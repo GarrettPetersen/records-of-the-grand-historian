@@ -37,9 +37,23 @@ The Twenty-Four Histories are the Chinese official historical books covering Chi
 npm install
 ```
 
-## Scraping
+## Data Structure
 
-Use the `scrape.js` script to scrape any chapter from any of the 24 histories:
+```
+data/
+├── glossary.json              # Shared glossary across all 24 histories
+├── shiji/                     # Records of the Grand Historian
+│   ├── 001.json
+│   ├── 002.json
+│   └── ...
+├── hanshu/                    # Book of Han
+│   ├── 001.json
+│   └── ...
+└── [other books]/
+    └── ...
+```
+
+## Scraping
 
 ### List available books
 ```bash
@@ -48,48 +62,126 @@ node scrape.js --list
 
 ### Scrape a specific chapter
 ```bash
-node scrape.js <book-id> <chapter>
+node scrape.js <book-id> <chapter> --glossary data/glossary.json
 ```
 
 **Examples:**
 ```bash
+# Create directory structure
+mkdir -p data/shiji
+
 # Scrape chapter 1 of the Records of the Grand Historian
-node scrape.js shiji 1
+node scrape.js shiji 001 --glossary data/glossary.json 2>/dev/null > data/shiji/001.json
 
 # Scrape chapter 369 of the History of Song
-node scrape.js songshi 369
+mkdir -p data/songshi
+node scrape.js songshi 369 --glossary data/glossary.json 2>/dev/null > data/songshi/369.json
 
 # Scrape chapter 24 of the History of Jin (with zero-padding)
-node scrape.js jinshi 024
+mkdir -p data/jinshi
+node scrape.js jinshi 024 --glossary data/glossary.json 2>/dev/null > data/jinshi/024.json
 ```
 
-### Output format
+**Note:** Use `2>/dev/null` to suppress status messages (loaded/saved glossary) from stderr.
 
-The scraper outputs JSON with:
-- `book`: Book identifier
-- `bookInfo`: Name, Chinese characters, pinyin, and dynasty period
-- `chapter`: Chapter number
-- `url`: Source URL
-- `title`: Chapter title (Chinese, English, and raw)
-- `count`: Number of paragraphs extracted
-- `paragraphs`: Array of Chinese text paragraphs
-- `scrapedAt`: ISO 8601 timestamp
+## Output Format
 
-### Saving output
+### Chapter JSON (e.g., `data/shiji/001.json`)
 
-```bash
-# Save to a file
-mkdir -p data/scrapes
-node scrape.js songshi 369 > data/scrapes/songshi369.json
-
-# Save to organized directories
-mkdir -p data/scrapes/songshi
-node scrape.js songshi 369 > data/scrapes/songshi/369.json
+```json
+{
+  "meta": {
+    "book": "shiji",
+    "bookInfo": {
+      "name": "Records of the Grand Historian",
+      "chinese": "史記",
+      "pinyin": "Shǐjì",
+      "dynasty": "Xia to Han"
+    },
+    "chapter": "001",
+    "url": "https://chinesenotes.com/shiji/shiji001.html",
+    "title": {
+      "zh": "《本紀‧五帝本紀》 Annals - Annals of the Five Emperors",
+      "en": null,
+      "raw": "..."
+    },
+    "sentenceCount": 286,
+    "translatedCount": 286,
+    "glossarySize": 2701,
+    "scrapedAt": "2025-12-12T22:27:17.560Z"
+  },
+  "content": [
+    {
+      "type": "paragraph",
+      "sentences": [
+        {
+          "id": "s0001",
+          "zh": "黃帝者，少典之子，姓公孫，名曰軒轅。",
+          "en": null
+        }
+      ],
+      "en": "Huangdi (Yellow emperor) was the son of Shaodian..."
+    }
+  ]
+}
 ```
+
+### Glossary (`data/glossary.json`)
+
+Shared across all books, keyed by chinesenotes.com's `headwordId`:
+
+```json
+{
+  "3023": {
+    "id": 3023,
+    "text": "張",
+    "pinyin": "zhāng",
+    "definitions": ["a sheet; a leaf", "Zhang", "to open; to draw [a bow]", ...],
+    "isProperNoun": false
+  }
+}
+```
+
+### Structure Details
+
+- **meta**: Book info, chapter, title (Chinese & English when available), counts, timestamp
+- **content**: Array of paragraph blocks, each containing:
+  - `sentences`: Array with sentence-level Chinese text (`zh`) and placeholder for translations (`en: null`)
+  - `id`: Unique sentence identifier for alignment (e.g., `s0001`)
+  - `en`: Paragraph-level English translation when available (from chinesenotes.com)
+- **glossary**: Maintained separately in `data/glossary.json`, grows as you scrape more chapters
+
+## Workflow
+
+1. **Scrape** chapters to organized JSON files (one per book)
+2. **Translate** using LLM (feed chapter JSON, get translations for each sentence)
+3. **Build** web frontend with split-pane view (Chinese left, English right)
+4. **Highlight** matching sentences on hover/click using sentence IDs
+5. **Reference** shared glossary for word-level tooltips
 
 ## Source
 
-Text is scraped from [Chinese Notes](https://chinesenotes.com), which provides English-Chinese parallel texts of classical Chinese literature.
+Text is scraped from [Chinese Notes](https://chinesenotes.com), which provides:
+- Classical Chinese source text
+- Word-level annotations (pinyin, definitions) 
+- Some chapters have existing English translations (especially early Shiji chapters)
+
+## Web Frontend
+
+After scraping chapters, generate the manifest for fast loading:
+
+```bash
+node generate-manifest.js
+```
+
+Run locally:
+```bash
+cd public && python3 -m http.server 8000
+```
+
+Then visit http://localhost:8000
+
+Deploy to Cloudflare Pages by deploying the `public/` directory.
 
 ## License
 
