@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reader - 二十四史</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header style="padding: 1.5rem 2rem;">
+        <div style="max-width: 1400px; margin: 0 auto;">
+            <a href="index.html" class="back-link" style="color: white; opacity: 0.9;">← Back to all histories</a>
+            <div class="chapter-title" style="border: none; padding: 0; margin-top: 1rem;">
+                <h2 id="chapter-title" style="color: white; margin: 0;">Loading...</h2>
+                <div id="chapter-subtitle" class="subtitle" style="color: rgba(255,255,255,0.8);"></div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div id="loading">Loading chapter...</div>
+        <div class="reader-container" style="display: none;">
+            <div class="pane chinese-pane">
+                <h3>原文 (Original Text)</h3>
+                <div id="chinese-content"></div>
+            </div>
+            <div class="pane english-pane">
+                <h3>English Translation</h3>
+                <div id="english-content"></div>
+            </div>
+        </div>
+    </main>
+
+    <div id="tooltip" class="tooltip" style="display: none;"></div>
+
+    <script type="module" src="reader.js"></script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+:root {
+    --primary-color: #8b4513;
+    --secondary-color: #d4af37;
+    --text-color: #2c2c2c;
+    --bg-color: #faf8f3;
+    --card-bg: #ffffff;
+    --border-color: #e0d5c7;
+    --highlight-color: #fff4d6;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Georgia', 'Songti SC', 'SimSun', serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #6d3610 100%);
+    color: white;
+    padding: 3rem 2rem;
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+header h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    font-weight: normal;
+    letter-spacing: 0.3rem;
+}
+
+header h2 {
+    font-size: 1.5rem;
+    font-weight: normal;
+    opacity: 0.95;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    font-size: 1rem;
+    opacity: 0.85;
+    font-style: italic;
+}
+
+main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+}
+
+#loading {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    padding: 4rem;
+}
+
+#histories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+}
+
+.history-card {
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text-color);
+    display: block;
+}
+
+.history-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(139, 69, 19, 0.15);
+    border-color: var(--secondary-color);
+}
+
+.history-card h3 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+.history-card .pinyin {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+    font-style: italic;
+}
+
+.history-card .english-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.history-card .dynasty {
+    font-size: 0.9rem;
+    color: #888;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.history-card .chapter-count {
+    font-size: 0.85rem;
+    color: var(--primary-color);
+    margin-top: 0.5rem;
+    font-weight: 500;
+}
+
+footer {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+    border-top: 1px solid var(--border-color);
+    margin-top: 4rem;
+}
+
+footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Chapter listing page */
+.chapter-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.chapter-link {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 1.5rem;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-color);
+    transition: all 0.2s ease;
+}
+
+.chapter-link:hover {
+    background: var(--highlight-color);
+    border-color: var(--secondary-color);
+}
+
+/* Reader page */
+.reader-container {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+    height: calc(100vh - 200px);
+}
+
+.pane {
+    flex: 1;
+    padding: 2rem;
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    overflow-y: auto;
+}
+
+.pane h3 {
+    position: sticky;
+    top: -2rem;
+    background: var(--card-bg);
+    padding: 1rem 0;
+    margin: -2rem -2rem 1rem -2rem;
+    padding: 1rem 2rem;
+    border-bottom: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    z-index: 10;
+}
+
+.paragraph {
+    margin-bottom: 1.5rem;
+    padding: 0.75rem;
+    border-radius: 4px;
+}
+
+.paragraph.highlighted {
+    background-color: var(--highlight-color);
+}
+
+.sentence {
+    display: inline;
+    padding: 2px 0;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-radius: 2px;
+}
+
+.sentence.highlighted {
+    background-color: var(--highlight-color);
+    box-shadow: 0 -2px 0 0 var(--secondary-color), 0 2px 0 0 var(--secondary-color);
+}
+
+.chinese-pane .paragraph {
+    font-size: 1.3rem;
+    line-height: 2.2;
+}
+
+.english-pane .paragraph {
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.word {
+    cursor: help;
+    position: relative;
+    border-bottom: 1px dotted transparent;
+    transition: border-color 0.2s ease;
+}
+
+.word:hover {
+    border-bottom-color: var(--primary-color);
+}
+
+.tooltip {
+    position: absolute;
+    background: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 4px;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    max-width: 300px;
+    font-size: 0.9rem;
+}
+
+.tooltip .pinyin {
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.tooltip .definitions {
+    margin-top: 0.5rem;
+}
+
+.tooltip .definitions li {
+    margin: 0.25rem 0;
+}
+
+.back-link {
+    display: inline-block;
+    color: var(--primary-color);
+    text-decoration: none;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.chapter-title {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.chapter-title h2 {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.chapter-title .subtitle {
+    color: #666;
+    font-style: italic;
+}
