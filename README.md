@@ -37,6 +37,38 @@ The Twenty-Four Histories are the Chinese official historical books covering Chi
 npm install
 ```
 
+## Quick Start with Makefile
+
+The easiest way to scrape chapters is using the Makefile:
+
+```bash
+# Scrape a single chapter
+make shiji-001                    # Scrape Shiji chapter 1
+make hanshu-042                   # Scrape Book of Han chapter 42
+
+# Scrape multiple chapters
+make shiji CHAPTERS="001 002 003" # Scrape Shiji chapters 1-3
+make hanshu CHAPTERS="001 002"    # Scrape Book of Han chapters 1-2
+
+# Scrape entire books (predefined ranges)
+make shiji-all                    # Scrape all 130 Shiji chapters
+make hanshu-all                   # Scrape all 100 Book of Han chapters
+
+# Generate manifest for web frontend
+make manifest
+
+# View statistics
+make stats                        # Show chapter counts per book
+
+# Clean up
+make clean-shiji                  # Remove all Shiji data
+make clean-all                    # Remove all scraped data
+
+# Help
+make help                         # Show all available commands
+make list                         # List all 24 histories
+```
+
 ## Data Structure
 
 ```
@@ -53,7 +85,7 @@ data/
     └── ...
 ```
 
-## Scraping
+## Manual Scraping (without Makefile)
 
 ### List available books
 ```bash
@@ -83,6 +115,19 @@ node scrape.js jinshi 024 --glossary data/glossary.json 2>/dev/null > data/jinsh
 ```
 
 **Note:** Use `2>/dev/null` to suppress status messages (loaded/saved glossary) from stderr.
+
+## Translation Alignment
+
+The scraper includes an improved alignment algorithm (`align-translations.js`) that matches Chinese sentences with English translations when available (currently only early Shiji chapters have translations from chinesenotes.com).
+
+The algorithm:
+- Generates multiple candidate alignments using different distribution strategies
+- Scores each alignment based on:
+  - Character-to-word ratio consistency across sentence pairs
+  - Penalties for unmapped Chinese sentences
+- Selects the best-scoring alignment
+
+For histories without English translations, the alignment step is automatically skipped.
 
 ## Output Format
 
@@ -117,10 +162,22 @@ node scrape.js jinshi 024 --glossary data/glossary.json 2>/dev/null > data/jinsh
         {
           "id": "s0001",
           "zh": "黃帝者，少典之子，姓公孫，名曰軒轅。",
-          "en": null
+          "translations": [
+            {
+              "lang": "en",
+              "text": "Huangdi (Yellow emperor) was the son of Shaodian...",
+              "translator": "Herbert J. Allen (1894)"
+            }
+          ]
         }
       ],
-      "en": "Huangdi (Yellow emperor) was the son of Shaodian..."
+      "translations": [
+        {
+          "lang": "en",
+          "text": "Huangdi (Yellow emperor) was the son of Shaodian...",
+          "translator": "Herbert J. Allen (1894)"
+        }
+      ]
     }
   ]
 }
@@ -146,9 +203,9 @@ Shared across all books, keyed by chinesenotes.com's `headwordId`:
 
 - **meta**: Book info, chapter, title (Chinese & English when available), counts, timestamp
 - **content**: Array of paragraph blocks, each containing:
-  - `sentences`: Array with sentence-level Chinese text (`zh`) and placeholder for translations (`en: null`)
+  - `sentences`: Array with sentence-level Chinese text (`zh`) and translations
   - `id`: Unique sentence identifier for alignment (e.g., `s0001`)
-  - `en`: Paragraph-level English translation when available (from chinesenotes.com)
+  - `translations`: Sentence-level English translation when available (aligned from paragraph)
 - **glossary**: Maintained separately in `data/glossary.json`, grows as you scrape more chapters
 
 ## Workflow
@@ -171,6 +228,8 @@ Text is scraped from [Chinese Notes](https://chinesenotes.com), which provides:
 After scraping chapters, generate the manifest for fast loading:
 
 ```bash
+make manifest
+# or manually:
 node generate-manifest.js
 ```
 

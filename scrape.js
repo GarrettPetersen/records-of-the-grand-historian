@@ -20,6 +20,7 @@
 import { load } from 'cheerio';
 import fs from 'node:fs';
 import path from 'node:path';
+import { alignTranslations } from './align-translations.js';
 
 // The 24 Dynastic Histories with their romanized names and metadata
 const BOOKS = {
@@ -306,121 +307,6 @@ function segmentSentences(text) {
   }
   
   return sentences;
-}
-
-/**
- * Segment English text into sentences
- */
-function segmentEnglishSentences(text) {
-  // Split on . ! ? followed by space and capital letter, or end of string
-  const sentences = [];
-  const pattern = /[.!?]+(?:\s+(?=[A-Z])|$)/g;
-  
-  let lastIndex = 0;
-  let match;
-  
-  while ((match = pattern.exec(text)) !== null) {
-    const sentence = text.slice(lastIndex, match.index + match[0].length).trim();
-    if (sentence) {
-      sentences.push(sentence);
-    }
-    lastIndex = match.index + match[0].length;
-  }
-  
-  // Catch any remaining text
-  if (lastIndex < text.length) {
-    const remaining = text.slice(lastIndex).trim();
-    if (remaining) {
-      sentences.push(remaining);
-    }
-  }
-  
-  return sentences;
-}
-
-/**
- * Count words in English text
- */
-function countEnglishWords(text) {
-  return text.split(/\s+/).filter(w => w.length > 0).length;
-}
-
-/**
- * Attempt to align English paragraph translation to Chinese sentences
- * Uses length-based heuristic: estimate English words per Chinese character,
- * then greedily assign English sentences to Chinese sentences based on expected length
- * Returns array of English translations, one per Chinese sentence
- */
-function alignTranslations(zhSentences, enParagraph) {
-  const enSentences = segmentEnglishSentences(enParagraph);
-  
-  // Case 1: Same number of sentences - direct alignment
-  if (zhSentences.length === enSentences.length) {
-    return enSentences;
-  }
-  
-  // Calculate total lengths
-  const totalZhChars = zhSentences.reduce((sum, s) => sum + s.length, 0);
-  const totalEnWords = countEnglishWords(enParagraph);
-  
-  // Ratio of English words per Chinese character
-  const wordsPerChar = totalEnWords / totalZhChars;
-  
-  // Greedily assign English sentences to Chinese sentences
-  const aligned = [];
-  let enIdx = 0;
-  
-  for (let i = 0; i < zhSentences.length; i++) {
-    const zhSentence = zhSentences[i];
-    const expectedEnWords = zhSentence.length * wordsPerChar;
-    
-    // Collect English sentences until we reach approximately the expected word count
-    let collectedWords = 0;
-    const collectedSentences = [];
-    
-    while (enIdx < enSentences.length) {
-      const enSentence = enSentences[enIdx];
-      const enWords = countEnglishWords(enSentence);
-      
-      // If this is the last Chinese sentence, take all remaining English
-      if (i === zhSentences.length - 1) {
-        collectedSentences.push(enSentence);
-        enIdx++;
-        continue;
-      }
-      
-      // If we haven't collected anything yet, take at least one sentence
-      if (collectedSentences.length === 0) {
-        collectedSentences.push(enSentence);
-        collectedWords += enWords;
-        enIdx++;
-        
-        // If we've met or exceeded expected, stop
-        if (collectedWords >= expectedEnWords) {
-          break;
-        }
-        continue;
-      }
-      
-      // Check if adding this sentence gets us closer to the target
-      const currentDistance = Math.abs(collectedWords - expectedEnWords);
-      const newDistance = Math.abs(collectedWords + enWords - expectedEnWords);
-      
-      if (newDistance < currentDistance) {
-        // Adding this sentence gets us closer to target
-        collectedSentences.push(enSentence);
-        collectedWords += enWords;
-        enIdx++;
-      } else {
-        // We're already at the best match, stop
-        break;
-      }
-    }
-    
-    aligned.push(collectedSentences.join(' '));
-  }
-  
-  return aligned;
 }
 
 /**
