@@ -208,22 +208,50 @@ async function renderReader() {
     document.getElementById('chapter-title').textContent = chapterData.meta.title.zh;
     document.getElementById('chapter-subtitle').textContent = chapterData.meta.title.en || '';
     
-    // Render content
-    const zhContent = document.getElementById('chinese-content');
-    const enContent = document.getElementById('english-content');
+    // Render content with aligned paragraphs
+    const readerContainer = document.querySelector('.reader-container');
+    
+    // Clear existing content
+    readerContainer.innerHTML = '';
+    
+    // Create wrapper for Chinese pane
+    const zhPane = document.createElement('div');
+    zhPane.className = 'pane chinese-pane';
+    zhPane.innerHTML = '<h3>原文 (Original Text)</h3>';
+    const zhContent = document.createElement('div');
+    zhContent.id = 'chinese-content';
+    zhPane.appendChild(zhContent);
+    
+    // Create wrapper for English pane
+    const enPane = document.createElement('div');
+    enPane.className = 'pane english-pane';
+    enPane.innerHTML = '<h3>English Translation</h3>';
+    const enContent = document.createElement('div');
+    enContent.id = 'english-content';
+    enPane.appendChild(enContent);
+    
+    readerContainer.appendChild(zhPane);
+    readerContainer.appendChild(enPane);
     
     let paragraphIdx = 0;
     for (const block of chapterData.content) {
       if (block.type === 'paragraph') {
-        zhContent.appendChild(createParagraphElement(block, 'zh', paragraphIdx));
-        enContent.appendChild(createParagraphElement(block, 'en', paragraphIdx));
+        const zhPara = createParagraphElement(block, 'zh', paragraphIdx);
+        const enPara = createParagraphElement(block, 'en', paragraphIdx);
+        
+        // Add matching data attributes for alignment
+        zhPara.dataset.paraIndex = paragraphIdx;
+        enPara.dataset.paraIndex = paragraphIdx;
+        
+        zhContent.appendChild(zhPara);
+        enContent.appendChild(enPara);
         paragraphIdx++;
       }
     }
     
     // Show reader
     document.getElementById('loading').style.display = 'none';
-    document.querySelector('.reader-container').style.display = 'flex';
+    readerContainer.style.display = 'flex';
   }).catch(err => {
     document.getElementById('loading').textContent = `Error: ${err.message}`;
   });
@@ -314,10 +342,46 @@ function setupViewControls() {
   });
 }
 
+// Align corresponding paragraphs
+function alignParagraphs() {
+  const zhParas = document.querySelectorAll('.chinese-pane .paragraph');
+  const enParas = document.querySelectorAll('.english-pane .paragraph');
+  
+  for (let i = 0; i < Math.min(zhParas.length, enParas.length); i++) {
+    const zhPara = zhParas[i];
+    const enPara = enParas[i];
+    
+    // Reset heights
+    zhPara.style.minHeight = '';
+    enPara.style.minHeight = '';
+    
+    // Get natural heights
+    const zhHeight = zhPara.offsetHeight;
+    const enHeight = enPara.offsetHeight;
+    
+    // Set both to the maximum height
+    const maxHeight = Math.max(zhHeight, enHeight);
+    zhPara.style.minHeight = maxHeight + 'px';
+    enPara.style.minHeight = maxHeight + 'px';
+  }
+}
+
 // Close tooltip on scroll
 window.addEventListener('scroll', hideTooltip);
 
 renderReader().then(() => {
   setupSyncScroll();
   setupViewControls();
+  
+  // Align paragraphs after rendering
+  setTimeout(() => {
+    alignParagraphs();
+  }, 100);
+  
+  // Re-align on window resize
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(alignParagraphs, 250);
+  });
 });
