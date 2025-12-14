@@ -229,19 +229,35 @@ async function renderReader() {
   });
 }
 
-// Synchronized scrolling between panes
+// Synchronized scrolling between panes based on sentence alignment
 let isSyncing = false;
 
 function syncScroll(source, target) {
   if (isSyncing) return;
   isSyncing = true;
   
-  const sourceMax = source.scrollHeight - source.clientHeight;
-  const targetMax = target.scrollHeight - target.clientHeight;
+  // Find the first visible sentence in the source pane
+  const sourceRect = source.getBoundingClientRect();
+  const sourceSentences = source.querySelectorAll('.sentence[data-sentence-id]');
   
-  if (sourceMax > 0) {
-    const scrollRatio = source.scrollTop / sourceMax;
-    target.scrollTop = scrollRatio * targetMax;
+  let visibleSentenceId = null;
+  for (const sentence of sourceSentences) {
+    const rect = sentence.getBoundingClientRect();
+    if (rect.top >= sourceRect.top && rect.top <= sourceRect.bottom) {
+      visibleSentenceId = sentence.dataset.sentenceId;
+      break;
+    }
+  }
+  
+  // Scroll target to show the same sentence
+  if (visibleSentenceId) {
+    const targetSentence = target.querySelector(`[data-sentence-id="${visibleSentenceId}"]`);
+    if (targetSentence) {
+      const targetRect = target.getBoundingClientRect();
+      const sentenceRect = targetSentence.getBoundingClientRect();
+      const offset = sentenceRect.top - targetRect.top;
+      target.scrollTop += offset;
+    }
   }
   
   requestAnimationFrame(() => {
@@ -265,7 +281,43 @@ function setupSyncScroll() {
   }
 }
 
+// View controls
+function setupViewControls() {
+  const viewBtns = document.querySelectorAll('.view-btn');
+  const zhPane = document.querySelector('.chinese-pane');
+  const enPane = document.querySelector('.english-pane');
+  
+  viewBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const view = btn.dataset.view;
+      
+      // Update active button
+      viewBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      // Toggle pane visibility
+      if (view === 'both') {
+        zhPane.classList.remove('collapsed');
+        enPane.classList.remove('collapsed');
+        zhPane.style.maxWidth = '50%';
+        enPane.style.maxWidth = '50%';
+      } else if (view === 'chinese') {
+        zhPane.classList.remove('collapsed');
+        enPane.classList.add('collapsed');
+        zhPane.style.maxWidth = '100%';
+      } else if (view === 'english') {
+        zhPane.classList.add('collapsed');
+        enPane.classList.remove('collapsed');
+        enPane.style.maxWidth = '100%';
+      }
+    });
+  });
+}
+
 // Close tooltip on scroll
 window.addEventListener('scroll', hideTooltip);
 
-renderReader().then(setupSyncScroll);
+renderReader().then(() => {
+  setupSyncScroll();
+  setupViewControls();
+});
