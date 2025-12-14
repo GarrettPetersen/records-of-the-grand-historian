@@ -103,16 +103,16 @@ function createSentenceElement(sentence, lang, sentenceId) {
 }
 
 function highlightSentence(sentenceId) {
-  const zhSentence = document.querySelector(`.chinese-pane [data-sentence-id="${sentenceId}"]`);
-  const enSentence = document.querySelector(`.english-pane [data-sentence-id="${sentenceId}"]`);
+  const zhSentence = document.querySelector(`.paragraph.chinese [data-sentence-id="${sentenceId}"]`);
+  const enSentence = document.querySelector(`.paragraph.english [data-sentence-id="${sentenceId}"]`);
   
   if (zhSentence) zhSentence.classList.add('highlighted');
   if (enSentence) enSentence.classList.add('highlighted');
 }
 
 function unhighlightSentence(sentenceId) {
-  const zhSentence = document.querySelector(`.chinese-pane [data-sentence-id="${sentenceId}"]`);
-  const enSentence = document.querySelector(`.english-pane [data-sentence-id="${sentenceId}"]`);
+  const zhSentence = document.querySelector(`.paragraph.chinese [data-sentence-id="${sentenceId}"]`);
+  const enSentence = document.querySelector(`.paragraph.english [data-sentence-id="${sentenceId}"]`);
   
   if (zhSentence) zhSentence.classList.remove('highlighted');
   if (enSentence) enSentence.classList.remove('highlighted');
