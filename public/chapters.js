@@ -39,9 +39,11 @@ async function renderChapters() {
     
     const titleZh = chapter.title?.zh || `卷${chapter.chapter}`;
     const hasTranslation = chapter.translatedCount > 0;
+    const chapterNum = parseInt(chapter.chapter, 10);
     
     link.innerHTML = `
-      <div style="font-size: 1.1rem; margin-bottom: 0.5rem;">${titleZh}</div>
+      <div style="font-size: 0.85rem; color: #999; margin-bottom: 0.25rem;">Chapter ${chapterNum}</div>
+      <div style="font-size: 1.1rem; margin-bottom: 0.5rem; font-weight: 600;">${titleZh}</div>
       <div style="font-size: 0.85rem; color: #666;">${chapter.sentenceCount} sentences</div>
       ${hasTranslation ? '<div style="font-size: 0.75rem; color: #8b4513; margin-top: 0.25rem;">✓ Translated</div>' : ''}
     `;

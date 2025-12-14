@@ -43,12 +43,30 @@ help:
 list:
 	@$(SCRAPE) --list
 
+# Sync data to public directory for frontend
+.PHONY: sync
+sync:
+	@echo "Syncing data to public/data..."
+	@mkdir -p public/data
+	@for dir in data/*/; do \
+		if [ -d "$$dir" ] && [ "$$(basename $$dir)" != "public" ]; then \
+			book=$$(basename $$dir); \
+			mkdir -p public/data/$$book; \
+			cp -r $$dir*.json public/data/$$book/ 2>/dev/null || true; \
+			echo "  Synced $$book"; \
+		fi; \
+	done
+	@cp data/glossary.json public/data/ 2>/dev/null || true
+	@cp data/manifest.json public/data/ 2>/dev/null || true
+	@echo "Sync complete."
+
 # Generate manifest for web frontend
 .PHONY: manifest
 manifest:
 	@echo "Generating manifest..."
 	@$(NODE) generate-manifest.js
 	@echo "Manifest generated at data/manifest.json"
+	@$(MAKE) sync
 
 # Generic rule to scrape a single chapter for any book
 # Usage: make <book>-<chapter>
