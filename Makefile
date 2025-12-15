@@ -22,15 +22,30 @@ data/shiji data/hanshu data/houhanshu data/sanguozhi data/jinshu data/songshu da
 help:
 	@echo "Makefile for scraping the 24 Dynastic Histories"
 	@echo ""
-	@echo "Usage examples:"
+	@echo "Common commands:"
+	@echo "  make update                 # Fix counts, regenerate manifest, sync (run after manual edits)"
 	@echo "  make shiji-001              # Scrape Shiji chapter 1"
 	@echo "  make shiji-010              # Scrape Shiji chapter 10"
-	@echo "  make shiji CHAPTERS='001 002 003'  # Scrape multiple chapters"
 	@echo "  make shiji-all              # Scrape all Shiji chapters (1-130)"
-	@echo "  make hanshu-001             # Scrape Book of Han chapter 1"
-	@echo "  make list                   # List all available books"
-	@echo "  make manifest               # Generate manifest for web frontend"
+	@echo "  make hanshu-all             # Scrape all Hanshu chapters (1-100)"
+	@echo ""
+	@echo "Scraping commands:"
+	@echo "  make <book>-<chapter>       # Scrape single chapter (e.g., make songshi-369)"
+	@echo "  make <book> CHAPTERS='...'  # Scrape multiple (e.g., make shiji CHAPTERS='001 002')"
+	@echo "  make list                   # List all 24 books available to scrape"
+	@echo ""
+	@echo "Maintenance commands:"
+	@echo "  make fix-counts             # Recalculate translatedCount in all chapter files"
+	@echo "  make manifest               # Generate manifest.json (includes sync)"
+	@echo "  make sync                   # Copy data/ to public/data/ for web frontend"
+	@echo "  make stats                  # Show chapter counts per book"
+	@echo "  make validate               # Check all JSON files are valid"
+	@echo "  make first-untranslated     # Find first chapter needing translation"
+	@echo ""
+	@echo "Cleanup commands:"
 	@echo "  make clean-shiji            # Remove all Shiji data"
+	@echo "  make clean-hanshu           # Remove all Hanshu data"
+	@echo "  make clean-all              # Remove all scraped data"
 	@echo ""
 	@echo "Books available: shiji, hanshu, houhanshu, sanguozhi, jinshu, songshu,"
 	@echo "                 nanqishu, liangshu, chenshu, weishu, beiqishu, zhoushu,"
@@ -60,12 +75,28 @@ sync:
 	@cp data/manifest.json public/data/ 2>/dev/null || true
 	@echo "Sync complete."
 
+# Update workflow: fix counts, regenerate manifest, sync to public
+# Run this after any manual edits to chapter JSON files
+.PHONY: update
+update:
+	@echo "=== Running update workflow ==="
+	@echo ""
+	@echo "Step 1/3: Fixing translated counts..."
+	@$(NODE) fix-translated-counts.js || echo "Note: fix-translated-counts.js not found, skipping..."
+	@echo ""
+	@echo "Step 2/3: Regenerating manifest..."
+	@$(NODE) generate-manifest.js
+	@echo ""
+	@echo "Step 3/3: Syncing to public..."
+	@$(MAKE) sync
+	@echo ""
+	@echo "=== Update complete ==="
+
 # Fix translated counts in existing files
 .PHONY: fix-counts
 fix-counts:
 	@echo "Recalculating translated counts..."
 	@$(NODE) fix-translated-counts.js
-	@$(MAKE) manifest
 
 # Generate manifest for web frontend
 .PHONY: manifest
