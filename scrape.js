@@ -340,7 +340,8 @@ function isMostlyEnglish(text) {
  */
 function shouldSkipLine(text) {
   // TOC entries typically start with numbers like "1 ", "1.1 ", "2 "
-  if (/^\d+(\.\d+)?\s+/.test(text)) return true;
+  // But don't skip BCE year entries like "206 高皇帝..." (3+ digit years are table data)
+  if (/^\d{1,2}(\.\d+)?\s+[^\d]/.test(text) && !/^\d+\s+[高孝元]/.test(text)) return true;
   if (text === '目录') return true;
   // Skip Wikipedia references
   if (text.includes('維基百科') || text.includes('维基百科')) return true;
@@ -560,7 +561,12 @@ async function scrapeChapter(bookId, chapter, glossaryPath) {
     let translatedCount = 0;
     for (const block of content) {
       sentenceCount += block.sentences.length;
-      if (block.en) translatedCount += block.sentences.length;
+      // Count sentences that have actual translation text
+      for (const sentence of block.sentences) {
+        if (sentence.translations && sentence.translations.length > 0 && sentence.translations[0].text) {
+          translatedCount++;
+        }
+      }
     }
 
     // Save updated glossary if path provided

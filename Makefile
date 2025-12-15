@@ -60,6 +60,13 @@ sync:
 	@cp data/manifest.json public/data/ 2>/dev/null || true
 	@echo "Sync complete."
 
+# Fix translated counts in existing files
+.PHONY: fix-counts
+fix-counts:
+	@echo "Recalculating translated counts..."
+	@$(NODE) fix-translated-counts.js
+	@$(MAKE) manifest
+
 # Generate manifest for web frontend
 .PHONY: manifest
 manifest:
@@ -227,3 +234,30 @@ stats:
 			echo "  $$(basename $$dir): $$count chapters"; \
 		fi; \
 	done
+
+# Find first untranslated chapter
+.PHONY: first-untranslated
+first-untranslated:
+	@echo "Searching for first untranslated chapter..."
+	@found=0; \
+	for dir in data/*/; do \
+		if [ -d "$$dir" ] && [ "$$(basename $$dir)" != "public" ]; then \
+			book=$$(basename $$dir); \
+			for file in $$dir*.json; do \
+				if [ -f "$$file" ]; then \
+					translated=$$(jq -r '.meta.translatedCount // 0' "$$file" 2>/dev/null); \
+					if [ "$$translated" = "0" ]; then \
+						chapter=$$(basename "$$file" .json); \
+						echo "Found: $$book chapter $$chapter"; \
+						echo "  File: $$file"; \
+						jq -r '.meta | "  Title: \(.title.zh // .title.raw)", "  Sentences: \(.sentenceCount)", "  URL: \(.url)"' "$$file" 2>/dev/null; \
+						found=1; \
+						break 2; \
+					fi; \
+				fi; \
+			done; \
+		fi; \
+	done; \
+	if [ $$found -eq 0 ]; then \
+		echo "No untranslated chapters found!"; \
+	fi
