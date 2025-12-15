@@ -75,19 +75,22 @@ sync:
 	@cp data/manifest.json public/data/ 2>/dev/null || true
 	@echo "Sync complete."
 
-# Update workflow: fix counts, regenerate manifest, sync to public
+# Update workflow: update citations, fix counts, regenerate manifest, sync to public
 # Run this after any manual edits to chapter JSON files
 .PHONY: update
 update:
 	@echo "=== Running update workflow ==="
 	@echo ""
-	@echo "Step 1/3: Fixing translated counts..."
+	@echo "Step 1/4: Updating citations..."
+	@$(NODE) update-citations.js
+	@echo ""
+	@echo "Step 2/4: Fixing translated counts..."
 	@$(NODE) fix-translated-counts.js || echo "Note: fix-translated-counts.js not found, skipping..."
 	@echo ""
-	@echo "Step 2/3: Regenerating manifest..."
+	@echo "Step 3/4: Regenerating manifest..."
 	@$(NODE) generate-manifest.js
 	@echo ""
-	@echo "Step 3/3: Syncing to public..."
+	@echo "Step 4/4: Syncing to public..."
 	@$(MAKE) sync
 	@echo ""
 	@echo "=== Update complete ==="
