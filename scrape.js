@@ -336,6 +336,26 @@ function isMostlyEnglish(text) {
 }
 
 /**
+ * Check if text looks like a section header (e.g., "Annals of Xiang Yu:")
+ * These are typically short English lines ending with a colon
+ */
+function isSectionHeader(text) {
+  // Section headers are typically:
+  // - Short (< 50 chars)
+  // - End with a colon
+  // - Mostly English words
+  // - No periods (actual translations have periods)
+  if (text.length > 50) return false;
+  if (!text.endsWith(':')) return false;
+  if (text.includes('.')) return false;
+  
+  // Check if it's mostly English
+  const words = text.split(/\s+/);
+  const englishWords = words.filter(w => /^[A-Za-z]+$/.test(w));
+  return englishWords.length >= words.length * 0.7;
+}
+
+/**
  * Check if text looks like a table of contents entry or should be skipped
  */
 function shouldSkipLine(text) {
@@ -347,6 +367,8 @@ function shouldSkipLine(text) {
   if (text.includes('維基百科') || text.includes('维基百科')) return true;
   // Skip single character or very short lines that are likely headers
   if (text.length <= 2 && !text.includes('。')) return true;
+  // Skip section headers
+  if (isSectionHeader(text)) return true;
   return false;
 }
 
@@ -417,7 +439,12 @@ function extractContent($) {
     
     if (isMostlyChinese(para)) {
       // Check if next paragraph is English translation
-      const nextPara = i + 1 < paragraphs.length ? paragraphs[i + 1] : null;
+      // Skip any section headers first
+      let nextIdx = i + 1;
+      while (nextIdx < paragraphs.length && isSectionHeader(paragraphs[nextIdx])) {
+        nextIdx++;
+      }
+      const nextPara = nextIdx < paragraphs.length ? paragraphs[nextIdx] : null;
       const hasEnglishTranslation = nextPara && isMostlyEnglish(nextPara);
       
       // Segment Chinese into sentences
@@ -446,7 +473,9 @@ function extractContent($) {
           }]
         };
         content.push(block);
-        i += 2; // Skip both Chinese and English
+        // Skip Chinese, any headers, and English
+        const headersSkipped = nextIdx - (i + 1);
+        i = nextIdx + 1; // Move past the English translation
       } else {
         // Chinese only
         const block = {
