@@ -384,6 +384,12 @@ function extractContent($) {
   // Remove the "Click on any word" paragraph
   html = html.replace(/<p>\s*Click on any word[^<]*<\/p>/gi, '');
   
+  // Remove the footer source/copyright text that appears on every page
+  html = html.replace(/Source:\s*Chinese Text Project[^]*?<\/p>/gi, '');
+  html = html.replace(/Dictionary cache status:[^<]*<\/p>/gi, '');
+  html = html.replace(/Copyright Fo Guang Shan[^]*?<\/p>/gi, '');
+  html = html.replace(/Glossary and Other Vocabulary<\/a>/gi, '');
+  
   // Replace <br/> and <br> with a marker we can split on
   const BR_MARKER = '\n§BR§\n';
   html = html.replace(/<br\s*\/?>/gi, BR_MARKER);
