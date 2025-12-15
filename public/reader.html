@@ -12,10 +12,15 @@
         <div style="max-width: 1400px; margin: 0 auto;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
                 <a href="index.html" class="back-link" style="color: white; opacity: 0.9;">← Back to all histories</a>
-                <div class="view-controls">
-                    <button class="view-btn active" data-view="both">Both</button>
-                    <button class="view-btn" data-view="chinese">中文</button>
-                    <button class="view-btn" data-view="english">English</button>
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <div class="view-controls">
+                        <button class="view-btn active" data-view="both">Both</button>
+                        <button class="view-btn" data-view="chinese">中文</button>
+                        <button class="view-btn" data-view="english">English</button>
+                    </div>
+                    <button id="cite-chapter-btn" class="cite-btn" title="Cite this chapter">
+                        📋 Cite
+                    </button>
                 </div>
             </div>
             <div class="chapter-title" style="border: none; padding: 0; margin-top: 1rem;">
@@ -37,6 +42,28 @@
     </main>
 
     <div id="tooltip" class="tooltip" style="display: none;"></div>
+
+    <!-- Citation Modal -->
+    <div id="citation-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="citation-title">Cite this Chapter</h3>
+                <button class="modal-close" id="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="citation-tabs">
+                    <button class="citation-tab active" data-format="chicago">Chicago</button>
+                    <button class="citation-tab" data-format="apa">APA</button>
+                    <button class="citation-tab" data-format="mla">MLA</button>
+                    <button class="citation-tab" data-format="bibtex">BibTeX</button>
+                </div>
+                <div class="citation-content">
+                    <textarea id="citation-text" readonly></textarea>
+                    <button id="copy-citation" class="btn-primary">Copy to Clipboard</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script type="module" src="reader.js"></script>
 </body>

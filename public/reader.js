@@ -139,6 +139,19 @@ function createParagraphElement(block, lang, paragraphIdx) {
   paraDiv.className = 'paragraph';
   paraDiv.dataset.paragraphId = `p${paragraphIdx}`;
   
+  // Add cite button for English paragraphs only
+  if (lang === 'en') {
+    const citeBtn = document.createElement('button');
+    citeBtn.className = 'cite-paragraph-btn';
+    citeBtn.textContent = '📋 Cite';
+    citeBtn.title = 'Cite this paragraph';
+    citeBtn.onclick = (e) => {
+      e.stopPropagation();
+      openCitationModal('paragraph', paragraphIdx, block);
+    };
+    paraDiv.appendChild(citeBtn);
+  }
+  
   for (const sentence of block.sentences) {
     const sentenceSpan = document.createElement('span');
     sentenceSpan.className = 'sentence';
@@ -203,6 +216,10 @@ async function renderReader() {
       return response.json();
     })()
   ]).then(([_, chapterData]) => {
+    // Store globally for citations
+    currentChapterData = chapterData;
+    currentBookInfo = bookInfo;
+    
     // Update header
     document.title = `${chapterData.meta.title.zh} - ${bookInfo.chinese}`;
     document.getElementById('chapter-title').textContent = chapterData.meta.title.zh;
@@ -293,10 +310,248 @@ function setupViewControls() {
   });
 }
 
+// Citation functionality
+let currentChapterData = null;
+let currentBookInfo = null;
+
+function getTranslatorInfo(block) {
+  // Get translator from first sentence's translation
+  if (block.sentences && block.sentences.length > 0) {
+    const firstTranslation = block.sentences[0].translations?.[0];
+    if (firstTranslation?.translator) {
+      return firstTranslation.translator;
+    }
+  }
+  return null;
+}
+
+function formatDate() {
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                  'July', 'August', 'September', 'October', 'November', 'December'];
+  const now = new Date();
+  return `${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+}
+
+function generateChicagoCitation(type, paragraphIdx, block) {
+  const url = window.location.href;
+  const chapterTitle = currentChapterData.meta.title.zh;
+  const bookTitle = currentBookInfo.chinese;
+  const author = currentBookInfo.author || 'Unknown';
+  
+  if (type === 'chapter') {
+    const translator = getTranslatorInfo(currentChapterData.content[0]);
+    if (translator && translator.includes('Herbert J. Allen')) {
+      return `${author}. ${chapterTitle}. Translated by Herbert J. Allen. Journal of the Royal Asiatic Society 26, no. 2 (1894): 269–295. Accessed via 24 Histories, ${formatDate()}. ${url}.`;
+    }
+    return `${author}. ${bookTitle}. ${chapterTitle}. Translated by Garrett M. Petersen. 24 Histories, 2025. ${url}. Accessed ${formatDate()}.`;
+  } else {
+    const translator = getTranslatorInfo(block);
+    const paraNum = paragraphIdx + 1;
+    if (translator && translator.includes('Herbert J. Allen')) {
+      return `${author}. ${chapterTitle}, trans. Herbert J. Allen, Journal of the Royal Asiatic Society 26, no. 2 (1894): 269–295, §${paraNum}, accessed via 24 Histories, ${formatDate()}, ${url}.`;
+    }
+    return `${author}. ${bookTitle}. ${chapterTitle}, §${paraNum}. Translated by Garrett M. Petersen. 24 Histories, 2025. ${url}. Accessed ${formatDate()}.`;
+  }
+}
+
+function generateAPACitation(type, paragraphIdx, block) {
+  const url = window.location.href;
+  const chapterTitle = currentChapterData.meta.title.zh;
+  const year = new Date().getFullYear();
+  const author = currentBookInfo.author || 'Unknown';
+  const authorLastName = author.split(' ').pop().charAt(0);
+  
+  if (type === 'chapter') {
+    const translator = getTranslatorInfo(currentChapterData.content[0]);
+    if (translator && translator.includes('Herbert J. Allen')) {
+      return `${author}. (1894). ${chapterTitle} (H. J. Allen, Trans.). Journal of the Royal Asiatic Society, 26(2), 269-295. Retrieved from ${url}`;
+    }
+    return `${author}. (2025). ${chapterTitle} (G. M. Petersen, Trans.). 24 Histories. Retrieved from ${url}`;
+  } else {
+    const paraNum = paragraphIdx + 1;
+    const translator = getTranslatorInfo(block);
+    if (translator && translator.includes('Herbert J. Allen')) {
+      return `${author}. (1894). ${chapterTitle} (H. J. Allen, Trans.) (para. ${paraNum}). Journal of the Royal Asiatic Society, 26(2), 269-295. Retrieved from ${url}`;
+    }
+    return `${author}. (2025). ${chapterTitle} (G. M. Petersen, Trans.) (para. ${paraNum}). 24 Histories. Retrieved from ${url}`;
+  }
+}
+
+function generateMLACitation(type, paragraphIdx, block) {
+  const url = window.location.href;
+  const chapterTitle = currentChapterData.meta.title.zh;
+  const accessDate = formatDate();
+  const author = currentBookInfo.author || 'Unknown';
+  
+  if (type === 'chapter') {
+    const translator = getTranslatorInfo(currentChapterData.content[0]);
+    if (translator && translator.includes('Herbert J. Allen')) {
+      return `${author}. "${chapterTitle}." Translated by Herbert J. Allen, Journal of the Royal Asiatic Society, vol. 26, no. 2, 1894, pp. 269-295. 24 Histories, ${url}. Accessed ${accessDate}.`;
+    }
+    return `${author}. "${chapterTitle}." Translated by Garrett M. Petersen, 24 Histories, 2025, ${url}. Accessed ${accessDate}.`;
+  } else {
+    const paraNum = paragraphIdx + 1;
+    const translator = getTranslatorInfo(block);
+    if (translator && translator.includes('Herbert J. Allen')) {
+      return `${author}. "${chapterTitle}." Translated by Herbert J. Allen, Journal of the Royal Asiatic Society, vol. 26, no. 2, 1894, pp. 269-295, para. ${paraNum}. 24 Histories, ${url}. Accessed ${accessDate}.`;
+    }
+    return `${author}. "${chapterTitle}." Translated by Garrett M. Petersen, para. ${paraNum}. 24 Histories, 2025, ${url}. Accessed ${accessDate}.`;
+  }
+}
+
+function generateBibTeXCitation(type, paragraphIdx, block) {
+  const url = window.location.href;
+  const chapterTitle = currentChapterData.meta.title.zh.replace(/[《》]/g, '');
+  const year = new Date().getFullYear();
+  const author = currentBookInfo.author || 'Unknown';
+  const authorKey = author.toLowerCase().replace(/\s+/g, '').replace(/[^a-z]/g, '');
+  
+  if (type === 'chapter') {
+    const translator = getTranslatorInfo(currentChapterData.content[0]);
+    if (translator && translator.includes('Herbert J. Allen')) {
+      return `@article{${authorKey}1894${currentChapterData.meta.chapter},
+  author = {${author}},
+  title = {${chapterTitle}},
+  journal = {Journal of the Royal Asiatic Society},
+  year = {1894},
+  volume = {26},
+  number = {2},
+  pages = {269--295},
+  note = {Translated by Herbert J. Allen. Accessed via 24 Histories, ${url}},
+  urldate = {${year}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}}
+}`;
+    }
+    return `@misc{${authorKey}2025${currentChapterData.meta.chapter},
+  author = {${author}},
+  title = {${chapterTitle}},
+  translator = {Garrett M. Petersen},
+  howpublished = {24 Histories},
+  year = {2025},
+  url = {${url}},
+  note = {Accessed ${formatDate()}}
+}`;
+  } else {
+    const paraNum = paragraphIdx + 1;
+    const translator = getTranslatorInfo(block);
+    if (translator && translator.includes('Herbert J. Allen')) {
+      return `@article{${authorKey}1894${currentChapterData.meta.chapter}p${paraNum},
+  author = {${author}},
+  title = {${chapterTitle}, para. ${paraNum}},
+  journal = {Journal of the Royal Asiatic Society},
+  year = {1894},
+  volume = {26},
+  number = {2},
+  pages = {269--295},
+  note = {Translated by Herbert J. Allen. Accessed via 24 Histories, ${url}},
+  urldate = {${year}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}}
+}`;
+    }
+    return `@misc{${authorKey}2025${currentChapterData.meta.chapter}p${paraNum},
+  author = {${author}},
+  title = {${chapterTitle}, para. ${paraNum}},
+  translator = {Garrett M. Petersen},
+  howpublished = {24 Histories},
+  year = {2025},
+  url = {${url}},
+  note = {Accessed ${formatDate()}}
+}`;
+  }
+}
+
+function generateCitation(format, type, paragraphIdx, block) {
+  switch(format) {
+    case 'chicago':
+      return generateChicagoCitation(type, paragraphIdx, block);
+    case 'apa':
+      return generateAPACitation(type, paragraphIdx, block);
+    case 'mla':
+      return generateMLACitation(type, paragraphIdx, block);
+    case 'bibtex':
+      return generateBibTeXCitation(type, paragraphIdx, block);
+    default:
+      return '';
+  }
+}
+
+function openCitationModal(type, paragraphIdx = null, block = null) {
+  const modal = document.getElementById('citation-modal');
+  const title = document.getElementById('citation-title');
+  const citationText = document.getElementById('citation-text');
+  
+  title.textContent = type === 'chapter' ? 'Cite this Chapter' : `Cite Paragraph ${paragraphIdx + 1}`;
+  
+  // Store citation context
+  modal.dataset.citationType = type;
+  modal.dataset.paragraphIdx = paragraphIdx;
+  if (block) {
+    modal.dataset.blockData = JSON.stringify(block);
+  }
+  
+  // Generate initial citation (Chicago)
+  const initialCitation = generateCitation('chicago', type, paragraphIdx, block);
+  citationText.value = initialCitation;
+  
+  // Set active tab
+  document.querySelectorAll('.citation-tab').forEach(tab => {
+    tab.classList.remove('active');
+    if (tab.dataset.format === 'chicago') {
+      tab.classList.add('active');
+    }
+  });
+  
+  modal.style.display = 'flex';
+}
+
+function setupCitationModal() {
+  const modal = document.getElementById('citation-modal');
+  const closeBtn = document.getElementById('close-modal');
+  const copyBtn = document.getElementById('copy-citation');
+  const citationText = document.getElementById('citation-text');
+  const tabs = document.querySelectorAll('.citation-tab');
+  
+  // Close modal
+  closeBtn.onclick = () => modal.style.display = 'none';
+  modal.onclick = (e) => {
+    if (e.target === modal) modal.style.display = 'none';
+  };
+  
+  // Copy citation
+  copyBtn.onclick = () => {
+    citationText.select();
+    document.execCommand('copy');
+    const originalText = copyBtn.textContent;
+    copyBtn.textContent = '✓ Copied!';
+    setTimeout(() => {
+      copyBtn.textContent = originalText;
+    }, 2000);
+  };
+  
+  // Tab switching
+  tabs.forEach(tab => {
+    tab.onclick = () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      
+      const format = tab.dataset.format;
+      const type = modal.dataset.citationType;
+      const paragraphIdx = parseInt(modal.dataset.paragraphIdx);
+      const block = modal.dataset.blockData ? JSON.parse(modal.dataset.blockData) : null;
+      
+      citationText.value = generateCitation(format, type, paragraphIdx, block);
+    };
+  });
+  
+  // Cite chapter button
+  document.getElementById('cite-chapter-btn')?.addEventListener('click', () => {
+    openCitationModal('chapter');
+  });
+}
+
 // Close tooltip on scroll
 window.addEventListener('scroll', hideTooltip);
 
 renderReader().then(() => {
   setupSyncScroll();
   setupViewControls();
+  setupCitationModal();
 });
