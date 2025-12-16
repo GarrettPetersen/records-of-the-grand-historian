@@ -306,7 +306,22 @@ function segmentSentences(text) {
     sentences.push(current.trim());
   }
   
-  return sentences;
+  // Post-process: merge standalone closing quotes with previous sentence
+  const merged = [];
+  const closeQuotes = /^[」"'』】)]$/;
+  
+  for (let i = 0; i < sentences.length; i++) {
+    const sentence = sentences[i];
+    
+    // If this sentence is only a closing quote, append it to the previous sentence
+    if (closeQuotes.test(sentence) && merged.length > 0) {
+      merged[merged.length - 1] += sentence;
+    } else {
+      merged.push(sentence);
+    }
+  }
+  
+  return merged;
 }
 
 /**
