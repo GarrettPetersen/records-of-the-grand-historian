@@ -306,18 +306,31 @@ function segmentSentences(text) {
     sentences.push(current.trim());
   }
   
-  // Post-process: merge standalone closing quotes with previous sentence
+  // Post-process: merge standalone closing quotes and move leading quotes
   const merged = [];
-  const closeQuotes = /^[」"'』】)]$/;
+  const closeQuotesOnly = /^[」"'』】)]+$/;
+  const startsWithCloseQuote = /^([」"'』】)]+)(.+)/;
   
   for (let i = 0; i < sentences.length; i++) {
     const sentence = sentences[i];
     
-    // If this sentence is only a closing quote, append it to the previous sentence
-    if (closeQuotes.test(sentence) && merged.length > 0) {
+    // Case 1: Sentence is only a closing quote - append to previous
+    if (closeQuotesOnly.test(sentence) && merged.length > 0) {
       merged[merged.length - 1] += sentence;
-    } else {
-      merged.push(sentence);
+    }
+    // Case 2: Sentence starts with closing quote - move quote to end of previous
+    else {
+      const match = sentence.match(startsWithCloseQuote);
+      if (match && merged.length > 0) {
+        const [, quotes, rest] = match;
+        // Only add quotes if previous doesn't already end with them
+        if (!merged[merged.length - 1].endsWith(quotes)) {
+          merged[merged.length - 1] += quotes;
+        }
+        merged.push(rest);
+      } else {
+        merged.push(sentence);
+      }
     }
   }
   
