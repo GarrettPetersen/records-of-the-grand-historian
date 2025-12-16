@@ -37,6 +37,7 @@ help:
 	@echo "Maintenance commands:"
 	@echo "  make fix-counts             # Recalculate translatedCount in all chapter files"
 	@echo "  make manifest               # Generate manifest.json (includes sync)"
+	@echo "  make generate-pages         # Generate static HTML pages for SEO"
 	@echo "  make sync                   # Copy data/ to public/data/ for web frontend"
 	@echo "  make stats                  # Show chapter counts per book"
 	@echo "  make validate               # Check all JSON files are valid"
@@ -75,22 +76,32 @@ sync:
 	@cp data/manifest.json public/data/ 2>/dev/null || true
 	@echo "Sync complete."
 
-# Update workflow: update citations, fix counts, regenerate manifest, sync to public
+# Generate static HTML pages for SEO
+.PHONY: generate-pages
+generate-pages:
+	@echo "Generating static HTML pages..."
+	@$(NODE) generate-static-pages.js
+	@echo "Static pages generated."
+
+# Update workflow: update citations, fix counts, regenerate manifest, generate static pages, sync to public
 # Run this after any manual edits to chapter JSON files
 .PHONY: update
 update:
 	@echo "=== Running update workflow ==="
 	@echo ""
-	@echo "Step 1/4: Updating citations..."
+	@echo "Step 1/5: Updating citations..."
 	@$(NODE) update-citations.js
 	@echo ""
-	@echo "Step 2/4: Fixing translated counts..."
+	@echo "Step 2/5: Fixing translated counts..."
 	@$(NODE) fix-translated-counts.js || echo "Note: fix-translated-counts.js not found, skipping..."
 	@echo ""
-	@echo "Step 3/4: Regenerating manifest..."
+	@echo "Step 3/5: Regenerating manifest..."
 	@$(NODE) generate-manifest.js
 	@echo ""
-	@echo "Step 4/4: Syncing to public..."
+	@echo "Step 4/5: Generating static pages..."
+	@$(NODE) generate-static-pages.js
+	@echo ""
+	@echo "Step 5/5: Syncing to public..."
 	@$(MAKE) sync
 	@echo ""
 	@echo "=== Update complete ==="
