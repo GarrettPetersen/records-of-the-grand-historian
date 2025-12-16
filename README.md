@@ -177,10 +177,10 @@ Manually create `translations/translations_010.json` with English translations:
 **Step 3: Apply translations to chapter**
 
 ```bash
-node apply-translations.js data/shiji/010.json translations/translations_010.json "Garrett M. Petersen (2025)" "claude-sonnet-4"
+node apply-translations.js data/shiji/010.json translations/translations_010.json "Garrett M. Petersen (2025)" "model-name"
 ```
 
-(Substitute in the model used if different.)
+**Important:** Replace `"model-name"` with the actual AI model used for translation (e.g., `"claude-sonnet-4"`, `"grok-1.5"`, `"gpt-4"`, etc.). This field should accurately reflect the model that generated the translations.
 
 This merges the translations into the chapter JSON file and updates metadata.
 
