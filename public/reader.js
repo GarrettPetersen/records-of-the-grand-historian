@@ -576,6 +576,9 @@ function setupCitationModal() {
 // Close tooltip on scroll
 window.addEventListener('scroll', hideTooltip);
 
+// Export citation functions for static pages
+export { openCitationModal, setupCitationModal, generateCitation };
+
 // Make citation functions globally available for static pages
 window.openCitationModal = openCitationModal;
 window.setupCitationModal = setupCitationModal;
@@ -587,12 +590,5 @@ if (typeof renderReader === 'function') {
     setupSyncScroll();
     setupViewControls();
     setupCitationModal();
-  });
-} else {
-  // For static pages, just set up citation modal
-  document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('citation-modal')) {
-      setupCitationModal();
-    }
   });
 }

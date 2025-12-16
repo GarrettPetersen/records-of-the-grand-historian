@@ -333,18 +333,20 @@ ${paragraphsHTML}
         </div>
     </div>
 
-    <script>
+    <script type="module">
       // Embed chapter data for citations
-      const currentChapterData = ${JSON.stringify(chapterData)};
-      const currentBookInfo = ${JSON.stringify(book)};
-      const currentBookId = '${bookId}';
+      window.currentChapterData = ${JSON.stringify(chapterData)};
+      window.currentBookInfo = ${JSON.stringify(book)};
+      window.currentBookId = '${bookId}';
+      
+      // Import citation functions
+      import { openCitationModal, setupCitationModal } from '../reader.js';
       
       // Initialize citation functionality for static pages
       document.addEventListener('DOMContentLoaded', () => {
-        // Import citation functions from reader.js will be available
         // Set up chapter citation button
         const citeChapterBtn = document.getElementById('cite-chapter-btn');
-        if (citeChapterBtn && typeof openCitationModal === 'function') {
+        if (citeChapterBtn) {
           citeChapterBtn.addEventListener('click', () => {
             openCitationModal('chapter');
           });
@@ -354,8 +356,8 @@ ${paragraphsHTML}
         const citeParagraphBtns = document.querySelectorAll('.cite-paragraph-btn');
         citeParagraphBtns.forEach(btn => {
           const paragraphIdx = parseInt(btn.dataset.paragraph, 10);
-          const block = currentChapterData.content[paragraphIdx];
-          if (block && typeof openCitationModal === 'function') {
+          const block = window.currentChapterData.content[paragraphIdx];
+          if (block) {
             btn.addEventListener('click', () => {
               openCitationModal('paragraph', paragraphIdx, block);
             });
@@ -363,12 +365,9 @@ ${paragraphsHTML}
         });
         
         // Set up citation modal close and copy buttons
-        if (typeof setupCitationModal === 'function') {
-          setupCitationModal();
-        }
+        setupCitationModal();
       });
     </script>
-    <script type="module" src="../reader.js"></script>
 </body>
 </html>`;
 }
