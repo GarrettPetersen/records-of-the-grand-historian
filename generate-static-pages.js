@@ -92,12 +92,17 @@ function generateStructuredData(bookId, chapterData) {
   };
 }
 
-function generateChapterHTML(bookId, chapterData) {
+function generateChapterHTML(bookId, chapterData, allChapters = []) {
   const book = BOOKS[bookId];
   const meta = generateChapterMeta(bookId, chapterData);
   const structuredData = generateStructuredData(bookId, chapterData);
   const chapterNum = parseInt(chapterData.meta.chapter, 10);
   const title = chapterData.meta.title.zh;
+  
+  // Find previous and next chapters
+  const currentIndex = allChapters.findIndex(c => c === chapterData.meta.chapter);
+  const prevChapter = currentIndex > 0 ? allChapters[currentIndex - 1] : null;
+  const nextChapter = currentIndex < allChapters.length - 1 ? allChapters[currentIndex + 1] : null;
   
   // Generate paragraph HTML
   let paragraphsHTML = '';
@@ -209,6 +214,25 @@ ${JSON.stringify(structuredData, null, 2)}
       .cite-paragraph-btn:hover {
         opacity: 1;
       }
+      .nav-btn {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        text-decoration: none;
+        color: #1a5490;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+      .nav-btn:hover:not(.disabled) {
+        background: #e3f2fd;
+        border-color: #1a5490;
+      }
+      .nav-btn.disabled {
+        color: #999;
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
       .translation-badge {
         display: inline-block;
         padding: 0.25rem 0.75rem;
@@ -258,7 +282,29 @@ ${JSON.stringify(structuredData, null, 2)}
     </header>
 
     <main class="static-content">
+        <div class="chapter-navigation" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #dee2e6;">
+            <div>
+                ${prevChapter ? `<a href="${prevChapter}.html" class="nav-btn prev-btn">← Previous Chapter</a>` : '<span class="nav-btn disabled">← Previous Chapter</span>'}
+            </div>
+            <div style="color: #666; font-size: 0.9rem;">Chapter ${chapterNum}</div>
+            <div>
+                ${nextChapter ? `<a href="${nextChapter}.html" class="nav-btn next-btn">Next Chapter →</a>` : '<span class="nav-btn disabled">Next Chapter →</span>'}
+            </div>
+        </div>
+
 ${paragraphsHTML}
+
+        <div class="chapter-navigation" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #dee2e6;">
+            <div>
+                ${prevChapter ? `<a href="${prevChapter}.html" class="nav-btn prev-btn">← Previous Chapter</a>` : '<span class="nav-btn disabled">← Previous Chapter</span>'}
+            </div>
+            <div>
+                <a href="../chapters.html?book=${bookId}" class="nav-btn">Back to Chapters</a>
+            </div>
+            <div>
+                ${nextChapter ? `<a href="${nextChapter}.html" class="nav-btn next-btn">Next Chapter →</a>` : '<span class="nav-btn disabled">Next Chapter →</span>'}
+            </div>
+        </div>
     </main>
 
     <footer>
@@ -332,6 +378,12 @@ async function generateStaticPages(bookId = null, chapterNum = null) {
     
     console.log(`\nGenerating static pages for ${book}...`);
     
+    // Get all chapter numbers sorted
+    const allChapterNums = fs.readdirSync(bookDataDir)
+      .filter(f => f.endsWith('.json'))
+      .map(f => path.basename(f, '.json'))
+      .sort();
+    
     for (const file of chapterFiles) {
       const chapterPath = path.join(bookDataDir, file);
       const chapterData = JSON.parse(fs.readFileSync(chapterPath, 'utf8'));
@@ -339,7 +391,7 @@ async function generateStaticPages(bookId = null, chapterNum = null) {
       const chapterNumStr = path.basename(file, '.json');
       const outputPath = path.join(bookOutputDir, `${chapterNumStr}.html`);
       
-      const html = generateChapterHTML(book, chapterData);
+      const html = generateChapterHTML(book, chapterData, allChapterNums);
       fs.writeFileSync(outputPath, html, 'utf8');
       
       const translationPercent = chapterData.meta.sentenceCount > 0

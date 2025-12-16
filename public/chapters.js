@@ -35,7 +35,7 @@ async function renderChapters() {
   for (const chapter of bookData.chapters) {
     const link = document.createElement('a');
     link.className = 'chapter-link';
-    link.href = `reader.html?book=${bookId}&chapter=${chapter.chapter}`;
+    link.href = `${bookId}/${chapter.chapter}.html`;
     
     const titleZh = chapter.title?.zh || `卷${chapter.chapter}`;
     const hasTranslation = chapter.translatedCount > 0;

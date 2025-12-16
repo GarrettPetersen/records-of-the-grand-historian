@@ -88,6 +88,25 @@
       .cite-paragraph-btn:hover {
         opacity: 1;
       }
+      .nav-btn {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        text-decoration: none;
+        color: #1a5490;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+      .nav-btn:hover:not(.disabled) {
+        background: #e3f2fd;
+        border-color: #1a5490;
+      }
+      .nav-btn.disabled {
+        color: #999;
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
       .translation-badge {
         display: inline-block;
         padding: 0.25rem 0.75rem;
@@ -137,6 +156,16 @@
     </header>
 
     <main class="static-content">
+        <div class="chapter-navigation" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #dee2e6;">
+            <div>
+                <a href="053.html" class="nav-btn prev-btn">← Previous Chapter</a>
+            </div>
+            <div style="color: #666; font-size: 0.9rem;">Chapter 54</div>
+            <div>
+                <a href="055.html" class="nav-btn next-btn">Next Chapter →</a>
+            </div>
+        </div>
+
 
       <div class="paragraph-block" data-paragraph="0">
         <div class="paragraph-number">1</div>
@@ -282,6 +311,18 @@
         </div>
         <button class="cite-paragraph-btn" data-paragraph="17" title="Cite this paragraph">📋</button>
       </div>
+
+        <div class="chapter-navigation" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #dee2e6;">
+            <div>
+                <a href="053.html" class="nav-btn prev-btn">← Previous Chapter</a>
+            </div>
+            <div>
+                <a href="../chapters.html?book=shiji" class="nav-btn">Back to Chapters</a>
+            </div>
+            <div>
+                <a href="055.html" class="nav-btn next-btn">Next Chapter →</a>
+            </div>
+        </div>
     </main>
 
     <footer>
