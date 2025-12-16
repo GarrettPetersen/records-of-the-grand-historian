@@ -129,6 +129,83 @@ The algorithm:
 
 For histories without English translations, the alignment step is automatically skipped.
 
+## Translation Workflow
+
+### Translating a Chapter
+
+This project uses AI-assisted translation (Claude Sonnet 4) to translate untranslated or partially translated chapters.
+
+**Step 1: Extract untranslated sentences**
+
+```bash
+# Extract untranslated sentences from a chapter
+node extract-untranslated.js data/shiji/010.json
+
+# Output: translations/untranslated_010.json
+# Contains: { "s0001": "Chinese text...", "s0002": "..." }
+```
+
+**Step 2: Create translations file**
+
+Manually create `translations/translations_010.json` with English translations:
+
+```json
+{
+  "s0001": "English translation of sentence 1...",
+  "s0002": "English translation of sentence 2...",
+  ...
+}
+```
+
+**Note:** Ensure translations do NOT start with closing quotation marks (`"` or `」`). The quote should be at the end of the previous sentence.
+
+**Step 3: Apply translations to chapter**
+
+```bash
+node apply-translations.js data/shiji/010.json translations/translations_010.json "Garrett M. Petersen (2025)" "claude-sonnet-4"
+```
+
+This merges the translations into the chapter JSON file and updates metadata.
+
+**Step 4: Update everything**
+
+```bash
+make update
+```
+
+This will:
+1. Update citations
+2. Fix translated counts
+3. Regenerate manifest
+4. Generate static HTML pages for SEO
+5. Sync data to public/
+
+### Translation File Organization
+
+```
+translations/
+├── untranslated_005.json    # Sentences needing translation
+├── translations_005.json    # Completed translations
+├── untranslated_007.json
+├── translations_007.json
+└── ...
+```
+
+### Quality Control
+
+After translating, you can:
+
+```bash
+# Check for orphan quotes
+node find-orphan-quotes.js data/shiji/010.json
+
+# Fix orphan quotes
+node fix-orphan-quotes.js data/shiji/010.json
+
+# Fix doubled quotes
+node fix-double-quotes.js data/shiji/010.json
+```
+
 ## Output Format
 
 ### Chapter JSON (e.g., `data/shiji/001.json`)
@@ -225,22 +302,69 @@ Text is scraped from [Chinese Notes](https://chinesenotes.com), which provides:
 
 ## Web Frontend
 
-After scraping chapters, generate the manifest for fast loading:
+### Building the Site
+
+After scraping or translating chapters:
 
 ```bash
-make manifest
-# or manually:
-node generate-manifest.js
+make update
 ```
 
-Run locally:
+This runs the complete build process:
+1. Updates citations metadata
+2. Fixes translated counts
+3. Generates manifest.json
+4. **Generates static HTML pages for SEO**
+5. Syncs data to public/
+
+**Individual commands:**
+
+```bash
+make manifest          # Generate manifest.json
+make generate-pages    # Generate static HTML pages
+make sync              # Copy data/ to public/data/
+```
+
+### Static Pages for SEO
+
+The site generates individual HTML files for each chapter with:
+- Full content embedded (not loaded via JavaScript)
+- Unique URLs (`/shiji/006.html`, `/shiji/007.html`, etc.)
+- Proper meta tags (title, description, Open Graph)
+- Schema.org structured data for search engines
+- Previous/Next chapter navigation
+- Translation percentage badges
+
+**Generate static pages:**
+
+```bash
+# Generate all chapters for all books
+node generate-static-pages.js
+
+# Generate all chapters for one book
+node generate-static-pages.js --book shiji
+
+# Generate one specific chapter
+node generate-static-pages.js --book shiji --chapter 006
+```
+
+### Running Locally
+
 ```bash
 cd public && python3 -m http.server 8000
 ```
 
 Then visit http://localhost:8000
 
+### Deployment
+
 Deploy to Cloudflare Pages by deploying the `public/` directory.
+
+The site includes:
+- Privacy Policy page (`/privacy.html`)
+- About page (`/about.html`)
+- ads.txt for Google AdSense
+- Static HTML pages for each chapter
 
 ## License
 
