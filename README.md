@@ -184,6 +184,52 @@ node apply-translations.js data/shiji/010.json translations/translations_010.jso
 
 This merges the translations into the chapter JSON file and updates metadata.
 
+### Batching for Large Chapters
+
+For very large chapters (1000+ sentences), it's recommended to translate in batches of ~100 sentences to avoid overwhelming AI models and make progress tracking easier:
+
+**Step 1: Extract untranslated sentences**
+```bash
+node extract-untranslated.js data/shiji/014.json
+# Output: translations/untranslated_014.json (1,334 sentences)
+```
+
+**Step 2: Split into batches**
+```bash
+# Create batches of ~100 sentences each
+head -200 translations/untranslated_014.json > translations/batch_014_01.json
+# Edit to keep only first 100 sentence entries, ensure valid JSON
+
+head -400 translations/untranslated_014.json | tail -200 > translations/batch_014_02.json
+# Edit to keep only next 100 sentence entries, ensure valid JSON
+
+# Repeat for subsequent batches...
+```
+
+**Step 3: Translate each batch**
+```bash
+# Create translations/batch_014_01_translations.json with English translations
+# for the first 100 sentences from batch_014_01.json
+```
+
+**Step 4: Apply each batch sequentially**
+```bash
+node apply-translations.js data/shiji/014.json translations/batch_014_01_translations.json "Garrett M. Petersen (2025)" "grok-1.5"
+node apply-translations.js data/shiji/014.json translations/batch_014_02_translations.json "Garrett M. Petersen (2025)" "grok-1.5"
+# Continue with remaining batches...
+```
+
+**Step 5: Verify completion and update**
+```bash
+# Check progress
+node extract-untranslated.js data/shiji/014.json
+
+# Final update when complete
+make update
+```
+
+**Note:** This batching approach was successfully used for chapter 014 (1,334 sentences) and is recommended for chapters with 500+ sentences.
+
 **Step 4: Update everything**
 
 ```bash
