@@ -576,8 +576,23 @@ function setupCitationModal() {
 // Close tooltip on scroll
 window.addEventListener('scroll', hideTooltip);
 
-renderReader().then(() => {
-  setupSyncScroll();
-  setupViewControls();
-  setupCitationModal();
-});
+// Make citation functions globally available for static pages
+window.openCitationModal = openCitationModal;
+window.setupCitationModal = setupCitationModal;
+window.generateCitation = generateCitation;
+
+// Initialize for dynamic reader pages
+if (typeof renderReader === 'function') {
+  renderReader().then(() => {
+    setupSyncScroll();
+    setupViewControls();
+    setupCitationModal();
+  });
+} else {
+  // For static pages, just set up citation modal
+  document.addEventListener('DOMContentLoaded', () => {
+    if (document.getElementById('citation-modal')) {
+      setupCitationModal();
+    }
+  });
+}
