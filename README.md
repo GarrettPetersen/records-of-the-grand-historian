@@ -37,11 +37,23 @@ The Twenty-Four Histories are the Chinese official historical books covering Chi
 npm install
 ```
 
-## Quick Start with Makefile
+## Workflow Overview
+
+1. **Scrape** - Download Chinese text (and existing translations if available) from chinesenotes.com
+2. **Translate** - Add English translations for untranslated sentences using AI
+3. **Build** - Generate static pages and manifest for the web frontend
+4. **Deploy** - Push to Cloudflare Pages
+
+## Scraping Chapters
+
+### Quick Start with Makefile
 
 The easiest way to scrape chapters is using the Makefile:
 
 ```bash
+# List available books
+make list
+
 # Scrape a single chapter
 make shiji-001                    # Scrape Shiji chapter 1
 make hanshu-042                   # Scrape Book of Han chapter 42
@@ -54,22 +66,56 @@ make hanshu CHAPTERS="001 002"    # Scrape Book of Han chapters 1-2
 make shiji-all                    # Scrape all 130 Shiji chapters
 make hanshu-all                   # Scrape all 100 Book of Han chapters
 
-# Generate manifest for web frontend
-make manifest
-
 # View statistics
 make stats                        # Show chapter counts per book
 
-# Clean up
-make clean-shiji                  # Remove all Shiji data
-make clean-all                    # Remove all scraped data
+# Find next chapter to translate
+make first-untranslated
+
+# Validate all JSON
+make validate
 
 # Help
 make help                         # Show all available commands
-make list                         # List all 24 histories
 ```
 
-## Data Structure
+### Manual Scraping (without Makefile)
+
+```bash
+# List available books
+node scrape.js --list
+
+# Scrape a specific chapter
+node scrape.js <book-id> <chapter> --glossary data/glossary.json
+
+# Examples:
+node scrape.js shiji 001 --glossary data/glossary.json 2>/dev/null > data/shiji/001.json
+node scrape.js songshi 369 --glossary data/glossary.json 2>/dev/null > data/songshi/369.json
+```
+
+**Note:** The scraper automatically:
+- Segments Chinese text into sentences
+- Extracts word-level annotations (pinyin, definitions)
+- Aligns existing English translations when available
+- Updates the shared glossary
+- Merges orphan closing quotes with previous sentences
+
+### Data Structure
+
+```
+data/
+├── glossary.json              # Shared glossary across all 24 histories
+├── manifest.json              # Index of all scraped chapters
+├── shiji/                     # Records of the Grand Historian
+│   ├── 001.json
+│   ├── 002.json
+│   └── ... (130 chapters)
+├── hanshu/                    # Book of Han
+│   ├── 001.json
+│   └── ... (100 chapters)
+└── [other books]/
+    └── ...
+```
 
 ```
 data/
@@ -84,37 +130,6 @@ data/
 └── [other books]/
     └── ...
 ```
-
-## Manual Scraping (without Makefile)
-
-### List available books
-```bash
-node scrape.js --list
-```
-
-### Scrape a specific chapter
-```bash
-node scrape.js <book-id> <chapter> --glossary data/glossary.json
-```
-
-**Examples:**
-```bash
-# Create directory structure
-mkdir -p data/shiji
-
-# Scrape chapter 1 of the Records of the Grand Historian
-node scrape.js shiji 001 --glossary data/glossary.json 2>/dev/null > data/shiji/001.json
-
-# Scrape chapter 369 of the History of Song
-mkdir -p data/songshi
-node scrape.js songshi 369 --glossary data/glossary.json 2>/dev/null > data/songshi/369.json
-
-# Scrape chapter 24 of the History of Jin (with zero-padding)
-mkdir -p data/jinshi
-node scrape.js jinshi 024 --glossary data/glossary.json 2>/dev/null > data/jinshi/024.json
-```
-
-**Note:** Use `2>/dev/null` to suppress status messages (loaded/saved glossary) from stderr.
 
 ## Translation Alignment
 
@@ -133,7 +148,7 @@ For histories without English translations, the alignment step is automatically 
 
 ### Translating a Chapter
 
-This project uses AI-assisted translation (Claude Sonnet 4) to translate untranslated or partially translated chapters.
+This project uses AI-assisted translation (e.g. with Claude Sonnet 4) to translate untranslated or partially translated chapters.
 
 **Step 1: Extract untranslated sentences**
 
@@ -165,6 +180,8 @@ Manually create `translations/translations_010.json` with English translations:
 node apply-translations.js data/shiji/010.json translations/translations_010.json "Garrett M. Petersen (2025)" "claude-sonnet-4"
 ```
 
+(Substitute in the model used if different.)
+
 This merges the translations into the chapter JSON file and updates metadata.
 
 **Step 4: Update everything**
@@ -179,6 +196,16 @@ This will:
 3. Regenerate manifest
 4. Generate static HTML pages for SEO
 5. Sync data to public/
+
+**Step 5: Clean up (optional)**
+
+After successfully applying translations, you can archive or delete the translation work files:
+
+```bash
+# The translations are now in the chapter JSON
+# You can remove the temporary files if desired
+rm translations/untranslated_010.json translations/translations_010.json
+```
 
 ### Translation File Organization
 
