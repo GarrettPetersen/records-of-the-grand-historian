@@ -27,14 +27,23 @@ function recalculateTranslatedCount(chapterData) {
       }
     } else if (block.type === 'table_row') {
       for (const cell of block.cells || []) {
-        // Empty cells are considered translated (nothing to translate)
-        if (!cell.content || cell.content.trim() === '') {
+        // For genealogical tables (shiji chapters 13-15), proper names don't need translation
+        const isGenealogicalTable = chapterData.meta.book === 'shiji' &&
+                                   ['013', '014', '015'].includes(chapterData.meta.chapter);
+
+        if (isGenealogicalTable) {
+          // All cells in genealogical tables are considered translated (proper names)
           translatedCount++;
         } else {
-          // Cells with content are translated if they have a translation
-          const hasTranslation = cell.translation && cell.translation.trim() !== '';
-          if (hasTranslation) {
+          // Empty cells are considered translated (nothing to translate)
+          if (!cell.content || cell.content.trim() === '') {
             translatedCount++;
+          } else {
+            // Cells with content are translated if they have a translation
+            const hasTranslation = cell.translation && cell.translation.trim() !== '';
+            if (hasTranslation) {
+              translatedCount++;
+            }
           }
         }
       }
