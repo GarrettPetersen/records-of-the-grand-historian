@@ -55,7 +55,21 @@ for (const block of chapter.content) {
   for (const sentence of sentences) {
     const translation = translations[sentence.id];
     if (translation && translation.trim()) {
-      sentence.translation = translation;
+      // For table cells, set translation directly
+      if (block.type === 'table_row') {
+        sentence.translation = translation;
+        sentence.translator = translator;
+        sentence.model = model;
+      } else {
+        // For paragraph sentences, update the translations array
+        if (!sentence.translations) sentence.translations = [];
+        if (sentence.translations.length === 0) {
+          sentence.translations.push({ lang: 'en', text: '', translator: '', model: '' });
+        }
+        sentence.translations[0].text = translation;
+        sentence.translations[0].translator = translator;
+        sentence.translations[0].model = model;
+      }
       translatedCount++;
     }
   }
