@@ -115,6 +115,11 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
   for (let i = 0; i < chapterData.content.length; i++) {
     const block = chapterData.content[i];
 
+    // Skip table_row blocks - they should only be processed as part of table_header groups
+    if (block.type === 'table_row') {
+      continue;
+    }
+
     if (block.type === 'paragraph') {
       const paraNum = i + 1;
 
@@ -245,7 +250,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         contentHTML += tableHtml;
 
         // Skip the table rows we just processed
-        i = j - 1;
+        i = j;
       } else {
         // Just a header without table rows
         const zhText = block.sentences.map(s => escapeHtml(s.zh)).join('');
