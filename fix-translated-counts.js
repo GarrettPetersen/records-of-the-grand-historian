@@ -16,7 +16,7 @@ const DATA_DIR = './data';
 
 function recalculateTranslatedCount(chapterData) {
   let translatedCount = 0;
-
+  
   for (const block of chapterData.content) {
     let sentences = [];
 
@@ -33,11 +33,11 @@ function recalculateTranslatedCount(chapterData) {
       const hasTranslation = (sentence.translation && sentence.translation.trim()) ||
                             (sentence.translations && sentence.translations.length > 0 && sentence.translations[0].text);
       if (hasTranslation) {
-        translatedCount++;
+          translatedCount++;
       }
     }
   }
-
+  
   return translatedCount;
 }
 

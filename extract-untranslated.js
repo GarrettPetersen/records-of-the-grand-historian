@@ -45,7 +45,7 @@ function extractUntranslated(filePath, outputPath = null) {
         chineseText = sentence.content;
         sentenceId = sentence.id;
       } else if (block.type === 'table_header') {
-        const trans = sentence.translations[0];
+      const trans = sentence.translations[0];
         hasTranslation = trans.text && trans.text.trim() !== '';
         chineseText = sentence.zh;
         sentenceId = sentence.id;

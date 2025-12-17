@@ -660,6 +660,14 @@
         const viewBtns = document.querySelectorAll('.view-btn');
         const contentContainer = document.querySelector('.content-container');
 
+        // Initialize default view (both)
+        const tabularContent = document.querySelector('.tabular-content');
+        if (tabularContent) {
+          tabularContent.classList.add('show-both');
+          contentContainer.style.gridTemplateColumns = '1fr 1px 1fr';
+          document.querySelectorAll('.chinese-text, .english-text').forEach(el => el.style.display = 'block');
+        }
+
         viewBtns.forEach(btn => {
           btn.addEventListener('click', () => {
             const view = btn.dataset.view;
