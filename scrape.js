@@ -730,8 +730,33 @@ async function scrapeTabularChapter(bookId, chapter, glossaryPath) {
   const ctextTitle = parseTitle(ctext$);
   const { content: tableContent, tokens: tableTokens } = extractContent(ctext$, true); // Pass isFromCtext flag
 
-  // Step 3: Combine content - text first, then table
+  // Step 3: Combine content - remove duplicate table data
   const combinedContent = [...textContent, ...tableContent];
+
+  // Filter out paragraphs that duplicate table row data
+  const filteredContent = combinedContent.filter((block, index) => {
+    if (block.type !== 'paragraph') return true;
+
+    const paragraphText = block.sentences.map(s => s.zh).join('');
+
+    // Check if this paragraph contains table data by looking for multiple state/ruler names
+    const stateNames = ['魯', '齊', '晉', '秦', '楚', '宋', '衛', '陳', '蔡', '曹', '燕', '魏'];
+    const hasStateNames = stateNames.some(state => paragraphText.includes(state));
+
+    // Look for patterns typical of table data: many short Chinese names separated by spaces
+    const namePatterns = paragraphText.match(/[\u4e00-\u9fff]{2,4}[\s\u3000]/g) || [];
+    const hasManyNames = namePatterns.length > 6; // More than 6 Chinese names
+
+    // If paragraph has state names and many Chinese names, it's likely table data
+    const isTableParagraph = hasStateNames && hasManyNames;
+
+    if (isTableParagraph) {
+      console.error(`Filtering out table paragraph: ${paragraphText.substring(0, 50)}...`);
+      return false;
+    }
+
+    return true;
+  });
   const combinedTokens = [...textTokens, ...tableTokens];
 
   // Step 4: Update glossary

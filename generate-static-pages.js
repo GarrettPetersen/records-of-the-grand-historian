@@ -40,20 +40,25 @@ function escapeHtml(text) {
 function generateChapterMeta(bookId, chapterData) {
   const book = BOOKS[bookId];
   const chapterNum = parseInt(chapterData.meta.chapter, 10);
-  const title = chapterData.meta.title.zh || `Chapter ${chapterNum}`;
+  const zhTitle = chapterData.meta.title.zh || `Chapter ${chapterNum}`;
+  const enTitle = chapterData.meta.title.en;
+  const title = enTitle ? `${zhTitle} ${enTitle}` : zhTitle;
   const translationPercent = chapterData.meta.sentenceCount > 0
     ? Math.round((chapterData.meta.translatedCount / chapterData.meta.sentenceCount) * 100)
     : 0;
-  
-  let description = `${book.chinese} (${book.name}) - ${title}`;
+
+  let description = `${book.chinese} (${book.name}) - ${zhTitle}`;
+  if (enTitle) {
+    description += ` (${enTitle})`;
+  }
   if (translationPercent === 100) {
     description += '. Complete English translation available.';
   } else if (translationPercent > 0) {
     description += `. ${translationPercent}% translated to English.`;
   }
-  
+
   return {
-    title: `${title} - ${book.chinese}`,
+    title: enTitle ? `${enTitle} - ${book.chinese}` : `${zhTitle} - ${book.chinese}`,
     description: description.substring(0, 160),
     translationPercent
   };
