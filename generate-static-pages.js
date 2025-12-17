@@ -121,17 +121,11 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
       // Chinese text
       const zhText = block.sentences.map(s => escapeHtml(s.zh)).join('');
 
-      // English text - use block translation if available, otherwise sentence translations
-      let enText = '';
-      if (block.translations && block.translations.length > 0 && block.translations[0].text) {
-        enText = escapeHtml(block.translations[0].text);
-      } else {
-        // Fallback to sentence-level translations
-        const sentenceTexts = block.sentences
-          .map(s => s.translations && s.translations.length > 0 ? s.translations[0].text : '')
-          .filter(t => t);
-        enText = sentenceTexts.map(t => escapeHtml(t)).join(' ');
-      }
+      // English text - use sentence-level translations
+      const sentenceTexts = block.sentences
+        .map(s => s.translation || (s.translations && s.translations.length > 0 ? s.translations[0].text : ''))
+        .filter(t => t);
+      const enText = sentenceTexts.map(t => escapeHtml(t)).join(' ');
 
       contentHTML += `
         <div class="paragraph-block" data-paragraph="${i}">
