@@ -104,39 +104,89 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
   const prevChapter = currentIndex > 0 ? allChapters[currentIndex - 1] : null;
   const nextChapter = currentIndex < allChapters.length - 1 ? allChapters[currentIndex + 1] : null;
   
-  // Generate paragraph HTML
-  let paragraphsHTML = '';
-  
+  // Generate content HTML (paragraphs and tables)
+  let contentHTML = '';
+
   for (let i = 0; i < chapterData.content.length; i++) {
     const block = chapterData.content[i];
-    if (block.type !== 'paragraph') continue;
-    
-    const paraNum = i + 1;
-    
-    // Chinese text
-    const zhText = block.sentences.map(s => escapeHtml(s.zh)).join('');
-    
-    // English text - use block translation if available, otherwise sentence translations
-    let enText = '';
-    if (block.translations && block.translations.length > 0 && block.translations[0].text) {
-      enText = escapeHtml(block.translations[0].text);
-    } else {
-      // Fallback to sentence-level translations
-      const sentenceTexts = block.sentences
-        .map(s => s.translations && s.translations.length > 0 ? s.translations[0].text : '')
-        .filter(t => t);
-      enText = sentenceTexts.map(t => escapeHtml(t)).join(' ');
+
+    if (block.type === 'paragraph') {
+      const paraNum = i + 1;
+
+      // Chinese text
+      const zhText = block.sentences.map(s => escapeHtml(s.zh)).join('');
+
+      // English text - use block translation if available, otherwise sentence translations
+      let enText = '';
+      if (block.translations && block.translations.length > 0 && block.translations[0].text) {
+        enText = escapeHtml(block.translations[0].text);
+      } else {
+        // Fallback to sentence-level translations
+        const sentenceTexts = block.sentences
+          .map(s => s.translations && s.translations.length > 0 ? s.translations[0].text : '')
+          .filter(t => t);
+        enText = sentenceTexts.map(t => escapeHtml(t)).join(' ');
+      }
+
+      contentHTML += `
+        <div class="paragraph-block" data-paragraph="${i}">
+          <div class="paragraph-number">${paraNum}</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">${zhText}</div>
+            ${enText ? `<div class="english-text">${enText}</div>` : ''}
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="${i}" title="Cite this paragraph">📋</button>
+        </div>`;
+    } else if (block.type === 'table_row') {
+      // Render table row
+      const year = escapeHtml(block.year);
+      const events = block.cells.events;
+
+      contentHTML += `
+        <div class="table-row-block" data-paragraph="${i}">
+          <div class="table-row-header">${year}</div>
+          <div class="table-row-content">
+            <table class="genealogical-table">
+              <tbody>`;
+
+      // Group events into columns (typically state names and rulers)
+      const numColumns = events.length;
+      for (let col = 0; col < numColumns; col++) {
+        const event = events[col];
+        if (event) {
+          const zhText = escapeHtml(event.zh);
+          const enText = event.translations && event.translations.length > 0 && event.translations[0].text
+            ? escapeHtml(event.translations[0].text)
+            : '';
+
+          contentHTML += `
+                <tr>
+                  <td class="chinese-cell">${zhText}</td>
+                  <td class="english-cell">${enText || ''}</td>
+                </tr>`;
+        }
+      }
+
+      contentHTML += `
+              </tbody>
+            </table>
+          </div>
+        </div>`;
+    } else if (block.type === 'table_header') {
+      // Render table header
+      const zhText = block.sentences.map(s => escapeHtml(s.zh)).join('');
+      const enText = block.translations && block.translations.length > 0 && block.translations[0].text
+        ? escapeHtml(block.translations[0].text)
+        : '';
+
+      contentHTML += `
+        <div class="table-header-block">
+          <h3 class="table-title">
+            <span class="chinese-text">${zhText}</span>
+            ${enText ? `<span class="english-text">${enText}</span>` : ''}
+          </h3>
+        </div>`;
     }
-    
-    paragraphsHTML += `
-      <div class="paragraph-block" data-paragraph="${i}">
-        <div class="paragraph-number">${paraNum}</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">${zhText}</div>
-          ${enText ? `<div class="english-text">${enText}</div>` : ''}
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="${i}" title="Cite this paragraph">📋</button>
-      </div>`;
   }
   
   const translationBadge = meta.translationPercent === 100 
@@ -248,12 +298,76 @@ ${JSON.stringify(structuredData, null, 2)}
         background: #fff3cd;
         color: #856404;
       }
+      .table-row-block {
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid #eee;
+      }
+      .table-row-header {
+        background: #f8f9fa;
+        padding: 0.75rem 1rem;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+        font-weight: 600;
+        color: #2c3e50;
+        border-left: 4px solid #3498db;
+      }
+      .table-row-content {
+        overflow-x: auto;
+      }
+      .genealogical-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0;
+      }
+      .genealogical-table td {
+        padding: 0.5rem;
+        border: 1px solid #dee2e6;
+        vertical-align: top;
+      }
+      .genealogical-table .chinese-cell {
+        background: #f8f9fa;
+        font-weight: 500;
+        color: #2c3e50;
+        width: 50%;
+      }
+      .genealogical-table .english-cell {
+        background: white;
+        color: #34495e;
+        width: 50%;
+      }
+      .table-header-block {
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+      .table-title {
+        font-size: 1.5rem;
+        color: #2c3e50;
+        margin: 0;
+        padding: 1rem 0;
+        border-bottom: 2px solid #3498db;
+      }
+      .table-title .english-text {
+        display: block;
+        font-size: 1rem;
+        color: #7f8c8d;
+        font-weight: normal;
+        margin-top: 0.25rem;
+      }
       @media (max-width: 768px) {
         .paragraph-content {
           grid-template-columns: 1fr;
         }
         .paragraph-block {
           grid-template-columns: 30px 1fr 30px;
+        }
+        .genealogical-table .chinese-cell,
+        .genealogical-table .english-cell {
+          display: block;
+          width: 100%;
+        }
+        .genealogical-table {
+          margin-bottom: 1rem;
         }
       }
     </style>
@@ -292,7 +406,7 @@ ${JSON.stringify(structuredData, null, 2)}
             </div>
         </div>
 
-${paragraphsHTML}
+${contentHTML}
 
         <div class="chapter-navigation" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #dee2e6;">
             <div>

@@ -20,7 +20,17 @@ function extractUntranslated(filePath, outputPath = null) {
   const untranslated = {};
   
   for (const block of data.content) {
-    for (const sentence of block.sentences) {
+    let sentences = [];
+
+    if (block.type === 'paragraph') {
+      sentences = block.sentences;
+    } else if (block.type === 'table_row') {
+      sentences = block.cells.events;
+    } else if (block.type === 'table_header') {
+      sentences = block.sentences;
+    }
+
+    for (const sentence of sentences) {
       const trans = sentence.translations[0];
       if (!trans.text || trans.text.trim() === '') {
         untranslated[sentence.id] = sentence.zh;

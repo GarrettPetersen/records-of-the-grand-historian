@@ -468,13 +468,7 @@ function parseCtextTables($, $container, startSentenceCounter) {
       content.push({
         type: 'table_row',
         year: period,
-        cells: { events: stateCells },
-        sentences: [{
-          id: `s${++sentenceCounter}`,
-          zh: cells.map(c => c.zh).join('\t'),
-          translations: [{ lang: 'en', text: '', translator: '' }]
-        }],
-        translations: []
+        cells: { events: stateCells }
       });
     }
   });
@@ -754,7 +748,7 @@ async function scrapeTabularChapter(bookId, chapter, glossaryPath) {
       if (block.type === 'paragraph') {
         return sum + block.sentences.length;
       } else if (block.type === 'table_row') {
-        return sum + block.sentences.length;
+        return sum + block.cells.events.length;
       } else if (block.type === 'table_header') {
         return sum + block.sentences.length;
       }

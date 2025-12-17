@@ -16,19 +16,27 @@ const DATA_DIR = './data';
 
 function recalculateTranslatedCount(chapterData) {
   let translatedCount = 0;
-  
+
   for (const block of chapterData.content) {
-    if (block.sentences) {
-      for (const sentence of block.sentences) {
-        if (sentence.translations && 
-            sentence.translations.length > 0 && 
-            sentence.translations[0].text) {
-          translatedCount++;
-        }
+    let sentences = [];
+
+    if (block.type === 'paragraph') {
+      sentences = block.sentences || [];
+    } else if (block.type === 'table_row') {
+      sentences = block.cells?.events || [];
+    } else if (block.type === 'table_header') {
+      sentences = block.sentences || [];
+    }
+
+    for (const sentence of sentences) {
+      if (sentence.translations &&
+          sentence.translations.length > 0 &&
+          sentence.translations[0].text) {
+        translatedCount++;
       }
     }
   }
-  
+
   return translatedCount;
 }
 

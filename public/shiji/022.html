@@ -122,12 +122,76 @@
         background: #fff3cd;
         color: #856404;
       }
+      .table-row-block {
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid #eee;
+      }
+      .table-row-header {
+        background: #f8f9fa;
+        padding: 0.75rem 1rem;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+        font-weight: 600;
+        color: #2c3e50;
+        border-left: 4px solid #3498db;
+      }
+      .table-row-content {
+        overflow-x: auto;
+      }
+      .genealogical-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0;
+      }
+      .genealogical-table td {
+        padding: 0.5rem;
+        border: 1px solid #dee2e6;
+        vertical-align: top;
+      }
+      .genealogical-table .chinese-cell {
+        background: #f8f9fa;
+        font-weight: 500;
+        color: #2c3e50;
+        width: 50%;
+      }
+      .genealogical-table .english-cell {
+        background: white;
+        color: #34495e;
+        width: 50%;
+      }
+      .table-header-block {
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+      .table-title {
+        font-size: 1.5rem;
+        color: #2c3e50;
+        margin: 0;
+        padding: 1rem 0;
+        border-bottom: 2px solid #3498db;
+      }
+      .table-title .english-text {
+        display: block;
+        font-size: 1rem;
+        color: #7f8c8d;
+        font-weight: normal;
+        margin-top: 0.25rem;
+      }
       @media (max-width: 768px) {
         .paragraph-content {
           grid-template-columns: 1fr;
         }
         .paragraph-block {
           grid-template-columns: 30px 1fr 30px;
+        }
+        .genealogical-table .chinese-cell,
+        .genealogical-table .english-cell {
+          display: block;
+          width: 100%;
+        }
+        .genealogical-table {
+          margin-bottom: 1rem;
         }
       }
     </style>
@@ -167,926 +231,926 @@
         </div>
 
 
-      <div class="paragraph-block" data-paragraph="0">
-        <div class="paragraph-number">1</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">公元前 紀年 大事紀。相位。將位。御史大夫位。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="0" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="1">
-        <div class="paragraph-number">2</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">206 高皇帝元年 春，沛公為漢王，之南鄭。秋，還定雍。一。丞相蕭何守漢中。御史大夫周苛守滎陽。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="1" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="2">
-        <div class="paragraph-number">3</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">205 二 春，定塞、翟、魏、河南、韓、殷國。夏，伐項籍，至彭城。立太子。還據滎陽。二。守關中。一。太尉長安侯盧綰。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="2" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="3">
-        <div class="paragraph-number">4</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">204 三 魏豹反。使韓信別定魏，伐趙。楚圍我滎陽。三 二</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="3" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="4">
-        <div class="paragraph-number">5</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">203 四 使韓信別定齊及燕，太公自楚歸，與楚界洪渠。四 三。周苛守滎陽，死。御史大夫汾陰侯周昌。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="4" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="5">
-        <div class="paragraph-number">6</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">202 五 冬，破楚垓下，殺項籍。春，王踐皇帝位定陶。。入都關中。五。罷太尉官。四。後九月，綰為燕王。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="5" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="6">
-        <div class="paragraph-number">7</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">201 六 尊太公為太上皇。劉仲為代王。立大市。更命咸陽曰長安。六。封為酇侯。。張蒼為計相。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="6" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="7">
-        <div class="paragraph-number">8</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">200 七 長樂宮成，自櫟陽徙長安。伐匈奴，匈奴圍我平城。七</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="7" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="8">
-        <div class="paragraph-number">9</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">199 八 擊韓信反虜於趙城。貫高作亂，明年覺，誅之。匈奴攻代王，代王棄國亡，廢為郃陽侯。八</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="8" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="9">
-        <div class="paragraph-number">10</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">198 九 未央宮成，置酒前殿，太上皇輦上坐，帝奉玉卮上壽，曰：「始常以臣不如仲力，今臣功孰與仲多？」太上皇笑，殿上稱萬歲。徙齊田，楚昭、屈、景于關中。九。遷為相國。御史大夫昌為趙丞相。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="9" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="10">
-        <div class="paragraph-number">11</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">197 十 太上皇崩。陳豨反代地。十 御史大夫江邑侯趙堯。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="10" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="11">
-        <div class="paragraph-number">12</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">196 十一 誅淮陰、彭越。黥布反。十一 周勃為太尉。攻代。後官省。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="11" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="12">
-        <div class="paragraph-number">13</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">195 十二 冬，擊布。還過沛。夏，上崩，葬長陵。十二</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="12" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="13">
-        <div class="paragraph-number">14</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">194 孝惠元年 趙隱王如意死。始作長安城西北方。除諸侯丞相為相。十三</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="13" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="14">
-        <div class="paragraph-number">15</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">193 二 楚元王、齊悼惠王來朝。七月辛未，何薨。十四。七月癸巳，齊相平陽侯曹參為相國。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="14" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="15">
-        <div class="paragraph-number">16</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">192 三 初作長安城。蜀湔氐反。擊之。二</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="15" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="16">
-        <div class="paragraph-number">17</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">191 四 三月甲子，赦，無所復作。三</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="16" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="17">
-        <div class="paragraph-number">18</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">190 五 為高祖立廟於沛城成，置歌兒一百二十人。八月乙丑，參卒。四</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="17" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="18">
-        <div class="paragraph-number">19</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">189 六 七月，齊悼惠王薨。立太倉、西市。一。十月己巳，安國侯王陵為右丞相。曲逆侯陳平為左丞相。堯抵罪。廣阿侯任敖為御史大夫。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="18" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="19">
-        <div class="paragraph-number">20</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">188 七 上崩。大臣用張辟彊計，呂氏權重，以呂台為呂王。立少帝。九月辛巳，葬安陵。二</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="19" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="20">
-        <div class="paragraph-number">21</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">187 高后元年 王孝惠諸子。置孝悌力田。三。十一月甲子，徙平為右丞相。辟陽侯審食其為左丞相。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="20" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="21">
-        <div class="paragraph-number">22</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">186 二 十二月，呂王台薨，子嘉代立為呂王。行八銖錢。四。平。二。食其。平陽侯曹窋為御史大夫。。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="21" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="22">
-        <div class="paragraph-number">23</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">185 三 五。三</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="22" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="23">
-        <div class="paragraph-number">24</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">184 四 廢少帝，更立常山王弘為帝。六。四。置太尉官。一。絳侯周勃為太尉。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="23" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="24">
-        <div class="paragraph-number">25</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">183 五 八月，淮陽王薨，以其弟壺關侯武為淮陽王。令戍卒歲更。七。五 二</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="24" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="25">
-        <div class="paragraph-number">26</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">182 六 以呂產為呂王。四月丁酉，赦天下。晝昏。八。六 三</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="25" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="26">
-        <div class="paragraph-number">27</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">181 七 趙王幽死，以呂祿為趙王。梁王徙趙，自殺。九。七 四</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="26" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="27">
-        <div class="paragraph-number">28</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">180 八 七月，高后崩。九月，誅諸呂。後九月，代王至，踐皇帝位。後九月，食其免相。十。七月辛巳，為帝太傅。九月壬戌，復為丞相。八 五。隆慮侯灶為將軍，擊南越。御史大夫蒼。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="27" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="28">
-        <div class="paragraph-number">29</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">179 孝文元年 除收孥相坐律。立太子。賜民爵。十一。十一月辛巳，平徙為左丞相。太尉絳侯周勃為右丞相。六。勃為相，潁陰侯灌嬰為太尉。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="28" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="29">
-        <div class="paragraph-number">30</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">178 二 除誹謗律。皇子武為代王，參為太原王，揖為梁王。十月，丞相平薨。一。十一月乙亥，絳侯勃復為丞相。一</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="29" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="30">
-        <div class="paragraph-number">31</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">177 三 徙代王武為淮陽王。上幸太原。濟北王反。匈奴大入上郡。以地盡與太原，太原更號代。十一月壬子，勃免相，之國。一。十二月乙亥，太尉潁陰侯灌嬰為丞相。罷太尉官。二。棘蒲侯陳武為大將軍，擊濟北。昌侯盧卿、共侯盧罷師、甯侯鸱、深澤侯將夜皆為將軍，屬武祁侯賀，將兵屯滎陽。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="30" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="31">
-        <div class="paragraph-number">32</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">176 四 十二月己巳，嬰卒。一。正月甲午，御史大夫北平侯張蒼為丞相。安丘侯張說為將軍，擊胡，出代。關中侯申屠嘉為御史大夫。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="31" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="32">
-        <div class="paragraph-number">33</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">175 五 除錢律，民得鑄錢</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="32" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="33">
-        <div class="paragraph-number">34</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">174 六 廢淮南王，遷嚴道，道死雍。三</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="33" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="34">
-        <div class="paragraph-number">35</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">173 七 四月丙子，初置南陵。四</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="34" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="35">
-        <div class="paragraph-number">36</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">172 八 太僕汝陰侯滕公卒。五</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="35" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="36">
-        <div class="paragraph-number">37</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">171 九 溫室鐘自鳴。以芷陽鄉為霸陵。六 御史大夫敬。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="36" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="37">
-        <div class="paragraph-number">38</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">170 十 諸侯王皆至長安。七</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="37" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="38">
-        <div class="paragraph-number">39</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">169 十一 上幸代。地動。八</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="38" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="39">
-        <div class="paragraph-number">40</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">168 十二 河決東郡金隄。徙淮陽王為梁王。九</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="39" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="40">
-        <div class="paragraph-number">41</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">167 十三 除肉刑及田租稅律、戍卒令。十</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="40" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="41">
-        <div class="paragraph-number">42</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">166 十四 匈奴大入蕭關，發兵擊之，及屯長安旁。十一 成侯董赤、內史欒布、昌侯盧卿、隆慮侯灶、甯侯鸱皆為將軍，東陽侯張相如為大將軍，皆擊匈奴。中尉周舍、郎中令張武皆為將軍，屯長安旁。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="41" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="42">
-        <div class="paragraph-number">43</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">165 十五 黃龍見成紀。上始郊見雍五帝。十二</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="42" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="43">
-        <div class="paragraph-number">44</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">164 十六 上始郊見渭陽五帝。十三</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="43" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="44">
-        <div class="paragraph-number">45</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">163 後元年 新垣平詐言方士，覺，誅之。十四</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="44" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="45">
-        <div class="paragraph-number">46</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">162 二 匈奴和親。地動。八月戊辰，蒼免相。十五。八月庚午，御史大夫申屠嘉為丞相，封故安侯。御史大夫青。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="45" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="46">
-        <div class="paragraph-number">47</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">161 三 置谷口邑。二</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="46" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="47">
-        <div class="paragraph-number">48</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">160 四 三</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="47" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="48">
-        <div class="paragraph-number">49</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">159 五 上幸雍。四</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="48" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="49">
-        <div class="paragraph-number">50</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">158 六 匈奴三萬人入上郡，二萬人入雲中。五 以中大夫令免為車騎將軍，軍飛狐，故楚相蘇意為將軍，軍句注；。將軍張武屯北地；河內守周亞夫為將軍，軍細柳；宗正劉禮軍霸上；祝茲侯徐厲軍棘門：以備胡。數月，胡去，亦罷。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="49" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="50">
-        <div class="paragraph-number">51</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">157 七 六月己亥，孝文皇帝崩。丁未，太子立。民出臨三日，葬霸陵。六 中尉亞夫為車騎將軍，郎中令張武為復土將軍，屬國捍為將屯將軍。詹事戎奴為車騎將軍，侍太后。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="50" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="51">
-        <div class="paragraph-number">52</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">156 孝景元年 立孝文皇帝廟，郡國為太宗廟。七。置司徒官。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="51" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="52">
-        <div class="paragraph-number">53</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">155 二 立皇子德為河閒王，閼為臨江王，餘為淮陽王，非為汝南王，彭祖為廣川王，發為長沙王。四月中，孝文太后崩。嘉卒。八。開封侯陶青為丞相。御史大夫錯。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="52" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="53">
-        <div class="paragraph-number">54</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">154 三 吳楚七國反，發兵擊，皆破之。皇子端為膠西王，勝為中山王。二。置太尉官。中尉條侯周亞夫。為太尉，擊吳楚；曲周侯酈寄為將軍，擊趙；竇嬰為大將軍，屯滎陽，欒布為將軍，擊齊。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="53" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="54">
-        <div class="paragraph-number">55</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">153 四 立太子。三 二。太尉亞夫。御史大夫蚡。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="54" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="55">
-        <div class="paragraph-number">56</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">152 五 置陽陵邑。丞相北平侯張蒼卒。四 三</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="55" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="56">
-        <div class="paragraph-number">57</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">151 六 徙廣川王彭祖為趙王。五 四 御史大夫陽陵侯岑邁。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="56" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="57">
-        <div class="paragraph-number">58</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">150 七 廢太子榮為臨江王。四月丁巳，膠東王立為太子。青罷相。六月乙巳，太尉條侯亞夫為丞相。罷太尉官。五。遷為丞相。御史大夫舍。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="57" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="58">
-        <div class="paragraph-number">59</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">149 中元年 二</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="58" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="59">
-        <div class="paragraph-number">60</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">148 二 皇子越為廣川王，寄為膠東王。三</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="59" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="60">
-        <div class="paragraph-number">61</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">147 三 皇子乘為清河王。亞夫免相。四。御史大夫桃侯劉舍為丞相。御史大夫綰。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="60" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="61">
-        <div class="paragraph-number">62</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">146 四 臨江王徵，自殺，葬藍田，燕數萬為銜士置冢上。二</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="61" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="62">
-        <div class="paragraph-number">63</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">145 五 皇子舜為常山王。三</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="62" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="63">
-        <div class="paragraph-number">64</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">144 六 梁孝王武薨。分梁為五國，王諸子：子買為梁王，明為濟川王，彭離為濟東王，定為山陽王，不識為濟陰王。四</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="63" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="64">
-        <div class="paragraph-number">65</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">143 後元年 五月，地動。七月乙巳，日蝕。舍免相。五。八月壬辰，御史大夫建陵侯衛綰為丞相。御史大夫不疑。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="64" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="65">
-        <div class="paragraph-number">66</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">142 二 二 六月丁丑，御史大夫岑邁卒。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="65" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="66">
-        <div class="paragraph-number">67</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">141 三 正月甲子，孝景皇帝崩。二月丙子，太子立。三</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="66" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="67">
-        <div class="paragraph-number">68</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">140 孝武建元元年 綰免相。四。魏其侯竇嬰為丞相。置太尉。武安侯田蚡為太尉。御史大夫抵。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="67" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="68">
-        <div class="paragraph-number">69</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">139 二 置茂陵。嬰免相。二月乙未，太常柏至侯許昌為丞相。蚡免太尉。罷太尉官。御史大夫趙綰。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="68" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="69">
-        <div class="paragraph-number">70</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">138 三 東甌王廣武侯望率其眾四萬餘人來降，處廬江郡。二</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="69" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="70">
-        <div class="paragraph-number">71</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">137 四 三 御史大夫青翟。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="70" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="71">
-        <div class="paragraph-number">72</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">136 五 行三分錢。四</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="71" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="72">
-        <div class="paragraph-number">73</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">135 六 正月，閩越王反。孝景太后崩。。昌免相。五。六月癸巳，武安侯田蚡為丞相。青翟為太子太傅。御史大夫安國。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="72" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="73">
-        <div class="paragraph-number">74</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">134 元光元年 二</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="73" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="74">
-        <div class="paragraph-number">75</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">133 二 帝初之雍，郊見五畤。三 夏，御史大夫韓安國為護軍將軍，衛尉李廣為驍騎將軍，太僕公孫賀為輕車將軍，大行王恢為將屯將軍，太中大夫李息為材官將軍，篡單于馬邑，不合，誅恢。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="74" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="75">
-        <div class="paragraph-number">76</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">132 三 五月丙子，河決于瓠子。四</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="75" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="76">
-        <div class="paragraph-number">77</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">131 四 十二月丁亥，地動。蚡卒。五。平棘侯薛澤為丞相。御史大夫歐。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="76" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="77">
-        <div class="paragraph-number">78</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">130 五 十月，族灌夫家，棄魏其侯市。二</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="77" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="78">
-        <div class="paragraph-number">79</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">129 六 南夷始置郵亭。三 太中大夫衛青為車騎將軍，出上谷；衛尉李廣為驍騎將軍，出鴈門；大中大夫公孫敖為騎將軍，出代；太僕公孫賀為輕車將軍，出雲中：皆擊匈奴。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="78" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="79">
-        <div class="paragraph-number">80</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">128 元朔元年 衛夫人立為皇后。四 車騎將軍青出雁門，擊匈奴。衛尉韓安國為將屯將軍，軍代，明年，屯漁陽卒。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="79" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="80">
-        <div class="paragraph-number">81</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">127 二 五 春，車騎將軍衛青出雲中，至高闕，取河南地。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="80" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="81">
-        <div class="paragraph-number">82</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">126 三 匈奴殺代太守友。六 御史大夫弘。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="81" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="82">
-        <div class="paragraph-number">83</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">125 四 匈奴入定襄、代、上郡。七</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="82" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="83">
-        <div class="paragraph-number">84</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">124 五 匈奴殺代都尉朱英。澤免相。八。十一月乙丑，御史大夫公孫弘為丞相，封平津侯。春，長平侯衛青為大將軍，擊右賢。衛尉蘇建為游擊將軍，屬青。左內史李沮為強弩將軍，太僕賀為車騎將軍，代相李蔡為輕車將軍，岸頭侯張次公為將軍，大行息為將軍：皆屬大將軍，擊匈奴。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="83" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="84">
-        <div class="paragraph-number">85</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">123 六 二 大將軍青再出定襄擊胡。合騎侯公孫敖為中將軍，太僕賀為左將軍，郎中令李廣為後將軍。翕侯趙信為前將軍，敗降匈奴。衛尉蘇建為右將軍，敗，身脫。左內史沮為彊弩將軍。皆屬青。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="84" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="85">
-        <div class="paragraph-number">86</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">122 元狩元年 十月中，淮南王安、衡山王賜謀反，皆自殺，國除。三 御史大夫蔡。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="85" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="86">
-        <div class="paragraph-number">87</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">121 二 匈奴入鴈門、代郡。江都王建反。膠東王子慶立為六安王。弘卒。四。御史大夫樂安侯李蔡為丞相。冠軍侯霍去病為驃騎將軍，擊胡，至祁連；合騎侯敖為將軍。出北地；博望侯張騫、郎中令李廣為將軍，出右北平。御史大夫湯。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="86" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="87">
-        <div class="paragraph-number">88</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">120 三 匈奴入右北平、定襄。二</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="87" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="88">
-        <div class="paragraph-number">89</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">119 四 三 大將軍青出定襄，郎中令李廣為前將軍，太僕公孫賀為左將軍，主爵趙食其為右將軍，平陽侯曹襄為後將軍：擊單于。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="88" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="89">
-        <div class="paragraph-number">90</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">118 五 蔡坐侵園堧，自殺。四。太子少傅武彊侯莊青翟為丞相。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="89" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="90">
-        <div class="paragraph-number">91</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">117 六 四月乙巳，皇子閎為齊王，旦為燕王，胥為廣陵王。二</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="90" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="91">
-        <div class="paragraph-number">92</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">116 元鼎元年 三</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="91" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="92">
-        <div class="paragraph-number">93</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">115 二 青翟有罪，自殺。四。太子太傅高陵侯趙周為丞相。湯有罪，自殺。御史大夫慶。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="92" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="93">
-        <div class="paragraph-number">94</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">114 三 二</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="93" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="94">
-        <div class="paragraph-number">95</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">113 四 立常山憲王子平為真定王，商為泗水王。六月中，河東汾陰得寶鼎。三</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="94" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="95">
-        <div class="paragraph-number">96</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">112 五 三月中，南越相嘉反，殺其王及漢使者。八月，周坐酎金，自殺。四。九月辛巳，御史大夫石慶為丞相，封牧丘侯。衛尉路博德為伏波將軍，出桂陽；主爵楊僕為樓船將軍，出豫章：皆破南越。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="95" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="96">
-        <div class="paragraph-number">97</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">111 六 十二月，東越反。二 故龍镪侯韓說為橫海將軍，出會稽；樓船將軍楊僕出豫章；中尉王溫舒出會稽：皆破東越。御史大夫式。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="96" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="97">
-        <div class="paragraph-number">98</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">110 元封元年。三 御史大夫寬。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="97" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="98">
-        <div class="paragraph-number">99</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">109 二 四 秋，樓船將軍楊僕、左將軍荀彘出遼東，擊朝鮮。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="98" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="99">
-        <div class="paragraph-number">100</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">108 三 五</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="99" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="100">
-        <div class="paragraph-number">101</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">107 四 六</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="100" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="101">
-        <div class="paragraph-number">102</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">106 五 七</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="101" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="102">
-        <div class="paragraph-number">103</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">105 六 八</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="102" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="103">
-        <div class="paragraph-number">104</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">104 太初元年 改曆，以正月為歲首。九</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="103" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="104">
-        <div class="paragraph-number">105</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">103 二 正月戊寅，慶卒。十。三月丁卯，太僕公孫賀為丞相，封葛繹侯。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="104" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="105">
-        <div class="paragraph-number">106</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">102 三 二 御史大夫延廣。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="105" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="106">
-        <div class="paragraph-number">107</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">101 四 三</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="106" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="107">
-        <div class="paragraph-number">108</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">100 天漢元年 四 御史大夫卿。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="107" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="108">
-        <div class="paragraph-number">109</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">86 孝昭始元元年 四。九月，日磾卒。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="108" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="109">
-        <div class="paragraph-number">110</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">80 元鳳元年 十 九月庚午，光祿勳張安世為右將軍。御史大夫訢。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="109" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="110">
-        <div class="paragraph-number">111</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">74 元平元年 敞卒。九月戊戌，御史大夫蔡義為丞相，封陽平侯。四月甲申，光祿大夫龍镪侯韓曾為前將軍。五月丁酉，水衡都尉趙充國為後將軍，右將軍張安世為車騎將軍。御史大夫昌水侯田廣明。</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="110" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="111">
-        <div class="paragraph-number">112</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">73 孝宣本始元年 二</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="111" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="112">
-        <div class="paragraph-number">113</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">65 元康元年 三</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="112" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="113">
-        <div class="paragraph-number">114</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">48 孝元初元元年 四</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="113" title="Cite this paragraph">📋</button>
-      </div>
-      <div class="paragraph-block" data-paragraph="114">
-        <div class="paragraph-number">115</div>
-        <div class="paragraph-content">
-          <div class="chinese-text">32 孝成建始元年 五</div>
-          
-        </div>
-        <button class="cite-paragraph-btn" data-paragraph="114" title="Cite this paragraph">📋</button>
-      </div>
+        <div class="paragraph-block" data-paragraph="0">
+          <div class="paragraph-number">1</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">公元前 紀年 大事紀。相位。將位。御史大夫位。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="0" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="1">
+          <div class="paragraph-number">2</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">206 高皇帝元年 春，沛公為漢王，之南鄭。秋，還定雍。一。丞相蕭何守漢中。御史大夫周苛守滎陽。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="1" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="2">
+          <div class="paragraph-number">3</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">205 二 春，定塞、翟、魏、河南、韓、殷國。夏，伐項籍，至彭城。立太子。還據滎陽。二。守關中。一。太尉長安侯盧綰。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="2" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="3">
+          <div class="paragraph-number">4</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">204 三 魏豹反。使韓信別定魏，伐趙。楚圍我滎陽。三 二</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="3" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="4">
+          <div class="paragraph-number">5</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">203 四 使韓信別定齊及燕，太公自楚歸，與楚界洪渠。四 三。周苛守滎陽，死。御史大夫汾陰侯周昌。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="4" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="5">
+          <div class="paragraph-number">6</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">202 五 冬，破楚垓下，殺項籍。春，王踐皇帝位定陶。。入都關中。五。罷太尉官。四。後九月，綰為燕王。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="5" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="6">
+          <div class="paragraph-number">7</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">201 六 尊太公為太上皇。劉仲為代王。立大市。更命咸陽曰長安。六。封為酇侯。。張蒼為計相。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="6" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="7">
+          <div class="paragraph-number">8</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">200 七 長樂宮成，自櫟陽徙長安。伐匈奴，匈奴圍我平城。七</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="7" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="8">
+          <div class="paragraph-number">9</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">199 八 擊韓信反虜於趙城。貫高作亂，明年覺，誅之。匈奴攻代王，代王棄國亡，廢為郃陽侯。八</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="8" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="9">
+          <div class="paragraph-number">10</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">198 九 未央宮成，置酒前殿，太上皇輦上坐，帝奉玉卮上壽，曰：「始常以臣不如仲力，今臣功孰與仲多？」太上皇笑，殿上稱萬歲。徙齊田，楚昭、屈、景于關中。九。遷為相國。御史大夫昌為趙丞相。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="9" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="10">
+          <div class="paragraph-number">11</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">197 十 太上皇崩。陳豨反代地。十 御史大夫江邑侯趙堯。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="10" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="11">
+          <div class="paragraph-number">12</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">196 十一 誅淮陰、彭越。黥布反。十一 周勃為太尉。攻代。後官省。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="11" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="12">
+          <div class="paragraph-number">13</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">195 十二 冬，擊布。還過沛。夏，上崩，葬長陵。十二</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="12" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="13">
+          <div class="paragraph-number">14</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">194 孝惠元年 趙隱王如意死。始作長安城西北方。除諸侯丞相為相。十三</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="13" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="14">
+          <div class="paragraph-number">15</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">193 二 楚元王、齊悼惠王來朝。七月辛未，何薨。十四。七月癸巳，齊相平陽侯曹參為相國。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="14" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="15">
+          <div class="paragraph-number">16</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">192 三 初作長安城。蜀湔氐反。擊之。二</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="15" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="16">
+          <div class="paragraph-number">17</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">191 四 三月甲子，赦，無所復作。三</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="16" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="17">
+          <div class="paragraph-number">18</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">190 五 為高祖立廟於沛城成，置歌兒一百二十人。八月乙丑，參卒。四</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="17" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="18">
+          <div class="paragraph-number">19</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">189 六 七月，齊悼惠王薨。立太倉、西市。一。十月己巳，安國侯王陵為右丞相。曲逆侯陳平為左丞相。堯抵罪。廣阿侯任敖為御史大夫。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="18" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="19">
+          <div class="paragraph-number">20</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">188 七 上崩。大臣用張辟彊計，呂氏權重，以呂台為呂王。立少帝。九月辛巳，葬安陵。二</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="19" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="20">
+          <div class="paragraph-number">21</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">187 高后元年 王孝惠諸子。置孝悌力田。三。十一月甲子，徙平為右丞相。辟陽侯審食其為左丞相。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="20" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="21">
+          <div class="paragraph-number">22</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">186 二 十二月，呂王台薨，子嘉代立為呂王。行八銖錢。四。平。二。食其。平陽侯曹窋為御史大夫。。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="21" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="22">
+          <div class="paragraph-number">23</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">185 三 五。三</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="22" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="23">
+          <div class="paragraph-number">24</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">184 四 廢少帝，更立常山王弘為帝。六。四。置太尉官。一。絳侯周勃為太尉。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="23" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="24">
+          <div class="paragraph-number">25</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">183 五 八月，淮陽王薨，以其弟壺關侯武為淮陽王。令戍卒歲更。七。五 二</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="24" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="25">
+          <div class="paragraph-number">26</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">182 六 以呂產為呂王。四月丁酉，赦天下。晝昏。八。六 三</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="25" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="26">
+          <div class="paragraph-number">27</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">181 七 趙王幽死，以呂祿為趙王。梁王徙趙，自殺。九。七 四</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="26" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="27">
+          <div class="paragraph-number">28</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">180 八 七月，高后崩。九月，誅諸呂。後九月，代王至，踐皇帝位。後九月，食其免相。十。七月辛巳，為帝太傅。九月壬戌，復為丞相。八 五。隆慮侯灶為將軍，擊南越。御史大夫蒼。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="27" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="28">
+          <div class="paragraph-number">29</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">179 孝文元年 除收孥相坐律。立太子。賜民爵。十一。十一月辛巳，平徙為左丞相。太尉絳侯周勃為右丞相。六。勃為相，潁陰侯灌嬰為太尉。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="28" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="29">
+          <div class="paragraph-number">30</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">178 二 除誹謗律。皇子武為代王，參為太原王，揖為梁王。十月，丞相平薨。一。十一月乙亥，絳侯勃復為丞相。一</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="29" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="30">
+          <div class="paragraph-number">31</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">177 三 徙代王武為淮陽王。上幸太原。濟北王反。匈奴大入上郡。以地盡與太原，太原更號代。十一月壬子，勃免相，之國。一。十二月乙亥，太尉潁陰侯灌嬰為丞相。罷太尉官。二。棘蒲侯陳武為大將軍，擊濟北。昌侯盧卿、共侯盧罷師、甯侯鸱、深澤侯將夜皆為將軍，屬武祁侯賀，將兵屯滎陽。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="30" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="31">
+          <div class="paragraph-number">32</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">176 四 十二月己巳，嬰卒。一。正月甲午，御史大夫北平侯張蒼為丞相。安丘侯張說為將軍，擊胡，出代。關中侯申屠嘉為御史大夫。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="31" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="32">
+          <div class="paragraph-number">33</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">175 五 除錢律，民得鑄錢</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="32" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="33">
+          <div class="paragraph-number">34</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">174 六 廢淮南王，遷嚴道，道死雍。三</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="33" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="34">
+          <div class="paragraph-number">35</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">173 七 四月丙子，初置南陵。四</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="34" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="35">
+          <div class="paragraph-number">36</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">172 八 太僕汝陰侯滕公卒。五</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="35" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="36">
+          <div class="paragraph-number">37</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">171 九 溫室鐘自鳴。以芷陽鄉為霸陵。六 御史大夫敬。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="36" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="37">
+          <div class="paragraph-number">38</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">170 十 諸侯王皆至長安。七</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="37" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="38">
+          <div class="paragraph-number">39</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">169 十一 上幸代。地動。八</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="38" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="39">
+          <div class="paragraph-number">40</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">168 十二 河決東郡金隄。徙淮陽王為梁王。九</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="39" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="40">
+          <div class="paragraph-number">41</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">167 十三 除肉刑及田租稅律、戍卒令。十</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="40" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="41">
+          <div class="paragraph-number">42</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">166 十四 匈奴大入蕭關，發兵擊之，及屯長安旁。十一 成侯董赤、內史欒布、昌侯盧卿、隆慮侯灶、甯侯鸱皆為將軍，東陽侯張相如為大將軍，皆擊匈奴。中尉周舍、郎中令張武皆為將軍，屯長安旁。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="41" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="42">
+          <div class="paragraph-number">43</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">165 十五 黃龍見成紀。上始郊見雍五帝。十二</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="42" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="43">
+          <div class="paragraph-number">44</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">164 十六 上始郊見渭陽五帝。十三</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="43" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="44">
+          <div class="paragraph-number">45</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">163 後元年 新垣平詐言方士，覺，誅之。十四</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="44" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="45">
+          <div class="paragraph-number">46</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">162 二 匈奴和親。地動。八月戊辰，蒼免相。十五。八月庚午，御史大夫申屠嘉為丞相，封故安侯。御史大夫青。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="45" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="46">
+          <div class="paragraph-number">47</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">161 三 置谷口邑。二</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="46" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="47">
+          <div class="paragraph-number">48</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">160 四 三</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="47" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="48">
+          <div class="paragraph-number">49</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">159 五 上幸雍。四</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="48" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="49">
+          <div class="paragraph-number">50</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">158 六 匈奴三萬人入上郡，二萬人入雲中。五 以中大夫令免為車騎將軍，軍飛狐，故楚相蘇意為將軍，軍句注；。將軍張武屯北地；河內守周亞夫為將軍，軍細柳；宗正劉禮軍霸上；祝茲侯徐厲軍棘門：以備胡。數月，胡去，亦罷。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="49" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="50">
+          <div class="paragraph-number">51</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">157 七 六月己亥，孝文皇帝崩。丁未，太子立。民出臨三日，葬霸陵。六 中尉亞夫為車騎將軍，郎中令張武為復土將軍，屬國捍為將屯將軍。詹事戎奴為車騎將軍，侍太后。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="50" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="51">
+          <div class="paragraph-number">52</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">156 孝景元年 立孝文皇帝廟，郡國為太宗廟。七。置司徒官。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="51" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="52">
+          <div class="paragraph-number">53</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">155 二 立皇子德為河閒王，閼為臨江王，餘為淮陽王，非為汝南王，彭祖為廣川王，發為長沙王。四月中，孝文太后崩。嘉卒。八。開封侯陶青為丞相。御史大夫錯。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="52" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="53">
+          <div class="paragraph-number">54</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">154 三 吳楚七國反，發兵擊，皆破之。皇子端為膠西王，勝為中山王。二。置太尉官。中尉條侯周亞夫。為太尉，擊吳楚；曲周侯酈寄為將軍，擊趙；竇嬰為大將軍，屯滎陽，欒布為將軍，擊齊。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="53" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="54">
+          <div class="paragraph-number">55</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">153 四 立太子。三 二。太尉亞夫。御史大夫蚡。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="54" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="55">
+          <div class="paragraph-number">56</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">152 五 置陽陵邑。丞相北平侯張蒼卒。四 三</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="55" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="56">
+          <div class="paragraph-number">57</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">151 六 徙廣川王彭祖為趙王。五 四 御史大夫陽陵侯岑邁。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="56" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="57">
+          <div class="paragraph-number">58</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">150 七 廢太子榮為臨江王。四月丁巳，膠東王立為太子。青罷相。六月乙巳，太尉條侯亞夫為丞相。罷太尉官。五。遷為丞相。御史大夫舍。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="57" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="58">
+          <div class="paragraph-number">59</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">149 中元年 二</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="58" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="59">
+          <div class="paragraph-number">60</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">148 二 皇子越為廣川王，寄為膠東王。三</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="59" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="60">
+          <div class="paragraph-number">61</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">147 三 皇子乘為清河王。亞夫免相。四。御史大夫桃侯劉舍為丞相。御史大夫綰。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="60" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="61">
+          <div class="paragraph-number">62</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">146 四 臨江王徵，自殺，葬藍田，燕數萬為銜士置冢上。二</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="61" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="62">
+          <div class="paragraph-number">63</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">145 五 皇子舜為常山王。三</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="62" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="63">
+          <div class="paragraph-number">64</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">144 六 梁孝王武薨。分梁為五國，王諸子：子買為梁王，明為濟川王，彭離為濟東王，定為山陽王，不識為濟陰王。四</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="63" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="64">
+          <div class="paragraph-number">65</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">143 後元年 五月，地動。七月乙巳，日蝕。舍免相。五。八月壬辰，御史大夫建陵侯衛綰為丞相。御史大夫不疑。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="64" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="65">
+          <div class="paragraph-number">66</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">142 二 二 六月丁丑，御史大夫岑邁卒。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="65" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="66">
+          <div class="paragraph-number">67</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">141 三 正月甲子，孝景皇帝崩。二月丙子，太子立。三</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="66" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="67">
+          <div class="paragraph-number">68</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">140 孝武建元元年 綰免相。四。魏其侯竇嬰為丞相。置太尉。武安侯田蚡為太尉。御史大夫抵。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="67" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="68">
+          <div class="paragraph-number">69</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">139 二 置茂陵。嬰免相。二月乙未，太常柏至侯許昌為丞相。蚡免太尉。罷太尉官。御史大夫趙綰。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="68" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="69">
+          <div class="paragraph-number">70</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">138 三 東甌王廣武侯望率其眾四萬餘人來降，處廬江郡。二</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="69" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="70">
+          <div class="paragraph-number">71</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">137 四 三 御史大夫青翟。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="70" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="71">
+          <div class="paragraph-number">72</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">136 五 行三分錢。四</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="71" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="72">
+          <div class="paragraph-number">73</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">135 六 正月，閩越王反。孝景太后崩。。昌免相。五。六月癸巳，武安侯田蚡為丞相。青翟為太子太傅。御史大夫安國。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="72" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="73">
+          <div class="paragraph-number">74</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">134 元光元年 二</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="73" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="74">
+          <div class="paragraph-number">75</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">133 二 帝初之雍，郊見五畤。三 夏，御史大夫韓安國為護軍將軍，衛尉李廣為驍騎將軍，太僕公孫賀為輕車將軍，大行王恢為將屯將軍，太中大夫李息為材官將軍，篡單于馬邑，不合，誅恢。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="74" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="75">
+          <div class="paragraph-number">76</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">132 三 五月丙子，河決于瓠子。四</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="75" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="76">
+          <div class="paragraph-number">77</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">131 四 十二月丁亥，地動。蚡卒。五。平棘侯薛澤為丞相。御史大夫歐。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="76" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="77">
+          <div class="paragraph-number">78</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">130 五 十月，族灌夫家，棄魏其侯市。二</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="77" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="78">
+          <div class="paragraph-number">79</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">129 六 南夷始置郵亭。三 太中大夫衛青為車騎將軍，出上谷；衛尉李廣為驍騎將軍，出鴈門；大中大夫公孫敖為騎將軍，出代；太僕公孫賀為輕車將軍，出雲中：皆擊匈奴。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="78" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="79">
+          <div class="paragraph-number">80</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">128 元朔元年 衛夫人立為皇后。四 車騎將軍青出雁門，擊匈奴。衛尉韓安國為將屯將軍，軍代，明年，屯漁陽卒。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="79" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="80">
+          <div class="paragraph-number">81</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">127 二 五 春，車騎將軍衛青出雲中，至高闕，取河南地。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="80" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="81">
+          <div class="paragraph-number">82</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">126 三 匈奴殺代太守友。六 御史大夫弘。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="81" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="82">
+          <div class="paragraph-number">83</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">125 四 匈奴入定襄、代、上郡。七</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="82" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="83">
+          <div class="paragraph-number">84</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">124 五 匈奴殺代都尉朱英。澤免相。八。十一月乙丑，御史大夫公孫弘為丞相，封平津侯。春，長平侯衛青為大將軍，擊右賢。衛尉蘇建為游擊將軍，屬青。左內史李沮為強弩將軍，太僕賀為車騎將軍，代相李蔡為輕車將軍，岸頭侯張次公為將軍，大行息為將軍：皆屬大將軍，擊匈奴。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="83" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="84">
+          <div class="paragraph-number">85</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">123 六 二 大將軍青再出定襄擊胡。合騎侯公孫敖為中將軍，太僕賀為左將軍，郎中令李廣為後將軍。翕侯趙信為前將軍，敗降匈奴。衛尉蘇建為右將軍，敗，身脫。左內史沮為彊弩將軍。皆屬青。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="84" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="85">
+          <div class="paragraph-number">86</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">122 元狩元年 十月中，淮南王安、衡山王賜謀反，皆自殺，國除。三 御史大夫蔡。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="85" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="86">
+          <div class="paragraph-number">87</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">121 二 匈奴入鴈門、代郡。江都王建反。膠東王子慶立為六安王。弘卒。四。御史大夫樂安侯李蔡為丞相。冠軍侯霍去病為驃騎將軍，擊胡，至祁連；合騎侯敖為將軍。出北地；博望侯張騫、郎中令李廣為將軍，出右北平。御史大夫湯。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="86" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="87">
+          <div class="paragraph-number">88</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">120 三 匈奴入右北平、定襄。二</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="87" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="88">
+          <div class="paragraph-number">89</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">119 四 三 大將軍青出定襄，郎中令李廣為前將軍，太僕公孫賀為左將軍，主爵趙食其為右將軍，平陽侯曹襄為後將軍：擊單于。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="88" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="89">
+          <div class="paragraph-number">90</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">118 五 蔡坐侵園堧，自殺。四。太子少傅武彊侯莊青翟為丞相。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="89" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="90">
+          <div class="paragraph-number">91</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">117 六 四月乙巳，皇子閎為齊王，旦為燕王，胥為廣陵王。二</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="90" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="91">
+          <div class="paragraph-number">92</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">116 元鼎元年 三</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="91" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="92">
+          <div class="paragraph-number">93</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">115 二 青翟有罪，自殺。四。太子太傅高陵侯趙周為丞相。湯有罪，自殺。御史大夫慶。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="92" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="93">
+          <div class="paragraph-number">94</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">114 三 二</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="93" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="94">
+          <div class="paragraph-number">95</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">113 四 立常山憲王子平為真定王，商為泗水王。六月中，河東汾陰得寶鼎。三</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="94" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="95">
+          <div class="paragraph-number">96</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">112 五 三月中，南越相嘉反，殺其王及漢使者。八月，周坐酎金，自殺。四。九月辛巳，御史大夫石慶為丞相，封牧丘侯。衛尉路博德為伏波將軍，出桂陽；主爵楊僕為樓船將軍，出豫章：皆破南越。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="95" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="96">
+          <div class="paragraph-number">97</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">111 六 十二月，東越反。二 故龍镪侯韓說為橫海將軍，出會稽；樓船將軍楊僕出豫章；中尉王溫舒出會稽：皆破東越。御史大夫式。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="96" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="97">
+          <div class="paragraph-number">98</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">110 元封元年。三 御史大夫寬。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="97" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="98">
+          <div class="paragraph-number">99</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">109 二 四 秋，樓船將軍楊僕、左將軍荀彘出遼東，擊朝鮮。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="98" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="99">
+          <div class="paragraph-number">100</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">108 三 五</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="99" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="100">
+          <div class="paragraph-number">101</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">107 四 六</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="100" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="101">
+          <div class="paragraph-number">102</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">106 五 七</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="101" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="102">
+          <div class="paragraph-number">103</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">105 六 八</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="102" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="103">
+          <div class="paragraph-number">104</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">104 太初元年 改曆，以正月為歲首。九</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="103" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="104">
+          <div class="paragraph-number">105</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">103 二 正月戊寅，慶卒。十。三月丁卯，太僕公孫賀為丞相，封葛繹侯。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="104" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="105">
+          <div class="paragraph-number">106</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">102 三 二 御史大夫延廣。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="105" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="106">
+          <div class="paragraph-number">107</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">101 四 三</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="106" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="107">
+          <div class="paragraph-number">108</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">100 天漢元年 四 御史大夫卿。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="107" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="108">
+          <div class="paragraph-number">109</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">86 孝昭始元元年 四。九月，日磾卒。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="108" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="109">
+          <div class="paragraph-number">110</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">80 元鳳元年 十 九月庚午，光祿勳張安世為右將軍。御史大夫訢。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="109" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="110">
+          <div class="paragraph-number">111</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">74 元平元年 敞卒。九月戊戌，御史大夫蔡義為丞相，封陽平侯。四月甲申，光祿大夫龍镪侯韓曾為前將軍。五月丁酉，水衡都尉趙充國為後將軍，右將軍張安世為車騎將軍。御史大夫昌水侯田廣明。</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="110" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="111">
+          <div class="paragraph-number">112</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">73 孝宣本始元年 二</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="111" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="112">
+          <div class="paragraph-number">113</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">65 元康元年 三</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="112" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="113">
+          <div class="paragraph-number">114</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">48 孝元初元元年 四</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="113" title="Cite this paragraph">📋</button>
+        </div>
+        <div class="paragraph-block" data-paragraph="114">
+          <div class="paragraph-number">115</div>
+          <div class="paragraph-content">
+            <div class="chinese-text">32 孝成建始元年 五</div>
+            
+          </div>
+          <button class="cite-paragraph-btn" data-paragraph="114" title="Cite this paragraph">📋</button>
+        </div>
 
         <div class="chapter-navigation" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #dee2e6;">
             <div>
