@@ -8,18 +8,34 @@
 
 import fs from 'node:fs';
 
-const chapterFile = process.argv[2];
-const translationsFile = process.argv[3];
-const translator = process.argv[4];
-const model = process.argv[5];
+const args = process.argv.slice(2);
+if (args.length < 3) {
+  console.error('Usage: node apply-translations.js <chapter-file> <translations-file...> <translator> <model>');
+  process.exit(1);
+}
 
-if (!chapterFile || !translationsFile || !translator || !model) {
-  console.error('Usage: node apply-translations.js <chapter-file> <translations-file> <translator> <model>');
+const chapterFile = args[0];
+const translator = args[args.length - 2];
+const model = args[args.length - 1];
+const translationFiles = args.slice(1, -2);
+
+if (!chapterFile || translationFiles.length === 0 || !translator || !model) {
+  console.error('Usage: node apply-translations.js <chapter-file> <translations-file...> <translator> <model>');
   process.exit(1);
 }
 
 const chapter = JSON.parse(fs.readFileSync(chapterFile, 'utf8'));
-const translations = JSON.parse(fs.readFileSync(translationsFile, 'utf8'));
+
+// Merge all translation files
+let translations = {};
+for (const file of translationFiles) {
+  try {
+    const fileTranslations = JSON.parse(fs.readFileSync(file, 'utf8'));
+    translations = { ...translations, ...fileTranslations };
+  } catch (err) {
+    console.error(`Warning: Could not load translations from ${file}: ${err.message}`);
+  }
+}
 
 let translatedCount = 0;
 
@@ -29,7 +45,7 @@ for (const block of chapter.content) {
   if (block.type === 'paragraph') {
     sentences = block.sentences;
   } else if (block.type === 'table_row') {
-    sentences = block.cells.events;
+    sentences = block.cells;
   } else if (block.type === 'table_header') {
     sentences = block.sentences;
   }
@@ -39,15 +55,11 @@ for (const block of chapter.content) {
   for (const sentence of sentences) {
     const translation = translations[sentence.id];
     if (translation && translation.trim()) {
-      sentence.translations = [{
-        lang: 'en',
-        text: translation,
-        translator: translator,
-        model: model
-      }];
+      sentence.translation = translation;
       translatedCount++;
     }
   }
+
 
   // Update block-level translation by concatenating sentence translations (for paragraphs)
   if (block.type === 'paragraph') {
@@ -75,7 +87,7 @@ for (const block of chapter.content) {
   if (block.type === 'paragraph') {
     sentences = block.sentences;
   } else if (block.type === 'table_row') {
-    sentences = block.cells.events;
+    sentences = block.cells;
   } else if (block.type === 'table_header') {
     sentences = block.sentences;
   }

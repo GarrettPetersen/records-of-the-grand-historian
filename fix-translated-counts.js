@@ -23,15 +23,16 @@ function recalculateTranslatedCount(chapterData) {
     if (block.type === 'paragraph') {
       sentences = block.sentences || [];
     } else if (block.type === 'table_row') {
-      sentences = block.cells?.events || [];
+      sentences = block.cells || [];
     } else if (block.type === 'table_header') {
       sentences = block.sentences || [];
     }
 
     for (const sentence of sentences) {
-      if (sentence.translations &&
-          sentence.translations.length > 0 &&
-          sentence.translations[0].text) {
+      // Check both old format (translations array) and new format (translation property)
+      const hasTranslation = (sentence.translation && sentence.translation.trim()) ||
+                            (sentence.translations && sentence.translations.length > 0 && sentence.translations[0].text);
+      if (hasTranslation) {
         translatedCount++;
       }
     }

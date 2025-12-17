@@ -461,33 +461,36 @@ function parseCtextTables($, $container, startSentenceCounter) {
     }
 
     if (cells.length > 0) {
-      // For genealogical tables, first cell is period/year, rest are state rulers
-      const period = cells[0]?.zh || `Period ${rowIndex}`;
-      const stateCells = cells.slice(1);
+      // Create generic table row with array of cells
+      const rowCells = cells.map((cell, cellIndex) => ({
+        id: `s${startSentenceCounter++}`,
+        content: cell.zh || '',
+        translation: '' // Will be filled by translation process
+      }));
 
       content.push({
         type: 'table_row',
-        year: period,
-        cells: { events: stateCells }
+        cells: rowCells
       });
     }
   });
 
   console.error(`Parsed ${content.length} table elements from ctext.org genealogical table`);
-  return { content, tokens: [] }; // No vocabulary spans in ctext tables
+  return { content, tokens: [], sentenceCounter: startSentenceCounter }; // Return updated sentence counter
 }
 
 /**
  * Extract structured content from the page
  * Handle both Chinese-only and Chinese-English parallel text
  */
-function extractContent($, isFromCtext = false) {
+function extractContent($, isFromCtext = false, startSentenceCounter = 0) {
   const content = [];
-  let sentenceCounter = 0;
+  let sentenceCounter = startSentenceCounter;
 
   // Handle ctext.org tables
   if (isFromCtext) {
-    return parseCtextTables($, $('body'), sentenceCounter);
+    const result = parseCtextTables($, $('body'), sentenceCounter);
+    return result; // Now includes sentenceCounter
   }
 
   // Get the main content area
@@ -628,7 +631,7 @@ function extractContent($, isFromCtext = false) {
     }
   }
 
-  return { content, tokens: allTokens };
+  return { content, tokens: allTokens, sentenceCounter };
 }
 
 /**
@@ -676,10 +679,23 @@ function listBooks() {
   console.log('Example: node scrape.js shiji 013 --url https://ctext.org/shiji/san-dai-shi-biao\n');
 }
 
+function countSentences(content) {
+  return content.reduce((sum, block) => {
+    if (block.type === 'paragraph') {
+      return sum + block.sentences.length;
+    } else if (block.type === 'table_row') {
+      return sum + block.cells.length;
+    } else if (block.type === 'table_header') {
+      return sum + block.sentences.length;
+    }
+    return sum;
+  }, 0);
+}
+
 function getCtextUrl(bookId, chapter) {
   // Try to load URL mappings from a data file instead of hardcoding
   try {
-    const ctextUrlsPath = path.join(__dirname, 'data', 'ctext-urls.json');
+    const ctextUrlsPath = path.join(process.cwd(), 'data', 'ctext-urls.json');
     if (fs.existsSync(ctextUrlsPath)) {
       const ctextUrls = JSON.parse(fs.readFileSync(ctextUrlsPath, 'utf8'));
       return ctextUrls[bookId]?.[chapter];
@@ -719,7 +735,7 @@ async function scrapeTabularChapter(bookId, chapter, glossaryPath) {
   const chinesenotesHtml = await fetchContent(chinesenotesUrl);
   const chinesenotes$ = load(chinesenotesHtml, { decodeEntities: false });
   const chinesenotesTitle = parseTitle(chinesenotes$);
-  const { content: textContent, tokens: textTokens } = extractContent(chinesenotes$);
+  const { content: textContent, tokens: textTokens, sentenceCounter: textSentenceCounter } = extractContent(chinesenotes$);
 
   // Step 2: Scrape table structure from ctext
   console.error('Step 2: Scraping table structure from ctext.org...');
@@ -753,7 +769,7 @@ async function scrapeTabularChapter(bookId, chapter, glossaryPath) {
   const ctextHtml = await fetchContent(ctextUrl);
   const ctext$ = load(ctextHtml, { decodeEntities: false });
   const ctextTitle = parseTitle(ctext$);
-  const { content: tableContent, tokens: tableTokens } = extractContent(ctext$, true); // Pass isFromCtext flag
+  const { content: tableContent, tokens: tableTokens, sentenceCounter: tableSentenceCounter } = extractContent(ctext$, true, textSentenceCounter); // Pass isFromCtext flag and sentence counter
 
   // Step 3: Combine content - remove duplicate table data
   const combinedContent = [...textContent, ...tableContent];
@@ -798,7 +814,7 @@ async function scrapeTabularChapter(bookId, chapter, glossaryPath) {
       if (block.type === 'paragraph') {
         return sum + block.sentences.length;
       } else if (block.type === 'table_row') {
-        return sum + block.cells.events.length;
+        return sum + block.cells.length;
       } else if (block.type === 'table_header') {
         return sum + block.sentences.length;
       }
@@ -854,44 +870,13 @@ async function scrapeChapter(bookId, chapter, glossaryPath, customUrl) {
     process.exit(1);
   }
 
-  // First, try to determine if this is a tabular chapter by scraping from chinesenotes
-  let isTabularChapter = false;
-  if (!customUrl) {
-    try {
-      console.error('Checking if chapter contains tabular content...');
-      const chinesenotesUrl = book.urlPattern.replace('{chapter}', chapter);
-      const chinesenotesHtml = await fetchContent(chinesenotesUrl);
-      const chinesenotes$ = load(chinesenotesHtml, { decodeEntities: false });
-      const { content: textContent } = extractContent(chinesenotes$);
+  // Determine if this is a tabular chapter
+  // chinesenotes NEVER has proper HTML table structures
+  // Tabular chapters are identified by providing a custom ctext.org URL
+  const isTabularChapter = !!customUrl;
 
-      // Analyze content for tabular patterns
-      const allText = textContent
-        .filter(block => block.type === 'paragraph')
-        .map(block => block.sentences.map(s => s.zh).join(''))
-        .join('');
-
-      // Check for multiple state/ruler names (common in genealogical tables)
-      const stateNames = ['魯', '齊', '晉', '秦', '楚', '宋', '衛', '陳', '蔡', '曹', '燕', '魏', '吳', '鄭', '許'];
-      const foundStates = stateNames.filter(state => allText.includes(state));
-
-      // Look for patterns typical of table data
-      const hasTablePatterns = allText.includes('初封') || allText.includes('王弟') ||
-        /\w{2,}[，。]\w{2,}[，。]/.test(allText) ||
-        (foundStates.length >= 5 && allText.split(/\s+/).length > 50);
-
-      isTabularChapter = foundStates.length >= 3 && hasTablePatterns;
-
-      if (isTabularChapter) {
-        console.error(`Detected tabular chapter (found ${foundStates.length} states, table patterns: ${hasTablePatterns})`);
-      }
-
-    } catch (err) {
-      console.error(`Warning: Could not check for tabular content: ${err.message}`);
-      isTabularChapter = false;
-    }
-  }
-
-  if (isTabularChapter && !customUrl) {
+  if (isTabularChapter) {
+    console.error('Custom URL provided - treating as tabular chapter');
     // Hybrid scraping: get text content from chinesenotes, table from ctext
     return await scrapeTabularChapter(bookId, chapter, glossaryPath);
   }

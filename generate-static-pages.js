@@ -177,31 +177,19 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
                     <tbody>`;
 
         tableRows.forEach(tableRow => {
-          const periodZh = escapeHtml(tableRow.year);
-          const periodEn = tableRow.yearTranslation ? escapeHtml(tableRow.yearTranslation) : '';
-          const events = tableRow.cells.events;
-
           contentHTML += `
-                      <tr>
-                        <td class="period-cell">
-                          <div class="chinese-text">${periodZh}</div>
-                          <div class="english-text">${periodEn}</div>
-                        </td>`;
+                      <tr>`;
 
-          // Add all events in order, with empty cells for missing data (11 columns total for rulers)
-          for (let col = 0; col < 11; col++) {
-            const event = events[col];
-            const rulerZh = event ? escapeHtml(event.zh) : '';
-            const rulerEn = event && event.translations && event.translations.length > 0 && event.translations[0].text
-              ? escapeHtml(event.translations[0].text)
-              : '';
+          tableRow.cells.forEach(cell => {
+            const cellZh = escapeHtml(cell.content);
+            const cellEn = cell.translation ? escapeHtml(cell.translation) : '';
 
             contentHTML += `
-                        <td class="ruler-cell">
-                          <div class="chinese-text">${rulerZh}</div>
-                          <div class="english-text">${rulerEn}</div>
+                        <td class="table-cell">
+                          <div class="chinese-text">${cellZh}</div>
+                          <div class="english-text">${cellEn}</div>
                         </td>`;
-          }
+          });
 
           contentHTML += `
                       </tr>`;
@@ -220,19 +208,14 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
                     <tbody>`;
 
         tableRows.forEach(tableRow => {
-          const periodZh = escapeHtml(tableRow.year);
-          const events = tableRow.cells.events;
-
           contentHTML += `
-                      <tr>
-                        <td class="period-cell">${periodZh}</td>`;
+                      <tr>`;
 
-          for (let col = 0; col < 11; col++) {
-            const event = events[col];
-            const rulerZh = event ? escapeHtml(event.zh) : '';
+          tableRow.cells.forEach(cell => {
+            const cellZh = escapeHtml(cell.content);
 
-            contentHTML += `<td class="ruler-cell">${rulerZh}</td>`;
-          }
+            contentHTML += `<td class="table-cell">${cellZh}</td>`;
+          });
 
           contentHTML += `
                       </tr>`;
@@ -251,21 +234,14 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
                     <tbody>`;
 
         tableRows.forEach(tableRow => {
-          const periodEn = tableRow.yearTranslation ? escapeHtml(tableRow.yearTranslation) : escapeHtml(tableRow.year);
-          const events = tableRow.cells.events;
-
           contentHTML += `
-                      <tr>
-                        <td class="period-cell">${periodEn}</td>`;
+                      <tr>`;
 
-          for (let col = 0; col < 11; col++) {
-            const event = events[col];
-            const rulerEn = event && event.translations && event.translations.length > 0 && event.translations[0].text
-              ? escapeHtml(event.translations[0].text)
-              : '';
+          tableRow.cells.forEach(cell => {
+            const cellEn = cell.translation ? escapeHtml(cell.translation) : '';
 
-            contentHTML += `<td class="ruler-cell">${rulerEn}</td>`;
-          }
+            contentHTML += `<td class="table-cell">${cellEn}</td>`;
+          });
 
           contentHTML += `
                       </tr>`;
@@ -507,19 +483,9 @@ ${JSON.stringify(structuredData, null, 2)}
         text-align: center;
         min-height: 3rem;
       }
-      .genealogical-table .period-cell {
-        background: #e3f2fd;
-        font-weight: 600;
-        min-width: 180px;
-        position: sticky;
-        left: 0;
-        z-index: 5;
-      }
-      .genealogical-table .state-header {
+      .genealogical-table .table-cell {
         min-width: 80px;
-      }
-      .genealogical-table .ruler-cell {
-        min-width: 80px;
+        padding: 0.5rem;
       }
       .genealogical-table.chinese-only {
         background: #f8f9fa;
