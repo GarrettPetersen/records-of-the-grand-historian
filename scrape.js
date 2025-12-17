@@ -835,7 +835,21 @@ async function scrapeTabularChapter(bookId, chapter, glossaryPath) {
       }
       return sum;
     }, 0),
-    translatedCount: 0,
+    translatedCount: filteredContent.reduce((sum, block) => {
+      if (block.type === 'paragraph') {
+        return sum + block.sentences.filter(s => s.translations && s.translations.length > 0 && s.translations[0].text).length;
+      } else if (block.type === 'table_row') {
+        return sum + block.cells.filter(cell => {
+          // Empty cells are considered translated (nothing to translate)
+          if (!cell.content || cell.content.trim() === '') return true;
+          // Cells with content are translated if they have a translation
+          return cell.translation && cell.translation.trim() !== '';
+        }).length;
+      } else if (block.type === 'table_header') {
+        return sum + block.sentences.filter(s => s.translations && s.translations.length > 0 && s.translations[0].text).length;
+      }
+      return sum;
+    }, 0),
     glossarySize: Object.keys(glossary).length,
     scrapedAt: new Date().toISOString()
   };

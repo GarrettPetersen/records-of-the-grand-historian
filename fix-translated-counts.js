@@ -16,28 +16,38 @@ const DATA_DIR = './data';
 
 function recalculateTranslatedCount(chapterData) {
   let translatedCount = 0;
-  
+
   for (const block of chapterData.content) {
-    let sentences = [];
-
     if (block.type === 'paragraph') {
-      sentences = block.sentences || [];
-    } else if (block.type === 'table_row') {
-      sentences = block.cells || [];
-    } else if (block.type === 'table_header') {
-      sentences = block.sentences || [];
-    }
-
-    for (const sentence of sentences) {
-      // Check both old format (translations array) and new format (translation property)
-      const hasTranslation = (sentence.translation && sentence.translation.trim()) ||
-                            (sentence.translations && sentence.translations.length > 0 && sentence.translations[0].text);
-      if (hasTranslation) {
+      for (const sentence of block.sentences || []) {
+        const hasTranslation = sentence.translations && sentence.translations.length > 0 && sentence.translations[0].text;
+        if (hasTranslation) {
           translatedCount++;
+        }
+      }
+    } else if (block.type === 'table_row') {
+      for (const cell of block.cells || []) {
+        // Empty cells are considered translated (nothing to translate)
+        if (!cell.content || cell.content.trim() === '') {
+          translatedCount++;
+        } else {
+          // Cells with content are translated if they have a translation
+          const hasTranslation = cell.translation && cell.translation.trim() !== '';
+          if (hasTranslation) {
+            translatedCount++;
+          }
+        }
+      }
+    } else if (block.type === 'table_header') {
+      for (const sentence of block.sentences || []) {
+        const hasTranslation = sentence.translations && sentence.translations.length > 0 && sentence.translations[0].text;
+        if (hasTranslation) {
+          translatedCount++;
+        }
       }
     }
   }
-  
+
   return translatedCount;
 }
 
