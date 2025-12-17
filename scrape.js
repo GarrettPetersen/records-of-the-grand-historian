@@ -404,57 +404,27 @@ function shouldSkipLine(text) {
 /**
  * Parse HTML tables from ctext.org pages
  */
-function parseCtextTables($, $container, startSentenceCounter, customHeaderText = '', url = '') {
+function parseCtextTables($, $table, startSentenceCounter, customHeaderText = '', url = '') {
   const content = [];
   let sentenceCounter = startSentenceCounter;
 
-  // Find the main genealogical table (skip navigation/header tables)
-  const $mainTable = $container.find('table').filter((i, table) => {
-    const $table = $(table);
-    // Look for table with resrow class cells (genealogical data) or colhead headers
-    return $table.find('td.resrow, td.resrowalt, th.colhead').length > 0;
-  }).first();
+  console.error(`Processing table with ${$table.find('tr').length} rows and ${$table.find('td, th').length} cells`);
 
-  if ($mainTable.length === 0) {
-    console.error('No genealogical table found in ctext.org HTML');
+  // Check if this looks like a genealogical table
+  const cellCount = $table.find('td, th').length;
+  const rowCount = $table.find('tr').length;
+
+  if (cellCount < 20 || rowCount < 5) {
+    console.error(`Table too small (${rowCount} rows, ${cellCount} cells), skipping`);
     return { content, tokens: [] };
   }
 
-  const $table = $mainTable;
+  console.error('Processing genealogical table...');
 
-  // Create table header - use custom header text if provided, otherwise extract from URL
-  let headerText = customHeaderText || '三代世表';
-
-  // Try to extract table name from URL
-  if (url && url.includes('/shiji/')) {
-    const urlParts = url.split('/');
-    const lastPart = urlParts[urlParts.length - 1];
-    console.error(`URL parsing: url=${url}, lastPart=${lastPart}`);
-    if (lastPart) {
-      // Convert URL slug to Chinese title
-      const titleMap = {
-        'san-dai-shi-biao': '三代世表',
-        'shi-er-zhu-hou-nian-biao': '十二諸侯年表',
-        'liu-guo-nian-biao': '六國年表',
-        'qin-chu-zhi-ji-yue-biao': '秦楚之際月表'
-      };
-      if (titleMap[lastPart]) {
-        headerText = titleMap[lastPart];
-        console.error(`Using table header from URL: ${headerText}`);
-      }
-    }
-  }
-  content.push({
-    type: 'table_header',
-    sentences: [{
-      id: `s${++sentenceCounter}`,
-      zh: headerText,
-      translations: [{ lang: 'en', text: '', translator: '' }]
-    }],
-    translations: []
-  });
+  // Don't create a separate table header - the first row will be treated as the header
 
   // Process all rows including headers
+  let headerContent = null;
 
   // Process each row
   $table.find('tr').each((rowIndex, rowElement) => {
@@ -473,8 +443,13 @@ function parseCtextTables($, $container, startSentenceCounter, customHeaderText 
       });
     });
 
-    console.error(`Row ${rowIndex}: found ${cells.length} cells`);
-    console.error(`  Cell contents: ${cells.slice(0, 5).map(c => `"${c.zh || 'empty'}"`).join(', ')}`);
+    console.error(`Processing row ${rowIndex} with ${cells.length} cells`);
+    if (rowIndex <= 3) {
+      console.error(`Row ${rowIndex} cell contents: ${cells.slice(0, 5).map(c => `"${c.zh || 'empty'}"`).join(', ')}`);
+    }
+    if (rowIndex === 1) {
+      console.error(`Row 1 detailed cells: ${cells.map(c => `"${c.zh}"`).join(' | ')}`);
+    }
 
     // Skip rows with too many cells (likely header/combined rows)
     if (cells.length > 50) {
@@ -495,12 +470,46 @@ function parseCtextTables($, $container, startSentenceCounter, customHeaderText 
       translation: '' // Will be filled by translation process
     }));
 
-    console.error(`Creating table row ${rowIndex} with ${rowCells.length} cells: ${rowCells.slice(0, 3).map(c => `"${c.content}"`).join(', ')}`);
+    if (rowIndex === 0) {
+      // First row is the table header
+      headerContent = rowCells.map(c => c.content).join('|');
+      console.error(`Creating table header with ${rowCells.length} cells: ${rowCells.slice(0, 3).map(c => `"${c.content}"`).join(', ')}`);
+      const headerObj = {
+        type: 'table_header',
+        sentences: rowCells.map(cell => ({
+          id: cell.id,
+          zh: cell.content,
+          translations: [{ lang: 'en', text: '', translator: '' }]
+        })),
+        translations: []
+      };
+      console.error(`Pushing header to content array (content.length before: ${content.length})`);
+      content.push(headerObj);
+      console.error(`Content array now has ${content.length} items`);
+    } else {
+      // Check if this row has the same content as the header (repeated headers)
+      const rowContent = rowCells.map(c => c.content.trim()).join('|');
+      const trimmedHeaderContent = headerContent.trim();
 
-    content.push({
-      type: 'table_row',
-      cells: rowCells
-    });
+      // Also check if first few cells match header
+      const firstThreeRow = rowCells.slice(0, 3).map(c => c.content.trim()).join('|');
+      const firstThreeHeader = headerContent.split('|').slice(0, 3).join('|');
+
+      // Also check if first cell is "公元前" (should only appear in header)
+      const firstCell = rowCells[0]?.content?.trim();
+
+      if (rowContent === trimmedHeaderContent || firstThreeRow === firstThreeHeader || firstCell === '公元前') {
+        console.error(`Skipping row ${rowIndex}: duplicate header content (first cell: "${firstCell}")`);
+        return;
+      }
+
+      // Subsequent rows are table data
+      const rowObj = {
+        type: 'table_row',
+        cells: rowCells
+      };
+      content.push(rowObj);
+    }
   });
 
   console.error(`Parsed ${content.length} table elements from ctext.org genealogical table`);
@@ -515,103 +524,69 @@ function extractCtextContent($, startSentenceCounter, url = '') {
   let sentenceCounter = startSentenceCounter;
 
   // Get all text content and tables from the main content area
-  const $main = $('main.main-content, #content, body').first();
+  // For ctext.org, look for the main content table or div
+  let $main = $('table').filter((i, el) => {
+    const $el = $(el);
+    return $el.find('td').filter((j, td) => $(td).text().includes('太史公')).length > 0;
+  });
+
+  if (!$main.length) {
+    // Fallback to other selectors
+    $main = $('main.main-content, #content, body').first();
+  }
+
   if (!$main.length) {
     console.error('No main content area found in ctext.org HTML');
     return { content, tokens: [], sentenceCounter };
   }
 
-  // Find ALL potential content elements - we'll filter them later
-  const $contentElements = $main.find('p, div, span, section, table').filter((i, el) => {
+  // For ctext.org, find all relevant content elements
+  const $contentElements = $main.find('td.ctext, table').filter((i, el) => {
     const $el = $(el);
     const text = $el.text().trim();
-    // Include any element with substantial text content
-    return text.length > 5;
+    // Include elements with substantial text content
+    if (text.length < 10) return false;
+    if (text.includes('Jump to dictionary') ||
+      text.includes('Show parallel') ||
+      text.includes('Chinese Text Project') ||
+      text.includes('Home')) {
+      return false;
+    }
+    // Skip td.ctext elements that contain table-like text (these are text representations)
+    if ($el.is('td.ctext') && text.includes('公元前') && text.includes('年') && text.includes('周') && text.includes('魯')) {
+      console.error(`Skipping td.ctext: appears to be table text content`);
+      return false;
+    }
+    return true;
   });
-  let pendingTableHeader = '';
 
+  console.error(`Found ${$contentElements.length} content elements`);
   $contentElements.each((index, element) => {
     const $el = $(element);
 
     if ($el.is('table')) {
-      // Use the <table> HTML tag to detect tables
-      // Extract table content with any pending table header
-      const tableResult = parseCtextTables($, $el, sentenceCounter, pendingTableHeader, url);
+      // Process table elements
+      console.error(`Processing table element ${index}`);
+      const tableResult = parseCtextTables($, $el, sentenceCounter, '', url);
       if (tableResult.content.length > 0) {
-        console.error(`Adding ${tableResult.content.length} table items to content (first: ${tableResult.content[0]?.type || 'none'})`);
         content.push(...tableResult.content);
         sentenceCounter = tableResult.sentenceCounter;
       }
-      // Clear the pending header after using it
-      pendingTableHeader = '';
-    } else if ($el.is('p, div')) {
-      // Extract paragraph content, but skip elements inside tables
-      if ($el.closest('table').length > 0) {
-        return; // Skip elements that are inside <table> tags
-      }
-
+    } else if ($el.is('td.ctext')) {
+      // Process td.ctext as paragraphs
       const text = $el.text().trim();
-
-      if (text && text.length > 5) { // Include more content
-        // Skip obvious navigation/header content
-        if (text.includes('Chinese Text Project') ||
-          text.includes('Home') ||
-          text.match(/^\d+\s+comments?$/) ||
-          text === '简体中文版' ||
-          text === 'Advanced' ||
-          text.length < 10) {
-          return;
-        }
-
-        // Check if this is the introductory text we're looking for
-        if (text.includes('太史公') && text.includes('讀春秋')) {
-          console.error(`Found introductory text: ${text.substring(0, 50)}...`);
-          const sentences = segmentSentences(text);
-          if (sentences.length > 0) {
-            content.push({
-              type: 'paragraph',
-              sentences: sentences.map(text => ({
-                id: `s${++sentenceCounter}`,
-                zh: text,
-                translations: [{ lang: 'en', text: '', translator: '' }]
-              })),
-              translations: []
-            });
-          }
-          return;
-        }
-
-        // Check if this looks like a table header (many state names)
-        const stateNames = ['魯', '齊', '晉', '秦', '楚', '宋', '衛', '陳', '蔡', '曹', '燕', '魏', '吳', '周'];
-        const stateCount = stateNames.filter(state => text.includes(state)).length;
-
-        if (stateCount >= 8 && text.length < 150 && text.includes('周')) {
-          // This looks like a table header - save it for the next table
-          pendingTableHeader = text;
-          console.error(`Detected table header: ${text.substring(0, 50)}...`);
-          return; // Don't add this as a regular paragraph
-        }
-
-        // Skip table data rows (many numbers + state references)
-        const numberCount = (text.match(/\d+/g) || []).length;
-        if (numberCount >= 2 && stateCount >= 1 && text.length < 250) {
-          console.error(`Skipping table data: ${text.substring(0, 50)}...`);
-          return;
-        }
-
-        // For ctext.org, be more permissive with content extraction
-        const sentences = segmentSentences(text);
-        if (sentences.length > 0 && sentences[0].length > 20) { // Ensure substantial content
-          content.push({
-            type: 'paragraph',
-            sentences: sentences.map(text => ({
-              id: `s${++sentenceCounter}`,
-              zh: text,
-              translations: [{ lang: 'en', text: '', translator: '' }]
-            })),
-            translations: []
-          });
-        }
+      console.error(`Found paragraph in cell ${index}: ${text.substring(0, 50)}...`);
+      const sentences = segmentSentences(text);
+      if (sentences.length > 0) {
+        content.push({
+          type: 'paragraph',
+          sentences: sentences.map(text => ({
+            id: `s${++sentenceCounter}`,
+            zh: text,
+            translations: [{ lang: 'en', text: '', translator: '' }]
+          })),
+          translations: []
+        });
       }
     }
   });
@@ -698,9 +673,14 @@ function extractContent($, isFromCtext = false, startSentenceCounter = 0, url = 
   }
 
   // Get the main content area
-  const $main = $('main.main-content');
+  let $main = $('main.main-content');
   if (!$main.length) {
-    return { content: [], tokens: [] };
+    // Try ctext.org specific selectors
+    $main = $('#content3');
+  }
+  if (!$main.length) {
+    // Fallback to body
+    $main = $('body');
   }
 
   // Get all vocabulary spans for the glossary
@@ -763,13 +743,17 @@ function extractContent($, isFromCtext = false, startSentenceCounter = 0, url = 
     const namePatterns = para.match(/[\u4e00-\u9fff]{2,4}[\s\u3000]/g) || [];
     const hasManyNames = namePatterns.length > 5; // Lower threshold
 
-    // Check for tabular patterns
+    // Check for tabular patterns - be more specific to avoid false positives
     const hasTabularPatterns = para.includes('初封') || para.includes('王弟') ||
-      para.includes('二年') || para.includes('三年') ||
-      (para.match(/\w{2,}[，。]\w{2,}[，。]/) && para.length < 200) ||
-      (para.match(/[\u4e00-\u9fff]{2,}[，。]/g) || []).length > 4; // Many short segments
+      para.includes('薨') || para.includes('元年') || para.includes('即位') ||
+      // Look for very regular numeric patterns typical of tables
+      (para.match(/\d{1,2}[\s\u3000]+\d{1,2}[\s\u3000]+\d{1,2}/g) || []).length > 2;
 
-    if ((hasStateNames && (hasTabularPatterns || hasManyNames)) || hasManyNames) {
+    // Only skip if it has both state names AND tabular patterns, or has many names in a short space
+    const shouldSkip = (hasStateNames && hasTabularPatterns) ||
+      (hasManyNames && para.length < 300 && (para.match(/[\u4e00-\u9fff]{2,}[，。]/g) || []).length > 6);
+
+    if (shouldSkip) {
       console.error(`Skipping apparent table data formatted as text: ${para.substring(0, 50)}...`);
       i++;
       continue;
@@ -971,23 +955,18 @@ async function scrapeTabularChapter(bookId, chapter, glossaryPath) {
     return result;
   }
 
-  // Try to get introductory text from chinesenotes first
-  console.error('Step 1: Getting introductory text from chinesenotes.com...');
-  const chinesenotesUrl = book.urlPattern.replace('{chapter}', chapter);
-  const chinesenotesHtml = await fetchContent(chinesenotesUrl);
-  const chinesenotes$ = load(chinesenotesHtml, { decodeEntities: true });
-  const { content: introContent, tokens: introTokens } = extractContent(chinesenotes$);
-
-  // Scrape table content from ctext.org
-  console.error('Step 2: Scraping table content from ctext.org...');
+  // For ctext.org URLs, scrape everything from ctext.org directly
+  console.error('Scraping content from ctext.org...');
   const ctextHtml = await fetchContent(ctextUrl);
   const ctext$ = load(ctextHtml, { decodeEntities: true });
   const ctextTitle = parseTitle(ctext$);
-  const { content: tableContent, tokens: tableTokens } = extractContent(ctext$, true, ctextUrl);
+  const { content: tableContent, tokens: finalTokens } = extractContent(ctext$, true, 0, ctextUrl);
+  console.error(`Table content has ${tableContent.length} items`);
 
-  // Combine intro content and table content
+  // For ctext.org, we don't have separate intro content
+  const introContent = [];
   const finalContent = [...introContent, ...tableContent];
-  const finalTokens = [...introTokens, ...tableTokens];
+  console.error(`Final content has ${finalContent.length} items`);
 
   // Update glossary
   glossary = updateGlossary(glossary, finalTokens);
@@ -1067,10 +1046,22 @@ async function scrapeChapter(bookId, chapter, glossaryPath, customUrl) {
     process.exit(1);
   }
 
-  // Determine if this is a tabular chapter
-  // chinesenotes NEVER has proper HTML table structures
-  // Tabular chapters are identified by providing a custom ctext.org URL
-  const isTabularChapter = !!customUrl;
+  // Check if existing chapter has ctext.org URL (indicating it's a tabular chapter)
+  const existingFile = `data/${bookId}/${chapter.padStart(3, '0')}.json`;
+  let isTabularChapter = !!customUrl;
+
+  if (!isTabularChapter && fs.existsSync(existingFile)) {
+    try {
+      const existingData = JSON.parse(fs.readFileSync(existingFile, 'utf8'));
+      if (existingData.meta && existingData.meta.url && existingData.meta.url.includes('ctext.org')) {
+        console.error('Existing chapter has ctext.org URL - treating as tabular chapter');
+        isTabularChapter = true;
+        customUrl = existingData.meta.url; // Use the existing ctext URL
+      }
+    } catch (e) {
+      // Ignore errors reading existing file
+    }
+  }
 
   if (isTabularChapter) {
     console.error('Custom URL provided - treating as tabular chapter');
@@ -1183,7 +1174,7 @@ async function scrapeChapter(bookId, chapter, glossaryPath, customUrl) {
       content
     };
 
-    console.log(JSON.stringify(result, null, 2));
+    return result;
   } catch (err) {
     console.error(err instanceof Error ? err.message : String(err));
     process.exit(1);
@@ -1239,7 +1230,10 @@ async function main() {
     customUrl = args[urlIdx + 1];
   }
 
-  await scrapeChapter(bookId, chapter, glossaryPath, customUrl);
+  const result = await scrapeChapter(bookId, chapter, glossaryPath, customUrl);
+  if (result) {
+    console.log(JSON.stringify(result, null, 2));
+  }
 }
 
 await main();

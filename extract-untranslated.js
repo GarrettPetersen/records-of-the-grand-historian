@@ -18,13 +18,29 @@ import path from 'node:path';
 function extractUntranslated(filePath, outputPath = null) {
   const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
   const untranslated = {};
-  
+
+  // Check if this is a genealogical table chapter (Shiji chapters 13-15)
+  const isGenealogicalTable = data.meta.book === 'shiji' &&
+                             ['013', '014', '015'].includes(data.meta.chapter);
+
   for (const block of data.content) {
     let sentences = [];
 
     if (block.type === 'paragraph') {
+      // Skip paragraphs in genealogical table chapters that contain table-like data
+      if (isGenealogicalTable && block.sentences && block.sentences.length > 0) {
+        const zh = block.sentences[0].zh;
+        // Skip if it contains years (4-digit numbers) or is mostly numbers/spaces
+        if (/\d{4}/.test(zh) || /^[\d\s]+$/.test(zh)) {
+          continue;
+        }
+      }
       sentences = block.sentences;
     } else if (block.type === 'table_row') {
+      // Skip genealogical table cells - they contain proper names that don't need translation
+      if (isGenealogicalTable) {
+        continue;
+      }
       sentences = block.cells;
     } else if (block.type === 'table_header') {
       sentences = block.sentences;
