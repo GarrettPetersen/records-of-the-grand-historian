@@ -31,6 +31,7 @@ help:
 	@echo ""
 	@echo "Scraping commands:"
 	@echo "  make <book>-<chapter>       # Scrape single chapter (e.g., make songshi-369)"
+	@echo "  make ctext BOOK=shiji CHAPTER=013 CTEXT_URL='https://ctext.org/shiji/san-dai-shi-biao'  # Scrape from ctext.org"
 	@echo "  make <book> CHAPTERS='...'  # Scrape multiple (e.g., make shiji CHAPTERS='001 002')"
 	@echo "  make list                   # List all 24 books available to scrape"
 	@echo ""
@@ -177,6 +178,29 @@ manifest:
 	@$(eval CHAPTER := $(word 2,$(subst -, ,$@)))
 	@echo "Scraping $(BOOK) chapter $(CHAPTER)..."
 	@$(SCRAPE) $(BOOK) $(CHAPTER) --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/$(BOOK)/$(CHAPTER).json
+	@echo "Saved to data/$(BOOK)/$(CHAPTER).json"
+
+# Scrape from ctext.org with custom URL
+# Usage: make ctext BOOK=shiji CHAPTER=013 CTEXT_URL="https://ctext.org/shiji/san-dai-shi-biao"
+.PHONY: ctext
+ctext: | data/$(BOOK)
+	@if [ -z "$(BOOK)" ]; then \
+		echo "Error: BOOK variable not set."; \
+		echo "Usage: make ctext BOOK=shiji CHAPTER=013 CTEXT_URL='https://ctext.org/book/chapter-url'"; \
+		exit 1; \
+	fi
+	@if [ -z "$(CHAPTER)" ]; then \
+		echo "Error: CHAPTER variable not set."; \
+		echo "Usage: make ctext BOOK=shiji CHAPTER=013 CTEXT_URL='https://ctext.org/book/chapter-url'"; \
+		exit 1; \
+	fi
+	@if [ -z "$(CTEXT_URL)" ]; then \
+		echo "Error: CTEXT_URL variable not set."; \
+		echo "Usage: make ctext BOOK=shiji CHAPTER=013 CTEXT_URL='https://ctext.org/book/chapter-url'"; \
+		exit 1; \
+	fi
+	@echo "Scraping $(BOOK) chapter $(CHAPTER) from ctext.org..."
+	@$(SCRAPE) $(BOOK) $(CHAPTER) --url "$(CTEXT_URL)" --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/$(BOOK)/$(CHAPTER).json
 	@echo "Saved to data/$(BOOK)/$(CHAPTER).json"
 
 # Scrape multiple chapters of a book
