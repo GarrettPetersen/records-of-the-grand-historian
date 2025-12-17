@@ -438,16 +438,16 @@ function parseCtextTables($, $container, startSentenceCounter) {
     const $row = $(rowElement);
     const cells = [];
 
-    // Extract cell data from resrow/resrowalt cells
+    // Extract ALL cell data from resrow/resrowalt cells (including empty ones)
     $row.find('td.resrow, td.resrowalt').each((cellIndex, cellElement) => {
       const cellText = $(cellElement).text().trim();
-      if (cellText && cellText !== '—' && cellText !== '－' && cellText !== '') {
-        cells.push({
-          id: `s${++sentenceCounter}`,
-          zh: cellText,
-          translations: [{ lang: 'en', text: '', translator: '' }]
-        });
-      }
+      // Include empty cells to preserve table structure
+      const isEmpty = !cellText || cellText === '—' || cellText === '－' || cellText === '';
+      cells.push({
+        id: `s${++sentenceCounter}`,
+        zh: isEmpty ? '' : cellText,
+        translations: [{ lang: 'en', text: '', translator: '' }]
+      });
     });
 
     // Skip rows with too many cells (likely header/combined rows)
@@ -460,19 +460,17 @@ function parseCtextTables($, $container, startSentenceCounter) {
       return;
     }
 
-    if (cells.length > 0) {
-      // Create generic table row with array of cells
-      const rowCells = cells.map((cell, cellIndex) => ({
-        id: `s${startSentenceCounter++}`,
-        content: cell.zh || '',
-        translation: '' // Will be filled by translation process
-      }));
+    // Create generic table row with array of cells (preserving empty cells)
+    const rowCells = cells.map((cell, cellIndex) => ({
+      id: `s${startSentenceCounter++}`,
+      content: cell.zh || '',
+      translation: '' // Will be filled by translation process
+    }));
 
-      content.push({
-        type: 'table_row',
-        cells: rowCells
-      });
-    }
+    content.push({
+      type: 'table_row',
+      cells: rowCells
+    });
   });
 
   console.error(`Parsed ${content.length} table elements from ctext.org genealogical table`);
@@ -771,33 +769,43 @@ async function scrapeTabularChapter(bookId, chapter, glossaryPath) {
   const ctextTitle = parseTitle(ctext$);
   const { content: tableContent, tokens: tableTokens, sentenceCounter: tableSentenceCounter } = extractContent(ctext$, true, textSentenceCounter); // Pass isFromCtext flag and sentence counter
 
-  // Step 3: Combine content - remove duplicate table data
-  const combinedContent = [...textContent, ...tableContent];
+  // Step 3: Combine content - insert table in correct position
+  let filteredContent = [...textContent];
+  let tableInserted = false;
 
-  // Filter out paragraphs that duplicate table row data
-  const filteredContent = combinedContent.filter((block, index) => {
-    if (block.type !== 'paragraph') return true;
+  // Find the paragraph that contains table data and replace it with the table
+  for (let i = 0; i < filteredContent.length; i++) {
+    const block = filteredContent[i];
+    if (block.type === 'paragraph') {
+      const paragraphText = block.sentences.map(s => s.zh).join('');
 
-    const paragraphText = block.sentences.map(s => s.zh).join('');
+      // Check if this paragraph contains table data by looking for multiple state/ruler names
+      const stateNames = ['魯', '齊', '晉', '秦', '楚', '宋', '衛', '陳', '蔡', '曹', '燕', '魏'];
+      const hasStateNames = stateNames.some(state => paragraphText.includes(state));
 
-    // Check if this paragraph contains table data by looking for multiple state/ruler names
-    const stateNames = ['魯', '齊', '晉', '秦', '楚', '宋', '衛', '陳', '蔡', '曹', '燕', '魏'];
-    const hasStateNames = stateNames.some(state => paragraphText.includes(state));
+      // Look for patterns typical of table data: many short Chinese names separated by spaces
+      const namePatterns = paragraphText.match(/[\u4e00-\u9fff]{2,4}[\s\u3000]/g) || [];
+      const hasManyNames = namePatterns.length > 6; // More than 6 Chinese names
 
-    // Look for patterns typical of table data: many short Chinese names separated by spaces
-    const namePatterns = paragraphText.match(/[\u4e00-\u9fff]{2,4}[\s\u3000]/g) || [];
-    const hasManyNames = namePatterns.length > 6; // More than 6 Chinese names
+      // If paragraph has state names and many Chinese names, it's likely table data
+      const isTableParagraph = hasStateNames && hasManyNames;
 
-    // If paragraph has state names and many Chinese names, it's likely table data
-    const isTableParagraph = hasStateNames && hasManyNames;
+      if (isTableParagraph && !tableInserted) {
+        console.error(`Replacing table paragraph with structured table: ${paragraphText.substring(0, 50)}...`);
 
-    if (isTableParagraph) {
-      console.error(`Filtering out table paragraph: ${paragraphText.substring(0, 50)}...`);
-      return false;
+        // Replace this paragraph with the table structure
+        filteredContent.splice(i, 1, ...tableContent);
+        tableInserted = true;
+        break; // Only replace the first table paragraph found
+      }
     }
+  }
 
-    return true;
-  });
+  // If no table paragraph was found, append the table at the end
+  if (!tableInserted) {
+    console.error('No table paragraph found to replace, appending table at end');
+    filteredContent = [...filteredContent, ...tableContent];
+  }
   const combinedTokens = [...textTokens, ...tableTokens];
 
   // Step 4: Update glossary
@@ -810,7 +818,7 @@ async function scrapeTabularChapter(bookId, chapter, glossaryPath) {
     chapter,
     url: ctextUrl, // Use ctext URL as primary
     title: ctextTitle || chinesenotesTitle,
-    sentenceCount: combinedContent.reduce((sum, block) => {
+    sentenceCount: filteredContent.reduce((sum, block) => {
       if (block.type === 'paragraph') {
         return sum + block.sentences.length;
       } else if (block.type === 'table_row') {
@@ -826,7 +834,7 @@ async function scrapeTabularChapter(bookId, chapter, glossaryPath) {
   };
 
   // Step 6: Save to file
-  const output = { meta, content: combinedContent };
+  const output = { meta, content: filteredContent };
   const outputPath = `data/${bookId}/${chapter}.json`;
   fs.writeFileSync(outputPath, JSON.stringify(output, null, 2));
   console.error(`Saved to ${outputPath}`);

@@ -25,15 +25,34 @@ function extractUntranslated(filePath, outputPath = null) {
     if (block.type === 'paragraph') {
       sentences = block.sentences;
     } else if (block.type === 'table_row') {
-      sentences = block.cells.events;
+      sentences = block.cells;
     } else if (block.type === 'table_header') {
       sentences = block.sentences;
     }
 
     for (const sentence of sentences) {
-      const trans = sentence.translations[0];
-      if (!trans.text || trans.text.trim() === '') {
-        untranslated[sentence.id] = sentence.zh;
+      let hasTranslation = false;
+      let chineseText = '';
+      let sentenceId = '';
+
+      if (block.type === 'paragraph') {
+        const trans = sentence.translations[0];
+        hasTranslation = trans.text && trans.text.trim() !== '';
+        chineseText = sentence.zh;
+        sentenceId = sentence.id;
+      } else if (block.type === 'table_row') {
+        hasTranslation = sentence.translation && sentence.translation.trim() !== '';
+        chineseText = sentence.content;
+        sentenceId = sentence.id;
+      } else if (block.type === 'table_header') {
+        const trans = sentence.translations[0];
+        hasTranslation = trans.text && trans.text.trim() !== '';
+        chineseText = sentence.zh;
+        sentenceId = sentence.id;
+      }
+
+      if (!hasTranslation) {
+        untranslated[sentenceId] = chineseText;
       }
     }
   }

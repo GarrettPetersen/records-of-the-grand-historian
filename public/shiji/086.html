@@ -151,6 +151,21 @@
         overflow-x: auto;
         max-height: 80vh;
       }
+      .table-pair {
+        display: grid;
+        grid-template-columns: 1fr 1px 1fr;
+        gap: 1rem;
+      }
+      .table-half {
+        display: flex;
+        flex-direction: column;
+      }
+      .table-half .table-title {
+        margin-bottom: 1rem;
+        color: #2c3e50;
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
       .genealogical-table {
         width: 100%;
         border-collapse: collapse;
@@ -658,6 +673,7 @@
 
         // Set up view controls
         const viewBtns = document.querySelectorAll('.view-btn');
+        const contentContainer = document.querySelector('.content-container');
 
         viewBtns.forEach(btn => {
           btn.addEventListener('click', () => {
@@ -667,16 +683,28 @@
             viewBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            // Update content visibility
+            // Update paragraph content visibility and layout
             if (view === 'both') {
+              contentContainer.style.gridTemplateColumns = '1fr 1px 1fr';
               document.querySelectorAll('.chinese-text, .english-text').forEach(el => el.style.display = 'block');
             } else if (view === 'chinese') {
+              contentContainer.style.gridTemplateColumns = '1fr';
               document.querySelectorAll('.chinese-text').forEach(el => el.style.display = 'block');
               document.querySelectorAll('.english-text').forEach(el => el.style.display = 'none');
             } else if (view === 'english') {
+              contentContainer.style.gridTemplateColumns = '1fr';
               document.querySelectorAll('.chinese-text').forEach(el => el.style.display = 'none');
               document.querySelectorAll('.english-text').forEach(el => el.style.display = 'block');
             }
+
+            // Update table views
+            document.querySelectorAll('.table-view').forEach(tableView => {
+              if (tableView.classList.contains(view + '-view')) {
+                tableView.classList.add('active');
+              } else {
+                tableView.classList.remove('active');
+              }
+            });
           });
         });
 

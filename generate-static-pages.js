@@ -152,43 +152,103 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
       }
 
       if (tableRows.length > 0) {
-        // Create exact recreation of the original table structure
+        // Create separate table views for Chinese-only, English-only, and both
         const zhTitle = block.sentences.map(s => escapeHtml(s.zh)).join('');
         const enTitle = block.translations && block.translations.length > 0 && block.translations[0].text
           ? escapeHtml(block.translations[0].text)
           : 'Genealogical Tables of the Three Dynasties';
 
-        contentHTML += `
-          <div class="tabular-content" data-paragraph="${i}">
-            <h3>${zhTitle}</h3>
-            <div class="table-scroll">
-              <table class="genealogical-table">
-                <tbody>`;
+        let tableHtml = `<div class="tabular-content" data-paragraph="${i}">
+            <div class="table-views">
+              <!-- Both view - side by side tables -->
+              <div class="table-view both-view active">
+                <div class="table-pair">
+                  <div class="table-half">
+                    <h3 class="table-title">${zhTitle}</h3>
+                    <div class="table-scroll">
+                      <table class="genealogical-table">
+                        <tbody>`;
 
         tableRows.forEach(tableRow => {
-          contentHTML += `
-                      <tr>`;
-
+          tableHtml += `<tr>`;
           tableRow.cells.forEach(cell => {
             const cellZh = escapeHtml(cell.content);
-            const cellEn = cell.translation ? escapeHtml(cell.translation) : '';
-
-            contentHTML += `
-                        <td class="table-cell">
-                          <div class="chinese-text">${cellZh}</div>
-                          <div class="english-text">${cellEn}</div>
-                        </td>`;
+            tableHtml += `<td class="table-cell">${cellZh}</td>`;
           });
-
-          contentHTML += `
-                      </tr>`;
+          tableHtml += `</tr>`;
         });
 
-        contentHTML += `
-                </tbody>
-              </table>
+        tableHtml += `</tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="table-half">
+                    <h3 class="table-title">${enTitle}</h3>
+                    <div class="table-scroll">
+                      <table class="genealogical-table">
+                        <tbody>`;
+
+        tableRows.forEach(tableRow => {
+          tableHtml += `<tr>`;
+          tableRow.cells.forEach(cell => {
+            const cellEn = cell.translation ? escapeHtml(cell.translation) : '';
+            tableHtml += `<td class="table-cell">${cellEn}</td>`;
+          });
+          tableHtml += `</tr>`;
+        });
+
+        tableHtml += `</tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Chinese only view -->
+              <div class="table-view chinese-view">
+                <h3 class="table-title">${zhTitle}</h3>
+                <div class="table-scroll">
+                  <table class="genealogical-table chinese-only">
+                    <tbody>`;
+
+        tableRows.forEach(tableRow => {
+          tableHtml += `<tr>`;
+          tableRow.cells.forEach(cell => {
+            const cellZh = escapeHtml(cell.content);
+            tableHtml += `<td class="table-cell">${cellZh}</td>`;
+          });
+          tableHtml += `</tr>`;
+        });
+
+        tableHtml += `</tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- English only view -->
+              <div class="table-view english-view">
+                <h3 class="table-title">${enTitle}</h3>
+                <div class="table-scroll">
+                  <table class="genealogical-table english-only">
+                    <tbody>`;
+
+        tableRows.forEach(tableRow => {
+          tableHtml += `<tr>`;
+          tableRow.cells.forEach(cell => {
+            const cellEn = cell.translation ? escapeHtml(cell.translation) : '';
+            tableHtml += `<td class="table-cell">${cellEn}</td>`;
+          });
+          tableHtml += `</tr>`;
+        });
+
+        tableHtml += `</tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>`;
+
+        contentHTML += tableHtml;
 
         // Skip the table rows we just processed
         i = j - 1;
@@ -207,7 +267,21 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
             </h3>
           </div>`;
       }
-    }
+    } else {
+        // Just a header without table rows
+        const zhText = block.sentences.map(s => escapeHtml(s.zh)).join('');
+        const enText = block.translations && block.translations.length > 0 && block.translations[0].text
+          ? escapeHtml(block.translations[0].text)
+          : '';
+
+        contentHTML += `
+          <div class="table-header-block">
+            <h3 class="table-title">
+              <span class="chinese-text">${zhText}</span>
+              ${enText ? `<span class="english-text">${enText}</span>` : ''}
+            </h3>
+          </div>`;
+      }
   }
   
   const translationBadge = meta.translationPercent === 100 
@@ -347,6 +421,21 @@ ${JSON.stringify(structuredData, null, 2)}
       .table-scroll {
         overflow-x: auto;
         max-height: 80vh;
+      }
+      .table-pair {
+        display: grid;
+        grid-template-columns: 1fr 1px 1fr;
+        gap: 1rem;
+      }
+      .table-half {
+        display: flex;
+        flex-direction: column;
+      }
+      .table-half .table-title {
+        margin-bottom: 1rem;
+        color: #2c3e50;
+        font-size: 1.1rem;
+        font-weight: 600;
       }
       .genealogical-table {
         width: 100%;
@@ -551,6 +640,7 @@ ${contentHTML}
 
         // Set up view controls
         const viewBtns = document.querySelectorAll('.view-btn');
+        const contentContainer = document.querySelector('.content-container');
 
         viewBtns.forEach(btn => {
           btn.addEventListener('click', () => {
@@ -560,16 +650,28 @@ ${contentHTML}
             viewBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            // Update content visibility
+            // Update paragraph content visibility and layout
             if (view === 'both') {
+              contentContainer.style.gridTemplateColumns = '1fr 1px 1fr';
               document.querySelectorAll('.chinese-text, .english-text').forEach(el => el.style.display = 'block');
             } else if (view === 'chinese') {
+              contentContainer.style.gridTemplateColumns = '1fr';
               document.querySelectorAll('.chinese-text').forEach(el => el.style.display = 'block');
               document.querySelectorAll('.english-text').forEach(el => el.style.display = 'none');
             } else if (view === 'english') {
+              contentContainer.style.gridTemplateColumns = '1fr';
               document.querySelectorAll('.chinese-text').forEach(el => el.style.display = 'none');
               document.querySelectorAll('.english-text').forEach(el => el.style.display = 'block');
             }
+
+            // Update table views
+            document.querySelectorAll('.table-view').forEach(tableView => {
+              if (tableView.classList.contains(view + '-view')) {
+                tableView.classList.add('active');
+              } else {
+                tableView.classList.remove('active');
+              }
+            });
           });
         });
 
