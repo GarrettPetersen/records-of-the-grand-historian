@@ -487,6 +487,12 @@ ${JSON.stringify(structuredData, null, 2)}
         background: rgba(255,255,255,0.15);
       }
 
+      .table-view {
+        display: none;
+      }
+      .table-view.active {
+        display: block;
+      }
       .table-header-block {
         margin-bottom: 2rem;
         text-align: center;
