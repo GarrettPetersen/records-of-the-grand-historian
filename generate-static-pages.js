@@ -158,15 +158,12 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
           : 'Genealogical Tables of the Three Dynasties';
 
         let tableHtml = `<div class="tabular-content" data-paragraph="${i}">
-            <div class="table-views">
-              <!-- Both view - side by side tables -->
-              <div class="table-view both-view active">
-                <div class="table-pair">
-                  <div class="table-half">
-                    <h3 class="table-title">${zhTitle}</h3>
-                    <div class="table-scroll">
-                      <table class="genealogical-table">
-                        <tbody>`;
+            <!-- Chinese table -->
+            <div class="table-container chinese-table">
+              <h3 class="table-title">${zhTitle}</h3>
+              <div class="table-scroll">
+                <table class="genealogical-table">
+                  <tbody>`;
 
         tableRows.forEach(tableRow => {
           tableHtml += `<tr>`;
@@ -178,14 +175,16 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         });
 
         tableHtml += `</tbody>
-                      </table>
-                    </div>
-                  </div>
-                  <div class="table-half">
-                    <h3 class="table-title">${enTitle}</h3>
-                    <div class="table-scroll">
-                      <table class="genealogical-table">
-                        <tbody>`;
+                </table>
+              </div>
+            </div>
+
+            <!-- English table -->
+            <div class="table-container english-table">
+              <h3 class="table-title">${enTitle}</h3>
+              <div class="table-scroll">
+                <table class="genealogical-table">
+                  <tbody>`;
 
         tableRows.forEach(tableRow => {
           tableHtml += `<tr>`;
@@ -197,52 +196,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         });
 
         tableHtml += `</tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Chinese only view -->
-              <div class="table-view chinese-view">
-                <h3 class="table-title">${zhTitle}</h3>
-                <div class="table-scroll">
-                  <table class="genealogical-table chinese-only">
-                    <tbody>`;
-
-        tableRows.forEach(tableRow => {
-          tableHtml += `<tr>`;
-          tableRow.cells.forEach(cell => {
-            const cellZh = escapeHtml(cell.content);
-            tableHtml += `<td class="table-cell">${cellZh}</td>`;
-          });
-          tableHtml += `</tr>`;
-        });
-
-        tableHtml += `</tbody>
-                  </table>
-                </div>
-              </div>
-
-              <!-- English only view -->
-              <div class="table-view english-view">
-                <h3 class="table-title">${enTitle}</h3>
-                <div class="table-scroll">
-                  <table class="genealogical-table english-only">
-                    <tbody>`;
-
-        tableRows.forEach(tableRow => {
-          tableHtml += `<tr>`;
-          tableRow.cells.forEach(cell => {
-            const cellEn = cell.translation ? escapeHtml(cell.translation) : '';
-            tableHtml += `<td class="table-cell">${cellEn}</td>`;
-          });
-          tableHtml += `</tr>`;
-        });
-
-        tableHtml += `</tbody>
-                  </table>
-                </div>
+                </table>
               </div>
             </div>
           </div>`;
@@ -487,11 +441,22 @@ ${JSON.stringify(structuredData, null, 2)}
         background: rgba(255,255,255,0.15);
       }
 
-      .table-view {
+      .tabular-content {
+        margin: 2rem 0;
+      }
+      .table-container {
         display: none;
       }
-      .table-view.active {
+      .tabular-content.show-both .chinese-table,
+      .tabular-content.show-both .english-table,
+      .tabular-content.show-chinese .chinese-table,
+      .tabular-content.show-english .english-table {
         display: block;
+      }
+      .tabular-content.show-both .chinese-table,
+      .tabular-content.show-both .english-table {
+        width: 50%;
+        float: left;
       }
       .table-header-block {
         margin-bottom: 2rem;
@@ -670,13 +635,13 @@ ${contentHTML}
             }
 
             // Update table views
-            document.querySelectorAll('.table-view').forEach(tableView => {
-              if (tableView.classList.contains(view + '-view')) {
-                tableView.classList.add('active');
-              } else {
-                tableView.classList.remove('active');
-              }
-            });
+            const tabularContent = document.querySelector('.tabular-content');
+            if (tabularContent) {
+              // Remove all view classes
+              tabularContent.classList.remove('show-both', 'show-chinese', 'show-english');
+              // Add the appropriate view class
+              tabularContent.classList.add('show-' + view);
+            }
           });
         });
 

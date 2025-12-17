@@ -217,11 +217,22 @@
         background: rgba(255,255,255,0.15);
       }
 
-      .table-view {
+      .tabular-content {
+        margin: 2rem 0;
+      }
+      .table-container {
         display: none;
       }
-      .table-view.active {
+      .tabular-content.show-both .chinese-table,
+      .tabular-content.show-both .english-table,
+      .tabular-content.show-chinese .chinese-table,
+      .tabular-content.show-english .english-table {
         display: block;
+      }
+      .tabular-content.show-both .chinese-table,
+      .tabular-content.show-both .english-table {
+        width: 50%;
+        float: left;
       }
       .table-header-block {
         margin-bottom: 2rem;
@@ -4568,13 +4579,13 @@
             }
 
             // Update table views
-            document.querySelectorAll('.table-view').forEach(tableView => {
-              if (tableView.classList.contains(view + '-view')) {
-                tableView.classList.add('active');
-              } else {
-                tableView.classList.remove('active');
-              }
-            });
+            const tabularContent = document.querySelector('.tabular-content');
+            if (tabularContent) {
+              // Remove all view classes
+              tabularContent.classList.remove('show-both', 'show-chinese', 'show-english');
+              // Add the appropriate view class
+              tabularContent.classList.add('show-' + view);
+            }
           });
         });
 
