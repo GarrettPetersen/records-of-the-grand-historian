@@ -145,51 +145,115 @@
       .table-row-content {
         overflow-x: auto;
       }
-      .genealogical-table-block {
+      .tabular-content {
         margin: 2rem 0;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        overflow: hidden;
       }
-      .table-container {
+      .table-controls {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-bottom: 1px solid #dee2e6;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .table-controls h3 {
+        margin: 0;
+        color: #2c3e50;
+        font-size: 1.2rem;
+      }
+      .table-toggle-buttons {
+        display: flex;
+        gap: 0.5rem;
+      }
+      .toggle-btn {
+        padding: 0.5rem 1rem;
+        border: 1px solid #dee2e6;
+        background: white;
+        color: #666;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+      }
+      .toggle-btn.active {
+        background: #007bff;
+        color: white;
+        border-color: #007bff;
+      }
+      .toggle-btn:hover {
+        background: #f8f9fa;
+      }
+      .toggle-btn.active:hover {
+        background: #0056b3;
+      }
+      .table-views {
+        position: relative;
+      }
+      .table-view {
+        display: none;
+      }
+      .table-view.active {
+        display: block;
+      }
+      .table-scroll {
         overflow-x: auto;
-        margin: 1rem 0;
+        max-height: 80vh;
       }
       .genealogical-table {
         width: 100%;
         border-collapse: collapse;
         margin: 0;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+        min-width: 1200px;
       }
       .genealogical-table th {
-        padding: 0.75rem 0.5rem;
+        padding: 0.75rem 0.25rem;
         background: #2c3e50;
         color: white;
         font-weight: 600;
-        text-align: left;
+        text-align: center;
         border: 1px solid #dee2e6;
+        position: sticky;
+        top: 0;
+        z-index: 10;
       }
       .genealogical-table td {
-        padding: 0.5rem;
+        padding: 0.5rem 0.25rem;
         border: 1px solid #dee2e6;
         vertical-align: top;
-      }
-      .genealogical-table .chinese-cell {
-        background: #f8f9fa;
-        font-weight: 500;
-        color: #2c3e50;
-      }
-      .genealogical-table .english-cell {
-        background: white;
-        color: #34495e;
+        text-align: center;
+        min-height: 3rem;
       }
       .genealogical-table .period-cell {
         background: #e3f2fd;
         font-weight: 600;
-        width: 15%;
+        min-width: 180px;
+        position: sticky;
+        left: 0;
+        z-index: 5;
       }
-      .genealogical-table .chinese-header {
-        background: #2c3e50;
+      .genealogical-table .state-header {
+        min-width: 80px;
       }
-      .genealogical-table .english-header {
-        background: #34495e;
+      .genealogical-table .ruler-cell {
+        min-width: 80px;
+      }
+      .genealogical-table.chinese-only {
+        background: #f8f9fa;
+        color: #2c3e50;
+      }
+      .genealogical-table.chinese-only .period-cell {
+        background: #e3f2fd;
+      }
+      .genealogical-table.english-only {
+        background: white;
+        color: #34495e;
+      }
+      .genealogical-table.english-only .period-cell {
+        background: #f0f8ff;
       }
       .table-header-block {
         margin-bottom: 2rem;
@@ -326,510 +390,606 @@
           </div>
           <button class="cite-paragraph-btn" data-paragraph="7" title="Cite this paragraph">📋</button>
         </div>
-          <div class="genealogical-table-block" data-paragraph="8">
-            <h3 class="table-title">
-              <span class="chinese-text">三代世表</span>
-              <span class="english-text">Genealogical Tables</span>
-            </h3>
-            <div class="table-container">
-              <table class="genealogical-table">
-                <thead>
-                  <tr>
-                    <th class="chinese-header">時期</th>
-                    <th class="english-header">Period</th>
-                    <th class="chinese-header">各國諸侯</th>
-                    <th class="english-header">Rulers of Various States</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="chinese-cell period-cell">成王誦</td>
-                    <td class="english-cell period-cell">Cheng Wang Shu</td>
-                    <td class="chinese-cell">魯周公旦，武王弟。初封。</td>
-                    <td class="english-cell">Duke Zhou Gongdan of Lu, King Wu&#039;s younger brother. Initial enfeoffment.</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">齊太公尚，文王、武王師。初封。</td>
-                    <td class="english-cell">Duke Tai Jiang Shang of Qi, teacher of King Wen and King Wu. Initial enfeoffment.</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">晉唐叔虞，武王子。初封。</td>
-                    <td class="english-cell">Uncle Tang Shu Yu of Jin, King Wu&#039;s son. Initial enfeoffment.</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">秦惡來，助紂。父飛廉，有力。</td>
-                    <td class="english-cell">Qin E Lai, assisted Zhou. Father Fei Lian, who was strong.</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">楚熊繹。繹父鬻熊，事文王。初封。</td>
-                    <td class="english-cell">Chu Xiong Xi. Xi&#039;s father Yu Xiong served King Wen. Initial enfeoffment.</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">宋微子啟，紂庶兄。初封。</td>
-                    <td class="english-cell">Song Wei Zi Qi, Zhou&#039;s younger half-brother. Initial enfeoffment.</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">衛康叔，武王弟。初封。</td>
-                    <td class="english-cell">Kang Shu of Wei, King Wu&#039;s younger brother. Initial enfeoffment.</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">陳胡公滿，舜之後。初封。</td>
-                    <td class="english-cell">Duke Hu Man of Chen, descendant of Shun. Initial enfeoffment.</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">蔡叔度，武王弟。初封。</td>
-                    <td class="english-cell">Shu Chu of Cai, King Wu&#039;s younger brother. Initial enfeoffment.</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">曹叔振鐸，武王弟。初封。</td>
-                    <td class="english-cell">Shu Zhen Duo of Cao, King Wu&#039;s younger brother. Initial enfeoffment.</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">燕召公奭，周同姓。初封。</td>
-                    <td class="english-cell">Duke Zhao Shi of Yan, Zhou same surname. Initial enfeoffment.</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell">康王釗刑錯四十餘年。</td>
-                    <td class="english-cell period-cell">Kang Wang Zhao, punishment weapons stored away for forty years.</td>
-                    <td class="chinese-cell">魯公伯禽</td>
-                    <td class="english-cell">Duke Boqin of Lu</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">丁公呂伋</td>
-                    <td class="english-cell">Duke Ding Lü Ji</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">晉侯燮</td>
-                    <td class="english-cell">Marquis Xie of Jin</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">女防</td>
-                    <td class="english-cell">Nüfang</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">熊乂</td>
-                    <td class="english-cell">Xiong Yi</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">微仲，啟弟。</td>
-                    <td class="english-cell">Wei Zhong, Qi&#039;s younger brother.</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">康伯</td>
-                    <td class="english-cell">Kang Bo</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">申公</td>
-                    <td class="english-cell">Duke Shen</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">蔡仲</td>
-                    <td class="english-cell">Cai Zhong</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">九世至惠侯。</td>
-                    <td class="english-cell">Nine generations to Marquis Hui.</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell">昭王瑕南巡不返。不赴，諱之。</td>
-                    <td class="english-cell period-cell">Zhao Wang Xia went on a southern tour and did not return. Did not arrive, so it was tabooed.</td>
-                    <td class="chinese-cell">考公</td>
-                    <td class="english-cell">Duke Kao</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">乙公</td>
-                    <td class="english-cell">Duke Yi</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">武侯</td>
-                    <td class="english-cell">Marquis Wu</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">旁皋</td>
-                    <td class="english-cell">Pang Gao</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">熊黮</td>
-                    <td class="english-cell">Xiong Yuan</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">宋公</td>
-                    <td class="english-cell">Duke of Song</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">孝伯</td>
-                    <td class="english-cell">Xiao Bo</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">相公</td>
-                    <td class="english-cell">Duke Xiang</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">蔡伯</td>
-                    <td class="english-cell">Cai Bo</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">太伯</td>
-                    <td class="english-cell">Tai Bo</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell">穆王滿。作甫刑。荒服不至。</td>
-                    <td class="english-cell period-cell">Mu Wang Man. Made the Punishments of Fu. The remote regions did not come.</td>
-                    <td class="chinese-cell">煬公，考公弟。</td>
-                    <td class="english-cell">Duke Yang, younger brother of Duke Kao.</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">癸公</td>
-                    <td class="english-cell">Duke Gui</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">成侯</td>
-                    <td class="english-cell">Marquis Cheng</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">大几</td>
-                    <td class="english-cell">Da Ji</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">熊勝</td>
-                    <td class="english-cell">Xiong Sheng</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">丁公</td>
-                    <td class="english-cell">Duke Ding</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">嗣伯</td>
-                    <td class="english-cell">Si Bo</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">孝公</td>
-                    <td class="english-cell">Duke Xiao</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">宮侯</td>
-                    <td class="english-cell">Gong Hou</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">仲君</td>
-                    <td class="english-cell">Zhong Jun</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell">恭王伊扈</td>
-                    <td class="english-cell period-cell">Gong Wang Yi Hu</td>
-                    <td class="chinese-cell">幽公</td>
-                    <td class="english-cell">Duke You</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">哀公</td>
-                    <td class="english-cell">Duke Ai</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">厲侯</td>
-                    <td class="english-cell">Marquis Li</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">大駱</td>
-                    <td class="english-cell">Da Luo</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">熊煬</td>
-                    <td class="english-cell">Xiong Yang</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">湣公，丁公弟。</td>
-                    <td class="english-cell">Duke Min, younger brother of Duke Ding.</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">疌伯</td>
-                    <td class="english-cell">Zhe Bo</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">慎公</td>
-                    <td class="english-cell">Duke Shen</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">厲侯</td>
-                    <td class="english-cell">Marquis Li</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">宮伯</td>
-                    <td class="english-cell">Gong Bo</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell">懿王堅。周道衰，詩人作刺。</td>
-                    <td class="english-cell period-cell">Yi Wang Jian. The Zhou way declined, poets made satires.</td>
-                    <td class="chinese-cell">魏公</td>
-                    <td class="english-cell">Duke Wei</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">胡公</td>
-                    <td class="english-cell">Duke Hu</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">靖侯</td>
-                    <td class="english-cell">Marquis Jing</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">非子</td>
-                    <td class="english-cell">Fei Zi</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">熊渠</td>
-                    <td class="english-cell">Xiong Qu</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">煬公，湣公弟。</td>
-                    <td class="english-cell">Duke Yang, younger brother of Duke Min.</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">靖伯</td>
-                    <td class="english-cell">Jing Bo</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">幽公</td>
-                    <td class="english-cell">Duke You</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">武侯</td>
-                    <td class="english-cell">Marquis Wu</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">孝伯</td>
-                    <td class="english-cell">Xiao Bo</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell">孝王方，懿王弟。</td>
-                    <td class="english-cell period-cell">Xiao Wang Fang, Yi Wang&#039;s younger brother.</td>
-                    <td class="chinese-cell">厲公</td>
-                    <td class="english-cell">Duke Li</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">獻公弒胡公。</td>
-                    <td class="english-cell">Duke Xian assassinated Duke Hu.</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">秦侯</td>
-                    <td class="english-cell">Marquis of Qin</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">熊無康</td>
-                    <td class="english-cell">Xiong Wu Kang</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">厲公</td>
-                    <td class="english-cell">Duke Li</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">貞伯</td>
-                    <td class="english-cell">Zhen Bo</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">釐公</td>
-                    <td class="english-cell">Duke Xi</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">夷伯</td>
-                    <td class="english-cell">Yi Bo</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell">夷王燮，懿王子。</td>
-                    <td class="english-cell period-cell">Yi Wang Xie, son of Yi Wang.</td>
-                    <td class="chinese-cell">獻公，厲公弟。</td>
-                    <td class="english-cell">Duke Xian, younger brother of Duke Li.</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">武公</td>
-                    <td class="english-cell">Marquis Wu</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">公伯</td>
-                    <td class="english-cell">Gong Bo</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">熊鷙紅</td>
-                    <td class="english-cell">Xiong Zhi Hong</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">釐公</td>
-                    <td class="english-cell">Duke Xi</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">頃侯</td>
-                    <td class="english-cell">Marquis Qing</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell">厲王胡。以惡聞過亂，出奔，遂死於彘。</td>
-                    <td class="english-cell period-cell">Li Wang Hu. Hating to hear criticism, he caused disorder, fled, and died at Zhi.</td>
-                    <td class="chinese-cell">真公</td>
-                    <td class="english-cell">Duke Zhen</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">秦仲</td>
-                    <td class="english-cell">Qin Zhong</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">熊延，紅弟。</td>
-                    <td class="english-cell">Xiong Yan, Hong&#039;s younger brother.</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">釐侯</td>
-                    <td class="english-cell">Xi Hou</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell">共和，二伯行政。</td>
-                    <td class="english-cell period-cell">Gonghe, the two lords administered the government.</td>
-                    <td class="chinese-cell">武公，真公弟。</td>
-                    <td class="english-cell">Marquis Wu, younger brother of Duke Zhen.</td>
-                  </tr>
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">熊勇</td>
-                    <td class="english-cell">Xiong Yong</td>
-                  </tr>
-                </tbody>
-              </table>
+          <div class="tabular-content" data-paragraph="8">
+            <div class="table-controls">
+              <h3>三代世表</h3>
+              <div class="table-toggle-buttons">
+                <button class="toggle-btn active" data-view="both">Both</button>
+                <button class="toggle-btn" data-view="chinese">中文</button>
+                <button class="toggle-btn" data-view="english">English</button>
+              </div>
+            </div>
+
+            <div class="table-views">
+              <!-- Both view -->
+              <div class="table-view both-view active">
+                <div class="table-scroll">
+                  <table class="genealogical-table">
+                    <tbody>
+                      <tr>
+                        <td class="period-cell">
+                          <div class="chinese-text">成王誦</div>
+                          <div class="english-text">Cheng Wang Shu</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">魯周公旦，武王弟。初封。</div>
+                          <div class="english-text">Duke Zhou Gongdan of Lu, King Wu&#039;s younger brother. Initial enfeoffment.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">齊太公尚，文王、武王師。初封。</div>
+                          <div class="english-text">Duke Tai Jiang Shang of Qi, teacher of King Wen and King Wu. Initial enfeoffment.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">晉唐叔虞，武王子。初封。</div>
+                          <div class="english-text">Uncle Tang Shu Yu of Jin, King Wu&#039;s son. Initial enfeoffment.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">秦惡來，助紂。父飛廉，有力。</div>
+                          <div class="english-text">Qin E Lai, assisted Zhou. Father Fei Lian, who was strong.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">楚熊繹。繹父鬻熊，事文王。初封。</div>
+                          <div class="english-text">Chu Xiong Xi. Xi&#039;s father Yu Xiong served King Wen. Initial enfeoffment.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">宋微子啟，紂庶兄。初封。</div>
+                          <div class="english-text">Song Wei Zi Qi, Zhou&#039;s younger half-brother. Initial enfeoffment.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">衛康叔，武王弟。初封。</div>
+                          <div class="english-text">Kang Shu of Wei, King Wu&#039;s younger brother. Initial enfeoffment.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">陳胡公滿，舜之後。初封。</div>
+                          <div class="english-text">Duke Hu Man of Chen, descendant of Shun. Initial enfeoffment.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">蔡叔度，武王弟。初封。</div>
+                          <div class="english-text">Shu Chu of Cai, King Wu&#039;s younger brother. Initial enfeoffment.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">曹叔振鐸，武王弟。初封。</div>
+                          <div class="english-text">Shu Zhen Duo of Cao, King Wu&#039;s younger brother. Initial enfeoffment.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">燕召公奭，周同姓。初封。</div>
+                          <div class="english-text">Duke Zhao Shi of Yan, Zhou same surname. Initial enfeoffment.</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">
+                          <div class="chinese-text">康王釗刑錯四十餘年。</div>
+                          <div class="english-text">Kang Wang Zhao, punishment weapons stored away for forty years.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">魯公伯禽</div>
+                          <div class="english-text">Duke Boqin of Lu</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">丁公呂伋</div>
+                          <div class="english-text">Duke Ding Lü Ji</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">晉侯燮</div>
+                          <div class="english-text">Marquis Xie of Jin</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">女防</div>
+                          <div class="english-text">Nüfang</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">熊乂</div>
+                          <div class="english-text">Xiong Yi</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">微仲，啟弟。</div>
+                          <div class="english-text">Wei Zhong, Qi&#039;s younger brother.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">康伯</div>
+                          <div class="english-text">Kang Bo</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">申公</div>
+                          <div class="english-text">Duke Shen</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">蔡仲</div>
+                          <div class="english-text">Cai Zhong</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">九世至惠侯。</div>
+                          <div class="english-text">Nine generations to Marquis Hui.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">
+                          <div class="chinese-text">昭王瑕南巡不返。不赴，諱之。</div>
+                          <div class="english-text">Zhao Wang Xia went on a southern tour and did not return. Did not arrive, so it was tabooed.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">考公</div>
+                          <div class="english-text">Duke Kao</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">乙公</div>
+                          <div class="english-text">Duke Yi</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">武侯</div>
+                          <div class="english-text">Marquis Wu</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">旁皋</div>
+                          <div class="english-text">Pang Gao</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">熊黮</div>
+                          <div class="english-text">Xiong Yuan</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">宋公</div>
+                          <div class="english-text">Duke of Song</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">孝伯</div>
+                          <div class="english-text">Xiao Bo</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">相公</div>
+                          <div class="english-text">Duke Xiang</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">蔡伯</div>
+                          <div class="english-text">Cai Bo</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">太伯</div>
+                          <div class="english-text">Tai Bo</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">
+                          <div class="chinese-text">穆王滿。作甫刑。荒服不至。</div>
+                          <div class="english-text">Mu Wang Man. Made the Punishments of Fu. The remote regions did not come.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">煬公，考公弟。</div>
+                          <div class="english-text">Duke Yang, younger brother of Duke Kao.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">癸公</div>
+                          <div class="english-text">Duke Gui</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">成侯</div>
+                          <div class="english-text">Marquis Cheng</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">大几</div>
+                          <div class="english-text">Da Ji</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">熊勝</div>
+                          <div class="english-text">Xiong Sheng</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">丁公</div>
+                          <div class="english-text">Duke Ding</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">嗣伯</div>
+                          <div class="english-text">Si Bo</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">孝公</div>
+                          <div class="english-text">Duke Xiao</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">宮侯</div>
+                          <div class="english-text">Gong Hou</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">仲君</div>
+                          <div class="english-text">Zhong Jun</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">
+                          <div class="chinese-text">恭王伊扈</div>
+                          <div class="english-text">Gong Wang Yi Hu</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">幽公</div>
+                          <div class="english-text">Duke You</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">哀公</div>
+                          <div class="english-text">Duke Ai</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">厲侯</div>
+                          <div class="english-text">Marquis Li</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">大駱</div>
+                          <div class="english-text">Da Luo</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">熊煬</div>
+                          <div class="english-text">Xiong Yang</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">湣公，丁公弟。</div>
+                          <div class="english-text">Duke Min, younger brother of Duke Ding.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">疌伯</div>
+                          <div class="english-text">Zhe Bo</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">慎公</div>
+                          <div class="english-text">Duke Shen</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">厲侯</div>
+                          <div class="english-text">Marquis Li</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">宮伯</div>
+                          <div class="english-text">Gong Bo</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">
+                          <div class="chinese-text">懿王堅。周道衰，詩人作刺。</div>
+                          <div class="english-text">Yi Wang Jian. The Zhou way declined, poets made satires.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">魏公</div>
+                          <div class="english-text">Duke Wei</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">胡公</div>
+                          <div class="english-text">Duke Hu</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">靖侯</div>
+                          <div class="english-text">Marquis Jing</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">非子</div>
+                          <div class="english-text">Fei Zi</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">熊渠</div>
+                          <div class="english-text">Xiong Qu</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">煬公，湣公弟。</div>
+                          <div class="english-text">Duke Yang, younger brother of Duke Min.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">靖伯</div>
+                          <div class="english-text">Jing Bo</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">幽公</div>
+                          <div class="english-text">Duke You</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">武侯</div>
+                          <div class="english-text">Marquis Wu</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">孝伯</div>
+                          <div class="english-text">Xiao Bo</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">
+                          <div class="chinese-text">孝王方，懿王弟。</div>
+                          <div class="english-text">Xiao Wang Fang, Yi Wang&#039;s younger brother.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">厲公</div>
+                          <div class="english-text">Duke Li</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">獻公弒胡公。</div>
+                          <div class="english-text">Duke Xian assassinated Duke Hu.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">秦侯</div>
+                          <div class="english-text">Marquis of Qin</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">熊無康</div>
+                          <div class="english-text">Xiong Wu Kang</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">厲公</div>
+                          <div class="english-text">Duke Li</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">貞伯</div>
+                          <div class="english-text">Zhen Bo</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">釐公</div>
+                          <div class="english-text">Duke Xi</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">夷伯</div>
+                          <div class="english-text">Yi Bo</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">
+                          <div class="chinese-text">夷王燮，懿王子。</div>
+                          <div class="english-text">Yi Wang Xie, son of Yi Wang.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">獻公，厲公弟。</div>
+                          <div class="english-text">Duke Xian, younger brother of Duke Li.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">武公</div>
+                          <div class="english-text">Marquis Wu</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">公伯</div>
+                          <div class="english-text">Gong Bo</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">熊鷙紅</div>
+                          <div class="english-text">Xiong Zhi Hong</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">釐公</div>
+                          <div class="english-text">Duke Xi</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">頃侯</div>
+                          <div class="english-text">Marquis Qing</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">
+                          <div class="chinese-text">厲王胡。以惡聞過亂，出奔，遂死於彘。</div>
+                          <div class="english-text">Li Wang Hu. Hating to hear criticism, he caused disorder, fled, and died at Zhi.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">真公</div>
+                          <div class="english-text">Duke Zhen</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">秦仲</div>
+                          <div class="english-text">Qin Zhong</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">熊延，紅弟。</div>
+                          <div class="english-text">Xiong Yan, Hong&#039;s younger brother.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">釐侯</div>
+                          <div class="english-text">Xi Hou</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">
+                          <div class="chinese-text">共和，二伯行政。</div>
+                          <div class="english-text">Gonghe, the two lords administered the government.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">武公，真公弟。</div>
+                          <div class="english-text">Marquis Wu, younger brother of Duke Zhen.</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text">熊勇</div>
+                          <div class="english-text">Xiong Yong</div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                        <td class="ruler-cell">
+                          <div class="chinese-text"></div>
+                          <div class="english-text"></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Chinese only view -->
+              <div class="table-view chinese-view">
+                <div class="table-scroll">
+                  <table class="genealogical-table chinese-only">
+                    <tbody>
+                      <tr>
+                        <td class="period-cell">成王誦</td><td class="ruler-cell">魯周公旦，武王弟。初封。</td><td class="ruler-cell">齊太公尚，文王、武王師。初封。</td><td class="ruler-cell">晉唐叔虞，武王子。初封。</td><td class="ruler-cell">秦惡來，助紂。父飛廉，有力。</td><td class="ruler-cell">楚熊繹。繹父鬻熊，事文王。初封。</td><td class="ruler-cell">宋微子啟，紂庶兄。初封。</td><td class="ruler-cell">衛康叔，武王弟。初封。</td><td class="ruler-cell">陳胡公滿，舜之後。初封。</td><td class="ruler-cell">蔡叔度，武王弟。初封。</td><td class="ruler-cell">曹叔振鐸，武王弟。初封。</td><td class="ruler-cell">燕召公奭，周同姓。初封。</td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">康王釗刑錯四十餘年。</td><td class="ruler-cell">魯公伯禽</td><td class="ruler-cell">丁公呂伋</td><td class="ruler-cell">晉侯燮</td><td class="ruler-cell">女防</td><td class="ruler-cell">熊乂</td><td class="ruler-cell">微仲，啟弟。</td><td class="ruler-cell">康伯</td><td class="ruler-cell">申公</td><td class="ruler-cell">蔡仲</td><td class="ruler-cell">九世至惠侯。</td><td class="ruler-cell"></td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">昭王瑕南巡不返。不赴，諱之。</td><td class="ruler-cell">考公</td><td class="ruler-cell">乙公</td><td class="ruler-cell">武侯</td><td class="ruler-cell">旁皋</td><td class="ruler-cell">熊黮</td><td class="ruler-cell">宋公</td><td class="ruler-cell">孝伯</td><td class="ruler-cell">相公</td><td class="ruler-cell">蔡伯</td><td class="ruler-cell">太伯</td><td class="ruler-cell"></td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">穆王滿。作甫刑。荒服不至。</td><td class="ruler-cell">煬公，考公弟。</td><td class="ruler-cell">癸公</td><td class="ruler-cell">成侯</td><td class="ruler-cell">大几</td><td class="ruler-cell">熊勝</td><td class="ruler-cell">丁公</td><td class="ruler-cell">嗣伯</td><td class="ruler-cell">孝公</td><td class="ruler-cell">宮侯</td><td class="ruler-cell">仲君</td><td class="ruler-cell"></td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">恭王伊扈</td><td class="ruler-cell">幽公</td><td class="ruler-cell">哀公</td><td class="ruler-cell">厲侯</td><td class="ruler-cell">大駱</td><td class="ruler-cell">熊煬</td><td class="ruler-cell">湣公，丁公弟。</td><td class="ruler-cell">疌伯</td><td class="ruler-cell">慎公</td><td class="ruler-cell">厲侯</td><td class="ruler-cell">宮伯</td><td class="ruler-cell"></td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">懿王堅。周道衰，詩人作刺。</td><td class="ruler-cell">魏公</td><td class="ruler-cell">胡公</td><td class="ruler-cell">靖侯</td><td class="ruler-cell">非子</td><td class="ruler-cell">熊渠</td><td class="ruler-cell">煬公，湣公弟。</td><td class="ruler-cell">靖伯</td><td class="ruler-cell">幽公</td><td class="ruler-cell">武侯</td><td class="ruler-cell">孝伯</td><td class="ruler-cell"></td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">孝王方，懿王弟。</td><td class="ruler-cell">厲公</td><td class="ruler-cell">獻公弒胡公。</td><td class="ruler-cell">秦侯</td><td class="ruler-cell">熊無康</td><td class="ruler-cell">厲公</td><td class="ruler-cell">貞伯</td><td class="ruler-cell">釐公</td><td class="ruler-cell">夷伯</td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">夷王燮，懿王子。</td><td class="ruler-cell">獻公，厲公弟。</td><td class="ruler-cell">武公</td><td class="ruler-cell">公伯</td><td class="ruler-cell">熊鷙紅</td><td class="ruler-cell">釐公</td><td class="ruler-cell">頃侯</td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">厲王胡。以惡聞過亂，出奔，遂死於彘。</td><td class="ruler-cell">真公</td><td class="ruler-cell">秦仲</td><td class="ruler-cell">熊延，紅弟。</td><td class="ruler-cell">釐侯</td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">共和，二伯行政。</td><td class="ruler-cell">武公，真公弟。</td><td class="ruler-cell">熊勇</td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- English only view -->
+              <div class="table-view english-view">
+                <div class="table-scroll">
+                  <table class="genealogical-table english-only">
+                    <tbody>
+                      <tr>
+                        <td class="period-cell">Cheng Wang Shu</td><td class="ruler-cell">Duke Zhou Gongdan of Lu, King Wu&#039;s younger brother. Initial enfeoffment.</td><td class="ruler-cell">Duke Tai Jiang Shang of Qi, teacher of King Wen and King Wu. Initial enfeoffment.</td><td class="ruler-cell">Uncle Tang Shu Yu of Jin, King Wu&#039;s son. Initial enfeoffment.</td><td class="ruler-cell">Qin E Lai, assisted Zhou. Father Fei Lian, who was strong.</td><td class="ruler-cell">Chu Xiong Xi. Xi&#039;s father Yu Xiong served King Wen. Initial enfeoffment.</td><td class="ruler-cell">Song Wei Zi Qi, Zhou&#039;s younger half-brother. Initial enfeoffment.</td><td class="ruler-cell">Kang Shu of Wei, King Wu&#039;s younger brother. Initial enfeoffment.</td><td class="ruler-cell">Duke Hu Man of Chen, descendant of Shun. Initial enfeoffment.</td><td class="ruler-cell">Shu Chu of Cai, King Wu&#039;s younger brother. Initial enfeoffment.</td><td class="ruler-cell">Shu Zhen Duo of Cao, King Wu&#039;s younger brother. Initial enfeoffment.</td><td class="ruler-cell">Duke Zhao Shi of Yan, Zhou same surname. Initial enfeoffment.</td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">Kang Wang Zhao, punishment weapons stored away for forty years.</td><td class="ruler-cell">Duke Boqin of Lu</td><td class="ruler-cell">Duke Ding Lü Ji</td><td class="ruler-cell">Marquis Xie of Jin</td><td class="ruler-cell">Nüfang</td><td class="ruler-cell">Xiong Yi</td><td class="ruler-cell">Wei Zhong, Qi&#039;s younger brother.</td><td class="ruler-cell">Kang Bo</td><td class="ruler-cell">Duke Shen</td><td class="ruler-cell">Cai Zhong</td><td class="ruler-cell">Nine generations to Marquis Hui.</td><td class="ruler-cell"></td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">Zhao Wang Xia went on a southern tour and did not return. Did not arrive, so it was tabooed.</td><td class="ruler-cell">Duke Kao</td><td class="ruler-cell">Duke Yi</td><td class="ruler-cell">Marquis Wu</td><td class="ruler-cell">Pang Gao</td><td class="ruler-cell">Xiong Yuan</td><td class="ruler-cell">Duke of Song</td><td class="ruler-cell">Xiao Bo</td><td class="ruler-cell">Duke Xiang</td><td class="ruler-cell">Cai Bo</td><td class="ruler-cell">Tai Bo</td><td class="ruler-cell"></td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">Mu Wang Man. Made the Punishments of Fu. The remote regions did not come.</td><td class="ruler-cell">Duke Yang, younger brother of Duke Kao.</td><td class="ruler-cell">Duke Gui</td><td class="ruler-cell">Marquis Cheng</td><td class="ruler-cell">Da Ji</td><td class="ruler-cell">Xiong Sheng</td><td class="ruler-cell">Duke Ding</td><td class="ruler-cell">Si Bo</td><td class="ruler-cell">Duke Xiao</td><td class="ruler-cell">Gong Hou</td><td class="ruler-cell">Zhong Jun</td><td class="ruler-cell"></td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">Gong Wang Yi Hu</td><td class="ruler-cell">Duke You</td><td class="ruler-cell">Duke Ai</td><td class="ruler-cell">Marquis Li</td><td class="ruler-cell">Da Luo</td><td class="ruler-cell">Xiong Yang</td><td class="ruler-cell">Duke Min, younger brother of Duke Ding.</td><td class="ruler-cell">Zhe Bo</td><td class="ruler-cell">Duke Shen</td><td class="ruler-cell">Marquis Li</td><td class="ruler-cell">Gong Bo</td><td class="ruler-cell"></td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">Yi Wang Jian. The Zhou way declined, poets made satires.</td><td class="ruler-cell">Duke Wei</td><td class="ruler-cell">Duke Hu</td><td class="ruler-cell">Marquis Jing</td><td class="ruler-cell">Fei Zi</td><td class="ruler-cell">Xiong Qu</td><td class="ruler-cell">Duke Yang, younger brother of Duke Min.</td><td class="ruler-cell">Jing Bo</td><td class="ruler-cell">Duke You</td><td class="ruler-cell">Marquis Wu</td><td class="ruler-cell">Xiao Bo</td><td class="ruler-cell"></td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">Xiao Wang Fang, Yi Wang&#039;s younger brother.</td><td class="ruler-cell">Duke Li</td><td class="ruler-cell">Duke Xian assassinated Duke Hu.</td><td class="ruler-cell">Marquis of Qin</td><td class="ruler-cell">Xiong Wu Kang</td><td class="ruler-cell">Duke Li</td><td class="ruler-cell">Zhen Bo</td><td class="ruler-cell">Duke Xi</td><td class="ruler-cell">Yi Bo</td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">Yi Wang Xie, son of Yi Wang.</td><td class="ruler-cell">Duke Xian, younger brother of Duke Li.</td><td class="ruler-cell">Marquis Wu</td><td class="ruler-cell">Gong Bo</td><td class="ruler-cell">Xiong Zhi Hong</td><td class="ruler-cell">Duke Xi</td><td class="ruler-cell">Marquis Qing</td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">Li Wang Hu. Hating to hear criticism, he caused disorder, fled, and died at Zhi.</td><td class="ruler-cell">Duke Zhen</td><td class="ruler-cell">Qin Zhong</td><td class="ruler-cell">Xiong Yan, Hong&#039;s younger brother.</td><td class="ruler-cell">Xi Hou</td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td>
+                      </tr>
+                      <tr>
+                        <td class="period-cell">Gonghe, the two lords administered the government.</td><td class="ruler-cell">Marquis Wu, younger brother of Duke Zhen.</td><td class="ruler-cell">Xiong Yong</td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td><td class="ruler-cell"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -905,6 +1065,28 @@
         
         // Set up citation modal close and copy buttons
         setupCitationModal();
+
+        // Set up table toggle buttons
+        const toggleButtons = document.querySelectorAll('.toggle-btn');
+        const tableViews = document.querySelectorAll('.table-view');
+
+        toggleButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            const view = button.dataset.view;
+
+            // Update button states
+            toggleButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            // Update table views
+            tableViews.forEach(tableView => {
+              tableView.classList.remove('active');
+              if (tableView.classList.contains(view + '-view')) {
+                tableView.classList.add('active');
+              }
+            });
+          });
+        });
       });
     </script>
 </body>

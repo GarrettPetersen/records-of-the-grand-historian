@@ -143,7 +143,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
           <button class="cite-paragraph-btn" data-paragraph="${i}" title="Cite this paragraph">📋</button>
         </div>`;
     } else if (block.type === 'table_header') {
-      // Check if this is followed by table_row blocks - if so, create one big table
+      // Check if this is followed by table_row blocks - if so, create toggleable tables
       let tableRows = [];
       let j = i + 1;
       while (j < chapterData.content.length && chapterData.content[j].type === 'table_row') {
@@ -152,73 +152,130 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
       }
 
       if (tableRows.length > 0) {
-        // Render as one big genealogical table
+        // Create exact recreation of the original table structure
         const zhTitle = block.sentences.map(s => escapeHtml(s.zh)).join('');
         const enTitle = block.translations && block.translations.length > 0 && block.translations[0].text
           ? escapeHtml(block.translations[0].text)
-          : 'Genealogical Tables';
+          : 'Genealogical Tables of the Three Dynasties';
 
         contentHTML += `
-          <div class="genealogical-table-block" data-paragraph="${i}">
-            <h3 class="table-title">
-              <span class="chinese-text">${zhTitle}</span>
-              <span class="english-text">${enTitle}</span>
-            </h3>
-            <div class="table-container">
-              <table class="genealogical-table">
-                <thead>
-                  <tr>
-                    <th class="chinese-header">時期</th>
-                    <th class="english-header">Period</th>
-                    <th class="chinese-header">各國諸侯</th>
-                    <th class="english-header">Rulers of Various States</th>
-                  </tr>
-                </thead>
-                <tbody>`;
+          <div class="tabular-content" data-paragraph="${i}">
+            <div class="table-controls">
+              <h3>${zhTitle}</h3>
+              <div class="table-toggle-buttons">
+                <button class="toggle-btn active" data-view="both">Both</button>
+                <button class="toggle-btn" data-view="chinese">中文</button>
+                <button class="toggle-btn" data-view="english">English</button>
+              </div>
+            </div>
+
+            <div class="table-views">
+              <!-- Both view -->
+              <div class="table-view both-view active">
+                <div class="table-scroll">
+                  <table class="genealogical-table">
+                    <tbody>`;
 
         tableRows.forEach(tableRow => {
-          const yearZh = escapeHtml(tableRow.year);
-          const yearEn = tableRow.yearTranslation ? escapeHtml(tableRow.yearTranslation) : 'Period';
+          const periodZh = escapeHtml(tableRow.year);
+          const periodEn = tableRow.yearTranslation ? escapeHtml(tableRow.yearTranslation) : '';
           const events = tableRow.cells.events;
 
-          if (events.length > 0) {
-            // First cell goes in the rulers column
-            const firstEvent = events[0];
-            const firstZh = escapeHtml(firstEvent.zh);
-            const firstEn = firstEvent.translations && firstEvent.translations.length > 0 && firstEvent.translations[0].text
-              ? escapeHtml(firstEvent.translations[0].text)
+          contentHTML += `
+                      <tr>
+                        <td class="period-cell">
+                          <div class="chinese-text">${periodZh}</div>
+                          <div class="english-text">${periodEn}</div>
+                        </td>`;
+
+          // Add all events in order, with empty cells for missing data (11 columns total for rulers)
+          for (let col = 0; col < 11; col++) {
+            const event = events[col];
+            const rulerZh = event ? escapeHtml(event.zh) : '';
+            const rulerEn = event && event.translations && event.translations.length > 0 && event.translations[0].text
+              ? escapeHtml(event.translations[0].text)
               : '';
 
             contentHTML += `
-                  <tr>
-                    <td class="chinese-cell period-cell">${yearZh}</td>
-                    <td class="english-cell period-cell">${yearEn}</td>
-                    <td class="chinese-cell">${firstZh}</td>
-                    <td class="english-cell">${firstEn}</td>
-                  </tr>`;
-
-            // Additional cells in this row
-            for (let k = 1; k < events.length; k++) {
-              const event = events[k];
-              const zhText = escapeHtml(event.zh);
-              const enText = event.translations && event.translations.length > 0 && event.translations[0].text
-                ? escapeHtml(event.translations[0].text)
-                : '';
-
-              contentHTML += `
-                  <tr>
-                    <td class="chinese-cell period-cell"></td>
-                    <td class="english-cell period-cell"></td>
-                    <td class="chinese-cell">${zhText}</td>
-                    <td class="english-cell">${enText}</td>
-                  </tr>`;
-            }
+                        <td class="ruler-cell">
+                          <div class="chinese-text">${rulerZh}</div>
+                          <div class="english-text">${rulerEn}</div>
+                        </td>`;
           }
+
+          contentHTML += `
+                      </tr>`;
         });
 
         contentHTML += `
-                </tbody>
-              </table>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Chinese only view -->
+              <div class="table-view chinese-view">
+                <div class="table-scroll">
+                  <table class="genealogical-table chinese-only">
+                    <tbody>`;
+
+        tableRows.forEach(tableRow => {
+          const periodZh = escapeHtml(tableRow.year);
+          const events = tableRow.cells.events;
+
+          contentHTML += `
+                      <tr>
+                        <td class="period-cell">${periodZh}</td>`;
+
+          for (let col = 0; col < 11; col++) {
+            const event = events[col];
+            const rulerZh = event ? escapeHtml(event.zh) : '';
+
+            contentHTML += `<td class="ruler-cell">${rulerZh}</td>`;
+          }
+
+          contentHTML += `
+                      </tr>`;
+        });
+
+        contentHTML += `
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- English only view -->
+              <div class="table-view english-view">
+                <div class="table-scroll">
+                  <table class="genealogical-table english-only">
+                    <tbody>`;
+
+        tableRows.forEach(tableRow => {
+          const periodEn = tableRow.yearTranslation ? escapeHtml(tableRow.yearTranslation) : escapeHtml(tableRow.year);
+          const events = tableRow.cells.events;
+
+          contentHTML += `
+                      <tr>
+                        <td class="period-cell">${periodEn}</td>`;
+
+          for (let col = 0; col < 11; col++) {
+            const event = events[col];
+            const rulerEn = event && event.translations && event.translations.length > 0 && event.translations[0].text
+              ? escapeHtml(event.translations[0].text)
+              : '';
+
+            contentHTML += `<td class="ruler-cell">${rulerEn}</td>`;
+          }
+
+          contentHTML += `
+                      </tr>`;
+        });
+
+        contentHTML += `
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>`;
 
@@ -368,51 +425,115 @@ ${JSON.stringify(structuredData, null, 2)}
       .table-row-content {
         overflow-x: auto;
       }
-      .genealogical-table-block {
+      .tabular-content {
         margin: 2rem 0;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        overflow: hidden;
       }
-      .table-container {
+      .table-controls {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-bottom: 1px solid #dee2e6;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .table-controls h3 {
+        margin: 0;
+        color: #2c3e50;
+        font-size: 1.2rem;
+      }
+      .table-toggle-buttons {
+        display: flex;
+        gap: 0.5rem;
+      }
+      .toggle-btn {
+        padding: 0.5rem 1rem;
+        border: 1px solid #dee2e6;
+        background: white;
+        color: #666;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+      }
+      .toggle-btn.active {
+        background: #007bff;
+        color: white;
+        border-color: #007bff;
+      }
+      .toggle-btn:hover {
+        background: #f8f9fa;
+      }
+      .toggle-btn.active:hover {
+        background: #0056b3;
+      }
+      .table-views {
+        position: relative;
+      }
+      .table-view {
+        display: none;
+      }
+      .table-view.active {
+        display: block;
+      }
+      .table-scroll {
         overflow-x: auto;
-        margin: 1rem 0;
+        max-height: 80vh;
       }
       .genealogical-table {
         width: 100%;
         border-collapse: collapse;
         margin: 0;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+        min-width: 1200px;
       }
       .genealogical-table th {
-        padding: 0.75rem 0.5rem;
+        padding: 0.75rem 0.25rem;
         background: #2c3e50;
         color: white;
         font-weight: 600;
-        text-align: left;
+        text-align: center;
         border: 1px solid #dee2e6;
+        position: sticky;
+        top: 0;
+        z-index: 10;
       }
       .genealogical-table td {
-        padding: 0.5rem;
+        padding: 0.5rem 0.25rem;
         border: 1px solid #dee2e6;
         vertical-align: top;
-      }
-      .genealogical-table .chinese-cell {
-        background: #f8f9fa;
-        font-weight: 500;
-        color: #2c3e50;
-      }
-      .genealogical-table .english-cell {
-        background: white;
-        color: #34495e;
+        text-align: center;
+        min-height: 3rem;
       }
       .genealogical-table .period-cell {
         background: #e3f2fd;
         font-weight: 600;
-        width: 15%;
+        min-width: 180px;
+        position: sticky;
+        left: 0;
+        z-index: 5;
       }
-      .genealogical-table .chinese-header {
-        background: #2c3e50;
+      .genealogical-table .state-header {
+        min-width: 80px;
       }
-      .genealogical-table .english-header {
-        background: #34495e;
+      .genealogical-table .ruler-cell {
+        min-width: 80px;
+      }
+      .genealogical-table.chinese-only {
+        background: #f8f9fa;
+        color: #2c3e50;
+      }
+      .genealogical-table.chinese-only .period-cell {
+        background: #e3f2fd;
+      }
+      .genealogical-table.english-only {
+        background: white;
+        color: #34495e;
+      }
+      .genealogical-table.english-only .period-cell {
+        background: #f0f8ff;
       }
       .table-header-block {
         margin-bottom: 2rem;
@@ -558,6 +679,28 @@ ${contentHTML}
         
         // Set up citation modal close and copy buttons
         setupCitationModal();
+
+        // Set up table toggle buttons
+        const toggleButtons = document.querySelectorAll('.toggle-btn');
+        const tableViews = document.querySelectorAll('.table-view');
+
+        toggleButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            const view = button.dataset.view;
+
+            // Update button states
+            toggleButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            // Update table views
+            tableViews.forEach(tableView => {
+              tableView.classList.remove('active');
+              if (tableView.classList.contains(view + '-view')) {
+                tableView.classList.add('active');
+              }
+            });
+          });
+        });
       });
     </script>
 </body>
