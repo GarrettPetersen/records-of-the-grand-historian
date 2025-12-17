@@ -552,11 +552,18 @@ function extractContent($, isFromCtext = false, startSentenceCounter = 0) {
     // This happens when chinesenotes presents genealogical tables as formatted paragraphs
     const stateNames = ['魯', '齊', '晉', '秦', '楚', '宋', '衛', '陳', '蔡', '曹', '燕'];
     const hasStateNames = stateNames.some(state => para.includes(state));
+
+    // Check for many Chinese names (typical of table rows)
+    const namePatterns = para.match(/[\u4e00-\u9fff]{2,4}[\s\u3000]/g) || [];
+    const hasManyNames = namePatterns.length > 5; // Lower threshold
+
+    // Check for tabular patterns
     const hasTabularPatterns = para.includes('初封') || para.includes('王弟') ||
       para.includes('二年') || para.includes('三年') ||
-      (para.match(/\w{2,}[，。]\w{2,}[，。]/) && para.length < 200);
+      (para.match(/\w{2,}[，。]\w{2,}[，。]/) && para.length < 200) ||
+      (para.match(/[\u4e00-\u9fff]{2,}[，。]/g) || []).length > 4; // Many short segments
 
-    if (hasStateNames && hasTabularPatterns) {
+    if ((hasStateNames && (hasTabularPatterns || hasManyNames)) || hasManyNames) {
       console.error(`Skipping apparent table data formatted as text: ${para.substring(0, 50)}...`);
       i++;
       continue;
