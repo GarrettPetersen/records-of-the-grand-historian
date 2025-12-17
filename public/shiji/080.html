@@ -141,56 +141,11 @@
       }
       .tabular-content {
         margin: 2rem 0;
-        border: 1px solid #dee2e6;
-        border-radius: 4px;
-        overflow: hidden;
       }
-      .table-controls {
-        background: #f8f9fa;
-        padding: 1rem;
-        border-bottom: 1px solid #dee2e6;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .table-controls h3 {
-        margin: 0;
+      .tabular-content h3 {
+        margin: 0 0 1rem 0;
         color: #2c3e50;
         font-size: 1.2rem;
-      }
-      .table-toggle-buttons {
-        display: flex;
-        gap: 0.5rem;
-      }
-      .toggle-btn {
-        padding: 0.5rem 1rem;
-        border: 1px solid #dee2e6;
-        background: white;
-        color: #666;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 0.9rem;
-        transition: all 0.2s;
-      }
-      .toggle-btn.active {
-        background: #007bff;
-        color: white;
-        border-color: #007bff;
-      }
-      .toggle-btn:hover {
-        background: #f8f9fa;
-      }
-      .toggle-btn.active:hover {
-        background: #0056b3;
-      }
-      .table-views {
-        position: relative;
-      }
-      .table-view {
-        display: none;
-      }
-      .table-view.active {
-        display: block;
       }
       .table-scroll {
         overflow-x: auto;
@@ -225,20 +180,28 @@
         min-width: 80px;
         padding: 0.5rem;
       }
-      .genealogical-table.chinese-only {
-        background: #f8f9fa;
-        color: #2c3e50;
+      .view-controls {
+        display: flex;
+        gap: 0.5rem;
       }
-      .genealogical-table.chinese-only .period-cell {
-        background: #e3f2fd;
+      .view-btn {
+        padding: 0.5rem 1rem;
+        border: 1px solid rgba(255,255,255,0.3);
+        background: rgba(255,255,255,0.1);
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.2s;
       }
-      .genealogical-table.english-only {
-        background: white;
-        color: #34495e;
+      .view-btn.active {
+        background: rgba(255,255,255,0.2);
+        border-color: rgba(255,255,255,0.5);
       }
-      .genealogical-table.english-only .period-cell {
-        background: #f0f8ff;
+      .view-btn:hover {
+        background: rgba(255,255,255,0.15);
       }
+
       .table-header-block {
         margin-bottom: 2rem;
         text-align: center;
@@ -281,6 +244,11 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
                 <a href="../chapters.html?book=shiji" class="back-link" style="color: white; opacity: 0.9;">← Back to 史記</a>
                 <div style="display: flex; gap: 1rem; align-items: center;">
+                    <div class="view-controls">
+                        <button class="view-btn active" data-view="both">Both</button>
+                        <button class="view-btn" data-view="chinese">中文</button>
+                        <button class="view-btn" data-view="english">English</button>
+                    </div>
                     <button id="cite-chapter-btn" class="cite-btn" title="Cite this chapter">
                         📋 Cite
                     </button>
@@ -544,27 +512,6 @@
         // Set up citation modal close and copy buttons
         setupCitationModal();
 
-        // Set up table toggle buttons
-        const toggleButtons = document.querySelectorAll('.toggle-btn');
-        const tableViews = document.querySelectorAll('.table-view');
-
-        toggleButtons.forEach(button => {
-          button.addEventListener('click', () => {
-            const view = button.dataset.view;
-
-            // Update button states
-            toggleButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-
-            // Update table views
-            tableViews.forEach(tableView => {
-              tableView.classList.remove('active');
-              if (tableView.classList.contains(view + '-view')) {
-                tableView.classList.add('active');
-              }
-            });
-          });
-        });
       });
     </script>
 </body>
