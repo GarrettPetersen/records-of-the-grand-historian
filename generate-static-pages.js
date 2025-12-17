@@ -452,11 +452,8 @@ ${JSON.stringify(structuredData, null, 2)}
       .tabular-content.show-chinese .chinese-table,
       .tabular-content.show-english .english-table {
         display: block;
-      }
-      .tabular-content.show-both .chinese-table,
-      .tabular-content.show-both .english-table {
-        width: 50%;
-        float: left;
+        width: 100%;
+        float: none;
       }
       .table-header-block {
         margin-bottom: 2rem;
