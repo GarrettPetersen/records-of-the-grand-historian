@@ -142,55 +142,103 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
           </div>
           <button class="cite-paragraph-btn" data-paragraph="${i}" title="Cite this paragraph">📋</button>
         </div>`;
-    } else if (block.type === 'table_row') {
-      // Render table row
-      const year = escapeHtml(block.year);
-      const events = block.cells.events;
-
-      contentHTML += `
-        <div class="table-row-block" data-paragraph="${i}">
-          <div class="table-row-header">${year}</div>
-          <div class="table-row-content">
-            <table class="genealogical-table">
-              <tbody>`;
-
-      // Group events into columns (typically state names and rulers)
-      const numColumns = events.length;
-      for (let col = 0; col < numColumns; col++) {
-        const event = events[col];
-        if (event) {
-          const zhText = escapeHtml(event.zh);
-          const enText = event.translations && event.translations.length > 0 && event.translations[0].text
-            ? escapeHtml(event.translations[0].text)
-            : '';
-
-          contentHTML += `
-                <tr>
-                  <td class="chinese-cell">${zhText}</td>
-                  <td class="english-cell">${enText || ''}</td>
-                </tr>`;
-        }
+    } else if (block.type === 'table_header') {
+      // Check if this is followed by table_row blocks - if so, create one big table
+      let tableRows = [];
+      let j = i + 1;
+      while (j < chapterData.content.length && chapterData.content[j].type === 'table_row') {
+        tableRows.push(chapterData.content[j]);
+        j++;
       }
 
-      contentHTML += `
-              </tbody>
-            </table>
-          </div>
-        </div>`;
-    } else if (block.type === 'table_header') {
-      // Render table header
-      const zhText = block.sentences.map(s => escapeHtml(s.zh)).join('');
-      const enText = block.translations && block.translations.length > 0 && block.translations[0].text
-        ? escapeHtml(block.translations[0].text)
-        : '';
+      if (tableRows.length > 0) {
+        // Render as one big genealogical table
+        const zhTitle = block.sentences.map(s => escapeHtml(s.zh)).join('');
+        const enTitle = block.translations && block.translations.length > 0 && block.translations[0].text
+          ? escapeHtml(block.translations[0].text)
+          : 'Genealogical Tables';
 
-      contentHTML += `
-        <div class="table-header-block">
-          <h3 class="table-title">
-            <span class="chinese-text">${zhText}</span>
-            ${enText ? `<span class="english-text">${enText}</span>` : ''}
-          </h3>
-        </div>`;
+        contentHTML += `
+          <div class="genealogical-table-block" data-paragraph="${i}">
+            <h3 class="table-title">
+              <span class="chinese-text">${zhTitle}</span>
+              <span class="english-text">${enTitle}</span>
+            </h3>
+            <div class="table-container">
+              <table class="genealogical-table">
+                <thead>
+                  <tr>
+                    <th class="chinese-header">時期</th>
+                    <th class="english-header">Period</th>
+                    <th class="chinese-header">各國諸侯</th>
+                    <th class="english-header">Rulers of Various States</th>
+                  </tr>
+                </thead>
+                <tbody>`;
+
+        tableRows.forEach(tableRow => {
+          const yearZh = escapeHtml(tableRow.year);
+          const yearEn = tableRow.yearTranslation ? escapeHtml(tableRow.yearTranslation) : 'Period';
+          const events = tableRow.cells.events;
+
+          if (events.length > 0) {
+            // First cell goes in the rulers column
+            const firstEvent = events[0];
+            const firstZh = escapeHtml(firstEvent.zh);
+            const firstEn = firstEvent.translations && firstEvent.translations.length > 0 && firstEvent.translations[0].text
+              ? escapeHtml(firstEvent.translations[0].text)
+              : '';
+
+            contentHTML += `
+                  <tr>
+                    <td class="chinese-cell period-cell">${yearZh}</td>
+                    <td class="english-cell period-cell">${yearEn}</td>
+                    <td class="chinese-cell">${firstZh}</td>
+                    <td class="english-cell">${firstEn}</td>
+                  </tr>`;
+
+            // Additional cells in this row
+            for (let k = 1; k < events.length; k++) {
+              const event = events[k];
+              const zhText = escapeHtml(event.zh);
+              const enText = event.translations && event.translations.length > 0 && event.translations[0].text
+                ? escapeHtml(event.translations[0].text)
+                : '';
+
+              contentHTML += `
+                  <tr>
+                    <td class="chinese-cell period-cell"></td>
+                    <td class="english-cell period-cell"></td>
+                    <td class="chinese-cell">${zhText}</td>
+                    <td class="english-cell">${enText}</td>
+                  </tr>`;
+            }
+          }
+        });
+
+        contentHTML += `
+                </tbody>
+              </table>
+            </div>
+          </div>`;
+
+        // Skip the table rows we just processed
+        i = j - 1;
+      } else {
+        // Just a header without table rows
+        const zhText = block.sentences.map(s => escapeHtml(s.zh)).join('');
+        const enText = block.translations && block.translations.length > 0 && block.translations[0].text
+          ? escapeHtml(block.translations[0].text)
+          : '';
+
+        contentHTML += `
+          <div class="table-header-block">
+            <h3 class="table-title">
+              <span class="chinese-text">${zhText}</span>
+              ${enText ? `<span class="english-text">${enText}</span>` : ''}
+            </h3>
+          </div>`;
+      }
     }
   }
   
@@ -320,10 +368,26 @@ ${JSON.stringify(structuredData, null, 2)}
       .table-row-content {
         overflow-x: auto;
       }
+      .genealogical-table-block {
+        margin: 2rem 0;
+      }
+      .table-container {
+        overflow-x: auto;
+        margin: 1rem 0;
+      }
       .genealogical-table {
         width: 100%;
         border-collapse: collapse;
         margin: 0;
+        font-size: 0.9rem;
+      }
+      .genealogical-table th {
+        padding: 0.75rem 0.5rem;
+        background: #2c3e50;
+        color: white;
+        font-weight: 600;
+        text-align: left;
+        border: 1px solid #dee2e6;
       }
       .genealogical-table td {
         padding: 0.5rem;
@@ -334,12 +398,21 @@ ${JSON.stringify(structuredData, null, 2)}
         background: #f8f9fa;
         font-weight: 500;
         color: #2c3e50;
-        width: 50%;
       }
       .genealogical-table .english-cell {
         background: white;
         color: #34495e;
-        width: 50%;
+      }
+      .genealogical-table .period-cell {
+        background: #e3f2fd;
+        font-weight: 600;
+        width: 15%;
+      }
+      .genealogical-table .chinese-header {
+        background: #2c3e50;
+      }
+      .genealogical-table .english-header {
+        background: #34495e;
       }
       .table-header-block {
         margin-bottom: 2rem;
