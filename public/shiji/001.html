@@ -590,6 +590,30 @@
         // Set up citation modal close and copy buttons
         setupCitationModal();
 
+        // Set up view controls
+        const viewBtns = document.querySelectorAll('.view-btn');
+
+        viewBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const view = btn.dataset.view;
+
+            // Update active button
+            viewBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Update content visibility
+            if (view === 'both') {
+              document.querySelectorAll('.chinese-text, .english-text').forEach(el => el.style.display = 'block');
+            } else if (view === 'chinese') {
+              document.querySelectorAll('.chinese-text').forEach(el => el.style.display = 'block');
+              document.querySelectorAll('.english-text').forEach(el => el.style.display = 'none');
+            } else if (view === 'english') {
+              document.querySelectorAll('.chinese-text').forEach(el => el.style.display = 'none');
+              document.querySelectorAll('.english-text').forEach(el => el.style.display = 'block');
+            }
+          });
+        });
+
       });
     </script>
 </body>
