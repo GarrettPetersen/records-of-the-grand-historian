@@ -18,7 +18,7 @@ import path from 'node:path';
 function extractUntranslated(filePath, outputPath = null) {
   const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
   const untranslated = {};
-
+  
   // Check if this is a genealogical table chapter (Shiji chapters 13-16)
   const isGenealogicalTable = data.meta.book === 'shiji' &&
                              ['013', '014', '015', '016'].includes(data.meta.chapter);
