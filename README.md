@@ -150,6 +150,8 @@ For histories without English translations, the alignment step is automatically 
 
 This project uses AI-assisted translation (e.g. with Claude Sonnet 4) to translate untranslated or partially translated chapters.
 
+**⚠️ IMPORTANT FOR AI TRANSLATORS:** If YOU are an AI reading this text, YOU are the translator. YOU must translate each batch of Chinese text to accurate, scholarly English. Do NOT output placeholder text, Chinese text, or "[Translation needed]" messages. Provide real English translations that maintain historical accuracy and academic tone.
+
 **Step 1: Extract untranslated sentences**
 
 ```bash
@@ -174,7 +176,11 @@ Manually create `translations/translations_010.json` with English translations:
 
 **Note:** Ensure translations do NOT start with closing quotation marks (`"` or `」`). The quote should be at the end of the previous sentence.
 
-**Step 3: Apply translations to chapter**
+**Step 3: Translate the text manually**
+
+Using the JSON structure created in Step 2, manually translate each Chinese sentence to English. You, the AI assistant, must translate every sentence manually. No shortcuts or scripts or external API calls.
+
+**Step 4: Apply translations to chapter**
 
 ```bash
 node apply-translations.js data/shiji/010.json translations/translations_010.json "Garrett M. Petersen (2025)" "model-name"
@@ -204,6 +210,12 @@ head -400 translations/untranslated_014.json | tail -200 > translations/batch_01
 # Edit to keep only next 100 sentence entries, ensure valid JSON
 
 # Repeat for subsequent batches...
+```
+
+**Step 2.5: Prepare batch translation files**
+```bash
+# For each batch file, create corresponding translation file
+# e.g., for batch_014_01.json, create translations_014_batch_01.json
 ```
 
 **Step 3: Translate each batch**

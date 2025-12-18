@@ -37,11 +37,18 @@ function extractUntranslated(filePath, outputPath = null) {
       }
       sentences = block.sentences;
     } else if (block.type === 'table_row') {
-      // Skip genealogical table cells - they contain proper names that don't need translation
+      // For genealogical table chapters, only include cells with substantial narrative content
       if (isGenealogicalTable) {
-        continue;
+        sentences = block.cells.filter(cell => {
+          const content = cell.content.trim();
+          // Include cells that contain sentence-ending punctuation (。！？)
+          // and are longer than 10 characters (likely narrative content)
+          return content.includes('。') || content.includes('！') || content.includes('？') ||
+                 content.length > 20;
+        });
+      } else {
+        sentences = block.cells;
       }
-      sentences = block.cells;
     } else if (block.type === 'table_header') {
       sentences = block.sentences;
     }
