@@ -19,9 +19,9 @@ function extractUntranslated(filePath, outputPath = null) {
   const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
   const untranslated = {};
 
-  // Check if this is a genealogical table chapter (Shiji chapters 13-15)
+  // Check if this is a genealogical table chapter (Shiji chapters 13-16)
   const isGenealogicalTable = data.meta.book === 'shiji' &&
-                             ['013', '014', '015'].includes(data.meta.chapter);
+                             ['013', '014', '015', '016'].includes(data.meta.chapter);
 
   for (const block of data.content) {
     let sentences = [];
@@ -37,20 +37,31 @@ function extractUntranslated(filePath, outputPath = null) {
       }
       sentences = block.sentences;
     } else if (block.type === 'table_row') {
-      // For genealogical table chapters, only include cells with substantial narrative content
-      if (isGenealogicalTable) {
-        sentences = block.cells.filter(cell => {
-          const content = cell.content.trim();
-          // Include cells that contain sentence-ending punctuation (。！？)
-          // and are longer than 10 characters (likely narrative content)
+      // Unified logic for all table cells - determine what needs translation based on content only
+      sentences = block.cells.filter(cell => {
+        const content = cell.content.trim();
+
+        // Skip empty cells
+        if (!content) return false;
+
+        // For genealogical table chapters, apply content-based filtering
+        if (isGenealogicalTable) {
+          // For chapter 16 (monthly chronicle), include historical events
+          if (data.meta.chapter === '016') {
+            // Include cells with Chinese characters that are likely historical events
+            // Exclude single character state names and pure numbers
+            return /[\u4e00-\u9fff]/.test(content) && !/^[\d\s]+$/.test(content) &&
+                   content.length > 2 && !/^[\u4e00-\u9fff]$/.test(content);
+          }
+          // For other genealogical tables, use stricter criteria for narrative content
           return content.includes('。') || content.includes('！') || content.includes('？') ||
                  content.length > 20;
-        });
-      } else {
-        sentences = block.cells;
-      }
-    } else if (block.type === 'table_header') {
-      sentences = block.sentences;
+        }
+
+        // For non-genealogical tables, include all non-empty cells
+        // (Higher-level logic can determine what actually needs translation)
+        return true;
+      });
     }
 
     for (const sentence of sentences) {
@@ -66,11 +77,6 @@ function extractUntranslated(filePath, outputPath = null) {
       } else if (block.type === 'table_row') {
         hasTranslation = sentence.translation && sentence.translation.trim() !== '';
         chineseText = sentence.content;
-        sentenceId = sentence.id;
-      } else if (block.type === 'table_header') {
-      const trans = sentence.translations[0];
-        hasTranslation = trans.text && trans.text.trim() !== '';
-        chineseText = sentence.zh;
         sentenceId = sentence.id;
       }
 
