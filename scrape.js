@@ -969,49 +969,20 @@ async function scrapeTabularChapter(bookId, chapter, glossaryPath, customUrl) {
     return result;
   }
 
-  // For tabular chapters with introductory content (like chapter 15), use hybrid scraping
-  const hasIntroContent = bookId === 'shiji' && ['013', '014', '015'].includes(chapter);
+  // Use ctext.org exclusively for all tabular chapters - it contains both intro and table content
+  console.error('Using ctext.org exclusively for tabular chapter...');
+  const ctextHtml = await fetchContent(ctextUrl);
+  const ctext$ = load(ctextHtml, { decodeEntities: true });
+  const ctextTitle = parseTitle(ctext$);
+  const { content: tableContent, tokens: tableTokens, sentenceCounter: tableCounter } = extractContent(ctext$, true, 0, ctextUrl, chapter);
+  console.error(`Table content has ${tableContent.length} items`);
 
-  let finalContent, finalTokens, finalCounter, title, url;
-
-  if (hasIntroContent) {
-    // Hybrid scraping: get introductory text from chinesenotes, table from ctext
-    console.error('Using hybrid scraping for tabular chapter with intro content...');
-    const chinesenotesUrl = book.urlPattern.replace('{chapter}', chapter);
-    const chinesenotesHtml = await fetchContent(chinesenotesUrl);
-    const chinesenotes$ = load(chinesenotesHtml, { decodeEntities: true });
-    const { content: introContent, tokens: introTokens, sentenceCounter: introCounter } = extractContent(chinesenotes$, false, 0);
-    console.error(`Intro content has ${introContent.length} items, sentence counter at ${introCounter}`);
-
-    console.error('Scraping table content from ctext.org...');
-    const ctextHtml = await fetchContent(ctextUrl);
-    const ctext$ = load(ctextHtml, { decodeEntities: true });
-    const ctextTitle = parseTitle(ctext$);
-    const { content: tableContent, tokens: tableTokens, sentenceCounter: tableCounter } = extractContent(ctext$, true, introCounter, ctextUrl, chapter);
-    console.error(`Table content has ${tableContent.length} items`);
-
-    finalContent = [...introContent, ...tableContent];
-    finalTokens = [...introTokens, ...tableTokens];
-    finalCounter = tableCounter;
-    title = ctextTitle;
-    url = chinesenotesUrl; // Primary URL is chinesenotes for hybrid
-    console.error(`Final content has ${finalContent.length} items, total sentences: ${finalCounter}`);
-  } else {
-    // For other tabular chapters, use ctext.org exclusively
-    console.error('Using ctext.org exclusively for tabular chapter...');
-    const ctextHtml = await fetchContent(ctextUrl);
-    const ctext$ = load(ctextHtml, { decodeEntities: true });
-    const ctextTitle = parseTitle(ctext$);
-    const { content: tableContent, tokens: tableTokens, sentenceCounter: tableCounter } = extractContent(ctext$, true, 0, ctextUrl, chapter);
-    console.error(`Table content has ${tableContent.length} items`);
-
-    finalContent = tableContent;
-    finalTokens = tableTokens;
-    finalCounter = tableCounter;
-    title = ctextTitle;
-    url = ctextUrl;
-    console.error(`Final content has ${finalContent.length} items, total sentences: ${finalCounter}`);
-  }
+  const finalContent = tableContent;
+  const finalTokens = tableTokens;
+  const finalCounter = tableCounter;
+  const title = ctextTitle;
+  const url = ctextUrl;
+  console.error(`Final content has ${finalContent.length} items, total sentences: ${finalCounter}`);
 
   // Update glossary
   glossary = updateGlossary(glossary, finalTokens);
