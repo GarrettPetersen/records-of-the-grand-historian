@@ -42,6 +42,7 @@ help:
 	@echo "  make sync                   # Copy data/ to public/data/ for web frontend"
 	@echo "  make stats                  # Show chapter counts per book"
 	@echo "  make validate               # Check all JSON files are valid"
+	@echo "  make score-translations     # Score translations for quality issues"
 	@echo "  make first-untranslated     # Find first chapter needing translation"
 	@echo ""
 	@echo "Cleanup commands:"
@@ -292,6 +293,17 @@ validate:
 		fi; \
 	done
 	@echo "Validation complete."
+
+# Score translations for quality issues
+.PHONY: score-translations
+score-translations:
+	@echo "Scoring translations for quality issues..."
+	@if [ -z "$(CHAPTER)" ]; then \
+		echo "Error: CHAPTER variable not set."; \
+		echo "Usage: make score-translations CHAPTER=data/shiji/015.json"; \
+		exit 1; \
+	fi
+	@$(NODE) score-translations.js $(CHAPTER)
 
 # Count scraped chapters per book
 .PHONY: stats

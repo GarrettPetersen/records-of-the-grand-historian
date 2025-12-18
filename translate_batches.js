@@ -74,3 +74,4 @@ function translateBatch(batchNum) {
 for (let i = 5; i <= 9; i++) {
   translateBatch(i);
 }
+
