@@ -14,19 +14,31 @@ import path from 'node:path';
 
 const DATA_DIR = './data';
 
+// Check if text contains Chinese characters
+function containsChinese(text) {
+  return /[\u4e00-\u9fff]/.test(text);
+}
+
 function recalculateTranslatedCount(chapterData) {
   let translatedCount = 0;
 
   for (const block of chapterData.content) {
     if (block.type === 'paragraph') {
       for (const sentence of block.sentences || []) {
-        const hasTranslation = sentence.translations && sentence.translations.length > 0 && sentence.translations[0].text;
-        if (hasTranslation) {
+        // Skip empty content
+        if (!sentence.zh || sentence.zh.trim() === '') continue;
+
+        // Check if translation exists and doesn't contain Chinese characters
+        const translation = sentence.translations?.[0]?.text;
+        if (translation && translation.trim() !== '' && !containsChinese(translation)) {
           translatedCount++;
         }
       }
     } else if (block.type === 'table_row') {
       for (const cell of block.cells || []) {
+        // Skip empty content
+        if (!cell.content || cell.content.trim() === '') continue;
+
         // For genealogical tables (shiji chapters 13-15), proper names don't need translation
         const isGenealogicalTable = chapterData.meta.book === 'shiji' &&
                                    ['013', '014', '015'].includes(chapterData.meta.chapter);
@@ -35,22 +47,21 @@ function recalculateTranslatedCount(chapterData) {
           // All cells in genealogical tables are considered translated (proper names)
           translatedCount++;
         } else {
-          // Empty cells are considered translated (nothing to translate)
-          if (!cell.content || cell.content.trim() === '') {
+          // Check if translation exists and doesn't contain Chinese characters
+          const translation = cell.translation;
+          if (translation && translation.trim() !== '' && !containsChinese(translation)) {
             translatedCount++;
-          } else {
-            // Cells with content are translated if they have a translation
-            const hasTranslation = cell.translation && cell.translation.trim() !== '';
-            if (hasTranslation) {
-              translatedCount++;
-            }
           }
         }
       }
     } else if (block.type === 'table_header') {
       for (const sentence of block.sentences || []) {
-        const hasTranslation = sentence.translations && sentence.translations.length > 0 && sentence.translations[0].text;
-        if (hasTranslation) {
+        // Skip empty content
+        if (!sentence.zh || sentence.zh.trim() === '') continue;
+
+        // Check if translation exists and doesn't contain Chinese characters
+        const translation = sentence.translations?.[0]?.text;
+        if (translation && translation.trim() !== '' && !containsChinese(translation)) {
           translatedCount++;
         }
       }
