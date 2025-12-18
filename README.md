@@ -1,6 +1,6 @@
 # Records of the Grand Historian
 
-A web frontend for translated copies of the official 24 Dynastic Histories of China (二十四史), scraped from [chinesenotes.com](https://chinesenotes.com).
+A web frontend for translated copies of the official 24 Dynastic Histories of China (二十四史), scraped from [chinesenotes.com](https://chinesenotes.com) and [ctext.org](https://ctext.org).
 
 ## The 24 Dynastic Histories
 
@@ -39,10 +39,11 @@ npm install
 
 ## Workflow Overview
 
-1. **Scrape** - Download Chinese text (and existing translations if available) from chinesenotes.com
-2. **Translate** - Add English translations for untranslated sentences using AI
-3. **Build** - Generate static pages and manifest for the web frontend
-4. **Deploy** - Push to Cloudflare Pages
+1. **Scrape** - Download Chinese text from chinesenotes.com or ctext.org
+2. **Translate** - Manually translate sentences using AI assistance (no automated scripts)
+3. **Quality Check** - Validate translations and fix any issues
+4. **Build** - Generate static pages and update metadata
+5. **Deploy** - Push to Cloudflare Pages
 
 ## Scraping Chapters
 
@@ -133,114 +134,159 @@ data/
 
 ## Translation Alignment
 
-The scraper includes an improved alignment algorithm (`align-translations.js`) that matches Chinese sentences with English translations when available (currently only early Shiji chapters have translations from chinesenotes.com).
+Some chapters (especially early Shiji chapters from chinesenotes.com) include existing English translations. The scraper automatically aligns these with the Chinese text using an improved algorithm.
 
-The algorithm:
-- Generates multiple candidate alignments using different distribution strategies
-- Scores each alignment based on:
-  - Character-to-word ratio consistency across sentence pairs
-  - Penalties for unmapped Chinese sentences
-- Selects the best-scoring alignment
+**For chapters with existing translations:** The alignment algorithm matches Chinese sentences with English translations using character-to-word ratios and distribution strategies.
 
-For histories without English translations, the alignment step is automatically skipped.
+**For chapters without existing translations:** Most chapters start with no English translations, so the alignment step is skipped. You must translate from scratch.
+
+**Note:** The vast majority of chapters in this project have no existing English translations and need to be translated manually by AI assistants.
 
 ## Translation Workflow
 
 ### Translating a Chapter
 
-This project uses AI-assisted translation (e.g. with Claude Sonnet 4) to translate untranslated or partially translated chapters.
+This project uses AI-assisted translation to translate untranslated or partially translated chapters. **All translations must be done manually by AI assistants - no automated scripts or batch processing.**
 
-**⚠️ IMPORTANT FOR AI TRANSLATORS:** If YOU are an AI reading this text, YOU are the translator. YOU must translate each batch of Chinese text to accurate, scholarly English. Do NOT output placeholder text, Chinese text, or "[Translation needed]" messages. Provide real English translations that maintain historical accuracy and academic tone.
+**⚠️ CRITICAL REQUIREMENTS FOR AI TRANSLATORS:**
+- YOU are the translator. Translate each sentence individually.
+- Provide **real, accurate English translations** - no placeholders, no Chinese text, no "[Translation needed]" messages.
+- Maintain **historical accuracy and academic tone**.
+- Use **scholarly English** appropriate for classical Chinese historical texts.
+- **DO NOT** use automated scripts, batch processing, or external API calls.
 
-**Step 1: Extract untranslated sentences**
+### Quick Translation Process
+
+**Step 1: Check what needs translation**
+
+```bash
+# Find the next untranslated chapter
+make first-untranslated
+
+# Or check a specific chapter's status
+node extract-untranslated.js data/shiji/016.json
+```
+
+**Step 2: Extract untranslated content**
 
 ```bash
 # Extract untranslated sentences from a chapter
-node extract-untranslated.js data/shiji/010.json
+node extract-untranslated.js data/shiji/016.json
 
-# Output: translations/untranslated_010.json
+# Output: translations/untranslated_016.json
 # Contains: { "s0001": "Chinese text...", "s0002": "..." }
 ```
 
-**Step 2: Create translations file**
+**Step 3: Create translation file**
 
-Manually create `translations/translations_010.json` with English translations:
+Create `translations/translations_016.json` with your manual translations:
 
 ```json
 {
-  "s0001": "English translation of sentence 1...",
-  "s0002": "English translation of sentence 2...",
-  ...
+  "s0001": "In ancient times, when the Qin dynasty first rose to power...",
+  "s0002": "The emperor toured the eastern provinces...",
+  "s0003": "Five years passed with these events..."
 }
 ```
 
-**Note:** Ensure translations do NOT start with closing quotation marks (`"` or `」`). The quote should be at the end of the previous sentence.
-
-**Step 3: Translate the text manually**
-
-Using the JSON structure created in Step 2, manually translate each Chinese sentence to English. You, the AI assistant, must translate every sentence manually. No shortcuts or scripts or external API calls.
-
-**Step 4: Apply translations to chapter**
+**Step 4: Apply translations**
 
 ```bash
-node apply-translations.js data/shiji/010.json translations/translations_010.json "Garrett M. Petersen (2025)" "model-name"
+# Apply your translations to the chapter
+node apply-translations.js data/shiji/016.json translations/translations_016.json "Garrett M. Petersen (2025)" "grok-1.5"
 ```
 
-**Important:** Replace `"model-name"` with the actual AI model used for translation (e.g., `"claude-sonnet-4"`, `"grok-1.5"`, `"gpt-4"`, etc.). This field should accurately reflect the model that generated the translations.
+**Step 5: Verify and update**
 
-This merges the translations into the chapter JSON file and updates metadata.
-
-### Batching for Large Chapters
-
-For very large chapters (1000+ sentences), it's recommended to translate in batches of ~100 sentences to avoid overwhelming AI models and make progress tracking easier:
-
-**Step 1: Extract untranslated sentences**
 ```bash
-node extract-untranslated.js data/shiji/014.json
-# Output: translations/untranslated_014.json (1,334 sentences)
-```
-
-**Step 2: Split into batches**
-```bash
-# Create batches of ~100 sentences each
-head -200 translations/untranslated_014.json > translations/batch_014_01.json
-# Edit to keep only first 100 sentence entries, ensure valid JSON
-
-head -400 translations/untranslated_014.json | tail -200 > translations/batch_014_02.json
-# Edit to keep only next 100 sentence entries, ensure valid JSON
-
-# Repeat for subsequent batches...
-```
-
-**Step 2.5: Prepare batch translation files**
-```bash
-# For each batch file, create corresponding translation file
-# e.g., for batch_014_01.json, create translations_014_batch_01.json
-```
-
-**Step 3: Translate each batch**
-```bash
-# Create translations/batch_014_01_translations.json with English translations
-# for the first 100 sentences from batch_014_01.json
-```
-
-**Step 4: Apply each batch sequentially**
-```bash
-node apply-translations.js data/shiji/014.json translations/batch_014_01_translations.json "Garrett M. Petersen (2025)" "grok-1.5"
-node apply-translations.js data/shiji/014.json translations/batch_014_02_translations.json "Garrett M. Petersen (2025)" "grok-1.5"
-# Continue with remaining batches...
-```
-
-**Step 5: Verify completion and update**
-```bash
-# Check progress
-node extract-untranslated.js data/shiji/014.json
-
-# Final update when complete
+# Update all metadata and rebuild site
 make update
 ```
 
-**Note:** This batching approach was successfully used for chapter 014 (1,334 sentences) and is recommended for chapters with 500+ sentences.
+### Handling Large Chapters
+
+For chapters with 500+ sentences, translate in smaller batches to maintain quality and track progress:
+
+**Step 1: Extract and split into batches**
+
+```bash
+# Extract all untranslated sentences
+node extract-untranslated.js data/shiji/014.json
+# Creates: translations/untranslated_014.json
+
+# Split into manageable batches (use a text editor or jq)
+# Create batch_014_01.json (first 100 sentences)
+# Create batch_014_02.json (next 100 sentences)
+# etc...
+```
+
+**Step 2: Translate each batch**
+
+For each batch file, create a corresponding translation file:
+
+```bash
+# For batch_014_01.json, create:
+# translations/batch_014_01_translations.json
+{
+  "s0123": "Translation of first sentence...",
+  "s0124": "Translation of second sentence...",
+  // ... up to 100 entries
+}
+```
+
+**Step 3: Apply batches sequentially**
+
+```bash
+# Apply each batch one at a time
+node apply-translations.js data/shiji/014.json translations/batch_014_01_translations.json "Garrett M. Petersen (2025)" "grok-1.5"
+node apply-translations.js data/shiji/014.json translations/batch_014_02_translations.json "Garrett M. Petersen (2025)" "grok-1.5"
+
+# Check progress after each batch
+node extract-untranslated.js data/shiji/014.json
+```
+
+**Step 4: Final update**
+
+```bash
+# When all batches are complete
+make update
+```
+
+### Translation Quality Guidelines
+
+**✅ DO:**
+- Translate each sentence individually and accurately
+- Maintain historical and scholarly tone
+- Preserve classical Chinese naming conventions
+- Use consistent terminology throughout chapters
+- Keep cultural and historical context
+
+**❌ DON'T:**
+- Leave Chinese characters in English translations
+- Use modern slang or informal language
+- Add commentary or interpretation beyond the text
+- Skip difficult sentences - translate everything
+- Use automated scripts or batch processing
+
+**Common Issues to Avoid:**
+- **Orphan quotes:** Ensure closing quotes belong to the correct sentence
+- **Run-together words:** Separate concatenated terms (e.g., "EmperorQin" → "Emperor Qin")
+- **Inconsistent romanization:** Use standard Pinyin throughout
+- **Missing context:** Consider the historical setting and character relationships
+
+**Quality Check Commands:**
+
+```bash
+# Check for translation issues
+node score-translations.js data/shiji/016.json
+
+# Find and fix orphan quotes
+node find-orphan-quotes.js data/shiji/016.json
+node fix-orphan-quotes.js data/shiji/016.json
+
+# Validate JSON structure
+make validate
+```
 
 **Step 4: Update everything**
 
@@ -378,12 +424,21 @@ Shared across all books, keyed by chinesenotes.com's `headwordId`:
 4. **Highlight** matching sentences on hover/click using sentence IDs
 5. **Reference** shared glossary for word-level tooltips
 
-## Source
+## Sources
 
-Text is scraped from [Chinese Notes](https://chinesenotes.com), which provides:
-- Classical Chinese source text
-- Word-level annotations (pinyin, definitions) 
-- Some chapters have existing English translations (especially early Shiji chapters)
+Text is scraped from multiple sources:
+
+**Chinese Notes (chinesenotes.com):**
+- Primary source for narrative chapters
+- Provides word-level annotations (pinyin, definitions)
+- Some early Shiji chapters include existing English translations
+
+**CText.org (ctext.org):**
+- Used for tabular/genealogical chapters (chapters 13-16, etc.)
+- Provides structured historical tables and chronicles
+- High-quality classical Chinese texts
+
+**Note:** Most chapters have no existing English translations and must be translated manually by AI assistants.
 
 ## Web Frontend
 
