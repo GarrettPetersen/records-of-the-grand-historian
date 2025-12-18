@@ -46,12 +46,10 @@ function extractUntranslated(filePath, outputPath = null) {
 
         // For genealogical table chapters, apply content-based filtering
         if (isGenealogicalTable) {
-          // For chapter 16 (monthly chronicle), include historical events
+          // For chapter 16 (monthly chronicle), include cells with Chinese characters
           if (data.meta.chapter === '016') {
-            // Include cells with Chinese characters that are likely historical events
-            // Exclude single character state names and pure numbers
-            return /[\u4e00-\u9fff]/.test(content) && !/^[\d\s]+$/.test(content) &&
-                   content.length > 2 && !/^[\u4e00-\u9fff]$/.test(content);
+            // Include cells with Chinese characters, exclude only pure numbers
+            return /[\u4e00-\u9fff]/.test(content) && !/^[\d\s]+$/.test(content);
           }
           // For other genealogical tables, use stricter criteria for narrative content
           return content.includes('。') || content.includes('！') || content.includes('？') ||

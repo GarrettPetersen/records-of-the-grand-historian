@@ -274,6 +274,8 @@ make update
 - **Inconsistent romanization:** Use standard Pinyin throughout
 - **Missing context:** Consider the historical setting and character relationships
 
+If you find that you have used any kind of automated substitution script to translate, delete all translations and start over.
+
 **Quality Check Commands:**
 
 ```bash
