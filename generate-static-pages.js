@@ -169,7 +169,11 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
           tableHtml += `<tr>`;
           tableRow.cells.forEach(cell => {
             const cellZh = escapeHtml(cell.content);
-            tableHtml += `<td class="table-cell">${cellZh}</td>`;
+            if (cellZh.trim()) {
+              tableHtml += `<td class="table-cell">${cellZh}</td>`;
+            } else {
+              tableHtml += `<td class="table-cell empty-cell"></td>`;
+            }
           });
           tableHtml += `</tr>`;
         });
@@ -190,7 +194,11 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
           tableHtml += `<tr>`;
           tableRow.cells.forEach(cell => {
             const cellEn = cell.translation ? escapeHtml(cell.translation) : '';
-            tableHtml += `<td class="table-cell">${cellEn}</td>`;
+            if (cellEn.trim()) {
+              tableHtml += `<td class="table-cell">${cellEn}</td>`;
+            } else {
+              tableHtml += `<td class="table-cell empty-cell"></td>`;
+            }
           });
           tableHtml += `</tr>`;
         });
@@ -418,6 +426,10 @@ ${JSON.stringify(structuredData, null, 2)}
       .genealogical-table .table-cell {
         min-width: 80px;
         padding: 0.5rem;
+      }
+      .genealogical-table .empty-cell {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
       }
       .view-controls {
         display: flex;
