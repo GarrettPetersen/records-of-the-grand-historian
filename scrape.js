@@ -1242,6 +1242,20 @@ async function main() {
 
   const result = await scrapeChapter(bookId, chapter, glossaryPath, customUrl);
   if (result) {
+    // Save to data file
+    const dataDir = `data/${bookId}`;
+    const fileName = `${chapter.padStart(3, '0')}.json`;
+    const filePath = `${dataDir}/${fileName}`;
+
+    // Ensure data directory exists
+    if (!fs.existsSync(dataDir)) {
+      fs.mkdirSync(dataDir, { recursive: true });
+    }
+
+    fs.writeFileSync(filePath, JSON.stringify(result, null, 2), 'utf8');
+    console.error(`✅ Saved to ${filePath}`);
+
+    // Also print to console for debugging
     console.log(JSON.stringify(result, null, 2));
   }
 }
