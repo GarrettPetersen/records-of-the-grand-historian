@@ -132,8 +132,14 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         .filter(t => t);
       const enText = sentenceTexts.map(t => escapeHtml(t)).join(' ');
 
+      // Add special styling for concluding paragraph
+      const isConcludingParagraph = i === chapterData.content.length - 1 && block.sentences.length === 3;
+      const extraClass = isConcludingParagraph ? ' concluding-paragraph' : '';
+      const separator = isConcludingParagraph ? '<hr style="margin: 3rem 0; border: none; border-top: 2px solid #3498db;"><h3 style="text-align: center; color: #2c3e50; margin-bottom: 2rem;">Conclusion</h3>' : '';
+
       contentHTML += `
-        <div class="paragraph-block" data-paragraph="${i}">
+        ${separator}
+        <div class="paragraph-block${extraClass}" data-paragraph="${i}">
           <div class="paragraph-number">${paraNum}</div>
           <div class="paragraph-content">
             <div class="chinese-text">${zhText}</div>
@@ -212,7 +218,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         contentHTML += tableHtml;
 
         // Skip the table rows we just processed
-        i = j;
+        i = j - 1;
       } else {
         // Just a header without table rows
         const zhText = block.sentences.map(s => escapeHtml(s.zh)).join('');
@@ -430,6 +436,13 @@ ${JSON.stringify(structuredData, null, 2)}
       .genealogical-table .empty-cell {
         background-color: #f8f9fa;
         border: 1px solid #dee2e6;
+      }
+      .concluding-paragraph {
+        background-color: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border-left: 4px solid #3498db;
+        margin: 2rem 0;
       }
       .view-controls {
         display: flex;
