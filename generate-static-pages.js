@@ -111,6 +111,8 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
   
   // Generate content HTML (paragraphs and tables)
   let contentHTML = '';
+  let footnotes = [];
+  let footnoteCounter = 1;
 
   for (let i = 0; i < chapterData.content.length; i++) {
     const block = chapterData.content[i];
@@ -126,11 +128,28 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
       // Chinese text
       const zhText = block.sentences.map(s => escapeHtml(s.zh)).join('');
 
-      // English text - use sentence-level translations
+      // English text - use sentence-level translations with footnote support
       const sentenceTexts = block.sentences
-        .map(s => s.translation || (s.translations && s.translations.length > 0 ? s.translations[0].text : ''))
+        .map(s => {
+          const translation = s.translation || (s.translations && s.translations.length > 0 ? s.translations[0] : null);
+          if (!translation || !translation.text) return '';
+
+          let text = escapeHtml(translation.text);
+
+          // Check for footnote
+          if (translation.footnote) {
+            const footnoteNum = footnoteCounter++;
+            footnotes.push({
+              number: footnoteNum,
+              text: translation.footnote
+            });
+            text += `<sup class="footnote-marker" data-footnote="${footnoteNum}">${footnoteNum}</sup>`;
+          }
+
+          return text;
+        })
         .filter(t => t);
-      const enText = sentenceTexts.map(t => escapeHtml(t)).join(' ');
+      const enText = sentenceTexts.join(' ');
 
       // No special styling for concluding paragraph - display like any other paragraph
 
@@ -162,8 +181,22 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         // Generate header rows from table_header sentences
         const zhHeaderRow = block.sentences.map(s => `<th class="table-header">${escapeHtml(s.zh)}</th>`).join('');
         const enHeaderRow = block.sentences.map(s => {
-          const translation = s.translations && s.translations.length > 0 ? s.translations[0].text : '';
-          return `<th class="table-header">${escapeHtml(translation)}</th>`;
+          const translation = s.translations && s.translations.length > 0 ? s.translations[0] : null;
+          if (!translation || !translation.text) return '<th class="table-header"></th>';
+
+          let text = escapeHtml(translation.text);
+
+          // Check for footnote
+          if (translation.footnote) {
+            const footnoteNum = footnoteCounter++;
+            footnotes.push({
+              number: footnoteNum,
+              text: translation.footnote
+            });
+            text += `<sup class="footnote-marker" data-footnote="${footnoteNum}">${footnoteNum}</sup>`;
+          }
+
+          return `<th class="table-header">${text}</th>`;
         }).join('');
 
         let tableHtml = `<div class="tabular-content" data-paragraph="${i}">
@@ -436,6 +469,35 @@ ${JSON.stringify(structuredData, null, 2)}
         font-size: 14px !important;
         display: table-cell;
       }
+      .footnote-marker {
+        color: #e74c3c;
+        font-weight: bold;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 0.8em;
+        vertical-align: super;
+        margin-left: 0.1em;
+      }
+      .footnote-marker:hover {
+        color: #c0392b;
+      }
+      .footnotes-section {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #dee2e6;
+      }
+      .footnotes-section h3 {
+        color: #2c3e50;
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+      }
+      .footnotes-list {
+        padding-left: 1.5rem;
+      }
+      .footnotes-list li {
+        margin-bottom: 0.5rem;
+        line-height: 1.4;
+      }
       .genealogical-table td {
         padding: 0.5rem 0.25rem;
         border: 1px solid #dee2e6;
@@ -574,6 +636,15 @@ ${JSON.stringify(structuredData, null, 2)}
 
 ${contentHTML}
 
+        ${footnotes.length > 0 ? `
+        <div class="footnotes-section" style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #dee2e6;">
+            <h3 style="margin-bottom: 1rem; color: #2c3e50;">Footnotes</h3>
+            <ol class="footnotes-list" style="padding-left: 1.5rem;">
+                ${footnotes.map(fn => `<li id="footnote-${fn.number}" style="margin-bottom: 0.5rem;">${escapeHtml(fn.text)}</li>`).join('')}
+            </ol>
+        </div>
+        ` : ''}
+
         <div class="chapter-navigation" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #dee2e6;">
             <div>
                 ${prevChapter ? `<a href="${prevChapter}.html" class="nav-btn prev-btn">← Previous Chapter</a>` : '<span class="nav-btn disabled">← Previous Chapter</span>'}
@@ -688,6 +759,23 @@ ${contentHTML}
               tabularContent.classList.remove('show-both', 'show-chinese', 'show-english');
               // Add the appropriate view class
               tabularContent.classList.add('show-' + view);
+            }
+          });
+        });
+
+        // Set up footnote functionality
+        const footnoteMarkers = document.querySelectorAll('.footnote-marker');
+        footnoteMarkers.forEach(marker => {
+          marker.addEventListener('click', (e) => {
+            e.preventDefault();
+            const footnoteNum = marker.dataset.footnote;
+            const footnoteElement = document.getElementById('footnote-' + footnoteNum);
+            if (footnoteElement) {
+              footnoteElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              footnoteElement.style.backgroundColor = '#fff3cd';
+              setTimeout(() => {
+                footnoteElement.style.backgroundColor = '';
+              }, 2000);
             }
           });
         });

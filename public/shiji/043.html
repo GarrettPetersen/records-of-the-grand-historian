@@ -189,6 +189,35 @@
         font-size: 14px !important;
         display: table-cell;
       }
+      .footnote-marker {
+        color: #e74c3c;
+        font-weight: bold;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 0.8em;
+        vertical-align: super;
+        margin-left: 0.1em;
+      }
+      .footnote-marker:hover {
+        color: #c0392b;
+      }
+      .footnotes-section {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #dee2e6;
+      }
+      .footnotes-section h3 {
+        color: #2c3e50;
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+      }
+      .footnotes-list {
+        padding-left: 1.5rem;
+      }
+      .footnotes-list li {
+        margin-bottom: 0.5rem;
+        line-height: 1.4;
+      }
       .genealogical-table td {
         padding: 0.5rem 0.25rem;
         border: 1px solid #dee2e6;
@@ -1271,6 +1300,8 @@
           <button class="cite-paragraph-btn" data-paragraph="117" title="Cite this paragraph">📋</button>
         </div>
 
+        
+
         <div class="chapter-navigation" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #dee2e6;">
             <div>
                 <a href="042.html" class="nav-btn prev-btn">← Previous Chapter</a>
@@ -1385,6 +1416,23 @@
               tabularContent.classList.remove('show-both', 'show-chinese', 'show-english');
               // Add the appropriate view class
               tabularContent.classList.add('show-' + view);
+            }
+          });
+        });
+
+        // Set up footnote functionality
+        const footnoteMarkers = document.querySelectorAll('.footnote-marker');
+        footnoteMarkers.forEach(marker => {
+          marker.addEventListener('click', (e) => {
+            e.preventDefault();
+            const footnoteNum = marker.dataset.footnote;
+            const footnoteElement = document.getElementById('footnote-' + footnoteNum);
+            if (footnoteElement) {
+              footnoteElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              footnoteElement.style.backgroundColor = '#fff3cd';
+              setTimeout(() => {
+                footnoteElement.style.backgroundColor = '';
+              }, 2000);
             }
           });
         });
