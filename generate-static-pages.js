@@ -132,14 +132,10 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         .filter(t => t);
       const enText = sentenceTexts.map(t => escapeHtml(t)).join(' ');
 
-      // Add special styling for concluding paragraph
-      const isConcludingParagraph = i === chapterData.content.length - 1 && block.sentences.length === 3;
-      const extraClass = isConcludingParagraph ? ' concluding-paragraph' : '';
-      const separator = isConcludingParagraph ? '<hr style="margin: 3rem 0; border: none; border-top: 2px solid #3498db;"><h3 style="text-align: center; color: #2c3e50; margin-bottom: 2rem;">Conclusion</h3>' : '';
+      // No special styling for concluding paragraph - display like any other paragraph
 
       contentHTML += `
-        ${separator}
-        <div class="paragraph-block${extraClass}" data-paragraph="${i}">
+        <div class="paragraph-block" data-paragraph="${i}">
           <div class="paragraph-number">${paraNum}</div>
           <div class="paragraph-content">
             <div class="chinese-text">${zhText}</div>
@@ -163,12 +159,22 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
           ? escapeHtml(block.translations[0].text)
           : 'Genealogical Tables of the Three Dynasties';
 
+        // Generate header rows from table_header sentences
+        const zhHeaderRow = block.sentences.map(s => `<th class="table-header">${escapeHtml(s.zh)}</th>`).join('');
+        const enHeaderRow = block.sentences.map(s => {
+          const translation = s.translations && s.translations.length > 0 ? s.translations[0].text : '';
+          return `<th class="table-header">${escapeHtml(translation)}</th>`;
+        }).join('');
+
         let tableHtml = `<div class="tabular-content" data-paragraph="${i}">
             <!-- Chinese table -->
             <div class="table-container chinese-table">
               <h3 class="table-title">${zhTitle}</h3>
               <div class="table-scroll">
                 <table class="genealogical-table">
+                  <thead>
+                    <tr>${zhHeaderRow}</tr>
+                  </thead>
                   <tbody>`;
 
         tableRows.forEach(tableRow => {
@@ -194,6 +200,9 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
               <h3 class="table-title">${enTitle}</h3>
               <div class="table-scroll">
                 <table class="genealogical-table">
+                  <thead>
+                    <tr>${enHeaderRow}</tr>
+                  </thead>
                   <tbody>`;
 
         tableRows.forEach(tableRow => {
@@ -437,12 +446,15 @@ ${JSON.stringify(structuredData, null, 2)}
         background-color: #f8f9fa;
         border: 1px solid #dee2e6;
       }
-      .concluding-paragraph {
+      .genealogical-table th {
         background-color: #f8f9fa;
-        padding: 1.5rem;
-        border-radius: 8px;
-        border-left: 4px solid #3498db;
-        margin: 2rem 0;
+        font-weight: bold;
+        border: 1px solid #dee2e6;
+        padding: 8px;
+        text-align: center;
+        position: sticky;
+        top: 0;
+        z-index: 10;
       }
       .view-controls {
         display: flex;

@@ -955,29 +955,39 @@ async function scrapeTabularChapter(bookId, chapter, glossaryPath) {
     return result;
   }
 
-  // For ctext.org URLs, scrape everything from ctext.org directly
-  console.error('Scraping content from ctext.org...');
+  // Hybrid scraping: get introductory text from chinesenotes, table from ctext
+  console.error('Scraping introductory content from chinesenotes.com...');
+  const chinesenotesUrl = book.urlPattern.replace('{chapter}', chapter);
+  const chinesenotesHtml = await fetchContent(chinesenotesUrl);
+  const chinesenotes$ = load(chinesenotesHtml, { decodeEntities: true });
+  const { content: introContent, tokens: introTokens, sentenceCounter: introCounter } = extractContent(chinesenotes$, false, 0);
+  console.error(`Intro content has ${introContent.length} items, sentence counter at ${introCounter}`);
+
+  console.error('Scraping table content from ctext.org...');
   const ctextHtml = await fetchContent(ctextUrl);
   const ctext$ = load(ctextHtml, { decodeEntities: true });
   const ctextTitle = parseTitle(ctext$);
-  const { content: tableContent, tokens: finalTokens } = extractContent(ctext$, true, 0, ctextUrl);
+  const { content: tableContent, tokens: tableTokens, sentenceCounter: finalCounter } = extractContent(ctext$, true, introCounter, ctextUrl);
   console.error(`Table content has ${tableContent.length} items`);
 
-  // For ctext.org, we don't have separate intro content
-  const introContent = [];
   const finalContent = [...introContent, ...tableContent];
-  console.error(`Final content has ${finalContent.length} items`);
+  const finalTokens = [...introTokens, ...tableTokens];
+  console.error(`Final content has ${finalContent.length} items, total sentences: ${finalCounter}`);
 
   // Update glossary
   glossary = updateGlossary(glossary, finalTokens);
+
+  // Get title from chinesenotes (primary source)
+  const chinesenotesTitle = parseTitle(chinesenotes$);
 
   // Generate metadata
   const meta = {
     book: bookId,
     bookInfo: book,
     chapter,
-    url: ctextUrl,
-    title: ctextTitle,
+    url: chinesenotesUrl, // Primary URL is chinesenotes
+    ctextUrl, // Store ctext URL for reference
+    title: chinesenotesTitle,
     sentenceCount: countSentences(finalContent),
     translatedCount: finalContent.reduce((sum, block) => {
       if (block.type === 'paragraph') {
