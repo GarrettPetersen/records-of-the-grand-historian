@@ -74,38 +74,10 @@ function showTooltip(e) {
     </ul>
   `;
 
-  // Position tooltip intelligently
   const rect = e.target.getBoundingClientRect();
-  const viewportWidth = window.innerWidth;
-  const viewportHeight = window.innerHeight;
-
-  // Show tooltip temporarily to get its dimensions
   tooltip.style.display = 'block';
-  tooltip.style.left = '0px';
-  tooltip.style.top = '0px';
-
-  const tooltipWidth = tooltip.offsetWidth;
-  const tooltipHeight = tooltip.offsetHeight;
-
-  // Calculate preferred position (below and to the right)
-  let left = rect.left;
-  let top = rect.bottom + 5;
-
-  // Adjust if tooltip would go off-screen
-  if (left + tooltipWidth > viewportWidth) {
-    left = rect.right - tooltipWidth;
-  }
-
-  if (top + tooltipHeight > viewportHeight) {
-    top = rect.top - tooltipHeight - 5;
-  }
-
-  // Ensure tooltip stays within viewport bounds
-  left = Math.max(5, Math.min(left, viewportWidth - tooltipWidth - 5));
-  top = Math.max(5, Math.min(top, viewportHeight - tooltipHeight - 5));
-
-  tooltip.style.left = left + 'px';
-  tooltip.style.top = top + 'px';
+  tooltip.style.left = rect.left + 'px';
+  tooltip.style.top = (rect.bottom + 5) + 'px';
 }
 
 function hideTooltip() {
