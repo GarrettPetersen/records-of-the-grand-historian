@@ -37,6 +37,7 @@ help:
 	@echo ""
 	@echo "Maintenance commands:"
 	@echo "  make fix-counts             # Recalculate translatedCount in all chapter files"
+	@echo "  make nuke-translations      # ⚠️  Emergency: Remove ALL translations from a chapter"
 	@echo "  make manifest               # Generate manifest.json (includes sync)"
 	@echo "  make generate-pages         # Generate static HTML pages for SEO"
 	@echo "  make sync                   # Copy data/ to public/data/ for web frontend"
@@ -113,6 +114,21 @@ update:
 fix-counts:
 	@echo "Recalculating translated counts..."
 	@$(NODE) fix-translated-counts.js
+
+# Nuke all translations from a chapter (emergency reset)
+.PHONY: nuke-translations
+nuke-translations:
+	@if [ -z "$(CHAPTER)" ]; then \
+		echo "Error: CHAPTER variable not set."; \
+		echo "Usage: make nuke-translations CHAPTER=data/shiji/017.json"; \
+		exit 1; \
+	fi
+	@echo "⚠️  NUKING ALL TRANSLATIONS from $(CHAPTER)"
+	@echo "This will permanently delete all existing translations!"
+	@echo "Press Enter to continue or Ctrl+C to abort..."
+	@read -r || true
+	@$(NODE) nuke-translations.js $(CHAPTER)
+	@echo "✅ Translations nuked. Run 'make update' to update the website."
 
 # Generate manifest for web frontend
 .PHONY: manifest
