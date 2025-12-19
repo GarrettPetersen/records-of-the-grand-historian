@@ -48,6 +48,17 @@ function extractUntranslated(filePath, outputPath = null) {
         // Include all non-empty cells - everything with content needs translation
         return true;
       });
+    } else if (block.type === 'table_header') {
+      // Include all header sentences - table headers need translation too
+      sentences = block.sentences.filter(sentence => {
+        const content = sentence.zh.trim();
+
+        // Skip empty content
+        if (!content) return false;
+
+        // Include all non-empty header sentences
+        return true;
+      });
     }
 
     for (const sentence of sentences) {
@@ -63,6 +74,11 @@ function extractUntranslated(filePath, outputPath = null) {
       } else if (block.type === 'table_row') {
         hasTranslation = sentence.translation && sentence.translation.trim() !== '';
         chineseText = sentence.content;
+        sentenceId = sentence.id;
+      } else if (block.type === 'table_header') {
+        const trans = sentence.translations[0];
+        hasTranslation = trans.text && trans.text.trim() !== '';
+        chineseText = sentence.zh;
         sentenceId = sentence.id;
       }
 
@@ -100,6 +116,12 @@ function extractUntranslated(filePath, outputPath = null) {
     } else if (block.type === 'table_row') {
       for (const cell of block.cells) {
         if (cell.content && cell.content.trim()) {
+          actualTotal++;
+        }
+      }
+    } else if (block.type === 'table_header') {
+      for (const sentence of block.sentences) {
+        if (sentence.zh && sentence.zh.trim()) {
           actualTotal++;
         }
       }
