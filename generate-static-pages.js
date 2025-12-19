@@ -416,12 +416,12 @@ ${JSON.stringify(structuredData, null, 2)}
         grid-template-columns: 1fr 1fr;
         gap: 2rem;
       }
-      .chinese-text {
+      .paragraph.chinese .chinese-text {
         font-size: 1.1rem;
         line-height: 1.8;
         color: #2c3e50;
       }
-      .english-text {
+      .paragraph.english .english-text {
         font-size: 1rem;
         line-height: 1.7;
         color: #34495e;
