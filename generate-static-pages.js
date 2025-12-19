@@ -68,10 +68,10 @@ function generateStructuredData(bookId, chapterData) {
   const book = BOOKS[bookId];
   const chapterNum = parseInt(chapterData.meta.chapter, 10);
   const title = chapterData.meta.title.zh;
-  
+
   const translators = chapterData.meta.translators || [];
   const translatorNames = translators.map(t => t.name).filter(Boolean);
-  
+
   return {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -103,12 +103,12 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
   const structuredData = generateStructuredData(bookId, chapterData);
   const chapterNum = parseInt(chapterData.meta.chapter, 10);
   const title = chapterData.meta.title.zh;
-  
+
   // Find previous and next chapters
   const currentIndex = allChapters.findIndex(c => c === chapterData.meta.chapter);
   const prevChapter = currentIndex > 0 ? allChapters[currentIndex - 1] : null;
   const nextChapter = currentIndex < allChapters.length - 1 ? allChapters[currentIndex + 1] : null;
-  
+
   // Generate content HTML (paragraphs and tables)
   let contentHTML = '';
   let footnotes = [];
@@ -172,12 +172,6 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
       }
 
       if (tableRows.length > 0) {
-        // Create separate table views for Chinese-only, English-only, and both
-        const zhTitle = block.sentences.map(s => escapeHtml(s.zh)).join('');
-        const enTitle = block.translations && block.translations.length > 0 && block.translations[0].text
-          ? escapeHtml(block.translations[0].text)
-          : 'Genealogical Tables of the Three Dynasties';
-
         // Generate header rows from table_header sentences
         const zhHeaderRow = block.sentences.map(s => `<th class="table-header">${escapeHtml(s.zh)}</th>`).join('');
         const enHeaderRow = block.sentences.map(s => {
@@ -202,7 +196,6 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         let tableHtml = `<div class="tabular-content" data-paragraph="${i}">
             <!-- Chinese table -->
             <div class="table-container chinese-table">
-              <h3 class="table-title">${zhTitle}</h3>
               <div class="table-scroll">
                 <table class="genealogical-table">
                   <thead>
@@ -230,7 +223,6 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
 
             <!-- English table -->
             <div class="table-container english-table">
-              <h3 class="table-title">${enTitle}</h3>
               <div class="table-scroll">
                 <table class="genealogical-table">
                   <thead>
@@ -277,28 +269,28 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
           </div>`;
       }
     } else {
-        // Just a header without table rows
-        const zhText = block.sentences.map(s => escapeHtml(s.zh)).join('');
-        const enText = block.translations && block.translations.length > 0 && block.translations[0].text
-          ? escapeHtml(block.translations[0].text)
-          : '';
+      // Just a header without table rows
+      const zhText = block.sentences.map(s => escapeHtml(s.zh)).join('');
+      const enText = block.translations && block.translations.length > 0 && block.translations[0].text
+        ? escapeHtml(block.translations[0].text)
+        : '';
 
-        contentHTML += `
+      contentHTML += `
           <div class="table-header-block">
             <h3 class="table-title">
               <span class="chinese-text">${zhText}</span>
               ${enText ? `<span class="english-text">${enText}</span>` : ''}
             </h3>
           </div>`;
-      }
+    }
   }
-  
-  const translationBadge = meta.translationPercent === 100 
+
+  const translationBadge = meta.translationPercent === 100
     ? '✓ Translated'
-    : meta.translationPercent > 0 
-    ? `${meta.translationPercent}% Translated`
-    : 'Untranslated';
-  
+    : meta.translationPercent > 0
+      ? `${meta.translationPercent}% Translated`
+      : 'Untranslated';
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -684,14 +676,105 @@ ${contentHTML}
         </div>
     </div>
 
-    <script type="module">
+    <script>
       // Embed chapter data for citations
       window.currentChapterData = ${JSON.stringify(chapterData)};
       window.currentBookInfo = ${JSON.stringify(book)};
       window.currentBookId = '${bookId}';
-      
-      // Import citation functions
-      import { openCitationModal, setupCitationModal } from '../reader.js';
+
+      // Simple citation functions for static pages
+      function generateCitation(format, type, paragraphIdx, block) {
+        const book = window.currentBookInfo;
+        const chapterNum = window.currentChapterData.meta.chapter;
+        const chapterTitle = window.currentChapterData.meta.title.en || ('Chapter ' + chapterNum);
+
+        const baseCitation = book.name + '. "' + chapterTitle + '." In ' + book.chinese + ', translated by Garrett M. Petersen, 2025.';
+
+        if (type === 'paragraph' && paragraphIdx !== null) {
+          return baseCitation + ' Paragraph ' + (paragraphIdx + 1) + '.';
+        }
+
+        return baseCitation;
+      }
+
+      function openCitationModal(type, paragraphIdx = null, block = null) {
+        const modal = document.getElementById('citation-modal');
+        const title = document.getElementById('citation-title');
+        const citationText = document.getElementById('citation-text');
+
+        title.textContent = type === 'chapter' ? 'Cite this Chapter' : ('Cite Paragraph ' + (paragraphIdx + 1));
+
+        // Store citation context
+        modal.dataset.citationType = type;
+        modal.dataset.paragraphIdx = paragraphIdx;
+        if (block) {
+          modal.dataset.blockData = JSON.stringify(block);
+        }
+
+        // Generate initial citation (Chicago)
+        const initialCitation = generateCitation('chicago', type, paragraphIdx, block);
+        citationText.value = initialCitation;
+
+        // Set active tab
+        document.querySelectorAll('.citation-tab').forEach(tab => {
+          tab.classList.remove('active');
+          if (tab.dataset.format === 'chicago') {
+            tab.classList.add('active');
+          }
+        });
+
+        modal.style.display = 'flex';
+      }
+
+      function setupCitationModal() {
+        const modal = document.getElementById('citation-modal');
+        const closeBtn = document.getElementById('close-modal');
+        const copyBtn = document.getElementById('copy-citation');
+        const citationText = document.getElementById('citation-text');
+        const tabs = document.querySelectorAll('.citation-tab');
+
+        // Close modal
+        closeBtn.onclick = () => modal.style.display = 'none';
+        modal.onclick = (e) => {
+          if (e.target === modal) modal.style.display = 'none';
+        };
+
+        // Copy citation
+        copyBtn.onclick = () => {
+          citationText.select();
+          navigator.clipboard.writeText(citationText.value).then(() => {
+            const originalText = copyBtn.textContent;
+            copyBtn.textContent = '✓ Copied!';
+            setTimeout(() => {
+              copyBtn.textContent = originalText;
+            }, 2000);
+          }).catch(() => {
+            // Fallback for older browsers
+            citationText.select();
+            document.execCommand('copy');
+            const originalText = copyBtn.textContent;
+            copyBtn.textContent = '✓ Copied!';
+            setTimeout(() => {
+              copyBtn.textContent = originalText;
+            }, 2000);
+          });
+        };
+
+        // Tab switching
+        tabs.forEach(tab => {
+          tab.onclick = () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            const format = tab.dataset.format;
+            const type = modal.dataset.citationType;
+            const paragraphIdx = parseInt(modal.dataset.paragraphIdx);
+            const block = modal.dataset.blockData ? JSON.parse(modal.dataset.blockData) : null;
+
+            citationText.value = generateCitation(format, type, paragraphIdx, block);
+          };
+        });
+      }
       
       // Initialize citation functionality for static pages
       document.addEventListener('DOMContentLoaded', () => {
@@ -720,7 +803,7 @@ ${contentHTML}
 
         // Set up view controls
         const viewBtns = document.querySelectorAll('.view-btn');
-        const contentContainer = document.querySelector('.content-container');
+        const contentContainer = document.querySelector('.static-content');
 
         // Initialize default view (both) for all tables
         const tabularContents = document.querySelectorAll('.tabular-content');
@@ -791,62 +874,62 @@ ${contentHTML}
 async function generateStaticPages(bookId = null, chapterNum = null) {
   const dataDir = path.join(__dirname, 'data');
   const outputDir = path.join(__dirname, 'public');
-  
+
   // Get list of books to process
   const booksToProcess = bookId ? [bookId] : Object.keys(BOOKS);
-  
+
   let totalGenerated = 0;
-  
+
   for (const book of booksToProcess) {
     if (!BOOKS[book]) {
       console.error(`Unknown book: ${book}`);
       continue;
     }
-    
+
     const bookDataDir = path.join(dataDir, book);
     if (!fs.existsSync(bookDataDir)) {
       console.error(`Data directory not found: ${bookDataDir}`);
       continue;
     }
-    
+
     // Create output directory for this book
     const bookOutputDir = path.join(outputDir, book);
     if (!fs.existsSync(bookOutputDir)) {
       fs.mkdirSync(bookOutputDir, { recursive: true });
     }
-    
+
     // Get chapters to process
-    const chapterFiles = chapterNum 
+    const chapterFiles = chapterNum
       ? [`${String(chapterNum).padStart(3, '0')}.json`]
       : fs.readdirSync(bookDataDir).filter(f => f.endsWith('.json'));
-    
+
     console.log(`\nGenerating static pages for ${book}...`);
-    
+
     // Get all chapter numbers sorted
     const allChapterNums = fs.readdirSync(bookDataDir)
       .filter(f => f.endsWith('.json'))
       .map(f => path.basename(f, '.json'))
       .sort();
-    
+
     for (const file of chapterFiles) {
       const chapterPath = path.join(bookDataDir, file);
       const chapterData = JSON.parse(fs.readFileSync(chapterPath, 'utf8'));
-      
+
       const chapterNumStr = path.basename(file, '.json');
       const outputPath = path.join(bookOutputDir, `${chapterNumStr}.html`);
-      
+
       const html = generateChapterHTML(book, chapterData, allChapterNums);
       fs.writeFileSync(outputPath, html, 'utf8');
-      
+
       const translationPercent = chapterData.meta.sentenceCount > 0
         ? Math.round((chapterData.meta.translatedCount / chapterData.meta.sentenceCount) * 100)
         : 0;
-      
+
       console.log(`  ✓ ${chapterNumStr}.html (${translationPercent}% translated)`);
       totalGenerated++;
     }
   }
-  
+
   console.log(`\n✅ Generated ${totalGenerated} static HTML pages`);
   console.log(`Output directory: ${path.join(outputDir)}`);
 }
@@ -854,7 +937,7 @@ async function generateStaticPages(bookId = null, chapterNum = null) {
 // Parse command line arguments
 function main() {
   const args = process.argv.slice(2);
-  
+
   if (args.includes('--help') || args.includes('-h')) {
     console.log(`
 Usage:
@@ -870,20 +953,20 @@ Examples:
 `);
     process.exit(0);
   }
-  
+
   let bookId = null;
   let chapterNum = null;
-  
+
   const bookIdx = args.indexOf('--book');
   if (bookIdx !== -1 && bookIdx + 1 < args.length) {
     bookId = args[bookIdx + 1];
   }
-  
+
   const chapterIdx = args.indexOf('--chapter');
   if (chapterIdx !== -1 && chapterIdx + 1 < args.length) {
     chapterNum = args[chapterIdx + 1];
   }
-  
+
   generateStaticPages(bookId, chapterNum);
 }
 
