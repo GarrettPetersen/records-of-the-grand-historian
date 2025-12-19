@@ -1081,15 +1081,12 @@ async function scrapeChapter(bookId, chapter, glossaryPath, customUrl) {
   const existingFile = `data/${bookId}/${chapter.padStart(3, '0')}.json`;
   let isTabularChapter = !!customUrl;
 
-  // For shiji chapters 13-17, always treat as tabular (they require ctext.org)
-  if (bookId === 'shiji' && ['013', '014', '015', '016', '017'].includes(chapter)) {
-    console.error(`Chapter ${chapter} is a known tabular chapter - will use ctext.org exclusively`);
+  // For shiji chapters with ctext URLs configured, use ctext.org
+  const ctextUrl = getCtextUrl(bookId, chapter);
+  if (ctextUrl) {
+    console.error(`Chapter ${chapter} has ctext.org URL configured - will use ctext.org`);
     isTabularChapter = true;
-    // Get the ctext URL for this chapter
-    const ctextUrl = getCtextUrl(bookId, chapter);
-    if (ctextUrl) {
-      customUrl = ctextUrl;
-    }
+    customUrl = ctextUrl;
   }
 
   if (!isTabularChapter && fs.existsSync(existingFile)) {

@@ -194,7 +194,17 @@ manifest:
 	@$(eval BOOK := $(word 1,$(subst -, ,$@)))
 	@$(eval CHAPTER := $(word 2,$(subst -, ,$@)))
 	@echo "Scraping $(BOOK) chapter $(CHAPTER)..."
-	@$(SCRAPE) $(BOOK) $(CHAPTER) --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/$(BOOK)/$(CHAPTER).json
+	@if [ -f "data/ctext-urls.json" ]; then \
+		CTEXT_URL=$$(jq -r '.$(BOOK)."$(CHAPTER)" // empty' data/ctext-urls.json 2>/dev/null); \
+		if [ -n "$$CTEXT_URL" ] && [ "$$CTEXT_URL" != "null" ]; then \
+			echo "Using ctext.org URL: $$CTEXT_URL"; \
+			$(SCRAPE) $(BOOK) $(CHAPTER) --url "$$CTEXT_URL" --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/$(BOOK)/$(CHAPTER).json; \
+		else \
+			$(SCRAPE) $(BOOK) $(CHAPTER) --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/$(BOOK)/$(CHAPTER).json; \
+		fi; \
+	else \
+		$(SCRAPE) $(BOOK) $(CHAPTER) --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/$(BOOK)/$(CHAPTER).json; \
+	fi
 	@echo "Saved to data/$(BOOK)/$(CHAPTER).json"
 
 # Scrape from ctext.org with custom URL
