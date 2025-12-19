@@ -669,7 +669,7 @@ ${JSON.stringify(structuredData, null, 2)}
         }
       }
     </style>
-    <script src="../reader.js"></script>
+    <script type="module" src="../reader.js"></script>
 </head>
 <body>
     <header style="padding: 1.5rem 2rem;">
