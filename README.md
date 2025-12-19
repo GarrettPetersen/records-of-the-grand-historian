@@ -260,6 +260,7 @@ make update
 - Preserve classical Chinese naming conventions
 - Use consistent terminology throughout chapters
 - Keep cultural and historical context
+- Translate such that each sentence is readable and grammatically correct in English
 
 **❌ DON'T:**
 - Leave Chinese characters in English translations
@@ -267,6 +268,7 @@ make update
 - Add commentary or interpretation beyond the text
 - Skip difficult sentences - translate everything
 - Use automated scripts or batch processing
+- Maintain Chinese sentence structure extremely literally in a way that makes the English unreadable
 
 **Common Issues to Avoid:**
 - **Orphan quotes:** Ensure closing quotes belong to the correct sentence
@@ -288,6 +290,22 @@ node fix-orphan-quotes.js data/shiji/016.json
 
 # Validate JSON structure
 make validate
+
+# Review and improve translation readability (manual editing approach)
+
+# Step 1: Extract translations for review
+make extract-review CHAPTER=data/shiji/024.json
+# Creates review_024.json with all translations
+
+# Step 2: Manually edit the JSON file
+# Open review_XXX.json in your editor and improve the "english" fields
+# Focus on: readability, grammar, natural English flow, proper punctuation
+# This is a MANUAL process - edit each translation individually for quality
+# ⚠️ DO NOT create automated scripts to "improve" translations
+# ⚠️ Manual review ensures accuracy and maintains scholarly quality
+
+# Step 3: Apply the reviewed translations
+make apply-review CHAPTER=data/shiji/024.json REVIEW=review_024.json
 ```
 
 **Step 4: Update everything**

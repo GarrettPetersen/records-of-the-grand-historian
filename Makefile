@@ -331,6 +331,31 @@ score-translations:
 	fi
 	@$(NODE) score-translations.js $(CHAPTER)
 
+# Extract translations for MANUAL review and editing
+# WARNING: This creates a JSON file for manual editing - do not create automated improvement scripts
+.PHONY: extract-review
+extract-review:
+	@echo "Extracting translations for review..."
+	@if [ -z "$(CHAPTER)" ]; then \
+		echo "Error: CHAPTER variable not set."; \
+		echo "Usage: make extract-review CHAPTER=data/shiji/024.json"; \
+		exit 1; \
+	fi
+	@$(NODE) extract-translations-for-review.js $(CHAPTER)
+
+# Apply reviewed translations back to chapter
+.PHONY: apply-review
+apply-review:
+	@echo "Applying reviewed translations..."
+	@if [ -z "$(CHAPTER)" ] || [ -z "$(REVIEW)" ]; then \
+		echo "Error: CHAPTER and REVIEW variables must be set."; \
+		echo "Usage: make apply-review CHAPTER=data/shiji/024.json REVIEW=review_024.json"; \
+		exit 1; \
+	fi
+	@$(NODE) apply-reviewed-translations.js $(CHAPTER) $(REVIEW)
+	@echo "Regenerating static page..."
+	@$(MAKE) update
+
 # Count scraped chapters per book
 .PHONY: stats
 stats:
