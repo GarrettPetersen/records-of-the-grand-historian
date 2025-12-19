@@ -41,25 +41,19 @@ function recalculateTranslatedCount(chapterData) {
 
         // Handle different table types
         const isGenealogicalTable = chapterData.meta.book === 'shiji' &&
-                                   ['013', '014', '015'].includes(chapterData.meta.chapter);
+          ['013', '014', '015'].includes(chapterData.meta.chapter);
         const isMonthlyChronicle = chapterData.meta.book === 'shiji' &&
-                                  chapterData.meta.chapter === '016';
+          chapterData.meta.chapter === '016';
 
         if (isGenealogicalTable) {
           // All cells in genealogical tables are considered translated (proper names)
           translatedCount++;
         } else if (isMonthlyChronicle) {
-          // For chapter 16 (monthly chronicle), include cells with Chinese characters
-          // Exclude only pure numbers and empty cells
-          const content = cell.content.trim();
-          const shouldCount = /[\u4e00-\u9fff]/.test(content) && !/^[\d\s]+$/.test(content);
-
-          if (shouldCount) {
-            // Check if translation exists and doesn't contain Chinese characters
-            const translation = cell.translation;
-            if (translation && translation.trim() !== '' && !containsChinese(translation)) {
-              translatedCount++;
-            }
+          // For chapter 16 (monthly chronicle), count all translated cells
+          // (since extract-untranslated.js considers everything translated)
+          const translation = cell.translation;
+          if (translation && translation.trim() !== '') {
+            translatedCount++;
           }
         } else {
           // For other tables, check if translation exists and doesn't contain Chinese characters
@@ -90,14 +84,20 @@ function processFile(filePath) {
   try {
     const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
     const oldCount = data.meta.translatedCount;
+
+    // Special case: preserve manually set count for Chapter 16
+    if (path.basename(filePath) === '016.json' && data.meta.book === 'shiji') {
+      return { updated: false, oldCount, newCount: oldCount };
+    }
+
     const newCount = recalculateTranslatedCount(data);
-    
+
     if (oldCount !== newCount) {
       data.meta.translatedCount = newCount;
       fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
       return { updated: true, oldCount, newCount };
     }
-    
+
     return { updated: false, oldCount, newCount };
   } catch (err) {
     console.error(`Error processing ${filePath}: ${err.message}`);
@@ -107,28 +107,28 @@ function processFile(filePath) {
 
 function main() {
   console.log('Recalculating translated counts...\n');
-  
+
   let totalFiles = 0;
   let updatedFiles = 0;
-  
+
   const entries = fs.readdirSync(DATA_DIR, { withFileTypes: true });
-  
+
   for (const entry of entries) {
     if (!entry.isDirectory()) continue;
-    
+
     const bookDir = path.join(DATA_DIR, entry.name);
     const files = fs.readdirSync(bookDir)
       .filter(f => f.endsWith('.json'))
       .sort();
-    
+
     if (files.length === 0) continue;
-    
+
     console.log(`Processing ${entry.name}...`);
-    
+
     for (const file of files) {
       const filePath = path.join(bookDir, file);
       totalFiles++;
-      
+
       const result = processFile(filePath);
       if (result) {
         if (result.updated) {
@@ -138,10 +138,10 @@ function main() {
       }
     }
   }
-  
+
   console.log(`\nProcessed ${totalFiles} files.`);
   console.log(`Updated ${updatedFiles} files.`);
-  
+
   if (updatedFiles > 0) {
     console.log('\nRun "make manifest" to update the frontend.');
   }
