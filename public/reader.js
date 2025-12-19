@@ -210,17 +210,26 @@ function createParagraphElement(block, lang, paragraphIdx) {
 }
 
 async function renderReader() {
+  // Check if we're on a static page with embedded data
+  if (window.currentChapterData && window.currentBookInfo) {
+    // Static page - initialize interactive functionality
+    await loadGlossary();
+    initializeInteractiveFeatures();
+    return;
+  }
+
+  // Dynamic reader page
   const params = new URLSearchParams(window.location.search);
   const bookId = params.get('book');
   const chapter = params.get('chapter');
-  
+
   if (!bookId || !chapter || !BOOKS[bookId]) {
     document.getElementById('loading').textContent = 'Invalid parameters';
     return;
   }
-  
+
   const bookInfo = BOOKS[bookId];
-  
+
   // Load glossary and chapter data in parallel
   await Promise.all([
     loadGlossary(),
@@ -603,6 +612,56 @@ window.addEventListener('scroll', hideTooltip);
 
 // Export citation functions for static pages
 export { openCitationModal, setupCitationModal, generateCitation };
+
+// Initialize interactive features for static pages
+function initializeInteractiveFeatures() {
+  // Set up sentence highlighting
+  setupSentenceHighlighting();
+
+  // Set up citation modal
+  if (document.getElementById('citation-modal')) {
+    setupCitationModal();
+  }
+
+  // Hide loading if it exists
+  const loading = document.getElementById('loading');
+  if (loading) {
+    loading.style.display = 'none';
+  }
+}
+
+// Set up sentence highlighting for static pages
+function setupSentenceHighlighting() {
+  // Add event listeners to all sentence elements
+  document.querySelectorAll('.sentence').forEach(sentence => {
+    sentence.addEventListener('mouseenter', () => {
+      const sentenceId = sentence.dataset.sentenceId;
+      if (sentenceId) {
+        highlightSentence(sentenceId);
+      }
+    });
+
+    sentence.addEventListener('mouseleave', () => {
+      const sentenceId = sentence.dataset.sentenceId;
+      if (sentenceId && currentHighlight !== sentenceId) {
+        unhighlightSentence(sentenceId);
+      }
+    });
+
+    sentence.addEventListener('click', () => {
+      const sentenceId = sentence.dataset.sentenceId;
+      if (sentenceId) {
+        toggleHighlight(sentenceId);
+      }
+    });
+  });
+
+  // Add event listeners to Chinese character spans for tooltips
+  document.querySelectorAll('.word').forEach(span => {
+    span.addEventListener('mouseenter', showTooltip);
+    span.addEventListener('mouseleave', hideTooltip);
+  });
+}
 
 // Make citation functions globally available for static pages
 window.openCitationModal = openCitationModal;

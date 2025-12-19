@@ -193,16 +193,22 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
     if (block.type === 'paragraph') {
       const paraNum = i + 1;
 
-      // Chinese text
-      const zhText = block.sentences.map(s => escapeHtml(s.zh)).join('');
+      // Chinese text - create sentence spans with word segmentation
+      const zhSentences = block.sentences.map(s => {
+        const id = s.id;
+        const chars = s.zh.split('').filter(c => c.trim());
+        const wordSpans = chars.map(char => `<span class="word" data-char="${escapeHtml(char)}">${escapeHtml(char)}</span>`).join('');
+        return `<span class="sentence" data-sentence-id="${id}">${wordSpans}</span>`;
+      }).join('');
 
-      // English text - use sentence-level translations with footnote support
-      const sentenceTexts = block.sentences
-        .map(s => {
-          const translation = s.translation || (s.translations && s.translations.length > 0 ? s.translations[0] : null);
-          if (!translation || !translation.text) return '';
+      // English text - create sentence spans with translations
+      const enSentences = block.sentences.map(s => {
+        const id = s.id;
+        const translation = s.translation || (s.translations && s.translations.length > 0 ? s.translations[0] : null);
 
-          let text = escapeHtml(translation.text);
+        let text = '';
+        if (translation && translation.text) {
+          text = escapeHtml(translation.text);
 
           // Check for footnote
           if (translation.footnote) {
@@ -213,11 +219,12 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
             });
             text += `<sup class="footnote-marker" data-footnote="${footnoteNum}">${footnoteNum}</sup>`;
           }
+        } else {
+          text = '(No translation available)';
+        }
 
-          return text;
-        })
-        .filter(t => t);
-      const enText = sentenceTexts.join(' ');
+        return `<span class="sentence" data-sentence-id="${id}">${text}</span>`;
+      }).join('');
 
       // No special styling for concluding paragraph - display like any other paragraph
 
@@ -225,8 +232,12 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         <div class="paragraph-block" data-paragraph="${i}">
           <div class="paragraph-number">${paraNum}</div>
           <div class="paragraph-content">
-            <div class="chinese-text">${zhText}</div>
-            ${enText ? `<div class="english-text">${enText}</div>` : ''}
+            <div class="paragraph chinese">
+              <div class="chinese-text">${zhSentences}</div>
+            </div>
+            <div class="paragraph english">
+              <div class="english-text">${enSentences}</div>
+            </div>
           </div>
           <button class="cite-paragraph-btn" data-paragraph="${i}" title="Cite this paragraph">📋</button>
         </div>`;
@@ -658,6 +669,7 @@ ${JSON.stringify(structuredData, null, 2)}
         }
       }
     </style>
+    <script src="../reader.js"></script>
 </head>
 <body>
     <header style="padding: 1.5rem 2rem;">
@@ -942,6 +954,7 @@ ${contentHTML}
 
       });
     </script>
+    <div id="tooltip" class="tooltip" style="display: none;"></div>
 </body>
 </html>`;
 }
