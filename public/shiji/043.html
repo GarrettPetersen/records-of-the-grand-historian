@@ -1379,10 +1379,12 @@
         const viewBtns = document.querySelectorAll('.view-btn');
         const contentContainer = document.querySelector('.content-container');
 
-        // Initialize default view (both)
-        const tabularContent = document.querySelector('.tabular-content');
-        if (tabularContent) {
-          tabularContent.classList.add('show-both');
+        // Initialize default view (both) for all tables
+        const tabularContents = document.querySelectorAll('.tabular-content');
+        if (tabularContents.length > 0) {
+          tabularContents.forEach(tabularContent => {
+            tabularContent.classList.add('show-both');
+          });
           contentContainer.style.gridTemplateColumns = '1fr 1px 1fr';
           document.querySelectorAll('.chinese-text, .english-text').forEach(el => el.style.display = 'block');
         }
@@ -1409,14 +1411,14 @@
               document.querySelectorAll('.english-text').forEach(el => el.style.display = 'block');
             }
 
-            // Update table views
-            const tabularContent = document.querySelector('.tabular-content');
-            if (tabularContent) {
+            // Update table views (all tables on the page)
+            const tabularContents = document.querySelectorAll('.tabular-content');
+            tabularContents.forEach(tabularContent => {
               // Remove all view classes
               tabularContent.classList.remove('show-both', 'show-chinese', 'show-english');
               // Add the appropriate view class
               tabularContent.classList.add('show-' + view);
-            }
+            });
           });
         });
 
