@@ -199,7 +199,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         const chars = s.zh.split('').filter(c => c.trim());
         const wordSpans = chars.map(char => `<span class="word" data-char="${escapeHtml(char)}">${escapeHtml(char)}</span>`).join('');
         return `<span class="sentence" data-sentence-id="${id}">${wordSpans}</span>`;
-      }).join('');
+      }).join(' ');
 
       // English text - create sentence spans with translations
       const enSentences = block.sentences.map(s => {
@@ -224,7 +224,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         }
 
         return `<span class="sentence" data-sentence-id="${id}">${text}</span>`;
-      }).join('');
+      }).join(' ');
 
       // No special styling for concluding paragraph - display like any other paragraph
 
@@ -416,6 +416,12 @@ ${JSON.stringify(structuredData, null, 2)}
         grid-template-columns: 1fr 1fr;
         gap: 2rem;
       }
+      .paragraph.chinese {
+        grid-column: 1;
+      }
+      .paragraph.english {
+        grid-column: 2;
+      }
       .paragraph.chinese .chinese-text {
         font-size: 1.1rem;
         line-height: 1.8;
@@ -425,6 +431,10 @@ ${JSON.stringify(structuredData, null, 2)}
         font-size: 1rem;
         line-height: 1.7;
         color: #34495e;
+      }
+      .sentence {
+        display: inline;
+        margin-right: 0.25em;
       }
       .cite-paragraph-btn {
         background: none;
