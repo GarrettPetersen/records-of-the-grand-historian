@@ -132,20 +132,11 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         const zhTitle = '';
         const enTitle = '';
 
-        // Generate header rows - create generic headers based on number of columns
-        const firstRow = tableRows[0];
-        const numColumns = firstRow.cells.length;
-        const zhHeaderRow = Array.from({length: numColumns}, (_, idx) => `<th class="table-header">Column ${idx + 1}</th>`).join('');
-        const enHeaderRow = zhHeaderRow; // Same for English since no translations
-
         let tableHtml = `<div class="tabular-content" data-paragraph="${i}">
             <!-- Chinese table -->
             <div class="table-container chinese-table">
               <div class="table-scroll">
                 <table class="genealogical-table">
-                  <thead>
-                    <tr>${zhHeaderRow}</tr>
-                  </thead>
                   <tbody>`;
 
         tableRows.forEach(tableRow => {
@@ -170,9 +161,6 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
             <div class="table-container english-table">
               <div class="table-scroll">
                 <table class="genealogical-table">
-                  <thead>
-                    <tr>${enHeaderRow}</tr>
-                  </thead>
                   <tbody>`;
 
         tableRows.forEach(tableRow => {
@@ -305,9 +293,6 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
             <div class="table-container english-table">
               <div class="table-scroll">
                 <table class="genealogical-table">
-                  <thead>
-                    <tr>${enHeaderRow}</tr>
-                  </thead>
                   <tbody>`;
 
         tableRows.forEach(tableRow => {
