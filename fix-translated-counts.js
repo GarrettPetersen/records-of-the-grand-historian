@@ -85,10 +85,6 @@ function processFile(filePath) {
     const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
     const oldCount = data.meta.translatedCount;
 
-    // Special case: preserve manually set counts for Chapter 16 and 17
-    if ((path.basename(filePath) === '016.json' || path.basename(filePath) === '017.json') && data.meta.book === 'shiji') {
-      return { updated: false, oldCount, newCount: oldCount };
-    }
 
     const newCount = recalculateTranslatedCount(data);
 
