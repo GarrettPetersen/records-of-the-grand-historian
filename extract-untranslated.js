@@ -18,6 +18,7 @@ import path from 'node:path';
 function extractUntranslated(filePath, outputPath = null) {
   const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
   const untranslated = {};
+  let totalCount = 0;
   
   // Check if this is a genealogical table chapter (Shiji chapters 13-16)
   const isGenealogicalTable = data.meta.book === 'shiji' &&
@@ -44,20 +45,7 @@ function extractUntranslated(filePath, outputPath = null) {
         // Skip empty cells
         if (!content) return false;
 
-        // For genealogical table chapters, apply content-based filtering
-        if (isGenealogicalTable) {
-          // For chapter 16 (monthly chronicle), include cells with Chinese characters
-          if (data.meta.chapter === '016') {
-            // Include cells with Chinese characters, exclude only pure numbers
-            return /[\u4e00-\u9fff]/.test(content) && !/^[\d\s]+$/.test(content);
-          }
-          // For other genealogical tables, use stricter criteria for narrative content
-          return content.includes('。') || content.includes('！') || content.includes('？') ||
-                 content.length > 20;
-        }
-
-        // For non-genealogical tables, include all non-empty cells
-        // (Higher-level logic can determine what actually needs translation)
+        // Include all non-empty cells - everything with content needs translation
         return true;
       });
     }
@@ -98,9 +86,29 @@ function extractUntranslated(filePath, outputPath = null) {
   
   fs.writeFileSync(outputPath, JSON.stringify(untranslated, null, 2), 'utf8');
   
-  const total = data.meta.sentenceCount;
+  // Count all processed sentences
+  let actualTotal = 0;
+  for (const block of data.content) {
+    if (block.type === 'paragraph') {
+      if (isGenealogicalTable && block.sentences && block.sentences.length > 0) {
+        const zh = block.sentences[0].zh;
+        if (/\d{4}/.test(zh) || /^[\d\s]+$/.test(zh)) {
+          continue;
+        }
+      }
+      actualTotal += block.sentences.length;
+    } else if (block.type === 'table_row') {
+      for (const cell of block.cells) {
+        if (cell.content && cell.content.trim()) {
+          actualTotal++;
+        }
+      }
+    }
+  }
+
   const untranslatedCount = Object.keys(untranslated).length;
-  const translatedCount = total - untranslatedCount;
+  const translatedCount = actualTotal - untranslatedCount;
+  const total = actualTotal;
   const percent = total > 0 ? Math.round((translatedCount / total) * 100) : 0;
   
   return {

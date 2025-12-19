@@ -23,16 +23,29 @@ function recalculateTranslatedCount(chapterData) {
   let translatedCount = 0;
   let totalCount = 0;
 
+  // Check if this is a genealogical table chapter
+  const isGenealogicalTable = chapterData.meta.book === 'shiji' &&
+    ['013', '014', '015'].includes(chapterData.meta.chapter);
+
   for (const block of chapterData.content) {
     if (block.type === 'paragraph') {
+      // Skip paragraphs in genealogical table chapters that contain table-like data
+      if (isGenealogicalTable && block.sentences && block.sentences.length > 0) {
+        const zh = block.sentences[0].zh;
+        // Skip if it contains years (4-digit numbers) or is mostly numbers/spaces
+        if (/\d{4}/.test(zh) || /^[\d\s]+$/.test(zh)) {
+          continue;
+        }
+      }
+
       for (const sentence of block.sentences || []) {
         // Skip empty content
         if (!sentence.zh || sentence.zh.trim() === '') continue;
 
         totalCount++;
-        // Check if translation exists and doesn't contain Chinese characters
+        // Check if translation exists
         const translation = sentence.translations?.[0]?.text;
-        if (translation && translation.trim() !== '' && !containsChinese(translation)) {
+        if (translation && translation.trim() !== '') {
           translatedCount++;
         }
       }
@@ -41,39 +54,10 @@ function recalculateTranslatedCount(chapterData) {
         // Skip empty content
         if (!cell.content || cell.content.trim() === '') continue;
 
-        // Handle different table types
-        const isGenealogicalTable = chapterData.meta.book === 'shiji' &&
-          ['013', '014', '015'].includes(chapterData.meta.chapter);
-        const isMonthlyChronicle = chapterData.meta.book === 'shiji' &&
-          chapterData.meta.chapter === '016';
-
-        if (isGenealogicalTable) {
-          // All cells in genealogical tables are considered translated (proper names)
-          totalCount++;
+        totalCount++;
+        const translation = cell.translation;
+        if (translation && translation.trim() !== '') {
           translatedCount++;
-        } else if (isMonthlyChronicle) {
-          // For chapter 16 (monthly chronicle), only count cells with Chinese characters
-          // that are not pure numbers, matching extract-untranslated.js logic
-          const content = cell.content.trim();
-          const hasChinese = /[\u4e00-\u9fff]/.test(content);
-          const isPureNumbers = /^[\d\s]+$/.test(content);
-
-          if (hasChinese && !isPureNumbers) {
-            totalCount++;
-            const translation = cell.translation;
-            if (translation && translation.trim() !== '') {
-              translatedCount++;
-            }
-          }
-          // Cells that are pure numbers or don't have Chinese characters are not counted
-          // in either total or translated for percentage calculation
-        } else {
-          // For other tables, check if translation exists and doesn't contain Chinese characters
-          totalCount++;
-          const translation = cell.translation;
-          if (translation && translation.trim() !== '' && !containsChinese(translation)) {
-            translatedCount++;
-          }
         }
       }
     } else if (block.type === 'table_header') {
@@ -82,7 +66,7 @@ function recalculateTranslatedCount(chapterData) {
         if (!sentence.zh || sentence.zh.trim() === '') continue;
 
         totalCount++;
-        // Check if translation exists and doesn't contain Chinese characters
+        // Check if translation exists
         const translation = sentence.translations?.[0]?.text;
         if (translation && translation.trim() !== '' && !containsChinese(translation)) {
           translatedCount++;

@@ -36,32 +36,76 @@ function createWordSpan(char, charIndex) {
 function showTooltip(e) {
   const char = e.target.dataset.char;
   const tooltip = document.getElementById('tooltip');
-  
-  // Find glossary entry for this character
-  let entry = null;
-  for (const [id, data] of Object.entries(glossary)) {
-    if (data.text === char || data.text.includes(char)) {
-      entry = data;
-      break;
-    }
-  }
-  
-  if (!entry) {
+
+  // Ensure glossary is loaded
+  if (!glossary || Object.keys(glossary).length === 0) {
     return;
   }
-  
+
+  // Find the most relevant glossary entry for this character
+  // Prioritize: exact match > longer terms containing this char > shorter terms
+  let bestEntry = null;
+  let bestScore = 0;
+
+  for (const [id, data] of Object.entries(glossary)) {
+    if (data.text === char) {
+      // Exact match gets highest priority
+      bestEntry = data;
+      break;
+    } else if (data.text.includes(char)) {
+      // Multi-character term containing this char
+      const score = data.text.length; // Prefer longer terms
+      if (score > bestScore) {
+        bestEntry = data;
+        bestScore = score;
+      }
+    }
+  }
+
+  if (!bestEntry) {
+    return;
+  }
+
   tooltip.innerHTML = `
-    <div class="pinyin">${entry.pinyin || ''}</div>
-    <div><strong>${entry.text}</strong></div>
+    <div class="pinyin">${bestEntry.pinyin || ''}</div>
+    <div><strong>${bestEntry.text}</strong></div>
     <ul class="definitions">
-      ${entry.definitions.map(def => `<li>${def}</li>`).join('')}
+      ${bestEntry.definitions.map(def => `<li>${def}</li>`).join('')}
     </ul>
   `;
-  
+
+  // Position tooltip intelligently
   const rect = e.target.getBoundingClientRect();
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+
+  // Show tooltip temporarily to get its dimensions
   tooltip.style.display = 'block';
-  tooltip.style.left = rect.left + 'px';
-  tooltip.style.top = (rect.bottom + 5) + 'px';
+  tooltip.style.left = '0px';
+  tooltip.style.top = '0px';
+
+  const tooltipWidth = tooltip.offsetWidth;
+  const tooltipHeight = tooltip.offsetHeight;
+
+  // Calculate preferred position (below and to the right)
+  let left = rect.left;
+  let top = rect.bottom + 5;
+
+  // Adjust if tooltip would go off-screen
+  if (left + tooltipWidth > viewportWidth) {
+    left = rect.right - tooltipWidth;
+  }
+
+  if (top + tooltipHeight > viewportHeight) {
+    top = rect.top - tooltipHeight - 5;
+  }
+
+  // Ensure tooltip stays within viewport bounds
+  left = Math.max(5, Math.min(left, viewportWidth - tooltipWidth - 5));
+  top = Math.max(5, Math.min(top, viewportHeight - tooltipHeight - 5));
+
+  tooltip.style.left = left + 'px';
+  tooltip.style.top = top + 'px';
 }
 
 function hideTooltip() {

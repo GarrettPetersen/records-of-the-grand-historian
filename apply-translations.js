@@ -55,22 +55,28 @@ for (const block of chapter.content) {
   for (const sentence of sentences) {
     const translation = translations[sentence.id];
     if (translation && translation.trim()) {
-      // For table cells, set translation directly
-      if (block.type === 'table_row') {
-        sentence.translation = translation;
-        sentence.translator = translator;
-        sentence.model = model;
-      } else {
-        // For paragraph sentences, update the translations array
-        if (!sentence.translations) sentence.translations = [];
-        if (sentence.translations.length === 0) {
-          sentence.translations.push({ lang: 'en', text: '', translator: '', model: '' });
+      // Only apply translations to sentences/cells with non-empty content
+      const hasContent = (block.type === 'table_row' && sentence.content && sentence.content.trim()) ||
+                        (block.type !== 'table_row' && sentence.zh && sentence.zh.trim());
+
+      if (hasContent) {
+        // For table cells, set translation directly
+        if (block.type === 'table_row') {
+          sentence.translation = translation;
+          sentence.translator = translator;
+          sentence.model = model;
+        } else {
+          // For paragraph sentences, update the translations array
+          if (!sentence.translations) sentence.translations = [];
+          if (sentence.translations.length === 0) {
+            sentence.translations.push({ lang: 'en', text: '', translator: '', model: '' });
+          }
+          sentence.translations[0].text = translation;
+          sentence.translations[0].translator = translator;
+          sentence.translations[0].model = model;
         }
-        sentence.translations[0].text = translation;
-        sentence.translations[0].translator = translator;
-        sentence.translations[0].model = model;
+        translatedCount++;
       }
-      translatedCount++;
     }
   }
 
