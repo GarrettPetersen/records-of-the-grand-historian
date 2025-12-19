@@ -117,9 +117,89 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
   for (let i = 0; i < chapterData.content.length; i++) {
     const block = chapterData.content[i];
 
-    // Skip table_row blocks - they should only be processed as part of table_header groups
+    // Handle tables without headers (consecutive table_row blocks)
     if (block.type === 'table_row') {
-      continue;
+      // Check if this is the start of a table (not following a table_header)
+      let tableRows = [block];
+      let j = i + 1;
+      while (j < chapterData.content.length && chapterData.content[j].type === 'table_row') {
+        tableRows.push(chapterData.content[j]);
+        j++;
+      }
+
+      if (tableRows.length > 0) {
+        // Create table without header - use generic title
+        const zhTitle = '';
+        const enTitle = '';
+
+        // Generate header rows - create generic headers based on number of columns
+        const firstRow = tableRows[0];
+        const numColumns = firstRow.cells.length;
+        const zhHeaderRow = Array.from({length: numColumns}, (_, idx) => `<th class="table-header">Column ${idx + 1}</th>`).join('');
+        const enHeaderRow = zhHeaderRow; // Same for English since no translations
+
+        let tableHtml = `<div class="tabular-content" data-paragraph="${i}">
+            <!-- Chinese table -->
+            <div class="table-container chinese-table">
+              <div class="table-scroll">
+                <table class="genealogical-table">
+                  <thead>
+                    <tr>${zhHeaderRow}</tr>
+                  </thead>
+                  <tbody>`;
+
+        tableRows.forEach(tableRow => {
+          tableHtml += `<tr>`;
+          tableRow.cells.forEach(cell => {
+            const cellZh = escapeHtml(cell.content);
+            if (cellZh.trim()) {
+              tableHtml += `<td class="table-cell">${cellZh}</td>`;
+            } else {
+              tableHtml += `<td class="table-cell empty-cell"></td>`;
+            }
+          });
+          tableHtml += `</tr>`;
+        });
+
+        tableHtml += `</tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- English table -->
+            <div class="table-container english-table">
+              <div class="table-scroll">
+                <table class="genealogical-table">
+                  <thead>
+                    <tr>${enHeaderRow}</tr>
+                  </thead>
+                  <tbody>`;
+
+        tableRows.forEach(tableRow => {
+          tableHtml += `<tr>`;
+          tableRow.cells.forEach(cell => {
+            const cellEn = cell.translation ? escapeHtml(cell.translation) : '';
+            if (cellEn.trim()) {
+              tableHtml += `<td class="table-cell">${cellEn}</td>`;
+            } else {
+              tableHtml += `<td class="table-cell empty-cell"></td>`;
+            }
+          });
+          tableHtml += `</tr>`;
+        });
+
+        tableHtml += `</tbody>
+                </table>
+              </div>
+            </div>
+          </div>`;
+
+        contentHTML += tableHtml;
+
+        // Skip the table rows we just processed
+        i = j - 1;
+        continue;
+      }
     }
 
     if (block.type === 'paragraph') {
