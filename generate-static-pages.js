@@ -612,24 +612,12 @@ ${JSON.stringify(structuredData, null, 2)}
         display: none;
       }
       .tabular-content.show-both .chinese-table,
-      .tabular-content.show-both .english-table {
-        display: block;
-        width: 50%;
-        float: left;
-      }
-      .tabular-content.show-chinese .chinese-table {
-        display: block;
-        width: 100%;
-      }
-      .tabular-content.show-chinese .english-table {
-        display: none;
-      }
+      .tabular-content.show-both .english-table,
+      .tabular-content.show-chinese .chinese-table,
       .tabular-content.show-english .english-table {
         display: block;
         width: 100%;
-      }
-      .tabular-content.show-english .chinese-table {
-        display: none;
+        float: none;
       }
       .table-header-block {
         margin-bottom: 2rem;
@@ -906,13 +894,16 @@ ${contentHTML}
             // Update paragraph content visibility and layout
             if (view === 'both') {
               contentContainer.style.gridTemplateColumns = '1fr 1px 1fr';
+              document.querySelectorAll('.paragraph-content').forEach(el => el.style.gridTemplateColumns = '1fr 1fr');
               document.querySelectorAll('.chinese-text, .english-text').forEach(el => el.style.display = 'block');
             } else if (view === 'chinese') {
               contentContainer.style.gridTemplateColumns = '1fr';
+              document.querySelectorAll('.paragraph-content').forEach(el => el.style.gridTemplateColumns = '1fr');
               document.querySelectorAll('.chinese-text').forEach(el => el.style.display = 'block');
               document.querySelectorAll('.english-text').forEach(el => el.style.display = 'none');
             } else if (view === 'english') {
               contentContainer.style.gridTemplateColumns = '1fr';
+              document.querySelectorAll('.paragraph-content').forEach(el => el.style.gridTemplateColumns = '1fr');
               document.querySelectorAll('.chinese-text').forEach(el => el.style.display = 'none');
               document.querySelectorAll('.english-text').forEach(el => el.style.display = 'block');
             }
