@@ -278,12 +278,24 @@
         display: none;
       }
       .tabular-content.show-both .chinese-table,
-      .tabular-content.show-both .english-table,
-      .tabular-content.show-chinese .chinese-table,
+      .tabular-content.show-both .english-table {
+        display: block;
+        width: 50%;
+        float: left;
+      }
+      .tabular-content.show-chinese .chinese-table {
+        display: block;
+        width: 100%;
+      }
+      .tabular-content.show-chinese .english-table {
+        display: none;
+      }
       .tabular-content.show-english .english-table {
         display: block;
         width: 100%;
-        float: none;
+      }
+      .tabular-content.show-english .chinese-table {
+        display: none;
       }
       .table-header-block {
         margin-bottom: 2rem;
@@ -384,7 +396,7 @@
             <div class="english-text">After Qin declared itself emperor, it worried that weapons would never cease because of the feudal lords, therefore there were no enfeoffments of even a foot of land, famous cities were demolished, weapons were melted down, powerful nobles were eliminated, to maintain peace for ten thousand generations. Yet the rise of royal traces begins in alleyways, allied coalitions attack, surpassing the Three Dynasties, the Qin prohibitions actually only served to provide resources for the worthy to eliminate difficulties. Therefore they were enraged at what made them hegemon of the realm, how could they not become king without territory? Is this not what the transmissions call a great sage? Is it not Heaven? Is it not Heaven! Who but a great sage could receive this mandate and become emperor?</div>
           </div>
           <button class="cite-paragraph-btn" data-paragraph="2" title="Cite this paragraph">📋</button>
-        </div><div class="tabular-content" data-paragraph="3">
+        </div><div class="tabular-content" data-paragraph="3" style="margin: 3rem 0;">
             <!-- Chinese table -->
             <div class="table-container chinese-table">
               <div class="table-scroll">
@@ -408,7 +420,7 @@
                 </table>
               </div>
             </div>
-          </div><div class="tabular-content" data-paragraph="36">
+          </div><div class="tabular-content" data-paragraph="36" style="margin: 3rem 0;">
             <!-- Chinese table -->
             <div class="table-container chinese-table">
               <div class="table-scroll">

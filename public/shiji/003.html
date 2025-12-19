@@ -282,12 +282,24 @@
         display: none;
       }
       .tabular-content.show-both .chinese-table,
-      .tabular-content.show-both .english-table,
-      .tabular-content.show-chinese .chinese-table,
+      .tabular-content.show-both .english-table {
+        display: block;
+        width: 50%;
+        float: left;
+      }
+      .tabular-content.show-chinese .chinese-table {
+        display: block;
+        width: 100%;
+      }
+      .tabular-content.show-chinese .english-table {
+        display: none;
+      }
       .tabular-content.show-english .english-table {
         display: block;
         width: 100%;
-        float: none;
+      }
+      .tabular-content.show-english .chinese-table {
+        display: none;
       }
       .table-header-block {
         margin-bottom: 2rem;

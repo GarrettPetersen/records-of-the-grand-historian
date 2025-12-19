@@ -278,12 +278,24 @@
         display: none;
       }
       .tabular-content.show-both .chinese-table,
-      .tabular-content.show-both .english-table,
-      .tabular-content.show-chinese .chinese-table,
+      .tabular-content.show-both .english-table {
+        display: block;
+        width: 50%;
+        float: left;
+      }
+      .tabular-content.show-chinese .chinese-table {
+        display: block;
+        width: 100%;
+      }
+      .tabular-content.show-chinese .english-table {
+        display: none;
+      }
       .tabular-content.show-english .english-table {
         display: block;
         width: 100%;
-        float: none;
+      }
+      .tabular-content.show-english .chinese-table {
+        display: none;
       }
       .table-header-block {
         margin-bottom: 2rem;
@@ -376,7 +388,7 @@
             <div class="english-text">I have read the secret records; since the Yellow Emperor, all have year numbers. Examining their calendar genealogies and secret records, the transmission of the beginning and end of the Five Virtues—all the ancient texts differ and are contradictory. That the Master did not discuss and arrange their years and months—was this in vain? Therefore, using the Five Emperors genealogical records and Documents collected generations, I made genealogical tables from the Yellow Emperor down to the Gonghe period.</div>
           </div>
           <button class="cite-paragraph-btn" data-paragraph="1" title="Cite this paragraph">📋</button>
-        </div><div class="tabular-content" data-paragraph="2">
+        </div><div class="tabular-content" data-paragraph="2" style="margin: 3rem 0;">
             <!-- Chinese table -->
             <div class="table-container chinese-table">
               <div class="table-scroll">

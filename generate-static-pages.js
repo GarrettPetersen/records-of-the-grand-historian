@@ -132,7 +132,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         const zhTitle = '';
         const enTitle = '';
 
-        let tableHtml = `<div class="tabular-content" data-paragraph="${i}">
+        let tableHtml = `<div class="tabular-content" data-paragraph="${i}" style="margin: 3rem 0;">
             <!-- Chinese table -->
             <div class="table-container chinese-table">
               <div class="table-scroll">
@@ -261,7 +261,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
           return `<th class="table-header">${text}</th>`;
         }).join('');
 
-        let tableHtml = `<div class="tabular-content" data-paragraph="${i}">
+        let tableHtml = `<div class="tabular-content" data-paragraph="${i}" style="margin: 3rem 0;">
             <!-- Chinese table -->
             <div class="table-container chinese-table">
               <div class="table-scroll">
@@ -612,12 +612,24 @@ ${JSON.stringify(structuredData, null, 2)}
         display: none;
       }
       .tabular-content.show-both .chinese-table,
-      .tabular-content.show-both .english-table,
-      .tabular-content.show-chinese .chinese-table,
+      .tabular-content.show-both .english-table {
+        display: block;
+        width: 50%;
+        float: left;
+      }
+      .tabular-content.show-chinese .chinese-table {
+        display: block;
+        width: 100%;
+      }
+      .tabular-content.show-chinese .english-table {
+        display: none;
+      }
       .tabular-content.show-english .english-table {
         display: block;
         width: 100%;
-        float: none;
+      }
+      .tabular-content.show-english .chinese-table {
+        display: none;
       }
       .table-header-block {
         margin-bottom: 2rem;
