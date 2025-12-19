@@ -293,6 +293,9 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
             <div class="table-container english-table">
               <div class="table-scroll">
                 <table class="genealogical-table">
+                  <thead>
+                    <tr>${enHeaderRow}</tr>
+                  </thead>
                   <tbody>`;
 
         tableRows.forEach(tableRow => {
