@@ -19,6 +19,16 @@ function getLengthRatio(chinese, english) {
   const chineseLength = chinese.length;
   const englishLength = english.trim().split(/\s+/).length;
 
+  // Special handling for short phrases and conversational responses
+  if (chineseLength <= 20) {
+    // For short Chinese phrases (20 or fewer characters), be very lenient
+    // This covers typical dialogue and brief statements
+    if (englishLength >= 1 && englishLength <= 25) {
+      return 1; // Accept reasonable translations for short phrases
+    }
+    return 0; // Too short or too long even for brief phrases
+  }
+
   // Chinese characters are roughly 1.5-4x more concise than English words
   // A single Chinese character often translates to 1-6 English words in historical context
   const expectedRatio = chineseLength * 3.0; // more generous estimate
@@ -106,11 +116,14 @@ function scoreChapterFile(filePath) {
     for (const block of data.content) {
       if (block.type === 'paragraph') {
         for (const sentence of block.sentences || []) {
-          if (sentence.translation) {
+          // Check both old format (sentence.translation) and new format (sentence.translations[0].text)
+          const translation = sentence.translation || (sentence.translations && sentence.translations[0] && sentence.translations[0].text);
+          const content = sentence.content || sentence.zh;
+          if (translation) {
             results.push(scoreTranslation({
               id: sentence.id,
-              content: sentence.content,
-              translation: sentence.translation
+              content: content,
+              translation: translation
             }));
           }
         }
