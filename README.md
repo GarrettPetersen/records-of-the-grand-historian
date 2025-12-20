@@ -256,6 +256,7 @@ make update
 
 **✅ DO:**
 - Translate each sentence individually and accurately
+- **Use smooth, flowing English rather than word-by-word, choppy translations**
 - Maintain historical and scholarly tone
 - Preserve classical Chinese naming conventions
 - Use consistent terminology throughout chapters
