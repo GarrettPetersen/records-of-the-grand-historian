@@ -58,6 +58,8 @@ function generateChapterMeta(bookId, chapterData) {
   }
 
   return {
+    zhTitle,
+    enTitle,
     title: enTitle ? `${enTitle} - ${book.chinese}` : `${zhTitle} - ${book.chinese}`,
     description: description.substring(0, 160),
     translationPercent
@@ -102,7 +104,8 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
   const meta = generateChapterMeta(bookId, chapterData);
   const structuredData = generateStructuredData(bookId, chapterData);
   const chapterNum = parseInt(chapterData.meta.chapter, 10);
-  const title = chapterData.meta.title.zh;
+  const zhTitle = meta.zhTitle;
+  const enTitle = meta.enTitle;
 
   // Find previous and next chapters
   const currentIndex = allChapters.findIndex(c => c === chapterData.meta.chapter);
@@ -113,6 +116,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
   let contentHTML = '';
   let footnotes = [];
   let footnoteCounter = 1;
+  let tableCounter = 1;
 
   for (let i = 0; i < chapterData.content.length; i++) {
     const block = chapterData.content[i];
@@ -129,10 +133,13 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
 
       if (tableRows.length > 0) {
         // Create table without header - use generic title
-        const zhTitle = '';
-        const enTitle = '';
+        const tableTitle = `Table ${tableCounter}`;
+        tableCounter++;
 
-        let tableHtml = `<div class="tabular-content" data-paragraph="${i}" style="margin: 5rem 0;">
+        let tableHtml = `<div class="tabular-content" data-paragraph="${i}" style="margin: 5rem 0; position: relative;">
+            <!-- Table citation button -->
+            <button class="cite-table-btn" data-table="${tableCounter - 1}" title="Cite this table" style="position: absolute; top: 10px; right: 10px; z-index: 10;">📋 ${tableTitle}</button>
+
             <!-- Chinese table -->
             <div class="table-container chinese-table">
               <div class="table-scroll">
@@ -272,7 +279,13 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
           return `<th class="table-header">${text}</th>`;
         }).join('');
 
-        let tableHtml = `<div class="tabular-content" data-paragraph="${i}" style="margin: 5rem 0;">
+        const tableTitle = `Table ${tableCounter}`;
+        tableCounter++;
+
+        let tableHtml = `<div class="tabular-content" data-paragraph="${i}" style="margin: 5rem 0; position: relative;">
+            <!-- Table citation button -->
+            <button class="cite-table-btn" data-table="${tableCounter - 1}" title="Cite this table" style="position: absolute; top: 10px; right: 10px; z-index: 10;">📋 ${tableTitle}</button>
+
             <!-- Chinese table -->
             <div class="table-container chinese-table">
               <div class="table-scroll">
@@ -698,7 +711,8 @@ ${JSON.stringify(structuredData, null, 2)}
                 </div>
             </div>
             <div class="chapter-title" style="border: none; padding: 0; margin-top: 1rem;">
-                <h1 style="color: white; margin: 0; font-size: 1.8rem;">${escapeHtml(title)}</h1>
+                <h1 style="color: white; margin: 0; font-size: 1.8rem;" class="chapter-title-text chinese-text">${escapeHtml(zhTitle)}</h1>
+                ${enTitle ? `<h2 style="color: rgba(255,255,255,0.9); margin: 0.25rem 0 0 0; font-size: 1.2rem; font-weight: 400;" class="chapter-title-text english-text">${escapeHtml(enTitle)}</h2>` : ''}
                 <div class="subtitle" style="color: rgba(255,255,255,0.8);">
                   Chapter ${chapterNum} of ${book.chinese}
                   <span class="translation-badge ${meta.translationPercent === 100 ? 'badge-complete' : 'badge-partial'}">

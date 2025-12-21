@@ -38,22 +38,28 @@ async function renderChapters() {
     link.href = `${bookId}/${chapter.chapter}.html`;
     
     const titleZh = chapter.title?.zh || `卷${chapter.chapter}`;
+    const titleEn = chapter.title?.en;
     const hasTranslation = chapter.translatedCount > 0;
     const chapterNum = parseInt(chapter.chapter, 10);
-    const translationPercent = chapter.sentenceCount > 0 
-      ? Math.round((chapter.translatedCount / chapter.sentenceCount) * 100) 
+    const translationPercent = chapter.sentenceCount > 0
+      ? Math.round((chapter.translatedCount / chapter.sentenceCount) * 100)
       : 0;
-    
+
+    let titleDisplay = `<div style="font-size: 1.1rem; margin-bottom: 0.5rem; font-weight: 600;">${titleZh}</div>`;
+    if (titleEn) {
+      titleDisplay += `<div style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;">${titleEn}</div>`;
+    }
+
     let translationBadge = '';
     if (translationPercent === 100) {
       translationBadge = '<div style="font-size: 0.75rem; color: #8b4513; margin-top: 0.25rem;">✓ Translated</div>';
     } else if (translationPercent > 0) {
       translationBadge = `<div style="font-size: 0.75rem; color: #8b4513; margin-top: 0.25rem;">${translationPercent}% Translated</div>`;
     }
-    
+
     link.innerHTML = `
       <div style="font-size: 0.85rem; color: #999; margin-bottom: 0.25rem;">Chapter ${chapterNum}</div>
-      <div style="font-size: 1.1rem; margin-bottom: 0.5rem; font-weight: 600;">${titleZh}</div>
+      ${titleDisplay}
       <div style="font-size: 0.85rem; color: #666;">${chapter.sentenceCount} sentences</div>
       ${translationBadge}
     `;
