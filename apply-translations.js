@@ -8,6 +8,9 @@
 
 import fs from 'node:fs';
 
+// Regular expressions for validation
+const CHINESE_CHARS_REGEX = /[\u4e00-\u9fff]/;
+
 const args = process.argv.slice(2);
 if (args.length < 3) {
   console.error('Usage: node apply-translations.js <chapter-file> <translations-file...> <translator> <model>');
@@ -28,14 +31,42 @@ const chapter = JSON.parse(fs.readFileSync(chapterFile, 'utf8'));
 
 // Merge all translation files
 let translations = {};
+let totalTranslationsLoaded = 0;
+
 for (const file of translationFiles) {
   try {
     const fileTranslations = JSON.parse(fs.readFileSync(file, 'utf8'));
+    const fileTranslationCount = Object.keys(fileTranslations).length;
+    totalTranslationsLoaded += fileTranslationCount;
+
+    // Validate that translations are actually English (not Chinese)
+    let chineseCharsFound = 0;
+    let englishTranslations = 0;
+
+    for (const [id, text] of Object.entries(fileTranslations)) {
+      if (text && typeof text === 'string') {
+        if (CHINESE_CHARS_REGEX.test(text)) {
+          chineseCharsFound++;
+        } else if (text.trim().length > 0) {
+          englishTranslations++;
+        }
+      }
+    }
+
+    if (chineseCharsFound > englishTranslations) {
+      console.error(`Error: ${file} appears to contain Chinese text instead of English translations!`);
+      console.error(`  Chinese text found: ${chineseCharsFound}, English translations: ${englishTranslations}`);
+      process.exit(1);
+    }
+
     translations = { ...translations, ...fileTranslations };
+    console.log(`Loaded ${fileTranslationCount} translations from ${file}`);
   } catch (err) {
     console.error(`Warning: Could not load translations from ${file}: ${err.message}`);
   }
 }
+
+console.log(`Total translations loaded: ${totalTranslationsLoaded}`);
 
 let translatedCount = 0;
 
@@ -60,6 +91,17 @@ for (const block of chapter.content) {
                         (block.type !== 'table_row' && sentence.zh && sentence.zh.trim());
 
       if (hasContent) {
+        // Check if translation already exists and warn about overwrites
+        const existingTranslation = block.type === 'table_row' ?
+          sentence.translation :
+          (sentence.translations && sentence.translations[0] && sentence.translations[0].text);
+
+        if (existingTranslation && existingTranslation.trim()) {
+          console.warn(`Warning: Overwriting existing translation for ${sentence.id}`);
+          console.warn(`  Old: "${existingTranslation}"`);
+          console.warn(`  New: "${translation}"`);
+        }
+
         // For table cells, set translation directly
         if (block.type === 'table_row') {
           sentence.translation = translation;
@@ -76,7 +118,11 @@ for (const block of chapter.content) {
           sentence.translations[0].model = model;
         }
         translatedCount++;
+      } else {
+        console.warn(`Warning: Skipping translation for ${sentence.id} - no content found`);
       }
+    } else if (sentence.id in translations) {
+      console.warn(`Warning: Empty translation for ${sentence.id} - skipping`);
     }
   }
 

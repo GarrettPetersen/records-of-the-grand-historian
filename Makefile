@@ -44,7 +44,8 @@ help:
 	@echo "  make stats                  # Show chapter counts per book"
 	@echo "  make validate               # Check all JSON files are valid"
 	@echo "  make score-translations     # Score translations for quality issues"
-	@echo "  make first-untranslated     # Find first chapter needing translation"
+	@echo "  make batch-quality-check    # Batch quality check on multiple chapters"
+	@echo "  make first-untranslated     # Find first partially translated chapter"
 	@echo ""
 	@echo "Cleanup commands:"
 	@echo "  make clean-shiji            # Remove all Shiji data"
@@ -331,6 +332,19 @@ score-translations:
 	fi
 	@$(NODE) score-translations.js $(CHAPTER)
 
+# Batch quality check on multiple chapters
+.PHONY: batch-quality-check
+batch-quality-check:
+	@echo "Running batch quality check..."
+	@if [ -z "$(CHAPTERS)" ]; then \
+		echo "Error: CHAPTERS variable not set."; \
+		echo "Usage: make batch-quality-check CHAPTERS=043-050"; \
+		echo "       make batch-quality-check CHAPTERS=all --summary-only"; \
+		echo "       make batch-quality-check CHAPTERS=043,047,050"; \
+		exit 1; \
+	fi
+	@$(NODE) batch-quality-check.js $(CHAPTERS) $(filter-out $@,$(MAKECMDGOALS))
+
 # Extract translations for MANUAL review and editing
 # WARNING: This creates a JSON file for manual editing - do not create automated improvement scripts
 .PHONY: extract-review
@@ -367,10 +381,10 @@ stats:
 		fi; \
 	done
 
-# Find first untranslated chapter
+# Find first partially translated chapter (less than 100%)
 .PHONY: first-untranslated
 first-untranslated:
-	@echo "Searching for first untranslated chapter..."
+	@echo "Searching for first chapter needing translation..."
 	@found=0; \
 	for dir in data/*/; do \
 		if [ -d "$$dir" ] && [ "$$(basename $$dir)" != "public" ]; then \
@@ -378,11 +392,13 @@ first-untranslated:
 			for file in $$dir*.json; do \
 				if [ -f "$$file" ]; then \
 					translated=$$(jq -r '.meta.translatedCount // 0' "$$file" 2>/dev/null); \
-					if [ "$$translated" = "0" ]; then \
+					total=$$(jq -r '.meta.sentenceCount // 0' "$$file" 2>/dev/null); \
+					if [ "$$translated" -gt 0 ] 2>/dev/null && [ "$$total" -gt 0 ] 2>/dev/null && [ "$$translated" -lt "$$total" ]; then \
 						chapter=$$(basename "$$file" .json); \
-						echo "Found: $$book chapter $$chapter"; \
+						percent=$$(echo "scale=1; $$translated * 100 / $$total" | bc 2>/dev/null || echo "0"); \
+						echo "Found: $$book chapter $$chapter ($$translated/$$total = $${percent}%)"; \
 						echo "  File: $$file"; \
-						jq -r '.meta | "  Title: \(.title.zh // .title.raw)", "  Sentences: \(.sentenceCount)", "  URL: \(.url)"' "$$file" 2>/dev/null; \
+						jq -r '.meta | "  Title: \(.title.zh // .title.raw)", "  URL: \(.url)"' "$$file" 2>/dev/null; \
 						found=1; \
 						break 2; \
 					fi; \
@@ -391,5 +407,5 @@ first-untranslated:
 		fi; \
 	done; \
 	if [ $$found -eq 0 ]; then \
-		echo "No untranslated chapters found!"; \
+		echo "No partially translated chapters found!"; \
 	fi

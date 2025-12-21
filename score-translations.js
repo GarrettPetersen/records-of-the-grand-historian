@@ -147,6 +147,29 @@ function scoreChapterFile(filePath) {
 }
 
 /**
+ * Randomly select and display sample translations for manual spot-checking
+ */
+function displayRandomSamples(results, filename) {
+  if (results.length === 0) {
+    return;
+  }
+
+  // Randomly select up to 5 translations for spot-checking
+  const sampleSize = Math.min(5, results.length);
+  const shuffled = [...results].sort(() => 0.5 - Math.random());
+  const samples = shuffled.slice(0, sampleSize);
+
+  console.log(`\n🎯 Random spot-check samples from ${filename} (${sampleSize} selected):\n`);
+
+  samples.forEach((sample, index) => {
+    console.log(`${index + 1}. ${sample.id}:`);
+    console.log(`   原文: ${sample.chinese}`);
+    console.log(`   译文: ${sample.english}`);
+    console.log('');
+  });
+}
+
+/**
  * Main function
  */
 function main() {
@@ -182,6 +205,9 @@ function main() {
     } else {
       console.log(`No problems found in ${path.basename(filePath)}`);
     }
+
+    // Always show random samples for manual spot-checking
+    displayRandomSamples(results, path.basename(filePath));
   }
 
   console.log(`\nSummary: ${totalProblems} problematic translations out of ${totalEntries} total entries`);
