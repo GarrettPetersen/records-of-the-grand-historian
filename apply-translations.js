@@ -159,8 +159,18 @@ for (const block of chapter.content) {
   }
 
   for (const sentence of sentences) {
-    if (sentence.translations && sentence.translations.length > 0 && sentence.translations[0].text) {
-      totalTranslated++;
+    // Check if sentence/cell has content and a translation
+    const hasContent = (block.type === 'table_row' && sentence.content && sentence.content.trim()) ||
+                      (block.type !== 'table_row' && sentence.zh && sentence.zh.trim());
+
+    if (hasContent) {
+      // Check for translation based on the correct property
+      const hasTranslation = (block.type === 'table_row' && sentence.translation && sentence.translation.trim()) ||
+                           (block.type !== 'table_row' && sentence.translations && sentence.translations.length > 0 && sentence.translations[0].text && sentence.translations[0].text.trim());
+
+      if (hasTranslation) {
+        totalTranslated++;
+      }
     }
   }
 }

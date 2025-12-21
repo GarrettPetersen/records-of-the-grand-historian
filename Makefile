@@ -45,7 +45,7 @@ help:
 	@echo "  make validate               # Check all JSON files are valid"
 	@echo "  make score-translations     # Score translations for quality issues"
 	@echo "  make batch-quality-check    # Batch quality check on multiple chapters"
-	@echo "  make first-untranslated     # Find first partially translated chapter"
+	@echo "  make first-untranslated     # Find first chapter needing translation"
 	@echo ""
 	@echo "Cleanup commands:"
 	@echo "  make clean-shiji            # Remove all Shiji data"
@@ -393,7 +393,7 @@ first-untranslated:
 				if [ -f "$$file" ]; then \
 					translated=$$(jq -r '.meta.translatedCount // 0' "$$file" 2>/dev/null); \
 					total=$$(jq -r '.meta.sentenceCount // 0' "$$file" 2>/dev/null); \
-					if [ "$$translated" -gt 0 ] 2>/dev/null && [ "$$total" -gt 0 ] 2>/dev/null && [ "$$translated" -lt "$$total" ]; then \
+					if [ "$$total" -gt 0 ] 2>/dev/null && [ "$$translated" -lt "$$total" ]; then \
 						chapter=$$(basename "$$file" .json); \
 						percent=$$(echo "scale=1; $$translated * 100 / $$total" | bc 2>/dev/null || echo "0"); \
 						echo "Found: $$book chapter $$chapter ($$translated/$$total = $${percent}%)"; \
