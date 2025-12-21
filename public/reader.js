@@ -66,6 +66,7 @@ function showTooltip(e) {
     return;
   }
 
+  // Set tooltip content
   tooltip.innerHTML = `
     <div class="pinyin">${bestEntry.pinyin || ''}</div>
     <div><strong>${bestEntry.text}</strong></div>
@@ -74,38 +75,76 @@ function showTooltip(e) {
     </ul>
   `;
 
-  const rect = e.target.getBoundingClientRect();
+  const targetRect = e.target.getBoundingClientRect();
+
+  // Make tooltip temporarily visible to get its dimensions
   tooltip.style.display = 'block';
+  tooltip.style.opacity = '0';
+  tooltip.style.pointerEvents = 'none';
 
-  // Position tooltip initially below the element
-  tooltip.style.left = (rect.left + window.scrollX) + 'px';
-  tooltip.style.top = (rect.bottom + window.scrollY + 5) + 'px';
-
-  // Now get the actual tooltip dimensions after it's positioned
+  // Get tooltip dimensions
   const tooltipRect = tooltip.getBoundingClientRect();
-  const spaceBelow = window.innerHeight - (rect.bottom - window.scrollY);
-  const spaceAbove = rect.top + window.scrollY;
+  const tooltipWidth = tooltipRect.width;
+  const tooltipHeight = tooltipRect.height;
 
-  // Adjust horizontal position to keep tooltip on screen
-  let leftPos = rect.left + window.scrollX;
-  if (leftPos + tooltipRect.width > window.innerWidth + window.scrollX) {
-    leftPos = window.innerWidth + window.scrollX - tooltipRect.width - 10;
-  }
-  if (leftPos < window.scrollX + 10) {
-    leftPos = window.scrollX + 10;
-  }
-  tooltip.style.left = leftPos + 'px';
+  // Calculate available space
+  const spaceAbove = targetRect.top;
+  const spaceBelow = window.innerHeight - targetRect.bottom;
+  const spaceLeft = targetRect.left;
+  const spaceRight = window.innerWidth - targetRect.right;
 
-  // Adjust vertical position if tooltip would be cut off
-  if (tooltipRect.bottom > window.innerHeight + window.scrollY - 10 && spaceAbove >= tooltipRect.height + 10) {
-    // Tooltip is cut off at bottom and there's space above - move it above
-    tooltip.style.top = (rect.top + window.scrollY - tooltipRect.height - 5) + 'px';
+  // Determine best position
+  let left, top;
+
+  // Try to position below first (preferred)
+  if (spaceBelow >= tooltipHeight + 10) {
+    // Enough space below
+    top = targetRect.bottom + window.scrollY + 5;
+    left = targetRect.left + window.scrollX + (targetRect.width / 2) - (tooltipWidth / 2);
+  } else if (spaceAbove >= tooltipHeight + 10) {
+    // Not enough space below, but enough above
+    top = targetRect.top + window.scrollY - tooltipHeight - 5;
+    left = targetRect.left + window.scrollX + (targetRect.width / 2) - (tooltipWidth / 2);
+  } else {
+    // Not enough space above or below, position to the side
+    left = targetRect.right + window.scrollX + 5;
+    top = targetRect.top + window.scrollY + (targetRect.height / 2) - (tooltipHeight / 2);
+
+    // If not enough space on right, try left
+    if (left + tooltipWidth > window.innerWidth + window.scrollX && spaceLeft >= tooltipWidth + 10) {
+      left = targetRect.left + window.scrollX - tooltipWidth - 5;
+    }
   }
+
+  // Ensure tooltip stays within viewport bounds
+  if (left < window.scrollX + 10) {
+    left = window.scrollX + 10;
+  }
+  if (left + tooltipWidth > window.innerWidth + window.scrollX - 10) {
+    left = window.innerWidth + window.scrollX - tooltipWidth - 10;
+  }
+  if (top < window.scrollY + 10) {
+    top = window.scrollY + 10;
+  }
+  if (top + tooltipHeight > window.innerHeight + window.scrollY - 10) {
+    top = window.innerHeight + window.scrollY - tooltipHeight - 10;
+  }
+
+  // Set final position
+  tooltip.style.left = left + 'px';
+  tooltip.style.top = top + 'px';
+  tooltip.style.opacity = '1';
+  tooltip.style.pointerEvents = 'auto';
 }
 
 function hideTooltip() {
   const tooltip = document.getElementById('tooltip');
-  tooltip.style.display = 'none';
+  tooltip.style.opacity = '0';
+  tooltip.style.pointerEvents = 'none';
+  // Keep it visible but transparent for a brief moment to allow transition
+  setTimeout(() => {
+    tooltip.style.display = 'none';
+  }, 100);
 }
 
 function createSentenceElement(sentence, lang, sentenceId) {
@@ -676,7 +715,7 @@ function initializeInteractiveFeatures() {
   document.querySelectorAll('.cite-table-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      const tableNum = parseInt(btn.dataset.table) + 1; // Convert to 1-based indexing
+      const tableNum = parseInt(btn.dataset.table); // Already 1-based from generation
       openCitationModal('table', tableNum - 1); // Pass 0-based index
     });
   });
