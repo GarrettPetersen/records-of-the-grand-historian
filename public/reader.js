@@ -93,41 +93,41 @@ function showTooltip(e) {
   const spaceLeft = targetRect.left;
   const spaceRight = window.innerWidth - targetRect.right;
 
-  // Determine best position
+  // Determine best position (using viewport coordinates for position: fixed)
   let left, top;
 
   // Try to position below first (preferred)
   if (spaceBelow >= tooltipHeight + 10) {
     // Enough space below
-    top = targetRect.bottom + window.scrollY + 5;
-    left = targetRect.left + window.scrollX + (targetRect.width / 2) - (tooltipWidth / 2);
+    top = targetRect.bottom + 5;
+    left = targetRect.left + (targetRect.width / 2) - (tooltipWidth / 2);
   } else if (spaceAbove >= tooltipHeight + 10) {
     // Not enough space below, but enough above
-    top = targetRect.top + window.scrollY - tooltipHeight - 5;
-    left = targetRect.left + window.scrollX + (targetRect.width / 2) - (tooltipWidth / 2);
+    top = targetRect.top - tooltipHeight - 5;
+    left = targetRect.left + (targetRect.width / 2) - (tooltipWidth / 2);
   } else {
     // Not enough space above or below, position to the side
-    left = targetRect.right + window.scrollX + 5;
-    top = targetRect.top + window.scrollY + (targetRect.height / 2) - (tooltipHeight / 2);
+    left = targetRect.right + 5;
+    top = targetRect.top + (targetRect.height / 2) - (tooltipHeight / 2);
 
     // If not enough space on right, try left
-    if (left + tooltipWidth > window.innerWidth + window.scrollX && spaceLeft >= tooltipWidth + 10) {
-      left = targetRect.left + window.scrollX - tooltipWidth - 5;
+    if (left + tooltipWidth > window.innerWidth && spaceLeft >= tooltipWidth + 10) {
+      left = targetRect.left - tooltipWidth - 5;
     }
   }
 
   // Ensure tooltip stays within viewport bounds
-  if (left < window.scrollX + 10) {
-    left = window.scrollX + 10;
+  if (left < 10) {
+    left = 10;
   }
-  if (left + tooltipWidth > window.innerWidth + window.scrollX - 10) {
-    left = window.innerWidth + window.scrollX - tooltipWidth - 10;
+  if (left + tooltipWidth > window.innerWidth - 10) {
+    left = window.innerWidth - tooltipWidth - 10;
   }
-  if (top < window.scrollY + 10) {
-    top = window.scrollY + 10;
+  if (top < 10) {
+    top = 10;
   }
-  if (top + tooltipHeight > window.innerHeight + window.scrollY - 10) {
-    top = window.innerHeight + window.scrollY - tooltipHeight - 10;
+  if (top + tooltipHeight > window.innerHeight - 10) {
+    top = window.innerHeight - tooltipHeight - 10;
   }
 
   // Set final position
