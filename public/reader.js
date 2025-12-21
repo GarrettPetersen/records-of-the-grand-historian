@@ -76,8 +76,31 @@ function showTooltip(e) {
 
   const rect = e.target.getBoundingClientRect();
   tooltip.style.display = 'block';
-  tooltip.style.left = rect.left + 'px';
-  tooltip.style.top = (rect.bottom + 5) + 'px';
+
+  // Position tooltip initially below the element
+  tooltip.style.left = (rect.left + window.scrollX) + 'px';
+  tooltip.style.top = (rect.bottom + window.scrollY + 5) + 'px';
+
+  // Now get the actual tooltip dimensions after it's positioned
+  const tooltipRect = tooltip.getBoundingClientRect();
+  const spaceBelow = window.innerHeight - (rect.bottom - window.scrollY);
+  const spaceAbove = rect.top + window.scrollY;
+
+  // Adjust horizontal position to keep tooltip on screen
+  let leftPos = rect.left + window.scrollX;
+  if (leftPos + tooltipRect.width > window.innerWidth + window.scrollX) {
+    leftPos = window.innerWidth + window.scrollX - tooltipRect.width - 10;
+  }
+  if (leftPos < window.scrollX + 10) {
+    leftPos = window.scrollX + 10;
+  }
+  tooltip.style.left = leftPos + 'px';
+
+  // Adjust vertical position if tooltip would be cut off
+  if (tooltipRect.bottom > window.innerHeight + window.scrollY - 10 && spaceAbove >= tooltipRect.height + 10) {
+    // Tooltip is cut off at bottom and there's space above - move it above
+    tooltip.style.top = (rect.top + window.scrollY - tooltipRect.height - 5) + 'px';
+  }
 }
 
 function hideTooltip() {
@@ -371,7 +394,7 @@ function generateChicagoCitation(type, paragraphIdx, block) {
   const chapterTitle = getCurrentChapterData().meta.title.zh;
   const bookTitle = getCurrentBookInfo().chinese;
   const author = getCurrentBookInfo().author || 'Unknown';
-  
+
   if (type === 'chapter') {
     // For chapter citations, check if there's a custom citation in metadata
     const citation = getCurrentChapterData().meta.citation;
@@ -384,6 +407,9 @@ function generateChicagoCitation(type, paragraphIdx, block) {
       return `${author}. ${chapterTitle}. Translated by Herbert J. Allen. Journal of the Royal Asiatic Society 26, no. 2 (1894): 269–295. Accessed via 24 Histories, ${formatDate()}. ${url}.`;
     }
     return `${author}. ${bookTitle}. ${chapterTitle}. Translated by Garrett M. Petersen. 24 Histories, 2025. ${url}. Accessed ${formatDate()}.`;
+  } else if (type === 'table') {
+    const tableNum = paragraphIdx + 1;
+    return `${author}. ${bookTitle}. ${chapterTitle}, table ${tableNum}. Translated by Garrett M. Petersen. 24 Histories, 2025. ${url}. Accessed ${formatDate()}.`;
   } else {
     const translator = getTranslatorInfo(block);
     const paraNum = paragraphIdx + 1;
@@ -411,6 +437,9 @@ function generateAPACitation(type, paragraphIdx, block) {
       return `${author}. (1894). ${chapterTitle} (H. J. Allen, Trans.). Journal of the Royal Asiatic Society, 26(2), 269-295. Retrieved from ${url}`;
     }
     return `${author}. (2025). ${chapterTitle} (G. M. Petersen, Trans.). 24 Histories. Retrieved from ${url}`;
+  } else if (type === 'table') {
+    const tableNum = paragraphIdx + 1;
+    return `${author}. (2025). ${chapterTitle} (G. M. Petersen, Trans.) [Table ${tableNum}]. 24 Histories. Retrieved from ${url}`;
   } else {
     const paraNum = paragraphIdx + 1;
     const translator = getTranslatorInfo(block);
@@ -437,6 +466,9 @@ function generateMLACitation(type, paragraphIdx, block) {
       return `${author}. "${chapterTitle}." Translated by Herbert J. Allen, Journal of the Royal Asiatic Society, vol. 26, no. 2, 1894, pp. 269-295. 24 Histories, ${url}. Accessed ${accessDate}.`;
     }
     return `${author}. "${chapterTitle}." Translated by Garrett M. Petersen, 24 Histories, 2025, ${url}. Accessed ${accessDate}.`;
+  } else if (type === 'table') {
+    const tableNum = paragraphIdx + 1;
+    return `${author}. "${chapterTitle}." Translated by Garrett M. Petersen, table ${tableNum}. 24 Histories, 2025, ${url}. Accessed ${accessDate}.`;
   } else {
     const paraNum = paragraphIdx + 1;
     const translator = getTranslatorInfo(block);
@@ -490,6 +522,17 @@ function generateBibTeXCitation(type, paragraphIdx, block) {
   url = {${url}},
   note = {Accessed ${formatDate()}}
 }`;
+  } else if (type === 'table') {
+    const tableNum = paragraphIdx + 1;
+    return `@misc{${authorKey}2025${getCurrentChapterData().meta.chapter}t${tableNum},
+  author = {${author}},
+  title = {${chapterTitle}, Table ${tableNum}},
+  translator = {Garrett M. Petersen},
+  howpublished = {24 Histories},
+  year = {2025},
+  url = {${url}},
+  note = {Accessed ${formatDate()}}
+}`;
   } else {
     const paraNum = paragraphIdx + 1;
     const translator = getTranslatorInfo(block);
@@ -537,9 +580,15 @@ function openCitationModal(type, paragraphIdx = null, block = null) {
   const modal = document.getElementById('citation-modal');
   const title = document.getElementById('citation-title');
   const citationText = document.getElementById('citation-text');
-  
-  title.textContent = type === 'chapter' ? 'Cite this Chapter' : `Cite Paragraph ${paragraphIdx + 1}`;
-  
+
+  if (type === 'chapter') {
+    title.textContent = 'Cite this Chapter';
+  } else if (type === 'table') {
+    title.textContent = `Cite Table ${paragraphIdx + 1}`;
+  } else {
+    title.textContent = `Cite Paragraph ${paragraphIdx + 1}`;
+  }
+
   // Store citation context
   modal.dataset.citationType = type;
   modal.dataset.paragraphIdx = paragraphIdx;
@@ -622,6 +671,15 @@ function initializeInteractiveFeatures() {
   if (document.getElementById('citation-modal')) {
     setupCitationModal();
   }
+
+  // Set up table citation buttons
+  document.querySelectorAll('.cite-table-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const tableNum = parseInt(btn.dataset.table) + 1; // Convert to 1-based indexing
+      openCitationModal('table', tableNum - 1); // Pass 0-based index
+    });
+  });
 
   // Hide loading if it exists
   const loading = document.getElementById('loading');

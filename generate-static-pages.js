@@ -136,9 +136,11 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         const tableTitle = `Table ${tableCounter}`;
         tableCounter++;
 
-        let tableHtml = `<div class="tabular-content" data-paragraph="${i}" style="margin: 5rem 0; position: relative;">
+        let tableHtml = `<div class="tabular-content" data-paragraph="${i}" style="margin: 5rem 0;">
             <!-- Table citation button -->
-            <button class="cite-table-btn" data-table="${tableCounter - 1}" title="Cite this table" style="position: absolute; top: 10px; right: 10px; z-index: 10;">📋 ${tableTitle}</button>
+            <div class="table-citation-header">
+                <button class="cite-table-btn" data-table="${tableCounter - 1}" title="Cite this table">📋 ${tableTitle}</button>
+            </div>
 
             <!-- Chinese table -->
             <div class="table-container chinese-table">
@@ -282,9 +284,11 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         const tableTitle = `Table ${tableCounter}`;
         tableCounter++;
 
-        let tableHtml = `<div class="tabular-content" data-paragraph="${i}" style="margin: 5rem 0; position: relative;">
+        let tableHtml = `<div class="tabular-content" data-paragraph="${i}" style="margin: 5rem 0;">
             <!-- Table citation button -->
-            <button class="cite-table-btn" data-table="${tableCounter - 1}" title="Cite this table" style="position: absolute; top: 10px; right: 10px; z-index: 10;">📋 ${tableTitle}</button>
+            <div class="table-citation-header">
+                <button class="cite-table-btn" data-table="${tableCounter - 1}" title="Cite this table">📋 ${tableTitle}</button>
+            </div>
 
             <!-- Chinese table -->
             <div class="table-container chinese-table">

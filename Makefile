@@ -398,7 +398,7 @@ first-untranslated:
 						percent=$$(echo "scale=1; $$translated * 100 / $$total" | bc 2>/dev/null || echo "0"); \
 						echo "Found: $$book chapter $$chapter ($$translated/$$total = $${percent}%)"; \
 						echo "  File: $$file"; \
-						jq -r '.meta | "  Title: \(.title.zh // .title.raw)", "  URL: \(.url)"' "$$file" 2>/dev/null; \
+						jq -r '.meta | "  Title: \(.title.zh // .title.raw)", "  English: \(.title.en // "N/A")", "  URL: \(.url)"' "$$file" 2>/dev/null; \
 						found=1; \
 						break 2; \
 					fi; \

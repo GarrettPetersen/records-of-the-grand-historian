@@ -339,7 +339,7 @@ footer a:hover {
 }
 
 .tooltip {
-    position: absolute;
+    position: fixed;
     background: white;
     border: 2px solid var(--primary-color);
     border-radius: 4px;
@@ -347,6 +347,8 @@ footer a:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     max-width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
     font-size: 0.9rem;
 }
 
@@ -439,6 +441,12 @@ footer a:hover {
 .cite-paragraph-btn:hover {
     background: var(--highlight-color);
     border-color: var(--primary-color);
+}
+
+.table-citation-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.5rem;
 }
 
 .cite-table-btn {

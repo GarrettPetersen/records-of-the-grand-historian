@@ -19,37 +19,53 @@ function getLengthRatio(chinese, english) {
   const chineseLength = chinese.length;
   const englishLength = english.trim().split(/\s+/).length;
 
-  // Special handling for short phrases and conversational responses
-  if (chineseLength <= 20) {
-    // For short Chinese phrases (20 or fewer characters), be very lenient
-    // This covers typical dialogue and brief statements
-    if (englishLength >= 1 && englishLength <= 25) {
+  // Check for obviously wrong translations
+  if (englishLength === 0 && chineseLength > 0) {
+    return 0; // Empty translation for non-empty Chinese
+  }
+
+  if (englishLength === 1 && chineseLength > 10) {
+    return 0; // Single word translation for long Chinese text
+  }
+
+  // Special handling for very short Chinese phrases (ordinals, single words, etc.)
+  if (chineseLength <= 5) {
+    // For very short phrases (5 or fewer characters), be very lenient
+    // This covers ordinals, single words, year numbers, etc.
+    if (englishLength >= 1 && englishLength <= 8) {
       return 1; // Accept reasonable translations for short phrases
     }
     return 0; // Too short or too long even for brief phrases
   }
 
-  // Chinese characters are roughly 1.5-4x more concise than English words
-  // A single Chinese character often translates to 1-6 English words in historical context
-  const expectedRatio = chineseLength * 3.0; // more generous estimate
+  // Special handling for short phrases (6-12 characters)
+  // This covers brief statements but not full sentences
+  if (chineseLength <= 12) {
+    if (englishLength >= 1 && englishLength <= 15) {
+      return 1; // Accept reasonable translations for short phrases
+    }
+    return 0; // Too short or too long
+  }
 
-  // Calculate deviation from expected length
+  // For longer content (>12 characters), expect proper translations
+  const expectedRatio = chineseLength * 2.5; // more conservative estimate for longer text
   const ratio = englishLength / expectedRatio;
 
   // Special handling for common patterns that are acceptable:
   // - Year numbers (like "四十三" -> "43rd year.")
   // - Ordinal numbers (like "十四" -> "14th year")
   // - Simple dates (like "474" -> "474 BC")
+  // - Names and titles that are naturally short
   if (/^\d+$/.test(chinese) || /^[\u4e00-\u9fff]+年?$/.test(chinese) ||
-      (chineseLength <= 5 && english.includes('year') && english.includes('.'))) {
+      (chineseLength <= 8 && english.includes('year') && english.includes('.'))) {
     return 1; // Accept these as valid
   }
 
   // Score from 0-1, where 1 is perfect length match
-  if (ratio < 0.15) return 0; // way too short (e.g., single char -> 0 words)
-  if (ratio > 8.0) return 0; // way too long (e.g., single char -> 24+ words)
-  if (ratio >= 0.3 && ratio <= 3.0) return 1; // good range, more lenient
-  return Math.max(0, 1 - Math.abs(Math.log(ratio)) * 0.3); // gradual decrease, even less harsh
+  if (ratio < 0.1) return 0; // way too short
+  if (ratio > 10.0) return 0; // way too long
+  if (ratio >= 0.25 && ratio <= 4.0) return 1; // good range
+  return Math.max(0, 1 - Math.abs(Math.log(ratio)) * 0.25); // gradual decrease
 }
 
 /**
@@ -59,6 +75,18 @@ function scoreTranslation(entry) {
   const { id, content: chinese, translation: english } = entry;
   const issues = [];
   let score = 1.0;
+
+  // Check for empty Chinese but non-empty English (shouldn't happen)
+  if ((!chinese || chinese.trim() === '') && english && english.trim() !== '') {
+    issues.push('Empty Chinese text with non-empty translation');
+    score = 0;
+  }
+
+  // Check for non-empty Chinese but empty English
+  if (chinese && chinese.trim() !== '' && (!english || english.trim() === '')) {
+    issues.push('Missing translation for non-empty Chinese text');
+    score = 0;
+  }
 
   // Check for Chinese characters in English translation
   if (english && CHINESE_CHARS_REGEX.test(english)) {
@@ -78,10 +106,16 @@ function scoreTranslation(entry) {
     score = 0;
   }
 
+  // Check for obviously wrong translations
+  if (chinese && english && chinese.length > 10 && english.trim().split(/\s+/).length === 1) {
+    issues.push('Single word translation for long Chinese text');
+    score = 0;
+  }
+
   // Check length ratio (only if no other fails)
   if (score > 0 && chinese && english) {
     const lengthScore = getLengthRatio(chinese, english);
-    if (lengthScore < 0.3) {
+    if (lengthScore < 0.5) {
       issues.push('Length mismatch between Chinese and English');
       score = Math.min(score, lengthScore);
     }
