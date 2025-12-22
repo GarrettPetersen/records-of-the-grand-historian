@@ -3,8 +3,17 @@
 import fs from 'fs';
 
 // Chapter file to process
-const chapterFile = process.argv[2] || 'data/shiji/014.json';
-const outputFile = 'translations/auto_number_translations.json';
+const chapterFile = process.argv[2];
+if (!chapterFile) {
+  console.error('Usage: node auto-translate-numbers.js <chapter-file>');
+  console.error('Example: node auto-translate-numbers.js data/shiji/025.json');
+  process.exit(1);
+}
+
+// Generate output file name based on chapter
+const chapterMatch = chapterFile.match(/\/([^\/]+)\.json$/);
+const chapterName = chapterMatch ? chapterMatch[1] : 'unknown';
+const outputFile = `translations/auto_number_translations_${chapterName}.json`;
 
 // Read the chapter data
 const chapterData = JSON.parse(fs.readFileSync(chapterFile, 'utf8'));
@@ -122,4 +131,4 @@ console.log(`Found ${count} pure number cells to translate automatically`);
 fs.writeFileSync(outputFile, JSON.stringify(translations, null, 2));
 
 console.log(`Saved translations to ${outputFile}`);
-console.log('Run: node apply-translations.js data/shiji/014.json translations/auto_number_translations.json "Garrett M. Petersen (2025)" "grok-1.5"');
+console.log(`Run: node apply-translations.js ${chapterFile} ${outputFile} "Garrett M. Petersen (2025)" "grok-1.5"`);

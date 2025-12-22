@@ -40,7 +40,7 @@ npm install
 ## Workflow Overview
 
 1. **Scrape** - Download Chinese text from chinesenotes.com or ctext.org
-2. **Translate** - Manually translate sentences using AI assistance (no automated scripts)
+2. **Translate** - Manually translate sentences using AI assistance (automated number translation allowed)
 3. **Quality Check** - Validate translations and fix any issues
 4. **Build** - Generate static pages and update metadata
 5. **Deploy** - Push to Cloudflare Pages
@@ -146,14 +146,28 @@ Some chapters (especially early Shiji chapters from chinesenotes.com) include ex
 
 ### Translating a Chapter
 
-This project uses AI-assisted translation to translate untranslated or partially translated chapters. **All translations must be done manually by AI assistants - no automated scripts or batch processing.**
+This project uses AI-assisted translation to translate untranslated or partially translated chapters. **All substantive translations must be done manually by AI assistants.** Automated number translation is the **only allowable form of scripted translation** for pure numerals.
 
 **⚠️ CRITICAL REQUIREMENTS FOR AI TRANSLATORS:**
 - YOU are the translator. Translate each sentence individually.
 - Provide **real, accurate English translations** - no placeholders, no Chinese text, no "[Translation needed]" messages.
 - Maintain **historical accuracy and academic tone**.
 - Use **scholarly English** appropriate for classical Chinese historical texts.
-- **DO NOT** use automated scripts, batch processing, or external API calls.
+- **DO NOT** use automated scripts, batch processing, or external API calls (except for approved automated number translation).
+
+#### Automated Number Translation (Exception)
+
+**The ONLY allowable form of scripted translation** is the automated number translation for pure numerals:
+
+```bash
+# Automatically translate pure number sentences (Arabic and Chinese numerals)
+node auto-translate-numbers.js data/shiji/025.json
+
+# Apply the generated translations
+node apply-translations.js data/shiji/025.json translations/auto_number_translations_025.json "Garrett M. Petersen (2025)" "grok-1.5"
+```
+
+This script **ONLY translates sentences that contain pure numbers** (like `"十九"` → `"19"`, `"42"` → `"42"`). It does not translate any historical content, dialogue, or narrative text. All substantive translation work must be done manually by AI assistants.
 
 ### Quick Translation Process
 
@@ -287,7 +301,7 @@ make update
 - **Inconsistent romanization:** Use standard Pinyin throughout
 - **Missing context:** Consider the historical setting and character relationships
 
-If you find that you have used any kind of automated substitution script to translate, delete all translations and start over.
+If you find that you have used any kind of automated substitution script to translate (except for the approved auto-translate-numbers.js script for pure numerals), delete all translations and start over.
 
 **Quality Check Commands:**
 
