@@ -68,6 +68,181 @@ for (const file of translationFiles) {
 
 console.log(`Total translations loaded: ${totalTranslationsLoaded}`);
 
+// Pre-validation: Check for potential issues before applying translations
+console.log('\n🔍 Pre-validating translations...');
+
+// 1. Check for non-existent IDs
+const allSentenceIds = new Set();
+for (const block of chapter.content) {
+  let sentences = [];
+
+  if (block.type === 'paragraph') {
+    sentences = block.sentences;
+  } else if (block.type === 'table_row') {
+    sentences = block.cells;
+  } else if (block.type === 'table_header') {
+    sentences = block.sentences;
+  }
+
+  for (const sentence of sentences) {
+    if (sentence.id) {
+      allSentenceIds.add(sentence.id);
+    }
+  }
+}
+
+const invalidIds = [];
+for (const id of Object.keys(translations)) {
+  if (!allSentenceIds.has(id)) {
+    invalidIds.push(id);
+  }
+}
+
+if (invalidIds.length > 0) {
+  console.error(`❌ ERROR: Attempting to translate non-existent sentence IDs:`);
+  invalidIds.forEach(id => console.error(`   - ${id}`));
+  console.error('This suggests the translations were generated from different data.');
+  console.error('Please verify the translations file matches the chapter file.');
+  process.exit(1);
+}
+
+// 2. Check for problematic translations that would overwrite existing content
+const problematicTranslations = [];
+for (const block of chapter.content) {
+  let sentences = [];
+
+  if (block.type === 'paragraph') {
+    sentences = block.sentences;
+  } else if (block.type === 'table_row') {
+    sentences = block.cells;
+  } else if (block.type === 'table_header') {
+    sentences = block.sentences;
+  }
+
+  for (const sentence of sentences) {
+    if (sentence.id && sentence.id in translations) {
+      const newTranslation = translations[sentence.id];
+      const chineseContent = block.type === 'table_row' ? sentence.content : sentence.zh;
+
+      // Check if sentence has content
+      const hasChineseContent = chineseContent && chineseContent.trim();
+      const hasNewTranslation = newTranslation && newTranslation.trim();
+
+      // Existing translation (if any)
+      const existingTranslation = block.type === 'table_row' ?
+        (sentence.translation && sentence.translation.trim()) :
+        (sentence.translations && sentence.translations[0] && sentence.translations[0].text && sentence.translations[0].text.trim());
+
+      // Problem: trying to translate empty Chinese content
+      if (!hasChineseContent && hasNewTranslation) {
+        problematicTranslations.push({
+          id: sentence.id,
+          chinese: chineseContent || '',
+          newTranslation: newTranslation,
+          issue: 'translating_empty_chinese'
+        });
+      }
+
+      // Problem: providing empty translation for content
+      if (hasChineseContent && !hasNewTranslation) {
+        problematicTranslations.push({
+          id: sentence.id,
+          chinese: chineseContent,
+          newTranslation: newTranslation || '',
+          issue: 'empty_translation_for_content'
+        });
+      }
+
+      // Check for suspicious overwrites (very short translations for long Chinese)
+      if (hasChineseContent && hasNewTranslation && existingTranslation) {
+        const chineseWords = chineseContent.split(/\s+/).length;
+        const newEnglishWords = newTranslation.split(/\s+/).length;
+        if (newEnglishWords < chineseWords * 0.2 && chineseWords > 3) {
+          problematicTranslations.push({
+            id: sentence.id,
+            chinese: chineseContent,
+            existing: existingTranslation,
+            newTranslation: newTranslation,
+            issue: 'suspiciously_short'
+          });
+        }
+      }
+    }
+  }
+}
+
+if (problematicTranslations.length > 0) {
+  console.error(`❌ ERROR: Found ${problematicTranslations.length} problematic translations:`);
+  problematicTranslations.slice(0, 10).forEach(item => {
+    if (item.issue === 'translating_empty_chinese') {
+      console.error(`   ${item.id}: Trying to translate empty Chinese "${item.chinese}" with "${item.newTranslation}"`);
+    } else if (item.issue === 'empty_translation_for_content') {
+      console.error(`   ${item.id}: Providing empty translation "${item.newTranslation}" for Chinese "${item.chinese}"`);
+    } else if (item.issue === 'suspiciously_short') {
+      console.error(`   ${item.id}: Suspiciously short translation:`);
+      console.error(`     Chinese: "${item.chinese}"`);
+      console.error(`     Existing: "${item.existing}"`);
+      console.error(`     New: "${item.newTranslation}"`);
+    }
+  });
+  if (problematicTranslations.length > 10) {
+    console.error(`   ... and ${problematicTranslations.length - 10} more`);
+  }
+  console.error('Please fix these issues before applying translations.');
+  process.exit(1);
+}
+
+// 3. Show random sample for user verification
+const translationPairs = [];
+for (const block of chapter.content) {
+  let sentences = [];
+
+  if (block.type === 'paragraph') {
+    sentences = block.sentences;
+  } else if (block.type === 'table_row') {
+    sentences = block.cells;
+  } else if (block.type === 'table_header') {
+    sentences = block.sentences;
+  }
+
+  for (const sentence of sentences) {
+    if (sentence.id && sentence.id in translations) {
+      const translation = translations[sentence.id];
+      const chineseContent = block.type === 'table_row' ? sentence.content : sentence.zh;
+      if (chineseContent && translation) {
+        translationPairs.push({
+          id: sentence.id,
+          chinese: chineseContent,
+          english: translation
+        });
+      }
+    }
+  }
+}
+
+// Show up to 5 random samples
+if (translationPairs.length > 0) {
+  console.log('\n📋 Random translation samples for verification:');
+  const samples = translationPairs.sort(() => 0.5 - Math.random()).slice(0, Math.min(5, translationPairs.length));
+
+  samples.forEach((sample, index) => {
+    console.log(`\n${index + 1}. ${sample.id}:`);
+    console.log(`   中文: "${sample.chinese}"`);
+    console.log(`   英文: "${sample.english}"`);
+  });
+
+  // Ask user to confirm
+  console.log('\n❓ Do these translations look correct? (y/N): ');
+
+  // For now, we'll assume the user confirms - in a real interactive script we'd wait for input
+  // But since this is automated, we'll proceed but log the warning
+  console.log('⚠️  Proceeding with translations. Please verify the samples above manually.');
+} else {
+  console.log('ℹ️  No translation samples to show (likely all are number translations).');
+}
+
+console.log('✅ Pre-validation passed. Applying translations...\n');
+
 let translatedCount = 0;
 
 for (const block of chapter.content) {
