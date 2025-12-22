@@ -161,8 +161,8 @@ function createSentenceElement(sentence, lang, sentenceId) {
   } else {
     // English text
     const translation = sentence.translations && sentence.translations[0];
-    div.textContent = translation?.text || '(No translation available)';
-    if (!translation?.text) {
+    div.textContent = (translation?.idiomatic || translation?.literal || translation?.text) || '(No translation available)';
+    if (!(translation?.idiomatic || translation?.literal || translation?.text)) {
       div.style.fontStyle = 'italic';
       div.style.color = '#999';
     }
@@ -244,8 +244,8 @@ function createParagraphElement(block, lang, paragraphIdx) {
     } else {
       // English text
       const translation = sentence.translations && sentence.translations[0];
-      sentenceSpan.textContent = translation?.text || '';
-      if (!translation?.text) {
+      sentenceSpan.textContent = (translation?.idiomatic || translation?.literal || translation?.text) || '';
+      if (!(translation?.idiomatic || translation?.literal || translation?.text)) {
         sentenceSpan.style.fontStyle = 'italic';
         sentenceSpan.style.color = '#999';
       }

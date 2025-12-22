@@ -128,10 +128,12 @@ for (const block of chapter.content) {
       const hasChineseContent = chineseContent && chineseContent.trim();
       const hasNewTranslation = newTranslation && newTranslation.trim();
 
-      // Existing translation (if any)
+      // Existing translation (if any) - check idiomatic first, then literal
       const existingTranslation = block.type === 'table_row' ?
-        (sentence.translation && sentence.translation.trim()) :
-        (sentence.translations && sentence.translations[0] && sentence.translations[0].text && sentence.translations[0].text.trim());
+        (sentence.idiomatic && sentence.idiomatic.trim()) || (sentence.literal && sentence.literal.trim()) :
+        (sentence.translations && sentence.translations[0] &&
+         ((sentence.translations[0].idiomatic && sentence.translations[0].idiomatic.trim()) ||
+          (sentence.translations[0].literal && sentence.translations[0].literal.trim())));
 
       // Problem: trying to translate empty Chinese content
       if (!hasChineseContent && hasNewTranslation) {
@@ -287,21 +289,27 @@ for (const block of chapter.content) {
         if (existingTranslation && existingTranslation.trim()) {
           console.warn(`Warning: Overwriting existing translation for ${sentence.id}`);
           console.warn(`  Old: "${existingTranslation}"`);
-          console.warn(`  New: "${translation}"`);
+          console.warn(`  New: "${JSON.stringify(translation)}"`);
         }
 
-        // For table cells, set translation directly
+        // Apply both literal and idiomatic translations
+        const literalTranslation = translation.literal || translation;
+        const idiomaticTranslation = translation.idiomatic || null;
+
+        // For table cells, set translation fields directly
         if (block.type === 'table_row') {
-          sentence.translation = translation;
+          sentence.literal = literalTranslation;
+          sentence.idiomatic = idiomaticTranslation;
           sentence.translator = translator;
           sentence.model = model;
         } else {
           // For paragraph sentences, update the translations array
           if (!sentence.translations) sentence.translations = [];
           if (sentence.translations.length === 0) {
-            sentence.translations.push({ lang: 'en', text: '', translator: '', model: '' });
+            sentence.translations.push({ lang: 'en', literal: '', idiomatic: null, translator: '', model: '' });
           }
-          sentence.translations[0].text = translation;
+          sentence.translations[0].literal = literalTranslation;
+          sentence.translations[0].idiomatic = idiomaticTranslation;
           sentence.translations[0].translator = translator;
           sentence.translations[0].model = model;
         }
@@ -318,14 +326,15 @@ for (const block of chapter.content) {
   // Update block-level translation by concatenating sentence translations (for paragraphs)
   if (block.type === 'paragraph') {
     const paragraphText = sentences
-      .map(s => s.translations?.[0]?.text || '')
+      .map(s => (s.translations?.[0]?.idiomatic || s.translations?.[0]?.literal || ''))
       .filter(t => t)
       .join(' ');
 
     if (paragraphText) {
       block.translations = [{
         lang: 'en',
-        text: paragraphText,
+        literal: paragraphText,
+        idiomatic: null, // Paragraph translations are considered literal
         translator: translator,
         model: model
       }];
@@ -354,7 +363,10 @@ for (const block of chapter.content) {
     if (hasContent) {
       // Check for translation based on the correct property
       const hasTranslation = (block.type === 'table_row' && sentence.translation && sentence.translation.trim()) ||
-                           (block.type !== 'table_row' && sentence.translations && sentence.translations.length > 0 && sentence.translations[0].text && sentence.translations[0].text.trim());
+                           (block.type !== 'table_row' && sentence.translations && sentence.translations.length > 0 &&
+                           (sentence.translations[0].idiomatic || sentence.translations[0].literal) &&
+                           ((sentence.translations[0].idiomatic && sentence.translations[0].idiomatic.trim()) ||
+                            (sentence.translations[0].literal && sentence.translations[0].literal.trim())));
 
       if (hasTranslation) {
         totalTranslated++;

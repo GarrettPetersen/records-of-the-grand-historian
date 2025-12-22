@@ -150,8 +150,10 @@ function scoreChapterFile(filePath) {
     for (const block of data.content) {
       if (block.type === 'paragraph') {
         for (const sentence of block.sentences || []) {
-          // Check both old format (sentence.translation) and new format (sentence.translations[0].text)
-          const translation = sentence.translation || (sentence.translations && sentence.translations[0] && sentence.translations[0].text);
+          // Check idiomatic first, then literal, supporting both old and new formats
+          const translation = (sentence.idiomatic || sentence.translation) ||
+                            (sentence.translations && sentence.translations[0] &&
+                             (sentence.translations[0].idiomatic || sentence.translations[0].literal || sentence.translations[0].text));
           const content = sentence.content || sentence.zh;
           if (translation) {
             results.push(scoreTranslation({

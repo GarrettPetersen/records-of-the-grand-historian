@@ -64,8 +64,17 @@ for (const file of translationFiles) {
         validationErrors++;
       }
 
-      if (!translation || typeof translation !== 'string' || !translation.trim()) {
-        console.error(`❌ ERROR: Translation for ${id} is empty or invalid`);
+      // Validate translation format (can be string or object with literal/idiomatic)
+      let isValid = false;
+      if (typeof translation === 'string') {
+        isValid = translation.trim().length > 0;
+      } else if (translation && typeof translation === 'object') {
+        isValid = (translation.literal && translation.literal.trim()) ||
+                  (translation.idiomatic && translation.idiomatic.trim());
+      }
+
+      if (!isValid) {
+        console.error(`❌ ERROR: Translation for ${id} is empty or invalid: ${JSON.stringify(translation)}`);
         validationErrors++;
       }
 

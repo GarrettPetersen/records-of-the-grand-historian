@@ -216,8 +216,8 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         const translation = s.translation || (s.translations && s.translations.length > 0 ? s.translations[0] : null);
 
         let text = '';
-        if (translation && translation.text) {
-          text = escapeHtml(translation.text);
+        if (translation && (translation.idiomatic || translation.literal || translation.text)) {
+          text = escapeHtml(translation.idiomatic || translation.literal || translation.text);
 
           // Check for footnote
           if (translation.footnote) {
@@ -264,9 +264,9 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         const zhHeaderRow = block.sentences.map(s => `<th class="table-header">${escapeHtml(s.zh)}</th>`).join('');
         const enHeaderRow = block.sentences.map(s => {
           const translation = s.translations && s.translations.length > 0 ? s.translations[0] : null;
-          if (!translation || !translation.text) return '<th class="table-header"></th>';
+          if (!translation || (!translation.idiomatic && !translation.literal && !translation.text)) return '<th class="table-header"></th>';
 
-          let text = escapeHtml(translation.text);
+          let text = escapeHtml(translation.idiomatic || translation.literal || translation.text);
 
           // Check for footnote
           if (translation.footnote) {
@@ -352,8 +352,9 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
       } else {
         // Just a header without table rows
         const zhText = block.sentences.map(s => escapeHtml(s.zh)).join('');
-        const enText = block.translations && block.translations.length > 0 && block.translations[0].text
-          ? escapeHtml(block.translations[0].text)
+        const enText = block.translations && block.translations.length > 0 &&
+          (block.translations[0].idiomatic || block.translations[0].literal || block.translations[0].text)
+          ? escapeHtml(block.translations[0].idiomatic || block.translations[0].literal || block.translations[0].text)
           : '';
 
         contentHTML += `

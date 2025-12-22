@@ -44,7 +44,8 @@ function recalculateTranslatedCount(chapterData) {
 
         totalCount++;
         // Check if translation exists
-        const translation = sentence.translations?.[0]?.text;
+        // Check idiomatic first, then literal
+        const translation = sentence.translations?.[0]?.idiomatic || sentence.translations?.[0]?.literal || sentence.translations?.[0]?.text;
         if (translation && translation.trim() !== '') {
           translatedCount++;
         }
@@ -55,7 +56,8 @@ function recalculateTranslatedCount(chapterData) {
         if (!cell.content || cell.content.trim() === '') continue;
 
         totalCount++;
-        const translation = cell.translation;
+        // Check idiomatic first, then literal
+        const translation = cell.idiomatic || cell.literal || cell.translation;
         if (translation && translation.trim() !== '') {
           translatedCount++;
         }
@@ -67,7 +69,8 @@ function recalculateTranslatedCount(chapterData) {
 
         totalCount++;
         // Check if translation exists
-        const translation = sentence.translations?.[0]?.text;
+        // Check idiomatic first, then literal
+        const translation = sentence.translations?.[0]?.idiomatic || sentence.translations?.[0]?.literal || sentence.translations?.[0]?.text;
         if (translation && translation.trim() !== '' && !containsChinese(translation)) {
           translatedCount++;
         }
