@@ -212,6 +212,12 @@ function displaySummary(summary, options) {
         console.log(`   ${issue}: ${count} instances`);
       });
   }
+
+  // Add note about subjective quality assessment
+  console.log('\n💡 IMPORTANT: The automated checks above detect technical issues like length mismatches,');
+  console.log('   corrupted characters, and placeholder text. However, there may be subjective quality');
+  console.log('   problems not caught by these automated checks. Always review the spot-check samples');
+  console.log('   above to ensure uniform high quality across all translations in the Ken Liu style.');
 }
 
 /**

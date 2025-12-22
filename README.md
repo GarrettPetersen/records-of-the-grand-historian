@@ -192,9 +192,14 @@ Create `translations/translations_016.json` with your manual translations:
 **Step 4: Apply translations**
 
 ```bash
-# Apply your translations to the chapter
+# First validate translation files to prevent misalignment errors
+node validate-translations.js data/shiji/016.json translations/translations_016.json
+
+# Apply your translations to the chapter (only if validation passes)
 node apply-translations.js data/shiji/016.json translations/translations_016.json "Garrett M. Petersen (2025)" "grok-1.5"
 ```
+
+**Important**: Always validate translation files before applying them to prevent batch write errors and misaligned translations!
 
 **Step 5: Verify and update**
 
@@ -253,6 +258,11 @@ make update
 ```
 
 ### Translation Quality Guidelines
+
+**🎯 TRANSLATE LIKE KEN LIU:**
+- Prioritize semantic fidelity and modern readability with no added narrative or stylistic ornament
+- Aim for the literary quality and natural flow of Ken Liu's translation style
+- Focus on accurate meaning while ensuring smooth, readable English
 
 **✅ DO:**
 - Translate each sentence individually and accurately

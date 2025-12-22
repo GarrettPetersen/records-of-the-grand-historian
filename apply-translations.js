@@ -86,6 +86,19 @@ for (const block of chapter.content) {
   for (const sentence of sentences) {
     const translation = translations[sentence.id];
     if (translation && translation.trim()) {
+      // Basic validation: check if translation looks reasonable for the Chinese content
+      const chineseText = block.type === 'table_row' ? sentence.content : sentence.zh;
+      if (chineseText && chineseText.trim()) {
+        const chineseWordCount = chineseText.split(/\s+/).length;
+        const englishWordCount = translation.split(/\s+/).length;
+
+        // Warn if translation is suspiciously short compared to Chinese
+        if (englishWordCount < chineseWordCount * 0.3 && chineseWordCount > 5) {
+          console.warn(`Warning: Translation for ${sentence.id} seems suspiciously short:`);
+          console.warn(`  Chinese (${chineseWordCount} words): "${chineseText}"`);
+          console.warn(`  English (${englishWordCount} words): "${translation}"`);
+        }
+      }
       // Only apply translations to sentences/cells with non-empty content
       const hasContent = (block.type === 'table_row' && sentence.content && sentence.content.trim()) ||
                         (block.type !== 'table_row' && sentence.zh && sentence.zh.trim());

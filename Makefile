@@ -92,6 +92,10 @@ generate-pages:
 .PHONY: update
 update:
 	@echo "=== Running update workflow ==="
+	@echo "🎯 Remember: Translate like Ken Liu - prioritize semantic fidelity and modern readability"
+	@echo "   • Focus on semantic fidelity and modern readability"
+	@echo "   • Avoid added narrative or stylistic ornament"
+	@echo "   • Aim for the literary quality and natural flow of Ken Liu's translation style"
 	@echo ""
 	@echo "Step 1/5: Updating citations..."
 	@$(NODE) update-citations.js
@@ -330,7 +334,15 @@ score-translations:
 		echo "Usage: make score-translations CHAPTER=data/shiji/015.json"; \
 		exit 1; \
 	fi
-	@$(NODE) score-translations.js $(CHAPTER)
+	@$(NODE) score-translations.js $(CHAPTER) || true
+	@echo ""
+	@echo "🤔 REFLECTION PROMPT: Are these translations Ken Liu quality?"
+	@echo "   • Do they prioritize semantic fidelity and modern readability?"
+	@echo "   • Do they avoid added narrative or stylistic ornament?"
+	@echo "   • Would Ken Liu himself approve of this literary quality?"
+	@echo ""
+	@echo "If not, consider re-translating weak sentences to match Ken Liu's style."
+	@echo "Use 'make extract-review CHAPTER=... && make apply-review CHAPTER=... REVIEW=...'"
 
 # Batch quality check on multiple chapters
 .PHONY: batch-quality-check
@@ -385,6 +397,11 @@ stats:
 .PHONY: first-untranslated
 first-untranslated:
 	@echo "Searching for first chapter needing translation..."
+	@echo "🎯 Remember: Translate like Ken Liu - prioritize semantic fidelity and modern readability"
+	@echo "   • Focus on semantic fidelity and modern readability"
+	@echo "   • Avoid added narrative or stylistic ornament"
+	@echo "   • Aim for the literary quality and natural flow of Ken Liu's translation style"
+	@echo ""
 	@found=0; \
 	for dir in data/*/; do \
 		if [ -d "$$dir" ] && [ "$$(basename $$dir)" != "public" ]; then \
