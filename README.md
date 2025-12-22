@@ -292,7 +292,7 @@ make update
 - Use modern slang or informal language
 - Add commentary or interpretation beyond the text
 - Skip difficult sentences - translate everything
-- Use automated scripts or batch processing
+- Use automated scripts or batch processing (except for approved automated number translation)
 - Maintain Chinese sentence structure extremely literally in a way that makes the English unreadable
 
 **Common Issues to Avoid:**
@@ -326,7 +326,7 @@ make extract-review CHAPTER=data/shiji/024.json
 # Open review_XXX.json in your editor and improve the "english" fields
 # Focus on: readability, grammar, natural English flow, proper punctuation
 # This is a MANUAL process - edit each translation individually for quality
-# ⚠️ DO NOT create automated scripts to "improve" translations
+# ⚠️ DO NOT create automated scripts to "improve" translations (except for approved automated number translation)
 # ⚠️ Manual review ensures accuracy and maintains scholarly quality
 
 # Step 3: Apply the reviewed translations

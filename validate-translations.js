@@ -100,3 +100,4 @@ const missingTranslations = [...chapterIds].filter(id => !translatedIds.has(id))
 if (missingTranslations.length > 0) {
   console.log(`\nℹ️  Note: ${missingTranslations.length} sentences still untranslated`);
 }
+
