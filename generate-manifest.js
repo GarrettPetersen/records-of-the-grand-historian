@@ -43,6 +43,17 @@ const BOOKS = {
 };
 
 function generateManifest() {
+  // Load existing manifest to preserve quality scores
+  let existingManifest = {};
+  const existingManifestPath = path.join(DATA_DIR, 'manifest.json');
+  if (fs.existsSync(existingManifestPath)) {
+    try {
+      existingManifest = JSON.parse(fs.readFileSync(existingManifestPath, 'utf8'));
+    } catch (e) {
+      console.warn('Could not read existing manifest, starting fresh');
+    }
+  }
+
   const manifest = {
     generatedAt: new Date().toISOString(),
     books: {}
@@ -50,39 +61,45 @@ function generateManifest() {
 
   // Scan data directory for books
   const entries = fs.readdirSync(DATA_DIR, { withFileTypes: true });
-  
+
   for (const entry of entries) {
     if (!entry.isDirectory()) continue;
-    
+
     const bookId = entry.name;
     if (!BOOKS[bookId]) continue;
-    
+
     const bookDir = path.join(DATA_DIR, bookId);
     const chapterFiles = fs.readdirSync(bookDir)
       .filter(f => f.endsWith('.json'))
       .sort();
-    
+
     if (chapterFiles.length === 0) continue;
-    
+
     // Read each chapter to get title info
     const chapters = [];
     for (const file of chapterFiles) {
       const chapterNum = file.replace('.json', '');
       const chapterPath = path.join(bookDir, file);
-      
+
       try {
         const data = JSON.parse(fs.readFileSync(chapterPath, 'utf8'));
+
+        // Preserve existing quality score if available
+        const existingChapter = existingManifest.books?.[bookId]?.chapters?.find(c => c.chapter === chapterNum);
+        const qualityScore = existingChapter?.qualityScore ?? null;
+
         chapters.push({
           chapter: chapterNum,
           title: data.meta.title,
           sentenceCount: data.meta.sentenceCount,
-          translatedCount: data.meta.translatedCount
+          translatedCount: data.meta.translatedCount,
+          qualityScore: qualityScore
         });
       } catch (e) {
         console.error(`Error reading ${chapterPath}: ${e.message}`);
       }
     }
-    
+
     manifest.books[bookId] = {
       ...BOOKS[bookId],
       chapterCount: chapters.length,

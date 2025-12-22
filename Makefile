@@ -45,6 +45,7 @@ help:
 	@echo "  make validate               # Check all JSON files are valid"
 	@echo "  make score-translations     # Score translations for quality issues"
 	@echo "  make batch-quality-check    # Batch quality check on multiple chapters"
+	@echo "  make quality-score          # Score translation quality subjectively (1-10 scale)"
 	@echo "  make first-untranslated     # Find first chapter needing translation"
 	@echo ""
 	@echo "Cleanup commands:"
@@ -356,6 +357,34 @@ batch-quality-check:
 		exit 1; \
 	fi
 	@$(NODE) batch-quality-check.js $(CHAPTERS) $(filter-out $@,$(MAKECMDGOALS))
+
+# Score translation quality subjectively (1-10 scale)
+.PHONY: quality-score
+quality-score:
+	@echo "Quality scoring (1-10 scale) - both interactive and programmatic use..."
+	@echo "Scoring guidelines:"
+	@echo "  1-2: Poor - Major issues with accuracy, readability, or style"
+	@echo "  3-4: Adequate - Generally accurate but could be improved"
+	@echo "  5-6: Good - Solid translation with minor issues"
+	@echo "  7-8: Very Good - High quality, few noticeable issues"
+	@echo "  9-10: Excellent - Exceptional translation quality"
+	@echo ""
+	@echo "Interactive usage:"
+	@echo "  make quality-score                    # Score chapters interactively"
+	@echo "  make quality-score BOOK=shiji         # Score specific book"
+	@echo "  make quality-score CHAPTER=083        # Score specific chapter"
+	@echo ""
+	@echo "Programmatic/AI usage:"
+	@echo "  node score-quality.js --set-score 8 --chapter 083"
+	@echo "  node score-quality.js --batch-scores '{\"083\": 8, \"084\": 7}'"
+	@echo ""
+	@if [ -n "$(BOOK)" ]; then \
+		$(NODE) score-quality.js --book $(BOOK); \
+	elif [ -n "$(CHAPTER)" ]; then \
+		$(NODE) score-quality.js --chapter $(CHAPTER); \
+	else \
+		$(NODE) score-quality.js; \
+	fi
 
 # Extract translations for MANUAL review and editing
 # WARNING: This creates a JSON file for manual editing - do not create automated improvement scripts

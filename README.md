@@ -332,6 +332,56 @@ This will:
 4. Generate static HTML pages for SEO
 5. Sync data to public/
 
+## Quality Scoring
+
+After translating chapters, you can score their quality subjectively using a 1-10 scale:
+
+**Interactive Quality Scoring:**
+
+```bash
+# Score chapters interactively
+make quality-score
+
+# Score chapters from a specific book
+make quality-score BOOK=shiji
+
+# Score a specific chapter
+make quality-score CHAPTER=083
+
+# View scoring statistics
+node score-quality.js --stats
+
+# List unscored chapters
+node score-quality.js --list
+```
+
+**AI/Programmatic Quality Scoring:**
+
+The scoring tool is designed for both human and AI use:
+
+```bash
+# Set score for a specific chapter
+node score-quality.js --set-score 8 --chapter 083
+
+# Set score for a chapter in a different book
+node score-quality.js --set-score 9 --chapter 042 --book hanshu
+
+# Batch score multiple chapters at once
+node score-quality.js --batch-scores '{"083": 8, "084": 7, "085": 9}'
+
+# Show help and all options
+node score-quality.js --help
+```
+
+**Quality Scoring Scale:**
+- **1-2**: Poor - Major issues with accuracy, readability, or style
+- **3-4**: Adequate - Generally accurate but could be improved
+- **5-6**: Good - Solid translation with minor issues
+- **7-8**: Very Good - High quality, few noticeable issues
+- **9-10**: Excellent - Exceptional translation quality
+
+The scoring system preserves scores when regenerating the manifest, so your subjective quality assessments are maintained across updates.
+
 **Step 5: Clean up (optional)**
 
 After successfully applying translations, you can archive or delete the translation work files:
