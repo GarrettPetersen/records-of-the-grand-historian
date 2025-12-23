@@ -509,6 +509,6 @@ first-untranslated:
 		if [ -n "$(BOOK)" ]; then \
 			echo "No chapters with missing idiomatic translations found in $(BOOK)!"; \
 		else \
-			echo "No chapters with missing idiomatic translations found!"; \
+		echo "No chapters with missing idiomatic translations found!"; \
 		fi; \
 	fi

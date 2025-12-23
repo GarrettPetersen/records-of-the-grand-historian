@@ -32,23 +32,30 @@ function extractTranslationsForReview(filePath) {
       if (block.type === 'paragraph') {
         for (const sentence of block.sentences || []) {
           if (sentence.translations && sentence.translations.length > 0) {
-            reviewData.translations.push({
-              id: sentence.id,
-              type: 'paragraph',
-              chinese: sentence.zh || sentence.content,
-              english: sentence.translations[0].text,
-              context: getContext(data.content, block, sentence)
-            });
+            const translation = sentence.translations[0];
+            // Use idiomatic translation if available, otherwise literal, otherwise legacy text field
+            const english = translation.idiomatic || translation.literal || translation.text;
+            if (english) {
+              reviewData.translations.push({
+                id: sentence.id,
+                type: 'paragraph',
+                chinese: sentence.zh || sentence.content,
+                english: english,
+                context: getContext(data.content, block, sentence)
+              });
+            }
           }
         }
       } else if (block.type === 'table_row') {
         for (const cell of block.cells || []) {
-          if (cell.translation) {
+          // Handle both old translation field and new idiomatic field
+          const english = cell.idiomatic || cell.translation;
+          if (english) {
             reviewData.translations.push({
               id: cell.id,
               type: 'table_cell',
               chinese: cell.content,
-              english: cell.translation,
+              english: english,
               context: getTableContext(data.content, block, cell)
             });
           }
@@ -56,13 +63,18 @@ function extractTranslationsForReview(filePath) {
       } else if (block.type === 'table_header') {
         for (const sentence of block.sentences || []) {
           if (sentence.translations && sentence.translations.length > 0) {
-            reviewData.translations.push({
-              id: sentence.id,
-              type: 'table_header',
-              chinese: sentence.zh || sentence.content,
-              english: sentence.translations[0].text,
-              context: getTableContext(data.content, block, sentence)
-            });
+            const translation = sentence.translations[0];
+            // Use idiomatic translation if available, otherwise literal, otherwise legacy text field
+            const english = translation.idiomatic || translation.literal || translation.text;
+            if (english) {
+              reviewData.translations.push({
+                id: sentence.id,
+                type: 'table_header',
+                chinese: sentence.zh || sentence.content,
+                english: english,
+                context: getTableContext(data.content, block, sentence)
+              });
+            }
           }
         }
       }
