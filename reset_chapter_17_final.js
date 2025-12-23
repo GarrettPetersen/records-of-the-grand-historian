@@ -47,3 +47,4 @@ data.meta.translatedCount = 0;
 // Write back
 fs.writeFileSync('./data/shiji/017.json', JSON.stringify(data, null, 2));
 console.log('Removed all translations from Chapter 17 and reset count to 0');
+
