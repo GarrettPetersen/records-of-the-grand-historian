@@ -209,19 +209,19 @@ function normalizeWhitespace(text) {
  */
 function parseAnnotation(title) {
   if (!title) return null;
-  
+
   const pipeIdx = title.indexOf(' | ');
   if (pipeIdx === -1) {
     return { pinyin: title.trim(), definitions: [] };
   }
-  
+
   const pinyin = title.slice(0, pipeIdx).trim();
   const defPart = title.slice(pipeIdx + 3).trim();
-  
+
   // Parse numbered definitions: "1. def1, 2. def2" or single definition
   const definitions = [];
   const defMatches = defPart.match(/\d+\.\s*[^,\d]+(?:,\s*)?/g);
-  
+
   if (defMatches) {
     for (const match of defMatches) {
       const def = match.replace(/^\d+\.\s*/, '').replace(/,\s*$/, '').trim();
@@ -230,7 +230,7 @@ function parseAnnotation(title) {
   } else if (defPart) {
     definitions.push(defPart);
   }
-  
+
   return { pinyin, definitions };
 }
 
@@ -239,18 +239,18 @@ function parseAnnotation(title) {
  */
 function extractTokensFromSpans($, $spans) {
   const tokens = [];
-  
+
   $spans.each((_, el) => {
     const $el = $(el);
     const text = $el.text().trim();
     if (!text) return;
-    
+
     const title = $el.attr('title');
     const headwordId = $el.attr('value');
     const isProperNoun = $el.hasClass('propernoun');
-    
+
     const annotation = parseAnnotation(title);
-    
+
     tokens.push({
       text,
       headwordId: headwordId ? parseInt(headwordId, 10) : null,
@@ -258,7 +258,7 @@ function extractTokensFromSpans($, $spans) {
       ...annotation
     });
   });
-  
+
   return tokens;
 }
 
@@ -267,10 +267,10 @@ function extractTokensFromSpans($, $spans) {
  */
 function updateGlossary(existingGlossary, tokens) {
   const glossary = { ...existingGlossary };
-  
+
   for (const token of tokens) {
     if (!token.headwordId) continue;
-    
+
     const key = String(token.headwordId);
     if (!glossary[key]) {
       glossary[key] = {
@@ -282,7 +282,7 @@ function updateGlossary(existingGlossary, tokens) {
       };
     }
   }
-  
+
   return glossary;
 }
 
@@ -292,7 +292,7 @@ function updateGlossary(existingGlossary, tokens) {
 function segmentSentences(text) {
   const sentences = [];
   const parts = text.split(SENTENCE_ENDINGS);
-  
+
   let current = '';
   for (let i = 0; i < parts.length; i++) {
     current += parts[i];
@@ -302,20 +302,20 @@ function segmentSentences(text) {
       current = '';
     }
   }
-  
+
   // Don't forget remaining text without ending punctuation
   if (current.trim()) {
     sentences.push(current.trim());
   }
-  
+
   // Post-process: merge standalone closing quotes and move leading quotes
   const merged = [];
   const closeQuotesOnly = /^[」"'』】)]+$/;
   const startsWithCloseQuote = /^([」"'』】)]+)(.+)/;
-  
+
   for (let i = 0; i < sentences.length; i++) {
     const sentence = sentences[i];
-    
+
     // Case 1: Sentence is only a closing quote - append to previous
     if (closeQuotesOnly.test(sentence) && merged.length > 0) {
       merged[merged.length - 1] += sentence;
@@ -335,7 +335,7 @@ function segmentSentences(text) {
       }
     }
   }
-  
+
   return merged;
 }
 
@@ -469,11 +469,11 @@ function parseCtextTables($, $table, startSentenceCounter, customHeaderText = ''
       const cellText = $(cellElement).text().trim();
       // Include empty cells to preserve table structure
       const isEmpty = !cellText || cellText === '—' || cellText === '－' || cellText === '';
-        cells.push({
-          id: `s${++sentenceCounter}`,
+      cells.push({
+        id: `s${++sentenceCounter}`,
         zh: isEmpty ? '' : cellText,
-          translations: [{ lang: 'en', text: '', translator: '' }]
-        });
+        translations: [{ lang: 'en', literal: '', idiomatic: '', translator: '' }]
+      });
     });
 
     console.error(`Processing row ${rowIndex} with ${cells.length} cells`);
@@ -512,7 +512,7 @@ function parseCtextTables($, $table, startSentenceCounter, customHeaderText = ''
         sentences: rowCells.map(cell => ({
           id: cell.id,
           zh: cell.content,
-          translations: [{ lang: 'en', text: '', translator: '' }]
+          translations: [{ lang: 'en', literal: '', idiomatic: '', translator: '' }]
         })),
         translations: []
       };
@@ -600,9 +600,9 @@ function extractCtextContent($, startSentenceCounter, url = '', chapter = '') {
           sentences: sentences.map((sentence, idx) => ({
             id: `s${(++sentenceCounter).toString().padStart(4, '0')}`,
             zh: sentence,
-            translations: [{ lang: 'en', text: '', translator: '' }]
+            translations: [{ lang: 'en', literal: '', idiomatic: '', translator: '' }]
           })),
-          translations: [{ lang: 'en', text: '', translator: '' }]
+          translations: [{ lang: 'en', literal: '', idiomatic: '', translator: '' }]
         };
         content.push(paragraphContent);
       }
@@ -651,7 +651,7 @@ function extractCtextContent($, startSentenceCounter, url = '', chapter = '') {
   let currentGroup = [];
   for (let i = 0; i < tableIndices.length; i++) {
     const index = tableIndices[i];
-    if (currentGroup.length === 0 || index === tableIndices[i-1] + 1) {
+    if (currentGroup.length === 0 || index === tableIndices[i - 1] + 1) {
       currentGroup.push(index);
     } else {
       tableGroups.push([...currentGroup]);
@@ -681,7 +681,7 @@ function extractCtextContent($, startSentenceCounter, url = '', chapter = '') {
             sentences: firstRow.cells.map(cell => ({
               id: cell.id,
               zh: cell.content,
-              translations: [{ lang: 'en', text: '', translator: '' }]
+              translations: [{ lang: 'en', literal: '', idiomatic: '', translator: '' }]
             }))
           };
 
@@ -709,7 +709,7 @@ function extractContent($, isFromCtext = false, startSentenceCounter = 0, url = 
     const result = extractCtextContent($, sentenceCounter, url, chapter);
     return result;
   }
-  
+
   // Get the main content area
   let $main = $('main.main-content');
   if (!$main.length) {
@@ -720,53 +720,53 @@ function extractContent($, isFromCtext = false, startSentenceCounter = 0, url = 
     // Fallback to body
     $main = $('body');
   }
-  
+
   // Get all vocabulary spans for the glossary
   const $allSpans = $main.find('span.vocabulary, span.propernoun');
   const allTokens = extractTokensFromSpans($, $allSpans);
-  
+
   // Get the HTML content and split by <br> tags to find paragraphs
   let html = $main.html();
-  
+
   // Extract text between </header> and <footer (or end)
   const headerEndMatch = html.match(/<\/header>/i);
   const footerMatch = html.match(/<footer/i);
-  
+
   if (headerEndMatch) {
     const startIdx = headerEndMatch.index + headerEndMatch[0].length;
     const endIdx = footerMatch ? footerMatch.index : html.length;
     html = html.slice(startIdx, endIdx);
   }
-  
+
   // Remove the "Click on any word" paragraph
   html = html.replace(/<p>\s*Click on any word[^<]*<\/p>/gi, '');
-  
+
   // Remove the footer source/copyright text that appears on every page
   html = html.replace(/Source:\s*Chinese Text Project[^]*?<\/p>/gi, '');
   html = html.replace(/Dictionary cache status:[^<]*<\/p>/gi, '');
   html = html.replace(/Copyright Fo Guang Shan[^]*?<\/p>/gi, '');
   html = html.replace(/Glossary and Other Vocabulary<\/a>/gi, '');
-  
+
   // Replace <br/> and <br> with a marker we can split on
   const BR_MARKER = '\n§BR§\n';
   html = html.replace(/<br\s*\/?>/gi, BR_MARKER);
-  
+
   // Load the cleaned HTML
   const $content = load(html, { decodeEntities: true });
-  
+
   // Get the text, which now has our markers
   let text = $content.root().text();
-  
+
   // Split into paragraphs by our marker
   const paragraphs = text.split('§BR§')
     .map(p => normalizeWhitespace(p))
     .filter(p => p);
-  
+
   // Process paragraphs - look for Chinese-English pairs
   let i = 0;
   while (i < paragraphs.length) {
     const para = paragraphs[i];
-    
+
     if (shouldSkipLine(para)) {
       i++;
       continue;
@@ -800,7 +800,7 @@ function extractContent($, isFromCtext = false, startSentenceCounter = 0, url = 
       i++;
       continue;
     }
-    
+
     if (isMostlyChinese(para)) {
       // Check if next paragraph is English translation
       // Skip any section headers first
@@ -810,10 +810,10 @@ function extractContent($, isFromCtext = false, startSentenceCounter = 0, url = 
       }
       const nextPara = nextIdx < paragraphs.length ? paragraphs[nextIdx] : null;
       const hasEnglishTranslation = nextPara && isMostlyEnglish(nextPara);
-      
+
       // Segment Chinese into sentences
       const zhSentences = segmentSentences(para);
-      
+
       if (hasEnglishTranslation) {
         // We have parallel text - attempt to align sentence-by-sentence
         const enText = nextPara;
@@ -829,13 +829,15 @@ function extractContent($, isFromCtext = false, startSentenceCounter = 0, url = 
             zh: s,
             translations: [{
               lang: 'en',
-              text: alignedTranslations[idx] || '',
+              literal: (alignedTranslations[idx] && isActualTranslation) ? alignedTranslations[idx] : '',
+              idiomatic: '',
               translator: (alignedTranslations[idx] && isActualTranslation) ? 'Herbert J. Allen (1894)' : ''
             }]
           })),
           translations: [{
             lang: 'en',
-            text: enText,
+            literal: isActualTranslation ? enText : '',
+            idiomatic: '',
             translator: isActualTranslation ? 'Herbert J. Allen (1894)' : ''
           }]
         };
@@ -852,13 +854,15 @@ function extractContent($, isFromCtext = false, startSentenceCounter = 0, url = 
             zh: s,
             translations: [{
               lang: 'en',
-              text: '',
+              literal: '',
+              idiomatic: '',
               translator: ''
             }]
           })),
           translations: [{
             lang: 'en',
-            text: '',
+            literal: '',
+            idiomatic: '',
             translator: ''
           }]
         };
@@ -870,7 +874,7 @@ function extractContent($, isFromCtext = false, startSentenceCounter = 0, url = 
       i++;
     }
   }
-  
+
   return { content, tokens: allTokens, sentenceCounter };
 }
 
@@ -880,11 +884,11 @@ function extractContent($, isFromCtext = false, startSentenceCounter = 0, url = 
 function parseTitle($) {
   const h3 = $('h3').first().text() || $('h2').first().text() || '';
   const text = normalizeWhitespace(h3);
-  
+
   // Try to split Chinese/English parts
   // Format usually: "卷三百六十九 列傳... Volume 369 Biographies..."
   const volumeMatch = text.match(/^(.+?)\s+(Volume\s+\d+.*)$/i);
-  
+
   if (volumeMatch) {
     return {
       zh: volumeMatch[1].trim(),
@@ -892,7 +896,7 @@ function parseTitle($) {
       raw: text
     };
   }
-  
+
   return {
     zh: text,
     en: null,
@@ -904,7 +908,7 @@ function listBooks() {
   console.log('\nAvailable books (24 Dynastic Histories):\n');
   console.log('Book ID'.padEnd(20) + 'English Name'.padEnd(45) + 'Chinese'.padEnd(12) + 'Dynasty/Period');
   console.log('='.repeat(120));
-  
+
   for (const [id, info] of Object.entries(BOOKS)) {
     console.log(
       id.padEnd(20) +
@@ -913,7 +917,7 @@ function listBooks() {
       info.dynasty
     );
   }
-  
+
   console.log('\nUsage: node scrape.js <book-id> <chapter-number> [--glossary <path>] [--url <custom-url>]');
   console.log('Example: node scrape.js songshi 369 --glossary data/glossary.json');
   console.log('Example: node scrape.js shiji 013 --url https://ctext.org/shiji/san-dai-shi-biao\n');
@@ -943,7 +947,7 @@ function getCtextUrl(bookId, chapter) {
     const ctextUrlsPath = path.join(process.cwd(), 'data', 'ctext-urls.json');
     if (fs.existsSync(ctextUrlsPath)) {
       const ctextUrls = JSON.parse(fs.readFileSync(ctextUrlsPath, 'utf8'));
-  return ctextUrls[bookId]?.[chapter];
+      return ctextUrls[bookId]?.[chapter];
     }
   } catch (err) {
     console.error(`Warning: Could not load ctext URLs from data file: ${err.message}`);
@@ -981,10 +985,10 @@ async function scrapeTabularChapter(bookId, chapter, glossaryPath, customUrl) {
     console.error('Falling back to regular chinesenotes scraping...');
 
     // Fall back to regular scraping
-  const chinesenotesUrl = book.urlPattern.replace('{chapter}', chapter);
-  const chinesenotesHtml = await fetchContent(chinesenotesUrl);
+    const chinesenotesUrl = book.urlPattern.replace('{chapter}', chapter);
+    const chinesenotesHtml = await fetchContent(chinesenotesUrl);
     const chinesenotes$ = load(chinesenotesHtml, { decodeEntities: true });
-  const chinesenotesTitle = parseTitle(chinesenotes$);
+    const chinesenotesTitle = parseTitle(chinesenotes$);
     const { content: finalContent, tokens: finalTokens } = extractContent(chinesenotes$);
 
     const result = {
@@ -1144,7 +1148,7 @@ async function scrapeChapter(bookId, chapter, glossaryPath, customUrl) {
   }
 
   const targetUrl = customUrl || book.urlPattern.replace('{chapter}', chapter);
-  
+
   // Load existing glossary if provided
   let glossary = {};
   if (glossaryPath && fs.existsSync(glossaryPath)) {
@@ -1156,7 +1160,7 @@ async function scrapeChapter(bookId, chapter, glossaryPath, customUrl) {
       console.error(`Warning: Could not load glossary from ${glossaryPath}: ${err.message}`);
     }
   }
-  
+
   let html;
   try {
     if (customUrl && customUrl.includes('ctext.org')) {
@@ -1181,14 +1185,14 @@ async function scrapeChapter(bookId, chapter, glossaryPath, customUrl) {
       });
     } else {
       // Use fetch for other URLs
-    const res = await fetch(targetUrl, {
-      headers: { 'user-agent': 'records-grand-historian-scraper/1.0' }
-    });
-    
-    if (!res.ok) {
-      throw new Error(`Failed to fetch ${targetUrl}: ${res.status} ${res.statusText}`);
-    }
-    
+      const res = await fetch(targetUrl, {
+        headers: { 'user-agent': 'records-grand-historian-scraper/1.0' }
+      });
+
+      if (!res.ok) {
+        throw new Error(`Failed to fetch ${targetUrl}: ${res.status} ${res.statusText}`);
+      }
+
       html = await res.text();
     }
     const $ = load(html);
@@ -1196,7 +1200,7 @@ async function scrapeChapter(bookId, chapter, glossaryPath, customUrl) {
     const title = parseTitle($);
     const isFromCtext = customUrl && customUrl.includes('ctext.org');
     const { content, tokens } = extractContent($, isFromCtext);
-    
+
     // Update glossary with new tokens
     glossary = updateGlossary(glossary, tokens);
 
@@ -1257,7 +1261,7 @@ async function scrapeChapter(bookId, chapter, glossaryPath, customUrl) {
 
 async function main() {
   const args = process.argv.slice(2);
-  
+
   if (args.length === 0 || args[0] === '--help' || args[0] === '-h') {
     console.log('\nUsage:');
     console.log('  node scrape.js <book-id> <chapter> [--glossary <path>]');
@@ -1274,29 +1278,29 @@ async function main() {
     console.log('  - glossary: Updated global word annotations\n');
     process.exit(0);
   }
-  
+
   if (args[0] === '--list' || args[0] === '-l') {
     listBooks();
     process.exit(0);
   }
-  
+
   if (args.length < 2) {
     console.error('Error: Please provide both book ID and chapter number');
     console.error('Usage: node scrape.js <book-id> <chapter>');
     console.error('Use --list to see available books');
     process.exit(1);
   }
-  
+
   const bookId = args[0];
   const chapter = args[1];
-  
+
   // Check for --glossary option
   let glossaryPath = null;
   const glossaryIdx = args.indexOf('--glossary');
   if (glossaryIdx !== -1 && glossaryIdx + 1 < args.length) {
     glossaryPath = args[glossaryIdx + 1];
   }
-  
+
   // Check for --url option
   let customUrl = null;
   const urlIdx = args.indexOf('--url');
