@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 
 /**
- * extract-untranslated.js - Extract untranslated sentences from a chapter
- * 
- * Creates a JSON file mapping sentence IDs to Chinese text for all
- * untranslated sentences in a chapter.
- * 
+ * extract-untranslated.js - Extract sentences for translation/review with existing translations
+ *
+ * Creates a JSON file with all sentences in a chapter, including existing
+ * literal/idiomatic translations for reference. Useful for batch translation
+ * and quality review workflows.
+ *
  * Usage:
  *   node extract-untranslated.js <chapter-file> [output-file]
  *   node extract-untranslated.js data/shiji/007.json
- *   node extract-untranslated.js data/shiji/007.json translations/untranslated_007.json
+ *   node extract-untranslated.js data/shiji/007.json translations/for_review_007.json
  */
 
 import fs from 'node:fs';
@@ -62,34 +63,81 @@ function extractUntranslated(filePath, outputPath = null) {
     }
 
     for (const sentence of sentences) {
-      let hasTranslation = false;
+      let hasIdiomaticTranslation = false;
+      let hasLiteralTranslation = false;
       let chineseText = '';
       let sentenceId = '';
+      let existingTranslations = null;
 
       if (block.type === 'paragraph') {
         const trans = sentence.translations[0];
-        // Prioritize idiomatic translation, fall back to literal
-        hasTranslation = (trans.idiomatic && trans.idiomatic.trim() !== '') ||
-                        (trans.literal && trans.literal.trim() !== '');
+        const translator = trans.translator || '';
+
+        // Skip sentences translated by Herbert J. Allen (1894)
+        if (translator === 'Herbert J. Allen (1894)') {
+          continue;
+        }
+
+        hasIdiomaticTranslation = trans.idiomatic && trans.idiomatic.trim() !== '';
+        hasLiteralTranslation = trans.literal && trans.literal.trim() !== '';
         chineseText = sentence.zh;
         sentenceId = sentence.id;
+
+        // Include existing translations for reference
+        if (hasIdiomaticTranslation || hasLiteralTranslation) {
+          existingTranslations = {};
+          if (hasLiteralTranslation) existingTranslations.literal = trans.literal;
+          if (hasIdiomaticTranslation) existingTranslations.idiomatic = trans.idiomatic;
+        }
       } else if (block.type === 'table_row') {
-        // Prioritize idiomatic translation, fall back to literal
-        hasTranslation = (sentence.idiomatic && sentence.idiomatic.trim() !== '') ||
-                        (sentence.literal && sentence.literal.trim() !== '');
+        const translator = sentence.translator || '';
+
+        // Skip sentences translated by Herbert J. Allen (1894)
+        if (translator === 'Herbert J. Allen (1894)') {
+          continue;
+        }
+
+        hasIdiomaticTranslation = sentence.idiomatic && sentence.idiomatic.trim() !== '';
+        hasLiteralTranslation = sentence.literal && sentence.literal.trim() !== '';
         chineseText = sentence.content;
         sentenceId = sentence.id;
+
+        // Include existing translations for reference
+        if (hasIdiomaticTranslation || hasLiteralTranslation) {
+          existingTranslations = {};
+          if (hasLiteralTranslation) existingTranslations.literal = sentence.literal;
+          if (hasIdiomaticTranslation) existingTranslations.idiomatic = sentence.idiomatic;
+        }
       } else if (block.type === 'table_header') {
         const trans = sentence.translations[0];
-        // Prioritize idiomatic translation, fall back to literal
-        hasTranslation = (trans.idiomatic && trans.idiomatic.trim() !== '') ||
-                        (trans.literal && trans.literal.trim() !== '');
+        const translator = trans.translator || '';
+
+        // Skip sentences translated by Herbert J. Allen (1894)
+        if (translator === 'Herbert J. Allen (1894)') {
+          continue;
+        }
+
+        hasIdiomaticTranslation = trans.idiomatic && trans.idiomatic.trim() !== '';
+        hasLiteralTranslation = trans.literal && trans.literal.trim() !== '';
         chineseText = sentence.zh;
         sentenceId = sentence.id;
+
+        // Include existing translations for reference
+        if (hasIdiomaticTranslation || hasLiteralTranslation) {
+          existingTranslations = {};
+          if (hasLiteralTranslation) existingTranslations.literal = trans.literal;
+          if (hasIdiomaticTranslation) existingTranslations.idiomatic = trans.idiomatic;
+        }
       }
 
-      if (!hasTranslation) {
-        untranslated[sentenceId] = chineseText;
+      // Only include sentences that are missing idiomatic translations
+      const hasIdiomatic = existingTranslations?.idiomatic && existingTranslations.idiomatic.trim() !== '';
+      if (!hasIdiomatic) {
+        untranslated[sentenceId] = {
+          chinese: chineseText,
+          literal: existingTranslations?.literal || '',
+          idiomatic: existingTranslations?.idiomatic || ''
+        };
       }
     }
   }
@@ -107,9 +155,12 @@ function extractUntranslated(filePath, outputPath = null) {
   }
   
   fs.writeFileSync(outputPath, JSON.stringify(untranslated, null, 2), 'utf8');
-  
-  // Count all processed sentences
+
+  // Count statistics based on idiomatic translations (our priority)
   let actualTotal = 0;
+  let idiomaticTranslated = 0;
+
+  // Re-count to get accurate statistics
   for (const block of data.content) {
     if (block.type === 'paragraph') {
       if (isGenealogicalTable && block.sentences && block.sentences.length > 0) {
@@ -118,24 +169,43 @@ function extractUntranslated(filePath, outputPath = null) {
           continue;
         }
       }
-      actualTotal += block.sentences.length;
+      for (const sentence of block.sentences) {
+        actualTotal++;
+        const trans = sentence.translations?.[0];
+        // Count as translated if it has idiomatic translation OR is by Allen
+        if ((trans?.idiomatic && trans.idiomatic.trim() !== '') ||
+            (trans?.translator === 'Herbert J. Allen (1894)')) {
+          idiomaticTranslated++;
+        }
+      }
     } else if (block.type === 'table_row') {
       for (const cell of block.cells) {
         if (cell.content && cell.content.trim()) {
           actualTotal++;
+          // Count as translated if it has idiomatic translation OR is by Allen
+          if ((cell.idiomatic && cell.idiomatic.trim() !== '') ||
+              (cell.translator === 'Herbert J. Allen (1894)')) {
+            idiomaticTranslated++;
+          }
         }
       }
     } else if (block.type === 'table_header') {
       for (const sentence of block.sentences) {
         if (sentence.zh && sentence.zh.trim()) {
           actualTotal++;
+          const trans = sentence.translations?.[0];
+          // Count as translated if it has idiomatic translation OR is by Allen
+          if ((trans?.idiomatic && trans.idiomatic.trim() !== '') ||
+              (trans?.translator === 'Herbert J. Allen (1894)')) {
+            idiomaticTranslated++;
+          }
         }
       }
     }
   }
 
-  const untranslatedCount = Object.keys(untranslated).length;
-  const translatedCount = actualTotal - untranslatedCount;
+  const untranslatedCount = actualTotal - idiomaticTranslated;
+  const translatedCount = idiomaticTranslated;
   const total = actualTotal;
   const percent = total > 0 ? Math.round((translatedCount / total) * 100) : 0;
   
@@ -162,7 +232,9 @@ Examples:
   node extract-untranslated.js data/shiji/007.json translations/untranslated_007.json
 
 Output:
-  Creates a JSON file with untranslated sentence IDs mapped to Chinese text.
+  Creates a JSON file with all sentence IDs mapped to objects containing:
+  - "chinese": the Chinese text
+  - "existing": existing literal/idiomatic translations (if any)
   Default output: translations/untranslated_<chapter>.json
 `);
     process.exit(0);

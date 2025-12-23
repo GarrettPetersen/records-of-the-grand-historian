@@ -43,11 +43,20 @@ for (const file of translationFiles) {
     let chineseCharsFound = 0;
     let englishTranslations = 0;
 
-    for (const [id, text] of Object.entries(fileTranslations)) {
-      if (text && typeof text === 'string') {
-        if (CHINESE_CHARS_REGEX.test(text)) {
+    for (const [id, translation] of Object.entries(fileTranslations)) {
+      let translationText = '';
+      if (typeof translation === 'string') {
+        // Legacy format
+        translationText = translation;
+      } else if (translation && typeof translation === 'object') {
+        // New format with chinese/literal/idiomatic
+        translationText = translation.idiomatic || translation.literal || '';
+      }
+
+      if (translationText && typeof translationText === 'string') {
+        if (CHINESE_CHARS_REGEX.test(translationText)) {
           chineseCharsFound++;
-        } else if (text.trim().length > 0) {
+        } else if (translationText.trim().length > 0) {
           englishTranslations++;
         }
       }
@@ -126,7 +135,11 @@ for (const block of chapter.content) {
 
       // Check if sentence has content
       const hasChineseContent = chineseContent && chineseContent.trim();
-      const hasNewTranslation = newTranslation && newTranslation.trim();
+      // Handle both legacy string format and new object format
+      const hasNewTranslation = (typeof newTranslation === 'string' && newTranslation.trim()) ||
+                               (newTranslation && typeof newTranslation === 'object' &&
+                                (newTranslation.literal && newTranslation.literal.trim()) ||
+                                (newTranslation.idiomatic && newTranslation.idiomatic.trim()));
 
       // Existing translation (if any) - check idiomatic first, then literal
       const existingTranslation = block.type === 'table_row' ?
@@ -158,15 +171,18 @@ for (const block of chapter.content) {
       // Check for suspicious overwrites (very short translations for long Chinese)
       if (hasChineseContent && hasNewTranslation && existingTranslation) {
         const chineseWords = chineseContent.split(/\s+/).length;
-        const newEnglishWords = newTranslation.split(/\s+/).length;
+        // Extract translation text from object or use string directly
+        const translationText = (typeof newTranslation === 'string') ? newTranslation :
+                               (newTranslation.idiomatic || newTranslation.literal || '');
+        const newEnglishWords = translationText.split(/\s+/).length;
         if (newEnglishWords < chineseWords * 0.2 && chineseWords > 3) {
-          problematicTranslations.push({
-            id: sentence.id,
-            chinese: chineseContent,
-            existing: existingTranslation,
-            newTranslation: newTranslation,
-            issue: 'suspiciously_short'
-          });
+        problematicTranslations.push({
+          id: sentence.id,
+          chinese: chineseContent,
+          existing: existingTranslation,
+          newTranslation: translationText,
+          issue: 'suspiciously_short'
+        });
         }
       }
     }
@@ -177,9 +193,13 @@ if (problematicTranslations.length > 0) {
   console.error(`❌ ERROR: Found ${problematicTranslations.length} problematic translations:`);
   problematicTranslations.slice(0, 10).forEach(item => {
     if (item.issue === 'translating_empty_chinese') {
-      console.error(`   ${item.id}: Trying to translate empty Chinese "${item.chinese}" with "${item.newTranslation}"`);
+      const displayTranslation = (typeof item.newTranslation === 'string') ? item.newTranslation :
+                                (item.newTranslation?.idiomatic || item.newTranslation?.literal || 'N/A');
+      console.error(`   ${item.id}: Trying to translate empty Chinese "${item.chinese}" with "${displayTranslation}"`);
     } else if (item.issue === 'empty_translation_for_content') {
-      console.error(`   ${item.id}: Providing empty translation "${item.newTranslation}" for Chinese "${item.chinese}"`);
+      const displayTranslation = (typeof item.newTranslation === 'string') ? item.newTranslation :
+                                (item.newTranslation?.idiomatic || item.newTranslation?.literal || 'N/A');
+      console.error(`   ${item.id}: Providing empty translation "${displayTranslation}" for Chinese "${item.chinese}"`);
     } else if (item.issue === 'suspiciously_short') {
       console.error(`   ${item.id}: Suspiciously short translation:`);
       console.error(`     Chinese: "${item.chinese}"`);
@@ -215,7 +235,8 @@ for (const block of chapter.content) {
         translationPairs.push({
           id: sentence.id,
           chinese: chineseContent,
-          english: translation
+          english: (typeof translation === 'string') ? translation :
+                  (translation.idiomatic || translation.literal || '')
         });
       }
     }
@@ -261,7 +282,15 @@ for (const block of chapter.content) {
   if (sentences.length === 0) continue;
 
   for (const sentence of sentences) {
-    const translation = translations[sentence.id];
+    const translationInput = translations[sentence.id];
+    // Handle both legacy string format and new object format
+    let translation = '';
+    if (typeof translationInput === 'string') {
+      translation = translationInput;
+    } else if (translationInput && typeof translationInput === 'object') {
+      // Use idiomatic if available, otherwise literal
+      translation = translationInput.idiomatic || translationInput.literal || '';
+    }
     if (translation && translation.trim()) {
       // Basic validation: check if translation looks reasonable for the Chinese content
       const chineseText = block.type === 'table_row' ? sentence.content : sentence.zh;
@@ -281,20 +310,31 @@ for (const block of chapter.content) {
                         (block.type !== 'table_row' && sentence.zh && sentence.zh.trim());
 
       if (hasContent) {
+        // Check if sentence is already translated by Herbert J. Allen (1894) - skip these
+        const existingTranslator = block.type === 'table_row' ?
+          sentence.translator :
+          (sentence.translations && sentence.translations[0] && sentence.translations[0].translator);
+
+        if (existingTranslator === 'Herbert J. Allen (1894)') {
+          console.log(`Skipping ${sentence.id} - already translated by Herbert J. Allen (1894)`);
+          translatedCount++;
+          continue;
+        }
+
         // Check if translation already exists and warn about overwrites
         const existingTranslation = block.type === 'table_row' ?
-          sentence.translation :
-          (sentence.translations && sentence.translations[0] && sentence.translations[0].text);
+          (sentence.idiomatic || sentence.literal) :
+          (sentence.translations && sentence.translations[0] && (sentence.translations[0].idiomatic || sentence.translations[0].literal));
 
         if (existingTranslation && existingTranslation.trim()) {
           console.warn(`Warning: Overwriting existing translation for ${sentence.id}`);
           console.warn(`  Old: "${existingTranslation}"`);
-          console.warn(`  New: "${JSON.stringify(translation)}"`);
+          console.warn(`  New: "${JSON.stringify(translationInput)}"`);
         }
 
         // Apply both literal and idiomatic translations
-        const literalTranslation = translation.literal || translation;
-        const idiomaticTranslation = translation.idiomatic || null;
+        const literalTranslation = translationInput.literal || translation;
+        const idiomaticTranslation = translationInput.idiomatic || null;
 
         // For table cells, set translation fields directly
         if (block.type === 'table_row') {

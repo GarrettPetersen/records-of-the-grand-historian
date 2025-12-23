@@ -64,11 +64,12 @@ for (const file of translationFiles) {
         validationErrors++;
       }
 
-      // Validate translation format (can be string or object with literal/idiomatic)
+      // Validate translation format (can be string or object with chinese/literal/idiomatic)
       let isValid = false;
       if (typeof translation === 'string') {
         isValid = translation.trim().length > 0;
       } else if (translation && typeof translation === 'object') {
+        // New format with chinese/literal/idiomatic fields
         isValid = (translation.literal && translation.literal.trim()) ||
                   (translation.idiomatic && translation.idiomatic.trim());
       }

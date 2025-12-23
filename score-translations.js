@@ -150,6 +150,12 @@ function scoreChapterFile(filePath) {
     for (const block of data.content) {
       if (block.type === 'paragraph') {
         for (const sentence of block.sentences || []) {
+          // Skip sentences translated by Herbert J. Allen (1894)
+          const translator = sentence.translations?.[0]?.translator;
+          if (translator === 'Herbert J. Allen (1894)') {
+            continue;
+          }
+
           // Check idiomatic first, then literal, supporting both old and new formats
           const translation = (sentence.idiomatic || sentence.translation) ||
                             (sentence.translations && sentence.translations[0] &&
@@ -167,6 +173,11 @@ function scoreChapterFile(filePath) {
       // Score table rows
       else if (block.type === 'table_row') {
         for (const cell of block.cells || []) {
+          // Skip cells translated by Herbert J. Allen (1894)
+          if (cell.translator === 'Herbert J. Allen (1894)') {
+            continue;
+          }
+
           if (cell.translation) {
             results.push(scoreTranslation({
               id: cell.id,

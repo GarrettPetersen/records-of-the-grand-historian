@@ -46,7 +46,7 @@ help:
 	@echo "  make score-translations     # Score translations for quality issues"
 	@echo "  make batch-quality-check    # Batch quality check on multiple chapters"
 	@echo "  make quality-score          # Score translation quality subjectively (1-10 scale)"
-	@echo "  make first-untranslated     # Find first chapter needing translation"
+	@echo "  make first-untranslated     # Find first chapter needing idiomatic translations"
 	@echo ""
 	@echo "Cleanup commands:"
 	@echo "  make clean-shiji            # Remove all Shiji data"
@@ -425,7 +425,7 @@ stats:
 # Find first partially translated chapter (less than 100%)
 .PHONY: first-untranslated
 first-untranslated:
-	@echo "Searching for first chapter needing translation..."
+	@echo "Searching for first chapter needing idiomatic translations..."
 	@echo "🎯 Remember: Translate like Ken Liu - prioritize semantic fidelity and modern readability"
 	@echo "   • Focus on semantic fidelity and modern readability"
 	@echo "   • Avoid added narrative or stylistic ornament"
@@ -437,14 +437,56 @@ first-untranslated:
 			book=$$(basename $$dir); \
 			for file in $$dir*.json; do \
 				if [ -f "$$file" ]; then \
-					translated=$$(jq -r '.meta.translatedCount // 0' "$$file" 2>/dev/null); \
-					total=$$(jq -r '.meta.sentenceCount // 0' "$$file" 2>/dev/null); \
-					if [ "$$total" -gt 0 ] 2>/dev/null && [ "$$translated" -lt "$$total" ]; then \
+					idiomatic_missing=$$($(NODE) -e " \
+						const data = JSON.parse(require('fs').readFileSync('$$file', 'utf8')); \
+						let total = 0, missing = 0; \
+						for (const block of data.content) { \
+							if (block.type === 'paragraph') { \
+								for (const sentence of block.sentences || []) { \
+									if (sentence.zh && sentence.zh.trim()) { \
+										total++; \
+										const trans = sentence.translations?.[0]; \
+										const translator = trans?.translator; \
+										if (translator !== 'Herbert J. Allen (1894)' && (!trans?.idiomatic || !trans.idiomatic.trim())) { \
+											missing++; \
+										} \
+									} \
+								} \
+							} else if (block.type === 'table_row') { \
+								for (const cell of block.cells || []) { \
+									if (cell.content && cell.content.trim()) { \
+										total++; \
+										const translator = cell.translator; \
+										if (translator !== 'Herbert J. Allen (1894)' && (!cell.idiomatic || !cell.idiomatic.trim())) { \
+											missing++; \
+										} \
+									} \
+								} \
+							} else if (block.type === 'table_header') { \
+								for (const sentence of block.sentences || []) { \
+									if (sentence.zh && sentence.zh.trim()) { \
+										total++; \
+										const trans = sentence.translations?.[0]; \
+										const translator = trans?.translator; \
+										if (translator !== 'Herbert J. Allen (1894)' && (!trans?.idiomatic || !trans.idiomatic.trim())) { \
+											missing++; \
+										} \
+									} \
+								} \
+							} \
+						} \
+						console.log(missing); \
+					" 2>/dev/null || echo "0"); \
+					if [ "$$idiomatic_missing" -gt 0 ] 2>/dev/null; then \
 						chapter=$$(basename "$$file" .json); \
-						percent=$$(echo "scale=1; $$translated * 100 / $$total" | bc 2>/dev/null || echo "0"); \
-						echo "Found: $$book chapter $$chapter ($$translated/$$total = $${percent}%)"; \
+						total=$$(jq -r '.meta.sentenceCount // 0' "$$file" 2>/dev/null); \
+						translated=$$(jq -r '.meta.translatedCount // 0' "$$file" 2>/dev/null); \
+						idiomatic_total=$$(echo "$$total - $$idiomatic_missing" | bc 2>/dev/null || echo "0"); \
+						percent=$$(echo "scale=1; $$idiomatic_total * 100 / $$total" | bc 2>/dev/null || echo "0"); \
+						echo "Found: $$book chapter $$chapter ($$idiomatic_total/$$total = $${percent}% idiomatic)"; \
 						echo "  File: $$file"; \
 						jq -r '.meta | "  Title: \(.title.zh // .title.raw)", "  English: \(.title.en // "N/A")", "  URL: \(.url)"' "$$file" 2>/dev/null; \
+						echo "  Missing idiomatic: $$idiomatic_missing sentences"; \
 						found=1; \
 						break 2; \
 					fi; \
@@ -453,5 +495,5 @@ first-untranslated:
 		fi; \
 	done; \
 	if [ $$found -eq 0 ]; then \
-		echo "No partially translated chapters found!"; \
+		echo "No chapters with missing idiomatic translations found!"; \
 	fi

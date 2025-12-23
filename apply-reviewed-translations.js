@@ -75,6 +75,7 @@ function applySingleTranslation(content, reviewItem) {
 
             if (newTranslation && newTranslation !== oldTranslation) {
               sentence.translations[0].text = newTranslation;
+              sentence.translations[0].idiomatic = newTranslation; // Also update idiomatic for consistency
               // Preserve original translator information
               sentence.translations[0].translator = sentence.translations[0].translator || 'Garrett M. Petersen (2025)';
               sentence.translations[0].reviewed = true;
@@ -111,6 +112,7 @@ function applySingleTranslation(content, reviewItem) {
 
             if (newTranslation && newTranslation !== oldTranslation) {
               sentence.translations[0].text = newTranslation;
+              sentence.translations[0].idiomatic = newTranslation; // Also update idiomatic for consistency
               // Preserve original translator information
               sentence.translations[0].translator = sentence.translations[0].translator || 'Garrett M. Petersen (2025)';
               sentence.translations[0].reviewed = true;

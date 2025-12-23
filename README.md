@@ -40,7 +40,7 @@ npm install
 ## Workflow Overview
 
 1. **Scrape** - Download Chinese text from chinesenotes.com or ctext.org
-2. **Translate** - Manually translate sentences using AI assistance (automated number translation allowed)
+2. **Translate** - Manually translate sentences with both literal and idiomatic versions using AI assistance (automated number translation allowed)
 3. **Quality Check** - Validate translations and fix any issues
 4. **Build** - Generate static pages and update metadata
 5. **Deploy** - Push to Cloudflare Pages
@@ -70,7 +70,7 @@ make hanshu-all                   # Scrape all 100 Book of Han chapters
 # View statistics
 make stats                        # Show chapter counts per book
 
-# Find next chapter to translate
+# Find next chapter to translate (prioritizes missing idiomatic translations)
 make first-untranslated
 
 # Validate all JSON
@@ -151,6 +151,9 @@ This project uses AI-assisted translation to translate untranslated or partially
 **⚠️ CRITICAL REQUIREMENTS FOR AI TRANSLATORS:**
 - YOU are the translator. Translate each sentence individually.
 - Provide **real, accurate English translations** - no placeholders, no Chinese text, no "[Translation needed]" messages.
+- Generate **both literal and idiomatic translations** for each sentence
+- **Literal translation**: Direct, accurate translation prioritizing semantic fidelity
+- **Idiomatic translation**: Natural, flowing English prioritizing modern readability (in Ken Liu style)
 - Maintain **historical accuracy and academic tone**.
 - Use **scholarly English** appropriate for classical Chinese historical texts.
 - **DO NOT** use automated scripts, batch processing, or external API calls (except for approved automated number translation).
@@ -174,32 +177,53 @@ This script **ONLY translates sentences that contain pure numbers** (like `"十�
 **Step 1: Check what needs translation**
 
 ```bash
-# Find the next untranslated chapter
+# Find the next chapter needing idiomatic translations
 make first-untranslated
 
 # Or check a specific chapter's status
 node extract-untranslated.js data/shiji/016.json
+# Note: Sentences by Herbert J. Allen (1894) are automatically skipped
 ```
 
 **Step 2: Extract untranslated content**
 
 ```bash
-# Extract untranslated sentences from a chapter
+# Extract sentences for translation/review from a chapter
 node extract-untranslated.js data/shiji/016.json
 
 # Output: translations/untranslated_016.json
-# Contains: { "s0001": "Chinese text...", "s0002": "..." }
+# Contains: {
+#   "s0001": {"chinese": "Chinese text...", "literal": "existing...", "idiomatic": "existing..."},
+#   "s0002": {"chinese": "Chinese text...", "literal": "", "idiomatic": ""}
+# }
 ```
 
 **Step 3: Create translation file**
 
-Create `translations/translations_016.json` with your manual translations:
+Create `translations/translations_016.json` with your manual translations. **You must provide both literal and idiomatic translations for each sentence:**
 
 ```json
 {
+  "s0001": {
+    "literal": "In ancient times, when the Qin dynasty first rose to power...",
+    "idiomatic": "Long ago, when Qin first established its power..."
+  },
+  "s0002": {
+    "literal": "The emperor toured the eastern provinces...",
+    "idiomatic": "The emperor traveled through the eastern regions..."
+  },
+  "s0003": {
+    "literal": "Five years passed with these events...",
+    "idiomatic": "Five years went by amid these developments..."
+  }
+}
+```
+
+**Legacy format is also supported:**
+```json
+{
   "s0001": "In ancient times, when the Qin dynasty first rose to power...",
-  "s0002": "The emperor toured the eastern provinces...",
-  "s0003": "Five years passed with these events..."
+  "s0002": "The emperor toured the eastern provinces..."
 }
 ```
 
@@ -213,7 +237,9 @@ node validate-translations.js data/shiji/016.json translations/translations_016.
 node apply-translations.js data/shiji/016.json translations/translations_016.json "Garrett M. Petersen (2025)" "grok-1.5"
 ```
 
-**Important**: Always validate translation files before applying them to prevent batch write errors and misaligned translations!
+**Important notes**:
+- Always validate translation files before applying them to prevent batch write errors and misaligned translations!
+- Sentences already translated by Herbert J. Allen (1894) will be automatically skipped to preserve attribution
 
 **Step 5: Verify and update**
 
@@ -234,22 +260,30 @@ node extract-untranslated.js data/shiji/014.json
 # Creates: translations/untranslated_014.json
 
 # Split into manageable batches (use a text editor or jq)
-# Create batch_014_01.json (first 100 sentences)
-# Create batch_014_02.json (next 100 sentences)
+# Create batch_014_01.json (first 100 sentences with existing translations)
+# Create batch_014_02.json (next 100 sentences with existing translations)
 # etc...
 ```
 
 **Step 2: Translate each batch**
 
-For each batch file, create a corresponding translation file:
+The extracted batches already contain existing translations. Edit them directly:
 
 ```bash
-# For batch_014_01.json, create:
-# translations/batch_014_01_translations.json
+# Edit the extracted batch file:
+# translations/untranslated_014.json (contains all sentences with existing translations pre-filled)
+
+# Edit literal/idiomatic fields as needed, then apply:
+node apply-translations.js data/shiji/014.json translations/untranslated_014.json "Garrett M. Petersen (2025)" "grok-1.5"
+```
+
+**Note**: Sentences already translated by Herbert J. Allen (1894) are not included in extraction batches and cannot be overwritten to maintain proper attribution.
+
+**Legacy string format also supported:**
+```json
 {
   "s0123": "Translation of first sentence...",
-  "s0124": "Translation of second sentence...",
-  // ... up to 100 entries
+  "s0124": "Translation of second sentence..."
 }
 ```
 
@@ -273,14 +307,34 @@ make update
 
 ### Translation Quality Guidelines
 
+### Dual Translation Approach
+
+To combat AI translation slippage toward overly literal renderings, this project requires **both literal and idiomatic translations** for each sentence:
+
+- **Literal Translation**: Direct, semantically faithful translation prioritizing accuracy over flow
+- **Idiomatic Translation**: Natural, flowing English translation prioritizing readability (Ken Liu style)
+
+**Benefits:**
+- Forces explicit consideration of both accuracy and readability
+- Prevents gradual drift toward literal translations
+- Provides multiple translation options for different reading preferences
+- Enables quality control by comparing literal vs idiomatic versions
+
+**Frontend Behavior:**
+- Displays **idiomatic** translation when available (preferred for reading)
+- Falls back to **literal** translation if idiomatic is missing
+- Maintains backward compatibility with legacy "text" fields
+
 **🎯 TRANSLATE LIKE KEN LIU:**
-- Prioritize semantic fidelity and modern readability with no added narrative or stylistic ornament
+- **Idiomatic translation**: Prioritize semantic fidelity and modern readability with no added narrative or stylistic ornament
+- **Literal translation**: Provide direct, accurate translation as reference
 - Aim for the literary quality and natural flow of Ken Liu's translation style
 - Focus on accurate meaning while ensuring smooth, readable English
 
 **✅ DO:**
-- Translate each sentence individually and accurately
-- **Use smooth, flowing English rather than word-by-word, choppy translations**
+- Translate each sentence individually with **both literal and idiomatic versions**
+- **Idiomatic**: Use smooth, flowing English rather than word-by-word, choppy translations
+- **Literal**: Provide direct, accurate translation as reference
 - Maintain historical and scholarly tone
 - Preserve classical Chinese naming conventions
 - Use consistent terminology throughout chapters
@@ -302,6 +356,8 @@ make update
 - **Missing context:** Consider the historical setting and character relationships
 
 If you find that you have used any kind of automated substitution script to translate (except for the approved auto-translate-numbers.js script for pure numerals), delete all translations and start over.
+
+**Migration Note:** All existing translations have been migrated to the dual literal/idiomatic format. Herbert J. Allen (1894) translations are automatically placed in the "idiomatic" field. Progress tracking now prioritizes idiomatic translation completeness.
 
 **Quality Check Commands:**
 
@@ -468,8 +524,10 @@ node fix-double-quotes.js data/shiji/010.json
           "translations": [
             {
               "lang": "en",
-              "text": "Huangdi (Yellow emperor) was the son of Shaodian...",
-              "translator": "Herbert J. Allen (1894)"
+              "literal": "Huangdi (Yellow emperor) was the son of Shaodian...",
+              "idiomatic": "The Yellow Emperor was Shaodian's son...",
+              "translator": "Garrett M. Petersen (2025)",
+              "model": "grok-1.5"
             }
           ]
         }
@@ -477,8 +535,10 @@ node fix-double-quotes.js data/shiji/010.json
       "translations": [
         {
           "lang": "en",
-          "text": "Huangdi (Yellow emperor) was the son of Shaodian...",
-          "translator": "Herbert J. Allen (1894)"
+          "literal": "Huangdi (Yellow emperor) was the son of Shaodian...",
+          "idiomatic": "The Yellow Emperor was Shaodian's son...",
+          "translator": "Garrett M. Petersen (2025)",
+          "model": "grok-1.5"
         }
       ]
     }
@@ -502,13 +562,29 @@ Shared across all books, keyed by chinesenotes.com's `headwordId`:
 }
 ```
 
+### Translation Schema: Literal vs Idiomatics
+
+This project uses a dual translation approach to ensure both accuracy and readability:
+
+- **Literal Translation**: Direct, semantically faithful translation prioritizing accuracy
+- **Idiomatic Translation**: Natural, flowing English prioritizing readability (Ken Liu style)
+
+**Frontend Display Priority:**
+1. Show **idiomatic** translation when available
+2. Fall back to **literal** translation if idiomatic is missing
+3. Fall back to legacy "text" field for backward compatibility
+
+**Progress Tracking:**
+- `make first-untranslated` prioritizes chapters missing idiomatic translations
+- Translation completeness considers idiomatic availability first
+
 ### Structure Details
 
 - **meta**: Book info, chapter, title (Chinese & English when available), counts, timestamp
 - **content**: Array of paragraph blocks, each containing:
   - `sentences`: Array with sentence-level Chinese text (`zh`) and translations
   - `id`: Unique sentence identifier for alignment (e.g., `s0001`)
-  - `translations`: Sentence-level English translation when available (aligned from paragraph)
+  - `translations`: Sentence-level English translation object with `literal`/`idiomatic` fields
 - **glossary**: Maintained separately in `data/glossary.json`, grows as you scrape more chapters
 
 ## Workflow
