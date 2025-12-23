@@ -21,3 +21,4 @@ content = content.replace(/"translatedCount": \d+/, '"translatedCount": 0');
 fs.writeFileSync('./data/shiji/017.json', content);
 console.log('Completely cleaned Chapter 17 of all translations');
 
+

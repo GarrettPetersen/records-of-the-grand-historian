@@ -70,7 +70,9 @@ function extractUntranslated(filePath, outputPath = null) {
       let existingTranslations = null;
 
       if (block.type === 'paragraph') {
-        const trans = sentence.translations[0];
+        const trans = sentence.translations?.[0];
+        if (!trans) continue; // Skip sentences without translations
+
         const translator = trans.translator || '';
 
         // Skip sentences translated by Herbert J. Allen (1894)
@@ -90,12 +92,8 @@ function extractUntranslated(filePath, outputPath = null) {
           if (hasIdiomaticTranslation) existingTranslations.idiomatic = trans.idiomatic;
         }
       } else if (block.type === 'table_row') {
-        const translator = sentence.translator || '';
-
-        // Skip sentences translated by Herbert J. Allen (1894)
-        if (translator === 'Herbert J. Allen (1894)') {
-          continue;
-        }
+        // Table cells don't have translator field, skip if already translated by Herbert J. Allen
+        // (This would be handled during scraping, so we can proceed)
 
         hasIdiomaticTranslation = sentence.idiomatic && sentence.idiomatic.trim() !== '';
         hasLiteralTranslation = sentence.literal && sentence.literal.trim() !== '';
@@ -109,7 +107,9 @@ function extractUntranslated(filePath, outputPath = null) {
           if (hasIdiomaticTranslation) existingTranslations.idiomatic = sentence.idiomatic;
         }
       } else if (block.type === 'table_header') {
-        const trans = sentence.translations[0];
+        const trans = sentence.translations?.[0];
+        if (!trans) continue; // Skip sentences without translations
+
         const translator = trans.translator || '';
 
         // Skip sentences translated by Herbert J. Allen (1894)
