@@ -47,6 +47,7 @@ help:
 	@echo "  make batch-quality-check    # Batch quality check on multiple chapters"
 	@echo "  make quality-score          # Score translation quality subjectively (1-10 scale)"
 	@echo "  make first-untranslated     # Find first chapter needing idiomatic translations"
+	@echo "  make first-untranslated BOOK=hanshu  # Find in specific book only"
 	@echo ""
 	@echo "Cleanup commands:"
 	@echo "  make clean-shiji            # Remove all Shiji data"
@@ -426,13 +427,23 @@ stats:
 .PHONY: first-untranslated
 first-untranslated:
 	@echo "Searching for first chapter needing idiomatic translations..."
+	@if [ -n "$(BOOK)" ]; then \
+		echo "Searching only in book: $(BOOK)"; \
+	else \
+		echo "Searching all books..."; \
+	fi
 	@echo "🎯 Remember: Translate like Ken Liu - prioritize semantic fidelity and modern readability"
 	@echo "   • Focus on semantic fidelity and modern readability"
 	@echo "   • Avoid added narrative or stylistic ornament"
 	@echo "   • Aim for the literary quality and natural flow of Ken Liu's translation style"
 	@echo ""
 	@found=0; \
-	for dir in data/*/; do \
+	if [ -n "$(BOOK)" ]; then \
+		dirs="data/$(BOOK)/"; \
+	else \
+		dirs=$$(find data -maxdepth 1 -type d -name "*" | grep -v "^data$$" | grep -v "^data/public$$" | sort); \
+	fi; \
+	for dir in $$dirs; do \
 		if [ -d "$$dir" ] && [ "$$(basename $$dir)" != "public" ]; then \
 			book=$$(basename $$dir); \
 			for file in $$dir*.json; do \
@@ -495,5 +506,9 @@ first-untranslated:
 		fi; \
 	done; \
 	if [ $$found -eq 0 ]; then \
-		echo "No chapters with missing idiomatic translations found!"; \
+		if [ -n "$(BOOK)" ]; then \
+			echo "No chapters with missing idiomatic translations found in $(BOOK)!"; \
+		else \
+			echo "No chapters with missing idiomatic translations found!"; \
+		fi; \
 	fi

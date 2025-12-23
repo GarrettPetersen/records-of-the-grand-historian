@@ -72,6 +72,7 @@ make stats                        # Show chapter counts per book
 
 # Find next chapter to translate (prioritizes missing idiomatic translations)
 make first-untranslated
+make first-untranslated BOOK=hanshu  # Find in specific book only
 
 # Validate all JSON
 make validate
@@ -179,6 +180,7 @@ This script **ONLY translates sentences that contain pure numbers** (like `"ÂçÅ‰
 ```bash
 # Find the next chapter needing idiomatic translations
 make first-untranslated
+make first-untranslated BOOK=hanshu  # Find in specific book only
 
 # Or check a specific chapter's status
 node extract-untranslated.js data/shiji/016.json
