@@ -378,11 +378,43 @@ function isSectionHeader(text) {
   if (text.length > 50) return false;
   if (!text.endsWith(':')) return false;
   if (text.includes('.')) return false;
-  
+
   // Check if it's mostly English
   const words = text.split(/\s+/);
   const englishWords = words.filter(w => /^[A-Za-z]+$/.test(w));
   return englishWords.length >= words.length * 0.7;
+}
+
+/**
+ * Check if text is boilerplate/public domain notice rather than actual translation
+ */
+function isBoilerplateText(text) {
+  if (!text) return true;
+
+  const t = text.toLowerCase().trim();
+
+  // Common boilerplate patterns that should not be attributed to Herbert J. Allen
+  const boilerplatePatterns = [
+    'public domain',
+    'this text is',
+    'copyright',
+    'all rights reserved',
+    'permission granted',
+    'free to copy',
+    'distributed under',
+    'creative commons',
+    'gnu general public',
+    'wikipedia',
+    '維基百科',
+    'dictionary cache',
+    'jump to dictionary',
+    'show parallel',
+    'chinese text project',
+    'home',
+    'source:'
+  ];
+
+  return boilerplatePatterns.some(pattern => t.includes(pattern));
 }
 
 /**
@@ -786,7 +818,10 @@ function extractContent($, isFromCtext = false, startSentenceCounter = 0, url = 
         // We have parallel text - attempt to align sentence-by-sentence
         const enText = nextPara;
         const alignedTranslations = alignTranslations(zhSentences, enText);
-        
+
+        // Only attribute to Herbert J. Allen if the translation isn't boilerplate
+        const isActualTranslation = !isBoilerplateText(enText);
+
         const block = {
           type: 'paragraph',
           sentences: zhSentences.map((s, idx) => ({
@@ -795,13 +830,13 @@ function extractContent($, isFromCtext = false, startSentenceCounter = 0, url = 
             translations: [{
               lang: 'en',
               text: alignedTranslations[idx] || '',
-              translator: alignedTranslations[idx] ? 'Herbert J. Allen (1894)' : ''
+              translator: (alignedTranslations[idx] && isActualTranslation) ? 'Herbert J. Allen (1894)' : ''
             }]
           })),
           translations: [{
             lang: 'en',
             text: enText,
-            translator: 'Herbert J. Allen (1894)'
+            translator: isActualTranslation ? 'Herbert J. Allen (1894)' : ''
           }]
         };
         content.push(block);
