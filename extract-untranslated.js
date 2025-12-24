@@ -250,17 +250,26 @@ Output:
   
   try {
     const result = extractUntranslated(filePath, outputPath);
-    
+
     console.log(`
 📖 Chapter: ${path.basename(result.filePath)}`);
     console.log(`📊 Translation Status:`);
     console.log(`   Total sentences: ${result.total}`);
     console.log(`   Translated: ${result.translated} (${result.percent}%)`);
     console.log(`   Untranslated: ${result.untranslated}`);
+
+    // Exit early if no untranslated sentences (prevent unnecessary file creation)
+    if (result.untranslated === 0) {
+      console.log(`
+✅ No untranslated sentences found. Nothing to extract.
+`);
+      process.exit(0);
+    }
+
     console.log(`
 💾 Saved to: ${result.outputPath}
 `);
-    
+
   } catch (err) {
     console.error(`Error: ${err.message}`);
     process.exit(1);

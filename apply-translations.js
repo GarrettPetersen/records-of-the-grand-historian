@@ -427,3 +427,19 @@ chapter.meta.citation = `Translation: ${translator}`;
 fs.writeFileSync(chapterFile, JSON.stringify(chapter, null, 2), 'utf8');
 
 console.log(`Applied ${translatedCount} translations to ${chapterFile}`);
+
+// Clean up temporary translation files after successful application
+console.log('\n🧹 Cleaning up temporary translation files...');
+let cleanupCount = 0;
+for (const file of translationFiles) {
+  try {
+    if (fs.existsSync(file)) {
+      fs.unlinkSync(file);
+      console.log(`  Deleted: ${file}`);
+      cleanupCount++;
+    }
+  } catch (err) {
+    console.warn(`  Warning: Could not delete ${file}: ${err.message}`);
+  }
+}
+console.log(`Cleaned up ${cleanupCount} temporary files.`);

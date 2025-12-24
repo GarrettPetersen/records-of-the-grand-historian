@@ -53,6 +53,7 @@ help:
 	@echo "  make clean-shiji            # Remove all Shiji data"
 	@echo "  make clean-hanshu           # Remove all Hanshu data"
 	@echo "  make clean-all              # Remove all scraped data"
+	@echo "  make clean-translations     # Remove all temporary translation files"
 	@echo ""
 	@echo "Books available: shiji, hanshu, houhanshu, sanguozhi, jinshu, songshu,"
 	@echo "                 nanqishu, liangshu, chenshu, weishu, beiqishu, zhoushu,"
@@ -282,7 +283,7 @@ hanshu-all: | data/hanshu
 	done
 
 # Clean targets
-.PHONY: clean-shiji clean-hanshu clean-all
+.PHONY: clean-shiji clean-hanshu clean-all clean-translations
 clean-shiji:
 	@echo "Removing all Shiji data..."
 	@rm -rf data/shiji/*.json
@@ -296,6 +297,11 @@ clean-hanshu:
 clean-all:
 	@echo "Removing all scraped data..."
 	@rm -rf data/*/*.json
+	@echo "Done."
+
+clean-translations:
+	@echo "Removing all temporary translation files..."
+	@rm -f translations/batch_*.json translations/*_translations.json translations/*_filtered.json translations/*_review.json
 	@echo "Done."
 
 # Force re-scrape (ignore existing files)
