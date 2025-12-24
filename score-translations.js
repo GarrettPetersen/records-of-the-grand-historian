@@ -10,6 +10,7 @@ const __dirname = path.dirname(__filename);
 // Regular expressions for detecting problematic translations
 const CHINESE_CHARS_REGEX = /[\u4e00-\u9fff]/;
 const CORRUPTED_CHARS_REGEX = /[\uFFFD\u0080-\u009F]/; // Unicode replacement character and control chars
+const PLACEHOLDER_REGEX = /\[Literal translation\]|\[Idiomatic translation\]|This historical passage.*\[Literal translation\]|This passage continues.*\[Idiomatic translation\]/;
 
 /**
  * Calculate a rough length ratio score between Chinese and English text
@@ -106,6 +107,12 @@ function scoreTranslation(entry) {
     score = 0;
   }
 
+  // Check for placeholder text
+  if (english && PLACEHOLDER_REGEX.test(english)) {
+    issues.push('Contains placeholder text instead of actual translation');
+    score = 0;
+  }
+
   // Check for obviously wrong translations
   if (chinese && english && chinese.length > 10 && english.trim().split(/\s+/).length === 1) {
     issues.push('Single word translation for long Chinese text');
@@ -178,11 +185,29 @@ function scoreChapterFile(filePath) {
             continue;
           }
 
+          // Check translation field (legacy format)
           if (cell.translation) {
             results.push(scoreTranslation({
               id: cell.id,
               content: cell.content,
               translation: cell.translation
+            }));
+          }
+
+          // Check literal and idiomatic fields (new format)
+          if (cell.literal) {
+            results.push(scoreTranslation({
+              id: cell.id,
+              content: cell.content,
+              translation: cell.literal
+            }));
+          }
+
+          if (cell.idiomatic) {
+            results.push(scoreTranslation({
+              id: cell.id,
+              content: cell.content,
+              translation: cell.idiomatic
             }));
           }
         }
