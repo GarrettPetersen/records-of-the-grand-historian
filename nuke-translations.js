@@ -3,10 +3,10 @@
 /**
  * nuke-translations.js - Clear all translation text from a chapter
  *
- * This script clears all existing translation text by setting "text" fields to
- * empty strings, while preserving the JSON structure. Effectively resets the
- * chapter to an untranslated state. Use when automated translations are
- * detected and a clean reset is needed.
+ * This script clears all existing translation text by setting "text", "literal",
+ * and "idiomatic" fields to empty strings, while preserving the JSON structure.
+ * Effectively resets the chapter to an untranslated state. Use when poor quality
+ * translations are detected and a clean reset is needed.
  *
  * Usage:
  *   node nuke-translations.js <chapter-file>
@@ -28,6 +28,8 @@ function nukeTranslations(filePath) {
     if (obj.translations && Array.isArray(obj.translations)) {
       for (const trans of obj.translations) {
         if (trans.text) trans.text = "";
+        if (trans.literal) trans.literal = "";
+        if (trans.idiomatic) trans.idiomatic = "";
         if (trans.translator) trans.translator = "";
         if (trans.model) delete trans.model;
       }
@@ -39,6 +41,8 @@ function nukeTranslations(filePath) {
         if (sentence.translations && Array.isArray(sentence.translations)) {
           for (const trans of sentence.translations) {
             if (trans.text) trans.text = "";
+            if (trans.literal) trans.literal = "";
+            if (trans.idiomatic) trans.idiomatic = "";
             if (trans.translator) trans.translator = "";
             if (trans.model) delete trans.model;
           }
