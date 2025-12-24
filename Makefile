@@ -301,7 +301,7 @@ clean-all:
 
 clean-translations:
 	@echo "Removing all temporary translation files..."
-	@rm -f translations/batch_*.json translations/*_translations.json translations/*_filtered.json translations/*_review.json
+	@rm -f translations/batch_*.json translations/*_translations.json translations/*_filtered.json translations/*_review.json translations/untranslated_*.json
 	@echo "Done."
 
 # Force re-scrape (ignore existing files)
