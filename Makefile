@@ -421,6 +421,19 @@ apply-review:
 	@echo "Regenerating static page..."
 	@$(MAKE) update
 
+# Apply translations from batch file and immediately check quality
+.PHONY: apply-translations
+apply-translations:
+	@echo "Applying translations from batch file..."
+	@if [ -z "$(CHAPTER)" ] || [ -z "$(BATCH)" ]; then \
+		echo "Error: CHAPTER and BATCH variables must be set."; \
+		echo "Usage: make apply-translations CHAPTER=data/shiji/014.json BATCH=translations/batch_014_01_translations.json TRANSLATOR=\"Garrett M. Petersen (2025)\" MODEL=\"grok-1.5\""; \
+		exit 1; \
+	fi
+	@$(NODE) apply-translations.js $(CHAPTER) $(BATCH) "$(TRANSLATOR)" "$(MODEL)"
+	@echo "Applied translations. Now checking quality..."
+	@$(MAKE) score-translations CHAPTER=$(CHAPTER)
+
 # Count scraped chapters per book
 .PHONY: stats
 stats:
