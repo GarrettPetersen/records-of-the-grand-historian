@@ -44,7 +44,7 @@ help:
 	@echo "  make stats                  # Show chapter counts per book"
 	@echo "  make validate               # Check all JSON files are valid"
 	@echo "  make score-translations     # Score translations for quality issues"
-	@echo "  make batch-quality-check    # Batch quality check on multiple chapters"
+	@echo "  make batch-quality-check    # Batch quality check on multiple chapters (all books)"
 	@echo "  make quality-score          # Score translation quality subjectively (1-10 scale)"
 	@echo "  make first-untranslated     # Find first chapter needing idiomatic translations"
 	@echo "  make first-untranslated BOOK=hanshu  # Find in specific book only"
@@ -359,11 +359,14 @@ batch-quality-check:
 	@if [ -z "$(CHAPTERS)" ]; then \
 		echo "Error: CHAPTERS variable not set."; \
 		echo "Usage: make batch-quality-check CHAPTERS=043-050"; \
-		echo "       make batch-quality-check CHAPTERS=all --summary-only"; \
+		echo "       make batch-quality-check CHAPTERS=hanshu:043-050"; \
+		echo "       make batch-quality-check CHAPTERS=all OPTIONS=\"--summary-only\""; \
+		echo "       make batch-quality-check CHAPTERS=hanshu:all OPTIONS=\"--detailed\""; \
 		echo "       make batch-quality-check CHAPTERS=043,047,050"; \
+		echo "Use OPTIONS variable for additional flags like --summary-only, --detailed, etc."; \
 		exit 1; \
 	fi
-	@$(NODE) batch-quality-check.js $(CHAPTERS) $(filter-out $@,$(MAKECMDGOALS))
+	@$(NODE) batch-quality-check.js $(CHAPTERS) $(OPTIONS)
 
 # Score translation quality subjectively (1-10 scale)
 .PHONY: quality-score
@@ -430,13 +433,16 @@ stats:
 	done
 
 # Find first partially translated chapter (less than 100%)
+# Chronological order of the 24 dynastic histories
+CHRONOLOGICAL_ORDER := shiji hanshu houhanshu sanguozhi jinshu songshu nanqishu liangshu chenshu weishu beiqishu zhoushu suishu nanshi beishi jiutangshu xintangshu jiuwudaishi xinwudaishi songshi liaoshi jinshi yuanshi mingshi
+
 .PHONY: first-untranslated
 first-untranslated:
 	@echo "Searching for first chapter needing idiomatic translations..."
 	@if [ -n "$(BOOK)" ]; then \
 		echo "Searching only in book: $(BOOK)"; \
 	else \
-		echo "Searching all books..."; \
+		echo "Searching all books in chronological order..."; \
 	fi
 	@echo "🎯 Remember: Translate like Ken Liu - prioritize semantic fidelity and modern readability"
 	@echo "   • Focus on semantic fidelity and modern readability"
@@ -447,7 +453,18 @@ first-untranslated:
 	if [ -n "$(BOOK)" ]; then \
 		dirs="data/$(BOOK)/"; \
 	else \
-		dirs=$$(find data -maxdepth 1 -type d -name "*" | grep -v "^data$$" | grep -v "^data/public$$" | sort); \
+		dirs=""; \
+		for book in $(CHRONOLOGICAL_ORDER); do \
+			if [ -d "data/$$book" ]; then \
+				dirs="$$dirs data/$$book/"; \
+			fi; \
+		done; \
+		for other_dir in $$(find data -maxdepth 1 -type d -name "*" | grep -v "^data$$" | grep -v "^data/public$$" | sort); do \
+			book_name=$$(basename "$$other_dir"); \
+			if ! echo "$(CHRONOLOGICAL_ORDER)" | grep -q "$$book_name"; then \
+				dirs="$$dirs $$other_dir/"; \
+			fi; \
+		done; \
 	fi; \
 	for dir in $$dirs; do \
 		if [ -d "$$dir" ] && [ "$$(basename $$dir)" != "public" ]; then \

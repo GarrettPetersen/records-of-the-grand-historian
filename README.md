@@ -364,8 +364,13 @@ If you find that you have used any kind of automated substitution script to tran
 **Quality Check Commands:**
 
 ```bash
-# Check for translation issues
+# Check individual chapter for translation issues
 node score-translations.js data/shiji/016.json
+
+# Batch quality check multiple chapters at once
+node batch-quality-check.js 043-050 --summary-only
+node batch-quality-check.js hanshu:001-010 --detailed
+node batch-quality-check.js all --output=json
 
 # Find and fix orphan quotes
 node find-orphan-quotes.js data/shiji/016.json
@@ -390,6 +395,51 @@ make extract-review CHAPTER=data/shiji/024.json
 # Step 3: Apply the reviewed translations
 make apply-review CHAPTER=data/shiji/024.json REVIEW=review_024.json
 ```
+
+### Batch Quality Checking
+
+Run automated quality checks on multiple chapters at once. The batch quality checker detects technical issues like length mismatches, corrupted characters, and missing translations.
+
+**Usage:**
+```bash
+node batch-quality-check.js <chapter-spec> [options]
+```
+
+**Chapter Specifications:**
+- `043-050` - Range of chapters (shiji by default)
+- `hanshu:043-050` - Range of chapters in specific book
+- `043,045,047` - Specific chapters
+- `all` - All available chapters (shiji by default)
+- `hanshu:all` - All chapters in specific book
+- `data/hanshu/*.json` - Glob patterns
+
+**Options:**
+- `--summary-only` - Show only summary statistics
+- `--detailed` - Show detailed problems for each chapter
+- `--samples-only` - Show only random samples, skip problem details
+- `--output=json` - Output results as JSON
+- `--min-problems=N` - Only show chapters with N+ problems
+
+**Examples:**
+```bash
+# Direct script usage
+node batch-quality-check.js 043-050 --summary-only
+node batch-quality-check.js hanshu:001-010 --detailed
+node batch-quality-check.js all --output=json
+node batch-quality-check.js hanshu:all --min-problems=5
+
+# Makefile usage
+make batch-quality-check CHAPTERS=043-050 OPTIONS="--summary-only"
+make batch-quality-check CHAPTERS=hanshu:001-010 OPTIONS="--detailed"
+make batch-quality-check CHAPTERS=all OPTIONS="--output=json"
+```
+
+**Quality Checks Performed:**
+- ✅ Length ratio validation (Chinese vs English)
+- ✅ Corrupted character detection
+- ✅ Missing translation detection
+- ✅ Chinese characters in English detection
+- ✅ Random spot-check sampling for manual review
 
 **Step 4: Update everything**
 

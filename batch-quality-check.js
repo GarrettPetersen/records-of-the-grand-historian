@@ -32,12 +32,24 @@ const CORRUPTED_CHARS_REGEX = /[\uFFFD\u0080-\u009F]/;
 /**
  * Parse chapter specification into array of file paths
  */
-function parseChapterSpec(spec) {
-  const dataDir = 'data/shiji';
+function parseChapterSpec(spec, bookId = null) {
+  // If book is specified in spec like "hanshu:043-050", extract it
+  let dataDir = 'data/shiji'; // default
+  let chapterSpec = spec;
+
+  if (spec.includes(':')) {
+    const parts = spec.split(':');
+    if (parts.length === 2) {
+      dataDir = `data/${parts[0]}`;
+      chapterSpec = parts[1];
+    }
+  } else if (bookId) {
+    dataDir = `data/${bookId}`;
+  }
 
   // Handle range like "043-050"
-  if (spec.includes('-')) {
-    const [start, end] = spec.split('-').map(s => s.padStart(3, '0'));
+  if (chapterSpec.includes('-')) {
+    const [start, end] = chapterSpec.split('-').map(s => s.padStart(3, '0'));
     const files = [];
     for (let i = parseInt(start); i <= parseInt(end); i++) {
       const chapterFile = `${dataDir}/${i.toString().padStart(3, '0')}.json`;
@@ -49,8 +61,8 @@ function parseChapterSpec(spec) {
   }
 
   // Handle comma-separated list like "043,045,047" or "043,047-048"
-  if (spec.includes(',')) {
-    const parts = spec.split(',');
+  if (chapterSpec.includes(',')) {
+    const parts = chapterSpec.split(',');
     const files = [];
 
     for (const part of parts) {
@@ -77,7 +89,7 @@ function parseChapterSpec(spec) {
   }
 
   // Handle "all"
-  if (spec === 'all') {
+  if (chapterSpec === 'all') {
     try {
       const files = fs.readdirSync(dataDir)
         .filter(file => file.endsWith('.json'))
@@ -91,24 +103,24 @@ function parseChapterSpec(spec) {
   }
 
   // Handle glob patterns (simple support)
-  if (spec.includes('*')) {
+  if (chapterSpec.includes('*')) {
     try {
-      const files = fs.readdirSync(path.dirname(spec) || dataDir)
+      const files = fs.readdirSync(path.dirname(chapterSpec) || dataDir)
         .filter(file => {
-          const fullPath = path.join(path.dirname(spec) || dataDir, file);
+          const fullPath = path.join(path.dirname(chapterSpec) || dataDir, file);
           return fs.statSync(fullPath).isFile() && file.endsWith('.json');
         })
-        .map(file => path.join(path.dirname(spec) || dataDir, file))
+        .map(file => path.join(path.dirname(chapterSpec) || dataDir, file))
         .sort();
       return files;
     } catch (error) {
-      console.error(`Error reading directory for pattern ${spec}: ${error.message}`);
+      console.error(`Error reading directory for pattern ${chapterSpec}: ${error.message}`);
       return [];
     }
   }
 
   // Handle single chapter
-  const chapterFile = spec.startsWith(dataDir) ? spec : `${dataDir}/${spec.padStart(3, '0')}.json`;
+  const chapterFile = chapterSpec.startsWith(dataDir) ? chapterSpec : `${dataDir}/${chapterSpec.padStart(3, '0')}.json`;
   return fs.existsSync(chapterFile) ? [chapterFile] : [];
 }
 
@@ -229,22 +241,25 @@ function main() {
     console.error('Usage: node batch-quality-check.js <chapter-spec> [options]');
     console.error('');
     console.error('Chapter specs:');
-    console.error('  043-050        - Range of chapters');
-    console.error('  043,045,047    - Specific chapters');
-    console.error('  all            - All available chapters');
-    console.error('  data/shiji/*.json - Glob pattern');
+    console.error('  043-050              - Range of chapters (shiji by default)');
+    console.error('  hanshu:043-050        - Range of chapters in specific book');
+    console.error('  043,045,047          - Specific chapters');
+    console.error('  all                   - All available chapters (shiji by default)');
+    console.error('  hanshu:all           - All chapters in specific book');
+    console.error('  data/hanshu/*.json    - Glob pattern');
     console.error('');
     console.error('Options:');
-    console.error('  --summary-only  - Show only summary statistics');
-    console.error('  --detailed      - Show detailed problems for each chapter');
-    console.error('  --samples-only  - Show only random samples, skip problem details');
-    console.error('  --output=json   - Output results as JSON');
-    console.error('  --min-problems=N - Only show chapters with N+ problems');
+    console.error('  --summary-only        - Show only summary statistics');
+    console.error('  --detailed            - Show detailed problems for each chapter');
+    console.error('  --samples-only        - Show only random samples, skip problem details');
+    console.error('  --output=json         - Output results as JSON');
+    console.error('  --min-problems=N      - Only show chapters with N+ problems');
     console.error('');
     console.error('Examples:');
     console.error('  node batch-quality-check.js 043-050');
+    console.error('  node batch-quality-check.js hanshu:001-010');
     console.error('  node batch-quality-check.js all --summary-only');
-    console.error('  node batch-quality-check.js 043,047 --min-problems=5');
+    console.error('  node batch-quality-check.js hanshu:all --min-problems=5');
     process.exit(1);
   }
 
@@ -260,10 +275,22 @@ function main() {
     })()
   };
 
-  // Parse chapter specification
-  const chapterFiles = parseChapterSpec(spec);
+  // Parse book and chapter specification
+  let bookId = null;
+  let chapterSpec = spec;
+
+  if (spec.includes(':')) {
+    const parts = spec.split(':');
+    if (parts.length === 2) {
+      bookId = parts[0];
+      chapterSpec = parts[1];
+    }
+  }
+
+  const chapterFiles = parseChapterSpec(chapterSpec, bookId);
   if (chapterFiles.length === 0) {
-    console.error(`No chapter files found for spec: ${spec}`);
+    const bookName = bookId || 'shiji';
+    console.error(`No chapter files found for spec: ${spec} (in ${bookName})`);
     process.exit(1);
   }
 
