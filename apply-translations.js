@@ -68,6 +68,34 @@ for (const file of translationFiles) {
       process.exit(1);
     }
 
+    // Validate that translation file follows correct workflow (has Chinese text for alignment)
+    let hasChineseField = false;
+    let totalTranslationObjects = 0;
+
+    for (const [id, translation] of Object.entries(fileTranslations)) {
+      if (translation && typeof translation === 'object') {
+        totalTranslationObjects++;
+        if ('chinese' in translation) {
+          hasChineseField = true;
+          break; // Found at least one, that's enough
+        }
+      }
+    }
+
+    if (totalTranslationObjects > 0 && !hasChineseField) {
+      console.error(`❌ ERROR: Translation file ${file} does not contain Chinese text for alignment checking!`);
+      console.error('');
+      console.error('This indicates the translation file was not created using the correct workflow.');
+      console.error('');
+      console.error('Correct workflow:');
+      console.error('1. Run: node extract-untranslated.js data/book/chapter.json');
+      console.error('2. Edit: translations/untranslated_chapter.json directly (contains Chinese text)');
+      console.error('3. Apply: node apply-translations.js data/book/chapter.json translations/untranslated_chapter.json');
+      console.error('');
+      console.error('Do NOT create separate translation files or edit files without Chinese alignment data.');
+      process.exit(1);
+    }
+
     translations = { ...translations, ...fileTranslations };
     console.log(`Loaded ${fileTranslationCount} translations from ${file}`);
   } catch (err) {
