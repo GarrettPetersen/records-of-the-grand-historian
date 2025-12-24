@@ -158,6 +158,7 @@ This project uses AI-assisted translation to translate untranslated or partially
 - Maintain **historical accuracy and academic tone**.
 - Use **scholarly English** appropriate for classical Chinese historical texts.
 - **DO NOT** use automated scripts, batch processing, or external API calls (except for approved automated number translation).
+- **🚨 CRITICAL WORKFLOW REMINDER**: After extracting untranslated sentences, you MUST actually fill in the translations before applying them. Do NOT skip the translation step and commit empty batch files!
 
 #### Automated Number Translation (Exception)
 
@@ -200,7 +201,14 @@ node extract-untranslated.js data/shiji/016.json
 # }
 ```
 
-**Step 3: Create translation file**
+**Step 3: TRANSLATE THE CONTENT** ⚠️ **CRITICAL STEP - DO NOT SKIP!**
+
+❌ **DO NOT just commit the extracted file without filling in translations!**
+❌ **DO NOT skip to Step 4 without actually translating the sentences!**
+
+**You MUST fill in the translations in the extracted file before proceeding.** The extracted batch file contains empty `idiomatic` fields that need your translations. Edit the JSON file and provide real English translations for each sentence - do not leave placeholder text, Chinese characters, or empty fields.
+
+**Step 4: Apply translations**
 
 Create `translations/translations_016.json` with your manual translations. **You must provide both literal and idiomatic translations for each sentence:**
 
@@ -245,6 +253,8 @@ node apply-translations.js data/shiji/016.json translations/translations_016.jso
 
 **Step 5: Verify and update**
 
+⚠️ **FINAL CHECK**: Before running `make update`, ensure all translations have been properly applied and contain real English text, not empty fields or placeholders.
+
 ```bash
 # Update all metadata and rebuild site
 make update
@@ -269,13 +279,20 @@ node extract-untranslated.js data/shiji/014.json
 
 **Step 2: Translate each batch**
 
-The extracted batches already contain existing translations. Edit them directly:
+⚠️ **CRITICAL: You MUST actually translate the sentences before applying!**
+
+The extracted batch files contain empty `idiomatic` fields that need **real English translations**. Do not just commit the files without filling in translations - that would leave sentences untranslated!
+
+Edit the batch file and provide actual English translations for each sentence with empty `idiomatic` fields:
 
 ```bash
 # Edit the extracted batch file:
-# translations/untranslated_014.json (contains all sentences with existing translations pre-filled)
+# translations/untranslated_014.json (contains sentences with empty idiomatic fields)
 
-# Edit literal/idiomatic fields as needed, then apply:
+# ⚠️ CRUCIAL: Fill in the empty "idiomatic" fields with real English translations!
+# Do NOT leave them empty or with placeholder text!
+
+# Then apply the completed translations:
 node apply-translations.js data/shiji/014.json translations/untranslated_014.json "Garrett M. Petersen (2025)" "grok-1.5"
 ```
 
