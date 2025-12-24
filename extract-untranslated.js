@@ -71,25 +71,35 @@ function extractUntranslated(filePath, outputPath = null) {
 
       if (block.type === 'paragraph') {
         const trans = sentence.translations?.[0];
-        if (!trans) continue; // Skip sentences without translations
 
-        const translator = trans.translator || '';
+        // Skip if no translations array at all
+        if (!sentence.translations || sentence.translations.length === 0) {
+          // This sentence has no translations at all - include it
+          hasIdiomaticTranslation = false;
+          hasLiteralTranslation = false;
+          chineseText = sentence.zh;
+          sentenceId = sentence.id;
+          existingTranslations = null;
+        } else {
+          // Include sentences without translations OR missing idiomatic translations
+          const translator = trans.translator || '';
 
-        // Skip sentences translated by Herbert J. Allen (1894)
-        if (translator === 'Herbert J. Allen (1894)') {
-          continue;
-        }
+          // Skip sentences translated by Herbert J. Allen (1894)
+          if (translator === 'Herbert J. Allen (1894)') {
+            continue;
+          }
 
-        hasIdiomaticTranslation = trans.idiomatic && trans.idiomatic.trim() !== '';
-        hasLiteralTranslation = trans.literal && trans.literal.trim() !== '';
-        chineseText = sentence.zh;
-        sentenceId = sentence.id;
+          hasIdiomaticTranslation = trans.idiomatic && trans.idiomatic.trim() !== '';
+          hasLiteralTranslation = trans.literal && trans.literal.trim() !== '';
+          chineseText = sentence.zh;
+          sentenceId = sentence.id;
 
-        // Include existing translations for reference
-        if (hasIdiomaticTranslation || hasLiteralTranslation) {
-          existingTranslations = {};
-          if (hasLiteralTranslation) existingTranslations.literal = trans.literal;
-          if (hasIdiomaticTranslation) existingTranslations.idiomatic = trans.idiomatic;
+          // Include existing translations for reference
+          if (hasIdiomaticTranslation || hasLiteralTranslation) {
+            existingTranslations = {};
+            if (hasLiteralTranslation) existingTranslations.literal = trans.literal;
+            if (hasIdiomaticTranslation) existingTranslations.idiomatic = trans.idiomatic;
+          }
         }
       } else if (block.type === 'table_row') {
         // Table cells don't have translator field, skip if already translated by Herbert J. Allen
@@ -130,9 +140,10 @@ function extractUntranslated(filePath, outputPath = null) {
         }
       }
 
-      // Only include sentences that are missing idiomatic translations
+      // Include sentences that are missing idiomatic translations OR have no translations at all
       const hasIdiomatic = existingTranslations?.idiomatic && existingTranslations.idiomatic.trim() !== '';
-      if (!hasIdiomatic) {
+      const hasAnyTranslations = sentence.translations && sentence.translations.length > 0;
+      if (!hasIdiomatic || !hasAnyTranslations) {
         untranslated[sentenceId] = {
           chinese: chineseText,
           literal: existingTranslations?.literal || '',
