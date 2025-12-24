@@ -115,6 +115,55 @@ if (invalidIds.length > 0) {
   process.exit(1);
 }
 
+// 2. Check for Chinese text mismatches
+const chineseMismatches = [];
+for (const block of chapter.content) {
+  let sentences = [];
+
+  if (block.type === 'paragraph') {
+    sentences = block.sentences;
+  } else if (block.type === 'table_row') {
+    sentences = block.cells;
+  } else if (block.type === 'table_header') {
+    sentences = block.sentences;
+  }
+
+  for (const sentence of sentences) {
+    if (sentence.id && sentence.id in translations) {
+      const newTranslation = translations[sentence.id];
+      const actualChinese = block.type === 'table_row' ? sentence.content : sentence.zh;
+
+      // Check if batch file has chinese field and if it matches
+      if (newTranslation && typeof newTranslation === 'object' && 'chinese' in newTranslation) {
+        const batchChinese = newTranslation.chinese;
+        if (batchChinese !== actualChinese) {
+          chineseMismatches.push({
+            id: sentence.id,
+            expected: actualChinese,
+            found: batchChinese
+          });
+        }
+      }
+    }
+  }
+}
+
+if (chineseMismatches.length > 0) {
+  console.error(`❌ ERROR: Chinese text mismatch in batch file!`);
+  console.error(`Found ${chineseMismatches.length} sentences where the Chinese text doesn't match:`);
+  chineseMismatches.slice(0, 5).forEach(mismatch => {
+    console.error(`   - ${mismatch.id}:`);
+    console.error(`     Expected: "${mismatch.expected}"`);
+    console.error(`     Found:    "${mismatch.found}"`);
+  });
+  if (chineseMismatches.length > 5) {
+    console.error(`   ... and ${chineseMismatches.length - 5} more`);
+  }
+  console.error('\nThis indicates the batch file was created from different chapter data.');
+  console.error('Please regenerate the batch file from the current chapter data.');
+  process.exit(1);
+}
+
 // 2. Check for problematic translations that would overwrite existing content
 const problematicTranslations = [];
 for (const block of chapter.content) {

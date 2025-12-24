@@ -147,14 +147,6 @@ function extractUntranslated(filePath, outputPath = null) {
     const baseName = path.basename(filePath, '.json');
     outputPath = path.join('translations', `untranslated_${baseName}.json`);
   }
-  
-  // Ensure output directory exists
-  const outputDir = path.dirname(outputPath);
-  if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir, { recursive: true });
-  }
-  
-  fs.writeFileSync(outputPath, JSON.stringify(untranslated, null, 2), 'utf8');
 
   // Count statistics based on idiomatic translations (our priority)
   let actualTotal = 0;
@@ -208,7 +200,63 @@ function extractUntranslated(filePath, outputPath = null) {
   const translatedCount = idiomaticTranslated;
   const total = actualTotal;
   const percent = total > 0 ? Math.round((translatedCount / total) * 100) : 0;
-  
+
+  // Exit early if no untranslated sentences (prevent unnecessary file creation)
+  if (untranslatedCount === 0) {
+    return {
+      filePath,
+      outputPath: null, // No file created
+      total,
+      translated: translatedCount,
+      untranslated: untranslatedCount,
+      percent
+    };
+  }
+
+  // Get book and chapter info for naming and cleanup
+  const bookName = data.meta.book;
+  const chapterNum = data.meta.chapter;
+
+  // If output path starts with "batch_" or similar patterns, prepend book name for clarity
+  const fileName = path.basename(outputPath);
+  if (fileName.startsWith('batch_') || fileName.startsWith('fresh_batch_')) {
+    // Replace patterns like "batch_096_next50.json" with "batch_shiji_096_next50.json"
+    const newFileName = fileName.replace(/^((?:fresh_)?batch_)([^_]+)(.*)$/, `$1${bookName}_$2$3`);
+    if (newFileName !== fileName) {
+      outputPath = path.join(path.dirname(outputPath), newFileName);
+    }
+  }
+
+  // Ensure output directory exists
+  const outputDir = path.dirname(outputPath);
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
+  }
+
+  // Clean up old batch files for this chapter to maintain idempotency
+  console.log(`🧹 Cleaning up old batch files for ${bookName} chapter ${chapterNum}...`);
+
+  // Find and remove old batch files for this chapter
+  const files = fs.readdirSync(outputDir);
+  let cleanupCount = 0;
+  for (const file of files) {
+    // Match patterns like: batch_shiji_096_*.json, fresh_batch_shiji_096_*.json,
+    // or old patterns like batch_096_*.json for backward compatibility
+    if (file.match(new RegExp(`^.*batch(?:_${bookName})?_${chapterNum}_.*\.json$`))) {
+      try {
+        fs.unlinkSync(path.join(outputDir, file));
+        cleanupCount++;
+      } catch (err) {
+        console.warn(`Warning: Could not delete ${file}: ${err.message}`);
+      }
+    }
+  }
+  if (cleanupCount > 0) {
+    console.log(`  Cleaned up ${cleanupCount} old batch files`);
+  }
+
+  fs.writeFileSync(outputPath, JSON.stringify(untranslated, null, 2), 'utf8');
+
   return {
     filePath,
     outputPath,
@@ -258,8 +306,8 @@ Output:
     console.log(`   Translated: ${result.translated} (${result.percent}%)`);
     console.log(`   Untranslated: ${result.untranslated}`);
 
-    // Exit early if no untranslated sentences (prevent unnecessary file creation)
-    if (result.untranslated === 0) {
+    // Check if no file was created (no untranslated sentences)
+    if (result.outputPath === null) {
       console.log(`
 ✅ No untranslated sentences found. Nothing to extract.
 `);

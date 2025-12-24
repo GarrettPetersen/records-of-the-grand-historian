@@ -15,6 +15,34 @@ import path from 'node:path';
 const DATA_DIR = './data';
 const PUBLIC_DATA_DIR = './public/data';
 
+// Chronological order of the 24 dynastic histories
+const CHRONOLOGICAL_ORDER = [
+  'shiji',        // Records of the Grand Historian - Xia to Han
+  'hanshu',       // Book of Han - Western Han
+  'houhanshu',    // Book of Later Han - Eastern Han
+  'sanguozhi',    // Records of the Three Kingdoms - Three Kingdoms
+  'jinshu',       // Book of Jin - Jin
+  'songshu',      // Book of Song - Liu Song
+  'nanqishu',     // Book of Southern Qi - Southern Qi
+  'liangshu',     // Book of Liang - Liang
+  'chenshu',      // Book of Chen - Chen
+  'weishu',       // Book of Wei - Northern Wei
+  'beiqishu',     // Book of Northern Qi - Northern Qi
+  'zhoushu',      // Book of Zhou - Northern Zhou
+  'suishu',       // Book of Sui - Sui
+  'nanshi',       // History of the Southern Dynasties - Southern Dynasties
+  'beishi',       // History of the Northern Dynasties - Northern Dynasties
+  'jiutangshu',   // Old Book of Tang - Tang
+  'xintangshu',   // New Book of Tang - Tang
+  'jiuwudaishi',  // Old History of the Five Dynasties - Five Dynasties
+  'xinwudaishi',  // New History of the Five Dynasties - Five Dynasties
+  'songshi',      // History of Song - Song
+  'liaoshi',      // History of Liao - Liao (Khitan)
+  'jinshi',       // History of Jin - Jin (Jurchen)
+  'yuanshi',      // History of Yuan - Yuan (Mongol)
+  'mingshi'       // History of Ming - Ming
+];
+
 const BOOKS = {
   shiji: { name: 'Records of the Grand Historian', chinese: '史記', pinyin: 'Shǐjì', dynasty: 'Xia to Han' },
   hanshu: { name: 'Book of Han', chinese: '漢書', pinyin: 'Hànshū', dynasty: 'Western Han' },
@@ -59,14 +87,27 @@ function generateManifest() {
     books: {}
   };
 
-  // Scan data directory for books
+  // Scan data directory for books and sort them chronologically
   const entries = fs.readdirSync(DATA_DIR, { withFileTypes: true });
+  const availableBooks = [];
 
   for (const entry of entries) {
     if (!entry.isDirectory()) continue;
 
     const bookId = entry.name;
-    if (!BOOKS[bookId]) continue;
+    if (BOOKS[bookId]) {
+      availableBooks.push(bookId);
+    }
+  }
+
+  // Sort books in chronological order
+  const sortedBooks = CHRONOLOGICAL_ORDER.filter(id => availableBooks.includes(id));
+
+  // Add any books not in the chronological list at the end
+  const remainingBooks = availableBooks.filter(id => !sortedBooks.includes(id));
+  sortedBooks.push(...remainingBooks);
+
+  for (const bookId of sortedBooks) {
 
     const bookDir = path.join(DATA_DIR, bookId);
     const chapterFiles = fs.readdirSync(bookDir)

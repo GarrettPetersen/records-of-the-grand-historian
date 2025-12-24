@@ -1,4 +1,5 @@
-// Book metadata from scraper
+// Complete book metadata for all 24 dynastic histories (for reference)
+// Books are loaded dynamically from manifest.json and sorted chronologically
 export const BOOKS = {
   shiji: {
     name: 'Records of the Grand Historian',
@@ -217,25 +218,62 @@ async function loadAvailableHistories() {
   return data.books || {};
 }
 
+// Chronological order of the 24 dynastic histories
+const CHRONOLOGICAL_ORDER = [
+  'shiji',        // Records of the Grand Historian - Xia to Han
+  'hanshu',       // Book of Han - Western Han
+  'houhanshu',    // Book of Later Han - Eastern Han
+  'sanguozhi',    // Records of the Three Kingdoms - Three Kingdoms
+  'jinshu',       // Book of Jin - Jin
+  'songshu',      // Book of Song - Liu Song
+  'nanqishu',     // Book of Southern Qi - Southern Qi
+  'liangshu',     // Book of Liang - Liang
+  'chenshu',      // Book of Chen - Chen
+  'weishu',       // Book of Wei - Northern Wei
+  'beiqishu',     // Book of Northern Qi - Northern Qi
+  'zhoushu',      // Book of Zhou - Northern Zhou
+  'suishu',       // Book of Sui - Sui
+  'nanshi',       // History of the Southern Dynasties - Southern Dynasties
+  'beishi',       // History of the Northern Dynasties - Northern Dynasties
+  'jiutangshu',   // Old Book of Tang - Tang
+  'xintangshu',   // New Book of Tang - Tang
+  'jiuwudaishi',  // Old History of the Five Dynasties - Five Dynasties
+  'xinwudaishi',  // New History of the Five Dynasties - Five Dynasties
+  'songshi',      // History of Song - Song
+  'liaoshi',      // History of Liao - Liao (Khitan)
+  'jinshi',       // History of Jin - Jin (Jurchen)
+  'yuanshi',      // History of Yuan - Yuan (Mongol)
+  'mingshi'       // History of Ming - Ming
+];
+
 async function renderHomepage() {
   const loading = document.getElementById('loading');
   const grid = document.getElementById('histories-grid');
-  
+
   const histories = await loadAvailableHistories();
-  
+
   loading.style.display = 'none';
   grid.style.display = 'grid';
-  
+
   if (Object.keys(histories).length === 0) {
     grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1;">No histories available yet. Run the scraper to add content.</p>';
     return;
   }
-  
-  for (const [id, info] of Object.entries(histories)) {
+
+  // Sort available books by chronological order of the 24 dynastic histories
+  const availableBooks = Object.keys(histories);
+  const sortedBookIds = CHRONOLOGICAL_ORDER.filter(id => availableBooks.includes(id));
+
+  // Add any books not in the chronological list at the end
+  const remainingBooks = availableBooks.filter(id => !sortedBookIds.includes(id));
+  sortedBookIds.push(...remainingBooks);
+
+  for (const id of sortedBookIds) {
+    const info = histories[id];
     const card = document.createElement('a');
     card.className = 'history-card';
     card.href = `chapters.html?book=${id}`;
-    
+
     card.innerHTML = `
       <h3>${info.chinese}</h3>
       <div class="pinyin">${info.pinyin}</div>
@@ -243,7 +281,7 @@ async function renderHomepage() {
       <div class="dynasty">Dynasty: ${info.dynasty}</div>
       <div class="chapter-count">Click to browse chapters</div>
     `;
-    
+
     grid.appendChild(card);
   }
 }

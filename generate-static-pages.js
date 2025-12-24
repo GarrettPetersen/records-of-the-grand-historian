@@ -18,15 +18,53 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const BOOKS = {
-  shiji: {
-    name: 'Records of the Grand Historian',
-    chinese: '史記',
-    pinyin: 'Shǐjì',
-    author: 'Sima Qian',
-    dynasty: 'Xia to Han'
+// Dynamically load book information from data directory
+function loadBooks() {
+  const dataDir = path.join(__dirname, 'data');
+  const books = {};
+
+  try {
+    // Get all directories in data folder (excluding files like manifest.json, glossary.json)
+    const entries = fs.readdirSync(dataDir, { withFileTypes: true });
+    const bookDirs = entries
+      .filter(entry => entry.isDirectory())
+      .map(entry => entry.name);
+
+    for (const bookId of bookDirs) {
+      const bookDataDir = path.join(dataDir, bookId);
+
+      try {
+        // Find the first chapter file to extract book metadata
+        const chapterFiles = fs.readdirSync(bookDataDir)
+          .filter(file => file.endsWith('.json') && /^\d+\.json$/.test(file))
+          .sort((a, b) => parseInt(a) - parseInt(b));
+
+        if (chapterFiles.length > 0) {
+          const firstChapterPath = path.join(bookDataDir, chapterFiles[0]);
+          const chapterData = JSON.parse(fs.readFileSync(firstChapterPath, 'utf8'));
+
+          if (chapterData.meta && chapterData.meta.bookInfo) {
+            books[bookId] = {
+              name: chapterData.meta.bookInfo.name || bookId,
+              chinese: chapterData.meta.bookInfo.chinese || bookId,
+              pinyin: chapterData.meta.bookInfo.pinyin || bookId,
+              author: chapterData.meta.bookInfo.author || 'Unknown',
+              dynasty: chapterData.meta.bookInfo.dynasty || 'Unknown'
+            };
+          }
+        }
+      } catch (err) {
+        console.warn(`Warning: Could not load metadata for ${bookId}: ${err.message}`);
+      }
+    }
+  } catch (err) {
+    console.error(`Error loading books from data directory: ${err.message}`);
   }
-};
+
+  return books;
+}
+
+const BOOKS = loadBooks();
 
 function escapeHtml(text) {
   return text
@@ -1061,6 +1099,8 @@ Usage:
   node generate-static-pages.js                    Generate all chapters for all books
   node generate-static-pages.js --book <book-id>   Generate all chapters for one book
   node generate-static-pages.js --book <book-id> --chapter <num>
+
+Automatically discovers all books from the data directory.
                                                    Generate one specific chapter
 
 Examples:
