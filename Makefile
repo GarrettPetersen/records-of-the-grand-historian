@@ -53,7 +53,8 @@ help:
 	@echo "  make clean-shiji            # Remove all Shiji data"
 	@echo "  make clean-hanshu           # Remove all Hanshu data"
 	@echo "  make clean-all              # Remove all scraped data"
-	@echo "  make clean-translations     # Remove all temporary translation files"
+	@echo "  make clean-translations     # Clear ALL translations from ALL chapters (DESTRUCTIVE)"
+	@echo "  make clean-temp             # Remove all temporary translation files"
 	@echo ""
 	@echo "Books available: shiji, hanshu, houhanshu, sanguozhi, jinshu, songshu,"
 	@echo "                 nanqishu, liangshu, chenshu, weishu, beiqishu, zhoushu,"
@@ -283,7 +284,7 @@ hanshu-all: | data/hanshu
 	done
 
 # Clean targets
-.PHONY: clean-shiji clean-hanshu clean-all clean-translations
+.PHONY: clean-shiji clean-hanshu clean-all clean-translations clean-temp
 clean-shiji:
 	@echo "Removing all Shiji data..."
 	@rm -rf data/shiji/*.json
@@ -300,6 +301,30 @@ clean-all:
 	@echo "Done."
 
 clean-translations:
+	@echo "Clearing all translation text from all chapter files..."
+	@echo "This will reset ALL chapters to untranslated state."
+	@read -p "Are you sure? This cannot be undone. (y/N): " confirm; \
+	if [ "$$confirm" = "y" ] || [ "$$confirm" = "Y" ]; then \
+		echo "Clearing translations from Shiji chapters..."; \
+		for file in data/shiji/*.json; do \
+			if [ -f "$$file" ]; then \
+				node nuke-translations.js "$$file" >/dev/null 2>&1; \
+			fi; \
+		done; \
+		echo "Clearing translations from Hanshu chapters..."; \
+		for file in data/hanshu/*.json; do \
+			if [ -f "$$file" ]; then \
+				node nuke-translations.js "$$file" >/dev/null 2>&1; \
+			fi; \
+		done; \
+		echo "Removing temporary translation files..."; \
+		rm -f translations/batch_*.json translations/*_translations.json translations/*_filtered.json translations/*_review.json; \
+		echo "All translations cleared."; \
+	else \
+		echo "Operation cancelled."; \
+	fi
+
+clean-temp:
 	@echo "Removing all temporary translation files..."
 	@rm -f translations/batch_*.json translations/*_translations.json translations/*_filtered.json translations/*_review.json
 	@echo "Done."
