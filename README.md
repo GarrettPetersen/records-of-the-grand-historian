@@ -74,6 +74,10 @@ make stats                        # Show chapter counts per book
 make first-untranslated
 make first-untranslated BOOK=hanshu  # Find in specific book only
 
+# Streamlined translation workflow
+make start-translation BOOK=shiji     # Start translation session (extract 50 sentences)
+make submit-translations TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"  # Submit translations
+
 # Validate all JSON
 make validate
 
@@ -147,7 +151,7 @@ Some chapters (especially early Shiji chapters from chinesenotes.com) include ex
 
 ### Translating a Chapter
 
-**⚠️ IMPORTANT WORKFLOW NOTE**: Always work directly in the extracted `translations/untranslated_*.json` file created by `extract-untranslated.js`. Fill in the `literal` and `idiomatic` fields in that file, then apply it back using `apply-translations.js`. Do NOT create separate batch files unless absolutely necessary.
+**⚠️ IMPORTANT WORKFLOW NOTE**: Use the streamlined `make start-translation` and `make submit-translations` commands for efficient, error-free translation sessions. Both literal and idiomatic translations are required for each sentence.
 
 This project uses AI-assisted translation to translate untranslated or partially translated chapters. **All substantive translations must be done manually by AI assistants.** Automated number translation is the **only allowable form of scripted translation** for pure numerals.
 
@@ -160,7 +164,7 @@ This project uses AI-assisted translation to translate untranslated or partially
 - Maintain **historical accuracy and academic tone**.
 - Use **scholarly English** appropriate for classical Chinese historical texts.
 - **DO NOT** use automated scripts, batch processing, or external API calls (except for approved automated number translation).
-- **🚨 CRITICAL WORKFLOW REMINDER**: After extracting untranslated sentences, you MUST actually fill in the translations before applying them. Do NOT skip the translation step and commit empty batch files!
+- **🚨 CRITICAL WORKFLOW REMINDER**: After running `make start-translation`, you MUST fill in BOTH literal and idiomatic translations for each sentence before running `make submit-translations`. Do NOT leave empty fields!
 
 #### Automated Number Translation (Exception)
 
@@ -176,150 +180,119 @@ node apply-translations.js data/shiji/025.json translations/auto_number_translat
 
 This script **ONLY translates sentences that contain pure numbers** (like `"十九"` → `"19"`, `"42"` → `"42"`). It does not translate any historical content, dialogue, or narrative text. All substantive translation work must be done manually by AI assistants.
 
-### Quick Translation Process
+### Streamlined Translation Process
 
-**Step 1: Check what needs translation**
+The streamlined workflow uses two commands to make translation sessions efficient and error-free:
 
-```bash
-# Find the next chapter needing idiomatic translations
-make first-untranslated
-make first-untranslated BOOK=hanshu  # Find in specific book only
-
-# Or check a specific chapter's status
-node extract-untranslated.js data/shiji/016.json
-# Note: Sentences by Herbert J. Allen (1894) are automatically skipped
-```
-
-**Step 2: Extract untranslated content**
+**Step 1: Start a translation session**
 
 ```bash
-# Extract sentences for translation/review from a chapter
-node extract-untranslated.js data/shiji/016.json
+# Find the next chapter needing translation and extract up to 50 sentences
+make start-translation BOOK=shiji
 
-# Output: translations/untranslated_016.json
-# Contains: {
-#   "s0001": {"chinese": "Chinese text...", "literal": "existing...", "idiomatic": "existing..."},
-#   "s0002": {"chinese": "Chinese text...", "literal": "", "idiomatic": ""}
-# }
+# This creates: translations/current_translation.json
+# Contains up to 50 sentences needing both literal and idiomatic translations
 ```
 
-**Step 3: TRANSLATE THE CONTENT** ⚠️ **CRITICAL STEP - DO NOT SKIP!**
+**Step 2: Fill in translations**
 
-❌ **DO NOT just commit the extracted file without filling in translations!**
-❌ **DO NOT skip to Step 4 without actually translating the sentences!**
-
-**You MUST fill in the translations in the extracted file before proceeding.** The extracted file `translations/untranslated_016.json` contains empty `literal` and `idiomatic` fields that need your translations. **Edit the extracted JSON file directly** and provide real English translations for each sentence - do not leave placeholder text, Chinese characters, or empty fields.
-
-⚠️ **IMPORTANT**: Do NOT create separate batch files unless specifically needed for large chapters. Work directly in the `translations/untranslated_*.json` file that was created by the extract command.
-
-**Step 4: Apply translations**
-
-Once you have filled in the translations in the extracted file, apply them back to the chapter:
+Edit `translations/current_translation.json` and provide **both literal and idiomatic translations** for each sentence:
 
 ```json
 {
-  "s0001": {
-    "literal": "In ancient times, when the Qin dynasty first rose to power...",
-    "idiomatic": "Long ago, when Qin first established its power..."
+  "metadata": {
+    "book": "shiji",
+    "chapter": "016",
+    "file": "data/shiji/016.json"
   },
-  "s0002": {
-    "literal": "The emperor toured the eastern provinces...",
-    "idiomatic": "The emperor traveled through the eastern regions..."
-  },
-  "s0003": {
-    "literal": "Five years passed with these events...",
-    "idiomatic": "Five years went by amid these developments..."
-  }
+  "sentences": [
+    {
+      "id": "s0001",
+      "chinese": "太史公讀秦楚之際，曰：",
+      "literal": "Grand Historian read between Qin Chu interregnum, said:",
+      "idiomatic": "The Grand Historian, reading of the period between Qin and Chu, remarked:"
+    },
+    {
+      "id": "s0002",
+      "chinese": "初作難，發於陳涉；",
+      "literal": "Initially made difficulty, arose from Chen Sheng;",
+      "idiomatic": "The initial uprising began with Chen Sheng;"
+    }
+  ]
 }
 ```
 
-**Legacy format is also supported:**
-```json
-{
-  "s0001": "In ancient times, when the Qin dynasty first rose to power...",
-  "s0002": "The emperor toured the eastern provinces..."
-}
-```
+⚠️ **CRITICAL REQUIREMENTS**:
+- **Both literal AND idiomatic translations are required** for each sentence
+- **Literal translation**: Direct, accurate translation prioritizing semantic fidelity
+- **Idiomatic translation**: Natural, flowing English prioritizing modern readability (Ken Liu style)
+- **NO placeholders, NO empty fields, NO Chinese text**
+- **Maintain historical accuracy and academic tone**
 
-**Step 4: Apply translations**
+**Step 3: Submit translations**
 
 ```bash
-# Validate the filled-in extracted file to prevent misalignment errors
-node validate-translations.js data/shiji/016.json translations/untranslated_016.json
+# Validate and apply translations, then run quality checks
+make submit-translations TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"
 
-# Apply your translations to the chapter (only if validation passes)
-node apply-translations.js data/shiji/016.json translations/untranslated_016.json "Garrett M. Petersen (2025)" "grok-1.5"
+# Use custom file if needed:
+make submit-translations TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5" FILE="translations/my_custom_file.json"
 ```
 
-**Important notes**:
-- Always validate translation files before applying them to prevent batch write errors and misaligned translations!
-- Sentences already translated by Herbert J. Allen (1894) will be automatically skipped to preserve attribution
+**What happens during submission**:
+1. **Validation**: Checks Chinese text matches and both literal/idiomatic translations are present
+2. **Application**: Applies translations to the chapter with proper attribution
+3. **Quality Check**: Runs `make score-translations` to identify issues
+4. **Cleanup**: Deletes the temporary translation file
 
-**Step 5: Verify and update**
-
-⚠️ **FINAL CHECK**: Before running `make update`, ensure all translations have been properly applied and contain real English text, not empty fields or placeholders.
+**Step 4: Verify and update**
 
 ```bash
 # Update all metadata and rebuild site
 make update
 ```
 
-### Handling Large Chapters
+### Alternative: Manual Process (for advanced users)
 
-For chapters with 500+ sentences, translate in smaller batches to maintain quality and track progress:
-
-**Step 1: Extract and split into batches**
+For manual control over the process, you can still use the individual commands:
 
 ```bash
-# Extract all untranslated sentences
-node extract-untranslated.js data/shiji/014.json
-# Creates: translations/untranslated_014.json
+# Find what needs translation
+make first-untranslated BOOK=hanshu
 
-# For large chapters, work in sections within the main extracted file
-# Edit translations/untranslated_014.json directly, filling in translations
-# as you go in manageable sections (first 100 sentences, then next 100, etc.)
+# Extract sentences manually
+node extract-untranslated.js data/hanshu/008.json
+
+# Validate and apply manually
+node validate-translations.js data/hanshu/008.json translations/untranslated_008.json
+node apply-translations.js data/hanshu/008.json translations/untranslated_008.json "Garrett M. Petersen (2025)" "grok-1.5"
 ```
 
-**Step 2: Translate the content**
+### Large Chapters
 
-⚠️ **CRITICAL: You MUST actually translate the sentences before applying!**
+The streamlined workflow automatically handles large chapters by extracting up to 50 sentences at a time. For chapters with hundreds of untranslated sentences:
 
-The extracted file `translations/untranslated_014.json` contains empty `literal` and `idiomatic` fields that need **real English translations**. Do not just commit the file without filling in translations - that would leave sentences untranslated!
+1. **Run multiple translation sessions**:
+   ```bash
+   # First batch of 50 sentences
+   make start-translation BOOK=shiji
+   # Fill in translations...
+   make submit-translations TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"
 
-Edit the extracted file directly and provide actual English translations for each sentence with empty fields:
+   # Next batch of 50 sentences
+   make start-translation BOOK=shiji
+   # Fill in translations...
+   make submit-translations TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"
 
-```bash
-# Edit the extracted batch file:
-# translations/untranslated_014.json (contains sentences with empty idiomatic fields)
+   # Repeat until chapter is complete
+   ```
 
-# ⚠️ CRUCIAL: Fill in the empty "idiomatic" fields with real English translations!
-# Do NOT leave them empty or with placeholder text!
+2. **Check overall progress**:
+   ```bash
+   make first-untranslated BOOK=shiji  # Shows current status
+   ```
 
-# Then apply the completed translations:
-node apply-translations.js data/shiji/014.json translations/untranslated_014.json "Garrett M. Petersen (2025)" "grok-1.5"
-```
-
-**Note**: Sentences already translated by Herbert J. Allen (1894) are not included in extraction batches and cannot be overwritten to maintain proper attribution.
-
-**Legacy string format also supported:**
-```json
-{
-  "s0123": "Translation of first sentence...",
-  "s0124": "Translation of second sentence..."
-}
-```
-
-**Step 3: Apply translations**
-
-Since you work directly in the extracted file, apply all translations at once:
-
-```bash
-# Apply all translations from the filled-in extracted file
-node apply-translations.js data/shiji/014.json translations/untranslated_014.json "Garrett M. Petersen (2025)" "grok-1.5"
-
-# Check progress - should show 0 untranslated sentences
-node extract-untranslated.js data/shiji/014.json
-```
+**Note**: Sentences already translated by Herbert J. Allen (1894) are automatically skipped to maintain proper attribution.
 
 **Step 4: Final update**
 

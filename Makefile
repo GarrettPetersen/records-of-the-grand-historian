@@ -48,6 +48,9 @@ help:
 	@echo "  make quality-score          # Score translation quality subjectively (1-10 scale)"
 	@echo "  make first-untranslated     # Find first chapter needing idiomatic translations"
 	@echo "  make first-untranslated BOOK=hanshu  # Find in specific book only"
+	@echo "  make start-translation BOOK=shiji     # Start translation session (extract 50 sentences)"
+	@echo "  make submit-translations TRANSLATOR=\"Garrett M. Petersen (2025)\" MODEL=\"grok-1.5\"  # Submit translations from current_translation.json"
+	@echo "  make submit-translations TRANSLATOR=\"...\" MODEL=\"...\" FILE=\"path/to/file.json\"  # Submit from custom file"
 	@echo ""
 	@echo "Cleanup commands:"
 	@echo "  make clean-shiji            # Remove all Shiji data"
@@ -461,6 +464,7 @@ first-untranslated:
 	@echo "   • Focus on semantic fidelity and modern readability"
 	@echo "   • Avoid added narrative or stylistic ornament"
 	@echo "   • Aim for the literary quality and natural flow of Ken Liu's translation style"
+	@echo "   • Provide BOTH literal and idiomatic translations for each sentence"
 	@echo ""
 	@found=0; \
 	if [ -n "$(BOOK)" ]; then \
@@ -547,4 +551,52 @@ first-untranslated:
 		else \
 		echo "No chapters with missing idiomatic translations found!"; \
 		fi; \
+	fi
+
+# Start a translation session - find next chapter and extract sentences
+.PHONY: start-translation
+start-translation:
+	@echo "Starting translation session..."
+	@if [ -z "$(BOOK)" ]; then \
+		echo "Error: BOOK variable not set."; \
+		echo "Usage: make start-translation BOOK=shiji"; \
+		exit 1; \
+	fi
+	@echo "🎯 Remember: Translate like Ken Liu - prioritize semantic fidelity and modern readability"
+	@echo "   • Focus on semantic fidelity and modern readability"
+	@echo "   • Avoid added narrative or stylistic ornament"
+	@echo "   • Aim for the literary quality and natural flow of Ken Liu's translation style"
+	@echo "   • Provide BOTH literal and idiomatic translations for each sentence"
+	@echo ""
+	@$(NODE) start-translation.js $(BOOK)
+
+# Submit translations from a translation session
+.PHONY: submit-translations
+submit-translations:
+	@echo "Submitting translations..."
+	@if [ -z "$(TRANSLATOR)" ]; then \
+		echo "Error: TRANSLATOR variable not set."; \
+		echo "Usage: make submit-translations TRANSLATOR=\"Garrett M. Petersen (2025)\" MODEL=\"grok-1.5\""; \
+		exit 1; \
+	fi
+	@if [ -z "$(MODEL)" ]; then \
+		echo "Error: MODEL variable not set."; \
+		echo "Usage: make submit-translations TRANSLATOR=\"Garrett M. Petersen (2025)\" MODEL=\"grok-1.5\""; \
+		exit 1; \
+	fi
+	@translation_file="translations/current_translation.json"; \
+	if [ -n "$(FILE)" ]; then \
+		translation_file="$(FILE)"; \
+	fi; \
+	if [ ! -f "$$translation_file" ]; then \
+		echo "Error: Translation file not found: $$translation_file"; \
+		exit 1; \
+	fi; \
+	$(NODE) submit-translations.js "$$translation_file" "$(TRANSLATOR)" "$(MODEL)"; \
+	echo "Translations applied. Running quality check..."; \
+	chapter_file=$$(jq -r '.metadata.file' "$$translation_file" 2>/dev/null); \
+	if [ -n "$$chapter_file" ] && [ "$$chapter_file" != "null" ] && [ -f "$$chapter_file" ]; then \
+		$(MAKE) score-translations CHAPTER=$$chapter_file; \
+	else \
+		echo "Warning: Could not find chapter file to check quality."; \
 	fi
