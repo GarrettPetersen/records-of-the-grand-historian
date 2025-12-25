@@ -593,10 +593,18 @@ submit-translations:
 		exit 1; \
 	fi; \
 	$(NODE) submit-translations.js "$$translation_file" "$(TRANSLATOR)" "$(MODEL)"; \
-	echo "Translations applied. Running quality check..."; \
-	chapter_file=$$(jq -r '.metadata.file' "$$translation_file" 2>/dev/null); \
-	if [ -n "$$chapter_file" ] && [ "$$chapter_file" != "null" ] && [ -f "$$chapter_file" ]; then \
-		$(MAKE) score-translations CHAPTER=$$chapter_file; \
+	echo "Translations applied. Running quality checks..."; \
+	chapter_nums=$$(jq -r '.sentences[].chapter' "$$translation_file" 2>/dev/null | sort | uniq); \
+	if [ -n "$$chapter_nums" ]; then \
+		for chapter in $$chapter_nums; do \
+			if [ "$$chapter" != "null" ]; then \
+				chapter_file="data/$(BOOK)/$$(printf "%03d" $$chapter).json"; \
+				if [ -f "$$chapter_file" ]; then \
+					echo "Checking quality for chapter $$chapter..."; \
+					$(MAKE) score-translations CHAPTER=$$chapter_file || true; \
+				fi; \
+			fi; \
+		done; \
 	else \
-		echo "Warning: Could not find chapter file to check quality."; \
+		echo "Warning: Could not find chapter files to check quality."; \
 	fi

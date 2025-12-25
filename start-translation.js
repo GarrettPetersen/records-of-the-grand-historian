@@ -68,9 +68,29 @@ function findFirstUntranslatedChapter(bookFilter = null) {
               }
             }
           }
+        } else if (block.type === 'table_row') {
+          for (const cell of block.cells || []) {
+            if (cell.content && cell.content.trim()) {
+              total++;
+              if (!cell.idiomatic || !cell.idiomatic.trim()) {
+                missing++;
+              }
+            }
+          }
+        } else if (block.type === 'table_header') {
+          for (const sentence of block.sentences || []) {
+            if (sentence.zh && sentence.zh.trim()) {
+              total++;
+              const trans = sentence.translations?.[0];
+              if (!trans?.idiomatic || !trans.idiomatic.trim()) {
+                missing++;
+              }
+            }
+          }
         }
       }
 
+      // Return the first chapter found that has any missing translations
       if (missing > 0) {
         return {
           book,
@@ -179,7 +199,7 @@ function main() {
   const book = args[0];
   const outputFile = args[1] || 'translations/current_translation.json';
 
-  console.log(`Finding first chapter needing translation in book: ${book}`);
+  console.log(`Finding the most complete chapter needing translation in book: ${book}`);
 
   const chapter = findFirstUntranslatedChapter(book);
   if (!chapter) {
@@ -187,7 +207,7 @@ function main() {
     process.exit(0);
   }
 
-  console.log(`Found: ${chapter.book} chapter ${chapter.chapter} (${chapter.missing}/${chapter.total} missing idiomatic)`);
+  console.log(`Found: ${chapter.book} chapter ${chapter.chapter} (${chapter.total - chapter.missing}/${chapter.total} = ${((chapter.total - chapter.missing)/chapter.total*100).toFixed(1)}% complete, ${chapter.missing} missing)`);
   console.log(`File: ${chapter.file}`);
 
   const sentences = extractSentencesForTranslation(chapter.file, 50);

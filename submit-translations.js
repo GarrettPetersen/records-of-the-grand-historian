@@ -150,6 +150,18 @@ function applyTranslations(translationFile, chapterFile, translator, model) {
           translatedCount++;
         }
       }
+    } else if (block.type === 'table_row') {
+      for (const cell of block.cells || []) {
+        if (cell.idiomatic && cell.idiomatic.trim()) {
+          translatedCount++;
+        }
+      }
+    } else if (block.type === 'table_header') {
+      for (const sentence of block.sentences || []) {
+        if (sentence.translations?.[0]?.idiomatic?.trim()) {
+          translatedCount++;
+        }
+      }
     }
   }
   chapter.meta.translatedCount = translatedCount;
