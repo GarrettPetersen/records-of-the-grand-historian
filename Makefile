@@ -573,21 +573,21 @@ first-untranslated:
 .PHONY: continue
 continue:
 	@echo "Continuing translation workflow..."
-	@echo "Step 1/2: Submitting current translations..."
-	@$(MAKE) submit-translations TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"
-	@echo ""
-	@echo "Step 2/2: Starting next translation batch..."
 	@translation_file="translations/current_translation.json"; \
-	if [ -f "$$translation_file" ]; then \
-		echo "Error: Translation file still exists after submission. Check for errors."; \
-		exit 1; \
-	fi; \
-	book=$$(jq -r '.metadata.book // empty' "translations/current_translation.json" 2>/dev/null); \
-	if [ -z "$$book" ] || [ "$$book" = "null" ]; then \
-		echo "Error: Could not determine book from previous translation session."; \
+	if [ ! -f "$$translation_file" ]; then \
+		echo "Error: No current translation session found."; \
 		echo "Try running: make start-translation BOOK=<book_name>"; \
 		exit 1; \
 	fi; \
+	book=$$(jq -r '.metadata.book // empty' "$$translation_file" 2>/dev/null); \
+	if [ -z "$$book" ] || [ "$$book" = "null" ]; then \
+		echo "Error: Could not determine book from current translation session."; \
+		exit 1; \
+	fi; \
+	echo "Step 1/2: Submitting current translations..."; \
+	$(MAKE) submit-translations TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"; \
+	echo ""; \
+	echo "Step 2/2: Starting next translation batch..."; \
 	$(MAKE) start-translation BOOK=$$book
 
 # Start a translation session - find next chapter and extract sentences
