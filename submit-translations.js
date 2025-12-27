@@ -19,6 +19,7 @@ function validateTranslations(translationFile, chapterFile) {
   const chapter = JSON.parse(fs.readFileSync(chapterFile, 'utf8'));
 
   const errors = [];
+  let identicalCount = 0;
 
   for (const sentence of translations.sentences) {
     // Check if literal is empty
@@ -29,6 +30,12 @@ function validateTranslations(translationFile, chapterFile) {
     // Check if idiomatic is empty
     if (!sentence.idiomatic || !sentence.idiomatic.trim()) {
       errors.push(`Missing idiomatic translation for sentence ${sentence.id}. Please provide both literal and idiomatic translations for each sentence.`);
+    }
+
+    // Check if literal and idiomatic are identical (after trimming)
+    if (sentence.literal && sentence.idiomatic &&
+        sentence.literal.trim() === sentence.idiomatic.trim()) {
+      identicalCount++;
     }
 
     // Find the corresponding sentence in the chapter file
@@ -73,6 +80,15 @@ function validateTranslations(translationFile, chapterFile) {
     if (!found) {
       errors.push(`Sentence ${sentence.id} not found in chapter file`);
     }
+  }
+
+  // Check if too many translations are identical
+  const totalSentences = translations.sentences.length;
+  if (totalSentences > 0 && identicalCount === totalSentences) {
+    errors.push(`❌ SHORTCUT DETECTED: All ${totalSentences} literal and idiomatic translations are identical.`);
+    errors.push(`You cannot just copy literal translations to fill idiomatic fields.`);
+    errors.push(`Please provide distinct, high-quality idiomatic translations for each sentence.`);
+    errors.push(`Each idiomatic translation should be more natural and flowing while maintaining semantic fidelity.`);
   }
 
   return errors;

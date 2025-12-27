@@ -49,6 +49,7 @@ help:
 	@echo "  make first-untranslated     # Find first chapter needing idiomatic translations"
 	@echo "  make first-untranslated BOOK=hanshu  # Find in specific book only"
 	@echo "  make start-translation BOOK=shiji     # Start translation session (extract 50 sentences)"
+	@echo "  make continue                        # Submit current batch and start next (quicker workflow)"
 	@echo "  make submit-translations TRANSLATOR=\"Garrett M. Petersen (2025)\" MODEL=\"grok-1.5\"  # Submit translations from current_translation.json"
 	@echo "  make submit-translations TRANSLATOR=\"...\" MODEL=\"...\" FILE=\"path/to/file.json\"  # Submit from custom file"
 	@echo ""
@@ -140,6 +141,21 @@ nuke-translations:
 	@read -r || true
 	@$(NODE) nuke-translations.js $(CHAPTER)
 	@echo "✅ Translations nuked. Run 'make update' to update the website."
+
+# Nuke only idiomatic translations from a chapter (preserve literal)
+.PHONY: nuke-idiomatic
+nuke-idiomatic:
+	@if [ -z "$(CHAPTER)" ]; then \
+		echo "Error: CHAPTER variable not set."; \
+		echo "Usage: make nuke-idiomatic CHAPTER=data/shiji/062.json"; \
+		exit 1; \
+	fi
+	@echo "⚠️  NUKING IDIOMATIC TRANSLATIONS from $(CHAPTER)"
+	@echo "This will permanently remove only idiomatic translations while preserving literal ones!"
+	@echo "Press Enter to continue or Ctrl+C to abort..."
+	@read -r || true
+	@$(NODE) nuke-idiomatic-translations.js $(CHAPTER)
+	@echo "✅ Idiomatic translations nuked. Run 'make update' to update the website."
 
 # Generate manifest for web frontend
 .PHONY: manifest
@@ -553,6 +569,27 @@ first-untranslated:
 		fi; \
 	fi
 
+# Continue translation workflow - submit current batch and start next one
+.PHONY: continue
+continue:
+	@echo "Continuing translation workflow..."
+	@echo "Step 1/2: Submitting current translations..."
+	@$(MAKE) submit-translations TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"
+	@echo ""
+	@echo "Step 2/2: Starting next translation batch..."
+	@translation_file="translations/current_translation.json"; \
+	if [ -f "$$translation_file" ]; then \
+		echo "Error: Translation file still exists after submission. Check for errors."; \
+		exit 1; \
+	fi; \
+	book=$$(jq -r '.metadata.book // empty' "translations/current_translation.json" 2>/dev/null); \
+	if [ -z "$$book" ] || [ "$$book" = "null" ]; then \
+		echo "Error: Could not determine book from previous translation session."; \
+		echo "Try running: make start-translation BOOK=<book_name>"; \
+		exit 1; \
+	fi; \
+	$(MAKE) start-translation BOOK=$$book
+
 # Start a translation session - find next chapter and extract sentences
 .PHONY: start-translation
 start-translation:
@@ -593,18 +630,10 @@ submit-translations:
 		exit 1; \
 	fi; \
 	$(NODE) submit-translations.js "$$translation_file" "$(TRANSLATOR)" "$(MODEL)"; \
-	echo "Translations applied. Running quality checks..."; \
-	chapter_nums=$$(jq -r '.sentences[].chapter' "$$translation_file" 2>/dev/null | sort | uniq); \
-	if [ -n "$$chapter_nums" ]; then \
-		for chapter in $$chapter_nums; do \
-			if [ "$$chapter" != "null" ]; then \
-				chapter_file="data/$(BOOK)/$$(printf "%03d" $$chapter).json"; \
-				if [ -f "$$chapter_file" ]; then \
-					echo "Checking quality for chapter $$chapter..."; \
-					$(MAKE) score-translations CHAPTER=$$chapter_file || true; \
-				fi; \
-			fi; \
-		done; \
+	echo "Translations applied. Running quality check..."; \
+	chapter_file=$$(jq -r '.metadata.file' "$$translation_file" 2>/dev/null); \
+	if [ -n "$$chapter_file" ] && [ "$$chapter_file" != "null" ] && [ -f "$$chapter_file" ]; then \
+		$(MAKE) score-translations CHAPTER=$$chapter_file; \
 	else \
-		echo "Warning: Could not find chapter files to check quality."; \
+		echo "Warning: Could not find chapter file to check quality."; \
 	fi

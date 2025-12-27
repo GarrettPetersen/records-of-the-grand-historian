@@ -152,6 +152,10 @@ function scoreChapterFile(filePath) {
   const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
   const results = [];
 
+  // Track identical translations for chapter-level check
+  let identicalTranslations = 0;
+  let totalTranslations = 0;
+
   // Score paragraphs
   if (data.content) {
     for (const block of data.content) {
@@ -174,6 +178,14 @@ function scoreChapterFile(filePath) {
               content: content,
               translation: translation
             }));
+
+            // Check for identical literal and idiomatic
+            const literal = sentence.translations?.[0]?.literal || sentence.literal;
+            const idiomatic = sentence.translations?.[0]?.idiomatic || sentence.idiomatic;
+            if (literal && idiomatic && literal.trim() === idiomatic.trim()) {
+              totalTranslations++;
+              identicalTranslations++;
+            }
           }
         }
       }
@@ -209,10 +221,30 @@ function scoreChapterFile(filePath) {
               content: cell.content,
               translation: cell.idiomatic
             }));
+
+            // Check for identical literal and idiomatic in table cells
+            if (cell.literal && cell.idiomatic && cell.literal.trim() === cell.idiomatic.trim()) {
+              totalTranslations++;
+              identicalTranslations++;
+            }
           }
         }
       }
     }
+  }
+
+  // Check if too many translations are identical (1/3 threshold)
+  if (totalTranslations > 0 && identicalTranslations >= totalTranslations / 3) {
+    const ratio = identicalTranslations / totalTranslations;
+    // Add a "problematic" entry to flag this issue
+    results.push({
+      id: 'chapter-level-check',
+      chinese: `Chapter has ${identicalTranslations}/${totalTranslations} identical literal/idiomatic translations (${(ratio * 100).toFixed(1)}%)`,
+      english: '',
+      score: 0,
+      issues: [`Excessive identical translations: ${identicalTranslations}/${totalTranslations} (${(ratio * 100).toFixed(1)}%)`],
+      problematic: true
+    });
   }
 
   return results;
