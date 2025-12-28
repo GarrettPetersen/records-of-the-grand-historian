@@ -592,10 +592,18 @@ continue:
 		echo "Error: Could not determine book from current translation session."; \
 		exit 1; \
 	fi; \
+	echo "Found translation session for book: $$book"; \
+	echo "$$book" > translations/.continue_book.tmp; \
 	echo "Step 1/2: Submitting current translations..."; \
 	$(MAKE) submit-translations TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"; \
 	echo ""; \
 	echo "Step 2/2: Starting next translation batch..."; \
+	book=$$(cat translations/.continue_book.tmp 2>/dev/null); \
+	rm -f translations/.continue_book.tmp; \
+	if [ -z "$$book" ]; then \
+		echo "Error: Could not read book from temporary file."; \
+		exit 1; \
+	fi; \
 	$(MAKE) start-translation BOOK=$$book
 
 # Start a translation session - find next chapter and extract sentences
