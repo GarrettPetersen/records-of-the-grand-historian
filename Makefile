@@ -369,7 +369,7 @@ score-translations:
 	@echo "   • Would Ken Liu himself approve of this literary quality?"
 	@echo ""
 	@echo "If not, consider re-translating weak sentences to match Ken Liu's style."
-	@echo "Use 'make extract-review CHAPTER=... && make apply-review CHAPTER=... REVIEW=...'"
+	@echo "Use 'make extract-review CHAPTER=...' && 'make apply-review CHAPTER=... REVIEW=...' for manual review workflow"
 
 # Batch quality check on multiple chapters
 .PHONY: batch-quality-check
@@ -431,12 +431,20 @@ extract-review:
 .PHONY: apply-review
 apply-review:
 	@echo "Applying reviewed translations..."
-	@if [ -z "$(CHAPTER)" ] || [ -z "$(REVIEW)" ]; then \
-		echo "Error: CHAPTER and REVIEW variables must be set."; \
-		echo "Usage: make apply-review CHAPTER=data/shiji/024.json REVIEW=review_024.json"; \
+	@if [ -z "$(CHAPTER)" ]; then \
+		echo "Error: CHAPTER variable must be set."; \
+		echo "Usage: make apply-review CHAPTER=data/shiji/076.json"; \
+		echo "       (review file will be auto-detected from translations/ folder)"; \
 		exit 1; \
 	fi
-	@$(NODE) apply-reviewed-translations.js $(CHAPTER) $(REVIEW)
+	@chapter_base=$$(basename $(CHAPTER) .json); \
+	review_file="translations/review_$${chapter_base}.json"; \
+	if [ ! -f "$$review_file" ]; then \
+		echo "Error: Review file not found: $$review_file"; \
+		echo "Run 'make extract-review CHAPTER=$(CHAPTER)' first."; \
+		exit 1; \
+	fi; \
+	$(NODE) apply-reviewed-translations.js $(CHAPTER) $$review_file
 	@echo "Regenerating static page..."
 	@$(MAKE) update
 

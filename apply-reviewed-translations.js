@@ -1,186 +1,170 @@
 #!/usr/bin/env node
 
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 /**
- * Apply reviewed translations back to a chapter file
+ * apply-reviewed-translations.js - Apply reviewed translations back to chapter
+ *
+ * Usage: node apply-reviewed-translations.js <chapter-file> <review-file>
  */
-function applyReviewedTranslations(chapterPath, reviewPath) {
-  console.log(`Applying reviewed translations from: ${reviewPath}`);
-  console.log(`To chapter file: ${chapterPath}`);
 
-  if (!fs.existsSync(chapterPath)) {
-    console.error(`Chapter file not found: ${chapterPath}`);
+import fs from 'fs';
+
+function applyReviewedTranslations(chapterFile, reviewFile) {
+  if (!fs.existsSync(chapterFile)) {
+    console.error(`Chapter file not found: ${chapterFile}`);
     process.exit(1);
   }
 
-  if (!fs.existsSync(reviewPath)) {
-    console.error(`Review file not found: ${reviewPath}`);
+  if (!fs.existsSync(reviewFile)) {
+    console.error(`Review file not found: ${reviewFile}`);
     process.exit(1);
   }
 
-  const chapterData = JSON.parse(fs.readFileSync(chapterPath, 'utf8'));
-  const reviewData = JSON.parse(fs.readFileSync(reviewPath, 'utf8'));
-
-  // Validate that review data matches chapter
-  if (reviewData.chapter !== path.basename(chapterPath, '.json')) {
-    console.error(`Review file chapter (${reviewData.chapter}) doesn't match target chapter (${path.basename(chapterPath, '.json')})`);
-    process.exit(1);
-  }
+  const chapter = JSON.parse(fs.readFileSync(chapterFile, 'utf8'));
+  const review = JSON.parse(fs.readFileSync(reviewFile, 'utf8'));
 
   let appliedCount = 0;
   let changedCount = 0;
 
-  // Apply translations to content blocks
-  if (chapterData.content && reviewData.translations) {
-    for (const reviewItem of reviewData.translations) {
-      const success = applySingleTranslation(chapterData.content, reviewItem);
-      if (success) {
-        appliedCount++;
-        if (success.changed) {
-          changedCount++;
-        }
+  for (const reviewItem of review.translations) {
+    const success = applySingleTranslation(chapter.content, reviewItem);
+    if (success) {
+      appliedCount++;
+      if (success.changed) {
+        changedCount++;
       }
     }
   }
 
   // Recalculate translated count
-  const actualCount = countTranslations(chapterData);
-  chapterData.meta.translatedCount = actualCount;
+  let translatedCount = 0;
+  for (const block of chapter.content) {
+    if (block.type === 'paragraph') {
+      for (const sentence of block.sentences || []) {
+        if (sentence.translations?.[0]?.idiomatic?.trim()) {
+          translatedCount++;
+        }
+      }
+    } else if (block.type === 'table_row') {
+      for (const cell of block.cells || []) {
+        if (cell.idiomatic && cell.idiomatic.trim()) {
+          translatedCount++;
+        }
+      }
+    } else if (block.type === 'table_header') {
+      for (const sentence of block.sentences || []) {
+        if (sentence.translations?.[0]?.idiomatic?.trim()) {
+          translatedCount++;
+        }
+      }
+    }
+  }
+  chapter.meta.translatedCount = translatedCount;
 
-  // Write back the updated chapter
-  fs.writeFileSync(chapterPath, JSON.stringify(chapterData, null, 2));
-
-  console.log(`\n✅ Applied ${appliedCount} translations`);
+  fs.writeFileSync(chapterFile, JSON.stringify(chapter, null, 2));
+  console.log(`✅ Applied ${appliedCount} translations`);
   console.log(`✏️  ${changedCount} translations were modified`);
-  console.log(`📊 Updated translated count: ${actualCount}`);
+  console.log(`📊 Updated translated count: ${translatedCount}`);
 }
 
-/**
- * Apply a single reviewed translation
- */
 function applySingleTranslation(content, reviewItem) {
   for (const block of content) {
     if (block.type === 'paragraph') {
       for (const sentence of block.sentences || []) {
         if (sentence.id === reviewItem.id) {
           if (sentence.translations && sentence.translations.length > 0) {
-            const oldTranslation = sentence.translations[0].text;
-            const newTranslation = reviewItem.english?.trim();
+            let changed = false;
 
-            if (newTranslation && newTranslation !== oldTranslation) {
-              sentence.translations[0].text = newTranslation;
-              sentence.translations[0].idiomatic = newTranslation; // Also update idiomatic for consistency
+            // Apply literal translation if provided
+            if (reviewItem.literal !== undefined && reviewItem.literal !== sentence.translations[0].literal) {
+              sentence.translations[0].literal = reviewItem.literal;
+              changed = true;
+            }
+
+            // Apply idiomatic translation if provided
+            if (reviewItem.idiomatic !== undefined && reviewItem.idiomatic !== sentence.translations[0].idiomatic) {
+              sentence.translations[0].idiomatic = reviewItem.idiomatic;
+              changed = true;
+            }
+
+            if (changed) {
               // Preserve original translator information
               sentence.translations[0].translator = sentence.translations[0].translator || 'Garrett M. Petersen (2025)';
               sentence.translations[0].reviewed = true;
               return { changed: true };
-            } else if (newTranslation === oldTranslation) {
-              return { changed: false };
             }
+            return { changed: false };
           }
         }
       }
     } else if (block.type === 'table_row') {
       for (const cell of block.cells || []) {
         if (cell.id === reviewItem.id) {
-          const oldTranslation = cell.translation;
-          const newTranslation = reviewItem.english?.trim();
+          let changed = false;
 
-          if (newTranslation && newTranslation !== oldTranslation) {
-            cell.translation = newTranslation;
+          // Apply literal translation if provided
+          if (reviewItem.literal !== undefined && reviewItem.literal !== cell.literal) {
+            cell.literal = reviewItem.literal;
+            changed = true;
+          }
+
+          // Apply idiomatic translation if provided
+          if (reviewItem.idiomatic !== undefined && reviewItem.idiomatic !== cell.idiomatic) {
+            cell.idiomatic = reviewItem.idiomatic;
+            changed = true;
+          }
+
+          if (changed) {
             // Preserve original translator information
             cell.translator = cell.translator || 'Garrett M. Petersen (2025)';
             cell.reviewed = true;
             return { changed: true };
-          } else if (newTranslation === oldTranslation) {
-            return { changed: false };
           }
+          return { changed: false };
         }
       }
     } else if (block.type === 'table_header') {
       for (const sentence of block.sentences || []) {
         if (sentence.id === reviewItem.id) {
           if (sentence.translations && sentence.translations.length > 0) {
-            const oldTranslation = sentence.translations[0].text;
-            const newTranslation = reviewItem.english?.trim();
+            let changed = false;
 
-            if (newTranslation && newTranslation !== oldTranslation) {
-              sentence.translations[0].text = newTranslation;
-              sentence.translations[0].idiomatic = newTranslation; // Also update idiomatic for consistency
+            // Apply literal translation if provided
+            if (reviewItem.literal !== undefined && reviewItem.literal !== sentence.translations[0].literal) {
+              sentence.translations[0].literal = reviewItem.literal;
+              changed = true;
+            }
+
+            // Apply idiomatic translation if provided
+            if (reviewItem.idiomatic !== undefined && reviewItem.idiomatic !== sentence.translations[0].idiomatic) {
+              sentence.translations[0].idiomatic = reviewItem.idiomatic;
+              changed = true;
+            }
+
+            if (changed) {
               // Preserve original translator information
               sentence.translations[0].translator = sentence.translations[0].translator || 'Garrett M. Petersen (2025)';
               sentence.translations[0].reviewed = true;
               return { changed: true };
-            } else if (newTranslation === oldTranslation) {
-              return { changed: false };
             }
+            return { changed: false };
           }
         }
       }
     }
   }
-
-  console.warn(`Warning: Could not find sentence with ID ${reviewItem.id}`);
   return false;
 }
 
-/**
- * Count total translations in chapter data
- */
-function countTranslations(data) {
-  let count = 0;
-
-  if (data.content) {
-    for (const block of data.content) {
-      if (block.type === 'paragraph') {
-        for (const sentence of block.sentences || []) {
-          if (sentence.translations && sentence.translations.length > 0 && sentence.translations[0].text?.trim()) {
-            count++;
-          }
-        }
-      } else if (block.type === 'table_row') {
-        for (const cell of block.cells || []) {
-          if (cell.translation && cell.translation.trim()) {
-            count++;
-          }
-        }
-      } else if (block.type === 'table_header') {
-        for (const sentence of block.sentences || []) {
-          if (sentence.translations && sentence.translations.length > 0 && sentence.translations[0].text?.trim()) {
-            count++;
-          }
-        }
-      }
-    }
-  }
-
-  return count;
-}
-
-/**
- * Main function
- */
 function main() {
   const args = process.argv.slice(2);
-
   if (args.length !== 2) {
     console.error('Usage: node apply-reviewed-translations.js <chapter-file> <review-file>');
-    console.error('Example: node apply-reviewed-translations.js data/shiji/024.json review_024.json');
+    console.error('Example: node apply-reviewed-translations.js data/shiji/076.json review_076.json');
     process.exit(1);
   }
 
-  const [chapterPath, reviewPath] = args;
-  applyReviewedTranslations(chapterPath, reviewPath);
+  const [chapterFile, reviewFile] = args;
+  applyReviewedTranslations(chapterFile, reviewFile);
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
-  main();
-}
-
-export { applyReviewedTranslations };
+main();

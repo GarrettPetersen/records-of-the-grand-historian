@@ -33,14 +33,16 @@ function extractTranslationsForReview(filePath) {
         for (const sentence of block.sentences || []) {
           if (sentence.translations && sentence.translations.length > 0) {
             const translation = sentence.translations[0];
-            // Use idiomatic translation if available, otherwise literal, otherwise legacy text field
-            const english = translation.idiomatic || translation.literal || translation.text;
-            if (english) {
+            // Extract both literal and idiomatic translations
+            const literal = translation.literal || '';
+            const idiomatic = translation.idiomatic || '';
+            if (literal || idiomatic) {
               reviewData.translations.push({
                 id: sentence.id,
                 type: 'paragraph',
                 chinese: sentence.zh || sentence.content,
-                english: english,
+                literal: literal,
+                idiomatic: idiomatic,
                 context: getContext(data.content, block, sentence)
               });
             }
@@ -48,14 +50,16 @@ function extractTranslationsForReview(filePath) {
         }
       } else if (block.type === 'table_row') {
         for (const cell of block.cells || []) {
-          // Handle both old translation field and new idiomatic field
-          const english = cell.idiomatic || cell.translation;
-          if (english) {
+          // Extract both literal and idiomatic translations
+          const literal = cell.literal || '';
+          const idiomatic = cell.idiomatic || cell.translation || '';
+          if (literal || idiomatic) {
             reviewData.translations.push({
               id: cell.id,
               type: 'table_cell',
               chinese: cell.content,
-              english: english,
+              literal: literal,
+              idiomatic: idiomatic,
               context: getTableContext(data.content, block, cell)
             });
           }
@@ -64,14 +68,16 @@ function extractTranslationsForReview(filePath) {
         for (const sentence of block.sentences || []) {
           if (sentence.translations && sentence.translations.length > 0) {
             const translation = sentence.translations[0];
-            // Use idiomatic translation if available, otherwise literal, otherwise legacy text field
-            const english = translation.idiomatic || translation.literal || translation.text;
-            if (english) {
+            // Extract both literal and idiomatic translations
+            const literal = translation.literal || '';
+            const idiomatic = translation.idiomatic || '';
+            if (literal || idiomatic) {
               reviewData.translations.push({
                 id: sentence.id,
                 type: 'table_header',
                 chinese: sentence.zh || sentence.content,
-                english: english,
+                literal: literal,
+                idiomatic: idiomatic,
                 context: getTableContext(data.content, block, sentence)
               });
             }
@@ -148,14 +154,14 @@ function main() {
   const filePath = args[0];
   const reviewData = extractTranslationsForReview(filePath);
 
-  // Generate output filename
+  // Generate output filename in translations folder
   const baseName = path.basename(filePath, '.json');
-  const outputFile = `review_${baseName}.json`;
+  const outputFile = `translations/review_${baseName}.json`;
 
   fs.writeFileSync(outputFile, JSON.stringify(reviewData, null, 2));
   console.log(`\n✅ Extracted ${reviewData.translations.length} translations for review`);
   console.log(`📁 Saved to: ${outputFile}`);
-  console.log(`\n📝 Edit the "english" field in each translation object, then run:`);
+  console.log(`\n📝 Edit the "literal" and "idiomatic" fields in each translation object, then run:`);
   console.log(`   node apply-reviewed-translations.js ${filePath} ${outputFile}`);
 }
 
