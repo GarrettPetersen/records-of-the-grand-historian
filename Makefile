@@ -637,9 +637,9 @@ submit-translations:
 		echo "Error: Translation file not found: $$translation_file"; \
 		exit 1; \
 	fi; \
+	chapter_file=$$(jq -r '.metadata.file' "$$translation_file" 2>/dev/null); \
 	$(NODE) submit-translations.js "$$translation_file" "$(TRANSLATOR)" "$(MODEL)"; \
 	echo "Translations applied. Running quality check..."; \
-	chapter_file=$$(jq -r '.metadata.file' "$$translation_file" 2>/dev/null); \
 	if [ -n "$$chapter_file" ] && [ "$$chapter_file" != "null" ] && [ -f "$$chapter_file" ]; then \
 		$(MAKE) score-translations CHAPTER=$$chapter_file; \
 	else \

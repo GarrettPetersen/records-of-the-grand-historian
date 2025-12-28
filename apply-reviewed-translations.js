@@ -27,10 +27,10 @@ function applyReviewedTranslations(chapterFile, reviewFile) {
 
   for (const reviewItem of review.translations) {
     const success = applySingleTranslation(chapter.content, reviewItem);
-    if (success) {
-      appliedCount++;
-      if (success.changed) {
-        changedCount++;
+      if (success) {
+        appliedCount++;
+        if (success.changed) {
+          changedCount++;
       }
     }
   }
@@ -167,4 +167,4 @@ function main() {
   applyReviewedTranslations(chapterFile, reviewFile);
 }
 
-main();
+  main();
