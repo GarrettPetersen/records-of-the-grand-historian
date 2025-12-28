@@ -77,6 +77,7 @@ make first-untranslated BOOK=hanshu  # Find in specific book only
 # Streamlined translation workflow
 make start-translation BOOK=shiji     # Start translation session (extract 50 sentences)
 make submit-translations TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"  # Submit translations
+make continue TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"  # Submit & continue to next batch
 
 # Validate all JSON
 make validate
@@ -245,6 +246,19 @@ make submit-translations TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5
 3. **Quality Check**: Runs `make score-translations` to identify issues
 4. **Cleanup**: Deletes the temporary translation file
 
+**Step 3.5: Continue to next batch (optional)**
+
+For efficient multi-batch translation sessions, you can immediately continue to the next batch:
+
+```bash
+# After submitting translations, continue with the next 50 sentences from the same book
+make continue TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"
+
+# This is equivalent to:
+# make submit-translations TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"
+# make start-translation BOOK=<current-book>
+```
+
 **Step 4: Verify and update**
 
 ```bash
@@ -279,12 +293,12 @@ The streamlined workflow automatically handles large chapters by extracting up t
    # Fill in translations...
    make submit-translations TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"
 
-   # Next batch of 50 sentences
-   make start-translation BOOK=shiji
+   # Next batch of 50 sentences (quick continue)
+   make continue TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"
    # Fill in translations...
-   make submit-translations TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"
+   make continue TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"
 
-   # Repeat until chapter is complete
+   # Repeat make continue until chapter is complete
    ```
 
 2. **Check overall progress**:
