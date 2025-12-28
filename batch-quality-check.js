@@ -139,9 +139,40 @@ function displayRandomSamples(results, filename, options) {
       console.log(`\n${index + 1}. ${sample.id}:`);
       console.log(`   原文: ${sample.chinese}`);
       console.log(`   译文: ${sample.english}`);
+
+      // Try to show both literal and idiomatic translations if available
+      try {
+        const data = JSON.parse(fs.readFileSync(filename, 'utf8'));
+        const sentence = findSentenceById(data, sample.id);
+        if (sentence) {
+          const literal = sentence.translations?.[0]?.literal || sentence.literal;
+          const idiomatic = sentence.translations?.[0]?.idiomatic || sentence.idiomatic;
+          if (literal && idiomatic) {
+            console.log(`   直译: ${literal}`);
+            console.log(`   意译: ${idiomatic}`);
+          }
+        }
+      } catch (error) {
+        // Silently continue if we can't read the file or find the sentence
+      }
     });
     console.log('');
   }
+}
+
+/**
+ * Find a sentence by ID in chapter data
+ */
+function findSentenceById(data, sentenceId) {
+  if (data.content) {
+    for (const block of data.content) {
+      if (block.type === 'paragraph' && block.sentences) {
+        const sentence = block.sentences.find(s => s.id === sentenceId);
+        if (sentence) return sentence;
+      }
+    }
+  }
+  return null;
 }
 
 /**
@@ -159,6 +190,12 @@ function displayChapterProblems(problems, filename, options) {
     console.log(`   Score: ${problem.score.toFixed(2)}`);
     console.log(`   Issues: ${problem.issues.join(', ')}`);
   });
+
+  // Specifically highlight chapters with excessive identical translations
+  const identicalProblem = problems.find(p => p.id === 'chapter-level-check' && p.issues.some(issue => issue.includes('Excessive identical translations')));
+  if (identicalProblem) {
+    console.log(`\n🚨 CRITICAL: ${path.basename(filename)} has ${identicalProblem.issues[0]} - this chapter may have low quality translations!`);
+  }
 }
 
 /**
