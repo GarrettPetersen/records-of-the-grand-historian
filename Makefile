@@ -595,16 +595,21 @@ continue:
 	echo "Found translation session for book: $$book"; \
 	echo "$$book" > translations/.continue_book.tmp; \
 	echo "Step 1/2: Submitting current translations..."; \
-	$(MAKE) submit-translations TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"; \
-	echo ""; \
-	echo "Step 2/2: Starting next translation batch..."; \
-	book=$$(cat translations/.continue_book.tmp 2>/dev/null); \
-	rm -f translations/.continue_book.tmp; \
-	if [ -z "$$book" ]; then \
-		echo "Error: Could not read book from temporary file."; \
+	if $(MAKE) submit-translations TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"; then \
+		echo ""; \
+		echo "Step 2/2: Starting next translation batch..."; \
+		book=$$(cat translations/.continue_book.tmp 2>/dev/null); \
+		rm -f translations/.continue_book.tmp; \
+		if [ -z "$$book" ]; then \
+			echo "Error: Could not read book from temporary file."; \
+			exit 1; \
+		fi; \
+		$(MAKE) start-translation BOOK=$$book; \
+	else \
+		echo "❌ Translation submission failed. Please fix the issues and try again."; \
+		rm -f translations/.continue_book.tmp; \
 		exit 1; \
-	fi; \
-	$(MAKE) start-translation BOOK=$$book
+	fi
 
 # Start a translation session - find next chapter and extract sentences
 .PHONY: start-translation
@@ -646,7 +651,9 @@ submit-translations:
 		exit 1; \
 	fi; \
 	chapter_file=$$(jq -r '.metadata.file' "$$translation_file" 2>/dev/null); \
-	$(NODE) submit-translations.js "$$translation_file" "$(TRANSLATOR)" "$(MODEL)"; \
+	if ! $(NODE) submit-translations.js "$$translation_file" "$(TRANSLATOR)" "$(MODEL)"; then \
+		exit 1; \
+	fi; \
 	echo "Translations applied. Running quality check..."; \
 	if [ -n "$$chapter_file" ] && [ "$$chapter_file" != "null" ] && [ -f "$$chapter_file" ]; then \
 		$(MAKE) score-translations CHAPTER=$$chapter_file; \
