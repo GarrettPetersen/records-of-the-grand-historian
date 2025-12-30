@@ -411,7 +411,12 @@ function isBoilerplateText(text) {
     'show parallel',
     'chinese text project',
     'home',
-    'source:'
+    'source:',
+    // chinesenotes.com copyright boilerplate
+    'chinese text:',
+    'this work was published before',
+    'published before january 1, 1923',
+    'and is in the'
   ];
 
   return boilerplatePatterns.some(pattern => t.includes(pattern));
@@ -500,7 +505,7 @@ function parseCtextTables($, $table, startSentenceCounter, customHeaderText = ''
     const rowCells = cells.map((cell, cellIndex) => ({
       id: `s${startSentenceCounter++}`,
       content: cell.zh || '',
-      translation: '' // Will be filled by translation process
+      translations: [{ lang: 'en', literal: '', idiomatic: '', translator: '' }]
     }));
 
     if (rowIndex === 0) {
@@ -1042,7 +1047,7 @@ async function scrapeTabularChapter(bookId, chapter, glossaryPath, customUrl) {
           // Skip empty content
           if (!s.zh || s.zh.trim() === '') return false;
           // Check if translation exists and doesn't contain Chinese characters
-          const translation = s.translations?.[0]?.text;
+          const translation = s.translations?.[0]?.literal;
           return translation && translation.trim() !== '' && !containsChinese(translation);
         }).length;
       } else if (block.type === 'table_row') {
@@ -1050,7 +1055,7 @@ async function scrapeTabularChapter(bookId, chapter, glossaryPath, customUrl) {
           // Skip empty content
           if (!cell.content || cell.content.trim() === '') return false;
           // Check if translation exists and doesn't contain Chinese characters
-          const translation = cell.translation;
+          const translation = cell.translations?.[0]?.literal;
           return translation && translation.trim() !== '' && !containsChinese(translation);
         }).length;
       } else if (block.type === 'table_header') {
@@ -1058,7 +1063,7 @@ async function scrapeTabularChapter(bookId, chapter, glossaryPath, customUrl) {
           // Skip empty content
           if (!s.zh || s.zh.trim() === '') return false;
           // Check if translation exists and doesn't contain Chinese characters
-          const translation = s.translations?.[0]?.text;
+          const translation = s.translations?.[0]?.literal;
           return translation && translation.trim() !== '' && !containsChinese(translation);
         }).length;
       }
@@ -1211,8 +1216,11 @@ async function scrapeChapter(bookId, chapter, glossaryPath, customUrl) {
       sentenceCount += block.sentences.length;
       // Count sentences that have actual translation text
       for (const sentence of block.sentences) {
-        if (sentence.translations && sentence.translations.length > 0 && sentence.translations[0].text) {
-          translatedCount++;
+        if (sentence.translations && sentence.translations.length > 0) {
+          const trans = sentence.translations[0];
+          if ((trans.literal && trans.literal.trim() !== '') || (trans.idiomatic && trans.idiomatic.trim() !== '')) {
+            translatedCount++;
+          }
         }
       }
     }

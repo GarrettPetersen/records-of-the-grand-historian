@@ -28,6 +28,7 @@ help:
 	@echo "  make shiji-010              # Scrape Shiji chapter 10"
 	@echo "  make shiji-all              # Scrape all Shiji chapters (1-130)"
 	@echo "  make hanshu-all             # Scrape all Hanshu chapters (1-100)"
+	@echo "  make houhanshu-all          # Scrape all Houhanshu chapters (1-120)"
 	@echo ""
 	@echo "Scraping commands:"
 	@echo "  make <book>-<chapter>       # Scrape single chapter (e.g., make songshi-369)"
@@ -313,6 +314,20 @@ hanshu-all: | data/hanshu
 		fi; \
 	done
 
+# Houhanshu has 120 chapters
+.PHONY: houhanshu-all
+houhanshu-all: | data/houhanshu
+	@echo "Scraping all Book of Later Han chapters (1-120)..."
+	@for i in $$(seq -f "%03g" 1 120); do \
+		if [ ! -f data/houhanshu/$$i.json ]; then \
+			echo "Scraping houhanshu chapter $$i..."; \
+			$(SCRAPE) houhanshu $$i --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/houhanshu/$$i.json && \
+			echo "Saved to data/houhanshu/$$i.json"; \
+		else \
+			echo "Skipping houhanshu chapter $$i (already exists)"; \
+		fi; \
+	done
+
 # Clean targets
 .PHONY: clean-shiji clean-hanshu clean-all clean-translations
 clean-shiji:
@@ -336,7 +351,7 @@ clean-translations:
 	@echo "Done."
 
 # Force re-scrape (ignore existing files)
-.PHONY: force-shiji-all force-hanshu-all
+.PHONY: force-shiji-all force-hanshu-all force-houhanshu-all
 force-shiji-all: | data/shiji
 	@echo "Force scraping all Shiji chapters (1-130)..."
 	@for i in $$(seq -f "%03g" 1 130); do \
@@ -351,6 +366,14 @@ force-hanshu-all: | data/hanshu
 		echo "Scraping hanshu chapter $$i..."; \
 		$(SCRAPE) hanshu $$i --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/hanshu/$$i.json && \
 		echo "Saved to data/hanshu/$$i.json"; \
+	done
+
+force-houhanshu-all: | data/houhanshu
+	@echo "Force scraping all Book of Later Han chapters (1-120)..."
+	@for i in $$(seq -f "%03g" 1 120); do \
+		echo "Scraping houhanshu chapter $$i..."; \
+		$(SCRAPE) houhanshu $$i --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/houhanshu/$$i.json && \
+		echo "Saved to data/houhanshu/$$i.json"; \
 	done
 
 # Validate JSON files
