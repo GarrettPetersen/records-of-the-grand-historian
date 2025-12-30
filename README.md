@@ -191,13 +191,13 @@ The streamlined workflow uses two commands to make translation sessions efficien
 # Find the next chapter needing translation and extract up to 50 sentences
 make start-translation BOOK=shiji
 
-# This creates: translations/current_translation.json
+# This creates: translations/current_translation_shiji.json
 # Contains up to 50 sentences needing both literal and idiomatic translations
 ```
 
 **Step 2: Fill in translations**
 
-Edit `translations/current_translation.json` and provide **both literal and idiomatic translations** for each sentence:
+Edit `translations/current_translation_{book}.json` and provide **both literal and idiomatic translations** for each sentence:
 
 ```json
 {

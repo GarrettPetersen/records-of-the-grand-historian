@@ -52,7 +52,7 @@ help:
 	@echo "  make first-untranslated BOOK=hanshu  # Find in specific book only"
 	@echo "  make start-translation BOOK=shiji     # Start translation session (extract 50 sentences)"
 	@echo "  make continue                        # Submit current batch and start next (quicker workflow)"
-	@echo "  make submit-translations TRANSLATOR=\"Garrett M. Petersen (2025)\" MODEL=\"grok-1.5\"  # Submit translations from current_translation.json"
+	@echo "  make submit-translations TRANSLATOR=\"Garrett M. Petersen (2025)\" MODEL=\"grok-1.5\"  # Submit translations from current_translation_{book}.json"
 	@echo "  make submit-translations TRANSLATOR=\"...\" MODEL=\"...\" FILE=\"path/to/file.json\"  # Submit from custom file"
 	@echo ""
 	@echo "Cleanup commands:"
@@ -616,21 +616,29 @@ first-untranslated:
 .PHONY: continue
 continue:
 	@echo "Continuing translation workflow..."
-	@translation_file="translations/current_translation.json"; \
-	if [ ! -f "$$translation_file" ]; then \
+	@translation_files=$$(find translations -name "current_translation_*.json" -type f 2>/dev/null); \
+	translation_file_count=$$(echo "$$translation_files" | wc -l | tr -d ' '); \
+	if [ -z "$$translation_files" ] || [ "$$translation_file_count" -eq 0 ]; then \
 		echo "Error: No current translation session found."; \
 		echo "Try running: make start-translation BOOK=<book_name>"; \
 		exit 1; \
 	fi; \
+	if [ "$$translation_file_count" -gt 1 ]; then \
+		echo "Error: Multiple translation sessions found:"; \
+		echo "$$translation_files" | sed 's/^/  /'; \
+		echo "Please complete or delete extra sessions before continuing."; \
+		exit 1; \
+	fi; \
+	translation_file=$$translation_files; \
 	book=$$(jq -r '.metadata.book // empty' "$$translation_file" 2>/dev/null); \
 	if [ -z "$$book" ] || [ "$$book" = "null" ]; then \
 		echo "Error: Could not determine book from current translation session."; \
 		exit 1; \
 	fi; \
-	echo "Found translation session for book: $$book"; \
+	echo "Found translation session for book: $$book ($$translation_file)"; \
 	echo "$$book" > translations/.continue_book.tmp; \
 	echo "Step 1/2: Submitting current translations..."; \
-	if $(MAKE) submit-translations TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"; then \
+	if $(MAKE) submit-translations TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5" FILE="$$translation_file"; then \
 		echo ""; \
 		echo "Step 2/2: Starting next translation batch..."; \
 		book=$$(cat translations/.continue_book.tmp 2>/dev/null); \
@@ -677,9 +685,24 @@ submit-translations:
 		echo "Usage: make submit-translations TRANSLATOR=\"Garrett M. Petersen (2025)\" MODEL=\"grok-1.5\""; \
 		exit 1; \
 	fi
-	@translation_file="translations/current_translation.json"; \
+	@translation_file=""; \
 	if [ -n "$(FILE)" ]; then \
 		translation_file="$(FILE)"; \
+	else \
+		translation_files=$$(find translations -name "current_translation_*.json" -type f 2>/dev/null); \
+		translation_file_count=$$(echo "$$translation_files" | wc -l | tr -d ' '); \
+		if [ -z "$$translation_files" ] || [ "$$translation_file_count" -eq 0 ]; then \
+			echo "Error: No current translation session found."; \
+			echo "Try running: make start-translation BOOK=<book_name>"; \
+			exit 1; \
+		fi; \
+		if [ "$$translation_file_count" -gt 1 ]; then \
+			echo "Error: Multiple translation sessions found:"; \
+			echo "$$translation_files" | sed 's/^/  /'; \
+			echo "Please specify which file to submit using FILE=<path>."; \
+			exit 1; \
+		fi; \
+		translation_file=$$translation_files; \
 	fi; \
 	if [ ! -f "$$translation_file" ]; then \
 		echo "Error: Translation file not found: $$translation_file"; \

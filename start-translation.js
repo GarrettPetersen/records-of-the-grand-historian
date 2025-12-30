@@ -9,7 +9,7 @@
  * Usage:
  *   node start-translation.js <book> [output-file]
  *   node start-translation.js shiji
- *   node start-translation.js hanshu translations/current_translation.json
+ *   node start-translation.js hanshu translations/current_translation_hanshu.json
  */
 
 import fs from 'node:fs';
@@ -197,7 +197,7 @@ function main() {
   }
 
   const book = args[0];
-  const outputFile = args[1] || 'translations/current_translation.json';
+  const outputFile = args[1] || `translations/current_translation_${book}.json`;
 
   console.log(`Finding the most complete chapter needing translation in book: ${book}`);
 
@@ -227,6 +227,7 @@ function main() {
   console.log('');
   console.log('Now fill in BOTH "literal" and "idiomatic" fields for each sentence and run: make submit-translations');
   console.log('Note: Both literal and idiomatic translations are required for each sentence.');
+  console.log(`Note: The translation file is now named current_translation_${book}.json`);
 }
 
 main();

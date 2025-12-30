@@ -8,7 +8,7 @@
  *
  * Usage:
  *   node submit-translations.js <translation-file> <translator> <model>
- *   node submit-translations.js translations/current_translation.json "Garrett M. Petersen (2025)" "grok-1.5"
+ *   node submit-translations.js translations/current_translation_shiji.json "Garrett M. Petersen (2025)" "grok-1.5"
  */
 
 import fs from 'node:fs';
@@ -190,7 +190,7 @@ function main() {
   const args = process.argv.slice(2);
   if (args.length < 3) {
     console.error('Usage: node submit-translations.js <translation-file> <translator> <model>');
-    console.error('Example: node submit-translations.js translations/current_translation.json "Garrett M. Petersen (2025)" "grok-1.5"');
+    console.error('Example: node submit-translations.js translations/current_translation_shiji.json "Garrett M. Petersen (2025)" "grok-1.5"');
     process.exit(1);
   }
 
