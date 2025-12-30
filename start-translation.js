@@ -4,7 +4,7 @@
  * start-translation.js - Start a translation session by finding the next chapter and sentences to translate
  *
  * Finds the first chapter needing idiomatic translations and creates a JSON file with
- * the next 50 non-empty untranslated sentences, including existing translations for reference.
+ * the next 15 non-empty untranslated sentences, including existing translations for reference.
  *
  * Usage:
  *   node start-translation.js <book> [output-file]
@@ -106,7 +106,7 @@ function findFirstUntranslatedChapter(bookFilter = null) {
   return null;
 }
 
-function extractSentencesForTranslation(filePath, maxSentences = 50) {
+function extractSentencesForTranslation(filePath, maxSentences = 15) {
   const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
   const sentences = [];
   const isGenealogicalTable = data.meta.book === 'shiji' &&
@@ -210,7 +210,7 @@ function main() {
   console.log(`Found: ${chapter.book} chapter ${chapter.chapter} (${chapter.total - chapter.missing}/${chapter.total} = ${((chapter.total - chapter.missing)/chapter.total*100).toFixed(1)}% complete, ${chapter.missing} missing)`);
   console.log(`File: ${chapter.file}`);
 
-  const sentences = extractSentencesForTranslation(chapter.file, 50);
+  const sentences = extractSentencesForTranslation(chapter.file, 15);
   console.log(`Extracted ${sentences.length} sentences for translation`);
 
   const result = {
