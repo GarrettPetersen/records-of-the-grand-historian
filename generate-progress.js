@@ -78,18 +78,18 @@ function analyzeChapterStatus(bookId, chapter, chapterData) {
       }
     }
 
-    // Red: blatant problems OR lots of problems (significant fraction)
+    // Red: major issues (blatant problems OR lots of problems)
     const problemRatio = totalSentences > 0 ? problems / totalSentences : 0;
-    if (blatantProblems > 0 || problemRatio > 0.1) { // 10%+ problems is "lots"
+    if (blatantProblems > 0 || problemRatio > 0.1) { // 10%+ problems OR Chinese chars
       return 'red';
     }
 
-    // Green: complete idiomatic translations without problems
-    if (idiomaticTranslations >= totalSentences && problems === 0) {
+    // Green: complete idiomatic translations without major issues
+    if (idiomaticTranslations >= totalSentences) {
       return 'green';
     }
 
-    // Yellow: partially translated (has some translations)
+    // Yellow: partial translation (has some translations but not complete)
     return 'yellow';
 
   } catch (error) {
