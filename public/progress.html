@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation Progress - 二十四史</title>
+    <meta name="description" content="Translation progress overview of the Twenty-Four Dynastic Histories of China">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
+            gap: 2px;
+            margin: 1rem 0;
+            max-width: 100%;
+        }
+
+        .progress-square {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 2px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-square.gray {
+            background-color: #d3d3d3;
+        }
+
+        .progress-square.yellow {
+            background-color: #ffd700;
+        }
+
+        .progress-square.red {
+            background-color: #dc3545;
+        }
+
+        .progress-square.green {
+            background-color: #28a745;
+        }
+
+        .progress-square:hover {
+            transform: scale(1.2);
+            z-index: 10;
+        }
+
+        .progress-square:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            z-index: 100;
+            pointer-events: none;
+            margin-bottom: 5px;
+        }
+
+        .progress-square:hover::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.8);
+            margin-bottom: -5px;
+        }
+
+        .book-section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .book-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .book-header h2 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .book-subtitle {
+            color: var(--text-color);
+            opacity: 0.7;
+            font-size: 1rem;
+        }
+
+        .progress-legend {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .legend-square {
+            width: 16px;
+            height: 16px;
+            border-radius: 2px;
+        }
+
+        .progress-stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stat-square {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .progress-grid {
+                grid-template-columns: repeat(auto-fit, minmax(12px, 1fr));
+                gap: 1px;
+            }
+
+            .progress-square:hover::after {
+                display: none;
+            }
+
+            .progress-square:hover::before {
+                display: none;
+            }
+
+            .book-section {
+                padding: 1rem;
+            }
+
+            .progress-legend {
+                gap: 1rem;
+            }
+
+            .progress-stats {
+                gap: 1rem;
+            }
+        }
+
+        .last-updated {
+            text-align: center;
+            margin: 2rem 0;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div style="max-width: 1400px; margin: 0 auto;">
+            <a href="index.html" class="back-link" style="color: white; opacity: 0.9;">← Back to all histories</a>
+            <h1>Translation Progress</h1>
+            <h2>二十四史 Translation Status</h2>
+        </div>
+    </header>
+
+    <main>
+        <div id="loading">Loading progress data...</div>
+        <div id="progress-content" style="display: none;">
+            <div class="progress-legend">
+                <div class="legend-item">
+                    <div class="legend-square gray"></div>
+                    <span>Untranslated</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-square yellow"></div>
+                    <span>Partially Translated</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-square red"></div>
+                    <span>Problems Detected</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-square green"></div>
+                    <span>Complete</span>
+                </div>
+            </div>
+
+            <div id="books-container"></div>
+        </div>
+    </main>
+
+    <div class="last-updated" id="last-updated"></div>
+
+    <footer>
+        <p><a href="about.html">About</a> | Source text from <a href="https://chinesenotes.com" target="_blank">Chinese Notes</a> | <a href="privacy.html">Privacy Policy</a></p>
+    </footer>
+
+    <script>
+        async function loadProgressData() {
+            try {
+                const response = await fetch('data/progress.json');
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error loading progress data:', error);
+                document.getElementById('loading').textContent = 'Error loading progress data';
+                return null;
+            }
+        }
+
+        function createBookSection(bookId, bookData) {
+            const section = document.createElement('div');
+            section.className = 'book-section';
+
+            // Count status types
+            const stats = {
+                gray: 0,
+                yellow: 0,
+                red: 0,
+                green: 0,
+                total: bookData.chapters.length
+            };
+
+            bookData.chapters.forEach(chapter => {
+                stats[chapter.status]++;
+            });
+
+            // Book header
+            const header = document.createElement('div');
+            header.className = 'book-header';
+            header.innerHTML = `
+                <h2>${bookData.name}</h2>
+                <div class="book-subtitle">${bookData.chinese} (${bookData.pinyin}) - ${bookData.dynasty}</div>
+                <div class="progress-stats">
+                    <div class="stat-item">
+                        <div class="stat-square gray"></div>
+                        <span>${stats.gray}/${stats.total} untranslated</span>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-square yellow"></div>
+                        <span>${stats.yellow}/${stats.total} partial</span>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-square red"></div>
+                        <span>${stats.red}/${stats.total} problems</span>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-square green"></div>
+                        <span>${stats.green}/${stats.total} complete</span>
+                    </div>
+                </div>
+            `;
+
+            // Progress grid
+            const grid = document.createElement('div');
+            grid.className = 'progress-grid';
+
+            bookData.chapters.forEach(chapter => {
+                const square = document.createElement('div');
+                square.className = `progress-square ${chapter.status}`;
+                square.setAttribute('data-tooltip', `${chapter.chapter}: ${chapter.title.en || chapter.title.zh}\n${chapter.translatedCount}/${chapter.sentenceCount} translated`);
+
+                // Make clickable to go to chapter
+                square.addEventListener('click', () => {
+                    window.location.href = `${bookId}/${chapter.chapter}.html`;
+                });
+
+                grid.appendChild(square);
+            });
+
+            section.appendChild(header);
+            section.appendChild(grid);
+
+            return section;
+        }
+
+        async function init() {
+            const data = await loadProgressData();
+            if (!data) return;
+
+            const loading = document.getElementById('loading');
+            const content = document.getElementById('progress-content');
+            const container = document.getElementById('books-container');
+            const lastUpdated = document.getElementById('last-updated');
+
+            // Format last updated time
+            const updated = new Date(data.generatedAt);
+            lastUpdated.textContent = `Last updated: ${updated.toLocaleDateString()} ${updated.toLocaleTimeString()}`;
+
+            // Create sections for each book
+            Object.keys(data.books).forEach(bookId => {
+                const bookSection = createBookSection(bookId, data.books[bookId]);
+                container.appendChild(bookSection);
+            });
+
+            // Show content
+            loading.style.display = 'none';
+            content.style.display = 'block';
+        }
+
+        init();
+    </script>
+</body>
+</html>
