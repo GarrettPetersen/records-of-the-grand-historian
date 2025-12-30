@@ -182,9 +182,11 @@ function scoreChapterFile(filePath) {
             // Check for identical literal and idiomatic
             const literal = sentence.translations?.[0]?.literal || sentence.literal;
             const idiomatic = sentence.translations?.[0]?.idiomatic || sentence.idiomatic;
-            if (literal && idiomatic && literal.trim() === idiomatic.trim()) {
+            if (literal && idiomatic) {
               totalTranslations++;
-              identicalTranslations++;
+              if (literal.trim() === idiomatic.trim()) {
+                identicalTranslations++;
+              }
             }
           }
         }
@@ -223,9 +225,11 @@ function scoreChapterFile(filePath) {
             }));
 
             // Check for identical literal and idiomatic in table cells
-            if (cell.literal && cell.idiomatic && cell.literal.trim() === cell.idiomatic.trim()) {
+            if (cell.literal && cell.idiomatic) {
               totalTranslations++;
-              identicalTranslations++;
+              if (cell.literal.trim() === cell.idiomatic.trim()) {
+                identicalTranslations++;
+              }
             }
           }
         }
