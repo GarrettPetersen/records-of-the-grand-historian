@@ -108,3 +108,4 @@ export function getAlignmentScore(chineseText, englishText) {
   return 0;
 }
 
+
