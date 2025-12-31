@@ -1,0 +1,29 @@
+Was that last chapter up to the standards of Ken Liu? If you used any shortcuts or placeholders, you must now nuke the chapter and start again. If you choose to nuke the chapter, you MUST provide a written explanation of what you did wrong, why it had to be nuked, and how you will avoid this going forward. Otherwise, let's continue.
+
+First, git pull and resolve and differences with remote.
+
+Then run make start-translation BOOK=hanshu.
+
+Then add professional quality translations to translations/current_translation_hanshu.json.
+
+Run make continue.
+
+Then, once again, add professional quality translations to translations/current_translation.json.
+
+Run make continue again.
+
+Continue this process in a loop until the chapter is fully translated.
+
+Then run make submit-translations TRANSLATOR="Garrett M. Petersen (2025)" MODEL=(your model) FILE=(translation json you've been working on)
+
+Continue repeating the above steps until you have fully completed a chapter, then use git to add, commit, and push your changes.
+
+Translate that chapter in full using the process documented in the readme. Do it in batches until it is 100% complete. You don't need to do any of the following steps until you hit 100%. I don't care how many batches it takes!
+
+Use the make score-translations command on your chapter to check the quality of your translations. It sometimes has false positives for length differences, but you should be able to see if anything is wildly wrong. Fix any issues. (Make sure there are NO placeholders where translations should be!)
+
+Once the chapter has been completely translated with valid literal and idiomatic translations provided by YOU (the AI reading this), you're done.
+
+I fully expect this to take a long time! NO placeholders. There is NO other translator coming to fill in your work. You must produce production-quality work without shortcuts.
+
+Then run make update, and then push to github with an appropriate commit message, resolving any differences with remote.
