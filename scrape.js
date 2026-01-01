@@ -196,8 +196,8 @@ const BOOKS = {
   }
 };
 
-// Classical Chinese sentence-ending punctuation
-const SENTENCE_ENDINGS = /([。！？；])/;
+// Classical Chinese sentence-ending punctuation, plus parentheses to split parenthetical content
+const SENTENCE_ENDINGS = /([。！？；〈〉()（）])/;
 
 function normalizeWhitespace(text) {
   return text.replace(/\u00A0/g, ' ').replace(/\s+/g, ' ').trim();
@@ -289,17 +289,35 @@ function updateGlossary(existingGlossary, tokens) {
 /**
  * Segment Chinese text into sentences based on punctuation
  */
-function segmentSentences(text) {
+export function segmentSentences(text) {
   const sentences = [];
   const parts = text.split(SENTENCE_ENDINGS);
 
   let current = '';
   for (let i = 0; i < parts.length; i++) {
-    current += parts[i];
-    // If this part is punctuation (odd indices after split), complete the sentence
-    if (i % 2 === 1 && current.trim()) {
-      sentences.push(current.trim());
-      current = '';
+    // If this part is punctuation (odd indices after split)
+    if (i % 2 === 1) {
+      const punctuation = parts[i];
+      // Check if it's opening punctuation (should start a new sentence)
+      const isOpeningPunc = /[〈(（]/.test(punctuation);
+
+      if (isOpeningPunc) {
+        // Opening punctuation: complete current sentence (if any) and start new one with punctuation
+        if (current.trim()) {
+          sentences.push(current.trim());
+        }
+        current = punctuation;
+      } else {
+        // Closing punctuation: add to current sentence and complete it
+        current += punctuation;
+        if (current.trim()) {
+          sentences.push(current.trim());
+          current = '';
+        }
+      }
+    } else {
+      // Text part: add to current sentence
+      current += parts[i];
     }
   }
 
@@ -308,31 +326,20 @@ function segmentSentences(text) {
     sentences.push(current.trim());
   }
 
-  // Post-process: merge standalone closing quotes and move leading quotes
+  // Post-process: merge standalone punctuation but keep parentheses as sentence boundaries
   const merged = [];
-  const closeQuotesOnly = /^[」"'』】)〉\s]+$/;
-  const startsWithCloseQuote = /^([」"'』】)〉]+)(.+)/;
+  const punctuationOnly = /^[」"'』】\s]+$/; // Only merge standalone quotes/punctuation
 
   for (let i = 0; i < sentences.length; i++) {
     const sentence = sentences[i];
 
-    // Case 1: Sentence is only a closing quote - append to previous
-    if (closeQuotesOnly.test(sentence) && merged.length > 0) {
+    // Case 1: Sentence is only punctuation (not including parentheses) - append to previous
+    if (punctuationOnly.test(sentence) && merged.length > 0) {
       merged[merged.length - 1] += sentence;
     }
-    // Case 2: Sentence starts with closing quote - move quote to end of previous
+    // Case 2: All other sentences (including parentheses) stay as separate sentences
     else {
-      const match = sentence.match(startsWithCloseQuote);
-      if (match && merged.length > 0) {
-        const [, quotes, rest] = match;
-        // Only add quotes if previous doesn't already end with them
-        if (!merged[merged.length - 1].endsWith(quotes)) {
-          merged[merged.length - 1] += quotes;
-        }
-        merged.push(rest);
-      } else {
-        merged.push(sentence);
-      }
+      merged.push(sentence);
     }
   }
 
