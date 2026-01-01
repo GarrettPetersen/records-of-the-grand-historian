@@ -201,7 +201,6 @@ function applyTranslations(translationFile, chapterFile, translator, model) {
           break;
         }
       }
-      if (found) break;
     } else {
       // Fallback: search all blocks (old behavior)
       for (const block of chapter.content) {
