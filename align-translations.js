@@ -78,12 +78,37 @@ function splitEnglishSentences(text) {
     return [];
   }
 
+  // Preprocess: move closing parentheses that start sentences to the previous sentence
+  let processed = text;
+
+  // Split on sentence endings but keep track of sentence boundaries
+  const parts = processed.split(/([.!?]+\s*)/);
+
+  for (let i = 1; i < parts.length; i++) {
+    // If a part starts with ), move it to the end of the previous part
+    if (parts[i].startsWith(')')) {
+      // Find the previous non-empty part
+      for (let j = i - 1; j >= 0; j--) {
+        if (parts[j].trim()) {
+          if (!parts[j].endsWith(')')) {
+            parts[j] = parts[j].trim() + ')';
+          }
+          parts[i] = parts[i].substring(1).trim();
+          break;
+        }
+      }
+    }
+  }
+
+  processed = parts.join('');
+
   // Simple sentence splitting on periods, question marks, exclamation points
   // This is a basic implementation - could be improved
-  const sentences = text
+  const sentences = processed
     .split(/[.!?]+/)
     .map(s => s.trim())
     .filter(s => s.length > 0)
+    .filter(s => !/^[」"'』】)\s]*$/.test(s)) // Filter out punctuation-only sentences
     .map(s => s + '.');
 
   return sentences;

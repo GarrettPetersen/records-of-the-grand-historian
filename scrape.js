@@ -310,8 +310,8 @@ function segmentSentences(text) {
 
   // Post-process: merge standalone closing quotes and move leading quotes
   const merged = [];
-  const closeQuotesOnly = /^[」"'』】)]+$/;
-  const startsWithCloseQuote = /^([」"'』】)]+)(.+)/;
+  const closeQuotesOnly = /^[」"'』】)〉\s]+$/;
+  const startsWithCloseQuote = /^([」"'』】)〉]+)(.+)/;
 
   for (let i = 0; i < sentences.length; i++) {
     const sentence = sentences[i];
@@ -337,6 +337,41 @@ function segmentSentences(text) {
   }
 
   return merged;
+}
+
+/**
+ * Fix English text where sentences start with closing parentheses
+ * These should be moved to the end of the previous sentence
+ */
+function fixEnglishClosingParentheses(text) {
+  if (!text) return text;
+
+  // Split on sentence endings but keep the punctuation
+  const parts = text.split(/([.!?]+\s*)/);
+
+  const fixed = [];
+  for (let i = 0; i < parts.length; i++) {
+    let part = parts[i];
+
+    // Check if this part starts with a closing parenthesis
+    if (part.startsWith(')')) {
+      // Find the previous non-empty part and attach the ) to it
+      for (let j = fixed.length - 1; j >= 0; j--) {
+        if (fixed[j].trim()) {
+          // Only attach if the previous part doesn't already end with )
+          if (!fixed[j].endsWith(')')) {
+            fixed[j] = fixed[j].trim() + ')';
+          }
+          part = part.substring(1).trim(); // Remove the ) from the beginning
+          break;
+        }
+      }
+    }
+
+    fixed.push(part);
+  }
+
+  return fixed.join('');
 }
 
 /**
@@ -821,8 +856,15 @@ function extractContent($, isFromCtext = false, startSentenceCounter = 0, url = 
 
       if (hasEnglishTranslation) {
         // We have parallel text - attempt to align sentence-by-sentence
-        const enText = nextPara;
+        let enText = nextPara;
+        // Preprocess English text to fix closing parentheses that should attach to previous sentences
+        enText = fixEnglishClosingParentheses(enText);
         const alignedTranslations = alignTranslations(zhSentences, enText);
+
+        // Filter out punctuation-only translations
+        const filteredTranslations = alignedTranslations.map(trans =>
+          trans && !/^[」"'』】)\s]*$/.test(trans.trim()) ? trans : ''
+        );
 
         // Only attribute to Herbert J. Allen if the translation isn't boilerplate
         const isActualTranslation = !isBoilerplateText(enText);
@@ -834,9 +876,9 @@ function extractContent($, isFromCtext = false, startSentenceCounter = 0, url = 
             zh: s,
             translations: [{
               lang: 'en',
-              literal: (alignedTranslations[idx] && isActualTranslation) ? alignedTranslations[idx] : '',
+              literal: (filteredTranslations[idx] && isActualTranslation) ? filteredTranslations[idx] : '',
               idiomatic: '',
-              translator: (alignedTranslations[idx] && isActualTranslation) ? 'Herbert J. Allen (1894)' : ''
+              translator: (filteredTranslations[idx] && isActualTranslation) ? 'Herbert J. Allen (1894)' : ''
             }]
           })),
           translations: [{

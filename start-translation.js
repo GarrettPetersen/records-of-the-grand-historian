@@ -112,7 +112,8 @@ function extractSentencesForTranslation(filePath, maxSentences = 15) {
   const isGenealogicalTable = data.meta.book === 'shiji' &&
                              ['013', '014', '015', '016'].includes(data.meta.chapter);
 
-  for (const block of data.content) {
+  for (let blockIndex = 0; blockIndex < data.content.length; blockIndex++) {
+    const block = data.content[blockIndex];
     if (sentences.length >= maxSentences) break;
 
     let blockSentences = [];
@@ -175,8 +176,12 @@ function extractSentencesForTranslation(filePath, maxSentences = 15) {
       }
 
       if (!hasIdiomatic && chineseText && chineseText.trim()) {
+        // Create globally unique ID by including block index
+        const globalId = `${blockIndex}-${sentenceId}`;
         sentences.push({
-          id: sentenceId,
+          id: globalId,
+          originalId: sentenceId,
+          blockIndex: blockIndex,
           chinese: chineseText,
           literal: existingLiteral,
           idiomatic: ''

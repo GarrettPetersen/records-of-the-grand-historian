@@ -40,7 +40,11 @@ function validateTranslations(translationFile, chapterFile) {
 
     // Find the corresponding sentence in the chapter file
     let found = false;
-    for (const block of chapter.content) {
+    const originalId = sentence.originalId || sentence.id;
+    const blockIndex = sentence.blockIndex;
+
+    if (blockIndex !== undefined && blockIndex < chapter.content.length) {
+      const block = chapter.content[blockIndex];
       let blockSentences = [];
 
       if (block.type === 'paragraph') {
@@ -66,7 +70,7 @@ function validateTranslations(translationFile, chapterFile) {
           chapterId = chapterSentence.id;
         }
 
-        if (chapterId === sentence.id) {
+        if (chapterId === originalId) {
           if (chapterChinese !== sentence.chinese) {
             errors.push(`Chinese text mismatch for sentence ${sentence.id}: expected "${chapterChinese}", got "${sentence.chinese}"`);
           }
@@ -74,7 +78,44 @@ function validateTranslations(translationFile, chapterFile) {
           break;
         }
       }
-      if (found) break;
+    } else {
+      // Fallback: search all blocks for the sentence (old behavior)
+      for (const block of chapter.content) {
+        let blockSentences = [];
+
+        if (block.type === 'paragraph') {
+          blockSentences = block.sentences;
+        } else if (block.type === 'table_row') {
+          blockSentences = block.cells;
+        } else if (block.type === 'table_header') {
+          blockSentences = block.sentences;
+        }
+
+        for (const chapterSentence of blockSentences) {
+          let chapterChinese = '';
+          let chapterId = '';
+
+          if (block.type === 'paragraph') {
+            chapterChinese = chapterSentence.zh;
+            chapterId = chapterSentence.id;
+          } else if (block.type === 'table_row') {
+            chapterChinese = chapterSentence.content;
+            chapterId = chapterSentence.id;
+          } else if (block.type === 'table_header') {
+            chapterChinese = chapterSentence.zh;
+            chapterId = chapterSentence.id;
+          }
+
+          if (chapterId === originalId) {
+            if (chapterChinese !== sentence.chinese) {
+              errors.push(`Chinese text mismatch for sentence ${sentence.id}: expected "${chapterChinese}", got "${sentence.chinese}"`);
+            }
+            found = true;
+            break;
+          }
+        }
+        if (found) break;
+      }
     }
 
     if (!found) {
@@ -102,7 +143,12 @@ function applyTranslations(translationFile, chapterFile, translator, model) {
 
   for (const sentence of translations.sentences) {
     // Find and update the sentence in the chapter
-    for (const block of chapter.content) {
+    const originalId = sentence.originalId || sentence.id;
+    const blockIndex = sentence.blockIndex;
+    let found = false;
+    if (blockIndex !== undefined && blockIndex < chapter.content.length) {
+      // Use block index if available
+      const block = chapter.content[blockIndex];
       let blockSentences = [];
 
       if (block.type === 'paragraph') {
@@ -124,7 +170,8 @@ function applyTranslations(translationFile, chapterFile, translator, model) {
           chapterId = chapterSentence.id;
         }
 
-        if (chapterId === sentence.id) {
+        if (chapterId === originalId) {
+          found = true;
           if (block.type === 'paragraph') {
             if (!chapterSentence.translations) {
               chapterSentence.translations = [];
@@ -154,6 +201,68 @@ function applyTranslations(translationFile, chapterFile, translator, model) {
           break;
         }
       }
+      if (found) break;
+    } else {
+      // Fallback: search all blocks (old behavior)
+      for (const block of chapter.content) {
+        let blockSentences = [];
+
+        if (block.type === 'paragraph') {
+          blockSentences = block.sentences;
+        } else if (block.type === 'table_row') {
+          blockSentences = block.cells;
+        } else if (block.type === 'table_header') {
+          blockSentences = block.sentences;
+        }
+
+        for (const chapterSentence of blockSentences) {
+          let chapterId = '';
+
+          if (block.type === 'paragraph') {
+            chapterId = chapterSentence.id;
+          } else if (block.type === 'table_row') {
+            chapterId = chapterSentence.id;
+          } else if (block.type === 'table_header') {
+            chapterId = chapterSentence.id;
+          }
+
+          if (chapterId === originalId) {
+            found = true;
+            if (block.type === 'paragraph') {
+              if (!chapterSentence.translations) {
+                chapterSentence.translations = [];
+              }
+              if (chapterSentence.translations.length === 0) {
+                chapterSentence.translations.push({});
+              }
+              chapterSentence.translations[0].translator = translator;
+              chapterSentence.translations[0].model = model;
+              chapterSentence.translations[0].literal = sentence.literal;
+              chapterSentence.translations[0].idiomatic = sentence.idiomatic;
+            } else if (block.type === 'table_row') {
+              chapterSentence.literal = sentence.literal;
+              chapterSentence.idiomatic = sentence.idiomatic;
+            } else if (block.type === 'table_header') {
+              if (!chapterSentence.translations) {
+                chapterSentence.translations = [];
+              }
+              if (chapterSentence.translations.length === 0) {
+                chapterSentence.translations.push({});
+              }
+              chapterSentence.translations[0].translator = translator;
+              chapterSentence.translations[0].model = model;
+              chapterSentence.translations[0].literal = sentence.literal;
+              chapterSentence.translations[0].idiomatic = sentence.idiomatic;
+            }
+            break;
+          }
+        }
+        if (found) break;
+      }
+    }
+
+    if (!found) {
+      console.warn(`Warning: Sentence ${sentence.id} (original: ${originalId}) not found in chapter file`);
     }
   }
 

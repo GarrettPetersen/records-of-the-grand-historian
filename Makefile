@@ -616,21 +616,31 @@ first-untranslated:
 .PHONY: continue
 continue:
 	@echo "Continuing translation workflow..."
-	@translation_files=$$(find translations -name "current_translation_*.json" -type f 2>/dev/null); \
-	translation_file_count=$$(echo "$$translation_files" | wc -l | tr -d ' '); \
-	if [ -z "$$translation_files" ] || [ "$$translation_file_count" -eq 0 ]; then \
-		echo "Error: No current translation session found."; \
-		echo "Try running: make start-translation BOOK=<book_name>"; \
-		exit 1; \
+	@if [ -n "$(BOOK)" ]; then \
+		translation_file="translations/current_translation_$(BOOK).json"; \
+		if [ ! -f "$$translation_file" ]; then \
+			echo "Error: No current translation session found for book: $(BOOK)"; \
+			echo "Try running: make start-translation BOOK=$(BOOK)"; \
+			exit 1; \
+		fi; \
+		book="$(BOOK)"; \
+	else \
+		translation_files=$$(find translations -name "current_translation_*.json" -type f 2>/dev/null); \
+		translation_file_count=$$(echo "$$translation_files" | wc -l | tr -d ' '); \
+		if [ -z "$$translation_files" ] || [ "$$translation_file_count" -eq 0 ]; then \
+			echo "Error: No current translation session found."; \
+			echo "Try running: make start-translation BOOK=<book_name>"; \
+			exit 1; \
+		fi; \
+		if [ "$$translation_file_count" -gt 1 ]; then \
+			echo "Error: Multiple translation sessions found:"; \
+			echo "$$translation_files" | sed 's/^/  /'; \
+			echo "Please specify a book with BOOK=<book_name> or delete extra sessions."; \
+			exit 1; \
+		fi; \
+		translation_file=$$translation_files; \
+		book=$$(jq -r '.metadata.book // empty' "$$translation_file" 2>/dev/null); \
 	fi; \
-	if [ "$$translation_file_count" -gt 1 ]; then \
-		echo "Error: Multiple translation sessions found:"; \
-		echo "$$translation_files" | sed 's/^/  /'; \
-		echo "Please complete or delete extra sessions before continuing."; \
-		exit 1; \
-	fi; \
-	translation_file=$$translation_files; \
-	book=$$(jq -r '.metadata.book // empty' "$$translation_file" 2>/dev/null); \
 	if [ -z "$$book" ] || [ "$$book" = "null" ]; then \
 		echo "Error: Could not determine book from current translation session."; \
 		exit 1; \
@@ -638,7 +648,9 @@ continue:
 	echo "Found translation session for book: $$book ($$translation_file)"; \
 	echo "$$book" > translations/.continue_book.tmp; \
 	echo "Step 1/2: Submitting current translations..."; \
-	if $(MAKE) submit-translations TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5" FILE="$$translation_file"; then \
+	translator=$${TRANSLATOR:-"Garrett M. Petersen (2025)"}; \
+	model=$${MODEL:-"grok-1.5"}; \
+	if $(MAKE) submit-translations TRANSLATOR="$$translator" MODEL="$$model" FILE="$$translation_file"; then \
 		echo ""; \
 		echo "Step 2/2: Starting next translation batch..."; \
 		book=$$(cat translations/.continue_book.tmp 2>/dev/null); \
