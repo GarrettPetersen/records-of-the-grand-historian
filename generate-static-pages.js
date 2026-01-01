@@ -870,9 +870,10 @@ ${contentHTML}
       function generateCitation(format, type, paragraphIdx, block) {
         const book = window.currentBookInfo;
         const chapterNum = window.currentChapterData.meta.chapter;
-        const chapterTitle = window.currentChapterData.meta.title.en || ('Chapter ' + chapterNum);
+        const chapterTitle = window.currentChapterData.meta.title.zh || ('Chapter ' + chapterNum);
+        const author = book.author || 'Unknown';
 
-        const baseCitation = book.name + '. "' + chapterTitle + '." In ' + book.chinese + ', translated by Garrett M. Petersen, 2025.';
+        const baseCitation = author + '. ' + chapterTitle + '. In ' + book.chinese + ' (' + book.name + '), translated by Garrett M. Petersen, 2025.';
 
         if (type === 'paragraph' && paragraphIdx !== null) {
           return baseCitation + ' Paragraph ' + (paragraphIdx + 1) + '.';

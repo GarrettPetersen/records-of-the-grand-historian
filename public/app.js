@@ -94,8 +94,8 @@ export const BOOKS = {
     chinese: '周書',
     pinyin: 'Zhōushū',
     dynasty: 'Northern Zhou',
-    author: 'Linghu Defen',
-    authorChinese: '令狐德棻'
+    author: 'Linghu Defen et al.',
+    authorChinese: '令狐德棻等'
   },
   suishu: {
     name: 'Book of Sui',

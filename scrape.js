@@ -30,6 +30,8 @@ const BOOKS = {
     chinese: '史記',
     pinyin: 'Shǐjì',
     dynasty: 'Xia to Han',
+    author: 'Sima Qian',
+    authorChinese: '司馬遷',
     urlPattern: 'https://chinesenotes.com/shiji/shiji{chapter}.html',
     ctextUrlPattern: 'https://ctext.org/shiji/{chapter}'
   },
@@ -38,6 +40,8 @@ const BOOKS = {
     chinese: '漢書',
     pinyin: 'Hànshū',
     dynasty: 'Western Han',
+    author: 'Ban Gu',
+    authorChinese: '班固',
     urlPattern: 'https://chinesenotes.com/hanshu/hanshu{chapter}.html'
   },
   houhanshu: {
@@ -45,6 +49,8 @@ const BOOKS = {
     chinese: '後漢書',
     pinyin: 'Hòu Hànshū',
     dynasty: 'Eastern Han',
+    author: 'Fan Ye',
+    authorChinese: '范曄',
     urlPattern: 'https://chinesenotes.com/houhanshu/houhanshu{chapter}.html'
   },
   sanguozhi: {
@@ -52,6 +58,8 @@ const BOOKS = {
     chinese: '三國志',
     pinyin: 'Sānguó Zhì',
     dynasty: 'Three Kingdoms',
+    author: 'Chen Shou',
+    authorChinese: '陳壽',
     urlPattern: 'https://chinesenotes.com/sanguozhi/sanguozhi{chapter}.html'
   },
   jinshu: {
@@ -59,6 +67,8 @@ const BOOKS = {
     chinese: '晉書',
     pinyin: 'Jìnshū',
     dynasty: 'Jin',
+    author: 'Fang Xuanling et al.',
+    authorChinese: '房玄齡等',
     urlPattern: 'https://chinesenotes.com/jinshu/jinshu{chapter}.html'
   },
   songshu: {
@@ -66,6 +76,8 @@ const BOOKS = {
     chinese: '宋書',
     pinyin: 'Sòngshū',
     dynasty: 'Liu Song',
+    author: 'Shen Yue',
+    authorChinese: '沈約',
     urlPattern: 'https://chinesenotes.com/songshu/songshu{chapter}.html'
   },
   nanqishu: {
@@ -73,6 +85,8 @@ const BOOKS = {
     chinese: '南齊書',
     pinyin: 'Nán Qíshū',
     dynasty: 'Southern Qi',
+    author: 'Xiao Zixian',
+    authorChinese: '蕭子顯',
     urlPattern: 'https://chinesenotes.com/nanqishu/nanqishu{chapter}.html'
   },
   liangshu: {
@@ -80,6 +94,8 @@ const BOOKS = {
     chinese: '梁書',
     pinyin: 'Liángshū',
     dynasty: 'Liang',
+    author: 'Yao Silian',
+    authorChinese: '姚思廉',
     urlPattern: 'https://chinesenotes.com/liangshu/liangshu{chapter}.html'
   },
   chenshu: {
@@ -87,6 +103,8 @@ const BOOKS = {
     chinese: '陳書',
     pinyin: 'Chénshū',
     dynasty: 'Chen',
+    author: 'Yao Silian',
+    authorChinese: '姚思廉',
     urlPattern: 'https://chinesenotes.com/chenshu/chenshu{chapter}.html'
   },
   weishu: {
@@ -94,6 +112,8 @@ const BOOKS = {
     chinese: '魏書',
     pinyin: 'Wèishū',
     dynasty: 'Northern Wei',
+    author: 'Wei Shou',
+    authorChinese: '魏收',
     urlPattern: 'https://chinesenotes.com/weishu/weishu{chapter}.html'
   },
   beiqishu: {
@@ -101,6 +121,8 @@ const BOOKS = {
     chinese: '北齊書',
     pinyin: 'Běi Qíshū',
     dynasty: 'Northern Qi',
+    author: 'Li Baiyao',
+    authorChinese: '李百藥',
     urlPattern: 'https://chinesenotes.com/beiqishu/beiqishu{chapter}.html'
   },
   zhoushu: {
@@ -108,6 +130,8 @@ const BOOKS = {
     chinese: '周書',
     pinyin: 'Zhōushū',
     dynasty: 'Northern Zhou',
+    author: 'Linghu Defen et al.',
+    authorChinese: '令狐德棻等',
     urlPattern: 'https://chinesenotes.com/zhoushu/zhoushu{chapter}.html'
   },
   suishu: {
@@ -115,6 +139,8 @@ const BOOKS = {
     chinese: '隋書',
     pinyin: 'Suíshū',
     dynasty: 'Sui',
+    author: 'Wei Zheng et al.',
+    authorChinese: '魏徵等',
     urlPattern: 'https://chinesenotes.com/suishu/suishu{chapter}.html'
   },
   nanshi: {
@@ -122,6 +148,8 @@ const BOOKS = {
     chinese: '南史',
     pinyin: 'Nánshǐ',
     dynasty: 'Southern Dynasties',
+    author: 'Li Yanshou',
+    authorChinese: '李延壽',
     urlPattern: 'https://chinesenotes.com/nanshi/nanshi{chapter}.html'
   },
   beishi: {
@@ -129,6 +157,8 @@ const BOOKS = {
     chinese: '北史',
     pinyin: 'Běishǐ',
     dynasty: 'Northern Dynasties',
+    author: 'Li Yanshou',
+    authorChinese: '李延壽',
     urlPattern: 'https://chinesenotes.com/beishi/beishi{chapter}.html'
   },
   jiutangshu: {
@@ -136,6 +166,8 @@ const BOOKS = {
     chinese: '舊唐書',
     pinyin: 'Jiù Tángshū',
     dynasty: 'Tang',
+    author: 'Liu Xu et al.',
+    authorChinese: '劉昫等',
     urlPattern: 'https://chinesenotes.com/jiutangshu/jiutangshu{chapter}.html'
   },
   xintangshu: {
@@ -143,6 +175,8 @@ const BOOKS = {
     chinese: '新唐書',
     pinyin: 'Xīn Tángshū',
     dynasty: 'Tang',
+    author: 'Ouyang Xiu and Song Qi',
+    authorChinese: '歐陽修、宋祁',
     urlPattern: 'https://chinesenotes.com/xintangshu/xintangshu{chapter}.html'
   },
   jiuwudaishi: {
@@ -150,6 +184,8 @@ const BOOKS = {
     chinese: '舊五代史',
     pinyin: 'Jiù Wǔdàishǐ',
     dynasty: 'Five Dynasties',
+    author: 'Xue Juzheng et al.',
+    authorChinese: '薛居正等',
     urlPattern: 'https://chinesenotes.com/jiuwudaishi/jiuwudaishi{chapter}.html'
   },
   xinwudaishi: {
@@ -157,6 +193,8 @@ const BOOKS = {
     chinese: '新五代史',
     pinyin: 'Xīn Wǔdàishǐ',
     dynasty: 'Five Dynasties',
+    author: 'Ouyang Xiu',
+    authorChinese: '歐陽修',
     urlPattern: 'https://chinesenotes.com/xinwudaishi/xinwudaishi{chapter}.html'
   },
   songshi: {
@@ -164,6 +202,8 @@ const BOOKS = {
     chinese: '宋史',
     pinyin: 'Sòngshǐ',
     dynasty: 'Song',
+    author: 'Toqto\'a et al.',
+    authorChinese: '脫脫等',
     urlPattern: 'https://chinesenotes.com/songshi/songshi{chapter}.html'
   },
   liaoshi: {
@@ -171,6 +211,8 @@ const BOOKS = {
     chinese: '遼史',
     pinyin: 'Liáoshǐ',
     dynasty: 'Liao (Khitan)',
+    author: 'Toqto\'a et al.',
+    authorChinese: '脫脫等',
     urlPattern: 'https://chinesenotes.com/liaoshi/liaoshi{chapter}.html'
   },
   jinshi: {
@@ -178,6 +220,8 @@ const BOOKS = {
     chinese: '金史',
     pinyin: 'Jīnshǐ',
     dynasty: 'Jin (Jurchen)',
+    author: 'Toqto\'a et al.',
+    authorChinese: '脫脫等',
     urlPattern: 'https://chinesenotes.com/jinshi/jinshi{chapter}.html'
   },
   yuanshi: {
@@ -185,6 +229,8 @@ const BOOKS = {
     chinese: '元史',
     pinyin: 'Yuánshǐ',
     dynasty: 'Yuan (Mongol)',
+    author: 'Song Lian et al.',
+    authorChinese: '宋濂等',
     urlPattern: 'https://chinesenotes.com/yuanshi/yuanshi{chapter}.html'
   },
   mingshi: {
@@ -192,6 +238,8 @@ const BOOKS = {
     chinese: '明史',
     pinyin: 'Míngshǐ',
     dynasty: 'Ming',
+    author: 'Zhang Tingyu et al.',
+    authorChinese: '張廷玉等',
     urlPattern: 'https://chinesenotes.com/mingshi/mingshi{chapter}.html'
   }
 };
