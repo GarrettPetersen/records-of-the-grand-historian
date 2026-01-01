@@ -739,7 +739,6 @@ function generateBibTeXCitation(type, paragraphIdx, block) {
 }`;
     }
   }
-  }
 }
 
 function generateCitation(format, type, paragraphIdx, block) {
