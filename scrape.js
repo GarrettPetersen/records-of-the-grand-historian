@@ -374,18 +374,18 @@ export function segmentSentences(text) {
     sentences.push(current.trim());
   }
 
-  // Post-process: merge standalone punctuation but keep parentheses as sentence boundaries
+  // Post-process: merge ending punctuation to the previous sentence
   const merged = [];
-  const punctuationOnly = /^[」"'』】\s]+$/; // Only merge standalone quotes/punctuation
+  const punctuationOnly = /^[」"'』】）〉\s]+$/; // Only merge standalone quotes/punctuation and closing brackets/parentheses
 
   for (let i = 0; i < sentences.length; i++) {
     const sentence = sentences[i];
 
-    // Case 1: Sentence is only punctuation (not including parentheses) - append to previous
+    // Case 1: Sentence is only ending punctuation - append to previous sentence
     if (punctuationOnly.test(sentence) && merged.length > 0) {
       merged[merged.length - 1] += sentence;
     }
-    // Case 2: All other sentences (including parentheses) stay as separate sentences
+    // Case 2: All other sentences stay as separate sentences
     else {
       merged.push(sentence);
     }
