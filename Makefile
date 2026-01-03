@@ -24,14 +24,14 @@ help:
 	@echo ""
 	@echo "Common commands:"
 	@echo "  make update                 # Fix counts, regenerate manifest, sync (run after manual edits)"
-	@echo "  make shiji-001              # Scrape Shiji chapter 1"
-	@echo "  make shiji-010              # Scrape Shiji chapter 10"
+	@echo "  make shiji-001              # Scrape Shiji chapter 1 (⚠️ will warn if translations exist)"
+	@echo "  make shiji-010              # Scrape Shiji chapter 10 (⚠️ will warn if translations exist)"
 	@echo "  make shiji-all              # Scrape all Shiji chapters (1-130)"
 	@echo "  make hanshu-all             # Scrape all Hanshu chapters (1-100)"
 	@echo "  make houhanshu-all          # Scrape all Houhanshu chapters (1-120)"
 	@echo ""
 	@echo "Scraping commands:"
-	@echo "  make <book>-<chapter>       # Scrape single chapter (e.g., make songshi-369)"
+	@echo "  make <book>-<chapter>       # Scrape single chapter (⚠️ warns if translations exist)"
 	@echo "  make ctext BOOK=shiji CHAPTER=013 CTEXT_URL='https://ctext.org/shiji/san-dai-shi-biao'  # Scrape from ctext.org"
 	@echo "  make <book> CHAPTERS='...'  # Scrape multiple (e.g., make shiji CHAPTERS='001 002')"
 	@echo "  make list                   # List all 24 books available to scrape"
@@ -233,6 +233,25 @@ progress:
 %-491 %-492 %-493 %-494 %-495 %-496 %-497 %-498 %-499 %-500: | data/%
 	@$(eval BOOK := $(word 1,$(subst -, ,$@)))
 	@$(eval CHAPTER := $(word 2,$(subst -, ,$@)))
+	@if [ -f "data/$(BOOK)/$(CHAPTER).json" ]; then \
+		translated_count=$$(jq -r '.meta.translatedCount // 0' "data/$(BOOK)/$(CHAPTER).json" 2>/dev/null); \
+		if [ "$$translated_count" -gt 0 ]; then \
+			echo "⚠️  WARNING: Chapter $(BOOK) $(CHAPTER) already exists and contains $$translated_count translations!"; \
+			echo "   This command will ERASE ALL EXISTING TRANSLATIONS."; \
+			echo ""; \
+			echo "   Are you sure you want to continue? (y/N): "; \
+			read -r response; \
+			case $$response in \
+				[yY][eE][sS]|[yY]) \
+					echo "Proceeding with re-scraping..."; \
+					;; \
+				*) \
+					echo "Aborted."; \
+					exit 1; \
+					;; \
+			esac; \
+		fi; \
+	fi
 	@echo "Scraping $(BOOK) chapter $(CHAPTER)..."
 	@if [ -f "data/ctext-urls.json" ]; then \
 		CTEXT_URL=$$(jq -r '.$(BOOK)."$(CHAPTER)" // empty' data/ctext-urls.json 2>/dev/null); \
