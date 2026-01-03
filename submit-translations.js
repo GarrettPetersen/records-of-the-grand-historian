@@ -57,10 +57,6 @@ function validateTranslations(translationFile, chapterFile) {
         errors.push(`❌ SUSPICIOUSLY SHORT literal translation for sentence ${sentence.id}: Chinese has ${chineseLength} characters, English has ${englishLength} characters (${(lengthRatio * 100).toFixed(1)}% ratio). This suggests an incomplete or placeholder translation. Please provide a proper full translation.`);
       }
 
-      // Check for missing basic English articles (common in choppy translations)
-      if (chineseLength > 15 && !literalText.includes(' the ') && !literalText.includes(' a ') && !literalText.includes(' an ') && !literalText.includes('The ') && !literalText.includes('A ') && !literalText.includes('An ')) {
-        errors.push(`⚠️  WARNING: Literal translation for sentence ${sentence.id} appears to lack basic English articles (the/a/an). This often indicates choppy or incomplete translation. Please review for natural English flow: "${literalText}".`);
-      }
     }
 
     if (sentence.idiomatic && sentence.idiomatic.trim()) {

@@ -73,7 +73,7 @@ function getLengthRatio(chinese, english) {
  * Score a single translation entry
  */
 function scoreTranslation(entry) {
-  const { id, content: chinese, translation: english } = entry;
+  const { id, content: chinese, translation: english, isIdiomatic = true } = entry;
   const issues = [];
   let score = 1.0;
 
@@ -111,6 +111,13 @@ function scoreTranslation(entry) {
   if (english && PLACEHOLDER_REGEX.test(english)) {
     issues.push('Contains placeholder text instead of actual translation');
     score = 0;
+  }
+
+  // Check for missing basic English articles (common in choppy idiomatic translations)
+  // Only check idiomatic translations for longer Chinese text (>15 chars) where articles would be expected
+  if (isIdiomatic && chinese && chinese.length > 15 && english && !english.includes(' the ') && !english.includes(' a ') && !english.includes(' an ') && !english.includes('The ') && !english.includes('A ') && !english.includes('An ')) {
+    issues.push('Idiomatic translation appears to lack basic English articles (the/a/an) - may indicate choppy or incomplete translation');
+    score = Math.min(score, 0.5); // Reduce score but don't fail completely
   }
 
   // Check for obviously wrong translations
@@ -168,15 +175,23 @@ function scoreChapterFile(filePath) {
           }
 
           // Check idiomatic first, then literal, supporting both old and new formats
-          const translation = (sentence.idiomatic || sentence.translation) ||
-                            (sentence.translations && sentence.translations[0] &&
-                             (sentence.translations[0].idiomatic || sentence.translations[0].literal || sentence.translations[0].text));
+          const idiomaticTranslation = (sentence.idiomatic || sentence.translation) ||
+                                     (sentence.translations && sentence.translations[0] &&
+                                      sentence.translations[0].idiomatic);
+          const literalTranslation = sentence.translations && sentence.translations[0] &&
+                                   sentence.translations[0].literal;
           const content = sentence.content || sentence.zh;
+
+          // Prefer idiomatic, fall back to literal
+          const translation = idiomaticTranslation || literalTranslation;
+          const isIdiomatic = !!idiomaticTranslation;
+
           if (translation) {
             results.push(scoreTranslation({
               id: sentence.id,
               content: content,
-              translation: translation
+              translation: translation,
+              isIdiomatic: isIdiomatic
             }));
 
             // Check for identical literal and idiomatic
