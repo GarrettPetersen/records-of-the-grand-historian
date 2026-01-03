@@ -52,8 +52,17 @@ help:
 	@echo "  make first-untranslated BOOK=hanshu  # Find in specific book only"
 	@echo "  make start-translation BOOK=shiji     # Start translation session (extract 50 sentences)"
 	@echo "  make continue                        # Submit current batch and start next (quicker workflow)"
-	@echo "  make submit-translations TRANSLATOR=\"Garrett M. Petersen (2025)\" MODEL=\"grok-1.5\"  # Submit translations from current_translation_{book}.json"
+	@echo "  make submit-translations TRANSLATOR=\"Garrett M. Petersen (2026)\" MODEL=\"grok-1.5\"  # Submit translations from current_translation_{book}.json"
 	@echo "  make submit-translations TRANSLATOR=\"...\" MODEL=\"...\" FILE=\"path/to/file.json\"  # Submit from custom file"
+	@echo ""
+	@echo "⚠️  QUALITY REQUIREMENTS for translations:"
+	@echo "   • Provide BOTH literal AND idiomatic translations for each sentence"
+	@echo "   • NO placeholders like '(translated)', 'TODO', or '...' - provide real English"
+	@echo "   • Literal and idiomatic must be DIFFERENT (idiomatic should be more natural)"
+	@echo "   • Translations should be complete sentences with proper grammar and articles"
+	@echo "   • Ken Liu quality standard: semantic fidelity + modern readability"
+	@echo "   • Length should be reasonable compared to Chinese (not extremely short)"
+	@echo "   • NO choppy fragments - complete, flowing English sentences"
 	@echo ""
 	@echo "Cleanup commands:"
 	@echo "  make clean-shiji            # Remove all Shiji data"
@@ -706,14 +715,20 @@ start-translation:
 .PHONY: submit-translations
 submit-translations:
 	@echo "Submitting translations..."
+	@echo "🎯 QUALITY CHECKS: Ensuring Ken Liu standard translations..."
+	@echo "   • Both literal and idiomatic translations required"
+	@echo "   • No placeholders, no identical translations"
+	@echo "   • Proper English grammar and natural flow"
+	@echo "   • Reasonable length compared to Chinese text"
+	@echo ""
 	@if [ -z "$(TRANSLATOR)" ]; then \
 		echo "Error: TRANSLATOR variable not set."; \
-		echo "Usage: make submit-translations TRANSLATOR=\"Garrett M. Petersen (2025)\" MODEL=\"grok-1.5\""; \
+		echo "Usage: make submit-translations TRANSLATOR=\"Garrett M. Petersen (2026)\" MODEL=\"grok-1.5\""; \
 		exit 1; \
 	fi
 	@if [ -z "$(MODEL)" ]; then \
 		echo "Error: MODEL variable not set."; \
-		echo "Usage: make submit-translations TRANSLATOR=\"Garrett M. Petersen (2025)\" MODEL=\"grok-1.5\""; \
+		echo "Usage: make submit-translations TRANSLATOR=\"Garrett M. Petersen (2026)\" MODEL=\"grok-1.5\""; \
 		exit 1; \
 	fi
 	@translation_file=""; \

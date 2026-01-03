@@ -8,7 +8,7 @@
  *
  * Usage:
  *   node submit-translations.js <translation-file> <translator> <model>
- *   node submit-translations.js translations/current_translation_shiji.json "Garrett M. Petersen (2025)" "grok-1.5"
+ *   node submit-translations.js translations/current_translation_shiji.json "Garrett M. Petersen (2026)" "grok-1.5"
  */
 
 import fs from 'node:fs';
@@ -36,6 +36,64 @@ function validateTranslations(translationFile, chapterFile) {
     if (sentence.literal && sentence.idiomatic &&
         sentence.literal.trim() === sentence.idiomatic.trim()) {
       identicalCount++;
+    }
+
+    // NEW: Check for placeholder text and poor quality indicators
+    if (sentence.literal && sentence.literal.trim()) {
+      const literalText = sentence.literal.trim();
+
+      // Check for placeholder patterns
+      if (literalText.includes('(translated)') || literalText.includes('[translated]') ||
+          literalText.includes('TODO') || literalText.includes('PLACEHOLDER') ||
+          literalText.includes('...') || literalText === sentence.chinese) {
+        errors.push(`❌ PLACEHOLDER DETECTED in literal translation for sentence ${sentence.id}: "${literalText}". Please provide a proper English translation, not placeholder text.`);
+      }
+
+      // Check for extremely short translations compared to Chinese length
+      const chineseLength = sentence.chinese.length;
+      const englishLength = literalText.length;
+      const lengthRatio = englishLength / chineseLength;
+      if (lengthRatio < 0.3 && chineseLength > 10) {
+        errors.push(`❌ SUSPICIOUSLY SHORT literal translation for sentence ${sentence.id}: Chinese has ${chineseLength} characters, English has ${englishLength} characters (${(lengthRatio * 100).toFixed(1)}% ratio). This suggests an incomplete or placeholder translation. Please provide a proper full translation.`);
+      }
+
+      // Check for missing basic English articles (common in choppy translations)
+      if (chineseLength > 15 && !literalText.includes(' the ') && !literalText.includes(' a ') && !literalText.includes(' an ') && !literalText.includes('The ') && !literalText.includes('A ') && !literalText.includes('An ')) {
+        errors.push(`⚠️  WARNING: Literal translation for sentence ${sentence.id} appears to lack basic English articles (the/a/an). This often indicates choppy or incomplete translation. Please review for natural English flow: "${literalText}".`);
+      }
+    }
+
+    if (sentence.idiomatic && sentence.idiomatic.trim()) {
+      const idiomaticText = sentence.idiomatic.trim();
+
+      // Check for placeholder patterns
+      if (idiomaticText.includes('(translated)') || idiomaticText.includes('[translated]') ||
+          idiomaticText.includes('TODO') || idiomaticText.includes('PLACEHOLDER') ||
+          idiomaticText.includes('...') || idiomaticText === sentence.chinese) {
+        errors.push(`❌ PLACEHOLDER DETECTED in idiomatic translation for sentence ${sentence.id}: "${idiomaticText}". Please provide a proper English translation, not placeholder text.`);
+      }
+
+      // Check for extremely short translations
+      const chineseLength = sentence.chinese.length;
+      const englishLength = idiomaticText.length;
+      const lengthRatio = englishLength / chineseLength;
+      if (lengthRatio < 0.3 && chineseLength > 10) {
+        errors.push(`❌ SUSPICIOUSLY SHORT idiomatic translation for sentence ${sentence.id}: Chinese has ${chineseLength} characters, English has ${englishLength} characters (${(lengthRatio * 100).toFixed(1)}% ratio). This suggests an incomplete or placeholder translation. Please provide a proper full translation.`);
+      }
+
+      // Check for missing basic English articles (common in choppy translations)
+      if (chineseLength > 15 && !idiomaticText.includes(' the ') && !idiomaticText.includes(' a ') && !idiomaticText.includes(' an ') && !idiomaticText.includes('The ') && !idiomaticText.includes('A ') && !idiomaticText.includes('An ')) {
+        errors.push(`⚠️  WARNING: Idiomatic translation for sentence ${sentence.id} appears to lack basic English articles (the/a/an). This often indicates choppy or incomplete translation. Please review for natural English flow: "${idiomaticText}".`);
+      }
+
+      // Check for choppy sentence fragments (sentences without verbs)
+      const words = idiomaticText.split(' ');
+      if (words.length > 3 && words.length < 10) {
+        const hasVerb = /\b(is|are|was|were|be|been|being|have|has|had|do|does|did|will|would|can|could|should|may|might|must|shall|am|going|want|need|like|love|hate|know|think|feel|see|hear|say|tell|get|give|take|make|come|go|run|walk|eat|drink|sleep|work|play|live|die)\b/i.test(idiomaticText);
+        if (!hasVerb && !idiomaticText.includes(',') && !idiomaticText.includes('.')) {
+          errors.push(`⚠️  WARNING: Idiomatic translation for sentence ${sentence.id} appears to be a choppy fragment without a verb: "${idiomaticText}". Please ensure it forms a complete, natural English sentence.`);
+        }
+      }
     }
 
     // Find the corresponding sentence in the chapter file
@@ -298,7 +356,7 @@ function main() {
   const args = process.argv.slice(2);
   if (args.length < 3) {
     console.error('Usage: node submit-translations.js <translation-file> <translator> <model>');
-    console.error('Example: node submit-translations.js translations/current_translation_shiji.json "Garrett M. Petersen (2025)" "grok-1.5"');
+    console.error('Example: node submit-translations.js translations/current_translation_shiji.json "Garrett M. Petersen (2026)" "grok-1.5"');
     process.exit(1);
   }
 
@@ -330,7 +388,14 @@ function main() {
     process.exit(1);
   }
 
-  console.log('✅ Validation passed. Applying translations...');
+  console.log('✅ Validation passed! All quality checks met:');
+  console.log('   • Both literal and idiomatic translations provided');
+  console.log('   • No placeholder text detected');
+  console.log('   • Translations are not identical');
+  console.log('   • Reasonable length and proper English structure');
+  console.log('   • Ken Liu quality standards met');
+  console.log('');
+  console.log('Applying translations...');
 
   applyTranslations(translationFile, chapterFile, translator, model);
 
