@@ -64,16 +64,107 @@
 
     <main class="blog-content">
         <div class="blog-post">
-            <h2>New Insights into the Shiji</h2>
+            <h2>The Translation Process</h2>
             <div class="post-meta">January 3, 2026</div>
             <p>
-                In our recent translation efforts, we've encountered passages that highlight the complex moral landscape of the Han dynasty.
+                Creating a process for AI translation is not as easy as it sounds.
+                LLMs are powerful tools, but they don't always behave as expected.
+            </p>
+            <p></p>
+                The problem I had early on was that the AI would give overly literal,
+                character-by-character translations that weren't at all readable in
+                English. Try as I might to cajole the AI into doing smooth, readable,
+                idiomatic English translations, it kept slipping into stilted direct translations.
+                My theory is that, as the context window gradually fills with more and more
+                Chinese, text, the LLM starts to think in Chinese sentence structures.
+                But that's just a guess. What matters is that the translations were bad,
+                and they got worse the longer I let the context window get.
+            </p>
+            <p>
+                Eventually the workflow I settled on was to have the AI generate first a literal
+                translation then an idiomatic one. This is twice as much work, but the process
+                forces the AI to think about the difference between a literal and idiomatic translation.
+                I then only use the idiomatic version on the website.
+            </p>
+            <p>
+                I generate JSONs in batches of 15 sentences and have the AI fill them in in batches.
+                So far I have just been calling Grok Code within Cursor repeatedly rather than setting
+                up a proper pipeline to call the AI APIs directly. This is for two reasons:
+            </p>
+            <ol>
+                <li>Ease of setup. I was already using Cursor to interact with AI and edit files.</li>
+                <li>Grok Code is temporarily free for Cursor users, so I can do a lot of translating for free.</li>
+            </ol>
+            <p>
+                I know I should create a proper pipeline connecting to AI APIs eventually, but this is sufficient to get
+                some translations out fast.
+            </p>
+            <p>
+                This is the full text of the prompt I have been calling repeatedly within a loop within Cursor.
+                Note that it references various Makefile commands, which I have created for the AI to use.
+                This is less error prone than having the AI write scripts on the fly.
             </p>
             <blockquote>
-                <p>"The wise man does not seek to dominate, but to understand. Through history, we find the echoes of our own triumphs and failures."</p>
+                <p>
+                    Was that last chapter up to the standards of Ken Liu? If (and ONLY IF) you used any shortcuts or placeholders, you must now nuke the chapter and start again. If you choose to nuke the chapter, you MUST provide a written explanation of what you did wrong, why it had to be nuked, and how you will avoid this going forward. Otherwise, let's continue.
+                </p>
+                <p>
+                    First, git pull and resolve and differences with remote.
+                </p>
+                <p>
+                    Then run make start-translation BOOK=shiji.
+                </p>
+                <p>
+                    Then add professional quality translations to translations/current_translation_shiji.json.
+                </p>
+                <p>
+                    Run make continue BOOK=shiji.
+                </p>
+                <p>
+                    Then, once again, add professional quality translations to translations/current_translation_shiji.json.
+                </p>
+                <p>
+                    Run make continue again.
+                </p>
+                <p>
+                    Continue this process in a loop until the chapter is fully translated.
+                </p>
+                <p>
+                    Then run make submit-translations TRANSLATOR="Garrett M. Petersen (2026)" MODEL=(your model) FILE=(translation json you've been working on)
+                </p>
+                <p>
+                    Continue repeating the above steps until you have fully completed a chapter, then use git to add, commit, and push your changes.
+                </p>
+                <p>
+                    Translate that chapter in full using the process documented in the readme. Do it in batches until it is 100% complete. You don't need to do any of the following steps until you hit 100%. I don't care how many batches it takes!
+                </p>
+                <p>
+                    Use the make score-translations command on your chapter to check the quality of your translations. It sometimes has false positives for length differences, but you should be able to see if anything is wildly wrong. Fix any issues. (Make sure there are NO placeholders where translations should be!)
+                </p>
+                <p>
+                    Once the chapter has been completely translated with valid literal and idiomatic translations provided by YOU (the AI reading this), you're done.
+                </p>
+                <p>
+                    I fully expect this to take a long time! NO placeholders. There is NO other translator coming to fill in your work. You must produce production-quality work without shortcuts.
+                </p>
+                <p>
+                    Then run make update, and then push to github with an appropriate commit message, resolving any differences with remote.
+                </p>
             </blockquote>
             <p>
-                These insights help us refine our AI models to better capture the nuance of Classical Chinese.
+                Many of the lines in this prompt had to be added after the AI screwed up in some way.
+                You can see the way I exhort it to not use placeholder text and shortcuts, and infer exactly the kind
+                of issues I've been dealing with for the past few weeks. Lots of "[translation goes here]" in place
+                of real translations.
+            </p>
+            <p>
+                I have inserted many automated checks into the scripts it calls that catch
+                the most common problems. The most successful of these has been a check on the relative length of Chinese
+                and English sentences. "[translation goes here]" will get automatically flagged because it is the same length
+                regardless of the length of the underlying Chinese sentences.
+            </p>
+            <p>
+                I expect to make many improvements to this process going forward!
             </p>
         </div>
 
