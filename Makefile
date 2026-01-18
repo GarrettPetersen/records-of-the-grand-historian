@@ -48,6 +48,7 @@ help:
 	@echo "  make score-translations     # Score translations for quality issues"
 	@echo "  make batch-quality-check    # Batch quality check on multiple chapters (all books)"
 	@echo "  make quality-score          # Score translation quality subjectively (1-10 scale)"
+	@echo "  make auto-translate-numbers # Auto-translate Chinese numerals and Arabic numbers"
 	@echo "  make first-untranslated     # Find first chapter needing idiomatic translations"
 	@echo "  make first-untranslated BOOK=hanshu  # Find in specific book only"
 	@echo "  make start-translation BOOK=shiji     # Start translation session (extract 50 sentences)"
@@ -433,6 +434,24 @@ score-translations:
 	@echo ""
 	@echo "If not, consider re-translating weak sentences to match Ken Liu's style."
 	@echo "Use 'make extract-review CHAPTER=...' && 'make apply-review CHAPTER=... REVIEW=...' for manual review workflow"
+
+.PHONY: auto-translate-numbers
+auto-translate-numbers:
+	@echo "🔢 Auto-translating Chinese numerals and Arabic numbers..."
+	@if [ -z "$(CHAPTER)" ]; then \
+		echo "Error: CHAPTER variable not set."; \
+		echo "Usage: make auto-translate-numbers CHAPTER=data/shiji/015.json"; \
+		echo "       make auto-translate-numbers CHAPTER=data/shiji/015.json FORCE=1"; \
+		echo "       Auto-translates Chinese numerals (一二三) and copies Arabic numerals (314)"; \
+		exit 1; \
+	fi
+	@if [ "$(FORCE)" = "1" ]; then \
+		$(NODE) auto-translate-numbers.js --force $(CHAPTER); \
+	else \
+		$(NODE) auto-translate-numbers.js $(CHAPTER); \
+	fi
+	@echo ""
+	@echo "✅ Auto-translation complete. Run 'make update' to regenerate the website."
 
 # Batch quality check on multiple chapters
 .PHONY: batch-quality-check
