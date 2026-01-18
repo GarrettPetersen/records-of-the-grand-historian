@@ -49,7 +49,7 @@ function getLengthRatio(chinese, english) {
   }
 
   // For longer content (>12 characters), expect proper translations
-  const expectedRatio = chineseLength * 2.5; // more conservative estimate for longer text
+  const expectedRatio = chineseLength * 1.8; // more lenient estimate for longer text
   const ratio = englishLength / expectedRatio;
 
   // Special handling for common patterns that are acceptable:
@@ -63,10 +63,10 @@ function getLengthRatio(chinese, english) {
   }
 
   // Score from 0-1, where 1 is perfect length match
-  if (ratio < 0.1) return 0; // way too short
-  if (ratio > 10.0) return 0; // way too long
-  if (ratio >= 0.25 && ratio <= 4.0) return 1; // good range
-  return Math.max(0, 1 - Math.abs(Math.log(ratio)) * 0.25); // gradual decrease
+  if (ratio < 0.05) return 0; // way too short
+  if (ratio > 20.0) return 0; // way too long
+  if (ratio >= 0.15 && ratio <= 6.0) return 1; // good range (more lenient)
+  return Math.max(0, 1 - Math.abs(Math.log(ratio)) * 0.15); // gradual decrease (less aggressive)
 }
 
 /**
@@ -113,11 +113,13 @@ function scoreTranslation(entry) {
     score = 0;
   }
 
-  // Check for missing basic English articles (common in choppy idiomatic translations)
-  // Only check idiomatic translations for longer Chinese text (>15 chars) where articles would be expected
-  if (isIdiomatic && chinese && chinese.length > 15 && english && !english.includes(' the ') && !english.includes(' a ') && !english.includes(' an ') && !english.includes('The ') && !english.includes('A ') && !english.includes('An ')) {
+  // Check for missing basic English articles (only for very long translations where it's more concerning)
+  // Only check idiomatic translations for very long Chinese text (>30 chars) and very long English without any articles
+  if (isIdiomatic && chinese && chinese.length > 30 && english && english.length > 50 &&
+      !english.includes(' the ') && !english.includes(' a ') && !english.includes(' an ') &&
+      !english.includes('The ') && !english.includes('A ') && !english.includes('An ')) {
     issues.push('Idiomatic translation appears to lack basic English articles (the/a/an) - may indicate choppy or incomplete translation');
-    score = Math.min(score, 0.5); // Reduce score but don't fail completely
+    score = Math.min(score, 0.7); // Reduce score slightly but not severely
   }
 
   // Check for obviously wrong translations
@@ -126,12 +128,12 @@ function scoreTranslation(entry) {
     score = 0;
   }
 
-  // Check length ratio (only if no other fails)
+  // Check length ratio (only if no other fails) - be more lenient
   if (score > 0 && chinese && english) {
     const lengthScore = getLengthRatio(chinese, english);
-    if (lengthScore < 0.5) {
+    if (lengthScore < 0.3) { // More lenient threshold
       issues.push('Length mismatch between Chinese and English');
-      score = Math.min(score, lengthScore);
+      score = Math.min(score, Math.max(lengthScore, 0.5)); // Don't reduce below 0.5
     }
   }
 
