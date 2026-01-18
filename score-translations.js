@@ -113,6 +113,27 @@ function scoreTranslation(entry) {
     score = 0;
   }
 
+  // Check for AI artifacts and unwanted markers
+  if (english) {
+    // Check for "(translated)" artifacts
+    if (/\(translated\)|\(translated\.\)|translated\.?$/.test(english)) {
+      issues.push('Contains AI-generated "(translated)" artifacts that should be removed');
+      score = 0;
+    }
+
+    // Check for other common AI artifacts
+    if (/\s*\[.*?\]\s*$/.test(english)) {
+      issues.push('Contains bracketed artifacts [like this] that should be removed');
+      score = 0;
+    }
+
+    // Check for redundant translation markers
+    if (/\s*(translated by AI|machine translation|auto-translated|AI translation)\s*$/i.test(english)) {
+      issues.push('Contains redundant translation markers that should be removed');
+      score = 0;
+    }
+  }
+
   // Check for missing basic English articles (only for very long translations where it's more concerning)
   // Only check idiomatic translations for very long Chinese text (>30 chars) and very long English without any articles
   if (isIdiomatic && chinese && chinese.length > 30 && english && english.length > 50 &&
