@@ -78,8 +78,9 @@ function validateTranslations(translationFile, chapterFile) {
       }
 
       // Check for missing basic English articles (common in choppy translations)
+      // Non-blocking: many valid English sentences omit articles (proper nouns, imperatives, literary style)
       if (chineseLength > 15 && !idiomaticText.includes(' the ') && !idiomaticText.includes(' a ') && !idiomaticText.includes(' an ') && !idiomaticText.includes('The ') && !idiomaticText.includes('A ') && !idiomaticText.includes('An ')) {
-        errors.push(`⚠️  WARNING: Idiomatic translation for sentence ${sentence.id} appears to lack basic English articles (the/a/an). This often indicates choppy or incomplete translation. Please review for natural English flow: "${idiomaticText}".`);
+        console.warn(`⚠️  NOTE: Idiomatic translation for sentence ${sentence.id} has no English articles (the/a/an). Review if needed: "${idiomaticText}".`);
       }
 
       // Check for choppy sentence fragments (sentences without verbs)
