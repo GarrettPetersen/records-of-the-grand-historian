@@ -19,7 +19,7 @@ The standard translation loop is: `make start-translation BOOK=<book>` → fill 
 
 - **Economical model choice:** The bulk of chapters consist of formulaic annalistic military records ("In year X, General Y attacked Z"). A less expensive model handles these well. Reserve a more capable model for famous rhetorical passages (speeches, debates, Sima Qian's commentary) where literary quality matters most.
 - **MODEL metadata:** Always set the `MODEL` parameter to the actual model name so provenance is tracked accurately.
-- **Article validator quirk:** The `submit-translations.js` validator rejects sentences lacking standalone English articles (`the`/`a`/`an`). This triggers false positives on grammatically correct sentences. Rephrase to include an article naturally rather than fighting the check.
+- **Article validator:** The `submit-translations.js` validator warns (non-blocking) when idiomatic translations lack English articles (`the`/`a`/`an`). These are informational only and do not block submission.
 
 ### Gotchas
 
