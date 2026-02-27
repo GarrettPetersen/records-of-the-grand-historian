@@ -20,6 +20,9 @@ The standard translation loop is: `make start-translation BOOK=<book>` → fill 
 - **Economical model choice:** The bulk of chapters consist of formulaic annalistic military records ("In year X, General Y attacked Z"). A less expensive model handles these well. Reserve a more capable model for famous rhetorical passages (speeches, debates, Sima Qian's commentary) where literary quality matters most.
 - **MODEL metadata:** Always set the `MODEL` parameter to the actual model name so provenance is tracked accurately.
 - **Article validator:** The `submit-translations.js` validator warns (non-blocking) when idiomatic translations lack English articles (`the`/`a`/`an`). These are informational only and do not block submission.
+- **FILE= parameter:** Always use `FILE=translations/current_translation_shiji.json` (or the appropriate book name) with `make submit-translations` to avoid ambiguity if multiple translation files exist.
+- **Batch size:** `start-translation` extracts 15 sentences per batch. For a 244-sentence chapter, expect ~17 batches. Commit every 4 batches per the workflow convention.
+- **Score-translations length mismatches:** The quality scorer flags "length mismatch" for short classical Chinese sentences with longer English translations. These are false positives inherent to translating terse classical Chinese and can be ignored.
 
 ### Gotchas
 
