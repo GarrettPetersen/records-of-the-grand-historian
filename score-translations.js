@@ -32,20 +32,20 @@ function getLengthRatio(chinese, english) {
   // Special handling for very short Chinese phrases (ordinals, single words, etc.)
   if (chineseLength <= 5) {
     // For very short phrases (5 or fewer characters), be very lenient
-    // This covers ordinals, single words, year numbers, etc.
-    if (englishLength >= 1 && englishLength <= 8) {
-      return 1; // Accept reasonable translations for short phrases
+    // Only flag if English is empty or absurdly long (>20 words for <=5 chars)
+    if (englishLength >= 1 && englishLength <= 20) {
+      return 1;
     }
-    return 0; // Too short or too long even for brief phrases
+    return 0;
   }
 
   // Special handling for short phrases (6-12 characters)
-  // This covers brief statements but not full sentences
+  // Classical Chinese is extremely terse; a 10-char sentence routinely needs 15-25 English words
   if (chineseLength <= 12) {
-    if (englishLength >= 1 && englishLength <= 15) {
-      return 1; // Accept reasonable translations for short phrases
+    if (englishLength >= 1 && englishLength <= 30) {
+      return 1;
     }
-    return 0; // Too short or too long
+    return 0;
   }
 
   // For longer content (>12 characters), expect proper translations
@@ -134,13 +134,12 @@ function scoreTranslation(entry) {
     }
   }
 
-  // Check for missing basic English articles (only for very long translations where it's more concerning)
-  // Only check idiomatic translations for very long Chinese text (>30 chars) and very long English without any articles
+  // Check for missing basic English articles (informational only, not scored)
+  // Many valid English sentences use proper nouns throughout without articles
   if (isIdiomatic && chinese && chinese.length > 30 && english && english.length > 50 &&
       !english.includes(' the ') && !english.includes(' a ') && !english.includes(' an ') &&
       !english.includes('The ') && !english.includes('A ') && !english.includes('An ')) {
-    issues.push('Idiomatic translation appears to lack basic English articles (the/a/an) - may indicate choppy or incomplete translation');
-    score = Math.min(score, 0.7); // Reduce score slightly but not severely
+    // Non-blocking: proper-noun-heavy sentences legitimately omit articles
   }
 
   // Check for obviously wrong translations
