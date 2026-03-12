@@ -55,6 +55,12 @@ function analyzeChapterStatus(bookId, chapter, chapterData) {
               continue;
             }
 
+            // Skip sentences with empty Chinese text (blank table cells)
+            const chineseText = (sentence.zh || '').trim();
+            if (!chineseText) {
+              continue;
+            }
+
             totalSentences++;
 
             const literal = sentence.translations?.[0]?.literal || sentence.literal;
