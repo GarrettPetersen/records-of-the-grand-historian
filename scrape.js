@@ -987,20 +987,50 @@ function parseTitle($) {
   const h3 = $('h3').first().text() || $('h2').first().text() || '';
   const text = normalizeWhitespace(h3);
 
+  // Remove book-title wrappers from ctext-style titles (e.g., 《...》, <...>, 〈...〉)
+  const stripTitleWrappers = (value) => {
+    if (!value) return value;
+    return value
+      .replace(/^《\s*|\s*》$/g, '')
+      .replace(/^<\s*|\s*>$/g, '')
+      .replace(/^〈\s*|\s*〉$/g, '')
+      .trim();
+  };
+
   // Try to split Chinese/English parts
   // Format usually: "卷三百六十九 列傳... Volume 369 Biographies..."
   const volumeMatch = text.match(/^(.+?)\s+(Volume\s+\d+.*)$/i);
 
   if (volumeMatch) {
     return {
-      zh: volumeMatch[1].trim(),
+      zh: stripTitleWrappers(volumeMatch[1].trim()),
       en: volumeMatch[2].trim(),
       raw: text
     };
   }
 
+  // ctext mixed format: "《淮陰侯列傳》 Biography of the Marquis of Huaiyin"
+  const quotedMixedMatch = text.match(/^《\s*([^》]+?)\s*》\s*(.+)$/);
+  if (quotedMixedMatch) {
+    return {
+      zh: stripTitleWrappers(quotedMixedMatch[1]),
+      en: quotedMixedMatch[2].trim() || null,
+      raw: text
+    };
+  }
+
+  // Generic mixed Chinese + English format without explicit "Volume N" marker
+  const genericMixedMatch = text.match(/^([\p{Script=Han}《》〈〉<>\s]+?)\s+([A-Za-z].*)$/u);
+  if (genericMixedMatch) {
+    return {
+      zh: stripTitleWrappers(genericMixedMatch[1].trim()),
+      en: genericMixedMatch[2].trim() || null,
+      raw: text
+    };
+  }
+
   return {
-    zh: text,
+    zh: stripTitleWrappers(text),
     en: null,
     raw: text
   };

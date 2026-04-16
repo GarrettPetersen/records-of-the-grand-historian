@@ -44,7 +44,7 @@ function segmentSentences(text) {
 
   // Post-process: merge standalone punctuation but keep parentheses as sentence boundaries
   const merged = [];
-  const punctuationOnly = /^[」"'』】\s]+$/; // Only merge standalone quotes/punctuation
+  const punctuationOnly = /^[」"'』】）〉\s]+$/; // Only merge standalone quotes/punctuation and closing brackets
 
   for (let i = 0; i < sentences.length; i++) {
     const sentence = sentences[i];
@@ -85,6 +85,11 @@ const testCases = [
     input: 'First part (parenthetical) second part.',
     expected: ['First part', '(parenthetical)', 'second part.'],
     description: 'English with parentheses'
+  },
+  {
+    input: '〈師古曰：「但次古人而不表今人者，其書未畢故也。」〉',
+    expected: ['〈師古曰：「但次古人而不表今人者，其書未畢故也。」〉'],
+    description: 'Closing angle quote should merge with previous sentence'
   }
 ];
 
