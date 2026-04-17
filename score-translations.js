@@ -11,6 +11,20 @@ const __dirname = path.dirname(__filename);
 const CHINESE_CHARS_REGEX = /[\u4e00-\u9fff]/;
 const CORRUPTED_CHARS_REGEX = /[\uFFFD\u0080-\u009F]/; // Unicode replacement character and control chars
 const PLACEHOLDER_REGEX = /\[Literal translation\]|\[Idiomatic translation\]|This historical passage.*\[Literal translation\]|This passage continues.*\[Idiomatic translation\]/;
+const TERMINAL_PUNCTUATION_REGEX = /[.!?]["')\]]*\s*$/;
+
+function endsWithTerminalPunctuation(text) {
+  if (!text || !text.trim()) return false;
+  return TERMINAL_PUNCTUATION_REGEX.test(text.trim());
+}
+
+function startsWithLowercaseLetter(text) {
+  if (!text || !text.trim()) return false;
+  // Ignore leading whitespace, quotes, and brackets before checking first Latin letter.
+  const match = text.trim().match(/^[\s"'`([{<]*([A-Za-z])/);
+  if (!match) return false;
+  return match[1] === match[1].toLowerCase();
+}
 
 /**
  * Calculate a rough length ratio score between Chinese and English text
@@ -72,8 +86,9 @@ function getLengthRatio(chinese, english) {
 /**
  * Score a single translation entry
  */
-function scoreTranslation(entry) {
+function scoreTranslation(entry, options = {}) {
   const { id, content: chinese, translation: english, isIdiomatic = true } = entry;
+  const { shouldEnforceSentenceStartCapitalization = false } = options;
   const issues = [];
   let score = 1.0;
 
@@ -157,6 +172,12 @@ function scoreTranslation(entry) {
     }
   }
 
+  // Flag likely sentence-start lowercase when sentence boundary suggests capitalization is expected.
+  if (score > 0 && english && shouldEnforceSentenceStartCapitalization && startsWithLowercaseLetter(english)) {
+    issues.push('Likely sentence-start capitalization issue');
+    score = Math.min(score, 0.8);
+  }
+
   return {
     id,
     chinese,
@@ -186,6 +207,8 @@ function scoreChapterFile(filePath) {
   let totalTranslations = 0;
 
   // Score paragraphs
+  let previousBoundaryTranslation = null;
+  let isFirstBoundarySentence = true;
   if (data.content) {
     for (const block of data.content) {
       if (block.type === 'paragraph') {
@@ -209,14 +232,62 @@ function scoreChapterFile(filePath) {
           const isIdiomatic = !!idiomaticTranslation;
 
           if (translation) {
+            const shouldEnforceSentenceStartCapitalization =
+              isFirstBoundarySentence || endsWithTerminalPunctuation(previousBoundaryTranslation);
             results.push(scoreTranslation({
               id: sentence.id,
               content: content,
               translation: translation,
               isIdiomatic: isIdiomatic
+            }, {
+              shouldEnforceSentenceStartCapitalization
             }));
+            previousBoundaryTranslation = translation;
+            isFirstBoundarySentence = false;
 
             // Check for identical literal and idiomatic
+            const literal = sentence.translations?.[0]?.literal || sentence.literal;
+            const idiomatic = sentence.translations?.[0]?.idiomatic || sentence.idiomatic;
+            if (literal && idiomatic) {
+              totalTranslations++;
+              if (literal.trim() === idiomatic.trim()) {
+                identicalTranslations++;
+              }
+            }
+          }
+        }
+      }
+      // Score table header sentences
+      else if (block.type === 'table_header') {
+        for (const sentence of block.sentences || []) {
+          const translator = sentence.translations?.[0]?.translator;
+          if (translator === 'Herbert J. Allen (1894)') {
+            continue;
+          }
+
+          const idiomaticTranslation = (sentence.idiomatic || sentence.translation) ||
+                                     (sentence.translations && sentence.translations[0] &&
+                                      sentence.translations[0].idiomatic);
+          const literalTranslation = sentence.translations && sentence.translations[0] &&
+                                   sentence.translations[0].literal;
+          const content = sentence.content || sentence.zh;
+          const translation = idiomaticTranslation || literalTranslation;
+          const isIdiomatic = !!idiomaticTranslation;
+
+          if (translation) {
+            const shouldEnforceSentenceStartCapitalization =
+              isFirstBoundarySentence || endsWithTerminalPunctuation(previousBoundaryTranslation);
+            results.push(scoreTranslation({
+              id: sentence.id,
+              content: content,
+              translation: translation,
+              isIdiomatic: isIdiomatic
+            }, {
+              shouldEnforceSentenceStartCapitalization
+            }));
+            previousBoundaryTranslation = translation;
+            isFirstBoundarySentence = false;
+
             const literal = sentence.translations?.[0]?.literal || sentence.literal;
             const idiomatic = sentence.translations?.[0]?.idiomatic || sentence.idiomatic;
             if (literal && idiomatic) {

@@ -4,10 +4,10 @@
  * start-translation.js - Start a translation session by finding the next chapter and sentences to translate
  *
  * Finds the first chapter needing idiomatic translations and creates a JSON file with
- * the next 15 non-empty untranslated sentences, including existing translations for reference.
+ * the next N non-empty untranslated sentences, including existing translations for reference.
  *
  * Usage:
- *   node start-translation.js <book> [output-file]
+ *   node start-translation.js <book> [output-file] [batch-size]
  *   node start-translation.js shiji
  *   node start-translation.js hanshu translations/current_translation_hanshu.json
  */
@@ -106,7 +106,7 @@ function findFirstUntranslatedChapter(bookFilter = null) {
   return null;
 }
 
-function extractSentencesForTranslation(filePath, maxSentences = 15) {
+function extractSentencesForTranslation(filePath, maxSentences = 100) {
   const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
   const sentences = [];
   const isGenealogicalTable = data.meta.book === 'shiji' &&
@@ -196,13 +196,16 @@ function extractSentencesForTranslation(filePath, maxSentences = 15) {
 function main() {
   const args = process.argv.slice(2);
   if (args.length < 1) {
-    console.error('Usage: node start-translation.js <book> [output-file]');
+    console.error('Usage: node start-translation.js <book> [output-file] [batch-size]');
     console.error('Example: node start-translation.js shiji');
     process.exit(1);
   }
 
   const book = args[0];
   const outputFile = args[1] || `translations/current_translation_${book}.json`;
+  const batchSizeArg = args[2];
+  const parsedBatchSize = Number.parseInt(batchSizeArg ?? '', 10);
+  const batchSize = Number.isFinite(parsedBatchSize) && parsedBatchSize > 0 ? parsedBatchSize : 100;
 
   console.log(`Finding the most complete chapter needing translation in book: ${book}`);
 
@@ -215,7 +218,7 @@ function main() {
   console.log(`Found: ${chapter.book} chapter ${chapter.chapter} (${chapter.total - chapter.missing}/${chapter.total} = ${((chapter.total - chapter.missing)/chapter.total*100).toFixed(1)}% complete, ${chapter.missing} missing)`);
   console.log(`File: ${chapter.file}`);
 
-  const sentences = extractSentencesForTranslation(chapter.file, 15);
+  const sentences = extractSentencesForTranslation(chapter.file, batchSize);
   console.log(`Extracted ${sentences.length} sentences for translation`);
 
   const result = {

@@ -75,7 +75,7 @@ make first-untranslated
 make first-untranslated BOOK=hanshu  # Find in specific book only
 
 # Streamlined translation workflow
-make start-translation BOOK=shiji     # Start translation session (extract 50 sentences)
+make start-translation BOOK=shiji     # Start translation session (extract 100 sentences by default)
 make submit-translations TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"  # Submit translations
 make continue TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"  # Submit & continue to next batch
 
@@ -188,11 +188,13 @@ The streamlined workflow uses two commands to make translation sessions efficien
 **Step 1: Start a translation session**
 
 ```bash
-# Find the next chapter needing translation and extract up to 50 sentences
+# Find the next chapter needing translation and extract up to 100 sentences (default)
 make start-translation BOOK=shiji
+# Optional override:
+# make start-translation BOOK=shiji BATCH_SIZE=25
 
 # This creates: translations/current_translation_shiji.json
-# Contains up to 50 sentences needing both literal and idiomatic translations
+# Contains up to 100 sentences needing both literal and idiomatic translations
 ```
 
 **Step 2: Fill in translations**
@@ -251,7 +253,7 @@ make submit-translations TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5
 For efficient multi-batch translation sessions, you can immediately continue to the next batch:
 
 ```bash
-# After submitting translations, continue with the next 50 sentences from the same book
+# After submitting translations, continue with the next batch from the same book
 make continue TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"
 
 # This is equivalent to:
@@ -284,16 +286,16 @@ node apply-translations.js data/hanshu/008.json translations/untranslated_008.js
 
 ### Large Chapters
 
-The streamlined workflow automatically handles large chapters by extracting up to 50 sentences at a time. For chapters with hundreds of untranslated sentences:
+The streamlined workflow automatically handles large chapters by extracting up to 100 sentences at a time by default. For chapters with hundreds of untranslated sentences:
 
 1. **Run multiple translation sessions**:
    ```bash
-   # First batch of 50 sentences
+   # First batch of up to 100 sentences
    make start-translation BOOK=shiji
    # Fill in translations...
    make submit-translations TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"
 
-   # Next batch of 50 sentences (quick continue)
+   # Next batch (quick continue)
    make continue TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"
    # Fill in translations...
    make continue TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"

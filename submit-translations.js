@@ -14,9 +14,70 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+const TERMINAL_PUNCTUATION_REGEX = /[.!?]["')\]]*\s*$/;
+
+function endsWithTerminalPunctuation(text) {
+  if (!text || !text.trim()) return false;
+  return TERMINAL_PUNCTUATION_REGEX.test(text.trim());
+}
+
+function startsWithLowercaseLetter(text) {
+  if (!text || !text.trim()) return false;
+  const match = text.trim().match(/^[\s"'`([{<]*([A-Za-z])/);
+  if (!match) return false;
+  return match[1] === match[1].toLowerCase();
+}
+
+function getChapterIdiomaticText(entry) {
+  if (!entry) return '';
+  if (entry.blockType === 'table_row') {
+    return entry.raw?.idiomatic || entry.raw?.translation || '';
+  }
+  return entry.raw?.translations?.[0]?.idiomatic || entry.raw?.idiomatic || entry.raw?.translation || '';
+}
+
+function buildChapterLookup(chapter) {
+  const byId = new Map();
+  const boundaryEntries = [];
+
+  for (let blockIndex = 0; blockIndex < chapter.content.length; blockIndex++) {
+    const block = chapter.content[blockIndex];
+    let blockSentences = [];
+    let blockType = block.type;
+
+    if (block.type === 'paragraph' || block.type === 'table_header') {
+      blockSentences = block.sentences || [];
+    } else if (block.type === 'table_row') {
+      blockSentences = block.cells || [];
+    } else {
+      continue;
+    }
+
+    for (const chapterSentence of blockSentences) {
+      const id = chapterSentence.id;
+      if (!id) continue;
+      const chinese = block.type === 'table_row' ? chapterSentence.content : chapterSentence.zh;
+      const entry = { id, chinese, blockType, blockIndex, raw: chapterSentence, boundaryIndex: null };
+      byId.set(id, entry);
+
+      if (block.type === 'paragraph' || block.type === 'table_header') {
+        entry.boundaryIndex = boundaryEntries.length;
+        boundaryEntries.push(entry);
+      }
+    }
+  }
+
+  return { byId, boundaryEntries };
+}
+
 function validateTranslations(translationFile, chapterFile) {
   const translations = JSON.parse(fs.readFileSync(translationFile, 'utf8'));
   const chapter = JSON.parse(fs.readFileSync(chapterFile, 'utf8'));
+  const chapterLookup = buildChapterLookup(chapter);
+  const pendingById = new Map();
+  for (const s of translations.sentences) {
+    pendingById.set(s.originalId || s.id, s);
+  }
 
   const errors = [];
   let identicalCount = 0;
@@ -94,88 +155,32 @@ function validateTranslations(translationFile, chapterFile) {
       }
     }
 
-    // Find the corresponding sentence in the chapter file
-    let found = false;
     const originalId = sentence.originalId || sentence.id;
-    const blockIndex = sentence.blockIndex;
-
-    if (blockIndex !== undefined && blockIndex < chapter.content.length) {
-      const block = chapter.content[blockIndex];
-      let blockSentences = [];
-
-      if (block.type === 'paragraph') {
-        blockSentences = block.sentences;
-      } else if (block.type === 'table_row') {
-        blockSentences = block.cells;
-      } else if (block.type === 'table_header') {
-        blockSentences = block.sentences;
-      }
-
-      for (const chapterSentence of blockSentences) {
-        let chapterChinese = '';
-        let chapterId = '';
-
-        if (block.type === 'paragraph') {
-          chapterChinese = chapterSentence.zh;
-          chapterId = chapterSentence.id;
-        } else if (block.type === 'table_row') {
-          chapterChinese = chapterSentence.content;
-          chapterId = chapterSentence.id;
-        } else if (block.type === 'table_header') {
-          chapterChinese = chapterSentence.zh;
-          chapterId = chapterSentence.id;
-        }
-
-        if (chapterId === originalId) {
-          if (chapterChinese !== sentence.chinese) {
-            errors.push(`Chinese text mismatch for sentence ${sentence.id}: expected "${chapterChinese}", got "${sentence.chinese}"`);
-          }
-          found = true;
-          break;
-        }
-      }
-    } else {
-      // Fallback: search all blocks for the sentence (old behavior)
-      for (const block of chapter.content) {
-        let blockSentences = [];
-
-        if (block.type === 'paragraph') {
-          blockSentences = block.sentences;
-        } else if (block.type === 'table_row') {
-          blockSentences = block.cells;
-        } else if (block.type === 'table_header') {
-          blockSentences = block.sentences;
-        }
-
-        for (const chapterSentence of blockSentences) {
-          let chapterChinese = '';
-          let chapterId = '';
-
-          if (block.type === 'paragraph') {
-            chapterChinese = chapterSentence.zh;
-            chapterId = chapterSentence.id;
-          } else if (block.type === 'table_row') {
-            chapterChinese = chapterSentence.content;
-            chapterId = chapterSentence.id;
-          } else if (block.type === 'table_header') {
-            chapterChinese = chapterSentence.zh;
-            chapterId = chapterSentence.id;
-          }
-
-          if (chapterId === originalId) {
-            if (chapterChinese !== sentence.chinese) {
-              errors.push(`Chinese text mismatch for sentence ${sentence.id}: expected "${chapterChinese}", got "${sentence.chinese}"`);
-            }
-            found = true;
-            break;
-          }
-        }
-        if (found) break;
-      }
+    const chapterEntry = chapterLookup.byId.get(originalId);
+    if (!chapterEntry) {
+      errors.push(`Sentence ${sentence.id} not found in chapter file`);
+      continue;
     }
 
-    if (!found) {
-      errors.push(`Sentence ${sentence.id} not found in chapter file`);
+    if (chapterEntry.chinese !== sentence.chinese) {
+      errors.push(`Chinese text mismatch for sentence ${sentence.id}: expected "${chapterEntry.chinese}", got "${sentence.chinese}"`);
+    }
+
+    // Context-aware sentence-start capitalization flag for idiomatic translations:
+    // enforce only at likely sentence boundaries (chapter start or after terminal punctuation).
+    if ((chapterEntry.blockType === 'paragraph' || chapterEntry.blockType === 'table_header') &&
+        sentence.idiomatic && sentence.idiomatic.trim()) {
+      const boundaryIndex = chapterEntry.boundaryIndex;
+      const prevEntry = boundaryIndex > 0 ? chapterLookup.boundaryEntries[boundaryIndex - 1] : null;
+      let prevIdiomatic = '';
+      if (prevEntry) {
+        const pendingPrev = pendingById.get(prevEntry.id);
+        prevIdiomatic = pendingPrev?.idiomatic || getChapterIdiomaticText(prevEntry);
+      }
+      const shouldEnforce = !prevEntry || endsWithTerminalPunctuation(prevIdiomatic);
+      if (shouldEnforce && startsWithLowercaseLetter(sentence.idiomatic)) {
+        console.warn(`⚠️  NOTE: Idiomatic translation for sentence ${sentence.id} appears to start with lowercase at a sentence boundary: "${sentence.idiomatic.trim()}".`);
+      }
     }
   }
 

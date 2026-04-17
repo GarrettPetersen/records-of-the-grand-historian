@@ -51,7 +51,7 @@ help:
 	@echo "  make auto-translate-numbers # Auto-translate Chinese numerals and Arabic numbers"
 	@echo "  make first-untranslated     # Find first chapter needing idiomatic translations"
 	@echo "  make first-untranslated BOOK=hanshu  # Find in specific book only"
-	@echo "  make start-translation BOOK=shiji     # Start translation session (extract 50 sentences)"
+	@echo "  make start-translation BOOK=shiji [BATCH_SIZE=100]  # Start translation session"
 	@echo "  make continue                        # Submit current batch and start next (quicker workflow)"
 	@echo "  make submit-translations TRANSLATOR=\"Garrett M. Petersen (2026)\" MODEL=\"grok-1.5\"  # Submit translations from current_translation_{book}.json"
 	@echo "  make submit-translations TRANSLATOR=\"...\" MODEL=\"...\" FILE=\"path/to/file.json\"  # Submit from custom file"
@@ -719,7 +719,7 @@ start-translation:
 	@echo "Starting translation session..."
 	@if [ -z "$(BOOK)" ]; then \
 		echo "Error: BOOK variable not set."; \
-		echo "Usage: make start-translation BOOK=shiji"; \
+		echo "Usage: make start-translation BOOK=shiji [BATCH_SIZE=100]"; \
 		exit 1; \
 	fi
 	@echo "🎯 Remember: Translate like Ken Liu - prioritize semantic fidelity and modern readability"
@@ -728,7 +728,7 @@ start-translation:
 	@echo "   • Aim for the literary quality and natural flow of Ken Liu's translation style"
 	@echo "   • Provide BOTH literal and idiomatic translations for each sentence"
 	@echo ""
-	@$(NODE) start-translation.js $(BOOK)
+	@$(NODE) start-translation.js $(BOOK) "" "$(or $(BATCH_SIZE),100)"
 
 # Submit translations from a translation session
 .PHONY: submit-translations
