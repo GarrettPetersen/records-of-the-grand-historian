@@ -406,7 +406,7 @@ force-houhanshu-all: | data/houhanshu
 	done
 
 # Validate JSON files
-.PHONY: validate
+.PHONY: validate check-no-autotranslate
 validate:
 	@echo "Validating all JSON files..."
 	@find data -name "*.json" -type f | while read f; do \
@@ -414,7 +414,12 @@ validate:
 			echo "Invalid JSON: $$f"; \
 		fi; \
 	done
+	@$(MAKE) check-no-autotranslate
 	@echo "Validation complete."
+
+check-no-autotranslate:
+	@echo "Checking for blocked auto-translation imports/usages..."
+	@$(NODE) check-no-autotranslate.js
 
 # Score translations for quality issues
 .PHONY: score-translations
@@ -740,6 +745,7 @@ submit-translations:
 	@echo "   • Proper English grammar and natural flow"
 	@echo "   • Reasonable length compared to Chinese text"
 	@echo ""
+	@$(MAKE) check-no-autotranslate
 	@if [ -z "$(TRANSLATOR)" ]; then \
 		echo "Error: TRANSLATOR variable not set."; \
 		echo "Usage: make submit-translations TRANSLATOR=\"Garrett M. Petersen (2026)\" MODEL=\"grok-1.5\""; \
