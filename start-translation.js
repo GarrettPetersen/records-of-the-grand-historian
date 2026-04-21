@@ -109,6 +109,7 @@ function findFirstUntranslatedChapter(bookFilter = null) {
 function extractSentencesForTranslation(filePath, maxSentences = 100) {
   const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
   const sentences = [];
+  const seenIds = new Set();
   const isGenealogicalTable = data.meta.book === 'shiji' &&
                              ['013', '014', '015', '016'].includes(data.meta.chapter);
 
@@ -176,10 +177,14 @@ function extractSentencesForTranslation(filePath, maxSentences = 100) {
       }
 
       if (!hasIdiomatic && chineseText && chineseText.trim()) {
-        // Create globally unique ID by including block index
-        const globalId = `${blockIndex}-${sentenceId}`;
+        // Keep sentence IDs readable (e.g., "s0101"). Only append block index on collision.
+        let displayId = sentenceId;
+        if (seenIds.has(displayId)) {
+          displayId = `${sentenceId}@${blockIndex}`;
+        }
+        seenIds.add(displayId);
         sentences.push({
-          id: globalId,
+          id: displayId,
           originalId: sentenceId,
           blockIndex: blockIndex,
           chinese: chineseText,
