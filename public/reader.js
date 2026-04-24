@@ -2,6 +2,7 @@ import { BOOKS } from './app.js';
 
 let glossary = {};
 let currentHighlight = null;
+let hideTooltipTimeout = null;
 
 async function loadGlossary() {
   try {
@@ -34,7 +35,13 @@ function createWordSpan(char, charIndex) {
 }
 
 function showTooltip(e) {
-  const char = e.target.dataset.char;
+  if (hideTooltipTimeout) {
+    clearTimeout(hideTooltipTimeout);
+    hideTooltipTimeout = null;
+  }
+
+  const target = e.currentTarget || e.target;
+  const char = target.dataset.char;
   const tooltip = document.getElementById('tooltip');
 
   // Ensure glossary is loaded
@@ -75,7 +82,7 @@ function showTooltip(e) {
     </ul>
   `;
 
-  const targetRect = e.target.getBoundingClientRect();
+  const targetRect = target.getBoundingClientRect();
 
   // Make tooltip temporarily visible to get its dimensions
   tooltip.style.display = 'block';
@@ -134,17 +141,23 @@ function showTooltip(e) {
   tooltip.style.left = left + 'px';
   tooltip.style.top = top + 'px';
   tooltip.style.opacity = '1';
-  tooltip.style.pointerEvents = 'auto';
+  tooltip.style.pointerEvents = 'none';
 }
 
 function hideTooltip() {
   const tooltip = document.getElementById('tooltip');
+
+  if (hideTooltipTimeout) {
+    clearTimeout(hideTooltipTimeout);
+  }
+
   tooltip.style.opacity = '0';
   tooltip.style.pointerEvents = 'none';
-  // Keep it visible but transparent for a brief moment to allow transition
-  setTimeout(() => {
+  // Delay hiding slightly so moving between adjacent characters feels smooth.
+  hideTooltipTimeout = setTimeout(() => {
     tooltip.style.display = 'none';
-  }, 100);
+    hideTooltipTimeout = null;
+  }, 140);
 }
 
 function createSentenceElement(sentence, lang, sentenceId) {
