@@ -248,7 +248,12 @@ const BOOKS = {
 const SENTENCE_ENDINGS = /([。！？；〈〉()（）])/;
 
 const CHINESENOTES_GLYPH_SUBSTITUTIONS = {
-  '[B125]': '軬'
+  '[A170]': '虨',
+  '[B080]': '鍐',
+  '[B125]': '軬',
+  '[B231]': '𨏩',
+  '[C102]': '烖',
+  '[C111]': '㔨'
 };
 
 function normalizeWhitespace(text) {
@@ -260,7 +265,8 @@ function normalizeChineseNotesText(text) {
   let normalized = text.replace(/\uFEFF/g, '');
   normalized = normalized
     .replaceAll('[B125]音饭。车', '軬車')
-    .replaceAll('[B125]车', '軬車');
+    .replaceAll('[B125]车', '軬車')
+    .replaceAll('[B231]婁', '𨏩𨻻');
   for (const [marker, replacement] of Object.entries(CHINESENOTES_GLYPH_SUBSTITUTIONS)) {
     normalized = normalized.replaceAll(marker, replacement);
   }
@@ -516,6 +522,7 @@ function isBoilerplateText(text) {
     'jump to dictionary',
     'show parallel',
     'chinese text project',
+    'no u',
     'home',
     'source:',
     // chinesenotes.com copyright boilerplate
