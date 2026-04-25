@@ -247,8 +247,24 @@ const BOOKS = {
 // Classical Chinese sentence-ending punctuation, plus parentheses to split parenthetical content
 const SENTENCE_ENDINGS = /([。！？；〈〉()（）])/;
 
+const CHINESENOTES_GLYPH_SUBSTITUTIONS = {
+  '[B125]': '軬'
+};
+
 function normalizeWhitespace(text) {
   return text.replace(/\u00A0/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function normalizeChineseNotesText(text) {
+  if (!text) return text;
+  let normalized = text.replace(/\uFEFF/g, '');
+  normalized = normalized
+    .replaceAll('[B125]音饭。车', '軬車')
+    .replaceAll('[B125]车', '軬車');
+  for (const [marker, replacement] of Object.entries(CHINESENOTES_GLYPH_SUBSTITUTIONS)) {
+    normalized = normalized.replaceAll(marker, replacement);
+  }
+  return normalized;
 }
 
 /**
@@ -518,7 +534,7 @@ function isBoilerplateText(text) {
 function shouldSkipLine(text) {
   // TOC entries typically start with numbers like "1 ", "1.1 ", "2 "
   // But don't skip BCE year entries like "206 高皇帝..." (3+ digit years are table data)
-  if (/^\d{1,2}(\.\d+)?\s+[^\d]/.test(text) && !/^\d+\s+[高孝元]/.test(text)) return true;
+  if (/^\d{1,2}(\.\d+)?\s+[^\d]/.test(text) && !/^\d{3,}\s+[高孝元]/.test(text)) return true;
   if (text === '目录') return true;
   // Skip Wikipedia references
   if (text.includes('維基百科') || text.includes('维基百科')) return true;
@@ -850,7 +866,7 @@ function extractContent($, isFromCtext = false, startSentenceCounter = 0, url = 
   const $content = load(html, { decodeEntities: true });
 
   // Get the text, which now has our markers
-  let text = $content.root().text();
+  let text = normalizeChineseNotesText($content.root().text());
 
   // Split into paragraphs by our marker
   const paragraphs = text.split('§BR§')
@@ -886,7 +902,7 @@ function extractContent($, isFromCtext = false, startSentenceCounter = 0, url = 
     const looksLikeTableData = /^\d{3,4}[\s\u3000]+.*[\d一二三四五六七八九十百千]+.*$/.test(para) && para.length < 100;
 
     // Only skip if it has both state names AND tabular patterns, or has many names in a short space, or looks like table data
-    const shouldSkip = (hasStateNames && hasTabularPatterns) ||
+    const shouldSkip = (hasStateNames && hasTabularPatterns && para.length < 300) ||
       (hasManyNames && para.length < 300 && (para.match(/[\u4e00-\u9fff]{2,}[，。]/g) || []).length > 6) ||
       looksLikeTableData;
 
