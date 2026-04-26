@@ -1,10 +1,10 @@
-import { BOOKS, loadManifest } from './app.js';
+import { loadManifest } from './app.js';
 
 async function renderChapters() {
   const params = new URLSearchParams(window.location.search);
   const bookId = params.get('book');
   
-  if (!bookId || !BOOKS[bookId]) {
+  if (!bookId) {
     document.getElementById('loading').textContent = 'Invalid book ID';
     return;
   }
