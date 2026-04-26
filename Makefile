@@ -51,8 +51,8 @@ help:
 	@echo "  make auto-translate-numbers # Auto-translate Chinese numerals and Arabic numbers"
 	@echo "  make first-untranslated     # Find first chapter needing idiomatic translations"
 	@echo "  make first-untranslated BOOK=hanshu  # Find in specific book only"
-	@echo "  make start-translation BOOK=shiji [CHAPTER=022] [BATCH_SIZE=100]  # Start translation session"
-	@echo "  make continue [CHAPTER=022]          # Submit current batch and start next (quicker workflow)"
+	@echo "  make start-translation [BOOK=shiji] [CHAPTER=022] [BATCH_SIZE=100]  # Start translation session"
+	@echo "  make continue [BOOK=shiji] [CHAPTER=022]  # Submit current batch and start next"
 	@echo "  make submit-translations TRANSLATOR=\"Garrett M. Petersen (2026)\" MODEL=\"grok-1.5\"  # Submit translations from current_translation_{book}.json"
 	@echo "  make submit-translations TRANSLATOR=\"...\" MODEL=\"...\" FILE=\"path/to/file.json\"  # Submit from custom file"
 	@echo ""
@@ -76,6 +76,7 @@ help:
 	@echo "                 suishu, nanshi, beishi, jiutangshu, xintangshu,"
 	@echo "                 jiuwudaishi, xinwudaishi, songshi, liaoshi, jinshi,"
 	@echo "                 yuanshi, mingshi"
+	@echo "Other works:     zizhitongjian, qingshigao"
 
 # List available books
 .PHONY: list
@@ -668,6 +669,11 @@ first-untranslated:
 .PHONY: continue
 continue:
 	@echo "Continuing translation workflow..."
+	@if [ -n "$(CHAPTER)" ] && [ -z "$(BOOK)" ]; then \
+		echo "Error: CHAPTER requires BOOK because chapter numbers are not unique across books."; \
+		echo "Usage: make continue BOOK=shiji CHAPTER=022"; \
+		exit 1; \
+	fi
 	@if [ -n "$(BOOK)" ]; then \
 		translation_file="translations/current_translation_$(BOOK).json"; \
 		if [ ! -f "$$translation_file" ]; then \
@@ -681,7 +687,7 @@ continue:
 		translation_file_count=$$(echo "$$translation_files" | wc -l | tr -d ' '); \
 		if [ -z "$$translation_files" ] || [ "$$translation_file_count" -eq 0 ]; then \
 			echo "Error: No current translation session found."; \
-			echo "Try running: make start-translation BOOK=<book_name>"; \
+			echo "Try running: make start-translation"; \
 			exit 1; \
 		fi; \
 		if [ "$$translation_file_count" -gt 1 ]; then \
@@ -700,7 +706,7 @@ continue:
 	echo "Found translation session for book: $$book ($$translation_file)"; \
 	echo "$$book" > translations/.continue_book.tmp; \
 	echo "Step 1/2: Submitting current translations..."; \
-	translator=$${TRANSLATOR:-"Garrett M. Petersen (2025)"}; \
+	translator=$${TRANSLATOR:-"Garrett M. Petersen (2026)"}; \
 	model=$${MODEL:-"grok-1.5"}; \
 	if $(MAKE) submit-translations TRANSLATOR="$$translator" MODEL="$$model" FILE="$$translation_file"; then \
 		echo ""; \
@@ -711,7 +717,11 @@ continue:
 			echo "Error: Could not read book from temporary file."; \
 			exit 1; \
 		fi; \
-		$(MAKE) start-translation BOOK=$$book CHAPTER="$(CHAPTER)"; \
+		if [ -n "$(BOOK)" ]; then \
+			$(MAKE) start-translation BOOK=$$book CHAPTER="$(CHAPTER)"; \
+		else \
+			$(MAKE) start-translation; \
+		fi; \
 	else \
 		echo "❌ Translation submission failed. Please fix the issues and try again."; \
 		rm -f translations/.continue_book.tmp; \
@@ -722,9 +732,9 @@ continue:
 .PHONY: start-translation
 start-translation:
 	@echo "Starting translation session..."
-	@if [ -z "$(BOOK)" ]; then \
-		echo "Error: BOOK variable not set."; \
-		echo "Usage: make start-translation BOOK=shiji [CHAPTER=022] [BATCH_SIZE=100]"; \
+	@if [ -n "$(CHAPTER)" ] && [ -z "$(BOOK)" ]; then \
+		echo "Error: CHAPTER requires BOOK because chapter numbers are not unique across books."; \
+		echo "Usage: make start-translation BOOK=shiji CHAPTER=022 [BATCH_SIZE=100]"; \
 		exit 1; \
 	fi
 	@echo "🎯 Remember: Translate like Ken Liu - prioritize semantic fidelity and modern readability"
@@ -733,7 +743,7 @@ start-translation:
 	@echo "   • Aim for the literary quality and natural flow of Ken Liu's translation style"
 	@echo "   • Provide BOTH literal and idiomatic translations for each sentence"
 	@echo ""
-	@$(NODE) start-translation.js $(BOOK) "" "$(or $(BATCH_SIZE),100)" "$(CHAPTER)"
+	@$(NODE) start-translation.js "$(BOOK)" "" "$(or $(BATCH_SIZE),100)" "$(CHAPTER)"
 
 # Submit translations from a translation session
 .PHONY: submit-translations

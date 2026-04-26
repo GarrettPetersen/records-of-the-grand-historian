@@ -7,7 +7,8 @@
  * the next N non-empty untranslated sentences, including existing translations for reference.
  *
  * Usage:
- *   node start-translation.js <book> [output-file] [batch-size] [chapter]
+ *   node start-translation.js [book] [output-file] [batch-size] [chapter]
+ *   node start-translation.js
  *   node start-translation.js shiji
  *   node start-translation.js hanshu translations/current_translation_hanshu.json
  *   node start-translation.js shiji "" 100 22
@@ -23,6 +24,8 @@ const CHRONOLOGICAL_ORDER = [
   'jiuwudaishi', 'xinwudaishi', 'songshi', 'liaoshi', 'jinshi',
   'yuanshi', 'mingshi'
 ];
+
+const OTHER_WORKS_ORDER = ['zizhitongjian', 'qingshigao'];
 
 function countMissingTranslations(data) {
   let total = 0, missing = 0;
@@ -117,17 +120,9 @@ function findFirstUntranslatedChapter(bookFilter = null) {
     }
   } else {
     // Add chronological order books
-    for (const book of CHRONOLOGICAL_ORDER) {
+    for (const book of [...CHRONOLOGICAL_ORDER, ...OTHER_WORKS_ORDER]) {
       if (fs.existsSync(`data/${book}`)) {
         dirs.push(`data/${book}/`);
-      }
-    }
-    // Add any other books
-    const dataDir = 'data/';
-    const entries = fs.readdirSync(dataDir, { withFileTypes: true });
-    for (const entry of entries) {
-      if (entry.isDirectory() && entry.name !== 'public' && !CHRONOLOGICAL_ORDER.includes(entry.name)) {
-        dirs.push(`${dataDir}${entry.name}/`);
       }
     }
   }
@@ -243,28 +238,33 @@ function extractSentencesForTranslation(filePath, maxSentences = 100) {
 
 function main() {
   const args = process.argv.slice(2);
-  if (args.length < 1) {
-    console.error('Usage: node start-translation.js <book> [output-file] [batch-size]');
-    console.error('Example: node start-translation.js shiji');
-    process.exit(1);
-  }
-
-  const book = args[0];
-  const outputFile = args[1] || `translations/current_translation_${book}.json`;
+  const book = args[0]?.trim() || null;
+  const outputFileArg = args[1]?.trim() || null;
   const batchSizeArg = args[2];
   const parsedBatchSize = Number.parseInt(batchSizeArg ?? '', 10);
   const batchSize = Number.isFinite(parsedBatchSize) && parsedBatchSize > 0 ? parsedBatchSize : 100;
-  const chapterArg = args[3];
+  const chapterArg = args[3]?.trim() || null;
 
   if (chapterArg) {
+    if (!book) {
+      console.error('Error: CHAPTER requires BOOK because chapter numbers are not unique across books.');
+      console.error('Usage: node start-translation.js shiji "" 100 22');
+      process.exit(1);
+    }
     console.log(`Finding untranslated sentences in ${book} chapter ${chapterArg}`);
-  } else {
+  } else if (book) {
     console.log(`Finding the most complete chapter needing translation in book: ${book}`);
+  } else {
+    console.log('Finding the first chapter needing translation across all books');
   }
 
   const chapter = chapterArg ? findSpecificChapter(book, chapterArg) : findFirstUntranslatedChapter(book);
   if (!chapter) {
-    console.log(`No untranslated chapters found in ${book}`);
+    if (book) {
+      console.log(`No untranslated chapters found in ${book}`);
+    } else {
+      console.log('No untranslated chapters found');
+    }
     process.exit(0);
   }
 
@@ -273,6 +273,8 @@ function main() {
 
   const sentences = extractSentencesForTranslation(chapter.file, batchSize);
   console.log(`Extracted ${sentences.length} sentences for translation`);
+
+  const outputFile = outputFileArg || `translations/current_translation_${chapter.book}.json`;
 
   const result = {
     metadata: {
@@ -288,7 +290,7 @@ function main() {
   console.log('');
   console.log('Now fill in BOTH "literal" and "idiomatic" fields for each sentence and run: make submit-translations');
   console.log('Note: Both literal and idiomatic translations are required for each sentence.');
-  console.log(`Note: The translation file is now named current_translation_${book}.json`);
+  console.log(`Note: The translation file is now named current_translation_${chapter.book}.json`);
 }
 
 main();
