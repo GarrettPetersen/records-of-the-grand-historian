@@ -198,6 +198,54 @@
             font-size: 2rem;
             margin: 2rem 0 1rem;
         }
+
+        .overall-progress-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            padding: 2rem;
+        }
+
+        .overall-progress-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .overall-progress-header h2 {
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .overall-progress-percent {
+            color: var(--primary-color);
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .overall-progress-bar {
+            background: #d3d3d3;
+            border-radius: 999px;
+            height: 1.25rem;
+            overflow: hidden;
+        }
+
+        .overall-progress-fill {
+            background: #28a745;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .overall-progress-count {
+            color: var(--text-color);
+            margin-top: 0.75rem;
+            opacity: 0.8;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -212,6 +260,17 @@
     <main>
         <div id="loading">Loading progress data...</div>
         <div id="progress-content" style="display: none;">
+            <section class="overall-progress-card" aria-labelledby="overall-progress-heading">
+                <div class="overall-progress-header">
+                    <h2 id="overall-progress-heading">Overall Chapter Progress</h2>
+                    <div class="overall-progress-percent" id="overall-progress-percent">0%</div>
+                </div>
+                <div class="overall-progress-bar" aria-label="Overall chapter translation progress">
+                    <div class="overall-progress-fill" id="overall-progress-fill" style="width: 0%;"></div>
+                </div>
+                <div class="overall-progress-count" id="overall-progress-count">0 of 0 chapters finished</div>
+            </section>
+
             <div class="progress-legend">
                 <div class="legend-item">
                     <div class="legend-square gray"></div>
@@ -326,6 +385,18 @@
             return section;
         }
 
+        function renderOverallProgress(data) {
+            const chapters = Object.values(data.books).flatMap(book => book.chapters || []);
+            const total = chapters.length;
+            const finished = chapters.filter(chapter => chapter.status === 'green').length;
+            const percent = total > 0 ? (finished / total) * 100 : 0;
+            const displayPercent = `${percent.toFixed(1)}%`;
+
+            document.getElementById('overall-progress-percent').textContent = displayPercent;
+            document.getElementById('overall-progress-fill').style.width = displayPercent;
+            document.getElementById('overall-progress-count').textContent = `${finished.toLocaleString()} of ${total.toLocaleString()} chapters finished`;
+        }
+
         async function init() {
             const data = await loadProgressData();
             if (!data) return;
@@ -338,6 +409,8 @@
             // Format last updated time
             const updated = new Date(data.generatedAt);
             lastUpdated.textContent = `Last updated: ${updated.toLocaleDateString()} ${updated.toLocaleTimeString()}`;
+
+            renderOverallProgress(data);
 
             const groups = [
                 ['twentyFourHistories', 'Twenty-Four Histories'],
