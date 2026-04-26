@@ -7,9 +7,10 @@
  * the next N non-empty untranslated sentences, including existing translations for reference.
  *
  * Usage:
- *   node start-translation.js <book> [output-file] [batch-size]
+ *   node start-translation.js <book> [output-file] [batch-size] [chapter]
  *   node start-translation.js shiji
  *   node start-translation.js hanshu translations/current_translation_hanshu.json
+ *   node start-translation.js shiji "" 100 22
  */
 
 import fs from 'node:fs';
@@ -22,6 +23,90 @@ const CHRONOLOGICAL_ORDER = [
   'jiuwudaishi', 'xinwudaishi', 'songshi', 'liaoshi', 'jinshi',
   'yuanshi', 'mingshi'
 ];
+
+function countMissingTranslations(data) {
+  let total = 0, missing = 0;
+  for (const block of data.content) {
+    if (block.type === 'paragraph') {
+      for (const sentence of block.sentences || []) {
+        if (sentence.zh && sentence.zh.trim()) {
+          total++;
+          const trans = sentence.translations?.[0];
+          const translator = trans?.translator;
+          if (translator !== 'Herbert J. Allen (1894)' && (!trans?.idiomatic || !trans.idiomatic.trim())) {
+            missing++;
+          }
+        }
+      }
+    } else if (block.type === 'table_row') {
+      for (const cell of block.cells || []) {
+        if (cell.content && cell.content.trim()) {
+          total++;
+          if (!cell.idiomatic || !cell.idiomatic.trim()) {
+            missing++;
+          }
+        }
+      }
+    } else if (block.type === 'table_header') {
+      for (const sentence of block.sentences || []) {
+        if (sentence.zh && sentence.zh.trim()) {
+          total++;
+          const trans = sentence.translations?.[0];
+          if (!trans?.idiomatic || !trans.idiomatic.trim()) {
+            missing++;
+          }
+        }
+      }
+    }
+  }
+
+  return { total, missing };
+}
+
+function chapterToFileName(chapter) {
+  const normalized = String(chapter).trim();
+  if (/^\d+$/.test(normalized)) {
+    return `${normalized.padStart(3, '0')}.json`;
+  }
+  if (/^\d+\.json$/.test(normalized)) {
+    return normalized.replace(/^(\d+)\.json$/, (_, n) => `${n.padStart(3, '0')}.json`);
+  }
+  return normalized.endsWith('.json') ? normalized : `${normalized}.json`;
+}
+
+function buildChapterResult(filePath) {
+  const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  const { total, missing } = countMissingTranslations(data);
+  return {
+    book: data.meta.book,
+    chapter: data.meta.chapter,
+    file: filePath,
+    total,
+    missing
+  };
+}
+
+function findSpecificChapter(book, chapter) {
+  const bookDir = `data/${book}`;
+  if (!fs.existsSync(bookDir)) {
+    console.error(`Book not found: ${book}`);
+    process.exit(1);
+  }
+
+  const filePath = path.join(bookDir, chapterToFileName(chapter));
+  if (!fs.existsSync(filePath)) {
+    console.error(`Chapter not found: ${filePath}`);
+    process.exit(1);
+  }
+
+  const result = buildChapterResult(filePath);
+  if (result.missing === 0) {
+    console.log(`No untranslated sentences found in ${book} chapter ${result.chapter}`);
+    process.exit(0);
+  }
+
+  return result;
+}
 
 function findFirstUntranslatedChapter(bookFilter = null) {
   const dirs = [];
@@ -48,57 +133,15 @@ function findFirstUntranslatedChapter(bookFilter = null) {
   }
 
   for (const dir of dirs) {
-    const book = path.basename(dir);
     const files = fs.readdirSync(dir).filter(f => f.endsWith('.json')).sort();
 
     for (const file of files) {
       const filePath = path.join(dir, file);
-      const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-
-      let total = 0, missing = 0;
-      for (const block of data.content) {
-        if (block.type === 'paragraph') {
-          for (const sentence of block.sentences || []) {
-            if (sentence.zh && sentence.zh.trim()) {
-              total++;
-              const trans = sentence.translations?.[0];
-              const translator = trans?.translator;
-              if (translator !== 'Herbert J. Allen (1894)' && (!trans?.idiomatic || !trans.idiomatic.trim())) {
-                missing++;
-              }
-            }
-          }
-        } else if (block.type === 'table_row') {
-          for (const cell of block.cells || []) {
-            if (cell.content && cell.content.trim()) {
-              total++;
-              if (!cell.idiomatic || !cell.idiomatic.trim()) {
-                missing++;
-              }
-            }
-          }
-        } else if (block.type === 'table_header') {
-          for (const sentence of block.sentences || []) {
-            if (sentence.zh && sentence.zh.trim()) {
-              total++;
-              const trans = sentence.translations?.[0];
-              if (!trans?.idiomatic || !trans.idiomatic.trim()) {
-                missing++;
-              }
-            }
-          }
-        }
-      }
+      const chapter = buildChapterResult(filePath);
 
       // Return the first chapter found that has any missing translations
-      if (missing > 0) {
-        return {
-          book,
-          chapter: data.meta.chapter,
-          file: filePath,
-          total,
-          missing
-        };
+      if (chapter.missing > 0) {
+        return chapter;
       }
     }
   }
@@ -211,10 +254,15 @@ function main() {
   const batchSizeArg = args[2];
   const parsedBatchSize = Number.parseInt(batchSizeArg ?? '', 10);
   const batchSize = Number.isFinite(parsedBatchSize) && parsedBatchSize > 0 ? parsedBatchSize : 100;
+  const chapterArg = args[3];
 
-  console.log(`Finding the most complete chapter needing translation in book: ${book}`);
+  if (chapterArg) {
+    console.log(`Finding untranslated sentences in ${book} chapter ${chapterArg}`);
+  } else {
+    console.log(`Finding the most complete chapter needing translation in book: ${book}`);
+  }
 
-  const chapter = findFirstUntranslatedChapter(book);
+  const chapter = chapterArg ? findSpecificChapter(book, chapterArg) : findFirstUntranslatedChapter(book);
   if (!chapter) {
     console.log(`No untranslated chapters found in ${book}`);
     process.exit(0);
