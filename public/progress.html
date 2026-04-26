@@ -192,6 +192,12 @@
             color: var(--text-color);
             opacity: 0.7;
         }
+
+        .progress-group-heading {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin: 2rem 0 1rem;
+        }
     </style>
 </head>
 <body>
@@ -199,7 +205,7 @@
         <div style="max-width: 1400px; margin: 0 auto;">
             <a href="index.html" class="back-link" style="color: white; opacity: 0.9;">← Back to all histories</a>
             <h1>Translation Progress</h1>
-            <h2>二十四史 Translation Status</h2>
+            <h2>Translation Status</h2>
         </div>
     </header>
 
@@ -333,10 +339,28 @@
             const updated = new Date(data.generatedAt);
             lastUpdated.textContent = `Last updated: ${updated.toLocaleDateString()} ${updated.toLocaleTimeString()}`;
 
-            // Create sections for each book
-            Object.keys(data.books).forEach(bookId => {
-                const bookSection = createBookSection(bookId, data.books[bookId]);
-                container.appendChild(bookSection);
+            const groups = [
+                ['twentyFourHistories', 'Twenty-Four Histories'],
+                ['otherWorks', 'Other Works']
+            ];
+
+            groups.forEach(([category, label]) => {
+                const bookIds = Object.keys(data.books).filter(bookId => {
+                    const book = data.books[bookId];
+                    return (book.category || 'twentyFourHistories') === category;
+                });
+
+                if (bookIds.length === 0) return;
+
+                const heading = document.createElement('h2');
+                heading.className = 'progress-group-heading';
+                heading.textContent = label;
+                container.appendChild(heading);
+
+                bookIds.forEach(bookId => {
+                    const bookSection = createBookSection(bookId, data.books[bookId]);
+                    container.appendChild(bookSection);
+                });
             });
 
             // Show content

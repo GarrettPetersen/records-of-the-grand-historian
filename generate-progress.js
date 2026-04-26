@@ -121,6 +121,7 @@ function generateProgressData() {
       chinese: book.chinese,
       pinyin: book.pinyin,
       dynasty: book.dynasty,
+      category: book.category || 'twentyFourHistories',
       chapters: []
     };
 

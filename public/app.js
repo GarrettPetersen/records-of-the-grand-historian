@@ -1,4 +1,4 @@
-// Complete book metadata for all 24 dynastic histories (for reference)
+// Complete book metadata for the Twenty-Four Histories and supplemental works.
 // Books are loaded dynamically from manifest.json and sorted chronologically
 export const BOOKS = {
   shiji: {
@@ -192,6 +192,24 @@ export const BOOKS = {
     dynasty: 'Ming',
     author: 'Zhang Tingyu et al.',
     authorChinese: '張廷玉等'
+  },
+  zizhitongjian: {
+    name: 'Comprehensive Mirror in Aid of Governance',
+    chinese: '資治通鑑',
+    pinyin: 'Zīzhì Tōngjiàn',
+    dynasty: 'Warring States to Five Dynasties',
+    author: 'Sima Guang',
+    authorChinese: '司馬光',
+    category: 'otherWorks'
+  },
+  qingshigao: {
+    name: 'Draft History of Qing',
+    chinese: '清史稿',
+    pinyin: 'Qīngshǐgǎo',
+    dynasty: 'Qing',
+    author: 'Zhao Erxun et al.',
+    authorChinese: '趙爾巽等',
+    category: 'otherWorks'
   }
 };
 
@@ -246,9 +264,16 @@ const CHRONOLOGICAL_ORDER = [
   'mingshi'       // History of Ming - Ming
 ];
 
+const OTHER_WORKS_ORDER = [
+  'zizhitongjian',
+  'qingshigao'
+];
+
 async function renderHomepage() {
   const loading = document.getElementById('loading');
   const grid = document.getElementById('histories-grid');
+  const otherWorksGrid = document.getElementById('other-works-grid');
+  const otherWorksSection = document.getElementById('other-works-section');
 
   const histories = await loadAvailableHistories();
 
@@ -260,15 +285,12 @@ async function renderHomepage() {
     return;
   }
 
-  // Sort available books by chronological order of the 24 dynastic histories
+  // Sort available books by chronological order of the 24 dynastic histories.
   const availableBooks = Object.keys(histories);
   const sortedBookIds = CHRONOLOGICAL_ORDER.filter(id => availableBooks.includes(id));
+  const otherWorkIds = OTHER_WORKS_ORDER.filter(id => availableBooks.includes(id));
 
-  // Add any books not in the chronological list at the end
-  const remainingBooks = availableBooks.filter(id => !sortedBookIds.includes(id));
-  sortedBookIds.push(...remainingBooks);
-
-  for (const id of sortedBookIds) {
+  const renderCard = (id, targetGrid) => {
     const info = histories[id];
     const card = document.createElement('a');
     card.className = 'history-card';
@@ -282,7 +304,19 @@ async function renderHomepage() {
       <div class="chapter-count">Click to browse chapters</div>
     `;
 
-    grid.appendChild(card);
+    targetGrid.appendChild(card);
+  };
+
+  for (const id of sortedBookIds) {
+    renderCard(id, grid);
+  }
+
+  if (otherWorksGrid && otherWorksSection && otherWorkIds.length > 0) {
+    otherWorksSection.style.display = 'block';
+    otherWorksGrid.style.display = 'grid';
+    for (const id of otherWorkIds) {
+      renderCard(id, otherWorksGrid);
+    }
   }
 }
 

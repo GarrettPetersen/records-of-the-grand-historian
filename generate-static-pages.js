@@ -49,7 +49,8 @@ function loadBooks() {
               chinese: chapterData.meta.bookInfo.chinese || bookId,
               pinyin: chapterData.meta.bookInfo.pinyin || bookId,
               author: chapterData.meta.bookInfo.author || 'Unknown',
-              dynasty: chapterData.meta.bookInfo.dynasty || 'Unknown'
+              dynasty: chapterData.meta.bookInfo.dynasty || 'Unknown',
+              category: chapterData.meta.bookInfo.category || 'twentyFourHistories'
             };
           }
         }

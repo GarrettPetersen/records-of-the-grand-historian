@@ -43,6 +43,11 @@ const CHRONOLOGICAL_ORDER = [
   'mingshi'       // History of Ming - Ming
 ];
 
+const OTHER_WORKS_ORDER = [
+  'zizhitongjian', // Comprehensive Mirror in Aid of Governance
+  'qingshigao'     // Draft History of Qing
+];
+
 const BOOKS = {
   shiji: { name: 'Records of the Grand Historian', chinese: '史記', pinyin: 'Shǐjì', dynasty: 'Xia to Han', author: 'Sima Qian', authorChinese: '司馬遷' },
   hanshu: { name: 'Book of Han', chinese: '漢書', pinyin: 'Hànshū', dynasty: 'Western Han', author: 'Ban Gu', authorChinese: '班固' },
@@ -67,8 +72,14 @@ const BOOKS = {
   liaoshi: { name: 'History of Liao', chinese: '遼史', pinyin: 'Liáoshǐ', dynasty: 'Liao (Khitan)', author: 'Toqto\'a et al.', authorChinese: '脫脫等' },
   jinshi: { name: 'History of Jin', chinese: '金史', pinyin: 'Jīnshǐ', dynasty: 'Jin (Jurchen)', author: 'Toqto\'a et al.', authorChinese: '脫脫等' },
   yuanshi: { name: 'History of Yuan', chinese: '元史', pinyin: 'Yuánshǐ', dynasty: 'Yuan (Mongol)', author: 'Song Lian et al.', authorChinese: '宋濂等' },
-  mingshi: { name: 'History of Ming', chinese: '明史', pinyin: 'Míngshǐ', dynasty: 'Ming', author: 'Zhang Tingyu et al.', authorChinese: '張廷玉等' }
+  mingshi: { name: 'History of Ming', chinese: '明史', pinyin: 'Míngshǐ', dynasty: 'Ming', author: 'Zhang Tingyu et al.', authorChinese: '張廷玉等', category: 'twentyFourHistories' },
+  zizhitongjian: { name: 'Comprehensive Mirror in Aid of Governance', chinese: '資治通鑑', pinyin: 'Zīzhì Tōngjiàn', dynasty: 'Warring States to Five Dynasties', author: 'Sima Guang', authorChinese: '司馬光', category: 'otherWorks' },
+  qingshigao: { name: 'Draft History of Qing', chinese: '清史稿', pinyin: 'Qīngshǐgǎo', dynasty: 'Qing', author: 'Zhao Erxun et al.', authorChinese: '趙爾巽等', category: 'otherWorks' }
 };
+
+for (const id of CHRONOLOGICAL_ORDER) {
+  BOOKS[id].category = BOOKS[id].category || 'twentyFourHistories';
+}
 
 function generateManifest() {
   // Load existing manifest to preserve quality scores
@@ -100,10 +111,11 @@ function generateManifest() {
     }
   }
 
-  // Sort books in chronological order
+  // Sort the Twenty-Four Histories first, then supplemental works.
   const sortedBooks = CHRONOLOGICAL_ORDER.filter(id => availableBooks.includes(id));
+  sortedBooks.push(...OTHER_WORKS_ORDER.filter(id => availableBooks.includes(id)));
 
-  // Add any books not in the chronological list at the end
+  // Add any books not in either ordered list at the end.
   const remainingBooks = availableBooks.filter(id => !sortedBooks.includes(id));
   sortedBooks.push(...remainingBooks);
 
