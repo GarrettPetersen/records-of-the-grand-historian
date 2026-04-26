@@ -15,19 +15,23 @@ permissions:
 jobs:
   enable-automerge:
     name: Enable auto-merge
-    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
-      - name: Enable auto-merge for Cursor-authored PRs
+      - name: Mark ready and enable auto-merge for Cursor-authored PRs
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_URL: ${{ github.event.pull_request.html_url }}
         run: |
           author="$(gh pr view "$PR_URL" --json author --jq '.author.login')"
+          is_draft="$(gh pr view "$PR_URL" --json isDraft --jq '.isDraft')"
           echo "PR author: $author"
+          echo "PR is draft: $is_draft"
 
           case "$author" in
             app/cursor|cursor|"cursor[bot]")
+              if [ "$is_draft" = "true" ]; then
+                gh pr ready "$PR_URL"
+              fi
               gh pr merge "$PR_URL" --auto --squash
               ;;
             *)
