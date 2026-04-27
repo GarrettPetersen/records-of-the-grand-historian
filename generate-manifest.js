@@ -82,7 +82,7 @@ for (const id of CHRONOLOGICAL_ORDER) {
 }
 
 function generateManifest() {
-  // Load existing manifest to preserve quality scores
+  // Load existing manifest to preserve quality scores and editorial review flags
   let existingManifest = {};
   const existingManifestPath = path.join(DATA_DIR, 'manifest.json');
   if (fs.existsSync(existingManifestPath)) {
@@ -137,16 +137,18 @@ function generateManifest() {
       try {
         const data = JSON.parse(fs.readFileSync(chapterPath, 'utf8'));
 
-        // Preserve existing quality score if available
+        // Preserve existing quality score and reviewed flag if available
         const existingChapter = existingManifest.books?.[bookId]?.chapters?.find(c => c.chapter === chapterNum);
         const qualityScore = existingChapter?.qualityScore ?? null;
+        const reviewed = existingChapter?.reviewed ?? false;
 
         chapters.push({
           chapter: chapterNum,
           title: data.meta.title,
           sentenceCount: data.meta.sentenceCount,
           translatedCount: data.meta.translatedCount,
-          qualityScore: qualityScore
+          qualityScore: qualityScore,
+          reviewed
         });
       } catch (e) {
         console.error(`Error reading ${chapterPath}: ${e.message}`);

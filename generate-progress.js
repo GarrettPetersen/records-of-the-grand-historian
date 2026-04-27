@@ -133,7 +133,8 @@ function generateProgressData() {
         status: status,
         sentenceCount: chapter.sentenceCount,
         translatedCount: chapter.translatedCount,
-        qualityScore: chapter.qualityScore
+        qualityScore: chapter.qualityScore,
+        reviewed: chapter.reviewed ?? false
       });
     }
 

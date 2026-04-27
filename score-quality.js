@@ -15,6 +15,11 @@
  * AI/Programmatic Usage:
  *   node score-quality.js --set-score 8 --chapter 083
  *   node score-quality.js --batch-scores '{"083": 8, "084": 7}'
+ *
+ * Editorial review (manifest "reviewed" flag, default false):
+ *   node score-quality.js --set-reviewed --chapter 083 [--book shiji]
+ *   node score-quality.js --clear-reviewed --chapter 083 [--book shiji]
+ *   node score-quality.js --list-unreviewed [--book shiji]
  */
 
 import fs from 'node:fs';
@@ -98,6 +103,26 @@ function showScoringStats() {
   const completionRate = stats.translatedChapters > 0 ?
     ((stats.scoredChapters / stats.translatedChapters) * 100).toFixed(1) : 0;
   console.log(`\nCompletion rate: ${completionRate}%`);
+
+  let reviewedTranslated = 0;
+  let unreviewedTranslated = 0;
+  for (const bookId in manifest.books) {
+    const book = manifest.books[bookId];
+    for (const chapter of book.chapters) {
+      if (chapter.translatedCount > 0) {
+        if (chapter.reviewed === true) reviewedTranslated++;
+        else unreviewedTranslated++;
+      }
+    }
+  }
+  const reviewedTotal = reviewedTranslated + unreviewedTranslated;
+  const reviewPct = reviewedTotal > 0
+    ? ((reviewedTranslated / reviewedTotal) * 100).toFixed(1)
+    : 0;
+  console.log('\n=== Editorial review (translated chapters only) ===');
+  console.log(`Reviewed: ${reviewedTranslated}`);
+  console.log(`Not reviewed: ${unreviewedTranslated}`);
+  console.log(`Review completion: ${reviewPct}%`);
 }
 
 function createInterface() {
@@ -111,6 +136,47 @@ function askQuestion(rl, question) {
   return new Promise((resolve) => {
     rl.question(question, resolve);
   });
+}
+
+function listUnreviewedChapters(bookFilter = null) {
+  const manifest = loadManifest();
+  const rows = [];
+
+  for (const bookId in manifest.books) {
+    if (bookFilter && bookId !== bookFilter) continue;
+
+    const book = manifest.books[bookId];
+    for (const chapter of book.chapters) {
+      if (chapter.reviewed === true) continue;
+      if (chapter.translatedCount > 0) {
+        rows.push({
+          bookId,
+          bookName: book.name,
+          chapter: chapter.chapter,
+          title: chapter.title.en || chapter.title.zh,
+          sentenceCount: chapter.sentenceCount,
+          translatedCount: chapter.translatedCount
+        });
+      }
+    }
+  }
+
+  return rows;
+}
+
+function setReviewedFlag(bookId, chapterNum, reviewed) {
+  const manifest = loadManifest();
+  const chapter = manifest.books[bookId]?.chapters?.find(c => c.chapter === chapterNum);
+
+  if (!chapter) {
+    console.error(`Chapter ${bookId}/${chapterNum} not found`);
+    return false;
+  }
+
+  chapter.reviewed = reviewed;
+  saveManifest(manifest);
+  console.log(`Set reviewed=${reviewed} for chapter ${bookId}/${chapterNum}`);
+  return true;
 }
 
 function setQualityScore(bookId, chapterNum, score) {
@@ -283,6 +349,19 @@ function main() {
         console.log(`  ${chapter.translatedCount}/${chapter.sentenceCount} sentences translated`);
       });
     }
+  } else if (args.includes('--list-unreviewed')) {
+    const bookIndex = args.indexOf('--book');
+    const bookFilter = bookIndex >= 0 ? args[bookIndex + 1] : null;
+    const unreviewed = listUnreviewedChapters(bookFilter);
+    if (unreviewed.length === 0) {
+      console.log('No unreviewed translated chapters found');
+    } else {
+      console.log(`\n=== Unreviewed translated chapters${bookFilter ? ` (${bookFilter})` : ''} ===`);
+      unreviewed.forEach(chapter => {
+        console.log(`${chapter.bookId}/${chapter.chapter}: ${chapter.title}`);
+        console.log(`  ${chapter.translatedCount}/${chapter.sentenceCount} sentences translated`);
+      });
+    }
   } else if (args.includes('--stats')) {
     showScoringStats();
   } else if (args.includes('--set-score')) {
@@ -299,6 +378,30 @@ function main() {
     }
 
     setQualityScore(bookId, chapterNum, score);
+  } else if (args.includes('--set-reviewed')) {
+    const chapterIndex = args.indexOf('--chapter');
+    const chapterNum = args[chapterIndex + 1];
+    const bookIndex = args.indexOf('--book');
+    const bookId = bookIndex >= 0 ? args[bookIndex + 1] : 'shiji';
+
+    if (!chapterNum) {
+      console.error('Usage: node score-quality.js --set-reviewed --chapter CHAPTER [--book BOOK]');
+      process.exit(1);
+    }
+
+    setReviewedFlag(bookId, chapterNum, true);
+  } else if (args.includes('--clear-reviewed')) {
+    const chapterIndex = args.indexOf('--chapter');
+    const chapterNum = args[chapterIndex + 1];
+    const bookIndex = args.indexOf('--book');
+    const bookId = bookIndex >= 0 ? args[bookIndex + 1] : 'shiji';
+
+    if (!chapterNum) {
+      console.error('Usage: node score-quality.js --clear-reviewed --chapter CHAPTER [--book BOOK]');
+      process.exit(1);
+    }
+
+    setReviewedFlag(bookId, chapterNum, false);
   } else if (args.includes('--batch-scores')) {
     const batchIndex = args.indexOf('--batch-scores');
     const scoresJson = args[batchIndex + 1];
@@ -335,9 +438,17 @@ USAGE:
 
 OPTIONS:
   --list                    List all unscored chapters
-  --stats                   Show scoring statistics
+  --list-unreviewed         List translated chapters not marked reviewed
+    --book BOOK             Limit to one book (optional)
+  --stats                   Show scoring statistics (includes review counts)
   --set-score SCORE         Set quality score (1-10) for a chapter
     --chapter CHAPTER         Chapter number (required with --set-score)
+    --book BOOK             Book ID (default: shiji)
+  --set-reviewed            Mark chapter as editorially reviewed (manifest flag)
+    --chapter CHAPTER         Required
+    --book BOOK             Book ID (default: shiji)
+  --clear-reviewed          Clear reviewed flag for a chapter
+    --chapter CHAPTER         Required
     --book BOOK             Book ID (default: shiji)
   --batch-scores JSON       Set multiple scores from JSON object
   --book BOOK               Interactive scoring for specific book
@@ -347,7 +458,9 @@ OPTIONS:
 EXAMPLES:
   node score-quality.js --stats
   node score-quality.js --list
+  node score-quality.js --list-unreviewed --book hanshu
   node score-quality.js --set-score 8 --chapter 083
+  node score-quality.js --set-reviewed --chapter 083 --book shiji
   node score-quality.js --batch-scores '{"083": 8, "084": 7}'
   node score-quality.js --book shiji
   node score-quality.js --chapter 083

@@ -369,7 +369,8 @@
             bookData.chapters.forEach(chapter => {
                 const square = document.createElement('div');
                 square.className = `progress-square ${chapter.status}`;
-                square.setAttribute('data-tooltip', `${chapter.chapter}: ${chapter.title.en || chapter.title.zh}\n${chapter.translatedCount}/${chapter.sentenceCount} translated`);
+                const reviewLine = chapter.reviewed ? 'Editorial review: done' : 'Editorial review: pending';
+                square.setAttribute('data-tooltip', `${chapter.chapter}: ${chapter.title.en || chapter.title.zh}\n${chapter.translatedCount}/${chapter.sentenceCount} translated\n${reviewLine}`);
 
                 // Make clickable to go to chapter
                 square.addEventListener('click', () => {
