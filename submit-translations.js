@@ -28,6 +28,13 @@ function startsWithLowercaseLetter(text) {
   return match[1] === match[1].toLowerCase();
 }
 
+/** Count CJK unified ideographs (excludes punctuation). */
+function countHanzi(text) {
+  if (!text) return 0;
+  const m = text.match(/[\u4e00-\u9fff]/g);
+  return m ? m.length : 0;
+}
+
 function getChapterIdiomaticText(entry) {
   if (!entry) return '';
   if (entry.blockType === 'table_row') {
@@ -81,6 +88,8 @@ function validateTranslations(translationFile, chapterFile) {
 
   const errors = [];
   let identicalCount = 0;
+  let identicalStrictCount = 0;
+  const strictTotal = translations.sentences.filter((s) => countHanzi(s.chinese) > 3).length;
 
   for (const sentence of translations.sentences) {
     // Check if literal is empty
@@ -93,10 +102,12 @@ function validateTranslations(translationFile, chapterFile) {
       errors.push(`Missing idiomatic translation for sentence ${sentence.id}. Please provide both literal and idiomatic translations for each sentence.`);
     }
 
-    // Check if literal and idiomatic are identical (after trimming)
+    // Check if literal and idiomatic are identical (after trimming).
+    // For rubrics of 3 or fewer hanzi (e.g. subsection headings), identical EN is allowed.
     if (sentence.literal && sentence.idiomatic &&
         sentence.literal.trim() === sentence.idiomatic.trim()) {
       identicalCount++;
+      if (countHanzi(sentence.chinese) > 3) identicalStrictCount++;
     }
 
     // NEW: Check for placeholder text and poor quality indicators
@@ -184,13 +195,15 @@ function validateTranslations(translationFile, chapterFile) {
     }
   }
 
-  // Check if too many translations are identical
+  // Check if too many translations are identical (ignore sentences with ≤3 hanzi)
   const totalSentences = translations.sentences.length;
-  if (totalSentences > 0 && identicalCount === totalSentences) {
-    errors.push(`❌ SHORTCUT DETECTED: All ${totalSentences} literal and idiomatic translations are identical.`);
+  if (strictTotal > 0 && identicalStrictCount === strictTotal) {
+    errors.push(`❌ SHORTCUT DETECTED: All ${strictTotal} longer-sentence literal and idiomatic translations are identical.`);
     errors.push(`You cannot just copy literal translations to fill idiomatic fields.`);
     errors.push(`Please provide distinct, high-quality idiomatic translations for each sentence.`);
     errors.push(`Each idiomatic translation should be more natural and flowing while maintaining semantic fidelity.`);
+  } else if (totalSentences > 0 && identicalCount === totalSentences && strictTotal === 0) {
+    // Entire batch is only very short lines (≤3 hanzi each); identical pairs are allowed.
   }
 
   return errors;

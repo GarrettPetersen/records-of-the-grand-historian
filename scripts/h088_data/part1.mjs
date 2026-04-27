@@ -5,8 +5,8 @@ export default {
     "This is Book 77 of the History of the Han: the forty-seventh set of biographies, treating Gai Kuangrao, Zhuge Feng, Liu Fu, Zheng Chong, Sun Bao, Wujiang Long, and He Bing.",
   ],
   s0002: [
-    "The subsection title is the personal name Gai Kuangrao.",
-    "Gai Kuangrao—the first biography in this scroll.",
+    "Rubric line: Gai Kuangrao (蓋寬饒), the next figure treated in this joint chapter.",
+    "Gai Kuangrao (蓋寬饒)—the subject whose biography opens this chapter.",
   ],
   s0003: [
     "Gai Kuangrao, courtesy name Cigong, was a man of Wei Commandery.",
@@ -211,8 +211,8 @@ export default {
     "He opened his own throat below the northern watchtower; the capital wept.",
   ],
   s0055: [
-    "The subsection title is the personal name Zhuge Feng.",
-    "Zhuge Feng—the second life in this scroll.",
+    "Rubric line: Zhuge Feng (諸葛豐), the next figure treated in this joint chapter.",
+    "Zhuge Feng (諸葛豐)—the subject of the biography that follows Gai Kuangrao’s.",
   ],
   s0056: [
     "Zhuge Feng, courtesy name Shaoji, was a man of Langye.",

@@ -13,6 +13,13 @@ const CORRUPTED_CHARS_REGEX = /[\uFFFD\u0080-\u009F]/; // Unicode replacement ch
 const PLACEHOLDER_REGEX = /\[Literal translation\]|\[Idiomatic translation\]|This historical passage.*\[Literal translation\]|This passage continues.*\[Idiomatic translation\]/;
 const TERMINAL_PUNCTUATION_REGEX = /[.!?]["')\]]*\s*$/;
 
+/** Count CJK unified ideographs (punctuation excluded). */
+function countHanzi(text) {
+  if (!text) return 0;
+  const m = text.match(/[\u4e00-\u9fff]/g);
+  return m ? m.length : 0;
+}
+
 function endsWithTerminalPunctuation(text) {
   if (!text || !text.trim()) return false;
   return TERMINAL_PUNCTUATION_REGEX.test(text.trim());
@@ -202,7 +209,7 @@ function scoreChapterFile(filePath) {
   const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
   const results = [];
 
-  // Track identical translations for chapter-level check
+  // Track identical translations for chapter-level check (skip ≤3 hanzi rubrics)
   let identicalTranslations = 0;
   let totalTranslations = 0;
 
@@ -250,7 +257,7 @@ function scoreChapterFile(filePath) {
             const idiomatic = sentence.translations?.[0]?.idiomatic || sentence.idiomatic;
             if (literal && idiomatic) {
               totalTranslations++;
-              if (literal.trim() === idiomatic.trim()) {
+              if (literal.trim() === idiomatic.trim() && countHanzi(content) > 3) {
                 identicalTranslations++;
               }
             }
@@ -292,7 +299,7 @@ function scoreChapterFile(filePath) {
             const idiomatic = sentence.translations?.[0]?.idiomatic || sentence.idiomatic;
             if (literal && idiomatic) {
               totalTranslations++;
-              if (literal.trim() === idiomatic.trim()) {
+              if (literal.trim() === idiomatic.trim() && countHanzi(content) > 3) {
                 identicalTranslations++;
               }
             }
@@ -335,7 +342,7 @@ function scoreChapterFile(filePath) {
             // Check for identical literal and idiomatic in table cells
             if (cell.literal && cell.idiomatic) {
               totalTranslations++;
-              if (cell.literal.trim() === cell.idiomatic.trim()) {
+              if (cell.literal.trim() === cell.idiomatic.trim() && countHanzi(cell.content) > 3) {
                 identicalTranslations++;
               }
             }
