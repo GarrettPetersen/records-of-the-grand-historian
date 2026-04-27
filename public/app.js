@@ -236,6 +236,29 @@ async function loadAvailableHistories() {
   return data.books || {};
 }
 
+/**
+ * Aggregate sentence counts from manifest chapters to classify translation coverage.
+ * @returns {{ level: 'full' | 'partial' | 'none', sentenceTotal: number, translatedTotal: number }}
+ */
+function bookTranslationSummary(book) {
+  const chapters = book?.chapters || [];
+  let sentenceTotal = 0;
+  let translatedTotal = 0;
+  for (const ch of chapters) {
+    const n = Number(ch.sentenceCount) || 0;
+    const t = Number(ch.translatedCount) || 0;
+    sentenceTotal += n;
+    translatedTotal += Math.min(t, n);
+  }
+  if (sentenceTotal === 0 || translatedTotal === 0) {
+    return { level: 'none', sentenceTotal, translatedTotal };
+  }
+  if (translatedTotal >= sentenceTotal) {
+    return { level: 'full', sentenceTotal, translatedTotal };
+  }
+  return { level: 'partial', sentenceTotal, translatedTotal };
+}
+
 // Chronological order of the 24 dynastic histories
 const CHRONOLOGICAL_ORDER = [
   'shiji',        // Records of the Grand Historian - Xia to Han
@@ -292,12 +315,31 @@ async function renderHomepage() {
 
   const renderCard = (id, targetGrid) => {
     const info = histories[id];
+    const { level, sentenceTotal, translatedTotal } = bookTranslationSummary(info);
+    const statusLabels = {
+      full: 'Fully translated',
+      partial: 'Partially translated',
+      none: 'Not translated'
+    };
+    const statusTitle =
+      level === 'full'
+        ? 'Every sentence in the book has an English translation.'
+        : level === 'partial'
+          ? `${translatedTotal.toLocaleString()} of ${sentenceTotal.toLocaleString()} sentences translated.`
+          : sentenceTotal > 0
+            ? 'No sentences have been translated yet.'
+            : 'No sentence data for this book.';
+
     const card = document.createElement('a');
-    card.className = 'history-card';
+    card.className = `history-card history-card--translation-${level}`;
     card.href = `chapters.html?book=${id}`;
+    card.title = statusTitle;
 
     card.innerHTML = `
-      <h3>${info.chinese}</h3>
+      <div class="history-card-header">
+        <h3>${info.chinese}</h3>
+        <span class="translation-status translation-status--${level}">${statusLabels[level]}</span>
+      </div>
       <div class="pinyin">${info.pinyin}</div>
       <div class="english-name">${info.name}</div>
       <div class="dynasty">Dynasty: ${info.dynasty}</div>

@@ -115,10 +115,66 @@ main:has(.reader-container) {
     border-color: var(--secondary-color);
 }
 
-.history-card h3 {
-    font-size: 2rem;
+.history-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.75rem;
     margin-bottom: 0.5rem;
+}
+
+.history-card-header h3 {
+    font-size: 2rem;
+    margin: 0;
     color: var(--primary-color);
+    line-height: 1.2;
+    flex: 1;
+    min-width: 0;
+}
+
+.translation-status {
+    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.3rem 0.55rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    line-height: 1.2;
+    border: 1px solid transparent;
+}
+
+.translation-status--full {
+    background: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+}
+
+.translation-status--partial {
+    background: #fff3cd;
+    color: #856404;
+    border-color: #ffeeba;
+}
+
+.translation-status--none {
+    background: #e9ecef;
+    color: #495057;
+    border-color: #dee2e6;
+}
+
+.history-card--translation-full {
+    border-left: 4px solid #28a745;
+}
+
+.history-card--translation-partial {
+    border-left: 4px solid #ffc107;
+}
+
+.history-card--translation-none {
+    border-left: 4px solid #adb5bd;
 }
 
 .history-card .pinyin {
