@@ -1,69 +1,72 @@
-import { loadManifest } from './app.js';
+import {
+  loadManifest,
+  buildHistoryCardInnerHtml,
+  chapterTranslationSummary,
+  translationStatusTooltip,
+} from './app.js';
 
 async function renderChapters() {
   const params = new URLSearchParams(window.location.search);
   const bookId = params.get('book');
-  
+
   if (!bookId) {
     document.getElementById('loading').textContent = 'Invalid book ID';
     return;
   }
-  
+
   const manifest = await loadManifest();
   const bookData = manifest.books[bookId];
-  
+
   if (!bookData) {
     document.getElementById('loading').textContent = 'Book not found in manifest';
     return;
   }
-  
+
   document.title = `${bookData.chinese} - Chapters`;
   document.getElementById('book-title').textContent = bookData.chinese;
   document.getElementById('book-subtitle').textContent = `${bookData.name} (${bookData.pinyin})`;
-  
+
   const loading = document.getElementById('loading');
   const list = document.getElementById('chapter-list');
-  
+
   loading.style.display = 'none';
   list.style.display = 'grid';
-  
+
   if (!bookData.chapters || bookData.chapters.length === 0) {
     list.innerHTML = '<p style="text-align: center; grid-column: 1/-1;">No chapters found.</p>';
     return;
   }
-  
+
   for (const chapter of bookData.chapters) {
-    const link = document.createElement('a');
-    link.className = 'chapter-link';
-    link.href = `${bookId}/${chapter.chapter}.html`;
-    
+    const { level, sentenceTotal, translatedTotal } = chapterTranslationSummary(chapter);
     const titleZh = chapter.title?.zh || `卷${chapter.chapter}`;
-    const titleEn = chapter.title?.en;
-    const hasTranslation = chapter.translatedCount > 0;
+    const titleEn = chapter.title?.en || '\u2014';
     const chapterNum = parseInt(chapter.chapter, 10);
-    const translationPercent = chapter.sentenceCount > 0
-      ? Math.round((chapter.translatedCount / chapter.sentenceCount) * 100)
-      : 0;
+    const chapterLabel = Number.isFinite(chapterNum)
+      ? `Chapter ${chapterNum}`
+      : `Chapter ${chapter.chapter}`;
 
-    let titleDisplay = `<div style="font-size: 1.1rem; margin-bottom: 0.5rem; font-weight: 600;">${titleZh}</div>`;
-    if (titleEn) {
-      titleDisplay += `<div style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;">${titleEn}</div>`;
-    }
+    const card = document.createElement('a');
+    card.className = `history-card history-card--translation-${level}`;
+    card.href = `${bookId}/${chapter.chapter}.html`;
+    card.title = translationStatusTooltip(level, sentenceTotal, translatedTotal, 'chapter');
 
-    let translationBadge = '';
-    if (translationPercent === 100) {
-      translationBadge = '<div style="font-size: 0.75rem; color: #8b4513; margin-top: 0.25rem;">✓ Translated</div>';
-    } else if (translationPercent > 0) {
-      translationBadge = `<div style="font-size: 0.75rem; color: #8b4513; margin-top: 0.25rem;">${translationPercent}% Translated</div>`;
-    }
+    const footerLine =
+      sentenceTotal > 0
+        ? `${translatedTotal.toLocaleString()} of ${sentenceTotal.toLocaleString()} sentences · Click to read`
+        : 'Click to read';
 
-    link.innerHTML = `
-      <div style="font-size: 0.85rem; color: #999; margin-bottom: 0.25rem;">Chapter ${chapterNum}</div>
-      ${titleDisplay}
-      <div style="font-size: 0.85rem; color: #666;">${chapter.sentenceCount} sentences</div>
-      ${translationBadge}
-    `;
-    list.appendChild(link);
+    card.innerHTML = buildHistoryCardInnerHtml({
+      titleZh,
+      level,
+      secondaryLine: chapterLabel,
+      secondaryLineClass: 'pinyin--chapter-index',
+      englishLine: titleEn,
+      metaLine: `Dynasty: ${bookData.dynasty}`,
+      footerLine,
+    });
+
+    list.appendChild(card);
   }
 }
 

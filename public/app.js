@@ -236,11 +236,72 @@ async function loadAvailableHistories() {
   return data.books || {};
 }
 
+/** Labels for the pill on book and chapter cards */
+export const TRANSLATION_STATUS_LABELS = {
+  full: 'Fully translated',
+  partial: 'Partially translated',
+  none: 'Not translated',
+};
+
+export function escapeHtml(text) {
+  if (text == null || text === '') return '';
+  const div = document.createElement('div');
+  div.textContent = String(text);
+  return div.innerHTML;
+}
+
+/**
+ * Tooltip / title text for a card given translation level and counts.
+ * @param {'book' | 'chapter'} scope
+ */
+export function translationStatusTooltip(level, sentenceTotal, translatedTotal, scope = 'book') {
+  if (level === 'full') {
+    return scope === 'book'
+      ? 'Every sentence in the book has an English translation.'
+      : 'Every sentence in this chapter has an English translation.';
+  }
+  if (level === 'partial') {
+    return `${translatedTotal.toLocaleString()} of ${sentenceTotal.toLocaleString()} sentences translated.`;
+  }
+  if (sentenceTotal > 0) {
+    return 'No sentences have been translated yet.';
+  }
+  return scope === 'book' ? 'No sentence data for this book.' : 'No sentence data for this chapter.';
+}
+
+/**
+ * Inner markup for a book or chapter card (wrap with `<a class="history-card …">`).
+ * @param {object} opts
+ * @param {string} [opts.secondaryLineClass] - extra class on the `.pinyin` row (e.g. chapter index)
+ */
+export function buildHistoryCardInnerHtml({
+  titleZh,
+  level,
+  secondaryLine,
+  englishLine,
+  metaLine,
+  footerLine,
+  secondaryLineClass = '',
+}) {
+  const labels = TRANSLATION_STATUS_LABELS;
+  const secClass = secondaryLineClass ? ` ${secondaryLineClass}` : '';
+  return `
+      <div class="history-card-header">
+        <h3>${escapeHtml(titleZh)}</h3>
+        <span class="translation-status translation-status--${level}">${labels[level]}</span>
+      </div>
+      <div class="pinyin${secClass}">${escapeHtml(secondaryLine)}</div>
+      <div class="english-name">${escapeHtml(englishLine)}</div>
+      <div class="dynasty">${escapeHtml(metaLine)}</div>
+      <div class="chapter-count">${escapeHtml(footerLine)}</div>
+    `;
+}
+
 /**
  * Aggregate sentence counts from manifest chapters to classify translation coverage.
  * @returns {{ level: 'full' | 'partial' | 'none', sentenceTotal: number, translatedTotal: number }}
  */
-function bookTranslationSummary(book) {
+export function bookTranslationSummary(book) {
   const chapters = book?.chapters || [];
   let sentenceTotal = 0;
   let translatedTotal = 0;
@@ -257,6 +318,25 @@ function bookTranslationSummary(book) {
     return { level: 'full', sentenceTotal, translatedTotal };
   }
   return { level: 'partial', sentenceTotal, translatedTotal };
+}
+
+/**
+ * Translation coverage for a single chapter row from the manifest.
+ * @returns {{ level: 'full' | 'partial' | 'none', sentenceTotal: number, translatedTotal: number }}
+ */
+export function chapterTranslationSummary(chapter) {
+  const sentenceTotal = Number(chapter?.sentenceCount) || 0;
+  const translatedTotal = Math.min(Number(chapter?.translatedCount) || 0, sentenceTotal);
+  if (sentenceTotal === 0) {
+    return { level: 'none', sentenceTotal, translatedTotal };
+  }
+  if (translatedTotal >= sentenceTotal) {
+    return { level: 'full', sentenceTotal, translatedTotal };
+  }
+  if (translatedTotal > 0) {
+    return { level: 'partial', sentenceTotal, translatedTotal };
+  }
+  return { level: 'none', sentenceTotal, translatedTotal };
 }
 
 // Chronological order of the 24 dynastic histories
@@ -316,35 +396,19 @@ async function renderHomepage() {
   const renderCard = (id, targetGrid) => {
     const info = histories[id];
     const { level, sentenceTotal, translatedTotal } = bookTranslationSummary(info);
-    const statusLabels = {
-      full: 'Fully translated',
-      partial: 'Partially translated',
-      none: 'Not translated'
-    };
-    const statusTitle =
-      level === 'full'
-        ? 'Every sentence in the book has an English translation.'
-        : level === 'partial'
-          ? `${translatedTotal.toLocaleString()} of ${sentenceTotal.toLocaleString()} sentences translated.`
-          : sentenceTotal > 0
-            ? 'No sentences have been translated yet.'
-            : 'No sentence data for this book.';
-
     const card = document.createElement('a');
     card.className = `history-card history-card--translation-${level}`;
     card.href = `chapters.html?book=${id}`;
-    card.title = statusTitle;
+    card.title = translationStatusTooltip(level, sentenceTotal, translatedTotal, 'book');
 
-    card.innerHTML = `
-      <div class="history-card-header">
-        <h3>${info.chinese}</h3>
-        <span class="translation-status translation-status--${level}">${statusLabels[level]}</span>
-      </div>
-      <div class="pinyin">${info.pinyin}</div>
-      <div class="english-name">${info.name}</div>
-      <div class="dynasty">Dynasty: ${info.dynasty}</div>
-      <div class="chapter-count">Click to browse chapters</div>
-    `;
+    card.innerHTML = buildHistoryCardInnerHtml({
+      titleZh: info.chinese,
+      level,
+      secondaryLine: info.pinyin,
+      englishLine: info.name,
+      metaLine: `Dynasty: ${info.dynasty}`,
+      footerLine: 'Click to browse chapters',
+    });
 
     targetGrid.appendChild(card);
   };

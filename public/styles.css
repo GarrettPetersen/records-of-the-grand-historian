@@ -70,11 +70,17 @@ main:has(.reader-container) {
     padding: 4rem;
 }
 
+/* Book index, other works, and per-book chapter listing */
 #histories-grid,
-#other-works-grid {
+#other-works-grid,
+.chapter-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 2rem;
+}
+
+.chapter-list {
+    margin-top: 2rem;
 }
 
 .section-heading {
@@ -184,6 +190,13 @@ main:has(.reader-container) {
     font-style: italic;
 }
 
+/* Chapter cards use the same slot for “Chapter N” (roman label, not always pinyin) */
+.history-card .pinyin--chapter-index {
+    font-style: normal;
+    font-weight: 500;
+    color: #555;
+}
+
 .history-card .english-name {
     font-size: 1.1rem;
     font-weight: 600;
@@ -220,30 +233,6 @@ footer a {
 
 footer a:hover {
     text-decoration: underline;
-}
-
-/* Chapter listing page */
-.chapter-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-top: 2rem;
-}
-
-.chapter-link {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    padding: 1.5rem;
-    text-align: center;
-    text-decoration: none;
-    color: var(--text-color);
-    transition: all 0.2s ease;
-}
-
-.chapter-link:hover {
-    background: var(--highlight-color);
-    border-color: var(--secondary-color);
 }
 
 /* Reader page */
