@@ -1,9 +1,10 @@
+// Query must stay in sync with index.html app.js (cache bust; bare ./app.js can serve stale modules).
 import {
   loadManifest,
   buildHistoryCardInnerHtml,
   chapterTranslationSummary,
   translationStatusTooltip,
-} from './app.js';
+} from './app.js?v=20260428-exports';
 
 async function renderChapters() {
   const params = new URLSearchParams(window.location.search);
