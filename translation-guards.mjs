@@ -95,17 +95,9 @@ function countSubstr(str, needle) {
   return c;
 }
 
-function pushUnbalanced(notes, fieldLabel, openCount, closeCount, label, where) {
-  if (openCount !== closeCount) {
-    notes.push(
-      `${fieldLabel}: ${label} unbalanced in ${where} (${openCount} open vs ${closeCount} close).`
-    );
-  }
-}
-
 /**
- * Balanced delimiters within Chinese / within English, plus light cross-language checks
- * for corner quotes vs English dialogue quotes and fullwidth vs ASCII parentheses.
+ * Compare delimiter *counts* between Chinese and English when each side uses
+ * well-formed pairs (open === close). No "unbalanced within one language" warnings.
  */
 export function delimiterAlignmentNotes(chinese, english, fieldLabel) {
   const notes = [];
@@ -113,41 +105,52 @@ export function delimiterAlignmentNotes(chinese, english, fieldLabel) {
   const en = String(english || '').trim();
   if (!zh || !en) return notes;
 
-  pushUnbalanced(
-    notes,
-    fieldLabel,
-    countSubstr(zh, '\uFF08'),
-    countSubstr(zh, '\uFF09'),
-    'Fullwidth parentheses （）',
-    'Chinese'
-  );
-  pushUnbalanced(notes, fieldLabel, countSubstr(zh, '「'), countSubstr(zh, '」'), 'Corner quotes 「」', 'Chinese');
-  pushUnbalanced(notes, fieldLabel, countSubstr(zh, '『'), countSubstr(zh, '』'), 'Corner quotes 『』', 'Chinese');
-  pushUnbalanced(notes, fieldLabel, countSubstr(zh, '\u300A'), countSubstr(zh, '\u300B'), 'Title marks 《》', 'Chinese');
-  pushUnbalanced(notes, fieldLabel, countSubstr(zh, '('), countSubstr(zh, ')'), 'ASCII parentheses', 'Chinese');
-  pushUnbalanced(notes, fieldLabel, countSubstr(zh, '['), countSubstr(zh, ']'), 'Square brackets', 'Chinese');
+  const enPO = countSubstr(en, '(');
+  const enPC = countSubstr(en, ')');
+  const enAscBal = enPO === enPC;
 
-  pushUnbalanced(notes, fieldLabel, countSubstr(en, '('), countSubstr(en, ')'), 'ASCII parentheses ()', 'English');
-  pushUnbalanced(notes, fieldLabel, countSubstr(en, '['), countSubstr(en, ']'), 'Square brackets []', 'English');
-  pushUnbalanced(notes, fieldLabel, countSubstr(en, '{'), countSubstr(en, '}'), 'Braces {}', 'English');
-  pushUnbalanced(
-    notes,
-    fieldLabel,
-    countSubstr(en, '\uFF08'),
-    countSubstr(en, '\uFF09'),
-    'Fullwidth parentheses （）',
-    'English'
-  );
-  pushUnbalanced(notes, fieldLabel, countSubstr(en, '\u00AB'), countSubstr(en, '\u00BB'), 'Guillemets «»', 'English');
+  const zhFwO = countSubstr(zh, '\uFF08');
+  const zhFwC = countSubstr(zh, '\uFF09');
+  const zhPO = countSubstr(zh, '(');
+  const zhPC = countSubstr(zh, ')');
+  const zhFwOk = zhFwO === zhFwC;
+  const zhAscOk = zhPO === zhPC;
+  if (zhFwOk && zhAscOk && enAscBal) {
+    const zhParenTotal = zhFwO + zhPO;
+    if (zhParenTotal !== enPO && (zhParenTotal > 0 || enPO > 0)) {
+      notes.push(
+        `${fieldLabel}: Chinese has ${zhFwO} （） + ${zhPO} () = ${zhParenTotal} parenthetical pair(s) but English has ${enPO} (); match parenthetical structure to the source.`
+      );
+    }
+  }
 
-  const u201C = countSubstr(en, '\u201C');
-  const u201D = countSubstr(en, '\u201D');
-  pushUnbalanced(notes, fieldLabel, u201C, u201D, 'Curly double quotes (\u201C / \u201D)', 'English');
-
-  const asciiDouble = countSubstr(en, '"');
-  if (asciiDouble % 2 === 1) {
+  const zhBO = countSubstr(zh, '[');
+  const zhBC = countSubstr(zh, ']');
+  const enBO = countSubstr(en, '[');
+  const enBC = countSubstr(en, ']');
+  if (zhBO === zhBC && enBO === enBC && zhBO !== enBO && (zhBO > 0 || enBO > 0)) {
     notes.push(
-      `${fieldLabel}: Odd number of ASCII double-quote (") characters (${asciiDouble}) in English; they are usually paired for dialogue.`
+      `${fieldLabel}: Chinese has ${zhBO} [] pair(s) but English has ${enBO}; match bracket structure to the source.`
+    );
+  }
+
+  const zhBrO = countSubstr(zh, '{');
+  const zhBrC = countSubstr(zh, '}');
+  const enBrO = countSubstr(en, '{');
+  const enBrC = countSubstr(en, '}');
+  if (zhBrO === zhBrC && enBrO === enBrC && zhBrO !== enBrO && (zhBrO > 0 || enBrO > 0)) {
+    notes.push(
+      `${fieldLabel}: Chinese has ${zhBrO} {} pair(s) but English has ${enBrO}; match brace structure to the source.`
+    );
+  }
+
+  const zhLA = countSubstr(zh, '\u300A');
+  const zhLB = countSubstr(zh, '\u300B');
+  const enLA = countSubstr(en, '\u300A');
+  const enLB = countSubstr(en, '\u300B');
+  if (zhLA === zhLB && enLA === enLB && zhLA !== enLA && (zhLA > 0 || enLA > 0)) {
+    notes.push(
+      `${fieldLabel}: Chinese has ${zhLA} 《》 pair(s) but English has ${enLA}; match title marks to the source.`
     );
   }
 
@@ -155,28 +158,31 @@ export function delimiterAlignmentNotes(chinese, english, fieldLabel) {
   const cClose = countSubstr(zh, '」');
   const fOpen = countSubstr(zh, '『');
   const fClose = countSubstr(zh, '』');
-  if (cOpen === cClose && fOpen === fClose && cOpen > 0 && fOpen === 0) {
-    const zhPairs = cOpen;
-    const enAsciiPairs = Math.floor(asciiDouble / 2);
-    if (asciiDouble % 2 === 0 && u201C === 0 && u201D === 0 && enAsciiPairs !== zhPairs) {
+  const asciiDouble = countSubstr(en, '"');
+  const u201C = countSubstr(en, '\u201C');
+  const u201D = countSubstr(en, '\u201D');
+
+  if (cOpen === cClose && fOpen === fClose && fOpen === 0 && cOpen > 0) {
+    const hasAscii = asciiDouble > 0;
+    const hasCurly = u201C > 0 || u201D > 0;
+    if (hasAscii && hasCurly) {
+      // Mixed quote styles; skip pair-count comparison.
+    } else if (hasAscii && asciiDouble % 2 === 0 && u201C === 0 && u201D === 0) {
+      const enPairs = asciiDouble / 2;
+      if (enPairs !== cOpen) {
+        notes.push(
+          `${fieldLabel}: Chinese has ${cOpen} 「…」 pair(s) but English has ${enPairs} ASCII double-quote pair(s); match dialogue framing to the source.`
+        );
+      }
+    } else if (hasCurly && asciiDouble === 0 && u201C === u201D && u201C !== cOpen) {
       notes.push(
-        `${fieldLabel}: Chinese has ${zhPairs} 「…」 pair(s) but English has ${enAsciiPairs} ASCII double-quote pair(s); check that dialogue boundaries match.`
+        `${fieldLabel}: Chinese has ${cOpen} 「…」 pair(s) but English has ${u201C} curly double-quote pair(s); match dialogue framing to the source.`
       );
-    } else if (asciiDouble === 0 && u201C === u201D && u201C > 0 && u201C !== zhPairs) {
+    } else if (!hasAscii && !hasCurly) {
       notes.push(
-        `${fieldLabel}: Chinese has ${zhPairs} 「…」 pair(s) but English has ${u201C} curly double-quote pair(s); check that dialogue boundaries match.`
+        `${fieldLabel}: Chinese has ${cOpen} 「…」 pair(s) but English has no double quotes; match dialogue framing to the source.`
       );
     }
-  }
-
-  const zhFwPo = countSubstr(zh, '\uFF08');
-  const zhFwPc = countSubstr(zh, '\uFF09');
-  const enPo = countSubstr(en, '(');
-  const enPc = countSubstr(en, ')');
-  if (zhFwPo === zhFwPc && zhFwPo > 0 && enPo === enPc && enPo > 0 && zhFwPo !== enPo) {
-    notes.push(
-      `${fieldLabel}: Chinese has ${zhFwPo} fullwidth （） pair(s) but English has ${enPo} ASCII () pair(s); check glosses and asides.`
-    );
   }
 
   return notes;
