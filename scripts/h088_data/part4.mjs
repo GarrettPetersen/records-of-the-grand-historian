@@ -1,8 +1,8 @@
 /** Hanshu 088 s0225–s0301 */
 export default {
   s0225: [
-    "Rubric line: Wujiang Long (毌將隆); Wujiang (毌將 / 毋將) is the compound surname, Long (隆) the given name.",
-    "Wujiang Long (毌將隆)—the statesman profiled next; the first two characters are the compound surname Wujiang, the third his given name Long.",
+    "Wujiang Long.",
+    "Wujiang Long.",
   ],
   s0226: [
     "Wujiang Long, courtesy name Junfang, was a man of Lanling in the Eastern Sea.",
