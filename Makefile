@@ -46,6 +46,7 @@ help:
 	@echo "  make stats                  # Show chapter counts per book"
 	@echo "  make validate               # Check all JSON files are valid"
 	@echo "  make score-translations     # Score translations for quality issues"
+	@echo "  make scan-rubric-scaffolding BOOK=hanshu  # Find meta English on short name headings"
 	@echo "  make batch-quality-check    # Batch quality check on multiple chapters (all books)"
 	@echo "  make quality-score          # Score translation quality subjectively (1-10 scale)"
 	@echo "  make auto-translate-numbers # Auto-translate Chinese numerals and Arabic numbers"
@@ -55,6 +56,8 @@ help:
 	@echo "  make continue [BOOK=shiji] [CHAPTER=022]  # Submit current batch and start next"
 	@echo "  make submit-translations TRANSLATOR=\"Garrett M. Petersen (2026)\" MODEL=\"grok-1.5\"  # Submit translations from current_translation_{book}.json"
 	@echo "  make submit-translations TRANSLATOR=\"...\" MODEL=\"...\" FILE=\"path/to/file.json\"  # Submit from custom file"
+	@echo "  node submit-translations.js <file> TRANSLATOR MODEL --validate-only  # Run checks only (no apply/delete)"
+	@echo "  node scripts/validate-chapter-as-batch.mjs data/hanshu/088.json  # Re-run submit checks on a chapter"
 	@echo ""
 	@echo "⚠️  QUALITY REQUIREMENTS for translations:"
 	@echo "   • Provide BOTH literal AND idiomatic translations for each sentence"
@@ -440,6 +443,15 @@ score-translations:
 	@echo ""
 	@echo "If not, consider re-translating weak sentences to match Ken Liu's style."
 	@echo "Use 'make extract-review CHAPTER=...' && 'make apply-review CHAPTER=... REVIEW=...' for manual review workflow"
+
+.PHONY: scan-rubric-scaffolding
+scan-rubric-scaffolding:
+	@if [ -z "$(BOOK)" ]; then \
+		echo "Error: BOOK variable not set."; \
+		echo "Usage: make scan-rubric-scaffolding BOOK=hanshu"; \
+		exit 1; \
+	fi
+	@$(NODE) scan-rubric-scaffolding.mjs data/$(BOOK)
 
 .PHONY: auto-translate-numbers
 auto-translate-numbers:

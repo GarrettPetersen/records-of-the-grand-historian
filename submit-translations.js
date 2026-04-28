@@ -13,6 +13,13 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
+
+import {
+  countHanzi,
+  punctuationAlignmentNotes,
+  rubricScaffoldingErrorsForSentence,
+} from './translation-guards.mjs';
 
 const TERMINAL_PUNCTUATION_REGEX = /[.!?]["')\]]*\s*$/;
 
@@ -26,13 +33,6 @@ function startsWithLowercaseLetter(text) {
   const match = text.trim().match(/^[\s"'`([{<]*([A-Za-z])/);
   if (!match) return false;
   return match[1] === match[1].toLowerCase();
-}
-
-/** Count CJK unified ideographs (excludes punctuation). */
-function countHanzi(text) {
-  if (!text) return 0;
-  const m = text.match(/[\u4e00-\u9fff]/g);
-  return m ? m.length : 0;
 }
 
 function getChapterIdiomaticText(entry) {
@@ -175,6 +175,26 @@ function validateTranslations(translationFile, chapterFile) {
 
     if (chapterEntry.chinese !== sentence.chinese) {
       errors.push(`Chinese text mismatch for sentence ${sentence.id}: expected "${chapterEntry.chinese}", got "${sentence.chinese}"`);
+    }
+
+    for (const rubErr of rubricScaffoldingErrorsForSentence({
+      chinese: sentence.chinese,
+      literal: sentence.literal,
+      idiomatic: sentence.idiomatic,
+    })) {
+      errors.push(`${rubErr} (sentence ${sentence.id})`);
+    }
+
+    // Non-blocking: Chinese sentence-final mark vs English closing (and mixed fullwidth punctuation).
+    if (sentence.literal?.trim()) {
+      for (const note of punctuationAlignmentNotes(sentence.chinese, sentence.literal, 'Literal')) {
+        console.warn(`⚠️  PUNCTUATION (${sentence.id}): ${note}`);
+      }
+    }
+    if (sentence.idiomatic?.trim()) {
+      for (const note of punctuationAlignmentNotes(sentence.chinese, sentence.idiomatic, 'Idiomatic')) {
+        console.warn(`⚠️  PUNCTUATION (${sentence.id}): ${note}`);
+      }
     }
 
     // Context-aware sentence-start capitalization flag for idiomatic translations:
@@ -369,10 +389,13 @@ function applyTranslations(translationFile, chapterFile, translator, model) {
 }
 
 function main() {
-  const args = process.argv.slice(2);
+  const argv = process.argv.slice(2);
+  const validateOnly = argv.includes('--validate-only');
+  const args = argv.filter((a) => a !== '--validate-only');
   if (args.length < 3) {
-    console.error('Usage: node submit-translations.js <translation-file> <translator> <model>');
+    console.error('Usage: node submit-translations.js <translation-file> <translator> <model> [--validate-only]');
     console.error('Example: node submit-translations.js translations/current_translation_shiji.json "Garrett M. Petersen (2026)" "grok-1.5"');
+    console.error('  --validate-only  Run checks and exit without applying or deleting the translation file.');
     process.exit(1);
   }
 
@@ -410,7 +433,13 @@ function main() {
   console.log('   • Translations are not identical');
   console.log('   • Reasonable length and proper English structure');
   console.log('   • Ken Liu quality standards met');
+  console.log('   • (Non-blocking warnings above may include punctuation/delimiter notes.)');
   console.log('');
+  if (validateOnly) {
+    console.log('(--validate-only: skipping apply and translation file delete.)');
+    return;
+  }
+
   console.log('Applying translations...');
 
   applyTranslations(translationFile, chapterFile, translator, model);
@@ -422,4 +451,11 @@ function main() {
   console.log('✅ Translations applied successfully!');
 }
 
-main();
+export { validateTranslations };
+
+const ranAsCli =
+  process.argv[1] &&
+  import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href;
+if (ranAsCli) {
+  main();
+}
