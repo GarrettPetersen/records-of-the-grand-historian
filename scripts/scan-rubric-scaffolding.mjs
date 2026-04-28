@@ -4,13 +4,13 @@
  * Uses the same rules as translation-guards.mjs (submit + score).
  *
  * Usage:
- *   node scan-rubric-scaffolding.mjs data/hanshu/*.json
- *   node scan-rubric-scaffolding.mjs data/hanshu/064.json
+ *   node scripts/scan-rubric-scaffolding.mjs data/hanshu
+ *   node scripts/scan-rubric-scaffolding.mjs data/hanshu/064.json
  */
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { rubricScaffoldingIssue } from './translation-guards.mjs';
+import { rubricScaffoldingIssue } from '../translation-guards.mjs';
 
 function* walkSentences(data) {
   if (!data?.content) return;
@@ -45,7 +45,7 @@ function scanFile(filePath) {
 
 const args = process.argv.slice(2);
 if (args.length === 0) {
-  console.error('Usage: node scan-rubric-scaffolding.mjs <path.json|dir> [...]');
+  console.error('Usage: node scripts/scan-rubric-scaffolding.mjs <path.json|dir> [...]');
   process.exit(1);
 }
 
