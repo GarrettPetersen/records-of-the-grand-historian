@@ -8,6 +8,28 @@
     --highlight-color: #e3f2fd;
     --divider-color: #adb5bd;
     --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    /* Book-level history cards (index); .chapter-list overrides for chapter index */
+    --history-card-grid-min: 320px;
+    --history-card-grid-gap: 2rem;
+    --history-card-padding: 2rem;
+    --history-card-radius: 8px;
+    --history-card-header-gap: 0.75rem;
+    --history-card-header-margin-bottom: 0.5rem;
+    --history-card-title-size: 2rem;
+    --history-card-status-font-size: 0.65rem;
+    --history-card-status-padding-y: 0.3rem;
+    --history-card-status-padding-x: 0.55rem;
+    --history-card-pinyin-size: 1rem;
+    --history-card-pinyin-margin-bottom: 0.5rem;
+    --history-card-english-size: 1.1rem;
+    --history-card-english-margin-bottom: 1rem;
+    --history-card-meta-size: 0.9rem;
+    --history-card-meta-margin-top: 1rem;
+    --history-card-meta-padding-top: 1rem;
+    --history-card-footer-size: 0.85rem;
+    --history-card-footer-margin-top: 0.5rem;
+    --history-card-hover-translate-y: -4px;
 }
 
 * {
@@ -75,11 +97,33 @@ main:has(.reader-container) {
 #other-works-grid,
 .chapter-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(var(--history-card-grid-min), 1fr));
+    gap: var(--history-card-grid-gap);
 }
 
+/* Chapter listing: smaller cells and type than full book cards */
 .chapter-list {
+    --history-card-grid-min: 200px;
+    --history-card-grid-gap: 1rem;
+    --history-card-padding: 1rem 1.125rem;
+    --history-card-radius: 6px;
+    --history-card-header-gap: 0.5rem;
+    --history-card-header-margin-bottom: 0.35rem;
+    --history-card-title-size: 1.2rem;
+    --history-card-status-font-size: 0.55rem;
+    --history-card-status-padding-y: 0.2rem;
+    --history-card-status-padding-x: 0.45rem;
+    --history-card-pinyin-size: 0.8rem;
+    --history-card-pinyin-margin-bottom: 0.35rem;
+    --history-card-english-size: 0.9rem;
+    --history-card-english-margin-bottom: 0.55rem;
+    --history-card-meta-size: 0.75rem;
+    --history-card-meta-margin-top: 0.6rem;
+    --history-card-meta-padding-top: 0.6rem;
+    --history-card-footer-size: 0.72rem;
+    --history-card-footer-margin-top: 0.35rem;
+    --history-card-hover-translate-y: -2px;
+
     margin-top: 2rem;
 }
 
@@ -106,8 +150,8 @@ main:has(.reader-container) {
 .history-card {
     background: var(--card-bg);
     border: 2px solid var(--border-color);
-    border-radius: 8px;
-    padding: 2rem;
+    border-radius: var(--history-card-radius);
+    padding: var(--history-card-padding);
     transition: all 0.3s ease;
     cursor: pointer;
     text-decoration: none;
@@ -116,7 +160,7 @@ main:has(.reader-container) {
 }
 
 .history-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(var(--history-card-hover-translate-y));
     box-shadow: 0 8px 16px rgba(139, 69, 19, 0.15);
     border-color: var(--secondary-color);
 }
@@ -126,12 +170,12 @@ main:has(.reader-container) {
     justify-content: space-between;
     align-items: flex-start;
     flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-bottom: 0.5rem;
+    gap: var(--history-card-header-gap);
+    margin-bottom: var(--history-card-header-margin-bottom);
 }
 
 .history-card-header h3 {
-    font-size: 2rem;
+    font-size: var(--history-card-title-size);
     margin: 0;
     color: var(--primary-color);
     line-height: 1.2;
@@ -141,11 +185,11 @@ main:has(.reader-container) {
 
 .translation-status {
     font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
-    font-size: 0.65rem;
+    font-size: var(--history-card-status-font-size);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    padding: 0.3rem 0.55rem;
+    padding: var(--history-card-status-padding-y) var(--history-card-status-padding-x);
     border-radius: 4px;
     white-space: nowrap;
     flex-shrink: 0;
@@ -184,9 +228,9 @@ main:has(.reader-container) {
 }
 
 .history-card .pinyin {
-    font-size: 1rem;
+    font-size: var(--history-card-pinyin-size);
     color: #666;
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--history-card-pinyin-margin-bottom);
     font-style: italic;
 }
 
@@ -198,23 +242,23 @@ main:has(.reader-container) {
 }
 
 .history-card .english-name {
-    font-size: 1.1rem;
+    font-size: var(--history-card-english-size);
     font-weight: 600;
-    margin-bottom: 1rem;
+    margin-bottom: var(--history-card-english-margin-bottom);
 }
 
 .history-card .dynasty {
-    font-size: 0.9rem;
+    font-size: var(--history-card-meta-size);
     color: #888;
-    margin-top: 1rem;
-    padding-top: 1rem;
+    margin-top: var(--history-card-meta-margin-top);
+    padding-top: var(--history-card-meta-padding-top);
     border-top: 1px solid var(--border-color);
 }
 
 .history-card .chapter-count {
-    font-size: 0.85rem;
+    font-size: var(--history-card-footer-size);
     color: var(--primary-color);
-    margin-top: 0.5rem;
+    margin-top: var(--history-card-footer-margin-top);
     font-weight: 500;
 }
 
