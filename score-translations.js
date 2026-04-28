@@ -4,6 +4,8 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+import { countHanzi, rubricScaffoldingIssue } from './translation-guards.mjs';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -12,13 +14,6 @@ const CHINESE_CHARS_REGEX = /[\u4e00-\u9fff]/;
 const CORRUPTED_CHARS_REGEX = /[\uFFFD\u0080-\u009F]/; // Unicode replacement character and control chars
 const PLACEHOLDER_REGEX = /\[Literal translation\]|\[Idiomatic translation\]|This historical passage.*\[Literal translation\]|This passage continues.*\[Idiomatic translation\]/;
 const TERMINAL_PUNCTUATION_REGEX = /[.!?]["')\]]*\s*$/;
-
-/** Count CJK unified ideographs (punctuation excluded). */
-function countHanzi(text) {
-  if (!text) return 0;
-  const m = text.match(/[\u4e00-\u9fff]/g);
-  return m ? m.length : 0;
-}
 
 function endsWithTerminalPunctuation(text) {
   if (!text || !text.trim()) return false;
@@ -115,6 +110,14 @@ function scoreTranslation(entry, options = {}) {
   if (english && CHINESE_CHARS_REGEX.test(english)) {
     issues.push('Contains Chinese characters');
     score = 0;
+  }
+
+  if (chinese && english && score > 0) {
+    const rub = rubricScaffoldingIssue(chinese, english);
+    if (rub) {
+      issues.push(rub);
+      score = 0;
+    }
   }
 
   // Check for corrupted characters in original
