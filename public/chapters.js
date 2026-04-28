@@ -4,7 +4,7 @@ import {
   buildHistoryCardInnerHtml,
   chapterTranslationSummary,
   translationStatusTooltip,
-} from './app.js?v=20260428-exports';
+} from './app.js?v=20260428-footer';
 
 async function renderChapters() {
   const params = new URLSearchParams(window.location.search);
@@ -54,8 +54,8 @@ async function renderChapters() {
 
     const footerLine =
       sentenceTotal > 0
-        ? `${translatedTotal.toLocaleString()} of ${sentenceTotal.toLocaleString()} sentences · Click to read`
-        : 'Click to read';
+        ? `${translatedTotal.toLocaleString()} of ${sentenceTotal.toLocaleString()} sentences`
+        : '';
 
     card.innerHTML = buildHistoryCardInnerHtml({
       titleZh,

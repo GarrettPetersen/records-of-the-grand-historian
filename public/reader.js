@@ -1,4 +1,4 @@
-import { BOOKS } from './app.js?v=20260428-exports';
+import { BOOKS } from './app.js?v=20260428-footer';
 
 let glossary = {};
 let currentHighlight = null;

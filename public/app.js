@@ -280,11 +280,14 @@ export function buildHistoryCardInnerHtml({
   secondaryLine,
   englishLine,
   metaLine,
-  footerLine,
+  footerLine = '',
   secondaryLineClass = '',
 }) {
   const labels = TRANSLATION_STATUS_LABELS;
   const secClass = secondaryLineClass ? ` ${secondaryLineClass}` : '';
+  const footerBlock = footerLine
+    ? `<div class="chapter-count">${escapeHtml(footerLine)}</div>`
+    : '';
   return `
       <div class="history-card-header">
         <h3>${escapeHtml(titleZh)}</h3>
@@ -292,8 +295,7 @@ export function buildHistoryCardInnerHtml({
       </div>
       <div class="pinyin${secClass}">${escapeHtml(secondaryLine)}</div>
       <div class="english-name">${escapeHtml(englishLine)}</div>
-      <div class="dynasty">${escapeHtml(metaLine)}</div>
-      <div class="chapter-count">${escapeHtml(footerLine)}</div>
+      <div class="dynasty">${escapeHtml(metaLine)}</div>${footerBlock}
     `;
 }
 
@@ -401,13 +403,18 @@ async function renderHomepage() {
     card.href = `chapters.html?book=${id}`;
     card.title = translationStatusTooltip(level, sentenceTotal, translatedTotal, 'book');
 
+    const bookFooter =
+      sentenceTotal > 0
+        ? `${translatedTotal.toLocaleString()} of ${sentenceTotal.toLocaleString()} sentences`
+        : '';
+
     card.innerHTML = buildHistoryCardInnerHtml({
       titleZh: info.chinese,
       level,
       secondaryLine: info.pinyin,
       englishLine: info.name,
       metaLine: `Dynasty: ${info.dynasty}`,
-      footerLine: 'Click to browse chapters',
+      footerLine: bookFooter,
     });
 
     targetGrid.appendChild(card);
