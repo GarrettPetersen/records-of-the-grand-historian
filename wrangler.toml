@@ -4,5 +4,14 @@
 #   Build output:   public
 # If Build command is left blank, Cloudflare skips npm entirely and only uploads
 # committed files under `public/` — no manifest/sync/static regen, no OG PNGs.
+#
+# OG share cards (generate-og-images.js): `npm run build` uses --incremental so
+# existing PNGs newer than their source JSON are skipped. Speed up CI/Pages by
+# adding build cache directories (Settings → Builds → Build cache):
+#   public/og
+#   fonts/.cache
+# After changing OG layout/fonts, run once with env OG_FORCE=1 or pass --force
+# to generate-og-images.js, or clear the cache. Raise OG_CHAPTER_CONCURRENCY (e.g. 8–12)
+# if the build machine has CPU headroom.
 name = "records-of-the-grand-historian"
 pages_build_output_dir = "public"

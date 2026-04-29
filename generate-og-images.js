@@ -17,6 +17,12 @@
  * Usage:
  *   node generate-og-images.js
  *   node generate-og-images.js --book shiji --chapter 002
+ *   node generate-og-images.js --book shiji --incremental
+ *
+ * Incremental skips rasterizing a chapter when its PNG exists and is at least as new
+ * as the source JSON (same for book hubs vs data/manifest.json). Use --force or
+ * OG_FORCE=1 after changing card layout/fonts. CI: set OG_INCREMENTAL=1 and cache
+ * public/og + fonts/.cache between Pages builds so only changed chapters re-render.
  *
  * Env:
  *   SITE_URL       Canonical origin (default https://24histories.com)
@@ -25,7 +31,9 @@
  *   OG_DEBUG_SVG     If set to a file path, writes the first Satori SVG attempt there
  *   OG_VERBOSE       Log when a chapter OG image uses a simplified fallback layout
  *   OG_CHAPTER_CONCURRENCY  Parallel chapter renders (default 4, max 16). Higher uses
- *                      more CPU on the build machine; try 6–8 on paid Pages if stable.
+ *                      more CPU on the build machine; try 8–12 on Pages if stable.
+ *   OG_INCREMENTAL      If 1, same as passing --incremental (skip up-to-date PNGs).
+ *   OG_FORCE            If 1, same as --force (ignore incremental skips).
  *   OG_BOOK_RESVG_CHUNK   Book-hub PNGs Resvg'd N at a time in one child (default 16).
  */
 
@@ -65,6 +73,25 @@ function argVal(name) {
 }
 const filterBook = argVal('--book');
 const filterChapter = argVal('--chapter');
+const incremental =
+  args.includes('--incremental') ||
+  process.env.OG_INCREMENTAL === '1' ||
+  process.env.OG_INCREMENTAL === 'true';
+const force =
+  args.includes('--force') ||
+  process.env.OG_FORCE === '1' ||
+  process.env.OG_FORCE === 'true';
+
+/** Skip raster work when output exists and is at least as new as the source file. */
+function outputIsFresh(outPath, srcPath) {
+  if (force || !incremental) return false;
+  if (!fs.existsSync(outPath) || !fs.existsSync(srcPath)) return false;
+  try {
+    return fs.statSync(outPath).mtimeMs >= fs.statSync(srcPath).mtimeMs;
+  } catch {
+    return false;
+  }
+}
 
 /** Must match the font file’s family name (Noto CJK SC OTF → "Noto Serif CJK SC"). */
 function fontFamilyName() {
@@ -795,6 +822,11 @@ async function main() {
   console.log(
     `  (parallelism: OG_CHAPTER_CONCURRENCY=${OG_CHAPTER_CONCURRENCY}, book Resvg chunk=${OG_BOOK_RESVG_CHUNK})`,
   );
+  if (incremental) {
+    console.log(
+      '  (incremental: skipping PNGs newer than source JSON / manifest; use --force after layout or font changes)',
+    );
+  }
   console.log('Loading fonts for OG images…');
   const { fonts, resvgFontPath } = await loadFonts();
 
@@ -810,8 +842,17 @@ async function main() {
 
   for (let c = 0; c < bookIds.length; c += OG_BOOK_RESVG_CHUNK) {
     const chunkIds = bookIds.slice(c, c + OG_BOOK_RESVG_CHUNK);
+    const needIds = chunkIds.filter(
+      (bookId) => !outputIsFresh(path.join(outRoot, 'books', `${bookId}.png`), manifestPath),
+    );
+    for (const bookId of chunkIds) {
+      if (!needIds.includes(bookId)) {
+        console.log(`  ○ og/books/${bookId}.png (up to date)`);
+      }
+    }
+    if (needIds.length === 0) continue;
     const svgs = await Promise.all(
-      chunkIds.map((bookId) => {
+      needIds.map((bookId) => {
         const b = books[bookId];
         return satori(bookOgElement(b.chinese, b.name), {
           width: OG_W,
@@ -821,10 +862,10 @@ async function main() {
       }),
     );
     const pngs = resvgBatchBuffers(svgs, resvgFontPath);
-    for (let k = 0; k < chunkIds.length; k += 1) {
-      fs.writeFileSync(path.join(outRoot, 'books', `${chunkIds[k]}.png`), pngs[k]);
+    for (let k = 0; k < needIds.length; k += 1) {
+      fs.writeFileSync(path.join(outRoot, 'books', `${needIds[k]}.png`), pngs[k]);
     }
-    for (const bookId of chunkIds) {
+    for (const bookId of needIds) {
       console.log(`  ✓ og/books/${bookId}.png`);
     }
   }
@@ -848,12 +889,22 @@ async function main() {
     }
   }
 
+  const chapterJobsToRun = chapterJobs.filter((job) => {
+    const pngPath = path.join(outRoot, 'chapters', job.bookId, `${job.chNum}.png`);
+    return !outputIsFresh(pngPath, job.jsonPath);
+  });
+  if (incremental && chapterJobs.length > chapterJobsToRun.length) {
+    console.log(
+      `  (incremental: skipping ${chapterJobs.length - chapterJobsToRun.length} chapter PNGs already up to date)`,
+    );
+  }
+
   const chapterCounts = new Map();
   for (const bookId of bookIds) {
     chapterCounts.set(bookId, 0);
   }
 
-  await runPool(chapterJobs, OG_CHAPTER_CONCURRENCY, async (job) => {
+  await runPool(chapterJobsToRun, OG_CHAPTER_CONCURRENCY, async (job) => {
     const { bookId, chNum, jsonPath } = job;
     const chapterData = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
     const zhTitle = chapterData.meta?.title?.zh || `卷${chNum}`;
@@ -883,7 +934,7 @@ async function main() {
   }
 
   console.log(
-    `\n✅ Open Graph done: ${totalChapterPng} chapter PNGs, ${bookIds.length} book hub PNGs, 1 site PNG → public/og/`,
+    `\n✅ Open Graph done: ${totalChapterPng} chapter PNG(s) written, ${bookIds.length} book(s) in scope, site card → public/og/`,
   );
 }
 
