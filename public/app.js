@@ -272,6 +272,7 @@ export function translationStatusTooltip(level, sentenceTotal, translatedTotal, 
 /**
  * Inner markup for a book or chapter card (wrap with `<a class="history-card …">`).
  * @param {object} opts
+ * @param {string} [opts.metaLine] - e.g. dynasty line; omitted when empty (chapter list skips it).
  * @param {string} [opts.secondaryLineClass] - extra class on the `.pinyin` row (e.g. chapter index)
  */
 export function buildHistoryCardInnerHtml({
@@ -279,12 +280,15 @@ export function buildHistoryCardInnerHtml({
   level,
   secondaryLine,
   englishLine,
-  metaLine,
+  metaLine = '',
   footerLine = '',
   secondaryLineClass = '',
 }) {
   const labels = TRANSLATION_STATUS_LABELS;
   const secClass = secondaryLineClass ? ` ${secondaryLineClass}` : '';
+  const metaBlock = metaLine
+    ? `<div class="dynasty">${escapeHtml(metaLine)}</div>`
+    : '';
   const footerBlock = footerLine
     ? `<div class="chapter-count">${escapeHtml(footerLine)}</div>`
     : '';
@@ -294,8 +298,7 @@ export function buildHistoryCardInnerHtml({
         <span class="translation-status translation-status--${level}">${labels[level]}</span>
       </div>
       <div class="pinyin${secClass}">${escapeHtml(secondaryLine)}</div>
-      <div class="english-name">${escapeHtml(englishLine)}</div>
-      <div class="dynasty">${escapeHtml(metaLine)}</div>${footerBlock}
+      <div class="english-name">${escapeHtml(englishLine)}</div>${metaBlock}${footerBlock}
     `;
 }
 
@@ -400,7 +403,7 @@ async function renderHomepage() {
     const { level, sentenceTotal, translatedTotal } = bookTranslationSummary(info);
     const card = document.createElement('a');
     card.className = `history-card history-card--translation-${level}`;
-    card.href = `chapters.html?book=${id}`;
+    card.href = `book/${id}.html`;
     card.title = translationStatusTooltip(level, sentenceTotal, translatedTotal, 'book');
 
     const bookFooter =

@@ -119,7 +119,7 @@ function main() {
   }
 
   console.log(`\n✅ Cleaned ${totalCleaned} erroneous translations total`);
-  console.log('Run "make update" to update the progress tracking');
+  console.log('Run "make update BOOK=houhanshu" or "make update-all" to update the progress tracking');
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

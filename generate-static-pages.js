@@ -18,6 +18,9 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+/** Canonical origin for og:url, og:image, and <link rel="canonical"> */
+const CANONICAL_SITE = (process.env.SITE_URL || 'https://24histories.com').replace(/\/$/, '');
+
 // Dynamically load book information from data directory
 function loadBooks() {
   const dataDir = path.join(__dirname, 'data');
@@ -103,6 +106,63 @@ function generateChapterMeta(bookId, chapterData) {
     description: description.substring(0, 160),
     translationPercent
   };
+}
+
+function generateBookLandingHTML(bookId) {
+  const book = BOOKS[bookId];
+  if (!book) return '';
+  const title = `${book.chinese} — ${book.name}`;
+  const pageUrl = `${CANONICAL_SITE}/book/${bookId}.html`;
+  const ogImage = `${CANONICAL_SITE}/og/books/${bookId}.png`;
+  const desc = `Browse chapters of ${book.name} (${book.chinese}).`;
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${escapeHtml(title)}</title>
+    <meta name="description" content="${escapeHtml(desc)}">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles.css?v=20260428-status-wrap">
+    <link rel="canonical" href="${pageUrl}">
+    <meta property="og:title" content="${escapeHtml(title)}">
+    <meta property="og:description" content="${escapeHtml(desc)}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="${pageUrl}">
+    <meta property="og:image" content="${ogImage}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="${escapeHtml(title)}">
+    <meta name="twitter:description" content="${escapeHtml(desc)}">
+    <meta name="twitter:image" content="${ogImage}">
+</head>
+<body data-book="${escapeHtml(bookId)}">
+    <header>
+        <h1 id="book-title">Loading...</h1>
+        <h2 id="book-subtitle"></h2>
+    </header>
+
+    <main>
+        <a href="../index.html" class="back-link">← Back to all histories</a>
+
+        <div id="loading">Loading chapters...</div>
+        <div class="chapter-list" id="chapter-list" style="display: none;"></div>
+    </main>
+
+    <footer>
+        <p>
+            <a href="../about.html">About</a> |
+            <a href="../blog.html">Blog</a> |
+            <a href="../progress.html">Progress</a> |
+            Source text from <a href="https://chinesenotes.com" target="_blank">Chinese Notes</a> |
+            <a href="../privacy.html">Privacy Policy</a>
+        </p>
+    </footer>
+
+    <script type="module" src="../chapters.js?v=20260429-og"></script>
+</body>
+</html>`;
 }
 
 function generateStructuredData(bookId, chapterData) {
@@ -427,6 +487,10 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
       ? `${meta.translationPercent}% Translated`
       : 'Untranslated';
 
+  const chapterSlug = String(chapterData.meta.chapter).padStart(3, '0');
+  const chapterUrl = `${CANONICAL_SITE}/${bookId}/${chapterSlug}.html`;
+  const ogImageUrl = `${CANONICAL_SITE}/og/chapters/${bookId}/${chapterSlug}.png`;
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -436,12 +500,20 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
     <meta name="description" content="${escapeHtml(meta.description)}">
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles.css">
-    <link rel="canonical" href="https://24histories.com/${bookId}/${chapterData.meta.chapter}.html">
+    <link rel="canonical" href="${chapterUrl}">
     
     <!-- Open Graph -->
     <meta property="og:title" content="${escapeHtml(meta.title)}">
     <meta property="og:description" content="${escapeHtml(meta.description)}">
     <meta property="og:type" content="article">
+    <meta property="og:url" content="${chapterUrl}">
+    <meta property="og:image" content="${ogImageUrl}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="${escapeHtml(meta.title)}">
+    <meta name="twitter:description" content="${escapeHtml(meta.description)}">
+    <meta name="twitter:image" content="${ogImageUrl}">
     
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -775,7 +847,7 @@ ${JSON.stringify(structuredData, null, 2)}
     <header style="padding: 1.5rem 2rem;">
         <div style="max-width: 1400px; margin: 0 auto;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
-                <a href="../chapters.html?book=${bookId}" class="back-link" style="color: white; opacity: 0.9;">← Back to ${book.chinese}</a>
+                <a href="../book/${bookId}.html" class="back-link" style="color: white; opacity: 0.9;">← Back to ${book.chinese}</a>
                 <div style="display: flex; gap: 1rem; align-items: center;">
                     <div class="view-controls">
                         <button class="view-btn active" data-view="both">Both</button>
@@ -827,7 +899,7 @@ ${contentHTML}
                 ${prevChapter ? `<a href="${prevChapter}.html" class="nav-btn prev-btn">← Previous Chapter</a>` : '<span class="nav-btn disabled">← Previous Chapter</span>'}
             </div>
             <div>
-                <a href="../chapters.html?book=${bookId}" class="nav-btn">Back to Chapters</a>
+                <a href="../book/${bookId}.html" class="nav-btn">Back to Chapters</a>
             </div>
             <div>
                 ${nextChapter ? `<a href="${nextChapter}.html" class="nav-btn next-btn">Next Chapter →</a>` : '<span class="nav-btn disabled">Next Chapter →</span>'}
@@ -1123,6 +1195,16 @@ async function generateStaticPages(bookId = null, chapterNum = null) {
 
       console.log(`  ✓ ${chapterNumStr}.html (${translationPercent}% translated)`);
       totalGenerated++;
+    }
+
+    const bookHubDir = path.join(outputDir, 'book');
+    if (!fs.existsSync(bookHubDir)) {
+      fs.mkdirSync(bookHubDir, { recursive: true });
+    }
+    const bookHubHtml = generateBookLandingHTML(book);
+    if (bookHubHtml) {
+      fs.writeFileSync(path.join(bookHubDir, `${book}.html`), bookHubHtml, 'utf8');
+      console.log(`  ✓ book/${book}.html`);
     }
   }
 

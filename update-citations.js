@@ -6,13 +6,21 @@
  * Analyzes paragraph-level translators and generates appropriate
  * chapter-level citations.
  * 
- * Usage: node update-citations.js
+ * Usage:
+ *   node update-citations.js
+ *   node update-citations.js --book shiji
  */
 
 import fs from 'node:fs';
 import path from 'node:path';
 
 const DATA_DIR = './data';
+
+function parseBookArg() {
+  const i = process.argv.indexOf('--book');
+  if (i === -1 || !process.argv[i + 1]) return null;
+  return process.argv[i + 1].trim();
+}
 
 function generateCitation(translatorStats) {
   // Filter out empty translators and aggregate
@@ -112,19 +120,26 @@ function analyzeChapter(chapterPath) {
 }
 
 function main() {
-  console.log('Updating citations in all chapter files...\n');
-  
+  const onlyBook = parseBookArg();
+  console.log(
+    onlyBook
+      ? `Updating citations in data/${onlyBook}/...\n`
+      : 'Updating citations in all chapter files...\n',
+  );
+
   let totalFiles = 0;
   let updatedFiles = 0;
-  
+
   const entries = fs.readdirSync(DATA_DIR, { withFileTypes: true });
-  
+
   for (const entry of entries) {
     if (!entry.isDirectory()) continue;
-    
+
     const bookId = entry.name;
+    if (onlyBook && bookId !== onlyBook) continue;
+
     const bookDir = path.join(DATA_DIR, bookId);
-    
+
     console.log(`Processing ${bookId}...`);
     
     const chapterFiles = fs.readdirSync(bookDir)

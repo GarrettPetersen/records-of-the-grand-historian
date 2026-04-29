@@ -23,7 +23,8 @@ help:
 	@echo "Makefile for scraping the 24 Dynastic Histories"
 	@echo ""
 	@echo "Common commands:"
-	@echo "  make update                 # Fix counts, regenerate manifest, sync (run after manual edits)"
+	@echo "  make update BOOK=<id>       # Same pipeline for one book (requires BOOK=)"
+	@echo "  make update-all             # Full site rebuild for every book under data/"
 	@echo "  make shiji-001              # Scrape Shiji chapter 1 (⚠️ will warn if translations exist)"
 	@echo "  make shiji-010              # Scrape Shiji chapter 10 (⚠️ will warn if translations exist)"
 	@echo "  make shiji-all              # Scrape all Shiji chapters (1-130)"
@@ -41,7 +42,7 @@ help:
 	@echo "  make nuke-translations      # ⚠️  Emergency: Remove ALL translations from a chapter"
 	@echo "  make manifest               # Generate manifest.json (includes sync)"
 	@echo "  make progress               # Generate translation progress data"
-	@echo "  make generate-pages         # Generate static HTML pages for SEO"
+	@echo "  make generate-pages         # Static HTML + Open Graph PNGs (see generate-og-images.js)"
 	@echo "  make sync                   # Copy data/ to public/data/ for web frontend"
 	@echo "  make stats                  # Show chapter counts per book"
 	@echo "  make validate               # Check all JSON files are valid"
@@ -88,10 +89,17 @@ list:
 	@$(SCRAPE) --list
 
 # Sync data to public directory for frontend
+# With BOOK=<id>, copy only that book's chapter JSON (plus glossary and manifest).
 .PHONY: sync
 sync:
 	@echo "Syncing data to public/data..."
 	@mkdir -p public/data
+ifdef BOOK
+	@if [ ! -d "data/$(BOOK)" ]; then echo "Error: data/$(BOOK) not found"; exit 1; fi
+	@mkdir -p public/data/$(BOOK)
+	@cp data/$(BOOK)/*.json public/data/$(BOOK)/ 2>/dev/null || true
+	@echo "  Synced book $(BOOK) only"
+else
 	@for dir in data/*/; do \
 		if [ -d "$$dir" ] && [ "$$(basename $$dir)" != "public" ]; then \
 			book=$$(basename $$dir); \
@@ -100,46 +108,99 @@ sync:
 			echo "  Synced $$book"; \
 		fi; \
 	done
+endif
 	@cp data/glossary.json public/data/ 2>/dev/null || true
 	@cp data/manifest.json public/data/ 2>/dev/null || true
 	@echo "Sync complete."
+
+# Open Graph share images only (writes public/og/)
+.PHONY: generate-og-images
+generate-og-images:
+	@$(NODE) generate-og-images.js
 
 # Generate static HTML pages for SEO
 .PHONY: generate-pages
 generate-pages:
 	@echo "Generating static HTML pages..."
-	@$(NODE) generate-static-pages.js
-	@echo "Static pages generated."
+	@$(NODE) generate-static-pages.js $(if $(BOOK),--book $(BOOK),)
+	@echo "Generating Open Graph share images (requires network on first font fetch)..."
+	@$(NODE) generate-og-images.js $(if $(BOOK),--book $(BOOK),)
+	@echo "Static pages and OG images generated."
 
-# Update workflow: update citations, fix counts, regenerate manifest, generate static pages, sync to public
-# Run this after any manual edits to chapter JSON files
+# Update workflow for one book: citations, counts, manifest merge, progress merge, static HTML, OG images, sync
+# Requires BOOK=<book-id> (directory name under data/, e.g. shiji). Use make update-all for every book.
 .PHONY: update
 update:
-	@echo "=== Running update workflow ==="
+	@if [ -z "$(BOOK)" ]; then \
+		echo "Error: BOOK is required."; \
+		echo "Usage: make update BOOK=shiji"; \
+		echo "       make update-all   — rebuild the whole site (all books)"; \
+		exit 1; \
+	fi
+	@if [ ! -d "data/$(BOOK)" ]; then \
+		echo "Error: data/$(BOOK) does not exist."; \
+		exit 1; \
+	fi
+	@echo "=== Running update workflow for book: $(BOOK) (7 steps) ==="
 	@echo "🎯 Remember: Translate like Ken Liu - prioritize semantic fidelity and modern readability"
 	@echo "   • Focus on semantic fidelity and modern readability"
 	@echo "   • Avoid added narrative or stylistic ornament"
 	@echo "   • Aim for the literary quality and natural flow of Ken Liu's translation style"
 	@echo ""
-	@echo "Step 1/6: Updating citations..."
+	@echo "Step 1/7: Updating citations..."
+	@$(NODE) update-citations.js --book $(BOOK)
+	@echo ""
+	@echo "Step 2/7: Fixing translated counts..."
+	@$(NODE) fix-translated-counts.js --book $(BOOK) || echo "Note: fix-translated-counts.js not found, skipping..."
+	@echo ""
+	@echo "Step 3/7: Regenerating manifest (merge this book)..."
+	@$(NODE) generate-manifest.js --book $(BOOK)
+	@echo ""
+	@echo "Step 4/7: Generating translation progress (merge this book)..."
+	@$(NODE) generate-progress.js --book $(BOOK)
+	@echo ""
+	@echo "Step 5/7: Generating static pages..."
+	@$(NODE) generate-static-pages.js --book $(BOOK)
+	@echo ""
+	@echo "Step 6/7: Generating Open Graph share images..."
+	@$(NODE) generate-og-images.js --book $(BOOK)
+	@echo ""
+	@echo "Step 7/7: Syncing to public..."
+	@$(MAKE) sync BOOK=$(BOOK)
+	@echo ""
+	@echo "=== Update complete for $(BOOK) ==="
+
+# Full-site update: same seven steps as update, for every book (previous default behavior)
+.PHONY: update-all
+update-all:
+	@echo "=== Running full update workflow (7 steps, all books) ==="
+	@echo "🎯 Remember: Translate like Ken Liu - prioritize semantic fidelity and modern readability"
+	@echo "   • Focus on semantic fidelity and modern readability"
+	@echo "   • Avoid added narrative or stylistic ornament"
+	@echo "   • Aim for the literary quality and natural flow of Ken Liu's translation style"
+	@echo ""
+	@echo "Step 1/7: Updating citations..."
 	@$(NODE) update-citations.js
 	@echo ""
-	@echo "Step 2/6: Fixing translated counts..."
+	@echo "Step 2/7: Fixing translated counts..."
 	@$(NODE) fix-translated-counts.js || echo "Note: fix-translated-counts.js not found, skipping..."
 	@echo ""
-	@echo "Step 3/6: Regenerating manifest..."
+	@echo "Step 3/7: Regenerating manifest..."
 	@$(NODE) generate-manifest.js
 	@echo ""
-	@echo "Step 4/6: Generating translation progress..."
+	@echo "Step 4/7: Generating translation progress..."
 	@$(NODE) generate-progress.js
 	@echo ""
-	@echo "Step 5/6: Generating static pages..."
+	@echo "Step 5/7: Generating static pages..."
 	@$(NODE) generate-static-pages.js
 	@echo ""
-	@echo "Step 6/6: Syncing to public..."
+	@echo "Step 6/7: Generating Open Graph share images..."
+	@$(NODE) generate-og-images.js
+	@echo ""
+	@echo "Step 7/7: Syncing to public..."
 	@$(MAKE) sync
 	@echo ""
-	@echo "=== Update complete ==="
+	@echo "=== Update complete (all books) ==="
 
 # Fix translated counts in existing files
 .PHONY: fix-counts
@@ -160,7 +221,7 @@ nuke-translations:
 	@echo "Press Enter to continue or Ctrl+C to abort..."
 	@read -r || true
 	@$(NODE) nuke-translations.js $(CHAPTER)
-	@echo "✅ Translations nuked. Run 'make update' to update the website."
+	@echo "✅ Translations nuked. Run 'make update BOOK=<book>' or 'make update-all' to update the website."
 
 # Nuke only idiomatic translations from a chapter (preserve literal)
 .PHONY: nuke-idiomatic
@@ -175,23 +236,23 @@ nuke-idiomatic:
 	@echo "Press Enter to continue or Ctrl+C to abort..."
 	@read -r || true
 	@$(NODE) nuke-idiomatic-translations.js $(CHAPTER)
-	@echo "✅ Idiomatic translations nuked. Run 'make update' to update the website."
+	@echo "✅ Idiomatic translations nuked. Run 'make update BOOK=<book>' or 'make update-all' to update the website."
 
-# Generate manifest for web frontend
+# Generate manifest for web frontend (optional: BOOK=<id> merges one book into existing manifest)
 .PHONY: manifest
 manifest:
 	@echo "Generating manifest..."
-	@$(NODE) generate-manifest.js
+	@$(NODE) generate-manifest.js $(if $(BOOK),--book $(BOOK),)
 	@echo "Manifest generated at data/manifest.json"
-	@$(MAKE) sync
+	@$(MAKE) sync $(if $(BOOK),BOOK=$(BOOK),)
 
-# Generate translation progress data
+# Generate translation progress data (optional: BOOK=<id> recomputes one book in progress.json)
 .PHONY: progress
 progress:
 	@echo "Generating translation progress data..."
-	@$(NODE) generate-progress.js
+	@$(NODE) generate-progress.js $(if $(BOOK),--book $(BOOK),)
 	@echo "Progress data generated at data/progress.json"
-	@$(MAKE) sync
+	@$(MAKE) sync $(if $(BOOK),BOOK=$(BOOK),)
 
 # Generic rule to scrape a single chapter for any book
 # Usage: make <book>-<chapter>
@@ -476,7 +537,7 @@ auto-translate-numbers:
 		$(NODE) auto-translate-numbers.js $(CHAPTER); \
 	fi
 	@echo ""
-	@echo "✅ Auto-translation complete. Run 'make update' to regenerate the website."
+	@echo "✅ Auto-translation complete. Run 'make update BOOK=<book>' or 'make update-all' to regenerate the website."
 
 # Batch quality check on multiple chapters
 .PHONY: batch-quality-check

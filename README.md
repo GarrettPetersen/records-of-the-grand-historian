@@ -264,8 +264,10 @@ make continue TRANSLATOR="Garrett M. Petersen (2025)" MODEL="grok-1.5"
 **Step 4: Verify and update**
 
 ```bash
-# Update all metadata and rebuild site
-make update
+# Update metadata and rebuild site for the book you edited (fast)
+make update BOOK=shiji
+# Or rebuild everything under data/ (slower; use after multi-book changes)
+make update-all
 ```
 
 ### Alternative: Manual Process (for advanced users)
@@ -314,7 +316,7 @@ The streamlined workflow automatically handles large chapters by extracting up t
 
 ```bash
 # When all batches are complete
-make update
+make update BOOK=shiji
 ```
 
 ### Translation Quality Guidelines
@@ -454,15 +456,18 @@ make batch-quality-check CHAPTERS=all OPTIONS="--output=json"
 **Step 4: Update everything**
 
 ```bash
-make update
+make update BOOK=hanshu
+# or: make update-all
 ```
 
-This will:
+This will (per book with `make update BOOK=…`, or all books with `make update-all`):
 1. Update citations
 2. Fix translated counts
-3. Regenerate manifest
-4. Generate static HTML pages for SEO
-5. Sync data to public/
+3. Regenerate manifest (single-book mode merges that book into the existing manifest)
+4. Generate translation progress data (single-book mode merges that book into `progress.json`)
+5. Generate static HTML pages for SEO
+6. Generate Open Graph share images (PNG)
+7. Sync chapter JSON to `public/data/` (single-book sync copies only that book’s JSON plus manifest and glossary)
 
 ## Quality Scoring
 
@@ -680,22 +685,24 @@ Text is scraped from multiple sources:
 After scraping or translating chapters:
 
 ```bash
-make update
+make update BOOK=shiji
+# Full rebuild for every book:
+make update-all
 ```
 
-This runs the complete build process:
-1. Updates citations metadata
-2. Fixes translated counts
-3. Generates manifest.json
-4. **Generates static HTML pages for SEO**
-5. Syncs data to public/
+This runs the build pipeline (seven steps): citations, translated counts, manifest, progress, static HTML, OG PNGs, and sync. Use `BOOK=` to limit work and file copies to one book; use `make update-all` when you need the entire site refreshed.
 
 **Individual commands:**
 
 ```bash
-make manifest          # Generate manifest.json
-make generate-pages    # Generate static HTML pages
-make sync              # Copy data/ to public/data/
+make manifest                    # Generate manifest.json (all books)
+make manifest BOOK=shiji        # Merge one book into manifest (requires existing manifest)
+make generate-pages              # Static HTML + OG images (all books)
+make generate-pages BOOK=shiji   # Same for one book only
+make sync                        # Copy all book JSON + manifest + glossary to public/data/
+make sync BOOK=shiji             # Copy one book’s JSON + manifest + glossary
+make progress                    # Regenerate progress.json (all books)
+make progress BOOK=shiji         # Recompute one book in progress.json (merge)
 ```
 
 ### Static Pages for SEO
@@ -729,9 +736,22 @@ cd public && python3 -m http.server 8000
 
 Then visit http://localhost:8000
 
-### Deployment
+### Deployment (Cloudflare Pages)
 
-Deploy to Cloudflare Pages by deploying the `public/` directory.
+Open Graph share images under `public/og/**/*.png` are **gitignored**; they are produced by **`npm run build`** on each deploy.
+
+**Pages project settings**
+
+| Setting | Value |
+| --- | --- |
+| **Build command** | `npm run build` |
+| **Build output directory** | `public` |
+| **Root directory** | `/` (repository root) |
+| **Node.js version** | **22** (see `.node-version` and `package.json` `engines`) |
+
+The build runs, in order: sync chapter JSON into `public/data/`, regenerate `manifest.json` and `progress.json`, regenerate static HTML, then render all OG PNGs (first build may download the Noto CJK font; network required).
+
+For local iteration you can still use `make update BOOK=…` / `make update-all`; commit source and `data/` changes; CI/Pages runs `npm run build` so previews match production.
 
 The site includes:
 - Privacy Policy page (`/privacy.html`)

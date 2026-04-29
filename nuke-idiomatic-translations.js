@@ -124,7 +124,7 @@ function main() {
     const nukedCount = nukeIdiomaticTranslations(chapterFile);
     console.log(`✅ Nuked ${nukedCount} idiomatic translations from ${chapterFile}`);
     console.log(`Updated translated count to reflect remaining translations.`);
-    console.log(`Run 'make update' to regenerate static pages.`);
+    console.log(`Run 'make update BOOK=<book>' or 'make update-all' to regenerate static pages.`);
   });
 }
 

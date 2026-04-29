@@ -4,11 +4,12 @@ import {
   buildHistoryCardInnerHtml,
   chapterTranslationSummary,
   translationStatusTooltip,
-} from './app.js?v=20260428-footer';
+} from './app.js?v=20260429-og';
 
 async function renderChapters() {
   const params = new URLSearchParams(window.location.search);
-  const bookId = params.get('book');
+  const bookId =
+    params.get('book') || document.body?.dataset?.book?.trim() || null;
 
   if (!bookId) {
     document.getElementById('loading').textContent = 'Invalid book ID';
@@ -49,7 +50,8 @@ async function renderChapters() {
 
     const card = document.createElement('a');
     card.className = `history-card history-card--translation-${level}`;
-    card.href = `${bookId}/${chapter.chapter}.html`;
+    const chFile = String(chapter.chapter).padStart(3, '0');
+    card.href = `/${bookId}/${chFile}.html`;
     card.title = translationStatusTooltip(level, sentenceTotal, translatedTotal, 'chapter');
 
     const footerLine =
@@ -63,7 +65,6 @@ async function renderChapters() {
       secondaryLine: chapterLabel,
       secondaryLineClass: 'pinyin--chapter-index',
       englishLine: titleEn,
-      metaLine: `Dynasty: ${bookData.dynasty}`,
       footerLine,
     });
 

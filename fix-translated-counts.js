@@ -6,13 +6,21 @@
  * Reads existing JSON files and updates the meta.translatedCount field
  * based on actual sentence translations without re-scraping.
  * 
- * Usage: node fix-translated-counts.js
+ * Usage:
+ *   node fix-translated-counts.js
+ *   node fix-translated-counts.js --book shiji
  */
 
 import fs from 'node:fs';
 import path from 'node:path';
 
 const DATA_DIR = './data';
+
+function parseBookArg() {
+  const i = process.argv.indexOf('--book');
+  if (i === -1 || !process.argv[i + 1]) return null;
+  return process.argv[i + 1].trim();
+}
 
 // Check if text contains Chinese characters
 function containsChinese(text) {
@@ -104,7 +112,12 @@ function processFile(filePath) {
 }
 
 function main() {
-  console.log('Recalculating translated counts...\n');
+  const onlyBook = parseBookArg();
+  console.log(
+    onlyBook
+      ? `Recalculating translated counts for ${onlyBook}...\n`
+      : 'Recalculating translated counts...\n',
+  );
 
   let totalFiles = 0;
   let updatedFiles = 0;
@@ -113,6 +126,7 @@ function main() {
 
   for (const entry of entries) {
     if (!entry.isDirectory()) continue;
+    if (onlyBook && entry.name !== onlyBook) continue;
 
     const bookDir = path.join(DATA_DIR, entry.name);
     const files = fs.readdirSync(bookDir)

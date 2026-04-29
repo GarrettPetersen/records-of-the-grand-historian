@@ -6,8 +6,10 @@ This is a static-site project (no framework, no build toolchain, no database). A
 
 ### Key commands
 
-- **Install deps:** `npm install` (sole dependency is `cheerio`)
-- **Build/rebuild site:** `make update` — runs citations, counts, manifest, progress, static page generation, and data sync to `public/`
+- **Install deps:** `npm install` (includes `cheerio`, `satori`, `react`, `@resvg/resvg-js` for OG share images)
+- **Build/rebuild site:** `make update BOOK=<book>` — runs citations, counts, manifest (merge), progress (merge), static HTML, **Open Graph PNGs** (`generate-og-images.js`), and sync for that book only. Use `make update-all` for every book under `data/` (full rebuild).
+- **Cloudflare Pages:** Build command **`npm run build`** (see `package.json`). Output directory **`public`**. Regenerates manifest, progress, static HTML, and **all** `public/og/**/*.png` files; those PNGs are **gitignored** and only exist after a local `make update*` or a Pages build.
+- **OG images:** First run downloads Noto Serif CJK OTF into `fonts/.cache/` (gitignored). Override with `OG_FONT_PATH` + `OG_FONT_FAMILY`. Canonical URLs use `SITE_URL` (default `https://24histories.com`) in `generate-static-pages.js` and `generate-og-images.js`.
 - **Validate JSON:** `make validate` (requires `jq`)
 - **Serve locally:** `cd public && python3 -m http.server 8000`
 - **View stats:** `make stats`
@@ -28,6 +30,6 @@ The standard translation loop is: `make start-translation BOOK=<book>` → fill 
 
 - `jq` is a required system tool for `make validate` and scraping targets — it is pre-installed in the VM.
 - There is no linter, test suite, or TypeScript — the project has `"test": "echo \"Error: no test specified\" && exit 1"` in `package.json`.
-- The `make update` command is the canonical "build" step; it regenerates all static HTML pages and syncs data to `public/`.
+- **`make update BOOK=<book>`** is the usual incremental build after editing one book; **`make update-all`** rebuilds the whole site. Both regenerate static HTML and OG assets as appropriate and sync to `public/`. The first time you need a `data/manifest.json`, run `make update-all` (or `make manifest`) once before relying on per-book manifest merge.
 - Scraping targets (`make shiji-001`, etc.) require internet access to chinesenotes.com/ctext.org and are interactive (prompt before overwriting translated chapters).
 - `package-lock.json` is gitignored, so `npm install` resolves latest compatible versions each time.

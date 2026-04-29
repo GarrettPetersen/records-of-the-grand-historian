@@ -4,7 +4,11 @@
   "type": "module",
   "main": "scrape.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node scripts/sync-data-to-public.mjs && node generate-manifest.js && node generate-progress.js && node generate-static-pages.js && node generate-og-images.js"
+  },
+  "engines": {
+    "node": ">=22.0.0"
   },
   "repository": {
     "type": "git",
@@ -19,6 +23,9 @@
   "homepage": "https://github.com/GarrettPetersen/records-of-the-grand-historian#readme",
   "description": "",
   "dependencies": {
-    "cheerio": "^1.1.2"
+    "@resvg/resvg-js": "^2.6.2",
+    "cheerio": "^1.1.2",
+    "react": "^19.2.5",
+    "satori": "^0.26.0"
   }
 }

@@ -20,6 +20,8 @@
     --history-card-status-font-size: 0.65rem;
     --history-card-status-padding-y: 0.3rem;
     --history-card-status-padding-x: 0.55rem;
+    /* Cap pill width so label wraps (e.g. FULLY / TRANSLATED); % is of .history-card-header */
+    --history-card-status-max-width: min(10rem, 40%);
     --history-card-pinyin-size: 1rem;
     --history-card-pinyin-margin-bottom: 0.5rem;
     --history-card-english-size: 1.1rem;
@@ -113,6 +115,7 @@ main:has(.reader-container) {
     --history-card-status-font-size: 0.55rem;
     --history-card-status-padding-y: 0.2rem;
     --history-card-status-padding-x: 0.45rem;
+    --history-card-status-max-width: min(7.25rem, 44%);
     --history-card-pinyin-size: 0.8rem;
     --history-card-pinyin-margin-bottom: 0.35rem;
     --history-card-english-size: 0.9rem;
@@ -184,6 +187,7 @@ main:has(.reader-container) {
 }
 
 .translation-status {
+    display: inline-block;
     font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
     font-size: var(--history-card-status-font-size);
     font-weight: 600;
@@ -191,10 +195,15 @@ main:has(.reader-container) {
     letter-spacing: 0.04em;
     padding: var(--history-card-status-padding-y) var(--history-card-status-padding-x);
     border-radius: 4px;
-    white-space: nowrap;
-    flex-shrink: 0;
+    white-space: normal;
+    text-align: center;
+    text-wrap: balance;
+    max-width: var(--history-card-status-max-width);
+    flex: 0 1 auto;
+    align-self: flex-start;
     line-height: 1.2;
     border: 1px solid transparent;
+    overflow-wrap: break-word;
 }
 
 .translation-status--full {
