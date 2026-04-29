@@ -10,6 +10,9 @@
  *   node generate-static-pages.js
  *   node generate-static-pages.js --book shiji
  *   node generate-static-pages.js --book shiji --chapter 006
+ *
+ * Env:
+ *   STATIC_GEN_CONCURRENCY  Parallel chapter HTML jobs per book (default 6, max 32).
  */
 
 import fs from 'node:fs';
@@ -20,6 +23,39 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /** Canonical origin for og:url, og:image, and <link rel="canonical"> */
 const CANONICAL_SITE = (process.env.SITE_URL || 'https://24histories.com').replace(/\/$/, '');
+
+function envPositiveInt(name, defaultVal, max) {
+  const v = parseInt(process.env[name] || '', 10);
+  if (!Number.isFinite(v) || v < 1) return defaultVal;
+  return Math.min(max, v);
+}
+
+/** Parallel chapter HTML writes (Cloudflare Pages: try 8–12). */
+const STATIC_GEN_CONCURRENCY = envPositiveInt('STATIC_GEN_CONCURRENCY', 6, 32);
+
+/**
+ * @template T, R
+ * @param {T[]} items
+ * @param {number} limit
+ * @param {(item: T, index: number) => Promise<R>} fn
+ * @returns {Promise<R[]>}
+ */
+async function runPool(items, limit, fn) {
+  if (items.length === 0) return [];
+  const results = new Array(items.length);
+  let next = 0;
+  const n = Math.min(Math.max(1, limit), items.length);
+  const worker = async () => {
+    while (true) {
+      const i = next;
+      next += 1;
+      if (i >= items.length) break;
+      results[i] = await fn(items[i], i);
+    }
+  };
+  await Promise.all(Array.from({ length: n }, () => worker()));
+  return results;
+}
 
 // Dynamically load book information from data directory
 function loadBooks() {
@@ -1148,6 +1184,8 @@ async function generateStaticPages(bookId = null, chapterNum = null) {
 
   let totalGenerated = 0;
 
+  console.log(`(STATIC_GEN_CONCURRENCY=${STATIC_GEN_CONCURRENCY})`);
+
   for (const book of booksToProcess) {
     if (!BOOKS[book]) {
       console.error(`Unknown book: ${book}`);
@@ -1179,7 +1217,7 @@ async function generateStaticPages(bookId = null, chapterNum = null) {
       .map(f => path.basename(f, '.json'))
       .sort();
 
-    for (const file of chapterFiles) {
+    await runPool(chapterFiles, STATIC_GEN_CONCURRENCY, async (file) => {
       const chapterPath = path.join(bookDataDir, file);
       const chapterData = JSON.parse(fs.readFileSync(chapterPath, 'utf8'));
 
@@ -1194,8 +1232,9 @@ async function generateStaticPages(bookId = null, chapterNum = null) {
         : 0;
 
       console.log(`  ✓ ${chapterNumStr}.html (${translationPercent}% translated)`);
-      totalGenerated++;
-    }
+      return 1;
+    });
+    totalGenerated += chapterFiles.length;
 
     const bookHubDir = path.join(outputDir, 'book');
     if (!fs.existsSync(bookHubDir)) {
@@ -1213,7 +1252,7 @@ async function generateStaticPages(bookId = null, chapterNum = null) {
 }
 
 // Parse command line arguments
-function main() {
+async function main() {
   const args = process.argv.slice(2);
 
   if (args.includes('--help') || args.includes('-h')) {
@@ -1247,7 +1286,10 @@ Examples:
     chapterNum = args[chapterIdx + 1];
   }
 
-  generateStaticPages(bookId, chapterNum);
+  await generateStaticPages(bookId, chapterNum);
 }
 
-main();
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
