@@ -6,12 +6,18 @@
 # committed files under `public/` — no manifest/sync/static regen, no OG PNGs.
 #
 # OG share cards (generate-og-images.js): `npm run build` uses --incremental so
-# existing PNGs newer than their source JSON are skipped. Speed up CI/Pages by
-# adding build cache directories (Settings → Builds → Build cache):
-#   public/og
-#   fonts/.cache
-# After changing OG layout/fonts, run once with env OG_FORCE=1 or pass --force
-# to generate-og-images.js, or clear the cache. Raise OG_CHAPTER_CONCURRENCY (e.g. 8–12)
-# if the build machine has CPU headroom.
+# existing PNGs newer than their source JSON are skipped when those files are
+# still present in the workspace.
+#
+# Cloudflare Pages still clones the repo fresh each build; Build caching (beta)
+# restores a *separate* cache (see https://developers.cloudflare.com/pages/configuration/build-caching/).
+# Official docs only list framework-specific paths (e.g. Next .next/cache, Gatsby .cache+public)
+# and package-manager caches (.npm, etc.). This project is not in that framework table, so
+# public/og may NOT be restored between builds—incremental may only help npm install time
+# unless Cloudflare expands detection or you use another strategy (e.g. R2 upload, committed
+# assets, or a worker/build step that preserves artifacts).
+#
+# After changing OG layout/fonts, use OG_FORCE=1 or --force once, or clear the build cache.
+# Raise OG_CHAPTER_CONCURRENCY (e.g. 8–12) if the build image has CPU headroom.
 name = "records-of-the-grand-historian"
 pages_build_output_dir = "public"
