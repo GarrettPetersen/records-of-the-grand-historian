@@ -10,8 +10,9 @@
  * your file’s family name (see Font Book / `fc-query`).
  *
  * SVG vs PNG for social cards: `og:image` pointing at SVG is **not** reliably supported
- * (Facebook, Slack, iMessage, etc. expect raster). All PNGs under `public/og/` are
- * gitignored; Cloudflare Pages runs `npm run build`, which ends with this script.
+ * (Facebook, Slack, iMessage, etc. expect raster). PNGs are written under `public/og/`;
+ * do not gitignore them or Cloudflare Pages may omit them from the deploy bundle.
+ * `npm run build` ends with this script and `scripts/verify-og-assets.mjs`.
  *
  * Usage:
  *   node generate-og-images.js
