@@ -10,8 +10,9 @@
  * your file’s family name (see Font Book / `fc-query`).
  *
  * SVG vs PNG for social cards: `og:image` pointing at SVG is **not** reliably supported
- * (Facebook, Slack, iMessage, etc. expect raster). All PNGs under `public/og/` are
- * gitignored; Cloudflare Pages runs `npm run build`, which ends with this script.
+ * (Facebook, Slack, iMessage, etc. expect raster). PNGs are written under `public/og/`
+ * (typically gitignored in the repo; produced on each `npm run build` / Pages build).
+ * `npm run build` ends with this script and `scripts/verify-og-assets.mjs`.
  *
  * Usage:
  *   node generate-og-images.js
@@ -700,6 +701,8 @@ async function main() {
   const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
   const books = manifest.books || {};
 
+  console.log('');
+  console.log('=== Open Graph: generate-og-images.js (raster share cards) ===');
   console.log('Loading fonts for OG images…');
   const { fonts, resvgFontPath } = await loadFonts();
 
@@ -712,6 +715,7 @@ async function main() {
   console.log('  ✓ og/site.png');
 
   const bookIds = Object.keys(books).filter((id) => !filterBook || id === filterBook);
+  let totalChapterPng = 0;
 
   for (const bookId of bookIds) {
     const b = books[bookId];
@@ -754,10 +758,13 @@ async function main() {
       fs.writeFileSync(path.join(chDir, `${chNum}.png`), png);
       chapterImages += 1;
     }
+    totalChapterPng += chapterImages;
     console.log(`  ✓ og/chapters/${bookId}/ (${chapterImages} images)`);
   }
 
-  console.log('\n✅ OG images written under public/og/');
+  console.log(
+    `\n✅ Open Graph done: ${totalChapterPng} chapter PNGs, ${bookIds.length} book hub PNGs, 1 site PNG → public/og/`,
+  );
 }
 
 main().catch((e) => {
