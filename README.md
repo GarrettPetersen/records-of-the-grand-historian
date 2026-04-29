@@ -738,20 +738,20 @@ Then visit http://localhost:8000
 
 ### Deployment (Cloudflare Pages)
 
-Open Graph share images under `public/og/**/*.png` are **gitignored**; they are produced by **`npm run build`** on each deploy.
+**The Build command in the Pages dashboard cannot be empty.** If it is blank, Cloudflare does not run Node: it only uploads whatever is already committed under `public/`. You will not get fresh `manifest.json` / static HTML / **`public/og/*.png`** share cards from the generator on that deploy.
 
 **Pages project settings**
 
 | Setting | Value |
 | --- | --- |
-| **Build command** | `npm run build` |
+| **Build command** | `npm run build` (required) |
 | **Build output directory** | `public` |
 | **Root directory** | `/` (repository root) |
 | **Node.js version** | **22** (see `.node-version` and `package.json` `engines`) |
 
-The build runs, in order: sync chapter JSON into `public/data/`, regenerate `manifest.json` and `progress.json`, regenerate static HTML, then render all OG PNGs (first build may download the Noto CJK font; network required).
+The build runs, in order: sync chapter JSON into `public/data/`, regenerate `manifest.json` and `progress.json`, regenerate static HTML, then render all OG PNGs (first build may download the Noto CJK font; network required). `wrangler.toml` only sets `pages_build_output_dir` for Wrangler CLI; it does **not** replace the dashboard build command for Git-connected Pages.
 
-For local iteration you can still use `make update BOOK=…` / `make update-all`; commit source and `data/` changes; CI/Pages runs `npm run build` so previews match production.
+For local iteration you can still use `make update BOOK=…` / `make update-all`; commit source and `data/` changes. Production parity requires the dashboard build command above so each push runs `npm run build` on Cloudflare.
 
 The site includes:
 - Privacy Policy page (`/privacy.html`)

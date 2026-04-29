@@ -1,4 +1,8 @@
-# Cloudflare Pages — publish `public/` after `npm run build` (see package.json "build").
-# In the Pages project: Build command = npm run build, Build output = public (or rely on this file + dashboard).
+# Cloudflare Pages — Git builds do NOT infer a build command from this file.
+# You must set these in the Pages dashboard (Settings → Builds):
+#   Build command:  npm run build
+#   Build output:   public
+# If Build command is left blank, Cloudflare skips npm entirely and only uploads
+# committed files under `public/` — no manifest/sync/static regen, no OG PNGs.
 name = "records-of-the-grand-historian"
 pages_build_output_dir = "public"
