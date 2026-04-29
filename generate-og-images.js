@@ -24,6 +24,9 @@
  *   OG_FONT_FAMILY   CSS font-family matching that file (default: Noto Serif CJK SC)
  *   OG_DEBUG_SVG     If set to a file path, writes the first Satori SVG attempt there
  *   OG_VERBOSE       Log when a chapter OG image uses a simplified fallback layout
+ *   OG_CHAPTER_CONCURRENCY  Parallel chapter renders (default 4, max 16). Higher uses
+ *                      more CPU on the build machine; try 6–8 on paid Pages if stable.
+ *   OG_BOOK_RESVG_CHUNK   Book-hub PNGs Resvg'd N at a time in one child (default 16).
  */
 
 import fs from 'node:fs';
@@ -43,6 +46,17 @@ const HEADER_BLUE = '#1a5490';
 const HEADER_BLUE_DEEP = '#0d3a66';
 /** Long CJK-only excerpts can trigger Resvg panics; cap per paragraph before layout. */
 const OG_SNIPPET_CHAR_CAP = 420;
+
+function envPositiveInt(name, defaultVal, max) {
+  const v = parseInt(process.env[name] || '', 10);
+  if (!Number.isFinite(v) || v < 1) return defaultVal;
+  return Math.min(max, v);
+}
+
+/** Concurrent chapter OG pipelines (each: Satori + Resvg worker). */
+const OG_CHAPTER_CONCURRENCY = envPositiveInt('OG_CHAPTER_CONCURRENCY', 4, 16);
+/** Book hub cards batched into one `og-resvg-batch` child per chunk (fewer spawns). */
+const OG_BOOK_RESVG_CHUNK = envPositiveInt('OG_BOOK_RESVG_CHUNK', 16, 64);
 
 const args = process.argv.slice(2);
 function argVal(name) {
@@ -137,6 +151,81 @@ function resvgWorkerPng(svg, resvgFontPath) {
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }
+}
+
+/**
+ * Render several SVG strings in one child process when possible; falls back to
+ * one `og-resvg-worker` spawn per SVG if the batch child fails.
+ * @param {string[]} svgs
+ * @param {string} resvgFontPath
+ * @returns {Buffer[]}
+ */
+function resvgBatchBuffers(svgs, resvgFontPath) {
+  if (svgs.length === 0) return [];
+  if (svgs.length === 1) {
+    const r = resvgWorkerPng(svgs[0], resvgFontPath);
+    if (!r.ok) throw new Error(r.reason || 'resvg failed');
+    return [r.png];
+  }
+
+  const family = fontFamilyName();
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'og-rbatch-'));
+  try {
+    const jobs = [];
+    for (let i = 0; i < svgs.length; i += 1) {
+      const svgPath = path.join(dir, `b${i}.svg`);
+      const pngPath = path.join(dir, `b${i}.png`);
+      fs.writeFileSync(svgPath, svgs[i], 'utf8');
+      jobs.push({ svgPath, pngPath });
+    }
+    const manifest = {
+      width: OG_W,
+      fontFamily: family,
+      fontFilePath: resvgFontPath,
+      jobs,
+    };
+    const manPath = path.join(dir, 'manifest.json');
+    fs.writeFileSync(manPath, JSON.stringify(manifest), 'utf8');
+    const batchWorker = path.join(__dirname, 'scripts', 'og-resvg-batch.mjs');
+    const r = spawnSync(process.execPath, [batchWorker, manPath], {
+      maxBuffer: 128 * 1024 * 1024,
+    });
+    if (r.signal || r.status !== 0) {
+      return svgs.map((svg) => {
+        const one = resvgWorkerPng(svg, resvgFontPath);
+        if (!one.ok) throw new Error(one.reason || 'resvg failed');
+        return one.png;
+      });
+    }
+    return jobs.map((j) => fs.readFileSync(j.pngPath));
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+}
+
+/**
+ * Run async work over `items` with at most `limit` concurrent executions.
+ * @template T, R
+ * @param {T[]} items
+ * @param {number} limit
+ * @param {(item: T, index: number) => Promise<R>} fn
+ * @returns {Promise<R[]>}
+ */
+async function runPool(items, limit, fn) {
+  if (items.length === 0) return [];
+  const results = new Array(items.length);
+  let next = 0;
+  const n = Math.min(Math.max(1, limit), items.length);
+  const worker = async () => {
+    while (true) {
+      const i = next;
+      next += 1;
+      if (i >= items.length) break;
+      results[i] = await fn(items[i], i);
+    }
+  };
+  await Promise.all(Array.from({ length: n }, () => worker()));
+  return results;
 }
 
 /**
@@ -703,6 +792,9 @@ async function main() {
 
   console.log('');
   console.log('=== Open Graph: generate-og-images.js (raster share cards) ===');
+  console.log(
+    `  (parallelism: OG_CHAPTER_CONCURRENCY=${OG_CHAPTER_CONCURRENCY}, book Resvg chunk=${OG_BOOK_RESVG_CHUNK})`,
+  );
   console.log('Loading fonts for OG images…');
   const { fonts, resvgFontPath } = await loadFonts();
 
@@ -715,17 +807,31 @@ async function main() {
   console.log('  ✓ og/site.png');
 
   const bookIds = Object.keys(books).filter((id) => !filterBook || id === filterBook);
-  let totalChapterPng = 0;
 
+  for (let c = 0; c < bookIds.length; c += OG_BOOK_RESVG_CHUNK) {
+    const chunkIds = bookIds.slice(c, c + OG_BOOK_RESVG_CHUNK);
+    const svgs = await Promise.all(
+      chunkIds.map((bookId) => {
+        const b = books[bookId];
+        return satori(bookOgElement(b.chinese, b.name), {
+          width: OG_W,
+          height: OG_H,
+          fonts,
+        });
+      }),
+    );
+    const pngs = resvgBatchBuffers(svgs, resvgFontPath);
+    for (let k = 0; k < chunkIds.length; k += 1) {
+      fs.writeFileSync(path.join(outRoot, 'books', `${chunkIds[k]}.png`), pngs[k]);
+    }
+    for (const bookId of chunkIds) {
+      console.log(`  ✓ og/books/${bookId}.png`);
+    }
+  }
+
+  const chapterJobs = [];
   for (const bookId of bookIds) {
     const b = books[bookId];
-    const bookPng = await renderPng(bookOgElement(b.chinese, b.name), fonts, resvgFontPath);
-    fs.writeFileSync(path.join(outRoot, 'books', `${bookId}.png`), bookPng);
-    console.log(`  ✓ og/books/${bookId}.png`);
-
-    const chDir = path.join(outRoot, 'chapters', bookId);
-    mkdirp(chDir);
-
     const chapterEntries = (b.chapters || []).filter((ch) => {
       if (filterChapter) {
         const n = String(ch.chapter).padStart(3, '0');
@@ -734,32 +840,46 @@ async function main() {
       }
       return true;
     });
-
-    let chapterImages = 0;
     for (const ch of chapterEntries) {
       const chNum = String(ch.chapter).padStart(3, '0');
       const jsonPath = path.join(__dirname, 'data', bookId, `${chNum}.json`);
       if (!fs.existsSync(jsonPath)) continue;
-
-      const chapterData = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
-      const zhTitle = chapterData.meta?.title?.zh || `卷${chNum}`;
-      const enTitle = chapterData.meta?.title?.en || '';
-      const snippetRaw = collectOpeningSnippet(chapterData);
-      const snippet = snippetRaw.map((p) => ({
-        ...p,
-        text: p.text.length > OG_SNIPPET_CHAR_CAP ? p.text.slice(0, OG_SNIPPET_CHAR_CAP) : p.text,
-      }));
-      const png = await renderPng(chapterOgElement(zhTitle, enTitle, snippet), fonts, resvgFontPath, {
-        fallbackElements: [
-          chapterOgElement(zhTitle, enTitle, snippet, { noBottomFade: true }),
-          chapterOgFallbackTitlesElement(zhTitle, enTitle),
-        ],
-      });
-      fs.writeFileSync(path.join(chDir, `${chNum}.png`), png);
-      chapterImages += 1;
+      chapterJobs.push({ bookId, chNum, jsonPath });
     }
-    totalChapterPng += chapterImages;
-    console.log(`  ✓ og/chapters/${bookId}/ (${chapterImages} images)`);
+  }
+
+  const chapterCounts = new Map();
+  for (const bookId of bookIds) {
+    chapterCounts.set(bookId, 0);
+  }
+
+  await runPool(chapterJobs, OG_CHAPTER_CONCURRENCY, async (job) => {
+    const { bookId, chNum, jsonPath } = job;
+    const chapterData = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+    const zhTitle = chapterData.meta?.title?.zh || `卷${chNum}`;
+    const enTitle = chapterData.meta?.title?.en || '';
+    const snippetRaw = collectOpeningSnippet(chapterData);
+    const snippet = snippetRaw.map((p) => ({
+      ...p,
+      text: p.text.length > OG_SNIPPET_CHAR_CAP ? p.text.slice(0, OG_SNIPPET_CHAR_CAP) : p.text,
+    }));
+    const png = await renderPng(chapterOgElement(zhTitle, enTitle, snippet), fonts, resvgFontPath, {
+      fallbackElements: [
+        chapterOgElement(zhTitle, enTitle, snippet, { noBottomFade: true }),
+        chapterOgFallbackTitlesElement(zhTitle, enTitle),
+      ],
+    });
+    const chDir = path.join(outRoot, 'chapters', bookId);
+    mkdirp(chDir);
+    fs.writeFileSync(path.join(chDir, `${chNum}.png`), png);
+    chapterCounts.set(bookId, (chapterCounts.get(bookId) || 0) + 1);
+  });
+
+  let totalChapterPng = 0;
+  for (const bookId of bookIds) {
+    const n = chapterCounts.get(bookId) || 0;
+    totalChapterPng += n;
+    console.log(`  ✓ og/chapters/${bookId}/ (${n} images)`);
   }
 
   console.log(
