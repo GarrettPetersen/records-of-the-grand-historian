@@ -29,6 +29,31 @@ function startsWithLowercaseLetter(text) {
 }
 
 /**
+ * Collation / commentary lines (esp. Zhonghua shuju 頁/行 notes) routinely quote graphs in English.
+ * Do not treat Hanzi in the English as "leakage" from the main narrative, and skip
+ * sentence-boundary capitalization heuristics (e.g. "p. 1423, l. 6 …").
+ */
+function isCriticalApparatusNote(zh) {
+  if (!zh || typeof zh !== 'string') return false;
+  const t = zh.trim();
+  if (t.length === 0) return false;
+  if (/頁.{0,20}行/.test(t)) return true;
+  if (/^按[:：]/.test(t)) return true;
+  if (/^今據/.test(t)) return true;
+  if (/^又引/.test(t)) return true;
+  if (/^今按[:：]/.test(t)) return true;
+  if (/^[（(][^)）]{1,14}[)）]$/.test(t)) return true;
+  if (t.length <= 40 && /或為/.test(t)) return true;
+  if (t.length <= 24 && /音.{1,18}[。.]$/.test(t)) return true;
+  if (/左氏傳「|左傳「/.test(t)) return true;
+  if (t.length <= 80 && /」續漢書「/.test(t)) return true;
+  if (t.length <= 200 && /(校補(引|謂)?|集解引|刊誤)/.test(t)) return true;
+  if (t.length <= 120 && /(汲本|殿本)/.test(t) && /「/.test(t)) return true;
+  if (t.length <= 160 && /字衍[,，]/.test(t)) return true;
+  return false;
+}
+
+/**
  * Calculate a rough length ratio score between Chinese and English text
  * Chinese characters are more information-dense than English words
  */
@@ -106,8 +131,10 @@ function scoreTranslation(entry, options = {}) {
     score = 0;
   }
 
-  // Check for Chinese characters in English translation
-  if (english && CHINESE_CHARS_REGEX.test(english)) {
+  const apparatusNote = chinese && isCriticalApparatusNote(chinese);
+
+  // Check for Chinese characters in English translation (skip for collation commentary)
+  if (english && CHINESE_CHARS_REGEX.test(english) && !apparatusNote) {
     issues.push('Contains Chinese characters');
     score = 0;
   }
@@ -183,7 +210,13 @@ function scoreTranslation(entry, options = {}) {
   }
 
   // Flag likely sentence-start lowercase when sentence boundary suggests capitalization is expected.
-  if (score > 0 && english && shouldEnforceSentenceStartCapitalization && startsWithLowercaseLetter(english)) {
+  if (
+    score > 0 &&
+    english &&
+    shouldEnforceSentenceStartCapitalization &&
+    !apparatusNote &&
+    startsWithLowercaseLetter(english)
+  ) {
     issues.push('Likely sentence-start capitalization issue');
     score = Math.min(score, 0.8);
   }
