@@ -21,14 +21,17 @@
  *   SITE_URL       Canonical origin (default https://24histories.com)
  *   OG_FONT_PATH     Path to .otf/.ttf/.woff (not woff2) with Latin + CJK for all strings
  *   OG_FONT_FAMILY   CSS font-family matching that file (default: Noto Serif CJK SC)
+ *   OG_DEBUG_SVG     If set to a file path, writes the first Satori SVG attempt there
+ *   OG_VERBOSE       Log when a chapter OG image uses a simplified fallback layout
  */
 
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { createElement } from 'react';
 import satori from 'satori';
-import { Resvg } from '@resvg/resvg-js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -37,6 +40,8 @@ const OG_W = 1200;
 const OG_H = 630;
 const HEADER_BLUE = '#1a5490';
 const HEADER_BLUE_DEEP = '#0d3a66';
+/** Long CJK-only excerpts can trigger Resvg panics; cap per paragraph before layout. */
+const OG_SNIPPET_CHAR_CAP = 420;
 
 const args = process.argv.slice(2);
 function argVal(name) {
@@ -98,25 +103,72 @@ async function loadFonts() {
   };
 }
 
-/** Resvg often does not use SVG-embedded @font-face; load the same file via fontFiles for CJK. */
-function renderPng(element, fonts, resvgFontPath) {
+/**
+ * Run Resvg in a child process so a native panic does not abort the whole generator
+ * (see e.g. resvg geom.rs unwrap on some Satori SVGs).
+ */
+function resvgWorkerPng(svg, resvgFontPath) {
   const family = fontFamilyName();
-  return satori(element, {
-    width: OG_W,
-    height: OG_H,
-    fonts,
-  }).then((svg) => {
-    const resvg = new Resvg(svg, {
-      fitTo: { mode: 'width', value: OG_W },
-      background: 'white',
-      font: {
-        loadSystemFonts: false,
-        defaultFontFamily: family,
-        fontFiles: [resvgFontPath],
-      },
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'og-resvg-'));
+  const svgPath = path.join(dir, 'in.svg');
+  const pngPath = path.join(dir, 'out.png');
+  try {
+    fs.writeFileSync(svgPath, svg, 'utf8');
+    const worker = path.join(__dirname, 'scripts', 'og-resvg-worker.mjs');
+    const r = spawnSync(
+      process.execPath,
+      [worker, svgPath, pngPath, String(OG_W), family, resvgFontPath],
+      { maxBuffer: 64 * 1024 * 1024 },
+    );
+    if (r.signal) {
+      return { ok: false, reason: `signal ${r.signal}` };
+    }
+    if (r.status !== 0) {
+      return {
+        ok: false,
+        reason: (r.stderr && String(r.stderr)) || `exit ${r.status}`,
+      };
+    }
+    if (!fs.existsSync(pngPath)) {
+      return { ok: false, reason: 'missing output png' };
+    }
+    return { ok: true, png: fs.readFileSync(pngPath) };
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+}
+
+/**
+ * @param {import('react').ReactNode} element
+ * @param {import('satori').FontOptions[]} fonts
+ * @param {string} resvgFontPath
+ * @param {{ fallbackElements?: import('react').ReactNode[] }} [options]
+ */
+async function renderPng(element, fonts, resvgFontPath, options = {}) {
+  const { fallbackElements = [] } = options;
+  const chain = [element, ...fallbackElements];
+
+  let lastReason = '';
+  for (let i = 0; i < chain.length; i += 1) {
+    const el = chain[i];
+    const svg = await satori(el, {
+      width: OG_W,
+      height: OG_H,
+      fonts,
     });
-    return resvg.render().asPng();
-  });
+    if (process.env.OG_DEBUG_SVG && i === 0) {
+      fs.writeFileSync(process.env.OG_DEBUG_SVG, svg, 'utf8');
+    }
+    const r = resvgWorkerPng(svg, resvgFontPath);
+    if (r.ok) {
+      if (i > 0 && process.env.OG_VERBOSE) {
+        console.warn(`  (OG used fallback layout ${i}/${chain.length - 1})`);
+      }
+      return r.png;
+    }
+    lastReason = r.reason;
+  }
+  throw new Error(`OG Resvg failed after ${chain.length} attempt(s): ${lastReason}`);
 }
 
 function baseTextStyle() {
@@ -338,7 +390,113 @@ function computeChapterSnippetTypography(snippetParts) {
   };
 }
 
-function chapterOgElement(zhTitle, enTitle, snippetParts) {
+/** Minimal chapter card: no excerpt, no absolute overlays (last-resort Resvg escape hatch). */
+function chapterOgFallbackTitlesElement(zhTitle, enTitle) {
+  const leftChildren = [
+    createElement(
+      'div',
+      {
+        style: {
+          ...baseTextStyle(),
+          color: '#ffffff',
+          fontSize: 44,
+          lineHeight: 1.25,
+          fontWeight: 600,
+          maxWidth: '100%',
+          wordBreak: 'break-all',
+        },
+      },
+      zhTitle,
+    ),
+  ];
+  if (enTitle) {
+    leftChildren.push(
+      createElement(
+        'div',
+        {
+          style: {
+            ...baseTextStyle(),
+            color: 'rgba(255,255,255,0.92)',
+            fontSize: 26,
+            marginTop: 20,
+            lineHeight: 1.35,
+            maxWidth: '100%',
+            wordBreak: 'break-word',
+          },
+        },
+        normalizeOgLatinTypography(enTitle),
+      ),
+    );
+  }
+
+  return createElement(
+    'div',
+    {
+      style: {
+        width: OG_W,
+        height: OG_H,
+        display: 'flex',
+        flexDirection: 'row',
+        backgroundColor: '#ffffff',
+      },
+    },
+    createElement(
+      'div',
+      {
+        style: {
+          width: CHAPTER_LEFT_RAIL,
+          height: OG_H,
+          background: `linear-gradient(180deg, ${HEADER_BLUE} 0%, ${HEADER_BLUE_DEEP} 100%)`,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          paddingLeft: 40,
+          paddingRight: 36,
+          flexShrink: 0,
+        },
+      },
+      ...leftChildren,
+    ),
+    createElement(
+      'div',
+      {
+        style: {
+          width: CHAPTER_RIGHT_W,
+          flexShrink: 0,
+          height: OG_H,
+          backgroundColor: '#ffffff',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingLeft: 36,
+          paddingRight: 36,
+        },
+      },
+      createElement(
+        'div',
+        {
+          style: {
+            ...baseTextStyle(),
+            color: '#444444',
+            fontSize: 28,
+            textAlign: 'center',
+            lineHeight: 1.4,
+            maxWidth: CHAPTER_SNIPPET_INNER_W,
+          },
+        },
+        'Chapter preview unavailable for this card layout.',
+      ),
+    ),
+  );
+}
+
+/**
+ * @param {{ english: boolean, text: string }[]} snippetParts
+ * @param {{ noBottomFade?: boolean }} [layout]
+ */
+function chapterOgElement(zhTitle, enTitle, snippetParts, layout = {}) {
+  const { noBottomFade = false } = layout;
   const leftChildren = [
     createElement(
       'div',
@@ -382,7 +540,7 @@ function chapterOgElement(zhTitle, enTitle, snippetParts) {
     maxWidth: CHAPTER_SNIPPET_TEXT_W,
     minWidth: 0,
     whiteSpace: 'normal',
-    textAlign: 'justify',
+    textAlign: 'left',
     hyphens: 'none',
   };
 
@@ -479,6 +637,8 @@ function chapterOgElement(zhTitle, enTitle, snippetParts) {
     },
   });
 
+  const rightPanelChildren = noBottomFade ? [snippetInset] : [snippetInset, bottomFade];
+
   return createElement(
     'div',
     {
@@ -520,13 +680,12 @@ function chapterOgElement(zhTitle, enTitle, snippetParts) {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          position: 'relative',
+          position: noBottomFade ? 'static' : 'relative',
           overflow: 'hidden',
           minWidth: 0,
         },
       },
-      snippetInset,
-      bottomFade,
+      ...rightPanelChildren,
     ),
   );
 }
@@ -581,8 +740,17 @@ async function main() {
       const chapterData = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
       const zhTitle = chapterData.meta?.title?.zh || `卷${chNum}`;
       const enTitle = chapterData.meta?.title?.en || '';
-      const snippet = collectOpeningSnippet(chapterData);
-      const png = await renderPng(chapterOgElement(zhTitle, enTitle, snippet), fonts, resvgFontPath);
+      const snippetRaw = collectOpeningSnippet(chapterData);
+      const snippet = snippetRaw.map((p) => ({
+        ...p,
+        text: p.text.length > OG_SNIPPET_CHAR_CAP ? p.text.slice(0, OG_SNIPPET_CHAR_CAP) : p.text,
+      }));
+      const png = await renderPng(chapterOgElement(zhTitle, enTitle, snippet), fonts, resvgFontPath, {
+        fallbackElements: [
+          chapterOgElement(zhTitle, enTitle, snippet, { noBottomFade: true }),
+          chapterOgFallbackTitlesElement(zhTitle, enTitle),
+        ],
+      });
       fs.writeFileSync(path.join(chDir, `${chNum}.png`), png);
       chapterImages += 1;
     }
