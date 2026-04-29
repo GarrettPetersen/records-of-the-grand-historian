@@ -18,8 +18,8 @@
 # assets, or a worker/build step that preserves artifacts).
 #
 # After changing OG layout/fonts, use OG_FORCE=1 or --force once, or clear the build cache.
-# Raise OG_CHAPTER_CONCURRENCY (e.g. 8–12) if the build image has CPU headroom.
-# Same for STATIC_GEN_CONCURRENCY (chapter HTML); set both in Pages → Settings →
-# Environment variables for production builds.
+# Optional: set OG_CHAPTER_CONCURRENCY / STATIC_GEN_CONCURRENCY in Pages → Environment
+# variables to pin parallelism. If unset, build scripts default from Node's reported
+# logical thread count (see scripts/build-parallelism.mjs).
 name = "records-of-the-grand-historian"
 pages_build_output_dir = "public"

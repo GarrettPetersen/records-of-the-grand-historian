@@ -12,26 +12,26 @@
  *   node generate-static-pages.js --book shiji --chapter 006
  *
  * Env:
- *   STATIC_GEN_CONCURRENCY  Parallel chapter HTML jobs per book (default 6, max 32).
+ *   STATIC_GEN_CONCURRENCY  Parallel chapter HTML jobs per book (max 32). If unset,
+ *                           defaults scale with os.availableParallelism() (capped).
  */
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { defaultStaticGenConcurrency, hardwareConcurrency } from './scripts/build-parallelism.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /** Canonical origin for og:url, og:image, and <link rel="canonical"> */
 const CANONICAL_SITE = (process.env.SITE_URL || 'https://24histories.com').replace(/\/$/, '');
 
-function envPositiveInt(name, defaultVal, max) {
-  const v = parseInt(process.env[name] || '', 10);
-  if (!Number.isFinite(v) || v < 1) return defaultVal;
-  return Math.min(max, v);
-}
-
-/** Parallel chapter HTML writes (Cloudflare Pages: try 8–12). */
-const STATIC_GEN_CONCURRENCY = envPositiveInt('STATIC_GEN_CONCURRENCY', 6, 32);
+const _staticGenEnv = parseInt(process.env.STATIC_GEN_CONCURRENCY || '', 10);
+const STATIC_GEN_FROM_ENV = Number.isFinite(_staticGenEnv) && _staticGenEnv >= 1;
+/** Parallel chapter HTML writes per book. */
+const STATIC_GEN_CONCURRENCY = STATIC_GEN_FROM_ENV
+  ? Math.min(32, _staticGenEnv)
+  : defaultStaticGenConcurrency();
 
 /**
  * @template T, R
@@ -1184,7 +1184,11 @@ async function generateStaticPages(bookId = null, chapterNum = null) {
 
   let totalGenerated = 0;
 
-  console.log(`(STATIC_GEN_CONCURRENCY=${STATIC_GEN_CONCURRENCY})`);
+  console.log(
+    `(STATIC_GEN_CONCURRENCY=${STATIC_GEN_CONCURRENCY}${
+      STATIC_GEN_FROM_ENV ? '' : ` auto from ${hardwareConcurrency()} logical`
+    })`,
+  );
 
   for (const book of booksToProcess) {
     if (!BOOKS[book]) {

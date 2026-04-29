@@ -30,8 +30,8 @@
  *   OG_FONT_FAMILY   CSS font-family matching that file (default: Noto Serif CJK SC)
  *   OG_DEBUG_SVG     If set to a file path, writes the first Satori SVG attempt there
  *   OG_VERBOSE       Log when a chapter OG image uses a simplified fallback layout
- *   OG_CHAPTER_CONCURRENCY  Parallel chapter renders (default 4, max 16). Higher uses
- *                      more CPU on the build machine; try 8–12 on Pages if stable.
+ *   OG_CHAPTER_CONCURRENCY  Parallel chapter renders (max 16). If unset, defaults scale
+ *                      with os.availableParallelism() (capped); override on CI if needed.
  *   OG_INCREMENTAL      If 1, same as passing --incremental (skip up-to-date PNGs).
  *   OG_FORCE            If 1, same as --force (ignore incremental skips).
  *   OG_BOOK_RESVG_CHUNK   Book-hub PNGs Resvg'd N at a time in one child (default 16).
@@ -44,6 +44,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { createElement } from 'react';
 import satori from 'satori';
+import { defaultOgChapterConcurrency, hardwareConcurrency } from './scripts/build-parallelism.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -61,8 +62,12 @@ function envPositiveInt(name, defaultVal, max) {
   return Math.min(max, v);
 }
 
+const _ogChapterEnv = parseInt(process.env.OG_CHAPTER_CONCURRENCY || '', 10);
+const OG_CHAPTER_FROM_ENV = Number.isFinite(_ogChapterEnv) && _ogChapterEnv >= 1;
 /** Concurrent chapter OG pipelines (each: Satori + Resvg worker). */
-const OG_CHAPTER_CONCURRENCY = envPositiveInt('OG_CHAPTER_CONCURRENCY', 4, 16);
+const OG_CHAPTER_CONCURRENCY = OG_CHAPTER_FROM_ENV
+  ? Math.min(16, _ogChapterEnv)
+  : defaultOgChapterConcurrency();
 /** Book hub cards batched into one `og-resvg-batch` child per chunk (fewer spawns). */
 const OG_BOOK_RESVG_CHUNK = envPositiveInt('OG_BOOK_RESVG_CHUNK', 16, 64);
 
@@ -820,7 +825,9 @@ async function main() {
   console.log('');
   console.log('=== Open Graph: generate-og-images.js (raster share cards) ===');
   console.log(
-    `  (parallelism: OG_CHAPTER_CONCURRENCY=${OG_CHAPTER_CONCURRENCY}, book Resvg chunk=${OG_BOOK_RESVG_CHUNK})`,
+    `  (parallelism: OG_CHAPTER_CONCURRENCY=${OG_CHAPTER_CONCURRENCY}${
+      OG_CHAPTER_FROM_ENV ? '' : ` (auto from ${hardwareConcurrency()} logical)`
+    }, book Resvg chunk=${OG_BOOK_RESVG_CHUNK})`,
   );
   if (incremental) {
     console.log(
