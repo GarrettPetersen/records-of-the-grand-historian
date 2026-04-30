@@ -52,6 +52,7 @@ const BOOKS = {
     dynasty: 'Eastern Han',
     author: 'Fan Ye',
     authorChinese: '范曄',
+    // Chinese Notes: 131 sequential files (001–131); file index runs past 120 卷 (郡國、志、載記等).
     urlPattern: 'https://chinesenotes.com/houhanshu/houhanshu{chapter}.html'
   },
   sanguozhi: {
@@ -88,6 +89,7 @@ const BOOKS = {
     dynasty: 'Southern Qi',
     author: 'Xiao Zixian',
     authorChinese: '蕭子顯',
+    // Chinese Notes: 60 files (001–059 卷, 060 序).
     urlPattern: 'https://chinesenotes.com/nanqishu/nanqishu{chapter}.html'
   },
   liangshu: {
@@ -115,6 +117,7 @@ const BOOKS = {
     dynasty: 'Northern Wei',
     author: 'Wei Shou',
     authorChinese: '魏收',
+    // Chinese Notes: 130 sequential files (001–130), not 114.
     urlPattern: 'https://chinesenotes.com/weishu/weishu{chapter}.html'
   },
   beiqishu: {
@@ -142,6 +145,7 @@ const BOOKS = {
     dynasty: 'Sui',
     author: 'Wei Zheng et al.',
     authorChinese: '魏徵等',
+    // Chinese Notes: 86 files (001–85 卷, 086 刊本跋等).
     urlPattern: 'https://chinesenotes.com/suishu/suishu{chapter}.html'
   },
   nanshi: {
@@ -169,6 +173,7 @@ const BOOKS = {
     dynasty: 'Tang',
     author: 'Liu Xu et al.',
     authorChinese: '劉昫等',
+    // Chinese Notes: 214 sequential files (001–214), not 200.
     urlPattern: 'https://chinesenotes.com/jiutangshu/jiutangshu{chapter}.html'
   },
   xintangshu: {
@@ -205,6 +210,7 @@ const BOOKS = {
     dynasty: 'Song',
     author: 'Toqto\'a et al.',
     authorChinese: '脫脫等',
+    // Chinese Notes: 497 files (001–496 卷, 497 進宋史表等附录).
     urlPattern: 'https://chinesenotes.com/songshi/songshi{chapter}.html'
   },
   liaoshi: {
@@ -214,6 +220,7 @@ const BOOKS = {
     dynasty: 'Liao (Khitan)',
     author: 'Toqto\'a et al.',
     authorChinese: '脫脫等',
+    // Chinese Notes: 117 files (001–116 卷, 117 進遼史表附录).
     urlPattern: 'https://chinesenotes.com/liaoshi/liaoshi{chapter}.html'
   },
   jinshi: {

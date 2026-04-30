@@ -340,7 +340,8 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
       // Chinese text - create sentence spans with word segmentation
       const zhSentences = block.sentences.map(s => {
         const id = s.id;
-        const chars = s.zh.split('').filter(c => c.trim());
+        // [...str] iterates Unicode code points; split('') breaks supplementary planes (e.g. 𨻻).
+        const chars = [...s.zh].filter((c) => c.trim());
         const wordSpans = chars.map(char => `<span class="word" data-char="${escapeHtml(char)}">${escapeHtml(char)}</span>`).join('');
         return `<span class="sentence" data-sentence-id="${id}">${wordSpans}</span>`;
       }).join(' ');

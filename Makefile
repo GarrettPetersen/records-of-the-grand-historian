@@ -12,6 +12,9 @@ GLOSSARY := data/glossary.json
 NODE := node
 SCRAPE := $(NODE) scrape.js
 STDERR_REDIRECT := 2>/dev/null
+# Open Graph: pass --incremental so PNGs are skipped when newer than source JSON/manifest (generate-og-images.js).
+# Set OG_FULL=1 on the command line to re-raster every card (layout, fonts, or cold cache).
+OG_IMAGE_ARGS := $(if $(filter 1,$(OG_FULL)),,--incremental)
 
 # Create data directories
 data/shiji data/hanshu data/houhanshu data/sanguozhi data/jinshu data/songshu data/nanqishu data/liangshu data/chenshu data/weishu data/beiqishu data/zhoushu data/suishu data/nanshi data/beishi data/jiutangshu data/xintangshu data/jiuwudaishi data/xinwudaishi data/songshi data/liaoshi data/jinshi data/yuanshi data/mingshi:
@@ -29,7 +32,13 @@ help:
 	@echo "  make shiji-010              # Scrape Shiji chapter 10 (⚠️ will warn if translations exist)"
 	@echo "  make shiji-all              # Scrape all Shiji chapters (1-130)"
 	@echo "  make hanshu-all             # Scrape all Hanshu pages on Chinese Notes (001-118)"
-	@echo "  make houhanshu-all          # Scrape all Houhanshu chapters (1-120)"
+	@echo "  make houhanshu-all          # Scrape all Houhanshu chapters (1-131)"
+	@echo "  make jiutangshu-all         # Scrape all Old Book of Tang pages on Chinese Notes (001-214)"
+	@echo "  make weishu-all             # Scrape all Book of Wei pages on Chinese Notes (001-130)"
+	@echo "  make nanqishu-all           # Scrape all Nanqishu pages on Chinese Notes (001-060 incl. 序)"
+	@echo "  make suishu-all             # Scrape all Suishu pages on Chinese Notes (001-086 incl. 跋)"
+	@echo "  make songshi-all            # Scrape all Songshi pages on Chinese Notes (001-497 incl. 附录)"
+	@echo "  make liaoshi-all            # Scrape all Liaoshi pages on Chinese Notes (001-117 incl. 附录)"
 	@echo ""
 	@echo "Scraping commands:"
 	@echo "  make <book>-<chapter>       # Scrape single chapter (⚠️ warns if translations exist)"
@@ -38,6 +47,7 @@ help:
 	@echo "  make list                   # List all 24 books available to scrape"
 	@echo ""
 	@echo "Maintenance commands:"
+	@echo "  (OG: default --incremental; use OG_FULL=1 with update/update-all for full OG raster)"
 	@echo "  make fix-counts             # Recalculate translatedCount in all chapter files"
 	@echo "  make nuke-translations      # ⚠️  Emergency: Remove ALL translations from a chapter"
 	@echo "  make manifest               # Generate manifest.json (includes sync)"
@@ -116,7 +126,7 @@ endif
 # Open Graph share images only (writes public/og/)
 .PHONY: generate-og-images
 generate-og-images:
-	@$(NODE) generate-og-images.js
+	@$(NODE) generate-og-images.js $(OG_IMAGE_ARGS)
 
 # Generate static HTML pages for SEO
 .PHONY: generate-pages
@@ -124,7 +134,7 @@ generate-pages:
 	@echo "Generating static HTML pages..."
 	@$(NODE) generate-static-pages.js $(if $(BOOK),--book $(BOOK),)
 	@echo "Generating Open Graph share images (requires network on first font fetch)..."
-	@$(NODE) generate-og-images.js $(if $(BOOK),--book $(BOOK),)
+	@$(NODE) generate-og-images.js $(OG_IMAGE_ARGS) $(if $(BOOK),--book $(BOOK),)
 	@echo "Static pages and OG images generated."
 
 # Update workflow for one book: citations, counts, manifest merge, progress merge, static HTML, OG images, sync
@@ -163,7 +173,7 @@ update:
 	@$(NODE) generate-static-pages.js --book $(BOOK)
 	@echo ""
 	@echo "Step 6/7: Generating Open Graph share images..."
-	@$(NODE) generate-og-images.js --book $(BOOK)
+	@$(NODE) generate-og-images.js $(OG_IMAGE_ARGS) --book $(BOOK)
 	@echo ""
 	@echo "Step 7/7: Syncing to public..."
 	@$(MAKE) sync BOOK=$(BOOK)
@@ -195,7 +205,7 @@ update-all:
 	@$(NODE) generate-static-pages.js
 	@echo ""
 	@echo "Step 6/7: Generating Open Graph share images..."
-	@$(NODE) generate-og-images.js
+	@$(NODE) generate-og-images.js $(OG_IMAGE_ARGS)
 	@echo ""
 	@echo "Step 7/7: Syncing to public..."
 	@$(MAKE) sync
@@ -410,17 +420,101 @@ hanshu-all: | data/hanshu
 		fi; \
 	done
 
-# Houhanshu has 120 chapters
+# Houhanshu: Chinese Notes exposes 131 sequential files (houhanshu001…131); treaty / 郡國 / 西羌 etc. extend past 120.
 .PHONY: houhanshu-all
 houhanshu-all: | data/houhanshu
-	@echo "Scraping all Book of Later Han chapters (1-120)..."
-	@for i in $$(seq -f "%03g" 1 120); do \
+	@echo "Scraping all Book of Later Han chapters (1-131)..."
+	@for i in $$(seq -f "%03g" 1 131); do \
 		if [ ! -f data/houhanshu/$$i.json ]; then \
 			echo "Scraping houhanshu chapter $$i..."; \
 			$(SCRAPE) houhanshu $$i --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/houhanshu/$$i.json && \
 			echo "Saved to data/houhanshu/$$i.json"; \
 		else \
 			echo "Skipping houhanshu chapter $$i (already exists)"; \
+		fi; \
+	done
+
+# Jiutangshu: Chinese Notes uses 214 sequential files (jiutangshu001…214), not 200.
+.PHONY: jiutangshu-all
+jiutangshu-all: | data/jiutangshu
+	@echo "Scraping all Old Book of Tang pages on Chinese Notes (001-214)..."
+	@for i in $$(seq -f "%03g" 1 214); do \
+		if [ ! -f data/jiutangshu/$$i.json ]; then \
+			echo "Scraping jiutangshu chapter $$i..."; \
+			$(SCRAPE) jiutangshu $$i --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/jiutangshu/$$i.json && \
+			echo "Saved to data/jiutangshu/$$i.json"; \
+		else \
+			echo "Skipping jiutangshu chapter $$i (already exists)"; \
+		fi; \
+	done
+
+# Weishu: Chinese Notes uses 130 sequential files (weishu001…130), not 114.
+.PHONY: weishu-all
+weishu-all: | data/weishu
+	@echo "Scraping all Book of Wei pages on Chinese Notes (001-130)..."
+	@for i in $$(seq -f "%03g" 1 130); do \
+		if [ ! -f data/weishu/$$i.json ]; then \
+			echo "Scraping weishu chapter $$i..."; \
+			$(SCRAPE) weishu $$i --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/weishu/$$i.json && \
+			echo "Saved to data/weishu/$$i.json"; \
+		else \
+			echo "Skipping weishu chapter $$i (already exists)"; \
+		fi; \
+	done
+
+# Nanqishu: Chinese Notes uses 60 files (nanqishu001…060); 060 is 序.
+.PHONY: nanqishu-all
+nanqishu-all: | data/nanqishu
+	@echo "Scraping all Nanqishu pages on Chinese Notes (001-060)..."
+	@for i in $$(seq -f "%03g" 1 60); do \
+		if [ ! -f data/nanqishu/$$i.json ]; then \
+			echo "Scraping nanqishu chapter $$i..."; \
+			$(SCRAPE) nanqishu $$i --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/nanqishu/$$i.json && \
+			echo "Saved to data/nanqishu/$$i.json"; \
+		else \
+			echo "Skipping nanqishu chapter $$i (already exists)"; \
+		fi; \
+	done
+
+# Suishu: Chinese Notes uses 86 files (suishu001…086); 086 is 刊本跋等.
+.PHONY: suishu-all
+suishu-all: | data/suishu
+	@echo "Scraping all Suishu pages on Chinese Notes (001-086)..."
+	@for i in $$(seq -f "%03g" 1 86); do \
+		if [ ! -f data/suishu/$$i.json ]; then \
+			echo "Scraping suishu chapter $$i..."; \
+			$(SCRAPE) suishu $$i --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/suishu/$$i.json && \
+			echo "Saved to data/suishu/$$i.json"; \
+		else \
+			echo "Skipping suishu chapter $$i (already exists)"; \
+		fi; \
+	done
+
+# Songshi: Chinese Notes uses 497 files (songshi001…497); 497 is 進宋史表等附录.
+.PHONY: songshi-all
+songshi-all: | data/songshi
+	@echo "Scraping all Songshi pages on Chinese Notes (001-497)..."
+	@for i in $$(seq -f "%03g" 1 497); do \
+		if [ ! -f data/songshi/$$i.json ]; then \
+			echo "Scraping songshi chapter $$i..."; \
+			$(SCRAPE) songshi $$i --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/songshi/$$i.json && \
+			echo "Saved to data/songshi/$$i.json"; \
+		else \
+			echo "Skipping songshi chapter $$i (already exists)"; \
+		fi; \
+	done
+
+# Liaoshi: Chinese Notes uses 117 files (liaoshi001…117); 117 is 進遼史表附录.
+.PHONY: liaoshi-all
+liaoshi-all: | data/liaoshi
+	@echo "Scraping all Liaoshi pages on Chinese Notes (001-117)..."
+	@for i in $$(seq -f "%03g" 1 117); do \
+		if [ ! -f data/liaoshi/$$i.json ]; then \
+			echo "Scraping liaoshi chapter $$i..."; \
+			$(SCRAPE) liaoshi $$i --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/liaoshi/$$i.json && \
+			echo "Saved to data/liaoshi/$$i.json"; \
+		else \
+			echo "Skipping liaoshi chapter $$i (already exists)"; \
 		fi; \
 	done
 
@@ -447,7 +541,8 @@ clean-translations:
 	@echo "Done."
 
 # Force re-scrape (ignore existing files)
-.PHONY: force-shiji-all force-hanshu-all force-houhanshu-all
+.PHONY: force-shiji-all force-hanshu-all force-houhanshu-all force-jiutangshu-all force-weishu-all \
+	force-nanqishu-all force-suishu-all force-songshi-all force-liaoshi-all
 force-shiji-all: | data/shiji
 	@echo "Force scraping all Shiji chapters (1-130)..."
 	@for i in $$(seq -f "%03g" 1 130); do \
@@ -465,11 +560,59 @@ force-hanshu-all: | data/hanshu
 	done
 
 force-houhanshu-all: | data/houhanshu
-	@echo "Force scraping all Book of Later Han chapters (1-120)..."
-	@for i in $$(seq -f "%03g" 1 120); do \
+	@echo "Force scraping all Book of Later Han chapters (1-131)..."
+	@for i in $$(seq -f "%03g" 1 131); do \
 		echo "Scraping houhanshu chapter $$i..."; \
 		$(SCRAPE) houhanshu $$i --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/houhanshu/$$i.json && \
 		echo "Saved to data/houhanshu/$$i.json"; \
+	done
+
+force-jiutangshu-all: | data/jiutangshu
+	@echo "Force scraping all Old Book of Tang pages on Chinese Notes (001-214)..."
+	@for i in $$(seq -f "%03g" 1 214); do \
+		echo "Scraping jiutangshu chapter $$i..."; \
+		$(SCRAPE) jiutangshu $$i --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/jiutangshu/$$i.json && \
+		echo "Saved to data/jiutangshu/$$i.json"; \
+	done
+
+force-weishu-all: | data/weishu
+	@echo "Force scraping all Book of Wei pages on Chinese Notes (001-130)..."
+	@for i in $$(seq -f "%03g" 1 130); do \
+		echo "Scraping weishu chapter $$i..."; \
+		$(SCRAPE) weishu $$i --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/weishu/$$i.json && \
+		echo "Saved to data/weishu/$$i.json"; \
+	done
+
+force-nanqishu-all: | data/nanqishu
+	@echo "Force scraping all Nanqishu pages on Chinese Notes (001-060)..."
+	@for i in $$(seq -f "%03g" 1 60); do \
+		echo "Scraping nanqishu chapter $$i..."; \
+		$(SCRAPE) nanqishu $$i --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/nanqishu/$$i.json && \
+		echo "Saved to data/nanqishu/$$i.json"; \
+	done
+
+force-suishu-all: | data/suishu
+	@echo "Force scraping all Suishu pages on Chinese Notes (001-086)..."
+	@for i in $$(seq -f "%03g" 1 86); do \
+		echo "Scraping suishu chapter $$i..."; \
+		$(SCRAPE) suishu $$i --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/suishu/$$i.json && \
+		echo "Saved to data/suishu/$$i.json"; \
+	done
+
+force-songshi-all: | data/songshi
+	@echo "Force scraping all Songshi pages on Chinese Notes (001-497)..."
+	@for i in $$(seq -f "%03g" 1 497); do \
+		echo "Scraping songshi chapter $$i..."; \
+		$(SCRAPE) songshi $$i --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/songshi/$$i.json && \
+		echo "Saved to data/songshi/$$i.json"; \
+	done
+
+force-liaoshi-all: | data/liaoshi
+	@echo "Force scraping all Liaoshi pages on Chinese Notes (001-117)..."
+	@for i in $$(seq -f "%03g" 1 117); do \
+		echo "Scraping liaoshi chapter $$i..."; \
+		$(SCRAPE) liaoshi $$i --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/liaoshi/$$i.json && \
+		echo "Saved to data/liaoshi/$$i.json"; \
 	done
 
 # Validate JSON files
