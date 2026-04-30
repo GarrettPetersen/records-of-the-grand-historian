@@ -65,7 +65,7 @@ make hanshu CHAPTERS="001 002"    # Scrape Book of Han chapters 1-2
 
 # Scrape entire books (predefined ranges)
 make shiji-all                    # Scrape all 130 Shiji chapters
-make hanshu-all                   # Scrape all 100 Book of Han chapters
+make hanshu-all                   # Scrape all 118 Book of Han pages on Chinese Notes (001–118; see Makefile)
 
 # View statistics
 make stats                        # Show chapter counts per book

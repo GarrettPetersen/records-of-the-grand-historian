@@ -28,7 +28,7 @@ help:
 	@echo "  make shiji-001              # Scrape Shiji chapter 1 (⚠️ will warn if translations exist)"
 	@echo "  make shiji-010              # Scrape Shiji chapter 10 (⚠️ will warn if translations exist)"
 	@echo "  make shiji-all              # Scrape all Shiji chapters (1-130)"
-	@echo "  make hanshu-all             # Scrape all Hanshu chapters (1-100)"
+	@echo "  make hanshu-all             # Scrape all Hanshu pages on Chinese Notes (001-118)"
 	@echo "  make houhanshu-all          # Scrape all Houhanshu chapters (1-120)"
 	@echo ""
 	@echo "Scraping commands:"
@@ -395,11 +395,12 @@ shiji-all: | data/shiji
 		fi; \
 	done
 
-# Hanshu has 100 chapters
+# Hanshu: Chinese Notes uses 118 sequential HTML files (hanshu001…hanshu118) for the
+# full text through 卷一百下, not 100. Chapter JSON keys match that URL index (001–118).
 .PHONY: hanshu-all
 hanshu-all: | data/hanshu
-	@echo "Scraping all Book of Han chapters (1-100)..."
-	@for i in $$(seq -f "%03g" 1 100); do \
+	@echo "Scraping all Book of Han pages on Chinese Notes (001-118)..."
+	@for i in $$(seq -f "%03g" 1 118); do \
 		if [ ! -f data/hanshu/$$i.json ]; then \
 			echo "Scraping hanshu chapter $$i..."; \
 			$(SCRAPE) hanshu $$i --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/hanshu/$$i.json && \
@@ -456,8 +457,8 @@ force-shiji-all: | data/shiji
 	done
 
 force-hanshu-all: | data/hanshu
-	@echo "Force scraping all Book of Han chapters (1-100)..."
-	@for i in $$(seq -f "%03g" 1 100); do \
+	@echo "Force scraping all Book of Han pages on Chinese Notes (001-118)..."
+	@for i in $$(seq -f "%03g" 1 118); do \
 		echo "Scraping hanshu chapter $$i..."; \
 		$(SCRAPE) hanshu $$i --glossary $(GLOSSARY) $(STDERR_REDIRECT) > data/hanshu/$$i.json && \
 		echo "Saved to data/hanshu/$$i.json"; \

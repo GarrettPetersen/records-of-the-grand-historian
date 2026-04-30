@@ -42,6 +42,7 @@ const BOOKS = {
     dynasty: 'Western Han',
     author: 'Ban Gu',
     authorChinese: '班固',
+    // Chinese Notes: 118 sequential pages (001–118), not 100; 上/下 splits add pages vs 卷 count.
     urlPattern: 'https://chinesenotes.com/hanshu/hanshu{chapter}.html'
   },
   houhanshu: {
