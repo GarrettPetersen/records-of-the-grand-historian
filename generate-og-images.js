@@ -11,18 +11,20 @@
  *
  * SVG vs PNG for social cards: `og:image` pointing at SVG is **not** reliably supported
  * (Facebook, Slack, iMessage, etc. expect raster). PNGs are written under `public/og/`
- * (typically gitignored in the repo; produced on each `npm run build` / Pages build).
+ * (PNG + `*.png.sha256` may be committed; produced or refreshed on `npm run build` / Pages build.)
  * `npm run build` ends with this script and `scripts/verify-og-assets.mjs`.
  *
  * Usage:
  *   node generate-og-images.js
  *   node generate-og-images.js --book shiji --chapter 002
  *   node generate-og-images.js --book shiji --incremental
+ *   node scripts/backfill-og-sidecars.mjs   # write *.png.sha256 only (existing PNGs, no raster)
  *
- * Incremental skips rasterizing a chapter when its PNG exists and is at least as new
- * as the source JSON (same for book hubs vs data/manifest.json). Use --force or
- * OG_FORCE=1 after changing card layout/fonts. CI: set OG_INCREMENTAL=1 and cache
- * public/og + fonts/.cache between Pages builds so only changed chapters re-render.
+ * Incremental skips rasterizing when `public/og/…/*.png.sha256` matches a SHA-256
+ * fingerprint of the current inputs (chapter JSON bytes; book hub = manifest name fields;
+ * site = static template id). Fresh clones are deterministic (no mtime races). Use --force
+ * or OG_FORCE=1 after changing layout/fonts; bump `OG_LAYOUT_VERSION` in
+ * `scripts/og-fingerprint.mjs` when inputs not captured by those files change.
  *
  * Env:
  *   SITE_URL       Canonical origin (default https://24histories.com)
@@ -45,6 +47,13 @@ import { fileURLToPath } from 'node:url';
 import { createElement } from 'react';
 import satori from 'satori';
 import { defaultOgChapterConcurrency, hardwareConcurrency } from './scripts/build-parallelism.mjs';
+import {
+  OG_LAYOUT_VERSION,
+  fingerprintBook,
+  fingerprintChapter,
+  fingerprintSite,
+  ogSidecarPath,
+} from './scripts/og-fingerprint.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -87,15 +96,27 @@ const force =
   process.env.OG_FORCE === '1' ||
   process.env.OG_FORCE === 'true';
 
-/** Skip raster work when output exists and is at least as new as the source file. */
-function outputIsFresh(outPath, srcPath) {
-  if (force || !incremental) return false;
-  if (!fs.existsSync(outPath) || !fs.existsSync(srcPath)) return false;
+function readSidecarHex(pngPath) {
+  const sidecar = ogSidecarPath(pngPath);
+  if (!fs.existsSync(sidecar)) return null;
   try {
-    return fs.statSync(outPath).mtimeMs >= fs.statSync(srcPath).mtimeMs;
+    const t = fs.readFileSync(sidecar, 'utf8').trim();
+    return /^[0-9a-f]{64}$/.test(t) ? t : null;
   } catch {
-    return false;
+    return null;
   }
+}
+
+/** Incremental skip: PNG exists and `.png.sha256` matches the current input fingerprint. */
+function incrementalOgIsCurrent(pngPath, expectedHex) {
+  if (force || !incremental) return false;
+  if (!fs.existsSync(pngPath) || !expectedHex) return false;
+  return readSidecarHex(pngPath) === expectedHex;
+}
+
+function writePngAndSidecar(pngPath, pngBuffer, fingerprintHex) {
+  fs.writeFileSync(pngPath, pngBuffer);
+  fs.writeFileSync(ogSidecarPath(pngPath), `${fingerprintHex}\n`, 'utf8');
 }
 
 /** Must match the font file’s family name (Noto CJK SC OTF → "Noto Serif CJK SC"). */
@@ -831,7 +852,7 @@ async function main() {
   );
   if (incremental) {
     console.log(
-      '  (incremental: skipping PNGs newer than source JSON / manifest; use --force after layout or font changes)',
+      '  (incremental: skipping when *.png.sha256 matches source fingerprint; --force or bump OG_LAYOUT_VERSION to rebuild)',
     );
   }
   console.log('Loading fonts for OG images…');
@@ -841,17 +862,25 @@ async function main() {
   mkdirp(outRoot);
   mkdirp(path.join(outRoot, 'books'));
 
-  const sitePng = await renderPng(siteOgElement(), fonts, resvgFontPath);
-  fs.writeFileSync(path.join(outRoot, 'site.png'), sitePng);
-  console.log('  ✓ og/site.png');
+  const sitePngPath = path.join(outRoot, 'site.png');
+  const siteFp = fingerprintSite(OG_LAYOUT_VERSION);
+  if (incrementalOgIsCurrent(sitePngPath, siteFp)) {
+    console.log('  ○ og/site.png (up to date)');
+  } else {
+    const sitePng = await renderPng(siteOgElement(), fonts, resvgFontPath);
+    writePngAndSidecar(sitePngPath, sitePng, siteFp);
+    console.log('  ✓ og/site.png');
+  }
 
   const bookIds = Object.keys(books).filter((id) => !filterBook || id === filterBook);
 
   for (let c = 0; c < bookIds.length; c += OG_BOOK_RESVG_CHUNK) {
     const chunkIds = bookIds.slice(c, c + OG_BOOK_RESVG_CHUNK);
-    const needIds = chunkIds.filter(
-      (bookId) => !outputIsFresh(path.join(outRoot, 'books', `${bookId}.png`), manifestPath),
-    );
+    const needIds = chunkIds.filter((bookId) => {
+      const bookPngPath = path.join(outRoot, 'books', `${bookId}.png`);
+      const fp = fingerprintBook(OG_LAYOUT_VERSION, books[bookId]);
+      return !incrementalOgIsCurrent(bookPngPath, fp);
+    });
     for (const bookId of chunkIds) {
       if (!needIds.includes(bookId)) {
         console.log(`  ○ og/books/${bookId}.png (up to date)`);
@@ -870,7 +899,10 @@ async function main() {
     );
     const pngs = resvgBatchBuffers(svgs, resvgFontPath);
     for (let k = 0; k < needIds.length; k += 1) {
-      fs.writeFileSync(path.join(outRoot, 'books', `${needIds[k]}.png`), pngs[k]);
+      const bookId = needIds[k];
+      const bookPngPath = path.join(outRoot, 'books', `${bookId}.png`);
+      const fp = fingerprintBook(OG_LAYOUT_VERSION, books[bookId]);
+      writePngAndSidecar(bookPngPath, pngs[k], fp);
     }
     for (const bookId of needIds) {
       console.log(`  ✓ og/books/${bookId}.png`);
@@ -898,7 +930,8 @@ async function main() {
 
   const chapterJobsToRun = chapterJobs.filter((job) => {
     const pngPath = path.join(outRoot, 'chapters', job.bookId, `${job.chNum}.png`);
-    return !outputIsFresh(pngPath, job.jsonPath);
+    const hex = fingerprintChapter(OG_LAYOUT_VERSION, fs.readFileSync(job.jsonPath));
+    return !incrementalOgIsCurrent(pngPath, hex);
   });
   if (incremental && chapterJobs.length > chapterJobsToRun.length) {
     console.log(
@@ -913,7 +946,9 @@ async function main() {
 
   await runPool(chapterJobsToRun, OG_CHAPTER_CONCURRENCY, async (job) => {
     const { bookId, chNum, jsonPath } = job;
-    const chapterData = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+    const jsonBuf = fs.readFileSync(jsonPath);
+    const fpHex = fingerprintChapter(OG_LAYOUT_VERSION, jsonBuf);
+    const chapterData = JSON.parse(jsonBuf.toString('utf8'));
     const zhTitle = chapterData.meta?.title?.zh || `卷${chNum}`;
     const enTitle = chapterData.meta?.title?.en || '';
     const snippetRaw = collectOpeningSnippet(chapterData);
@@ -929,7 +964,7 @@ async function main() {
     });
     const chDir = path.join(outRoot, 'chapters', bookId);
     mkdirp(chDir);
-    fs.writeFileSync(path.join(chDir, `${chNum}.png`), png);
+    writePngAndSidecar(path.join(chDir, `${chNum}.png`), png, fpHex);
     chapterCounts.set(bookId, (chapterCounts.get(bookId) || 0) + 1);
   });
 

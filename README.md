@@ -751,7 +751,7 @@ Then visit http://localhost:8000
 
 The build runs, in order: sync chapter JSON into `public/data/`, regenerate `manifest.json` and `progress.json`, regenerate static HTML, then render all OG PNGs (first build may download the Noto CJK font; network required). `wrangler.toml` only sets `pages_build_output_dir` for Wrangler CLI; it does **not** replace the dashboard build command for Git-connected Pages.
 
-**`public/og/**/*.png` is gitignored** (large generated rasters). They are created during `npm run build` on Pages, not stored in Git. If `/og/site.png` ever returns HTML instead of PNG after a deploy, see the note in `AGENTS.md` under Cloudflare Pages.
+**Open Graph rasters** live under **`public/og/`** as **`*.png`** plus **`*.png.sha256`** input fingerprints; they are **committed** so Pages clones include them and incremental skips avoid re-rendering when sources are unchanged. If `/og/site.png` ever returns HTML instead of PNG after a deploy, see `AGENTS.md` under Cloudflare Pages.
 
 For local iteration you can still use `make update BOOK=…` / `make update-all`; commit source and `data/` changes. Production parity requires the dashboard build command above so each push runs `npm run build` on Cloudflare.
 

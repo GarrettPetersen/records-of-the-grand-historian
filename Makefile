@@ -12,7 +12,7 @@ GLOSSARY := data/glossary.json
 NODE := node
 SCRAPE := $(NODE) scrape.js
 STDERR_REDIRECT := 2>/dev/null
-# Open Graph: pass --incremental so PNGs are skipped when newer than source JSON/manifest (generate-og-images.js).
+# Open Graph: pass --incremental so PNGs are skipped when *.png.sha256 matches inputs (generate-og-images.js).
 # Set OG_FULL=1 on the command line to re-raster every card (layout, fonts, or cold cache).
 OG_IMAGE_ARGS := $(if $(filter 1,$(OG_FULL)),,--incremental)
 
@@ -53,6 +53,7 @@ help:
 	@echo "  make manifest               # Generate manifest.json (includes sync)"
 	@echo "  make progress               # Generate translation progress data"
 	@echo "  make generate-pages         # Static HTML + Open Graph PNGs (see generate-og-images.js)"
+	@echo "  make backfill-og-sidecars   # Write public/og/*.png.sha256 only (no raster; fast)"
 	@echo "  make sync                   # Copy data/ to public/data/ for web frontend"
 	@echo "  make stats                  # Show chapter counts per book"
 	@echo "  make validate               # Check all JSON files are valid"
@@ -127,6 +128,11 @@ endif
 .PHONY: generate-og-images
 generate-og-images:
 	@$(NODE) generate-og-images.js $(OG_IMAGE_ARGS)
+
+# Write public/og/**/*.png.sha256 from sources only (no raster; use after layout version bump or clone)
+.PHONY: backfill-og-sidecars
+backfill-og-sidecars:
+	@$(NODE) scripts/backfill-og-sidecars.mjs
 
 # Generate static HTML pages for SEO
 .PHONY: generate-pages
