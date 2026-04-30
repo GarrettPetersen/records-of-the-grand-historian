@@ -196,7 +196,7 @@ function generateBookLandingHTML(bookId) {
         </p>
     </footer>
 
-    <script type="module" src="../chapters.js?v=20260429-search"></script>
+    <script type="module" src="../chapters.js?v=20260427-booksearch"></script>
 </body>
 </html>`;
 }
@@ -271,7 +271,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         const tableTitle = `Table ${tableCounter}`;
         tableCounter++;
 
-        let tableHtml = `<div class="tabular-content" data-paragraph="${i}" style="margin: 5rem 0;">
+        let tableHtml = `<div class="tabular-content" id="p-${i}" data-paragraph="${i}" style="margin: 5rem 0;">
             <!-- Table citation button -->
             <div class="table-citation-header">
                 <button class="cite-table-btn" data-table="${tableCounter - 1}" title="Cite this table">📋 ${tableTitle}</button>
@@ -374,7 +374,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
       // No special styling for concluding paragraph - display like any other paragraph
 
       contentHTML += `
-        <div class="paragraph-block" data-paragraph="${i}">
+        <div class="paragraph-block" id="p-${i}" data-paragraph="${i}">
           <div class="paragraph-number">${paraNum}</div>
           <div class="paragraph-content">
             <div class="paragraph chinese">
@@ -420,7 +420,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         const tableTitle = `Table ${tableCounter}`;
         tableCounter++;
 
-        let tableHtml = `<div class="tabular-content" data-paragraph="${i}" style="margin: 5rem 0;">
+        let tableHtml = `<div class="tabular-content" id="p-${i}" data-paragraph="${i}" style="margin: 5rem 0;">
             <!-- Table citation button -->
             <div class="table-citation-header">
                 <button class="cite-table-btn" data-table="${tableCounter - 1}" title="Cite this table">📋 ${tableTitle}</button>
@@ -428,7 +428,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
 
             <!-- Chinese table -->
             <div class="table-container chinese-table">
-              <div class="table-scroll">
+                <div class="table-scroll">
                 <table class="genealogical-table">
                   <thead>
                     <tr>${zhHeaderRow}</tr>
@@ -878,7 +878,7 @@ ${JSON.stringify(structuredData, null, 2)}
         }
       }
     </style>
-    <script type="module" src="../reader.js"></script>
+    <script type="module" src="../reader.js?v=20260430-paragraph-hash"></script>
 </head>
 <body>
     <header style="padding: 1.5rem 2rem;">

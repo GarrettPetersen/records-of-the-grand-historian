@@ -145,6 +145,8 @@ generate-sitemap:
 generate-pages:
 	@echo "Generating static HTML pages..."
 	@$(NODE) generate-static-pages.js $(if $(BOOK),--book $(BOOK),)
+	@echo "Building book full-text search corpora..."
+	@$(NODE) scripts/build-book-search-corpus.mjs $(if $(BOOK),--book $(BOOK),)
 	@echo "Generating sitemap and robots.txt..."
 	@$(NODE) scripts/generate-sitemap.mjs
 	@echo "Generating Open Graph share images (requires network on first font fetch)..."
@@ -186,6 +188,9 @@ update:
 	@echo "Step 5/7: Generating static pages..."
 	@$(NODE) generate-static-pages.js --book $(BOOK)
 	@echo ""
+	@echo "Step 5c: Building book full-text search corpus..."
+	@$(NODE) scripts/build-book-search-corpus.mjs --book $(BOOK)
+	@echo ""
 	@echo "Step 5b: Generating sitemap and robots.txt..."
 	@$(NODE) scripts/generate-sitemap.mjs
 	@echo ""
@@ -220,6 +225,9 @@ update-all:
 	@echo ""
 	@echo "Step 5/7: Generating static pages..."
 	@$(NODE) generate-static-pages.js
+	@echo ""
+	@echo "Step 5c: Building book full-text search corpora..."
+	@$(NODE) scripts/build-book-search-corpus.mjs
 	@echo ""
 	@echo "Step 5b: Generating sitemap and robots.txt..."
 	@$(NODE) scripts/generate-sitemap.mjs

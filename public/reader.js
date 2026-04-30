@@ -1,4 +1,4 @@
-import { BOOKS } from './app.js?v=20260429-search';
+import { BOOKS } from './app.js?v=20260430-searchux';
 
 let glossary = {};
 let currentHighlight = null;
@@ -883,6 +883,18 @@ function initializeInteractiveFeatures() {
   if (loading) {
     loading.style.display = 'none';
   }
+
+  // Deep links #p-{index} (same index as data-paragraph on static chapter HTML)
+  const scrollToParagraphHash = () => {
+    const raw = window.location.hash?.replace(/^#/, '') || '';
+    if (!raw || !/^p-\d+$/.test(raw)) return;
+    requestAnimationFrame(() => {
+      const el = document.getElementById(raw);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  };
+  scrollToParagraphHash();
+  window.addEventListener('hashchange', scrollToParagraphHash);
 }
 
 // Set up sentence highlighting for static pages
