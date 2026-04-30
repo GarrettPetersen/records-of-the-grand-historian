@@ -52,7 +52,8 @@ help:
 	@echo "  make nuke-translations      # ⚠️  Emergency: Remove ALL translations from a chapter"
 	@echo "  make manifest               # Generate manifest.json (includes sync)"
 	@echo "  make progress               # Generate translation progress data"
-	@echo "  make generate-pages         # Static HTML + Open Graph PNGs (see generate-og-images.js)"
+	@echo "  make generate-pages         # Static HTML + sitemap/robots + Open Graph PNGs"
+	@echo "  make generate-sitemap       # public/sitemap.xml + robots.txt (after static HTML)"
 	@echo "  make backfill-og-sidecars   # Write public/og/*.png.sha256 only (no raster; fast)"
 	@echo "  make sync                   # Copy data/ to public/data/ for web frontend"
 	@echo "  make stats                  # Show chapter counts per book"
@@ -134,11 +135,18 @@ generate-og-images:
 backfill-og-sidecars:
 	@$(NODE) scripts/backfill-og-sidecars.mjs
 
+# Sitemap + robots.txt (requires data/manifest.json and generated HTML under public/)
+.PHONY: generate-sitemap
+generate-sitemap:
+	@$(NODE) scripts/generate-sitemap.mjs
+
 # Generate static HTML pages for SEO
 .PHONY: generate-pages
 generate-pages:
 	@echo "Generating static HTML pages..."
 	@$(NODE) generate-static-pages.js $(if $(BOOK),--book $(BOOK),)
+	@echo "Generating sitemap and robots.txt..."
+	@$(NODE) scripts/generate-sitemap.mjs
 	@echo "Generating Open Graph share images (requires network on first font fetch)..."
 	@$(NODE) generate-og-images.js $(OG_IMAGE_ARGS) $(if $(BOOK),--book $(BOOK),)
 	@echo "Static pages and OG images generated."
@@ -178,6 +186,9 @@ update:
 	@echo "Step 5/7: Generating static pages..."
 	@$(NODE) generate-static-pages.js --book $(BOOK)
 	@echo ""
+	@echo "Step 5b: Generating sitemap and robots.txt..."
+	@$(NODE) scripts/generate-sitemap.mjs
+	@echo ""
 	@echo "Step 6/7: Generating Open Graph share images..."
 	@$(NODE) generate-og-images.js $(OG_IMAGE_ARGS) --book $(BOOK)
 	@echo ""
@@ -209,6 +220,9 @@ update-all:
 	@echo ""
 	@echo "Step 5/7: Generating static pages..."
 	@$(NODE) generate-static-pages.js
+	@echo ""
+	@echo "Step 5b: Generating sitemap and robots.txt..."
+	@$(NODE) scripts/generate-sitemap.mjs
 	@echo ""
 	@echo "Step 6/7: Generating Open Graph share images..."
 	@$(NODE) generate-og-images.js $(OG_IMAGE_ARGS)

@@ -749,7 +749,7 @@ Then visit http://localhost:8000
 | **Root directory** | `/` (repository root) |
 | **Node.js version** | **22** (see `.node-version` and `package.json` `engines`) |
 
-The build runs, in order: sync chapter JSON into `public/data/`, regenerate `manifest.json` and `progress.json`, regenerate static HTML, then render all OG PNGs (first build may download the Noto CJK font; network required). `wrangler.toml` only sets `pages_build_output_dir` for Wrangler CLI; it does **not** replace the dashboard build command for Git-connected Pages.
+The build runs, in order: sync chapter JSON into `public/data/`, regenerate `manifest.json` and `progress.json`, regenerate static HTML, then write **`public/sitemap.xml`** and **`public/robots.txt`** (`scripts/generate-sitemap.mjs`), then render OG PNGs incrementally (first build may download the Noto CJK font; network required). `wrangler.toml` only sets `pages_build_output_dir` for Wrangler CLI; it does **not** replace the dashboard build command for Git-connected Pages.
 
 **Open Graph rasters** live under **`public/og/`** as **`*.png`** plus **`*.png.sha256`** input fingerprints; they are **committed** so Pages clones include them and incremental skips avoid re-rendering when sources are unchanged. If `/og/site.png` ever returns HTML instead of PNG after a deploy, see `AGENTS.md` under Cloudflare Pages.
 

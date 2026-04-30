@@ -5,7 +5,7 @@
   "main": "scrape.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node scripts/sync-data-to-public.mjs && node generate-manifest.js && node generate-progress.js && node generate-static-pages.js && node generate-og-images.js --incremental && node scripts/verify-og-assets.mjs",
+    "build": "node scripts/sync-data-to-public.mjs && node generate-manifest.js && node generate-progress.js && node generate-static-pages.js && node scripts/generate-sitemap.mjs && node generate-og-images.js --incremental && node scripts/verify-og-assets.mjs",
     "build:og": "node generate-og-images.js",
     "build:og:incremental": "node generate-og-images.js --incremental",
     "build:og:shiji": "node generate-og-images.js --book shiji",
