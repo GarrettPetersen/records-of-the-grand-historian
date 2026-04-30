@@ -1,10 +1,55 @@
-// Query must stay in sync with index.html app.js (cache bust; bare ./app.js can serve stale modules).
+// Keep ?v= in sync with book hub HTML from generate-static-pages.js (chapters.js script tag).
 import {
   loadManifest,
   buildHistoryCardInnerHtml,
   chapterTranslationSummary,
   translationStatusTooltip,
-} from './app.js?v=20260429-og';
+  matchesSearchQuery,
+  normalizeForSearch,
+} from './app.js?v=20260429-search';
+
+function injectBookChapterSearch(main) {
+  if (!main || document.getElementById('book-chapter-search-input')) return;
+  const wrap = document.createElement('div');
+  wrap.className = 'book-chapter-search-wrap';
+  wrap.innerHTML = `
+    <label class="book-chapter-search-label" for="book-chapter-search-input">Search chapters in this book</label>
+    <input type="search" id="book-chapter-search-input" class="book-chapter-search-input" autocomplete="off" placeholder="Chinese or English title, chapter number…" />
+    <p id="book-chapter-search-empty" class="book-chapter-search-empty" hidden>No matching chapters.</p>
+  `;
+  const back = main.querySelector('.back-link');
+  if (back) {
+    back.insertAdjacentElement('afterend', wrap);
+  } else {
+    main.prepend(wrap);
+  }
+}
+
+function wireBookChapterSearch(list) {
+  const input = document.getElementById('book-chapter-search-input');
+  const emptyMsg = document.getElementById('book-chapter-search-empty');
+  if (!input || !list) return;
+
+  let debounceTimer = null;
+  input.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      const q = input.value;
+      const cards = list.querySelectorAll('a.history-card');
+      let anyVisible = false;
+      for (const card of cards) {
+        const hay = card.dataset.searchText || '';
+        const show = matchesSearchQuery(hay, q);
+        card.hidden = !show;
+        if (show) anyVisible = true;
+      }
+      if (emptyMsg) {
+        const active = normalizeForSearch(q).length > 0;
+        emptyMsg.hidden = !active || anyVisible;
+      }
+    }, 100);
+  });
+}
 
 async function renderChapters() {
   const params = new URLSearchParams(window.location.search);
@@ -30,6 +75,9 @@ async function renderChapters() {
 
   const loading = document.getElementById('loading');
   const list = document.getElementById('chapter-list');
+  const main = document.querySelector('main');
+
+  injectBookChapterSearch(main);
 
   loading.style.display = 'none';
   list.style.display = 'grid';
@@ -43,6 +91,7 @@ async function renderChapters() {
     const { level, sentenceTotal, translatedTotal } = chapterTranslationSummary(chapter);
     const titleZh = chapter.title?.zh || `卷${chapter.chapter}`;
     const titleEn = chapter.title?.en || '\u2014';
+    const titleRaw = chapter.title?.raw || '';
     const chapterNum = parseInt(chapter.chapter, 10);
     const chapterLabel = Number.isFinite(chapterNum)
       ? `Chapter ${chapterNum}`
@@ -53,6 +102,20 @@ async function renderChapters() {
     const chFile = String(chapter.chapter).padStart(3, '0');
     card.href = `/${bookId}/${chFile}.html`;
     card.title = translationStatusTooltip(level, sentenceTotal, translatedTotal, 'chapter');
+
+    card.dataset.searchText = [
+      titleZh,
+      titleEn,
+      titleRaw,
+      chapterLabel,
+      String(chapter.chapter),
+      chFile,
+      bookData.chinese,
+      bookData.name,
+      bookData.pinyin || '',
+    ]
+      .join(' ')
+      .trim();
 
     const footerLine =
       sentenceTotal > 0
@@ -70,6 +133,8 @@ async function renderChapters() {
 
     list.appendChild(card);
   }
+
+  wireBookChapterSearch(list);
 }
 
 renderChapters();

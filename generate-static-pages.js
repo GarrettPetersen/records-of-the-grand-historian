@@ -196,7 +196,7 @@ function generateBookLandingHTML(bookId) {
         </p>
     </footer>
 
-    <script type="module" src="../chapters.js?v=20260429-og"></script>
+    <script type="module" src="../chapters.js?v=20260429-search"></script>
 </body>
 </html>`;
 }

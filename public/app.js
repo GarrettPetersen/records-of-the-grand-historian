@@ -250,6 +250,99 @@ export function escapeHtml(text) {
   return div.innerHTML;
 }
 
+/** NFC + trim + ASCII lowercase (CJK unchanged) for substring search. */
+export function normalizeForSearch(str) {
+  return String(str || '')
+    .normalize('NFC')
+    .trim()
+    .toLowerCase();
+}
+
+/**
+ * True if every whitespace-separated token appears in haystack (after normalization).
+ * Works for mixed Chinese + English queries.
+ */
+export function matchesSearchQuery(haystack, rawQuery) {
+  const q = normalizeForSearch(rawQuery);
+  if (!q) return true;
+  const tokens = q.split(/\s+/).filter(Boolean);
+  const h = normalizeForSearch(haystack);
+  return tokens.every((t) => h.includes(t));
+}
+
+const GLOBAL_SEARCH_MAX_RESULTS = 80;
+
+function buildFlatChapterSearchIndex(manifest) {
+  const books = manifest.books || {};
+  const out = [];
+  for (const bookId of Object.keys(books)) {
+    const b = books[bookId];
+    for (const ch of b.chapters || []) {
+      const pad = String(ch.chapter).padStart(3, '0');
+      const titleZh = ch.title?.zh || `卷${pad}`;
+      const titleEn = ch.title?.en || '';
+      const titleRaw = ch.title?.raw || '';
+      const n = parseInt(ch.chapter, 10);
+      const chapterLabel = Number.isFinite(n) ? `Chapter ${n}` : `Chapter ${ch.chapter}`;
+      out.push({
+        href: `/${bookId}/${pad}.html`,
+        keyLine: `${bookId} ${pad} ${b.chinese || ''} ${b.name || ''} ${b.pinyin || ''} ${chapterLabel} ${titleZh} ${titleEn} ${titleRaw}`.trim(),
+        displayPrimary: titleZh,
+        displaySecondary: `${b.chinese || bookId} · ${chapterLabel}`,
+        displayTertiary: titleEn || '—',
+      });
+    }
+  }
+  return out;
+}
+
+function initGlobalChapterSearch(flatIndex) {
+  const input = document.getElementById('site-search-input');
+  const resultsEl = document.getElementById('site-search-results');
+  const hint = document.getElementById('site-search-hint');
+  if (!input || !resultsEl || !hint) return;
+
+  let debounceTimer = null;
+  const run = () => {
+    const q = input.value;
+    if (!normalizeForSearch(q)) {
+      resultsEl.hidden = true;
+      resultsEl.innerHTML = '';
+      hint.textContent = '';
+      return;
+    }
+    const hits = [];
+    for (const row of flatIndex) {
+      if (matchesSearchQuery(row.keyLine, q)) {
+        hits.push(row);
+        if (hits.length >= GLOBAL_SEARCH_MAX_RESULTS) break;
+      }
+    }
+    resultsEl.hidden = false;
+    if (hits.length === 0) {
+      resultsEl.innerHTML = '<p class="site-search-empty">No chapters match.</p>';
+      hint.textContent = '';
+      return;
+    }
+    const items = hits
+      .map(
+        (row) =>
+          `<li><a href="${row.href}"><span class="site-search-hit-title">${escapeHtml(row.displayPrimary)}</span><span class="site-search-hit-meta">${escapeHtml(row.displaySecondary)}</span><span class="site-search-hit-en">${escapeHtml(row.displayTertiary)}</span></a></li>`,
+      )
+      .join('');
+    resultsEl.innerHTML = `<ul class="site-search-hit-list">${items}</ul>`;
+    hint.textContent =
+      hits.length >= GLOBAL_SEARCH_MAX_RESULTS
+        ? `Showing the first ${GLOBAL_SEARCH_MAX_RESULTS} matches. Narrow your search for more specific results.`
+        : `${hits.length} match${hits.length === 1 ? '' : 'es'}.`;
+  };
+
+  input.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(run, 120);
+  });
+}
+
 /**
  * Tooltip / title text for a card given translation level and counts.
  * @param {'book' | 'chapter'} scope
@@ -434,6 +527,9 @@ async function renderHomepage() {
       renderCard(id, otherWorksGrid);
     }
   }
+
+  const fullManifest = await loadManifest();
+  initGlobalChapterSearch(buildFlatChapterSearchIndex(fullManifest));
 }
 
 // Initialize on page load

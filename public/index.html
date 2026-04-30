@@ -33,6 +33,14 @@
     </header>
 
     <main>
+        <section class="site-search-section" aria-labelledby="site-search-heading">
+            <h2 id="site-search-heading" class="visually-hidden">Search chapters</h2>
+            <label class="site-search-label" for="site-search-input">Search all chapters</label>
+            <p class="site-search-description">Chinese titles, English titles, book names, or chapter numbers (space = match all tokens).</p>
+            <input type="search" id="site-search-input" class="site-search-input" autocomplete="off" placeholder="e.g. 項羽, Xiang Yu, Annals of Han, hanshu 012…" />
+            <div id="site-search-results" class="site-search-results" hidden></div>
+            <p id="site-search-hint" class="site-search-hint" role="status"></p>
+        </section>
         <div id="loading">Loading histories...</div>
         <section>
             <h2 class="section-heading">Twenty-Four Histories</h2>
@@ -56,6 +64,6 @@
         </p>
     </footer>
 
-    <script type="module" src="app.js?v=20260429-og"></script>
+    <script type="module" src="app.js?v=20260429-search"></script>
 </body>
 </html>

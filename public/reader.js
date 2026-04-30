@@ -1,4 +1,4 @@
-import { BOOKS } from './app.js?v=20260429-og';
+import { BOOKS } from './app.js?v=20260429-search';
 
 let glossary = {};
 let currentHighlight = null;
