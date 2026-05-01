@@ -159,7 +159,7 @@ function generateBookLandingHTML(bookId) {
     <title>${escapeHtml(title)}</title>
     <meta name="description" content="${escapeHtml(desc)}">
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
-    <link rel="stylesheet" href="../styles.css?v=20260428-status-wrap">
+    <link rel="stylesheet" href="../styles.css?v=20260430-search-mark">
     <link rel="canonical" href="${pageUrl}">
     <meta property="og:title" content="${escapeHtml(title)}">
     <meta property="og:description" content="${escapeHtml(desc)}">
@@ -196,7 +196,7 @@ function generateBookLandingHTML(bookId) {
         </p>
     </footer>
 
-    <script type="module" src="../chapters.js?v=20260427-booksearch"></script>
+    <script type="module" src="../chapters.js?v=20260430-searchrank"></script>
 </body>
 </html>`;
 }
