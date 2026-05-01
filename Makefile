@@ -66,6 +66,9 @@ help:
 	@echo "  make auto-translate-numbers # Auto-translate Chinese numerals and Arabic numbers"
 	@echo "  make first-untranslated     # Find first chapter needing idiomatic translations"
 	@echo "  make first-untranslated BOOK=hanshu  # Find in specific book only"
+	@echo "  make extract-review CHAPTER=data/shiji/024.json  # Extract translations for manual review"
+	@echo "  make extract-next-review [BOOK=shiji]  # Extract next unreviewed translated chapter"
+	@echo "  make apply-review CHAPTER=data/shiji/024.json    # Apply reviewed edits and mark manifest"
 	@echo "  make start-translation [BOOK=shiji] [CHAPTER=022] [BATCH_SIZE=100]  # Start translation session"
 	@echo "  make continue [BOOK=shiji] [CHAPTER=022]  # Submit current batch and start next"
 	@echo "  make submit-translations TRANSLATOR=\"Garrett M. Petersen (2026)\" MODEL=\"grok-1.5\"  # Submit translations from current_translation_{book}.json"
@@ -777,16 +780,29 @@ apply-review:
 		echo "       (review file will be auto-detected from translations/ folder)"; \
 		exit 1; \
 	fi
-	@chapter_base=$$(basename $(CHAPTER) .json); \
+	@chapter_base=$$(basename "$(CHAPTER)" .json); \
+	book_id=$$(jq -r '.meta.book // empty' "$(CHAPTER)" 2>/dev/null); \
 	review_file="translations/review_$${chapter_base}.json"; \
+	if [ -n "$$book_id" ] && [ -f "translations/review_$${book_id}_$${chapter_base}.json" ]; then \
+		review_file="translations/review_$${book_id}_$${chapter_base}.json"; \
+	fi; \
 	if [ ! -f "$$review_file" ]; then \
 		echo "Error: Review file not found: $$review_file"; \
-		echo "Run 'make extract-review CHAPTER=$(CHAPTER)' first."; \
+		echo "Run 'make extract-review CHAPTER=$(CHAPTER)' or 'make extract-next-review' first."; \
 		exit 1; \
 	fi; \
-	$(NODE) apply-reviewed-translations.js $(CHAPTER) $$review_file
+	$(MAKE) check-no-autotranslate; \
+	$(NODE) apply-reviewed-translations.js "$(CHAPTER)" "$$review_file"
+	@echo "Running quality check..."
+	@$(MAKE) score-translations CHAPTER="$(CHAPTER)"
 	@echo "Regenerating static page..."
-	@$(MAKE) update
+	@$(MAKE) update BOOK=$$(jq -r '.meta.book // empty' "$(CHAPTER)" 2>/dev/null)
+
+# Extract the next unreviewed translated chapter in manifest order
+.PHONY: extract-next-review
+extract-next-review:
+	@echo "Extracting the next chapter needing editorial review..."
+	@$(NODE) extract-next-review.js $(if $(BOOK),$(BOOK),)
 
 # Apply translations from batch file and immediately check quality
 .PHONY: apply-translations

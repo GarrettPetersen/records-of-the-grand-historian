@@ -405,8 +405,10 @@ make extract-review CHAPTER=data/shiji/024.json
 # ⚠️ Manual review ensures accuracy and maintains scholarly quality
 
 # Step 3: Apply the reviewed translations
-make apply-review CHAPTER=data/shiji/024.json REVIEW=review_024.json
+make apply-review CHAPTER=data/shiji/024.json
 ```
+
+For the review workflow and quality criteria, see [REVIEW_PROCESS.md](./REVIEW_PROCESS.md).
 
 ### Batch Quality Checking
 

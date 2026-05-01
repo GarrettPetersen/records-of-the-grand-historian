@@ -25,12 +25,12 @@ function applyReviewedTranslations(chapterFile, reviewFile) {
   let appliedCount = 0;
   let changedCount = 0;
 
-  for (const reviewItem of review.translations) {
+  for (const reviewItem of review.translations || []) {
     const success = applySingleTranslation(chapter.content, reviewItem);
-      if (success) {
-        appliedCount++;
-        if (success.changed) {
-          changedCount++;
+    if (success) {
+      appliedCount++;
+      if (success.changed) {
+        changedCount++;
       }
     }
   }
@@ -64,6 +64,32 @@ function applyReviewedTranslations(chapterFile, reviewFile) {
   console.log(`✅ Applied ${appliedCount} translations`);
   console.log(`✏️  ${changedCount} translations were modified`);
   console.log(`📊 Updated translated count: ${translatedCount}`);
+}
+
+function markChapterReviewed(chapterFile) {
+  const manifestPath = 'data/manifest.json';
+  if (!fs.existsSync(manifestPath)) {
+    throw new Error('Manifest not found: data/manifest.json');
+  }
+
+  const chapter = JSON.parse(fs.readFileSync(chapterFile, 'utf8'));
+  const bookId = chapter?.meta?.book;
+  const chapterNum = chapter?.meta?.chapter;
+
+  if (!bookId || !chapterNum) {
+    throw new Error(`Could not determine book/chapter from ${chapterFile}`);
+  }
+
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  const manifestChapter = manifest.books?.[bookId]?.chapters?.find(c => c.chapter === chapterNum);
+
+  if (!manifestChapter) {
+    throw new Error(`Chapter ${bookId}/${chapterNum} not found in manifest`);
+  }
+
+  manifestChapter.reviewed = true;
+  fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
+  console.log(`📝 Marked manifest reviewed=true for ${bookId}/${chapterNum}`);
 }
 
 function applySingleTranslation(content, reviewItem) {
@@ -165,6 +191,7 @@ function main() {
 
   const [chapterFile, reviewFile] = args;
   applyReviewedTranslations(chapterFile, reviewFile);
+  markChapterReviewed(chapterFile);
 }
 
-  main();
+main();
