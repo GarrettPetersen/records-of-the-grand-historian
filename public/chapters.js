@@ -279,9 +279,16 @@ function wireBookChapterSearch(bookId, list) {
 
     /** @type {Map<string, string>} */
     const chapterMeta = new Map();
+    /** @type {Map<string, { zh: string, en: string }>} */
+    const chapterTitles = new Map();
     for (const card of list.querySelectorAll('a.history-card')) {
       const ch = card.dataset.chapterFile;
-      if (ch) chapterMeta.set(ch, card.dataset.searchText || '');
+      if (!ch) continue;
+      chapterMeta.set(ch, card.dataset.searchText || '');
+      chapterTitles.set(ch, {
+        zh: card.dataset.chapterTitleZh || '',
+        en: card.dataset.chapterTitleEn || '',
+      });
     }
 
     const tokens = searchTokens(q);
@@ -327,10 +334,23 @@ function wireBookChapterSearch(bookId, list) {
       const items = bodyHits
         .map((hit) => {
           const n = parseInt(hit.chPad, 10);
-          const chLabel = Number.isFinite(n) ? `Chapter ${n}` : `Chapter ${hit.chPad}`;
+          const numPart = Number.isFinite(n) ? `Ch. ${n}` : `Ch. ${hit.chPad}`;
+          const t = chapterTitles.get(hit.chPad);
+          const tZh = (t?.zh || '').trim();
+          const tEn = (t?.en || '').trim();
+          let headingHtml;
+          if (tZh) {
+            const enLine = tEn
+              ? `<span class="book-chapter-search-hit-title-en">${escapeHtml(tEn)}</span>`
+              : '';
+            headingHtml = `<span class="book-chapter-search-hit-ch"><span class="book-chapter-search-hit-title-zh">${escapeHtml(tZh)}</span>${enLine}<span class="book-chapter-search-hit-num">${escapeHtml(numPart)}</span></span>`;
+          } else {
+            const fallback = Number.isFinite(n) ? `Chapter ${n}` : `Chapter ${hit.chPad}`;
+            headingHtml = `<span class="book-chapter-search-hit-ch"><span class="book-chapter-search-hit-title-zh">${escapeHtml(fallback)}</span></span>`;
+          }
           const { zhHtml, enHtml } = buildSnippetPair(hit.zh, hit.en, tokens, rawTokens);
           const href = `/${bookId}/${hit.chPad}.html#p-${hit.i}`;
-          return `<li><a href="${href}"><span class="book-chapter-search-hit-ch">${escapeHtml(chLabel)}</span><span class="book-chapter-search-snippet-zh">${zhHtml}</span><span class="book-chapter-search-snippet-en">${enHtml}</span></a></li>`;
+          return `<li><a href="${href}">${headingHtml}<span class="book-chapter-search-snippet-zh">${zhHtml}</span><span class="book-chapter-search-snippet-en">${enHtml}</span></a></li>`;
         })
         .join('');
       textResults.innerHTML = `<p class="book-chapter-search-text-heading">Passages in chapter text <span class="book-chapter-search-ranked-note">(top ${bodyHits.length} by relevance)</span></p><ul class="book-chapter-search-hit-list">${items}</ul>`;
@@ -405,6 +425,8 @@ async function renderChapters() {
     card.href = `/${bookId}/${chFile}.html`;
     card.title = translationStatusTooltip(level, sentenceTotal, translatedTotal, 'chapter');
     card.dataset.chapterFile = chFile;
+    card.dataset.chapterTitleZh = titleZh;
+    card.dataset.chapterTitleEn = titleEn === '\u2014' ? '' : titleEn;
 
     card.dataset.searchText = [
       titleZh,
