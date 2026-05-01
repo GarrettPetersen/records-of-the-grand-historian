@@ -295,7 +295,9 @@ function applyTranslations(translationFile, chapterFile, translator, model) {
           break;
         }
       }
-    } else {
+    }
+
+    if (!found) {
       // Fallback: search all blocks (old behavior)
       for (const block of chapter.content) {
         let blockSentences = [];
