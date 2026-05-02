@@ -26,6 +26,9 @@ make extract-next-review BOOK=shiji
 4. Run the automated quality checks.
 5. Mark the chapter reviewed in the manifest.
 
+Important: `make apply-review` does not perform editorial rewriting by itself. It
+expects you to have already made the wording fixes manually in the review JSON.
+
 The usual commands are:
 
 ```bash
@@ -79,4 +82,3 @@ If the chapter still needs work after the automated check, keep editing the revi
 - [QUALITY_STANDARDS.md](./QUALITY_STANDARDS.md)
 - [README.md](./README.md)
 - [Makefile](./Makefile)
-
