@@ -405,6 +405,8 @@ make extract-review CHAPTER=data/shiji/024.json
 # ⚠️ Manual review ensures accuracy and maintains scholarly quality
 
 # Step 3: Apply the reviewed translations
+# This command only writes your manual edits back into the chapter; it does not
+# perform editorial rewriting or wording fixes for you.
 make apply-review CHAPTER=data/shiji/024.json
 ```
 
