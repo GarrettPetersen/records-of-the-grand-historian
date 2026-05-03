@@ -124,7 +124,7 @@ export default {
     literal:
       'Those whom he praised and recommended, such as Yu Fang and Bian Shao of Chenliu, Yan Gu and Zhang Wen of Nanyang, Zhang Huan of Hongnong, and Tangxi Dian of Yingchuan, all reached the ranks of duke and minister, yet he did not boast of their goodness.',
     idiomatic:
-      'Men he backedYu Fang and Bian Shao of Chenliu, Yan Gu and Zhang Wen of Nanyang, Zhang Huan of Hongnong, Tangxi Dian of Yingchuan, and othersall rose to the highest offices, yet he never bragged about his part in their careers.',
+      'Men he backed — Yu Fang and Bian Shao of Chenliu, Yan Gu and Zhang Wen of Nanyang, Zhang Huan of Hongnong, Tangxi Dian of Yingchuan, and others — all rose to the highest offices, yet he never bragged about his part in their careers.',
   },
   s0022: {
     literal:
