@@ -405,24 +405,50 @@ export function segmentSentences(text) {
     sentences.push(current.trim());
   }
 
-  // Post-process: merge ending punctuation to the previous sentence
+  // Post-process: attach opening punctuation to the following sentence and
+  // closing punctuation to the previous sentence so standalone fragments never
+  // survive as their own sentence entries.
   const merged = [];
+  let pendingPrefix = '';
+  const openingOnly = /^[〈《「『【〔（(\s]+$/;
   const punctuationOnly = /^[」"'』】）〉\s]+$/; // Only merge standalone quotes/punctuation and closing brackets/parentheses
 
   for (let i = 0; i < sentences.length; i++) {
     const sentence = sentences[i];
 
-    // Case 1: Sentence is only ending punctuation - append to previous sentence
-    if (punctuationOnly.test(sentence) && merged.length > 0) {
-      merged[merged.length - 1] += sentence;
+    // Opening punctuation belongs with the next substantive sentence.
+    if (openingOnly.test(sentence)) {
+      pendingPrefix += sentence;
+      continue;
     }
-    // Case 2: All other sentences stay as separate sentences
-    else {
+
+    // Closing punctuation belongs with the previous substantive sentence.
+    if (punctuationOnly.test(sentence)) {
+      if (merged.length > 0) {
+        merged[merged.length - 1] += sentence;
+      } else {
+        pendingPrefix += sentence;
+      }
+      continue;
+    }
+
+    if (pendingPrefix) {
+      merged.push(pendingPrefix + sentence);
+      pendingPrefix = '';
+    } else {
       merged.push(sentence);
     }
   }
 
-  return merged.filter(sentence => !isPunctuationOnlySentence(sentence));
+  if (pendingPrefix) {
+    if (merged.length > 0) {
+      merged[merged.length - 1] += pendingPrefix;
+    } else {
+      merged.push(pendingPrefix);
+    }
+  }
+
+  return merged;
 }
 
 /**
