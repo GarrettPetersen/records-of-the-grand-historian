@@ -411,7 +411,7 @@ export function segmentSentences(text) {
   const merged = [];
   let pendingPrefix = '';
   const openingOnly = /^[〈《「『【〔（(\s]+$/;
-  const punctuationOnly = /^[」"'』】）〉\s]+$/; // Only merge standalone quotes/punctuation and closing brackets/parentheses
+  const punctuationOnly = /^[\p{P}\p{S}\s]+$/u;
 
   for (let i = 0; i < sentences.length; i++) {
     const sentence = sentences[i];
@@ -422,13 +422,11 @@ export function segmentSentences(text) {
       continue;
     }
 
-    // Closing punctuation belongs with the previous substantive sentence.
+    // Any standalone punctuation that is not pure opening punctuation belongs
+    // with the previous substantive sentence.
     if (punctuationOnly.test(sentence)) {
-      if (merged.length > 0) {
-        merged[merged.length - 1] += sentence;
-      } else {
-        pendingPrefix += sentence;
-      }
+      if (merged.length > 0) merged[merged.length - 1] += sentence;
+      else pendingPrefix += sentence;
       continue;
     }
 
@@ -445,6 +443,58 @@ export function segmentSentences(text) {
       merged[merged.length - 1] += pendingPrefix;
     } else {
       merged.push(pendingPrefix);
+    }
+  }
+
+  return merged;
+}
+
+function mergePunctuationFragments(items, getText, setText) {
+  const merged = [];
+  let pendingPrefix = '';
+  const openingOnly = /^[〈《「『【〔（(\s]+$/;
+  const punctuationOnly = /^[\p{P}\p{S}\s]+$/u;
+
+  for (const item of items) {
+    const text = getText(item);
+    if (!text || text.trim() === '') {
+      merged.push(item);
+      continue;
+    }
+
+    if (openingOnly.test(text)) {
+      pendingPrefix += text;
+      continue;
+    }
+
+    if (punctuationOnly.test(text)) {
+      if (merged.length > 0) {
+        const prev = merged[merged.length - 1];
+        setText(prev, getText(prev) + text);
+      } else {
+        pendingPrefix += text;
+      }
+      continue;
+    }
+
+    if (pendingPrefix) {
+      setText(item, pendingPrefix + text);
+      pendingPrefix = '';
+    }
+
+    merged.push(item);
+  }
+
+  if (pendingPrefix) {
+    if (merged.length > 0) {
+      const prev = merged[merged.length - 1];
+      setText(prev, getText(prev) + pendingPrefix);
+    } else {
+      merged.push({
+        id: items[0]?.id || '',
+        content: pendingPrefix,
+        translations: [{ lang: 'en', literal: '', idiomatic: '', translator: '' }]
+      });
     }
   }
 
@@ -656,13 +706,21 @@ function parseCtextTables($, $table, startSentenceCounter, customHeaderText = ''
       translations: [{ lang: 'en', literal: '', idiomatic: '', translator: '' }]
     }));
 
+    const mergedRowCells = mergePunctuationFragments(
+      rowCells,
+      (cell) => cell.content || '',
+      (cell, text) => {
+        cell.content = text;
+      }
+    );
+
     if (rowIndex === 0) {
       // First row is the table header
-      headerContent = rowCells.map(c => c.content).join('|');
-      console.error(`Creating table header with ${rowCells.length} cells: ${rowCells.slice(0, 3).map(c => `"${c.content}"`).join(', ')}`);
+      headerContent = mergedRowCells.map(c => c.content).join('|');
+      console.error(`Creating table header with ${mergedRowCells.length} cells: ${mergedRowCells.slice(0, 3).map(c => `"${c.content}"`).join(', ')}`);
       const headerObj = {
         type: 'table_header',
-        sentences: rowCells.map(cell => ({
+        sentences: mergedRowCells.map(cell => ({
           id: cell.id,
           zh: cell.content,
           translations: [{ lang: 'en', literal: '', idiomatic: '', translator: '' }]
@@ -674,15 +732,15 @@ function parseCtextTables($, $table, startSentenceCounter, customHeaderText = ''
       console.error(`Content array now has ${content.length} items`);
     } else {
       // Check if this row has the same content as the header (repeated headers)
-      const rowContent = rowCells.map(c => c.content.trim()).join('|');
+      const rowContent = mergedRowCells.map(c => c.content.trim()).join('|');
       const trimmedHeaderContent = headerContent.trim();
 
       // Also check if first few cells match header
-      const firstThreeRow = rowCells.slice(0, 3).map(c => c.content.trim()).join('|');
+      const firstThreeRow = mergedRowCells.slice(0, 3).map(c => c.content.trim()).join('|');
       const firstThreeHeader = headerContent.split('|').slice(0, 3).join('|');
 
       // Also check if first cell is "公元前" (should only appear in header)
-      const firstCell = rowCells[0]?.content?.trim();
+      const firstCell = mergedRowCells[0]?.content?.trim();
 
       if (rowContent === trimmedHeaderContent || firstThreeRow === firstThreeHeader || firstCell === '公元前') {
         console.error(`Skipping row ${rowIndex}: duplicate header content (first cell: "${firstCell}")`);
@@ -692,7 +750,7 @@ function parseCtextTables($, $table, startSentenceCounter, customHeaderText = ''
       // Subsequent rows are table data
       const rowObj = {
         type: 'table_row',
-        cells: rowCells
+        cells: mergedRowCells
       };
       content.push(rowObj);
     }

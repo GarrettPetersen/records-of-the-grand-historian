@@ -46,7 +46,7 @@ function segmentSentences(text) {
 const merged = [];
 let pendingPrefix = '';
 const openingOnly = /^[〈《「『【〔（(\s]+$/;
-const punctuationOnly = /^[」"'』】）〉\s]+$/; // Closing quotes/punctuation and brackets
+const punctuationOnly = /^[\p{P}\p{S}\s]+$/u; // Any standalone punctuation/symbol fragment
 
 for (let i = 0; i < sentences.length; i++) {
   const sentence = sentences[i];
@@ -55,11 +55,8 @@ for (let i = 0; i < sentences.length; i++) {
     pendingPrefix += sentence;
   }
   else if (punctuationOnly.test(sentence)) {
-    if (merged.length > 0) {
-      merged[merged.length - 1] += sentence;
-    } else {
-      pendingPrefix += sentence;
-    }
+    if (merged.length > 0) merged[merged.length - 1] += sentence;
+    else pendingPrefix += sentence;
   }
   else {
     if (pendingPrefix) {
