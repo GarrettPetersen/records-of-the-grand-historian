@@ -22,6 +22,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { alignTranslations } from './align-translations.js';
+import { isPunctuationOnlySentence } from './sentence-utils.mjs';
 
 // The 24 Dynastic Histories with their romanized names and metadata
 const BOOKS = {
@@ -421,7 +422,7 @@ export function segmentSentences(text) {
     }
   }
 
-  return merged;
+  return merged.filter(sentence => !isPunctuationOnlySentence(sentence));
 }
 
 /**
@@ -1104,11 +1105,11 @@ function containsChinese(text) {
 function countSentences(content) {
   return content.reduce((sum, block) => {
     if (block.type === 'paragraph') {
-      return sum + block.sentences.filter(s => s.zh && s.zh.trim() !== '').length;
+      return sum + block.sentences.filter(s => s.zh && s.zh.trim() !== '' && !isPunctuationOnlySentence(s.zh)).length;
     } else if (block.type === 'table_row') {
-      return sum + block.cells.filter(cell => cell.content && cell.content.trim() !== '').length;
+      return sum + block.cells.filter(cell => cell.content && cell.content.trim() !== '' && !isPunctuationOnlySentence(cell.content)).length;
     } else if (block.type === 'table_header') {
-      return sum + block.sentences.filter(s => s.zh && s.zh.trim() !== '').length;
+      return sum + block.sentences.filter(s => s.zh && s.zh.trim() !== '' && !isPunctuationOnlySentence(s.zh)).length;
     }
     return sum;
   }, 0);

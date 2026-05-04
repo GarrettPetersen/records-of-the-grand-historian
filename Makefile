@@ -60,6 +60,7 @@ help:
 	@echo "  make validate               # Check all JSON files are valid"
 	@echo "  make score-translations     # Score translations for quality issues"
 	@echo "  make scan-rubric-scaffolding BOOK=hanshu  # Find meta English on short name headings"
+	@echo "  make scan-punctuation-only [BOOK=hanshu]   # Find punctuation-only sentence fragments"
 	@echo "  make scan-punctuation-report             # Regenerate scripts/scan-punctuation-report.tsv"
 	@echo "  make batch-quality-check    # Batch quality check on multiple chapters (all books)"
 	@echo "  make quality-score          # Score translation quality subjectively (1-10 scale)"
@@ -695,6 +696,16 @@ scan-punctuation-report:
 	@echo "Scanning punctuation/delimiter notes across all chapters..."
 	@$(NODE) scripts/scan-punctuation-all-chapters.mjs > scripts/scan-punctuation-report.tsv
 	@echo "Wrote scripts/scan-punctuation-report.tsv"
+
+.PHONY: scan-punctuation-only
+scan-punctuation-only:
+	@if [ -n "$(BOOK)" ]; then \
+		echo "Scanning punctuation-only sentences in data/$(BOOK)..."; \
+		$(NODE) scripts/scan-punctuation-only-sentences.mjs data/$(BOOK); \
+	else \
+		echo "Scanning punctuation-only sentences across all chapters..."; \
+		$(NODE) scripts/scan-punctuation-only-sentences.mjs; \
+	fi
 
 .PHONY: auto-translate-numbers
 auto-translate-numbers:
