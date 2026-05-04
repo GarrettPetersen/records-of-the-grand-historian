@@ -898,7 +898,15 @@ function extractContent($, isFromCtext = false, startSentenceCounter = 0, url = 
       continue;
     }
 
-    // Skip paragraphs that appear to be tabular data formatted as text
+    // Skip paragraphs that appear to be tabular data formatted as text.
+    // This heuristic is only reliable for known genealogical/table chapters.
+    const isShiji = /\/shiji\//.test(url);
+    const isHanshu = /\/hanshu\//.test(url);
+    const chapterNum = Number(chapter);
+    const isKnownTabularChapter =
+      (isShiji && chapterNum >= 13 && chapterNum <= 22) ||
+      (isHanshu && chapterNum >= 13 && chapterNum <= 20);
+
     // This happens when chinesenotes presents genealogical tables as formatted paragraphs
     const stateNames = ['魯', '齊', '晉', '秦', '楚', '宋', '衛', '陳', '蔡', '曹', '燕'];
     const hasStateNames = stateNames.some(state => para.includes(state));
@@ -917,9 +925,11 @@ function extractContent($, isFromCtext = false, startSentenceCounter = 0, url = 
     const looksLikeTableData = /^\d{3,4}[\s\u3000]+.*[\d一二三四五六七八九十百千]+.*$/.test(para) && para.length < 100;
 
     // Only skip if it has both state names AND tabular patterns, or has many names in a short space, or looks like table data
-    const shouldSkip = (hasStateNames && hasTabularPatterns && para.length < 300) ||
+    const shouldSkip = isKnownTabularChapter && (
+      (hasStateNames && hasTabularPatterns && para.length < 300) ||
       (hasManyNames && para.length < 300 && (para.match(/[\u4e00-\u9fff]{2,}[，。]/g) || []).length > 6) ||
-      looksLikeTableData;
+      looksLikeTableData
+    );
 
     if (shouldSkip) {
       console.error(`Skipping apparent table data formatted as text: ${para.substring(0, 50)}...`);
