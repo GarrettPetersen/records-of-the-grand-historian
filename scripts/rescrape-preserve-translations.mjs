@@ -3,8 +3,38 @@
 import fs from "node:fs";
 import { spawnSync } from "node:child_process";
 
+const PLACEHOLDER_REPLACEMENTS = {
+  A081: "柹",
+  A134: "幐",
+  A148: "嫕",
+  A156: "兒",
+  A172: "祥",
+  A181: "愔",
+  A191: "轂",
+  A212: "灅",
+  B133: "剺",
+  B134: "廓",
+  B163: "篹",
+  B225: "鄗",
+  B164: "夔",
+  B170: "芮",
+  B428: "盢",
+  B459: "𠟼",
+  C061: "冎",
+  C090: "垂",
+  C102: "固",
+  C171: "闅",
+  C745: "郪",
+  D279: "酂",
+  D655: "箙",
+};
+
 function normalizeText(text) {
-  return (text || "").replace(/[\p{P}\p{S}\s]+/gu, "").trim();
+  let out = String(text || "");
+  for (const [token, replacement] of Object.entries(PLACEHOLDER_REPLACEMENTS)) {
+    out = out.replaceAll(`[${token}]`, replacement).replaceAll(token, replacement);
+  }
+  return out.replace(/[\p{P}\p{S}\s]+/gu, "").trim();
 }
 
 function flattenItems(chapter) {

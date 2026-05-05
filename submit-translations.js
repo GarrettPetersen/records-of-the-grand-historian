@@ -20,6 +20,7 @@ import {
   punctuationAlignmentNotes,
   rubricScaffoldingErrorsForSentence,
 } from './translation-guards.mjs';
+import { countChapterMetrics } from './chapter-counts.mjs';
 
 const TERMINAL_PUNCTUATION_REGEX = /[.!?]["')\]]*\s*$/;
 
@@ -361,33 +362,12 @@ function applyTranslations(translationFile, chapterFile, translator, model) {
     }
   }
 
-  // Recalculate translatedCount
-  let translatedCount = 0;
-  for (const block of chapter.content) {
-    if (block.type === 'paragraph') {
-      for (const sentence of block.sentences || []) {
-        if (sentence.translations?.[0]?.idiomatic?.trim()) {
-          translatedCount++;
-        }
-      }
-    } else if (block.type === 'table_row') {
-      for (const cell of block.cells || []) {
-        if (cell.idiomatic && cell.idiomatic.trim()) {
-          translatedCount++;
-        }
-      }
-    } else if (block.type === 'table_header') {
-      for (const sentence of block.sentences || []) {
-        if (sentence.translations?.[0]?.idiomatic?.trim()) {
-          translatedCount++;
-        }
-      }
-    }
-  }
-  chapter.meta.translatedCount = translatedCount;
+  const counts = countChapterMetrics(chapter);
+  chapter.meta.sentenceCount = counts.sentenceCount;
+  chapter.meta.translatedCount = counts.translatedCount;
 
   fs.writeFileSync(chapterFile, JSON.stringify(chapter, null, 2));
-  console.log(`Applied translations. Updated translated count: ${translatedCount}`);
+  console.log(`Applied translations. Updated counts: ${counts.translatedCount}/${counts.sentenceCount}`);
 }
 
 function main() {

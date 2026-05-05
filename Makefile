@@ -48,7 +48,7 @@ help:
 	@echo ""
 	@echo "Maintenance commands:"
 	@echo "  (OG: default --incremental; use OG_FULL=1 with update/update-all for full OG raster)"
-	@echo "  make fix-counts             # Recalculate translatedCount in all chapter files"
+	@echo "  make fix-counts             # Recalculate sentenceCount and translatedCount in all chapter files"
 	@echo "  make nuke-translations      # ⚠️  Emergency: Remove ALL translations from a chapter"
 	@echo "  make manifest               # Generate manifest.json (includes sync)"
 	@echo "  make progress               # Generate translation progress data"
@@ -62,6 +62,7 @@ help:
 	@echo "  make scan-rubric-scaffolding BOOK=hanshu  # Find meta English on short name headings"
 	@echo "  make scan-punctuation-only [BOOK=hanshu]   # Find punctuation-only sentence fragments"
 	@echo "  make scan-br-tags           # Find literal <BR> tags in stored Chinese text"
+	@echo "  make scan-western-chars     # Find Latin letters / HTML fragments in Chinese-facing text"
 	@echo "  make scan-punctuation-report             # Regenerate scripts/scan-punctuation-report.tsv"
 	@echo "  make batch-quality-check    # Batch quality check on multiple chapters (all books)"
 	@echo "  make quality-score          # Score translation quality subjectively (1-10 scale)"
@@ -181,7 +182,7 @@ update:
 	@echo "Step 1/7: Updating citations..."
 	@$(NODE) update-citations.js --book $(BOOK)
 	@echo ""
-	@echo "Step 2/7: Fixing translated counts..."
+	@echo "Step 2/7: Fixing chapter counts..."
 	@$(NODE) fix-translated-counts.js --book $(BOOK) || echo "Note: fix-translated-counts.js not found, skipping..."
 	@echo ""
 	@echo "Step 3/7: Regenerating manifest (merge this book)..."
@@ -219,7 +220,7 @@ update-all:
 	@echo "Step 1/7: Updating citations..."
 	@$(NODE) update-citations.js
 	@echo ""
-	@echo "Step 2/7: Fixing translated counts..."
+	@echo "Step 2/7: Fixing chapter counts..."
 	@$(NODE) fix-translated-counts.js || echo "Note: fix-translated-counts.js not found, skipping..."
 	@echo ""
 	@echo "Step 3/7: Regenerating manifest..."
@@ -716,6 +717,16 @@ scan-br-tags:
 	else \
 		echo "Scanning literal <BR> tags across all chapters..."; \
 		$(NODE) scripts/scan-br-tags.mjs; \
+	fi
+
+.PHONY: scan-western-chars
+scan-western-chars:
+	@if [ -n "$(BOOK)" ]; then \
+		echo "Scanning western characters in data/$(BOOK)..."; \
+		$(NODE) scripts/scan-western-chars.mjs data/$(BOOK); \
+	else \
+		echo "Scanning western characters across all chapters..."; \
+		$(NODE) scripts/scan-western-chars.mjs; \
 	fi
 
 .PHONY: auto-translate-numbers

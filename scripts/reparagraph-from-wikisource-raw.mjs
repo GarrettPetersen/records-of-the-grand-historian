@@ -9,6 +9,33 @@ const BOOKS = new Set(["qingshigao", "zizhitongjian"]);
 const SENT_END = new Set(["。", "！", "？", "；", "〈", "〉", "(", ")", "（", "）"]);
 const BR_TAG_RE = /<br\s*\/?>/gi;
 const BR_TAG_TEST_RE = /<br\s*\/?>/i;
+const SOURCE_ERROR_RE = /(?:Please set a proper user-agent|Error:\s*429|Upstream caches:\s*cp1108|robot policy)/i;
+const CURRENT_ERROR_PAGE_RE = /(?:Wikimedia Error|Please set a proper user-agent|Error:\s*429|robot policy)/i;
+const PLACEHOLDER_REPLACEMENTS = {
+  A081: "柹",
+  A134: "幐",
+  A148: "嫕",
+  A156: "兒",
+  A172: "祥",
+  A181: "愔",
+  A191: "轂",
+  A212: "灅",
+  B133: "剺",
+  B134: "廓",
+  B163: "篹",
+  B225: "鄗",
+  B164: "夔",
+  B170: "芮",
+  B428: "盢",
+  B459: "𠟼",
+  C061: "冎",
+  C090: "垂",
+  C102: "固",
+  C171: "闅",
+  C745: "郪",
+  D279: "酂",
+  D655: "箙",
+};
 
 function splitSentences(text) {
   const out = [];
@@ -27,7 +54,16 @@ function splitSentences(text) {
 }
 
 function normalizeText(s) {
-  return (s || "").replace(BR_TAG_RE, "").replace(/\s+/g, "").trim();
+  let out = applyPlaceholderReplacements(String(s || "").replace(BR_TAG_RE, ""));
+  return out.replace(/\s+/g, "").trim();
+}
+
+function applyPlaceholderReplacements(text) {
+  let out = String(text || "");
+  for (const [token, replacement] of Object.entries(PLACEHOLDER_REPLACEMENTS)) {
+    out = out.replaceAll(`[${token}]`, replacement).replaceAll(token, replacement);
+  }
+  return out;
 }
 
 function stripWikiMarkup(line) {
@@ -116,13 +152,29 @@ function lcsMatches(oldSeq, newSeq) {
 }
 
 function fetchRaw(url) {
-  const r = spawnSync("curl", ["-k", "-s", url], { encoding: "utf8", maxBuffer: 20 * 1024 * 1024 });
+  const r = spawnSync("curl", [
+    "-k",
+    "-s",
+    "--compressed",
+    "--retry", "3",
+    "--retry-delay", "2",
+    "--retry-all-errors",
+    "--connect-timeout", "20",
+    "--max-time", "90",
+    "-H", "Accept-Encoding: gzip,deflate",
+    "-H", "Accept-Charset: utf-8",
+    "-A", "Mozilla/5.0 (compatible; records-scraper/1.0)",
+    url,
+  ], { encoding: "utf8", maxBuffer: 20 * 1024 * 1024 });
   if (r.status !== 0) throw new Error(`curl failed: ${url}`);
+  if (SOURCE_ERROR_RE.test(r.stdout || "")) throw new Error(`wiki error page: ${url}`);
   return r.stdout || "";
 }
 
 function main() {
   const report = { fixed: [], failed: [] };
+  const cliRefs = process.argv.slice(2).filter((arg) => /^\w+\/\d{3}$/.test(arg));
+  const targetRefs = cliRefs.length > 0 ? new Set(cliRefs) : null;
 
   for (const book of BOOKS) {
     const dir = path.join(ROOT, "data", book);
@@ -133,6 +185,7 @@ function main() {
       if (!Array.isArray(data.content)) continue;
 
       const ref = `${book}/${file.replace(".json", "")}`;
+      if (targetRefs && !targetRefs.has(ref)) continue;
       const url = data?.meta?.url || "";
       if (!url.includes("wikisource.org")) {
         report.failed.push({ chapter: ref, reason: "non-wikisource-url" });
@@ -140,7 +193,11 @@ function main() {
       }
 
       const flat = flattenSentenceObjects(data);
-      if (!flat.some((sentence) => BR_TAG_TEST_RE.test(sentence?.zh || ""))) {
+      if (!flat.some((sentence) =>
+        BR_TAG_TEST_RE.test(sentence?.zh || "") ||
+        CURRENT_ERROR_PAGE_RE.test(sentence?.zh || "") ||
+        Object.keys(PLACEHOLDER_REPLACEMENTS).some((token) => String(sentence?.zh || "").includes(token) || String(sentence?.zh || "").includes(`[${token}]`))
+      )) {
         continue;
       }
 
@@ -165,13 +222,13 @@ function main() {
       const rebuilt = [];
       for (const p of paras) {
         const sentences = splitSentences(p)
-          .map((zh) => zh.trim())
-          .filter(Boolean)
-          .map((zh) => ({
-            id: `s${String(newFlat.length + 1).padStart(4, "0")}`,
-            zh,
-            translations: [{ lang: "en", literal: "", idiomatic: "", translator: "" }],
-          }));
+        .map((zh) => zh.trim())
+        .filter(Boolean)
+        .map((zh) => ({
+          id: `s${String(newFlat.length + 1).padStart(4, "0")}`,
+          zh: applyPlaceholderReplacements(zh),
+          translations: [{ lang: "en", literal: "", idiomatic: "", translator: "" }],
+        }));
         if (sentences.length === 0) continue;
         newFlat.push(...sentences);
         rebuilt.push({
