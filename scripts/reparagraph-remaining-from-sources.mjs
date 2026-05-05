@@ -27,7 +27,21 @@ function splitSentences(text) {
 }
 
 function curl(url) {
-  const r = spawnSync("curl", ["-L", "-k", "-s", url], {
+  const r = spawnSync("curl", [
+    "-L",
+    "-k",
+    "-s",
+    "--compressed",
+    "--retry", "3",
+    "--retry-delay", "2",
+    "--retry-all-errors",
+    "--connect-timeout", "20",
+    "--max-time", "90",
+    "-H", "Accept-Encoding: gzip,deflate",
+    "-H", "Accept-Charset: utf-8",
+    "-A", "Mozilla/5.0 (compatible; records-scraper/1.0)",
+    url,
+  ], {
     encoding: "utf8",
     maxBuffer: 20 * 1024 * 1024,
   });

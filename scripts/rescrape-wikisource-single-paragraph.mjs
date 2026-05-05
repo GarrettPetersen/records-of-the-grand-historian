@@ -69,7 +69,20 @@ function parseRawParagraphs(raw) {
 }
 
 function fetchRaw(url) {
-  const r = spawnSync("curl", ["-k", "-s", url], { encoding: "utf8", maxBuffer: 20 * 1024 * 1024 });
+  const r = spawnSync("curl", [
+    "-k",
+    "-s",
+    "--compressed",
+    "--retry", "3",
+    "--retry-delay", "2",
+    "--retry-all-errors",
+    "--connect-timeout", "20",
+    "--max-time", "90",
+    "-H", "Accept-Encoding: gzip,deflate",
+    "-H", "Accept-Charset: utf-8",
+    "-A", "Mozilla/5.0 (compatible; records-scraper/1.0)",
+    url,
+  ], { encoding: "utf8", maxBuffer: 20 * 1024 * 1024 });
   if (r.status !== 0) throw new Error(`curl-failed status=${r.status}`);
   return r.stdout || "";
 }

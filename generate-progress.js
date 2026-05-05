@@ -17,6 +17,7 @@
 import fs from 'fs';
 import path from 'path';
 import { scoreChapterFile } from './score-translations.js';
+import { isPunctuationOnlySentence } from './sentence-utils.mjs';
 
 const MANIFEST_PATH = './data/manifest.json';
 const DATA_DIR = './data';
@@ -54,27 +55,28 @@ function analyzeChapterStatus(bookId, chapter, chapterData) {
     let problems = 0;
     let blatantProblems = 0;
 
-    // Analyze each sentence
+    // Analyze each sentence / table cell
     if (data.content) {
       for (const block of data.content) {
-        if (block.type === 'paragraph') {
-          for (const sentence of block.sentences || []) {
+        const rows = block.type === 'table_row' ? (block.cells || []) : (block.sentences || []);
+        if (block.type === 'paragraph' || block.type === 'table_header' || block.type === 'table_row') {
+          for (const sentence of rows) {
             // Skip Herbert J. Allen translations
-            const translator = sentence.translations?.[0]?.translator;
+            const translator = sentence.translations?.[0]?.translator || sentence.translator;
             if (translator === 'Herbert J. Allen (1894)') {
               continue;
             }
 
-            // Skip sentences with empty Chinese text (blank table cells)
-            const chineseText = (sentence.zh || '').trim();
-            if (!chineseText) {
+            // Skip empty or punctuation-only text (blank table cells / scaffolding)
+            const chineseText = (sentence.zh || sentence.content || '').trim();
+            if (!chineseText || isPunctuationOnlySentence(chineseText)) {
               continue;
             }
 
             totalSentences++;
 
-            const literal = sentence.translations?.[0]?.literal || sentence.literal;
-            const idiomatic = sentence.translations?.[0]?.idiomatic || sentence.idiomatic;
+            const literal = sentence.translations?.[0]?.literal || sentence.literal || '';
+            const idiomatic = sentence.translations?.[0]?.idiomatic || sentence.idiomatic || '';
 
             if (literal && literal.trim()) literalTranslations++;
             if (idiomatic && idiomatic.trim()) idiomaticTranslations++;

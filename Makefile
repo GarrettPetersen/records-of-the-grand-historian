@@ -48,7 +48,7 @@ help:
 	@echo ""
 	@echo "Maintenance commands:"
 	@echo "  (OG: default --incremental; use OG_FULL=1 with update/update-all for full OG raster)"
-	@echo "  make fix-counts             # Recalculate translatedCount in all chapter files"
+	@echo "  make fix-counts             # Recalculate sentenceCount and translatedCount in all chapter files"
 	@echo "  make nuke-translations      # ⚠️  Emergency: Remove ALL translations from a chapter"
 	@echo "  make manifest               # Generate manifest.json (includes sync)"
 	@echo "  make progress               # Generate translation progress data"
@@ -182,7 +182,7 @@ update:
 	@echo "Step 1/7: Updating citations..."
 	@$(NODE) update-citations.js --book $(BOOK)
 	@echo ""
-	@echo "Step 2/7: Fixing translated counts..."
+	@echo "Step 2/7: Fixing chapter counts..."
 	@$(NODE) fix-translated-counts.js --book $(BOOK) || echo "Note: fix-translated-counts.js not found, skipping..."
 	@echo ""
 	@echo "Step 3/7: Regenerating manifest (merge this book)..."
@@ -220,7 +220,7 @@ update-all:
 	@echo "Step 1/7: Updating citations..."
 	@$(NODE) update-citations.js
 	@echo ""
-	@echo "Step 2/7: Fixing translated counts..."
+	@echo "Step 2/7: Fixing chapter counts..."
 	@$(NODE) fix-translated-counts.js || echo "Note: fix-translated-counts.js not found, skipping..."
 	@echo ""
 	@echo "Step 3/7: Regenerating manifest..."
