@@ -61,6 +61,7 @@ help:
 	@echo "  make score-translations     # Score translations for quality issues"
 	@echo "  make scan-rubric-scaffolding BOOK=hanshu  # Find meta English on short name headings"
 	@echo "  make scan-punctuation-only [BOOK=hanshu]   # Find punctuation-only sentence fragments"
+	@echo "  make scan-br-tags           # Find literal <BR> tags in stored Chinese text"
 	@echo "  make scan-punctuation-report             # Regenerate scripts/scan-punctuation-report.tsv"
 	@echo "  make batch-quality-check    # Batch quality check on multiple chapters (all books)"
 	@echo "  make quality-score          # Score translation quality subjectively (1-10 scale)"
@@ -705,6 +706,16 @@ scan-punctuation-only:
 	else \
 		echo "Scanning punctuation-only sentences across all chapters..."; \
 		$(NODE) scripts/scan-punctuation-only-sentences.mjs; \
+	fi
+
+.PHONY: scan-br-tags
+scan-br-tags:
+	@if [ -n "$(BOOK)" ]; then \
+		echo "Scanning literal <BR> tags in data/$(BOOK)..."; \
+		$(NODE) scripts/scan-br-tags.mjs data/$(BOOK); \
+	else \
+		echo "Scanning literal <BR> tags across all chapters..."; \
+		$(NODE) scripts/scan-br-tags.mjs; \
 	fi
 
 .PHONY: auto-translate-numbers
