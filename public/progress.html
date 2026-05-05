@@ -262,13 +262,13 @@
         <div id="progress-content" style="display: none;">
             <section class="overall-progress-card" aria-labelledby="overall-progress-heading">
                 <div class="overall-progress-header">
-                    <h2 id="overall-progress-heading">Overall Chapter Progress</h2>
+                    <h2 id="overall-progress-heading">Overall Translation Progress</h2>
                     <div class="overall-progress-percent" id="overall-progress-percent">0%</div>
                 </div>
-                <div class="overall-progress-bar" aria-label="Overall chapter translation progress">
+                <div class="overall-progress-bar" aria-label="Overall chapter completion progress">
                     <div class="overall-progress-fill" id="overall-progress-fill" style="width: 0%;"></div>
                 </div>
-                <div class="overall-progress-count" id="overall-progress-count">0 of 0 chapters finished</div>
+                <div class="overall-progress-count" id="overall-progress-count">Chapters: 0 / 0 (0.0%)</div>
             </section>
 
             <div class="progress-legend">
@@ -335,6 +335,10 @@
             bookData.chapters.forEach(chapter => {
                 stats[chapter.status]++;
             });
+            const sentenceTotal = bookData.chapters.reduce((sum, chapter) => sum + (chapter.sentenceCount || 0), 0);
+            const sentenceTranslated = bookData.chapters.reduce((sum, chapter) => sum + (chapter.translatedCount || 0), 0);
+            const characterTotal = bookData.chapters.reduce((sum, chapter) => sum + (chapter.characterCount || 0), 0);
+            const characterTranslated = bookData.chapters.reduce((sum, chapter) => sum + (chapter.translatedCharacterCount || 0), 0);
 
             // Book header
             const header = document.createElement('div');
@@ -359,6 +363,12 @@
                         <div class="stat-square green"></div>
                         <span>${stats.green}/${stats.total} complete</span>
                     </div>
+                    <div class="stat-item">
+                        <span>${formatProgress(sentenceTranslated, sentenceTotal, 'sentences')}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>${formatProgress(characterTranslated, characterTotal, 'characters')}</span>
+                    </div>
                 </div>
             `;
 
@@ -370,7 +380,7 @@
                 const square = document.createElement('div');
                 square.className = `progress-square ${chapter.status}`;
                 const reviewLine = chapter.reviewed ? 'Editorial review: done' : 'Editorial review: pending';
-                square.setAttribute('data-tooltip', `${chapter.chapter}: ${chapter.title.en || chapter.title.zh}\n${chapter.translatedCount}/${chapter.sentenceCount} translated\n${reviewLine}`);
+                square.setAttribute('data-tooltip', `${chapter.chapter}: ${chapter.title.en || chapter.title.zh}\n${chapter.translatedCount}/${chapter.sentenceCount} sentences translated\n${(chapter.translatedCharacterCount || 0).toLocaleString()}/${(chapter.characterCount || 0).toLocaleString()} characters translated\n${reviewLine}`);
 
                 // Make clickable to go to chapter
                 square.addEventListener('click', () => {
@@ -388,14 +398,27 @@
 
         function renderOverallProgress(data) {
             const chapters = Object.values(data.books).flatMap(book => book.chapters || []);
-            const total = chapters.length;
-            const finished = chapters.filter(chapter => chapter.status === 'green').length;
-            const percent = total > 0 ? (finished / total) * 100 : 0;
+            const chapterTotal = chapters.length;
+            const chapterFinished = chapters.filter(chapter => chapter.status === 'green').length;
+            const sentenceTotal = chapters.reduce((sum, chapter) => sum + (chapter.sentenceCount || 0), 0);
+            const sentenceTranslated = chapters.reduce((sum, chapter) => sum + (chapter.translatedCount || 0), 0);
+            const characterTotal = chapters.reduce((sum, chapter) => sum + (chapter.characterCount || 0), 0);
+            const characterTranslated = chapters.reduce((sum, chapter) => sum + (chapter.translatedCharacterCount || 0), 0);
+            const percent = chapterTotal > 0 ? (chapterFinished / chapterTotal) * 100 : 0;
             const displayPercent = `${percent.toFixed(1)}%`;
 
             document.getElementById('overall-progress-percent').textContent = displayPercent;
             document.getElementById('overall-progress-fill').style.width = displayPercent;
-            document.getElementById('overall-progress-count').textContent = `${finished.toLocaleString()} of ${total.toLocaleString()} chapters finished`;
+            document.getElementById('overall-progress-count').innerHTML = `
+                <div>${formatProgress(chapterFinished, chapterTotal, 'chapters complete')}</div>
+                <div>${formatProgress(sentenceTranslated, sentenceTotal, 'sentences translated')}</div>
+                <div>${formatProgress(characterTranslated, characterTotal, 'characters translated')}</div>
+            `;
+        }
+
+        function formatProgress(translated, total, label) {
+            const pct = total > 0 ? ((translated / total) * 100).toFixed(1) : '0.0';
+            return `${label}: ${translated.toLocaleString()} / ${total.toLocaleString()} (${pct}%)`;
         }
 
         async function init() {

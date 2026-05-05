@@ -32,23 +32,37 @@ function hasMeaningfulTranslation(item) {
 export function countChapterMetrics(chapterData) {
   let sentenceCount = 0;
   let translatedCount = 0;
+  let characterCount = 0;
+  let translatedCharacterCount = 0;
 
   for (const block of chapterData?.content || []) {
     if (block.type === "paragraph" || block.type === "table_header") {
       for (const sentence of block.sentences || []) {
-        if (!isCountableText(getSentenceText(sentence))) continue;
+        const text = getSentenceText(sentence);
+        if (!isCountableText(text)) continue;
         sentenceCount += 1;
-        if (hasMeaningfulTranslation(sentence)) translatedCount += 1;
+        const chars = text.trim().length;
+        characterCount += chars;
+        if (hasMeaningfulTranslation(sentence)) {
+          translatedCount += 1;
+          translatedCharacterCount += chars;
+        }
       }
     } else if (block.type === "table_row") {
       for (const cell of block.cells || []) {
-        if (!isCountableText(getSentenceText(cell))) continue;
+        const text = getSentenceText(cell);
+        if (!isCountableText(text)) continue;
         sentenceCount += 1;
-        if (hasMeaningfulTranslation(cell)) translatedCount += 1;
+        const chars = text.trim().length;
+        characterCount += chars;
+        if (hasMeaningfulTranslation(cell)) {
+          translatedCount += 1;
+          translatedCharacterCount += chars;
+        }
       }
     }
   }
 
-  return { sentenceCount, translatedCount };
+  return { sentenceCount, translatedCount, characterCount, translatedCharacterCount };
 }
 

@@ -134,6 +134,8 @@ function bookProgressFromManifest(bookId, book) {
       status: status,
       sentenceCount: chapter.sentenceCount,
       translatedCount: chapter.translatedCount,
+      characterCount: chapter.characterCount ?? 0,
+      translatedCharacterCount: chapter.translatedCharacterCount ?? 0,
       qualityScore: chapter.qualityScore,
       reviewed: chapter.reviewed ?? false
     });
