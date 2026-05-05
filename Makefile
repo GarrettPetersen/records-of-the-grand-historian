@@ -62,6 +62,7 @@ help:
 	@echo "  make scan-rubric-scaffolding BOOK=hanshu  # Find meta English on short name headings"
 	@echo "  make scan-punctuation-only [BOOK=hanshu]   # Find punctuation-only sentence fragments"
 	@echo "  make scan-br-tags           # Find literal <BR> tags in stored Chinese text"
+	@echo "  make scan-western-chars     # Find Latin letters / HTML fragments in Chinese-facing text"
 	@echo "  make scan-punctuation-report             # Regenerate scripts/scan-punctuation-report.tsv"
 	@echo "  make batch-quality-check    # Batch quality check on multiple chapters (all books)"
 	@echo "  make quality-score          # Score translation quality subjectively (1-10 scale)"
@@ -716,6 +717,16 @@ scan-br-tags:
 	else \
 		echo "Scanning literal <BR> tags across all chapters..."; \
 		$(NODE) scripts/scan-br-tags.mjs; \
+	fi
+
+.PHONY: scan-western-chars
+scan-western-chars:
+	@if [ -n "$(BOOK)" ]; then \
+		echo "Scanning western characters in data/$(BOOK)..."; \
+		$(NODE) scripts/scan-western-chars.mjs data/$(BOOK); \
+	else \
+		echo "Scanning western characters across all chapters..."; \
+		$(NODE) scripts/scan-western-chars.mjs; \
 	fi
 
 .PHONY: auto-translate-numbers
