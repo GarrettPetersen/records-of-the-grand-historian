@@ -1019,9 +1019,9 @@ continue:
 			exit 1; \
 		fi; \
 		if [ -n "$(BOOK)" ]; then \
-			$(MAKE) start-translation BOOK=$$book CHAPTER="$(CHAPTER)"; \
+			$(MAKE) start-translation BOOK=$$book CHAPTER="$(CHAPTER)" BATCH_SIZE="$(or $(BATCH_SIZE),100)"; \
 		else \
-			$(MAKE) start-translation; \
+			$(MAKE) start-translation BATCH_SIZE="$(or $(BATCH_SIZE),100)"; \
 		fi; \
 	else \
 		echo "❌ Translation submission failed. Please fix the issues and try again."; \
