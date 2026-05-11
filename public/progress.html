@@ -445,7 +445,7 @@
                 const daysRemaining = Math.max(0, Math.ceil(estimate.estimatedDaysRemaining || 0));
                 estimateNode.innerHTML = `
                     <div>Estimated completion: ${formatter.format(estimatedCompletionDate)} (${daysRemaining.toLocaleString()} day${daysRemaining === 1 ? '' : 's'} remaining)</div>
-                    <small>Based on ${estimate.translationCommits.toLocaleString()} translation commits over the last ${estimate.windowDays} days, across ${estimate.activeDays.toLocaleString()} active days.</small>
+                    <small>Based on ${estimate.translationCommits.toLocaleString()} progress snapshots over the last ${estimate.windowDays} days, across ${estimate.activeDays.toLocaleString()} active days.</small>
                     <small>Average pace: ${sentencesPerDay.toFixed(2)} sentences/day overall, ${(Number(estimate.sentencesPerActiveDay || 0)).toFixed(2)} sentences per active day.</small>
                 `;
             } else {

@@ -3,7 +3,7 @@
 import { execFileSync } from 'node:child_process';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
-const DEFAULT_WINDOW_DAYS = 180;
+const DEFAULT_WINDOW_DAYS = 30;
 const PROGRESS_FILE = 'data/progress.json';
 
 function parseWindowDays(value) {
@@ -35,31 +35,51 @@ function readTranslationHistory(windowDays) {
   }
 
   const commits = [];
-  let current = null;
-
   for (const line of output.split('\n')) {
     if (!line) continue;
-
-    if (line.startsWith('__COMMIT__')) {
-      if (current) commits.push(current);
-      const [hash, timestamp] = line.slice('__COMMIT__'.length).split('\t');
-      current = {
-        hash,
-        timestamp: Number.parseInt(timestamp, 10) * 1000,
-        files: []
-      };
-      continue;
-    }
-
-    if (current && line === PROGRESS_FILE) current.files.push(line);
+    if (!line.startsWith('__COMMIT__')) continue;
+    const [hash, timestamp] = line.slice('__COMMIT__'.length).split('\t');
+    commits.push({
+      hash,
+      timestamp: Number.parseInt(timestamp, 10) * 1000
+    });
   }
 
-  if (current) commits.push(current);
   return commits;
 }
 
 function toUtcDayKey(date) {
   return date.toISOString().slice(0, 10);
+}
+
+function hasMeaningfulTranslation(item) {
+  for (const t of item?.translations || []) {
+    if (
+      (typeof t?.literal === 'string' && t.literal.trim()) ||
+      (typeof t?.idiomatic === 'string' && t.idiomatic.trim()) ||
+      (typeof t?.text === 'string' && t.text.trim()) ||
+      (typeof t?.translation === 'string' && t.translation.trim())
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function countTranslatedSentencesFromProgressJson(progressJson) {
+  const books = Object.values(progressJson?.books || {});
+  let total = 0;
+
+  for (const book of books) {
+    for (const chapter of book?.chapters || []) {
+      const translatedCount = Number(chapter?.translatedCount);
+      if (Number.isFinite(translatedCount) && translatedCount > 0) {
+        total += translatedCount;
+      }
+    }
+  }
+
+  return total;
 }
 
 function readTranslatedSentenceTotalAtRevision(revision) {
@@ -76,17 +96,11 @@ function readTranslatedSentenceTotalAtRevision(revision) {
 
   try {
     const data = JSON.parse(output);
-    if (Number.isFinite(Number(data?.summary?.translatedSentences))) {
-      return Number(data.summary.translatedSentences);
+    const summaryCount = Number(data?.summary?.translatedSentences);
+    if (Number.isFinite(summaryCount) && summaryCount >= 0) {
+      return summaryCount;
     }
-
-    let total = 0;
-    for (const book of Object.values(data.books || {})) {
-      for (const chapter of book.chapters || []) {
-        total += Number(chapter.translatedCount || 0);
-      }
-    }
-    return total;
+    return countTranslatedSentencesFromProgressJson(data);
   } catch {
     return 0;
   }
@@ -124,21 +138,35 @@ function estimateCompletionFromGitHistory({
     return null;
   }
 
+  const snapshots = commits
+    .map(commit => ({
+      ...commit,
+      total: readTranslatedSentenceTotalAtRevision(commit.hash)
+    }))
+    .filter(snapshot => Number.isFinite(snapshot.total));
+
+  if (snapshots.length === 0) {
+    return null;
+  }
+
+  snapshots.sort((a, b) => a.timestamp - b.timestamp);
+
   const dailyCounts = new Map();
   let translatedSentencesAdded = 0;
   let translationCommits = 0;
 
-  for (const commit of commits) {
-    const currentCount = readTranslatedSentenceTotalAtRevision(commit.hash);
-    const parentCount = readTranslatedSentenceTotalAtRevision(`${commit.hash}^`);
-    const commitDelta = currentCount - parentCount;
-
-    if (commitDelta > 0) {
-      translatedSentencesAdded += commitDelta;
-      translationCommits += 1;
-      const key = toUtcDayKey(new Date(commit.timestamp));
-      dailyCounts.set(key, (dailyCounts.get(key) || 0) + commitDelta);
+  let previous = null;
+  for (const snapshot of snapshots) {
+    if (previous) {
+      const delta = snapshot.total - previous.total;
+      if (delta > 0) {
+        translatedSentencesAdded += delta;
+        translationCommits += 1;
+        const key = toUtcDayKey(new Date(snapshot.timestamp));
+        dailyCounts.set(key, (dailyCounts.get(key) || 0) + delta);
+      }
     }
+    previous = snapshot;
   }
 
   const activeDays = dailyCounts.size;
@@ -165,7 +193,7 @@ function estimateCompletionFromGitHistory({
     sentencesPerActiveDay,
     estimatedDaysRemaining,
     estimatedCompletionDate,
-    source: 'git translation commits'
+    source: 'git chapter-file deltas'
   };
 }
 
