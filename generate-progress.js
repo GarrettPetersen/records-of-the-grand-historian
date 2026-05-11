@@ -162,14 +162,20 @@ function generateProgressData() {
 
   const chapters = Object.values(progress.books).flatMap(book => book.chapters || []);
   const completedChapters = chapters.filter(chapter => chapter.status === 'green').length;
+  const totalSentences = chapters.reduce((sum, chapter) => sum + (chapter.sentenceCount || 0), 0);
+  const translatedSentences = chapters.reduce((sum, chapter) => sum + (chapter.translatedCount || 0), 0);
   const estimate = estimateCompletionFromGitHistory({
     completedChapters,
-    totalChapters: chapters.length
+    totalChapters: chapters.length,
+    remainingSentences: Math.max(0, totalSentences - translatedSentences)
   });
   progress.summary = {
     completedChapters,
     totalChapters: chapters.length,
     remainingChapters: Math.max(0, chapters.length - completedChapters),
+    totalSentences,
+    translatedSentences,
+    remainingSentences: Math.max(0, totalSentences - translatedSentences),
     estimate
   };
 
@@ -211,14 +217,20 @@ function mergeProgressSingleBook(bookId) {
   progress.books[bookId] = bookProgressFromManifest(bookId, manifest.books[bookId]);
   const chapters = Object.values(progress.books).flatMap(book => book.chapters || []);
   const completedChapters = chapters.filter(chapter => chapter.status === 'green').length;
+  const totalSentences = chapters.reduce((sum, chapter) => sum + (chapter.sentenceCount || 0), 0);
+  const translatedSentences = chapters.reduce((sum, chapter) => sum + (chapter.translatedCount || 0), 0);
   const estimate = estimateCompletionFromGitHistory({
     completedChapters,
-    totalChapters: chapters.length
+    totalChapters: chapters.length,
+    remainingSentences: Math.max(0, totalSentences - translatedSentences)
   });
   progress.summary = {
     completedChapters,
     totalChapters: chapters.length,
     remainingChapters: Math.max(0, chapters.length - completedChapters),
+    totalSentences,
+    translatedSentences,
+    remainingSentences: Math.max(0, totalSentences - translatedSentences),
     estimate
   };
   writeProgress(progress);
