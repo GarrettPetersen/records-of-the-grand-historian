@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const DEFAULT_WINDOW_DAYS = 30;
+const MIN_CHAPTERS_PER_DAY = 24;
 const PROGRESS_FILE = 'data/progress.json';
 
 function parseWindowDays(value) {
@@ -66,15 +67,15 @@ function hasMeaningfulTranslation(item) {
   return false;
 }
 
-function countTranslatedSentencesFromProgressJson(progressJson) {
+function countCompletedChaptersFromProgressJson(progressJson) {
   const books = Object.values(progressJson?.books || {});
   let total = 0;
 
   for (const book of books) {
     for (const chapter of book?.chapters || []) {
-      const translatedCount = Number(chapter?.translatedCount);
-      if (Number.isFinite(translatedCount) && translatedCount > 0) {
-        total += translatedCount;
+      const status = chapter?.status;
+      if (status === 'green') {
+        total += 1;
       }
     }
   }
@@ -82,7 +83,7 @@ function countTranslatedSentencesFromProgressJson(progressJson) {
   return total;
 }
 
-function readTranslatedSentenceTotalAtRevision(revision) {
+function readProgressSnapshotAtRevision(revision) {
   const spec = `${revision}:${PROGRESS_FILE}`;
   let output = '';
   try {
@@ -96,40 +97,46 @@ function readTranslatedSentenceTotalAtRevision(revision) {
 
   try {
     const data = JSON.parse(output);
-    const summaryCount = Number(data?.summary?.translatedSentences);
-    if (Number.isFinite(summaryCount) && summaryCount >= 0) {
-      return summaryCount;
-    }
-    return countTranslatedSentencesFromProgressJson(data);
+    const summaryCompleted = Number(data?.summary?.completedChapters);
+    const summaryTotal = Number(data?.summary?.totalChapters);
+    return {
+      completedChapters: Number.isFinite(summaryCompleted) && summaryCompleted >= 0
+        ? summaryCompleted
+        : countCompletedChaptersFromProgressJson(data),
+      totalChapters: Number.isFinite(summaryTotal) && summaryTotal >= 0
+        ? summaryTotal
+        : Object.values(data?.books || {}).reduce(
+            (sum, book) => sum + (book?.chapters?.length || 0),
+            0
+          )
+    };
   } catch {
-    return 0;
+    return null;
   }
 }
 
 function estimateCompletionFromGitHistory({
   completedChapters,
   totalChapters,
-  remainingSentences,
   windowDays = parseWindowDays(process.env.PROGRESS_ESTIMATE_WINDOW_DAYS)
 } = {}) {
   const remainingChapters = Math.max(0, (totalChapters || 0) - (completedChapters || 0));
-  const outstandingSentences = Math.max(0, remainingSentences || 0);
 
-  if (outstandingSentences === 0) {
+  if (remainingChapters === 0) {
     return {
       windowDays,
-      translationCommits: 0,
+      progressSnapshots: 0,
       activeDays: 0,
       completedChapters: completedChapters || 0,
       totalChapters: totalChapters || 0,
       remainingChapters: 0,
-      remainingSentences: 0,
-      sentencesPerDay: 0,
-      sentencesPerActiveDay: 0,
-      translatedSentencesAdded: 0,
+      rawChaptersPerDay: 0,
+      chaptersPerDay: 0,
+      chaptersPerActiveDay: 0,
+      completedChaptersAdded: 0,
       estimatedDaysRemaining: 0,
       estimatedCompletionDate: new Date().toISOString(),
-      source: 'git translation commits'
+      source: 'git progress snapshots'
     };
   }
 
@@ -139,11 +146,17 @@ function estimateCompletionFromGitHistory({
   }
 
   const snapshots = commits
-    .map(commit => ({
-      ...commit,
-      total: readTranslatedSentenceTotalAtRevision(commit.hash)
-    }))
-    .filter(snapshot => Number.isFinite(snapshot.total));
+    .map(commit => {
+      const snapshot = readProgressSnapshotAtRevision(commit.hash);
+      return snapshot
+        ? {
+            ...commit,
+            completedChapters: snapshot.completedChapters,
+            totalChapters: snapshot.totalChapters
+          }
+        : null;
+    })
+    .filter(snapshot => snapshot && Number.isFinite(snapshot.completedChapters));
 
   if (snapshots.length === 0) {
     return null;
@@ -152,16 +165,16 @@ function estimateCompletionFromGitHistory({
   snapshots.sort((a, b) => a.timestamp - b.timestamp);
 
   const dailyCounts = new Map();
-  let translatedSentencesAdded = 0;
-  let translationCommits = 0;
+  let completedChaptersAdded = 0;
+  let progressSnapshots = 0;
 
   let previous = null;
   for (const snapshot of snapshots) {
     if (previous) {
-      const delta = snapshot.total - previous.total;
+      const delta = snapshot.completedChapters - previous.completedChapters;
       if (delta > 0) {
-        translatedSentencesAdded += delta;
-        translationCommits += 1;
+        completedChaptersAdded += delta;
+        progressSnapshots += 1;
         const key = toUtcDayKey(new Date(snapshot.timestamp));
         dailyCounts.set(key, (dailyCounts.get(key) || 0) + delta);
       }
@@ -170,30 +183,31 @@ function estimateCompletionFromGitHistory({
   }
 
   const activeDays = dailyCounts.size;
-  const sentencesPerDay = translatedSentencesAdded / windowDays;
-  const sentencesPerActiveDay = activeDays > 0 ? translatedSentencesAdded / activeDays : 0;
+  const rawChaptersPerDay = completedChaptersAdded / windowDays;
+  const chaptersPerDay = rawChaptersPerDay > 0 ? Math.max(rawChaptersPerDay, MIN_CHAPTERS_PER_DAY) : 0;
+  const chaptersPerActiveDay = activeDays > 0 ? completedChaptersAdded / activeDays : 0;
 
-  if (sentencesPerDay <= 0) {
+  if (chaptersPerDay <= 0) {
     return null;
   }
 
-  const estimatedDaysRemaining = outstandingSentences / sentencesPerDay;
+  const estimatedDaysRemaining = remainingChapters / chaptersPerDay;
   const estimatedCompletionDate = new Date(Date.now() + estimatedDaysRemaining * DAY_MS).toISOString();
 
   return {
     windowDays,
-    translationCommits,
+    progressSnapshots,
     activeDays,
     completedChapters: completedChapters || 0,
     totalChapters: totalChapters || 0,
     remainingChapters,
-    remainingSentences: outstandingSentences,
-    translatedSentencesAdded,
-    sentencesPerDay,
-    sentencesPerActiveDay,
+    completedChaptersAdded,
+    rawChaptersPerDay,
+    chaptersPerDay,
+    chaptersPerActiveDay,
     estimatedDaysRemaining,
     estimatedCompletionDate,
-    source: 'git chapter-file deltas'
+    source: 'git progress snapshots'
   };
 }
 

@@ -166,8 +166,7 @@ function generateProgressData() {
   const translatedSentences = chapters.reduce((sum, chapter) => sum + (chapter.translatedCount || 0), 0);
   const estimate = estimateCompletionFromGitHistory({
     completedChapters,
-    totalChapters: chapters.length,
-    remainingSentences: Math.max(0, totalSentences - translatedSentences)
+    totalChapters: chapters.length
   });
   progress.summary = {
     completedChapters,
