@@ -246,6 +246,20 @@
             opacity: 0.8;
             text-align: center;
         }
+
+        .overall-progress-estimate {
+            color: var(--text-color);
+            margin-top: 0.5rem;
+            opacity: 0.8;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .overall-progress-estimate small {
+            display: block;
+            margin-top: 0.25rem;
+            opacity: 0.85;
+        }
     </style>
 </head>
 <body>
@@ -269,6 +283,7 @@
                     <div class="overall-progress-fill" id="overall-progress-fill" style="width: 0%;"></div>
                 </div>
                 <div class="overall-progress-count" id="overall-progress-count">Chapters: 0 / 0 (0.0%)</div>
+                <div class="overall-progress-estimate" id="overall-progress-estimate"></div>
             </section>
 
             <div class="progress-legend">
@@ -416,6 +431,23 @@
                 <div>${formatProgress(sentenceTranslated, sentenceTotal, 'sentences translated')}</div>
                 <div>${formatProgress(characterTranslated, characterTotal, 'characters translated')}</div>
             `;
+
+            const estimateNode = document.getElementById('overall-progress-estimate');
+            const estimate = data.summary?.estimate;
+            if (estimate?.estimatedCompletionDate && estimate?.chaptersPerDay > 0) {
+                const date = new Date(estimate.estimatedCompletionDate);
+                const formatter = new Intl.DateTimeFormat(undefined, {
+                    dateStyle: 'medium'
+                });
+                const daysRemaining = Math.max(0, Math.ceil(estimate.estimatedDaysRemaining || 0));
+                estimateNode.innerHTML = `
+                    <div>Estimated completion: ${formatter.format(date)} (${daysRemaining.toLocaleString()} day${daysRemaining === 1 ? '' : 's'} remaining)</div>
+                    <small>Based on ${estimate.reviewCommits.toLocaleString()} review commits over the last ${estimate.windowDays} days, across ${estimate.activeDays.toLocaleString()} active days.</small>
+                    <small>Average pace: ${(estimate.chaptersPerDay || 0).toFixed(2)} chapters/day overall, ${(estimate.chaptersPerActiveDay || 0).toFixed(2)} chapters per active day.</small>
+                `;
+            } else {
+                estimateNode.textContent = 'Estimated completion: unavailable';
+            }
         }
 
         function formatProgress(translated, total, label) {

@@ -18,6 +18,7 @@ import fs from 'fs';
 import path from 'path';
 import { scoreChapterFile } from './score-translations.js';
 import { isPunctuationOnlySentence } from './sentence-utils.mjs';
+import { estimateCompletionFromGitHistory } from './scripts/progress-estimate.mjs';
 
 const MANIFEST_PATH = './data/manifest.json';
 const DATA_DIR = './data';
@@ -159,6 +160,19 @@ function generateProgressData() {
     progress.books[bookId] = bookProgressFromManifest(bookId, book);
   }
 
+  const chapters = Object.values(progress.books).flatMap(book => book.chapters || []);
+  const completedChapters = chapters.filter(chapter => chapter.status === 'green').length;
+  const estimate = estimateCompletionFromGitHistory({
+    completedChapters,
+    totalChapters: chapters.length
+  });
+  progress.summary = {
+    completedChapters,
+    totalChapters: chapters.length,
+    remainingChapters: Math.max(0, chapters.length - completedChapters),
+    estimate
+  };
+
   return progress;
 }
 
@@ -195,6 +209,18 @@ function mergeProgressSingleBook(bookId) {
   progress.generatedAt = new Date().toISOString();
   progress.books = progress.books || {};
   progress.books[bookId] = bookProgressFromManifest(bookId, manifest.books[bookId]);
+  const chapters = Object.values(progress.books).flatMap(book => book.chapters || []);
+  const completedChapters = chapters.filter(chapter => chapter.status === 'green').length;
+  const estimate = estimateCompletionFromGitHistory({
+    completedChapters,
+    totalChapters: chapters.length
+  });
+  progress.summary = {
+    completedChapters,
+    totalChapters: chapters.length,
+    remainingChapters: Math.max(0, chapters.length - completedChapters),
+    estimate
+  };
   writeProgress(progress);
   console.log(`Merged progress for book: ${bookId}`);
 }
