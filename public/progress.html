@@ -240,25 +240,44 @@
             transition: width 0.3s ease;
         }
 
-        .overall-progress-count {
-            color: var(--text-color);
-            margin-top: 0.75rem;
-            opacity: 0.8;
-            text-align: center;
+        .overall-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
         }
 
-        .overall-progress-estimate {
-            color: var(--text-color);
-            margin-top: 0.5rem;
-            opacity: 0.8;
-            text-align: center;
-            font-size: 0.95rem;
+        .overall-metric-card {
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+            padding: 0.85rem 1rem;
+            background: rgba(255, 255, 255, 0.45);
+            min-height: 5.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .overall-progress-estimate small {
-            display: block;
-            margin-top: 0.25rem;
-            opacity: 0.85;
+        .overall-metric-label {
+            color: var(--text-color);
+            font-size: 0.82rem;
+            opacity: 0.72;
+            text-transform: uppercase;
+            letter-spacing: 0;
+        }
+
+        .overall-metric-value {
+            color: var(--primary-color);
+            font-size: 1.15rem;
+            line-height: 1.25;
+            font-weight: 700;
+        }
+
+        .overall-metric-note {
+            color: var(--text-color);
+            font-size: 0.82rem;
+            line-height: 1.35;
+            opacity: 0.78;
         }
     </style>
 </head>
@@ -282,8 +301,12 @@
                 <div class="overall-progress-bar" aria-label="Overall chapter completion progress">
                     <div class="overall-progress-fill" id="overall-progress-fill" style="width: 0%;"></div>
                 </div>
-                <div class="overall-progress-count" id="overall-progress-count">Chapters: 0 / 0 (0.0%)</div>
-                <div class="overall-progress-estimate" id="overall-progress-estimate"></div>
+                <div class="overall-metrics-grid">
+                    <div class="overall-metric-card" id="overall-progress-chapters"></div>
+                    <div class="overall-metric-card" id="overall-progress-sentences"></div>
+                    <div class="overall-metric-card" id="overall-progress-characters"></div>
+                    <div class="overall-metric-card" id="overall-progress-estimate"></div>
+                </div>
             </section>
 
             <div class="progress-legend">
@@ -428,10 +451,20 @@
 
             document.getElementById('overall-progress-percent').textContent = displayPercent;
             document.getElementById('overall-progress-fill').style.width = displayPercent;
-            document.getElementById('overall-progress-count').innerHTML = `
-                <div>${formatProgress(chapterFinished, chapterTotal, 'chapters complete')}</div>
-                <div>${formatProgress(sentenceTranslated, sentenceTotal, 'sentences translated')}</div>
-                <div>${formatProgress(characterTranslated, characterTotal, 'characters translated')}</div>
+            document.getElementById('overall-progress-chapters').innerHTML = `
+                <div class="overall-metric-label">Chapters</div>
+                <div class="overall-metric-value">${chapterFinished.toLocaleString()} / ${chapterTotal.toLocaleString()} (${percent.toFixed(1)}%)</div>
+                <div class="overall-metric-note">Complete chapters only.</div>
+            `;
+            document.getElementById('overall-progress-sentences').innerHTML = `
+                <div class="overall-metric-label">Sentences</div>
+                <div class="overall-metric-value">${sentenceTranslated.toLocaleString()} / ${sentenceTotal.toLocaleString()} (${sentenceTotal > 0 ? ((sentenceTranslated / sentenceTotal) * 100).toFixed(1) : '0.0'}%)</div>
+                <div class="overall-metric-note">Translated sentence coverage.</div>
+            `;
+            document.getElementById('overall-progress-characters').innerHTML = `
+                <div class="overall-metric-label">Characters</div>
+                <div class="overall-metric-value">${characterTranslated.toLocaleString()} / ${characterTotal.toLocaleString()} (${characterTotal > 0 ? ((characterTranslated / characterTotal) * 100).toFixed(1) : '0.0'}%)</div>
+                <div class="overall-metric-note">Translated character coverage.</div>
             `;
 
             const estimateNode = document.getElementById('overall-progress-estimate');
@@ -445,12 +478,16 @@
                 });
                 const daysRemaining = Math.max(0, Math.ceil(estimate.estimatedDaysRemaining || 0));
                 estimateNode.innerHTML = `
-                    <div>Estimated completion: ${formatter.format(estimatedCompletionDate)} (${daysRemaining.toLocaleString()} day${daysRemaining === 1 ? '' : 's'} remaining)</div>
-                    <small>Based on ${estimate.progressSnapshots.toLocaleString()} progress snapshots over the last ${estimate.windowDays} days, across ${estimate.activeDays.toLocaleString()} active days.</small>
-                    <small>Snapshot pace: ${rawChaptersPerDay.toFixed(2)} chapters/day. Estimated pace floors at 24 chapters/day so sparse snapshot history does not drag the forecast out.</small>
+                    <div class="overall-metric-label">Estimate</div>
+                    <div class="overall-metric-value">Completion ${formatter.format(estimatedCompletionDate)}</div>
+                    <div class="overall-metric-note">${daysRemaining.toLocaleString()} day${daysRemaining === 1 ? '' : 's'} remaining. Snapshot pace ${rawChaptersPerDay.toFixed(2)} chapters/day, floored at 24.</div>
                 `;
             } else {
-                estimateNode.textContent = 'Estimated completion: unavailable';
+                estimateNode.innerHTML = `
+                    <div class="overall-metric-label">Estimate</div>
+                    <div class="overall-metric-value">Unavailable</div>
+                    <div class="overall-metric-note">Not enough recent progress snapshots to project a finish date.</div>
+                `;
             }
         }
 
