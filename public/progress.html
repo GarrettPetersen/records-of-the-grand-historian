@@ -326,7 +326,9 @@
     <script>
         async function loadProgressData() {
             try {
-                const response = await fetch('data/progress.json');
+                const response = await fetch(`data/progress.json?ts=${Date.now()}`, {
+                    cache: 'no-store'
+                });
                 const data = await response.json();
                 return data;
             } catch (error) {
@@ -434,16 +436,17 @@
 
             const estimateNode = document.getElementById('overall-progress-estimate');
             const estimate = data.summary?.estimate;
-            if (estimate?.estimatedCompletionDate && estimate?.chaptersPerDay > 0) {
-                const date = new Date(estimate.estimatedCompletionDate);
+            const chaptersPerDay = Number(estimate?.chaptersPerDay || 0);
+            const estimatedCompletionDate = estimate?.estimatedCompletionDate ? new Date(estimate.estimatedCompletionDate) : null;
+            if (estimatedCompletionDate && !Number.isNaN(estimatedCompletionDate.getTime()) && chaptersPerDay > 0) {
                 const formatter = new Intl.DateTimeFormat(undefined, {
                     dateStyle: 'medium'
                 });
                 const daysRemaining = Math.max(0, Math.ceil(estimate.estimatedDaysRemaining || 0));
                 estimateNode.innerHTML = `
-                    <div>Estimated completion: ${formatter.format(date)} (${daysRemaining.toLocaleString()} day${daysRemaining === 1 ? '' : 's'} remaining)</div>
+                    <div>Estimated completion: ${formatter.format(estimatedCompletionDate)} (${daysRemaining.toLocaleString()} day${daysRemaining === 1 ? '' : 's'} remaining)</div>
                     <small>Based on ${estimate.reviewCommits.toLocaleString()} review commits over the last ${estimate.windowDays} days, across ${estimate.activeDays.toLocaleString()} active days.</small>
-                    <small>Average pace: ${(estimate.chaptersPerDay || 0).toFixed(2)} chapters/day overall, ${(estimate.chaptersPerActiveDay || 0).toFixed(2)} chapters per active day.</small>
+                    <small>Average pace: ${chaptersPerDay.toFixed(2)} chapters/day overall, ${(Number(estimate.chaptersPerActiveDay || 0)).toFixed(2)} chapters per active day.</small>
                 `;
             } else {
                 estimateNode.textContent = 'Estimated completion: unavailable';
