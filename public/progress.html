@@ -468,25 +468,32 @@
             `;
 
             const estimateNode = document.getElementById('overall-progress-estimate');
-            const estimate = data.summary?.estimate;
+            const summary = data.summary || {};
+            const estimate = summary.estimate || null;
+            const remainingChapters = Number(summary.remainingChapters || Math.max(0, chapterTotal - chapterFinished));
             const chaptersPerDay = Number(estimate?.chaptersPerDay || 0);
             const rawChaptersPerDay = Number(estimate?.rawChaptersPerDay || 0);
             const estimatedCompletionDate = estimate?.estimatedCompletionDate ? new Date(estimate.estimatedCompletionDate) : null;
-            if (estimatedCompletionDate && !Number.isNaN(estimatedCompletionDate.getTime()) && chaptersPerDay > 0) {
+            const fallbackDaysRemaining = remainingChapters > 0 ? remainingChapters / 24 : 0;
+            const fallbackCompletionDate = remainingChapters > 0 ? new Date(Date.now() + fallbackDaysRemaining * 24 * 60 * 60 * 1000) : null;
+            const displayDate = estimatedCompletionDate && !Number.isNaN(estimatedCompletionDate.getTime()) && chaptersPerDay > 0
+                ? estimatedCompletionDate
+                : fallbackCompletionDate;
+            if (displayDate && !Number.isNaN(displayDate.getTime()) && remainingChapters > 0) {
                 const formatter = new Intl.DateTimeFormat(undefined, {
                     dateStyle: 'medium'
                 });
-                const daysRemaining = Math.max(0, Math.ceil(estimate.estimatedDaysRemaining || 0));
+                const daysRemaining = Math.max(0, Math.ceil(estimate?.estimatedDaysRemaining || fallbackDaysRemaining));
                 estimateNode.innerHTML = `
                     <div class="overall-metric-label">Estimate</div>
-                    <div class="overall-metric-value">Completion ${formatter.format(estimatedCompletionDate)}</div>
-                    <div class="overall-metric-note">${daysRemaining.toLocaleString()} day${daysRemaining === 1 ? '' : 's'} remaining. Snapshot pace ${rawChaptersPerDay.toFixed(2)} chapters/day, floored at 24.</div>
+                    <div class="overall-metric-value">Completion ${formatter.format(displayDate)}</div>
+                    <div class="overall-metric-note">${daysRemaining.toLocaleString()} day${daysRemaining === 1 ? '' : 's'} remaining. ${estimate ? `Snapshot pace ${rawChaptersPerDay.toFixed(2)} chapters/day, floored at 24.` : 'Fallback pace set to 24 chapters/day.'}</div>
                 `;
             } else {
                 estimateNode.innerHTML = `
                     <div class="overall-metric-label">Estimate</div>
                     <div class="overall-metric-value">Unavailable</div>
-                    <div class="overall-metric-note">Not enough recent progress snapshots to project a finish date.</div>
+                    <div class="overall-metric-note">No chapter-count summary is available yet.</div>
                 `;
             }
         }
