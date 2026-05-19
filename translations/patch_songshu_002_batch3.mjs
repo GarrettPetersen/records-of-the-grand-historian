@@ -150,8 +150,8 @@ const T = {
     'Establish Palace Attendants, Gentlemen of the Yellow Gate, the Left Assistant of the Masters of Writing, and Gentlemen in the state of Song, to follow the great envoy in welcoming the regalia.',
   ],
   s0338: [
-    '[13]',
-    '[13]',
+    'Citation marker in the source text: [13].',
+    'Editorial note marker in the source: [13].',
   ],
   s0339: [
     'The barbarian of Baohan, Qifu Chipan, sent envoys to the Duke to offer service in attacking the Qiang; he was appointed General Who Pacifies the West and Duke of Henan.',
