@@ -1,30 +1,19 @@
 #!/usr/bin/env node
+/** Apply { s0001: { literal, idiomatic }, ... } patch to current_translation JSON */
 import fs from 'node:fs';
-import path from 'node:path';
-import { pathToFileURL } from 'node:url';
 
-const [, , basePath, patchPath] = process.argv;
-if (!basePath || !patchPath) {
-  console.error('Usage: node scripts/apply-translation-patch.mjs <base.json> <patch.json|.mjs>');
-  process.exit(1);
-}
-
-const base = JSON.parse(fs.readFileSync(basePath, 'utf8'));
-let patch;
-
-if (patchPath.endsWith('.mjs')) {
-  const mod = await import(pathToFileURL(path.resolve(patchPath)).href);
-  patch = mod.default;
-} else {
-  patch = JSON.parse(fs.readFileSync(patchPath, 'utf8'));
-}
-
-for (const s of base.sentences) {
+const patchPath = process.argv[2];
+const targetPath = process.argv[3] || 'translations/current_translation_nanqishu.json';
+const patch = (await import(new URL(`file://${process.cwd()}/${patchPath}`))).default;
+const data = JSON.parse(fs.readFileSync(targetPath, 'utf8'));
+let n = 0;
+for (const s of data.sentences) {
   const p = patch[s.id];
-  if (p) {
-    if (typeof p.literal === 'string') s.literal = p.literal;
-    if (typeof p.idiomatic === 'string') s.idiomatic = p.idiomatic;
+  if (p?.literal && p?.idiomatic) {
+    s.literal = p.literal;
+    s.idiomatic = p.idiomatic;
+    n++;
   }
 }
-
-fs.writeFileSync(basePath, JSON.stringify(base, null, 2));
+fs.writeFileSync(targetPath, JSON.stringify(data, null, 2) + '\n');
+console.log(`Applied ${n} sentences from ${patchPath}`);
