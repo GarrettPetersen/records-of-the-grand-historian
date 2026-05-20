@@ -1,0 +1,96 @@
+/** Jinshi ch.059 batch 1b: s0051–s0100 (Imperial Family table — Offering Ancestor sons through Wolian) */
+export default {
+  s0051: { literal: '', idiomatic: '' },
+  s0052: { literal: '', idiomatic: '' },
+  s0053: { literal: '', idiomatic: '' },
+  s0054: { literal: '', idiomatic: '' },
+  s0055: {
+    literal: 'Diku',
+    idiomatic: 'Diku',
+  },
+  s0056: { literal: '', idiomatic: '' },
+  s0057: { literal: '', idiomatic: '' },
+  s0058: { literal: '', idiomatic: '' },
+  s0059: { literal: '', idiomatic: '' },
+  s0060: {
+    literal: 'Digunai',
+    idiomatic: 'Digunai',
+  },
+  s0061: { literal: '', idiomatic: '' },
+  s0062: { literal: '', idiomatic: '' },
+  s0063: { literal: '', idiomatic: '' },
+  s0064: { literal: '', idiomatic: '' },
+  s0065: {
+    literal: 'Salilian',
+    idiomatic: 'Salilian',
+  },
+  s0066: { literal: '', idiomatic: '' },
+  s0067: { literal: '', idiomatic: '' },
+  s0068: { literal: '', idiomatic: '' },
+  s0069: { literal: '', idiomatic: '' },
+  s0070: {
+    literal: 'Sagezhou',
+    idiomatic: 'Sagezhou',
+  },
+  s0071: { literal: '', idiomatic: '' },
+  s0072: { literal: '', idiomatic: '' },
+  s0073: { literal: '', idiomatic: '' },
+  s0074: { literal: '', idiomatic: '' },
+  s0075: {
+    literal: 'At right: sons of the Offering Ancestor—seven in all, with the Bright Ancestor.',
+    idiomatic:
+      'Listed at right: sons of the Offering Ancestor—seven men, counting the Bright Ancestor.',
+  },
+  s0076: {
+    literal: 'Wuguchu',
+    idiomatic: 'Wuguchu',
+  },
+  s0077: {
+    literal: 'Cibushi (Amai bojilie).',
+    idiomatic: 'Cibushi (Amai bojilie, charged with governing the walled towns).',
+  },
+  s0078: { literal: '', idiomatic: '' },
+  s0079: {
+    literal: 'Zongheng (Prefect of Ningzhou).',
+    idiomatic: 'Zongheng (Prefect of Ningzhou).',
+  },
+  s0080: { literal: '', idiomatic: '' },
+  s0081: { literal: '', idiomatic: '' },
+  s0082: { literal: '', idiomatic: '' },
+  s0083: { literal: '', idiomatic: '' },
+  s0084: {
+    literal: 'Zongxian (Left Director of the Department of State Affairs).',
+    idiomatic: 'Zongxian (Left Director of the Department of State Affairs).',
+  },
+  s0085: { literal: '', idiomatic: '' },
+  s0086: {
+    literal: 'Bahei',
+    idiomatic: 'Bahei',
+  },
+  s0087: { literal: '', idiomatic: '' },
+  s0088: {
+    literal: 'Ang (original name Bendu; Grand Preceptor and Concurrent Commander-in-Chief).',
+    idiomatic: 'Ang (born Bendu; Grand Preceptor and concurrent Commander-in-Chief).',
+  },
+  s0089: {
+    literal: 'Zonghao (Right Chancellor and Concurrent Commander-in-Chief).',
+    idiomatic: 'Zonghao (Right Chancellor and concurrent Commander-in-Chief).',
+  },
+  s0090: { literal: '', idiomatic: '' },
+  s0091: {
+    literal: 'Boliehei',
+    idiomatic: 'Boliehei',
+  },
+  s0092: { literal: '', idiomatic: '' },
+  s0093: { literal: '', idiomatic: '' },
+  s0094: { literal: '', idiomatic: '' },
+  s0095: { literal: '', idiomatic: '' },
+  s0096: {
+    literal: 'Wolian',
+    idiomatic: 'Wolian',
+  },
+  s0097: { literal: '', idiomatic: '' },
+  s0098: { literal: '', idiomatic: '' },
+  s0099: { literal: '', idiomatic: '' },
+  s0100: { literal: '', idiomatic: '' },
+};
