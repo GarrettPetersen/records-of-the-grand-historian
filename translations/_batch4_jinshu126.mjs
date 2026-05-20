@@ -1,0 +1,403 @@
+/** Batch 4 translations for jinshu 126 (s0301-s0400) */
+export const batch4 = {
+  s0301: {
+    literal: "Rutan sent envoys to request peace; Mengxun agreed and sent Censor-in-Chief Jing Gui and his son Ta as hostages; at Hukeng Jing Gui fled back, and Ta was seized by pursuing troops.",
+    idiomatic: "Rutan sued for peace; Mengxun accepted and sent Jing Gui, Censor-in-Chief, with his son Ta as hostages. At Hukeng Jing Gui escaped; pursuers captured Ta.",
+  },
+  s0302: {
+    literal: "Mengxun moved more than eight thousand households and returned.",
+    idiomatic: "Mengxun resettled eight thousand-odd households and withdrew.",
+  },
+  s0303: {
+    literal: "Right Guard Zhejue Qi Jizhen seized Shilu Mountain and rebelled.",
+    idiomatic: "Qi Jizhen of the Right Guard Zhejue rebelled and held Shilu Mountain.",
+  },
+  s0304: {
+    literal: "Rutan feared destruction by Mengxun and also feared Qi would take the lands south of the ridge; he moved to Ledu and left Grand Minister of Agriculture Cheng Gongxu to guard Guzang.",
+    idiomatic: "Fearing Mengxun would destroy him and Qi would seize the southern passes, Rutan moved to Ledu and left Cheng Gongxu, Grand Minister of Agriculture, to hold Guzang.",
+  },
+  s0305: {
+    literal: "As Rutan was about to leave the city, Jiao Chen, Wang Hou, and others shut the gates and raised trouble, gathering more than three thousand families to hold the south city.",
+    idiomatic: "As Rutan left the city, Jiao Chen and Wang Hou shut the gates in revolt, rallying three thousand families behind the south wall.",
+  },
+  s0306: {
+    literal: "Chen installed Jiao Lang as Grand Commander and Dragon Cavalry Grand General; Chen as Governor of Liang, and submitted to Mengxun.",
+    idiomatic: "Chen made Jiao Lang Grand Commander and Dragon Cavalry Grand General, took the governorship of Liang himself, and surrendered to Mengxun.",
+  },
+  s0307: {
+    literal: "Pacifying Army Jing Gui attacked Qi Jizhen at Shilu Mountain, was defeated, and died.",
+    idiomatic: "Jing Gui of the Pacifying Army attacked Qi at Shilu Mountain, was routed, and killed.",
+  },
+  s0308: {
+    literal: "Mengxun came to attack exploiting his capture of Guzang; Rutan sent his Pacifier of the North Duan Gou and Left General Yun Lian to strike Fanhe in his rear and moved more than three thousand families to Xiping.",
+    idiomatic: "Mengxun marched on the strength of Guzang; Rutan sent Duan Gou and Yun Lian to raid Fanhe from behind and resettled three thousand families in Xiping.",
+  },
+  s0309: {
+    literal: "Mengxun besieged Ledu; after thirty days without taking it he sent envoys telling Rutan: \"If you give a favored son as hostage I shall withdraw the army.\"",
+    idiomatic: "Mengxun besieged Ledu for thirty days in vain, then sent word: \"Give me a beloved son as hostage and I will withdraw.\"",
+  },
+  s0310: {
+    literal: "Rutan said: \"Whether I stay or go is yours to decide by force of arms.\"",
+    idiomatic: "Rutan replied: \"Stay or go—as your armies please.\"",
+  },
+  s0311: {
+    literal: "You break oath and lack faith—what hostage have I to offer!\"",
+    idiomatic: "You broke faith—what hostage could I offer you!\"",
+  },
+  s0312: {
+    literal: "Mengxun in anger built houses and turned to farming, planning a long siege.",
+    idiomatic: "Mengxun in fury built houses and turned the soil, settling in for a long siege.",
+  },
+  s0313: {
+    literal: "His ministers urgently pressed him; only then did he give his son Anzhou as hostage.",
+    idiomatic: "His ministers pressed him hard; at last he gave his son Anzhou as hostage.",
+  },
+  s0314: {
+    literal: "Mengxun withdrew.",
+    idiomatic: "Mengxun broke the siege and marched away.",
+  },
+  s0315: {
+    literal: "Tuyuhun Shuluogan led troops to attack; Rutan sent his heir Wutai to resist and was defeated by Shuluogan.",
+    idiomatic: "Shuluogan of the Tuyuhun attacked; Rutan sent his heir Wutai to meet him and was defeated.",
+  },
+  s0316: {
+    literal: "Rutan was again about to campaign against Mengxun; Han River Protector Meng Kai remonstrated: \"Mengxun has newly swallowed Guzang and his ferocious momentum is very strong—you should hold firm and watch for an opening, not act rashly.\"",
+    idiomatic: "Rutan prepared to strike Mengxun again; Meng Kai, Han River Protector, warned: \"Mengxun has just taken Guzang and his power is at its peak—hold fast and wait; do not move rashly.\"",
+  },
+  s0317: {
+    literal: "He did not listen.",
+    idiomatic: "Rutan would not listen.",
+  },
+  s0318: {
+    literal: "Five columns advanced together to Fanhe and Tiaodiao, seizing more than five thousand households.",
+    idiomatic: "Five columns marched to Fanhe and Tiaodiao and seized more than five thousand households.",
+  },
+  s0319: {
+    literal: "His general Qu You advanced and said: \"Your Majesty has campaigned a thousand li; the van is intact, households and goods overflow the roads—you should march at double speed and cross the steep passes early.\"",
+    idiomatic: "General Qu You urged: \"You have marched a thousand li with the van unbroken and booty choking the roads—double the pace and cross the passes while you can.\"",
+  },
+  s0320: {
+    literal: "Mengxun is skilled in war and his troops are seasoned in battle; if light forces suddenly arrive beyond our reckoning, a great enemy pressing outside and resettled households attacking within—that is the path of peril.\"",
+    idiomatic: "Mengxun is a master of war and his men are hardened; if light troops strike where we do not expect, the foe without and the settlers within will crush us—that is the road to ruin.\"",
+  },
+  s0321: {
+    literal: "Commandant of the Guard Yiliyan said: \"Our army's momentum is at its height and officers and men are doubly brave; they are foot and we are horse—the conditions do not compare. If we double back we must abandon goods and show weakness to men—that is no plan.\"",
+    idiomatic: "Yiliyan, Commandant of the Guard, said: \"Our army is at flood tide and every man fights twice as hard; infantry cannot match our horse. To turn back is to abandon plunder and show fear—that is no plan.\"",
+  },
+  s0322: {
+    literal: "Qu You went out and told his brothers: \"My words are not used—this is Heaven's decree.\"",
+    idiomatic: "Qu You left and told his brothers: \"They will not hear me—this is fate.\"",
+  },
+  s0323: {
+    literal: "This is where we brothers will die.\"",
+    idiomatic: "Here we brothers will die.\"",
+  },
+  s0324: {
+    literal: "Soon dusk fog and wind and rain came; Mengxun's army arrived in force; Rutan was defeated and returned.",
+    idiomatic: "Soon fog, wind, and rain closed in; Mengxun's host fell upon them; Rutan was routed and fled home.",
+  },
+  s0325: {
+    literal: "Mengxun advanced to besiege Ledu; Rutan held the walls; he gave his son Ran Gan as hostage; Mengxun withdrew. Long afterward he sent Pacifier of the West Hebo to display troops on the western border.",
+    idiomatic: "Mengxun besieged Ledu again; Rutan held the walls and gave his son Ran Gan as hostage; Mengxun withdrew. Later he sent Hebo, Pacifier of the West, to parade troops on the frontier.",
+  },
+  s0326: {
+    literal: "Mengxun invaded Xiping, moved households, plundered cattle and horses, and returned.",
+    idiomatic: "Mengxun raided Xiping, carried off families and livestock, and returned.",
+  },
+  s0327: {
+    literal: "Han River Protector Meng Kai memorialized that Defender of the South and Governor of Huang River Wen Zhi was reckless with wine, obstinate in counsel, and neglected government affairs.",
+    idiomatic: "Meng Kai memorialized that Wen Zhi, Defender of the South and Governor of Huang River, drank without measure, spurned good counsel, and neglected his duties.",
+  },
+  s0328: {
+    literal: "Rutan said to Yiliyan: \"Now the province is overturned; all I rely on is Wen Zhi alone—what shall I do?\"",
+    idiomatic: "Rutan asked Yiliyan: \"The province is ruined; Wen Zhi is all I have left—what can I do?\"",
+  },
+  s0329: {
+    literal: "Yiliyan said: \"You should summon and instruct him to reform his past and improve his conduct.\"",
+    idiomatic: "Yiliyan said: \"Summon him, rebuke him, and make him mend his ways.\"",
+  },
+  s0330: {
+    literal: "Rutan summoned Wen Zhi; when he arrived he reproached him: \"Two elder brothers died young in splendor; I, unworthy, succeeded and cannot bear the great enterprise, so fallen as this—how can I face the world! Though alive I am as if fallen.\"",
+    idiomatic: "Rutan summoned Wen Zhi and rebuked him: \"My brilliant elder brothers died young; I, unfit, inherited and have brought the realm to ruin—how can I show my face! I live as one already dead.\"",
+  },
+  s0331: {
+    literal: "I hoped to rely on Zixian to guard the realm and on Wen Zhong to restore Wu—you were that man.\"",
+    idiomatic: "I counted on you as Zixian to guard the state and as Wen Zhong to restore Wu.\"",
+  },
+  s0332: {
+    literal: "I hear you drown yourself only in wine and abandon all duties.",
+    idiomatic: "They say you drink your days away and abandon every duty.",
+  },
+  s0333: {
+    literal: "I am already old and you are again like this—upon whom shall the ancestors' enterprise be entrusted!\"",
+    idiomatic: "I am old, and you are still like this—who will carry our fathers' work!\"",
+  },
+  s0334: {
+    literal: "Wen Zhi bowed and confessed fault.",
+    idiomatic: "Wen Zhi kowtowed and begged forgiveness.",
+  },
+  s0335: {
+    literal: "Han River men Wei Zhang and others plotted to kill Meng Kai and southward opened relations with Qifu Chibpan.",
+    idiomatic: "Wei Zhang of Han River plotted to kill Meng Kai and sent word south to Qifu Chibpan.",
+  },
+  s0336: {
+    literal: "Guo Yue stopped them saying: \"Chief Minister Meng is generous to those below—what crime warrants killing him!\"",
+    idiomatic: "Guo Yue stopped them: \"Minister Meng is generous to his men—what crime could justify his murder!\"",
+  },
+  s0337: {
+    literal: "I would rather die against the multitude than live by betraying my lord.\"",
+    idiomatic: "I would rather die with the crowd against me than live by betraying my lord.\"",
+  },
+  s0338: {
+    literal: "He secretly informed Kai, lured Zhang and the rest to drink, and killed more than forty.",
+    idiomatic: "He warned Meng Kai in secret, lured Zhang and his fellows to drink, and killed more than forty.",
+  },
+  s0339: {
+    literal: "Kai feared Chibpan's army would arrive and galloped to inform Wen Zhi; Wen Zhi sent General Pi Zhen to meet them.",
+    idiomatic: "Fearing Chibpan's approach, Meng Kai rode to Wen Zhi; Wen Zhi sent General Pi Zhen to meet the enemy.",
+  },
+  s0340: {
+    literal: "When Chibpan's army reached the city and heard Pi Zhen was coming they withdrew.",
+    idiomatic: "Chibpan reached the city, heard Pi Zhen was marching, and withdrew.",
+  },
+  s0341: {
+    literal: "Mengxun again attacked Ledu; after twenty days without taking it he returned.",
+    idiomatic: "Mengxun besieged Ledu again, failed in twenty days, and left.",
+  },
+  s0342: {
+    literal: "Defender of the South Wen Zhi surrendered Huang River to Mengxun, who moved more than five thousand households to Guzang.",
+    idiomatic: "Wen Zhi surrendered Huang River to Mengxun, who resettled five thousand households at Guzang.",
+  },
+  s0343: {
+    literal: "Mengxun again came to attack; Rutan gave Grand Marshal Juyan as hostage; Mengxun then withdrew.",
+    idiomatic: "Mengxun attacked again; Rutan gave Grand Marshal Juyan as hostage, and Mengxun withdrew.",
+  },
+  s0344: {
+    literal: "Rutan deliberated a western campaign against the Yifu; Meng Kai remonstrated: \"Years without harvest, above and below hungry and exhausted, pressed in the south by Chibpan and in the north by Mengxun—the people are unsettled and below there is no secure livelihood.\"",
+    idiomatic: "Rutan planned a western campaign against the Yifu; Meng Kai warned: \"Famine has drained us; Chibpan presses from the south, Mengxun from the north—the people are in turmoil and cannot live in peace.\"",
+  },
+  s0345: {
+    literal: "Now though a distant campaign may succeed, later troubles will surely be deep; better to ally with Chibpan, exchange grain to relieve hardship, comfort and instruct the various tribes to broaden army supplies, store strength and repair weapons, and move when the time is right.\"",
+    idiomatic: "Even victory abroad will breed disaster at home; ally with Chibpan, buy grain, win over the tribes, hoard strength and sharpen arms, and strike only when the moment is ripe.\"",
+  },
+  s0346: {
+    literal: "The Changes says: 'About to perish, about to perish—bound to the mulberry in the bud.'",
+    idiomatic: "The Changes says: 'Ruin is near, ruin is near—tie yourself to the mulberry while it is still in bud.'",
+  },
+  s0347: {
+    literal: "May Your Majesty consider this.\"",
+    idiomatic: "Your Majesty, weigh this well.\"",
+  },
+  s0348: {
+    literal: "Rutan said: \"I mean to seize territory—do not discourage the troops.\"",
+    idiomatic: "Rutan said: \"I am going to take land—do not dampen the army's spirit.\"",
+  },
+  s0349: {
+    literal: "He told his heir Wutai: \"Years without planting—within and without we are destitute—the time calls for a western march to save this distress.\"",
+    idiomatic: "He told his heir Wutai: \"Years without sowing have beggared us inside and out—a western march is our only rescue.\"",
+  },
+  s0350: {
+    literal: "Mengxun has lately withdrawn and cannot come at once; what I fear morning and evening is only Chibpan.\"",
+    idiomatic: "Mengxun has just withdrawn and cannot strike at once; only Chibpan troubles me day and night.\"",
+  },
+  s0351: {
+    literal: "Their name is slight and their masses few—easy to resist; within a month I shall have room enough to maneuver.\"",
+    idiomatic: "His fame is small and his host few—he is easy to beat; within a month I shall be free to turn back.\"",
+  },
+  s0352: {
+    literal: "Guard Ledu carefully and do not let it fall.\"",
+    idiomatic: "Hold Ledu fast and do not let it fall.\"",
+  },
+  s0353: {
+    literal: "Rutan led seven thousand cavalry to strike the Yifu, inflicted a great defeat, and obtained more than four hundred thousand cattle, sheep, and horses.",
+    idiomatic: "Rutan led seven thousand horse against the Yifu, routed them, and took four hundred thousand head of livestock.",
+  },
+  s0354: {
+    literal: "Chibpan seized the opening and struck; Adjunct to the Pacifying Army Wei Su said to Wutai: \"The outer city is vast and hard to defend—you should gather our people within the inner city; Su and others will lead the Jin men to fight outside; if we do not prevail there is still full safety.\"",
+    idiomatic: "Chibpan struck while Rutan was away; Wei Su, adjunct to the Pacifying Army, urged Wutai: \"The outer city is too wide to hold—gather our people within the inner wall; we Jin will fight outside, and even if we lose, the core remains safe.\"",
+  },
+  s0355: {
+    literal: "Wutai said: \"A petty bandit, a mere nib—he will flee in a morning and evening; your worry is excessive.\"",
+    idiomatic: "Wutai said: \"A petty thief—he will run by tomorrow; you worry too much.\"",
+  },
+  s0356: {
+    literal: "Wutai feared the Jin men had divided hearts and called influential men of courage and counsel to shut them within.",
+    idiomatic: "Fearing the Jin would turn traitor, Wutai locked the brave and wise within the inner city.",
+  },
+  s0357: {
+    literal: "Meng Kai wept: \"Chibpan is unrighteous; men and spirits share rage; if we advance we bear the grace of heavy relocation, if we retreat we glance at the burden of wife and children—how could there be two hearts!\"",
+    idiomatic: "Meng Kai wept: \"Chibpan is a villain; heaven and earth rage with us. Advance, and we repay your grace for moving us here; retreat, and we think of our wives and children—how could we be divided!\"",
+  },
+  s0358: {
+    literal: "The affair is urgent now; men wish to give their all—what suspicion is there!\"",
+    idiomatic: "The crisis is upon us; every man longs to die fighting—why doubt us!\"",
+  },
+  s0359: {
+    literal: "Wutai said: \"I do not fail to know your loyalty; I truly fear others may live by escaping beyond reckoning—to settle you I act thus.\"",
+    idiomatic: "Wutai said: \"I know you are loyal; I fear others may slip away in panic—that is why I confine you, to keep you safe.\"",
+  },
+  s0360: {
+    literal: "In ten days the city fell.",
+    idiomatic: "Within ten days the city fell.",
+  },
+  s0361: {
+    literal: "Pacifier of the West Fanni fled from Xiping to tell Rutan; Rutan said to the crowd: \"Now Ledu is lost to Chibpan; men are all killed, women rewarded to the army—though we wish to return, there is nowhere to go.\"",
+    idiomatic: "Fanni fled from Xiping with the news; Rutan told his men: \"Chibpan has taken Ledu; the men are dead, the women given to his soldiers—even if we turn back, we have nowhere left.\"",
+  },
+  s0362: {
+    literal: "If you can with me use Yifu resources to take Qihan and ransom wife and children, that is my hope.\"",
+    idiomatic: "If you will follow me west, use the Yifu to seize Qihan, and buy back your wives and children—that is my hope.\"",
+  },
+  s0363: {
+    literal: "Otherwise, returning to Chibpan means becoming slaves and servants—how can I bear to see wife and children in another's embrace!\"",
+    idiomatic: "Otherwise we submit to Chibpan as slaves—how can I bear to see our wives in another's arms!\"",
+  },
+  s0364: {
+    literal: "He led the army west; many fled back; he sent Pacifier of the North Duan Gou to pursue; Gou also did not return.",
+    idiomatic: "He marched west; many deserted on the road; he sent Duan Gou to bring them back, but Gou never returned.",
+  },
+  s0365: {
+    literal: "Then officers and men all scattered; only Central Army Hebo, Rear Army Luogong, Pacifier of the West Fanni, and Gentleman Attendant of Scattered Cavalry Yin Lili remained.",
+    idiomatic: "Officers and men melted away; only Hebo, Luogong, Fanni, and Yin Lili, Gentleman Attendant of Scattered Cavalry, stayed.",
+  },
+  s0366: {
+    literal: "Rutan said: \"Mengxun and Chibpan in old days both pledged allegiance to me—now to go to them, is it not base!\"",
+    idiomatic: "Rutan said: \"Mengxun and Chibpan once pledged themselves to me—now to crawl to them, how shameful!\"",
+  },
+  s0367: {
+    literal: "The broad four seas—there is nowhere for a lone man to shelter his body; how painful!\"",
+    idiomatic: "All beneath heaven, and not one corner for a single man—how bitter!\"",
+  },
+  s0368: {
+    literal: "Mengxun and I are peers in name and years; Chibpan is a young man bound by marriage alliance—both are what they fear; neither situation can succeed.\"",
+    idiomatic: "Mengxun is my peer in rank and age; Chibpan is a young kinsman by marriage—each fears me; neither road can save me.\"",
+  },
+  s0369: {
+    literal: "Rather than gather and die together, better to divide and perhaps some survive.\"",
+    idiomatic: "Better to split and live in part than die together in a heap.\"",
+  },
+  s0370: {
+    literal: "Fanni is my elder brother's son, the tribe's reliance; our households in the north number near twenty thousand; Mengxun is now recruiting the distant and continuing the severed line—you go west.\"",
+    idiomatic: "Fanni is my brother's son and the tribe's hope; twenty thousand of our people remain in the north; Mengxun is winning the distant and restoring the broken line—go west.\"",
+  },
+  s0371: {
+    literal: "Hebo and Luogong go with Ni.\"",
+    idiomatic: "Hebo and Luogong, go with Fanni.\"",
+  },
+  s0372: {
+    literal: "I am old; where I am suited does not admit me; I would rather see wife and children and die!\"",
+    idiomatic: "I am old; no land will have me; I would rather see my wife and children and die!\"",
+  },
+  s0373: {
+    literal: "He then submitted to Chibpan; only Yin Lili followed him.",
+    idiomatic: "He went to Chibpan; only Yin Lili followed.",
+  },
+  s0374: {
+    literal: "Rutan said to Lili: \"Leaving danger for safety is man's constant.\"",
+    idiomatic: "Rutan told Lili: \"To flee danger for safety is only human.\"",
+  },
+  s0375: {
+    literal: "My kin are all scattered—why do you alone remain!\"",
+    idiomatic: "My kin have all fled—why do you alone stay!\"",
+  },
+  s0376: {
+    literal: "Lili said: \"Your servant's old mother is at home; my heart is truly in turmoil.\"",
+    idiomatic: "Lili said: \"My old mother is at home; my heart is torn.\"",
+  },
+  s0377: {
+    literal: "But loyalty and filial duty cannot both be fully achieved in this situation.\"",
+    idiomatic: "Yet loyalty and filial piety cannot both be whole in such a day.\"",
+  },
+  s0378: {
+    literal: "Though I cannot weep west of the Qu for Juqu as Shen Baoxu did;",
+    idiomatic: "I cannot weep west of the Qu for Juqu as Shen Baoxu did for Chu;",
+  },
+  s0379: {
+    literal: "nor feel Qin's aid in the east and display Mao Sui's resolve, yet to bear bridle and serve Your Majesty at your side—that is your servant's portion.\"",
+    idiomatic: "nor win Qin from the east and show Mao Sui's courage, yet to take bridle and serve at your side—that is my duty.\"",
+  },
+  s0380: {
+    literal: "I only hope you will open a far-reaching design and weigh advance and retreat.\"",
+    idiomatic: "Only grant me this: think far, and weigh every move.\"",
+  },
+  s0381: {
+    literal: "Rutan sighed: \"To know men is truly not easy, and men are not easily known.\"",
+    idiomatic: "Rutan sighed: \"To know a man is hard; to be known is harder still.\"",
+  },
+  s0382: {
+    literal: "Ministers and kin all left me; in the end none failed me but you alone.\"",
+    idiomatic: "Ministers and kin abandoned me; in the end only you did not fail me.\"",
+  },
+  s0383: {
+    literal: "The cold of year does not wither the pine—shown in you.\"",
+    idiomatic: "The pine does not fade in winter—that is you.\"",
+  },
+  s0384: {
+    literal: "Rutan reached Xiping; Chibpan sent envoys to welcome him in the suburbs and treated him as a guest of highest honor.",
+    idiomatic: "At Xiping, Chibpan's envoys met him beyond the walls and received him as a guest of the first rank.",
+  },
+  s0385: {
+    literal: "Earlier, when Ledu fell, all cities submitted to Chibpan; Rutan's general Wei Xianzheng held Hao'e and would not descend.",
+    idiomatic: "When Ledu fell, every city surrendered to Chibpan; only Wei Xianzheng held Hao'e and would not yield.",
+  },
+  s0386: {
+    literal: "Chibpan called to him: \"Ledu has already fallen; your wife and children are all in my grasp—a lone city held alone, what are you doing!\"",
+    idiomatic: "Chibpan called: \"Ledu is lost; your wife and children are mine—why hold a lone city!\"",
+  },
+  s0387: {
+    literal: "Xianzheng said: \"I received deep favor from the King of Liang and served the state as a border shield; though I know Ledu has fallen and wife and children are captives, to submit first wins reward and to follow later wins punishment—yet not knowing whether my lord lives or dies I dare not return to allegiance.\"",
+    idiomatic: "Xianzheng said: \"The King of Liang favored me; I was his border shield. I know Ledu has fallen and my family is captive—the first to submit is rewarded, the last is punished—but I do not know whether my lord lives or dies, and I dare not yield yet.\"",
+  },
+  s0388: {
+    literal: "Wife and children are a small matter—how could they move my heart!\"",
+    idiomatic: "Wife and children are a small thing—they cannot sway me!\"",
+  },
+  s0389: {
+    literal: "In old times Luo Xian awaited orders and Jin Wen praised him;",
+    idiomatic: "Luo Xian waited for his orders and Jin Wen honored him;",
+  },
+  s0390: {
+    literal: "Wen Pi came later and Cao of Wei did not blame him.\"",
+    idiomatic: "Wen Pi came late and Cao Wei did not reproach him.\"",
+  },
+  s0391: {
+    literal: "To chase a moment's glory and forget the weight of commission—I am ashamed to do so; why would Your Majesty employ me!\"",
+    idiomatic: "To grasp a moment's gain and forget the charge given me—I would be ashamed; why would you want such a man!\"",
+  },
+  s0392: {
+    literal: "Chibpan sent Wutai's own hand to persuade Xianzheng; Xianzheng said: \"You are the heir of the state and could not exhaust your integrity—bound face in hand to others, abandoning father and betraying lord, ruining the enterprise of ten thousand generations; I, Xianzheng the righteous man, am not like you!\"",
+    idiomatic: "Chibpan sent Wutai's own letter; Xianzheng answered: \"You were heir of the realm yet could not die with honor—you bound yourself to the enemy, forsook your father, betrayed your lord, and ruined a thousand years of work. I, Xianzheng, am not such a man!\"",
+  },
+  s0393: {
+    literal: "Later hearing Rutan had reached Zuonan, he surrendered.",
+    idiomatic: "When he heard Rutan had reached Zuonan, he surrendered.",
+  },
+  s0394: {
+    literal: "Chibpan made Rutan Grand General of Agile Cavalry and enfeoffed him as Duke of Zuonan.",
+    idiomatic: "Chibpan made Rutan Grand General of Agile Cavalry and Duke of Zuonan.",
+  },
+  s0395: {
+    literal: "After more than a year he was poisoned by Chibpan.",
+    idiomatic: "A year later Chibpan poisoned him.",
+  },
+  s0396: {
+    literal: "His attendants urged Rutan to take antidote; Rutan said: \"My illness—how should it be cured!\"",
+    idiomatic: "Attendants pressed antidote on him; Rutan said: \"This sickness—why cure it!\"",
+  },
+  s0397: {
+    literal: "He died, aged fifty-one, having reigned thirteen years; his false posthumous title was King Jing.",
+    idiomatic: "He died at fifty-one after thirteen years' reign, posthumously titled King Jing.",
+  },
+  s0398: {
+    literal: "Wutai later was also killed by Chibpan.",
+    idiomatic: "Wutai was later killed by Chibpan as well.",
+  },
+  s0399: {
+    literal: "Rutan's young sons Baozhou and La, Juyan's son Fulong, Lilugu's grandson Fuzhou, and Wugu's grandson Chengbo all fled to Juqu Mengxun.",
+    idiomatic: "Rutan's sons Baozhou and La, Juyan's son Fulong, Lilugu's grandson Fuzhou, and Wugu's grandson Chengbo fled to Juqu Mengxun.",
+  },
+  s0400: {
+    literal: "Long afterward they returned to Wei; Wei made Baozhou Prince of Zhangye, Fulong Duke of Jiuquan, La Duke of Xiping, Fuzhou Duke of Yongping, and Chengbo Duke of Changsong.",
+    idiomatic: "Years later they went to Wei; Wei made Baozhou Prince of Zhangye, Fulong Duke of Jiuquan, La Duke of Xiping, Fuzhou Duke of Yongping, and Chengbo Duke of Changsong.",
+  },
+};
