@@ -12,6 +12,7 @@
  */
 
 import fs from 'fs';
+import { countChapterMetrics } from './chapter-counts.mjs';
 
 function nukeIdiomaticTranslations(chapterFile) {
   if (!fs.existsSync(chapterFile)) {
@@ -77,30 +78,9 @@ function nukeIdiomaticTranslations(chapterFile) {
     }
   }
 
-  // Recalculate translatedCount (only count entries that still have idiomatic translations)
-  let translatedCount = 0;
-  for (const block of chapter.content) {
-    if (block.type === 'paragraph') {
-      for (const sentence of block.sentences || []) {
-        if (sentence.translations?.[0]?.idiomatic?.trim()) {
-          translatedCount++;
-        }
-      }
-    } else if (block.type === 'table_row') {
-      for (const cell of block.cells || []) {
-        if (cell.idiomatic && cell.idiomatic.trim()) {
-          translatedCount++;
-        }
-      }
-    } else if (block.type === 'table_header') {
-      for (const sentence of block.sentences || []) {
-        if (sentence.translations?.[0]?.idiomatic?.trim()) {
-          translatedCount++;
-        }
-      }
-    }
-  }
-  chapter.meta.translatedCount = translatedCount;
+  const counts = countChapterMetrics(chapter);
+  chapter.meta.sentenceCount = counts.sentenceCount;
+  chapter.meta.translatedCount = counts.translatedCount;
 
   fs.writeFileSync(chapterFile, JSON.stringify(chapter, null, 2));
   return nukedCount;
@@ -131,4 +111,3 @@ function main() {
 if (import.meta.url === `file://${process.argv[1]}`) {
   main();
 }
-

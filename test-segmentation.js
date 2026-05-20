@@ -42,24 +42,41 @@ function segmentSentences(text) {
     sentences.push(current.trim());
   }
 
-  // Post-process: merge standalone punctuation but keep parentheses as sentence boundaries
-  const merged = [];
-  const punctuationOnly = /^[」"'』】）〉\s]+$/; // Only merge standalone quotes/punctuation and closing brackets
+// Post-process: attach opening punctuation to the next sentence and closing punctuation to the previous one.
+const merged = [];
+let pendingPrefix = '';
+const openingOnly = /^[〈《「『【〔（(\s]+$/;
+const punctuationOnly = /^[\p{P}\p{S}\s]+$/u; // Any standalone punctuation/symbol fragment
 
-  for (let i = 0; i < sentences.length; i++) {
-    const sentence = sentences[i];
+for (let i = 0; i < sentences.length; i++) {
+  const sentence = sentences[i];
 
-    // Case 1: Sentence is only punctuation (not including parentheses) - append to previous
-    if (punctuationOnly.test(sentence) && merged.length > 0) {
-      merged[merged.length - 1] += sentence;
-    }
-    // Case 2: All other sentences (including parentheses) stay as separate sentences
-    else {
+  if (openingOnly.test(sentence)) {
+    pendingPrefix += sentence;
+  }
+  else if (punctuationOnly.test(sentence)) {
+    if (merged.length > 0) merged[merged.length - 1] += sentence;
+    else pendingPrefix += sentence;
+  }
+  else {
+    if (pendingPrefix) {
+      merged.push(pendingPrefix + sentence);
+      pendingPrefix = '';
+    } else {
       merged.push(sentence);
     }
   }
+}
 
-  return merged;
+if (pendingPrefix) {
+  if (merged.length > 0) {
+    merged[merged.length - 1] += pendingPrefix;
+  } else {
+    merged.push(pendingPrefix);
+  }
+}
+
+return merged;
 }
 
 console.log('Testing sentence segmentation with parentheses as breaks...\n');

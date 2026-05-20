@@ -7,6 +7,7 @@
  */
 
 import fs from 'fs';
+import { countChapterMetrics } from './chapter-counts.mjs';
 
 function applyReviewedTranslations(chapterFile, reviewFile) {
   if (!fs.existsSync(chapterFile)) {
@@ -35,35 +36,14 @@ function applyReviewedTranslations(chapterFile, reviewFile) {
     }
   }
 
-  // Recalculate translated count
-  let translatedCount = 0;
-  for (const block of chapter.content) {
-    if (block.type === 'paragraph') {
-      for (const sentence of block.sentences || []) {
-        if (sentence.translations?.[0]?.idiomatic?.trim()) {
-          translatedCount++;
-        }
-      }
-    } else if (block.type === 'table_row') {
-      for (const cell of block.cells || []) {
-        if (cell.idiomatic && cell.idiomatic.trim()) {
-          translatedCount++;
-        }
-      }
-    } else if (block.type === 'table_header') {
-      for (const sentence of block.sentences || []) {
-        if (sentence.translations?.[0]?.idiomatic?.trim()) {
-          translatedCount++;
-        }
-      }
-    }
-  }
-  chapter.meta.translatedCount = translatedCount;
+  const counts = countChapterMetrics(chapter);
+  chapter.meta.sentenceCount = counts.sentenceCount;
+  chapter.meta.translatedCount = counts.translatedCount;
 
   fs.writeFileSync(chapterFile, JSON.stringify(chapter, null, 2));
   console.log(`✅ Applied ${appliedCount} translations`);
   console.log(`✏️  ${changedCount} translations were modified`);
-  console.log(`📊 Updated translated count: ${translatedCount}`);
+  console.log(`📊 Updated counts: ${counts.translatedCount}/${counts.sentenceCount}`);
 }
 
 function markChapterReviewed(chapterFile) {
@@ -115,10 +95,12 @@ function applySingleTranslation(content, reviewItem) {
             if (changed) {
               // Preserve original translator information
               sentence.translations[0].translator = sentence.translations[0].translator || 'Garrett M. Petersen (2025)';
-              sentence.translations[0].reviewed = true;
-              return { changed: true };
             }
-            return { changed: false };
+
+            // Any sentence included in the review file has now been editorially reviewed,
+            // even if the final wording stayed the same.
+            sentence.translations[0].reviewed = true;
+            return { changed };
           }
         }
       }
@@ -142,10 +124,12 @@ function applySingleTranslation(content, reviewItem) {
           if (changed) {
             // Preserve original translator information
             cell.translator = cell.translator || 'Garrett M. Petersen (2025)';
-            cell.reviewed = true;
-            return { changed: true };
           }
-          return { changed: false };
+
+          // Any cell included in the review file has now been editorially reviewed,
+          // even if the final wording stayed the same.
+          cell.reviewed = true;
+          return { changed };
         }
       }
     } else if (block.type === 'table_header') {
@@ -169,10 +153,12 @@ function applySingleTranslation(content, reviewItem) {
             if (changed) {
               // Preserve original translator information
               sentence.translations[0].translator = sentence.translations[0].translator || 'Garrett M. Petersen (2025)';
-              sentence.translations[0].reviewed = true;
-              return { changed: true };
             }
-            return { changed: false };
+
+            // Any sentence included in the review file has now been editorially reviewed,
+            // even if the final wording stayed the same.
+            sentence.translations[0].reviewed = true;
+            return { changed };
           }
         }
       }

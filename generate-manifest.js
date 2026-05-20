@@ -10,6 +10,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { countChapterMetrics } from './chapter-counts.mjs';
 
 const DATA_DIR = './data';
 const PUBLIC_DATA_DIR = './public/data';
@@ -113,6 +114,7 @@ function bookEntryFromDisk(bookId, existingBooks) {
 
     try {
       const data = JSON.parse(fs.readFileSync(chapterPath, 'utf8'));
+      const metrics = countChapterMetrics(data);
 
       const existingChapter = existingBooks?.[bookId]?.chapters?.find(c => c.chapter === chapterNum);
       const qualityScore = existingChapter?.qualityScore ?? null;
@@ -121,8 +123,10 @@ function bookEntryFromDisk(bookId, existingBooks) {
       chapters.push({
         chapter: chapterNum,
         title: data.meta.title,
-        sentenceCount: data.meta.sentenceCount,
-        translatedCount: data.meta.translatedCount,
+        sentenceCount: metrics.sentenceCount,
+        translatedCount: metrics.translatedCount,
+        characterCount: metrics.characterCount,
+        translatedCharacterCount: metrics.translatedCharacterCount,
         qualityScore: qualityScore,
         reviewed
       });

@@ -13,6 +13,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { countChapterMetrics } from './chapter-counts.mjs';
 
 const DATA_DIR = './data';
 
@@ -27,84 +28,40 @@ function containsChinese(text) {
   return /[\u4e00-\u9fff]/.test(text);
 }
 
-function recalculateTranslatedCount(chapterData) {
-  let translatedCount = 0;
-  let totalCount = 0;
-
-  // Check if this is a genealogical table chapter
-  const isGenealogicalTable = chapterData.meta.book === 'shiji' &&
-    ['013', '014', '015'].includes(chapterData.meta.chapter);
-
-  for (const block of chapterData.content) {
-    if (block.type === 'paragraph') {
-      // Skip paragraphs in genealogical table chapters that contain table-like data
-      if (isGenealogicalTable && block.sentences && block.sentences.length > 0) {
-        const zh = block.sentences[0].zh;
-        // Skip if it contains years (4-digit numbers) or is mostly numbers/spaces
-        if (/\d{4}/.test(zh) || /^[\d\s]+$/.test(zh)) {
-          continue;
-        }
-      }
-
-      for (const sentence of block.sentences || []) {
-        // Skip empty content
-        if (!sentence.zh || sentence.zh.trim() === '') continue;
-
-        totalCount++;
-        // Check if translation exists
-        // Check idiomatic first, then literal
-        const translation = sentence.translations?.[0]?.idiomatic || sentence.translations?.[0]?.literal || sentence.translations?.[0]?.text;
-        if (translation && translation.trim() !== '') {
-          translatedCount++;
-        }
-      }
-    } else if (block.type === 'table_row') {
-      for (const cell of block.cells || []) {
-        // Skip empty content
-        if (!cell.content || cell.content.trim() === '') continue;
-
-        totalCount++;
-        // Check idiomatic first, then literal
-        const translation = cell.idiomatic || cell.literal || cell.translation;
-        if (translation && translation.trim() !== '') {
-          translatedCount++;
-        }
-      }
-    } else if (block.type === 'table_header') {
-      for (const sentence of block.sentences || []) {
-        // Skip empty content
-        if (!sentence.zh || sentence.zh.trim() === '') continue;
-
-        totalCount++;
-        // Check if translation exists
-        // Check idiomatic first, then literal
-        const translation = sentence.translations?.[0]?.idiomatic || sentence.translations?.[0]?.literal || sentence.translations?.[0]?.text;
-        if (translation && translation.trim() !== '' && !containsChinese(translation)) {
-          translatedCount++;
-        }
-      }
-    }
-  }
-
-  return { translatedCount, totalCount };
+function recalculateChapterCounts(chapterData) {
+  const { sentenceCount, translatedCount } = countChapterMetrics(chapterData);
+  return { sentenceCount, translatedCount };
 }
 
 function processFile(filePath) {
   try {
     const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-    const oldCount = data.meta.translatedCount;
+    const oldSentenceCount = data.meta.sentenceCount;
+    const oldTranslatedCount = data.meta.translatedCount;
 
+    const result = recalculateChapterCounts(data);
+    const countsChanged = oldSentenceCount !== result.sentenceCount || oldTranslatedCount !== result.translatedCount;
 
-    const result = recalculateTranslatedCount(data);
-    const newCount = result.translatedCount;
-
-    if (oldCount !== newCount) {
-      data.meta.translatedCount = newCount;
+    if (countsChanged) {
+      data.meta.sentenceCount = result.sentenceCount;
+      data.meta.translatedCount = result.translatedCount;
       fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
-      return { updated: true, oldCount, newCount };
+      return {
+        updated: true,
+        oldSentenceCount,
+        oldTranslatedCount,
+        newSentenceCount: result.sentenceCount,
+        newTranslatedCount: result.translatedCount
+      };
     }
 
-    return { updated: false, oldCount, newCount };
+    return {
+      updated: false,
+      oldSentenceCount,
+      oldTranslatedCount,
+      newSentenceCount: result.sentenceCount,
+      newTranslatedCount: result.translatedCount
+    };
   } catch (err) {
     console.error(`Error processing ${filePath}: ${err.message}`);
     return null;
@@ -141,13 +98,13 @@ function main() {
       const filePath = path.join(bookDir, file);
       totalFiles++;
 
-      const result = processFile(filePath);
-      if (result) {
-        if (result.updated) {
-          console.log(`  ${file}: ${result.oldCount} → ${result.newCount}`);
-          updatedFiles++;
-        }
+    const result = processFile(filePath);
+    if (result) {
+      if (result.updated) {
+        console.log(`  ${file}: sentences ${result.oldSentenceCount} → ${result.newSentenceCount}, translated ${result.oldTranslatedCount} → ${result.newTranslatedCount}`);
+        updatedFiles++;
       }
+    }
     }
   }
 

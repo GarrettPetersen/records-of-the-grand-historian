@@ -22,6 +22,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { alignTranslations } from './align-translations.js';
+import { isPunctuationOnlySentence } from './sentence-utils.mjs';
 
 // The 24 Dynastic Histories with their romanized names and metadata
 const BOOKS = {
@@ -257,12 +258,41 @@ const SENTENCE_ENDINGS = /([。！？；〈〉()（）])/;
 
 const CHINESENOTES_GLYPH_SUBSTITUTIONS = {
   '[A170]': '虨',
+  '[A081]': '柹',
+  '[A134]': '幐',
+  '[A148]': '嫕',
+  '[A156]': '兒',
+  '[A172]': '祥',
+  '[A181]': '愔',
+  '[A191]': '轂',
+  '[A212]': '灅',
   '[B080]': '鍐',
+  '[B133]': '剺',
+  '[B134]': '廓',
+  '[B163]': '篹',
+  '[B225]': '鄗',
+  '[B164]': '夔',
+  '[B170]': '芮',
+  '[B428]': '盢',
+  '[B459]': '𠟼',
   '[B125]': '軬',
   '[B231]': '𨏩',
-  '[C102]': '烖',
-  '[C111]': '㔨'
+  '[C061]': '冎',
+  '[C090]': '垂',
+  '[C102]': '固',
+  '[C111]': '㔨',
+  '[C171]': '闅',
+  '[C745]': '郪',
+  '[D279]': '酂',
+  '[D655]': '箙'
 };
+
+for (const [marker, replacement] of Object.entries({ ...CHINESENOTES_GLYPH_SUBSTITUTIONS })) {
+  const bare = marker.slice(1, -1);
+  if (!CHINESENOTES_GLYPH_SUBSTITUTIONS[bare]) {
+    CHINESENOTES_GLYPH_SUBSTITUTIONS[bare] = replacement;
+  }
+}
 
 function normalizeWhitespace(text) {
   return text.replace(/\u00A0/g, ' ').replace(/\s+/g, ' ').trim();
@@ -404,20 +434,96 @@ export function segmentSentences(text) {
     sentences.push(current.trim());
   }
 
-  // Post-process: merge ending punctuation to the previous sentence
+  // Post-process: attach opening punctuation to the following sentence and
+  // closing punctuation to the previous sentence so standalone fragments never
+  // survive as their own sentence entries.
   const merged = [];
-  const punctuationOnly = /^[」"'』】）〉\s]+$/; // Only merge standalone quotes/punctuation and closing brackets/parentheses
+  let pendingPrefix = '';
+  const openingOnly = /^[〈《「『【〔（(\s]+$/;
+  const punctuationOnly = /^[\p{P}\p{S}\s]+$/u;
 
   for (let i = 0; i < sentences.length; i++) {
     const sentence = sentences[i];
 
-    // Case 1: Sentence is only ending punctuation - append to previous sentence
-    if (punctuationOnly.test(sentence) && merged.length > 0) {
-      merged[merged.length - 1] += sentence;
+    // Opening punctuation belongs with the next substantive sentence.
+    if (openingOnly.test(sentence)) {
+      pendingPrefix += sentence;
+      continue;
     }
-    // Case 2: All other sentences stay as separate sentences
-    else {
+
+    // Any standalone punctuation that is not pure opening punctuation belongs
+    // with the previous substantive sentence.
+    if (punctuationOnly.test(sentence)) {
+      if (merged.length > 0) merged[merged.length - 1] += sentence;
+      else pendingPrefix += sentence;
+      continue;
+    }
+
+    if (pendingPrefix) {
+      merged.push(pendingPrefix + sentence);
+      pendingPrefix = '';
+    } else {
       merged.push(sentence);
+    }
+  }
+
+  if (pendingPrefix) {
+    if (merged.length > 0) {
+      merged[merged.length - 1] += pendingPrefix;
+    } else {
+      merged.push(pendingPrefix);
+    }
+  }
+
+  return merged;
+}
+
+function mergePunctuationFragments(items, getText, setText) {
+  const merged = [];
+  let pendingPrefix = '';
+  const openingOnly = /^[〈《「『【〔（(\s]+$/;
+  const punctuationOnly = /^[\p{P}\p{S}\s]+$/u;
+
+  for (const item of items) {
+    const text = getText(item);
+    if (!text || text.trim() === '') {
+      merged.push(item);
+      continue;
+    }
+
+    if (openingOnly.test(text)) {
+      pendingPrefix += text;
+      continue;
+    }
+
+    if (punctuationOnly.test(text)) {
+      if (merged.length > 0) {
+        const prev = merged[merged.length - 1];
+        setText(prev, getText(prev) + text);
+      } else {
+        pendingPrefix += text;
+      }
+      continue;
+    }
+
+    if (pendingPrefix) {
+      setText(item, pendingPrefix + text);
+      pendingPrefix = '';
+    }
+
+    merged.push(item);
+  }
+
+  if (pendingPrefix) {
+    if (merged.length > 0) {
+      const prev = merged[merged.length - 1];
+      setText(prev, getText(prev) + pendingPrefix);
+    } else {
+      merged.push({
+        id: items[0]?.id || '',
+        content: pendingPrefix,
+        translations: [{ lang: 'en', literal: '', idiomatic: '', translator: '' }]
+      });
     }
   }
 
@@ -629,13 +735,21 @@ function parseCtextTables($, $table, startSentenceCounter, customHeaderText = ''
       translations: [{ lang: 'en', literal: '', idiomatic: '', translator: '' }]
     }));
 
+    const mergedRowCells = mergePunctuationFragments(
+      rowCells,
+      (cell) => cell.content || '',
+      (cell, text) => {
+        cell.content = text;
+      }
+    );
+
     if (rowIndex === 0) {
       // First row is the table header
-      headerContent = rowCells.map(c => c.content).join('|');
-      console.error(`Creating table header with ${rowCells.length} cells: ${rowCells.slice(0, 3).map(c => `"${c.content}"`).join(', ')}`);
+      headerContent = mergedRowCells.map(c => c.content).join('|');
+      console.error(`Creating table header with ${mergedRowCells.length} cells: ${mergedRowCells.slice(0, 3).map(c => `"${c.content}"`).join(', ')}`);
       const headerObj = {
         type: 'table_header',
-        sentences: rowCells.map(cell => ({
+        sentences: mergedRowCells.map(cell => ({
           id: cell.id,
           zh: cell.content,
           translations: [{ lang: 'en', literal: '', idiomatic: '', translator: '' }]
@@ -647,15 +761,15 @@ function parseCtextTables($, $table, startSentenceCounter, customHeaderText = ''
       console.error(`Content array now has ${content.length} items`);
     } else {
       // Check if this row has the same content as the header (repeated headers)
-      const rowContent = rowCells.map(c => c.content.trim()).join('|');
+      const rowContent = mergedRowCells.map(c => c.content.trim()).join('|');
       const trimmedHeaderContent = headerContent.trim();
 
       // Also check if first few cells match header
-      const firstThreeRow = rowCells.slice(0, 3).map(c => c.content.trim()).join('|');
+      const firstThreeRow = mergedRowCells.slice(0, 3).map(c => c.content.trim()).join('|');
       const firstThreeHeader = headerContent.split('|').slice(0, 3).join('|');
 
       // Also check if first cell is "公元前" (should only appear in header)
-      const firstCell = rowCells[0]?.content?.trim();
+      const firstCell = mergedRowCells[0]?.content?.trim();
 
       if (rowContent === trimmedHeaderContent || firstThreeRow === firstThreeHeader || firstCell === '公元前') {
         console.error(`Skipping row ${rowIndex}: duplicate header content (first cell: "${firstCell}")`);
@@ -665,7 +779,7 @@ function parseCtextTables($, $table, startSentenceCounter, customHeaderText = ''
       // Subsequent rows are table data
       const rowObj = {
         type: 'table_row',
-        cells: rowCells
+        cells: mergedRowCells
       };
       content.push(rowObj);
     }
@@ -898,7 +1012,15 @@ function extractContent($, isFromCtext = false, startSentenceCounter = 0, url = 
       continue;
     }
 
-    // Skip paragraphs that appear to be tabular data formatted as text
+    // Skip paragraphs that appear to be tabular data formatted as text.
+    // This heuristic is only reliable for known genealogical/table chapters.
+    const isShiji = /\/shiji\//.test(url);
+    const isHanshu = /\/hanshu\//.test(url);
+    const chapterNum = Number(chapter);
+    const isKnownTabularChapter =
+      (isShiji && chapterNum >= 13 && chapterNum <= 22) ||
+      (isHanshu && chapterNum >= 13 && chapterNum <= 20);
+
     // This happens when chinesenotes presents genealogical tables as formatted paragraphs
     const stateNames = ['魯', '齊', '晉', '秦', '楚', '宋', '衛', '陳', '蔡', '曹', '燕'];
     const hasStateNames = stateNames.some(state => para.includes(state));
@@ -917,9 +1039,11 @@ function extractContent($, isFromCtext = false, startSentenceCounter = 0, url = 
     const looksLikeTableData = /^\d{3,4}[\s\u3000]+.*[\d一二三四五六七八九十百千]+.*$/.test(para) && para.length < 100;
 
     // Only skip if it has both state names AND tabular patterns, or has many names in a short space, or looks like table data
-    const shouldSkip = (hasStateNames && hasTabularPatterns && para.length < 300) ||
+    const shouldSkip = isKnownTabularChapter && (
+      (hasStateNames && hasTabularPatterns && para.length < 300) ||
       (hasManyNames && para.length < 300 && (para.match(/[\u4e00-\u9fff]{2,}[，。]/g) || []).length > 6) ||
-      looksLikeTableData;
+      looksLikeTableData
+    );
 
     if (shouldSkip) {
       console.error(`Skipping apparent table data formatted as text: ${para.substring(0, 50)}...`);
@@ -1094,11 +1218,11 @@ function containsChinese(text) {
 function countSentences(content) {
   return content.reduce((sum, block) => {
     if (block.type === 'paragraph') {
-      return sum + block.sentences.filter(s => s.zh && s.zh.trim() !== '').length;
+      return sum + block.sentences.filter(s => s.zh && s.zh.trim() !== '' && !isPunctuationOnlySentence(s.zh)).length;
     } else if (block.type === 'table_row') {
-      return sum + block.cells.filter(cell => cell.content && cell.content.trim() !== '').length;
+      return sum + block.cells.filter(cell => cell.content && cell.content.trim() !== '' && !isPunctuationOnlySentence(cell.content)).length;
     } else if (block.type === 'table_header') {
-      return sum + block.sentences.filter(s => s.zh && s.zh.trim() !== '').length;
+      return sum + block.sentences.filter(s => s.zh && s.zh.trim() !== '' && !isPunctuationOnlySentence(s.zh)).length;
     }
     return sum;
   }, 0);
@@ -1246,6 +1370,11 @@ async function fetchContent(url) {
     '-k',           // Ignore SSL certificate issues
     '-s',           // Silent mode
     '--compressed', // Handle compressed responses
+    '--retry', '3',
+    '--retry-delay', '2',
+    '--retry-all-errors',
+    '--connect-timeout', '20',
+    '--max-time', '90',
     '-H', 'Accept-Encoding: gzip,deflate',
     '-H', 'Accept-Charset: utf-8',
     '--user-agent', 'Mozilla/5.0 (compatible; records-scraper/1.0)',
@@ -1268,6 +1397,9 @@ async function fetchContent(url) {
     });
     curl.on('error', reject);
   });
+  if (/Please set a proper user-agent|Error: 429|robot policy/i.test(output)) {
+    throw new Error(`fetch returned a wiki error page for ${url}`);
+  }
   return output;
 }
 
@@ -1328,7 +1460,20 @@ async function scrapeChapter(bookId, chapter, glossaryPath, customUrl) {
   try {
     if (customUrl && customUrl.includes('ctext.org')) {
       // Use curl for ctext.org URLs
-      const curl = spawn('curl', ['-k', '-s', targetUrl], { stdio: ['pipe', 'pipe', 'inherit'] });
+      const curl = spawn('curl', [
+        '-k',
+        '-s',
+        '--compressed',
+        '--retry', '3',
+        '--retry-delay', '2',
+        '--retry-all-errors',
+        '--connect-timeout', '20',
+        '--max-time', '90',
+        '-H', 'Accept-Encoding: gzip,deflate',
+        '-H', 'Accept-Charset: utf-8',
+        '--user-agent', 'Mozilla/5.0 (compatible; records-scraper/1.0)',
+        targetUrl
+      ], { stdio: ['pipe', 'pipe', 'inherit'] });
 
       let output = '';
       curl.stdout.on('data', (data) => {
@@ -1339,6 +1484,10 @@ async function scrapeChapter(bookId, chapter, glossaryPath, customUrl) {
         curl.on('close', (code) => {
           if (code === 0) {
             html = output;
+            if (/Please set a proper user-agent|Error: 429|robot policy/i.test(html)) {
+              reject(new Error(`fetch returned a ctext error page for ${targetUrl}`));
+              return;
+            }
             resolve();
           } else {
             reject(new Error(`curl exited with code ${code}`));
