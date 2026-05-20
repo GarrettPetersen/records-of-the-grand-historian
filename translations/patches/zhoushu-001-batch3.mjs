@@ -88,7 +88,7 @@ export default {
   },
   s0217: {
     literal: '(cut)',
-    idiomatic: '[cut]',
+    idiomatic: '(cut)',
   },
   s0218: {
     literal: '[split] it open and gave it to officers and soldiers; the host greatly rejoiced.',
@@ -106,7 +106,7 @@ export default {
   },
   s0221: {
     literal: '(Qi)',
-    idiomatic: '[Qi]',
+    idiomatic: '(Qi)',
   },
   s0222: {
     literal: '[Xian]ding led Tuyuhun to raid Jincheng.',
