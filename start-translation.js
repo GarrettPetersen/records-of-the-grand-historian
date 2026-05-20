@@ -112,32 +112,9 @@ function findSpecificChapter(book, chapter) {
 }
 
 /**
- * When translating a single book without CHAPTER=, prefer the incomplete chapter
- * with the fewest missing sentences (resume in-progress work) instead of the first
- * file in numeric order (which may be a huge untouched chapter).
+ * First chapter (by sorted filename) in the given book or across books that still
+ * has missing idiomatic translations. Same selection logic with or without BOOK=.
  */
-function findMostCompleteChapter(bookFilter) {
-  const bookDir = `data/${bookFilter}`;
-  if (!fs.existsSync(bookDir)) {
-    return null;
-  }
-  const files = fs.readdirSync(bookDir).filter((f) => f.endsWith('.json')).sort();
-  let best = null;
-  for (const file of files) {
-    const filePath = path.join(bookDir, file);
-    const chapter = buildChapterResult(filePath);
-    if (chapter.missing === 0) continue;
-    if (
-      !best ||
-      chapter.missing < best.missing ||
-      (chapter.missing === best.missing && chapter.file < best.file)
-    ) {
-      best = chapter;
-    }
-  }
-  return best;
-}
-
 function findFirstUntranslatedChapter(bookFilter = null) {
   const dirs = [];
 
@@ -280,16 +257,14 @@ function main() {
     }
     console.log(`Finding untranslated sentences in ${book} chapter ${chapterArg}`);
   } else if (book) {
-    console.log(`Finding the most complete chapter needing translation in book: ${book}`);
+    console.log(`Finding the first incomplete chapter in book: ${book}`);
   } else {
-    console.log('Finding the first chapter needing translation across all books');
+    console.log('Finding the first incomplete chapter across all books');
   }
 
   const chapter = chapterArg
     ? findSpecificChapter(book, chapterArg)
-    : book
-      ? findMostCompleteChapter(book)
-      : findFirstUntranslatedChapter(null);
+    : findFirstUntranslatedChapter(book || null);
   if (!chapter) {
     if (book) {
       console.log(`No untranslated chapters found in ${book}`);

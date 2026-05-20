@@ -258,12 +258,41 @@ const SENTENCE_ENDINGS = /([。！？；〈〉()（）])/;
 
 const CHINESENOTES_GLYPH_SUBSTITUTIONS = {
   '[A170]': '虨',
+  '[A081]': '柹',
+  '[A134]': '幐',
+  '[A148]': '嫕',
+  '[A156]': '兒',
+  '[A172]': '祥',
+  '[A181]': '愔',
+  '[A191]': '轂',
+  '[A212]': '灅',
   '[B080]': '鍐',
+  '[B133]': '剺',
+  '[B134]': '廓',
+  '[B163]': '篹',
+  '[B225]': '鄗',
+  '[B164]': '夔',
+  '[B170]': '芮',
+  '[B428]': '盢',
+  '[B459]': '𠟼',
   '[B125]': '軬',
   '[B231]': '𨏩',
-  '[C102]': '烖',
-  '[C111]': '㔨'
+  '[C061]': '冎',
+  '[C090]': '垂',
+  '[C102]': '固',
+  '[C111]': '㔨',
+  '[C171]': '闅',
+  '[C745]': '郪',
+  '[D279]': '酂',
+  '[D655]': '箙'
 };
+
+for (const [marker, replacement] of Object.entries({ ...CHINESENOTES_GLYPH_SUBSTITUTIONS })) {
+  const bare = marker.slice(1, -1);
+  if (!CHINESENOTES_GLYPH_SUBSTITUTIONS[bare]) {
+    CHINESENOTES_GLYPH_SUBSTITUTIONS[bare] = replacement;
+  }
+}
 
 function normalizeWhitespace(text) {
   return text.replace(/\u00A0/g, ' ').replace(/\s+/g, ' ').trim();
@@ -1341,6 +1370,11 @@ async function fetchContent(url) {
     '-k',           // Ignore SSL certificate issues
     '-s',           // Silent mode
     '--compressed', // Handle compressed responses
+    '--retry', '3',
+    '--retry-delay', '2',
+    '--retry-all-errors',
+    '--connect-timeout', '20',
+    '--max-time', '90',
     '-H', 'Accept-Encoding: gzip,deflate',
     '-H', 'Accept-Charset: utf-8',
     '--user-agent', 'Mozilla/5.0 (compatible; records-scraper/1.0)',
@@ -1363,6 +1397,9 @@ async function fetchContent(url) {
     });
     curl.on('error', reject);
   });
+  if (/Please set a proper user-agent|Error: 429|robot policy/i.test(output)) {
+    throw new Error(`fetch returned a wiki error page for ${url}`);
+  }
   return output;
 }
 
@@ -1423,7 +1460,20 @@ async function scrapeChapter(bookId, chapter, glossaryPath, customUrl) {
   try {
     if (customUrl && customUrl.includes('ctext.org')) {
       // Use curl for ctext.org URLs
-      const curl = spawn('curl', ['-k', '-s', targetUrl], { stdio: ['pipe', 'pipe', 'inherit'] });
+      const curl = spawn('curl', [
+        '-k',
+        '-s',
+        '--compressed',
+        '--retry', '3',
+        '--retry-delay', '2',
+        '--retry-all-errors',
+        '--connect-timeout', '20',
+        '--max-time', '90',
+        '-H', 'Accept-Encoding: gzip,deflate',
+        '-H', 'Accept-Charset: utf-8',
+        '--user-agent', 'Mozilla/5.0 (compatible; records-scraper/1.0)',
+        targetUrl
+      ], { stdio: ['pipe', 'pipe', 'inherit'] });
 
       let output = '';
       curl.stdout.on('data', (data) => {
@@ -1434,6 +1484,10 @@ async function scrapeChapter(bookId, chapter, glossaryPath, customUrl) {
         curl.on('close', (code) => {
           if (code === 0) {
             html = output;
+            if (/Please set a proper user-agent|Error: 429|robot policy/i.test(html)) {
+              reject(new Error(`fetch returned a ctext error page for ${targetUrl}`));
+              return;
+            }
             resolve();
           } else {
             reject(new Error(`curl exited with code ${code}`));
