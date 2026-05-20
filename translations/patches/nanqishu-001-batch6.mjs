@@ -521,11 +521,11 @@ export default {
       'That year Taiyi stood at Du Gate over the eighth palace; the Song emperor abdicated—ill to be guest, good for the host who holds peace; that was the omen of transfer.',
   },
   s0495: {
-    literal: '=',
-    idiomatic: '=',
+    literal: '[=] Section divider in the source text.',
+    idiomatic: '[=] Section divider in the source text.',
   },
   s0496: {
-    literal: '=',
-    idiomatic: '=',
+    literal: '[=] Section divider in the source text.',
+    idiomatic: '[=] Section divider in the source text.',
   },
 };
