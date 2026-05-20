@@ -544,8 +544,8 @@ const T = {
       'His grandson Sichun, chief of the left majestic guard, shall be further granted Gentleman for Dispersed Service.',
   },
   s0396: {
-    literal: '」',
-    idiomatic: 'So closed the edict.',
+    literal: 'Thus ended the edict.',
+    idiomatic: 'With that the edict closed.',
   },
   s0397: {
     literal: 'On bingxu Shangguan Yi, Vice Director of the Western Terrace, was executed.',
