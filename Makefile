@@ -185,6 +185,11 @@ update:
 	@echo "Step 2/7: Fixing chapter counts..."
 	@$(NODE) fix-translated-counts.js --book $(BOOK) || echo "Note: fix-translated-counts.js not found, skipping..."
 	@echo ""
+	@if [ ! -f data/manifest.json ]; then \
+		echo "No data/manifest.json found; generating full manifest first..."; \
+		$(MAKE) manifest; \
+		echo ""; \
+	fi
 	@echo "Step 3/7: Regenerating manifest (merge this book)..."
 	@$(NODE) generate-manifest.js --book $(BOOK)
 	@echo ""
@@ -1019,9 +1024,9 @@ continue:
 			exit 1; \
 		fi; \
 		if [ -n "$(BOOK)" ]; then \
-			$(MAKE) start-translation BOOK=$$book CHAPTER="$(CHAPTER)"; \
+			$(MAKE) start-translation BOOK=$$book CHAPTER="$(CHAPTER)" BATCH_SIZE="$(or $(BATCH_SIZE),100)"; \
 		else \
-			$(MAKE) start-translation; \
+			$(MAKE) start-translation BATCH_SIZE="$(or $(BATCH_SIZE),100)"; \
 		fi; \
 	else \
 		echo "❌ Translation submission failed. Please fix the issues and try again."; \

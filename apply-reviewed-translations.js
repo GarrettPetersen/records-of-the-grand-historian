@@ -95,10 +95,12 @@ function applySingleTranslation(content, reviewItem) {
             if (changed) {
               // Preserve original translator information
               sentence.translations[0].translator = sentence.translations[0].translator || 'Garrett M. Petersen (2025)';
-              sentence.translations[0].reviewed = true;
-              return { changed: true };
             }
-            return { changed: false };
+
+            // Any sentence included in the review file has now been editorially reviewed,
+            // even if the final wording stayed the same.
+            sentence.translations[0].reviewed = true;
+            return { changed };
           }
         }
       }
@@ -122,10 +124,12 @@ function applySingleTranslation(content, reviewItem) {
           if (changed) {
             // Preserve original translator information
             cell.translator = cell.translator || 'Garrett M. Petersen (2025)';
-            cell.reviewed = true;
-            return { changed: true };
           }
-          return { changed: false };
+
+          // Any cell included in the review file has now been editorially reviewed,
+          // even if the final wording stayed the same.
+          cell.reviewed = true;
+          return { changed };
         }
       }
     } else if (block.type === 'table_header') {
@@ -149,10 +153,12 @@ function applySingleTranslation(content, reviewItem) {
             if (changed) {
               // Preserve original translator information
               sentence.translations[0].translator = sentence.translations[0].translator || 'Garrett M. Petersen (2025)';
-              sentence.translations[0].reviewed = true;
-              return { changed: true };
             }
-            return { changed: false };
+
+            // Any sentence included in the review file has now been editorially reviewed,
+            // even if the final wording stayed the same.
+            sentence.translations[0].reviewed = true;
+            return { changed };
           }
         }
       }
