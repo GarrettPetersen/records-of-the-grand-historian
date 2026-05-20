@@ -1,421 +1,675 @@
 #!/usr/bin/env node
-/** Batch 2: s0101–s0200 (Suishu ch.006) */
-import { readFileSync, writeFileSync } from 'fs';
+/** Batch 2: s0101–s0200 (Jiutangshu ch.006, Empress Wu — Zhou founding through early reign) */
+import { readFileSync, writeFileSync, existsSync } from 'fs';
 
-const transPath = 'translations/current_translation_suishu.json';
+const dataPath = 'data/jiutangshu/006.json';
+const transPath = 'translations/current_translation_jiutangshu.json';
+const START = 101;
+const END = 200;
+
+function loadSentencesFromData() {
+  const book = JSON.parse(readFileSync(dataPath, 'utf8'));
+  const out = new Map();
+  let blockIndex = 0;
+  for (const block of book.content) {
+    for (const s of block.sentences || []) {
+      out.set(s.id, { chinese: s.zh, blockIndex });
+    }
+    blockIndex++;
+  }
+  return out;
+}
+
+function extractRange(chapterPath, startN, endN) {
+  const data = JSON.parse(readFileSync(chapterPath, 'utf8'));
+  const out = [];
+  const seenIds = new Set();
+
+  for (let blockIndex = 0; blockIndex < data.content.length; blockIndex++) {
+    const block = data.content[blockIndex];
+    let blockSentences = [];
+
+    if (block.type === 'paragraph') {
+      blockSentences = block.sentences;
+    } else if (block.type === 'table_row') {
+      blockSentences = block.cells.filter((cell) => cell.content && cell.content.trim());
+    } else if (block.type === 'table_header') {
+      blockSentences = block.sentences.filter((s) => s.zh && s.zh.trim());
+    }
+
+    for (const sentence of blockSentences) {
+      const sentenceId = sentence.id;
+      const n = parseInt(sentenceId.slice(1), 10);
+      if (n < startN || n > endN) continue;
+
+      let chineseText = '';
+      if (block.type === 'paragraph' || block.type === 'table_header') {
+        chineseText = sentence.zh;
+      } else if (block.type === 'table_row') {
+        chineseText = sentence.content;
+      }
+
+      let displayId = sentenceId;
+      if (seenIds.has(displayId)) {
+        displayId = `${sentenceId}@${blockIndex}`;
+      }
+      seenIds.add(displayId);
+
+      out.push({
+        id: displayId,
+        originalId: sentenceId,
+        blockIndex,
+        chinese: chineseText,
+        literal: '',
+        idiomatic: '',
+      });
+    }
+  }
+
+  out.sort(
+    (a, b) => parseInt(a.originalId.slice(1), 10) - parseInt(b.originalId.slice(1), 10)
+  );
+  return out;
+}
 
 const T = {
   s0101: {
-    literal: 'Now to use once and then bury—wasteful and contrary to the canon.',
-    idiomatic: 'To bury vessels after a single use would be wasteful and contrary to canonical practice.',
+    literal: 'On bingxu, the Wu clan ancestral temple was first established at the Divine Capital.',
+    idiomatic:
+      'On bingxu the Wu ancestral shrine was founded in the Divine Capital for the first time.',
   },
   s0102: {
-    literal: 'The Emperor said: "The offering mats are light objects; pottery and gourd are humble vessels—if returned to the storehouse, they might again become defiled."',
-    idiomatic: 'The emperor said: "Offering mats are light goods and pottery humble vessels—if returned to store they might become defiled again."',
+    literal:
+      'Posthumously honored the Divine Sovereign\'s father, the late Grand Marshal and Prince of Taiyuan Shi Yue, as Emperor Xiaoming.',
+    idiomatic:
+      'She posthumously ennobled her father Shi Yue—late grand marshal and Prince of Taiyuan—as Emperor Xiaoming.',
   },
   s0103: {
-    literal: 'Only when worn out should they be buried—this refers to the seasonal sacrificial vessels.',
-    idiomatic: 'They should be buried only when worn out—this applies to the seasonal sacrificial vessels alone."',
+    literal:
+      'Nephew Chengsi, left chancellor of the Secretariat, was made Prince of Wei; Sizan, minister of celestial offices, Prince of Liang; twelve clansmen including Yizong were made commandery princes.',
+    idiomatic:
+      'Her nephew Chengsi became Prince of Wei; Sizan, minister of celestial offices, Prince of Liang; and twelve kinsmen including Yizong were enfeoffed as commandery princes.',
   },
   s0104: {
-    literal: '" From this they followed the relevant offices\' deliberation and burned and buried them.',
-    idiomatic: 'Thereafter they followed the relevant offices\' proposal and burned and buried the vessels.',
+    literal:
+      'Shi Wuzi, director of ceremonial guests, became chief counselor; Zong Qinke, vice minister of Fengge, became Secretariat Director.',
+    idiomatic:
+      'Shi Wuzi, director of ceremonial guests, was made chief counselor; Zong Qinke, Fengge vice minister, Secretariat Director.',
   },
   s0105: {
-    literal: 'In the fourth year, Tongzhi said: "The Rites of Zhou say \'Heaven is called spirit; Earth is called numen.\'"',
-    idiomatic: 'In the fourth year, Tongzhi said: "The Rites of Zhou state, \'Heaven is called spirit; Earth is called numen.\'"',
+    literal:
+      'Fu Youyi, palace attendant, became vice minister of Luantai and retained his associate councilorship of Fengge-Luantai.',
+    idiomatic:
+      'Fu Youyi, palace attendant, became Luantai vice minister while keeping his Fengge-Luantai associate councilorship.',
   },
   s0106: {
-    literal: 'Today Heaven is not called spirit, Earth is not called numen; the Heaven banner inscription should read "Seat of August Heaven," the Earth banner "Seat of Queen Earth."',
-    idiomatic: 'Today Heaven is not styled spirit nor Earth numen; the Heaven banner should read "Seat of August Heaven," the Earth banner "Seat of Queen Earth."',
+    literal: 'Ordered Shi Wuzi and ten others to travel separate circuits comforting and reviewing the realm.',
+    idiomatic:
+      'She dispatched Shi Wuzi and ten others on separate circuits to comfort and inspect the realm.',
   },
   s0107: {
-    literal: 'Also the Southern Suburb and Bright Hall use agarwood incense—taking the substance of Heaven, what yang should use.',
-    idiomatic: 'The Southern Suburb and Bright Hall also use agarwood incense—appropriate to Heaven\'s nature and the yang principle.',
+    literal: 'Changed the fish tally badges worn by inner and outer officials to turtle badges.',
+    idiomatic: 'Court tally badges—fish for all inner and outer officials—were changed to turtles.',
   },
   s0108: {
-    literal: 'The Northern Suburb uses superior blended incense—since Earth is close to man, mixed fragrance is appropriate.',
-    idiomatic: 'The Northern Suburb uses superior blended incense—since Earth is kin to humanity, a mixed fragrance is fitting.',
+    literal:
+      'In the tenth winter month, Bingzhou\'s Wenshui County was renamed Wuxing County; following the Han precedents of Feng and Pei, descendants of its people received hereditary tax exemptions.',
+    idiomatic:
+      'In the tenth winter month Wenshui in Bingzhou became Wuxing County; like Han Feng and Pei, its people\'s descendants received hereditary tax relief.',
   },
   s0109: {
-    literal: '" The Emperor followed all of this.',
-    idiomatic: 'The emperor accepted all of these proposals.',
+    literal: 'In the first month of year 2, she personally sacrificed at the Bright Hall.',
+    idiomatic: 'In the first month of her second year she personally sacrificed at the Bright Hall.',
   },
   s0110: {
-    literal: 'In the fifth year, Ming Shanbin stated: "Examining the imperial decree: Zhou used the eleventh month to sacrifice to Heaven, the fifth month to sacrifice to Earth."',
-    idiomatic: 'In the fifth year, Ming Shanbin stated: "Examining the imperial decree: Zhou sacrificed to Heaven in the eleventh month and to Earth in the fifth."',
+    literal: 'In the third spring month, the Tang ancestral temple was renamed the Temple of Honored Virtue.',
+    idiomatic:
+      'In the third spring month the Tang ancestral temple was retitled the Temple of Honored Virtue.',
   },
   s0111: {
-    literal: 'Yin used the twelfth month to sacrifice to Heaven, the sixth month to sacrifice to Earth.',
-    idiomatic: 'Yin sacrificed to Heaven in the twelfth month and to Earth in the sixth.',
+    literal:
+      'In the fourth summer month, Buddhism was ranked above Daoism, monks and nuns taking precedence over Daoist clergy.',
+    idiomatic:
+      'In the fourth summer month Buddhism was placed above the Way: monks and nuns took rank before Daoist priests and nuns.',
   },
   s0112: {
-    literal: 'Xia used the first month to sacrifice to Heaven, the seventh month to sacrifice to Earth.',
-    idiomatic: 'Xia sacrificed to Heaven in the first month and to Earth in the seventh.',
+    literal: 'In the sixth month, Cen Changqian was ordered to lead the armies against Tibet.',
+    idiomatic: 'In the sixth month Cen Changqian was ordered to lead the armies against Tibet.',
   },
   s0113: {
-    literal: 'In recent generations, the Northern and Southern suburbs both used the Xia first month.',
-    idiomatic: 'In recent generations both suburban rites used the Xia first month.',
+    literal:
+      'Ge Fuyuan, left censor-in-chief, became minister of terrestrial offices; Yue Sihui, Luantai vice minister, became Fengge-Luantai associate councilor.',
+    idiomatic:
+      'Ge Fuyuan, left censor-in-chief, became minister of terrestrial offices; Yue Sihui, Luantai vice minister, joined the Fengge-Luantai council.',
   },
   s0114: {
-    literal: '" An edict ordered further detailed deliberation.',
-    idiomatic: 'An edict ordered further detailed deliberation.',
+    literal:
+      'In the seventh autumn month, a hundred thousand households from seven Guanzhong prefectures including Yong and Tong were moved to populate Luoyang.',
+    idiomatic:
+      'In the seventh autumn month a hundred thousand households from seven Guanzhong circuits including Yong and Tong were relocated to swell Luoyang.',
   },
   s0115: {
-    literal: 'Shanbin held that both ceremonies are equally exalted; the three courts\' celebration of the year\'s beginning—using this day for both suburbs is acceptable.',
-    idiomatic: 'Shanbin held that both ceremonies are equally exalted; since the three courts celebrate the year\'s beginning on this day, performing both suburban rites then is acceptable.',
+    literal: 'Jingzhao was divided to establish the four prefectures Ding, Ji, Hong, and Yi.',
+    idiomatic: 'Jingzhao was split into the four prefectures Ding, Ji, Hong, and Yi.',
   },
   s0116: {
-    literal: 'Also requesting to welcome the Five Emperors at the suburb—all with the Founding Ancestor as associate in the feast.',
-    idiomatic: 'He also proposed welcoming the Five Emperors at the suburb, all with the Founding Ancestor as associate in the feast.',
+    literal: 'Ouyang Tong, minister of summer offices, was given charge of chief counselor duties.',
+    idiomatic: 'Ouyang Tong, minister of summer offices, was assigned to handle chief counselor affairs.',
   },
   s0117: {
-    literal: 'When receiving blessings at the suburb and temple, only the emperor performs the double bow—the upper spirits bestow grace; ministers and subjects dare not share it.',
-    idiomatic: 'When receiving blessings at the suburban and temple rites, only the emperor performs the double bow—the upper spirits bestow grace, and ministers dare not share in it.',
+    literal: 'In the ninth month, Fu Youyi was imprisoned and died.',
+    idiomatic: 'In the ninth month Fu Youyi was thrown into prison and died there.',
   },
   s0118: {
-    literal: '" An edict approved all according to deliberation.',
-    idiomatic: 'An edict approved all according to deliberation.',
+    literal:
+      'You Ning, right general of the Feathered Forest Guards and Prince of Jianchang, became chief counselor; Di Renjie, Luozhou vice prefect, became vice minister of terrestrial offices and Fengge-Luantai associate councilor.',
+    idiomatic:
+      'You Ning, right general of the Feathered Forest and Prince of Jianchang, became chief counselor; Di Renjie, Luozhou vice prefect, became terrestrial vice minister and Fengge-Luantai associate councilor.',
   },
   s0119: {
-    literal: 'In the sixth year, debaters held that the Northern Suburb had seats for sacred mountains, guardian peaks, seas, and rivers—and also seats for the Four Outlooks—suspecting this was redundant.',
-    idiomatic: 'In the sixth year, debaters noted that the Northern Suburb had seats for sacred mountains, guardian peaks, seas, and rivers—and also seats for the Four Outlooks—deeming this redundant.',
+    literal: 'In the tenth winter month, an edict ordered that all officeholders must nominate themselves.',
+    idiomatic:
+      'In the tenth winter month an edict required every officeholder to nominate himself for appointment.',
   },
   s0120: {
-    literal: 'Director of Ritual Affairs Zhu Yi deliberated: "Outlook is a name for what is not approached directly—how can it be confined to stars and seas, bound to mountains and rivers?"',
-    idiomatic: 'Director of Ritual Affairs Zhu Yi argued: "An outlook sacrifice addresses what cannot be approached directly—how can it be confined to stars and seas, bound to mountains and rivers?"',
+    literal:
+      'Cen Changqian, left chancellor, Ouyang Tong, chief counselor, and Ge Fuyuan, minister of terrestrial offices, were executed.',
+    idiomatic:
+      'Cen Changqian, left chancellor, Ouyang Tong, chief counselor, and Ge Fuyuan, minister of terrestrial offices, were put to death.',
   },
   s0121: {
-    literal: '" Ming Shanbin said: "The Canon of Shun says \'outlook toward mountains and rivers.\'"',
-    idiomatic: 'Ming Shanbin said: "The Canon of Shun records \'outlook toward mountains and rivers.\'"',
+    literal: 'In the first month of year 3, she personally sacrificed at the Bright Hall.',
+    idiomatic: 'In the first month of the third year she again sacrificed at the Bright Hall in person.',
   },
   s0122: {
-    literal: 'The Spring and Autumn Annals say "The Jiang, Han, Ju, and Zhang—Chu\'s outlooks."',
-    idiomatic: 'The Spring and Autumn Annals state: "The Jiang, Han, Ju, and Zhang are Chu\'s outlooks."',
+    literal: 'In the first spring month, Yang Zhirou, minister of winter offices, became Fengge-Luantai associate councilor.',
+    idiomatic:
+      'In the first spring month Yang Zhirou, minister of winter offices, joined the Fengge-Luantai council.',
   },
   s0123: {
-    literal: 'Yet today the Northern Suburb sets up sacred mountains, seas, and rivers, and also establishes the Four Outlooks—I venture to say this is excessive and should be reduced.',
-    idiomatic: 'Yet today the Northern Suburb sets up sacred mountains, seas, and rivers and also the Four Outlooks—I submit this is excessive and should be reduced.',
+    literal: 'In the third month, all five Indic realms sent envoys bearing tribute.',
+    idiomatic: 'In the third month all five Indic realms sent envoys to court with tribute.',
   },
   s0124: {
-    literal: '" Xu Mian said: "Sacred mountains and rivers are the lords of mountains and rivers."',
-    idiomatic: 'Xu Mian said: "Sacred mountains and rivers are the lords of all mountains and rivers."',
+    literal:
+      'In the fourth month, a general amnesty was proclaimed, the era name changed to Ruyi, and slaughter throughout the realm was forbidden.',
+    idiomatic:
+      'In the fourth month she proclaimed a general amnesty, changed the era to Ruyi, and forbade slaughter throughout the realm.',
   },
   s0125: {
-    literal: 'As for the meaning of outlook sacrifice—it is not limited to sacred mountains and rivers.',
-    idiomatic: 'As for the meaning of outlook sacrifice—it is not limited to sacred mountains and rivers alone.',
+    literal:
+      'In the seventh autumn month torrential rain flooded the Luo; more than five thousand households were swept away, and envoys were sent to inquire after them and grant relief.',
+    idiomatic:
+      'In the seventh autumn month heavy rains made the Luo overflow and swept away more than five thousand households; envoys were sent to inquire and grant relief.',
   },
   s0126: {
-    literal: 'If the Four Outlooks are reduced—in principle this is wrong.',
-    idiomatic: 'To eliminate the Four Outlooks would be ritually improper.',
+    literal:
+      'In the eighth month, Prince of Wei Chengsi became special advance; Prince of Jianchang You Ning, minister of winter offices; Yang Zhirou, minister of terrestrial offices—all were removed from council affairs.',
+    idiomatic:
+      'In the eighth month Prince of Wei Chengsi became special advance; Prince of Jianchang You Ning, minister of winter offices; Yang Zhirou, minister of terrestrial offices—all left the council.',
   },
   s0127: {
-    literal: 'Deliberation long could not be decided.',
-    idiomatic: 'Deliberation continued without resolution.',
+    literal:
+      'Cui Yuanzong, autumn offices vice minister, became Luantai vice minister; Li Zhaode, summer offices vice minister, Fengge vice minister; Yao Shuo, acting celestial offices vice minister, left secretariat aide; Li Yuansu, terrestrial offices vice minister, right secretariat aide—all became Fengge-Luantai associate councilors.',
+    idiomatic:
+      'Cui Yuanzong became Luantai vice minister; Li Zhaode, Fengge vice minister; Yao Shuo, left secretariat aide; Li Yuansu, right secretariat aide—all joined the Fengge-Luantai council.',
   },
   s0128: {
-    literal: 'In the sixteenth year, when the Northern Suburb ceremony was performed, the Emperor again sent down the deliberation.',
-    idiomatic: 'In the sixteenth year, when the Northern Suburb rite was performed, the emperor reopened the deliberation.',
+    literal: 'In the ninth month, general amnesty; era changed to Longevity.',
+    idiomatic: 'In the ninth month she proclaimed a general amnesty and changed the era to Longevity.',
   },
   s0129: {
-    literal: 'Thereupon the Eight Ministers memorialized to reduce the Four Outlooks, Song River, Zhe River, Five Lakes, and other seats.',
-    idiomatic: 'The Eight Ministers then memorialized to eliminate the Four Outlooks, Song River, Zhe River, Five Lakes, and other seats.',
+    literal: 'The she harvest rite was moved to the ninth month, with a seven-day court feast.',
+    idiomatic: 'The autumn she rite was fixed in the ninth month, and the court feasted for seven days.',
   },
   s0130: {
-    literal: 'Mount Zhong and Mount Baishi—since they were in the local territory—were both retained as before.',
-    idiomatic: 'Mount Zhong and Mount Baishi, being within the local territory, were both retained.',
+    literal: 'Bingzhou was re-established as Northern Capital.',
+    idiomatic: 'Bingzhou was re-established as the Northern Capital.',
   },
   s0131: {
-    literal: 'In the seventh year, the Emperor held that one offering is substance, three offerings are ornament—in the Way of serving Heaven, principle should not be so; an edict ordered detailed deliberation.',
-    idiomatic: 'In the seventh year, the emperor held that one offering represents substance and three represent ornament—in serving Heaven this is improper; he ordered detailed deliberation.',
+    literal:
+      'In the tenth winter month Wang Xiaojie, protector-general of Wuwei Army, routed Tibet and recovered the garrisons of Kucha, Khotan, Kashgar, and Suyab.',
+    idiomatic:
+      'In the tenth winter month Wang Xiaojie, Wuwei protector-general, crushed Tibet and recovered Kucha, Khotan, Kashgar, and Suyab.',
   },
   s0132: {
-    literal: 'Erudite Lu Wei, Ming Shanbin, and Director of Ritual Affairs Sima Jiong held: "The ancestral temple\'s three offerings combine the meaning of minister and subject; the upper Heaven\'s rite centers on the emperor and king—according to principle and extending meaning, one offering is acceptable."',
-    idiomatic: 'Erudite Lu Wei, Ming Shanbin, and Director of Ritual Affairs Sima Jiong argued: "The ancestral temple\'s three offerings include ministers and subjects; the rite to upper Heaven centers on the emperor—on principle, one offering suffices."',
+    literal: 'In the first spring month of year 2, she personally offered at the Bright Hall.',
+    idiomatic: 'In the first spring month of the second year she personally offered at the Bright Hall.',
   },
   s0133: {
-    literal: 'From this, sacrifices to Heaven and Earth were all one offering—beginning to eliminate the Grand Commandant as second offerer and the Director of Imperial Sacrifices as final offerer.',
-    idiomatic: 'Henceforth sacrifices to Heaven and Earth used a single offering—the Grand Commandant as second offerer and the Director of Imperial Sacrifices as final offerer were eliminated.',
+    literal: 'On guihai, the Imperial Heir\'s consorts Lady Liu and Lady Dou were executed.',
+    idiomatic:
+      'On guihai the Imperial Heir\'s consorts, the Ladies Liu and Dou, were executed.',
   },
   s0134: {
-    literal: 'Also Assistant Director of the Grand Master of Ceremonies Wang Sengchong stated: "The Five Sacrifices\' positions are at the Northern Suburb—the Round Mound should not duplicate them."',
-    idiomatic: 'Assistant Director Wang Sengchong stated: "The Five Sacrifices belong at the Northern Suburb—the Round Mound should not duplicate them."',
+    literal:
+      'In the twelfth month, imperial grandsons were re-enfeoffed: Chengi as Prince of Shouchun commandery, Chengyi as Hengyang, Longji as Linzi, Longfan as Baling, Longye as Pengcheng.',
+    idiomatic:
+      'In the twelfth month her grandsons were re-enfeoffed: Chengi Prince of Shouchun, Chengyi of Hengyang, Longji of Linzi, Longfan of Baling, Longye of Pengcheng.',
   },
   s0135: {
-    literal: '" The Emperor said: "The qi of the Five Phases—Heaven and Earth both have them—therefore both should be followed."',
-    idiomatic: 'The emperor said: "The qi of the Five Phases exist in both Heaven and Earth—both altars should include them."',
+    literal:
+      'In the second spring month, Pei Feigong, director of imperial manufactories, was bisected at the waist in the marketplace for secretly visiting the Imperial Heir.',
+    idiomatic:
+      'In the second spring month Pei Feigong, director of imperial manufactories, was cut in two at the waist in the marketplace for secretly visiting the Imperial Heir.',
   },
   s0136: {
-    literal: 'Sengchong again said: "Wind Lord and Rain Master are the stars Ji and Bi."',
-    idiomatic: 'Sengchong added: "Wind Lord and Rain Master are the stars Ji and Bi."',
+    literal:
+      'In the ninth autumn month the sovereign added the title Golden Wheel Sage Spirit Emperor, proclaimed amnesty, and feasted seven days.',
+    idiomatic:
+      'In the ninth autumn month she took the added title Golden Wheel Sage Spirit Emperor, proclaimed amnesty, and feasted for seven days.',
   },
   s0137: {
-    literal: 'Yet today the Southern Suburb sacrifices to the two stars Ji and Bi, and again sacrifices to Wind Master and Rain Master—I fear this departs from the sacrificial canon.',
-    idiomatic: 'Yet the Southern Suburb sacrifices to Ji and Bi and also to Wind Master and Rain Master—I fear this departs from canonical practice.',
+    literal:
+      'On xinchou, Doulu Qinwang, ceremonial guests director, became Secretariat Director; Wei Juyuan, right secretariat aide, and Lu Yuanfang, autumn offices vice minister and Luantai vice minister, became associate councilors.',
+    idiomatic:
+      'On xinchou Doulu Qinwang became Secretariat Director; Wei Juyuan and Lu Yuanfang joined the Fengge-Luantai council.',
   },
   s0138: {
-    literal: '" The Emperor said: "Ji and Bi are naturally names of the Twenty-eight Lodges; Wind Master and Rain Master are naturally subordinates beneath Ji and Bi stars."',
-    idiomatic: 'The emperor replied: "Ji and Bi are names within the Twenty-eight Lodges; Wind Master and Rain Master are subordinates of those stars."',
+    literal: 'In the first spring month of year 3, she personally offered at the Bright Hall.',
+    idiomatic: 'Again in the first spring month of the third year she sacrificed at the Bright Hall in person.',
   },
   s0139: {
-    literal: 'Two sacrifices are not objectionable.',
-    idiomatic: 'Two separate sacrifices are not improper.',
+    literal:
+      'Third month: Li Zhaode acting neishi; Su Weidao associate councilor.',
+    idiomatic:
+      'In the third month Li Zhaode became acting Secretariat Director; Su Weidao joined the Fengge-Luantai council.',
   },
   s0140: {
-    literal: '"',
-    idiomatic: '(End of edict.)',
+    literal: 'Wei Juyuan summer offices vice minister, retained council duties.',
+    idiomatic: 'Wei Juyuan became summer offices vice minister while retaining his seat on the council.',
   },
   s0141: {
-    literal: 'In the eleventh year, the Grand Invocator submitted: the Northern Suburb had only one sea; and the two suburbs in succession used seven-tray stands for victims, plain tables to bear jade.',
-    idiomatic: 'In the eleventh year, the Grand Invocator submitted: the Northern Suburb had only one sea altar; both suburban rites used seven-tray stands for victims and plain tables to bear jade.',
+    literal: 'Fourth month: Wang Xiaojie third rank deliberative.',
+    idiomatic:
+      'In the fourth month Wang Xiaojie, minister of summer offices, was made deliberative third rank with Fengge-Luantai.',
   },
   s0142: {
-    literal: 'Also regulations were made for the seats of the multitude of spirits below the Northern and Southern suburb altars—all using white thatch; an edict ordered detailed deliberation.',
-    idiomatic: 'Regulations were also made for spirit seats below the suburban altars—all using white thatch; the emperor ordered detailed deliberation.',
+    literal:
+      'Fifth month: added title Transcendent Golden Wheel Sage Spirit Emperor, amnesty, Yanzai era, seven-day feast.',
+    idiomatic:
+      'In the fifth month she added the title Transcendent Golden Wheel Sage Spirit Emperor, proclaimed amnesty, changed the era to Extended Reign, and feasted seven days.',
   },
   s0143: {
-    literal: 'The Eight Ministers memorialized: "The Rites say \'observe the things under Heaven—none can be called worthy of its virtue\'—from this one knows that using seven-tray stands for suburban sacrifice is improper in principle."',
-    idiomatic: 'The Eight Ministers memorialized: "The Rites say \'observe all things under Heaven—none can be called worthy of Heaven\'s virtue\'—hence seven-tray stands are improper for suburban sacrifice."',
+    literal: 'Eighth autumn month: Yao Shuo chief counselor.',
+    idiomatic: 'In the eighth autumn month Yao Shuo, vice director of ceremonial guests, became chief counselor.',
   },
   s0144: {
-    literal: 'Also using white thatch as mats—the Rites give no source for this.',
-    idiomatic: 'Using white thatch as mats likewise lacks canonical precedent.',
+    literal:
+      'Yang Zaisi Luantai vice minister; Du Jingjian Fengge vice minister; both associate councilors.',
+    idiomatic:
+      'Yang Zaisi became Luantai vice minister and Du Jingjian Fengge vice minister; both joined the Fengge-Luantai council.',
   },
   s0145: {
-    literal: 'The seat of the August Heaven Supreme Lord already uses stands— from this one knows the suburb has the meaning of stands.',
-    idiomatic: 'Since the August Heaven Supreme Lord\'s seat already uses stands, the suburban rite properly employs stands.',
+    literal:
+      'Prince of Liang Wu Sizan urged tribal chiefs to petition for levying copper and iron in the eastern capital to cast the Celestial Axis outside the Vermilion Gate and erect a monument praising the sovereign\'s achievements.',
+    idiomatic:
+      'Prince of Liang Wu Sizan urged the frontier chiefs to petition for a great levy of copper and iron in the eastern capital to cast the Celestial Axis outside the Vermilion Gate and raise a monument to her achievements.',
   },
   s0146: {
-    literal: '" Thereupon plain stands were adopted, and the Northern Suburb was given Four Seas seats.',
-    idiomatic: 'Plain stands were adopted, and the Northern Suburb was given Four Seas seats.',
+    literal: 'Ninth month: Li Zhaode demoted to Qinzhou Nanbin county captain.',
+    idiomatic:
+      'In the ninth month Li Zhaode was demoted to captain of Nanbin County in Qin Prefecture.',
   },
   s0147: {
-    literal: 'Below the Five Emperors, all used rush mats and straw offering mats, and all used plain stands.',
-    idiomatic: 'Below the Five Emperors, all used rush mats and straw offering mats with plain stands.',
+    literal: 'Tenth winter month: Li Yuansu associate councilor.',
+    idiomatic:
+      'In the tenth winter month Li Yuansu, right secretariat aide, joined the Fengge-Luantai council.',
   },
   s0148: {
-    literal: 'Also the Emperor said: "The Rites \'sacrifice to the moon in a pit\'— truly because the moon is yin in meaning."',
-    idiomatic: 'The emperor also said: "The Rites prescribe sacrificing to the moon in a pit—because the moon embodies yin."',
+    literal:
+      'Zhengsheng year 1 first month: added Maitreya Transcendent Golden Wheel title, amnesty, era change, seven-day feast.',
+    idiomatic:
+      'In the first month of Proof of Sagacity 1 she added the title Maitreya Transcendent Golden Wheel Sage Spirit Emperor, proclaimed amnesty, changed the era, and feasted seven days.',
   },
   s0149: {
-    literal: 'Now the Five Emperors are celestial spirits—yet they are placed in pits.',
-    idiomatic: 'Yet the Five Emperors are celestial spirits—yet they are placed in pits.',
+    literal:
+      'On wuzi, Doulu Qinwang, Wei Juyuan, Du Jingjian, Su Weidao, Lu Yuanfang were all demoted to prefects of Zhao, Fu, Ji, Sui, etc.',
+    idiomatic:
+      'On wuzi Doulu Qinwang, Wei Juyuan, Du Jingjian, Su Weidao, and Lu Yuanfang were all demoted to prefects of Zhao, Fu, Ji, Sui, and the like.',
   },
   s0150: {
-    literal: 'Also the Rites say \'sacrifice to the sun on an altar, sacrifice to the moon in a pit\'—both are separate sacrifices, unrelated to the suburb—therefore each follows yin and yang, establishing altar and pit.',
-    idiomatic: 'The Rites also say \'sacrifice to the sun on an altar, the moon in a pit\'—these are separate rites, unrelated to the suburb—each follows yin and yang in establishing altar and pit.',
+    literal: 'On bingshen night the Bright Hall burned; by dawn it was ashes.',
+    idiomatic: 'On bingshen night the Bright Hall caught fire; by dawn it was nothing but ash.',
   },
   s0151: {
-    literal: 'The site at the Southern Suburb takes the yang meaning; dwelling at the Northern Suburb takes the yin meaning.',
-    idiomatic: 'The Southern Suburb site follows the yang principle; the Northern Suburb, the yin.',
+    literal:
+      'On gengzi, reported the fire to the ancestral temple, self-reproach edict, ordered all officials rank 9+ to submit sealed memorials with frank remonstrance.',
+    idiomatic:
+      'On gengzi she reported the blaze to the ancestral temple, issued a hand-edict blaming herself, and ordered civil and military officials of the ninth rank and above to submit sealed memorials with the frankest remonstrance.',
   },
   s0152: {
-    literal: 'Since it is said to take yang, the meaning differs from yin.',
-    idiomatic: 'Since the rite takes the yang position, its meaning differs from yin.',
+    literal: 'Second spring month: removed Maitreya Transcendent parts of title.',
+    idiomatic: 'In the second spring month she dropped the Maitreya and Transcendent portions of her title.',
   },
   s0153: {
-    literal: 'Stars, moon, and sacrifice—in principle should not be in pits.',
-    idiomatic: 'Stars, the moon, and associated sacrifices should not occupy pits.',
+    literal:
+      'Ninth autumn month: southern suburb sacrifice, added Tianceshan Golden Wheel title, amnesty including capital crimes and ten abominations, Tianceshanwansui era, nine-day feast.',
+    idiomatic:
+      'In the ninth autumn month she sacrificed at the southern suburb, added the title Heaven-Enregistered Golden Wheel Sage Spirit Emperor, proclaimed amnesty even for capital crimes and the ten abominations, changed the era to Heaven-Enregistered Ten Thousand Years, and feasted nine days.',
   },
   s0154: {
-    literal: '" The Eight Ministers memorialized: "The meaning of the Five Emperors should not be in pits."',
-    idiomatic: 'The Eight Ministers replied: "The Five Emperors should not occupy pit-seats."',
+    literal:
+      'Wansui Dengfeng year 1 twelfth month jiashen: feng on Mount Song, amnesty, era change, nine-day feast.',
+    idiomatic:
+      'On jiashen of the twelfth month in Ten Thousand Years Ascent-Feng 1 she performed the feng rite on Mount Song, proclaimed amnesty, changed the era, and feasted nine days.',
   },
   s0155: {
-    literal: 'Truly because the Qi dynasty\'s Round Mound was small and steep, at the edge there was no place to settle the spirits.',
-    idiomatic: 'This was because the Qi Round Mound was small and steep, with no room at the edge to settle the spirits.',
+    literal: 'Dinghai: shan at Mount Shaoshi.',
+    idiomatic: 'On dinghai she performed the shan rite at Mount Shaoshi.',
   },
   s0156: {
-    literal: 'Now the mound\'s form is already large—it is easy to take settling places.',
-    idiomatic: 'Now the mound is larger and can accommodate them properly.',
+    literal:
+      'Jichou: third rank+ given two noble ranks counting prior service, fourth rank and below two rank steps.',
+    idiomatic:
+      'On jichou she decreed that officials of the third rank and above receive two noble ranks counting prior honors, and those of the fourth rank and below two steps in rank.',
   },
   s0157: {
-    literal: 'Request that the Five Emperors\' seats all be on the altar; the outer enclosure\'s Twenty-eight Lodges and Rain Master and other seats—all cease being pits.',
-    idiomatic: 'We propose placing all Five Emperors\' seats on the altar; the outer enclosure\'s Twenty-eight Lodges, Rain Master, and others should no longer use pits.',
+    literal: 'Luozhou people tax exemption 2 years, Dengfeng and Gaocheng counties 3 years.',
+    idiomatic:
+      'The people of Luozhou received two years\' tax relief; Dengfeng and Gaocheng counties, three.',
   },
   s0158: {
-    literal: '" From this the Northern and Southern suburbs both had no pit positions.',
-    idiomatic: 'Henceforth neither suburban altar used pit-seats.',
+    literal: 'Guisi: returned from Mount Song.',
+    idiomatic: 'On guisi she returned from Mount Song.',
   },
   s0159: {
-    literal: 'In the seventeenth year, the Emperor held that Weiyang and Po Bao are both Heavenly Emperors—on the altar they are exalted, below they are humble.',
-    idiomatic: 'In the seventeenth year, the emperor held that Weiyang and Po Bao are both Heavenly Emperors—exalted on the altar yet humble below.',
+    literal: 'Jiawu: personally visited ancestral temple.',
+    idiomatic: 'On jiawu she personally visited the ancestral temple.',
   },
   s0160: {
-    literal: 'Also the Celestial Emperor sacrificed to at the Southern Suburb—the Five Emperors separately had Bright Hall sacrifice—no need to duplicate setup.',
-    idiomatic: 'The Celestial Emperor sacrificed to at the Southern Suburb; the Five Emperors had separate Bright Hall rites—no need to duplicate them.',
+    literal: 'Third spring month: Bright Hall rebuilt.',
+    idiomatic: 'In the third spring month the Bright Hall was rebuilt.',
   },
   s0161: {
-    literal: 'Also the suburban sacrifice to the Twenty-eight Lodges but without the Twelve Branches—in principle this was deficient.',
-    idiomatic: 'The suburban sacrifice included the Twenty-eight Lodges but omitted the Twelve Branches—a ritual deficiency.',
+    literal:
+      'Fourth summer month: offered at Bright Hall, amnesty, Wansui Tongtian era, seven-day feast.',
+    idiomatic:
+      'In the fourth summer month she offered at the Bright Hall, proclaimed amnesty, changed the era to Ten Thousand Years Penetrating Heaven, and feasted seven days.',
   },
   s0162: {
-    literal: 'Thereupon the Southern Suburb first removed Five Emperors sacrifice, added Twelve Branches seats, and with the Twenty-eight Lodges each in its direction made altars.',
-    idiomatic: 'The Southern Suburb then eliminated Five Emperors sacrifice, added Twelve Branches seats, and with the Twenty-eight Lodges established altars in their respective directions.',
+    literal: 'Great drought: ordered officials rank 9+ to speak frankly on government faults.',
+    idiomatic:
+      'Because of a great drought throughout the realm, she ordered civil and military officials of the ninth rank and above to speak frankly on the gains and losses of current policy.',
   },
   s0163: {
-    literal: 'Chen regulations also used alternate years.',
-    idiomatic: 'Chen regulations also used alternate years.',
+    literal:
+      'Fifth month: Khitan leader Li Jinzhong and brother-in-law Sun Wanrong killed Zhao Wenshui, rebelled, took Yingzhou.',
+    idiomatic:
+      'In the fifth month the Khitan leader Li Jinzhong and his brother-in-law Sun Wanrong, governor of Guicheng, killed the protector Zhao Wenshui, rose in revolt, and seized Ying Prefecture.',
   },
   s0164: {
-    literal: 'On the first xin of the first month, one special bull was used; Heaven and Earth were sacrificed to at the Northern and Southern suburbs.',
-    idiomatic: 'On the first xin day of the first month, a single bull was offered; Heaven and Earth were sacrificed to at the Northern and Southern suburbs.',
+    literal: 'Jinzhong styled himself khan.',
+    idiomatic: 'He proclaimed himself khan.',
   },
   s0165: {
-    literal: 'In the first year of Yongding, Emperor Wu received the abdication, restored the Southern Suburb—a round altar two zhang two chi five cun high, upper width ten zhang; firewood burning to announce to Heaven.',
-    idiomatic: 'In Yongding 1, Emperor Wu accepted the abdication and restored the Southern Suburb—a round altar two zhang two chi five cun high and ten zhang across at the top, with firewood burning to announce to Heaven.',
+    literal:
+      'Yichou: 28 generals including Cao Renshi ordered to campaign.',
+    idiomatic:
+      'On yichou she ordered twenty-eight generals, including Cao Renshi, Zhang Xuanyu, Li Duozuo, and Ma Renjie, to campaign against them.',
   },
   s0166: {
-    literal: 'The next year on the first xin of the first month, the Southern Suburb ceremony was performed—with the deceased father Virtue Emperor as associate; the Twelve Branches seats were removed and Five Emperors positions added; the rest followed Liang precedent.',
-    idiomatic: 'The following first xin day of the first month, the Southern Suburb rite was performed with the deceased Virtue Emperor as associate; Twelve Branches seats were removed and Five Emperors added; the rest followed Liang precedent.',
+    literal: 'Seventh month: Wu Sizan pacification commissioner, Yao Shuo deputy.',
+    idiomatic:
+      'In the seventh autumn month Prince of Liang Wu Sizan was made pacification commissioner and Yao Shuo chief counselor his deputy.',
   },
   s0167: {
-    literal: 'The Northern Suburb altar was one zhang five chi high, eight zhang wide—with the deceased mother Empress Zhao as associate; associated sacrifices also followed Liang precedent.',
-    idiomatic: 'The Northern Suburb altar stood one zhang five chi high and eight zhang wide, with the deceased Empress Zhao as associate; associated sacrifices followed Liang precedent.',
+    literal:
+      'Edict changed Li Jinzhong\'s name to Jinmie (exterminate-all) and Sun Wanrong to Wanzhan (ten-thousand-beheadings).',
+    idiomatic:
+      'An edict changed Li Jinzhong\'s name to Li Exterminate-All and Sun Wanrong\'s to Sun Ten-Thousand-Beheadings.',
   },
   s0168: {
-    literal: 'In Emperor Wen\'s Tianjia era, the Southern Suburb changed to use the High Ancestor as associate; the Northern Suburb used the Virtue Emperor to associate with Heaven.',
-    idiomatic: 'Under Emperor Wen in the Tianjia era, the Southern Suburb used the High Ancestor as associate; the Northern Suburb paired the Virtue Emperor with Heaven.',
+    literal:
+      'Eighth month: defeat at Xixiashi Huangzhang Valley, Zhang and Ma captured.',
+    idiomatic:
+      'In the eighth autumn month Zhang Xuanyu, Cao Renshi, and Ma Renjie fought Li Exterminate-All at Huangzhang Valley west of Xiashi Pass; the government army was routed and Zhang and Ma were captured.',
   },
   s0169: {
-    literal: 'Grand Master of Ceremonies, Director of the Grand Secretariat, Acting Director of the Grand Master of Ceremonies Xu Heng memorialized: "Formerly Emperor Wu of Liang said: \'Heaven\'s number is five; Earth\'s number is five—the qi of the Five Phases, Heaven and Earth both have them.\'"',
-    idiomatic: 'Grand Master Xu Heng memorialized: "Formerly Emperor Wu of Liang said: \'Heaven\'s number is five; Earth\'s number is five—the qi of the Five Phases exist in both Heaven and Earth.\'"',
+    literal: 'Ninth month: Prince of Jian\'an You Yi grand commander against Khitan.',
+    idiomatic:
+      'In the ninth month Prince of Jian\'an You Yi, right general of the Martial Guard, was made grand commander to campaign against the Khitan.',
   },
   s0170: {
-    literal: 'Therefore within the Northern and Southern suburbs, the Five Sacrifices are both sacrificed to.',
-    idiomatic: 'Therefore both suburban altars included the Five Sacrifices.',
+    literal: 'Wang Fangqing Luantai vice minister; Li Daoguang associate councilor.',
+    idiomatic:
+      'Wang Fangqing, Bingzhou chief administrator, became Luantai vice minister; Li Daoguang, palace director, joined the Fengge-Luantai council.',
   },
   s0171: {
-    literal: 'Your subject examines the Rites of Zhou: \'with blood sacrifice to the altars of soil and grain and the Five Sacrifices.\'"',
-    idiomatic: 'I examine the Rites of Zhou: \'with blood sacrifice to the altars of soil and grain and the Five Sacrifices.\'"',
+    literal: 'Tibet raided Liangzhou; Xu Qinming captured.',
+    idiomatic: 'Tibet raided Liang Prefecture and captured its protector Xu Qinming.',
   },
   s0172: {
-    literal: 'Zheng Xuan says: \'Yin sacrifice begins with blood—honoring the qi\'s fragrance.\'"',
-    idiomatic: 'Zheng Xuan explains: \'Yin sacrifice begins with blood—honoring the fragrance of qi.\'"',
+    literal: 'Gengshen: Wang Fangqing Fengge vice minister, retained council.',
+    idiomatic:
+      'On gengshen Wang Fangqing became Fengge vice minister while retaining his seat on the council.',
   },
   s0173: {
-    literal: 'Five Sacrifices are the spirits of the Five Officials.',
-    idiomatic: 'The Five Sacrifices are the spirits of the Five Officials.',
+    literal: 'Li Jinmie died; Sun Wanzhan led the band.',
+    idiomatic: 'Li Exterminate-All died, and Sun Ten-Thousand-Beheadings took command of the rebels.',
   },
   s0174: {
-    literal: 'The Five Spirits govern the Five Phases, subordinate to Earth—therefore together with burial, immersion, and substitute victims they are yin sacrifices.',
-    idiomatic: 'The Five Spirits govern the Five Phases and are subordinate to Earth—together with burial, immersion, and substitute victims they constitute yin sacrifices.',
+    literal: 'Tenth winter month: Sun took Ji Prefecture; Lu Baoji killed.',
+    idiomatic:
+      'In the tenth winter month Sun Ten-Thousand-Beheadings seized Ji Prefecture and killed its governor Lu Baoji.',
   },
   s0175: {
-    literal: 'Since they are not firewood burning, they have no relation to yang sacrifice.',
-    idiomatic: 'Since they do not involve firewood burning, they have no connection to yang sacrifice.',
+    literal: 'Eleventh month: also took Yingzhou subordinate counties.',
+    idiomatic: 'In the eleventh month he also overran the counties subordinate to Ying Prefecture.',
   },
   s0176: {
-    literal: 'Therefore He Xiu says: \'Zhou\'s five ranks of nobility—modeling Earth\'s having the Five Phases.\'"',
-    idiomatic: 'He Xiu therefore says: \'Zhou\'s five ranks of nobility model Earth\'s Five Phases.\'"',
+    literal: 'Year 2 first month: Bright Hall offering.',
+    idiomatic: 'In the first month of the second year she personally offered at the Bright Hall.',
   },
   s0177: {
-    literal: 'The Five Spirits\' positions are at the Northern Suburb—the Round Mound should not duplicate setup.',
-    idiomatic: 'The Five Spirits belong at the Northern Suburb—the Round Mound should not duplicate them.',
+    literal: 'Li Yuansu and Sun Yuanheng executed for plotting with Qilian Yao.',
+    idiomatic:
+      'Li Yuansu, Fengge vice minister, and Sun Yuanheng, summer offices vice minister, were executed for plotting rebellion with Qilian Yao.',
   },
   s0178: {
-    literal: '" The decree said: "Approved."',
-    idiomatic: 'The decree read: "Approved."',
+    literal: 'Lou Shide associate councilor.',
+    idiomatic:
+      'Lou Shide, Bingzhou protector staff officer, became Fengge vice minister and Fengge-Luantai associate councilor.',
   },
   s0179: {
-    literal: 'Heng again memorialized: "Emperor Wu of Liang\'s deliberation: Ji and Bi are naturally names of the Twenty-eight Lodges; Wind Master and Rain Master are naturally subordinates beneath Ji and Bi—not the stars themselves."',
-    idiomatic: 'Heng memorialized again: "Emperor Wu of Liang held that Ji and Bi are names within the Twenty-eight Lodges; Wind Master and Rain Master are subordinates beneath them—not the stars themselves."',
+    literal:
+      'Second spring month: 180,000 troops under Wang Xiaojie defeated at Xiashi Valley; Wang died in battle, Su Honghui fled.',
+    idiomatic:
+      'In the second spring month Wang Xiaojie and Su Honghui led a hundred and eighty thousand men against Sun Ten-Thousand-Beheadings at Xiashi Valley; the imperial army was crushed, Wang Xiaojie fell in battle, and Su Honghui fled without his armor.',
   },
   s0180: {
-    literal: 'Therefore at the suburban rain-prayer places—all are rain sacrifices.',
-    idiomatic: 'Therefore at suburban rain-prayer sites—all are rain sacrifices.',
+    literal:
+      'Fourth summer month: Nine Cauldrons cast and placed in Bright Hall court; Wang Jishan neishi.',
+    idiomatic:
+      'In the fourth summer month the Nine Cauldrons were cast and set up in the Bright Hall courtyard; Wang Jishan, former chief administrator of Yizhou, became Secretariat Director.',
   },
   s0181: {
-    literal: 'Your subject examines the Rites of Zhou Grand Master of Ceremonies\' duties: \'burning sacrifice to the Director of the Center, Director of Fate, Wind Master, Rain Master.\'"',
-    idiomatic: 'I examine the Rites of Zhou: the Grand Master of Ceremonies \'burns sacrifice to the Director of the Center, Director of Fate, Wind Master, and Rain Master.\'"',
+    literal:
+      'Fifth month: Wu Yizong grand commander, Lou Shide deputy, Shazha Zhongyi vanguard, 200,000 to campaign against Sun.',
+    idiomatic:
+      'In the fifth month Prince of Henei Wu Yizong was made grand commander, Lou Shide deputy grand commander, and Shazha Zhongyi vanguard commander, with two hundred thousand men to campaign against Sun Ten-Thousand-Beheadings.',
   },
   s0182: {
-    literal: 'Zheng Zhong says: \'Wind Master is Ji;',
-    idiomatic: 'Zheng Zhong explains: \'Wind Master is Ji;',
+    literal:
+      'Eighth month: Turkic khan Mojie detained Yanxiu as not a Tang prince, invaded with Yan Zhiwei.',
+    idiomatic:
+      'In the eighth month the Turkic khan Mojie, holding that Wu Yanxiu was no prince of the Tang house, imprisoned him separately and led his horde with Yan Zhiwei to raid Gui and Tan and other prefectures.',
   },
   s0183: {
-    literal: 'Rain Master is Bi.\'"',
-    idiomatic: 'Rain Master is Bi.\'"',
+    literal: '200,000 under Chonggui etc. counterattacked; Yanxiu released.',
+    idiomatic:
+      'She ordered Prince of Gaoping Chonggui, Shazha Zhongyi, Zhang Renyan, and Li Duozuo and others to lead two hundred thousand men against them, whereupon Yanxiu was released.',
   },
   s0184: {
-    literal: 'The Odes say: \'The moon passes Bi—bringing great rain.\'"',
-    idiomatic: 'The Odes say: \'The moon passes Bi—bringing torrential rain.\'"',
+    literal: 'Jichou: Mojie took Dingzhou; Sun Yan\'gao killed; thousands dead.',
+    idiomatic:
+      'On jichou Mojie seized Ding Prefecture; Governor Sun Yan\'gao was killed, commoners\' houses burned, and thousands perished.',
   },
   s0185: {
-    literal: 'Like this, then Wind Lord and Rain Master are the stars Ji and Bi.',
-    idiomatic: 'On this basis, Wind Lord and Rain Master are the stars Ji and Bi.',
+    literal: 'Prince of Wei Chengsi died.',
+    idiomatic: 'Prince of Wei Chengsi passed away.',
   },
   s0186: {
-    literal: 'Yet today the Southern Suburb sacrifices to the two stars Ji and Bi, and again sacrifices to Wind Lord and Rain Master—I fear this departs from the sacrificial canon.',
-    idiomatic: 'Yet the Southern Suburb sacrifices to Ji and Bi and also to Wind Lord and Rain Master—I fear this departs from canonical practice.',
+    literal: 'Gengzi: Wu Sizan neishi, Di Renjie chief counselor.',
+    idiomatic: 'On gengzi Wu Sizan became Secretariat Director and Di Renjie chief counselor.',
   },
   s0187: {
-    literal: '" The decree said: "If the suburb sets up star positions, remove them as appropriate."',
-    idiomatic: 'The decree read: "If the suburban altar sets up star positions, remove them accordingly."',
+    literal: 'September: You Ning associate councilor.',
+    idiomatic: 'In the ninth month Prince of Jianchang You Ning joined the Fengge-Luantai council.',
   },
   s0188: {
-    literal: 'Heng again memorialized: "The Liang ritual regulations say: \'One offering is substance; three offerings are ornament."',
-    idiomatic: 'Heng memorialized again: "The Liang ritual regulations state: \'One offering is substance; three offerings are ornament.\'"',
+    literal: 'Mojie took Zhaozhou; Gao Rui killed.',
+    idiomatic: 'Mojie seized Zhao Prefecture and killed its governor Gao Rui.',
   },
   s0189: {
-    literal: 'The affair of serving Heaven—therefore not three offerings.\'"',
-    idiomatic: 'The rite of serving Heaven—therefore not three offerings.\'"',
+    literal:
+      'Bingzi: Prince of Luling Zhe made crown prince, restored name Xian, amnesty, five-day feast.',
+    idiomatic:
+      'On bingzi Prince of Luling Zhe was made crown prince and ordered to resume his former name Xian; amnesty was proclaimed and the court feasted five days.',
   },
   s0190: {
-    literal: 'Your subject examines the Rites of Zhou Director of Vessels\' statement—three offerings applied to the ancestral temple; yet Zheng\'s commentary: \'one offering applied to the multitude of small sacrifices.\'"',
-    idiomatic: 'I examine the Rites of Zhou Director of Vessels: three offerings apply to the ancestral temple; Zheng\'s commentary adds, \'one offering applies to minor sacrifices.\'"',
+    literal: 'Di Renjie ordered as Hebei campaign marshal.',
+    idiomatic: 'Di Renjie was ordered to serve as Hebei campaign marshal.',
   },
   s0191: {
-    literal: 'Now using the small sacrifice\'s rite for the Heavenly Spirit Supreme Lord—Emperor Wu of Liang\'s meaning here is incoherent.',
-    idiomatic: 'To apply the minor sacrifice rite to the Heavenly Spirit Supreme Lord—Emperor Wu of Liang\'s reasoning here is incoherent.',
+    literal: 'Xinsi: crown prince visited ancestral temple.',
+    idiomatic: 'On xinsi the crown prince visited the ancestral temple.',
   },
   s0192: {
-    literal: 'Also vessel and stand objects depend on substance and ornament; bowing and offering rites center on reverent respect.',
-    idiomatic: 'Vessels and stands depend on substance and ornament; bowing and offering center on reverent respect.',
+    literal: 'Su Weidao associate councilor.',
+    idiomatic:
+      'Su Weidao, celestial offices vice minister, became Fengge vice minister and Fengge-Luantai associate councilor.',
   },
   s0193: {
-    literal: 'Now requesting that all suburban and mound sacrifices follow the ancestral temple—three offerings is acceptable.',
-    idiomatic: 'We propose that all suburban and mound sacrifices follow the ancestral temple model—three offerings is appropriate.',
+    literal:
+      'Guiwei: Mojie slaughtered 10,000+ captives from Zhao and Ding, withdrew via Wuhui road.',
+    idiomatic:
+      'On guiwei Mojie slaughtered more than ten thousand men and women he had seized in Zhao and Ding and withdrew by the Five-Turns road, ravaging everywhere he passed beyond count.',
   },
   s0194: {
-    literal: '" The decree said: "Follow deliberation."',
-    idiomatic: 'The decree read: "Follow deliberation."',
+    literal: 'Yao Yuanchong and Li Qiao associate councilors.',
+    idiomatic:
+      'In the tenth winter month Yao Yuanchong, summer offices vice minister, and Li Qiao, vice director of the Forest Terrace, joined the Fengge-Luantai council.',
   },
   s0195: {
-    literal: '"',
-    idiomatic: '(End of memorial.)',
+    literal: 'That month Yan Zhiwei fled back from Turks; entire clan executed.',
+    idiomatic:
+      'That same month Yan Zhiwei fled back from the Turks; his entire clan was executed to the last man.',
   },
   s0196: {
-    literal: 'In Emperor Fei\'s Guangda era, Empress Zhao was again paired at the Northern Suburb.',
-    idiomatic: 'Under Emperor Fei in the Guangda era, Empress Zhao was again paired at the Northern Suburb.',
+    literal: 'Year 2 second spring month: Imperial Heir Dan enfeoffed Prince of Xiang.',
+    idiomatic:
+      'In the second spring month of the second year the Imperial Heir Dan was enfeoffed as Prince of Xiang.',
   },
   s0197: {
-    literal: 'When Emperor Xuan succeeded to the throne, because the Northern and Southern suburbs were low and small, further deliberation was held to enlarge them.',
-    idiomatic: 'When Emperor Xuan succeeded, finding the suburban altars too low and small, he ordered deliberation to enlarge them.',
+    literal:
+      'First established Control-Crane Bureau for Zhang Yizhi and Zhang Changzong; renamed Attendant-Court Bureau, ranked below censor-in-chief.',
+    idiomatic:
+      'She first established the Control-Crane Bureau for her favorites Zhang Yizhi and Zhang Changzong; it was soon renamed the Attendant-Court Bureau, ranking just below the censor-in-chief.',
   },
   s0198: {
-    literal: 'Long without decision.',
-    idiomatic: 'Deliberation continued without resolution.',
+    literal: 'Wei Yuanzhong and Ji Xu associate councilors.',
+    idiomatic:
+      'Wei Yuanzhong, left censor, became Fengge vice minister, and Ji Xu celestial vice minister; both joined the Fengge-Luantai council.',
   },
   s0199: {
-    literal: 'In the eleventh year of Taijian, Director of the Sacrificial Department Wang Yuangui deliberated:',
-    idiomatic: 'In Taijian 11, Director of the Sacrificial Department Wang Yuangui submitted:',
+    literal: 'Wuzi: visited Mount Song, passed Prince Zijin\'s shrine.',
+    idiomatic: 'On wuzi she went to Mount Song and passed the shrine of Prince Zijin.',
   },
   s0200: {
-    literal: ': Examining the Former Han Yellow Chart, the Supreme Lord altar diameter five zhang, height nine chi;',
-    idiomatic: 'Examining the Former Han Yellow Chart: the Supreme Lord altar was five zhang in diameter and nine chi high;',
+    literal: 'Bingshen: visited Mount Gou.',
+    idiomatic: 'On bingshen she visited Mount Gou.',
   },
 };
 
+const source = loadSentencesFromData();
+for (let n = START; n <= END; n++) {
+  const id = `s${String(n).padStart(4, '0')}`;
+  if (!source.has(id)) throw new Error(`Missing ${id} in ${dataPath}`);
+  if (!T[id]) throw new Error(`Missing translation for ${id}`);
+}
+
+const expectedIds = new Set(
+  Array.from({ length: END - START + 1 }, (_, i) => `s${String(START + i).padStart(4, '0')}`)
+);
+
+for (const id of expectedIds) {
+  const pair = T[id];
+  if (pair.literal === pair.idiomatic) {
+    throw new Error(`${id}: literal and idiomatic must differ`);
+  }
+}
+
+if (!existsSync(transPath)) {
+  console.log(
+    `No ${transPath}; standalone T ready (${Object.keys(T).length} entries, s0101–s0200).`
+  );
+  process.exit(0);
+}
+
 const data = JSON.parse(readFileSync(transPath, 'utf8'));
+if (data.metadata.chapter !== '006') {
+  console.log(
+    `Session is chapter ${data.metadata.chapter}, not 006; standalone T ready (${Object.keys(T).length} entries).`
+  );
+  process.exit(0);
+}
+
+const sessionIds = new Set(data.sentences.map((s) => s.originalId || s.id));
+const hasRange = [...expectedIds].every((id) => sessionIds.has(id));
+
+if (!hasRange) {
+  const extracted = extractRange(dataPath, START, END);
+  for (const row of extracted) {
+    const key = row.originalId;
+    if (!sessionIds.has(key)) {
+      data.sentences.push(row);
+      sessionIds.add(key);
+    }
+  }
+  const stillMissing = [...expectedIds].filter((id) => !sessionIds.has(id));
+  if (stillMissing.length) {
+    console.log(
+      `Session lacks ${stillMissing.join(', ')}; standalone T ready (${Object.keys(T).length} entries). Re-run after the next start-translation batch.`
+    );
+    process.exit(0);
+  }
+}
+
+const byId = new Map(data.sentences.map((s) => [s.originalId || s.id, s]));
+for (const id of expectedIds) {
+  const src = source.get(id);
+  const row = byId.get(id);
+  if (!row) throw new Error(`Session missing ${id}`);
+  if (src.chinese && row.chinese !== src.chinese) {
+    row.chinese = src.chinese;
+  } else if (!row.chinese) {
+    row.chinese = src.chinese;
+  }
+}
+
 let applied = 0;
 for (const s of data.sentences) {
   const key = s.originalId || s.id;
   const pair = T[key];
   if (!pair) continue;
+  if (pair.literal === pair.idiomatic) {
+    throw new Error(`${key}: literal and idiomatic must differ`);
+  }
   s.literal = pair.literal;
   s.idiomatic = pair.idiomatic;
   applied++;
 }
+
+const missing = [...expectedIds].filter(
+  (id) => !data.sentences.some((s) => (s.originalId || s.id) === id && s.idiomatic)
+);
+if (missing.length) {
+  throw new Error(`Missing applied translations for: ${missing.join(', ')}`);
+}
+if (applied !== Object.keys(T).length) {
+  throw new Error(`Applied ${applied}, expected ${Object.keys(T).length}`);
+}
+
 writeFileSync(transPath, JSON.stringify(data, null, 2) + '\n');
-console.log('Applied', applied, 'translations to', transPath);
+console.log('Applied', applied, 'translations (s0101–s0200) to', transPath);
