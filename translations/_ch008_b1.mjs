@@ -1,6 +1,6 @@
 /** Batch 1 translations for zizhitongjian ch.008 */
 export const batch1 = [
-  { zh: "__FORCETOC__", literal: "", idiomatic: "" },
+  { zh: "__FORCETOC__", literal: "—", idiomatic: "—" },
   { zh: "起昭陽大荒落，盡閼逢敦牂，凡二年。", literal: "From Zhaoyang Dahuanluo through Emao Dunzang; two years in all.", idiomatic: "From Zhaoyang Dahuanluo through Emao Dunzang—two years in all." },
   { zh: "1冬，十月，泗川監平將兵圍沛公於豐，沛公出與戰，破之，令雍齒守豐。", literal: "1. In winter, the tenth month, Sishui supervisor Ping led troops to besiege the Duke of Pei at Feng; the Duke of Pei came out to give battle, routed him, and ordered Yong Chi to hold Feng.", idiomatic: "1. In the tenth month of winter, Sishui supervisor Ping besieged the Duke of Pei at Feng. The duke marched out, routed him, and left Yong Chi to hold the city." },
   { zh: "十一月，沛公引兵之薛。", literal: "In the eleventh month the Duke of Pei led his army to Xue.", idiomatic: "In the eleventh month the Duke of Pei marched on Xue." },
