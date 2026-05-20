@@ -1,4 +1,4 @@
-/** Songshi ch.005 batch 3a: s0201–s0250 (Chunhua 1: drought, floods, reforms, Zu Pu) */
+/** Songshi ch.005 batch 3a: s0201–s0250 (Chunhua 1: drought, floods, reforms, Zhao Pu) */
 export default {
   s0201: {
     literal: 'In the third month, on bingzi, the new-moon day.',
