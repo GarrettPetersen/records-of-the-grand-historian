@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** Batch 5: s0401–s0423 (Jiutangshu ch.004, Gaozong 1 — Linde 2, fengshan departure; no historian comment in range) */
+/** Batch 5: s0401–s0425 (Jiutangshu ch.004, Gaozong 1 — Linde 2, fengshan departure) */
 import { readFileSync, writeFileSync } from 'fs';
 
 const T = {
@@ -117,12 +117,20 @@ const T = {
     literal: 'On bingwu of the twelfth month he held great public feasting at Qizhou.',
     idiomatic: 'On bingwu of the twelfth month he presided over great public feasting at Qizhou.',
   },
+  s0424: {
+    literal: 'On yimao he ordered the relevant offices to sacrifice at Mount Tai.',
+    idiomatic: 'On yimao he commanded the proper offices to perform the sacrifice at Mount Tai.',
+  },
+  s0425: {
+    literal: 'On bingchen he set out from Lingyan Station.',
+    idiomatic: 'On bingchen he departed from Lingyan Station.',
+  },
 };
 
 const CHAPTER_PATH = 'data/jiutangshu/004.json';
 const TRANS_PATH = 'translations/current_translation_jiutangshu.json';
 const START = 401;
-const END = 423;
+const END = 425;
 
 function extractRange(chapterPath, startN, endN) {
   const data = JSON.parse(readFileSync(chapterPath, 'utf8'));
@@ -234,4 +242,4 @@ if (applied !== Object.keys(T).length) {
 }
 
 writeFileSync(TRANS_PATH, JSON.stringify(trans, null, 2) + '\n');
-console.log(`Applied ${applied} translations (s0401–s0423)`);
+console.log(`Applied ${applied} translations (s0401–s0425)`);
