@@ -1,185 +1,512 @@
 #!/usr/bin/env node
-/** Batch 3: s0201–s0300 (Suishu ch.009 — betrothal gifts, school rites, Liang New Year audience) */
+/** Batch 3: s0201–s0300 (Jiutangshu ch.009, Xuanzong 2 — Tianbao 2–7, Yang Guifei, Wei Jian purge) */
 import { readFileSync, writeFileSync } from 'fs';
 
-const dataPath = 'data/suishu/009.json';
-const transPath = 'translations/current_translation_suishu.json';
+const T = {
+  s0201: {
+    literal: 'Gao Yao was posthumously honored as Emperor Deming.',
+    idiomatic: 'Gao Yao was posthumously enshrined as Emperor Deming.',
+  },
+  s0202: {
+    literal: 'The Xuan Yuan temple in the western capital was renamed Grand Pure Palace; in the eastern capital, Grand Aperture Palace; in all commanderies, Purple Pole Palace.',
+    idiomatic: 'The western capital\'s temple to the Mysterious Origin was renamed Grand Pure Palace; Luoyang\'s became Grand Aperture Palace; every commandery temple became Purple Pole Palace.',
+  },
+  s0203: {
+    literal: 'Wei Jian completed opening the Guangyun Canal and arrayed many ships in display.',
+    idiomatic: 'Wei Jian finished the Guangyun Canal and staged a great fleet upon its waters.',
+  },
+  s0204: {
+    literal: 'On bingyin the emperor went to the Guangyun Tower to view them and returned to the palace the same day.',
+    idiomatic: 'On bingyin the emperor visited the Guangyun Tower to watch the spectacle and returned to the palace that same day.',
+  },
+  s0205: {
+    literal: 'On the night of jiaxu in the sixth summer month, lightning struck the Yingtian Gate observatory in the eastern capital; fire spread to the left and right Yanfu gates and burned for a day without going out.',
+    idiomatic: 'On the night of jiaxu in the sixth summer month lightning shattered the Yingtian Gate observatory at Luoyang; flames reached the Yanfu gates on either side and burned all day without dying.',
+  },
+  s0206: {
+    literal: 'On guichou of the seventh month, retired minister of rites Wang Qiu died.',
+    idiomatic: 'On guichou of the seventh month Wang Qiu, retired minister of rites, died.',
+  },
+  s0207: {
+    literal: 'On bingchen, right vice director of the Department of State Affairs Pei Yaoqing died.',
+    idiomatic: 'On bingchen Pei Yaoqing, right vice director of the Department of State Affairs, died.',
+  },
+  s0208: {
+    literal: 'In the ninth month, junior tutor of the heir apparent Cui Lin died.',
+    idiomatic: 'In the ninth month Cui Lin, junior tutor of the heir apparent, died.',
+  },
+  s0209: {
+    literal: 'On xinyou, the Purple Pole Palace in Qiao commandery was renamed Grand Pure Palace.',
+    idiomatic: 'On xinyou the Purple Pole Palace in Qiao commandery was renamed Grand Pure Palace.',
+  },
+  s0210: {
+    literal: 'On wuchen of the tenth winter month, heir apparent grand protector and Prince of Xin\'an Li Yi died.',
+    idiomatic: 'On wuchen of the tenth winter month Li Yi, heir apparent grand protector and Prince of Xin\'an, died.',
+  },
+  s0211: {
+    literal: 'On wuyin, he went to the hot springs palace.',
+    idiomatic: 'On wuyin he went to the hot springs palace.',
+  },
+  s0212: {
+    literal: 'On yimao of the eleventh month, he returned from the hot springs palace.',
+    idiomatic: 'On yimao of the eleventh month he returned from the hot springs palace.',
+  },
+  s0213: {
+    literal: 'On jihai of the twelfth month, the Yingtian Gate of the eastern capital was renamed Qianyuan Gate.',
+    idiomatic: 'On jihai of the twelfth month Luoyang\'s Yingtian Gate was renamed Qianyuan Gate.',
+  },
+  s0214: {
+    literal: 'On wushen, he went to the hot springs palace.',
+    idiomatic: 'On wushen he went to the hot springs palace.',
+  },
+  s0215: {
+    literal: 'On bingchen, he returned from the hot springs palace.',
+    idiomatic: 'On bingchen he returned from the hot springs palace.',
+  },
+  s0216: {
+    literal: 'On yiyou of the twelfth month, heir apparent guest He Zhizhang requested to be ordained a Daoist and return home.',
+    idiomatic: 'On yiyou of the twelfth month He Zhizhang, guest of the heir apparent, asked to take Daoist orders and go home.',
+  },
+  s0217: {
+    literal: 'That winter there was no snow.',
+    idiomatic: 'That winter no snow fell.',
+  },
+  s0218: {
+    literal: 'On the new moon of bingchen, first month of Tianbao 3, the era name was changed so that nian became zai.',
+    idiomatic: 'On the bingchen new moon of the first month of Tianbao 3 the era word nian was changed to zai.',
+  },
+  s0219: {
+    literal: 'An amnesty was granted to prisoners in custody.',
+    idiomatic: 'An amnesty was granted to prisoners still in custody.',
+  },
+  s0220: {
+    literal: 'On gengzi, the left and right chancellors and officials below escorted He Zhizhang to bid farewell at Changle Slope; the emperor composed a poem and presented it as a gift.',
+    idiomatic: 'On gengzi the left and right chancellors and all officials below them saw He Zhizhang off at Changle Slope; the emperor wrote him a parting poem.',
+  },
+  s0221: {
+    literal: 'On renyin, he went to the hot springs palace.',
+    idiomatic: 'On renyin he went to the hot springs palace.',
+  },
+  s0222: {
+    literal: 'On jisi of the second month, he returned to the capital.',
+    idiomatic: 'On jisi of the second month he returned to the capital.',
+  },
+  s0223: {
+    literal: 'On dingchou, the emperor\'s younger brother Lin was made successor Prince of Ning; the former Prince of Bin\'s son Chengning was made successor Prince of Bin; the emperor\'s younger brother Shan was made successor Prince of Shen; the late Prince Huixuan\'s son Zhen was made successor Prince of Qi; Yuan was made successor Prince of Xue.',
+    idiomatic: 'On dingchou Lin was made successor Prince of Ning; Chengning, son of the former Prince of Bin, successor Prince of Bin; Shan successor Prince of Shen; Zhen, son of the late Prince Huixuan, successor Prince of Qi; and Yuan successor Prince of Xue.',
+  },
+  s0224: {
+    literal: 'On gengyin, the crown prince Shao was renamed Heng.',
+    idiomatic: 'On gengyin the crown prince Shao was renamed Heng.',
+  },
+  s0225: {
+    literal: 'That month, Henan intendant Pei Dunfu died.',
+    idiomatic: 'That month Pei Dunfu, intendant of Henan, died.',
+  },
+  s0226: {
+    literal: 'On xinhai of the intercalary month, a star like the moon fell in the southeast; after it fell there was a sound.',
+    idiomatic: 'On xinhai of the intercalary month a moon-sized star fell in the southeast, and a sound followed its fall.',
+  },
+  s0227: {
+    literal: 'Rumors spread in the capital that officials were sending sticks to seize people\'s livers for sacrifice to the Heavenly Dog.',
+    idiomatic: 'The capital buzzed with rumor that the court was dispatching clubs to seize human livers as offerings to the Heavenly Dog.',
+  },
+  s0228: {
+    literal: 'People were mutually terrified; the metropolitan counties were especially affected; envoys were sent to reassure them.',
+    idiomatic: 'Panic spread among the people, worst in the metropolitan counties; the court sent envoys to calm them.',
+  },
+  s0229: {
+    literal: 'On gengwu of the third month, Wuwei commandery reported that at Mount Tianbao in Fanhe county a sweet spring had welled up and ridge stones had turned into auspicious wheat; the poor from near and far took it for food.',
+    idiomatic: 'On gengwu of the third month Wuwei reported that at Mount Tianbao in Fanhe a sweet spring had burst forth and cliff stone had become miraculous grain, which the poor came from far and near to eat.',
+  },
+  s0230: {
+    literal: 'Fanhe was renamed Tianbao county.',
+    idiomatic: 'Fanhe county was renamed Tianbao.',
+  },
+  s0231: {
+    literal: 'On guiyou, an edict ordered that among prisoners in custody, those sentenced to death were reduced to exile, and those exiled or below were all pardoned.',
+    idiomatic: 'On guiyou an edict commuted death sentences to exile and pardoned all prisoners at exile or below.',
+  },
+  s0232: {
+    literal: 'In the fourth summer month, Nanhai protector Liu Juxi defeated the pirate Wu Lingguang and pacified Yongjia commandery.',
+    idiomatic: 'In the fourth summer month Liu Juxi, protector of Nanhai, crushed the pirate Wu Lingguang and pacified Yongjia commandery.',
+  },
+  s0233: {
+    literal: 'An edict ordered commanderies in both capitals and throughout the empire to cast one bronze statue each of the Heavenly Worthy and of the Buddha from official goods, and send them to Kaiyuan Abbey and Kaiyuan Monastery.',
+    idiomatic: 'An edict ordered every commandery in the two capitals and the realm to cast from official bronze one image each of the Heavenly Worthy and the Buddha and send them to Kaiyuan Abbey and Kaiyuan Monastery.',
+  },
+  s0234: {
+    literal: 'On wuyin of the fifth month, Chang\'an magistrate Liu Sheng was executed in the court hall for corruption.',
+    idiomatic: 'On wuyin of the fifth month Liu Sheng, magistrate of Chang\'an, was beaten to death in open court for corruption.',
+  },
+  s0235: {
+    literal: 'On bingwu of the eighth autumn month, the Basmyl qaghan of the Nine Surnames attacked and killed the Turk qaghan Wushimi, and his head was sent to the capital.',
+    idiomatic: 'On bingwu of the eighth autumn month the Basmyl qaghan of the Nine Surnames slew the Turk qaghan Wushimi and sent his head to court.',
+  },
+  s0236: {
+    literal: 'On gengshen, civil and military officials inside and outside the court from sixth rank downward were hereafter, after taking up their posts, allowed to complete their merit review upon two hundred full days of service.',
+    idiomatic: 'On gengshen an edict granted civil and military officials of sixth rank and below, once two hundred days in post had elapsed, the right to a completed merit review.',
+  },
+  s0237: {
+    literal: 'On guisi of the tenth winter month, he went to the hot springs palace.',
+    idiomatic: 'On guisi of the tenth winter month he went to the hot springs palace.',
+  },
+  s0238: {
+    literal: 'On dingwei, State of Shi was renamed State of Laiwei.',
+    idiomatic: 'On dingwei the State of Shi was renamed State of Laiwei.',
+  },
+  s0239: {
+    literal: 'On guimao of the eleventh month, he returned to the capital.',
+    idiomatic: 'On guimao of the eleventh month he returned to the capital.',
+  },
+  s0240: {
+    literal: 'On guichou, each zai as before on the fourteenth, fifteenth, and sixteenth of the first month the ward gates were opened and lamps lit—a perpetual statute.',
+    idiomatic: 'On guichou it was made perpetual law that on the fourteenth, fifteenth, and sixteenth of the first month each year ward gates should open and festival lamps burn.',
+  },
+  s0241: {
+    literal: 'Princess Yuzhen had earlier become a female Daoist; she was granted title and a substantive fief, and the name Chiying was bestowed.',
+    idiomatic: 'Princess Yuzhen, already a female Daoist, received a title and substantive fief; the name Chiying was bestowed on her.',
+  },
+  s0242: {
+    literal: 'On jiawu of the twelfth month, Huichang county was established by dividing Xinfeng county.',
+    idiomatic: 'On jiawu of the twelfth month Huichang county was carved from Xinfeng.',
+  },
+  s0243: {
+    literal: 'On jiayin, he personally sacrificed to the Nine Palaces Noble Spirits at the eastern suburban altar; when the rites were finished, a great amnesty was granted throughout the empire.',
+    idiomatic: 'On jiayin he sacrificed in person to the Nine Palaces spirits at the eastern suburb; when the rites ended he proclaimed a great amnesty for the realm.',
+  },
+  s0244: {
+    literal: 'Commoners eighteen and above were made zhongnan; twenty-three and above counted as adult males.',
+    idiomatic: 'Men eighteen and older were classed as zhongnan; at twenty-three they counted as adult males liable for service.',
+  },
+  s0245: {
+    literal: 'Each year\'s corvée and land-tax levy was to begin collection in the eighth month and could be extended to the ninth.',
+    idiomatic: 'Annual corvée and land-tax collection might begin in the eighth month and run into the ninth.',
+  },
+  s0246: {
+    literal: 'An edict ordered that every household throughout the empire keep one copy of the Classic of Filial Piety.',
+    idiomatic: 'An edict required every household in the empire to keep a copy of the Classic of Filial Piety.',
+  },
+  s0247: {
+    literal: 'On jiashen of the third spring month of Tianbao 4, he feasted the host of officials at the Qinzheng Tower.',
+    idiomatic: 'On jiashen of the third spring month of Tianbao 4 he feasted the officials at the Qinzheng Tower.',
+  },
+  s0248: {
+    literal: 'On renshen, an external granddaughter of the Dugu clan was created Princess Jingle and married to Khitan Songmo protector Li Huaijie.',
+    idiomatic: 'On renshen a Dugu granddaughter was created Princess Jingle and sent to marry Khitan Songmo protector Li Huaijie.',
+  },
+  s0249: {
+    literal: 'An external granddaughter of the Yang clan was created Princess Yifang and married to Xi Raole protector Li Yanchong.',
+    idiomatic: 'A Yang granddaughter was created Princess Yifang and sent to marry Xi Raole protector Li Yanchong.',
+  },
+  s0250: {
+    literal: 'On jiachen of the eighth autumn month, Noble Consort True Yang was installed as imperial consort.',
+    idiomatic: 'On jiachen of the eighth autumn month Lady Yang, consort of Taizhen rank, was elevated to imperial consort.',
+  },
+  s0251: {
+    literal: 'That month, eight commanderies including Suiyang, Huaiyang, and Qiao in Henan suffered great floods.',
+    idiomatic: 'That month great floods struck eight Henan commanderies, including Suiyang, Huaiyang, and Qiao.',
+  },
+  s0252: {
+    literal: 'In the ninth month, Khitan and Xi chieftains each killed their princesses and rose in rebellion with their tribes.',
+    idiomatic: 'In the ninth month Khitan and Xi chiefs each slew their Tang princesses and led their tribes in revolt.',
+  },
+  s0253: {
+    literal: 'Longyou military commissioner Huangfu Weiming fought Tibetans at Stone Fortress City; the government army was unsuccessful and deputy commander Chu Zhilian and others were killed.',
+    idiomatic: 'At Stone Fortress City Huangfu Weiming, commissioner of Longyou, fought Tibetans and lost; deputy commander Chu Zhilian and others fell.',
+  },
+  s0254: {
+    literal: 'In the tenth winter month, Jinhe county was established at the Chanyu Protectorate and Yinshan county at the Anbei Protectorate.',
+    idiomatic: 'In the tenth winter month Jinhe county was set up under the Chanyu Protectorate and Yinshan under Anbei.',
+  },
+  s0255: {
+    literal: 'On dingyou, he went to the hot springs palace.',
+    idiomatic: 'On dingyou he went to the hot springs palace.',
+  },
+  s0256: {
+    literal: 'On renzi, Huichang county was made Tongjing county.',
+    idiomatic: 'On renzi Huichang county was renamed Tongjing.',
+  },
+  s0257: {
+    literal: 'On wuxu of the twelfth month, he returned to the capital.',
+    idiomatic: 'On wuxu of the twelfth month he returned to the capital.',
+  },
+  s0258: {
+    literal: 'On guiyou of the first spring month of Tianbao 5, minister of punishments Wei Jian was demoted to protector of Kuocang;',
+    idiomatic: 'On guiyou of the first spring month of Tianbao 5 Wei Jian, minister of punishments, was demoted to protector of Kuocang;',
+  },
+  s0259: {
+    literal: 'Longyou military commissioner Huangfu Weiming was demoted to protector of Bo River; soon both were ordered executed in Qianzhong.',
+    idiomatic: 'Huangfu Weiming, commissioner of Longyou, was demoted to protector of Bo River—and soon both men were ordered executed in Qianzhong.',
+  },
+  s0260: {
+    literal: 'On yihai, an edict ordered that magistrates of large and small counties alike would, like metropolitan officials, complete three selections before being summoned to court.',
+    idiomatic: 'On yihai an edict required magistrates of every county, like capital officials, to pass three selections before being summoned.',
+  },
+  s0261: {
+    literal: 'Record of Rites Monthly Ordinances was renamed Seasonal Ordinances.',
+    idiomatic: 'The Record of Rites Monthly Ordinances was retitled Seasonal Ordinances.',
+  },
+  s0262: {
+    literal: 'Mount Song was enfeoffed as King of Central Heaven, Mount Heng of the south as King of Heaven of Offices, Mount Heng of the north as King of Peaceful Heaven.',
+    idiomatic: 'Mount Song was enfeoffed King of Central Heaven; the southern Mount Heng, King of Heaven of Offices; the northern Mount Heng, King of Peaceful Heaven.',
+  },
+  s0263: {
+    literal: 'Mountains and waters throughout the empire—many names duplicated or were improper, often from vulgar local sayings; the relevant offices were ordered to correct them according to maps and registers.',
+    idiomatic: 'Mountains and rivers across the realm bore duplicate or improper names, many from vulgar local usage; each office was ordered to rectify them against the official maps.',
+  },
+  s0264: {
+    literal: 'On bingzi, minister of rites Xi Yu and left assistant director Cui Qiao, censor-in-chief Wang Hong, and seven others were dispatched throughout the empire to promote and demote officials.',
+    idiomatic: 'On bingzi Xi Yu, minister of rites, Cui Qiao, left assistant director, Wang Hong, censor-in-chief, and seven others were sent through the realm to promote and demote officials.',
+  },
+  s0265: {
+    literal: 'On gengyin of the fourth summer month, left chancellor and Count of Weiyuan Li Shizhi became grand protector of the heir apparent and ceased to manage government.',
+    idiomatic: 'On gengyin of the fourth summer month Li Shizhi, left chancellor and Count of Weiyuan, became grand protector of the heir apparent and left the council.',
+  },
+  s0266: {
+    literal: 'On dingyou, Yellow Gate vice minister Chen Xilie became co-equal Zhongshu Menxia chief minister.',
+    idiomatic: 'On dingyou Chen Xilie, yellow gate vice minister, joined the council as co-equal chief minister.',
+  },
+  s0267: {
+    literal: 'On gengshen of the fifth month, an edict ordered that on each decanal holiday the Zhongshu Menxia civil and military officials need not attend court, and outside officials need not assemble at their yamen.',
+    idiomatic: 'On gengshen of the fifth month an edict freed Zhongshu Menxia officials from court on decanal holidays and outside officials from yamen assembly.',
+  },
+  s0268: {
+    literal: 'On guimao, the county practice of assessing white-service corvée money was stopped.',
+    idiomatic: 'On guimao the counties ceased levying white-service corvée money.',
+  },
+  s0269: {
+    literal: 'In the sixth month, an edict ordered that during the three fu periods chancellors might return home at chen hour.',
+    idiomatic: 'In the sixth month an edict allowed chancellors to leave office at chen hour during the three fu periods.',
+  },
+  s0270: {
+    literal: 'On bingzi of the seventh autumn month, Wei Jian was framed by Li Linfu, sentenced to exile to Linfeng commandery, and granted death.',
+    idiomatic: 'On bingzi of the seventh autumn month Li Linfu framed Wei Jian; sentenced to exile at Linfeng, he was granted death.',
+  },
+  s0271: {
+    literal: 'Wei Jian\'s sister, the crown prince\'s consort, was ordered to divorce; his external nephew, successor Prince of Xue Yuan, was demoted to Baling prefect; his son-in-law Baling protector Lu Youlin was exiled far to Hepu commandery.',
+    idiomatic: 'Wei Jian\'s sister, the crown prince\'s consort, was made to divorce; his nephew, successor Prince of Xue Yuan, was demoted to Baling prefect; his son-in-law Lu Youlin, protector of Baling, was exiled to Hepu.',
+  },
+  s0272: {
+    literal: 'Grand protector of the heir apparent Li Shizhi was demoted to Yichun protector; upon reaching his post he took poison and died.',
+    idiomatic: 'Li Shizhi, grand protector of the heir apparent, was demoted to Yichun; on reaching his post he drank poison and died.',
+  },
+  s0273: {
+    literal: 'In the eighth month, vice minister of revenue Guo Xuji was made censor-in-chief and Jiannan military commissioner.',
+    idiomatic: 'In the eighth month Guo Xuji, vice minister of revenue, became censor-in-chief and Jiannan military commissioner.',
+  },
+  s0274: {
+    literal: 'On renzi of the ninth month, stone images of Li Linfu and Chen Xilie were carved at the Grand Pure Palace and placed beside the sage\'s portrait.',
+    idiomatic: 'On renzi of the ninth month stone images of Li Linfu and Chen Xilie were carved at the Grand Pure Palace and set beside the sage\'s likeness.',
+  },
+  s0275: {
+    literal: 'On dingyou of the tenth winter month, he went to the hot springs palace.',
+    idiomatic: 'On dingyou of the tenth winter month he went to the hot springs palace.',
+  },
+  s0276: {
+    literal: 'Linzi commandery was renamed Jinan commandery.',
+    idiomatic: 'Linzi commandery was renamed Jinan.',
+  },
+  s0277: {
+    literal: 'On jisi of the eleventh month, he returned to the capital.',
+    idiomatic: 'On jisi of the eleventh month he returned to the capital.',
+  },
+  s0278: {
+    literal: 'On xinwei of the twelfth month, good-order grandee Du Youlin, Director of Composition Wang Zeng, left Yaoqiwei military assessor Liu Ji, and others were framed by Li Linfu; all were imprisoned and put to death.',
+    idiomatic: 'On xinwei of the twelfth month Du Youlin, good-order grandee, Wang Zeng, director of composition, Liu Ji, left Yaoqiwei assessor, and others were framed by Li Linfu and died in prison.',
+  },
+  s0279: {
+    literal: 'On the new moon of xinsi, first month of Tianbao 6, Beihai protector Li Yong and Zichuan protector Pei Dunfu, implicated through Wang Zeng and Liu Ji, were dispatched and killed on the spot.',
+    idiomatic: 'On the xinsi new moon of the first month of Tianbao 6 Li Yong of Beihai and Pei Dunfu of Zichuan, implicated through Wang Zeng and Liu Ji, were met on the road and executed.',
+  },
+  s0280: {
+    literal: 'On dinghai, he personally sacrificed at the Imperial Ancestral Temple.',
+    idiomatic: 'On dinghai he sacrificed in person at the Imperial Ancestral Temple.',
+  },
+  s0281: {
+    literal: 'On wuzi, he personally sacrificed at the Round Altar; when the rites were finished a great amnesty was granted throughout the empire; strangulation and decapitation were removed—only heavy beating was imposed.',
+    idiomatic: 'On wuzi he sacrificed at the Round Altar; when the rites ended he proclaimed a great amnesty, abolishing strangulation and decapitation in favor of heavy rod punishment.',
+  },
+  s0282: {
+    literal: 'Temples to the Three Sovereigns and Five Emperors were established in the capital and sacrifices were offered seasonally.',
+    idiomatic: 'Temples to the Three Sovereigns and Five Emperors were built in the capital and honored on the seasonal schedule.',
+  },
+  s0283: {
+    literal: 'Crown princes Zhanghuai, Jiemin, Huizhuang, Huiwen, and Huixuan should share one temple with the hidden crown prince and the Posthumous Virtue crown prince.',
+    idiomatic: 'Crown princes Zhanghuai, Jiemin, Huizhuang, Huiwen, and Huixuan were to share one temple with the Hidden Crown Prince and the Posthumous Virtue Crown Prince.',
+  },
+  s0284: {
+    literal: 'Daily standing-ration food and setting guards in the courtyard were afterward all to be abolished.',
+    idiomatic: 'Daily rations for the standing guard and the courtyard guard-mount were abolished.',
+  },
+  s0285: {
+    literal: 'Since the five sacred mountains had been enfeoffed as kings, the four streams should be raised to duke: Yellow River as Duke of Spiritual Source, Ji as Duke of Clear Source, Yangtze as Duke of Broad Source, Huai as Duke of Long Source.',
+    idiomatic: 'With the five mountains already enfeoffed as kings, the four rivers were raised to duke: the Yellow River, Duke of Spiritual Source; the Ji, Duke of Clear Source; the Yangtze, Duke of Broad Source; the Huai, Duke of Long Source.',
+  },
+  s0286: {
+    literal: 'On wuxu of the third month, Nanhai protector Peng Guo was convicted of corruption, beaten with the staff, and exiled far to Qinxi commandery; he died on the road.',
+    idiomatic: 'On wuxu of the third month Peng Guo, protector of Nanhai, was beaten for corruption and exiled to Qinxi; he died on the way.',
+  },
+  s0287: {
+    literal: 'On wuwu of the fourth summer month, Yellow Gate vice minister Chen Xilie became left chancellor and concurrent minister of war.',
+    idiomatic: 'On wuwu of the fourth summer month Chen Xilie became left chancellor and minister of war.',
+  },
+  s0288: {
+    literal: 'On guiyou, the Directorate of Armaments was reestablished.',
+    idiomatic: 'On guiyou the Directorate of Armaments was restored.',
+  },
+  s0289: {
+    literal: 'From the fifth month there was no rain until the seventh autumn month.',
+    idiomatic: 'From the fifth month no rain fell until the seventh autumn month.',
+  },
+  s0290: {
+    literal: 'On yiyou, because of drought, chancellors, censorial and temple offices, and prefectural and county authorities were ordered to record prisoners in custody; death sentences were commuted to beating and exile, and penal servitude and below were specially pardoned.',
+    idiomatic: 'On yiyou, with drought gripping the land, chancellors, censorial and temple offices, and every prefecture and county were ordered to review prisoners; death sentences became beating and exile, and penal servitude or less was pardoned.',
+  },
+  s0291: {
+    literal: 'On gengyin rain began.',
+    idiomatic: 'On gengyin rain at last fell.',
+  },
+  s0292: {
+    literal: 'On wushen of the tenth winter month, he went to the hot springs palace, which was renamed Huaqing Palace.',
+    idiomatic: 'On wushen of the tenth winter month he went to the hot springs palace, now renamed Huaqing Palace.',
+  },
+  s0293: {
+    literal: 'On yihai of the eleventh month, vice minister of revenue Yang Shenjin and his elder brother, vice director of the palace workshops Shenyu, and his younger brother Luoyang magistrate Shenming were all framed by Li Linfu and censor-in-chief Wang Hong and died in prison.',
+    idiomatic: 'On yihai of the eleventh month Yang Shenjin, vice minister of revenue, his brother Shenyu of the palace workshops, and his brother Shenming, magistrate of Luoyang, were framed by Li Linfu and Wang Hong and died in prison.',
+  },
+  s0294: {
+    literal: 'On bingchen of the twelfth month, minister of works Lu Jingrong died.',
+    idiomatic: 'On bingchen of the twelfth month Lu Jingrong, minister of works, died.',
+  },
+  s0295: {
+    literal: 'On renxu, he returned to the capital.',
+    idiomatic: 'On renxu he returned to the capital.',
+  },
+  s0296: {
+    literal: 'On jimao of the first spring month of Tianbao 7, minister of rites Xi Yu died.',
+    idiomatic: 'On jimao of the first spring month of Tianbao 7 Xi Yu, minister of rites, died.',
+  },
+  s0297: {
+    literal: 'On jihai, Wei Jiang memorialized that imperial couch quilts, drapes, curtains, etc. should remove purple and use red-yellow; the request was granted.',
+    idiomatic: 'On jihai Wei Jiang asked that imperial bedding and hangings drop purple for red-yellow; the court agreed.',
+  },
+  s0298: {
+    literal: 'On yiyou of the third month, a jade fungus grew on a pillar of the Datong Hall, with divine light illuminating the hall.',
+    idiomatic: 'On yiyou of the third month a jade fungus sprouted on a Datong Hall pillar, and a sacred light filled the hall.',
+  },
+  s0299: {
+    literal: 'The host of officials requested adding to the emperor\'s honorific title "Kaiyuan Tianbao Sacred-Cultured Divinely Martial Responsive-to-the-Way"; permission was granted.',
+    idiomatic: 'Officials petitioned to add to the emperor\'s honorific the phrase Kaiyuan Tianbao Sacred-Cultured Divinely Martial Responsive-to-the-Way; he assented.',
+  },
+  s0300: {
+    literal: 'On xinchou of the fourth summer month, Gao Lishi was made chief general of swift cavalry.',
+    idiomatic: 'On xinchou of the fourth summer month Gao Lishi was made chief general of swift cavalry.',
+  },
+};
+
+const CHAPTER_PATH = 'data/jiutangshu/009.json';
+const TRANS_PATH = 'translations/current_translation_jiutangshu.json';
 const START = 201;
 const END = 300;
-
-function loadSentencesFromData() {
-  const book = JSON.parse(readFileSync(dataPath, 'utf8'));
-  const out = new Map();
-  let blockIndex = 0;
-  for (const block of book.content) {
-    let blockSentences = [];
-    if (block.type === 'paragraph') blockSentences = block.sentences || [];
-    else if (block.type === 'table_row')
-      blockSentences = (block.cells || []).filter((c) => c.content?.trim());
-    else if (block.type === 'table_header')
-      blockSentences = (block.sentences || []).filter((s) => s.zh?.trim());
-    for (const s of blockSentences) {
-      const id = s.id;
-      const chinese = s.zh || s.content;
-      if (chinese?.trim()) out.set(id, { chinese, blockIndex });
-    }
-    blockIndex++;
-  }
-  return out;
-}
 
 function extractRange(chapterPath, startN, endN) {
   const data = JSON.parse(readFileSync(chapterPath, 'utf8'));
   const out = [];
   const seenIds = new Set();
+
   for (let blockIndex = 0; blockIndex < data.content.length; blockIndex++) {
     const block = data.content[blockIndex];
     let blockSentences = [];
-    if (block.type === 'paragraph') blockSentences = block.sentences || [];
-    else if (block.type === 'table_row')
-      blockSentences = (block.cells || []).filter((c) => c.content?.trim());
-    else if (block.type === 'table_header')
-      blockSentences = (block.sentences || []).filter((s) => s.zh?.trim());
+
+    if (block.type === 'paragraph') {
+      blockSentences = block.sentences;
+    } else if (block.type === 'table_row') {
+      blockSentences = block.cells.filter((cell) => cell.content && cell.content.trim());
+    } else if (block.type === 'table_header') {
+      blockSentences = block.sentences.filter((s) => s.zh && s.zh.trim());
+    }
+
     for (const sentence of blockSentences) {
       const sentenceId = sentence.id;
       const n = parseInt(sentenceId.slice(1), 10);
       if (n < startN || n > endN) continue;
+
       let chineseText = '';
-      if (block.type === 'paragraph' || block.type === 'table_header') chineseText = sentence.zh;
-      else if (block.type === 'table_row') chineseText = sentence.content;
+      if (block.type === 'paragraph' || block.type === 'table_header') {
+        chineseText = sentence.zh;
+      } else if (block.type === 'table_row') {
+        chineseText = sentence.content;
+      }
+
       let displayId = sentenceId;
-      if (seenIds.has(displayId)) displayId = `${sentenceId}@${blockIndex}`;
+      if (seenIds.has(displayId)) {
+        displayId = `${sentenceId}@${blockIndex}`;
+      }
       seenIds.add(displayId);
-      out.push({ id: displayId, originalId: sentenceId, blockIndex, chinese: chineseText, literal: '', idiomatic: '' });
+
+      out.push({
+        id: displayId,
+        originalId: sentenceId,
+        blockIndex,
+        chinese: chineseText,
+        literal: '',
+        idiomatic: '',
+      });
     }
   }
+
   out.sort((a, b) => parseInt(a.originalId.slice(1), 10) - parseInt(b.originalId.slice(1), 10));
   return out;
 }
 
-const T = {
-  s0201: { literal: 'All used one lamb, one pair of geese, and one hu each of wine, millet, panicled millet, rice, and flour.', idiomatic: 'All ranks used one lamb, one pair of geese, and one hu each of wine, millet, panicled millet, rice, and flour.' },
-  s0202: { literal: 'From imperial princes down to ninth rank all were the same; those outside the regular ranks and commoners had half.', idiomatic: 'From imperial princes down to ninth rank the gifts were identical; those outside the regular ranks and commoners received half.' },
-  s0203: { literal: 'For betrothal gifts, imperial princes used three bolts of black, two bolts of crimson, ten bolts of bundled silk, and one great jade tablet; from first rank down to junior third rank used jade bi; fourth rank and below had none.', idiomatic: 'For betrothal gifts, imperial princes sent three bolts of black silk, two of crimson, ten of bundled silk, and one great jade tablet. From first rank through junior third rank used jade bi; fourth rank and below had none.' },
-  s0204: { literal: 'Two pieces of animal hide: from first rank down to junior fifth rank used two leopard hides; from sixth rank down to junior ninth rank used deer hide.', idiomatic: 'Two pieces of animal hide were required: first rank through junior fifth rank used two leopard hides; sixth rank through junior ninth rank used deer hide.' },
-  s0205: { literal: 'Brocade sixty bolts for first rank, forty for second, thirty for third, twenty for fourth, sixteen bolts of mixed colors for fourth rank, ten for fifth, five for sixth and seventh.', idiomatic: 'Brocade: sixty bolts for first rank, forty for second, thirty for third, twenty for third rank, sixteen bolts of mixed colors for fourth, ten for fifth, five for sixth and seventh.' },
-  s0206: { literal: 'Silk two hundred bolts: first rank one hundred forty, second one hundred twenty, third one hundred, fourth eighty, fifth sixty, sixth and seventh fifty, eighth and ninth thirty.', idiomatic: 'Silk totaled two hundred bolts at most: first rank one hundred forty, second one hundred twenty, third one hundred, fourth eighty, fifth sixty, sixth and seventh fifty, eighth and ninth thirty.' },
-  s0207: { literal: 'One lamb, four sheep, two calves, and ten hu each of wine, millet, panicled millet, rice, and flour.', idiomatic: 'Also one lamb, four sheep, two calves, and ten hu each of wine, millet, panicled millet, rice, and flour.' },
-  s0208: { literal: 'First to third rank reduced two sheep and six hu each of wine, millet, panicled millet, rice, and flour; fourth and fifth rank reduced one calf and two hu each; sixth rank and below had no calf, one hu each of wine, millet, panicled millet, rice, and flour.', idiomatic: 'First through third rank reduced two sheep and six hu of each grain and wine; fourth and fifth rank reduced one calf and two hu of each; sixth rank and below had no calf and only one hu of each.' },
-  s0209: { literal: 'Sons of princes, whether enfeoffed or not, all followed first-rank rites.', idiomatic: 'Sons of princes, whether enfeoffed or not, all followed first-rank rites, as prescribed.' },
-  s0210: { literal: 'Wedding escort carriages: imperial princes one hundred, first rank fifty, second and third thirty, fourth and fifth twenty, sixth and seventh ten, eighth rank down to commoners five.', idiomatic: 'Wedding escort carriages numbered one hundred for imperial princes, fifty for first rank, thirty for second and third, twenty for fourth and fifth, ten for sixth and seventh, and five from eighth rank down to commoners.' },
-  s0211: { literal: 'Each followed the ornamentation of his rank.', idiomatic: 'Each followed the ornamentation appropriate to his rank.' },
-  s0212: { literal: 'In the fifth year of Datong of Liang, when the Duke of Lincheng married, the duke\'s wife was aunt to the crown prince\'s consort; the protocol for the first audience differed among debaters.', idiomatic: 'In Liang Datong 5, when the Duke of Lincheng married, his wife was aunt to the crown prince\'s consort; debaters disagreed on the protocol for the first audience.' },
-  s0213: { literal: 'An edict said: "The crimson-goose rite already marks the union of two surnames; the feast of wine and food also keeps marriage within kinship without losing closeness.', idiomatic: 'An edict said: "The crimson-goose rite already marks the union of two surnames; the feast of wine and food also keeps marriage within kinship without losing closeness, as prescribed.' },
-  s0214: { literal: 'If hazelnuts, chestnuts, dates, and dried meat are all presented, secondary hairpins and braided ornaments fully prepared, it is wrong that the bride\'s audience rite alone should omit kinship on account of relationship.', idiomatic: 'If hazelnuts, chestnuts, dates, and dried meat are all presented, with secondary hairpins and braided ornaments fully prepared, the bride\'s audience rite alone should not omit kinship on account of relationship.' },
-  s0215: { literal: 'Recently the respectful presentation of fermented milk and ceremonial wine has already transmitted the rule of wifely duty, yet offering the tray and pouring the hand-washing water is not practiced in marquisate households.', idiomatic: 'Recently the respectful presentation of fermented milk and ceremonial wine has already transmitted the rule of wifely duty, yet offering the tray and pouring the hand-washing water is not practiced in marquisate households, as prescribed.' },
-  s0216: { literal: 'Thus we know that elaboration and simplification differ, substance and ornament vary by age; since the Duke of Lincheng\'s wife and the consort are aunt and niece, the simplification should cease."', idiomatic: 'Thus elaboration and simplification differ, and substance and ornament vary by age. Since the Duke of Lincheng\'s wife and the consort are aunt and niece, the simplification should cease."' },
-  s0217: { literal: 'When Later Qi was about to lecture before the Son of Heaven, the classic was first fixed at the temple of Confucius; one holder of the classic, two lecture attendants, one reader, two phrase-pointers, six recorders of meaning, and two bearers of the classic were appointed.', idiomatic: 'When Later Qi was about to lecture before the Son of Heaven, the classic was first fixed at the temple of Confucius. One holder of the classic, two lecture attendants, one reader, two phrase-pointers, six recorders of meaning, and two bearers of the classic were appointed.' },
-  s0218: { literal: 'On the morning of the lecture, the emperor wore the tongtian cap and dark gauze robe, rode the elephant carriage to the academy, and sat in the temple hall.', idiomatic: 'On the morning of the lecture, the emperor wore the tongtian cap and dark gauze robe, rode the elephant carriage to the academy, and sat in the temple hall, as prescribed.' },
-  s0219: { literal: 'When the lecture was finished, he returned to the side hall, changed to crimson gauze robe, rode the elephant carriage, and returned to the palace.', idiomatic: 'Once the lecture was finished, he returned to the side hall, changed to crimson gauze robe, rode the elephant carriage, and returned to the palace, as prescribed.' },
-  s0220: { literal: 'When the lecture was complete, a single great sacrifice was offered to Confucius, with Yan Hui as associate; suspended bells were arrayed and the six-row dance performed.', idiomatic: 'When the lecture was complete, a single great sacrifice was offered to Confucius with Yan Hui as associate; suspended bells were arrayed and the six-row dance performed.' },
-  s0221: { literal: 'When the three offerings were complete, the emperor in tongtian cap and crimson gauze robe ascended the host steps and took his seat.', idiomatic: 'Once the three offerings were complete, the emperor in tongtian cap and crimson gauze robe ascended the host steps and took his seat, as prescribed.' },
-  s0222: { literal: 'When the banquet was complete, he returned to the palace.', idiomatic: 'Once the banquet was complete, he returned to the palace, as prescribed.' },
-  s0223: { literal: 'Each time the crown prince mastered a classic he also offered the sacrifice; he rode the stone-mount carriage, the Three Preceptors riding in carriages ahead, the Three Junior Preceptors following behind to the academy.', idiomatic: 'Each time the crown prince mastered a classic he also offered the sacrifice, riding the stone-mount carriage with the Three Preceptors in carriages ahead and the Three Junior Preceptors following behind to the academy.' },
-  s0224: { literal: 'In the eighth year of Tianjian of Liang, the crown prince offered the sacrifice.', idiomatic: 'In Liang Tianjian 8 the crown prince offered the sacrifice.' },
-  s0225: { literal: 'Zhou She argued: "The sacrifice is still followed by a banquet — since this is a great rite, please follow the Eastern Palace New Year audience: the crown prince wears the crimson gauze collar-robe, and suspended bells are used.', idiomatic: 'Zhou She argued: "The sacrifice is still followed by a banquet. Since this is a great rite, please follow the Eastern Palace New Year audience: the crown prince wears the crimson gauze collar-robe, and suspended bells are used.' },
-  s0226: { literal: 'All who ascend the hall to sit wear vermilion robes.', idiomatic: 'Every rank who ascend the hall to sit wear vermilion robes, as prescribed.' },
-  s0227: { literal: '" The emperor agreed.', idiomatic: '" The emperor agreed, as prescribed.' },
-  s0228: { literal: 'The relevant office also argued: "The Rites say: \'As a son, one does not ascend or descend by the host steps.\'', idiomatic: 'Relevant office also argued: "The Rites say: \'As a son, one does not ascend or descend by the host steps.\'' },
-  s0229: { literal: '\' According to the present academy, which has three flights of steps in all, I think that if the guest is of lower rank he follows the host\'s steps.', idiomatic: 'According to the present academy, which has three flights of steps, I think that if the guest is of lower rank he follows the host\'s steps.' },
-  s0230: { literal: 'Now the former master is in the hall — one whom it is right to honor — so the crown prince should ascend the host steps to make clear the meaning of following the teacher.', idiomatic: 'Now the former master is in the hall — one whom it is right to honor — so the crown prince should ascend the host steps to make clear the meaning of following the teacher, as prescribed.' },
-  s0231: { literal: 'If the sacrifice is finished and it is time for the banquet, when there is no longer reverence for the former master, the crown prince ascending the hall should use the western steps to make clear the meaning of not using the host steps.', idiomatic: 'If the sacrifice is finished and it is time for the banquet, when there is no longer reverence for the former master, the crown prince ascending the hall should use the western steps to make clear the meaning of not using the host steps, as prescribed.' },
-  s0232: { literal: '" Director of the Ministry of Personnel Xu Mian argued: "Zheng Xuan says: \'From ranked knights upward, father and son dwell in separate quarters.\'', idiomatic: 'Director of the Ministry of Personnel Xu Mian argued: "Zheng Xuan says that from ranked knights upward, father and son dwell in separate quarters."' },
-  s0233: { literal: '\' Since the quarters differ, there is no rule against using the host steps.', idiomatic: 'Since the quarters differ, there is no rule against using the host steps.' },
-  s0234: { literal: 'I request that for both the sacrifice and the banquet, when the crown prince ascends the hall, he should use the eastern steps.', idiomatic: 'I request that for both the sacrifice and the banquet, when the crown prince ascends the hall, he should use the eastern steps, as prescribed.' },
-  s0235: { literal: 'If the imperial carriage visits the academy, naturally the central flight is used.', idiomatic: 'If the imperial carriage visits the academy, naturally the central flight is used, as prescribed.' },
-  s0236: { literal: 'I also checked the Eastern Palace New Year Audience Protocol: when the crown prince ascends the Chongzheng Hall he does not wish to use the eastern or western steps.', idiomatic: 'I also checked the Eastern Palace New Year Audience Protocol: when the crown prince ascends the Chongzheng Hall he does not wish to use the eastern or western steps, as prescribed.' },
-  s0237: { literal: 'Examining the Eastern Palace master of ceremonies, the list says \'At the crown prince\'s New Year audience he ascends by the western steps\' — this transmitted custom is mistaken.', idiomatic: 'Examining the Eastern Palace master of ceremonies, the list says "At the crown prince\'s New Year audience he ascends by the western steps" — this transmitted custom is mistaken.' },
-  s0238: { literal: 'I request that from now on, for great affairs of the Eastern Palace, when the crown prince ascends the Chongzheng Hall, he always use the host steps.', idiomatic: 'I request that from now on, for great affairs of the Eastern Palace, when the crown prince ascends the Chongzheng Hall, he always use the host steps, as prescribed.' },
-  s0239: { literal: 'Guests attending the banquet should still use the western steps."', idiomatic: 'Banquet guests should still use the western steps."' },
-  s0240: { literal: 'In the seventh year of Datong, the crown prince memorialized that his sons the Dukes of Ningguo and Lincheng enter the academy; debaters doubted this because of the rule of equal age with the teacher.', idiomatic: 'In Datong 7 the crown prince memorialized that his sons the Dukes of Ningguo and Lincheng enter the academy; debaters doubted this because of the rule of equal age with the teacher.' },
-  s0241: { literal: 'Attendant-in-ordinary and Minister of Works Xiao Jingrong, Vice Minister of Works Liu Zuan, Ministers Xiao Tong, Liu Zilin, and Liu Yun and others argued: "Can and Dian both served Confucius; Hui and Lu both consulted at the Si River — in Zou and Lu this was praised as flourishing, and at Zhu and Wen none scoffed.', idiomatic: 'Attendant-in-ordinary and Minister of Works Xiao Jingrong, Vice Minister Liu Zuan, Ministers Xiao Tong, Liu Zilin, and Liu Yun and others argued: "Can and Dian both served Confucius; Hui and Lu both consulted at the Si River — in Zou and Lu this was praised as flourishing, and at Zhu and Wen none scoffed.' },
-  s0242: { literal: 'Since the way of the teacher shines, gaining one measure of reverence does not diminish the heir apparent — how much less for two dukes could one say it is not permitted?', idiomatic: 'Since the way of the teacher shines, gaining one measure of reverence does not diminish the heir apparent — how much less could one forbid two dukes?' },
-  s0243: { literal: '" An edict said: "Permitted."', idiomatic: '" The emperor replied: "Permitted."' },
-  s0244: { literal: 'Under Later Qi, when a new academy was established, the sacrifice to the former sage and former master was required; each year in the second and eighth months the rite was regularly performed.', idiomatic: 'Under Later Qi, when a new academy was established, the sacrifice to the former sage and former master was required; each year in the second and eighth months the rite was regularly performed, as prescribed.' },
-  s0245: { literal: 'On the first of each month the libationer led the erudites and below and students of the Directorate of Education and above; erudites of the Grand Academy and Four Gates ascended the hall, assistants and below and Grand Academy students below the steps, bowing to Confucius and bowing to Yan.', idiomatic: 'On the first of each month the libationer led the erudites and below and students of the Directorate of Education and above. Erudites of the Grand Academy and Four Gates ascended the hall; assistants and below and Grand Academy students stood below the steps, bowing to Confucius and bowing to Yan.' },
-  s0246: { literal: 'Those who did not come on the day of the rite were recorded as one demerit.', idiomatic: 'Those who did not come on the day of the rite were recorded as one demerit, as prescribed.' },
-  s0247: { literal: 'If rain soaked their clothes the rite was stopped.', idiomatic: 'If rain soaked their clothes the rite was stopped, as prescribed.' },
-  s0248: { literal: 'Students received leave every ten days, always released on bing days.', idiomatic: 'Students received leave every ten days, always released on bing days, as prescribed.' },
-  s0249: { literal: 'At the commandery academy temples to Confucius and Yan were set up within the ward; erudites and below also paid court monthly.', idiomatic: 'At the commandery academy temples to Confucius and Yan were set up within the ward; erudites and below also paid court monthly, as prescribed.' },
-  s0250: { literal: 'Under Sui, the Directorate of the Sons of the State each year on the first ding day of the four middle months offered the sacrifice to the former sage and former master.', idiomatic: 'Under Sui, the Directorate of the Sons of the State each year on the first ding day of the four middle months offered the sacrifice to the former sage and former master, as prescribed.' },
-  s0251: { literal: 'Each year the district drinking rite was performed once.', idiomatic: 'All year the district drinking rite was performed once, as prescribed.' },
-  s0252: { literal: 'Provincial and commandery academies offered the sacrifice in the middle months of spring and autumn.', idiomatic: 'Provincial and commandery academies offered the sacrifice in the middle months of spring and autumn, as prescribed.' },
-  s0253: { literal: 'Provinces, commanderies, and counties also each year performed the district drinking rite at the academy.', idiomatic: 'Provinces, commanderies, and counties also each year performed the district drinking rite at the academy, as prescribed.' },
-  s0254: { literal: 'Students were examined in writing on yi days and given leave on bing days.', idiomatic: 'Students were examined in writing on yi days and given leave on bing days, as prescribed.' },
-  s0255: { literal: 'The Liang New Year audience rite: before dawn, courtyard torches were set and regalia filled the courtyard.', idiomatic: 'Liang New Year audience rite: before dawn, courtyard torches were set and regalia filled the courtyard, as prescribed.' },
-  s0256: { literal: 'The palace gate opened; the guard was strict; each office attended to its duties.', idiomatic: 'Palace gate opened; the guard was strict; each office attended to its duties, as prescribed.' },
-  s0257: { literal: 'East of the great steps the White Beast Vat was placed.', idiomatic: 'East of the great steps the White Beast Vat was placed, as prescribed.' },
-  s0258: { literal: 'The ministers and foreign envoys all assembled, each bowing according to his rank.', idiomatic: 'Ministers and foreign envoys all assembled, each bowing according to his rank, as prescribed.' },
-  s0259: { literal: 'The attendant-in-ordinary reported the second watch; princes, dukes, ministers, and governors each holding jade tablets entered to bow.', idiomatic: 'Attendant-in-ordinary reported the second watch; princes, dukes, ministers, and governors each holding jade tablets entered to bow, as prescribed.' },
-  s0260: { literal: 'The attendant-in-ordinary then reported that the outer preparations were complete; the emperor in dragon robe and crown rode the palanquin out.', idiomatic: 'Attendant-in-ordinary then reported that the outer preparations were complete; the emperor in dragon robe and crown rode the palanquin out, as prescribed.' },
-  s0261: { literal: 'The attendant-in-ordinary supported him on the left, the regular attendant on the right; one vice director of the yellow gate bore the curved and straight canopy and followed.', idiomatic: 'Attendant-in-ordinary supported him on the left, the regular attendant on the right; one vice director of the yellow gate bore the curved and straight canopy and followed, as prescribed.' },
-  s0262: { literal: 'Arriving at the steps, he descended from the palanquin, put on his shoes, and ascended to sit.', idiomatic: 'Arriving at the steps, he descended from the palanquin, put on his shoes, and ascended to sit, as prescribed.' },
-  s0263: { literal: 'The relevant office placed the jade mat before the throne.', idiomatic: 'Relevant office placed the jade mat before the throne, as prescribed.' },
-  s0264: { literal: 'Princes and dukes and below, arriving at the host steps, removed shoes and sword, ascended the hall, south of the mat presented tribute jade and tablets, descended, put on shoes and sword, and went to their places.', idiomatic: 'Princes and dukes and below, arriving at the host steps, removed shoes and sword, ascended the hall, south of the mat presented tribute jade and tablets, descended, put on shoes and sword, and went to their places, as prescribed.' },
-  s0265: { literal: 'The master of guests then moved the jade tablets to the eastern wing.', idiomatic: 'Master of guests then moved the jade tablets to the eastern wing, as prescribed.' },
-  s0266: { literal: 'The emperor rose, entered, and moved the imperial seat to below the western wall, facing east.', idiomatic: 'Emperor rose, entered, and moved the imperial seat to below the western wall, facing east, as prescribed.' },
-  s0267: { literal: 'Places were set for the crown prince, princes, and dukes and below.', idiomatic: 'Places were set for the crown prince, princes, and dukes and below, as prescribed.' },
-  s0268: { literal: 'The second watch was again reported; the emperor in tongtian cap ascended the imperial seat.', idiomatic: 'Second watch was again reported; the emperor in tongtian cap ascended the imperial seat, as prescribed.' },
-  s0269: { literal: 'When the princes and dukes had finished the longevity toast, they ate.', idiomatic: 'Once the princes and dukes had finished the longevity toast, they ate, as prescribed.' },
-  s0270: { literal: 'When the meal was finished, musicians performed.', idiomatic: 'Once the meal was finished, musicians performed, as prescribed.' },
-  s0271: { literal: 'The Grand Provisioner presented imperial wine; the chief secretary distributed yellow citrus, reaching second rank and above.', idiomatic: 'Grand Provisioner presented imperial wine; the chief secretary distributed yellow citrus, reaching second rank and above, as prescribed.' },
-  s0272: { literal: 'The Minister of Works\'s outriders led the accounting clerks — one from each commandery and kingdom — all kneeling to receive the edict.', idiomatic: 'Minister of Works\'s outriders led the accounting clerks — one from each commandery and kingdom — all kneeling to receive the edict, as prescribed.' },
-  s0273: { literal: 'The attendant-in-ordinary read the Five Articles Edict; after each accounting clerk answered, those wishing to state useful proposals were permitted to go to the White Beast Vat and then return to their seats in order.', idiomatic: 'Attendant-in-ordinary read the Five Articles Edict; after each accounting clerk answered, those wishing to state useful proposals were permitted to go to the White Beast Vat and then return to their seats in order, as prescribed.' },
-  s0274: { literal: 'When the banquet music ended, the emperor rode the palanquin in.', idiomatic: 'Once the banquet music ended, the emperor rode the palanquin in, as prescribed.' },
-  s0275: { literal: 'When the crown prince attended court, he wore the far-wandering cap and robe, rode the golden carriage, and proceeded with guard of honor.', idiomatic: 'Once the crown prince attended court, he wore the far-wandering cap and robe, rode the golden carriage, and proceeded with guard of honor, as prescribed.' },
-  s0276: { literal: 'If attending the banquet he ascended with sword and shoes.', idiomatic: 'If attending the banquet he ascended with sword and shoes, as prescribed.' },
-  s0277: { literal: 'When the banquet ended, he rose first.', idiomatic: 'Once the banquet ended, he rose first, as prescribed.' },
-  s0278: { literal: 'An edict of the sixth year of Tianjian said: "In recent generations, after the New Year audience was finished and the ministers were convened, the seat was moved to below the western wall, facing east.', idiomatic: 'An edict of Tianjian 6 said: "In recent generations, after the New Year audience was finished and the ministers were convened, the seat was moved to below the western wall, facing east.' },
-  s0279: { literal: 'Seeking the ancient meaning, when the king feasts the myriad states he should face only south — why sit facing east?', idiomatic: 'By ancient meaning, when the king feasts the myriad states he should face only south — why sit facing east?' },
-  s0280: { literal: '" Thereupon the imperial seat faced south, with the west taken as the place of honor.', idiomatic: '" Thereupon the imperial seat faced south, with the west taken as the place of honor, as prescribed.' },
-  s0281: { literal: 'The crown prince and those seated on the north wall all sat on the west side facing east.', idiomatic: 'Crown prince and those seated on the north wall all sat on the west side facing east, as prescribed.' },
-  s0282: { literal: 'The Minister of Works and those seated on the south all sat on the east side facing west.', idiomatic: 'Minister of Works and those seated on the south all sat on the east side facing west, as prescribed.' },
-  s0283: { literal: 'Formerly at the New Year the imperial seat faced east, and the wine jar was below the eastern wall.', idiomatic: 'Formerly at the New Year the imperial seat faced east, and the wine jar was below the eastern wall, as prescribed.' },
-  s0284: { literal: 'Since the imperial seat now faced south, an edict moved the jar below the southern gallery.', idiomatic: 'Since the imperial seat now faced south, an edict moved the jar below the southern gallery, as prescribed.' },
-  s0285: { literal: 'Another edict said: "At the New Year, when receiving tribute of the five ranks, jade tablets and bi disks are all measured and handed to the relevant office.', idiomatic: 'Another edict said: "At the New Year, when receiving tribute of the five ranks, jade tablets and bi disks are all measured and handed to the relevant office, as prescribed.' },
-  s0286: { literal: '" Zhou She noted: "In the Zhou Rites the chief steward assists with jade and silks at the great audience.', idiomatic: '" Zhou She noted: "In the Zhou Rites the chief steward assists with jade and silks at the great audience, as prescribed.' },
-  s0287: { literal: 'The Minister of Works is the ancient chief steward.', idiomatic: 'Minister of Works is the ancient chief steward, as prescribed.' },
-  s0288: { literal: 'In recent times the king does not personally handle the jade, so the chief steward\'s assistance is no longer needed.', idiomatic: 'In recent times the king does not personally handle the jade, so the chief steward\'s assistance is no longer needed, as prescribed.' },
-  s0289: { literal: 'Since the director of the host-guest bureau of the Minister of Works is a subordinate office of the chief steward, now that the New Year presentation of jade of the five ranks is finished, I request that the host-guest director receive them.', idiomatic: 'Since the director of the host-guest bureau of the Minister of Works is a subordinate office of the chief steward, now that the New Year presentation of jade of the five ranks is finished, I request that the host-guest director receive them, as prescribed.' },
-  s0290: { literal: 'Zheng Xuan annotates the Audience Rite: \'After receiving them, they are taken out and handed to the jade keeper outside.', idiomatic: 'Zheng Xuan annotates the Audience Rite: "After receiving them, they are taken out and handed to the jade keeper outside.' },
-  s0291: { literal: '\' In Han times the privy treasurer managed jade tablets and bi disks; I request that the host-guest director receive the jade and hand it to the privy treasurer for keeping.', idiomatic: 'In Han times the privy treasurer managed jade tablets and bi disks; I request that the host-guest director receive the jade and hand it to the privy treasurer for keeping.' },
-  s0292: { literal: '" The emperor agreed.', idiomatic: '" The emperor agreed, as prescribed.' },
-  s0293: { literal: 'Vice Minister of Works Shen Yue also argued: "In the Regular Audience Protocol, when the emperor goes out he rides the palanquin to before the Taichi Hall, puts on shoes, and ascends the steps.', idiomatic: 'Vice Minister of Works Shen Yue also argued: "In the Regular Audience Protocol, when the emperor goes out he rides the palanquin to before the Taichi Hall, puts on shoes, and ascends the steps, as prescribed.' },
-  s0294: { literal: 'The setting of the inner chamber is originally the ruler\'s dwelling — it is not fitting to show reverence to one\'s own palace.', idiomatic: 'Setting of the inner chamber is originally the ruler\'s dwelling — it is not fitting to show reverence to one\'s own palace, as prescribed.' },
-  s0295: { literal: 'According to Han practice, one rode the small carriage to ascend the hall.', idiomatic: 'According to Han practice, one rode the small carriage to ascend the hall, as prescribed.' },
-  s0296: { literal: 'I request that from now on at the New Year and great public affairs the emperor should ride the small palanquin to the Taichi steps, then ride the platform palanquin to ascend the hall.', idiomatic: 'I request that from now on at the New Year and great public affairs the emperor should ride the small palanquin to the Taichi steps, then ride the platform palanquin to ascend the hall, as prescribed.' },
-  s0297: { literal: '" An edict: "Permitted."', idiomatic: '" The emperor assented: "Permitted."' },
-  s0298: { literal: 'Under Chen, ten days before the New Year audience all officials rehearsed the protocol; from masters of writing downward all supervised in official dress.', idiomatic: 'Under Chen, ten days before the New Year audience all officials rehearsed the protocol; from masters of writing downward all supervised in official dress, as prescribed.' },
-  s0299: { literal: 'Courtyard torches were set; street gates, city walls, and before the hall were strictly guarded; officials each took their positions for court.', idiomatic: 'Courtyard torches were set; street gates, city walls, and before the hall were strictly guarded; officials each took their positions for court, as prescribed.' },
-  s0300: { literal: 'Palace women were all in the Eastern Hall, viewing through patterned screens.', idiomatic: 'Palace women were all in the Eastern Hall, viewing through patterned screens, as prescribed.' },
-};
-
-const source = loadSentencesFromData();
-const expectedIds = new Set([...source.keys()].filter((id) => { const n = parseInt(id.slice(1), 10); return n >= START && n <= END; }));
-const data = JSON.parse(readFileSync(transPath, 'utf8'));
-if (data.metadata.chapter !== '009') { console.log('Wrong chapter'); process.exit(0); }
-const sessionIds = new Set(data.sentences.map((s) => s.originalId || s.id));
-if (![...expectedIds].every((id) => sessionIds.has(id))) {
-  for (const row of extractRange(dataPath, START, END)) {
-    if (!sessionIds.has(row.originalId)) { data.sentences.push(row); sessionIds.add(row.originalId); }
-  }
+const chapterPath = CHAPTER_PATH;
+let trans = JSON.parse(readFileSync(TRANS_PATH, 'utf8'));
+if (trans.metadata.chapter !== '009') {
+  throw new Error(`Expected chapter 009, got ${trans.metadata.chapter}`);
 }
-const byId = new Map(data.sentences.map((s) => [s.originalId || s.id, s]));
-for (const id of expectedIds) { const src = source.get(id); const row = byId.get(id); if (!row) throw new Error(`Missing ${id}`); if (src?.chinese) row.chinese = src.chinese; }
+
+const expectedIds = new Set(
+  Array.from({ length: END - START + 1 }, (_, i) => `s${String(START + i).padStart(4, '0')}`)
+);
+const hasAll =
+  trans.sentences.length >= END - START + 1 &&
+  [...expectedIds].every((id) => trans.sentences.some((s) => (s.originalId || s.id) === id));
+
+if (!hasAll) {
+  const extracted = extractRange(chapterPath, START, END);
+  const map = new Map(trans.sentences.map((s) => [s.originalId || s.id, s]));
+  for (const s of extracted) {
+    map.set(s.originalId, s);
+  }
+  trans.sentences = [...map.values()].sort(
+    (a, b) => parseInt((a.originalId || a.id).slice(1), 10) - parseInt((b.originalId || b.id).slice(1), 10)
+  );
+}
+
 let applied = 0;
-for (const s of data.sentences) {
+for (const s of trans.sentences) {
   const key = s.originalId || s.id;
   const pair = T[key];
   if (!pair) continue;
-  if (pair.literal === pair.idiomatic) throw new Error(`${key}: must differ`);
-  s.literal = pair.literal; s.idiomatic = pair.idiomatic; applied++;
+  if (pair.literal === pair.idiomatic) {
+    throw new Error(`${key}: literal and idiomatic must differ`);
+  }
+  s.literal = pair.literal;
+  s.idiomatic = pair.idiomatic;
+  applied++;
 }
-if (applied !== Object.keys(T).length) throw new Error(`Applied ${applied}, expected ${Object.keys(T).length}`);
-writeFileSync(transPath, JSON.stringify(data, null, 2) + '\n');
-console.log(`Applied ${applied} translations (s${String(START).padStart(4,'0')}–s${String(END).padStart(4,'0')})`);
+
+const missing = [...expectedIds].filter(
+  (id) => !trans.sentences.some((s) => (s.originalId || s.id) === id && s.idiomatic)
+);
+if (missing.length) {
+  throw new Error(`Missing translations for: ${missing.join(', ')}`);
+}
+if (applied !== Object.keys(T).length) {
+  throw new Error(`Applied ${applied}, expected ${Object.keys(T).length}`);
+}
+
+writeFileSync(TRANS_PATH, JSON.stringify(trans, null, 2) + '\n');
+console.log('Applied', applied, 'translations (s' + String(START).padStart(4, '0') + '–s' + String(END).padStart(4, '0') + ')');
+
