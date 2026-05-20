@@ -38,9 +38,9 @@ export default {
   },
   s0059: {
     literal:
-      '..., made bearer of credentials, General Who Pacifies the North, Vice Director of the Imperial Bodyguard, and army commander.',
+      'He was also made bearer of credentials, General Who Pacifies the North, Vice Director of the Imperial Bodyguard, and army commander.',
     idiomatic:
-      '..., then bearer of credentials, general who pacifies the north, vice director of the imperial bodyguard, and army chief.',
+      'He was also made bearer of credentials, general who pacifies the north, vice director of the imperial bodyguard, and army commander.',
   },
   s0060: {
     literal:
@@ -103,8 +103,8 @@ export default {
       'On his return he rose by stages to supervisor within the gates and household minister of the glory of state.',
   },
   s0070: {
-    literal: '..., and died.',
-    idiomatic: '..., and died.',
+    literal: 'He died.',
+    idiomatic: 'He died.',
   },
   s0071: {
     literal: 'Zhou Shantu',
