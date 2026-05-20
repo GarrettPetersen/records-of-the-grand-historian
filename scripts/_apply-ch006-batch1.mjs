@@ -1,421 +1,570 @@
 #!/usr/bin/env node
-/** Batch 1: s0001–s0100 (Suishu ch.006, Rites treatise 1) */
+/** Batch 1: s0001–s0100 (Jiutangshu ch.006, Empress Wu Zetian — Wu clan, rise, Two Sages, through Zhou founding) */
 import { readFileSync, writeFileSync } from 'fs';
-
-const transPath = 'translations/current_translation_suishu.json';
 
 const T = {
   s0001: {
-    literal: 'In the age of Tang and Yu, those who sacrificed to Heaven constituted the rites of Heaven; those who sacrificed to Earth constituted the rites of Earth; those who sacrificed in the ancestral temples constituted the rites of Man.',
-    idiomatic: 'In the age of Tang and Yu, sacrifices to Heaven were classified as rites of Heaven, sacrifices to Earth as rites of Earth, and sacrifices in the ancestral temples as rites of Man.',
+    literal:
+      'Empress Wu Zetian of the Wu clan bore the taboo name Zhao; she was a native of Wenshui in Bingzhou.',
+    idiomatic:
+      'Empress Wu Zetian, née Wu, bore the taboo name Zhao and came from Wenshui in Bingzhou.',
   },
   s0002: {
-    literal: 'Therefore the Book says: "Appoint Bo Yi to preside over my Three Rites," by which to bind together Heaven and Earth, weave yin and yang, distinguish the hidden and profound and penetrate the subtle and deep, communicate with the hundred spirits and regulate the myriad affairs.',
-    idiomatic: 'The Book therefore records the command to appoint Bo Yi to oversee the Three Rites—the means by which to embrace Heaven and Earth, align yin and yang, discern what is hidden and profound, commune with the hundred spirits, and regulate the myriad affairs of state.',
+    literal:
+      'Her father Shi Yue, at the end of the Sui dynasty\'s Daye reign, served as captain of the Eagle-Forging Garrison.',
+    idiomatic:
+      'Her father Shi Yue, in the closing years of Sui, held the rank of captain in the Eagle-Forging Garrison.',
   },
   s0003: {
-    literal: 'Yin followed Xia, with additions and subtractions; reverently transmitting instructions on the side, to encourage the living people.',
-    idiomatic: 'The Yin dynasty adopted Xia ritual practice with modifications, handing down reverent instruction to guide the people.',
+    literal:
+      'When Gaozu marched through Fen and Jin, he always rested at their household.',
+    idiomatic:
+      'When Gaozu campaigned through Fen and Jin, he often lodged at their home.',
   },
   s0004: {
-    literal: 'Shang Xin was without the Way; elegant regulations were lost and extinguished.',
-    idiomatic: 'King Zhou of Shang was devoid of virtue, and the refined ritual codes were destroyed.',
+    literal: 'When the righteous banner first rose, he followed in the pacification of the capital.',
+    idiomatic: 'At the first raising of the rebel standard he joined the march that took the capital.',
   },
   s0005: {
-    literal: 'The Duke of Zhou rescued disorder, broadly established this culture: with auspicious rites to honor spirits and ghosts, with inauspicious rites to mourn the state, with guest rites to draw near guests, with military rites to punish the irreverent, with celebratory rites to unite marriages—called the Five Rites.',
-    idiomatic: 'The Duke of Zhou restored order amid chaos and broadly codified ritual culture: auspicious rites to honor spirits and the dead, inauspicious rites to mourn for the state, guest rites to welcome visitors, military rites to punish the irreverent, and celebratory rites to sanction marriage—all together called the Five Rites.',
+    literal:
+      'In the Zhenguan era he was repeatedly promoted to Minister of Works and military governor of Jingzhou, and enfeoffed as Duke of Ying.',
+    idiomatic:
+      'Under Zhenguan he rose through the Ministry of Works and the Jingzhou governorship to the dukedom of Ying.',
   },
   s0006: {
-    literal: 'Therefore it is said, "The ritual canon has three hundred sections and the ceremonial forms three thousand—none enters the inner chamber except by way of the door."',
-    idiomatic: 'Hence the saying: "The ritual canon comprises three hundred sections and ceremonial forms three thousand—and no one enters the inner chamber except through the door."',
+    literal:
+      'At first, when Wu Zetian was fourteen, Taizong heard of her beauty and deportment, summoned her to the palace, and installed her as a cairen.',
+    idiomatic:
+      'When she was fourteen, Taizong, hearing of her beauty and grace, brought her to court and made her a cairen.',
   },
   s0007: {
-    literal: 'Cheng and Kang followed this, and punishments were set aside unused.',
-    idiomatic: 'Kings Cheng and Kang upheld these rites, and punishments fell into disuse.',
+    literal: 'When Taizong died, she became a nun and dwelt at Ganye Temple.',
+    idiomatic: 'After Taizong\'s death she took the tonsure and lived at Ganye Temple.',
   },
   s0008: {
-    literal: 'From the time the Quan Rong assassinated the queen and Zhou was moved and weakened, rites were lost and music declined; customs withered and morals decayed.',
-    idiomatic: 'After the Quan Rong killed the queen and the Zhou court was relocated and enfeebled, ritual was lost and music faded; customs declined and morals decayed.',
+    literal:
+      'The Great Emperor saw her at the temple, summoned her again to the palace, and appointed her Imperial Consort Zhaoyi.',
+    idiomatic:
+      'Gaozong met her at the temple, recalled her to the palace, and created her Imperial Consort Zhaoyi.',
   },
   s0009: {
-    literal: 'Confucius, attending as guest at the year-end sacrifice, sighed and said: "Qiu has a purpose here. Yu, Tang, Wen, Wu, King Cheng, and the Duke of Zhou—none failed to be scrupulous in ritual."',
-    idiomatic: 'Confucius, present as a guest at the year-end la sacrifice, sighed and said: "I have a purpose in this. Yu, Tang, King Wen, King Wu, King Cheng, and the Duke of Zhou—none ever neglected ritual propriety."',
+    literal:
+      'At that time Empress Wang and Lady Xiao the fair consort repeatedly vied with Consort Wu Zhaoyi for favor, each slandering the other; the emperor accepted none of it.',
+    idiomatic:
+      'Empress Wang and Consort Xiao then fought Consort Wu for the emperor\'s favor, trading slanders; he believed neither side.',
   },
   s0010: {
-    literal: '" Thereupon he compiled rites and revived music, wishing to rescue the ills of the age.',
-    idiomatic: 'He then compiled the rites and revived music, seeking to remedy the disorders of the age.',
+    literal: 'Her title was advanced to Chen Consort.',
+    idiomatic: 'She was promoted to Chen Consort.',
   },
   s0011: {
-    literal: 'The ruler cast it aside and paid no heed; the Way was obstructed and did not prevail.',
-    idiomatic: 'The ruler ignored him, and the Way was blocked and could not be put into practice.',
+    literal:
+      'In the sixth year of Yonghui, Empress Wang was deposed and Chen Consort Wu was installed as empress.',
+    idiomatic:
+      'In Yonghui 6 Empress Wang was deposed and Consort Wu was raised to empress.',
   },
   s0012: {
-    literal: 'Therefore states that perish, families that are ruined, and men who die—all first abandon their rites.',
-    idiomatic: 'Thus doomed states, ruined houses, and lost lives all begin by abandoning ritual.',
+    literal: 'Gaozong styled himself Heavenly Sovereign, and Empress Wu styled herself Heavenly Empress.',
+    idiomatic: 'Gaozong took the title Heavenly Sovereign; Empress Wu took that of Heavenly Empress.',
   },
   s0013: {
-    literal: 'Duke Zhao married Mengzi and concealed her surname; Marquis Yang stole a woman\'s beauty and harmed a man.',
-    idiomatic: 'Duke Zhao married Mengzi while concealing her surname; the Marquis of Yang seized another man\'s wife and killed him.',
+    literal: 'The empress had long been resourceful in stratagem and also versed in letters and history.',
+    idiomatic: 'She was clever in counsel and well read in the classics and histories.',
   },
   s0014: {
-    literal: 'Therefore it is said: when the rites of marriage are abandoned, then licentious and depraved offenses multiply.',
-    idiomatic: 'Hence the saying: when marriage rites are abandoned, licentious and depraved crimes multiply.',
+    literal:
+      'From Xianqing onward the emperor often suffered wind ailments; memorials from the hundred offices were all entrusted to the Heavenly Empress for detailed decision.',
+    idiomatic:
+      'After Xianqing the emperor was often crippled by wind sickness; every ministry memorial went to the Heavenly Empress for final ruling.',
   },
   s0015: {
-    literal: 'Drinking together in groups and indulging in dissipation, not knowing the warning—when the rites of the district drinking ceremony are abandoned, then lawsuits of contention and fighting become numerous.',
-    idiomatic: 'When men drink together in unruly groups and know no restraint, and the district drinking rites are abandoned, lawsuits over brawling multiply.',
+    literal:
+      'From this she assisted in governing the realm for several decades; her authority differed in no way from the emperor\'s, and the age called them the "Two Sages."',
+    idiomatic:
+      'For decades she shared rule from within; her power matched the emperor\'s, and contemporaries named them the Two Sages.',
   },
   s0016: {
-    literal: 'The Marquis of Lu reversed the sacrifices of the five temples; the Han emperor abolished the three-year mourning—when the rites of mourning and sacrifice are abandoned, then the bond of flesh and blood grows thin.',
-    idiomatic: 'The ruler of Lu reversed the sacrifices of the five ancestral temples; a Han emperor abolished three-year mourning—when mourning and sacrificial rites are abandoned, kinship ties grow thin.',
+    literal:
+      'On wuwu of the second month the emperor was deposed as Prince of Luling, confined in a separate residence, and his given name was changed to Zhe.',
+    idiomatic:
+      'On wuwu of the second month the emperor was demoted to Prince of Luling, shut away, and renamed Zhe.',
   },
   s0017: {
-    literal: 'Feudal lords descended from the hall before the Son of Heaven; the Five Hegemons summoned the ruler to Heyang—when the rites of court audience and diplomatic visits are abandoned, then the first steps toward encroachment arise.',
-    idiomatic: 'When feudal lords stepped down from the hall before the Son of Heaven, and the Five Hegemons summoned a ruler to Heyang—when audience and diplomatic rites were abandoned, the first steps toward usurpation began.',
+    literal:
+      'On jiwei Prince Lun of Yu was installed as emperor and ordered to dwell in a separate hall.',
+    idiomatic:
+      'On jiwei Prince Lun of Yu was enthroned and lodged in a side palace.',
   },
   s0018: {
-    literal: 'The Qin clan, by the prestige of victory in war, swallowed the nine states, fully collected their ceremonial rites, and brought them to Xianyang.',
-    idiomatic: 'The Qin, wielding the prestige of military victory, annexed the nine states, seized their entire ritual corpus, and brought it to Xianyang.',
+    literal: 'A general amnesty was proclaimed throughout the realm and the era name changed to Wenming.',
+    idiomatic: 'The court proclaimed a general amnesty and renamed the era Wenming.',
   },
   s0019: {
-    literal: 'They only adopted what honored the ruler and restrained ministers, to serve the needs of the time.',
-    idiomatic: 'They adopted only what exalted the ruler and subordinated ministers, for immediate political use.',
+    literal: 'The empress dowager still held court and exercised regency.',
+    idiomatic: 'The empress dowager continued to rule from behind the curtain.',
   },
   s0020: {
-    literal: 'As for yielding and deference arising from one\'s gait, loyalty and filial piety formed in movement and stillness—flowers and leaves were not raised; great and small were alike cast aside.',
-    idiomatic: 'As for the courtesy of yielding in one\'s step, or loyalty and filial piety embodied in every motion—none of it was preserved; great and small alike were discarded.',
+    literal: 'On gengwu the heir\'s grandson Chongzhao was deposed to commoner status.',
+    idiomatic: 'On gengwu the heir\'s grandson Chongzhao was stripped to common rank.',
   },
   s0021: {
-    literal: 'Like straw dogs abandoned on the road, like ceremonial caps worn in Yue—the forest of Confucian learning was exhausted, and the Book of Songs and Documents became smoke.',
-    idiomatic: 'It was like straw dogs cast aside on the road, like ceremonial caps worn in the land of Yue—the Confucian tradition was extinguished, and the classics were reduced to ashes.',
+    literal:
+      'Wang Dezhen, Grand Master of Ceremonies and concurrent chief administrator of the Prince of Yu\'s household, became attendant-in-chief; Liu Yizhi, vice director of the Secretariat and concurrent marshal of the Prince of Yu\'s household, was made equal in rank to the Three Offices at the Secretariat Chancellery.',
+    idiomatic:
+      'Wang Dezhen, grand master of ceremonies and chief administrator to the Prince of Yu, became attendant-in-chief; Liu Yizhi, secretariat vice director and the prince\'s marshal, joined the third rank at the Secretariat Chancellery.',
   },
   s0022: {
-    literal: 'After Emperor Gaozu of Han had pacified the Qin disorder, first executed Xiang Yu, and rewarded the founding meritorious, he had no leisure for court ritual.',
-    idiomatic: 'After Emperor Gaozu of Han quelled the Qin rebellion, executed Xiang Yu, and rewarded his founding ministers, he had no time to establish court ceremony.',
+    literal: 'In the third month the commoner Xian died in Bazhou.',
+    idiomatic: 'In the third month the deposed heir Xian died in Bazhou.',
   },
   s0023: {
-    literal: 'Ministers drinking wine disputed merit; some drew swords and struck the pillars—the High Ancestor was troubled by this.',
-    idiomatic: 'His ministers quarreled over credit while drinking; some drew swords and struck the pillars. Gaozu was deeply troubled.',
+    literal: 'In the fourth month of summer Prince Yuanying of Teng died.',
+    idiomatic: 'In the fourth summer month Prince Yuanying of Teng died.',
   },
   s0024: {
-    literal: 'Shusun Tong said: "Confucians are hard to advance with for achievement, but can be relied on for preserving what has been won."',
-    idiomatic: 'Shusun Tong said: "Confucian scholars are poor partners for conquest, but excellent for preserving what has been won."',
+    literal:
+      'Prince Shangjin of Bi was re-enfeoffed as Prince of Ze; Prince Sunjie of Ge as Prince of Xu.',
+    idiomatic:
+      'Prince Shangjin of Bi was made Prince of Ze; Prince Sunjie of Ge was made Prince of Xu.',
   },
   s0025: {
-    literal: '" Thereupon he requested to establish court ceremony and was granted permission, yet still saying, "Make it according to what I can perform."',
-    idiomatic: 'He then asked to establish court ceremony and was permitted—but only on the condition that it be scaled to what Gaozu could actually perform.',
+    literal: 'On dingchou Prince Zhe of Luling was moved to Junzhou.',
+    idiomatic: 'On dingchou Prince Zhe of Luling was exiled to Junzhou.',
   },
   s0026: {
-    literal: 'After slight practice in ritual deportment, all knew to follow the proper track.',
-    idiomatic: 'After brief instruction in ritual deportment, everyone knew to follow proper form.',
+    literal:
+      'In the intercalary fifth month Wu Chengsi, Minister of Rites, was made equal in rank to the Three Offices at the Secretariat Chancellery.',
+    idiomatic:
+      'In the intercalary fifth month Wu Chengsi, minister of rites, joined the third rank at the Secretariat Chancellery.',
   },
   s0027: {
-    literal: 'If he had traced back to Wen and Wu and taken the Book of Songs and Documents as his model, it was truly because he had no leisure—and feared it himself.',
-    idiomatic: 'Had he sought to follow the example of Kings Wen and Wu and take the classics as his charter, he truly lacked the time—and feared he could not measure up.',
+    literal:
+      'In the seventh month of autumn the Turks Kutlug and Yuanzhen raided Shuozhou; the Left Majestic Guard General Cheng Wuting was ordered to repel them.',
+    idiomatic:
+      'In the seventh autumn month the Turks Kutlug and Yuanzhen struck Shuozhou; Cheng Wuting, general of the left majestic guard, was sent against them.',
   },
   s0028: {
-    literal: 'Emperor Wu established canonical institutions yet loved esoteric arts; as for sacrifices to spirits and ghosts, they drifted without returning.',
-    idiomatic: 'Emperor Wu revived canonical institutions yet dabbled in esoteric arts; sacrifices to spirits and ghosts wandered far from orthodox practice.',
+    literal:
+      'A comet appeared in the northwest, more than two zhang in length; after thirty-three days it vanished.',
+    idiomatic:
+      'A comet blazed in the northwest for thirty-three days, its tail longer than two zhang.',
   },
   s0029: {
-    literal: 'The Founding Emperor restored the dynasty; Emperor Ming succeeded to the throne: they sacrificed at the Bright Hall, donned caps and regalia, ascended the Spirit Terrace, and observed cloud omens—obtaining the timely institutions, the common people rejoiced.',
-    idiomatic: 'The Founding Emperor restored the Han; Emperor Ming took the throne: they sacrificed at the Bright Hall, donned ceremonial caps, ascended the Spirit Terrace, and observed celestial signs—restoring timely institutions to the people\'s delight.',
+    literal: 'In the ninth month a general amnesty was proclaimed and the era name changed to Guangzhai.',
+    idiomatic: 'In the ninth month the court proclaimed a general amnesty and renamed the era Guangzhai.',
   },
   s0030: {
-    literal: 'Yet the court\'s statutes and regulations were of long standing; some were obtained in ages of peace and prosperity, some lost in years of famine and disaster—and generations distant, customs errant and confused.',
-    idiomatic: 'Yet the court\'s statutes were ancient; some were preserved in ages of peace, others lost in years of famine—and over distant generations, custom grew corrupt and confused.',
+    literal: 'Banners and flags were changed to gold, trimmed with purple and painted with mixed designs.',
+    idiomatic: 'Imperial banners were recolored gold, edged in purple, and painted with mixed emblems.',
   },
   s0031: {
-    literal: 'Human sentiment must exist and will shift the meaning of ritual—therefore Yin and Zhou differed in track, and Qin and Han changed course here.',
-    idiomatic: 'Human sentiment inevitably shifts the meaning of ritual—hence Yin and Zhou followed different paths, and Qin and Han changed course.',
+    literal:
+      'The Eastern Capital was renamed the Divine Capital, and the Secretariat and the names of the various offices were also changed.',
+    idiomatic:
+      'Luoyang was renamed the Divine Capital, and the Secretariat together with many ministry titles were retitled.',
   },
   s0032: {
-    literal: 'As for enhancing customs and broadly planting dikes and barriers—if not the majesty of ritual, what else could be honored!',
-    idiomatic: 'As for enhancing custom and erecting broad moral bulwarks—if not the majesty of ritual, what could surpass it!',
+    literal: 'For the first time officials of the Right Office for Censorial Reform were appointed.',
+    idiomatic: 'The court first staffed the Right Office for Censorial Reform.',
   },
   s0033: {
-    literal: 'It is like the mountain spirits having Song and Dai, the sea lord having the vast ocean—adorned with a speck of dust, it does not bring failure.',
-    idiomatic: 'As Mount Song and Mount Tai belong to the mountain spirits, and the vast ocean to the sea lord—a speck of adornment cannot mar their grandeur.',
+    literal:
+      'Xu Jingye, grandson of the former Minister of Works Li Ji and prefectural marshal of Liuzhou, falsely styled himself acting prefect of Yangzhou, killed the chief administrator Chen Jingzhi, seized Yangzhou and raised troops, styled himself supreme commander, and took restoration of the dynasty as his pretext.',
+    idiomatic:
+      'Xu Jingye, grandson of Li Ji and marshal of Liuzhou, posed as acting prefect of Yangzhou, murdered chief administrator Chen Jingzhi, seized the city, declared himself supreme commander, and marched under the banner of restoring Tang.',
   },
   s0034: {
-    literal: 'Gaotang Sheng, in the transmitted Scholar\'s Rites also called "ceremony," broadly clarified human sentiment and adorned conduct.',
-    idiomatic: 'Gaotang Sheng, in the transmitted Scholar\'s Rites also called Yili, broadly clarified human sentiment and adorned proper conduct.',
+    literal:
+      'In the tenth month of winter Li Chongfu, prefectural marshal of Chuzhou, led the three counties under his command to join Jingye.',
+    idiomatic:
+      'In the tenth winter month Li Chongfu of Chuzhou rallied his three counties to Jingye\'s cause.',
   },
   s0035: {
-    literal: 'Down from the Western Capital, they were used as mutual standards; all were praised as the beauty of the age, each with its own rules of interchange.',
-    idiomatic: 'From the Western Capital onward, these were used as mutual standards; all were praised as the finest ritual of their age, each with its own rules of courtly interchange.',
+    literal:
+      'Li Xiaoyi, general of the Left Jade-Belled Guard, was appointed grand commander and led three hundred thousand troops to suppress them.',
+    idiomatic:
+      'Li Xiaoyi of the left jade-belled guard was named grand commander and marched with three hundred thousand men to crush the rebellion.',
   },
   s0036: {
-    literal: 'The detailed fixing of court ceremony in Huangchu, the removal of excess errors in Taishi— these the Book of Song sets forth in full.',
-    idiomatic: 'The detailed codification of court ceremony under Huangchu and the elimination of ritual errors under Taishi—the Book of Song treats these fully.',
+    literal: 'The Grand Secretary Pei Yan was executed.',
+    idiomatic: 'Grand Secretary Pei Yan was put to death.',
   },
   s0037: {
-    literal: 'Emperor Wu of Liang first commanded the Confucian scholars to compile the great canon.',
-    idiomatic: 'Emperor Wu of Liang first ordered Confucian scholars to compile the great ritual canon.',
+    literal:
+      'On dingyou Jingye\'s father and forebears were posthumously stripped of rank and title, and the clan name was restored to Xu.',
+    idiomatic:
+      'On dingyou the court erased Jingye\'s ancestral honors and restored the clan name Xu.',
   },
   s0038: {
-    literal: 'For auspicious rites, Ming Shanbin; for inauspicious rites, Yan Zhizhi; for military rites, Lu Lian; for guest rites, He Yang; for celebratory rites, Sima Jiong.',
-    idiomatic: 'For auspicious rites he assigned Ming Shanbin; for inauspicious rites, Yan Zhizhi; for military rites, Lu Lian; for guest rites, He Yang; for celebratory rites, Sima Jiong.',
+    literal: 'In the twelfth month the former Grand Secretary Xue Yuanchao died.',
+    idiomatic: 'In the twelfth month the former grand secretary Xue Yuanchao died.',
   },
   s0039: {
-    literal: 'The Emperor also commanded Shen Yue, Zhou She, Xu Mian, He Tongzhi, and others—all participated in detailed deliberation.',
-    idiomatic: 'The emperor also assigned Shen Yue, Zhou She, Xu Mian, He Tongzhi, and others to join in the detailed review.',
+    literal: 'Cheng Wuting, Left Majestic Guard General, was executed.',
+    idiomatic: 'Cheng Wuting, general of the left majestic guard, was executed.',
   },
   s0040: {
-    literal: 'Emperor Wu of Chen, having conquered and pacified Jianye, largely followed Liang precedent; he still decreed that Left Assistant Director of the Secretariat Jiang Dezao, Attendant Outside the Casual Rider Regular Palace Attendant Shen Zhu, Erudite Shen Wena, Secretariat Drafting Attendant Liu Shizhi, and others, according to circumstances in performance, should adopt or discard as the occasion required.',
-    idiomatic: 'Emperor Wu of Chen, after conquering Jianye, largely followed Liang precedent; he further ordered Jiang Dezao, Shen Zhu, Shen Wena, Liu Shizhi, and others to adapt ritual practice as circumstances required.',
+    literal:
+      'In the first month of spring in the inaugural year of Chuigong, after Jingye\'s suppression a general amnesty was proclaimed and the era name installed.',
+    idiomatic:
+      'In the first spring month of Chuigong 1, with Jingye defeated, the court proclaimed a general amnesty and fixed the new era name.',
   },
   s0041: {
-    literal: 'In Later Qi: Left Vice Director Yang Xiuzhi, Director of the Department of Revenue Yuan Xiubo, Director of the Court of State Ceremonial Wang Xi, Erudite of the Imperial Academy Xiong Ansheng; in Zhou: Su Chuo, Lu Bian, Yuwen Kai—all versed in ceremonial rites—jointly deliberated on state institutions for contemporary use.',
-    idiomatic: 'In Northern Qi, Yang Xiuzhi, Yuan Xiubo, Wang Xi, and Xiong Ansheng; in Northern Zhou, Su Chuo, Lu Bian, and Yuwen Kai—all masters of ceremonial rites—jointly deliberated state ritual for contemporary use.',
+    literal: 'Liu Ren\'gui died.',
+    idiomatic: 'Liu Ren\'gui, the great commander, died.',
   },
   s0042: {
-    literal: 'Emperor Gaozu commanded Niu Hong, Xin Yanzhi, and others to collect Liang and Northern Qi ritual regulations, forming the Five Rites.',
-    idiomatic: 'Emperor Gaozu ordered Niu Hong, Xin Yanzhi, and others to compile Liang and Northern Qi ritual regulations into the Five Rites.',
+    literal: 'In the third month Prince Zhe of Luling was moved to Fangzhou.',
+    idiomatic: 'In the third month Prince Zhe of Luling was transferred to Fangzhou.',
   },
   s0043: {
-    literal: 'The Rites say: "The myriad things root in Heaven; man roots in the ancestor—therefore he is paired with the Supreme Lord."',
-    idiomatic: 'The Rites state: "The myriad things root in Heaven; man roots in the ancestor—therefore the ancestor is paired with the Supreme Lord."',
+    literal: 'The personally drafted Chuigong Code was promulgated throughout the realm.',
+    idiomatic: 'Her personally drafted Chuigong Code was issued empire-wide.',
   },
   s0044: {
-    literal: '" The people of Qin swept away the Six Classics into embers and ash; the rites of sacrificing to Heaven were mutilated and incomplete, and Confucians each held to what they had seen and made meanings accordingly.',
-    idiomatic: 'The Qin burned the Six Classics to ashes; rites for sacrificing to Heaven were shattered, and each Confucian school defended its own interpretation.',
+    literal:
+      'In the fourth month of summer Grand Secretary Qian Weidao was demoted and sent out as prefect of Qingzhou.',
+    idiomatic:
+      'In the fourth summer month Grand Secretary Qian Weidao was demoted to prefect of Qingzhou.',
   },
   s0045: {
-    literal: 'One view: the number of sacrifices to Heaven—through the year there are nine; the number of sacrifices to Earth—through the year there are two; Round Mound and Square Marsh, once every three years.',
-    idiomatic: 'One view holds: sacrifices to Heaven number nine in a year; sacrifices to Earth, two; the Round Mound and Square Marsh rites are performed once every three years.',
+    literal:
+      'In the fifth month Pei Judao, Minister of Autumn, became Grand Secretary; Remonstrator Wang Dezhen was banished to Xiangzhou; Su Liangsi, Minister of Winter, became Remonstrator.',
+    idiomatic:
+      'In the fifth month Pei Judao became grand secretary; Wang Dezhen was exiled to Xiangzhou; Su Liangsi became remonstrator.',
   },
   s0046: {
-    literal: 'In years of Round Mound and Square Marsh, sacrifices to Heaven are nine and sacrifices to Earth are two.',
-    idiomatic: 'In years when the Round Mound and Square Marsh rites are performed, sacrifices to Heaven total nine and sacrifices to Earth, two.',
+    literal:
+      'An edict ordered civil and military officials of the ninth rank and above, and the common people, all to nominate themselves.',
+    idiomatic:
+      'An edict commanded every official of the ninth rank or higher—and commoners as well—to put forward their own names.',
   },
   s0047: {
-    literal: 'If Heaven does not include the Round Mound sacrifice, through the year there are eight.',
-    idiomatic: 'If the Round Mound rite is not included, sacrifices to Heaven total eight for the year.',
+    literal: 'That summer there was great drought.',
+    idiomatic: 'That summer a severe drought struck.',
   },
   s0048: {
-    literal: 'If Earth does not include the Square Marsh sacrifice, through the year there is one.',
-    idiomatic: 'If the Square Marsh rite is not included, sacrifices to Earth total one for the year.',
+    literal:
+      'In the first month of spring of the second year, the empress dowager issued an edict restoring rule to the emperor.',
+    idiomatic:
+      'In the first spring month of her second regnal year the empress dowager edicted the return of power to the emperor.',
   },
   s0049: {
-    literal: 'This is what the Zheng school honors.',
-    idiomatic: 'This is the position honored by the Zheng school.',
+    literal:
+      'Because the empress dowager\'s intent was not genuine, he firmly declined.',
+    idiomatic:
+      'Knowing her offer was not sincere, he refused it outright.',
   },
   s0050: {
-    literal: 'One view: there is only August Heaven; there are no Five Essence Emperors.',
-    idiomatic: 'Another view: there is only August Heaven; there are no Five Essence Emperors.',
+    literal:
+      'The empress dowager still held court as before and exercised regency, and a general amnesty was proclaimed.',
+    idiomatic:
+      'She resumed regency as before and proclaimed another general amnesty.',
   },
   s0051: {
-    literal: 'Yet Heaven is sacrificed to twice in a year, and the altar positions are unique.',
-    idiomatic: 'Yet Heaven receives two sacrifices per year, at a single altar.',
+    literal:
+      'For the first time military governors and prefects were likewise permitted to wear the court fish tally like capital officials.',
+    idiomatic:
+      'For the first time provincial governors and prefects were allowed the court fish tally worn by capital officials.',
   },
   s0052: {
-    literal: 'The Round Mound sacrifice is the Southern Suburb; the Southern Suburb sacrifice is the Round Mound.',
-    idiomatic: 'The Round Mound sacrifice is the Southern Suburb rite; the Southern Suburb rite is the Round Mound sacrifice.',
+    literal:
+      'In the third month chests were first set up in the audience hall; those submitting memorials or reports were permitted to deposit them, and thereby good and ill in the realm became widely known.',
+    idiomatic:
+      'In the third month complaint boxes were placed in the audience hall; anyone with a petition could deposit it, and court and country alike learned what the people knew.',
   },
   s0053: {
-    literal: 'At the winter solstice, upon it Heaven is sacrificed to; in spring there is again one sacrifice, to pray for agricultural affairs—called the two sacrifices, with no separate Heaven.',
-    idiomatic: 'At the winter solstice Heaven is sacrificed to upon it; in spring a second sacrifice prays for the harvest—these two sacrifices, with no distinction of separate Heavens.',
+    literal: 'In the fourth month of summer Cen Changqian became Grand Secretary.',
+    idiomatic: 'In the fourth summer month Cen Changqian became grand secretary.',
   },
   s0054: {
-    literal: 'The five seasonal receptions of qi are all sacrifices to the Human Emperors of the Five Phases, such as Taihao— not sacrifices to Heaven.',
-    idiomatic: 'The five seasonal qi-reception rites all sacrifice to the Human Emperors of the Five Phases, such as Taihao—they are not sacrifices to Heaven.',
+    literal:
+      'In the sixth month Su Liangsi became Left Minister of the Department of State Affairs; Wei Daibao, Minister of Heaven, became Right Minister—both equal in rank to the Three Offices at Phoenix Pavilion and Phoenix Terrace.',
+    idiomatic:
+      'In the sixth month Su Liangsi became left minister of state and Wei Daibao right minister, each of third rank at Phoenix Pavilion and Terrace.',
   },
   s0055: {
-    literal: 'Heaven is called August Heaven, also called Supreme Lord, also simply called Lord.',
-    idiomatic: 'Heaven is called August Heaven, also Supreme Lord, also simply Lord.',
+    literal:
+      'Wei Siqian, Censor-in-Chief of the Right Office for Censorial Reform, became Remonstrator.',
+    idiomatic:
+      'Wei Siqian, censor-in-chief of the Right Office for Censorial Reform, became remonstrator.',
   },
   s0056: {
-    literal: 'The Human Emperors of the Five Phases may also be called Supreme Lord, but may not be called Heaven.',
-    idiomatic: 'The Human Emperors of the Five Phases may also be styled Supreme Lord, but may not be called Heaven.',
+    literal:
+      'In the first month of spring of the third year, Prince Chengyi was enfeoffed as Prince of Heng, Longji as Prince of Chu, Longfan as Prince of Wei, and Longye as Prince of Zhao.',
+    idiomatic:
+      'In the first spring month of the third year Chengyi was made Prince of Heng, Longji Prince of Chu, Longfan Prince of Wei, and Longye Prince of Zhao.',
   },
   s0057: {
-    literal: 'Therefore the five seasonal qi-receptions and the paired sacrifices to Wen and Wu at the Bright Hall are all sacrifices to Human Emperors, not sacrifices to Heaven.',
-    idiomatic: 'Therefore the five seasonal qi-receptions and the paired sacrifices to Kings Wen and Wu at the Bright Hall are all sacrifices to Human Emperors, not to Heaven.',
+    literal: 'In the second month Wei Siqian requested retirement; permission was granted.',
+    idiomatic: 'In the second month Wei Siqian asked to retire and was allowed.',
   },
   s0058: {
-    literal: 'This is what the Wang school honors.',
-    idiomatic: 'This is the position honored by the Wang school.',
+    literal:
+      'In the fourth month of summer Pei Judao became Remonstrator; Zhang Guangfu, vice minister of summer affairs, became vice minister at Phoenix Pavilion, equal in rank to the Phoenix Terrace chancellor.',
+    idiomatic:
+      'In the fourth summer month Pei Judao became remonstrator and Zhang Guangfu, vice minister of summer affairs, joined the Phoenix Terrace as vice minister and chancellor.',
   },
   s0059: {
-    literal: 'From Liang and Chen down to Sui, debaters each honored their own masters—therefore suburban and mound rites mutually changed.',
-    idiomatic: 'From Liang and Chen down to Sui, each faction followed its own master—hence the suburban and mound rites underwent repeated change.',
+    literal: 'On gengwu Liu Yizhi was granted death at home.',
+    idiomatic: 'On gengwu Liu Yizhi was ordered to take his own life at home.',
   },
   s0060: {
-    literal: 'Liang\'s Southern Suburb: a round altar, south of the capital.',
-    idiomatic: 'The Liang Southern Suburb altar was a round mound south of the capital.',
+    literal:
+      'In the eighth month of autumn Wei Xuantong, Minister of Earth, was made acting Remonstrator.',
+    idiomatic:
+      'In the eighth autumn month Wei Xuantong, minister of earth, was appointed acting remonstrator.',
   },
   s0061: {
-    literal: 'Two zhang seven chi in height; upper diameter eleven zhang, lower diameter eighteen zhang.',
-    idiomatic: 'It stood two zhang and seven chi high, eleven zhang across at the top and eighteen zhang at the base.',
+    literal:
+      'In the second month of spring of the fourth year the Qianyuan Hall was demolished and the Bright Hall built on its site.',
+    idiomatic:
+      'In the second spring month of the fourth year Qianyuan Hall was torn down and the Bright Hall raised in its place.',
   },
   s0062: {
-    literal: 'Outside it, two enclosing walls; four gates.',
-    idiomatic: 'Two concentric enclosure walls surrounded it, with four gates.',
+    literal:
+      'Shandong and Henan suffered severe famine; Wang Jishan, Director of Retainers; Ouyang Tong, Director of the Palace Storehouse; and Di Renjie, vice minister of winter affairs, were ordered on inspection tours to relieve and supply.',
+    idiomatic:
+      'With Shandong and Henan in famine, Wang Jishan, Ouyang Tong, and Di Renjie were sent to inspect, relieve, and provision the stricken regions.',
   },
   s0063: {
-    literal: 'Ordinarily it alternated years with the Northern Suburb.',
-    idiomatic: 'It was normally performed in alternate years with the Northern Suburb rite.',
+    literal:
+      'In the fourth month of summer Prince Wu Chengsi of Wei forged an auspicious stone inscribed: "The Holy Mother presides over the people; the imperial line shall flourish forever.',
+    idiomatic:
+      'In the fourth summer month Prince Wu Chengsi of Wei forged a prophetic stone that read, "The Holy Mother rules mankind; the imperial house shall flourish forever.',
   },
   s0064: {
-    literal: 'On the first xin day of the first month the ceremony was performed, using one special bull; the spirit of the Celestial Emperor Supreme Lord was sacrificed to upon it, with the Emperor\'s deceased father and Founding Emperor Wen as associates.',
-    idiomatic: 'On the first xin day of the first month, a single bull was offered; the Celestial Emperor Supreme Lord was sacrificed to upon the altar, with the emperor\'s deceased father and Founding Emperor Wen as associates.',
+    literal:
+      '" A man of Yongzhou, Tang Tongtai, memorialized that it had been obtained from the Luo River.',
+    idiomatic:
+      '" Tang Tongtai of Yongzhou reported its discovery in the Luo River.',
   },
   s0065: {
-    literal: 'The rite used a green jade disc to form the silks.',
-    idiomatic: 'The rite employed a green jade bi disc to form the ritual silks.',
+    literal:
+      'The empress dowager was greatly pleased, named the stone the "Treasure Chart," and promoted Tongtai to general of the mobile guard.',
+    idiomatic:
+      'The empress dowager rejoiced, named the stone the Treasure Chart, and made Tongtai a general of the mobile guard.',
   },
   s0066: {
-    literal: 'The Five Direction Supreme Lords, Five Officials spirits, Grand Unity, Celestial Unity, Sun, Moon, Five Stars, Twenty-eight Lodges, Grand Subtlety, Chariot Pivot, Literary Glory, Northern Dipper, Three Terraces, Old Man, Wind Lord, Minister of Works, Thunder and Lightning, Rain Master—all were associated sacrifices.',
-    idiomatic: 'The Five Direction Supreme Lords, Five Officials, Grand Unity, Celestial Unity, Sun, Moon, Five Stars, Twenty-eight Lodges, Grand Subtlety, Chariot Pivot, Literary Glory, Northern Dipper, Three Terraces, Old Man, Wind Lord, Minister of Works, Thunder, Lightning, and Rain Master—all received associated sacrifice.',
+    literal:
+      'In the fifth month the empress dowager added the honorific title Holy Mother, Divine Sovereign.',
+    idiomatic:
+      'In the fifth month she took the added honorific Holy Mother, Divine Sovereign.',
   },
   s0067: {
-    literal: 'The Twenty-eight Lodges and Rain Master and others had seats in pits; the Five Emperors likewise; the rest were all on level ground.',
-    idiomatic: 'The Twenty-eight Lodges, Rain Master, and others had pit-seats; the Five Emperors likewise; all others were on level ground.',
+    literal: 'In the seventh month of autumn a general amnesty was proclaimed.',
+    idiomatic: 'In the seventh autumn month the court proclaimed a general amnesty.',
   },
   s0068: {
-    literal: 'Vessels were of pottery and gourd; mats of straw and stalks.',
-    idiomatic: 'Vessels were pottery and gourd; mats were of straw and stalks.',
+    literal:
+      'The "Treasure Chart" was renamed the "Chart Bestowed by Heaven," the spirit of the Luo was enfeoffed as Manifest Sage with special advancement, and a temple was established.',
+    idiomatic:
+      'The Treasure Chart was retitled the Chart Bestowed by Heaven; the Luo spirit was enfeoffed Manifest Sage with special advancement and given a temple.',
   },
   s0069: {
-    literal: 'The Grand Astrologer set up a firewood altar at the bing position.',
-    idiomatic: 'The Grand Astrologer erected a firewood altar at the bing position.',
+    literal: 'Beside the river the county of Yongchang was established.',
+    idiomatic: 'Yongchang County was founded on the riverbank.',
   },
   s0070: {
-    literal: 'The emperor fasted in the Wanshou Hall, rode the jade chariot, and with full imperial escort performed the rite.',
-    idiomatic: 'The emperor fasted in the Hall of Longevity, rode the jade chariot, and with full imperial escort performed the rite.',
+    literal: 'Throughout the realm there were five days of public feasting.',
+    idiomatic: 'The empire feasted for five days.',
   },
   s0071: {
-    literal: 'When the rite was complete, he changed dress to the sky-piercing cap and returned.',
-    idiomatic: 'When the rite was finished, he changed into the sky-piercing cap and returned.',
+    literal:
+      'On renyin of the eighth month Prince Chong of Langye, prefect of Bozhou, seized Bozhou and raised troops; Qiu Shenji, general of the Left Golden Crow Guard, was appointed campaigning commander to suppress him.',
+    idiomatic:
+      'On renyin of the eighth month Prince Chong of Langye, prefect of Bozhou, rebelled; Qiu Shenji of the left golden crow guard was named campaigning commander against him.',
   },
   s0072: {
-    literal: 'Northern Suburb: a square altar at the Northern Suburb.',
-    idiomatic: 'The Northern Suburb altar was a square mound at the northern suburb.',
+    literal:
+      'On gengxu Chong\'s father Zhen, Prince of Yue and prefect of Yuzhou, also raised troops at Yuzhou in concert with Chong.',
+    idiomatic:
+      'On gengxu Chong\'s father Zhen, Prince of Yue and prefect of Yuzhou, rose at Yuzhou in support.',
   },
   s0073: {
-    literal: 'Upper side ten zhang, lower side twelve zhang, height one zhang.',
-    idiomatic: 'Its top measured ten zhang square, its base twelve zhang, and its height one zhang.',
+    literal:
+      'In the ninth month Cen Changqian, Grand Secretary; Zhang Guangfu, vice minister at Phoenix Pavilion; and Ju Chongyu, general of the Left Gate Guard, were ordered to lead troops in suppression.',
+    idiomatic:
+      'In the ninth month Cen Changqian, Zhang Guangfu, and Ju Chongyu were ordered to march against them.',
   },
   s0074: {
-    literal: 'Each of the four sides had steps.',
-    idiomatic: 'Each of its four sides had steps.',
+    literal:
+      'On bingyin Zhen, Chong, and the rest were beheaded; their heads were sent to the Divine Capital, and their surname was changed to Hui.',
+    idiomatic:
+      'On bingyin Zhen, Chong, and their fellows were executed; their heads were displayed in the Divine Capital and the clan renamed Hui.',
   },
   s0075: {
-    literal: 'Outside it were two layers of enclosing wall.',
-    idiomatic: 'Two layers of enclosing wall stood outside it.',
+    literal: 'A partial amnesty was granted for Bozhou.',
+    idiomatic: 'Bozhou alone received a partial amnesty.',
   },
   s0076: {
-    literal: 'It alternated years with the Southern Suburb.',
-    idiomatic: 'It alternated years with the Southern Suburb rite.',
+    literal:
+      'Prince Yuancheng of Han, Prince Lingqian of Lu, Yuancheng\'s son Chan the Duke of Huang, Lingqian\'s son Ai the Prince of Fanyang and left attendant of the cavalry, Prince Yuan\'gui of Huo and his son Xu the Prince of Jiangdu, and Rong the Duke of Dongguan, son of the late Prince Yuanfeng of Guo, were implicated in plotting with Zhen; Yuancheng and Lingqian killed themselves, Yuan\'gui was banished to Qianzhou, and Chan and the rest were executed—their surname changed to Hui.',
+    idiomatic:
+      'Princes Yuancheng of Han and Lingqian of Lu, their sons Chan and Ai, Prince Yuan\'gui of Huo and his son Xu, and Rong of Dongguan, son of the late Prince Yuanfeng of Guo, were judged complicit with Zhen; Yuancheng and Lingqian took their own lives, Yuan\'gui was exiled to Qianzhou, and the rest were executed—the clan renamed Hui.',
   },
   s0077: {
-    literal: 'On the first xin of the first month, with one special bull, the spirit of Queen Earth was sacrificed to upon it, with the Virtue Empress as associate.',
-    idiomatic: 'On the first xin day of the first month, a single bull was offered; Queen Earth was sacrificed to upon the altar, with the Virtue Empress as associate.',
+    literal:
+      'From this the imperial princes were executed one after another, until they were nearly all gone.',
+    idiomatic:
+      'Thereafter imperial princes were killed in succession until the house was nearly extinct.',
   },
   s0078: {
-    literal: 'The rite used a yellow jade tube to form the silks.',
-    idiomatic: 'The rite employed a yellow jade cong tube to form the ritual silks.',
+    literal:
+      'Their young sons and grandsons were all banished beyond the ranges, and several hundred families of their kin and partisans were executed.',
+    idiomatic:
+      'Young heirs were exiled beyond the mountains; kin and allies of hundreds of families were put to death.',
   },
   s0079: {
-    literal: 'Five Officials spirits, First Farmer, Five Sacred Mountains, Mount Yi, Mount Yue, Mount Baishi, Mount Huo, Mount Wulü, Mount Jiang, Four Seas, Four Rivers, Song River, Kuaiji River, Qiantang River, Four Outlooks—all were associated sacrifices.',
-    idiomatic: 'The Five Officials, First Farmer, Five Sacred Mountains, Mount Yi, Mount Yue, Mount Baishi, Mount Huo, Mount Wulü, Mount Jiang, the Four Seas, Four Rivers, Song River, Kuaiji River, Qiantang River, and Four Outlooks—all received associated sacrifice.',
+    literal:
+      'On jiyou of the twelfth month the Divine Sovereign worshipped at the Luo River and received the Chart Bestowed by Heaven; that day she returned to the palace.',
+    idiomatic:
+      'On jiyou of the twelfth month the Divine Sovereign worshipped the Luo and received the Chart Bestowed by Heaven, then returned to court the same day.',
   },
   s0080: {
-    literal: 'The Grand Astrologer set up a burial pit at the ren position.',
-    idiomatic: 'The Grand Astrologer prepared a burial pit at the ren position.',
+    literal: 'The Bright Hall was completed.',
+    idiomatic: 'The Bright Hall was finished.',
   },
   s0081: {
-    literal: 'In the third year of Tianjian, Left Assistant Director Wu Caozhi submitted: "The tradition says \'suburban sacrifice at the Awakening of Insects\'—the suburban rite should follow after the Establishment of Spring."',
-    idiomatic: 'In Tianjian 3, Left Assistant Director Wu Caozhi submitted: "Tradition says \'suburban sacrifice at the Awakening of Insects\'—the suburban rite should fall after the Establishment of Spring."',
+    literal:
+      'In the sixth month civil and military officials of the fifth rank and above were ordered each to recommend someone known to them.',
+    idiomatic:
+      'In the sixth month every civil and military official of the fifth rank or higher was ordered to nominate a worthy man.',
   },
   s0082: {
-    literal: '" Left Assistant Director of the Secretariat He Tongzhi deliberated: "Today\'s suburban sacrifice is to report last year\'s achievements and pray for this year\'s blessings."',
-    idiomatic: 'Left Assistant Director He Tongzhi replied: "The present suburban sacrifice reports the previous year\'s achievements and prays for the coming year\'s blessings."',
+    literal:
+      'In the seventh month of autumn Prince Shen of Ji was falsely accused of plotting rebellion, loaded into a caged cart, and banished to Bazhou; his surname was changed to Hui.',
+    idiomatic:
+      'In the seventh autumn month Prince Shen of Ji was denounced for treason, carted in a cage to Bazhou, and renamed Hui.',
   },
   s0083: {
-    literal: 'Therefore the first xin of the year is taken, not bound to before or after the Establishment of Spring.',
-    idiomatic: 'Hence the first xin day of the year is chosen, without regard to whether it falls before or after the Establishment of Spring.',
+    literal:
+      'Wei Daibao was punished for delay in advancing; many soldiers died of hunger, and he was banished to Xiuzhou.',
+    idiomatic:
+      'Wei Daibao was punished for slow marching; his troops starved in great numbers, and he was exiled to Xiuzhou.',
   },
   s0084: {
-    literal: 'Zhou at the winter solstice at the Round Mound—great report to Heaven.',
-    idiomatic: 'Under Zhou, the winter solstice sacrifice at the Round Mound was the great report to Heaven.',
+    literal:
+      'In the eighth month Wang Benli, Censor-in-Chief of the Right Office for Censorial Reform, was made equal in rank to the Three Offices at Phoenix Pavilion and Phoenix Terrace.',
+    idiomatic:
+      'In the eighth month Wang Benli, censor-in-chief of the Right Office for Censorial Reform, joined the third rank at Phoenix Pavilion and Terrace.',
   },
   s0085: {
-    literal: 'Under Xia\'s calendar there was again a suburban sacrifice, to pray for agricultural affairs—hence the saying about the Awakening of Insects.',
-    idiomatic: 'Under the Xia calendar a second suburban sacrifice prayed for the harvest—hence the Awakening of Insects tradition.',
+    literal: 'On xinsi Grand Secretary Zhang Guangfu was executed.',
+    idiomatic: 'On xinsi the court executed Grand Secretary Zhang Guangfu.',
   },
   s0086: {
-    literal: 'From Jin Taishi year two, Round Mound and Square Marsh were combined with the two suburbs.',
-    idiomatic: 'From Jin Taishi 2, the Round Mound and Square Marsh rites were merged with the two suburban sacrifices.',
+    literal: 'In the ninth month Remonstrator Wei Xuantong was granted death at home.',
+    idiomatic: 'In the ninth month Remonstrator Wei Xuantong was ordered to die at home.',
   },
   s0087: {
-    literal: 'From this one knows that today\'s suburban yi combines prayer and report—it cannot be limited to one path.',
-    idiomatic: 'This shows that the present suburban yi rite combines prayer and thanksgiving—it cannot be confined to a single purpose.',
+    literal:
+      'In the tenth month of winter Fan Lubing, Minister of Spring; and Xing Wenwei, vice minister at Phoenix Pavilion, were both made equal in rank to the Phoenix Terrace chancellor.',
+    idiomatic:
+      'In the tenth winter month Fan Lubing and Xing Wenwei were both made chancellors of the Phoenix Terrace.',
   },
   s0088: {
-    literal: '" The Emperor said: "The Round Mound is naturally the sacrifice to Heaven; the First Farmer is naturally the prayer for grain."',
-    idiomatic: 'The emperor said: "The Round Mound is inherently a sacrifice to Heaven; the First Farmer is inherently a prayer for grain."',
+    literal: 'The hundred riders of the Imperial Guard were changed to a thousand riders.',
+    idiomatic: 'The Imperial Guard\'s hundred riders were expanded to a thousand.',
   },
   s0089: {
-    literal: 'But it takes the yang position—therefore it is at the suburb.',
-    idiomatic: 'But it occupies the yang position—hence it is performed in the suburb.',
+    literal:
+      'In the first month of spring in the inaugural year of Zaichu, the Divine Sovereign personally performed sacrifice at the Bright Hall and proclaimed a general amnesty.',
+    idiomatic:
+      'In the first spring month of Zaichu 1 the Divine Sovereign sacrificed at the Bright Hall and proclaimed a general amnesty.',
   },
   s0090: {
-    literal: 'On the night of the winter solstice, yang qi begins at jiazi; since August Heaven is sacrificed to, it is appropriate at the winter solstice.',
-    idiomatic: 'On the winter solstice night, yang qi begins at jiazi; since August Heaven is sacrificed to, the winter solstice is the proper time.',
+    literal:
+      'Following Zhou practice the zi month was made the year\'s opening; the eleventh month of Yongchang 1 was reckoned the first month of Zaichu 1, the twelfth month became the year-end month, and the former first month was renamed the First Month; there were three days of public feasting.',
+    idiomatic:
+      'Adopting the Zhou calendar, the zi month opened the year; Yongchang 1\'s eleventh month became Zaichu 1\'s first month, the twelfth became the year-end month, and the old New Year month was redesignated the First Month; the court feasted for three days.',
   },
   s0091: {
-    literal: 'The time for praying for grain may follow antiquity—it must be at the Awakening of Insects.',
-    idiomatic: 'The grain-prayer rite may follow antiquity—it must fall at the Awakening of Insects.',
+    literal:
+      'The Divine Sovereign took the character Zhao as her name, and therefore changed edicts to "imperial pronouncements."',
+    idiomatic:
+      'Because she had adopted the character Zhao as her name, edicts were renamed imperial pronouncements.',
   },
   s0092: {
-    literal: 'On one suburban altar, divided into two sacrifices.',
-    idiomatic: 'On a single suburban altar, the rite is divided into two sacrifices.',
+    literal:
+      'In the first month, Su Liangsi became special advancement; Wu Chengsi became Left Minister of the Department of State Affairs; Cen Changqian became Right Minister; Pei Judao became Junior Tutor to the Heir Apparent—all retaining equal rank to the Three Offices at Phoenix Pavilion and Phoenix Terrace.',
+    idiomatic:
+      'In the new first month Su Liangsi became special advancement; Wu Chengsi left minister of state; Cen Changqian right minister; Pei Judao junior tutor to the heir—all of third rank at Phoenix Pavilion and Terrace.',
   },
   s0093: {
-    literal: '" From this the winter solstice was called sacrificing to Heaven; the Awakening of Insects was named praying for grain.',
-    idiomatic: 'Henceforth the winter solstice rite was called sacrificing to Heaven; the Awakening of Insects rite was named praying for grain.',
+    literal:
+      'Wu Youning, vice minister at Phoenix Pavilion, became Remonstrator; Xing Wenwei became Grand Secretary.',
+    idiomatic:
+      'Wu Youning became remonstrator; Xing Wenwei became grand secretary.',
   },
   s0094: {
-    literal: 'He Tongzhi again submitted: "According to the case, fragrant wine is held in six yi vessels, covered with painted veils, complete in ornament—applied in the ancestral temple."',
-    idiomatic: 'He Tongzhi submitted again: "Fragrant wine is held in six yi vessels, covered with painted veils, fully adorned—for use in the ancestral temple."',
+    literal:
+      'In the seventh month of autumn Prince Dan of Yuzhang was killed, and his father Prince Yuanming of Shu was moved to Hezhou.',
+    idiomatic:
+      'In the seventh autumn month Prince Dan of Yuzhang was executed and his father Prince Yuanming of Shu was exiled to Hezhou.',
   },
   s0095: {
-    literal: 'Now the Northern and Southern suburbs\' ritual regulations include libation—since this departs from valuing simplicity, it is proposed to change it."',
-    idiomatic: 'Yet the Northern and Southern suburb ritual regulations include libation—since this departs from the principle of simplicity, we propose to abolish it."',
+    literal:
+      'Ten monks forged the Great Cloud Sutra and presented it, lavishly proclaiming the Divine Sovereign\'s mandate to rule.',
+    idiomatic:
+      'Ten monks forged the Great Cloud Sutra and presented it, proclaiming at length that Heaven had chosen the Divine Sovereign.',
   },
   s0096: {
-    literal: '" Erudite Ming Shanbin deliberated, holding: "The Record of Rites says \'the Son of Heaven personally plows the fields; sacrificial grain and fragrant millet wine to serve the Supreme Lord\'—this is the libation at the Bright Hall."',
-    idiomatic: 'Erudite Ming Shanbin argued: "The Record of Rites states, \'The Son of Heaven personally plows the fields; sacrificial grain and fragrant millet wine to serve the Supreme Lord\'—this refers to libation at the Bright Hall."',
+    literal:
+      'An imperial pronouncement was issued throughout the realm ordering each prefecture to establish a Great Cloud Monastery and ordain a thousand monks in all.',
+    idiomatic:
+      'A pronouncement ordered every prefecture to found a Great Cloud Monastery and ordain a thousand monks empire-wide.',
   },
   s0097: {
-    literal: 'The suburb should not have libation.',
-    idiomatic: 'The suburban rite should not include libation."',
+    literal:
+      'On dinghai Prince Shangjin of Ze, prefect of Suizhou, and Prince Sunjie of Xu, prefect of Shuzhou, together with several tens of their sons, were executed.',
+    idiomatic:
+      'On dinghai Princes Shangjin of Ze and Sunjie of Xu, with dozens of their sons, were put to death.',
   },
   s0098: {
-    literal: '" The Emperor followed this.',
-    idiomatic: 'The emperor accepted this view.',
+    literal:
+      'On renwu, the ninth day of the ninth month, the mandate of Tang was set aside and the state name changed to Zhou.',
+    idiomatic:
+      'On renwu, the Double Ninth, Tang\'s mandate was cast off and the dynasty renamed Zhou.',
   },
   s0099: {
-    literal: 'Also the relevant offices held that when the sacrifice was complete, vessels and mats in succession were returned to the storehouse; they requested according to the canon to burn and bury them.',
-    idiomatic: 'The relevant offices further held that after the sacrifice, vessels and mats were returned to store; they requested that these be burned and buried according to canonical practice.',
+    literal:
+      'The era name was changed to Tianshou, a general amnesty was proclaimed, and seven days of public feasting were granted.',
+    idiomatic:
+      'The era was renamed Tianshou; the court proclaimed a general amnesty and granted seven days of feasting.',
   },
   s0100: {
-    literal: 'Tongzhi and others deliberated: "According to the Rites, \'when sacrificial vessels are worn out, bury them.\'"',
-    idiomatic: 'Tongzhi and his colleagues argued: "The Rites state, \'When sacrificial vessels are worn out, bury them.\'"',
+    literal:
+      'On yiyou the honorific title Holy Divine Emperor was added, and the emperor was demoted to imperial heir.',
+    idiomatic:
+      'On yiyou she took the title Holy Divine Emperor and reduced the emperor to imperial heir.',
   },
 };
 
-const data = JSON.parse(readFileSync(transPath, 'utf8'));
+const path = 'translations/current_translation_jiutangshu.json';
+const data = JSON.parse(readFileSync(path, 'utf8'));
+if (data.metadata.chapter !== '006') {
+  throw new Error(`Expected chapter 006, got ${data.metadata.chapter}`);
+}
+const source = JSON.parse(readFileSync('data/jiutangshu/006.json', 'utf8'));
+const zhById = new Map();
+for (const block of source.content) {
+  for (const s of block.sentences ?? []) zhById.set(s.id, s.zh);
+}
 let applied = 0;
 for (const s of data.sentences) {
-  const key = s.originalId || s.id;
-  const pair = T[key];
+  const pair = T[s.id];
   if (!pair) continue;
+  const zh = zhById.get(s.id);
+  if (zh && s.chinese !== zh) {
+    throw new Error(`${s.id}: chinese mismatch with data/jiutangshu/006.json`);
+  }
+  if (pair.literal === pair.idiomatic) {
+    throw new Error(`${s.id}: literal and idiomatic must differ`);
+  }
   s.literal = pair.literal;
   s.idiomatic = pair.idiomatic;
   applied++;
 }
-writeFileSync(transPath, JSON.stringify(data, null, 2) + '\n');
-console.log('Applied', applied, 'translations to', transPath);
+writeFileSync(path, JSON.stringify(data, null, 2) + '\n');
+console.log('Applied', applied, 'translations (expected', Object.keys(T).length, ')');
