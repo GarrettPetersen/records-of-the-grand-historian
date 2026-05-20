@@ -111,6 +111,10 @@ function findSpecificChapter(book, chapter) {
   return result;
 }
 
+/**
+ * First chapter (by sorted filename) in the given book or across books that still
+ * has missing idiomatic translations. Same selection logic with or without BOOK=.
+ */
 function findFirstUntranslatedChapter(bookFilter = null) {
   const dirs = [];
 
@@ -253,12 +257,14 @@ function main() {
     }
     console.log(`Finding untranslated sentences in ${book} chapter ${chapterArg}`);
   } else if (book) {
-    console.log(`Finding the most complete chapter needing translation in book: ${book}`);
+    console.log(`Finding the first incomplete chapter in book: ${book}`);
   } else {
-    console.log('Finding the first chapter needing translation across all books');
+    console.log('Finding the first incomplete chapter across all books');
   }
 
-  const chapter = chapterArg ? findSpecificChapter(book, chapterArg) : findFirstUntranslatedChapter(book);
+  const chapter = chapterArg
+    ? findSpecificChapter(book, chapterArg)
+    : findFirstUntranslatedChapter(book || null);
   if (!chapter) {
     if (book) {
       console.log(`No untranslated chapters found in ${book}`);

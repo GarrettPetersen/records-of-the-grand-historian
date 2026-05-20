@@ -20,6 +20,7 @@ import {
   punctuationAlignmentNotes,
   rubricScaffoldingErrorsForSentence,
 } from './translation-guards.mjs';
+import { countChapterMetrics } from './chapter-counts.mjs';
 
 const TERMINAL_PUNCTUATION_REGEX = /[.!?]["')\]]*\s*$/;
 
@@ -41,6 +42,69 @@ function getChapterIdiomaticText(entry) {
     return entry.raw?.idiomatic || entry.raw?.translation || '';
   }
   return entry.raw?.translations?.[0]?.idiomatic || entry.raw?.idiomatic || entry.raw?.translation || '';
+}
+
+function getSentenceChinese(block, chapterSentence) {
+  if (block.type === 'table_row') {
+    return chapterSentence.content || '';
+  }
+  return chapterSentence.zh || '';
+}
+
+/** Match by originalId plus Chinese text (and blockIndex when present) for duplicate sentence ids. */
+function findMatchingChapterEntry(chapter, sentence) {
+  const originalId = sentence.originalId || sentence.id;
+  const targetChinese = sentence.chinese;
+  const preferredBlock = sentence.blockIndex;
+
+  const searchBlock = (block, blockIndex) => {
+    let blockSentences = [];
+    if (block.type === 'paragraph' || block.type === 'table_header') {
+      blockSentences = block.sentences || [];
+    } else if (block.type === 'table_row') {
+      blockSentences = block.cells || [];
+    } else {
+      return null;
+    }
+
+    for (const chapterSentence of blockSentences) {
+      if (chapterSentence.id !== originalId) continue;
+      if (getSentenceChinese(block, chapterSentence) !== targetChinese) continue;
+      return {
+        id: chapterSentence.id,
+        chinese: targetChinese,
+        blockType: block.type,
+        blockIndex,
+        raw: chapterSentence,
+        boundaryIndex: null,
+      };
+    }
+    return null;
+  };
+
+  if (preferredBlock !== undefined && preferredBlock < chapter.content.length) {
+    const hit = searchBlock(chapter.content[preferredBlock], preferredBlock);
+    if (hit) return hit;
+  }
+
+  for (let blockIndex = 0; blockIndex < chapter.content.length; blockIndex++) {
+    if (blockIndex === preferredBlock) continue;
+    const hit = searchBlock(chapter.content[blockIndex], blockIndex);
+    if (hit) return hit;
+  }
+
+  return null;
+}
+
+function attachBoundaryIndex(chapterLookup, entry) {
+  if (entry.blockType !== 'paragraph' && entry.blockType !== 'table_header') {
+    return entry;
+  }
+  const idx = chapterLookup.boundaryEntries.findIndex(
+    (e) => e.id === entry.id && e.chinese === entry.chinese && e.blockIndex === entry.blockIndex
+  );
+  if (idx >= 0) entry.boundaryIndex = idx;
+  return entry;
 }
 
 function buildChapterLookup(chapter) {
@@ -83,7 +147,7 @@ function validateTranslations(translationFile, chapterFile) {
   const chapterLookup = buildChapterLookup(chapter);
   const pendingById = new Map();
   for (const s of translations.sentences) {
-    pendingById.set(s.originalId || s.id, s);
+    pendingById.set(s.id, s);
   }
 
   const errors = [];
@@ -166,16 +230,12 @@ function validateTranslations(translationFile, chapterFile) {
       }
     }
 
-    const originalId = sentence.originalId || sentence.id;
-    const chapterEntry = chapterLookup.byId.get(originalId);
+    let chapterEntry = findMatchingChapterEntry(chapter, sentence);
     if (!chapterEntry) {
       errors.push(`Sentence ${sentence.id} not found in chapter file`);
       continue;
     }
-
-    if (chapterEntry.chinese !== sentence.chinese) {
-      errors.push(`Chinese text mismatch for sentence ${sentence.id}: expected "${chapterEntry.chinese}", got "${sentence.chinese}"`);
-    }
+    chapterEntry = attachBoundaryIndex(chapterLookup, chapterEntry);
 
     for (const rubErr of rubricScaffoldingErrorsForSentence({
       chinese: sentence.chinese,
@@ -205,7 +265,12 @@ function validateTranslations(translationFile, chapterFile) {
       const prevEntry = boundaryIndex > 0 ? chapterLookup.boundaryEntries[boundaryIndex - 1] : null;
       let prevIdiomatic = '';
       if (prevEntry) {
-        const pendingPrev = pendingById.get(prevEntry.id);
+        const pendingPrev = [...pendingById.values()].find(
+          (p) =>
+            (p.originalId || p.id) === prevEntry.id &&
+            p.chinese === prevEntry.chinese &&
+            p.blockIndex === prevEntry.blockIndex
+        );
         prevIdiomatic = pendingPrev?.idiomatic || getChapterIdiomaticText(prevEntry);
       }
       const shouldEnforce = !prevEntry || endsWithTerminalPunctuation(prevIdiomatic);
@@ -264,7 +329,10 @@ function applyTranslations(translationFile, chapterFile, translator, model) {
           chapterId = chapterSentence.id;
         }
 
-        if (chapterId === originalId) {
+        if (
+          chapterId === originalId &&
+          getSentenceChinese(block, chapterSentence) === sentence.chinese
+        ) {
           found = true;
           if (block.type === 'paragraph') {
             if (!chapterSentence.translations) {
@@ -298,8 +366,9 @@ function applyTranslations(translationFile, chapterFile, translator, model) {
     }
 
     if (!found) {
-      // Fallback: search all blocks (old behavior)
-      for (const block of chapter.content) {
+      // Fallback: search all blocks by id and Chinese text
+      for (let bi = 0; bi < chapter.content.length; bi++) {
+        const block = chapter.content[bi];
         let blockSentences = [];
 
         if (block.type === 'paragraph') {
@@ -321,7 +390,10 @@ function applyTranslations(translationFile, chapterFile, translator, model) {
             chapterId = chapterSentence.id;
           }
 
-          if (chapterId === originalId) {
+          if (
+            chapterId === originalId &&
+            getSentenceChinese(block, chapterSentence) === sentence.chinese
+          ) {
             found = true;
             if (block.type === 'paragraph') {
               if (!chapterSentence.translations) {
@@ -361,33 +433,12 @@ function applyTranslations(translationFile, chapterFile, translator, model) {
     }
   }
 
-  // Recalculate translatedCount
-  let translatedCount = 0;
-  for (const block of chapter.content) {
-    if (block.type === 'paragraph') {
-      for (const sentence of block.sentences || []) {
-        if (sentence.translations?.[0]?.idiomatic?.trim()) {
-          translatedCount++;
-        }
-      }
-    } else if (block.type === 'table_row') {
-      for (const cell of block.cells || []) {
-        if (cell.idiomatic && cell.idiomatic.trim()) {
-          translatedCount++;
-        }
-      }
-    } else if (block.type === 'table_header') {
-      for (const sentence of block.sentences || []) {
-        if (sentence.translations?.[0]?.idiomatic?.trim()) {
-          translatedCount++;
-        }
-      }
-    }
-  }
-  chapter.meta.translatedCount = translatedCount;
+  const counts = countChapterMetrics(chapter);
+  chapter.meta.sentenceCount = counts.sentenceCount;
+  chapter.meta.translatedCount = counts.translatedCount;
 
   fs.writeFileSync(chapterFile, JSON.stringify(chapter, null, 2));
-  console.log(`Applied translations. Updated translated count: ${translatedCount}`);
+  console.log(`Applied translations. Updated counts: ${counts.translatedCount}/${counts.sentenceCount}`);
 }
 
 function main() {
