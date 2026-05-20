@@ -1,0 +1,98 @@
+/** liaoshi 038 s0151–s0200 */
+export const T = {
+  s0151: ['Governing one county:', 'One county:'],
+  s0152: ['Jian\'an County.', 'Jian\'an County.'],
+  s0153: ['Lu Prefecture, Xuande Army, cishi.', 'Lu Prefecture (Xuande Army), cishi.'],
+  s0154: [
+    'Originally Bohai Shanlu Commandery; former counties five: Shanyang, Shanlu, Hanyang, Baiyan, and Shuangyan—all abolished.',
+    'Originally Bohai Shanlu Commandery; five former counties—Shanyang, Shanlu, Hanyang, Baiyan, Shuangyan—all abolished.',
+  ],
+  s0155: ['Households 300.', '300 households.'],
+  s0156: ['One hundred thirty li from the capital.', 'It stood one hundred thirty li from the capital.'],
+  s0157: [
+    'Military affairs belonged to the Southern Jurchen Tanghe Office.',
+    'Military affairs fell under the Southern Jurchen Tanghe Office.',
+  ],
+  s0158: ['Governing one county:', 'One county:'],
+  s0159: ['Xiongyue County.', 'Xiongyue County.'],
+  s0160: [
+    'West to the sea fifteen li; beside the sea is Xiongyue Mountain.',
+    'Fifteen li west to the sea; Xiongyue Mountain stands on the coast.',
+  ],
+  s0161: ['Laiyuan Fort.', 'Laiyuan Fort.'],
+  s0162: ['Originally mature Jurchen land.', 'Originally mature Jurchen territory.'],
+  s0163: [
+    'In Tonghe a Goryeo campaign used fierce Yan troops; two commanders were posted and a city built for defense.',
+    'During Tonghe\'s Goryeo war fierce Yan troops earned two command posts and a garrison city.',
+  ],
+  s0164: ['Military affairs belonged to the Eastern Capital army command.', 'Military affairs under the Eastern Capital army command.'],
+  s0165: ['Tie Prefecture, Jianwu Army, cishi.', 'Tie Prefecture (Jianwu Army), cishi.'],
+  s0166: [
+    'Originally Han Anshi County; Goryeo made it Anshi Fort.',
+    'Originally Han Anshi County; Goryeo fortified it as Anshi.',
+  ],
+  s0167: [
+    'Tang Taizong attacked but could not take it; Xue Rengui in white robes scaled the wall—this is that place.',
+    'Tang Taizong failed to capture it; Xue Rengui scaled the walls in white—this was the site.',
+  ],
+  s0168: [
+    'Bohai established the prefecture; former counties four: Weicheng, Heduan, Cangshan, and Longzhen—8 all abolished.',
+    'Bohai founded the prefecture; four former counties—Weicheng, Heduan, Cangshan, Longzhen—eighth note: all abolished.',
+  ],
+  s0169: ['Households 1,000.', '1,000 households.'],
+  s0170: ['Sixty li southwest of the capital.', 'Sixty li southwest of the Eastern Capital.'],
+  s0171: ['Governing one county:', 'One county:'],
+  s0172: ['Tangchi County.', 'Tangchi County.'],
+  s0173: ['Xing Prefecture, Zhongxing Army, military commissioner.', 'Xing Prefecture (Zhongxing Army), military commissioner.'],
+  s0174: ['Originally Han Haiming County land.', 'Originally Han Haiming County territory.'],
+  s0175: [
+    'Bohai established the prefecture; former counties three: Shengji, Suanshan, and Tieshan—all abolished.',
+    'Bohai founded it; three former counties—Shengji, Suanshan, Tieshan—all abolished.',
+  ],
+  s0176: ['Households 200.', '200 households.'],
+  s0177: ['Three hundred li southwest of the capital.', 'Three hundred li southwest of the capital seat.'],
+  s0178: ['Tang Prefecture.', 'Tang Prefecture.'],
+  s0179: ['Originally Han Xiangping County land.', 'Originally Han Xiangping County territory.'],
+  s0180: [
+    'Bohai established the prefecture; 9 former counties five: Lingfeng, Changfeng, Baishi, Junyu, and Jiali—all abolished.',
+    'Bohai founded it; ninth note: five former counties—Lingfeng, Changfeng, Baishi, Junyu, Jiali—all abolished.',
+  ],
+  s0181: ['Households 500.', '500 households.'],
+  s0182: ['One hundred li northwest of the capital.', 'One hundred li northwest of the capital seat.'],
+  s0183: ['Chong Prefecture, Long\'an Army, cishi.', 'Chong Prefecture (Long\'an Army), cishi.'],
+  s0184: ['Originally Han Changcen County land.', 'Originally Han Changcen County territory.'],
+  s0185: [
+    'Bohai established the prefecture; former counties three: Chongshan, Weishui, and Lücheng—all abolished.',
+    'Bohai founded it; three former counties—Chongshan, Weishui, Lücheng—all abolished.',
+  ],
+  s0186: ['Households 500.', '500 households.'],
+  s0187: ['One hundred fifty li northeast of the capital.', 'One hundred fifty li northeast of the Eastern Capital.'],
+  s0188: ['Governing one county:', 'One county:'],
+  s0189: ['Chongxin County.', 'Chongxin County.'],
+  s0190: ['Hai Prefecture, Nanhai Army, military commissioner.', 'Hai Prefecture (Nanhai Army), military commissioner.'],
+  s0191: ['Originally Woju state land.', 'Originally Woju state territory.'],
+  s0192: [
+    'Goryeo made it Shabei Fort; Tang Li Shiji once attacked it.',
+    'Goryeo made Shabei Fort; Tang Li Shiji once besieged it.',
+  ],
+  s0193: ['Bohai styled it Southern Capital Nanhai Prefecture.', 'Bohai titled it Southern Capital Nanhai Prefecture.'],
+  s0194: [
+    'Stacked stone made the walls, nine li in circuit; it superintended Wo, Qing, and Jiao three prefectures.',
+    'Stacked-stone walls ran nine li; it oversaw Wo, Qing, and Jiao prefectures.',
+  ],
+  s0195: [
+    'Former counties six: Woju, Jiuyan, Longshan, Binhai, Shengping, and Lingquan—all abolished.',
+    'Six former counties—Woju, Jiuyan, Longshan, Binhai, Shengping, Lingquan—all abolished.',
+  ],
+  s0196: [
+    'In the Taiping era Da Yanlin rebelled; Nanhai city held firm a full year until other chieftains were captured and it surrendered.',
+    'In Taiping times Da Yanlin rebelled; Nanhai held a year until allied chiefs were taken and it submitted.',
+  ],
+  s0197: [
+    'Thereupon all people were moved to Shangjing; Qianliao County was established and Ze Prefecture people moved to fill it.',
+    'All inhabitants were then moved to Shangjing; Qianliao County was founded and Ze Prefecture people settled there.',
+  ],
+  s0198: ['Households 1,500.', '1,500 households.'],
+  s0199: ['Governing two prefectures and one county:', 'Two prefectures, one county:'],
+  s0200: ['Linming County.', 'Linming County.'],
+};
