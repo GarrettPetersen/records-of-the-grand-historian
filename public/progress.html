@@ -240,11 +240,44 @@
             transition: width 0.3s ease;
         }
 
-        .overall-progress-count {
+        .overall-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .overall-metric-card {
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+            padding: 0.85rem 1rem;
+            background: rgba(255, 255, 255, 0.45);
+            min-height: 5.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .overall-metric-label {
             color: var(--text-color);
-            margin-top: 0.75rem;
-            opacity: 0.8;
-            text-align: center;
+            font-size: 0.82rem;
+            opacity: 0.72;
+            text-transform: uppercase;
+            letter-spacing: 0;
+        }
+
+        .overall-metric-value {
+            color: var(--primary-color);
+            font-size: 1.15rem;
+            line-height: 1.25;
+            font-weight: 700;
+        }
+
+        .overall-metric-note {
+            color: var(--text-color);
+            font-size: 0.82rem;
+            line-height: 1.35;
+            opacity: 0.78;
         }
     </style>
 </head>
@@ -268,7 +301,12 @@
                 <div class="overall-progress-bar" aria-label="Overall chapter completion progress">
                     <div class="overall-progress-fill" id="overall-progress-fill" style="width: 0%;"></div>
                 </div>
-                <div class="overall-progress-count" id="overall-progress-count">Chapters: 0 / 0 (0.0%)</div>
+                <div class="overall-metrics-grid">
+                    <div class="overall-metric-card" id="overall-progress-chapters"></div>
+                    <div class="overall-metric-card" id="overall-progress-sentences"></div>
+                    <div class="overall-metric-card" id="overall-progress-characters"></div>
+                    <div class="overall-metric-card" id="overall-progress-estimate"></div>
+                </div>
             </section>
 
             <div class="progress-legend">
@@ -301,8 +339,8 @@
             <a href="about.html">About</a> | 
             <a href="blog.html">Blog</a> | 
             <a href="progress.html">Progress</a> | 
-            Source text from <a href="https://chinesenotes.com" target="_blank" rel="noopener noreferrer">Chinese Notes</a> | 
-            <a href="https://ctext.org" target="_blank" rel="noopener noreferrer">CText</a> | 
+            Source texts: <a href="https://chinesenotes.com" target="_blank" rel="noopener noreferrer">Chinese Notes</a>, 
+            <a href="https://ctext.org" target="_blank" rel="noopener noreferrer">CText</a>, and 
             <a href="https://zh.wikisource.org" target="_blank" rel="noopener noreferrer">Wikisource</a> | 
             <a href="privacy.html">Privacy Policy</a>
         </p>
@@ -311,7 +349,9 @@
     <script>
         async function loadProgressData() {
             try {
-                const response = await fetch('data/progress.json');
+                const response = await fetch(`data/progress.json?ts=${Date.now()}`, {
+                    cache: 'no-store'
+                });
                 const data = await response.json();
                 return data;
             } catch (error) {
@@ -411,11 +451,51 @@
 
             document.getElementById('overall-progress-percent').textContent = displayPercent;
             document.getElementById('overall-progress-fill').style.width = displayPercent;
-            document.getElementById('overall-progress-count').innerHTML = `
-                <div>${formatProgress(chapterFinished, chapterTotal, 'chapters complete')}</div>
-                <div>${formatProgress(sentenceTranslated, sentenceTotal, 'sentences translated')}</div>
-                <div>${formatProgress(characterTranslated, characterTotal, 'characters translated')}</div>
+            document.getElementById('overall-progress-chapters').innerHTML = `
+                <div class="overall-metric-label">Chapters</div>
+                <div class="overall-metric-value">${chapterFinished.toLocaleString()} / ${chapterTotal.toLocaleString()} (${percent.toFixed(1)}%)</div>
+                <div class="overall-metric-note">Complete chapters only.</div>
             `;
+            document.getElementById('overall-progress-sentences').innerHTML = `
+                <div class="overall-metric-label">Sentences</div>
+                <div class="overall-metric-value">${sentenceTranslated.toLocaleString()} / ${sentenceTotal.toLocaleString()} (${sentenceTotal > 0 ? ((sentenceTranslated / sentenceTotal) * 100).toFixed(1) : '0.0'}%)</div>
+                <div class="overall-metric-note">Translated sentence coverage.</div>
+            `;
+            document.getElementById('overall-progress-characters').innerHTML = `
+                <div class="overall-metric-label">Characters</div>
+                <div class="overall-metric-value">${characterTranslated.toLocaleString()} / ${characterTotal.toLocaleString()} (${characterTotal > 0 ? ((characterTranslated / characterTotal) * 100).toFixed(1) : '0.0'}%)</div>
+                <div class="overall-metric-note">Translated character coverage.</div>
+            `;
+
+            const estimateNode = document.getElementById('overall-progress-estimate');
+            const summary = data.summary || {};
+            const estimate = summary.estimate || null;
+            const remainingChapters = Number(summary.remainingChapters || Math.max(0, chapterTotal - chapterFinished));
+            const chaptersPerDay = Number(estimate?.chaptersPerDay || 0);
+            const rawChaptersPerDay = Number(estimate?.rawChaptersPerDay || 0);
+            const estimatedCompletionDate = estimate?.estimatedCompletionDate ? new Date(estimate.estimatedCompletionDate) : null;
+            const fallbackDaysRemaining = remainingChapters > 0 ? remainingChapters / 24 : 0;
+            const fallbackCompletionDate = remainingChapters > 0 ? new Date(Date.now() + fallbackDaysRemaining * 24 * 60 * 60 * 1000) : null;
+            const displayDate = estimatedCompletionDate && !Number.isNaN(estimatedCompletionDate.getTime()) && chaptersPerDay > 0
+                ? estimatedCompletionDate
+                : fallbackCompletionDate;
+            if (displayDate && !Number.isNaN(displayDate.getTime()) && remainingChapters > 0) {
+                const formatter = new Intl.DateTimeFormat(undefined, {
+                    dateStyle: 'medium'
+                });
+                const daysRemaining = Math.max(0, Math.ceil(estimate?.estimatedDaysRemaining || fallbackDaysRemaining));
+                estimateNode.innerHTML = `
+                    <div class="overall-metric-label">Estimate</div>
+                    <div class="overall-metric-value">Completion ${formatter.format(displayDate)}</div>
+                    <div class="overall-metric-note">${daysRemaining.toLocaleString()} day${daysRemaining === 1 ? '' : 's'} remaining. ${estimate ? `Snapshot pace ${rawChaptersPerDay.toFixed(2)} chapters/day, floored at 24.` : 'Fallback pace set to 24 chapters/day.'}</div>
+                `;
+            } else {
+                estimateNode.innerHTML = `
+                    <div class="overall-metric-label">Estimate</div>
+                    <div class="overall-metric-value">Unavailable</div>
+                    <div class="overall-metric-note">No chapter-count summary is available yet.</div>
+                `;
+            }
         }
 
         function formatProgress(translated, total, label) {
