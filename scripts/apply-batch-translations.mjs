@@ -1,29 +1,17 @@
 #!/usr/bin/env node
-import { readFileSync, writeFileSync } from 'fs';
+import fs from 'node:fs';
 
-const pairsPath = process.argv[2];
-const targetPath = process.argv[3];
-if (!pairsPath || !targetPath) {
-  console.error('Usage: node apply-batch-translations.mjs <pairs.json> <translation-file>');
-  process.exit(1);
-}
-
-const pairs = JSON.parse(readFileSync(pairsPath, 'utf8'));
-const data = JSON.parse(readFileSync(targetPath, 'utf8'));
-const map = new Map(pairs.map((p) => [p.id, p]));
+const file = process.argv[2];
+const translations = JSON.parse(fs.readFileSync(process.argv[3], 'utf8'));
+const data = JSON.parse(fs.readFileSync(file, 'utf8'));
 
 for (const s of data.sentences) {
-  const p = map.get(s.id);
-  if (!p) continue;
-  s.literal = p.literal;
-  s.idiomatic = p.idiomatic;
+  const t = translations[s.id];
+  if (t) {
+    s.literal = t.literal;
+    s.idiomatic = t.idiomatic;
+  }
 }
 
-const missing = data.sentences.filter((s) => !s.literal || !s.idiomatic);
-if (missing.length) {
-  console.error(`Missing: ${missing.map((s) => s.id).join(', ')}`);
-  process.exit(1);
-}
-
-writeFileSync(targetPath, JSON.stringify(data, null, 2) + '\n');
-console.log(`Applied ${pairs.length} translations`);
+fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n');
+console.log(`Applied ${Object.keys(translations).length} translations`);

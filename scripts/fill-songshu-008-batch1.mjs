@@ -15,7 +15,7 @@ const T = {
   },
   s0003: {
     literal: 'In the twenty-fifth year he was enfeoffed as Prince of Huaiyang with a fief of two thousand households.',
-    idiomatic: 'In the twenty-fifth year he was enfeoffed as Prince of Huaiyang with a fief of two thousand households.',
+    idiomatic: 'In the twenty-fifth year he received the title Prince of Huaiyang with a fief of two thousand households.',
   },
   s0004: {
     literal: 'In the twenty-ninth year his enfeoffment was changed to Prince of Xiangdong.',
@@ -59,7 +59,7 @@ const T = {
   },
   s0014: {
     literal: 'In the seventh year he was promoted to General of the Palace Guard.',
-    idiomatic: 'In the seventh year he was promoted to General of the Palace Guard.',
+    idiomatic: 'In the seventh year he rose to General of the Palace Guard.',
   },
   s0015: {
     literal: 'In the eighth year he was sent out with Bearer of the Staff with Full Powers, as Commander-in-Chief of military affairs for Xu and Yan provinces and Liang commandery in Yuzhou, General Who Pacifies the North and Inspector of Xuzhou, and granted one set of drums and pipes.',
@@ -167,7 +167,7 @@ const T = {
   },
   s0041: {
     literal: 'An edict said:',
-    idiomatic: 'An edict said:',
+    idiomatic: 'He issued an edict, saying:',
   },
   s0042: {
     literal: 'The High Ancestor Martial Emperor\'s virtue filled the four seas; his transforming influence extended to the nine domains.',
@@ -355,7 +355,7 @@ const T = {
   },
   s0088: {
     literal: 'Empress Wang was installed.',
-    idiomatic: 'Empress Wang was installed.',
+    idiomatic: 'Empress Wang was raised to the throne.',
   },
   s0089: {
     literal: 'Prince Zixun of Jin\'an, General Who Pacifies the Army and Inspector of Jiangzhou, raised troops in rebellion; Chief Clerk of the Pacifying Army Deng Wan was his chief plotter; Inspector of Yong Yuan Yi led troops to join him.',
@@ -367,7 +367,7 @@ const T = {
   },
   s0091: {
     literal: 'General of the Palace Guard Wang Xuamo was given the additional title General Who Pacifies the Army.',
-    idiomatic: 'General of the Palace Guard Wang Xuamo was given the additional title General Who Pacifies the Army.',
+    idiomatic: 'General of the Palace Guard Wang Xuamo was also made General Who Pacifies the Army.',
   },
   s0092: {
     literal: 'On renwu, the imperial carriage visited the Imperial Ancestral Temple.',
