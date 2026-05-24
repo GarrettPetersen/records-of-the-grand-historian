@@ -1,0 +1,158 @@
+#!/usr/bin/env node
+import fs from 'node:fs';
+
+const T = {
+  s1601: {
+    literal: 'For increase: halve the entry remainder, multiply by the difference, likewise divide by the chronogram method: all add to the rate subtracted.',
+    idiomatic: 'For increase: halve the entry remainder, multiply by the difference, likewise divide by the chronogram divisor; add all to the diminished rate.',
+  },
+  s1602: { literal: 'Then multiply by the entry remainder; as one per chronogram method;', idiomatic: 'Then multiply by the entry remainder and divide by the chronogram divisor;' },
+  s1603: {
+    literal: 'What is obtained is used to increase or decrease the count’s advance-retreat below; each is the fixed number entered at mean conjunction.',
+    idiomatic: 'Use the result to adjust the count’s advance-retreat accumulation below, yielding the fixed value entered at mean conjunction.',
+  },
+  s1604: { literal: 'Set the advance-retreat fixed number; for Venus, double it.', idiomatic: 'Set the advance-retreat fixed number; for Venus, double it.' },
+  s1605: { literal: 'For each, multiply by the conjunction’s multiplier below; divide by the divisor;', idiomatic: 'For each, multiply by the conjunction multiplier below and divide by the divisor;' },
+  s1606: {
+    literal: 'When full of the chronogram method, it becomes days; advance adds and retreat subtracts from the mean-conjunction day-count; first quarter-reduce the mean-conjunction remainder, then add or subtract.',
+    idiomatic: 'When the quotient fills the chronogram divisor it becomes days; add for advance and subtract for retreat from the mean-conjunction day-count—first quarter-reduce the mean-conjunction remainder, then adjust.',
+  },
+  s1607: { literal: 'This is the regular conjunction day-count.', idiomatic: 'This is the regular conjunction day-count.' },
+  s1608: {
+    literal: 'Set the regular conjunction’s prior-posterior fixed number; quarter it; with prior subtract and posterior add to the regular conjunction day-count, obtaining the fixed conjunction day-count.',
+    idiomatic: 'Set the regular conjunction’s prior-posterior fixed number, divide by four, subtract for prior and add for posterior to the regular conjunction day-count to obtain the fixed conjunction day-count.',
+  },
+  s1609: {
+    literal: 'Again quarter the expansion-contraction parts; multiply by the fixed-conjunction remainder; as one per chronogram method;',
+    idiomatic: 'Again quarter the equation-of-time parts, multiply by the fixed-conjunction remainder, and divide by the chronogram divisor;',
+  },
+  s1610: {
+    literal: 'What is obtained: expansion adds and contraction subtracts from the fixed remainder; add the day-and-night midnight solar degree; this is the fixed-conjunction hour-added star degree.',
+    idiomatic: 'Apply the result—add for expansion, subtract for contraction—to the fixed remainder, add the midnight solar degree for that day, and obtain the fixed-conjunction hour-added stellar longitude.',
+  },
+  s1611: {
+    literal: 'Again set the fixed-conjunction day-count; add the Winter Solstice major and minor remainders; subtract the celestial-standard mean-new-moon major and minor remainders.',
+    idiomatic: 'Set the fixed-conjunction day-count, add the Winter Solstice major and minor remainders, and subtract the celestial-standard mean-new-moon major and minor remainders.',
+  },
+  s1612: { literal: 'For solstice and new-moon minor remainders, first quarter-reduce each.', idiomatic: 'Quarter-reduce the solstice and new-moon minor remainders first.' },
+  s1613: { literal: 'If the major remainder is insufficient to subtract, add the line-count and then subtract.', idiomatic: 'If the major remainder is insufficient, add the line-count before subtracting.' },
+  s1614: { literal: 'Cast out full four-image counts from the remainder; this is the month-count.', idiomatic: 'Divide the remainder by the four-image count to obtain the month-count.' },
+  s1615: { literal: 'What does not exhaust is the day-count entering new moon.', idiomatic: 'The remainder is the day-count entering new moon.' },
+  s1616: {
+    literal: 'Count months from celestial standard and days from mean-new-moon count, outside the tally; obtain the fixed-conjunction month and day.',
+    idiomatic: 'Count months from the celestial standard and days from the mean-new-moon count, outside the tally, to obtain the fixed-conjunction month and day.',
+  },
+  s1617: {
+    literal: 'If the true new moon differs from the mean new moon by advance or retreat, likewise advance subtracts one day and retreat adds one day for the fixed value.',
+    idiomatic: 'If the true new moon differs from the mean new moon by advance or retreat, subtract one day for advance and add one day for retreat to fix the date.',
+  },
+  s1618: {
+    literal: 'Set the regular and fixed conjunctions’ required add-subtract fixed numbers; same name combine, different name cancel;',
+    idiomatic: 'Set the add-subtract fixed numbers required for regular and fixed conjunction; combine same-named terms and cancel opposite-named terms;',
+  },
+  s1619: {
+    literal: 'Then add or subtract to the mean-conjunction entered-line count; when full or insufficient, advance or retreat the line-count, obtaining the fixed-conjunction entry.',
+    idiomatic: 'Then adjust the mean-conjunction entered-line count; carry or borrow on the line-count to obtain the fixed-conjunction entry.',
+  },
+  s1620: {
+    literal: 'Then cumulatively add the post-conjunction phase ephemeris degrees; remove the count as before, obtaining the next phase’s initial-day entry.',
+    idiomatic: 'Cumulatively add the post-conjunction phase ephemeris degrees and remove the count as before to obtain the next phase’s initial-day entry.',
+  },
+  s1621: {
+    literal: 'As for mean conjunction, seek the advance-retreat fixed number; multiply by the multiplier and divide by the divisor; each is the advance-retreat phase rate.',
+    idiomatic: 'As with mean conjunction, find the advance-retreat fixed number, multiply by the multiplier and divide by the divisor to obtain each phase’s advance-retreat rate.',
+  },
+  s1622: {
+    literal: 'The five stars’ phase motion: daily mean rate, degree mean rate, differential motion increase-decrease rates, ephemeris-degree multipliers and divisors.',
+    idiomatic: 'Five-planet phase motion: daily mean rate, degree mean rate, differential-motion increase-decrease rates, and ephemeris-degree multipliers and divisors.',
+  },
+  s1623: { literal: 'Year Star', idiomatic: 'Jupiter' },
+  s1624: { literal: 'Post-conjunction hiding: 17 days 332 parts, motion 3° 332 parts', idiomatic: 'Post-conjunction hiding: 17 days 332 parts, traveling 3° 332 parts' },
+  s1625: { literal: 'Initially slow; for 二 days daily increase in slowness 疾九分。 parts', idiomatic: 'Initially slow; over 2 days, daily increase in slowness of 9 parts' },
+  s1626: { literal: 'Ephemeris, 1° 357 parts', idiomatic: 'Ephemeris interval: 1° 357 parts' },
+  s1627: { literal: 'Multiplier 350, divisor 281', idiomatic: 'Multiplier: 350, divisor: 281' },
+  s1628: { literal: 'Prior prograde: 112 days, motion 18° 656 parts', idiomatic: 'Prior prograde: 112 days, traveling 18° 656 parts' },
+  s1629: { literal: 'Initially swift; for 五 days daily increase in slowness 遲六分。 parts', idiomatic: 'Initially swift; over 5 days, daily increase in slowness of 6 parts' },
+  s1630: { literal: 'Ephemeris, 9° 337 parts', idiomatic: 'Ephemeris interval: 9° 337 parts' },
+  s1631: { literal: 'Multiplier 350, divisor 281', idiomatic: 'Multiplier: 350, divisor: 281' },
+  s1632: { literal: 'Prior station: 二十七 days', idiomatic: 'Prior station: 27 days' },
+  s1633: { literal: 'Ephemeris, 2° 220 parts', idiomatic: 'Ephemeris interval: 2° 220 parts' },
+  s1634: { literal: 'Multiplier 267, divisor 221', idiomatic: 'Multiplier: 267, divisor: 221' },
+  s1635: { literal: 'Prior retrograde: 43 days, retrograde 5° 369 parts', idiomatic: 'Prior retrograde: 43 days, retrograding 5° 369 parts' },
+  s1636: { literal: 'Initially slow; for 六 days daily increase in slowness 疾十一分。 parts', idiomatic: 'Initially slow; over 6 days, daily increase in slowness of 11 parts' },
+  s1637: { literal: 'Ephemeris, 3° 475 parts', idiomatic: 'Ephemeris interval: 3° 475 parts' },
+  s1638: { literal: 'Multiplier 470, divisor 403', idiomatic: 'Multiplier: 470, divisor: 403' },
+  s1639: { literal: 'Posterior retrograde: 43 days, retrograde 5° 369 parts', idiomatic: 'Posterior retrograde: 43 days, retrograding 5° 369 parts' },
+  s1640: { literal: 'Initially slow; for 六 days daily increase in slowness 遲十一分。 parts', idiomatic: 'Initially slow; over 6 days, daily increase in slowness of 11 parts' },
+  s1641: { literal: 'Ephemeris, 3° 475 parts', idiomatic: 'Ephemeris interval: 3° 475 parts' },
+  s1642: { literal: 'Multiplier 510, divisor 467', idiomatic: 'Multiplier: 510, divisor: 467' },
+  s1643: { literal: 'Posterior station: 二十七 days', idiomatic: 'Posterior station: 27 days' },
+  s1644: { literal: 'Ephemeris, 3° 210 parts', idiomatic: 'Ephemeris interval: 3° 210 parts' },
+  s1645: { literal: 'Multiplier 270, divisor 222', idiomatic: 'Multiplier: 270, divisor: 222' },
+  s1646: { literal: 'Posterior prograde: 112 days, motion 18° 65 parts', idiomatic: 'Posterior prograde: 112 days, traveling 18° 65 parts' },
+  s1647: { literal: 'Initially slow; for 五 days daily increase in slowness 疾六分。 parts', idiomatic: 'Initially slow; over 5 days, daily increase in slowness of 6 parts' },
+  s1648: { literal: 'Ephemeris, 9° 337 parts', idiomatic: 'Ephemeris interval: 9° 337 parts' },
+  s1649: { literal: 'Multiplier 267, divisor 227', idiomatic: 'Multiplier: 267, divisor: 227' },
+  s1650: { literal: 'Pre-conjunction hiding: 17 days 332 parts, motion 3° 332 parts', idiomatic: 'Pre-conjunction hiding: 17 days 332 parts, traveling 3° 332 parts' },
+  s1651: { literal: 'Initially swift; for 二 days daily increase in slowness 遲九分。 parts', idiomatic: 'Initially swift; over 2 days, daily increase in slowness of 9 parts' },
+  s1652: { literal: 'Ephemeris, 1° 358 parts', idiomatic: 'Ephemeris interval: 1° 358 parts' },
+  s1653: { literal: 'Multiplier 350, divisor 281', idiomatic: 'Multiplier: 350, divisor: 281' },
+  s1654: { literal: 'Glimmering Flame', idiomatic: 'Mars' },
+  s1655: { literal: 'Post-conjunction hiding: 71 days 735 parts, motion 54° 735 parts', idiomatic: 'Post-conjunction hiding: 71 days 735 parts, traveling 54° 735 parts' },
+  s1656: { literal: 'Initially swift; for 五 days daily increase in slowness 遲七分。 parts', idiomatic: 'Initially swift; over 5 days, daily increase in slowness of 7 parts' },
+  s1657: { literal: 'Ephemeris, 38° 201 parts', idiomatic: 'Ephemeris interval: 38° 201 parts' },
+  s1658: { literal: 'Multiplier 127, divisor 30', idiomatic: 'Multiplier: 127, divisor: 30' },
+  s1659: { literal: 'Prior swift: 214 days, motion 136°', idiomatic: 'Prior swift: 214 days, traveling 136°' },
+  s1660: { literal: 'Initially swift; for 九 days daily increase in slowness 遲四分。 parts', idiomatic: 'Initially swift; over 9 days, daily increase in slowness of 4 parts' },
+  s1661: { literal: 'Ephemeris, 113° 596 parts', idiomatic: 'Ephemeris interval: 113° 596 parts' },
+  s1662: { literal: 'Multiplier 127, divisor 30', idiomatic: 'Multiplier: 127, divisor: 30' },
+  s1663: { literal: 'Prior slow: 60 days, motion 25°', idiomatic: 'Prior slow: 60 days, traveling 25°' },
+  s1664: { literal: 'Initially swift; daily increase in slowness 四分。 parts', idiomatic: 'Initially swift; daily increase in slowness of 4 parts' },
+  s1665: { literal: 'Ephemeris, 31° 685 parts', idiomatic: 'Ephemeris interval: 31° 685 parts' },
+  s1666: { literal: 'Multiplier 203, divisor 54', idiomatic: 'Multiplier: 203, divisor: 54' },
+  s1667: { literal: 'Prior station: 十三 days', idiomatic: 'Prior station: 13 days' },
+  s1668: { literal: 'Ephemeris, 6° 693 parts', idiomatic: 'Ephemeris interval: 6° 693 parts' },
+  s1669: { literal: 'Multiplier 203, divisor 54', idiomatic: 'Multiplier: 203, divisor: 54' },
+  s1670: { literal: 'Prior retrograde: 31 days, retrograde 8° 473 parts', idiomatic: 'Prior retrograde: 31 days, retrograding 8° 473 parts' },
+  s1671: { literal: 'Initially slow; for 六 days daily increase in slowness 疾五分。 parts', idiomatic: 'Initially slow; over 6 days, daily increase in slowness of 5 parts' },
+  s1672: { literal: 'Ephemeris, 16° 367 parts', idiomatic: 'Ephemeris interval: 16° 367 parts' },
+  s1673: { literal: 'Multiplier 203, divisor 48', idiomatic: 'Multiplier: 203, divisor: 48' },
+  s1674: { literal: 'Posterior retrograde: 31 days, retrograde 8° 473 parts', idiomatic: 'Posterior retrograde: 31 days, retrograding 8° 473 parts' },
+  s1675: { literal: 'Initially swift; for 六 days daily increase in slowness 遲五分。 parts', idiomatic: 'Initially swift; over 6 days, daily increase in slowness of 5 parts' },
+  s1676: { literal: 'Ephemeris, 16° 367 parts', idiomatic: 'Ephemeris interval: 16° 367 parts' },
+  s1677: { literal: 'Multiplier 203, divisor 48', idiomatic: 'Multiplier: 203, divisor: 48' },
+  s1678: { literal: 'Posterior station: 十三 days', idiomatic: 'Posterior station: 13 days' },
+  s1679: { literal: 'Ephemeris, 6 degrees 693 parts', idiomatic: 'Ephemeris interval: 6° 693 parts' },
+  s1680: { literal: 'Multiplier 203, divisor 48', idiomatic: 'Multiplier: 203, divisor: 48' },
+  s1681: { literal: 'Posterior slow: 60 days, motion 25°', idiomatic: 'Posterior slow: 60 days, traveling 25°' },
+  s1682: { literal: 'Initially slow; daily increase in swiftness 四分。 parts', idiomatic: 'Initially slow; daily increase in swiftness of 4 parts' },
+  s1683: { literal: 'Ephemeris, 31° 685 parts', idiomatic: 'Ephemeris interval: 31° 685 parts' },
+  s1684: { literal: 'Multiplier 203, divisor 54', idiomatic: 'Multiplier: 203, divisor: 54' },
+  s1685: { literal: 'Posterior swift: 214 days, motion 136°', idiomatic: 'Posterior swift: 214 days, traveling 136°' },
+  s1686: { literal: 'Initially slow; for 九 days daily increase in slowness 疾四分。 parts', idiomatic: 'Initially slow; over 9 days, daily increase in slowness of 4 parts' },
+  s1687: { literal: 'Ephemeris, 113° 596 parts', idiomatic: 'Ephemeris interval: 113° 596 parts' },
+  s1688: { literal: 'Multiplier 203, divisor 54', idiomatic: 'Multiplier: 203, divisor: 54' },
+  s1689: { literal: 'Pre-conjunction hiding: 71 days 736 parts, motion 54° 736 parts', idiomatic: 'Pre-conjunction hiding: 71 days 736 parts, traveling 54° 736 parts' },
+  s1690: { literal: 'Initially slow; for 五 days daily increase in slowness 疾七分。 parts', idiomatic: 'Initially slow; over 5 days, daily increase in slowness of 7 parts' },
+  s1691: { literal: 'Ephemeris, 38° 201 parts', idiomatic: 'Ephemeris interval: 38° 201 parts' },
+  s1692: { literal: 'Multiplier 127, divisor 30', idiomatic: 'Multiplier: 127, divisor: 30' },
+  s1693: { literal: 'Quelling Star', idiomatic: 'Saturn' },
+  s1694: { literal: 'Post-conjunction hiding: 18 days 415 parts, motion 1° 415 parts', idiomatic: 'Post-conjunction hiding: 18 days 415 parts, traveling 1° 415 parts' },
+  s1695: { literal: 'Initially slow; for 二 days daily increase in slowness 疾九分。 parts', idiomatic: 'Initially slow; over 2 days, daily increase in slowness of 9 parts' },
+  s1696: { literal: 'Ephemeris, 480 parts', idiomatic: 'Ephemeris interval: 480 parts' },
+  s1697: { literal: 'Multiplier 12, divisor 11', idiomatic: 'Multiplier: 12, divisor: 11' },
+  s1698: { literal: 'Prior prograde: 83 days, motion 7° 241 parts', idiomatic: 'Prior prograde: 83 days, traveling 7° 241 parts' },
+  s1699: { literal: 'Initially swift; for 六 days daily increase in slowness 遲五分。 parts', idiomatic: 'Initially swift; over 6 days, daily increase in slowness of 5 parts' },
+  s1700: { literal: 'Ephemeris, 2° 623 parts', idiomatic: 'Ephemeris interval: 2° 623 parts' },
+};
+
+const path = 'translations/current_translation_xintangshu.json';
+const data = JSON.parse(fs.readFileSync(path, 'utf8'));
+for (const s of data.sentences) {
+  const t = T[s.id];
+  if (!t) throw new Error(`Missing ${s.id}`);
+  s.literal = t.literal;
+  s.idiomatic = t.idiomatic;
+}
+fs.writeFileSync(path, JSON.stringify(data, null, 2) + '\n');
+console.log('Applied', Object.keys(T).length);
