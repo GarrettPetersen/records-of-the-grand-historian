@@ -380,6 +380,11 @@ async function runBookLoop(book, opts) {
       } else if (hasAnotherSession && !opts.waitForMerge) {
         console.warn(`[${book}] --no-wait-merge: next session may re-translate the same chapter`);
       }
+
+      if (drainRequested) {
+        console.log(`[${book}] drain: stopping after session ${run} (chapter merged on master)`);
+        break;
+      }
     } catch (err) {
       if (err instanceof CursorAgentError) {
         console.error(`[${book}] startup failed: ${err.message} retryable=${err.isRetryable}`);
@@ -488,6 +493,9 @@ async function main() {
   );
   if (opts.runtime === 'cloud') {
     console.log(`Repo: ${opts.repoUrl}`);
+    console.log(
+      'Cloud DAG: one chapter per session per book; merge-wait on origin/master before the next session for that book only (PR automerge).',
+    );
   } else if (opts.directToMaster && opts.concurrency > 1) {
     console.log(
       'Local parallel: agents share one working tree; commit only this book’s paths (see prompt-local.txt).',
