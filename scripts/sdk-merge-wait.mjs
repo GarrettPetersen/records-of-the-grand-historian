@@ -179,6 +179,11 @@ async function fetchOpenPrsForBook(owner, repo, book, token) {
   const url = `https://api.github.com/repos/${owner}/${repo}/pulls?state=open&per_page=100`;
   const res = await githubFetch(url, { token });
   const pulls = await res.json();
+  if (!Array.isArray(pulls)) {
+    throw new Error(
+      `GitHub pulls list was not an array for ${owner}/${repo}: ${JSON.stringify(pulls).slice(0, 200)}`,
+    );
+  }
   const needle = book.toLowerCase();
   return pulls.filter((pr) => {
     const head = (pr.head?.ref ?? '').toLowerCase();
@@ -208,12 +213,73 @@ function sleep(ms) {
 }
 
 /**
+ * Local agents push straight to master — wait until origin/master shows the chapter done.
+ * @param {string} book
+ * @param {Set<string>} baselineIncomplete
+ * @param {{ includeRed?: boolean, pollMs?: number, timeoutMs?: number }} opts
+ */
+async function waitForProgressOnMaster(book, baselineIncomplete, opts) {
+  const pollMs = opts.pollMs ?? 90_000;
+  const timeoutMs = opts.timeoutMs ?? 6 * 60 * 60 * 1000;
+  const masterRef = 'origin/master';
+  const started = Date.now();
+
+  console.log(
+    `[${book}] waiting for direct push to master — baseline incomplete chapters: ${baselineIncomplete.size}`,
+  );
+
+  execSync('git fetch origin master', { cwd: REPO_ROOT, stdio: 'inherit' });
+
+  while (Date.now() - started < timeoutMs) {
+    execSync('git fetch origin master', { cwd: REPO_ROOT, stdio: 'pipe' });
+
+    const currentIncomplete = incompleteChaptersOnGitRef(masterRef, book, {
+      includeRed: opts.includeRed,
+    });
+
+    let progressed = false;
+    for (const ch of baselineIncomplete) {
+      if (!currentIncomplete.has(ch)) {
+        progressed = true;
+        console.log(`[${book}] chapter ${ch} now complete on origin/master`);
+        break;
+      }
+    }
+
+    if (progressed) break;
+
+    if (baselineIncomplete.size > 0 && currentIncomplete.size < baselineIncomplete.size) {
+      console.log(
+        `[${book}] master incomplete count dropped ${baselineIncomplete.size} → ${currentIncomplete.size}`,
+      );
+      break;
+    }
+
+    const elapsed = Math.round((Date.now() - started) / 1000);
+    console.log(
+      `[${book}] still waiting for master push (${elapsed}s): incomplete on master=${currentIncomplete.size}`,
+    );
+    await sleep(pollMs);
+  }
+
+  if (Date.now() - started >= timeoutMs) {
+    throw new Error(`[${book}] timed out waiting for master push after ${timeoutMs / 1000}s`);
+  }
+
+  execSync('git fetch origin master', { cwd: REPO_ROOT, stdio: 'pipe' });
+}
+
+/**
  * @param {string} book
  * @param {{ git?: { branches?: Array<{ branch?: string, prUrl?: string, repoUrl?: string }> } }} sessionResult
  * @param {Set<string>} baselineIncomplete
- * @param {{ repoUrl: string, includeRed?: boolean, pollMs?: number, timeoutMs?: number, githubToken?: string }} opts
+ * @param {{ repoUrl: string, includeRed?: boolean, pollMs?: number, timeoutMs?: number, githubToken?: string, directToMaster?: boolean }} opts
  */
 export async function waitForSessionMergedToMaster(book, sessionResult, baselineIncomplete, opts) {
+  if (opts.directToMaster) {
+    return waitForProgressOnMaster(book, baselineIncomplete, opts);
+  }
+
   const { owner, repo } = parseGitHubRepo(opts.repoUrl);
   const token = opts.githubToken ?? process.env.GITHUB_TOKEN ?? process.env.GH_TOKEN;
   const pollMs = opts.pollMs ?? 90_000;

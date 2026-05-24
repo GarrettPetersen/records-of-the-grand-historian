@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Build a per-book translation prompt from prompt.txt ({book}, {model}, … placeholders).
+ * Build a per-book translation prompt from prompt.txt or prompt-local.txt.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PROMPT_PATH = path.join(REPO_ROOT, 'prompt.txt');
+const PROMPT_LOCAL_PATH = path.join(REPO_ROOT, 'prompt-local.txt');
 
 /** Display name for make MODEL= metadata (not the API model id). */
 const MODEL_DISPLAY_NAMES = {
@@ -16,13 +17,14 @@ const MODEL_DISPLAY_NAMES = {
 
 /**
  * @param {string} book
- * @param {{ model?: string, translator?: string }} [opts]
+ * @param {{ model?: string, translator?: string, directToMaster?: boolean }} [opts]
  */
 export function buildTranslationPrompt(book, opts = {}) {
   const apiModel = opts.model ?? 'composer-2.5';
   const modelDisplay = MODEL_DISPLAY_NAMES[apiModel] ?? apiModel;
   const translator = opts.translator ?? 'Garrett M. Petersen (2026)';
   const translationFile = `translations/current_translation_${book}.json`;
+  const directToMaster = opts.directToMaster ?? false;
 
   const vars = {
     book,
@@ -31,7 +33,8 @@ export function buildTranslationPrompt(book, opts = {}) {
     translator,
   };
 
-  let text = fs.readFileSync(PROMPT_PATH, 'utf8');
+  const promptPath = directToMaster ? PROMPT_LOCAL_PATH : PROMPT_PATH;
+  let text = fs.readFileSync(promptPath, 'utf8');
 
   for (const [key, value] of Object.entries(vars)) {
     text = text.replaceAll(`{${key}}`, value);
@@ -43,15 +46,20 @@ export function buildTranslationPrompt(book, opts = {}) {
     /\{book\}|\{translation_file\}/.test(text)
   ) {
     throw new Error(
-      `prompt.txt still has unresolved placeholders or shiji for book=${book}`,
+      `${path.basename(promptPath)} still has unresolved placeholders or shiji for book=${book}`,
     );
   }
+
+  const modeNote = directToMaster
+    ? 'Mode: LOCAL agent — push directly to origin/master (no PR). Economy Composer (fast mode OFF). Ignore other books\' dirty files in the working tree.'
+    : 'Mode: CLOUD agent — open a PR against master when done.';
 
   const header = [
     '=== SDK translation session ===',
     `Book: ${book} (work only on this book)`,
     `Translation session file: ${translationFile}`,
     `API model id for your reference: ${apiModel}`,
+    modeNote,
     '===',
     '',
   ].join('\n');
@@ -59,4 +67,4 @@ export function buildTranslationPrompt(book, opts = {}) {
   return `${header}${text}`;
 }
 
-export { PROMPT_PATH, REPO_ROOT };
+export { PROMPT_PATH, PROMPT_LOCAL_PATH, REPO_ROOT };

@@ -1,0 +1,56 @@
+First, git fetch origin master. Do not stop for unrelated local changes from other parallel agents.
+
+You are one of several local agents sharing this working tree. Other agents may be translating other books at the same time. Ignore their in-progress edits:
+- Do not revert, stash, or commit files outside this book's scope.
+- Only stage and commit paths for BOOK={book}: `data/{book}/`, `public/{book}/`, `public/data/{book}/`, and `public/og/{book}/` if present after `make update`.
+- Do not touch `translations/` session JSON (gitignored); use {translation_file} only as a workspace file via make targets.
+- Shared generated files (`data/progress.json`, `data/manifest.json`, `public/data/progress.json`, etc.) are gitignored and rebuilt by CI — never commit them.
+
+Before starting: `git fetch origin master` and `git merge origin/master` (or rebase) so you start from current master. If `make start-translation BOOK={book}` picks a chapter that is already complete on origin/master, stop.
+
+Then run make start-translation BOOK={book}.
+
+Then add professional quality translations to {translation_file}.
+
+EXAMPLE of Ken Liu quality translation:
+
+CHINESE: 孝文在代時，前后有三男，及竇太后得幸，前后死，及三子更死，故孝景得立。
+LITERAL: When Emperor Xiaowen was in Dai, he had three sons by his former queen. After Empress Dowager Dou gained his favor, the former queen died, and the three sons also died one after another. Therefore Emperor Xiaojing was able to be established.
+IDIOMATIC: While Emperor Wen was still in Dai, he had three sons by his former consort. After Lady Dou won his favor, that consort died, and the three sons died in turn as well. This was how Emperor Jing came to be named heir.
+
+KEY PRINCIPLES:
+• Semantic fidelity: Preserve exact historical meaning
+• Modern readability: Natural, flowing English
+• No choppy fragments: Complete grammatical sentences
+• Proper articles/grammar: "the", "a", etc. where appropriate
+• Ken Liu literary quality: Professional historical translation style
+
+The Makefile has all the commands you need. Use `make` targets only — do not write your own scripts (no one-off `.mjs`, `.js`, `.py`, or shell files for batching, filling translations, scoring, or submitting). If you need a step, find it in the Makefile or README first.
+
+Run make continue BOOK={book} MODEL="{model}".
+
+Then, once again, add professional quality translations to {translation_file}.
+
+Run make continue BOOK={book} MODEL="{model}" again.
+
+Continue this process in a loop until the chapter is fully translated.
+
+Then run make submit-translations TRANSLATOR="{translator}" MODEL="{model}" FILE={translation_file}
+
+Translate that chapter in full using the process documented in the readme. Do it in batches until it is 100% complete. You don't need to do any of the following steps until you hit 100%. I don't care how many batches it takes!
+
+Use the make score-translations command on your chapter to check the quality of your translations. It sometimes has false positives for length differences, but you should be able to see if anything is wildly wrong. Fix any issues. (Make sure there are NO placeholders where translations should be!)
+
+Once the chapter has been completely translated with valid literal and idiomatic translations provided by YOU (the AI reading this), you're done.
+
+I fully expect this to take a long time! NO placeholders. There is NO other translator coming to fill in your work. You must produce production-quality work without shortcuts.
+
+Then run make update BOOK={book} only (not make update-all).
+
+Pull from origin/master once more (`git fetch origin master && git merge origin/master`), resolve only conflicts in this book's paths if any.
+
+Commit directly on master with one clear commit message (e.g. "{book} ch. NNN: short English title"). Push to origin master: `git push origin master`.
+
+Do not open a pull request. Do not create a feature branch. Merge to master is required.
+
+Translate exactly one chapter per session, then stop.

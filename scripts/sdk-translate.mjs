@@ -10,6 +10,9 @@
  *   node scripts/sdk-translate.mjs --book jinshu
  *   node scripts/sdk-translate.mjs --books jinshu,songshu --concurrency 2 --runtime cloud
  *   node scripts/sdk-translate.mjs --all-untranslated --concurrency 4 --runtime cloud --max-runs-per-book 3
+ *
+ * Local parallel (direct to master, economy model):
+ *   node scripts/sdk-translate-local.mjs --all-untranslated --concurrency 4 --until-complete
  */
 import { Agent, CursorAgentError } from '@cursor/sdk';
 import { execSync } from 'node:child_process';
@@ -38,6 +41,7 @@ Options:
   --list-books             Print books needing work and exit
   --concurrency <n>        Max parallel agents (default: 1)
   --runtime <local|cloud>  local = this repo checkout; cloud = Cursor VM clone (default: cloud if concurrency>1 else local)
+  --direct-to-master       Local only: push commits to origin/master (no PR). Uses prompt-local.txt
   --repo <url>             GitHub repo for cloud agents (default: ${DEFAULT_REPO_URL})
   --model <id>             Model id (default: ${DEFAULT_MODEL})
   --fast                   Enable Composer 2.5 fast mode (default: off — economy)
@@ -54,6 +58,7 @@ Options:
 Examples:
   node scripts/sdk-translate.mjs --list-books
   node scripts/sdk-translate.mjs --book weishu --runtime local
+  node scripts/sdk-translate-local.mjs --all-untranslated --concurrency 4 --until-complete
   node scripts/sdk-translate.mjs --all-untranslated --concurrency 3 --runtime cloud --max-runs-per-book 5
 `);
 }
@@ -77,6 +82,7 @@ function parseArgs(argv) {
     stream: true,
     apiKey: process.env.CURSOR_API_KEY,
     fast: false,
+    directToMaster: false,
   };
 
   for (let i = 0; i < argv.length; i++) {
@@ -118,6 +124,9 @@ function parseArgs(argv) {
           throw new Error('--runtime must be local or cloud');
         }
         break;
+      case '--direct-to-master':
+        opts.directToMaster = true;
+        break;
       case '--repo':
         opts.repoUrl = next();
         break;
@@ -157,8 +166,14 @@ function parseArgs(argv) {
     }
   }
 
-  if (!opts.runtime) {
+  if (opts.directToMaster) {
+    opts.runtime = 'local';
+  } else if (!opts.runtime) {
     opts.runtime = opts.concurrency > 1 ? 'cloud' : 'local';
+  }
+
+  if (opts.directToMaster && opts.runtime !== 'local') {
+    throw new Error('--direct-to-master requires --runtime local');
   }
 
   return opts;
@@ -200,6 +215,7 @@ async function runOneSession(book, opts) {
   const prompt = buildTranslationPrompt(book, {
     model: opts.model,
     translator: opts.translator,
+    directToMaster: opts.directToMaster,
   });
 
   const modelSelection = buildModelSelection(opts);
@@ -301,6 +317,7 @@ async function runBookLoop(book, opts) {
           pollMs: opts.mergePollMs,
           timeoutMs: opts.mergeTimeoutMs,
           githubToken: process.env.GITHUB_TOKEN ?? process.env.GH_TOKEN,
+          directToMaster: opts.directToMaster,
         });
       } else if (hasAnotherSession && !opts.waitForMerge) {
         console.warn(`[${book}] --no-wait-merge: next session may re-translate the same chapter`);
@@ -392,13 +409,16 @@ async function main() {
 
   console.log(`Books: ${books.join(', ')}`);
   const fastNote = opts.fast ? 'fast=on' : 'fast=off';
+  const mergeNote = opts.directToMaster ? 'direct→master' : 'PR→master';
   console.log(
-    `Runtime: ${opts.runtime}  Concurrency: ${opts.concurrency}  Model: ${opts.model} (${fastNote})`,
+    `Runtime: ${opts.runtime}  Concurrency: ${opts.concurrency}  Model: ${opts.model} (${fastNote})  Merge: ${mergeNote}`,
   );
   if (opts.runtime === 'cloud') {
     console.log(`Repo: ${opts.repoUrl}`);
-  } else if (opts.concurrency > 1) {
-    console.warn('Warning: multiple local agents share one working tree; git conflicts are likely. Prefer --runtime cloud for parallel books.');
+  } else if (opts.directToMaster && opts.concurrency > 1) {
+    console.log(
+      'Local parallel: agents share one working tree; commit only this book’s paths (see prompt-local.txt).',
+    );
   }
 
   const allResults = await mapPool(books, opts.concurrency, (book) => runBookLoop(book, opts));
