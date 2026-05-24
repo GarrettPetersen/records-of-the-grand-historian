@@ -32,6 +32,13 @@ export function buildTranslationPrompt(book, opts = {}) {
   };
 
   let text = fs.readFileSync(PROMPT_PATH, 'utf8');
+
+  // Removed from prompt.txt — strip if an old copy or merge reintroduces it.
+  text = text.replace(
+    /^Was that last chapter up to the standards of Ken Liu\?[\s\S]*?Otherwise, let's continue\.\s*\n*/m,
+    '',
+  );
+
   for (const [key, value] of Object.entries(vars)) {
     text = text.replaceAll(`{${key}}`, value);
   }
