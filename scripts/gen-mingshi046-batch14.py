@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+import json
+
+T = {
+"s1501": ("To the east is Dong Stream.", "To the east is Dong Stream."),
+"s1502": ("Eighty li southwest from the provincial administration commission.", "It lies eighty li southwest of the provincial administration commission."),
+"s1503": ("Bijie Guard was established in the second month of Hongwu 17, subordinate to the Guizhou regional command.", "Bijie Guard was established in the second month of Hongwu 17 and subordinated to the Guizhou regional command."),
+"s1504": ("To the east is Muxi Mountain; there is a pass.", "To the east is Muxi Mountain; there is a pass."),
+"s1505": ("Also there is the Xiangshui River.", "Also there is the Xiangshui River."),
+"s1506": ("To the south is Shanyu Pass; to the west is Laoya Pass — both established in the Hongwu period.", "To the south is Shanyu Pass; to the west is Laoya Pass — both established during the Hongwu period."),
+"s1507": ("To the northeast is Cengtai Guard, established in the ninth month of Hongwu 21; abolished in the sixth month of Hongwu 27.", "To the northeast is Cengtai Guard, established in the ninth month of Hongwu 21 and abolished in the sixth month of Hongwu 27."),
+"s1508": ("It administers one defensive battalion seat.", "It administers one defensive battalion seat."),
+"s1509": ("Four hundred fifty li southeast from the provincial administration commission.", "It lies four hundred fifty li southeast of the provincial administration commission."),
+"s1510": ("The defensive Qixing Pass Rear thousand-household seat, west of the guard.", "The defensive Qixing Pass rear thousand-household seat lies west of the guard."),
+"s1511": ("Established in Hongwu 21, subordinate to Wusa Guard.", "It was established in Hongwu 21 and subordinated to Wusa Guard."),
+"s1512": ("In the Yongle period it came under jurisdiction.", "During the Yongle period it came under Bijie Guard."),
+"s1513": ("There is the Qixing Pass River, also called the Ke River; its source is Wusa Prefecture in Sichuan — that is, the upper course of the North Pan River; Qixing Pass is above it; its lower course enters Zhanyi Prefecture in Yunnan.", "There is the Qixing Pass River, also called the Ke River; its source is Wusa Prefecture in Sichuan — that is, the upper course of the North Pan River; Qixing Pass lies above it; its lower course enters Zhanyi Prefecture in Yunnan."),
+"s1514": ("Chishui Guard was established in the tenth month of Hongwu 21; to the north is Xueshan, with a pass above it.", "Chishui Guard was established in the tenth month of Hongwu 21; to the north is Xueshan, with a pass above it."),
+"s1515": ("To the east is the Chishui River; there is Chishui Pass.", "To the east is the Chishui River; there is Chishui Pass."),
+"s1516": ("It administers four battalion seats.", "It administers four battalion seats."),
+"s1517": ("Six hundred twenty li from the provincial administration commission.", "It lies six hundred twenty li from the provincial administration commission."),
+"s1518": ("The Moni thousand-household seat, north of the guard; the Baisa thousand-household seat, southeast of the guard.", "The Moni thousand-household seat lies north of the guard; the Baisa thousand-household seat lies southeast of the guard."),
+"s1519": ("Both seats were established in the ninth month of Hongwu 22; the Aluomi thousand-household seat, south of the guard; the Front thousand-household seat, south of the guard.", "Both were established in the ninth month of Hongwu 22; the Aluomi thousand-household seat lies south of the guard; the Front thousand-household seat lies south of the guard."),
+"s1520": ("Both seats were established in Hongwu 27.", "Both were established in Hongwu 27."),
+"s1521": ("The Pushi defensive battalion thousand-household seat was established in the third month of Hongwu 23 from Yongning Pacification Office territory, directly subordinate to the Guizhou regional command.", "The Pushi defensive battalion thousand-household seat was established in the third month of Hongwu 23 from Yongning Pacification Office territory and placed under direct Guizhou regional command."),
+"s1522": ("To the east is Mu'an Mountain.", "To the east is Mu'an Mountain."),
+"s1523": ("To the southwest is Shuinnao Cave.", "To the southwest is Shuinnao Cave."),
+"s1524": ("Also to the southeast is Longquan Stream.", "Also to the southeast is Longquan Stream."),
+"s1525": ("Seven hundred twenty li from the provincial administration commission.", "It lies seven hundred twenty li from the provincial administration commission."),
+"s1526": ("Fuyong Guard was formerly the Daliao Zuo Native Official Office.", "Fuyong Guard was formerly the Daliao Zuo Native Official Office."),
+"s1527": ("In Hongwu 5 the Yuan Luobang Zhazuo and Other Places Native Official Office was changed and established, subordinate to the Guizhou Pacification Commission.", "In Hongwu 5 the Yuan Luobang Zhazuo and Other Places Native Official Office was re-established as a guard, subordinate to the Guizhou Pacification Commission."),
+"s1528": ("Changed and established in Chongzhen 3, subordinate to the Guizhou regional command.", "It was re-established in Chongzhen 3 and subordinated to the Guizhou regional command."),
+"s1529": ("To the east is Yangming Cave.", "To the east is Yangming Cave."),
+"s1530": ("To the west is the Sanxiang River.", "To the west is the Sanxiang River."),
+"s1531": ("To the north is the Wu River; there is the Luguang River.", "To the north is the Wu River; there is the Luguang River."),
+"s1532": ("It administers four battalion seats.", "It administers four battalion seats."),
+"s1533": ("Fifty li south from the provincial administration commission.", "It lies fifty li south of the provincial administration commission."),
+"s1534": ("The Yuxiang defensive battalion thousand-household seat, west of the guard.", "The Yuxiang defensive battalion thousand-household seat lies west of the guard."),
+"s1535": ("Formerly the Qingshan Native Official Office; in Hongwu 5 the Yuan Qingshan Yuandi and Other Places Native Official Office was changed and established, subordinate to the Guizhou Pacification Commission.", "It was formerly the Qingshan Native Official Office; in Hongwu 5 the Yuan Qingshan Yuandi and Other Places Native Official Office was re-established and subordinated to the Guizhou Pacification Commission."),
+"s1536": ("Changed and established in Chongzhen 3.", "It was re-established in Chongzhen 3."),
+"s1537": ("The Xifeng defensive battalion thousand-household seat, northeast of the guard.", "The Xifeng defensive battalion thousand-household seat lies northeast of the guard."),
+"s1538": ("In Chongzhen 3 it was established from the six abandoned garrisons of the former Guizhou Front Guard and territory cut from the Dizhai Office.", "In Chongzhen 3 it was established from the six abandoned garrisons of the former Guizhou Front Guard and territory cut from the Dizhai Office."),
+"s1539": ("To the west is Xiwang Mountain.", "To the west is Xiwang Mountain."),
+"s1540": ("To the south is Shitian Cave.", "To the south is Shitian Cave."),
+"s1541": ("To the north is the Wu River.", "To the north is the Wu River."),
+"s1542": ("The Zhuoling defensive battalion thousand-household seat, north of the guard.", "The Zhuoling defensive battalion thousand-household seat lies north of the guard."),
+"s1543": ("To the west is the Luguang River, flowing north to join the Wu River; the Xiuwen defensive battalion thousand-household seat, northeast of the guard.", "To the west is the Luguang River, flowing north to join the Wu River; the Xiuwen defensive battalion thousand-household seat lies northeast of the guard."),
+"s1544": ("Both seats are from the Pacification Commission's Shuixi territory; all established together in Chongzhen 3.", "Both are from the Pacification Commission's Shuixi territory; all were established together in Chongzhen 3."),
+"s1545": ("Zhenxi Guard was established in Chongzhen 3 from the Pacification Commission's Shuixi territory.", "Zhenxi Guard was established in Chongzhen 3 from the Pacification Commission's Shuixi territory."),
+"s1546": ("To the north is Tianzhu Cave; also there is the Yachi River, another name for the Wu River.", "To the north is Tianzhu Cave; also there is the Yachi River, another name for the Wu River."),
+"s1547": ("It administers four battalion seats.", "It administers four battalion seats."),
+"s1548": ("Sixty li southwest from the provincial administration commission.", "It lies sixty li southwest of the provincial administration commission."),
+"s1549": ("The Weiwu defensive battalion thousand-household seat, east of the guard; the Hesheng defensive battalion thousand-household seat, north of the guard.", "The Weiwu defensive battalion thousand-household seat lies east of the guard; the Hesheng defensive battalion thousand-household seat lies north of the guard."),
+"s1550": ("There is the Yachi River; the Rouyuan defensive battalion thousand-household seat □; the Dingyuan defensive battalion thousand-household seat □.", "There is the Yachi River; the Rouyuan defensive battalion thousand-household seat □; the Dingyuan defensive battalion thousand-household seat □."),
+"s1551": ("All of the above are Shuixi territory, established together with the guard in Chongzhen 3.", "All of the above are Shuixi territory, established together with the guard in Chongzhen 3."),
+}
+
+out = {k: {"literal": v[0], "idiomatic": v[1]} for k, v in T.items()}
+with open("scripts/mingshi046-batch14.json", "w") as f:
+    json.dump(out, f, indent=2, ensure_ascii=False)
+    f.write("\n")
+print(f"Wrote {len(out)} entries")
