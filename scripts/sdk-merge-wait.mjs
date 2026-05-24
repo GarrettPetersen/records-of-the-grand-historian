@@ -2,8 +2,24 @@
 /**
  * Wait until a cloud agent's translation work is merged to master before the next session.
  */
-import { execSync } from 'node:child_process';
+import { exec, execSync } from 'node:child_process';
+import { promisify } from 'node:util';
 import { REPO_ROOT } from './sdk-translation-books.mjs';
+
+const execAsync = promisify(exec);
+
+/**
+ * @param {string} command
+ * @param {{ maxBuffer?: number }} [opts]
+ */
+async function execGit(command, opts = {}) {
+  const { stdout } = await execAsync(command, {
+    cwd: REPO_ROOT,
+    maxBuffer: opts.maxBuffer ?? 50 * 1024 * 1024,
+    encoding: 'utf8',
+  });
+  return stdout;
+}
 
 /**
  * @param {string} repoUrl
@@ -94,6 +110,81 @@ function incompleteChaptersFromDataFiles(ref, book) {
       incomplete.add(chapter);
     }
   }
+  return incomplete;
+}
+
+/**
+ * Non-blocking variant for parallel orchestrator workers (avoids long execSync stalls).
+ * @param {string} ref
+ * @param {string} book
+ * @param {{ includeRed?: boolean }} [opts]
+ */
+export async function incompleteChaptersOnGitRefAsync(ref, book, opts = {}) {
+  let raw;
+  try {
+    raw = await execGit(`git show "${ref}:data/progress.json"`, { maxBuffer: 10 * 1024 * 1024 });
+  } catch {
+    return incompleteChaptersFromDataFilesAsync(ref, book);
+  }
+
+  const progress = JSON.parse(raw);
+  const bookData = progress.books?.[book];
+  if (!bookData?.chapters) return new Set();
+
+  const incomplete = new Set();
+  for (const ch of bookData.chapters) {
+    const needs =
+      ch.status === 'gray' ||
+      ch.status === 'yellow' ||
+      (opts.includeRed && ch.status === 'red');
+    if (needs) incomplete.add(ch.chapter);
+  }
+  return incomplete;
+}
+
+/**
+ * @param {string} ref
+ * @param {string} book
+ */
+async function incompleteChaptersFromDataFilesAsync(ref, book) {
+  let listing;
+  try {
+    const out = await execGit(`git ls-tree --name-only "${ref}:data/${book}"`);
+    listing = out
+      .trim()
+      .split('\n')
+      .filter((f) => f.endsWith('.json'));
+  } catch {
+    return new Set();
+  }
+
+  const incomplete = new Set();
+  await Promise.all(
+    listing.map(async (file) => {
+      const chapter = file.replace(/\.json$/, '');
+      try {
+        const json = await execGit(`git show "${ref}:data/${book}/${file}"`);
+        const data = JSON.parse(json);
+        let t = 0;
+        let m = 0;
+        for (const block of data.content ?? []) {
+          const rows = block.type === 'table_row' ? (block.cells ?? []) : (block.sentences ?? []);
+          for (const s of rows) {
+            const tr = s.translations?.[0]?.translator ?? s.translator;
+            if (tr === 'Herbert J. Allen (1894)') continue;
+            const zh = (s.zh ?? s.content ?? '').trim();
+            if (!zh) continue;
+            t++;
+            const idio = s.translations?.[0]?.idiomatic ?? s.idiomatic ?? '';
+            if (idio.trim()) m++;
+          }
+        }
+        if (t > 0 && m < t) incomplete.add(chapter);
+      } catch {
+        incomplete.add(chapter);
+      }
+    }),
+  );
   return incomplete;
 }
 
@@ -233,7 +324,7 @@ async function waitForProgressOnMaster(book, baselineIncomplete, opts) {
   while (Date.now() - started < timeoutMs) {
     execSync('git fetch origin master', { cwd: REPO_ROOT, stdio: 'pipe' });
 
-    const currentIncomplete = incompleteChaptersOnGitRef(masterRef, book, {
+    const currentIncomplete = await incompleteChaptersOnGitRefAsync(masterRef, book, {
       includeRed: opts.includeRed,
     });
 
@@ -323,7 +414,7 @@ export async function waitForSessionMergedToMaster(book, sessionResult, baseline
 
     const openPrs = await fetchOpenPrsForBook(owner, repo, book, token);
     const openCount = openPrs.length;
-    const currentIncomplete = incompleteChaptersOnGitRef(masterRef, book, {
+    const currentIncomplete = await incompleteChaptersOnGitRefAsync(masterRef, book, {
       includeRed: opts.includeRed,
     });
 

@@ -21,7 +21,10 @@ import { fileURLToPath } from 'node:url';
 import { buildTranslationPrompt } from './sdk-translation-prompt.mjs';
 import { loadDotenv } from './load-dotenv.mjs';
 import { listBooksNeedingTranslation, REPO_ROOT } from './sdk-translation-books.mjs';
-import { incompleteChaptersOnGitRef, waitForSessionMergedToMaster } from './sdk-merge-wait.mjs';
+import {
+  incompleteChaptersOnGitRefAsync,
+  waitForSessionMergedToMaster,
+} from './sdk-merge-wait.mjs';
 
 loadDotenv(REPO_ROOT);
 
@@ -236,15 +239,15 @@ function buildModelSelection(opts) {
   return selection;
 }
 
-function bookStillNeedsWork(bookId, includeRed) {
+async function bookStillNeedsWork(bookId, includeRed) {
   try {
     execSync('git fetch origin master', { cwd: REPO_ROOT, stdio: 'pipe' });
   } catch {
-    // offline or no remote — fall back to local progress.json
     const books = listBooksNeedingTranslation({ bookFilter: [bookId], includeRed });
     return books.length > 0;
   }
-  return incompleteChaptersOnGitRef('origin/master', bookId, { includeRed }).size > 0;
+  const incomplete = await incompleteChaptersOnGitRefAsync('origin/master', bookId, { includeRed });
+  return incomplete.size > 0;
 }
 
 async function disposeAgent(agent) {
@@ -341,17 +344,18 @@ async function runBookLoop(book, opts) {
   let run = 0;
   execSync('git fetch origin master', { cwd: REPO_ROOT, stdio: 'pipe' });
 
-  while (bookStillNeedsWork(book, opts.includeRed)) {
+  while (await bookStillNeedsWork(book, opts.includeRed)) {
     run += 1;
     if (run > opts.maxRunsPerBook) {
       console.log(`[${book}] stopping: reached --max-runs-per-book ${opts.maxRunsPerBook}`);
       break;
     }
-    console.log(`[${book}] session ${run}${Number.isFinite(opts.maxRunsPerBook) ? `/${opts.maxRunsPerBook}` : ''}`);
 
-    const baselineIncomplete = incompleteChaptersOnGitRef('origin/master', book, {
+    const baselineIncomplete = await incompleteChaptersOnGitRefAsync('origin/master', book, {
       includeRed: opts.includeRed,
     });
+
+    console.log(`[${book}] session ${run}${Number.isFinite(opts.maxRunsPerBook) ? `/${opts.maxRunsPerBook}` : ''} — ${baselineIncomplete.size} chapter(s) incomplete on master`);
 
     try {
       const result = await runOneSession(book, opts);
@@ -365,7 +369,7 @@ async function runBookLoop(book, opts) {
         break;
       }
 
-      const moreWork = bookStillNeedsWork(book, opts.includeRed);
+      const moreWork = await bookStillNeedsWork(book, opts.includeRed);
       const hasAnotherSession = run < opts.maxRunsPerBook && moreWork;
 
       if (hasAnotherSession && opts.waitForMerge && !opts.dryRun) {
