@@ -36,6 +36,26 @@ export function buildTranslationPrompt(book, opts = {}) {
     text = text.replaceAll(`{${key}}`, value);
   }
 
+  // Legacy prompt.txt used hardcoded shiji; catch stragglers after placeholder migration.
+  const legacyShiji = [
+    ['BOOK=shiji', `BOOK=${book}`],
+    ['current_translation_shiji.json', translationFile],
+    ['make update BOOK=shiji', `make update BOOK=${book}`],
+  ];
+  for (const [from, to] of legacyShiji) {
+    text = text.replaceAll(from, to);
+  }
+
+  if (
+    text.includes('BOOK=shiji') ||
+    text.includes('current_translation_shiji.json') ||
+    /\{book\}|\{translation_file\}/.test(text)
+  ) {
+    throw new Error(
+      `prompt.txt still has unresolved placeholders or shiji for book=${book}`,
+    );
+  }
+
   const header = [
     '=== SDK translation session ===',
     `Book: ${book} (work only on this book)`,
