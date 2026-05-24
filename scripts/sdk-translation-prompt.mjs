@@ -32,8 +32,19 @@ export function buildTranslationPrompt(book, opts = {}) {
   };
 
   let text = fs.readFileSync(PROMPT_PATH, 'utf8');
+
   for (const [key, value] of Object.entries(vars)) {
     text = text.replaceAll(`{${key}}`, value);
+  }
+
+  if (
+    text.includes('BOOK=shiji') ||
+    text.includes('current_translation_shiji.json') ||
+    /\{book\}|\{translation_file\}/.test(text)
+  ) {
+    throw new Error(
+      `prompt.txt still has unresolved placeholders or shiji for book=${book}`,
+    );
   }
 
   const header = [

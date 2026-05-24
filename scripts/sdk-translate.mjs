@@ -311,7 +311,10 @@ async function runBookLoop(book, opts) {
         results.push({ book, status: 'startup_error', message: err.message });
         break;
       }
-      throw err;
+      const message = err instanceof Error ? err.message : String(err);
+      console.error(`[${book}] session loop failed: ${message}`);
+      results.push({ book, status: 'loop_error', message });
+      break;
     }
     if (opts.dryRun) break;
   }
@@ -400,7 +403,12 @@ async function main() {
 
   const allResults = await mapPool(books, opts.concurrency, (book) => runBookLoop(book, opts));
 
-  const failed = allResults.flat().filter((r) => r?.status === 'error' || r?.status === 'startup_error');
+  const failed = allResults.flat().filter(
+    (r) =>
+      r?.status === 'error' ||
+      r?.status === 'startup_error' ||
+      r?.status === 'loop_error',
+  );
   if (failed.length > 0) {
     process.exit(failed.some((r) => r.status === 'startup_error') ? 1 : 2);
   }

@@ -1,4 +1,4 @@
-name: Auto-merge Cursor PRs
+name: Auto-merge translation PRs
 
 on:
   pull_request_target:
@@ -17,24 +17,38 @@ jobs:
     name: Enable auto-merge
     runs-on: ubuntu-latest
     steps:
-      - name: Mark ready and enable auto-merge for Cursor-authored PRs
+      - name: Mark ready and enable auto-merge for SDK / Cursor translation PRs
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_URL: ${{ github.event.pull_request.html_url }}
         run: |
           author="$(gh pr view "$PR_URL" --json author --jq '.author.login')"
           is_draft="$(gh pr view "$PR_URL" --json isDraft --jq '.isDraft')"
+          head_ref="$(gh pr view "$PR_URL" --json headRefName --jq '.headRefName')"
           echo "PR author: $author"
           echo "PR is draft: $is_draft"
+          echo "PR head ref: $head_ref"
 
+          automerge=0
           case "$author" in
-            app/cursor|cursor|"cursor[bot]")
-              if [ "$is_draft" = "true" ]; then
-                gh pr ready "$PR_URL"
-              fi
-              gh pr merge "$PR_URL" --auto --squash
-              ;;
-            *)
-              echo "Not a Cursor-authored PR; skipping."
+            app/cursor|cursor|"cursor[bot]"|GarrettPetersen)
+              automerge=1
               ;;
           esac
+
+          # Cloud agents often open PRs under the repo owner; branch names are still cursor/*
+          if [ "$automerge" -eq 0 ] && [[ "$head_ref" == cursor/* ]]; then
+            echo "Head branch matches cursor/* — enabling auto-merge"
+            automerge=1
+          fi
+
+          if [ "$automerge" -eq 0 ]; then
+            echo "Not an SDK/Cursor translation PR; skipping."
+            exit 0
+          fi
+
+          if [ "$is_draft" = "true" ]; then
+            echo "Marking draft PR ready for review"
+            gh pr ready "$PR_URL"
+          fi
+          gh pr merge "$PR_URL" --auto --squash
