@@ -32,17 +32,20 @@ const DEFAULT_REPO_URL = 'https://github.com/GarrettPetersen/records-of-the-gran
 /** When true, worker pool stops claiming new books (in-flight sessions still finish). */
 let drainRequested = false;
 
-/** Serialize local Agent.create/dispose — avoids SDK WriteIterableClosedError under parallel load. */
-let localAgentLifecycle = Promise.resolve();
+/**
+ * Brief global mutex for local Agent.create / dispose only (not run.wait).
+ * Parallel books translate concurrently; only SDK open/close is serialized.
+ */
+let localSdkMutex = Promise.resolve();
 
 /**
  * @template T
  * @param {() => Promise<T>} fn
  * @returns {Promise<T>}
  */
-function withLocalAgentLifecycle(fn) {
-  const run = localAgentLifecycle.then(fn, fn);
-  localAgentLifecycle = run.then(
+function withLocalSdkMutex(fn) {
+  const run = localSdkMutex.then(fn, fn);
+  localSdkMutex = run.then(
     () => undefined,
     () => undefined,
   );
@@ -289,44 +292,47 @@ async function runOneSession(book, opts) {
     return { book, status: 'dry-run' };
   }
 
-  const runSession = async () => {
-    const agent = await Agent.create(agentOptions);
-    try {
-      console.log(`[${book}] agent ${agent.agentId} — sending translation prompt…`);
-      const run = await agent.send(prompt);
-      console.log(`[${book}] run ${run.id}`);
+  const agent =
+    opts.runtime === 'local'
+      ? await withLocalSdkMutex(() => Agent.create(agentOptions))
+      : await Agent.create(agentOptions);
+  try {
+    console.log(`[${book}] agent ${agent.agentId} — sending translation prompt…`);
+    const run = await agent.send(prompt);
+    console.log(`[${book}] run ${run.id}`);
 
-      if (opts.stream) {
-        for await (const event of run.stream()) {
-          if (event.type === 'assistant') {
-            for (const block of event.message.content) {
-              if (block.type === 'text') process.stdout.write(block.text);
-            }
+    if (opts.stream) {
+      for await (const event of run.stream()) {
+        if (event.type === 'assistant') {
+          for (const block of event.message.content) {
+            if (block.type === 'text') process.stdout.write(block.text);
           }
         }
       }
+    }
 
-      const result = await run.wait();
-      console.log(`\n[${book}] finished run ${result.id} status=${result.status}`);
-      return {
-        book,
-        status: result.status,
-        agentId: agent.agentId,
-        runId: result.id,
-        git: result.git,
-      };
-    } finally {
+    const result = await run.wait();
+    console.log(`\n[${book}] finished run ${result.id} status=${result.status}`);
+    return {
+      book,
+      status: result.status,
+      agentId: agent.agentId,
+      runId: result.id,
+      git: result.git,
+    };
+  } finally {
+    if (opts.runtime === 'local') {
+      await withLocalSdkMutex(() => disposeAgent(agent));
+    } else {
       await disposeAgent(agent);
     }
-  };
-
-  if (opts.runtime === 'local') {
-    return withLocalAgentLifecycle(runSession);
   }
-  return runSession();
 }
 
 /**
+ * One book = one chain: session (one chapter) → merge-wait on origin/master → next session.
+ * Cross-book parallelism is only limited by --concurrency; there is no wait across books.
+ *
  * @param {string} book
  * @param {ReturnType<typeof parseArgs>} opts
  */
