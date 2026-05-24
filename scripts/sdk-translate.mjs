@@ -32,6 +32,23 @@ const DEFAULT_REPO_URL = 'https://github.com/GarrettPetersen/records-of-the-gran
 /** When true, worker pool stops claiming new books (in-flight sessions still finish). */
 let drainRequested = false;
 
+/** Serialize local Agent.create/dispose — avoids SDK WriteIterableClosedError under parallel load. */
+let localAgentLifecycle = Promise.resolve();
+
+/**
+ * @template T
+ * @param {() => Promise<T>} fn
+ * @returns {Promise<T>}
+ */
+function withLocalAgentLifecycle(fn) {
+  const run = localAgentLifecycle.then(fn, fn);
+  localAgentLifecycle = run.then(
+    () => undefined,
+    () => undefined,
+  );
+  return run;
+}
+
 function requestDrain(source) {
   if (drainRequested) return;
   drainRequested = true;
@@ -39,6 +56,10 @@ function requestDrain(source) {
     `\n[orchestrator] drain requested (${source}) — active sessions will finish and merge-wait; no new books will start`,
   );
 }
+
+process.on('unhandledRejection', (reason) => {
+  console.error('[orchestrator] unhandledRejection:', reason);
+});
 
 process.on('SIGUSR1', () => requestDrain('SIGUSR1'));
 process.on('SIGINT', () => {
@@ -268,34 +289,41 @@ async function runOneSession(book, opts) {
     return { book, status: 'dry-run' };
   }
 
-  const agent = await Agent.create(agentOptions);
-  try {
-    console.log(`[${book}] agent ${agent.agentId} — sending translation prompt…`);
-    const run = await agent.send(prompt);
-    console.log(`[${book}] run ${run.id}`);
+  const runSession = async () => {
+    const agent = await Agent.create(agentOptions);
+    try {
+      console.log(`[${book}] agent ${agent.agentId} — sending translation prompt…`);
+      const run = await agent.send(prompt);
+      console.log(`[${book}] run ${run.id}`);
 
-    if (opts.stream) {
-      for await (const event of run.stream()) {
-        if (event.type === 'assistant') {
-          for (const block of event.message.content) {
-            if (block.type === 'text') process.stdout.write(block.text);
+      if (opts.stream) {
+        for await (const event of run.stream()) {
+          if (event.type === 'assistant') {
+            for (const block of event.message.content) {
+              if (block.type === 'text') process.stdout.write(block.text);
+            }
           }
         }
       }
-    }
 
-    const result = await run.wait();
-    console.log(`\n[${book}] finished run ${result.id} status=${result.status}`);
-    return {
-      book,
-      status: result.status,
-      agentId: agent.agentId,
-      runId: result.id,
-      git: result.git,
-    };
-  } finally {
-    await disposeAgent(agent);
+      const result = await run.wait();
+      console.log(`\n[${book}] finished run ${result.id} status=${result.status}`);
+      return {
+        book,
+        status: result.status,
+        agentId: agent.agentId,
+        runId: result.id,
+        git: result.git,
+      };
+    } finally {
+      await disposeAgent(agent);
+    }
+  };
+
+  if (opts.runtime === 'local') {
+    return withLocalAgentLifecycle(runSession);
   }
+  return runSession();
 }
 
 /**
@@ -377,7 +405,14 @@ async function mapPool(items, concurrency, fn, poolOpts = {}) {
     while (nextIndex < items.length) {
       if (shouldStop()) break;
       const i = nextIndex++;
-      results[i] = await fn(items[i], i);
+      const book = items[i];
+      try {
+        results[i] = await fn(book, i);
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        console.error(`[${book}] worker crashed (orchestrator continues): ${message}`);
+        results[i] = [{ book, status: 'loop_error', message }];
+      }
     }
   }
 
