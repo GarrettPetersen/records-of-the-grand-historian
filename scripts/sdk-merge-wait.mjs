@@ -97,6 +97,78 @@ function incompleteChaptersFromDataFiles(ref, book) {
   return incomplete;
 }
 
+const RETRYABLE_NETWORK = new Set(['ECONNRESET', 'ETIMEDOUT', 'ENOTFOUND', 'EAI_AGAIN', 'ECONNREFUSED']);
+
+/**
+ * @param {unknown} err
+ */
+function isRetryableFetchError(err) {
+  if (!err || typeof err !== 'object') return false;
+  const e = /** @type {{ code?: string, cause?: { code?: string }, message?: string }} */ (err);
+  const code = e.code ?? e.cause?.code;
+  if (code && RETRYABLE_NETWORK.has(code)) return true;
+  const msg = e.message ?? '';
+  return msg.includes('fetch failed') || /GitHub API (429|5\d\d)/.test(msg);
+}
+
+/**
+ * @param {string} url
+ * @param {{ token?: string, maxAttempts?: number, baseMs?: number }} [opts]
+ */
+async function githubFetch(url, opts = {}) {
+  const { token, maxAttempts = 5, baseMs = 1000 } = opts;
+  const headers = {
+    Accept: 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+  };
+  if (token) headers.Authorization = `Bearer ${token}`;
+
+  let lastErr;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      const res = await fetch(url, { headers });
+      if (res.status === 429 || res.status >= 500) {
+        const body = await res.text();
+        throw new Error(`GitHub API ${res.status}: ${body.slice(0, 200)}`);
+      }
+      return res;
+    } catch (err) {
+      lastErr = err;
+      if (!isRetryableFetchError(err) || attempt === maxAttempts) throw err;
+      const delay = baseMs * 2 ** (attempt - 1);
+      console.warn(
+        `GitHub API retry ${attempt}/${maxAttempts} in ${delay}ms: ${/** @type {Error} */ (err).message}`,
+      );
+      await sleep(delay);
+    }
+  }
+  throw lastErr;
+}
+
+/**
+ * @param {{ state?: string, merged?: boolean, mergeable?: boolean | null, mergeable_state?: string, number?: number }} pr
+ * @param {string} book
+ */
+function assertPrMergeable(pr, book) {
+  if (pr.state === 'closed' && !pr.merged) {
+    throw new Error(`[${book}] PR #${pr.number} closed without merge — fix or reopen manually`);
+  }
+  if (pr.state !== 'open' || pr.merged) return;
+  if (pr.mergeable == null) return;
+
+  const state = pr.mergeable_state ?? 'unknown';
+  if (!pr.mergeable && (state === 'dirty' || state === 'conflicting')) {
+    throw new Error(
+      `[${book}] PR #${pr.number} has merge conflicts (mergeable_state=${state}). Resolve on GitHub before the next session.`,
+    );
+  }
+  if (!pr.mergeable && state === 'behind') {
+    console.warn(
+      `[${book}] PR #${pr.number} is behind master (mergeable_state=behind) — automerge may be waiting on an update`,
+    );
+  }
+}
+
 /**
  * @param {string} owner
  * @param {string} repo
@@ -104,17 +176,8 @@ function incompleteChaptersFromDataFiles(ref, book) {
  * @param {string} [token]
  */
 async function fetchOpenPrsForBook(owner, repo, book, token) {
-  const headers = {
-    Accept: 'application/vnd.github+json',
-    'X-GitHub-Api-Version': '2022-11-28',
-  };
-  if (token) headers.Authorization = `Bearer ${token}`;
-
   const url = `https://api.github.com/repos/${owner}/${repo}/pulls?state=open&per_page=100`;
-  const res = await fetch(url, { headers });
-  if (!res.ok) {
-    throw new Error(`GitHub API ${res.status}: ${(await res.text()).slice(0, 200)}`);
-  }
+  const res = await githubFetch(url, { token });
   const pulls = await res.json();
   const needle = book.toLowerCase();
   return pulls.filter((pr) => {
@@ -126,20 +189,15 @@ async function fetchOpenPrsForBook(owner, repo, book, token) {
 
 /**
  * @param {string} prUrl
- * @param {string} token
+ * @param {string} [token]
  */
 async function fetchPullRequest(prUrl, token) {
   const m = prUrl.match(/github\.com\/([^/]+)\/([^/]+)\/pull\/(\d+)/);
   if (!m) return null;
   const [, owner, repo, number] = m;
-  const headers = {
-    Accept: 'application/vnd.github+json',
-    'X-GitHub-Api-Version': '2022-11-28',
-  };
-  if (token) headers.Authorization = `Bearer ${token}`;
-  const res = await fetch(
+  const res = await githubFetch(
     `https://api.github.com/repos/${owner}/${repo}/pulls/${number}`,
-    { headers },
+    { token },
   );
   if (!res.ok) return null;
   return res.json();
@@ -175,6 +233,12 @@ export async function waitForSessionMergedToMaster(book, sessionResult, baseline
       ` — baseline incomplete chapters: ${baselineIncomplete.size}`,
   );
 
+  if (!prUrl && !branch) {
+    console.warn(
+      `[${book}] agent finished but SDK returned no PR URL or branch — will wait for origin/master progress only`,
+    );
+  }
+
   execSync('git fetch origin master', { cwd: REPO_ROOT, stdio: 'inherit' });
 
   while (Date.now() - started < timeoutMs) {
@@ -182,12 +246,12 @@ export async function waitForSessionMergedToMaster(book, sessionResult, baseline
 
     if (prUrl) {
       const pr = await fetchPullRequest(prUrl, token);
-      if (pr?.merged) {
-        console.log(`[${book}] PR #${pr.number} merged`);
-        break;
-      }
-      if (pr?.state === 'closed' && !pr?.merged) {
-        throw new Error(`[${book}] PR closed without merge: ${prUrl}`);
+      if (pr) {
+        assertPrMergeable(pr, book);
+        if (pr.merged) {
+          console.log(`[${book}] PR #${pr.number} merged`);
+          break;
+        }
       }
     }
 
