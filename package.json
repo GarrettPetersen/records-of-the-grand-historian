@@ -9,7 +9,9 @@
     "build:og": "node generate-og-images.js",
     "build:og:incremental": "node generate-og-images.js --incremental",
     "build:og:shiji": "node generate-og-images.js --book shiji",
-    "build:og:shiji:incremental": "node generate-og-images.js --book shiji --incremental"
+    "build:og:shiji:incremental": "node generate-og-images.js --book shiji --incremental",
+    "sdk-translate": "node scripts/sdk-translate.mjs",
+    "sdk-translate:list": "node scripts/sdk-translate.mjs --list-books"
   },
   "engines": {
     "node": ">=22.0.0"
@@ -27,6 +29,7 @@
   "homepage": "https://github.com/GarrettPetersen/records-of-the-grand-historian#readme",
   "description": "",
   "dependencies": {
+    "@cursor/sdk": "^1.0.13",
     "@resvg/resvg-js": "^2.6.2",
     "cheerio": "^1.1.2",
     "react": "^19.2.5",
