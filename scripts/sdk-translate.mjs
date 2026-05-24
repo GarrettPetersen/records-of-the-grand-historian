@@ -29,6 +29,27 @@ const DEFAULT_MODEL = 'composer-2.5';
 const DEFAULT_TRANSLATOR = 'Garrett M. Petersen (2026)';
 const DEFAULT_REPO_URL = 'https://github.com/GarrettPetersen/records-of-the-grand-historian';
 
+/** When true, worker pool stops claiming new books (in-flight sessions still finish). */
+let drainRequested = false;
+
+function requestDrain(source) {
+  if (drainRequested) return;
+  drainRequested = true;
+  console.log(
+    `\n[orchestrator] drain requested (${source}) — active sessions will finish and merge-wait; no new books will start`,
+  );
+}
+
+process.on('SIGUSR1', () => requestDrain('SIGUSR1'));
+process.on('SIGINT', () => {
+  if (!drainRequested) {
+    requestDrain('SIGINT — press Ctrl+C again to force quit');
+  } else {
+    console.log('\n[orchestrator] force exit');
+    process.exit(130);
+  }
+});
+
 function usage() {
   console.log(`Usage: node scripts/sdk-translate.mjs [options]
 
@@ -54,6 +75,9 @@ Options:
   --dry-run                Print plan without calling the API
   --no-stream              Wait without streaming assistant text
   -h, --help               This message
+
+Drain (graceful shutdown): npm run sdk-translate:drain  (or kill -USR1 <orchestrator-pid>)
+  Finishes in-flight agent runs and merge-wait, then exits without starting new books.
 
 Examples:
   node scripts/sdk-translate.mjs --list-books
@@ -338,12 +362,20 @@ async function runBookLoop(book, opts) {
   return results;
 }
 
-async function mapPool(items, concurrency, fn) {
+/**
+ * @param {unknown[]} items
+ * @param {number} concurrency
+ * @param {(item: unknown, index: number) => Promise<unknown>} fn
+ * @param {{ shouldStopScheduling?: () => boolean }} [poolOpts]
+ */
+async function mapPool(items, concurrency, fn, poolOpts = {}) {
   const results = new Array(items.length);
   let nextIndex = 0;
+  const shouldStop = poolOpts.shouldStopScheduling ?? (() => false);
 
   async function worker() {
     while (nextIndex < items.length) {
+      if (shouldStop()) break;
       const i = nextIndex++;
       results[i] = await fn(items[i], i);
     }
@@ -421,7 +453,17 @@ async function main() {
     );
   }
 
-  const allResults = await mapPool(books, opts.concurrency, (book) => runBookLoop(book, opts));
+  const allResults = await mapPool(books, opts.concurrency, (book) => runBookLoop(book, opts), {
+    shouldStopScheduling: () => drainRequested,
+  });
+
+  if (drainRequested) {
+    const started = allResults.filter((r) => r != null).length;
+    console.log(
+      `[orchestrator] drain complete — processed ${started}/${books.length} book slot(s); restart to continue the queue`,
+    );
+    return;
+  }
 
   const failed = allResults.flat().filter(
     (r) =>

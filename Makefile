@@ -1010,17 +1010,20 @@ continue:
 		exit 1; \
 	fi; \
 	echo "Found translation session for book: $$book ($$translation_file)"; \
-	echo "$$book" > translations/.continue_book.tmp; \
+	continue_tmp="translations/.continue_book.$$book.tmp"; \
+	rm -f translations/.continue_book.tmp "$$continue_tmp"; \
+	echo "$$book" > "$$continue_tmp"; \
 	echo "Step 1/2: Submitting current translations..."; \
 	translator=$${TRANSLATOR:-"Garrett M. Petersen (2026)"}; \
 	model=$${MODEL:-"grok-1.5"}; \
 	if $(MAKE) submit-translations TRANSLATOR="$$translator" MODEL="$$model" FILE="$$translation_file"; then \
 		echo ""; \
 		echo "Step 2/2: Starting next translation batch..."; \
-		book=$$(cat translations/.continue_book.tmp 2>/dev/null); \
-		rm -f translations/.continue_book.tmp; \
+		book=$$(cat "$$continue_tmp" 2>/dev/null); \
+		rm -f "$$continue_tmp" translations/.continue_book.tmp; \
 		if [ -z "$$book" ]; then \
-			echo "Error: Could not read book from temporary file."; \
+			echo "Error: Could not read book from temporary file ($$continue_tmp)."; \
+			echo "If several agents run make continue in parallel, always pass BOOK=<book>."; \
 			exit 1; \
 		fi; \
 		if [ -n "$(BOOK)" ]; then \
@@ -1030,7 +1033,7 @@ continue:
 		fi; \
 	else \
 		echo "❌ Translation submission failed. Please fix the issues and try again."; \
-		rm -f translations/.continue_book.tmp; \
+		rm -f "$$continue_tmp" translations/.continue_book.tmp; \
 		exit 1; \
 	fi
 
