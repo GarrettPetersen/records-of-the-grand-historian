@@ -33,24 +33,8 @@ export function buildTranslationPrompt(book, opts = {}) {
 
   let text = fs.readFileSync(PROMPT_PATH, 'utf8');
 
-  // Removed from prompt.txt — strip if an old copy or merge reintroduces it.
-  text = text.replace(
-    /^Was that last chapter up to the standards of Ken Liu\?[\s\S]*?Otherwise, let's continue\.\s*\n*/m,
-    '',
-  );
-
   for (const [key, value] of Object.entries(vars)) {
     text = text.replaceAll(`{${key}}`, value);
-  }
-
-  // Legacy prompt.txt used hardcoded shiji; catch stragglers after placeholder migration.
-  const legacyShiji = [
-    ['BOOK=shiji', `BOOK=${book}`],
-    ['current_translation_shiji.json', translationFile],
-    ['make update BOOK=shiji', `make update BOOK=${book}`],
-  ];
-  for (const [from, to] of legacyShiji) {
-    text = text.replaceAll(from, to);
   }
 
   if (

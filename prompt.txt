@@ -19,11 +19,13 @@ KEY PRINCIPLES:
 • Proper articles/grammar: "the", "a", etc. where appropriate
 • Ken Liu literary quality: Professional historical translation style
 
+The Makefile has all the commands you need. Use `make` targets only — do not write your own scripts (no one-off `.mjs`, `.js`, `.py`, or shell files for batching, filling translations, scoring, or submitting). If you need a step, find it in the Makefile or README first.
+
 Run make continue BOOK={book} MODEL="{model}".
 
 Then, once again, add professional quality translations to {translation_file}.
 
-Run make continue again.
+Run make continue BOOK={book} MODEL="{model}" again.
 
 Continue this process in a loop until the chapter is fully translated.
 
