@@ -20,6 +20,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defaultStaticGenConcurrency, hardwareConcurrency } from './scripts/build-parallelism.mjs';
+import { getBookMetadata, mergeBookInfo } from './scripts/book-metadata.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -92,14 +93,17 @@ function loadBooks() {
           const chapterData = JSON.parse(fs.readFileSync(firstChapterPath, 'utf8'));
 
           if (chapterData.meta && chapterData.meta.bookInfo) {
+            const merged = mergeBookInfo(bookId, chapterData.meta.bookInfo);
             books[bookId] = {
-              name: chapterData.meta.bookInfo.name || bookId,
-              chinese: chapterData.meta.bookInfo.chinese || bookId,
-              pinyin: chapterData.meta.bookInfo.pinyin || bookId,
-              author: chapterData.meta.bookInfo.author || 'Unknown',
-              dynasty: chapterData.meta.bookInfo.dynasty || 'Unknown',
-              category: chapterData.meta.bookInfo.category || 'twentyFourHistories'
+              name: merged.name || bookId,
+              chinese: merged.chinese || bookId,
+              pinyin: merged.pinyin || bookId,
+              author: merged.author || 'Unknown',
+              dynasty: merged.dynasty || 'Unknown',
+              category: merged.category || 'twentyFourHistories',
             };
+          } else if (getBookMetadata(bookId)) {
+            books[bookId] = { ...getBookMetadata(bookId) };
           }
         }
       } catch (err) {
