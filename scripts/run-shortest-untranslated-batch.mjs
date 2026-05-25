@@ -38,7 +38,7 @@ function parseArgs() {
       limit = Number.parseInt(process.argv[++i], 10) || 100;
     }
   }
-  const concurrency = Number.parseInt(process.env.SDK_CHAPTER_BATCH_CONCURRENCY ?? '25', 10) || 25;
+  const concurrency = Number.parseInt(process.env.SDK_CHAPTER_BATCH_CONCURRENCY ?? '100', 10) || 100;
   return { dryRun, limit, concurrency };
 }
 
