@@ -302,6 +302,7 @@
                     <div class="overall-progress-fill" id="overall-progress-fill" style="width: 0%;"></div>
                 </div>
                 <div class="overall-metrics-grid">
+                    <div class="overall-metric-card" id="overall-progress-books"></div>
                     <div class="overall-metric-card" id="overall-progress-chapters"></div>
                     <div class="overall-metric-card" id="overall-progress-sentences"></div>
                     <div class="overall-metric-card" id="overall-progress-characters"></div>
@@ -438,6 +439,15 @@
             return section;
         }
 
+        function countCompletedBooks(books) {
+            const bookList = Object.values(books || {});
+            const totalBooks = bookList.length;
+            const completedBooks = bookList.filter(
+                (book) => book.chapters?.length > 0 && book.chapters.every((chapter) => chapter.status === 'green')
+            ).length;
+            return { completedBooks, totalBooks };
+        }
+
         function renderOverallProgress(data) {
             const chapters = Object.values(data.books).flatMap(book => book.chapters || []);
             const chapterTotal = chapters.length;
@@ -446,11 +456,20 @@
             const sentenceTranslated = chapters.reduce((sum, chapter) => sum + (chapter.translatedCount || 0), 0);
             const characterTotal = chapters.reduce((sum, chapter) => sum + (chapter.characterCount || 0), 0);
             const characterTranslated = chapters.reduce((sum, chapter) => sum + (chapter.translatedCharacterCount || 0), 0);
+            const bookCounts = countCompletedBooks(data.books);
+            const completedBooks = Number(data.summary?.completedBooks ?? bookCounts.completedBooks);
+            const totalBooks = Number(data.summary?.totalBooks ?? bookCounts.totalBooks);
+            const bookPercent = totalBooks > 0 ? (completedBooks / totalBooks) * 100 : 0;
             const percent = chapterTotal > 0 ? (chapterFinished / chapterTotal) * 100 : 0;
             const displayPercent = `${percent.toFixed(1)}%`;
 
             document.getElementById('overall-progress-percent').textContent = displayPercent;
             document.getElementById('overall-progress-fill').style.width = displayPercent;
+            document.getElementById('overall-progress-books').innerHTML = `
+                <div class="overall-metric-label">Books</div>
+                <div class="overall-metric-value">${completedBooks.toLocaleString()} / ${totalBooks.toLocaleString()} (${bookPercent.toFixed(1)}%)</div>
+                <div class="overall-metric-note">Coarsest milestone: every chapter in a work is complete (green).</div>
+            `;
             document.getElementById('overall-progress-chapters').innerHTML = `
                 <div class="overall-metric-label">Chapters</div>
                 <div class="overall-metric-value">${chapterFinished.toLocaleString()} / ${chapterTotal.toLocaleString()} (${percent.toFixed(1)}%)</div>

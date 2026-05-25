@@ -145,6 +145,39 @@ function bookProgressFromManifest(bookId, book) {
   return bookProgress;
 }
 
+/** A book is fully translated when every chapter is green (complete idiomatic, no major issues). */
+function countCompletedBooks(books) {
+  const entries = Object.values(books || {});
+  const totalBooks = entries.length;
+  const completedBooks = entries.filter(
+    (book) => book.chapters?.length > 0 && book.chapters.every((chapter) => chapter.status === 'green')
+  ).length;
+  return { completedBooks, totalBooks };
+}
+
+function buildProgressSummary(books) {
+  const chapters = Object.values(books).flatMap((book) => book.chapters || []);
+  const completedChapters = chapters.filter((chapter) => chapter.status === 'green').length;
+  const totalSentences = chapters.reduce((sum, chapter) => sum + (chapter.sentenceCount || 0), 0);
+  const translatedSentences = chapters.reduce((sum, chapter) => sum + (chapter.translatedCount || 0), 0);
+  const { completedBooks, totalBooks } = countCompletedBooks(books);
+  const estimate = estimateCompletionFromGitHistory({
+    completedChapters,
+    totalChapters: chapters.length,
+  });
+  return {
+    completedBooks,
+    totalBooks,
+    completedChapters,
+    totalChapters: chapters.length,
+    remainingChapters: Math.max(0, chapters.length - completedChapters),
+    totalSentences,
+    translatedSentences,
+    remainingSentences: Math.max(0, totalSentences - translatedSentences),
+    estimate,
+  };
+}
+
 /**
  * Generate progress data for all books in the manifest
  */
@@ -160,23 +193,7 @@ function generateProgressData() {
     progress.books[bookId] = bookProgressFromManifest(bookId, book);
   }
 
-  const chapters = Object.values(progress.books).flatMap(book => book.chapters || []);
-  const completedChapters = chapters.filter(chapter => chapter.status === 'green').length;
-  const totalSentences = chapters.reduce((sum, chapter) => sum + (chapter.sentenceCount || 0), 0);
-  const translatedSentences = chapters.reduce((sum, chapter) => sum + (chapter.translatedCount || 0), 0);
-  const estimate = estimateCompletionFromGitHistory({
-    completedChapters,
-    totalChapters: chapters.length
-  });
-  progress.summary = {
-    completedChapters,
-    totalChapters: chapters.length,
-    remainingChapters: Math.max(0, chapters.length - completedChapters),
-    totalSentences,
-    translatedSentences,
-    remainingSentences: Math.max(0, totalSentences - translatedSentences),
-    estimate
-  };
+  progress.summary = buildProgressSummary(progress.books);
 
   return progress;
 }
@@ -214,24 +231,7 @@ function mergeProgressSingleBook(bookId) {
   progress.generatedAt = new Date().toISOString();
   progress.books = progress.books || {};
   progress.books[bookId] = bookProgressFromManifest(bookId, manifest.books[bookId]);
-  const chapters = Object.values(progress.books).flatMap(book => book.chapters || []);
-  const completedChapters = chapters.filter(chapter => chapter.status === 'green').length;
-  const totalSentences = chapters.reduce((sum, chapter) => sum + (chapter.sentenceCount || 0), 0);
-  const translatedSentences = chapters.reduce((sum, chapter) => sum + (chapter.translatedCount || 0), 0);
-  const estimate = estimateCompletionFromGitHistory({
-    completedChapters,
-    totalChapters: chapters.length,
-    remainingSentences: Math.max(0, totalSentences - translatedSentences)
-  });
-  progress.summary = {
-    completedChapters,
-    totalChapters: chapters.length,
-    remainingChapters: Math.max(0, chapters.length - completedChapters),
-    totalSentences,
-    translatedSentences,
-    remainingSentences: Math.max(0, totalSentences - translatedSentences),
-    estimate
-  };
+  progress.summary = buildProgressSummary(progress.books);
   writeProgress(progress);
   console.log(`Merged progress for book: ${bookId}`);
 }
@@ -256,4 +256,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   main();
 }
 
-export { generateProgressData, analyzeChapterStatus, bookProgressFromManifest, mergeProgressSingleBook };
+export {
+  generateProgressData,
+  analyzeChapterStatus,
+  bookProgressFromManifest,
+  mergeProgressSingleBook,
+  countCompletedBooks,
+  buildProgressSummary,
+};
