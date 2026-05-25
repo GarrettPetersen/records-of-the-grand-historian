@@ -133,7 +133,10 @@ export async function mergePullRequest(repoUrl, pullNumber, opts = {}) {
     const text = await res.text();
     throw new Error(`GitHub merge PR #${pullNumber}: ${res.status} ${text.slice(0, 300)}`);
   }
-  return res.json();
+  if (res.status === 204) return { merged: true };
+  const text = await res.text();
+  if (!text.trim()) return { merged: true };
+  return JSON.parse(text);
 }
 
 /**
