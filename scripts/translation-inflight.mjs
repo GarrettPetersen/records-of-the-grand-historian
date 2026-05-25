@@ -88,16 +88,19 @@ export function parsePrChapter(pr, bookIds) {
     }
   }
 
+  // cursor/jiuwudaishi-148-04c6, cursor/liaoshi-111-28d8
+  m = head.match(/cursor\/(?:translate-)?([a-z][a-z0-9]*)-(\d{1,3})\b/i);
+  if (m) {
+    const book = m[1].toLowerCase();
+    if (bookIds.has(book)) {
+      return { book, chapter: normalizeChapterId(m[2]) };
+    }
+  }
+
   m = head.match(/cursor\/(?:translate-)?([a-z][a-z0-9]*)-translation\b/i);
   if (m) {
     const book = m[1].toLowerCase();
     if (bookIds.has(book)) {
-      return { book, chapter: null };
-    }
-  }
-
-  for (const book of bookIds) {
-    if (head.toLowerCase().includes(book)) {
       return { book, chapter: null };
     }
   }
@@ -332,7 +335,7 @@ export async function buildInflightRegistry(opts = {}) {
 export function isChapterInflight(book, chapter, registry) {
   const key = chapterKey(book, chapter);
   if (registry.keys.has(key)) return true;
-  if (registry.bookOnly.has(book)) return true;
+  // bookOnly: unparsed open PRs only — do not block every chapter in the book
   return false;
 }
 
@@ -344,12 +347,7 @@ export function isChapterInflight(book, chapter, registry) {
  */
 export function inflightReasonsForChapter(book, chapter, registry) {
   const ch = normalizeChapterId(chapter);
-  return registry.entries.filter(
-    (e) =>
-      (e.book === book && e.chapter === ch) ||
-      (e.book === book && e.chapter === null) ||
-      (e.book === book && !e.chapter),
-  );
+  return registry.entries.filter((e) => e.book === book && e.chapter === ch);
 }
 
 /**
