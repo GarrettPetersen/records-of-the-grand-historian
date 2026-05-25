@@ -43,4 +43,4 @@ I fully expect this to take a long time! NO placeholders. There is NO other tran
 
 Then run make update BOOK={book} (or make update-all only if you touched multiple books). Pull from master once more, then commit and push your branch with an appropriate message (prefer one commit at the end of the chapter — no commit spam).
 
-You MUST open a pull request against master (non-draft). Use `gh pr create` if a PR was not opened for you automatically. Do not stop at a compare URL or hand off with "you can open a PR" — verify the PR exists before ending the session. Translate exactly one chapter per session, then stop.
+You MUST open a pull request against `translation-staging` (non-draft), not `master` — chapter work is batched to `master` via the staging branch. Example: `gh pr create --base translation-staging`. Use `gh pr create` if a PR was not opened for you automatically. Do not stop at a compare URL or hand off with "you can open a PR" — verify the PR exists before ending the session. Translate exactly one chapter per session, then stop.

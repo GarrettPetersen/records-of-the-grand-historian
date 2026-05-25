@@ -59,4 +59,4 @@ jobs:
             gh label create "translation-batch" --description "Chapter translation; merge via translation-staging batch" --color "1d76db" && \
             gh pr edit "$PR_URL" --add-label "translation-batch"
 
-          gh pr comment "$PR_URL" --body "This chapter PR is queued for **translation-staging** batch merge (not merged to \`master\` individually, to avoid one Cloudflare build per PR). Run workflow **Merge translation PRs to staging** or \`npm run merge-translation:staging\`, then squash-merge \`translation-staging\` → \`master\` once."
+          gh pr comment "$PR_URL" --body "This chapter PR is queued for **translation-staging** batch merge (not merged to \`master\` individually, to avoid one Cloudflare build per PR). Run workflow **Merge translation PRs to staging** or \`npm run merge-translation:staging\` — that retargets each chapter PR to \`translation-staging\` and **merges** it there (PR shows as merged). Then squash-merge \`translation-staging\` → \`master\` once."
