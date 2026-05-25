@@ -378,6 +378,7 @@
             bookData.chapters.forEach(chapter => {
                 stats[chapter.status]++;
             });
+            const chaptersComplete = stats.green + stats.red;
             const sentenceTotal = bookData.chapters.reduce((sum, chapter) => sum + (chapter.sentenceCount || 0), 0);
             const sentenceTranslated = bookData.chapters.reduce((sum, chapter) => sum + (chapter.translatedCount || 0), 0);
             const characterTotal = bookData.chapters.reduce((sum, chapter) => sum + (chapter.characterCount || 0), 0);
@@ -404,7 +405,7 @@
                     </div>
                     <div class="stat-item">
                         <div class="stat-square green"></div>
-                        <span>${stats.green}/${stats.total} complete</span>
+                        <span>${chaptersComplete}/${stats.total} translated (${stats.green} clean, ${stats.red} flagged)</span>
                     </div>
                     <div class="stat-item">
                         <span>${formatProgress(sentenceTranslated, sentenceTotal, 'sentences')}</span>
@@ -439,11 +440,15 @@
             return section;
         }
 
+        function isChapterTranslated(status) {
+            return status === 'green' || status === 'red';
+        }
+
         function countCompletedBooks(books) {
             const bookList = Object.values(books || {});
             const totalBooks = bookList.length;
             const completedBooks = bookList.filter(
-                (book) => book.chapters?.length > 0 && book.chapters.every((chapter) => chapter.status === 'green')
+                (book) => book.chapters?.length > 0 && book.chapters.every((chapter) => isChapterTranslated(chapter.status))
             ).length;
             return { completedBooks, totalBooks };
         }
@@ -451,7 +456,7 @@
         function renderOverallProgress(data) {
             const chapters = Object.values(data.books).flatMap(book => book.chapters || []);
             const chapterTotal = chapters.length;
-            const chapterFinished = chapters.filter(chapter => chapter.status === 'green').length;
+            const chapterFinished = chapters.filter(chapter => isChapterTranslated(chapter.status)).length;
             const sentenceTotal = chapters.reduce((sum, chapter) => sum + (chapter.sentenceCount || 0), 0);
             const sentenceTranslated = chapters.reduce((sum, chapter) => sum + (chapter.translatedCount || 0), 0);
             const characterTotal = chapters.reduce((sum, chapter) => sum + (chapter.characterCount || 0), 0);
@@ -468,12 +473,12 @@
             document.getElementById('overall-progress-books').innerHTML = `
                 <div class="overall-metric-label">Books</div>
                 <div class="overall-metric-value">${completedBooks.toLocaleString()} / ${totalBooks.toLocaleString()} (${bookPercent.toFixed(1)}%)</div>
-                <div class="overall-metric-note">Coarsest milestone: every chapter in a work is complete (green).</div>
+                <div class="overall-metric-note">Coarsest milestone: every chapter translated (green or red).</div>
             `;
             document.getElementById('overall-progress-chapters').innerHTML = `
                 <div class="overall-metric-label">Chapters</div>
                 <div class="overall-metric-value">${chapterFinished.toLocaleString()} / ${chapterTotal.toLocaleString()} (${percent.toFixed(1)}%)</div>
-                <div class="overall-metric-note">Complete chapters only.</div>
+                <div class="overall-metric-note">Translated chapters (green or red).</div>
             `;
             document.getElementById('overall-progress-sentences').innerHTML = `
                 <div class="overall-metric-label">Sentences</div>

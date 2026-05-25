@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { execFileSync } from 'node:child_process';
+import { countTranslatedChapters } from './progress-status.mjs';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const DEFAULT_WINDOW_DAYS = 30;
@@ -68,19 +69,8 @@ function hasMeaningfulTranslation(item) {
 }
 
 function countCompletedChaptersFromProgressJson(progressJson) {
-  const books = Object.values(progressJson?.books || {});
-  let total = 0;
-
-  for (const book of books) {
-    for (const chapter of book?.chapters || []) {
-      const status = chapter?.status;
-      if (status === 'green') {
-        total += 1;
-      }
-    }
-  }
-
-  return total;
+  const chapters = Object.values(progressJson?.books || {}).flatMap((book) => book?.chapters || []);
+  return countTranslatedChapters(chapters);
 }
 
 function readProgressSnapshotAtRevision(revision) {

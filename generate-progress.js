@@ -19,6 +19,7 @@ import path from 'path';
 import { scoreChapterFile } from './score-translations.js';
 import { isPunctuationOnlySentence } from './sentence-utils.mjs';
 import { estimateCompletionFromGitHistory } from './scripts/progress-estimate.mjs';
+import { countCompletedBooks, countTranslatedChapters } from './scripts/progress-status.mjs';
 
 const MANIFEST_PATH = './data/manifest.json';
 const DATA_DIR = './data';
@@ -145,19 +146,9 @@ function bookProgressFromManifest(bookId, book) {
   return bookProgress;
 }
 
-/** A book is fully translated when every chapter is green (complete idiomatic, no major issues). */
-function countCompletedBooks(books) {
-  const entries = Object.values(books || {});
-  const totalBooks = entries.length;
-  const completedBooks = entries.filter(
-    (book) => book.chapters?.length > 0 && book.chapters.every((chapter) => chapter.status === 'green')
-  ).length;
-  return { completedBooks, totalBooks };
-}
-
 function buildProgressSummary(books) {
   const chapters = Object.values(books).flatMap((book) => book.chapters || []);
-  const completedChapters = chapters.filter((chapter) => chapter.status === 'green').length;
+  const completedChapters = countTranslatedChapters(chapters);
   const totalSentences = chapters.reduce((sum, chapter) => sum + (chapter.sentenceCount || 0), 0);
   const translatedSentences = chapters.reduce((sum, chapter) => sum + (chapter.translatedCount || 0), 0);
   const { completedBooks, totalBooks } = countCompletedBooks(books);
@@ -261,6 +252,5 @@ export {
   analyzeChapterStatus,
   bookProgressFromManifest,
   mergeProgressSingleBook,
-  countCompletedBooks,
   buildProgressSummary,
 };
