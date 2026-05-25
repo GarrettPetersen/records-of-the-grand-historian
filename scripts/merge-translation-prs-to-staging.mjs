@@ -20,6 +20,7 @@ import { execSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
+  closeAbsorbedChapterPr,
   DEFAULT_REPO_URL,
   getPullRequest,
   listOpenCursorTranslationPrs,
@@ -91,6 +92,36 @@ function syncStagingBranchWithMaster(stagingBranch) {
   run('git merge origin/master -m "staging: sync from master" --no-edit', { inherit: true });
 }
 
+/**
+ * Resolve merge conflicts by keeping the incoming PR version (chapter + corpus deltas).
+ * Multiple chapter PRs touch the same search-corpus/{book}.json; sequential merges conflict otherwise.
+ */
+function resolveConflictsPreferIncoming() {
+  let unmerged = run('git diff --name-only --diff-filter=U', { encoding: 'utf8' }).trim();
+  if (!unmerged) return true;
+
+  for (const file of unmerged.split('\n')) {
+    if (!file) continue;
+    run(`git checkout --theirs -- "${file}"`, { inherit: true });
+    run(`git add -- "${file}"`, { inherit: true });
+  }
+
+  unmerged = run('git diff --name-only --diff-filter=U', { encoding: 'utf8' }).trim();
+  if (unmerged) return false;
+
+  run('git commit --no-edit', { inherit: true });
+  return true;
+}
+
+function rebuildSearchCorporaOnStaging() {
+  console.log('Rebuilding search corpora on staging (fixes batch merge conflicts)…');
+  run('node scripts/build-book-search-corpus.mjs', { inherit: true });
+  const status = run('git status --porcelain public/data/search-corpus', { encoding: 'utf8' }).trim();
+  if (!status) return;
+  run('git add public/data/search-corpus', { inherit: true });
+  run('git commit -m "staging: rebuild search corpora after chapter batch" --no-edit', { inherit: true });
+}
+
 function gitMergePrHeadIntoStaging(pr, stagingBranch, skipConflicts) {
   const remoteRef = `origin/${pr.headRef}`;
   try {
@@ -106,6 +137,10 @@ function gitMergePrHeadIntoStaging(pr, stagingBranch, skipConflicts) {
     );
     return true;
   } catch {
+    if (resolveConflictsPreferIncoming()) {
+      console.log(`  PR #${pr.number}: git merge completed after conflict resolution`);
+      return true;
+    }
     try {
       run('git merge --abort', { inherit: true });
     } catch {
@@ -205,9 +240,17 @@ async function mergePrIntoStagingViaGithub(pr, stagingBranch, { skipConflicts, r
     return { ok: true, via: 'github-after-git' };
   } catch (err) {
     console.warn(
-      `  PR #${pr.number}: still not mergeable on GitHub after git fallback (${err instanceof Error ? err.message : err})`,
+      `  PR #${pr.number}: GitHub merge still blocked after git absorb — closing PR (${err instanceof Error ? err.message : err})`,
     );
-    return { ok: true, via: 'git-only' };
+    try {
+      await closeAbsorbedChapterPr(repoUrl, pr.number);
+      console.log(`  PR #${pr.number}: closed after git absorb`);
+    } catch (closeErr) {
+      console.warn(
+        `  PR #${pr.number}: could not close (${closeErr instanceof Error ? closeErr.message : closeErr})`,
+      );
+    }
+    return { ok: true, via: 'git-absorb-closed' };
   }
 }
 
@@ -292,6 +335,19 @@ async function main() {
         console.warn(`  failed: PR #${pr.number} — ${failed.at(-1)?.reason}`);
         if (!skipConflicts) break;
       }
+    }
+  }
+
+  if (merged > 0 && push) {
+    try {
+      syncStagingBranchWithMaster(stagingBranch);
+      rebuildSearchCorporaOnStaging();
+      console.log(`Pushing origin ${stagingBranch} (post-corpus rebuild)…`);
+      run(`git push -u origin ${stagingBranch}`, { inherit: true });
+    } catch (err) {
+      console.warn(
+        `Corpus rebuild/push issue (${err instanceof Error ? err.message : err}) — push staging manually if needed.`,
+      );
     }
   }
 

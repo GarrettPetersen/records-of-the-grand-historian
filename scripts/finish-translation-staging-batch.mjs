@@ -19,8 +19,6 @@ import { REPO_ROOT } from './sdk-translation-books.mjs';
 
 const STAGING = process.env.TRANSLATION_STAGING_BRANCH || 'translation-staging';
 const BATCH_PR_TITLE = 'Translation batch';
-const ABSORBED_COMMENT =
-  'Absorbed via **translation-staging** batch (chapter work already on `translation-staging`). Closing to clear the queue.';
 
 /** @type {Record<number, string>} */
 const MERGE_BRANCHES = {
@@ -47,41 +45,6 @@ function run(cmd, inherit = false) {
     encoding: 'utf8',
     stdio: inherit ? 'inherit' : ['ignore', 'pipe', 'pipe'],
   });
-}
-
-/**
- * @param {string} repoUrl
- * @param {number} pullNumber
- * @param {string} body
- */
-async function commentOnPr(repoUrl, pullNumber, body) {
-  const auth = token();
-  const { owner, repo } = parseGitHubRepo(repoUrl);
-  const res = await githubFetch(
-    `https://api.github.com/repos/${owner}/${repo}/issues/${pullNumber}/comments`,
-    { token: auth, method: 'POST', body: { body } },
-  );
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`comment PR #${pullNumber}: ${res.status} ${text.slice(0, 200)}`);
-  }
-}
-
-/**
- * @param {string} repoUrl
- * @param {number} pullNumber
- */
-async function closePullRequest(repoUrl, pullNumber) {
-  const auth = token();
-  const { owner, repo } = parseGitHubRepo(repoUrl);
-  const res = await githubFetch(
-    `https://api.github.com/repos/${owner}/${repo}/pulls/${pullNumber}`,
-    { token: auth, method: 'PATCH', body: { state: 'closed' } },
-  );
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`close PR #${pullNumber}: ${res.status} ${text.slice(0, 200)}`);
-  }
 }
 
 /**
@@ -168,8 +131,7 @@ async function main() {
     }
     console.log(`Close #${num} (${pr.headRef}) — already on staging`);
     if (!dryRun) {
-      await commentOnPr(repoUrl, num, ABSORBED_COMMENT);
-      await closePullRequest(repoUrl, num);
+      await closeAbsorbedChapterPr(repoUrl, num);
     }
   }
 
