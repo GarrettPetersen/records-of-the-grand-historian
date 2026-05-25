@@ -405,7 +405,7 @@
                     </div>
                     <div class="stat-item">
                         <div class="stat-square green"></div>
-                        <span>${chaptersComplete}/${stats.total} translated (${stats.green} clean, ${stats.red} flagged)</span>
+                        <span>${chaptersComplete}/${stats.total} complete</span>
                     </div>
                     <div class="stat-item">
                         <span>${formatProgress(sentenceTranslated, sentenceTotal, 'sentences')}</span>
@@ -473,12 +473,12 @@
             document.getElementById('overall-progress-books').innerHTML = `
                 <div class="overall-metric-label">Books</div>
                 <div class="overall-metric-value">${completedBooks.toLocaleString()} / ${totalBooks.toLocaleString()} (${bookPercent.toFixed(1)}%)</div>
-                <div class="overall-metric-note">Coarsest milestone: every chapter translated (green or red).</div>
+                <div class="overall-metric-note">Coarsest milestone: every chapter translated.</div>
             `;
             document.getElementById('overall-progress-chapters').innerHTML = `
                 <div class="overall-metric-label">Chapters</div>
                 <div class="overall-metric-value">${chapterFinished.toLocaleString()} / ${chapterTotal.toLocaleString()} (${percent.toFixed(1)}%)</div>
-                <div class="overall-metric-note">Translated chapters (green or red).</div>
+                <div class="overall-metric-note">Chapters fully translated.</div>
             `;
             document.getElementById('overall-progress-sentences').innerHTML = `
                 <div class="overall-metric-label">Sentences</div>

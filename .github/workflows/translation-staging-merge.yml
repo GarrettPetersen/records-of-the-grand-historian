@@ -1,0 +1,68 @@
+name: Merge translation PRs to staging
+
+# Batch open cursor/* PRs into translation-staging (avoids one Cloudflare build per chapter PR).
+# Final release: squash-merge translation-staging → master once (single build).
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: List PRs only, do not merge
+        type: boolean
+        default: false
+      limit:
+        description: Max PRs to merge (empty = all)
+        type: string
+        default: ''
+      skip_conflicts:
+        description: Continue past merge conflicts
+        type: boolean
+        default: true
+      staging_branch:
+        description: Staging branch name
+        type: string
+        default: translation-staging
+
+permissions:
+  contents: write
+
+jobs:
+  merge-to-staging:
+    name: Absorb chapter PRs into staging
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Merge open cursor PRs into staging
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          args=()
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            args+=(--dry-run)
+          fi
+          if [ -n "${{ inputs.limit }}" ]; then
+            args+=(--limit "${{ inputs.limit }}")
+          fi
+          if [ "${{ inputs.skip_conflicts }}" = "true" ]; then
+            args+=(--skip-conflicts)
+          fi
+          if [ -n "${{ inputs.staging_branch }}" ]; then
+            args+=(--staging-branch "${{ inputs.staging_branch }}")
+          fi
+          node scripts/merge-translation-prs-to-staging.mjs "${args[@]}"

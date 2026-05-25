@@ -29,5 +29,6 @@ for (const pid of pids) {
   console.log(`Sent SIGUSR1 (drain) to orchestrator pid ${pid}`);
 }
 
-console.log('Watch: tail -f /tmp/sdk-translate-local.log');
-console.log('When you see "[orchestrator] drain complete", restart with sdk-translate:local');
+console.log('Watch: tail -f /tmp/sdk-translate-cloud.log  (or sdk-translate-local.log)');
+console.log('Status: node scripts/sdk-drain-status.mjs');
+console.log('When you see "[orchestrator] drain complete", the loop has stopped scheduling new sessions.');

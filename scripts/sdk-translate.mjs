@@ -8,6 +8,7 @@
  *   # CURSOR_API_KEY in repo-root .env is loaded automatically
  *   node scripts/sdk-translate.mjs --list-books
  *   node scripts/sdk-translate.mjs --book jinshu
+ *   node scripts/sdk-translate.mjs --book jinshi --chapter 068 --runtime cloud
  *   node scripts/sdk-translate.mjs --books jinshu,songshu --concurrency 2 --runtime cloud
  *   node scripts/sdk-translate.mjs --all-untranslated --concurrency 4 --runtime cloud --max-runs-per-book 3
  *
@@ -16,6 +17,7 @@
  */
 import { Agent, CursorAgentError } from '@cursor/sdk';
 import { execSync } from 'node:child_process';
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildTranslationPrompt } from './sdk-translation-prompt.mjs';
@@ -30,6 +32,7 @@ import {
   incompleteChaptersOnGitRefAsync,
   waitForSessionMergedToMaster,
 } from './sdk-merge-wait.mjs';
+import { normalizeChapterId } from './normalize-chapter-id.mjs';
 
 loadDotenv(REPO_ROOT);
 
@@ -87,6 +90,7 @@ function usage() {
 
 Options:
   --book <id>              Translate a single book (e.g. jinshu)
+  --chapter <id>           One chapter, one session (requires --book; no merge-wait)
   --books <a,b,c>          Comma-separated book ids
   --all-untranslated       Books with gray/yellow chapters (missing/partial translation)
   --exclude <a,b,c>        Skip these book ids (e.g. --exclude songshu)
@@ -116,6 +120,7 @@ Inspect failed runs: npm run sdk-inspect:run -- --from-log /tmp/sdk-translate-cl
 Examples:
   node scripts/sdk-translate.mjs --list-books
   node scripts/sdk-translate.mjs --book weishu --runtime local
+  node scripts/sdk-translate.mjs --book jinshi --chapter 068 --runtime cloud --concurrency 50
   node scripts/sdk-translate-local.mjs --all-untranslated --concurrency 4 --until-complete
   node scripts/sdk-translate.mjs --all-untranslated --concurrency 3 --runtime cloud --max-runs-per-book 5
 `);
@@ -141,6 +146,7 @@ function parseArgs(argv) {
     apiKey: process.env.CURSOR_API_KEY,
     fast: false,
     directToMaster: false,
+    chapter: null,
   };
 
   for (let i = 0; i < argv.length; i++) {
@@ -157,6 +163,9 @@ function parseArgs(argv) {
         break;
       case '--book':
         opts.books.push(next());
+        break;
+      case '--chapter':
+        opts.chapter = next();
         break;
       case '--books':
         opts.books.push(...next().split(',').map((s) => s.trim()).filter(Boolean));
@@ -234,6 +243,26 @@ function parseArgs(argv) {
     throw new Error('--direct-to-master requires --runtime local');
   }
 
+  if (opts.chapter) {
+    if (opts.books.length === 0 && !opts.allUntranslated) {
+      throw new Error('--chapter requires --book');
+    }
+    if (opts.allUntranslated) {
+      throw new Error('--chapter cannot be used with --all-untranslated');
+    }
+    if (opts.books.length > 1) {
+      throw new Error('--chapter requires exactly one --book');
+    }
+    opts.chapter = normalizeChapterId(opts.chapter);
+    opts.maxRunsPerBook = 1;
+    opts.waitForMerge = false;
+    const bookId = opts.books[0];
+    const chapterPath = path.join(REPO_ROOT, 'data', bookId, `${opts.chapter}.json`);
+    if (!fs.existsSync(chapterPath)) {
+      throw new Error(`Chapter file not found: ${chapterPath}`);
+    }
+  }
+
   return opts;
 }
 
@@ -274,6 +303,7 @@ async function runOneSession(book, opts) {
     model: opts.model,
     translator: opts.translator,
     directToMaster: opts.directToMaster,
+    chapter: opts.chapter,
   });
 
   const modelSelection = buildModelSelection(opts);
@@ -311,8 +341,9 @@ async function runOneSession(book, opts) {
         : await Agent.create(agentOptions);
 
     const agentUrl = cloudAgentUrl(agent.agentId);
+    const chapterNote = opts.chapter ? ` chapter ${opts.chapter}` : '';
     console.log(
-      `[${book}] agent ${agent.agentId} — sending translation prompt…${agentUrl ? ` (${agentUrl})` : ''}`,
+      `[${book}] agent ${agent.agentId} — sending translation prompt${chapterNote}…${agentUrl ? ` (${agentUrl})` : ''}`,
     );
     const run = await agent.send(prompt);
     console.log(`[${book}] run ${run.id}`);
@@ -475,6 +506,18 @@ async function runBookLoop(book, opts) {
 }
 
 /**
+ * Single chapter: one agent session, then exit (no merge-wait; for parallel fan-out).
+ *
+ * @param {string} book
+ * @param {ReturnType<typeof parseArgs>} opts
+ */
+async function runChapterSession(book, opts) {
+  console.log(`[${book}] chapter ${opts.chapter} — one-shot session (no merge-wait)`);
+  const result = await runOneSession(book, opts);
+  return [result];
+}
+
+/**
  * @param {unknown[]} items
  * @param {number} concurrency
  * @param {(item: unknown, index: number) => Promise<unknown>} fn
@@ -525,6 +568,10 @@ async function main() {
     books = listBooksNeedingTranslation({ includeRed: opts.includeRed }).map((b) => b.id);
   }
 
+  if (opts.chapter && books.length !== 1) {
+    throw new Error('--chapter requires exactly one book in the queue');
+  }
+
   if (books.length === 0) {
     console.error('No books selected. Use --book, --books, or --all-untranslated (or --list-books).');
     usage();
@@ -536,13 +583,15 @@ async function main() {
     process.exit(1);
   }
 
-  const needing = new Set(
-    listBooksNeedingTranslation({ includeRed: opts.includeRed }).map((b) => b.id),
-  );
-  const skipped = books.filter((b) => !needing.has(b));
-  books = books.filter((b) => needing.has(b));
-  for (const b of skipped) {
-    console.log(`[${b}] no gray/yellow${opts.includeRed ? '/red' : ''} chapters in progress.json — skipping`);
+  if (!opts.chapter) {
+    const needing = new Set(
+      listBooksNeedingTranslation({ includeRed: opts.includeRed }).map((b) => b.id),
+    );
+    const skipped = books.filter((b) => !needing.has(b));
+    books = books.filter((b) => needing.has(b));
+    for (const b of skipped) {
+      console.log(`[${b}] no gray/yellow${opts.includeRed ? '/red' : ''} chapters in progress.json — skipping`);
+    }
   }
 
   if (opts.exclude.length > 0) {
@@ -558,24 +607,35 @@ async function main() {
     return;
   }
 
-  console.log(`Books: ${books.join(', ')}`);
+  if (opts.chapter) {
+    console.log(`Target: ${books[0]} chapter ${opts.chapter}`);
+  } else {
+    console.log(`Books: ${books.join(', ')}`);
+  }
   const fastNote = opts.fast ? 'fast=on' : 'fast=off';
   const mergeNote = opts.directToMaster ? 'direct→master' : 'PR→master';
   console.log(
     `Runtime: ${opts.runtime}  Concurrency: ${opts.concurrency}  Model: ${opts.model} (${fastNote})  Merge: ${mergeNote}`,
   );
-  if (opts.runtime === 'cloud') {
+  if (opts.runtime === 'cloud' && !opts.chapter) {
     console.log(`Repo: ${opts.repoUrl}`);
     console.log(
       'Cloud DAG: one chapter per session per book; merge-wait on origin/master before the next session for that book only (PR automerge).',
     );
+  } else if (opts.runtime === 'cloud' && opts.chapter) {
+    console.log(`Repo: ${opts.repoUrl}`);
+    console.log('Cloud one-shot: agent opens PR when done; orchestrator does not wait for merge.');
   } else if (opts.directToMaster && opts.concurrency > 1) {
     console.log(
       'Local parallel: agents share one working tree; commit only this book’s paths (see prompt-local.txt).',
     );
   }
 
-  const allResults = await mapPool(books, opts.concurrency, (book) => runBookLoop(book, opts), {
+  const runForBook = opts.chapter
+    ? (book) => runChapterSession(book, opts)
+    : (book) => runBookLoop(book, opts);
+
+  const allResults = await mapPool(books, opts.concurrency, runForBook, {
     shouldStopScheduling: () => drainRequested,
   });
 

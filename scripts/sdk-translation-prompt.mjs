@@ -25,12 +25,15 @@ export function buildTranslationPrompt(book, opts = {}) {
   const translator = opts.translator ?? 'Garrett M. Petersen (2026)';
   const translationFile = `translations/current_translation_${book}.json`;
   const directToMaster = opts.directToMaster ?? false;
+  const chapter = opts.chapter ?? null;
 
   const vars = {
     book,
     translation_file: translationFile,
     model: modelDisplay,
     translator,
+    chapter: chapter ?? '',
+    chapter_arg: chapter ? ` CHAPTER=${chapter}` : '',
   };
 
   const promptPath = directToMaster ? PROMPT_LOCAL_PATH : PROMPT_PATH;
@@ -57,6 +60,7 @@ export function buildTranslationPrompt(book, opts = {}) {
   const header = [
     '=== SDK translation session ===',
     `Book: ${book} (work only on this book)`,
+    chapter ? `Chapter: ${chapter} (translate this chapter only — do not pick another)` : 'Chapter: (agent picks next incomplete chapter via make start-translation)',
     `Translation session file: ${translationFile}`,
     `API model id for your reference: ${apiModel}`,
     modeNote,

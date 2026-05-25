@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
- * Merge cursor SDK branches (pushed without PR) into the current branch.
+ * Legacy: merge a fixed list of cursor branches (2026-05-24 bulk run).
+ * For open chapter PRs, use scripts/merge-translation-prs-to-staging.mjs instead.
  *
  * Usage:
  *   git checkout master && git pull
