@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 /**
- * Absorb open cursor/* translation PRs into one staging branch (one Cloudflare build when merged).
+ * Absorb open cursor/* translation PRs into translation-staging.
  *
- * Does NOT merge individual PRs to master. After staging is ready:
+ * Each chapter PR is retargeted to translation-staging (if needed) and merged via GitHub
+ * so it shows as "Merged" into staging — not left open against master.
+ *
+ * Does NOT merge chapter PRs to master. After staging is ready:
  *   gh pr create --base master --head translation-staging --title "Translation batch"
  *   # then squash-merge that single PR
  *
@@ -11,11 +14,19 @@
  *   node scripts/merge-translation-prs-to-staging.mjs
  *   node scripts/merge-translation-prs-to-staging.mjs --limit 20
  *   node scripts/merge-translation-prs-to-staging.mjs --staging-branch translation-staging
+ *   node scripts/merge-translation-prs-to-staging.mjs --git-only   # legacy: git-merge heads only
  */
 import { execSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { listOpenCursorTranslationPrs } from './github-pr.mjs';
+import {
+  DEFAULT_REPO_URL,
+  getPullRequest,
+  listOpenCursorTranslationPrs,
+  mergePullRequest,
+  updatePullRequestBase,
+  updatePullRequestBranch,
+} from './github-pr.mjs';
 import { REPO_ROOT } from './sdk-translation-books.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -24,6 +35,7 @@ const DEFAULT_STAGING = process.env.TRANSLATION_STAGING_BRANCH || 'translation-s
 function parseArgs() {
   const dryRun = process.argv.includes('--dry-run');
   const skipConflicts = process.argv.includes('--skip-conflicts');
+  const gitOnly = process.argv.includes('--git-only');
   const push = !process.argv.includes('--no-push');
   let stagingBranch = DEFAULT_STAGING;
   let limit = Infinity;
@@ -37,7 +49,7 @@ function parseArgs() {
     }
   }
 
-  return { dryRun, skipConflicts, push, stagingBranch, limit };
+  return { dryRun, skipConflicts, gitOnly, push, stagingBranch, limit };
 }
 
 function run(cmd, opts = {}) {
@@ -58,10 +70,112 @@ function branchExistsOnRemote(branch) {
   }
 }
 
-async function main() {
-  const { dryRun, skipConflicts, push, stagingBranch, limit } = parseArgs();
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
-  const prs = await listOpenCursorTranslationPrs();
+/** Ensure translation-staging exists on origin and includes latest master. */
+function syncStagingBranchWithMaster(stagingBranch) {
+  run('git fetch origin', { inherit: true });
+
+  const onStaging = run('git branch --show-current').trim() === stagingBranch;
+  if (!onStaging) {
+    if (branchExistsOnRemote(stagingBranch)) {
+      run(`git checkout -B ${stagingBranch} origin/${stagingBranch}`, { inherit: true });
+    } else {
+      run(`git checkout -B ${stagingBranch} origin/master`, { inherit: true });
+    }
+  }
+
+  console.log(`Syncing ${stagingBranch} with origin/master…`);
+  run('git merge origin/master -m "staging: sync from master" --no-edit', { inherit: true });
+}
+
+function gitMergePrHeadIntoStaging(pr, stagingBranch, skipConflicts) {
+  const remoteRef = `origin/${pr.headRef}`;
+  try {
+    run(`git fetch origin ${pr.headRef}`, { inherit: true });
+  } catch (err) {
+    throw new Error(`fetch failed: ${err instanceof Error ? err.message : err}`);
+  }
+
+  try {
+    run(
+      `git merge "${remoteRef}" -m "staging: absorb PR #${pr.number} (${pr.headRef})" --no-edit`,
+      { inherit: true },
+    );
+    return true;
+  } catch {
+    try {
+      run('git merge --abort', { inherit: true });
+    } catch {
+      run('git reset --hard HEAD', { inherit: true });
+    }
+    if (!skipConflicts) {
+      throw new Error(`git merge conflict for PR #${pr.number}`);
+    }
+    console.warn(`  git conflict: PR #${pr.number} ${pr.headRef}`);
+    return false;
+  }
+}
+
+/**
+ * Retarget PR to staging, merge via GitHub API; fall back to local git merge + retry API.
+ */
+async function mergePrIntoStagingViaGithub(pr, stagingBranch, { skipConflicts, repoUrl }) {
+  if (pr.baseRef !== stagingBranch) {
+    console.log(`  PR #${pr.number}: retarget base ${pr.baseRef} → ${stagingBranch}`);
+    await updatePullRequestBase(repoUrl, pr.number, stagingBranch);
+    await sleep(1500);
+  }
+
+  let detail = await getPullRequest(repoUrl, pr.number);
+  if (detail.mergeable_state === 'behind') {
+    console.log(`  PR #${pr.number}: updating branch (behind ${stagingBranch})`);
+    try {
+      await updatePullRequestBranch(repoUrl, pr.number);
+      await sleep(2000);
+      detail = await getPullRequest(repoUrl, pr.number);
+    } catch (err) {
+      console.warn(
+        `  PR #${pr.number}: update-branch failed (${err instanceof Error ? err.message : err})`,
+      );
+    }
+  }
+
+  try {
+    await mergePullRequest(repoUrl, pr.number, { mergeMethod: 'merge' });
+    console.log(`  PR #${pr.number}: merged into ${stagingBranch} (GitHub)`);
+    return { ok: true, via: 'github' };
+  } catch (err) {
+    console.warn(
+      `  PR #${pr.number}: GitHub merge failed (${err instanceof Error ? err.message : err}) — trying git fallback`,
+    );
+  }
+
+  syncStagingBranchWithMaster(stagingBranch);
+  const gitOk = gitMergePrHeadIntoStaging(pr, stagingBranch, skipConflicts);
+  if (!gitOk) {
+    return { ok: false, via: 'git-conflict' };
+  }
+
+  try {
+    await mergePullRequest(repoUrl, pr.number, { mergeMethod: 'merge' });
+    console.log(`  PR #${pr.number}: merged into ${stagingBranch} (GitHub, after git fallback)`);
+    return { ok: true, via: 'github-after-git' };
+  } catch (err) {
+    console.warn(
+      `  PR #${pr.number}: still not mergeable on GitHub after git fallback (${err instanceof Error ? err.message : err})`,
+    );
+    return { ok: true, via: 'git-only' };
+  }
+}
+
+async function main() {
+  const { dryRun, skipConflicts, gitOnly, push, stagingBranch, limit } = parseArgs();
+  const repoUrl = process.env.GITHUB_REPO_URL ?? DEFAULT_REPO_URL;
+
+  const prs = await listOpenCursorTranslationPrs(repoUrl);
   const batch = prs.slice(0, limit);
 
   console.log(`Open cursor/* translation PRs: ${prs.length}`);
@@ -76,88 +190,84 @@ async function main() {
 
   if (dryRun) {
     for (const pr of batch) {
-      console.log(`  #${pr.number} ${pr.headRef} — ${pr.title}`);
+      const retarget =
+        pr.baseRef !== stagingBranch ? `retarget ${pr.baseRef}→${stagingBranch}, ` : '';
+      console.log(`  #${pr.number} ${pr.headRef} — ${retarget}merge into ${stagingBranch} — ${pr.title}`);
     }
-    console.log(`\nDry-run: would reset ${stagingBranch} to origin/master and merge ${batch.length} PR head(s).`);
+    console.log(`\nDry-run: would sync ${stagingBranch} with master, then merge ${batch.length} PR(s) via GitHub.`);
     return;
   }
 
-  run('git fetch origin', { inherit: true });
-
-  const onStaging = run('git branch --show-current').trim() === stagingBranch;
-  if (!onStaging) {
-    if (branchExistsOnRemote(stagingBranch)) {
-      run(`git checkout -B ${stagingBranch} origin/${stagingBranch}`, { inherit: true });
-    } else {
-      run(`git checkout -B ${stagingBranch} origin/master`, { inherit: true });
-    }
+  syncStagingBranchWithMaster(stagingBranch);
+  if (push) {
+    console.log(`Pushing origin ${stagingBranch} (pre-merge sync)…`);
+    run(`git push -u origin ${stagingBranch}`, { inherit: true });
   }
-
-  console.log(`Syncing ${stagingBranch} with origin/master…`);
-  run('git merge origin/master -m "staging: sync from master" --no-edit', { inherit: true });
 
   let merged = 0;
   const conflicts = [];
   const failed = [];
 
-  for (const pr of batch) {
-    const remoteRef = `origin/${pr.headRef}`;
-    try {
-      run(`git fetch origin ${pr.headRef}`, { inherit: true });
-    } catch (err) {
-      failed.push({ pr, reason: `fetch failed: ${err instanceof Error ? err.message : err}` });
-      continue;
-    }
-
-    try {
-      run(
-        `git merge "${remoteRef}" -m "staging: absorb PR #${pr.number} (${pr.headRef})" --no-edit`,
-        { inherit: true },
-      );
-      merged += 1;
-      if (merged % 25 === 0) {
-        console.log(`  …${merged} PRs merged into ${stagingBranch}`);
-      }
-    } catch {
+  if (gitOnly) {
+    for (const pr of batch) {
       try {
-        run('git merge --abort', { inherit: true });
-      } catch {
-        run('git reset --hard HEAD', { inherit: true });
-      }
-      conflicts.push(pr);
-      console.warn(`  conflict: PR #${pr.number} ${pr.headRef}`);
-      if (!skipConflicts) {
-        console.error(
-          'Stopping on first conflict. Re-run with --skip-conflicts to continue past conflicts, or resolve manually.',
-        );
-        break;
+        if (gitMergePrHeadIntoStaging(pr, stagingBranch, skipConflicts)) {
+          merged += 1;
+        } else {
+          conflicts.push(pr);
+        }
+      } catch (err) {
+        failed.push({ pr, reason: err instanceof Error ? err.message : String(err) });
+        if (!skipConflicts) break;
       }
     }
-  }
-
-  console.log(`\nMerged ${merged} PR(s) into ${stagingBranch}. Conflicts: ${conflicts.length}. Failed fetch: ${failed.length}.`);
-
-  if (push && merged > 0) {
-    console.log(`Pushing origin ${stagingBranch}…`);
-    try {
+    if (push && merged > 0) {
+      console.log(`Pushing origin ${stagingBranch}…`);
       run(`git push -u origin ${stagingBranch}`, { inherit: true });
-    } catch {
-      console.warn('Push failed — if the remote branch moved, try: git push --force-with-lease origin HEAD');
-      throw new Error('git push failed');
     }
-  } else if (!push) {
-    console.log('Skipped push (--no-push).');
+  } else {
+    for (const pr of batch) {
+      try {
+        const result = await mergePrIntoStagingViaGithub(pr, stagingBranch, {
+          skipConflicts,
+          repoUrl,
+        });
+        if (result.ok) {
+          merged += 1;
+          // Keep local staging in sync for subsequent git fallbacks / push
+          try {
+            run(`git fetch origin ${stagingBranch} && git merge origin/${stagingBranch} --no-edit`, {
+              inherit: true,
+            });
+          } catch {
+            run(`git fetch origin ${stagingBranch}`, { inherit: true });
+            run(`git reset --hard origin/${stagingBranch}`, { inherit: true });
+          }
+        } else {
+          conflicts.push(pr);
+          if (!skipConflicts) break;
+        }
+      } catch (err) {
+        failed.push({ pr, reason: err instanceof Error ? err.message : String(err) });
+        console.warn(`  failed: PR #${pr.number} — ${failed.at(-1)?.reason}`);
+        if (!skipConflicts) break;
+      }
+    }
   }
+
+  console.log(
+    `\nMerged ${merged} PR(s) into ${stagingBranch}. Conflicts: ${conflicts.length}. Failed: ${failed.length}.`,
+  );
 
   if (conflicts.length > 0) {
-    console.log('Conflict PRs (not in staging):');
+    console.log('Conflict PRs (still open):');
     for (const pr of conflicts) {
       console.log(`  #${pr.number} ${pr.url}`);
     }
   }
 
   if (failed.length > 0) {
-    console.log('Failed fetch:');
+    console.log('Failed:');
     for (const { pr, reason } of failed) {
       console.log(`  #${pr.number} ${reason}`);
     }

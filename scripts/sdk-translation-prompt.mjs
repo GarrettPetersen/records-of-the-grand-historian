@@ -55,7 +55,7 @@ export function buildTranslationPrompt(book, opts = {}) {
 
   const modeNote = directToMaster
     ? 'Mode: LOCAL agent — push directly to origin/master (no PR). Economy Composer (fast mode OFF). Ignore other books\' dirty files in the working tree.'
-    : 'Mode: CLOUD agent — open a PR against master when done.';
+    : 'Mode: CLOUD agent — open a PR against translation-staging when done (batched to master via staging).';
 
   const header = [
     '=== SDK translation session ===',
