@@ -1,6 +1,6 @@
 First, git pull and resolve any differences with remote.
 
-Before starting new work on BOOK={book}: check GitHub for open pull requests (including cursor/* branches) that already cover this book. If the next chapter is already in an open PR, stop — do not re-translate it.
+Before starting new work on BOOK={book}: check in-flight chapters (open PRs, translation-staging, or active SDK runs). From the repo root run: `node scripts/translation-inflight.mjs` or `node scripts/translation-inflight.mjs --check {book} {chapter}` when a chapter is fixed. If that chapter is reserved, stop — do not re-translate it.
 
 Then run make start-translation BOOK={book}{chapter_arg}.
 

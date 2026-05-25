@@ -33,6 +33,12 @@ import {
   waitForSessionMergedToMaster,
 } from './sdk-merge-wait.mjs';
 import { normalizeChapterId } from './normalize-chapter-id.mjs';
+import {
+  addLocalClaim,
+  assertChapterNotInflight,
+  buildInflightRegistry,
+  removeLocalClaim,
+} from './translation-inflight.mjs';
 
 loadDotenv(REPO_ROOT);
 
@@ -512,9 +518,18 @@ async function runBookLoop(book, opts) {
  * @param {ReturnType<typeof parseArgs>} opts
  */
 async function runChapterSession(book, opts) {
-  console.log(`[${book}] chapter ${opts.chapter} — one-shot session (no merge-wait)`);
-  const result = await runOneSession(book, opts);
-  return [result];
+  const chapter = opts.chapter;
+  if (!opts.dryRun) {
+    await assertChapterNotInflight(book, chapter, { repoUrl: opts.repoUrl });
+    addLocalClaim({ book, chapter, runtime: opts.runtime });
+  }
+  console.log(`[${book}] chapter ${chapter} — one-shot session (no merge-wait)`);
+  try {
+    const result = await runOneSession(book, opts);
+    return [result];
+  } finally {
+    if (!opts.dryRun) removeLocalClaim(book, chapter);
+  }
 }
 
 /**
@@ -609,6 +624,15 @@ async function main() {
 
   if (opts.chapter) {
     console.log(`Target: ${books[0]} chapter ${opts.chapter}`);
+    if (!opts.dryRun) {
+      const registry = await buildInflightRegistry({ repoUrl: opts.repoUrl });
+      const reserved = registry.keys.size + registry.bookOnly.size;
+      if (reserved > 0) {
+        console.log(
+          `In-flight registry: ${registry.keys.size} chapter(s) reserved (open PRs, staging, local claims).`,
+        );
+      }
+    }
   } else {
     console.log(`Books: ${books.join(', ')}`);
   }
