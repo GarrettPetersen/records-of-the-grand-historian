@@ -180,4 +180,55 @@ export async function listOpenCursorTranslationPrs(repoUrl = DEFAULT_REPO_URL, t
   return all;
 }
 
-export { parseGitHubRepo, DEFAULT_REPO_URL };
+const ABSORBED_COMMENT =
+  'Absorbed via **translation-staging** batch (chapter work merged into staging). Closing to clear the queue.';
+
+/**
+ * @param {string} repoUrl
+ * @param {number} pullNumber
+ * @param {string} body
+ * @param {string} [token]
+ */
+export async function commentOnPullRequest(repoUrl, pullNumber, body, token) {
+  const auth = authToken(token);
+  const { owner, repo } = parseGitHubRepo(repoUrl);
+  const res = await githubFetch(
+    `https://api.github.com/repos/${owner}/${repo}/issues/${pullNumber}/comments`,
+    { token: auth, method: 'POST', body: { body } },
+  );
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`comment PR #${pullNumber}: ${res.status} ${text.slice(0, 200)}`);
+  }
+}
+
+/**
+ * @param {string} repoUrl
+ * @param {number} pullNumber
+ * @param {string} [token]
+ */
+export async function closePullRequest(repoUrl, pullNumber, token) {
+  const auth = authToken(token);
+  const { owner, repo } = parseGitHubRepo(repoUrl);
+  const res = await githubFetch(
+    `https://api.github.com/repos/${owner}/${repo}/pulls/${pullNumber}`,
+    { token: auth, method: 'PATCH', body: { state: 'closed' } },
+  );
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`close PR #${pullNumber}: ${res.status} ${text.slice(0, 200)}`);
+  }
+}
+
+/**
+ * Close an absorbed chapter PR after git merge into staging.
+ */
+export async function closeAbsorbedChapterPr(repoUrl, pullNumber, token) {
+  const auth = authToken(token);
+  const detail = await getPullRequest(repoUrl, pullNumber, auth);
+  if (detail.state === 'closed') return;
+  await commentOnPullRequest(repoUrl, pullNumber, ABSORBED_COMMENT, auth);
+  await closePullRequest(repoUrl, pullNumber, auth);
+}
+
+export { parseGitHubRepo, DEFAULT_REPO_URL, ABSORBED_COMMENT };
