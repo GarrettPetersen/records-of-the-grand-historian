@@ -26,6 +26,15 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 /** Canonical origin for og:url, og:image, and <link rel="canonical"> */
 const CANONICAL_SITE = (process.env.SITE_URL || 'https://24histories.com').replace(/\/$/, '');
 
+function getTableCellEnglish(cell) {
+  if (!cell) return '';
+  if (cell.translation?.trim()) return cell.translation;
+  if (cell.idiomatic?.trim()) return cell.idiomatic;
+  if (cell.literal?.trim()) return cell.literal;
+  const t = cell.translations?.[0];
+  return t?.idiomatic || t?.literal || t?.text || '';
+}
+
 const _staticGenEnv = parseInt(process.env.STATIC_GEN_CONCURRENCY || '', 10);
 const STATIC_GEN_FROM_ENV = Number.isFinite(_staticGenEnv) && _staticGenEnv >= 1;
 /** Parallel chapter HTML writes per book. */
@@ -312,7 +321,8 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         tableRows.forEach(tableRow => {
           tableHtml += `<tr>`;
           tableRow.cells.forEach(cell => {
-            const cellEn = cell.translation ? escapeHtml(cell.translation) : '';
+            const cellEnText = getTableCellEnglish(cell);
+            const cellEn = cellEnText ? escapeHtml(cellEnText) : '';
             if (cellEn.trim()) {
               tableHtml += `<td class="table-cell">${cellEn}</td>`;
             } else {
@@ -467,7 +477,8 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         tableRows.forEach(tableRow => {
           tableHtml += `<tr>`;
           tableRow.cells.forEach(cell => {
-            const cellEn = cell.translation ? escapeHtml(cell.translation) : '';
+            const cellEnText = getTableCellEnglish(cell);
+            const cellEn = cellEnText ? escapeHtml(cellEnText) : '';
             if (cellEn.trim()) {
               tableHtml += `<td class="table-cell">${cellEn}</td>`;
             } else {

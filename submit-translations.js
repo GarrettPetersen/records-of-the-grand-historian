@@ -348,6 +348,17 @@ function applyTranslations(translationFile, chapterFile, translator, model) {
           } else if (block.type === 'table_row') {
             chapterSentence.literal = sentence.literal;
             chapterSentence.idiomatic = sentence.idiomatic;
+            chapterSentence.translation = sentence.idiomatic;
+            if (!chapterSentence.translations) {
+              chapterSentence.translations = [];
+            }
+            if (chapterSentence.translations.length === 0) {
+              chapterSentence.translations.push({ lang: 'en' });
+            }
+            chapterSentence.translations[0].translator = translator;
+            chapterSentence.translations[0].model = model;
+            chapterSentence.translations[0].literal = sentence.literal;
+            chapterSentence.translations[0].idiomatic = sentence.idiomatic;
           } else if (block.type === 'table_header') {
             if (!chapterSentence.translations) {
               chapterSentence.translations = [];
@@ -409,6 +420,17 @@ function applyTranslations(translationFile, chapterFile, translator, model) {
             } else if (block.type === 'table_row') {
               chapterSentence.literal = sentence.literal;
               chapterSentence.idiomatic = sentence.idiomatic;
+              chapterSentence.translation = sentence.idiomatic;
+              if (!chapterSentence.translations) {
+                chapterSentence.translations = [];
+              }
+              if (chapterSentence.translations.length === 0) {
+                chapterSentence.translations.push({ lang: 'en' });
+              }
+              chapterSentence.translations[0].translator = translator;
+              chapterSentence.translations[0].model = model;
+              chapterSentence.translations[0].literal = sentence.literal;
+              chapterSentence.translations[0].idiomatic = sentence.idiomatic;
             } else if (block.type === 'table_header') {
               if (!chapterSentence.translations) {
                 chapterSentence.translations = [];
