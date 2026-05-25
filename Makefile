@@ -72,6 +72,8 @@ help:
 	@echo "  make extract-review CHAPTER=data/shiji/024.json  # Extract translations for manual review"
 	@echo "  make extract-next-review [BOOK=shiji]  # Extract next unreviewed translated chapter"
 	@echo "  make apply-review CHAPTER=data/shiji/024.json    # Apply reviewed edits and mark manifest"
+	@echo "  npm run sdk-review:cloud [--book <id>]  # SDK agent reviews next chapter (PR → master)"
+	@echo "  npm run sdk-review:local [--book <id>]  # SDK agent reviews next chapter (local extract + apply)"
 	@echo "  make start-translation [BOOK=shiji] [CHAPTER=022] [BATCH_SIZE=100]  # Start translation session"
 	@echo "  make continue [BOOK=shiji] [CHAPTER=022]  # Submit current batch and start next"
 	@echo "  make submit-translations TRANSLATOR=\"Garrett M. Petersen (2026)\" MODEL=\"grok-1.5\"  # Submit translations from current_translation_{book}.json"

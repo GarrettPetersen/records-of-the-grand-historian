@@ -361,6 +361,41 @@ async function waitForProgressOnMaster(book, baselineIncomplete, opts) {
 }
 
 /**
+ * True when origin/master shows this session reduced incomplete chapters vs baseline.
+ *
+ * @param {string} book
+ * @param {Set<string>} baselineIncomplete
+ * @param {{ includeRed?: boolean }} [opts]
+ * @returns {Promise<{ progressed: boolean, reason?: string, currentIncomplete: Set<string> }>}
+ */
+export async function detectSessionProgressOnMaster(book, baselineIncomplete, opts = {}) {
+  execSync('git fetch origin master', { cwd: REPO_ROOT, stdio: 'pipe' });
+  const currentIncomplete = await incompleteChaptersOnGitRefAsync('origin/master', book, {
+    includeRed: opts.includeRed,
+  });
+
+  for (const ch of baselineIncomplete) {
+    if (!currentIncomplete.has(ch)) {
+      return {
+        progressed: true,
+        reason: `chapter ${ch} now complete on origin/master`,
+        currentIncomplete,
+      };
+    }
+  }
+
+  if (baselineIncomplete.size > 0 && currentIncomplete.size < baselineIncomplete.size) {
+    return {
+      progressed: true,
+      reason: `incomplete count dropped ${baselineIncomplete.size} → ${currentIncomplete.size}`,
+      currentIncomplete,
+    };
+  }
+
+  return { progressed: false, currentIncomplete };
+}
+
+/**
  * @param {string} book
  * @param {{ git?: { branches?: Array<{ branch?: string, prUrl?: string, repoUrl?: string }> } }} sessionResult
  * @param {Set<string>} baselineIncomplete

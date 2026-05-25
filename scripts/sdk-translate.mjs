@@ -22,6 +22,11 @@ import { buildTranslationPrompt } from './sdk-translation-prompt.mjs';
 import { loadDotenv } from './load-dotenv.mjs';
 import { listBooksNeedingTranslation, REPO_ROOT } from './sdk-translation-books.mjs';
 import {
+  cloudAgentUrl,
+  printRunFailureDiagnostics,
+} from './sdk-inspect-shared.mjs';
+import {
+  detectSessionProgressOnMaster,
   incompleteChaptersOnGitRefAsync,
   waitForSessionMergedToMaster,
 } from './sdk-merge-wait.mjs';
@@ -105,6 +110,8 @@ Options:
 
 Drain (graceful shutdown): npm run sdk-translate:drain  (or kill -USR1 <orchestrator-pid>)
   Finishes in-flight agent runs and merge-wait, then exits without starting new books.
+
+Inspect failed runs: npm run sdk-inspect:run -- --from-log /tmp/sdk-translate-cloud.log
 
 Examples:
   node scripts/sdk-translate.mjs --list-books
@@ -295,12 +302,18 @@ async function runOneSession(book, opts) {
     return { book, status: 'dry-run' };
   }
 
-  const agent =
-    opts.runtime === 'local'
-      ? await withLocalSdkMutex(() => Agent.create(agentOptions))
-      : await Agent.create(agentOptions);
+  /** @type {import('@cursor/sdk').SDKAgent | undefined} */
+  let agent;
   try {
-    console.log(`[${book}] agent ${agent.agentId} — sending translation prompt…`);
+    agent =
+      opts.runtime === 'local'
+        ? await withLocalSdkMutex(() => Agent.create(agentOptions))
+        : await Agent.create(agentOptions);
+
+    const agentUrl = cloudAgentUrl(agent.agentId);
+    console.log(
+      `[${book}] agent ${agent.agentId} — sending translation prompt…${agentUrl ? ` (${agentUrl})` : ''}`,
+    );
     const run = await agent.send(prompt);
     console.log(`[${book}] run ${run.id}`);
 
@@ -316,6 +329,18 @@ async function runOneSession(book, opts) {
 
     const result = await run.wait();
     console.log(`\n[${book}] finished run ${result.id} status=${result.status}`);
+    if (result.status === 'error' || result.status === 'cancelled') {
+      await printRunFailureDiagnostics({
+        book,
+        agentId: agent.agentId,
+        runId: result.id,
+        result,
+        run,
+        runtime: opts.runtime,
+        cwd: REPO_ROOT,
+        apiKey: opts.apiKey,
+      });
+    }
     return {
       book,
       status: result.status,
@@ -323,11 +348,22 @@ async function runOneSession(book, opts) {
       runId: result.id,
       git: result.git,
     };
+  } catch (err) {
+    if (err instanceof CursorAgentError) {
+      console.error(`[${book}] startup failed: ${err.message} retryable=${err.isRetryable}`);
+      if (agent) {
+        const url = cloudAgentUrl(agent.agentId);
+        if (url) console.error(`[${book}] open: ${url}`);
+      }
+    }
+    throw err;
   } finally {
-    if (opts.runtime === 'local') {
-      await withLocalSdkMutex(() => disposeAgent(agent));
-    } else {
-      await disposeAgent(agent);
+    if (agent) {
+      if (opts.runtime === 'local') {
+        await withLocalSdkMutex(() => disposeAgent(agent));
+      } else {
+        await disposeAgent(agent);
+      }
     }
   }
 }
@@ -360,29 +396,63 @@ async function runBookLoop(book, opts) {
     try {
       const result = await runOneSession(book, opts);
       results.push(result);
-      if (result.status === 'error') {
-        console.error(`[${book}] run ended with error; stopping book loop`);
-        break;
-      }
-      if (result.status !== 'finished' && result.status !== 'dry-run') {
+
+      const runFailed = result.status === 'error' || result.status === 'cancelled';
+      const runOk = result.status === 'finished' || result.status === 'dry-run';
+
+      if (!runOk && !runFailed) {
         console.error(`[${book}] run status=${result.status}; stopping book loop`);
         break;
       }
 
+      if (runFailed) {
+        console.warn(
+          `[${book}] run status=${result.status} — still checking PR merge / origin/master (SDK status can disagree with merged work)`,
+        );
+      }
+
       const moreWork = await bookStillNeedsWork(book, opts.includeRed);
       const hasAnotherSession = run < opts.maxRunsPerBook && moreWork;
+      const mergeWaitOpts = {
+        repoUrl: opts.repoUrl,
+        includeRed: opts.includeRed,
+        pollMs: opts.mergePollMs,
+        timeoutMs: opts.mergeTimeoutMs,
+        githubToken: process.env.GITHUB_TOKEN ?? process.env.GH_TOKEN,
+        directToMaster: opts.directToMaster,
+      };
 
-      if (hasAnotherSession && opts.waitForMerge && !opts.dryRun) {
-        await waitForSessionMergedToMaster(book, result, baselineIncomplete, {
-          repoUrl: opts.repoUrl,
-          includeRed: opts.includeRed,
-          pollMs: opts.mergePollMs,
-          timeoutMs: opts.mergeTimeoutMs,
-          githubToken: process.env.GITHUB_TOKEN ?? process.env.GH_TOKEN,
-          directToMaster: opts.directToMaster,
-        });
+      // Finished: wait before next session. Error/cancelled: still wait — agent may have opened a PR.
+      const shouldWaitMerge =
+        opts.waitForMerge && !opts.dryRun && (runOk ? hasAnotherSession : true);
+
+      if (shouldWaitMerge) {
+        try {
+          await waitForSessionMergedToMaster(book, result, baselineIncomplete, mergeWaitOpts);
+        } catch (waitErr) {
+          const msg = waitErr instanceof Error ? waitErr.message : String(waitErr);
+          if (runFailed) {
+            console.error(`[${book}] merge-wait after ${result.status} failed: ${msg}`);
+            break;
+          }
+          throw waitErr;
+        }
       } else if (hasAnotherSession && !opts.waitForMerge) {
         console.warn(`[${book}] --no-wait-merge: next session may re-translate the same chapter`);
+      }
+
+      if (runFailed) {
+        const { progressed, reason } = await detectSessionProgressOnMaster(
+          book,
+          baselineIncomplete,
+          { includeRed: opts.includeRed },
+        );
+        if (progressed) {
+          console.log(`[${book}] recovered despite run status=${result.status}: ${reason}`);
+        } else {
+          console.error(`[${book}] no master progress after ${result.status}; stopping book loop`);
+          break;
+        }
       }
 
       if (drainRequested) {
@@ -391,7 +461,6 @@ async function runBookLoop(book, opts) {
       }
     } catch (err) {
       if (err instanceof CursorAgentError) {
-        console.error(`[${book}] startup failed: ${err.message} retryable=${err.isRetryable}`);
         results.push({ book, status: 'startup_error', message: err.message });
         break;
       }

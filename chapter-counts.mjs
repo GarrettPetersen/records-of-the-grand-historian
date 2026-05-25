@@ -29,6 +29,42 @@ function hasMeaningfulTranslation(item) {
   return false;
 }
 
+/** @param {object} item sentence or table cell */
+function isTranslationReviewed(item) {
+  if (!hasMeaningfulTranslation(item)) return true;
+  if (item.reviewed === true) return true;
+  const t = getTranslations(item)[0];
+  return t?.reviewed === true;
+}
+
+/**
+ * True when every translated sentence/cell in the chapter has reviewed=true (committed in chapter JSON).
+ * @param {object} chapterData
+ */
+export function isChapterFullyReviewed(chapterData) {
+  let translated = 0;
+  for (const block of chapterData?.content || []) {
+    if (block.type === "paragraph" || block.type === "table_header") {
+      for (const sentence of block.sentences || []) {
+        const text = getSentenceText(sentence);
+        if (!isCountableText(text)) continue;
+        if (!hasMeaningfulTranslation(sentence)) continue;
+        translated += 1;
+        if (!isTranslationReviewed(sentence)) return false;
+      }
+    } else if (block.type === "table_row") {
+      for (const cell of block.cells || []) {
+        const text = getSentenceText(cell);
+        if (!isCountableText(text)) continue;
+        if (!hasMeaningfulTranslation(cell)) continue;
+        translated += 1;
+        if (!isTranslationReviewed(cell)) return false;
+      }
+    }
+  }
+  return translated > 0;
+}
+
 export function countChapterMetrics(chapterData) {
   let sentenceCount = 0;
   let translatedCount = 0;

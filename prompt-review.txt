@@ -1,0 +1,61 @@
+You are performing an **editorial review** of existing English translations for one chapter of a classical Chinese history. You are not translating from scratch — you are improving literal and idiomatic fields already present.
+
+## Your assignment
+
+- **Book:** {book}
+- **Chapter:** {chapter}
+- **Chapter data:** {chapter_file}
+- **Review workspace (edit this file):** {review_file}
+
+If the review file does not exist yet, run:
+
+```bash
+make extract-review CHAPTER={chapter_file}
+```
+
+## Editorial goals (in order)
+
+1. **Semantic fidelity** — The English must match the Chinese meaning. Do not soften, embellish, or omit facts, titles, dates, relationships, or causal links. If the Chinese is ambiguous, choose the reading best supported by context and note nothing in the JSON (no commentary fields).
+
+2. **Readability** — Idiomatic English should read as professional historical prose: complete sentences, natural word order, appropriate articles (`the`, `a`, `an`), and conjunctions. Avoid choppy telegraphic fragments unless the Chinese is itself a bare list.
+
+3. **Dialogue and speech** — Where the Chinese records quoted speech, commands, memorials, or questions, the English must make **who is speaking or being addressed** clear on first mention in that passage. Use tags where needed (`X said`, `Y replied`, `the emperor asked`, `they memorialized`). Do not leave orphan quotations that could be misattributed.
+
+4. **Names and titles** — Keep consistent romanization within the chapter. Prefer established forms (e.g. Emperor Wu, the Xiongnu) over literal calques when standard in English historiography.
+
+5. **Tables** — For table cells, preserve row/column sense; use `context` in the review JSON (headers, row cells) to disambiguate abbreviated Chinese.
+
+## Style guide
+
+- **Literal** — Close, denotative rendering; may be stiffer. Still grammatical. Use for scholars comparing to the source.
+- **Idiomatic** — Same meaning as literal, but fluent for a general reader. This is the primary reading text on the site.
+- Do **not** make literal and idiomatic identical unless the Chinese is a single proper name or fixed formula.
+- Prefer past tense for narrative; present only for gnomic or timeless statements.
+- Avoid archaisms unless the passage is a formal citation and tone demands it.
+- Numbers, reign years, and place names: translate clearly; do not invent modern geography.
+
+## What to edit
+
+Work only in `{review_file}`. For each object in `translations`:
+
+- Refine `literal` and `idiomatic` as needed.
+- Keep `id` unchanged (required for apply step).
+- You may leave a field unchanged if it is already correct.
+- Do not delete entries or add new ids.
+
+## When finished
+
+Run these Makefile targets in order (do not substitute custom scripts):
+
+```bash
+make apply-review CHAPTER={chapter_file}
+make update BOOK={book}
+```
+
+`make apply-review` merges your review JSON into the chapter, marks sentences reviewed, updates the manifest, runs quality scoring, and rebuilds the public page.
+
+Then commit, push, and open a **non-draft pull request** against `master` (cloud) or push to `origin/master` (local direct mode). One chapter per session. Verify the PR exists before ending.
+
+Use `MODEL="{model}"` in commit messages only if you amend translator metadata; do not change the original translator field unless the Makefile workflow requires it.
+
+Pull from `origin/master` before you start if the repo may have moved.
