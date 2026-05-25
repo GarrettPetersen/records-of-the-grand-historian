@@ -92,9 +92,23 @@ function syncStagingBranchWithMaster(stagingBranch) {
   run('git merge origin/master -m "staging: sync from master" --no-edit', { inherit: true });
 }
 
+const SEARCH_CORPUS_PREFIX = 'public/data/search-corpus/';
+
+function isSearchCorpusPath(file) {
+  return file.startsWith(SEARCH_CORPUS_PREFIX);
+}
+
+/** Drop git-tracked corpus paths from the index (directory is gitignored on staging). */
+function resolveSearchCorpusConflict(file) {
+  try {
+    run(`git rm -f -- "${file}"`, { inherit: true });
+  } catch {
+    run(`git rm -f --cached -- "${file}"`, { inherit: true });
+  }
+}
+
 /**
- * Resolve merge conflicts by keeping the incoming PR version (chapter + corpus deltas).
- * Multiple chapter PRs touch the same search-corpus/{book}.json; sequential merges conflict otherwise.
+ * Resolve merge conflicts: keep incoming PR for chapter files; never re-track search corpus.
  */
 function resolveConflictsPreferIncoming() {
   let unmerged = run('git diff --name-only --diff-filter=U', { encoding: 'utf8' }).trim();
@@ -102,6 +116,10 @@ function resolveConflictsPreferIncoming() {
 
   for (const file of unmerged.split('\n')) {
     if (!file) continue;
+    if (isSearchCorpusPath(file)) {
+      resolveSearchCorpusConflict(file);
+      continue;
+    }
     run(`git checkout --theirs -- "${file}"`, { inherit: true });
     run(`git add -- "${file}"`, { inherit: true });
   }
@@ -113,13 +131,10 @@ function resolveConflictsPreferIncoming() {
   return true;
 }
 
+/** Regenerate corpus on disk for local/CI builds; paths are gitignored and are not committed. */
 function rebuildSearchCorporaOnStaging() {
-  console.log('Rebuilding search corpora on staging (fixes batch merge conflicts)…');
+  console.log('Rebuilding search corpora locally (gitignored; not committed)…');
   run('node scripts/build-book-search-corpus.mjs', { inherit: true });
-  const status = run('git status --porcelain public/data/search-corpus', { encoding: 'utf8' }).trim();
-  if (!status) return;
-  run('git add public/data/search-corpus', { inherit: true });
-  run('git commit -m "staging: rebuild search corpora after chapter batch" --no-edit', { inherit: true });
 }
 
 function gitMergePrHeadIntoStaging(pr, stagingBranch, skipConflicts) {
