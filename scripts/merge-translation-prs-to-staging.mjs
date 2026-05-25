@@ -120,6 +120,28 @@ function gitMergePrHeadIntoStaging(pr, stagingBranch, skipConflicts) {
 }
 
 /**
+ * Wait for GitHub to compute mergeability (null → true/false).
+ */
+async function waitForPrMergeable(repoUrl, pullNumber, maxMs = 90_000) {
+  const started = Date.now();
+  while (Date.now() - started < maxMs) {
+    const detail = await getPullRequest(repoUrl, pullNumber);
+    if (detail.state === 'closed') {
+      return { detail, closed: true, merged: Boolean(detail.merged) };
+    }
+    if (detail.mergeable === true) return { detail };
+    if (
+      detail.mergeable === false &&
+      (detail.mergeable_state === 'dirty' || detail.mergeable_state === 'conflicting')
+    ) {
+      return { detail, blocked: true };
+    }
+    await sleep(2000);
+  }
+  return { detail: await getPullRequest(repoUrl, pullNumber), timeout: true };
+}
+
+/**
  * Retarget PR to staging, merge via GitHub API; fall back to local git merge + retry API.
  */
 async function mergePrIntoStagingViaGithub(pr, stagingBranch, { skipConflicts, repoUrl }) {
@@ -127,9 +149,27 @@ async function mergePrIntoStagingViaGithub(pr, stagingBranch, { skipConflicts, r
     console.log(`  PR #${pr.number}: retarget base ${pr.baseRef} → ${stagingBranch}`);
     await updatePullRequestBase(repoUrl, pr.number, stagingBranch);
     await sleep(1500);
+  } else {
+    console.log(`  PR #${pr.number}: already targets ${stagingBranch}`);
   }
 
-  let detail = await getPullRequest(repoUrl, pr.number);
+  const ready = await waitForPrMergeable(repoUrl, pr.number);
+  if (ready.closed) {
+    if (ready.merged) {
+      console.log(`  PR #${pr.number}: already merged`);
+      return { ok: true, via: 'already-merged' };
+    }
+    throw new Error(`PR #${pr.number} is closed but not merged`);
+  }
+  if (ready.blocked) {
+    console.warn(
+      `  PR #${pr.number}: not mergeable (state=${ready.detail.mergeable_state}) — trying git fallback`,
+    );
+  } else if (ready.timeout) {
+    console.warn(`  PR #${pr.number}: mergeability check timed out — attempting merge anyway`);
+  }
+
+  let detail = ready.detail;
   if (detail.mergeable_state === 'behind') {
     console.log(`  PR #${pr.number}: updating branch (behind ${stagingBranch})`);
     try {

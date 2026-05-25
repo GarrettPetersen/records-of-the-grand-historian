@@ -11,6 +11,7 @@ import { execSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isChapterTranslated } from './progress-status.mjs';
+import { buildInflightRegistry, formatInflightReport } from './translation-inflight.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
@@ -81,6 +82,8 @@ function loadIncompleteSummary() {
 }
 
 const { logPath } = parseArgs();
+
+async function run() {
 console.log(`Drain status — ${new Date().toISOString()}\n`);
 
 if (!fs.existsSync(logPath)) {
@@ -108,18 +111,27 @@ if (!fs.existsSync(logPath)) {
   console.log('');
 }
 
-const prs = listOpenPrs();
-if (prs === null) {
-  console.log('Open PRs: (gh not available — check GitHub manually)\n');
-} else if (prs.length === 0) {
-  console.log('Open PRs: none\n');
-} else {
-  console.log(`Open PRs (${prs.length}):`);
-  for (const pr of prs) {
-    console.log(`  #${pr.number} ${pr.title}`);
-    console.log(`    ${pr.url}`);
-  }
+try {
+  const registry = await buildInflightRegistry();
+  console.log(formatInflightReport(registry));
   console.log('');
+} catch (err) {
+  console.log(
+    `In-flight registry: failed (${err instanceof Error ? err.message : err})\n`,
+  );
+  const prs = listOpenPrs();
+  if (prs === null) {
+    console.log('Open PRs: (gh not available — check GitHub manually)\n');
+  } else if (prs.length === 0) {
+    console.log('Open PRs: none\n');
+  } else {
+    console.log(`Open PRs (${prs.length}):`);
+    for (const pr of prs) {
+      console.log(`  #${pr.number} ${pr.title}`);
+      console.log(`    ${pr.url}`);
+    }
+    console.log('');
+  }
 }
 
 const incomplete = loadIncompleteSummary();
@@ -130,4 +142,11 @@ if (incomplete) {
 }
 
 console.log('\nWatch merges: tail -f /tmp/sdk-translate-cloud.log');
+console.log('In-flight list: npm run translation-inflight');
 console.log('Next wave: per-chapter cloud runs (orchestrator loop is off).');
+}
+
+run().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

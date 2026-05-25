@@ -16,6 +16,12 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import {
+  buildInflightRegistry,
+  chapterKey,
+  isChapterInflight,
+} from './scripts/translation-inflight.mjs';
+import { normalizeChapterId } from './scripts/normalize-chapter-id.mjs';
 
 const CHRONOLOGICAL_ORDER = [
   'shiji', 'hanshu', 'houhanshu', 'sanguozhi', 'jinshu', 'songshu',
@@ -115,7 +121,7 @@ function findSpecificChapter(book, chapter) {
  * First chapter (by sorted filename) in the given book or across books that still
  * has missing idiomatic translations. Same selection logic with or without BOOK=.
  */
-function findFirstUntranslatedChapter(bookFilter = null) {
+function findFirstUntranslatedChapter(bookFilter = null, registry = null) {
   const dirs = [];
 
   if (bookFilter) {
@@ -140,6 +146,15 @@ function findFirstUntranslatedChapter(bookFilter = null) {
 
       // Return the first chapter found that has any missing translations
       if (chapter.missing > 0) {
+        if (
+          registry &&
+          isChapterInflight(chapter.book, chapter.chapter, registry)
+        ) {
+          console.log(
+            `Skipping ${chapterKey(chapter.book, chapter.chapter)} (in flight or on translation-staging)`,
+          );
+          continue;
+        }
         return chapter;
       }
     }
@@ -240,7 +255,7 @@ function extractSentencesForTranslation(filePath, maxSentences = 100) {
   return sentences;
 }
 
-function main() {
+async function main() {
   const args = process.argv.slice(2);
   const book = args[0]?.trim() || null;
   const outputFileArg = args[1]?.trim() || null;
@@ -249,10 +264,32 @@ function main() {
   const batchSize = Number.isFinite(parsedBatchSize) && parsedBatchSize > 0 ? parsedBatchSize : 100;
   const chapterArg = args[3]?.trim() || null;
 
+  let registry = null;
+  try {
+    registry = await buildInflightRegistry({ fetchGit: true });
+    if (registry.keys.size > 0 || registry.bookOnly.size > 0) {
+      console.log(
+        `In-flight: ${registry.keys.size} chapter(s) reserved` +
+          (registry.bookOnly.size ? `, ${registry.bookOnly.size} book(s) with open PR (chapter unknown)` : ''),
+      );
+    }
+  } catch (err) {
+    console.warn(
+      `Could not load in-flight registry (${err instanceof Error ? err.message : err}); continuing without skip list`,
+    );
+  }
+
   if (chapterArg) {
     if (!book) {
       console.error('Error: CHAPTER requires BOOK because chapter numbers are not unique across books.');
       console.error('Usage: node start-translation.js shiji "" 100 22');
+      process.exit(1);
+    }
+    const ch = normalizeChapterId(chapterArg);
+    if (registry && isChapterInflight(book, ch, registry)) {
+      console.error(
+        `Chapter ${book}/${ch} is in flight or on translation-staging. Run: node scripts/translation-inflight.mjs`,
+      );
       process.exit(1);
     }
     console.log(`Finding untranslated sentences in ${book} chapter ${chapterArg}`);
@@ -264,7 +301,7 @@ function main() {
 
   const chapter = chapterArg
     ? findSpecificChapter(book, chapterArg)
-    : findFirstUntranslatedChapter(book || null);
+    : findFirstUntranslatedChapter(book || null, registry);
   if (!chapter) {
     if (book) {
       console.log(`No untranslated chapters found in ${book}`);
@@ -299,4 +336,7 @@ function main() {
   console.log(`Note: The translation file is now named current_translation_${chapter.book}.json`);
 }
 
-main();
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
