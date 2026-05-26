@@ -72,8 +72,17 @@ function markChapterReviewed(chapterFile) {
   console.log(`📝 Marked manifest reviewed=true for ${bookId}/${chapterNum}`);
 }
 
+function blockMatchesReviewItem(block, reviewItem) {
+  if (!reviewItem.type) return true;
+  if (reviewItem.type === 'paragraph') return block.type === 'paragraph';
+  if (reviewItem.type === 'table_header') return block.type === 'table_header';
+  if (reviewItem.type === 'table_cell') return block.type === 'table_row';
+  return true;
+}
+
 function applySingleTranslation(content, reviewItem) {
   for (const block of content) {
+    if (!blockMatchesReviewItem(block, reviewItem)) continue;
     if (block.type === 'paragraph') {
       for (const sentence of block.sentences || []) {
         if (sentence.id === reviewItem.id) {
