@@ -6,17 +6,22 @@
  *   node scripts/run-shortest-untranslated-batch.mjs --dry-run
  *   node scripts/run-shortest-untranslated-batch.mjs --limit 100
  *   SDK_CHAPTER_BATCH_CONCURRENCY=25 node scripts/run-shortest-untranslated-batch.mjs
+ *   node scripts/run-shortest-untranslated-batch.mjs --skip-log /tmp/sdk-full-batch.log
+ *   node scripts/run-shortest-untranslated-batch.mjs --skip-json data/batch-started-chapters.json
+ *   SDK_CHAPTER_BATCH_CONCURRENCY=25 SDK_BATCH_START_DELAY_MS=2000 node scripts/...
  */
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { Agent } from '@cursor/sdk';
 import { countChapterMetrics } from '../chapter-counts.mjs';
 import { loadDotenv } from './load-dotenv.mjs';
 import { normalizeChapterId } from './normalize-chapter-id.mjs';
 import { incompleteChaptersOnGitRefAsync } from './sdk-merge-wait.mjs';
 import { REPO_ROOT } from './sdk-translation-books.mjs';
+import { parseBatchStartLog } from './extract-batch-starts.mjs';
 import {
   buildInflightRegistry,
   chapterKey,
@@ -33,13 +38,101 @@ const MASTER_REF = 'origin/master';
 function parseArgs() {
   const dryRun = process.argv.includes('--dry-run');
   let limit = 100;
+  /** @type {string[]} */
+  const skipLogs = [];
+  /** @type {string[]} */
+  const skipJsons = [];
+  let skipActiveAgentHours = 0;
   for (let i = 0; i < process.argv.length; i++) {
     if (process.argv[i] === '--limit' && process.argv[i + 1]) {
       limit = Number.parseInt(process.argv[++i], 10) || 100;
     }
+    if (process.argv[i] === '--skip-log' && process.argv[i + 1]) {
+      skipLogs.push(process.argv[++i]);
+    }
+    if (process.argv[i] === '--skip-json' && process.argv[i + 1]) {
+      skipJsons.push(process.argv[++i]);
+    }
+    if (process.argv[i] === '--skip-active-agents-hours' && process.argv[i + 1]) {
+      skipActiveAgentHours = Number.parseFloat(process.argv[++i]) || 0;
+    }
   }
   const concurrency = Number.parseInt(process.env.SDK_CHAPTER_BATCH_CONCURRENCY ?? '100', 10) || 100;
-  return { dryRun, limit, concurrency };
+  const startDelayMs = Number.parseInt(process.env.SDK_BATCH_START_DELAY_MS ?? '0', 10) || 0;
+  return { dryRun, limit, concurrency, skipLogs, skipJsons, skipActiveAgentHours, startDelayMs };
+}
+
+/**
+ * @param {string[]} skipLogPaths
+ */
+function loadStartedKeysFromLogs(skipLogPaths) {
+  const keys = new Set();
+  for (const logPath of skipLogPaths) {
+    const { chapters } = parseBatchStartLog(path.resolve(ROOT, logPath));
+    for (const { book, chapter } of chapters) {
+      keys.add(chapterKey(book, chapter));
+    }
+  }
+  return keys;
+}
+
+/**
+ * @param {string[]} skipJsonPaths
+ */
+function loadStartedKeysFromJson(skipJsonPaths) {
+  const keys = new Set();
+  for (const jsonPath of skipJsonPaths) {
+    const abs = path.resolve(ROOT, jsonPath);
+    const { chapters } = JSON.parse(fs.readFileSync(abs, 'utf8'));
+    for (const { book, chapter } of chapters) {
+      keys.add(chapterKey(book, chapter));
+    }
+  }
+  return keys;
+}
+
+/** @param {string} name */
+function chapterKeyFromAgentName(name) {
+  const n = (name || '').toLowerCase();
+  const m = n.match(/\b([a-z]+)\s+(?:chapter\s+)?(\d{1,4})\b/);
+  if (!m) return null;
+  return chapterKey(m[1], m[2]);
+}
+
+/**
+ * Skip chapters that already have a cloud agent created recently (name → book/chapter).
+ *
+ * @param {number} hours
+ * @param {string} [apiKey]
+ */
+async function loadActiveAgentKeys(hours, apiKey) {
+  const keys = new Set();
+  if (hours <= 0 || !apiKey) return keys;
+  const since = Date.now() - hours * 60 * 60 * 1000;
+  const repoSlug = 'records-of-the-grand-historian';
+  let cursor;
+  let pages = 0;
+  do {
+    const res = await Agent.list({ runtime: 'cloud', apiKey, limit: 100, cursor });
+    pages++;
+    let allOlder = true;
+    for (const a of res.items) {
+      const ts = a.createdAt ?? 0;
+      if (ts < since) continue;
+      allOlder = false;
+      if (!(a.repos || []).some((r) => r.includes(repoSlug))) continue;
+      const key = chapterKeyFromAgentName(a.name);
+      if (key) keys.add(key);
+    }
+    if (allOlder && res.items.length > 0) break;
+    cursor = res.nextCursor;
+    if (!cursor || pages > 100) break;
+  } while (cursor);
+  return keys;
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function log(line) {
@@ -89,7 +182,11 @@ function sentenceCountOnRef(ref, book, chapter) {
  *
  * @returns {Promise<Array<{ book: string, chapter: string, status: string, sentences: number, skip?: string }>>}
  */
-async function collectCandidates() {
+/**
+ * @param {Set<string>} [startedKeys]
+ * @param {Set<string>} [activeAgentKeys]
+ */
+async function collectCandidates(startedKeys = new Set(), activeAgentKeys = new Set()) {
   const registry = await buildInflightRegistry({ fetchGit: true });
   const books = listBooksOnRef(MASTER_REF);
 
@@ -101,8 +198,13 @@ async function collectCandidates() {
     for (const chapter of incomplete) {
       const ch = normalizeChapterId(chapter);
       const sentences = sentenceCountOnRef(MASTER_REF, book, ch);
+      const key = chapterKey(book, ch);
       let skip = null;
-      if (isChapterInflight(book, ch, registry)) {
+      if (startedKeys.has(key)) {
+        skip = 'batch-log';
+      } else if (activeAgentKeys.has(key)) {
+        skip = 'active-agent';
+      } else if (isChapterInflight(book, ch, registry)) {
         skip = 'in-flight';
       }
       raw.push({ book, chapter: ch, status: 'incomplete', sentences, skip });
@@ -149,14 +251,16 @@ function runOne({ book, chapter, sentences }) {
 /**
  * @param {Array<{ book: string, chapter: string, sentences: number }>} items
  * @param {number} concurrency
+ * @param {number} startDelayMs
  */
-async function runPool(items, concurrency) {
+async function runPool(items, concurrency, startDelayMs = 0) {
   const results = [];
   let index = 0;
 
   async function worker() {
     while (index < items.length) {
       const i = index++;
+      if (startDelayMs > 0) await sleep(startDelayMs);
       results[i] = await runOne(items[i]);
     }
   }
@@ -168,7 +272,8 @@ async function runPool(items, concurrency) {
 }
 
 async function main() {
-  const { dryRun, limit, concurrency } = parseArgs();
+  const { dryRun, limit, concurrency, skipLogs, skipJsons, skipActiveAgentHours, startDelayMs } =
+    parseArgs();
 
   if (!dryRun && !process.env.CURSOR_API_KEY) {
     console.error('CURSOR_API_KEY is required (set in .env or environment).');
@@ -178,7 +283,25 @@ async function main() {
   console.log('Fetching origin/master…');
   fetchMaster();
 
-  const raw = await collectCandidates();
+  const startedKeys = new Set([
+    ...(skipLogs.length > 0 ? loadStartedKeysFromLogs(skipLogs) : []),
+    ...(skipJsons.length > 0 ? loadStartedKeysFromJson(skipJsons) : []),
+  ]);
+  if (startedKeys.size > 0) {
+    console.log(`Skipping ${startedKeys.size} chapter(s) from batch log/json.`);
+  }
+
+  const activeAgentKeys = await loadActiveAgentKeys(
+    skipActiveAgentHours,
+    process.env.CURSOR_API_KEY,
+  );
+  if (activeAgentKeys.size > 0) {
+    console.log(
+      `Skipping ${activeAgentKeys.size} chapter(s) with cloud agents in the last ${skipActiveAgentHours}h.`,
+    );
+  }
+
+  const raw = await collectCandidates(startedKeys, activeAgentKeys);
   const skipped = raw.filter((r) => r.skip);
   const selected = selectShortest(raw, limit);
 
@@ -187,6 +310,12 @@ async function main() {
     masterRef: MASTER_REF,
     limit,
     concurrency,
+    skipLogs,
+    skipJsons,
+    skipActiveAgentHours,
+    startDelayMs,
+    batchLogSkipped: startedKeys.size,
+    activeAgentSkipped: activeAgentKeys.size,
     skippedCount: skipped.length,
     skipped: skipped.map((r) => ({
       book: r.book,
@@ -208,8 +337,15 @@ async function main() {
   console.log(`\nPlan: ${PLAN_PATH}`);
   console.log(`Log: ${LOG}`);
   console.log(`Gray/yellow on master: ${raw.length}`);
-  console.log(`Skipped (in-flight or already complete): ${skipped.length}`);
-  console.log(`Launching: ${selected.length} (concurrency ${concurrency})\n`);
+  const byReason = skipped.reduce((acc, r) => {
+    const k = r.skip ?? 'unknown';
+    acc[k] = (acc[k] ?? 0) + 1;
+    return acc;
+  }, /** @type {Record<string, number>} */ ({}));
+  console.log(`Skipped: ${skipped.length} (${Object.entries(byReason).map(([k, n]) => `${k}=${n}`).join(', ')})`);
+  console.log(
+    `Launching: ${selected.length} (concurrency ${concurrency}${startDelayMs ? `, ${startDelayMs}ms between starts` : ''})\n`,
+  );
 
   if (selected.length === 0) {
     console.log('Nothing to launch.');
@@ -235,7 +371,7 @@ async function main() {
     { flag: 'a' },
   );
 
-  const results = await runPool(selected, concurrency);
+  const results = await runPool(selected, concurrency, startDelayMs);
   const failed = results.filter((r) => r.code !== 0);
   console.log(`\nFinished: ${results.length - failed.length} ok, ${failed.length} failed`);
   if (failed.length > 0) {
