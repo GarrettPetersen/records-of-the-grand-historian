@@ -26,7 +26,7 @@ The standard translation loop is: `make start-translation BOOK=<book>` → fill 
 - **Batch size:** `start-translation` extracts 100 sentences per batch by default. For a 244-sentence chapter, expect ~3 batches. Commit every 4 batches per the workflow convention.
 - **Score-translations length mismatches:** The quality scorer flags "length mismatch" for short classical Chinese sentences with longer English translations. These are false positives inherent to translating terse classical Chinese and can be ignored.
 - **SDK translation failures:** `npm run sdk-inspect:run -- --from-log /tmp/sdk-translate-cloud.log` (or `--agent bc-… --run run-…`) prints agent URL, result summary, and last conversation turns. The orchestrator logs the same diagnostics on `status=error` automatically.
-- **SDK editorial review:** `npm run sdk-review:list` shows the queue; `npm run sdk-review:cloud -- --book <id>` runs the next unreviewed chapter via `prompt-review.txt` (semantic fidelity, dialogue attribution, `make apply-review`). Optional `--until-complete` loops within that book or globally.
+- **SDK editorial review:** `npm run sdk-review:list` shows the queue; `npm run sdk-review:cloud -- --book <id>` runs the next unreviewed chapter via `prompt-review.txt` (semantic fidelity, dialogue attribution, `make apply-review`). Optional `--until-complete` loops within that book or globally. **Batch:** `npm run sdk-review:batch -- --book shiji [--limit N] [--dry-run]` (or `sdk-review:shiji-batch`) launches parallel cloud review agents — independent of translation batch; default concurrency **10** (`SDK_REVIEW_BATCH_CONCURRENCY`); log `/tmp/sdk-review-batch.log`.
 
 ### Gotchas
 

@@ -112,22 +112,42 @@ export function writeReviewExtract(chapterFilePath, target) {
  * @param {string | null} [bookFilter]
  */
 export function countUnreviewedChapters(manifest, bookFilter = null) {
-  let count = 0;
+  return listUnreviewedChapters(manifest, bookFilter).length;
+}
+
+/**
+ * @param {object} manifest
+ * @param {string | null} [bookFilter]
+ * @returns {Array<{ bookId: string, chapter: string, filePath: string, sentences: number }>}
+ */
+export function listUnreviewedChapters(manifest, bookFilter = null) {
+  /** @type {Array<{ bookId: string, chapter: string, filePath: string, sentences: number }>} */
+  const out = [];
+
   for (const bookId of orderedBookIds(manifest, bookFilter)) {
     const book = manifest.books?.[bookId];
     if (!book) continue;
-    for (const ch of book.chapters || []) {
+
+    const chapters = [...(book.chapters || [])].sort((a, b) =>
+      a.chapter.localeCompare(b.chapter, 'en', { numeric: true }),
+    );
+
+    for (const ch of chapters) {
       if ((ch.translatedCount || 0) <= 0) continue;
       if (ch.reviewed === true) continue;
+
       const filePath = path.join(DATA_DIR, bookId, `${ch.chapter}.json`);
-      if (fs.existsSync(filePath)) {
-        const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-        if (isChapterFullyReviewed(data)) continue;
-      }
-      count += 1;
+      if (!fs.existsSync(filePath)) continue;
+
+      const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+      if (isChapterFullyReviewed(data)) continue;
+
+      const sentences = ch.translatedCount || data.translatedCount || 0;
+      out.push({ bookId, chapter: ch.chapter, filePath, sentences });
     }
   }
-  return count;
+
+  return out;
 }
 
 export { REPO_ROOT, MANIFEST_PATH, DATA_DIR };
