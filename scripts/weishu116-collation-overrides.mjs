@@ -728,4 +728,8 @@ export const COLLATION_OVERRIDES = {
     'The Southern edition and above treat the two characters 「豐城」 under Qisi as large main text—probably an intentional change to make two counties; the Palace and Bureau editions follow.',
     'The Southern edition and above treat the two characters "Fengcheng" under Qisi as large main text—probably an intentional change to make two counties; the Palace and Bureau editions follow.',
   ],
+  s2588: [
+    'Here the character 「治」 is an error for 「活」.',
+    'Here the character "zhi" ("administer") is a scribal error for "huo" ("living").',
+  ],
 };
