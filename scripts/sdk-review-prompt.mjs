@@ -46,7 +46,7 @@ export function buildReviewPrompt(opts) {
 
   const modeNote = opts.directToMaster
     ? 'Mode: LOCAL agent — push directly to origin/master (no PR).'
-    : 'Mode: CLOUD agent — open a PR against master when done.';
+    : 'Mode: CLOUD agent — open a non-draft PR against translation-staging when done (not master).';
 
   const extractNote = opts.reviewFileReady
     ? `The review file ${opts.reviewFile} is already extracted on disk — edit it directly; do not re-run extract unless the file is missing.`

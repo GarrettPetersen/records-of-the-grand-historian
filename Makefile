@@ -831,6 +831,10 @@ apply-review:
 		echo "Run 'make extract-review CHAPTER=$(CHAPTER)' or 'make extract-next-review' first."; \
 		exit 1; \
 	fi; \
+	if [ ! -f data/manifest.json ]; then \
+		echo "No data/manifest.json; generating manifest before apply-review…"; \
+		$(MAKE) manifest; \
+	fi; \
 	$(MAKE) check-no-autotranslate; \
 	$(NODE) apply-reviewed-translations.js "$(CHAPTER)" "$$review_file"
 	@echo "Running quality check..."
