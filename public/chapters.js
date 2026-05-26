@@ -16,8 +16,15 @@ const SNIPPET_MAX_EN = 160;
 /** @type {Map<string, Promise<object|null>>} */
 const corpusLoadPromises = new Map();
 
-function corpusUrl(bookId) {
-  return `/data/search-corpus/${encodeURIComponent(bookId)}.json`;
+function corpusBaseUrl(bookId) {
+  return `/data/search-corpus/${encodeURIComponent(bookId)}`;
+}
+
+async function fetchJson(url) {
+  const response = await fetch(url);
+  if (response.status === 404) return null;
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json();
 }
 
 /**
@@ -26,13 +33,48 @@ function corpusUrl(bookId) {
  */
 function loadSearchCorpus(bookId) {
   if (corpusLoadPromises.has(bookId)) return corpusLoadPromises.get(bookId);
-  const p = fetch(corpusUrl(bookId))
-    .then((res) => {
-      if (res.status === 404) return null;
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      return res.json();
-    })
-    .catch(() => null);
+  const p = (async () => {
+    const baseUrl = corpusBaseUrl(bookId);
+
+    try {
+      const index = await fetchJson(`${baseUrl}/index.json`);
+      if (index && Array.isArray(index.parts) && index.parts.length > 0) {
+        const partResults = await Promise.all(
+          index.parts.map(async (part) => {
+            const partUrl = `${baseUrl}/${encodeURIComponent(part.file)}`;
+            const data = await fetchJson(partUrl);
+            return data && data.chapters ? data.chapters : null;
+          }),
+        );
+
+        if (partResults.every(Boolean)) {
+          const chapters = {};
+          for (const partChapters of partResults) {
+            for (const [chKey, blocks] of Object.entries(partChapters)) {
+              chapters[chKey] = blocks;
+            }
+          }
+
+          if (Object.keys(chapters).length > 0) {
+            return {
+              v: index.v || 2,
+              bookId: index.bookId || bookId,
+              generatedAt: index.generatedAt || null,
+              chapters,
+            };
+          }
+        }
+      }
+    } catch {
+      // Fall through to the legacy flat file path.
+    }
+
+    try {
+      return await fetchJson(`${baseUrl}.json`);
+    } catch {
+      return null;
+    }
+  })().catch(() => null);
   corpusLoadPromises.set(bookId, p);
   return p;
 }
