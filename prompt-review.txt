@@ -19,20 +19,64 @@ make extract-review CHAPTER={chapter_file}
 
 2. **Readability** — Idiomatic English should read as professional historical prose: complete sentences, natural word order, appropriate articles (`the`, `a`, `an`), and conjunctions. Avoid choppy telegraphic fragments unless the Chinese is itself a bare list.
 
-3. **Dialogue and speech** — Where the Chinese records quoted speech, commands, memorials, or questions, the English must make **who is speaking or being addressed** clear on first mention in that passage. Use tags where needed (`X said`, `Y replied`, `the emperor asked`, `they memorialized`). Do not leave orphan quotations that could be misattributed.
+3. **Dialogue and speech** — Where the Chinese records quoted speech, commands, memorials, or questions, the English must make **who is speaking or being addressed** clear on first mention in that passage. Use tags where needed (`X said`, `Y replied`, `the emperor asked`, `they memorialized`). Do not leave orphan quotations that could be misattributed. **Inside quoted speech, keep first person** (`I`, `we`) when the speaker refers to themselves — do not switch to third person (`Xiang was the plotter`).
 
 4. **Names and titles** — Keep consistent romanization within the chapter. Prefer established forms (e.g. Emperor Wu, the Xiongnu) over literal calques when standard in English historiography.
 
 5. **Tables** — For table cells, preserve row/column sense; use `context` in the review JSON (headers, row cells) to disambiguate abbreviated Chinese.
 
-## Style guide
+## Conservative editing (important)
+
+- **Change only where needed.** Most sentences in a chapter may already be correct — leave them unchanged.
+- Do **not** rewrite for polish, synonym variety, or “literary” effect alone.
+- Read every line in the review file; it is fine if most entries keep the same wording.
+- After `make apply-review`, the chapter is marked reviewed even for unchanged lines — your job is to **verify** each line, not to change every line.
+
+## Literal vs idiomatic
 
 - **Literal** — Close, denotative rendering; may be stiffer. Still grammatical. Use for scholars comparing to the source.
 - **Idiomatic** — Same meaning as literal, but fluent for a general reader. This is the primary reading text on the site.
 - Do **not** make literal and idiomatic identical unless the Chinese is a single proper name or fixed formula.
+- Literal may stay closer to Chinese word order; idiomatic may add articles and conjunctions. **Both must mean the same thing.**
+
+## Style guide
+
 - Prefer past tense for narrative; present only for gnomic or timeless statements.
 - Avoid archaisms unless the passage is a formal citation and tone demands it.
 - Numbers, reign years, and place names: translate clearly; do not invent modern geography.
+- Tone: dignified historical prose (Sima Qian / standard English historiography), not colloquial sarcasm or modern editorializing.
+
+## Classical phrasing pitfalls
+
+When you see patterns like these, prefer the faithful reading — do not substitute a clever modern paraphrase:
+
+| Chinese pattern | Wrong drift | Prefer |
+|-----------------|-------------|--------|
+| 皆曰X可 | “All said X might” (fragment) | `All said, “X may do it.”` |
+| 爾其庶矣 (pardon after offense) | “almost a true brother” | forgiveness / sparing: e.g. “you are still my brother,” “you are forgiven,” “you will yet be my younger brother” — **not** “almost” |
+| 欽哉 | vague “revere” only | reverent command to officials; e.g. “Be reverent, be reverent” |
+| 土德 / 服土德 | “gentleman,” generic dress | earth virtue / earth’s color (Yellow Emperor context) |
+| 執中 | “soaked the mean” | held fast the center / held the mean |
+| 砥屬 | “grindstone,” unrelated idiom | submit to / come under (his rule) |
+| 盲者子 (quoted) | omit or mis-attribute | keep as quoted speech with clear speaker |
+
+If `{book}` is **shiji** and the chapter is annals (本紀), expect mythic register, genealogies, and quoted dialogue between rulers — keep names consistent within the chapter.
+
+## Dialogue checklist (before apply)
+
+For each passage with `「…」`:
+
+- Speaker identified before or inside the quote
+- Quotation marks closed; no orphan English fragments split across sentences unless the Chinese is split
+- `皆曰…` and similar: complete English sentence with quoted recommendation
+
+## Self-check (before apply)
+
+Skim **every line you changed** (not the whole chapter if you changed few):
+
+- Did any edit alter facts, titles, or who did what to whom?
+- Did literal and idiomatic still match each other in meaning?
+- Any quote now third-person inside first-person speech?
 
 ## What to edit
 
@@ -45,17 +89,22 @@ Work only in `{review_file}`. For each object in `translations`:
 
 ## When finished
 
-Run these Makefile targets in order (do not substitute custom scripts):
+If `data/manifest.json` is missing, generate it first:
+
+```bash
+make manifest
+```
+
+Then run (do not substitute custom scripts):
 
 ```bash
 make apply-review CHAPTER={chapter_file}
-make update BOOK={book}
 ```
 
-`make apply-review` merges your review JSON into the chapter, marks sentences reviewed, updates the manifest, runs quality scoring, and rebuilds the public page.
+`make apply-review` merges your review JSON into the chapter, marks the chapter reviewed in the manifest, runs quality scoring, and runs `make update BOOK={book}` (HTML, OG images, sync).
 
-Then commit, push, and open a **non-draft pull request** against `translation-staging` (cloud) or push to `origin/master` (local direct mode). One chapter per session. Verify the PR exists before ending.
+Then commit, push, and open a **non-draft pull request** against **`translation-staging`** (cloud) or push to `origin/master` (local direct mode). One chapter per session. Verify the PR exists before ending.
 
 Use `MODEL="{model}"` in commit messages only if you amend translator metadata; do not change the original translator field unless the Makefile workflow requires it.
 
-Pull from `origin/master` before you start if the repo may have moved.
+Pull from `origin/master` (or merge `origin/master` into your branch) before you start if the repo may have moved.
