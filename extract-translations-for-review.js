@@ -154,9 +154,13 @@ function main() {
   const filePath = args[0];
   const reviewData = extractTranslationsForReview(filePath);
 
-  // Generate output filename in translations folder
+  // Generate output filename in translations folder (book_chapter when meta.book is set)
   const baseName = path.basename(filePath, '.json');
-  const outputFile = `translations/review_${baseName}.json`;
+  const bookId = reviewData.book;
+  const outputFile =
+    bookId && bookId.length > 0
+      ? `translations/review_${bookId}_${baseName}.json`
+      : `translations/review_${baseName}.json`;
 
   fs.writeFileSync(outputFile, JSON.stringify(reviewData, null, 2));
   console.log(`\n✅ Extracted ${reviewData.translations.length} translations for review`);
