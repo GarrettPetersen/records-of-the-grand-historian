@@ -128,6 +128,53 @@ function escapeHtml(text) {
     .replace(/'/g, '&#039;');
 }
 
+function parseTableAttributePrefix(text) {
+  const source = String(text || '');
+  const match = source.match(/^((?:(?:rowspan|colspan|valign|align|style|class)\s*=\s*"[^"]*"\s*)+)\|\s*/i);
+  if (!match) return { text: source };
+
+  const attrs = {};
+  for (const attr of match[1].matchAll(/\b(rowspan|colspan)\s*=\s*"(\d+)"/gi)) {
+    attrs[attr[1].toLowerCase()] = parseInt(attr[2], 10);
+  }
+
+  return {
+    ...attrs,
+    text: source.slice(match[0].length)
+  };
+}
+
+function tableSpanValue(value) {
+  const n = Number(value);
+  return Number.isInteger(n) && n > 1 ? n : null;
+}
+
+function tableSpanAttrs(item, parsed, fallback) {
+  const rowspan = tableSpanValue(item?.rowspan) || tableSpanValue(parsed.rowspan) || tableSpanValue(fallback.rowspan);
+  const colspan = tableSpanValue(item?.colspan) || tableSpanValue(parsed.colspan) || tableSpanValue(fallback.colspan);
+  let attrs = '';
+  if (rowspan) attrs += ` rowspan="${rowspan}"`;
+  if (colspan) attrs += ` colspan="${colspan}"`;
+  return attrs;
+}
+
+function renderTableCell(cell, text) {
+  const parsed = parseTableAttributePrefix(text);
+  const fallback = parseTableAttributePrefix(cell?.content || cell?.zh || '');
+  const attrs = tableSpanAttrs(cell, parsed, fallback);
+  const cellText = escapeHtml(parsed.text);
+  const className = cellText.trim() ? 'table-cell' : 'table-cell empty-cell';
+  return `<td class="${className}"${attrs}>${cellText}</td>`;
+}
+
+function renderTableHeaderCell(sentence, text) {
+  const parsed = parseTableAttributePrefix(text);
+  const fallback = parseTableAttributePrefix(sentence?.zh || '');
+  const attrs = tableSpanAttrs(sentence, parsed, fallback);
+  const cellText = escapeHtml(parsed.text);
+  return `<th class="table-header"${attrs}>${cellText}</th>`;
+}
+
 function generateChapterMeta(bookId, chapterData) {
   const book = BOOKS[bookId];
   const chapterNum = parseInt(chapterData.meta.chapter, 10);
@@ -301,12 +348,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         tableRows.forEach(tableRow => {
           tableHtml += `<tr>`;
           tableRow.cells.forEach(cell => {
-            const cellZh = escapeHtml(cell.content);
-            if (cellZh.trim()) {
-              tableHtml += `<td class="table-cell">${cellZh}</td>`;
-            } else {
-              tableHtml += `<td class="table-cell empty-cell"></td>`;
-            }
+            tableHtml += renderTableCell(cell, cell.content);
           });
           tableHtml += `</tr>`;
         });
@@ -326,12 +368,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
           tableHtml += `<tr>`;
           tableRow.cells.forEach(cell => {
             const cellEnText = getTableCellEnglish(cell);
-            const cellEn = cellEnText ? escapeHtml(cellEnText) : '';
-            if (cellEn.trim()) {
-              tableHtml += `<td class="table-cell">${cellEn}</td>`;
-            } else {
-              tableHtml += `<td class="table-cell empty-cell"></td>`;
-            }
+            tableHtml += renderTableCell(cell, cellEnText);
           });
           tableHtml += `</tr>`;
         });
@@ -413,12 +450,13 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
 
       if (tableRows.length > 0) {
         // Generate header rows from table_header sentences
-        const zhHeaderRow = block.sentences.map(s => `<th class="table-header">${escapeHtml(s.zh)}</th>`).join('');
+        const zhHeaderRow = block.sentences.map(s => renderTableHeaderCell(s, s.zh)).join('');
         const enHeaderRow = block.sentences.map(s => {
           const translation = s.translations && s.translations.length > 0 ? s.translations[0] : null;
           if (!translation || (!translation.idiomatic && !translation.literal && !translation.text)) return '<th class="table-header"></th>';
 
-          let text = escapeHtml(translation.idiomatic || translation.literal || translation.text);
+          const parsed = parseTableAttributePrefix(translation.idiomatic || translation.literal || translation.text);
+          let text = escapeHtml(parsed.text);
 
           // Check for footnote
           if (translation.footnote) {
@@ -430,7 +468,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
             text += `<sup class="footnote-marker" data-footnote="${footnoteNum}">${footnoteNum}</sup>`;
           }
 
-          return `<th class="table-header">${text}</th>`;
+          return `<th class="table-header"${tableSpanAttrs(s, parsed, parseTableAttributePrefix(s.zh))}>${text}</th>`;
         }).join('');
 
         const tableTitle = `Table ${tableCounter}`;
@@ -454,12 +492,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         tableRows.forEach(tableRow => {
           tableHtml += `<tr>`;
           tableRow.cells.forEach(cell => {
-            const cellZh = escapeHtml(cell.content);
-            if (cellZh.trim()) {
-              tableHtml += `<td class="table-cell">${cellZh}</td>`;
-            } else {
-              tableHtml += `<td class="table-cell empty-cell"></td>`;
-            }
+            tableHtml += renderTableCell(cell, cell.content);
           });
           tableHtml += `</tr>`;
         });
@@ -482,12 +515,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
           tableHtml += `<tr>`;
           tableRow.cells.forEach(cell => {
             const cellEnText = getTableCellEnglish(cell);
-            const cellEn = cellEnText ? escapeHtml(cellEnText) : '';
-            if (cellEn.trim()) {
-              tableHtml += `<td class="table-cell">${cellEn}</td>`;
-            } else {
-              tableHtml += `<td class="table-cell empty-cell"></td>`;
-            }
+            tableHtml += renderTableCell(cell, cellEnText);
           });
           tableHtml += `</tr>`;
         });

@@ -649,6 +649,28 @@ function isBoilerplateText(text) {
   return boilerplatePatterns.some(pattern => t.includes(pattern));
 }
 
+function parseTableAttributePrefix(text) {
+  const source = String(text || '');
+  const match = source.match(/^((?:(?:rowspan|colspan|valign|align|style|class)\s*=\s*"[^"]*"\s*)+)\|\s*/i);
+  if (!match) return { text: source };
+
+  const attrs = {};
+  for (const attr of match[1].matchAll(/\b(rowspan|colspan)\s*=\s*"(\d+)"/gi)) {
+    attrs[attr[1].toLowerCase()] = parseInt(attr[2], 10);
+  }
+
+  return {
+    ...attrs,
+    text: source.slice(match[0].length)
+  };
+}
+
+function applyTableCellSpans(cell, attrs) {
+  if (Number.isInteger(attrs.rowspan) && attrs.rowspan > 1) cell.rowspan = attrs.rowspan;
+  if (Number.isInteger(attrs.colspan) && attrs.colspan > 1) cell.colspan = attrs.colspan;
+  return cell;
+}
+
 /**
  * Check if text looks like a table of contents entry or should be skipped
  */
@@ -698,14 +720,22 @@ function parseCtextTables($, $table, startSentenceCounter, customHeaderText = ''
 
     // Extract ALL cell data from td, th elements (including headers)
     $row.find('td, th').each((cellIndex, cellElement) => {
-      const cellText = $(cellElement).text().trim();
+      const $cell = $(cellElement);
+      const parsed = parseTableAttributePrefix($cell.text().trim());
       // Include empty cells to preserve table structure
-      const isEmpty = !cellText || cellText === '—' || cellText === '－' || cellText === '';
-      cells.push({
+      const isEmpty = !parsed.text || parsed.text === '—' || parsed.text === '－' || parsed.text === '';
+      const cell = {
         id: `s${++sentenceCounter}`,
-        zh: isEmpty ? '' : cellText,
+        zh: isEmpty ? '' : parsed.text,
         translations: [{ lang: 'en', literal: '', idiomatic: '', translator: '' }]
+      };
+      const rowspan = parseInt($cell.attr('rowspan') || '', 10);
+      const colspan = parseInt($cell.attr('colspan') || '', 10);
+      applyTableCellSpans(cell, {
+        rowspan: Number.isInteger(rowspan) ? rowspan : parsed.rowspan,
+        colspan: Number.isInteger(colspan) ? colspan : parsed.colspan
       });
+      cells.push(cell);
     });
 
     console.error(`Processing row ${rowIndex} with ${cells.length} cells`);
@@ -729,11 +759,14 @@ function parseCtextTables($, $table, startSentenceCounter, customHeaderText = ''
     }
 
     // Create generic table row with array of cells (preserving empty cells)
-    const rowCells = cells.map((cell, cellIndex) => ({
-      id: `s${startSentenceCounter++}`,
-      content: cell.zh || '',
-      translations: [{ lang: 'en', literal: '', idiomatic: '', translator: '' }]
-    }));
+    const rowCells = cells.map((cell, cellIndex) => {
+      const rowCell = {
+        id: `s${startSentenceCounter++}`,
+        content: cell.zh || '',
+        translations: [{ lang: 'en', literal: '', idiomatic: '', translator: '' }]
+      };
+      return applyTableCellSpans(rowCell, cell);
+    });
 
     const mergedRowCells = mergePunctuationFragments(
       rowCells,
@@ -749,11 +782,11 @@ function parseCtextTables($, $table, startSentenceCounter, customHeaderText = ''
       console.error(`Creating table header with ${mergedRowCells.length} cells: ${mergedRowCells.slice(0, 3).map(c => `"${c.content}"`).join(', ')}`);
       const headerObj = {
         type: 'table_header',
-        sentences: mergedRowCells.map(cell => ({
+        sentences: mergedRowCells.map(cell => applyTableCellSpans({
           id: cell.id,
           zh: cell.content,
           translations: [{ lang: 'en', literal: '', idiomatic: '', translator: '' }]
-        })),
+        }, cell)),
         translations: []
       };
       console.error(`Pushing header to content array (content.length before: ${content.length})`);
