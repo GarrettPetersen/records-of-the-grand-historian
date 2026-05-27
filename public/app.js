@@ -1,5 +1,7 @@
 // Complete book metadata for the Twenty-Four Histories and supplemental works.
 // Books are loaded dynamically from manifest.json and sorted chronologically
+import { getBookDesign } from './book-design.js';
+
 export const BOOKS = {
   shiji: {
     name: 'Records of the Grand Historian',
@@ -395,6 +397,22 @@ export function buildHistoryCardInnerHtml({
     `;
 }
 
+export function buildBookCoverCardInnerHtml({ bookId, info, chapterCount }) {
+  const design = getBookDesign(bookId);
+  const coverPath = `/covers/books/${bookId}.svg`;
+  const coverageLine = design.coverage ? `${design.coverage} · ` : '';
+  return `
+      <div class="book-cover-card-art" style="--book-color: ${escapeHtml(design.color)}">
+        <img src="${coverPath}" alt="" loading="lazy" />
+      </div>
+      <div class="book-cover-card-copy">
+        <div class="book-cover-card-title">${escapeHtml(info.name)}</div>
+        <div class="book-cover-card-meta">${escapeHtml(info.pinyin)} · ${escapeHtml(info.author)}</div>
+        <div class="book-cover-card-detail">${escapeHtml(`${coverageLine}${chapterCount.toLocaleString()} chapters`)}</div>
+      </div>
+    `;
+}
+
 /**
  * Aggregate sentence counts from manifest chapters to classify translation coverage.
  * @returns {{ level: 'full' | 'partial' | 'none', sentenceTotal: number, translatedTotal: number }}
@@ -493,24 +511,15 @@ async function renderHomepage() {
 
   const renderCard = (id, targetGrid) => {
     const info = histories[id];
-    const { level, sentenceTotal, translatedTotal } = bookTranslationSummary(info);
     const card = document.createElement('a');
-    card.className = `history-card history-card--translation-${level}`;
+    card.className = 'history-card book-cover-card';
     card.href = `book/${id}.html`;
-    card.title = translationStatusTooltip(level, sentenceTotal, translatedTotal, 'book');
+    card.title = `${info.name} (${info.chinese})`;
 
-    const bookFooter =
-      sentenceTotal > 0
-        ? `${translatedTotal.toLocaleString()} of ${sentenceTotal.toLocaleString()} sentences`
-        : '';
-
-    card.innerHTML = buildHistoryCardInnerHtml({
-      titleZh: info.chinese,
-      level,
-      secondaryLine: info.pinyin,
-      englishLine: info.name,
-      metaLine: `Dynasty: ${info.dynasty}`,
-      footerLine: bookFooter,
+    card.innerHTML = buildBookCoverCardInnerHtml({
+      bookId: id,
+      info,
+      chapterCount: (info.chapters || []).length,
     });
 
     targetGrid.appendChild(card);

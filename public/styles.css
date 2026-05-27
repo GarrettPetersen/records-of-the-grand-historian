@@ -103,6 +103,12 @@ main:has(.reader-container) {
     gap: var(--history-card-grid-gap);
 }
 
+#histories-grid,
+#other-works-grid {
+    --history-card-grid-min: 260px;
+    --history-card-grid-gap: 1.5rem;
+}
+
 /* Chapter listing: smaller cells and type than full book cards */
 .chapter-list {
     --history-card-grid-min: 200px;
@@ -269,6 +275,59 @@ main:has(.reader-container) {
     color: var(--primary-color);
     margin-top: var(--history-card-footer-margin-top);
     font-weight: 500;
+}
+
+.book-cover-card {
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid rgba(29, 28, 24, 0.14);
+    background: #ffffff;
+}
+
+.book-cover-card:hover {
+    border-color: var(--book-color, var(--secondary-color));
+    box-shadow: 0 14px 30px rgba(29, 28, 24, 0.16);
+}
+
+.book-cover-card-art {
+    background: #f1f0eb;
+    border-bottom: 1px solid rgba(29, 28, 24, 0.1);
+    padding: 1rem;
+}
+
+.book-cover-card-art img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 5 / 8;
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 0 10px 20px rgba(29, 28, 24, 0.18);
+}
+
+.book-cover-card-copy {
+    padding: 1rem 1.125rem 1.2rem;
+}
+
+.book-cover-card-title {
+    color: #1d1c18;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 0.35rem;
+}
+
+.book-cover-card-meta,
+.book-cover-card-detail {
+    color: #646058;
+    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-size: 0.82rem;
+    line-height: 1.35;
+}
+
+.book-cover-card-detail {
+    color: var(--book-color, var(--primary-color));
+    font-weight: 650;
+    margin-top: 0.45rem;
 }
 
 footer {

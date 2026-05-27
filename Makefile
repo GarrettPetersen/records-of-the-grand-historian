@@ -53,6 +53,7 @@ help:
 	@echo "  make manifest               # Generate manifest.json (includes sync)"
 	@echo "  make progress               # Generate translation progress data"
 	@echo "  make generate-pages         # Static HTML + sitemap/robots + Open Graph PNGs"
+	@echo "  make generate-book-covers   # Generate reusable book-cover SVGs for cards and e-books"
 	@echo "  make generate-sitemap       # public/sitemap.xml + robots.txt (after static HTML)"
 	@echo "  make backfill-og-sidecars   # Write public/og/*.png.sha256 only (no raster; fast)"
 	@echo "  make sync                   # Copy data/ to public/data/ for web frontend"
@@ -72,6 +73,9 @@ help:
 	@echo "  make extract-review CHAPTER=data/shiji/024.json  # Extract translations for manual review"
 	@echo "  make extract-next-review [BOOK=shiji]  # Extract next unreviewed translated chapter"
 	@echo "  make apply-review CHAPTER=data/shiji/024.json    # Apply reviewed edits and mark manifest"
+	@echo "  make ebook BOOK=shiji VOLUME=001       # Generate one EPUB product from ebooks/manifest.json"
+	@echo "  make ebook-book BOOK=shiji             # Generate all EPUB products for one book"
+	@echo "  make ebook-validate SLUG=shiji-volume-01  # Run local structural EPUB checks"
 	@echo "  npm run sdk-review:cloud [--book <id>]  # SDK agent reviews next chapter (PR → master)"
 	@echo "  npm run sdk-review:local [--book <id>]  # SDK agent reviews next chapter (local extract + apply)"
 	@echo "  make start-translation [BOOK=shiji] [CHAPTER=022] [BATCH_SIZE=100]  # Start translation session"
@@ -108,6 +112,22 @@ help:
 list:
 	@$(SCRAPE) --list
 
+.PHONY: ebook
+ebook:
+	@if [ -z "$(BOOK)" ]; then echo "Error: BOOK is required."; exit 1; fi
+	@if [ -z "$(VOLUME)" ]; then echo "Error: VOLUME is required."; exit 1; fi
+	@$(NODE) scripts/generate-ebook.mjs --book $(BOOK) --volume $(VOLUME)
+
+.PHONY: ebook-book
+ebook-book:
+	@if [ -z "$(BOOK)" ]; then echo "Error: BOOK is required."; exit 1; fi
+	@$(NODE) scripts/generate-ebook.mjs --book $(BOOK) --all-volumes
+
+.PHONY: ebook-validate
+ebook-validate:
+	@if [ -z "$(SLUG)" ]; then echo "Error: SLUG is required."; exit 1; fi
+	@$(NODE) scripts/validate-ebook.mjs dist/ebooks/$(SLUG)/$(SLUG).epub
+
 # Sync data to public directory for frontend
 # With BOOK=<id>, copy only that book's chapter JSON (plus glossary and manifest).
 .PHONY: sync
@@ -138,6 +158,10 @@ endif
 generate-og-images:
 	@$(NODE) generate-og-images.js $(OG_IMAGE_ARGS)
 
+.PHONY: generate-book-covers
+generate-book-covers:
+	@$(NODE) scripts/generate-book-covers.mjs
+
 # Write public/og/**/*.png.sha256 from sources only (no raster; use after layout version bump or clone)
 .PHONY: backfill-og-sidecars
 backfill-og-sidecars:
@@ -152,6 +176,7 @@ generate-sitemap:
 .PHONY: generate-pages
 generate-pages:
 	@echo "Generating static HTML pages..."
+	@$(NODE) scripts/generate-book-covers.mjs
 	@$(NODE) generate-static-pages.js $(if $(BOOK),--book $(BOOK),)
 	@echo "Building book full-text search corpora..."
 	@$(NODE) scripts/build-book-search-corpus.mjs $(if $(BOOK),--book $(BOOK),)
@@ -199,6 +224,7 @@ update:
 	@$(NODE) generate-progress.js --book $(BOOK)
 	@echo ""
 	@echo "Step 5/7: Generating static pages..."
+	@$(NODE) scripts/generate-book-covers.mjs
 	@$(NODE) generate-static-pages.js --book $(BOOK)
 	@echo ""
 	@echo "Step 5c: Building book full-text search corpus..."
@@ -237,6 +263,7 @@ update-all:
 	@$(NODE) generate-progress.js
 	@echo ""
 	@echo "Step 5/7: Generating static pages..."
+	@$(NODE) scripts/generate-book-covers.mjs
 	@$(NODE) generate-static-pages.js
 	@echo ""
 	@echo "Step 5c: Building book full-text search corpora..."
