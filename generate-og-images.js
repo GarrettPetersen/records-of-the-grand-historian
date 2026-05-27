@@ -46,6 +46,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { createElement } from 'react';
 import satori from 'satori';
+import { getBookDesign } from './public/book-design.js';
 import { defaultOgChapterConcurrency, hardwareConcurrency } from './scripts/build-parallelism.mjs';
 import {
   OG_LAYOUT_VERSION,
@@ -126,6 +127,45 @@ function fontFamilyName() {
 
 function mkdirp(dir) {
   fs.mkdirSync(dir, { recursive: true });
+}
+
+function clampChannel(value) {
+  return Math.max(0, Math.min(255, Math.round(value)));
+}
+
+function hexToRgb(hex) {
+  const cleaned = String(hex || '').replace('#', '').trim();
+  if (!/^[0-9a-fA-F]{6}$/.test(cleaned)) return null;
+  return {
+    r: parseInt(cleaned.slice(0, 2), 16),
+    g: parseInt(cleaned.slice(2, 4), 16),
+    b: parseInt(cleaned.slice(4, 6), 16),
+  };
+}
+
+function rgbToHex({ r, g, b }) {
+  return `#${[r, g, b].map((v) => clampChannel(v).toString(16).padStart(2, '0')).join('')}`;
+}
+
+function mixHex(hex, targetHex, amount) {
+  const source = hexToRgb(hex) || hexToRgb(HEADER_BLUE);
+  const target = hexToRgb(targetHex) || { r: 0, g: 0, b: 0 };
+  return rgbToHex({
+    r: source.r + (target.r - source.r) * amount,
+    g: source.g + (target.g - source.g) * amount,
+    b: source.b + (target.b - source.b) * amount,
+  });
+}
+
+function ogBookTheme(bookId) {
+  const design = getBookDesign(bookId);
+  const color = design.color || HEADER_BLUE;
+  return {
+    ...design,
+    color,
+    deep: mixHex(color, '#000000', 0.34),
+    pale: mixHex(color, '#ffffff', 0.9),
+  };
 }
 
 /** Full Simplified Chinese serif (classical coverage); one-time ~20 MB download */
@@ -376,48 +416,102 @@ function normalizeOgLatinTypography(text) {
     .replace(/\u2018/g, "'"); // LEFT SINGLE QUOTATION MARK (sometimes used as apostrophe)
 }
 
-function bookOgElement(chinese, englishName) {
+function bookOgElement(chinese, englishName, theme) {
+  const color = theme?.color || HEADER_BLUE;
+  const deep = theme?.deep || HEADER_BLUE_DEEP;
+  const coverage = theme?.coverage || '';
   return createElement(
     'div',
     {
       style: {
         width: OG_W,
         height: OG_H,
-        background: `linear-gradient(135deg, ${HEADER_BLUE} 0%, ${HEADER_BLUE_DEEP} 100%)`,
+        backgroundColor: '#ffffff',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 56,
+        alignItems: 'stretch',
+        justifyContent: 'space-between',
       },
     },
     createElement(
       'div',
       {
         style: {
-          ...baseTextStyle(),
-          color: '#ffffff',
-          fontSize: Math.min(96, 3200 / Math.max(4, chinese.length)),
-          textAlign: 'center',
-          lineHeight: 1.2,
+          height: 150,
+          background: `linear-gradient(135deg, ${color} 0%, ${deep} 100%)`,
+          flexShrink: 0,
         },
       },
-      chinese,
     ),
     createElement(
       'div',
       {
         style: {
-          ...baseTextStyle(),
-          color: 'rgba(255,255,255,0.95)',
-          fontSize: 36,
-          marginTop: 24,
-          textAlign: 'center',
-          lineHeight: 1.3,
-          maxWidth: 1080,
+          display: 'flex',
+          flex: 1,
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingLeft: 64,
+          paddingRight: 64,
+          backgroundColor: '#ffffff',
         },
       },
-      normalizeOgLatinTypography(englishName),
+      createElement(
+        'div',
+        {
+          style: {
+            ...baseTextStyle(),
+            color,
+            fontSize: Math.min(116, 4000 / Math.max(4, chinese.length)),
+            textAlign: 'center',
+            lineHeight: 1.05,
+            letterSpacing: 0,
+          },
+        },
+        chinese,
+      ),
+      createElement(
+        'div',
+        {
+          style: {
+            ...baseTextStyle(),
+            color: '#1f2933',
+            fontSize: 38,
+            marginTop: 26,
+            textAlign: 'center',
+            lineHeight: 1.25,
+            maxWidth: 1080,
+          },
+        },
+        normalizeOgLatinTypography(englishName),
+      ),
+      coverage
+        ? createElement(
+            'div',
+            {
+              style: {
+                ...baseTextStyle(),
+                color: '#5d6873',
+                fontSize: 25,
+                marginTop: 18,
+                textAlign: 'center',
+                lineHeight: 1.2,
+              },
+            },
+            coverage,
+          )
+        : null,
+    ),
+    createElement(
+      'div',
+      {
+        style: {
+          height: 132,
+          background: `linear-gradient(135deg, ${deep} 0%, ${color} 100%)`,
+          flexShrink: 0,
+        },
+      },
     ),
   );
 }
@@ -534,7 +628,9 @@ function computeChapterSnippetTypography(snippetParts) {
 }
 
 /** Minimal chapter card: no excerpt, no absolute overlays (last-resort Resvg escape hatch). */
-function chapterOgFallbackTitlesElement(zhTitle, enTitle) {
+function chapterOgFallbackTitlesElement(zhTitle, enTitle, theme) {
+  const color = theme?.color || HEADER_BLUE;
+  const deep = theme?.deep || HEADER_BLUE_DEEP;
   const leftChildren = [
     createElement(
       'div',
@@ -589,7 +685,7 @@ function chapterOgFallbackTitlesElement(zhTitle, enTitle) {
         style: {
           width: CHAPTER_LEFT_RAIL,
           height: OG_H,
-          background: `linear-gradient(180deg, ${HEADER_BLUE} 0%, ${HEADER_BLUE_DEEP} 100%)`,
+          background: `linear-gradient(180deg, ${color} 0%, ${deep} 100%)`,
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
@@ -638,7 +734,9 @@ function chapterOgFallbackTitlesElement(zhTitle, enTitle) {
  * @param {{ english: boolean, text: string }[]} snippetParts
  * @param {{ noBottomFade?: boolean }} [layout]
  */
-function chapterOgElement(zhTitle, enTitle, snippetParts, layout = {}) {
+function chapterOgElement(zhTitle, enTitle, snippetParts, theme, layout = {}) {
+  const color = theme?.color || HEADER_BLUE;
+  const deep = theme?.deep || HEADER_BLUE_DEEP;
   const { noBottomFade = false } = layout;
   const leftChildren = [
     createElement(
@@ -799,7 +897,7 @@ function chapterOgElement(zhTitle, enTitle, snippetParts, layout = {}) {
         style: {
           width: CHAPTER_LEFT_RAIL,
           height: OG_H,
-          background: `linear-gradient(180deg, ${HEADER_BLUE} 0%, ${HEADER_BLUE_DEEP} 100%)`,
+          background: `linear-gradient(180deg, ${color} 0%, ${deep} 100%)`,
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
@@ -878,7 +976,7 @@ async function main() {
     const chunkIds = bookIds.slice(c, c + OG_BOOK_RESVG_CHUNK);
     const needIds = chunkIds.filter((bookId) => {
       const bookPngPath = path.join(outRoot, 'books', `${bookId}.png`);
-      const fp = fingerprintBook(OG_LAYOUT_VERSION, books[bookId]);
+      const fp = fingerprintBook(OG_LAYOUT_VERSION, books[bookId], getBookDesign(bookId));
       return !incrementalOgIsCurrent(bookPngPath, fp);
     });
     for (const bookId of chunkIds) {
@@ -890,7 +988,7 @@ async function main() {
     const svgs = await Promise.all(
       needIds.map((bookId) => {
         const b = books[bookId];
-        return satori(bookOgElement(b.chinese, b.name), {
+        return satori(bookOgElement(b.chinese, b.name, ogBookTheme(bookId)), {
           width: OG_W,
           height: OG_H,
           fonts,
@@ -901,7 +999,7 @@ async function main() {
     for (let k = 0; k < needIds.length; k += 1) {
       const bookId = needIds[k];
       const bookPngPath = path.join(outRoot, 'books', `${bookId}.png`);
-      const fp = fingerprintBook(OG_LAYOUT_VERSION, books[bookId]);
+      const fp = fingerprintBook(OG_LAYOUT_VERSION, books[bookId], getBookDesign(bookId));
       writePngAndSidecar(bookPngPath, pngs[k], fp);
     }
     for (const bookId of needIds) {
@@ -930,7 +1028,7 @@ async function main() {
 
   const chapterJobsToRun = chapterJobs.filter((job) => {
     const pngPath = path.join(outRoot, 'chapters', job.bookId, `${job.chNum}.png`);
-    const hex = fingerprintChapter(OG_LAYOUT_VERSION, fs.readFileSync(job.jsonPath));
+    const hex = fingerprintChapter(OG_LAYOUT_VERSION, fs.readFileSync(job.jsonPath), getBookDesign(job.bookId));
     return !incrementalOgIsCurrent(pngPath, hex);
   });
   if (incremental && chapterJobs.length > chapterJobsToRun.length) {
@@ -947,7 +1045,8 @@ async function main() {
   await runPool(chapterJobsToRun, OG_CHAPTER_CONCURRENCY, async (job) => {
     const { bookId, chNum, jsonPath } = job;
     const jsonBuf = fs.readFileSync(jsonPath);
-    const fpHex = fingerprintChapter(OG_LAYOUT_VERSION, jsonBuf);
+    const theme = ogBookTheme(bookId);
+    const fpHex = fingerprintChapter(OG_LAYOUT_VERSION, jsonBuf, getBookDesign(bookId));
     const chapterData = JSON.parse(jsonBuf.toString('utf8'));
     const zhTitle = chapterData.meta?.title?.zh || `卷${chNum}`;
     const enTitle = chapterData.meta?.title?.en || '';
@@ -956,10 +1055,10 @@ async function main() {
       ...p,
       text: p.text.length > OG_SNIPPET_CHAR_CAP ? p.text.slice(0, OG_SNIPPET_CHAR_CAP) : p.text,
     }));
-    const png = await renderPng(chapterOgElement(zhTitle, enTitle, snippet), fonts, resvgFontPath, {
+    const png = await renderPng(chapterOgElement(zhTitle, enTitle, snippet, theme), fonts, resvgFontPath, {
       fallbackElements: [
-        chapterOgElement(zhTitle, enTitle, snippet, { noBottomFade: true }),
-        chapterOgFallbackTitlesElement(zhTitle, enTitle),
+        chapterOgElement(zhTitle, enTitle, snippet, theme, { noBottomFade: true }),
+        chapterOgFallbackTitlesElement(zhTitle, enTitle, theme),
       ],
     });
     const chDir = path.join(outRoot, 'chapters', bookId);

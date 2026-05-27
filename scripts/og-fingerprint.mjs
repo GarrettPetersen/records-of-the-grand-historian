@@ -4,7 +4,11 @@ import { createHash } from 'node:crypto';
  * Bump when OG layout, snippet rules, fonts-as-rendered, or static site card copy changes.
  * Forces a new fingerprint so incremental builds re-raster affected cards.
  */
-export const OG_LAYOUT_VERSION = '1';
+export const OG_LAYOUT_VERSION = '2';
+
+function stableJson(value) {
+  return JSON.stringify(value ?? {});
+}
 
 /** Sidecar path: one line, 64 lowercase hex chars + optional newline (Option A). */
 export function ogSidecarPath(pngPath) {
@@ -14,9 +18,11 @@ export function ogSidecarPath(pngPath) {
 /**
  * Chapter share card: raw UTF-8 bytes of `data/{book}/{nnn}.json` (same inputs as parse + snippet).
  */
-export function fingerprintChapter(layoutVersion, jsonFileBuffer) {
+export function fingerprintChapter(layoutVersion, jsonFileBuffer, renderInputs = {}) {
   const h = createHash('sha256');
   h.update(layoutVersion, 'utf8');
+  h.update(Buffer.from([0]));
+  h.update(stableJson(renderInputs), 'utf8');
   h.update(Buffer.from([0]));
   h.update(jsonFileBuffer);
   return h.digest('hex');
@@ -25,10 +31,11 @@ export function fingerprintChapter(layoutVersion, jsonFileBuffer) {
 /**
  * Book hub card: only fields used by `bookOgElement` (Chinese line + English name).
  */
-export function fingerprintBook(layoutVersion, book) {
+export function fingerprintBook(layoutVersion, book, renderInputs = {}) {
   const payload = JSON.stringify({
     chinese: book.chinese ?? '',
     name: book.name ?? '',
+    renderInputs,
   });
   const h = createHash('sha256');
   h.update(layoutVersion, 'utf8');

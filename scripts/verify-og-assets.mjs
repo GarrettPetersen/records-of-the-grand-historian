@@ -13,6 +13,7 @@ import {
   fingerprintSite,
   ogSidecarPath,
 } from './og-fingerprint.mjs';
+import { getBookDesign } from '../public/book-design.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
@@ -74,15 +75,16 @@ const books = manifest.books || {};
 
 for (const bookId of Object.keys(books)) {
   const b = books[bookId];
+  const design = getBookDesign(bookId);
   const bookPng = path.join(root, 'public', 'og', 'books', `${bookId}.png`);
-  expectSidecarMatches(bookPng, fingerprintBook(OG_LAYOUT_VERSION, b), `book hub ${bookId}`);
+  expectSidecarMatches(bookPng, fingerprintBook(OG_LAYOUT_VERSION, b, design), `book hub ${bookId}`);
 
   for (const ch of b.chapters || []) {
     const chNum = String(ch.chapter).padStart(3, '0');
     const jsonPath = path.join(root, 'data', bookId, `${chNum}.json`);
     if (!fs.existsSync(jsonPath)) continue;
     const chPng = path.join(root, 'public', 'og', 'chapters', bookId, `${chNum}.png`);
-    const expected = fingerprintChapter(OG_LAYOUT_VERSION, fs.readFileSync(jsonPath));
+    const expected = fingerprintChapter(OG_LAYOUT_VERSION, fs.readFileSync(jsonPath), design);
     expectSidecarMatches(chPng, expected, `chapter ${bookId}/${chNum}`);
   }
 }

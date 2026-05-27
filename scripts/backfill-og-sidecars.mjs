@@ -13,6 +13,7 @@ import {
   fingerprintSite,
   ogSidecarPath,
 } from './og-fingerprint.mjs';
+import { getBookDesign } from '../public/book-design.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
@@ -39,9 +40,10 @@ const books = manifest.books || {};
 
 for (const bookId of Object.keys(books)) {
   const b = books[bookId];
+  const design = getBookDesign(bookId);
   const bookPng = path.join(root, 'public', 'og', 'books', `${bookId}.png`);
   if (fs.existsSync(bookPng)) {
-    writeSidecar(bookPng, fingerprintBook(OG_LAYOUT_VERSION, b));
+    writeSidecar(bookPng, fingerprintBook(OG_LAYOUT_VERSION, b, design));
     n += 1;
   }
   for (const ch of b.chapters || []) {
@@ -50,7 +52,7 @@ for (const bookId of Object.keys(books)) {
     if (!fs.existsSync(jsonPath)) continue;
     const chPng = path.join(root, 'public', 'og', 'chapters', bookId, `${chNum}.png`);
     if (!fs.existsSync(chPng)) continue;
-    writeSidecar(chPng, fingerprintChapter(OG_LAYOUT_VERSION, fs.readFileSync(jsonPath)));
+    writeSidecar(chPng, fingerprintChapter(OG_LAYOUT_VERSION, fs.readFileSync(jsonPath), design));
     n += 1;
   }
 }
