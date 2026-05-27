@@ -601,12 +601,6 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
     }
   }
 
-  const translationBadge = meta.translationPercent === 100
-    ? '✓ Translated'
-    : meta.translationPercent > 0
-      ? `${meta.translationPercent}% Translated`
-      : 'Untranslated';
-
   const chapterSlug = String(chapterData.meta.chapter).padStart(3, '0');
   const chapterUrl = `${CANONICAL_SITE}/${bookId}/${chapterSlug}.html`;
   const ogImageUrl = `${CANONICAL_SITE}/og/chapters/${bookId}/${chapterSlug}.png`;
@@ -716,21 +710,6 @@ ${JSON.stringify(structuredData, null, 2)}
         color: #999;
         cursor: not-allowed;
         opacity: 0.5;
-      }
-      .translation-badge {
-        display: inline-block;
-        padding: 0.25rem 0.75rem;
-        border-radius: 4px;
-        font-size: 0.85rem;
-        margin-left: 1rem;
-      }
-      .badge-complete {
-        background: #d4edda;
-        color: #155724;
-      }
-      .badge-partial {
-        background: #fff3cd;
-        color: #856404;
       }
       .table-row-block {
         margin-bottom: 2rem;
@@ -983,10 +962,7 @@ ${JSON.stringify(structuredData, null, 2)}
                 <h1 style="color: white; margin: 0; font-size: 1.8rem;" class="chapter-title-text chinese-text">${escapeHtml(zhTitle)}</h1>
                 ${enTitle ? `<h2 style="color: rgba(255,255,255,0.9); margin: 0.25rem 0 0 0; font-size: 1.2rem; font-weight: 400;" class="chapter-title-text english-text">${escapeHtml(enTitle)}</h2>` : ''}
                 <div class="subtitle" style="color: rgba(255,255,255,0.8);">
-                  Chapter ${chapterNum} of ${book.chinese}
-                  <span class="translation-badge ${meta.translationPercent === 100 ? 'badge-complete' : 'badge-partial'}">
-                    ${translationBadge}
-                  </span>
+                  Chapter ${chapterNum} of ${book.chinese} · ${escapeHtml(book.name)}
                 </div>
             </div>
         </div>

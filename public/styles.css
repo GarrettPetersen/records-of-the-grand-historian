@@ -111,9 +111,9 @@ main:has(.reader-container) {
 
 /* Chapter listing: smaller cells and type than full book cards */
 .chapter-list {
-    --history-card-grid-min: 200px;
-    --history-card-grid-gap: 1rem;
-    --history-card-padding: 1rem 1.125rem;
+    --history-card-grid-min: 220px;
+    --history-card-grid-gap: 0.85rem;
+    --history-card-padding: 0.85rem 1rem;
     --history-card-radius: 6px;
     --history-card-header-gap: 0.5rem;
     --history-card-header-margin-bottom: 0.35rem;
@@ -134,6 +134,26 @@ main:has(.reader-container) {
     --history-card-hover-translate-y: -2px;
 
     margin-top: 2rem;
+}
+
+.chapter-index-card {
+    border: 1px solid var(--border-color);
+    border-top: 4px solid var(--book-color, var(--primary-color));
+}
+
+.chapter-index-card:hover {
+    border-color: var(--book-color, var(--secondary-color));
+    box-shadow: 0 8px 16px rgba(29, 28, 24, 0.12);
+}
+
+.chapter-index-card .history-card-header h3 {
+    color: #1f2933;
+}
+
+.chapter-index-card .chapter-count {
+    color: var(--book-color, var(--primary-color));
+    border-top: 1px solid var(--border-color);
+    padding-top: 0.55rem;
 }
 
 .section-heading {

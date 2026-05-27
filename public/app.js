@@ -372,15 +372,19 @@ export function translationStatusTooltip(level, sentenceTotal, translatedTotal, 
  */
 export function buildHistoryCardInnerHtml({
   titleZh,
-  level,
   secondaryLine,
   englishLine,
   metaLine = '',
   footerLine = '',
   secondaryLineClass = '',
+  showStatus = true,
+  level = 'full',
 }) {
   const labels = TRANSLATION_STATUS_LABELS;
   const secClass = secondaryLineClass ? ` ${secondaryLineClass}` : '';
+  const statusBlock = showStatus
+    ? `<span class="translation-status translation-status--${level}">${labels[level]}</span>`
+    : '';
   const metaBlock = metaLine
     ? `<div class="dynasty">${escapeHtml(metaLine)}</div>`
     : '';
@@ -390,7 +394,7 @@ export function buildHistoryCardInnerHtml({
   return `
       <div class="history-card-header">
         <h3>${escapeHtml(titleZh)}</h3>
-        <span class="translation-status translation-status--${level}">${labels[level]}</span>
+        ${statusBlock}
       </div>
       <div class="pinyin${secClass}">${escapeHtml(secondaryLine)}</div>
       <div class="english-name">${escapeHtml(englishLine)}</div>${metaBlock}${footerBlock}

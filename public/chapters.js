@@ -452,7 +452,7 @@ async function renderChapters() {
   }
 
   for (const chapter of bookData.chapters) {
-    const { level, sentenceTotal, translatedTotal } = chapterTranslationSummary(chapter);
+    const sentenceTotal = Number(chapter?.sentenceCount) || 0;
     const titleZh = chapter.title?.zh || `卷${chapter.chapter}`;
     const titleEn = chapter.title?.en || '\u2014';
     const titleRaw = chapter.title?.raw || '';
@@ -462,10 +462,10 @@ async function renderChapters() {
       : `Chapter ${chapter.chapter}`;
 
     const card = document.createElement('a');
-    card.className = `history-card history-card--translation-${level}`;
+    card.className = 'history-card chapter-index-card';
     const chFile = String(chapter.chapter).padStart(3, '0');
     card.href = `/${bookId}/${chFile}.html`;
-    card.title = translationStatusTooltip(level, sentenceTotal, translatedTotal, 'chapter');
+    card.title = titleEn === '\u2014' ? `${chapterLabel}: ${titleZh}` : `${chapterLabel}: ${titleEn}`;
     card.dataset.chapterFile = chFile;
     card.dataset.chapterTitleZh = titleZh;
     card.dataset.chapterTitleEn = titleEn === '\u2014' ? '' : titleEn;
@@ -484,18 +484,17 @@ async function renderChapters() {
       .join(' ')
       .trim();
 
-    const footerLine =
-      sentenceTotal > 0
-        ? `${translatedTotal.toLocaleString()} of ${sentenceTotal.toLocaleString()} sentences`
-        : '';
+    const footerLine = sentenceTotal > 0
+      ? `${chapterLabel} · ${sentenceTotal.toLocaleString()} sentences`
+      : chapterLabel;
 
     card.innerHTML = buildHistoryCardInnerHtml({
       titleZh,
-      level,
       secondaryLine: chapterLabel,
       secondaryLineClass: 'pinyin--chapter-index',
       englishLine: titleEn,
       footerLine,
+      showStatus: false,
     });
 
     list.appendChild(card);
