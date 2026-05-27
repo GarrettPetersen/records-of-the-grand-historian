@@ -397,10 +397,14 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
     }
 
     if (block.type === 'paragraph') {
+      const visibleSentences = (block.sentences || []).filter(s => (s.zh || '').trim() || getSentenceEnglish(s).trim());
+      if (visibleSentences.length === 0) {
+        continue;
+      }
       const paraNum = i + 1;
 
       // Chinese text - create sentence spans with word segmentation
-      const zhSentences = block.sentences.map(s => {
+      const zhSentences = visibleSentences.map(s => {
         const id = s.id;
         // [...str] iterates Unicode code points; split('') breaks supplementary planes (e.g. 𨻻).
         const chars = [...s.zh].filter((c) => c.trim());
@@ -409,7 +413,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
       }).join(' ');
 
       // English text - create sentence spans with translations
-      const enSentences = block.sentences.map(s => {
+      const enSentences = visibleSentences.map(s => {
         const id = s.id;
         const sentenceEnglish = getSentenceEnglish(s);
         const translation = s.translations && s.translations.length > 0 ? s.translations[0] : null;
