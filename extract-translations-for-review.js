@@ -43,6 +43,7 @@ function extractTranslationsForReview(filePath) {
                 chinese: sentence.zh || sentence.content,
                 literal: literal,
                 idiomatic: idiomatic,
+                allowChineseCharacters: translation.allowChineseCharacters === true,
                 context: getContext(data.content, block, sentence)
               });
             }
@@ -60,6 +61,7 @@ function extractTranslationsForReview(filePath) {
               chinese: cell.content,
               literal: literal,
               idiomatic: idiomatic,
+              allowChineseCharacters: cell.allowChineseCharacters === true,
               context: getTableContext(data.content, block, cell)
             });
           }
@@ -78,6 +80,7 @@ function extractTranslationsForReview(filePath) {
                 chinese: sentence.zh || sentence.content,
                 literal: literal,
                 idiomatic: idiomatic,
+                allowChineseCharacters: translation.allowChineseCharacters === true,
                 context: getTableContext(data.content, block, sentence)
               });
             }

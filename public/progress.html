@@ -503,7 +503,16 @@
             const displayDate = estimatedCompletionDate && !Number.isNaN(estimatedCompletionDate.getTime()) && chaptersPerDay > 0
                 ? estimatedCompletionDate
                 : fallbackCompletionDate;
-            if (displayDate && !Number.isNaN(displayDate.getTime()) && remainingChapters > 0) {
+            if (remainingChapters === 0 && estimatedCompletionDate && !Number.isNaN(estimatedCompletionDate.getTime())) {
+                const formatter = new Intl.DateTimeFormat(undefined, {
+                    dateStyle: 'medium'
+                });
+                estimateNode.innerHTML = `
+                    <div class="overall-metric-label">Estimate</div>
+                    <div class="overall-metric-value">Finished on ${formatter.format(estimatedCompletionDate)}</div>
+                    <div class="overall-metric-note">All chapters translated.</div>
+                `;
+            } else if (displayDate && !Number.isNaN(displayDate.getTime()) && remainingChapters > 0) {
                 const formatter = new Intl.DateTimeFormat(undefined, {
                     dateStyle: 'medium'
                 });

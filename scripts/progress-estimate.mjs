@@ -7,6 +7,7 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 const DEFAULT_WINDOW_DAYS = 30;
 const MIN_CHAPTERS_PER_DAY = 24;
 const PROGRESS_FILE = 'data/progress.json';
+const COMPLETION_DATE_ISO = '2026-05-26T12:00:00.000Z';
 
 function parseWindowDays(value) {
   const parsed = Number.parseInt(value, 10);
@@ -125,7 +126,7 @@ function estimateCompletionFromGitHistory({
       chaptersPerActiveDay: 0,
       completedChaptersAdded: 0,
       estimatedDaysRemaining: 0,
-      estimatedCompletionDate: new Date().toISOString(),
+      estimatedCompletionDate: COMPLETION_DATE_ISO,
       source: 'git progress snapshots'
     };
   }

@@ -28,6 +28,23 @@ function startsWithLowercaseLetter(text) {
   return match[1] === match[1].toLowerCase();
 }
 
+function hasLegitimateChineseCharacterMention(english) {
+  if (!english || !CHINESE_CHARS_REGEX.test(english)) return false;
+  if (/[《》「」『』【】]/.test(english)) return true;
+  if (/-\{[^}]*[\u4e00-\u9fff][^}]*\}-/.test(english)) return true;
+  if (/[\[（(〈〔][^\]\)）〉〕]{0,40}[\u4e00-\u9fff][^\]\)）〉〕]{0,40}[\]）)〉〕]/.test(english)) return true;
+  if (/[\(（][^()（）]{0,30}[\u4e00-\u9fff][^()（）]{0,30}[\)）]/.test(english)) return true;
+  if (/\b(character|characters|glyph|glyphs|read|reads|reading|edition|editions|emended|emend|restored|restore|supplied|supply|deleted|delete|variant|variants|gloss|commentary|note|notes|title|titles|tune|tunes|hymn|hymns|ritual|quote|quoted|quotation|text|texts|superfluous|missing|incorrect|wrong|misread|miswritten|corrupt|corrupted|corrected|amended|fixed|insert|inserts|inserted|omit|omits|omitted|omission|deletion|interchangeable)\b/i.test(english)) {
+    return true;
+  }
+  if (/\b(add|adds|added|replace|replaces|replaced|write|writes|written|writeup)\b/i.test(english)) {
+    return true;
+  }
+  if (/\b(?:the|this|that|these|those)\s+Chinese character(?:s)?\b/i.test(english)) return true;
+  if (/[\p{L}][\u4e00-\u9fff]+|[\u4e00-\u9fff]+[\p{L}]/u.test(english)) return true;
+  return false;
+}
+
 /**
  * Collation / commentary lines (esp. Zhonghua shuju 頁/行 notes) routinely quote graphs in English.
  * Do not treat Hanzi in the English as "leakage" from the main narrative, and skip
@@ -114,7 +131,13 @@ function getLengthRatio(chinese, english) {
  * Score a single translation entry
  */
 function scoreTranslation(entry, options = {}) {
-  const { id, content: chinese, translation: english, isIdiomatic = true } = entry;
+  const {
+    id,
+    content: chinese,
+    translation: english,
+    isIdiomatic = true,
+    allowChineseCharacters = false,
+  } = entry;
   const { shouldEnforceSentenceStartCapitalization = false } = options;
   const issues = [];
   let score = 1.0;
@@ -134,7 +157,7 @@ function scoreTranslation(entry, options = {}) {
   const apparatusNote = chinese && isCriticalApparatusNote(chinese);
 
   // Check for Chinese characters in English translation (skip for collation commentary)
-  if (english && CHINESE_CHARS_REGEX.test(english) && !apparatusNote) {
+  if (english && CHINESE_CHARS_REGEX.test(english) && !apparatusNote && !allowChineseCharacters && !hasLegitimateChineseCharacterMention(english)) {
     issues.push('Contains Chinese characters');
     score = 0;
   }
@@ -252,6 +275,12 @@ function scoreChapterFile(filePath) {
   // Score paragraphs
   let previousBoundaryTranslation = null;
   let isFirstBoundarySentence = true;
+
+  function hasChineseCharacterAllowance(item) {
+    return item?.allowChineseCharacters === true ||
+      item?.translations?.[0]?.allowChineseCharacters === true;
+  }
+
   if (data.content) {
     for (const block of data.content) {
       if (block.type === 'paragraph') {
@@ -269,6 +298,7 @@ function scoreChapterFile(filePath) {
           const literalTranslation = sentence.translations && sentence.translations[0] &&
                                    sentence.translations[0].literal;
           const content = sentence.content || sentence.zh;
+          const allowChineseCharacters = hasChineseCharacterAllowance(sentence);
 
           // Prefer idiomatic, fall back to literal
           const translation = idiomaticTranslation || literalTranslation;
@@ -281,7 +311,8 @@ function scoreChapterFile(filePath) {
               id: sentence.id,
               content: content,
               translation: translation,
-              isIdiomatic: isIdiomatic
+              isIdiomatic: isIdiomatic,
+              allowChineseCharacters
             }, {
               shouldEnforceSentenceStartCapitalization
             }));
@@ -314,6 +345,7 @@ function scoreChapterFile(filePath) {
           const literalTranslation = sentence.translations && sentence.translations[0] &&
                                    sentence.translations[0].literal;
           const content = sentence.content || sentence.zh;
+          const allowChineseCharacters = hasChineseCharacterAllowance(sentence);
           const translation = idiomaticTranslation || literalTranslation;
           const isIdiomatic = !!idiomaticTranslation;
 
@@ -324,7 +356,8 @@ function scoreChapterFile(filePath) {
               id: sentence.id,
               content: content,
               translation: translation,
-              isIdiomatic: isIdiomatic
+              isIdiomatic: isIdiomatic,
+              allowChineseCharacters
             }, {
               shouldEnforceSentenceStartCapitalization
             }));
@@ -355,7 +388,8 @@ function scoreChapterFile(filePath) {
             results.push(scoreTranslation({
               id: cell.id,
               content: cell.content,
-              translation: cell.translation
+              translation: cell.translation,
+              allowChineseCharacters: cell.allowChineseCharacters === true
             }));
           }
 
@@ -364,7 +398,8 @@ function scoreChapterFile(filePath) {
             results.push(scoreTranslation({
               id: cell.id,
               content: cell.content,
-              translation: cell.literal
+              translation: cell.literal,
+              allowChineseCharacters: cell.allowChineseCharacters === true
             }));
           }
 
@@ -372,7 +407,8 @@ function scoreChapterFile(filePath) {
             results.push(scoreTranslation({
               id: cell.id,
               content: cell.content,
-              translation: cell.idiomatic
+              translation: cell.idiomatic,
+              allowChineseCharacters: cell.allowChineseCharacters === true
             }));
 
             // Check for identical literal and idiomatic in table cells

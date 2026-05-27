@@ -101,6 +101,12 @@ function applySingleTranslation(content, reviewItem) {
               changed = true;
             }
 
+            if (reviewItem.allowChineseCharacters !== undefined &&
+                reviewItem.allowChineseCharacters !== sentence.translations[0].allowChineseCharacters) {
+              sentence.translations[0].allowChineseCharacters = reviewItem.allowChineseCharacters;
+              changed = true;
+            }
+
             if (changed) {
               // Preserve original translator information
               sentence.translations[0].translator = sentence.translations[0].translator || 'Garrett M. Petersen (2025)';
@@ -130,6 +136,12 @@ function applySingleTranslation(content, reviewItem) {
             changed = true;
           }
 
+          if (reviewItem.allowChineseCharacters !== undefined &&
+              reviewItem.allowChineseCharacters !== cell.allowChineseCharacters) {
+            cell.allowChineseCharacters = reviewItem.allowChineseCharacters;
+            changed = true;
+          }
+
           if (changed) {
             // Preserve original translator information
             cell.translator = cell.translator || 'Garrett M. Petersen (2025)';
@@ -156,6 +168,12 @@ function applySingleTranslation(content, reviewItem) {
             // Apply idiomatic translation if provided
             if (reviewItem.idiomatic !== undefined && reviewItem.idiomatic !== sentence.translations[0].idiomatic) {
               sentence.translations[0].idiomatic = reviewItem.idiomatic;
+              changed = true;
+            }
+
+            if (reviewItem.allowChineseCharacters !== undefined &&
+                reviewItem.allowChineseCharacters !== sentence.translations[0].allowChineseCharacters) {
+              sentence.translations[0].allowChineseCharacters = reviewItem.allowChineseCharacters;
               changed = true;
             }
 
