@@ -29,10 +29,19 @@ const CANONICAL_SITE = (process.env.SITE_URL || 'https://24histories.com').repla
 
 function getTableCellEnglish(cell) {
   if (!cell) return '';
-  if (cell.translation?.trim()) return cell.translation;
+  if (typeof cell.translation === 'string' && cell.translation.trim()) return cell.translation;
   if (cell.idiomatic?.trim()) return cell.idiomatic;
   if (cell.literal?.trim()) return cell.literal;
   const t = cell.translations?.[0];
+  return t?.idiomatic || t?.literal || t?.text || '';
+}
+
+function getSentenceEnglish(sentence) {
+  if (!sentence) return '';
+  if (sentence.idiomatic?.trim()) return sentence.idiomatic;
+  if (sentence.literal?.trim()) return sentence.literal;
+  if (typeof sentence.translation === 'string' && sentence.translation.trim()) return sentence.translation;
+  const t = sentence.translations?.[0];
   return t?.idiomatic || t?.literal || t?.text || '';
 }
 
@@ -402,14 +411,15 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
       // English text - create sentence spans with translations
       const enSentences = block.sentences.map(s => {
         const id = s.id;
-        const translation = s.translation || (s.translations && s.translations.length > 0 ? s.translations[0] : null);
+        const sentenceEnglish = getSentenceEnglish(s);
+        const translation = s.translations && s.translations.length > 0 ? s.translations[0] : null;
 
         let text = '';
-        if (translation && (translation.idiomatic || translation.literal || translation.text)) {
-          text = escapeHtml(translation.idiomatic || translation.literal || translation.text);
+        if (sentenceEnglish) {
+          text = escapeHtml(sentenceEnglish);
 
           // Check for footnote
-          if (translation.footnote) {
+          if (translation?.footnote) {
             const footnoteNum = footnoteCounter++;
             footnotes.push({
               number: footnoteNum,
@@ -533,31 +543,31 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
       } else {
         // Just a header without table rows
         const zhText = block.sentences.map(s => escapeHtml(s.zh)).join('');
-        const enText = block.translations && block.translations.length > 0 &&
-          (block.translations[0].idiomatic || block.translations[0].literal || block.translations[0].text)
-          ? escapeHtml(block.translations[0].idiomatic || block.translations[0].literal || block.translations[0].text)
+        const sentenceEnText = block.sentences.map(getSentenceEnglish).filter(Boolean).join(' ');
+        const blockTranslation = block.translations && block.translations.length > 0 ? block.translations[0] : null;
+        const blockEnText = blockTranslation
+          ? blockTranslation.idiomatic || blockTranslation.literal || blockTranslation.text || ''
           : '';
+        const enText = sentenceEnText || blockEnText;
 
         contentHTML += `
           <div class="table-header-block">
             <h3 class="table-title">
               <span class="chinese-text">${zhText}</span>
-              ${enText ? `<span class="english-text">${enText}</span>` : ''}
+              ${enText ? `<span class="english-text">${escapeHtml(enText)}</span>` : ''}
             </h3>
           </div>`;
       }
     } else {
       // Just a header without table rows
       const zhText = block.sentences.map(s => escapeHtml(s.zh)).join('');
-      const enText = block.translations && block.translations.length > 0 && block.translations[0].text
-        ? escapeHtml(block.translations[0].text)
-        : '';
+      const enText = block.sentences.map(getSentenceEnglish).filter(Boolean).join(' ');
 
       contentHTML += `
           <div class="table-header-block">
             <h3 class="table-title">
               <span class="chinese-text">${zhText}</span>
-              ${enText ? `<span class="english-text">${enText}</span>` : ''}
+              ${enText ? `<span class="english-text">${escapeHtml(enText)}</span>` : ''}
             </h3>
           </div>`;
     }
