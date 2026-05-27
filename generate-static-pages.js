@@ -21,6 +21,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defaultStaticGenConcurrency, hardwareConcurrency } from './scripts/build-parallelism.mjs';
 import { getBookMetadata, mergeBookInfo } from './scripts/book-metadata.mjs';
+import { getBookDesign } from './public/book-design.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -137,6 +138,37 @@ function escapeHtml(text) {
     .replace(/'/g, '&#039;');
 }
 
+function bookTheme(bookId) {
+  const color = getBookDesign(bookId).color || '#1a5490';
+  const deep = darkenHex(color, 0.32);
+  return { color, deep };
+}
+
+function darkenHex(hex, amount) {
+  const m = String(hex || '').match(/^#?([0-9a-f]{6})$/i);
+  if (!m) return '#0d3a66';
+  const n = Number.parseInt(m[1], 16);
+  const r = Math.max(0, Math.round(((n >> 16) & 255) * (1 - amount)));
+  const g = Math.max(0, Math.round(((n >> 8) & 255) * (1 - amount)));
+  const b = Math.max(0, Math.round((n & 255) * (1 - amount)));
+  return `#${[r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('')}`;
+}
+
+function siteFooter(prefix = '') {
+  return `<footer>
+        <p>
+            <a href="${prefix}index.html">Home</a> |
+            <a href="${prefix}about.html">About</a> |
+            <a href="${prefix}blog.html">Blog</a> |
+            <a href="${prefix}progress.html">Progress</a> |
+            Source texts: <a href="https://chinesenotes.com" target="_blank" rel="noopener noreferrer">Chinese Notes</a>, 
+            <a href="https://ctext.org" target="_blank" rel="noopener noreferrer">CText</a>, and 
+            <a href="https://zh.wikisource.org" target="_blank" rel="noopener noreferrer">Wikisource</a> |
+            <a href="${prefix}privacy.html">Privacy Policy</a>
+        </p>
+    </footer>`;
+}
+
 function parseTableAttributePrefix(text) {
   const source = String(text || '');
   const match = source.match(/^((?:(?:rowspan|colspan|valign|align|style|class)\s*=\s*"[^"]*"\s*)+)\|\s*/i);
@@ -216,6 +248,7 @@ function generateChapterMeta(bookId, chapterData) {
 function generateBookLandingHTML(bookId) {
   const book = BOOKS[bookId];
   if (!book) return '';
+  const theme = bookTheme(bookId);
   const title = `${book.chinese} — ${book.name}`;
   const pageUrl = `${CANONICAL_SITE}/book/${bookId}.html`;
   const ogImage = `${CANONICAL_SITE}/og/books/${bookId}.png`;
@@ -228,7 +261,7 @@ function generateBookLandingHTML(bookId) {
     <title>${escapeHtml(title)}</title>
     <meta name="description" content="${escapeHtml(desc)}">
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
-    <link rel="stylesheet" href="../styles.css?v=20260430-search-mark">
+    <link rel="stylesheet" href="../styles.css?v=20260527-book-colors">
     <link rel="canonical" href="${pageUrl}">
     <meta property="og:title" content="${escapeHtml(title)}">
     <meta property="og:description" content="${escapeHtml(desc)}">
@@ -242,7 +275,7 @@ function generateBookLandingHTML(bookId) {
     <meta name="twitter:description" content="${escapeHtml(desc)}">
     <meta name="twitter:image" content="${ogImage}">
 </head>
-<body data-book="${escapeHtml(bookId)}">
+<body data-book="${escapeHtml(bookId)}" style="--book-color: ${escapeHtml(theme.color)}; --book-color-deep: ${escapeHtml(theme.deep)};">
     <header>
         <h1 id="book-title">Loading...</h1>
         <h2 id="book-subtitle"></h2>
@@ -255,19 +288,9 @@ function generateBookLandingHTML(bookId) {
         <div class="chapter-list" id="chapter-list" style="display: none;"></div>
     </main>
 
-    <footer>
-        <p>
-            <a href="../about.html">About</a> |
-            <a href="../blog.html">Blog</a> |
-            <a href="../progress.html">Progress</a> |
-            Source texts: <a href="https://chinesenotes.com" target="_blank" rel="noopener noreferrer">Chinese Notes</a>, 
-            <a href="https://ctext.org" target="_blank" rel="noopener noreferrer">CText</a>, and 
-            <a href="https://zh.wikisource.org" target="_blank" rel="noopener noreferrer">Wikisource</a> |
-            <a href="../privacy.html">Privacy Policy</a>
-        </p>
-    </footer>
+    ${siteFooter('../')}
 
-    <script type="module" src="../chapters.js?v=20260430-bookhit-titles"></script>
+    <script type="module" src="../chapters.js?v=20260527-book-colors"></script>
 </body>
 </html>`;
 }
@@ -307,6 +330,7 @@ function generateStructuredData(bookId, chapterData) {
 
 function generateChapterHTML(bookId, chapterData, allChapters = []) {
   const book = BOOKS[bookId];
+  const theme = bookTheme(bookId);
   const meta = generateChapterMeta(bookId, chapterData);
   const structuredData = generateStructuredData(bookId, chapterData);
   const chapterNum = parseInt(chapterData.meta.chapter, 10);
@@ -595,7 +619,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
     <title>${escapeHtml(meta.title)}</title>
     <meta name="description" content="${escapeHtml(meta.description)}">
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
-    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../styles.css?v=20260527-book-colors">
     <link rel="canonical" href="${chapterUrl}">
     
     <!-- Open Graph -->
@@ -937,10 +961,10 @@ ${JSON.stringify(structuredData, null, 2)}
         }
       }
     </style>
-    <script type="module" src="../reader.js?v=20260430-paragraph-hash"></script>
+    <script type="module" src="../reader.js?v=20260527-book-colors"></script>
 </head>
-<body>
-    <header style="padding: 1.5rem 2rem;">
+<body data-book="${escapeHtml(bookId)}" style="--book-color: ${escapeHtml(theme.color)}; --book-color-deep: ${escapeHtml(theme.deep)};">
+    <header style="padding: 1.5rem 2rem; background: linear-gradient(135deg, var(--book-color) 0%, var(--book-color-deep) 100%);">
         <div style="max-width: 1400px; margin: 0 auto;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
                 <a href="../book/${bookId}.html" class="back-link" style="color: white; opacity: 0.9;">← Back to ${book.chinese}</a>
@@ -1003,17 +1027,7 @@ ${contentHTML}
         </div>
     </main>
 
-    <footer>
-        <p>
-            <a href="../about.html">About</a> | 
-            <a href="../blog.html">Blog</a> | 
-            <a href="../progress.html">Progress</a> | 
-            Source texts: <a href="https://chinesenotes.com" target="_blank" rel="noopener noreferrer">Chinese Notes</a>, 
-            <a href="https://ctext.org" target="_blank" rel="noopener noreferrer">CText</a>, and 
-            <a href="https://zh.wikisource.org" target="_blank" rel="noopener noreferrer">Wikisource</a> | 
-            <a href="../privacy.html">Privacy Policy</a>
-        </p>
-    </footer>
+    ${siteFooter('../')}
 
     <!-- Citation Modal -->
     <div id="citation-modal" class="modal" style="display: none;">

@@ -1,8 +1,19 @@
-import { BOOKS } from './app.js?v=20260430-searchux';
+import { BOOKS } from './app.js?v=20260527-book-colors';
+import { getBookDesign } from './book-design.js';
 
 let glossary = {};
 let currentHighlight = null;
 let hideTooltipTimeout = null;
+
+function darkenHex(hex, amount) {
+  const match = String(hex || '').match(/^#?([0-9a-f]{6})$/i);
+  if (!match) return '#0d3a66';
+  const value = parseInt(match[1], 16);
+  const r = Math.max(0, Math.round(((value >> 16) & 255) * (1 - amount)));
+  const g = Math.max(0, Math.round(((value >> 8) & 255) * (1 - amount)));
+  const b = Math.max(0, Math.round((value & 255) * (1 - amount)));
+  return `#${[r, g, b].map((part) => part.toString(16).padStart(2, '0')).join('')}`;
+}
 
 async function loadGlossary() {
   try {
@@ -304,6 +315,10 @@ async function renderReader() {
   }
 
   const bookInfo = BOOKS[bookId];
+  const design = getBookDesign(bookId);
+  document.body.dataset.book = bookId;
+  document.body.style.setProperty('--book-color', design.color);
+  document.body.style.setProperty('--book-color-deep', darkenHex(design.color, 0.32));
 
   // Load glossary and chapter data in parallel
   await Promise.all([

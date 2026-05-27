@@ -48,7 +48,7 @@ body {
 }
 
 header {
-    background: linear-gradient(135deg, #1a5490 0%, #0d3a66 100%);
+    background: linear-gradient(135deg, var(--book-color, #1a5490) 0%, var(--book-color-deep, #0d3a66) 100%);
     color: white;
     padding: 3rem 2rem;
     text-align: center;
@@ -282,6 +282,7 @@ main:has(.reader-container) {
     overflow: hidden;
     border: 1px solid rgba(29, 28, 24, 0.14);
     background: #ffffff;
+    min-width: 0;
 }
 
 .book-cover-card:hover {
@@ -293,13 +294,17 @@ main:has(.reader-container) {
     background: #f1f0eb;
     border-bottom: 1px solid rgba(29, 28, 24, 0.1);
     padding: 1rem;
+    aspect-ratio: 5 / 8;
+    overflow: hidden;
 }
 
 .book-cover-card-art img {
     display: block;
     width: 100%;
-    aspect-ratio: 5 / 8;
-    object-fit: cover;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
     border-radius: 4px;
     box-shadow: 0 10px 20px rgba(29, 28, 24, 0.18);
 }
@@ -360,13 +365,13 @@ footer a:hover {
     top: 0;
     background: var(--card-bg);
     z-index: 100;
-    border-bottom: 2px solid var(--primary-color);
+    border-bottom: 2px solid var(--book-color, var(--primary-color));
 }
 
 .column-header {
     padding: 1rem 3rem;
     margin: 0;
-    color: var(--primary-color);
+    color: var(--book-color, var(--primary-color));
     font-size: 1.1rem;
     font-weight: 600;
 }
