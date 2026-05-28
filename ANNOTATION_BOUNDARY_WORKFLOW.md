@@ -65,19 +65,20 @@ blindly wrapping ordinary English sentences in angle brackets.
 - [x] `mingshi` - Editorial/table annotations, biography supplements, and source-aligned note boundaries audited.
 - [x] `jinshu` - Geography notes, table/endnote markers, genealogical appendices, and source-aligned commentary boundaries audited.
 - [x] `xinwudaishi` - Calendrical table corrections, omitted-table markers, and long Ten Kingdoms chronology notes audited.
+- [x] `liaoshi` - Editorial glosses, source abbreviations, table references, and appended biography markers audited.
+- [x] `nanqishu` - Pronunciation, collation, missing-text, and damaged-text annotation markers audited.
+- [x] `chenshu` - Annals cross-references and collation-note markers audited.
+- [x] `jinshi` - Embedded place-name annotation marker audited.
+- [x] `beishi` - Existing annotation markers reviewed and normalized.
+- [x] `jiutangshu` - Genealogical and pronunciation annotation markers audited.
+- [x] `liangshu` - Editorial parenthetical and biography cross-reference markers audited.
+- [x] `qingshigao` - Embedded treatise-title and existing annotation markers audited.
+- [x] `suishu` - Source abbreviation markers audited.
+- [x] `xintangshu` - Existing annotation marker reviewed and normalized.
 
 ### Not Yet Reviewed
 
-- [ ] `liaoshi`
-- [ ] `nanqishu`
-- [ ] `chenshu`
-- [ ] `jinshi`
-- [ ] `beishi`
-- [ ] `jiutangshu`
-- [ ] `liangshu`
-- [ ] `qingshigao`
-- [ ] `suishu`
-- [ ] `xintangshu`
+All books with annotation-boundary patterns have been reviewed.
 
 ## Notes By Pattern
 
