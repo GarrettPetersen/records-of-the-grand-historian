@@ -63,10 +63,10 @@ blindly wrapping ordinary English sentences in angle brackets.
 - [x] `songshu` - Music-section labels, calendrical/table notes, omission markers, and geographic/editorial annotations audited.
 - [x] `jiuwudaishi` - Editorial notes, quoted source supplements, table corrections, and one unclosed source annotation audited.
 - [x] `mingshi` - Editorial/table annotations, biography supplements, and source-aligned note boundaries audited.
+- [x] `jinshu` - Geography notes, table/endnote markers, genealogical appendices, and source-aligned commentary boundaries audited.
 
 ### Not Yet Reviewed
 
-- [ ] `jinshu`
 - [ ] `xinwudaishi`
 - [ ] `liaoshi`
 - [ ] `nanqishu`
