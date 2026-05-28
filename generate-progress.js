@@ -88,11 +88,15 @@ function analyzeChapterStatus(bookId, chapter, chapterData) {
 
             // Check for problems in this sentence
             const sentenceResults = results.filter(r => r.id === sentence.id);
-            if (sentenceResults.some(r => r.problematic)) {
+            const statusProblems = sentenceResults.filter(r =>
+              r.problematic &&
+              !r.issues.every(issue => issue === 'Likely sentence-start capitalization issue')
+            );
+            if (statusProblems.length > 0) {
               problems++;
 
               // Check for blatant problems (Chinese characters in translation)
-              if (sentenceResults.some(r => r.issues.some(issue => issue.includes('Contains Chinese characters')))) {
+              if (statusProblems.some(r => r.issues.some(issue => issue.includes('Contains Chinese characters')))) {
                 blatantProblems++;
               }
               // if (sentenceResults.some(r => r.issues.some(issue => issue.includes('Punctuation alignment:')))) {

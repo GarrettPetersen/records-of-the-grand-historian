@@ -124,10 +124,10 @@ function englishHasAnnotationMarker(text, boundary) {
   const en = String(text || '').trim();
   if (!en) return false;
   if (boundary === 'start') {
-    return /^(?:[〈\[]|<|(?:annotation|annot\.|commentary|note):)/i.test(en);
+    return /^(?:[〈\[\(（⟨‹]|<|(?:annotation|annot\.|commentary|note):)/i.test(en);
   }
   if (boundary === 'end') {
-    return /(?:[〉\]]|>)["')\]]*\s*$/.test(en);
+    return /(?:[〉\]\)）⟩›]|>)["')\]）。．.,;:!?！？]*\s*$/.test(en);
   }
   return /(?:annotation|annot\.|commentary|note|\[|〈|〉|\])/i.test(en);
 }
