@@ -64,7 +64,7 @@ function titleTextSvg(title) {
     .join('');
 }
 
-function renderCover(bookId) {
+export function renderBookCover(bookId) {
   const book = BOOK_METADATA[bookId];
   const design = getBookDesign(bookId);
   const title = book.chinese;
@@ -94,9 +94,11 @@ function main() {
   fs.mkdirSync(outDir, { recursive: true });
   const bookIds = [...CHRONOLOGICAL_ORDER, ...OTHER_WORKS_ORDER];
   for (const bookId of bookIds) {
-    fs.writeFileSync(path.join(outDir, `${bookId}.svg`), renderCover(bookId), 'utf8');
+    fs.writeFileSync(path.join(outDir, `${bookId}.svg`), renderBookCover(bookId), 'utf8');
   }
   console.log(`Generated ${bookIds.length} book covers in ${path.relative(repoRoot, outDir)}`);
 }
 
-main();
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main();
+}

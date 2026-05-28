@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getBookMetadata } from './book-metadata.mjs';
-import { getBookDesign } from '../public/book-design.js';
+import { renderBookCover } from './generate-book-covers.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
@@ -180,7 +180,6 @@ function renderChapter(chapter, qa) {
 }
 
 function renderCover(product, bookInfo) {
-  const design = getBookDesign(product.book);
   return `<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -189,21 +188,9 @@ function renderCover(product, bookInfo) {
   <link rel="stylesheet" type="text/css" href="styles/ebook.css" />
 </head>
 <body class="cover-page">
-  <section class="cover">
-    <div class="cover-band cover-band-top" style="background: ${escapeXml(design.color)}">
-      <p class="cover-pinyin">${escapeXml(bookInfo.pinyin || product.series || product.title)}</p>
-      ${design.coverage ? `<p class="cover-coverage">${escapeXml(design.coverage)}</p>` : ''}
-    </div>
-    <div class="cover-center">
-      <p class="cover-chinese">${escapeXml(bookInfo.chinese || '')}</p>
-      <p class="cover-title">${escapeXml(product.title)}</p>
-      <p class="cover-subtitle">${escapeXml(product.subtitle || '')}</p>
-    </div>
-    <div class="cover-band cover-band-bottom" style="background: ${escapeXml(design.color)}">
-      <p class="cover-author">${escapeXml(product.author)}</p>
-      <p class="cover-translator">Translated by ${escapeXml(product.translator)}</p>
-    </div>
-  </section>
+  <div class="cover-image-wrap">
+    <img class="cover-image" src="images/cover.svg" alt="${escapeXml(product.title)} cover" />
+  </div>
 </body>
 </html>
 `;
@@ -286,6 +273,7 @@ function renderPackage(product, chapters) {
     <item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav" />
     <item id="css" href="styles/ebook.css" media-type="text/css" />
     <item id="cover" href="cover.xhtml" media-type="application/xhtml+xml" />
+    <item id="cover-image" href="images/cover.svg" media-type="image/svg+xml" properties="cover-image" />
     <item id="frontmatter" href="frontmatter.xhtml" media-type="application/xhtml+xml" />
 ${items}
   </manifest>
@@ -324,48 +312,27 @@ p {
 }
 
 .cover-page {
+  background: #ffffff;
   padding: 0;
 }
 
-.cover {
-  border: 0.18em solid #1d1c18;
-  margin: 1em auto;
-  min-height: 92vh;
-  padding: 0;
+.cover-image-wrap {
+  background: #ffffff;
+  box-sizing: border-box;
+  margin: 0 auto;
+  page-break-after: always;
+  page-break-inside: avoid;
   text-align: center;
 }
 
-.cover-band {
-  color: #ffffff;
-  padding: 2.5em 1.5em;
-}
-
-.cover-center {
-  padding: 5em 1.5em;
-}
-
-.cover-chinese {
-  color: #111111;
-  font-size: 5em;
-  letter-spacing: 0.12em;
-  line-height: 1;
-  margin-bottom: 0.45em;
-  text-indent: 0;
-}
-
-.cover-title {
-  color: #1d1c18;
-  font-size: 1.65em;
-  font-weight: bold;
-  text-indent: 0;
-}
-
-.cover-pinyin,
-.cover-coverage,
-.cover-subtitle,
-.cover-author,
-.cover-translator {
-  text-indent: 0;
+.cover-image {
+  background: #ffffff;
+  display: block;
+  height: auto;
+  margin: 0 auto;
+  max-height: 99vh;
+  max-width: 100%;
+  width: auto;
 }
 
 .table-header-list,
@@ -426,6 +393,7 @@ function buildProduct(product) {
   writeFile(path.join(buildDir, 'META-INF', 'container.xml'), renderContainer());
   writeFile(path.join(buildDir, 'EPUB', 'styles', 'ebook.css'), renderCss());
   writeFile(path.join(buildDir, 'EPUB', 'cover.xhtml'), renderCover(product, bookInfo));
+  writeFile(path.join(buildDir, 'EPUB', 'images', 'cover.svg'), renderBookCover(product.book));
   writeFile(path.join(buildDir, 'EPUB', 'frontmatter.xhtml'), renderFrontMatter(product, bookInfo));
 
   const chapters = product.chapters.map((chapter) => {

@@ -255,7 +255,7 @@ function listBookDirs() {
     .filter((e) => e.isDirectory())
     .map((e) => e.name)
     .filter((name) => {
-      if (name === 'public') return false;
+      if (name === 'public' || name === 'quality') return false;
       const p = path.join(dataDir, name);
       try {
         return fs.readdirSync(p).some((f) => f.endsWith('.json'));

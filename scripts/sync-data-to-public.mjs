@@ -19,7 +19,7 @@ let books = 0;
 for (const ent of fs.readdirSync(dataDir, { withFileTypes: true })) {
   if (!ent.isDirectory()) continue;
   const name = ent.name;
-  if (name === 'public') continue;
+  if (name === 'public' || name === 'quality') continue;
 
   const srcBook = path.join(dataDir, name);
   const files = fs.readdirSync(srcBook);

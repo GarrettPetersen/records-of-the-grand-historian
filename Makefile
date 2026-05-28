@@ -51,7 +51,7 @@ help:
 	@echo "  make fix-counts             # Recalculate sentenceCount and translatedCount in all chapter files"
 	@echo "  make nuke-translations      # ⚠️  Emergency: Remove ALL translations from a chapter"
 	@echo "  make manifest               # Generate manifest.json (includes sync)"
-	@echo "  make progress               # Generate translation progress data"
+	@echo "  make progress               # Generate cleanup/refinement progress data"
 	@echo "  make generate-pages         # Static HTML + sitemap/robots + Open Graph PNGs"
 	@echo "  make generate-book-covers   # Generate reusable book-cover SVGs for cards and e-books"
 	@echo "  make generate-sitemap       # public/sitemap.xml + robots.txt (after static HTML)"
@@ -60,6 +60,7 @@ help:
 	@echo "  make stats                  # Show chapter counts per book"
 	@echo "  make validate               # Check all JSON files are valid"
 	@echo "  make score-translations     # Score translations for quality issues"
+	@echo "  make score-languagetool     # Run LanguageTool cleanup scoring (requires local LT server)"
 	@echo "  make scan-rubric-scaffolding BOOK=hanshu  # Find meta English on short name headings"
 	@echo "  make scan-punctuation-only [BOOK=hanshu]   # Find punctuation-only sentence fragments"
 	@echo "  make scan-br-tags           # Find literal <BR> tags in stored Chinese text"
@@ -142,7 +143,7 @@ ifdef BOOK
 	@echo "  Synced book $(BOOK) only"
 else
 	@for dir in data/*/; do \
-		if [ -d "$$dir" ] && [ "$$(basename $$dir)" != "public" ]; then \
+		if [ -d "$$dir" ] && [ "$$(basename $$dir)" != "public" ] && [ "$$(basename $$dir)" != "quality" ]; then \
 			book=$$(basename $$dir); \
 			mkdir -p public/data/$$book; \
 			cp -r $$dir*.json public/data/$$book/ 2>/dev/null || true; \
@@ -201,16 +202,16 @@ update:
 		echo "Error: data/$(BOOK) does not exist."; \
 		exit 1; \
 	fi
-	@echo "=== Running update workflow for book: $(BOOK) (7 steps) ==="
+	@echo "=== Running update workflow for book: $(BOOK) (8 steps) ==="
 	@echo "🎯 Remember: Translate like Ken Liu - prioritize semantic fidelity and modern readability"
 	@echo "   • Focus on semantic fidelity and modern readability"
 	@echo "   • Avoid added narrative or stylistic ornament"
 	@echo "   • Aim for the literary quality and natural flow of Ken Liu's translation style"
 	@echo ""
-	@echo "Step 1/7: Updating citations..."
+	@echo "Step 1/8: Updating citations..."
 	@$(NODE) update-citations.js --book $(BOOK)
 	@echo ""
-	@echo "Step 2/7: Fixing chapter counts..."
+	@echo "Step 2/8: Fixing chapter counts..."
 	@$(NODE) fix-translated-counts.js --book $(BOOK) || echo "Note: fix-translated-counts.js not found, skipping..."
 	@echo ""
 	@if [ ! -f data/manifest.json ]; then \
@@ -218,26 +219,29 @@ update:
 		$(MAKE) manifest; \
 		echo ""; \
 	fi
-	@echo "Step 3/7: Regenerating manifest (merge this book)..."
+	@echo "Step 3/8: Regenerating manifest (merge this book)..."
 	@$(NODE) generate-manifest.js --book $(BOOK)
 	@echo ""
-	@echo "Step 4/7: Generating translation progress (merge this book)..."
+	@echo "Step 4/8: Updating LanguageTool cleanup scores for this book..."
+	@$(NODE) scripts/score-languagetool.mjs --book $(BOOK)
+	@echo ""
+	@echo "Step 5/8: Generating cleanup progress (merge this book)..."
 	@$(NODE) generate-progress.js --book $(BOOK)
 	@echo ""
-	@echo "Step 5/7: Generating static pages..."
+	@echo "Step 6/8: Generating static pages..."
 	@$(NODE) scripts/generate-book-covers.mjs
 	@$(NODE) generate-static-pages.js --book $(BOOK)
 	@echo ""
-	@echo "Step 5c: Building book full-text search corpus..."
+	@echo "Step 6c: Building book full-text search corpus..."
 	@$(NODE) scripts/build-book-search-corpus.mjs --book $(BOOK)
 	@echo ""
-	@echo "Step 5b: Generating sitemap and robots.txt..."
+	@echo "Step 6b: Generating sitemap and robots.txt..."
 	@$(NODE) scripts/generate-sitemap.mjs
 	@echo ""
-	@echo "Step 6/7: Generating Open Graph share images..."
+	@echo "Step 7/8: Generating Open Graph share images..."
 	@$(NODE) generate-og-images.js $(OG_IMAGE_ARGS) --book $(BOOK)
 	@echo ""
-	@echo "Step 7/7: Syncing to public..."
+	@echo "Step 8/8: Syncing to public..."
 	@$(MAKE) sync BOOK=$(BOOK)
 	@echo ""
 	@echo "=== Update complete for $(BOOK) ==="
@@ -245,38 +249,41 @@ update:
 # Full-site update: same seven steps as update, for every book (previous default behavior)
 .PHONY: update-all
 update-all:
-	@echo "=== Running full update workflow (7 steps, all books) ==="
+	@echo "=== Running full update workflow (8 steps, all books) ==="
 	@echo "🎯 Remember: Translate like Ken Liu - prioritize semantic fidelity and modern readability"
 	@echo "   • Focus on semantic fidelity and modern readability"
 	@echo "   • Avoid added narrative or stylistic ornament"
 	@echo "   • Aim for the literary quality and natural flow of Ken Liu's translation style"
 	@echo ""
-	@echo "Step 1/7: Updating citations..."
+	@echo "Step 1/8: Updating citations..."
 	@$(NODE) update-citations.js
 	@echo ""
-	@echo "Step 2/7: Fixing chapter counts..."
+	@echo "Step 2/8: Fixing chapter counts..."
 	@$(NODE) fix-translated-counts.js || echo "Note: fix-translated-counts.js not found, skipping..."
 	@echo ""
-	@echo "Step 3/7: Regenerating manifest..."
+	@echo "Step 3/8: Regenerating manifest..."
 	@$(NODE) generate-manifest.js
 	@echo ""
-	@echo "Step 4/7: Generating translation progress..."
+	@echo "Step 4/8: Updating LanguageTool cleanup scores..."
+	@$(NODE) scripts/score-languagetool.mjs --all
+	@echo ""
+	@echo "Step 5/8: Generating cleanup progress..."
 	@$(NODE) generate-progress.js
 	@echo ""
-	@echo "Step 5/7: Generating static pages..."
+	@echo "Step 6/8: Generating static pages..."
 	@$(NODE) scripts/generate-book-covers.mjs
 	@$(NODE) generate-static-pages.js
 	@echo ""
-	@echo "Step 5c: Building book full-text search corpora..."
+	@echo "Step 6c: Building book full-text search corpora..."
 	@$(NODE) scripts/build-book-search-corpus.mjs
 	@echo ""
-	@echo "Step 5b: Generating sitemap and robots.txt..."
+	@echo "Step 6b: Generating sitemap and robots.txt..."
 	@$(NODE) scripts/generate-sitemap.mjs
 	@echo ""
-	@echo "Step 6/7: Generating Open Graph share images..."
+	@echo "Step 7/8: Generating Open Graph share images..."
 	@$(NODE) generate-og-images.js $(OG_IMAGE_ARGS)
 	@echo ""
-	@echo "Step 7/7: Syncing to public..."
+	@echo "Step 8/8: Syncing to public..."
 	@$(MAKE) sync
 	@echo ""
 	@echo "=== Update complete (all books) ==="
@@ -325,13 +332,19 @@ manifest:
 	@echo "Manifest generated at data/manifest.json"
 	@$(MAKE) sync $(if $(BOOK),BOOK=$(BOOK),)
 
-# Generate translation progress data (optional: BOOK=<id> recomputes one book in progress.json)
+# Generate cleanup/refinement progress data (optional: BOOK=<id> recomputes one book in progress.json)
 .PHONY: progress
 progress:
-	@echo "Generating translation progress data..."
+	@echo "Updating LanguageTool cleanup scores..."
+	@$(NODE) scripts/score-languagetool.mjs $(if $(BOOK),--book $(BOOK),--all)
+	@echo "Generating cleanup progress data..."
 	@$(NODE) generate-progress.js $(if $(BOOK),--book $(BOOK),)
 	@echo "Progress data generated at data/progress.json"
 	@$(MAKE) sync $(if $(BOOK),BOOK=$(BOOK),)
+
+.PHONY: score-languagetool
+score-languagetool:
+	@$(NODE) scripts/score-languagetool.mjs $(if $(BOOK),--book $(BOOK),--all) $(if $(LIMIT),--limit $(LIMIT),) $(if $(CONCURRENCY),--concurrency $(CONCURRENCY),) $(if $(FORCE),--force,) $(if $(LANGUAGETOOL_URL),--url $(LANGUAGETOOL_URL),)
 
 # Generic rule to scrape a single chapter for any book
 # Usage: make <book>-<chapter>

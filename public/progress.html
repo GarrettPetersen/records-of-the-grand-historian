@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Translation Progress - 二十四史</title>
-    <meta name="description" content="Translation progress overview of the Twenty-Four Dynastic Histories of China">
+    <title>Cleanup Progress - 二十四史</title>
+    <meta name="description" content="LanguageTool cleanup and refinement progress for the complete English translations of the Twenty-Four Histories">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="styles.css?v=20260527-book-colors">
     <style>
@@ -158,6 +158,22 @@
             border-radius: 2px;
         }
 
+        .stat-square.gray {
+            background-color: #d3d3d3;
+        }
+
+        .stat-square.yellow {
+            background-color: #ffd700;
+        }
+
+        .stat-square.red {
+            background-color: #dc3545;
+        }
+
+        .stat-square.green {
+            background-color: #28a745;
+        }
+
         @media (max-width: 768px) {
             .progress-grid {
                 grid-template-columns: repeat(auto-fit, minmax(12px, 1fr));
@@ -285,8 +301,8 @@
     <header>
         <div style="max-width: 1400px; margin: 0 auto;">
             <a href="index.html" class="back-link" style="color: white; opacity: 0.9;">← Back to all histories</a>
-            <h1>Translation Progress</h1>
-            <h2>Translation Status</h2>
+            <h1>Cleanup Progress</h1>
+            <h2>English Refinement Status</h2>
         </div>
     </header>
 
@@ -295,10 +311,10 @@
         <div id="progress-content" style="display: none;">
             <section class="overall-progress-card" aria-labelledby="overall-progress-heading">
                 <div class="overall-progress-header">
-                    <h2 id="overall-progress-heading">Overall Translation Progress</h2>
+                    <h2 id="overall-progress-heading">Overall Cleanup Progress</h2>
                     <div class="overall-progress-percent" id="overall-progress-percent">0%</div>
                 </div>
-                <div class="overall-progress-bar" aria-label="Overall chapter completion progress">
+                <div class="overall-progress-bar" aria-label="Overall LanguageTool cleanup progress">
                     <div class="overall-progress-fill" id="overall-progress-fill" style="width: 0%;"></div>
                 </div>
                 <div class="overall-metrics-grid">
@@ -313,19 +329,19 @@
             <div class="progress-legend">
                 <div class="legend-item">
                     <div class="legend-square gray"></div>
-                    <span>Untranslated</span>
+                    <span>Not Checked</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-square yellow"></div>
-                    <span>Partial Translation</span>
+                    <span>Moderate Issue Density</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-square red"></div>
-                    <span>Problems Detected</span>
+                    <span>High Issue Density</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-square green"></div>
-                    <span>Complete</span>
+                    <span>Low Issue Density</span>
                 </div>
             </div>
 
@@ -367,7 +383,6 @@
             const section = document.createElement('div');
             section.className = 'book-section';
 
-            // Count status types
             const stats = {
                 gray: 0,
                 yellow: 0,
@@ -379,13 +394,11 @@
             bookData.chapters.forEach(chapter => {
                 stats[chapter.status]++;
             });
-            const chaptersComplete = stats.green + stats.red;
+            const chaptersChecked = bookData.chapters.filter(chapter => chapter.languageTool).length;
             const sentenceTotal = bookData.chapters.reduce((sum, chapter) => sum + (chapter.sentenceCount || 0), 0);
             const sentenceTranslated = bookData.chapters.reduce((sum, chapter) => sum + (chapter.translatedCount || 0), 0);
-            const characterTotal = bookData.chapters.reduce((sum, chapter) => sum + (chapter.characterCount || 0), 0);
-            const characterTranslated = bookData.chapters.reduce((sum, chapter) => sum + (chapter.translatedCharacterCount || 0), 0);
+            const averageScore = averageLanguageToolScore(bookData.chapters);
 
-            // Book header
             const header = document.createElement('div');
             header.className = 'book-header';
             header.innerHTML = `
@@ -394,25 +407,28 @@
                 <div class="progress-stats">
                     <div class="stat-item">
                         <div class="stat-square gray"></div>
-                        <span>${stats.gray}/${stats.total} untranslated</span>
+                        <span>${stats.gray}/${stats.total} not checked</span>
                     </div>
                     <div class="stat-item">
                         <div class="stat-square yellow"></div>
-                        <span>${stats.yellow}/${stats.total} partial</span>
+                        <span>${stats.yellow}/${stats.total} moderate</span>
                     </div>
                     <div class="stat-item">
                         <div class="stat-square red"></div>
-                        <span>${stats.red}/${stats.total} problems</span>
+                        <span>${stats.red}/${stats.total} high</span>
                     </div>
                     <div class="stat-item">
                         <div class="stat-square green"></div>
-                        <span>${chaptersComplete}/${stats.total} complete</span>
+                        <span>${stats.green}/${stats.total} low</span>
                     </div>
                     <div class="stat-item">
-                        <span>${formatProgress(sentenceTranslated, sentenceTotal, 'sentences')}</span>
+                        <span>checked: ${chaptersChecked.toLocaleString()} / ${stats.total.toLocaleString()}</span>
                     </div>
                     <div class="stat-item">
-                        <span>${formatProgress(characterTranslated, characterTotal, 'characters')}</span>
+                        <span>${averageScore === null ? 'avg score: n/a' : `avg score: ${averageScore.toFixed(1)} issues/1k words`}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>${formatProgress(sentenceTranslated, sentenceTotal, 'sentences translated')}</span>
                     </div>
                 </div>
             `;
@@ -425,7 +441,18 @@
                 const square = document.createElement('div');
                 square.className = `progress-square ${chapter.status}`;
                 const reviewLine = chapter.reviewed ? 'Editorial review: done' : 'Editorial review: pending';
-                square.setAttribute('data-tooltip', `${chapter.chapter}: ${chapter.title.en || chapter.title.zh}\n${chapter.translatedCount}/${chapter.sentenceCount} sentences translated\n${(chapter.translatedCharacterCount || 0).toLocaleString()}/${(chapter.characterCount || 0).toLocaleString()} characters translated\n${reviewLine}`);
+                const lt = chapter.languageTool;
+                const scoreLine = lt
+                    ? `LanguageTool: ${lt.matchCount.toLocaleString()} issues, ${Number(lt.matchesPer1000Words || 0).toFixed(1)}/1k words`
+                    : 'LanguageTool: not checked';
+                const topIssue = lt?.topMatches?.[0]?.message ? `Top issue: ${lt.topMatches[0].message}` : '';
+                square.setAttribute('data-tooltip', [
+                    `${chapter.chapter}: ${chapter.title.en || chapter.title.zh}`,
+                    scoreLine,
+                    lt ? `Words checked: ${lt.wordCount.toLocaleString()}` : '',
+                    reviewLine,
+                    topIssue
+                ].filter(Boolean).join('\n'));
 
                 // Make clickable to go to chapter
                 square.addEventListener('click', () => {
@@ -441,93 +468,68 @@
             return section;
         }
 
-        function isChapterTranslated(status) {
-            return status === 'green' || status === 'red';
-        }
-
-        function countCompletedBooks(books) {
-            const bookList = Object.values(books || {});
-            const totalBooks = bookList.length;
-            const completedBooks = bookList.filter(
-                (book) => book.chapters?.length > 0 && book.chapters.every((chapter) => isChapterTranslated(chapter.status))
-            ).length;
-            return { completedBooks, totalBooks };
+        function averageLanguageToolScore(chapters) {
+            const scores = (chapters || [])
+                .map(chapter => chapter.languageTool?.matchesPer1000Words)
+                .filter(score => Number.isFinite(score));
+            if (scores.length === 0) return null;
+            return scores.reduce((sum, score) => sum + score, 0) / scores.length;
         }
 
         function renderOverallProgress(data) {
             const chapters = Object.values(data.books).flatMap(book => book.chapters || []);
             const chapterTotal = chapters.length;
-            const chapterFinished = chapters.filter(chapter => isChapterTranslated(chapter.status)).length;
+            const statusCounts = chapters.reduce((counts, chapter) => {
+                counts[chapter.status] = (counts[chapter.status] || 0) + 1;
+                if (chapter.languageTool) counts.checked++;
+                return counts;
+            }, { gray: 0, yellow: 0, red: 0, green: 0, checked: 0 });
+            const cleanPercent = chapterTotal > 0 ? (statusCounts.green / chapterTotal) * 100 : 0;
+            const checkedPercent = chapterTotal > 0 ? (statusCounts.checked / chapterTotal) * 100 : 0;
             const sentenceTotal = chapters.reduce((sum, chapter) => sum + (chapter.sentenceCount || 0), 0);
             const sentenceTranslated = chapters.reduce((sum, chapter) => sum + (chapter.translatedCount || 0), 0);
-            const characterTotal = chapters.reduce((sum, chapter) => sum + (chapter.characterCount || 0), 0);
-            const characterTranslated = chapters.reduce((sum, chapter) => sum + (chapter.translatedCharacterCount || 0), 0);
-            const bookCounts = countCompletedBooks(data.books);
-            const completedBooks = Number(data.summary?.completedBooks ?? bookCounts.completedBooks);
-            const totalBooks = Number(data.summary?.totalBooks ?? bookCounts.totalBooks);
-            const bookPercent = totalBooks > 0 ? (completedBooks / totalBooks) * 100 : 0;
-            const percent = chapterTotal > 0 ? (chapterFinished / chapterTotal) * 100 : 0;
-            const displayPercent = `${percent.toFixed(1)}%`;
+            const averageScore = averageLanguageToolScore(chapters);
+            const displayPercent = `${cleanPercent.toFixed(1)}%`;
 
             document.getElementById('overall-progress-percent').textContent = displayPercent;
             document.getElementById('overall-progress-fill').style.width = displayPercent;
             document.getElementById('overall-progress-books').innerHTML = `
-                <div class="overall-metric-label">Books</div>
-                <div class="overall-metric-value">${completedBooks.toLocaleString()} / ${totalBooks.toLocaleString()} (${bookPercent.toFixed(1)}%)</div>
-                <div class="overall-metric-note">Coarsest milestone: every chapter translated.</div>
+                <div class="overall-metric-label">Clean Chapters</div>
+                <div class="overall-metric-value">${statusCounts.green.toLocaleString()} / ${chapterTotal.toLocaleString()} (${cleanPercent.toFixed(1)}%)</div>
+                <div class="overall-metric-note">Low LanguageTool issue density.</div>
             `;
             document.getElementById('overall-progress-chapters').innerHTML = `
-                <div class="overall-metric-label">Chapters</div>
-                <div class="overall-metric-value">${chapterFinished.toLocaleString()} / ${chapterTotal.toLocaleString()} (${percent.toFixed(1)}%)</div>
-                <div class="overall-metric-note">Chapters fully translated.</div>
+                <div class="overall-metric-label">Needs Review</div>
+                <div class="overall-metric-value">${(statusCounts.yellow + statusCounts.red).toLocaleString()}</div>
+                <div class="overall-metric-note">${statusCounts.yellow.toLocaleString()} moderate and ${statusCounts.red.toLocaleString()} high-priority chapters.</div>
             `;
             document.getElementById('overall-progress-sentences').innerHTML = `
-                <div class="overall-metric-label">Sentences</div>
-                <div class="overall-metric-value">${sentenceTranslated.toLocaleString()} / ${sentenceTotal.toLocaleString()} (${sentenceTotal > 0 ? ((sentenceTranslated / sentenceTotal) * 100).toFixed(1) : '0.0'}%)</div>
-                <div class="overall-metric-note">Translated sentence coverage.</div>
+                <div class="overall-metric-label">Checked</div>
+                <div class="overall-metric-value">${statusCounts.checked.toLocaleString()} / ${chapterTotal.toLocaleString()} (${checkedPercent.toFixed(1)}%)</div>
+                <div class="overall-metric-note">Chapters scored by LanguageTool.</div>
             `;
             document.getElementById('overall-progress-characters').innerHTML = `
-                <div class="overall-metric-label">Characters</div>
-                <div class="overall-metric-value">${characterTranslated.toLocaleString()} / ${characterTotal.toLocaleString()} (${characterTotal > 0 ? ((characterTranslated / characterTotal) * 100).toFixed(1) : '0.0'}%)</div>
-                <div class="overall-metric-note">Translated character coverage.</div>
+                <div class="overall-metric-label">Average Score</div>
+                <div class="overall-metric-value">${averageScore === null ? 'Unavailable' : `${averageScore.toFixed(1)} / 1k words`}</div>
+                <div class="overall-metric-note">LanguageTool matches per 1,000 English words.</div>
             `;
 
             const estimateNode = document.getElementById('overall-progress-estimate');
-            const summary = data.summary || {};
-            const estimate = summary.estimate || null;
-            const remainingChapters = Number(summary.remainingChapters || Math.max(0, chapterTotal - chapterFinished));
-            const chaptersPerDay = Number(estimate?.chaptersPerDay || 0);
-            const rawChaptersPerDay = Number(estimate?.rawChaptersPerDay || 0);
-            const estimatedCompletionDate = estimate?.estimatedCompletionDate ? new Date(estimate.estimatedCompletionDate) : null;
-            const fallbackDaysRemaining = remainingChapters > 0 ? remainingChapters / 24 : 0;
-            const fallbackCompletionDate = remainingChapters > 0 ? new Date(Date.now() + fallbackDaysRemaining * 24 * 60 * 60 * 1000) : null;
-            const displayDate = estimatedCompletionDate && !Number.isNaN(estimatedCompletionDate.getTime()) && chaptersPerDay > 0
-                ? estimatedCompletionDate
-                : fallbackCompletionDate;
-            if (remainingChapters === 0 && estimatedCompletionDate && !Number.isNaN(estimatedCompletionDate.getTime())) {
+            const scoringDate = data.qualityScoring?.generatedAt ? new Date(data.qualityScoring.generatedAt) : null;
+            if (scoringDate && !Number.isNaN(scoringDate.getTime())) {
                 const formatter = new Intl.DateTimeFormat(undefined, {
                     dateStyle: 'medium'
                 });
                 estimateNode.innerHTML = `
-                    <div class="overall-metric-label">Estimate</div>
-                    <div class="overall-metric-value">Finished on ${formatter.format(estimatedCompletionDate)}</div>
-                    <div class="overall-metric-note">All chapters translated.</div>
-                `;
-            } else if (displayDate && !Number.isNaN(displayDate.getTime()) && remainingChapters > 0) {
-                const formatter = new Intl.DateTimeFormat(undefined, {
-                    dateStyle: 'medium'
-                });
-                const daysRemaining = Math.max(0, Math.ceil(estimate?.estimatedDaysRemaining || fallbackDaysRemaining));
-                estimateNode.innerHTML = `
-                    <div class="overall-metric-label">Estimate</div>
-                    <div class="overall-metric-value">Completion ${formatter.format(displayDate)}</div>
-                    <div class="overall-metric-note">${daysRemaining.toLocaleString()} day${daysRemaining === 1 ? '' : 's'} remaining. ${estimate ? `Snapshot pace ${rawChaptersPerDay.toFixed(2)} chapters/day, floored at 24.` : 'Fallback pace set to 24 chapters/day.'}</div>
+                    <div class="overall-metric-label">Last Score Run</div>
+                    <div class="overall-metric-value">${formatter.format(scoringDate)}</div>
+                    <div class="overall-metric-note">All translations are complete; this page now tracks cleanup.</div>
                 `;
             } else {
                 estimateNode.innerHTML = `
-                    <div class="overall-metric-label">Estimate</div>
-                    <div class="overall-metric-value">Unavailable</div>
-                    <div class="overall-metric-note">No chapter-count summary is available yet.</div>
+                    <div class="overall-metric-label">Last Score Run</div>
+                    <div class="overall-metric-value">Not yet run</div>
+                    <div class="overall-metric-note">Run LanguageTool scoring to populate cleanup status.</div>
                 `;
             }
         }

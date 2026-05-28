@@ -1,17 +1,15 @@
 #!/usr/bin/env node
 
 /**
- * generate-progress.js - Generate translation progress data for all books
+ * generate-progress.js - Generate progress data for all books
  *
  * Usage:
  *   node generate-progress.js
  *   node generate-progress.js --book shiji   # Recompute one book; merge into existing progress.json
  *
- * Analyzes each chapter to determine its status:
- * - gray: untranslated (translatedCount === 0)
- * - yellow: partially translated (has some translations but not complete idiomatic)
- * - red: problems detected (blatant issues or significant fraction with problems)
- * - green: complete idiomatic translation without problems
+ * Status colors now represent cleanup/refinement scores when LanguageTool
+ * results are available. Without those cached scores, the legacy translation
+ * completion analysis is used as a fallback.
  */
 
 import fs from 'fs';
@@ -19,15 +17,27 @@ import path from 'path';
 import { scoreChapterFile } from './score-translations.js';
 import { isPunctuationOnlySentence } from './sentence-utils.mjs';
 import { estimateCompletionFromGitHistory } from './scripts/progress-estimate.mjs';
-import { countCompletedBooks, countTranslatedChapters } from './scripts/progress-status.mjs';
 
 const MANIFEST_PATH = './data/manifest.json';
 const DATA_DIR = './data';
+const LANGUAGE_TOOL_SCORES_PATH = './data/quality/languagetool-scores.json';
 
 function parseBookArg() {
   const i = process.argv.indexOf('--book');
   if (i === -1 || !process.argv[i + 1]) return null;
   return process.argv[i + 1].trim();
+}
+
+function loadLanguageToolScores() {
+  if (!fs.existsSync(LANGUAGE_TOOL_SCORES_PATH)) {
+    return null;
+  }
+  try {
+    return JSON.parse(fs.readFileSync(LANGUAGE_TOOL_SCORES_PATH, 'utf8'));
+  } catch (error) {
+    console.warn(`Could not read ${LANGUAGE_TOOL_SCORES_PATH}: ${error.message}`);
+    return null;
+  }
 }
 
 /**
@@ -36,7 +46,7 @@ function parseBookArg() {
 function analyzeChapterStatus(bookId, chapter, chapterData) {
   const chapterPath = path.join(DATA_DIR, bookId, `${chapter}.json`);
 
-  // Gray: untranslated
+  // Legacy fallback: untranslated chapters are gray.
   if (chapterData.translatedCount === 0) {
     return 'gray';
   }
@@ -128,7 +138,11 @@ function analyzeChapterStatus(bookId, chapter, chapterData) {
   }
 }
 
-function bookProgressFromManifest(bookId, book) {
+function getLanguageToolChapterScore(languageToolScores, bookId, chapter) {
+  return languageToolScores?.books?.[bookId]?.chapters?.[chapter] || null;
+}
+
+function bookProgressFromManifest(bookId, book, languageToolScores = null) {
   const bookProgress = {
     name: book.name,
     chinese: book.chinese,
@@ -139,11 +153,22 @@ function bookProgressFromManifest(bookId, book) {
   };
 
   for (const chapter of book.chapters) {
-    const status = analyzeChapterStatus(bookId, chapter.chapter, chapter);
+    const languageTool = getLanguageToolChapterScore(languageToolScores, bookId, chapter.chapter);
+    const translationComplete = (chapter.sentenceCount || 0) > 0 && (chapter.translatedCount || 0) >= (chapter.sentenceCount || 0);
+    const status = languageTool?.status || 'gray';
     bookProgress.chapters.push({
       chapter: chapter.chapter,
       title: chapter.title,
       status: status,
+      translationComplete,
+      languageTool: languageTool ? {
+        status: languageTool.status,
+        checkedAt: languageTool.checkedAt,
+        wordCount: languageTool.wordCount,
+        matchCount: languageTool.matchCount,
+        matchesPer1000Words: languageTool.matchesPer1000Words,
+        topMatches: languageTool.topMatches || []
+      } : null,
       sentenceCount: chapter.sentenceCount,
       translatedCount: chapter.translatedCount,
       characterCount: chapter.characterCount ?? 0,
@@ -158,10 +183,21 @@ function bookProgressFromManifest(bookId, book) {
 
 function buildProgressSummary(books) {
   const chapters = Object.values(books).flatMap((book) => book.chapters || []);
-  const completedChapters = countTranslatedChapters(chapters);
+  const isTranslationComplete = (chapter) => (chapter.sentenceCount || 0) > 0 && (chapter.translatedCount || 0) >= (chapter.sentenceCount || 0);
+  const completedChapters = chapters.filter(isTranslationComplete).length;
+  const cleanup = chapters.reduce((counts, chapter) => {
+    counts[chapter.status] = (counts[chapter.status] || 0) + 1;
+    if (chapter.languageTool) counts.checkedChapters++;
+    return counts;
+  }, { gray: 0, yellow: 0, red: 0, green: 0, checkedChapters: 0 });
   const totalSentences = chapters.reduce((sum, chapter) => sum + (chapter.sentenceCount || 0), 0);
   const translatedSentences = chapters.reduce((sum, chapter) => sum + (chapter.translatedCount || 0), 0);
-  const { completedBooks, totalBooks } = countCompletedBooks(books);
+  const bookList = Object.values(books || {});
+  const totalBooks = bookList.length;
+  const completedBooks = bookList.filter((book) => {
+    const bookChapters = book.chapters || [];
+    return bookChapters.length > 0 && bookChapters.every(isTranslationComplete);
+  }).length;
   const estimate = estimateCompletionFromGitHistory({
     completedChapters,
     totalChapters: chapters.length,
@@ -175,6 +211,7 @@ function buildProgressSummary(books) {
     totalSentences,
     translatedSentences,
     remainingSentences: Math.max(0, totalSentences - translatedSentences),
+    cleanup,
     estimate,
   };
 }
@@ -184,14 +221,21 @@ function buildProgressSummary(books) {
  */
 function generateProgressData() {
   const manifest = JSON.parse(fs.readFileSync(MANIFEST_PATH, 'utf8'));
+  const languageToolScores = loadLanguageToolScores();
   const progress = {
     generatedAt: new Date().toISOString(),
+    qualityScoring: languageToolScores ? {
+      tool: languageToolScores.tool,
+      language: languageToolScores.language,
+      generatedAt: languageToolScores.generatedAt,
+      thresholds: languageToolScores.thresholds,
+    } : null,
     books: {}
   };
 
   for (const bookId in manifest.books) {
     const book = manifest.books[bookId];
-    progress.books[bookId] = bookProgressFromManifest(bookId, book);
+    progress.books[bookId] = bookProgressFromManifest(bookId, book, languageToolScores);
   }
 
   progress.summary = buildProgressSummary(progress.books);
@@ -213,6 +257,7 @@ function writeProgress(progress) {
  */
 function mergeProgressSingleBook(bookId) {
   const manifest = JSON.parse(fs.readFileSync(MANIFEST_PATH, 'utf8'));
+  const languageToolScores = loadLanguageToolScores();
   if (!manifest.books?.[bookId]) {
     console.error(`Unknown book or not in manifest: ${bookId}`);
     process.exit(1);
@@ -230,8 +275,14 @@ function mergeProgressSingleBook(bookId) {
   }
 
   progress.generatedAt = new Date().toISOString();
+  progress.qualityScoring = languageToolScores ? {
+    tool: languageToolScores.tool,
+    language: languageToolScores.language,
+    generatedAt: languageToolScores.generatedAt,
+    thresholds: languageToolScores.thresholds,
+  } : null;
   progress.books = progress.books || {};
-  progress.books[bookId] = bookProgressFromManifest(bookId, manifest.books[bookId]);
+  progress.books[bookId] = bookProgressFromManifest(bookId, manifest.books[bookId], languageToolScores);
   progress.summary = buildProgressSummary(progress.books);
   writeProgress(progress);
   console.log(`Merged progress for book: ${bookId}`);
@@ -243,12 +294,12 @@ function mergeProgressSingleBook(bookId) {
 function main() {
   const onlyBook = parseBookArg();
   if (onlyBook) {
-    console.log(`Generating translation progress for single book: ${onlyBook}...`);
+    console.log(`Generating cleanup progress for single book: ${onlyBook}...`);
     mergeProgressSingleBook(onlyBook);
     return;
   }
 
-  console.log('Generating translation progress data...');
+  console.log('Generating cleanup progress data...');
   const progress = generateProgressData();
   writeProgress(progress);
 }
