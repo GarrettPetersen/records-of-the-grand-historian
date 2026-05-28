@@ -58,13 +58,13 @@ blindly wrapping ordinary English sentences in angle brackets.
 - [x] `hanshu` - Yan Shigu and other commentary audited; embedded notes reviewed.
 - [x] `houhanshu` - Li Xian/commentarial notes audited; source irregularities fixed.
 - [x] `songshi` - Editorial/table annotations audited; parentheses retained where clearer.
+- [x] `yuanshi` - Calendrical, ritual, table, and office-rank notes audited.
 
 ### Not Yet Reviewed
 
 - [ ] `weishu`
 - [ ] `songshu`
 - [ ] `jiuwudaishi`
-- [ ] `yuanshi`
 - [ ] `mingshi`
 - [ ] `jinshu`
 - [ ] `xinwudaishi`
