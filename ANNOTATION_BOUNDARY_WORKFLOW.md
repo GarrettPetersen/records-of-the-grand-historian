@@ -60,10 +60,10 @@ blindly wrapping ordinary English sentences in angle brackets.
 - [x] `songshi` - Editorial/table annotations audited; parentheses retained where clearer.
 - [x] `yuanshi` - Calendrical, ritual, table, and office-rank notes audited.
 - [x] `weishu` - Critical apparatus, geography notes, and source-supplied commentary audited.
+- [x] `songshu` - Music-section labels, calendrical/table notes, omission markers, and geographic/editorial annotations audited.
 
 ### Not Yet Reviewed
 
-- [ ] `songshu`
 - [ ] `jiuwudaishi`
 - [ ] `mingshi`
 - [ ] `jinshu`
