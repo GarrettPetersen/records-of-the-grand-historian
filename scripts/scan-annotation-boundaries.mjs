@@ -150,6 +150,20 @@ function sourceTitle(zh) {
   return m?.[1] || '';
 }
 
+function startsWithAnnotationBoundary(zh) {
+  const value = String(zh || '').trim();
+  const index = value.indexOf('〈');
+  if (index === -1) return false;
+  return /^[\s「『“‘"'(（【\[]*$/.test(value.slice(0, index));
+}
+
+function endsWithAnnotationBoundary(zh) {
+  const value = String(zh || '').trim();
+  const index = value.lastIndexOf('〉');
+  if (index === -1) return false;
+  return /^[\s。．.，,、；;：:！？!?」』”’"')）】\]]*$/.test(value.slice(index + 1));
+}
+
 function scanChapter(filePath) {
   const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
   const book = data.meta?.book || path.basename(path.dirname(filePath));
@@ -166,6 +180,8 @@ function scanChapter(filePath) {
     const opens = countChar(row.zh, '〈');
     const closes = countChar(row.zh, '〉');
     const startsHere = opens > 0;
+    const startsAtRowStart = startsWithAnnotationBoundary(row.zh);
+    const endsAtRowEnd = endsWithAnnotationBoundary(row.zh);
     const wasInside = depth > 0;
     const inside = wasInside || startsHere;
     const spanIds = openStack.map((s) => s.id);
@@ -192,12 +208,12 @@ function scanChapter(filePath) {
         spanIds: [...new Set(spanIds)],
         id: row.id,
         type: row.type,
-        startsAnnotation: startsHere,
-        endsAnnotation: closes > 0,
+        startsAnnotation: startsAtRowStart,
+        endsAnnotation: endsAtRowEnd,
         depthBefore: wasInside ? depth - opens : 0,
         sourceTitle: sourceTitle(row.zh),
-        missingEnglishStart: startsHere && !englishHasAnnotationMarker(row.idiomatic || row.literal, 'start'),
-        missingEnglishEnd: closes > 0 && !englishHasAnnotationMarker(row.idiomatic || row.literal, 'end'),
+        missingEnglishStart: startsAtRowStart && !englishHasAnnotationMarker(row.idiomatic || row.literal, 'start'),
+        missingEnglishEnd: endsAtRowEnd && (wasInside || startsAtRowStart) && !englishHasAnnotationMarker(row.idiomatic || row.literal, 'end'),
         zh: row.zh,
         literal: row.literal,
         idiomatic: row.idiomatic,
