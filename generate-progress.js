@@ -56,6 +56,9 @@ function analyzeChapterStatus(bookId, chapter, chapterData) {
     let idiomaticTranslations = 0;
     let problems = 0;
     let blatantProblems = 0;
+    // Punctuation alignment checks are currently too broad for progress status.
+    // Keep progress red focused on blatant failures and high problem ratios.
+    // let punctuationAlignmentProblems = 0;
 
     // Analyze each sentence / table cell
     if (data.content) {
@@ -84,14 +87,17 @@ function analyzeChapterStatus(bookId, chapter, chapterData) {
             if (idiomatic && idiomatic.trim()) idiomaticTranslations++;
 
             // Check for problems in this sentence
-            const sentenceResult = results.find(r => r.id === sentence.id);
-            if (sentenceResult && sentenceResult.problematic) {
+            const sentenceResults = results.filter(r => r.id === sentence.id);
+            if (sentenceResults.some(r => r.problematic)) {
               problems++;
 
               // Check for blatant problems (Chinese characters in translation)
-              if (sentenceResult.issues.some(issue => issue.includes('Contains Chinese characters'))) {
+              if (sentenceResults.some(r => r.issues.some(issue => issue.includes('Contains Chinese characters')))) {
                 blatantProblems++;
               }
+              // if (sentenceResults.some(r => r.issues.some(issue => issue.includes('Punctuation alignment:')))) {
+              //   punctuationAlignmentProblems++;
+              // }
             }
           }
         }

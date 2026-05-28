@@ -138,7 +138,10 @@ function scoreTranslation(entry, options = {}) {
     isIdiomatic = true,
     allowChineseCharacters = false,
   } = entry;
-  const { shouldEnforceSentenceStartCapitalization = false } = options;
+  const {
+    fieldLabel = isIdiomatic ? 'Idiomatic' : 'Literal',
+    shouldEnforceSentenceStartCapitalization = false
+  } = options;
   const issues = [];
   let score = 1.0;
 
@@ -243,6 +246,16 @@ function scoreTranslation(entry, options = {}) {
     issues.push('Likely sentence-start capitalization issue');
     score = Math.min(score, 0.8);
   }
+
+  // Punctuation alignment is useful for targeted diagnostics, but it is too broad
+  // for global scoring/progress: it turns almost every translated chapter red.
+  // Keep this disabled unless we narrow it to high-confidence annotation failures.
+  // if (chinese && english) {
+  //   for (const note of punctuationAlignmentNotes(chinese, english, fieldLabel)) {
+  //     issues.push(`Punctuation alignment: ${note}`);
+  //     score = Math.min(score, 0.8);
+  //   }
+  // }
 
   return {
     id,
@@ -399,7 +412,10 @@ function scoreChapterFile(filePath) {
               id: cell.id,
               content: cell.content,
               translation: cell.literal,
+              isIdiomatic: false,
               allowChineseCharacters: cell.allowChineseCharacters === true
+            }, {
+              fieldLabel: 'Literal'
             }));
           }
 
@@ -408,7 +424,10 @@ function scoreChapterFile(filePath) {
               id: cell.id,
               content: cell.content,
               translation: cell.idiomatic,
+              isIdiomatic: true,
               allowChineseCharacters: cell.allowChineseCharacters === true
+            }, {
+              fieldLabel: 'Idiomatic'
             }));
 
             // Check for identical literal and idiomatic in table cells

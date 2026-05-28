@@ -64,6 +64,7 @@ help:
 	@echo "  make scan-punctuation-only [BOOK=hanshu]   # Find punctuation-only sentence fragments"
 	@echo "  make scan-br-tags           # Find literal <BR> tags in stored Chinese text"
 	@echo "  make scan-western-chars     # Find Latin letters / HTML fragments in Chinese-facing text"
+	@echo "  make scan-annotations [BOOK=sanguozhi] [CHAPTER=data/sanguozhi/001.json] [OPTIONS='--only-missing --details']  # Find/extract 〈...〉 annotation spans"
 	@echo "  make scan-punctuation-report             # Regenerate scripts/scan-punctuation-report.tsv"
 	@echo "  make batch-quality-check    # Batch quality check on multiple chapters (all books)"
 	@echo "  make quality-score          # Score translation quality subjectively (1-10 scale)"
@@ -741,6 +742,20 @@ scan-punctuation-only:
 	else \
 		echo "Scanning punctuation-only sentences across all chapters..."; \
 		$(NODE) scripts/scan-punctuation-only-sentences.mjs; \
+	fi
+
+.PHONY: scan-annotations
+scan-annotations:
+	@if [ -n "$(CHAPTER)" ]; then \
+		$(NODE) scripts/scan-annotation-boundaries.mjs "$(CHAPTER)" $(OPTIONS); \
+	elif [ -n "$(BOOK)" ]; then \
+		$(NODE) scripts/scan-annotation-boundaries.mjs --book "$(BOOK)" $(OPTIONS); \
+	else \
+		echo "Usage: make scan-annotations BOOK=sanguozhi [OPTIONS='--only-missing --details']"; \
+		echo "       make scan-annotations BOOK=sanguozhi [OPTIONS='--only-missing --extract --out-dir translations/annotation-review']"; \
+		echo "       make scan-annotations BOOK=sanguozhi [OPTIONS='--only-missing --fix']"; \
+		echo "       make scan-annotations CHAPTER=data/sanguozhi/001.json [OPTIONS='--only-missing --extract']"; \
+		exit 1; \
 	fi
 
 .PHONY: scan-br-tags
