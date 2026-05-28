@@ -64,10 +64,10 @@ blindly wrapping ordinary English sentences in angle brackets.
 - [x] `jiuwudaishi` - Editorial notes, quoted source supplements, table corrections, and one unclosed source annotation audited.
 - [x] `mingshi` - Editorial/table annotations, biography supplements, and source-aligned note boundaries audited.
 - [x] `jinshu` - Geography notes, table/endnote markers, genealogical appendices, and source-aligned commentary boundaries audited.
+- [x] `xinwudaishi` - Calendrical table corrections, omitted-table markers, and long Ten Kingdoms chronology notes audited.
 
 ### Not Yet Reviewed
 
-- [ ] `xinwudaishi`
 - [ ] `liaoshi`
 - [ ] `nanqishu`
 - [ ] `chenshu`
