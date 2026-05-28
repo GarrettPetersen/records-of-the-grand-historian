@@ -59,10 +59,10 @@ blindly wrapping ordinary English sentences in angle brackets.
 - [x] `houhanshu` - Li Xian/commentarial notes audited; source irregularities fixed.
 - [x] `songshi` - Editorial/table annotations audited; parentheses retained where clearer.
 - [x] `yuanshi` - Calendrical, ritual, table, and office-rank notes audited.
+- [x] `weishu` - Critical apparatus, geography notes, and source-supplied commentary audited.
 
 ### Not Yet Reviewed
 
-- [ ] `weishu`
 - [ ] `songshu`
 - [ ] `jiuwudaishi`
 - [ ] `mingshi`
