@@ -239,6 +239,20 @@ function compactMatch(match) {
   };
 }
 
+function countByRule(matches) {
+  const counts = new Map();
+  for (const match of matches) {
+    const ruleId = match.ruleId || 'UNKNOWN_RULE';
+    counts.set(ruleId, (counts.get(ruleId) || 0) + 1);
+  }
+  return Object.fromEntries(
+    Array.from(counts.entries()).sort((a, b) => {
+      if (b[1] !== a[1]) return b[1] - a[1];
+      return a[0].localeCompare(b[0]);
+    })
+  );
+}
+
 async function scoreChapter(baseUrl, target) {
   const matches = [];
   for (const chunk of target.prepared.chunks) {
@@ -260,6 +274,7 @@ async function scoreChapter(baseUrl, target) {
     chunkCount: target.prepared.chunks.length,
     matchCount: matches.length,
     matchesPer1000Words,
+    ruleCounts: countByRule(matches),
     topMatches: matches.slice(0, 3),
   };
 }
