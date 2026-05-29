@@ -66,6 +66,61 @@ function getParagraphTranslation(block) {
   return getTranslation(block);
 }
 
+function tableFieldLabel(headers, cellIndex) {
+  const header = textContent(headers[cellIndex] || '');
+  return header;
+}
+
+function renderTableHeaderSummary(headers) {
+  const labels = headers.map(textContent).filter(Boolean);
+  if (labels.length === 0) return '';
+  return `<p class="table-column-summary">Columns: ${labels.map(escapeXml).join('; ')}</p>`;
+}
+
+function inferInitialTableHeaders(chapter) {
+  if (chapter?.meta?.book === 'shiji' && chapter?.meta?.chapter === '013') {
+    return ['Zhou', 'Lu', 'Qi', 'Jin', 'Qin', 'Chu', 'Song', 'Wei', 'Chen', 'Cai', 'Cao', 'Yan'];
+  }
+  return [];
+}
+
+function renderTableEntry(block, headers, chapter, blockIndex, rowNumber, qa) {
+  const fields = (block.cells || [])
+    .map((cell, cellIndex) => {
+      const text = textContent(getTranslation(cell));
+      if (!text && textContent(cell.content || cell.zh)) {
+        qa.errors.push(`Missing table cell translation in ${chapter.meta.chapter} block ${blockIndex + 1} cell ${cellIndex + 1}`);
+      }
+      if (hasPlaceholder(text)) {
+        qa.errors.push(`Placeholder text in ${chapter.meta.chapter} block ${blockIndex + 1} cell ${cellIndex + 1}`);
+      }
+      if (!text) return null;
+      return {
+        label: tableFieldLabel(headers, cellIndex),
+        text
+      };
+    })
+    .filter(Boolean);
+
+  if (fields.length === 0) return '';
+
+  const titleField = fields[0];
+  const details = fields.slice(1)
+    .map((field) => {
+      if (!field.label) return `<dd class="table-entry-unlabeled">${escapeXml(field.text)}</dd>`;
+      return `<dt>${escapeXml(field.label)}</dt><dd>${escapeXml(field.text)}</dd>`;
+    })
+    .join('');
+  const fallbackTitle = `Table row ${rowNumber}`;
+  const title = titleField?.text || fallbackTitle;
+  const titleLabel = titleField?.label ? `<span class="table-entry-kicker">${escapeXml(titleField.label)}</span>` : '';
+  const detailList = details ? `\n  <dl>${details}</dl>` : '';
+
+  return `<section class="table-entry">
+  <h3>${titleLabel}${escapeXml(title)}</h3>${detailList}
+</section>`;
+}
+
 function hasPlaceholder(value) {
   return /\(no translation available\)|\[translation\]|\bTODO\b/i.test(value);
 }
@@ -105,7 +160,8 @@ function loadProducts(args) {
 
 function collectChapterBlocks(chapter, qa) {
   const blocks = [];
-  let currentHeaders = [];
+  let currentHeaders = inferInitialTableHeaders(chapter);
+  let tableRowNumber = 0;
 
   for (const [blockIndex, block] of (chapter.content || []).entries()) {
     if (block.type === 'paragraph') {
@@ -126,31 +182,18 @@ function collectChapterBlocks(chapter, qa) {
 
     if (block.type === 'table_header') {
       currentHeaders = (block.sentences || []).map(getTranslation).map(textContent);
-      const cells = currentHeaders.filter(Boolean).map((cell) => `<span>${escapeXml(cell)}</span>`).join('');
-      if (cells) blocks.push(`<div class="table-header-list">${cells}</div>`);
-      qa.warnings.push(`Table header rendered as list in ${chapter.meta.chapter} block ${blockIndex + 1}`);
+      tableRowNumber = 0;
+      const summary = renderTableHeaderSummary(currentHeaders);
+      if (summary) blocks.push(summary);
+      qa.warnings.push(`Table header rendered as column summary in ${chapter.meta.chapter} block ${blockIndex + 1}`);
       continue;
     }
 
     if (block.type === 'table_row') {
-      const entries = (block.cells || [])
-        .map((cell, cellIndex) => {
-          const text = textContent(getTranslation(cell));
-          if (!text && textContent(cell.content || cell.zh)) {
-            qa.errors.push(`Missing table cell translation in ${chapter.meta.chapter} block ${blockIndex + 1} cell ${cellIndex + 1}`);
-          }
-          if (hasPlaceholder(text)) {
-            qa.errors.push(`Placeholder text in ${chapter.meta.chapter} block ${blockIndex + 1} cell ${cellIndex + 1}`);
-          }
-          if (!text) return '';
-          const header = currentHeaders[cellIndex];
-          return header
-            ? `<li><strong>${escapeXml(header)}:</strong> ${escapeXml(text)}</li>`
-            : `<li>${escapeXml(text)}</li>`;
-        })
-        .filter(Boolean);
-      if (entries.length > 0) blocks.push(`<ul class="table-row-list">${entries.join('')}</ul>`);
-      qa.warnings.push(`Table row rendered as list in ${chapter.meta.chapter} block ${blockIndex + 1}`);
+      tableRowNumber += 1;
+      const entry = renderTableEntry(block, currentHeaders, chapter, blockIndex, tableRowNumber, qa);
+      if (entry) blocks.push(entry);
+      qa.warnings.push(`Table row rendered as structured entry in ${chapter.meta.chapter} block ${blockIndex + 1}`);
       continue;
     }
 
@@ -341,19 +384,52 @@ p {
   width: auto;
 }
 
-.table-header-list,
-.table-row-list {
-  margin: 0 0 1em;
+.table-column-summary {
+  color: #59554b;
+  font-size: 0.9em;
+  margin: 1.25em 0;
+  text-indent: 0;
 }
 
-.table-header-list span {
-  display: inline-block;
+.table-entry {
+  border-top: 0.08em solid #d8d2c4;
+  margin: 1.15em 0 0;
+  padding-top: 0.8em;
+  page-break-inside: avoid;
+}
+
+.table-entry h3 {
+  font-size: 1.05em;
+  line-height: 1.2;
+  margin: 0 0 0.55em;
+}
+
+.table-entry-kicker {
+  color: #6b665b;
+  display: block;
+  font-size: 0.72em;
+  font-weight: normal;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.2em;
+  text-transform: uppercase;
+}
+
+.table-entry dl {
+  margin: 0;
+}
+
+.table-entry dt {
+  color: #5c574f;
   font-weight: bold;
-  margin-right: 0.75em;
+  margin: 0.25em 0 0.05em;
 }
 
-.table-row-list li {
-  margin-bottom: 0.25em;
+.table-entry dd {
+  margin: 0 0 0.42em 1em;
+}
+
+.table-entry-unlabeled {
+  margin-left: 0;
 }
 `;
 }
