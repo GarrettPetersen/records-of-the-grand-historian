@@ -60,6 +60,12 @@ function getTranslation(item) {
   return textContent(translation?.idiomatic || translation?.literal || translation?.text || '');
 }
 
+function getParagraphTranslation(block) {
+  const sentenceText = (block.sentences || []).map(getTranslation).filter(Boolean).join(' ');
+  if (sentenceText.trim()) return sentenceText;
+  return getTranslation(block);
+}
+
 function hasPlaceholder(value) {
   return /\(no translation available\)|\[translation\]|\bTODO\b/i.test(value);
 }
@@ -103,7 +109,7 @@ function collectChapterBlocks(chapter, qa) {
 
   for (const [blockIndex, block] of (chapter.content || []).entries()) {
     if (block.type === 'paragraph') {
-      const paragraph = getTranslation(block) || (block.sentences || []).map(getTranslation).filter(Boolean).join(' ');
+      const paragraph = getParagraphTranslation(block);
       const text = textContent(paragraph);
       if (!text && (block.sentences || []).length > 0) {
         qa.errors.push(`Missing paragraph translation in ${chapter.meta.chapter} block ${blockIndex + 1}`);
