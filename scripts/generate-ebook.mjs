@@ -129,6 +129,11 @@ function hasCjk(value) {
   return /[\u3400-\u9fff]/u.test(value);
 }
 
+function allowsChineseCharacters(item) {
+  return item?.allowChineseCharacters === true ||
+    item?.translations?.some((entry) => entry.allowChineseCharacters === true) === true;
+}
+
 function chapterFileName(chapterId) {
   return `chapter-${chapterId}.xhtml`;
 }
@@ -173,7 +178,7 @@ function collectChapterBlocks(chapter, qa) {
       if (hasPlaceholder(text)) {
         qa.errors.push(`Placeholder text in ${chapter.meta.chapter} block ${blockIndex + 1}`);
       }
-      if (hasCjk(text)) {
+      if (hasCjk(text) && !allowsChineseCharacters(block) && !(block.sentences || []).some(allowsChineseCharacters)) {
         qa.warnings.push(`Chinese characters in English paragraph in ${chapter.meta.chapter} block ${blockIndex + 1}`);
       }
       if (text) blocks.push(`<p>${escapeXml(text)}</p>`);
