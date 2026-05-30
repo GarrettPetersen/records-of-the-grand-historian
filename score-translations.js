@@ -73,9 +73,10 @@ function trailingQuote(text) {
   return ['"', '”', "'"].includes(char) ? { index, char } : null;
 }
 
-function preservesLeadingInnerSingleQuote(zh, en, quote) {
+function preservesLeadingInnerQuote(zh, en, quote) {
+  if (!/^[〉\])）\s]*『/u.test(String(zh || '').trimStart())) return false;
+  if (quote.char === '"' || quote.char === '“') return true;
   if (quote.char !== "'") return false;
-  if (!String(zh || '').trimStart().startsWith('『')) return false;
   return !/["“”]/.test(String(en || '').slice(quote.index + 1));
 }
 
@@ -86,6 +87,14 @@ function preservesTrailingInnerQuote(zh, en, quote) {
   if (quote.char !== "'") return false;
   const beforeQuote = text.slice(0, quote.index);
   return !/["“”]/.test(beforeQuote);
+}
+
+function isQuotedGlossHeadword(english) {
+  const text = String(english || '').trim();
+  return /^["“'][^"“”']{1,80}["”'](?:\s*\([^)]{1,40}\))?\s*(?:[-—]\s*)?(?:(?:again|also|here|this)\s+)?(?:(?:this|the)\s+(?:character|phrase|line|passage|principle|term)\s+)?(?:means?|signif(?:y|ies)|denotes?|describes?|gloss(?:es|ed)?|images?|symbolizes?|implies?|governs?|omits?|writes?|says?|is|are|was|were|names?|equals?|refers? to|stands? for|pointed to|rewarded)\b/i.test(text)
+    || /^["“'][^"“”']{1,40}["”'](?:\s*,?\s*(?:and|or)\s*["“'][^"“”']{1,40}["”'])+\s+(?:refer|refers|mean|means|denote|denotes)\b/i.test(text)
+    || /^["“'][^"“”']{1,80}["”']\s+refers(?:\s+\w+)?\s+to\b/i.test(text)
+    || /^["“'][^"“”']{1,80}["”']\s*[-—]\s+(?:I|we|your servant|this servant|the minister|the court)\b/i.test(text);
 }
 
 function endsWithTerminalPunctuation(text) {
@@ -371,13 +380,13 @@ function quoteSpanAlignmentIssuesForSequence(items) {
     if (isOpeningUnit && trail && (!lead || lead.index !== trail.index) && !(innerCloseCount > 0 && (trail.char === "'" || preservesTrailingInnerQuote(chinese, english, trail)))) {
       boundaryIssues.push('English has a closing quote at the end of an opening unit whose Chinese quote continues into the next unit.');
     }
-    if (isInteriorUnit && lead && !(innerOpenCount > 0 && preservesLeadingInnerSingleQuote(chinese, english, lead))) {
+    if (isInteriorUnit && lead && !isQuotedGlossHeadword(english) && !(innerOpenCount > 0 && preservesLeadingInnerQuote(chinese, english, lead))) {
       boundaryIssues.push('English has an opening quote at the start of an interior unit of a Chinese quote span.');
     }
     if (isInteriorUnit && trail && !lead && englishQuoteCount === 1 && !(innerCloseCount > 0 && preservesTrailingInnerQuote(chinese, english, trail))) {
       boundaryIssues.push('English has a closing quote at the end of an interior unit of a Chinese quote span.');
     }
-    if (isClosingUnit && lead && trail && lead.index !== trail.index && !(innerOpenCount > 0 && preservesLeadingInnerSingleQuote(chinese, english, lead))) {
+    if (isClosingUnit && lead && trail && lead.index !== trail.index && !isQuotedGlossHeadword(english) && !(innerOpenCount > 0 && preservesLeadingInnerQuote(chinese, english, lead))) {
       boundaryIssues.push('English has an opening quote at the start of a closing unit whose Chinese quote began earlier.');
     }
 
