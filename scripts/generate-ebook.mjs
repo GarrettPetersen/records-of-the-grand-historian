@@ -261,8 +261,8 @@ function renderFrontMatter(product, bookInfo) {
     <p>Original work: ${escapeXml(bookInfo.chinese || '')} (${escapeXml(bookInfo.pinyin || '')}), by ${escapeXml(product.author)}.</p>
     <p>English translation: ${escapeXml(product.translator)}.</p>
     <p>${escapeXml(product.rights || '')}</p>
-    <p>This English translation was generated with AI tools under the direction of Garrett M. Petersen. It is a complete first-pass translation intended for accessibility and reading, with ongoing editorial review planned.</p>
-    <p>Chinese source text attribution: ${escapeXml(sources)}.</p>
+    <p>This English translation was generated with AI tools under the direction of Garrett M. Petersen. It has been prepared to make the text accessible to English readers, with ongoing editorial review planned.</p>
+    <p>Chinese source texts were drawn from ${escapeXml(sources)}.</p>
     <p>Edition status: ${escapeXml(product.editionStatus || '')}.</p>
   </section>
 </body>
@@ -305,8 +305,10 @@ function renderPackage(product, chapters) {
 <package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="pub-id" xml:lang="en">
   <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
     <dc:identifier id="pub-id">${escapeXml(productId(product))}</dc:identifier>
-    <dc:title>${escapeXml(product.title)}</dc:title>
-    ${product.subtitle ? `<dc:title id="subtitle">${escapeXml(product.subtitle)}</dc:title>` : ''}
+    <dc:title id="title">${escapeXml(product.title)}</dc:title>
+    ${product.subtitle ? `<dc:title id="subtitle">${escapeXml(product.subtitle)}</dc:title>
+    <meta refines="#title" property="title-type">main</meta>
+    <meta refines="#subtitle" property="title-type">subtitle</meta>` : '<meta refines="#title" property="title-type">main</meta>'}
     <dc:language>${escapeXml(product.language || 'en')}</dc:language>
     <dc:creator>${escapeXml(product.author)}</dc:creator>
     <dc:contributor id="translator">${escapeXml(product.translator)}</dc:contributor>
