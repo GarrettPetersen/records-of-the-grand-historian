@@ -15,6 +15,79 @@ const CORRUPTED_CHARS_REGEX = /[\uFFFD\u0080-\u009F]/; // Unicode replacement ch
 const PLACEHOLDER_REGEX = /\[Literal translation\]|\[Idiomatic translation\]|This historical passage.*\[Literal translation\]|This passage continues.*\[Idiomatic translation\]/;
 const TERMINAL_PUNCTUATION_REGEX = /[.!?]["')\]]*\s*$/;
 
+function countSubstr(str, needle) {
+  if (!str || !needle) return 0;
+  let count = 0;
+  let index = 0;
+  while ((index = String(str).indexOf(needle, index)) !== -1) {
+    count++;
+    index += needle.length;
+  }
+  return count;
+}
+
+function countSingleQuoteDelimiters(text) {
+  const en = String(text || '');
+  let count = 0;
+  for (let i = 0; i < en.length; i++) {
+    if (en[i] !== "'") continue;
+    const prev = en[i - 1] || '';
+    const next = en[i + 1] || '';
+    if (/[A-Za-z]/.test(prev) && /[A-Za-z]/.test(next)) continue;
+    if (/[sS]/.test(prev) && (!next || /[\s,.;:!?)}\]]/.test(next))) continue;
+    count++;
+  }
+  return count;
+}
+
+function countEnglishQuoteMarks(text) {
+  const en = String(text || '');
+  const doubleQuoteCount = countSubstr(en, '"') + countSubstr(en, '“') + countSubstr(en, '”');
+  return doubleQuoteCount + countSingleQuoteDelimiters(en);
+}
+
+function firstNonSpaceIndex(text) {
+  const match = String(text).match(/\S/);
+  return match ? match.index : -1;
+}
+
+function lastNonSpaceIndex(text) {
+  const str = String(text);
+  for (let i = str.length - 1; i >= 0; i--) {
+    if (!/\s/.test(str[i])) return i;
+  }
+  return -1;
+}
+
+function leadingQuote(text) {
+  const index = firstNonSpaceIndex(text);
+  if (index < 0) return null;
+  const char = text[index];
+  return ['"', '“', "'"].includes(char) ? { index, char } : null;
+}
+
+function trailingQuote(text) {
+  const index = lastNonSpaceIndex(text);
+  if (index < 0) return null;
+  const char = text[index];
+  return ['"', '”', "'"].includes(char) ? { index, char } : null;
+}
+
+function preservesLeadingInnerSingleQuote(zh, en, quote) {
+  if (quote.char !== "'") return false;
+  if (!String(zh || '').trimStart().startsWith('『')) return false;
+  return !/["“”]/.test(String(en || '').slice(quote.index + 1));
+}
+
+function preservesTrailingInnerQuote(zh, en, quote) {
+  if (!/』[。！？!?]?$/u.test(String(zh || '').trim())) return false;
+  const text = String(en || '');
+  if (quote.char === '"' || quote.char === '”') return text[quote.index - 1] !== "'";
+  if (quote.char !== "'") return false;
+  const beforeQuote = text.slice(0, quote.index);
+  return !/["“”]/.test(beforeQuote);
+}
+
 function endsWithTerminalPunctuation(text) {
   if (!text || !text.trim()) return false;
   return TERMINAL_PUNCTUATION_REGEX.test(text.trim());
@@ -267,18 +340,68 @@ function scoreTranslation(entry, options = {}) {
   };
 }
 
-/**
- * Score all translations in a chapter file
- */
-function scoreChapterFile(filePath) {
-  console.log(`Scoring translations in: ${filePath}`);
+function quoteSpanAlignmentIssuesForSequence(items) {
+  const issues = [];
+  let zhQuoteDepth = 0;
 
-  if (!fs.existsSync(filePath)) {
-    console.error(`File not found: ${filePath}`);
-    return [];
+  for (const item of items) {
+    const chinese = item.content || item.zh || '';
+    const english = item.idiomatic || item.translation ||
+      (item.translations && item.translations[0] && item.translations[0].idiomatic) ||
+      '';
+    const openCount = countSubstr(chinese, '「');
+    const closeCount = countSubstr(chinese, '」');
+    const beforeDepth = zhQuoteDepth;
+    const afterDepth = Math.max(0, zhQuoteDepth + openCount - closeCount);
+    const isInChineseQuoteSpan = beforeDepth > 0 || afterDepth > 0 || openCount > 0 || closeCount > 0;
+    zhQuoteDepth = afterDepth;
+
+    if (!isInChineseQuoteSpan || !english) continue;
+
+    const innerOpenCount = countSubstr(chinese, '『');
+    const innerCloseCount = countSubstr(chinese, '』');
+    const englishQuoteCount = countEnglishQuoteMarks(english);
+    const lead = leadingQuote(english);
+    const trail = trailingQuote(english);
+    const isOpeningUnit = beforeDepth === 0 && afterDepth > 0 && openCount > 0 && closeCount === 0;
+    const isInteriorUnit = beforeDepth > 0 && afterDepth > 0 && openCount === 0 && closeCount === 0;
+    const isClosingUnit = beforeDepth > 0 && afterDepth === 0 && openCount === 0 && closeCount > 0;
+    const boundaryIssues = [];
+
+    if (isOpeningUnit && trail && (!lead || lead.index !== trail.index) && !(innerCloseCount > 0 && (trail.char === "'" || preservesTrailingInnerQuote(chinese, english, trail)))) {
+      boundaryIssues.push('English has a closing quote at the end of an opening unit whose Chinese quote continues into the next unit.');
+    }
+    if (isInteriorUnit && lead && !(innerOpenCount > 0 && preservesLeadingInnerSingleQuote(chinese, english, lead))) {
+      boundaryIssues.push('English has an opening quote at the start of an interior unit of a Chinese quote span.');
+    }
+    if (isInteriorUnit && trail && !lead && englishQuoteCount === 1 && !(innerCloseCount > 0 && preservesTrailingInnerQuote(chinese, english, trail))) {
+      boundaryIssues.push('English has a closing quote at the end of an interior unit of a Chinese quote span.');
+    }
+    if (isClosingUnit && lead && trail && lead.index !== trail.index && !(innerOpenCount > 0 && preservesLeadingInnerSingleQuote(chinese, english, lead))) {
+      boundaryIssues.push('English has an opening quote at the start of a closing unit whose Chinese quote began earlier.');
+    }
+
+    if (boundaryIssues.length > 0) {
+      issues.push({
+        id: item.id || 'quote-span-check',
+        chinese,
+        english,
+        score: 0,
+        issues: [
+          `Quote span boundary mismatch: ${boundaryIssues.join(' ')} Move Chinese and English quote boundaries together when a quotation crosses unit boundaries.`
+        ],
+        problematic: true
+      });
+    }
   }
 
-  const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  return issues;
+}
+
+/**
+ * Score all translations in a parsed chapter object.
+ */
+function scoreChapterData(data) {
   const results = [];
 
   // Track identical translations for chapter-level check (skip ≤3 hanzi rubrics)
@@ -297,6 +420,7 @@ function scoreChapterFile(filePath) {
   if (data.content) {
     for (const block of data.content) {
       if (block.type === 'paragraph') {
+        results.push(...quoteSpanAlignmentIssuesForSequence(block.sentences || []));
         for (const sentence of block.sentences || []) {
           // Skip sentences translated by Herbert J. Allen (1894)
           const translator = sentence.translations?.[0]?.translator;
@@ -346,6 +470,7 @@ function scoreChapterFile(filePath) {
       }
       // Score table header sentences
       else if (block.type === 'table_header') {
+        results.push(...quoteSpanAlignmentIssuesForSequence(block.sentences || []));
         for (const sentence of block.sentences || []) {
           const translator = sentence.translations?.[0]?.translator;
           if (translator === 'Herbert J. Allen (1894)') {
@@ -461,6 +586,21 @@ function scoreChapterFile(filePath) {
 }
 
 /**
+ * Score all translations in a chapter file
+ */
+function scoreChapterFile(filePath) {
+  console.log(`Scoring translations in: ${filePath}`);
+
+  if (!fs.existsSync(filePath)) {
+    console.error(`File not found: ${filePath}`);
+    return [];
+  }
+
+  const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  return scoreChapterData(data);
+}
+
+/**
  * Randomly select and display sample translations for manual spot-checking
  */
 function displayRandomSamples(results, filename) {
@@ -537,6 +677,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 
 export {
   scoreTranslation,
+  scoreChapterData,
   scoreChapterFile,
   getLengthRatio
 };

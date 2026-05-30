@@ -8,6 +8,28 @@
 
 import fs from 'fs';
 import { countChapterMetrics } from './chapter-counts.mjs';
+import { scoreChapterData } from './score-translations.js';
+
+function assertReviewedChapterPassesQuality(chapter, chapterFile) {
+  const results = scoreChapterData(chapter);
+  const problems = results.filter(result => result.problematic);
+
+  if (problems.length === 0) return;
+
+  console.error(`Review blocked: ${chapterFile} has ${problems.length} quality problem(s) after applying the review.`);
+  console.error('No chapter file was written and the manifest was not marked reviewed.\n');
+
+  for (const [index, problem] of problems.entries()) {
+    console.error(`${index + 1}. ${problem.id}`);
+    console.error(`   Chinese: "${problem.chinese}"`);
+    console.error(`   English: "${problem.english}"`);
+    console.error(`   Score: ${problem.score.toFixed(2)}`);
+    console.error(`   Issues: ${problem.issues.join(', ')}`);
+    console.error('');
+  }
+
+  process.exit(1);
+}
 
 function applyReviewedTranslations(chapterFile, reviewFile) {
   if (!fs.existsSync(chapterFile)) {
@@ -39,6 +61,8 @@ function applyReviewedTranslations(chapterFile, reviewFile) {
   const counts = countChapterMetrics(chapter);
   chapter.meta.sentenceCount = counts.sentenceCount;
   chapter.meta.translatedCount = counts.translatedCount;
+
+  assertReviewedChapterPassesQuality(chapter, chapterFile);
 
   fs.writeFileSync(chapterFile, JSON.stringify(chapter, null, 2));
   console.log(`✅ Applied ${appliedCount} translations`);
