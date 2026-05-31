@@ -170,6 +170,10 @@ function tableFieldLabel(headers, cellIndex) {
   return header;
 }
 
+function tableCells(block) {
+  return block.cells || block.sentences || [];
+}
+
 function renderTableHeaderSummary(headers) {
   const labels = headers.map(textContent).filter(Boolean);
   if (labels.length === 0) return '';
@@ -184,7 +188,7 @@ function inferInitialTableHeaders(chapter) {
 }
 
 function renderTableEntry(block, headers, chapter, blockIndex, rowNumber, qa) {
-  const fields = (block.cells || [])
+  const fields = tableCells(block)
     .map((cell, cellIndex) => {
       const text = textContent(getTranslation(cell));
       if (!text && textContent(cell.content || cell.zh)) {
@@ -235,6 +239,18 @@ function allowsChineseCharacters(item) {
 
 function chapterFileName(chapterId) {
   return `chapter-${chapterId}.xhtml`;
+}
+
+function emptyChapterTableStats() {
+  return {
+    headers: 0,
+    rows: 0,
+    renderedRows: 0,
+    emptyRows: 0,
+    cells: 0,
+    translatedCells: 0,
+    maxCells: 0
+  };
 }
 
 function packageDate() {
@@ -351,10 +367,11 @@ function loadProducts(args) {
   throw new Error('Missing --volume or --all-volumes.');
 }
 
-function collectChapterBlocks(chapter, qa) {
+function collectChapterBlocks(chapter, qa, chapterQa) {
   const blocks = [];
   let currentHeaders = inferInitialTableHeaders(chapter);
   let tableRowNumber = 0;
+  const tableStats = chapterQa.tableRendering;
 
   for (const [blockIndex, block] of (chapter.content || []).entries()) {
     if (block.type === 'paragraph') {
@@ -397,6 +414,8 @@ function collectChapterBlocks(chapter, qa) {
     if (block.type === 'table_header') {
       currentHeaders = (block.sentences || []).map(getTranslation).map(textContent);
       tableRowNumber = 0;
+      tableStats.headers += 1;
+      tableStats.maxCells = Math.max(tableStats.maxCells, currentHeaders.length);
       const summary = renderTableHeaderSummary(currentHeaders);
       if (summary) blocks.push(summary);
       qa.tableRendering.headers += 1;
@@ -405,8 +424,18 @@ function collectChapterBlocks(chapter, qa) {
 
     if (block.type === 'table_row') {
       tableRowNumber += 1;
+      const cells = tableCells(block);
+      const translatedCells = cells.filter((cell) => textContent(getTranslation(cell))).length;
+      tableStats.rows += 1;
+      tableStats.cells += cells.length;
+      tableStats.translatedCells += translatedCells;
+      tableStats.maxCells = Math.max(tableStats.maxCells, cells.length);
+      if (translatedCells === 0) tableStats.emptyRows += 1;
       const entry = renderTableEntry(block, currentHeaders, chapter, blockIndex, tableRowNumber, qa);
-      if (entry) blocks.push(entry);
+      if (entry) {
+        blocks.push(entry);
+        tableStats.renderedRows += 1;
+      }
       qa.tableRendering.rows += 1;
       continue;
     }
@@ -417,12 +446,19 @@ function collectChapterBlocks(chapter, qa) {
   return blocks;
 }
 
-function renderChapter(chapter, qa) {
+function renderChapter(chapter, qa, chapterQa) {
   const chapterId = chapter.meta.chapter;
   const zhTitle = chapter.meta.title?.zh || `Chapter ${chapterId}`;
   const enTitle = chapter.meta.title?.en || `Chapter ${Number.parseInt(chapterId, 10)}`;
-  const blocks = collectChapterBlocks(chapter, qa);
+  const blocks = collectChapterBlocks(chapter, qa, chapterQa);
   if (blocks.length === 0) qa.errors.push(`No rendered English content for chapter ${chapterId}`);
+  const tableStats = chapterQa.tableRendering;
+  if (tableStats.rows > 0 && tableStats.renderedRows === 0) {
+    qa.errors.push(`No rendered table rows for chapter ${chapterId} despite ${tableStats.rows} source table row(s).`);
+  }
+  if (tableStats.rows >= 100 || tableStats.maxCells >= 8) {
+    qa.warnings.push(`Manual table QA recommended for chapter ${chapterId}: ${tableStats.rows} row(s), max ${tableStats.maxCells} cell(s).`);
+  }
 
   return `<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html>
@@ -758,19 +794,21 @@ function buildProduct(product) {
     const file = path.join(repoRoot, 'data', product.book, `${chapter}.json`);
     const data = readJson(file);
     const chapterTitle = textContent(data.meta.title?.en || '');
-    qa.chapters.push({
+    const chapterQa = {
       chapter,
       title: chapterTitle,
       sentenceCount: data.meta.sentenceCount || 0,
-      translatedCount: data.meta.translatedCount || 0
-    });
+      translatedCount: data.meta.translatedCount || 0,
+      tableRendering: emptyChapterTableStats()
+    };
+    qa.chapters.push(chapterQa);
     if (!chapterTitle) {
       qa.errors.push(`Missing English chapter title for ${product.book}/${chapter}`);
     }
     if ((data.meta.sentenceCount || 0) !== (data.meta.translatedCount || 0)) {
       qa.errors.push(`Chapter ${chapter} is not fully translated: ${data.meta.translatedCount}/${data.meta.sentenceCount}`);
     }
-    return { chapter, data };
+    return { chapter, data, qa: chapterQa };
   });
 
   const titleToChapters = new Map();
@@ -788,7 +826,7 @@ function buildProduct(product) {
   for (const chapter of chapters) {
     writeFile(
       path.join(buildDir, 'EPUB', 'text', chapterFileName(chapter.chapter)),
-      renderChapter(chapter.data, qa)
+      renderChapter(chapter.data, qa, chapter.qa)
     );
   }
 

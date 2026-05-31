@@ -222,6 +222,7 @@ Warnings:
 
 - Very large files.
 - Chapters with wide tables.
+- Table-heavy chapters that need manual Kindle/small-screen review; for Shiji this currently means chapters 013-022.
 - English text containing unexpected Chinese characters without `allowChineseCharacters`.
 - Repeated chapter titles.
 - Very long paragraphs.

@@ -89,6 +89,22 @@ if (fs.existsSync(path.join(productDir, 'publication-manifest.json'))) {
   }
 }
 
+if (fs.existsSync(path.join(productDir, 'qa-report.json'))) {
+  const qaReport = readJson(path.join(productDir, 'qa-report.json'));
+  if (Array.isArray(qaReport.errors) && qaReport.errors.length > 0) {
+    errors.push(`QA report contains ${qaReport.errors.length} error(s).`);
+  }
+  for (const chapter of qaReport.chapters || []) {
+    const tableRendering = chapter.tableRendering || {};
+    if (tableRendering.rows > 0 && tableRendering.renderedRows === 0) {
+      errors.push(`QA report shows no rendered table rows for chapter ${chapter.chapter}.`);
+    }
+    if (tableRendering.renderedRows > tableRendering.rows) {
+      errors.push(`QA report table row count mismatch for chapter ${chapter.chapter}: ${tableRendering.renderedRows}/${tableRendering.rows}.`);
+    }
+  }
+}
+
 if (entries[0] !== 'mimetype') {
   errors.push('The first ZIP entry must be mimetype.');
 }
