@@ -39,7 +39,6 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   AN_AND: new Set(['An']),
   A_INFINITIVE: new Set(['An be']),
   DT_PRP: new Set(['An himself']),
-  EN_MULTITOKEN_SPELLING_TWO: new Set(['Sima An', 'Chao Cuo']),
   // The fengshan chapter uses shan as the name of a ritual, not as a mangled
   // contraction of "shan't".
   MISSING_APOSTROPHE_T: new Set(['shan']),
@@ -50,8 +49,14 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   LOWERCASE_MONTHS: new Set(['march']),
   // Ma is a common Chinese surname, not a mistaken "my".
   MA_MY: new Set(['Ma']),
-  // Zhang Zhang is a personal name, not accidental repetition.
-  ENGLISH_WORD_REPEAT_RULE: new Set(['Zhang Zhang']),
+  // Wan is a Qin-era place name, not a misspelling of "want".
+  WAN_WANT: new Set(['Wan']),
+  // Han Zhong is a personal name, not a spelling error for "Han Zheng".
+  EN_MULTITOKEN_SPELLING_TWO: new Set(['Sima An', 'Chao Cuo', 'Han Zhong']),
+  // Chinese measure words are normally used unchanged in this corpus.
+  CD_NN: new Set(['chi']),
+  // Zhang Zhang and Ji Ji are personal names, not accidental repetition.
+  ENGLISH_WORD_REPEAT_RULE: new Set(['Zhang Zhang', 'Ji Ji']),
 };
 
 function getArg(name) {
