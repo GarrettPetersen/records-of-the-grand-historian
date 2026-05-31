@@ -9,11 +9,15 @@ const MANIFEST_PATH = path.join(DATA_DIR, 'manifest.json');
 const OUTPUT_PATH = path.join(DATA_DIR, 'quality', 'languagetool-scores.json');
 const DEFAULT_URL = 'http://localhost:8081';
 const MAX_CHUNK_CHARS = 12000;
-const SCORER_VERSION = '2026-05-30-language-tool-v2';
+const SCORER_VERSION = '2026-05-30-language-tool-v3';
 
 const IGNORED_RULE_IDS = new Set([
   'WHITESPACE_RULE',
   'EN_QUOTES',
+  // Genealogies and annals naturally repeat official titles at sentence starts
+  // ("Duke...", "King...", "In the nth year..."). This rule dominates false
+  // positives and pushes review toward ornamental rewrites rather than defects.
+  'ENGLISH_WORD_REPEAT_BEGINNING_RULE',
 ]);
 const IGNORED_CATEGORY_IDS = new Set([
   // Historical names and romanized Chinese terms produce too many false positives

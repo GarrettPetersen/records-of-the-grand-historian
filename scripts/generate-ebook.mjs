@@ -190,7 +190,7 @@ function collectChapterBlocks(chapter, qa) {
       tableRowNumber = 0;
       const summary = renderTableHeaderSummary(currentHeaders);
       if (summary) blocks.push(summary);
-      qa.warnings.push(`Table header rendered as column summary in ${chapter.meta.chapter} block ${blockIndex + 1}`);
+      qa.tableRendering.headers += 1;
       continue;
     }
 
@@ -198,7 +198,7 @@ function collectChapterBlocks(chapter, qa) {
       tableRowNumber += 1;
       const entry = renderTableEntry(block, currentHeaders, chapter, blockIndex, tableRowNumber, qa);
       if (entry) blocks.push(entry);
-      qa.warnings.push(`Table row rendered as structured entry in ${chapter.meta.chapter} block ${blockIndex + 1}`);
+      qa.tableRendering.rows += 1;
       continue;
     }
 
@@ -472,6 +472,10 @@ function buildProduct(product) {
     generatedAt: new Date().toISOString(),
     errors: [],
     warnings: [],
+    tableRendering: {
+      headers: 0,
+      rows: 0
+    },
     chapters: []
   };
 
