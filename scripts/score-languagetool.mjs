@@ -66,7 +66,7 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   // Parallel prose often repeats "need not" to mirror 不必...要之... constructions.
   EN_REPEATEDWORDS_NEED: new Set(['need']),
   // LanguageTool sometimes mistakes two-state pairs for missing Oxford commas.
-  SERIAL_COMMA_ON: new Set(['Chu and']),
+  SERIAL_COMMA_ON: new Set(['Chu and', 'names and']),
   // This is a clear prepositional phrase, not an ambiguous pronoun boundary.
   PRP_COMMA: new Set(['them']),
   // An Qisheng is a personal name, not an indefinite article error.
