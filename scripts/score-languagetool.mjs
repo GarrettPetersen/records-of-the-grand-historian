@@ -39,6 +39,7 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   AN_AND: new Set(['An']),
   A_INFINITIVE: new Set(['An be']),
   AN_VB_PRP: new Set(['An confronted him']),
+  NON3PRS_VERB: new Set(["You's"]),
   DT_PRP: new Set(['An himself', 'the He', 'the you']),
   // The fengshan chapter uses shan as the name of a ritual, not as a mangled
   // contraction of "shan't".
@@ -53,7 +54,7 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   // Wan is a Qin-era place name, not a misspelling of "want".
   WAN_WANT: new Set(['Wan']),
   // Han Zhong is a personal name, not a spelling error for "Han Zheng".
-  EN_MULTITOKEN_SPELLING_TWO: new Set(['Sima An', 'Chao Cuo', 'Han Zhong', 'Wei Shui', 'Wang Shuo', 'Lü Chen', 'Xiang Zhuang']),
+  EN_MULTITOKEN_SPELLING_TWO: new Set(['Sima An', 'Chao Cuo', 'Han Zhong', 'Wei Shui', 'Wang Shuo', 'Lü Chen', 'Xiang Zhuang', 'Xun Zhi']),
   // Chinese measure words are normally used unchanged in this corpus.
   CD_NN: new Set(['chi']),
   // Repeated syllables in romanized Chinese names are often intentional.
