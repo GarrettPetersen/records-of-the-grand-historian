@@ -38,7 +38,7 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   // the English article and reports article/agreement errors around correct names.
   AN_AND: new Set(['An']),
   A_INFINITIVE: new Set(['An be']),
-  DT_PRP: new Set(['An himself']),
+  DT_PRP: new Set(['An himself', 'the He']),
   // The fengshan chapter uses shan as the name of a ritual, not as a mangled
   // contraction of "shan't".
   MISSING_APOSTROPHE_T: new Set(['shan']),
@@ -52,11 +52,13 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   // Wan is a Qin-era place name, not a misspelling of "want".
   WAN_WANT: new Set(['Wan']),
   // Han Zhong is a personal name, not a spelling error for "Han Zheng".
-  EN_MULTITOKEN_SPELLING_TWO: new Set(['Sima An', 'Chao Cuo', 'Han Zhong']),
+  EN_MULTITOKEN_SPELLING_TWO: new Set(['Sima An', 'Chao Cuo', 'Han Zhong', 'Wei Shui', 'Wang Shuo']),
   // Chinese measure words are normally used unchanged in this corpus.
   CD_NN: new Set(['chi']),
-  // Zhang Zhang and Ji Ji are personal names, not accidental repetition.
-  ENGLISH_WORD_REPEAT_RULE: new Set(['Zhang Zhang', 'Ji Ji']),
+  // Repeated syllables in romanized Chinese names are often intentional.
+  ENGLISH_WORD_REPEAT_RULE: new Set(['Zhang Zhang', 'Ji Ji', 'Yun Yun', 'Ting Ting']),
+  // An Qisheng is a personal name, not an indefinite article error.
+  EN_A_VS_AN: new Set(['An']),
 };
 
 function getArg(name) {
