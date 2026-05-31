@@ -67,6 +67,8 @@ Create a new generator rather than adapting `generate-static-pages.js` directly:
 - Product manifest: `ebooks/manifest.json`
 - Generated files:
   - `dist/ebooks/<slug>/<slug>.epub`
+  - `dist/ebooks/<slug>/cover.png`
+  - `dist/ebooks/<slug>/kdp-metadata.md`
   - `dist/ebooks/<slug>/content/` for debug XHTML
   - `dist/ebooks/<slug>/metadata.json`
   - `dist/ebooks/<slug>/qa-report.json`

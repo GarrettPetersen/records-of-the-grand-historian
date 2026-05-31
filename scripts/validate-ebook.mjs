@@ -16,6 +16,8 @@ if (!fs.existsSync(epubPath)) {
   process.exit(1);
 }
 
+const productDir = path.dirname(epubPath);
+
 function unzipText(file) {
   return childProcess.execFileSync('unzip', ['-p', epubPath, file], { encoding: 'utf8' });
 }
@@ -44,6 +46,12 @@ const required = [
 
 for (const entry of required) {
   if (!entries.includes(entry)) errors.push(`Missing required EPUB entry: ${entry}`);
+}
+
+for (const sidecar of ['cover.png', 'kdp-metadata.md', 'metadata.json', 'qa-report.json']) {
+  if (!fs.existsSync(path.join(productDir, sidecar))) {
+    errors.push(`Missing generated e-book sidecar: ${sidecar}`);
+  }
 }
 
 if (entries[0] !== 'mimetype') {

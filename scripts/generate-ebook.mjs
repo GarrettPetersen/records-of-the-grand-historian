@@ -261,11 +261,64 @@ function validateProductMetadata(product, qa) {
   if (!textContent(kdp.suggestedListPriceUsd)) qa.warnings.push('Missing KDP suggested USD list price.');
   if (!textContent(kdp.publishingRights)) qa.warnings.push('Missing KDP publishing-rights note.');
   if (!textContent(kdp.aiGeneratedContent)) qa.warnings.push('Missing KDP AI-generated-content disclosure note.');
+  if (textContent(product.productDescription).length > 4000) {
+    qa.warnings.push('Product description is longer than 4,000 characters.');
+  }
   const categories = Array.isArray(kdp.categories) ? kdp.categories.map(textContent).filter(Boolean) : [];
   if (categories.length === 0) qa.warnings.push('Missing KDP category suggestions.');
   const keywords = Array.isArray(kdp.keywords) ? kdp.keywords.map(textContent).filter(Boolean) : [];
   if (keywords.length < 7) qa.warnings.push(`KDP keyword list has ${keywords.length} entries; expected 7.`);
   if (keywords.length > 7) qa.warnings.push(`KDP keyword list has ${keywords.length} entries; KDP accepts 7 keyword slots.`);
+}
+
+function markdownList(values) {
+  return values.map(textContent).filter(Boolean).map((value) => `- ${value}`).join('\n');
+}
+
+function renderKdpMetadata(product) {
+  const kdp = product.kdp || {};
+  const categories = Array.isArray(kdp.categories) ? kdp.categories : [];
+  const keywords = Array.isArray(kdp.keywords) ? kdp.keywords : [];
+  return `# KDP Metadata: ${product.title}
+
+## Product
+
+- Title: ${product.title}
+- Subtitle: ${product.subtitle || ''}
+- Author: ${product.author}
+- Translator: ${product.translator}
+- Publisher: ${product.publisher || ''}
+- Language: ${product.language || 'en'}
+- Series: ${product.series || ''}
+- Series number: ${product.seriesNumber || product.volume || ''}
+- Copyright: ${product.rights || ''}
+
+## Description
+
+${product.productDescription || product.description || ''}
+
+## AI Disclosure
+
+${product.aiDisclosure || ''}
+
+KDP field suggestion: ${kdp.aiGeneratedContent || ''}
+
+## Publishing Rights
+
+${kdp.publishingRights || ''}
+
+## Pricing
+
+- Suggested list price USD: ${kdp.suggestedListPriceUsd || ''}
+
+## Categories
+
+${markdownList(categories)}
+
+## Keywords
+
+${markdownList(keywords)}
+`;
 }
 
 function loadProducts(args) {
@@ -634,6 +687,9 @@ function buildProduct(product) {
       maxWords: 0,
       longParagraphs: 0
     },
+    kdpMetadata: {
+      file: 'kdp-metadata.md'
+    },
     coverImage: null,
     cjkBodyOccurrences: [],
     chapters: []
@@ -651,6 +707,7 @@ function buildProduct(product) {
   const coverPng = renderCoverPng(coverSvg);
   validateCoverImage(coverPng, qa);
   writeBinaryFile(path.join(productDir, 'cover.png'), coverPng);
+  writeFile(path.join(productDir, 'kdp-metadata.md'), renderKdpMetadata(product));
   writeFile(path.join(buildDir, 'EPUB', 'cover.xhtml'), renderCover(product, bookInfo));
   writeBinaryFile(path.join(buildDir, 'EPUB', 'images', 'cover.png'), coverPng);
   writeFile(path.join(buildDir, 'EPUB', 'frontmatter.xhtml'), renderFrontMatter(product, bookInfo));
