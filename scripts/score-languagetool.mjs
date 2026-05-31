@@ -62,7 +62,7 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   // Chinese measure words are normally used unchanged in this corpus.
   CD_NN: new Set(['chi']),
   // Repeated syllables in romanized Chinese names are often intentional.
-  ENGLISH_WORD_REPEAT_RULE: new Set(['Zhang Zhang', 'Ji Ji', 'Lu Lu', 'Yun Yun', 'Ting Ting', 'Shi Shi', 'Jia Jia', 'Fu Fu', 'Bi Bi']),
+  ENGLISH_WORD_REPEAT_RULE: new Set(['Zhang Zhang', 'Ji Ji', 'Lu Lu', 'Yun Yun', 'Ting Ting', 'Shi Shi', 'Jia Jia', 'Fu Fu', 'Bi Bi', 'Yan Yan']),
   // Parallel prose often repeats "need not" to mirror 不必...要之... constructions.
   EN_REPEATEDWORDS_NEED: new Set(['need']),
   // LanguageTool sometimes mistakes two-state pairs for missing Oxford commas.
