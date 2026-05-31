@@ -33,7 +33,7 @@ const IGNORED_CATEGORY_IDS = new Set([
 const IGNORED_MATCH_TEXT_BY_RULE = {
   // LanguageTool's RUDE_SARCASTIC rule treats "Your Majesty" as sarcasm. In this
   // corpus it is a standard court address, especially in memorials and speeches.
-  RUDE_SARCASTIC: new Set(['Your Majesty']),
+  RUDE_SARCASTIC: new Set(['Your Majesty', 'Your Highness']),
   // Ji An and Sima An are personal names. LanguageTool sometimes reads "An" as
   // the English article and reports article/agreement errors around correct names.
   AN_AND: new Set(['An']),
@@ -54,7 +54,7 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   // Wan is a Qin-era place name, not a misspelling of "want".
   WAN_WANT: new Set(['Wan']),
   // Han Zhong is a personal name, not a spelling error for "Han Zheng".
-  EN_MULTITOKEN_SPELLING_TWO: new Set(['Sima An', 'Chao Cuo', 'Han Zhong', 'Wei Shui', 'Wang Shuo', 'Lü Chen', 'Xiang Zhuang', 'Xiang Zhong', 'Xun Zhi']),
+  EN_MULTITOKEN_SPELLING_TWO: new Set(['Sima An', 'Chao Cuo', 'Han Zhong', 'Wei Shui', 'Wang Shuo', 'Wang Zhong', 'Lü Chen', 'Tian Fen', 'Xiang Zhuang', 'Xiang Zhong', 'Xun Zhi']),
   // Chinese measure words are normally used unchanged in this corpus.
   CD_NN: new Set(['chi']),
   // Repeated syllables in romanized Chinese names are often intentional.
