@@ -58,7 +58,7 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   // Chinese measure words are normally used unchanged in this corpus.
   CD_NN: new Set(['chi']),
   // Repeated syllables in romanized Chinese names are often intentional.
-  ENGLISH_WORD_REPEAT_RULE: new Set(['Zhang Zhang', 'Ji Ji', 'Lu Lu', 'Yun Yun', 'Ting Ting', 'Shi Shi']),
+  ENGLISH_WORD_REPEAT_RULE: new Set(['Zhang Zhang', 'Ji Ji', 'Lu Lu', 'Yun Yun', 'Ting Ting', 'Shi Shi', 'Jia Jia']),
   // An Qisheng is a personal name, not an indefinite article error.
   EN_A_VS_AN: new Set(['An']),
   A_NNS: new Set(['An says']),
