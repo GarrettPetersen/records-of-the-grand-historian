@@ -170,6 +170,16 @@ function tableFieldLabel(headers, cellIndex) {
   return header;
 }
 
+function fallbackTableFieldLabel(headers, cellIndex) {
+  const header = tableFieldLabel(headers, cellIndex);
+  if (header) return header;
+  if (headers.length > 0 && headers.every((item) => !textContent(item))) {
+    if (cellIndex === 0) return 'Year';
+    if (cellIndex === 1) return 'Reign year';
+  }
+  return `Column ${cellIndex + 1}`;
+}
+
 function tableCells(block) {
   return block.cells || block.sentences || [];
 }
@@ -199,7 +209,7 @@ function renderTableEntry(block, headers, chapter, blockIndex, rowNumber, qa) {
       }
       if (!text) return null;
       return {
-        label: tableFieldLabel(headers, cellIndex),
+        label: fallbackTableFieldLabel(headers, cellIndex),
         text
       };
     })
@@ -247,6 +257,7 @@ function emptyChapterTableStats() {
     rows: 0,
     renderedRows: 0,
     emptyRows: 0,
+    blankHeaders: 0,
     cells: 0,
     translatedCells: 0,
     maxCells: 0
@@ -416,6 +427,9 @@ function collectChapterBlocks(chapter, qa, chapterQa) {
       tableRowNumber = 0;
       tableStats.headers += 1;
       tableStats.maxCells = Math.max(tableStats.maxCells, currentHeaders.length);
+      if (currentHeaders.length > 0 && currentHeaders.every((header) => !textContent(header))) {
+        tableStats.blankHeaders += 1;
+      }
       const summary = renderTableHeaderSummary(currentHeaders);
       if (summary) blocks.push(summary);
       qa.tableRendering.headers += 1;
@@ -458,6 +472,9 @@ function renderChapter(chapter, qa, chapterQa) {
   }
   if (tableStats.rows >= 100 || tableStats.maxCells >= 8) {
     qa.warnings.push(`Manual table QA recommended for chapter ${chapterId}: ${tableStats.rows} row(s), max ${tableStats.maxCells} cell(s).`);
+  }
+  if (tableStats.blankHeaders > 0) {
+    qa.warnings.push(`Manual table label QA recommended for chapter ${chapterId}: ${tableStats.blankHeaders} blank table header row(s).`);
   }
 
   return `<?xml version="1.0" encoding="utf-8"?>
