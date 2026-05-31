@@ -254,6 +254,7 @@ function fixEnglishSpanBoundaries(sentences, proposals, remaining) {
       const endText = endField.owner[endField.key];
       const startClose = trailingQuote(startText, englishCloseChars());
       if (!startClose) continue;
+      if (startClose.char === "'") continue;
 
       const endAlreadyCloses = trailingQuote(endText, englishCloseChars());
       const quoteToMove = englishCloseFor(startClose.char);
