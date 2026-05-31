@@ -9,7 +9,7 @@ const MANIFEST_PATH = path.join(DATA_DIR, 'manifest.json');
 const OUTPUT_PATH = path.join(DATA_DIR, 'quality', 'languagetool-scores.json');
 const DEFAULT_URL = 'http://localhost:8081';
 const MAX_CHUNK_CHARS = 12000;
-const SCORER_VERSION = '2026-05-30-language-tool-v3';
+const SCORER_VERSION = '2026-05-30-language-tool-v4';
 
 const IGNORED_RULE_IDS = new Set([
   'WHITESPACE_RULE',
@@ -28,6 +28,12 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   // LanguageTool's RUDE_SARCASTIC rule treats "Your Majesty" as sarcasm. In this
   // corpus it is a standard court address, especially in memorials and speeches.
   RUDE_SARCASTIC: new Set(['Your Majesty']),
+  // Ji An and Sima An are personal names. LanguageTool sometimes reads "An" as
+  // the English article and reports article/agreement errors around correct names.
+  AN_AND: new Set(['An']),
+  A_INFINITIVE: new Set(['An be']),
+  DT_PRP: new Set(['An himself']),
+  EN_MULTITOKEN_SPELLING_TWO: new Set(['Sima An']),
 };
 
 function getArg(name) {
