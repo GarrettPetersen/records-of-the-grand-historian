@@ -67,6 +67,8 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   EN_REPEATEDWORDS_NEED: new Set(['need']),
   // LanguageTool sometimes mistakes two-state pairs for missing Oxford commas.
   SERIAL_COMMA_ON: new Set(['Chu and']),
+  // This is a clear prepositional phrase, not an ambiguous pronoun boundary.
+  PRP_COMMA: new Set(['them']),
   // An Qisheng is a personal name, not an indefinite article error.
   EN_A_VS_AN: new Set(['An']),
   A_NNS: new Set(['An says']),
