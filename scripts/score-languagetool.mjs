@@ -53,6 +53,8 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   MA_MY: new Set(['Ma']),
   // Dun appears in sexagenary/calendar terminology; it is not "don't".
   DUN_DONT: new Set(['Dun']),
+  // Wen is a personal name in Tian Wen, not a misspelling of "when".
+  WEN_WE: new Set(['Wen']),
   // Wan is a Qin-era place name, not a misspelling of "want".
   WAN_WANT: new Set(['Wan']),
   // Han Zhong and Han Zeng are personal names, not spelling errors for "Han Zheng".
@@ -60,7 +62,7 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   // Chinese measure words are normally used unchanged in this corpus.
   CD_NN: new Set(['chi']),
   // Repeated syllables in romanized Chinese names are often intentional.
-  ENGLISH_WORD_REPEAT_RULE: new Set(['Zhang Zhang', 'Ji Ji', 'Lu Lu', 'Yun Yun', 'Ting Ting', 'Shi Shi', 'Jia Jia']),
+  ENGLISH_WORD_REPEAT_RULE: new Set(['Zhang Zhang', 'Ji Ji', 'Lu Lu', 'Yun Yun', 'Ting Ting', 'Shi Shi', 'Jia Jia', 'Fu Fu']),
   // Parallel prose often repeats "need not" to mirror 不必...要之... constructions.
   EN_REPEATEDWORDS_NEED: new Set(['need']),
   // LanguageTool sometimes mistakes two-state pairs for missing Oxford commas.
