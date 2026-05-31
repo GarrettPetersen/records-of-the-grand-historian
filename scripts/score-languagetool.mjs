@@ -51,6 +51,8 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   LOWERCASE_MONTHS: new Set(['march']),
   // Ma is a common Chinese surname, not a mistaken "my".
   MA_MY: new Set(['Ma']),
+  // Dun appears in sexagenary/calendar terminology; it is not "don't".
+  DUN_DONT: new Set(['Dun']),
   // Wan is a Qin-era place name, not a misspelling of "want".
   WAN_WANT: new Set(['Wan']),
   // Han Zhong is a personal name, not a spelling error for "Han Zheng".
