@@ -44,6 +44,42 @@ function writeBinaryFile(file, content) {
   fs.writeFileSync(file, content);
 }
 
+function pngInfo(buffer) {
+  const signature = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+  if (!Buffer.isBuffer(buffer) || buffer.length < 24 || !buffer.subarray(0, 8).equals(signature)) {
+    return null;
+  }
+  return {
+    width: buffer.readUInt32BE(16),
+    height: buffer.readUInt32BE(20),
+    bytes: buffer.length
+  };
+}
+
+function validateCoverImage(buffer, qa) {
+  const info = pngInfo(buffer);
+  if (!info) {
+    qa.errors.push('Generated cover image is not a valid PNG.');
+    return null;
+  }
+  const ratio = info.height / info.width;
+  qa.coverImage = {
+    file: 'cover.png',
+    format: 'png',
+    width: info.width,
+    height: info.height,
+    bytes: info.bytes,
+    aspectRatio: Number(ratio.toFixed(3))
+  };
+  if (info.width < 1000 || info.height < 1600) {
+    qa.errors.push(`Generated cover image is too small: ${info.width}x${info.height}.`);
+  }
+  if (Math.abs(ratio - 1.6) > 0.02) {
+    qa.warnings.push(`Generated cover image aspect ratio is ${ratio.toFixed(3)}; expected about 1.600.`);
+  }
+  return info;
+}
+
 function escapeXml(value) {
   return String(value ?? '')
     .replace(/&/g, '&amp;')
@@ -598,6 +634,7 @@ function buildProduct(product) {
       maxWords: 0,
       longParagraphs: 0
     },
+    coverImage: null,
     cjkBodyOccurrences: [],
     chapters: []
   };
@@ -612,6 +649,8 @@ function buildProduct(product) {
   writeFile(path.join(buildDir, 'EPUB', 'styles', 'ebook.css'), renderCss());
   const coverSvg = renderBookCover(product.book);
   const coverPng = renderCoverPng(coverSvg);
+  validateCoverImage(coverPng, qa);
+  writeBinaryFile(path.join(productDir, 'cover.png'), coverPng);
   writeFile(path.join(buildDir, 'EPUB', 'cover.xhtml'), renderCover(product, bookInfo));
   writeBinaryFile(path.join(buildDir, 'EPUB', 'images', 'cover.png'), coverPng);
   writeFile(path.join(buildDir, 'EPUB', 'frontmatter.xhtml'), renderFrontMatter(product, bookInfo));
