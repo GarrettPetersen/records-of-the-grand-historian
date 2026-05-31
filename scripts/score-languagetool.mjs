@@ -9,7 +9,7 @@ const MANIFEST_PATH = path.join(DATA_DIR, 'manifest.json');
 const OUTPUT_PATH = path.join(DATA_DIR, 'quality', 'languagetool-scores.json');
 const DEFAULT_URL = 'http://localhost:8081';
 const MAX_CHUNK_CHARS = 12000;
-const SCORER_VERSION = '2026-05-30-language-tool-v5';
+const SCORER_VERSION = '2026-05-31-language-tool-v7';
 
 const IGNORED_RULE_IDS = new Set([
   'WHITESPACE_RULE',
@@ -18,6 +18,12 @@ const IGNORED_RULE_IDS = new Set([
   // ("Duke...", "King...", "In the nth year..."). This rule dominates false
   // positives and pushes review toward ornamental rewrites rather than defects.
   'ENGLISH_WORD_REPEAT_BEGINNING_RULE',
+  // Passive voice is common and appropriate in annals, tables, and appointment
+  // records. It is too noisy to help identify genuinely broken English.
+  'REP_PASSIVE_VOICE',
+  // "Battle-axe" is a standard spelling; LanguageTool prefers "battleaxe" but
+  // that is a style choice, not a translation quality signal.
+  'EN_COMPOUNDS_BATTLE_AXE',
 ]);
 const IGNORED_CATEGORY_IDS = new Set([
   // Historical names and romanized Chinese terms produce too many false positives
@@ -33,7 +39,7 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   AN_AND: new Set(['An']),
   A_INFINITIVE: new Set(['An be']),
   DT_PRP: new Set(['An himself']),
-  EN_MULTITOKEN_SPELLING_TWO: new Set(['Sima An']),
+  EN_MULTITOKEN_SPELLING_TWO: new Set(['Sima An', 'Chao Cuo']),
   // The fengshan chapter uses shan as the name of a ritual, not as a mangled
   // contraction of "shan't".
   MISSING_APOSTROPHE_T: new Set(['shan']),
@@ -42,6 +48,10 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   MISSING_PERIOD_AFTER_ABBREVIATION: new Set(['Su']),
   // LanguageTool sometimes treats the ordinary verb "march" as the month March.
   LOWERCASE_MONTHS: new Set(['march']),
+  // Ma is a common Chinese surname, not a mistaken "my".
+  MA_MY: new Set(['Ma']),
+  // Zhang Zhang is a personal name, not accidental repetition.
+  ENGLISH_WORD_REPEAT_RULE: new Set(['Zhang Zhang']),
 };
 
 function getArg(name) {
