@@ -46,7 +46,7 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   MISSING_APOSTROPHE_T: new Set(['shan']),
   // Su is a common Chinese surname, as in Su Qin. LanguageTool reads it as a
   // US state abbreviation and asks for "Su.", which would be wrong in names.
-  MISSING_PERIOD_AFTER_ABBREVIATION: new Set(['Su']),
+  MISSING_PERIOD_AFTER_ABBREVIATION: new Set(['Mo', 'Su']),
   // LanguageTool sometimes treats the ordinary verb "march" as the month March.
   LOWERCASE_MONTHS: new Set(['march']),
   // Ma is a common Chinese surname, not a mistaken "my".
