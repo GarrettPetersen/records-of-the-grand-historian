@@ -20,6 +20,10 @@ function unzipText(file) {
   return childProcess.execFileSync('unzip', ['-p', epubPath, file], { encoding: 'utf8' });
 }
 
+function unzipBuffer(file) {
+  return childProcess.execFileSync('unzip', ['-p', epubPath, file]);
+}
+
 function listEntries() {
   return childProcess.execFileSync('unzip', ['-Z1', epubPath], { encoding: 'utf8' })
     .split(/\r?\n/)
@@ -33,6 +37,8 @@ const required = [
   'META-INF/container.xml',
   'EPUB/package.opf',
   'EPUB/nav.xhtml',
+  'EPUB/cover.xhtml',
+  'EPUB/images/cover.png',
   'EPUB/styles/ebook.css'
 ];
 
@@ -51,11 +57,27 @@ if (mimetype !== 'application/epub+zip') {
 
 const packageXml = unzipText('EPUB/package.opf');
 const nav = unzipText('EPUB/nav.xhtml');
+const cover = unzipText('EPUB/cover.xhtml');
 if (!packageXml.includes('properties="nav"')) {
   errors.push('package.opf does not identify nav.xhtml with properties="nav".');
 }
+if (!packageXml.includes('href="images/cover.png"') || !packageXml.includes('media-type="image/png"') || !packageXml.includes('properties="cover-image"')) {
+  errors.push('package.opf does not identify images/cover.png as the PNG cover image.');
+}
 if (!nav.includes('epub:type="toc"')) {
   errors.push('nav.xhtml does not contain an EPUB TOC nav.');
+}
+if (!cover.includes('src="images/cover.png"')) {
+  errors.push('cover.xhtml does not reference images/cover.png.');
+}
+if (entries.includes('EPUB/images/cover.svg')) {
+  errors.push('EPUB still packages cover.svg; use the raster cover image for store upload.');
+}
+
+const png = unzipBuffer('EPUB/images/cover.png');
+const pngSignature = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+if (png.length < 24 || !png.subarray(0, 8).equals(pngSignature)) {
+  errors.push('EPUB/images/cover.png is not a valid PNG file.');
 }
 
 const chapterEntries = entries.filter((entry) => /^EPUB\/text\/chapter-\d+\.xhtml$/.test(entry));

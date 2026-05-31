@@ -5,6 +5,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { Resvg } from '@resvg/resvg-js';
 import { getBookMetadata } from './book-metadata.mjs';
 import { renderBookCover } from './generate-book-covers.mjs';
 
@@ -34,6 +35,11 @@ function readJson(file) {
 }
 
 function writeFile(file, content) {
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, content);
+}
+
+function writeBinaryFile(file, content) {
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, content);
 }
@@ -343,11 +349,21 @@ function renderCover(product, bookInfo) {
 </head>
 <body class="cover-page">
   <div class="cover-image-wrap">
-    <img class="cover-image" src="images/cover.svg" alt="${escapeXml(product.title)} cover" />
+    <img class="cover-image" src="images/cover.png" alt="${escapeXml(product.title)} cover" />
   </div>
 </body>
 </html>
 `;
+}
+
+function renderCoverPng(svg) {
+  const resvg = new Resvg(svg, {
+    fitTo: {
+      mode: 'width',
+      value: 1600
+    }
+  });
+  return resvg.render().asPng();
 }
 
 function renderFrontMatter(product, bookInfo) {
@@ -430,7 +446,7 @@ function renderPackage(product, chapters) {
     <item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav" />
     <item id="css" href="styles/ebook.css" media-type="text/css" />
     <item id="cover" href="cover.xhtml" media-type="application/xhtml+xml" />
-    <item id="cover-image" href="images/cover.svg" media-type="image/svg+xml" properties="cover-image" />
+    <item id="cover-image" href="images/cover.png" media-type="image/png" properties="cover-image" />
     <item id="frontmatter" href="frontmatter.xhtml" media-type="application/xhtml+xml" />
 ${items}
   </manifest>
@@ -594,8 +610,10 @@ function buildProduct(product) {
   writeFile(path.join(buildDir, 'mimetype'), 'application/epub+zip');
   writeFile(path.join(buildDir, 'META-INF', 'container.xml'), renderContainer());
   writeFile(path.join(buildDir, 'EPUB', 'styles', 'ebook.css'), renderCss());
+  const coverSvg = renderBookCover(product.book);
+  const coverPng = renderCoverPng(coverSvg);
   writeFile(path.join(buildDir, 'EPUB', 'cover.xhtml'), renderCover(product, bookInfo));
-  writeFile(path.join(buildDir, 'EPUB', 'images', 'cover.svg'), renderBookCover(product.book));
+  writeBinaryFile(path.join(buildDir, 'EPUB', 'images', 'cover.png'), coverPng);
   writeFile(path.join(buildDir, 'EPUB', 'frontmatter.xhtml'), renderFrontMatter(product, bookInfo));
 
   const chapters = product.chapters.map((chapter) => {
