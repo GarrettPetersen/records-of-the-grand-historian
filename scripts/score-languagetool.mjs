@@ -38,6 +38,7 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   // the English article and reports article/agreement errors around correct names.
   AN_AND: new Set(['An']),
   A_INFINITIVE: new Set(['An be']),
+  AN_VB_PRP: new Set(['An confronted him']),
   DT_PRP: new Set(['An himself', 'the He']),
   // The fengshan chapter uses shan as the name of a ritual, not as a mangled
   // contraction of "shan't".
@@ -59,6 +60,7 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   ENGLISH_WORD_REPEAT_RULE: new Set(['Zhang Zhang', 'Ji Ji', 'Yun Yun', 'Ting Ting']),
   // An Qisheng is a personal name, not an indefinite article error.
   EN_A_VS_AN: new Set(['An']),
+  A_NNS: new Set(['An says']),
 };
 
 function getArg(name) {
