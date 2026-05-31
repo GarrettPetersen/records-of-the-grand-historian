@@ -190,6 +190,42 @@ function productId(product) {
   return `urn:uuid:${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20, 32)}`;
 }
 
+function validateProductMetadata(product, qa) {
+  const requiredFields = [
+    'slug',
+    'book',
+    'title',
+    'subtitle',
+    'author',
+    'translator',
+    'publisher',
+    'rights',
+    'description',
+    'productDescription',
+    'aiDisclosure',
+    'editionStatus'
+  ];
+  for (const field of requiredFields) {
+    if (!textContent(product[field])) {
+      qa.errors.push(`Missing e-book product metadata field: ${field}`);
+    }
+  }
+
+  if (!Array.isArray(product.sourceAttribution) || product.sourceAttribution.map(textContent).filter(Boolean).length === 0) {
+    qa.errors.push('Missing e-book source attribution metadata.');
+  }
+
+  const kdp = product.kdp || {};
+  if (!textContent(kdp.suggestedListPriceUsd)) qa.warnings.push('Missing KDP suggested USD list price.');
+  if (!textContent(kdp.publishingRights)) qa.warnings.push('Missing KDP publishing-rights note.');
+  if (!textContent(kdp.aiGeneratedContent)) qa.warnings.push('Missing KDP AI-generated-content disclosure note.');
+  const categories = Array.isArray(kdp.categories) ? kdp.categories.map(textContent).filter(Boolean) : [];
+  if (categories.length === 0) qa.warnings.push('Missing KDP category suggestions.');
+  const keywords = Array.isArray(kdp.keywords) ? kdp.keywords.map(textContent).filter(Boolean) : [];
+  if (keywords.length < 7) qa.warnings.push(`KDP keyword list has ${keywords.length} entries; expected 7.`);
+  if (keywords.length > 7) qa.warnings.push(`KDP keyword list has ${keywords.length} entries; KDP accepts 7 keyword slots.`);
+}
+
 function loadProducts(args) {
   const manifest = readJson(manifestPath);
   const products = manifest.products || [];
@@ -316,6 +352,7 @@ function renderCover(product, bookInfo) {
 
 function renderFrontMatter(product, bookInfo) {
   const sources = formatList(product.sourceAttribution || []);
+  const aiDisclosure = product.aiDisclosure || 'This English translation was generated with AI tools under the direction and editorial supervision of Garrett M. Petersen.';
   return `<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="en" lang="en">
@@ -330,7 +367,7 @@ function renderFrontMatter(product, bookInfo) {
     <p>Original work: ${escapeXml(bookInfo.chinese || '')} (${escapeXml(bookInfo.pinyin || '')}), by ${escapeXml(product.author)}.</p>
     <p>English translation: ${escapeXml(product.translator)}.</p>
     <p>${escapeXml(product.rights || '')}</p>
-    <p>This English translation was generated with AI tools under the direction and editorial supervision of Garrett M. Petersen.</p>
+    <p>${escapeXml(aiDisclosure)}</p>
     <p>Chinese source texts were drawn from ${escapeXml(sources)}.</p>
     <p>Edition status: ${escapeXml(product.editionStatus || '')}.</p>
   </section>
@@ -548,6 +585,8 @@ function buildProduct(product) {
     cjkBodyOccurrences: [],
     chapters: []
   };
+
+  validateProductMetadata(product, qa);
 
   cleanDir(buildDir);
   fs.mkdirSync(productDir, { recursive: true });
