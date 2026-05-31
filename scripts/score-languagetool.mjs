@@ -52,7 +52,7 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   // Wan is a Qin-era place name, not a misspelling of "want".
   WAN_WANT: new Set(['Wan']),
   // Han Zhong is a personal name, not a spelling error for "Han Zheng".
-  EN_MULTITOKEN_SPELLING_TWO: new Set(['Sima An', 'Chao Cuo', 'Han Zhong', 'Wei Shui', 'Wang Shuo']),
+  EN_MULTITOKEN_SPELLING_TWO: new Set(['Sima An', 'Chao Cuo', 'Han Zhong', 'Wei Shui', 'Wang Shuo', 'Lü Chen', 'Xiang Zhuang']),
   // Chinese measure words are normally used unchanged in this corpus.
   CD_NN: new Set(['chi']),
   // Repeated syllables in romanized Chinese names are often intentional.
