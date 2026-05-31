@@ -57,12 +57,12 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   WEN_WE: new Set(['Wen']),
   // Wan is a Qin-era place name, not a misspelling of "want".
   WAN_WANT: new Set(['Wan']),
-  // Han Zhong and Han Zeng are personal names, not spelling errors for "Han Zheng".
-  EN_MULTITOKEN_SPELLING_TWO: new Set(['Sima An', 'Chao Cuo', 'Han Zhong', 'Han Zeng', 'Wei Shui', 'Wang Shuo', 'Wang Zhong', 'Lü Chen', 'Tian Fen', 'Xiang Zhuang', 'Xiang Zhong', 'Xun Zhi', 'Yang Zhen', 'Jie Yang', 'Li Gui', 'Bai Yan', 'Feng Xin']),
+  // These romanized names are not multitoken spelling mistakes.
+  EN_MULTITOKEN_SPELLING_TWO: new Set(['Sima An', 'Chao Cuo', 'Han Zhong', 'Han Zeng', 'Wei Shui', 'Wang Shuo', 'Wang Zhong', 'Lü Chen', 'Tian Fen', 'Xiang Zhuang', 'Xiang Zhong', 'Xun Zhi', 'Yang Zhen', 'Ying Huo', 'Jie Yang', 'Li Gui', 'Bai Yan', 'Feng Xin']),
   // Chinese measure words are normally used unchanged in this corpus.
   CD_NN: new Set(['chi']),
   // Repeated syllables in romanized Chinese names are often intentional.
-  ENGLISH_WORD_REPEAT_RULE: new Set(['Zhang Zhang', 'Ji Ji', 'Lu Lu', 'Yun Yun', 'Ting Ting', 'Shi Shi', 'Jia Jia', 'Fu Fu']),
+  ENGLISH_WORD_REPEAT_RULE: new Set(['Zhang Zhang', 'Ji Ji', 'Lu Lu', 'Yun Yun', 'Ting Ting', 'Shi Shi', 'Jia Jia', 'Fu Fu', 'Bi Bi']),
   // Parallel prose often repeats "need not" to mirror 不必...要之... constructions.
   EN_REPEATEDWORDS_NEED: new Set(['need']),
   // LanguageTool sometimes mistakes two-state pairs for missing Oxford commas.
