@@ -562,17 +562,33 @@ function buildProduct(product) {
   const chapters = product.chapters.map((chapter) => {
     const file = path.join(repoRoot, 'data', product.book, `${chapter}.json`);
     const data = readJson(file);
+    const chapterTitle = textContent(data.meta.title?.en || '');
     qa.chapters.push({
       chapter,
-      title: data.meta.title?.en || '',
+      title: chapterTitle,
       sentenceCount: data.meta.sentenceCount || 0,
       translatedCount: data.meta.translatedCount || 0
     });
+    if (!chapterTitle) {
+      qa.errors.push(`Missing English chapter title for ${product.book}/${chapter}`);
+    }
     if ((data.meta.sentenceCount || 0) !== (data.meta.translatedCount || 0)) {
       qa.errors.push(`Chapter ${chapter} is not fully translated: ${data.meta.translatedCount}/${data.meta.sentenceCount}`);
     }
     return { chapter, data };
   });
+
+  const titleToChapters = new Map();
+  for (const { chapter, data } of chapters) {
+    const title = textContent(data.meta.title?.en || '');
+    if (!title) continue;
+    titleToChapters.set(title, [...(titleToChapters.get(title) || []), chapter]);
+  }
+  for (const [title, chapterIds] of titleToChapters.entries()) {
+    if (chapterIds.length > 1) {
+      qa.warnings.push(`Repeated English chapter title "${title}" in ${product.book}: ${chapterIds.join(', ')}`);
+    }
+  }
 
   for (const chapter of chapters) {
     writeFile(

@@ -29,7 +29,7 @@ Do not launch the whole corpus as one product. It is too large, hard to validate
 
 Recommended sequence:
 
-1. Pilot: `Records of the Grand Historian`, Volume 1.
+1. Pilot: `Records of the Grand Historian` as a complete single-work e-book.
 2. Complete one medium-sized work as a full series proof: `Records of the Three Kingdoms` or `Book of Song`.
 3. Publish each major work as a series.
 4. Split very large works into multiple volumes by chapter ranges.
@@ -55,7 +55,7 @@ Before commercial upload, run a short rights review:
 
 Recommended front-matter wording:
 
-> This English translation was generated with AI tools under the direction of Garrett M. Petersen. It is a complete first-pass translation intended for accessibility and reading, with ongoing editorial review planned.
+> This English translation was generated with AI tools under the direction and editorial supervision of Garrett M. Petersen. It is a complete AI-assisted English translation intended for accessibility and reading.
 
 ## E-book Build Pipeline
 
@@ -74,7 +74,7 @@ Create a new generator rather than adapting `generate-static-pages.js` directly:
 Core command shape:
 
 ```bash
-node scripts/generate-ebook.mjs --book shiji --volume 001
+node scripts/generate-ebook.mjs --book shiji --volume 1
 node scripts/generate-ebook.mjs --book shiji --all-volumes
 node scripts/generate-ebook.mjs --all
 ```
@@ -237,11 +237,11 @@ Manual QA checklist for each pilot volume:
 
 ## Pilot Milestone
 
-Pilot target: `Records of the Grand Historian, Volume 1`.
+Pilot target: `Records of the Grand Historian`.
 
 Scope:
 
-- Chapters 001-012, or another coherent first section if preferred.
+- Chapters 001-130.
 - English-only reflowable EPUB.
 - Generated cover.
 - Full QA report.
@@ -270,7 +270,7 @@ Phase 1: Infrastructure
 
 Phase 2: Pilot Publishing
 
-- Build `shiji-volume-01`.
+- Build `shiji`.
 - Validate locally.
 - Upload as KDP draft.
 - Fix formatting and metadata problems.
@@ -278,7 +278,7 @@ Phase 2: Pilot Publishing
 
 Phase 3: Series Production
 
-- Generate all Shiji volumes.
+- Use the completed Shiji workflow as the model for the next work.
 - Create batch QA checklist.
 - Publish at a controlled pace, respecting KDP title limits.
 - Use direct KDP for Amazon.
@@ -311,10 +311,9 @@ Phase 5: Print And Premium Editions
 
 ## Immediate Next Tasks
 
-1. Create `ebooks/manifest.json` with a pilot Shiji volume.
-2. Build a minimal EPUB generator for English-only chapters.
-3. Add placeholder/missing-translation validation to the generator.
-4. Generate and validate the first EPUB.
-5. Review the first EPUB manually in Kindle Previewer.
-6. Iterate on table rendering.
-7. Prepare KDP draft metadata and disclosure text.
+1. Keep `ebooks/manifest.json` aligned with the complete Shiji product.
+2. Keep the EPUB generator failing on missing translations, placeholders, invalid metadata, and empty chapter titles.
+3. Generate and validate the complete Shiji EPUB after each source or generator change.
+4. Review the EPUB manually in Kindle Previewer, with special attention to cover rendering, TOC navigation, and table-heavy chapters.
+5. Prepare KDP draft metadata, product description, categories, keywords, pricing, and AI disclosure text.
+6. Upload to KDP as a draft and fix any Kindle Previewer or KDP ingestion issues before publication.
