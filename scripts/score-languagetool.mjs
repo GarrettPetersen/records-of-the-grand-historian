@@ -62,6 +62,8 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   // An Qisheng is a personal name, not an indefinite article error.
   EN_A_VS_AN: new Set(['An']),
   A_NNS: new Set(['An says']),
+  // "Cavalry" is a collective noun here; "cavalries" would be wrong.
+  MANY_NN: new Set(['several hundred cavalry', 'several thousand cavalry']),
 };
 
 function getArg(name) {
