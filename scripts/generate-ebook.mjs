@@ -51,6 +51,13 @@ function textContent(value) {
   return String(value ?? '').replace(/\s+/g, ' ').trim();
 }
 
+function formatList(values) {
+  const items = values.map(textContent).filter(Boolean);
+  if (items.length <= 1) return items.join('');
+  if (items.length === 2) return `${items[0]} and ${items[1]}`;
+  return `${items.slice(0, -1).join(', ')}, and ${items.at(-1)}`;
+}
+
 function getTranslation(item) {
   if (!item) return '';
   if (typeof item.idiomatic === 'string' && item.idiomatic.trim()) return item.idiomatic.trim();
@@ -60,10 +67,46 @@ function getTranslation(item) {
   return textContent(translation?.idiomatic || translation?.literal || translation?.text || '');
 }
 
-function getParagraphTranslation(block) {
-  const sentenceText = (block.sentences || []).map(getTranslation).filter(Boolean).join(' ');
-  if (sentenceText.trim()) return sentenceText;
-  return getTranslation(block);
+function getParagraphTranslations(block) {
+  const sentenceTexts = (block.sentences || []).map(getTranslation).map(textContent).filter(Boolean);
+  if (sentenceTexts.length > 0) return sentenceTexts;
+  const text = textContent(getTranslation(block));
+  return text ? [text] : [];
+}
+
+function wordCount(value) {
+  const text = textContent(value);
+  if (!text) return 0;
+  return text.split(/\s+/).filter(Boolean).length;
+}
+
+function splitParagraphSentences(sentences, maxWords = 220) {
+  const chunks = [];
+  let current = [];
+  let currentWords = 0;
+
+  for (const sentence of sentences) {
+    const sentenceWords = wordCount(sentence);
+    if (current.length > 0 && currentWords + sentenceWords > maxWords) {
+      chunks.push(current.join(' '));
+      current = [];
+      currentWords = 0;
+    }
+    current.push(sentence);
+    currentWords += sentenceWords;
+  }
+
+  if (current.length > 0) chunks.push(current.join(' '));
+  return chunks;
+}
+
+function recordCjkOccurrence(qa, chapter, blockIndex, text, allowed) {
+  qa.cjkBodyOccurrences.push({
+    chapter: chapter.meta.chapter,
+    block: blockIndex + 1,
+    allowed,
+    excerpt: text.slice(0, 240)
+  });
 }
 
 function tableFieldLabel(headers, cellIndex) {
@@ -170,8 +213,8 @@ function collectChapterBlocks(chapter, qa) {
 
   for (const [blockIndex, block] of (chapter.content || []).entries()) {
     if (block.type === 'paragraph') {
-      const paragraph = getParagraphTranslation(block);
-      const text = textContent(paragraph);
+      const sentences = getParagraphTranslations(block);
+      const text = textContent(sentences.join(' '));
       if (!text && (block.sentences || []).length > 0) {
         qa.errors.push(`Missing paragraph translation in ${chapter.meta.chapter} block ${blockIndex + 1}`);
       }
@@ -181,7 +224,28 @@ function collectChapterBlocks(chapter, qa) {
       if (hasCjk(text) && !allowsChineseCharacters(block) && !(block.sentences || []).some(allowsChineseCharacters)) {
         qa.warnings.push(`Chinese characters in English paragraph in ${chapter.meta.chapter} block ${blockIndex + 1}`);
       }
-      if (text) blocks.push(`<p>${escapeXml(text)}</p>`);
+      if (hasCjk(text)) {
+        recordCjkOccurrence(
+          qa,
+          chapter,
+          blockIndex,
+          text,
+          allowsChineseCharacters(block) || (block.sentences || []).some(allowsChineseCharacters)
+        );
+      }
+      if (text) {
+        const chunks = splitParagraphSentences(sentences);
+        if (chunks.length > 1) qa.paragraphRendering.splits += chunks.length - 1;
+        for (const chunk of chunks) {
+          const chunkWords = wordCount(chunk);
+          if (chunkWords > qa.paragraphRendering.maxWords) qa.paragraphRendering.maxWords = chunkWords;
+          if (chunkWords > 350) {
+            qa.paragraphRendering.longParagraphs += 1;
+            qa.warnings.push(`Long rendered paragraph in ${chapter.meta.chapter} block ${blockIndex + 1}: ${chunkWords} words`);
+          }
+          blocks.push(`<p>${escapeXml(chunk)}</p>`);
+        }
+      }
       continue;
     }
 
@@ -251,7 +315,7 @@ function renderCover(product, bookInfo) {
 }
 
 function renderFrontMatter(product, bookInfo) {
-  const sources = (product.sourceAttribution || []).join(', ');
+  const sources = formatList(product.sourceAttribution || []);
   return `<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="en" lang="en">
@@ -266,7 +330,7 @@ function renderFrontMatter(product, bookInfo) {
     <p>Original work: ${escapeXml(bookInfo.chinese || '')} (${escapeXml(bookInfo.pinyin || '')}), by ${escapeXml(product.author)}.</p>
     <p>English translation: ${escapeXml(product.translator)}.</p>
     <p>${escapeXml(product.rights || '')}</p>
-    <p>This English translation was generated with AI tools under the direction of Garrett M. Petersen. It has been prepared to make the text accessible to English readers, with ongoing editorial review planned.</p>
+    <p>This English translation was generated with AI tools under the direction and editorial supervision of Garrett M. Petersen.</p>
     <p>Chinese source texts were drawn from ${escapeXml(sources)}.</p>
     <p>Edition status: ${escapeXml(product.editionStatus || '')}.</p>
   </section>
@@ -476,6 +540,12 @@ function buildProduct(product) {
       headers: 0,
       rows: 0
     },
+    paragraphRendering: {
+      splits: 0,
+      maxWords: 0,
+      longParagraphs: 0
+    },
+    cjkBodyOccurrences: [],
     chapters: []
   };
 
