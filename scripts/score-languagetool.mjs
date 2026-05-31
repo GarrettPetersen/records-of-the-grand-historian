@@ -64,6 +64,8 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   A_NNS: new Set(['An says']),
   // "Cavalry" is a collective noun here; "cavalries" would be wrong.
   MANY_NN: new Set(['several hundred cavalry', 'several thousand cavalry']),
+  // Standalone numeric table cells do not need sentence-ending punctuation.
+  PUNCTUATION_PARAGRAPH_END: new Set(['Twenty-eight']),
 };
 
 function getArg(name) {
