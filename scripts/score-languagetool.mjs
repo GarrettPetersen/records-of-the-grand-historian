@@ -9,7 +9,7 @@ const MANIFEST_PATH = path.join(DATA_DIR, 'manifest.json');
 const OUTPUT_PATH = path.join(DATA_DIR, 'quality', 'languagetool-scores.json');
 const DEFAULT_URL = 'http://localhost:8081';
 const MAX_CHUNK_CHARS = 12000;
-const SCORER_VERSION = '2026-05-30-language-tool-v4';
+const SCORER_VERSION = '2026-05-30-language-tool-v5';
 
 const IGNORED_RULE_IDS = new Set([
   'WHITESPACE_RULE',
@@ -34,6 +34,9 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   A_INFINITIVE: new Set(['An be']),
   DT_PRP: new Set(['An himself']),
   EN_MULTITOKEN_SPELLING_TWO: new Set(['Sima An']),
+  // The fengshan chapter uses shan as the name of a ritual, not as a mangled
+  // contraction of "shan't".
+  MISSING_APOSTROPHE_T: new Set(['shan']),
 };
 
 function getArg(name) {
