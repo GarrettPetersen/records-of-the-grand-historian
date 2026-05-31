@@ -64,6 +64,8 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   // An Qisheng is a personal name, not an indefinite article error.
   EN_A_VS_AN: new Set(['An']),
   A_NNS: new Set(['An says']),
+  // She He is a Joseon envoy's name; this is not a repeated pronoun.
+  PRP_REPITION: new Set(['She He']),
   // "Cavalry" is a collective noun here; "cavalries" would be wrong.
   MANY_NN: new Set(['several hundred cavalry', 'several thousand cavalry']),
   // Standalone numeric table cells do not need sentence-ending punctuation.
