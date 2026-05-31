@@ -46,7 +46,7 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   MISSING_APOSTROPHE_T: new Set(['shan']),
   // Su is a common Chinese surname, as in Su Qin. LanguageTool reads it as a
   // US state abbreviation and asks for "Su.", which would be wrong in names.
-  MISSING_PERIOD_AFTER_ABBREVIATION: new Set(['Mo', 'Su']),
+  MISSING_PERIOD_AFTER_ABBREVIATION: new Set(['Mo', 'Su', 'Tu']),
   // LanguageTool sometimes treats the ordinary verb "march" as the month March.
   LOWERCASE_MONTHS: new Set(['march']),
   // Ma is a common Chinese surname, not a mistaken "my".
@@ -58,7 +58,7 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   // Chinese measure words are normally used unchanged in this corpus.
   CD_NN: new Set(['chi']),
   // Repeated syllables in romanized Chinese names are often intentional.
-  ENGLISH_WORD_REPEAT_RULE: new Set(['Zhang Zhang', 'Ji Ji', 'Yun Yun', 'Ting Ting', 'Shi Shi']),
+  ENGLISH_WORD_REPEAT_RULE: new Set(['Zhang Zhang', 'Ji Ji', 'Lu Lu', 'Yun Yun', 'Ting Ting', 'Shi Shi']),
   // An Qisheng is a personal name, not an indefinite article error.
   EN_A_VS_AN: new Set(['An']),
   A_NNS: new Set(['An says']),
