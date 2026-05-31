@@ -37,6 +37,11 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   // The fengshan chapter uses shan as the name of a ritual, not as a mangled
   // contraction of "shan't".
   MISSING_APOSTROPHE_T: new Set(['shan']),
+  // Su is a common Chinese surname, as in Su Qin. LanguageTool reads it as a
+  // US state abbreviation and asks for "Su.", which would be wrong in names.
+  MISSING_PERIOD_AFTER_ABBREVIATION: new Set(['Su']),
+  // LanguageTool sometimes treats the ordinary verb "march" as the month March.
+  LOWERCASE_MONTHS: new Set(['march']),
 };
 
 function getArg(name) {
