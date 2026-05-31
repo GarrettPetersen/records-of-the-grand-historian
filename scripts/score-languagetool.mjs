@@ -72,6 +72,10 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   PUNCTUATION_PARAGRAPH_END: new Set(['Twenty-eight']),
   // Multi-sentence quoted speech can be flagged as one long sentence while quote spans remain aligned.
   TOO_LONG_SENTENCE: new Set(['I have heard he is favored by the king, and all world matters are decided by Chancellor Jun. Now whether my matter succeeds or fails depends on Zhang Jun. How could a young man like me have a guest familiar with Chancellor Jun?']),
+  // Zhuang Can is a personal name; "Can replied" is not a modal-verb construction.
+  MD_BASEFORM: new Set(['replied']),
+  // "Cast aside all restraint" is idiomatic; LanguageTool misreads restraint as a verb form.
+  COMPLAINT_COMPLAINED: new Set(['restraint']),
 };
 
 function getArg(name) {
