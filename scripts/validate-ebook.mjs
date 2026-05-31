@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import childProcess from 'node:child_process';
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -17,6 +18,14 @@ if (!fs.existsSync(epubPath)) {
 }
 
 const productDir = path.dirname(epubPath);
+
+function readJson(file) {
+  return JSON.parse(fs.readFileSync(file, 'utf8'));
+}
+
+function sha256File(file) {
+  return crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+}
 
 function unzipText(file) {
   return childProcess.execFileSync('unzip', ['-p', epubPath, file], { encoding: 'utf8' });
@@ -48,9 +57,35 @@ for (const entry of required) {
   if (!entries.includes(entry)) errors.push(`Missing required EPUB entry: ${entry}`);
 }
 
-for (const sidecar of ['cover.png', 'kdp-metadata.md', 'metadata.json', 'qa-report.json']) {
+for (const sidecar of ['cover.png', 'kdp-metadata.md', 'metadata.json', 'qa-report.json', 'publication-manifest.json']) {
   if (!fs.existsSync(path.join(productDir, sidecar))) {
     errors.push(`Missing generated e-book sidecar: ${sidecar}`);
+  }
+}
+
+if (fs.existsSync(path.join(productDir, 'publication-manifest.json'))) {
+  const publicationManifest = readJson(path.join(productDir, 'publication-manifest.json'));
+  const artifacts = [
+    publicationManifest.uploadArtifacts?.epub,
+    publicationManifest.uploadArtifacts?.cover,
+    publicationManifest.uploadArtifacts?.kdpMetadata,
+    publicationManifest.supportArtifacts?.metadata,
+    publicationManifest.supportArtifacts?.qaReport
+  ].filter(Boolean);
+  for (const artifact of artifacts) {
+    const artifactPath = path.join(productDir, artifact.file || '');
+    if (!artifact.file || !fs.existsSync(artifactPath)) {
+      errors.push(`Publication manifest references missing artifact: ${artifact.file || '(empty)'}`);
+      continue;
+    }
+    const actualBytes = fs.statSync(artifactPath).size;
+    if (artifact.bytes !== actualBytes) {
+      errors.push(`Publication manifest byte count mismatch for ${artifact.file}: ${artifact.bytes} != ${actualBytes}`);
+    }
+    const actualSha = sha256File(artifactPath);
+    if (artifact.sha256 !== actualSha) {
+      errors.push(`Publication manifest SHA-256 mismatch for ${artifact.file}.`);
+    }
   }
 }
 

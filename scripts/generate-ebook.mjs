@@ -44,6 +44,20 @@ function writeBinaryFile(file, content) {
   fs.writeFileSync(file, content);
 }
 
+function sha256File(file) {
+  return crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+}
+
+function artifactInfo(productDir, fileName) {
+  const file = path.join(productDir, fileName);
+  const stat = fs.statSync(file);
+  return {
+    file: fileName,
+    bytes: stat.size,
+    sha256: sha256File(file)
+  };
+}
+
 function pngInfo(buffer) {
   const signature = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
   if (!Buffer.isBuffer(buffer) || buffer.length < 24 || !buffer.subarray(0, 8).equals(signature)) {
@@ -668,6 +682,31 @@ function zipEpub(buildDir, epubPath) {
   childProcess.execFileSync('zip', ['-Xr9D', epubPath, 'META-INF', 'EPUB'], { cwd: buildDir, stdio: 'ignore' });
 }
 
+function writePublicationManifest(product, productDir, epubPath, qa) {
+  const epubFile = path.basename(epubPath);
+  const manifest = {
+    slug: product.slug,
+    title: product.title,
+    subtitle: product.subtitle || '',
+    generatedAt: new Date().toISOString(),
+    qa: {
+      errors: qa.errors.length,
+      warnings: qa.warnings.length
+    },
+    uploadArtifacts: {
+      epub: artifactInfo(productDir, epubFile),
+      cover: artifactInfo(productDir, 'cover.png'),
+      kdpMetadata: artifactInfo(productDir, 'kdp-metadata.md')
+    },
+    supportArtifacts: {
+      metadata: artifactInfo(productDir, 'metadata.json'),
+      qaReport: artifactInfo(productDir, 'qa-report.json')
+    }
+  };
+  writeFile(path.join(productDir, 'publication-manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);
+  return manifest;
+}
+
 function buildProduct(product) {
   const bookInfo = getBookMetadata(product.book) || {};
   const productDir = path.join(outRoot, product.slug);
@@ -689,6 +728,9 @@ function buildProduct(product) {
     },
     kdpMetadata: {
       file: 'kdp-metadata.md'
+    },
+    publicationManifest: {
+      file: 'publication-manifest.json'
     },
     coverImage: null,
     cjkBodyOccurrences: [],
@@ -760,6 +802,7 @@ function buildProduct(product) {
   }
 
   zipEpub(buildDir, epubPath);
+  writePublicationManifest(product, productDir, epubPath, qa);
   return { product, epubPath, qa };
 }
 

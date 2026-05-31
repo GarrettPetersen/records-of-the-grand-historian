@@ -72,6 +72,7 @@ Create a new generator rather than adapting `generate-static-pages.js` directly:
   - `dist/ebooks/<slug>/content/` for debug XHTML
   - `dist/ebooks/<slug>/metadata.json`
   - `dist/ebooks/<slug>/qa-report.json`
+  - `dist/ebooks/<slug>/publication-manifest.json` with file sizes and SHA-256 checksums for upload artifacts
 
 Core command shape:
 
