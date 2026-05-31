@@ -173,10 +173,6 @@ function tableFieldLabel(headers, cellIndex) {
 function fallbackTableFieldLabel(headers, cellIndex) {
   const header = tableFieldLabel(headers, cellIndex);
   if (header) return header;
-  if (headers.length > 0 && headers.every((item) => !textContent(item))) {
-    if (cellIndex === 0) return 'Year';
-    if (cellIndex === 1) return 'Reign year';
-  }
   return `Column ${cellIndex + 1}`;
 }
 
@@ -190,11 +186,51 @@ function renderTableHeaderSummary(headers) {
   return `<p class="table-column-summary">Columns: ${labels.map(escapeXml).join('; ')}</p>`;
 }
 
+function isBlankHeader(headers) {
+  return headers.length > 0 && headers.every((header) => !textContent(header));
+}
+
+function promotableHeaderRow(block) {
+  const labels = tableCells(block).map(getTranslation).map(textContent);
+  const lowerLabels = labels.map((label) => label.toLowerCase());
+  const hasStateName = lowerLabels.some((label) => label === 'state name' || label === 'state');
+  const hasMeritColumn = lowerLabels.some((label) => label.includes('merit') || label.includes('meritorious'));
+  if (!hasStateName || !hasMeritColumn) return null;
+  return labels;
+}
+
 function inferInitialTableHeaders(chapter) {
   if (chapter?.meta?.book === 'shiji' && chapter?.meta?.chapter === '013') {
     return ['Zhou', 'Lu', 'Qi', 'Jin', 'Qin', 'Chu', 'Song', 'Wei', 'Chen', 'Cai', 'Cao', 'Yan'];
   }
   return [];
+}
+
+function inferBlankTableHeaders(chapter, columnCount) {
+  if (chapter?.meta?.book !== 'shiji') return null;
+  if (chapter?.meta?.chapter === '017') {
+    return Array.from({ length: columnCount }, (_, index) => {
+      if (index === 0) return 'Year';
+      if (index === 1) return 'Reign year';
+      return `Column ${index + 1}`;
+    });
+  }
+  if (chapter?.meta?.chapter === '019') {
+    return [
+      'State name',
+      'Meritorious service',
+      'Hui, year 7',
+      'Empress Gao, year 8',
+      'Wen, year 23',
+      'Jing, year 16',
+      'Jianyuan through Yuanfeng, 36 years',
+      'Taichu and later'
+    ].slice(0, columnCount);
+  }
+  if (chapter?.meta?.chapter === '020' && columnCount === 2) {
+    return ['State name', 'Account'];
+  }
+  return null;
 }
 
 function renderTableEntry(block, headers, chapter, blockIndex, rowNumber, qa) {
@@ -258,6 +294,9 @@ function emptyChapterTableStats() {
     renderedRows: 0,
     emptyRows: 0,
     blankHeaders: 0,
+    resolvedBlankHeaders: 0,
+    inferredBlankHeaders: 0,
+    promotedHeaderRows: 0,
     cells: 0,
     translatedCells: 0,
     maxCells: 0
@@ -381,11 +420,13 @@ function loadProducts(args) {
 function collectChapterBlocks(chapter, qa, chapterQa) {
   const blocks = [];
   let currentHeaders = inferInitialTableHeaders(chapter);
+  let pendingBlankHeader = false;
   let tableRowNumber = 0;
   const tableStats = chapterQa.tableRendering;
 
   for (const [blockIndex, block] of (chapter.content || []).entries()) {
     if (block.type === 'paragraph') {
+      pendingBlankHeader = false;
       const sentences = getParagraphTranslations(block);
       const text = textContent(sentences.join(' '));
       if (!text && (block.sentences || []).length > 0) {
@@ -427,7 +468,8 @@ function collectChapterBlocks(chapter, qa, chapterQa) {
       tableRowNumber = 0;
       tableStats.headers += 1;
       tableStats.maxCells = Math.max(tableStats.maxCells, currentHeaders.length);
-      if (currentHeaders.length > 0 && currentHeaders.every((header) => !textContent(header))) {
+      pendingBlankHeader = isBlankHeader(currentHeaders);
+      if (pendingBlankHeader) {
         tableStats.blankHeaders += 1;
       }
       const summary = renderTableHeaderSummary(currentHeaders);
@@ -437,6 +479,26 @@ function collectChapterBlocks(chapter, qa, chapterQa) {
     }
 
     if (block.type === 'table_row') {
+      if (pendingBlankHeader && tableRowNumber === 0) {
+        const promotedHeaders = promotableHeaderRow(block);
+        if (promotedHeaders) {
+          currentHeaders = promotedHeaders;
+          tableStats.resolvedBlankHeaders += 1;
+          tableStats.promotedHeaderRows += 1;
+          tableStats.maxCells = Math.max(tableStats.maxCells, currentHeaders.length);
+          const summary = renderTableHeaderSummary(currentHeaders);
+          if (summary) blocks.push(summary);
+          pendingBlankHeader = false;
+          continue;
+        }
+        const inferredHeaders = inferBlankTableHeaders(chapter, currentHeaders.length);
+        if (inferredHeaders) {
+          currentHeaders = inferredHeaders;
+          tableStats.resolvedBlankHeaders += 1;
+          tableStats.inferredBlankHeaders += 1;
+        }
+      }
+      pendingBlankHeader = false;
       tableRowNumber += 1;
       const cells = tableCells(block);
       const translatedCells = cells.filter((cell) => textContent(getTranslation(cell))).length;
@@ -473,8 +535,9 @@ function renderChapter(chapter, qa, chapterQa) {
   if (tableStats.rows >= 100 || tableStats.maxCells >= 8) {
     qa.warnings.push(`Manual table QA recommended for chapter ${chapterId}: ${tableStats.rows} row(s), max ${tableStats.maxCells} cell(s).`);
   }
-  if (tableStats.blankHeaders > 0) {
-    qa.warnings.push(`Manual table label QA recommended for chapter ${chapterId}: ${tableStats.blankHeaders} blank table header row(s).`);
+  const unresolvedBlankHeaders = tableStats.blankHeaders - tableStats.resolvedBlankHeaders;
+  if (unresolvedBlankHeaders > 0) {
+    qa.warnings.push(`Manual table label QA recommended for chapter ${chapterId}: ${unresolvedBlankHeaders} unresolved blank table header row(s).`);
   }
 
   return `<?xml version="1.0" encoding="utf-8"?>
