@@ -114,6 +114,13 @@ function englishCloseFor(openOrClose) {
   return '"';
 }
 
+function preservesTrailingInnerQuote(chinese, english, quote) {
+  if (!/』[。！？!?]?$/u.test(String(chinese || '').trim())) return false;
+  const text = String(english || '');
+  if (quote.char === '"' || quote.char === '”') return text[quote.index - 1] !== "'";
+  return false;
+}
+
 function englishOpenChars() {
   return ['"', '“', "'"];
 }
@@ -255,6 +262,7 @@ function fixEnglishSpanBoundaries(sentences, proposals, remaining) {
       const startClose = trailingQuote(startText, englishCloseChars());
       if (!startClose) continue;
       if (startClose.char === "'") continue;
+      if (preservesTrailingInnerQuote(sentenceZh(start), startText, startClose)) continue;
 
       const endAlreadyCloses = trailingQuote(endText, englishCloseChars());
       const quoteToMove = englishCloseFor(startClose.char);
