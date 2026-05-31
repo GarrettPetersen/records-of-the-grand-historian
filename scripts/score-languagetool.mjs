@@ -70,6 +70,8 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   MANY_NN: new Set(['several hundred cavalry', 'several thousand cavalry']),
   // Standalone numeric table cells do not need sentence-ending punctuation.
   PUNCTUATION_PARAGRAPH_END: new Set(['Twenty-eight']),
+  // Multi-sentence quoted speech can be flagged as one long sentence while quote spans remain aligned.
+  TOO_LONG_SENTENCE: new Set(['I have heard he is favored by the king, and all world matters are decided by Chancellor Jun. Now whether my matter succeeds or fails depends on Zhang Jun. How could a young man like me have a guest familiar with Chancellor Jun?']),
 };
 
 function getArg(name) {
