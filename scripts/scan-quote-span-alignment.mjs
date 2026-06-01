@@ -85,14 +85,29 @@ function isQuotedGlossHeadword(english) {
     || /^["“'][^"“”']{1,80}["”']\s*[-—]\s+(?:I|we|your servant|this servant|the minister|the court)\b/i.test(text);
 }
 
+function isChineseDirectSpeechUnit(chinese) {
+  const zh = String(chinese || '');
+  return /(?:曰|云|謂|告|問|對|言|諫|戒|命|詔|令|報|謝|辭|讓|謠|歌|祝|誓|號|呼|請|稱)(?:[^「」]{0,24})?[曰謂告問對言諫戒命詔令報謝辭讓謠歌祝誓號呼請稱]?[：:]?「/u.test(zh)
+    || /(?:相謂|謂其|謂曰|對曰|問曰|告曰|諫曰|戒曰|曰)[：:]?「/u.test(zh);
+}
+
 function quoteBoundaryProblems(chinese, english, beforeDepth, afterDepth, openCount, closeCount, innerOpenCount, innerCloseCount) {
   const problems = [];
   const lead = leadingQuote(english);
   const trail = trailingQuote(english);
   const englishQuoteCount = countEnglishQuoteMarks(english);
+  const isCompleteUnit = beforeDepth === 0 && afterDepth === 0 && openCount > 0 && closeCount > 0;
   const isOpeningUnit = beforeDepth === 0 && afterDepth > 0 && openCount > 0 && closeCount === 0;
   const isInteriorUnit = beforeDepth > 0 && afterDepth > 0 && openCount === 0 && closeCount === 0;
   const isClosingUnit = beforeDepth > 0 && afterDepth === 0 && openCount === 0 && closeCount > 0;
+
+  if (isCompleteUnit && englishQuoteCount === 0 && (isChineseDirectSpeechUnit(chinese) || /「/.test(String(chinese || '')))) {
+    problems.push('Chinese has a complete quoted unit, but English has no quote marks.');
+  }
+
+  if (isOpeningUnit && englishQuoteCount === 0) {
+    problems.push('Chinese opens a multi-sentence quote span, but English has no quote marks.');
+  }
 
   if (isOpeningUnit && trail && (!lead || lead.index !== trail.index) && !(innerCloseCount > 0 && (trail.char === "'" || preservesTrailingInnerQuote(chinese, english, trail)))) {
     problems.push('English has a closing quote at the end of an opening unit whose Chinese quote continues into the next unit.');
@@ -104,6 +119,10 @@ function quoteBoundaryProblems(chinese, english, beforeDepth, afterDepth, openCo
 
   if (isInteriorUnit && trail && !lead && englishQuoteCount === 1 && !(innerCloseCount > 0 && preservesTrailingInnerQuote(chinese, english, trail))) {
     problems.push('English has a closing quote at the end of an interior unit of a Chinese quote span.');
+  }
+
+  if (isClosingUnit && englishQuoteCount === 0) {
+    problems.push('Chinese closes a multi-sentence quote span, but English has no quote marks.');
   }
 
   if (isClosingUnit && lead && trail && lead.index !== trail.index && !isQuotedGlossHeadword(english) && !(innerOpenCount > 0 && preservesLeadingInnerQuote(chinese, english, lead))) {
