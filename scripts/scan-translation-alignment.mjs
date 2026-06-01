@@ -1,0 +1,659 @@
+#!/usr/bin/env node
+/**
+ * Scan for likely Chinese/English sentence misalignment using bilingual anchors.
+ *
+ * This does not try to prove semantic fidelity. Distinctive manual terms are
+ * treated as high-confidence anchors. The full glossary, including proper nouns,
+ * is used only as fuzzy aggregate evidence when several terms point to the same
+ * neighboring sentence.
+ */
+
+import fs from 'node:fs';
+import path from 'node:path';
+
+const DATA_DIR = path.join(process.cwd(), 'data');
+const GLOSSARY_PATH = path.join(DATA_DIR, 'glossary.json');
+
+const CHECK_FIELDS = new Set([
+  'idiomatic',
+  'translation',
+  'en',
+  'english',
+]);
+
+const MANUAL_ANCHORS = [
+  ['Taiyi', ['太一', '泰一', '泰畤'], /\bTai ?yi\b/i],
+  ['Shangdi', ['上帝'], /\b(?:Shangdi|Shang Di|Supreme (?:God|Deity))\b/i],
+  ['Houtu', ['后土', '後土'], /\bHou ?tu\b/i],
+  ['Lingxing', ['靈星', '灵星'], /\bLingxing\b/i],
+  ['Penglai', ['蓬萊', '蓬莱'], /\bPenglai\b/i],
+  ['Fangzhang', ['方丈'], /\bFangzhang\b/i],
+  ['Yingzhou', ['瀛洲'], /\bYingzhou\b/i],
+  ['Jianzhang Palace', ['建章宮', '建章宫'], /\bJian ?zhang\b/i],
+  ['Ganquan', ['甘泉'], /\bGanquan\b/i],
+  ['Mount Tai', ['泰山', '岱'], /\b(?:Mount Tai|Tai Shan|Taishan|Dai ?zong)\b/i],
+  ['Daizong', ['岱宗'], /\bDai ?zong\b/i],
+  ['Langya', ['瑯邪', '琅邪', '琅琊'], /\bLang(?:ya|ye)\b/i],
+  ['Linzi', ['臨菑', '臨淄', '临淄'], /\bLinzi\b/i],
+  ["Chang'an", ['長安', '长安'], /\bChang[’']?an\b/i],
+  ['Jieshi', ['碣石'], /\bJieshi\b/i],
+  ['Liaoxi', ['遼西', '辽西'], /\bLiaoxi\b/i],
+  ['Jiuyuan', ['九原'], /\bJiuyuan\b/i],
+  ['Pengcheng', ['彭城'], /\bPengcheng\b/i],
+  ['Jiang-Huai', ['江淮'], /\b(?:Jiang-?Huai|Yangzi and Huai)\b/i],
+  ['Yellow River', ['黃河', '黄河'], /\bYellow River\b/],
+  // Common topical ethnonyms/titles are too often supplied from context in English;
+  // let the glossary aggregate catch them only when several terms shift together.
+  ['Linhu', ['林胡'], /\bLinhu\b/i],
+  ['Jizi', ['箕子'], /\bJizi\b/i],
+  ['Bigan', ['比干'], /\bBigan\b/i],
+  ['Wei Zi', ['微子'], /\bWei Zi\b/i],
+  ['Wu Geng', ['武庚'], /\bWu Geng\b/i],
+  ['Guan Shu', ['管叔'], /\bGuan Shu\b/i],
+  ['Cai Shu', ['蔡叔'], /\bCai Shu\b/i],
+  ['Xinyuan Ping', ['新垣平'], /\bXinyuan Ping\b/i],
+  ['Gongsun Qing', ['公孫卿', '公孙卿'], /\bGongsun Qing\b/i],
+  ['Gongsun Chen', ['公孫臣', '公孙臣'], /\bGongsun Chen\b/i],
+  ['Shaojun', ['少君'], /\bShaojun\b/i],
+  ['Shaoweng', ['少翁'], /\bShao ?weng\b/i],
+  ['General of the Five Benefits', ['五利'], /\b(?:Five Benefits|Wuli)\b/i],
+  ['Guiyu Qu', ['鬼臾區', '鬼臾区'], /\bGuiyu Qu\b/i],
+  ['Jade Hall', ['玉堂'], /\bJade Hall\b/i],
+  ['Bi Gate', ['璧門', '璧门'], /\b(?:Bi|Jade) Gate\b/i],
+  ['Great Bird', ['大鳥', '大鸟'], /\bGreat Bird\b/i],
+  ['immortals', ['僊', '仙', '神仙'], /\bimmortals?\b/i],
+  ['fangshi', ['方士'], /\bfangshi\b/i],
+  ['tripods', ['鼎'], /\b(?:dings?|tripods?|Nine Tripods)\b/],
+  ['white deer', ['白鹿'], /\bwhite deer\b/i],
+  ['white gold', ['白金'], /\bwhite gold\b/i],
+  ['jade cup', ['玉杯'], /\bjade cup\b/i],
+];
+
+const COMMON_SOURCE_MIN_LENGTH = 2;
+const VALID_GLOSSARY_SCOPES = new Set(['all', 'proper', 'manual']);
+const PROPER_GLOSSARY_MIN_NEARBY_SCORE = 2.35;
+const MIXED_GLOSSARY_MIN_NEARBY_SCORE = 2.7;
+const COMMON_ONLY_GLOSSARY_MIN_NEARBY_SCORE = 4.2;
+const MAX_VARIANT_LENGTH = 40;
+
+function stripDiacritics(text) {
+  return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+function escapeRegex(text) {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function definitionVariants(definition) {
+  return String(definition || '')
+    .split(/[;,/]/)
+    .map((value) => value.replace(/\([^)]*\)/g, '').trim())
+    .filter((value) => (
+      value.length >= 3
+      && value.length <= MAX_VARIANT_LENGTH
+      && /[A-Za-z]/.test(value)
+      && !/^(?:the|a|an)\s+/i.test(value)
+      && !/^(?:of|and|or|to|in|on|at|by|for|from|with|as|is|are|was|were)\b/i.test(value)
+    ));
+}
+
+function pinyinVariants(pinyin) {
+  const normalized = stripDiacritics(String(pinyin || ''))
+    .toLowerCase()
+    .replace(/[^a-z\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (!normalized || normalized.length < 3) return [];
+  const compact = normalized.replace(/\s+/g, '');
+  if (compact.length < 5) return [];
+  const spaced = normalized
+    .split(' ')
+    .map((word) => word ? `${word[0].toUpperCase()}${word.slice(1)}` : '')
+    .join(' ');
+  const compactTitle = compact[0].toUpperCase() + compact.slice(1);
+  return [...new Set([compact, compactTitle, spaced].filter(Boolean))];
+}
+
+function variantRegex(variants) {
+  const parts = [...new Set(variants)]
+    .filter(Boolean)
+    .sort((a, b) => b.length - a.length)
+    .map((variant) => escapeRegex(variant).replace(/\\ /g, '[\\\\s-]+'));
+  if (parts.length === 0) return null;
+  return new RegExp(`\\b(?:${parts.join('|')})\\b`, 'i');
+}
+
+function capitalizedDefinitionVariants(definitions) {
+  return definitions
+    .flatMap(definitionVariants)
+    .filter((variant) => /(?:^|[\s-])[A-Z][a-z]/.test(variant));
+}
+
+function loadGlossaryAnchors({ properOnly = false, commonOnly = false, mode = 'pinyin' } = {}) {
+  if (!fs.existsSync(GLOSSARY_PATH)) return [];
+  const glossary = Object.values(JSON.parse(fs.readFileSync(GLOSSARY_PATH, 'utf8')));
+  const anchors = [];
+  const seen = new Set();
+  for (const entry of glossary) {
+    const text = String(entry.text || '');
+    const isProperNoun = Boolean(entry.isProperNoun);
+    if (properOnly && !isProperNoun) continue;
+    if (commonOnly && isProperNoun) continue;
+    if (text.length < (isProperNoun ? 2 : COMMON_SOURCE_MIN_LENGTH)) continue;
+    if (/^[一二三四五六七八九十]+月$/.test(text)) continue;
+    const definitions = Array.isArray(entry.definitions) ? entry.definitions : [];
+    let variants = [];
+    if (mode === 'pinyin') {
+      variants = [
+        ...pinyinVariants(entry.pinyin),
+        ...capitalizedDefinitionVariants(definitions),
+      ].filter(Boolean);
+    } else if (mode === 'definitions') {
+      variants = definitions.flatMap(definitionVariants);
+    }
+    const englishRe = variantRegex(variants);
+    if (!englishRe) continue;
+    const key = `${text}:${englishRe.source}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    anchors.push({
+      label: text,
+      sourceForms: [text],
+      englishRe,
+      glossary: true,
+      proper: isProperNoun,
+      common: !isProperNoun,
+    });
+  }
+  return anchors;
+}
+
+let HARD_ANCHORS = [];
+let COMMON_ANCHORS = [];
+let COMMON_SOURCE_INDEX = new Map();
+let ANCHOR_STATS = {};
+
+function configureAnchors({ glossaryScope = 'all' } = {}) {
+  const manualAnchors = MANUAL_ANCHORS
+    .map(([label, sourceForms, englishRe]) => ({ label, sourceForms, englishRe, manual: true }));
+  const glossaryAnchors = [];
+  if (glossaryScope !== 'manual') {
+    glossaryAnchors.push(...loadGlossaryAnchors({ properOnly: true, mode: 'pinyin' }));
+  }
+  if (glossaryScope === 'all') {
+    glossaryAnchors.push(...loadGlossaryAnchors({ commonOnly: true, mode: 'definitions' }));
+  }
+  HARD_ANCHORS = manualAnchors;
+  COMMON_ANCHORS = glossaryAnchors;
+  COMMON_SOURCE_INDEX = sourceIndex(COMMON_ANCHORS);
+  ANCHOR_STATS = {
+    glossaryScope,
+    manualAnchors: HARD_ANCHORS.length,
+    glossaryAnchors: COMMON_ANCHORS.length,
+    properGlossaryAnchors: COMMON_ANCHORS.filter((anchor) => anchor.proper).length,
+    commonGlossaryAnchors: COMMON_ANCHORS.filter((anchor) => anchor.common).length,
+  };
+}
+
+function sourceIndex(anchors) {
+  const index = new Map();
+  for (const anchor of anchors) {
+    for (const form of anchor.sourceForms) {
+      const first = form[0];
+      if (!first) continue;
+      const bucket = index.get(first) || [];
+      bucket.push({ form, anchor });
+      index.set(first, bucket);
+    }
+  }
+  for (const bucket of index.values()) {
+    bucket.sort((a, b) => b.form.length - a.form.length);
+  }
+  return index;
+}
+
+function usage() {
+  console.error(`Usage:
+  node scripts/scan-translation-alignment.mjs [--book BOOK] [--json] [--summary] [--fail] [--min-severity N] [--review-priorities] [--glossary-scope all|proper|manual] [path ...]
+
+Flags likely sentence-misalignment candidates using distinctive manual anchors plus fuzzy aggregate matches from the full glossary.
+Proper nouns carry more weight; common terms are used only when several line up around the same neighboring sentence.
+
+Glossary scopes:
+  all      Use proper nouns and common multi-character terms as fuzzy evidence (default)
+  proper   Use only proper nouns as fuzzy evidence
+  manual   Use only the curated hard anchors`);
+}
+
+function parseArgs(argv) {
+  const opts = {
+    inputs: [],
+    book: null,
+    json: false,
+    summary: false,
+    fail: false,
+    minSeverity: 3,
+    reviewPriorities: false,
+    glossaryScope: 'all',
+  };
+  for (let i = 0; i < argv.length; i += 1) {
+    const arg = argv[i];
+    if (arg === '--help' || arg === '-h') {
+      usage();
+      process.exit(0);
+    }
+    if (arg === '--json') {
+      opts.json = true;
+      continue;
+    }
+    if (arg === '--summary') {
+      opts.summary = true;
+      continue;
+    }
+    if (arg === '--fail') {
+      opts.fail = true;
+      continue;
+    }
+    if (arg === '--review-priorities') {
+      opts.reviewPriorities = true;
+      continue;
+    }
+    if (arg === '--glossary-scope') {
+      opts.glossaryScope = argv[++i];
+      if (!VALID_GLOSSARY_SCOPES.has(opts.glossaryScope)) {
+        usage();
+        process.exit(2);
+      }
+      continue;
+    }
+    if (arg.startsWith('--glossary-scope=')) {
+      opts.glossaryScope = arg.slice('--glossary-scope='.length);
+      if (!VALID_GLOSSARY_SCOPES.has(opts.glossaryScope)) {
+        usage();
+        process.exit(2);
+      }
+      continue;
+    }
+    if (arg === '--book') {
+      opts.book = argv[++i];
+      if (!opts.book) {
+        usage();
+        process.exit(2);
+      }
+      continue;
+    }
+    if (arg === '--min-severity') {
+      opts.minSeverity = Number(argv[++i]);
+      if (!Number.isFinite(opts.minSeverity)) {
+        usage();
+        process.exit(2);
+      }
+      continue;
+    }
+    if (arg.startsWith('--min-severity=')) {
+      opts.minSeverity = Number(arg.slice('--min-severity='.length));
+      if (!Number.isFinite(opts.minSeverity)) {
+        usage();
+        process.exit(2);
+      }
+      continue;
+    }
+    if (arg.startsWith('--book=')) {
+      opts.book = arg.slice('--book='.length);
+      continue;
+    }
+    if (arg.startsWith('-')) {
+      console.error(`Unknown option: ${arg}`);
+      usage();
+      process.exit(2);
+    }
+    opts.inputs.push(arg);
+  }
+  if (opts.book && opts.inputs.length > 0) {
+    console.error('Use either --book or explicit paths, not both.');
+    process.exit(2);
+  }
+  return opts;
+}
+
+function chapterFiles(inputs) {
+  const files = [];
+  const enqueue = (entry) => {
+    if (!fs.existsSync(entry)) return;
+    const st = fs.statSync(entry);
+    if (st.isDirectory()) {
+      for (const child of fs.readdirSync(entry).sort()) enqueue(path.join(entry, child));
+      return;
+    }
+    if (entry.endsWith('.json')) files.push(entry);
+  };
+  if (inputs.length === 0) enqueue(DATA_DIR);
+  else inputs.forEach(enqueue);
+  return files.sort();
+}
+
+function sentenceRecords(chapter) {
+  const records = [];
+  for (const [blockIndex, block] of (chapter.content || []).entries()) {
+    for (const [sentenceIndex, sentence] of (block.sentences || []).entries()) {
+      const translation = (sentence.translations || [])[0] || {};
+      const englishParts = [];
+      for (const [key, value] of Object.entries(translation)) {
+        if (CHECK_FIELDS.has(key) && typeof value === 'string') englishParts.push(value);
+      }
+      records.push({
+        id: sentence.id || '',
+        blockIndex,
+        sentenceIndex,
+        zh: sentence.zh || '',
+        english: englishParts.join(' '),
+      });
+    }
+  }
+  return records;
+}
+
+function hasSource(record, anchor) {
+  return anchor.sourceForms.some((form) => record.zh.includes(form));
+}
+
+function hasEnglish(record, anchor) {
+  anchor.englishRe.lastIndex = 0;
+  return anchor.englishRe.test(record.english);
+}
+
+function normalizedEnglishMatch(value) {
+  return String(value || '').toLowerCase().replace(/\s+/g, ' ').trim();
+}
+
+function matchedEnglishTexts(record, anchor) {
+  anchor.englishRe.lastIndex = 0;
+  const match = record.english.match(anchor.englishRe);
+  return match ? [normalizedEnglishMatch(match[0])] : [];
+}
+
+function nearbyHasSource(records, index, anchor) {
+  return [-2, -1, 1, 2].some((offset) => {
+    const record = records[index + offset];
+    return record && hasSource(record, anchor);
+  });
+}
+
+function nearbyHasEnglish(records, index, anchor) {
+  return [-2, -1, 1, 2].some((offset) => {
+    const record = records[index + offset];
+    return record && hasEnglish(record, anchor);
+  });
+}
+
+function nearbySourceOffsets(records, index, anchor) {
+  return [-2, -1, 1, 2].filter((offset) => {
+    const record = records[index + offset];
+    return record && hasSource(record, anchor);
+  });
+}
+
+function nearbyEnglishOffsets(records, index, anchor) {
+  return [-2, -1, 1, 2].filter((offset) => {
+    const record = records[index + offset];
+    return record && hasEnglish(record, anchor);
+  });
+}
+
+function nearbyRecords(records, index) {
+  return [-2, -1, 0, 1, 2]
+    .map((offset) => ({ offset, record: records[index + offset] }))
+    .filter((entry) => entry.record);
+}
+
+function sourceMatchedAnchorsForRecord(record, index) {
+  const matches = [];
+  const seen = new Set();
+  for (let i = 0; i < record.zh.length; i += 1) {
+    const bucket = index.get(record.zh[i]);
+    if (!bucket) continue;
+    for (const { form, anchor } of bucket) {
+      if (!record.zh.startsWith(form, i)) continue;
+      if (seen.has(anchor.label)) continue;
+      seen.add(anchor.label);
+      matches.push(anchor);
+    }
+  }
+  return matches;
+}
+
+function sourceMatchedCommonAnchorsForRecord(record) {
+  return sourceMatchedAnchorsForRecord(record, COMMON_SOURCE_INDEX);
+}
+
+function sourceMatchedCommonAnchors(records, index) {
+  const window = nearbyRecords(records, index);
+  const matches = [];
+  for (const { offset, record } of window) {
+    for (const anchor of sourceMatchedCommonAnchorsForRecord(record)) {
+      matches.push({ anchor, offset });
+    }
+  }
+  return matches;
+}
+
+function anchorWeight(anchor) {
+  if (anchor.proper) return 1;
+  // Common glossary terms are useful as corroboration, but are too noisy to
+  // prove misalignment on their own.
+  return 0.35;
+}
+
+function glossaryGroupScore(labels, { reviewPriorities = false } = {}) {
+  const unique = [...new Map(labels.map((anchor) => [anchor.label, anchor])).values()]
+    .filter((anchor, _index, anchors) => !anchors.some((other) => (
+      other !== anchor
+      && other.label.length > anchor.label.length
+      && other.label.includes(anchor.label)
+    )));
+  const properCount = unique.filter((anchor) => anchor.proper).length;
+  const commonCount = unique.filter((anchor) => anchor.common).length;
+  const score = unique.reduce((sum, anchor) => sum + anchorWeight(anchor), 0);
+  let threshold = properCount >= 2
+    ? PROPER_GLOSSARY_MIN_NEARBY_SCORE
+    : properCount >= 1
+      ? MIXED_GLOSSARY_MIN_NEARBY_SCORE
+      : COMMON_ONLY_GLOSSARY_MIN_NEARBY_SCORE;
+  if (reviewPriorities) {
+    threshold = properCount >= 2
+      ? 1.75
+      : properCount >= 1
+        ? 2
+        : 3.5;
+  }
+  return {
+    anchors: unique,
+    properCount,
+    commonCount,
+    score,
+    threshold,
+    reportable: score >= threshold,
+  };
+}
+
+function excerpt(text, width = 110) {
+  return text.replace(/\s+/g, ' ').trim().slice(0, width);
+}
+
+function scanFile(file, { reviewPriorities = false } = {}) {
+  const chapter = JSON.parse(fs.readFileSync(file, 'utf8'));
+  const records = sentenceRecords(chapter);
+  const hits = [];
+
+  for (const [index, record] of records.entries()) {
+    if (!record.english || !record.zh) continue;
+    for (const anchor of HARD_ANCHORS) {
+      const source = hasSource(record, anchor);
+      const english = hasEnglish(record, anchor);
+      if (english && !source) {
+        const nearbySource = nearbyHasSource(records, index, anchor);
+        hits.push({
+          file,
+          id: record.id,
+          block: record.blockIndex + 1,
+          sentence: record.sentenceIndex + 1,
+          rule: nearbySource ? 'ENGLISH_ANCHOR_NEARBY_SOURCE' : 'ENGLISH_ANCHOR_ABSENT_SOURCE',
+          severity: nearbySource ? 3 : 2,
+          anchor: anchor.label,
+          zh: excerpt(record.zh),
+          english: excerpt(record.english),
+        });
+      } else if (source && !english && (anchor.manual || nearbyHasEnglish(records, index, anchor))) {
+        const nearbyEnglish = nearbyHasEnglish(records, index, anchor);
+        hits.push({
+          file,
+          id: record.id,
+          block: record.blockIndex + 1,
+          sentence: record.sentenceIndex + 1,
+          rule: nearbyEnglish ? 'SOURCE_ANCHOR_NEARBY_ENGLISH' : 'SOURCE_ANCHOR_MISSING_ENGLISH',
+          severity: nearbyEnglish ? 3 : 1,
+          anchor: anchor.label,
+          zh: excerpt(record.zh),
+          english: excerpt(record.english),
+        });
+      }
+    }
+
+    const englishNearbySource = new Map();
+    const sourceNearbyEnglish = new Map();
+    const currentMatchedEnglishTexts = new Set(
+      sourceMatchedCommonAnchorsForRecord(record).flatMap((anchor) => matchedEnglishTexts(record, anchor)),
+    );
+    for (const { anchor, offset } of sourceMatchedCommonAnchors(records, index)) {
+      const source = hasSource(record, anchor);
+      const english = hasEnglish(record, anchor);
+      if (english && !source) {
+        const sameRenderedEntity = matchedEnglishTexts(record, anchor)
+          .some((match) => currentMatchedEnglishTexts.has(match));
+        if (sameRenderedEntity) continue;
+        const group = englishNearbySource.get(offset) || [];
+        group.push(anchor);
+        englishNearbySource.set(offset, group);
+      }
+      if (source && !english) {
+        for (const englishOffset of nearbyEnglishOffsets(records, index, anchor)) {
+          const group = sourceNearbyEnglish.get(englishOffset) || [];
+          group.push(anchor);
+          sourceNearbyEnglish.set(englishOffset, group);
+        }
+      }
+    }
+
+    for (const [offset, labels] of englishNearbySource.entries()) {
+      const group = glossaryGroupScore(labels, { reviewPriorities });
+      if (!group.reportable) continue;
+      hits.push({
+        file,
+        id: record.id,
+        block: record.blockIndex + 1,
+        sentence: record.sentenceIndex + 1,
+        rule: 'COMMON_GLOSSARY_NEARBY_SOURCE',
+        severity: 3,
+        offset,
+        anchor: group.anchors.slice(0, 8).map((anchor) => anchor.label).join(', '),
+        glossaryScore: Number(group.score.toFixed(2)),
+        glossaryThreshold: Number(group.threshold.toFixed(2)),
+        properAnchors: group.properCount,
+        commonAnchors: group.commonCount,
+        zh: excerpt(record.zh),
+        english: excerpt(record.english),
+      });
+    }
+
+    for (const [offset, labels] of sourceNearbyEnglish.entries()) {
+      const group = glossaryGroupScore(labels, { reviewPriorities });
+      if (!group.reportable) continue;
+      hits.push({
+        file,
+        id: record.id,
+        block: record.blockIndex + 1,
+        sentence: record.sentenceIndex + 1,
+        rule: 'COMMON_GLOSSARY_NEARBY_ENGLISH',
+        severity: 3,
+        offset,
+        anchor: group.anchors.slice(0, 8).map((anchor) => anchor.label).join(', '),
+        glossaryScore: Number(group.score.toFixed(2)),
+        glossaryThreshold: Number(group.threshold.toFixed(2)),
+        properAnchors: group.properCount,
+        commonAnchors: group.commonCount,
+        zh: excerpt(record.zh),
+        english: excerpt(record.english),
+      });
+    }
+  }
+
+  return hits;
+}
+
+function bookFromFile(file) {
+  const parts = file.split(path.sep);
+  const dataIndex = parts.lastIndexOf('data');
+  return dataIndex >= 0 ? parts[dataIndex + 1] || '' : '';
+}
+
+function printSummary(hits) {
+  const byBook = new Map();
+  const byChapter = new Map();
+  const byRule = new Map();
+  for (const hit of hits) {
+    const book = bookFromFile(hit.file);
+    const bookStats = byBook.get(book) || { chapters: new Set(), hits: 0 };
+    bookStats.chapters.add(hit.file);
+    bookStats.hits += 1;
+    byBook.set(book, bookStats);
+
+    const chapterStats = byChapter.get(hit.file) || { hits: 0, maxSeverity: 0 };
+    chapterStats.hits += 1;
+    chapterStats.maxSeverity = Math.max(chapterStats.maxSeverity, hit.severity);
+    byChapter.set(hit.file, chapterStats);
+
+    const ruleStats = byRule.get(hit.rule) || { hits: 0, severity: hit.severity };
+    ruleStats.hits += 1;
+    ruleStats.severity = Math.max(ruleStats.severity, hit.severity);
+    byRule.set(hit.rule, ruleStats);
+  }
+  console.log(`Translation alignment candidates: ${hits.length} hit(s) in ${new Set(hits.map((hit) => hit.file)).size} chapter(s)`);
+  console.log(`Anchors: ${ANCHOR_STATS.manualAnchors} manual, ${ANCHOR_STATS.glossaryAnchors} glossary (${ANCHOR_STATS.glossaryScope}; ${ANCHOR_STATS.properGlossaryAnchors} proper, ${ANCHOR_STATS.commonGlossaryAnchors} common)`);
+  console.log('\nbook\tchapters\thits');
+  for (const [book, stats] of [...byBook.entries()].sort()) {
+    console.log(`${book}\t${stats.chapters.size}\t${stats.hits}`);
+  }
+  console.log('\nrule\tseverity\thits');
+  for (const [rule, stats] of [...byRule.entries()].sort()) {
+    console.log(`${rule}\t${stats.severity}\t${stats.hits}`);
+  }
+  console.log('\ntop chapters');
+  console.log('hits\tseverity\tfile');
+  for (const [file, stats] of [...byChapter.entries()].sort((a, b) => b[1].hits - a[1].hits).slice(0, 20)) {
+    console.log(`${stats.hits}\t${stats.maxSeverity}\t${file}`);
+  }
+}
+
+const opts = parseArgs(process.argv.slice(2));
+configureAnchors(opts);
+const inputs = opts.book ? [path.join(DATA_DIR, opts.book)] : opts.inputs;
+const files = chapterFiles(inputs);
+const scanner = (file) => scanFile(file, { reviewPriorities: opts.reviewPriorities });
+const hits = files.flatMap(scanner).filter((hit) => hit.severity >= opts.minSeverity);
+
+if (opts.json) {
+  console.log(JSON.stringify({
+    count: hits.length,
+    anchorStats: ANCHOR_STATS,
+    hits,
+  }, null, 2));
+} else if (opts.summary) {
+  printSummary(hits);
+} else {
+  printSummary(hits);
+  for (const hit of hits) {
+    console.log(`${hit.file}: ${hit.id || `block ${hit.block} sentence ${hit.sentence}`} ${hit.rule} ${hit.anchor}: ${hit.english}`);
+  }
+}
+
+if (opts.fail && hits.length > 0) process.exit(1);

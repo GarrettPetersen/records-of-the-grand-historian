@@ -87,7 +87,7 @@ function main() {
 
     const bookDir = path.join(DATA_DIR, entry.name);
     const files = fs.readdirSync(bookDir)
-      .filter(f => f.endsWith('.json'))
+      .filter(f => /^\d{3}\.json$/.test(f))
       .sort();
 
     if (files.length === 0) continue;

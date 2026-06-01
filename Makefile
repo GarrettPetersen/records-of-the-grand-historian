@@ -15,6 +15,7 @@ STDERR_REDIRECT := 2>/dev/null
 # Open Graph: pass --incremental so PNGs are skipped when *.png.sha256 matches inputs (generate-og-images.js).
 # Set OG_FULL=1 on the command line to re-raster every card (layout, fonts, or cold cache).
 OG_IMAGE_ARGS := $(if $(filter 1,$(OG_FULL)),,--incremental)
+RUN_LANGUAGETOOL ?= 0
 
 # Create data directories
 data/shiji data/hanshu data/houhanshu data/sanguozhi data/jinshu data/songshu data/nanqishu data/liangshu data/chenshu data/weishu data/beiqishu data/zhoushu data/suishu data/nanshi data/beishi data/jiutangshu data/xintangshu data/jiuwudaishi data/xinwudaishi data/songshi data/liaoshi data/jinshi data/yuanshi data/mingshi:
@@ -48,6 +49,7 @@ help:
 	@echo ""
 	@echo "Maintenance commands:"
 	@echo "  (OG: default --incremental; use OG_FULL=1 with update/update-all for full OG raster)"
+	@echo "  (LanguageTool: update/update-all skip it by default; use RUN_LANGUAGETOOL=1 to score)"
 	@echo "  make fix-counts             # Recalculate sentenceCount and translatedCount in all chapter files"
 	@echo "  make nuke-translations      # ⚠️  Emergency: Remove ALL translations from a chapter"
 	@echo "  make manifest               # Generate manifest.json (includes sync)"
@@ -61,10 +63,17 @@ help:
 	@echo "  make validate               # Check all JSON files are valid"
 	@echo "  make score-translations     # Score translations for quality issues"
 	@echo "  make score-languagetool     # Run LanguageTool cleanup scoring (requires local LT server)"
+	@echo "  make check-languagetool-cache [BOOK=shiji] [JSON=1]  # Check cached LanguageTool score freshness without LT server"
 	@echo "  make scan-rubric-scaffolding BOOK=hanshu  # Find meta English on short name headings"
 	@echo "  make scan-punctuation-only [BOOK=hanshu]   # Find punctuation-only sentence fragments"
 	@echo "  make scan-br-tags           # Find literal <BR> tags in stored Chinese text"
 	@echo "  make scan-western-chars     # Find Latin letters / HTML fragments in Chinese-facing text"
+	@echo "  make scan-compound-names [BOOK=shiji]  # Find split compound romanizations like Si Ma/Gong Sun"
+	@echo "  make scan-title-style [BOOK=shiji]  # Find publication-facing chapter title style artifacts"
+	@echo "  make scan-translation-alignment [BOOK=shiji]  # Find likely Chinese/English sentence misalignment"
+	@echo "  make scan-translation-artifacts [BOOK=shiji]  # Find rough formulaic English that LanguageTool misses"
+	@echo "  make scan-literal-identical [BOOK=shiji]  # Find literal/idiomatic matches for review prioritization"
+	@echo "  make quality-scan [BOOK=shiji] [OPTIONS='--product shiji']  # Run cheap corpus cleanup scanners"
 	@echo "  make scan-annotations [BOOK=sanguozhi] [CHAPTER=data/sanguozhi/001.json] [OPTIONS='--only-missing --details']  # Find/extract 〈...〉 annotation spans"
 	@echo "  make scan-punctuation-report             # Regenerate scripts/scan-punctuation-report.tsv"
 	@echo "  make batch-quality-check    # Batch quality check on multiple chapters (all books)"
@@ -75,9 +84,16 @@ help:
 	@echo "  make extract-review CHAPTER=data/shiji/024.json  # Extract translations for manual review"
 	@echo "  make extract-next-review [BOOK=shiji]  # Extract next unreviewed translated chapter"
 	@echo "  make apply-review CHAPTER=data/shiji/024.json    # Apply reviewed edits and mark manifest"
-	@echo "  make ebook BOOK=shiji VOLUME=001       # Generate one EPUB product from ebooks/manifest.json"
-	@echo "  make ebook-book BOOK=shiji             # Generate all EPUB products for one book"
-	@echo "  make ebook-validate SLUG=shiji-volume-01  # Run local structural EPUB checks"
+	@echo "  make ebook BOOK=shiji                  # Generate one EPUB product from ebooks/manifest.json"
+	@echo "  make ebook-validate SLUG=shiji            # Run local structural EPUB checks; set EPUBCHECK_JAR for official EPUBCheck"
+	@echo "  make ebook-smoke-calibre SLUG=shiji       # Optional Calibre EPUB→AZW3 conversion smoke test"
+	@echo "  make ebook-qa SLUG=shiji                  # Run reusable EPUB + translation QA gates for one product"
+	@echo "  make ebook-qa SLUG=shiji REQUIRE_LANGUAGETOOL_CURRENT=1  # Also require fresh cached LanguageTool scores"
+	@echo "  make ebook-manual-qa SLUG=shiji REPORT=1  # Print manual Kindle/KDP publication signoff checklist"
+	@echo "  make ebook-upload-bundle-check SLUG=shiji # Verify the small KDP upload bundle and checksums"
+	@echo "  make ebook-kdp-signoff SLUG=shiji CHECKED_BY=\"Name\" CONFIRM_KDP_DRAFT=1  # Record final KDP draft signoff"
+	@echo "  make ebook-readiness SLUG=shiji           # Emit machine-readable publication readiness JSON"
+	@echo "  make ebook-qa ALL=1                       # Run reusable EPUB + translation QA gates for every e-book product"
 	@echo "  npm run sdk-review:cloud [--book <id>]  # SDK agent reviews next chapter (PR → master)"
 	@echo "  npm run sdk-review:local [--book <id>]  # SDK agent reviews next chapter (local extract + apply)"
 	@echo "  make start-translation [BOOK=shiji] [CHAPTER=022] [BATCH_SIZE=100]  # Start translation session"
@@ -117,18 +133,61 @@ list:
 .PHONY: ebook
 ebook:
 	@if [ -z "$(BOOK)" ]; then echo "Error: BOOK is required."; exit 1; fi
-	@if [ -z "$(VOLUME)" ]; then echo "Error: VOLUME is required."; exit 1; fi
-	@$(NODE) scripts/generate-ebook.mjs --book $(BOOK) --volume $(VOLUME)
+	@$(NODE) scripts/generate-ebook.mjs --book $(BOOK)
 
 .PHONY: ebook-book
 ebook-book:
 	@if [ -z "$(BOOK)" ]; then echo "Error: BOOK is required."; exit 1; fi
-	@$(NODE) scripts/generate-ebook.mjs --book $(BOOK) --all-volumes
+	@$(NODE) scripts/generate-ebook.mjs --book $(BOOK) --all-products
 
 .PHONY: ebook-validate
 ebook-validate:
 	@if [ -z "$(SLUG)" ]; then echo "Error: SLUG is required."; exit 1; fi
 	@$(NODE) scripts/validate-ebook.mjs dist/ebooks/$(SLUG)/$(SLUG).epub
+
+.PHONY: ebook-smoke-calibre
+ebook-smoke-calibre:
+	@if [ -z "$(SLUG)" ]; then echo "Error: SLUG is required."; exit 1; fi
+	@$(NODE) scripts/smoke-calibre-ebook.mjs dist/ebooks/$(SLUG)/$(SLUG).epub
+
+.PHONY: ebook-qa
+ebook-qa:
+	@if [ "$(ALL)" = "1" ]; then \
+		$(NODE) scripts/ebook-qa.mjs --all $(if $(SKIP_CALIBRE),--skip-calibre,) $(if $(REQUIRE_LANGUAGETOOL_CURRENT),--require-languagetool-current,) $(if $(REQUIRE_MANUAL_SIGNOFF),--require-manual-signoff,); \
+	else \
+		if [ -z "$(SLUG)" ]; then echo "Error: SLUG is required, or use ALL=1."; exit 1; fi; \
+		$(NODE) scripts/ebook-qa.mjs --slug $(SLUG) $(if $(BOOK),--book $(BOOK),) $(if $(SKIP_CALIBRE),--skip-calibre,) $(if $(REQUIRE_LANGUAGETOOL_CURRENT),--require-languagetool-current,) $(if $(REQUIRE_MANUAL_SIGNOFF),--require-manual-signoff,); \
+	fi
+
+.PHONY: ebook-manual-qa
+ebook-manual-qa:
+	@if [ "$(ALL)" = "1" ]; then \
+		$(NODE) scripts/validate-ebook-manual-qa.mjs --all $(if $(INIT),--init,) $(if $(REPORT),--report,) $(if $(JSON),--json,); \
+	else \
+		if [ -z "$(SLUG)" ]; then echo "Error: SLUG is required, or use ALL=1."; exit 1; fi; \
+		$(NODE) scripts/validate-ebook-manual-qa.mjs --slug $(SLUG) $(if $(INIT),--init,) $(if $(REPORT),--report,) $(if $(JSON),--json,); \
+	fi
+
+.PHONY: ebook-kdp-signoff
+ebook-kdp-signoff:
+	@if [ -z "$(SLUG)" ]; then echo "Error: SLUG is required."; exit 1; fi
+	@if [ -z "$(CHECKED_BY)" ]; then echo "Error: CHECKED_BY is required."; exit 1; fi
+	@if [ "$(CONFIRM_KDP_DRAFT)" != "1" ]; then echo "Error: CONFIRM_KDP_DRAFT=1 is required after checking the unpublished KDP draft."; exit 1; fi
+	@$(NODE) scripts/signoff-ebook-kdp-draft.mjs --slug $(SLUG) --checked-by "$(CHECKED_BY)" --confirm-kdp-draft $(if $(CHECKED_AT),--checked-at "$(CHECKED_AT)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(DRY_RUN),--dry-run,)
+
+.PHONY: ebook-upload-bundle-check
+ebook-upload-bundle-check:
+	@if [ -z "$(SLUG)" ]; then echo "Error: SLUG is required."; exit 1; fi
+	@$(NODE) scripts/verify-ebook-upload-bundle.mjs $(SLUG)
+
+.PHONY: ebook-readiness
+ebook-readiness:
+	@if [ "$(ALL)" = "1" ]; then \
+		$(NODE) scripts/validate-ebook-manual-qa.mjs --all --json; \
+	else \
+		if [ -z "$(SLUG)" ]; then echo "Error: SLUG is required, or use ALL=1."; exit 1; fi; \
+		$(NODE) scripts/validate-ebook-manual-qa.mjs --slug $(SLUG) --json; \
+	fi
 
 # Sync data to public directory for frontend
 # With BOOK=<id>, copy only that book's chapter JSON (plus glossary and manifest).
@@ -222,8 +281,12 @@ update:
 	@echo "Step 3/8: Regenerating manifest (merge this book)..."
 	@$(NODE) generate-manifest.js --book $(BOOK)
 	@echo ""
-	@echo "Step 4/8: Updating LanguageTool cleanup scores for this book..."
-	@$(NODE) scripts/score-languagetool.mjs --book $(BOOK)
+	@if [ "$(RUN_LANGUAGETOOL)" = "1" ]; then \
+		echo "Step 4/8: Updating LanguageTool cleanup scores for this book..."; \
+		$(NODE) scripts/score-languagetool.mjs --book $(BOOK); \
+	else \
+		echo "Step 4/8: Skipping LanguageTool cleanup scores (set RUN_LANGUAGETOOL=1 to run)..."; \
+	fi
 	@echo ""
 	@echo "Step 5/8: Generating cleanup progress (merge this book)..."
 	@$(NODE) generate-progress.js --book $(BOOK)
@@ -264,8 +327,12 @@ update-all:
 	@echo "Step 3/8: Regenerating manifest..."
 	@$(NODE) generate-manifest.js
 	@echo ""
-	@echo "Step 4/8: Updating LanguageTool cleanup scores..."
-	@$(NODE) scripts/score-languagetool.mjs --all
+	@if [ "$(RUN_LANGUAGETOOL)" = "1" ]; then \
+		echo "Step 4/8: Updating LanguageTool cleanup scores..."; \
+		$(NODE) scripts/score-languagetool.mjs --all; \
+	else \
+		echo "Step 4/8: Skipping LanguageTool cleanup scores (set RUN_LANGUAGETOOL=1 to run)..."; \
+	fi
 	@echo ""
 	@echo "Step 5/8: Generating cleanup progress..."
 	@$(NODE) generate-progress.js
@@ -345,6 +412,10 @@ progress:
 .PHONY: score-languagetool
 score-languagetool:
 	@$(NODE) scripts/score-languagetool.mjs $(if $(BOOK),--book $(BOOK),--all) $(if $(LIMIT),--limit $(LIMIT),) $(if $(CONCURRENCY),--concurrency $(CONCURRENCY),) $(if $(FORCE),--force,) $(if $(LANGUAGETOOL_URL),--url $(LANGUAGETOOL_URL),)
+
+.PHONY: check-languagetool-cache
+check-languagetool-cache:
+	@$(NODE) scripts/score-languagetool.mjs $(if $(BOOK),--book $(BOOK),--all) --check-cache $(if $(JSON),--json,)
 
 # Generic rule to scrape a single chapter for any book
 # Usage: make <book>-<chapter>
@@ -789,6 +860,66 @@ scan-western-chars:
 	else \
 		echo "Scanning western characters across all chapters..."; \
 		$(NODE) scripts/scan-western-chars.mjs; \
+	fi
+
+.PHONY: scan-compound-names
+scan-compound-names:
+	@if [ -n "$(BOOK)" ]; then \
+		echo "Scanning split compound romanizations in data/$(BOOK)..."; \
+		$(NODE) scripts/scan-compound-name-spacing.mjs --book "$(BOOK)" $(OPTIONS); \
+	else \
+		echo "Scanning split compound romanizations across all chapters..."; \
+		$(NODE) scripts/scan-compound-name-spacing.mjs $(OPTIONS); \
+	fi
+
+.PHONY: scan-translation-artifacts
+scan-translation-artifacts:
+	@if [ -n "$(BOOK)" ]; then \
+		echo "Scanning rough formulaic English in data/$(BOOK)..."; \
+		$(NODE) scripts/scan-translation-artifacts.mjs --book "$(BOOK)" $(OPTIONS); \
+	else \
+		echo "Scanning rough formulaic English across all chapters..."; \
+		$(NODE) scripts/scan-translation-artifacts.mjs $(OPTIONS); \
+	fi
+
+.PHONY: scan-title-style
+scan-title-style:
+	@if [ -n "$(BOOK)" ]; then \
+		echo "Scanning chapter title style in data/$(BOOK)..."; \
+		$(NODE) scripts/scan-title-style.mjs --book "$(BOOK)" $(OPTIONS); \
+	else \
+		echo "Scanning chapter title style across all chapters..."; \
+		$(NODE) scripts/scan-title-style.mjs $(OPTIONS); \
+	fi
+
+.PHONY: scan-translation-alignment
+scan-translation-alignment:
+	@if [ -n "$(BOOK)" ]; then \
+		echo "Scanning likely sentence alignment issues in data/$(BOOK)..."; \
+		$(NODE) scripts/scan-translation-alignment.mjs --book "$(BOOK)" $(OPTIONS); \
+	else \
+		echo "Scanning likely sentence alignment issues across all chapters..."; \
+		$(NODE) scripts/scan-translation-alignment.mjs $(OPTIONS); \
+	fi
+
+.PHONY: scan-literal-identical
+scan-literal-identical:
+	@if [ -n "$(BOOK)" ]; then \
+		echo "Scanning literal/idiomatic matches in data/$(BOOK)..."; \
+		$(NODE) scripts/scan-literal-identical-prose.mjs --book "$(BOOK)" $(OPTIONS); \
+	else \
+		echo "Scanning literal/idiomatic matches across all chapters..."; \
+		$(NODE) scripts/scan-literal-identical-prose.mjs $(OPTIONS); \
+	fi
+
+.PHONY: quality-scan
+quality-scan:
+	@if [ -n "$(BOOK)" ]; then \
+		echo "Running cheap quality scanners for data/$(BOOK)..."; \
+		$(NODE) scripts/quality-scan.mjs --book "$(BOOK)" $(OPTIONS); \
+	else \
+		echo "Running cheap quality scanners across all chapters..."; \
+		$(NODE) scripts/quality-scan.mjs $(OPTIONS); \
 	fi
 
 .PHONY: auto-translate-numbers

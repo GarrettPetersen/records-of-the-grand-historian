@@ -143,7 +143,7 @@ function main() {
     console.log(`Processing ${bookId}...`);
     
     const chapterFiles = fs.readdirSync(bookDir)
-      .filter(f => f.endsWith('.json'))
+      .filter(f => /^\d{3}\.json$/.test(f))
       .sort();
     
     for (const file of chapterFiles) {

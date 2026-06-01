@@ -9,7 +9,7 @@ const MANIFEST_PATH = path.join(DATA_DIR, 'manifest.json');
 const OUTPUT_PATH = path.join(DATA_DIR, 'quality', 'languagetool-scores.json');
 const DEFAULT_URL = 'http://localhost:8081';
 const MAX_CHUNK_CHARS = 12000;
-const SCORER_VERSION = '2026-05-31-language-tool-v7';
+const SCORER_VERSION = '2026-05-31-language-tool-v8';
 
 const IGNORED_RULE_IDS = new Set([
   'WHITESPACE_RULE',
@@ -21,6 +21,10 @@ const IGNORED_RULE_IDS = new Set([
   // Passive voice is common and appropriate in annals, tables, and appointment
   // records. It is too noisy to help identify genuinely broken English.
   'REP_PASSIVE_VOICE',
+  // Long translated speeches and table rows are scored in chunks, which produces
+  // many false unpaired-quote reports. Quote placement is covered by the
+  // dedicated quote-span alignment checker instead.
+  'EN_UNPAIRED_QUOTES',
   // "Battle-axe" is a standard spelling; LanguageTool prefers "battleaxe" but
   // that is a style choice, not a translation quality signal.
   'EN_COMPOUNDS_BATTLE_AXE',
@@ -101,12 +105,15 @@ function usage() {
   node scripts/score-languagetool.mjs --all
   node scripts/score-languagetool.mjs --book shiji
   node scripts/score-languagetool.mjs --chapter data/shiji/012.json
+  node scripts/score-languagetool.mjs data/shiji/012.json data/shiji/084.json
 
 Options:
   --url http://localhost:8081   LanguageTool server URL (default: LANGUAGETOOL_URL or ${DEFAULT_URL})
   --limit 20                    Stop after N chapters, useful for testing
   --concurrency 8               Chapters to check in parallel (default: 8)
   --stamp-existing              Add fingerprints to existing cached results without rechecking
+  --check-cache                 Report stale/missing cached scores without contacting LanguageTool
+  --json                        Emit machine-readable JSON for --check-cache
   --force                       Re-score chapters already present in the cache`);
 }
 
@@ -244,15 +251,27 @@ function updateScoreMetadata(scores, baseUrl) {
   scores.ignoredRules = Array.from(IGNORED_RULE_IDS);
 }
 
-function chapterTargets(manifest, { bookId, chapterPath }) {
+function inferBookId(chapterPath) {
+  const parts = chapterPath.split(path.sep);
+  const dataIndex = parts.indexOf(DATA_DIR);
+  if (dataIndex === -1 || !parts[dataIndex + 1]) {
+    throw new Error(`Cannot infer book id from ${chapterPath}`);
+  }
+  return parts[dataIndex + 1];
+}
+
+function chapterTargets(manifest, { bookId, chapterPath, chapterPaths = [] }) {
+  if (chapterPaths.length > 0) {
+    return chapterPaths.map((targetPath) => ({
+      bookId: inferBookId(targetPath),
+      chapter: path.basename(targetPath, '.json'),
+      path: targetPath,
+    }));
+  }
+
   if (chapterPath) {
-    const parts = chapterPath.split(path.sep);
-    const dataIndex = parts.indexOf(DATA_DIR);
-    if (dataIndex === -1 || !parts[dataIndex + 1]) {
-      throw new Error(`Cannot infer book id from ${chapterPath}`);
-    }
     return [{
-      bookId: parts[dataIndex + 1],
+      bookId: inferBookId(chapterPath),
       chapter: path.basename(chapterPath, '.json'),
       path: chapterPath,
     }];
@@ -270,6 +289,14 @@ function chapterTargets(manifest, { bookId, chapterPath }) {
     }
   }
   return targets;
+}
+
+function scoreCacheStatus(scores, target, prepared) {
+  const existing = scores.books?.[target.bookId]?.chapters?.[target.chapter];
+  if (!existing) return 'missing';
+  if (existing.scorerVersion !== SCORER_VERSION) return 'stale-version';
+  if (existing.sourceFingerprint !== prepared.sourceFingerprint) return 'stale-source';
+  return 'current';
 }
 
 async function checkChunk(baseUrl, text) {
@@ -381,16 +408,27 @@ async function main() {
 
   const bookId = getArg('--book');
   const chapterPath = getArg('--chapter');
+  const positionalInputs = process.argv.slice(2).filter((arg, index, argv) => {
+    const previous = argv[index - 1];
+    if (['--book', '--chapter', '--url', '--limit', '--concurrency'].includes(previous)) return false;
+    return !arg.startsWith('-');
+  });
   const all = hasFlag('--all');
   const limit = Number(getArg('--limit') || 0);
   const concurrency = Math.max(1, Math.min(16, Number(getArg('--concurrency') || process.env.LANGUAGETOOL_CONCURRENCY || 8)));
   const force = hasFlag('--force');
   const stampExisting = hasFlag('--stamp-existing');
+  const checkCache = hasFlag('--check-cache');
+  const json = hasFlag('--json');
   const baseUrl = normalizeBaseUrl(getArg('--url') || process.env.LANGUAGETOOL_URL);
 
-  if (!all && !bookId && !chapterPath) {
+  if (!all && !bookId && !chapterPath && positionalInputs.length === 0) {
     usage();
     process.exit(1);
+  }
+  if ([all, Boolean(bookId), Boolean(chapterPath), positionalInputs.length > 0].filter(Boolean).length > 1) {
+    console.error('Use only one target mode: --all, --book, --chapter, or explicit chapter paths.');
+    process.exit(2);
   }
 
   const manifest = fs.existsSync(MANIFEST_PATH)
@@ -399,7 +437,7 @@ async function main() {
   const scores = loadExistingScores();
   scores.books = scores.books || {};
 
-  const targets = chapterTargets(manifest, { bookId, chapterPath }).slice(0, limit || undefined);
+  const targets = chapterTargets(manifest, { bookId, chapterPath, chapterPaths: positionalInputs }).slice(0, limit || undefined);
   const queue = [];
   let skipped = 0;
   let stamped = 0;
@@ -412,6 +450,10 @@ async function main() {
     scores.books[target.bookId] = scores.books[target.bookId] || { chapters: {} };
     const existing = scores.books[target.bookId].chapters[target.chapter];
     const prepared = prepareTarget(target);
+    if (checkCache) {
+      queue.push({ ...target, prepared, cacheStatus: scoreCacheStatus(scores, target, prepared) });
+      continue;
+    }
     const isCurrent = existing
       && existing.sourceFingerprint === prepared.sourceFingerprint
       && existing.scorerVersion === SCORER_VERSION;
@@ -430,6 +472,41 @@ async function main() {
     }
     if (existing && !force) stale++;
     queue.push({ ...target, prepared });
+  }
+
+  if (checkCache) {
+    const staleTargets = queue.filter((target) => target.cacheStatus !== 'current');
+    const counts = queue.reduce((acc, target) => {
+      acc[target.cacheStatus] = (acc[target.cacheStatus] || 0) + 1;
+      return acc;
+    }, {});
+    if (json) {
+      console.log(JSON.stringify({
+        count: queue.length,
+        staleCount: staleTargets.length,
+        counts: Object.fromEntries(
+          ['current', 'missing', 'stale-version', 'stale-source'].map((status) => [status, counts[status] || 0])
+        ),
+        stale: staleTargets.map((target) => ({
+          book: target.bookId,
+          chapter: target.chapter,
+          path: target.path,
+          status: target.cacheStatus,
+        })),
+      }, null, 2));
+      process.exit(staleTargets.length > 0 ? 1 : 0);
+    }
+    console.log(`LanguageTool cache check: ${queue.length} chapter${queue.length === 1 ? '' : 's'} scanned.`);
+    for (const status of ['current', 'missing', 'stale-version', 'stale-source']) {
+      console.log(`${status}: ${counts[status] || 0}`);
+    }
+    for (const target of staleTargets.slice(0, 200)) {
+      console.log(`${target.bookId}/${target.chapter}: ${target.cacheStatus}`);
+    }
+    if (staleTargets.length > 200) {
+      console.log(`... ${staleTargets.length - 200} more stale/missing chapter(s).`);
+    }
+    process.exit(staleTargets.length > 0 ? 1 : 0);
   }
 
   if (stamped > 0) {

@@ -31,15 +31,13 @@ Recommended sequence:
 
 1. Pilot: `Records of the Grand Historian` as a complete single-work e-book.
 2. Complete one medium-sized work as a full series proof: `Records of the Three Kingdoms` or `Book of Song`.
-3. Publish each major work as a series.
-4. Split very large works into multiple volumes by chapter ranges.
-5. Publish omnibus editions only after individual volumes are stable.
+3. Publish each major work as one complete e-book.
+4. Reserve print editions or premium formats for later, after the e-book workflow is stable.
 
-Suggested volume policy:
+Suggested product policy:
 
-- Small works under about 60 chapters: one e-book.
-- Medium works: split by natural section or 50-80 chapters.
-- Large works such as `Songshi`, `Mingshi`, `Qingshigao`, and `Zizhi Tongjian`: split into 6-12+ volumes.
+- Each source work gets one e-book product.
+- Very large works such as `Songshi`, `Mingshi`, `Qingshigao`, and `Zizhi Tongjian` should still be packaged as single e-books unless a platform limit forces a change.
 - Table-heavy chapters should be grouped carefully because they need manual QA on small screens.
 
 ## Rights And Disclosure Gates
@@ -69,16 +67,17 @@ Create a new generator rather than adapting `generate-static-pages.js` directly:
   - `dist/ebooks/<slug>/<slug>.epub`
   - `dist/ebooks/<slug>/cover.png`
   - `dist/ebooks/<slug>/kdp-metadata.md`
+  - `dist/ebooks/<slug>/upload-checklist.md`
   - `dist/ebooks/<slug>/content/` for debug XHTML
   - `dist/ebooks/<slug>/metadata.json`
   - `dist/ebooks/<slug>/qa-report.json`
-  - `dist/ebooks/<slug>/publication-manifest.json` with file sizes and SHA-256 checksums for upload artifacts
+  - `dist/ebooks/<slug>/publication-manifest.json` with file sizes and SHA-256 checksums for upload and support artifacts
 
 Core command shape:
 
 ```bash
-node scripts/generate-ebook.mjs --book shiji --volume 1
-node scripts/generate-ebook.mjs --book shiji --all-volumes
+node scripts/generate-ebook.mjs --book shiji
+node scripts/generate-ebook.mjs --book shiji --all-products
 node scripts/generate-ebook.mjs --all
 ```
 
@@ -86,14 +85,43 @@ Make targets:
 
 ```make
 ebook:
-	node scripts/generate-ebook.mjs --book $(BOOK) --volume $(VOLUME)
+	node scripts/generate-ebook.mjs --book $(BOOK)
 
 ebook-book:
-	node scripts/generate-ebook.mjs --book $(BOOK) --all-volumes
+	node scripts/generate-ebook.mjs --book $(BOOK) --all-products
 
 ebook-validate:
 	node scripts/validate-ebook.mjs dist/ebooks/$(SLUG)/$(SLUG).epub
+
+ebook-qa:
+	node scripts/ebook-qa.mjs --slug $(SLUG)
+
+ebook-manual-qa:
+	node scripts/validate-ebook-manual-qa.mjs --slug $(SLUG)
+
+ebook-readiness:
+	node scripts/validate-ebook-manual-qa.mjs --slug $(SLUG) --json
 ```
+
+`ebook-validate` performs local structural checks, verifies sidecar manifests, scans packaged XHTML for known visible artifacts, checks XML/XHTML well-formedness with `xmllint`, and fails if the generated QA report has errors or warnings. If `EPUBCHECK_JAR=/path/to/epubcheck.jar` is set, it also runs official EPUBCheck before the local checks.
+
+`ebook-qa` runs the reusable pre-publication automated gate: EPUB validation, optional Calibre EPUB-to-AZW3 smoke conversion, quote-span alignment, and cheap translation quality scanners.
+
+Run the same gates for later products by changing only the slug/book values, or use `make ebook-qa ALL=1` once multiple e-book products are listed in `ebooks/manifest.json`. Product QA reads each product's `book` and `chapters` fields, so the source QA checks exactly the chapters that are packaged into that e-book. The EPUB validator imports the shared translation-artifact scanner, so source JSON and packaged XHTML use the same formulaic-English rules instead of drifting apart. The cheap source QA bundle also uses reusable compound-name, translation-completeness, translation-metadata, and literal-identical prose scanners, so future books get the same checks for split romanized surnames, missing idiomatic English, literal-only fallback text, stale or agent-labeled translator metadata, and chapters that need review because too much prose still matches the literal draft.
+
+For review prioritization, run `npm run quality:scan -- --book <book> --summary --fail` after each review pass, or `npm run quality:scan -- --product <slug> --summary --fail` before packaging a specific e-book product. The hard-gate scanners decide the exit code; the literal-identical scanner is included as advisory output and reports long prose passages where the idiomatic translation is identical to the literal translation. It should not be a hard publication gate, because some terse annalistic prose genuinely needs little rewriting, but the highest-count chapters are good candidates for human review before packaging each book. For a focused report, run `npm run quality:literal-identical -- --book <book> --summary`.
+
+The translation-alignment scanner uses Chinese Notes glossary anchors to catch likely sentence drift. Run `npm run quality:translation-alignment -- --book <book> --summary --glossary-scope all --review-priorities` for the normal broad pass: proper nouns carry the most weight, while common multi-character glossary terms only count as fuzzy corroborating evidence when several point toward the same neighboring sentence. If that is too noisy for a book, rerun with `--glossary-scope proper`; for a smoke check using only curated high-confidence terms, use `--glossary-scope manual`. Severity 3+ findings should be treated as review candidates, especially when a cluster of glossary anchors appears in the adjacent English sentence.
+
+For publication readiness, add `REQUIRE_LANGUAGETOOL_CURRENT=1` to fail if cached LanguageTool scores are stale or missing for the product's source chapters. This does not contact the LanguageTool server; it verifies cache fingerprints. Refresh stale scores with `make score-languagetool BOOK=<book>` once the local LanguageTool server is running.
+
+`ebook-manual-qa` creates and validates an artifact-bound human signoff file under `ebooks/manual-qa/`. It records Kindle Previewer, reader rendering, cover behavior, TOC navigation, frontmatter, table-heavy chapter review, and KDP draft ingestion. Normal site/e-book builds should not require this gate, but a book should not be treated as publishable until `make ebook-qa SLUG=<slug> REQUIRE_LANGUAGETOOL_CURRENT=1 REQUIRE_MANUAL_SIGNOFF=1` passes against the current EPUB and cover hashes.
+
+`ebook-readiness` emits the same manual signoff state as machine-readable JSON. It is intentionally strict: it exits nonzero until the manual signoff is complete, but the JSON can still show that all automated readiness checks are green and list the exact remaining human blockers.
+
+For the Shiji pilot, follow `ebooks/shiji-publication-runbook.md` for the final Kindle Previewer, EPUB reader, KDP draft, and `ebooks/manual-qa/shiji.json` signoff workflow.
+
+The generated QA report also performs a KDP metadata preflight before packaging: required product fields, title/subtitle length, product-description length, category count, seven keyword slots, duplicate keywords, keyword overlap with existing metadata, promotional/platform terms, URLs, and HTML-like characters in fields where KDP does not want them.
 
 ## EPUB Structure
 
@@ -168,19 +196,18 @@ Example:
 {
   "products": [
     {
-      "slug": "shiji-volume-01",
+      "slug": "shiji",
       "book": "shiji",
-      "volume": 1,
-      "title": "Records of the Grand Historian, Volume 1",
-      "subtitle": "Basic Annals",
-      "chapters": ["001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012"],
-      "series": "Records of the Grand Historian",
+      "title": "Records of the Grand Historian",
+      "subtitle": "The First History of the Twenty-Four Histories",
+      "chapters": ["001", "002", "003"],
+      "series": "The Twenty-Four Histories",
       "seriesNumber": 1,
       "author": "Sima Qian",
       "translator": "Garrett M. Petersen",
       "language": "en",
       "sourceAttribution": ["Chinese Notes", "CText", "Wikisource"],
-      "editionStatus": "Complete first-pass AI translation"
+      "editionStatus": "Complete AI-assisted English translation"
     }
   ]
 }
@@ -193,7 +220,7 @@ Start with programmatic covers so we can scale:
 - Reuse the existing OG image stack if possible.
 - Generate one cover per product from a deterministic template.
 - Export front cover as high-resolution JPG/PNG for e-book stores.
-- Later, commission or manually design branded covers for best-selling volumes.
+- Later, commission or manually design branded covers for best-selling books.
 
 Cover requirements to track:
 
@@ -228,7 +255,7 @@ Warnings:
 - Very long paragraphs.
 - Footnotes or source links that do not resolve.
 
-Manual QA checklist for each pilot volume:
+Manual QA checklist for each pilot book:
 
 - Open in Kindle Previewer.
 - Open in Apple Books.
@@ -290,7 +317,7 @@ Phase 3: Series Production
 
 Phase 4: Scale To Corpus
 
-- Define volume splits for all 26 works.
+- Define one e-book product for each source work.
 - Generate all EPUBs.
 - Batch-validate and prioritize by quality/readability.
 - Publish work-by-work.
@@ -301,23 +328,26 @@ Phase 5: Print And Premium Editions
 - Create print-specific layout pipeline.
 - Decide trim size, typography, indices, and table handling.
 - Generate print PDFs.
-- Publish selected volumes as paperback/hardcover.
+- Publish selected books as paperback/hardcover.
 
 ## Open Decisions
 
 - Use one imprint name or personal author/publisher account?
 - Buy ISBNs or use platform-provided identifiers?
-- Price per volume or by series bundle strategy?
+- Price per book or by series bundle strategy?
 - Enroll Amazon e-books in KDP Select/Kindle Unlimited or keep wide distribution?
 - Publish AI disclosure only in platform metadata, or also visibly in front matter? Recommendation: both.
 - English-only first, or bilingual editions later?
-- How much editorial review is required before a volume is labeled "polished" rather than "first-pass"?
+- How much editorial review is required before a book is labeled "polished" rather than "first-pass"?
 
 ## Immediate Next Tasks
 
 1. Keep `ebooks/manifest.json` aligned with the complete Shiji product.
-2. Keep the EPUB generator failing on missing translations, placeholders, invalid metadata, and empty chapter titles.
+2. Keep the EPUB generator failing on missing translations, placeholders, invalid metadata, empty chapter titles, transparent covers, unresolved table labels, and suspicious table-title punctuation.
 3. Generate and validate the complete Shiji EPUB after each source or generator change.
-4. Review the EPUB manually in Kindle Previewer, with special attention to cover rendering, TOC navigation, and table-heavy chapters.
-5. Prepare KDP draft metadata, product description, categories, keywords, pricing, and AI disclosure text.
-6. Upload to KDP as a draft and fix any Kindle Previewer or KDP ingestion issues before publication.
+4. Install or provide EPUBCheck locally and run `EPUBCHECK_JAR=/path/to/epubcheck.jar make ebook-validate SLUG=shiji`.
+5. Create the Shiji manual signoff template with `make ebook-manual-qa SLUG=shiji INIT=1`.
+6. Use `ebooks/shiji-publication-runbook.md` for the final Kindle Previewer, reader, navigation, table-heavy chapter, and KDP draft review.
+7. Check current structured readiness with `make ebook-readiness SLUG=shiji`; all `automatedReadiness` fields should be `true` before manual signoff.
+8. Fill `ebooks/manual-qa/shiji.json` only after the manual reader and KDP draft checks pass.
+9. Run `make ebook-qa SLUG=shiji REQUIRE_LANGUAGETOOL_CURRENT=1 REQUIRE_MANUAL_SIGNOFF=1` before treating the book as publishable.

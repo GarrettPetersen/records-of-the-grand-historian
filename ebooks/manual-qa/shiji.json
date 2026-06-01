@@ -1,0 +1,367 @@
+{
+  "schemaVersion": 1,
+  "slug": "shiji",
+  "title": "Records of the Grand Historian",
+  "status": "pending",
+  "checkedBy": "",
+  "checkedAt": "",
+  "artifacts": {
+    "epub": {
+      "file": "dist/ebooks/shiji/shiji.epub",
+      "bytes": 1699857,
+      "sha256": "da8b457d3178e6f6dd8a35d3c94d0c9d0f1800b70a3226af26ff8c8407bf8a7a"
+    },
+    "cover": {
+      "file": "dist/ebooks/shiji/cover.png",
+      "bytes": 95677,
+      "sha256": "5b4e06ceb384930107fa10644d0b1217f9643c5eec2bda3e0d312973cde1088a"
+    },
+    "kdpUploadFields": {
+      "file": "dist/ebooks/shiji/kdp-upload-fields.json",
+      "bytes": 2242,
+      "sha256": "e5a04b0812a92c4f7620d0712ddf34e2fb04845f147f23ab711c23b72ab19125"
+    },
+    "kdpDraftWorksheet": {
+      "file": "dist/ebooks/shiji/kdp-draft-worksheet.md",
+      "bytes": 2764,
+      "sha256": "03398598270fa104e7b356762d8ef5647f8379d427213012a0d17dea3f2d26aa"
+    },
+    "tableReview": {
+      "file": "dist/ebooks/shiji/table-review.md",
+      "bytes": 16260,
+      "sha256": "a0344abf8033b9517405da42e28994c736e17947256c368113274bc418414981"
+    },
+    "reviewChecklist": {
+      "file": "dist/ebooks/shiji/review-checklist.md",
+      "bytes": 6854,
+      "sha256": "6facd17fa5825f3fb94e4bed2cf62db72e54e27668e34cd8c9d42a085fb80d59"
+    },
+    "uploadChecklist": {
+      "file": "dist/ebooks/shiji/upload-checklist.md",
+      "bytes": 2874,
+      "sha256": "28b18f6714625c61845d3a7f4a7e47562628108d659650437c3c2d2b3615eb01"
+    },
+    "uploadBundleReadme": {
+      "file": "dist/ebooks/shiji/upload/README.md",
+      "bytes": 689,
+      "sha256": "ca123faa8fa3ae3146f7d619e68f52651456dc9c6ffdb7e09a0a7f3065c68754"
+    },
+    "uploadBundleChecksums": {
+      "file": "dist/ebooks/shiji/upload/SHA256SUMS.txt",
+      "bytes": 493,
+      "sha256": "3a36ba21e2baf60b80a358adc96cffa0dff7dfc346be5fc472191766f69877ec"
+    }
+  },
+  "checks": {
+    "kindlePreviewer": {
+      "status": "passed",
+      "appVersion": "3.104",
+      "conversionErrors": false,
+      "notes": "Opened the clean rebuilt dist/ebooks/shiji/shiji.epub in Kindle Previewer 3.104. The book loaded as \"Kindle Previewer - Records of the Grand Historian\" with Enhanced Typesetting enabled, 34,759 locations, a populated table of contents, and chapter 001 visible in the preview pane. Amazon's bundled kindlegen compiler also compiled the generated EPUB package successfully with no errors; it reported only CSS support warnings for max-height and max-width."
+    },
+    "readerRendering": {
+      "status": "passed",
+      "readers": [
+        "Calibre 9.9 E-book Viewer"
+      ],
+      "lightModeOk": true,
+      "darkModeOk": true,
+      "proseFlowTargets": [
+        {
+          "chapter": "001",
+          "epubEntry": "EPUB/text/chapter-001.xhtml",
+          "title": "Annals of the Five Emperors"
+        },
+        {
+          "chapter": "071",
+          "epubEntry": "EPUB/text/chapter-071.xhtml",
+          "title": "Biographies of Shu Lizi and Gan Mao"
+        },
+        {
+          "chapter": "130",
+          "epubEntry": "EPUB/text/chapter-130.xhtml",
+          "title": "Autobiographical Afterword of the Grand Historian"
+        }
+      ],
+      "notes": "Opened dist/ebooks/shiji/shiji.epub in Calibre E-book Viewer. Verified cover/frontmatter/chapter 001 in dark mode; verified chapter 071 and chapter 130 prose flow via search navigation; switched the reader to White mode and verified chapter 130 still renders cleanly with black text on white background."
+    },
+    "coverRendering": {
+      "status": "passed",
+      "onePage": true,
+      "whiteBandOpaqueInDarkMode": true,
+      "notes": "Verified packaged EPUB/cover.xhtml and EPUB/styles/ebook.css use a single height-constrained cover image with explicit white backgrounds; dist/ebooks/shiji/cover.png is fully opaque per generated QA."
+    },
+    "navigation": {
+      "status": "passed",
+      "tocOk": true,
+      "firstMiddleLastChapterLinksOk": true,
+      "targets": [
+        {
+          "href": "cover.xhtml",
+          "text": "Cover"
+        },
+        {
+          "href": "frontmatter.xhtml",
+          "text": "Copyright and Source Note"
+        },
+        {
+          "href": "text/chapter-001.xhtml",
+          "text": "Annals of the Five Emperors"
+        },
+        {
+          "href": "text/chapter-066.xhtml",
+          "text": "Biography of Wu Zixu"
+        },
+        {
+          "href": "text/chapter-130.xhtml",
+          "text": "Autobiographical Afterword of the Grand Historian"
+        }
+      ],
+      "notes": "Verified EPUB/nav.xhtml contains cover, frontmatter, 130 chapter links, landmarks, and first/middle/last chapter targets."
+    },
+    "frontmatter": {
+      "status": "passed",
+      "aiDisclosureOk": true,
+      "sourceAttributionOk": true,
+      "rightsStatementOk": true,
+      "notes": "Verified against EPUB/frontmatter.xhtml from the generated Shiji EPUB."
+    },
+    "tableHeavyChapters": {
+      "status": "passed",
+      "chaptersReviewed": [
+        {
+          "chapter": "013",
+          "title": "Genealogical Tables of the Three Dynasties",
+          "epubEntry": "EPUB/text/chapter-013.xhtml",
+          "rows": 10,
+          "renderedRows": 10,
+          "maxCells": 12,
+          "blankHeaders": 0,
+          "resolvedBlankHeaders": 0,
+          "genericLabels": 0,
+          "spotCheckRows": [
+            "King Cheng (Song)",
+            "King Yi Jian. The Zhou way declined, poets made satirical poems.",
+            "Gonghe, the two nobles administered government."
+          ],
+          "status": "passed",
+          "notes": "Spot-checked rendered rows in dist/ebooks/shiji/table-review.md and packaged EPUB/text/chapter-013.xhtml."
+        },
+        {
+          "chapter": "014",
+          "title": "Chronicle of the Twelve Feudal Lords",
+          "epubEntry": "EPUB/text/chapter-014.xhtml",
+          "rows": 364,
+          "renderedRows": 364,
+          "maxCells": 16,
+          "blankHeaders": 0,
+          "resolvedBlankHeaders": 0,
+          "genericLabels": 0,
+          "spotCheckRows": [
+            "840",
+            "658",
+            "477"
+          ],
+          "status": "passed",
+          "notes": "Spot-checked rendered rows in dist/ebooks/shiji/table-review.md and packaged EPUB/text/chapter-014.xhtml."
+        },
+        {
+          "chapter": "015",
+          "title": "Chronicle of the Six States",
+          "epubEntry": "EPUB/text/chapter-015.xhtml",
+          "rows": 270,
+          "renderedRows": 270,
+          "maxCells": 9,
+          "blankHeaders": 0,
+          "resolvedBlankHeaders": 0,
+          "genericLabels": 0,
+          "spotCheckRows": [
+            "476",
+            "341",
+            "207"
+          ],
+          "status": "passed",
+          "notes": "Spot-checked rendered rows in dist/ebooks/shiji/table-review.md and packaged EPUB/text/chapter-015.xhtml."
+        },
+        {
+          "chapter": "016",
+          "title": "Monthly Chronicle of the Qin-Chu Interregnum",
+          "epubEntry": "EPUB/text/chapter-016.xhtml",
+          "rows": 91,
+          "renderedRows": 91,
+          "maxCells": 21,
+          "blankHeaders": 0,
+          "resolvedBlankHeaders": 0,
+          "genericLabels": 0,
+          "spotCheckRows": [
+            "209",
+            "205",
+            "202"
+          ],
+          "status": "passed",
+          "notes": "Spot-checked rendered rows in dist/ebooks/shiji/table-review.md and packaged EPUB/text/chapter-016.xhtml."
+        },
+        {
+          "chapter": "017",
+          "title": "Table of the Years of Feudal Lords since the Rise of the Han Dynasty",
+          "epubEntry": "EPUB/text/chapter-017.xhtml",
+          "rows": 106,
+          "renderedRows": 106,
+          "maxCells": 28,
+          "blankHeaders": 0,
+          "resolvedBlankHeaders": 0,
+          "genericLabels": 0,
+          "spotCheckRows": [
+            "206 BCE",
+            "153",
+            "101"
+          ],
+          "status": "passed",
+          "notes": "Spot-checked rendered rows in dist/ebooks/shiji/table-review.md and packaged EPUB/text/chapter-017.xhtml."
+        },
+        {
+          "chapter": "018",
+          "title": "Chronicle of Gaozu's Meritorious Officials and Marquises",
+          "epubEntry": "EPUB/text/chapter-018.xhtml",
+          "rows": 143,
+          "renderedRows": 143,
+          "maxCells": 9,
+          "blankHeaders": 1,
+          "resolvedBlankHeaders": 1,
+          "genericLabels": 0,
+          "spotCheckRows": [
+            "Pingyang",
+            "Neyang",
+            "Xun"
+          ],
+          "status": "passed",
+          "notes": "Spot-checked rendered rows in dist/ebooks/shiji/table-review.md and packaged EPUB/text/chapter-018.xhtml."
+        },
+        {
+          "chapter": "019",
+          "title": "Chronicle of Marquises from Emperor Hui to Emperor Jing",
+          "epubEntry": "EPUB/text/chapter-019.xhtml",
+          "rows": 93,
+          "renderedRows": 93,
+          "maxCells": 8,
+          "blankHeaders": 4,
+          "resolvedBlankHeaders": 4,
+          "genericLabels": 0,
+          "spotCheckRows": [
+            "Bian",
+            "Ping Chang",
+            "Zhou Yang"
+          ],
+          "status": "passed",
+          "notes": "Spot-checked rendered rows in dist/ebooks/shiji/table-review.md and packaged EPUB/text/chapter-019.xhtml."
+        },
+        {
+          "chapter": "020",
+          "title": "Chronicle of Marquises since Jianyuan",
+          "epubEntry": "EPUB/text/chapter-020.xhtml",
+          "rows": 114,
+          "renderedRows": 114,
+          "maxCells": 8,
+          "blankHeaders": 2,
+          "resolvedBlankHeaders": 2,
+          "genericLabels": 0,
+          "spotCheckRows": [
+            "Xi",
+            "Xia Li",
+            "Xi Ping"
+          ],
+          "status": "passed",
+          "notes": "Spot-checked rendered rows in dist/ebooks/shiji/table-review.md and packaged EPUB/text/chapter-020.xhtml."
+        },
+        {
+          "chapter": "021",
+          "title": "Chronicle of Princes and Marquises since Jianyuan",
+          "epubEntry": "EPUB/text/chapter-021.xhtml",
+          "rows": 162,
+          "renderedRows": 162,
+          "maxCells": 8,
+          "blankHeaders": 0,
+          "resolvedBlankHeaders": 0,
+          "genericLabels": 0,
+          "spotCheckRows": [
+            "Zi",
+            "Xichang",
+            "Zhuzi"
+          ],
+          "status": "passed",
+          "notes": "Spot-checked rendered rows in dist/ebooks/shiji/table-review.md and packaged EPUB/text/chapter-021.xhtml."
+        },
+        {
+          "chapter": "022",
+          "title": "Chronicle of Generals, Chancellors, and Worthy Ministers since Han Founding",
+          "epubEntry": "EPUB/text/chapter-022.xhtml",
+          "rows": 187,
+          "renderedRows": 187,
+          "maxCells": 6,
+          "blankHeaders": 0,
+          "resolvedBlankHeaders": 0,
+          "genericLabels": 0,
+          "spotCheckRows": [
+            "206",
+            "113",
+            "20"
+          ],
+          "status": "passed",
+          "notes": "Spot-checked rendered rows in dist/ebooks/shiji/table-review.md and packaged EPUB/text/chapter-022.xhtml."
+        }
+      ],
+      "notes": "Verified generated table-review.md samples and spot-checked packaged XHTML after table year/month marker normalization."
+    },
+    "kdpDraft": {
+      "status": "pending",
+      "draftCreated": null,
+      "fieldsMatchUploadFields": null,
+      "productDescriptionEntered": null,
+      "priceEntered": null,
+      "publishingRightsEntered": null,
+      "categoriesEntered": null,
+      "keywordsEntered": null,
+      "aiDisclosureEntered": null,
+      "ingestionErrors": null,
+      "targets": {
+        "title": "Records of the Grand Historian",
+        "subtitle": "The First History of the Twenty-Four Histories",
+        "contributors": [
+          {
+            "role": "Author",
+            "name": "Sima Qian"
+          },
+          {
+            "role": "Translator",
+            "name": "Garrett M. Petersen"
+          }
+        ],
+        "publisher": "24 Histories",
+        "language": "en",
+        "series": "The Twenty-Four Histories",
+        "seriesNumber": 1,
+        "isbnInstruction": "Leave blank unless assigning your own ISBN.",
+        "edition": "Complete AI-assisted English translation",
+        "suggestedListPriceUsd": "9.99",
+        "publishingRights": "This is not a public domain translation. Garrett M. Petersen holds the English translation rights.",
+        "aiGeneratedContent": "Yes - AI-generated translation, edited and published under Garrett M. Petersen's direction.",
+        "productDescription": "Sima Qian's Records of the Grand Historian is the foundational work of Chinese historical writing, spanning the legendary sage-kings through the early Han dynasty. This complete English edition presents all 130 chapters in a reflowable e-book format designed for modern readers. The translation was generated with AI tools under the direction and editorial supervision of Garrett M. Petersen.",
+        "categories": [
+          "History / Asia / China",
+          "History / Ancient / General",
+          "History / Historiography"
+        ],
+        "keywords": [
+          "early imperial China",
+          "Qin Han transition",
+          "Warring States diplomacy",
+          "dynastic chronicles",
+          "classical historiography",
+          "Confucian statecraft",
+          "court annals biographies"
+        ]
+      },
+      "notes": ""
+    }
+  }
+}

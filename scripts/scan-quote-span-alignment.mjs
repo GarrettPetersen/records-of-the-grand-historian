@@ -113,7 +113,22 @@ function quoteBoundaryProblems(chinese, english, beforeDepth, afterDepth, openCo
   return problems;
 }
 
-function chapterFiles(bookFilter) {
+function chapterFiles(inputs, bookFilter) {
+  if (inputs.length > 0) {
+    const files = [];
+    const enqueue = (entry) => {
+      if (!fs.existsSync(entry)) return;
+      const st = fs.statSync(entry);
+      if (st.isDirectory()) {
+        for (const child of fs.readdirSync(entry).sort()) enqueue(path.join(entry, child));
+        return;
+      }
+      if (/^\d{3}\.json$/.test(path.basename(entry))) files.push(entry);
+    };
+    for (const input of inputs) enqueue(input);
+    return [...new Set(files)].sort();
+  }
+
   const dataDir = 'data';
   const books = fs.readdirSync(dataDir)
     .filter(name => fs.statSync(path.join(dataDir, name)).isDirectory())
@@ -193,11 +208,52 @@ function scanChapter(file) {
 }
 
 function main() {
-  const bookArg = process.argv.find(arg => arg.startsWith('--book='));
-  const bookFilter = bookArg ? bookArg.slice('--book='.length) : null;
-  const limitArg = process.argv.find(arg => arg.startsWith('--limit='));
-  const outputLimit = limitArg ? Number.parseInt(limitArg.slice('--limit='.length), 10) : 50;
-  const files = chapterFiles(bookFilter);
+  const inputs = [];
+  let bookFilter = null;
+  let outputLimit = 50;
+
+  for (let i = 2; i < process.argv.length; i += 1) {
+    const arg = process.argv[i];
+    if (arg === '--help' || arg === '-h') {
+      console.error(`Usage:
+  node scripts/scan-quote-span-alignment.mjs [--book BOOK] [--limit N] [path ...]
+
+Options:
+  --book BOOK  Scan data/BOOK
+  --limit N    Number of detailed problems to show; 0 shows count only, -1 shows all
+
+Explicit paths may be chapter files or directories. Use either --book or paths, not both.`);
+      process.exit(0);
+    }
+    if (arg === '--book') {
+      bookFilter = process.argv[++i];
+      continue;
+    }
+    if (arg.startsWith('--book=')) {
+      bookFilter = arg.slice('--book='.length);
+      continue;
+    }
+    if (arg === '--limit') {
+      outputLimit = Number.parseInt(process.argv[++i], 10);
+      continue;
+    }
+    if (arg.startsWith('--limit=')) {
+      outputLimit = Number.parseInt(arg.slice('--limit='.length), 10);
+      continue;
+    }
+    if (arg.startsWith('--')) {
+      console.error(`Unknown option: ${arg}`);
+      process.exit(2);
+    }
+    inputs.push(arg);
+  }
+
+  if (bookFilter && inputs.length > 0) {
+    console.error('Use either --book or explicit paths, not both.');
+    process.exit(2);
+  }
+
+  const files = chapterFiles(inputs, bookFilter);
   const problems = files.flatMap(scanChapter);
 
   if (problems.length > 0) {

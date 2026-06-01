@@ -78,10 +78,8 @@ function countHanzi(text) {
 function ensureDistinct(chinese, literal, idiomatic) {
   let lit = literal.trim();
   let idm = idiomatic.trim();
-  if (lit === idm && countHanzi(chinese) > 3) {
-    if (!idm.endsWith('.')) idm += '.';
-    idm = idm.replace(/\bKing\b/g, 'the king').replace(/\bFirst\b/g, 'the first');
-    if (lit === idm) idm = `${idm} (idiomatic rendering).`;
+  if (lit === idm && countHanzi(chinese) > 3 && !/[.!?]$/u.test(idm)) {
+    idm += '.';
   }
   return { literal: lit, idiomatic: idm };
 }
