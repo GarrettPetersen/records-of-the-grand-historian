@@ -1620,6 +1620,7 @@ function renderFrontMatter(product, bookInfo) {
     ${product.subtitle ? `<h2>${escapeXml(product.subtitle)}</h2>` : ''}
     <p>Original work: ${escapeXml(bookInfo.chinese || '')} (${escapeXml(bookInfo.pinyin || '')}), by ${escapeXml(product.author)}.</p>
     <p>English translation: ${escapeXml(product.translator)}.</p>
+    ${product.publisher ? `<p>Published by ${escapeXml(product.publisher)}.</p>` : ''}
     <p>${escapeXml(product.rights || '')}</p>
     <p>${escapeXml(aiDisclosure)}</p>
     <p>Chinese source texts were drawn from ${escapeXml(sources)}.</p>
