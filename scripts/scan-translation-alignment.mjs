@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 /**
- * Scan for likely Chinese/English sentence misalignment using bilingual anchors.
+ * Scan for likely Chinese/English sentence misalignment and low glossary
+ * coverage using bilingual anchors.
  *
  * This does not try to prove semantic fidelity. Distinctive manual terms are
  * treated as high-confidence anchors. The full glossary, including proper nouns,
- * is used only as fuzzy aggregate evidence when several terms point to the same
- * neighboring sentence.
+ * is used as fuzzy aggregate evidence when several terms point to the same
+ * neighboring sentence, and as an advisory same-sentence coverage signal when a
+ * Chinese sentence contains enough distinctive glossary terms.
  */
 
 import fs from 'node:fs';
@@ -74,6 +76,10 @@ const VALID_GLOSSARY_SCOPES = new Set(['all', 'proper', 'manual']);
 const PROPER_GLOSSARY_MIN_NEARBY_SCORE = 2.35;
 const MIXED_GLOSSARY_MIN_NEARBY_SCORE = 2.7;
 const COMMON_ONLY_GLOSSARY_MIN_NEARBY_SCORE = 4.2;
+const SAME_SENTENCE_MIN_SOURCE_SCORE = 4.2;
+const SAME_SENTENCE_REVIEW_MIN_SOURCE_SCORE = 3.0;
+const SAME_SENTENCE_MAX_COVERAGE = 0.12;
+const SAME_SENTENCE_REVIEW_MAX_COVERAGE = 0.22;
 const MAX_VARIANT_LENGTH = 40;
 
 function stripDiacritics(text) {
@@ -114,8 +120,32 @@ function pinyinVariants(pinyin) {
   return [...new Set([compact, compactTitle, spaced].filter(Boolean))];
 }
 
+function expandedEnglishVariants(variants) {
+  const expanded = [];
+  for (const variant of variants) {
+    const plainApostrophe = variant.replace(/[’']/g, ' ').replace(/\s+/g, ' ').trim();
+    if (plainApostrophe !== variant) expanded.push(plainApostrophe);
+
+    const mt = variant.match(/^Mt\.?\s+(.+)$/);
+    if (mt) {
+      expanded.push(`Mount ${mt[1]}`);
+      expanded.push(`Mount ${mt[1].replace(/[’']/g, ' ').replace(/\s+/g, ' ').trim()}`);
+    }
+
+    const trailingDynasty = variant.match(/^((?:King|Queen|Emperor|Prince|Duke|Marquis|Lord) [A-Z][A-Za-z'’.-]+) of [A-Z][A-Za-z'’.-]+$/);
+    if (trailingDynasty) expanded.push(trailingDynasty[1]);
+
+    const compactTitle = variant.match(/^(Duke|Marquis|Lord|Prince) ([A-Z][A-Za-z'’.-]+)$/);
+    if (compactTitle) expanded.push(`${compactTitle[1]} of ${compactTitle[2]}`);
+
+    const compactKing = variant.match(/^King ([A-Z][A-Za-z'’.-]+)$/);
+    if (compactKing) expanded.push(`${compactKing[1]} Wang`);
+  }
+  return [...new Set([...variants, ...expanded])];
+}
+
 function variantRegex(variants) {
-  const parts = [...new Set(variants)]
+  const parts = expandedEnglishVariants([...new Set(variants)])
     .filter(Boolean)
     .sort((a, b) => b.length - a.length)
     .map((variant) => escapeRegex(variant).replace(/\\ /g, '[\\\\s-]+'));
@@ -214,10 +244,11 @@ function sourceIndex(anchors) {
 
 function usage() {
   console.error(`Usage:
-  node scripts/scan-translation-alignment.mjs [--book BOOK] [--json] [--summary] [--fail] [--min-severity N] [--review-priorities] [--glossary-scope all|proper|manual] [path ...]
+  node scripts/scan-translation-alignment.mjs [--book BOOK] [--json] [--summary] [--fail] [--min-severity N] [--review-priorities] [--glossary-scope all|proper|manual] [--no-same-sentence-glossary] [path ...]
 
 Flags likely sentence-misalignment candidates using distinctive manual anchors plus fuzzy aggregate matches from the full glossary.
-Proper nouns carry more weight; common terms are used only when several line up around the same neighboring sentence.
+Also flags suspiciously low same-sentence glossary coverage when the Chinese sentence has enough distinctive anchors.
+Proper nouns carry more weight; common terms are used only when several terms corroborate one another.
 
 Glossary scopes:
   all      Use proper nouns and common multi-character terms as fuzzy evidence (default)
@@ -235,6 +266,7 @@ function parseArgs(argv) {
     minSeverity: 3,
     reviewPriorities: false,
     glossaryScope: 'all',
+    sameSentenceGlossary: true,
   };
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
@@ -256,6 +288,10 @@ function parseArgs(argv) {
     }
     if (arg === '--review-priorities') {
       opts.reviewPriorities = true;
+      continue;
+    }
+    if (arg === '--no-same-sentence-glossary') {
+      opts.sameSentenceGlossary = false;
       continue;
     }
     if (arg === '--glossary-scope') {
@@ -359,7 +395,9 @@ function hasSource(record, anchor) {
 
 function hasEnglish(record, anchor) {
   anchor.englishRe.lastIndex = 0;
-  return anchor.englishRe.test(record.english);
+  if (anchor.englishRe.test(record.english)) return true;
+  anchor.englishRe.lastIndex = 0;
+  return anchor.englishRe.test(stripDiacritics(record.english));
 }
 
 function normalizedEnglishMatch(value) {
@@ -369,7 +407,10 @@ function normalizedEnglishMatch(value) {
 function matchedEnglishTexts(record, anchor) {
   anchor.englishRe.lastIndex = 0;
   const match = record.english.match(anchor.englishRe);
-  return match ? [normalizedEnglishMatch(match[0])] : [];
+  if (match) return [normalizedEnglishMatch(match[0])];
+  anchor.englishRe.lastIndex = 0;
+  const strippedMatch = stripDiacritics(record.english).match(anchor.englishRe);
+  return strippedMatch ? [normalizedEnglishMatch(strippedMatch[0])] : [];
 }
 
 function nearbyHasSource(records, index, anchor) {
@@ -444,13 +485,17 @@ function anchorWeight(anchor) {
   return 0.35;
 }
 
-function glossaryGroupScore(labels, { reviewPriorities = false } = {}) {
-  const unique = [...new Map(labels.map((anchor) => [anchor.label, anchor])).values()]
-    .filter((anchor, _index, anchors) => !anchors.some((other) => (
+function uniqueGlossaryAnchors(anchors) {
+  return [...new Map(anchors.map((anchor) => [anchor.label, anchor])).values()]
+    .filter((anchor, _index, unique) => !unique.some((other) => (
       other !== anchor
       && other.label.length > anchor.label.length
       && other.label.includes(anchor.label)
     )));
+}
+
+function glossaryGroupScore(labels, { reviewPriorities = false } = {}) {
+  const unique = uniqueGlossaryAnchors(labels);
   const properCount = unique.filter((anchor) => anchor.proper).length;
   const commonCount = unique.filter((anchor) => anchor.common).length;
   const score = unique.reduce((sum, anchor) => sum + anchorWeight(anchor), 0);
@@ -476,11 +521,59 @@ function glossaryGroupScore(labels, { reviewPriorities = false } = {}) {
   };
 }
 
+function sameSentenceGlossaryCoverage(record, { reviewPriorities = false } = {}) {
+  const sourceAnchors = uniqueGlossaryAnchors(sourceMatchedCommonAnchorsForRecord(record));
+  if (sourceAnchors.length === 0) return null;
+
+  const properCount = sourceAnchors.filter((anchor) => anchor.proper).length;
+  const commonCount = sourceAnchors.filter((anchor) => anchor.common).length;
+  const sourceScore = sourceAnchors.reduce((sum, anchor) => sum + anchorWeight(anchor), 0);
+  const minSourceScore = reviewPriorities
+    ? SAME_SENTENCE_REVIEW_MIN_SOURCE_SCORE
+    : SAME_SENTENCE_MIN_SOURCE_SCORE;
+  if (sourceScore < minSourceScore) return null;
+
+  // Do not let a pile of generic common terms create a priority unless there is
+  // enough cumulative evidence to make the fuzzy check meaningful.
+  if (properCount === 0 && commonCount < 10) return null;
+  if (properCount === 1 && commonCount < 4 && sourceScore < 3) return null;
+
+  const matchedAnchors = sourceAnchors.filter((anchor) => hasEnglish(record, anchor));
+  const matchedProperCount = matchedAnchors.filter((anchor) => anchor.proper).length;
+  const matchedCommonCount = matchedAnchors.filter((anchor) => anchor.common).length;
+  const matchedScore = matchedAnchors.reduce((sum, anchor) => sum + anchorWeight(anchor), 0);
+  const coverage = sourceScore > 0 ? matchedScore / sourceScore : 1;
+  const maxCoverage = reviewPriorities
+    ? SAME_SENTENCE_REVIEW_MAX_COVERAGE
+    : SAME_SENTENCE_MAX_COVERAGE;
+  if (coverage > maxCoverage) return null;
+
+  const severity = (
+    sourceScore >= 5
+    || properCount >= 3
+    || (properCount >= 2 && matchedProperCount === 0 && coverage <= SAME_SENTENCE_MAX_COVERAGE)
+  ) ? 3 : 2;
+
+  return {
+    sourceAnchors,
+    matchedAnchors,
+    missingAnchors: sourceAnchors.filter((anchor) => !matchedAnchors.includes(anchor)),
+    properCount,
+    commonCount,
+    matchedProperCount,
+    matchedCommonCount,
+    sourceScore,
+    matchedScore,
+    coverage,
+    severity,
+  };
+}
+
 function excerpt(text, width = 110) {
   return text.replace(/\s+/g, ' ').trim().slice(0, width);
 }
 
-function scanFile(file, { reviewPriorities = false } = {}) {
+function scanFile(file, { reviewPriorities = false, sameSentenceGlossary = true } = {}) {
   const chapter = JSON.parse(fs.readFileSync(file, 'utf8'));
   const records = sentenceRecords(chapter);
   const hits = [];
@@ -585,6 +678,31 @@ function scanFile(file, { reviewPriorities = false } = {}) {
         english: excerpt(record.english),
       });
     }
+
+    if (sameSentenceGlossary) {
+      const coverage = sameSentenceGlossaryCoverage(record, { reviewPriorities });
+      if (coverage) {
+        hits.push({
+          file,
+          id: record.id,
+          block: record.blockIndex + 1,
+          sentence: record.sentenceIndex + 1,
+          rule: 'LOW_GLOSSARY_SAME_SENTENCE_COVERAGE',
+          severity: coverage.severity,
+          anchor: coverage.missingAnchors.slice(0, 10).map((anchor) => anchor.label).join(', '),
+          glossarySourceScore: Number(coverage.sourceScore.toFixed(2)),
+          glossaryMatchedScore: Number(coverage.matchedScore.toFixed(2)),
+          glossaryCoverage: Number(coverage.coverage.toFixed(2)),
+          properAnchors: coverage.properCount,
+          commonAnchors: coverage.commonCount,
+          matchedProperAnchors: coverage.matchedProperCount,
+          matchedCommonAnchors: coverage.matchedCommonCount,
+          matchedAnchor: coverage.matchedAnchors.slice(0, 8).map((anchor) => anchor.label).join(', '),
+          zh: excerpt(record.zh),
+          english: excerpt(record.english),
+        });
+      }
+    }
   }
 
   return hits;
@@ -638,7 +756,10 @@ const opts = parseArgs(process.argv.slice(2));
 configureAnchors(opts);
 const inputs = opts.book ? [path.join(DATA_DIR, opts.book)] : opts.inputs;
 const files = chapterFiles(inputs);
-const scanner = (file) => scanFile(file, { reviewPriorities: opts.reviewPriorities });
+const scanner = (file) => scanFile(file, {
+  reviewPriorities: opts.reviewPriorities,
+  sameSentenceGlossary: opts.sameSentenceGlossary,
+});
 const hits = files.flatMap(scanner).filter((hit) => hit.severity >= opts.minSeverity);
 
 if (opts.json) {

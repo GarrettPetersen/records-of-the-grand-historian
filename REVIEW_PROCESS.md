@@ -80,5 +80,7 @@ If the chapter still needs work after the automated check, keep editing the revi
 ## Related Files
 
 - [QUALITY_STANDARDS.md](./QUALITY_STANDARDS.md)
+- [BOOK_PUBLICATION_QA.md](./BOOK_PUBLICATION_QA.md)
+- [EBOOK_PUBLISHING_PLAN.md](./EBOOK_PUBLISHING_PLAN.md)
 - [README.md](./README.md)
 - [Makefile](./Makefile)

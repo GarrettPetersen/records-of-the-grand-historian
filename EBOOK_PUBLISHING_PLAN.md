@@ -119,7 +119,7 @@ For publication readiness, add `REQUIRE_LANGUAGETOOL_CURRENT=1` to fail if cache
 
 `ebook-readiness` emits the same manual signoff state as machine-readable JSON. It is intentionally strict: it exits nonzero until the manual signoff is complete, but the JSON can still show that all automated readiness checks are green and list the exact remaining human blockers.
 
-For the Shiji pilot, follow `ebooks/shiji-publication-runbook.md` for the final Kindle Previewer, EPUB reader, KDP draft, and `ebooks/manual-qa/shiji.json` signoff workflow.
+For future books, follow the reusable [Book Publication QA Runbook](./BOOK_PUBLICATION_QA.md). For the Shiji pilot, `ebooks/shiji-publication-runbook.md` records the final Kindle Previewer, EPUB reader, KDP draft, and `ebooks/manual-qa/shiji.json` signoff workflow.
 
 The generated QA report also performs a KDP metadata preflight before packaging: required product fields, title/subtitle length, product-description length, category count, seven keyword slots, duplicate keywords, keyword overlap with existing metadata, promotional/platform terms, URLs, and HTML-like characters in fields where KDP does not want them.
 
@@ -347,7 +347,7 @@ Phase 5: Print And Premium Editions
 3. Generate and validate the complete Shiji EPUB after each source or generator change.
 4. Install or provide EPUBCheck locally and run `EPUBCHECK_JAR=/path/to/epubcheck.jar make ebook-validate SLUG=shiji`.
 5. Create the Shiji manual signoff template with `make ebook-manual-qa SLUG=shiji INIT=1`.
-6. Use `ebooks/shiji-publication-runbook.md` for the final Kindle Previewer, reader, navigation, table-heavy chapter, and KDP draft review.
+6. Use [BOOK_PUBLICATION_QA.md](./BOOK_PUBLICATION_QA.md) for the final Kindle Previewer, reader, navigation, table-heavy chapter, and KDP draft review. For the Shiji pilot, `ebooks/shiji-publication-runbook.md` records the completed handoff.
 7. Check current structured readiness with `make ebook-readiness SLUG=shiji`; all `automatedReadiness` fields should be `true` before manual signoff.
 8. Fill `ebooks/manual-qa/shiji.json` only after the manual reader and KDP draft checks pass.
 9. Run `make ebook-qa SLUG=shiji REQUIRE_LANGUAGETOOL_CURRENT=1 REQUIRE_MANUAL_SIGNOFF=1` before treating the book as publishable.

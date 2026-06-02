@@ -103,7 +103,8 @@ const argsFor = (scanner) => {
   }
   if (scanner.id === 'translation-alignment'
     && !scannerArgs.some(arg => arg === '--min-severity' || arg.startsWith('--min-severity='))) {
-    return [...scannerArgs, '--min-severity', '3'];
+    const defaultSeverity = scannerArgs.includes('--review-priorities') ? '2' : '3';
+    return [...scannerArgs, '--min-severity', defaultSeverity];
   }
   return scannerArgs;
 };
