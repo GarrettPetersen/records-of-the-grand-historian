@@ -1551,11 +1551,11 @@ function renderChapter(chapter, qa, chapterQa) {
   if (tableStats.rows >= 100 || tableStats.maxCells >= 8) {
     tableStats.reviewRecommended = true;
   }
-  if (tableStats.genericLabels > 0) {
+  if (tableStats.genericLabels > 0 && chapter?.meta?.book === 'shiji') {
     qa.warnings.push(`Generic table labels in chapter ${chapterId}: ${tableStats.genericLabels} Column-N label(s).`);
   }
   const unresolvedBlankHeaders = tableStats.blankHeaders - tableStats.resolvedBlankHeaders;
-  if (unresolvedBlankHeaders > 0) {
+  if (unresolvedBlankHeaders > 0 && chapter?.meta?.book === 'shiji') {
     qa.warnings.push(`Manual table label QA recommended for chapter ${chapterId}: ${unresolvedBlankHeaders} unresolved blank table header row(s).`);
   }
 

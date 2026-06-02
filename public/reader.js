@@ -498,30 +498,30 @@ function generateChicagoCitation(type, paragraphIdx, block) {
 
     if (citation && citation.includes('Partial translation')) {
       // Mixed translators - use custom citation format
-      return `${author}. "${chapterTitle}." Partial translation by Herbert J. Allen, Journal of the Royal Asiatic Society 26, no. 2 (1894): 269–295; remaining portions translated by Garrett M. Petersen, ${siteTitle}, 2025. ${url}. Accessed ${formatDate()}.`;
+      return `${author}. "${chapterTitle}." Partial translation by Herbert J. Allen, Journal of the Royal Asiatic Society 26, no. 2 (1894): 269–295; remaining portions translated by Garrett M. Petersen, ${siteTitle}, 2026. ${url}. Accessed ${formatDate()}.`;
     }
 
     // Only credit Herbert J. Allen if there are also modern translations
     const translator = getTranslatorInfo(chapterData.content[0]);
     if (translator && translator.includes('Herbert J. Allen') && hasModernTrans) {
-      return `${author}. "${chapterTitle}." Partial translation by Herbert J. Allen, Journal of the Royal Asiatic Society 26, no. 2 (1894): 269–295; completed by Garrett M. Petersen, ${siteTitle}, 2025. ${url}. Accessed ${formatDate()}.`;
+      return `${author}. "${chapterTitle}." Partial translation by Herbert J. Allen, Journal of the Royal Asiatic Society 26, no. 2 (1894): 269–295; completed by Garrett M. Petersen, ${siteTitle}, 2026. ${url}. Accessed ${formatDate()}.`;
     }
 
     // If chapter has modern translations, credit current translator
     if (hasModernTrans) {
-      return `${author}. ${bookTitle}. "${chapterTitle}." Translated by Garrett M. Petersen. ${siteTitle}, 2025. ${url}. Accessed ${formatDate()}.`;
+      return `${author}. ${bookTitle}. "${chapterTitle}." Translated by Garrett M. Petersen. ${siteTitle}, 2026. ${url}. Accessed ${formatDate()}.`;
     }
 
     // If chapter has only legacy translations, treat as untranslated
-    return `${author}. ${bookTitle}. "${chapterTitle}." ${siteTitle}, 2025. ${url}. Accessed ${formatDate()}.`;
+    return `${author}. ${bookTitle}. "${chapterTitle}." ${siteTitle}, 2026. ${url}. Accessed ${formatDate()}.`;
   } else if (type === 'table') {
     const tableNum = paragraphIdx + 1;
     const hasModernTrans = hasModernTranslations(chapterData);
 
     if (hasModernTrans) {
-      return `${author}. ${bookTitle}. "${chapterTitle}," table ${tableNum}. Translated by Garrett M. Petersen. ${siteTitle}, 2025. ${url}. Accessed ${formatDate()}.`;
+      return `${author}. ${bookTitle}. "${chapterTitle}," table ${tableNum}. Translated by Garrett M. Petersen. ${siteTitle}, 2026. ${url}. Accessed ${formatDate()}.`;
     } else {
-      return `${author}. ${bookTitle}. "${chapterTitle}," table ${tableNum}. ${siteTitle}, 2025. ${url}. Accessed ${formatDate()}.`;
+      return `${author}. ${bookTitle}. "${chapterTitle}," table ${tableNum}. ${siteTitle}, 2026. ${url}. Accessed ${formatDate()}.`;
     }
   } else {
     const hasModernTrans = hasModernTranslations(chapterData);
@@ -530,16 +530,16 @@ function generateChicagoCitation(type, paragraphIdx, block) {
 
     // Only credit Herbert J. Allen if there are also modern translations
     if (translator && translator.includes('Herbert J. Allen') && hasModernTrans) {
-      return `${author}. "${chapterTitle}," trans. Herbert J. Allen, Journal of the Royal Asiatic Society 26, no. 2 (1894): 269–295; completed by Garrett M. Petersen, ${siteTitle}, 2025, §${paraNum}. ${url}. Accessed ${formatDate()}.`;
+      return `${author}. "${chapterTitle}," trans. Herbert J. Allen, Journal of the Royal Asiatic Society 26, no. 2 (1894): 269–295; completed by Garrett M. Petersen, ${siteTitle}, 2026, §${paraNum}. ${url}. Accessed ${formatDate()}.`;
     }
 
     // If block has modern translations, credit current translator
     if (hasModernTrans) {
-      return `${author}. ${bookTitle}. "${chapterTitle}," §${paraNum}. Translated by Garrett M. Petersen. ${siteTitle}, 2025. ${url}. Accessed ${formatDate()}.`;
+      return `${author}. ${bookTitle}. "${chapterTitle}," §${paraNum}. Translated by Garrett M. Petersen. ${siteTitle}, 2026. ${url}. Accessed ${formatDate()}.`;
     }
 
     // If no modern translations, don't credit any translator
-    return `${author}. ${bookTitle}. "${chapterTitle}," §${paraNum}. ${siteTitle}, 2025. ${url}. Accessed ${formatDate()}.`;
+    return `${author}. ${bookTitle}. "${chapterTitle}," §${paraNum}. ${siteTitle}, 2026. ${url}. Accessed ${formatDate()}.`;
   }
 }
 
@@ -558,27 +558,27 @@ function generateAPACitation(type, paragraphIdx, block) {
     const hasModernTrans = hasModernTranslations(chapterData);
 
     if (citation && citation.includes('Partial translation')) {
-      return `${author}. (1894/2025). ${chapterTitle} (H. J. Allen & G. M. Petersen, Trans.). ${siteTitle}. Retrieved from ${url}`;
+      return `${author}. (1894/2026). ${chapterTitle} (H. J. Allen & G. M. Petersen, Trans.). ${siteTitle}. Retrieved from ${url}`;
     }
 
     const translator = getTranslatorInfo(chapterData.content[0]);
     if (translator && translator.includes('Herbert J. Allen') && hasModernTrans) {
-      return `${author}. (1894/2025). ${chapterTitle} (H. J. Allen & G. M. Petersen, Trans.). ${siteTitle}. Retrieved from ${url}`;
+      return `${author}. (1894/2026). ${chapterTitle} (H. J. Allen & G. M. Petersen, Trans.). ${siteTitle}. Retrieved from ${url}`;
     }
 
     if (hasModernTrans) {
-      return `${author}. (2025). ${chapterTitle} (G. M. Petersen, Trans.). ${siteTitle}. Retrieved from ${url}`;
+      return `${author}. (2026). ${chapterTitle} (G. M. Petersen, Trans.). ${siteTitle}. Retrieved from ${url}`;
     }
 
-    return `${author}. (2025). ${chapterTitle}. ${siteTitle}. Retrieved from ${url}`;
+    return `${author}. (2026). ${chapterTitle}. ${siteTitle}. Retrieved from ${url}`;
   } else if (type === 'table') {
     const tableNum = paragraphIdx + 1;
     const hasModernTrans = hasModernTranslations(chapterData);
 
     if (hasModernTrans) {
-      return `${author}. (2025). ${chapterTitle} (G. M. Petersen, Trans.) [Table ${tableNum}]. ${siteTitle}. Retrieved from ${url}`;
+      return `${author}. (2026). ${chapterTitle} (G. M. Petersen, Trans.) [Table ${tableNum}]. ${siteTitle}. Retrieved from ${url}`;
     } else {
-      return `${author}. (2025). ${chapterTitle} [Table ${tableNum}]. ${siteTitle}. Retrieved from ${url}`;
+      return `${author}. (2026). ${chapterTitle} [Table ${tableNum}]. ${siteTitle}. Retrieved from ${url}`;
     }
   } else {
     const hasModernTrans = hasModernTranslations(chapterData);
@@ -586,14 +586,14 @@ function generateAPACitation(type, paragraphIdx, block) {
     const translator = getTranslatorInfo(block);
 
     if (translator && translator.includes('Herbert J. Allen') && hasModernTrans) {
-      return `${author}. (1894/2025). ${chapterTitle} (H. J. Allen & G. M. Petersen, Trans.) (para. ${paraNum}). ${siteTitle}. Retrieved from ${url}`;
+      return `${author}. (1894/2026). ${chapterTitle} (H. J. Allen & G. M. Petersen, Trans.) (para. ${paraNum}). ${siteTitle}. Retrieved from ${url}`;
     }
 
     if (hasModernTrans) {
-      return `${author}. (2025). ${chapterTitle} (G. M. Petersen, Trans.) (para. ${paraNum}). ${siteTitle}. Retrieved from ${url}`;
+      return `${author}. (2026). ${chapterTitle} (G. M. Petersen, Trans.) (para. ${paraNum}). ${siteTitle}. Retrieved from ${url}`;
     }
 
-    return `${author}. (2025). ${chapterTitle} (para. ${paraNum}). ${siteTitle}. Retrieved from ${url}`;
+    return `${author}. (2026). ${chapterTitle} (para. ${paraNum}). ${siteTitle}. Retrieved from ${url}`;
   }
 }
 
@@ -611,27 +611,27 @@ function generateMLACitation(type, paragraphIdx, block) {
     const hasModernTrans = hasModernTranslations(chapterData);
 
     if (citation && citation.includes('Partial translation')) {
-      return `${author}. "${chapterTitle}." Partial translation by Herbert J. Allen, Journal of the Royal Asiatic Society, vol. 26, no. 2, 1894, pp. 269-295; remaining portions translated by Garrett M. Petersen, ${siteTitle}, 2025, ${url}. Accessed ${accessDate}.`;
+      return `${author}. "${chapterTitle}." Partial translation by Herbert J. Allen, Journal of the Royal Asiatic Society, vol. 26, no. 2, 1894, pp. 269-295; remaining portions translated by Garrett M. Petersen, ${siteTitle}, 2026, ${url}. Accessed ${accessDate}.`;
     }
 
     const translator = getTranslatorInfo(chapterData.content[0]);
     if (translator && translator.includes('Herbert J. Allen') && hasModernTrans) {
-      return `${author}. "${chapterTitle}." Partial translation by Herbert J. Allen, Journal of the Royal Asiatic Society, vol. 26, no. 2, 1894, pp. 269-295; completed by Garrett M. Petersen, ${siteTitle}, 2025, ${url}. Accessed ${accessDate}.`;
+      return `${author}. "${chapterTitle}." Partial translation by Herbert J. Allen, Journal of the Royal Asiatic Society, vol. 26, no. 2, 1894, pp. 269-295; completed by Garrett M. Petersen, ${siteTitle}, 2026, ${url}. Accessed ${accessDate}.`;
     }
 
     if (hasModernTrans) {
-      return `${author}. "${chapterTitle}." Translated by Garrett M. Petersen, ${siteTitle}, 2025, ${url}. Accessed ${accessDate}.`;
+      return `${author}. "${chapterTitle}." Translated by Garrett M. Petersen, ${siteTitle}, 2026, ${url}. Accessed ${accessDate}.`;
     }
 
-    return `${author}. "${chapterTitle}." ${siteTitle}, 2025, ${url}. Accessed ${accessDate}.`;
+    return `${author}. "${chapterTitle}." ${siteTitle}, 2026, ${url}. Accessed ${accessDate}.`;
   } else if (type === 'table') {
     const tableNum = paragraphIdx + 1;
     const hasModernTrans = hasModernTranslations(chapterData);
 
     if (hasModernTrans) {
-      return `${author}. "${chapterTitle}." Translated by Garrett M. Petersen, table ${tableNum}. ${siteTitle}, 2025, ${url}. Accessed ${accessDate}.`;
+      return `${author}. "${chapterTitle}." Translated by Garrett M. Petersen, table ${tableNum}. ${siteTitle}, 2026, ${url}. Accessed ${accessDate}.`;
     } else {
-      return `${author}. "${chapterTitle}." Table ${tableNum}. ${siteTitle}, 2025, ${url}. Accessed ${accessDate}.`;
+      return `${author}. "${chapterTitle}." Table ${tableNum}. ${siteTitle}, 2026, ${url}. Accessed ${accessDate}.`;
     }
   } else {
     const hasModernTrans = hasModernTranslations(chapterData);
@@ -639,14 +639,14 @@ function generateMLACitation(type, paragraphIdx, block) {
     const translator = getTranslatorInfo(block);
 
     if (translator && translator.includes('Herbert J. Allen') && hasModernTrans) {
-      return `${author}. "${chapterTitle}." Partial translation by Herbert J. Allen, Journal of the Royal Asiatic Society, vol. 26, no. 2, 1894, pp. 269-295; completed by Garrett M. Petersen, ${siteTitle}, 2025, para. ${paraNum}, ${url}. Accessed ${accessDate}.`;
+      return `${author}. "${chapterTitle}." Partial translation by Herbert J. Allen, Journal of the Royal Asiatic Society, vol. 26, no. 2, 1894, pp. 269-295; completed by Garrett M. Petersen, ${siteTitle}, 2026, para. ${paraNum}, ${url}. Accessed ${accessDate}.`;
     }
 
     if (hasModernTrans) {
-      return `${author}. "${chapterTitle}." Translated by Garrett M. Petersen, para. ${paraNum}. ${siteTitle}, 2025, ${url}. Accessed ${accessDate}.`;
+      return `${author}. "${chapterTitle}." Translated by Garrett M. Petersen, para. ${paraNum}. ${siteTitle}, 2026, ${url}. Accessed ${accessDate}.`;
     }
 
-    return `${author}. "${chapterTitle}." Para. ${paraNum}. ${siteTitle}, 2025, ${url}. Accessed ${accessDate}.`;
+    return `${author}. "${chapterTitle}." Para. ${paraNum}. ${siteTitle}, 2026, ${url}. Accessed ${accessDate}.`;
   }
 }
 
@@ -665,47 +665,47 @@ function generateBibTeXCitation(type, paragraphIdx, block) {
     const hasModernTrans = hasModernTranslations(chapterData);
 
     if (citation && citation.includes('Partial translation')) {
-      return `@misc{${authorKey}2025${chapterData.meta.chapter},
+      return `@misc{${authorKey}2026${chapterData.meta.chapter},
   author = {${author}},
   title = {${chapterTitle}},
   translator = {Herbert J. Allen and Garrett M. Petersen},
   howpublished = {${siteTitle}},
-  year = {1894/2025},
+  year = {1894/2026},
   url = {${url}},
-  note = {Partial translation by Herbert J. Allen (1894), Journal of the Royal Asiatic Society 26(2): 269-295; remaining portions by Garrett M. Petersen (2025). Accessed ${formatDate()}}
+  note = {Partial translation by Herbert J. Allen (1894), Journal of the Royal Asiatic Society 26(2): 269-295; remaining portions by Garrett M. Petersen (2026). Accessed ${formatDate()}}
 }`;
     }
 
     const translator = getTranslatorInfo(chapterData.content[0]);
     if (translator && translator.includes('Herbert J. Allen') && hasModernTrans) {
-      return `@misc{${authorKey}2025${chapterData.meta.chapter},
+      return `@misc{${authorKey}2026${chapterData.meta.chapter},
   author = {${author}},
   title = {${chapterTitle}},
   translator = {Herbert J. Allen and Garrett M. Petersen},
   howpublished = {${siteTitle}},
-  year = {1894/2025},
+  year = {1894/2026},
   url = {${url}},
-  note = {Partial translation by Herbert J. Allen (1894), completed by Garrett M. Petersen (2025). Accessed ${formatDate()}}
+  note = {Partial translation by Herbert J. Allen (1894), completed by Garrett M. Petersen (2026). Accessed ${formatDate()}}
 }`;
     }
 
     if (hasModernTrans) {
-      return `@misc{${authorKey}2025${chapterData.meta.chapter},
+      return `@misc{${authorKey}2026${chapterData.meta.chapter},
   author = {${author}},
   title = {${chapterTitle}},
   translator = {Garrett M. Petersen},
   howpublished = {${siteTitle}},
-  year = {2025},
+  year = {2026},
   url = {${url}},
   note = {Accessed ${formatDate()}}
 }`;
     }
 
-    return `@misc{${authorKey}2025${chapterData.meta.chapter},
+    return `@misc{${authorKey}2026${chapterData.meta.chapter},
   author = {${author}},
   title = {${chapterTitle}},
   howpublished = {${siteTitle}},
-  year = {2025},
+  year = {2026},
   url = {${url}},
   note = {Accessed ${formatDate()}}
 }`;
@@ -714,21 +714,21 @@ function generateBibTeXCitation(type, paragraphIdx, block) {
     const hasModernTrans = hasModernTranslations(chapterData);
 
     if (hasModernTrans) {
-      return `@misc{${authorKey}2025${chapterData.meta.chapter}t${tableNum},
+      return `@misc{${authorKey}2026${chapterData.meta.chapter}t${tableNum},
   author = {${author}},
   title = {${chapterTitle}, Table ${tableNum}},
   translator = {Garrett M. Petersen},
   howpublished = {${siteTitle}},
-  year = {2025},
+  year = {2026},
   url = {${url}},
   note = {Accessed ${formatDate()}}
 }`;
     } else {
-      return `@misc{${authorKey}2025${chapterData.meta.chapter}t${tableNum},
+      return `@misc{${authorKey}2026${chapterData.meta.chapter}t${tableNum},
   author = {${author}},
   title = {${chapterTitle}, Table ${tableNum}},
   howpublished = {${siteTitle}},
-  year = {2025},
+  year = {2026},
   url = {${url}},
   note = {Accessed ${formatDate()}}
 }`;
@@ -739,33 +739,33 @@ function generateBibTeXCitation(type, paragraphIdx, block) {
     const translator = getTranslatorInfo(block);
 
     if (translator && translator.includes('Herbert J. Allen') && hasModernTrans) {
-      return `@misc{${authorKey}2025${chapterData.meta.chapter}p${paraNum},
+      return `@misc{${authorKey}2026${chapterData.meta.chapter}p${paraNum},
   author = {${author}},
   title = {${chapterTitle}, para. ${paraNum}},
   translator = {Herbert J. Allen and Garrett M. Petersen},
   howpublished = {${siteTitle}},
-  year = {1894/2025},
+  year = {1894/2026},
   url = {${url}},
-  note = {Partial translation by Herbert J. Allen (1894), completed by Garrett M. Petersen (2025). Accessed ${formatDate()}}
+  note = {Partial translation by Herbert J. Allen (1894), completed by Garrett M. Petersen (2026). Accessed ${formatDate()}}
 }`;
     }
 
     if (hasModernTrans) {
-      return `@misc{${authorKey}2025${chapterData.meta.chapter}p${paraNum},
+      return `@misc{${authorKey}2026${chapterData.meta.chapter}p${paraNum},
   author = {${author}},
   title = {${chapterTitle}, para. ${paraNum}},
   translator = {Garrett M. Petersen},
   howpublished = {${siteTitle}},
-  year = {2025},
+  year = {2026},
   url = {${url}},
   note = {Accessed ${formatDate()}}
 }`;
     } else {
-      return `@misc{${authorKey}2025${chapterData.meta.chapter}p${paraNum},
+      return `@misc{${authorKey}2026${chapterData.meta.chapter}p${paraNum},
   author = {${author}},
   title = {${chapterTitle}, para. ${paraNum}},
   howpublished = {${siteTitle}},
-  year = {2025},
+  year = {2026},
   url = {${url}},
   note = {Accessed ${formatDate()}}
 }`;
