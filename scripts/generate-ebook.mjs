@@ -202,12 +202,32 @@ function formatList(values) {
 }
 
 function getTranslation(item) {
-  if (!item) return '';
-  if (typeof item.idiomatic === 'string' && item.idiomatic.trim()) return item.idiomatic.trim();
-  if (typeof item.literal === 'string' && item.literal.trim()) return item.literal.trim();
-  if (typeof item.translation === 'string' && item.translation.trim()) return item.translation.trim();
+  return getMainText(item);
+}
+
+function getTranslationObject(item) {
+  if (!item) return null;
+  if (typeof item.idiomatic === 'string' || typeof item.literal === 'string' || typeof item.translation === 'string') {
+    return null;
+  }
   const translation = item.translations?.find((entry) => entry.lang === 'en') || item.translations?.[0];
-  return textContent(translation?.idiomatic || translation?.literal || translation?.text || '');
+  return translation || null;
+}
+
+function getMainText(item) {
+  if (!item) return '';
+  const direct = item.idiomatic || item.literal || item.translation;
+  if (typeof direct === 'string' && direct.trim()) return direct.trim();
+  const trans = getTranslationObject(item);
+  if (trans) {
+    return textContent(trans.idiomatic || trans.literal || trans.text || '');
+  }
+  return '';
+}
+
+function getFootnote(item) {
+  const trans = getTranslationObject(item);
+  return trans?.footnote ? textContent(trans.footnote) : '';
 }
 
 function getParagraphTranslations(block) {
@@ -224,23 +244,24 @@ function wordCount(value) {
 }
 
 function splitParagraphSentences(sentences, maxWords = 220) {
-  const chunks = [];
+  const groups = [];
   let current = [];
   let currentWords = 0;
 
-  for (const sentence of sentences) {
-    const sentenceWords = wordCount(sentence);
+  for (const sent of sentences) {
+    const sText = typeof sent === 'string' ? sent : (sent.plain || sent);
+    const sentenceWords = wordCount(sText);
     if (current.length > 0 && currentWords + sentenceWords > maxWords) {
-      chunks.push(current.join(' '));
+      groups.push(current);
       current = [];
       currentWords = 0;
     }
-    current.push(sentence);
+    current.push(sent);
     currentWords += sentenceWords;
   }
 
-  if (current.length > 0) chunks.push(current.join(' '));
-  return chunks;
+  if (current.length > 0) groups.push(current);
+  return groups;
 }
 
 function recordCjkOccurrence(qa, chapter, blockIndex, text, allowed) {
@@ -606,10 +627,11 @@ function inferBlankTableHeaders(chapter, columnCount) {
   return null;
 }
 
-function renderTableEntry(block, headers, chapter, blockIndex, rowNumber, qa, tableStats) {
+function renderTableEntry(block, headers, chapter, blockIndex, rowNumber, qa, tableStats, footnotes) {
   const fields = tableCells(block)
     .map((cell, cellIndex) => {
-      const text = textContent(getTranslation(cell));
+      const mainText = getMainText(cell);
+      const text = textContent(mainText);
       if (!text && textContent(cell.content || cell.zh)) {
         qa.errors.push(`Missing table cell translation in ${chapter.meta.chapter} block ${blockIndex + 1} cell ${cellIndex + 1}`);
       }
@@ -619,11 +641,24 @@ function renderTableEntry(block, headers, chapter, blockIndex, rowNumber, qa, ta
       if (!text) return null;
       const label = fallbackTableFieldLabel(headers, cellIndex);
       if (isGenericTableFieldLabel(label)) tableStats.genericLabels += 1;
-      const displayText = tableDisplayText(label, text, chapter);
-      if (!displayText) return null;
+      const displayMain = tableDisplayText(label, text, chapter);
+      if (!displayMain) return null;
+      let cellContent = escapeXml(displayMain);
+      const fnText = getFootnote(cell);
+      if (fnText) {
+        const fnNum = footnotes.length + 1;
+        const fnId = `fn-${chapter.meta.chapter}-${fnNum}`;
+        footnotes.push({
+          id: fnId,
+          number: fnNum,
+          text: fnText
+        });
+        cellContent += `<a epub:type="noteref" href="#${fnId}"><sup>${fnNum}</sup></a>`;
+      }
       return {
-        label,
-        text: displayText
+        label: label ? escapeXml(label) : null,
+        main: displayMain,
+        content: cellContent
       };
     })
     .filter(Boolean);
@@ -633,16 +668,16 @@ function renderTableEntry(block, headers, chapter, blockIndex, rowNumber, qa, ta
   const titleField = fields[0];
   const details = fields.slice(1)
     .map((field) => {
-      if (!field.label) return `<dd class="table-entry-unlabeled">${escapeXml(field.text)}</dd>`;
-      return `<dt>${escapeXml(field.label)}</dt><dd>${escapeXml(field.text)}</dd>`;
+      if (!field.label) return `<dd class="table-entry-unlabeled">${field.content}</dd>`;
+      return `<dt>${field.label}</dt><dd>${field.content}</dd>`;
     })
     .join('');
   const fallbackTitle = `Table row ${rowNumber}`;
-  const title = titleField?.text || fallbackTitle;
+  const title = titleField?.main || fallbackTitle;
   if (/state|name/i.test(titleField?.label || '') && hasSuspiciousTableTitlePunctuation(title)) {
     qa.errors.push(`Suspicious terminal punctuation in table title in ${chapter.meta.chapter} block ${blockIndex + 1}: ${title}`);
   }
-  const titleLabel = titleField?.label ? `<span class="table-entry-kicker">${escapeXml(titleField.label)}</span>` : '';
+  const titleLabel = titleField?.label ? `<span class="table-entry-kicker">${titleField.label}</span>` : '';
   const detailList = details ? `\n  <dl>${details}</dl>` : '';
 
   return `<section class="table-entry">
@@ -1298,10 +1333,11 @@ function proseFlowMetrics(chapterData) {
     const sentences = getParagraphTranslations(block);
     if (sentences.length === 0) continue;
     sourceParagraphs += 1;
-    const chunks = splitParagraphSentences(sentences);
-    renderedParagraphs += chunks.length;
-    if (chunks.length > 1) splitParagraphs += 1;
-    for (const chunk of chunks) {
+    const groups = splitParagraphSentences(sentences);
+    renderedParagraphs += groups.length;
+    if (groups.length > 1) splitParagraphs += 1;
+    for (const group of groups) {
+      const chunk = group.join(' ');
       maxWords = Math.max(maxWords, wordCount(chunk));
     }
   }
@@ -1432,7 +1468,7 @@ function loadProducts(args) {
   throw new Error(`Book "${args.book}" has ${matches.length} products. Use --all-products or a more specific selector.`);
 }
 
-function collectChapterBlocks(chapter, qa, chapterQa) {
+function collectChapterBlocks(chapter, qa, chapterQa, footnotes = []) {
   const blocks = [];
   let currentHeaders = inferInitialTableHeaders(chapter);
   let pendingBlankHeader = false;
@@ -1442,15 +1478,35 @@ function collectChapterBlocks(chapter, qa, chapterQa) {
   for (const [blockIndex, block] of (chapter.content || []).entries()) {
     if (block.type === 'paragraph') {
       pendingBlankHeader = false;
-      const sentences = getParagraphTranslations(block);
-      const text = textContent(sentences.join(' '));
-      if (!text && (block.sentences || []).length > 0) {
+      const sentenceItems = block.sentences || [];
+      const units = [];
+      for (const item of sentenceItems) {
+        const main = getMainText(item);
+        if (!main) continue;
+        let rendered = escapeXml(main);
+        const fnText = getFootnote(item);
+        if (fnText) {
+          const fnNum = footnotes.length + 1;
+          const fnId = `fn-${chapter.meta.chapter}-${fnNum}`;
+          footnotes.push({
+            id: fnId,
+            number: fnNum,
+            text: fnText
+          });
+          rendered += `<a epub:type="noteref" href="#${fnId}"><sup>${fnNum}</sup></a>`;
+        }
+        units.push({ plain: main, rendered });
+      }
+      if (units.length === 0) continue;
+      const plainSentences = units.map(u => u.plain);
+      const text = textContent(plainSentences.join(' '));
+      if (!text && sentenceItems.length > 0) {
         qa.errors.push(`Missing paragraph translation in ${chapter.meta.chapter} block ${blockIndex + 1}`);
       }
       if (hasPlaceholder(text)) {
         qa.errors.push(`Placeholder text in ${chapter.meta.chapter} block ${blockIndex + 1}`);
       }
-      if (hasCjk(text) && !allowsChineseCharacters(block) && !(block.sentences || []).some(allowsChineseCharacters)) {
+      if (hasCjk(text) && !allowsChineseCharacters(block) && !sentenceItems.some(allowsChineseCharacters)) {
         qa.warnings.push(`Chinese characters in English paragraph in ${chapter.meta.chapter} block ${blockIndex + 1}`);
       }
       if (hasCjk(text)) {
@@ -1459,20 +1515,21 @@ function collectChapterBlocks(chapter, qa, chapterQa) {
           chapter,
           blockIndex,
           text,
-          allowsChineseCharacters(block) || (block.sentences || []).some(allowsChineseCharacters)
+          allowsChineseCharacters(block) || sentenceItems.some(allowsChineseCharacters)
         );
       }
       if (text) {
-        const chunks = splitParagraphSentences(sentences);
-        if (chunks.length > 1) qa.paragraphRendering.splits += chunks.length - 1;
-        for (const chunk of chunks) {
-          const chunkWords = wordCount(chunk);
+        const groups = splitParagraphSentences(units);
+        if (groups.length > 1) qa.paragraphRendering.splits += groups.length - 1;
+        for (const group of groups) {
+          const chunkWords = wordCount(group.map(u => u.plain).join(' '));
           if (chunkWords > qa.paragraphRendering.maxWords) qa.paragraphRendering.maxWords = chunkWords;
           if (chunkWords > 350) {
             qa.paragraphRendering.longParagraphs += 1;
             qa.warnings.push(`Long rendered paragraph in ${chapter.meta.chapter} block ${blockIndex + 1}: ${chunkWords} words`);
           }
-          blocks.push(`<p>${escapeXml(chunk)}</p>`);
+          const chunkHtml = group.map(u => u.rendered).join(' ');
+          blocks.push(`<p>${chunkHtml}</p>`);
         }
       }
       continue;
@@ -1523,7 +1580,7 @@ function collectChapterBlocks(chapter, qa, chapterQa) {
       tableStats.translatedCells += translatedCells;
       tableStats.maxCells = Math.max(tableStats.maxCells, cells.length);
       if (translatedCells === 0) tableStats.emptyRows += 1;
-      const entry = renderTableEntry(block, currentHeaders, chapter, blockIndex, tableRowNumber, qa, tableStats);
+      const entry = renderTableEntry(block, currentHeaders, chapter, blockIndex, tableRowNumber, qa, tableStats, footnotes);
       if (entry) {
         blocks.push(entry);
         tableStats.renderedRows += 1;
@@ -1542,7 +1599,8 @@ function renderChapter(chapter, qa, chapterQa) {
   const chapterId = chapter.meta.chapter;
   const zhTitle = chapter.meta.title?.zh || `Chapter ${chapterId}`;
   const enTitle = chapter.meta.title?.en || `Chapter ${Number.parseInt(chapterId, 10)}`;
-  const blocks = collectChapterBlocks(chapter, qa, chapterQa);
+  const footnotes = [];
+  const blocks = collectChapterBlocks(chapter, qa, chapterQa, footnotes);
   if (blocks.length === 0) qa.errors.push(`No rendered English content for chapter ${chapterId}`);
   const tableStats = chapterQa.tableRendering;
   if (tableStats.rows > 0 && tableStats.renderedRows === 0) {
@@ -1559,6 +1617,13 @@ function renderChapter(chapter, qa, chapterQa) {
     qa.warnings.push(`Manual table label QA recommended for chapter ${chapterId}: ${unresolvedBlankHeaders} unresolved blank table header row(s).`);
   }
 
+  let footnotesSection = '';
+  if (footnotes.length > 0) {
+    footnotesSection = '\n    ' + footnotes.map((fn) =>
+      `<aside epub:type="footnote" id="${fn.id}">\n      <p><sup>${fn.number}</sup> ${escapeXml(fn.text)}</p>\n    </aside>`
+    ).join('\n    ');
+  }
+
   return `<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="en" lang="en">
@@ -1571,6 +1636,7 @@ function renderChapter(chapter, qa, chapterQa) {
     <h1>${escapeXml(enTitle)}</h1>
     <p class="chapter-kicker">${escapeXml(zhTitle)} - Chapter ${escapeXml(chapterId)}</p>
     ${blocks.join('\n    ')}
+    ${footnotesSection}
   </section>
 </body>
 </html>
@@ -1848,6 +1914,27 @@ p {
 
 .table-entry-unlabeled {
   margin-left: 0;
+}
+
+[epub\\:type="noteref"] {
+  font-size: 0.65em;
+  vertical-align: super;
+  line-height: 0;
+  text-decoration: none;
+  color: #c0392b;
+}
+
+[epub\\:type="footnote"] {
+  font-size: 0.85em;
+  margin-top: 1em;
+  padding-top: 0.5em;
+  border-top: 1px solid #d8d2c4;
+  page-break-inside: avoid;
+}
+
+[epub\\:type="footnote"] p {
+  text-indent: 0;
+  margin: 0.2em 0;
 }
 `;
 }
