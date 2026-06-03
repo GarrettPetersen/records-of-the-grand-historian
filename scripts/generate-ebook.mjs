@@ -13,7 +13,12 @@ import { renderBookCover } from './generate-book-covers.mjs';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
 const manifestPath = path.join(repoRoot, 'ebooks', 'manifest.json');
+const publicationDescriptionsPath = path.join(repoRoot, 'ebooks', 'publication-descriptions.json');
 const outRoot = path.join(repoRoot, 'dist', 'ebooks');
+const publicationDescriptions = (() => {
+  if (!fs.existsSync(publicationDescriptionsPath)) return {};
+  return readJson(publicationDescriptionsPath);
+})();
 
 function parseArgs(argv) {
   const args = {};
@@ -33,6 +38,36 @@ function parseArgs(argv) {
 
 function readJson(file) {
   return JSON.parse(fs.readFileSync(file, 'utf8'));
+}
+
+function publicationDescriptionFromValue(value) {
+  if (typeof value === 'string') return textContent(value);
+  if (Array.isArray(value)) {
+    return value.map((paragraph) => textContent(paragraph)).filter(Boolean).join('\n\n');
+  }
+  return '';
+}
+
+function publicationAboutThisEditionFromValue(value) {
+  if (Array.isArray(value)) {
+    return value.map((paragraph) => textContent(paragraph)).filter(Boolean);
+  }
+  if (typeof value === 'string') {
+    return value.split(/\n{2,}/).map((paragraph) => textContent(paragraph)).filter(Boolean);
+  }
+  return null;
+}
+
+function applyPublicationDescriptions(product) {
+  const entry = publicationDescriptions[product.slug] || publicationDescriptions[product.book] || {};
+  const resolved = structuredClone(product);
+  if (Object.prototype.hasOwnProperty.call(entry, 'productDescription')) {
+    resolved.productDescription = publicationDescriptionFromValue(entry.productDescription);
+  }
+  if (Object.prototype.hasOwnProperty.call(entry, 'aboutThisEdition')) {
+    resolved.aboutThisEdition = publicationAboutThisEditionFromValue(entry.aboutThisEdition) || [];
+  }
+  return resolved;
 }
 
 function writeFile(file, content) {
@@ -765,7 +800,6 @@ function validateProductMetadata(product, qa) {
     'publisher',
     'rights',
     'description',
-    'productDescription',
     'aiDisclosure',
     'editionNote',
     'editionStatus'
@@ -812,6 +846,9 @@ function validateProductMetadata(product, qa) {
   if (!textContent(kdp.publishingRights)) qa.warnings.push('Missing KDP publishing-rights note.');
   if (!textContent(kdp.aiGeneratedContent)) qa.warnings.push('Missing KDP AI-generated-content disclosure note.');
   const productDescription = textContent(product.productDescription);
+  if (!productDescription) {
+    qa.warnings.push('No product description found for publication metadata.');
+  }
   if (productDescription.length > 4000) {
     qa.warnings.push('Product description is longer than 4,000 characters.');
   }
@@ -1458,13 +1495,14 @@ ${tableItems || 'No table-heavy chapters flagged.'}
 function loadProducts(args) {
   const manifest = readJson(manifestPath);
   const products = manifest.products || [];
-  if (args.all) return products;
+  if (args.all) return products.map((product) => applyPublicationDescriptions(product));
   if (!args.book) {
     throw new Error('Missing --book. Use --book shiji or --all.');
   }
   const matches = products.filter((product) => product.book === args.book);
-  if (args['all-products']) return matches;
-  if (matches.length === 1) return matches;
+  const resolvedMatches = matches.map((product) => applyPublicationDescriptions(product));
+  if (args['all-products']) return resolvedMatches;
+  if (resolvedMatches.length === 1) return resolvedMatches;
   throw new Error(`Book "${args.book}" has ${matches.length} products. Use --all-products or a more specific selector.`);
 }
 
