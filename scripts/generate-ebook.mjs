@@ -40,32 +40,27 @@ function readJson(file) {
   return JSON.parse(fs.readFileSync(file, 'utf8'));
 }
 
-function publicationDescriptionFromValue(value) {
-  if (typeof value === 'string') return textContent(value);
-  if (Array.isArray(value)) {
-    return value.map((paragraph) => textContent(paragraph)).filter(Boolean).join('\n\n');
+function publicationTextFromEntry(entry = {}) {
+  if (typeof entry.text === 'string') {
+    return entry.text.replace(/\r\n/g, '\n').trim();
+  }
+  if (typeof entry.productDescription === 'string') {
+    return entry.productDescription.replace(/\r\n/g, '\n').trim();
+  }
+  if (Array.isArray(entry.aboutThisEdition)) {
+    const paragraphs = entry.aboutThisEdition.map((paragraph) => textContent(paragraph)).filter(Boolean);
+    return paragraphs.join('\n\n');
   }
   return '';
-}
-
-function publicationAboutThisEditionFromValue(value) {
-  if (Array.isArray(value)) {
-    return value.map((paragraph) => textContent(paragraph)).filter(Boolean);
-  }
-  if (typeof value === 'string') {
-    return value.split(/\n{2,}/).map((paragraph) => textContent(paragraph)).filter(Boolean);
-  }
-  return null;
 }
 
 function applyPublicationDescriptions(product) {
   const entry = publicationDescriptions[product.slug] || publicationDescriptions[product.book] || {};
   const resolved = structuredClone(product);
-  if (Object.prototype.hasOwnProperty.call(entry, 'productDescription')) {
-    resolved.productDescription = publicationDescriptionFromValue(entry.productDescription);
-  }
-  if (Object.prototype.hasOwnProperty.call(entry, 'aboutThisEdition')) {
-    resolved.aboutThisEdition = publicationAboutThisEditionFromValue(entry.aboutThisEdition) || [];
+  if (Object.prototype.hasOwnProperty.call(entry, 'text') || Object.prototype.hasOwnProperty.call(entry, 'productDescription') || Object.prototype.hasOwnProperty.call(entry, 'aboutThisEdition')) {
+    const publicationText = publicationTextFromEntry(entry);
+    resolved.productDescription = publicationText;
+    resolved.aboutThisEdition = publicationText ? publicationText.split(/\n{2,}/).map((paragraph) => textContent(paragraph)).filter(Boolean) : [];
   }
   return resolved;
 }
