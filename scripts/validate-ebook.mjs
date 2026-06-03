@@ -11,6 +11,7 @@ import { renderBookCover } from './generate-book-covers.mjs';
 const epubPath = process.argv[2];
 const CHILD_TIMEOUT_MS = 10_000;
 const errors = [];
+const MANIFEST_PATH = path.join(process.cwd(), 'ebooks', 'manifest.json');
 
 function execFileSyncChecked(command, args, options = {}) {
   return childProcess.execFileSync(command, args, {
@@ -56,6 +57,8 @@ if (epubcheckJar) {
 const productDir = path.dirname(epubPath);
 const slug = path.basename(epubPath, '.epub');
 const extractDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ebook-validate-'));
+const ebookManifest = readEbookManifest();
+const sourceProduct = manifestMetadataForSlug(ebookManifest, slug);
 try {
   execFileSyncChecked('unzip', ['-q', epubPath, '-d', extractDir], { stdio: 'pipe' });
 } catch (error) {
@@ -67,6 +70,24 @@ process.on('exit', () => {
 
 function readJson(file) {
   return JSON.parse(fs.readFileSync(file, 'utf8'));
+}
+
+function readEbookManifest() {
+  if (!fs.existsSync(MANIFEST_PATH)) {
+    errors.push('ebooks/manifest.json is missing; cannot validate title/subtitle parity.');
+    return null;
+  }
+  try {
+    return readJson(MANIFEST_PATH);
+  } catch (error) {
+    errors.push(`Could not parse ebooks/manifest.json: ${error.message}`);
+    return null;
+  }
+}
+
+function productFromManifest(manifest) {
+  if (!manifest) return null;
+  return (manifest.products || []).find((product) => product.slug === slug) || null;
 }
 
 function sha256File(file) {
@@ -94,6 +115,15 @@ function validateArtifactDescriptor(label, descriptor, expectedFile) {
   if (descriptor.sha256 !== actualSha) {
     errors.push(`${label} artifact SHA-256 mismatch.`);
   }
+}
+
+function textOrEmpty(value) {
+  return (typeof value === 'string' ? value : '').replace(/\s+/gu, ' ').trim();
+}
+
+function manifestMetadataForSlug(manifest, targetSlug) {
+  if (!manifest || !targetSlug) return null;
+  return (manifest.products || []).find((product) => product.slug === targetSlug) || null;
 }
 
 function unzipText(file) {
@@ -255,6 +285,11 @@ if (fs.existsSync(path.join(productDir, 'qa-report.json'))) {
   }
 }
 
+function extractOpfTitle(xml, id) {
+  const match = xml.match(new RegExp(`<dc:title\\s+[^>]*id="${id}"[^>]*>([\\s\\S]*?)<\\/dc:title>`, 'u'));
+  return match ? visibleText(match[1]) : '';
+}
+
 if (entries[0] !== 'mimetype') {
   errors.push('The first ZIP entry must be mimetype.');
 }
@@ -272,6 +307,51 @@ const packageXml = unzipText('EPUB/package.opf');
 const nav = unzipText('EPUB/nav.xhtml');
 const cover = unzipText('EPUB/cover.xhtml');
 const css = unzipText('EPUB/styles/ebook.css');
+
+const sourceTitle = textOrEmpty(sourceProduct?.title);
+const sourceSubtitle = textOrEmpty(sourceProduct?.subtitle);
+if (sourceTitle) {
+  const metadataPath = path.join(productDir, 'metadata.json');
+  const publicationManifestPath = path.join(productDir, 'publication-manifest.json');
+  const kdpUploadFieldsPath = path.join(productDir, 'kdp-upload-fields.json');
+  if (fs.existsSync(metadataPath)) {
+    const metadata = readJson(metadataPath);
+    if (textOrEmpty(metadata.title) !== sourceTitle) {
+      errors.push(`metadata.json title mismatch: ${JSON.stringify(textOrEmpty(metadata.title))} != ${JSON.stringify(sourceTitle)}.`);
+    }
+    if ((textOrEmpty(sourceProduct?.subtitle) || '') !== (textOrEmpty(metadata.subtitle) || '')) {
+      errors.push(`metadata.json subtitle mismatch: ${JSON.stringify(textOrEmpty(metadata.subtitle))} != ${JSON.stringify(textOrEmpty(sourceSubtitle))}.`);
+    }
+  }
+  if (fs.existsSync(kdpUploadFieldsPath)) {
+    const fields = readJson(kdpUploadFieldsPath);
+    const fieldTitle = textOrEmpty(fields.product?.title);
+    const fieldSubtitle = textOrEmpty(fields.product?.subtitle);
+    if (fieldTitle !== sourceTitle) {
+      errors.push(`kdp-upload-fields.json title mismatch: ${JSON.stringify(fieldTitle)} != ${JSON.stringify(sourceTitle)}.`);
+    }
+    if (fieldSubtitle !== (textOrEmpty(sourceSubtitle))) {
+      errors.push(`kdp-upload-fields.json subtitle mismatch: ${JSON.stringify(fieldSubtitle)} != ${JSON.stringify(textOrEmpty(sourceSubtitle))}.`);
+    }
+  }
+  if (fs.existsSync(publicationManifestPath)) {
+    const publicationManifest = readJson(publicationManifestPath);
+    if (textOrEmpty(publicationManifest.title) !== sourceTitle) {
+      errors.push(`publication-manifest.json title mismatch: ${JSON.stringify(textOrEmpty(publicationManifest.title))} != ${JSON.stringify(sourceTitle)}.`);
+    }
+    if (textOrEmpty(publicationManifest.subtitle) !== textOrEmpty(sourceSubtitle)) {
+      errors.push(`publication-manifest.json subtitle mismatch: ${JSON.stringify(textOrEmpty(publicationManifest.subtitle))} != ${JSON.stringify(textOrEmpty(sourceSubtitle))}.`);
+    }
+  }
+  const opfTitle = extractOpfTitle(packageXml, 'title');
+  const opfSubtitle = extractOpfTitle(packageXml, 'subtitle');
+  if (opfTitle !== sourceTitle) {
+    errors.push(`EPUB package.opf title mismatch: ${JSON.stringify(opfTitle)} != ${JSON.stringify(sourceTitle)}.`);
+  }
+  if (sourceSubtitle !== opfSubtitle) {
+    errors.push(`EPUB package.opf subtitle mismatch: ${JSON.stringify(opfSubtitle)} != ${JSON.stringify(textOrEmpty(sourceSubtitle))}.`);
+  }
+}
 
 function timestampOrEmpty(value) {
   if (!value || typeof value !== 'string') return '';
