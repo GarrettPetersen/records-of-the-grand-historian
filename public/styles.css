@@ -1196,3 +1196,221 @@ footer .site-copyright {
     outline-offset: 6px;
     border-radius: 4px;
 }
+
+/* Kindle / Amazon Associates promo */
+.kindle-footer-link {
+    margin-top: 0.75rem;
+    font-size: 0.82rem;
+    color: #666;
+    line-height: 1.5;
+}
+
+.kindle-footer-link a {
+    color: var(--primary-color);
+}
+
+.affiliate-disclosure {
+    color: #777;
+}
+
+.kindle-callout-cover,
+.kindle-promo-cover {
+    flex-shrink: 0;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: var(--book-color, var(--primary-color));
+}
+
+.kindle-callout-cover img,
+.kindle-promo-cover img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.kindle-promo-cover {
+    width: 7.5rem;
+    margin: 0 auto 1rem;
+}
+
+.kindle-callout {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 1.5rem;
+    margin: 1.5rem 0 2rem;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--book-color, var(--primary-color));
+    border-radius: 8px;
+    background: linear-gradient(135deg, #fff 0%, #f7f9fc 100%);
+    box-shadow: var(--shadow);
+}
+
+.kindle-callout--chapter {
+    margin-top: 2.5rem;
+    padding: 1rem 1.25rem;
+}
+
+.kindle-callout-eyebrow {
+    margin: 0 0 0.35rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--book-color, var(--primary-color));
+}
+
+.kindle-callout-text {
+    margin: 0;
+    max-width: 42rem;
+    line-height: 1.55;
+}
+
+.kindle-callout-disclosure {
+    margin: 0.65rem 0 0;
+    font-size: 0.78rem;
+    color: #777;
+    line-height: 1.4;
+}
+
+.kindle-callout-btn {
+    flex-shrink: 0;
+    display: inline-block;
+    padding: 0.65rem 1.1rem;
+    border-radius: 6px;
+    background: var(--book-color, var(--primary-color));
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.92rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.kindle-callout-btn:hover {
+    filter: brightness(1.08);
+    color: #fff;
+}
+
+.kindle-promo-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    background: rgba(15, 23, 42, 0.55);
+}
+
+.kindle-promo-modal[hidden] {
+    display: none !important;
+}
+
+body.kindle-promo-open {
+    overflow: hidden;
+}
+
+.kindle-promo-panel {
+    position: relative;
+    width: min(100%, 28rem);
+    padding: 1.75rem 1.75rem 1.25rem;
+    border-radius: 12px;
+    background: var(--card-bg);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.22);
+}
+
+.kindle-promo-close {
+    position: absolute;
+    top: 0.65rem;
+    right: 0.75rem;
+    border: none;
+    background: none;
+    color: #999;
+    font-size: 1.75rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.kindle-promo-close:hover {
+    color: var(--text-color);
+}
+
+.kindle-promo-eyebrow {
+    margin: 0 0 0.35rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--book-color, var(--primary-color));
+}
+
+.kindle-promo-title {
+    margin: 0 0 0.75rem;
+    font-size: 1.45rem;
+    color: var(--primary-color);
+}
+
+.kindle-promo-text {
+    margin: 0 0 1.25rem;
+    line-height: 1.55;
+}
+
+.kindle-promo-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 0.85rem;
+}
+
+.kindle-promo-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.7rem 1.1rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+}
+
+.kindle-promo-btn--primary {
+    background: var(--book-color, var(--primary-color));
+    color: #fff;
+}
+
+.kindle-promo-btn--primary:hover {
+    filter: brightness(1.08);
+    color: #fff;
+}
+
+.kindle-promo-btn--ghost {
+    background: transparent;
+    color: #666;
+    border: 1px solid var(--border-color);
+}
+
+.kindle-promo-btn--ghost:hover {
+    color: var(--text-color);
+    border-color: #bbb;
+}
+
+.kindle-promo-disclosure {
+    margin: 0;
+    font-size: 0.76rem;
+    color: #777;
+    line-height: 1.45;
+}
+
+.book-cover-card-kindle {
+    margin-top: 0.35rem;
+    font-size: 0.78rem;
+    color: var(--primary-color);
+    font-weight: 600;
+}

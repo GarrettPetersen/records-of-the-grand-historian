@@ -405,6 +405,9 @@ export function buildBookCoverCardInnerHtml({ bookId, info, chapterCount }) {
   const design = getBookDesign(bookId);
   const coverPath = `/covers/books/${bookId}.svg`;
   const coverageLine = design.coverage ? `${design.coverage} · ` : '';
+  const kindleLine = bookId === 'shiji'
+    ? '<div class="book-cover-card-kindle">Kindle edition available</div>'
+    : '';
   return `
       <div class="book-cover-card-art" style="--book-color: ${escapeHtml(design.color)}">
         <img src="${coverPath}" alt="" loading="lazy" />
@@ -413,6 +416,7 @@ export function buildBookCoverCardInnerHtml({ bookId, info, chapterCount }) {
         <div class="book-cover-card-title">${escapeHtml(info.name)}</div>
         <div class="book-cover-card-meta">${escapeHtml(info.pinyin)} · ${escapeHtml(info.author)}</div>
         <div class="book-cover-card-detail">${escapeHtml(`${coverageLine}${chapterCount.toLocaleString()} chapters`)}</div>
+        ${kindleLine}
       </div>
     `;
 }

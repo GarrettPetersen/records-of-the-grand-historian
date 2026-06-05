@@ -22,6 +22,11 @@ import { fileURLToPath } from 'node:url';
 import { defaultStaticGenConcurrency, hardwareConcurrency } from './scripts/build-parallelism.mjs';
 import { getBookMetadata, mergeBookInfo } from './scripts/book-metadata.mjs';
 import { getBookDesign } from './public/book-design.js';
+import {
+  SHIJI_KINDLE,
+  kindleFooterLine,
+  kindleInlineCalloutHtml,
+} from './public/kindle-promo-shared.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -167,7 +172,12 @@ function siteFooter(prefix = '') {
             <a href="${prefix}privacy.html">Privacy Policy</a>
         </p>
         <p class="site-copyright">English translations © 2026 Garrett M. Petersen. The original Chinese texts are in the public domain.</p>
+        ${kindleFooterLine(prefix)}
     </footer>`;
+}
+
+function kindlePromoScript(prefix = '') {
+  return `<script type="module" src="${prefix}kindle-promo.js?v=20260605-kindle"></script>`;
 }
 
 function parseTableAttributePrefix(text) {
@@ -285,11 +295,14 @@ function generateBookLandingHTML(bookId) {
     <main>
         <a href="../index.html" class="back-link">← Back to all histories</a>
 
+        ${bookId === SHIJI_KINDLE.bookId ? kindleInlineCalloutHtml({ variant: 'hub' }) : ''}
+
         <div id="loading">Loading chapters...</div>
         <div class="chapter-list" id="chapter-list" style="display: none;"></div>
     </main>
 
     ${siteFooter('../')}
+    ${bookId === SHIJI_KINDLE.bookId ? kindlePromoScript('../') : ''}
 
     <script type="module" src="../chapters.js?v=20260527-book-colors"></script>
 </body>
@@ -1002,6 +1015,8 @@ ${contentHTML}
                 ${nextChapter ? `<a href="${nextChapter}.html" class="nav-btn next-btn">Next Chapter →</a>` : '<span class="nav-btn disabled">Next Chapter →</span>'}
             </div>
         </div>
+
+        ${bookId === SHIJI_KINDLE.bookId ? kindleInlineCalloutHtml({ variant: 'chapter' }) : ''}
     </main>
 
     ${siteFooter('../')}
