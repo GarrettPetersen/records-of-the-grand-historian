@@ -153,6 +153,12 @@ export const TRANSLATION_ARTIFACT_RULES = [
     pattern: /\b(?!(?:had|that)\b)([a-z][a-z'-]{2,})\s+\1\b/g,
   },
   {
+    id: 'RAW_ROMANIZATION_PLACEHOLDER',
+    severity: 3,
+    description: 'Placeholder romanization left in place of an English translation',
+    pattern: /\b(?:Technical sentence in .*?;\s*romanization|Same passage read aloud as):/gi,
+  },
+  {
     id: 'DUPLICATE_PRONOUN_AFTER_TITLE',
     severity: 3,
     description: 'Service formula accidentally duplicated a pronoun, as in "As general he, he..."',
