@@ -159,6 +159,12 @@ export const TRANSLATION_ARTIFACT_RULES = [
     pattern: /\b(?:Technical sentence in .*?;\s*romanization|Same passage read aloud as):/gi,
   },
   {
+    id: 'GENERIC_ANNOTATION_PLACEHOLDER',
+    severity: 3,
+    description: 'Generic annotation placeholder left instead of translating the source note',
+    pattern: /\b(?:The subcomment links Records, Zuo, and Masters texts|The subcomment names Han offices, titles, or ritual gear|The editors align this line with received Wenxuan lemmata|The note defines a rare graph or gives fanqie reading|The critical apparatus marks \(\)|Subcommentary: scholastic gloss citing canonical parallels|Subcomment: parallel diction from the Wenxuan tradition|Commentary note: exegetical expansion with historical exempla|Gloss: Han-school citation cluster supporting the main text|Gloss: moral-philosophical tag from the Analects or Mencius|Editorial gloss: etymology and phonological aside|Commentary: bureaucratic or institutional clarification)\b/gi,
+  },
+  {
     id: 'DUPLICATE_PRONOUN_AFTER_TITLE',
     severity: 3,
     description: 'Service formula accidentally duplicated a pronoun, as in "As general he, he..."',
