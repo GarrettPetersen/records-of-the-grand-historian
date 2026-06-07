@@ -44,9 +44,9 @@ Start with the cheap reusable scanners:
 make quality-scan BOOK=<book> OPTIONS="--summary --fail"
 ```
 
-This runs source artifact checks, translation artifact checks, quote/alignment-adjacent translation checks, compound-name spacing, title style, translation completeness, metadata, and literal-identical prose advisory output.
+This runs source artifact checks, translation artifact checks, quote span alignment, quote/alignment-adjacent translation checks, compound-name spacing, title style, translation completeness, metadata, and literal-identical prose advisory output.
 
-Treat hard-gate failures as blockers. Treat advisory output as a review queue, not proof of defects.
+Treat hard-gate failures, including quote span alignment failures, as blockers. Treat advisory output as a review queue, not proof of defects.
 
 For broad review prioritization, run:
 

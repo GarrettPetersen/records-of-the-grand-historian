@@ -60,7 +60,11 @@ function countSingleQuoteDelimiters(text) {
   const en = String(text || '');
   let count = 0;
   for (let i = 0; i < en.length; i++) {
-    if (en[i] !== "'") continue;
+    if (en[i] !== "'" && en[i] !== '‘' && en[i] !== '’') continue;
+    if (en[i] === '‘' || en[i] === '’') {
+      count++;
+      continue;
+    }
     const prev = en[i - 1] || '';
     const next = en[i + 1] || '';
     if (/[A-Za-z]/.test(prev) && /[A-Za-z]/.test(next)) continue;
@@ -79,10 +83,8 @@ function countEnglishQuoteMarks(text) {
 function translationFields(sentence) {
   const fields = [];
   if (sentence.translations?.[0]) {
-    fields.push({ owner: sentence.translations[0], key: 'literal' });
     fields.push({ owner: sentence.translations[0], key: 'idiomatic' });
   }
-  if (Object.hasOwn(sentence, 'literal')) fields.push({ owner: sentence, key: 'literal' });
   if (Object.hasOwn(sentence, 'idiomatic')) fields.push({ owner: sentence, key: 'idiomatic' });
   if (Object.hasOwn(sentence, 'translation')) fields.push({ owner: sentence, key: 'translation' });
   return fields.filter(field => typeof field.owner[field.key] === 'string' && field.owner[field.key].length > 0);
@@ -105,14 +107,14 @@ function leadingQuote(text) {
   const index = firstNonSpaceIndex(text);
   if (index < 0) return null;
   const char = text[index];
-  return ['"', '“', "'"].includes(char) ? { index, char } : null;
+  return ['"', '“', "'", '‘'].includes(char) ? { index, char } : null;
 }
 
 function trailingQuote(text) {
   const index = lastNonSpaceIndex(text);
   if (index < 0) return null;
   const char = text[index];
-  return ['"', '”', "'"].includes(char) ? { index, char } : null;
+  return ['"', '”', "'", '’'].includes(char) ? { index, char } : null;
 }
 
 function leadingQuoteRun(text) {
@@ -120,7 +122,7 @@ function leadingQuoteRun(text) {
   const start = firstNonSpaceIndex(str);
   if (start < 0) return [];
   const run = [];
-  for (let i = start; i < str.length && ['"', '“', "'"].includes(str[i]); i++) {
+  for (let i = start; i < str.length && ['"', '“', "'", '‘'].includes(str[i]); i++) {
     run.push({ index: i, char: str[i] });
   }
   return run;
@@ -131,7 +133,7 @@ function trailingQuoteRun(text) {
   const end = lastNonSpaceIndex(str);
   if (end < 0) return [];
   const run = [];
-  for (let i = end; i >= 0 && ['"', '”', "'"].includes(str[i]); i--) {
+  for (let i = end; i >= 0 && ['"', '”', "'", '’'].includes(str[i]); i--) {
     run.push({ index: i, char: str[i] });
   }
   return run.reverse();
@@ -149,7 +151,7 @@ function removeCharsAt(text, indexes) {
 }
 
 function preservesLeadingInnerSingleQuote(zh, en, quote) {
-  if (quote.char !== "'") return false;
+  if (quote.char !== "'" && quote.char !== '‘') return false;
   if (!String(zh || '').trimStart().startsWith('『')) return false;
   return !/["“”]/.test(String(en || '').slice(quote.index + 1));
 }
@@ -158,7 +160,7 @@ function preservesTrailingInnerQuote(zh, en, quote) {
   if (!/』[。！？!?]?$/u.test(String(zh || '').trim())) return false;
   const text = String(en || '');
   if (quote.char === '"' || quote.char === '”') return text[quote.index - 1] !== "'";
-  if (quote.char !== "'") return false;
+  if (quote.char !== "'" && quote.char !== '’') return false;
   const beforeQuote = String(en || '').slice(0, quote.index);
   return !/["“”]/.test(beforeQuote);
 }

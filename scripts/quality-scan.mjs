@@ -15,6 +15,7 @@ if (args.includes('--help') || args.includes('-h')) {
 Runs the reusable cheap QA scanners:
   - scan-source-artifacts.mjs
   - scan-translation-artifacts.mjs
+  - scan-quote-span-alignment.mjs
   - scan-translation-alignment.mjs
   - scan-compound-name-spacing.mjs
   - scan-title-style.mjs
@@ -125,6 +126,12 @@ const commands = [
     label: 'Translation artifact candidates',
     command: 'node',
     args: ['scripts/scan-translation-artifacts.mjs'],
+  },
+  {
+    id: 'quote-span-alignment',
+    label: 'Quote span alignment candidates',
+    command: 'node',
+    args: ['scripts/scan-quote-span-alignment.mjs'],
   },
   {
     id: 'translation-alignment',

@@ -18,7 +18,11 @@ function countSingleQuoteDelimiters(text) {
   const en = String(text || '');
   let count = 0;
   for (let i = 0; i < en.length; i++) {
-    if (en[i] !== "'") continue;
+    if (en[i] !== "'" && en[i] !== '‘' && en[i] !== '’') continue;
+    if (en[i] === '‘' || en[i] === '’') {
+      count++;
+      continue;
+    }
     const prev = en[i - 1] || '';
     const next = en[i + 1] || '';
     if (/[A-Za-z]/.test(prev) && /[A-Za-z]/.test(next)) continue;
@@ -51,20 +55,25 @@ function leadingQuote(text) {
   const index = firstNonSpaceIndex(text);
   if (index < 0) return null;
   const char = text[index];
-  return ['"', '“', "'"].includes(char) ? { index, char } : null;
+  return ['"', '“', "'", '‘'].includes(char) ? { index, char } : null;
 }
 
 function trailingQuote(text) {
   const index = lastNonSpaceIndex(text);
   if (index < 0) return null;
   const char = text[index];
-  return ['"', '”', "'"].includes(char) ? { index, char } : null;
+  return ['"', '”', "'", '’'].includes(char) ? { index, char } : null;
+}
+
+function isTrailingOpeningQuote(text, quote) {
+  if (!quote || !['"', '“', "'", '‘'].includes(quote.char)) return false;
+  return /[:：]\s*["“'‘]\s*$/u.test(String(text || ''));
 }
 
 function preservesLeadingInnerQuote(zh, en, quote) {
   if (!/^[〉\])）\s]*『/u.test(String(zh || '').trimStart())) return false;
   if (quote.char === '"' || quote.char === '“') return true;
-  if (quote.char !== "'") return false;
+  if (quote.char !== "'" && quote.char !== '‘') return false;
   return !/["“”]/.test(String(en || '').slice(quote.index + 1));
 }
 
@@ -72,9 +81,7 @@ function preservesTrailingInnerQuote(zh, en, quote) {
   if (!/』[。！？!?]?$/u.test(String(zh || '').trim())) return false;
   const text = String(en || '');
   if (quote.char === '"' || quote.char === '”') return text[quote.index - 1] !== "'";
-  if (quote.char !== "'") return false;
-  const beforeQuote = text.slice(0, quote.index);
-  return !/["“”]/.test(beforeQuote);
+  return quote.char === "'" || quote.char === '’';
 }
 
 function isQuotedGlossHeadword(english) {
@@ -109,7 +116,7 @@ function quoteBoundaryProblems(chinese, english, beforeDepth, afterDepth, openCo
     problems.push('Chinese opens a multi-sentence quote span, but English has no quote marks.');
   }
 
-  if (isOpeningUnit && trail && (!lead || lead.index !== trail.index) && !(innerCloseCount > 0 && (trail.char === "'" || preservesTrailingInnerQuote(chinese, english, trail)))) {
+  if (isOpeningUnit && trail && !isTrailingOpeningQuote(english, trail) && (!lead || lead.index !== trail.index) && !(innerCloseCount > 0 && (trail.char === "'" || preservesTrailingInnerQuote(chinese, english, trail)))) {
     problems.push('English has a closing quote at the end of an opening unit whose Chinese quote continues into the next unit.');
   }
 
@@ -230,19 +237,35 @@ function main() {
   const inputs = [];
   let bookFilter = null;
   let outputLimit = 50;
+  let wantsJson = false;
+  let wantsSummary = false;
 
   for (let i = 2; i < process.argv.length; i += 1) {
     const arg = process.argv[i];
     if (arg === '--help' || arg === '-h') {
       console.error(`Usage:
-  node scripts/scan-quote-span-alignment.mjs [--book BOOK] [--limit N] [path ...]
+  node scripts/scan-quote-span-alignment.mjs [--book BOOK] [--limit N] [--summary] [--json] [path ...]
 
 Options:
   --book BOOK  Scan data/BOOK
   --limit N    Number of detailed problems to show; 0 shows count only, -1 shows all
+  --summary    Print count only
+  --json       Emit machine-readable report
 
 Explicit paths may be chapter files or directories. Use either --book or paths, not both.`);
       process.exit(0);
+    }
+    if (arg === '--json') {
+      wantsJson = true;
+      continue;
+    }
+    if (arg === '--fail') {
+      continue;
+    }
+    if (arg === '--summary') {
+      wantsSummary = true;
+      outputLimit = 0;
+      continue;
     }
     if (arg === '--book') {
       bookFilter = process.argv[++i];
@@ -274,6 +297,27 @@ Explicit paths may be chapter files or directories. Use either --book or paths, 
 
   const files = chapterFiles(inputs, bookFilter);
   const problems = files.flatMap(scanChapter);
+
+  if (wantsJson) {
+    const byFile = {};
+    const byProblem = {};
+    for (const problem of problems) {
+      byFile[problem.file] = (byFile[problem.file] || 0) + 1;
+      for (const note of problem.boundaryProblems) {
+        byProblem[note] = (byProblem[note] || 0) + 1;
+      }
+    }
+    console.log(JSON.stringify({
+      count: problems.length,
+      totalHits: problems.length,
+      scannedFiles: files.length,
+      book: bookFilter,
+      byFile,
+      byProblem,
+      problems
+    }, null, 2));
+    process.exit(problems.length > 0 ? 1 : 0);
+  }
 
   if (problems.length > 0) {
     console.error(`Found ${problems.length} quote-span alignment problem(s):\n`);
