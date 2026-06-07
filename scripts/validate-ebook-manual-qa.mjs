@@ -400,6 +400,19 @@ function initSignoff(product) {
   if (fs.existsSync(file)) {
     const existing = readJson(file);
     if (existing.status !== 'pending') {
+      const currentArtifacts = currentArtifactInfo(product);
+      const staleArtifacts = Object.entries(currentArtifacts)
+        .some(([key, current]) => {
+          const signed = existing.artifacts?.[key];
+          return current && (!signed || signed.file !== current.file || signed.bytes !== current.bytes || signed.sha256 !== current.sha256);
+        });
+      if (staleArtifacts) {
+        const next = templateFor(product);
+        next.checks.kindlePreviewer.notes = `Previous passed signoff from ${existing.checkedAt || 'an unknown date'} was invalidated by regenerated artifacts. Re-run Kindle Previewer and reader checks before final publication.`;
+        fs.writeFileSync(file, `${JSON.stringify(next, null, 2)}\n`);
+        console.log(`Reset stale passed manual QA signoff to pending: ${path.relative(REPO_ROOT, file)}`);
+        return;
+      }
       console.log(`Manual QA signoff already exists: ${path.relative(REPO_ROOT, file)}`);
       return;
     }

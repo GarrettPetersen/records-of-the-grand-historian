@@ -51,20 +51,22 @@ Treat hard-gate failures as blockers. Treat advisory output as a review queue, n
 For broad review prioritization, run:
 
 ```bash
-npm run quality:scan -- --book <book> --summary --review-priorities
+npm run quality:scan -- --book <book> --summary --review-priorities --min-severity 3 --min-glossary-risk 10
 ```
 
-The broader review-priority mode deliberately surfaces more candidates than the final gate. Use it to choose chapters for human review.
+This produces the publication top queue. The broader review-priority mode can surface thousands of low-confidence glossary misses, so use the risk cutoff when deciding what must be inspected before packaging.
 
 ## 3. Use Glossary Alignment As A Review Queue
 
-The translation-alignment scanner uses curated anchors and the Chinese Notes glossary. It now checks both likely sentence offsets and suspiciously low same-sentence glossary coverage.
+The translation-alignment scanner uses curated anchors and the Chinese Notes glossary. It now checks both likely sentence offsets and per-sentence same-sentence glossary coverage.
 
 Run the normal broad pass:
 
 ```bash
-npm run quality:translation-alignment -- --book <book> --summary --glossary-scope all --review-priorities
+npm run quality:translation-alignment -- --book <book> --summary --glossary-scope all --review-priorities --min-severity 3 --min-glossary-risk 10
 ```
+
+This is the recommended book-level top queue. `make apply-review` uses the same scanner with a lower chapter-level risk cutoff, so every editorial pass prints glossary-based alerts for the chapter after edits are applied.
 
 If it is too noisy, narrow it:
 
@@ -76,17 +78,23 @@ npm run quality:translation-alignment -- --book <book> --summary --glossary-scop
 Interpretation:
 
 - `COMMON_GLOSSARY_NEARBY_SOURCE` and `COMMON_GLOSSARY_NEARBY_ENGLISH` often indicate sentence offset or quote-boundary drift.
-- `LOW_GLOSSARY_SAME_SENTENCE_COVERAGE` means the Chinese sentence has enough glossary anchors, but the English matches very few of them.
+- `LOW_GLOSSARY_SAME_SENTENCE_COVERAGE` means the Chinese sentence has glossary anchors, but the English matches too few of them. Use this beyond offset detection: it can catch mistranslations, omissions, over-paraphrase, and copied English from a different sentence.
 - A low glossary score is smoke, not a verdict. It is strongest for sentences with several proper nouns, offices, titles, places, or technical terms.
-- False positives are expected when the translation uses a better rendering than the glossary, such as an established house style or a title form the glossary does not list.
+- False positives are expected when the translation uses a better rendering than the glossary, such as an established house style or a title form the glossary does not list. For example, the glossary may not credit "Son of Heaven" for `天子` even when the translation is correct.
 
 For machine-readable triage:
 
 ```bash
-npm run quality:translation-alignment -- --book <book> --json --review-priorities > /tmp/<book>-alignment.json
+npm run quality:translation-alignment -- --book <book> --json --review-priorities --min-severity 3 --min-glossary-risk 10 > /tmp/<book>-alignment.json
 ```
 
-Review highest-count chapters first, then inspect individual severity 3 findings.
+To export per-sentence glossary scores, including sentences below the alert threshold:
+
+```bash
+npm run quality:translation-alignment -- --book <book> --json --review-priorities --include-sentence-scores > /tmp/<book>-glossary-scores.json
+```
+
+Review the highest `glossaryRiskScore` findings first, then the highest-count chapters. Use the full per-sentence score export when you want a deeper pass than the publication queue.
 
 ## 4. Refresh LanguageTool Scores
 
@@ -163,7 +171,8 @@ Run the full automated publication gate:
 make ebook-qa SLUG=<slug> REQUIRE_LANGUAGETOOL_CURRENT=1
 ```
 
-This validates EPUB structure, optional Calibre conversion, quote-span alignment, cheap source QA, and cached LanguageTool freshness.
+This validates EPUB structure, scans the packaged EPUB/upload bundle for publication blockers, runs optional Calibre conversion, checks quote-span alignment, runs cheap source QA, and checks cached LanguageTool freshness.
+The publication-blocker scan catches visible placeholders, raw table-span text, `edicted`, `strategems`, `Maquis`, unexplained `paoge`, unaccented `lese-majeste`, and lowercase `wuchen day`.
 
 If Calibre is unavailable or the environment cannot run it:
 
@@ -201,6 +210,14 @@ Check:
 - table-heavy chapters listed in `dist/ebooks/<slug>/table-review.md` are readable on a narrow pane
 - no visible placeholders, raw HTML, `colspan`, `rowspan`, or `(No translation available)` text appears
 
+After the local Kindle Previewer and reader checks pass, record the local evidence without marking the KDP draft complete:
+
+```bash
+make ebook-local-signoff SLUG=<slug> CHECKED_BY="Garrett M. Petersen" KINDLE_PREVIEWER_VERSION="<version>"
+```
+
+This updates the artifact-bound manual QA file for the current EPUB and cover, but it intentionally leaves the KDP draft fields pending.
+
 Some readers may modify an EPUB while opening it. If that happens, regenerate the upload artifact before final QA:
 
 ```bash
@@ -236,7 +253,7 @@ Create a KDP draft before publishing. Confirm:
 
 ## 10. Final Signoff
 
-After Kindle Previewer, reader QA, table review, and KDP draft ingestion pass, record signoff:
+After Kindle Previewer, reader QA, table review, and KDP draft ingestion pass, record the final KDP signoff:
 
 ```bash
 make ebook-kdp-signoff SLUG=<slug> CHECKED_BY="Garrett M. Petersen" CONFIRM_KDP_DRAFT=1

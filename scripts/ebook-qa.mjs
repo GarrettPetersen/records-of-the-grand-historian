@@ -141,6 +141,7 @@ function runProduct(productLike, opts) {
   }
 
   run('EPUB structure validation', 'node', ['scripts/validate-ebook.mjs', epubPath]);
+  run('Publication blocker scan', 'node', ['scripts/scan-ebook-publication-blockers.mjs', '--slug', slug, '--fail']);
 
   if (!opts.skipCalibre) {
     run('Calibre conversion smoke test', 'node', ['scripts/smoke-calibre-ebook.mjs', epubPath]);
@@ -158,7 +159,16 @@ function runProduct(productLike, opts) {
   }
   // Cheap scan is advisory at this stage; --fail would catch hard gates only, but we run summary for visibility.
   console.log('\n=== Cheap translation quality scan (advisory) ===');
-  const cheapRes = spawnSync('node', ['scripts/quality-scan.mjs', '--summary', ...sourceScopeArgs], {cwd: REPO_ROOT, stdio: 'inherit'});
+  const cheapRes = spawnSync('node', [
+    'scripts/quality-scan.mjs',
+    '--summary',
+    '--review-priorities',
+    '--min-severity',
+    '3',
+    '--min-glossary-risk',
+    '10',
+    ...sourceScopeArgs,
+  ], {cwd: REPO_ROOT, stdio: 'inherit'});
   if (cheapRes.status !== 0) {
     console.log('Cheap quality scan found advisory candidates (review queue); not a hard blocker for publication.');
   }

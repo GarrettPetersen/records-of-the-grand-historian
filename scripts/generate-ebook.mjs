@@ -730,6 +730,32 @@ function cjkMatches(value) {
   }));
 }
 
+function isInsideChineseBookTitle(text, index) {
+  const beforeOpen = text.lastIndexOf('《', index);
+  const beforeClose = text.lastIndexOf('》', index);
+  if (beforeOpen === -1 || beforeClose > beforeOpen) return false;
+  const afterClose = text.indexOf('》', index);
+  return afterClose !== -1;
+}
+
+function isIntentionalCjkReference(text, match) {
+  const value = textContent(text);
+  if (isInsideChineseBookTitle(value, match.index)) return true;
+
+  const referenceCue = /\b(?:character|characters|graph|gloss(?:es|ed)?|read|reads|pronounced|pronunciation|fanqie|text reads|written|place-name|corrupt|insert(?:ed)?|marks?)\b/i;
+  if (!referenceCue.test(value)) return false;
+
+  const cjkRuns = cjkMatches(value);
+  const shortReference = match.text.length <= 6 && cjkRuns.length <= 8;
+  const compactGloss = value.length <= 220 && cjkRuns.every((run) => run.text.length <= 6);
+  return shortReference || compactGloss;
+}
+
+function hasUnmarkedCjk(value) {
+  const text = textContent(value);
+  return cjkMatches(text).some((match) => !isIntentionalCjkReference(text, match));
+}
+
 function excerptAround(text, index, width = 80) {
   const start = Math.max(0, index - width);
   const end = Math.min(text.length, index + width);
@@ -1098,6 +1124,8 @@ These files are for review and recordkeeping; do not upload them as the manuscri
 - ${languageTool.line}
 - Local artifact checks covered by automated QA: EPUB structure, packaged cover opacity, frontmatter text, table-of-contents completeness, KDP field sidecar completeness, and generated table-review targets.
 - Manual publication checks are tracked in \`ebooks/manual-qa/${product.slug}.json\`: Kindle Previewer conversion, at least one reader light/dark rendering pass, and a KDP draft with fields entered from \`${support.kdpUploadFields?.file || 'kdp-upload-fields.json'}\`.
+- After Kindle Previewer and local reader checks pass, record local evidence with \`make ebook-local-signoff SLUG=${product.slug} CHECKED_BY="Garrett M. Petersen" KINDLE_PREVIEWER_VERSION="<version>"\`.
+- After the unpublished KDP draft ingests successfully, record final KDP evidence with \`make ebook-kdp-signoff SLUG=${product.slug} CHECKED_BY="Garrett M. Petersen" CONFIRM_KDP_DRAFT=1\`.
 - Before publishing, complete \`ebooks/manual-qa/${product.slug}.json\` and run \`make ebook-qa SLUG=${product.slug} REQUIRE_LANGUAGETOOL_CURRENT=1 REQUIRE_MANUAL_SIGNOFF=1\`.
 `;
 }
@@ -1432,6 +1460,7 @@ Generated: ${qa.generatedAt}
 - Run \`make ebook-validate SLUG=${product.slug}\`.
 - Run \`make ebook-smoke-calibre SLUG=${product.slug}\` on a machine with Calibre installed.
 - Run \`make ebook-manual-qa SLUG=${product.slug} INIT=1\` to create the manual signoff template.
+- After Kindle Previewer and local reader checks pass, run \`make ebook-local-signoff SLUG=${product.slug} CHECKED_BY="Garrett M. Petersen" KINDLE_PREVIEWER_VERSION="<version>"\`.
 - ${languageTool.line}
 - After Kindle/KDP review, run \`make ebook-qa SLUG=${product.slug} REQUIRE_LANGUAGETOOL_CURRENT=1 REQUIRE_MANUAL_SIGNOFF=1\`.
 
@@ -1539,7 +1568,7 @@ function collectChapterBlocks(chapter, qa, chapterQa, footnotes = []) {
       if (hasPlaceholder(text)) {
         qa.errors.push(`Placeholder text in ${chapter.meta.chapter} block ${blockIndex + 1}`);
       }
-      if (hasCjk(text) && !allowsChineseCharacters(block) && !sentenceItems.some(allowsChineseCharacters)) {
+      if (hasCjk(text) && !allowsChineseCharacters(block) && !sentenceItems.some(allowsChineseCharacters) && hasUnmarkedCjk(text)) {
         qa.warnings.push(`Chinese characters in English paragraph in ${chapter.meta.chapter} block ${blockIndex + 1}`);
       }
       if (hasCjk(text)) {
@@ -1757,7 +1786,7 @@ function renderNav(product, chapters) {
   }).join('\n      ');
   const hasAbout = Array.isArray(product.aboutThisEdition) && product.aboutThisEdition.length > 0;
   const aboutTocItem = hasAbout ? '<li><a href="about.xhtml">About This Edition</a></li>' : '';
-  const aboutLandmarkItem = hasAbout ? '<li><a epub:type="frontmatter" href="about.xhtml">About This Edition</a></li>' : '';
+  const aboutLandmarkItem = hasAbout ? '<li><a epub:type="preface" href="about.xhtml">About This Edition</a></li>' : '';
 
   return `<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html>
@@ -1780,7 +1809,7 @@ function renderNav(product, chapters) {
     <h2>Guide</h2>
     <ol>
       <li><a epub:type="cover" href="cover.xhtml">Cover</a></li>
-      <li><a epub:type="frontmatter" href="frontmatter.xhtml">Copyright and Source Note</a></li>
+      <li><a epub:type="copyright-page" href="frontmatter.xhtml">Copyright and Source Note</a></li>
       ${aboutLandmarkItem}
       <li><a epub:type="bodymatter" href="text/${chapterFileName(chapters[0]?.chapter || '001')}">Start Reading</a></li>
     </ol>
@@ -1896,8 +1925,6 @@ p {
   display: block;
   height: auto;
   margin: 0 auto;
-  max-height: 100%;
-  max-width: 100%;
   width: auto;
 }
 
@@ -2030,11 +2057,18 @@ The worksheet, JSON, checklist, README, and checksum file are support files only
 
 ## Integrity
 
-Before upload, compare files against \`SHA256SUMS.txt\`. After a KDP draft
-ingests successfully, run:
+Before upload, compare files against \`SHA256SUMS.txt\`. After Kindle Previewer
+and local reader checks pass, run:
+
+\`\`\`bash
+make ebook-local-signoff SLUG=${product.slug} CHECKED_BY="Garrett M. Petersen" KINDLE_PREVIEWER_VERSION="<version>"
+\`\`\`
+
+After a KDP draft ingests successfully, run:
 
 \`\`\`bash
 make ebook-kdp-signoff SLUG=${product.slug} CHECKED_BY="Garrett M. Petersen" CONFIRM_KDP_DRAFT=1
+make ebook-qa SLUG=${product.slug} REQUIRE_LANGUAGETOOL_CURRENT=1 REQUIRE_MANUAL_SIGNOFF=1
 \`\`\`
 `;
 }

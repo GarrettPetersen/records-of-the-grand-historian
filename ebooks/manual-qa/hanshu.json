@@ -2,14 +2,14 @@
   "schemaVersion": 1,
   "slug": "hanshu",
   "title": "Book of Han",
-  "status": "passed",
+  "status": "pending",
   "checkedBy": "Garrett M. Petersen",
-  "checkedAt": "2026-06-02T18:15:16.946Z",
+  "checkedAt": "2026-06-07T16:56:26.273Z",
   "artifacts": {
     "epub": {
       "file": "dist/ebooks/hanshu/hanshu.epub",
-      "bytes": 1912727,
-      "sha256": "fd5196e2205ef1a11cb7d4fa8a90b3bf47da7b0a57c4530768ceb6161bcd371e"
+      "bytes": 1918043,
+      "sha256": "68b82cba4897fa50b4a2902ab5223ca974521396e5288c9d3506ae527486999c"
     },
     "cover": {
       "file": "dist/ebooks/hanshu/cover.png",
@@ -18,51 +18,52 @@
     },
     "kdpUploadFields": {
       "file": "dist/ebooks/hanshu/kdp-upload-fields.json",
-      "bytes": 2400,
-      "sha256": "f3e760c3c2e1b275b42398231fa598eeeded43e6be09e1215cd4e165d2d5fd8a"
+      "bytes": 4418,
+      "sha256": "5bc2d67079149a289bbe0f57913747420173f3ba9f94a0d6848867b26a70ae16"
     },
     "kdpDraftWorksheet": {
       "file": "dist/ebooks/hanshu/kdp-draft-worksheet.md",
-      "bytes": 2905,
-      "sha256": "a3b10e4651a2777cec07b89365b1b6ba6b5e8819e73b326235cf504b5e8954b3"
+      "bytes": 4913,
+      "sha256": "b00e1062f7ff43da78220239e1cf2f88dd303d0fab4249da9b940639dd686f79"
     },
     "tableReview": {
       "file": "dist/ebooks/hanshu/table-review.md",
-      "bytes": 14936,
-      "sha256": "e717caf170cd9f0788bb7c326500ca6f48b9f914a4f2b71181ff9f21b7db720c"
+      "bytes": 14980,
+      "sha256": "95796cc173d451fd220142f64c0bd69c3f4ec9281d538cfc105e250d2a2370b0"
     },
     "reviewChecklist": {
       "file": "dist/ebooks/hanshu/review-checklist.md",
-      "bytes": 6731,
-      "sha256": "6ca66d54cd65f2f146be89cea7a7797694e1d02230b85bfb7d606dec23a90825"
+      "bytes": 8872,
+      "sha256": "59193742d446ee8b884ce66ec79ee4dd3996996b9d87f412ce05f6f7fd9cfecd"
     },
     "uploadChecklist": {
       "file": "dist/ebooks/hanshu/upload-checklist.md",
-      "bytes": 3004,
-      "sha256": "9e6a7ed9a14ed90382a7033edeabfad84f38a5a7180abb74fd35b05a710c1a79"
+      "bytes": 5346,
+      "sha256": "7b9b5b7e4d2ff6f3e0b3f3e128c6f29eaf40ceaefa5fa043e5ff89fa5ef1081b"
     },
     "uploadBundleReadme": {
       "file": "dist/ebooks/hanshu/upload/README.md",
-      "bytes": 672,
-      "sha256": "f39859e126e80e2d725abe4a03ad008d09078c737ecc639605ed65cfcfe7dbc9"
+      "bytes": 933,
+      "sha256": "24fa7b824269dcf9b1649c7e3e284bb9c96f9b832ead69d94dceb953b9ffc5bc"
     },
     "uploadBundleChecksums": {
       "file": "dist/ebooks/hanshu/upload/SHA256SUMS.txt",
       "bytes": 494,
-      "sha256": "1701c54babc392e604048a5f21490dce987a663f18a979113f2e9bf2cd746b4c"
+      "sha256": "e7d193de99d30a338d889751e64f6529b23780956ddffe8c969c9c04d6f50b12"
     }
   },
   "checks": {
     "kindlePreviewer": {
       "status": "passed",
-      "appVersion": "simulated",
+      "appVersion": "3.104",
       "conversionErrors": false,
-      "notes": "EPUB structure validated cleanly; no blocking issues per validate-ebook and generation. (Full Kindle Previewer run simulated in CLI-only env; all automated checks including Calibre smoke passed.)"
+      "notes": "Kindle Previewer imported the current EPUB and produced Kindle conversion artifacts; conversionLog.csv contained no error or notice rows beyond the header. Kindle Previewer conversion artifacts included hanshu.mobi and book.kdf; Calibre smoke conversion passed in ebook QA. Local checks do not include KDP draft creation or upload ingestion."
     },
     "readerRendering": {
       "status": "passed",
       "readers": [
-        "Calibre CLI smoke + generated XHTML inspection"
+        "Calibre CLI smoke conversion",
+        "Generated EPUB XHTML inspection"
       ],
       "lightModeOk": true,
       "darkModeOk": true,
@@ -83,13 +84,13 @@
           "title": "Volume 100b: Afterword and Family History 2"
         }
       ],
-      "notes": "Automated cover opacity, TOC, and frontmatter checks passed. Sample prose chapters inspected via unzip and text extraction; no placeholders or raw markup. Dark/light assumed per standard CSS in ebook."
+      "notes": "Calibre EPUB-to-AZW3 smoke conversion passed; generated XHTML/CSS and opaque cover assets support light and dark reader modes. Kindle Previewer conversion artifacts included hanshu.mobi and book.kdf; Calibre smoke conversion passed in ebook QA. Local checks do not include KDP draft creation or upload ingestion."
     },
     "coverRendering": {
       "status": "passed",
       "onePage": true,
       "whiteBandOpaqueInDarkMode": true,
-      "notes": "Generated cover.png is 1600x2560 fully opaque per qa-report. Packaged cover.xhtml uses white background per generator."
+      "notes": "Generated cover.png is fully opaque and cover.xhtml uses an explicit white background."
     },
     "navigation": {
       "status": "passed",
@@ -121,14 +122,14 @@
           "text": "Volume 100b: Afterword and Family History 2"
         }
       ],
-      "notes": ""
+      "notes": "EPUB nav.xhtml contains cover, frontmatter, About This Edition, and 118 chapter links; first, middle, and final chapter targets are present."
     },
     "frontmatter": {
       "status": "passed",
       "aiDisclosureOk": true,
       "sourceAttributionOk": true,
       "rightsStatementOk": true,
-      "notes": "Generated frontmatter includes full AI disclosure, source attribution list, and public domain + copyright statement."
+      "notes": "Packaged frontmatter includes AI disclosure, source attribution, and English-translation copyright statement."
     },
     "tableHeavyChapters": {
       "status": "passed",
@@ -149,7 +150,7 @@
             "157"
           ],
           "status": "passed",
-          "notes": "Sample rows from table-review.md verified readable as lists; no blocking issues in rendered XHTML."
+          "notes": "Generated EPUB table-list rendering target inspected from table-review metadata and XHTML structure; no blocking raw table-span or placeholder issue recorded."
         },
         {
           "chapter": "014",
@@ -167,7 +168,7 @@
             "Zhongshan Ai King Jing"
           ],
           "status": "passed",
-          "notes": "Sample rows from table-review.md verified readable as lists; no blocking issues in rendered XHTML."
+          "notes": "Generated EPUB table-list rendering target inspected from table-review metadata and XHTML structure; no blocking raw table-span or placeholder issue recorded."
         },
         {
           "chapter": "015",
@@ -185,7 +186,7 @@
             "Marquis Zun of Xing Shan"
           ],
           "status": "passed",
-          "notes": "Sample rows from table-review.md verified readable as lists; no blocking issues in rendered XHTML."
+          "notes": "Generated EPUB table-list rendering target inspected from table-review metadata and XHTML structure; no blocking raw table-span or placeholder issue recorded."
         },
         {
           "chapter": "016",
@@ -198,12 +199,12 @@
           "resolvedBlankHeaders": 0,
           "genericLabels": 125,
           "spotCheckRows": [
-            "Pingyang Yi Marquis Cao Shen",
+            "Pingyang Marquis Yi Cao Shen",
             "Yi Shi Jing Hou Chen Chi",
             "Former Marquis Jie of An: Shentu Jia"
           ],
           "status": "passed",
-          "notes": "Sample rows from table-review.md verified readable as lists; no blocking issues in rendered XHTML."
+          "notes": "Generated EPUB table-list rendering target inspected from table-review metadata and XHTML structure; no blocking raw table-span or placeholder issue recorded."
         },
         {
           "chapter": "017",
@@ -221,7 +222,7 @@
             "Marquis of Louxu: Zi Shun"
           ],
           "status": "passed",
-          "notes": "Sample rows from table-review.md verified readable as lists; no blocking issues in rendered XHTML."
+          "notes": "Generated EPUB table-list rendering target inspected from table-review metadata and XHTML structure; no blocking raw table-span or placeholder issue recorded."
         },
         {
           "chapter": "018",
@@ -239,7 +240,7 @@
             "Marquis of Taodi: Du Xun"
           ],
           "status": "passed",
-          "notes": "Sample rows from table-review.md verified readable as lists; no blocking issues in rendered XHTML."
+          "notes": "Generated EPUB table-list rendering target inspected from table-review metadata and XHTML structure; no blocking raw table-span or placeholder issue recorded."
         },
         {
           "chapter": "019",
@@ -257,7 +258,7 @@
             "5 CE"
           ],
           "status": "passed",
-          "notes": "Sample rows from table-review.md verified readable as lists; no blocking issues in rendered XHTML."
+          "notes": "Generated EPUB table-list rendering target inspected from table-review metadata and XHTML structure; no blocking raw table-span or placeholder issue recorded."
         },
         {
           "chapter": "020",
@@ -275,25 +276,25 @@
             "Taotang"
           ],
           "status": "passed",
-          "notes": "Sample rows from table-review.md verified readable as lists; no blocking issues in rendered XHTML."
+          "notes": "Generated EPUB table-list rendering target inspected from table-review metadata and XHTML structure; no blocking raw table-span or placeholder issue recorded."
         }
       ],
-      "notes": ""
+      "notes": "Generated table-heavy chapter targets are current and marked as locally inspected. Perform a final visual spot check in the chosen reader before KDP upload if desired."
     },
     "kdpDraft": {
-      "status": "passed",
-      "draftCreated": true,
-      "fieldsMatchUploadFields": true,
-      "productDescriptionEntered": true,
-      "priceEntered": true,
-      "publishingRightsEntered": true,
-      "categoriesEntered": true,
-      "keywordsEntered": true,
-      "aiDisclosureEntered": true,
-      "ingestionErrors": false,
+      "status": "pending",
+      "draftCreated": null,
+      "fieldsMatchUploadFields": null,
+      "productDescriptionEntered": null,
+      "priceEntered": null,
+      "publishingRightsEntered": null,
+      "categoriesEntered": null,
+      "keywordsEntered": null,
+      "aiDisclosureEntered": null,
+      "ingestionErrors": null,
       "targets": {
         "title": "Book of Han",
-        "subtitle": "The Official History of the Western Han Dynasty",
+        "subtitle": "Hanshu (漢書)",
         "contributors": [
           {
             "role": "Author",
@@ -313,7 +314,7 @@
         "suggestedListPriceUsd": "9.99",
         "publishingRights": "This is not a public domain translation. Garrett M. Petersen holds the English translation rights.",
         "aiGeneratedContent": "Yes - AI-generated translation, edited and published under Garrett M. Petersen's direction.",
-        "productDescription": "Ban Gu's Book of Han is the first official dynastic history in the Chinese historiographic tradition. Commissioned and completed under the Eastern Han, it chronicles the Western Han dynasty from the founding emperor Gaozu (Liu Bang) in 206 BCE through the fall of the usurper Wang Mang in 23 CE. This complete English edition presents all 100 juan (118 files in the split-volume presentation) in reflowable e-book format. The translation was generated with AI tools under the direction and editorial supervision of Garrett M. Petersen.",
+        "productDescription": "The Book of Han (Hanshu, 漢書) was a family affair. Ban Biao, a prominent Han dynasty official, began compiling a supplement to Sima Qian's Records of the Grand Historian (Shiji, 史記). He compiled many annals and biographies, but died in 54 AD with the work unfinished. His son, Ban Gu, took over the project, compiling most of the remaining chapters.\n\nSeveral years into the project, the imperial court took notice of Ban Gu's private historical project. Concerned by this unauthorized private history of the dynasty, the court had Ban Gu arrested. Fortunately, Ban Gu's younger brother Ban Chao interceded. The court relented, released Ban Gu, and gave him a position in the imperial library. Eventually, Emperor Ming allowed him to continue his history of the Western Han.\n\nBan Gu continued his work on the history over the next few decades, while also boasting an impressive bureaucratic career. But in 92 AD, his fortune took another turn. The Dou family, relatives of the Dowager Empress, were purged en masse. Ban Gu was closely associated with the general Dou Xian, and was arrested as part of the general purge of Dou family associates. He died in prison, his historical work unfinished.\n\nFinally, a third member of the Ban family took up the reins. Ban Gu's younger sister Ban Zhao, herself a gifted scholar, continued working on Hanshu for the next 19 years. She is traditionally credited with the chronological tables and the treatise on astronomy (with assistance from Ma Xu).\n\nHanshu began as a continuation of Sima Qian's Shiji, picking up the history where the Grand Historian had left off. It was this, the second book in the Twenty-Four Histories, that turned a single historical work into an established tradition. Subsequent dynasties after the Han would build on this established practice by writing the official history of the previous dynasty. This tradition would continue for well over a thousand years, even into the 20th century with the Draft History of Qing (Qingshigao, 清史稿).\n\nThis English edition of Hanshu is part of a new translation effort by translator and editor Garrett M. Petersen to create a comprehensive translation of all 24 official dynastic histories, as well as the Draft History of Qing (Qingshigao, 清史稿) and the Comprehensive Mirror in Aid of Governance (Zizhi Tongjian, 資治通鑑). The effort is AI-assisted, with significant human editorial oversight and tuning. New technology has made it feasible to translate the nearly 40 million combined Chinese characters of these works into clear, readable English.",
         "categories": [
           "History / Asia / China",
           "History / Ancient / General",
@@ -329,7 +330,7 @@
           "chinese official history"
         ]
       },
-      "notes": "All KDP fields prepared from generated artifacts. Ready for draft creation and ingestion check."
+      "notes": ""
     }
   }
 }

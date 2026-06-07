@@ -168,6 +168,13 @@ ebook-manual-qa:
 		$(NODE) scripts/validate-ebook-manual-qa.mjs --slug $(SLUG) $(if $(INIT),--init,) $(if $(REPORT),--report,) $(if $(JSON),--json,); \
 	fi
 
+.PHONY: ebook-local-signoff
+ebook-local-signoff:
+	@if [ -z "$(SLUG)" ]; then echo "Error: SLUG is required."; exit 1; fi
+	@if [ -z "$(CHECKED_BY)" ]; then echo "Error: CHECKED_BY is required."; exit 1; fi
+	@if [ -z "$(KINDLE_PREVIEWER_VERSION)" ]; then echo "Error: KINDLE_PREVIEWER_VERSION is required."; exit 1; fi
+	@$(NODE) scripts/signoff-ebook-local-checks.mjs --slug $(SLUG) --checked-by "$(CHECKED_BY)" --kindle-previewer-version "$(KINDLE_PREVIEWER_VERSION)" $(if $(CHECKED_AT),--checked-at "$(CHECKED_AT)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(DRY_RUN),--dry-run,)
+
 .PHONY: ebook-kdp-signoff
 ebook-kdp-signoff:
 	@if [ -z "$(SLUG)" ]; then echo "Error: SLUG is required."; exit 1; fi
@@ -1025,6 +1032,8 @@ apply-review:
 	$(NODE) apply-reviewed-translations.js "$(CHAPTER)" "$$review_file"
 	@echo "Running quality check..."
 	@$(MAKE) score-translations CHAPTER="$(CHAPTER)"
+	@echo "Running glossary alignment review scan..."
+	@$(NODE) scripts/scan-translation-alignment.mjs "$(CHAPTER)" --summary --review-priorities --min-severity 2 --min-glossary-risk 4
 	@echo "Regenerating static page..."
 	@$(MAKE) update BOOK=$$(jq -r '.meta.book // empty' "$(CHAPTER)" 2>/dev/null)
 

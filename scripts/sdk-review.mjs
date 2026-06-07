@@ -164,6 +164,10 @@ function finalizeReviewLocally(target, reviewFileAbs, opts) {
     cwd: REPO_ROOT,
     stdio: 'inherit',
   });
+  execSync(`node scripts/scan-translation-alignment.mjs "${chapterRel}" --summary --review-priorities --min-severity 2 --min-glossary-risk 4`, {
+    cwd: REPO_ROOT,
+    stdio: 'inherit',
+  });
   execSync(`make update BOOK=${target.bookId}`, { cwd: REPO_ROOT, stdio: 'inherit' });
   console.log(`[${target.bookId}] chapter ${target.chapter} reviewed and site updated`);
 }

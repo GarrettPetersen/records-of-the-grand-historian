@@ -78,6 +78,15 @@ Skim **every line you changed** (not the whole chapter if you changed few):
 - Did literal and idiomatic still match each other in meaning?
 - Any quote now third-person inside first-person speech?
 
+## Glossary alignment check
+
+After review application, the workflow runs `scan-translation-alignment` in review-priority mode with a chapter-level glossary-risk cutoff. Treat its output as a review queue:
+
+- Offset-style hits usually mean a distinctive Chinese term appears in one sentence while its English equivalent appears nearby.
+- `LOW_GLOSSARY_SAME_SENTENCE_COVERAGE` means the Chinese sentence has glossary anchors, but the English matched too few of them.
+- `glossaryRiskScore` ranks how much distinctive source evidence is missing from the English. Inspect the highest-risk findings first; full per-sentence glossary scores can be exported separately for deeper book-level passes.
+- These are not automatic errors. They are prompts to inspect the Chinese and English together. Accept a hit only when the English is faithful and the missing glossary terms are false positives, better rendered another way, or intentionally implicit from context.
+
 ## What to edit
 
 Work only in `{review_file}`. For each object in `translations`:

@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 1,
+  "slug": "sanguozhi",
+  "title": "Records of the Three Kingdoms",
+  "status": "pending",
+  "checkedBy": "Garrett M. Petersen",
+  "checkedAt": "2026-06-07T17:52:43.320Z",
+  "artifacts": {
+    "epub": {
+      "file": "dist/ebooks/sanguozhi/sanguozhi.epub",
+      "bytes": 1374196,
+      "sha256": "ed2bdd03673f986388bc43d074252f3180f0e72b1000e1324f32e1499dd00e47"
+    },
+    "cover": {
+      "file": "dist/ebooks/sanguozhi/cover.png",
+      "bytes": 101417,
+      "sha256": "a6f8e30c675843e1177e5d9e9e8603ca6155be565a22196f06c2077c973a040c"
+    },
+    "kdpUploadFields": {
+      "file": "dist/ebooks/sanguozhi/kdp-upload-fields.json",
+      "bytes": 4931,
+      "sha256": "48df7eb005ce46ba158e4dcc2ebc466b5e7a3230320454cecca873c1fc9226a8"
+    },
+    "kdpDraftWorksheet": {
+      "file": "dist/ebooks/sanguozhi/kdp-draft-worksheet.md",
+      "bytes": 5450,
+      "sha256": "901d1f83d9e5fda98f94f402f3fe838a1739d0f1f17338a8b92c5e493bb380d1"
+    },
+    "tableReview": {
+      "file": "dist/ebooks/sanguozhi/table-review.md",
+      "bytes": 359,
+      "sha256": "a93e960bfe513aeb84e2374b4aa2d7c780d844137e01857c0320fc8e197c5f95"
+    },
+    "reviewChecklist": {
+      "file": "dist/ebooks/sanguozhi/review-checklist.md",
+      "bytes": 7010,
+      "sha256": "48343922706fc492b30d2447f8fd3dbef9512f15a6fc541cc775c117019d6b43"
+    },
+    "uploadChecklist": {
+      "file": "dist/ebooks/sanguozhi/upload-checklist.md",
+      "bytes": 5887,
+      "sha256": "8e1e5732fb4efb2c537e12492f323641e76e3e65da984125f86797e1d582db88"
+    },
+    "uploadBundleReadme": {
+      "file": "dist/ebooks/sanguozhi/upload/README.md",
+      "bytes": 963,
+      "sha256": "6d9534020ed164430933b2fa25c569cb357d28a87c0dd8242101c8f9657345ea"
+    },
+    "uploadBundleChecksums": {
+      "file": "dist/ebooks/sanguozhi/upload/SHA256SUMS.txt",
+      "bytes": 497,
+      "sha256": "202d3c1605fceba1913133d817e62a2b7f3d914b6d94b268f66b29e3a44567a7"
+    }
+  },
+  "checks": {
+    "kindlePreviewer": {
+      "status": "passed",
+      "appVersion": "3.104",
+      "conversionErrors": false,
+      "notes": "Kindle Previewer imported the current EPUB and produced Kindle conversion artifacts; conversionLog.csv contained no error or notice rows beyond the header. Kindle Previewer 3.104 ingested the EPUB and produced a MOBI preview artifact; Calibre conversion smoke test passed; automated EPUB QA verified cover opacity, TOC/navigation, and frontmatter. Local checks do not include KDP draft creation or upload ingestion."
+    },
+    "readerRendering": {
+      "status": "passed",
+      "readers": [
+        "Calibre CLI smoke conversion",
+        "Generated EPUB XHTML inspection"
+      ],
+      "lightModeOk": true,
+      "darkModeOk": true,
+      "proseFlowTargets": [
+        {
+          "chapter": "001",
+          "epubEntry": "EPUB/text/chapter-001.xhtml",
+          "title": "Volume 1: Book of Wei 1 - Annals of Emperor Wu"
+        },
+        {
+          "chapter": "033",
+          "epubEntry": "EPUB/text/chapter-033.xhtml",
+          "title": "Volume 33: Book of Shu 3 - Biography of the Later Lord"
+        },
+        {
+          "chapter": "065",
+          "epubEntry": "EPUB/text/chapter-065.xhtml",
+          "title": "Volume 65: Book of Wu 20 - Biographies of Wang, Lou, He, Wei, and Hua"
+        }
+      ],
+      "notes": "Calibre EPUB-to-AZW3 smoke conversion passed; generated XHTML/CSS and opaque cover assets support light and dark reader modes. Kindle Previewer 3.104 ingested the EPUB and produced a MOBI preview artifact; Calibre conversion smoke test passed; automated EPUB QA verified cover opacity, TOC/navigation, and frontmatter. Local checks do not include KDP draft creation or upload ingestion."
+    },
+    "coverRendering": {
+      "status": "passed",
+      "onePage": true,
+      "whiteBandOpaqueInDarkMode": true,
+      "notes": "Generated cover.png is fully opaque and cover.xhtml uses an explicit white background."
+    },
+    "navigation": {
+      "status": "passed",
+      "tocOk": true,
+      "firstMiddleLastChapterLinksOk": true,
+      "targets": [
+        {
+          "href": "cover.xhtml",
+          "text": "Cover"
+        },
+        {
+          "href": "frontmatter.xhtml",
+          "text": "Copyright and Source Note"
+        },
+        {
+          "href": "about.xhtml",
+          "text": "About This Edition"
+        },
+        {
+          "href": "text/chapter-001.xhtml",
+          "text": "Volume 1: Book of Wei 1 - Annals of Emperor Wu"
+        },
+        {
+          "href": "text/chapter-033.xhtml",
+          "text": "Volume 33: Book of Shu 3 - Biography of the Later Lord"
+        },
+        {
+          "href": "text/chapter-065.xhtml",
+          "text": "Volume 65: Book of Wu 20 - Biographies of Wang, Lou, He, Wei, and Hua"
+        }
+      ],
+      "notes": "EPUB nav.xhtml contains cover, frontmatter, About This Edition, and 118 chapter links; first, middle, and final chapter targets are present."
+    },
+    "frontmatter": {
+      "status": "passed",
+      "aiDisclosureOk": true,
+      "sourceAttributionOk": true,
+      "rightsStatementOk": true,
+      "notes": "Packaged frontmatter includes AI disclosure, source attribution, and English-translation copyright statement."
+    },
+    "tableHeavyChapters": {
+      "status": "not-applicable",
+      "chaptersReviewed": [],
+      "notes": "Generated table-heavy chapter targets are current and marked as locally inspected. Perform a final visual spot check in the chosen reader before KDP upload if desired."
+    },
+    "kdpDraft": {
+      "status": "pending",
+      "draftCreated": null,
+      "fieldsMatchUploadFields": null,
+      "productDescriptionEntered": null,
+      "priceEntered": null,
+      "publishingRightsEntered": null,
+      "categoriesEntered": null,
+      "keywordsEntered": null,
+      "aiDisclosureEntered": null,
+      "ingestionErrors": null,
+      "targets": {
+        "title": "Records of the Three Kingdoms",
+        "subtitle": "Sanguozhi (三國志)",
+        "contributors": [
+          {
+            "role": "Author",
+            "name": "Chen Shou"
+          },
+          {
+            "role": "Translator",
+            "name": "Garrett M. Petersen"
+          }
+        ],
+        "publisher": "24 Histories Press",
+        "language": "en",
+        "series": "The Twenty-Four Histories",
+        "seriesNumber": 3,
+        "isbnInstruction": "Leave blank unless assigning your own ISBN.",
+        "edition": "Complete AI-assisted English translation",
+        "suggestedListPriceUsd": "9.99",
+        "publishingRights": "This is not a public domain translation. Garrett M. Petersen holds the English translation rights.",
+        "aiGeneratedContent": "Yes - AI-generated translation, edited and published under Garrett M. Petersen's direction.",
+        "productDescription": "The Book of Jin (Jinshu, 晉書) contains a detailed biography of Chen Shou, who authored the Records of the Three Kingdoms (Sanguo Zhi, 三國志). He was said to love books from a young age, becoming a clerk in the imperial library of Shu-Han. His early career was mired in controversy. When the eunuch Huang Hao dominated the Shu-Han court, Chen Shou refused to ingratiate himself with him, and was repeatedly demoted and censured. Later, when Chen Shou's father died, he himself fell ill, and he violated ritual by having a servant girl prepare his medicine. Others found out about this, and Chen Shou was disgraced. His reputation would not recover for several years, even outliving the Shu-Han dynasty, which was invaded and toppled by Wei dynasty forces.\n\nFortunately for Chen Shou, the Minister of Works Zhang Hua admired his talent. Zhang Hua declared him filial and incorrupt, appointed him as assistant drafter, and made him a magistrate. As assistant drafter, Chen Shou compiled the works of Zhuge Liang and presented them to the court. This earned him a promotion to drafter.\n\nIn this role, Chen Shou wrote the Records of the Three Kingdoms, consisting of 65 chapters containing biographies of important figures who shaped the history of the three kingdoms period. Chen Shou's contemporaries greatly admired his work. It was so good that, when Xiahou Zhan read Chen Shou's history, he tore up his own draft history of Wei and quit.\n\nChen Shou lived through the tail end of the Three Kingdoms period and wrote his history in the immediate aftermath, when sources were fresh and many key actors were still alive. Later, during the 5th century, Pei Songzhi revisited the work, adding commentary, annotations, and references to other sources, many of which are now lost. His annotations are marked 〈like this〉 in this edition. Pei Songzhi's additions increased Sanguo Zhi's value as a historical source.\n\nIn addition to being an important historical work, Sanguo Zhi became important through its influence on literature. Sanguo Zhi provided the historical foundation for the historical novel Romance of the Three Kingdoms by Luo Guanzhong during the early Ming dynasty. Romance adapts and embellishes Sanguo Zhi to create an epic drama full of intrigue, action, and larger-than-life characters. This novel was extremely influential on Chinese literature, becoming one of the Four Great Classical Novels of Chinese literature. Romance has spawned many adaptations in the modern day, from movies and TV shows to video games.\n\nThis English edition of Sanguo Zhi is part of a new translation effort by translator and editor Garrett M. Petersen to create a comprehensive translation of all 24 official dynastic histories, as well as the Draft History of Qing (Qingshigao, 清史稿) and the Comprehensive Mirror in Aid of Governance (Zizhi Tongjian, 資治通鑑). The effort is AI-assisted, with significant human editorial oversight and tuning. New technology has made it feasible to translate the nearly 40 million combined Chinese characters of these works into clear, readable English.",
+        "categories": [
+          "History / Asia / China",
+          "History / Ancient / General",
+          "History / Historiography"
+        ],
+        "keywords": [
+          "cao cao",
+          "liu bei",
+          "sun quan",
+          "cao wei",
+          "eastern wu",
+          "ancient chinese history",
+          "chinese official history"
+        ]
+      },
+      "notes": ""
+    }
+  }
+}

@@ -852,8 +852,11 @@ if (!nav.includes('epub:type="toc"')) {
 if (!nav.includes('epub:type="landmarks"')) {
   errors.push('nav.xhtml does not contain an EPUB landmarks nav.');
 }
-for (const landmark of ['epub:type="cover"', 'epub:type="frontmatter"', 'epub:type="bodymatter"']) {
+for (const landmark of ['epub:type="cover"', 'epub:type="bodymatter"']) {
   if (!nav.includes(landmark)) errors.push(`nav.xhtml landmarks are missing ${landmark}.`);
+}
+if (!/epub:type="(?:frontmatter|copyright-page|preface)"/u.test(nav)) {
+  errors.push('nav.xhtml landmarks are missing a frontmatter/copyright/preface target.');
 }
 if (!cover.includes('src="images/cover.png"')) {
   errors.push('cover.xhtml does not reference images/cover.png.');
@@ -867,8 +870,8 @@ if (!/<img\b[^>]*src="images\/cover\.png"[^>]*\balt="[^"]+"/u.test(cover)) {
 if (entries.includes('EPUB/images/cover.svg')) {
   errors.push('EPUB still packages cover.svg; use the raster cover image for store upload.');
 }
-if (!css.includes('.cover-page') || !css.includes('height: 100%') || !css.includes('max-height: 100%')) {
-  errors.push('EPUB cover CSS does not use the expected single-page height-constrained cover fit.');
+if (!css.includes('.cover-page') || !css.includes('height: 100%') || !css.includes('.cover-image') || !css.includes('background: #ffffff')) {
+  errors.push('EPUB cover CSS does not use the expected single-page opaque cover fit.');
 }
 if (/max-height:\s*\d+vh/u.test(css)) {
   errors.push('EPUB cover CSS uses viewport-height units, which are unreliable in some e-readers.');
