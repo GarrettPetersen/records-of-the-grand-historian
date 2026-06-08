@@ -742,7 +742,7 @@ function isIntentionalCjkReference(text, match) {
   const value = textContent(text);
   if (isInsideChineseBookTitle(value, match.index)) return true;
 
-  const referenceCue = /\b(?:character|characters|graph|gloss(?:es|ed)?|read|reads|pronounced|pronunciation|fanqie|text reads|written|place-name|corrupt|insert(?:ed)?|marks?)\b/i;
+  const referenceCue = /\b(?:character|characters|graph|gloss(?:es|ed)?|means?|describes?|refers?|is\s+(?:like|an?|the)|rhyme|read|reads|pronounced|pronunciation|fanqie|text reads|written|place-name|corrupt|insert(?:ed)?|marks?)\b/i;
   if (!referenceCue.test(value)) return false;
 
   const cjkRuns = cjkMatches(value);
@@ -1568,7 +1568,11 @@ function collectChapterBlocks(chapter, qa, chapterQa, footnotes = []) {
       if (hasPlaceholder(text)) {
         qa.errors.push(`Placeholder text in ${chapter.meta.chapter} block ${blockIndex + 1}`);
       }
-      if (hasCjk(text) && !allowsChineseCharacters(block) && !sentenceItems.some(allowsChineseCharacters) && hasUnmarkedCjk(text)) {
+      const hasUnmarkedSentenceCjk = plainSentences.some((sentence, sentenceIndex) => {
+        const item = sentenceItems[sentenceIndex];
+        return hasCjk(sentence) && !allowsChineseCharacters(item) && hasUnmarkedCjk(sentence);
+      });
+      if (hasCjk(text) && !allowsChineseCharacters(block) && hasUnmarkedSentenceCjk) {
         qa.warnings.push(`Chinese characters in English paragraph in ${chapter.meta.chapter} block ${blockIndex + 1}`);
       }
       if (hasCjk(text)) {
