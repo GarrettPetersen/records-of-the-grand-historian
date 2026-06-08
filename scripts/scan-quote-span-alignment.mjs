@@ -3,13 +3,11 @@
 import fs from 'fs';
 import path from 'path';
 
-const CHINESE_OPEN_QUOTES = new Set(['「', '『', '“', '‘']);
-const CHINESE_CLOSE_QUOTES = new Set(['」', '』', '”', '’']);
+const CHINESE_OPEN_QUOTES = new Set(['「', '『']);
+const CHINESE_CLOSE_QUOTES = new Set(['」', '』']);
 const MATCHING_OPEN_FOR_CLOSE = {
   '」': '「',
   '』': '『',
-  '”': '“',
-  '’': '‘',
 };
 
 function countSubstr(str, needle) {
@@ -23,66 +21,167 @@ function countSubstr(str, needle) {
   return count;
 }
 
-function countSingleQuoteDelimiters(text) {
-  const en = String(text || '');
-  let count = 0;
-  for (let i = 0; i < en.length; i++) {
-    if (en[i] !== "'" && en[i] !== '‘' && en[i] !== '’') continue;
-    if (en[i] === '‘' || en[i] === '’') {
-      count++;
+function isWordChar(ch) {
+  return /[A-Za-z]/.test(ch);
+}
+
+function isWhitespaceOrEnd(ch) {
+  return !ch || /\s/.test(ch);
+}
+
+function isQuoteBoundaryChar(ch) {
+  return ch === '' || /[\s,.;:!?)]/u.test(ch);
+}
+
+function isLikelySingleQuoteApostrophe(text, index, singleQuoteDepth = 0) {
+  const prev = text[index - 1] || '';
+  const next = text[index + 1] || '';
+  if (!prev && !next) return false;
+
+  if (isWordChar(prev) && isWordChar(next)) {
+    return true;
+  }
+
+  if (isWordChar(prev) && !isWordChar(next)) {
+    return singleQuoteDepth === 0;
+  }
+
+  return false;
+}
+
+function getEnglishQuoteTokens(text) {
+  const tokens = [];
+  let singleQuoteDepth = 0;
+  for (let i = 0; i < text.length; i += 1) {
+    const ch = text[i];
+    if (!['"', '“', '”', "'", '‘', '’'].includes(ch)) continue;
+
+    if (ch === '"') {
+      const prev = text[i - 1] || '';
+      const next = text[i + 1] || '';
+      if (!next || isWhitespaceOrEnd(next) || /^[,.;:!?)}\]—–]/u.test(next)) {
+        tokens.push({ index: i, char: ch, type: 'close' });
+        continue;
+      }
+      if (!prev || /\s/.test(prev) || /^[:：;\[({]/u.test(prev)) {
+        tokens.push({ index: i, char: ch, type: 'open' });
+        continue;
+      }
+      if (isWordChar(prev) && !isWordChar(next)) {
+        // contraction/possessive style in single-quoted text, but with a neutral quote this is still usually closing
+        tokens.push({ index: i, char: ch, type: 'close' });
+        continue;
+      }
+      tokens.push({ index: i, char: ch, type: 'close' });
       continue;
     }
-    const prev = en[i - 1] || '';
-    const next = en[i + 1] || '';
-    if (/[A-Za-z]/.test(prev) && /[A-Za-z]/.test(next)) continue;
-    if (/[sS]/.test(prev) && (!next || /[\s,.;:!?)}\]]/.test(next))) continue;
-    count++;
+
+    if (ch === '“') {
+      tokens.push({ index: i, char: ch, type: 'open' });
+      continue;
+    }
+    if (ch === '”') {
+      tokens.push({ index: i, char: ch, type: 'close' });
+      continue;
+    }
+
+    // Handle single-quote variants with state so contractions/possessives are ignored.
+    if (ch === "'" && isLikelySingleQuoteApostrophe(text, i, singleQuoteDepth)) {
+      continue;
+    }
+    if (isLikelySingleQuoteApostrophe(text, i, singleQuoteDepth)) {
+      if (ch === '’' && singleQuoteDepth > 0) {
+        singleQuoteDepth = Math.max(0, singleQuoteDepth - 1);
+      }
+      continue;
+    }
+
+    if (ch === '‘') {
+      singleQuoteDepth += 1;
+      tokens.push({ index: i, char: ch, type: 'open' });
+      continue;
+    }
+
+    if (ch === '’') {
+      if (singleQuoteDepth > 0) {
+        singleQuoteDepth -= 1;
+        tokens.push({ index: i, char: ch, type: 'close' });
+      } else {
+        const prev = text[i - 1] || '';
+        const next = text[i + 1] || '';
+        if (isWhitespaceOrEnd(prev) || /^[:：;\[({“‘'"]/.test(prev)) {
+          singleQuoteDepth += 1;
+          tokens.push({ index: i, char: ch, type: 'open' });
+        } else if (isWhitespaceOrEnd(next) || isQuoteBoundaryChar(next)) {
+          tokens.push({ index: i, char: ch, type: 'close' });
+        }
+      }
+      continue;
+    }
+
+    const prev = text[i - 1] || '';
+    const next = text[i + 1] || '';
+    if (singleQuoteDepth > 0 && (isWhitespaceOrEnd(next) || isQuoteBoundaryChar(next))) {
+      singleQuoteDepth -= 1;
+      tokens.push({ index: i, char: ch, type: 'close' });
+      continue;
+    }
+    if (isWhitespaceOrEnd(prev) || /^[:：;\[({“‘'"]/.test(prev)) {
+      singleQuoteDepth += 1;
+      tokens.push({ index: i, char: ch, type: 'open' });
+      continue;
+    }
+    if (isWhitespaceOrEnd(next) || isQuoteBoundaryChar(next)) {
+      tokens.push({ index: i, char: ch, type: 'close' });
+    }
   }
-  return count;
+  return tokens;
 }
 
-function isLikelyOpeningQuote(en, index) {
-  const ch = en[index];
-  if (ch === '‘' || ch === '“') return true;
-  if (ch === "'") return false;
-  if (ch !== '"') return false;
-  const prev = en[index - 1] || '';
-  if (!prev || /\s/.test(prev)) return true;
-  if (/^[\[({（「『“’”»]/u.test(prev)) return true;
-  if (/[:：;,。！？!?-—–]/u.test(prev)) return true;
-  return false;
-}
-
-function isLikelyClosingQuote(en, index) {
-  const ch = en[index];
-  if (ch === '’' || ch === '”') return true;
-  if (ch !== '"') return false;
-  const next = en[index + 1] || '';
-  if (!next) return true;
-  if (/^\s/.test(next) || /^[,.;:!?—–)—】」”’%]/u.test(next)) return true;
-  return false;
+function classifyEnglishQuoteToken(text, index) {
+  const ch = text[index];
+  const tokens = getEnglishQuoteTokens(text);
+  return tokens.find(item => item.index === index) || null;
 }
 
 function scanEnglishQuoteOrderErrors(english) {
   const en = String(english || '');
   const problems = [];
-  const lead = leadingQuote(en);
-  if (lead && lead.index === 0 && isLikelyClosingQuote(en, lead.index)) {
+  const quoteTokens = getEnglishQuoteTokens(en);
+
+  if (quoteTokens.length === 0) return problems;
+  if (quoteTokens[0].type === 'close') {
     problems.push('English begins with a likely closing quote mark.');
   }
-
-  const tail = trailingQuote(en);
-  if (tail && tail.index === lastNonSpaceIndex(en) && isLikelyOpeningQuote(en, tail.index)) {
+  if (quoteTokens[quoteTokens.length - 1].type === 'open') {
     problems.push('English ends with a likely opening quote mark.');
+  }
+
+  let balance = 0;
+  for (const token of quoteTokens) {
+    if (token.type === 'open') {
+      balance += 1;
+      continue;
+    }
+    if (balance > 0) {
+      balance -= 1;
+      continue;
+    }
+    if (token.type === 'close') {
+      problems.push('English has an unmatched closing quote mark.');
+      break;
+    }
+  }
+
+  if (balance > 0 && quoteTokens[quoteTokens.length - 1].type !== 'open') {
+    problems.push('English has an unmatched opening quote mark.');
   }
 
   return problems;
 }
 
 function countEnglishQuoteMarks(text) {
-  const en = String(text || '');
-  const doubleQuoteCount = countSubstr(en, '"') + countSubstr(en, '“') + countSubstr(en, '”');
-  return doubleQuoteCount + countSingleQuoteDelimiters(en);
+  return getEnglishQuoteTokens(String(text || '')).length;
 }
 
 function validateChineseQuotes(text, state) {
@@ -133,33 +232,32 @@ function leadingQuote(text) {
   const index = firstNonSpaceIndex(text);
   if (index < 0) return null;
   const char = text[index];
-  return ['"', '“', "'", '‘'].includes(char) ? { index, char } : null;
+  return ['"', '“'].includes(char) ? { index, char } : null;
 }
 
 function trailingQuote(text) {
   const index = lastNonSpaceIndex(text);
   if (index < 0) return null;
   const char = text[index];
-  return ['"', '”', "'", '’'].includes(char) ? { index, char } : null;
+  return ['"', '”'].includes(char) ? { index, char } : null;
 }
 
 function isTrailingOpeningQuote(text, quote) {
-  if (!quote || !['"', '“', "'", '‘'].includes(quote.char)) return false;
+  if (!quote || !['"', '“'].includes(quote.char)) return false;
   return /[:：]\s*["“'‘]\s*$/u.test(String(text || ''));
 }
 
 function preservesLeadingInnerQuote(zh, en, quote) {
   if (!/^[〉\])）\s]*『/u.test(String(zh || '').trimStart())) return false;
   if (quote.char === '"' || quote.char === '“') return true;
-  if (quote.char !== "'" && quote.char !== '‘') return false;
-  return !/["“”]/.test(String(en || '').slice(quote.index + 1));
+  return quote.char === "'" && !/["“”]/.test(String(en || '').slice(quote.index + 1));
 }
 
 function preservesTrailingInnerQuote(zh, en, quote) {
   if (!/』[。！？!?]?$/u.test(String(zh || '').trim())) return false;
   const text = String(en || '');
   if (quote.char === '"' || quote.char === '”') return text[quote.index - 1] !== "'";
-  return quote.char === "'" || quote.char === '’';
+  return quote.char === "'";
 }
 
 function isQuotedGlossHeadword(english) {
@@ -276,24 +374,26 @@ function scanSequence(items, file, blockIndex, quoteState) {
       });
     }
 
-    const englishOrderProblems = scanEnglishQuoteOrderErrors(english);
-    if (englishOrderProblems.length > 0) {
-      problems.push({
-        file,
-        blockIndex,
-        id: item.id,
-        boundaryProblems: englishOrderProblems,
-        chinese,
-        english
-      });
-    }
-
     const openCount = countSubstr(chinese, '「');
     const closeCount = countSubstr(chinese, '」');
     const beforeDepth = zhQuoteDepth;
     const afterDepth = Math.max(0, zhQuoteDepth + openCount - closeCount);
     const inChineseQuoteSpan = beforeDepth > 0 || afterDepth > 0 || openCount > 0 || closeCount > 0;
     zhQuoteDepth = afterDepth;
+
+    if (!inChineseQuoteSpan) {
+      const englishOrderProblems = scanEnglishQuoteOrderErrors(english);
+      if (englishOrderProblems.length > 0) {
+        problems.push({
+          file,
+          blockIndex,
+          id: item.id,
+          boundaryProblems: englishOrderProblems,
+          chinese,
+          english
+        });
+      }
+    }
 
     if (!inChineseQuoteSpan || !english) continue;
 

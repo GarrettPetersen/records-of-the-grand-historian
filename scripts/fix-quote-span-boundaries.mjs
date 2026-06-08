@@ -3,10 +3,12 @@
 import fs from 'fs';
 import path from 'path';
 
-const OUTER_OPEN = '「';
-const OUTER_CLOSE = '」';
+const OUTER_OPEN = new Set(['「', '“']);
+const OUTER_CLOSE = new Set(['」', '”']);
 const INNER_OPEN = '『';
 const INNER_CLOSE = '』';
+const BOUNDARY_OPEN_QUOTES = ['“', '"', '‘', "'"];
+const BOUNDARY_CLOSE_QUOTES = ['”', '"', '’', "'"];
 
 function usage() {
   console.error('Usage: node scripts/fix-quote-span-boundaries.mjs <chapter.json> [--apply] [--limit=N]');
@@ -51,8 +53,13 @@ function translationFields(sentence) {
   return fields.filter(field => typeof field.owner[field.key] === 'string' && field.owner[field.key].length > 0);
 }
 
-function countChar(text, char) {
-  return [...String(text || '')].filter(item => item === char).length;
+function countChar(text, chars) {
+  const lookup = chars instanceof Set ? chars : new Set([chars]);
+  let count = 0;
+  for (const ch of String(text || '')) {
+    if (lookup.has(ch)) count += 1;
+  }
+  return count;
 }
 
 function firstNonSpaceIndex(text) {
@@ -82,6 +89,54 @@ function trailingQuote(text, chars) {
   return chars.includes(char) ? { index, char } : null;
 }
 
+function boundaryQuoteRunStart(text) {
+  const str = String(text);
+  const start = firstNonSpaceIndex(str);
+  if (start < 0) return [];
+  const run = [];
+  for (let i = start; i < str.length; i += 1) {
+    if (!BOUNDARY_OPEN_QUOTES.includes(str[i]) && !BOUNDARY_CLOSE_QUOTES.includes(str[i])) break;
+    run.push({ index: i, char: str[i] });
+  }
+  return run;
+}
+
+function boundaryQuoteRunEnd(text) {
+  const str = String(text);
+  const end = lastNonSpaceIndex(str);
+  if (end < 0) return [];
+  const run = [];
+  for (let i = end; i >= 0; i -= 1) {
+    if (!BOUNDARY_OPEN_QUOTES.includes(str[i]) && !BOUNDARY_CLOSE_QUOTES.includes(str[i])) break;
+    run.push({ index: i, char: str[i] });
+  }
+  return run.reverse();
+}
+
+function isOpenBoundaryQuote(char) {
+  return BOUNDARY_OPEN_QUOTES.includes(char);
+}
+
+function isCloseBoundaryQuote(char) {
+  return BOUNDARY_CLOSE_QUOTES.includes(char);
+}
+
+function removeCharsAt(text, indexes) {
+  const sorted = [...indexes].sort((a, b) => b - a);
+  let next = text;
+  for (const index of sorted) {
+    next = next.slice(0, index) + next.slice(index + 1);
+  }
+  return next;
+}
+
+function quoteCloseFor(openOrClose) {
+  if (openOrClose === '“' || openOrClose === '”') return '”';
+  if (openOrClose === '‘' || openOrClose === '’') return '’';
+  if (openOrClose === "'") return "'";
+  return '"';
+}
+
 function removeCharAt(text, index) {
   return text.slice(0, index) + text.slice(index + 1);
 }
@@ -108,17 +163,17 @@ function prependAfterLeadingSpace(text, char) {
   return str.slice(0, insertAt) + char + str.slice(insertAt);
 }
 
-function englishCloseFor(openOrClose) {
-  if (openOrClose === '“' || openOrClose === '”') return '”';
-  if (openOrClose === "'") return "'";
-  return '"';
-}
-
 function preservesTrailingInnerQuote(chinese, english, quote) {
   if (!/』[。！？!?]?$/u.test(String(chinese || '').trim())) return false;
   const text = String(english || '');
   if (quote.char === '"' || quote.char === '”') return text[quote.index - 1] !== "'";
   return false;
+}
+
+function preservesLeadingInnerQuote(chinese, english, quote) {
+  if (quote.char !== "'" && quote.char !== '‘') return false;
+  if (!String(chinese || '').trimStart().startsWith('『')) return false;
+  return !/[“”]/.test(String(english || '').slice(quote.index + 1));
 }
 
 function englishOpenChars() {
@@ -127,6 +182,10 @@ function englishOpenChars() {
 
 function englishCloseChars() {
   return ['"', '”', "'"];
+}
+
+function englishCloseFor(openOrClose) {
+  return quoteCloseFor(openOrClose);
 }
 
 function alreadyEndsWithEnglishClose(text) {
@@ -155,7 +214,8 @@ function normalizeAdjacentQuoteBoundary(sentences, proposals, remaining) {
     const next = sentences[i + 1];
     let zh = sentenceZh(current);
 
-    if (previous && (zh.trimStart().startsWith(OUTER_CLOSE) || zh.trimStart().startsWith(INNER_CLOSE))) {
+    const prevTrimmedStart = zh.trimStart();
+    if (previous && ((prevTrimmedStart && OUTER_CLOSE.has(prevTrimmedStart[0])) || prevTrimmedStart.startsWith(INNER_CLOSE))) {
       if (applied + 2 > remaining) break;
       const quote = zh.trimStart()[0];
       const leadingSpaces = zh.match(/^\s*/)?.[0] || '';
@@ -190,7 +250,7 @@ function normalizeAdjacentQuoteBoundary(sentences, proposals, remaining) {
       }
     }
 
-    if (next && (zh.trimEnd().endsWith(OUTER_OPEN) || zh.trimEnd().endsWith(INNER_OPEN))) {
+    if (next && ((zh.trimEnd() && OUTER_OPEN.has(zh.trimEnd().slice(-1))) || zh.trimEnd().endsWith(INNER_OPEN))) {
       if (applied + 2 > remaining) break;
       const quote = zh.trimEnd().slice(-1);
       const trailingSpaces = zh.match(/\s*$/)?.[0] || '';
@@ -219,6 +279,91 @@ function normalizeAdjacentQuoteBoundary(sentences, proposals, remaining) {
         field.owner[field.key] = currentAfter;
         nextField.owner[nextField.key] = nextAfter;
         applied += 2;
+      }
+    }
+  }
+
+  return applied;
+}
+
+function normalizeByChineseDepth(sentences, proposals, remaining) {
+  let applied = 0;
+  let zhDepth = 0;
+
+  for (const sentence of sentences) {
+    if (applied >= remaining) break;
+    const zh = sentenceZh(sentence);
+    const openCount = countChar(zh, OUTER_OPEN);
+    const closeCount = countChar(zh, OUTER_CLOSE);
+    const beforeDepth = zhDepth;
+    const afterDepth = Math.max(0, zhDepth + openCount - closeCount);
+    const isOpeningUnit = beforeDepth === 0 && afterDepth > 0 && openCount > 0 && closeCount === 0;
+    const isInteriorUnit = beforeDepth > 0 && afterDepth > 0 && openCount === 0 && closeCount === 0;
+    const isClosingUnit = beforeDepth > 0 && afterDepth === 0 && openCount === 0 && closeCount > 0;
+    zhDepth = afterDepth;
+
+    if (!isOpeningUnit && !isInteriorUnit && !isClosingUnit) continue;
+
+    for (const field of translationFields(sentence)) {
+      let before = field.owner[field.key];
+      let after = before;
+      const runStart = boundaryQuoteRunStart(before);
+      const runEnd = boundaryQuoteRunEnd(before);
+
+      if (isOpeningUnit) {
+        const trailingOpen = runEnd.every(item => isOpenBoundaryQuote(item.char));
+        if (trailingOpen && runEnd.length > 0) {
+          after = removeCharsAt(before, runEnd.map(item => item.index));
+          if (proposedChange(proposals, 'remove-open-at-open-unit-end', sentence, field.label, before, after, 'Remove opening quote placed at the end of a quote-opening sentence.')) {
+            field.owner[field.key] = after;
+            applied += 1;
+          }
+        }
+        continue;
+      }
+
+      if (isInteriorUnit) {
+        const indexes = [];
+        for (const item of runStart) {
+          if (isOpenBoundaryQuote(item.char) && preservesLeadingInnerQuote(zh, before, item)) continue;
+          indexes.push(item.index);
+        }
+        for (const item of runEnd) {
+          if (isCloseBoundaryQuote(item.char) && preservesTrailingInnerQuote(zh, before, item)) continue;
+          indexes.push(item.index);
+        }
+        if (indexes.length > 0 && new Set(indexes).size > 0) {
+          after = removeCharsAt(before, [...new Set(indexes)]);
+          if (proposedChange(proposals, 'remove-boundary-quote-from-interior-unit', sentence, field.label, before, after, 'Remove boundary quote(s) from an interior sentence in a Chinese multi-sentence quote span.')) {
+            field.owner[field.key] = after;
+            applied += 1;
+          }
+        }
+        continue;
+      }
+
+      if (isClosingUnit) {
+        if (runStart.length > 0) {
+          const startCloseIndexes = runStart.filter(item => isCloseBoundaryQuote(item.char)).map(item => item.index);
+          if (startCloseIndexes.length > 0) {
+            after = removeCharsAt(before, startCloseIndexes);
+            if (proposedChange(proposals, 'remove-close-from-closing-unit-start', sentence, field.label, before, after, 'Remove a closing quote from the start of a closing sentence.')) {
+              before = after;
+              field.owner[field.key] = after;
+              applied += 1;
+            }
+          }
+        }
+
+        const hasClosing = boundaryQuoteRunEnd(after).some(item => isCloseBoundaryQuote(item.char));
+        if (!hasClosing && after.trim() !== '') {
+          const quoteToAdd = quoteCloseFor(runStart.length > 0 ? runStart[runStart.length - 1].char : '"');
+          const withClose = appendBeforeTrailingSpace(after, quoteToAdd);
+          if (proposedChange(proposals, 'append-close-to-closing-unit-end', sentence, field.label, after, withClose, 'Add closing quote at the end of a closing sentence in a Chinese multi-sentence quote span.')) {
+            field.owner[field.key] = withClose;
+            applied += 1;
+          }
+        }
       }
     }
   }
@@ -317,6 +462,8 @@ function fixChapterQuoteBoundaries(chapter, options = {}) {
     const sentences = block.sentences || [];
     const remainingAfterAdjacent = Math.max(0, limit - proposals.length);
     normalizeAdjacentQuoteBoundary(sentences, proposals, remainingAfterAdjacent);
+    const remainingAfterDepthFixes = Math.max(0, limit - proposals.length);
+    normalizeByChineseDepth(sentences, proposals, remainingAfterDepthFixes);
     const remainingAfterSpanFixes = Math.max(0, limit - proposals.length);
     fixEnglishSpanBoundaries(sentences, proposals, remainingAfterSpanFixes);
   }

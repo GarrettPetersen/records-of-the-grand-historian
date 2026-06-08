@@ -3,8 +3,8 @@
 import fs from 'fs';
 import path from 'path';
 
-const OUTER_OPEN = '「';
-const OUTER_CLOSE = '」';
+const OUTER_OPEN = new Set(['「', '“']);
+const OUTER_CLOSE = new Set(['」', '”']);
 
 function argValue(name) {
   const prefix = `${name}=`;
@@ -41,8 +41,13 @@ function chapterFiles(opts) {
     .map(file => path.join('data', book, file)));
 }
 
-function countChar(text, char) {
-  return [...String(text || '')].filter(item => item === char).length;
+function countChar(text, chars) {
+  const lookup = chars instanceof Set ? chars : new Set([chars]);
+  let count = 0;
+  for (const ch of String(text || '')) {
+    if (lookup.has(ch)) count += 1;
+  }
+  return count;
 }
 
 function countSubstr(text, needle) {
