@@ -9,7 +9,7 @@ const MANIFEST_PATH = path.join(DATA_DIR, 'manifest.json');
 const OUTPUT_PATH = path.join(DATA_DIR, 'quality', 'languagetool-scores.json');
 const DEFAULT_URL = 'http://localhost:8081';
 const MAX_CHUNK_CHARS = 12000;
-const SCORER_VERSION = '2026-05-31-language-tool-v8';
+const SCORER_VERSION = '2026-06-08-language-tool-v9-split-word-typos';
 
 const IGNORED_RULE_IDS = new Set([
   'WHITESPACE_RULE',
@@ -154,6 +154,7 @@ function scorerConfig() {
     maxChunkChars: MAX_CHUNK_CHARS,
     ignoredRules: Array.from(IGNORED_RULE_IDS).sort(),
     ignoredCategories: Array.from(IGNORED_CATEGORY_IDS).sort(),
+    retainedTypoClass: 'split-word replacements',
     ignoredMatchTextByRule: Object.fromEntries(
       Object.entries(IGNORED_MATCH_TEXT_BY_RULE).map(([ruleId, values]) => [ruleId, Array.from(values).sort()])
     ),
@@ -248,6 +249,7 @@ function updateScoreMetadata(scores, baseUrl) {
     gray: 'not checked or no words',
   };
   scores.ignoredCategories = Array.from(IGNORED_CATEGORY_IDS);
+  scores.retainedTypoClass = 'split-word replacements';
   scores.ignoredRules = Array.from(IGNORED_RULE_IDS);
 }
 
@@ -344,9 +346,23 @@ function matchedContextText(match) {
   return context.slice(offset, offset + length);
 }
 
+function isSplitWordTypo(match) {
+  if (match.rule?.category?.id !== 'TYPOS') return false;
+  const matched = matchedContextText(match);
+  if (!/[A-Za-z]/.test(matched) || /\s/.test(matched)) return false;
+  return (match.replacements || []).some((replacement) => {
+    const value = String(replacement.value || '');
+    return /\b[A-Za-z][A-Za-z'-]+\s+[A-Za-z][A-Za-z'-]+\b/.test(value)
+      && value.replace(/\s+/g, '').toLowerCase() === matched.toLowerCase();
+  });
+}
+
 function isIgnoredMatch(match) {
   const ruleId = match.rule?.id;
-  if (IGNORED_RULE_IDS.has(ruleId) || IGNORED_CATEGORY_IDS.has(match.rule?.category?.id)) {
+  if (IGNORED_RULE_IDS.has(ruleId)) {
+    return true;
+  }
+  if (IGNORED_CATEGORY_IDS.has(match.rule?.category?.id) && !isSplitWordTypo(match)) {
     return true;
   }
   const ignoredText = IGNORED_MATCH_TEXT_BY_RULE[ruleId];

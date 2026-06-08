@@ -160,6 +160,24 @@ export const TRANSLATION_ARTIFACT_RULES = [
     pattern: /\b(?!(?:had|that)\b)([a-z][a-z'-]{2,})\s+\1\b/g,
   },
   {
+    id: 'FUSED_COMMON_WORD_BOUNDARY',
+    severity: 3,
+    description: 'Likely missing space before a common English clause word',
+    pattern: /\b(?:alarmonly|chaptersworks|warare|sawyou|sectyou|mudwho|anywayhardly|rearwhat|handwhere|strengthwhat|kinthat|sorcererall|plansis|victoryis|succeededbut|gloryhow|obscuritythough|elsejust|earswar|themthat|fledwhere|rolesremain|precedentslike|modestythey|countinsufficient|stateno|thatnot|sealsnone)\b/g,
+  },
+  {
+    id: 'FUSED_LOWER_UPPER_BOUNDARY',
+    severity: 3,
+    description: 'Likely missing space where a lowercase word runs into a capitalized word',
+    pattern: /\b[A-Za-z’'-]*[a-z][A-Z][A-Za-z’'-]*\b/g,
+  },
+  {
+    id: 'MISSPELLED_MORE_SO',
+    severity: 2,
+    description: 'Use "more so" rather than the nonstandard closed spelling "moreso"',
+    pattern: /\bmoreso\b/gi,
+  },
+  {
     id: 'RAW_ROMANIZATION_PLACEHOLDER',
     severity: 3,
     description: 'Placeholder romanization left in place of an English translation',
