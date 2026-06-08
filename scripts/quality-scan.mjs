@@ -205,7 +205,7 @@ for (const scanner of commands) {
     }
   }
 
-  if (!scanner.advisory && result.status) exitCode = result.status;
+  if (result.status) exitCode = result.status;
 }
 
 if (wantsJson) {

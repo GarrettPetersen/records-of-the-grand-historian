@@ -34,7 +34,7 @@ const MANUAL_ANCHORS = [
   ['Yingzhou', ['瀛洲'], /\bYingzhou\b/i],
   ['Jianzhang Palace', ['建章宮', '建章宫'], /\bJian ?zhang\b/i],
   ['Ganquan', ['甘泉'], /\bGanquan\b/i],
-  ['Mount Tai', ['泰山', '岱'], /\b(?:Mount Tai|Tai Shan|Taishan|Dai ?zong)\b/i],
+  ['Mount Tai', ['泰山', '太山', '岱'], /\b(?:Mount Tai|Tai Shan|Taishan|Dai ?zong)\b/i],
   ['Daizong', ['岱宗'], /\bDai ?zong\b/i],
   ['Langya', ['瑯邪', '琅邪', '琅琊'], /\bLang(?:ya|ye)\b/i],
   ['Linzi', ['臨菑', '臨淄', '临淄'], /\bLinzi\b/i],
@@ -618,6 +618,7 @@ function sameSentenceGlossaryCoverage(record, { reviewPriorities = false } = {})
   if (reviewPriorities && properCount === 1 && commonCount === 0 && coverage > 0) return null;
 
   if (coverage > maxCoverage) return null;
+  if (isCompactTableOrFormulaRecord(record, score)) return null;
 
   const glossaryRiskScore = sourceScore * (1 - coverage)
     * (properCount > 0 && matchedProperCount === 0 ? 1.35 : 1);
@@ -643,6 +644,26 @@ function sameSentenceGlossaryCoverage(record, { reviewPriorities = false } = {})
     glossaryRiskScore,
     severity,
   };
+}
+
+function isCompactTableOrFormulaRecord(record, score) {
+  const zh = String(record.zh || '');
+  const english = String(record.english || '');
+  if (!zh || !english) return false;
+
+  const compactEnglish = english.replace(/\s+/g, '');
+  const compactSource = zh.replace(/\s+/g, '');
+  const numericSourceChars = (compactSource.match(/[一二三四五六七八九十百千萬万\d年月日度分刻丈尺寸步里斗牛女虛虚危室壁奎婁娄胃昴畢毕觜參参井鬼柳星張张翼軫轸角亢氐房心尾箕甲乙丙丁戊己庚辛壬癸子丑寅卯辰巳午未申酉戌亥]/g) || []).length;
+  const numericEnglishChars = (compactEnglish.match(/[\d°′'½¼~+\\/—;:.,-]/g) || []).length;
+  const hasFormulaEnglish = /(?:\d|°|′|½|¼|\b(?:d|p)\b|\.{3}|…|\+|\/)/i.test(english);
+  const hasFormulaSource = numericSourceChars >= 10 && numericSourceChars / Math.max(compactSource.length, 1) >= 0.28;
+  const mostlyCommonAnchors = score.properCount <= 1 && score.commonCount >= 6;
+
+  if (hasFormulaSource && hasFormulaEnglish && mostlyCommonAnchors) return true;
+  if (/[甲乙丙丁戊己庚辛壬癸子丑寅卯辰巳午未申酉戌亥]{6,}/.test(zh) && /[甲乙丙丁戊己庚辛壬癸子丑寅卯辰巳午未申酉戌亥]/.test(english)) return true;
+  if (hasFormulaSource && numericEnglishChars >= 8 && compactEnglish.length <= 180 && mostlyCommonAnchors) return true;
+
+  return false;
 }
 
 function excerpt(text, width = 110) {
