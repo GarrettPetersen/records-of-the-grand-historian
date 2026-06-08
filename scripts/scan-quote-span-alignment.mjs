@@ -3,6 +3,15 @@
 import fs from 'fs';
 import path from 'path';
 
+const CHINESE_OPEN_QUOTES = new Set(['「', '『', '“', '‘']);
+const CHINESE_CLOSE_QUOTES = new Set(['」', '』', '”', '’']);
+const MATCHING_OPEN_FOR_CLOSE = {
+  '」': '「',
+  '』': '『',
+  '”': '“',
+  '’': '‘',
+};
+
 function countSubstr(str, needle) {
   if (!str || !needle) return 0;
   let count = 0;
@@ -36,6 +45,37 @@ function countEnglishQuoteMarks(text) {
   const en = String(text || '');
   const doubleQuoteCount = countSubstr(en, '"') + countSubstr(en, '“') + countSubstr(en, '”');
   return doubleQuoteCount + countSingleQuoteDelimiters(en);
+}
+
+function validateChineseQuotes(text, state) {
+  const problems = [];
+  const zh = String(text || '');
+  for (const char of zh) {
+    if (CHINESE_OPEN_QUOTES.has(char)) {
+      state.stack.push(char);
+      continue;
+    }
+    if (!CHINESE_CLOSE_QUOTES.has(char)) continue;
+
+    const expected = state.stack[state.stack.length - 1];
+    const opener = MATCHING_OPEN_FOR_CLOSE[char];
+    if (!expected) {
+      problems.push(`Chinese quote close (${char}) has no matching opening quote before it in this chapter segment.`);
+      continue;
+    }
+    if (expected !== opener) {
+      problems.push(`Chinese quote order mismatch: encountered ${char} while the active opener is ${expected}.`);
+      const fallbackIndex = state.stack.lastIndexOf(opener);
+      if (fallbackIndex >= 0) {
+        state.stack = state.stack.slice(0, fallbackIndex);
+      } else {
+        state.stack = [];
+      }
+      continue;
+    }
+    state.stack.pop();
+  }
+  return problems;
 }
 
 function firstNonSpaceIndex(text) {
@@ -179,13 +219,25 @@ function idiomaticText(item) {
     '';
 }
 
-function scanSequence(items, file, blockIndex) {
+function scanSequence(items, file, blockIndex, quoteState) {
   const problems = [];
   let zhQuoteDepth = 0;
 
   for (const item of items) {
     const chinese = item.content || item.zh || '';
     const english = idiomaticText(item);
+    const chineseQuoteBalanceProblems = validateChineseQuotes(chinese, quoteState);
+    if (chineseQuoteBalanceProblems.length > 0) {
+      problems.push({
+        file,
+        blockIndex,
+        id: item.id,
+        boundaryProblems: chineseQuoteBalanceProblems,
+        chinese,
+        english
+      });
+    }
+
     const openCount = countSubstr(chinese, '「');
     const closeCount = countSubstr(chinese, '」');
     const beforeDepth = zhQuoteDepth;
@@ -225,10 +277,29 @@ function scanSequence(items, file, blockIndex) {
 function scanChapter(file) {
   const chapter = JSON.parse(fs.readFileSync(file, 'utf8'));
   const problems = [];
+  const quoteState = { stack: [] };
   for (const [blockIndex, block] of (chapter.content || []).entries()) {
     if (block.type === 'paragraph' || block.type === 'table_header') {
-      problems.push(...scanSequence(block.sentences || [], file, blockIndex));
+      problems.push(...scanSequence(block.sentences || [], file, blockIndex, quoteState));
     }
+  }
+
+  if (quoteState.stack.length > 0) {
+    const openCount = new Map();
+    for (const quote of quoteState.stack) {
+      openCount.set(quote, (openCount.get(quote) || 0) + 1);
+    }
+    const unmatchedOpens = Array.from(openCount.entries())
+      .map(([quote, count]) => `${count} unmatched ${quote}`)
+      .join(', ');
+    problems.push({
+      file,
+      blockIndex: -1,
+      id: 'chapter-end',
+      boundaryProblems: [`Chinese quote stack not closed by chapter end: ${unmatchedOpens}.`],
+      chinese: 'End of chapter',
+      english: 'End of chapter',
+    });
   }
   return problems;
 }
