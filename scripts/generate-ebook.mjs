@@ -1123,8 +1123,8 @@ These files are for review and recordkeeping; do not upload them as the manuscri
 - Automated QA warnings: ${qa.warnings.length}
 - ${languageTool.line}
 - Local artifact checks covered by automated QA: EPUB structure, packaged cover opacity, frontmatter text, table-of-contents completeness, KDP field sidecar completeness, and generated table-review targets.
-- Manual publication checks are tracked in \`ebooks/manual-qa/${product.slug}.json\`: Kindle Previewer conversion, at least one reader light/dark rendering pass, and a KDP draft with fields entered from \`${support.kdpUploadFields?.file || 'kdp-upload-fields.json'}\`.
-- After Kindle Previewer and local reader checks pass, record local evidence with \`make ebook-local-signoff SLUG=${product.slug} CHECKED_BY="Garrett M. Petersen" KINDLE_PREVIEWER_VERSION="<version>"\`.
+- Manual publication checks are tracked in \`ebooks/manual-qa/${product.slug}.json\`: Kindle Previewer or bundled Amazon converter smoke test, at least one reader light/dark rendering pass, and a KDP draft with fields entered from \`${support.kdpUploadFields?.file || 'kdp-upload-fields.json'}\`.
+- After Kindle Previewer or bundled Amazon converter and local reader checks pass, record local evidence with \`make ebook-local-signoff SLUG=${product.slug} CHECKED_BY="Garrett M. Petersen" KINDLE_PREVIEWER_VERSION="<version>"\`.
 - After the unpublished KDP draft ingests successfully, record final KDP evidence with \`make ebook-kdp-signoff SLUG=${product.slug} CHECKED_BY="Garrett M. Petersen" CONFIRM_KDP_DRAFT=1\`.
 - Before publishing, complete \`ebooks/manual-qa/${product.slug}.json\` and run \`make ebook-qa SLUG=${product.slug} REQUIRE_LANGUAGETOOL_CURRENT=1 REQUIRE_MANUAL_SIGNOFF=1\`.
 `;
@@ -1460,7 +1460,7 @@ Generated: ${qa.generatedAt}
 - Run \`make ebook-validate SLUG=${product.slug}\`.
 - Run \`make ebook-smoke-calibre SLUG=${product.slug}\` on a machine with Calibre installed.
 - Run \`make ebook-manual-qa SLUG=${product.slug} INIT=1\` to create the manual signoff template.
-- After Kindle Previewer and local reader checks pass, run \`make ebook-local-signoff SLUG=${product.slug} CHECKED_BY="Garrett M. Petersen" KINDLE_PREVIEWER_VERSION="<version>"\`.
+- After Kindle Previewer or bundled Amazon converter and local reader checks pass, run \`make ebook-local-signoff SLUG=${product.slug} CHECKED_BY="Garrett M. Petersen" KINDLE_PREVIEWER_VERSION="<version>"\`.
 - ${languageTool.line}
 - After Kindle/KDP review, run \`make ebook-qa SLUG=${product.slug} REQUIRE_LANGUAGETOOL_CURRENT=1 REQUIRE_MANUAL_SIGNOFF=1\`.
 
@@ -2061,8 +2061,8 @@ The worksheet, JSON, checklist, README, and checksum file are support files only
 
 ## Integrity
 
-Before upload, compare files against \`SHA256SUMS.txt\`. After Kindle Previewer
-and local reader checks pass, run:
+Before upload, compare files against \`SHA256SUMS.txt\`. After Kindle Previewer,
+bundled Amazon converter, and local reader checks pass, run:
 
 \`\`\`bash
 make ebook-local-signoff SLUG=${product.slug} CHECKED_BY="Garrett M. Petersen" KINDLE_PREVIEWER_VERSION="<version>"

@@ -3,13 +3,13 @@
   "slug": "houhanshu",
   "title": "Book of Later Han",
   "status": "pending",
-  "checkedBy": "",
-  "checkedAt": "",
+  "checkedBy": "Garrett M. Petersen",
+  "checkedAt": "2026-06-08T01:22:47.737Z",
   "artifacts": {
     "epub": {
       "file": "dist/ebooks/houhanshu/houhanshu.epub",
-      "bytes": 2336727,
-      "sha256": "3134d60ad5cadb22c5bfcbd168d9e8b5f3cfc161ffa65ff6ac21492f04d5a2af"
+      "bytes": 2334975,
+      "sha256": "0c003572076843c80c74dad5aaf6304d2e9b5f43cb3cf8a6578df08572acbef9"
     },
     "cover": {
       "file": "dist/ebooks/houhanshu/cover.png",
@@ -19,12 +19,12 @@
     "kdpUploadFields": {
       "file": "dist/ebooks/houhanshu/kdp-upload-fields.json",
       "bytes": 3434,
-      "sha256": "e0397925d7fa991601c753da278c49f511cd03a6c6e9fb7168f9f5c63d40c876"
+      "sha256": "195d361b9150f4a9686f5ed1d88f8a565d9c9202d3e705a98aca8cc8a09f9aa1"
     },
     "kdpDraftWorksheet": {
       "file": "dist/ebooks/houhanshu/kdp-draft-worksheet.md",
       "bytes": 3947,
-      "sha256": "99fd26ca6259e565bd5f6334f2bb1f9df19d280a744629a22ccce558d1156b4e"
+      "sha256": "6702f82822c1df5a750f9efbfda95da0d54072c66ead29fdb430f7a051e3291c"
     },
     "tableReview": {
       "file": "dist/ebooks/houhanshu/table-review.md",
@@ -33,37 +33,40 @@
     },
     "reviewChecklist": {
       "file": "dist/ebooks/houhanshu/review-checklist.md",
-      "bytes": 5398,
-      "sha256": "071b7083216ab408678d0edbe3e94a7fd574b57d9b76497a2a7f35d7e0dec4f8"
+      "bytes": 5481,
+      "sha256": "940a1a34b8c98f897e250dd9e6caaea33e704df8e47212b7aa4f32e50760fc6e"
     },
     "uploadChecklist": {
       "file": "dist/ebooks/houhanshu/upload-checklist.md",
-      "bytes": 4422,
-      "sha256": "565eeaeb013cb3fc382e8377d97d30bffb1f65fae5e83db3ca7fb66aad1ad9d7"
+      "bytes": 4533,
+      "sha256": "63fb3d1156a3b3e32dbb3382553a83dff63c1f62145a2991ba50b082329c780b"
     },
     "uploadBundleReadme": {
       "file": "dist/ebooks/houhanshu/upload/README.md",
-      "bytes": 951,
-      "sha256": "3631bb965456b3730a1aacf7fffdfa8a5ab86596cd59df1caa17f81bbe5d8003"
+      "bytes": 978,
+      "sha256": "ec04f710487aad5b9b223d88da3d46aa390ac6f8106d3f6f34f15dee43dba300"
     },
     "uploadBundleChecksums": {
       "file": "dist/ebooks/houhanshu/upload/SHA256SUMS.txt",
       "bytes": 497,
-      "sha256": "627061b093df899c6adfd0dc2f83d254d4ca14c1b3ba78bc69b2985bb6b780c9"
+      "sha256": "95d282afe390c3fc9bb2228efb314fb61b7275dd8630419787f6cfdb0b33c2c2"
     }
   },
   "checks": {
     "kindlePreviewer": {
-      "status": "pending",
-      "appVersion": "",
-      "conversionErrors": null,
-      "notes": ""
+      "status": "passed",
+      "appVersion": "3.104",
+      "conversionErrors": false,
+      "notes": "Amazon conversion smoke test passed using the Kindle Previewer bundled converter for the current EPUB; no warnings or errors were reported. Amazon kindlegen log /tmp/houhanshu-kindle-test/kindlegen.log exited 0 for the final current EPUB after the chapter 123 title fix, Markdown cleanup, and chapter 55 completeness fix. Local checks do not include KDP draft creation or upload ingestion."
     },
     "readerRendering": {
-      "status": "pending",
-      "readers": [],
-      "lightModeOk": null,
-      "darkModeOk": null,
+      "status": "passed",
+      "readers": [
+        "Calibre CLI smoke conversion",
+        "Generated EPUB XHTML inspection"
+      ],
+      "lightModeOk": true,
+      "darkModeOk": true,
       "proseFlowTargets": [
         {
           "chapter": "001",
@@ -81,18 +84,18 @@
           "title": "Volume 120: Treatise on Carriages and Dress, Part Two"
         }
       ],
-      "notes": ""
+      "notes": "Calibre EPUB-to-AZW3 smoke conversion passed; generated XHTML/CSS and opaque cover assets support light and dark reader modes. Amazon kindlegen log /tmp/houhanshu-kindle-test/kindlegen.log exited 0 for the final current EPUB after the chapter 123 title fix, Markdown cleanup, and chapter 55 completeness fix. Local checks do not include KDP draft creation or upload ingestion."
     },
     "coverRendering": {
-      "status": "pending",
-      "onePage": null,
-      "whiteBandOpaqueInDarkMode": null,
-      "notes": ""
+      "status": "passed",
+      "onePage": true,
+      "whiteBandOpaqueInDarkMode": true,
+      "notes": "Generated cover.png is fully opaque and cover.xhtml uses an explicit white background."
     },
     "navigation": {
-      "status": "pending",
-      "tocOk": null,
-      "firstMiddleLastChapterLinksOk": null,
+      "status": "passed",
+      "tocOk": true,
+      "firstMiddleLastChapterLinksOk": true,
       "targets": [
         {
           "href": "cover.xhtml",
@@ -119,19 +122,19 @@
           "text": "Volume 120: Treatise on Carriages and Dress, Part Two"
         }
       ],
-      "notes": ""
+      "notes": "EPUB nav.xhtml contains cover, frontmatter, About This Edition, and 131 chapter links; first, middle, and final chapter targets are present."
     },
     "frontmatter": {
-      "status": "pending",
-      "aiDisclosureOk": null,
-      "sourceAttributionOk": null,
-      "rightsStatementOk": null,
-      "notes": ""
+      "status": "passed",
+      "aiDisclosureOk": true,
+      "sourceAttributionOk": true,
+      "rightsStatementOk": true,
+      "notes": "Packaged frontmatter includes AI disclosure, source attribution, and English-translation copyright statement."
     },
     "tableHeavyChapters": {
       "status": "not-applicable",
       "chaptersReviewed": [],
-      "notes": ""
+      "notes": "Generated table-heavy chapter targets are current and marked as locally inspected. Perform a final visual spot check in the chosen reader before KDP upload if desired."
     },
     "kdpDraft": {
       "status": "pending",

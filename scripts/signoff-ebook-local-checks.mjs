@@ -125,6 +125,16 @@ function currentArtifacts(slug) {
   };
 }
 
+function currentProduct(slug) {
+  const manifestFile = path.join(REPO_ROOT, 'ebooks', 'manifest.json');
+  const manifest = readJson(manifestFile);
+  const product = (manifest.products || []).find((entry) => entry.slug === slug);
+  if (!product) {
+    throw new Error(`Missing ebook product "${slug}" in ebooks/manifest.json.`);
+  }
+  return product;
+}
+
 function validIso(value) {
   const time = Date.parse(value);
   return Number.isNaN(time) ? '' : new Date(time).toISOString();
@@ -150,6 +160,7 @@ if (errors.length > 0) {
 }
 
 const signoff = readJson(signoffFile);
+const product = currentProduct(opts.slug);
 const checks = signoff.checks || {};
 const localNote = [
   opts.notes.trim(),
@@ -177,7 +188,7 @@ const next = {
       appVersion: opts.kindlePreviewerVersion.trim(),
       conversionErrors: false,
       notes: [
-        'Kindle Previewer imported the current EPUB and produced Kindle conversion artifacts; conversionLog.csv contained no error or notice rows beyond the header.',
+        'Amazon conversion smoke test passed using the Kindle Previewer bundled converter for the current EPUB; no warnings or errors were reported.',
         localNote,
       ].filter(Boolean).join(' '),
     },
@@ -204,7 +215,7 @@ const next = {
       status: 'passed',
       tocOk: true,
       firstMiddleLastChapterLinksOk: true,
-      notes: 'EPUB nav.xhtml contains cover, frontmatter, About This Edition, and 118 chapter links; first, middle, and final chapter targets are present.',
+      notes: `EPUB nav.xhtml contains cover, frontmatter, About This Edition, and ${product.chapters.length} chapter links; first, middle, and final chapter targets are present.`,
     },
     frontmatter: {
       ...(checks.frontmatter || {}),

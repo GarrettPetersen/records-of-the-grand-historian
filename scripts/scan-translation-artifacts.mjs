@@ -21,6 +21,12 @@ const CHECK_FIELDS = new Set([
 
 export const TRANSLATION_ARTIFACT_RULES = [
   {
+    id: 'RAW_MARKDOWN_EMPHASIS',
+    severity: 3,
+    description: 'Raw Markdown emphasis marker left in published translation text',
+    pattern: /\*/g,
+  },
+  {
     id: 'MARQUIS_YEAR_ONE',
     severity: 2,
     description: 'Succession formula left as "Marquis X year 1"',
