@@ -41,6 +41,44 @@ function countSingleQuoteDelimiters(text) {
   return count;
 }
 
+function isLikelyOpeningQuote(en, index) {
+  const ch = en[index];
+  if (ch === '‘' || ch === '“') return true;
+  if (ch === "'") return false;
+  if (ch !== '"') return false;
+  const prev = en[index - 1] || '';
+  if (!prev || /\s/.test(prev)) return true;
+  if (/^[\[({（「『“’”»]/u.test(prev)) return true;
+  if (/[:：;,。！？!?-—–]/u.test(prev)) return true;
+  return false;
+}
+
+function isLikelyClosingQuote(en, index) {
+  const ch = en[index];
+  if (ch === '’' || ch === '”') return true;
+  if (ch !== '"') return false;
+  const next = en[index + 1] || '';
+  if (!next) return true;
+  if (/^\s/.test(next) || /^[,.;:!?—–)—】」”’%]/u.test(next)) return true;
+  return false;
+}
+
+function scanEnglishQuoteOrderErrors(english) {
+  const en = String(english || '');
+  const problems = [];
+  const lead = leadingQuote(en);
+  if (lead && lead.index === 0 && isLikelyClosingQuote(en, lead.index)) {
+    problems.push('English begins with a likely closing quote mark.');
+  }
+
+  const tail = trailingQuote(en);
+  if (tail && tail.index === lastNonSpaceIndex(en) && isLikelyOpeningQuote(en, tail.index)) {
+    problems.push('English ends with a likely opening quote mark.');
+  }
+
+  return problems;
+}
+
 function countEnglishQuoteMarks(text) {
   const en = String(text || '');
   const doubleQuoteCount = countSubstr(en, '"') + countSubstr(en, '“') + countSubstr(en, '”');
@@ -233,6 +271,18 @@ function scanSequence(items, file, blockIndex, quoteState) {
         blockIndex,
         id: item.id,
         boundaryProblems: chineseQuoteBalanceProblems,
+        chinese,
+        english
+      });
+    }
+
+    const englishOrderProblems = scanEnglishQuoteOrderErrors(english);
+    if (englishOrderProblems.length > 0) {
+      problems.push({
+        file,
+        blockIndex,
+        id: item.id,
+        boundaryProblems: englishOrderProblems,
         chinese,
         english
       });
