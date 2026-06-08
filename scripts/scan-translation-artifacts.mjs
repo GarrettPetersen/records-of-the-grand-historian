@@ -9,6 +9,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { hasDisallowedChineseCharacters } from '../score-translations.js';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 
@@ -1635,6 +1636,17 @@ function excerpt(text, index, width = 56) {
 
 export function scanArtifactText(text) {
   const hits = [];
+  if (hasDisallowedChineseCharacters(text)) {
+    const match = /[\u4e00-\u9fff]+/u.exec(text);
+    hits.push({
+      ruleId: 'CHINESE_CHARACTERS_IN_ENGLISH',
+      severity: 3,
+      description: 'Chinese characters left in English translation text',
+      found: match?.[0] || '',
+      index: match?.index || 0,
+      excerpt: excerpt(text, match?.index || 0),
+    });
+  }
   for (const rule of TRANSLATION_ARTIFACT_RULES) {
     rule.pattern.lastIndex = 0;
     let match;
@@ -1654,6 +1666,19 @@ export function scanArtifactText(text) {
 
 function* walk(value, keyPath = [], sentenceId = '') {
   if (typeof value === 'string') {
+    if (keyPath.includes('translations') && keyPath[keyPath.length - 1] === 'text') {
+      yield {
+        path: nearestContext(keyPath),
+        sentenceId,
+        ruleId: 'TRANSLATION_TEXT_FIELD',
+        severity: 3,
+        description: 'Deprecated translations[].text field is present; remove it and use literal/idiomatic only',
+        found: value,
+        index: 0,
+        excerpt: excerpt(value, 0),
+      };
+      return;
+    }
     if (!isTranslationField(keyPath)) return;
     for (const hit of scanArtifactText(value)) {
       yield {

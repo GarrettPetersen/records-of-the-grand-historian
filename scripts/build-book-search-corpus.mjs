@@ -63,7 +63,7 @@ function extractBlocks(chapterData) {
       const en = (block.sentences || [])
         .map((s) => {
           const t = s.translation || (s.translations && s.translations.length > 0 ? s.translations[0] : null);
-          return t ? String(t.idiomatic || t.literal || t.text || '').trim() : '';
+          return t ? String(t.idiomatic || t.literal || '').trim() : '';
         })
         .join(' ');
       blocks.push([i, zh, en]);
@@ -91,7 +91,7 @@ function extractBlocks(chapterData) {
       const enH = (block.sentences || [])
         .map((s) => {
           const tr = s.translations && s.translations[0];
-          return tr ? String(tr.idiomatic || tr.literal || tr.text || '').trim() : '';
+          return tr ? String(tr.idiomatic || tr.literal || '').trim() : '';
         })
         .join('');
       blocks.push([i, `${zhH} ${zhCells.join(' ')}`.trim(), `${enH} ${enCells.join(' ')}`.trim()]);

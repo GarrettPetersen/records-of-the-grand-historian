@@ -123,8 +123,17 @@ function hasLegitimateChineseCharacterMention(english) {
     return true;
   }
   if (/\b(?:the|this|that|these|those)\s+Chinese character(?:s)?\b/i.test(english)) return true;
-  if (/[\p{L}][\u4e00-\u9fff]+|[\u4e00-\u9fff]+[\p{L}]/u.test(english)) return true;
+  if (/[A-Za-z][\u4e00-\u9fff]+|[\u4e00-\u9fff]+[A-Za-z]/u.test(english)) return true;
   return false;
+}
+
+function hasDisallowedChineseCharacters(english, { allowChineseCharacters = false } = {}) {
+  return Boolean(
+    english &&
+    CHINESE_CHARS_REGEX.test(english) &&
+    !allowChineseCharacters &&
+    !hasLegitimateChineseCharacterMention(english)
+  );
 }
 
 /**
@@ -242,7 +251,7 @@ function scoreTranslation(entry, options = {}) {
   const apparatusNote = chinese && isCriticalApparatusNote(chinese);
 
   // Check for Chinese characters in English translation (skip for collation commentary)
-  if (english && CHINESE_CHARS_REGEX.test(english) && !apparatusNote && !allowChineseCharacters && !hasLegitimateChineseCharacterMention(english)) {
+  if (hasDisallowedChineseCharacters(english, { allowChineseCharacters }) && !apparatusNote) {
     issues.push('Contains Chinese characters');
     score = 0;
   }
@@ -437,7 +446,8 @@ function scoreChapterData(data) {
             continue;
           }
 
-          // Check idiomatic first, then literal, supporting both old and new formats
+          // Check both English fields. Idiomatic remains the main quality score,
+          // but literal must also be English unless explicitly allowed.
           const idiomaticTranslation = (sentence.idiomatic || sentence.translation) ||
                                      (sentence.translations && sentence.translations[0] &&
                                       sentence.translations[0].idiomatic);
@@ -446,7 +456,6 @@ function scoreChapterData(data) {
           const content = sentence.content || sentence.zh;
           const allowChineseCharacters = hasChineseCharacterAllowance(sentence);
 
-          // Prefer idiomatic, fall back to literal
           const translation = idiomaticTranslation || literalTranslation;
           const isIdiomatic = !!idiomaticTranslation;
 
@@ -474,6 +483,17 @@ function scoreChapterData(data) {
                 identicalTranslations++;
               }
             }
+          }
+          if (literalTranslation && idiomaticTranslation) {
+            results.push(scoreTranslation({
+              id: `${sentence.id}:literal`,
+              content,
+              translation: literalTranslation,
+              isIdiomatic: false,
+              allowChineseCharacters
+            }, {
+              fieldLabel: 'Literal'
+            }));
           }
         }
       }
@@ -519,6 +539,17 @@ function scoreChapterData(data) {
                 identicalTranslations++;
               }
             }
+          }
+          if (literalTranslation && idiomaticTranslation) {
+            results.push(scoreTranslation({
+              id: `${sentence.id}:literal`,
+              content,
+              translation: literalTranslation,
+              isIdiomatic: false,
+              allowChineseCharacters
+            }, {
+              fieldLabel: 'Literal'
+            }));
           }
         }
       }
@@ -688,5 +719,6 @@ export {
   scoreTranslation,
   scoreChapterData,
   scoreChapterFile,
-  getLengthRatio
+  getLengthRatio,
+  hasDisallowedChineseCharacters
 };

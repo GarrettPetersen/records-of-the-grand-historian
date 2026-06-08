@@ -523,7 +523,7 @@ function bookOgElement(chinese, englishName, theme) {
 function paragraphSnippetFromBlock(block) {
   const blockTr = (block.translations || []).find((t) => t.lang === 'en') || block.translations?.[0];
   if (blockTr) {
-    const t = String(blockTr.idiomatic || blockTr.literal || blockTr.text || '').trim();
+    const t = String(blockTr.idiomatic || blockTr.literal || '').trim();
     if (t) return { english: true, text: t };
   }
 
@@ -531,7 +531,7 @@ function paragraphSnippetFromBlock(block) {
   let anyEn = false;
   for (const s of block.sentences || []) {
     const tr = (s.translations || []).find((x) => x.lang === 'en') || s.translations?.[0];
-    const en = tr && String(tr.idiomatic || tr.literal || tr.text || '').trim();
+    const en = tr && String(tr.idiomatic || tr.literal || '').trim();
     const zh = String(s.zh || '').trim();
     if (en) {
       anyEn = true;

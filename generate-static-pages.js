@@ -39,7 +39,7 @@ function getTableCellEnglish(cell) {
   if (cell.idiomatic?.trim()) return cell.idiomatic;
   if (cell.literal?.trim()) return cell.literal;
   const t = cell.translations?.[0];
-  return t?.idiomatic || t?.literal || t?.text || '';
+  return t?.idiomatic || t?.literal || '';
 }
 
 function getSentenceEnglish(sentence) {
@@ -48,7 +48,7 @@ function getSentenceEnglish(sentence) {
   if (sentence.literal?.trim()) return sentence.literal;
   if (typeof sentence.translation === 'string' && sentence.translation.trim()) return sentence.translation;
   const t = sentence.translations?.[0];
-  return t?.idiomatic || t?.literal || t?.text || '';
+  return t?.idiomatic || t?.literal || '';
 }
 
 const _staticGenEnv = parseInt(process.env.STATIC_GEN_CONCURRENCY || '', 10);
@@ -505,9 +505,9 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         const zhHeaderRow = block.sentences.map(s => renderTableHeaderCell(s, s.zh)).join('');
         const enHeaderRow = block.sentences.map(s => {
           const translation = s.translations && s.translations.length > 0 ? s.translations[0] : null;
-          if (!translation || (!translation.idiomatic && !translation.literal && !translation.text)) return '<th class="table-header"></th>';
+          if (!translation || (!translation.idiomatic && !translation.literal)) return '<th class="table-header"></th>';
 
-          const parsed = parseTableAttributePrefix(translation.idiomatic || translation.literal || translation.text);
+          const parsed = parseTableAttributePrefix(translation.idiomatic || translation.literal);
           let text = escapeHtml(parsed.text);
 
           // Check for footnote
@@ -588,7 +588,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         const sentenceEnText = block.sentences.map(getSentenceEnglish).filter(Boolean).join(' ');
         const blockTranslation = block.translations && block.translations.length > 0 ? block.translations[0] : null;
         const blockEnText = blockTranslation
-          ? blockTranslation.idiomatic || blockTranslation.literal || blockTranslation.text || ''
+          ? blockTranslation.idiomatic || blockTranslation.literal || ''
           : '';
         const enText = sentenceEnText || blockEnText;
 

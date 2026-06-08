@@ -23,7 +23,7 @@ const productDir = path.join(repoRoot, 'dist', 'ebooks', slug);
 const uploadDir = path.join(productDir, 'upload');
 const required = [
   `${slug}.epub`,
-  'cover.png',
+  'cover.jpg',
   'kdp-draft-worksheet.md',
   'kdp-upload-fields.json',
   'upload-checklist.md',

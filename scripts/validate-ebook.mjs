@@ -189,13 +189,13 @@ for (const entry of required) {
   if (!entries.includes(entry)) errors.push(`Missing required EPUB entry: ${entry}`);
 }
 
-for (const sidecar of ['cover.png', 'kdp-metadata.md', 'metadata.json', 'kdp-upload-fields.json', 'kdp-draft-worksheet.md', 'qa-report.json', 'publication-manifest.json', 'table-review.md', 'review-checklist.md', 'upload-checklist.md']) {
+for (const sidecar of ['cover.png', 'cover.jpg', 'kdp-metadata.md', 'metadata.json', 'kdp-upload-fields.json', 'kdp-draft-worksheet.md', 'qa-report.json', 'publication-manifest.json', 'table-review.md', 'review-checklist.md', 'upload-checklist.md']) {
   if (!fs.existsSync(path.join(productDir, sidecar))) {
     errors.push(`Missing generated e-book sidecar: ${sidecar}`);
   }
 }
 
-for (const uploadFile of [`${slug}.epub`, 'cover.png', 'kdp-draft-worksheet.md', 'kdp-upload-fields.json', 'upload-checklist.md', 'README.md', 'SHA256SUMS.txt']) {
+for (const uploadFile of [`${slug}.epub`, 'cover.jpg', 'kdp-draft-worksheet.md', 'kdp-upload-fields.json', 'upload-checklist.md', 'README.md', 'SHA256SUMS.txt']) {
   if (!fs.existsSync(path.join(productDir, 'upload', uploadFile))) {
     errors.push(`Missing KDP upload bundle file: upload/${uploadFile}`);
   }
@@ -206,6 +206,7 @@ if (fs.existsSync(path.join(productDir, 'publication-manifest.json'))) {
   const artifacts = [
     publicationManifest.uploadArtifacts?.epub,
     publicationManifest.uploadArtifacts?.cover,
+    publicationManifest.uploadArtifacts?.coverJpeg,
     publicationManifest.uploadArtifacts?.kdpMetadata,
     publicationManifest.supportArtifacts?.metadata,
     publicationManifest.supportArtifacts?.kdpUploadFields,
@@ -507,7 +508,7 @@ function sourceItemTranslation(item) {
   if (typeof item.literal === 'string' && item.literal.trim()) return item.literal.trim();
   if (typeof item.translation === 'string' && item.translation.trim()) return item.translation.trim();
   const translation = item.translations?.find((entry) => entry.lang === 'en') || item.translations?.[0];
-  return normalizeVisibleText(translation?.idiomatic || translation?.literal || translation?.translation || translation?.text || '');
+  return normalizeVisibleText(translation?.idiomatic || translation?.literal || translation?.translation || '');
 }
 
 function expectedRenderedSourceTexts(chapterData) {
@@ -987,7 +988,8 @@ if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
     errors.push('Missing structured KDP upload fields sidecar.');
   } else {
     validateArtifactDescriptor('Structured KDP upload manuscript', kdpUploadFields.uploadFiles?.manuscript, path.basename(epubPath));
-    validateArtifactDescriptor('Structured KDP upload cover', kdpUploadFields.uploadFiles?.cover, 'cover.png');
+    validateArtifactDescriptor('Structured KDP upload cover', kdpUploadFields.uploadFiles?.cover, 'cover.jpg');
+    validateArtifactDescriptor('Structured KDP packaged cover', kdpUploadFields.uploadFiles?.packagedCover, 'cover.png');
     const expectedContributors = [
       { role: 'Author', name: metadata.author },
       { role: 'Translator', name: metadata.translator },
@@ -1040,7 +1042,7 @@ if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
     'Manuscript:',
     `${metadata.slug}.epub`,
     'Cover image:',
-    'cover.png',
+    'cover.jpg',
     'Structured KDP fields:',
     'kdp-upload-fields.json',
     'Contributors:',

@@ -21,6 +21,7 @@ import {
   rubricScaffoldingErrorsForSentence,
 } from './translation-guards.mjs';
 import { countChapterMetrics } from './chapter-counts.mjs';
+import { hasDisallowedChineseCharacters } from './score-translations.js';
 
 const TERMINAL_PUNCTUATION_REGEX = /[.!?]["')\]]*\s*$/;
 
@@ -178,6 +179,10 @@ function validateTranslations(translationFile, chapterFile) {
     if (sentence.literal && sentence.literal.trim()) {
       const literalText = sentence.literal.trim();
 
+      if (hasDisallowedChineseCharacters(literalText)) {
+        errors.push(`❌ CHINESE CHARACTERS DETECTED in literal translation for sentence ${sentence.id}: "${literalText}". Use English unless this is an explicit character/graph reference.`);
+      }
+
       // Check for placeholder patterns
       if (literalText.includes('(translated)') || literalText.includes('[translated]') ||
           literalText.includes('TODO') || literalText.includes('PLACEHOLDER') ||
@@ -197,6 +202,10 @@ function validateTranslations(translationFile, chapterFile) {
 
     if (sentence.idiomatic && sentence.idiomatic.trim()) {
       const idiomaticText = sentence.idiomatic.trim();
+
+      if (hasDisallowedChineseCharacters(idiomaticText)) {
+        errors.push(`❌ CHINESE CHARACTERS DETECTED in idiomatic translation for sentence ${sentence.id}: "${idiomaticText}". Use English unless this is an explicit character/graph reference.`);
+      }
 
       // Check for placeholder patterns
       if (idiomaticText.includes('(translated)') || idiomaticText.includes('[translated]') ||

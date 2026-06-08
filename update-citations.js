@@ -62,8 +62,9 @@ function analyzeChapter(chapterPath) {
     let hasTranslatedSentences = false;
     for (const sentence of block.sentences) {
       if (sentence.translations && sentence.translations.length > 0) {
-        const sentenceTranslator = sentence.translations[0].translator || '';
-        const sentenceText = sentence.translations[0].text || '';
+        const translation = sentence.translations[0];
+        const sentenceTranslator = translation.translator || '';
+        const sentenceText = translation.idiomatic || translation.literal || '';
         
         // Only count if there's actual translation text
         if (sentenceText.trim()) {
@@ -83,8 +84,9 @@ function analyzeChapter(chapterPath) {
       // Find which translator has most sentences in this paragraph
       const paragraphSentenceTranslators = {};
       for (const sentence of block.sentences) {
-        if (sentence.translations && sentence.translations[0]?.text?.trim()) {
-          const t = sentence.translations[0].translator || paragraphTranslator;
+        const translation = sentence.translations?.[0];
+        if ((translation?.idiomatic || translation?.literal || '').trim()) {
+          const t = translation.translator || paragraphTranslator;
           paragraphSentenceTranslators[t] = (paragraphSentenceTranslators[t] || 0) + 1;
         }
       }

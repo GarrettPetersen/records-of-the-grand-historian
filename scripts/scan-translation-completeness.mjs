@@ -89,8 +89,13 @@ function text(value) {
   return String(value ?? '').replace(/\s+/gu, ' ').trim();
 }
 
+function hasTranslatableSource(value) {
+  return /[\p{L}\p{N}]/u.test(value);
+}
+
 function sourceText(item) {
-  return text(item?.content ?? item?.zh ?? item?.chinese ?? item?.source);
+  const src = text(item?.content ?? item?.zh ?? item?.chinese ?? item?.source);
+  return hasTranslatableSource(src) ? src : '';
 }
 
 function englishIdiomatic(item) {

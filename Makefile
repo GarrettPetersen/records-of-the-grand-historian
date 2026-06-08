@@ -784,6 +784,9 @@ validate:
 			echo "Invalid JSON: $$f"; \
 		fi; \
 	done
+	@$(NODE) scripts/normalize-punctuation-sentences.mjs
+	@$(NODE) scripts/validate-translation-fields.mjs
+	@$(NODE) scripts/scan-translation-completeness.mjs --fail --summary
 	@$(MAKE) check-no-autotranslate
 	@echo "Validation complete."
 

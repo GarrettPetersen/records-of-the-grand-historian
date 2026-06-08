@@ -250,7 +250,7 @@ function getMainText(item) {
   if (typeof direct === 'string' && direct.trim()) return direct.trim();
   const trans = getTranslationObject(item);
   if (trans) {
-    return textContent(trans.idiomatic || trans.literal || trans.text || '');
+    return textContent(trans.idiomatic || trans.literal || '');
   }
   return '';
 }
@@ -1072,9 +1072,9 @@ Generated: ${manifest.generatedAt}
 - Manuscript: \`${upload.epub?.file || `${product.slug}.epub`}\`
   - SHA-256: \`${upload.epub?.sha256 || ''}\`
   - Bytes: ${upload.epub?.bytes || ''}
-- Cover image: \`${upload.cover?.file || 'cover.png'}\`
-  - SHA-256: \`${upload.cover?.sha256 || ''}\`
-  - Bytes: ${upload.cover?.bytes || ''}
+- Cover image: \`${upload.coverJpeg?.file || upload.cover?.file || 'cover.jpg'}\`
+  - SHA-256: \`${upload.coverJpeg?.sha256 || upload.cover?.sha256 || ''}\`
+  - Bytes: ${upload.coverJpeg?.bytes || upload.cover?.bytes || ''}
 
 ## KDP Fields
 
@@ -1149,9 +1149,9 @@ Use this worksheet while creating the unpublished KDP draft. It mirrors \`kdp-up
 - Manuscript: \`dist/ebooks/${product.slug}/${upload.epub?.file || `${product.slug}.epub`}\`
   - Bytes: ${upload.epub?.bytes || ''}
   - SHA-256: \`${upload.epub?.sha256 || ''}\`
-- Cover: \`dist/ebooks/${product.slug}/${upload.cover?.file || 'cover.png'}\`
-  - Bytes: ${upload.cover?.bytes || ''}
-  - SHA-256: \`${upload.cover?.sha256 || ''}\`
+- Cover: \`dist/ebooks/${product.slug}/${upload.coverJpeg?.file || upload.cover?.file || 'cover.jpg'}\`
+  - Bytes: ${upload.coverJpeg?.bytes || upload.cover?.bytes || ''}
+  - SHA-256: \`${upload.coverJpeg?.sha256 || upload.cover?.sha256 || ''}\`
 
 ## Book Details
 
@@ -1211,7 +1211,8 @@ function kdpUploadFields(product, manifest) {
     generatedAt: manifest.generatedAt,
     uploadFiles: {
       manuscript: upload.epub || null,
-      cover: upload.cover || null,
+      cover: upload.coverJpeg || upload.cover || null,
+      packagedCover: upload.cover || null,
     },
     product: {
       title: product.title,
@@ -1468,7 +1469,7 @@ Generated: ${qa.generatedAt}
 
 - Open \`dist/ebooks/${product.slug}/${product.slug}.epub\` in Kindle Previewer and confirm conversion has no blocking errors.
 - Open \`dist/ebooks/${product.slug}/${product.slug}.epub\` in Calibre or another EPUB reader in light and dark mode.
-- Use \`dist/ebooks/${product.slug}/cover.png\` as the KDP cover upload file.
+- Use \`dist/ebooks/${product.slug}/cover.jpg\` as the KDP cover upload file.
 - Use \`dist/ebooks/${product.slug}/kdp-upload-fields.json\` as the source of record for KDP form fields.
 - The generated cover is already checked for opaque pixels and the packaged cover page uses an explicit white background; still confirm the cover appears as one page in Kindle Previewer.
 - Frontmatter text is checked by automated QA; still confirm it displays normally in the reader.
@@ -1734,6 +1735,37 @@ function renderCoverPng(svg) {
     }
   });
   return resvg.render().asPng();
+}
+
+function convertPngToJpeg(pngPath, jpegPath, qa) {
+  const converters = [
+    {
+      command: 'sips',
+      args: [pngPath, '-s', 'format', 'jpeg', '-s', 'formatOptions', '95', '--out', jpegPath]
+    },
+    {
+      command: 'magick',
+      args: [pngPath, '-background', 'white', '-alpha', 'remove', '-quality', '95', jpegPath]
+    },
+    {
+      command: 'convert',
+      args: [pngPath, '-background', 'white', '-alpha', 'remove', '-quality', '95', jpegPath]
+    }
+  ];
+
+  for (const converter of converters) {
+    try {
+      childProcess.execFileSync(converter.command, converter.args, { stdio: 'ignore' });
+      if (fs.existsSync(jpegPath) && fs.statSync(jpegPath).size > 0) {
+        return true;
+      }
+    } catch (_error) {
+      fs.rmSync(jpegPath, { force: true });
+    }
+  }
+
+  qa.warnings.push('Could not generate cover.jpg; install macOS sips or ImageMagick and rerun the ebook generator.');
+  return false;
 }
 
 function renderFrontMatter(product, bookInfo) {
@@ -2047,7 +2079,7 @@ Use this directory while creating the unpublished KDP draft.
 ## Upload These Files
 
 - Manuscript: \`${upload.epub?.file || `${product.slug}.epub`}\`
-- Cover: \`${upload.cover?.file || 'cover.png'}\`
+- Cover: \`${upload.coverJpeg?.file || upload.cover?.file || 'cover.jpg'}\`
 
 ## Use For Form Entry
 
@@ -2082,7 +2114,7 @@ function writeUploadBundle(product, productDir, manifest) {
   cleanDir(uploadDir);
   const files = [
     `${product.slug}.epub`,
-    'cover.png',
+    fs.existsSync(path.join(productDir, 'cover.jpg')) ? 'cover.jpg' : 'cover.png',
     'kdp-draft-worksheet.md',
     'kdp-upload-fields.json',
     'upload-checklist.md',
@@ -2128,6 +2160,7 @@ function publicationManifest(product, productDir, epubPath, qa, generatedAt) {
     uploadArtifacts: {
       epub: artifactInfo(productDir, epubFile),
       cover: artifactInfo(productDir, 'cover.png'),
+      ...(fs.existsSync(path.join(productDir, 'cover.jpg')) ? { coverJpeg: artifactInfo(productDir, 'cover.jpg') } : {}),
       kdpMetadata: artifactInfo(productDir, 'kdp-metadata.md')
     },
     supportArtifacts
@@ -2182,7 +2215,9 @@ function buildProduct(product) {
   const coverSvg = renderBookCover(product.book);
   const coverPng = renderCoverPng(coverSvg);
   validateCoverImage(coverPng, qa);
-  writeBinaryFile(path.join(productDir, 'cover.png'), coverPng);
+  const coverPngPath = path.join(productDir, 'cover.png');
+  writeBinaryFile(coverPngPath, coverPng);
+  convertPngToJpeg(coverPngPath, path.join(productDir, 'cover.jpg'), qa);
   writeFile(path.join(productDir, 'kdp-metadata.md'), renderKdpMetadata(product));
   writeFile(path.join(buildDir, 'EPUB', 'cover.xhtml'), renderCover(product, bookInfo));
   writeBinaryFile(path.join(buildDir, 'EPUB', 'images', 'cover.png'), coverPng);
