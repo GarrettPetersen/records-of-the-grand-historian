@@ -55,8 +55,8 @@ export const BOOK_METADATA = {
     chinese: '漢書',
     pinyin: 'Hànshū',
     dynasty: 'Western Han',
-    author: 'Ban Gu',
-    authorChinese: '班固',
+    author: 'Ban Gu, Ban Biao, and Ban Zhao',
+    authorChinese: '班固、班彪、班昭',
   },
   houhanshu: {
     name: 'Book of Later Han',
@@ -71,8 +71,8 @@ export const BOOK_METADATA = {
     chinese: '三國志',
     pinyin: 'Sānguó Zhì',
     dynasty: 'Three Kingdoms',
-    author: 'Chen Shou',
-    authorChinese: '陳壽',
+    author: 'Chen Shou and Pei Songzhi',
+    authorChinese: '陳壽、裴松之',
   },
   jinshu: {
     name: 'Book of Jin',
