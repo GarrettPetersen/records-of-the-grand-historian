@@ -9,7 +9,7 @@ const MANIFEST_PATH = path.join(DATA_DIR, 'manifest.json');
 const OUTPUT_PATH = path.join(DATA_DIR, 'quality', 'languagetool-scores.json');
 const DEFAULT_URL = 'http://localhost:8081';
 const MAX_CHUNK_CHARS = 12000;
-const SCORER_VERSION = '2026-06-08-language-tool-v9-split-word-typos';
+const SCORER_VERSION = '2026-06-09-language-tool-v10-fused-typos';
 
 const IGNORED_RULE_IDS = new Set([
   'WHITESPACE_RULE',
@@ -350,6 +350,8 @@ function isSplitWordTypo(match) {
   if (match.rule?.category?.id !== 'TYPOS') return false;
   const matched = matchedContextText(match);
   if (!/[A-Za-z]/.test(matched) || /\s/.test(matched)) return false;
+  if (/^[A-Z][a-z]+$/.test(matched)) return false;
+  if (!/^[a-z]/.test(matched) && !/[a-z][A-Z]/.test(matched)) return false;
   return (match.replacements || []).some((replacement) => {
     const value = String(replacement.value || '');
     return /\b[A-Za-z][A-Za-z'-]+\s+[A-Za-z][A-Za-z'-]+\b/.test(value)

@@ -160,6 +160,12 @@ export const TRANSLATION_ARTIFACT_RULES = [
     pattern: /\b(?!(?:had|that)\b)([a-z][a-z'-]{2,})\s+\1\b/g,
   },
   {
+    id: 'REPEATED_INITIAL_ARTICLE',
+    severity: 2,
+    description: 'Likely accidental repeated article with sentence-initial capitalization',
+    pattern: /\b(?:The the|A a|An an)\b/g,
+  },
+  {
     id: 'FUSED_COMMON_WORD_BOUNDARY',
     severity: 3,
     description: 'Likely missing space before a common English clause word',
