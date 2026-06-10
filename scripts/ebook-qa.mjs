@@ -150,7 +150,7 @@ function runProduct(productLike, opts) {
   const chapterPaths = chapterPathsForProduct({ ...productLike, book });
   const sourceScopeArgs = chapterPaths || ['--book', book];
 
-  run('Quote span alignment', 'node', ['scripts/scan-quote-span-alignment.mjs', '--limit=0', ...sourceScopeArgs]);
+  run('Quote span alignment', 'node', ['scripts/scan-quote-span-alignment.mjs', '--publication', '--limit=0', ...sourceScopeArgs]);
   // Cheap scan is advisory at this stage; --fail would catch hard gates only, but we run summary for visibility.
   console.log('\n=== Cheap translation quality scan (advisory) ===');
   const cheapRes = spawnSync('node', [

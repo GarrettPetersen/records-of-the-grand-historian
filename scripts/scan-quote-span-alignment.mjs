@@ -30,7 +30,7 @@ function isWhitespaceOrEnd(ch) {
 }
 
 function isQuoteBoundaryChar(ch) {
-  return ch === '' || /[\s,.;:!?)]/u.test(ch);
+  return ch === '' || /[\s,.;:!?)>\]〉）]/u.test(ch);
 }
 
 function isLikelySingleQuoteApostrophe(text, index, singleQuoteDepth = 0) {
@@ -63,7 +63,7 @@ function getEnglishQuoteTokens(text) {
         tokens.push({ index: i, char: ch, type: 'close' });
         continue;
       }
-      if (!prev || /\s/.test(prev) || /^[:：;\[({]/u.test(prev)) {
+      if (!prev || /\s/.test(prev) || /^[:：;\[({<〈—–-]/u.test(prev)) {
         tokens.push({ index: i, char: ch, type: 'open' });
         continue;
       }
@@ -109,7 +109,7 @@ function getEnglishQuoteTokens(text) {
       } else {
         const prev = text[i - 1] || '';
         const next = text[i + 1] || '';
-        if (isWhitespaceOrEnd(prev) || /^[:：;\[({“‘'"]/.test(prev)) {
+        if (isWhitespaceOrEnd(prev) || /^[:：;\[({<〈—–-“‘'"]/.test(prev)) {
           singleQuoteDepth += 1;
           tokens.push({ index: i, char: ch, type: 'open' });
         } else if (isWhitespaceOrEnd(next) || isQuoteBoundaryChar(next)) {
@@ -126,7 +126,7 @@ function getEnglishQuoteTokens(text) {
       tokens.push({ index: i, char: ch, type: 'close' });
       continue;
     }
-    if (isWhitespaceOrEnd(prev) || /^[:：;\[({“‘'"]/.test(prev)) {
+    if (isWhitespaceOrEnd(prev) || /^[:：;\[({<〈—–-“‘'"]/.test(prev)) {
       singleQuoteDepth += 1;
       tokens.push({ index: i, char: ch, type: 'open' });
       continue;
@@ -144,37 +144,29 @@ function classifyEnglishQuoteToken(text, index) {
   return tokens.find(item => item.index === index) || null;
 }
 
-function scanEnglishQuoteOrderErrors(english) {
+function scanEnglishQuoteOrderErrors(english, state = { depth: 0 }) {
   const en = String(english || '');
   const problems = [];
   const quoteTokens = getEnglishQuoteTokens(en);
 
   if (quoteTokens.length === 0) return problems;
-  if (quoteTokens[0].type === 'close') {
+  if (quoteTokens[0].type === 'close' && state.depth === 0) {
     problems.push('English begins with a likely closing quote mark.');
   }
-  if (quoteTokens[quoteTokens.length - 1].type === 'open') {
-    problems.push('English ends with a likely opening quote mark.');
-  }
 
-  let balance = 0;
   for (const token of quoteTokens) {
     if (token.type === 'open') {
-      balance += 1;
+      state.depth += 1;
       continue;
     }
-    if (balance > 0) {
-      balance -= 1;
+    if (state.depth > 0) {
+      state.depth -= 1;
       continue;
     }
     if (token.type === 'close') {
       problems.push('English has an unmatched closing quote mark.');
       break;
     }
-  }
-
-  if (balance > 0 && quoteTokens[quoteTokens.length - 1].type !== 'open') {
-    problems.push('English has an unmatched opening quote mark.');
   }
 
   return problems;
@@ -355,13 +347,13 @@ function idiomaticText(item) {
     '';
 }
 
-function scanSequence(items, file, blockIndex, quoteState) {
+function scanSequence(items, file, blockIndex, quoteState, englishState) {
   const problems = [];
-  let zhQuoteDepth = 0;
 
   for (const item of items) {
     const chinese = item.content || item.zh || '';
     const english = idiomaticText(item);
+    const beforeDepth = quoteState.stack.length;
     const chineseQuoteBalanceProblems = validateChineseQuotes(chinese, quoteState);
     if (chineseQuoteBalanceProblems.length > 0) {
       problems.push({
@@ -374,15 +366,13 @@ function scanSequence(items, file, blockIndex, quoteState) {
       });
     }
 
-    const openCount = countSubstr(chinese, '「');
-    const closeCount = countSubstr(chinese, '」');
-    const beforeDepth = zhQuoteDepth;
-    const afterDepth = Math.max(0, zhQuoteDepth + openCount - closeCount);
+    const openCount = countSubstr(chinese, '「') + countSubstr(chinese, '『');
+    const closeCount = countSubstr(chinese, '」') + countSubstr(chinese, '』');
+    const afterDepth = quoteState.stack.length;
     const inChineseQuoteSpan = beforeDepth > 0 || afterDepth > 0 || openCount > 0 || closeCount > 0;
-    zhQuoteDepth = afterDepth;
+    const englishOrderProblems = scanEnglishQuoteOrderErrors(english, englishState);
 
     if (!inChineseQuoteSpan) {
-      const englishOrderProblems = scanEnglishQuoteOrderErrors(english);
       if (englishOrderProblems.length > 0) {
         problems.push({
           file,
@@ -428,9 +418,10 @@ function scanChapter(file) {
   const chapter = JSON.parse(fs.readFileSync(file, 'utf8'));
   const problems = [];
   const quoteState = { stack: [] };
+  const englishState = { depth: 0 };
   for (const [blockIndex, block] of (chapter.content || []).entries()) {
     if (block.type === 'paragraph' || block.type === 'table_header') {
-      problems.push(...scanSequence(block.sentences || [], file, blockIndex, quoteState));
+      problems.push(...scanSequence(block.sentences || [], file, blockIndex, quoteState, englishState));
     }
   }
 
@@ -451,7 +442,21 @@ function scanChapter(file) {
       english: 'End of chapter',
     });
   }
+  if (englishState.depth > 0) {
+    problems.push({
+      file,
+      blockIndex: -1,
+      id: 'chapter-end',
+      boundaryProblems: [`English quote stack not closed by chapter end: ${englishState.depth} unmatched quote span(s).`],
+      chinese: 'End of chapter',
+      english: 'End of chapter',
+    });
+  }
   return problems;
+}
+
+function isPublicationBlockingQuoteProblem(note) {
+  return /^English (?:begins|ends|has an unmatched)/.test(note);
 }
 
 function main() {
@@ -460,6 +465,7 @@ function main() {
   let outputLimit = 50;
   let wantsJson = false;
   let wantsSummary = false;
+  let publicationOnly = false;
 
   for (let i = 2; i < process.argv.length; i += 1) {
     const arg = process.argv[i];
@@ -478,6 +484,10 @@ Explicit paths may be chapter files or directories. Use either --book or paths, 
     }
     if (arg === '--json') {
       wantsJson = true;
+      continue;
+    }
+    if (arg === '--publication') {
+      publicationOnly = true;
       continue;
     }
     if (arg === '--fail') {
@@ -517,7 +527,15 @@ Explicit paths may be chapter files or directories. Use either --book or paths, 
   }
 
   const files = chapterFiles(inputs, bookFilter);
-  const problems = files.flatMap(scanChapter);
+  let problems = files.flatMap(scanChapter);
+  if (publicationOnly) {
+    problems = problems
+      .map(problem => ({
+        ...problem,
+        boundaryProblems: problem.boundaryProblems.filter(isPublicationBlockingQuoteProblem),
+      }))
+      .filter(problem => problem.boundaryProblems.length > 0);
+  }
 
   if (wantsJson) {
     const byFile = {};
@@ -533,6 +551,7 @@ Explicit paths may be chapter files or directories. Use either --book or paths, 
       totalHits: problems.length,
       scannedFiles: files.length,
       book: bookFilter,
+      publicationOnly,
       byFile,
       byProblem,
       problems
