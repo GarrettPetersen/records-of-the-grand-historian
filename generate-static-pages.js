@@ -23,7 +23,7 @@ import { defaultStaticGenConcurrency, hardwareConcurrency } from './scripts/buil
 import { getBookMetadata, mergeBookInfo } from './scripts/book-metadata.mjs';
 import { getBookDesign } from './public/book-design.js';
 import {
-  SHIJI_KINDLE,
+  kindleProductForBook,
   kindleFooterLine,
   kindleInlineCalloutHtml,
 } from './public/kindle-promo-shared.js';
@@ -32,6 +32,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /** Canonical origin for og:url, og:image, and <link rel="canonical"> */
 const CANONICAL_SITE = (process.env.SITE_URL || 'https://24histories.com').replace(/\/$/, '');
+const PUBLICATION_DESCRIPTIONS = JSON.parse(
+  fs.readFileSync(path.join(__dirname, 'ebooks', 'publication-descriptions.json'), 'utf8')
+);
 
 function getTableCellEnglish(cell) {
   if (!cell) return '';
@@ -143,6 +146,11 @@ function escapeHtml(text) {
     .replace(/'/g, '&#039;');
 }
 
+function publicationIntroForBook(bookId) {
+  const text = PUBLICATION_DESCRIPTIONS?.[bookId]?.text || '';
+  return String(text).split(/\n{2,}/).map(p => p.trim()).filter(Boolean)[0] || '';
+}
+
 function bookTheme(bookId) {
   const color = getBookDesign(bookId).color || '#1a5490';
   const deep = darkenHex(color, 0.32);
@@ -177,7 +185,7 @@ function siteFooter(prefix = '') {
 }
 
 function kindlePromoScript(prefix = '') {
-  return `<script type="module" src="${prefix}kindle-promo.js?v=20260605-kindle"></script>`;
+  return `<script type="module" src="${prefix}kindle-promo.js?v=20260611-kindle-products"></script>`;
 }
 
 function parseTableAttributePrefix(text) {
@@ -260,6 +268,8 @@ function generateBookLandingHTML(bookId) {
   const book = BOOKS[bookId];
   if (!book) return '';
   const theme = bookTheme(bookId);
+  const kindleProduct = kindleProductForBook(bookId);
+  const kindleIntro = publicationIntroForBook(bookId);
   const title = `${book.chinese} — ${book.name}`;
   const pageUrl = `${CANONICAL_SITE}/book/${bookId}.html`;
   const ogImage = `${CANONICAL_SITE}/og/books/${bookId}.png`;
@@ -286,7 +296,7 @@ function generateBookLandingHTML(bookId) {
     <meta name="twitter:description" content="${escapeHtml(desc)}">
     <meta name="twitter:image" content="${ogImage}">
 </head>
-<body data-book="${escapeHtml(bookId)}" style="--book-color: ${escapeHtml(theme.color)}; --book-color-deep: ${escapeHtml(theme.deep)};">
+<body data-book="${escapeHtml(bookId)}"${kindleProduct ? ` data-kindle-intro="${escapeHtml(kindleIntro)}"` : ''} style="--book-color: ${escapeHtml(theme.color)}; --book-color-deep: ${escapeHtml(theme.deep)};">
     <header>
         <h1 id="book-title">Loading...</h1>
         <h2 id="book-subtitle"></h2>
@@ -295,16 +305,16 @@ function generateBookLandingHTML(bookId) {
     <main>
         <a href="../index.html" class="back-link">← Back to all histories</a>
 
-        ${bookId === SHIJI_KINDLE.bookId ? kindleInlineCalloutHtml({ variant: 'hub' }) : ''}
+        ${kindleProduct ? kindleInlineCalloutHtml({ bookId, variant: 'hub', intro: kindleIntro }) : ''}
 
         <div id="loading">Loading chapters...</div>
         <div class="chapter-list" id="chapter-list" style="display: none;"></div>
     </main>
 
     ${siteFooter('../')}
-    ${bookId === SHIJI_KINDLE.bookId ? kindlePromoScript('../') : ''}
+    ${kindleProduct ? kindlePromoScript('../') : ''}
 
-    <script type="module" src="../chapters.js?v=20260527-book-colors"></script>
+    <script type="module" src="../chapters.js?v=20260611-search-retry"></script>
 </body>
 </html>`;
 }
@@ -345,6 +355,8 @@ function generateStructuredData(bookId, chapterData) {
 function generateChapterHTML(bookId, chapterData, allChapters = []) {
   const book = BOOKS[bookId];
   const theme = bookTheme(bookId);
+  const kindleProduct = kindleProductForBook(bookId);
+  const kindleIntro = publicationIntroForBook(bookId);
   const meta = generateChapterMeta(bookId, chapterData);
   const structuredData = generateStructuredData(bookId, chapterData);
   const chapterNum = parseInt(chapterData.meta.chapter, 10);
@@ -1016,7 +1028,7 @@ ${contentHTML}
             </div>
         </div>
 
-        ${bookId === SHIJI_KINDLE.bookId ? kindleInlineCalloutHtml({ variant: 'chapter' }) : ''}
+        ${kindleProduct ? kindleInlineCalloutHtml({ bookId, variant: 'chapter', intro: kindleIntro }) : ''}
     </main>
 
     ${siteFooter('../')}

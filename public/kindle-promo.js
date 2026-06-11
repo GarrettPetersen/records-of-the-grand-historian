@@ -1,19 +1,22 @@
 import {
-  SHIJI_KINDLE,
-  STORAGE_KEY,
   DISMISS_DAYS,
+  kindleProductForBook,
   kindleModalMarkup,
+  storageKeyForBook,
 } from './kindle-promo-shared.js';
 
-/** Modal only on the Shiji book hub — not on individual chapters. */
-function isShijiBookHub() {
-  if (document.body?.dataset?.book?.trim() !== SHIJI_KINDLE.bookId) return false;
-  return /\/book\/shiji(?:\.html)?$/i.test(window.location.pathname);
+/** Modal only on published book hubs — not on individual chapters. */
+function currentBookHubProduct() {
+  const bookId = document.body?.dataset?.book?.trim();
+  const product = kindleProductForBook(bookId);
+  if (!product) return null;
+  const pattern = new RegExp(`/book/${product.bookId}(?:\\.html)?$`, 'i');
+  return pattern.test(window.location.pathname) ? product : null;
 }
 
-function readSeenAt() {
+function readSeenAt(bookId) {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(storageKeyForBook(bookId));
     if (!raw) return null;
     const ts = Number.parseInt(raw, 10);
     return Number.isFinite(ts) ? ts : null;
@@ -22,23 +25,23 @@ function readSeenAt() {
   }
 }
 
-function writeSeenAt() {
+function writeSeenAt(bookId) {
   try {
-    localStorage.setItem(STORAGE_KEY, String(Date.now()));
+    localStorage.setItem(storageKeyForBook(bookId), String(Date.now()));
   } catch {
     // Ignore private browsing / storage limits.
   }
 }
 
-function shouldShowModal() {
-  const seenAt = readSeenAt();
+function shouldShowModal(bookId) {
+  const seenAt = readSeenAt(bookId);
   if (!seenAt) return true;
   const ms = DISMISS_DAYS * 24 * 60 * 60 * 1000;
   return Date.now() - seenAt > ms;
 }
 
-function openModal(modal) {
-  writeSeenAt();
+function openModal(modal, bookId) {
+  writeSeenAt(bookId);
   modal.hidden = false;
   document.body.classList.add('kindle-promo-open');
   const primary = modal.querySelector('.kindle-promo-btn--primary');
@@ -65,15 +68,17 @@ function wireModal(modal) {
 }
 
 function initKindlePromo() {
-  if (!isShijiBookHub() || !shouldShowModal()) return;
+  const product = currentBookHubProduct();
+  if (!product || !shouldShowModal(product.bookId)) return;
   if (document.getElementById('kindle-promo-modal')) return;
 
-  document.body.insertAdjacentHTML('beforeend', kindleModalMarkup());
+  const intro = document.body?.dataset?.kindleIntro || '';
+  document.body.insertAdjacentHTML('beforeend', kindleModalMarkup({ bookId: product.bookId, intro }));
   const modal = document.getElementById('kindle-promo-modal');
   if (!(modal instanceof HTMLElement)) return;
 
   wireModal(modal);
-  window.requestAnimationFrame(() => openModal(modal));
+  window.requestAnimationFrame(() => openModal(modal, product.bookId));
 }
 
 if (document.readyState === 'loading') {

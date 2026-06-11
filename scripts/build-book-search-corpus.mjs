@@ -21,8 +21,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
 const dataDir = path.join(root, 'data');
 const outDir = path.join(root, 'public', 'data', 'search-corpus');
-const MAX_FLAT_BYTES = 20 * 1024 * 1024;
-const MAX_CHUNK_BYTES = 20 * 1024 * 1024;
+// Keep comfortably below Pages' practical static asset ceiling. A nominal 20 MiB
+// JSON file can still be fragile at the edge, so shard earlier.
+const MAX_FLAT_BYTES = 16 * 1024 * 1024;
+const MAX_CHUNK_BYTES = 16 * 1024 * 1024;
 
 /** @typedef {[number, string, string]} BlockTuple [contentIndex, zhText, enText] */
 

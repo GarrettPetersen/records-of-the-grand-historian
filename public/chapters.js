@@ -12,6 +12,8 @@ import {
 const BOOK_SEARCH_BODY_MAX = 48;
 const SNIPPET_MAX_ZH = 140;
 const SNIPPET_MAX_EN = 160;
+const SEARCH_FETCH_RETRIES = 2;
+const SEARCH_FETCH_BACKOFF_MS = 250;
 
 /** @type {Map<string, Promise<object|null>>} */
 const corpusLoadPromises = new Map();
@@ -27,6 +29,34 @@ async function fetchJson(url) {
   return response.json();
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function isTransientFetchError(error) {
+  if (!(error instanceof Error)) return true;
+  const match = error.message.match(/^HTTP\s+(\d+)/u);
+  if (!match) return true;
+  const status = Number.parseInt(match[1], 10);
+  return status === 408 || status === 429 || status >= 500;
+}
+
+async function fetchJsonWithRetry(url) {
+  let lastError = null;
+  for (let attempt = 0; attempt <= SEARCH_FETCH_RETRIES; attempt += 1) {
+    try {
+      return await fetchJson(url);
+    } catch (error) {
+      lastError = error;
+      if (!isTransientFetchError(error) || attempt === SEARCH_FETCH_RETRIES) {
+        throw error;
+      }
+      await sleep(SEARCH_FETCH_BACKOFF_MS * (2 ** attempt));
+    }
+  }
+  throw lastError || new Error('fetch failed');
+}
+
 /**
  * @param {string} bookId
  * @returns {Promise<object|null>}
@@ -35,14 +65,16 @@ function loadSearchCorpus(bookId) {
   if (corpusLoadPromises.has(bookId)) return corpusLoadPromises.get(bookId);
   const p = (async () => {
     const baseUrl = corpusBaseUrl(bookId);
+    /** @type {string|null} */
+    let failureReason = null;
 
     try {
-      const index = await fetchJson(`${baseUrl}/index.json`);
+      const index = await fetchJsonWithRetry(`${baseUrl}/index.json`);
       if (index && Array.isArray(index.parts) && index.parts.length > 0) {
         const partResults = await Promise.all(
           index.parts.map(async (part) => {
             const partUrl = `${baseUrl}/${encodeURIComponent(part.file)}`;
-            const data = await fetchJson(partUrl);
+            const data = await fetchJsonWithRetry(partUrl);
             return data && data.chapters ? data.chapters : null;
           }),
         );
@@ -64,15 +96,26 @@ function loadSearchCorpus(bookId) {
             };
           }
         }
+        failureReason = 'incomplete';
+      } else if (index) {
+        failureReason = 'invalid-index';
+      } else {
+        failureReason = 'missing-index';
       }
-    } catch {
+    } catch (error) {
+      failureReason = error instanceof Error ? error.message : 'chunked index load failed';
       // Fall through to the legacy flat file path.
     }
 
     try {
-      return await fetchJson(`${baseUrl}.json`);
-    } catch {
-      return null;
+      const flat = await fetchJsonWithRetry(`${baseUrl}.json`);
+      if (flat) return flat;
+      return { missing: true, reason: failureReason || 'missing-flat' };
+    } catch (error) {
+      return {
+        missing: true,
+        reason: failureReason || (error instanceof Error ? error.message : 'flat index load failed'),
+      };
     }
   })().catch(() => null);
   corpusLoadPromises.set(bookId, p);
@@ -312,8 +355,13 @@ function wireBookChapterSearch(bookId, list) {
     if (myGen !== runGeneration) return;
 
     if (!corpus || !corpus.chapters) {
+      const reason = corpus?.reason === 'incomplete'
+        ? 'index incomplete'
+        : corpus?.reason
+          ? `index unavailable: ${corpus.reason}`
+          : 'index missing';
       statusEl.textContent =
-        'Full-text search is not available for this book (index missing). Chapter titles still match.';
+        `Full-text search is not available for this book (${reason}). Chapter titles still match.`;
     } else {
       statusEl.hidden = true;
       statusEl.textContent = '';
