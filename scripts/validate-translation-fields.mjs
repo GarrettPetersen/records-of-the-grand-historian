@@ -14,7 +14,10 @@ function usage() {
 Validates chapter translations:
   - translations[].text must not be present
   - translations[].literal must exist, be a non-empty string, and contain no Chinese characters
-  - translations[].idiomatic must exist, be a non-empty string, and contain no Chinese characters`);
+  - translations[].idiomatic must exist, be a non-empty string, and contain no Chinese characters
+
+Set allowChineseCharacters: true on a sentence or translation object for intentional
+short Chinese references such as graph disambiguation or quoted source terms.`);
   process.exit(1);
 }
 
@@ -76,19 +79,24 @@ function contextPath(parts) {
   return parts.map(part => (typeof part === 'number' ? `[${part}]` : `.${part}`)).join('').replace(/^\./, '');
 }
 
-function validateEnglishField(translation, field) {
+function allowsChineseCharacters(sentence, translation) {
+  return sentence?.allowChineseCharacters === true || translation?.allowChineseCharacters === true;
+}
+
+function validateEnglishField(translation, field, allowChineseCharacters = false) {
   if (!hasOwn(translation, field)) return `${field} missing`;
   if (typeof translation[field] !== 'string') return `${field} not string`;
   if (translation[field].trim().length === 0) return `${field} empty`;
-  if (HANZI_RE.test(translation[field])) return `${field} contains Chinese characters`;
+  if (!allowChineseCharacters && HANZI_RE.test(translation[field])) return `${field} contains Chinese characters`;
   return null;
 }
 
-function validateTranslationObject(translation, parts) {
+function validateTranslationObject(translation, parts, sentence) {
   const issues = [];
   if (hasOwn(translation, 'text')) issues.push('text present');
+  const allowChinese = allowsChineseCharacters(sentence, translation);
   for (const field of ['literal', 'idiomatic']) {
-    const issue = validateEnglishField(translation, field);
+    const issue = validateEnglishField(translation, field, allowChinese);
     if (issue) issues.push(issue);
   }
   return issues.map(issue => ({ path: contextPath(parts), issue }));
@@ -112,7 +120,7 @@ function validateNode(node, parts = [], sentenceId = '') {
         issues.push({ path: contextPath([...parts, 'translations', index]), issue: 'translation object invalid', sentenceId: nextSentenceId });
         continue;
       }
-      for (const issue of validateTranslationObject(translation, [...parts, 'translations', index])) {
+      for (const issue of validateTranslationObject(translation, [...parts, 'translations', index], node)) {
         issues.push({ ...issue, sentenceId: nextSentenceId });
       }
     }

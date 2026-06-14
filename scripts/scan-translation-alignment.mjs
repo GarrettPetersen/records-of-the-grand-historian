@@ -23,6 +23,10 @@ const CHECK_FIELDS = new Set([
   'en',
   'english',
 ]);
+const SUPPORT_FIELDS = new Set([
+  ...CHECK_FIELDS,
+  'literal',
+]);
 
 const MANUAL_ANCHORS = [
   ['Taiyi', ['太一', '泰一', '泰畤'], /\bTai ?yi\b/i],
@@ -258,11 +262,15 @@ function sourceIndex(anchors) {
 
 function usage() {
   console.error(`Usage:
-  node scripts/scan-translation-alignment.mjs [--book BOOK] [--json] [--summary] [--fail] [--min-severity N] [--min-glossary-risk N] [--review-priorities] [--glossary-scope all|proper|manual] [--include-sentence-scores] [--no-same-sentence-glossary] [path ...]
+  node scripts/scan-translation-alignment.mjs [--book BOOK] [--json] [--summary] [--fail] [--min-severity N] [--min-glossary-risk N] [--review-priorities] [--offset-clusters] [--glossary-scope all|proper|manual] [--include-sentence-scores] [--no-same-sentence-glossary] [path ...]
 
 Flags likely sentence-misalignment candidates using distinctive manual anchors plus fuzzy aggregate matches from the full glossary.
 Also scores same-sentence glossary coverage and flags suspiciously low coverage when the Chinese sentence has enough distinctive anchors.
 Proper nouns carry more weight; common terms are used only when several terms corroborate one another.
+Use --offset-clusters for a hard publication gate: it reports adjacent nearby-anchor
+warnings as probable sentence shifts, and also keeps high-confidence
+FABRICATED_OR_SUBSTITUTED_TRANSLATION hits where dense source anchors vanish
+from suspiciously thin English. It ignores isolated glossary noise.
 
 Glossary scopes:
   all      Use proper nouns and common multi-character terms as fuzzy evidence (default)
@@ -280,6 +288,7 @@ function parseArgs(argv) {
     minSeverity: 3,
     minGlossaryRisk: null,
     reviewPriorities: false,
+    offsetClusters: false,
     glossaryScope: 'all',
     sameSentenceGlossary: true,
     includeSentenceScores: false,
@@ -304,6 +313,10 @@ function parseArgs(argv) {
     }
     if (arg === '--review-priorities') {
       opts.reviewPriorities = true;
+      continue;
+    }
+    if (arg === '--offset-clusters') {
+      opts.offsetClusters = true;
       continue;
     }
     if (arg === '--no-same-sentence-glossary') {
@@ -410,8 +423,10 @@ function sentenceRecords(chapter) {
     for (const [sentenceIndex, sentence] of (block.sentences || []).entries()) {
       const translation = (sentence.translations || [])[0] || {};
       const englishParts = [];
+      const supportEnglishParts = [];
       for (const [key, value] of Object.entries(translation)) {
         if (CHECK_FIELDS.has(key) && typeof value === 'string') englishParts.push(value);
+        if (SUPPORT_FIELDS.has(key) && typeof value === 'string') supportEnglishParts.push(value);
       }
       records.push({
         id: sentence.id || '',
@@ -419,6 +434,7 @@ function sentenceRecords(chapter) {
         sentenceIndex,
         zh: sentence.zh || '',
         english: englishParts.join(' '),
+        supportEnglish: supportEnglishParts.join(' '),
       });
     }
   }
@@ -646,6 +662,89 @@ function sameSentenceGlossaryCoverage(record, { reviewPriorities = false } = {})
   };
 }
 
+function fabricatedOrSubstitutedTranslation(record) {
+  const score = scoreSentenceGlossaryCoverage(record);
+  if (!score) return null;
+  if (isCompactTableOrFormulaRecord(record, score)) return null;
+
+  const {
+    sourceAnchors,
+    matchedAnchors,
+    missingAnchors,
+    properCount,
+    commonCount,
+    matchedProperCount,
+    matchedCommonCount,
+    sourceScore,
+    matchedScore,
+    coverage,
+  } = score;
+
+  // This is stricter than LOW_GLOSSARY_SAME_SENTENCE_COVERAGE. It targets the
+  // incident class where the English is fluent but is effectively about a
+  // different source sentence: enough distinctive source anchors are present,
+  // yet almost none survive in English.
+  const hasEnoughDistinctiveSource = (
+    (properCount >= 2 && sourceScore >= 8)
+    || (properCount >= 1 && commonCount >= 10 && sourceScore >= 8)
+    || (properCount === 0 && commonCount >= 24 && sourceScore >= 9)
+  );
+  if (!hasEnoughDistinctiveSource) return null;
+  if (matchedProperCount > 0) return null;
+  if (matchedScore > 0.35 || coverage > 0.05) return null;
+
+  const supportEnglish = record.supportEnglish || record.english || '';
+  const englishWords = String(record.english || '').match(/[A-Za-z][A-Za-z'’-]*/g) || [];
+  if (englishWords.length < 8) return null;
+  const sourceLength = String(record.zh || '').replace(/\s+/g, '').length;
+  const englishLength = String(supportEnglish || '').replace(/\s+/g, ' ').trim().length;
+  if (sourceLength > 0 && englishLength / sourceLength > 4.25) return null;
+  if (englishSpecificityScore(supportEnglish) >= 4) return null;
+  if (englishFormulaOrListScore(supportEnglish) >= 4) return null;
+
+  const glossaryRiskScore = sourceScore * (1 - coverage)
+    * (properCount >= 2 ? 1.6 : 1.25);
+  if (glossaryRiskScore < 10) return null;
+
+  return {
+    sourceAnchors,
+    matchedAnchors,
+    missingAnchors,
+    properCount,
+    commonCount,
+    matchedProperCount,
+    matchedCommonCount,
+    sourceScore,
+    matchedScore,
+    coverage,
+    glossaryRiskScore,
+    severity: 3,
+  };
+}
+
+function englishSpecificityScore(english) {
+  const stop = new Set([
+    'A', 'An', 'And', 'As', 'At', 'But', 'By', 'For', 'From', 'He', 'His',
+    'If', 'In', 'It', 'On', 'Or', 'She', 'The', 'They', 'This', 'To', 'When',
+    'While', 'With',
+  ]);
+  const genericTitles = new Set([
+    'Administrator', 'Attendant', 'Cavalier', 'Chancellor', 'Commander',
+    'Director', 'Emperor', 'General', 'Governor', 'Inspector', 'King',
+    'Marquis', 'Minister', 'Palace', 'Prince', 'Secretary',
+  ]);
+  const tokens = String(english || '').match(/\b[A-Z][A-Za-z'’-]{2,}\b/g) || [];
+  return tokens.filter((token) => !stop.has(token) && !genericTitles.has(token)).length;
+}
+
+function englishFormulaOrListScore(english) {
+  const text = String(english || '');
+  const numeric = (text.match(/\b\d+(?:[.,]\d+)*\b|[°¼½¾]/g) || []).length;
+  const separators = (text.match(/[;:]/g) || []).length;
+  const commas = (text.match(/,/g) || []).length;
+  return numeric + separators + Math.floor(commas / 3);
+}
+
 function isCompactTableOrFormulaRecord(record, score) {
   const zh = String(record.zh || '');
   const english = String(record.english || '');
@@ -801,6 +900,30 @@ function scanFile(file, { reviewPriorities = false, sameSentenceGlossary = true,
     }
 
     if (sameSentenceGlossary) {
+      const fabricated = fabricatedOrSubstitutedTranslation(record);
+      if (fabricated) {
+        hits.push({
+          file,
+          id: record.id,
+          block: record.blockIndex + 1,
+          sentence: record.sentenceIndex + 1,
+          rule: 'FABRICATED_OR_SUBSTITUTED_TRANSLATION',
+          severity: fabricated.severity,
+          anchor: fabricated.missingAnchors.slice(0, 12).map((anchor) => anchor.label).join(', '),
+          glossarySourceScore: Number(fabricated.sourceScore.toFixed(2)),
+          glossaryMatchedScore: Number(fabricated.matchedScore.toFixed(2)),
+          glossaryCoverage: Number(fabricated.coverage.toFixed(2)),
+          glossaryRiskScore: Number(fabricated.glossaryRiskScore.toFixed(2)),
+          properAnchors: fabricated.properCount,
+          commonAnchors: fabricated.commonCount,
+          matchedProperAnchors: fabricated.matchedProperCount,
+          matchedCommonAnchors: fabricated.matchedCommonCount,
+          matchedAnchor: fabricated.matchedAnchors.slice(0, 8).map((anchor) => anchor.label).join(', '),
+          zh: excerpt(record.zh),
+          english: excerpt(record.english),
+        });
+      }
+
       const coverage = sameSentenceGlossaryCoverage(record, { reviewPriorities });
       if (coverage) {
         hits.push({
@@ -874,6 +997,65 @@ function printSummary(hits) {
   }
 }
 
+function sentenceNumber(id) {
+  const match = String(id || '').match(/^s(\d+)$/);
+  return match ? Number(match[1]) : null;
+}
+
+function nearbyAnchorClusters(hits, { minUniqueSentences = 4, maxSpan = 4 } = {}) {
+  const nearby = hits
+    .filter((hit) => /NEARBY/.test(hit.rule))
+    .filter((hit) => sentenceNumber(hit.id) !== null);
+  const byFile = new Map();
+  for (const hit of nearby) {
+    const list = byFile.get(hit.file) || [];
+    list.push(hit);
+    byFile.set(hit.file, list);
+  }
+
+  const clusters = [];
+  const seen = new Set();
+  for (const [file, fileHits] of byFile) {
+    fileHits.sort((a, b) => sentenceNumber(a.id) - sentenceNumber(b.id));
+    const sentenceStarts = [...new Set(fileHits.map((hit) => sentenceNumber(hit.id)))];
+    for (const start of sentenceStarts) {
+      const inWindow = fileHits.filter((hit) => {
+        const n = sentenceNumber(hit.id);
+        return n >= start && n <= start + maxSpan;
+      });
+      const uniqueIds = [...new Set(inWindow.map((hit) => hit.id))].sort();
+      if (uniqueIds.length < minUniqueSentences) continue;
+      const key = `${file}:${uniqueIds.join(',')}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const anchors = [...new Set(inWindow.map((hit) => hit.anchor).filter(Boolean))];
+      clusters.push({
+        file,
+        id: `${uniqueIds[0]}-${uniqueIds[uniqueIds.length - 1]}`,
+        block: inWindow[0].block,
+        sentence: inWindow[0].sentence,
+        rule: 'NEARBY_ANCHOR_CLUSTER',
+        severity: Math.max(...inWindow.map((hit) => hit.severity || 0), 3),
+        anchor: anchors.slice(0, 8).join('; '),
+        glossaryScore: Number(Math.max(...inWindow.map((hit) => Number(hit.glossaryScore || 0))).toFixed(2)),
+        zh: `Probable offset cluster across ${uniqueIds.length} nearby sentence(s).`,
+        english: inWindow
+          .slice(0, 4)
+          .map((hit) => `${hit.id} ${hit.rule}: ${hit.english}`)
+          .join(' | '),
+        clusteredHits: inWindow.map((hit) => ({
+          id: hit.id,
+          rule: hit.rule,
+          anchor: hit.anchor,
+          zh: hit.zh,
+          english: hit.english,
+        })),
+      });
+    }
+  }
+  return clusters;
+}
+
 const opts = parseArgs(process.argv.slice(2));
 configureAnchors(opts);
 const inputs = opts.book ? [path.join(DATA_DIR, opts.book)] : opts.inputs;
@@ -884,13 +1066,17 @@ const scanner = (file) => scanFile(file, {
   includeSentenceScores: opts.includeSentenceScores,
 });
 const scanReports = files.map(scanner);
-const hits = scanReports.flatMap((report) => report.hits)
+let hits = scanReports.flatMap((report) => report.hits)
   .filter((hit) => hit.severity >= opts.minSeverity)
   .filter((hit) => (
     opts.minGlossaryRisk === null
     || hit.rule !== 'LOW_GLOSSARY_SAME_SENTENCE_COVERAGE'
     || Number(hit.glossaryRiskScore || 0) >= opts.minGlossaryRisk
   ));
+if (opts.offsetClusters) {
+  const fabricatedHits = hits.filter((hit) => hit.rule === 'FABRICATED_OR_SUBSTITUTED_TRANSLATION');
+  hits = [...nearbyAnchorClusters(hits), ...fabricatedHits];
+}
 const sentenceScores = opts.includeSentenceScores
   ? scanReports.flatMap((report) => report.sentenceScores)
   : [];

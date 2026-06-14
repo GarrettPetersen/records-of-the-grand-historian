@@ -33,6 +33,13 @@ function isQuoteBoundaryChar(ch) {
   return ch === '' || /[\s,.;:!?)>\]〉）]/u.test(ch);
 }
 
+function isNumericPrimeMark(text, index) {
+  const prev = text[index - 1] || '';
+  const next = text[index + 1] || '';
+  if (!/\d/.test(prev)) return false;
+  return next === '' || /[\s,.;:!?)}\]〉）]/u.test(next);
+}
+
 function isLikelySingleQuoteApostrophe(text, index, singleQuoteDepth = 0) {
   const prev = text[index - 1] || '';
   const next = text[index + 1] || '';
@@ -55,6 +62,10 @@ function getEnglishQuoteTokens(text) {
   for (let i = 0; i < text.length; i += 1) {
     const ch = text[i];
     if (!['"', '“', '”', "'", '‘', '’'].includes(ch)) continue;
+
+    if ((ch === '"' || ch === "'" || ch === '’') && isNumericPrimeMark(text, i)) {
+      continue;
+    }
 
     if (ch === '"') {
       const prev = text[i - 1] || '';

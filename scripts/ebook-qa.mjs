@@ -151,6 +151,18 @@ function runProduct(productLike, opts) {
   const sourceScopeArgs = chapterPaths || ['--book', book];
 
   run('Quote span alignment', 'node', ['scripts/scan-quote-span-alignment.mjs', '--publication', '--limit=0', ...sourceScopeArgs]);
+  run('Translation offset clusters', 'node', [
+    'scripts/scan-translation-alignment.mjs',
+    '--summary',
+    '--review-priorities',
+    '--offset-clusters',
+    '--fail',
+    '--min-severity',
+    '3',
+    '--min-glossary-risk',
+    '10',
+    ...sourceScopeArgs,
+  ]);
   // Cheap scan is advisory at this stage; --fail would catch hard gates only, but we run summary for visibility.
   console.log('\n=== Cheap translation quality scan (advisory) ===');
   const cheapRes = spawnSync('node', [

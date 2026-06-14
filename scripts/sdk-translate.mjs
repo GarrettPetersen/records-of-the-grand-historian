@@ -659,6 +659,12 @@ async function main() {
     ? (book) => runChapterSession(book, opts)
     : (book) => runBookLoop(book, opts);
 
+  if (!opts.chapter) {
+    throw new Error(
+      'Book-level orchestrator is disabled. Use chapter-level invocation only (--book <id> --chapter <id>).',
+    );
+  }
+
   const allResults = await mapPool(books, opts.concurrency, runForBook, {
     shouldStopScheduling: () => drainRequested,
   });

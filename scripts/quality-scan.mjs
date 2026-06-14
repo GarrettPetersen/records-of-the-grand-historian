@@ -98,6 +98,7 @@ const argsFor = (scanner) => {
   if (scanner.advisory) scannerArgs = scannerArgs.filter(arg => arg !== '--fail');
   if (scanner.id !== 'translation-alignment') {
     scannerArgs = scannerArgs.filter(arg => arg !== '--review-priorities');
+    scannerArgs = scannerArgs.filter(arg => arg !== '--offset-clusters');
     scannerArgs = scannerArgs.filter(arg => arg !== '--include-sentence-scores');
     scannerArgs = omitFlagWithOptionalValue(scannerArgs, '--min-severity');
     scannerArgs = omitFlagWithOptionalValue(scannerArgs, '--min-glossary-risk');

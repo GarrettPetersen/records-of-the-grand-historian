@@ -1037,6 +1037,7 @@ apply-review:
 	@$(MAKE) score-translations CHAPTER="$(CHAPTER)"
 	@echo "Running glossary alignment review scan..."
 	@$(NODE) scripts/scan-translation-alignment.mjs "$(CHAPTER)" --summary --review-priorities --min-severity 2 --min-glossary-risk 4
+	@$(NODE) scripts/scan-translation-alignment.mjs "$(CHAPTER)" --summary --review-priorities --offset-clusters --fail --min-severity 3 --min-glossary-risk 10
 	@echo "Regenerating static page..."
 	@$(MAKE) update BOOK=$$(jq -r '.meta.book // empty' "$(CHAPTER)" 2>/dev/null)
 

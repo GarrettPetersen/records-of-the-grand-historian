@@ -1658,9 +1658,9 @@ function excerpt(text, index, width = 56) {
   return text.slice(start, end).replace(/\s+/g, ' ').trim();
 }
 
-export function scanArtifactText(text) {
+export function scanArtifactText(text, opts = {}) {
   const hits = [];
-  if (hasDisallowedChineseCharacters(text)) {
+  if (!opts.allowChineseCharacters && hasDisallowedChineseCharacters(text)) {
     const match = /[\u4e00-\u9fff]+/u.exec(text);
     hits.push({
       ruleId: 'CHINESE_CHARACTERS_IN_ENGLISH',
@@ -1688,7 +1688,7 @@ export function scanArtifactText(text) {
   return hits.sort((a, b) => b.severity - a.severity || a.index - b.index || a.ruleId.localeCompare(b.ruleId));
 }
 
-function* walk(value, keyPath = [], sentenceId = '') {
+function* walk(value, keyPath = [], sentenceId = '', allowChineseCharacters = false) {
   if (typeof value === 'string') {
     if (keyPath.includes('translations') && keyPath[keyPath.length - 1] === 'text') {
       yield {
@@ -1704,7 +1704,7 @@ function* walk(value, keyPath = [], sentenceId = '') {
       return;
     }
     if (!isTranslationField(keyPath)) return;
-    for (const hit of scanArtifactText(value)) {
+    for (const hit of scanArtifactText(value, { allowChineseCharacters })) {
       yield {
         path: nearestContext(keyPath),
         sentenceId,
@@ -1716,14 +1716,15 @@ function* walk(value, keyPath = [], sentenceId = '') {
 
   if (!value || typeof value !== 'object') return;
   const nextSentenceId = typeof value.id === 'string' ? value.id : sentenceId;
+  const nextAllowChineseCharacters = allowChineseCharacters || value.allowChineseCharacters === true;
   if (Array.isArray(value)) {
     for (let i = 0; i < value.length; i += 1) {
-      yield* walk(value[i], [...keyPath, String(i)], nextSentenceId);
+      yield* walk(value[i], [...keyPath, String(i)], nextSentenceId, nextAllowChineseCharacters);
     }
     return;
   }
   for (const [key, child] of Object.entries(value)) {
-    yield* walk(child, [...keyPath, key], nextSentenceId);
+    yield* walk(child, [...keyPath, key], nextSentenceId, nextAllowChineseCharacters);
   }
 }
 
