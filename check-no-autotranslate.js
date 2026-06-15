@@ -6,6 +6,25 @@ import path from "node:path";
 
 const ROOT = process.cwd();
 const SELF = "check-no-autotranslate.js";
+const SCANNABLE_EXTENSIONS = new Set([
+  ".cjs",
+  ".js",
+  ".json",
+  ".mjs",
+  ".py",
+  ".sh",
+  ".ts",
+]);
+const SCANNABLE_FILES = new Set([
+  "Makefile",
+  "package.json",
+  "package-lock.json",
+]);
+const SKIPPED_PREFIXES = [
+  "data/",
+  "public/",
+  "translations/",
+];
 
 const RULES = [
   {
@@ -43,7 +62,9 @@ function listFiles() {
     .split("\n")
     .map((f) => f.trim())
     .filter(Boolean)
-    .filter((f) => f !== SELF);
+    .filter((f) => f !== SELF)
+    .filter((f) => !SKIPPED_PREFIXES.some((prefix) => f.startsWith(prefix)))
+    .filter((f) => SCANNABLE_FILES.has(f) || SCANNABLE_EXTENSIONS.has(path.extname(f)));
 }
 
 function isText(content) {
