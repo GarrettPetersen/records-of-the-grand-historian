@@ -20,6 +20,38 @@ const CHECK_FIELDS = new Set([
   'translation',
 ]);
 
+const RULE_ALLOWLIST = new Map([
+  ['FUSED_LOWER_UPPER_BOUNDARY', new Set(['MacDonald'])],
+]);
+
+const CYCLICAL_STEMS = [
+  'jiazi', 'yichou', 'bingyin', 'dingmao', 'wuchen', 'jisi',
+  'gengwu', 'xinwei', 'renshen', 'guiyou', 'jiaxu', 'yihai',
+  'bingzi', 'dingchou', 'wuyin', 'jimao', 'gengchen', 'xinsi',
+  'renwu', 'guiwei', 'jiashen', 'yiyou', 'bingxu', 'dinghai',
+  'wuzi', 'jichou', 'gengyin', 'xinmao', 'renchen', 'guisi',
+  'jiawu', 'yiwei', 'bingshen', 'dingyou', 'wuxu', 'jihai',
+  'gengzi', 'xinchou', 'renyin', 'guimao', 'jiachen', 'yisi',
+  'bingwu', 'dingwei', 'wushen', 'jiyou', 'gengxu', 'xinhai',
+  'renzi', 'guichou', 'jiayin', 'yimao', 'bingchen', 'dingsi',
+  'wuwu', 'jiwei', 'gengshen', 'xinyou', 'renxu', 'guihai',
+  'yiwu',
+];
+
+const CYCLICAL_CONTEXT_RE = new RegExp(
+  `\\b(?:${CYCLICAL_STEMS.join('|')})(?:\\b[^.);:]{0,60}\\b(?:day|year)|(?:,\\s*(?:${CYCLICAL_STEMS.join('|')}))+)`,
+  'i',
+);
+
+function isAllowedArtifactHit(ruleId, found, text, index) {
+  if (RULE_ALLOWLIST.get(ruleId)?.has(found)) return true;
+  if (ruleId === 'LOWERCASE_ROMANIZED_MARQUIS_NAME') {
+    const window = text.slice(Math.max(0, index - 80), Math.min(text.length, index + 100));
+    return CYCLICAL_CONTEXT_RE.test(window);
+  }
+  return false;
+}
+
 export const TRANSLATION_ARTIFACT_RULES = [
   {
     id: 'RAW_MARKDOWN_EMPHASIS',
@@ -1675,6 +1707,7 @@ export function scanArtifactText(text, opts = {}) {
     rule.pattern.lastIndex = 0;
     let match;
     while ((match = rule.pattern.exec(text)) !== null) {
+      if (isAllowedArtifactHit(rule.id, match[0], text, match.index)) continue;
       hits.push({
         ruleId: rule.id,
         severity: rule.severity,
