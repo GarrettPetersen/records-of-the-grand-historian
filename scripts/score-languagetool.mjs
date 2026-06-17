@@ -9,7 +9,7 @@ const MANIFEST_PATH = path.join(DATA_DIR, 'manifest.json');
 const OUTPUT_PATH = path.join(DATA_DIR, 'quality', 'languagetool-scores.json');
 const DEFAULT_URL = 'http://localhost:8081';
 const MAX_CHUNK_CHARS = 12000;
-const SCORER_VERSION = '2026-06-09-language-tool-v10-fused-typos';
+const SCORER_VERSION = '2026-06-16-language-tool-v11-corpus-noise';
 
 const IGNORED_RULE_IDS = new Set([
   'WHITESPACE_RULE',
@@ -28,6 +28,33 @@ const IGNORED_RULE_IDS = new Set([
   // "Battle-axe" is a standard spelling; LanguageTool prefers "battleaxe" but
   // that is a style choice, not a translation quality signal.
   'EN_COMPOUNDS_BATTLE_AXE',
+  // These are too noisy for chapter-level publication cleanup in this corpus:
+  // annalistic table cells, Chinese measures, editorial brackets, and ordinary
+  // comma/style preferences dominate the signal without indicating typos.
+  'CD_NN',
+  'COMMA_COMPOUND_SENTENCE',
+  'COMMA_COMPOUND_SENTENCE_2',
+  'COMMA_PERIOD',
+  'COMMA_PARENTHESIS_WHITESPACE',
+  'DASH_RULE',
+  'DOUBLE_PUNCTUATION',
+  'EN_MULTITOKEN_SPELLING_TWO',
+  'EN_UNPAIRED_BRACKETS',
+  'EN_WORD_COHERENCY',
+  'ELLIPSIS',
+  'NODT_DOZEN',
+  'METRIC_UNITS_EN_US',
+  'MISSING_COMMA_AFTER_INTRODUCTORY_PHRASE',
+  'ONE_PLURAL',
+  'PUNCTUATION_PARAGRAPH_END',
+  'SECOND_LARGEST_HYPHEN',
+  'SENT_START_CONJUNCTIVE_LINKING_ADVERB_COMMA',
+  'SERIAL_COMMA_ON',
+  'SPACE_BEFORE_PARENTHESIS',
+  'SUBJECT_VERB_AGREEMENT_PLURAL',
+  'THE_SUPERLATIVE',
+  'UNLIKELY_OPENING_PUNCTUATION',
+  'UPPERCASE_SENTENCE_START',
 ]);
 const IGNORED_CATEGORY_IDS = new Set([
   // Historical names and romanized Chinese terms produce too many false positives
@@ -89,6 +116,92 @@ const IGNORED_MATCH_TEXT_BY_RULE = {
   // "Cast aside all restraint" is idiomatic; LanguageTool misreads restraint as a verb form.
   COMPLAINT_COMPLAINED: new Set(['restraint']),
 };
+
+const IGNORED_SPLIT_WORD_TYPOS = new Set([
+  // Historical offices and title words that LanguageTool tries to split.
+  'academicianship',
+  'academicianships',
+  'cishi',
+  'commissionership',
+  'commissionerships',
+  'councilorship',
+  'councilorships',
+  'grandeeship',
+  'grandeeships',
+  'headcloth',
+  'headcloths',
+  'sagehood',
+  'tiyin',
+  // Manchu/Qing ranks and names; keep actual fused English artifacts such as
+  // "yearinherited" visible for cleanup.
+  'adaha',
+  'ashan',
+  'beye',
+  'ermen',
+  'ergeng',
+  'ertun',
+  // Sexagenary cycle terms often appear in lower case in table rows.
+  'jiazi',
+  'yichou',
+  'bingyin',
+  'dingmao',
+  'wuchen',
+  'jisi',
+  'gengwu',
+  'xinwei',
+  'renshen',
+  'guiyou',
+  'jiaxu',
+  'yihai',
+  'bingzi',
+  'dingchou',
+  'wuyin',
+  'jimao',
+  'gengchen',
+  'xinsi',
+  'renwu',
+  'guiwei',
+  'jiashen',
+  'yiyou',
+  'bingxu',
+  'dinghai',
+  'wuzi',
+  'jichou',
+  'gengyin',
+  'xinmao',
+  'renchen',
+  'guisi',
+  'jiawu',
+  'yiwei',
+  'bingshen',
+  'dingyou',
+  'wuxu',
+  'jihai',
+  'gengzi',
+  'xinchou',
+  'renyin',
+  'guimao',
+  'jiachen',
+  'yisi',
+  'bingwu',
+  'dingwei',
+  'wushen',
+  'jiyou',
+  'gengxu',
+  'xinhai',
+  'renzi',
+  'guichou',
+  'jiayin',
+  'yimao',
+  'bingchen',
+  'dingsi',
+  'wuwu',
+  'jiwei',
+  'gengshen',
+  'xinyou',
+  'renxu',
+  'guihai',
+]);
 
 function getArg(name) {
   const index = process.argv.indexOf(name);
@@ -349,6 +462,7 @@ function matchedContextText(match) {
 function isSplitWordTypo(match) {
   if (match.rule?.category?.id !== 'TYPOS') return false;
   const matched = matchedContextText(match);
+  if (IGNORED_SPLIT_WORD_TYPOS.has(matched.toLowerCase())) return false;
   if (!/[A-Za-z]/.test(matched) || /\s/.test(matched)) return false;
   if (/^[A-Z][a-z]+$/.test(matched)) return false;
   if (!/^[a-z]/.test(matched) && !/[a-z][A-Z]/.test(matched)) return false;
