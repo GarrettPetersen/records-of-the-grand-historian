@@ -332,7 +332,7 @@ function applyManualTranslations(entries, item) {
 function untranslatedCountableEntries(entries) {
   return entries
     .filter((entry) => isCountableSource(sourceText(entry)))
-    .filter((entry) => !hasMeaningfulTranslations(entry));
+    .filter((entry) => !hasMeaningfulTranslations(entry.unit));
 }
 
 function assertAppliedEntriesTranslated(item, entries, translationsBySource = new Map()) {
@@ -717,7 +717,12 @@ function findInsertionIndex(entries, item) {
 function findTargetRange(entries, item) {
   const ids = new Set(item.localRange?.ids || []);
   const byIds = findRangeByIds(entries, ids);
-  if (byIds) return byIds;
+  if (byIds) {
+    const matchedText = entries.slice(byIds.start, byIds.end).map(sourceText).join('');
+    if (!item.localRange?.text || comparisonKey(matchedText) === comparisonKey(item.localRange.text)) {
+      return byIds;
+    }
+  }
 
   if (item.localRange?.text) {
     const key = comparisonKey(item.localRange.text);
