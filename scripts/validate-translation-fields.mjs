@@ -13,8 +13,8 @@ function usage() {
 
 Validates chapter translations:
   - translations[].text must not be present
-  - translations[].literal must exist, be a non-empty string, and contain no Chinese characters
-  - translations[].idiomatic must exist, be a non-empty string, and contain no Chinese characters
+  - translations[].literal and translations[].idiomatic must exist, be strings, and contain no Chinese characters
+  - literal/idiomatic may be empty only for rows with non-empty footnote text or source-empty residue rows
 
 Set allowChineseCharacters: true on a sentence or translation object for intentional
 short Chinese references such as graph disambiguation or quoted source terms.`);
@@ -83,10 +83,21 @@ function allowsChineseCharacters(sentence, translation) {
   return sentence?.allowChineseCharacters === true || translation?.allowChineseCharacters === true;
 }
 
-function validateEnglishField(translation, field, allowChineseCharacters = false) {
+function sourceText(sentence) {
+  for (const key of ['zh', 'source', 'content', 'text']) {
+    if (typeof sentence?.[key] === 'string') return sentence[key];
+  }
+  return '';
+}
+
+function canHaveEmptyMainTranslation(translation, sentence) {
+  return Boolean(String(translation?.footnote || '').trim()) || !String(sourceText(sentence)).trim();
+}
+
+function validateEnglishField(translation, field, allowChineseCharacters = false, allowEmpty = false) {
   if (!hasOwn(translation, field)) return `${field} missing`;
   if (typeof translation[field] !== 'string') return `${field} not string`;
-  if (translation[field].trim().length === 0) return `${field} empty`;
+  if (translation[field].trim().length === 0) return allowEmpty ? null : `${field} empty`;
   if (!allowChineseCharacters && HANZI_RE.test(translation[field])) return `${field} contains Chinese characters`;
   return null;
 }
@@ -95,8 +106,9 @@ function validateTranslationObject(translation, parts, sentence) {
   const issues = [];
   if (hasOwn(translation, 'text')) issues.push('text present');
   const allowChinese = allowsChineseCharacters(sentence, translation);
+  const allowEmpty = canHaveEmptyMainTranslation(translation, sentence);
   for (const field of ['literal', 'idiomatic']) {
-    const issue = validateEnglishField(translation, field, allowChinese);
+    const issue = validateEnglishField(translation, field, allowChinese, allowEmpty);
     if (issue) issues.push(issue);
   }
   return issues.map(issue => ({ path: contextPath(parts), issue }));

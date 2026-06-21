@@ -104,13 +104,19 @@ function loadRepairQueueProgress() {
       continue;
     }
 
-    const items = Array.isArray(report.items)
+    const currentItems = Array.isArray(report.items)
       ? report.items
       : (Array.isArray(report.hits) ? report.hits : []);
+    const items = [
+      ...currentItems,
+      ...(Array.isArray(report.resolvedHits) ? report.resolvedHits : []),
+    ];
     const sourceCounts = {
       file,
       scanner: report.scanner || (Array.isArray(report.hits) ? 'scan-source-artifacts' : 'scan-source-correspondence'),
       generatedAt: report.generatedAt || null,
+      currentItems: currentItems.length,
+      resolvedItems: Array.isArray(report.resolvedHits) ? report.resolvedHits.length : 0,
       totalItems: 0,
       completedItems: 0,
       pendingItems: 0,

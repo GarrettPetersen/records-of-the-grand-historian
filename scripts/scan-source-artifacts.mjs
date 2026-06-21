@@ -233,6 +233,23 @@ function scanFile(file) {
   });
 }
 
+function isResolvedQueueItem(item) {
+  const status = String(item?.status || '').toLowerCase();
+  const decision = String(item?.decision || '').toLowerCase();
+  const values = new Set([status, decision].filter(Boolean));
+  return Boolean(
+    item?.appliedAt ||
+    item?.appliedSummary ||
+    values.has('applied') ||
+    values.has('included') ||
+    values.has('denied') ||
+    values.has('rejected') ||
+    values.has('declined') ||
+    values.has('false-positive') ||
+    values.has('false_positive')
+  );
+}
+
 function mergeExistingDecisions(report, outPath) {
   if (!outPath || !fs.existsSync(outPath)) return report;
   let previous;
@@ -241,7 +258,12 @@ function mergeExistingDecisions(report, outPath) {
   } catch {
     return report;
   }
-  const priorItems = new Map((previous.hits || []).map((item) => [item.id, item]));
+  const priorItems = new Map(
+    [...(previous.hits || []), ...(previous.resolvedHits || [])]
+      .filter((item) => item.id)
+      .map((item) => [item.id, item])
+  );
+  const currentIds = new Set(report.hits.map((item) => item.id));
   for (const item of report.hits) {
     const prior = priorItems.get(item.id);
     if (!prior) continue;
@@ -253,6 +275,26 @@ function mergeExistingDecisions(report, outPath) {
     item.appliedAt = prior.appliedAt;
     item.appliedSummary = prior.appliedSummary;
   }
+  const resolvedHits = [];
+  for (const prior of priorItems.values()) {
+    if (currentIds.has(prior.id) || !isResolvedQueueItem(prior)) continue;
+    resolvedHits.push({
+      ...prior,
+      present: false,
+      resolved: true,
+    });
+  }
+  if (resolvedHits.length > 0) {
+    report.resolvedCount = resolvedHits.length;
+    report.resolvedHits = resolvedHits.sort((a, b) => (
+      (a.book || '').localeCompare(b.book || '') ||
+      (a.chapter || '').localeCompare(b.chapter || '') ||
+      (a.path || '').localeCompare(b.path || '') ||
+      (a.id || '').localeCompare(b.id || '')
+    ));
+  }
+  report.currentCount = report.hits.length;
+  report.totalQueueItems = report.hits.length + resolvedHits.length;
   return report;
 }
 
@@ -297,6 +339,9 @@ function main() {
     generatedAt: new Date().toISOString(),
     scanner: 'scan-source-artifacts',
     count: hits.length,
+    currentCount: hits.length,
+    resolvedCount: 0,
+    totalQueueItems: hits.length,
     hits,
   }, opts.out);
 

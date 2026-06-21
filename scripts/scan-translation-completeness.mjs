@@ -112,11 +112,17 @@ function englishLiteral(item) {
   return text(translation?.literal ?? translation?.text);
 }
 
+function englishFootnote(item) {
+  const translation = item?.translations?.find?.((entry) => entry.lang === 'en') || item?.translations?.[0];
+  return text(translation?.footnote);
+}
+
 function hit(kind, file, data, blockIndex, itemIndex, item) {
   const src = sourceText(item);
   const idiomatic = englishIdiomatic(item);
   const literal = englishLiteral(item);
-  if (!src || idiomatic) return null;
+  const footnote = englishFootnote(item);
+  if (!src || idiomatic || footnote) return null;
   return {
     type: literal ? 'literal-only' : 'missing',
     kind,

@@ -19,6 +19,8 @@ const END_CLOSE_QUOTE_RE = /[」』”）)\]】〉》]+$/u;
 const LEADING_ATTACHING_PUNCT_RE = /^[，、。；：！？」』”）)\]】〉》]+/u;
 const PUNCTUATION_ONLY_RE = /^[\p{P}\p{S}\s]+$/u;
 const DEFAULT_REVIEWER = 'source-correspondence';
+const DEFAULT_TRANSLATOR = process.env.TRANSLATOR || 'Garrett M. Petersen (2026)';
+const DEFAULT_MODEL = process.env.MODEL || 'Manual source repair';
 
 const COMMON_VARIANTS = new Map([
   ['并', '並'],
@@ -52,8 +54,10 @@ function usage() {
 
 Queue workflow:
   1. Run scan-source-correspondence to create data/quality/source-correspondence-*.json.
-  2. Mark queue items status/decision "approved" or pass --approve ID.
-  3. Run this script to apply approved source edits, renumber sentence IDs, and
+  2. Add manualTranslations to any approved item that inserts or changes Chinese:
+     [{ "zh": "...", "literal": "...", "idiomatic": "...", "model": "..." }]
+  3. Mark queue items status/decision "approved" or pass --approve ID.
+  4. Run this script to apply approved source edits, renumber sentence IDs, and
      preserve existing translations by matching Chinese source text.`);
 }
 
@@ -251,6 +255,99 @@ function emptyTranslation() {
     idiomatic: '',
     translator: '',
   };
+}
+
+function normalizeManualTranslations(item) {
+  const raw = item.manualTranslations || item.manualTranslation || [];
+  const rows = [];
+
+  if (Array.isArray(raw)) {
+    rows.push(...raw);
+  } else if (raw && typeof raw === 'object') {
+    for (const [key, value] of Object.entries(raw)) {
+      if (value && typeof value === 'object') rows.push({ zh: key, ...value });
+      else if (typeof value === 'string') rows.push({ zh: key, literal: value, idiomatic: value });
+    }
+  }
+
+  return rows
+    .filter((row) => row && typeof row === 'object')
+    .map((row) => ({
+      zh: String(row.zh || row.source || row.text || '').trim(),
+      literal: String(row.literal || '').trim(),
+      idiomatic: String(row.idiomatic || row.translation || '').trim(),
+      footnote: typeof row.footnote === 'string' ? row.footnote.trim() : undefined,
+      translator: String(row.translator || DEFAULT_TRANSLATOR).trim(),
+      model: String(row.model || DEFAULT_MODEL).trim(),
+      allowChineseCharacters: row.allowChineseCharacters === true,
+    }))
+    .filter((row) => row.zh && row.literal && row.idiomatic);
+}
+
+function manualTranslationsBySource(item) {
+  const map = new Map();
+  for (const row of normalizeManualTranslations(item)) {
+    const key = strictKey(row.zh);
+    if (!key) continue;
+    map.set(key, row);
+  }
+  return map;
+}
+
+function applyManualTranslation(unit, manual) {
+  const translation = {
+    lang: 'en',
+    literal: manual.literal,
+    idiomatic: manual.idiomatic,
+    translator: manual.translator,
+    model: manual.model,
+  };
+  if (manual.footnote) translation.footnote = manual.footnote;
+  if (manual.allowChineseCharacters) translation.allowChineseCharacters = true;
+
+  unit.translations = [translation];
+  for (const key of ['literal', 'idiomatic', 'translation']) {
+    if (Object.hasOwn(unit, key)) unit[key] = translation[key] || '';
+  }
+  unit.translator = manual.translator;
+  unit.model = manual.model;
+  if (manual.allowChineseCharacters) unit.allowChineseCharacters = true;
+}
+
+function applyManualTranslations(entries, item) {
+  const translations = manualTranslationsBySource(item);
+  if (translations.size === 0) return 0;
+
+  let applied = 0;
+  for (const entry of entries) {
+    if (hasMeaningfulTranslations(entry.unit)) continue;
+    const manual = translations.get(strictKey(sourceText(entry)));
+    if (!manual) continue;
+    applyManualTranslation(entry.unit, manual);
+    applied += 1;
+  }
+  return applied;
+}
+
+function untranslatedCountableEntries(entries) {
+  return entries
+    .filter((entry) => isCountableSource(sourceText(entry)))
+    .filter((entry) => !hasMeaningfulTranslations(entry));
+}
+
+function assertAppliedEntriesTranslated(item, entries, translationsBySource = new Map()) {
+  const untranslated = untranslatedCountableEntries(entries)
+    .filter((entry) => !translationsBySource.has(strictKey(sourceText(entry))));
+  if (untranslated.length === 0) return [];
+
+  const examples = untranslated.slice(0, 8).map((entry) => sourceText(entry).slice(0, 100));
+  throw new Error(
+    [
+      `${item.id}: approved source-correspondence edit would create or change ${untranslated.length} countable source unit(s) without manual English translation.`,
+      'Add manualTranslations to this queue item before applying.',
+      ...examples.map((example) => `  ${example}`),
+    ].join('\n'),
+  );
 }
 
 function hasMeaningfulTranslations(unit) {
@@ -721,7 +818,7 @@ function replaceWithinSingleEntry(entries, range, item) {
   return [next];
 }
 
-function insertWithinSingleEntry(entries, item) {
+function insertWithinSingleEntry(entries, item, translationsBySource) {
   if (item.localRange || !item.sourceRange?.text) return null;
 
   const before = item.context?.beforeLocal || '';
@@ -745,9 +842,12 @@ function insertWithinSingleEntry(entries, item) {
     `${original.slice(0, insertAt)}${adjustedSourceText(item)}${original.slice(insertAt)}`,
     { preserveTranslations: false },
   );
+  const manualTranslationsApplied = applyManualTranslations([next], item);
+  assertAppliedEntriesTranslated(item, [next], translationsBySource);
   return {
     index: beforeIndex,
     replacement: next,
+    manualTranslationsApplied,
   };
 }
 
@@ -838,8 +938,8 @@ function replacementEntries(entries, range, item) {
   });
 }
 
-function applyItem(entries, item) {
-  const intraEntryInsertion = insertWithinSingleEntry(entries, item);
+function applyItem(entries, item, translationsBySource) {
+  const intraEntryInsertion = insertWithinSingleEntry(entries, item, translationsBySource);
   if (intraEntryInsertion) {
     const beforeCount = entries.length;
     entries.splice(intraEntryInsertion.index, 1, intraEntryInsertion.replacement);
@@ -851,12 +951,15 @@ function applyItem(entries, item) {
       inserted: 1,
       delta: entries.length - beforeCount,
       mode: 'intra-entry-insert',
+      manualTranslationsApplied: intraEntryInsertion.manualTranslationsApplied,
     };
   }
 
   const range = findTargetRange(entries, item);
   const beforeCount = entries.length;
   const replacements = replacementEntries(entries, range, item);
+  const manualTranslationsApplied = applyManualTranslations(replacements, item);
+  assertAppliedEntriesTranslated(item, replacements, translationsBySource);
   entries.splice(range.start, range.end - range.start, ...replacements);
   return {
     id: item.id,
@@ -865,6 +968,7 @@ function applyItem(entries, item) {
     removed: range.end - range.start,
     inserted: replacements.length,
     delta: entries.length - beforeCount,
+    manualTranslationsApplied,
   };
 }
 
@@ -925,7 +1029,7 @@ function applyQueue(queue, opts) {
 
     const applied = [];
     for (const item of items) {
-      const summary = applyItem(entries, item);
+      const summary = applyItem(entries, item, translationsBySource);
       applied.push(summary);
       item.status = opts.dryRun ? 'approved' : 'applied';
       item.appliedAt = opts.dryRun ? undefined : now;

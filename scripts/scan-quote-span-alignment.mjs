@@ -3,11 +3,13 @@
 import fs from 'fs';
 import path from 'path';
 
-const CHINESE_OPEN_QUOTES = new Set(['「', '『']);
-const CHINESE_CLOSE_QUOTES = new Set(['」', '』']);
+const CHINESE_OPEN_QUOTES = new Set(['「', '『', '“', '‘']);
+const CHINESE_CLOSE_QUOTES = new Set(['」', '』', '”', '’']);
 const MATCHING_OPEN_FOR_CLOSE = {
   '」': '「',
   '』': '『',
+  '”': '“',
+  '’': '‘',
 };
 
 function countSubstr(str, needle) {
@@ -353,8 +355,9 @@ function chapterFiles(inputs, bookFilter) {
 }
 
 function idiomaticText(item) {
+  const translation = item.translations && item.translations[0];
   return item.idiomatic || item.translation ||
-    (item.translations && item.translations[0] && item.translations[0].idiomatic) ||
+    (translation && (translation.idiomatic || translation.literal || translation.footnote)) ||
     '';
 }
 
@@ -365,6 +368,7 @@ function scanSequence(items, file, blockIndex, quoteState, englishState) {
     const chinese = item.content || item.zh || '';
     const english = idiomaticText(item);
     const beforeDepth = quoteState.stack.length;
+    const englishBeforeDepth = englishState.depth;
     const chineseQuoteBalanceProblems = validateChineseQuotes(chinese, quoteState);
     if (chineseQuoteBalanceProblems.length > 0) {
       problems.push({
@@ -377,11 +381,12 @@ function scanSequence(items, file, blockIndex, quoteState, englishState) {
       });
     }
 
-    const openCount = countSubstr(chinese, '「') + countSubstr(chinese, '『');
-    const closeCount = countSubstr(chinese, '」') + countSubstr(chinese, '』');
+    const openCount = countSubstr(chinese, '「') + countSubstr(chinese, '『') + countSubstr(chinese, '“') + countSubstr(chinese, '‘');
+    const closeCount = countSubstr(chinese, '」') + countSubstr(chinese, '』') + countSubstr(chinese, '”') + countSubstr(chinese, '’');
     const afterDepth = quoteState.stack.length;
     const inChineseQuoteSpan = beforeDepth > 0 || afterDepth > 0 || openCount > 0 || closeCount > 0;
     const englishOrderProblems = scanEnglishQuoteOrderErrors(english, englishState);
+    const englishAfterDepth = englishState.depth;
 
     if (!inChineseQuoteSpan) {
       if (englishOrderProblems.length > 0) {
@@ -394,9 +399,30 @@ function scanSequence(items, file, blockIndex, quoteState, englishState) {
           english
         });
       }
+      if (englishBeforeDepth > 0 && englishAfterDepth < englishBeforeDepth) {
+        problems.push({
+          file,
+          blockIndex,
+          id: item.id,
+          boundaryProblems: ['English closes a quote span in a unit with no Chinese quote close; the closing quote likely belongs to the previous sentence/cell.'],
+          chinese,
+          english
+        });
+      }
     }
 
     if (!inChineseQuoteSpan || !english) continue;
+
+    if (beforeDepth === afterDepth && beforeDepth === 0 && (openCount > 0 || closeCount > 0) && englishBeforeDepth !== englishAfterDepth) {
+      problems.push({
+        file,
+        blockIndex,
+        id: item.id,
+        boundaryProblems: ['Chinese quote span opens and closes within this unit, but the English quote span crosses the sentence/cell boundary.'],
+        chinese,
+        english
+      });
+    }
 
     const innerOpenCount = countSubstr(chinese, '『');
     const innerCloseCount = countSubstr(chinese, '』');
@@ -433,6 +459,8 @@ function scanChapter(file) {
   for (const [blockIndex, block] of (chapter.content || []).entries()) {
     if (block.type === 'paragraph' || block.type === 'table_header') {
       problems.push(...scanSequence(block.sentences || [], file, blockIndex, quoteState, englishState));
+    } else if (block.type === 'table_row') {
+      problems.push(...scanSequence(block.cells || [], file, blockIndex, quoteState, englishState));
     }
   }
 

@@ -54,6 +54,19 @@ function getSentenceEnglish(sentence) {
   return t?.idiomatic || t?.literal || '';
 }
 
+function addFootnote(translation, footnotes, footnoteCounter) {
+  if (!translation?.footnote) return { marker: '', footnoteCounter };
+  const footnoteNum = footnoteCounter++;
+  footnotes.push({
+    number: footnoteNum,
+    text: translation.footnote
+  });
+  return {
+    marker: `<sup class="footnote-marker" data-footnote="${footnoteNum}">${footnoteNum}</sup>`,
+    footnoteCounter
+  };
+}
+
 const _staticGenEnv = parseInt(process.env.STATIC_GEN_CONCURRENCY || '', 10);
 const STATIC_GEN_FROM_ENV = Number.isFinite(_staticGenEnv) && _staticGenEnv >= 1;
 /** Parallel chapter HTML writes per book. */
@@ -472,15 +485,13 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         if (sentenceEnglish) {
           text = escapeHtml(sentenceEnglish);
 
-          // Check for footnote
-          if (translation?.footnote) {
-            const footnoteNum = footnoteCounter++;
-            footnotes.push({
-              number: footnoteNum,
-              text: translation.footnote
-            });
-            text += `<sup class="footnote-marker" data-footnote="${footnoteNum}">${footnoteNum}</sup>`;
-          }
+          const footnote = addFootnote(translation, footnotes, footnoteCounter);
+          footnoteCounter = footnote.footnoteCounter;
+          text += footnote.marker;
+        } else if (translation?.footnote) {
+          const footnote = addFootnote(translation, footnotes, footnoteCounter);
+          footnoteCounter = footnote.footnoteCounter;
+          text = footnote.marker;
         } else {
           text = '(No translation available)';
         }
@@ -517,20 +528,14 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         const zhHeaderRow = block.sentences.map(s => renderTableHeaderCell(s, s.zh)).join('');
         const enHeaderRow = block.sentences.map(s => {
           const translation = s.translations && s.translations.length > 0 ? s.translations[0] : null;
-          if (!translation || (!translation.idiomatic && !translation.literal)) return '<th class="table-header"></th>';
+          if (!translation || (!translation.idiomatic && !translation.literal && !translation.footnote)) return '<th class="table-header"></th>';
 
           const parsed = parseTableAttributePrefix(translation.idiomatic || translation.literal);
           let text = escapeHtml(parsed.text);
 
-          // Check for footnote
-          if (translation.footnote) {
-            const footnoteNum = footnoteCounter++;
-            footnotes.push({
-              number: footnoteNum,
-              text: translation.footnote
-            });
-            text += `<sup class="footnote-marker" data-footnote="${footnoteNum}">${footnoteNum}</sup>`;
-          }
+          const footnote = addFootnote(translation, footnotes, footnoteCounter);
+          footnoteCounter = footnote.footnoteCounter;
+          text += footnote.marker;
 
           return `<th class="table-header"${tableSpanAttrs(s, parsed, parseTableAttributePrefix(s.zh))}>${text}</th>`;
         }).join('');

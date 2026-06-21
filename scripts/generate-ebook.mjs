@@ -662,19 +662,19 @@ function renderTableEntry(block, headers, chapter, blockIndex, rowNumber, qa, ta
     .map((cell, cellIndex) => {
       const mainText = getMainText(cell);
       const text = textContent(mainText);
-      if (!text && textContent(cell.content || cell.zh)) {
+      const fnText = getFootnote(cell);
+      if (!text && !fnText && textContent(cell.content || cell.zh)) {
         qa.errors.push(`Missing table cell translation in ${chapter.meta.chapter} block ${blockIndex + 1} cell ${cellIndex + 1}`);
       }
       if (hasPlaceholder(text)) {
         qa.errors.push(`Placeholder text in ${chapter.meta.chapter} block ${blockIndex + 1} cell ${cellIndex + 1}`);
       }
-      if (!text) return null;
+      if (!text && !fnText) return null;
       const label = fallbackTableFieldLabel(headers, cellIndex);
       if (isGenericTableFieldLabel(label)) tableStats.genericLabels += 1;
       const displayMain = tableDisplayText(label, text, chapter);
-      if (!displayMain) return null;
+      if (!displayMain && !fnText) return null;
       let cellContent = escapeXml(displayMain);
-      const fnText = getFootnote(cell);
       if (fnText) {
         const fnNum = footnotes.length + 1;
         const fnId = `fn-${chapter.meta.chapter}-${fnNum}`;
@@ -1545,9 +1545,9 @@ function collectChapterBlocks(chapter, qa, chapterQa, footnotes = []) {
       const units = [];
       for (const item of sentenceItems) {
         const main = getMainText(item);
-        if (!main) continue;
         let rendered = escapeXml(main);
         const fnText = getFootnote(item);
+        if (!main && !fnText) continue;
         if (fnText) {
           const fnNum = footnotes.length + 1;
           const fnId = `fn-${chapter.meta.chapter}-${fnNum}`;

@@ -154,6 +154,16 @@ export function delimiterAlignmentNotes(chinese, english, fieldLabel) {
     );
   }
 
+  const zhAngleOpen = countSubstr(zh, '\u3008');
+  const zhAngleClose = countSubstr(zh, '\u3009');
+  const enAngleOpen = countSubstr(en, '\u3008');
+  const enAngleClose = countSubstr(en, '\u3009');
+  if (zhAngleOpen === zhAngleClose && enAngleOpen === enAngleClose && zhAngleOpen !== enAngleOpen && (zhAngleOpen > 0 || enAngleOpen > 0)) {
+    notes.push(
+      `${fieldLabel}: Chinese has ${zhAngleOpen} 〈〉 pair(s) but English has ${enAngleOpen}; match note/title mark structure to the source.`
+    );
+  }
+
   const cOpen = countSubstr(zh, '「');
   const cClose = countSubstr(zh, '」');
   const fOpen = countSubstr(zh, '『');
@@ -227,6 +237,7 @@ export function englishMatchesChineseTerminal(zhTerminal, english) {
 
 /** Fullwidth / CJK punctuation often pasted into English by mistake (non-exhaustive). */
 const FULLWIDTH_OR_CJK_IN_ENGLISH = /[\uFF0C\u3002\uFF1A\uFF1B\uFF01\uFF1F\u3001\uFF08\uFF09\u300A\u300B]/;
+const LEADING_ATTACHING_PUNCT_IN_ENGLISH = /^[\s\u00A0]*([,.;:!?]+|[)\]\}>〉》」』”]+)/u;
 
 /**
  * Non-blocking notes when English closing punctuation or script style disagrees with Chinese.
@@ -237,6 +248,13 @@ export function punctuationAlignmentNotes(chinese, english, fieldLabel) {
   const zh = String(chinese || '');
   const en = String(english || '').trim();
   if (!zh || !en) return notes;
+
+  const leadingAttach = en.match(LEADING_ATTACHING_PUNCT_IN_ENGLISH);
+  if (leadingAttach) {
+    notes.push(
+      `${fieldLabel}: English begins with attaching punctuation (${JSON.stringify(leadingAttach[1])}); move it to the previous sentence/cell or remove it if it is not translation-bearing.`
+    );
+  }
 
   if (FULLWIDTH_OR_CJK_IN_ENGLISH.test(en)) {
     notes.push(

@@ -17,6 +17,7 @@ import { load } from 'cheerio';
 const DATA_DIR = path.join(process.cwd(), 'data');
 const DEFAULT_MIN_SEVERITY = 2;
 const DEFAULT_FETCH_TIMEOUT_MS = 15000;
+const DEFAULT_RETRY_DELAY_MS = 10000;
 const SENTENCE_ENDINGS = new Set(['。', '！', '？', '；']);
 const CJK_RE = /[\p{Script=Han}]/u;
 const LATIN_RUN_RE = /[A-Za-z][A-Za-z0-9'’.,:;!?()[\]\- ]*/g;
@@ -49,7 +50,11 @@ function usage() {
   node scripts/scan-source-correspondence.mjs [--book BOOK --chapter CHAPTER | path ...]
     [--source-url NAME=URL] [--ctext-url URL] [--out PATH] [--json] [--summary]
     [--fail] [--min-severity N] [--limit N] [--fetch-timeout-ms N]
-    [--source-name NAME[,NAME...]] [--quiet]
+    [--source-name NAME[,NAME...]] [--primary-source-only]
+    [--include-migrated-chinesenotes] [--concurrency N]
+    [--fetch-delay-ms N] [--retry-rate-limit] [--retry-count N]
+    [--retry-delay-ms N] [--single-derived-wikisource]
+    [--progress-every N] [--quiet]
 
 Examples:
   node scripts/scan-source-correspondence.mjs --book songshu --chapter 069 --summary
@@ -57,9 +62,10 @@ Examples:
     --source-url ctext=https://ctext.org/wiki.pl?if=en\\&chapter=707318 \\
     --out data/quality/source-correspondence-songshu-069.json
 
-The chapter meta.url is used automatically as the chinesenotes source when it is
-present, and meta.ctextUrl is used automatically as a ctext source when present.
-Additional sources can be supplied with --source-url NAME=URL.`);
+The chapter meta.url is used automatically as the primary source when present.
+The scanner also knows meta.ctextUrl, meta.wikisourceUrl, and
+meta.fallbackSourceUrl. Additional sources can be supplied with --source-url
+NAME=URL.`);
 }
 
 function parseArgs(argv) {
@@ -76,7 +82,16 @@ function parseArgs(argv) {
     minSeverity: DEFAULT_MIN_SEVERITY,
     limit: null,
     fetchTimeoutMs: DEFAULT_FETCH_TIMEOUT_MS,
+    fetchDelayMs: 0,
+    retryRateLimit: false,
+    retryCount: 3,
+    retryDelayMs: DEFAULT_RETRY_DELAY_MS,
+    singleDerivedWikisource: false,
+    progressEvery: null,
     sourceNames: new Set(),
+    primarySourceOnly: false,
+    includeMigratedChineseNotes: false,
+    concurrency: 1,
   };
 
   const addNames = (value) => {
@@ -102,6 +117,14 @@ function parseArgs(argv) {
     }
     if (arg === '--quiet') {
       opts.quiet = true;
+      continue;
+    }
+    if (arg === '--primary-source-only') {
+      opts.primarySourceOnly = true;
+      continue;
+    }
+    if (arg === '--include-migrated-chinesenotes') {
+      opts.includeMigratedChineseNotes = true;
       continue;
     }
     if (arg === '--fail') {
@@ -172,6 +195,54 @@ function parseArgs(argv) {
       opts.fetchTimeoutMs = Number(arg.slice('--fetch-timeout-ms='.length));
       continue;
     }
+    if (arg === '--fetch-delay-ms') {
+      opts.fetchDelayMs = Number(argv[++i]);
+      continue;
+    }
+    if (arg.startsWith('--fetch-delay-ms=')) {
+      opts.fetchDelayMs = Number(arg.slice('--fetch-delay-ms='.length));
+      continue;
+    }
+    if (arg === '--retry-rate-limit') {
+      opts.retryRateLimit = true;
+      continue;
+    }
+    if (arg === '--single-derived-wikisource') {
+      opts.singleDerivedWikisource = true;
+      continue;
+    }
+    if (arg === '--progress-every') {
+      opts.progressEvery = Number(argv[++i]);
+      continue;
+    }
+    if (arg.startsWith('--progress-every=')) {
+      opts.progressEvery = Number(arg.slice('--progress-every='.length));
+      continue;
+    }
+    if (arg === '--retry-count') {
+      opts.retryCount = Number(argv[++i]);
+      continue;
+    }
+    if (arg.startsWith('--retry-count=')) {
+      opts.retryCount = Number(arg.slice('--retry-count='.length));
+      continue;
+    }
+    if (arg === '--retry-delay-ms') {
+      opts.retryDelayMs = Number(argv[++i]);
+      continue;
+    }
+    if (arg.startsWith('--retry-delay-ms=')) {
+      opts.retryDelayMs = Number(arg.slice('--retry-delay-ms='.length));
+      continue;
+    }
+    if (arg === '--concurrency') {
+      opts.concurrency = Number(argv[++i]);
+      continue;
+    }
+    if (arg.startsWith('--concurrency=')) {
+      opts.concurrency = Number(arg.slice('--concurrency='.length));
+      continue;
+    }
     if (arg === '--source-name') {
       addNames(argv[++i]);
       continue;
@@ -204,8 +275,28 @@ function parseArgs(argv) {
     console.error('--limit must be a positive integer.');
     process.exit(2);
   }
+  if (opts.progressEvery !== null && (!Number.isInteger(opts.progressEvery) || opts.progressEvery < 1)) {
+    console.error('--progress-every must be a positive integer.');
+    process.exit(2);
+  }
   if (!Number.isFinite(opts.fetchTimeoutMs) || opts.fetchTimeoutMs < 1000) {
     console.error('--fetch-timeout-ms must be at least 1000.');
+    process.exit(2);
+  }
+  if (!Number.isFinite(opts.fetchDelayMs) || opts.fetchDelayMs < 0) {
+    console.error('--fetch-delay-ms must be at least 0.');
+    process.exit(2);
+  }
+  if (!Number.isInteger(opts.retryCount) || opts.retryCount < 0) {
+    console.error('--retry-count must be a non-negative integer.');
+    process.exit(2);
+  }
+  if (!Number.isFinite(opts.retryDelayMs) || opts.retryDelayMs < 0) {
+    console.error('--retry-delay-ms must be at least 0.');
+    process.exit(2);
+  }
+  if (!Number.isInteger(opts.concurrency) || opts.concurrency < 1 || opts.concurrency > 32) {
+    console.error('--concurrency must be an integer between 1 and 32.');
     process.exit(2);
   }
   return opts;
@@ -229,6 +320,27 @@ function sourceNameFromUrl(url) {
   if (/ctext\.org/i.test(url)) return 'ctext';
   if (/wikisource\.org/i.test(url)) return 'wikisource';
   return 'source';
+}
+
+function normalizeWikisourceRawUrl(url) {
+  if (!url || !/wikisource\.org/i.test(url)) return url;
+  const parsed = new URL(url);
+  parsed.searchParams.set('action', 'raw');
+  return parsed.toString();
+}
+
+function sanitizeSourceUrl(url) {
+  const raw = String(url || '').trim();
+  const match = raw.match(/^https?:\/\/\S+/i);
+  return match ? match[0] : raw;
+}
+
+function sourceKey(source) {
+  try {
+    return `${source.name}:${new URL(source.url).toString()}`;
+  } catch {
+    return `${source.name}:${source.url}`;
+  }
 }
 
 function chapterFiles(opts) {
@@ -259,28 +371,53 @@ function chapterRef(file) {
 
 function sourceUrlsForChapter(data, extraSources, opts = {}) {
   const sources = [];
+
+  const add = (name, url, sourceField, primary = false) => {
+    if (!url) return;
+    const cleanUrl = sanitizeSourceUrl(url);
+    const sourceName = name || sourceNameFromUrl(cleanUrl);
+    const sourceUrl = sourceName === 'wikisource' ? normalizeWikisourceRawUrl(cleanUrl) : cleanUrl;
+    sources.push({
+      name: sourceName,
+      url: sourceUrl,
+      sourceField,
+      primary,
+    });
+  };
+
   const metaUrl = data.meta?.url || data.url;
-  if (metaUrl) {
-    sources.push({ name: sourceNameFromUrl(metaUrl), url: metaUrl });
-    const migrated = migratedChineseNotesUrl(metaUrl);
-    if (migrated && migrated !== metaUrl) {
-      sources.push({ name: 'chinesenotes-migrated', url: migrated });
-    }
+  add(sourceNameFromUrl(metaUrl), metaUrl, 'meta.url', true);
+  add('ctext', data.meta?.ctextUrl, 'meta.ctextUrl');
+  add('wikisource', data.meta?.wikisourceUrl, 'meta.wikisourceUrl');
+  add(sourceNameFromUrl(data.meta?.fallbackSourceUrl), data.meta?.fallbackSourceUrl, 'meta.fallbackSourceUrl');
+  add(sourceNameFromUrl(data.meta?.sourceUrl), data.meta?.sourceUrl, 'meta.sourceUrl');
+  add(sourceNameFromUrl(data.meta?.chinesenotesUrl), data.meta?.chinesenotesUrl, 'meta.chinesenotesUrl');
+  derivedWikisourceUrlsForChapter(data).forEach((url, index) => add('wikisource', url, `derived.wikisource.${index}`));
+  if (Array.isArray(data.meta?.wikisourceSubpages)) {
+    data.meta.wikisourceSubpages.forEach((url, index) => add('wikisource', url, `meta.wikisourceSubpages.${index}`));
   }
-  if (data.meta?.ctextUrl) {
-    sources.push({ name: 'ctext', url: data.meta.ctextUrl });
+
+  if (opts.includeMigratedChineseNotes) {
+    for (const source of [...sources]) {
+      const migrated = migratedChineseNotesUrl(source.url);
+      if (migrated && migrated !== source.url) {
+        add('chinesenotes-migrated', migrated, `${source.sourceField}:migrated`);
+      }
+    }
   }
   for (const source of extraSources) sources.push(source);
 
   const seen = new Set();
-  return sources.filter((source) => {
+  const filtered = sources.filter((source) => {
     if (!source.url) return false;
     if (opts.sourceNames?.size > 0 && !opts.sourceNames.has(source.name)) return false;
-    const key = `${source.name}:${source.url}`;
+    const key = sourceKey(source);
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
   });
+  if (!opts.primarySourceOnly || opts.sourceNames?.size > 0 || extraSources.length > 0) return filtered;
+  return filtered.length > 0 ? [filtered[0]] : [];
 }
 
 function migratedChineseNotesUrl(url) {
@@ -289,18 +426,143 @@ function migratedChineseNotesUrl(url) {
   return `https://chinesenotes.com/library/${match[1]}/${match[2]}`;
 }
 
-async function fetchText(url, timeoutMs = DEFAULT_FETCH_TIMEOUT_MS) {
-  const response = await fetch(url, {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (compatible; records-source-correspondence/1.0)',
-      'Accept': 'text/html, text/plain;q=0.9, */*;q=0.8',
-    },
-    signal: AbortSignal.timeout(timeoutMs),
-  });
-  if (!response.ok) throw new Error(`${url}: HTTP ${response.status} ${response.statusText}`);
+const CHINESE_NUMERAL_VALUES = new Map([
+  ['零', 0],
+  ['〇', 0],
+  ['一', 1],
+  ['二', 2],
+  ['兩', 2],
+  ['三', 3],
+  ['四', 4],
+  ['五', 5],
+  ['六', 6],
+  ['七', 7],
+  ['八', 8],
+  ['九', 9],
+]);
+
+const CHINESE_NUMERAL_UNITS = new Map([
+  ['十', 10],
+  ['百', 100],
+  ['千', 1000],
+]);
+
+function parseChineseInteger(text) {
+  const raw = String(text || '').trim();
+  if (!raw) return null;
+  if (/^\d+$/.test(raw)) return Number(raw);
+  if (![...raw].some((char) => CHINESE_NUMERAL_UNITS.has(char))) {
+    const digits = [];
+    for (const char of raw) {
+      if (!CHINESE_NUMERAL_VALUES.has(char)) return null;
+      digits.push(String(CHINESE_NUMERAL_VALUES.get(char)));
+    }
+    return Number(digits.join('')) || null;
+  }
+  let section = 0;
+  let current = 0;
+  for (const char of raw) {
+    if (CHINESE_NUMERAL_VALUES.has(char)) {
+      current = CHINESE_NUMERAL_VALUES.get(char);
+      continue;
+    }
+    if (CHINESE_NUMERAL_UNITS.has(char)) {
+      section += (current || 1) * CHINESE_NUMERAL_UNITS.get(char);
+      current = 0;
+      continue;
+    }
+    return null;
+  }
+  return section + current || null;
+}
+
+function volumeLabelFromTitle(data) {
+  const title = [
+    data.meta?.title?.zh,
+    data.meta?.title?.raw,
+  ].filter(Boolean).join(' ');
+  const match = title.match(/卷\s*([〇零一二兩三四五六七八九十百千\d]+)\s*((?:[上下中](?:之[上下])?)|(?:之[〇零一二兩三四五六七八九十百千\d]+))?/u);
+  const englishMatch = match ? null : title.match(/\bVolume\s+(\d+)(?:[a-z])?\b/i);
+  const fallbackNumber = Number(data.meta?.chapter);
+  const number = match ? parseChineseInteger(match[1]) : (englishMatch ? Number(englishMatch[1]) : fallbackNumber);
+  if (!number) return null;
   return {
-    text: await response.text(),
-    finalUrl: response.url,
+    number,
+    suffix: match?.[2] || '',
+  };
+}
+
+function derivedWikisourceUrlsForChapter(data) {
+  const bookTitle = data.meta?.bookInfo?.chinese;
+  const volume = volumeLabelFromTitle(data);
+  if (!bookTitle || !volume) return [];
+  const urls = [];
+  const push = (volumeText) => {
+    urls.push(`https://zh.wikisource.org/wiki/${encodeURIComponent(bookTitle)}/${encodeURIComponent(`卷${volumeText}${volume.suffix}`)}?action=raw`);
+  };
+  push(String(volume.number).padStart(3, '0'));
+  push(String(volume.number).padStart(2, '0'));
+  push(String(volume.number));
+  return [...new Set(urls)];
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function fetchText(url, opts = {}) {
+  const fetchOpts = typeof opts === 'number'
+    ? { fetchTimeoutMs: opts }
+    : opts;
+  const timeoutMs = fetchOpts.fetchTimeoutMs || DEFAULT_FETCH_TIMEOUT_MS;
+  const maxAttempts = fetchOpts.retryRateLimit ? fetchOpts.retryCount + 1 : 1;
+
+  for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+    if (fetchOpts.fetchDelayMs) await sleep(fetchOpts.fetchDelayMs);
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; records-source-correspondence/1.0)',
+        'Accept': 'text/html, text/plain;q=0.9, */*;q=0.8',
+      },
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+    if (response.ok) {
+      return {
+        text: await response.text(),
+        finalUrl: response.url,
+      };
+    }
+
+    if (response.status === 429 && attempt + 1 < maxAttempts) {
+      await sleep((fetchOpts.retryDelayMs || DEFAULT_RETRY_DELAY_MS) * (attempt + 1));
+      continue;
+    }
+    const error = new Error(`${url}: HTTP ${response.status} ${response.statusText}`);
+    error.status = response.status;
+    throw error;
+  }
+  throw new Error(`${url}: fetch failed after ${maxAttempts} attempts`);
+}
+
+function wikisourceRawRedirectTarget(text, baseUrl) {
+  const match = String(text || '').match(/^#(?:REDIRECT|重定向)\s*\[\[([^\]]+)\]\]/i);
+  if (!match) return null;
+  const target = match[1].split('|')[0].trim();
+  if (!target) return null;
+  const base = new URL(baseUrl);
+  const prefix = base.pathname.split('/wiki/')[0] || '';
+  return `${base.origin}${prefix}/wiki/${encodeURIComponent(target)}?action=raw`;
+}
+
+async function fetchSourceText(source, opts) {
+  let fetched = await fetchText(source.url, opts);
+  if (source.name !== 'wikisource') return fetched;
+  const redirectUrl = wikisourceRawRedirectTarget(fetched.text, fetched.finalUrl || source.url);
+  if (!redirectUrl) return fetched;
+  const redirected = await fetchText(redirectUrl, opts);
+  return {
+    ...redirected,
+    redirectedFrom: fetched.finalUrl || source.url,
   };
 }
 
@@ -370,6 +632,89 @@ function stripLatinNoise(text) {
     })
     .filter(Boolean)
     .join('\n');
+}
+
+function decodeLanguageVariant(inner) {
+  const text = String(inner || '');
+  const entries = [...text.matchAll(/(?:^|[;|])-?(zh(?:-(?:hant|hans))?):([^;|]*)/gi)]
+    .map((match) => ({
+      lang: match[1].toLowerCase(),
+      value: match[2].trim(),
+    }))
+    .filter((entry) => entry.value);
+
+  const traditional = entries.find((entry) => entry.lang === 'zh-hant');
+  if (traditional) return traditional.value;
+  const generic = entries.find((entry) => entry.lang === 'zh');
+  if (generic) return generic.value;
+  const simplified = entries.find((entry) => entry.lang === 'zh-hans');
+  if (simplified) return simplified.value;
+
+  const parts = text
+    .split('|')
+    .map((part) => part.trim())
+    .filter((part) => part && !/^(?:H|A|T|R|S|zh|zh-hant|zh-hans|ProperNoun)$/i.test(part));
+  return parts.at(-1) || text;
+}
+
+function decodeContentTemplate(name, body) {
+  const templateName = String(name || '').trim().toLowerCase();
+  const parts = String(body || '')
+    .split('|')
+    .map((part) => part.trim())
+    .filter(Boolean);
+  if (templateName === '!') return parts[0] || '';
+  if (templateName === 'propernoun') return parts.join('');
+  if (templateName === '標' || templateName === 'wavybookmark') return parts.join('');
+  return '';
+}
+
+function stripMediaWikiTemplates(text) {
+  let out = String(text || '')
+    .replace(/\{\{\s*(!)\|([^{}]*)\}\}/g, (_, name, body) => decodeContentTemplate(name, body))
+    .replace(/-\{([^{}]*)\}-/g, (_, inner) => decodeLanguageVariant(inner))
+    .replace(/(?:ProperNoun\|)?-?zh:[^;|]*;zh-hans:[^;|]*;zh-hant:([^;|]+);?/gi, '$1')
+    .replace(/(?:ProperNoun\|)?-?zh:([^;|]+);zh-hans:[^;|]*;zh-hant:[^;|]*;?/gi, '$1')
+    .replace(/(?:ProperNoun\|)?-?zh-hant:([^;|]+);?/gi, '$1')
+    .replace(/(?:ProperNoun\|)?-?zh:([^;|]+);?/gi, '$1')
+    .replace(/\{\{\s*(?:header2?|版權|PD|PD-old|年代|DEFAULTSORT|Authority control|Wikisource author|wikisource author)[\s\S]*?\}\}/gi, '');
+  let previous = '';
+  let guard = 0;
+  while (out !== previous && guard < 20) {
+    previous = out;
+    out = out
+      .replace(/\{\{\s*(ProperNoun|標|WavyBookMark)\|([^{}]*)\}\}/gi, (_, name, body) => decodeContentTemplate(name, body))
+      .replace(/\{\{\s*(!)\|([^{}]*)\}\}/g, (_, name, body) => decodeContentTemplate(name, body))
+      .replace(/\{\{\*\|([^{}]*)\}\}/g, '$1')
+      .replace(/\{\{[^{}]*\}\}/g, '');
+    guard += 1;
+  }
+  return out;
+}
+
+function cleanupWikisourceMarkup(text) {
+  return stripMediaWikiTemplates(String(text || ''))
+    .replace(/<ref\b[^>]*>[\s\S]*?<\/ref>/gi, '')
+    .replace(/<ref\b[^/>]*\/>/gi, '')
+    .replace(/<\/?(?:onlyinclude|noinclude|includeonly)>/gi, '')
+    .replace(/<\/?[a-z][^>]*>/gi, '')
+    .replace(/\[\[[^\]|]*\|([^\]]+)\]\]/g, '$1')
+    .replace(/\[\[([^\]]+)\]\]/g, '$1')
+    .replace(/\[https?:\/\/[^\s\]]+\s*([^\]]*)\]/g, '$1')
+    .replace(/__NOEDITSECTION__/g, '')
+    .replace(/'''?/g, '')
+    .replace(/^=+\s*[^=\n]+?\s*=+$/gm, '')
+    .replace(/^\s*(?:\d{3,4}年代|[\p{Script=Han}]{1,8}[元一二三四五六七八九十百千]+年)\s*$/gmu, '')
+    .replace(/\d{3,4}年代/g, '')
+    .replace(/[{}]+/g, '')
+    .replace(/^\{\|.*$/gm, '')
+    .replace(/^\|\}.*$/gm, '')
+    .replace(/^\|-.*$/gm, '')
+    .replace(/^[!|]\s*(?:rowspan|colspan)?\s*=\s*"[^"]*"\s*(?:valign\s*=\s*"[^"]*")?\s*\|\s*/gim, '')
+    .replace(/^[!|]\s*/gm, '')
+    .replace(/\b(?:rowspan|colspan)\s*=\s*"[^"]*"\s*(?:valign\s*=\s*"[^"]*")?\s*\|\s*/gi, '')
+    .replace(/\{\|/g, '')
+    .replace(/\|\}/g, '');
 }
 
 function splitUnits(text) {
@@ -449,7 +794,14 @@ function extractCtextText(html) {
 
 function extractSourceUnits(sourceName, url, html) {
   const name = sourceNameFromUrl(url) || sourceName;
-  const text = name === 'ctext' ? extractCtextText(html) : extractChineseNotesText(html);
+  let text;
+  if (name === 'ctext') {
+    text = extractCtextText(html);
+  } else if (name === 'wikisource') {
+    text = cleanupWikisourceMarkup(cleanupExtractedText(html));
+  } else {
+    text = extractChineseNotesText(html);
+  }
   return splitUnits(text);
 }
 
@@ -793,15 +1145,22 @@ async function scanFile(file, opts) {
   const sources = sourceUrlsForChapter(data, opts.sourceUrls, opts);
   const sourceReports = [];
   const items = [];
+  let fetchedDerivedWikisource = false;
 
   for (const source of sources) {
+    const isDerivedWikisource = source.name === 'wikisource'
+      && String(source.sourceField || '').startsWith('derived.wikisource');
+    if (opts.singleDerivedWikisource && fetchedDerivedWikisource && isDerivedWikisource) {
+      continue;
+    }
     let fetched;
     try {
-      fetched = await fetchText(source.url, opts.fetchTimeoutMs);
+      fetched = await fetchSourceText(source, opts);
     } catch (error) {
       sourceReports.push({
         name: source.name,
         url: source.url,
+        sourceField: source.sourceField,
         sourceUnits: 0,
         localUnits: localUnits.length,
         itemCount: 0,
@@ -813,6 +1172,7 @@ async function scanFile(file, opts) {
       sourceReports.push({
         name: source.name,
         url: source.url,
+        sourceField: source.sourceField,
         finalUrl: fetched.finalUrl,
         sourceUnits: 0,
         localUnits: localUnits.length,
@@ -827,7 +1187,10 @@ async function scanFile(file, opts) {
       sourceReports.push({
         name: source.name,
         url: source.url,
+        sourceField: source.sourceField,
         finalUrl: fetched.finalUrl,
+        fetched: true,
+        emptyWitness: true,
         sourceUnits: 0,
         localUnits: localUnits.length,
         itemCount: 0,
@@ -847,10 +1210,15 @@ async function scanFile(file, opts) {
     sourceReports.push({
       name: source.name,
       url: source.url,
+      sourceField: source.sourceField,
+      redirectedFrom: fetched.redirectedFrom,
+      finalUrl: fetched.finalUrl,
+      fetched: true,
       sourceUnits: sourceUnits.length,
       localUnits: localUnits.length,
       itemCount: sourceItems.length,
     });
+    if (isDerivedWikisource) fetchedDerivedWikisource = true;
     items.push(...sourceItems);
   }
 
@@ -895,17 +1263,38 @@ async function main() {
 
   const chapters = [];
   const allItems = [];
-  for (const file of files) {
-    const chapterReport = await scanFile(file, opts);
-    chapters.push({
-      file: chapterReport.file,
-      book: chapterReport.book,
-      chapter: chapterReport.chapter,
-      localUnits: chapterReport.localUnits,
-      sources: chapterReport.sources,
-    });
-    allItems.push(...chapterReport.items);
+  let nextIndex = 0;
+  let completed = 0;
+  async function worker() {
+    while (nextIndex < files.length) {
+      const file = files[nextIndex];
+      nextIndex += 1;
+      const chapterReport = await scanFile(file, opts);
+      chapters.push({
+        file: chapterReport.file,
+        book: chapterReport.book,
+        chapter: chapterReport.chapter,
+        localUnits: chapterReport.localUnits,
+        sources: chapterReport.sources,
+      });
+      allItems.push(...chapterReport.items);
+      completed += 1;
+      if (opts.progressEvery && (completed % opts.progressEvery === 0 || completed === files.length)) {
+        console.error(`source-correspondence: scanned ${completed}/${files.length} chapters (${chapterReport.book}/${chapterReport.chapter})`);
+      }
+    }
   }
+  await Promise.all(Array.from({ length: Math.min(opts.concurrency, files.length) }, () => worker()));
+  chapters.sort((a, b) => (
+    a.book.localeCompare(b.book) ||
+    a.chapter.localeCompare(b.chapter, undefined, { numeric: true })
+  ));
+  allItems.sort((a, b) => (
+    a.book.localeCompare(b.book) ||
+    a.chapter.localeCompare(b.chapter, undefined, { numeric: true }) ||
+    a.sourceName.localeCompare(b.sourceName) ||
+    a.id.localeCompare(b.id)
+  ));
 
   const report = mergeExistingDecisions({
     generatedAt: new Date().toISOString(),
