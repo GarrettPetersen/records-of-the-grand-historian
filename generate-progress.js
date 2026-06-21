@@ -20,6 +20,7 @@ import { estimateCompletionFromGitHistory } from './scripts/progress-estimate.mj
 
 const MANIFEST_PATH = './data/manifest.json';
 const DATA_DIR = './data';
+const QUALITY_DIR = './data/quality';
 const LANGUAGE_TOOL_SCORES_PATH = './data/quality/languagetool-scores.json';
 
 function parseBookArg() {
@@ -38,6 +39,121 @@ function loadLanguageToolScores() {
     console.warn(`Could not read ${LANGUAGE_TOOL_SCORES_PATH}: ${error.message}`);
     return null;
   }
+}
+
+function repairQueueFiles() {
+  if (!fs.existsSync(QUALITY_DIR)) return [];
+  return fs.readdirSync(QUALITY_DIR)
+    .filter((entry) => /^source-(?:artifacts|correspondence).+\.json$/u.test(entry))
+    .map((entry) => path.join(QUALITY_DIR, entry))
+    .sort();
+}
+
+function repairQueueItemKey(item, sourceFile, index) {
+  if (item?.id) return item.id;
+  return [
+    sourceFile,
+    index,
+    item?.book || '',
+    item?.chapter || '',
+    item?.ruleId || item?.type || '',
+    item?.path || '',
+    item?.sentenceId || '',
+    item?.sourceName || '',
+    item?.sourceRange?.text || '',
+    item?.localRange?.text || '',
+    item?.excerpt || '',
+  ].join('\u241f');
+}
+
+function repairQueueItemState(item) {
+  const status = String(item?.status || '').toLowerCase();
+  const decision = String(item?.decision || '').toLowerCase();
+  const values = new Set([status, decision].filter(Boolean));
+
+  if (item?.appliedAt || item?.appliedSummary || values.has('applied') || values.has('included')) {
+    return 'applied';
+  }
+  if (values.has('denied') || values.has('rejected') || values.has('declined') || values.has('false-positive') || values.has('false_positive')) {
+    return 'rejected';
+  }
+  if (values.has('approved')) {
+    return 'approved';
+  }
+  return 'pending';
+}
+
+function loadRepairQueueProgress() {
+  const seen = new Set();
+  const totals = {
+    totalItems: 0,
+    completedItems: 0,
+    pendingItems: 0,
+    appliedItems: 0,
+    approvedItems: 0,
+    rejectedItems: 0,
+  };
+  const bySource = [];
+
+  for (const file of repairQueueFiles()) {
+    let report;
+    try {
+      report = JSON.parse(fs.readFileSync(file, 'utf8'));
+    } catch (error) {
+      console.warn(`Could not read repair queue ${file}: ${error.message}`);
+      continue;
+    }
+
+    const items = Array.isArray(report.items)
+      ? report.items
+      : (Array.isArray(report.hits) ? report.hits : []);
+    const sourceCounts = {
+      file,
+      scanner: report.scanner || (Array.isArray(report.hits) ? 'scan-source-artifacts' : 'scan-source-correspondence'),
+      generatedAt: report.generatedAt || null,
+      totalItems: 0,
+      completedItems: 0,
+      pendingItems: 0,
+      appliedItems: 0,
+      approvedItems: 0,
+      rejectedItems: 0,
+    };
+
+    items.forEach((item, index) => {
+      const key = repairQueueItemKey(item, file, index);
+      if (seen.has(key)) return;
+      seen.add(key);
+
+      const state = repairQueueItemState(item);
+      sourceCounts.totalItems++;
+      totals.totalItems++;
+
+      if (state === 'applied') {
+        sourceCounts.appliedItems++;
+        totals.appliedItems++;
+      } else if (state === 'approved') {
+        sourceCounts.approvedItems++;
+        totals.approvedItems++;
+      } else if (state === 'rejected') {
+        sourceCounts.rejectedItems++;
+        totals.rejectedItems++;
+      }
+    });
+
+    sourceCounts.completedItems = sourceCounts.appliedItems + sourceCounts.rejectedItems;
+    sourceCounts.pendingItems = Math.max(0, sourceCounts.totalItems - sourceCounts.completedItems);
+    bySource.push(sourceCounts);
+  }
+
+  totals.completedItems = totals.appliedItems + totals.rejectedItems;
+  totals.pendingItems = Math.max(0, totals.totalItems - totals.completedItems);
+
+  return {
+    generatedAt: new Date().toISOString(),
+    percentComplete: totals.totalItems > 0 ? (totals.completedItems / totals.totalItems) * 100 : 0,
+    ...totals,
+    sourceFiles: bySource,
+  };
 }
 
 /**
@@ -230,6 +346,7 @@ function generateProgressData() {
       generatedAt: languageToolScores.generatedAt,
       thresholds: languageToolScores.thresholds,
     } : null,
+    repairQueue: loadRepairQueueProgress(),
     books: {}
   };
 
@@ -281,6 +398,7 @@ function mergeProgressSingleBook(bookId) {
     generatedAt: languageToolScores.generatedAt,
     thresholds: languageToolScores.thresholds,
   } : null;
+  progress.repairQueue = loadRepairQueueProgress();
   progress.books = progress.books || {};
   progress.books[bookId] = bookProgressFromManifest(bookId, manifest.books[bookId], languageToolScores);
   progress.summary = buildProgressSummary(progress.books);
@@ -314,4 +432,5 @@ export {
   bookProgressFromManifest,
   mergeProgressSingleBook,
   buildProgressSummary,
+  loadRepairQueueProgress,
 };

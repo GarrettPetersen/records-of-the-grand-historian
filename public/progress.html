@@ -256,6 +256,10 @@
             transition: width 0.3s ease;
         }
 
+        .repair-progress-fill {
+            background: var(--primary-color);
+        }
+
         .overall-metrics-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -323,6 +327,23 @@
                     <div class="overall-metric-card" id="overall-progress-sentences"></div>
                     <div class="overall-metric-card" id="overall-progress-characters"></div>
                     <div class="overall-metric-card" id="overall-progress-estimate"></div>
+                </div>
+            </section>
+
+            <section class="overall-progress-card" aria-labelledby="repair-progress-heading">
+                <div class="overall-progress-header">
+                    <h2 id="repair-progress-heading">Repair Queue Progress</h2>
+                    <div class="overall-progress-percent" id="repair-progress-percent">0%</div>
+                </div>
+                <div class="overall-progress-bar" aria-label="Repair queue completion progress">
+                    <div class="overall-progress-fill repair-progress-fill" id="repair-progress-fill" style="width: 0%;"></div>
+                </div>
+                <div class="overall-metrics-grid">
+                    <div class="overall-metric-card" id="repair-progress-completed"></div>
+                    <div class="overall-metric-card" id="repair-progress-applied"></div>
+                    <div class="overall-metric-card" id="repair-progress-rejected"></div>
+                    <div class="overall-metric-card" id="repair-progress-pending"></div>
+                    <div class="overall-metric-card" id="repair-progress-sources"></div>
                 </div>
             </section>
 
@@ -536,6 +557,55 @@
             }
         }
 
+        function renderRepairQueueProgress(data) {
+            const queue = data.repairQueue || {};
+            const total = Number(queue.totalItems || 0);
+            const completed = Number(queue.completedItems || 0);
+            const applied = Number(queue.appliedItems || 0);
+            const rejected = Number(queue.rejectedItems || 0);
+            const approved = Number(queue.approvedItems || 0);
+            const pending = Number(queue.pendingItems || Math.max(0, total - completed));
+            const percent = total > 0 ? (completed / total) * 100 : 0;
+            const displayPercent = `${percent.toFixed(1)}%`;
+            const sources = Array.isArray(queue.sourceFiles) ? queue.sourceFiles : [];
+            const activeSources = sources.filter(source => Number(source.totalItems || 0) > 0);
+            const newestDate = sources
+                .map(source => source.generatedAt ? new Date(source.generatedAt) : null)
+                .filter(date => date && !Number.isNaN(date.getTime()))
+                .sort((a, b) => b - a)[0] || null;
+            const formattedDate = newestDate
+                ? new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(newestDate)
+                : 'Unavailable';
+
+            document.getElementById('repair-progress-percent').textContent = displayPercent;
+            document.getElementById('repair-progress-fill').style.width = displayPercent;
+            document.getElementById('repair-progress-completed').innerHTML = `
+                <div class="overall-metric-label">Worked Through</div>
+                <div class="overall-metric-value">${completed.toLocaleString()} / ${total.toLocaleString()} (${displayPercent})</div>
+                <div class="overall-metric-note">Applied repairs plus rejected candidates.</div>
+            `;
+            document.getElementById('repair-progress-applied').innerHTML = `
+                <div class="overall-metric-label">Applied</div>
+                <div class="overall-metric-value">${applied.toLocaleString()}</div>
+                <div class="overall-metric-note">Approved and included in the source data.</div>
+            `;
+            document.getElementById('repair-progress-rejected').innerHTML = `
+                <div class="overall-metric-label">Rejected</div>
+                <div class="overall-metric-value">${rejected.toLocaleString()}</div>
+                <div class="overall-metric-note">Reviewed and marked as not a source repair.</div>
+            `;
+            document.getElementById('repair-progress-pending').innerHTML = `
+                <div class="overall-metric-label">Pending</div>
+                <div class="overall-metric-value">${pending.toLocaleString()}</div>
+                <div class="overall-metric-note">${approved.toLocaleString()} approved but not yet included.</div>
+            `;
+            document.getElementById('repair-progress-sources').innerHTML = `
+                <div class="overall-metric-label">Queue Sources</div>
+                <div class="overall-metric-value">${activeSources.length.toLocaleString()}</div>
+                <div class="overall-metric-note">Last queue scan: ${formattedDate}.</div>
+            `;
+        }
+
         function formatProgress(translated, total, label) {
             const pct = total > 0 ? ((translated / total) * 100).toFixed(1) : '0.0';
             return `${label}: ${translated.toLocaleString()} / ${total.toLocaleString()} (${pct}%)`;
@@ -555,6 +625,7 @@
             lastUpdated.textContent = `Last updated: ${updated.toLocaleDateString()} ${updated.toLocaleTimeString()}`;
 
             renderOverallProgress(data);
+            renderRepairQueueProgress(data);
 
             const groups = [
                 ['twentyFourHistories', 'Twenty-Four Histories'],

@@ -7,6 +7,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
@@ -19,6 +20,12 @@ const SOURCE_FIELD_NAMES = new Set([
 ]);
 
 const SOURCE_ARTIFACT_RULES = [
+  {
+    id: 'SOURCE_LEADING_ATTACHED_PUNCTUATION',
+    severity: 3,
+    description: 'Sentence-leading punctuation should be attached to the previous Chinese source sentence',
+    pattern: /^[，、。；：！？」』”）)\]】〉》]+/gu,
+  },
   {
     id: 'SOURCE_PLACEHOLDER_SYMBOL',
     severity: 3,
@@ -41,14 +48,14 @@ const SOURCE_ARTIFACT_RULES = [
 
 function usage() {
   console.error(`Usage:
-  node scripts/scan-source-artifacts.mjs [--book BOOK] [--json] [--summary] [--fail] [path ...]
+  node scripts/scan-source-artifacts.mjs [--book BOOK] [--json] [--summary] [--fail] [--out PATH] [path ...]
 
-Scans source-side Chinese/text fields for scrape artifacts such as replacement glyphs,
-raw table span attributes, and raw HTML tags.`);
+Scans source-side Chinese/text fields for scrape artifacts such as sentence-leading
+attached punctuation, replacement glyphs, raw table span attributes, and raw HTML tags.`);
 }
 
 function parseArgs(argv) {
-  const opts = { inputs: [], book: null, json: false, summary: false, fail: false };
+  const opts = { inputs: [], book: null, json: false, summary: false, fail: false, out: null };
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
     if (arg === '--help' || arg === '-h') {
@@ -65,6 +72,14 @@ function parseArgs(argv) {
     }
     if (arg === '--fail') {
       opts.fail = true;
+      continue;
+    }
+    if (arg === '--out') {
+      opts.out = argv[++i];
+      continue;
+    }
+    if (arg.startsWith('--out=')) {
+      opts.out = arg.slice('--out='.length);
       continue;
     }
     if (arg === '--book') {
@@ -186,14 +201,59 @@ function chapterIdFor(file) {
   return path.basename(file, '.json');
 }
 
+function stableHitId(hit) {
+  const input = [
+    hit.book,
+    hit.chapter,
+    hit.ruleId,
+    hit.path,
+    hit.sentenceId || '',
+    hit.found || '',
+    hit.index,
+    hit.excerpt || '',
+  ].join('\u241f');
+  const hash = crypto.createHash('sha1').update(input).digest('hex').slice(0, 12);
+  return `source-artifact-${hit.book}-${hit.chapter}-${hit.ruleId.toLowerCase()}-${hash}`;
+}
+
 function scanFile(file) {
   const data = JSON.parse(fs.readFileSync(file, 'utf8'));
-  return [...walk(data)].map((hit) => ({
-    file,
-    book: bookIdFor(file),
-    chapter: chapterIdFor(file),
-    ...hit,
-  }));
+  return [...walk(data)].map((hit) => {
+    const item = {
+      file,
+      book: bookIdFor(file),
+      chapter: chapterIdFor(file),
+      ...hit,
+      status: 'pending',
+      decision: null,
+      notes: '',
+    };
+    item.id = stableHitId(item);
+    return item;
+  });
+}
+
+function mergeExistingDecisions(report, outPath) {
+  if (!outPath || !fs.existsSync(outPath)) return report;
+  let previous;
+  try {
+    previous = JSON.parse(fs.readFileSync(outPath, 'utf8'));
+  } catch {
+    return report;
+  }
+  const priorItems = new Map((previous.hits || []).map((item) => [item.id, item]));
+  for (const item of report.hits) {
+    const prior = priorItems.get(item.id);
+    if (!prior) continue;
+    item.status = prior.status || item.status;
+    item.decision = prior.decision ?? item.decision;
+    item.notes = prior.notes || item.notes;
+    item.reviewedAt = prior.reviewedAt;
+    item.reviewer = prior.reviewer;
+    item.appliedAt = prior.appliedAt;
+    item.appliedSummary = prior.appliedSummary;
+  }
+  return report;
 }
 
 function printSummary(hits) {
@@ -233,9 +293,20 @@ function main() {
 
   const files = chapterFiles(inputs);
   const hits = files.flatMap(scanFile);
+  const report = mergeExistingDecisions({
+    generatedAt: new Date().toISOString(),
+    scanner: 'scan-source-artifacts',
+    count: hits.length,
+    hits,
+  }, opts.out);
+
+  if (opts.out) {
+    fs.mkdirSync(path.dirname(opts.out), { recursive: true });
+    fs.writeFileSync(opts.out, `${JSON.stringify(report, null, 2)}\n`, 'utf8');
+  }
 
   if (opts.json) {
-    console.log(JSON.stringify({ count: hits.length, hits }, null, 2));
+    console.log(JSON.stringify(report, null, 2));
   } else {
     console.log(`Source artifact candidates: ${hits.length} hit(s) in ${new Set(hits.map((hit) => `${hit.book}/${hit.chapter}`)).size} chapter(s)`);
     if (opts.summary) {
@@ -246,6 +317,7 @@ function main() {
       }
       if (hits.length > 200) console.log(`... ${hits.length - 200} more hit(s). Use --json or --summary for full output.`);
     }
+    if (opts.out) console.log(`\nWrote ${opts.out}`);
   }
 
   if (opts.fail && hits.length > 0) process.exit(1);
