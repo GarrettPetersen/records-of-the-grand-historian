@@ -6703,7 +6703,7 @@
     },
     {
       "id": "source-beiqishu-011-wikisource-212112208e8e",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "beiqishu",
@@ -6727,12 +6727,47 @@
         "afterLocal": "廣寧王孝珩，文襄第二子也。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Approved as a real local omission: Wikisource Beiqishu and the parallel Beishi queue preserve the missing Xiaoyu mother/consort paragraph between 子弘節嗣 and the Guangning Prince section; manual translations supplied.",
+      "reviewedAt": "2026-06-22T10:30:49.337Z",
+      "reviewer": "source-correspondence",
+      "appliedAt": "2026-06-22T10:30:49.337Z",
+      "manualTranslations": [
+        {
+          "zh": "孝瑜母，魏吏部尚書宋弁孫也，本魏潁川王斌之妃，為文襄所納，生孝瑜，孝瑜還第，為太妃。",
+          "literal": "Xiaoyu's mother was the granddaughter of Song Bian, Minister of Personnel under Wei. She had originally been the consort of Prince Bin of Yingchuan in Wei; Wenxiang took her into his household, and she bore Xiaoyu. When Xiaoyu returned to his residence, she became Grand Consort.",
+          "idiomatic": "Xiaoyu's mother was a granddaughter of Song Bian, Wei's Minister of Personnel. She had originally been consort to Prince Bin of Yingchuan in Wei, but Wenxiang took her into his household and she bore Xiaoyu. When Xiaoyu took up residence in his own mansion, she became Grand Consort.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "孝瑜妃，盧正山女，武成胡后之內姊也。",
+          "literal": "Xiaoyu's consort was the daughter of Lu Zhengshan and was the elder sister of Wucheng's Empress Hu.",
+          "idiomatic": "Xiaoyu's consort was a daughter of Lu Zhengshan and an elder sister of Emperor Wucheng's Empress Hu.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "孝瑜薨後，宋太妃為盧妃所譖訴，武成殺之。",
+          "literal": "After Xiaoyu died, Grand Consort Song was slanderously accused by Consort Lu, and Wucheng killed her.",
+          "idiomatic": "After Xiaoyu died, Consort Lu brought slanderous accusations against Grand Consort Song, and Wucheng had Song killed.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        }
+      ],
+      "appliedSummary": {
+        "id": "source-beiqishu-011-wikisource-212112208e8e",
+        "type": "source_omission_candidate",
+        "inserted": 3,
+        "removed": 0,
+        "delta": 3,
+        "mode": "manual-anchor-insert",
+        "manualTranslationsApplied": 3
+      }
     },
     {
       "id": "source-beiqishu-011-wikisource-6f3b12fc6d55",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0.005,
@@ -8602,12 +8637,14 @@
         "afterLocal": ""
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": "Reviewed as no-op: discrepancy is caused by upstream MediaWiki residue such as __TOC__, Category, or PD-old text; local corpus text retained.\nReopened for manual review: previous automatic residue no-op left non-residue punctuation or text unresolved."
+      "decision": "denied",
+      "notes": "Denied as raw Wikisource parse residue: the rendered chapter and local corpus continue past the 正月五日 sentence, while the raw witness was truncated and polluted by Category:PD-old. Local text retained; bracketed footnote markers in the local body and English translations were cleaned separately.",
+      "reviewedAt": "2026-06-22T10:30:49.337Z",
+      "reviewer": "source-correspondence"
     },
     {
       "id": "source-beiqishu-011-wikisource-81e23074d627",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.067,
@@ -8686,8 +8723,110 @@
         "afterLocal": "武成常使和士開與胡后對坐握槊，孝瑜諫曰：「皇后天下之母，不可與臣下接手。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Approved as a real opening omission in local Beiqishu 011. Inserted after the chapter genealogy before the existing Xiaoyu admonition paragraph; corrected local heading 康舒 to 康獻. Wikisource Beiqishu corruptions 覆缱/慕矅 were restored as 覆棋/慕斅 from the parallel Beishi source, appropriate because this Beiqishu volume is supplemented from Beishi 52.",
+      "reviewedAt": "2026-06-22T10:30:49.337Z",
+      "reviewer": "source-correspondence",
+      "appliedAt": "2026-06-22T10:30:49.337Z",
+      "manualTranslations": [
+        {
+          "zh": "河南康獻王孝瑜，字正德，文襄長子也。",
+          "literal": "Prince Kangxian of Henan, Xiaoyu, style name Zhengde, was Wenxiang's eldest son.",
+          "idiomatic": "Prince Xiaoyu of Henan, posthumously Prince Kangxian, style name Zhengde, was Wenxiang's eldest son.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "初封河南郡公，齊受禪，進爵為王。",
+          "literal": "He was first enfeoffed as Duke of Henan Commandery; when Qi received the abdication, his title was advanced to prince.",
+          "idiomatic": "He was first made Duke of Henan Commandery. When Qi received the abdication, he was promoted to prince.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "歷位中書令、司州牧。",
+          "literal": "He successively held the posts of Director of the Secretariat and Governor of Si Province.",
+          "idiomatic": "He later served as Director of the Secretariat and Governor of Si Province.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "初，孝瑜養於神武宮中，與武成同年相愛。",
+          "literal": "At first Xiaoyu was raised in Shenwu's palace; he and Wucheng were the same age and loved each other.",
+          "idiomatic": "Xiaoyu was initially raised in Shenwu's palace. He and Wucheng were the same age and were deeply attached to one another.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "將誅楊愔等，孝瑜預其謀。",
+          "literal": "When Yang Yin and the others were about to be executed, Xiaoyu took part in the plot.",
+          "idiomatic": "When the plot was made to kill Yang Yin and the others, Xiaoyu was involved in it.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "及武成即位，禮遇特隆。",
+          "literal": "When Wucheng came to the throne, the courtesy and treatment he gave Xiaoyu were especially generous.",
+          "idiomatic": "After Wucheng ascended the throne, he treated Xiaoyu with exceptional honor.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "帝在晉陽，手勑之曰：「吾飲汾清二盃，勸汝於鄴酌兩盃。」",
+          "literal": "While the emperor was at Jinyang, he wrote him an edict in his own hand, saying, \"I have drunk two cups of Fenqing; I urge you in Ye to pour two cups too.\"",
+          "idiomatic": "While in Jinyang, the emperor sent him a handwritten edict: \"I have drunk two cups of Fenqing; you should pour two cups in Ye as well.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "其親愛如此。",
+          "literal": "Their intimacy and affection were like this.",
+          "idiomatic": "Such was the affection between them.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "孝瑜容貌魁偉，精彩雄毅，謙慎寬厚，兼愛文學，讀書敏速，十行俱下，覆棋不失一道。",
+          "literal": "Xiaoyu's appearance was imposing and tall, his spirit bold and resolute; he was modest, cautious, generous, and also loved literature. He read swiftly, taking in ten lines at once, and when replaying a game never missed a single move.",
+          "idiomatic": "Xiaoyu was tall and imposing, with a bold, spirited bearing. Modest, cautious, and generous, he loved literature, read with exceptional speed, taking in ten lines at a glance, and when replaying a game never lost track of a single move.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "初，文襄於鄴東起山池遊觀，時俗眩之。",
+          "literal": "At first Wenxiang built hills, pools, and pleasure grounds east of Ye, and the fashion dazzled people at the time.",
+          "idiomatic": "When Wenxiang first built ornamental hills and pools for recreation east of Ye, the fashion dazzled the age.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "孝瑜遂於第作水堂、龍舟，植幡矟於舟上，數集諸弟宴射為樂。",
+          "literal": "Xiaoyu thereupon built a water hall and dragon boat at his residence, planted banners and spears on the boat, and several times gathered his younger brothers for feasting and archery as amusement.",
+          "idiomatic": "Xiaoyu followed by building a water hall and dragon boat at his mansion, fitting the vessel with banners and spears and often gathering his brothers there for feasts and archery.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "武成幸其第，見而悅之，故盛興後園之玩，於是貴賤慕斅，處處營造。",
+          "literal": "Wucheng visited his residence, saw it, and was pleased by it; therefore amusements in rear gardens flourished greatly, and high and low alike emulated them, constructing them everywhere.",
+          "idiomatic": "When Wucheng visited Xiaoyu's mansion and liked what he saw, rear-garden amusements became all the rage. High and low alike rushed to imitate them, building such displays everywhere.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        }
+      ],
+      "appliedSummary": {
+        "id": "source-beiqishu-011-wikisource-81e23074d627",
+        "type": "source_omission_candidate",
+        "inserted": 12,
+        "removed": 0,
+        "delta": 12,
+        "mode": "manual-anchor-insert",
+        "manualTranslationsApplied": 12,
+        "additionalFixes": [
+          "heading 河南康舒王孝瑜 -> 河南康獻王孝瑜",
+          "body footnote markers removed"
+        ]
+      }
     },
     {
       "id": "source-beiqishu-012-wikisource-000cdd6ce03a",
@@ -18564,5 +18703,5 @@
       "reviewer": "repair-source-queue-patterns"
     }
   ],
-  "updatedAt": "2026-06-22T10:16:03.061Z"
+  "updatedAt": "2026-06-22T10:30:49.337Z"
 }
