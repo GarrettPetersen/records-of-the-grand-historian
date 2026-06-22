@@ -1745,6 +1745,34 @@ const CONTEXTUAL_PRIVATE_USE_REPAIRS = [
     replacement: '如鞹弩',
     markerRe: /如郭弩/u,
   },
+  {
+    found: '',
+    fileRe: /[/\\]mingshi[/\\]156\.json$/u,
+    textRe: /其子錦衣指揮同知/gu,
+    replacement: '其子㫤錦衣指揮同知',
+    markerRe: /其子錦衣指揮同知/u,
+  },
+  {
+    found: '',
+    fileRe: /[/\\]mingshi[/\\]195\.json$/u,
+    textRe: /王、徐文英/gu,
+    replacement: '王暐、徐文英',
+    markerRe: /王、徐文英/u,
+  },
+  {
+    found: '',
+    fileRe: /[/\\]mingshi[/\\]213\.json$/u,
+    textRe: /范皆長者/gu,
+    replacement: '范鏓皆長者',
+    markerRe: /范皆長者/u,
+  },
+  {
+    found: '',
+    fileRe: /[/\\]songshi[/\\]425\.json$/u,
+    textRe: /於時為《》/gu,
+    replacement: '於時為《夬》',
+    markerRe: /於時為《》/u,
+  },
 ];
 
 const VARIANTS = new Map([
