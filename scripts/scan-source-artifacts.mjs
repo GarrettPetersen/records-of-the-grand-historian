@@ -54,7 +54,7 @@ const SOURCE_ARTIFACT_RULES = [
     id: 'SOURCE_BROKEN_HTML_TAG',
     severity: 3,
     description: 'Broken HTML tag fragment leaked into Chinese source',
-    pattern: /\/[a-z][a-z0-9]*>/giu,
+    pattern: /(?:\/[a-z][a-z0-9]*>|\bbr>)/giu,
   },
   {
     id: 'SOURCE_HTML_TABLE_SPAN',
