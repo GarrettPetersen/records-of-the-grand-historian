@@ -1773,6 +1773,13 @@ const CONTEXTUAL_PRIVATE_USE_REPAIRS = [
     replacement: '於時為《夬》',
     markerRe: /於時為《》/u,
   },
+  {
+    found: '',
+    fileRe: /[/\\]songshi[/\\]245\.json$/u,
+    textRe: /不禾(?:)?去/gu,
+    replacement: '不𥞋',
+    markerRe: /自不禾去始/u,
+  },
 ];
 
 const VARIANTS = new Map([
