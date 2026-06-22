@@ -83,9 +83,17 @@ function repairQueueItemState(item) {
   return 'pending';
 }
 
-function loadRepairQueueProgress() {
-  const seen = new Set();
-  const totals = {
+function repairQueueSeverityKey(item) {
+  const severity = Number(item?.severity);
+  if (Number.isFinite(severity) && severity > 0) {
+    return String(Math.trunc(severity));
+  }
+  return 'unknown';
+}
+
+function createRepairQueueCounts(extra = {}) {
+  return {
+    ...extra,
     totalItems: 0,
     completedItems: 0,
     pendingItems: 0,
@@ -93,6 +101,83 @@ function loadRepairQueueProgress() {
     approvedItems: 0,
     rejectedItems: 0,
   };
+}
+
+function incrementRepairQueueCounts(counts, state) {
+  counts.totalItems++;
+  if (state === 'applied') {
+    counts.appliedItems++;
+  } else if (state === 'approved') {
+    counts.approvedItems++;
+  } else if (state === 'rejected') {
+    counts.rejectedItems++;
+  }
+}
+
+function finalizeRepairQueueCounts(counts) {
+  counts.completedItems = counts.appliedItems + counts.rejectedItems;
+  counts.pendingItems = Math.max(0, counts.totalItems - counts.completedItems);
+  counts.percentComplete = counts.totalItems > 0 ? (counts.completedItems / counts.totalItems) * 100 : 0;
+  return counts;
+}
+
+function ensureRepairQueueSeverity(counts, severity) {
+  counts.bySeverity = counts.bySeverity || {};
+  counts.bySeverity[severity] = counts.bySeverity[severity] || createRepairQueueCounts({
+    severity,
+  });
+  return counts.bySeverity[severity];
+}
+
+function ensureRepairQueueChapter(counts, item) {
+  if (!item?.book || !item?.chapter) return null;
+  counts.byChapter = counts.byChapter || {};
+  const key = `${item.book}/${item.chapter}`;
+  counts.byChapter[key] = counts.byChapter[key] || createRepairQueueCounts({
+    book: item.book,
+    chapter: item.chapter,
+    bySeverity: {},
+  });
+  return counts.byChapter[key];
+}
+
+function finalizeRepairQueueSeverityCounts(counts) {
+  for (const severityCounts of Object.values(counts.bySeverity || {})) {
+    finalizeRepairQueueCounts(severityCounts);
+  }
+}
+
+function finalizeRepairQueueChapterCounts(counts) {
+  for (const chapterCounts of Object.values(counts.byChapter || {})) {
+    finalizeRepairQueueSeverityCounts(chapterCounts);
+    finalizeRepairQueueCounts(chapterCounts);
+
+    const severityEntries = Object.entries(chapterCounts.bySeverity || {});
+    chapterCounts.highPendingItems = severityEntries
+      .filter(([severity]) => Number(severity) >= 3)
+      .reduce((sum, [, severityCounts]) => sum + (severityCounts.pendingItems || 0), 0);
+    chapterCounts.lowPendingItems = severityEntries
+      .filter(([severity]) => Number(severity) > 0 && Number(severity) < 3)
+      .reduce((sum, [, severityCounts]) => sum + (severityCounts.pendingItems || 0), 0);
+    chapterCounts.unknownPendingItems = severityEntries
+      .filter(([severity]) => severity === 'unknown')
+      .reduce((sum, [, severityCounts]) => sum + (severityCounts.pendingItems || 0), 0);
+    const pendingSeverities = severityEntries
+      .filter(([, severityCounts]) => (severityCounts.pendingItems || 0) > 0)
+      .map(([severity]) => Number(severity))
+      .filter(Number.isFinite);
+    chapterCounts.highestPendingSeverity = pendingSeverities.length > 0
+      ? Math.max(...pendingSeverities)
+      : null;
+  }
+}
+
+function loadRepairQueueProgress() {
+  const seen = new Set();
+  const totals = createRepairQueueCounts({
+    bySeverity: {},
+    byChapter: {},
+  });
   const bySource = [];
 
   for (const file of repairQueueFiles()) {
@@ -117,12 +202,9 @@ function loadRepairQueueProgress() {
       generatedAt: report.generatedAt || null,
       currentItems: currentItems.length,
       resolvedItems: Array.isArray(report.resolvedHits) ? report.resolvedHits.length : 0,
-      totalItems: 0,
-      completedItems: 0,
-      pendingItems: 0,
-      appliedItems: 0,
-      approvedItems: 0,
-      rejectedItems: 0,
+      ...createRepairQueueCounts({
+        bySeverity: {},
+      }),
     };
 
     items.forEach((item, index) => {
@@ -131,32 +213,34 @@ function loadRepairQueueProgress() {
       seen.add(key);
 
       const state = repairQueueItemState(item);
-      sourceCounts.totalItems++;
-      totals.totalItems++;
+      const severity = repairQueueSeverityKey(item);
+      const sourceSeverityCounts = ensureRepairQueueSeverity(sourceCounts, severity);
+      const totalSeverityCounts = ensureRepairQueueSeverity(totals, severity);
+      const chapterCounts = ensureRepairQueueChapter(totals, item);
+      const chapterSeverityCounts = chapterCounts
+        ? ensureRepairQueueSeverity(chapterCounts, severity)
+        : null;
 
-      if (state === 'applied') {
-        sourceCounts.appliedItems++;
-        totals.appliedItems++;
-      } else if (state === 'approved') {
-        sourceCounts.approvedItems++;
-        totals.approvedItems++;
-      } else if (state === 'rejected') {
-        sourceCounts.rejectedItems++;
-        totals.rejectedItems++;
-      }
+      incrementRepairQueueCounts(sourceCounts, state);
+      incrementRepairQueueCounts(totals, state);
+      incrementRepairQueueCounts(sourceSeverityCounts, state);
+      incrementRepairQueueCounts(totalSeverityCounts, state);
+      if (chapterCounts) incrementRepairQueueCounts(chapterCounts, state);
+      if (chapterSeverityCounts) incrementRepairQueueCounts(chapterSeverityCounts, state);
     });
 
-    sourceCounts.completedItems = sourceCounts.appliedItems + sourceCounts.rejectedItems;
-    sourceCounts.pendingItems = Math.max(0, sourceCounts.totalItems - sourceCounts.completedItems);
+    finalizeRepairQueueSeverityCounts(sourceCounts);
+    finalizeRepairQueueCounts(sourceCounts);
     bySource.push(sourceCounts);
   }
 
-  totals.completedItems = totals.appliedItems + totals.rejectedItems;
-  totals.pendingItems = Math.max(0, totals.totalItems - totals.completedItems);
+  finalizeRepairQueueSeverityCounts(totals);
+  finalizeRepairQueueChapterCounts(totals);
+  finalizeRepairQueueCounts(totals);
 
   return {
     generatedAt: new Date().toISOString(),
-    percentComplete: totals.totalItems > 0 ? (totals.completedItems / totals.totalItems) * 100 : 0,
+    percentComplete: totals.percentComplete,
     ...totals,
     sourceFiles: bySource,
   };
@@ -264,7 +348,24 @@ function getLanguageToolChapterScore(languageToolScores, bookId, chapter) {
   return languageToolScores?.books?.[bookId]?.chapters?.[chapter] || null;
 }
 
-function bookProgressFromManifest(bookId, book, languageToolScores = null) {
+function getRepairQueueChapterStats(repairQueue, bookId, chapter) {
+  return repairQueue?.byChapter?.[`${bookId}/${chapter}`] || null;
+}
+
+function effectiveChapterStatus(baseStatus, repairQueueChapter) {
+  if (baseStatus === 'red') return 'red';
+  if (repairQueueChapter) {
+    const highPending = Number(repairQueueChapter.highPendingItems || 0);
+    const pending = Number(repairQueueChapter.pendingItems || 0);
+    const highestSeverity = Number(repairQueueChapter.highestPendingSeverity || 0);
+    if (highPending > 0 || highestSeverity >= 3) return 'red';
+    if (pending > 0) return 'yellow';
+  }
+  if (baseStatus === 'yellow') return 'yellow';
+  return baseStatus || 'gray';
+}
+
+function bookProgressFromManifest(bookId, book, languageToolScores = null, repairQueue = null) {
   const bookProgress = {
     name: book.name,
     chinese: book.chinese,
@@ -276,12 +377,15 @@ function bookProgressFromManifest(bookId, book, languageToolScores = null) {
 
   for (const chapter of book.chapters) {
     const languageTool = getLanguageToolChapterScore(languageToolScores, bookId, chapter.chapter);
+    const repairQueueChapter = getRepairQueueChapterStats(repairQueue, bookId, chapter.chapter);
     const translationComplete = (chapter.sentenceCount || 0) > 0 && (chapter.translatedCount || 0) >= (chapter.sentenceCount || 0);
     const status = languageTool?.status || 'gray';
+    const displayStatus = effectiveChapterStatus(status, repairQueueChapter);
     bookProgress.chapters.push({
       chapter: chapter.chapter,
       title: chapter.title,
       status: status,
+      displayStatus,
       translationComplete,
       languageTool: languageTool ? {
         status: languageTool.status,
@@ -296,7 +400,21 @@ function bookProgressFromManifest(bookId, book, languageToolScores = null) {
       characterCount: chapter.characterCount ?? 0,
       translatedCharacterCount: chapter.translatedCharacterCount ?? 0,
       qualityScore: chapter.qualityScore,
-      reviewed: chapter.reviewed ?? false
+      reviewed: chapter.reviewed ?? false,
+      repairQueue: repairQueueChapter ? {
+        totalItems: repairQueueChapter.totalItems,
+        completedItems: repairQueueChapter.completedItems,
+        pendingItems: repairQueueChapter.pendingItems,
+        appliedItems: repairQueueChapter.appliedItems,
+        approvedItems: repairQueueChapter.approvedItems,
+        rejectedItems: repairQueueChapter.rejectedItems,
+        percentComplete: repairQueueChapter.percentComplete,
+        highPendingItems: repairQueueChapter.highPendingItems,
+        lowPendingItems: repairQueueChapter.lowPendingItems,
+        unknownPendingItems: repairQueueChapter.unknownPendingItems,
+        highestPendingSeverity: repairQueueChapter.highestPendingSeverity,
+        bySeverity: repairQueueChapter.bySeverity,
+      } : null
     });
   }
 
@@ -308,7 +426,8 @@ function buildProgressSummary(books) {
   const isTranslationComplete = (chapter) => (chapter.sentenceCount || 0) > 0 && (chapter.translatedCount || 0) >= (chapter.sentenceCount || 0);
   const completedChapters = chapters.filter(isTranslationComplete).length;
   const cleanup = chapters.reduce((counts, chapter) => {
-    counts[chapter.status] = (counts[chapter.status] || 0) + 1;
+    const status = chapter.displayStatus || chapter.status || 'gray';
+    counts[status] = (counts[status] || 0) + 1;
     if (chapter.languageTool) counts.checkedChapters++;
     return counts;
   }, { gray: 0, yellow: 0, red: 0, green: 0, checkedChapters: 0 });
@@ -358,7 +477,7 @@ function generateProgressData() {
 
   for (const bookId in manifest.books) {
     const book = manifest.books[bookId];
-    progress.books[bookId] = bookProgressFromManifest(bookId, book, languageToolScores);
+    progress.books[bookId] = bookProgressFromManifest(bookId, book, languageToolScores, progress.repairQueue);
   }
 
   progress.summary = buildProgressSummary(progress.books);
@@ -406,7 +525,7 @@ function mergeProgressSingleBook(bookId) {
   } : null;
   progress.repairQueue = loadRepairQueueProgress();
   progress.books = progress.books || {};
-  progress.books[bookId] = bookProgressFromManifest(bookId, manifest.books[bookId], languageToolScores);
+  progress.books[bookId] = bookProgressFromManifest(bookId, manifest.books[bookId], languageToolScores, progress.repairQueue);
   progress.summary = buildProgressSummary(progress.books);
   writeProgress(progress);
   console.log(`Merged progress for book: ${bookId}`);

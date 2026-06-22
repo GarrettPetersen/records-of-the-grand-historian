@@ -57,7 +57,9 @@
             padding: 0.5rem;
             border-radius: 4px;
             font-size: 0.8rem;
-            white-space: nowrap;
+            white-space: pre-line;
+            min-width: 18rem;
+            max-width: min(26rem, 90vw);
             z-index: 100;
             pointer-events: none;
             margin-bottom: 5px;
@@ -260,6 +262,70 @@
             background: var(--primary-color);
         }
 
+        .repair-severity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .repair-severity-card {
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+            padding: 0.9rem 1rem;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .repair-severity-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.75rem;
+            align-items: baseline;
+            margin-bottom: 0.65rem;
+        }
+
+        .repair-severity-label {
+            color: var(--primary-color);
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .repair-severity-percent {
+            color: var(--text-color);
+            font-size: 0.9rem;
+            font-weight: 700;
+            opacity: 0.82;
+        }
+
+        .repair-severity-track {
+            background: #d3d3d3;
+            border-radius: 999px;
+            height: 0.8rem;
+            overflow: hidden;
+        }
+
+        .repair-severity-fill {
+            background: #ffd700;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .repair-severity-fill.high {
+            background: #dc3545;
+        }
+
+        .repair-severity-fill.unknown {
+            background: #6c757d;
+        }
+
+        .repair-severity-note {
+            color: var(--text-color);
+            font-size: 0.82rem;
+            line-height: 1.35;
+            margin-top: 0.65rem;
+            opacity: 0.78;
+        }
+
         .overall-metrics-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -345,6 +411,7 @@
                     <div class="overall-metric-card" id="repair-progress-pending"></div>
                     <div class="overall-metric-card" id="repair-progress-sources"></div>
                 </div>
+                <div class="repair-severity-grid" id="repair-severity-grid"></div>
             </section>
 
             <div class="progress-legend">
@@ -354,11 +421,11 @@
                 </div>
                 <div class="legend-item">
                     <div class="legend-square yellow"></div>
-                    <span>Moderate Issue Density</span>
+                    <span>Low-Severity Repair or Moderate Cleanup</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-square red"></div>
-                    <span>High Issue Density</span>
+                    <span>High-Severity Repair or High Cleanup</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-square green"></div>
@@ -415,7 +482,8 @@
             };
 
             bookData.chapters.forEach(chapter => {
-                stats[chapter.status]++;
+                const status = effectiveChapterStatus(chapter);
+                stats[status] = (stats[status] || 0) + 1;
             });
             const chaptersChecked = bookData.chapters.filter(chapter => chapter.languageTool).length;
             const sentenceTotal = bookData.chapters.reduce((sum, chapter) => sum + (chapter.sentenceCount || 0), 0);
@@ -462,15 +530,18 @@
 
             bookData.chapters.forEach(chapter => {
                 const square = document.createElement('div');
-                square.className = `progress-square ${chapter.status}`;
+                const status = effectiveChapterStatus(chapter);
+                square.className = `progress-square ${status}`;
                 const reviewLine = chapter.reviewed ? 'Editorial review: done' : 'Editorial review: pending';
                 const lt = chapter.languageTool;
+                const repairLine = repairQueueTooltipLine(chapter.repairQueue);
                 const scoreLine = lt
                     ? `LanguageTool: ${lt.matchCount.toLocaleString()} issues, ${Number(lt.matchesPer1000Words || 0).toFixed(1)}/1k words`
                     : 'LanguageTool: not checked';
                 const topIssue = lt?.topMatches?.[0]?.message ? `Top issue: ${lt.topMatches[0].message}` : '';
                 square.setAttribute('data-tooltip', [
                     `${chapter.chapter}: ${chapter.title.en || chapter.title.zh}`,
+                    repairLine,
                     scoreLine,
                     lt ? `Words checked: ${lt.wordCount.toLocaleString()}` : '',
                     reviewLine,
@@ -491,6 +562,41 @@
             return section;
         }
 
+        function effectiveChapterStatus(chapter) {
+            if (chapter.displayStatus) {
+                return chapter.displayStatus;
+            }
+            if (chapter.status === 'red') return 'red';
+            const repairQueue = chapter.repairQueue || {};
+            const highPending = Number(repairQueue.highPendingItems || 0);
+            const pending = Number(repairQueue.pendingItems || 0);
+            const highestSeverity = Number(repairQueue.highestPendingSeverity || 0);
+            if (highPending > 0 || highestSeverity >= 3) return 'red';
+            if (pending > 0) return 'yellow';
+            if (chapter.status === 'yellow') return 'yellow';
+            return chapter.status || 'gray';
+        }
+
+        function repairQueueTooltipLine(repairQueue) {
+            if (!repairQueue || Number(repairQueue.totalItems || 0) === 0) {
+                return 'Repair queue: no items';
+            }
+            const pending = Number(repairQueue.pendingItems || 0);
+            const high = Number(repairQueue.highPendingItems || 0);
+            const low = Number(repairQueue.lowPendingItems || 0);
+            const completed = Number(repairQueue.completedItems || 0);
+            const total = Number(repairQueue.totalItems || 0);
+            if (pending === 0) {
+                return `Repair queue: ${completed.toLocaleString()} / ${total.toLocaleString()} worked through`;
+            }
+            const parts = [];
+            if (high > 0) parts.push(`${high.toLocaleString()} high`);
+            if (low > 0) parts.push(`${low.toLocaleString()} low`);
+            const classified = high + low;
+            if (pending > classified) parts.push(`${(pending - classified).toLocaleString()} unclassified`);
+            return `Repair queue: ${pending.toLocaleString()} pending (${parts.join(', ')})`;
+        }
+
         function averageLanguageToolScore(chapters) {
             const scores = (chapters || [])
                 .map(chapter => chapter.languageTool?.matchesPer1000Words)
@@ -503,7 +609,8 @@
             const chapters = Object.values(data.books).flatMap(book => book.chapters || []);
             const chapterTotal = chapters.length;
             const statusCounts = chapters.reduce((counts, chapter) => {
-                counts[chapter.status] = (counts[chapter.status] || 0) + 1;
+                const status = effectiveChapterStatus(chapter);
+                counts[status] = (counts[status] || 0) + 1;
                 if (chapter.languageTool) counts.checked++;
                 return counts;
             }, { gray: 0, yellow: 0, red: 0, green: 0, checked: 0 });
@@ -604,6 +711,75 @@
                 <div class="overall-metric-value">${activeSources.length.toLocaleString()}</div>
                 <div class="overall-metric-note">Last queue scan: ${formattedDate}.</div>
             `;
+            renderRepairSeverityProgress(queue);
+        }
+
+        function repairSeverityMeta(severity) {
+            const level = Number(severity);
+            if (Number.isFinite(level) && level >= 3) {
+                return {
+                    className: 'high',
+                    label: `Severity ${severity}: high`,
+                    note: 'Outstanding items mark chapters red.'
+                };
+            }
+            if (Number.isFinite(level) && level > 0) {
+                return {
+                    className: 'low',
+                    label: `Severity ${severity}: low`,
+                    note: 'Outstanding items mark chapters yellow.'
+                };
+            }
+            return {
+                className: 'unknown',
+                label: 'Unclassified severity',
+                note: 'Outstanding items mark chapters yellow unless paired with high severity.'
+            };
+        }
+
+        function renderRepairSeverityProgress(queue) {
+            const container = document.getElementById('repair-severity-grid');
+            const entries = Object.entries(queue.bySeverity || {})
+                .sort(([a], [b]) => {
+                    const aNumber = Number(a);
+                    const bNumber = Number(b);
+                    if (Number.isFinite(aNumber) && Number.isFinite(bNumber)) return bNumber - aNumber;
+                    return String(a).localeCompare(String(b));
+                });
+
+            if (entries.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            container.innerHTML = entries.map(([severity, counts]) => {
+                const meta = repairSeverityMeta(severity);
+                const total = Number(counts.totalItems || 0);
+                const completed = Number(counts.completedItems || 0);
+                const pending = Number(counts.pendingItems || 0);
+                const applied = Number(counts.appliedItems || 0);
+                const rejected = Number(counts.rejectedItems || 0);
+                const approved = Number(counts.approvedItems || 0);
+                const percent = total > 0 ? (completed / total) * 100 : 0;
+                const displayPercent = `${percent.toFixed(1)}%`;
+                return `
+                    <div class="repair-severity-card">
+                        <div class="repair-severity-header">
+                            <div class="repair-severity-label">${meta.label}</div>
+                            <div class="repair-severity-percent">${displayPercent}</div>
+                        </div>
+                        <div class="repair-severity-track" aria-label="${meta.label} repair progress">
+                            <div class="repair-severity-fill ${meta.className}" style="width: ${displayPercent};"></div>
+                        </div>
+                        <div class="repair-severity-note">
+                            ${completed.toLocaleString()} / ${total.toLocaleString()} worked through;
+                            ${pending.toLocaleString()} pending.
+                            Applied ${applied.toLocaleString()}, rejected ${rejected.toLocaleString()}, approved not included ${approved.toLocaleString()}.
+                            ${meta.note}
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
         function formatProgress(translated, total, label) {
