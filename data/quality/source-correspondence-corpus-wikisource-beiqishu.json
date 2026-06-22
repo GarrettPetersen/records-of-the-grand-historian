@@ -16361,7 +16361,7 @@
     },
     {
       "id": "source-beiqishu-032-wikisource-8235ac5e2fc6",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "beiqishu",
@@ -16396,8 +16396,10 @@
         "afterLocal": ""
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: rendered Wikisource includes this Zhonghua Shuju collation note as footnote 1 after the final Wang Lin sentence. The local corpus keeps the standard edition note sentence, so it should not be deleted.",
+      "reviewer": "codex-source-repair",
+      "reviewedAt": "2026-06-22T12:56:48.000Z"
     },
     {
       "id": "source-beiqishu-032-wikisource-a1a2336689fa",
@@ -16593,7 +16595,7 @@
     },
     {
       "id": "source-beiqishu-033-wikisource-5bceb96801d5",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.636,
@@ -16636,8 +16638,10 @@
         "afterLocal": "之才於和士開、陸令萱母子曲盡卑狎，二家苦疾，救護百端。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: rendered Wikisource preserves the linked era name 武平元年 before 重除尚書左僕射, and the leading close quote belongs to the previous local sentence. The local corpus already has the correct text.",
+      "reviewer": "codex-source-repair",
+      "reviewedAt": "2026-06-22T12:56:48.000Z"
     },
     {
       "id": "source-beiqishu-033-wikisource-604d66efd20d",
@@ -16691,7 +16695,7 @@
     },
     {
       "id": "source-beiqishu-033-wikisource-767ed0e73ead",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -16734,12 +16738,14 @@
         "afterLocal": "以方智為太子，授王僧辯大司馬。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: rendered Wikisource preserves 改承聖四年為天成元年. The queued text dropped linked era-name text, producing the malformed 改為.",
+      "reviewer": "codex-source-repair",
+      "reviewedAt": "2026-06-22T12:56:48.000Z"
     },
     {
       "id": "source-beiqishu-033-wikisource-81935295edf8",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.714,
@@ -16782,8 +16788,10 @@
         "afterLocal": "從祖謇子踐啟求之才還宅。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: rendered Wikisource preserves the linked era name 孝昌二年 before 至洛. The local corpus already has the correct text.",
+      "reviewer": "codex-source-repair",
+      "reviewedAt": "2026-06-22T12:56:48.000Z"
     },
     {
       "id": "source-beiqishu-033-wikisource-82b3415f9675",
@@ -20789,5 +20797,5 @@
       "reviewer": "repair-source-queue-patterns"
     }
   ],
-  "updatedAt": "2026-06-22T12:50:01.267Z"
+  "updatedAt": "2026-06-22T12:56:48.000Z"
 }
