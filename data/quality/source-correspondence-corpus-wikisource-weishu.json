@@ -29825,7 +29825,7 @@
     },
     {
       "id": "source-weishu-020-wikisource-185b701dde79",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -29849,12 +29849,40 @@
         "afterLocal": "子石侯，襲。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms omitted Guangyang Wang Jian biography after Yuan Fu.",
+      "reviewedAt": "2026-06-22T22:42:38.105Z",
+      "reviewer": "Codex",
+      "manualTranslations": [
+        {
+          "zh": "廣陽王建，真君三年封楚王，後改封廣陽王。",
+          "literal": "Jian, Prince of Guangyang, was enfeoffed as Prince of Chu in the third year of Zhenjun and was later re-enfeoffed as Prince of Guangyang.",
+          "idiomatic": "Jian, Prince of Guangyang, was enfeoffed as Prince of Chu in the third year of Zhenjun and was later re-enfeoffed as Prince of Guangyang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "薨，諡曰簡王。",
+          "literal": "He died and received the posthumous title Prince Jian.",
+          "idiomatic": "He died and received the posthumous title Prince Jian.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T22:43:17.112Z",
+      "appliedSummary": {
+        "id": "source-weishu-020-wikisource-185b701dde79",
+        "type": "source_omission_candidate",
+        "start": 263,
+        "removed": 0,
+        "inserted": 2,
+        "delta": 2,
+        "manualTranslationsApplied": 2
+      }
     },
     {
       "id": "source-weishu-020-wikisource-3088b14c074a",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.895,
@@ -29897,12 +29925,14 @@
         "afterLocal": "所謂天子有道，守在四夷者也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: source/local difference is only a local footnote marker; Chinese base text agrees with raw Wikisource.",
+      "reviewedAt": "2026-06-22T22:42:38.105Z",
+      "reviewer": "Codex"
     },
     {
       "id": "source-weishu-020-wikisource-34272ebbef2e",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.013,
@@ -29915,7 +29945,7 @@
         "startIndex": 0,
         "endIndex": 15,
         "count": 16,
-        "text": "，延和三年二月「遣使人納吳提妹為夫人，又進為左昭儀。」卷一四望都公頹傳稱：「使迎左昭儀於蠕蠕。」茹茹主吳提妹為魏左昭儀，歷見記載，「閭」是茹茹姓木骨閭的改姓。「石」乃「左」之訛。「閭左昭儀」連讀。今改正。其小兒、猫兒、真、虎頭、龍頭並闕母氏，皆早薨，無傳。晉王伏羅，真君三年封，加車騎大將軍。後督高平、涼州諸軍討吐谷渾慕利延。軍至樂都，謂諸將曰：「若從正道，恐軍聲先振，必當遠遁。若潛軍出其非意，此鄧艾擒蜀之計也。」諸將咸難之，伏羅曰：「夫將軍，制勝萬里，擇利，專之可也。」遂間道行。至大母橋，慕利延眾驚奔白蘭，慕利延兄子拾寅走河曲，斬首五千餘級，降其一萬餘落。八年薨。無子，國除。",
+        "text": "太武皇帝十一男：賀皇后生景穆皇帝。越椒房生晉王伏羅。舒椒房生東平王翰。弗椒房生臨淮王譚。伏椒房生楚王建。閭左昭儀生南安王余。其小兒、猫兒、真、虎頭、龍頭並闕母氏，皆早薨，無傳。晉王伏羅，真君三年封，加車騎大將軍。後督高平、涼州諸軍討吐谷渾慕利延。軍至樂都，謂諸將曰：「若從正道，恐軍聲先振，必當遠遁。若潛軍出其非意，此鄧艾擒蜀之計也。」諸將咸難之，伏羅曰：「夫將軍，制勝萬里，擇利，專之可也。」遂間道行。至大母橋，慕利延眾驚奔白蘭，慕利延兄子拾寅走河曲，斬首五千餘級，降其一萬餘落。八年薨。無子，國除。",
         "ids": [],
         "locations": []
       },
@@ -29945,12 +29975,138 @@
         "afterLocal": "東平王翰，真君三年封秦王，拜侍中、中軍大將軍，參典都曹事。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms the opening genealogy and Jin Wang Fuluo biography; removed parser-intruded collation note text and replaced the artificial heading list with the true source passage.",
+      "reviewedAt": "2026-06-22T22:42:38.105Z",
+      "reviewer": "Codex",
+      "manualTranslations": [
+        {
+          "zh": "太武皇帝十一男：賀皇后生景穆皇帝。",
+          "literal": "Emperor Taiwu had eleven sons: Empress He gave birth to Emperor Jingmu.",
+          "idiomatic": "Emperor Taiwu had eleven sons: Empress He gave birth to Emperor Jingmu.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "越椒房生晉王伏羅。",
+          "literal": "Consort Yue of the Pepper Chamber gave birth to Fuluo, Prince of Jin.",
+          "idiomatic": "Consort Yue of the Pepper Chamber gave birth to Fuluo, Prince of Jin.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "舒椒房生東平王翰。",
+          "literal": "Consort Shu of the Pepper Chamber gave birth to Han, Prince of Dongping.",
+          "idiomatic": "Consort Shu of the Pepper Chamber gave birth to Han, Prince of Dongping.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "弗椒房生臨淮王譚。",
+          "literal": "Consort Fu of the Pepper Chamber gave birth to Tan, Prince of Linhuai.",
+          "idiomatic": "Consort Fu of the Pepper Chamber gave birth to Tan, Prince of Linhuai.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "伏椒房生楚王建。",
+          "literal": "Consort Fu of the Pepper Chamber gave birth to Jian, Prince of Chu.",
+          "idiomatic": "Consort Fu of the Pepper Chamber gave birth to Jian, Prince of Chu.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "閭左昭儀生南安王余。",
+          "literal": "Left Zhaoyi Lu gave birth to Yu, Prince of Nan'an.",
+          "idiomatic": "Left Zhaoyi Lu gave birth to Yu, Prince of Nan'an.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "其小兒、猫兒、真、虎頭、龍頭並闕母氏，皆早薨，無傳。",
+          "literal": "As for Xiao'er, Mao'er, Zhen, Hutou, and Longtou, their mothers' clans are all missing; they all died young and have no biographies.",
+          "idiomatic": "As for Xiao'er, Mao'er, Zhen, Hutou, and Longtou, their mothers' clans are all missing; they all died young and have no biographies.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "晉王伏羅，真君三年封，加車騎大將軍。",
+          "literal": "Fuluo, Prince of Jin, was enfeoffed in the third year of Zhenjun and given the additional title Grand General of Chariots and Cavalry.",
+          "idiomatic": "Fuluo, Prince of Jin, was enfeoffed in the third year of Zhenjun and given the additional title Grand General of Chariots and Cavalry.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "後督高平、涼州諸軍討吐谷渾慕利延。",
+          "literal": "Later he commanded the armies of Gaoping and Liangzhou in a campaign against Muliyan of the Tuyuhun.",
+          "idiomatic": "Later he commanded the armies of Gaoping and Liangzhou in a campaign against Muliyan of the Tuyuhun.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "軍至樂都，謂諸將曰：「若從正道，恐軍聲先振，必當遠遁。",
+          "literal": "When the army reached Ledu, he said to the generals, \"If we take the main road, I fear the army's reputation will arrive first and he will certainly flee far away.",
+          "idiomatic": "When the army reached Ledu, he said to the generals, \"If we take the main road, I fear the army's reputation will arrive first and he will certainly flee far away.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "若潛軍出其非意，此鄧艾擒蜀之計也。」",
+          "literal": "If we move secretly and emerge where he does not expect us, this will be the strategy by which Deng Ai captured Shu.\"",
+          "idiomatic": "If we move secretly and emerge where he does not expect us, this will be the strategy by which Deng Ai captured Shu.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "諸將咸難之，伏羅曰：「夫將軍，制勝萬里，擇利，專之可也。」",
+          "literal": "The generals all considered this difficult, but Fuluo said, \"A general wins victory across ten thousand li; where advantage is chosen, he may act on his own authority.\"",
+          "idiomatic": "The generals all considered this difficult, but Fuluo said, \"A general wins victory across ten thousand li; where advantage is chosen, he may act on his own authority.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "遂間道行。",
+          "literal": "He then advanced by a hidden route.",
+          "idiomatic": "He then advanced by a hidden route.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "至大母橋，慕利延眾驚奔白蘭，慕利延兄子拾寅走河曲，斬首五千餘級，降其一萬餘落。",
+          "literal": "When he reached Damu Bridge, Muliyan's troops fled in alarm to Bailan, and Muliyan's elder brother's son Shiyin fled to Hequ. Fuluo took more than five thousand heads and received the surrender of more than ten thousand encampments.",
+          "idiomatic": "When he reached Damu Bridge, Muliyan's troops fled in alarm to Bailan, and Muliyan's elder brother's son Shiyin fled to Hequ. Fuluo took more than five thousand heads and received the surrender of more than ten thousand encampments.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "八年薨。",
+          "literal": "He died in the eighth year.",
+          "idiomatic": "He died in the eighth year.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "無子，國除。",
+          "literal": "He had no sons, and the principality was abolished.",
+          "idiomatic": "He had no sons, and the principality was abolished.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T22:43:17.112Z",
+      "appliedSummary": {
+        "id": "source-weishu-020-wikisource-34272ebbef2e",
+        "type": "source_omission_candidate",
+        "start": 0,
+        "removed": 1,
+        "inserted": 16,
+        "delta": 15,
+        "manualTranslationsApplied": 16
+      }
     },
     {
       "id": "source-weishu-020-wikisource-3a750a059f6d",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.778,
@@ -29993,12 +30149,14 @@
         "afterLocal": "聞刺史楊津疑其有異志，乃止於州南佛寺。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: source/local difference is only a local footnote marker; Chinese base text agrees with raw Wikisource.",
+      "reviewedAt": "2026-06-22T22:42:38.105Z",
+      "reviewer": "Codex"
     },
     {
       "id": "source-weishu-020-wikisource-65b884733d0c",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -30041,12 +30199,14 @@
         "afterLocal": "元顥入洛，授孚東道行臺、彭城郡王，孚封顥逆書送朝廷，天子嘉之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: source/local difference is only a local footnote marker; Chinese base text agrees with raw Wikisource.",
+      "reviewedAt": "2026-06-22T22:42:38.105Z",
+      "reviewer": "Codex"
     },
     {
       "id": "source-weishu-020-wikisource-7d0a1cce9642",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.895,
@@ -30089,12 +30249,14 @@
         "afterLocal": "既而鮮于脩禮叛於定州，杜洛周反於幽州，其餘降戶，猶在恒州，遂欲推深為主。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: source/local difference is only a local footnote marker; Chinese base text agrees with raw Wikisource.",
+      "reviewedAt": "2026-06-22T22:42:38.105Z",
+      "reviewer": "Codex"
     },
     {
       "id": "source-weishu-020-wikisource-83c5e0a52df4",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -30137,12 +30299,14 @@
         "afterLocal": "王公猶自一心，已下何敢二意。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: source/local difference is only a local footnote marker; Chinese base text agrees with raw Wikisource.",
+      "reviewedAt": "2026-06-22T22:42:38.105Z",
+      "reviewer": "Codex"
     },
     {
       "id": "source-weishu-020-wikisource-89bdfc8ce4d0",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -30166,12 +30330,89 @@
         "afterLocal": "湛弟瑾，尚書祠部郎。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms omitted Yuan Zhan biography before Zhan younger brother Jin.",
+      "reviewedAt": "2026-06-22T22:42:38.105Z",
+      "reviewer": "Codex",
+      "manualTranslations": [
+        {
+          "zh": "子湛，字士深，少有風尚。",
+          "literal": "His son Zhan, styled Shishen, had poise and refinement from youth.",
+          "idiomatic": "His son Zhan, styled Shishen, had poise and refinement from youth.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "莊帝初，襲封。",
+          "literal": "At the beginning of Emperor Zhuang's reign he inherited the enfeoffment.",
+          "idiomatic": "At the beginning of Emperor Zhuang's reign he inherited the enfeoffment.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "孝靜初，累遷冀州刺史，所在聚斂，風政不立。",
+          "literal": "At the beginning of Emperor Xiaojing's reign he rose through successive posts to Inspector of Ji Province, but wherever he served he amassed wealth, and sound governance was not established.",
+          "idiomatic": "At the beginning of Emperor Xiaojing's reign he rose through successive posts to Inspector of Ji Province, but wherever he served he amassed wealth, and sound governance was not established.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "入為侍中，後行司州牧。",
+          "literal": "He entered court as Attendant-in-Chief and later acted as Governor of Si Province.",
+          "idiomatic": "He entered court as Attendant-in-Chief and later acted as Governor of Si Province.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "時齊獻武王作相，以湛頗有器望，啟超拜太尉公。",
+          "literal": "At the time, when King Xianwu of Qi served as minister, he considered Zhan to have considerable capacity and reputation and petitioned that he be promoted out of turn to Grand Commandant.",
+          "idiomatic": "At the time, when King Xianwu of Qi served as minister, he considered Zhan to have considerable capacity and reputation and petitioned that he be promoted out of turn to Grand Commandant.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "薨，贈假黃鉞、大司馬、尚書令，諡曰文獻。",
+          "literal": "When Zhan died, he was posthumously granted the Yellow Axe, appointed Grand Marshal and Minister of the Secretariat, and given the posthumous title Wenxian.",
+          "idiomatic": "When Zhan died, he was posthumously granted the Yellow Axe, appointed Grand Marshal and Minister of the Secretariat, and given the posthumous title Wenxian.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "初，湛名位漸重，留連聲色，始以婢紫光遺尚書郎中宋遊道，後乃私耽，出為冀州，竊而攜去。",
+          "literal": "Earlier, as Zhan's rank and reputation gradually grew, he lingered over music and women. At first he gave the maid Ziguang to Secretariat Gentleman Song Youdao, but later became privately infatuated with her; when he went out to Ji Province, he secretly took her away with him.",
+          "idiomatic": "Earlier, as Zhan's rank and reputation gradually grew, he lingered over music and women. At first he gave the maid Ziguang to Secretariat Gentleman Song Youdao, but later became privately infatuated with her; when he went out to Ji Province, he secretly took her away with him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "遊道大致紛紛，乃云紫光湛父所寵，湛母遺己，將致公文。",
+          "literal": "Youdao caused a great uproar, saying that Ziguang had been favored by Zhan's father and that Zhan's mother had given her to him, and he was about to submit an official complaint.",
+          "idiomatic": "Youdao caused a great uproar, saying that Ziguang had been favored by Zhan's father and that Zhan's mother had given her to him, and he was about to submit an official complaint.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "久乃停息，論者兩非之。",
+          "literal": "Only after a long time did the matter subside, and critics found fault with both men.",
+          "idiomatic": "Only after a long time did the matter subside, and critics found fault with both men.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T22:43:17.112Z",
+      "appliedSummary": {
+        "id": "source-weishu-020-wikisource-89bdfc8ce4d0",
+        "type": "source_omission_candidate",
+        "start": 416,
+        "removed": 0,
+        "inserted": 9,
+        "delta": 9,
+        "manualTranslationsApplied": 9
+      }
     },
     {
       "id": "source-weishu-020-wikisource-955ba1c5081a",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.082,
@@ -30184,29 +30425,11 @@
         "startIndex": 24,
         "endIndex": 32,
         "count": 9,
-        "text": "，謀反，司馬段太陽討斬之，傳首京師。臨淮王譚，真君三年封燕王，拜侍中，參都曹事。後改封臨淮王。世祖南討，授中軍大將軍。先是，劉義隆以鄒山險固，有榮胡家，乃積糧為守禦之備。譚率眾攻之，獲米三十萬以供軍儲。義隆恃淮之阻，素不設備。譚造筏數十，潛軍而濟，賊眾驚潰，遂斬其將胡崇，賊首萬餘級。薨，諡宣王。",
+        "text": "臨淮王譚，真君三年封燕王，拜侍中，參都曹事。後改封臨淮王。世祖南討，授中軍大將軍。先是，劉義隆以鄒山險固，有榮胡家，乃積糧為守禦之備。譚率眾攻之，獲米三十萬以供軍儲。義隆恃淮之阻，素不設備。譚造筏數十，潛軍而濟，賊眾驚潰，遂斬其將胡崇，賊首萬餘級。薨，諡宣王。",
         "ids": [],
         "locations": []
       },
-      "localRange": {
-        "startIndex": 9,
-        "endIndex": 9,
-        "count": 1,
-        "text": "皇興元年，謀反，司馬段太陽討斬之，傳首京師。",
-        "ids": [
-          "s0010"
-        ],
-        "locations": [
-          {
-            "blockIndex": 2,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 2,
-            "field": "zh",
-            "id": "s0010"
-          }
-        ]
-      },
+      "localRange": null,
       "context": {
         "beforeSource": "顯祖踐阼，拜長安鎮都大將。",
         "afterSource": "子提，襲。",
@@ -30214,12 +30437,82 @@
         "afterLocal": "子提，襲。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms omitted Linhuai Wang Tan biography after Daofu; omitted leading text was repaired to exclude the already-present Huangxing sentence.",
+      "reviewedAt": "2026-06-22T22:42:38.105Z",
+      "reviewer": "Codex",
+      "manualTranslations": [
+        {
+          "zh": "臨淮王譚，真君三年封燕王，拜侍中，參都曹事。",
+          "literal": "Tan, Prince of Linhuai, was enfeoffed as Prince of Yan in the third year of Zhenjun, appointed Attendant-in-Chief, and took part in the affairs of the capital offices.",
+          "idiomatic": "Tan, Prince of Linhuai, was enfeoffed as Prince of Yan in the third year of Zhenjun, appointed Attendant-in-Chief, and took part in the affairs of the capital offices.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "後改封臨淮王。",
+          "literal": "Later his enfeoffment was changed to Prince of Linhuai.",
+          "idiomatic": "Later his enfeoffment was changed to Prince of Linhuai.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "世祖南討，授中軍大將軍。",
+          "literal": "When Shizu campaigned south, Tan was appointed Grand General of the Central Army.",
+          "idiomatic": "When Shizu campaigned south, Tan was appointed Grand General of the Central Army.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "先是，劉義隆以鄒山險固，有榮胡家，乃積糧為守禦之備。",
+          "literal": "Earlier, Liu Yilong, considering Zou Mountain rugged and secure and containing Rong Hu's household, had accumulated grain there as preparation for defense.",
+          "idiomatic": "Earlier, Liu Yilong, considering Zou Mountain rugged and secure and containing Rong Hu's household, had accumulated grain there as preparation for defense.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "譚率眾攻之，獲米三十萬以供軍儲。",
+          "literal": "Tan led troops to attack it and captured three hundred thousand measures of grain to supply the army stores.",
+          "idiomatic": "Tan led troops to attack it and captured three hundred thousand measures of grain to supply the army stores.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "義隆恃淮之阻，素不設備。",
+          "literal": "Yilong relied on the barrier of the Huai and had long made no defensive preparations.",
+          "idiomatic": "Yilong relied on the barrier of the Huai and had long made no defensive preparations.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "譚造筏數十，潛軍而濟，賊眾驚潰，遂斬其將胡崇，賊首萬餘級。",
+          "literal": "Tan built several dozen rafts and secretly ferried his army across; the enemy host collapsed in alarm, and he then killed their general Hu Chong and took more than ten thousand enemy heads.",
+          "idiomatic": "Tan built several dozen rafts and secretly ferried his army across; the enemy host collapsed in alarm, and he then killed their general Hu Chong and took more than ten thousand enemy heads.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "薨，諡宣王。",
+          "literal": "He died and received the posthumous title Prince Xuan.",
+          "idiomatic": "He died and received the posthumous title Prince Xuan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T22:43:17.112Z",
+      "appliedSummary": {
+        "id": "source-weishu-020-wikisource-955ba1c5081a",
+        "type": "source_omission_candidate",
+        "start": 24,
+        "removed": 0,
+        "inserted": 8,
+        "delta": 8,
+        "manualTranslationsApplied": 8
+      }
     },
     {
       "id": "source-weishu-020-wikisource-9706144f3c6c",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -30243,12 +30536,54 @@
         "afterLocal": "子彧，字文若，紹封。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms omitted Chang biography before Yuan Yu.",
+      "reviewedAt": "2026-06-22T22:42:38.105Z",
+      "reviewer": "Codex",
+      "manualTranslations": [
+        {
+          "zh": "提子昌，字法顯。",
+          "literal": "Ti's son Chang was styled Faxian.",
+          "idiomatic": "Ti's son Chang was styled Faxian.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "好文學，居父母喪，哀號孺慕，悲感行人。",
+          "literal": "He loved literature and learning. While in mourning for his parents, his wailing and childlike grief moved passersby.",
+          "idiomatic": "He loved literature and learning. While in mourning for his parents, his wailing and childlike grief moved passersby.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "世宗時，復封臨淮王，未拜而薨。",
+          "literal": "In Shizong's time he was again enfeoffed as Prince of Linhuai, but he died before being formally appointed.",
+          "idiomatic": "In Shizong's time he was again enfeoffed as Prince of Linhuai, but he died before being formally appointed.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "贈齊州刺史，諡曰康王，追封濟南。",
+          "literal": "He was posthumously appointed Inspector of Qi Province, received the posthumous title Prince Kang, and was posthumously enfeoffed at Jinan.",
+          "idiomatic": "He was posthumously appointed Inspector of Qi Province, received the posthumous title Prince Kang, and was posthumously enfeoffed at Jinan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T22:43:17.112Z",
+      "appliedSummary": {
+        "id": "source-weishu-020-wikisource-9706144f3c6c",
+        "type": "source_omission_candidate",
+        "start": 40,
+        "removed": 0,
+        "inserted": 4,
+        "delta": 4,
+        "manualTranslationsApplied": 4
+      }
     },
     {
       "id": "source-weishu-020-wikisource-e3415504f8f7",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.778,
@@ -30291,13 +30626,15 @@
         "afterLocal": "肅宗初，拜肆州刺史。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: source/local difference is only a local footnote marker; Chinese base text agrees with raw Wikisource.",
+      "reviewedAt": "2026-06-22T22:42:38.105Z",
+      "reviewer": "Codex"
     },
     {
       "id": "source-weishu-020-wikisource-ffa28595b07a",
-      "status": "pending",
-      "type": "local_extra_candidate",
+      "status": "applied",
+      "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.016,
       "book": "weishu",
@@ -30309,59 +30646,168 @@
         "startIndex": 442,
         "endIndex": 447,
         "count": 6,
-        "text": "論曰：太武之子，秦、晉才賢。而翰之遇酷，倚伏豈可量矣。臨淮之後，彧為盛德；廣陽之世，嘉實為美，深之闕惡於元徽，所謂盜憎之義。作之見殺，不基晚歟！category:魏書",
+        "text": "論曰：太武之子，秦、晉才賢。而翰之遇酷，倚伏豈可量矣。臨淮之後，彧為盛德；廣陽之世，嘉實為美，深之闕惡於元徽，所謂盜憎之義。作之見殺，不基晚歟！",
+        "ids": [],
+        "locations": []
+      },
+      "localRange": null,
+      "context": {
+        "beforeSource": "高宗葬以王禮，諡曰隱。",
+        "afterSource": "校勘記",
+        "beforeLocal": "高宗葬以王禮，諡曰隱。",
+        "afterLocal": "校勘記"
+      },
+      "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms omitted final appraisal before collation notes; retained local collation notes and removed category markup from source text.",
+      "reviewedAt": "2026-06-22T22:42:38.105Z",
+      "reviewer": "Codex",
+      "manualTranslations": [
+        {
+          "zh": "論曰：太武之子，秦、晉才賢。",
+          "literal": "The appraisal says: Among Taiwu's sons, Qin and Jin showed talent and worth.",
+          "idiomatic": "The appraisal says: Among Taiwu's sons, Qin and Jin showed talent and worth.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "而翰之遇酷，倚伏豈可量矣。",
+          "literal": "Yet Han met cruelty; how can the turns of fortune and misfortune be measured?",
+          "idiomatic": "Yet Han met cruelty; how can the turns of fortune and misfortune be measured?",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "臨淮之後，彧為盛德；",
+          "literal": "Among Linhuai's descendants, Yu possessed eminent virtue;",
+          "idiomatic": "Among Linhuai's descendants, Yu possessed eminent virtue;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "廣陽之世，嘉實為美，深之闕惡於元徽，所謂盜憎之義。",
+          "literal": "in Guangyang's line, Jia was truly admirable, while Shen's wrongs against Yuan Hui were an instance of the saying about a thief's hatred.",
+          "idiomatic": "in Guangyang's line, Jia was truly admirable, while Shen's wrongs against Yuan Hui were an instance of the saying about a thief's hatred.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "作之見殺，不基晚歟！",
+          "literal": "As for Zuo's being killed, was its ruin not rooted late?",
+          "idiomatic": "As for Zuo's being killed, was its ruin not rooted late?",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T22:43:17.112Z",
+      "appliedSummary": {
+        "id": "source-weishu-020-wikisource-ffa28595b07a",
+        "type": "source_omission_candidate",
+        "start": 450,
+        "removed": 0,
+        "inserted": 5,
+        "delta": 5,
+        "manualTranslationsApplied": 5
+      }
+    },
+    {
+      "id": "source-weishu-020-wikisource-120baf318ca0",
+      "status": "denied",
+      "type": "source_omission_candidate",
+      "severity": 2,
+      "book": "weishu",
+      "chapter": "020",
+      "file": "data/weishu/020.json",
+      "sourceName": "wikisource",
+      "sourceUrl": "https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B718?action=raw",
+      "sourceRange": {
+        "startIndex": 24,
+        "endIndex": 24,
+        "count": 1,
+        "text": "，謀反，司馬段太陽討斬之，傳首京師。",
+        "ids": [],
+        "locations": []
+      },
+      "localRange": null,
+      "context": {
+        "beforeSource": "顯祖踐阼，拜長安鎮都大將。",
+        "afterSource": "臨淮王譚，真君三年封燕王，拜侍中，參都曹事。",
+        "beforeLocal": "顯祖踐阼，拜長安鎮都大將。",
+        "afterLocal": "臨淮王譚，真君三年封燕王，拜侍中，參都曹事。"
+      },
+      "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
+      "decision": "denied",
+      "notes": "Denied: raw-source parser dropped the Huangxing regnal-year template from the existing sentence; local preserves 皇興元年 correctly.",
+      "reviewedAt": "2026-06-22T22:44:48.814Z",
+      "reviewer": "Codex"
+    },
+    {
+      "id": "source-weishu-020-wikisource-51bf2a70a00d",
+      "status": "denied",
+      "type": "local_extra_candidate",
+      "severity": 2,
+      "book": "weishu",
+      "chapter": "020",
+      "file": "data/weishu/020.json",
+      "sourceName": "wikisource",
+      "sourceUrl": "https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B718?action=raw",
+      "sourceRange": null,
+      "localRange": {
+        "startIndex": 32,
+        "endIndex": 32,
+        "count": 1,
+        "text": "皇興元年，謀反，司馬段太陽討斬之，傳首京師。",
+        "ids": [
+          "s0033"
+        ],
+        "locations": [
+          {
+            "blockIndex": 2,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 10,
+            "field": "zh",
+            "id": "s0033"
+          }
+        ]
+      },
+      "context": {
+        "beforeSource": "薨，諡宣王。",
+        "afterSource": "子提，襲。",
+        "beforeLocal": "薨，諡宣王。",
+        "afterLocal": "子提，襲。"
+      },
+      "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
+      "decision": "denied",
+      "notes": "Denied: local extra is the correct 皇興元年 regnal year from the Wikisource YL template; scanner source text omitted it.",
+      "reviewedAt": "2026-06-22T22:44:48.814Z",
+      "reviewer": "Codex"
+    },
+    {
+      "id": "source-weishu-020-wikisource-cfc39637738a",
+      "status": "denied",
+      "type": "local_extra_candidate",
+      "severity": 3,
+      "similarity": 0.001,
+      "book": "weishu",
+      "chapter": "020",
+      "file": "data/weishu/020.json",
+      "sourceName": "wikisource",
+      "sourceUrl": "https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B718?action=raw",
+      "sourceRange": {
+        "startIndex": 447,
+        "endIndex": 447,
+        "count": 1,
+        "text": "category:魏書",
         "ids": [],
         "locations": []
       },
       "localRange": {
-        "startIndex": 412,
-        "endIndex": 495,
+        "startIndex": 455,
+        "endIndex": 538,
         "count": 84,
         "text": "校勘記魏書卷十八諸本目錄此卷注「闕」。百衲本、南本、汲本、局本卷後有宋人校語云：「魏收書太武五王列傳亡。殿本考證云：「魏收書闕，後人所補。按此傳以北史補，間有溢出字句，當出於高氏小史。閭左昭儀生南安王余諸本及北史卷一六「左」作「石」。按卷一０三蠕蠕傳〈補〉，延和三年二月「遣使人納吳提妹為夫人，又進為左昭儀。卷一四望都公頹傳稱：「使迎左昭儀於蠕蠕。茹茹主吳提妹為魏左昭儀，歷見記載，「閭」是茹茹姓木骨閭的改姓。「石」乃「左」之訛。「閭左昭儀」連讀。今改正。其小兒猫兒真虎頭龍頭並闕母氏諸本無「真」字，北史卷一六有。按卷四下世祖紀下太平真君十一年二月記「皇子真薨」。此傳脫去「真」字，十一男就少了一人，今據北史補。慕利延兄子拾寅走河曲諸本及北史卷一六「子」上無「兄」字，「河」作「阿」。御覽卷三一六〈一四五五頁〉如上摘句。按卷一０一吐谷渾傳〈補〉作「慕利延兄子拾寅走河西」。拾寅是慕利延兄樹洛干子，作「兄子」是，「阿」是「河」之訛，今皆補正。「河曲」「河西」都通，諸本作「曲」，今仍之。有榮胡家按晉書卷一一０慕容雋載記永和八年記「晉寧朔將軍榮胡以彭城、魯郡叛降於儁」。鄒山屬魯郡，當即此榮胡，「家」疑是「冢」之訛。三王楚琳琅御覽卷四九五〈二二六五頁〉「楚」下有「楚盡」二字。按「楚琳琅」不甚可解，當脫此二字。有闕餘序諸本「序」下旁注「疑」字，通志卷八四上「餘」作「倫」，疑是。令制百家為黨族二十家為閭五家為比隣百家之內有帥二十五按百家之內，二十家為閭，應有閭長五人；五家為比隣，應有隣長二十人，合計已達「有帥二十五」之數，再加黨族之長，就有二十六人，數目不符。疑當作「二十五家為閭」，則閭長四人，正合二十五之數。自云不受人欺諸本及北史卷一六脫「不」字，今據冊府卷二八八〈三三九七頁〉、北齊書卷二八元孝友傳〈補〉補。若婚葬過禮者諸本脫「禮」字，今據冊府卷二八八〈三三九七頁〉及北史卷一六補。孝友在尹積年北、汲、殿、局四本「尹」作「郡」，百衲本的底本和南本作「尹」，百衲本已從他本改。按北史卷一六、北齊書卷二八元孝友傳也作「尹」。孝友當是魏尹，北史刪略，致此「尹」字沒有着落。後人遂臆改為「郡」，其實上面也不云孝友曾為某郡太守，仍然沒有着落。百衲本的底本和南本不誤，今從之。今北鎮諸將舊常云一人代外邏按此句不甚可解。「云」即「雲」，疑本作「舊常一人雲、代外邏」。「雲代」指雲中、代京。傳本誤倒，「雲」寫作「云」，遂不可通。又孟都潘紹等數百人皆叩頭就法按上文見張孟都、馬潘、張叔緒，疑「紹」字乃「緒」之訛，「叔緒」單稱「緒」。榮平諸本及北史卷一六「平」作「卒」，獨殿本作「平」。按葛榮被擒就法，過去史籍不可能稱之為「卒」，今從殿本。廣陽王建諸本「建」下有「閭」字。按這是後人誤讀傳序，把「閭左昭儀」的「閭」字和上「建」字連讀，以為廣陽王名「建閭」，這裏又妄增「閭」字。今據冊府卷二八四〈三三四六頁〉、北史卷一六刪。子深按魏書紀傳都作「廣陽王淵」。此傳以北史補，北史避唐諱，改「淵」作「深」。詔深為北道大都督按卷九肅宗紀正光五年五月：「詔尚書令李崇為大都督，率廣陽王淵等北討。當時李崇是大都督，元淵受他節度，不得有「大都督」之號，下文崔暹只稱東道都督，可證。這裏「大」字衍。時東道都督崔暹敗於白道北史卷一六，冊府卷四０四〈四八０八頁〉此下有「深率諸軍退還朔州」一句，此傳脫。敢為逆命諸本及北史卷一六無「敢」字，據冊府卷四０四〈四八０八頁〉補。詔遣黃門郎楊昱分散之於冀定瀛三州就食諸本及北史卷一六「昱」作「置」。按事見卷五八楊昱傳，「置」字訛，今改正。戰敗於白牛邏諸本及北史卷一六「邏」都作「還」。按元融敗於白牛邏，歷見卷九肅宗紀孝昌二年九月辛亥條和卷一九下融本傳。「還」字訛，今改正。子湛字士深諸本及北史卷一六「深」都作「淵」，墓誌集釋元湛墓誌〈圖版九六〉作「字士深」。按父名「淵」，子不可能以「淵」為字。又北史例避唐諱，何故於其父則改「淵」為「深」，於子則直書不諱？顯然這裏本作「士深」，後人不知「元深」之「深」本是「淵」字，反疑這裏「士深」為北史諱改，實是適得其反。今據墓誌回改。",
         "ids": [
-          "s0413",
-          "s0414",
-          "s0415",
-          "s0416",
-          "s0417",
-          "s0418",
-          "s0419",
-          "s0420",
-          "s0421",
-          "s0422",
-          "s0423",
-          "s0424",
-          "s0425",
-          "s0426",
-          "s0427",
-          "s0428",
-          "s0429",
-          "s0430",
-          "s0431",
-          "s0432",
-          "s0433",
-          "s0434",
-          "s0435",
-          "s0436",
-          "s0437",
-          "s0438",
-          "s0439",
-          "s0440",
-          "s0441",
-          "s0442",
-          "s0443",
-          "s0444",
-          "s0445",
-          "s0446",
-          "s0447",
-          "s0448",
-          "s0449",
-          "s0450",
-          "s0451",
-          "s0452",
-          "s0453",
-          "s0454",
-          "s0455",
           "s0456",
           "s0457",
           "s0458",
@@ -30402,363 +30848,62 @@
           "s0493",
           "s0494",
           "s0495",
-          "s0496"
+          "s0496",
+          "s0497",
+          "s0498",
+          "s0499",
+          "s0500",
+          "s0501",
+          "s0502",
+          "s0503",
+          "s0504",
+          "s0505",
+          "s0506",
+          "s0507",
+          "s0508",
+          "s0509",
+          "s0510",
+          "s0511",
+          "s0512",
+          "s0513",
+          "s0514",
+          "s0515",
+          "s0516",
+          "s0517",
+          "s0518",
+          "s0519",
+          "s0520",
+          "s0521",
+          "s0522",
+          "s0523",
+          "s0524",
+          "s0525",
+          "s0526",
+          "s0527",
+          "s0528",
+          "s0529",
+          "s0530",
+          "s0531",
+          "s0532",
+          "s0533",
+          "s0534",
+          "s0535",
+          "s0536",
+          "s0537",
+          "s0538",
+          "s0539"
         ],
         "locations": [
           {
-            "blockIndex": 59,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0413"
-          },
-          {
-            "blockIndex": 60,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0414"
-          },
-          {
-            "blockIndex": 60,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0415"
-          },
-          {
-            "blockIndex": 60,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 2,
-            "field": "zh",
-            "id": "s0416"
-          },
-          {
-            "blockIndex": 60,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 3,
-            "field": "zh",
-            "id": "s0417"
-          },
-          {
-            "blockIndex": 61,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0418"
-          },
-          {
-            "blockIndex": 61,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0419"
-          },
-          {
-            "blockIndex": 61,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 2,
-            "field": "zh",
-            "id": "s0420"
-          },
-          {
-            "blockIndex": 61,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 3,
-            "field": "zh",
-            "id": "s0421"
-          },
-          {
-            "blockIndex": 61,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 4,
-            "field": "zh",
-            "id": "s0422"
-          },
-          {
-            "blockIndex": 61,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 5,
-            "field": "zh",
-            "id": "s0423"
-          },
-          {
-            "blockIndex": 61,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 6,
-            "field": "zh",
-            "id": "s0424"
-          },
-          {
-            "blockIndex": 61,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 7,
-            "field": "zh",
-            "id": "s0425"
-          },
-          {
-            "blockIndex": 61,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 8,
-            "field": "zh",
-            "id": "s0426"
-          },
-          {
-            "blockIndex": 62,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0427"
-          },
-          {
-            "blockIndex": 62,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0428"
-          },
-          {
-            "blockIndex": 62,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 2,
-            "field": "zh",
-            "id": "s0429"
-          },
-          {
             "blockIndex": 63,
             "blockType": "paragraph",
             "kind": "sentence",
             "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0430"
-          },
-          {
-            "blockIndex": 63,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0431"
-          },
-          {
-            "blockIndex": 63,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 2,
-            "field": "zh",
-            "id": "s0432"
-          },
-          {
-            "blockIndex": 63,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 3,
-            "field": "zh",
-            "id": "s0433"
-          },
-          {
-            "blockIndex": 63,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 4,
-            "field": "zh",
-            "id": "s0434"
-          },
-          {
-            "blockIndex": 63,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 5,
-            "field": "zh",
-            "id": "s0435"
-          },
-          {
-            "blockIndex": 63,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 6,
-            "field": "zh",
-            "id": "s0436"
-          },
-          {
-            "blockIndex": 63,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 7,
-            "field": "zh",
-            "id": "s0437"
-          },
-          {
-            "blockIndex": 63,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 8,
-            "field": "zh",
-            "id": "s0438"
-          },
-          {
-            "blockIndex": 64,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0439"
-          },
-          {
-            "blockIndex": 64,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0440"
-          },
-          {
-            "blockIndex": 65,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0441"
-          },
-          {
-            "blockIndex": 65,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0442"
-          },
-          {
-            "blockIndex": 65,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 2,
-            "field": "zh",
-            "id": "s0443"
-          },
-          {
-            "blockIndex": 65,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 3,
-            "field": "zh",
-            "id": "s0444"
-          },
-          {
-            "blockIndex": 66,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0445"
-          },
-          {
-            "blockIndex": 67,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0446"
-          },
-          {
-            "blockIndex": 67,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0447"
-          },
-          {
-            "blockIndex": 67,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 2,
-            "field": "zh",
-            "id": "s0448"
-          },
-          {
-            "blockIndex": 68,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0449"
-          },
-          {
-            "blockIndex": 68,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0450"
-          },
-          {
-            "blockIndex": 68,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 2,
-            "field": "zh",
-            "id": "s0451"
-          },
-          {
-            "blockIndex": 68,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 3,
-            "field": "zh",
-            "id": "s0452"
-          },
-          {
-            "blockIndex": 68,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 4,
-            "field": "zh",
-            "id": "s0453"
-          },
-          {
-            "blockIndex": 69,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0454"
-          },
-          {
-            "blockIndex": 69,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0455"
-          },
-          {
-            "blockIndex": 69,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 2,
             "field": "zh",
             "id": "s0456"
           },
           {
-            "blockIndex": 70,
+            "blockIndex": 64,
             "blockType": "paragraph",
             "kind": "sentence",
             "sentenceIndex": 0,
@@ -30766,7 +30911,7 @@
             "id": "s0457"
           },
           {
-            "blockIndex": 70,
+            "blockIndex": 64,
             "blockType": "paragraph",
             "kind": "sentence",
             "sentenceIndex": 1,
@@ -30774,7 +30919,7 @@
             "id": "s0458"
           },
           {
-            "blockIndex": 70,
+            "blockIndex": 64,
             "blockType": "paragraph",
             "kind": "sentence",
             "sentenceIndex": 2,
@@ -30782,7 +30927,7 @@
             "id": "s0459"
           },
           {
-            "blockIndex": 70,
+            "blockIndex": 64,
             "blockType": "paragraph",
             "kind": "sentence",
             "sentenceIndex": 3,
@@ -30790,175 +30935,175 @@
             "id": "s0460"
           },
           {
-            "blockIndex": 70,
+            "blockIndex": 65,
             "blockType": "paragraph",
             "kind": "sentence",
-            "sentenceIndex": 4,
+            "sentenceIndex": 0,
             "field": "zh",
             "id": "s0461"
           },
           {
-            "blockIndex": 71,
+            "blockIndex": 65,
             "blockType": "paragraph",
             "kind": "sentence",
-            "sentenceIndex": 0,
+            "sentenceIndex": 1,
             "field": "zh",
             "id": "s0462"
           },
           {
-            "blockIndex": 71,
+            "blockIndex": 65,
             "blockType": "paragraph",
             "kind": "sentence",
-            "sentenceIndex": 1,
+            "sentenceIndex": 2,
             "field": "zh",
             "id": "s0463"
           },
           {
-            "blockIndex": 71,
+            "blockIndex": 65,
             "blockType": "paragraph",
             "kind": "sentence",
-            "sentenceIndex": 2,
+            "sentenceIndex": 3,
             "field": "zh",
             "id": "s0464"
           },
           {
-            "blockIndex": 71,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 3,
-            "field": "zh",
-            "id": "s0465"
-          },
-          {
-            "blockIndex": 72,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0466"
-          },
-          {
-            "blockIndex": 73,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0467"
-          },
-          {
-            "blockIndex": 73,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0468"
-          },
-          {
-            "blockIndex": 74,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0469"
-          },
-          {
-            "blockIndex": 74,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0470"
-          },
-          {
-            "blockIndex": 74,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 2,
-            "field": "zh",
-            "id": "s0471"
-          },
-          {
-            "blockIndex": 74,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 3,
-            "field": "zh",
-            "id": "s0472"
-          },
-          {
-            "blockIndex": 74,
+            "blockIndex": 65,
             "blockType": "paragraph",
             "kind": "sentence",
             "sentenceIndex": 4,
             "field": "zh",
-            "id": "s0473"
+            "id": "s0465"
           },
           {
-            "blockIndex": 75,
+            "blockIndex": 65,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 5,
+            "field": "zh",
+            "id": "s0466"
+          },
+          {
+            "blockIndex": 65,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 6,
+            "field": "zh",
+            "id": "s0467"
+          },
+          {
+            "blockIndex": 65,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 7,
+            "field": "zh",
+            "id": "s0468"
+          },
+          {
+            "blockIndex": 65,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 8,
+            "field": "zh",
+            "id": "s0469"
+          },
+          {
+            "blockIndex": 66,
             "blockType": "paragraph",
             "kind": "sentence",
             "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0470"
+          },
+          {
+            "blockIndex": 66,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0471"
+          },
+          {
+            "blockIndex": 66,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 2,
+            "field": "zh",
+            "id": "s0472"
+          },
+          {
+            "blockIndex": 67,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0473"
+          },
+          {
+            "blockIndex": 67,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
             "field": "zh",
             "id": "s0474"
           },
           {
-            "blockIndex": 75,
+            "blockIndex": 67,
             "blockType": "paragraph",
             "kind": "sentence",
-            "sentenceIndex": 1,
+            "sentenceIndex": 2,
             "field": "zh",
             "id": "s0475"
           },
           {
-            "blockIndex": 76,
+            "blockIndex": 67,
             "blockType": "paragraph",
             "kind": "sentence",
-            "sentenceIndex": 0,
+            "sentenceIndex": 3,
             "field": "zh",
             "id": "s0476"
           },
           {
-            "blockIndex": 76,
+            "blockIndex": 67,
             "blockType": "paragraph",
             "kind": "sentence",
-            "sentenceIndex": 1,
+            "sentenceIndex": 4,
             "field": "zh",
             "id": "s0477"
           },
           {
-            "blockIndex": 76,
+            "blockIndex": 67,
             "blockType": "paragraph",
             "kind": "sentence",
-            "sentenceIndex": 2,
+            "sentenceIndex": 5,
             "field": "zh",
             "id": "s0478"
           },
           {
-            "blockIndex": 77,
+            "blockIndex": 67,
             "blockType": "paragraph",
             "kind": "sentence",
-            "sentenceIndex": 0,
+            "sentenceIndex": 6,
             "field": "zh",
             "id": "s0479"
           },
           {
-            "blockIndex": 77,
+            "blockIndex": 67,
             "blockType": "paragraph",
             "kind": "sentence",
-            "sentenceIndex": 1,
+            "sentenceIndex": 7,
             "field": "zh",
             "id": "s0480"
           },
           {
-            "blockIndex": 77,
+            "blockIndex": 67,
             "blockType": "paragraph",
             "kind": "sentence",
-            "sentenceIndex": 2,
+            "sentenceIndex": 8,
             "field": "zh",
             "id": "s0481"
           },
           {
-            "blockIndex": 78,
+            "blockIndex": 68,
             "blockType": "paragraph",
             "kind": "sentence",
             "sentenceIndex": 0,
@@ -30966,7 +31111,7 @@
             "id": "s0482"
           },
           {
-            "blockIndex": 78,
+            "blockIndex": 68,
             "blockType": "paragraph",
             "kind": "sentence",
             "sentenceIndex": 1,
@@ -30974,120 +31119,561 @@
             "id": "s0483"
           },
           {
+            "blockIndex": 69,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0484"
+          },
+          {
+            "blockIndex": 69,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0485"
+          },
+          {
+            "blockIndex": 69,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 2,
+            "field": "zh",
+            "id": "s0486"
+          },
+          {
+            "blockIndex": 69,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 3,
+            "field": "zh",
+            "id": "s0487"
+          },
+          {
+            "blockIndex": 70,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0488"
+          },
+          {
+            "blockIndex": 71,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0489"
+          },
+          {
+            "blockIndex": 71,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0490"
+          },
+          {
+            "blockIndex": 71,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 2,
+            "field": "zh",
+            "id": "s0491"
+          },
+          {
+            "blockIndex": 72,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0492"
+          },
+          {
+            "blockIndex": 72,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0493"
+          },
+          {
+            "blockIndex": 72,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 2,
+            "field": "zh",
+            "id": "s0494"
+          },
+          {
+            "blockIndex": 72,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 3,
+            "field": "zh",
+            "id": "s0495"
+          },
+          {
+            "blockIndex": 72,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 4,
+            "field": "zh",
+            "id": "s0496"
+          },
+          {
+            "blockIndex": 73,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0497"
+          },
+          {
+            "blockIndex": 73,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0498"
+          },
+          {
+            "blockIndex": 73,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 2,
+            "field": "zh",
+            "id": "s0499"
+          },
+          {
+            "blockIndex": 74,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0500"
+          },
+          {
+            "blockIndex": 74,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0501"
+          },
+          {
+            "blockIndex": 74,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 2,
+            "field": "zh",
+            "id": "s0502"
+          },
+          {
+            "blockIndex": 74,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 3,
+            "field": "zh",
+            "id": "s0503"
+          },
+          {
+            "blockIndex": 74,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 4,
+            "field": "zh",
+            "id": "s0504"
+          },
+          {
+            "blockIndex": 75,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0505"
+          },
+          {
+            "blockIndex": 75,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0506"
+          },
+          {
+            "blockIndex": 75,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 2,
+            "field": "zh",
+            "id": "s0507"
+          },
+          {
+            "blockIndex": 75,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 3,
+            "field": "zh",
+            "id": "s0508"
+          },
+          {
+            "blockIndex": 76,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0509"
+          },
+          {
+            "blockIndex": 77,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0510"
+          },
+          {
+            "blockIndex": 77,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0511"
+          },
+          {
+            "blockIndex": 78,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0512"
+          },
+          {
+            "blockIndex": 78,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0513"
+          },
+          {
             "blockIndex": 78,
             "blockType": "paragraph",
             "kind": "sentence",
             "sentenceIndex": 2,
             "field": "zh",
-            "id": "s0484"
+            "id": "s0514"
           },
           {
-            "blockIndex": 79,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0485"
-          },
-          {
-            "blockIndex": 79,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0486"
-          },
-          {
-            "blockIndex": 80,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0487"
-          },
-          {
-            "blockIndex": 80,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0488"
-          },
-          {
-            "blockIndex": 80,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 2,
-            "field": "zh",
-            "id": "s0489"
-          },
-          {
-            "blockIndex": 81,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0490"
-          },
-          {
-            "blockIndex": 81,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0491"
-          },
-          {
-            "blockIndex": 81,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 2,
-            "field": "zh",
-            "id": "s0492"
-          },
-          {
-            "blockIndex": 81,
+            "blockIndex": 78,
             "blockType": "paragraph",
             "kind": "sentence",
             "sentenceIndex": 3,
             "field": "zh",
-            "id": "s0493"
+            "id": "s0515"
           },
           {
-            "blockIndex": 81,
+            "blockIndex": 78,
             "blockType": "paragraph",
             "kind": "sentence",
             "sentenceIndex": 4,
             "field": "zh",
-            "id": "s0494"
+            "id": "s0516"
+          },
+          {
+            "blockIndex": 79,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0517"
+          },
+          {
+            "blockIndex": 79,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0518"
+          },
+          {
+            "blockIndex": 80,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0519"
+          },
+          {
+            "blockIndex": 80,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0520"
+          },
+          {
+            "blockIndex": 80,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 2,
+            "field": "zh",
+            "id": "s0521"
           },
           {
             "blockIndex": 81,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0522"
+          },
+          {
+            "blockIndex": 81,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0523"
+          },
+          {
+            "blockIndex": 81,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 2,
+            "field": "zh",
+            "id": "s0524"
+          },
+          {
+            "blockIndex": 82,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0525"
+          },
+          {
+            "blockIndex": 82,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0526"
+          },
+          {
+            "blockIndex": 82,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 2,
+            "field": "zh",
+            "id": "s0527"
+          },
+          {
+            "blockIndex": 83,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0528"
+          },
+          {
+            "blockIndex": 83,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0529"
+          },
+          {
+            "blockIndex": 84,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0530"
+          },
+          {
+            "blockIndex": 84,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0531"
+          },
+          {
+            "blockIndex": 84,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 2,
+            "field": "zh",
+            "id": "s0532"
+          },
+          {
+            "blockIndex": 85,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0533"
+          },
+          {
+            "blockIndex": 85,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0534"
+          },
+          {
+            "blockIndex": 85,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 2,
+            "field": "zh",
+            "id": "s0535"
+          },
+          {
+            "blockIndex": 85,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 3,
+            "field": "zh",
+            "id": "s0536"
+          },
+          {
+            "blockIndex": 85,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 4,
+            "field": "zh",
+            "id": "s0537"
+          },
+          {
+            "blockIndex": 85,
             "blockType": "paragraph",
             "kind": "sentence",
             "sentenceIndex": 5,
             "field": "zh",
-            "id": "s0495"
+            "id": "s0538"
           },
           {
-            "blockIndex": 81,
+            "blockIndex": 85,
             "blockType": "paragraph",
             "kind": "sentence",
             "sentenceIndex": 6,
             "field": "zh",
-            "id": "s0496"
+            "id": "s0539"
           }
         ]
       },
       "context": {
-        "beforeSource": "高宗葬以王禮，諡曰隱。",
+        "beforeSource": "作之見殺，不基晚歟！",
         "afterSource": "",
-        "beforeLocal": "高宗葬以王禮，諡曰隱。",
+        "beforeLocal": "作之見殺，不基晚歟！",
         "afterLocal": ""
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: scanner compared Wikisource category markup with legitimate local collation notes; no corpus source repair needed.",
+      "reviewedAt": "2026-06-22T22:44:48.814Z",
+      "reviewer": "Codex"
+    },
+    {
+      "id": "source-weishu-020-wikisource-fb2db2b70beb",
+      "status": "denied",
+      "type": "source_replacement_candidate",
+      "severity": 2,
+      "similarity": 0.063,
+      "book": "weishu",
+      "chapter": "020",
+      "file": "data/weishu/020.json",
+      "sourceName": "wikisource",
+      "sourceUrl": "https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B718?action=raw",
+      "sourceRange": {
+        "startIndex": 0,
+        "endIndex": 5,
+        "count": 6,
+        "text": "，延和三年二月「遣使人納吳提妹為夫人，又進為左昭儀。」卷一四望都公頹傳稱：「使迎左昭儀於蠕蠕。」茹茹主吳提妹為魏左昭儀，歷見記載，「閭」是茹茹姓木骨閭的改姓。「石」乃「左」之訛。「閭左昭儀」連讀。今改正。",
+        "ids": [],
+        "locations": []
+      },
+      "localRange": {
+        "startIndex": 0,
+        "endIndex": 5,
+        "count": 6,
+        "text": "太武皇帝十一男：賀皇后生景穆皇帝。越椒房生晉王伏羅。舒椒房生東平王翰。弗椒房生臨淮王譚。伏椒房生楚王建。閭左昭儀生南安王余。",
+        "ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005",
+          "s0006"
+        ],
+        "locations": [
+          {
+            "blockIndex": 0,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0001"
+          },
+          {
+            "blockIndex": 0,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0002"
+          },
+          {
+            "blockIndex": 0,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 2,
+            "field": "zh",
+            "id": "s0003"
+          },
+          {
+            "blockIndex": 0,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 3,
+            "field": "zh",
+            "id": "s0004"
+          },
+          {
+            "blockIndex": 0,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 4,
+            "field": "zh",
+            "id": "s0005"
+          },
+          {
+            "blockIndex": 0,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 5,
+            "field": "zh",
+            "id": "s0006"
+          }
+        ]
+      },
+      "context": {
+        "beforeSource": "",
+        "afterSource": "其小兒、猫兒、真、虎頭、龍頭並闕母氏，皆早薨，無傳。",
+        "beforeLocal": "",
+        "afterLocal": "其小兒、猫兒、真、虎頭、龍頭並闕母氏，皆早薨，無傳。"
+      },
+      "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
+      "decision": "denied",
+      "notes": "Denied: source-side text is collation-note spillover from the opening Header notes; local now preserves the main-text opening genealogy correctly.",
+      "reviewedAt": "2026-06-22T22:44:48.814Z",
+      "reviewer": "Codex"
     },
     {
       "id": "source-weishu-021-wikisource-1cfa58286d87",
@@ -169368,5 +169954,5 @@
       "notes": ""
     }
   ],
-  "updatedAt": "2026-06-22T22:32:46.319Z"
+  "updatedAt": "2026-06-22T22:43:17.163Z"
 }
