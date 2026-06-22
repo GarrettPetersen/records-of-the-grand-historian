@@ -15748,7 +15748,7 @@
     },
     {
       "id": "source-beiqishu-026-wikisource-4ed1c0e643a4",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "beiqishu",
@@ -15772,12 +15772,14 @@
         "afterLocal": "後因引見，復進諫曰：「共治天下，本屬百官。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: rendered Wikisource has 請不依此。」書奏不報。 The leading close quote is already attached to local s0017, and 書奏不報。 already exists as translated local s0018, so inserting the queued raw fragment would duplicate text.",
+      "reviewedAt": "2026-06-22T12:40:18.000Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-beiqishu-028-wikisource-068ffeed31c8",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "beiqishu",
@@ -15789,7 +15791,7 @@
         "startIndex": 113,
         "endIndex": 128,
         "count": 16,
-        "text": "元韶，字世胄，魏孝莊之侄。避尒朱之難，匿於嵩山。性好學，美容儀。初，尒朱榮將入洛，父劭恐，以韶寄所親滎陽太守鄭仲明。仲明尋為城人所殺，韶因亂與乳母相失，遂與仲明兄子僧副避難。路中為賊逼，僧副恐不免，因令韶下馬。僧副謂客曰：「窮鳥投入，尚或矜愍，況諸王如何棄乎？」僧副舉刃逼之，客乃退。韶逢一老母姓程，哀之，隱於私家十餘日，莊帝訪而獲焉，襲封彭城王。齊神武帝以孝武帝後配之。魏室奇寶，多隨後入韶家。有二玉缽相盛，可轉而不可出；馬瑙榼容三升，玉縫之。皆稱西域鬼作也。歷位太尉、侍中、錄尚書、司州牧，進太傅。齊，降爵為縣公。",
+        "text": "元韶，字世胄，魏孝莊之侄。避尒朱之難，匿於嵩山。性好學，美容儀。初，尒朱榮將入洛，父劭恐，以韶寄所親滎陽太守鄭仲明。仲明尋為城人所殺，韶因亂與乳母相失，遂與仲明兄子僧副避難。路中為賊逼，僧副恐不免，因令韶下馬。僧副謂客曰：「窮鳥投入，尚或矜愍，況諸王如何棄乎？」僧副舉刃逼之，客乃退。韶逢一老母姓程，哀之，隱於私家十餘日，莊帝訪而獲焉，襲封彭城王。齊神武帝以孝武帝後配之。魏室奇寶，多隨後入韶家。有二玉缽相盛，可轉而不可出；馬瑙榼容三升，玉縫之。皆稱西域鬼作也。歷位太尉、侍中、錄尚書、司州牧，進太傅。齊天保元年，降爵為縣公。",
         "ids": [],
         "locations": []
       },
@@ -15801,12 +15803,106 @@
         "afterLocal": "韶性行溫裕，以高氏婿，頗膺時寵。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Accepted. Rendered Wikisource restores the opening Yuan Shao biography paragraph before 韶性行溫裕. The raw queue text lost the linked era name 天保元年, so sourceRange.text was normalized from the rendered witness.",
+      "reviewer": "codex-source-repair",
+      "reviewedAt": "2026-06-22T12:47:00.000Z",
+      "manualTranslations": [
+        {
+          "zh": "元韶，字世胄，魏孝莊之侄。",
+          "literal": "Yuan Shao, styled Shizhou, was a nephew of Emperor Xiaozhuang of Wei.",
+          "idiomatic": "Yuan Shao, styled Shizhou, was a nephew of Emperor Xiaozhuang of Wei."
+        },
+        {
+          "zh": "避尒朱之難，匿於嵩山。",
+          "literal": "Avoiding the disorder of the Erzhus, he hid on Mount Song.",
+          "idiomatic": "To escape the turmoil caused by the Erzhus, he hid on Mount Song."
+        },
+        {
+          "zh": "性好學，美容儀。",
+          "literal": "By nature he loved learning and had fine appearance and bearing.",
+          "idiomatic": "He loved learning by nature and had a handsome appearance and bearing."
+        },
+        {
+          "zh": "初，尒朱榮將入洛，父劭恐，以韶寄所親滎陽太守鄭仲明。",
+          "literal": "At first, when Erzhu Rong was about to enter Luoyang, his father Shao was afraid and entrusted Shao to Zheng Zhongming, administrator of Xingyang, a man close to him.",
+          "idiomatic": "Earlier, when Erzhu Rong was about to enter Luoyang, Shao's father feared for him and entrusted him to Zheng Zhongming, the administrator of Xingyang and a close associate."
+        },
+        {
+          "zh": "仲明尋為城人所殺，韶因亂與乳母相失，遂與仲明兄子僧副避難。",
+          "literal": "Zhongming was soon killed by the people of the city; in the disorder Shao became separated from his wet nurse and then fled danger with Zhongming's brother's son Sengfu.",
+          "idiomatic": "Zhongming was soon killed by the townspeople. In the chaos Shao was separated from his wet nurse, and he fled with Zhongming's nephew Sengfu."
+        },
+        {
+          "zh": "路中為賊逼，僧副恐不免，因令韶下馬。",
+          "literal": "On the road they were pressed by bandits; Sengfu feared they would not escape, and accordingly ordered Shao to dismount.",
+          "idiomatic": "On the road bandits pressed them hard. Sengfu feared they would not escape, so he ordered Shao to dismount."
+        },
+        {
+          "zh": "僧副謂客曰：「窮鳥投入，尚或矜愍，況諸王如何棄乎？」",
+          "literal": "Sengfu said to his retainers, \"When an exhausted bird flies into one's arms, one may still pity it; how could one abandon one of the princes?\"",
+          "idiomatic": "Sengfu said to his followers, \"If even an exhausted bird that flies into one's arms deserves pity, how could we abandon one of the princes?\""
+        },
+        {
+          "zh": "僧副舉刃逼之，客乃退。",
+          "literal": "Sengfu raised his blade and forced them back, and the retainers then withdrew.",
+          "idiomatic": "Sengfu raised his blade and forced them back, and his followers withdrew."
+        },
+        {
+          "zh": "韶逢一老母姓程，哀之，隱於私家十餘日，莊帝訪而獲焉，襲封彭城王。",
+          "literal": "Shao encountered an old woman surnamed Cheng, who pitied him and hid him in her private home for more than ten days; Emperor Zhuang searched for him and found him, and he inherited the title Prince of Pengcheng.",
+          "idiomatic": "Shao met an old woman surnamed Cheng, who pitied him and hid him in her home for more than ten days. Emperor Zhuang searched for him and found him, and Shao inherited the title Prince of Pengcheng."
+        },
+        {
+          "zh": "齊神武帝以孝武帝後配之。",
+          "literal": "Emperor Shenwu of Qi gave Emperor Xiaowu's empress to him as wife.",
+          "idiomatic": "Emperor Shenwu of Qi married Emperor Xiaowu's empress to him."
+        },
+        {
+          "zh": "魏室奇寶，多隨後入韶家。",
+          "literal": "Many rare treasures of the Wei imperial house followed the empress into Shao's household.",
+          "idiomatic": "Many rare treasures of the Wei imperial house came into Shao's household along with the empress."
+        },
+        {
+          "zh": "有二玉缽相盛，可轉而不可出；",
+          "literal": "There were two jade bowls nested inside one another; they could be turned but could not be separated;",
+          "idiomatic": "There were two jade bowls nested together; they could be turned but not separated;"
+        },
+        {
+          "zh": "馬瑙榼容三升，玉縫之。",
+          "literal": "an agate wine vessel held three sheng and had seams of jade.",
+          "idiomatic": "and an agate wine vessel held three sheng and had jade seams."
+        },
+        {
+          "zh": "皆稱西域鬼作也。",
+          "literal": "All were said to be the work of spirits from the Western Regions.",
+          "idiomatic": "All were said to be uncanny works from the Western Regions."
+        },
+        {
+          "zh": "歷位太尉、侍中、錄尚書、司州牧，進太傅。",
+          "literal": "He successively held posts as grand commandant, palace attendant, recorder of the masters of writing, and governor of Sizhou, and was advanced to grand tutor.",
+          "idiomatic": "He successively served as grand commandant, palace attendant, recorder of the masters of writing, and governor of Sizhou, and was advanced to grand tutor."
+        },
+        {
+          "zh": "齊天保元年，降爵為縣公。",
+          "literal": "In the first year of Tianbao under Qi, his title was reduced to county duke.",
+          "idiomatic": "In the first year of Tianbao under Qi, his title was reduced to county duke."
+        }
+      ],
+      "appliedAt": "2026-06-22T12:42:48.085Z",
+      "appliedSummary": {
+        "id": "source-beiqishu-028-wikisource-068ffeed31c8",
+        "type": "source_omission_candidate",
+        "start": 115,
+        "removed": 0,
+        "inserted": 16,
+        "delta": 16,
+        "manualTranslationsApplied": 16
+      }
     },
     {
       "id": "source-beiqishu-028-wikisource-3b2a98556582",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.704,
@@ -15858,8 +15954,10 @@
         "afterLocal": "初，弼嘗夢人謂之曰：「君身不得傳世封，其紹先爵者，君長子紹遠也。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: rendered Wikisource preserves the linked era names 建元元年 and 永安三年. The local corpus already has the correct text; the queued replacement is a raw-link artifact.",
+      "reviewer": "codex-source-repair",
+      "reviewedAt": "2026-06-22T12:47:00.000Z"
     },
     {
       "id": "source-beiqishu-028-wikisource-6f1605f48c4e",
@@ -20658,5 +20756,5 @@
       "reviewer": "repair-source-queue-patterns"
     }
   ],
-  "updatedAt": "2026-06-22T12:33:34.891Z"
+  "updatedAt": "2026-06-22T12:42:48.101Z"
 }
