@@ -32,6 +32,19 @@ const REPAIRABLE_SOURCE_ARTIFACT_RULES = new Set([
 const UPSTREAM_RESIDUE_TOKEN_PATTERN = String.raw`__TOC__|PD-old|----\s*校勘記|Category:[^\s<>|]+`;
 const UPSTREAM_RESIDUE_RE = new RegExp(UPSTREAM_RESIDUE_TOKEN_PATTERN, 'u');
 const UPSTREAM_RESIDUE_TOKEN_RE = new RegExp(UPSTREAM_RESIDUE_TOKEN_PATTERN, 'gu');
+const LEADING_CLOSE_PUNCT_RE = /^[」』”）)\]】〉》]+/u;
+const TRAILING_WRAPPER_CLOSE_CHARS = '〉》）)\\]】';
+const EQUIVALENT_CLOSE_PUNCT = new Map([
+  ['」', ['」', '』', '”']],
+  ['』', ['』', '」', '’']],
+  ['”', ['”', '」', '』']],
+  ['）', ['）', ')']],
+  [')', [')', '）']],
+  [']', [']', '】']],
+  ['】', ['】', ']']],
+  ['〉', ['〉', '》']],
+  ['》', ['》', '〉']],
+]);
 const RAW_HTML_TAG_RE = /<\/?[a-z][^>]*>/giu;
 const REF_OPEN_RE = /<ref\b[^>]*>/iu;
 const REF_CLOSE_RE = /<\/ref>/iu;
@@ -2033,6 +2046,125 @@ function collectSourceUnits(data) {
   return units;
 }
 
+function previousSourceUnit(units, index) {
+  for (let i = index - 1; i >= 0; i -= 1) {
+    const unit = units[i];
+    if (String(unit.unit[unit.key] || '').length > 0) return unit;
+  }
+  return null;
+}
+
+function locationIndex(location) {
+  if (!location) return undefined;
+  return location.sentenceIndex ?? location.cellIndex ?? location.index;
+}
+
+function unitMatchesLocation(unit, location) {
+  if (!location) return false;
+  const kind = location.kind === 'sentence' ? 'sentences' : location.kind === 'cell' ? 'cells' : '';
+  return unit.blockIndex === location.blockIndex
+    && unit.index === locationIndex(location)
+    && unit.key === location.field
+    && (!kind || unit.path.startsWith(`${kind}.`));
+}
+
+function liveUnitsForItem(item, cache) {
+  const file = item.file || '';
+  if (!file) return null;
+  const absolute = path.resolve(file);
+  if (cache.has(absolute)) return cache.get(absolute);
+  if (!fs.existsSync(file)) {
+    cache.set(absolute, null);
+    return null;
+  }
+  const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+  const units = collectSourceUnits(data);
+  cache.set(absolute, units);
+  return units;
+}
+
+function escapeRegExp(text) {
+  return String(text || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function attachedCloseMatch(text, punctuation) {
+  const trimmed = String(text || '').trimEnd();
+  if (!trimmed || !punctuation) return null;
+  const alternatives = punctuation.length === 1
+    ? (EQUIVALENT_CLOSE_PUNCT.get(punctuation) || [punctuation])
+    : [punctuation];
+  const re = new RegExp(`(${alternatives.map(escapeRegExp).join('|')})([${TRAILING_WRAPPER_CLOSE_CHARS}]*)$`, 'u');
+  return trimmed.match(re);
+}
+
+function isLeadingCloseAlreadyAttached(item, cache) {
+  const source = item.sourceRange?.text || '';
+  const match = source.match(LEADING_CLOSE_PUNCT_RE);
+  if (!match) return null;
+
+  const punctuation = match[0];
+  const sourceRest = source.slice(punctuation.length);
+  if (!sourceRest) return null;
+
+  const locations = item.localRange?.locations || [];
+  if (locations.length !== 1) return null;
+
+  const units = liveUnitsForItem(item, cache);
+  if (!units) return null;
+
+  const currentIndex = units.findIndex((unit) => unitMatchesLocation(unit, locations[0]));
+  if (currentIndex < 0) return null;
+
+  const current = units[currentIndex];
+  const currentText = String(current.unit[current.key] || '');
+  if (variantText(currentText) !== variantText(sourceRest)) return null;
+
+  const previous = previousSourceUnit(units, currentIndex);
+  if (!previous) return null;
+
+  const previousText = String(previous.unit[previous.key] || '').trimEnd();
+  const attachedClose = attachedCloseMatch(previousText, punctuation);
+  if (!attachedClose) return null;
+
+  return {
+    punctuation,
+    attachedPunctuation: attachedClose[1],
+    previousId: previous.id || previous.path,
+    currentId: current.id || current.path,
+  };
+}
+
+function isChapterStartHeadingNoOp(item, cache) {
+  if (item.type !== 'local_extra_candidate' || item.sourceRange) return null;
+
+  const localRange = item.localRange;
+  if (!localRange || localRange.startIndex !== 0 || localRange.endIndex !== 0 || localRange.count !== 1) return null;
+  if (String(item.context?.beforeSource || '') || String(item.context?.beforeLocal || '')) return null;
+
+  const afterSource = stripUpstreamResidue(item.context?.afterSource || '');
+  const afterLocal = item.context?.afterLocal || '';
+  if (!afterSource || !afterLocal || variantText(afterSource) !== variantText(afterLocal)) return null;
+
+  const locations = localRange.locations || [];
+  if (locations.length !== 1) return null;
+
+  const units = liveUnitsForItem(item, cache);
+  if (!units) return null;
+
+  const currentIndex = units.findIndex((unit) => unitMatchesLocation(unit, locations[0]));
+  if (currentIndex < 0) return null;
+
+  const current = units[currentIndex];
+  const currentText = String(current.unit[current.key] || '');
+  if (variantText(currentText) !== variantText(localRange.text || '')) return null;
+  if (previousSourceUnit(units, currentIndex)) return null;
+
+  return {
+    heading: currentText,
+    currentId: current.id || current.path,
+  };
+}
+
 function sourceUnitKeys(file, unit) {
   return [
     `${path.resolve(file)}\u241f${unit.id}`,
@@ -2193,10 +2325,13 @@ function clearCorrespondenceNoOps(opts, now) {
     filesChanged: 0,
     variantNoOps: 0,
     upstreamResidueNoOps: 0,
+    leadingClosePunctuationNoOps: 0,
+    chapterStartHeadingNoOps: 0,
     reopenedVariantNoOps: 0,
     reopenedResidueNoOps: 0,
   };
   const samples = [];
+  const liveUnitCache = new Map();
 
   for (const file of correspondenceQueueFiles()) {
     const queue = JSON.parse(fs.readFileSync(file, 'utf8'));
@@ -2207,6 +2342,7 @@ function clearCorrespondenceNoOps(opts, now) {
         statusOf(item) === 'rejected'
         && notes.includes('source/local difference is only approved graph variants')
         && !isVariantOnly(item)
+        && !isLeadingCloseAlreadyAttached(item, liveUnitCache)
       ) {
         markPending(item, 'Reopened for manual review: previous automatic variant no-op ignored punctuation or quote placement.');
         stats.reopenedVariantNoOps += 1;
@@ -2233,7 +2369,28 @@ function clearCorrespondenceNoOps(opts, now) {
         stats.upstreamResidueNoOps += 1;
         changed = true;
       } else {
-        continue;
+        const leadingClose = isLeadingCloseAlreadyAttached(item, liveUnitCache);
+        if (leadingClose) {
+          markDenied(
+            item,
+            now,
+            opts.reviewer,
+            `Reviewed as no-op: upstream range starts with closing punctuation ${JSON.stringify(leadingClose.punctuation)} that is already attached to previous live source unit ${leadingClose.previousId} as ${JSON.stringify(leadingClose.attachedPunctuation)}; local segmentation retained.`,
+          );
+          stats.leadingClosePunctuationNoOps += 1;
+          changed = true;
+        } else {
+          const heading = isChapterStartHeadingNoOp(item, liveUnitCache);
+          if (!heading) continue;
+          markDenied(
+            item,
+            now,
+            opts.reviewer,
+            `Reviewed as no-op: local chapter-start heading ${JSON.stringify(heading.heading)} is retained; upstream witness begins with the following body text.`,
+          );
+          stats.chapterStartHeadingNoOps += 1;
+          changed = true;
+        }
       }
       if (samples.length < 12) {
         samples.push({
