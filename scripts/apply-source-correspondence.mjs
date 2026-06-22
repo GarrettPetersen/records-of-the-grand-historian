@@ -219,8 +219,16 @@ function splitSentences(text) {
   const merged = [];
   let pendingPrefix = '';
   const openingOnly = /^[〈《「『【〔（(\s]+$/;
+  const leadingClose = /^([〉》」』】〕）)\]\s]+)(.+)$/u;
 
-  for (const sentence of sentences) {
+  for (let sentence of sentences) {
+    const leadingCloseMatch = sentence.match(leadingClose);
+    if (leadingCloseMatch && merged.length > 0) {
+      merged[merged.length - 1] += leadingCloseMatch[1].trimEnd();
+      sentence = leadingCloseMatch[2].trim();
+      if (!sentence) continue;
+    }
+
     if (openingOnly.test(sentence)) {
       pendingPrefix += sentence;
       continue;

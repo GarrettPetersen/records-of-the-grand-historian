@@ -3106,7 +3106,7 @@
     },
     {
       "id": "source-beiqishu-005-wikisource-115c9c988d8b",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.692,
@@ -3149,12 +3149,14 @@
         "afterLocal": "性敏慧。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: the external witness dropped the linked era text, while local \"天保元年，立爲皇太子，時年六歲。\" is fuller and agrees with the chapter context.",
+      "reviewedAt": "2026-06-22T09:20:01.282Z",
+      "reviewer": "source-correspondence"
     },
     {
       "id": "source-beiqishu-005-wikisource-b4fb4080a3ff",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.031,
@@ -3167,7 +3169,7 @@
         "startIndex": 29,
         "endIndex": 36,
         "count": 8,
-        "text": "是歲，周。庚辰，春正月癸丑朔，改元。己末，詔寬徭賦。癸亥，高陽王湜薨。是月，車駕至自晉陽。二月己亥，乙太傅、常山王演爲太師、錄尚書事，以太尉、長廣王湛爲大司馬、幷省錄尚書事，以尚書左僕射、平秦王歸彥爲司空，趙郡王睿爲尚書左僕射。詔諸元良口配沒宮內及賜人者，並放免。甲辰，帝幸芳林園，親錄囚徒，死罪以下降免各有差。",
+        "text": "是歲，周武成元年。乾明元年庚辰，春正月癸丑朔，改元。己未，詔寬徭賦。癸亥，高陽王湜薨。是月，車駕至自晉陽。二月己亥，以太傅、常山王演爲太師、錄尚書事，以太尉、長廣王湛爲大司馬、幷省錄尚書事，以尚書左僕射、平秦王歸彥爲司空，趙郡王叡爲尚書左僕射。詔諸元良口配沒宮內及賜人者，並放免。甲辰，帝幸芳林園，親錄囚徒，死罪以下降免各有差。",
         "ids": [],
         "locations": []
       },
@@ -3197,12 +3199,82 @@
         "afterLocal": "乙巳，太師、常山王演矯詔誅尚書令楊愔、尚書右僕射燕子獻、領軍大將軍可朱渾天和、侍中宋欽道、散騎常侍鄭子默。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Approved with source cleanup: preserved local \"是歲，周武成元年。\" and restored the missing Qianming opening events. Corrected obvious source-side slips 己末 to 己未, 乙太傅 to 以太傅, and normalized 趙郡王睿 to local 趙郡王叡.",
+      "manualTranslations": [
+        {
+          "zh": "是歲，周武成元年。",
+          "literal": "That year was the first year of Wucheng in Zhou.",
+          "idiomatic": "That year corresponded to the first year of the Wucheng era of Northern Zhou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "乾明元年庚辰，春正月癸丑朔，改元。",
+          "literal": "In the gengchen year, the first year of Qianming, in spring, on guichou, the first day of the first month, the era name was changed.",
+          "idiomatic": "In Qianming 1, the gengchen year, on guichou, the first day of the first month in spring, the reign era was changed.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "己未，詔寬徭賦。",
+          "literal": "On jiwei, an edict relaxed labor services and taxes.",
+          "idiomatic": "On jiwei, an edict lightened corvee obligations and taxes.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "癸亥，高陽王湜薨。",
+          "literal": "On guihai, Prince Shi of Gaoyang died.",
+          "idiomatic": "On guihai, Prince Shi of Gaoyang died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "是月，車駕至自晉陽。",
+          "literal": "That month, the imperial carriage arrived from Jinyang.",
+          "idiomatic": "That month the emperor returned from Jinyang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "二月己亥，以太傅、常山王演爲太師、錄尚書事，以太尉、長廣王湛爲大司馬、幷省錄尚書事，以尚書左僕射、平秦王歸彥爲司空，趙郡王叡爲尚書左僕射。",
+          "literal": "In the second month, on jihai, the Grand Tutor, Prince Yan of Changshan, was made Grand Preceptor and Recorder of the Affairs of the Masters of Writing; the Grand Commandant, Prince Zhan of Changguang, was made Grand Marshal and Recorder of the Affairs of the Masters of Writing in Bing Province; the Left Vice Director of the Masters of Writing, Prince Guiyan of Pingqin, was made Minister of Works; and Prince Rui of Zhaojun was made Left Vice Director of the Masters of Writing.",
+          "idiomatic": "In the second month, on jihai, Prince Yan of Changshan, then grand tutor, was appointed grand preceptor and recorder of the Masters of Writing. Prince Zhan of Changguang, then grand commandant, became grand marshal and recorder of the Masters of Writing in the Bingzhou administration. Prince Guiyan of Pingqin, left vice director of the Masters of Writing, became minister of works, and Prince Rui of Zhaojun became left vice director.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "詔諸元良口配沒宮內及賜人者，並放免。",
+          "literal": "An edict ordered that all free persons of the Yuan clan who had been assigned and confiscated into the palace or bestowed on others should all be released and exempted.",
+          "idiomatic": "An edict released all free members of the Yuan clan who had been confiscated into palace service or granted to others.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "甲辰，帝幸芳林園，親錄囚徒，死罪以下降免各有差。",
+          "literal": "On jiachen, the emperor visited Fanglin Garden and personally reviewed the prisoners; those sentenced to death and below received reductions or exemptions, each by degree.",
+          "idiomatic": "On jiachen, the emperor visited Fanglin Garden and personally reviewed the prisoners. Sentences at the death penalty and below were reduced or remitted by graded degrees.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        }
+      ],
+      "reviewedAt": "2026-06-22T09:20:01.282Z",
+      "reviewer": "source-correspondence",
+      "appliedAt": "2026-06-22T09:20:01.296Z",
+      "appliedSummary": {
+        "id": "source-beiqishu-005-wikisource-b4fb4080a3ff",
+        "type": "source_omission_candidate",
+        "start": 29,
+        "removed": 1,
+        "inserted": 8,
+        "delta": 7,
+        "manualTranslationsApplied": 7
+      }
     },
     {
       "id": "source-beiqishu-005-wikisource-ff0cfe8f8268",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.023,
@@ -3215,7 +3287,7 @@
         "startIndex": 48,
         "endIndex": 65,
         "count": 18,
-        "text": "九月，殂於晉陽，年十七。帝聰慧夙成，寬厚仁智，天保間雅有令名。及承大位，楊愔、燕子獻、宋欽道等同輔。以常山王地親望重，內外畏服，加以文宣初崩之日，太后本欲立之，故愔等並懷猜忌。常山王憂悵，乃白太后誅其黨，時平秦王歸彥亦預謀焉。皇建二年秋，天文告變，歸彥慮有後害，仍白孝昭，以王當咎。乃遣歸彥馳驛至晉陽宮殺之。王薨後，孝昭不豫，見文宣爲祟。孝昭深惡之，厭勝術備設而無益也。薨三旬而孝昭崩。大寧二年，葬於武寧之西北，諡閔悼王。初，文宣命邢卲制帝名殷，字正道，帝從而尤之曰：「殷家弟及，『正』字一止，吾身後兒不得也。」卲懼，請改焉。文宣不許曰：「天也。」因謂孝昭帝曰：「奪但奪，慎勿殺也。」論曰：濟南繼業，大革其弊，風教粲然，搢紳稱幸。股肱輔弼，雖懷厥誠，旣不能贊弘道德，和睦親懿，又不能遠慮防身，深謀衛主，應斷不斷，自取其咎。臣旣誅夷，君壽廢辱，皆任非其器之所致爾。",
+        "text": "皇建二年九月，殂於晉陽，年十七。帝聰慧夙成，寬厚仁智，天保間雅有令名。及承大位，楊愔、燕子獻、宋欽道等同輔。以常山王地親望重，內外畏服，加以文宣初崩之日，太后本欲立之，故愔等並懷猜忌。常山王憂悵，乃白太后誅其黨，時平秦王歸彥亦預謀焉。皇建二年秋，天文告變，歸彥慮有後害，仍白孝昭，以王當咎。乃遣歸彥馳驛至晉陽宮殺之。王薨後，孝昭不豫，見文宣爲祟。孝昭深惡之，厭勝術備設而無益也。薨三旬而孝昭崩。大寧二年，葬於武寧之西北，諡閔悼王。初，文宣命邢卲制帝名殷，字正道，帝從而尤之曰：「殷家弟及，『正』字一止，吾身後兒不得也。」卲懼，請改焉。文宣不許曰：「天也。」因謂孝昭帝曰：「奪但奪，慎勿殺也。」論曰：濟南繼業，大革其弊，風教粲然，搢紳稱幸。股肱輔弼，雖懷厥誠，旣不能贊弘道德，和睦親懿，又不能遠慮防身，深謀衛主，應斷不斷，自取其咎。臣旣誅夷，君壽廢辱，皆任非其器之所致爾。",
         "ids": [],
         "locations": []
       },
@@ -3245,12 +3317,153 @@
         "afterLocal": "全文以中華書局、一九七二年十一月、第一版《北齊書》為本校。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Approved with source cleanup: upstream and ChineseNotes preserve the missing death, posthumous account, and final appraisal. Restored local 皇建二年 in the first sentence before applying.",
+      "manualTranslations": [
+        {
+          "zh": "皇建二年九月，殂於晉陽，年十七。",
+          "literal": "In the ninth month of the second year of Huangjian he died at Jinyang, aged seventeen.",
+          "idiomatic": "In the ninth month of the second year of the Huangjian era he died at Jinyang, at the age of seventeen.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "帝聰慧夙成，寬厚仁智，天保間雅有令名。",
+          "literal": "The emperor was intelligent and wise from an early age, generous, kind, benevolent, and discerning; during Tianbao he had a fine reputation.",
+          "idiomatic": "The emperor showed intelligence early, was generous and humane, and during the Tianbao era enjoyed an excellent reputation.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "及承大位，楊愔、燕子獻、宋欽道等同輔。",
+          "literal": "When he inherited the great throne, Yang Yin, Yanzi Xian, Song Qindao, and others assisted him together.",
+          "idiomatic": "When he came to the throne, Yang Yin, Yanzi Xian, Song Qindao, and others served jointly as his advisers.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "以常山王地親望重，內外畏服，加以文宣初崩之日，太后本欲立之，故愔等並懷猜忌。",
+          "literal": "Because the Prince of Changshan was close in kinship and weighty in reputation, and those within and without feared and submitted to him, and because on the day Emperor Wenxuan first died the empress dowager had originally wanted to enthrone him, Yin and the others all harbored suspicion.",
+          "idiomatic": "Prince Yan of Changshan was a close kinsman with formidable prestige, feared and obeyed at court and beyond. Since the empress dowager had originally wanted to enthrone him when Emperor Wenxuan died, Yang Yin and the others all suspected him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "常山王憂悵，乃白太后誅其黨，時平秦王歸彥亦預謀焉。",
+          "literal": "The Prince of Changshan became anxious and distressed, and so reported to the empress dowager that their party should be executed; at the time Prince Guiyan of Pingqin also took part in the plot.",
+          "idiomatic": "Prince Yan of Changshan grew anxious and asked the empress dowager to execute that faction; Prince Guiyan of Pingqin was also involved in the plot.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "皇建二年秋，天文告變，歸彥慮有後害，仍白孝昭，以王當咎。",
+          "literal": "In autumn of the second year of Huangjian, celestial signs announced change; Guiyan feared there would be later danger, and again told Xiaozhao that the prince was the one on whom blame would fall.",
+          "idiomatic": "In autumn of Huangjian 2, ominous celestial signs appeared. Guiyan feared future trouble and again told Emperor Xiaozhao that the prince was the one portended by the omen.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "乃遣歸彥馳驛至晉陽宮殺之。",
+          "literal": "He therefore sent Guiyan by relay horse to Jinyang Palace to kill him.",
+          "idiomatic": "He therefore sent Guiyan by relay post to Jinyang Palace to kill him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "王薨後，孝昭不豫，見文宣爲祟。",
+          "literal": "After the prince died, Xiaozhao fell ill and saw Wenxuan acting as a baleful spirit.",
+          "idiomatic": "After the prince died, Emperor Xiaozhao fell ill and saw Emperor Wenxuan haunting him as an angry spirit.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "孝昭深惡之，厭勝術備設而無益也。",
+          "literal": "Xiaozhao deeply hated it, and suppressive apotropaic rites were set up in every form, but they were of no benefit.",
+          "idiomatic": "Xiaozhao was terrified and deployed every rite for suppressing baleful influence, but none helped.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "薨三旬而孝昭崩。",
+          "literal": "Thirty days after the prince died, Xiaozhao died.",
+          "idiomatic": "Thirty days after the prince died, Emperor Xiaozhao died as well.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "大寧二年，葬於武寧之西北，諡閔悼王。",
+          "literal": "In the second year of Daning he was buried northwest of Wuning and was posthumously titled Prince Mindao.",
+          "idiomatic": "In Daning 2 he was buried northwest of Wuning and given the posthumous title Prince Mindao.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "初，文宣命邢卲制帝名殷，字正道，帝從而尤之曰：「殷家弟及，『正』字一止，吾身後兒不得也。」",
+          "literal": "Initially, Emperor Wenxuan ordered Xing Shao to devise the emperor's personal name Yin and style Zhengdao; the emperor then faulted him, saying, \"In the house of Yin, younger brothers succeeded; the character zheng contains one stop, so after I am gone my son will not get it.\"",
+          "idiomatic": "Earlier, Emperor Wenxuan had ordered Xing Shao to devise Yin as the emperor's personal name and Zhengdao as his style. Wenxuan later faulted him for it: \"In the house of Yin, brothers succeeded one another, and the character 正 contains a single 'stop.' After I am gone, my son will not have it.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "allowChineseCharacters": true
+        },
+        {
+          "zh": "卲懼，請改焉。",
+          "literal": "Shao was afraid and asked to change it.",
+          "idiomatic": "Shao was frightened and asked to change the names.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "文宣不許曰：「天也。」",
+          "literal": "Wenxuan did not permit it and said, \"It is Heaven.\"",
+          "idiomatic": "Wenxuan refused, saying, \"It is Heaven.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "因謂孝昭帝曰：「奪但奪，慎勿殺也。」",
+          "literal": "He then told Emperor Xiaozhao, \"If you seize it, just seize it; be careful not to kill him.\"",
+          "idiomatic": "He then told Emperor Xiaozhao, \"If you take it, take it, but be careful not to kill him.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "論曰：濟南繼業，大革其弊，風教粲然，搢紳稱幸。",
+          "literal": "The appraisal says: Jinan inherited the enterprise, greatly reformed its abuses, and teaching and customs shone brightly; the gentry considered themselves fortunate.",
+          "idiomatic": "The appraisal says: Jinan inherited the enterprise and greatly reformed its abuses. Teaching and custom shone brightly, and the gentry counted themselves fortunate.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "股肱輔弼，雖懷厥誠，旣不能贊弘道德，和睦親懿，又不能遠慮防身，深謀衛主，應斷不斷，自取其咎。",
+          "literal": "His chief ministers and assistants, although they held sincere intentions, could neither assist him in magnifying the Way and virtue and harmonizing his close kin, nor plan farsightedly to protect themselves and deeply scheme to safeguard their lord; when they should have acted decisively they did not, and brought blame upon themselves.",
+          "idiomatic": "His chief ministers may have been sincere, but they could not help him enlarge the Way and virtue or keep harmony among his kin. Nor could they plan far enough to protect themselves or safeguard their lord. When decision was needed they failed to decide, and brought disaster on themselves.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "臣旣誅夷，君壽廢辱，皆任非其器之所致爾。",
+          "literal": "The ministers were already executed and wiped out, while the ruler, though alive, was deposed and humiliated; all this came from entrusting office to men who were not equal to the task.",
+          "idiomatic": "The ministers were exterminated, and the ruler, though still alive, was deposed and humiliated. All of it came from entrusting affairs to men unequal to the task.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        }
+      ],
+      "reviewedAt": "2026-06-22T09:20:01.282Z",
+      "reviewer": "source-correspondence",
+      "appliedAt": "2026-06-22T09:20:01.296Z",
+      "appliedSummary": {
+        "id": "source-beiqishu-005-wikisource-ff0cfe8f8268",
+        "type": "source_omission_candidate",
+        "start": 48,
+        "removed": 1,
+        "inserted": 18,
+        "delta": 17,
+        "manualTranslationsApplied": 17
+      }
     },
     {
       "id": "source-beiqishu-006-wikisource-06e306d1219f",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "beiqishu",
@@ -3274,12 +3487,75 @@
         "afterLocal": "帝聰敏有識度，深沉能斷，不可窺測。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Approved: upstream and ChineseNotes preserve the missing death edict and burial notice; splitter now attaches the closing quote to the edict instead of the following sentence.",
+      "manualTranslations": [
+        {
+          "zh": "十一月甲辰，詔曰：「朕嬰此暴疾，奄忽無逮。",
+          "literal": "In the eleventh month, on jiachen, an edict said: \"I have been stricken by this violent illness and suddenly can no longer reach affairs.",
+          "idiomatic": "In the eleventh month, on jiachen, an edict declared, \"I have been struck by a sudden grave illness and can no longer attend to affairs.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "今嗣子沖眇，未閑政術，社稷業重，理歸上德。",
+          "literal": "Now the heir is young and slight, not yet practiced in the arts of government; the work of the altars of soil and grain is weighty, and by principle it returns to one of highest virtue.",
+          "idiomatic": "The heir is young and slight, not yet versed in statecraft. The charge of the dynasty is heavy, and by rights it should pass to one of highest virtue.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "右丞相、長廣王湛研機測化，體道居宗，人雄之望，海內瞻仰，同胞共氣，家國所憑，可遣尚書左僕射、趙郡王叡喻旨，征王統茲大寶。",
+          "literal": "The Right Chancellor, Prince Zhan of Changguang, studies subtle workings and fathoms transformation, embodies the Way and stands within the clan; as a hero among men, he is looked up to within the seas. Of the same womb and shared breath, he is one on whom house and state rely. The Left Vice Director of the Masters of Writing, Prince Rui of Zhaojun, may be sent to explain the intent and summon the prince to govern this great treasure.",
+          "idiomatic": "Prince Zhan of Changguang, right chancellor, understands hidden workings and change, embodies the Way, and stands foremost among the clan. The whole realm looks to him as a hero among men. Born of the same mother and sharing the same breath, he is the support of house and state. Send Prince Rui of Zhaojun, left vice director of the Masters of Writing, to convey my intent and summon him to take charge of the throne.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "其喪紀之禮一同漢文，三十六日悉從公除，山陵施用，務從儉約。」",
+          "literal": "As for the rites of mourning, let all be the same as under Emperor Wen of Han; after thirty-six days, all shall follow public removal of mourning, and the expenditures for the mountain mausoleum must follow frugality.\"",
+          "idiomatic": "As for mourning rites, follow entirely the precedent of Emperor Wen of Han. After thirty-six days all mourning shall be removed according to public rule, and the mausoleum expenses must be kept frugal.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "先是帝不豫而無闕聽覽，是月，崩於晉陽宮，時年二十七。",
+          "literal": "Before this, the emperor had been ill but had not neglected hearings and review; that month he died in Jinyang Palace, aged twenty-seven.",
+          "idiomatic": "Before this the emperor had been ill, yet he had not neglected audiences or reviews of affairs. That month he died in Jinyang Palace at the age of twenty-seven.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "大寧元年閏十二月癸卯，梓宮還鄴，上諡曰孝昭皇帝。",
+          "literal": "In the intercalary twelfth month of the first year of Daning, on guimao, the imperial coffin returned to Ye, and the posthumous title Emperor Xiaozhao was presented.",
+          "idiomatic": "In the intercalary twelfth month of Daning 1, on guimao, his coffin was returned to Ye, and he was given the posthumous title Emperor Xiaozhao.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "庚午，葬於文靖陵。",
+          "literal": "On gengwu, he was buried in Wenjing Mausoleum.",
+          "idiomatic": "On gengwu he was buried in Wenjing Mausoleum.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        }
+      ],
+      "reviewedAt": "2026-06-22T09:28:10.045Z",
+      "reviewer": "source-correspondence",
+      "appliedAt": "2026-06-22T09:28:10.111Z",
+      "appliedSummary": {
+        "id": "source-beiqishu-006-wikisource-06e306d1219f",
+        "type": "source_omission_candidate",
+        "start": 91,
+        "removed": 0,
+        "inserted": 7,
+        "delta": 7,
+        "manualTranslationsApplied": 7
+      }
     },
     {
       "id": "source-beiqishu-006-wikisource-0a64bc0615b0",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "beiqishu",
@@ -3291,7 +3567,7 @@
         "startIndex": 38,
         "endIndex": 45,
         "count": 8,
-        "text": "及文宣崩，帝居禁中護喪事，幼主即位，乃即朝班。除太傅、錄尚書，朝政皆決於帝。月餘，乃居藩邸，自是詔勑多不關帝。客或言於帝曰：「鷙烏舍巢，必有探卵之患，今日之地，何宜屢出。」，從廢帝赴鄴，居於領軍府。時楊愔、燕子獻、可朱渾天和、宋欽道、鄭子默等以帝威望旣重，內懼權逼，請以帝為太師、司州牧、錄尚書事；長廣王湛為大司馬、錄幷省尚書事，解京畿大都督。帝時以尊親而見猜斥，乃與長廣王期獵，謀之於野。",
+        "text": "及文宣崩，帝居禁中護喪事，幼主即位，乃即朝班。除太傅、錄尚書，朝政皆決於帝。月餘，乃居藩邸，自是詔勑多不關帝。客或言於帝曰：「鷙烏舍巢，必有探卵之患，今日之地，何宜屢出。」乾明元年，從廢帝赴鄴，居於領軍府。時楊愔、燕子獻、可朱渾天和、宋欽道、鄭子默等以帝威望旣重，內懼權逼，請以帝為太師、司州牧、錄尚書事；長廣王湛為大司馬、錄幷省尚書事，解京畿大都督。帝時以尊親而見猜斥，乃與長廣王期獵，謀之於野。",
         "ids": [],
         "locations": []
       },
@@ -3303,12 +3579,82 @@
         "afterLocal": "三月甲戌，帝初上省，旦發領軍府，大風暴起，壞所御車幔，帝甚惡之。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Approved with source cleanup: restored the missing pre-coup paragraph from ChineseNotes/Wikisource, attached the closing quote to the warning sentence, restored the dropped 乾明元年 heading, and removed the leading comma artifact.",
+      "manualTranslations": [
+        {
+          "zh": "及文宣崩，帝居禁中護喪事，幼主即位，乃即朝班。",
+          "literal": "When Wenxuan died, the emperor remained inside the palace to oversee the funeral arrangements; after the young ruler ascended the throne, he then took his place in the court ranks.",
+          "idiomatic": "When Emperor Wenxuan died, Xiaozhao remained in the palace to oversee the funeral. Once the young ruler took the throne, he entered the court ranks.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "除太傅、錄尚書，朝政皆決於帝。",
+          "literal": "He was appointed Grand Tutor and Recorder of the Masters of Writing, and all court government was decided by the emperor.",
+          "idiomatic": "He was appointed grand tutor and recorder of the Masters of Writing, and all court affairs were decided by him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "月餘，乃居藩邸，自是詔勑多不關帝。",
+          "literal": "After more than a month he went to live in his princely residence, and from then on edicts and commands often did not involve the emperor.",
+          "idiomatic": "After a little over a month he withdrew to his princely residence, and from then on many edicts no longer passed through him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "客或言於帝曰：「鷙烏舍巢，必有探卵之患，今日之地，何宜屢出。」",
+          "literal": "A guest once said to the emperor, \"When a fierce bird leaves its nest, there is sure to be the danger of someone probing its eggs; in your present position, you should not go out repeatedly.\"",
+          "idiomatic": "One guest warned him, \"When a bird of prey leaves the nest, someone is bound to reach for its eggs. In your present position, you should not be going out so often.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "乾明元年，從廢帝赴鄴，居於領軍府。",
+          "literal": "In the first year of Qianming, he followed Emperor Fei to Ye and lived at the headquarters of the Commanding General.",
+          "idiomatic": "In Qianming 1 he accompanied Emperor Fei to Ye and resided at the headquarters of the Commanding General.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "時楊愔、燕子獻、可朱渾天和、宋欽道、鄭子默等以帝威望旣重，內懼權逼，請以帝為太師、司州牧、錄尚書事；",
+          "literal": "At the time Yang Yin, Yanzi Xian, Kezhuhun Tianhe, Song Qindao, Zheng Zimo, and others, because the emperor’s prestige had become weighty and they inwardly feared the pressure of his power, requested that he be made Grand Preceptor, governor of Sizhou, and Recorder of the Masters of Writing;",
+          "idiomatic": "At the time Yang Yin, Yanzi Xian, Kezhuhun Tianhe, Song Qindao, Zheng Zimo, and the others saw how great his prestige had become and secretly feared the pressure of his authority. They asked that he be made grand preceptor, governor of Sizhou, and recorder of the Masters of Writing;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "長廣王湛為大司馬、錄幷省尚書事，解京畿大都督。",
+          "literal": "Prince Zhan of Changguang was made Grand Marshal and Recorder of the Affairs of the Masters of Writing in Bing Province, and was relieved as metropolitan commander of the capital region.",
+          "idiomatic": "Prince Zhan of Changguang was appointed grand marshal and recorder of the Masters of Writing in the Bingzhou administration, and was relieved of the capital-region command.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "帝時以尊親而見猜斥，乃與長廣王期獵，謀之於野。",
+          "literal": "The emperor at that time, because he was an honored kinsman, was regarded with suspicion and pushed aside; he therefore arranged to hunt with the Prince of Changguang and plotted with him in the countryside.",
+          "idiomatic": "Because his rank and kinship made him suspect, Xiaozhao was being pushed aside. He therefore arranged a hunt with Prince Zhan of Changguang and plotted with him in the field.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        }
+      ],
+      "reviewedAt": "2026-06-22T09:28:10.045Z",
+      "reviewer": "source-correspondence",
+      "appliedAt": "2026-06-22T09:28:10.111Z",
+      "appliedSummary": {
+        "id": "source-beiqishu-006-wikisource-0a64bc0615b0",
+        "type": "source_omission_candidate",
+        "start": 38,
+        "removed": 0,
+        "inserted": 8,
+        "delta": 8,
+        "manualTranslationsApplied": 8
+      }
     },
     {
       "id": "source-beiqishu-006-wikisource-26e2747da065",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.6,
@@ -3351,12 +3697,14 @@
         "afterLocal": "及文襄執政，遣中書侍郎李同軌就霸府為諸弟師。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: the external witness dropped the linked era text, while local “魏元象元年，封常山郡公。” is fuller and agrees with the chapter context.",
+      "reviewedAt": "2026-06-22T09:28:10.045Z",
+      "reviewer": "source-correspondence"
     },
     {
       "id": "source-beiqishu-006-wikisource-78a9439c0127",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -3399,12 +3747,14 @@
         "afterLocal": "詔奉太皇太后還稱皇太后，皇太后稱文宣皇后，宮曰昭信。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: the external witness dropped the linked era text, while local “皇建元年八月壬午...” is fuller and agrees with the chapter context.",
+      "reviewedAt": "2026-06-22T09:28:10.045Z",
+      "reviewer": "source-correspondence"
     },
     {
       "id": "source-beiqishu-006-wikisource-969abb75a935",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0.102,
@@ -3510,8 +3860,10 @@
         "afterLocal": "文宣崩後，大革前弊。"
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: Wikisource’s section view omits the earlier combined appraisal, but ChineseNotes preserves the local longer appraisal text before the Xiaozhao-specific passage.",
+      "reviewedAt": "2026-06-22T09:28:10.045Z",
+      "reviewer": "source-correspondence"
     },
     {
       "id": "source-beiqishu-007-wikisource-11e326045b5d",
@@ -17092,5 +17444,5 @@
       "notes": ""
     }
   ],
-  "updatedAt": "2026-06-22T09:08:46.161Z"
+  "updatedAt": "2026-06-22T09:28:10.143Z"
 }
