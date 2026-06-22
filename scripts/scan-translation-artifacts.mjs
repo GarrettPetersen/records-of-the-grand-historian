@@ -54,6 +54,12 @@ function isAllowedArtifactHit(ruleId, found, text, index) {
 
 export const TRANSLATION_ARTIFACT_RULES = [
   {
+    id: 'RAW_TABLE_ATTRIBUTE',
+    severity: 3,
+    description: 'Raw table markup attribute left in English translation text',
+    pattern: /\b(?:rowspan|colspan|valign|align|style|width|height)\s*=\s*(?:"[^"]*"|'[^']*'|[^\s|]+)\s*\|?/gi,
+  },
+  {
     id: 'RAW_MARKDOWN_EMPHASIS',
     severity: 3,
     description: 'Raw Markdown emphasis marker left in published translation text',

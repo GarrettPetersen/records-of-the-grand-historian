@@ -33,6 +33,30 @@ const SOURCE_ARTIFACT_RULES = [
     pattern: /[∴�￼]/gu,
   },
   {
+    id: 'SOURCE_CTEXT_INLINE_MARKUP',
+    severity: 3,
+    description: 'CText inline normalization markup leaked into Chinese source',
+    pattern: /-\{[^}]+\}-/gu,
+  },
+  {
+    id: 'SOURCE_KANA_PLACEHOLDER',
+    severity: 3,
+    description: 'Kana placeholder leaked into Chinese source',
+    pattern: /[ぁ-ゟ゠-ヿ]/gu,
+  },
+  {
+    id: 'SOURCE_PRIVATE_USE_GLYPH',
+    severity: 3,
+    description: 'Private-use glyph leaked into Chinese source',
+    pattern: /[\uE000-\uF8FF]/gu,
+  },
+  {
+    id: 'SOURCE_BROKEN_HTML_TAG',
+    severity: 3,
+    description: 'Broken HTML tag fragment leaked into Chinese source',
+    pattern: /\/[a-z][a-z0-9]*>/giu,
+  },
+  {
     id: 'SOURCE_HTML_TABLE_SPAN',
     severity: 3,
     description: 'HTML table span attribute leaked into Chinese source',
