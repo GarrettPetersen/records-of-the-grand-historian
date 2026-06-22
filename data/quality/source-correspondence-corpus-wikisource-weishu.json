@@ -31677,7 +31677,7 @@
     },
     {
       "id": "source-weishu-021-wikisource-1cfa58286d87",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -31720,12 +31720,14 @@
         "afterLocal": "量省二三，謂芳為得。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: raw source text matches local text apart from the local collation marker [9]; no corpus source repair needed.",
+      "reviewedAt": "2026-06-22T23:00:53.311Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-021-wikisource-2fe85b68ac20",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.455,
@@ -31786,13 +31788,34 @@
         "afterLocal": "袁椒房生陽平幽王新成。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource opens with this single source sentence; local had converted the header note into a stray heading and split the sentence.",
+      "reviewedAt": "2026-06-22T23:00:53.311Z",
+      "reviewer": "source-correspondence-manual",
+      "manualTranslations": [
+        {
+          "zh": "景穆皇帝十四男：恭皇后生文成皇帝。",
+          "literal": "Emperor Jingmu had fourteen sons: Empress Gong gave birth to Emperor Wencheng.",
+          "idiomatic": "Emperor Jingmu had fourteen sons: Empress Gong gave birth to Emperor Wencheng.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T23:01:09.714Z",
+      "appliedSummary": {
+        "id": "source-weishu-021-wikisource-2fe85b68ac20",
+        "type": "source_replacement_candidate",
+        "start": 0,
+        "removed": 3,
+        "inserted": 1,
+        "delta": -2,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-weishu-021-wikisource-37bc72311a14",
-      "status": "pending",
-      "type": "local_extra_candidate",
+      "status": "applied",
+      "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.01,
       "book": "weishu",
@@ -31803,484 +31826,60 @@
       "sourceRange": {
         "startIndex": 446,
         "endIndex": 449,
-        "count": 4,
-        "text": "論曰：陽平諸子，頤乃忠壯。京兆之胤，悽實有聲。匡之謇直，有足稱矣！category:魏書",
+        "count": 3,
+        "text": "論曰：陽平諸子，頤乃忠壯。京兆之胤，悽實有聲。匡之謇直，有足稱矣！",
         "ids": [],
         "locations": []
       },
-      "localRange": {
-        "startIndex": 408,
-        "endIndex": 457,
-        "count": 50,
-        "text": "校勘記魏書卷十九上諸本目錄此卷注「闕」。百衲本、南本、汲本、局本卷末有宋人校語云：「魏收書景穆十二王列傳卷上亡。殿本考證云：「魏收書亡，後人所補。按此傳以北史卷一七景穆十二王傳補，間有溢出字句，當出於高氏小史。世宗景明元年薨於青州刺史諸本「元」作「六」，殿本作「元」。北史卷一七百衲本此字缺，他本或作「六」。按景明無六年，頤死於景明元年十一月，見卷八世宗紀，今從殿本。諡曰文墓誌集釋元悰墓誌〈圖版一００〉云：「諡曰文靖。墓誌與傳諡號不同者甚多，也有誌載諡而傳缺，傳載而誌缺。有的是先後改諡，有的是原諡不美，子孫私改，有的是後來補諡，不獨誌、傳有異，誌與誌間亦常不合，很難判斷是非。今後凡諡號異同有無均不出校記。遷冀州刺史自此句至下文「遷右光祿大夫」一段北史卷一七無。按墓誌集釋元遙墓誌〈圖版一０六〉說他景明時「出拜鎮軍將軍、冀州刺史，入除護軍，加右光祿大夫。延昌中，淮泗不靜，加征南大將軍、南征諸軍事」。則遙為冀州刺史，在元恪的景明年間；是由冀州刺史入為右光祿大夫、護軍，非如此傳所云以左光祿大夫，領護軍，出為冀州，更不在「肅宗初」。此段當是補此傳者採自高氏小史或他書，弄錯了時間，遂致先後倒置。下文又說「遷右光祿大夫」，實即前「左光祿大夫」的重出〈北史已誤「右」為「左」〉，插入的痕跡甚顯。據卷八世宗紀正始三年八月見「元恒」，而卷九肅宗紀孝昌二年六月丙子、孝昌三年正月甲申，卷一０孝莊紀武泰元年四月己亥，卷五八楊椿傳並見「元恒芝」。疑初名「恒」，後加「芝」字。汝陰王天賜和平三年封按天賜於和平二年七月戊寅，與小新成、萬壽同日封，見卷五高宗紀，這裏「三」當是「二」之訛。下樂浪王萬壽傳同訛。高祖器之諸本「祖」作「宗」，北史卷一七作「孝文」。按元匡乃元濬〈高宗〉弟新成子，若這裏作「高宗」，則下文元濬稱之為「叔父」，豈非顛倒？北史作「孝文」，補此傳者依魏書例，改作「高祖」，「祖」訛「宗」，今改正。而尚書令臣肇以芳造〈至〉仍云扶按此段文義不可解。「造」下、「扶」下當有脫文。抑中無所張森楷北史校勘記云：「疑『抑』是『折』之誤。按通志卷八四下正作「折」，疑是。恐此由心張森楷云：「『此』疑當是『非』字，作『此』則與文義不相應。劉芳學高一時深明典故其所據者與先朝尺乃寸過一黍何得復云先朝之意也按前贊劉芳，後不應說他所據與「先朝尺」不合云云。據上王顯彈文，說「芳造寸，唯止十黍」，則所謂「寸過一黍」，明非斥芳，恐是指元匡所造尺。這裏「其所據者」下當有脫文。大概是說劉芳根據的是「先朝」所頒尺，而元匡所造則「寸過一黍」，故下文斥責元匡「所執不經」。今於「其所據者」下句斷。私繼歲久按上文明云元恪〈世宗〉時，匡已求紹洛侯封，經尚書議奏襲封，則並非私繼，且襲封已久。不知何以前後矛盾。",
-        "ids": [
-          "s0410",
-          "s0411",
-          "s0412",
-          "s0413",
-          "s0414",
-          "s0415",
-          "s0416",
-          "s0417",
-          "s0418",
-          "s0419",
-          "s0420",
-          "s0421",
-          "s0422",
-          "s0423",
-          "s0424",
-          "s0425",
-          "s0426",
-          "s0427",
-          "s0428",
-          "s0429",
-          "s0430",
-          "s0431",
-          "s0432",
-          "s0433",
-          "s0434",
-          "s0436",
-          "s0437",
-          "s0438",
-          "s0439",
-          "s0440",
-          "s0441",
-          "s0442",
-          "s0443",
-          "s0444",
-          "s0445",
-          "s0446",
-          "s0447",
-          "s0448",
-          "s0449",
-          "s0450",
-          "s0451",
-          "s0452",
-          "s0453",
-          "s0454",
-          "s0455",
-          "s0456",
-          "s0457",
-          "s0458",
-          "s0459",
-          "s0460"
-        ],
-        "locations": [
-          {
-            "blockIndex": 55,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0410"
-          },
-          {
-            "blockIndex": 56,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0411"
-          },
-          {
-            "blockIndex": 56,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0412"
-          },
-          {
-            "blockIndex": 56,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 2,
-            "field": "zh",
-            "id": "s0413"
-          },
-          {
-            "blockIndex": 56,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 3,
-            "field": "zh",
-            "id": "s0414"
-          },
-          {
-            "blockIndex": 57,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0415"
-          },
-          {
-            "blockIndex": 57,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0416"
-          },
-          {
-            "blockIndex": 57,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 2,
-            "field": "zh",
-            "id": "s0417"
-          },
-          {
-            "blockIndex": 58,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0418"
-          },
-          {
-            "blockIndex": 58,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0419"
-          },
-          {
-            "blockIndex": 58,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 2,
-            "field": "zh",
-            "id": "s0420"
-          },
-          {
-            "blockIndex": 58,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 3,
-            "field": "zh",
-            "id": "s0421"
-          },
-          {
-            "blockIndex": 58,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 4,
-            "field": "zh",
-            "id": "s0422"
-          },
-          {
-            "blockIndex": 58,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 5,
-            "field": "zh",
-            "id": "s0423"
-          },
-          {
-            "blockIndex": 59,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0424"
-          },
-          {
-            "blockIndex": 59,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0425"
-          },
-          {
-            "blockIndex": 59,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 2,
-            "field": "zh",
-            "id": "s0426"
-          },
-          {
-            "blockIndex": 59,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 3,
-            "field": "zh",
-            "id": "s0427"
-          },
-          {
-            "blockIndex": 59,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 4,
-            "field": "zh",
-            "id": "s0428"
-          },
-          {
-            "blockIndex": 59,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 5,
-            "field": "zh",
-            "id": "s0429"
-          },
-          {
-            "blockIndex": 59,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 6,
-            "field": "zh",
-            "id": "s0430"
-          },
-          {
-            "blockIndex": 59,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 7,
-            "field": "zh",
-            "id": "s0431"
-          },
-          {
-            "blockIndex": 59,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 8,
-            "field": "zh",
-            "id": "s0432"
-          },
-          {
-            "blockIndex": 59,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 9,
-            "field": "zh",
-            "id": "s0433"
-          },
-          {
-            "blockIndex": 59,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 10,
-            "field": "zh",
-            "id": "s0434"
-          },
-          {
-            "blockIndex": 60,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0436"
-          },
-          {
-            "blockIndex": 60,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 2,
-            "field": "zh",
-            "id": "s0437"
-          },
-          {
-            "blockIndex": 61,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0438"
-          },
-          {
-            "blockIndex": 61,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0439"
-          },
-          {
-            "blockIndex": 62,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0440"
-          },
-          {
-            "blockIndex": 62,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0441"
-          },
-          {
-            "blockIndex": 62,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 2,
-            "field": "zh",
-            "id": "s0442"
-          },
-          {
-            "blockIndex": 62,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 3,
-            "field": "zh",
-            "id": "s0443"
-          },
-          {
-            "blockIndex": 62,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 4,
-            "field": "zh",
-            "id": "s0444"
-          },
-          {
-            "blockIndex": 63,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0445"
-          },
-          {
-            "blockIndex": 63,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0446"
-          },
-          {
-            "blockIndex": 63,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 2,
-            "field": "zh",
-            "id": "s0447"
-          },
-          {
-            "blockIndex": 63,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 3,
-            "field": "zh",
-            "id": "s0448"
-          },
-          {
-            "blockIndex": 64,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0449"
-          },
-          {
-            "blockIndex": 64,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0450"
-          },
-          {
-            "blockIndex": 65,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0451"
-          },
-          {
-            "blockIndex": 66,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0452"
-          },
-          {
-            "blockIndex": 66,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0453"
-          },
-          {
-            "blockIndex": 66,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 2,
-            "field": "zh",
-            "id": "s0454"
-          },
-          {
-            "blockIndex": 66,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 3,
-            "field": "zh",
-            "id": "s0455"
-          },
-          {
-            "blockIndex": 66,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 4,
-            "field": "zh",
-            "id": "s0456"
-          },
-          {
-            "blockIndex": 67,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0457"
-          },
-          {
-            "blockIndex": 67,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 1,
-            "field": "zh",
-            "id": "s0458"
-          },
-          {
-            "blockIndex": 67,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 2,
-            "field": "zh",
-            "id": "s0459"
-          },
-          {
-            "blockIndex": 67,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 3,
-            "field": "zh",
-            "id": "s0460"
-          }
-        ]
-      },
+      "localRange": null,
       "context": {
         "beforeSource": "齊受禪，爵例降。",
-        "afterSource": "",
-        "beforeLocal": "齊受禪，爵例降。",
-        "afterLocal": ""
+        "afterSource": "校勘記",
+        "beforeLocal": "[14]",
+        "afterLocal": "校勘記"
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms the final appraisal before the collation notes; scanner misclassified the following 校勘記 material as local extra and included category metadata.",
+      "reviewedAt": "2026-06-22T23:00:53.311Z",
+      "reviewer": "source-correspondence-manual",
+      "manualTranslations": [
+        {
+          "zh": "論曰：陽平諸子，頤乃忠壯。",
+          "literal": "The appraisal says: Among the sons of Yangping, Yi was loyal and resolute.",
+          "idiomatic": "The appraisal says: Among the sons of Yangping, Yi was loyal and resolute.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "京兆之胤，悽實有聲。",
+          "literal": "Among Jingzhao's descendants, Qi truly had a reputation.",
+          "idiomatic": "Among Jingzhao's descendants, Qi truly had a reputation.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "匡之謇直，有足稱矣！",
+          "literal": "Kuang's forthright integrity is worthy of praise.",
+          "idiomatic": "Kuang's forthright integrity is worthy of praise.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T23:01:09.714Z",
+      "appliedSummary": {
+        "id": "source-weishu-021-wikisource-37bc72311a14",
+        "type": "source_omission_candidate",
+        "start": 407,
+        "removed": 0,
+        "inserted": 3,
+        "delta": 3,
+        "manualTranslationsApplied": 3
+      }
     },
     {
       "id": "source-weishu-021-wikisource-6e87070b1f6a",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.704,
@@ -32332,12 +31931,14 @@
         "afterLocal": "初，弼嘗夢人謂之曰：「君身不得傳世封，其紹先爵者，君長子紹遠也。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: scanner dropped Wikisource YL regnal-year template text for 建義元年 and 永安三年; local source preserves the complete dates.",
+      "reviewedAt": "2026-06-22T23:00:53.311Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-021-wikisource-83d8f54a001c",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -32349,7 +31950,7 @@
         "startIndex": 66,
         "endIndex": 71,
         "count": 6,
-        "text": "」京兆王子推，封。位侍中、征南大將軍、長安鎮都大將。子推性沉雅，善於綏接，秦雍之人，服其威惠。入為中都大官，察獄有稱。顯祖將禪位於子推，以大臣固諫，乃傳高祖。高祖即位，拜侍中、本將軍、開府儀同三司、青州刺史，未至，道薨。",
+        "text": "京兆王子推，太安五年封。位侍中、征南大將軍、長安鎮都大將。子推性沉雅，善於綏接，秦雍之人，服其威惠。入為中都大官，察獄有稱。顯祖將禪位於子推，以大臣固諫，乃傳高祖。高祖即位，拜侍中、本將軍、開府儀同三司、青州刺史，未至，道薨。",
         "ids": [],
         "locations": []
       },
@@ -32361,12 +31962,68 @@
         "afterLocal": "子太興，襲。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms the omitted Jingzhao Prince Zipui biography; restored the Tai'an regnal year dropped by template parsing.",
+      "reviewedAt": "2026-06-22T23:00:53.311Z",
+      "reviewer": "source-correspondence-manual",
+      "manualTranslations": [
+        {
+          "zh": "京兆王子推，太安五年封。",
+          "literal": "Zipui, Prince of Jingzhao, was enfeoffed in the fifth year of Tai'an.",
+          "idiomatic": "Zipui, Prince of Jingzhao, was enfeoffed in the fifth year of Tai'an.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "位侍中、征南大將軍、長安鎮都大將。",
+          "literal": "He held the posts of Attendant-in-Chief, Grand General Who Campaigns South, and Grand General of the Chang'an Garrison.",
+          "idiomatic": "He held the posts of Attendant-in-Chief, Grand General Who Campaigns South, and Grand General of the Chang'an Garrison.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "子推性沉雅，善於綏接，秦雍之人，服其威惠。",
+          "literal": "Zipui was calm and refined by nature and skilled at pacifying and receiving others; the people of Qin and Yong submitted to his authority and kindness.",
+          "idiomatic": "Zipui was calm and refined by nature and skilled at pacifying and receiving others; the people of Qin and Yong submitted to his authority and kindness.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "入為中都大官，察獄有稱。",
+          "literal": "He entered court as High Official of the Central Capital and was praised for reviewing legal cases.",
+          "idiomatic": "He entered court as High Official of the Central Capital and was praised for reviewing legal cases.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "顯祖將禪位於子推，以大臣固諫，乃傳高祖。",
+          "literal": "Emperor Xianzu was about to abdicate in favor of Zipui, but because the senior ministers firmly remonstrated, he transmitted the throne to Gaozu instead.",
+          "idiomatic": "Emperor Xianzu was about to abdicate in favor of Zipui, but because the senior ministers firmly remonstrated, he transmitted the throne to Gaozu instead.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "高祖即位，拜侍中、本將軍、開府儀同三司、青州刺史，未至，道薨。",
+          "literal": "After Gaozu took the throne, Zipui was appointed Attendant-in-Chief, retained his previous generalship, was made Director with the Ceremonial of the Three Excellencies and Inspector of Qing Province, but died on the road before arriving.",
+          "idiomatic": "After Gaozu took the throne, Zipui was appointed Attendant-in-Chief, retained his previous generalship, was made Director with the Ceremonial of the Three Excellencies and Inspector of Qing Province, but died on the road before arriving.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T23:01:09.714Z",
+      "appliedSummary": {
+        "id": "source-weishu-021-wikisource-83d8f54a001c",
+        "type": "source_omission_candidate",
+        "start": 66,
+        "removed": 0,
+        "inserted": 6,
+        "delta": 6,
+        "manualTranslationsApplied": 6
+      }
     },
     {
       "id": "source-weishu-021-wikisource-90fa664e66ea",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.6,
@@ -32409,12 +32066,14 @@
         "afterLocal": "薨，諡曰殤。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: scanner dropped the Wikisource YL regnal-year template text 和平二年; local source preserves the complete date.",
+      "reviewedAt": "2026-06-22T23:00:53.311Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-021-wikisource-abbeac0b9849",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -32457,8 +32116,10 @@
         "afterLocal": "肅宗初，入為御史中尉。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: raw source text matches local text apart from the local collation marker [12]; no corpus source repair needed.",
+      "reviewedAt": "2026-06-22T23:00:53.311Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-021-wikisource-b0252cb54f89",
@@ -32512,7 +32173,7 @@
     },
     {
       "id": "source-weishu-021-wikisource-b4ada5341497",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -32536,8 +32197,85 @@
         "afterLocal": "子沖，襲。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms the omitted Yuan Xian passage between Zhongjing and Chong.",
+      "reviewedAt": "2026-06-22T23:00:53.311Z",
+      "reviewer": "source-correspondence-manual",
+      "manualTranslations": [
+        {
+          "zh": "仲景弟暹，字叔照。",
+          "literal": "Zhongjing's younger brother Xian was styled Shuzhao.",
+          "idiomatic": "Zhongjing's younger brother Xian was styled Shuzhao.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "莊帝初，除南兗州刺史，在州猛暴，多所殺害。",
+          "literal": "At the beginning of Emperor Zhuang's reign, he was appointed Inspector of Southern Yan Province; in the province he was fierce and violent and killed many people.",
+          "idiomatic": "At the beginning of Emperor Zhuang's reign, he was appointed Inspector of Southern Yan Province; in the province he was fierce and violent and killed many people.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "元顥入洛，暹據州不屈。",
+          "literal": "When Yuan Hao entered Luoyang, Xian held the province and did not yield.",
+          "idiomatic": "When Yuan Hao entered Luoyang, Xian held the province and did not yield.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "莊帝還宮，封汝陽王，遷秦州刺史。",
+          "literal": "When Emperor Zhuang returned to the palace, Xian was enfeoffed as Prince of Ruyang and transferred to Inspector of Qin Province.",
+          "idiomatic": "When Emperor Zhuang returned to the palace, Xian was enfeoffed as Prince of Ruyang and transferred to Inspector of Qin Province.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "先時，秦州城人屢為反覆，暹盡誅之，存者十一二。",
+          "literal": "Previously, the people within Qin Province's city had repeatedly changed sides, so Xian executed them all; only one or two in ten survived.",
+          "idiomatic": "Previously, the people within Qin Province's city had repeatedly changed sides, so Xian executed them all; only one or two in ten survived.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "普泰元年，除涼州刺史，貪暴無極。",
+          "literal": "In the first year of Putai, he was appointed Inspector of Liang Province and was boundlessly greedy and violent.",
+          "idiomatic": "In the first year of Putai, he was appointed Inspector of Liang Province and was boundlessly greedy and violent.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "欲規府人及商胡富人財物，詐一臺符，誑諸豪等云欲加賞，一時屠戮，所有資財生口，悉沒自入。",
+          "literal": "Wanting to seize the property of wealthy people in the province and rich Hu merchants, he forged a government tally and deceived the local magnates by saying he wished to grant rewards; then he slaughtered them all at once, and all their assets, goods, and dependents were confiscated into his own possession.",
+          "idiomatic": "Wanting to seize the property of wealthy people in the province and rich Hu merchants, he forged a government tally and deceived the local magnates by saying he wished to grant rewards; then he slaughtered them all at once, and all their assets, goods, and dependents were confiscated into his own possession.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "孝靜時，位侍中、錄尚書事。",
+          "literal": "In Emperor Xiaojing's time, he held the posts of Attendant-in-Chief and Recorder of the Affairs of the Secretariat.",
+          "idiomatic": "In Emperor Xiaojing's time, he held the posts of Attendant-in-Chief and Recorder of the Affairs of the Secretariat.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "薨，贈太師、錄尚書。",
+          "literal": "He died and was posthumously appointed Grand Preceptor and Recorder of the Secretariat.",
+          "idiomatic": "He died and was posthumously appointed Grand Preceptor and Recorder of the Secretariat.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T23:01:09.714Z",
+      "appliedSummary": {
+        "id": "source-weishu-021-wikisource-b4ada5341497",
+        "type": "source_omission_candidate",
+        "start": 102,
+        "removed": 0,
+        "inserted": 9,
+        "delta": 9,
+        "manualTranslationsApplied": 9
+      }
     },
     {
       "id": "source-weishu-021-wikisource-bd834b1c9773",
@@ -32591,7 +32329,7 @@
     },
     {
       "id": "source-weishu-021-wikisource-bf13899e4866",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -32603,7 +32341,7 @@
         "startIndex": 202,
         "endIndex": 214,
         "count": 13,
-        "text": "子誕，字曇首。初，誕伯父鬱以貪汙賜死，爵除。，誕訴云，伯鬱前朝之封，正以年長襲封，以罪除爵。爵由謬襲，襲應歸正。詔以偃正元妃息曇首，濟陰王嫡孫，可聽紹封，以纂先緒。誕既襲爵，除齊州刺史。在州貪暴，大為人患，牛馬騾驢，無不逼奪。家之奴隸，悉迫取良人為婦。有沙門為誕採藥，還而見之，誕曰：「師從外來，有何消息？」對曰：「唯聞王貪，願王早代。」誕曰：「齊州七萬戶，吾至來，一家未得三十錢，何得言貪？」後為御史中尉元纂所糾，會赦免。薨，諡曰靜王。",
+        "text": "子誕，字曇首。初，誕伯父鬱以貪汙賜死，爵除。景明三年，誕訴云，伯鬱前朝之封，正以年長襲封，以罪除爵。爵由謬襲，襲應歸正。詔以偃正元妃息曇首，濟陰王嫡孫，可聽紹封，以纂先緒。誕既襲爵，除齊州刺史。在州貪暴，大為人患，牛馬騾驢，無不逼奪。家之奴隸，悉迫取良人為婦。有沙門為誕採藥，還而見之，誕曰：「師從外來，有何消息？」對曰：「唯聞王貪，願王早代。」誕曰：「齊州七萬戶，吾至來，一家未得三十錢，何得言貪？」後為御史中尉元纂所糾，會赦免。薨，諡曰靜王。",
         "ids": [],
         "locations": []
       },
@@ -32615,12 +32353,122 @@
         "afterLocal": "子撫，字伯懿，襲。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms the omitted Yuan Dan passage; restored 景明三年 dropped by template parsing. Placement corrected after application: the inserted Yuan Dan passage was moved from the first ambiguous 卒。 anchor to the raw-source location after 鬱弟偃，字仲琁，位太中大夫。卒。 and before 子撫，字伯懿，襲。",
+      "reviewedAt": "2026-06-22T23:00:53.311Z",
+      "reviewer": "source-correspondence-manual",
+      "manualTranslations": [
+        {
+          "zh": "子誕，字曇首。",
+          "literal": "His son Dan was styled Tanshou.",
+          "idiomatic": "His son Dan was styled Tanshou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "初，誕伯父鬱以貪汙賜死，爵除。",
+          "literal": "Earlier, Dan's uncle Yu had been ordered to die for corruption, and the title was abolished.",
+          "idiomatic": "Earlier, Dan's uncle Yu had been ordered to die for corruption, and the title was abolished.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "景明三年，誕訴云，伯鬱前朝之封，正以年長襲封，以罪除爵。",
+          "literal": "In the third year of Jingming, Dan appealed, saying, \"My uncle Yu's enfeoffment from the previous reign was only because, as the eldest, he had inherited the title, and the title was abolished because of his crime.",
+          "idiomatic": "In the third year of Jingming, Dan appealed, saying, \"My uncle Yu's enfeoffment from the previous reign was only because, as the eldest, he had inherited the title, and the title was abolished because of his crime.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "爵由謬襲，襲應歸正。",
+          "literal": "The title had been inherited in error, and the succession should return to the proper line.",
+          "idiomatic": "The title had been inherited in error, and the succession should return to the proper line.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "詔以偃正元妃息曇首，濟陰王嫡孫，可聽紹封，以纂先緒。",
+          "literal": "An edict held that Tanshou was Yan's son by his principal consort and the legitimate grandson of the Prince of Jiyin, and allowed him to continue the enfeoffment and carry on the former line.",
+          "idiomatic": "An edict held that Tanshou was Yan's son by his principal consort and the legitimate grandson of the Prince of Jiyin, and allowed him to continue the enfeoffment and carry on the former line.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "誕既襲爵，除齊州刺史。",
+          "literal": "After Dan inherited the title, he was appointed Inspector of Qi Province.",
+          "idiomatic": "After Dan inherited the title, he was appointed Inspector of Qi Province.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "在州貪暴，大為人患，牛馬騾驢，無不逼奪。",
+          "literal": "In the province he was greedy and violent, becoming a great scourge to the people; cattle, horses, mules, and donkeys were all forcibly seized.",
+          "idiomatic": "In the province he was greedy and violent, becoming a great scourge to the people; cattle, horses, mules, and donkeys were all forcibly seized.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "家之奴隸，悉迫取良人為婦。",
+          "literal": "For his household slaves, he forced freeborn people to become wives.",
+          "idiomatic": "For his household slaves, he forced freeborn people to become wives.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "有沙門為誕採藥，還而見之，誕曰：「師從外來，有何消息？」",
+          "literal": "A monk gathered medicinal herbs for Dan and, on returning, came to see him. Dan asked, \"Master, you have come from outside; what news is there?\"",
+          "idiomatic": "A monk gathered medicinal herbs for Dan and, on returning, came to see him. Dan asked, \"Master, you have come from outside; what news is there?\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "對曰：「唯聞王貪，願王早代。」",
+          "literal": "He replied, \"I hear only that Your Highness is greedy, and I hope Your Highness will soon be replaced.\"",
+          "idiomatic": "He replied, \"I hear only that Your Highness is greedy, and I hope Your Highness will soon be replaced.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "誕曰：「齊州七萬戶，吾至來，一家未得三十錢，何得言貪？」",
+          "literal": "Dan said, \"Qi Province has seventy thousand households, and since I arrived I have not yet received thirty cash from any one household; how can you call me greedy?\"",
+          "idiomatic": "Dan said, \"Qi Province has seventy thousand households, and since I arrived I have not yet received thirty cash from any one household; how can you call me greedy?\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "後為御史中尉元纂所糾，會赦免。",
+          "literal": "Later he was impeached by Imperial Censor Yuan Zuan, but he happened to be pardoned under an amnesty.",
+          "idiomatic": "Later he was impeached by Imperial Censor Yuan Zuan, but he happened to be pardoned under an amnesty.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "薨，諡曰靜王。",
+          "literal": "He died and received the posthumous title Prince Jing.",
+          "idiomatic": "He died and received the posthumous title Prince Jing.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T23:01:09.714Z",
+      "appliedSummary": {
+        "id": "source-weishu-021-wikisource-bf13899e4866",
+        "type": "source_omission_candidate",
+        "start": 181,
+        "removed": 0,
+        "inserted": 13,
+        "delta": 13,
+        "manualTranslationsApplied": 13,
+        "placementCorrected": true,
+        "correctedContext": {
+          "beforeLocal": "鬱弟偃，字仲琁，位太中大夫。卒。",
+          "afterLocal": "子撫，字伯懿，襲。"
+        }
+      }
     },
     {
       "id": "source-weishu-021-wikisource-c5f2f0653ea7",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -32644,8 +32492,113 @@
         "afterLocal": "拜雍州刺史，為政嚴酷，吏人患之。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms the omitted Yuan Li campaign passage.",
+      "reviewedAt": "2026-06-22T23:00:53.311Z",
+      "reviewer": "source-correspondence-manual",
+      "manualTranslations": [
+        {
+          "zh": "偃弟麗，字寶掌。",
+          "literal": "Yan's younger brother Li was styled Baozhang.",
+          "idiomatic": "Yan's younger brother Li was styled Baozhang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "位兼宗正卿、右衞將軍，遷光祿勳，宗正、右衞如故。",
+          "literal": "He served concurrently as Chamberlain for the Imperial Clan and General of the Right Guard; he was promoted to Minister of Splendid Happiness while remaining Chamberlain for the Imperial Clan and General of the Right Guard as before.",
+          "idiomatic": "He served concurrently as Chamberlain for the Imperial Clan and General of the Right Guard; he was promoted to Minister of Splendid Happiness while remaining Chamberlain for the Imperial Clan and General of the Right Guard as before.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "時秦州屠各王法智推州主簿呂苟兒為主，號建明元年，置立百官，攻逼州郡。",
+          "literal": "At the time, Wang Fazhi of the Tuge in Qin Province put forward the provincial registrar Lu Gou'er as ruler, proclaimed the first year of Jianming, established a full bureaucracy, and attacked and pressed the provincial and commandery seats.",
+          "idiomatic": "At the time, Wang Fazhi of the Tuge in Qin Province put forward the provincial registrar Lu Gou'er as ruler, proclaimed the first year of Jianming, established a full bureaucracy, and attacked and pressed the provincial and commandery seats.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "涇州人陳瞻亦聚眾自稱王，號聖明元年。",
+          "literal": "Chen Zhan of Jing Province also gathered followers, called himself king, and proclaimed the first year of Shengming.",
+          "idiomatic": "Chen Zhan of Jing Province also gathered followers, called himself king, and proclaimed the first year of Shengming.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "詔以麗為使持節、都督、秦州刺史，與別駕楊椿討之。",
+          "literal": "An edict made Li Bearer of the Staff of Authority, Commander-in-Chief, and Inspector of Qin Province, and ordered him to campaign against them with the Administrative Aide Yang Chun.",
+          "idiomatic": "An edict made Li Bearer of the Staff of Authority, Commander-in-Chief, and Inspector of Qin Province, and ordered him to campaign against them with the Administrative Aide Yang Chun.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "苟兒率眾十餘萬屯孤山，列據諸險，圍逼州城。",
+          "literal": "Gou'er led more than one hundred thousand followers to garrison Gushan, occupying the strategic points and pressing the provincial city under siege.",
+          "idiomatic": "Gou'er led more than one hundred thousand followers to garrison Gushan, occupying the strategic points and pressing the provincial city under siege.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "麗出擊，大破之，便進軍水洛。",
+          "literal": "Li sallied out and struck them, badly defeating them, and then advanced to Shuiluo.",
+          "idiomatic": "Li sallied out and struck them, badly defeating them, and then advanced to Shuiluo.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "賊徒逆戰，麗夜擊走之。",
+          "literal": "The rebels came out to fight, and Li attacked by night and drove them off.",
+          "idiomatic": "The rebels came out to fight, and Li attacked by night and drove them off.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "行秦州事李韶破苟兒于孤山，乘勝追奔三十里，獲其父母妻子，斬賊王五人，其餘相繼歸降，諸城之圍，亦悉奔散。",
+          "literal": "Li Shao, acting in charge of Qin Province, defeated Gou'er at Gushan, pursued the routed enemy thirty li, captured Gou'er's parents, wife, and children, killed five rebel kings, and the rest surrendered one after another; the sieges of the cities all scattered as well.",
+          "idiomatic": "Li Shao, acting in charge of Qin Province, defeated Gou'er at Gushan, pursued the routed enemy thirty li, captured Gou'er's parents, wife, and children, killed five rebel kings, and the rest surrendered one after another; the sieges of the cities all scattered as well.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "苟兒率其王公三十餘人詣麗請罪。",
+          "literal": "Gou'er led more than thirty of his kings and dukes to Li to request punishment.",
+          "idiomatic": "Gou'er led more than thirty of his kings and dukes to Li to request punishment.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "椿又斬瞻。",
+          "literal": "Chun also beheaded Zhan.",
+          "idiomatic": "Chun also beheaded Zhan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "麗因平賊之勢，枉掠良善七百餘人。",
+          "literal": "Taking advantage of the victory over the rebels, Li wrongfully plundered more than seven hundred innocent people.",
+          "idiomatic": "Taking advantage of the victory over the rebels, Li wrongfully plundered more than seven hundred innocent people.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "世宗嘉其功，詔有司不聽追檢。",
+          "literal": "Shizong praised his achievement and ordered the authorities not to pursue an investigation.",
+          "idiomatic": "Shizong praised his achievement and ordered the authorities not to pursue an investigation.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T23:01:09.714Z",
+      "appliedSummary": {
+        "id": "source-weishu-021-wikisource-c5f2f0653ea7",
+        "type": "source_omission_candidate",
+        "start": 217,
+        "removed": 0,
+        "inserted": 13,
+        "delta": 13,
+        "manualTranslationsApplied": 13
+      }
     },
     {
       "id": "source-weishu-021-wikisource-d1244f7d4bd1",
@@ -32699,7 +32652,7 @@
     },
     {
       "id": "source-weishu-021-wikisource-ea80b2c12d51",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -32742,12 +32695,14 @@
         "afterLocal": "況匡表云：「所據銅權，形如古誌，明是漢作，非莽別造。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: raw source text matches local text apart from the local collation marker [11]; no corpus source repair needed.",
+      "reviewedAt": "2026-06-22T23:00:53.311Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-021-wikisource-f50511f355dd",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.706,
@@ -32790,8 +32745,10 @@
         "afterLocal": "傳國至孫宗胤，肅宗時，坐殺叔父賜死，爵除。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: scanner dropped Wikisource YL regnal-year template text 景明元年 and ignored local collation marker [2]; local source preserves the complete reading.",
+      "reviewedAt": "2026-06-22T23:00:53.311Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-022-wikisource-004a8637ff56",
@@ -169952,7 +169909,598 @@
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
       "decision": null,
       "notes": ""
+    },
+    {
+      "id": "source-weishu-021-wikisource-1ea910d54150",
+      "status": "denied",
+      "type": "text_discrepancy_candidate",
+      "severity": 2,
+      "similarity": 0.826,
+      "book": "weishu",
+      "chapter": "021",
+      "file": "data/weishu/021.json",
+      "sourceName": "wikisource",
+      "sourceUrl": "https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B719%E4%B8%8A?action=raw",
+      "sourceRange": {
+        "startIndex": 204,
+        "endIndex": 204,
+        "count": 1,
+        "text": "，誕訴云，伯鬱前朝之封，正以年長襲封，以罪除爵。",
+        "ids": [],
+        "locations": []
+      },
+      "localRange": {
+        "startIndex": 204,
+        "endIndex": 204,
+        "count": 1,
+        "text": "景明三年，誕訴云，伯鬱前朝之封，正以年長襲封，以罪除爵。",
+        "ids": [
+          "s0205"
+        ],
+        "locations": [
+          {
+            "blockIndex": 26,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 2,
+            "field": "zh",
+            "id": "s0205"
+          }
+        ]
+      },
+      "context": {
+        "beforeSource": "初，誕伯父鬱以貪汙賜死，爵除。",
+        "afterSource": "爵由謬襲，襲應歸正。",
+        "beforeLocal": "初，誕伯父鬱以貪汙賜死，爵除。",
+        "afterLocal": "爵由謬襲，襲應歸正。"
+      },
+      "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
+      "decision": "denied",
+      "notes": "Denied: scanner dropped Wikisource YL regnal-year template text 景明三年; local source now preserves the complete raw-source sentence.",
+      "reviewedAt": "2026-06-22T23:03:35.408Z",
+      "reviewer": "source-correspondence-manual"
+    },
+    {
+      "id": "source-weishu-021-wikisource-aaeb3638e05c",
+      "status": "denied",
+      "type": "local_extra_candidate",
+      "severity": 3,
+      "similarity": 0.002,
+      "book": "weishu",
+      "chapter": "021",
+      "file": "data/weishu/021.json",
+      "sourceName": "wikisource",
+      "sourceUrl": "https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B719%E4%B8%8A?action=raw",
+      "sourceRange": {
+        "startIndex": 449,
+        "endIndex": 449,
+        "count": 1,
+        "text": "category:魏書",
+        "ids": [],
+        "locations": []
+      },
+      "localRange": {
+        "startIndex": 450,
+        "endIndex": 499,
+        "count": 50,
+        "text": "校勘記魏書卷十九上諸本目錄此卷注「闕」。百衲本、南本、汲本、局本卷末有宋人校語云：「魏收書景穆十二王列傳卷上亡。殿本考證云：「魏收書亡，後人所補。按此傳以北史卷一七景穆十二王傳補，間有溢出字句，當出於高氏小史。世宗景明元年薨於青州刺史諸本「元」作「六」，殿本作「元」。北史卷一七百衲本此字缺，他本或作「六」。按景明無六年，頤死於景明元年十一月，見卷八世宗紀，今從殿本。諡曰文墓誌集釋元悰墓誌〈圖版一００〉云：「諡曰文靖。墓誌與傳諡號不同者甚多，也有誌載諡而傳缺，傳載而誌缺。有的是先後改諡，有的是原諡不美，子孫私改，有的是後來補諡，不獨誌、傳有異，誌與誌間亦常不合，很難判斷是非。今後凡諡號異同有無均不出校記。遷冀州刺史自此句至下文「遷右光祿大夫」一段北史卷一七無。按墓誌集釋元遙墓誌〈圖版一０六〉說他景明時「出拜鎮軍將軍、冀州刺史，入除護軍，加右光祿大夫。延昌中，淮泗不靜，加征南大將軍、南征諸軍事」。則遙為冀州刺史，在元恪的景明年間；是由冀州刺史入為右光祿大夫、護軍，非如此傳所云以左光祿大夫，領護軍，出為冀州，更不在「肅宗初」。此段當是補此傳者採自高氏小史或他書，弄錯了時間，遂致先後倒置。下文又說「遷右光祿大夫」，實即前「左光祿大夫」的重出〈北史已誤「右」為「左」〉，插入的痕跡甚顯。據卷八世宗紀正始三年八月見「元恒」，而卷九肅宗紀孝昌二年六月丙子、孝昌三年正月甲申，卷一０孝莊紀武泰元年四月己亥，卷五八楊椿傳並見「元恒芝」。疑初名「恒」，後加「芝」字。汝陰王天賜和平三年封按天賜於和平二年七月戊寅，與小新成、萬壽同日封，見卷五高宗紀，這裏「三」當是「二」之訛。下樂浪王萬壽傳同訛。高祖器之諸本「祖」作「宗」，北史卷一七作「孝文」。按元匡乃元濬〈高宗〉弟新成子，若這裏作「高宗」，則下文元濬稱之為「叔父」，豈非顛倒？北史作「孝文」，補此傳者依魏書例，改作「高祖」，「祖」訛「宗」，今改正。而尚書令臣肇以芳造〈至〉仍云扶按此段文義不可解。「造」下、「扶」下當有脫文。抑中無所張森楷北史校勘記云：「疑『抑』是『折』之誤。按通志卷八四下正作「折」，疑是。恐此由心張森楷云：「『此』疑當是『非』字，作『此』則與文義不相應。劉芳學高一時深明典故其所據者與先朝尺乃寸過一黍何得復云先朝之意也按前贊劉芳，後不應說他所據與「先朝尺」不合云云。據上王顯彈文，說「芳造寸，唯止十黍」，則所謂「寸過一黍」，明非斥芳，恐是指元匡所造尺。這裏「其所據者」下當有脫文。大概是說劉芳根據的是「先朝」所頒尺，而元匡所造則「寸過一黍」，故下文斥責元匡「所執不經」。今於「其所據者」下句斷。私繼歲久按上文明云元恪〈世宗〉時，匡已求紹洛侯封，經尚書議奏襲封，則並非私繼，且襲封已久。不知何以前後矛盾。",
+        "ids": [
+          "s0452",
+          "s0453",
+          "s0454",
+          "s0455",
+          "s0456",
+          "s0457",
+          "s0458",
+          "s0459",
+          "s0460",
+          "s0461",
+          "s0462",
+          "s0463",
+          "s0464",
+          "s0465",
+          "s0466",
+          "s0467",
+          "s0468",
+          "s0469",
+          "s0470",
+          "s0471",
+          "s0472",
+          "s0473",
+          "s0474",
+          "s0475",
+          "s0476",
+          "s0478",
+          "s0479",
+          "s0480",
+          "s0481",
+          "s0482",
+          "s0483",
+          "s0484",
+          "s0485",
+          "s0486",
+          "s0487",
+          "s0488",
+          "s0489",
+          "s0490",
+          "s0491",
+          "s0492",
+          "s0493",
+          "s0494",
+          "s0495",
+          "s0496",
+          "s0497",
+          "s0498",
+          "s0499",
+          "s0500",
+          "s0501",
+          "s0502"
+        ],
+        "locations": [
+          {
+            "blockIndex": 60,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0452"
+          },
+          {
+            "blockIndex": 61,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0453"
+          },
+          {
+            "blockIndex": 61,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0454"
+          },
+          {
+            "blockIndex": 61,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 2,
+            "field": "zh",
+            "id": "s0455"
+          },
+          {
+            "blockIndex": 61,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 3,
+            "field": "zh",
+            "id": "s0456"
+          },
+          {
+            "blockIndex": 62,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0457"
+          },
+          {
+            "blockIndex": 62,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0458"
+          },
+          {
+            "blockIndex": 62,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 2,
+            "field": "zh",
+            "id": "s0459"
+          },
+          {
+            "blockIndex": 63,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0460"
+          },
+          {
+            "blockIndex": 63,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0461"
+          },
+          {
+            "blockIndex": 63,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 2,
+            "field": "zh",
+            "id": "s0462"
+          },
+          {
+            "blockIndex": 63,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 3,
+            "field": "zh",
+            "id": "s0463"
+          },
+          {
+            "blockIndex": 63,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 4,
+            "field": "zh",
+            "id": "s0464"
+          },
+          {
+            "blockIndex": 63,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 5,
+            "field": "zh",
+            "id": "s0465"
+          },
+          {
+            "blockIndex": 64,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0466"
+          },
+          {
+            "blockIndex": 64,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0467"
+          },
+          {
+            "blockIndex": 64,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 2,
+            "field": "zh",
+            "id": "s0468"
+          },
+          {
+            "blockIndex": 64,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 3,
+            "field": "zh",
+            "id": "s0469"
+          },
+          {
+            "blockIndex": 64,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 4,
+            "field": "zh",
+            "id": "s0470"
+          },
+          {
+            "blockIndex": 64,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 5,
+            "field": "zh",
+            "id": "s0471"
+          },
+          {
+            "blockIndex": 64,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 6,
+            "field": "zh",
+            "id": "s0472"
+          },
+          {
+            "blockIndex": 64,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 7,
+            "field": "zh",
+            "id": "s0473"
+          },
+          {
+            "blockIndex": 64,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 8,
+            "field": "zh",
+            "id": "s0474"
+          },
+          {
+            "blockIndex": 64,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 9,
+            "field": "zh",
+            "id": "s0475"
+          },
+          {
+            "blockIndex": 64,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 10,
+            "field": "zh",
+            "id": "s0476"
+          },
+          {
+            "blockIndex": 65,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0478"
+          },
+          {
+            "blockIndex": 65,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 2,
+            "field": "zh",
+            "id": "s0479"
+          },
+          {
+            "blockIndex": 66,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0480"
+          },
+          {
+            "blockIndex": 66,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0481"
+          },
+          {
+            "blockIndex": 67,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0482"
+          },
+          {
+            "blockIndex": 67,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0483"
+          },
+          {
+            "blockIndex": 67,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 2,
+            "field": "zh",
+            "id": "s0484"
+          },
+          {
+            "blockIndex": 67,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 3,
+            "field": "zh",
+            "id": "s0485"
+          },
+          {
+            "blockIndex": 67,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 4,
+            "field": "zh",
+            "id": "s0486"
+          },
+          {
+            "blockIndex": 68,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0487"
+          },
+          {
+            "blockIndex": 68,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0488"
+          },
+          {
+            "blockIndex": 68,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 2,
+            "field": "zh",
+            "id": "s0489"
+          },
+          {
+            "blockIndex": 68,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 3,
+            "field": "zh",
+            "id": "s0490"
+          },
+          {
+            "blockIndex": 69,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0491"
+          },
+          {
+            "blockIndex": 69,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0492"
+          },
+          {
+            "blockIndex": 70,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0493"
+          },
+          {
+            "blockIndex": 71,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0494"
+          },
+          {
+            "blockIndex": 71,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0495"
+          },
+          {
+            "blockIndex": 71,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 2,
+            "field": "zh",
+            "id": "s0496"
+          },
+          {
+            "blockIndex": 71,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 3,
+            "field": "zh",
+            "id": "s0497"
+          },
+          {
+            "blockIndex": 71,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 4,
+            "field": "zh",
+            "id": "s0498"
+          },
+          {
+            "blockIndex": 72,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0499"
+          },
+          {
+            "blockIndex": 72,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 1,
+            "field": "zh",
+            "id": "s0500"
+          },
+          {
+            "blockIndex": 72,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 2,
+            "field": "zh",
+            "id": "s0501"
+          },
+          {
+            "blockIndex": 72,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 3,
+            "field": "zh",
+            "id": "s0502"
+          }
+        ]
+      },
+      "context": {
+        "beforeSource": "匡之謇直，有足稱矣！",
+        "afterSource": "",
+        "beforeLocal": "匡之謇直，有足稱矣！",
+        "afterLocal": ""
+      },
+      "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
+      "decision": "denied",
+      "notes": "Denied: Wikisource category metadata is not chapter text; local 校勘記 collation notes are real corpus content and should remain.",
+      "reviewedAt": "2026-06-22T23:03:35.408Z",
+      "reviewer": "source-correspondence-manual"
+    },
+    {
+      "id": "source-weishu-021-wikisource-b9f28a6da92f",
+      "status": "denied",
+      "type": "source_replacement_candidate",
+      "severity": 2,
+      "similarity": 0.6,
+      "book": "weishu",
+      "chapter": "021",
+      "file": "data/weishu/021.json",
+      "sourceName": "wikisource",
+      "sourceUrl": "https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B719%E4%B8%8A?action=raw",
+      "sourceRange": {
+        "startIndex": 66,
+        "endIndex": 66,
+        "count": 1,
+        "text": "」京兆王子推，封。",
+        "ids": [],
+        "locations": []
+      },
+      "localRange": {
+        "startIndex": 66,
+        "endIndex": 66,
+        "count": 1,
+        "text": "京兆王子推，太安五年封。",
+        "ids": [
+          "s0067"
+        ],
+        "locations": [
+          {
+            "blockIndex": 8,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 0,
+            "field": "zh",
+            "id": "s0067"
+          }
+        ]
+      },
+      "context": {
+        "beforeSource": "早有令譽，年八歲，司徒崔光見而異之曰：「後生領袖，必此人也。",
+        "afterSource": "位侍中、征南大將軍、長安鎮都大將。",
+        "beforeLocal": "早有令譽，年八歲，司徒崔光見而異之曰：「後生領袖，必此人也。",
+        "afterLocal": "位侍中、征南大將軍、長安鎮都大將。"
+      },
+      "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
+      "decision": "denied",
+      "notes": "Denied: scanner kept a spurious leading close quote and dropped Wikisource YL regnal-year template text 太安五年; local source now preserves the complete raw-source sentence.",
+      "reviewedAt": "2026-06-22T23:03:35.408Z",
+      "reviewer": "source-correspondence-manual"
     }
   ],
-  "updatedAt": "2026-06-22T22:43:17.163Z"
+  "updatedAt": "2026-06-22T23:03:35.408Z"
 }
