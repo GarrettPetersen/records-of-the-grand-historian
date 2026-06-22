@@ -69923,7 +69923,7 @@
     },
     {
       "id": "source-songshu-069-wikisource-290f6165cd61",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0.087,
@@ -70299,8 +70299,10 @@
         "afterLocal": "於十一月，徐湛之上表曰：「臣與范曄，本無素舊，中忝門下，與之鄰省，屢來見就，故漸成周旋。"
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: this is a Wikisource blockquote parsing false positive. The proclamation and Yikang letter body are present in the upstream page between 熙先使弟休先先為檄文曰 and 二十二年九月; local corpus text is retained.",
+      "reviewedAt": "2026-06-22T14:15:58Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-songshu-069-wikisource-2f47cdeb05b7",
@@ -70627,7 +70629,7 @@
     },
     {
       "id": "source-songshu-069-wikisource-bfac6a6728ec",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "songshu",
@@ -70638,8 +70640,8 @@
       "sourceRange": {
         "startIndex": 23,
         "endIndex": 28,
-        "count": 6,
-        "text": "」景平元年，召入，拜尚書吏部郎，遷右衞將軍。出督廣交二州諸軍事、建威將軍、平越中郎將、廣州刺史。嫡母憂去職。服闋，為侍中。撫軍將軍江夏王義恭鎮江陵，以湛為使持節、南蠻校尉、領撫軍長史，行府州事。時王弘輔政，而王華、王曇首任事居中，湛自謂才能不後之，不願外出，是行也，謂為弘等所斥，意甚不平，常曰：「二王若非代邸之舊，無以至此，可謂遭遇風雲。",
+        "count": 7,
+        "text": "景平元年，召入，拜尚書吏部郎，遷右衛將軍。出督廣、交二州諸軍事、建威將軍、平越中郎將、廣州刺史。嫡母憂去職。服闋，為侍中。撫軍將軍江夏王義恭鎮江陵，以湛為使持節、南蠻校尉、領撫軍長史，行府州事。時王弘輔政，而王華、王曇首任事居中，湛自謂才能不後之，不願外出；是行也，謂為弘等所斥，意甚不平，常曰：「二王若非代邸之舊，無以至此，可謂遭遇風雲。」",
         "ids": [],
         "locations": []
       },
@@ -70651,12 +70653,75 @@
         "afterLocal": "湛負其志氣，常慕汲黯、崔琰為人，故名長子曰黯字長孺，第二子曰琰字季珪。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Approved: CText and Wikisource both include this Liu Zhan passage between the wine/propriety rebuke and the sentence beginning 湛負其志氣. Normalized trivial witness variants to local corpus style: 右衛, 廣、交, and semicolon before 是行也.",
+      "reviewedAt": "2026-06-22T14:10:13.782Z",
+      "reviewer": "codex-source-repair",
+      "manualTranslations": [
+        {
+          "zh": "景平元年，召入，拜尚書吏部郎，遷右衛將軍。",
+          "literal": "In the first year of Jingping, he was summoned to court, appointed personnel bureau director in the Department of State Affairs, and transferred to general of the right guard.",
+          "idiomatic": "In the first year of Jingping, he was summoned to court, appointed personnel bureau director in the Department of State Affairs, and transferred to general of the right guard.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "出督廣、交二州諸軍事、建威將軍、平越中郎將、廣州刺史。",
+          "literal": "He was sent out to command all military affairs of Guang and Jiao provinces, as general who establishes authority, general of the palace gentlemen who pacifies Yue, and inspector of Guangzhou.",
+          "idiomatic": "He was sent out to command military affairs in Guang and Jiao provinces, serving as general who establishes authority, general of the palace gentlemen who pacifies Yue, and inspector of Guangzhou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "嫡母憂去職。",
+          "literal": "He left office because of mourning for his principal mother.",
+          "idiomatic": "He left office to mourn his principal mother.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "服闋，為侍中。",
+          "literal": "When mourning was completed, he became palace attendant.",
+          "idiomatic": "When mourning was completed, he became palace attendant.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "撫軍將軍江夏王義恭鎮江陵，以湛為使持節、南蠻校尉、領撫軍長史，行府州事。",
+          "literal": "When Yigong, Prince of Jiangxia and general who pacifies the army, garrisoned Jiangling, he made Zhan envoy holding the tally, colonel of the Southern Man, concurrently chief clerk to the general who pacifies the army, and acting administrator of the affairs of the headquarters and province.",
+          "idiomatic": "When Yigong, Prince of Jiangxia and general who pacifies the army, garrisoned Jiangling, he made Zhan envoy holding the tally, colonel of the Southern Man, concurrently chief clerk to the general who pacifies the army, with acting authority over headquarters and provincial affairs.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "時王弘輔政，而王華、王曇首任事居中，湛自謂才能不後之，不願外出；",
+          "literal": "At that time Wang Hong assisted in government, while Wang Hua and Wang Tanshou held responsibility for affairs at court. Zhan considered his talents no lower than theirs and did not wish to go out to the provinces;",
+          "idiomatic": "At that time Wang Hong assisted in government, while Wang Hua and Wang Tanshou held office at court. Zhan considered his talents no less than theirs and did not wish to be sent out;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "是行也，謂為弘等所斥，意甚不平，常曰：「二王若非代邸之舊，無以至此，可謂遭遇風雲。」",
+          "literal": "Regarding this posting, he thought he had been pushed out by Hong and the others, and his mind was very resentful. He often said, \"If the two Wangs were not old associates from the princely residence, they would have had no way to reach this. One may say they met the winds and clouds.\"",
+          "idiomatic": "He believed this appointment meant that Hong and the others had pushed him aside and was deeply resentful. He often said, \"Had the two Wangs not been old associates from the princely residence, they could never have reached such positions. They truly met their wind and clouds.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        }
+      ],
+      "appliedAt": "2026-06-22T14:10:57.844Z",
+      "appliedSummary": {
+        "id": "source-songshu-069-wikisource-bfac6a6728ec",
+        "type": "source_omission_candidate",
+        "start": 25,
+        "removed": 0,
+        "inserted": 7,
+        "delta": 7,
+        "manualTranslationsApplied": 7
+      }
     },
     {
       "id": "source-songshu-069-wikisource-e8572279cf41",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0.026,
@@ -71140,8 +71205,10 @@
         "afterLocal": "藹幼而整潔，衣服竟歲未嘗有塵點。"
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: this is a Wikisource blockquote parsing false positive. Fan Ye's prison self-preface is present in the upstream page between 曄獄中與諸甥姪書以自序曰 and 曄自序並實，故存之; local corpus text is retained.",
+      "reviewedAt": "2026-06-22T14:15:58Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-songshu-069-wikisource-ed2a46597513",
@@ -90852,5 +90919,5 @@
       "notes": ""
     }
   ],
-  "updatedAt": "2026-06-22T08:24:39.524Z"
+  "updatedAt": "2026-06-22T14:15:58Z"
 }
