@@ -16053,7 +16053,7 @@
     },
     {
       "id": "source-beiqishu-030-wikisource-a4dce9f532e0",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.789,
@@ -16096,8 +16096,10 @@
         "afterLocal": "帝特召昂至御所，曰：「歷思羣臣可綱紀省闥者，唯冀卿一人。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: rendered Wikisource preserves the linked era name 天保十年 before 策拜儀同燕子獻. The local corpus already has this text; the queued discrepancy is a raw-link artifact plus leading quote punctuation already attached to the previous sentence.",
+      "reviewer": "codex-source-repair",
+      "reviewedAt": "2026-06-22T12:49:10.000Z"
     },
     {
       "id": "source-beiqishu-030-wikisource-d6447df694a0",
@@ -16151,7 +16153,7 @@
     },
     {
       "id": "source-beiqishu-031-wikisource-47bb6bbfdc4d",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "beiqishu",
@@ -16163,7 +16165,7 @@
         "startIndex": 204,
         "endIndex": 206,
         "count": 3,
-        "text": "」齊亡，周武以晞為儀同大將軍、太子諫議大夫。隋，卒於洛陽，年七十一。贈儀同三司、曹州刺史。",
+        "text": "齊亡，周武以晞為儀同大將軍、太子諫議大夫。隋開皇元年，卒於洛陽，年七十一。贈儀同三司、曹州刺史。",
         "ids": [],
         "locations": []
       },
@@ -16175,8 +16177,37 @@
         "afterLocal": "全文以中華書局、一九七二年十一月、第一版《北齊書》為本校。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Accepted. Rendered Wikisource restores Wang Xi's final Zhou and Sui career notice after the closing quotation in local s0205. The raw queue text lost the linked era name 開皇元年 and included a leading close quote already present locally, so sourceRange.text was normalized from the rendered witness.",
+      "reviewer": "codex-source-repair",
+      "reviewedAt": "2026-06-22T12:49:10.000Z",
+      "manualTranslations": [
+        {
+          "zh": "齊亡，周武以晞為儀同大將軍、太子諫議大夫。",
+          "literal": "When Qi fell, Emperor Wu of Zhou made Xi Equal-in-Honor Grand General and Grand Remonstrant of the Crown Prince.",
+          "idiomatic": "When Qi fell, Emperor Wu of Zhou made Xi Equal-in-Honor Grand General and grand remonstrant of the crown prince."
+        },
+        {
+          "zh": "隋開皇元年，卒於洛陽，年七十一。",
+          "literal": "In the first year of Kaihuang under Sui, he died at Luoyang at the age of seventy-one.",
+          "idiomatic": "In the first year of Kaihuang under Sui, he died at Luoyang at the age of seventy-one."
+        },
+        {
+          "zh": "贈儀同三司、曹州刺史。",
+          "literal": "He was posthumously granted Equal in Honors to the Three Excellencies and inspector of Caozhou.",
+          "idiomatic": "He was posthumously granted Equal in Honors to the Three Excellencies and inspector of Caozhou."
+        }
+      ],
+      "appliedAt": "2026-06-22T12:50:01.247Z",
+      "appliedSummary": {
+        "id": "source-beiqishu-031-wikisource-47bb6bbfdc4d",
+        "type": "source_omission_candidate",
+        "start": 205,
+        "removed": 0,
+        "inserted": 3,
+        "delta": 3,
+        "manualTranslationsApplied": 3
+      }
     },
     {
       "id": "source-beiqishu-031-wikisource-aad9feb2f0ac",
@@ -16230,7 +16261,7 @@
     },
     {
       "id": "source-beiqishu-031-wikisource-e32f9f3d3431",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.84,
@@ -16273,8 +16304,10 @@
         "afterLocal": "有文集二十卷。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: rendered Wikisource preserves the linked era name 天保十年 in 投尸漳水，天保十年也. The local corpus already has this text; the queued discrepancy dropped the link text and added a stray comma.",
+      "reviewer": "codex-source-repair",
+      "reviewedAt": "2026-06-22T12:49:10.000Z"
     },
     {
       "id": "source-beiqishu-032-wikisource-62385ea1c63c",
@@ -20756,5 +20789,5 @@
       "reviewer": "repair-source-queue-patterns"
     }
   ],
-  "updatedAt": "2026-06-22T12:42:48.101Z"
+  "updatedAt": "2026-06-22T12:50:01.267Z"
 }
