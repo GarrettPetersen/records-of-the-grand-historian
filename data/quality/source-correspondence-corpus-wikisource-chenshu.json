@@ -1042,7 +1042,7 @@
     },
     {
       "id": "source-chenshu-001-wikisource-1ee741d5c169",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0.005,
@@ -2462,12 +2462,14 @@
         "afterLocal": ""
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: Wikisource raw collapsed long edict text into headings plus a page marker; local preserves the full transmitted text.",
+      "reviewedAt": "2026-06-22T15:41:48.819Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-chenshu-001-wikisource-431275d66389",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.667,
@@ -2510,8 +2512,10 @@
         "afterLocal": "庚申，蕭軌、東方老、王敬寶、李希光、裴英起皆伏誅。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: difference is only a local textual-note marker before the same sentence.",
+      "reviewedAt": "2026-06-22T15:41:48.819Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-chenshu-001-wikisource-7e57c672543c",
@@ -2565,7 +2569,7 @@
     },
     {
       "id": "source-chenshu-001-wikisource-979ecb9f2f9f",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -2608,12 +2612,33 @@
         "afterLocal": "是時蕭勃為定州刺史，於西江相會，勃知軍士憚遠役，陰購誘之，因詭說炀。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: Wikisource and ChineseNotes support 众軍; local 红軍 is a source glyph/scrape error. English updated manually.",
+      "reviewedAt": "2026-06-22T15:41:48.819Z",
+      "reviewer": "codex-source-repair",
+      "manualTranslations": [
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "高祖與众軍發自番禺。",
+          "literal": "Gaozu, with the many armies, set out from Panyu.",
+          "idiomatic": "Gaozu set out from Panyu with the combined forces.",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T15:42:01.821Z",
+      "appliedSummary": {
+        "id": "source-chenshu-001-wikisource-979ecb9f2f9f",
+        "type": "text_discrepancy_candidate",
+        "start": 29,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-chenshu-001-wikisource-a0d39bb1329b",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0.023,
@@ -3943,12 +3968,14 @@
         "afterLocal": "其相國、揚州牧、鎮纫大將軍嵭如故。"
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: Wikisource raw collapsed edict/celestial mandate text into headings; local preserves the full transmitted text.",
+      "reviewedAt": "2026-06-22T15:41:48.819Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-chenshu-001-wikisource-b641077ecb99",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "chenshu",
@@ -3972,12 +3999,75 @@
         "afterLocal": "十一月，西魏攻陷江陵，高祖與王僧辯等進啟江州，請晉安王以太宰承制，又遣長史謝哲奉牋勸進。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: omitted annalistic block is present in Wikisource and ChineseNotes between the same anchors. Added manual English translations.",
+      "reviewedAt": "2026-06-22T15:41:48.819Z",
+      "reviewer": "codex-source-repair",
+      "manualTranslations": [
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "七月，廣陵僑民朱盛、張象潛結兵襲齊刺史溫仲邕，遣使來告，高祖率众濟江以應之。",
+          "literal": "In the seventh month, Zhu Sheng and Zhang Xiang, sojourning people of Guangling, gathered troops and attacked Wen Zhongyong, the Qi governor; they sent envoys to report it, and Gaozu led the troops across the river to respond.",
+          "idiomatic": "In the seventh month, Zhu Sheng and Zhang Xiang, refugee residents of Guangling, gathered troops and attacked the Qi governor Wen Zhongyong. They sent envoys to report this, and Gaozu led his troops across the Yangzi to support them.",
+          "model": "Manual source repair"
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "會齊人來聘，求割廣陵之地，王僧辯許焉，仍報高祖，高祖於是引軍還南徐州，江北人隨軍而南者萬餘口。",
+          "literal": "At that time Qi envoys came on a mission and asked that Guangling territory be ceded; Wang Sengbian agreed and then reported to Gaozu, so Gaozu led the army back to Southern Xuzhou, and more than ten thousand people from north of the river followed the army south.",
+          "idiomatic": "At that time Qi envoys came and asked that the Guangling territory be ceded. Wang Sengbian agreed and reported it to Gaozu, so Gaozu led the army back to Southern Xuzhou. More than ten thousand people from north of the Yangzi followed the army south.",
+          "model": "Manual source repair"
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "承制授高祖使持節、散騎常侍、都督南徐州諸軍事、征北大將軍、開府儀同三司、南徐州刺史，餘嵭如故。",
+          "literal": "By delegated authority, Gaozu was appointed Envoy Holding the Tally, Cavalier Attendant-in-ordinary, Commander-in-chief of the military affairs of Southern Xuzhou, General Who Campaigns North, Kaifu Yitong Sansi, and Inspector of Southern Xuzhou; the rest were all as before.",
+          "idiomatic": "By delegated authority, Gaozu was appointed Envoy Holding the Tally, Cavalier Attendant-in-ordinary, commander of all military affairs in Southern Xuzhou, General Who Campaigns North, Kaifu Yitong Sansi, and Inspector of Southern Xuzhou. His other offices remained as before.",
+          "model": "Manual source repair"
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "及王僧辯率众征陸納於湘州，承制命高祖代鎮揚州。",
+          "literal": "When Wang Sengbian led the troops to campaign against Lu Na in Xiangzhou, by delegated authority Gaozu was ordered to replace him in garrisoning Yangzhou.",
+          "idiomatic": "When Wang Sengbian led the troops to campaign against Lu Na in Xiangzhou, Gaozu was ordered, by delegated authority, to take his place garrisoning Yangzhou.",
+          "model": "Manual source repair"
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "十一月，湘東王即位于江陵，改大寶三年為承聖元年。",
+          "literal": "In the eleventh month, the Prince of Xiangdong ascended the throne at Jiangling and changed the third year of Dabao to the first year of Chengsheng.",
+          "idiomatic": "In the eleventh month, the Prince of Xiangdong ascended the throne at Jiangling and renamed the third year of Dabao as the first year of Chengsheng.",
+          "model": "Manual source repair"
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "湘州平，高祖旋鎮京口。",
+          "literal": "When Xiangzhou was pacified, Gaozu returned to garrison Jingkou.",
+          "idiomatic": "After Xiangzhou was pacified, Gaozu returned to garrison Jingkou.",
+          "model": "Manual source repair"
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "三年三月，進高祖位司空，餘如故。",
+          "literal": "In the third year, third month, Gaozu was advanced to the office of Minister of Works; the rest were as before.",
+          "idiomatic": "In the third month of the third year, Gaozu was promoted to Minister of Works; his other offices remained as before.",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T15:42:01.821Z",
+      "appliedSummary": {
+        "id": "source-chenshu-001-wikisource-b641077ecb99",
+        "type": "source_omission_candidate",
+        "start": 116,
+        "removed": 0,
+        "inserted": 7,
+        "delta": 7,
+        "manualTranslationsApplied": 7
+      }
     },
     {
       "id": "source-chenshu-001-wikisource-f5243f74d830",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -4020,12 +4110,33 @@
         "afterLocal": "明年，高祖送喪還都，至大庾嶺，會有詔高祖為交州司馬，領武平太守，與刺史楊炀南討。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: Wikisource and ChineseNotes read 蕭暎, not local 蕭谟. English name updated manually.",
+      "reviewedAt": "2026-06-22T15:41:48.819Z",
+      "reviewer": "codex-source-repair",
+      "manualTranslations": [
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "其年冬，蕭暎卒。",
+          "literal": "That winter, Xiao Ying died.",
+          "idiomatic": "That winter, Xiao Ying died.",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T15:42:01.821Z",
+      "appliedSummary": {
+        "id": "source-chenshu-001-wikisource-f5243f74d830",
+        "type": "text_discrepancy_candidate",
+        "start": 24,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-chenshu-001-wikisource-fb1123e91621",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.842,
@@ -4077,8 +4188,10 @@
         "afterLocal": "壬子，詔授高祖侍中、大都督中外諸軍事、車騎將軍、揚南徐二州刺史，持節、司空、班闰、鼓吹嵭如故。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: Wikisource raw/source extraction dropped 紹泰元年; rendered Wikisource and ChineseNotes support local text.",
+      "reviewedAt": "2026-06-22T15:41:48.819Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-chenshu-001-wikisource-fbae453acfc7",
@@ -4132,7 +4245,7 @@
     },
     {
       "id": "source-chenshu-002-wikisource-12922b64d5f2",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "chenshu",
@@ -4156,12 +4269,89 @@
         "afterLocal": "六月己巳，詔司空侯瑱、領軍將軍徐度率舟師為前軍，以討王琳。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: omitted Yongding 2 summer block is present in Wikisource between the same anchors. Added manual English translations.",
+      "reviewedAt": "2026-06-22T15:41:48.819Z",
+      "reviewer": "codex-source-repair",
+      "manualTranslations": [
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "夏四月甲子，輿駕親祠太廟。",
+          "literal": "In summer, in the fourth month, on jiazi, the imperial carriage personally sacrificed at the Imperial Ancestral Temple.",
+          "idiomatic": "On jiazi in the fourth month of summer, the emperor personally sacrificed at the Imperial Ancestral Temple.",
+          "model": "Manual source repair"
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "乙丑，江陰王薨，詔遣太宰弔祭，司空監護喪事，凶禮所須，隨由備辦。",
+          "literal": "On yichou, the Prince of Jiangyin died; an edict sent the Grand Steward to offer condolences and sacrifices, had the Minister of Works supervise the funeral affairs, and ordered that whatever the mourning rites required be supplied according to need.",
+          "idiomatic": "On yichou, the Prince of Jiangyin died. An edict sent the Grand Steward to offer condolences and sacrifices, placed the Minister of Works in charge of the funeral, and ordered that everything required for the mourning rites be supplied as needed.",
+          "model": "Manual source repair"
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "以梁武林侯蕭諮息季卿嗣為江陰王。",
+          "literal": "Xiao Zhi's son Jiqing, of the Liang Marquis of Wulin, was made to succeed as Prince of Jiangyin.",
+          "idiomatic": "Jiqing, son of Xiao Zhi, the Liang Marquis of Wulin, was made successor as Prince of Jiangyin.",
+          "model": "Manual source repair"
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "景寅，輿駕幸石頭，餞司空侯瑱。",
+          "literal": "On bingyin, the imperial carriage visited Shitou and held a farewell banquet for Hou Tian, Minister of Works.",
+          "idiomatic": "On bingyin, the emperor visited Shitou and gave a farewell banquet for Hou Tian, the Minister of Works.",
+          "model": "Manual source repair"
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "戊辰，重雲殿東鴟尾有紫煙屬天。",
+          "literal": "On wuchen, from the eastern chiwei roof ornament of Chongyun Hall, purple smoke reached up to the sky.",
+          "idiomatic": "On wuchen, purple smoke rose to the sky from the eastern chiwei roof ornament of Chongyun Hall.",
+          "model": "Manual source repair"
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "五月乙未，京師地震。",
+          "literal": "In the fifth month, on yiwei, the capital had an earthquake.",
+          "idiomatic": "On yiwei in the fifth month, an earthquake struck the capital.",
+          "model": "Manual source repair"
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "癸丑，齊廣陵南城主張顯和、長史張僧那各率其所部入附。",
+          "literal": "On guichou, Zhang Xianhe, commander of Qi's Southern Guangling city, and Zhang Sengna, the chief secretary, each led the troops under his command and came over in submission.",
+          "idiomatic": "On guichou, Zhang Xianhe, commander of Qi's Southern Guangling city, and the chief secretary Zhang Sengna each led his command in submission.",
+          "model": "Manual source repair"
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "辛酉，輿駕幸大莊嚴寺捨身。",
+          "literal": "On xinyou, the imperial carriage visited Dazhuangyan Monastery and offered his body.",
+          "idiomatic": "On xinyou, the emperor visited Dazhuangyan Monastery and performed the Buddhist rite of offering himself.",
+          "model": "Manual source repair"
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "壬戌，群臣表請還宮。",
+          "literal": "On renxu, the assembled ministers memorialized requesting that he return to the palace.",
+          "idiomatic": "On renxu, the assembled ministers submitted a memorial asking him to return to the palace.",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T15:42:01.821Z",
+      "appliedSummary": {
+        "id": "source-chenshu-002-wikisource-12922b64d5f2",
+        "type": "source_omission_candidate",
+        "start": 114,
+        "removed": 0,
+        "inserted": 9,
+        "delta": 9,
+        "manualTranslationsApplied": 9
+      }
     },
     {
       "id": "source-chenshu-002-wikisource-2df5d238f869",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.821,
@@ -4222,12 +4412,14 @@
         "afterLocal": "夫肇有烝民，乃樹司牧，選賢與能，未常厥姓。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": "Reviewed as no-op: discrepancy is caused by upstream MediaWiki residue such as __TOC__, Category, or PD-old text; local corpus text retained.\nReopened for manual review: previous automatic residue no-op left non-residue punctuation or text unresolved."
+      "decision": "denied",
+      "notes": "Denied: Wikisource raw includes __TOC__ and omits the local chapter heading/note marker; local text preserves the chapter start.",
+      "reviewedAt": "2026-06-22T15:41:48.819Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-chenshu-002-wikisource-7514dc5c0035",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -4270,12 +4462,14 @@
         "afterLocal": "遺詔追臨川王蒨入纂。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: difference is only a local textual-note marker before the same sentence.",
+      "reviewedAt": "2026-06-22T15:41:48.819Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-chenshu-002-wikisource-d57193331e82",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0.003,
@@ -4858,12 +5052,14 @@
         "afterLocal": ""
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: Wikisource CATEGORY residue is not a source witness against the local collation notes.",
+      "reviewedAt": "2026-06-22T15:41:48.819Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-chenshu-002-wikisource-dcf3cb97cc04",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.818,
@@ -4915,12 +5111,14 @@
         "afterLocal": "殘弊之軌，致此未康。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: difference is only local textual-note markers within the same sentence.",
+      "reviewedAt": "2026-06-22T15:41:48.819Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-chenshu-002-wikisource-e270ca7e9744",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -4990,8 +5188,10 @@
         "afterLocal": "高祖疾又甚。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: difference is only a local textual-note marker before the same following sentence.",
+      "reviewedAt": "2026-06-22T15:41:48.819Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-chenshu-003-wikisource-08130c8eea6b",
@@ -13613,7 +13813,7 @@
     },
     {
       "id": "source-chenshu-010-wikisource-0863f0c8f4d8",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.872,
@@ -13665,8 +13865,10 @@
         "afterLocal": "五年，遷中護軍，常侍如故。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: Wikisource raw extraction dropped 天嘉四年 and local note marker; rendered chronology supports local text.",
+      "reviewedAt": "2026-06-22T15:46:44.440Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-chenshu-010-wikisource-10d59e8f6157",
@@ -13870,7 +14072,7 @@
     },
     {
       "id": "source-chenshu-010-wikisource-97b16fdab95b",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.892,
@@ -13913,8 +14115,10 @@
         "afterLocal": "故侍中、護軍將軍、青冀二州刺史沌陽縣開國侯鐵虎，誠節梗亮，力用雄敢，王業初基，行閒累及，垂翅賊壘，正色寇庭，古之遺烈，有識同壯。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: Wikisource raw extraction carried a stray closing quote and dropped 天嘉五年; local text is coherent.",
+      "reviewedAt": "2026-06-22T15:46:44.440Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-chenshu-010-wikisource-a7b75896f8b7",
@@ -14019,7 +14223,7 @@
     },
     {
       "id": "source-chenshu-010-wikisource-c5886d7824e5",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "book": "chenshu",
@@ -14144,8 +14348,10 @@
         "afterLocal": ""
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: local collation notes are not contradicted by an absent Wikisource source range.",
+      "reviewedAt": "2026-06-22T15:46:44.440Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-chenshu-010-wikisource-d04a2304c310",
@@ -14299,7 +14505,7 @@
     },
     {
       "id": "source-chenshu-011-wikisource-3de948de84fa",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "chenshu",
@@ -14323,8 +14529,85 @@
         "afterLocal": "荊州陷，量保據桂州。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: omitted Chunyu Liang biography block is present in rendered Wikisource between the same anchors. Added manual English translations.",
+      "reviewedAt": "2026-06-22T15:46:44.440Z",
+      "reviewer": "codex-source-repair",
+      "manualTranslations": [
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "侯景之亂，梁元帝凡遣五軍入援京邑，量預其一。",
+          "literal": "During Hou Jing's rebellion, Emperor Yuan of Liang sent five armies in all to aid the capital, and Liang was among them.",
+          "idiomatic": "During Hou Jing's rebellion, Emperor Yuan of Liang sent five armies to aid the capital, and Chunyu Liang served in one of them.",
+          "model": "Manual source repair"
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "臺城陷，量還荊州。",
+          "literal": "When Taicheng fell, Liang returned to Jingzhou.",
+          "idiomatic": "When Taicheng fell, Liang returned to Jingzhou.",
+          "model": "Manual source repair"
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "元帝承制以量為假節、通直散騎常侍、都督巴州諸軍事、信威將軍、巴州刺史。",
+          "literal": "Emperor Yuan, acting by delegated authority, made Liang Acting with the Tally, Regular Cavalier Attendant-in-ordinary, Commander-in-chief of the military affairs of Bazhou, General of Trustworthy Might, and Inspector of Bazhou.",
+          "idiomatic": "Acting by delegated authority, Emperor Yuan appointed Liang as Acting with the Tally, Regular Cavalier Attendant-in-ordinary, commander of all military affairs in Bazhou, General of Trustworthy Might, and Inspector of Bazhou.",
+          "model": "Manual source repair"
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "侯景西上攻巴州，元帝使都督王僧辯入據巴陵。",
+          "literal": "When Hou Jing advanced west and attacked Bazhou, Emperor Yuan sent the commander Wang Sengbian to enter and occupy Baling.",
+          "idiomatic": "When Hou Jing advanced west to attack Bazhou, Emperor Yuan sent the commander Wang Sengbian to occupy Baling.",
+          "model": "Manual source repair"
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "量與僧辯并力拒景，大敗景軍，擒其將任約。",
+          "literal": "Liang joined strength with Sengbian to resist Jing, greatly defeated Jing's army, and captured his general Ren Yue.",
+          "idiomatic": "Liang joined forces with Sengbian to resist Jing, badly defeated Jing's army, and captured his general Ren Yue.",
+          "model": "Manual source repair"
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "進攻郢州，獲宋子仙。",
+          "literal": "They advanced to attack Yingzhou and captured Song Zixian.",
+          "idiomatic": "They advanced on Yingzhou and captured Song Zixian.",
+          "model": "Manual source repair"
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "仍隨僧辯克平侯景。",
+          "literal": "He then followed Sengbian in defeating and pacifying Hou Jing.",
+          "idiomatic": "He then followed Sengbian in defeating and pacifying Hou Jing.",
+          "model": "Manual source repair"
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "以功授左衛將軍，封謝沐縣侯，邑五百戶。",
+          "literal": "For this merit he was appointed Left Guard General and enfeoffed as Marquis of Xiemu County with a fief of five hundred households.",
+          "idiomatic": "For this merit he was appointed Left Guard General and enfeoffed as Marquis of Xiemu County, with a fief of five hundred households.",
+          "model": "Manual source repair"
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "zh": "尋出為持節、都督桂定東西寧等四州諸軍事、信威將軍、安遠護軍、桂州刺史。",
+          "literal": "Soon he was sent out as Envoy Holding the Tally, Commander-in-chief of the military affairs of the four provinces Gui, Ding, East Ning, and West Ning, General of Trustworthy Might, Protector-general Who Pacifies the Distant, and Inspector of Guizhou.",
+          "idiomatic": "Soon he was sent out as Envoy Holding the Tally, commander of all military affairs in the four provinces of Gui, Ding, East Ning, and West Ning, General of Trustworthy Might, Protector-general Who Pacifies the Distant, and Inspector of Guizhou.",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T15:47:30.572Z",
+      "appliedSummary": {
+        "id": "source-chenshu-011-wikisource-3de948de84fa",
+        "type": "source_omission_candidate",
+        "start": 56,
+        "removed": 0,
+        "inserted": 9,
+        "delta": 9,
+        "manualTranslationsApplied": 9
+      }
     },
     {
       "id": "source-chenshu-011-wikisource-56840aac8735",
@@ -17162,7 +17445,7 @@
     },
     {
       "id": "source-chenshu-015-wikisource-260051db0939",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.884,
@@ -17214,8 +17497,10 @@
         "afterLocal": "周軍乘勝據有淮南，江外騷擾，慧紀收集士卒，自海道還都。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: Wikisource raw extraction dropped 光大元年 and 太建十年; local preserves chronological labels.",
+      "reviewedAt": "2026-06-22T15:46:44.440Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-chenshu-015-wikisource-2e46abb12d7f",
@@ -17269,7 +17554,7 @@
     },
     {
       "id": "source-chenshu-015-wikisource-3bc4c5ac5a43",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0.013,
@@ -17420,8 +17705,10 @@
         "afterLocal": ""
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: Wikisource category residue is not a source witness against the local collation notes.",
+      "reviewedAt": "2026-06-22T15:46:44.440Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-chenshu-015-wikisource-9c15dcf2e6f0",
@@ -17575,7 +17862,7 @@
     },
     {
       "id": "source-chenshu-015-wikisource-b8123bf5e5c9",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.894,
@@ -17627,12 +17914,14 @@
         "afterLocal": "其年，以應接之功，加侍中、金紫光祿大夫、開府儀同三司、征西將軍，增邑并前六千戶，餘如故。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: Wikisource raw extraction dropped 至德二年 and 禎明元年; local preserves chronological labels.",
+      "reviewedAt": "2026-06-22T15:46:44.440Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-chenshu-015-wikisource-d66b69056f9b",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "chenshu",
@@ -17667,8 +17956,10 @@
         "afterLocal": "陳慧紀字元方，高祖之從孫也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: local preserves an intentional section heading for 陳慧紀 between matching biography anchors.",
+      "reviewedAt": "2026-06-22T15:46:44.440Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-chenshu-015-wikisource-e47ac7daf5cc",
@@ -32431,7 +32722,7 @@
     },
     {
       "id": "source-chenshu-036-wikisource-0efb8cd8aa34",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0.007,
@@ -32582,8 +32873,10 @@
         "afterLocal": ""
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: Wikisource category residue is not a source witness against the local collation notes.",
+      "reviewedAt": "2026-06-22T15:46:44.440Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-chenshu-036-wikisource-52297b21663f",
@@ -32847,7 +33140,7 @@
     },
     {
       "id": "source-chenshu-036-wikisource-bf11d3ff590a",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.455,
@@ -32899,9 +33192,11 @@
         "afterLocal": "新安王伯固字牢之，世祖之第五子也。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: local preserves the same sentence plus an intentional section heading for 新安王伯固; no source deletion needed.",
+      "reviewedAt": "2026-06-22T15:46:44.440Z",
+      "reviewer": "codex-source-repair"
     }
   ],
-  "updatedAt": "2026-06-22T15:21:38.456Z"
+  "updatedAt": "2026-06-22T15:47:30.590Z"
 }

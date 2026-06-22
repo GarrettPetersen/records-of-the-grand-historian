@@ -988,6 +988,8 @@ function applyItem(entries, item, translationsBySource) {
 function itemApproved(item, opts) {
   if (opts.onlyItems.size > 0 && !opts.onlyItems.has(item.id)) return false;
   if (opts.deny.has(item.id)) return false;
+  if (item.status === 'applied' || item.status === 'denied') return false;
+  if (item.decision === 'applied' || item.decision === 'denied') return false;
   if (opts.approve.has(item.id)) return true;
   return item.status === 'approved' || item.decision === 'approved';
 }
@@ -1045,6 +1047,7 @@ function applyQueue(queue, opts) {
       const summary = applyItem(entries, item, translationsBySource);
       applied.push(summary);
       item.status = opts.dryRun ? 'approved' : 'applied';
+      item.decision = opts.dryRun ? 'approved' : 'applied';
       item.appliedAt = opts.dryRun ? undefined : now;
       item.appliedSummary = summary;
     }
