@@ -38,6 +38,7 @@ const WIKI_TOC_CONTROL_RE = /__(?:FORCE)?TOC__|__NOTOC__|__NOCC__/gu;
 const SOURCE_BODY_PUNCT_RE = /[。！？；：，、,.!?;:]/u;
 const SOURCE_SENTENCE_PUNCT_RE = /[。！？；，,.!?;]/u;
 const LINKED_CHRONO_FRAGMENT_RE = /^[\p{Script=Han}]{1,4}(?:元|[一二三四五六七八九十百廿卅]+)年$/u;
+const DROPPED_CHRONO_PREFIX_RE = /^[\p{Script=Han}]{0,4}(?:元|[一二三四五六七八九十百廿卅]+)年(?:春|夏|秋|冬)?(?:閏?(?:正|[一二三四五六七八九十]+)月)?(?:[甲乙丙丁戊己庚辛壬癸][子丑寅卯辰巳午未申酉戌亥])?(?:朔|晦)?$/u;
 const WIKI_PAGE_FIELD_RE = /\|?(?:previous|next|override_author|noauthor|notes|from|type|times)=[^|]*/gu;
 const HEADING_UI_ARTIFACT_RE = /[A-Za-z0-9%_=<>|\[\]{}*#/]/u;
 const SOURCE_HEADING_MARKUP_RE = /\b(?:class|style|width|rowspan|colspan)\s*=|wikitable/iu;
@@ -2082,6 +2083,75 @@ function isWikisourceLinkedChronologyNoOp(item, cache) {
   return null;
 }
 
+function isDroppedChronologyPrefix(text) {
+  const normalized = normalizeWhitespace(text);
+  if (!normalized || SOURCE_BODY_PUNCT_RE.test(normalized)) return false;
+  return DROPPED_CHRONO_PREFIX_RE.test(normalized);
+}
+
+function itemHasStableAnchors(item) {
+  const beforeSource = stripWikiControls(item.context?.beforeSource || '');
+  const beforeLocal = item.context?.beforeLocal || '';
+  if (beforeSource || beforeLocal) {
+    if (variantText(beforeSource.replace(LEADING_CLOSE_PUNCT_RE, '')) !== variantText(beforeLocal)) return false;
+  }
+  const afterSource = stripWikiControls(item.context?.afterSource || '');
+  const afterLocal = item.context?.afterLocal || '';
+  if (afterSource || afterLocal) {
+    if (variantText(afterSource.replace(LEADING_CLOSE_PUNCT_RE, '')) !== variantText(afterLocal)) return false;
+  }
+  return true;
+}
+
+function localRangeMatchesLiveText(item, cache) {
+  const localRange = item.localRange;
+  const locations = localRange?.locations || [];
+  if (locations.length === 0) return true;
+
+  const units = liveUnitsForItem(item, cache);
+  if (!units) return false;
+  const indices = locations.map((location) => units.findIndex((unit) => unitMatchesLocation(unit, location)));
+  if (indices.some((index) => index < 0)) return false;
+  for (let i = 1; i < indices.length; i += 1) {
+    if (indices[i] <= indices[i - 1]) return false;
+  }
+  const liveText = indices.map((index) => String(units[index].unit[units[index].key] || '')).join('');
+  return variantText(liveText) === variantText(localRange.text || '');
+}
+
+function isWikisourceDroppedChronologyPrefixNoOp(item, cache) {
+  if (!['text_discrepancy_candidate', 'source_replacement_candidate'].includes(item.type)) return null;
+  const sourceName = String(item.sourceName || '');
+  const sourceUrl = String(item.sourceUrl || '');
+  if (!/wikisource/i.test(`${sourceName} ${sourceUrl}`)) return null;
+
+  const sourceRange = item.sourceRange;
+  const localRange = item.localRange;
+  if (!sourceRange || !localRange) return null;
+  if (!itemHasStableAnchors(item)) return null;
+  if (!localRangeMatchesLiveText(item, cache)) return null;
+
+  const source = normalizeWhitespace(sourceRange.text || '');
+  const local = normalizeWhitespace(localRange.text || '');
+  if (!source || !local || variantText(source) === variantText(local)) return null;
+
+  const chars = [...local];
+  for (let end = 2; end <= Math.min(chars.length - 1, 20); end += 1) {
+    const prefix = chars.slice(0, end).join('');
+    if (!isDroppedChronologyPrefix(prefix)) continue;
+
+    const retained = chars.slice(end).join('');
+    if (variantText(retained) !== variantText(source)) continue;
+
+    return {
+      omitted: prefix,
+      ids: localRange.ids || [],
+    };
+  }
+
+  return null;
+}
+
 function markDenied(item, now, reviewer, notes) {
   item.status = 'denied';
   item.decision = 'denied';
@@ -2560,6 +2630,7 @@ function clearCorrespondenceNoOps(opts, now) {
     variantNoOps: 0,
     upstreamResidueNoOps: 0,
     wikisourceLinkedChronologyNoOps: 0,
+    wikisourceDroppedChronologyPrefixNoOps: 0,
     leadingClosePunctuationNoOps: 0,
     chapterStartHeadingNoOps: 0,
     sourceStartHeadingNoOps: 0,
@@ -2626,8 +2697,19 @@ function clearCorrespondenceNoOps(opts, now) {
           stats.wikisourceLinkedChronologyNoOps += 1;
           changed = true;
         } else {
-          const leadingClose = isLeadingCloseAlreadyAttached(item, liveUnitCache);
-          if (leadingClose) {
+          const droppedChronologyPrefix = isWikisourceDroppedChronologyPrefixNoOp(item, liveUnitCache);
+          if (droppedChronologyPrefix) {
+            markDenied(
+              item,
+              now,
+              opts.reviewer,
+              `Reviewed as no-op: raw Wikisource parsing dropped chronology prefix ${JSON.stringify(droppedChronologyPrefix.omitted)}; local corpus text retained.`,
+            );
+            stats.wikisourceDroppedChronologyPrefixNoOps += 1;
+            changed = true;
+          } else {
+            const leadingClose = isLeadingCloseAlreadyAttached(item, liveUnitCache);
+            if (leadingClose) {
             markDenied(
               item,
               now,
@@ -2673,6 +2755,7 @@ function clearCorrespondenceNoOps(opts, now) {
             }
           }
         }
+      }
       }
       if (samples.length < 12) {
         samples.push({
