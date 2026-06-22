@@ -3643,7 +3643,7 @@
     },
     {
       "id": "source-weishu-002-wikisource-2405d72d08ef",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -3686,8 +3686,10 @@
         "afterLocal": "三年春正月戊午，和突破盧溥於遼西，生獲溥及其子煥，傳送京師，轘之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: local text only has the retained [11] collation marker before the same sentence; no source correction needed.",
+      "reviewedAt": "2026-06-22T20:13:05.920Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-002-wikisource-27b836641979",
@@ -3741,7 +3743,7 @@
     },
     {
       "id": "source-weishu-002-wikisource-407502dea59e",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -3765,8 +3767,58 @@
         "afterLocal": "夏六月癸酉，遣將軍王建等三軍討寶廣寧太守劉亢泥，斬之，徙其部落。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms six omitted 皇始元年 sentences after the return to Shengle; restore them with manual English translations.",
+      "manualTranslations": [
+        {
+          "zh": "春正月，大蒐于定襄之虎山，因東幸善無北陂。",
+          "literal": "In spring, in the first month, he held a great hunt at Tiger Mountain in Dingxiang, and then went east to the northern marsh of Shanwu.",
+          "idiomatic": "In spring, in the first month, he held a great hunt at Tiger Mountain in Dingxiang, then went east to the northern marshes of Shanwu.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "三月，慕容垂來寇桑乾川。",
+          "literal": "In the third month, Murong Chui came to raid the Sangkan River valley.",
+          "idiomatic": "In the third month, Murong Chui came to raid the Sangkan River valley.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "陳留公元虔先鎮平城，時徵兵未集，虔率麾下邀擊，失利死之。",
+          "literal": "Duke Yuan Qian of Chenliu had previously been stationed at Pingcheng; at the time the conscripted troops had not yet assembled, so Qian led those under his command to intercept the enemy, was defeated, and died there.",
+          "idiomatic": "Duke Yuan Qian of Chenliu had previously been stationed at Pingcheng. The conscripted troops had not yet assembled, so Qian led his own men to intercept the enemy; he was defeated and died there.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "垂遂至平城西北，踰山結營，聞帝將至，乃築城自守。",
+          "literal": "Chui then reached the northwest of Pingcheng, crossed the mountains and made camp; hearing that the emperor was about to arrive, he built a fortification and defended himself.",
+          "idiomatic": "Chui then reached the northwest of Pingcheng, crossed the mountains, and made camp. When he heard that the emperor was coming, he built fortifications and held his position.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "疾甚，遂遁走，死於上谷。",
+          "literal": "His illness became severe, and so he fled and died at Shanggu.",
+          "idiomatic": "His illness grew severe, so he fled and died at Shanggu.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "子寶匿喪而還，至中山乃僭立。",
+          "literal": "His son Bao concealed the mourning and returned; when he reached Zhongshan, he illegitimately set himself up as ruler.",
+          "idiomatic": "His son Bao concealed the death and returned; only after reaching Zhongshan did he set himself up as ruler.",
+          "model": "Manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-22T20:13:05.920Z",
+      "reviewer": "source-correspondence-manual",
+      "appliedAt": "2026-06-22T20:13:30.600Z",
+      "appliedSummary": {
+        "id": "source-weishu-002-wikisource-407502dea59e",
+        "type": "source_omission_candidate",
+        "start": 189,
+        "removed": 0,
+        "inserted": 6,
+        "delta": 6,
+        "manualTranslationsApplied": 6
+      }
     },
     {
       "id": "source-weishu-002-wikisource-42feb66bc4ad",
@@ -4674,7 +4726,7 @@
     },
     {
       "id": "source-weishu-002-wikisource-8440504d60e5",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -4717,12 +4769,14 @@
         "afterLocal": "博陵、勃海、章武羣盜並起，略陽公元遵等討平之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: local text only has the retained [9] collation marker before the same sentence; no source correction needed.",
+      "reviewedAt": "2026-06-22T20:13:05.920Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-002-wikisource-c29af626eeb9",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.714,
@@ -4774,8 +4828,10 @@
         "afterLocal": "史臣曰：晉氏崩離，戎羯乘釁，僭偽紛糾，犲狼競馳。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: raw MediaWiki year-link parsing collapses 永興二年/Taichang context and the [14] marker; local text already preserves the complete passage.",
+      "reviewedAt": "2026-06-22T20:13:05.920Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-002-wikisource-c5a1bf2d0681",
@@ -4829,7 +4885,7 @@
     },
     {
       "id": "source-weishu-002-wikisource-e6758c7f22c9",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -4872,12 +4928,14 @@
         "afterLocal": "自河已南，諸部悉平。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: local text only has the retained [6] collation marker before the same sentence; no source correction needed.",
+      "reviewedAt": "2026-06-22T20:13:05.920Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-003-wikisource-0afbe8139ed9",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -4920,12 +4978,14 @@
         "afterLocal": "遺詔以司空奚斤所獲軍實賜大臣，自司徒長孫嵩已下至士卒各有差。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: local text only has the retained [12] collation marker before the same sentence; no source correction needed.",
+      "reviewedAt": "2026-06-22T20:17:21.688Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-003-wikisource-1df684b72279",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.033,
@@ -4968,12 +5028,14 @@
         "afterLocal": "太祖晚有子，聞而大悅，乃大赦天下。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": "Reviewed as no-op: discrepancy is caused by upstream MediaWiki residue such as __TOC__, Category, or PD-old text; local corpus text retained.\nReopened for manual review: previous automatic residue no-op left non-residue punctuation or text unresolved."
+      "decision": "denied",
+      "notes": "Denied: raw source shows this is Wikisource header and notes residue plus MediaWiki year-link parsing at the chapter opening; local body text already preserves the date.",
+      "reviewedAt": "2026-06-22T20:17:21.688Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-003-wikisource-2bdafe7b54c5",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -4997,8 +5059,88 @@
         "afterLocal": "是年，李暠卒，子歆立，遣使朝貢。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms the omitted winter campaign and surrender notices before the Li Gao succession entry.",
+      "manualTranslations": [
+        {
+          "zh": "冬十月己酉，詔司徒長孫嵩等還京師，遣叔孫建鎮鄴。",
+          "literal": "In winter, in the tenth month, on the jiyou day, he ordered Minister over the Masses Zhangsun Song and the others to return to the capital, and sent Shusun Jian to garrison Ye.",
+          "idiomatic": "In winter, in the tenth month, on the jiyou day, he ordered Situ Zhangsun Song and the others back to the capital and sent Shusun Jian to garrison Ye.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "癸丑，豫章王夔薨。",
+          "literal": "On the guichou day, Prince Kui of Yuzhang died.",
+          "idiomatic": "On the guichou day, Prince Kui of Yuzhang died.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "十有一月，司徒長孫嵩等諸軍至樂平。",
+          "literal": "In the eleventh month, Minister over the Masses Zhangsun Song and the various armies reached Leping.",
+          "idiomatic": "In the eleventh month, Situ Zhangsun Song and the various armies reached Leping.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "詔嵩遣娥清、周幾等與叔孫建討西山丁零翟蜀、洛支等，悉滅餘黨而還。",
+          "literal": "He ordered Song to send E Qing, Zhou Ji, and others together with Shusun Jian to attack Zhai Shu, Luo Zhi, and the Dingling of the Western Mountains; they exterminated all the remaining factions and returned.",
+          "idiomatic": "He ordered Song to send E Qing, Zhou Ji, and others with Shusun Jian against Zhai Shu, Luo Zhi, and the Dingling of the Western Mountains. They wiped out the remaining factions and returned.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "復諸州租稅。",
+          "literal": "He remitted the rents and taxes of the various provinces.",
+          "idiomatic": "He remitted rent and taxes for the provinces.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "十有二月己酉，詔河東、河內有姚泓子弟播越民間，能有送致京師者賞之。",
+          "literal": "In the twelfth month, on the jiyou day, he decreed that if in Hedong or Henei there were sons or younger kinsmen of Yao Hong scattered among the people, those able to send them to the capital would be rewarded.",
+          "idiomatic": "In the twelfth month, on the jiyou day, he decreed that anyone in Hedong or Henei who could find sons or younger kinsmen of Yao Hong scattered among the people and send them to the capital would be rewarded.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "庚申，田于西山。",
+          "literal": "On the gengshen day, he hunted at the Western Mountains.",
+          "idiomatic": "On the gengshen day he hunted in the Western Mountains.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "癸亥，車駕還宮。",
+          "literal": "On the guihai day, the imperial carriage returned to the palace.",
+          "idiomatic": "On the guihai day, the court returned to the palace.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "氐豪徐騃奴、齊元子等，擁部落三萬於雍，遣使內附，詔將軍王洛生及河內太守楊聲等西行以應之。",
+          "literal": "The Di chiefs Xu Gainu, Qi Yuanzi, and others held thirty thousand tribespeople at Yong and sent envoys to submit; he ordered General Wang Luosheng and Henei Administrator Yang Sheng and others to go west to respond to them.",
+          "idiomatic": "The Di chiefs Xu Gainu, Qi Yuanzi, and others gathered thirty thousand tribespeople at Yong and sent envoys to submit. The emperor ordered General Wang Luosheng, Henei Administrator Yang Sheng, and others to go west to receive them.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "壬申，幸大寧長川。",
+          "literal": "On the renshen day, he visited Changchuan in Daning.",
+          "idiomatic": "On the renshen day he visited Changchuan in Daning.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "姚泓尚書、東武侯姚敞，敞弟鎮遠將軍僧光，右將軍姚定世自洛來奔。",
+          "literal": "Yao Hong's Minister and Marquis of Dongwu Yao Chang, Chang's younger brother Sengguang, General Who Guards Afar, and Right General Yao Dingshi came from Luo to defect.",
+          "idiomatic": "Yao Chang, Yao Hong's Minister and Marquis of Dongwu, Chang's younger brother Sengguang, General Who Guards Afar, and Right General Yao Dingshi came from Luo to defect.",
+          "model": "Manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-22T20:17:21.688Z",
+      "reviewer": "source-correspondence-manual",
+      "appliedAt": "2026-06-22T20:17:37.555Z",
+      "appliedSummary": {
+        "id": "source-weishu-003-wikisource-2bdafe7b54c5",
+        "type": "source_omission_candidate",
+        "start": 214,
+        "removed": 0,
+        "inserted": 11,
+        "delta": 11,
+        "manualTranslationsApplied": 11
+      }
     },
     {
       "id": "source-weishu-003-wikisource-2c57cdc2f770",
@@ -6027,7 +6169,7 @@
     },
     {
       "id": "source-weishu-003-wikisource-8baf891b1266",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -6070,12 +6212,14 @@
         "afterLocal": "帝入誅紹。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: local text only retains the 天賜六年 year that the raw MediaWiki year-link parser dropped.",
+      "reviewedAt": "2026-06-22T20:17:21.688Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-003-wikisource-a2db37cb9ada",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -6099,8 +6243,112 @@
         "afterLocal": "秋七月，幸三會屋侯泉，詔皇太子率百官以從。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms the omitted Hulao/Luoyang campaign sequence between the Henei bridge entry and the seventh-month tour.",
+      "manualTranslations": [
+        {
+          "zh": "夏四月丁卯，幸成臯城，觀虎牢。",
+          "literal": "In summer, in the fourth month, on the dingmao day, he visited the city of Chenggao and inspected Hulao.",
+          "idiomatic": "In summer, in the fourth month, on the dingmao day, he visited Chenggao and inspected Hulao.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "而城內乏水，懸綆汲河。",
+          "literal": "Inside the city water was lacking, and ropes were hung down to draw water from the river.",
+          "idiomatic": "The city lacked water, and its defenders lowered ropes to draw from the river.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "帝令連艦上施轒轀，絕其汲路，又穿地道以奪其井。",
+          "literal": "The emperor ordered ships to be joined and siege screens set on them, cutting off their route for drawing water, and also dug tunnels to seize their wells.",
+          "idiomatic": "The emperor ordered ships lashed together and siege screens mounted on them to cut off the defenders' route to the water; he also dug tunnels to seize their wells.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "遂至洛陽，觀石經。",
+          "literal": "He then reached Luoyang and viewed the Stone Classics.",
+          "idiomatic": "He then went to Luoyang and viewed the Stone Classics.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "蠻王梅安，率渠帥數千人來貢方物。",
+          "literal": "The Man king Mei An led several thousand chiefs and came to present local products as tribute.",
+          "idiomatic": "The Man king Mei An led several thousand chieftains to present local products as tribute.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "閏月己未，還幸河內，北登太行，幸高都。",
+          "literal": "In the intercalary month, on the jiwei day, he returned to Henei, climbed north over Taihang, and visited Gaodu.",
+          "idiomatic": "In the intercalary month, on the jiwei day, he returned to Henei, climbed north over the Taihang range, and visited Gaodu.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "虎牢潰，獲劉義符冠軍將軍、司州刺史、觀陽伯毛德祖，冠軍司馬、滎陽太守翟廣，建威將軍竇霸，振武將軍姚勇錯，振威將軍吳寶之，司州別駕姜元興，治中竇溫。",
+          "literal": "Hulao collapsed, and they captured Liu Yifu's Champion General, Inspector of Sizhou, and Earl of Guanyang Mao Dezu; Champion Army Marshal and Administrator of Yingyang Di Guang; General Who Establishes Might Dou Ba; General Who Rouses Martiality Yao Yongcuo; General Who Rouses Might Wu Baozhi; Sizhou Aide Jiang Yuanxing; and Administrative Officer Dou Wen.",
+          "idiomatic": "Hulao fell, and they captured Liu Yifu's officials: Mao Dezu, Champion General, Inspector of Sizhou, and Earl of Guanyang; Di Guang, Champion Army Marshal and Administrator of Yingyang; Dou Ba, General Who Establishes Might; Yao Yongcuo, General Who Rouses Martiality; Wu Baozhi, General Who Rouses Might; Jiang Yuanxing, Aide of Sizhou; and Dou Wen, Administrative Officer.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "士眾大疫，死者十二三。",
+          "literal": "A great epidemic struck the troops and multitude; those who died were two or three out of ten.",
+          "idiomatic": "A severe epidemic struck the troops and populace, and two or three in ten died.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "辛酉，帝還至晉陽。",
+          "literal": "On the xinyou day, the emperor returned and reached Jinyang.",
+          "idiomatic": "On the xinyou day the emperor returned to Jinyang.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "班賜從官，王公已下逮於厮賤，無不霑給。",
+          "literal": "He distributed gifts to the accompanying officials; from princes and dukes on down to low servants, none failed to receive a share.",
+          "idiomatic": "He distributed gifts to the accompanying officials; from princes and dukes down to the lowest servants, everyone received a share.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "五月丙寅，還次雁門。",
+          "literal": "In the fifth month, on the bingyin day, he returned and halted at Yanmen.",
+          "idiomatic": "In the fifth month, on the bingyin day, he returned and halted at Yanmen.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "皇太子率留臺王公迎于句注之北。",
+          "literal": "The Crown Prince led the princes and dukes of the retained administration to welcome him north of Juzhu.",
+          "idiomatic": "The Crown Prince led the princes and dukes of the retained court to welcome him north of Juzhu.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "庚寅，車駕至自南巡。",
+          "literal": "On the gengyin day, the imperial carriage arrived back from the southern inspection.",
+          "idiomatic": "On the gengyin day, the court returned from the southern inspection tour.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "六月己亥，太尉、宜都公穆觀薨。",
+          "literal": "In the sixth month, on the jihai day, Grand Commandant and Duke of Yidu Mu Guan died.",
+          "idiomatic": "In the sixth month, on the jihai day, Mu Guan, Grand Commandant and Duke of Yidu, died.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "丙辰，北巡，至於參合陂，遊于蟠羊山。",
+          "literal": "On the bingchen day, he inspected the north, reached Canhe Slope, and traveled on Panyang Mountain.",
+          "idiomatic": "On the bingchen day he made a northern inspection tour, reached Canhe Slope, and visited Panyang Mountain.",
+          "model": "Manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-22T20:17:21.688Z",
+      "reviewer": "source-correspondence-manual",
+      "appliedAt": "2026-06-22T20:17:37.555Z",
+      "appliedSummary": {
+        "id": "source-weishu-003-wikisource-a2db37cb9ada",
+        "type": "source_omission_candidate",
+        "start": 333,
+        "removed": 0,
+        "inserted": 15,
+        "delta": 15,
+        "manualTranslationsApplied": 15
+      }
     },
     {
       "id": "source-weishu-003-wikisource-aee6ee0db6a7",
@@ -6154,7 +6402,7 @@
     },
     {
       "id": "source-weishu-003-wikisource-b2c47bf86221",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -6178,12 +6426,74 @@
         "afterLocal": "夏五月辛酉，車駕還宮。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms the omitted Shenrui 1 spring entries between the Yao Xing tribute notice and the fifth-month return.",
+      "manualTranslations": [
+        {
+          "zh": "春正月辛酉，以禎瑞頻集，大赦，改元。",
+          "literal": "In spring, in the first month, on the xinyou day, because auspicious signs had gathered repeatedly, he proclaimed a general amnesty and changed the era name.",
+          "idiomatic": "In spring, in the first month, on the xinyou day, repeated auspicious signs were reported, so he proclaimed a general amnesty and changed the era name.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "辛巳，幸繁畤。",
+          "literal": "On the xinsi day, he visited Fanzhi.",
+          "idiomatic": "On the xinsi day he visited Fanzhi.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "賜王公已下至於士卒百工布帛各有差。",
+          "literal": "He granted cloth and silk to princes and dukes on down to soldiers, craftsmen, and laborers, each according to rank.",
+          "idiomatic": "He bestowed cloth and silk in graded amounts on everyone from princes and dukes down to soldiers and artisans.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "二月戊戌，車駕還宮。",
+          "literal": "In the second month, on the wuxu day, the imperial carriage returned to the palace.",
+          "idiomatic": "In the second month, on the wuxu day, the court returned to the palace.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "是月，赫連屈孑入寇河東蒲子，殺掠吏民，三城護軍張昌等要擊走之。",
+          "literal": "That month, Helian Qujie invaded Puzi in Hedong, killing and plundering officials and people; Zhang Chang, Protector of the Three Cities, and others intercepted him and drove him off.",
+          "idiomatic": "That month Helian Qujie raided Puzi in Hedong, killing and plundering officials and commoners. Zhang Chang, Protector of the Three Cities, and others intercepted him and drove him off.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "庚戌，幸犲山宮。",
+          "literal": "On the gengxu day, he visited Chaishan Palace.",
+          "idiomatic": "On the gengxu day he visited Chaishan Palace.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "西河胡曹成、吐京民劉初原攻殺屈孑所置吐京護軍及其守三百餘人。",
+          "literal": "Cao Cheng, a Hu from Xihe, and Liu Chuyuan, a commoner of Tujing, attacked and killed the Tujing Protector installed by Qujie and more than three hundred of his guards.",
+          "idiomatic": "Cao Cheng, a Hu from Xihe, and Liu Chuyuan of Tujing attacked and killed the Tujing Protector whom Qujie had installed, together with more than three hundred of his guards.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "乙卯，起豐宮於平城東北。",
+          "literal": "On the yimao day, Feng Palace was built northeast of Pingcheng.",
+          "idiomatic": "On the yimao day he began construction of Feng Palace northeast of Pingcheng.",
+          "model": "Manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-22T20:17:21.688Z",
+      "reviewer": "source-correspondence-manual",
+      "appliedAt": "2026-06-22T20:17:37.555Z",
+      "appliedSummary": {
+        "id": "source-weishu-003-wikisource-b2c47bf86221",
+        "type": "source_omission_candidate",
+        "start": 119,
+        "removed": 0,
+        "inserted": 8,
+        "delta": 8,
+        "manualTranslationsApplied": 8
+      }
     },
     {
       "id": "source-weishu-003-wikisource-ec4d3f12be3e",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.688,
@@ -6226,8 +6536,10 @@
         "afterLocal": "追尊皇妣為宣穆皇后。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: raw MediaWiki year-link parsing drops 永興元年 and the local [2] collation marker; local text is complete.",
+      "reviewedAt": "2026-06-22T20:17:21.688Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-004-wikisource-2d2617eba3d5",
@@ -6960,7 +7272,7 @@
     },
     {
       "id": "source-weishu-004-wikisource-e362edd3603c",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.81,
@@ -7012,12 +7324,14 @@
         "afterLocal": "太宗有疾，命帝總攝百揆，聰明大度，意豁如也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: current local text already preserves the missing closing quote and the 天賜五年/泰常七年 year labels that MediaWiki year-link parsing drops.",
+      "reviewedAt": "2026-06-22T20:19:35.206Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-004-wikisource-f2be13a83d8a",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -7041,8 +7355,76 @@
         "afterLocal": "夏四月甲子，行幸雲中。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms the omitted year-three spring entries before the fourth-month Yunzhong visit.",
+      "manualTranslations": [
+        {
+          "zh": "三年春正月庚子，車駕還宮。",
+          "literal": "In the third year, in spring, in the first month, on the gengzi day, the imperial carriage returned to the palace.",
+          "idiomatic": "In the third year, in spring, in the first month, on the gengzi day, the court returned to the palace.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "壬寅，大赦天下。",
+          "literal": "On the renyin day, he granted a general amnesty throughout the realm.",
+          "idiomatic": "On the renyin day he granted a general amnesty throughout the realm.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "癸卯，行幸廣寧，臨溫泉，作溫泉之歌。",
+          "literal": "On the guimao day, he traveled to Guangning, visited the hot springs, and composed the Song of the Hot Springs.",
+          "idiomatic": "On the guimao day he went to Guangning, visited the hot springs, and composed the Song of the Hot Springs.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "二月丁卯，司徒、平陽王長孫翰薨。",
+          "literal": "In the second month, on the dingmao day, Minister over the Masses and Prince of Pingyang Zhangsun Han died.",
+          "idiomatic": "In the second month, on the dingmao day, Zhangsun Han, Situ and Prince of Pingyang, died.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "戊辰，車駕還宮。",
+          "literal": "On the wuchen day, the imperial carriage returned to the palace.",
+          "idiomatic": "On the wuchen day, the court returned to the palace.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "三月壬寅，進會稽公赫連昌為秦王。",
+          "literal": "In the third month, on the renyin day, Duke Helian Chang of Kuaiji was advanced to King of Qin.",
+          "idiomatic": "In the third month, on the renyin day, Helian Chang, Duke of Kuaiji, was promoted to King of Qin.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "癸卯，雲中、河西敕勒千餘家叛。",
+          "literal": "On the guimao day, more than one thousand Chile households in Yunzhong and Hexi rebelled.",
+          "idiomatic": "On the guimao day, more than a thousand Chile households in Yunzhong and Hexi rebelled.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "尚書令劉潔追滅之。",
+          "literal": "President of the Secretariat Liu Jie pursued and destroyed them.",
+          "idiomatic": "Liu Jie, President of the Secretariat, pursued and destroyed them.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "帝聞劉義隆將寇邊，乃詔冀、定、相三州造船三千艘，簡幽州以南戍兵集于河上以備之。",
+          "literal": "The emperor heard that Liu Yilong was about to raid the frontier, and therefore ordered Ji, Ding, and Xiang provinces to build three thousand boats, and selected garrison troops south of Youzhou to gather along the river in preparation for him.",
+          "idiomatic": "When the emperor heard that Liu Yilong was preparing to raid the frontier, he ordered Ji, Ding, and Xiang provinces to build three thousand boats and selected garrison troops south of Youzhou to assemble along the Yellow River in readiness.",
+          "model": "Manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-22T20:19:35.206Z",
+      "reviewer": "source-correspondence-manual",
+      "appliedAt": "2026-06-22T20:19:47.733Z",
+      "appliedSummary": {
+        "id": "source-weishu-004-wikisource-f2be13a83d8a",
+        "type": "source_omission_candidate",
+        "start": 151,
+        "removed": 0,
+        "inserted": 9,
+        "delta": 9,
+        "manualTranslationsApplied": 9
+      }
     },
     {
       "id": "source-weishu-004-wikisource-f5ce679146f8",
@@ -7096,7 +7478,7 @@
     },
     {
       "id": "source-weishu-005-wikisource-29b31b5f601a",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -7139,12 +7521,14 @@
         "afterLocal": "任牧以畜事，貢鳥獸；"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: local text only has the retained [6] collation marker before the same sentence; no source correction needed.",
+      "reviewedAt": "2026-06-22T20:22:52.426Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-005-wikisource-3262df192fd8",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -7168,8 +7552,70 @@
         "afterLocal": "二年春正月庚辰朔，南來降民五千餘家於中山謀叛，州軍討平之。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms omitted winter Yinshan, envoy, death, and prince-title entries before Zhengping 2.",
+      "manualTranslations": [
+        {
+          "zh": "冬十月庚申，行幸陰山。",
+          "literal": "In winter, in the tenth month, on the gengshen day, he traveled to Yinshan.",
+          "idiomatic": "In winter, in the tenth month, on the gengshen day, he went to Yinshan.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "劉義隆遣使朝貢。",
+          "literal": "Liu Yilong sent envoys to court with tribute.",
+          "idiomatic": "Liu Yilong sent envoys to court with tribute.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "詔殿中將軍郎法祐使於義隆。",
+          "literal": "He ordered Palace General Lang Fayou to go as envoy to Yilong.",
+          "idiomatic": "He ordered Palace General Lang Fayou to serve as envoy to Yilong.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "己巳，司空、上黨王長孫道生薨。",
+          "literal": "On the jisi day, Minister of Works and Prince of Shangdang Zhangsun Daosheng died.",
+          "idiomatic": "On the jisi day, Zhangsun Daosheng, Minister of Works and Prince of Shangdang, died.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "十有二月丁丑，車駕還宮。",
+          "literal": "In the twelfth month, on the dingchou day, the imperial carriage returned to the palace.",
+          "idiomatic": "In the twelfth month, on the dingchou day, the court returned to the palace.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "封皇孫濬為高陽王。",
+          "literal": "He enfeoffed the imperial grandson Jun as Prince of Gaoyang.",
+          "idiomatic": "He enfeoffed the imperial grandson Jun as Prince of Gaoyang.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "尋以皇孫世嫡，不宜在藩，乃止。",
+          "literal": "Soon, because the imperial grandson was the lineal heir, it was not appropriate for him to be in a feudatory state, and so the grant was stopped.",
+          "idiomatic": "Soon afterward, because the imperial grandson was the lineal heir and should not be placed in a feudatory state, the grant was revoked.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "封秦王翰為東平王，燕王譚為臨淮王，楚王建為廣陽王，吳王余為南安王。",
+          "literal": "He enfeoffed Prince Han of Qin as Prince of Dongping, Prince Tan of Yan as Prince of Linhuai, Prince Jian of Chu as Prince of Guangyang, and Prince Yu of Wu as Prince of Nan'an.",
+          "idiomatic": "He made Prince Han of Qin Prince of Dongping, Prince Tan of Yan Prince of Linhuai, Prince Jian of Chu Prince of Guangyang, and Prince Yu of Wu Prince of Nan'an.",
+          "model": "Manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-22T20:22:52.426Z",
+      "reviewer": "source-correspondence-manual",
+      "appliedAt": "2026-06-22T20:23:07.665Z",
+      "appliedSummary": {
+        "id": "source-weishu-005-wikisource-3262df192fd8",
+        "type": "source_omission_candidate",
+        "start": 296,
+        "removed": 0,
+        "inserted": 8,
+        "delta": 8,
+        "manualTranslationsApplied": 8
+      }
     },
     {
       "id": "source-weishu-005-wikisource-337de1913dcc",
@@ -7554,7 +8000,7 @@
     },
     {
       "id": "source-weishu-005-wikisource-3b4a8f8e5f1c",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -7578,8 +8024,46 @@
         "afterLocal": "四年春正月己巳，征西將軍皮豹子等大破劉義隆將於樂鄉，擒其將王奐之、王長卿等，強玄明、辛伯奮棄下辨遁走，追斬之，盡虜其眾。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms omitted tenth- and twelfth-month appointments before the fourth-year spring entry.",
+      "manualTranslations": [
+        {
+          "zh": "冬十月己卯，封皇子伏羅為晉王，翰為秦王，譚為燕王，建為楚王，余為吳王。",
+          "literal": "In winter, in the tenth month, on the jimao day, he enfeoffed the imperial sons Fuluo as Prince of Jin, Han as Prince of Qin, Tan as Prince of Yan, Jian as Prince of Chu, and Yu as Prince of Wu.",
+          "idiomatic": "In winter, in the tenth month, on the jimao day, he enfeoffed the imperial sons Fuluo as Prince of Jin, Han as Prince of Qin, Tan as Prince of Yan, Jian as Prince of Chu, and Yu as Prince of Wu.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "十有二月辛巳，侍中、太保、襄城公盧魯元薨。",
+          "literal": "In the twelfth month, on the xinsi day, Palace Attendant, Grand Protector, and Duke of Xiangcheng Lu Luyuan died.",
+          "idiomatic": "In the twelfth month, on the xinsi day, Lu Luyuan, Palace Attendant, Grand Protector, and Duke of Xiangcheng, died.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "丁酉，車駕還宮。",
+          "literal": "On the dingyou day, the imperial carriage returned to the palace.",
+          "idiomatic": "On the dingyou day, the court returned to the palace.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "李寶遣使朝貢，以寶為鎮西大將軍、開府儀同三司、沙州牧，封敦煌公。",
+          "literal": "Li Bao sent envoys to court with tribute; Bao was made General-in-Chief Who Guards the West, Opening Office with Ceremonial Equal to the Three Ministers, Governor of Sha Prefecture, and was enfeoffed as Duke of Dunhuang.",
+          "idiomatic": "Li Bao sent envoys to court with tribute. He was made General-in-Chief Who Guards the West, Kaifu Yitong Sansi, and Governor of Sha Prefecture, and was enfeoffed as Duke of Dunhuang.",
+          "model": "Manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-22T20:22:52.426Z",
+      "reviewer": "source-correspondence-manual",
+      "appliedAt": "2026-06-22T20:23:07.665Z",
+      "appliedSummary": {
+        "id": "source-weishu-005-wikisource-3b4a8f8e5f1c",
+        "type": "source_omission_candidate",
+        "start": 49,
+        "removed": 0,
+        "inserted": 4,
+        "delta": 4,
+        "manualTranslationsApplied": 4
+      }
     },
     {
       "id": "source-weishu-005-wikisource-5d9909d05e34",
@@ -7633,7 +8117,7 @@
     },
     {
       "id": "source-weishu-005-wikisource-6ec4638a3a21",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -7657,12 +8141,44 @@
         "afterLocal": "九年春正月，劉義隆遣使朝貢。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms omitted winter death, tribute, and Prince of Jin death entries before ninth-year spring.",
+      "manualTranslations": [
+        {
+          "zh": "冬十月，侍中、中書監、宜都王穆壽薨。",
+          "literal": "In winter, in the tenth month, Palace Attendant, Director of the Palace Secretariat, and Prince of Yidu Mu Shou died.",
+          "idiomatic": "In winter, in the tenth month, Mu Shou, Palace Attendant, Director of the Palace Secretariat, and Prince of Yidu, died.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "十二月，鄯善、遮逸國並遣子朝獻。",
+          "literal": "In the twelfth month, Shanshan and the state of Zheyi both sent sons to court with tribute.",
+          "idiomatic": "In the twelfth month, Shanshan and Zheyi both sent royal sons to court with tribute.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "晉王伏羅薨。",
+          "literal": "Prince Fuluo of Jin died.",
+          "idiomatic": "Prince Fuluo of Jin died.",
+          "model": "Manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-22T20:22:52.426Z",
+      "reviewer": "source-correspondence-manual",
+      "appliedAt": "2026-06-22T20:23:07.665Z",
+      "appliedSummary": {
+        "id": "source-weishu-005-wikisource-6ec4638a3a21",
+        "type": "source_omission_candidate",
+        "start": 208,
+        "removed": 0,
+        "inserted": 3,
+        "delta": 3,
+        "manualTranslationsApplied": 3
+      }
     },
     {
       "id": "source-weishu-005-wikisource-ae359d4825d5",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -7705,12 +8221,14 @@
         "afterLocal": "閏月，劉義隆龍驤將軍裴方明、梁州刺史劉康祖寇南秦，南秦王楊難當敗，奔於上邽。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: local text only has the retained [1] collation marker before the same sentence; no source correction needed.",
+      "reviewedAt": "2026-06-22T20:22:52.426Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-005-wikisource-c50be16f7ed4",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -7734,8 +8252,76 @@
         "afterLocal": "夏五月壬寅，大赦。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms omitted Zhengping 1 return-from-southern-campaign entries before the fifth-month amnesty.",
+      "manualTranslations": [
+        {
+          "zh": "春正月丙戌朔，大會羣臣於江上，班賞各有差，文武受爵者二百餘人。",
+          "literal": "In spring, in the first month, on the new moon day bingxu, he held a great assembly of the assembled ministers on the river, distributed rewards each according to rank, and more than two hundred civil and military officials received titles.",
+          "idiomatic": "In spring, in the first month, on the bingxu new moon, he held a great assembly of the ministers on the river and distributed rewards in graded amounts; more than two hundred civil and military officials received titles.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "丁亥，輿駕北旋。",
+          "literal": "On the dinghai day, the imperial carriage turned north.",
+          "idiomatic": "On the dinghai day, the imperial carriage turned north.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "是月，破洛那、罽賓、迷密諸國各遣使朝獻。",
+          "literal": "That month, the states of Boluona, Jibin, and Mimi each sent envoys to court with tribute.",
+          "idiomatic": "That month, Boluona, Jibin, and Mimi each sent envoys to court with tribute.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "二月戊寅，車駕濟河。",
+          "literal": "In the second month, on the wuyin day, the imperial carriage crossed the river.",
+          "idiomatic": "In the second month, on the wuyin day, the court crossed the river.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "癸未，次于魯口。",
+          "literal": "On the guiwei day, it halted at Lukou.",
+          "idiomatic": "On the guiwei day, the court halted at Lukou.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "皇太子朝於行宮。",
+          "literal": "The Crown Prince paid court at the temporary palace.",
+          "idiomatic": "The Crown Prince paid court at the temporary palace.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "三月己亥，車駕至自南伐，飲至策勳，告於宗廟。",
+          "literal": "In the third month, on the jihai day, the imperial carriage arrived back from the southern campaign; the arrival libation was drunk, merits were recorded, and announcement was made in the ancestral temple.",
+          "idiomatic": "In the third month, on the jihai day, the court returned from the southern campaign. The arrival rite was performed, merits were recorded, and the victory was reported to the ancestral temple.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "以降民五萬餘家分置近畿。",
+          "literal": "More than fifty thousand surrendered households were divided up and settled near the capital region.",
+          "idiomatic": "More than fifty thousand surrendered households were divided up and settled near the capital region.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "賜留臺文武所獲軍資生口各有差。",
+          "literal": "He granted captured military supplies and captives to the civil and military officials of the retained court, each according to rank.",
+          "idiomatic": "He distributed captured military supplies and captives among the civil and military officials of the retained court in graded amounts.",
+          "model": "Manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-22T20:22:52.426Z",
+      "reviewer": "source-correspondence-manual",
+      "appliedAt": "2026-06-22T20:23:07.665Z",
+      "appliedSummary": {
+        "id": "source-weishu-005-wikisource-c50be16f7ed4",
+        "type": "source_omission_candidate",
+        "start": 290,
+        "removed": 0,
+        "inserted": 9,
+        "delta": 9,
+        "manualTranslationsApplied": 9
+      }
     },
     {
       "id": "source-weishu-005-wikisource-d7f8332a77b1",
@@ -8428,7 +9014,7 @@
     },
     {
       "id": "source-weishu-006-wikisource-842f9e3f9a9d",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -8452,12 +9038,44 @@
         "afterLocal": "六年春正月丙申，大赦天下。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms omitted winter death and tribute entries before sixth-year spring.",
+      "manualTranslations": [
+        {
+          "zh": "冬十月，琅邪王司馬楚之薨。",
+          "literal": "In winter, in the tenth month, Prince Sima Chuzhi of Langye died.",
+          "idiomatic": "In winter, in the tenth month, Sima Chuzhi, Prince of Langye, died.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "十有二月，南秦王楊難當薨。",
+          "literal": "In the twelfth month, Yang Nandang, Prince of Southern Qin, died.",
+          "idiomatic": "In the twelfth month, Yang Nandang, Prince of Southern Qin, died.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "吐呼羅國遣使朝獻。",
+          "literal": "The state of Tuhuluo sent envoys to court with tribute.",
+          "idiomatic": "The state of Tuhuluo sent envoys to court with tribute.",
+          "model": "Manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-22T20:28:30.451Z",
+      "reviewer": "source-correspondence-manual",
+      "appliedAt": "2026-06-22T20:28:44.813Z",
+      "appliedSummary": {
+        "id": "source-weishu-006-wikisource-842f9e3f9a9d",
+        "type": "source_omission_candidate",
+        "start": 288,
+        "removed": 0,
+        "inserted": 3,
+        "delta": 3,
+        "manualTranslationsApplied": 3
+      }
     },
     {
       "id": "source-weishu-006-wikisource-9cb5757c4b99",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -8481,12 +9099,86 @@
         "afterLocal": "四年春三月乙未，賜京師民年七十以上太官厨食，以終其年。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms omitted tenth- to twelfth-month edict, envoy, battle-formation, and death entries before fourth-year spring.",
+      "manualTranslations": [
+        {
+          "zh": "冬十月丙辰，詔曰：「朕承洪緒，統御萬國，垂拱南面，委政羣司，欲緝熙治道，以致寧一。",
+          "literal": "In winter, in the tenth month, on the bingchen day, an edict said: \"I have inherited the great line, govern the myriad states, sit facing south with robes hanging down, and entrust government to the assembled offices, wishing to brighten the way of rule and bring about peace and unity.",
+          "idiomatic": "In winter, in the tenth month, on the bingchen day, an edict said, \"I have inherited the great line and rule the myriad states. Sitting in ritual repose facing south, I entrust government to the officials, wishing to brighten the way of rule and bring about peace and unity.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "夫三代之隆，莫不崇尚年齒。",
+          "literal": "In the flourishing of the Three Dynasties, none failed to honor age and seniority.",
+          "idiomatic": "In the flourishing age of the Three Dynasties, age and seniority were always honored.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "今選舉之官，多不以次，令班白處後，晚進居先。",
+          "literal": "Now the officials in charge of selection often do not follow order, causing white-haired men to stand behind and latecomers to be placed first.",
+          "idiomatic": "Now the officials in charge of selection often ignore proper order, leaving white-haired men behind while latecomers are placed ahead of them.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "豈所謂彝倫攸敍者也！",
+          "literal": "How could this be what is called the proper ordering of constant relations!",
+          "idiomatic": "How can this be called the proper ordering of enduring relations!",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "諸曹選補，宜各先盡勞舊才能。」",
+          "literal": "In selections and appointments by the various bureaus, each should first exhaust those old in service and capable.\"",
+          "idiomatic": "In selections and appointments by the various bureaus, each should first make full use of capable men with long service.\"",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "是月，詔員外散騎常侍游明根，員外郎、昌邑侯和天德使于劉駿。",
+          "literal": "That month, he ordered You Minggen, Supernumerary Cavalier Attendant-in-ordinary, and He Tiande, Supernumerary Gentleman and Marquis of Changyi, to go as envoys to Liu Jun.",
+          "idiomatic": "That month he ordered You Minggen, Supernumerary Cavalier Attendant-in-ordinary, and He Tiande, Supernumerary Gentleman and Marquis of Changyi, to serve as envoys to Liu Jun.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "十有一月壬寅，輿駕還宮。",
+          "literal": "In the eleventh month, on the renyin day, the imperial carriage returned to the palace.",
+          "idiomatic": "In the eleventh month, on the renyin day, the court returned to the palace.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "十有二月乙卯，制戰陳之法十有餘條。",
+          "literal": "In the twelfth month, on the yimao day, more than ten articles on the methods of battle formations were established.",
+          "idiomatic": "In the twelfth month, on the yimao day, more than ten regulations on battle formations were established.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "因大儺耀兵，有飛龍、騰蛇、魚麗之變，以示威武。",
+          "literal": "During the great nuo exorcism, troops were displayed, with transformations of Flying Dragon, Rising Serpent, and Fish Scale formations, to show martial might.",
+          "idiomatic": "During the great nuo exorcism, troops were displayed in shifting Flying Dragon, Rising Serpent, and Fish Scale formations to show martial power.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "戊午，零陵王閭拔薨。",
+          "literal": "On the wuwu day, Prince Lüba of Lingling died.",
+          "idiomatic": "On the wuwu day, Prince Lüba of Lingling died.",
+          "model": "Manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-22T20:28:30.451Z",
+      "reviewer": "source-correspondence-manual",
+      "appliedAt": "2026-06-22T20:28:44.813Z",
+      "appliedSummary": {
+        "id": "source-weishu-006-wikisource-9cb5757c4b99",
+        "type": "source_omission_candidate",
+        "start": 247,
+        "removed": 0,
+        "inserted": 10,
+        "delta": 10,
+        "manualTranslationsApplied": 10
+      }
     },
     {
       "id": "source-weishu-006-wikisource-d67d64e5811a",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.843,
@@ -8538,12 +9230,14 @@
         "afterLocal": "尚書長孫渴侯為尚書令，加儀同三司。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: raw MediaWiki year-link parsing drops 正平二年 and 興安元年; local text preserves both year labels.",
+      "reviewedAt": "2026-06-22T20:28:30.451Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-006-wikisource-d92c70eb6fb5",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.821,
@@ -8595,8 +9289,10 @@
         "afterLocal": "二月，衞將軍、樂安王良督東雍、吐京、六壁諸軍西趣河西，征西將軍皮豹子等督河西諸軍南趨石樓，以討河西叛胡。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: raw parsing drops 和平元年 and the retained [3] collation marker; local text is complete.",
+      "reviewedAt": "2026-06-22T20:28:30.451Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-007-wikisource-13ad653fc1b1",
@@ -8914,7 +9610,7 @@
     },
     {
       "id": "source-weishu-007-wikisource-6caa9d027ffa",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -8938,8 +9634,46 @@
         "afterLocal": "是歲，州鎮十一旱，民饑，開倉賑恤。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms omitted winter tribute, submission, retreat, and Anping death entries before the drought notice.",
+      "manualTranslations": [
+        {
+          "zh": "冬十月，曹利、彤曷國各遣使朝獻。",
+          "literal": "In winter, in the tenth month, the states of Caoli and Tonghe each sent envoys to court with tribute.",
+          "idiomatic": "In winter, in the tenth month, Caoli and Tonghe each sent envoys to court with tribute.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "十有一月壬子，劉彧兗州刺史畢眾敬遣使內屬。",
+          "literal": "In the eleventh month, on the renzi day, Bi Zhongjing, Liu Yu's Inspector of Yanzhou, sent envoys to submit.",
+          "idiomatic": "In the eleventh month, on the renzi day, Bi Zhongjing, Liu Yu's Inspector of Yanzhou, sent envoys to submit.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "十有二月己未，尉元軍次于秺，彧將周凱、張永、沈攸之相繼退走。",
+          "literal": "In the twelfth month, on the jiwei day, Wei Yuan's army halted at Du; Yu's generals Zhou Kai, Zhang Yong, and Shen Youzhi retreated one after another.",
+          "idiomatic": "In the twelfth month, on the jiwei day, Wei Yuan's army halted at Du, and Liu Yu's generals Zhou Kai, Zhang Yong, and Shen Youzhi retreated one after another.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "皇弟安平薨。",
+          "literal": "The imperial younger brother Anping died.",
+          "idiomatic": "The emperor's younger brother Anping died.",
+          "model": "Manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-22T20:30:48.735Z",
+      "reviewer": "source-correspondence-manual",
+      "appliedAt": "2026-06-22T20:31:09.647Z",
+      "appliedSummary": {
+        "id": "source-weishu-007-wikisource-6caa9d027ffa",
+        "type": "source_omission_candidate",
+        "start": 41,
+        "removed": 0,
+        "inserted": 4,
+        "delta": 4,
+        "manualTranslationsApplied": 4
+      }
     },
     {
       "id": "source-weishu-007-wikisource-776f7c3bf4a2",
@@ -8993,7 +9727,7 @@
     },
     {
       "id": "source-weishu-007-wikisource-7d6b9ac40d69",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.435,
@@ -9036,12 +9770,33 @@
         "afterLocal": "二月庚申，丞相、太原王乙渾謀反伏誅。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied manually: restored the missing Liu Ziye/Liu Yu usurpation sentence while retaining the local 天安元年 year label that raw year-link parsing drops.",
+      "manualTranslations": [
+        {
+          "zh": "是歲，劉子業叔父彧殺子業僭立。",
+          "literal": "That year, Liu Ziye's uncle Yu killed Ziye and usurped the throne.",
+          "idiomatic": "That year, Liu Ziye's uncle Liu Yu killed Ziye and usurped the throne.",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T20:30:48.735Z",
+      "appliedSummary": {
+        "id": "source-weishu-007-wikisource-7d6b9ac40d69",
+        "type": "source_replacement_candidate",
+        "start": 24,
+        "removed": 0,
+        "inserted": 1,
+        "delta": 1,
+        "manualTranslationsApplied": 1,
+        "mode": "manual-insert-preserve-year-label"
+      },
+      "reviewedAt": "2026-06-22T20:30:48.735Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-007-wikisource-9bd8261266ca",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -9065,8 +9820,46 @@
         "afterLocal": "夏四月壬辰，劉彧遣使朝貢。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: raw Wikisource confirms omitted third-year Dongyang, death, tribute, and Murong Baiyao appointment entries before Liu Yu tribute.",
+      "manualTranslations": [
+        {
+          "zh": "三年春正月乙丑，東陽潰，虜沈文秀。",
+          "literal": "In the third year, in spring, in the first month, on the yichou day, Dongyang collapsed and Shen Wenxiu was captured.",
+          "idiomatic": "In the third year, in spring, in the first month, on the yichou day, Dongyang fell and Shen Wenxiu was captured.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "戊辰，司空、平昌公和其奴薨。",
+          "literal": "On the wuchen day, Minister of Works and Duke of Pingchang He Qinu died.",
+          "idiomatic": "On the wuchen day, He Qinu, Minister of Works and Duke of Pingchang, died.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "二月，蠕蠕、高麗、庫莫奚、契丹國各遣使朝獻。",
+          "literal": "In the second month, the Rouran, Goryeo, Kumo Xi, and Khitan states each sent envoys to court with tribute.",
+          "idiomatic": "In the second month, Rouran, Goryeo, Kumo Xi, and Khitan each sent envoys to court with tribute.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "己卯，以上黨公慕容白曜為都督青齊東徐三州諸軍事、征南大將軍、開府儀同三司、青州刺史，進爵濟南王。",
+          "literal": "On the jimao day, Murong Baiyao, Duke of Shangdang, was made Commander of the military affairs of Qing, Qi, and Eastern Xu provinces, Grand General Who Conquers the South, Kaifu Yitong Sansi, and Inspector of Qingzhou, and his title was advanced to King of Jinan.",
+          "idiomatic": "On the jimao day, Murong Baiyao, Duke of Shangdang, was made commander of the military affairs of Qing, Qi, and Eastern Xu provinces, Grand General Who Conquers the South, Kaifu Yitong Sansi, and Inspector of Qingzhou, and his title was advanced to King of Jinan.",
+          "model": "Manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-22T20:30:48.735Z",
+      "reviewer": "source-correspondence-manual",
+      "appliedAt": "2026-06-22T20:31:09.647Z",
+      "appliedSummary": {
+        "id": "source-weishu-007-wikisource-9bd8261266ca",
+        "type": "source_omission_candidate",
+        "start": 91,
+        "removed": 0,
+        "inserted": 4,
+        "delta": 4,
+        "manualTranslationsApplied": 4
+      }
     },
     {
       "id": "source-weishu-007-wikisource-b62e6d97b592",
@@ -9120,7 +9913,7 @@
     },
     {
       "id": "source-weishu-007-wikisource-fb27851ec16f",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.667,
@@ -9172,8 +9965,10 @@
         "afterLocal": "聰叡機悟，幼而有濟民神武之規，仁孝純至，禮敬師友。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: raw MediaWiki year-link parsing drops 興光元年 and 太安二年; local text preserves both year labels.",
+      "reviewedAt": "2026-06-22T20:30:48.735Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-008-wikisource-080ffd1e27a3",
@@ -9851,7 +10646,7 @@
     },
     {
       "id": "source-weishu-008-wikisource-1bec377fee7d",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -9894,12 +10689,14 @@
         "afterLocal": "己亥，詔曰：「自今京師及天下之囚，罪未分判，在獄致死無近親者，公給衣衾棺櫝葬埋之，不得曝露。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: local text only has the retained [3] collation marker before the same sentence; no source correction needed.",
+      "reviewedAt": "2026-06-22T20:33:37.218Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-008-wikisource-32c16ee17dbb",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -9923,12 +10720,80 @@
         "afterLocal": "是年，京師及州鎮十三水旱傷稼。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied manually: restored omitted tenth- and twelfth-month equal-field edict, tribute, death, envoy, appointment, and Rouran incursion entries.",
+      "manualTranslations": [
+        {
+          "zh": "冬十月丁未，詔曰：「朕承乾在位，十有五年。",
+          "literal": "In winter, in the tenth month, on the dingwei day, an edict said: \"I have occupied the throne by Heaven's charge for fifteen years.",
+          "idiomatic": "In winter, in the tenth month, on the dingwei day, an edict said, \"I have occupied the throne by Heaven's charge for fifteen years.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "每覽先王之典，經綸百氏，儲畜既積，黎元永安。",
+          "literal": "Whenever I look at the codes of the former kings, they ordered the hundred clans, accumulated stores, and the black-haired people were forever secure.",
+          "idiomatic": "Whenever I look at the codes of the former kings, they ordered the many families, built up stores, and kept the people secure for the long term.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "爰暨季葉，斯道陵替，富強者并兼山澤，貧弱者望絕一廛，致令地有遺利，民無餘財，或爭畝畔以亡身，或因飢饉以棄業，而欲天下太平，百姓豐足，安可得哉？",
+          "literal": "Down to the latter ages, this way declined; the rich and powerful annexed mountains and marshes, while the poor and weak lost hope of even one homestead, causing the land to have unused profit and the people to have no surplus wealth. Some lose their lives fighting over field boundaries, others abandon their occupations because of famine; if one then desires the realm to be at peace and the people to be abundant, how can it be attained?",
+          "idiomatic": "By later ages this way had declined: the rich and powerful annexed mountains and marshes, while the poor and weak could no longer hope for even one homestead. Thus the land leaves its benefits unused and the people have no surplus wealth. Some lose their lives fighting over field boundaries; others abandon their livelihoods because of famine. If one wants the realm to be at peace and the people to be prosperous, how could that be achieved?",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "今遣使者，循行州郡，與牧守均給天下之田，還受以生死為斷，勸課農桑，興富民之本。」",
+          "literal": "Now I send envoys to tour the provinces and commanderies and, together with governors and administrators, to distribute the realm's fields equally, with return and receipt determined by death and life, encouraging agriculture and sericulture and promoting the foundation for enriching the people.\"",
+          "idiomatic": "I now send envoys to tour the provinces and commanderies and, together with governors and administrators, distribute the realm's fields equitably, with return and receipt determined by death and life, encouraging farming and sericulture and strengthening the foundation for enriching the people.\"",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "戊申，高麗、吐谷渾國並遣使朝貢。",
+          "literal": "On the wushen day, the states of Goryeo and Tuyuhun both sent envoys to court with tribute.",
+          "idiomatic": "On the wushen day, Goryeo and Tuyuhun both sent envoys to court with tribute.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "辛酉，侍中、司徒、魏郡王陳建薨。",
+          "literal": "On the xinyou day, Chen Jian, Palace Attendant, Minister over the Masses, and King of Wei Commandery, died.",
+          "idiomatic": "On the xinyou day, Chen Jian, Palace Attendant, Situ, and King of Wei Commandery, died.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "詔員外散騎常侍李彪、尚書郎公孫阿六頭使蕭賾。",
+          "literal": "He ordered Li Biao, Supernumerary Cavalier Attendant-in-ordinary, and Gongsun Aliutou, Gentleman of the Masters of Writing, to go as envoys to Xiao Ze.",
+          "idiomatic": "He ordered Li Biao, Supernumerary Cavalier Attendant-in-ordinary, and Gongsun Aliutou, Gentleman of the Masters of Writing, to serve as envoys to Xiao Ze.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "十有二月乙卯，侍中、淮南王他為司徒。",
+          "literal": "In the twelfth month, on the yimao day, Ta, Palace Attendant and King of Huainan, was made Minister over the Masses.",
+          "idiomatic": "In the twelfth month, on the yimao day, Ta, Palace Attendant and King of Huainan, was made Situ.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "蠕蠕犯塞，詔任城王澄率眾討之。",
+          "literal": "The Rouran violated the frontier, and he ordered Prince Cheng of Rencheng to lead forces to attack them.",
+          "idiomatic": "The Rouran violated the frontier, and he ordered Prince Cheng of Rencheng to lead forces to attack them.",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T20:40:00.468Z",
+      "appliedSummary": {
+        "id": "source-weishu-008-wikisource-32c16ee17dbb",
+        "type": "source_omission_candidate",
+        "inserted": 9,
+        "removed": 0,
+        "delta": 9,
+        "manualTranslationsApplied": 9,
+        "mode": "manual-insert"
+      },
+      "reviewedAt": "2026-06-22T20:40:00.468Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-008-wikisource-561f680fd53e",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -9952,8 +10817,100 @@
         "afterLocal": "秋七月甲子，蕭道成遣使朝貢。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied manually: restored the fourth-month Fangshan and fifth/sixth-month entries after the existing closing quote, omitting only the duplicated leading quote artifact from the scanner span.",
+      "manualTranslations": [
+        {
+          "zh": "夏四月己亥，行幸方山。",
+          "literal": "In summer, in the fourth month, on the jihai day, he traveled to Fangshan.",
+          "idiomatic": "In summer, in the fourth month, on the jihai day, he went to Fangshan.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "建永固石室於山上，立碑於石室之庭，又銘太皇太后終制于金冊，又起鑒玄殿。",
+          "literal": "Yonggu Stone Chamber was built on the mountain; a stele was erected in the stone chamber's courtyard; the Grand Empress Dowager's final regulations were also inscribed on golden tablets; and Jianxuan Hall was also begun.",
+          "idiomatic": "Yonggu Stone Chamber was built on the mountain, a stele was erected in its courtyard, the Grand Empress Dowager's final regulations were inscribed on golden tablets, and Jianxuan Hall was begun.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "壬子，以南俘萬餘口班賜羣臣。",
+          "literal": "On the renzi day, more than ten thousand southern captives were distributed as gifts to the assembled ministers.",
+          "idiomatic": "On the renzi day, more than ten thousand southern captives were distributed among the ministers.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "甲寅，詔曰：「時雨不霑，春苗萎悴。",
+          "literal": "On the jiayin day, an edict said: \"The timely rains have not moistened the fields, and the spring seedlings are withered.",
+          "idiomatic": "On the jiayin day, an edict said, \"The timely rains have not moistened the fields, and the spring seedlings are withered.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "諸有骸骨之處，皆敕埋藏，勿令露見。",
+          "literal": "In every place where bones are found, order them all buried and hidden, and do not let them remain exposed.",
+          "idiomatic": "Wherever bones are found, order them buried and do not let them remain exposed.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "有神祇之所，悉可禱祈。」",
+          "literal": "In places with spirits, prayers may all be offered.\"",
+          "idiomatic": "At all places with spirits, prayers may be offered.\"",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "任城王雲薨。",
+          "literal": "Prince Yun of Rencheng died.",
+          "idiomatic": "Prince Yun of Rencheng died.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "五月庚申朔，詔曰：「廼者邊兵屢動，勞役未息，百姓因之，輕陷刑網，獄訟煩興，四民失業，朕每念之，用傷懷抱。",
+          "literal": "In the fifth month, on the new moon day gengshen, an edict said: \"Recently frontier troops have repeatedly been mobilized, labor service has not ceased, and because of this the common people lightly fall into the net of punishments; prison suits arise in profusion, the four classes lose their occupations, and whenever I think of this it wounds my heart.",
+          "idiomatic": "In the fifth month, on the gengshen new moon, an edict said, \"Recently frontier troops have repeatedly been mobilized and labor service has not ceased. Because of this the people easily fall into the net of punishments, lawsuits multiply, and all four classes lose their livelihoods. Whenever I think of this, it grieves me.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "農時要月，民須肆力，其敕天下，勿使有留獄久囚。」",
+          "literal": "In the crucial months of the farming season, the people must exert their strength; order the whole realm not to let there be prisoners detained long in jail.\"",
+          "idiomatic": "In these crucial months of the farming season, the people must be free to exert their strength. Order the whole realm not to leave prisoners long detained in jail.\"",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "壬戌，鄧至國遣使朝貢。",
+          "literal": "On the renxu day, the state of Dengzhi sent envoys to court with tribute.",
+          "idiomatic": "On the renxu day, Dengzhi sent envoys to court with tribute.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "庚午，青州主簿崔次恩聚眾謀叛，州軍擊之，次恩走郁洲。",
+          "literal": "On the gengwu day, Cui Ci'en, Registrar of Qingzhou, gathered followers and plotted rebellion; provincial troops attacked him, and Ci'en fled to Yuzhou.",
+          "idiomatic": "On the gengwu day, Cui Ci'en, Registrar of Qingzhou, gathered followers and plotted rebellion. Provincial troops attacked him, and Ci'en fled to Yuzhou.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "六月甲辰，中山王叡薨。",
+          "literal": "In the sixth month, on the jiachen day, Prince Rui of Zhongshan died.",
+          "idiomatic": "In the sixth month, on the jiachen day, Prince Rui of Zhongshan died.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "戊午，封皇叔簡為齊郡王，猛為安豐王。",
+          "literal": "On the wuwu day, the imperial uncles Jian and Meng were enfeoffed, Jian as Prince of Qi Commandery and Meng as Prince of Anfeng.",
+          "idiomatic": "On the wuwu day, the emperor's uncles were enfeoffed: Jian as Prince of Qi Commandery and Meng as Prince of Anfeng.",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T20:40:00.468Z",
+      "appliedSummary": {
+        "id": "source-weishu-008-wikisource-561f680fd53e",
+        "type": "source_omission_candidate",
+        "inserted": 13,
+        "removed": 0,
+        "delta": 13,
+        "manualTranslationsApplied": 13,
+        "mode": "manual-insert"
+      },
+      "reviewedAt": "2026-06-22T20:40:00.468Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-008-wikisource-620619d7c317",
@@ -10057,7 +11014,7 @@
     },
     {
       "id": "source-weishu-008-wikisource-724b636e31b2",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -10081,12 +11038,63 @@
         "afterLocal": "冬十月丁亥，沃野、統萬二鎮敕勒叛。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied manually: restored the opening accession span and preserved the raw 延興元年 era-name template that the queue text had dropped.",
+      "manualTranslations": [
+        {
+          "zh": "五年秋八月丙午，即皇帝位於太華前殿，大赦，改元延興元年。",
+          "literal": "In the fifth year, in autumn, in the eighth month, on the bingwu day, he took the throne in the front hall of Taihua, proclaimed a general amnesty, and changed the era name to the first year of Yanxing.",
+          "idiomatic": "In the fifth year, in autumn, in the eighth month, on the bingwu day, he took the throne in the front hall of Taihua, proclaimed a general amnesty, and changed the era name to Yanxing.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "丁未，劉彧遣使朝貢。",
+          "literal": "On the dingwei day, Liu Yu sent envoys to court with tribute.",
+          "idiomatic": "On the dingwei day, Liu Yu sent envoys to court with tribute.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "九月壬戌，詔在位及民庶直言極諫。",
+          "literal": "In the ninth month, on the renxu day, he ordered officials in office and common people to speak directly and remonstrate fully.",
+          "idiomatic": "In the ninth month, on the renxu day, he ordered officials and commoners to speak frankly and remonstrate fully.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "有利民益治，損政傷化，悉心以聞。",
+          "literal": "Whatever benefited the people and helped governance, or harmed policy and damaged transformation, they were to report with all their hearts.",
+          "idiomatic": "Anything that benefited the people and improved governance, or harmed policy and damaged moral transformation, was to be reported frankly.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "壬午，青州高陽民封辯自號齊王，聚黨千餘人，州軍討滅之。",
+          "literal": "On the renwu day, Feng Bian, a commoner of Gaoyang in Qingzhou, styled himself King of Qi and gathered more than one thousand followers; provincial troops attacked and destroyed him.",
+          "idiomatic": "On the renwu day, Feng Bian, a commoner of Gaoyang in Qingzhou, styled himself King of Qi and gathered more than a thousand followers; provincial troops attacked and destroyed him.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "高麗民奴久等相率來降，各賜田宅。",
+          "literal": "The Goryeo people Nujiu and others led one another in coming to surrender, and each was granted fields and dwellings.",
+          "idiomatic": "The Goryeo people Nujiu and others came together to surrender, and each was granted fields and homes.",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T20:33:37.218Z",
+      "appliedSummary": {
+        "id": "source-weishu-008-wikisource-724b636e31b2",
+        "type": "source_omission_candidate",
+        "start": 5,
+        "removed": 0,
+        "inserted": 6,
+        "delta": 6,
+        "manualTranslationsApplied": 6,
+        "mode": "manual-insert-preserve-year-label"
+      },
+      "reviewedAt": "2026-06-22T20:33:37.218Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-008-wikisource-8f9fae4e3beb",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.056,
@@ -10129,12 +11137,116 @@
         "afterLocal": "詔曰：「廷尉者，天下之平，民命之所懸也。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied manually: restored the fourth-year spring entries before the existing local [10] prison-visit sentence, which was retained with its collation marker.",
+      "manualTranslations": [
+        {
+          "zh": "四年春正月癸卯，乾象六合殿成。",
+          "literal": "In the fourth year, in spring, in the first month, on the guimao day, Qianxiang Liuhe Hall was completed.",
+          "idiomatic": "In the fourth year, in spring, in the first month, on the guimao day, Qianxiang Liuhe Hall was completed.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "洮陽羌叛，枹罕鎮將討平之。",
+          "literal": "The Qiang of Taoyang rebelled, and the commander of Fuhan garrison attacked and pacified them.",
+          "idiomatic": "The Qiang of Taoyang rebelled, and the commander of Fuhan garrison attacked and pacified them.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "隴西公元琛等攻克蕭道成馬頭戍。",
+          "literal": "Yuan Chen, Duke of Longxi, and others attacked and captured Xiao Daocheng's Matou garrison.",
+          "idiomatic": "Yuan Chen, Duke of Longxi, and others attacked and captured Xiao Daocheng's Matou garrison.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "乙卯，廣川王略薨。",
+          "literal": "On the yimao day, Prince Lüe of Guangchuan died.",
+          "idiomatic": "On the yimao day, Prince Lüe of Guangchuan died.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "雍州氐齊男王反，殺美陽令，州郡捕斬之。",
+          "literal": "Qi Nanwang, a Di of Yongzhou, rebelled and killed the magistrate of Meiyang; the province and commandery arrested and beheaded him.",
+          "idiomatic": "Qi Nanwang, a Di of Yongzhou, rebelled and killed the magistrate of Meiyang; provincial and commandery forces arrested and beheaded him.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "丁巳，罷畜鷹鷂之所，以其地為報德佛寺。",
+          "literal": "On the dingsi day, the place for keeping hawks and sparrowhawks was abolished, and its land was made Baode Buddhist Temple.",
+          "idiomatic": "On the dingsi day, the place where hawks and sparrowhawks were kept was abolished, and its land was made Baode Buddhist Temple.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "戊午，襄城王韓頹有罪，削爵徙邊。",
+          "literal": "On the wuwu day, Han Tui, Prince of Xiangcheng, was guilty of crimes; his title was stripped and he was moved to the frontier.",
+          "idiomatic": "On the wuwu day, Han Tui, Prince of Xiangcheng, was found guilty; his title was stripped and he was moved to the frontier.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "蕭道成徐州刺史崔文仲寇淮北，陷茬眉戍。",
+          "literal": "Xiao Daocheng's Inspector of Xuzhou, Cui Wenzhong, raided north of the Huai and captured the Zhamei garrison.",
+          "idiomatic": "Cui Wenzhong, Xiao Daocheng's Inspector of Xuzhou, raided north of the Huai and captured the Zhamei garrison.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "二月，遣尚書游明根率騎二千南討。",
+          "literal": "In the second month, Master of Writing You Minggen was sent to lead two thousand cavalry south to attack.",
+          "idiomatic": "In the second month, You Minggen, Master of Writing, was sent to lead two thousand cavalry south to attack.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "癸巳，詔曰：「朕承乾緒，君臨海內，夙興昧旦，如履薄冰。",
+          "literal": "On the guisi day, an edict said: \"I have inherited Heaven's line and rule all within the seas; rising early and working until dark, I am as if treading on thin ice.",
+          "idiomatic": "On the guisi day, an edict said, \"I have inherited Heaven's line and rule all within the seas. Rising early and working until dark, I feel as though treading on thin ice.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "今東作方興，庶類萌動，品物資生，膏雨不降，歲一不登，百姓飢乏，朕甚懼焉。",
+          "literal": "Now spring plowing has just begun, the many kinds are stirring, all things rely on life, yet nourishing rain has not fallen; if the year fails even once, the common people will be hungry and lacking, and I am deeply afraid of this.",
+          "idiomatic": "Now spring plowing has just begun, the living things are stirring, and all creatures depend on growth, yet nourishing rain has not fallen. If the harvest fails even once, the people will be hungry and destitute, and I am deeply afraid of this.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "其敕天下，祀山川羣神及能興雲雨者，修飾祠堂，薦以牲璧。",
+          "literal": "Let an order be issued throughout the realm to sacrifice to the mountains, rivers, assembled spirits, and those able to raise clouds and rain; repair and adorn the shrines, and offer animals and jade discs.",
+          "idiomatic": "Let an order be issued throughout the realm to sacrifice to the mountains, rivers, assembled spirits, and those able to raise clouds and rain. Repair the shrines and offer sacrificial animals and jade discs.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "民有疾苦，所在存問。」",
+          "literal": "Wherever the people have illness or hardship, inquire after them.\"",
+          "idiomatic": "Wherever the people suffer illness or hardship, inquire after them.\"",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "三月丙午，詔車騎大將軍馮熙督眾迎還假梁郡王嘉等諸軍。",
+          "literal": "In the third month, on the bingwu day, he ordered General of Chariots and Cavalry Feng Xi to command forces to receive back the acting Prince Jia of Liang Commandery and the various armies.",
+          "idiomatic": "In the third month, on the bingwu day, he ordered General of Chariots and Cavalry Feng Xi to command forces to receive back the acting Prince Jia of Liang Commandery and the various armies.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "乙卯，蠕蠕國遣使朝貢。",
+          "literal": "On the yimao day, the Rouran state sent envoys to court with tribute.",
+          "idiomatic": "On the yimao day, Rouran sent envoys to court with tribute.",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T20:40:00.468Z",
+      "appliedSummary": {
+        "id": "source-weishu-008-wikisource-8f9fae4e3beb",
+        "type": "source_omission_candidate",
+        "inserted": 15,
+        "removed": 0,
+        "delta": 15,
+        "manualTranslationsApplied": 15,
+        "mode": "manual-insert"
+      },
+      "reviewedAt": "2026-06-22T20:40:00.468Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-008-wikisource-8fcf11d3ddac",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -10158,12 +11270,98 @@
         "afterLocal": "冬十月己巳朔，大赦天下。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied manually: restored omitted seventh- to ninth-month palace, appointment, death, and tribute entries after the Fangshan construction entry.",
+      "manualTranslations": [
+        {
+          "zh": "秋七月壬寅，詔宮人年老及疾病者，免之。",
+          "literal": "In autumn, in the seventh month, on the renyin day, he ordered palace women who were old or ill to be released.",
+          "idiomatic": "In autumn, in the seventh month, on the renyin day, he ordered palace women who were old or ill to be released.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "八月壬申，詔羣臣直言盡規，靡有所隱。",
+          "literal": "In the eighth month, on the renshen day, he ordered the assembled ministers to speak directly and give full admonition, hiding nothing.",
+          "idiomatic": "In the eighth month, on the renshen day, he ordered the ministers to speak frankly and offer full admonition, hiding nothing.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "乙亥，幸方山，起思遠佛寺。",
+          "literal": "On the yihai day, he visited Fangshan and began Siyuan Buddhist Temple.",
+          "idiomatic": "On the yihai day he visited Fangshan and began construction of Siyuan Buddhist Temple.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "丁丑，還宮。",
+          "literal": "On the dingchou day, he returned to the palace.",
+          "idiomatic": "On the dingchou day he returned to the palace.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "九月壬子，以侍中、司徒、東陽王丕為太尉；",
+          "literal": "In the ninth month, on the renzi day, Pi, Palace Attendant, Minister over the Masses, and Prince of Dongyang, was made Grand Commandant;",
+          "idiomatic": "In the ninth month, on the renzi day, Pi, Palace Attendant, Situ, and Prince of Dongyang, was made Grand Commandant;",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "侍中、尚書右僕射、趙郡公陳建為司徒，進爵魏郡王；",
+          "literal": "Chen Jian, Palace Attendant, Right Vice Director of the Masters of Writing, and Duke of Zhao Commandery, was made Minister over the Masses and advanced in title to King of Wei Commandery;",
+          "idiomatic": "Chen Jian, Palace Attendant, Right Vice Director of the Masters of Writing, and Duke of Zhao Commandery, was made Situ and advanced in title to King of Wei Commandery;",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "侍中、尚書、河南公苟頹為司空，進爵河東王；",
+          "literal": "Gou Tui, Palace Attendant, Master of Writing, and Duke of Henan, was made Minister of Works and advanced in title to King of Hedong;",
+          "idiomatic": "Gou Tui, Palace Attendant, Master of Writing, and Duke of Henan, was made Sikong and advanced in title to King of Hedong;",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "侍中、尚書、太原公王叡進爵中山王；",
+          "literal": "Wang Rui, Palace Attendant, Master of Writing, and Duke of Taiyuan, was advanced in title to King of Zhongshan;",
+          "idiomatic": "Wang Rui, Palace Attendant, Master of Writing, and Duke of Taiyuan, was advanced in title to King of Zhongshan;",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "侍中、尚書、隴東公張祐進爵新平王。",
+          "literal": "Zhang You, Palace Attendant, Master of Writing, and Duke of Longdong, was advanced in title to King of Xinping.",
+          "idiomatic": "Zhang You, Palace Attendant, Master of Writing, and Duke of Longdong, was advanced in title to King of Xinping.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "己未，定州刺史、安樂王長樂有罪，徵詣京師，賜死。",
+          "literal": "On the jiwei day, Changle, Inspector of Dingzhou and King of Anle, was guilty of crimes, summoned to the capital, and granted death.",
+          "idiomatic": "On the jiwei day, Changle, Inspector of Dingzhou and King of Anle, was found guilty, summoned to the capital, and ordered to commit suicide.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "庚申，隴西王源賀薨。",
+          "literal": "On the gengshen day, Prince Yuan He of Longxi died.",
+          "idiomatic": "On the gengshen day, Yuan He, Prince of Longxi, died.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "高麗、吐谷渾、地豆于、契丹、庫莫奚、龜茲諸國各遣使朝獻。",
+          "literal": "Goryeo, Tuyuhun, Didouyu, Khitan, Kumo Xi, Kucha, and other states each sent envoys to court with tribute.",
+          "idiomatic": "Goryeo, Tuyuhun, Didouyu, Khitan, Kumo Xi, Kucha, and other states each sent envoys to court with tribute.",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T20:40:00.468Z",
+      "appliedSummary": {
+        "id": "source-weishu-008-wikisource-8fcf11d3ddac",
+        "type": "source_omission_candidate",
+        "inserted": 12,
+        "removed": 0,
+        "delta": 12,
+        "manualTranslationsApplied": 12,
+        "mode": "manual-insert"
+      },
+      "reviewedAt": "2026-06-22T20:40:00.468Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-008-wikisource-9050ad388912",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.818,
@@ -10206,12 +11404,14 @@
         "afterLocal": "其五族者，降止同祖；"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: local text only has the retained [13] collation marker before the same sentence; no source correction needed.",
+      "reviewedAt": "2026-06-22T20:33:37.218Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-008-wikisource-eee7d9d67896",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -10254,12 +11454,14 @@
         "afterLocal": "戊午，吐谷渾、高麗國各遣使朝獻。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: local text only has the retained [9] collation marker before the same sentence; no source correction needed.",
+      "reviewedAt": "2026-06-22T20:33:37.218Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-008-wikisource-f0d4c52ab036",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -10302,12 +11504,14 @@
         "afterLocal": "雖有一時之煩，終克永逸之益。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: local text only has the retained [17] collation marker before the same sentence; no source correction needed.",
+      "reviewedAt": "2026-06-22T20:33:37.218Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-009-wikisource-3de5ba23b8b6",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.895,
@@ -10350,8 +11554,10 @@
         "afterLocal": "庚子，帝疾甚，車駕北次穀塘原。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: local text only has the retained [12] collation marker before the same sentence; no source correction needed.",
+      "reviewedAt": "2026-06-22T20:42:05.183Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-009-wikisource-84b4f4fed85f",
@@ -11024,7 +12230,7 @@
     },
     {
       "id": "source-weishu-009-wikisource-851b3c53c831",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -11048,12 +12254,104 @@
         "afterLocal": "秋七月己丑，詔曰：「今年穀不登，聽民出關就食，遣使者造籍，分遣去留，所在開倉賑恤。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied manually: restored the omitted fourth- to sixth-month famine relief and drought-edict span and included the closing quote from raw context.",
+      "manualTranslations": [
+        {
+          "zh": "夏四月己未，吐谷渾國遣使朝貢。",
+          "literal": "In summer, in the fourth month, on the jiwei day, the state of Tuyuhun sent envoys to court with tribute.",
+          "idiomatic": "In summer, in the fourth month, on the jiwei day, Tuyuhun sent envoys to court with tribute.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "五月壬辰，幸靈泉池，遂幸方山。",
+          "literal": "In the fifth month, on the renchen day, he visited Lingquan Pool and then visited Fangshan.",
+          "idiomatic": "In the fifth month, on the renchen day, he visited Lingquan Pool and then Fangshan.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "癸巳，南平王渾薨。",
+          "literal": "On the guisi day, Prince Hun of Nanping died.",
+          "idiomatic": "On the guisi day, Prince Hun of Nanping died.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "甲午，車駕還宮。",
+          "literal": "On the jiawu day, the imperial carriage returned to the palace.",
+          "idiomatic": "On the jiawu day, the court returned to the palace.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "詔復七廟子孫及外戚緦服已上，賦役無所與。",
+          "literal": "He ordered exemption for descendants of the seven ancestral temples and maternal relatives of the sima mourning grade and above, so that they would not participate in taxes or labor service.",
+          "idiomatic": "He exempted descendants of the seven ancestral temples and maternal relatives within the sima mourning grade or closer from taxes and labor service.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "詔南部尚書公孫文慶、上谷張伏千率眾南討舞陰。",
+          "literal": "He ordered Southern Department Master of Writing Gongsun Wenqing and Zhang Fuqian of Shanggu to lead troops south to attack Wuyin.",
+          "idiomatic": "He ordered Gongsun Wenqing, Southern Department Master of Writing, and Zhang Fuqian of Shanggu to lead troops south to attack Wuyin.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "山闕高麗、吐谷渾國遣使朝貢。",
+          "literal": "Shanque, Goryeo, and Tuyuhun sent envoys to court with tribute.",
+          "idiomatic": "Shanque, Goryeo, and Tuyuhun sent envoys to court with tribute.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "六月辛巳，秦州民飢，開倉賑恤。",
+          "literal": "In the sixth month, on the xinsi day, the people of Qinzhou were hungry, and granaries were opened to relieve them.",
+          "idiomatic": "In the sixth month, on the xinsi day, the people of Qinzhou were starving, so granaries were opened for relief.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "癸未，詔曰：「春旱至今，野無青草。",
+          "literal": "On the guiwei day, an edict said: \"The spring drought has continued until now, and the fields have no green grass.",
+          "idiomatic": "On the guiwei day, an edict said, \"The spring drought has continued until now, and the fields have no green grass.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "上天致譴，實由匪德。",
+          "literal": "That Heaven above has sent condemnation is truly because of my lack of virtue.",
+          "idiomatic": "Heaven has sent this condemnation truly because I lack virtue.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "百姓無辜，將罹飢饉。",
+          "literal": "The common people are innocent, yet they are about to suffer famine.",
+          "idiomatic": "The common people are innocent, yet they are about to suffer famine.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "寤寐思求，罔知所益。",
+          "literal": "Waking and sleeping I think and search, but do not know what would help.",
+          "idiomatic": "Day and night I ponder and search, but do not know what would help.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "公卿內外股肱之臣，謀猷所寄，其極言無隱，以救民瘼。」",
+          "literal": "Dukes, ministers, and inner and outer ministers who are my arms and legs, to whom plans and counsels are entrusted: speak to the utmost without concealing anything, in order to relieve the people's suffering.\"",
+          "idiomatic": "Dukes, ministers, and officials within and without, you are my arms and legs, the ones to whom plans and counsels are entrusted. Speak fully and conceal nothing, so that the people's suffering may be relieved.\"",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T20:42:05.183Z",
+      "appliedSummary": {
+        "id": "source-weishu-009-wikisource-851b3c53c831",
+        "type": "source_omission_candidate",
+        "inserted": 13,
+        "removed": 0,
+        "delta": 13,
+        "manualTranslationsApplied": 13,
+        "mode": "manual-insert-with-closing-quote"
+      },
+      "reviewedAt": "2026-06-22T20:42:05.183Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-009-wikisource-8aff911e1ce6",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.882,
@@ -11096,8 +12394,10 @@
         "afterLocal": "可不勉之！"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: local text only has the retained [13] collation marker before the same sentence; no source correction needed.",
+      "reviewedAt": "2026-06-22T20:42:05.183Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-009-wikisource-bd77d4d7cc12",
@@ -11151,7 +12451,7 @@
     },
     {
       "id": "source-weishu-010-wikisource-0157c96aa414",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -11175,12 +12475,50 @@
         "afterLocal": "秋七月癸酉，于闐國遣使朝獻。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied manually: restored omitted fourth/intercalary/fifth-month entries before the Khotan tribute entry.",
+      "manualTranslations": [
+        {
+          "zh": "夏四月，詔撫軍將軍李崇討魯陽反蠻。",
+          "literal": "In summer, in the fourth month, he ordered General Who Pacifies the Army Li Chong to attack the rebel Man of Luyang.",
+          "idiomatic": "In summer, in the fourth month, he ordered Li Chong, General Who Pacifies the Army, to attack the rebel Man of Luyang.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "是月，蕭衍又廢其主寶融而僭立，自稱曰梁。",
+          "literal": "That month, Xiao Yan again deposed his ruler Baorong and usurped the throne, calling himself Liang.",
+          "idiomatic": "That month, Xiao Yan deposed his ruler Baorong and usurped the throne, calling his state Liang.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "閏月丁巳，司空穆亮薨。",
+          "literal": "In the intercalary month, on the dingsi day, Minister of Works Mu Liang died.",
+          "idiomatic": "In the intercalary month, on the dingsi day, Mu Liang, Minister of Works, died.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "五月，揚州小峴戍主党法宗襲蕭衍大峴戍，破之，擒其龍驤將軍邾菩薩，送之京師。",
+          "literal": "In the fifth month, Dang Fazong, garrison commander of Xiaoxian in Yangzhou, attacked Xiao Yan's Daxian garrison, defeated it, captured his General Dragon-Soaring Zhu Pusa, and sent him to the capital.",
+          "idiomatic": "In the fifth month, Dang Fazong, commander of the Xiaoxian garrison in Yangzhou, attacked Xiao Yan's Daxian garrison and defeated it, capturing his Dragon-Soaring General Zhu Pusa and sending him to the capital.",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T20:49:45.088Z",
+      "appliedSummary": {
+        "id": "source-weishu-010-wikisource-0157c96aa414",
+        "type": "source_omission_candidate",
+        "inserted": 4,
+        "removed": 0,
+        "delta": 4,
+        "manualTranslationsApplied": 4,
+        "mode": "manual-insert"
+      },
+      "reviewedAt": "2026-06-22T20:49:45.088Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-010-wikisource-2467e20081ad",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -11204,12 +12542,62 @@
         "afterLocal": "夏四月辛卯，高麗國遣使朝獻。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied manually: restored the Zhengshi 1 spring campaign entries, preserving the raw 正始元年 era-name template dropped by the queue text.",
+      "manualTranslations": [
+        {
+          "zh": "正始元年春正月庚戌，江州刺史曲江公陳伯之破蕭衍將趙祖悅於東關。",
+          "literal": "In the first year of Zhengshi, in spring, in the first month, on the gengxu day, Jiangzhou Inspector and Duke of Qujiang Chen Bozhi defeated Xiao Yan's general Zhao Zuyue at Dongguan.",
+          "idiomatic": "In the first year of Zhengshi, in spring, in the first month, on the gengxu day, Chen Bozhi, Inspector of Jiangzhou and Duke of Qujiang, defeated Xiao Yan's general Zhao Zuyue at Dongguan.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "丙辰，東荊州刺史楊大眼大破羣蠻樊季安等。",
+          "literal": "On the bingchen day, Eastern Jingzhou Inspector Yang Dayan badly defeated the Man groups Fan Ji'an and others.",
+          "idiomatic": "On the bingchen day, Yang Dayan, Inspector of Eastern Jingzhou, badly defeated Fan Ji'an and the other Man groups.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "丙寅，大赦，改年。",
+          "literal": "On the bingyin day, he proclaimed a general amnesty and changed the era year.",
+          "idiomatic": "On the bingyin day, he proclaimed a general amnesty and changed the era name.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "二月戊子，蕭衍將姜慶真襲陷壽春外郭，州軍擊走之。",
+          "literal": "In the second month, on the wuzi day, Xiao Yan's general Jiang Qingzhen made a surprise attack and captured Shouchun's outer wall, but provincial troops attacked and drove him off.",
+          "idiomatic": "In the second month, on the wuzi day, Xiao Yan's general Jiang Qingzhen launched a surprise attack and captured Shouchun's outer wall, but provincial troops attacked and drove him off.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "丁酉，揚州統軍劉思祖大破衍眾於邵陽，擒其冠軍將軍、邵陽縣開國侯張惠紹，驍騎將軍、祁陽縣開國男趙景悅等十將，斬獲數千級。",
+          "literal": "On the dingyou day, Yangzhou Commander Liu Sizu badly defeated Yan's troops at Shaoyang, capturing his Champion General and Shaoyang County Founding Marquis Zhang Huishao, General of Valiant Cavalry and Qiyang County Founding Baron Zhao Jingyue, and ten other generals, and beheading and capturing several thousand ranks.",
+          "idiomatic": "On the dingyou day, Liu Sizu, Commander of Yangzhou, badly defeated Xiao Yan's troops at Shaoyang. He captured ten generals, including Zhang Huishao, Champion General and Founding Marquis of Shaoyang County, and Zhao Jingyue, General of Valiant Cavalry and Founding Baron of Qiyang County, and killed or captured several thousand men.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "三月壬申，元英破衍將王僧炳於樊城。",
+          "literal": "In the third month, on the renshen day, Yuan Ying defeated Yan's general Wang Sengbing at Fancheng.",
+          "idiomatic": "In the third month, on the renshen day, Yuan Ying defeated Xiao Yan's general Wang Sengbing at Fancheng.",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T20:49:45.088Z",
+      "appliedSummary": {
+        "id": "source-weishu-010-wikisource-2467e20081ad",
+        "type": "source_omission_candidate",
+        "inserted": 6,
+        "removed": 0,
+        "delta": 6,
+        "manualTranslationsApplied": 6,
+        "mode": "manual-insert"
+      },
+      "reviewedAt": "2026-06-22T20:49:45.088Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-010-wikisource-2b090d34d4dc",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.84,
@@ -11252,12 +12640,14 @@
         "afterLocal": "戊申，疏勒國遣使朝獻。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: raw MediaWiki year-link parsing drops 延昌元年; local source keeps the full date, and the English era-name rendering was corrected to Yanchang.",
+      "reviewedAt": "2026-06-22T20:49:45.088Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-010-wikisource-473ebf2de1ac",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -11300,12 +12690,14 @@
         "afterLocal": "壬午，詔尚書元遙率眾南討。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: local text only has the retained [12] collation marker before the same sentence; no source correction needed.",
+      "reviewedAt": "2026-06-22T20:49:45.088Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-010-wikisource-4af4418392a3",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.867,
@@ -11348,8 +12740,10 @@
         "afterLocal": "甲午，州郡十一大水，詔開倉賑恤。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: local text only has the retained [21] collation marker before the same sentence; no source correction needed.",
+      "reviewedAt": "2026-06-22T20:49:45.088Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-010-wikisource-4ed18b7564d1",
@@ -12328,7 +13722,7 @@
     },
     {
       "id": "source-weishu-010-wikisource-5108938bb25a",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.882,
@@ -12371,12 +13765,14 @@
         "afterLocal": "壬申，漢東蠻民一萬七千戶相率內附。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: local text only has the retained [16] collation marker before the same sentence; no source correction needed.",
+      "reviewedAt": "2026-06-22T20:49:45.088Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-010-wikisource-7846ceb69e25",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -12419,12 +13815,14 @@
         "afterLocal": "六月乙亥，乾達、阿婆羅、達舍、越伽使密、不流沙諸國並遣使朝獻。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: local text only has the retained [19] collation marker before the same sentence; no source correction needed.",
+      "reviewedAt": "2026-06-22T20:49:45.088Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-010-wikisource-7b00f60d3e82",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -12448,8 +13846,52 @@
         "afterLocal": "夏四月丙申，彭城王勰、車騎將軍王肅大破之，斬首萬數。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied manually: restored the Jingming 1 spring entries, preserving the raw 景明元年 era-name template that the queue text had dropped.",
+      "manualTranslations": [
+        {
+          "zh": "景明元年春正月壬寅，車駕謁長陵。",
+          "literal": "In the first year of Jingming, in spring, in the first month, on the renyin day, the imperial carriage paid respects at Changling.",
+          "idiomatic": "In the first year of Jingming, in spring, in the first month, on the renyin day, the court paid respects at Changling.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "乙巳，大赦，改年。",
+          "literal": "On the yisi day, he proclaimed a general amnesty and changed the era year.",
+          "idiomatic": "On the yisi day, he proclaimed a general amnesty and changed the era name.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "丁未，蕭寶卷豫州刺史裴叔業以壽春內屬，驃騎大將軍、彭城王勰帥車騎十萬赴之。",
+          "literal": "On the dingwei day, Pei Shuye, Xiao Baojuan's Inspector of Yuzhou, submitted with Shouchun; Xie, General of Agile Cavalry and Prince of Pengcheng, led one hundred thousand chariot and cavalry troops to go there.",
+          "idiomatic": "On the dingwei day, Pei Shuye, Xiao Baojuan's Inspector of Yuzhou, submitted with Shouchun. Xie, General of Agile Cavalry and Prince of Pengcheng, led one hundred thousand cavalry and chariot troops to receive him.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "二月戊戌，復以彭城王勰為司徒。",
+          "literal": "In the second month, on the wuxu day, Xie, Prince of Pengcheng, was again made Minister over the Masses.",
+          "idiomatic": "In the second month, on the wuxu day, Xie, Prince of Pengcheng, was again made Situ.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "寶卷將胡松、李居士率眾萬餘屯宛，陳伯之水軍泝淮而上，以逼壽春。",
+          "literal": "Baojuan's generals Hu Song and Li Jushi led more than ten thousand troops and garrisoned Wan; Chen Bozhi's naval forces went upstream on the Huai in order to press Shouchun.",
+          "idiomatic": "Baojuan's generals Hu Song and Li Jushi led more than ten thousand men to garrison Wan, while Chen Bozhi's naval forces went upstream on the Huai to threaten Shouchun.",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T20:49:45.088Z",
+      "appliedSummary": {
+        "id": "source-weishu-010-wikisource-7b00f60d3e82",
+        "type": "source_omission_candidate",
+        "inserted": 5,
+        "removed": 0,
+        "delta": 5,
+        "manualTranslationsApplied": 5,
+        "mode": "manual-insert"
+      },
+      "reviewedAt": "2026-06-22T20:49:45.088Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-010-wikisource-7b24ee64591a",
@@ -12503,7 +13945,7 @@
     },
     {
       "id": "source-weishu-010-wikisource-85712181b1c1",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -12546,8 +13988,10 @@
         "afterLocal": "甲辰，詔遣使者巡慰北邊酋庶。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: local text only has the retained [11] collation marker before the same sentence; no source correction needed.",
+      "reviewedAt": "2026-06-22T20:49:45.088Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-010-wikisource-881df1fab988",
@@ -12601,7 +14045,7 @@
     },
     {
       "id": "source-weishu-010-wikisource-c184f0a27b7f",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -12625,12 +14069,62 @@
         "afterLocal": "是歲，十七州大飢，分遣使者開倉賑恤。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied manually: restored omitted tenth- and eleventh-month entries after Liu Shiming rebellion.",
+      "manualTranslations": [
+        {
+          "zh": "冬十月丁卯朔，車駕謁長陵。",
+          "literal": "In winter, in the tenth month, on the dingmao new moon, the imperial carriage paid respects at Changling.",
+          "idiomatic": "In winter, in the tenth month, on the dingmao new moon, the court paid respects at Changling.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "庚寅，齊、兗二州討世明，平之。",
+          "literal": "On the gengyin day, Qi and Yan provinces attacked Shiming and pacified him.",
+          "idiomatic": "On the gengyin day, Qi and Yan provinces attacked Shiming and pacified him.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "丁亥，改授彭城王勰為司徒、錄尚書事。",
+          "literal": "On the dinghai day, Xie, Prince of Pengcheng, was reassigned as Minister over the Masses and Recorder of Secretariat Affairs.",
+          "idiomatic": "On the dinghai day, Xie, Prince of Pengcheng, was reassigned as Situ and Recorder of Secretariat Affairs.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "甲午，詔壽春置兵四萬人。",
+          "literal": "On the jiawu day, an edict ordered forty thousand troops stationed at Shouchun.",
+          "idiomatic": "On the jiawu day, an edict ordered forty thousand troops stationed at Shouchun.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "十有一月己亥，荊州刺史桓道進攻寶卷下笮戍，拔之，降者二千餘戶。",
+          "literal": "In the eleventh month, on the jihai day, Jingzhou Inspector Huan Daojin attacked Baojuan's Xiaze garrison, took it, and more than two thousand households surrendered.",
+          "idiomatic": "In the eleventh month, on the jihai day, Huan Daojin, Inspector of Jingzhou, attacked Baojuan's Xiaze garrison, took it, and received the surrender of more than two thousand households.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "丁巳，陽平王頤薨。",
+          "literal": "On the dingsi day, Prince Yi of Yangping died.",
+          "idiomatic": "On the dingsi day, Prince Yi of Yangping died.",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T20:49:45.088Z",
+      "appliedSummary": {
+        "id": "source-weishu-010-wikisource-c184f0a27b7f",
+        "type": "source_omission_candidate",
+        "inserted": 6,
+        "removed": 0,
+        "delta": 6,
+        "manualTranslationsApplied": 6,
+        "mode": "manual-insert"
+      },
+      "reviewedAt": "2026-06-22T20:49:45.088Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-010-wikisource-ce93c1b88f91",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -12654,8 +14148,58 @@
         "afterLocal": "夏四月，琅邪民王萬壽斬蕭衍輔國將軍、琅邪東莞二郡太守劉晣首，以朐山來降。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied manually: restored omitted fourth-year spring rebellion, tribute, famine-relief, and death entries before Wang Wanshou submission.",
+      "manualTranslations": [
+        {
+          "zh": "四年春正月丁巳，汾州劉龍駒聚眾反。",
+          "literal": "In the fourth year, in spring, in the first month, on the dingsi day, Liu Longju of Fenzhou gathered followers and rebelled.",
+          "idiomatic": "In the fourth year, in spring, in the first month, on the dingsi day, Liu Longju of Fenzhou gathered followers and rebelled.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "詔諫議大夫薛和率眾討之。",
+          "literal": "He ordered Remonstrance Counsellor Xue He to lead troops to attack him.",
+          "idiomatic": "He ordered Xue He, Remonstrance Counsellor, to lead troops to attack him.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "甲子，阿悅陁、不數羅國並遣使朝獻。",
+          "literal": "On the jiazi day, the states of Ayuetuo and Bushuluo both sent envoys to court with tribute.",
+          "idiomatic": "On the jiazi day, Ayuetuo and Bushuluo both sent envoys to court with tribute.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "二月壬午，青、齊、徐、兗四州民飢甚，遣使賑恤。",
+          "literal": "In the second month, on the renwu day, the people of Qing, Qi, Xu, and Yan provinces were severely hungry, and envoys were sent to relieve them.",
+          "idiomatic": "In the second month, on the renwu day, the people of Qing, Qi, Xu, and Yan provinces were suffering severe hunger, so envoys were sent to provide relief.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "三月癸卯，婆比幡彌、烏萇、比地、乾達諸國並遣使朝獻。",
+          "literal": "In the third month, on the guimao day, the states of Babi Fanmi, Wuchang, Bidi, Qiantuo, and others all sent envoys to court with tribute.",
+          "idiomatic": "In the third month, on the guimao day, Babi Fanmi, Wuchang, Bidi, Qiantuo, and other states all sent envoys to court with tribute.",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "壬戌，司徒、廣陽王嘉薨。",
+          "literal": "On the renxu day, Jia, Minister over the Masses and King of Guangyang, died.",
+          "idiomatic": "On the renxu day, Jia, Situ and King of Guangyang, died.",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-22T20:49:45.088Z",
+      "appliedSummary": {
+        "id": "source-weishu-010-wikisource-ce93c1b88f91",
+        "type": "source_omission_candidate",
+        "inserted": 6,
+        "removed": 0,
+        "delta": 6,
+        "manualTranslationsApplied": 6,
+        "mode": "manual-insert"
+      },
+      "reviewedAt": "2026-06-22T20:49:45.088Z",
+      "reviewer": "source-correspondence-manual"
     },
     {
       "id": "source-weishu-011-wikisource-0a778c436c44",
@@ -164687,5 +166231,5 @@
       "notes": ""
     }
   ],
-  "updatedAt": "2026-06-22T15:21:38.456Z"
+  "updatedAt": "2026-06-22T20:49:45.088Z"
 }
