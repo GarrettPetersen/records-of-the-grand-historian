@@ -11198,7 +11198,7 @@
     },
     {
       "id": "source-beiqishu-016-wikisource-10c1428b2c3d",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.556,
@@ -11241,8 +11241,10 @@
         "afterLocal": "二年五月卒，年六十二。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: rendered Wikisource and ChineseNotes both include 元象元年 here; only the raw action=raw scrape dropped the linked reign-year text and left leading punctuation.",
+      "reviewedAt": "2026-06-22T11:07:49.888Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-beiqishu-016-wikisource-13524de345db",
@@ -11296,7 +11298,7 @@
     },
     {
       "id": "source-beiqishu-016-wikisource-3c5de7d3b146",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "beiqishu",
@@ -11320,8 +11322,57 @@
         "afterLocal": "韶出總軍旅，入參帷幄，功既居高，重以婚媾，望傾朝野。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Approved against rendered Wikisource and ChineseNotes; this restores Duan Shao's death, funeral honors, and posthumous offices before the appraisal paragraph.",
+      "reviewedAt": "2026-06-22T11:07:49.888Z",
+      "reviewer": "codex-source-repair",
+      "manualTranslations": [
+        {
+          "zh": "韶疾甚，先軍還。",
+          "literal": "Shao became gravely ill and returned before the army.",
+          "idiomatic": "Shao became gravely ill and returned ahead of the army.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "以功別封樂陵郡公。",
+          "literal": "For his merit he was separately enfeoffed as Duke of Leling Commandery.",
+          "idiomatic": "For his merit he received a separate enfeoffment as Duke of Leling Commandery.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "竟以疾薨。",
+          "literal": "In the end he died of the illness.",
+          "idiomatic": "In the end he died of the illness.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "上舉哀東堂，贈物千段、溫明秘器、轀輬車，軍校之士陳衛送至平恩墓所，發卒起冢。",
+          "literal": "The emperor raised mourning in the Eastern Hall and bestowed one thousand bolts of goods, an imperial lacquered coffin, and a state funeral carriage; officers and men of the army arrayed themselves as guards and escorted him to the burial ground at Ping'en, and soldiers were conscripted to raise the tomb mound.",
+          "idiomatic": "The emperor mourned him in the Eastern Hall and bestowed one thousand bolts of goods, an imperial lacquered coffin, and a state funeral carriage. Officers and men of the army formed an honor guard and escorted him to the burial ground at Ping'en, and soldiers were conscripted to raise the tomb mound.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "贈假黃鉞、使持節、都督朔幷定趙冀滄齊兗梁洛晉建十二州諸軍事，相國、太尉、錄尚書事、朔州刺史，諡曰忠武。",
+          "literal": "He was posthumously granted the acting yellow battle-axe, bearer of the staff of authority, commander-in-chief of military affairs in the twelve provinces of Shuo, Bing, Ding, Zhao, Ji, Cang, Qi, Yan, Liang, Luo, Jin, and Jian, Chancellor of State, Grand Commandant, Recorder of the Department of State Affairs, and Inspector of Shuo Province; his posthumous name was Zhongwu.",
+          "idiomatic": "Posthumously he was granted the acting yellow battle-axe, bearer of the staff of authority, overall command of military affairs in the twelve provinces of Shuo, Bing, Ding, Zhao, Ji, Cang, Qi, Yan, Liang, Luo, Jin, and Jian, and the titles Chancellor of State, Grand Commandant, Recorder of the Department of State Affairs, and Inspector of Shuo Province. His posthumous name was Zhongwu.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        }
+      ],
+      "appliedAt": "2026-06-22T11:07:54.464Z",
+      "appliedSummary": {
+        "id": "source-beiqishu-016-wikisource-3c5de7d3b146",
+        "type": "source_omission_candidate",
+        "start": 166,
+        "removed": 0,
+        "inserted": 5,
+        "delta": 5,
+        "manualTranslationsApplied": 5
+      }
     },
     {
       "id": "source-beiqishu-016-wikisource-5884242314b3",
@@ -11525,7 +11576,7 @@
     },
     {
       "id": "source-beiqishu-016-wikisource-d5ceb47c8a1f",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.556,
@@ -11577,8 +11628,10 @@
         "afterLocal": "高歸彥作亂冀州，詔與東安王婁叡率衆討平之，遷太傅，賜女樂十人，並歸彥果園一千畝。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: rendered Wikisource and ChineseNotes both include 皇建元年 and 大寧二年 here; only the raw action=raw scrape dropped linked reign-year text and left leading punctuation.",
+      "reviewedAt": "2026-06-22T11:07:49.888Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-beiqishu-016-wikisource-d6748d911358",
@@ -19290,5 +19343,5 @@
       "reviewer": "repair-source-queue-patterns"
     }
   ],
-  "updatedAt": "2026-06-22T11:01:59.524Z"
+  "updatedAt": "2026-06-22T11:07:54.484Z"
 }
