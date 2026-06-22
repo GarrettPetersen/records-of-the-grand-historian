@@ -13088,7 +13088,7 @@
     },
     {
       "id": "source-beiqishu-020-wikisource-25c0853796f8",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "beiqishu",
@@ -13123,12 +13123,14 @@
         "afterLocal": "步大汗薩，太安狄那人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: rendered Wikisource has this as section heading/roster material; local standalone heading/body split is intentional and should not be deleted or merged into the body sentence.",
+      "reviewedAt": "2026-06-22T11:44:59.474Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-beiqishu-020-wikisource-56796710667e",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "beiqishu",
@@ -13140,7 +13142,7 @@
         "startIndex": 434,
         "endIndex": 448,
         "count": 15,
-        "text": "九年，又討賊有功，賜帛一百疋、錢十萬。十年，詔除揚州行臺，與王貴顯、侯子監將兵衛送蕭莊。築郭默、若邪二城。與陳新蔡太守魯悉達戰大蛇洞，破走之。又監蕭莊、王琳軍，與陳將侯瑱、侯安都戰於蕪湖，敗歸。皇建初，別封成陽郡公。天統二年，除特進。四年十月，又別封猗氏縣公，並賜金銀酒鐘各一枚、胡馬一匹。五年四月，進爵為義安王。武平元年，出為光州刺史。儼少任俠，交通輕薄，遨遊京洛間。及從征討，每立功效，經略雖非所長，而有將帥之節。所歷諸州，雖不能清白守道，亦不貪殘。卒，贈司徒、尚書令。子子颙，給事黃門侍郎。",
+        "text": "九年，又討賊有功，賜帛一百疋、錢十萬。十年，詔除揚州行臺，與王貴顯、侯子監將兵衛送蕭莊。築郭默、若邪二城。與陳新蔡太守魯悉達戰大蛇洞，破走之。又監蕭莊、王琳軍，與陳將侯瑱、侯安都戰於蕪湖，敗歸。皇建初，別封成陽郡公。天統二年，除特進。四年十月，又別封猗氏縣公，並賜金銀酒鐘各一枚、胡馬一匹。五年四月，進爵為義安王。武平元年，出為光州刺史。儼少任俠，交通輕薄，遨遊京洛間。及從征討，每立功效，經略雖非所長，而有將帥之節。所歷諸州，雖不能清白守道，亦不貪殘。卒，贈司徒、尚書令。子子顒，給事黃門侍郎。",
         "ids": [],
         "locations": []
       },
@@ -13152,12 +13154,131 @@
         "afterLocal": "尒朱將帥，義旗建後歸順立功者，武威牒舍樂、代郡范舍樂亦致通顯。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Approved: rendered Wikisource confirms the Murong Yan paragraph between the Zhao Province appointment and the Erzhu generals notice. SourceRange text normalized to traditional 顒 for local corpus style.",
+      "reviewedAt": "2026-06-22T11:44:59.474Z",
+      "reviewer": "codex-source-repair",
+      "manualTranslations": [
+        {
+          "zh": "九年，又討賊有功，賜帛一百疋、錢十萬。",
+          "literal": "In the ninth year, he again had merit in suppressing rebels and was given one hundred bolts of silk and one hundred thousand cash.",
+          "idiomatic": "In the ninth year, he again had merit in suppressing rebels and was given one hundred bolts of silk and one hundred thousand cash.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "十年，詔除揚州行臺，與王貴顯、侯子監將兵衛送蕭莊。",
+          "literal": "In the tenth year, an edict appointed him Yang Province field administrator; together with Wang Guixian and Hou Zijian, he led troops to escort Xiao Zhuang.",
+          "idiomatic": "In the tenth year, an edict made him field administrator for Yang Province; with Wang Guixian and Hou Zijian, he led troops escorting Xiao Zhuang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "築郭默、若邪二城。",
+          "literal": "He built the two cities of Guomo and Ruoye.",
+          "idiomatic": "He built the two cities of Guomo and Ruoye.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "與陳新蔡太守魯悉達戰大蛇洞，破走之。",
+          "literal": "He fought Chen's Administrator of Xincai, Lu Xida, at Dashe Cave, defeated him, and put him to flight.",
+          "idiomatic": "He fought Chen's Administrator of Xincai, Lu Xida, at Dashe Cave, defeated him, and put him to flight.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "又監蕭莊、王琳軍，與陳將侯瑱、侯安都戰於蕪湖，敗歸。",
+          "literal": "He also supervised the armies of Xiao Zhuang and Wang Lin, fought the Chen generals Hou Tian and Hou Andu at Wuhu, was defeated, and returned.",
+          "idiomatic": "He also supervised the armies of Xiao Zhuang and Wang Lin, fought the Chen generals Hou Tian and Hou Andu at Wuhu, was defeated, and returned.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "皇建初，別封成陽郡公。",
+          "literal": "At the beginning of Huangjian, he was separately enfeoffed as Duke of Chengyang Commandery.",
+          "idiomatic": "At the beginning of Huangjian, he was separately enfeoffed as Duke of Chengyang Commandery.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "天統二年，除特進。",
+          "literal": "In the second year of Tiantong, he was appointed Specially Advanced.",
+          "idiomatic": "In the second year of Tiantong, he was appointed Specially Advanced.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "四年十月，又別封猗氏縣公，並賜金銀酒鐘各一枚、胡馬一匹。",
+          "literal": "In the tenth month of the fourth year, he was again separately enfeoffed as Duke of Yishi County and was given one gold wine cup, one silver wine cup, and one Hu horse.",
+          "idiomatic": "In the tenth month of the fourth year, he was again separately enfeoffed as Duke of Yishi County and was given one gold wine cup, one silver wine cup, and one Hu horse.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "五年四月，進爵為義安王。",
+          "literal": "In the fourth month of the fifth year, his title was advanced to Prince of Yi'an.",
+          "idiomatic": "In the fourth month of the fifth year, his title was advanced to Prince of Yi'an.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "武平元年，出為光州刺史。",
+          "literal": "In the first year of Wuping, he went out as Inspector of Guang Province.",
+          "idiomatic": "In the first year of Wuping, he went out as Inspector of Guang Province.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "儼少任俠，交通輕薄，遨遊京洛間。",
+          "literal": "In youth, Yan was given to knight-errantry, associated with frivolous men, and roamed around the capital region.",
+          "idiomatic": "In youth, Yan was drawn to knight-errantry, kept company with frivolous men, and roamed about the capital region.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "及從征討，每立功效，經略雖非所長，而有將帥之節。",
+          "literal": "When he followed campaigns and punitive expeditions, he repeatedly established merit; though strategy and planning were not his strength, he had the bearing of a general.",
+          "idiomatic": "On campaign he repeatedly distinguished himself; strategy was not his strength, but he had the bearing of a commander.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "所歷諸州，雖不能清白守道，亦不貪殘。",
+          "literal": "In the provinces through which he served, though he could not remain pure and upright in keeping the Way, he was also not greedy or cruel.",
+          "idiomatic": "In the provinces where he served, he was not pure and upright, but neither was he greedy or cruel.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "卒，贈司徒、尚書令。",
+          "literal": "When he died, he was posthumously granted Minister of Education and Director of the Department of State Affairs.",
+          "idiomatic": "When he died, he was posthumously granted Minister of Education and Director of the Department of State Affairs.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "子子顒，給事黃門侍郎。",
+          "literal": "His son Ziyong was Attendant Gentleman of the Palace Gate.",
+          "idiomatic": "His son Ziyong served as Attendant Gentleman of the Palace Gate.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        }
+      ],
+      "appliedAt": "2026-06-22T11:45:03.903Z",
+      "appliedSummary": {
+        "id": "source-beiqishu-020-wikisource-56796710667e",
+        "type": "source_omission_candidate",
+        "start": 446,
+        "removed": 0,
+        "inserted": 15,
+        "delta": 15,
+        "manualTranslationsApplied": 15
+      }
     },
     {
       "id": "source-beiqishu-020-wikisource-5edc42226364",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "beiqishu",
@@ -13192,12 +13313,14 @@
         "afterLocal": "則弟敬寶，少歷顯位。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: rendered Wikisource has this as section heading/roster material; local standalone heading/body split is intentional and should not be deleted or merged into the body sentence.",
+      "reviewedAt": "2026-06-22T11:44:59.474Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-beiqishu-020-wikisource-5f3e9de33b9c",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "beiqishu",
@@ -13232,12 +13355,14 @@
         "afterLocal": "代人劉世清，祖拔，魏燕州刺史；"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: rendered Wikisource has this as section heading/roster material; local standalone heading/body split is intentional and should not be deleted or merged into the body sentence.",
+      "reviewedAt": "2026-06-22T11:44:59.474Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-beiqishu-020-wikisource-6f8811c15cbb",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "beiqishu",
@@ -13272,12 +13397,14 @@
         "afterLocal": "斛律羌舉，太安人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: rendered Wikisource has this as section heading/roster material; local standalone heading/body split is intentional and should not be deleted or merged into the body sentence.",
+      "reviewedAt": "2026-06-22T11:44:59.474Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-beiqishu-020-wikisource-7528814d6861",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "beiqishu",
@@ -13312,12 +13439,14 @@
         "afterLocal": "叱列平，字殺鬼，代郡西部人也，世為酋帥。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: rendered Wikisource has this as section heading/roster material; local standalone heading/body split is intentional and should not be deleted or merged into the body sentence.",
+      "reviewedAt": "2026-06-22T11:44:59.474Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-beiqishu-020-wikisource-7b4eda54416f",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "beiqishu",
@@ -13352,12 +13481,14 @@
         "afterLocal": "脩義從子元穎，父光熾，東雍州刺史、太常卿。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: rendered Wikisource has this as section heading/roster material; local standalone heading/body split is intentional and should not be deleted or merged into the body sentence.",
+      "reviewedAt": "2026-06-22T11:44:59.474Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-beiqishu-020-wikisource-8cb7cede9df2",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "beiqishu",
@@ -13392,12 +13523,14 @@
         "afterLocal": "子孝卿，少聰敏幾悟，有風檢，頻歷顯職。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: rendered Wikisource has this as section heading/roster material; local standalone heading/body split is intentional and should not be deleted or merged into the body sentence.",
+      "reviewedAt": "2026-06-22T11:44:59.474Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-beiqishu-020-wikisource-8df89c6ca57e",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "beiqishu",
@@ -13432,12 +13565,14 @@
         "afterLocal": "慕容紹宗，慕容晃第四子太原王恪後也，曾祖騰，歸魏，遂居於代。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: rendered Wikisource has this as section heading/roster material; local standalone heading/body split is intentional and should not be deleted or merged into the body sentence.",
+      "reviewedAt": "2026-06-22T11:44:59.474Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-beiqishu-020-wikisource-bc4ca66c3aaf",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.216,
@@ -13480,12 +13615,14 @@
         "afterLocal": "少壯健，有武用。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: rendered Wikisource has this as section heading/roster material; local standalone heading/body split is intentional and should not be deleted or merged into the body sentence.",
+      "reviewedAt": "2026-06-22T11:44:59.474Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-beiqishu-020-wikisource-c5c24b0e3f59",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "beiqishu",
@@ -13520,12 +13657,14 @@
         "afterLocal": "慕容儼，字恃德，清都成安人，慕容廆之後也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: rendered Wikisource has this as section heading/roster material; local standalone heading/body split is intentional and should not be deleted or merged into the body sentence.",
+      "reviewedAt": "2026-06-22T11:44:59.474Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-beiqishu-020-wikisource-cbc281bf9f19",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "beiqishu",
@@ -13560,12 +13699,14 @@
         "afterLocal": "遵業，討元顥有功，封固安縣開國子，除寧遠將軍、雲州大中正。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: rendered Wikisource has this as section heading/roster material; local standalone heading/body split is intentional and should not be deleted or merged into the body sentence.",
+      "reviewedAt": "2026-06-22T11:44:59.474Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-beiqishu-020-wikisource-e2853d7344a5",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "beiqishu",
@@ -13600,12 +13741,14 @@
         "afterLocal": "脩義從弟嘉族，性亦豪爽。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: rendered Wikisource has this as section heading/roster material; local standalone heading/body split is intentional and should not be deleted or merged into the body sentence.",
+      "reviewedAt": "2026-06-22T11:44:59.474Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-beiqishu-020-wikisource-f7f90eeea216",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "beiqishu",
@@ -13640,8 +13783,10 @@
         "afterLocal": "薛脩義，字公讓，河東汾陰人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: rendered Wikisource has this as section heading/roster material; local standalone heading/body split is intentional and should not be deleted or merged into the body sentence.",
+      "reviewedAt": "2026-06-22T11:44:59.474Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-beiqishu-021-wikisource-0a522ea01f46",
@@ -19940,5 +20085,5 @@
       "reviewer": "repair-source-queue-patterns"
     }
   ],
-  "updatedAt": "2026-06-22T11:34:29.026Z"
+  "updatedAt": "2026-06-22T11:45:03.942Z"
 }
