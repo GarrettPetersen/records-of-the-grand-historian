@@ -666,6 +666,10 @@ function decodeContentTemplate(name, body) {
   if (templateName === '!') return parts[0] || '';
   if (templateName === 'propernoun') return parts.join('');
   if (templateName === '標' || templateName === 'wavybookmark') return parts.join('');
+  if (templateName === '年代') {
+    const visible = parts.find((part) => hasHan(part)) || '';
+    return visible;
+  }
   return '';
 }
 
@@ -677,13 +681,13 @@ function stripMediaWikiTemplates(text) {
     .replace(/(?:ProperNoun\|)?-?zh:([^;|]+);zh-hans:[^;|]*;zh-hant:[^;|]*;?/gi, '$1')
     .replace(/(?:ProperNoun\|)?-?zh-hant:([^;|]+);?/gi, '$1')
     .replace(/(?:ProperNoun\|)?-?zh:([^;|]+);?/gi, '$1')
-    .replace(/\{\{\s*(?:header2?|版權|PD|PD-old|年代|DEFAULTSORT|Authority control|Wikisource author|wikisource author)[\s\S]*?\}\}/gi, '');
+    .replace(/\{\{\s*(?:header2?|版權|PD|PD-old|DEFAULTSORT|Authority control|Wikisource author|wikisource author)[\s\S]*?\}\}/gi, '');
   let previous = '';
   let guard = 0;
   while (out !== previous && guard < 20) {
     previous = out;
     out = out
-      .replace(/\{\{\s*(ProperNoun|標|WavyBookMark)\|([^{}]*)\}\}/gi, (_, name, body) => decodeContentTemplate(name, body))
+      .replace(/\{\{\s*(ProperNoun|標|WavyBookMark|年代)\|([^{}]*)\}\}/gi, (_, name, body) => decodeContentTemplate(name, body))
       .replace(/\{\{\s*(!)\|([^{}]*)\}\}/g, (_, name, body) => decodeContentTemplate(name, body))
       .replace(/\{\{\*\|([^{}]*)\}\}/g, '$1')
       .replace(/\{\{[^{}]*\}\}/g, '');

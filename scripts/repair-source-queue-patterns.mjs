@@ -7,6 +7,8 @@
  *   denied/no-op reviewed;
  * - marks correspondence items caused by upstream-only MediaWiki residue
  *   (__TOC__, Category:..., PD-old) as denied/no-op reviewed;
+ * - marks Wikisource diffs caused by linked regnal-year labels dropped from
+ *   raw-source parsing as denied/no-op reviewed;
  * - removes raw HTML tags and leading table span attributes from local source
  *   fields, then marks matching source-artifact queue items as applied.
  */
@@ -35,6 +37,7 @@ const UPSTREAM_RESIDUE_TOKEN_RE = new RegExp(UPSTREAM_RESIDUE_TOKEN_PATTERN, 'gu
 const WIKI_TOC_CONTROL_RE = /__(?:FORCE)?TOC__|__NOTOC__|__NOCC__/gu;
 const SOURCE_BODY_PUNCT_RE = /[。！？；：，、,.!?;:]/u;
 const SOURCE_SENTENCE_PUNCT_RE = /[。！？；，,.!?;]/u;
+const LINKED_CHRONO_FRAGMENT_RE = /^[\p{Script=Han}]{1,4}(?:元|[一二三四五六七八九十百廿卅]+)年$/u;
 const WIKI_PAGE_FIELD_RE = /\|?(?:previous|next|override_author|noauthor|notes|from|type|times)=[^|]*/gu;
 const HEADING_UI_ARTIFACT_RE = /[A-Za-z0-9%_=<>|\[\]{}*#/]/u;
 const SOURCE_HEADING_MARKUP_RE = /\b(?:class|style|width|rowspan|colspan)\s*=|wikitable/iu;
@@ -1872,7 +1875,7 @@ const VARIANTS = new Map([
 
 function usage() {
   console.error(`Usage:
-  node scripts/repair-source-queue-patterns.mjs [--apply] [--reviewer NAME]
+  node scripts/repair-source-queue-patterns.mjs [--apply] [--book BOOK] [--reviewer NAME]
 
 Clears high-confidence repair queue patterns. Dry-run by default.`);
 }
@@ -1880,6 +1883,7 @@ Clears high-confidence repair queue patterns. Dry-run by default.`);
 function parseArgs(argv) {
   const opts = {
     apply: false,
+    books: new Set(),
     reviewer: DEFAULT_REVIEWER,
   };
 
@@ -1891,6 +1895,16 @@ function parseArgs(argv) {
     }
     if (arg === '--apply') {
       opts.apply = true;
+      continue;
+    }
+    if (arg === '--book') {
+      const book = String(argv[++i] || '').trim();
+      if (book) opts.books.add(book);
+      continue;
+    }
+    if (arg.startsWith('--book=')) {
+      const book = arg.slice('--book='.length).trim();
+      if (book) opts.books.add(book);
       continue;
     }
     if (arg === '--reviewer') {
@@ -1989,6 +2003,83 @@ function isUpstreamResidueOnly(item) {
   const localKey = variantKey(local);
   if (!sourceKey) return !localKey;
   return variantText(sourceWithoutResidue) === variantText(local);
+}
+
+function isLinkedChronologyFragment(text) {
+  const normalized = normalizeWhitespace(text);
+  if (!normalized || SOURCE_SENTENCE_PUNCT_RE.test(normalized)) return false;
+  return LINKED_CHRONO_FRAGMENT_RE.test(normalized);
+}
+
+function isUnsafeChronologyBoundary(omitted, preceding, following) {
+  const previousText = normalizeWhitespace(preceding);
+  const nextText = normalizeWhitespace(following);
+  const yearMarkerRe = /^(?:元|[一二三四五六七八九十百廿卅]+)年/u;
+
+  const yearTail = omitted.match(/([元一二三四五六七八九十百廿卅]+年)$/u)?.[1] || '';
+  if (previousText.endsWith(omitted) || (yearTail && previousText.endsWith(yearTail))) return true;
+  if (nextText.startsWith(omitted) || (yearTail && nextText.startsWith(yearTail))) return true;
+  return yearMarkerRe.test(nextText);
+}
+
+function isWikisourceLinkedChronologyNoOp(item, cache) {
+  if (!['text_discrepancy_candidate', 'source_replacement_candidate'].includes(item.type)) return null;
+  const sourceName = String(item.sourceName || '');
+  const sourceUrl = String(item.sourceUrl || '');
+  if (!/wikisource/i.test(`${sourceName} ${sourceUrl}`)) return null;
+
+  const sourceRange = item.sourceRange;
+  const localRange = item.localRange;
+  if (!sourceRange || !localRange) return null;
+
+  const source = normalizeWhitespace(sourceRange.text || '');
+  const local = normalizeWhitespace(localRange.text || '');
+  if (!source || !local || variantText(source) === variantText(local)) return null;
+
+  const beforeSource = stripWikiControls(item.context?.beforeSource || '');
+  const beforeLocal = item.context?.beforeLocal || '';
+  if (beforeSource || beforeLocal) {
+    if (variantText(beforeSource) !== variantText(beforeLocal)) return null;
+  }
+  const afterSource = stripWikiControls(item.context?.afterSource || '');
+  const afterLocal = item.context?.afterLocal || '';
+  if (afterSource || afterLocal) {
+    if (variantText(afterSource) !== variantText(afterLocal)) return null;
+  }
+
+  const locations = localRange.locations || [];
+  if (locations.length > 0) {
+    const units = liveUnitsForItem(item, cache);
+    if (!units) return null;
+    const indices = locations.map((location) => units.findIndex((unit) => unitMatchesLocation(unit, location)));
+    if (indices.some((index) => index < 0)) return null;
+    for (let i = 1; i < indices.length; i += 1) {
+      if (indices[i] <= indices[i - 1]) return null;
+    }
+    const liveText = indices.map((index) => String(units[index].unit[units[index].key] || '')).join('');
+    if (variantText(liveText) !== variantText(local)) return null;
+  }
+
+  const chars = [...local];
+  for (let start = 0; start < chars.length; start += 1) {
+    const maxEnd = Math.min(chars.length, start + 16);
+    for (let end = start + 2; end <= maxEnd; end += 1) {
+      const omitted = chars.slice(start, end).join('');
+      if (!isLinkedChronologyFragment(omitted)) continue;
+      if (isUnsafeChronologyBoundary(omitted, chars.slice(0, start).join(''), chars.slice(end).join(''))) continue;
+
+      const retained = `${chars.slice(0, start).join('')}${chars.slice(end).join('')}`;
+      if (variantText(retained) !== variantText(source)) continue;
+
+      return {
+        omitted,
+        start,
+        ids: localRange.ids || [],
+      };
+    }
+  }
+
+  return null;
 }
 
 function markDenied(item, now, reviewer, notes) {
@@ -2451,10 +2542,14 @@ function cleanSourceArtifactText(text, state = { inRef: false }, file = '') {
   };
 }
 
-function correspondenceQueueFiles() {
+function correspondenceQueueFiles(opts = {}) {
   if (!fs.existsSync(QUALITY_DIR)) return [];
   return fs.readdirSync(QUALITY_DIR)
     .filter((entry) => CORRESPONDENCE_RE.test(entry))
+    .filter((entry) => {
+      if (!opts.books || opts.books.size === 0) return true;
+      return [...opts.books].some((book) => entry === `source-correspondence-corpus-wikisource-${book}.json`);
+    })
     .map((entry) => path.join(QUALITY_DIR, entry))
     .sort();
 }
@@ -2464,6 +2559,7 @@ function clearCorrespondenceNoOps(opts, now) {
     filesChanged: 0,
     variantNoOps: 0,
     upstreamResidueNoOps: 0,
+    wikisourceLinkedChronologyNoOps: 0,
     leadingClosePunctuationNoOps: 0,
     chapterStartHeadingNoOps: 0,
     sourceStartHeadingNoOps: 0,
@@ -2474,7 +2570,7 @@ function clearCorrespondenceNoOps(opts, now) {
   const samples = [];
   const liveUnitCache = new Map();
 
-  for (const file of correspondenceQueueFiles()) {
+  for (const file of correspondenceQueueFiles(opts)) {
     const queue = JSON.parse(fs.readFileSync(file, 'utf8'));
     let changed = false;
     for (const item of queue.items || []) {
@@ -2484,6 +2580,7 @@ function clearCorrespondenceNoOps(opts, now) {
         && notes.includes('source/local difference is only approved graph variants')
         && !isVariantOnly(item)
         && !isLeadingCloseAlreadyAttached(item, liveUnitCache)
+        && !isWikisourceLinkedChronologyNoOp(item, liveUnitCache)
         && !isChapterStartHeadingNoOp(item, liveUnitCache)
         && !isSourceStartHeadingNoOp(item, liveUnitCache)
         && !isChapterStartRangeHeadingNoOp(item, liveUnitCache)
@@ -2498,6 +2595,7 @@ function clearCorrespondenceNoOps(opts, now) {
         && notes.includes('upstream MediaWiki residue')
         && !isUpstreamResidueOnly(item)
         && !isLeadingCloseAlreadyAttached(item, liveUnitCache)
+        && !isWikisourceLinkedChronologyNoOp(item, liveUnitCache)
         && !isChapterStartHeadingNoOp(item, liveUnitCache)
         && !isSourceStartHeadingNoOp(item, liveUnitCache)
         && !isChapterStartRangeHeadingNoOp(item, liveUnitCache)
@@ -2517,49 +2615,61 @@ function clearCorrespondenceNoOps(opts, now) {
         stats.upstreamResidueNoOps += 1;
         changed = true;
       } else {
-        const leadingClose = isLeadingCloseAlreadyAttached(item, liveUnitCache);
-        if (leadingClose) {
+        const linkedChronology = isWikisourceLinkedChronologyNoOp(item, liveUnitCache);
+        if (linkedChronology) {
           markDenied(
             item,
             now,
             opts.reviewer,
-            `Reviewed as no-op: upstream range starts with closing punctuation ${JSON.stringify(leadingClose.punctuation)} that is already attached to previous live source unit ${leadingClose.previousId} as ${JSON.stringify(leadingClose.attachedPunctuation)}; local segmentation retained.`,
+            `Reviewed as no-op: raw Wikisource parsing dropped linked regnal-year text ${JSON.stringify(linkedChronology.omitted)}; local corpus text retained.`,
           );
-          stats.leadingClosePunctuationNoOps += 1;
+          stats.wikisourceLinkedChronologyNoOps += 1;
           changed = true;
         } else {
-          const heading = isChapterStartHeadingNoOp(item, liveUnitCache);
-          if (heading) {
+          const leadingClose = isLeadingCloseAlreadyAttached(item, liveUnitCache);
+          if (leadingClose) {
             markDenied(
               item,
               now,
               opts.reviewer,
-              `Reviewed as no-op: local chapter-start heading ${JSON.stringify(heading.heading)} is retained; upstream witness begins with the following body text.`,
+              `Reviewed as no-op: upstream range starts with closing punctuation ${JSON.stringify(leadingClose.punctuation)} that is already attached to previous live source unit ${leadingClose.previousId} as ${JSON.stringify(leadingClose.attachedPunctuation)}; local segmentation retained.`,
             );
-            stats.chapterStartHeadingNoOps += 1;
+            stats.leadingClosePunctuationNoOps += 1;
             changed = true;
           } else {
-            const sourceHeading = isSourceStartHeadingNoOp(item, liveUnitCache);
-            if (sourceHeading) {
+            const heading = isChapterStartHeadingNoOp(item, liveUnitCache);
+            if (heading) {
               markDenied(
                 item,
                 now,
                 opts.reviewer,
-                `Reviewed as no-op: upstream chapter-start header or page metadata ${JSON.stringify(sourceHeading.heading)} precedes live first local source unit ${sourceHeading.firstId}; local body text retained.`,
+                `Reviewed as no-op: local chapter-start heading ${JSON.stringify(heading.heading)} is retained; upstream witness begins with the following body text.`,
               );
-              stats.sourceStartHeadingNoOps += 1;
+              stats.chapterStartHeadingNoOps += 1;
               changed = true;
             } else {
-              const rangeHeading = isChapterStartRangeHeadingNoOp(item, liveUnitCache);
-              if (!rangeHeading) continue;
-              markDenied(
-                item,
-                now,
-                opts.reviewer,
-                `Reviewed as no-op: chapter-start heading ${JSON.stringify(rangeHeading.localHeading)} is local title/roster material before live body unit ${rangeHeading.bodyStartId}; source body text is already present.`,
-              );
-              stats.chapterStartRangeHeadingNoOps += 1;
-              changed = true;
+              const sourceHeading = isSourceStartHeadingNoOp(item, liveUnitCache);
+              if (sourceHeading) {
+                markDenied(
+                  item,
+                  now,
+                  opts.reviewer,
+                  `Reviewed as no-op: upstream chapter-start header or page metadata ${JSON.stringify(sourceHeading.heading)} precedes live first local source unit ${sourceHeading.firstId}; local body text retained.`,
+                );
+                stats.sourceStartHeadingNoOps += 1;
+                changed = true;
+              } else {
+                const rangeHeading = isChapterStartRangeHeadingNoOp(item, liveUnitCache);
+                if (!rangeHeading) continue;
+                markDenied(
+                  item,
+                  now,
+                  opts.reviewer,
+                  `Reviewed as no-op: chapter-start heading ${JSON.stringify(rangeHeading.localHeading)} is local title/roster material before live body unit ${rangeHeading.bodyStartId}; source body text is already present.`,
+                );
+                stats.chapterStartRangeHeadingNoOps += 1;
+                changed = true;
+              }
             }
           }
         }
@@ -2617,7 +2727,8 @@ function repairSourceArtifacts(opts, now) {
   }
 
   const pending = (queue.hits || [])
-    .filter((item) => statusOf(item) === 'pending' && REPAIRABLE_SOURCE_ARTIFACT_RULES.has(item.ruleId));
+    .filter((item) => statusOf(item) === 'pending' && REPAIRABLE_SOURCE_ARTIFACT_RULES.has(item.ruleId))
+    .filter((item) => opts.books.size === 0 || opts.books.has(path.basename(path.dirname(item.file || ''))));
   const files = [...new Set(pending.map((item) => item.file).filter(Boolean))].sort();
   const changedUnitKeys = new Set();
   const touchedBooks = new Set();
