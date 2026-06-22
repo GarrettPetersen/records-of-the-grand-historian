@@ -550,6 +550,13 @@ const CONTEXTUAL_PRIVATE_USE_REPAIRS = [
   },
   {
     found: '',
+    fileRe: /[/\\]mingshi[/\\]265\.json$/u,
+    textRe: /貴族奸民/gu,
+    replacement: '貴嗾奸民',
+    markerRe: /貴族奸民/u,
+  },
+  {
+    found: '',
     fileRe: /[/\\]mingshi[/\\](?:264|325)\.json$/u,
     textRe: /咬留吧/gu,
     replacement: '咬𠺕吧',
@@ -561,6 +568,13 @@ const CONTEXTUAL_PRIVATE_USE_REPAIRS = [
     textRe: //gu,
     replacement: '𡗨',
     markerRe: //u,
+  },
+  {
+    found: '',
+    fileRe: /[/\\]songshi[/\\]209\.json$/u,
+    textRe: /溪詩話/gu,
+    replacement: '䂬溪詩話',
+    markerRe: /溪詩話/u,
   },
   {
     found: '',
@@ -708,6 +722,34 @@ const CONTEXTUAL_PRIVATE_USE_REPAIRS = [
     textRe: /劉一献/gu,
     replacement: '劉一巘',
     markerRe: /劉一献/u,
+  },
+  {
+    found: '',
+    fileRe: /[/\\]mingshi[/\\]041\.json$/u,
+    textRe: /岠禺山/gu,
+    replacement: '岠嵎山',
+    markerRe: /岠禺山/u,
+  },
+  {
+    found: '',
+    fileRe: /[/\\]mingshi[/\\]042\.json$/u,
+    textRe: /南有涇水，源自開頭山，流經縣界，至高陵縣入謂。/gu,
+    replacement: '南有涇水，源自笄頭山，流經縣界，至高陵縣入渭。',
+    markerRe: /開頭山/u,
+  },
+  {
+    found: '',
+    fileRe: /[/\\]mingshi[/\\]044\.json$/u,
+    textRe: /雩山/gu,
+    replacement: '嶀山',
+    markerRe: /雩山/u,
+  },
+  {
+    found: '',
+    fileRe: /[/\\]songshi[/\\]244\.json$/u,
+    textRe: /今衿，嘉孝穆公世失子也。/gu,
+    replacement: '令衿，嘉孝穆公世瓞子也。',
+    markerRe: /世失子/u,
   },
   {
     found: '',
@@ -1165,6 +1207,13 @@ const CONTEXTUAL_PRIVATE_USE_REPAIRS = [
     markerRe: //u,
   },
   {
+    found: '',
+    fileRe: /[/\\]qingshigao[/\\]105\.json$/u,
+    textRe: /(?:壯|庄)緞傘/gu,
+    replacement: '妝緞傘',
+    markerRe: /(?:壯|庄)緞傘/u,
+  },
+  {
     found: '',
     fileRe: /[/\\]mingshi[/\\]311\.json$/u,
     textRe: /龍/gu,
@@ -1408,6 +1457,13 @@ const CONTEXTUAL_PRIVATE_USE_REPAIRS = [
     textRe: /神安坐/gu,
     replacement: '神主安坐',
     markerRe: /神安坐/u,
+  },
+  {
+    found: '',
+    fileRe: /[/\\]songshi[/\\]138\.json$/u,
+    textRe: /冒為冠/gu,
+    replacement: '冒鶡為冠',
+    markerRe: /冒為冠/u,
   },
   {
     found: '',
