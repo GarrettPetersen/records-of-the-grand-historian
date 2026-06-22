@@ -11877,7 +11877,7 @@
     },
     {
       "id": "source-beiqishu-017-wikisource-31146a5c5295",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -11920,8 +11920,10 @@
         "afterLocal": "詔加行臺僕射。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: rendered Wikisource and ChineseNotes both include 天統元年 here; only the raw action=raw scrape dropped the linked reign-year text.",
+      "reviewedAt": "2026-06-22T11:18:56.327Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-beiqishu-017-wikisource-4f0ccdca1088",
@@ -11975,7 +11977,7 @@
     },
     {
       "id": "source-beiqishu-017-wikisource-7e2712c3a416",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "beiqishu",
@@ -11987,7 +11989,7 @@
         "startIndex": 64,
         "endIndex": 77,
         "count": 14,
-        "text": "肅宗踐阼，納其孫女為皇太子妃。又詔金朝見，聽步挽車至階。世祖登極，禮遇彌重，又納其孫女為太子妃。金長子光大將軍，次子羨及孫武都並開府儀同三司，出鎮方岳，其餘子孫皆封侯貴達。一門一皇后、二太子妃、三公主，尊寵之盛，當時莫比。金嘗謂光曰：「我雖不讀書，聞古來外戚梁冀等無不傾滅。女若有寵，諸貴人妒；女若無寵，天子嫌之。我家直以立.勳抱忠致富貴，豈可藉女也？」辭不獲免，常以為憂。薨，年八十。世祖舉哀西堂，後主又舉哀於晉陽宮。贈假黃鉞、使持節、都督朔定冀並瀛青齊滄幽肆晉汾十二州諸軍事、相國、太尉公、錄尚書、朔州刺史，酋長、王如故，贈錢百萬，謚曰武。子光嗣。",
+        "text": "肅宗踐阼，納其孫女為皇太子妃。又詔金朝見，聽步挽車至階。世祖登極，禮遇彌重，又納其孫女為太子妃。金長子光大將軍，次子羨及孫武都並開府儀同三司，出鎮方岳，其餘子孫皆封侯貴達。一門一皇后、二太子妃、三公主，尊寵之盛，當時莫比。金嘗謂光曰：「我雖不讀書，聞古來外戚梁冀等無不傾滅。女若有寵，諸貴人妒；女若無寵，天子嫌之。我家直以立勳抱忠致富貴，豈可藉女也？」辭不獲免，常以為憂。天統三年薨，年八十。世祖舉哀西堂，後主又舉哀於晉陽宮。贈假黃鉞、使持節、都督朔定冀並瀛青齊滄幽肆晉汾十二州諸軍事、相國、太尉公、錄尚書、朔州刺史，酋長、王如故，贈錢百萬，謚曰武。子光嗣。",
         "ids": [],
         "locations": []
       },
@@ -11999,8 +12001,120 @@
         "afterLocal": "光，字明月，少工騎射，以武藝知名。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Approved against rendered Wikisource and ChineseNotes; sourceRange.text corrected to restore linked 天統三年 and avoid introducing the stray dotted artifact into the corpus.",
+      "reviewedAt": "2026-06-22T11:18:56.327Z",
+      "reviewer": "codex-source-repair",
+      "manualTranslations": [
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "肅宗踐阼，納其孫女為皇太子妃。",
+          "literal": "When Suzong ascended the throne, he took Jin's granddaughter as crown prince consort.",
+          "idiomatic": "When Emperor Xiaozhao ascended the throne, he took Jin's granddaughter as crown prince consort."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "又詔金朝見，聽步挽車至階。",
+          "literal": "Another edict summoned Jin to court and permitted him to have a hand-drawn carriage pulled up to the steps.",
+          "idiomatic": "Another edict summoned Jin to court and allowed him to ride a hand-drawn carriage all the way to the steps."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "世祖登極，禮遇彌重，又納其孫女為太子妃。",
+          "literal": "When Shizu ascended the throne, the rites and treatment became even more weighty, and he again took Jin's granddaughter as crown prince consort.",
+          "idiomatic": "When Emperor Wucheng came to the throne, the honors grew still greater, and another of Jin's granddaughters was taken as crown prince consort."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "金長子光大將軍，次子羨及孫武都並開府儀同三司，出鎮方岳，其餘子孫皆封侯貴達。",
+          "literal": "Jin's eldest son Guang was Grand General; his second son Xian and his grandson Wudu both held Opening Office with the same honors as the Three Excellencies and went out to guard regional commands; the rest of his sons and grandsons were all enfeoffed as marquises and reached high rank.",
+          "idiomatic": "Jin's eldest son Guang was Grand General, while his second son Xian and his grandson Wudu both held Opening Office with the same honors as the Three Excellencies and served as regional commanders; the rest of his descendants were all enfeoffed as marquises and rose to high rank."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "一門一皇后、二太子妃、三公主，尊寵之盛，當時莫比。",
+          "literal": "One household had one empress, two crown prince consorts, and three princesses; the fullness of its honor and favor was unmatched at the time.",
+          "idiomatic": "One household had one empress, two crown prince consorts, and three princesses; the fullness of its honor and favor was unmatched at the time."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "金嘗謂光曰：「我雖不讀書，聞古來外戚梁冀等無不傾滅。",
+          "literal": "Jin once said to Guang, \"Though I do not read books, I have heard that from antiquity imperial in-laws such as Liang Ji have never failed to be overthrown and destroyed.",
+          "idiomatic": "Jin once said to Guang, \"I may not read books, but I have heard that imperial in-laws from Liang Ji onward have all ended in ruin."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "女若有寵，諸貴人妒；",
+          "literal": "If a daughter receives favor, the noble people will be jealous;",
+          "idiomatic": "If a daughter is favored, the great families grow jealous;"
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "女若無寵，天子嫌之。",
+          "literal": "if a daughter receives no favor, the Son of Heaven resents her.",
+          "idiomatic": "if she is not favored, the Son of Heaven resents her."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "我家直以立勳抱忠致富貴，豈可藉女也？」",
+          "literal": "Our house has attained wealth and rank simply by establishing merit and holding loyalty; how can we rely on daughters?\"",
+          "idiomatic": "Our house has grown rich and noble by merit and loyalty alone. How could we rely on daughters?\""
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "辭不獲免，常以為憂。",
+          "literal": "He could not obtain exemption by refusing, and always took this as a worry.",
+          "idiomatic": "Unable to refuse the imperial matches, he always regarded them as a source of worry."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "天統三年薨，年八十。",
+          "literal": "He died in the third year of Tiantong, aged eighty.",
+          "idiomatic": "He died in the third year of Tiantong, aged eighty."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "世祖舉哀西堂，後主又舉哀於晉陽宮。",
+          "literal": "Shizu raised mourning in the Western Hall, and the Later Lord again raised mourning in Jinyang Palace.",
+          "idiomatic": "Emperor Wucheng mourned him in the Western Hall, and the Later Lord held another mourning ceremony in Jinyang Palace."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "贈假黃鉞、使持節、都督朔定冀並瀛青齊滄幽肆晉汾十二州諸軍事、相國、太尉公、錄尚書、朔州刺史，酋長、王如故，贈錢百萬，謚曰武。",
+          "literal": "He was posthumously granted the acting yellow battle-axe, bearer of the staff of authority, commander-in-chief of military affairs in the twelve provinces of Shuo, Ding, Ji, Bing, Ying, Qing, Qi, Cang, You, Si, Jin, and Fen, Chancellor of State, Duke Grand Commandant, Recorder of the Department of State Affairs, and Inspector of Shuo Province; his offices as tribal chief and prince remained as before; he was posthumously granted one million cash, and his posthumous name was Wu.",
+          "idiomatic": "Posthumously he was granted the acting yellow battle-axe, bearer of the staff of authority, overall command of military affairs in the twelve provinces of Shuo, Ding, Ji, Bing, Ying, Qing, Qi, Cang, You, Si, Jin, and Fen, and the titles Chancellor of State, Duke Grand Commandant, Recorder of the Department of State Affairs, and Inspector of Shuo Province. His offices as tribal chief and prince remained as before; he received one million cash, and his posthumous name was Wu."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "子光嗣。",
+          "literal": "His son Guang succeeded him.",
+          "idiomatic": "His son Guang succeeded him."
+        }
+      ],
+      "appliedAt": "2026-06-22T11:19:01.317Z",
+      "appliedSummary": {
+        "id": "source-beiqishu-017-wikisource-7e2712c3a416",
+        "type": "source_omission_candidate",
+        "start": 65,
+        "removed": 0,
+        "inserted": 14,
+        "delta": 14,
+        "manualTranslationsApplied": 14
+      }
     },
     {
       "id": "source-beiqishu-017-wikisource-cdcf386318f2",
@@ -12054,7 +12168,7 @@
     },
     {
       "id": "source-beiqishu-017-wikisource-e59b0ecac435",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "beiqishu",
@@ -12078,8 +12192,127 @@
         "afterLocal": "史臣曰：斛律金以高祖撥亂之始，翼成王業，忠款之至，成此大功，故能終享遐年，位高百辟。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Approved against rendered Wikisource and ChineseNotes; this restores Hulu Ping's career after he inherited the First Chieftain title and before the historian's appraisal.",
+      "reviewedAt": "2026-06-22T11:18:56.327Z",
+      "reviewer": "codex-source-repair",
+      "manualTranslations": [
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "高祖起義，以都督從。",
+          "literal": "When Gaozu raised the righteous cause, Ping followed as a commander.",
+          "idiomatic": "When Gao Huan raised the righteous cause, Ping followed him as a commander."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "稍遷平北將軍、顯州刺史，加鎮南將軍，封固安縣伯。",
+          "literal": "He was gradually promoted to General Who Pacifies the North and Inspector of Xian Province, additionally General Who Pacifies the South, and was enfeoffed as Baron of Gu'an County.",
+          "idiomatic": "He was gradually promoted to General Who Pacifies the North and Inspector of Xian Province, was additionally made General Who Pacifies the South, and was enfeoffed as Baron of Gu'an County."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "尋進為侯，行肆州刺史。",
+          "literal": "Soon he was advanced to marquis and acted as Inspector of Si Province.",
+          "idiomatic": "Soon he was advanced to marquis and acted as Inspector of Si Province."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "周文帝遣其右將軍李小光據梁州，平以偏師討擒之。",
+          "literal": "Emperor Wen of Zhou sent his Right General Li Xiaoguang to occupy Liang Province; Ping campaigned with a detached force and captured him.",
+          "idiomatic": "Emperor Wen of Zhou sent his Right General Li Xiaoguang to occupy Liang Province; Ping campaigned with a detached force and captured him."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "出為燕州刺史。",
+          "literal": "He went out as Inspector of Yan Province.",
+          "idiomatic": "He went out as Inspector of Yan Province."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "入兼左衛將軍，領衆一萬討北徐賊，破之，除濟州刺史。",
+          "literal": "He entered court as acting Left Guard General, led ten thousand troops to attack the Northern Xu rebels, defeated them, and was appointed Inspector of Ji Province.",
+          "idiomatic": "He entered court as acting Left Guard General, led ten thousand troops to attack the Northern Xu rebels, defeated them, and was appointed Inspector of Ji Province."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "侯景度江，詔平為大都督，率青州刺史敬顯俊、左衛將軍厙狄伏連等略定壽陽、宿預三十餘城。",
+          "literal": "When Hou Jing crossed the Yangzi, an edict made Ping Grand Commander; he led Inspector of Qing Province Jing Xianjun, Left Guard General Kudi Fulian, and others in taking and pacifying more than thirty cities including Shouyang and Suyu.",
+          "idiomatic": "When Hou Jing crossed the Yangzi, Ping was appointed Grand Commander and led Inspector of Qing Province Jing Xianjun, Left Guard General Kudi Fulian, and others in securing more than thirty cities, including Shouyang and Suyu."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "事罷還州，加開府，進位驃騎大將軍，進爵為公。",
+          "literal": "When the affair was over he returned to his province, was granted Opening Office, advanced to General of Agile Cavalry, and advanced in rank to duke.",
+          "idiomatic": "After the campaign ended he returned to his province, received Opening Office, was promoted to General of Agile Cavalry, and advanced in rank to duke."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "顯祖受禪，別封羨陽侯。",
+          "literal": "When Xianzu received the abdication, Ping was separately enfeoffed as Marquis of Xianyang.",
+          "idiomatic": "When Xianzu received the abdication, Ping was separately enfeoffed as Marquis of Xianyang."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "行兗州刺史，以黷貨除名。",
+          "literal": "Acting as Inspector of Yan Province, he was removed from the rolls for corruption.",
+          "idiomatic": "While acting as Inspector of Yan Province, he was dismissed from office for corruption."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "後除開府儀同三司。",
+          "literal": "Later he was appointed Opening Office with the same honors as the Three Excellencies.",
+          "idiomatic": "Later he was appointed Opening Office with the same honors as the Three Excellencies."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "廢帝即位，拜特進，食滄州樂陵郡幹。",
+          "literal": "When the Deposed Emperor ascended the throne, he was appointed Specially Advanced and received income from Leling Commandery in Cang Province.",
+          "idiomatic": "When the Deposed Emperor came to the throne, Ping was appointed Specially Advanced and given income from Leling Commandery in Cang Province."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "皇建初，封定陽郡公，拜護軍。",
+          "literal": "At the beginning of Huangjian, he was enfeoffed as Duke of Dingyang Commandery and appointed Protector of the Army.",
+          "idiomatic": "At the beginning of Huangjian, he was enfeoffed as Duke of Dingyang Commandery and appointed Protector of the Army."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "後為青州刺史，卒。",
+          "literal": "Later he became Inspector of Qing Province and died.",
+          "idiomatic": "Later he became Inspector of Qing Province and died."
+        },
+        {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5",
+          "zh": "贈太尉。",
+          "literal": "He was posthumously granted Grand Commandant.",
+          "idiomatic": "He was posthumously granted Grand Commandant."
+        }
+      ],
+      "appliedAt": "2026-06-22T11:19:01.317Z",
+      "appliedSummary": {
+        "id": "source-beiqishu-017-wikisource-e59b0ecac435",
+        "type": "source_omission_candidate",
+        "start": 239,
+        "removed": 0,
+        "inserted": 15,
+        "delta": 15,
+        "manualTranslationsApplied": 15
+      }
     },
     {
       "id": "source-beiqishu-017-wikisource-ebda088c3040",
@@ -19343,5 +19576,5 @@
       "reviewer": "repair-source-queue-patterns"
     }
   ],
-  "updatedAt": "2026-06-22T11:07:54.484Z"
+  "updatedAt": "2026-06-22T11:19:01.343Z"
 }
