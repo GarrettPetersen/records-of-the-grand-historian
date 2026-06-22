@@ -29,7 +29,9 @@ const REPAIRABLE_SOURCE_ARTIFACT_RULES = new Set([
   ...STRUCTURAL_SOURCE_ARTIFACT_RULES,
   'SOURCE_PRIVATE_USE_GLYPH',
 ]);
-const UPSTREAM_RESIDUE_RE = /__TOC__|Category:[A-Za-z0-9_-]+|PD-old/u;
+const UPSTREAM_RESIDUE_TOKEN_PATTERN = String.raw`__TOC__|PD-old|----\s*校勘記|Category:[^\s<>|]+`;
+const UPSTREAM_RESIDUE_RE = new RegExp(UPSTREAM_RESIDUE_TOKEN_PATTERN, 'u');
+const UPSTREAM_RESIDUE_TOKEN_RE = new RegExp(UPSTREAM_RESIDUE_TOKEN_PATTERN, 'gu');
 const RAW_HTML_TAG_RE = /<\/?[a-z][^>]*>/giu;
 const REF_OPEN_RE = /<ref\b[^>]*>/iu;
 const REF_CLOSE_RE = /<\/ref>/iu;
@@ -1810,6 +1812,42 @@ const VARIANTS = new Map([
   ['甎', '磚'],
   ['粘', '黏'],
   ['爲', '為'],
+  ['衆', '眾'],
+  ['奬', '獎'],
+  ['寃', '冤'],
+  ['陞', '升'],
+  ['髙', '高'],
+  ['戸', '戶'],
+  ['歳', '歲'],
+  ['卽', '即'],
+  ['旣', '既'],
+  ['鄕', '鄉'],
+  ['羣', '群'],
+  ['説', '說'],
+  ['内', '內'],
+  ['淸', '清'],
+  ['絶', '絕'],
+  ['呉', '吳'],
+  ['撃', '擊'],
+  ['鈎', '鉤'],
+  ['鎭', '鎮'],
+  ['塲', '場'],
+  ['眞', '真'],
+  ['隣', '鄰'],
+  ['録', '錄'],
+  ['畧', '略'],
+  ['毎', '每'],
+  ['温', '溫'],
+  ['鷄', '雞'],
+  ['敍', '敘'],
+  ['虚', '虛'],
+  ['産', '產'],
+  ['慙', '慚'],
+  ['驩', '歡'],
+  ['倶', '俱'],
+  ['効', '效'],
+  ['疎', '疏'],
+  ['却', '卻'],
 ]);
 
 function usage() {
@@ -1892,18 +1930,37 @@ function variantKey(text) {
   return out;
 }
 
+function variantText(text) {
+  let out = '';
+  for (const char of normalizePunctuation(normalizeWhitespace(text)).normalize('NFKC')) {
+    out += VARIANTS.get(char) || char;
+  }
+  return out;
+}
+
+function stripUpstreamResidue(text) {
+  return String(text || '').replace(UPSTREAM_RESIDUE_TOKEN_RE, '');
+}
+
 function isVariantOnly(item) {
   const source = item.sourceRange?.text || '';
   const local = item.localRange?.text || '';
   if (!source || !local) return false;
-  return strippedText(source) !== strippedText(local) && variantKey(source) === variantKey(local);
+  const sourceText = normalizePunctuation(normalizeWhitespace(source)).normalize('NFKC');
+  const localText = normalizePunctuation(normalizeWhitespace(local)).normalize('NFKC');
+  return sourceText !== localText && variantText(source) === variantText(local);
 }
 
 function isUpstreamResidueOnly(item) {
   const source = item.sourceRange?.text || '';
   const local = item.localRange?.text || '';
-  if (!UPSTREAM_RESIDUE_RE.test(source)) return false;
-  return !UPSTREAM_RESIDUE_RE.test(local);
+  const sourceWithoutResidue = stripUpstreamResidue(source);
+  if (sourceWithoutResidue === source || UPSTREAM_RESIDUE_RE.test(local)) return false;
+
+  const sourceKey = variantKey(sourceWithoutResidue);
+  const localKey = variantKey(local);
+  if (!sourceKey) return !localKey;
+  return variantText(sourceWithoutResidue) === variantText(local);
 }
 
 function markDenied(item, now, reviewer, notes) {
@@ -1911,6 +1968,14 @@ function markDenied(item, now, reviewer, notes) {
   item.decision = 'denied';
   item.reviewedAt = item.reviewedAt || now;
   item.reviewer = item.reviewer || reviewer;
+  item.notes = item.notes ? `${item.notes}\n${notes}` : notes;
+}
+
+function markPending(item, notes) {
+  item.status = 'pending';
+  item.decision = null;
+  delete item.reviewedAt;
+  delete item.reviewer;
   item.notes = item.notes ? `${item.notes}\n${notes}` : notes;
 }
 
@@ -2128,6 +2193,8 @@ function clearCorrespondenceNoOps(opts, now) {
     filesChanged: 0,
     variantNoOps: 0,
     upstreamResidueNoOps: 0,
+    reopenedVariantNoOps: 0,
+    reopenedResidueNoOps: 0,
   };
   const samples = [];
 
@@ -2135,6 +2202,27 @@ function clearCorrespondenceNoOps(opts, now) {
     const queue = JSON.parse(fs.readFileSync(file, 'utf8'));
     let changed = false;
     for (const item of queue.items || []) {
+      const notes = String(item.notes || '');
+      if (
+        statusOf(item) === 'rejected'
+        && notes.includes('source/local difference is only approved graph variants')
+        && !isVariantOnly(item)
+      ) {
+        markPending(item, 'Reopened for manual review: previous automatic variant no-op ignored punctuation or quote placement.');
+        stats.reopenedVariantNoOps += 1;
+        changed = true;
+        continue;
+      }
+      if (
+        statusOf(item) === 'rejected'
+        && notes.includes('upstream MediaWiki residue')
+        && !isUpstreamResidueOnly(item)
+      ) {
+        markPending(item, 'Reopened for manual review: previous automatic residue no-op left non-residue punctuation or text unresolved.');
+        stats.reopenedResidueNoOps += 1;
+        changed = true;
+        continue;
+      }
       if (statusOf(item) !== 'pending') continue;
       if (isVariantOnly(item)) {
         markDenied(item, now, opts.reviewer, 'Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.');
