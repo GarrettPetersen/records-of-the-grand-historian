@@ -32,6 +32,13 @@ const REPAIRABLE_SOURCE_ARTIFACT_RULES = new Set([
 const UPSTREAM_RESIDUE_TOKEN_PATTERN = String.raw`__TOC__|PD-old|----\s*校勘記|Category:[^\s<>|]+`;
 const UPSTREAM_RESIDUE_RE = new RegExp(UPSTREAM_RESIDUE_TOKEN_PATTERN, 'u');
 const UPSTREAM_RESIDUE_TOKEN_RE = new RegExp(UPSTREAM_RESIDUE_TOKEN_PATTERN, 'gu');
+const WIKI_TOC_CONTROL_RE = /__(?:FORCE)?TOC__|__NOTOC__|__NOCC__/gu;
+const SOURCE_BODY_PUNCT_RE = /[。！？；：，、,.!?;:]/u;
+const SOURCE_SENTENCE_PUNCT_RE = /[。！？；，,.!?;]/u;
+const WIKI_PAGE_FIELD_RE = /\|?(?:previous|next|override_author|noauthor|notes|from|type|times)=[^|]*/gu;
+const HEADING_UI_ARTIFACT_RE = /[A-Za-z0-9%_=<>|\[\]{}*#/]/u;
+const SOURCE_HEADING_MARKUP_RE = /\b(?:class|style|width|rowspan|colspan)\s*=|wikitable/iu;
+const MAX_CHAPTER_START_RANGE_HEADING_UNITS = 20;
 const LEADING_CLOSE_PUNCT_RE = /^[」』”）)\]】〉》]+/u;
 const TRAILING_WRAPPER_CLOSE_CHARS = '〉》）)\\]】';
 const EQUIVALENT_CLOSE_PUNCT = new Map([
@@ -1955,6 +1962,14 @@ function stripUpstreamResidue(text) {
   return String(text || '').replace(UPSTREAM_RESIDUE_TOKEN_RE, '');
 }
 
+function stripWikiControls(text) {
+  return stripUpstreamResidue(text).replace(WIKI_TOC_CONTROL_RE, '');
+}
+
+function stripWikiPageFields(text) {
+  return stripWikiControls(text).replace(WIKI_PAGE_FIELD_RE, '');
+}
+
 function isVariantOnly(item) {
   const source = item.sourceRange?.text || '';
   const local = item.localRange?.text || '';
@@ -2054,6 +2069,14 @@ function previousSourceUnit(units, index) {
   return null;
 }
 
+function nextSourceUnit(units, index) {
+  for (let i = index + 1; i < units.length; i += 1) {
+    const unit = units[i];
+    if (String(unit.unit[unit.key] || '').length > 0) return unit;
+  }
+  return null;
+}
+
 function locationIndex(location) {
   if (!location) return undefined;
   return location.sentenceIndex ?? location.cellIndex ?? location.index;
@@ -2135,34 +2158,150 @@ function isLeadingCloseAlreadyAttached(item, cache) {
 }
 
 function isChapterStartHeadingNoOp(item, cache) {
-  if (item.type !== 'local_extra_candidate' || item.sourceRange) return null;
+  if (item.type !== 'local_extra_candidate') return null;
+  if (item.sourceRange && String(item.sourceRange.text || '')) return null;
 
   const localRange = item.localRange;
-  if (!localRange || localRange.startIndex !== 0 || localRange.endIndex !== 0 || localRange.count !== 1) return null;
+  if (!localRange || localRange.startIndex !== 0 || localRange.count < 1) return null;
   if (String(item.context?.beforeSource || '') || String(item.context?.beforeLocal || '')) return null;
 
-  const afterSource = stripUpstreamResidue(item.context?.afterSource || '');
+  const afterSource = stripWikiControls(item.context?.afterSource || '');
   const afterLocal = item.context?.afterLocal || '';
   if (!afterSource || !afterLocal || variantText(afterSource) !== variantText(afterLocal)) return null;
 
   const locations = localRange.locations || [];
-  if (locations.length !== 1) return null;
+  if (locations.length !== localRange.count) return null;
 
   const units = liveUnitsForItem(item, cache);
   if (!units) return null;
 
-  const currentIndex = units.findIndex((unit) => unitMatchesLocation(unit, locations[0]));
-  if (currentIndex < 0) return null;
+  const indices = locations.map((location) => units.findIndex((unit) => unitMatchesLocation(unit, location)));
+  if (indices.some((index) => index < 0)) return null;
+  for (let i = 1; i < indices.length; i += 1) {
+    if (indices[i] <= indices[i - 1]) return null;
+  }
 
-  const current = units[currentIndex];
-  const currentText = String(current.unit[current.key] || '');
-  if (variantText(currentText) !== variantText(localRange.text || '')) return null;
-  if (previousSourceUnit(units, currentIndex)) return null;
+  const headingText = indices.map((index) => String(units[index].unit[units[index].key] || '')).join('');
+  if (variantText(headingText) !== variantText(localRange.text || '')) return null;
+  if (SOURCE_SENTENCE_PUNCT_RE.test(headingText)) return null;
+  if (previousSourceUnit(units, indices[0])) return null;
+
+  const next = nextSourceUnit(units, indices.at(-1));
+  if (!next || variantText(String(next.unit[next.key] || '')) !== variantText(afterLocal)) return null;
 
   return {
-    heading: currentText,
-    currentId: current.id || current.path,
+    heading: headingText,
+    currentId: units[indices[0]].id || units[indices[0]].path,
   };
+}
+
+function isSourceStartHeadingNoOp(item, cache) {
+  if (item.type !== 'source_omission_candidate' || item.localRange) return null;
+
+  const sourceRange = item.sourceRange;
+  if (!sourceRange || sourceRange.startIndex !== 0 || sourceRange.endIndex !== 0 || sourceRange.count !== 1) return null;
+  if (String(item.context?.beforeSource || '') || String(item.context?.beforeLocal || '')) return null;
+
+  const afterSource = stripWikiControls(item.context?.afterSource || '');
+  const afterLocal = item.context?.afterLocal || '';
+  if (!afterSource || !afterLocal || variantText(afterSource) !== variantText(afterLocal)) return null;
+
+  const sourceText = sourceRange.text || '';
+  const withoutPageFields = stripWikiPageFields(sourceText);
+  const sourceLooksLikePageMetadata = withoutPageFields !== stripWikiControls(sourceText);
+  const headerText = normalizeWhitespace(withoutPageFields);
+  if (SOURCE_BODY_PUNCT_RE.test(headerText)) return null;
+  if (!headerText && !sourceLooksLikePageMetadata) return null;
+
+  const units = liveUnitsForItem(item, cache);
+  if (!units?.length) return null;
+
+  const first = units[0];
+  const firstText = String(first.unit[first.key] || '');
+  if (variantText(firstText) !== variantText(afterLocal)) return null;
+
+  return {
+    heading: sourceText,
+    firstId: first.id || first.path,
+    sourceLooksLikePageMetadata,
+  };
+}
+
+function variantSuffixSplit(text, suffix) {
+  const chars = [...String(text || '')];
+  const suffixVariant = variantText(suffix);
+  if (!suffixVariant) return null;
+  for (let index = 0; index <= chars.length; index += 1) {
+    const tail = chars.slice(index).join('');
+    if (variantText(tail) !== suffixVariant) continue;
+    return {
+      prefix: chars.slice(0, index).join(''),
+      suffix: tail,
+    };
+  }
+  return null;
+}
+
+function isChapterStartRangeHeadingNoOp(item, cache) {
+  if (!['source_replacement_candidate', 'text_discrepancy_candidate', 'local_extra_candidate'].includes(item.type)) {
+    return null;
+  }
+
+  const sourceRange = item.sourceRange;
+  const localRange = item.localRange;
+  if (!sourceRange || !localRange) return null;
+  if (sourceRange.startIndex !== 0 || localRange.startIndex !== 0) return null;
+  if (localRange.count < 2 || localRange.count > MAX_CHAPTER_START_RANGE_HEADING_UNITS) return null;
+  if (String(item.context?.beforeSource || '') || String(item.context?.beforeLocal || '')) return null;
+
+  const afterSource = stripWikiControls(item.context?.afterSource || '');
+  const afterLocal = item.context?.afterLocal || '';
+  if (!afterSource || !afterLocal || variantText(afterSource) !== variantText(afterLocal)) return null;
+
+  const locations = localRange.locations || [];
+  if (locations.length !== localRange.count) return null;
+
+  const units = liveUnitsForItem(item, cache);
+  if (!units) return null;
+
+  const indices = locations.map((location) => units.findIndex((unit) => unitMatchesLocation(unit, location)));
+  if (indices.some((index) => index < 0)) return null;
+  for (let i = 1; i < indices.length; i += 1) {
+    if (indices[i] <= indices[i - 1]) return null;
+  }
+  if (previousSourceUnit(units, indices[0])) return null;
+
+  const next = nextSourceUnit(units, indices.at(-1));
+  if (!next || variantText(String(next.unit[next.key] || '')) !== variantText(afterLocal)) return null;
+
+  const parts = indices.map((index) => String(units[index].unit[units[index].key] || ''));
+  const localText = parts.join('');
+  if (variantText(localText) !== variantText(localRange.text || '')) return null;
+
+  const sourceCore = stripWikiPageFields(sourceRange.text || '');
+  for (let split = 1; split < parts.length; split += 1) {
+    const localHeading = parts.slice(0, split).join('');
+    if (SOURCE_SENTENCE_PUNCT_RE.test(localHeading)) continue;
+    if (HEADING_UI_ARTIFACT_RE.test(localHeading)) continue;
+
+    const localBody = parts.slice(split).join('');
+    const sourceSplit = variantSuffixSplit(sourceCore, localBody);
+    if (!sourceSplit) continue;
+
+    const sourceHeading = sourceSplit.prefix;
+    if (SOURCE_BODY_PUNCT_RE.test(sourceHeading)) continue;
+    if (HEADING_UI_ARTIFACT_RE.test(sourceHeading)) continue;
+    if (SOURCE_HEADING_MARKUP_RE.test(sourceHeading)) continue;
+
+    return {
+      localHeading,
+      sourceHeading,
+      firstId: units[indices[0]].id || units[indices[0]].path,
+      bodyStartId: units[indices[split]].id || units[indices[split]].path,
+    };
+  }
+
+  return null;
 }
 
 function sourceUnitKeys(file, unit) {
@@ -2327,6 +2466,8 @@ function clearCorrespondenceNoOps(opts, now) {
     upstreamResidueNoOps: 0,
     leadingClosePunctuationNoOps: 0,
     chapterStartHeadingNoOps: 0,
+    sourceStartHeadingNoOps: 0,
+    chapterStartRangeHeadingNoOps: 0,
     reopenedVariantNoOps: 0,
     reopenedResidueNoOps: 0,
   };
@@ -2343,6 +2484,9 @@ function clearCorrespondenceNoOps(opts, now) {
         && notes.includes('source/local difference is only approved graph variants')
         && !isVariantOnly(item)
         && !isLeadingCloseAlreadyAttached(item, liveUnitCache)
+        && !isChapterStartHeadingNoOp(item, liveUnitCache)
+        && !isSourceStartHeadingNoOp(item, liveUnitCache)
+        && !isChapterStartRangeHeadingNoOp(item, liveUnitCache)
       ) {
         markPending(item, 'Reopened for manual review: previous automatic variant no-op ignored punctuation or quote placement.');
         stats.reopenedVariantNoOps += 1;
@@ -2353,6 +2497,10 @@ function clearCorrespondenceNoOps(opts, now) {
         statusOf(item) === 'rejected'
         && notes.includes('upstream MediaWiki residue')
         && !isUpstreamResidueOnly(item)
+        && !isLeadingCloseAlreadyAttached(item, liveUnitCache)
+        && !isChapterStartHeadingNoOp(item, liveUnitCache)
+        && !isSourceStartHeadingNoOp(item, liveUnitCache)
+        && !isChapterStartRangeHeadingNoOp(item, liveUnitCache)
       ) {
         markPending(item, 'Reopened for manual review: previous automatic residue no-op left non-residue punctuation or text unresolved.');
         stats.reopenedResidueNoOps += 1;
@@ -2381,15 +2529,39 @@ function clearCorrespondenceNoOps(opts, now) {
           changed = true;
         } else {
           const heading = isChapterStartHeadingNoOp(item, liveUnitCache);
-          if (!heading) continue;
-          markDenied(
-            item,
-            now,
-            opts.reviewer,
-            `Reviewed as no-op: local chapter-start heading ${JSON.stringify(heading.heading)} is retained; upstream witness begins with the following body text.`,
-          );
-          stats.chapterStartHeadingNoOps += 1;
-          changed = true;
+          if (heading) {
+            markDenied(
+              item,
+              now,
+              opts.reviewer,
+              `Reviewed as no-op: local chapter-start heading ${JSON.stringify(heading.heading)} is retained; upstream witness begins with the following body text.`,
+            );
+            stats.chapterStartHeadingNoOps += 1;
+            changed = true;
+          } else {
+            const sourceHeading = isSourceStartHeadingNoOp(item, liveUnitCache);
+            if (sourceHeading) {
+              markDenied(
+                item,
+                now,
+                opts.reviewer,
+                `Reviewed as no-op: upstream chapter-start header or page metadata ${JSON.stringify(sourceHeading.heading)} precedes live first local source unit ${sourceHeading.firstId}; local body text retained.`,
+              );
+              stats.sourceStartHeadingNoOps += 1;
+              changed = true;
+            } else {
+              const rangeHeading = isChapterStartRangeHeadingNoOp(item, liveUnitCache);
+              if (!rangeHeading) continue;
+              markDenied(
+                item,
+                now,
+                opts.reviewer,
+                `Reviewed as no-op: chapter-start heading ${JSON.stringify(rangeHeading.localHeading)} is local title/roster material before live body unit ${rangeHeading.bodyStartId}; source body text is already present.`,
+              );
+              stats.chapterStartRangeHeadingNoOps += 1;
+              changed = true;
+            }
+          }
         }
       }
       if (samples.length < 12) {
