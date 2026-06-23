@@ -39,6 +39,7 @@ const SOURCE_BODY_PUNCT_RE = /[。！？；：，、,.!?;:]/u;
 const SOURCE_SENTENCE_PUNCT_RE = /[。！？；，,.!?;]/u;
 const LINKED_CHRONO_FRAGMENT_RE = /^[\p{Script=Han}]{1,4}(?:元|[一二三四五六七八九十百廿卅]+)年$/u;
 const DROPPED_CHRONO_PREFIX_RE = /^[\p{Script=Han}]{0,4}(?:元|[一二三四五六七八九十百廿卅]+)年(?:春|夏|秋|冬)?(?:閏?(?:正|[一二三四五六七八九十]+)月)?(?:[甲乙丙丁戊己庚辛壬癸][子丑寅卯辰巳午未申酉戌亥])?(?:朔|晦)?$/u;
+const LEADING_YEAR_RE = /^(?:元|[一二三四五六七八九十百廿卅]+)(?:年|載)/u;
 const WIKI_PAGE_FIELD_RE = /\|?(?:previous|next|override_author|noauthor|notes|from|type|times)=[^|]*/gu;
 const HEADING_UI_ARTIFACT_RE = /[A-Za-z0-9%_=<>|\[\]{}*#/]/u;
 const SOURCE_HEADING_MARKUP_RE = /\b(?:class|style|width|rowspan|colspan)\s*=|wikitable/iu;
@@ -2089,6 +2090,19 @@ function isDroppedChronologyPrefix(text) {
   return DROPPED_CHRONO_PREFIX_RE.test(normalized);
 }
 
+function isDuplicateChronologyHeadingPrefix(prefix, retained) {
+  const rawRetained = normalizeWhitespace(retained).replace(LEADING_CLOSE_PUNCT_RE, '');
+  if (LEADING_YEAR_RE.test(rawRetained)) return true;
+
+  const normalizedPrefix = variantText(normalizeWhitespace(prefix));
+  const normalizedRetained = variantText(rawRetained);
+  if (!normalizedPrefix || !normalizedRetained) return false;
+  if (normalizedRetained.startsWith(normalizedPrefix)) return true;
+
+  const yearTail = normalizedPrefix.match(/(?:元|[一二三四五六七八九十百廿卅]+)年$/u)?.[0] || '';
+  return Boolean(yearTail && normalizedRetained.startsWith(yearTail));
+}
+
 function itemHasStableAnchors(item) {
   const beforeSource = stripWikiControls(item.context?.beforeSource || '');
   const beforeLocal = item.context?.beforeLocal || '';
@@ -2142,6 +2156,7 @@ function isWikisourceDroppedChronologyPrefixNoOp(item, cache) {
 
     const retained = chars.slice(end).join('');
     if (variantText(retained) !== variantText(source)) continue;
+    if (isDuplicateChronologyHeadingPrefix(prefix, retained)) continue;
 
     return {
       omitted: prefix,

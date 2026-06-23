@@ -214,7 +214,7 @@ export function lastChineseSentenceTerminal(zh) {
 /** Strip trailing ASCII/CJK closers so we read the real English sentence end. */
 function stripTrailingEnglishDecorations(en) {
   let e = String(en || '').trim();
-  while (e && /["')\]]\s*$/.test(e)) e = e.replace(/["')\]]\s*$/, '').trim();
+  while (e && /["”’')\]]\s*$/.test(e)) e = e.replace(/["”’')\]]\s*$/, '').trim();
   while (e && /[」』]\s*$/.test(e)) e = e.replace(/[」』]\s*$/, '').trim();
   return e;
 }
