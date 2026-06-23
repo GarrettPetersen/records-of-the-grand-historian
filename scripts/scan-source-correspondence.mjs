@@ -775,11 +775,10 @@ function stripMediaWikiTemplates(text) {
       .replace(/\{\{\s*(ProperNoun|標|WavyBookMark|年代)\|([^{}]*)\}\}/gi, (_, name, body) => decodeContentTemplate(name, body))
       .replace(/\{\{\s*(red|YL|批|quote|color)\|([^{}]*)\}\}/gi, (_, name, body) => decodeContentTemplate(name, body))
       .replace(/\{\{\s*(!)\|([^{}]*)\}\}/g, (_, name, body) => decodeContentTemplate(name, body))
-      .replace(/\{\{\*\|([^{}]*)\}\}/g, '$1')
-      .replace(/\{\{[^{}]*\}\}/g, '');
+      .replace(/\{\{\*\|([^{}]*)\}\}/g, '$1');
     guard += 1;
   }
-  return out;
+  return out.replace(/\{\{[^{}]*\}\}/g, '');
 }
 
 function cleanupWikisourceMarkup(text) {

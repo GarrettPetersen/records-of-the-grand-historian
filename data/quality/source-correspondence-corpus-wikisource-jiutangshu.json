@@ -27219,7 +27219,7 @@
     },
     {
       "id": "source-jiutangshu-018-wikisource-2b603ffe08c2",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.68,
@@ -27275,12 +27275,36 @@
         "afterLocal": "開成中加開府儀同三司、檢校吏部尚書，依百官例，逐月給俸料。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Apply missing reign-year context for Wuzong birth and Prince of Ying enfeoffment; manual translations supplied.",
+      "manualTranslations": {
+        "元和九年六月十二日生於東宮。": {
+          "literal": "He was born in the Eastern Palace on the twelfth day of the sixth month of Yuanhe 9.",
+          "idiomatic": "He was born in the Eastern Palace on the twelfth day of the sixth month of Yuanhe 9.",
+          "model": "GPT-5 Codex"
+        },
+        "長慶元年三月，封潁王，本名瀍。": {
+          "literal": "In the third month of Changqing 1, he was enfeoffed as Prince of Ying; his original name was Chan.",
+          "idiomatic": "In the third month of Changqing 1, he was enfeoffed as Prince of Ying; his original name was Chan.",
+          "model": "GPT-5 Codex"
+        }
+      },
+      "reviewedAt": "2026-06-23T06:08:24.102Z",
+      "reviewer": "source-correspondence",
+      "appliedAt": "2026-06-23T06:08:24.127Z",
+      "appliedSummary": {
+        "id": "source-jiutangshu-018-wikisource-2b603ffe08c2",
+        "type": "source_replacement_candidate",
+        "start": 1,
+        "removed": 2,
+        "inserted": 2,
+        "delta": 0,
+        "manualTranslationsApplied": 2
+      }
     },
     {
       "id": "source-jiutangshu-018-wikisource-32c51b7b14c5",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.737,
@@ -27327,12 +27351,31 @@
         "afterLocal": "詔百官參議，紛然不定，禮儀使顏真卿堅請歸祔，不從，"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Apply missing Dali year context and correct Lu Sigong translation.",
+      "manualTranslations": {
+        "大曆十四年，留守路嗣恭奏重修太廟，以迎神主。": {
+          "literal": "In Dali 14, Regent Lu Sigong memorialized requesting that the Grand Temple be rebuilt to receive the spirit tablets.",
+          "idiomatic": "In Dali 14, Regent Lu Sigong memorialized requesting that the Grand Temple be rebuilt to receive the spirit tablets.",
+          "model": "GPT-5 Codex"
+        }
+      },
+      "reviewedAt": "2026-06-23T06:08:24.102Z",
+      "reviewer": "source-correspondence",
+      "appliedAt": "2026-06-23T06:08:24.127Z",
+      "appliedSummary": {
+        "id": "source-jiutangshu-018-wikisource-32c51b7b14c5",
+        "type": "source_replacement_candidate",
+        "start": 684,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-jiutangshu-018-wikisource-3351576b7e73",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.022,
@@ -27379,12 +27422,211 @@
         "afterLocal": "九月辛亥，西川節度使杜忭奏收復維州。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Apply missing Qin Prefecture recovery edict; local corpus had only the opener and the inserted Chinese receives manual English translations.",
+      "manualTranslations": {
+        "八月，鳳翔節度使李玭奏收復秦州，制曰：自昔皇王之有國也，曷嘗不文以守成，武以集事，參諸二柄，歸乎大寧。": {
+          "literal": "In the eighth month, Li Pin, military governor of Fengxiang, memorialized that Qin Prefecture had been recovered. The edict said: From of old, when sovereign kings possessed a state, how could they ever have failed to preserve completion with civil virtue and accomplish affairs with military force, using both handles together and returning to great peace?",
+          "idiomatic": "In the eighth month, Li Pin, military governor of Fengxiang, memorialized that Qin Prefecture had been recovered. The edict said: From of old, when sovereign kings possessed a state, how could they ever have failed to preserve completion with civil virtue and accomplish affairs with military force, using both handles together and returning to great peace?",
+          "model": "GPT-5 Codex"
+        },
+        "朕猥荷丕圖，思弘景運，憂勤庶政，四載於茲。": {
+          "literal": "I have unworthily borne the great plan and sought to broaden the auspicious fortune; I have worried over and labored at the many affairs of government, and four years have now passed.",
+          "idiomatic": "I have unworthily borne the great plan and sought to broaden the auspicious fortune; I have worried over and labored at the many affairs of government, and four years have now passed.",
+          "model": "GPT-5 Codex"
+        },
+        "每念河、湟土疆，綿亙遐闊。": {
+          "literal": "Whenever I think of the lands of He and Huang, they stretch far and wide.",
+          "idiomatic": "Whenever I think of the lands of He and Huang, they stretch far and wide.",
+          "model": "GPT-5 Codex"
+        },
+        "自天寶末，犬戎乘我多難，無力禦奸，遂縱腥膻，不遠京邑。": {
+          "literal": "Since the end of Tianbao, the Dog Rong took advantage of our many difficulties; we lacked the strength to resist their treachery, and so allowed the foul horde to come not far from the capital region.",
+          "idiomatic": "Since the end of Tianbao, the Dog Rong took advantage of our many difficulties; we lacked the strength to resist their treachery, and so allowed the foul horde to come not far from the capital region.",
+          "model": "GPT-5 Codex"
+        },
+        "事更十葉，時近百年。": {
+          "literal": "These affairs have passed through ten reigns, and the time approaches a hundred years.",
+          "idiomatic": "These affairs have passed through ten reigns, and the time approaches a hundred years.",
+          "model": "GPT-5 Codex"
+        },
+        "進士試能，靡不竭其長策；": {
+          "literal": "When Presented Scholars were tested on their abilities, none failed to exhaust their long plans;",
+          "idiomatic": "When Presented Scholars were tested on their abilities, none failed to exhaust their long plans;",
+          "model": "GPT-5 Codex"
+        },
+        "朝廷下議，皆亦聽其直詞。": {
+          "literal": "when the court sent the matter down for discussion, all were also permitted to speak frankly.",
+          "idiomatic": "when the court sent the matter down for discussion, all were also permitted to speak frankly.",
+          "model": "GPT-5 Codex"
+        },
+        "盡以不生邊事為永圖，且守舊地為明理，荏苒於是，收復無由。": {
+          "literal": "All took avoiding new frontier trouble as the lasting plan and merely guarding old territory as clear principle; as time drifted on in this way, there was no means to recover it.",
+          "idiomatic": "All took avoiding new frontier trouble as the lasting plan and merely guarding old territory as clear principle; as time drifted on in this way, there was no means to recover it.",
+          "model": "GPT-5 Codex"
+        },
+        "今者天地儲祥，祖宗垂佑，左衽輸款，邊壘連降，刷恥建功，所謀必克。": {
+          "literal": "Now Heaven and Earth have stored up auspiciousness, the ancestors have extended protection, the left-lapeled peoples submit sincerely, and frontier forts have surrendered one after another; in washing away shame and establishing merit, what we plan will surely succeed.",
+          "idiomatic": "Now Heaven and Earth have stored up auspiciousness, the ancestors have extended protection, the left-lapeled peoples submit sincerely, and frontier forts have surrendered one after another; in washing away shame and establishing merit, what we plan will surely succeed.",
+          "model": "GPT-5 Codex"
+        },
+        "實樞衡妙算，將帥雄稜，副玄元不爭之文，絕漢武遠征之悔。": {
+          "literal": "This truly comes from the subtle calculations of the chancellors and the heroic edge of the generals, fulfilling Xuan Yuan's civil virtue of non-contention and cutting off Emperor Wu of Han's regret over distant expeditions.",
+          "idiomatic": "This truly comes from the subtle calculations of the chancellors and the heroic edge of the generals, fulfilling Xuan Yuan's civil virtue of non-contention and cutting off Emperor Wu of Han's regret over distant expeditions.",
+          "model": "GPT-5 Codex"
+        },
+        "甌脫頓空於內地，斥堠全據于新封，莫大之休，指期而就。": {
+          "literal": "The outlying posts were suddenly emptied from the interior, and the scout stations fully occupied the newly enclosed territory; the greatest blessing will be accomplished at the appointed time.",
+          "idiomatic": "The outlying posts were suddenly emptied from the interior, and the scout stations fully occupied the newly enclosed territory; the greatest blessing will be accomplished at the appointed time.",
+          "model": "GPT-5 Codex"
+        },
+        "況將士等櫛沐風雨，暴露郊原，披荊棘而刁鬥夜嚴，逐豺狼而穹廬曉破。": {
+          "literal": "Moreover, the officers and soldiers have combed through wind and rain, lain exposed on the fields, cut through brambles while the night watches were strict, and driven off jackals and wolves as their tents were broken at dawn.",
+          "idiomatic": "Moreover, the officers and soldiers have combed through wind and rain, lain exposed on the fields, cut through brambles while the night watches were strict, and driven off jackals and wolves as their tents were broken at dawn.",
+          "model": "GPT-5 Codex"
+        },
+        "動皆如意，古無與京，念此誠勤，宜加寵賞。": {
+          "literal": "Their actions have all gone as wished, without equal in antiquity; mindful of this sincere diligence, favor and rewards should be added.",
+          "idiomatic": "Their actions have all gone as wished, without equal in antiquity; mindful of this sincere diligence, favor and rewards should be added.",
+          "model": "GPT-5 Codex"
+        },
+        "涇原宜賜絹六萬疋，靈武五萬疋，鳳翔、邠甯各四萬疋，並以戶部產業物色充，仍侍季榮、叔明、李玼、君緒各回戈到鎮，度支差腳支送。": {
+          "literal": "Jingyuan should be granted sixty thousand bolts of silk, Lingwu fifty thousand bolts, and Fengxiang and Binning forty thousand bolts each, all supplied from Ministry of Revenue property and goods; after Jirong, Shuming, Li Ci, and Junxu each turn their troops back to their garrisons, the Finance Commission shall arrange transport service to deliver them.",
+          "idiomatic": "Jingyuan should be granted sixty thousand bolts of silk, Lingwu fifty thousand bolts, and Fengxiang and Binning forty thousand bolts each, all supplied from Ministry of Revenue property and goods; after Jirong, Shuming, Li Ci, and Junxu each turn their troops back to their garrisons, the Finance Commission shall arrange transport service to deliver them.",
+          "model": "GPT-5 Codex"
+        },
+        "四道立功將士，各具名銜聞奏，當議甄酬。": {
+          "literal": "The officers and soldiers of the four circuits who have established merit shall each have their names and ranks listed and reported; selection and recompense will then be discussed.",
+          "idiomatic": "The officers and soldiers of the four circuits who have established merit shall each have their names and ranks listed and reported; selection and recompense will then be discussed.",
+          "model": "GPT-5 Codex"
+        },
+        "其秦、威、原三州及七關側近，訪聞田土肥沃，水草豐美，如百姓能耕墾種蒔，五年內不加稅賦。": {
+          "literal": "In the vicinity of the three prefectures Qin, Wei, and Yuan and the seven passes, I have heard that the fields are fertile and water and grazing abundant; if commoners can cultivate and plant them, for five years no taxes or levies shall be added.",
+          "idiomatic": "In the vicinity of the three prefectures Qin, Wei, and Yuan and the seven passes, I have heard that the fields are fertile and water and grazing abundant; if commoners can cultivate and plant them, for five years no taxes or levies shall be added.",
+          "model": "GPT-5 Codex"
+        },
+        "五年已後重定戶籍，為永業。": {
+          "literal": "After five years, the household registers shall be redetermined and the land made permanent property.",
+          "idiomatic": "After five years, the household registers shall be redetermined and the land made permanent property.",
+          "model": "GPT-5 Codex"
+        },
+        "溫池鹽利，可贍邊陲，委度支制置聞奏。": {
+          "literal": "The profits from Wenchi salt can support the frontier; the Finance Commission is entrusted to devise arrangements and report.",
+          "idiomatic": "The profits from Wenchi salt can support the frontier; the Finance Commission is entrusted to devise arrangements and report.",
+          "model": "GPT-5 Codex"
+        },
+        "鳳翔、邠甯、靈武、涇原守鎮將士，如能於本戍處耕墾營田，即度支給賜牛糧子種，每年量得斛斗，便充軍糧，亦不限約定數。": {
+          "literal": "If garrison officers and soldiers at Fengxiang, Binning, Lingwu, and Jingyuan can open military farms at their own posts, the Finance Commission shall provide cattle, grain, and seed; each year whatever amount of grain is obtained shall immediately serve as army grain, without being limited to a fixed quota.",
+          "idiomatic": "If garrison officers and soldiers at Fengxiang, Binning, Lingwu, and Jingyuan can open military farms at their own posts, the Finance Commission shall provide cattle, grain, and seed; each year whatever amount of grain is obtained shall immediately serve as army grain, without being limited to a fixed quota.",
+          "model": "GPT-5 Codex"
+        },
+        "三州七關鎮守官健。": {
+          "literal": "As for the officers and able-bodied soldiers guarding the three prefectures and seven passes:",
+          "idiomatic": "As for the officers and able-bodied soldiers guarding the three prefectures and seven passes:",
+          "model": "GPT-5 Codex"
+        },
+        "每人給衣糧兩分，一分依常年例支給，一分度支加給，仍二年一替換。": {
+          "literal": "each person shall receive two shares of clothing and grain: one share issued according to the usual annual practice, and one share additionally issued by the Finance Commission; they shall still be rotated every two years.",
+          "idiomatic": "each person shall receive two shares of clothing and grain: one share issued according to the usual annual practice, and one share additionally issued by the Finance Commission; they shall still be rotated every two years.",
+          "model": "GPT-5 Codex"
+        },
+        "其家口委長吏切加安存。": {
+          "literal": "Their families are entrusted to the chief officials, who must carefully settle and protect them.",
+          "idiomatic": "Their families are entrusted to the chief officials, who must carefully settle and protect them.",
+          "model": "GPT-5 Codex"
+        },
+        "官健有莊田戶籍者，仰州縣放免差役。": {
+          "literal": "For officers and soldiers who have estate lands and household registrations, the prefectures and counties are ordered to exempt them from corvee.",
+          "idiomatic": "For officers and soldiers who have estate lands and household registrations, the prefectures and counties are ordered to exempt them from corvee.",
+          "model": "GPT-5 Codex"
+        },
+        "秦州至隴州已來道路，要置堡柵，與秦州應接，委李玭與劉皋即便計度聞奏。": {
+          "literal": "On the road from Qin Prefecture to Long Prefecture, fort stockades must be established to coordinate with Qin Prefecture; Li Pin and Liu Gao are entrusted to calculate this immediately and report.",
+          "idiomatic": "On the road from Qin Prefecture to Long Prefecture, fort stockades must be established to coordinate with Qin Prefecture; Li Pin and Liu Gao are entrusted to calculate this immediately and report.",
+          "model": "GPT-5 Codex"
+        },
+        "如商旅往來，官健父兄子弟通傳家信，關司並不得邀詰阻滯。": {
+          "literal": "If merchants travel back and forth, or if officers' and soldiers' fathers, elder brothers, sons, and younger brothers transmit family letters, the pass offices must not detain, interrogate, obstruct, or delay them.",
+          "idiomatic": "If merchants travel back and forth, or if officers' and soldiers' fathers, elder brothers, sons, and younger brothers transmit family letters, the pass offices must not detain, interrogate, obstruct, or delay them.",
+          "model": "GPT-5 Codex"
+        },
+        "三州七關刺史、關使，將來訓練捍防有效能者，並與超序官爵。": {
+          "literal": "Governors of the three prefectures and pass commissioners of the seven passes who in future are effective in training and defense shall all be given offices and titles beyond the normal order.",
+          "idiomatic": "Governors of the three prefectures and pass commissioners of the seven passes who in future are effective in training and defense shall all be given offices and titles beyond the normal order.",
+          "model": "GPT-5 Codex"
+        },
+        "劍南西川沿邊沒蕃州郡，如力能收復，本道亦宜接借。": {
+          "literal": "For the prefectures and commanderies along the frontier of Jiannan Xichuan that have fallen to the Tibetans, if they are able to recover them, that circuit should also be supported and aided.",
+          "idiomatic": "For the prefectures and commanderies along the frontier of Jiannan Xichuan that have fallen to the Tibetans, if they are able to recover them, that circuit should also be supported and aided.",
+          "model": "GPT-5 Codex"
+        },
+        "三州七關創置戍卒，且要務靜。": {
+          "literal": "In newly establishing garrison soldiers in the three prefectures and seven passes, the main need for now is quiet.",
+          "idiomatic": "In newly establishing garrison soldiers in the three prefectures and seven passes, the main need for now is quiet.",
+          "model": "GPT-5 Codex"
+        },
+        "如蕃人求市，切不得通；": {
+          "literal": "If Tibetans request trade, it absolutely must not be permitted;",
+          "idiomatic": "If Tibetans request trade, it absolutely must not be permitted;",
+          "model": "GPT-5 Codex"
+        },
+        "有來投降者，申取長吏處分。": {
+          "literal": "if any come to surrender, request instructions from the chief officials for handling them.",
+          "idiomatic": "if any come to surrender, request instructions from the chief officials for handling them.",
+          "model": "GPT-5 Codex"
+        },
+        "嗚呼！": {
+          "literal": "Alas!",
+          "idiomatic": "Alas!",
+          "model": "GPT-5 Codex"
+        },
+        "七關要害，三郡膏腴，候館之殘趾可尋，唐人之遺風尚在。": {
+          "literal": "The seven passes are strategic points and the three commanderies fertile land; traces of ruined relay lodges can still be sought, and Tang customs remain.",
+          "idiomatic": "The seven passes are strategic points and the three commanderies fertile land; traces of ruined relay lodges can still be sought, and Tang customs remain.",
+          "model": "GPT-5 Codex"
+        },
+        "追懷往事，良用興嗟。": {
+          "literal": "Recalling former events, I truly sigh.",
+          "idiomatic": "Recalling former events, I truly sigh.",
+          "model": "GPT-5 Codex"
+        },
+        "夫取不在廣，貴保其金湯；": {
+          "literal": "Taking territory does not lie in breadth; what matters is preserving it like metal walls and boiling moats;",
+          "idiomatic": "Taking territory does not lie in breadth; what matters is preserving it like metal walls and boiling moats;",
+          "model": "GPT-5 Codex"
+        },
+        "得必有時，詎計于遲速。": {
+          "literal": "what is gained must have its proper time, so why reckon by delay or speed?",
+          "idiomatic": "what is gained must have its proper time, so why reckon by delay or speed?",
+          "model": "GPT-5 Codex"
+        },
+        "今則便務修築，不進干戈，必使足食足兵，有備無患，載洽亭育之道，永致生靈之安。": {
+          "literal": "Now attend first to repairing and building, without advancing weapons; be sure there is sufficient food and sufficient soldiers, with preparedness and no danger, so that the way of sheltering and nurturing may be fully harmonized and the people may forever be brought security.",
+          "idiomatic": "Now attend first to repairing and building, without advancing weapons; be sure there is sufficient food and sufficient soldiers, with preparedness and no danger, so that the way of sheltering and nurturing may be fully harmonized and the people may forever be brought security.",
+          "model": "GPT-5 Codex"
+        },
+        "中外臣僚，宜體朕意。": {
+          "literal": "Officials inside and outside the court should embody my intention.",
+          "idiomatic": "Officials inside and outside the court should embody my intention.",
+          "model": "GPT-5 Codex"
+        }
+      },
+      "reviewedAt": "2026-06-23T06:08:24.102Z",
+      "reviewer": "source-correspondence",
+      "appliedAt": "2026-06-23T06:08:24.127Z",
+      "appliedSummary": {
+        "id": "source-jiutangshu-018-wikisource-3351576b7e73",
+        "type": "source_omission_candidate",
+        "start": 829,
+        "removed": 1,
+        "inserted": 37,
+        "delta": 36,
+        "manualTranslationsApplied": 37
+      }
     },
     {
       "id": "source-jiutangshu-018-wikisource-4c275291859d",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.862,
@@ -27431,12 +27673,31 @@
         "afterLocal": "又下百僚議，皆言准故事，無兩都俱置之禮，唯禮部侍郎陳商議云：「周之文、武，有鎬、洛二廟，今兩都異廟可也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Apply missing Huichang year context for Li Shi and the Grand Temple.",
+      "manualTranslations": {
+        "會昌五年，留守李石因太微宮正殿圮陊，以廢弘敬寺為太廟，迎神主祔之。": {
+          "literal": "In Huichang 5, Regent Li Shi, because the main hall of Taiwei Palace had collapsed, made the abolished Hongjing Temple into the Grand Temple and received the spirit tablets to enshrine them there.",
+          "idiomatic": "In Huichang 5, Regent Li Shi, because the main hall of Taiwei Palace had collapsed, made the abolished Hongjing Temple into the Grand Temple and received the spirit tablets to enshrine them there.",
+          "model": "GPT-5 Codex"
+        }
+      },
+      "reviewedAt": "2026-06-23T06:08:24.102Z",
+      "reviewer": "source-correspondence",
+      "appliedAt": "2026-06-23T06:08:24.127Z",
+      "appliedSummary": {
+        "id": "source-jiutangshu-018-wikisource-4c275291859d",
+        "type": "text_discrepancy_candidate",
+        "start": 686,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-jiutangshu-018-wikisource-4d408d4abfb6",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.769,
@@ -27501,8 +27762,37 @@
         "afterLocal": "翌日，柩前即帝位，改今名，時年三十七。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Apply missing reign-year context for Xuanzong birth, Prince of Guang enfeoffment, and testamentary succession.",
+      "manualTranslations": {
+        "元和五年六月二十二日，生於大明宮。": {
+          "literal": "He was born in Daming Palace on the twenty-second day of the sixth month of Yuanhe 5.",
+          "idiomatic": "He was born in Daming Palace on the twenty-second day of the sixth month of Yuanhe 5.",
+          "model": "GPT-5 Codex"
+        },
+        "長慶元年三月，封光王，名怡。": {
+          "literal": "In the third month of Changqing 1, he was enfeoffed as Prince of Guang and named Yi.",
+          "idiomatic": "In the third month of Changqing 1, he was enfeoffed as Prince of Guang and named Yi.",
+          "model": "GPT-5 Codex"
+        },
+        "會昌六年三月一日，武宗疾篤，遺詔立為皇太叔，權勾當軍國政事。": {
+          "literal": "On the first day of the third month of Huichang 6, when Wuzong was gravely ill, his testamentary edict established him as Imperial Uncle and provisionally put him in charge of military and state affairs.",
+          "idiomatic": "On the first day of the third month of Huichang 6, when Wuzong was gravely ill, his testamentary edict established him as Imperial Uncle and provisionally put him in charge of military and state affairs.",
+          "model": "GPT-5 Codex"
+        }
+      },
+      "reviewedAt": "2026-06-23T06:08:24.102Z",
+      "reviewer": "source-correspondence",
+      "appliedAt": "2026-06-23T06:08:24.127Z",
+      "appliedSummary": {
+        "id": "source-jiutangshu-018-wikisource-4d408d4abfb6",
+        "type": "text_discrepancy_candidate",
+        "start": 658,
+        "removed": 3,
+        "inserted": 3,
+        "delta": 0,
+        "manualTranslationsApplied": 3
+      }
     },
     {
       "id": "source-jiutangshu-018-wikisource-645b0eef4c13",
@@ -27723,7 +28013,7 @@
     },
     {
       "id": "source-jiutangshu-018-wikisource-888cd54b8147",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.81,
@@ -27770,8 +28060,27 @@
         "afterLocal": "從之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Apply missing Huichang year context inside quoted memorial; manual translation keeps the closing English quote.",
+      "manualTranslations": {
+        "請准會昌三年十二月敕，諸軍使不得強奪百姓入軍。": {
+          "literal": "I request that, in accordance with the twelfth-month edict of Huichang 3, army commissioners be forbidden to forcibly seize commoners into the army.\"",
+          "idiomatic": "I request that, in accordance with the twelfth-month edict of Huichang 3, army commissioners be forbidden to forcibly seize commoners into the army.\"",
+          "model": "GPT-5 Codex"
+        }
+      },
+      "reviewedAt": "2026-06-23T06:08:24.102Z",
+      "reviewer": "source-correspondence",
+      "appliedAt": "2026-06-23T06:08:24.127Z",
+      "appliedSummary": {
+        "id": "source-jiutangshu-018-wikisource-888cd54b8147",
+        "type": "text_discrepancy_candidate",
+        "start": 957,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-jiutangshu-018-wikisource-96bc3ad67702",
@@ -27829,7 +28138,7 @@
     },
     {
       "id": "source-jiutangshu-018-wikisource-a4e25ab83f6c",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.011,
@@ -27876,12 +28185,91 @@
         "afterLocal": "三月己酉，兵部侍郎、判度支周墀本官平章事。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Apply missing Wu Xiang case disciplinary edict; local corpus had only the opener and the inserted Chinese receives manual English translations.",
+      "manualTranslations": {
+        "其月，敕：李回、鄭亞、元壽、魏鉶已從別敕處分。": {
+          "literal": "That month, an edict said: Li Hui, Zheng Ya, Yuan Shou, and Wei Xing have already been dealt with in separate edicts.",
+          "idiomatic": "That month, an edict said: Li Hui, Zheng Ya, Yuan Shou, and Wei Xing have already been dealt with in separate edicts.",
+          "model": "GPT-5 Codex"
+        },
+        "李紳起此冤訴，本由不真，今既身歿，無以加刑。": {
+          "literal": "Li Shen initiated this wrongful accusation, which originally was not true; now that he has died, there is no way to add punishment.",
+          "idiomatic": "Li Shen initiated this wrongful accusation, which originally was not true; now that he has died, there is no way to add punishment.",
+          "model": "GPT-5 Codex"
+        },
+        "粗塞眾情，量行削奪，宜追奪三任官告，送刑部注毀。": {
+          "literal": "To roughly satisfy public feeling, measured deprivation should be carried out: three sets of appointment certificates should be posthumously stripped and sent to the Ministry of Justice to be entered and destroyed.",
+          "idiomatic": "To roughly satisfy public feeling, measured deprivation should be carried out: three sets of appointment certificates should be posthumously stripped and sent to the Ministry of Justice to be entered and destroyed.",
+          "model": "GPT-5 Codex"
+        },
+        "其子孫稽於經義，罰不及嗣，並釋放。": {
+          "literal": "As for his descendants, according to classical principle punishment does not extend to heirs, and all should be released.",
+          "idiomatic": "As for his descendants, according to classical principle punishment does not extend to heirs, and all should be released.",
+          "model": "GPT-5 Codex"
+        },
+        "李德裕先朝委以重權，不務絕其黨庇，致使冤苦，直到於今，職爾之由，能無恨歎！": {
+          "literal": "Li Deyu was entrusted by the previous court with great power; he did not strive to cut off partisan sheltering, causing the wronged and suffering to remain so until today. Since this is due to your conduct, how could there be no resentment and sighing!",
+          "idiomatic": "Li Deyu was entrusted by the previous court with great power; he did not strive to cut off partisan sheltering, causing the wronged and suffering to remain so until today. Since this is due to your conduct, how could there be no resentment and sighing!",
+          "model": "GPT-5 Codex"
+        },
+        "昨以李威所訴，已經遠貶。": {
+          "literal": "Earlier, because of Li Wei's complaint, he was already banished far away.",
+          "idiomatic": "Earlier, because of Li Wei's complaint, he was already banished far away.",
+          "model": "GPT-5 Codex"
+        },
+        "俯全事體，特為從寬，宜准去年敕令處分。": {
+          "literal": "Looking down and considering the whole affair, we specially act with lenience; he should be handled according to last year's edict.",
+          "idiomatic": "Looking down and considering the whole affair, we specially act with lenience; he should be handled according to last year's edict.",
+          "model": "GPT-5 Codex"
+        },
+        "張弘思、李公佐卑吏守官，制不由己，不能守正，曲附權臣，各削兩任官。": {
+          "literal": "Zhang Hongsi and Li Gongzuo were low officials holding posts; orders did not come from themselves, yet they could not maintain rectitude and crookedly attached themselves to powerful ministers. Each is to be stripped of two offices.",
+          "idiomatic": "Zhang Hongsi and Li Gongzuo were low officials holding posts; orders did not come from themselves, yet they could not maintain rectitude and crookedly attached themselves to powerful ministers. Each is to be stripped of two offices.",
+          "model": "GPT-5 Codex"
+        },
+        "崔元藻曾受無辜之貶，合從洗雪之條，委中書門下商量處分。": {
+          "literal": "Cui Yuanzao once suffered an innocent demotion; he should follow the rule of being cleared, and the Secretariat-Chancellery is entrusted to deliberate and decide.",
+          "idiomatic": "Cui Yuanzao once suffered an innocent demotion; he should follow the rule of being cleared, and the Secretariat-Chancellery is entrusted to deliberate and decide.",
+          "model": "GPT-5 Codex"
+        },
+        "李恪詳驗款狀，蠹害最深，以其多時，須議減等，委京兆府決脊杖十五，配流天德。": {
+          "literal": "Li Ke, on detailed examination of his confession, caused the deepest harm; because much time has passed, reduction of penalty must be discussed. Jingzhao Prefecture is entrusted to administer fifteen strokes to his back and exile him to Tiande.",
+          "idiomatic": "Li Ke, on detailed examination of his confession, caused the deepest harm; because much time has passed, reduction of penalty must be discussed. Jingzhao Prefecture is entrusted to administer fifteen strokes to his back and exile him to Tiande.",
+          "model": "GPT-5 Codex"
+        },
+        "李克勳欲收阿顏，決杖二十，配流硤州。": {
+          "literal": "Li Kexun, who sought to arrest Ayan, is to receive twenty strokes and be exiled to Xia Prefecture.",
+          "idiomatic": "Li Kexun, who sought to arrest Ayan, is to receive twenty strokes and be exiled to Xia Prefecture.",
+          "model": "GPT-5 Codex"
+        },
+        "劉群據其款狀，合議痛刑，曾效職官，不欲決脊，決臀杖五十，配流岳州。": {
+          "literal": "Liu Qun, according to his confession, should be discussed for severe punishment; because he once served as an official, I do not wish to have him beaten on the back. Give him fifty strokes on the buttocks and exile him to Yue Prefecture.",
+          "idiomatic": "Liu Qun, according to his confession, should be discussed for severe punishment; because he once served as an official, I do not wish to have him beaten on the back. Give him fifty strokes on the buttocks and exile him to Yue Prefecture.",
+          "model": "GPT-5 Codex"
+        },
+        "其盧行立及諸典吏，委三司使量罪科放訖聞奏。": {
+          "literal": "Lu Xingli and the various clerks are entrusted to the Three Commissioners to assess their crimes and punish or release them, then report.",
+          "idiomatic": "Lu Xingli and the various clerks are entrusted to the Three Commissioners to assess their crimes and punish or release them, then report.",
+          "model": "GPT-5 Codex"
+        }
+      },
+      "reviewedAt": "2026-06-23T06:08:24.102Z",
+      "reviewer": "source-correspondence",
+      "appliedAt": "2026-06-23T06:08:24.127Z",
+      "appliedSummary": {
+        "id": "source-jiutangshu-018-wikisource-a4e25ab83f6c",
+        "type": "source_omission_candidate",
+        "start": 778,
+        "removed": 1,
+        "inserted": 13,
+        "delta": 12,
+        "manualTranslationsApplied": 13
+      }
     },
     {
       "id": "source-jiutangshu-018-wikisource-ac4a0cf30050",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.005,
@@ -27928,8 +28316,137 @@
         "afterLocal": "以起居郎庾道蔚、禮部員外郎李文儒並充翰林學士。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Apply missing second demotion edict against Li Deyu; local corpus had only the opener and the inserted Chinese receives manual English translations.",
+      "manualTranslations": {
+        "制曰：朕祗荷丕業，思平泰階，將分邪正之源，冀使華夷胥悅。": {
+          "literal": "An edict said: I reverently bear the great enterprise and seek to level the steps of peace; I will distinguish the source of evil and uprightness, hoping to make Chinese and non-Chinese all rejoice.",
+          "idiomatic": "An edict said: I reverently bear the great enterprise and seek to level the steps of peace; I will distinguish the source of evil and uprightness, hoping to make Chinese and non-Chinese all rejoice.",
+          "model": "GPT-5 Codex"
+        },
+        "其有常登元輔，久奉武宗，深苞禍心，盜弄國柄，雖已行譴斥之典，而未塞億兆之言，是議再舉朝章，式遵彝憲。": {
+          "literal": "There is one who long held the chief ministry and long served Wuzong, deeply harbored a calamitous heart, and toyed with state power. Although the rule of punishment and rejection has already been carried out, it has not yet satisfied the words of the multitudes; therefore we discuss again raising the court statutes, in order to follow the constant constitution.",
+          "idiomatic": "There is one who long held the chief ministry and long served Wuzong, deeply harbored a calamitous heart, and toyed with state power. Although the rule of punishment and rejection has already been carried out, it has not yet satisfied the words of the multitudes; therefore we discuss again raising the court statutes, in order to follow the constant constitution.",
+          "model": "GPT-5 Codex"
+        },
+        "守潮州司馬員外置同正員李德裕，早藉門地，叨踐清華，累居將相之榮，唯以奸傾為業。": {
+          "literal": "Li Deyu, acting Sima of Chaozhou, supernumerary with regular status, early relied on his family standing and undeservedly trod in pure eminence; he repeatedly occupied the honors of general and minister, but took treachery and overthrow as his occupation.",
+          "idiomatic": "Li Deyu, acting Sima of Chaozhou, supernumerary with regular status, early relied on his family standing and undeservedly trod in pure eminence; he repeatedly occupied the honors of general and minister, but took treachery and overthrow as his occupation.",
+          "model": "GPT-5 Codex"
+        },
+        "當會昌之際，極公台之榮，騁諛佞而得君，遂恣橫而持政，專權生事，妒賢害忠。": {
+          "literal": "During Huichang, he reached the highest honor of the chief offices, won the ruler by driving flattery and sycophancy, and thereafter acted arrogantly while holding government, monopolized power, created affairs, envied the worthy, and harmed the loyal.",
+          "idiomatic": "During Huichang, he reached the highest honor of the chief offices, won the ruler by driving flattery and sycophancy, and thereafter acted arrogantly while holding government, monopolized power, created affairs, envied the worthy, and harmed the loyal.",
+          "model": "GPT-5 Codex"
+        },
+        "動多詭異之謀，潛懷僭越之志。": {
+          "literal": "His actions were full of strange and deceitful plans, and he secretly harbored ambitions of usurpation.",
+          "idiomatic": "His actions were full of strange and deceitful plans, and he secretly harbored ambitions of usurpation.",
+          "model": "GPT-5 Codex"
+        },
+        "秉直者必棄，向善者盡排。": {
+          "literal": "Those who maintained uprightness he surely cast aside; those who inclined toward good he completely rejected.",
+          "idiomatic": "Those who maintained uprightness he surely cast aside; those who inclined toward good he completely rejected.",
+          "model": "GPT-5 Codex"
+        },
+        "誣貞良造朋黨之名，肆讒構生加諸之釁。": {
+          "literal": "He falsely accused upright good men under the name of faction and wantonly produced slander to create accusations against them.",
+          "idiomatic": "He falsely accused upright good men under the name of faction and wantonly produced slander to create accusations against them.",
+          "model": "GPT-5 Codex"
+        },
+        "計有逾于指鹿，罪實見其欺天。": {
+          "literal": "His calculations exceeded pointing at a deer, and his crime truly shows that he deceived Heaven.",
+          "idiomatic": "His calculations exceeded pointing at a deer, and his crime truly shows that he deceived Heaven.",
+          "model": "GPT-5 Codex"
+        },
+        "屬者方處鈞衡，曾無嫌避，委國史於愛婿之手，寵秘文於弱子之身，洎參信書，亦引親昵。": {
+          "literal": "Recently, when he occupied the balance of state, he had no avoidance of suspicion: he entrusted the national history to the hands of a beloved son-in-law, favored his weak son with secret writings, and when confidential documents were involved, also brought in intimates.",
+          "idiomatic": "Recently, when he occupied the balance of state, he had no avoidance of suspicion: he entrusted the national history to the hands of a beloved son-in-law, favored his weak son with secret writings, and when confidential documents were involved, also brought in intimates.",
+          "model": "GPT-5 Codex"
+        },
+        "恭惟《元和實錄》乃不刊之書，擅敢改張，罔有畏忌。": {
+          "literal": "Reverently considering that the Veritable Records of Yuanhe is an unalterable book, he arbitrarily dared to alter it, with no fear or restraint.",
+          "idiomatic": "Reverently considering that the Veritable Records of Yuanhe is an unalterable book, he arbitrarily dared to alter it, with no fear or restraint.",
+          "model": "GPT-5 Codex"
+        },
+        "奪他人之懿績，為私門之令猷。": {
+          "literal": "He seized other people's fine achievements and made them the good plans of his private family.",
+          "idiomatic": "He seized other people's fine achievements and made them the good plans of his private family.",
+          "model": "GPT-5 Codex"
+        },
+        "又附李紳之曲情，斷成吳湘之冤獄。": {
+          "literal": "He also attached himself to Li Shen's twisted feelings and decided Wu Xiang's wrongful case.",
+          "idiomatic": "He also attached himself to Li Shen's twisted feelings and decided Wu Xiang's wrongful case.",
+          "model": "GPT-5 Codex"
+        },
+        "凡彼簪纓之士，遏其取捨之途。": {
+          "literal": "For all those gentlemen of official rank, he blocked their paths of selection and rejection.",
+          "idiomatic": "For all those gentlemen of official rank, he blocked their paths of selection and rejection.",
+          "model": "GPT-5 Codex"
+        },
+        "驕居自誇，狡蠹無對，擢爾之發，數罪未窮。": {
+          "literal": "Arrogantly dwelling and boasting of himself, cunningly harmful without equal: if one plucked out your hair to count your crimes, the number would still not be exhausted.",
+          "idiomatic": "Arrogantly dwelling and boasting of himself, cunningly harmful without equal: if one plucked out your hair to count your crimes, the number would still not be exhausted.",
+          "model": "GPT-5 Codex"
+        },
+        "載窺立刻上之由，益驗無君之意。": {
+          "literal": "On further examining the reason recorded in what was set up and engraved, it further proves his intention to have no ruler.",
+          "idiomatic": "On further examining the reason recorded in what was set up and engraved, it further proves his intention to have no ruler.",
+          "model": "GPT-5 Codex"
+        },
+        "使天下之人，重足一跡，皆讋懼奉面，而慢易在心。": {
+          "literal": "He caused the people of the realm to advance with their feet close together, all fearfully obeying him to his face while harboring contempt in their hearts.",
+          "idiomatic": "He caused the people of the realm to advance with their feet close together, all fearfully obeying him to his face while harboring contempt in their hearts.",
+          "model": "GPT-5 Codex"
+        },
+        "為臣若斯，于法何逭。": {
+          "literal": "A minister like this: how can the law let him escape?",
+          "idiomatic": "A minister like this: how can the law let him escape?",
+          "model": "GPT-5 Codex"
+        },
+        "於戲！": {
+          "literal": "Alas!",
+          "idiomatic": "Alas!",
+          "model": "GPT-5 Codex"
+        },
+        "朕務全大體，久為含容，雖黜降其官榮，尚蓋藏其醜狀。": {
+          "literal": "I have been intent on preserving the great order and have long been tolerant; although I degraded his offices and honors, I still covered over his ugly conduct.",
+          "idiomatic": "I have been intent on preserving the great order and have long been tolerant; although I degraded his offices and honors, I still covered over his ugly conduct.",
+          "model": "GPT-5 Codex"
+        },
+        "而睥睨未已，兢惕無聞，積惡既彰，公議難抑。": {
+          "literal": "Yet his defiance has not ceased, no fearfulness has been heard of, his accumulated evils are now manifest, and public opinion is hard to suppress.",
+          "idiomatic": "Yet his defiance has not ceased, no fearfulness has been heard of, his accumulated evils are now manifest, and public opinion is hard to suppress.",
+          "model": "GPT-5 Codex"
+        },
+        "是宜移投荒服，以謝萬邦。": {
+          "literal": "It is fitting to move and cast him into remote savage regions, to make apology to the myriad states.",
+          "idiomatic": "It is fitting to move and cast him into remote savage regions, to make apology to the myriad states.",
+          "model": "GPT-5 Codex"
+        },
+        "中外臣僚，當知予意。": {
+          "literal": "Officials inside and outside the court should know my intention.",
+          "idiomatic": "Officials inside and outside the court should know my intention.",
+          "model": "GPT-5 Codex"
+        },
+        "可崖州司戶參軍，所在馳驛發遣，縱逢恩赦，不在量移之限。": {
+          "literal": "He may be made household registrar of Ya Prefecture; wherever he is, send him on by relay courier. Even should he encounter a general pardon, he shall not be eligible for discretionary transfer to a nearer post.",
+          "idiomatic": "He may be made household registrar of Ya Prefecture; wherever he is, send him on by relay courier. Even should he encounter a general pardon, he shall not be eligible for discretionary transfer to a nearer post.",
+          "model": "GPT-5 Codex"
+        }
+      },
+      "reviewedAt": "2026-06-23T06:08:24.102Z",
+      "reviewer": "source-correspondence",
+      "appliedAt": "2026-06-23T06:08:24.127Z",
+      "appliedSummary": {
+        "id": "source-jiutangshu-018-wikisource-ac4a0cf30050",
+        "type": "source_omission_candidate",
+        "start": 867,
+        "removed": 1,
+        "inserted": 23,
+        "delta": 22,
+        "manualTranslationsApplied": 23
+      }
     },
     {
       "id": "source-jiutangshu-018-wikisource-cc4ff390a5c6",
@@ -29018,7 +29535,7 @@
     },
     {
       "id": "source-jiutangshu-019-wikisource-d4a09a3b3037",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.692,
@@ -29074,8 +29591,32 @@
         "afterLocal": "大中十三年八月七日，宣遺詔立為皇太子監國，改今名。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Apply missing reign-year context for Yizong birth and Prince of Yun enfeoffment; manual translations supplied.",
+      "manualTranslations": {
+        "大和七年十一月十四日，生於籓邸。": {
+          "literal": "He was born in the princely residence on the fourteenth day of the eleventh month of Taihe 7.",
+          "idiomatic": "He was born in the princely residence on the fourteenth day of the eleventh month of Taihe 7.",
+          "model": "GPT-5 Codex"
+        },
+        "會昌六年十月，封鄆王，本名溫。": {
+          "literal": "In the tenth month of Huichang 6, he was enfeoffed as Prince of Yun; his original name was Wen.",
+          "idiomatic": "In the tenth month of Huichang 6, he was enfeoffed as Prince of Yun; his original name was Wen.",
+          "model": "GPT-5 Codex"
+        }
+      },
+      "reviewedAt": "2026-06-23T06:14:37.742Z",
+      "reviewer": "source-correspondence",
+      "appliedAt": "2026-06-23T06:14:37.765Z",
+      "appliedSummary": {
+        "id": "source-jiutangshu-019-wikisource-d4a09a3b3037",
+        "type": "source_replacement_candidate",
+        "start": 1,
+        "removed": 2,
+        "inserted": 2,
+        "delta": 0,
+        "manualTranslationsApplied": 2
+      }
     },
     {
       "id": "source-jiutangshu-019-wikisource-dd83119cca63",
@@ -29133,7 +29674,7 @@
     },
     {
       "id": "source-jiutangshu-019-wikisource-e44555d98ed9",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.023,
@@ -29180,8 +29721,92 @@
         "afterLocal": "遂罷賀禮。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Apply missing Yin Yingsun memorial on the ritual treatment of the pretender Li Yun; local corpus had only the opener and the inserted Chinese receives manual English translations.",
+      "manualTranslations": {
+        "博士殷盈孫奏曰：伏以偽煴違背宗社，僭竊乘輿，欺天之禍既盈，盜國之罪斯重，果至覆敗，以就誅夷。": {
+          "literal": "Erudite Yin Yingsun memorialized: I humbly submit that the false Yun violated the ancestral altars and usurped the imperial carriage. The calamity of deceiving Heaven was already full, and the crime of stealing the state was grave; he indeed met overthrow and went to execution.",
+          "idiomatic": "Erudite Yin Yingsun memorialized: I humbly submit that the false Yun violated the ancestral altars and usurped the imperial carriage. The calamity of deceiving Heaven was already full, and the crime of stealing the state was grave; he indeed met overthrow and went to execution.",
+          "model": "GPT-5 Codex"
+        },
+        "九重之妖既除，萬國之生靈共慶，宜陳賀禮，以顯皇猷。": {
+          "literal": "Now that the monster within the ninefold palace has been removed, all living beings in the myriad states rejoice; the rite of congratulations should be displayed to manifest the imperial plan.",
+          "idiomatic": "Now that the monster within the ninefold palace has been removed, all living beings in the myriad states rejoice; the rite of congratulations should be displayed to manifest the imperial plan.",
+          "model": "GPT-5 Codex"
+        },
+        "然物議之間，有所未允。": {
+          "literal": "Yet in public discussion there is something not yet accepted.",
+          "idiomatic": "Yet in public discussion there is something not yet accepted.",
+          "model": "GPT-5 Codex"
+        },
+        "臣按禮經，公族有罪，獄既具，有司聞於公曰：「某之罪在大辟。」": {
+          "literal": "I have examined the ritual classics: when a member of the ducal clan has committed a crime and the case is complete, the responsible officials report to the lord, \"So-and-so's crime lies in capital punishment.\"",
+          "idiomatic": "I have examined the ritual classics: when a member of the ducal clan has committed a crime and the case is complete, the responsible officials report to the lord, \"So-and-so's crime lies in capital punishment.\"",
+          "model": "GPT-5 Codex"
+        },
+        "君曰：「赦之。」": {
+          "literal": "The lord says, \"Pardon him.\"",
+          "idiomatic": "The lord says, \"Pardon him.\"",
+          "model": "GPT-5 Codex"
+        },
+        "如是者三，有司走出致刑，君復使謂之曰：「雖然，固當赦之。」": {
+          "literal": "After this happens three times, the officials run out and carry out the punishment; the lord again sends someone to tell them, \"Even so, he should still be pardoned.\"",
+          "idiomatic": "After this happens three times, the officials run out and carry out the punishment; the lord again sends someone to tell them, \"Even so, he should still be pardoned.\"",
+          "model": "GPT-5 Codex"
+        },
+        "有司曰：「不及矣！」": {
+          "literal": "The officials say, \"It is too late!\"",
+          "idiomatic": "The officials say, \"It is too late!\"",
+          "model": "GPT-5 Codex"
+        },
+        "君為之素服不樂三月。": {
+          "literal": "The lord wears plain clothing for him and does not enjoy music for three months.",
+          "idiomatic": "The lord wears plain clothing for him and does not enjoy music for three months.",
+          "model": "GPT-5 Codex"
+        },
+        "《左傳》：衛君在晉，衛臣元咺立衛君之弟叔武，衛君入國，叔武為前驅所殺，衛君哭之，左氏書焉。": {
+          "literal": "The Zuo Tradition says: When the lord of Wei was in Jin, the Wei minister Yuan Xuan established the lord of Wei's younger brother Shuwu. When the lord of Wei entered his state, Shuwu was killed by the vanguard; the lord of Wei wept for him, and Zuo recorded it.",
+          "idiomatic": "The Zuo Tradition says: When the lord of Wei was in Jin, the Wei minister Yuan Xuan established the lord of Wei's younger brother Shuwu. When the lord of Wei entered his state, Shuwu was killed by the vanguard; the lord of Wei wept for him, and Zuo recorded it.",
+          "model": "GPT-5 Codex"
+        },
+        "今偽煴，皇族也，雖犯殊死之罪，宜就屠戮，其可以朝群臣而受賀乎？": {
+          "literal": "Now the false Yun was an imperial clansman. Though he committed a crime deserving extraordinary death and should suffer slaughter, how can one face the court officials and receive congratulations?",
+          "idiomatic": "Now the false Yun was an imperial clansman. Though he committed a crime deserving extraordinary death and should suffer slaughter, how can one face the court officials and receive congratulations?",
+          "model": "GPT-5 Codex"
+        },
+        "臣以為煴胤系金枝，名標玉牒，迫脅之際，不能守節效死，而乃甘心逆謀，罪實滔天，刑不可赦。": {
+          "literal": "I believe that Yun's lineage was tied to the golden branches and his name marked in the jade registers. In the moment of coercion, he could not keep integrity and die for loyalty, but instead willingly embraced a rebel plot; his crime truly floods Heaven, and the punishment cannot be pardoned.",
+          "idiomatic": "I believe that Yun's lineage was tied to the golden branches and his name marked in the jade registers. In the moment of coercion, he could not keep integrity and die for loyalty, but instead willingly embraced a rebel plot; his crime truly floods Heaven, and the punishment cannot be pardoned.",
+          "model": "GPT-5 Codex"
+        },
+        "已為軍前處置，宜即黜為庶人，絕其屬籍，其首級仍委所在以庶禮收葬。": {
+          "literal": "Since he has already been dealt with before the army, he should now be reduced to commoner status and cut off from the clan register; his head should still be entrusted to the local authorities for burial with commoner rites.",
+          "idiomatic": "Since he has already been dealt with before the army, he should now be reduced to commoner status and cut off from the clan register; his head should still be entrusted to the local authorities for burial with commoner rites.",
+          "model": "GPT-5 Codex"
+        },
+        "大捷之慶，當以硃玫首級到日稱賀，為得其宜。": {
+          "literal": "For the celebration of the great victory, it would be appropriate to offer congratulations on the day Zhu Mei's head arrives.",
+          "idiomatic": "For the celebration of the great victory, it would be appropriate to offer congratulations on the day Zhu Mei's head arrives.",
+          "model": "GPT-5 Codex"
+        },
+        "上不軫於宸衷，下無傷於物體，協禮經之旨，祛中外之疑。": {
+          "literal": "Above, this does not distress the imperial heart; below, it does not harm propriety. It accords with the meaning of the ritual classics and removes doubts inside and outside the court.",
+          "idiomatic": "Above, this does not distress the imperial heart; below, it does not harm propriety. It accords with the meaning of the ritual classics and removes doubts inside and outside the court.",
+          "model": "GPT-5 Codex"
+        }
+      },
+      "reviewedAt": "2026-06-23T06:14:37.742Z",
+      "reviewer": "source-correspondence",
+      "appliedAt": "2026-06-23T06:14:37.765Z",
+      "appliedSummary": {
+        "id": "source-jiutangshu-019-wikisource-e44555d98ed9",
+        "type": "source_omission_candidate",
+        "start": 1373,
+        "removed": 1,
+        "inserted": 14,
+        "delta": 13,
+        "manualTranslationsApplied": 14
+      }
     },
     {
       "id": "source-jiutangshu-019-wikisource-e9582c180961",
@@ -29294,7 +29919,7 @@
     },
     {
       "id": "source-jiutangshu-019-wikisource-fc201c12899a",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.667,
@@ -29341,8 +29966,27 @@
         "afterLocal": "初封普王，名儼。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Apply missing Xiantong year context for Xizong birth; manual translation supplied.",
+      "manualTranslations": {
+        "咸通三年五月八日生於東內。": {
+          "literal": "He was born in the Eastern Inner Palace on the eighth day of the fifth month of Xiantong 3.",
+          "idiomatic": "He was born in the Eastern Inner Palace on the eighth day of the fifth month of Xiantong 3.",
+          "model": "GPT-5 Codex"
+        }
+      },
+      "reviewedAt": "2026-06-23T06:14:37.742Z",
+      "reviewer": "source-correspondence",
+      "appliedAt": "2026-06-23T06:14:37.765Z",
+      "appliedSummary": {
+        "id": "source-jiutangshu-019-wikisource-fc201c12899a",
+        "type": "source_replacement_candidate",
+        "start": 694,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-jiutangshu-020-wikisource-1b78d874976e",
@@ -29400,7 +30044,7 @@
     },
     {
       "id": "source-jiutangshu-020-wikisource-3c3bd163ca2c",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.895,
@@ -29447,8 +30091,29 @@
         "afterLocal": "中興之初，方備禮改卜，遇國喪而止。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Accepted: local text omitted reign-year context present in upstream and required for the English chronology.",
+      "reviewedAt": "2026-06-23T06:25:22.278Z",
+      "reviewer": "source-correspondence-manual-repair",
+      "manualTranslations": [
+        {
+          "zh": "天祐五年二月二十一日，帝為全忠所害，時年十七，仍諡曰哀皇帝，以王禮葬于濟陰縣之定陶鄉。",
+          "literal": "On the twenty-first day of the second month in the fifth year of Tianyou, the emperor was killed by Quanzhong; he was seventeen, was still given the posthumous title Emperor Ai, and was buried with princely rites at Dingtao Township in Jiyin County.",
+          "idiomatic": "On the twenty-first day of the second month in Tianyou 5, Quanzhong killed the seventeen-year-old emperor. He was given the posthumous title Emperor Ai and buried at Dingtao in Jiyin County with princely rites.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-23T06:25:38.428Z",
+      "appliedSummary": {
+        "id": "source-jiutangshu-020-wikisource-3c3bd163ca2c",
+        "type": "text_discrepancy_candidate",
+        "start": 1452,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-jiutangshu-020-wikisource-4f0d0c023ab6",
@@ -29669,7 +30334,7 @@
     },
     {
       "id": "source-jiutangshu-020-wikisource-af4339c2a5dc",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.721,
@@ -29734,8 +30399,43 @@
         "afterLocal": "天祐元年八月十二日，昭宗遇弑。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Accepted: local text omitted reign-year context present in upstream and required for the English chronology.",
+      "reviewedAt": "2026-06-23T06:25:22.278Z",
+      "reviewer": "source-correspondence-manual-repair",
+      "manualTranslations": [
+        {
+          "zh": "景福元年九月三日，生於大內。",
+          "literal": "On the third day of the ninth month in the first year of Jingfu, he was born in the inner palace.",
+          "idiomatic": "He was born in the inner palace on the third day of the ninth month in Jingfu 1.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "乾寧四年二月，封輝王，名祚。",
+          "literal": "In the second month of the fourth year of Qianning, he was enfeoffed as Prince of Hui and named Zuo.",
+          "idiomatic": "In Qianning 4, second month, he was enfeoffed Prince of Hui under the name Zuo.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "天復三年二月，拜開府儀同三司，充諸道兵馬元帥。",
+          "literal": "In the second month of the third year of Tianfu, he was appointed Kaifu Yitong Sansi and made commander-in-chief of the armies of all circuits.",
+          "idiomatic": "In Tianfu 3, second month, he was made Kaifu Yitong Sansi and commander-in-chief of the armies of all circuits.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-23T06:25:38.428Z",
+      "appliedSummary": {
+        "id": "source-jiutangshu-020-wikisource-af4339c2a5dc",
+        "type": "source_replacement_candidate",
+        "start": 886,
+        "removed": 3,
+        "inserted": 3,
+        "delta": 0,
+        "manualTranslationsApplied": 3
+      }
     },
     {
       "id": "source-jiutangshu-020-wikisource-bf932a3d2d43",
@@ -29902,7 +30602,7 @@
     },
     {
       "id": "source-jiutangshu-021-wikisource-ce56787e6982",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.789,
@@ -29945,12 +30645,33 @@
         "afterLocal": "十四年，通事舍人王嵒上疏，請改撰《禮記》，削去舊文，而以今事編之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Accepted: local text omitted reign-year context present in upstream and required for the English chronology.",
+      "reviewedAt": "2026-06-23T06:25:22.278Z",
+      "reviewer": "source-correspondence-manual-repair",
+      "manualTranslations": [
+        {
+          "zh": "開元十年，詔國子司業韋絛為禮儀使，專掌五禮。",
+          "literal": "In the tenth year of Kaiyuan, an edict made Guozi Vice Director Wei Tao Ritual Commissioner, exclusively in charge of the five rituals.",
+          "idiomatic": "In Kaiyuan 10, Wei Tao, Vice Director of the Imperial University, was made Ritual Commissioner for the five rituals.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-23T06:25:38.428Z",
+      "appliedSummary": {
+        "id": "source-jiutangshu-021-wikisource-ce56787e6982",
+        "type": "text_discrepancy_candidate",
+        "start": 80,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-jiutangshu-023-wikisource-0804fd8bb5de",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jiutangshu",
@@ -29974,12 +30695,47 @@
         "afterLocal": "二月，汴人大敗兗、鄆之軍于東阿，瑄、瑾勢蹙，求援于太原，李克用出師援之。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Accepted: upstream restores missing source text or corrects 御/禦 in imperial context.",
+      "reviewedAt": "2026-06-23T06:32:46.977Z",
+      "reviewer": "source-correspondence-manual-repair",
+      "manualTranslations": [
+        {
+          "zh": "乾甯元年春正月乙丑朔，上御武德殿受朝，宣制大赦，改元乾寧。",
+          "literal": "In spring, in the first month of the first year of Qianning, on the yichou new moon, the emperor held court in Wude Hall, proclaimed an edict of general amnesty, and changed the reign title to Qianning.",
+          "idiomatic": "In Qianning 1, first month, yichou new moon, the emperor held court in Wude Hall, proclaimed a general amnesty, and changed the reign title to Qianning.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "鳳翔李茂貞來朝，大陳兵衛，獻妓女三十人，宴之內殿，數日還籓。",
+          "literal": "Li Maozhen of Fengxiang came to court, arrayed a large military escort, presented thirty female entertainers, was banqueted in the inner palace, and after several days returned to his domain.",
+          "idiomatic": "Li Maozhen of Fengxiang came to court with an imposing guard, presented thirty entertainers, was feasted in the inner palace, and returned to his domain after several days.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "時茂貞有山南梁、洋、興、鳳、岐、隴、秦、涇、原等十五餘郡，甲兵雄盛，淩弱王室，頗有問鼎之志。",
+          "literal": "At that time Maozhen possessed more than fifteen commanderies, including Liang, Yang, and Xing in Shannan and Feng, Qi, Long, Qin, Jing, and Yuan; his troops and arms were powerful, he overawed the weakened royal house, and he had considerable ambition to ask about the cauldrons.",
+          "idiomatic": "Maozhen then controlled more than fifteen commanderies, including Liang, Yang, Xing, Feng, Qi, Long, Qin, Jing, and Yuan. His armies were strong, he bullied the weakened court, and he plainly coveted the throne.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-23T06:33:20.234Z",
+      "appliedSummary": {
+        "id": "source-jiutangshu-023-wikisource-0804fd8bb5de",
+        "type": "source_omission_candidate",
+        "start": 291,
+        "removed": 0,
+        "inserted": 3,
+        "delta": 3,
+        "manualTranslationsApplied": 3
+      }
     },
     {
       "id": "source-jiutangshu-023-wikisource-20f7b0e15929",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -30022,12 +30778,33 @@
         "afterLocal": "辛亥，上宿齋于武德殿，宰相百僚朝服於位。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Accepted: upstream restores missing source text or corrects 御/禦 in imperial context.",
+      "reviewedAt": "2026-06-23T06:32:46.977Z",
+      "reviewer": "source-correspondence-manual-repair",
+      "manualTranslations": [
+        {
+          "zh": "改御名曰曄。",
+          "literal": "The imperial taboo name was changed to Ye.",
+          "idiomatic": "His taboo personal name was fixed as Ye.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-23T06:33:20.234Z",
+      "appliedSummary": {
+        "id": "source-jiutangshu-023-wikisource-20f7b0e15929",
+        "type": "text_discrepancy_candidate",
+        "start": 62,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-jiutangshu-023-wikisource-49f35b9c5c9b",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jiutangshu",
@@ -30051,12 +30828,82 @@
         "afterLocal": "三月，克用、處存斂軍而退。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Accepted: upstream restores missing source text or corrects 御/禦 in imperial context.",
+      "reviewedAt": "2026-06-23T06:32:46.977Z",
+      "reviewer": "source-correspondence-manual-repair",
+      "manualTranslations": [
+        {
+          "zh": "景福元年春正月丙午朔，上御武德殿受朝賀，大赦，改元景福。",
+          "literal": "In spring, in the first month of the first year of Jingfu, on the bingwu new moon, the emperor held court in Wude Hall to receive congratulations, issued a general amnesty, and changed the reign title to Jingfu.",
+          "idiomatic": "In Jingfu 1, first month, bingwu new moon, the emperor received court congratulations in Wude Hall, issued a general amnesty, and changed the reign title to Jingfu.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "鳳翔李茂貞、邠州王行瑜、華州韓建、同州王行約、秦州李茂莊等上表疏興元楊守亮納叛臣楊復恭，請同出本軍討伐，兼自備供軍糧料，不取給于度支，只請加茂貞山南招討使名。",
+          "literal": "Li Maozhen of Fengxiang, Wang Xingyu of Bin Prefecture, Han Jian of Hua Prefecture, Wang Xingyue of Tong Prefecture, Li Maozhuang of Qin Prefecture, and others submitted a memorial accusing Yang Shouliang of Xingyuan of receiving the rebel minister Yang Fugong; they requested to send out their own armies together to punish him, supplying their own military provisions without drawing on the Revenue Commission, and asked only that Maozhen be given the title of Shannan Campaign Commissioner.",
+          "idiomatic": "Li Maozhen, Wang Xingyu, Han Jian, Wang Xingyue, Li Maozhuang, and others accused Yang Shouliang of sheltering Yang Fugong. They asked to campaign with their own troops and supplies, requesting only that Maozhen be named Shannan Campaign Commissioner.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "內臣皆不可其奏，昭宗亦以茂貞得山南之後有問鼎之志，詔久之不下。",
+          "literal": "The palace officials all disapproved their memorial, and Zhaozong also believed that after Maozhen obtained Shannan he had ambitions to ask about the cauldrons, so the edict was not issued for a long time.",
+          "idiomatic": "The palace officials opposed the request, and Zhaozong suspected Maozhen would covet the throne once he gained Shannan, so no edict came for a long time.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "茂貞怒，與王行瑜不俟進止，發兵攻興元。",
+          "literal": "Maozhen was angry and, with Wang Xingyu, did not wait for instructions but sent troops to attack Xingyuan.",
+          "idiomatic": "Maozhen and Wang Xingyu, angered, attacked Xingyuan without waiting for orders.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "累請招討之命，兼與宰相杜讓能、中尉西門君遂書，詞語詬詈，淩蔑王室，昭宗心不能容。",
+          "literal": "He repeatedly requested the campaign command and also wrote to Chancellor Du Rangneng and Central Commandant Ximen Junsui; the wording was abusive and insulted the royal house, and Zhaozong could not tolerate it in his heart.",
+          "idiomatic": "He kept demanding campaign authority and wrote abusive letters to Du Rangneng and Ximen Junsui, insulting the royal house; Zhaozong could not bear it.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "二月丙子朔。",
+          "literal": "In the second month, on the bingzi new moon.",
+          "idiomatic": "Second month, bingzi new moon.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "庚寅，太原、易定之兵合勢攻鎮州，王鎔復告難於幽州，李匡威率步騎三萬赴之。",
+          "literal": "On gengyin, the armies of Taiyuan and Yiding joined forces to attack Zhen Prefecture; Wang Rong again reported his distress to You Prefecture, and Li Kuangwei led thirty thousand infantry and cavalry to go to him.",
+          "idiomatic": "On gengyin, Taiyuan and Yiding forces joined to attack Zhenzhou. Wang Rong again appealed to Youzhou, and Li Kuangwei came with thirty thousand foot and horse.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "時太原之眾軍於常山鎮，易定之眾軍堅固鎮，燕、趙之卒分拒之。",
+          "literal": "At the time the Taiyuan forces were encamped at Changshan Garrison, the Yiding forces were encamped at Jiangu Garrison, and the soldiers of Yan and Zhao resisted them separately.",
+          "idiomatic": "The Taiyuan troops camped at Changshan, the Yiding troops at Jiangu, while Yan and Zhao forces held them off in separate positions.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-23T06:33:20.234Z",
+      "appliedSummary": {
+        "id": "source-jiutangshu-023-wikisource-49f35b9c5c9b",
+        "type": "source_omission_candidate",
+        "start": 239,
+        "removed": 0,
+        "inserted": 8,
+        "delta": 8,
+        "manualTranslationsApplied": 8
+      }
     },
     {
       "id": "source-jiutangshu-023-wikisource-d1d35c10e882",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jiutangshu",
@@ -30080,12 +30927,82 @@
         "afterLocal": "二月丙寅朔。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Accepted: upstream restores missing source text or corrects 御/禦 in imperial context.",
+      "reviewedAt": "2026-06-23T06:32:46.977Z",
+      "reviewer": "source-correspondence-manual-repair",
+      "manualTranslations": [
+        {
+          "zh": "天祐元年春正月丁酉朔，以翰林學士、左拾遺柳璨為右諫議大夫、同平章事，賜紫金魚袋。",
+          "literal": "In spring, in the first month of the first year of Tianyou, on the dingyou new moon, Hanlin Academician and Left Remonstrance Official Liu Can was made Right Remonstrance Grand Master and Associate Manager of Affairs, and was granted a purple robe and gold fish-pouch.",
+          "idiomatic": "In Tianyou 1, first month, dingyou new moon, Liu Can was promoted from Hanlin Academician and Left Remonstrance Official to Right Remonstrance Grand Master and associate chancellor, with a purple robe and gold fish-pouch.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "己亥，制以兵部尚書崔遠為中書侍郎、同平章事、集賢殿大學士。",
+          "literal": "On jihai, an edict made Minister of War Cui Yuan Vice Director of the Secretariat, Associate Manager of Affairs, and Grand Academician of the Jixian Hall.",
+          "idiomatic": "On jihai, Cui Yuan, Minister of War, was made vice director of the Secretariat, associate chancellor, and Grand Academician of Jixian Hall.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "己酉，全忠率師屯河中，遣牙將寇彥卿奉表請車駕遷都洛陽。",
+          "literal": "On jiyou, Quanzhong led his army to garrison at Hezhong and sent his headquarters general Kou Yanqing to submit a memorial requesting that the imperial carriage move the capital to Luoyang.",
+          "idiomatic": "On jiyou, Quanzhong stationed his army at Hezhong and sent Kou Yanqing to request that the court move the capital to Luoyang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "全忠令長安居人按籍遷居，徹屋木，自渭浮河而下，連甍號哭，月餘不息。",
+          "literal": "Quanzhong ordered the residents of Chang’an to move according to the registers, dismantled the timbers of their houses, and floated them down the Wei into the Yellow River; the wailing among the rows of roofs did not cease for more than a month.",
+          "idiomatic": "Quanzhong forced Chang’an residents to relocate by household register, tore timber from their houses, and floated it down the Wei to the Yellow River. For more than a month, the city’s rows of homes rang with weeping.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "秦人大罵于路曰：「國賊崔胤，召朱溫傾覆社稷，俾我及此，天乎！",
+          "literal": "The people of Qin cursed loudly on the roads, saying: “The state-traitor Cui Yin summoned Zhu Wen to overturn the altars of soil and grain and brought us to this. Heaven!",
+          "idiomatic": "People of Qin cursed in the roads: “State-traitor Cui Yin summoned Zhu Wen to destroy the dynasty and brought us to this. Heaven!",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "天乎！」",
+          "literal": "Heaven!”",
+          "idiomatic": "Heaven!”",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "丁巳，車駕發京師。",
+          "literal": "On dingsi, the imperial carriage departed the capital.",
+          "idiomatic": "On dingsi, the court left the capital.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "癸亥，次陝州，全忠迎謁于路。",
+          "literal": "On guihai, it halted at Shan Prefecture, and Quanzhong went out on the road to welcome and pay respects.",
+          "idiomatic": "On guihai, the court stopped at Shanzhou, where Quanzhong met it on the road.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-23T06:33:20.234Z",
+      "appliedSummary": {
+        "id": "source-jiutangshu-023-wikisource-d1d35c10e882",
+        "type": "source_omission_candidate",
+        "start": 809,
+        "removed": 0,
+        "inserted": 8,
+        "delta": 8,
+        "manualTranslationsApplied": 8
+      }
     },
     {
       "id": "source-jiutangshu-023-wikisource-dd6e792e8b0e",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0.087,
@@ -30524,8 +31441,10 @@
         "afterLocal": "內園冰井公事委河南尹，仍不差內夫人傳宣。"
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Rejected: false positive from scanner dropping Wikisource {{quote|...}} content with nested {{YL|...}} templates; upstream contains the long amnesty edict, so local text is retained.",
+      "reviewedAt": "2026-06-23T06:32:46.977Z",
+      "reviewer": "source-correspondence-manual-repair"
     },
     {
       "id": "source-jiutangshu-025-wikisource-000bbf23a736",
@@ -210092,7 +211011,418 @@
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
       "decision": null,
       "notes": ""
+    },
+    {
+      "id": "source-jiutangshu-023-wikisource-6a409dd02116",
+      "status": "applied",
+      "type": "text_discrepancy_candidate",
+      "severity": 2,
+      "similarity": 0.875,
+      "book": "jiutangshu",
+      "chapter": "023",
+      "file": "data/jiutangshu/023.json",
+      "sourceName": "wikisource",
+      "sourceUrl": "https://zh.wikisource.org/wiki/%E8%88%8A%E5%94%90%E6%9B%B8/%E5%8D%B720%E4%B8%8A?action=raw",
+      "sourceRange": {
+        "startIndex": 862,
+        "endIndex": 862,
+        "count": 1,
+        "text": "登御端門，軫惻興感。",
+        "ids": [],
+        "locations": []
+      },
+      "localRange": {
+        "startIndex": 846,
+        "endIndex": 846,
+        "count": 1,
+        "text": "登禦端門，軫惻興感。",
+        "ids": [
+          "s0847"
+        ],
+        "locations": [
+          {
+            "blockIndex": 107,
+            "blockType": "paragraph",
+            "kind": "sentence",
+            "sentenceIndex": 32,
+            "field": "zh",
+            "id": "s0847"
+          }
+        ]
+      },
+      "context": {
+        "beforeSource": "謝罪太廟，憂惕驚懷；",
+        "afterSource": "蓋以一人寡祐，至萬姓靡甯，工役艱疲，忠良盡瘁，克建再遷之業，冀延八百之基。",
+        "beforeLocal": "謝罪太廟，憂惕驚懷；",
+        "afterLocal": "蓋以一人寡祐，至萬姓靡甯，工役艱疲，忠良盡瘁，克建再遷之業，冀延八百之基。"
+      },
+      "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
+      "decision": "applied",
+      "notes": "Accepted: upstream restores missing source text or corrects 御/禦 in imperial context.",
+      "reviewedAt": "2026-06-23T06:32:46.977Z",
+      "reviewer": "source-correspondence-manual-repair",
+      "manualTranslations": [
+        {
+          "zh": "登御端門，軫惻興感。",
+          "literal": "Ascending Duan Gate, he was moved with sorrow and feeling.",
+          "idiomatic": "At Duan Gate, sorrow and feeling welled up.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "appliedAt": "2026-06-23T06:33:20.234Z",
+      "appliedSummary": {
+        "id": "source-jiutangshu-023-wikisource-6a409dd02116",
+        "type": "text_discrepancy_candidate",
+        "start": 846,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
+    },
+    {
+      "id": "source-jiutangshu-020-wikisource-3df650bece2b",
+      "status": "applied",
+      "type": "source_omission_candidate",
+      "severity": 3,
+      "similarity": 0.017,
+      "book": "jiutangshu",
+      "chapter": "020",
+      "file": "data/jiutangshu/020.json",
+      "sourceName": "wikisource",
+      "sourceUrl": "https://zh.wikisource.org/wiki/%E8%88%8A%E5%94%90%E6%9B%B8/%E5%8D%B720%E4%B8%8A?action=raw + https://zh.wikisource.org/wiki/%E8%88%8A%E5%94%90%E6%9B%B8/%E5%8D%B720%E4%B8%8B?action=raw",
+      "sourceUrls": [
+        "https://zh.wikisource.org/wiki/%E8%88%8A%E5%94%90%E6%9B%B8/%E5%8D%B720%E4%B8%8A?action=raw",
+        "https://zh.wikisource.org/wiki/%E8%88%8A%E5%94%90%E6%9B%B8/%E5%8D%B720%E4%B8%8B?action=raw"
+      ],
+      "sourceRange": {
+        "startIndex": 830,
+        "endIndex": 871,
+        "count": 42,
+        "text": "「乃睠中州，便侯伯會朝之路；運逢百六，順古今禳避之宜。況建鼎舊京，我家二宅，轘轅通其左，郟、鄏引其前。周平王之東遷，更延姬姓；漢光武之定業，克茂劉宗。肇葺新都，祈天永命，皆因否運，復啟昌期。或西避于戎狄，或載殲於妖孽。朕遭家不造，布德不明，十載已來，三罹播越。亦屬災纏秦、雍，叛起邠、岐。始幸石門，以避衛兵之亂；載行華嶽，仍驚畿邑之侵。憂危則矢及車輿，淩脅則火延宮廟。迨至逆連宮豎，構結奸凶，致劉季述幽朕于下宮，韓全誨劫予於右輔。莫匪兵圍內殿，焰亙九重，皆思假武以容身，唯效指鹿而威眾。矯宣天憲，欺蔑外籓，行書詔以任情，欲忠良而獲罪。雖群方嶽牧，協力匡扶，拘戎律于阻修，報朝恩而隔越。副元帥、梁王全忠以兼鎮近輔，總兵四籓，遠赴岐陽，躬迎大駕。辛勤百戰，盡剿凶渠，營野三年，竟回鑾輅。鹹、鎬載新其宮闕，讓、珪絕類於閹徒，方崇再造之功，以正中興之運。又邠岐結釁，巴蜀連兵，上負國恩，下隳鄰好。焚宮烈火，更延熱於親鄰；卻駕凶鋒，復延侵于禁苑。抑又太一遊處，並集六宮，罰星熒惑，久纏東井，玄象薦災于秦分，地形無過於洛陽。爰有一二藎臣，洎四方同志，竭心王室，共誓嘉謀。魏鎮定燕，航大河而畢至；陳徐潞蔡，輦巨軸以偕來。披荊棘而立朝廷，劃灰燼而化輪奐。左郊祧而右社稷，肅爾崇嚴；前廣殿而後重廊，藹然華邃。公卿僉議，龜筮協從。甲子令年，孟夏初吉，備法駕而離陝分，列百官而入洛郊，觀此殷繁，良多嘉慰。謝罪太廟，憂惕驚懷；登御端門，軫惻興感。蓋以一人寡祐，至萬姓靡甯，工役艱疲，忠良盡瘁，克建再遷之業，冀延八百之基。宜覃渙汗之恩，俟此雍熙之慶，滌瑕蕩垢，鹹與惟新。可大赦天下，改天復四年為天祐元年，於戲！肆眚閶闔，即安宮闈。雖九廟几筵，已閟於新室；而諸陵松柏，遙隔於舊都。將務乂甯，難申綣慕。文武百辟，執事具僚，從我千里而來，端爾一心蒞政。恩覃既往，效責從新，方當開國之初，必舉慢官之罰。」",
+        "ids": [],
+        "locations": []
+      },
+      "localRange": null,
+      "context": {
+        "beforeSource": "乙巳，上御光政門，大赦，制曰：",
+        "afterSource": "戊申，敕今後除留宣徽兩院、小馬坊、豐德廟、御廚、客省、閣門、飛龍、莊宅九使外，其餘並停。",
+        "beforeLocal": "乙巳，上御光政門，大赦，制曰：",
+        "afterLocal": "戊申，敕今後除留宣徽兩院、小馬坊、豐德廟、御廚、客省、閣門、飛龍、莊宅九使外，其餘並停。"
+      },
+      "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
+      "decision": "applied",
+      "notes": "Accepted after scanner quote-template fix: Wikisource quote template contains the same amnesty edict already present in jiutangshu/023; insert the missing edict body into combined chapter 020 using those reviewed translations.",
+      "reviewedAt": "2026-06-23T06:36:39.258Z",
+      "reviewer": "source-correspondence-manual-repair",
+      "manualTranslations": [
+        {
+          "zh": "「乃睠中州，便侯伯會朝之路；",
+          "literal": "\"Turning regard to the central domain, we open the road for marquises and earls to attend court;",
+          "idiomatic": "\"We turn to the central lands and open the road for the feudal lords to attend court;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "運逢百六，順古今禳避之宜。",
+          "literal": "our fate meets the hundred-six calamity cycle, fitting ancient and modern practice of averting and avoiding harm.",
+          "idiomatic": "fate meets the hundred-six cycle of disaster, in keeping with ancient and modern rites of avoidance.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "況建鼎舊京，我家二宅，轘轅通其左，郟、鄏引其前。",
+          "literal": "Moreover, setting the tripod at the old capital—our house's twin seats—with Mount Xuan to its left and Jia and Ru before it.",
+          "idiomatic": "Moreover, at the old capital where the tripod was set—our house's twin seats—Mount Xuan lies to the left and Jia and Ru lie before it.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "周平王之東遷，更延姬姓；",
+          "literal": "When King Ping of Zhou moved east, the Ji surname was prolonged anew;",
+          "idiomatic": "When King Ping of Zhou moved east, the house of Ji was prolonged anew;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "漢光武之定業，克茂劉宗。",
+          "literal": "when Emperor Guangwu of Han fixed his enterprise, the Liu clan flourished the more.",
+          "idiomatic": "when Emperor Guangwu of Han secured his rule, the house of Liu flourished all the more.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "肇葺新都，祈天永命，皆因否運，復啟昌期。",
+          "literal": "Founding and repairing a new capital, praying Heaven for an enduring mandate—all through adverse fortune to reopen a bright age.",
+          "idiomatic": "Founding and repairing a new capital and praying Heaven for lasting mandate—all through ill fortune to reopen a bright age.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "或西避于戎狄，或載殲於妖孽。",
+          "literal": "Some fled west among the Rong and Di; some perished utterly at the hands of demonic rebels.",
+          "idiomatic": "Some fled west among the Rong and Di; some were utterly destroyed by demonic rebels.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "朕遭家不造，布德不明，十載已來，三罹播越。",
+          "literal": "We have met misfortune in the house; our virtue spread unclear—in more than ten years We have thrice suffered forced removal.",
+          "idiomatic": "We have met misfortune in the house and spread virtue unclearly; in more than ten years We have thrice been driven from the throne.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "亦屬災纏秦、雍，叛起邠、岐。",
+          "literal": "It also happened that disaster clung to Qin and Yong and rebellion rose in Bin and Qi.",
+          "idiomatic": "Disaster also clung to Qin and Yong, and rebellion rose in Bin and Qi.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "始幸石門，以避衛兵之亂；",
+          "literal": "At first We went in person to Shimen to escape the guards' disorder;",
+          "idiomatic": "At first We went in person to Shimen to escape disorder among the guards;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "載行華嶽，仍驚畿邑之侵。",
+          "literal": "again We traveled to Mount Hua, still alarmed by raids on the capital region.",
+          "idiomatic": "again We went to Mount Hua, still shaken by raids on the capital region.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "憂危則矢及車輿，淩脅則火延宮廟。",
+          "literal": "in peril arrows reached the imperial carriage; under coercion fire spread through palace temples.",
+          "idiomatic": "in peril arrows reached the imperial carriage; under coercion fire spread through the palace temples.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "迨至逆連宮豎，構結奸凶，致劉季述幽朕于下宮，韓全誨劫予於右輔。",
+          "literal": "until at last villains linked with palace eunuchs and knit with traitors, causing Liu Jishu to imprison Us in the lower palace and Han Quanhui to seize Us in the right capital.",
+          "idiomatic": "until villains linked with palace eunuchs and traitors, Liu Jishu imprisoning Us in the lower palace and Han Quanhui seizing Us in the western capital.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "莫匪兵圍內殿，焰亙九重，皆思假武以容身，唯效指鹿而威眾。",
+          "literal": "None but troops besieging the inner halls, flame spanning the ninefold palace—all scheming to borrow arms for their persons, only imitating pointing at a deer to awe the multitude.",
+          "idiomatic": "Troops besieged the inner halls and flame filled the ninefold palace—all borrowing arms to save themselves, only imitating the deer-and-horse ruse to awe the crowd.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "矯宣天憲，欺蔑外籓，行書詔以任情，欲忠良而獲罪。",
+          "literal": "They forged proclamation of Heaven's statutes, despised outer fiefs, issued edicts at will, and made the loyal suffer punishment.",
+          "idiomatic": "They forged Heaven's statutes, despised outer fiefs, issued edicts at will, and punished the loyal.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "雖群方嶽牧，協力匡扶，拘戎律于阻修，報朝恩而隔越。",
+          "literal": "Though governors of the four quarters jointly aided restoration, military law was blocked by impassable roads and gratitude to the court was cut off across distance.",
+          "idiomatic": "Though governors of the four quarters aided restoration together, military law was blocked on broken roads and gratitude to the court could not reach across the distance.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "副元帥、梁王全忠以兼鎮近輔，總兵四籓，遠赴岐陽，躬迎大駕。",
+          "literal": "Deputy Marshal, Prince of Liang Quanzhong, holding concurrent command of the nearby capital region, mustering troops of four circuits, went far to Qiyang and personally welcomed the imperial carriage.",
+          "idiomatic": "Deputy Marshal Prince of Liang Quanzhong, commanding the nearby capital and four circuits' armies, went far to Qiyang and personally welcomed the imperial carriage.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "辛勤百戰，盡剿凶渠，營野三年，竟回鑾輅。",
+          "literal": "Through a hundred bitter battles he exterminated all villain chiefs; three years camped in the wild, at last he brought back the imperial carriage.",
+          "idiomatic": "Through a hundred bitter battles he wiped out the villain chiefs; three years in field camps, and at last he brought back the imperial carriage.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "鹹、鎬載新其宮闕，讓、珪絕類於閹徒，方崇再造之功，以正中興之運。",
+          "literal": "Xian and Hao were renewed in palaces and halls; Rang and Gui were cut off like eunuch minions—just then exalting the merit of second creation to align with the fortune of restoration.",
+          "idiomatic": "Xian and Hao saw palaces and halls renewed; Rang and Gui were cut down like eunuch minions—exalting the merit of second creation to match the fortune of restoration.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "又邠岐結釁，巴蜀連兵，上負國恩，下隳鄰好。",
+          "literal": "Again Bin and Qi joined in enmity; Ba-Shu linked in war—above they failed the state's grace, below they ruined good relations with neighbors.",
+          "idiomatic": "Again Bin and Qi made war; Ba and Shu joined arms—above they failed the state's grace, below they ruined neighborly peace.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "焚宮烈火，更延熱於親鄰；",
+          "literal": "Burning palaces' fierce fire spread heat further to kin and neighbors;",
+          "idiomatic": "Fires that burned the palaces spread heat to kin and neighbors;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "卻駕凶鋒，復延侵于禁苑。",
+          "literal": "the emperor turned back the villains' blades, yet invasion again reached the forbidden park.",
+          "idiomatic": "the court turned back the villains' blades, yet invasion again reached the forbidden park.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "抑又太一遊處，並集六宮，罰星熒惑，久纏東井，玄象薦災于秦分，地形無過於洛陽。",
+          "literal": "Moreover Taiyi's wandering seat and the Six Palaces gathered together; the punishing star Mars long clung to the Eastern Well; celestial signs offered disaster to the Qin quarter—no terrain surpasses Luoyang.",
+          "idiomatic": "Moreover Taiyi's seat and the Six Palaces gathered; Mars the punishing star long clung to the Eastern Well; heaven showed disaster for the Qin quarter—no terrain surpasses Luoyang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "爰有一二藎臣，洎四方同志，竭心王室，共誓嘉謀。",
+          "literal": "Then one or two loyal ministers, reaching to like-minded men in the four quarters, exhausted heart for the royal house and together swore a fine plan.",
+          "idiomatic": "Then one or two loyal ministers and men of like mind in the four quarters exhausted themselves for the royal house and swore a fine plan together.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "魏鎮定燕，航大河而畢至；",
+          "literal": "Wei garrisoned Dingyan, crossed the great river, and all arrived;",
+          "idiomatic": "Wei garrisoned Dingyan and crossed the great river until all had arrived;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "陳徐潞蔡，輦巨軸以偕來。",
+          "literal": "Chen, Xu, Lu, and Cai brought massive axles together.",
+          "idiomatic": "Chen, Xu, Lu, and Cai brought massive wagon trains together.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "披荊棘而立朝廷，劃灰燼而化輪奐。",
+          "literal": "They cut through brambles to set up the court anew and drew from ashes to transform splendor.",
+          "idiomatic": "They cut through brambles to raise the court anew and drew splendor from the ashes.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "左郊祧而右社稷，肅爾崇嚴；",
+          "literal": "Ancestral temple to the left of the suburbs, Altar of Soil and Grain to the right—solemn and lofty in dignity;",
+          "idiomatic": "The suburban ancestral temple to the left and the Altar of Soil and Grain to the right—solemn in dignity;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "前廣殿而後重廊，藹然華邃。",
+          "literal": "broad halls before and doubled corridors behind—richly elegant and deep.",
+          "idiomatic": "grand halls in front and doubled corridors behind—rich, elegant, and deep.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "公卿僉議，龜筮協從。",
+          "literal": "Dukes and ministers jointly deliberated; tortoise and milfoil agreed.",
+          "idiomatic": "Dukes and ministers deliberated together; tortoise and milfoil agreed.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "甲子令年，孟夏初吉，備法駕而離陝分，列百官而入洛郊，觀此殷繁，良多嘉慰。",
+          "literal": "In this jiazi year, at the first auspicious day of midsummer, fully equipped the law carriage left Shaan and ranked the hundred officials into the Luoyang suburbs—beholding such abundance, much comfort and joy.",
+          "idiomatic": "In this jiazi year, at midsummer's first auspicious day, the law carriage fully equipped left Shaan and the hundred officials entered the Luoyang suburbs—seeing such abundance brought much comfort.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "謝罪太廟，憂惕驚懷；",
+          "literal": "Offering guilt at the Imperial Temple, worry and fear stirred the breast;",
+          "idiomatic": "At the Imperial Temple We offered guilt; worry and fear stirred the breast;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "登御端門，軫惻興感。",
+          "literal": "Ascending Duan Gate, he was moved with sorrow and feeling.",
+          "idiomatic": "At Duan Gate, sorrow and feeling welled up.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "蓋以一人寡祐，至萬姓靡甯，工役艱疲，忠良盡瘁，克建再遷之業，冀延八百之基。",
+          "literal": "For one man's scant blessing brought the myriad people no peace; laborers worn hard, the loyal utterly spent—we could build the enterprise of moving again, hoping to extend the eight-hundred-year foundation.",
+          "idiomatic": "One man's scant blessing left the myriad people unquiet; laborers worn out, the loyal spent—we could build the work of moving again and hope to extend the eight-hundred-year foundation.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "宜覃渙汗之恩，俟此雍熙之慶，滌瑕蕩垢，鹹與惟新。",
+          "literal": "Fitting to spread overflowing mercy, await this celebration of harmonious flourishing, wash flaws and scour stains—all alike made new.",
+          "idiomatic": "Fitting to spread overflowing mercy, await this celebration of flourishing peace, wash flaws and scour stains—all alike made new.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "可大赦天下，改天復四年為天祐元年，於戲！",
+          "literal": "A general amnesty for All Under Heaven; change Tianfu year 4 to Tianyou year 1—Alas!",
+          "idiomatic": "Let there be a general amnesty for All Under Heaven; change Tianfu year 4 to Tianyou year 1—Alas!",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "肆眚閶闔，即安宮闈。",
+          "literal": "Extend pardon at the Vermilion Bird Gate and forthwith settle the inner quarters.",
+          "idiomatic": "Pardon at the Vermilion Bird Gate and forthwith settle the inner quarters.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "雖九廟几筵，已閟於新室；",
+          "literal": "Though the nine temples' mats and vessels are already shut in the new chamber;",
+          "idiomatic": "Though the nine temples' offerings are already shut in the new chamber;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "而諸陵松柏，遙隔於舊都。",
+          "literal": "yet the imperial tombs' pines and cypresses are far separated from the old capital.",
+          "idiomatic": "yet the imperial tombs' pines and cypresses stand far from the old capital.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "將務乂甯，難申綣慕。",
+          "literal": "We will strive for order and peace—hard to express bound affection.",
+          "idiomatic": "We will strive for order and peace—hard to express our bound affection.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "文武百辟，執事具僚，從我千里而來，端爾一心蒞政。",
+          "literal": "Civil and military hundred ministers, executive officials with posts—you who followed Us a thousand li—upright your single heart and take up government.",
+          "idiomatic": "Civil and military ministers and executive officials who followed Us a thousand li—upright your hearts and take up government.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "恩覃既往，效責從新，方當開國之初，必舉慢官之罰。」",
+          "literal": "Grace extends to the past; merit is required anew; at the founding of the state we must certainly impose penalties on negligent officials.\"",
+          "idiomatic": "Grace extends to the past and merit is required anew; at the founding of the state we must impose penalties on negligent officials.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "appliedAt": "2026-06-23T06:36:49.164Z",
+      "appliedSummary": {
+        "id": "source-jiutangshu-020-wikisource-3df650bece2b",
+        "type": "source_omission_candidate",
+        "start": 833,
+        "removed": 0,
+        "inserted": 42,
+        "delta": 42,
+        "manualTranslationsApplied": 42
+      }
     }
   ],
-  "updatedAt": "2026-06-23T05:44:00.833Z"
+  "updatedAt": "2026-06-23T06:36:49.250Z"
 }
