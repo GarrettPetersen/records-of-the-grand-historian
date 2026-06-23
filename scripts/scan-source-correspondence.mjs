@@ -385,6 +385,28 @@ function sourceUrlsForChapter(data, extraSources, opts = {}) {
     });
   };
 
+  const addCombined = (name, urls, sourceField, primary = false) => {
+    const cleanUrls = [...new Set((urls || [])
+      .map((url) => sanitizeSourceUrl(url))
+      .filter(Boolean))];
+    if (cleanUrls.length === 0) return;
+    const sourceName = name || sourceNameFromUrl(cleanUrls[0]);
+    const sourceUrls = cleanUrls.map((url) => (
+      sourceName === 'wikisource' ? normalizeWikisourceRawUrl(url) : url
+    ));
+    if (sourceUrls.length === 1) {
+      add(sourceName, sourceUrls[0], sourceField, primary);
+      return;
+    }
+    sources.push({
+      name: sourceName,
+      url: sourceUrls.join(' + '),
+      urls: sourceUrls,
+      sourceField,
+      primary,
+    });
+  };
+
   const metaUrl = data.meta?.url || data.url;
   add(sourceNameFromUrl(metaUrl), metaUrl, 'meta.url', true);
   add('ctext', data.meta?.ctextUrl, 'meta.ctextUrl');
@@ -394,7 +416,7 @@ function sourceUrlsForChapter(data, extraSources, opts = {}) {
   add(sourceNameFromUrl(data.meta?.chinesenotesUrl), data.meta?.chinesenotesUrl, 'meta.chinesenotesUrl');
   derivedWikisourceUrlsForChapter(data).forEach((url, index) => add('wikisource', url, `derived.wikisource.${index}`));
   if (Array.isArray(data.meta?.wikisourceSubpages)) {
-    data.meta.wikisourceSubpages.forEach((url, index) => add('wikisource', url, `meta.wikisourceSubpages.${index}`));
+    addCombined('wikisource', data.meta.wikisourceSubpages, 'meta.wikisourceSubpages');
   }
 
   if (opts.includeMigratedChineseNotes) {
@@ -407,10 +429,28 @@ function sourceUrlsForChapter(data, extraSources, opts = {}) {
   }
   for (const source of extraSources) sources.push(source);
 
+  const hasCombinedWikisourceSubpages = sources.some((source) => (
+    source.name === 'wikisource'
+    && source.sourceField === 'meta.wikisourceSubpages'
+    && Array.isArray(source.urls)
+    && source.urls.length > 1
+  ));
   const seen = new Set();
   const filtered = sources.filter((source) => {
     if (!source.url) return false;
     if (opts.sourceNames?.size > 0 && !opts.sourceNames.has(source.name)) return false;
+    if (
+      hasCombinedWikisourceSubpages
+      && source.name === 'wikisource'
+      && !Array.isArray(source.urls)
+      && (
+        source.sourceField === 'meta.fallbackSourceUrl'
+        || source.sourceField === 'meta.wikisourceUrl'
+        || String(source.sourceField || '').startsWith('derived.wikisource')
+      )
+    ) {
+      return false;
+    }
     const key = sourceKey(source);
     if (seen.has(key)) return false;
     seen.add(key);
@@ -555,6 +595,27 @@ function wikisourceRawRedirectTarget(text, baseUrl) {
 }
 
 async function fetchSourceText(source, opts) {
+  if (Array.isArray(source.urls) && source.urls.length > 0) {
+    const fetchedParts = [];
+    const finalUrls = [];
+    const redirectedFrom = [];
+    for (const url of source.urls) {
+      const fetched = await fetchSourceText({
+        ...source,
+        url,
+        urls: undefined,
+      }, opts);
+      fetchedParts.push(fetched.text);
+      finalUrls.push(fetched.finalUrl || url);
+      if (fetched.redirectedFrom) redirectedFrom.push(fetched.redirectedFrom);
+    }
+    return {
+      text: fetchedParts.join('\n'),
+      finalUrl: finalUrls.join(' + '),
+      redirectedFrom: redirectedFrom.length > 0 ? redirectedFrom.join(' + ') : undefined,
+    };
+  }
+
   let fetched = await fetchText(source.url, opts);
   if (source.name !== 'wikisource') return fetched;
   const redirectUrl = wikisourceRawRedirectTarget(fetched.text, fetched.finalUrl || source.url);
@@ -1043,6 +1104,7 @@ function makeItem({ file, book, chapter, source, sourceUnits, localUnits, source
     file,
     sourceName: source.name,
     sourceUrl: source.url,
+    sourceUrls: Array.isArray(source.urls) ? source.urls : undefined,
     sourceRange,
     localRange,
     context: {
