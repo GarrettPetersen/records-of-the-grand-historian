@@ -435,6 +435,15 @@ function sourceUrlsForChapter(data, extraSources, opts = {}) {
     && Array.isArray(source.urls)
     && source.urls.length > 1
   ));
+  const hasExplicitWikisourceSource = sources.some((source) => (
+    source.name === 'wikisource'
+    && (
+      source.sourceField === 'meta.fallbackSourceUrl'
+      || source.sourceField === 'meta.wikisourceUrl'
+      || source.sourceField === 'meta.sourceUrl'
+      || source.sourceField === 'meta.wikisourceSubpages'
+    )
+  ));
   const seen = new Set();
   const filtered = sources.filter((source) => {
     if (!source.url) return false;
@@ -448,6 +457,14 @@ function sourceUrlsForChapter(data, extraSources, opts = {}) {
         || source.sourceField === 'meta.wikisourceUrl'
         || String(source.sourceField || '').startsWith('derived.wikisource')
       )
+    ) {
+      return false;
+    }
+    if (
+      hasExplicitWikisourceSource
+      && source.name === 'wikisource'
+      && !Array.isArray(source.urls)
+      && String(source.sourceField || '').startsWith('derived.wikisource')
     ) {
       return false;
     }
@@ -724,9 +741,16 @@ function decodeContentTemplate(name, body) {
     .split('|')
     .map((part) => part.trim())
     .filter(Boolean);
+  const visibleParts = () => parts
+    .filter((part) => hasHan(part))
+    .filter((part) => !/^[a-z][\w-]*\s*=/iu.test(part));
   if (templateName === '!') return parts[0] || '';
   if (templateName === 'propernoun') return parts.join('');
   if (templateName === '標' || templateName === 'wavybookmark') return parts.join('');
+  if (templateName === 'red' || templateName === 'yl' || templateName === '批' || templateName === 'quote' || templateName === 'color') {
+    const visible = visibleParts();
+    return visible.length > 0 ? visible.join('') : parts.join('');
+  }
   if (templateName === '年代') {
     const visible = parts.find((part) => hasHan(part)) || '';
     return visible;
@@ -749,6 +773,7 @@ function stripMediaWikiTemplates(text) {
     previous = out;
     out = out
       .replace(/\{\{\s*(ProperNoun|標|WavyBookMark|年代)\|([^{}]*)\}\}/gi, (_, name, body) => decodeContentTemplate(name, body))
+      .replace(/\{\{\s*(red|YL|批|quote|color)\|([^{}]*)\}\}/gi, (_, name, body) => decodeContentTemplate(name, body))
       .replace(/\{\{\s*(!)\|([^{}]*)\}\}/g, (_, name, body) => decodeContentTemplate(name, body))
       .replace(/\{\{\*\|([^{}]*)\}\}/g, '$1')
       .replace(/\{\{[^{}]*\}\}/g, '');
@@ -1175,14 +1200,37 @@ function mergeExistingDecisions(report, outPath) {
     return report;
   }
   const priorItems = new Map((previous.items || []).map((item) => [item.id, item]));
-  for (const item of report.items) {
-    const prior = priorItems.get(item.id);
-    if (!prior) continue;
+  const currentIds = new Set(report.items.map((item) => item.id));
+  const copyReviewState = (item, prior) => {
     item.status = prior.status || item.status;
     item.decision = prior.decision ?? item.decision;
     item.notes = prior.notes || item.notes;
     item.reviewedAt = prior.reviewedAt;
     item.reviewer = prior.reviewer;
+    item.appliedAt = prior.appliedAt;
+    item.appliedSummary = prior.appliedSummary;
+    item.manualTranslations = prior.manualTranslations;
+  };
+  for (const item of report.items) {
+    const prior = priorItems.get(item.id);
+    if (!prior) continue;
+    copyReviewState(item, prior);
+  }
+  const retainedReviewedItems = (previous.items || [])
+    .filter((item) => item.status && item.status !== 'pending' && !currentIds.has(item.id))
+    .map((item) => ({
+      ...item,
+      retainedAfterRescan: true,
+    }));
+  if (retainedReviewedItems.length > 0) {
+    report.items.push(...retainedReviewedItems);
+    report.items.sort((a, b) => (
+      a.book.localeCompare(b.book) ||
+      a.chapter.localeCompare(b.chapter, undefined, { numeric: true }) ||
+      a.sourceName.localeCompare(b.sourceName) ||
+      a.id.localeCompare(b.id)
+    ));
+    report.summary = summarize(report.items);
   }
   return report;
 }
