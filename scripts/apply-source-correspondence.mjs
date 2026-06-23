@@ -577,7 +577,9 @@ function rebuildContent(entries, originalContent) {
         block.cells = [];
       } else {
         block.sentences = [];
-        block.translations = originalBlock?.translations ? clone(originalBlock.translations) : [];
+        if (originalBlock?.translations) {
+          block.translations = clone(originalBlock.translations);
+        }
       }
       current = {
         blockKey: entry.blockKey,
