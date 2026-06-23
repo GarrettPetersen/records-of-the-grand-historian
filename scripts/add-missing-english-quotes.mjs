@@ -179,7 +179,14 @@ function addCompleteQuotes(text) {
 }
 
 function addBoundaryQuote(text, kind) {
-  if (countEnglishQuoteMarks(text) > 0) return text;
+  const englishQuoteMarks = countEnglishQuoteMarks(text);
+  if (englishQuoteMarks > 0) {
+    if ((kind === 'complete' || kind === 'closing') && /["“'‘]/u.test(String(text || '')) && !closesWithQuote(text)) {
+      if (englishQuoteMarks % 2 === 0) return text;
+      return addClosingAtEnd(text);
+    }
+    return text;
+  }
   if (kind === 'complete') return addCompleteQuotes(text);
   if (kind === 'opening') return addOpeningQuote(text);
   if (kind === 'closing') return addClosingAtEnd(text);
