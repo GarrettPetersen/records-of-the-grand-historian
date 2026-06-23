@@ -236,7 +236,7 @@ export function englishMatchesChineseTerminal(zhTerminal, english) {
 }
 
 /** Fullwidth / CJK punctuation often pasted into English by mistake (non-exhaustive). */
-const FULLWIDTH_OR_CJK_IN_ENGLISH = /[\uFF0C\u3002\uFF1A\uFF1B\uFF01\uFF1F\u3001\uFF08\uFF09\u300A\u300B]/;
+const FULLWIDTH_OR_CJK_IN_ENGLISH = /[\uFF0C\u3002\uFF1A\uFF1B\uFF01\uFF1F\u3001\uFF08\uFF09]/;
 const LEADING_ATTACHING_PUNCT_IN_ENGLISH = /^[\s\u00A0]*([,.;:!?]+|[)\]\}>〉》」』”]+)/u;
 
 /**
