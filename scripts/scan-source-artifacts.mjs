@@ -21,6 +21,48 @@ const SOURCE_FIELD_NAMES = new Set([
 
 const SOURCE_ARTIFACT_RULES = [
   {
+    id: 'SOURCE_LEADING_SECTION_NUMBER',
+    severity: 2,
+    description: 'Arabic section/list numbering leaked into Chinese source sentence',
+    pattern: /^(?:-{4,})?\d+\s*(?=\p{Script=Han})/gu,
+  },
+  {
+    id: 'SOURCE_TRAILING_LAYOUT_MARKER',
+    severity: 2,
+    description: 'Trailing source layout marker leaked into Chinese source sentence',
+    pattern: /-{4,}(?=[」』”]*$)/gu,
+  },
+  {
+    id: 'SOURCE_WIKISOURCE_CATEGORY_FOOTER',
+    severity: 3,
+    description: 'Wikisource category footer leaked into Chinese source',
+    pattern: /^(?:-{4,})?(?:category|CATEGORY):資治通鑑[」』”]*$/gu,
+  },
+  {
+    id: 'SOURCE_WIKISOURCE_COLLATION_HEADING',
+    severity: 3,
+    description: 'Wikisource collation heading leaked into Chinese source',
+    pattern: /^=+\s*校刊記\s*=+[」』”]*$/gu,
+  },
+  {
+    id: 'SOURCE_WIKISOURCE_CORRECTION_BRACKET',
+    severity: 2,
+    description: 'Wikisource correction/supplement bracket leaked into Chinese source',
+    pattern: /[〔〕]/gu,
+  },
+  {
+    id: 'SOURCE_WIKISOURCE_INLINE_CORRECTION_NOTE',
+    severity: 3,
+    description: 'Wikisource inline correction note leaked into Chinese source',
+    pattern: /此處司馬光未改「蜀」為「漢」，逕改/gu,
+  },
+  {
+    id: 'SOURCE_REPEATED_CLOSING_QUOTE',
+    severity: 3,
+    description: 'Repeated closing quote punctuation leaked into Chinese source',
+    pattern: /[」』]{3,}$/gu,
+  },
+  {
     id: 'SOURCE_LEADING_ATTACHED_PUNCTUATION',
     severity: 3,
     description: 'Sentence-leading punctuation should be attached to the previous Chinese source sentence',
