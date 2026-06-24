@@ -19,6 +19,8 @@ const QUEUE_RE = /^source-correspondence-corpus-wikisource-(.+)\.json$/u;
 const SOURCE_FIELDS = ['zh', 'content', 'source', 'text'];
 const HEADING_MARKUP_RE = /^=+([^=].*?)=+$/u;
 const COLLATION_MARKER_RE = /^=*\s*(?:校勘記|校刊記|注)\s*=*$/u;
+const COLLATION_APPARATUS_RE = /^(?:校勘記|校刊記)/u;
+const LOCAL_UI_ARTIFACT_RE = /^(?:Disambig\.svg|註：章節乃維基文庫編輯後加，以方便索引。)$/u;
 const UI_ARTIFACTS = new Set(['打開字典']);
 const PUNCTUATION_ONLY_RE = /^[\p{P}\p{S}\s]+$/u;
 const DEFAULT_REVIEWER = 'clean-source-repair-artifact-lane';
@@ -105,6 +107,8 @@ function classify(item) {
   const markupText = cleanHeadingText(rawText);
   if (!text) return null;
   if (UI_ARTIFACTS.has(text)) return { className: 'local-ui-artifact', mode: 'remove', replacement: '' };
+  if (LOCAL_UI_ARTIFACT_RE.test(markupText)) return { className: 'local-ui-artifact', mode: 'remove', replacement: '' };
+  if (COLLATION_APPARATUS_RE.test(markupText)) return { className: 'local-collation-apparatus', mode: 'remove', replacement: '' };
   if (COLLATION_MARKER_RE.test(markupText)) return { className: 'local-source-note-marker', mode: 'remove', replacement: '' };
   const headingMatch = markupText.match(HEADING_MARKUP_RE);
   if (!headingMatch) return null;
@@ -251,7 +255,8 @@ function removeUnit(chapter, entry) {
 
 function applyArtifact(chapter, item, classification) {
   const matches = findUnits(chapter, item);
-  if (matches.length !== (item.localRange?.ids || []).length || matches.length === 0) {
+  const allowPartialRange = classification.className === 'local-collation-apparatus';
+  if ((!allowPartialRange && matches.length !== (item.localRange?.ids || []).length) || matches.length === 0) {
     throw new Error(`${item.id}: could not locate all local ids ${(item.localRange?.ids || []).join(', ')}`);
   }
 

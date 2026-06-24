@@ -2032,7 +2032,7 @@
     },
     {
       "id": "source-xinwudaishi-001-wikisource-3ffaba74fe21",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.885,
@@ -2084,8 +2084,10 @@
         "afterLocal": "九月，楊師厚敗青人於臨朐，取其棣州，師範以青州降，而鄩亦降。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (26 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-001-wikisource-508be6ae2058",
@@ -2586,7 +2588,7 @@
     },
     {
       "id": "source-xinwudaishi-001-wikisource-efd36a255278",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.656,
@@ -2638,8 +2640,10 @@
         "afterLocal": "其父誠，以《五經》教授鄉里，生三子，曰全昱、存、溫。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (21 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-001-wikisource-fd3da88e8624",
@@ -4905,7 +4909,7 @@
     },
     {
       "id": "source-xinwudaishi-003-wikisource-69a77142b307",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -4948,8 +4952,21 @@
         "afterLocal": "夏五月丙戌朔，德音改元，降流罪已下囚。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T15:51:05.264Z",
+      "reviewer": "source-orthographic-repair",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-24T15:51:05.264Z",
+      "appliedSummary": {
+        "id": "source-xinwudaishi-003-wikisource-69a77142b307",
+        "type": "text_discrepancy_candidate",
+        "start": 66,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-xinwudaishi-003-wikisource-83ac44cee2b8",
@@ -7149,7 +7166,7 @@
     },
     {
       "id": "source-xinwudaishi-005-wikisource-06c12fb84d8c",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -7173,8 +7190,10 @@
         "afterLocal": "八月癸未，殺河南縣令羅貫。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source-only upstream gloss/commentary is not part of the base corpus text; surrounding base-text anchors match and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T19:19:53.345Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-005-wikisource-08e580ee71d0",
@@ -9443,7 +9462,7 @@
     },
     {
       "id": "source-xinwudaishi-007-wikisource-2359ef2a3401",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -9486,8 +9505,10 @@
         "afterLocal": "康義誠叛於唐，來降。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream span is contained in the live local text before a structural suffix or boundary heading; local corpus text retained.",
+      "reviewedAt": "2026-06-24T22:19:44.081Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-xinwudaishi-007-wikisource-362af84f5fd7",
@@ -10282,7 +10303,7 @@
     },
     {
       "id": "source-xinwudaishi-008-wikisource-4f01606067bd",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -10306,8 +10327,10 @@
         "afterLocal": "夏四月己未，契丹使述括來。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source-only upstream gloss/commentary is not part of the base corpus text; surrounding base-text anchors match and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T19:19:53.345Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-008-wikisource-501ce7b49d2d",
@@ -11350,7 +11373,7 @@
     },
     {
       "id": "source-xinwudaishi-009-wikisource-a9938c0632ca",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -11393,8 +11416,10 @@
         "afterLocal": "辛巳，殿直王班使於契丹，至於鄴都，不得進而復。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T15:51:54.727Z",
+      "reviewer": "source-variant-noop"
     },
     {
       "id": "source-xinwudaishi-009-wikisource-aaf449bb9358",
@@ -11690,7 +11715,7 @@
     },
     {
       "id": "source-xinwudaishi-010-wikisource-068230af28c6",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -11742,8 +11767,10 @@
         "afterLocal": "庚申，郭威同中書門下平章事。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T15:51:54.727Z",
+      "reviewer": "source-variant-noop"
     },
     {
       "id": "source-xinwudaishi-010-wikisource-1b73a20b737d",
@@ -14014,7 +14041,7 @@
     },
     {
       "id": "source-xinwudaishi-012-wikisource-c7ae33c96a6f",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -14057,8 +14084,21 @@
         "afterLocal": "癸酉，如瓜洲。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T15:51:05.264Z",
+      "reviewer": "source-orthographic-repair",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-24T15:51:05.264Z",
+      "appliedSummary": {
+        "id": "source-xinwudaishi-012-wikisource-c7ae33c96a6f",
+        "type": "text_discrepancy_candidate",
+        "start": 88,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-xinwudaishi-012-wikisource-cbaf9f5a8f21",
@@ -14284,7 +14324,7 @@
     },
     {
       "id": "source-xinwudaishi-013-wikisource-2624ffcf230d",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "book": "xinwudaishi",
@@ -14328,8 +14368,10 @@
         "afterLocal": "朗王存，初與太祖俱從黃巢攻廣州，存戰死。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (15 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-013-wikisource-2a5b6c478f96",
@@ -14522,7 +14564,7 @@
     },
     {
       "id": "source-xinwudaishi-013-wikisource-73d5e8992ee7",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "book": "xinwudaishi",
@@ -14566,8 +14608,10 @@
         "afterLocal": "廣王全昱，太祖即位封。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (18 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-013-wikisource-87dda31cab44",
@@ -14963,7 +15007,7 @@
     },
     {
       "id": "source-xinwudaishi-013-wikisource-eeeb0854d038",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.583,
@@ -15006,8 +15050,10 @@
         "afterLocal": "自其起盜賊，至於亡唐，其遺毒流於天下。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": "Reviewed as no-op: discrepancy is caused by upstream MediaWiki residue such as __TOC__, Category, or PD-old text; local corpus text retained.\nReopened for manual review: previous automatic residue no-op left non-residue punctuation or text unresolved."
+      "decision": "denied",
+      "notes": "Reviewed as no-op: discrepancy is caused by upstream MediaWiki residue such as __TOC__, Category, or PD-old text; local corpus text retained.\nReopened for manual review: previous automatic residue no-op left non-residue punctuation or text unresolved.\nReviewed as no-op: first live source unit keeps chapter-start title/roster prefix \"新五代史·傳\" before upstream body text s0001; local corpus text retained.",
+      "reviewedAt": "2026-06-24T21:28:05.771Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-014-wikisource-06d4922fac7c",
@@ -16151,7 +16197,7 @@
     },
     {
       "id": "source-xinwudaishi-017-wikisource-89583998f3ca",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -16203,8 +16249,10 @@
         "afterLocal": "帝顧謂馮道等曰：「皇太后之命，與卿等不任大慶。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.",
+      "reviewedAt": "2026-06-24T18:11:25.053Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-017-wikisource-8dfd217e32a7",
@@ -16998,7 +17046,7 @@
     },
     {
       "id": "source-xinwudaishi-019-wikisource-1dfa7274f7ba",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "book": "xinwudaishi",
@@ -17042,8 +17090,10 @@
         "afterLocal": "德妃董氏，鎮州靈壽人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (19 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-019-wikisource-bc9511446c9d",
@@ -17798,7 +17848,7 @@
     },
     {
       "id": "source-xinwudaishi-021-wikisource-f1271653fdbb",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "book": "xinwudaishi",
@@ -17842,8 +17892,10 @@
         "afterLocal": "朱珍，徐州豐人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (10 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-022-wikisource-07d094bb4c86",
@@ -18021,7 +18073,7 @@
     },
     {
       "id": "source-xinwudaishi-022-wikisource-aa283f7fed6e",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "book": "xinwudaishi",
@@ -18065,8 +18117,10 @@
         "afterLocal": "張歸霸，清河人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (12 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-022-wikisource-b20b95664a88",
@@ -18471,7 +18525,7 @@
     },
     {
       "id": "source-xinwudaishi-023-wikisource-791730153969",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -18514,8 +18568,10 @@
         "afterLocal": "梁太祖素識景仁，乃遣人召之，景仁間道歸梁，仍以為寧國軍節度使，加同中書門下平章事。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.",
+      "reviewedAt": "2026-06-24T18:11:25.053Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-023-wikisource-ab0e03e2be3e",
@@ -18633,7 +18689,7 @@
     },
     {
       "id": "source-xinwudaishi-023-wikisource-f0e2f0b7d837",
-      "status": "approved",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -18676,7 +18732,7 @@
         "afterLocal": "事鄆州朱宣為都指揮使。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": "approved",
+      "decision": "denied",
       "notes": "Reviewed graph-pair lane; upstream graph form accepted for source text after checking item context.\nExisting English translation manually checked for this graph-only source repair and retained.",
       "manualTranslations": [
         {
@@ -18784,7 +18840,7 @@
     },
     {
       "id": "source-xinwudaishi-024-wikisource-2436ce757d48",
-      "status": "approved",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -18827,7 +18883,7 @@
         "afterLocal": "崇韜因建天下利害二十五事，施行之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": "approved",
+      "decision": "applied",
       "notes": "Reviewed 捨/舍 graph lane. Applied upstream 捨 manually while preserving existing quote boundaries; existing English checked and retained.\nExisting English manually checked and retained after graph-only source repair.",
       "manualTranslations": [
         {
@@ -18841,7 +18897,17 @@
       "preserveExistingTranslations": true,
       "translationReviewNote": "Existing English manually checked and retained after graph-only source repair.",
       "reviewedAt": "2026-06-24T08:45:51.092Z",
-      "reviewer": "repair-queue-workbench"
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-24T15:51:05.264Z",
+      "appliedSummary": {
+        "id": "source-xinwudaishi-024-wikisource-2436ce757d48",
+        "type": "text_discrepancy_candidate",
+        "start": 59,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-xinwudaishi-024-wikisource-477c4411cbb7",
@@ -19242,7 +19308,7 @@
     },
     {
       "id": "source-xinwudaishi-025-wikisource-5857df70a93f",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "book": "xinwudaishi",
@@ -19286,8 +19352,10 @@
         "afterLocal": "符存審，字德詳，陳州宛丘人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (14 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-025-wikisource-6363b12ccd7c",
@@ -20204,7 +20272,7 @@
     },
     {
       "id": "source-xinwudaishi-028-wikisource-9a36f20308d0",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -20239,8 +20307,10 @@
         "afterLocal": "盧程，不知其世家何人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (3 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-028-wikisource-9b41d8383ba3",
@@ -21990,7 +22060,7 @@
     },
     {
       "id": "source-xinwudaishi-032-wikisource-8b0b8d714d08",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "book": "xinwudaishi",
@@ -22034,8 +22104,10 @@
         "afterLocal": "王彥章，字子明，鄆州壽張人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (13 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-033-wikisource-00c0ba36394e",
@@ -22135,7 +22207,7 @@
     },
     {
       "id": "source-xinwudaishi-033-wikisource-2e50eff5a364",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -22178,8 +22250,10 @@
         "afterLocal": "漢高祖即位，贈侍中。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream range starts with closing punctuation \"」\" that is already attached to previous live source unit s0088 as \"」\"; local segmentation retained.",
+      "reviewedAt": "2026-06-24T20:05:02.330Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-033-wikisource-3acd1fb6b629",
@@ -22640,7 +22714,7 @@
     },
     {
       "id": "source-xinwudaishi-034-wikisource-e169462565a0",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "book": "xinwudaishi",
@@ -22684,12 +22758,14 @@
         "afterLocal": "鄭遨，字雲叟，滑州白馬人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (10 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-035-wikisource-0274951ab245",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "book": "xinwudaishi",
@@ -22733,8 +22809,10 @@
         "afterLocal": "蘇循，不知何許人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (9 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-035-wikisource-565edf17c2e6",
@@ -23257,7 +23335,7 @@
     },
     {
       "id": "source-xinwudaishi-037-wikisource-5852330c1fd4",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -23300,8 +23378,21 @@
         "afterLocal": "然時諸伶，獨新磨尤善俳，其語最著，而不聞其佗過惡。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T15:51:05.264Z",
+      "reviewer": "source-orthographic-repair",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-24T15:51:05.264Z",
+      "appliedSummary": {
+        "id": "source-xinwudaishi-037-wikisource-5852330c1fd4",
+        "type": "text_discrepancy_candidate",
+        "start": 57,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-xinwudaishi-037-wikisource-61e0ae60b4d9",
@@ -23353,7 +23444,7 @@
     },
     {
       "id": "source-xinwudaishi-037-wikisource-89acf2ecfcf7",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -23396,8 +23487,21 @@
         "afterLocal": "其戰於胡柳也，嬖伶周匝為梁人所得。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T15:51:05.264Z",
+      "reviewer": "source-orthographic-repair",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-24T15:51:05.264Z",
+      "appliedSummary": {
+        "id": "source-xinwudaishi-037-wikisource-89acf2ecfcf7",
+        "type": "text_discrepancy_candidate",
+        "start": 25,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-xinwudaishi-037-wikisource-a17c70a343f7",
@@ -23506,7 +23610,7 @@
     },
     {
       "id": "source-xinwudaishi-038-wikisource-52e0b24cffea",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -23541,8 +23645,10 @@
         "afterLocal": "張承業，字繼元，唐僖宗時宦者也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (4 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-038-wikisource-c0e636dc5ac6",
@@ -23594,7 +23700,7 @@
     },
     {
       "id": "source-xinwudaishi-039-wikisource-1d941c3f828f",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -23637,12 +23743,25 @@
         "afterLocal": "是時，晉新有太原，李匡威據幽州，王處存據中山，赫連鐸據大同，孟方立據邢臺，四面豪傑並起而交爭。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T15:51:05.264Z",
+      "reviewer": "source-orthographic-repair",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-24T15:51:05.264Z",
+      "appliedSummary": {
+        "id": "source-xinwudaishi-039-wikisource-1d941c3f828f",
+        "type": "text_discrepancy_candidate",
+        "start": 4,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-xinwudaishi-039-wikisource-26c53dc1d2d2",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.81,
@@ -23685,8 +23804,21 @@
         "afterLocal": "使其子昭祚與大將張文禮族弘規、漢衡，收其偏將下獄，窮究反狀，親軍皆懼。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T15:51:05.264Z",
+      "reviewer": "source-orthographic-repair",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-24T15:51:05.264Z",
+      "appliedSummary": {
+        "id": "source-xinwudaishi-039-wikisource-26c53dc1d2d2",
+        "type": "text_discrepancy_candidate",
+        "start": 56,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-xinwudaishi-039-wikisource-40ae0ecfa89c",
@@ -24682,7 +24814,7 @@
     },
     {
       "id": "source-xinwudaishi-040-wikisource-fb9df9c84592",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -24725,8 +24857,10 @@
         "afterLocal": "讓能曰：「臣故先言之矣，惟殺臣可以紓國難。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T15:51:54.727Z",
+      "reviewer": "source-variant-noop"
     },
     {
       "id": "source-xinwudaishi-041-wikisource-69ea20a3eb6c",
@@ -25278,7 +25412,7 @@
     },
     {
       "id": "source-xinwudaishi-043-wikisource-20351cfd8818",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -25321,8 +25455,10 @@
         "afterLocal": "德昭馳至，扣門曰：「季述誅矣，皇帝當反正！"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only curated orthographic graph variants with matching punctuation; local corpus text retained.",
+      "reviewedAt": "2026-06-24T21:19:10.857Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-043-wikisource-34db93209112",
@@ -26429,7 +26565,7 @@
     },
     {
       "id": "source-xinwudaishi-046-wikisource-5f729ac6c9fa",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -26464,8 +26600,10 @@
         "afterLocal": "房知溫，字伯玉，兗州瑕丘人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (4 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-046-wikisource-63850a3afc2a",
@@ -26932,7 +27070,7 @@
     },
     {
       "id": "source-xinwudaishi-047-wikisource-2a1c41ab0219",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.765,
@@ -26984,8 +27122,10 @@
         "afterLocal": "馬全節，字大雅，大名元城人也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream span is contained in the live local text before a structural suffix or boundary heading; local corpus text retained.",
+      "reviewedAt": "2026-06-24T22:19:44.081Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-xinwudaishi-047-wikisource-41c3acc05a3b",
@@ -27463,7 +27603,7 @@
     },
     {
       "id": "source-xinwudaishi-047-wikisource-c991fb9e020f",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -27498,8 +27638,10 @@
         "afterLocal": "李瓊，滄州饒安人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (3 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-047-wikisource-ce48a6344857",
@@ -27767,7 +27909,7 @@
     },
     {
       "id": "source-xinwudaishi-048-wikisource-7a0d2d818bff",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.861,
@@ -27828,8 +27970,10 @@
         "afterLocal": "王弘贄，不知其世家何人也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (33 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-048-wikisource-88e223125277",
@@ -27925,7 +28069,7 @@
     },
     {
       "id": "source-xinwudaishi-048-wikisource-9bcdc48e2788",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "book": "xinwudaishi",
@@ -27969,8 +28113,10 @@
         "afterLocal": "高行周，字尚質，媯州人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (10 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-048-wikisource-d047c885b97e",
@@ -28158,7 +28304,7 @@
     },
     {
       "id": "source-xinwudaishi-049-wikisource-647ebd8663fe",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.636,
@@ -28210,8 +28356,10 @@
         "afterLocal": "唐景思，秦州人也。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (8 Han/digit chars) is already present in the live chapter between matching before/after anchors (21/7 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-049-wikisource-9907d8d3956b",
@@ -28649,7 +28797,7 @@
     },
     {
       "id": "source-xinwudaishi-051-wikisource-3ef8c3fea6ed",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -28710,8 +28858,10 @@
         "afterLocal": "莊宗即位，以其廝養為長直軍，以守殷為軍使，故未嘗經戰陣之用。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": "Reviewed as no-op: discrepancy is caused by upstream MediaWiki residue such as __TOC__, Category, or PD-old text; local corpus text retained.\nReopened for manual review: previous automatic residue no-op left non-residue punctuation or text unresolved."
+      "decision": "denied",
+      "notes": "Reviewed as no-op: discrepancy is caused by upstream MediaWiki residue such as __TOC__, Category, or PD-old text; local corpus text retained.\nReopened for manual review: previous automatic residue no-op left non-residue punctuation or text unresolved.\nReviewed as no-op: normalized upstream span (24 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-051-wikisource-57d8a00a0758",
@@ -28853,7 +29003,7 @@
     },
     {
       "id": "source-xinwudaishi-051-wikisource-8abd3dace46e",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -28888,8 +29038,10 @@
         "afterLocal": "董璋，不知其世家何人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (3 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-051-wikisource-8af97692cd05",
@@ -29953,7 +30105,7 @@
     },
     {
       "id": "source-xinwudaishi-054-wikisource-fb7634feb3b5",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -29996,8 +30148,21 @@
         "afterLocal": "因誦文士聶夷中《田家詩》，其言近而易曉。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T15:51:05.264Z",
+      "reviewer": "source-orthographic-repair",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-24T15:51:05.264Z",
+      "appliedSummary": {
+        "id": "source-xinwudaishi-054-wikisource-fb7634feb3b5",
+        "type": "text_discrepancy_candidate",
+        "start": 50,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-xinwudaishi-054-wikisource-ff102827ef5d",
@@ -30099,7 +30264,7 @@
     },
     {
       "id": "source-xinwudaishi-055-wikisource-33f81e55f8ca",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -30134,8 +30299,10 @@
         "afterLocal": "李懌，京兆人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (3 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-055-wikisource-3b4e8abba8dc",
@@ -30286,7 +30453,7 @@
     },
     {
       "id": "source-xinwudaishi-055-wikisource-86c62e81e150",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -30321,8 +30488,10 @@
         "afterLocal": "崔居儉，清河人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (4 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-055-wikisource-bccbe54c6e10",
@@ -30531,7 +30700,7 @@
     },
     {
       "id": "source-xinwudaishi-057-wikisource-6a60f989b830",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -30566,8 +30735,10 @@
         "afterLocal": "馬重績，字洞微，其先出於北狄，而世事軍中。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (4 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-057-wikisource-7495899008d5",
@@ -30889,7 +31060,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-0ab7d3a16b72",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.375,
@@ -30941,8 +31112,10 @@
         "afterLocal": "各置初、甚、末定分。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream span is contained in the live local text before a structural suffix or boundary heading; local corpus text retained.",
+      "reviewedAt": "2026-06-24T22:19:44.081Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-0b3914fc1cf0",
@@ -31021,7 +31194,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-0ca75cd21a7f",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.863,
@@ -31091,8 +31264,10 @@
         "afterLocal": "各命以冬夏至之宿算外，即所求也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (67 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-114b72ae17e4",
@@ -31372,7 +31547,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-204942f2ad29",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.636,
@@ -31424,12 +31599,14 @@
         "afterLocal": "視距交分，中準以下，皆既；"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (8 Han/digit chars) is already present in the live chapter between matching before/after anchors (7/10 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-206d4ce8251f",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -31464,8 +31641,10 @@
         "afterLocal": "司天掌日月星辰之象。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (6 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-212d563fe312",
@@ -31526,7 +31705,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-29bb5fcae0a6",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -31561,12 +31740,14 @@
         "afterLocal": "置月離正交九道宿度，以入交度加之，命以九道宿次，即其朔加時月離九道宿度也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (6 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-29e1b7b8d9d4",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.727,
@@ -31618,12 +31799,14 @@
         "afterLocal": "一千七百五十六除之，用北加、南減二千五百一十三，為其地戴中數以赤道內外定數，內減、外加之，即九服距軌數也。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (17 Han/digit chars) is already present in the live chapter between matching before/after anchors (15/46 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-2f1dd7a23483",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -31658,12 +31841,14 @@
         "afterLocal": "置晨昏分，以一百八十加晨、減昏，為日出入分。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (6 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-348a48d8ac75",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -31698,12 +31883,14 @@
         "afterLocal": "置歲率，以演紀上元距所求積年乘之，為氣積。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (3 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-386999357a4f",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -31738,8 +31925,10 @@
         "afterLocal": "置定日，以前段定日減之，為日率；"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (4 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-387f82c5c644",
@@ -31991,7 +32180,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-597ef47fa2ce",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -32026,12 +32215,14 @@
         "afterLocal": "累計距後象離度，以減晨昏象積，為加；"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (7 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-5f7e56e96fd3",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -32066,8 +32257,10 @@
         "afterLocal": "常朔分朔虛已下者，為滅分。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (3 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-5ffa6eb47429",
@@ -32220,7 +32413,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-6248d4e51420",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.861,
@@ -32272,8 +32465,10 @@
         "afterLocal": "以上，減去三千二百八十七，為二分前。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (32 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-6476d7d0f9b3",
@@ -32376,7 +32571,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-6904dab021b3",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -32411,12 +32606,14 @@
         "afterLocal": "置定日，以氣策除之，命起冬至，即所入氣日數也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (4 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-6c0e238aeea8",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.744,
@@ -32477,12 +32674,14 @@
         "afterLocal": "置其日晨昏分，以定分減之，為前；"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (33 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-71ebdd4002cb",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.647,
@@ -32525,12 +32724,14 @@
         "afterLocal": "卦策：六，六百二十九，三十四。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (11 Han/digit chars) is already present in the live chapter between matching before/after anchors (32/11 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-7686692f8595",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -32565,12 +32766,14 @@
         "afterLocal": "近伏段與伏段平行分，合而半之，為其段近伏行分。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (5 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-789000cfa542",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -32605,12 +32808,14 @@
         "afterLocal": "月離出入黃道六度。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (5 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-7a7dc69b2def",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -32645,8 +32850,10 @@
         "afterLocal": "初末行分相減，為差率。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (5 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-7d483dfdb545",
@@ -32692,7 +32899,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-7dea76911f73",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -32727,8 +32934,10 @@
         "afterLocal": "演紀上元甲子，距今顯德三年丙辰，積七千二百六十九萬八千四百五十二算外。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (7 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-81a0f228f972",
@@ -32780,7 +32989,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-84566c34deb4",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -32815,8 +33024,10 @@
         "afterLocal": "中節分五千六百二十六秒六十五已上者，用減統法，為有沒分。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (3 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-84712ab6e2f0",
@@ -32862,7 +33073,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-8a28147caa52",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -32897,12 +33108,14 @@
         "afterLocal": "置二至日躔赤道宿度。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (5 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-8a8c5d7f5fcc",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -32954,8 +33167,21 @@
         "afterLocal": "以其日損益率乘之，經法而一，用損益其下盈縮數，即得所求也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T15:51:05.264Z",
+      "reviewer": "source-orthographic-repair",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-24T15:51:05.264Z",
+      "appliedSummary": {
+        "id": "source-xinwudaishi-058-wikisource-8a8c5d7f5fcc",
+        "type": "text_discrepancy_candidate",
+        "start": 779,
+        "removed": 2,
+        "inserted": 2,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-xinwudaishi-058-wikisource-8ed8972a330f",
@@ -33001,7 +33227,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-8f76d6e7dbd4",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -33044,12 +33270,25 @@
         "afterLocal": "其勢圜而平，紀宿度之常數焉。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T15:51:05.264Z",
+      "reviewer": "source-orthographic-repair",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-24T15:51:05.264Z",
+      "appliedSummary": {
+        "id": "source-xinwudaishi-058-wikisource-8f76d6e7dbd4",
+        "type": "text_discrepancy_candidate",
+        "start": 92,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-xinwudaishi-058-wikisource-948495ad4a70",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.893,
@@ -33110,12 +33349,14 @@
         "afterLocal": "置中準；"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream span is contained in the live local text before a structural suffix or boundary heading; local corpus text retained.",
+      "reviewedAt": "2026-06-24T22:19:44.081Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-9cfbae4e90d8",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -33167,8 +33408,10 @@
         "afterLocal": "如不足損，則反損之；"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (25 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-9fa2234b0973",
@@ -33521,7 +33764,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-b6cf0cc74950",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -33556,12 +33799,14 @@
         "afterLocal": "置昏分，以辰則除，為辰數；"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (5 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-b914496c99f5",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.886,
@@ -33613,8 +33858,10 @@
         "afterLocal": "用損加、益減其下昏分，即所求昏定分也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (32 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-c2c38d528b73",
@@ -33668,7 +33915,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-c2d01261655b",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.727,
@@ -33711,8 +33958,10 @@
         "afterLocal": "軌率：二百六十二萬九千八百四十四，八十。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (16 Han/digit chars) is already present in the live chapter between matching before/after anchors (6/17 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-c8d2bdca0cf4",
@@ -33806,7 +34055,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-cae0b99e8838",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -33841,8 +34090,10 @@
         "afterLocal": "置中氣，即公卦也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (5 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-cd7514a7295b",
@@ -33930,7 +34181,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-d6af82e9c9b8",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.538,
@@ -33982,8 +34233,10 @@
         "afterLocal": "置距食分，一千九百一十二以上，用減四千七百八十；"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream span is contained in the live local text before a structural suffix or boundary heading; local corpus text retained.",
+      "reviewedAt": "2026-06-24T22:19:44.081Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-d8b267cfd174",
@@ -34029,7 +34282,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-db89c7ea1a52",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -34064,8 +34317,10 @@
         "afterLocal": "置日入分，以日出分減之，為晝分。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (4 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-e9a04ef6666a",
@@ -34126,7 +34381,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-f6f10d70e202",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -34161,8 +34416,10 @@
         "afterLocal": "置朔望加時日相距之度，以軌中加之，為加時象積。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (6 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-f9fc7676fbba",
@@ -34456,7 +34713,7 @@
     },
     {
       "id": "source-xinwudaishi-059-wikisource-2a74e44fe7f8",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.667,
@@ -34508,8 +34765,10 @@
         "afterLocal": "然則王者君天下，子生民，布德行政，以順人心，是之謂奉天。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (28 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-059-wikisource-83c6edb37640",
@@ -35428,7 +35687,7 @@
     },
     {
       "id": "source-xinwudaishi-061-wikisource-cb95f3a36bd0",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.821,
@@ -35471,8 +35730,10 @@
         "afterLocal": "行密不能守，欲走。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (33 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-061-wikisource-d71f9a609c89",
@@ -35706,7 +35967,7 @@
     },
     {
       "id": "source-xinwudaishi-062-wikisource-750778674c59",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -35767,8 +36028,10 @@
         "afterLocal": "封弟從善韓王，從益鄭王，從謙宜春王，從度昭平郡公，從信文陽郡公。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text is already equivalent to upstream under approved variants and punctuation; local corpus text retained.",
+      "reviewedAt": "2026-06-24T22:19:44.081Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-xinwudaishi-062-wikisource-879c46708ab5",
@@ -36815,7 +37078,7 @@
     },
     {
       "id": "source-xinwudaishi-067-wikisource-001b7302cfec",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.895,
@@ -36867,8 +37130,10 @@
         "afterLocal": "王延政自立於建州，閩中大亂，元瓘遣其將仰詮、薛萬忠等攻之，逾年，大敗而歸。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (38 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-067-wikisource-5b108f3185b6",
@@ -37129,7 +37394,7 @@
     },
     {
       "id": "source-xinwudaishi-067-wikisource-c5a68e360d08",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -37181,8 +37446,10 @@
         "afterLocal": "及壯，無賴，不喜事生業，以販鹽為盜。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": "Reviewed as no-op: discrepancy is caused by upstream MediaWiki residue such as __TOC__, Category, or PD-old text; local corpus text retained.\nReopened for manual review: previous automatic residue no-op left non-residue punctuation or text unresolved."
+      "decision": "denied",
+      "notes": "Reviewed as no-op: discrepancy is caused by upstream MediaWiki residue such as __TOC__, Category, or PD-old text; local corpus text retained.\nReopened for manual review: previous automatic residue no-op left non-residue punctuation or text unresolved.\nReviewed as no-op: normalized upstream span (48 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-068-wikisource-1a0beba10f53",
@@ -37481,7 +37748,7 @@
     },
     {
       "id": "source-xinwudaishi-069-wikisource-7b1077b360e3",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.882,
@@ -37524,8 +37791,10 @@
         "afterLocal": "景威出而嘆曰：「吾言不用，大事去矣，何用生為！"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T15:51:54.727Z",
+      "reviewer": "source-variant-noop"
     },
     {
       "id": "source-xinwudaishi-069-wikisource-fda0d29d547e",
@@ -37949,7 +38218,7 @@
     },
     {
       "id": "source-xinwudaishi-072-wikisource-ca8494300cc1",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -37992,8 +38261,10 @@
         "afterLocal": "德光母述律嘗謂晉人曰：「南朝漢兒爭得一向臥邪？"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T15:51:54.727Z",
+      "reviewer": "source-variant-noop"
     },
     {
       "id": "source-xinwudaishi-072-wikisource-ee78cc3b80e3",
@@ -38326,7 +38597,7 @@
     },
     {
       "id": "source-xinwudaishi-074-wikisource-2f2bbc65b2e9",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.893,
@@ -38378,8 +38649,10 @@
         "afterLocal": "既嫁，則加氈帽。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text is already equivalent to upstream under approved variants and punctuation; local corpus text retained.",
+      "reviewedAt": "2026-06-24T22:19:44.081Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-xinwudaishi-074-wikisource-5f7afcceef63",
@@ -38581,5 +38854,5 @@
       "reviewer": "repair-source-queue-patterns"
     }
   ],
-  "updatedAt": "2026-06-24T15:00:49.927Z"
+  "updatedAt": "2026-06-24T22:19:44.081Z"
 }

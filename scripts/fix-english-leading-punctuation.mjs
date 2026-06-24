@@ -151,7 +151,7 @@ function appendToPrevious(text, punctuation) {
     if (base.endsWith(punctuation)) return `${base}${trailingSpace}`;
   }
 
-  if (punctuation === '.' && /[.!?]$/u.test(base)) return `${base}${trailingSpace}`;
+  if (punctuation === '.' && /[.!?][)"'\]〉》”』]*$/u.test(base)) return `${base}${trailingSpace}`;
   return `${base}${punctuation}${trailingSpace}`;
 }
 

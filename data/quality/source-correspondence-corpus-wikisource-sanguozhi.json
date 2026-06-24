@@ -1901,7 +1901,7 @@
     },
     {
       "id": "source-sanguozhi-001-wikisource-eef986429da3",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -1925,8 +1925,10 @@
         "afterLocal": "紹復進臨官渡，起土山地道。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (21 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-001-wikisource-ef8704ac74c2",
@@ -2421,7 +2423,7 @@
     },
     {
       "id": "source-sanguozhi-002-wikisource-eca8bc62dc03",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.5,
@@ -2464,8 +2466,10 @@
         "afterLocal": "〈《魏書》曰：帝生時，有雲氣青色而圜如車盖當其上，終日，望氣者以爲至貴之證，非人臣之氣。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource parsing dropped chronology prefix \"中平四年\"; local corpus text retained.",
+      "reviewedAt": "2026-06-24T16:59:49.549Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-002-wikisource-fb21b31b2ee6",
@@ -2677,7 +2681,7 @@
     },
     {
       "id": "source-sanguozhi-003-wikisource-636ae1d4453f",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -2701,8 +2705,10 @@
         "afterLocal": "以事付散騎而已。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (14 Han/digit chars) is already present in the live chapter between matching before/after anchors (27/7 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-003-wikisource-6412ed8ab03b",
@@ -5762,7 +5768,7 @@
     },
     {
       "id": "source-sanguozhi-004-wikisource-bc7a59c012d0",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.692,
@@ -5814,8 +5820,10 @@
         "afterLocal": "是日，即皇帝位，大赦。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource parsing dropped chronology prefix \"青龍三年 / 景初三年\"; local corpus text retained.",
+      "reviewedAt": "2026-06-24T17:02:34.443Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-004-wikisource-c0608677a1f9",
@@ -7021,7 +7029,7 @@
     },
     {
       "id": "source-sanguozhi-006-wikisource-06e1a3c44a07",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -7045,12 +7053,19 @@
         "afterLocal": "劉備奔表，表厚待之，然不能用。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Reviewed as already repaired: live corpus already contains the upstream source text between the recorded anchors.",
+      "appliedAt": "2026-06-24T22:19:44.081Z",
+      "appliedSummary": {
+        "mode": "already-present",
+        "source": "close-stale-source-correspondence-items",
+        "reason": "source-already-present-between-anchors"
+      },
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-sanguozhi-006-wikisource-114076c3da2d",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -7074,8 +7089,10 @@
         "afterLocal": "紹於是有害豐之意。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (19 Han/digit chars) is already present in the live chapter between matching before/after anchors (33/8 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-006-wikisource-157544e0cc8b",
@@ -7129,7 +7146,7 @@
     },
     {
       "id": "source-sanguozhi-006-wikisource-2713a069ff87",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -7153,8 +7170,10 @@
         "afterLocal": "公孫必至而馥懼矣，因使說利害，爲陳禍福，馥必遜讓。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (17 Han/digit chars) is already present in the live chapter between matching before/after anchors (19/21 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-006-wikisource-275ccd9d54cc",
@@ -7237,7 +7256,7 @@
     },
     {
       "id": "source-sanguozhi-006-wikisource-41074a69d290",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -7272,12 +7291,14 @@
         "afterLocal": "紹愛少子尚，皃美，欲以爲後而未顯。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (6 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-006-wikisource-4506bc0f4cb4",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -7301,12 +7322,14 @@
         "afterLocal": "紹善之，卒不廢配。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (16 Han/digit chars) is already present in the live chapter between matching before/after anchors (7/7 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-006-wikisource-6a08dfd5c4fe",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.81,
@@ -7349,8 +7372,10 @@
         "afterLocal": "〈《典略》曰：傕頭至，有詔高縣。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource parsing dropped chronology prefix \"建安二年\"; local corpus text retained.",
+      "reviewedAt": "2026-06-24T16:59:49.549Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-006-wikisource-715c0d2e683f",
@@ -7404,7 +7429,7 @@
     },
     {
       "id": "source-sanguozhi-006-wikisource-77e20b481677",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -7428,12 +7453,14 @@
         "afterLocal": "異度之計，臼犯之謀也。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (11 Han/digit chars) is already present in the live chapter between matching before/after anchors (8/9 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-006-wikisource-7865302c190b",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -7457,12 +7484,14 @@
         "afterLocal": "嵩還，深陳太祖威德，說表遣子入質。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (21 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-006-wikisource-7d045c51415b",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.636,
@@ -7523,8 +7552,10 @@
         "afterLocal": "說紹曰：「將軍弱冠登朝，則播名海內；"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream span is contained in the live local text after a structural heading/date/list prefix; local corpus text retained.",
+      "reviewedAt": "2026-06-24T22:19:44.081Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-sanguozhi-006-wikisource-800dd0e46dfc",
@@ -7626,7 +7657,7 @@
     },
     {
       "id": "source-sanguozhi-006-wikisource-9e3a207eec4c",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -7661,8 +7692,10 @@
         "afterLocal": "初，卓女壻中郎將牛輔典兵別屯陝，分遣校尉李傕、郭汜、張濟略陳留、潁川諸縣。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (5 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-006-wikisource-a6d43645bc93",
@@ -7716,7 +7749,7 @@
     },
     {
       "id": "source-sanguozhi-006-wikisource-c0df46bef2fe",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -7751,12 +7784,14 @@
         "afterLocal": "太祖乃迎天子都許。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (5 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-006-wikisource-c8d0564acc64",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -7780,12 +7815,14 @@
         "afterLocal": "兵不在多，在得人也。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (18 Han/digit chars) is already present in the live chapter between matching before/after anchors (29/8 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-006-wikisource-d4efefa057ff",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -7809,12 +7846,14 @@
         "afterLocal": "衆皆恐，欲令嵩謝。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (28 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-006-wikisource-dad4f230eccc",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.529,
@@ -7866,8 +7905,10 @@
         "afterLocal": "初，表及妻愛少子琮，欲以爲後，而蔡瑁、張允爲之支黨，乃出長子琦爲江夏太守，衆遂奉琮爲嗣。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (9 Han/digit chars) is already present in the live chapter between matching before/after anchors (14/37 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-006-wikisource-fc8fe310c0d2",
@@ -8517,7 +8558,7 @@
     },
     {
       "id": "source-sanguozhi-007-wikisource-2a55da85fa42",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -8541,8 +8582,10 @@
         "afterLocal": "欲言是，元龍名重天下。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (14 Han/digit chars) is already present in the live chapter between matching before/after anchors (9/9 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-007-wikisource-66c2086e9ccd",
@@ -12450,7 +12493,7 @@
     },
     {
       "id": "source-sanguozhi-010-wikisource-3c5079290c12",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -12474,8 +12517,10 @@
         "afterLocal": "冀州未平，留參司空軍事。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (14 Han/digit chars) is already present in the live chapter between matching before/after anchors (19/10 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-010-wikisource-637b966f8b5c",
@@ -12629,7 +12674,7 @@
     },
     {
       "id": "source-sanguozhi-010-wikisource-6e4fa02dc171",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -12672,8 +12717,10 @@
         "afterLocal": "功旣違義，識亦疚焉。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T15:51:54.050Z",
+      "reviewer": "source-variant-noop"
     },
     {
       "id": "source-sanguozhi-010-wikisource-82547b3c0339",
@@ -13902,7 +13949,7 @@
     },
     {
       "id": "source-sanguozhi-011-wikisource-389ede0bb9de",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -13937,8 +13984,10 @@
         "afterLocal": "時鉅鹿張臶，字子明，頴川胡昭，字孔明，亦養志不仕。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (5 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-011-wikisource-40e6d4ca1b91",
@@ -13992,7 +14041,7 @@
     },
     {
       "id": "source-sanguozhi-011-wikisource-526d57de4b57",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -14035,8 +14084,21 @@
         "afterLocal": "與平原華歆、同縣邴原相友，俱游學於異國，並敬善陳仲弓。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T15:51:03.569Z",
+      "reviewer": "source-orthographic-repair",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-24T15:51:03.569Z",
+      "appliedSummary": {
+        "id": "source-sanguozhi-011-wikisource-526d57de4b57",
+        "type": "text_discrepancy_candidate",
+        "start": 682,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-sanguozhi-011-wikisource-56b82bf8ca7f",
@@ -16566,7 +16628,7 @@
     },
     {
       "id": "source-sanguozhi-012-wikisource-4c051b9e3558",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.692,
@@ -16609,8 +16671,21 @@
         "afterLocal": "“君以爲信不？"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T15:51:03.569Z",
+      "reviewer": "source-orthographic-repair",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-24T15:51:03.569Z",
+      "appliedSummary": {
+        "id": "source-sanguozhi-012-wikisource-4c051b9e3558",
+        "type": "source_replacement_candidate",
+        "start": 264,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-sanguozhi-012-wikisource-531e901c2d14",
@@ -18290,7 +18365,7 @@
     },
     {
       "id": "source-sanguozhi-012-wikisource-ac2d3e3ea703",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.667,
@@ -18333,8 +18408,21 @@
         "afterLocal": "君不爲术所用；"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T19:35:19.534Z",
+      "reviewer": "source-correspondence",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-24T19:35:19.547Z",
+      "appliedSummary": {
+        "id": "source-sanguozhi-012-wikisource-ac2d3e3ea703",
+        "type": "source_replacement_candidate",
+        "start": 271,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-sanguozhi-012-wikisource-afd9809f494a",
@@ -19286,7 +19374,7 @@
     },
     {
       "id": "source-sanguozhi-012-wikisource-e2d5e3198d11",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.793,
@@ -19338,8 +19426,21 @@
         "afterLocal": "出爲魏郡太守。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T19:40:18.019Z",
+      "reviewer": "source-correspondence",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-24T19:40:18.019Z",
+      "appliedSummary": {
+        "id": "source-sanguozhi-012-wikisource-e2d5e3198d11",
+        "type": "text_discrepancy_candidate",
+        "start": 221,
+        "removed": 2,
+        "inserted": 2,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-sanguozhi-012-wikisource-e2e9677a2f17",
@@ -20777,7 +20878,7 @@
     },
     {
       "id": "source-sanguozhi-013-wikisource-1a945be994ea",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -20801,8 +20902,10 @@
         "afterLocal": "此大事，公卿羣寮善共平議。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (20 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-013-wikisource-1af07262a66c",
@@ -21062,7 +21165,7 @@
     },
     {
       "id": "source-sanguozhi-013-wikisource-c037d1dec446",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -21086,8 +21189,10 @@
         "afterLocal": "汝作司徒而敬敷五教。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (10 Han/digit chars) is already present in the live chapter between matching before/after anchors (10/9 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-013-wikisource-d62abba71359",
@@ -24533,7 +24638,7 @@
     },
     {
       "id": "source-sanguozhi-014-wikisource-f551be16ce58",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -24557,12 +24662,19 @@
         "afterLocal": "〈傅子曰：太祖謂嘉曰：「本初擁冀州之眾，青、並從之，地廣兵強，而數為不遜。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Reviewed as already repaired: live corpus already contains the upstream source text between the recorded anchors.",
+      "appliedAt": "2026-06-24T22:19:44.081Z",
+      "appliedSummary": {
+        "mode": "already-present",
+        "source": "close-stale-source-correspondence-items",
+        "reason": "source-already-present-between-anchors"
+      },
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-sanguozhi-014-wikisource-ff6999174795",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -24586,8 +24698,15 @@
         "afterLocal": "辭以家難，得還河東。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Reviewed as already repaired: live corpus already contains the upstream source text between the recorded anchors.",
+      "appliedAt": "2026-06-24T22:19:44.081Z",
+      "appliedSummary": {
+        "mode": "already-present",
+        "source": "close-stale-source-correspondence-items",
+        "reason": "source-already-present-between-anchors"
+      },
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-sanguozhi-015-wikisource-31dc9d40475d",
@@ -30368,7 +30487,7 @@
     },
     {
       "id": "source-sanguozhi-018-wikisource-04489fc83b29",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.773,
@@ -30420,8 +30539,21 @@
         "afterLocal": "斅，一本作勃。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T17:50:54.426Z",
+      "reviewer": "source-correspondence",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-24T17:50:54.427Z",
+      "appliedSummary": {
+        "id": "source-sanguozhi-018-wikisource-04489fc83b29",
+        "type": "text_discrepancy_candidate",
+        "start": 458,
+        "removed": 2,
+        "inserted": 2,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-sanguozhi-018-wikisource-12e91ea974fb",
@@ -37729,7 +37861,7 @@
     },
     {
       "id": "source-sanguozhi-019-wikisource-387af720e946",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.765,
@@ -37790,12 +37922,14 @@
         "afterLocal": "正元、景元初，連增邑，凡四千四百戶。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource parsing dropped chronology prefix \"太和六年 / 青龍三年 / 正始七年\"; local corpus text retained.",
+      "reviewedAt": "2026-06-24T17:02:34.443Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-019-wikisource-387d53c7df5d",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.667,
@@ -37856,8 +37990,10 @@
         "afterLocal": "六年薨，無子，國除。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource parsing dropped chronology prefix \"黃初二年 / 太和三年 / 青龍二年\"; local corpus text retained.",
+      "reviewedAt": "2026-06-24T17:02:34.443Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-019-wikisource-49d8de5643c5",
@@ -38616,7 +38752,7 @@
     },
     {
       "id": "source-sanguozhi-019-wikisource-71cf9ccca70c",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -38640,8 +38776,10 @@
         "afterLocal": "〈志別傳曰：志字允恭，好學有才行。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (11 Han/digit chars) is already present in the live chapter between matching before/after anchors (21/13 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-019-wikisource-8954ffaa4d0d",
@@ -44334,7 +44472,7 @@
     },
     {
       "id": "source-sanguozhi-021-wikisource-05fb4959aa61",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.828,
@@ -44404,8 +44542,10 @@
         "afterLocal": "東平劉楨字公幹並見友善。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (54 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-021-wikisource-09dc71cac5d3",
@@ -44742,7 +44882,7 @@
     },
     {
       "id": "source-sanguozhi-021-wikisource-491fc5e61a91",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.722,
@@ -44794,8 +44934,10 @@
         "afterLocal": "〈廙別傳云：時年四十二。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource parsing dropped chronology prefix \"黃初二年\"; local corpus text retained.",
+      "reviewedAt": "2026-06-24T17:02:34.443Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-021-wikisource-4ca4d1fd198a",
@@ -44947,7 +45089,7 @@
     },
     {
       "id": "source-sanguozhi-021-wikisource-582d6fd685f8",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -45008,8 +45150,10 @@
         "afterLocal": "博學有才章，又善蒼、雅、蟲、篆、許氏字指。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (16 Han/digit chars) is already present in the live chapter between matching before/after anchors (9/15 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-021-wikisource-62166da0d038",
@@ -45216,7 +45360,7 @@
     },
     {
       "id": "source-sanguozhi-021-wikisource-765dc644b8ac",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.789,
@@ -45268,8 +45412,10 @@
         "afterLocal": "著昌言，詞佳可觀省。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (16 Han/digit chars) is already present in the live chapter between matching before/after anchors (11/8 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-021-wikisource-7b37d40cfd17",
@@ -56222,7 +56368,7 @@
     },
     {
       "id": "source-sanguozhi-024-wikisource-2a29f352d9e1",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.882,
@@ -56283,8 +56429,10 @@
         "afterLocal": "《春秋傳》曰：命我先人典司宗祏。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (30 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-024-wikisource-2a9a20dbb1fa",
@@ -60279,7 +60427,7 @@
     },
     {
       "id": "source-sanguozhi-027-wikisource-93beac57d95e",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -60303,8 +60451,15 @@
         "afterLocal": "大將軍司馬文王進屯丘頭，分部圍守，各有所統。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Reviewed as already repaired: live corpus already contains the upstream source text between the recorded anchors.",
+      "appliedAt": "2026-06-24T22:19:44.081Z",
+      "appliedSummary": {
+        "mode": "already-present",
+        "source": "close-stale-source-correspondence-items",
+        "reason": "source-already-present-between-anchors"
+      },
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-sanguozhi-027-wikisource-a030b61018b6",
@@ -63519,7 +63674,7 @@
     },
     {
       "id": "source-sanguozhi-028-wikisource-f802509466b6",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -63543,8 +63698,10 @@
         "afterLocal": "城內喜且擾，又日飢困，誕、咨等智力窮。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (12 Han/digit chars) is already present in the live chapter between matching before/after anchors (30/15 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-029-wikisource-0eb9396eba3e",
@@ -63634,7 +63791,7 @@
     },
     {
       "id": "source-sanguozhi-029-wikisource-1dc39215f18f",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.88,
@@ -63695,8 +63852,10 @@
         "afterLocal": "後表子琮降太祖，太祖以夔為軍謀祭酒，參太樂事，因令創製雅樂。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (50 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-029-wikisource-21abf129c0de",
@@ -63832,7 +63991,7 @@
     },
     {
       "id": "source-sanguozhi-029-wikisource-b1cd9538ead8",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.429,
@@ -63875,8 +64034,10 @@
         "afterLocal": "〈輅別傳曰：輅為華清河所召，為北黌文學，一時士友無不嘆慕。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource parsing dropped chronology prefix \"正始九年\"; local corpus text retained.",
+      "reviewedAt": "2026-06-24T16:59:49.549Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-029-wikisource-d467db26055f",
@@ -63928,7 +64089,7 @@
     },
     {
       "id": "source-sanguozhi-029-wikisource-f65f5f4319ca",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.81,
@@ -63971,8 +64132,10 @@
         "afterLocal": "輅長歎曰：「吾自知有分直耳，然天與我才明，不與我年壽，恐四十七八間，不見女嫁兒娶婦也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (17 Han/digit chars) is already present in the live chapter between matching before/after anchors (11/36 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-030-wikisource-118e2ad5f8c6",
@@ -64801,7 +64964,7 @@
     },
     {
       "id": "source-sanguozhi-030-wikisource-8e2fc199b830",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -64825,8 +64988,10 @@
         "afterLocal": "其九服之制，可得而言也。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (11 Han/digit chars) is already present in the live chapter between matching before/after anchors (13/10 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-030-wikisource-8fe464d8ff9b",
@@ -65802,7 +65967,7 @@
     },
     {
       "id": "source-sanguozhi-030-wikisource-fd2a130cfb2d",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "sanguozhi",
@@ -65826,8 +65991,10 @@
         "afterLocal": ""
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (43 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-031-wikisource-a82c1b720562",
@@ -68277,7 +68444,7 @@
     },
     {
       "id": "source-sanguozhi-034-wikisource-12886c500555",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.692,
@@ -68329,8 +68496,10 @@
         "afterLocal": "〈孫盛《蜀世譜》曰：璿弟，瑤、琮、瓚、諶、恂、璩六人。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource parsing dropped chronology prefix \"景耀六年 / 咸熙元年\"; local corpus text retained.",
+      "reviewedAt": "2026-06-24T17:02:34.443Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-034-wikisource-146dc2ac9d90",
@@ -68807,7 +68976,7 @@
     },
     {
       "id": "source-sanguozhi-034-wikisource-ae2ed3080167",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.722,
@@ -68859,12 +69028,14 @@
         "afterLocal": "評曰：易稱有夫婦然後有父子，夫人倫之始，恩紀之隆，莫尚於此矣。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (13 Han/digit chars) is already present in the live chapter between matching before/after anchors (17/26 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-034-wikisource-fafc75d43c9b",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.529,
@@ -68916,8 +69087,10 @@
         "afterLocal": "十五年薨，葬南陵。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource parsing dropped chronology prefix \"章武元年 / 建興元年\"; local corpus text retained.",
+      "reviewedAt": "2026-06-24T17:02:34.443Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-035-wikisource-58c6ffd0ebb9",
@@ -68971,7 +69144,7 @@
     },
     {
       "id": "source-sanguozhi-035-wikisource-6ccd27a2d973",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.714,
@@ -69032,8 +69205,10 @@
         "afterLocal": "子攀，官至行護軍翊武將軍，亦早卒。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (14 Han/digit chars) is already present in the live chapter between matching before/after anchors (16/14 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-035-wikisource-87c3c77ce9b1",
@@ -69274,7 +69449,7 @@
     },
     {
       "id": "source-sanguozhi-035-wikisource-bdc76c9b4e6f",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.692,
@@ -69317,12 +69492,14 @@
         "afterLocal": "〈《襄陽記》曰：亮初亡，所在各求為立廟，朝議以禮秩不聽，百姓遂因時節私祭之於道陌上。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource parsing dropped chronology prefix \"景耀六年\"; local corpus text retained.",
+      "reviewedAt": "2026-06-24T16:59:49.549Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-035-wikisource-ce2904d88d33",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -69365,8 +69542,10 @@
         "afterLocal": "亮與關羽鎮荊州。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource parsing dropped chronology prefix \"建安十六年\"; local corpus text retained.",
+      "reviewedAt": "2026-06-24T16:59:49.549Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-035-wikisource-e2d4f96439f3",
@@ -69658,7 +69837,7 @@
     },
     {
       "id": "source-sanguozhi-036-wikisource-8376e74d5cb5",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -69710,8 +69889,10 @@
         "afterLocal": "曹操父子，世載其罪，朕用慘怛，疢如疾首。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (28 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-036-wikisource-839eca788976",
@@ -73515,7 +73696,7 @@
     },
     {
       "id": "source-sanguozhi-041-wikisource-4e574754c9bd",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.81,
@@ -73576,8 +73757,10 @@
         "afterLocal": "歷三郡守、監軍。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (17 Han/digit chars) is already present in the live chapter between matching before/after anchors (10/6 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-041-wikisource-577f07c3ebf7",
@@ -73802,7 +73985,7 @@
     },
     {
       "id": "source-sanguozhi-041-wikisource-c73b979ad9db",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.2,
@@ -73845,8 +74028,10 @@
         "afterLocal": "〈襄阳记曰：朗遗言戒子曰：“传称师克在和不在众，此言天地和则万物生，君臣和则国家平，九族和则动得所求，静得所安，是以圣人守和，以存以亡也。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource parsing dropped chronology prefix \"延熙十年\"; local corpus text retained.",
+      "reviewedAt": "2026-06-24T16:59:49.549Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-041-wikisource-d7344c4193c7",
@@ -76787,7 +76972,7 @@
     },
     {
       "id": "source-sanguozhi-044-wikisource-30acd70dd6fc",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -76830,8 +77015,21 @@
         "afterLocal": "亮辟維為倉曹掾，加奉義將軍，封當陽亭侯，時年二十七。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T15:51:03.569Z",
+      "reviewer": "source-orthographic-repair",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-24T15:51:03.569Z",
+      "appliedSummary": {
+        "id": "source-sanguozhi-044-wikisource-30acd70dd6fc",
+        "type": "text_discrepancy_candidate",
+        "start": 176,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-sanguozhi-044-wikisource-369825441c64",
@@ -77150,7 +77348,7 @@
     },
     {
       "id": "source-sanguozhi-044-wikisource-7b959bd84915",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -77193,8 +77391,21 @@
         "afterLocal": "“来何迟也？"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T15:51:03.569Z",
+      "reviewer": "source-orthographic-repair",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-24T15:51:03.569Z",
+      "appliedSummary": {
+        "id": "source-sanguozhi-044-wikisource-7b959bd84915",
+        "type": "text_discrepancy_candidate",
+        "start": 276,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-sanguozhi-044-wikisource-7ed4db8ed592",
@@ -78121,7 +78332,7 @@
     },
     {
       "id": "source-sanguozhi-045-wikisource-31b7db922651",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -78145,8 +78356,15 @@
         "afterLocal": "時冀妹為皇后，內寵方盛，冀兄弟權重於人主，順帝雖知綱言不誣，然無心治冀。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Reviewed as already repaired: live corpus already contains the upstream source text between the recorded anchors.",
+      "appliedAt": "2026-06-24T22:19:44.081Z",
+      "appliedSummary": {
+        "mode": "already-present",
+        "source": "close-stale-source-correspondence-items",
+        "reason": "source-already-present-between-anchors"
+      },
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-sanguozhi-045-wikisource-3407d37f8ad2",
@@ -79475,7 +79693,7 @@
     },
     {
       "id": "source-sanguozhi-046-wikisource-16c397af256f",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.862,
@@ -79527,12 +79745,14 @@
         "afterLocal": "繇遣樊能、于麋東屯橫江津，張英屯當利口，以距術。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text is already equivalent to upstream under approved variants and punctuation; local corpus text retained.",
+      "reviewedAt": "2026-06-24T22:19:44.081Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-sanguozhi-046-wikisource-183217d29ac2",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -79593,8 +79813,10 @@
         "afterLocal": "塚上數有光怪，雲氣五色，上屬於天，曼延數里。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (31 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-046-wikisource-22ffb07647b3",
@@ -83444,7 +83666,7 @@
     },
     {
       "id": "source-sanguozhi-047-wikisource-054b80e5fcb9",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -83496,8 +83718,10 @@
         "afterLocal": "山都、中廬五縣民五千家來附。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (9 Han/digit chars) is already present in the live chapter between matching before/after anchors (12/12 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-047-wikisource-056fa5a7d065",
@@ -83932,7 +84156,7 @@
     },
     {
       "id": "source-sanguozhi-047-wikisource-13f203c36fbc",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -83984,8 +84208,10 @@
         "afterLocal": "六年春正月，新都言白虎見。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text is already equivalent to upstream under approved variants and punctuation; local corpus text retained.",
+      "reviewedAt": "2026-06-24T22:19:44.081Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-sanguozhi-047-wikisource-19012e78d3a9",
@@ -84475,7 +84701,7 @@
     },
     {
       "id": "source-sanguozhi-047-wikisource-1c171f861391",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.692,
@@ -84518,8 +84744,10 @@
         "afterLocal": "勳破，進討黃祖於沙羨。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream range starts with closing punctuation \"」\" that is already attached to previous live source unit s0012 as \"\\\"\" after the local chronology prefix \"建安四年\"; local segmentation retained.",
+      "reviewedAt": "2026-06-24T17:55:24.582Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-047-wikisource-1c715d06cb7b",
@@ -87765,7 +87993,7 @@
     },
     {
       "id": "source-sanguozhi-047-wikisource-73ec5f85b29f",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.786,
@@ -87808,8 +88036,21 @@
         "afterLocal": "朕之與君，大義已定，豈樂勞師遠臨江漢？"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T19:35:19.534Z",
+      "reviewer": "source-correspondence",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-24T19:35:19.547Z",
+      "appliedSummary": {
+        "id": "source-sanguozhi-047-wikisource-73ec5f85b29f",
+        "type": "text_discrepancy_candidate",
+        "start": 310,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-sanguozhi-047-wikisource-7432e2166954",
@@ -90990,7 +91231,7 @@
     },
     {
       "id": "source-sanguozhi-047-wikisource-d080375e3f80",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -91033,8 +91274,10 @@
         "afterLocal": "仁委城走。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.",
+      "reviewedAt": "2026-06-24T18:11:25.053Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-047-wikisource-d892cdb54c15",
@@ -91923,7 +92166,7 @@
     },
     {
       "id": "source-sanguozhi-047-wikisource-f49c7bf3505e",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.842,
@@ -91966,8 +92209,21 @@
         "afterLocal": "詔曰：「古者聖王積行累善，修身行道，以有天下。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T19:40:18.019Z",
+      "reviewer": "source-correspondence",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-24T19:40:18.019Z",
+      "appliedSummary": {
+        "id": "source-sanguozhi-047-wikisource-f49c7bf3505e",
+        "type": "text_discrepancy_candidate",
+        "start": 944,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-sanguozhi-047-wikisource-f74875c02b89",
@@ -92455,7 +92711,7 @@
     },
     {
       "id": "source-sanguozhi-048-wikisource-48a6e091d2ef",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.778,
@@ -92507,8 +92763,10 @@
         "afterLocal": "二月朔，建業火。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (14 Han/digit chars) is already present in the live chapter between matching before/after anchors (20/6 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-048-wikisource-4cf968d055c8",
@@ -92644,7 +92902,7 @@
     },
     {
       "id": "source-sanguozhi-048-wikisource-6466f600bb31",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.719,
@@ -92696,8 +92954,10 @@
         "afterLocal": "冬，權寢疾，徵大將軍諸葛恪爲太子太傅，會稽太守滕胤爲太常，並受詔輔太子。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource parsing dropped chronology prefix \"赤烏十三年 / 太元元年\"; local corpus text retained.",
+      "reviewedAt": "2026-06-24T17:02:34.443Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-048-wikisource-6ffbadb6e5eb",
@@ -94012,7 +94272,7 @@
     },
     {
       "id": "source-sanguozhi-050-wikisource-519b85d0c780",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.85,
@@ -94082,8 +94342,10 @@
         "afterLocal": "吳主權步夫人，臨淮淮陰人也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (17 Han/digit chars) is already present in the live chapter between matching before/after anchors (20/12 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-050-wikisource-5441fa2b2cb3",
@@ -94787,7 +95049,7 @@
     },
     {
       "id": "source-sanguozhi-051-wikisource-20634aa9a93c",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.143,
@@ -94830,8 +95092,10 @@
         "afterLocal": "權追錄其功，封子胤為丹楊侯。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource parsing dropped chronology prefix \"建安二十四年\"; local corpus text retained.",
+      "reviewedAt": "2026-06-24T16:59:49.549Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-051-wikisource-2d152c7aecb0",
@@ -95909,7 +96173,7 @@
     },
     {
       "id": "source-sanguozhi-051-wikisource-ba4925ba1bc3",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -95952,8 +96216,21 @@
         "afterLocal": "孫輔字國儀，賁弟也，以揚武校尉佐孫策平三郡。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-24T15:51:03.569Z",
+      "reviewer": "source-orthographic-repair",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-24T15:51:03.569Z",
+      "appliedSummary": {
+        "id": "source-sanguozhi-051-wikisource-ba4925ba1bc3",
+        "type": "text_discrepancy_candidate",
+        "start": 195,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-sanguozhi-051-wikisource-bc52e886808f",
@@ -96625,7 +96902,7 @@
     },
     {
       "id": "source-sanguozhi-052-wikisource-14d7fda1cecf",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -96677,8 +96954,10 @@
         "afterLocal": "〈吴书曰：休进授，指摘文义，分别事物，并有章条。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (25 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-052-wikisource-341415a3c27b",
@@ -96849,7 +97128,7 @@
     },
     {
       "id": "source-sanguozhi-052-wikisource-4e65fb3b7cd0",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.854,
@@ -96901,8 +97180,10 @@
         "afterLocal": "朕甚愍之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource parsing dropped chronology prefix \"永安元年\"; local corpus text retained.",
+      "reviewedAt": "2026-06-24T17:02:34.443Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-052-wikisource-56677ef625a3",
@@ -98219,7 +98500,7 @@
     },
     {
       "id": "source-sanguozhi-052-wikisource-a1061115dd04",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -98271,8 +98552,10 @@
         "afterLocal": "〈陆机为谭传曰：宣太子正位东宫，天子方隆训导之义，妙简俊彦，讲学左右。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (25 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-052-wikisource-a838db5ff781",
@@ -99226,7 +99509,7 @@
     },
     {
       "id": "source-sanguozhi-052-wikisource-fe8985852176",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -99278,8 +99561,10 @@
         "afterLocal": "恪已自封侯，故弟融襲爵。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (18 Han/digit chars) is already present in the live chapter between matching before/after anchors (19/10 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-053-wikisource-1a19e5cd7d8a",
@@ -99714,7 +99999,7 @@
     },
     {
       "id": "source-sanguozhi-053-wikisource-46fed904f00a",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -99749,8 +100034,10 @@
         "afterLocal": "追舉茂才，移書發遣纮。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (49 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-24T21:02:30.061Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-053-wikisource-6d4cd5204564",
@@ -101787,7 +102074,7 @@
     },
     {
       "id": "source-sanguozhi-055-wikisource-58cde22f61d7",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.111,
@@ -101839,8 +102126,10 @@
         "afterLocal": "弟表，字文奧，武庶子也，少知名，與諸葛恪、顧譚、張休等並侍東宮，皆共親友。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream span is contained in the live local text between structural prefix/suffix material; local corpus text retained.",
+      "reviewedAt": "2026-06-24T22:19:44.081Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-sanguozhi-055-wikisource-598d3d094769",
@@ -101944,7 +102233,7 @@
     },
     {
       "id": "source-sanguozhi-055-wikisource-5f601af696b7",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -101968,8 +102257,10 @@
         "afterLocal": "由是二母感寤雍穆。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (8 Han/digit chars) is already present in the live chapter between matching before/after anchors (10/8 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-055-wikisource-6e82823aae42",
@@ -102323,7 +102614,7 @@
     },
     {
       "id": "source-sanguozhi-055-wikisource-f575238b6916",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -102347,8 +102638,10 @@
         "afterLocal": "空枉此勁銳以爲僮僕，非表志也。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (16 Han/digit chars) is already present in the live chapter between matching before/after anchors (20/13 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-056-wikisource-0384072ff900",
@@ -102525,7 +102818,7 @@
     },
     {
       "id": "source-sanguozhi-056-wikisource-0dc51907b02a",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.778,
@@ -102577,8 +102870,10 @@
         "afterLocal": "桓與衛將軍全琮俱以師迎。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource parsing dropped chronology prefix \"黃龍元年 / 嘉禾六年\"; local corpus text retained.",
+      "reviewedAt": "2026-06-24T17:02:34.443Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-056-wikisource-11f464982c16",
@@ -104129,7 +104424,7 @@
     },
     {
       "id": "source-sanguozhi-056-wikisource-c3f2a19476b6",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.849,
@@ -104181,12 +104476,14 @@
         "afterLocal": "綝聞之，使中書奉詔，詔文欽、劉纂，唐咨等使取據，又遣從兄慮以都下兵逆據於江都。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource parsing dropped chronology prefix \"五鳳二年 / 太平元年\"; local corpus text retained.",
+      "reviewedAt": "2026-06-24T17:02:34.443Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-056-wikisource-ce68c1b80848",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.839,
@@ -104238,8 +104535,10 @@
         "afterLocal": "二年，拜安國將軍，金印紫綬，徙封故鄣。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource parsing dropped linked regnal-year text \"黃武元年\"; local corpus text retained.",
+      "reviewedAt": "2026-06-24T18:11:25.053Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-056-wikisource-dcc6e0c89a3b",
@@ -106687,7 +106986,7 @@
     },
     {
       "id": "source-sanguozhi-058-wikisource-19df46aea447",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.852,
@@ -106739,8 +107038,10 @@
         "afterLocal": "三年，假節。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource parsing dropped chronology prefix \"太平二年 / 永安二年\"; local corpus text retained.",
+      "reviewedAt": "2026-06-24T17:02:34.443Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-058-wikisource-4625d627e196",
@@ -107213,7 +107514,7 @@
     },
     {
       "id": "source-sanguozhi-058-wikisource-6b90fa2ec58c",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -107237,8 +107538,10 @@
         "afterLocal": "既不聽許，而遜外生顧譚、顧承、姚信，工以親附太子，枉見流徙。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (19 Han/digit chars) is already present in the live chapter between matching before/after anchors (7/24 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-058-wikisource-6ef10877d557",
@@ -108569,7 +108872,7 @@
     },
     {
       "id": "source-sanguozhi-059-wikisource-227412b4688c",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.818,
@@ -108612,8 +108915,10 @@
         "afterLocal": "〈《吳歷》曰：孫和以無罪見殺，衆庶皆懷憤歎，前司馬桓慮因此招合將吏，欲共殺峻立英，事覺，皆見殺，英實不知。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource parsing dropped chronology prefix \"五鳳元年\"; local corpus text retained.",
+      "reviewedAt": "2026-06-24T16:59:49.549Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-059-wikisource-24ca2a244677",
@@ -110329,7 +110634,7 @@
     },
     {
       "id": "source-sanguozhi-060-wikisource-3be5bd58fb61",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -110381,8 +110686,10 @@
         "afterLocal": "及作督帅，养威持重，每御军，常任计策，不营小利。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (28 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:12:03.304Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-060-wikisource-73475d99e254",
@@ -110687,7 +110994,7 @@
     },
     {
       "id": "source-sanguozhi-060-wikisource-a7a60b36e26f",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.765,
@@ -110730,8 +111037,10 @@
         "afterLocal": "〈王隐《交广记》曰：吴后复置广州，以南阳滕脩为刺史。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource parsing dropped chronology prefix \"黃龍三年\"; local corpus text retained.",
+      "reviewedAt": "2026-06-24T16:59:49.549Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-060-wikisource-bff6913e0cc6",
@@ -111648,7 +111957,7 @@
     },
     {
       "id": "source-sanguozhi-060-wikisource-cb13843d778f",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.846,
@@ -111691,8 +112000,10 @@
         "afterLocal": "〈《虞预晋书》曰：贺氏本姓庆氏。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: discrepancy is caused by upstream Wikisource page metadata fields; local corpus text already preserves the base text.",
+      "reviewedAt": "2026-06-24T19:29:37.410Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-060-wikisource-ea3c7f387843",
@@ -116010,7 +116321,7 @@
     },
     {
       "id": "source-sanguozhi-064-wikisource-2415a529851d",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "sanguozhi",
@@ -116034,8 +116345,10 @@
         "afterLocal": "母使人密語綝。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (14 Han/digit chars) is already present in the live chapter between matching before/after anchors (33/6 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-24T20:20:25.188Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-sanguozhi-064-wikisource-3a4fc4d8f84a",
@@ -119904,5 +120217,5 @@
       "notes": "Denied: local 【評】 is a retained structural heading, not an upstream text omission."
     }
   ],
-  "updatedAt": "2026-06-24T15:00:49.927Z"
+  "updatedAt": "2026-06-24T22:19:44.081Z"
 }

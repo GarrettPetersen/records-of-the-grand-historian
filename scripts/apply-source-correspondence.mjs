@@ -49,13 +49,54 @@ const COMMON_VARIANTS = new Map([
   ['陜', '陝'],
   ['墻', '牆'],
   ['衞', '衛'],
+  ['仆', '僕'],
+  ['惪', '德'],
+  ['勛', '勳'],
+  ['弃', '棄'],
 ]);
+
+const ADDITIONAL_VARIANT_GROUPS = [
+  '國国', '問问', '對对', '與与', '無无', '諸诸', '歷曆歴历', '後后',
+  '歲岁', '懷怀', '聞闻', '時时', '復复', '爲為为', '餘余', '裡裏里',
+  '潁穎', '覆复復', '舍捨', '璽玺', '韍韨', '傳传', '數数', '寶宝',
+  '廣广', '宮宫', '鏐镠', '闍阇', '顒颙', '揚扬', '紘纮', '翬翚',
+  '釋释', '陳陈', '餕馂', '璫珰', '穀谷', '發髮发', '禦御',
+  '鎔镕熔', '鉶铏', '錡锜', '鬚須', '築筑', '繫係系', '寧甯',
+  '干幹', '采採', '遊游', '臺台', '衛衞卫', '眾衆众',
+  '貢贡', '圖图', '滎荥', '鑿凿', '溝沟', '澗涧', '衝冲',
+  '決决', '簡简', '費费', '猶犹', '億亿', '計计', '經经',
+  '陰阴', '陽阳', '趙赵', '綱纲', '塢坞', '繕缮', '遠远',
+  '來来', '誡诫', '恥耻', '畝亩', '別别', '動动', '載载',
+  '聖圣', '儀仪', '營营', '強强', '報报', '爾尔', '藝艺',
+  '盜盗', '賑赈', '倉仓', '憐怜', '憫悯', '窮穷', '畢毕',
+  '邊边', '跡迹', '黃黄', '禮礼', '廟庙', '毀毁', '郵邮',
+  '輸输', '盡尽', '產产', '飾饰', '緘缄', '閉闭', '薦荐',
+  '陸陆', '邁迈', '辭辞', '憂忧', '顧顾', '鴻鸿', '爭争',
+  '則则', '贊赞', '幾几', '機机', '雖虽', '濟济', '寬宽',
+  '氣气', '傷伤', '賞赏', '覽览', '結结', '詳详', '監监',
+  '馬马', '從从', '饗飨', '會会', '帶带', '飲饮', '頃顷',
+  '斬斩', '詣诣', '擊击', '誅诛', '賊贼', '過过', '濫滥',
+  '徵征', '長长', '興兴', '據据', '討讨', '級级', '論论',
+  '譯译', '連连', '斷断', '續续', '條条', '脅胁', '脫脱',
+  '職职', '戰战', '獻献', '寵宠', '讓让', '節节', '雲云',
+  '賦赋', '頌颂', '銘铭', '誄诔', '箋笺', '辯辩', '尙尚',
+  '難难', '潛潜', '賣卖', '鹽盐', '錢钱', '曉晓',
+];
+
+for (const group of ADDITIONAL_VARIANT_GROUPS) {
+  const chars = [...group];
+  const canonical = chars[0];
+  for (const char of chars) {
+    if (char !== canonical && !COMMON_VARIANTS.has(char)) COMMON_VARIANTS.set(char, canonical);
+  }
+}
 
 function usage() {
   console.error(`Usage:
   node scripts/apply-source-correspondence.mjs --queue PATH [--dry-run]
-    [--approve ID[,ID...]] [--deny ID[,ID...]] [--item ID[,ID...]]
-    [--reviewer NAME]
+    [--approve ID[,ID...]] [--approve-file PATH] [--deny ID[,ID...]]
+    [--deny-file PATH] [--item ID[,ID...]] [--item-file PATH]
+    [--reviewer NAME] [--preserve-existing-translations]
 
 Queue workflow:
   1. Run scan-source-correspondence to create data/quality/source-correspondence-*.json.
@@ -74,12 +115,27 @@ function parseArgs(argv) {
     deny: new Set(),
     onlyItems: new Set(),
     reviewer: DEFAULT_REVIEWER,
+    preserveExistingTranslations: false,
   };
 
   const addIds = (target, value) => {
     if (!value) return;
     for (const id of value.split(',').map((part) => part.trim()).filter(Boolean)) {
       target.add(id);
+    }
+  };
+
+  const addIdsFromFile = (target, filename) => {
+    const raw = fs.readFileSync(filename, 'utf8').trim();
+    if (!raw) return;
+
+    let rows;
+    if (raw.startsWith('[')) rows = JSON.parse(raw);
+    else rows = raw.split(/\r?\n/u);
+
+    for (const row of rows) {
+      const id = String(row || '').trim();
+      if (id) target.add(id);
     }
   };
 
@@ -91,6 +147,10 @@ function parseArgs(argv) {
     }
     if (arg === '--dry-run') {
       opts.dryRun = true;
+      continue;
+    }
+    if (arg === '--preserve-existing-translations') {
+      opts.preserveExistingTranslations = true;
       continue;
     }
     if (arg === '--queue') {
@@ -109,6 +169,14 @@ function parseArgs(argv) {
       addIds(opts.approve, arg.slice('--approve='.length));
       continue;
     }
+    if (arg === '--approve-file') {
+      addIdsFromFile(opts.approve, argv[++i]);
+      continue;
+    }
+    if (arg.startsWith('--approve-file=')) {
+      addIdsFromFile(opts.approve, arg.slice('--approve-file='.length));
+      continue;
+    }
     if (arg === '--deny') {
       addIds(opts.deny, argv[++i]);
       continue;
@@ -117,12 +185,28 @@ function parseArgs(argv) {
       addIds(opts.deny, arg.slice('--deny='.length));
       continue;
     }
+    if (arg === '--deny-file') {
+      addIdsFromFile(opts.deny, argv[++i]);
+      continue;
+    }
+    if (arg.startsWith('--deny-file=')) {
+      addIdsFromFile(opts.deny, arg.slice('--deny-file='.length));
+      continue;
+    }
     if (arg === '--item') {
       addIds(opts.onlyItems, argv[++i]);
       continue;
     }
     if (arg.startsWith('--item=')) {
       addIds(opts.onlyItems, arg.slice('--item='.length));
+      continue;
+    }
+    if (arg === '--item-file') {
+      addIdsFromFile(opts.onlyItems, argv[++i]);
+      continue;
+    }
+    if (arg.startsWith('--item-file=')) {
+      addIdsFromFile(opts.onlyItems, arg.slice('--item-file='.length));
       continue;
     }
     if (arg === '--reviewer') {
@@ -786,6 +870,17 @@ function findTargetRange(entries, item) {
     if (!item.localRange?.text || comparisonKey(matchedText) === comparisonKey(item.localRange.text)) {
       return byIds;
     }
+    if (item.type === 'local_extra_candidate' && localExtraRangeStillMatches(matchedText, item.localRange.text)) {
+      return byIds;
+    }
+    if (
+      byIds.end === byIds.start + 1
+      && item.localRange?.text
+      && isTableEntry(entries[byIds.start])
+      && anchoredReplacementIndex(sourceText(entries[byIds.start]), item.localRange.text, item.context || {}) >= 0
+    ) {
+      return byIds;
+    }
   }
 
   if (item.localRange?.text) {
@@ -805,6 +900,13 @@ function findTargetRange(entries, item) {
   }
 
   throw new Error(`Could not locate local range for ${item.id}`);
+}
+
+function localExtraRangeStillMatches(currentText, queuedText) {
+  const currentKey = comparisonKey(currentText);
+  const queuedKey = comparisonKey(queuedText);
+  if (!currentKey || !queuedKey) return false;
+  return queuedKey.includes(currentKey) || currentKey.includes(queuedKey);
 }
 
 function pairedSourceUnits(sourceSentences, localEntries) {
@@ -876,7 +978,7 @@ function replaceWithinSingleEntry(entries, range, item) {
   const original = sourceText(entry);
   const localText = item.localRange.text;
   const sourceReplacement = adjustedSourceText(item);
-  const exactIndex = original.indexOf(localText);
+  const exactIndex = anchoredReplacementIndex(original, localText, item.context || {});
   if (exactIndex < 0) return null;
 
   const nextText = `${original.slice(0, exactIndex)}${sourceReplacement}${original.slice(exactIndex + localText.length)}`;
@@ -886,6 +988,61 @@ function replaceWithinSingleEntry(entries, range, item) {
     { preserveTranslations: shouldPreserveExistingTranslation(item, entry, nextText) },
   );
   return [next];
+}
+
+function allIndexesOf(text, needle) {
+  const indexes = [];
+  if (!needle) return indexes;
+  let index = String(text || '').indexOf(needle);
+  while (index >= 0) {
+    indexes.push(index);
+    index = String(text || '').indexOf(needle, index + Math.max(needle.length, 1));
+  }
+  return indexes;
+}
+
+function anchoredReplacementIndex(original, localText, context) {
+  const candidates = allIndexesOf(original, localText);
+  if (candidates.length <= 1) return candidates[0] ?? -1;
+
+  const before = String(context.beforeLocal || '');
+  const after = String(context.afterLocal || '');
+  const beforeIndexes = allIndexesOf(original, before);
+  const afterIndexes = allIndexesOf(original, after);
+
+  const scored = candidates.map((index) => {
+    const end = index + localText.length;
+    let score = 0;
+    let distance = 0;
+
+    if (before && beforeIndexes.length > 0) {
+      const anchors = beforeIndexes
+        .map((beforeIndex) => beforeIndex + before.length)
+        .filter((beforeEnd) => beforeEnd <= index);
+      if (anchors.length > 0) {
+        const best = Math.max(...anchors);
+        score += 2;
+        distance += index - best;
+      } else {
+        distance += 100000;
+      }
+    }
+
+    if (after && afterIndexes.length > 0) {
+      const anchors = afterIndexes.filter((afterIndex) => afterIndex >= end);
+      if (anchors.length > 0) {
+        const best = Math.min(...anchors);
+        score += 2;
+        distance += best - end;
+      } else {
+        distance += 100000;
+      }
+    }
+
+    return { index, score, distance };
+  }).sort((a, b) => b.score - a.score || a.distance - b.distance || a.index - b.index);
+
+  return scored[0]?.index ?? -1;
 }
 
 function insertWithinSingleEntry(entries, item, translationsBySource) {
@@ -974,6 +1131,14 @@ function replacementEntries(entries, range, item) {
   }
 
   const sourceSentences = splitSentences(adjustedSourceText(item));
+  if (localEntries.length === 1 && sourceSentences.length === 1) {
+    const nextText = sourceSentences[0];
+    return [cloneEntryWithSource(localEntries[0], nextText, {
+      preserveTranslations: comparisonKey(nextText) === comparisonKey(sourceText(localEntries[0]))
+        || shouldPreserveExistingTranslation(item, localEntries[0], nextText),
+    })];
+  }
+
   const pairs = pairedSourceUnits(sourceSentences, localEntries);
   const afterBlockKey = (
     range.end < entries.length
@@ -1063,6 +1228,9 @@ function updateQueueDecisions(queue, opts) {
       item.decision = 'approved';
       item.reviewedAt = item.reviewedAt || now;
       item.reviewer = item.reviewer || opts.reviewer;
+      if (opts.preserveExistingTranslations) {
+        item.preserveExistingTranslations = true;
+      }
     }
     if (opts.deny.has(item.id)) {
       item.status = 'denied';
