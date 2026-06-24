@@ -58,6 +58,7 @@ function usage() {
   node scripts/repair-queue-workbench.mjs plan [--book BOOK] [--class CLASS]
   node scripts/repair-queue-workbench.mjs packet [--book BOOK] [--chapter CH]
     [--class CLASS] [--group GROUP_ID] [--packet-size N] [--out-dir DIR]
+    [--graph-pair SOURCE⇄LOCAL]
     [--prefill-default] [--prefill-graph-source-approve]
     [--prefill-existing-english]
     [--default-decision DECISION] [--default-notes TEXT]
@@ -91,6 +92,7 @@ function parseArgs(argv) {
     packetSize: 80,
     outDir: DEFAULT_PACKET_DIR,
     groupId: null,
+    graphPair: null,
     decisionsFile: null,
     dryRun: false,
     applySource: false,
@@ -188,6 +190,14 @@ function parseArgs(argv) {
     }
     if (arg.startsWith('--source-name=')) {
       opts.sourceNames.add(arg.slice('--source-name='.length));
+      continue;
+    }
+    if (arg === '--graph-pair') {
+      opts.graphPair = args[++i] || '';
+      continue;
+    }
+    if (arg.startsWith('--graph-pair=')) {
+      opts.graphPair = arg.slice('--graph-pair='.length);
       continue;
     }
     if (arg === '--class') {
@@ -401,6 +411,23 @@ function charDiffPairs(source, local, maxPairs = 4) {
     if (pairs.length > maxPairs) return [];
   }
   return pairs;
+}
+
+function splitGraphPair(pair) {
+  return String(pair || '')
+    .split('⇄')
+    .map((part) => part.trim())
+    .filter(Boolean);
+}
+
+function graphPairMatches(candidate, requested) {
+  const left = splitGraphPair(candidate);
+  const right = splitGraphPair(requested);
+  if (left.length !== 2 || right.length !== 2) return false;
+  return (
+    (left[0] === right[0] && left[1] === right[1])
+    || (left[0] === right[1] && left[1] === right[0])
+  );
 }
 
 function sourceField(unit) {
@@ -785,6 +812,7 @@ function scopeForJson(opts) {
     queues: opts.queues,
     sourceNames: [...opts.sourceNames],
     classFilter: opts.classFilter,
+    graphPair: opts.graphPair,
   };
 }
 
@@ -965,6 +993,7 @@ function printPlan(plan, opts) {
 
   lines.push('', 'Packet command examples:');
   lines.push('  npm run quality:repair-workbench:packet -- --group <group-id> --packet-size 80');
+  lines.push('  npm run quality:repair-workbench:graph-packet -- --graph-pair "里⇄裏" --packet-size 80');
   lines.push('  npm run quality:repair-workbench:packet -- --book houhanshu --chapter 007 --packet-size 80');
   lines.push('  npm run quality:repair-workbench:apply -- --decisions data/quality/repair-packets/workbench/<packet>.json');
   console.log(lines.join('\n'));
@@ -1140,6 +1169,21 @@ function safeSlug(value) {
 }
 
 function selectPacketRecords(records, opts) {
+  if (opts.groupId && opts.graphPair) {
+    throw new Error('Use either --group or --graph-pair, not both.');
+  }
+  if (opts.graphPair) {
+    const pair = String(opts.graphPair || '').trim();
+    if (splitGraphPair(pair).length !== 2) {
+      throw new Error('--graph-pair must look like SOURCE⇄LOCAL, for example 里⇄裏.');
+    }
+    return records
+      .filter((record) => {
+        const pairs = charDiffPairs(sourceText(record), localText(record));
+        return pairs.length > 0 && pairs.every((candidate) => graphPairMatches(candidate, pair));
+      })
+      .slice(0, opts.packetSize);
+  }
   if (!opts.groupId) return records.slice(0, opts.packetSize);
 
   const groups = groupRecords(records, { minGroup: 1 });
@@ -1158,7 +1202,17 @@ function writePacket(records, opts) {
   const groupsForRecommendation = opts.groupId
     ? groupRecords(records, { minGroup: 1 }).filter((group) => group.id === opts.groupId)
     : groupRecords(selected, { minGroup: 1 });
-  const packetRecommendation = groupsForRecommendation.length === 1
+  const packetRecommendation = opts.graphPair
+    ? {
+      kind: 'graph-pair',
+      risk: selected.length >= 10 ? 'medium' : 'medium-high',
+      suggestedDefaultDecision: 'skip',
+      suggestedDefaultNotes: '',
+      requiresManualTranslation: false,
+      prefersChapterContext: false,
+      reviewHint: `Audit graph pair ${opts.graphPair} in context. If upstream is clearly correct, approve and apply source edits; if it is only an edition preference, deny.`,
+    }
+    : groupsForRecommendation.length === 1
     ? laneRecommendation(groupsForRecommendation[0])
     : {
       kind: 'mixed-review',
@@ -1176,6 +1230,8 @@ function writePacket(records, opts) {
   fs.mkdirSync(opts.outDir, { recursive: true });
   const scopePart = opts.groupId
     ? `group-${opts.groupId}`
+    : opts.graphPair
+      ? `graph-${hashId(opts.graphPair)}`
     : [
       opts.classFilter || 'mixed',
       [...opts.books].join('-'),
@@ -1493,7 +1549,7 @@ function applyDecisions(opts) {
 
   for (const packetItemRecord of packet.items || []) {
     let decision = normalizeDecision(packetItemRecord.decision);
-    const itemHasOwnDecision = !['', 'pending', 'skip'].includes(String(packetItemRecord.decision || '').trim().toLowerCase());
+    const itemHasOwnDecision = !['', 'pending'].includes(String(packetItemRecord.decision || '').trim().toLowerCase());
     if (decision === 'skip' && !itemHasOwnDecision && defaultDecision !== 'skip') {
       decision = defaultDecision;
       packetItemRecord.effectiveNotes = packetItemRecord.notes || defaultNotes;

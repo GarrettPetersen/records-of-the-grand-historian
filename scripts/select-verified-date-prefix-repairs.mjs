@@ -293,6 +293,10 @@ function variantText(text) {
   return out;
 }
 
+function contentKey(text) {
+  return variantText(text).replace(/[^\p{Script=Han}0-9]/gu, '');
+}
+
 function sourceKey(unit) {
   for (const key of SOURCE_KEYS) {
     if (typeof unit?.[key] === 'string') return key;
@@ -382,6 +386,36 @@ function englishText(unit) {
   return parts.join('\n').replace(/\s+/gu, ' ').trim();
 }
 
+function translationForManualRow(unit, zh) {
+  const translation = Array.isArray(unit?.translations)
+    ? unit.translations.find((entry) => (
+      typeof entry?.literal === 'string'
+      && entry.literal.trim()
+      && typeof entry?.idiomatic === 'string'
+      && entry.idiomatic.trim()
+    ))
+    : null;
+
+  const literal = String(translation?.literal || unit?.literal || '').trim();
+  const idiomatic = String(translation?.idiomatic || unit?.idiomatic || unit?.translation || '').trim();
+  if (!literal || !idiomatic) return null;
+
+  const row = {
+    zh,
+    literal,
+    idiomatic,
+    translator: String(translation?.translator || unit?.translator || 'Garrett M. Petersen (2026)').trim(),
+    model: String(translation?.model || unit?.model || 'Existing English retained after verified date-prefix repair').trim(),
+  };
+  if (typeof translation?.footnote === 'string' && translation.footnote.trim()) {
+    row.footnote = translation.footnote.trim();
+  }
+  if (translation?.allowChineseCharacters === true || unit?.allowChineseCharacters === true) {
+    row.allowChineseCharacters = true;
+  }
+  return row;
+}
+
 function parseChineseNumber(text) {
   const value = normalizeWhitespace(text);
   if (value === '元') return 1;
@@ -440,6 +474,29 @@ function englishHasDate(text, date) {
   return patterns.some((pattern) => pattern.test(english));
 }
 
+const SENTENCE_ENDINGS = /([。！？；!?;])/gu;
+
+function splitSentences(text) {
+  const sentences = [];
+  const parts = String(text || '').split(SENTENCE_ENDINGS);
+
+  let current = '';
+  for (let i = 0; i < parts.length; i += 1) {
+    if (i % 2 === 1) {
+      current += parts[i];
+      if (current.trim()) {
+        sentences.push(current.trim());
+        current = '';
+      }
+    } else {
+      current += parts[i];
+    }
+  }
+
+  if (current.trim()) sentences.push(current.trim());
+  return sentences.filter((sentence) => /[\p{Script=Han}]/u.test(sentence));
+}
+
 function extractDatePrefixRepair(item) {
   if (!['text_discrepancy_candidate', 'source_replacement_candidate'].includes(item.type || '')) return null;
   if (statusOf(item) !== 'pending') return null;
@@ -455,13 +512,96 @@ function extractDatePrefixRepair(item) {
     const date = parseDatePrefix(prefix);
     if (!date) continue;
     const rest = sourceChars.slice(end).join('');
-    if (variantText(rest) !== variantText(local)) continue;
+    if (contentKey(rest) !== contentKey(local)) continue;
     return { prefix, date };
   }
   return null;
 }
 
+function extractSingleDatePrefix(text) {
+  const source = normalizeWhitespace(text || '');
+  const sourceChars = [...source];
+  for (let end = 2; end <= Math.min(DATE_PREFIX_MAX_CHARS, sourceChars.length - 1); end += 1) {
+    const prefix = sourceChars.slice(0, end).join('');
+    const date = parseDatePrefix(prefix);
+    if (!date) continue;
+    const rest = sourceChars.slice(end).join('');
+    if (!rest) continue;
+    return { prefix, date, rest };
+  }
+  return null;
+}
+
+function liveUnitsForItem(item) {
+  const locations = item.localRange?.locations || [];
+  if (locations.length === 0) return [];
+  if (locations.some((location) => location.kind !== 'sentence' || String(location.blockType || '') !== 'paragraph')) {
+    return [];
+  }
+
+  const file = item.file || '';
+  if (!file || !fs.existsSync(file)) return [];
+  const absolute = path.resolve(file);
+  let units = chapterCache.get(absolute);
+  if (!units) {
+    units = collectUnits(JSON.parse(fs.readFileSync(absolute, 'utf8')));
+    chapterCache.set(absolute, units);
+  }
+
+  return locations.map((location) => units.find((candidate) => unitMatchesLocation(candidate, location)) || null);
+}
+
+function multiUnitDatePrefixRepair(item, queuePath, queueIndex) {
+  if (!['text_discrepancy_candidate', 'source_replacement_candidate'].includes(item.type || '')) return null;
+  if (statusOf(item) !== 'pending') return null;
+  if (!item.sourceRange?.text || !item.localRange?.text) return null;
+
+  const liveUnits = liveUnitsForItem(item);
+  if (liveUnits.length < 2 || liveUnits.some((unit) => !unit)) return null;
+
+  const sourceSentences = splitSentences(item.sourceRange.text);
+  if (sourceSentences.length !== liveUnits.length) return null;
+
+  const manualTranslations = [];
+  const prefixes = [];
+  for (let index = 0; index < sourceSentences.length; index += 1) {
+    const sourceSentence = sourceSentences[index];
+    const liveUnit = liveUnits[index].unit;
+    const liveText = String(liveUnit[liveUnits[index].key] || '');
+
+    const repair = extractSingleDatePrefix(sourceSentence);
+    if (!repair) return null;
+    if (contentKey(repair.rest) !== contentKey(liveText)) return null;
+
+    const english = englishText(liveUnit);
+    if (!englishHasDate(english, repair.date)) return null;
+
+    const manual = translationForManualRow(liveUnit, sourceSentence);
+    if (!manual) return null;
+    manualTranslations.push(manual);
+    prefixes.push(repair.prefix);
+  }
+
+  return {
+    id: item.id,
+    queueFile: path.relative(process.cwd(), queuePath),
+    queueIndex,
+    book: item.book,
+    chapter: item.chapter,
+    file: item.file,
+    prefix: prefixes.join(' | '),
+    date: null,
+    source: item.sourceRange.text,
+    local: item.localRange.text,
+    english: manualTranslations.map((row) => row.idiomatic).join(' / ').slice(0, 240),
+    manualTranslations,
+  };
+}
+
 function itemMatches(item, queuePath, queueIndex) {
+  const multiUnit = multiUnitDatePrefixRepair(item, queuePath, queueIndex);
+  if (multiUnit) return multiUnit;
+
   const repair = extractDatePrefixRepair(item);
   if (!repair) return null;
 
@@ -470,6 +610,8 @@ function itemMatches(item, queuePath, queueIndex) {
 
   const english = englishText(unit.unit);
   if (!englishHasDate(english, repair.date)) return null;
+  const manual = translationForManualRow(unit.unit, item.sourceRange.text);
+  if (!manual) return null;
 
   return {
     id: item.id,
@@ -483,6 +625,7 @@ function itemMatches(item, queuePath, queueIndex) {
     source: item.sourceRange.text,
     local: item.localRange.text,
     english: english.slice(0, 240),
+    manualTranslations: [manual],
   };
 }
 
@@ -505,7 +648,7 @@ function writePacket(candidates, opts) {
     defaultDecision: 'approve',
     defaultNotes: 'Approved source repair: upstream restores a leading regnal-year prefix already present in the existing English translation.',
     defaultPreserveExistingTranslations: true,
-    defaultTranslationReviewNote: 'Existing English translation already includes the restored upstream regnal date; retained.',
+    defaultTranslationReviewNote: 'Existing English translation already includes the restored upstream regnal date; retained as manualTranslations.',
     items: candidates.map((candidate) => ({
       id: candidate.id,
       queueFile: candidate.queueFile,
@@ -515,6 +658,7 @@ function writePacket(candidates, opts) {
       decision: 'approve',
       preserveExistingTranslations: true,
       translationReviewNote: 'Existing English translation already includes the restored upstream regnal date; retained.',
+      manualTranslations: candidate.manualTranslations || [],
       notes: `Verified date prefix ${JSON.stringify(candidate.prefix)} against existing English.`,
       source: candidate.source,
       local: candidate.local,

@@ -24448,7 +24448,7 @@
     },
     {
       "id": "source-jinshu-019-wikisource-c9c7fdca782b",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.893,
@@ -24518,8 +24518,22 @@
         "afterLocal": "如此者甚眾。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Conservative graph-only source repair; upstream graph form accepted after lane review.\nExisting English translation manually checked for graph-only source repair and retained.",
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for graph-only source repair and retained.",
+      "reviewedAt": "2026-06-24T23:38:24.888Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-24T23:38:26.258Z",
+      "appliedSummary": {
+        "id": "source-jinshu-019-wikisource-c9c7fdca782b",
+        "type": "text_discrepancy_candidate",
+        "start": 54,
+        "removed": 4,
+        "inserted": 4,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-jinshu-019-wikisource-cda9b8e04541",
@@ -32846,7 +32860,7 @@
     },
     {
       "id": "source-jinshu-023-wikisource-c493d74c885d",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.733,
@@ -32889,8 +32903,10 @@
         "afterLocal": "《鐸舞歌》一篇，《幡舞歌》一篇，《鼓舞伎》六曲，並陳於元會。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied reviewed glyph/date/source repairs manually and checked the associated English translations; structural headings were preserved.",
+      "reviewedAt": "2026-06-24T23:17:20.250Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-jinshu-023-wikisource-c71a7056e919",
@@ -112886,7 +112902,7 @@
     },
     {
       "id": "source-jinshu-116-wikisource-c7a7694cb4c5",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.625,
@@ -112929,8 +112945,10 @@
         "afterLocal": "偽諡武昭皇帝，廟號太祖，墓稱原陵。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied manually after checking quote-boundary context; repaired Chinese glyphs, duplicate words, and associated English translations where the repaired source changed the meaning.",
+      "reviewedAt": "2026-06-24T23:12:57.594Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-jinshu-116-wikisource-dd8d61d7b0c7",
@@ -115534,5 +115552,5 @@
       "reviewer": "repair-source-queue-patterns"
     }
   ],
-  "updatedAt": "2026-06-24T22:19:44.081Z"
+  "updatedAt": "2026-06-24T23:38:26.296Z"
 }

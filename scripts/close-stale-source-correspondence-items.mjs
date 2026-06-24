@@ -177,6 +177,91 @@ function sourceBetweenAnchors(item) {
   return true;
 }
 
+function sourceNearAnyAnchor(item) {
+  if (!item.file || !fs.existsSync(item.file)) return false;
+  const full = chapterTextKey(item.file);
+  const source = variantKey(item.sourceRange?.text || '');
+  if (!source || source.length < 4) return false;
+
+  const sourceIndex = full.indexOf(source);
+  if (sourceIndex < 0 || full.indexOf(source, sourceIndex + 1) >= 0) return false;
+
+  const before = variantKey(item.context?.beforeLocal || item.context?.beforeSource || '');
+  const after = variantKey(item.context?.afterLocal || item.context?.afterSource || '');
+  if (!before && !after) return false;
+
+  if (before) {
+    const beforeIndex = full.lastIndexOf(before, sourceIndex);
+    if (beforeIndex >= 0 && sourceIndex - (beforeIndex + before.length) <= 10000) return true;
+  }
+  if (after) {
+    const afterIndex = full.indexOf(after, sourceIndex + source.length);
+    if (afterIndex >= 0 && afterIndex - (sourceIndex + source.length) <= 10000) return true;
+  }
+  return false;
+}
+
+const TABLE_MARKUP_RE = /\{\||\|\}|\|-|\|\+|\|\||!!|(?:^|[|\s])(?:class|style|colspan|rowspan|width|height|align|valign)\s*=/iu;
+const CJK_OR_DIGIT_RE = /[\p{Script=Han}0-9]/u;
+
+function normalizeTableNumerals(text) {
+  return String(text || '')
+    .replace(/二十/gu, '廿')
+    .replace(/三十/gu, '卅')
+    .replace(/四十/gu, '卌')
+    .replace(/十(?=[一二三四五六七八九])/gu, '一十');
+}
+
+function tableContentKey(text) {
+  return variantText(normalizeTableNumerals(text)
+    .replace(/class\s*=\s*"[^"]*"/giu, '')
+    .replace(/style\s*=\s*"[^"]*"/giu, '')
+    .replace(/(?:colspan|rowspan|width|height|align|valign)\s*=\s*"?[\w%.-]+"?/giu, '')
+    .replace(/\{\||\|\}|\|-|\|\+|\|\||!!|[|!]/gu, '')
+    .replace(/[^\p{Script=Han}0-9]/gu, '')
+    .normalize('NFKC'));
+}
+
+function tableMarkupEquivalent(sourceText, localText) {
+  if (!TABLE_MARKUP_RE.test(sourceText)) return false;
+  if (!CJK_OR_DIGIT_RE.test(sourceText) || !CJK_OR_DIGIT_RE.test(localText)) return false;
+  const source = tableContentKey(sourceText);
+  const local = tableContentKey(localText);
+  return Boolean(source && local && source === local);
+}
+
+const metaKeyCache = new Map();
+
+function chapterMetaKey(file) {
+  const absolute = path.resolve(file);
+  if (metaKeyCache.has(absolute)) return metaKeyCache.get(absolute);
+  const data = JSON.parse(fs.readFileSync(absolute, 'utf8'));
+  const meta = data.meta || {};
+  const title = meta.title || {};
+  const key = variantKey([
+    title.zh,
+    title.raw,
+    meta.book,
+    meta.chapter,
+  ].filter(Boolean).join(''));
+  metaKeyCache.set(absolute, key);
+  return key;
+}
+
+function preTocTitlePrefixEquivalent(item, liveText) {
+  if (!item.file || !fs.existsSync(item.file)) return false;
+  const sourceText = String(item.sourceRange?.text || '');
+  const index = sourceText.indexOf('__TOC__');
+  if (index < 0) return false;
+
+  const prefix = sourceText.slice(0, index);
+  const body = sourceText.slice(index + '__TOC__'.length);
+  const prefixKey = variantKey(prefix);
+  if (!prefixKey || prefix.length > 250) return false;
+  if (variantKey(body) !== variantKey(liveText)) return false;
+  return chapterMetaKey(item.file).includes(prefixKey);
+}
+
 function startsWithLastName(prefix, source) {
   const chars = [...prefix];
   for (let length = Math.min(4, chars.length); length >= 1; length -= 1) {
@@ -244,6 +329,20 @@ function classify(item) {
         notes: 'Reviewed as no-op: live local Han/digit content is already equivalent to upstream after punctuation-boundary repair; local corpus text retained.',
       };
     }
+    if (tableMarkupEquivalent(item.sourceRange.text, liveText)) {
+      return {
+        decision: 'denied',
+        reason: 'table-markup-equivalent',
+        notes: 'Reviewed as no-op: upstream table markup, blank-cell separators, or table numeric spelling normalize to the same live local table text; local corpus text retained.',
+      };
+    }
+    if (preTocTitlePrefixEquivalent(item, liveText)) {
+      return {
+        decision: 'denied',
+        reason: 'pre-toc-title-prefix-equivalent',
+        notes: 'Reviewed as no-op: upstream pre-TOC title/list prefix is already represented in chapter metadata, and the post-TOC body matches live local text.',
+      };
+    }
 
     const source = variantKey(item.sourceRange.text);
     const local = variantKey(liveText);
@@ -290,6 +389,12 @@ function classify(item) {
       decision: 'applied',
       reason: 'source-already-present-between-anchors',
       notes: 'Reviewed as already repaired: live corpus already contains the upstream source text between the recorded anchors.',
+    };
+  } else if ((item.localRange?.locations || []).length === 0 && sourceNearAnyAnchor(item)) {
+    return {
+      decision: 'applied',
+      reason: 'source-already-present-near-anchor',
+      notes: 'Reviewed as already repaired: live corpus already contains the upstream source text uniquely near one recorded anchor.',
     };
   }
 

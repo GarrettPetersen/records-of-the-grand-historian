@@ -24171,7 +24171,7 @@
     },
     {
       "id": "source-hanshu-015-wikisource-7ce484d2dbbb",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -24214,8 +24214,10 @@
         "afterLocal": "頃侯土生嗣。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.\nReopened for manual review: previous automatic variant no-op ignored punctuation or quote placement."
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.\nReopened for manual review: previous automatic variant no-op ignored punctuation or quote placement.",
+      "reviewedAt": "2026-06-24T22:48:22.008Z",
+      "reviewer": "source-correspondence"
     },
     {
       "id": "source-hanshu-015-wikisource-7f77bc2eed2b",
@@ -48083,7 +48085,7 @@
     },
     {
       "id": "source-hanshu-019-wikisource-443a8f24310b",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -48107,8 +48109,15 @@
         "afterLocal": "京兆尹南陽翟萌幼中。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Reviewed as already repaired: live corpus already contains the upstream source text uniquely near one recorded anchor.",
+      "appliedAt": "2026-06-24T22:42:09.480Z",
+      "appliedSummary": {
+        "mode": "already-present",
+        "source": "close-stale-source-correspondence-items",
+        "reason": "source-already-present-near-anchor"
+      },
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-hanshu-019-wikisource-44bb14d74816",
@@ -48620,7 +48629,7 @@
     },
     {
       "id": "source-hanshu-019-wikisource-50df117304d9",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -48644,8 +48653,15 @@
         "afterLocal": "御史大夫何武為前將軍，二年免。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Reviewed as already repaired: live corpus already contains the upstream source text uniquely near one recorded anchor.",
+      "appliedAt": "2026-06-24T22:42:09.480Z",
+      "appliedSummary": {
+        "mode": "already-present",
+        "source": "close-stale-source-correspondence-items",
+        "reason": "source-already-present-near-anchor"
+      },
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-hanshu-019-wikisource-5494c437306b",
@@ -49372,7 +49388,7 @@
     },
     {
       "id": "source-hanshu-019-wikisource-83f0fe81225d",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -49415,8 +49431,31 @@
         "afterLocal": "太常劉岑為宗伯。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Reviewed graph-pair lane; upstream graph form accepted for source text after checking item context.\nExisting English translation manually checked for this graph-only source repair and retained.",
+      "manualTranslations": [
+        {
+          "zh": "大鴻臚左咸。",
+          "literal": "Zuo Xian was Grand Herald",
+          "idiomatic": "Zuo Xian served as Grand Herald",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Existing English retained after source repair"
+        }
+      ],
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for this graph-only source repair and retained.",
+      "reviewedAt": "2026-06-24T23:06:41.178Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-24T23:06:42.160Z",
+      "appliedSummary": {
+        "id": "source-hanshu-019-wikisource-83f0fe81225d",
+        "type": "text_discrepancy_candidate",
+        "start": 3729,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-hanshu-019-wikisource-885cca31bf26",
@@ -49670,7 +49709,7 @@
     },
     {
       "id": "source-hanshu-019-wikisource-9a859a2d53db",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -49722,8 +49761,10 @@
         "afterLocal": "五月甲午，御史大夫于定國為丞相。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied manually after checking item context; Chinese numeric/month readings were updated in the corpus and associated English translations were revised where the meaning changed.",
+      "reviewedAt": "2026-06-24T23:08:31.563Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-hanshu-019-wikisource-9c64778ed8f6",
@@ -81948,7 +81989,7 @@
     },
     {
       "id": "source-hanshu-061-wikisource-7e11a168e34e",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.778,
@@ -82000,8 +82041,10 @@
         "afterLocal": "嘗受《韓子》、雜說鄒田生所。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied manually after checking quote-boundary context; repaired Chinese glyphs, duplicate words, and associated English translations where the repaired source changed the meaning.",
+      "reviewedAt": "2026-06-24T23:12:57.594Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-hanshu-061-wikisource-7f394bd37277",
@@ -107323,7 +107366,7 @@
     },
     {
       "id": "source-hanshu-077-wikisource-88a9bc87ca59",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.895,
@@ -107366,8 +107409,22 @@
         "afterLocal": "初，千秋始視事，見上連年治太子獄，誅罰尤多，群下恐懼，思欲寬廣上意，尉安眾庶。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Conservative graph-only source repair; upstream graph form accepted after lane review.\nExisting English translation manually checked for graph-only source repair and retained.",
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for graph-only source repair and retained.",
+      "reviewedAt": "2026-06-24T23:38:24.888Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-24T23:38:25.971Z",
+      "appliedSummary": {
+        "id": "source-hanshu-077-wikisource-88a9bc87ca59",
+        "type": "text_discrepancy_candidate",
+        "start": 88,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-hanshu-077-wikisource-9460505ac89d",
@@ -119529,7 +119586,7 @@
     },
     {
       "id": "source-hanshu-086-wikisource-45dd3b834d33",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -119581,8 +119638,22 @@
         "afterLocal": "仲舒下吏，夏侯囚執，眭孟誅戮，李尋流放，此學者之大戒也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Conservative graph-only source repair; upstream graph form accepted after lane review.\nExisting English translation manually checked for graph-only source repair and retained.",
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for graph-only source repair and retained.",
+      "reviewedAt": "2026-06-24T23:38:24.888Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-24T23:38:25.971Z",
+      "appliedSummary": {
+        "id": "source-hanshu-086-wikisource-45dd3b834d33",
+        "type": "text_discrepancy_candidate",
+        "start": 474,
+        "removed": 2,
+        "inserted": 2,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-hanshu-086-wikisource-45f8dfee8e27",
@@ -124540,7 +124611,7 @@
     },
     {
       "id": "source-hanshu-095-wikisource-f0f6c1255130",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -124583,8 +124654,22 @@
         "afterLocal": "是以廣立王侯，並建曾玄，俾屏我京師，綏撫宇內；"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Conservative graph-only source repair; upstream graph form accepted after lane review.\nExisting English translation manually checked for graph-only source repair and retained.",
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for graph-only source repair and retained.",
+      "reviewedAt": "2026-06-24T23:38:24.888Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-24T23:38:25.971Z",
+      "appliedSummary": {
+        "id": "source-hanshu-095-wikisource-f0f6c1255130",
+        "type": "text_discrepancy_candidate",
+        "start": 205,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-hanshu-096-wikisource-16351b930b1d",
@@ -128276,7 +128361,7 @@
     },
     {
       "id": "source-hanshu-099-wikisource-24f68f63ded9",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -128319,8 +128404,22 @@
         "afterLocal": "假言周於天地，贊於神明，幽弘橫廣，絕於邇言。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Conservative graph-only source repair; upstream graph form accepted after lane review.\nExisting English translation manually checked for graph-only source repair and retained.",
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for graph-only source repair and retained.",
+      "reviewedAt": "2026-06-24T23:38:24.888Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-24T23:38:25.971Z",
+      "appliedSummary": {
+        "id": "source-hanshu-099-wikisource-24f68f63ded9",
+        "type": "text_discrepancy_candidate",
+        "start": 166,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-hanshu-099-wikisource-45e66cb5f87f",
@@ -129266,7 +129365,7 @@
     },
     {
       "id": "source-hanshu-099-wikisource-cb37bb36a4ac",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.88,
@@ -129327,8 +129426,22 @@
         "afterLocal": "芒芒天道，在昔聖考，過則失中，不及則不至，不可奸罔。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Conservative graph-only source repair; upstream graph form accepted after lane review.\nExisting English translation manually checked for graph-only source repair and retained.",
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for graph-only source repair and retained.",
+      "reviewedAt": "2026-06-24T23:38:24.888Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-24T23:38:25.971Z",
+      "appliedSummary": {
+        "id": "source-hanshu-099-wikisource-cb37bb36a4ac",
+        "type": "text_discrepancy_candidate",
+        "start": 158,
+        "removed": 3,
+        "inserted": 3,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-hanshu-099-wikisource-f31184031a98",
@@ -129901,7 +130014,7 @@
     },
     {
       "id": "source-hanshu-101-wikisource-627daaee4117",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -129944,8 +130057,22 @@
         "afterLocal": "信臣為民作均水約束，刻石立於田畔，以防分爭。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Conservative graph-only source repair; upstream graph form accepted after lane review.\nExisting English translation manually checked for graph-only source repair and retained.",
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for graph-only source repair and retained.",
+      "reviewedAt": "2026-06-24T23:38:24.888Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-24T23:38:25.971Z",
+      "appliedSummary": {
+        "id": "source-hanshu-101-wikisource-627daaee4117",
+        "type": "text_discrepancy_candidate",
+        "start": 209,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-hanshu-101-wikisource-74bf19c25d79",
@@ -133649,7 +133776,7 @@
     },
     {
       "id": "source-hanshu-107-wikisource-6218ceb44600",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.882,
@@ -133692,8 +133819,22 @@
         "afterLocal": "十二月，還入塞，莽大喜，賜歙錢二百萬，悉封黯等。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Conservative graph-only source repair; upstream graph form accepted after lane review.\nExisting English translation manually checked for graph-only source repair and retained.",
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for graph-only source repair and retained.",
+      "reviewedAt": "2026-06-24T23:38:24.888Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-24T23:38:25.971Z",
+      "appliedSummary": {
+        "id": "source-hanshu-107-wikisource-6218ceb44600",
+        "type": "text_discrepancy_candidate",
+        "start": 408,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-hanshu-107-wikisource-7f2f3ab247c0",
@@ -138550,7 +138691,7 @@
     },
     {
       "id": "source-hanshu-114-wikisource-571ad3a34719",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.864,
@@ -138602,8 +138743,22 @@
         "afterLocal": "究於前議，其九錫禮儀亟奏。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Conservative graph-only source repair; upstream graph form accepted after lane review.\nExisting English translation manually checked for graph-only source repair and retained.",
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for graph-only source repair and retained.",
+      "reviewedAt": "2026-06-24T23:38:24.888Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-24T23:38:25.971Z",
+      "appliedSummary": {
+        "id": "source-hanshu-114-wikisource-571ad3a34719",
+        "type": "text_discrepancy_candidate",
+        "start": 358,
+        "removed": 2,
+        "inserted": 2,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-hanshu-114-wikisource-57577d31f866",
@@ -156490,5 +156645,5 @@
       "reviewer": "repair-source-queue-patterns"
     }
   ],
-  "updatedAt": "2026-06-24T22:19:44.081Z"
+  "updatedAt": "2026-06-24T23:38:26.090Z"
 }

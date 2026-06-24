@@ -916,12 +916,19 @@ function pairedSourceUnits(sourceSentences, localEntries) {
     let best = -1;
     let bestScore = 0;
     for (let sourceIndex = cursor; sourceIndex < sourceSentences.length; sourceIndex += 1) {
-      const score = similarity(sourceSentences[sourceIndex], sourceText(localEntries[localIndex]));
+      const sourceSentence = sourceSentences[sourceIndex];
+      const localText = sourceText(localEntries[localIndex]);
+      if (datePrefixRestKey(sourceSentence) === comparisonKey(localText)) {
+        best = sourceIndex;
+        bestScore = 1;
+        break;
+      }
+      const score = similarity(sourceSentence, localText);
       if (score > bestScore) {
         best = sourceIndex;
         bestScore = score;
       }
-      if (comparisonKey(sourceSentences[sourceIndex]) === comparisonKey(sourceText(localEntries[localIndex]))) break;
+      if (comparisonKey(sourceSentence) === comparisonKey(localText)) break;
     }
     if (best >= 0 && bestScore >= 0.72) {
       pairs.set(best, localIndex);
@@ -929,6 +936,11 @@ function pairedSourceUnits(sourceSentences, localEntries) {
     }
   }
   return pairs;
+}
+
+function datePrefixRestKey(text) {
+  const match = String(text || '').trim().match(/^\p{Script=Han}{1,8}(?:元|[一二三四五六七八九十廿卅0-9]+)年[，,、]?(?<rest>.+)$/u);
+  return match?.groups?.rest ? comparisonKey(match.groups.rest) : '';
 }
 
 function adjustedSourceText(item) {
