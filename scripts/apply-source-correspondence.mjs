@@ -328,8 +328,8 @@ function applyManualTranslation(unit, manual) {
   for (const key of ['literal', 'idiomatic', 'translation']) {
     if (Object.hasOwn(unit, key)) unit[key] = translation[key] || '';
   }
-  unit.translator = manual.translator;
-  unit.model = manual.model;
+  if (Object.hasOwn(unit, 'translator')) unit.translator = manual.translator;
+  if (Object.hasOwn(unit, 'model')) unit.model = manual.model;
   if (manual.allowChineseCharacters) unit.allowChineseCharacters = true;
 }
 
