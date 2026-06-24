@@ -24,7 +24,7 @@ const SOURCE_ARTIFACT_RULES = [
     id: 'SOURCE_LEADING_SECTION_NUMBER',
     severity: 2,
     description: 'Arabic section/list numbering leaked into Chinese source sentence',
-    pattern: /^(?:-{4,})?\d+\s*(?=\p{Script=Han})/gu,
+    pattern: /^(?!(?:-{4,})?\d{3,4}\s+(?:(?:\p{Script=Han}{1,8})?元[年載]|(?:\p{Script=Han}{1,8})?[一二三四五六七八九十]+[年載]))(?:-{4,})?\d+\s*(?=\p{Script=Han})/gu,
   },
   {
     id: 'SOURCE_TRAILING_LAYOUT_MARKER',
@@ -45,10 +45,16 @@ const SOURCE_ARTIFACT_RULES = [
     pattern: /^=+\s*校刊記\s*=+[」』”]*$/gu,
   },
   {
+    id: 'SOURCE_WIKISOURCE_HEADING_MARKUP',
+    severity: 3,
+    description: 'MediaWiki heading markup leaked into Chinese source',
+    pattern: /^=+[^=\n]{1,80}=+/gu,
+  },
+  {
     id: 'SOURCE_WIKISOURCE_CORRECTION_BRACKET',
     severity: 2,
     description: 'Wikisource correction/supplement bracket leaked into Chinese source',
-    pattern: /[〔〕]/gu,
+    pattern: /〔(?![一二三四五六七八九十百千萬万零〇０\d]+〕)[^〕]{1,20}〕/gu,
   },
   {
     id: 'SOURCE_WIKISOURCE_INLINE_CORRECTION_NOTE',
@@ -101,8 +107,8 @@ const SOURCE_ARTIFACT_RULES = [
   {
     id: 'SOURCE_HTML_TABLE_SPAN',
     severity: 3,
-    description: 'HTML table span attribute leaked into Chinese source',
-    pattern: /\b(?:rowspan|colspan)\b/gi,
+    description: 'HTML table attribute leaked into Chinese source',
+    pattern: /\b(?:class|style|rowspan|colspan|valign|align|width|height|border|cellspacing|cellpadding)\s*=/gi,
   },
   {
     id: 'SOURCE_RAW_HTML_TAG',

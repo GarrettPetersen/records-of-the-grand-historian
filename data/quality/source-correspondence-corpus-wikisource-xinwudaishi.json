@@ -11621,7 +11621,7 @@
     },
     {
       "id": "source-xinwudaishi-010-wikisource-03cd6d85f46d",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -11664,8 +11664,29 @@
         "afterLocal": "秋閏七月乙丑，禁造契丹服器。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Accepted 劉昫; local 劉句 was wrong. English name corrected from Liu Ju to Liu Xu.",
+      "manualTranslations": [
+        {
+          "zh": "是夏，劉昫薨。",
+          "literal": "That summer Liu Xu died.",
+          "idiomatic": "That summer Liu Xu died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-24T12:58:50.618Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-24T12:59:45.149Z",
+      "appliedSummary": {
+        "id": "source-xinwudaishi-010-wikisource-03cd6d85f46d",
+        "type": "text_discrepancy_candidate",
+        "start": 48,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-xinwudaishi-010-wikisource-068230af28c6",
@@ -29381,7 +29402,7 @@
     },
     {
       "id": "source-xinwudaishi-054-wikisource-08d323fc25b2",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -29424,8 +29445,10 @@
         "afterLocal": "導後事晉為吏部侍郎。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream range starts with closing punctuation \"」\" that is already attached to previous live source unit s0258 as \"」\"; local segmentation retained.",
+      "reviewedAt": "2026-06-24T13:19:34.368Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-054-wikisource-3eddebc4c5d8",
@@ -38468,5 +38491,5 @@
       "reviewer": "repair-source-queue-patterns"
     }
   ],
-  "updatedAt": "2026-06-24T12:48:24.105Z"
+  "updatedAt": "2026-06-24T13:19:34.368Z"
 }

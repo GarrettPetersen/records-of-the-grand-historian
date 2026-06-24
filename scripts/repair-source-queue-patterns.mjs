@@ -30,6 +30,8 @@ const STRUCTURAL_SOURCE_ARTIFACT_RULES = new Set([
 const REPAIRABLE_SOURCE_ARTIFACT_RULES = new Set([
   ...STRUCTURAL_SOURCE_ARTIFACT_RULES,
   'SOURCE_PRIVATE_USE_GLYPH',
+  'SOURCE_REPEATED_CLOSING_QUOTE',
+  'SOURCE_TRAILING_LAYOUT_MARKER',
 ]);
 const UPSTREAM_RESIDUE_TOKEN_PATTERN = String.raw`__TOC__|PD-old|----\s*校勘記|Category:[^\s<>|]+`;
 const UPSTREAM_RESIDUE_RE = new RegExp(UPSTREAM_RESIDUE_TOKEN_PATTERN, 'u');
@@ -43,6 +45,8 @@ const LEADING_YEAR_RE = /^(?:元|[一二三四五六七八九十百廿卅]+)(?:�
 const WIKI_PAGE_FIELD_RE = /\|?(?:previous|next|override_author|noauthor|notes|from|type|times)=[^|]*/gu;
 const HEADING_UI_ARTIFACT_RE = /[A-Za-z0-9%_=<>|\[\]{}*#/]/u;
 const SOURCE_HEADING_MARKUP_RE = /\b(?:class|style|width|rowspan|colspan)\s*=|wikitable/iu;
+const TABLE_MARKUP_RE = /\|\||!!|wikitable|\b(?:class|style|rowspan|colspan|valign|align|width|height|border|cellspacing|cellpadding)\s*=/iu;
+const LOCAL_HEADING_MARKUP_RE = /^=+([^=]{1,80})=+/u;
 const MAX_CHAPTER_START_RANGE_HEADING_UNITS = 20;
 const LEADING_CLOSE_PUNCT_RE = /^[」』”）)\]】〉》]+/u;
 const TRAILING_WRAPPER_CLOSE_CHARS = '〉》）)\\]】';
@@ -60,8 +64,9 @@ const EQUIVALENT_CLOSE_PUNCT = new Map([
 const RAW_HTML_TAG_RE = /<\/?[a-z][^>]*>/giu;
 const REF_OPEN_RE = /<ref\b[^>]*>/iu;
 const REF_CLOSE_RE = /<\/ref>/iu;
-const TABLE_SPAN_ATTR_RE = /(?:^|\|)\s*(?:(?:rowspan|colspan|valign|align|style|width|height)\s*=\s*(?:"[^"]*"|'[^']*')\s*)+\|?/giu;
+const TABLE_SPAN_ATTR_RE = /\b(?:class|style|rowspan|colspan|valign|align|width|height|border|cellspacing|cellpadding)\s*=\s*(?:"[^"]*"|'[^']*'|[^|!\s，。；：、]+)\s*\|?/giu;
 const CTEXT_INLINE_MARKUP_RE = /-\{([^}]+)\}-/gu;
+const TRAILING_LAYOUT_MARKER_RE = /-{4,}(?=[」』”]*$)/gu;
 const KNOWN_PRIVATE_USE_CHAR_REPAIRS = new Map([
   ['', '玘'],
   ['', '䚟'],
@@ -1811,6 +1816,7 @@ const CONTEXTUAL_PRIVATE_USE_REPAIRS = [
 
 const VARIANTS = new Map([
   ['并', '並'],
+  ['幷', '並'],
   ['竝', '並'],
   ['茍', '苟'],
   ['姧', '奸'],
@@ -1873,11 +1879,37 @@ const VARIANTS = new Map([
   ['効', '效'],
   ['疎', '疏'],
   ['却', '卻'],
+  ['勗', '勖'],
+  ['㫖', '旨'],
+  ['栢', '柏'],
+  ['槩', '概'],
+  ['欵', '款'],
+  ['暦', '曆'],
+  ['歴', '歷'],
+  ['諡', '謚'],
+  ['朞', '期'],
+  ['泄', '洩'],
+  ['渉', '涉'],
+  ['靑', '青'],
+  ['牋', '箋'],
+  ['矦', '侯'],
+  ['茘', '荔'],
+  ['贊', '讚'],
+  ['皐', '皋'],
+  ['礮', '炮'],
+  ['禀', '稟'],
+  ['穉', '稚'],
+  ['亖', '四'],
+]);
+const TABLE_VARIANTS = new Map([
+  ...VARIANTS,
+  ['廿', '二十'],
+  ['卅', '三十'],
 ]);
 
 function usage() {
   console.error(`Usage:
-  node scripts/repair-source-queue-patterns.mjs [--apply] [--book BOOK] [--reviewer NAME]
+  node scripts/repair-source-queue-patterns.mjs [--apply] [--book BOOK] [--reviewer NAME] [--skip-reopen]
 
 Clears high-confidence repair queue patterns. Dry-run by default.`);
 }
@@ -1887,6 +1919,7 @@ function parseArgs(argv) {
     apply: false,
     books: new Set(),
     reviewer: DEFAULT_REVIEWER,
+    skipReopen: false,
   };
 
   for (let i = 0; i < argv.length; i += 1) {
@@ -1897,6 +1930,10 @@ function parseArgs(argv) {
     }
     if (arg === '--apply') {
       opts.apply = true;
+      continue;
+    }
+    if (arg === '--skip-reopen') {
+      opts.skipReopen = true;
       continue;
     }
     if (arg === '--book') {
@@ -1970,6 +2007,24 @@ function variantText(text) {
   let out = '';
   for (const char of normalizePunctuation(normalizeWhitespace(text)).normalize('NFKC')) {
     out += VARIANTS.get(char) || char;
+  }
+  return out;
+}
+
+function stripTableMarkupText(text) {
+  return normalizePunctuation(normalizeWhitespace(text)).normalize('NFKC')
+    .replace(TABLE_SPAN_ATTR_RE, '')
+    .replace(/\|-\|?/gu, '')
+    .replace(/[|!]+/gu, '')
+    .replace(/-{2,}/gu, '')
+    .replace(/\[\[[^\]|]+\|([^\]]+)\]\]/gu, '$1')
+    .replace(/\[\[|\]\]/gu, '');
+}
+
+function tableVariantText(text) {
+  let out = '';
+  for (const char of stripTableMarkupText(text)) {
+    out += TABLE_VARIANTS.get(char) || char;
   }
   return out;
 }
@@ -2090,6 +2145,12 @@ function isDroppedChronologyPrefix(text) {
   return DROPPED_CHRONO_PREFIX_RE.test(normalized);
 }
 
+function isDroppedEraNameBeforeYear(text, following) {
+  const normalized = normalizeWhitespace(text);
+  if (!/^[\p{Script=Han}]{1,4}$/u.test(normalized)) return false;
+  return /^(?:元|[一二三四五六七八九十百廿卅]+)(?:年|載)/u.test(normalizeWhitespace(following));
+}
+
 function isDuplicateChronologyHeadingPrefix(prefix, retained) {
   const rawRetained = normalizeWhitespace(retained).replace(LEADING_CLOSE_PUNCT_RE, '');
   if (LEADING_YEAR_RE.test(rawRetained)) return true;
@@ -2131,6 +2192,65 @@ function localRangeMatchesLiveText(item, cache) {
   }
   const liveText = indices.map((index) => String(units[index].unit[units[index].key] || '')).join('');
   return variantText(liveText) === variantText(localRange.text || '');
+}
+
+function liveLocalRangeText(item, cache) {
+  const localRange = item.localRange;
+  const locations = localRange?.locations || [];
+  if (locations.length === 0) return localRange?.text || '';
+
+  const units = liveUnitsForItem(item, cache);
+  if (!units) return null;
+  const indices = locations.map((location) => units.findIndex((unit) => unitMatchesLocation(unit, location)));
+  if (indices.some((index) => index < 0)) return null;
+  for (let i = 1; i < indices.length; i += 1) {
+    if (indices[i] <= indices[i - 1]) return null;
+  }
+  return indices.map((index) => String(units[index].unit[units[index].key] || '')).join('');
+}
+
+function liveLocalRangeComparisonText(item, cache) {
+  const recorded = item.localRange?.text || '';
+  const live = liveLocalRangeText(item, cache);
+  if (live === null) return null;
+  if (variantText(live) === variantText(recorded)) return live;
+
+  const beforeLocal = item.context?.beforeLocal || '';
+  const afterLocal = item.context?.afterLocal || '';
+  const candidates = [];
+  if (afterLocal) candidates.push(`${recorded}${afterLocal}`);
+  if (beforeLocal) candidates.push(`${beforeLocal}${recorded}`);
+  if (beforeLocal && afterLocal) candidates.push(`${beforeLocal}${recorded}${afterLocal}`);
+
+  for (const candidate of candidates) {
+    if (variantText(live) === variantText(candidate)) return recorded;
+  }
+  return null;
+}
+
+function isTableMarkupNoOp(item, cache) {
+  if (![
+    'text_discrepancy_candidate',
+    'source_replacement_candidate',
+    'source_omission_candidate',
+  ].includes(item.type)) return null;
+
+  const source = item.sourceRange?.text || '';
+  if (!source || !TABLE_MARKUP_RE.test(source)) return null;
+
+  const liveLocal = liveLocalRangeComparisonText(item, cache);
+  if (!liveLocal) return null;
+
+  const sourceStripped = stripTableMarkupText(source);
+  const localStripped = stripTableMarkupText(liveLocal);
+  if (!sourceStripped || !localStripped) return null;
+  if (sourceStripped === localStripped && normalizeWhitespace(source) !== normalizeWhitespace(liveLocal)) {
+    return { variant: false };
+  }
+  if (sourceStripped !== localStripped && tableVariantText(source) === tableVariantText(liveLocal)) {
+    return { variant: true };
+  }
+  return null;
 }
 
 function isWikisourceDroppedChronologyPrefixNoOp(item, cache) {
@@ -2282,8 +2402,110 @@ function liveUnitsForItem(item, cache) {
   return units;
 }
 
+function liveDataForItem(item, cache) {
+  const file = item.file || '';
+  if (!file) return null;
+  const absolute = path.resolve(file);
+  if (cache.has(absolute)) return cache.get(absolute);
+  if (!fs.existsSync(file)) {
+    cache.set(absolute, null);
+    return null;
+  }
+  const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+  const entry = { data, units: collectSourceUnits(data), absolute, file };
+  cache.set(absolute, entry);
+  return entry;
+}
+
 function escapeRegExp(text) {
   return String(text || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function cleanEnglishHeadingText(text) {
+  let out = String(text || '');
+  if (!out) return { text: out, changed: false };
+
+  out = out
+    .replace(/^\s*=+\s*[^=]{1,120}\s*=+\s*/u, '')
+    .replace(/^\s*([^—.!?:：。！？]{2,80}?)\s+—\s+\1(?=\b|\s|,|，|。|\.|;|；|:|：)/iu, '$1');
+
+  const sentence = out.match(/^([^.!?。！？:：]{2,80})[.!?:：]\s+(.+)$/u);
+  if (sentence) {
+    const heading = sentence[1].trim();
+    const rest = sentence[2];
+    const headingRe = new RegExp(`^${escapeRegExp(heading)}(?=\\b|\\s|,|，|。|\\.|;|；|:|：)`, 'iu');
+    if (headingRe.test(rest)) {
+      out = rest;
+    } else {
+      const words = heading.split(/\s+/u).filter(Boolean);
+      const tail = words.length > 1 ? words.at(-1) : '';
+      if (tail) {
+        const tailRe = new RegExp(`^${escapeRegExp(tail)}(?=\\b|\\s|,|，|。|\\.|;|；|:|：)`, 'iu');
+        if (tailRe.test(rest)) out = `${heading}${rest.slice(tail.length)}`;
+      }
+    }
+  }
+
+  out = out.replace(/\s{2,}/gu, ' ').trim();
+  return { text: out, changed: out !== text };
+}
+
+function cleanTranslationHeadingArtifacts(unit) {
+  let changed = 0;
+  for (const field of ['literal', 'idiomatic']) {
+    if (typeof unit[field] !== 'string') continue;
+    const result = cleanEnglishHeadingText(unit[field]);
+    if (!result.changed) continue;
+    unit[field] = result.text;
+    changed += 1;
+  }
+  for (const translation of unit.translations || []) {
+    for (const field of ['literal', 'idiomatic']) {
+      if (typeof translation[field] !== 'string') continue;
+      const result = cleanEnglishHeadingText(translation[field]);
+      if (!result.changed) continue;
+      translation[field] = result.text;
+      changed += 1;
+    }
+  }
+  return changed;
+}
+
+function isLocalHeadingMarkupRepair(item, cache) {
+  if (!['text_discrepancy_candidate', 'source_replacement_candidate'].includes(item.type)) return null;
+  const source = item.sourceRange?.text || '';
+  const locations = item.localRange?.locations || [];
+  if (!source || locations.length === 0) return null;
+
+  const entry = liveDataForItem(item, cache);
+  if (!entry) return null;
+  const indices = locations.map((location) => entry.units.findIndex((unit) => unitMatchesLocation(unit, location)));
+  if (indices.some((index) => index < 0)) return null;
+  for (let i = 1; i < indices.length; i += 1) {
+    if (indices[i] <= indices[i - 1]) return null;
+  }
+
+  const first = entry.units[indices[0]];
+  const before = String(first.unit[first.key] || '');
+  const match = before.match(LOCAL_HEADING_MARKUP_RE);
+  if (!match) return null;
+
+  const after = before.slice(match[0].length);
+  if (!after || after === before) return null;
+  const cleanedLiveText = [
+    after,
+    ...indices.slice(1).map((index) => String(entry.units[index].unit[entry.units[index].key] || '')),
+  ].join('');
+  const sourceText = stripWikiControls(source).replace(LEADING_CLOSE_PUNCT_RE, '');
+  if (variantText(cleanedLiveText) !== variantText(sourceText)) return null;
+
+  return {
+    entry,
+    unit: first,
+    before,
+    after,
+    heading: match[1],
+  };
 }
 
 function attachedCloseMatch(text, punctuation) {
@@ -2316,7 +2538,6 @@ function isLeadingCloseAlreadyAttached(item, cache) {
 
   const current = units[currentIndex];
   const currentText = String(current.unit[current.key] || '');
-  if (variantText(currentText) !== variantText(sourceRest)) return null;
 
   const previous = previousSourceUnit(units, currentIndex);
   if (!previous) return null;
@@ -2325,12 +2546,58 @@ function isLeadingCloseAlreadyAttached(item, cache) {
   const attachedClose = attachedCloseMatch(previousText, punctuation);
   if (!attachedClose) return null;
 
-  return {
-    punctuation,
-    attachedPunctuation: attachedClose[1],
-    previousId: previous.id || previous.path,
-    currentId: current.id || current.path,
-  };
+  if (variantText(currentText) === variantText(sourceRest)) {
+    return {
+      punctuation,
+      attachedPunctuation: attachedClose[1],
+      previousId: previous.id || previous.path,
+      currentId: current.id || current.path,
+    };
+  }
+
+  const currentChars = [...normalizeWhitespace(currentText)];
+  for (let end = 2; end <= Math.min(currentChars.length - 1, 20); end += 1) {
+    const prefix = currentChars.slice(0, end).join('');
+    if (!isDroppedChronologyPrefix(prefix)) continue;
+
+    const retained = currentChars.slice(end).join('');
+    if (variantText(retained) !== variantText(sourceRest)) continue;
+    if (isDuplicateChronologyHeadingPrefix(prefix, retained)) continue;
+
+    return {
+      punctuation,
+      attachedPunctuation: attachedClose[1],
+      previousId: previous.id || previous.path,
+      currentId: current.id || current.path,
+      omitted: prefix,
+    };
+  }
+
+  for (let start = 0; start < currentChars.length; start += 1) {
+    const maxEnd = Math.min(currentChars.length, start + 16);
+    for (let end = start + 1; end <= maxEnd; end += 1) {
+      const omitted = currentChars.slice(start, end).join('');
+      const preceding = currentChars.slice(0, start).join('');
+      const following = currentChars.slice(end).join('');
+      const isChronology = isLinkedChronologyFragment(omitted)
+        ? !isUnsafeChronologyBoundary(omitted, preceding, following)
+        : isDroppedEraNameBeforeYear(omitted, following);
+      if (!isChronology) continue;
+
+      const retained = `${preceding}${following}`;
+      if (variantText(retained) !== variantText(sourceRest)) continue;
+
+      return {
+        punctuation,
+        attachedPunctuation: attachedClose[1],
+        previousId: previous.id || previous.path,
+        currentId: current.id || current.path,
+        omitted,
+      };
+    }
+  }
+
+  return null;
 }
 
 function isChapterStartHeadingNoOp(item, cache) {
@@ -2572,6 +2839,19 @@ function repairKnownPrivateUseText(text, file) {
   };
 }
 
+function repairRepeatedClosingQuotes(text) {
+  const input = String(text || '');
+  const match = input.match(/[」』]{3,}$/u);
+  if (!match) return { text: input, changed: false };
+
+  const run = match[0];
+  const replacement = new Set([...run]).size === 1 ? run[0] : [...run].slice(0, 2).join('');
+  return {
+    text: `${input.slice(0, -run.length)}${replacement}`,
+    changed: replacement !== run,
+  };
+}
+
 function cleanSourceArtifactText(text, state = { inRef: false }, file = '') {
   let changed = false;
   let htmlTags = 0;
@@ -2616,6 +2896,15 @@ function cleanSourceArtifactText(text, state = { inRef: false }, file = '') {
   changed = changed || glyphResult.changed;
   knownGlyphs += glyphResult.knownGlyphs;
 
+  const quoteResult = repairRepeatedClosingQuotes(out);
+  out = quoteResult.text;
+  changed = changed || quoteResult.changed;
+
+  out = out.replace(TRAILING_LAYOUT_MARKER_RE, () => {
+    changed = true;
+    return '';
+  });
+
   return {
     text: out,
     changed,
@@ -2650,11 +2939,17 @@ function clearCorrespondenceNoOps(opts, now) {
     chapterStartHeadingNoOps: 0,
     sourceStartHeadingNoOps: 0,
     chapterStartRangeHeadingNoOps: 0,
+    tableMarkupNoOps: 0,
+    localHeadingMarkupRepairs: 0,
+    translationHeadingRepairs: 0,
+    dataFilesChanged: 0,
     reopenedVariantNoOps: 0,
     reopenedResidueNoOps: 0,
   };
   const samples = [];
   const liveUnitCache = new Map();
+  const liveDataCache = new Map();
+  const changedDataFiles = new Set();
 
   for (const file of correspondenceQueueFiles(opts)) {
     const queue = JSON.parse(fs.readFileSync(file, 'utf8'));
@@ -2662,6 +2957,8 @@ function clearCorrespondenceNoOps(opts, now) {
     for (const item of queue.items || []) {
       const notes = String(item.notes || '');
       if (
+        !opts.skipReopen
+        &&
         statusOf(item) === 'rejected'
         && notes.includes('source/local difference is only approved graph variants')
         && !isVariantOnly(item)
@@ -2677,6 +2974,8 @@ function clearCorrespondenceNoOps(opts, now) {
         continue;
       }
       if (
+        !opts.skipReopen
+        &&
         statusOf(item) === 'rejected'
         && notes.includes('upstream MediaWiki residue')
         && !isUpstreamResidueOnly(item)
@@ -2723,52 +3022,84 @@ function clearCorrespondenceNoOps(opts, now) {
             stats.wikisourceDroppedChronologyPrefixNoOps += 1;
             changed = true;
           } else {
-            const leadingClose = isLeadingCloseAlreadyAttached(item, liveUnitCache);
-            if (leadingClose) {
-            markDenied(
-              item,
-              now,
-              opts.reviewer,
-              `Reviewed as no-op: upstream range starts with closing punctuation ${JSON.stringify(leadingClose.punctuation)} that is already attached to previous live source unit ${leadingClose.previousId} as ${JSON.stringify(leadingClose.attachedPunctuation)}; local segmentation retained.`,
-            );
-            stats.leadingClosePunctuationNoOps += 1;
-            changed = true;
-          } else {
-            const heading = isChapterStartHeadingNoOp(item, liveUnitCache);
-            if (heading) {
+            const tableMarkup = isTableMarkupNoOp(item, liveUnitCache);
+            if (tableMarkup) {
               markDenied(
                 item,
                 now,
                 opts.reviewer,
-                `Reviewed as no-op: local chapter-start heading ${JSON.stringify(heading.heading)} is retained; upstream witness begins with the following body text.`,
+                `Reviewed as no-op: raw Wikisource table markup${tableMarkup.variant ? ' and table graph/numeral variants' : ''} strip to the live local table text; local corpus text retained.`,
               );
-              stats.chapterStartHeadingNoOps += 1;
+              stats.tableMarkupNoOps += 1;
               changed = true;
             } else {
-              const sourceHeading = isSourceStartHeadingNoOp(item, liveUnitCache);
-              if (sourceHeading) {
-                markDenied(
+              const localHeading = isLocalHeadingMarkupRepair(item, liveDataCache);
+              if (localHeading) {
+                if (opts.apply) {
+                  localHeading.unit.unit[localHeading.unit.key] = localHeading.after;
+                  stats.translationHeadingRepairs += cleanTranslationHeadingArtifacts(localHeading.unit.unit);
+                  changedDataFiles.add(localHeading.entry.absolute);
+                }
+                markApplied(
                   item,
                   now,
                   opts.reviewer,
-                  `Reviewed as no-op: upstream chapter-start header or page metadata ${JSON.stringify(sourceHeading.heading)} precedes live first local source unit ${sourceHeading.firstId}; local body text retained.`,
+                  `Removed local MediaWiki heading markup ${JSON.stringify(localHeading.heading)} before matching upstream source text.`,
                 );
-                stats.sourceStartHeadingNoOps += 1;
+                stats.localHeadingMarkupRepairs += 1;
                 changed = true;
               } else {
-                const rangeHeading = isChapterStartRangeHeadingNoOp(item, liveUnitCache);
-                if (!rangeHeading) continue;
-                markDenied(
-                  item,
-                  now,
-                  opts.reviewer,
-                  `Reviewed as no-op: chapter-start heading ${JSON.stringify(rangeHeading.localHeading)} is local title/roster material before live body unit ${rangeHeading.bodyStartId}; source body text is already present.`,
-                );
-                stats.chapterStartRangeHeadingNoOps += 1;
-                changed = true;
+                const leadingClose = isLeadingCloseAlreadyAttached(item, liveUnitCache);
+                if (leadingClose) {
+                  const chronologyNote = leadingClose.omitted
+                    ? ` after the local chronology prefix ${JSON.stringify(leadingClose.omitted)}`
+                    : '';
+                  markDenied(
+                    item,
+                    now,
+                    opts.reviewer,
+                    `Reviewed as no-op: upstream range starts with closing punctuation ${JSON.stringify(leadingClose.punctuation)} that is already attached to previous live source unit ${leadingClose.previousId} as ${JSON.stringify(leadingClose.attachedPunctuation)}${chronologyNote}; local segmentation retained.`,
+                  );
+                  stats.leadingClosePunctuationNoOps += 1;
+                  changed = true;
+                } else {
+                  const heading = isChapterStartHeadingNoOp(item, liveUnitCache);
+                  if (heading) {
+                    markDenied(
+                      item,
+                      now,
+                      opts.reviewer,
+                      `Reviewed as no-op: local chapter-start heading ${JSON.stringify(heading.heading)} is retained; upstream witness begins with the following body text.`,
+                    );
+                    stats.chapterStartHeadingNoOps += 1;
+                    changed = true;
+                  } else {
+                    const sourceHeading = isSourceStartHeadingNoOp(item, liveUnitCache);
+                    if (sourceHeading) {
+                      markDenied(
+                        item,
+                        now,
+                        opts.reviewer,
+                        `Reviewed as no-op: upstream chapter-start header or page metadata ${JSON.stringify(sourceHeading.heading)} precedes live first local source unit ${sourceHeading.firstId}; local body text retained.`,
+                      );
+                      stats.sourceStartHeadingNoOps += 1;
+                      changed = true;
+                    } else {
+                      const rangeHeading = isChapterStartRangeHeadingNoOp(item, liveUnitCache);
+                      if (!rangeHeading) continue;
+                      markDenied(
+                        item,
+                        now,
+                        opts.reviewer,
+                        `Reviewed as no-op: chapter-start heading ${JSON.stringify(rangeHeading.localHeading)} is local title/roster material before live body unit ${rangeHeading.bodyStartId}; source body text is already present.`,
+                      );
+                      stats.chapterStartRangeHeadingNoOps += 1;
+                      changed = true;
+                    }
+                  }
+                }
               }
             }
-          }
         }
       }
       }
@@ -2786,6 +3117,15 @@ function clearCorrespondenceNoOps(opts, now) {
     queue.updatedAt = now;
     stats.filesChanged += 1;
     if (opts.apply) fs.writeFileSync(file, `${JSON.stringify(queue, null, 2)}\n`, 'utf8');
+  }
+
+  if (opts.apply) {
+    for (const absolute of changedDataFiles) {
+      const entry = liveDataCache.get(absolute);
+      if (!entry) continue;
+      fs.writeFileSync(entry.file, `${JSON.stringify(entry.data, null, 2)}\n`, 'utf8');
+      stats.dataFilesChanged += 1;
+    }
   }
 
   return { stats, samples };
@@ -2878,7 +3218,9 @@ function repairSourceArtifacts(opts, now) {
     if (!artifactQueueKeys(item).some((key) => changedUnitKeys.has(key))) continue;
     if (
       !STRUCTURAL_SOURCE_ARTIFACT_RULES.has(item.ruleId) &&
-      !isKnownPrivateUseArtifactItem(item)
+      !isKnownPrivateUseArtifactItem(item) &&
+      item.ruleId !== 'SOURCE_REPEATED_CLOSING_QUOTE' &&
+      item.ruleId !== 'SOURCE_TRAILING_LAYOUT_MARKER'
     ) {
       continue;
     }
