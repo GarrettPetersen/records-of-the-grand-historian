@@ -21,6 +21,10 @@ const PUNCTUATION_ONLY_RE = /^[\p{P}\p{S}\s]+$/u;
 const DEFAULT_REVIEWER = 'source-correspondence';
 const DEFAULT_TRANSLATOR = process.env.TRANSLATOR || 'Garrett M. Petersen (2026)';
 const DEFAULT_MODEL = process.env.MODEL || 'Manual source repair';
+const PRESERVE_TRANSLATION_TYPES = new Set([
+  'text_discrepancy_candidate',
+  'source_replacement_candidate',
+]);
 
 const COMMON_VARIANTS = new Map([
   ['并', '並'],
@@ -44,6 +48,7 @@ const COMMON_VARIANTS = new Map([
   ['于', '於'],
   ['陜', '陝'],
   ['墻', '牆'],
+  ['衞', '衛'],
 ]);
 
 function usage() {
@@ -302,6 +307,12 @@ function manualTranslationsBySource(item) {
   return map;
 }
 
+function fallbackSingleManualTranslation(item, untranslatedEntries) {
+  if (untranslatedEntries.length !== 1) return null;
+  const rows = normalizeManualTranslations(item);
+  return rows.length === 1 ? rows[0] : null;
+}
+
 function applyManualTranslation(unit, manual) {
   const translation = {
     lang: 'en',
@@ -327,9 +338,10 @@ function applyManualTranslations(entries, item) {
   if (translations.size === 0) return 0;
 
   let applied = 0;
+  const untranslated = untranslatedCountableEntries(entries);
+  const fallbackManual = fallbackSingleManualTranslation(item, untranslated);
   for (const entry of entries) {
-    if (hasMeaningfulTranslations(entry.unit)) continue;
-    const manual = translations.get(strictKey(sourceText(entry)));
+    const manual = translations.get(strictKey(sourceText(entry))) || fallbackManual;
     if (!manual) continue;
     applyManualTranslation(entry.unit, manual);
     applied += 1;
@@ -344,8 +356,22 @@ function untranslatedCountableEntries(entries) {
 }
 
 function assertAppliedEntriesTranslated(item, entries, translationsBySource = new Map()) {
-  const untranslated = untranslatedCountableEntries(entries)
-    .filter((entry) => !translationsBySource.has(strictKey(sourceText(entry))));
+  const manualBySource = manualTranslationsBySource(item);
+  const initiallyUntranslated = untranslatedCountableEntries(entries);
+  const fallbackManual = fallbackSingleManualTranslation(item, initiallyUntranslated);
+  const untranslated = initiallyUntranslated
+    .filter((entry) => {
+      const key = strictKey(sourceText(entry));
+      if (translationsBySource.has(key)) return false;
+
+      const manual = manualBySource.get(key) || fallbackManual;
+      if (manual) {
+        applyManualTranslation(entry.unit, manual);
+        return false;
+      }
+
+      return true;
+    });
   if (untranslated.length === 0) return [];
 
   const examples = untranslated.slice(0, 8).map((entry) => sourceText(entry).slice(0, 100));
@@ -423,6 +449,14 @@ function cloneEntryWithSource(entry, text, { preserveTranslations = false } = {}
   setSourceText(next, text);
   if (!preserveTranslations) clearTranslations(next.unit);
   return next;
+}
+
+function shouldPreserveExistingTranslation(item, entry, nextText) {
+  if (item.preserveExistingTranslations !== true) return false;
+  if (!PRESERVE_TRANSLATION_TYPES.has(item.type || '')) return false;
+  if (!entry || !hasMeaningfulTranslations(entry.unit)) return false;
+  if (!isCountableSource(sourceText(entry)) || !isCountableSource(nextText)) return false;
+  return true;
 }
 
 function newEntry(text, templateEntry, fallbackBlockKey = 0) {
@@ -825,10 +859,11 @@ function replaceWithinSingleEntry(entries, range, item) {
   const exactIndex = original.indexOf(localText);
   if (exactIndex < 0) return null;
 
+  const nextText = `${original.slice(0, exactIndex)}${sourceReplacement}${original.slice(exactIndex + localText.length)}`;
   const next = cloneEntryWithSource(
     entry,
-    `${original.slice(0, exactIndex)}${sourceReplacement}${original.slice(exactIndex + localText.length)}`,
-    { preserveTranslations: false },
+    nextText,
+    { preserveTranslations: shouldPreserveExistingTranslation(item, entry, nextText) },
   );
   return [next];
 }
@@ -880,7 +915,9 @@ function tableReplacementEntries(entries, range, item) {
 
   if (localEntries.length === 1) {
     const preserveTranslations = comparisonKey(source) === comparisonKey(sourceText(localEntries[0]));
-    return [cloneEntryWithSource(localEntries[0], source, { preserveTranslations })];
+    return [cloneEntryWithSource(localEntries[0], source, {
+      preserveTranslations: preserveTranslations || shouldPreserveExistingTranslation(item, localEntries[0], source),
+    })];
   }
 
   const sourceSentences = splitSentences(source);
@@ -892,7 +929,8 @@ function tableReplacementEntries(entries, range, item) {
   return localEntries.map((entry, index) => {
     const nextText = sourceSentences[index];
     return cloneEntryWithSource(entry, nextText, {
-      preserveTranslations: comparisonKey(nextText) === comparisonKey(sourceText(entry)),
+      preserveTranslations: comparisonKey(nextText) === comparisonKey(sourceText(entry))
+        || shouldPreserveExistingTranslation(item, entry, nextText),
     });
   });
 }
@@ -935,7 +973,8 @@ function replacementEntries(entries, range, item) {
       const preserveLocalSource = item.type === 'source_omission_candidate';
       const nextText = preserveLocalSource ? sourceText(localEntry) : zh;
       return cloneEntryWithSource(localEntry, nextText, {
-        preserveTranslations: comparisonKey(nextText) === comparisonKey(sourceText(localEntry)),
+        preserveTranslations: comparisonKey(nextText) === comparisonKey(sourceText(localEntry))
+          || shouldPreserveExistingTranslation(item, localEntry, nextText),
       });
     }
 

@@ -32,7 +32,7 @@ function isWhitespaceOrEnd(ch) {
 }
 
 function isQuoteBoundaryChar(ch) {
-  return ch === '' || /[\s,.;:!?)>\]〉）]/u.test(ch);
+  return ch === '' || /[\s,.;:!?)>\]〉）"'“”‘’—–-]/u.test(ch);
 }
 
 function isNumericPrimeMark(text, index) {
@@ -279,7 +279,11 @@ function isChineseDirectSpeechUnit(chinese) {
     || /(?:相謂|謂其|謂曰|對曰|問曰|告曰|諫曰|戒曰|曰)[：:]?「/u.test(zh);
 }
 
-function quoteBoundaryProblems(chinese, english, beforeDepth, afterDepth, openCount, closeCount, innerOpenCount, innerCloseCount) {
+function startsWithDeferredChineseClose(chinese) {
+  return /^[\s'"‘’“”]*[」』”’]/u.test(String(chinese || ''));
+}
+
+function quoteBoundaryProblems(chinese, english, beforeDepth, afterDepth, openCount, closeCount, innerOpenCount, innerCloseCount, nextChinese) {
   const problems = [];
   const lead = leadingQuote(english);
   const trail = trailingQuote(english);
@@ -297,7 +301,7 @@ function quoteBoundaryProblems(chinese, english, beforeDepth, afterDepth, openCo
     problems.push('Chinese opens a multi-sentence quote span, but English has no quote marks.');
   }
 
-  if (isOpeningUnit && trail && !isTrailingOpeningQuote(english, trail) && (!lead || lead.index !== trail.index) && !(innerCloseCount > 0 && (trail.char === "'" || preservesTrailingInnerQuote(chinese, english, trail)))) {
+  if (isOpeningUnit && trail && !isTrailingOpeningQuote(english, trail) && (!lead || lead.index !== trail.index) && !(innerCloseCount > 0 && (trail.char === "'" || preservesTrailingInnerQuote(chinese, english, trail))) && !startsWithDeferredChineseClose(nextChinese)) {
     problems.push('English has a closing quote at the end of an opening unit whose Chinese quote continues into the next unit.');
   }
 
@@ -364,8 +368,11 @@ function idiomaticText(item) {
 function scanSequence(items, file, blockIndex, quoteState, englishState) {
   const problems = [];
 
-  for (const item of items) {
+  for (let index = 0; index < items.length; index += 1) {
+    const item = items[index];
+    const nextItem = items[index + 1];
     const chinese = item.content || item.zh || '';
+    const nextChinese = nextItem ? (nextItem.content || nextItem.zh || '') : '';
     const english = idiomaticText(item);
     const beforeDepth = quoteState.stack.length;
     const englishBeforeDepth = englishState.depth;
@@ -434,7 +441,8 @@ function scanSequence(items, file, blockIndex, quoteState, englishState) {
       openCount,
       closeCount,
       innerOpenCount,
-      innerCloseCount
+      innerCloseCount,
+      nextChinese
     );
     if (boundaryProblems.length > 0) {
       problems.push({

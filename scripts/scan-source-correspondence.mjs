@@ -43,6 +43,7 @@ const COMMON_VARIANTS = new Map([
   ['于', '於'],
   ['陜', '陝'],
   ['墻', '牆'],
+  ['衞', '衛'],
 ]);
 
 function usage() {

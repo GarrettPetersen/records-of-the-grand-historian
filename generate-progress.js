@@ -50,10 +50,10 @@ function repairQueueFiles() {
 }
 
 function repairQueueItemKey(item, sourceFile, index) {
-  if (item?.id) return item.id;
   return [
     sourceFile,
     index,
+    item?.id || '',
     item?.book || '',
     item?.chapter || '',
     item?.ruleId || item?.type || '',
@@ -115,7 +115,7 @@ function incrementRepairQueueCounts(counts, state) {
 }
 
 function finalizeRepairQueueCounts(counts) {
-  counts.completedItems = counts.appliedItems + counts.rejectedItems;
+  counts.completedItems = counts.appliedItems + counts.approvedItems + counts.rejectedItems;
   counts.pendingItems = Math.max(0, counts.totalItems - counts.completedItems);
   counts.percentComplete = counts.totalItems > 0 ? (counts.completedItems / counts.totalItems) * 100 : 0;
   return counts;

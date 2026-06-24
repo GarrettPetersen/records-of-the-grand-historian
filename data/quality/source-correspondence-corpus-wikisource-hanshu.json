@@ -4786,7 +4786,7 @@
     },
     {
       "id": "source-hanshu-011-wikisource-ff283d6f8672",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.885,
@@ -4838,8 +4838,18 @@
         "afterLocal": "行幸雍，祠五畤。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.\nReopened for manual review: previous automatic variant no-op ignored punctuation or quote placement."
+      "decision": "included",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.\nReopened for manual review: previous automatic variant no-op ignored punctuation or quote placement.\nVerified current corpus already matches upstream span after approved graph variants/punctuation; marked stale source-correspondence item resolved.",
+      "reviewedAt": "2026-06-23T18:37:10.701Z",
+      "reviewer": "resolve-current-source-variant-queue",
+      "appliedAt": "2026-06-23T18:37:10.701Z",
+      "appliedSummary": {
+        "mode": "already-aligned-current-source-variant-punctuation",
+        "localIds": [
+          "s0279",
+          "s0280"
+        ]
+      }
     },
     {
       "id": "source-hanshu-012-wikisource-20be9e3bd8ca",
@@ -22944,7 +22954,7 @@
     },
     {
       "id": "source-hanshu-015-wikisource-636e3c64d213",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -22987,8 +22997,10 @@
         "afterLocal": "安侯攜嗣。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.\nReopened for manual review: previous automatic variant no-op ignored punctuation or quote placement."
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.\nReopened for manual review: previous automatic variant no-op ignored punctuation or quote placement.\nReviewed as no-op: upstream raw witness contains only table/list layout markers or duplicate punctuation; local corpus text retained.",
+      "reviewedAt": "2026-06-23T18:40:01.419Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-015-wikisource-63aafdbae9a3",
@@ -59303,7 +59315,7 @@
     },
     {
       "id": "source-hanshu-039-wikisource-672e974eace9",
-      "status": "pending",
+      "status": "applied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -59338,8 +59350,21 @@
         "afterLocal": "右天文二十一家，四百四十五卷。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied corpus cleanup: removed local source artifact that is not chapter content.",
+      "reviewedAt": "2026-06-23T18:08:00.294Z",
+      "reviewer": "clean-source-repair-artifact-lane",
+      "appliedAt": "2026-06-23T18:08:00.294Z",
+      "appliedSummary": {
+        "mode": "remove",
+        "ids": [
+          "s0761"
+        ],
+        "before": [
+          "打開字典"
+        ],
+        "after": []
+      }
     },
     {
       "id": "source-hanshu-039-wikisource-8b9073fa14c2",
@@ -59853,7 +59878,7 @@
     },
     {
       "id": "source-hanshu-039-wikisource-deaaa27c3346",
-      "status": "pending",
+      "status": "applied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -59888,8 +59913,21 @@
         "afterLocal": "右陰陽二十一家，三百六十九篇。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied corpus cleanup: removed local source artifact that is not chapter content.",
+      "reviewedAt": "2026-06-23T18:08:00.294Z",
+      "reviewer": "clean-source-repair-artifact-lane",
+      "appliedAt": "2026-06-23T18:08:00.294Z",
+      "appliedSummary": {
+        "mode": "remove",
+        "ids": [
+          "s0389"
+        ],
+        "before": [
+          "打開字典"
+        ],
+        "after": []
+      }
     },
     {
       "id": "source-hanshu-040-wikisource-0c956d344e17",
@@ -60568,7 +60606,7 @@
     },
     {
       "id": "source-hanshu-042-wikisource-d24c16bb7e30",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -60603,8 +60641,10 @@
         "afterLocal": "韓王信，故韓襄王孽孫也，長八尺五寸。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-043-wikisource-00b2f6e3e92f",
@@ -61873,7 +61913,7 @@
     },
     {
       "id": "source-hanshu-043-wikisource-d4eb004d16e7",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -61916,12 +61956,23 @@
         "afterLocal": "上怒罵之，遂戰，破布軍。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.\nReopened for manual review: previous automatic variant no-op ignored punctuation or quote placement."
+      "decision": "included",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.\nReopened for manual review: previous automatic variant no-op ignored punctuation or quote placement.\nVerified current corpus already places upstream leading close punctuation on the previous local unit; marked source-correspondence item resolved.",
+      "reviewedAt": "2026-06-23T18:23:00.816Z",
+      "reviewer": "resolve-current-source-punctuation-queue",
+      "appliedAt": "2026-06-23T18:23:00.816Z",
+      "appliedSummary": {
+        "mode": "already-repaired-leading-close-punctuation",
+        "leadingClose": "』",
+        "previousId": "s0509",
+        "localIds": [
+          "s0510"
+        ]
+      }
     },
     {
       "id": "source-hanshu-043-wikisource-e145f847a335",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.818,
@@ -61982,8 +62033,21 @@
         "afterLocal": "何曰：「幸甚。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.\nReopened for manual review: previous automatic variant no-op ignored punctuation or quote placement."
+      "decision": "included",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.\nReopened for manual review: previous automatic variant no-op ignored punctuation or quote placement.\nVerified current corpus already places upstream leading close punctuation on the previous local unit; marked source-correspondence item resolved.",
+      "reviewedAt": "2026-06-23T18:23:00.816Z",
+      "reviewer": "resolve-current-source-punctuation-queue",
+      "appliedAt": "2026-06-23T18:23:00.816Z",
+      "appliedSummary": {
+        "mode": "already-repaired-leading-close-punctuation",
+        "leadingClose": "』",
+        "previousId": "s0043",
+        "localIds": [
+          "s0044",
+          "s0045",
+          "s0046"
+        ]
+      }
     },
     {
       "id": "source-hanshu-043-wikisource-f32b1bab05ed",
@@ -62935,7 +62999,7 @@
     },
     {
       "id": "source-hanshu-047-wikisource-ce1f782e8d2b",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -62970,8 +63034,10 @@
         "afterLocal": "趙共王恢。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-047-wikisource-d782da40c39e",
@@ -63790,7 +63856,7 @@
     },
     {
       "id": "source-hanshu-049-wikisource-0e92707d17fd",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -63833,8 +63899,19 @@
         "afterLocal": "良曰：「上平生所憎，群臣所共知，誰最甚者？"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.\nReopened for manual review: previous automatic variant no-op ignored punctuation or quote placement."
+      "decision": "included",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.\nReopened for manual review: previous automatic variant no-op ignored punctuation or quote placement.\nVerified current corpus already places upstream leading close punctuation on the previous local unit; marked source-correspondence item resolved.",
+      "reviewedAt": "2026-06-23T18:23:00.816Z",
+      "reviewer": "resolve-current-source-punctuation-queue",
+      "appliedAt": "2026-06-23T18:23:00.816Z",
+      "appliedSummary": {
+        "mode": "already-repaired-leading-close-punctuation",
+        "leadingClose": "」",
+        "previousId": "s0156",
+        "localIds": [
+          "s0157"
+        ]
+      }
     },
     {
       "id": "source-hanshu-049-wikisource-14c13bf4afb2",
@@ -63976,7 +64053,7 @@
     },
     {
       "id": "source-hanshu-049-wikisource-202022d77204",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.895,
@@ -64028,8 +64105,18 @@
         "afterLocal": "以問平，平固辭謝，曰：「諸將云何？"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Verified current corpus already matches upstream span after approved graph variants/punctuation; marked stale source-correspondence item resolved.",
+      "reviewedAt": "2026-06-23T18:37:10.701Z",
+      "reviewer": "resolve-current-source-variant-queue",
+      "appliedAt": "2026-06-23T18:37:10.701Z",
+      "appliedSummary": {
+        "mode": "already-aligned-current-source-variant-punctuation",
+        "localIds": [
+          "s0324",
+          "s0325"
+        ]
+      }
     },
     {
       "id": "source-hanshu-049-wikisource-28503ca0f164",
@@ -64927,7 +65014,7 @@
     },
     {
       "id": "source-hanshu-049-wikisource-97f7707a7a9c",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -64970,8 +65057,19 @@
         "afterLocal": "平曰：「陛下即問決獄，責廷尉；"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.\nReopened for manual review: previous automatic variant no-op ignored punctuation or quote placement."
+      "decision": "included",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.\nReopened for manual review: previous automatic variant no-op ignored punctuation or quote placement.\nVerified current corpus already places upstream leading close punctuation on the previous local unit; marked source-correspondence item resolved.",
+      "reviewedAt": "2026-06-23T18:23:00.816Z",
+      "reviewer": "resolve-current-source-punctuation-queue",
+      "appliedAt": "2026-06-23T18:23:00.816Z",
+      "appliedSummary": {
+        "mode": "already-repaired-leading-close-punctuation",
+        "leadingClose": "」",
+        "previousId": "s0438",
+        "localIds": [
+          "s0439"
+        ]
+      }
     },
     {
       "id": "source-hanshu-049-wikisource-9aa0b65c9a95",
@@ -65302,7 +65400,7 @@
     },
     {
       "id": "source-hanshu-049-wikisource-aa726ac973e5",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -65345,12 +65443,23 @@
         "afterLocal": "良曰：「此難以口舌爭也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.\nReopened for manual review: previous automatic variant no-op ignored punctuation or quote placement."
+      "decision": "included",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.\nReopened for manual review: previous automatic variant no-op ignored punctuation or quote placement.\nVerified current corpus already places upstream leading close punctuation on the previous local unit; marked source-correspondence item resolved.",
+      "reviewedAt": "2026-06-23T18:23:00.816Z",
+      "reviewer": "resolve-current-source-punctuation-queue",
+      "appliedAt": "2026-06-23T18:23:00.816Z",
+      "appliedSummary": {
+        "mode": "already-repaired-leading-close-punctuation",
+        "leadingClose": "」",
+        "previousId": "s0179",
+        "localIds": [
+          "s0180"
+        ]
+      }
     },
     {
       "id": "source-hanshu-049-wikisource-abbf2508b857",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -65402,8 +65511,20 @@
         "afterLocal": "良因要項伯見沛公。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.\nReopened for manual review: previous automatic variant no-op ignored punctuation or quote placement."
+      "decision": "included",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.\nReopened for manual review: previous automatic variant no-op ignored punctuation or quote placement.\nVerified current corpus already places upstream leading close punctuation on the previous local unit; marked source-correspondence item resolved.",
+      "reviewedAt": "2026-06-23T18:23:00.816Z",
+      "reviewer": "resolve-current-source-punctuation-queue",
+      "appliedAt": "2026-06-23T18:23:00.816Z",
+      "appliedSummary": {
+        "mode": "already-repaired-leading-close-punctuation",
+        "leadingClose": "」",
+        "previousId": "s0073",
+        "localIds": [
+          "s0074",
+          "s0075"
+        ]
+      }
     },
     {
       "id": "source-hanshu-049-wikisource-b92e67fc54d7",
@@ -66498,7 +66619,7 @@
     },
     {
       "id": "source-hanshu-050-wikisource-4dc6b1317466",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -66533,8 +66654,10 @@
         "afterLocal": "夏侯嬰，沛人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-051-wikisource-01a113d13dd3",
@@ -66643,7 +66766,7 @@
     },
     {
       "id": "source-hanshu-051-wikisource-7f3d4fd7eb95",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -66678,8 +66801,10 @@
         "afterLocal": "申屠嘉，梁人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-051-wikisource-d1a46fdebeed",
@@ -66880,7 +67005,7 @@
     },
     {
       "id": "source-hanshu-052-wikisource-a72c9fbf6a1b",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -66923,8 +67048,10 @@
         "afterLocal": "故嘗為淮南王黥布相，有罪去，後復事布。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Reviewed and applied: corrected false 硃 to 朱 in names, vermilion/color terms, titles, and place names; English checked and revised where the color term changed.",
+      "reviewedAt": "2026-06-23T20:27:54.415Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-hanshu-053-wikisource-09ce5ac5336c",
@@ -67082,7 +67209,7 @@
     },
     {
       "id": "source-hanshu-053-wikisource-5e68c1ebeec0",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -67125,8 +67252,22 @@
         "afterLocal": "建具知太子之欲謀殺漢中尉，即使所善壽春嚴正上書天子曰：「毒藥苦口利病，忠言逆耳利行。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Accepted upstream traditional 繫 where the context means binding, imprisonment, attachment of title, or physical mooring; English reviewed with source repair.\nExisting English translation manually checked and retained for this 繫 source repair.",
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked and retained for this 繫 source repair.",
+      "reviewedAt": "2026-06-23T21:15:23.001Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-23T21:15:56.414Z",
+      "appliedSummary": {
+        "id": "source-hanshu-053-wikisource-5e68c1ebeec0",
+        "type": "text_discrepancy_candidate",
+        "start": 183,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-hanshu-053-wikisource-5f4cef3c1b4d",
@@ -67712,7 +67853,7 @@
     },
     {
       "id": "source-hanshu-054-wikisource-68e09688d938",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -67755,12 +67896,35 @@
         "afterLocal": "皇太后所賜金錢，盡以賞賜。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Reviewed graph-pair lane; upstream graph form accepted for source text after checking item context.\nExisting English translation manually checked for this graph-only source repair and retained.",
+      "manualTranslations": [
+        {
+          "zh": "軍罷，士卒已踰河，乃度。",
+          "literal": "when the army halts, the soldiers have already crossed the river, then he crosses.",
+          "idiomatic": "When the army disengages, he does not cross the river until the last soldier is over.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2"
+        }
+      ],
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for this graph-only source repair and retained.",
+      "reviewedAt": "2026-06-23T23:10:51.466Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-23T23:10:52.568Z",
+      "appliedSummary": {
+        "id": "source-hanshu-054-wikisource-68e09688d938",
+        "type": "text_discrepancy_candidate",
+        "start": 152,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-hanshu-054-wikisource-6a745c3c591b",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -67795,12 +67959,14 @@
         "afterLocal": "息夫躬字子微，河內河陽人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-054-wikisource-7e09a637512f",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -67843,8 +68009,10 @@
         "afterLocal": "穿井得水，乃敢飲；"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Accepted source graph 舍 for lodging/quarters sense; Chinese patched manually with local punctuation/quote placement preserved; English checked and retained.",
+      "reviewedAt": "2026-06-24T02:05:46.244Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-hanshu-054-wikisource-97c6d6c4ac84",
@@ -68002,7 +68170,7 @@
     },
     {
       "id": "source-hanshu-054-wikisource-d22820cbcef5",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -68045,8 +68213,22 @@
         "afterLocal": "通曰：「足下為令十餘年矣，殺人之父，孤人之子，斷人之足，黥人之首，甚眾。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Reviewed graph-pair lane; upstream graph form accepted for source text after checking item context.\nExisting English translation manually checked for this graph-only source repair and retained.",
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for this graph-only source repair and retained.",
+      "reviewedAt": "2026-06-23T22:30:47.406Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-23T22:30:48.540Z",
+      "appliedSummary": {
+        "id": "source-hanshu-054-wikisource-d22820cbcef5",
+        "type": "text_discrepancy_candidate",
+        "start": 5,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-hanshu-054-wikisource-e6f1c84c845c",
@@ -70379,7 +70561,7 @@
     },
     {
       "id": "source-hanshu-055-wikisource-df391346d9be",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -70414,8 +70596,10 @@
         "afterLocal": "直不疑，南陽人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-055-wikisource-e4efd2c2f699",
@@ -71161,7 +71345,7 @@
     },
     {
       "id": "source-hanshu-057-wikisource-290699a8445a",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -71204,8 +71388,31 @@
         "afterLocal": "粵棲會稽，句踐伯世。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Reviewed graph-pair lane; upstream graph form accepted for source text after checking item context.\nExisting English translation manually checked for this graph-only source repair and retained.",
+      "manualTranslations": [
+        {
+          "zh": "彼吳彊大，夫差以敗；",
+          "literal": "That Wu was strong and great, yet Fuchai thereby was defeated;",
+          "idiomatic": "Wu was mighty as a kingdom, yet King Fuchai fell in ruin.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2"
+        }
+      ],
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for this graph-only source repair and retained.",
+      "reviewedAt": "2026-06-23T23:25:34.826Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-23T23:25:35.791Z",
+      "appliedSummary": {
+        "id": "source-hanshu-057-wikisource-290699a8445a",
+        "type": "text_discrepancy_candidate",
+        "start": 69,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-hanshu-057-wikisource-299e5b0f28b5",
@@ -74674,7 +74881,7 @@
     },
     {
       "id": "source-hanshu-057-wikisource-97be0d65505a",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -74717,8 +74924,31 @@
         "afterLocal": "天下初定，制度疏闊。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Reviewed graph-pair lane; upstream graph form accepted for source text after checking item context.\nExisting English translation manually checked for this graph-only source repair and retained.",
+      "manualTranslations": [
+        {
+          "zh": "是時，匈奴彊，侵邊。",
+          "literal": "At this time the Xiongnu were strong and encroached on the border.",
+          "idiomatic": "The Xiongnu were powerful then and raiding the frontier without letup.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2"
+        }
+      ],
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for this graph-only source repair and retained.",
+      "reviewedAt": "2026-06-23T23:25:34.826Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-23T23:25:35.791Z",
+      "appliedSummary": {
+        "id": "source-hanshu-057-wikisource-97be0d65505a",
+        "type": "text_discrepancy_candidate",
+        "start": 113,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-hanshu-057-wikisource-9db6360ff4e1",
@@ -75400,7 +75630,7 @@
     },
     {
       "id": "source-hanshu-058-wikisource-12de30b6fb8c",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -75443,8 +75673,31 @@
         "afterLocal": "情之所欲，不以禁民。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Reviewed graph-pair lane; upstream graph form accepted for source text after checking item context.\nExisting English translation manually checked for this graph-only source repair and retained.",
+      "manualTranslations": [
+        {
+          "zh": "情之所惡，不以彊人；",
+          "literal": "What feeling hates, they did not force on others;",
+          "idiomatic": "They never forced on the people what they themselves would hate;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2"
+        }
+      ],
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for this graph-only source repair and retained.",
+      "reviewedAt": "2026-06-23T23:25:34.826Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-23T23:25:35.791Z",
+      "appliedSummary": {
+        "id": "source-hanshu-058-wikisource-12de30b6fb8c",
+        "type": "text_discrepancy_candidate",
+        "start": 310,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-hanshu-058-wikisource-270ae6dad6ab",
@@ -75496,7 +75749,7 @@
     },
     {
       "id": "source-hanshu-058-wikisource-27404deeacbe",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -75539,8 +75792,31 @@
         "afterLocal": "罪人有期，後宮出嫁；"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Reviewed 卹/恤 graph-pair source form in context; existing English still matches.\nExisting English translation manually checked for this graph-only source repair and retained.",
+      "manualTranslations": [
+        {
+          "zh": "賓禮長老，愛卹少孤；",
+          "literal": "you guest-treat the aged and cherish orphans;",
+          "idiomatic": "you feast the gray-haired and pension the fatherless;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2"
+        }
+      ],
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for this graph-only source repair and retained.",
+      "reviewedAt": "2026-06-24T00:49:30.198Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-24T00:49:31.187Z",
+      "appliedSummary": {
+        "id": "source-hanshu-058-wikisource-27404deeacbe",
+        "type": "text_discrepancy_candidate",
+        "start": 359,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-hanshu-058-wikisource-28d6be986be5",
@@ -76333,7 +76609,7 @@
     },
     {
       "id": "source-hanshu-059-wikisource-7f8d762ca2a9",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -76376,12 +76652,35 @@
         "afterLocal": "歲餘，東海大治，稱之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Reviewed 閤/閣 graph-pair source form in context; existing English still matches.\nExisting English translation manually checked for this graph-only source repair and retained.",
+      "manualTranslations": [
+        {
+          "zh": "黯多病，臥閤內不出。",
+          "literal": "An was often ill and lay in his quarters without coming out.",
+          "idiomatic": "Plagued by illness, he rarely left his inner office.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2"
+        }
+      ],
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for this graph-only source repair and retained.",
+      "reviewedAt": "2026-06-24T00:29:20.711Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-24T00:29:21.671Z",
+      "appliedSummary": {
+        "id": "source-hanshu-059-wikisource-7f8d762ca2a9",
+        "type": "text_discrepancy_candidate",
+        "start": 142,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-hanshu-059-wikisource-95a901b911c9",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -76416,8 +76715,10 @@
         "afterLocal": "鄭當時字莊，陳人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-059-wikisource-ccabc7872424",
@@ -77521,7 +77822,7 @@
     },
     {
       "id": "source-hanshu-060-wikisource-3bb3e180c024",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -77564,8 +77865,10 @@
         "afterLocal": "鄒陽，齊人也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Reviewed and applied: corrected false traditionalization of classical 云 as 雲; English checked and revised where needed.",
+      "reviewedAt": "2026-06-23T19:31:25.339Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-hanshu-060-wikisource-4cc7cd27d7c4",
@@ -81328,7 +81631,7 @@
     },
     {
       "id": "source-hanshu-061-wikisource-9f6ad47521c5",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.667,
@@ -81371,8 +81674,31 @@
         "afterLocal": "酒酣，蚡起為壽，坐皆避席伏。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Reviewed graph-pair lane; upstream graph form accepted for source text after checking item context.\nExisting English translation manually checked for this graph-only source repair and retained.",
+      "manualTranslations": [
+        {
+          "zh": "彊與俱。",
+          "literal": "He forced him to go together.",
+          "idiomatic": "He dragged him along anyway.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2"
+        }
+      ],
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for this graph-only source repair and retained.",
+      "reviewedAt": "2026-06-23T23:25:34.826Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-23T23:25:35.791Z",
+      "appliedSummary": {
+        "id": "source-hanshu-061-wikisource-9f6ad47521c5",
+        "type": "source_replacement_candidate",
+        "start": 154,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-hanshu-061-wikisource-ad4a44cbb766",
@@ -81775,7 +82101,7 @@
     },
     {
       "id": "source-hanshu-062-wikisource-2626dbad9919",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -81810,12 +82136,14 @@
         "afterLocal": "魯恭王餘以孝景前二年立為淮陽王。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-062-wikisource-2d305e36a29f",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -81850,12 +82178,14 @@
         "afterLocal": "膠東康王寄以孝景中二年立，二十八年薨。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-062-wikisource-2dcebd1547dc",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -81890,12 +82220,14 @@
         "afterLocal": "河間獻王德以孝景前二年立，修學好古，實事求是。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-062-wikisource-5f6b72532cf8",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -81930,12 +82262,14 @@
         "afterLocal": "趙敬肅王彭祖以孝景前二年立為廣川王。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-062-wikisource-6d26fa228670",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -81970,8 +82304,10 @@
         "afterLocal": "清河哀王乘以孝景中三年立，十二年薨。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-062-wikisource-6fbfe32d93e8",
@@ -82023,7 +82359,7 @@
     },
     {
       "id": "source-hanshu-062-wikisource-81f911cf5c63",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -82058,12 +82394,14 @@
         "afterLocal": "臨江哀王閼以孝景前二年立，三年薨。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-062-wikisource-8ef58e68f5e0",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -82098,12 +82436,14 @@
         "afterLocal": "臨江閔王榮以孝景前四年為皇太子，四歲廢為臨江王。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-062-wikisource-958919350398",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -82138,12 +82478,14 @@
         "afterLocal": "膠西于王端，孝景前三年立。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-062-wikisource-c4141a30a3fd",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -82178,8 +82520,10 @@
         "afterLocal": "長沙定王發，母唐姬，故程姬侍者。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-062-wikisource-d029f2cdbcad",
@@ -82240,7 +82584,7 @@
     },
     {
       "id": "source-hanshu-062-wikisource-fedb8dc9503c",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -82275,8 +82619,10 @@
         "afterLocal": "常山憲王舜以孝景中五年立。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-063-wikisource-067cf051e619",
@@ -82364,7 +82710,7 @@
     },
     {
       "id": "source-hanshu-063-wikisource-0f094261aa78",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -82407,8 +82753,10 @@
         "afterLocal": "群臣皆罪陵，上以問太史令司馬遷，遷盛言：「陵事親孝，與士信，常奮不顧身以殉國家之急。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.",
+      "reviewedAt": "2026-06-23T17:27:08.216Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-063-wikisource-2f77e6a58858",
@@ -83365,7 +83713,7 @@
     },
     {
       "id": "source-hanshu-064-wikisource-67ef3e38c133",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -83400,12 +83748,14 @@
         "afterLocal": "路博德，西河平州人，以右北平太守從票騎將軍，封邳離侯。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-064-wikisource-68c33768c198",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -83440,12 +83790,14 @@
         "afterLocal": "張次公，河東人，以校尉從大將軍，封岸頭侯。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-064-wikisource-7b1eb80353b8",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -83480,12 +83832,14 @@
         "afterLocal": "公孫敖，義渠人，以郎事景帝。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-064-wikisource-8f207c9a4432",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -83520,12 +83874,14 @@
         "afterLocal": "趙食其，祋祤人。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-064-wikisource-cdad1b98a06a",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -83560,12 +83916,14 @@
         "afterLocal": "趙破奴，太原人。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-064-wikisource-d9aeed608444",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -83600,8 +83958,10 @@
         "afterLocal": "霍去病，大將軍青姊少兒子也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-065-wikisource-279b4bb85dec",
@@ -94807,7 +95167,7 @@
     },
     {
       "id": "source-hanshu-069-wikisource-466a070516e2",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -94842,8 +95202,10 @@
         "afterLocal": "放子純嗣侯，恭儉自修，明習漢家制度故事，有敬侯遺風。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-069-wikisource-5c18a8c1a437",
@@ -94876,7 +95238,7 @@
     },
     {
       "id": "source-hanshu-069-wikisource-8e745d55ab59",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -94911,8 +95273,10 @@
         "afterLocal": "鴻嘉中，上欲遵武帝故事，與近臣游宴，放以公主子開敏得幸。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-069-wikisource-9ae82e29514b",
@@ -94982,7 +95346,7 @@
     },
     {
       "id": "source-hanshu-069-wikisource-af7e4576cef4",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -95017,8 +95381,10 @@
         "afterLocal": "安世字子孺，少以父任為郎。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-069-wikisource-e194ab460bab",
@@ -95137,7 +95503,7 @@
     },
     {
       "id": "source-hanshu-070-wikisource-68a03cc42b50",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -95172,8 +95538,10 @@
         "afterLocal": "欽字子夏，少好經書，家富而目偏盲，故不好為吏。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-070-wikisource-8d98b24a9a18",
@@ -95206,7 +95574,7 @@
     },
     {
       "id": "source-hanshu-070-wikisource-923da7414030",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -95241,12 +95609,14 @@
         "afterLocal": "業有材能，以列侯選，復為太常。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-070-wikisource-af68ff6c009d",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -95289,12 +95659,14 @@
         "afterLocal": "章既死，眾庶冤之，以譏朝廷。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied manually: corrected 后/後 source graph according to upstream; checked and updated English where the source meaning changed; preserved local quote/list punctuation placement.",
+      "reviewedAt": "2026-06-23T20:59:07.207Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-hanshu-070-wikisource-c1d078535513",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -95329,8 +95701,10 @@
         "afterLocal": "延年字幼公，亦明法律。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-070-wikisource-c20abfae3cfa",
@@ -95363,7 +95737,7 @@
     },
     {
       "id": "source-hanshu-070-wikisource-dcd5c8785d3c",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -95398,8 +95772,10 @@
         "afterLocal": "緩少為郎，本始中以校尉從蒲類將軍擊匈奴，還為諫大夫，遷上谷都尉，雁門太守。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-071-wikisource-03e7ba70fe6d",
@@ -100707,7 +101083,7 @@
     },
     {
       "id": "source-hanshu-073-wikisource-776b72de4e32",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -100742,8 +101118,10 @@
         "afterLocal": "廣陵厲王胥賜策曰：「嗚呼！"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-073-wikisource-81feecff3a48",
@@ -100911,7 +101289,7 @@
     },
     {
       "id": "source-hanshu-073-wikisource-e795c0500dbb",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -100946,8 +101324,10 @@
         "afterLocal": "戾太子據，元狩元年立為皇太子，年七歲矣。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-074-wikisource-0473bfaa7eb2",
@@ -101419,7 +101799,7 @@
     },
     {
       "id": "source-hanshu-074-wikisource-58da7fd128f8",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -101454,8 +101834,10 @@
         "afterLocal": "朱買臣字翁子，吳人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-074-wikisource-5eadb99f4885",
@@ -105003,7 +105385,7 @@
     },
     {
       "id": "source-hanshu-075-wikisource-96aee6fd8c3b",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -105038,8 +105420,10 @@
         "afterLocal": "賈捐之字君房，賈誼之曾孫也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-076-wikisource-005aabfccc51",
@@ -105658,7 +106042,7 @@
     },
     {
       "id": "source-hanshu-077-wikisource-0c9cc710443a",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -105701,8 +106085,10 @@
         "afterLocal": "對曰：「丞相秘之，未敢發兵。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.\nReopened for manual review: previous automatic variant no-op ignored punctuation or quote placement."
+      "decision": "included",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.\nReopened for manual review: previous automatic variant no-op ignored punctuation or quote placement.\nManually repaired 爲 source graph while preserving local annotation boundaries, title style, and modern quote placement; English remains correct.",
+      "reviewedAt": "2026-06-24T01:53:28.626Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-hanshu-077-wikisource-18c47450916c",
@@ -105754,7 +106140,7 @@
     },
     {
       "id": "source-hanshu-077-wikisource-22d661247def",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -105797,8 +106183,19 @@
         "afterLocal": "今子尚安得以卿大夫之制而責僕哉！"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.\nReopened for manual review: previous automatic variant no-op ignored punctuation or quote placement."
+      "decision": "included",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.\nReopened for manual review: previous automatic variant no-op ignored punctuation or quote placement.\nVerified current corpus already places upstream leading close punctuation on the previous local unit; marked source-correspondence item resolved.",
+      "reviewedAt": "2026-06-23T18:23:00.816Z",
+      "reviewer": "resolve-current-source-punctuation-queue",
+      "appliedAt": "2026-06-23T18:23:00.816Z",
+      "appliedSummary": {
+        "mode": "already-repaired-leading-close-punctuation",
+        "leadingClose": "」",
+        "previousId": "s0229",
+        "localIds": [
+          "s0230"
+        ]
+      }
     },
     {
       "id": "source-hanshu-077-wikisource-23b7e6b5ff32",
@@ -106030,7 +106427,7 @@
     },
     {
       "id": "source-hanshu-077-wikisource-6d9232339369",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -106073,8 +106470,10 @@
         "afterLocal": "「明明求仁義，常恐不能化民者，卿大夫意也；"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Reviewed and applied: corrected false traditionalization of classical 云 as 雲; English checked and revised where needed.",
+      "reviewedAt": "2026-06-23T19:31:25.339Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-hanshu-077-wikisource-6e4def78fe6c",
@@ -106185,7 +106584,7 @@
     },
     {
       "id": "source-hanshu-077-wikisource-7e167699d7a4",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.895,
@@ -106246,8 +106645,19 @@
         "afterLocal": "千秋無他材能術學，又無伐閱功勞，特以一言寤意，旬月取宰相封侯，世未嘗有也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Verified current corpus already matches upstream span after approved graph variants/punctuation; marked stale source-correspondence item resolved.",
+      "reviewedAt": "2026-06-23T18:37:10.701Z",
+      "reviewer": "resolve-current-source-variant-queue",
+      "appliedAt": "2026-06-23T18:37:10.701Z",
+      "appliedSummary": {
+        "mode": "already-aligned-current-source-variant-punctuation",
+        "localIds": [
+          "s0079",
+          "s0080",
+          "s0081"
+        ]
+      }
     },
     {
       "id": "source-hanshu-077-wikisource-8104b5592f1b",
@@ -106541,7 +106951,7 @@
     },
     {
       "id": "source-hanshu-077-wikisource-e79acdb2f717",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -106576,12 +106986,14 @@
         "afterLocal": "陳萬年字幼公，沛郡相人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-077-wikisource-e91bbfdd3d86",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -106616,8 +107028,10 @@
         "afterLocal": "車千秋，本姓田氏，其先齊諸田徙長陵。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-077-wikisource-ffe70d0d8230",
@@ -108589,7 +109003,7 @@
     },
     {
       "id": "source-hanshu-078-wikisource-f160dc76fa3c",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -108624,8 +109038,10 @@
         "afterLocal": "贊曰：昔仲尼稱不得中行，則思狂狷。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-078-wikisource-f196460d54f4",
@@ -110796,7 +111212,7 @@
     },
     {
       "id": "source-hanshu-079-wikisource-8c5659c4e133",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -110831,8 +111247,10 @@
         "afterLocal": "贊曰：霍光以結髮內侍，起於階闥之閒，確然秉志，誼形於主。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-079-wikisource-91ba22b84a32",
@@ -116291,7 +116709,7 @@
     },
     {
       "id": "source-hanshu-082-wikisource-8a9ebdc94cea",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -116326,8 +116744,10 @@
         "afterLocal": "于定國字曼倩，東海郯人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-082-wikisource-c14ef9dade39",
@@ -116431,7 +116851,7 @@
     },
     {
       "id": "source-hanshu-083-wikisource-2b2075be5bd7",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -116466,8 +116886,10 @@
         "afterLocal": "贊曰：易稱「君子之道，或出或處，或默或語」，言其各得道之一節，譬諸草木，區以別矣。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-083-wikisource-4de65ce884a9",
@@ -116871,7 +117293,7 @@
     },
     {
       "id": "source-hanshu-084-wikisource-2e7f461dddd6",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -116914,8 +117336,10 @@
         "afterLocal": "『吾不與祭，如不祭。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Reviewed and applied: corrected false traditionalization of classical 云 as 雲; English checked and revised where needed.",
+      "reviewedAt": "2026-06-23T19:31:25.339Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-hanshu-084-wikisource-3ec072f431a6",
@@ -118337,7 +118761,7 @@
     },
     {
       "id": "source-hanshu-086-wikisource-33e0cfadfe6f",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -118380,8 +118804,22 @@
         "afterLocal": "至四年夏，關東四十九郡同日地動，或山崩，壞城郭室屋，殺六千餘人。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Accepted upstream traditional 繫 where the context means binding, imprisonment, attachment of title, or physical mooring; English reviewed with source repair.\nExisting English translation manually checked and retained for this 繫 source repair.",
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked and retained for this 繫 source repair.",
+      "reviewedAt": "2026-06-23T21:15:23.001Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-23T21:15:56.414Z",
+      "appliedSummary": {
+        "id": "source-hanshu-086-wikisource-33e0cfadfe6f",
+        "type": "text_discrepancy_candidate",
+        "start": 44,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-hanshu-086-wikisource-45dd3b834d33",
@@ -119378,7 +119816,7 @@
     },
     {
       "id": "source-hanshu-088-wikisource-0100254c2750",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -119413,8 +119851,10 @@
         "afterLocal": "諸葛豐字少季，琅邪人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-088-wikisource-02f5358b4879",
@@ -120124,7 +120564,7 @@
     },
     {
       "id": "source-hanshu-088-wikisource-ae8f21ca54ef",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -120167,8 +120607,10 @@
         "afterLocal": "『惡利口之覆國家。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Reviewed and applied: corrected false traditionalization of classical 云 as 雲; English checked and revised where needed.",
+      "reviewedAt": "2026-06-23T19:31:25.339Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-hanshu-088-wikisource-b0cd339b35c5",
@@ -120739,7 +121181,7 @@
     },
     {
       "id": "source-hanshu-089-wikisource-2338a792123e",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -120782,8 +121224,10 @@
         "afterLocal": "雲者好節士，勸望之自裁。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Reviewed and applied: corrected false 硃 to 朱 in names, vermilion/color terms, titles, and place names; English checked and revised where the color term changed.",
+      "reviewedAt": "2026-06-23T20:27:54.415Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-hanshu-089-wikisource-2b4cd667c8d7",
@@ -121342,7 +121786,7 @@
     },
     {
       "id": "source-hanshu-091-wikisource-24b9efc280b4",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -121377,8 +121821,10 @@
         "afterLocal": "東平思王宇，甘露二年立。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-091-wikisource-3143eb495668",
@@ -121422,7 +121868,7 @@
     },
     {
       "id": "source-hanshu-091-wikisource-503c4bbc86be",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -121457,8 +121903,10 @@
         "afterLocal": "淮陽憲王欽，元康三年立，母張婕妤有寵於宣帝。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-091-wikisource-68f1cea0abc3",
@@ -121539,7 +121987,7 @@
     },
     {
       "id": "source-hanshu-091-wikisource-81fb0d12bf8f",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -121574,12 +122022,14 @@
         "afterLocal": "定陶共王康，永光三年立為濟陽王。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-091-wikisource-98015828056b",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -121614,8 +122064,10 @@
         "afterLocal": "中山哀王竟，初元二年立為清河王。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-091-wikisource-d5264fc8cad5",
@@ -122061,7 +122513,7 @@
     },
     {
       "id": "source-hanshu-093-wikisource-1cd1ecf885c0",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -122104,8 +122556,10 @@
         "afterLocal": "『歲寒然後知松伯之後凋也』。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Reviewed and applied: corrected false traditionalization of classical 云 as 雲; English checked and revised where needed.",
+      "reviewedAt": "2026-06-23T19:31:25.339Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-hanshu-093-wikisource-1e4c1a1148b8",
@@ -122618,7 +123072,7 @@
     },
     {
       "id": "source-hanshu-094-wikisource-935572545556",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -122661,8 +123115,10 @@
         "afterLocal": "家貧，少時給事縣為亭長，好客少年，捕搏敢行。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Reviewed and applied: corrected false 硃 to 朱 in names, vermilion/color terms, titles, and place names; English checked and revised where the color term changed.",
+      "reviewedAt": "2026-06-23T20:27:54.415Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-hanshu-094-wikisource-9de28d8e6671",
@@ -122771,7 +123227,7 @@
     },
     {
       "id": "source-hanshu-094-wikisource-dfdb5949ace9",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -122814,8 +123270,10 @@
         "afterLocal": "太后欲臨其喪，莽固爭，乃止。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Reviewed and applied: corrected false traditionalization of classical 云 as 雲; English checked and revised where needed.",
+      "reviewedAt": "2026-06-23T19:31:25.339Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-hanshu-095-wikisource-057a67092ee3",
@@ -128888,7 +129346,7 @@
     },
     {
       "id": "source-hanshu-101-wikisource-aa20ba994e54",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -128931,8 +129389,10 @@
         "afterLocal": "郡國吏竊笑丞相仁厚有知略，微信奇怪也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Accepted source graph 舍 for lodging/quarters sense; Chinese patched manually with local punctuation/quote placement preserved; English checked and retained.",
+      "reviewedAt": "2026-06-24T02:05:46.244Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-hanshu-101-wikisource-b673914cdbe3",
@@ -129074,7 +129534,7 @@
     },
     {
       "id": "source-hanshu-102-wikisource-18826630fbe0",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -129109,8 +129569,10 @@
         "afterLocal": "周陽由，其父趙兼以淮南王舅侯周陽，故因氏焉。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-102-wikisource-1cbca2f99bd7",
@@ -129348,7 +129810,7 @@
     },
     {
       "id": "source-hanshu-102-wikisource-9401c2c7c2ef",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -129383,8 +129845,10 @@
         "afterLocal": "王溫舒，陽陵人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-102-wikisource-b4d25bdc4053",
@@ -129541,7 +130005,7 @@
     },
     {
       "id": "source-hanshu-102-wikisource-d7d2603881a9",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -129576,8 +130040,10 @@
         "afterLocal": "嚴延年字次卿，東海下邳人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-102-wikisource-e1321dfdaee9",
@@ -130237,7 +130703,7 @@
     },
     {
       "id": "source-hanshu-105-wikisource-4c7e07cba30b",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -130272,8 +130738,10 @@
         "afterLocal": "李延年，中山人，身及父母兄弟皆故倡也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-105-wikisource-5a8e304f92b7",
@@ -130619,7 +131087,7 @@
     },
     {
       "id": "source-hanshu-105-wikisource-b7ddf91fc760",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -130662,8 +131130,10 @@
         "afterLocal": "贊曰：柔曼之傾意，非獨女德，蓋亦有男色焉。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Reviewed and applied: corrected false traditionalization of classical 云 as 雲; English checked and revised where needed.",
+      "reviewedAt": "2026-06-23T19:31:25.339Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-hanshu-105-wikisource-c1ab4cc2bfc7",
@@ -134026,7 +134496,7 @@
     },
     {
       "id": "source-hanshu-109-wikisource-2bcea8060334",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -134069,12 +134539,14 @@
         "afterLocal": "鄯善國，本名樓蘭，王治扞泥城，去陽關千六百里，去長安六千一百里。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Reviewed and applied: corrected false traditionalization of classical 云 as 雲; English checked and revised where needed.",
+      "reviewedAt": "2026-06-23T19:31:25.339Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-hanshu-109-wikisource-50483f618de3",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -134117,8 +134589,10 @@
         "afterLocal": "康居有小王五：一曰蘇薤王，治蘇薤城，去都護五千七百七十六里，去陽關八千二十五里；"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Reviewed and applied: corrected false traditionalization of classical 云 as 雲; English checked and revised where needed.",
+      "reviewedAt": "2026-06-23T19:31:25.339Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-hanshu-109-wikisource-bdfc5f1f441a",
@@ -134795,7 +135269,7 @@
     },
     {
       "id": "source-hanshu-111-wikisource-1213efa3c74c",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -134830,12 +135304,14 @@
         "afterLocal": "孝宣霍皇后，大司馬大將軍博陸侯光女也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-111-wikisource-2d3faaba376d",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -134870,8 +135346,10 @@
         "afterLocal": "史皇孫王夫人，宣帝母也，名翁須，太始中得幸於史皇孫。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-111-wikisource-3492bafd7cdd",
@@ -134904,7 +135382,7 @@
     },
     {
       "id": "source-hanshu-111-wikisource-5788df6ab890",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -134939,12 +135417,14 @@
         "afterLocal": "孝武鉤弋趙婕妤，昭帝母也，家在河間。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-111-wikisource-5810975ae380",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -134979,12 +135459,14 @@
         "afterLocal": "孝景薄皇后，孝文薄太后家女也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-111-wikisource-699a830b158c",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -135019,8 +135501,10 @@
         "afterLocal": "孝文竇皇后，景帝母也，呂太后時以良家子選入宮。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-111-wikisource-7baf6e482998",
@@ -135072,7 +135556,7 @@
     },
     {
       "id": "source-hanshu-111-wikisource-9d4db48ef49b",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -135107,12 +135591,14 @@
         "afterLocal": "高祖薄姬，文帝母也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-111-wikisource-a2632d29a5c2",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -135147,8 +135633,10 @@
         "afterLocal": "孝武李夫人，本以倡進。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-111-wikisource-aa347ba4a47b",
@@ -135319,7 +135807,7 @@
     },
     {
       "id": "source-hanshu-111-wikisource-c1ccf87f4de4",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -135354,12 +135842,14 @@
         "afterLocal": "孝武陳皇后，長公主嫖女也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-111-wikisource-c3ba21426250",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -135394,8 +135884,10 @@
         "afterLocal": "孝宣許皇后，元帝母也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-111-wikisource-c86174f3fdc2",
@@ -135428,7 +135920,7 @@
     },
     {
       "id": "source-hanshu-111-wikisource-db648cf4486b",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -135463,8 +135955,10 @@
         "afterLocal": "衛太子史良娣，宣帝祖母也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-111-wikisource-ee3696c6972f",
@@ -135593,7 +136087,7 @@
     },
     {
       "id": "source-hanshu-112-wikisource-08df667a9faa",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -135628,8 +136122,10 @@
         "afterLocal": "孝哀傅皇后，定陶太后從弟子也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-112-wikisource-274703dbb7aa",
@@ -135900,7 +136396,7 @@
     },
     {
       "id": "source-hanshu-112-wikisource-5b933de90831",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -135935,8 +136431,10 @@
         "afterLocal": "孝成趙皇后，本長安宮人。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-112-wikisource-66dc035bad5d",
@@ -136006,7 +136504,7 @@
     },
     {
       "id": "source-hanshu-112-wikisource-6d5db06c7e4b",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -136041,12 +136539,14 @@
         "afterLocal": "孝成許皇后，大司馬車騎將軍平恩侯嘉女也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-112-wikisource-7bb4d581ed94",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "hanshu",
@@ -136081,8 +136581,10 @@
         "afterLocal": "孝元傅昭儀，哀帝祖母也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
+      "reviewedAt": "2026-06-23T18:01:35.882Z",
+      "reviewer": "triage-repair-queue"
     },
     {
       "id": "source-hanshu-112-wikisource-8ef8f6489638",
@@ -136378,7 +136880,7 @@
     },
     {
       "id": "source-hanshu-112-wikisource-ce1bbb1b536e",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -136421,8 +136923,31 @@
         "afterLocal": "是時，楚思王衍、梁王立來朝，明旦當辭去，上宿供張白虎殿。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Reviewed graph-pair lane; upstream graph form accepted for source text after checking item context.\nExisting English translation manually checked for this graph-only source repair and retained.",
+      "manualTranslations": [
+        {
+          "zh": "帝素彊，無疾病。",
+          "literal": "The emperor had always been strong; he had no illness.",
+          "idiomatic": "He had always been vigorous and showed no sign of sickness.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2"
+        }
+      ],
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for this graph-only source repair and retained.",
+      "reviewedAt": "2026-06-23T23:25:34.826Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-23T23:25:35.791Z",
+      "appliedSummary": {
+        "id": "source-hanshu-112-wikisource-ce1bbb1b536e",
+        "type": "text_discrepancy_candidate",
+        "start": 185,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-hanshu-112-wikisource-d0ac2fca4ba0",
@@ -143973,7 +144498,7 @@
     },
     {
       "id": "source-hanshu-116-wikisource-4f54632ca708",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -144016,8 +144541,10 @@
         "afterLocal": "『損上益下，民說無疆。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Reviewed and applied: corrected false traditionalization of classical 云 as 雲; English checked and revised where needed.",
+      "reviewedAt": "2026-06-23T19:31:25.339Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-hanshu-116-wikisource-580b7597581d",
@@ -144621,7 +145148,7 @@
     },
     {
       "id": "source-hanshu-116-wikisource-addf5e24dd63",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -144664,8 +145191,10 @@
         "afterLocal": "『日新之謂盛德，生生之謂易。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Reviewed and applied: corrected false traditionalization of classical 云 as 雲; English checked and revised where needed.",
+      "reviewedAt": "2026-06-23T19:31:25.339Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-hanshu-116-wikisource-b47998b9ef32",
@@ -144956,7 +145485,7 @@
     },
     {
       "id": "source-hanshu-116-wikisource-f53d1dc60f75",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -144999,8 +145528,10 @@
         "afterLocal": "明年夏，赤眉樊崇等眾數十萬人入關，立劉盆子，稱尊號，攻更始，更始降之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variant 餘/余; local corpus text retained.",
+      "reviewedAt": "2026-06-23T19:02:29.908Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-hanshu-116-wikisource-f8968dcc11a0",
@@ -154951,5 +155482,5 @@
       "notes": ""
     }
   ],
-  "updatedAt": "2026-06-23T00:01:20.117Z"
+  "updatedAt": "2026-06-24T00:49:31.219Z"
 }
