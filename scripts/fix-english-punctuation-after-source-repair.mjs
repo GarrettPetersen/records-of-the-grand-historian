@@ -233,6 +233,8 @@ function appendToPrevious(text, punctuation) {
   const trailingSpace = original.match(/\s*$/u)?.[0] || '';
   let base = original.slice(0, original.length - trailingSpace.length);
 
+  if ((punctuation === '"' || punctuation === '”') && /["”]\s*$/u.test(base)) return original;
+
   if (punctuation === ',' || punctuation === ';' || punctuation === ':') {
     base = base.replace(/[.!?]$/u, punctuation);
     if (base.endsWith(punctuation)) return `${base}${trailingSpace}`;
@@ -397,6 +399,16 @@ function fixFile(file, hits) {
     const previous = previousSourceUnit(units, index);
     if (!previous) {
       skipped.push({ hit, reason: 'no previous source unit' });
+      continue;
+    }
+    const currentSource = String(current.item[current.key] || '').trimStart();
+    const previousSource = String(previous.item[previous.key] || '').trimEnd();
+    if (currentSource.startsWith(hit.found)) {
+      skipped.push({ hit, reason: 'source punctuation still leads current unit' });
+      continue;
+    }
+    if (!previousSource.endsWith(hit.found)) {
+      skipped.push({ hit, reason: 'previous source unit does not carry repaired punctuation' });
       continue;
     }
 

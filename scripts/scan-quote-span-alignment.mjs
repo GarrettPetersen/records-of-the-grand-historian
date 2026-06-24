@@ -603,7 +603,8 @@ Explicit paths may be chapter files or directories. Use either --book or paths, 
       byProblem,
       problems
     }, null, 2));
-    process.exit(problems.length > 0 ? 1 : 0);
+    process.exitCode = problems.length > 0 ? 1 : 0;
+    return;
   }
 
   if (problems.length > 0) {
@@ -621,7 +622,8 @@ Explicit paths may be chapter files or directories. Use either --book or paths, 
     if (shownProblems.length < problems.length) {
       console.error(`Showing ${shownProblems.length} of ${problems.length}. Use --limit=0 for count only or --limit=-1 for all details.`);
     }
-    process.exit(1);
+    process.exitCode = 1;
+    return;
   }
 
   console.log(`Quote span alignment OK (${files.length} chapter files scanned${bookFilter ? ` for ${bookFilter}` : ''}).`);
