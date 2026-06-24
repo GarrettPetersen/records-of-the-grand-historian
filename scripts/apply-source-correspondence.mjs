@@ -4,8 +4,8 @@
  *
  * This script intentionally has a human gate: it applies only queue items whose
  * status or decision is "approved", or items explicitly approved with
- * --approve. It then renumbers sentence IDs and preserves existing translations
- * by matching Chinese source text.
+ * --approve. It preserves existing sentence IDs, assigns IDs only to newly
+ * inserted units, and preserves existing translations by matching Chinese source text.
  */
 
 import fs from 'node:fs';
@@ -62,7 +62,7 @@ Queue workflow:
   2. Add manualTranslations to any approved item that inserts or changes Chinese:
      [{ "zh": "...", "literal": "...", "idiomatic": "...", "model": "..." }]
   3. Mark queue items status/decision "approved" or pass --approve ID.
-  4. Run this script to apply approved source edits, renumber sentence IDs, and
+  4. Run this script to apply approved source edits, preserve sentence IDs, and
      preserve existing translations by matching Chinese source text.`);
 }
 
@@ -627,9 +627,29 @@ function rebuildContent(entries, originalContent) {
   return blocks.map((entry) => entry.block);
 }
 
-function renumber(entries) {
-  for (let i = 0; i < entries.length; i += 1) {
-    entries[i].unit.id = `s${String(i + 1).padStart(4, '0')}`;
+function preserveIdsAndAssignMissing(entries) {
+  const used = new Set();
+  let maxNumericId = 0;
+
+  for (const entry of entries) {
+    const id = String(entry.unit.id || '').trim();
+    if (!id) continue;
+    if (used.has(id)) throw new Error(`Duplicate source unit id after repair: ${id}`);
+    used.add(id);
+
+    const match = id.match(/^s(\d+)$/);
+    if (match) maxNumericId = Math.max(maxNumericId, Number(match[1]));
+  }
+
+  for (const entry of entries) {
+    if (String(entry.unit.id || '').trim()) continue;
+    let id = '';
+    do {
+      maxNumericId += 1;
+      id = `s${String(maxNumericId).padStart(4, '0')}`;
+    } while (used.has(id));
+    entry.unit.id = id;
+    used.add(id);
   }
 }
 
@@ -1094,7 +1114,7 @@ function applyQueue(queue, opts) {
     }
 
     entries = repairPunctuationPlacement(entries);
-    renumber(entries);
+    preserveIdsAndAssignMissing(entries);
     const transferred = transferTranslations(entries, translationsBySource);
     updateMeta(chapter, entries);
     chapter.content = rebuildContent(entries, chapter.content || []);
