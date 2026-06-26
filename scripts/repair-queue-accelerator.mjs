@@ -743,16 +743,23 @@ function previewResolvers(opts) {
   const patternScoped = patternScopeArgs(opts);
   const punctuation = runNodeJson('scripts/resolve-current-source-punctuation-queue.mjs', resolverScoped);
   const current = runNodeJson('scripts/resolve-current-source-variant-queue.mjs', resolverScoped);
+  const houhanshuCommentary = runNodeJson('scripts/resolve-houhanshu-interleaved-commentary-noops.mjs', resolverScoped);
+  const jiutangshuMarkers = runNodeJson('scripts/resolve-jiutangshu-zhuan-table-marker-noops.mjs', resolverScoped);
   const patterns = patternScopeSupported(opts)
     ? runNodeJson('scripts/repair-source-queue-patterns.mjs', patternScoped)
     : null;
-  const staleComplete = Number(punctuation.verified || 0) + Number(current.verified || 0);
+  const staleComplete = Number(punctuation.verified || 0)
+    + Number(current.verified || 0)
+    + Number(houhanshuCommentary.total || 0)
+    + Number(jiutangshuMarkers.total || 0);
   const patternComplete = patternCompletions(patterns);
   const reopened = patternReopens(patterns);
   const artifactsChanged = Number(patterns?.artifacts?.unitsChanged || 0);
   return {
     punctuation,
     current,
+    houhanshuCommentary,
+    jiutangshuMarkers,
     patterns,
     summary: {
       metadataOnlyCompletable: staleComplete,
@@ -883,6 +890,10 @@ function runSafe(opts) {
   const args = opts.apply ? ['--apply', ...resolverScoped] : resolverScoped;
   const punctuation = runNodeJson('scripts/resolve-current-source-punctuation-queue.mjs', args);
   const current = runNodeJson('scripts/resolve-current-source-variant-queue.mjs', args);
+  const houhanshuCommentary = runNodeJson('scripts/resolve-houhanshu-interleaved-commentary-noops.mjs', args);
+  const jiutangshuMarkers = runNodeJson('scripts/resolve-jiutangshu-zhuan-table-marker-noops.mjs', args);
+  const sourcePlaceholders = runNodeJson('scripts/resolve-source-placeholder-noops.mjs', args);
+  const representedTables = runNodeJson('scripts/resolve-represented-table-markup-noops.mjs', args);
   let patterns = null;
 
   if (opts.includePatternNoops) {
@@ -893,6 +904,10 @@ function runSafe(opts) {
         reason: 'Pattern no-op pass supports only whole-corpus or --book scopes; remove --chapter, --queue, --source-name, and --class.',
         punctuation,
         current,
+        houhanshuCommentary,
+        jiutangshuMarkers,
+        sourcePlaceholders,
+        representedTables,
       };
     }
     const patternPreview = runNodeJson('scripts/repair-source-queue-patterns.mjs', patternScoped);
@@ -904,6 +919,10 @@ function runSafe(opts) {
         reason: `Pattern no-op pass would reopen ${reopens} older decisions. Re-run with --allow-reopen if that is intended.`,
         punctuation,
         current,
+        houhanshuCommentary,
+        jiutangshuMarkers,
+        sourcePlaceholders,
+        representedTables,
         patternPreview,
       };
     }
@@ -921,10 +940,19 @@ function runSafe(opts) {
     apply: opts.apply,
     punctuation,
     current,
+    houhanshuCommentary,
+    jiutangshuMarkers,
+    sourcePlaceholders,
+    representedTables,
     patterns,
     progress,
     summary: {
-      metadataOnlyCompleted: Number(punctuation.verified || 0) + Number(current.verified || 0),
+      metadataOnlyCompleted: Number(punctuation.verified || 0)
+        + Number(current.verified || 0)
+        + Number(houhanshuCommentary.total || 0)
+        + Number(jiutangshuMarkers.total || 0)
+        + Number(sourcePlaceholders.total || 0)
+        + Number(representedTables.total || 0),
       patternCompleted: patternCompletions(patterns),
       patternReopened: patternReopens(patterns),
       artifactSourceUnitsChanged: Number(patterns?.artifacts?.unitsChanged || 0),

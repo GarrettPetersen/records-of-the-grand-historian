@@ -1956,7 +1956,7 @@
     },
     {
       "id": "source-nanqishu-003-wikisource-0e82b46dabea",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -1999,8 +1999,10 @@
         "afterLocal": "夏四月丙午，以輔國將軍張倪爲兖州刺史。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.",
+      "reviewedAt": "2026-06-26T08:31:32.422Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-nanqishu-003-wikisource-17b18845a4de",
@@ -2217,7 +2219,7 @@
     },
     {
       "id": "source-nanqishu-003-wikisource-5ef671dbe6ff",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -2260,8 +2262,10 @@
         "afterLocal": "又詔曰：「《春秋國語》云『生民之有學斅，猶樹木之有枝葉。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants; local corpus text retained.",
+      "reviewedAt": "2026-06-26T08:31:32.422Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-nanqishu-003-wikisource-5fa7ffc22ae8",
@@ -2733,7 +2737,7 @@
     },
     {
       "id": "source-nanqishu-003-wikisource-f1bb72dad1d1",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -2776,8 +2780,31 @@
         "afterLocal": "都邑三百里內罪應入重者，降一等，餘依赦制。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved 祠/祀 worship-verb source form after checking ritual context; existing English sacrifice wording remains correct.\nExisting English translation manually checked for this graph-only source repair and retained.",
+      "manualTranslations": [
+        {
+          "zh": "辛卯，車駕祠南郊，大赦。",
+          "literal": "On xinmao day, the imperial carriage sacrificed at the Southern Altar and proclaimed a great amnesty.",
+          "idiomatic": "On xinmao, the emperor sacrificed at the Southern Altar and proclaimed a great amnesty.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2"
+        }
+      ],
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for this graph-only source repair and retained.",
+      "reviewedAt": "2026-06-26T10:28:11.423Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T10:28:11.697Z",
+      "appliedSummary": {
+        "id": "source-nanqishu-003-wikisource-f1bb72dad1d1",
+        "type": "text_discrepancy_candidate",
+        "start": 152,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-nanqishu-003-wikisource-f8e025e00593",
@@ -6116,7 +6143,7 @@
     },
     {
       "id": "source-nanqishu-011-wikisource-16ff114443e2",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.818,
@@ -6159,8 +6186,16 @@
         "afterLocal": "山道士朱僧標以聞，上遣主書董仲民案視，以爲神瑞。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明六年，",
+        "localId": "s0892"
+      }
     },
     {
       "id": "source-nanqishu-011-wikisource-1e127d346768",
@@ -6305,7 +6340,7 @@
     },
     {
       "id": "source-nanqishu-011-wikisource-2ef17004997c",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.886,
@@ -6348,8 +6383,16 @@
         "afterLocal": "參議：太廟登歌宜用司徒褚淵，餘悉用黃門郎謝超宗辭。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建元二年，",
+        "localId": "s0010"
+      }
     },
     {
       "id": "source-nanqishu-011-wikisource-39aeb0534f13",
@@ -6491,7 +6534,7 @@
     },
     {
       "id": "source-nanqishu-011-wikisource-622a46ab0df1",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.826,
@@ -6534,8 +6577,16 @@
         "afterLocal": "詔付外詳，竟不行。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明二年，",
+        "localId": "s0013"
+      }
     },
     {
       "id": "source-nanqishu-011-wikisource-6e86386d6096",
@@ -6629,7 +6680,7 @@
     },
     {
       "id": "source-nanqishu-011-wikisource-b1e19ef86382",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.765,
@@ -6672,8 +6723,16 @@
         "afterLocal": "淹制二章，不依胡、傅，世祖口勑付太樂歌之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明四年",
+        "localId": "s0563"
+      }
     },
     {
       "id": "source-nanqishu-011-wikisource-b90311baee32",
@@ -6771,7 +6830,7 @@
     },
     {
       "id": "source-nanqishu-011-wikisource-cf166f5820f3",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.882,
@@ -6814,8 +6873,16 @@
         "afterLocal": "穆皇后廟神室，亦未有歌辭。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明二年，",
+        "localId": "s0399"
+      }
     },
     {
       "id": "source-nanqishu-011-wikisource-e3dee798b530",
@@ -13149,7 +13216,7 @@
     },
     {
       "id": "source-nanqishu-016-wikisource-1f16acf52608",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.7,
@@ -13192,8 +13259,10 @@
         "afterLocal": "荀勗欲去事煩，唯論并省。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream witness uses placeholder/codepoint glyphs where the local corpus already preserves the corresponding source text; local corpus retained.",
+      "reviewedAt": "2026-06-26T16:24:25.234Z",
+      "reviewer": "resolve-source-placeholder-noops"
     },
     {
       "id": "source-nanqishu-016-wikisource-287626fa7a11",
@@ -17071,7 +17140,7 @@
     },
     {
       "id": "source-nanqishu-024-wikisource-38df229f1c43",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.6,
@@ -17114,8 +17183,30 @@
         "afterLocal": "是時虜寇壽陽，上敕世隆曰：「歷陽城大，恐不可卒治，正宜斷隔之，深爲保固。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Accepted missing era-year text after confirming the leading close quote belongs to the previous sentence; English manually updated.\nApplied reviewer-provided sourceTextOverride for this source repair.",
+      "sourceTextOverride": "建元二年，進號安南將軍。",
+      "manualTranslations": [
+        {
+          "zh": "建元二年，進號安南將軍。",
+          "literal": "In Jianyuan 2, his title was advanced to General Who Pacifies the South.",
+          "idiomatic": "In Jianyuan 2, his title was advanced to General Who Pacifies the South.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5 Codex manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-26T11:52:47.717Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T11:52:48.223Z",
+      "appliedSummary": {
+        "id": "source-nanqishu-024-wikisource-38df229f1c43",
+        "type": "source_replacement_candidate",
+        "start": 105,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-nanqishu-024-wikisource-5814e78fa81a",
@@ -17161,7 +17252,7 @@
     },
     {
       "id": "source-nanqishu-024-wikisource-6018018ed5b7",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.6,
@@ -17204,8 +17295,16 @@
         "afterLocal": "鬱林廢，朝臣到宮門參承高宗，瓌託脚疾不下。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "隆昌元年，",
+        "localId": "s0205"
+      }
     },
     {
       "id": "source-nanqishu-024-wikisource-650604572ad6",
@@ -17294,7 +17393,7 @@
     },
     {
       "id": "source-nanqishu-024-wikisource-a11eb3e11ff0",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.556,
@@ -17337,8 +17436,16 @@
         "afterLocal": "尋改封平都。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建元元年，",
+        "localId": "s0190"
+      }
     },
     {
       "id": "source-nanqishu-024-wikisource-a71e1fe28e4b",
@@ -17399,7 +17506,7 @@
     },
     {
       "id": "source-nanqishu-024-wikisource-bfdaf9acfd97",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -17442,8 +17549,16 @@
         "afterLocal": "月加給錢二萬。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建武元年，",
+        "localId": "s0210"
+      }
     },
     {
       "id": "source-nanqishu-025-wikisource-23d7a391229c",
@@ -17489,7 +17604,7 @@
     },
     {
       "id": "source-nanqishu-025-wikisource-286c51c93e7d",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -17532,8 +17647,16 @@
         "afterLocal": "崇祖召文武議曰：「賊衆我寡，當用奇以制之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建元二年，",
+        "localId": "s0068"
+      }
     },
     {
       "id": "source-nanqishu-025-wikisource-4b6097dc5dbb",
@@ -17669,7 +17792,7 @@
     },
     {
       "id": "source-nanqishu-025-wikisource-5f72b9ab15c0",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.765,
@@ -17712,8 +17835,16 @@
         "afterLocal": "敬兒左右雷仲顯知有變，抱敬兒而泣。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明元年，",
+        "localId": "s0214"
+      }
     },
     {
       "id": "source-nanqishu-025-wikisource-6c0c893e04bb",
@@ -17816,7 +17947,7 @@
     },
     {
       "id": "source-nanqishu-025-wikisource-a8e6353eea69",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -17859,12 +17990,20 @@
         "afterLocal": "太祖崩，敬兒於家竊泣曰：「官家大老天子，可惜！"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建元二年，",
+        "localId": "s0193"
+      }
     },
     {
       "id": "source-nanqishu-025-wikisource-ca99c9e2c71d",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.733,
@@ -17907,8 +18046,16 @@
         "afterLocal": "道和字敬邕，羌主姚興孫也。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建元元年，",
+        "localId": "s0183"
+      }
     },
     {
       "id": "source-nanqishu-025-wikisource-f23dc830c5f3",
@@ -17960,7 +18107,7 @@
     },
     {
       "id": "source-nanqishu-025-wikisource-fbe10826d9e2",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -18003,8 +18150,16 @@
         "afterLocal": "崇祖啓斷水注平地，以絕虜馬。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:45:07.928Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:45:07.928Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "泰豫元年，",
+        "localId": "s0046"
+      }
     },
     {
       "id": "source-nanqishu-026-wikisource-15594e3d5d43",
@@ -19092,7 +19247,7 @@
     },
     {
       "id": "source-nanqishu-028-wikisource-276b4b1b7c75",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.556,
@@ -19135,8 +19290,30 @@
         "afterLocal": "遺命薄殯。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved from repair decision packet; pending source application.\nApplied reviewer-provided sourceTextOverride for this source repair.",
+      "sourceTextOverride": "建元二年卒，年四十九。",
+      "manualTranslations": [
+        {
+          "zh": "建元二年卒，年四十九。",
+          "literal": "He died in Jianyuan 2 at the age of forty-nine.",
+          "idiomatic": "He died in Jianyuan 2 at forty-nine.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5 Codex manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-26T11:22:20.482Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T11:22:21.856Z",
+      "appliedSummary": {
+        "id": "source-nanqishu-028-wikisource-276b4b1b7c75",
+        "type": "source_replacement_candidate",
+        "start": 260,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-nanqishu-028-wikisource-4b1e7d135b7d",
@@ -19263,7 +19440,7 @@
     },
     {
       "id": "source-nanqishu-028-wikisource-53fad84eca27",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.765,
@@ -19306,8 +19483,16 @@
         "afterLocal": "作大形棺材盛仗，使郷人田天生、王道期載渡江北。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明二年，",
+        "localId": "s0359"
+      }
     },
     {
       "id": "source-nanqishu-028-wikisource-68b3bfd68161",
@@ -19485,7 +19670,7 @@
     },
     {
       "id": "source-nanqishu-028-wikisource-9f312f6d742c",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.556,
@@ -19528,8 +19713,16 @@
         "afterLocal": "上惜之甚至，追贈輔國將軍、梁南秦二州刺史，諡質侯。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建元元年，",
+        "localId": "s0319"
+      }
     },
     {
       "id": "source-nanqishu-028-wikisource-c897ead8af16",
@@ -19575,7 +19768,7 @@
     },
     {
       "id": "source-nanqishu-028-wikisource-d1b618d6de61",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -19618,8 +19811,10 @@
         "afterLocal": "斡晴潭而悵泗，枻松洲而悼情。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream witness uses placeholder/codepoint glyphs where the local corpus already preserves the corresponding source text; local corpus retained.",
+      "reviewedAt": "2026-06-26T16:24:25.234Z",
+      "reviewer": "resolve-source-placeholder-noops"
     },
     {
       "id": "source-nanqishu-028-wikisource-f16e2add9495",
@@ -19666,7 +19861,7 @@
     },
     {
       "id": "source-nanqishu-029-wikisource-0e8fe4720a5e",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.714,
@@ -19709,12 +19904,20 @@
         "afterLocal": "三年，遷右衞將軍，加給事中。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明元年，",
+        "localId": "s0198"
+      }
     },
     {
       "id": "source-nanqishu-029-wikisource-10e3b2abaef1",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -19757,12 +19960,20 @@
         "afterLocal": "廣之未至百餘里，虜退，乃還。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建武二年，",
+        "localId": "s0301"
+      }
     },
     {
       "id": "source-nanqishu-029-wikisource-2f0b8cc63ae4",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.886,
@@ -19805,8 +20016,16 @@
         "afterLocal": "預廢鬱林勳，增封三百戶。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "延興元年，",
+        "localId": "s0296"
+      }
     },
     {
       "id": "source-nanqishu-029-wikisource-4559f573f2f1",
@@ -19852,7 +20071,7 @@
     },
     {
       "id": "source-nanqishu-029-wikisource-4dc24c03008f",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.778,
@@ -19895,12 +20114,20 @@
         "afterLocal": "轉游擊將軍。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:45:07.928Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:45:07.928Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "元徽二年，",
+        "localId": "s0015"
+      }
     },
     {
       "id": "source-nanqishu-029-wikisource-7731c8810f9d",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.636,
@@ -19943,12 +20170,20 @@
         "afterLocal": "轉右衞將軍，加給事中。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建元元年，",
+        "localId": "s0026"
+      }
     },
     {
       "id": "source-nanqishu-029-wikisource-7f6368ad94c4",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.667,
@@ -19991,12 +20226,20 @@
         "afterLocal": "轉散騎常侍、左軍將軍。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建元元年，",
+        "localId": "s0278"
+      }
     },
     {
       "id": "source-nanqishu-029-wikisource-821d6ce2b1fc",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.818,
@@ -20039,12 +20282,20 @@
         "afterLocal": "衆軍擊破琰長史杜叔寶軍於橫塘，安國抄斷賊糧道，燒其運車，多所傷殺。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:45:07.928Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:45:07.928Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "泰始二年，",
+        "localId": "s0005"
+      }
     },
     {
       "id": "source-nanqishu-029-wikisource-8d9326c629ec",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.692,
@@ -20087,8 +20338,16 @@
         "afterLocal": "出爲假節、督兖青冀三州徐州東海朐山軍事、寧朔將軍、兖州刺史。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建元元年，",
+        "localId": "s0130"
+      }
     },
     {
       "id": "source-nanqishu-029-wikisource-96ee511f2538",
@@ -20134,7 +20393,7 @@
     },
     {
       "id": "source-nanqishu-029-wikisource-98bffd41e539",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.765,
@@ -20177,12 +20436,20 @@
         "afterLocal": "隨前將軍劉亮討破東賊於晉陵，除長水校尉，假輔國將軍。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:45:07.928Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:45:07.928Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "泰始二年，",
+        "localId": "s0059"
+      }
     },
     {
       "id": "source-nanqishu-029-wikisource-a2fe324cd2f8",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.667,
@@ -20225,8 +20492,16 @@
         "afterLocal": "時豫州刺史崔慧景密與虜通，有異志，"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "隆昌元年，",
+        "localId": "s0294"
+      }
     },
     {
       "id": "source-nanqishu-029-wikisource-a5b2125facb6",
@@ -20314,7 +20589,7 @@
     },
     {
       "id": "source-nanqishu-029-wikisource-b595a2a311f1",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.714,
@@ -20357,8 +20632,16 @@
         "afterLocal": "轉督高平下邳淮陽淮西四郡諸軍事、寧朔將軍、淮南太守。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:45:07.928Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:45:07.928Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "元徽三年，",
+        "localId": "s0105"
+      }
     },
     {
       "id": "source-nanqishu-029-wikisource-b8b35a7b67c3",
@@ -20461,7 +20744,7 @@
     },
     {
       "id": "source-nanqishu-029-wikisource-c1422146cca6",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -20504,8 +20787,16 @@
         "afterLocal": "盤龍率輔國將軍張倪馬步軍於西澤中奮擊，殺傷數萬人，獲牛馬輜重。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建元二年，",
+        "localId": "s0171"
+      }
     },
     {
       "id": "source-nanqishu-029-wikisource-c630ba19aecf",
@@ -20552,7 +20843,7 @@
     },
     {
       "id": "source-nanqishu-029-wikisource-da54159af2f0",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.556,
@@ -20595,12 +20886,20 @@
         "afterLocal": "詔賜朝服一具，衣一襲。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明元年，",
+        "localId": "s0157"
+      }
     },
     {
       "id": "source-nanqishu-029-wikisource-dfd0b73ba40c",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.886,
@@ -20643,8 +20942,16 @@
         "afterLocal": "四年，湘川蠻動，安國督州兵討之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明二年，",
+        "localId": "s0035"
+      }
     },
     {
       "id": "source-nanqishu-029-wikisource-eacf992ef356",
@@ -20730,7 +21037,7 @@
     },
     {
       "id": "source-nanqishu-029-wikisource-f836c992c523",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.886,
@@ -20773,8 +21080,16 @@
         "afterLocal": "二年，沈攸之平，司州刺史姚道和懷貳被徵，以盤龍督司州軍事、司州刺史、假節，將軍如故。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:45:07.928Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:45:07.928Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "昇明元年，",
+        "localId": "s0167"
+      }
     },
     {
       "id": "source-nanqishu-030-wikisource-04b9791b6465",
@@ -20818,7 +21133,7 @@
     },
     {
       "id": "source-nanqishu-030-wikisource-11fd257c8927",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.556,
@@ -20861,12 +21176,20 @@
         "afterLocal": "沈攸之平，論封諸將，以僧靜爲興平縣侯，邑千戶。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:45:07.928Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:45:07.928Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "昇明二年，",
+        "localId": "s0069"
+      }
     },
     {
       "id": "source-nanqishu-030-wikisource-207a93898955",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.667,
@@ -20909,12 +21232,20 @@
         "afterLocal": "轉輔國將軍，左軍將軍，游擊將軍，太守如故。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建元元年，",
+        "localId": "s0134"
+      }
     },
     {
       "id": "source-nanqishu-030-wikisource-2f8c1852d2a2",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.789,
@@ -20957,8 +21288,16 @@
         "afterLocal": "僧靜與平西司馬韓孟度、華山太守康元隆前進，未至比陽四十里，頓深橋。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明五年，",
+        "localId": "s0079"
+      }
     },
     {
       "id": "source-nanqishu-030-wikisource-43565bb8aeb0",
@@ -21010,7 +21349,7 @@
     },
     {
       "id": "source-nanqishu-030-wikisource-4a189e369849",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.765,
@@ -21053,8 +21392,16 @@
         "afterLocal": "明年，江州蠻動，敕虎領兵戍尋陽，板輔國將軍，伐蠻軍主。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明元年，",
+        "localId": "s0211"
+      }
     },
     {
       "id": "source-nanqishu-030-wikisource-4fbd99216820",
@@ -21142,7 +21489,7 @@
     },
     {
       "id": "source-nanqishu-030-wikisource-5e1975991356",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.765,
@@ -21185,8 +21532,16 @@
         "afterLocal": "贈輔國將軍、梁州剌史。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明八年，",
+        "localId": "s0150"
+      }
     },
     {
       "id": "source-nanqishu-030-wikisource-77148e0b43ec",
@@ -21247,7 +21602,7 @@
     },
     {
       "id": "source-nanqishu-030-wikisource-7e5d6c0c2764",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.778,
@@ -21290,12 +21645,20 @@
         "afterLocal": "事寧，轉散騎常侍、右衞將軍。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:45:07.928Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:45:07.928Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永元元年，",
+        "localId": "s0261"
+      }
     },
     {
       "id": "source-nanqishu-030-wikisource-7ea408147417",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.556,
@@ -21338,12 +21701,20 @@
         "afterLocal": "二年，進督爲監，進號平北將軍，爵爲侯，增邑三百戶。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建武元年，",
+        "localId": "s0230"
+      }
     },
     {
       "id": "source-nanqishu-030-wikisource-a24b2aa57198",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.556,
@@ -21386,8 +21757,16 @@
         "afterLocal": "贈輔國將軍、梁秦二州刺史。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明元年，",
+        "localId": "s0186"
+      }
     },
     {
       "id": "source-nanqishu-030-wikisource-a7b68b918eed",
@@ -21433,7 +21812,7 @@
     },
     {
       "id": "source-nanqishu-030-wikisource-aae8c7e2f154",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -21476,8 +21855,16 @@
         "afterLocal": "世祖踐阼，出爲持節、督徐州諸軍事、冠軍將軍、北徐州刺史。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建元二年，",
+        "localId": "s0074"
+      }
     },
     {
       "id": "source-nanqishu-030-wikisource-b29d763e985d",
@@ -21524,7 +21911,7 @@
     },
     {
       "id": "source-nanqishu-030-wikisource-cc378ebd5918",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.714,
@@ -21567,12 +21954,20 @@
         "afterLocal": "度見朝廷貴戚，說郢城事，宣露如初。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建元四年，",
+        "localId": "s0180"
+      }
     },
     {
       "id": "source-nanqishu-030-wikisource-d50a5c821e90",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.852,
@@ -21615,8 +22010,16 @@
         "afterLocal": "二年，除游擊將軍，本官如故。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建元元年",
+        "localId": "s0204"
+      }
     },
     {
       "id": "source-nanqishu-030-wikisource-da46b34a55d4",
@@ -21761,7 +22164,7 @@
     },
     {
       "id": "source-nanqishu-030-wikisource-ec92c136ad12",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.667,
@@ -21804,8 +22207,16 @@
         "afterLocal": "詔曰：「遠隔殊方，聲問難審。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明元年，",
+        "localId": "s0025"
+      }
     },
     {
       "id": "source-nanqishu-031-wikisource-079282b19453",
@@ -24174,7 +24585,7 @@
     },
     {
       "id": "source-nanqishu-036-wikisource-341120ac0906",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.5,
@@ -24217,8 +24628,16 @@
         "afterLocal": "詣東府門自通，其日風寒慘厲，太祖謂四座曰：「此客至，使人不衣自暖矣。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:45:07.928Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:45:07.928Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "昇明二年，",
+        "localId": "s0028"
+      }
     },
     {
       "id": "source-nanqishu-036-wikisource-6665da3d164d",
@@ -24348,7 +24767,7 @@
     },
     {
       "id": "source-nanqishu-037-wikisource-0a4ef8a4026a",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.789,
@@ -24391,8 +24810,16 @@
         "afterLocal": "其略以爲「食貨相通，理勢自然。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建元四年，",
+        "localId": "s0124"
+      }
     },
     {
       "id": "source-nanqishu-037-wikisource-18a70471e283",
@@ -24438,7 +24865,7 @@
     },
     {
       "id": "source-nanqishu-037-wikisource-2521de9059ff",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.862,
@@ -24481,12 +24908,20 @@
         "afterLocal": "虜寇旣盛，悛又以本官出屯新亭。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建武二年，",
+        "localId": "s0172"
+      }
     },
     {
       "id": "source-nanqishu-037-wikisource-2e24b4d83f28",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.84,
@@ -24529,12 +24964,20 @@
         "afterLocal": "遁家人在都，從野夜歸，見兩三人持堊刷其家門，須臾滅，明日而遁死問至。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:45:07.928Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:45:07.928Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "昇明元年，",
+        "localId": "s0025"
+      }
     },
     {
       "id": "source-nanqishu-037-wikisource-6c1c552440f4",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.2,
@@ -24577,12 +25020,33 @@
         "afterLocal": "時年六十五。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Accepted upstream date restoration; local text omitted 永元元年 before the death notice.",
+      "manualTranslations": [
+        {
+          "zh": "永元元年，卒。",
+          "literal": "In Yongyuan 1, he died.",
+          "idiomatic": "He died in the first year of Yongyuan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-26T12:40:41.958Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T12:40:42.093Z",
+      "appliedSummary": {
+        "id": "source-nanqishu-037-wikisource-6c1c552440f4",
+        "type": "source_replacement_candidate",
+        "start": 221,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-nanqishu-037-wikisource-a860e480d22d",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.667,
@@ -24625,8 +25089,16 @@
         "afterLocal": "歷豫章王鎮西驃騎二府諮議。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:45:07.928Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:45:07.928Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "昇明二年，",
+        "localId": "s0045"
+      }
     },
     {
       "id": "source-nanqishu-037-wikisource-aa3d93c8c36d",
@@ -24672,7 +25144,7 @@
     },
     {
       "id": "source-nanqishu-037-wikisource-c0e738469d38",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.714,
@@ -24715,8 +25187,16 @@
         "afterLocal": "車駕幸丹陽郡宴飲，撝恃舊，酒後狎侮同列，言笑過度，爲左丞庾杲之所糾，贖論。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明元年，",
+        "localId": "s0034"
+      }
     },
     {
       "id": "source-nanqishu-037-wikisource-caf7a18077fc",
@@ -25224,7 +25704,7 @@
     },
     {
       "id": "source-nanqishu-038-wikisource-80fa2b2bed49",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.852,
@@ -25267,12 +25747,20 @@
         "afterLocal": "轉持節、督青冀二州軍事、輔國將軍、青冀二州刺史。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "隆昌元年，",
+        "localId": "s0123"
+      }
     },
     {
       "id": "source-nanqishu-038-wikisource-8b237b4c8918",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.789,
@@ -25315,8 +25803,16 @@
         "afterLocal": "景先本名道先，乃改避上諱。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建元元年，",
+        "localId": "s0015"
+      }
     },
     {
       "id": "source-nanqishu-038-wikisource-a56ab7b723ab",
@@ -25656,7 +26152,7 @@
     },
     {
       "id": "source-nanqishu-040-wikisource-0693f98a48bc",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -25699,12 +26195,20 @@
         "afterLocal": "魚復侯子響爲豫州，子懋解督。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明三年，",
+        "localId": "s0410"
+      }
     },
     {
       "id": "source-nanqishu-040-wikisource-1d885ffae1ec",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.867,
@@ -25747,12 +26251,20 @@
         "afterLocal": "宋世元嘉中，皆責成郡縣；"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:45:07.928Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:45:07.928Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "昇明三年，",
+        "localId": "s0007"
+      }
     },
     {
       "id": "source-nanqishu-040-wikisource-21b32e9151d1",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.789,
@@ -25795,12 +26307,20 @@
         "afterLocal": "鬱林初，爲右衞將軍，未拜，遷侍中，領右軍將軍。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明八年，",
+        "localId": "s0265"
+      }
     },
     {
       "id": "source-nanqishu-040-wikisource-236c64acd812",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.778,
@@ -25843,12 +26363,20 @@
         "afterLocal": "遷持節、督南豫司二州軍事、冠軍將軍、南豫州刺史，領宣城太守。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明四年，",
+        "localId": "s0487"
+      }
     },
     {
       "id": "source-nanqishu-040-wikisource-273eff0e25ea",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.765,
@@ -25891,12 +26419,20 @@
         "afterLocal": "鄱陽王鏘見害，以子卿代爲司徒，領兵置佐。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "隆昌元年，",
+        "localId": "s0319"
+      }
     },
     {
       "id": "source-nanqishu-040-wikisource-2e88ed38fe99",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.692,
@@ -25939,8 +26475,16 @@
         "afterLocal": "鬱林卽位，進號征虜將軍，還爲後將軍，"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明十年，",
+        "localId": "s0537"
+      }
     },
     {
       "id": "source-nanqishu-040-wikisource-3517f766f6a1",
@@ -26463,7 +27007,7 @@
     },
     {
       "id": "source-nanqishu-040-wikisource-6aeeb9e92ad6",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.556,
@@ -26506,12 +27050,20 @@
         "afterLocal": "仍出爲使持節、都督豫州郢州之西陽司州之汝南二郡軍事、冠軍將軍、豫州刺史。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明三年，",
+        "localId": "s0329"
+      }
     },
     {
       "id": "source-nanqishu-040-wikisource-6c35fa4b7f5c",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.5,
@@ -26554,12 +27106,20 @@
         "afterLocal": "三年，失國璽，改封西陽。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明元年，",
+        "localId": "s0501"
+      }
     },
     {
       "id": "source-nanqishu-040-wikisource-77e470519396",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.5,
@@ -26602,8 +27162,16 @@
         "afterLocal": "建武中，改封西陽王。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明七年，",
+        "localId": "s0552"
+      }
     },
     {
       "id": "source-nanqishu-040-wikisource-7dbea93beccd",
@@ -27046,7 +27614,7 @@
     },
     {
       "id": "source-nanqishu-040-wikisource-bf81c42db219",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.846,
@@ -27089,12 +27657,20 @@
         "afterLocal": "四年，進號右軍。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明二年，",
+        "localId": "s0394"
+      }
     },
     {
       "id": "source-nanqishu-040-wikisource-c6f5f2a0c614",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.333,
@@ -27137,8 +27713,16 @@
         "afterLocal": "年十五。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建武二年，",
+        "localId": "s0539"
+      }
     },
     {
       "id": "source-nanqishu-040-wikisource-c8e40b21f869",
@@ -27325,7 +27909,7 @@
     },
     {
       "id": "source-nanqishu-040-wikisource-d6628a7b07ee",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.862,
@@ -27368,12 +27952,20 @@
         "afterLocal": "始興王鑑爲益州，子卿解督。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明元年，",
+        "localId": "s0299"
+      }
     },
     {
       "id": "source-nanqishu-040-wikisource-ddde87229ae7",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.778,
@@ -27416,8 +28008,16 @@
         "afterLocal": "明年，遷江州刺史，未拜，唐宇之賊平，遷爲持節、督會稽東陽新安臨海永嘉五郡、東中郎將、會稽太守。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明三年，",
+        "localId": "s0469"
+      }
     },
     {
       "id": "source-nanqishu-040-wikisource-de3c90efab6f",
@@ -27463,7 +28063,7 @@
     },
     {
       "id": "source-nanqishu-040-wikisource-dfbbac609300",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.789,
@@ -27506,8 +28106,16 @@
         "afterLocal": "進督南徐州。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "隆昌元年，",
+        "localId": "s0231"
+      }
     },
     {
       "id": "source-nanqishu-040-wikisource-dfd19cbf5c54",
@@ -28084,7 +28692,7 @@
     },
     {
       "id": "source-nanqishu-041-wikisource-15d4a3a8ad06",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.333,
@@ -28127,8 +28735,16 @@
         "afterLocal": "年五十四。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建武四年，",
+        "localId": "s0371"
+      }
     },
     {
       "id": "source-nanqishu-041-wikisource-27c0b7f9ba0a",
@@ -28174,7 +28790,7 @@
     },
     {
       "id": "source-nanqishu-041-wikisource-328f889c6468",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.765,
@@ -28217,12 +28833,20 @@
         "afterLocal": "爲左丞孫緬所奏，免官。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:45:07.928Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:45:07.928Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "大明五年",
+        "localId": "s0303"
+      }
     },
     {
       "id": "source-nanqishu-041-wikisource-7b5fcc9b9853",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.862,
@@ -28265,8 +28889,16 @@
         "afterLocal": "元徽初，郢州射手有叛者，融議家人家長罪所不及，亡身刑五年。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:45:07.928Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:45:07.928Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "泰始五年，",
+        "localId": "s0300"
+      }
     },
     {
       "id": "source-nanqishu-041-wikisource-9c36580dc999",
@@ -28312,7 +28944,7 @@
     },
     {
       "id": "source-nanqishu-041-wikisource-a05365d9c6c9",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.692,
@@ -28355,8 +28987,16 @@
         "afterLocal": "融扶入就榻，私索酒飲之，難問旣畢，乃長嘆曰：「嗚呼！"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明二年，",
+        "localId": "s0342"
+      }
     },
     {
       "id": "source-nanqishu-041-wikisource-ab56942a45c1",
@@ -30344,7 +30984,7 @@
     },
     {
       "id": "source-nanqishu-045-wikisource-13a1fa698a1f",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.778,
@@ -30387,8 +31027,16 @@
         "afterLocal": "明年，轉散騎常侍，太子詹事。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明五年，",
+        "localId": "s0200"
+      }
     },
     {
       "id": "source-nanqishu-045-wikisource-2dc9168d5dcd",
@@ -30889,7 +31537,7 @@
     },
     {
       "id": "source-nanqishu-045-wikisource-6ec87bd37e41",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.714,
@@ -30932,8 +31580,16 @@
         "afterLocal": "母區貴人卒，居喪盡禮。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明四年，",
+        "localId": "s0010"
+      }
     },
     {
       "id": "source-nanqishu-045-wikisource-737fa8f3473d",
@@ -31249,7 +31905,7 @@
     },
     {
       "id": "source-nanqishu-045-wikisource-a9546d4a5fed",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.826,
@@ -31292,8 +31948,16 @@
         "afterLocal": "仍除南彭城太守，將軍如故。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "隆昌元年，",
+        "localId": "s0045"
+      }
     },
     {
       "id": "source-nanqishu-045-wikisource-b14ca03e2787",
@@ -31590,7 +32254,7 @@
     },
     {
       "id": "source-nanqishu-045-wikisource-f459dc7d60e9",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.6,
@@ -31633,8 +32297,16 @@
         "afterLocal": "海陵立，轉撫軍將軍，侍中如故。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "隆昌元年，",
+        "localId": "s0020"
+      }
     },
     {
       "id": "source-nanqishu-045-wikisource-f62ae58aa8ca",
@@ -32912,7 +33584,7 @@
     },
     {
       "id": "source-nanqishu-049-wikisource-32e202bb998c",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.667,
@@ -32955,8 +33627,16 @@
         "afterLocal": "世祖遣文惠太子相隨往繢家置酒設樂，公卿皆冠冕而至，當世榮之。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明三年，",
+        "localId": "s0154"
+      }
     },
     {
       "id": "source-nanqishu-049-wikisource-62e4fc21129b",
@@ -33002,7 +33682,7 @@
     },
     {
       "id": "source-nanqishu-049-wikisource-7c779b01c46d",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.714,
@@ -33045,8 +33725,16 @@
         "afterLocal": "初省江州軍府。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明二年，",
+        "localId": "s0036"
+      }
     },
     {
       "id": "source-nanqishu-049-wikisource-7f7f0c894f9a",
@@ -33092,7 +33780,7 @@
     },
     {
       "id": "source-nanqishu-049-wikisource-8777dcc7f404",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.667,
@@ -33135,12 +33823,20 @@
         "afterLocal": "東昏卽位，出爲建安王征虜長史、輔國將軍、江夏內史，行郢州府州事，"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T07:45:17.772Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T07:45:17.772Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永泰元年，",
+        "localId": "s0185"
+      }
     },
     {
       "id": "source-nanqishu-049-wikisource-881779db5c1d",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.733,
@@ -33183,8 +33879,16 @@
         "afterLocal": "仍爲冠軍將軍、豫章內史。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "隆昌元年，",
+        "localId": "s0144"
+      }
     },
     {
       "id": "source-nanqishu-049-wikisource-8dafecffd355",
@@ -33314,7 +34018,7 @@
     },
     {
       "id": "source-nanqishu-049-wikisource-9d6f3865971e",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.2,
@@ -33357,12 +34061,33 @@
         "afterLocal": "年五十三。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Accepted upstream date restoration; local text omitted 永元元年 before the death notice.",
+      "manualTranslations": [
+        {
+          "zh": "永元元年，卒。",
+          "literal": "In Yongyuan 1, he died.",
+          "idiomatic": "He died in the first year of Yongyuan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-26T12:40:41.958Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T12:40:42.093Z",
+      "appliedSummary": {
+        "id": "source-nanqishu-049-wikisource-9d6f3865971e",
+        "type": "source_replacement_candidate",
+        "start": 146,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-nanqishu-049-wikisource-b080a26b0357",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.667,
@@ -33405,12 +34130,20 @@
         "afterLocal": "八年，爲假節、監青冀二州刺史事，將軍如故。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明六年，",
+        "localId": "s0170"
+      }
     },
     {
       "id": "source-nanqishu-049-wikisource-c121a3999119",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.846,
@@ -33453,12 +34186,20 @@
         "afterLocal": "虜并兵攻司州，詔青徐出軍分其兵勢。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建武二年，",
+        "localId": "s0178"
+      }
     },
     {
       "id": "source-nanqishu-049-wikisource-d575144a3ce8",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -33501,12 +34242,20 @@
         "afterLocal": "竟不行。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:45:07.928Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:45:07.928Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永元元年，",
+        "localId": "s0187"
+      }
     },
     {
       "id": "source-nanqishu-049-wikisource-e3949a5ea966",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.556,
@@ -33549,8 +34298,16 @@
         "afterLocal": "明年，遷太常，領鄱陽王師，仍轉侍中，祕書監，領驍騎將軍。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建元元年，",
+        "localId": "s0021"
+      }
     },
     {
       "id": "source-nanqishu-050-wikisource-2f3c6e6e681e",
@@ -37572,7 +38329,7 @@
     },
     {
       "id": "source-nanqishu-057-wikisource-1c6e81c8d769",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -37615,12 +38372,20 @@
         "afterLocal": "明年冬，虜使李道固報聘，世祖於玄武湖水步軍講武，登龍舟引見之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明元年",
+        "localId": "s0150"
+      }
     },
     {
       "id": "source-nanqishu-057-wikisource-291809a45619",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.2,
@@ -37663,8 +38428,16 @@
         "afterLocal": "三年，領軍將軍李安民、左軍將軍孫文顯與虜軍戰於淮陽，大敗之。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "永明八年，",
+        "localId": "s0108"
+      }
     },
     {
       "id": "source-nanqishu-057-wikisource-2a62af88cc02",
@@ -37812,7 +38585,7 @@
     },
     {
       "id": "source-nanqishu-057-wikisource-55b3fa4aa0c8",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.714,
@@ -37855,8 +38628,16 @@
         "afterLocal": "什翼珪始都平城，猶逐水草，無城郭，木末始土著居處。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:45:07.928Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:45:07.928Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "景和九年，",
+        "localId": "s0025"
+      }
     },
     {
       "id": "source-nanqishu-057-wikisource-650586c9b8d4",
@@ -37902,7 +38683,7 @@
     },
     {
       "id": "source-nanqishu-057-wikisource-65508df5163b",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.81,
@@ -37945,12 +38726,20 @@
         "afterLocal": "宏稱字玄覽。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "隆昌元年，",
+        "localId": "s0263"
+      }
     },
     {
       "id": "source-nanqishu-057-wikisource-8241b759d0ad",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.6,
@@ -37993,8 +38782,16 @@
         "afterLocal": "宏聞太祖受禪，其冬，發眾遣丹陽王劉昶為太師，寇司、豫二州。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建元元年，",
+        "localId": "s0092"
+      }
     },
     {
       "id": "source-nanqishu-057-wikisource-8b5b2abdd29c",
@@ -38106,7 +38903,7 @@
     },
     {
       "id": "source-nanqishu-057-wikisource-b3251307e250",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.871,
@@ -38149,12 +38946,20 @@
         "afterLocal": "分其部黨君雲中等四郡，諸部主帥歲終入朝，并得見犍，差稅諸部以給之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:45:07.928Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:45:07.928Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "太元元年，",
+        "localId": "s0006"
+      }
     },
     {
       "id": "source-nanqishu-057-wikisource-bc32ba0cf096",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.892,
@@ -38197,8 +39002,16 @@
         "afterLocal": "宏自率眾至壽陽，軍中有黑氈行殿，容二十人坐，輦邊皆三郎曷剌真，槊多白真毦，鐵騎為羣，前後相接。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:36:54.774Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:36:54.774Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "建武二年",
+        "localId": "s0271"
+      }
     },
     {
       "id": "source-nanqishu-057-wikisource-d65b73715677",
@@ -39153,5 +39966,5 @@
       "notes": ""
     }
   ],
-  "updatedAt": "2026-06-26T06:52:15.175Z"
+  "updatedAt": "2026-06-26T15:45:07.928Z"
 }

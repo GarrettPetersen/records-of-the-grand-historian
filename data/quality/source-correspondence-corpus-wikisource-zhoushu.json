@@ -2036,7 +2036,7 @@
     },
     {
       "id": "source-zhoushu-002-wikisource-0b065750b4e9",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -2079,8 +2079,10 @@
         "afterLocal": "是夕，魏帝幸太祖營，於是景等夜解圍去。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied as an old graph/edition variant for the Chan River: local 瀍 is the standard form and existing English already reads Chan River correctly.",
+      "reviewedAt": "2026-06-26T10:18:47.392Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-zhoushu-002-wikisource-30ec72362178",
@@ -2146,7 +2148,7 @@
     },
     {
       "id": "source-zhoushu-002-wikisource-5628722c0e12",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -2189,8 +2191,10 @@
         "afterLocal": "齊神武果度河，據邙山為陣，不進者數日。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied as an old graph/edition variant for the Chan River: local 瀍 is the standard form and existing English already reads Chan River correctly.",
+      "reviewedAt": "2026-06-26T10:18:47.392Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-zhoushu-002-wikisource-5e91b12a869a",
@@ -2967,7 +2971,7 @@
     },
     {
       "id": "source-zhoushu-005-wikisource-05f95cb977f3",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "zhoushu",
@@ -2991,8 +2995,44 @@
         "afterLocal": "十一月壬子，以大將軍梁國公侯莫陳芮、大將軍李意並為柱國。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved prose omission; removed Wikisource collation markup and kept the corrected reading 冀國公通.\nApplied reviewer-provided sourceTextOverride for this source repair.",
+      "sourceTextOverride": "冬十月壬午，冀國公通薨。乙未，遣右武伯谷會琨、御正蔡斌使於齊。壬寅，上親率六軍講武於城南。",
+      "manualTranslations": [
+        {
+          "zh": "冬十月壬午，冀國公通薨。",
+          "literal": "In winter, in the tenth month, on renwu, Tong, Duke of Ji, died.",
+          "idiomatic": "In winter, on renwu in the tenth month, Tong, Duke of Ji, died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "乙未，遣右武伯谷會琨、御正蔡斌使於齊。",
+          "literal": "On yiwei, Right Wubo Gu Huikun and Yuzheng Cai Bin were sent as envoys to Qi.",
+          "idiomatic": "On yiwei, Right Wubo Gu Huikun and Yuzheng Cai Bin were dispatched as envoys to Qi.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "壬寅，上親率六軍講武於城南。",
+          "literal": "On renyin, the emperor personally led the Six Armies in a military review south of the city.",
+          "idiomatic": "On renyin, the emperor personally led the Six Armies in military exercises south of the city.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-26T14:54:16.637Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T14:54:16.828Z",
+      "appliedSummary": {
+        "id": "source-zhoushu-005-wikisource-05f95cb977f3",
+        "type": "source_omission_candidate",
+        "start": 348,
+        "removed": 0,
+        "inserted": 3,
+        "delta": 3,
+        "manualTranslationsApplied": 3
+      }
     },
     {
       "id": "source-zhoushu-005-wikisource-25355b094dc8",
@@ -3158,7 +3198,7 @@
     },
     {
       "id": "source-zhoushu-005-wikisource-4e8fa3a150f6",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "zhoushu",
@@ -3182,12 +3222,40 @@
         "afterLocal": "十二月癸巳，大將軍鄭恪率師平越巂，置西寧州。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved prose omission between matching local neighbors.",
+      "manualTranslations": [
+        {
+          "zh": "十一月乙丑，追封章武孝公導為豳國公，以蔡國併於豳。",
+          "literal": "In the eleventh month, on yichou, Dao, Duke Xiao of Zhangwu, was posthumously enfeoffed as Duke of Bin, and the state of Cai was merged into Bin.",
+          "idiomatic": "In the eleventh month, on yichou, Dao, Duke Xiao of Zhangwu, was posthumously made Duke of Bin, and Cai was merged into Bin.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "丁卯，柱國、豳國公廣薨。",
+          "literal": "On dingmao, Guang, Pillar of State and Duke of Bin, died.",
+          "idiomatic": "On dingmao, Guang, Pillar of State and Duke of Bin, died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-26T14:54:16.637Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T14:54:16.828Z",
+      "appliedSummary": {
+        "id": "source-zhoushu-005-wikisource-4e8fa3a150f6",
+        "type": "source_omission_candidate",
+        "start": 325,
+        "removed": 0,
+        "inserted": 2,
+        "delta": 2,
+        "manualTranslationsApplied": 2
+      }
     },
     {
       "id": "source-zhoushu-005-wikisource-4f4ba51bd93f",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "zhoushu",
@@ -3211,8 +3279,37 @@
         "afterLocal": "三月癸卯朔，日有蝕之。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved prose omission; removed Wikisource collation markup, using 昌城公深 and 司宗李際 as supported by the packet correction and parallel Beishi text.\nApplied reviewer-provided sourceTextOverride for this source repair.",
+      "sourceTextOverride": "二月癸酉，遣大將軍、昌城公深使於突厥，司宗李際、小賓部賀遂禮使於齊。乙酉，柱國、安義公宇文丘薨。",
+      "manualTranslations": [
+        {
+          "zh": "二月癸酉，遣大將軍、昌城公深使於突厥，司宗李際、小賓部賀遂禮使於齊。",
+          "literal": "In the second month, on guiyou, the Grand General Shen, Duke of Changcheng, was sent as envoy to the Turks, and Sizong Li Ji and Small Guest Section official Hesui Li were sent as envoys to Qi.",
+          "idiomatic": "In the second month, on guiyou, Grand General Shen, Duke of Changcheng, was sent to the Turks, while Sizong Li Ji and Small Guest Section official Hesui Li were sent to Qi.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "乙酉，柱國、安義公宇文丘薨。",
+          "literal": "On yiyou, Yuwen Qiu, Pillar of State and Duke of Anyi, died.",
+          "idiomatic": "On yiyou, Yuwen Qiu, Pillar of State and Duke of Anyi, died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-26T14:54:16.637Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T14:54:16.828Z",
+      "appliedSummary": {
+        "id": "source-zhoushu-005-wikisource-4f4ba51bd93f",
+        "type": "source_omission_candidate",
+        "start": 360,
+        "removed": 0,
+        "inserted": 2,
+        "delta": 2,
+        "manualTranslationsApplied": 2
+      }
     },
     {
       "id": "source-zhoushu-005-wikisource-5b892110b79a",
@@ -3320,7 +3417,7 @@
     },
     {
       "id": "source-zhoushu-005-wikisource-7124d335859a",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "zhoushu",
@@ -3344,12 +3441,47 @@
         "afterLocal": "九月庚戌，太白與鎮星合於角。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved prose omission between matching local neighbors.",
+      "manualTranslations": [
+        {
+          "zh": "八月乙丑，韓國公元羅薨。",
+          "literal": "In the eighth month, on yichou, Yuan Luo, Duke of Han, died.",
+          "idiomatic": "In the eighth month, on yichou, Yuan Luo, Duke of Han, died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "齊請和親，遣使來聘，詔軍司馬陸逞、兵部尹公正報聘焉。",
+          "literal": "Qi requested a marriage alliance and sent envoys on a courtesy mission; an edict ordered Military Marshal Lu Cheng and War Ministry official Yin Gongzheng to make a return mission.",
+          "idiomatic": "Qi requested a marriage alliance and sent envoys on a courtesy mission; the emperor ordered Military Marshal Lu Cheng and War Ministry official Yin Gongzheng to make a return mission.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "癸酉，帝御大德殿，集百僚及沙門、道士等親講禮記。",
+          "literal": "On guiyou, the emperor visited Dade Hall, assembled the hundred officials together with Buddhist monks and Daoist priests, and personally lectured on the Book of Rites.",
+          "idiomatic": "On guiyou, the emperor went to Dade Hall, assembled the officials together with Buddhist monks and Daoist priests, and personally lectured on the Book of Rites.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-26T14:54:16.637Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T14:54:16.828Z",
+      "appliedSummary": {
+        "id": "source-zhoushu-005-wikisource-7124d335859a",
+        "type": "source_omission_candidate",
+        "start": 281,
+        "removed": 0,
+        "inserted": 3,
+        "delta": 3,
+        "manualTranslationsApplied": 3
+      }
     },
     {
       "id": "source-zhoushu-005-wikisource-9b44b4b5898f",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "zhoushu",
@@ -3373,8 +3505,50 @@
         "afterLocal": "五月庚辰，帝御正武殿，集羣臣親講《禮記》。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved prose omission between matching local neighbors.",
+      "manualTranslations": [
+        {
+          "zh": "夏四月己酉，益州獻三足烏。",
+          "literal": "In summer, in the fourth month, on jiyou, Yi Province presented a three-legged crow.",
+          "idiomatic": "In summer, in the fourth month, on jiyou, Yi Province presented a three-legged crow.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "辛亥，雩。",
+          "literal": "On xinhai, the rain sacrifice was performed.",
+          "idiomatic": "On xinhai, the rain sacrifice was performed.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "甲子，日有交暈，白虹貫之。",
+          "literal": "On jiazi, the sun had intersecting halos, and a white rainbow pierced them.",
+          "idiomatic": "On jiazi, intersecting halos appeared around the sun, and a white rainbow pierced them.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "是月，陳文帝薨，子伯宗嗣立。",
+          "literal": "That month, Emperor Wen of Chen died, and his son Bozong succeeded and was enthroned.",
+          "idiomatic": "That month, Emperor Wen of Chen died, and his son Bozong succeeded to the throne.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-26T14:54:16.637Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T14:54:16.828Z",
+      "appliedSummary": {
+        "id": "source-zhoushu-005-wikisource-9b44b4b5898f",
+        "type": "source_omission_candidate",
+        "start": 214,
+        "removed": 0,
+        "inserted": 4,
+        "delta": 4,
+        "manualTranslationsApplied": 4
+      }
     },
     {
       "id": "source-zhoushu-005-wikisource-9c3d144b1c32",
@@ -3498,7 +3672,7 @@
     },
     {
       "id": "source-zhoushu-005-wikisource-b0039c547358",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "zhoushu",
@@ -3522,12 +3696,61 @@
         "afterLocal": "十二月壬午，至自岐陽。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved prose omission between matching local neighbors.",
+      "manualTranslations": [
+        {
+          "zh": "十一月乙巳，以大將軍、衞國公直為雍州牧。",
+          "literal": "In the eleventh month, on yisi, Zhi, Grand General and Duke of Wei, was made Governor of Yong Province.",
+          "idiomatic": "In the eleventh month, on yisi, Zhi, Grand General and Duke of Wei, was appointed Governor of Yong Province.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "陳遣使來聘。",
+          "literal": "Chen sent envoys on a courtesy mission.",
+          "idiomatic": "Chen sent envoys on a courtesy mission.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "進封柱國、廣武公竇熾為鄧國公。",
+          "literal": "Dou Chi, Pillar of State and Duke of Guangwu, was advanced in enfeoffment to Duke of Deng.",
+          "idiomatic": "Dou Chi, Pillar of State and Duke of Guangwu, was promoted in enfeoffment to Duke of Deng.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "丁巳，狩於岐陽。",
+          "literal": "On dingsi, the emperor hunted at Qiyang.",
+          "idiomatic": "On dingsi, the emperor hunted at Qiyang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "是月，齊孝昭帝薨，弟長廣王湛代立，是為武成帝。",
+          "literal": "That month, Emperor Xiaozhao of Qi died; his younger brother Zhan, Prince of Changguang, succeeded in his place and became Emperor Wucheng.",
+          "idiomatic": "That month, Emperor Xiaozhao of Qi died; his younger brother Zhan, Prince of Changguang, succeeded him as Emperor Wucheng.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-26T14:54:16.637Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T14:54:16.828Z",
+      "appliedSummary": {
+        "id": "source-zhoushu-005-wikisource-b0039c547358",
+        "type": "source_omission_candidate",
+        "start": 58,
+        "removed": 0,
+        "inserted": 5,
+        "delta": 5,
+        "manualTranslationsApplied": 5
+      }
     },
     {
       "id": "source-zhoushu-005-wikisource-b4fd7a5dc6bd",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "zhoushu",
@@ -3551,8 +3774,50 @@
         "afterLocal": "三月壬午，熒惑犯左執法。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved prose omission between matching local neighbors.",
+      "manualTranslations": [
+        {
+          "zh": "二月壬寅，熒惑犯太微上相。",
+          "literal": "In the second month, on renyin, Mars violated the Upper Minister of the Supreme Palace.",
+          "idiomatic": "In the second month, on renyin, Mars crossed the Supreme Palace's Upper Minister.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "癸丑，以久不雨，降宥罪人，京城三十里內禁酒。",
+          "literal": "On guichou, because it had long failed to rain, punishments of criminals were reduced or pardoned, and wine was banned within thirty li of the capital.",
+          "idiomatic": "On guichou, because there had long been no rain, punishments were reduced or pardoned for criminals, and wine was banned within thirty li of the capital.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "梁主蕭詧薨。",
+          "literal": "Xiao Cha, ruler of Liang, died.",
+          "idiomatic": "Xiao Cha, ruler of Liang, died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "以大將軍、蔡國公廣為秦州總管。",
+          "literal": "Guang, Grand General and Duke of Cai, was made Area Commander of Qin Province.",
+          "idiomatic": "Guang, Grand General and Duke of Cai, was appointed Area Commander of Qin Province.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-26T14:54:16.637Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T14:54:16.828Z",
+      "appliedSummary": {
+        "id": "source-zhoushu-005-wikisource-b4fd7a5dc6bd",
+        "type": "source_omission_candidate",
+        "start": 71,
+        "removed": 0,
+        "inserted": 4,
+        "delta": 4,
+        "manualTranslationsApplied": 4
+      }
     },
     {
       "id": "source-zhoushu-005-wikisource-bb8a86739e53",
@@ -3655,7 +3920,7 @@
     },
     {
       "id": "source-zhoushu-005-wikisource-cc9baafbdb53",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "zhoushu",
@@ -3679,8 +3944,78 @@
         "afterLocal": "二月戊申，以開府、中山公訓為蒲州總管。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved prose omission between matching local neighbors.",
+      "manualTranslations": [
+        {
+          "zh": "天和元年春正月己卯，日有蝕之。",
+          "literal": "In Tianhe 1, in spring, in the first month, on jimao, there was a solar eclipse.",
+          "idiomatic": "In Tianhe 1, in spring, in the first month, on jimao, there was a solar eclipse.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "辛巳，露寢成，幸之。",
+          "literal": "On xinsi, Luqin Hall was completed, and the emperor visited it.",
+          "idiomatic": "On xinsi, Luqin Hall was completed, and the emperor visited it.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "令羣臣賦古詩，京邑耆老並預會焉，頒賜各有差。",
+          "literal": "He ordered the assembled ministers to compose old-style poems; elders from the capital also attended the gathering, and gifts were distributed in varying amounts.",
+          "idiomatic": "He ordered the assembled ministers to compose old-style poems; elders from the capital also attended the gathering, and gifts were distributed in varying amounts.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "癸未，大赦改元，百官普加四級。",
+          "literal": "On guiwei, a general amnesty was proclaimed and the reign title changed; all officials were universally advanced four ranks.",
+          "idiomatic": "On guiwei, a general amnesty was proclaimed and the reign title changed; all officials were advanced four ranks.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "己亥，親耕籍田。",
+          "literal": "On jihai, the emperor personally plowed the ceremonial field.",
+          "idiomatic": "On jihai, the emperor personally plowed the ceremonial field.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "丁未，於宕昌置宕州。",
+          "literal": "On dingwei, Dang Province was established at Dangchang.",
+          "idiomatic": "On dingwei, Dang Province was established at Dangchang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "以柱國、昌寧公長孫儉為陝州總管。",
+          "literal": "Zhangsun Jian, Pillar of State and Duke of Changning, was made Area Commander of Shan Province.",
+          "idiomatic": "Zhangsun Jian, Pillar of State and Duke of Changning, was appointed Area Commander of Shan Province.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "遣小載師杜杲使於陳。",
+          "literal": "Minor Zaishi Du Gao was sent as envoy to Chen.",
+          "idiomatic": "Minor Zaishi Du Gao was sent as envoy to Chen.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-26T14:54:16.637Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T14:54:16.828Z",
+      "appliedSummary": {
+        "id": "source-zhoushu-005-wikisource-cc9baafbdb53",
+        "type": "source_omission_candidate",
+        "start": 219,
+        "removed": 0,
+        "inserted": 8,
+        "delta": 8,
+        "manualTranslationsApplied": 8
+      }
     },
     {
       "id": "source-zhoushu-005-wikisource-f0336fefe1db",
@@ -3808,7 +4143,7 @@
     },
     {
       "id": "source-zhoushu-005-wikisource-f7c8ae8b6876",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "zhoushu",
@@ -3832,8 +4167,50 @@
         "afterLocal": "二月癸亥，以柱國、昌甯公長孫儉為夏州總管。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved prose omission between matching local neighbors.",
+      "manualTranslations": [
+        {
+          "zh": "十二月丁丑，至自岐陽。",
+          "literal": "In the twelfth month, on dingchou, the emperor returned from Qiyang.",
+          "idiomatic": "In the twelfth month, on dingchou, the emperor returned from Qiyang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "是月，齊武成帝薨。",
+          "literal": "That month, Emperor Wucheng of Qi died.",
+          "idiomatic": "That month, Emperor Wucheng of Qi died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "四年春正月辛卯朔，廢朝，以齊武成薨故也。",
+          "literal": "In the fourth year, in spring, on xinmao, the first day of the first month, court audience was suspended because Emperor Wucheng of Qi had died.",
+          "idiomatic": "In the fourth year, in spring, on xinmao, the first day of the first month, court audience was suspended because Emperor Wucheng of Qi had died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        },
+        {
+          "zh": "遣司會、河陽公李綸等會葬於齊，仍弔賻焉。",
+          "literal": "The Minister of Accounting Li Lun, Duke of Heyang, and others were sent to attend the funeral in Qi and to offer condolences and funeral gifts.",
+          "idiomatic": "The Minister of Accounting Li Lun, Duke of Heyang, and others were sent to attend the funeral in Qi and offer condolences and funeral gifts.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-26T14:54:16.637Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T14:54:16.828Z",
+      "appliedSummary": {
+        "id": "source-zhoushu-005-wikisource-f7c8ae8b6876",
+        "type": "source_omission_candidate",
+        "start": 313,
+        "removed": 0,
+        "inserted": 4,
+        "delta": 4,
+        "manualTranslationsApplied": 4
+      }
     },
     {
       "id": "source-zhoushu-006-wikisource-060eef4dce6c",
@@ -18433,7 +18810,7 @@
     },
     {
       "id": "source-zhoushu-034-wikisource-2f9386a4f4b9",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -18476,8 +18853,22 @@
         "afterLocal": "轉正平郡守。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved Yang Biao graph-form alignment after checking chapter context; existing English already transliterates the name as Biao.\nExisting English translation manually checked for this graph-only source repair and retained.",
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for this graph-only source repair and retained.",
+      "reviewedAt": "2026-06-26T10:18:47.327Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T10:18:47.515Z",
+      "appliedSummary": {
+        "id": "source-zhoushu-034-wikisource-2f9386a4f4b9",
+        "type": "text_discrepancy_candidate",
+        "start": 131,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-zhoushu-034-wikisource-538f8f089dc1",
@@ -18744,7 +19135,7 @@
     },
     {
       "id": "source-zhoushu-034-wikisource-96751f6c6a27",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -18787,12 +19178,25 @@
         "afterLocal": "水勢猶小，靈洗未得近城。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-26T07:44:48.357Z",
+      "reviewer": "apply-broad-variant-source-corrections",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-26T07:44:48.360Z",
+      "appliedSummary": {
+        "id": "source-zhoushu-034-wikisource-96751f6c6a27",
+        "type": "text_discrepancy_candidate",
+        "start": 256,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-zhoushu-034-wikisource-a88f0b6cdcd3",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -18835,8 +19239,23 @@
         "afterLocal": ""
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved Yang Biao graph-form alignment after checking chapter context; existing English already transliterates the name as Biao.\nApplied reviewer-provided sourceTextOverride for this source repair.\nExisting English translation manually checked for this graph-only source repair and retained.",
+      "sourceTextOverride": "其楊𢷋之謂也？",
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for this graph-only source repair and retained.",
+      "reviewedAt": "2026-06-26T10:18:47.327Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T10:18:47.515Z",
+      "appliedSummary": {
+        "id": "source-zhoushu-034-wikisource-a88f0b6cdcd3",
+        "type": "text_discrepancy_candidate",
+        "start": 377,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-zhoushu-034-wikisource-bca27ff9567d",
@@ -27527,7 +27946,7 @@
     },
     {
       "id": "source-zhoushu-046-wikisource-82382ef00b36",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.846,
@@ -27570,8 +27989,31 @@
         "afterLocal": "性剛簡任氣，少文，善騎射，果於斷決。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved Zhou Shu graph-form alignment for 祕/秘 and 虬/虯 after checking Liu Gui context; existing English remains correct.\nExisting English translation manually checked for this graph-only source repair and retained.",
+      "manualTranslations": [
+        {
+          "zh": "柳檜字季華，祕書監虬之次弟也。",
+          "literal": "Liu Gui, courtesy name Jihua, was the second younger brother of Secretariat Director Jiu.",
+          "idiomatic": "Liu Gui, whose courtesy name was Jihua, was the second younger brother of Secretariat Director Jiu.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for this graph-only source repair and retained.",
+      "reviewedAt": "2026-06-26T10:25:09.932Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T10:25:10.095Z",
+      "appliedSummary": {
+        "id": "source-zhoushu-046-wikisource-82382ef00b36",
+        "type": "text_discrepancy_candidate",
+        "start": 61,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-zhoushu-046-wikisource-8721b6f406f3",
@@ -27743,7 +28185,7 @@
     },
     {
       "id": "source-zhoushu-046-wikisource-cb8eb553e259",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.867,
@@ -27786,8 +28228,31 @@
         "afterLocal": "檜嘗謂兄弟曰：「兄則職典簡牘，褒貶人倫；"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved Zhou Shu graph-form alignment for 祕/秘 and 虬/虯 after checking Liu Gui context; existing English remains correct.\nExisting English translation manually checked for this graph-only source repair and retained.",
+      "manualTranslations": [
+        {
+          "zh": "時檜兄虬為祕書丞，弟慶為尚書左丞。",
+          "literal": "At that time Gui's elder brother Jiu was Secretariat Director and his younger brother Qing was Left Assistant Director of the Masters of Writing.",
+          "idiomatic": "At that time Gui's elder brother Jiu was Secretariat Director and his younger brother Qing was Left Assistant Director of the Masters of Writing.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for this graph-only source repair and retained.",
+      "reviewedAt": "2026-06-26T10:25:09.932Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T10:25:10.095Z",
+      "appliedSummary": {
+        "id": "source-zhoushu-046-wikisource-cb8eb553e259",
+        "type": "text_discrepancy_candidate",
+        "start": 80,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-zhoushu-047-wikisource-0d08356949ac",
@@ -30343,7 +30808,7 @@
     },
     {
       "id": "source-zhoushu-050-wikisource-1e54258c8f0f",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -30386,8 +30851,31 @@
         "afterLocal": "于闐、安息等大小二十餘國，皆役屬之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved 鬭/鬬 source graph alignment after checking battle/injury context; existing English remains correct.\nExisting English translation manually checked for this graph-only source repair and retained.",
+      "manualTranslations": [
+        {
+          "zh": "其人兇悍，能戰鬭。",
+          "literal": "The people were fierce and could fight.",
+          "idiomatic": "They were fierce warriors.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for this graph-only source repair and retained.",
+      "reviewedAt": "2026-06-26T10:33:24.725Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T10:33:24.856Z",
+      "appliedSummary": {
+        "id": "source-zhoushu-050-wikisource-1e54258c8f0f",
+        "type": "text_discrepancy_candidate",
+        "start": 302,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-zhoushu-050-wikisource-259737217217",
@@ -30499,7 +30987,7 @@
     },
     {
       "id": "source-zhoushu-050-wikisource-3f4803c42a73",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -30542,8 +31030,31 @@
         "afterLocal": "盜馬及雜物者，各十餘倍徵之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved 鬭/鬬 source graph alignment after checking battle/injury context; existing English remains correct.\nExisting English translation manually checked for this graph-only source repair and retained.",
+      "manualTranslations": [
+        {
+          "zh": "鬭傷人者，隨輕重輸物；",
+          "literal": "those who wounded in brawls paid goods according to severity;",
+          "idiomatic": "brawlers paid compensation scaled to the injury;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for this graph-only source repair and retained.",
+      "reviewedAt": "2026-06-26T10:33:24.725Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T10:33:24.856Z",
+      "appliedSummary": {
+        "id": "source-zhoushu-050-wikisource-3f4803c42a73",
+        "type": "text_discrepancy_candidate",
+        "start": 74,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-zhoushu-050-wikisource-481aa243c2e4",
@@ -31395,5 +31906,5 @@
       "retainedAfterRescan": true
     }
   ],
-  "updatedAt": "2026-06-26T06:14:46.736Z"
+  "updatedAt": "2026-06-26T14:54:16.917Z"
 }

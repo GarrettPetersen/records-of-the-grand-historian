@@ -83,6 +83,7 @@ const GLOSS_COMMENTARY_RE = /(?:[^。！？]{1,24}(?:音[^。！？]{0,14}反|�
 const NOTES = {
   rawTableMarkup: 'Reviewed as no-op: upstream raw witness includes MediaWiki table markup/separators while the local structured table cell text is already represented; local corpus text retained.',
   tableSourceAlreadyInChapter: 'Reviewed as no-op: upstream raw table span is already represented in the current structured chapter text; local table structure retained.',
+  tableSourceSubsequenceInChapter: 'Reviewed as no-op: upstream raw table span is represented in order across the current structured table cells after dropping Wikisource row-number residue; local table structure retained.',
   postTocAlreadyLocal: 'Reviewed as no-op: upstream witness includes Wikisource page TOC/header residue before __TOC__; the post-TOC source text is already represented in the local range.',
   tocPostTextAlreadyLocal: 'Reviewed as no-op: upstream witness includes Wikisource page TOC/header residue before __TOC__; the real post-TOC source text is already represented in the local range, so the upstream header residue is rejected.',
   orthographicCorrection: 'Reviewed as no-op: source/local difference is only approved graph variants or upstream correction-bracket notation; local corpus text retained.',
@@ -92,6 +93,7 @@ const NOTES = {
 };
 
 const chapterKeyCache = new Map();
+const chapterNoAsciiDigitKeyCache = new Map();
 
 function parseArgs(argv) {
   const opts = {
@@ -196,6 +198,10 @@ function tokenKey(text) {
   return out;
 }
 
+function tokenKeyNoAsciiDigits(text) {
+  return tokenKey(text).replace(/[0-9]/gu, '');
+}
+
 function sourceField(unit) {
   return SOURCE_FIELDS.find((field) => typeof unit?.[field] === 'string');
 }
@@ -229,6 +235,20 @@ function currentChapterKey(item) {
   return chapterKeyCache.get(abs);
 }
 
+function currentChapterNoAsciiDigitKey(item) {
+  const file = path.join(DATA_DIR, item.book || '', `${String(item.chapter || '').padStart(3, '0')}.json`);
+  const abs = path.resolve(file);
+  if (!chapterNoAsciiDigitKeyCache.has(abs)) {
+    if (!fs.existsSync(abs)) {
+      chapterNoAsciiDigitKeyCache.set(abs, '');
+    } else {
+      const chapter = JSON.parse(fs.readFileSync(abs, 'utf8'));
+      chapterNoAsciiDigitKeyCache.set(abs, tokenKeyNoAsciiDigits(flattenChapterText(chapter)));
+    }
+  }
+  return chapterNoAsciiDigitKeyCache.get(abs);
+}
+
 function stripTableMarkup(text) {
   return String(text || '').replace(TABLE_MARKUP_STRIP_RE, '');
 }
@@ -252,6 +272,21 @@ function isSubsequence(needle, haystack) {
     j += 1;
   }
   return true;
+}
+
+function subsequenceSpan(needle, haystack) {
+  if (!needle) return null;
+  let cursor = 0;
+  let first = -1;
+  let last = -1;
+  for (const char of needle) {
+    const next = haystack.indexOf(char, cursor);
+    if (next < 0) return null;
+    if (first < 0) first = next;
+    last = next;
+    cursor = next + 1;
+  }
+  return last - first + 1;
 }
 
 function hasTableLocation(item) {
@@ -305,6 +340,17 @@ function isTableSourceAlreadyInChapterNoop(item, source) {
   const sourceKey = tokenKey(stripCommentary(stripTableMarkup(source)));
   if (sourceKey.length < 8) return false;
   return currentChapterKey(item).includes(sourceKey);
+}
+
+function isTableSourceSubsequenceInChapterNoop(item, source) {
+  if (!source || !hasTableLocation(item)) return false;
+  if (!TABLE_MARKUP_RE.test(source) && !/[|!]{2,}/u.test(source)) return false;
+  const sourceKey = tokenKeyNoAsciiDigits(stripCommentary(stripTableMarkup(source)));
+  if (sourceKey.length < 8) return false;
+  const chapterKey = currentChapterNoAsciiDigitKey(item);
+  const span = subsequenceSpan(sourceKey, chapterKey);
+  if (!span) return false;
+  return span <= Math.max(80, sourceKey.length * 4);
 }
 
 function isPostTocAlreadyLocalNoop(source, local) {
@@ -388,6 +434,9 @@ function classify(item) {
   }
   if (isTableSourceAlreadyInChapterNoop(item, source)) {
     return { reason: 'table-source-already-in-chapter', note: NOTES.tableSourceAlreadyInChapter };
+  }
+  if (isTableSourceSubsequenceInChapterNoop(item, source)) {
+    return { reason: 'table-source-subsequence-in-chapter', note: NOTES.tableSourceSubsequenceInChapter };
   }
   if (item.type !== 'source_omission_candidate' && isRawTableMarkupNoop(item, source, local)) {
     return { reason: 'raw-table-markup', note: NOTES.rawTableMarkup };

@@ -20,6 +20,78 @@ const SOURCE_FIELDS = ['zh', 'content', 'source', 'text'];
 const DEFAULT_REVIEWER = 'repair-source-date-prefix-omissions';
 
 const ERA_NAMES = new Map([
+  ['中大通', 'Zhong Datong'],
+  ['中平', 'Zhongping'],
+  ['建元', 'Jianyuan'],
+  ['元封', 'Yuanfeng'],
+  ['元嘉', 'Yuanjia'],
+  ['嘉平', 'Jiaping'],
+  ['景初', 'Jingchu'],
+  ['正始', 'Zhengshi'],
+  ['景元', 'Jingyuan'],
+  ['咸熙', 'Xianxi'],
+  ['青龍', 'Qinglong'],
+  ['泰始', 'Taishi'],
+  ['咸寧', 'Xianning'],
+  ['太康', 'Taikang'],
+  ['太熙', 'Taixi'],
+  ['元康', 'Yuankang'],
+  ['永康', 'Yongkang'],
+  ['永寧', 'Yongning'],
+  ['永甯', 'Yongning'],
+  ['太安', "Tai'an"],
+  ['永安', "Yong'an"],
+  ['永興', 'Yongxing'],
+  ['光熙', 'Guangxi'],
+  ['永嘉', 'Yongjia'],
+  ['建興', 'Jianxing'],
+  ['太興', 'Taixing'],
+  ['太寧', 'Taining'],
+  ['咸和', 'Xianhe'],
+  ['咸康', 'Xiankang'],
+  ['永和', 'Yonghe'],
+  ['升平', 'Shengping'],
+  ['昇平', 'Shengping'],
+  ['興寧', 'Xingning'],
+  ['興甯', 'Xingning'],
+  ['寧康', 'Ningkang'],
+  ['太元', 'Taiyuan'],
+  ['隆安', "Long'an"],
+  ['元興', 'Yuanxing'],
+  ['義熙', 'Yixi'],
+  ['建安', "Jian'an"],
+  ['天紀', 'Tianji'],
+  ['永明', 'Yongming'],
+  ['隆昌', 'Longchang'],
+  ['延興', 'Yanxing'],
+  ['建武', 'Jianwu'],
+  ['永泰', 'Yongtai'],
+  ['中興', 'Zhongxing'],
+  ['元徽', 'Yuanhui'],
+  ['大明', 'Daming'],
+  ['泰豫', 'Taiyu'],
+  ['景和', 'Jinghe'],
+  ['昇明', 'Shengming'],
+  ['永元', 'Yongyuan'],
+  ['承聖', 'Chengsheng'],
+  ['大同', 'Datong'],
+  ['天保', 'Tianbao'],
+  ['乾明', 'Qianming'],
+  ['武泰', 'Wutai'],
+  ['普泰', 'Putai'],
+  ['興和', 'Xinghe'],
+  ['皇建', 'Huangjian'],
+  ['皇始', 'Huangshi'],
+  ['神瑞', 'Shenrui'],
+  ['正平', 'Zhengping'],
+  ['武定', 'Wuding'],
+  ['武平', 'Wuping'],
+  ['建德', 'Jiande'],
+  ['宣政', 'Xuanzheng'],
+  ['禎明', 'Zhenming'],
+  ['開皇', 'Kaihuang'],
+  ['仁壽', 'Renshou'],
+  ['大業', 'Daye'],
   ['武德', 'Wude'],
   ['貞觀', 'Zhenguan'],
   ['永徽', 'Yonghui'],
@@ -69,6 +141,7 @@ const ERA_NAMES = new Map([
   ['廣德', 'Guangde'],
   ['永泰', 'Yongtai'],
   ['大曆', 'Dali'],
+  ['大歷', 'Dali'],
   ['建中', 'Jianzhong'],
   ['興元', 'Xingyuan'],
   ['貞元', 'Zhenyuan'],
@@ -94,6 +167,21 @@ const ERA_NAMES = new Map([
   ['光化', 'Guanghua'],
   ['天復', 'Tianfu'],
   ['天祐', 'Tianyou'],
+  ['天命', 'Tianming'],
+  ['天聰', 'Tiancong'],
+  ['崇德', 'Chongde'],
+  ['順治', 'Shunzhi'],
+  ['康熙', 'Kangxi'],
+  ['雍正', 'Yongzheng'],
+  ['乾隆', 'Qianlong'],
+  ['嘉慶', 'Jiaqing'],
+  ['道光', 'Daoguang'],
+  ['咸豐', 'Xianfeng'],
+  ['同治', 'Tongzhi'],
+  ['光緒', 'Guangxu'],
+  ['宣統', 'Xuantong'],
+  ['建文', 'Jianwen'],
+  ['崇禎', 'Chongzhen'],
 ]);
 
 const ERA_ALT = [...ERA_NAMES.keys()].sort((a, b) => b.length - a.length).join('|');
@@ -102,7 +190,7 @@ const ERA_EN_ALT = [...new Set(ERA_NAMES.values())]
   .map((name) => name.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&'))
   .join('|');
 const CN_NUM = '[元一二三四五六七八九十百廿卅]+';
-const DATE_PREFIX_RE = new RegExp(`^(${ERA_ALT})(${CN_NUM})年[，,]?$`, 'u');
+const DATE_PREFIX_RE = new RegExp(`^(${ERA_ALT})(${CN_NUM})(?:年|載)[，,]?$`, 'u');
 
 function usage() {
   console.error(`Usage:
@@ -316,7 +404,7 @@ function parseDatePrefix(prefix) {
 
 function lowerContinuationLead(text) {
   return text.replace(
-    /^(In|On|At|During|That|This|It|The|A|An|First|Second|Third|Fourth|Fifth|Sixth|Seventh|Eighth|Ninth|Tenth|Eleventh|Twelfth|Fire)\b/u,
+    /^(In|On|At|During|For|When|Soon|That|This|It|Its|He|His|She|Her|They|Their|The|A|An|First|Second|Third|Fourth|Fifth|Sixth|Seventh|Eighth|Ninth|Tenth|Eleventh|Twelfth|Field|Fire)\b/u,
     (match) => match.toLowerCase(),
   );
 }
@@ -330,13 +418,24 @@ function cleanContinuation(text) {
     .replace(/^that\s+year,?\s+/iu, '');
 }
 
+function tidyEnglishPunctuation(text) {
+  return String(text || '')
+    .replace(/\s+([,.;:!?])/gu, '$1')
+    .replace(/,\s*,/gu, ',')
+    .replace(/;\./gu, '.')
+    .replace(/,\./gu, '.')
+    .replace(/:\./gu, '.')
+    .replace(/!\./gu, '!')
+    .replace(/\?\./gu, '?');
+}
+
 function prependEnglishDate(existing, datePhrase) {
   const cleaned = cleanContinuation(existing);
   if (!cleaned) return '';
-  if (cleaned.startsWith(`${datePhrase},`)) return cleaned;
+  if (cleaned.startsWith(`${datePhrase},`)) return tidyEnglishPunctuation(cleaned);
   const replacedDate = replaceLeadingEnglishDate(cleaned, datePhrase);
   if (replacedDate) return replacedDate;
-  return `${datePhrase}, ${lowerContinuationLead(cleaned)}`;
+  return tidyEnglishPunctuation(`${datePhrase}, ${lowerContinuationLead(cleaned)}`);
 }
 
 function firstTranslation(unit) {
@@ -359,7 +458,7 @@ function replaceLeadingEnglishDate(text, datePhrase) {
   if (!match) return null;
   const rest = cleanContinuation(text.slice(match[0].length));
   if (!rest) return `${datePhrase}.`;
-  return `${datePhrase}, ${lowerContinuationLead(rest)}`;
+  return tidyEnglishPunctuation(`${datePhrase}, ${lowerContinuationLead(rest)}`);
 }
 
 function startsWithExplicitEnglishDate(text) {

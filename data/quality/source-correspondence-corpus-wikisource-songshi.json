@@ -8204,7 +8204,7 @@
     },
     {
       "id": "source-songshi-003-wikisource-6bac3a2ffd9f",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "songshi",
@@ -8228,8 +8228,10 @@
         "afterLocal": "帝性孝友節儉，質任自然，不事矯飾。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied manually: merged split county-grade phrase into 武縁，下。 and merged the associated English translations.",
+      "reviewedAt": "2026-06-26T08:36:51Z",
+      "reviewer": "manual-table-local-repair"
     },
     {
       "id": "source-songshi-004-wikisource-694b0cdfda91",
@@ -18657,7 +18659,7 @@
     },
     {
       "id": "source-songshi-063-wikisource-83585a288812",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "songshi",
@@ -18681,12 +18683,61 @@
         "afterLocal": "政和元年正月，萊州芝草生。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Restore omitted Daguan-era auspicious fungus and bean-rain entries.",
+      "manualTranslations": [
+        {
+          "zh": "大觀元年三月，宣、鄆、湖、潤州皆芝草生。",
+          "literal": "In the third month of the first year of Daguan, auspicious fungus grew in Xuan, Yun, Hu, and Run prefectures.",
+          "idiomatic": "In the third month of Daguan 1, auspicious fungus appeared in Xuan, Yun, Hu, and Run prefectures.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "廬州雨大豆。",
+          "literal": "In Luzhou, soybeans rained down.",
+          "idiomatic": "Soybeans fell like rain in Luzhou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "九月，崇天臺及兗州孔林芝草生。",
+          "literal": "In the ninth month, auspicious fungus grew at the Chongtian Terrace and in the Kong Grove at Yanzhou.",
+          "idiomatic": "In the ninth month, auspicious fungus grew at the Chongtian Terrace and in the Kong Grove at Yanzhou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "二年，陳、兗、筠州、廣德軍芝草生。",
+          "literal": "In the second year, auspicious fungus grew in Chen, Yan, and Jun prefectures and in the Guangde army.",
+          "idiomatic": "In the second year, auspicious fungus appeared in Chen, Yan, and Jun prefectures and in the Guangde command.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "三年秋，西京、湖、海、普、渠州、南安軍芝草生。",
+          "literal": "In autumn of the third year, auspicious fungus grew in the Western Capital, Hu, Hai, Pu, and Qu prefectures, and the Nan’an army.",
+          "idiomatic": "In autumn of the third year, auspicious fungus appeared in the Western Capital, Hu, Hai, Pu, and Qu prefectures, and the Nan’an command.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        }
+      ],
+      "reviewedAt": "2026-06-26T14:23:05.486Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T14:23:06.145Z",
+      "appliedSummary": {
+        "id": "source-songshi-063-wikisource-83585a288812",
+        "type": "source_omission_candidate",
+        "start": 534,
+        "removed": 0,
+        "inserted": 5,
+        "delta": 5,
+        "manualTranslationsApplied": 5
+      }
     },
     {
       "id": "source-songshi-063-wikisource-955bbe1ae9c5",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "songshi",
@@ -18710,12 +18761,54 @@
         "afterLocal": "端拱元年二月，雲安軍威棹營火。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Restore omitted Yongxi fire disaster entries.",
+      "manualTranslations": [
+        {
+          "zh": "雍熙元年五月丁丑，乾元、文明二殿災。",
+          "literal": "In the fifth month of the first year of Yongxi, on dingchou, the Qianyuan and Wenming halls suffered fire disasters.",
+          "idiomatic": "On dingchou in the fifth month of Yongxi 1, the Qianyuan and Wenming halls burned.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "初夕，陰雲雷震，火起月華門，翌日辰、巳方止。",
+          "literal": "At early evening, clouds were dark and thunder shook; fire arose at the Yuehua Gate and did not stop until the chen and si hours the next day.",
+          "idiomatic": "At dusk, dark clouds gathered and thunder shook; fire broke out at the Yuehua Gate and was not extinguished until late the next morning.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "二年九月庚寅夜，楚王元佐宮火，燔舍數百區，王自是以疾廢於家。",
+          "literal": "In the ninth month of the second year, on the night of gengyin, the palace of Yuanzuo, Prince of Chu, caught fire, burning several hundred buildings; from then on the prince was retired at home because of illness.",
+          "idiomatic": "On the night of gengyin in the ninth month of the second year, the palace of Yuanzuo, Prince of Chu, caught fire and burned several hundred buildings. From then on, the prince was kept at home because of illness.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "三年，光化軍民卻勳家火，延燔軍廨、舍、庫。",
+          "literal": "In the third year, the house of Que Xun, a commoner of Guanghua army, caught fire, and the flames spread to burn the army offices, residences, and storehouses.",
+          "idiomatic": "In the third year, fire broke out at the home of Que Xun, a commoner in the Guanghua command, and spread to the command offices, residences, and storehouses.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        }
+      ],
+      "reviewedAt": "2026-06-26T14:23:05.486Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T14:23:06.145Z",
+      "appliedSummary": {
+        "id": "source-songshi-063-wikisource-955bbe1ae9c5",
+        "type": "source_omission_candidate",
+        "start": 26,
+        "removed": 0,
+        "inserted": 4,
+        "delta": 4,
+        "manualTranslationsApplied": 4
+      }
     },
     {
       "id": "source-songshi-063-wikisource-c30d894b7a2c",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "songshi",
@@ -18739,12 +18832,68 @@
         "afterLocal": "元祐元年三月，宗室宮院火。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Restore omitted Yuanfeng fire disaster entries.",
+      "manualTranslations": [
+        {
+          "zh": "元豐元年八月，邕州火，焚官舍千三百四十六區，諸軍衣萬余襲，穀帛軍器百五十萬。",
+          "literal": "In the eighth month of the first year of Yuanfeng, there was a fire in Yongzhou, burning 1,346 official buildings, more than ten thousand sets of military clothing, and 1,500,000 units of grain, silk, and military equipment.",
+          "idiomatic": "In the eighth month of Yuanfeng 1, fire in Yongzhou burned 1,346 official buildings, more than ten thousand sets of army clothing, and 1.5 million units of grain, silk, and military equipment.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "四年六月，衡州火，燒官舍、民居七千二百楹。",
+          "literal": "In the sixth month of the fourth year, there was a fire in Hengzhou, burning 7,200 bays of official buildings and private dwellings.",
+          "idiomatic": "In the sixth month of the fourth year, fire in Hengzhou burned 7,200 bays of government buildings and homes.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "欽州大雷震，火焚城屋。",
+          "literal": "In Qinzhou, great thunder shook, and fire burned buildings in the city.",
+          "idiomatic": "In Qinzhou, a great thunderclap set city buildings on fire.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "五年二月，洞眞宮火。",
+          "literal": "In the second month of the fifth year, the Dongzhen Palace caught fire.",
+          "idiomatic": "In the second month of the fifth year, the Dongzhen Palace burned.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "八年二月辛巳，開寶寺火。",
+          "literal": "In the second month of the eighth year, on xinsi, Kaibao Monastery caught fire.",
+          "idiomatic": "On xinsi in the second month of the eighth year, Kaibao Monastery burned.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "時寓禮部貢院於寺，點校試卷官翟曼、陳之方、馬希孟焚死，吏卒死者十四人。",
+          "literal": "At the time the Ministry of Rites examination compound was lodged in the monastery; the examination-paper checking officials Zhai Man, Chen Zhifang, and Ma Ximeng were burned to death, and fourteen clerks and soldiers died.",
+          "idiomatic": "At the time, the Ministry of Rites examination compound was housed in the monastery. The exam-paper checking officials Zhai Man, Chen Zhifang, and Ma Ximeng burned to death, along with fourteen clerks and soldiers.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        }
+      ],
+      "reviewedAt": "2026-06-26T14:23:05.486Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T14:23:06.145Z",
+      "appliedSummary": {
+        "id": "source-songshi-063-wikisource-c30d894b7a2c",
+        "type": "source_omission_candidate",
+        "start": 77,
+        "removed": 0,
+        "inserted": 6,
+        "delta": 6,
+        "manualTranslationsApplied": 6
+      }
     },
     {
       "id": "source-songshi-063-wikisource-db1aa8a775c1",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "songshi",
@@ -18768,12 +18917,82 @@
         "afterLocal": "皇祐五年正月丁巳，會靈觀火。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Restore omitted Qingli fire disaster entries.",
+      "manualTranslations": [
+        {
+          "zh": "慶曆元年五月癸亥，慶州草場火，延燔州城樓櫓。",
+          "literal": "In the fifth month of the first year of Qingli, on guihai, the pasture grounds at Qingzhou caught fire, and the flames spread to burn the towers and defensive works of the prefectural city.",
+          "idiomatic": "On guihai in the fifth month of Qingli 1, fire broke out in the Qingzhou pasture grounds and spread to the towers and defenses of the prefectural city.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "三年十一月丙寅，上清宮火。",
+          "literal": "In the eleventh month of the third year, on bingyin, the Shangqing Palace caught fire.",
+          "idiomatic": "On bingyin in the eleventh month of the third year, the Shangqing Palace burned.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "四年三月丙戌夜，代州五臺山寺火。",
+          "literal": "In the third month of the fourth year, on the night of bingxu, the monastery on Mount Wutai in Daizhou caught fire.",
+          "idiomatic": "On the night of bingxu in the third month of the fourth year, the Mount Wutai monastery in Daizhou burned.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "六月丁未，開寶寺靈感塔災。",
+          "literal": "In the sixth month, on dingwei, the Linggan Pagoda at Kaibao Monastery suffered a disaster.",
+          "idiomatic": "On dingwei in the sixth month, the Linggan Pagoda at Kaibao Monastery burned.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "七月甲子，燕王宮火。",
+          "literal": "In the seventh month, on jiazi, the palace of the Prince of Yan caught fire.",
+          "idiomatic": "On jiazi in the seventh month, the palace of the Prince of Yan burned.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "六年七月辛丑，洪福禪院火。",
+          "literal": "In the seventh month of the sixth year, on xinchou, Hongfu Chan Cloister caught fire.",
+          "idiomatic": "On xinchou in the seventh month of the sixth year, Hongfu Chan Cloister burned.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "八年正月壬午，江寧府火。",
+          "literal": "In the first month of the eighth year, on renwu, there was a fire in Jiangning prefecture.",
+          "idiomatic": "On renwu in the first month of the eighth year, fire broke out in Jiangning prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "初，李景江南大建宮室、府寺，其制多仿帝室，至是一夕而焚，唯玉燭殿獨存。",
+          "literal": "At first, Li Jing had greatly built palaces, halls, offices, and monasteries in Jiangnan, and their designs often imitated the imperial residence; now they burned in a single night, and only the Yuzhu Hall alone survived.",
+          "idiomatic": "Li Jing had once built many palaces, offices, and monasteries in Jiangnan, often modeled on imperial buildings. Now they burned in one night, with only the Yuzhu Hall surviving.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        }
+      ],
+      "reviewedAt": "2026-06-26T14:23:05.486Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T14:23:06.145Z",
+      "appliedSummary": {
+        "id": "source-songshi-063-wikisource-db1aa8a775c1",
+        "type": "source_omission_candidate",
+        "start": 64,
+        "removed": 0,
+        "inserted": 8,
+        "delta": 8,
+        "manualTranslationsApplied": 8
+      }
     },
     {
       "id": "source-songshi-063-wikisource-e380aaca5cc1",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "songshi",
@@ -18797,8 +19016,64 @@
         "afterLocal": "紹聖三年九月，淄川縣生芝草，有穀十科穿芝草生二枝。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Restore omitted Yuanyou auspicious fungus and millet-rain entries.",
+      "manualTranslations": [
+        {
+          "zh": "元祐元年七月，武安軍言：「前秘書省正字鄭忠臣母墳前生芝草一本，紫莖黃蓋。」",
+          "literal": "In the seventh month of the first year of Yuanyou, the Wu’an army reported, “Before the grave of the mother of Zheng Zhongchen, former Corrector in the Palace Library, there grew one stalk of auspicious fungus, with purple stem and yellow cap.”",
+          "idiomatic": "In the seventh month of Yuanyou 1, the Wu’an command reported: “Before the grave of the mother of Zheng Zhongchen, former Corrector in the Palace Library, one stalk of auspicious fungus grew, with a purple stem and yellow cap.”",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "三年六月，臨江縣塗井鎮雨白黍；",
+          "literal": "In the sixth month of the third year, white millet rained down in Tujing town, Linjiang county;",
+          "idiomatic": "In the sixth month of the third year, white millet fell like rain in Tujing town, Linjiang county;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "七月，又雨黑黍。",
+          "literal": "in the seventh month, black millet again rained down.",
+          "idiomatic": "in the seventh month, black millet fell as well.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "四年九月，江津縣石上生芝草二本六莖。",
+          "literal": "In the ninth month of the fourth year, on a stone in Jiangjin county there grew two plants and six stalks of auspicious fungus.",
+          "idiomatic": "In the ninth month of the fourth year, two plants with six stalks of auspicious fungus grew on a stone in Jiangjin county.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "五年二月，晉原縣生芝草四十二本。",
+          "literal": "In the second month of the fifth year, forty-two plants of auspicious fungus grew in Jinyuan county.",
+          "idiomatic": "In the second month of the fifth year, forty-two plants of auspicious fungus appeared in Jinyuan county.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "七年十一月，滁州生芝二百餘本。",
+          "literal": "In the eleventh month of the seventh year, more than two hundred plants of auspicious fungus grew in Chuzhou.",
+          "idiomatic": "In the eleventh month of the seventh year, more than two hundred plants of auspicious fungus appeared in Chuzhou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        }
+      ],
+      "reviewedAt": "2026-06-26T14:23:05.486Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T14:23:06.145Z",
+      "appliedSummary": {
+        "id": "source-songshi-063-wikisource-e380aaca5cc1",
+        "type": "source_omission_candidate",
+        "start": 542,
+        "removed": 0,
+        "inserted": 6,
+        "delta": 6,
+        "manualTranslationsApplied": 6
+      }
     },
     {
       "id": "source-songshi-063-wikisource-e6e380c0ffea",
@@ -46038,7 +46313,7 @@
     },
     {
       "id": "source-songshi-090-wikisource-03dafdcf6be8",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.667,
@@ -46090,8 +46365,10 @@
         "afterLocal": "景祐二年，廢樂昌縣入焉。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as local-fuller no-op (safe-variant-punctuation-local-retained): upstream span is already contained in the local corpus unit; local corpus retained.",
+      "reviewedAt": "2026-06-26T09:13:24.390Z",
+      "reviewer": "resolve-local-contained-source-noops"
     },
     {
       "id": "source-songshi-090-wikisource-05eda46dee63",
@@ -49932,7 +50209,7 @@
     },
     {
       "id": "source-songshi-090-wikisource-e05f3c13d8c9",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.882,
@@ -49984,8 +50261,10 @@
         "afterLocal": ""
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "",
+      "reviewedAt": "2026-06-26T16:48:01.563Z",
+      "reviewer": "source-correspondence"
     },
     {
       "id": "source-songshi-090-wikisource-e09b92ffb26e",
@@ -95201,7 +95480,7 @@
     },
     {
       "id": "source-songshi-188-wikisource-0482b336b11b",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.293,
@@ -95253,8 +95532,10 @@
         "afterLocal": "京十三，太原、尉氏、南京、鄭、汝、寧陵各二，咸平、東明、雍丘、襄邑、潁昌、曹、廣濟、穀熟、長葛各一。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource placeholder/layout residue omits a fuller local source span; local corpus text retained.",
+      "reviewedAt": "2026-06-26T09:34:38.270Z",
+      "reviewer": "resolve-wikisource-local-fuller-noops"
     },
     {
       "id": "source-songshi-188-wikisource-05b63e7f1d44",
@@ -98758,7 +99039,7 @@
     },
     {
       "id": "source-songshi-188-wikisource-721f9974983d",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.489,
@@ -98828,8 +99109,10 @@
         "afterLocal": "京師。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource placeholder/layout residue omits a fuller local source span; local corpus text retained.",
+      "reviewedAt": "2026-06-26T09:34:38.270Z",
+      "reviewer": "resolve-wikisource-local-fuller-noops"
     },
     {
       "id": "source-songshi-188-wikisource-72ab665f309e",
@@ -110437,7 +110720,7 @@
     },
     {
       "id": "source-songshi-189-wikisource-aac4bd778a84",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.793,
@@ -110750,8 +111033,10 @@
         "afterLocal": "河北路騎軍之額，自騎射而下十有二；"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource placeholder/layout residue omits a fuller local source span; local corpus text retained.",
+      "reviewedAt": "2026-06-26T09:34:38.270Z",
+      "reviewer": "resolve-wikisource-local-fuller-noops"
     },
     {
       "id": "source-songshi-189-wikisource-ae7d71e6ad49",
@@ -113017,7 +113302,7 @@
     },
     {
       "id": "source-songshi-189-wikisource-ef78631e71f6",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0.439,
@@ -113357,8 +113642,10 @@
         "afterLocal": "本鄉兵，舊名忠勇。"
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource placeholder/layout residue omits a fuller local source span; local corpus text retained.",
+      "reviewedAt": "2026-06-26T09:34:38.270Z",
+      "reviewer": "resolve-wikisource-local-fuller-noops"
     },
     {
       "id": "source-songshi-189-wikisource-f20a7b312161",
@@ -590034,7 +590321,7 @@
     },
     {
       "id": "source-songshi-456-wikisource-353775745986",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -590077,8 +590364,31 @@
         "afterLocal": "父超，逋官租，里胥督租，與超鬥，超歐里胥死。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved Xing surname correction 邢/刑 after checking person-name context; existing English transliteration remains correct.\nExisting English translation manually checked for this graph-only source repair and retained.",
+      "manualTranslations": [
+        {
+          "zh": "邢神留，深州陸澤人。",
+          "literal": "Xing Shenliu was a man of Luze in Shenzhou Prefecture.",
+          "idiomatic": "Xing Shenliu was a native of Luze in Shenzhou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for this graph-only source repair and retained.",
+      "reviewedAt": "2026-06-26T10:25:09.979Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T10:25:11.735Z",
+      "appliedSummary": {
+        "id": "source-songshi-456-wikisource-353775745986",
+        "type": "text_discrepancy_candidate",
+        "start": 85,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-songshi-456-wikisource-4d65b1a24d56",
@@ -611065,7 +611375,7 @@
     },
     {
       "id": "source-songshi-491-wikisource-d164acc06c98",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.744,
@@ -611117,8 +611427,10 @@
         "afterLocal": "從之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource placeholder/layout residue omits a fuller local source span; local corpus text retained.",
+      "reviewedAt": "2026-06-26T09:34:38.270Z",
+      "reviewer": "resolve-wikisource-local-fuller-noops"
     },
     {
       "id": "source-songshi-491-wikisource-e46a4fe9fcca",
@@ -613665,5 +613977,5 @@
       "notes": ""
     }
   ],
-  "updatedAt": "2026-06-26T04:20:17.850Z"
+  "updatedAt": "2026-06-26T16:48:01.567Z"
 }

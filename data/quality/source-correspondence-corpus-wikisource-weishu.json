@@ -5277,7 +5277,7 @@
     },
     {
       "id": "source-weishu-002-wikisource-b703b392c363",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.818,
@@ -5320,8 +5320,16 @@
         "afterLocal": "三月，慕容垂來寇桑乾川。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:45:07.928Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:45:07.928Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "皇始元年",
+        "localId": "s0190"
+      }
     },
     {
       "id": "source-weishu-002-wikisource-c29af626eeb9",
@@ -6824,7 +6832,7 @@
     },
     {
       "id": "source-weishu-003-wikisource-9838e5e35484",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.778,
@@ -6867,8 +6875,16 @@
         "afterLocal": "辛巳，幸繁畤。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:45:07.928Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:45:07.928Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "神瑞元年",
+        "localId": "s0120"
+      }
     },
     {
       "id": "source-weishu-003-wikisource-a2db37cb9ada",
@@ -9095,7 +9111,7 @@
     },
     {
       "id": "source-weishu-005-wikisource-ee5463bdcaed",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.871,
@@ -9138,8 +9154,16 @@
         "afterLocal": "丁亥，輿駕北旋。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied exact upstream reign-year prefix to local source and prepended the corresponding English date phrase.",
+      "reviewedAt": "2026-06-26T15:45:07.928Z",
+      "reviewer": "repair-source-date-prefix-omissions",
+      "appliedAt": "2026-06-26T15:45:07.928Z",
+      "appliedSummary": {
+        "mode": "date-prefix-source-repair",
+        "prefix": "正平元年",
+        "localId": "s0291"
+      }
     },
     {
       "id": "source-weishu-006-wikisource-5455f44fbecf",
@@ -111585,7 +111609,7 @@
     },
     {
       "id": "source-weishu-112-wikisource-1ab1cd557d24",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -111609,8 +111633,43 @@
         "afterLocal": "十二月戊戌，月犯歲星。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Restore omitted lunar eclipse omen and corresponding Southern Qinzhou Di rebellion entry.",
+      "manualTranslations": [
+        {
+          "zh": "肅宗熙平元年八月己酉，月在奎，十五分蝕八。",
+          "literal": "In Suzong’s first year of Xiping, in the eighth month, on jiyou, the moon was in Kui and eight fifteenths of it was eclipsed.",
+          "idiomatic": "On jiyou in the eighth month of Suzong’s Xiping 1, the moon was in Kui and eight fifteenths of it was eclipsed.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "占曰「有兵」。",
+          "literal": "The prognostication said, “There will be troops.”",
+          "idiomatic": "The omen was read as: “There will be military action.”",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "神龜元年三月，南秦州氐反，遣龍驤將軍崔襲持節喻之。",
+          "literal": "In the third month of the first year of Shengui, the Di of Southern Qinzhou rebelled, and Dragon-Raising General Cui Xi was sent with credentials to instruct them.",
+          "idiomatic": "In the third month of Shengui 1, the Di people of Southern Qinzhou rebelled; Dragon-Raising General Cui Xi was sent with credentials to admonish them.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        }
+      ],
+      "reviewedAt": "2026-06-26T14:02:49.052Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T14:02:49.311Z",
+      "appliedSummary": {
+        "id": "source-weishu-112-wikisource-1ab1cd557d24",
+        "type": "source_omission_candidate",
+        "start": 706,
+        "removed": 0,
+        "inserted": 3,
+        "delta": 3,
+        "manualTranslationsApplied": 3
+      }
     },
     {
       "id": "source-weishu-112-wikisource-20523470fe21",
@@ -111720,7 +111779,7 @@
     },
     {
       "id": "source-weishu-112-wikisource-3b6b9f71a674",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -111744,12 +111803,68 @@
         "afterLocal": "十二月辛巳，月入羽林。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Restore omitted lunar entries and matched rebellion/death events.",
+      "manualTranslations": [
+        {
+          "zh": "十一月壬子，月犯哭星。",
+          "literal": "In the eleventh month, on renzi, the moon encroached on the Weeping star.",
+          "idiomatic": "On renzi in the eleventh month, the moon encroached on the Weeping star.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "辛酉，月犯東井前星。",
+          "literal": "On xinyou, the moon encroached on the front star of Dongjing.",
+          "idiomatic": "On xinyou, the moon encroached on the front star of Dongjing.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "丁卯，月入太微。",
+          "literal": "On dingmao, the moon entered Taiwei.",
+          "idiomatic": "On dingmao, the moon entered Taiwei.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "占曰「大臣死，有反臣」。",
+          "literal": "The prognostication said, “A great minister will die; there will be a rebellious minister.”",
+          "idiomatic": "The omen was read as: “A great minister will die, and there will be a rebellious minister.”",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "二十一年四月，大將軍、宋王劉昶薨，廣州刺史薛法護南叛。",
+          "literal": "In the fourth month of the twenty-first year, Liu Chang, Great General and Prince of Song, died, and Xue Fahu, Inspector of Guangzhou, rebelled in the south.",
+          "idiomatic": "In the fourth month of the twenty-first year, Liu Chang, Great General and Prince of Song, died, and Xue Fahu, Inspector of Guangzhou, rebelled in the south.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "壬申，月入氐。",
+          "literal": "On renshen, the moon entered Di.",
+          "idiomatic": "On renshen, the moon entered Di.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        }
+      ],
+      "reviewedAt": "2026-06-26T14:02:49.052Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T14:02:49.311Z",
+      "appliedSummary": {
+        "id": "source-weishu-112-wikisource-3b6b9f71a674",
+        "type": "source_omission_candidate",
+        "start": 527,
+        "removed": 0,
+        "inserted": 6,
+        "delta": 6,
+        "manualTranslationsApplied": 6
+      }
     },
     {
       "id": "source-weishu-112-wikisource-48e14e865858",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -111773,8 +111888,43 @@
         "afterLocal": "二年正月壬戌，月犯畢。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Restore omitted Bi-mouth lunar omen and the following special pardon.",
+      "manualTranslations": [
+        {
+          "zh": "高祖延興元年十月庚子，月入畢口。",
+          "literal": "In Gaozu’s first year of Yanxing, in the tenth month, on gengzi, the moon entered the mouth of Bi.",
+          "idiomatic": "On gengzi in the tenth month of Gaozu’s Yanxing 1, the moon entered the mouth of Bi.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "占曰「有赦」。",
+          "literal": "The prognostication said, “There will be an amnesty.”",
+          "idiomatic": "The omen was read as: “There will be an amnesty.”",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "二年正月乙卯，曲赦京師及河西，南至秦涇，西至枹罕，北至涼州及諸鎮。",
+          "literal": "In the first month of the second year, on yimao, there was a special amnesty for the capital and Hexi, south to Qin and Jing, west to Fuhan, and north to Liangzhou and the various garrisons.",
+          "idiomatic": "On yimao in the first month of the second year, a special amnesty was granted for the capital and Hexi, extending south to Qin and Jing, west to Fuhan, and north to Liangzhou and the various garrisons.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        }
+      ],
+      "reviewedAt": "2026-06-26T14:02:49.052Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T14:02:49.311Z",
+      "appliedSummary": {
+        "id": "source-weishu-112-wikisource-48e14e865858",
+        "type": "source_omission_candidate",
+        "start": 271,
+        "removed": 0,
+        "inserted": 3,
+        "delta": 3,
+        "manualTranslationsApplied": 3
+      }
     },
     {
       "id": "source-weishu-112-wikisource-758dc50812ce",
@@ -112463,7 +112613,7 @@
     },
     {
       "id": "source-weishu-112-wikisource-9e7e8e24328f",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -112487,8 +112637,71 @@
         "afterLocal": "四月丁未，月犯心。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Restore omitted halo and Dongjing omen entries with their flood/death correlations.",
+      "manualTranslations": [
+        {
+          "zh": "九年正月丁丑，月在參，暈觜、參兩肩、東井、北河、五車三星。",
+          "literal": "In the first month of the ninth year, on dingchou, the moon was in Shen and haloed Zi, the two shoulders of Shen, Dongjing, Beihe, and three stars of Wuche.",
+          "idiomatic": "On dingchou in the first month of the ninth year, the moon was in Shen, with a halo around Zi, the two shoulders of Shen, Dongjing, Beihe, and three stars of Wuche.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "占曰「水」。",
+          "literal": "The prognostication said, “Water.”",
+          "idiomatic": "The omen was read as signifying flood.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "是年，冀定數州水，民有賣男女者。",
+          "literal": "That year, several prefectures including Ji and Ding suffered floods, and among the people there were those who sold sons and daughters.",
+          "idiomatic": "That year, Ji, Ding, and several other prefectures flooded, and some people sold their sons and daughters.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "戊申，月犯東井。",
+          "literal": "On wushen, the moon encroached on Dongjing.",
+          "idiomatic": "On wushen, the moon encroached on Dongjing.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "占曰「貴人死」，一曰「有水」。",
+          "literal": "The prognostication said, “A noble person will die”; one version says, “There will be water.”",
+          "idiomatic": "The omen was read as “a noble person will die”; another reading said, “there will be flood.”",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "十月，侍中、司徒、魏郡王陳建薨。",
+          "literal": "In the tenth month, Chen Jian, Palace Attendant, Minister over the Masses, and Prince of Wei Commandery, died.",
+          "idiomatic": "In the tenth month, Chen Jian, Palace Attendant, Minister over the Masses, and Prince of Wei Commandery, died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "是年，京師及州鎮十二水旱傷稼。",
+          "literal": "That year, floods and droughts in the capital and twelve provinces and garrisons damaged the crops.",
+          "idiomatic": "That year, floods and droughts damaged crops in the capital and in twelve provinces and garrisons.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        }
+      ],
+      "reviewedAt": "2026-06-26T14:02:49.052Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T14:02:49.311Z",
+      "appliedSummary": {
+        "id": "source-weishu-112-wikisource-9e7e8e24328f",
+        "type": "source_omission_candidate",
+        "start": 372,
+        "removed": 0,
+        "inserted": 7,
+        "delta": 7,
+        "manualTranslationsApplied": 7
+      }
     },
     {
       "id": "source-weishu-112-wikisource-b33f5044514a",
@@ -112598,7 +112811,7 @@
     },
     {
       "id": "source-weishu-112-wikisource-f0676527114a",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -112622,8 +112835,50 @@
         "afterLocal": "十一月癸卯，月入軒轅中，蝕第三星。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Restore omitted Bi occultation omen and the Wang Yuanshou rebellion entry.",
+      "manualTranslations": [
+        {
+          "zh": "八月乙亥，月掩畢。",
+          "literal": "In the eighth month, on yihai, the moon occulted Bi.",
+          "idiomatic": "On yihai in the eighth month, the moon occulted Bi.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "占曰「有邊兵」。",
+          "literal": "The prognostication said, “There will be troops on the frontier.”",
+          "idiomatic": "The omen was read as: “There will be frontier warfare.”",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "太和元年正月，秦州略陽民王元壽聚眾五千餘家，自號為衝天王。",
+          "literal": "In the first month of the first year of Taihe, Wang Yuanshou, a commoner of Lueyang in Qinzhou, gathered more than five thousand households and styled himself Heaven-Assailing King.",
+          "idiomatic": "In the first month of Taihe 1, Wang Yuanshou, a man of Lueyang in Qinzhou, gathered more than five thousand households and called himself the Heaven-Assailing King.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "二月，詔秦益二州刺史武都公尉洛侯討破元壽，獲其妻子送京師。",
+          "literal": "In the second month, an edict ordered Wei Luohou, Duke of Wudu and Inspector of Qin and Yi provinces, to campaign against and defeat Yuanshou; he captured Yuanshou’s wife and children and sent them to the capital.",
+          "idiomatic": "In the second month, Wei Luohou, Duke of Wudu and Inspector of Qin and Yi provinces, was ordered to attack and defeat Yuanshou. He captured Yuanshou’s wife and children and sent them to the capital.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        }
+      ],
+      "reviewedAt": "2026-06-26T14:02:49.052Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T14:02:49.311Z",
+      "appliedSummary": {
+        "id": "source-weishu-112-wikisource-f0676527114a",
+        "type": "source_omission_candidate",
+        "start": 298,
+        "removed": 0,
+        "inserted": 4,
+        "delta": 4,
+        "manualTranslationsApplied": 4
+      }
     },
     {
       "id": "source-weishu-113-wikisource-023681b9b3c3",
@@ -170535,5 +170790,5 @@
       "retainedAfterRescan": true
     }
   ],
-  "updatedAt": "2026-06-26T06:52:15.175Z"
+  "updatedAt": "2026-06-26T15:45:07.928Z"
 }

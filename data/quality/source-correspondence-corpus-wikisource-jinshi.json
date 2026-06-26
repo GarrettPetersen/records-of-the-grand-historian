@@ -3644,7 +3644,7 @@
     },
     {
       "id": "source-jinshi-001-wikisource-57ad5120966c",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -3687,8 +3687,31 @@
         "afterLocal": "景祖異母弟跋黑有異志，世祖慮其爲變，加意事之，不使將兵，但爲部長。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Reviewed graph-pair lane; upstream graph form accepted for source text after checking item context.\nExisting English translation manually checked for this graph-only source repair and retained.",
+      "manualTranslations": [
+        {
+          "zh": "遼咸雍十年，襲節度使。",
+          "literal": "In the tenth year of Liao Xianyong he inherited the military commissionership.",
+          "idiomatic": "In the tenth year of Liao Xianyong he inherited the military commissionership.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for this graph-only source repair and retained.",
+      "reviewedAt": "2026-06-26T08:04:43.602Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T08:04:59.336Z",
+      "appliedSummary": {
+        "id": "source-jinshi-001-wikisource-57ad5120966c",
+        "type": "text_discrepancy_candidate",
+        "start": 152,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-jinshi-001-wikisource-9ecc77a2bf72",
@@ -4022,7 +4045,7 @@
     },
     {
       "id": "source-jinshi-002-wikisource-042aee96be2a",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jinshi",
@@ -4046,12 +4069,82 @@
         "afterLocal": "是月，宋使登州防禦使馬政以國書來，其略曰：「日出之分，實生聖人。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Real annalistic omission; restore from upstream and add manual translations.",
+      "manualTranslations": [
+        {
+          "zh": "天輔元年正月，開州叛，加古撒喝等討平之。",
+          "literal": "In Tianfu 1, first month, Kaizhou rebelled; Jiagu Sahe and the others campaigned against and pacified it.",
+          "idiomatic": "In Tianfu 1, first month, Kaizhou rebelled; Jiagu Sahe and the others suppressed it.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "國論昊勃極烈斜也以兵一萬取泰州。",
+          "literal": "Xieye, Guolun Hao Bojilie, took Taizhou with ten thousand troops.",
+          "idiomatic": "Xieye, Guolun Hao Bojilie, captured Taizhou with ten thousand troops.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "四月，遼秦晉國王耶律捏里來伐，迪古乃、婁室、婆盧火將兵二萬。",
+          "literal": "In the fourth month, Yelu Nieli, Prince of Qin-Jin of Liao, came to attack; Digunai, Loushi, and Poluhuo led twenty thousand troops.",
+          "idiomatic": "In the fourth month, Yelu Nieli, Liao prince of Qin-Jin, invaded; Digunai, Loushi, and Poluhuo led twenty thousand troops against him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "會咸州路都統斡魯古擊之。",
+          "literal": "They joined Wulugu, Area Commander of Xianzhou Circuit, in attacking him.",
+          "idiomatic": "They joined Wulugu, Area Commander of Xianzhou Circuit, and attacked him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "五月丁巳，詔自收甯江州已後同姓爲婚者，杖而離之。",
+          "literal": "In the fifth month, on dingsi, an edict ordered that after Ningjiangzhou had been taken, those of the same surname who had married were to be beaten with rods and separated.",
+          "idiomatic": "In the fifth month, on dingsi, an edict ordered same-surname marriages contracted after the capture of Ningjiangzhou to be punished by flogging and dissolved.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "七月戊申，以完顏斡論知東京事。",
+          "literal": "In the seventh month, on wushen, Wanyan Wolun was made administrator of affairs in the Eastern Capital.",
+          "idiomatic": "In the seventh month, on wushen, Wanyan Wolun was put in charge of Eastern Capital affairs.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "八月癸亥，高麗遣使來請保州。",
+          "literal": "In the eighth month, on guihai, Goryeo sent envoys to request Baozhou.",
+          "idiomatic": "In the eighth month, on guihai, Goryeo sent envoys asking for Baozhou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "十二月甲子，斡魯古等敗耶律捍里兵于蒺藜山，拔顯州，乾、懿、豪、徽、成、川、惠等州皆降。",
+          "literal": "In the twelfth month, on jiazi, Wulugu and the others defeated Yelu Hanli's troops at Jili Mountain, took Xianzhou, and Qian, Yi, Hao, Hui, Cheng, Chuan, Hui, and other prefectures all surrendered.",
+          "idiomatic": "In the twelfth month, on jiazi, Wulugu and the others defeated Yelu Hanli at Jili Mountain, captured Xianzhou, and Qian, Yi, Hao, Hui, Cheng, Chuan, Hui, and other prefectures all submitted.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        }
+      ],
+      "reviewedAt": "2026-06-26T13:06:26.423Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T13:06:26.593Z",
+      "appliedSummary": {
+        "id": "source-jinshi-002-wikisource-042aee96be2a",
+        "type": "source_omission_candidate",
+        "start": 288,
+        "removed": 0,
+        "inserted": 8,
+        "delta": 8,
+        "manualTranslationsApplied": 8
+      }
     },
     {
       "id": "source-jinshi-002-wikisource-2dc7dec5581f",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "jinshi",
@@ -4075,12 +4168,33 @@
         "afterLocal": "四月辛卯，復取西京。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Real annalistic omission; restore from upstream and add manual translation.",
+      "manualTranslations": [
+        {
+          "zh": "是月，遼秦晉國王耶律捏里即位于燕。",
+          "literal": "That month, Yelu Nieli, Prince of Qin-Jin of Liao, took the throne at Yan.",
+          "idiomatic": "That month, Yelu Nieli, Liao prince of Qin-Jin, enthroned himself at Yan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        }
+      ],
+      "reviewedAt": "2026-06-26T13:06:26.423Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T13:06:26.593Z",
+      "appliedSummary": {
+        "id": "source-jinshi-002-wikisource-2dc7dec5581f",
+        "type": "source_omission_candidate",
+        "start": 427,
+        "removed": 0,
+        "inserted": 1,
+        "delta": 1,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-jinshi-002-wikisource-664527a72228",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jinshi",
@@ -4104,8 +4218,36 @@
         "afterLocal": "六月癸巳，餘睹與其將吏來見。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Real annalistic omission; restore from upstream and add manual translations.",
+      "manualTranslations": [
+        {
+          "zh": "五月，遼都統耶律餘睹等詣鹹州降。",
+          "literal": "In the fifth month, Yelu Yudu and others, commanders of Liao, went to Xianzhou and surrendered.",
+          "idiomatic": "In the fifth month, the Liao commander Yelu Yudu and others came to Xianzhou to surrender.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        },
+        {
+          "zh": "閏月辛巳，國論胡魯勃極烈撒改薨。",
+          "literal": "In the intercalary month, on xinsi, Sagai, Guolun Hulu Bojilie, died.",
+          "idiomatic": "In the intercalary month, on xinsi, Sagai, Guolun Hulu Bojilie, died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5"
+        }
+      ],
+      "reviewedAt": "2026-06-26T13:06:26.423Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T13:06:26.593Z",
+      "appliedSummary": {
+        "id": "source-jinshi-002-wikisource-664527a72228",
+        "type": "source_omission_candidate",
+        "start": 391,
+        "removed": 0,
+        "inserted": 2,
+        "delta": 2,
+        "manualTranslationsApplied": 2
+      }
     },
     {
       "id": "source-jinshi-002-wikisource-7120b7ba1a68",
@@ -67602,7 +67744,7 @@
     },
     {
       "id": "source-jinshi-134-wikisource-d6fee3389f32",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -67645,8 +67787,21 @@
         "afterLocal": "十月，攻龕谷，白撒連敗之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-26T07:44:29.646Z",
+      "reviewer": "apply-broad-variant-source-corrections",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-26T07:44:29.650Z",
+      "appliedSummary": {
+        "id": "source-jinshi-134-wikisource-d6fee3389f32",
+        "type": "text_discrepancy_candidate",
+        "start": 163,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-jinshi-134-wikisource-da540513aa77",
@@ -69286,5 +69441,5 @@
       "notes": ""
     }
   ],
-  "updatedAt": "2026-06-26T06:52:15.175Z"
+  "updatedAt": "2026-06-26T13:06:26.648Z"
 }
