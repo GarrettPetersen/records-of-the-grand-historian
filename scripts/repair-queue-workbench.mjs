@@ -1031,6 +1031,7 @@ function packetItem(record, opts = {}) {
     currentReviewContext: currentReviewContext(record),
     decision: 'pending',
     notes: '',
+    sourceTextOverride: null,
     preserveExistingTranslations: null,
     translationReviewNote: '',
     manualTranslations: [],
@@ -1422,6 +1423,10 @@ function applyDecisionToItem(queueItem, packetItemRecord, decision, opts, now) {
     queueItem.status = 'approved';
     queueItem.decision = 'approved';
     queueItem.notes = appendNote(queueItem.notes, notes || 'Approved from repair decision packet; pending source application.');
+    if (typeof packetItemRecord.sourceTextOverride === 'string' && packetItemRecord.sourceTextOverride.trim()) {
+      queueItem.sourceTextOverride = packetItemRecord.sourceTextOverride.trim();
+      queueItem.notes = appendNote(queueItem.notes, 'Applied reviewer-provided sourceTextOverride for this source repair.');
+    }
     if (Array.isArray(packetItemRecord.manualTranslations) && packetItemRecord.manualTranslations.length > 0) {
       queueItem.manualTranslations = packetItemRecord.manualTranslations;
     }

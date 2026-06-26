@@ -16,6 +16,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { countChapterMetrics } from '../chapter-counts.mjs';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const QUALITY_DIR = path.join(DATA_DIR, 'quality');
@@ -30,9 +31,11 @@ const STRUCTURAL_SOURCE_ARTIFACT_RULES = new Set([
 ]);
 const REPAIRABLE_SOURCE_ARTIFACT_RULES = new Set([
   ...STRUCTURAL_SOURCE_ARTIFACT_RULES,
+  'SOURCE_WIKISOURCE_TOC_CONTROL',
   'SOURCE_WIKISOURCE_CORRECTION_BRACKET',
-  'SOURCE_WIKISOURCE_HEADING_MARKUP',
+ 'SOURCE_WIKISOURCE_HEADING_MARKUP',
  'SOURCE_PRIVATE_USE_GLYPH',
+  'SOURCE_COMPONENT_PLACEHOLDER',
  'SOURCE_REPEATED_CLOSING_QUOTE',
  'SOURCE_TRAILING_LAYOUT_MARKER',
   'SOURCE_LEADING_SECTION_NUMBER',
@@ -1852,6 +1855,87 @@ const CONTEXTUAL_PRIVATE_USE_REPAIRS = [
   },
 ];
 
+const KNOWN_COMPONENT_PLACEHOLDER_REPAIRS = [
+  {
+    found: '忄互',
+    textRe: /忄互/gu,
+    replacement: '恆',
+    markerRe: /忄互/u,
+  },
+  {
+    found: '忄辦',
+    textRe: /不忄辦|忄辦從/gu,
+    replacement: (match) => (match === '不忄辦' ? '不憚' : '憚從'),
+    markerRe: /不忄辦|忄辦從/u,
+  },
+  {
+    found: '忄犬',
+    textRe: /狃忄犬/gu,
+    replacement: '狃忲',
+    markerRe: /狃忄犬/u,
+  },
+  {
+    found: '扌烝',
+    textRe: /扌烝(?=贍)/gu,
+    replacement: '拯',
+    markerRe: /扌烝贍/u,
+  },
+  {
+    found: '扌翦',
+    textRe: /扌翦(?=白)/gu,
+    replacement: '揃',
+    markerRe: /扌翦白/u,
+  },
+  {
+    found: '扌隺',
+    textRe: /(?<=研)扌隺/gu,
+    replacement: '搉',
+    markerRe: /研扌隺/u,
+  },
+  {
+    found: '氵公',
+    textRe: /氵公(?=樂)/gu,
+    replacement: '沿',
+    markerRe: /氵公樂/u,
+  },
+  {
+    found: '氵甸',
+    textRe: /氵甸(?=盤淺)/gu,
+    replacement: '澱',
+    markerRe: /浮雞氵甸/u,
+  },
+  {
+    found: '氵術',
+    textRe: /氵術(?=陽)/gu,
+    replacement: '沭',
+    markerRe: /氵術陽/u,
+  },
+  {
+    found: '氵隐强',
+    textRe: /氵隐强/gu,
+    replacement: '濦強',
+    markerRe: /氵隐强/u,
+  },
+  {
+    found: '阝焉',
+    textRe: /曰阝焉/gu,
+    replacement: '曰鄢',
+    markerRe: /曰阝焉/u,
+  },
+  {
+    found: '扌牽',
+    textRe: /扌牽(?=戶)/gu,
+    replacement: '牽',
+    markerRe: /扌牽戶/u,
+  },
+  {
+    found: '礻彗',
+    textRe: /礻彗(?=瘞之)/gu,
+    replacement: '槥',
+    markerRe: /礻彗瘞之/u,
+  },
+];
+
 const VARIANTS = new Map([
   ['并', '並'],
   ['幷', '並'],
@@ -1973,6 +2057,7 @@ const ADDITIONAL_VARIANT_GROUPS = [
   '甞嘗', '妬妒', '竪豎', '蠧蠹', '鑒鑑', '讌宴',
   '觧解', '猨猿', '袵衽', '敕勅', '筦管', '譌訛',
   '舘館', '僞偽', '媿愧', '昬昏', '逕徑', '恠怪',
+  '畺壃疆',
   '覩睹', '賔賓', '冡塚', '讎仇',
 ];
 
@@ -3119,6 +3204,7 @@ function collectSourceUnits(data) {
         units.push({
           blockIndex,
           blockType: block.type || 'paragraph',
+          collectionName: 'sentences',
           index,
           path: `sentences.${index}.${key}`,
           id: unit.id || '',
@@ -3134,6 +3220,7 @@ function collectSourceUnits(data) {
         units.push({
           blockIndex,
           blockType: block.type || 'table_row',
+          collectionName: 'cells',
           index,
           path: `cells.${index}.${key}`,
           id: unit.id || '',
@@ -3377,6 +3464,7 @@ function cleanEnglishSourceArtifactText(text) {
   if (!out) return { text: out, changed: false };
 
   out = out
+    .replace(/__(?:FORCE)?TOC__|__NOTOC__|__NOCC__/gu, '')
     .replace(/^\s*\[(?:one|two|three|four|five|six|seven|eight|nine|ten|[一二三四五六七八九十百千萬万零〇0-9]+)\]\s*/iu, '')
     .replace(/^\s*\d+\s*[\.)、．]?\s*(?=[A-Z])/u, '')
     .replace(/\[alternate(?: reading)?\s*:\s*([^\]]+)\]/giu, (_match, inner) => titleCaseWords(inner))
@@ -3962,6 +4050,55 @@ function sourceUnitKeys(file, unit) {
   ];
 }
 
+function changedSourceUnitKey(file, blockIndex, collectionName, index, unit, key) {
+  const id = unit?.id || '';
+  const pathKey = `${collectionName}.${index}.${key}`;
+  return [
+    `${path.resolve(file)}\u241f${id}`,
+    `${path.resolve(file)}\u241f${pathKey}`,
+  ];
+}
+
+function pruneEmptyChangedParagraphSourceUnits(data, file, changedUnitKeys) {
+  let removed = 0;
+  const nextContent = [];
+  for (const [blockIndex, block] of (data.content || []).entries()) {
+    if (block?.type !== 'paragraph' || !Array.isArray(block.sentences)) {
+      nextContent.push(block);
+      continue;
+    }
+
+    const kept = [];
+    for (const [index, unit] of block.sentences.entries()) {
+      const key = sourceKey(unit);
+      if (!key) {
+        kept.push(unit);
+        continue;
+      }
+      const text = String(unit[key] || '').trim();
+      const changed = changedSourceUnitKey(file, blockIndex, 'sentences', index, unit, key)
+        .some((candidate) => changedUnitKeys.has(candidate));
+      if (changed && !text) {
+        removed += 1;
+        continue;
+      }
+      kept.push(unit);
+    }
+
+    if (kept.length === 0) {
+      removed += block.sentences.length > 0 ? 0 : 0;
+      continue;
+    }
+    if (kept.length !== block.sentences.length) {
+      block.sentences = kept;
+    }
+    nextContent.push(block);
+  }
+
+  if (removed > 0) data.content = nextContent;
+  return removed;
+}
+
 function artifactQueueKeys(item) {
   return [
     `${path.resolve(item.file || '')}\u241f${item.sentenceId || ''}`,
@@ -4047,6 +4184,27 @@ function repairKnownPrivateUseText(text, file) {
   };
 }
 
+function repairKnownComponentPlaceholderText(text) {
+  let out = String(text || '');
+  let knownComponents = 0;
+
+  for (const repair of KNOWN_COMPONENT_PLACEHOLDER_REPAIRS) {
+    if (!repair.markerRe.test(out)) continue;
+    out = out.replace(repair.textRe, (...args) => {
+      knownComponents += 1;
+      return typeof repair.replacement === 'function'
+        ? repair.replacement(...args)
+        : repair.replacement;
+    });
+  }
+
+  return {
+    text: out,
+    changed: out !== text,
+    knownComponents,
+  };
+}
+
 function repairRepeatedClosingQuotes(text) {
   const input = String(text || '');
   const match = input.match(/[」』]{3,}$/u);
@@ -4090,8 +4248,10 @@ function cleanSourceArtifactText(text, state = { inRef: false }, file = '') {
   let htmlTags = 0;
   let tableAttrs = 0;
   let ctextMarkup = 0;
+  let tocControlsRemoved = 0;
   let refTextRemoved = 0;
   let knownGlyphs = 0;
+  let knownComponents = 0;
   let correctionBrackets = 0;
   let headingMarkup = 0;
   let leadingSectionNumbers = 0;
@@ -4133,6 +4293,12 @@ function cleanSourceArtifactText(text, state = { inRef: false }, file = '') {
     return inner;
   });
 
+  out = out.replace(WIKI_TOC_CONTROL_RE, () => {
+    changed = true;
+    tocControlsRemoved += 1;
+    return '';
+  });
+
   out = out.replace(WIKISOURCE_CORRECTION_BRACKET_RE, (_match, inner) => {
     changed = true;
     correctionBrackets += 1;
@@ -4143,6 +4309,11 @@ function cleanSourceArtifactText(text, state = { inRef: false }, file = '') {
   out = glyphResult.text;
   changed = changed || glyphResult.changed;
   knownGlyphs += glyphResult.knownGlyphs;
+
+  const componentResult = repairKnownComponentPlaceholderText(out);
+  out = componentResult.text;
+  changed = changed || componentResult.changed;
+  knownComponents += componentResult.knownComponents;
 
   const headingResult = repairWikisourceHeadingMarkup(out);
   out = headingResult.text;
@@ -4164,8 +4335,10 @@ function cleanSourceArtifactText(text, state = { inRef: false }, file = '') {
     htmlTags,
     tableAttrs,
     ctextMarkup,
+    tocControlsRemoved,
     refTextRemoved,
     knownGlyphs,
+    knownComponents,
     correctionBrackets,
     headingMarkup,
     leadingSectionNumbers,
@@ -4634,6 +4807,31 @@ function isKnownPrivateUseArtifactItem(item) {
   ));
 }
 
+function isKnownComponentPlaceholderArtifactItem(item) {
+  if (item.ruleId !== 'SOURCE_COMPONENT_PLACEHOLDER') return false;
+  return KNOWN_COMPONENT_PLACEHOLDER_REPAIRS.some((repair) => (
+    repair.markerRe.test(item.excerpt || '')
+  ));
+}
+
+function liveArtifactText(item) {
+  const file = item.file || '';
+  if (!file || !fs.existsSync(file)) return '';
+  const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+  const units = collectSourceUnits(data);
+  const byId = units.find((unit) => unit.id && unit.id === item.sentenceId);
+  if (byId) return String(byId.unit[byId.key] || '');
+  return units.map((unit) => String(unit.unit[unit.key] || '')).join('');
+}
+
+function isKnownArtifactResolvedInLiveSource(item) {
+  if (!isKnownPrivateUseArtifactItem(item) && !isKnownComponentPlaceholderArtifactItem(item)) return false;
+  const found = String(item.found || '');
+  if (!found) return false;
+  const liveText = liveArtifactText(item);
+  return Boolean(liveText && !liveText.includes(found));
+}
+
 function repairSourceArtifacts(opts, now) {
   const queue = loadArtifactQueue();
   if (!queue) {
@@ -4644,7 +4842,10 @@ function repairSourceArtifacts(opts, now) {
         htmlTagsRemoved: 0,
         tableAttrsRemoved: 0,
         ctextMarkupRemoved: 0,
+        tocControlsRemoved: 0,
+        emptySourceUnitsRemoved: 0,
         knownGlyphsRepaired: 0,
+        knownComponentsRepaired: 0,
         correctionBracketsRemoved: 0,
         headingMarkupRemoved: 0,
         leadingSectionNumbersRemoved: 0,
@@ -4669,8 +4870,11 @@ function repairSourceArtifacts(opts, now) {
     htmlTagsRemoved: 0,
     tableAttrsRemoved: 0,
     ctextMarkupRemoved: 0,
+    tocControlsRemoved: 0,
+    emptySourceUnitsRemoved: 0,
     refTextRemoved: 0,
     knownGlyphsRepaired: 0,
+    knownComponentsRepaired: 0,
     correctionBracketsRemoved: 0,
     headingMarkupRemoved: 0,
     leadingSectionNumbersRemoved: 0,
@@ -4692,8 +4896,10 @@ function repairSourceArtifacts(opts, now) {
       stats.htmlTagsRemoved += result.htmlTags;
       stats.tableAttrsRemoved += result.tableAttrs;
       stats.ctextMarkupRemoved += result.ctextMarkup;
+      stats.tocControlsRemoved += result.tocControlsRemoved;
       stats.refTextRemoved += result.refTextRemoved;
       stats.knownGlyphsRepaired += result.knownGlyphs;
+      stats.knownComponentsRepaired += result.knownComponents;
       stats.correctionBracketsRemoved += result.correctionBrackets;
       stats.headingMarkupRemoved += result.headingMarkup;
       stats.leadingSectionNumbersRemoved += result.leadingSectionNumbers;
@@ -4708,6 +4914,15 @@ function repairSourceArtifacts(opts, now) {
         });
       }
     }
+    if (fileChanged) {
+      const removed = pruneEmptyChangedParagraphSourceUnits(data, file, changedUnitKeys);
+      stats.emptySourceUnitsRemoved += removed;
+      if (removed > 0 && data.meta) {
+        const counts = countChapterMetrics(data);
+        data.meta.sentenceCount = counts.sentenceCount;
+        data.meta.translatedCount = counts.translatedCount;
+      }
+    }
     if (!fileChanged) continue;
     stats.filesChanged += 1;
     touchedBooks.add(path.basename(path.dirname(file)));
@@ -4715,11 +4930,15 @@ function repairSourceArtifacts(opts, now) {
   }
 
   for (const item of pending) {
-    if (!artifactQueueKeys(item).some((key) => changedUnitKeys.has(key))) continue;
+    const changedByThisRun = artifactQueueKeys(item).some((key) => changedUnitKeys.has(key));
+    const resolvedInLiveSource = !changedByThisRun && isKnownArtifactResolvedInLiveSource(item);
+    if (!changedByThisRun && !resolvedInLiveSource) continue;
     if (
       !STRUCTURAL_SOURCE_ARTIFACT_RULES.has(item.ruleId) &&
       !isKnownPrivateUseArtifactItem(item) &&
+      !isKnownComponentPlaceholderArtifactItem(item) &&
       item.ruleId !== 'SOURCE_WIKISOURCE_CORRECTION_BRACKET' &&
+      item.ruleId !== 'SOURCE_WIKISOURCE_TOC_CONTROL' &&
       item.ruleId !== 'SOURCE_WIKISOURCE_HEADING_MARKUP' &&
       item.ruleId !== 'SOURCE_REPEATED_CLOSING_QUOTE' &&
       item.ruleId !== 'SOURCE_TRAILING_LAYOUT_MARKER' &&

@@ -13,6 +13,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { load } from 'cheerio';
+import { variantText } from './source-variant-utils.mjs';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const DEFAULT_MIN_SEVERITY = 2;
@@ -665,9 +666,7 @@ function normalizePunctuation(text) {
 }
 
 function normalizeVariants(text) {
-  let out = '';
-  for (const char of text) out += COMMON_VARIANTS.get(char) || char;
-  return out;
+  return variantText(text);
 }
 
 function comparisonKey(text) {
@@ -747,6 +746,7 @@ function decodeContentTemplate(name, body) {
     .filter((part) => !/^[a-z][\w-]*\s*=/iu.test(part));
   if (templateName === '!') return parts[0] || '';
   if (templateName === 'propernoun') return parts.join('');
+  if (templateName === '專' || templateName === '专') return parts.join('');
   if (templateName === '標' || templateName === 'wavybookmark') return parts.join('');
   if (templateName === 'red' || templateName === 'yl' || templateName === '批' || templateName === 'quote' || templateName === 'color') {
     const visible = visibleParts();
@@ -773,7 +773,7 @@ function stripMediaWikiTemplates(text) {
   while (out !== previous && guard < 20) {
     previous = out;
     out = out
-      .replace(/\{\{\s*(ProperNoun|標|WavyBookMark|年代)\|([^{}]*)\}\}/gi, (_, name, body) => decodeContentTemplate(name, body))
+      .replace(/\{\{\s*(ProperNoun|專|专|標|WavyBookMark|年代)\|([^{}]*)\}\}/gi, (_, name, body) => decodeContentTemplate(name, body))
       .replace(/\{\{\s*(red|YL|批|quote|color)\|([^{}]*)\}\}/gi, (_, name, body) => decodeContentTemplate(name, body))
       .replace(/\{\{\s*(!)\|([^{}]*)\}\}/g, (_, name, body) => decodeContentTemplate(name, body))
       .replace(/\{\{\*\|([^{}]*)\}\}/g, '$1');

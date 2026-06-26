@@ -33,16 +33,46 @@ const SOURCE_ARTIFACT_RULES = [
     pattern: /-{4,}(?=[」』”]*$)/gu,
   },
   {
+    id: 'SOURCE_WIKISOURCE_TOC_CONTROL',
+    severity: 3,
+    description: 'Wikisource table-of-contents control leaked into Chinese source',
+    pattern: /__(?:FORCE)?TOC__|__NOTOC__|__NOCC__/gu,
+  },
+  {
+    id: 'SOURCE_WIKISOURCE_PROGRESS_MARKER',
+    severity: 3,
+    description: 'Wikisource progress marker leaked into Chinese source',
+    pattern: /^(?:25|50|75|100)%\s*(?=\p{Script=Han}|[◎=]|$)/gu,
+  },
+  {
     id: 'SOURCE_WIKISOURCE_CATEGORY_FOOTER',
     severity: 3,
     description: 'Wikisource category footer leaked into Chinese source',
-    pattern: /^(?:-{4,})?(?:category|CATEGORY):資治通鑑[」』”]*$/gu,
+    pattern: /category:[^\s，。；：！？「」『』]{1,80}/giu,
+  },
+  {
+    id: 'SOURCE_WIKISOURCE_PD_BOILERPLATE',
+    severity: 3,
+    description: 'Wikisource public-domain boilerplate leaked into Chinese source',
+    pattern: /(?:PD-icon\.svg\s*)?本(?:北宋|南宋|唐|元|明|清)?作品在全世界都属于公有领域，因为作者逝世已经遠?遠?超过100年。?/gu,
   },
   {
     id: 'SOURCE_WIKISOURCE_COLLATION_HEADING',
     severity: 3,
     description: 'Wikisource collation heading leaked into Chinese source',
     pattern: /^=+\s*校刊記\s*=+[」』”]*$/gu,
+  },
+  {
+    id: 'SOURCE_EDITION_COLLATION_NOTE',
+    severity: 3,
+    description: 'Edition collation note leaked into Chinese source',
+    pattern: /全文以中華書局[^。]{0,80}[為爲]本校。/gu,
+  },
+  {
+    id: 'SOURCE_MEDIAWIKI_TEMPLATE_MARKUP',
+    severity: 3,
+    description: 'MediaWiki template markup leaked into Chinese source',
+    pattern: /\{\{[^{}\n]{0,120}\}\}|\{\{|\}\}/gu,
   },
   {
     id: 'SOURCE_WIKISOURCE_HEADING_MARKUP',
@@ -81,6 +111,12 @@ const SOURCE_ARTIFACT_RULES = [
     pattern: /[∴�￼]/gu,
   },
   {
+    id: 'SOURCE_KNOWN_SPLIT_GLYPH_SEQUENCE',
+    severity: 3,
+    description: 'Known split-glyph sequence leaked into Chinese source',
+    pattern: /趙匪文/gu,
+  },
+  {
     id: 'SOURCE_CTEXT_INLINE_MARKUP',
     severity: 3,
     description: 'CText inline normalization markup leaked into Chinese source',
@@ -91,6 +127,12 @@ const SOURCE_ARTIFACT_RULES = [
     severity: 3,
     description: 'Kana placeholder leaked into Chinese source',
     pattern: /[ぁ-ゟ゠-ヿ]/gu,
+  },
+  {
+    id: 'SOURCE_COMPONENT_PLACEHOLDER',
+    severity: 3,
+    description: 'Split-radical component placeholder leaked into Chinese source',
+    pattern: /(?:[氵訁钅糹飠饣礻衤忄扌犭艹辶疒][\p{Script=Han}々]{1,3}|[\p{Script=Han}々]{1,3}(?:阝|攵|彡)|[<{\[［〈][\p{Script=Han}々]{0,4}(?:氵|訁|钅|糹|飠|饣|礻|衤|忄|扌|犭|艹|辶|疒|攵|彡|阝)[\p{Script=Han}々]{0,6}[>}〉\]］])/gu,
   },
   {
     id: 'SOURCE_PRIVATE_USE_GLYPH',
@@ -226,6 +268,7 @@ function scanSourceText(text) {
     rule.pattern.lastIndex = 0;
     let match;
     while ((match = rule.pattern.exec(text)) !== null) {
+      if (isAllowedSourceArtifact(rule.id, text, match[0])) continue;
       hits.push({
         ruleId: rule.id,
         severity: rule.severity,
@@ -237,6 +280,13 @@ function scanSourceText(text) {
     }
   }
   return hits.sort((a, b) => b.severity - a.severity || a.index - b.index || a.ruleId.localeCompare(b.ruleId));
+}
+
+function isAllowedSourceArtifact(ruleId, text, found) {
+  if (ruleId === 'SOURCE_COMPONENT_PLACEHOLDER') {
+    return found === '訁王' && /有言則訁王，近犬便狂/u.test(text);
+  }
+  return false;
 }
 
 function* walk(value, keyPath = [], sentenceId = '') {

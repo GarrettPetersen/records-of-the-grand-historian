@@ -16,6 +16,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { variantText } from './source-variant-utils.mjs';
 
 const QUALITY_DIR = path.join(process.cwd(), 'data', 'quality');
 const QUEUE_RE = /^source-correspondence.*\.json$/u;
@@ -63,6 +64,83 @@ const COMMON_VARIANTS = new Map([
   ['倶', '俱'],
   ['毎', '每'],
 ]);
+
+const EXTRA_VARIANT_GROUPS = [
+  '後后',
+  '餘余',
+  '云雲',
+  '禦御',
+  '發髮',
+  '干乾',
+  '谷穀',
+  '斗鬥',
+  '鍾鐘',
+  '制製',
+  '歌哥',
+  '嘗嚐',
+  '復複',
+  '幸倖',
+  '榆楡',
+  '村邨',
+  '梲棁',
+  '檦㯹',
+  '氈氊',
+  '沉沈',
+  '浚濬',
+  '璵玙',
+  '槊矟',
+  '答荅',
+  '綿緜',
+  '搢縉',
+  '肇肈',
+  '蒞莅',
+  '蔥葱',
+  '梁樑',
+  '坂阪',
+  '彦彥',
+  '暦曆',
+  '朱硃',
+  '鉢缽',
+  '台臺',
+  '呑吞',
+  '崑昆崐',
+  '昇升',
+  '𣏌杞',
+  '綵彩',
+  '閲閱',
+  '兪俞',
+  '冢塚',
+  '凌淩',
+  '剋克',
+  '劍劔',
+  '呪咒',
+  '喩喻',
+  '寖浸',
+  '屛屏',
+  '巖岩',
+  '布佈',
+  '彝彜',
+  '掲揭',
+  '搆構',
+  '旛幡',
+  '稱称',
+  '迭叠',
+  '遯遁',
+  '鋭銳',
+  '閑閒',
+  '闚窺',
+  '隄堤',
+  '霑沾',
+  '灊𤅬',
+];
+
+for (const group of EXTRA_VARIANT_GROUPS) {
+  const chars = [...group];
+  const canonical = chars[0];
+  for (const char of chars) {
+    if (!COMMON_VARIANTS.has(char)) COMMON_VARIANTS.set(char, canonical);
+  }
+}
 
 function usage() {
   console.error(`Usage:
@@ -168,12 +246,27 @@ function normalizeWhitespace(text) {
   return String(text || '').replace(/\s+/g, '').trim();
 }
 
+function normalizePunctuation(text) {
+  return String(text || '')
+    .replace(/[﹑、]/gu, '，')
+    .replace(/[﹔;]/gu, '；')
+    .replace(/[﹕:]/gu, '：')
+    .replace(/[﹗!]/gu, '！')
+    .replace(/[﹖?]/gu, '？')
+    .replace(/[“”]/gu, '「')
+    .replace(/[‘’]/gu, '」')
+    .replace(/[〈《]/gu, '《')
+    .replace(/[〉》]/gu, '》')
+    .replace(/[（]/gu, '(')
+    .replace(/[）]/gu, ')');
+}
+
 function comparisonKey(text) {
-  let out = '';
-  for (const char of normalizeWhitespace(text).normalize('NFKC')) {
-    out += COMMON_VARIANTS.get(char) || char;
+  let normalized = '';
+  for (const char of normalizePunctuation(normalizeWhitespace(text)).normalize('NFKC')) {
+    normalized += COMMON_VARIANTS.get(char) || variantText(char);
   }
-  return out.replace(/[^\p{Script=Han}0-9]/gu, '');
+  return normalized.replace(/[^\p{Script=Han}0-9]/gu, '');
 }
 
 function sourceField(unit) {

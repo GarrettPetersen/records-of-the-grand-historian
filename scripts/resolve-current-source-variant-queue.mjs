@@ -10,6 +10,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { exactVariantKey as sharedExactVariantKey } from './source-variant-utils.mjs';
 
 const QUALITY_DIR = path.join(process.cwd(), 'data', 'quality');
 const QUEUE_RE = /^source-correspondence.*\.json$/u;
@@ -178,11 +179,7 @@ function normalizePunctuation(text) {
 }
 
 function exactVariantKey(text) {
-  let out = '';
-  for (const char of normalizePunctuation(normalizeWhitespace(text)).normalize('NFKC')) {
-    out += COMMON_VARIANTS.get(char) || char;
-  }
-  return out;
+  return sharedExactVariantKey(text);
 }
 
 function sourceField(unit) {

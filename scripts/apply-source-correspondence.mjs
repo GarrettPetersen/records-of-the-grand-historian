@@ -613,6 +613,7 @@ function indexTranslationsBySource(entries) {
 function transferTranslations(entries, translationsBySource) {
   let transferred = 0;
   for (const entry of entries) {
+    if (hasMeaningfulTranslations(entry.unit)) continue;
     const snapshot = translationsBySource.get(strictKey(sourceText(entry)));
     if (!snapshot) continue;
     applyTranslationSnapshot(entry.unit, snapshot);
@@ -944,7 +945,7 @@ function datePrefixRestKey(text) {
 }
 
 function adjustedSourceText(item) {
-  let text = item.sourceRange?.text || '';
+  let text = item.sourceTextOverride || item.acceptedSourceText || item.adjustedSourceText || item.sourceRange?.text || '';
   const before = item.context?.beforeLocal || '';
   const after = item.context?.afterLocal || '';
   const afterSource = item.context?.afterSource || '';
@@ -1161,6 +1162,11 @@ function replacementEntries(entries, range, item) {
     : fallbackBlockKey;
 
   let lastPairedBlockKey = localEntries[0]?.blockKey ?? fallbackBlockKey;
+  const sameLengthReplacement = (
+    sourceSentences.length === localEntries.length
+    && (item.type === 'text_discrepancy_candidate' || item.type === 'source_replacement_candidate')
+  );
+  const consumedLocalIndexes = new Set(pairs.values());
 
   return sourceSentences.map((zh, sourceIndex) => {
     const localIndex = pairs.get(sourceIndex);
@@ -1172,6 +1178,16 @@ function replacementEntries(entries, range, item) {
       return cloneEntryWithSource(localEntry, nextText, {
         preserveTranslations: comparisonKey(nextText) === comparisonKey(sourceText(localEntry))
           || shouldPreserveExistingTranslation(item, localEntry, nextText),
+      });
+    }
+
+    if (sameLengthReplacement && localEntries[sourceIndex] && !consumedLocalIndexes.has(sourceIndex)) {
+      const localEntry = localEntries[sourceIndex];
+      consumedLocalIndexes.add(sourceIndex);
+      lastPairedBlockKey = localEntry.blockKey;
+      return cloneEntryWithSource(localEntry, zh, {
+        preserveTranslations: comparisonKey(zh) === comparisonKey(sourceText(localEntry))
+          || shouldPreserveExistingTranslation(item, localEntry, zh),
       });
     }
 

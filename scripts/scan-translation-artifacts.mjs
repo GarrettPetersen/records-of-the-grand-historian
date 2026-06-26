@@ -1696,8 +1696,26 @@ function excerpt(text, index, width = 56) {
   return text.slice(start, end).replace(/\s+/g, ' ').trim();
 }
 
+function hasHan(text) {
+  return /[\u4e00-\u9fff]/u.test(String(text || ''));
+}
+
+function englishWordCount(text) {
+  return (String(text || '').match(/\b[A-Za-z][A-Za-z'’-]*\b/g) || []).length;
+}
+
+function isNarrowChineseException(text, reason) {
+  const normalizedReason = String(reason || '').toLowerCase();
+  if (!/(?:proper[-\s]?name|source[-\s]?term|title|untransliterated)/u.test(normalizedReason)) {
+    return false;
+  }
+  const withoutAllowedMarks = String(text || '').replace(/[\u4e00-\u9fff\s.,;:'"(){}\[\]<>!?-]+/gu, '');
+  return withoutAllowedMarks.length === 0;
+}
+
 export function scanArtifactText(text, opts = {}) {
   const hits = [];
+  const containsHan = hasHan(text);
   if (!opts.allowChineseCharacters && hasDisallowedChineseCharacters(text)) {
     const match = /[\u4e00-\u9fff]+/u.exec(text);
     hits.push({
@@ -1708,6 +1726,28 @@ export function scanArtifactText(text, opts = {}) {
       index: match?.index || 0,
       excerpt: excerpt(text, match?.index || 0),
     });
+  }
+  if (opts.allowChineseCharacters && containsHan) {
+    const match = /[\u4e00-\u9fff]+/u.exec(text);
+    if (!opts.allowChineseCharactersReason) {
+      hits.push({
+        ruleId: 'CHINESE_CHARACTERS_EXCEPTION_WITHOUT_REASON',
+        severity: 2,
+        description: 'Chinese-character translation exception is missing allowChineseCharactersReason',
+        found: match?.[0] || '',
+        index: match?.index || 0,
+        excerpt: excerpt(text, match?.index || 0),
+      });
+    } else if (!isNarrowChineseException(text, opts.allowChineseCharactersReason) && englishWordCount(text) >= 6) {
+      hits.push({
+        ruleId: 'BROAD_CHINESE_CHARACTERS_EXCEPTION',
+        severity: 2,
+        description: 'Chinese-character exception appears to suppress mixed English/Chinese translation prose',
+        found: match?.[0] || '',
+        index: match?.index || 0,
+        excerpt: excerpt(text, match?.index || 0),
+      });
+    }
   }
   for (const rule of TRANSLATION_ARTIFACT_RULES) {
     rule.pattern.lastIndex = 0;
@@ -1727,7 +1767,7 @@ export function scanArtifactText(text, opts = {}) {
   return hits.sort((a, b) => b.severity - a.severity || a.index - b.index || a.ruleId.localeCompare(b.ruleId));
 }
 
-function* walk(value, keyPath = [], sentenceId = '', allowChineseCharacters = false) {
+function* walk(value, keyPath = [], sentenceId = '', allowChineseCharacters = false, allowChineseCharactersReason = '') {
   if (typeof value === 'string') {
     if (keyPath.includes('translations') && keyPath[keyPath.length - 1] === 'text') {
       yield {
@@ -1743,7 +1783,7 @@ function* walk(value, keyPath = [], sentenceId = '', allowChineseCharacters = fa
       return;
     }
     if (!isTranslationField(keyPath)) return;
-    for (const hit of scanArtifactText(value, { allowChineseCharacters })) {
+    for (const hit of scanArtifactText(value, { allowChineseCharacters, allowChineseCharactersReason })) {
       yield {
         path: nearestContext(keyPath),
         sentenceId,
@@ -1756,14 +1796,17 @@ function* walk(value, keyPath = [], sentenceId = '', allowChineseCharacters = fa
   if (!value || typeof value !== 'object') return;
   const nextSentenceId = typeof value.id === 'string' ? value.id : sentenceId;
   const nextAllowChineseCharacters = allowChineseCharacters || value.allowChineseCharacters === true;
+  const nextAllowChineseCharactersReason = typeof value.allowChineseCharactersReason === 'string' && value.allowChineseCharactersReason.trim()
+    ? value.allowChineseCharactersReason.trim()
+    : allowChineseCharactersReason;
   if (Array.isArray(value)) {
     for (let i = 0; i < value.length; i += 1) {
-      yield* walk(value[i], [...keyPath, String(i)], nextSentenceId, nextAllowChineseCharacters);
+      yield* walk(value[i], [...keyPath, String(i)], nextSentenceId, nextAllowChineseCharacters, nextAllowChineseCharactersReason);
     }
     return;
   }
   for (const [key, child] of Object.entries(value)) {
-    yield* walk(child, [...keyPath, key], nextSentenceId, nextAllowChineseCharacters);
+    yield* walk(child, [...keyPath, key], nextSentenceId, nextAllowChineseCharacters, nextAllowChineseCharactersReason);
   }
 }
 

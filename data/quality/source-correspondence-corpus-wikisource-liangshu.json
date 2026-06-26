@@ -2102,7 +2102,7 @@
     },
     {
       "id": "source-liangshu-003-wikisource-d763ecdf3972",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.429,
@@ -2163,8 +2163,10 @@
         "afterLocal": "賜文武勞位，孝悌力田爵一級，尤貧之家，勿收常調，鰥寡孤獨，並加贍卹。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": "Reviewed as no-op: discrepancy is caused by upstream MediaWiki residue such as __TOC__, Category, or PD-old text; local corpus text retained.\nReopened for manual review: previous automatic residue no-op left non-residue punctuation or text unresolved."
+      "decision": "denied",
+      "notes": "Reviewed as no-op: discrepancy is caused by upstream MediaWiki residue such as __TOC__, Category, or PD-old text; local corpus text retained.\nReopened for manual review: previous automatic residue no-op left non-residue punctuation or text unresolved.\nReviewed as no-op: upstream witness includes Wikisource page TOC/header residue before __TOC__; the post-TOC source text is already represented in the local range.\nReopened for manual review: previous automatic residue no-op left non-residue punctuation or text unresolved.",
+      "reviewedAt": "2026-06-25T08:06:22.977Z",
+      "reviewer": "close-upstream-witness-artifacts"
     },
     {
       "id": "source-liangshu-003-wikisource-fab9a3bd18b1",
@@ -6698,7 +6700,7 @@
     },
     {
       "id": "source-liangshu-006-wikisource-c22341770ea1",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "liangshu",
@@ -6722,8 +6724,29 @@
         "afterLocal": "史臣曰：梁季橫潰，喪亂屢臻，當此之時，天歷去矣，敬皇高讓，將同釋負焉。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved after reviewing upstream source omission; manual English translation supplied.",
+      "manualTranslations": [
+        {
+          "zh": "陳王踐阼，奉帝爲江陰王，薨于外邸，時年十六，追諡敬皇帝。",
+          "literal": "When the King of Chen ascended the throne, he made the emperor King of Jiangyin. The emperor died at his outer residence at the age of sixteen, and was posthumously titled Emperor Jing.",
+          "idiomatic": "When the King of Chen ascended the throne, he made the emperor King of Jiangyin. The emperor died at his outer residence at the age of sixteen, and was posthumously titled Emperor Jing.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "GPT-5 Codex manual source repair"
+        }
+      ],
+      "reviewedAt": "2026-06-26T04:29:02.010Z",
+      "reviewer": "repair-queue-workbench",
+      "appliedAt": "2026-06-26T04:29:04.544Z",
+      "appliedSummary": {
+        "id": "source-liangshu-006-wikisource-c22341770ea1",
+        "type": "source_omission_candidate",
+        "start": 137,
+        "removed": 0,
+        "inserted": 1,
+        "delta": 1,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-liangshu-006-wikisource-cd4d6960a1e2",
@@ -8347,7 +8370,7 @@
     },
     {
       "id": "source-liangshu-010-wikisource-f3fe44a5d6f1",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.882,
@@ -8390,8 +8413,17 @@
         "afterLocal": "相持百餘日，前後斬獲不可勝計。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied component-placeholder source repair; English translations retained because only source glyph composition changed.",
+      "reviewedAt": "2026-06-25T04:06:43.588Z",
+      "reviewer": "repair-source-component-placeholders",
+      "appliedAt": "2026-06-25T04:06:43.588Z",
+      "appliedSummary": {
+        "mode": "component-placeholder-source-repair",
+        "replacements": [
+          "＜犭屯＞->㹠"
+        ]
+      }
     },
     {
       "id": "source-liangshu-010-wikisource-f442fe1fb38c",
@@ -11592,7 +11624,7 @@
     },
     {
       "id": "source-liangshu-021-wikisource-247440e6397e",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.846,
@@ -11635,8 +11667,10 @@
         "afterLocal": "崔慧景平，以例加右軍將軍，封臨汝侯，固讓不受，改領右衛將軍。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource omitted explicit date/reign-year detail while the local corpus preserves the fuller source wording; local text retained.",
+      "reviewedAt": "2026-06-25T22:11:49.658Z",
+      "reviewer": "resolve-wikisource-local-fuller-noops"
     },
     {
       "id": "source-liangshu-021-wikisource-2b3c363901c1",
@@ -14593,7 +14627,7 @@
     },
     {
       "id": "source-liangshu-025-wikisource-6aa67e1650bd",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.879,
@@ -14636,8 +14670,10 @@
         "afterLocal": "《賓禮儀注》以天監六年五月二十日上尚書，合十有七秩，一百三十三卷，五百四十五條；"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource omitted explicit date/reign-year detail while the local corpus preserves the fuller source wording; local text retained.",
+      "reviewedAt": "2026-06-25T22:11:49.658Z",
+      "reviewer": "resolve-wikisource-local-fuller-noops"
     },
     {
       "id": "source-liangshu-025-wikisource-7464334096d6",
@@ -14691,7 +14727,7 @@
     },
     {
       "id": "source-liangshu-025-wikisource-898496b5bea4",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.882,
@@ -14743,8 +14779,10 @@
         "afterLocal": "二宮並降中使，以相慰勗，親游賓客，畢來弔問，輒慟哭失聲，悲不自已，所謂父子天性，不知涕之所從來也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource dropped visible content from repeated name/date/content templates, while the live local corpus preserves the grammatical source text between matching anchors.",
+      "reviewedAt": "2026-06-25T05:44:01.999Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-liangshu-025-wikisource-c42fa8395c5f",
@@ -21379,7 +21417,7 @@
     },
     {
       "id": "source-liangshu-039-wikisource-59129896855c",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -21431,8 +21469,10 @@
         "afterLocal": "討南蠻賊，平之，加散騎常侍、安西將軍，又增邑五百戶。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource dropped visible content from repeated name/date/content templates, while the live local corpus preserves the grammatical source text between matching anchors.",
+      "reviewedAt": "2026-06-25T05:44:01.999Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-liangshu-039-wikisource-766fffc77b4e",
@@ -22142,7 +22182,7 @@
     },
     {
       "id": "source-liangshu-040-wikisource-f3692b65226d",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.784,
@@ -22194,8 +22234,10 @@
         "afterLocal": "時鄱陽嗣王範得班固所上《漢書》真本，獻之東宮，皇太子令之遴與張纘、到漑、陸襄等參校異同。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text preserves explicit regnal-year/date details that raw Wikisource dropped; removing those date details makes the spans equivalent, so local corpus text was retained.",
+      "reviewedAt": "2026-06-25T01:52:05.979Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-liangshu-041-wikisource-16f956c1384d",
@@ -25865,7 +25907,7 @@
     },
     {
       "id": "source-liangshu-048-wikisource-6efb4a88b242",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0.078,
@@ -26034,8 +26076,10 @@
         "afterLocal": "魏、晉浮蕩，儒教淪歇，風節罔樹，抑此之由。"
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as chapter-start/source-boundary mismatch; local structural heading/context is retained. Obvious local scrape artifacts in this class were cleaned separately before closing the queue items.",
+      "reviewedAt": "2026-06-25T00:11:08.877Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-liangshu-048-wikisource-89e079f20a15",
@@ -30014,7 +30058,7 @@
     },
     {
       "id": "source-liangshu-054-wikisource-6a295d7963f3",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.846,
@@ -30066,8 +30110,10 @@
         "afterLocal": "彌死，立子濟；"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as graph-variant/punctuation-only source-correspondence no-op; local corpus text retained and English translation unchanged.",
+      "reviewedAt": "2026-06-26T03:28:13.006Z",
+      "reviewer": "broad-graph-variant-review"
     },
     {
       "id": "source-liangshu-054-wikisource-6f025d290523",
@@ -31488,5 +31534,5 @@
       }
     }
   ],
-  "updatedAt": "2026-06-24T22:19:44.081Z"
+  "updatedAt": "2026-06-26T04:29:04.563Z"
 }

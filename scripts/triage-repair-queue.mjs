@@ -10,6 +10,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { variantText as sharedVariantText } from './source-variant-utils.mjs';
 
 const QUALITY_DIR = path.join(process.cwd(), 'data', 'quality');
 const DEFAULT_PACKET_DIR = path.join(QUALITY_DIR, 'repair-packets');
@@ -232,9 +233,7 @@ function normalizePunctuation(text) {
 }
 
 function variantText(text) {
-  let out = '';
-  for (const char of String(text || '')) out += COMMON_VARIANTS.get(char) || char;
-  return out;
+  return sharedVariantText(text);
 }
 
 function noPunctuationKey(text, { variants = false } = {}) {

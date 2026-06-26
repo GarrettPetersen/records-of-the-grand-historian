@@ -3218,7 +3218,7 @@
     },
     {
       "id": "source-jinshi-001-wikisource-37eae84df47f",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.652,
@@ -3270,8 +3270,10 @@
         "afterLocal": "穆宗末年，阿疏使達紀誘扇邊民，曷懶甸人執送之。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource omitted explicit date/reign-year detail while the local corpus preserves the fuller source wording; local text retained.",
+      "reviewedAt": "2026-06-25T22:11:49.658Z",
+      "reviewer": "resolve-wikisource-local-fuller-noops"
     },
     {
       "id": "source-jinshi-001-wikisource-48571b0e5fdb",
@@ -3644,7 +3646,7 @@
     },
     {
       "id": "source-jinshi-001-wikisource-bb002cc7f74c",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.793,
@@ -3696,8 +3698,10 @@
         "afterLocal": "在父兄時號國相。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource omitted explicit date/reign-year detail while the local corpus preserves the fuller source wording; local text retained.",
+      "reviewedAt": "2026-06-25T22:11:49.658Z",
+      "reviewer": "resolve-wikisource-local-fuller-noops"
     },
     {
       "id": "source-jinshi-001-wikisource-eeb319a6f817",
@@ -7243,7 +7247,7 @@
     },
     {
       "id": "source-jinshi-020-wikisource-25923b14af6c",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.895,
@@ -7286,8 +7290,19 @@
         "afterLocal": "天興元年七月乙巳，太白、歲星、熒惑、太陰俱會於軫、翼，司天武亢極言天變，上惟歎息，竟亦不之罪也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied source graph/punctuation repair: Han/digit text is equivalent under curated graph variants; English translation retained.",
+      "reviewedAt": "2026-06-25T02:40:27.074Z",
+      "reviewer": "repair-source-graph-variants",
+      "appliedAt": "2026-06-25T02:40:27.074Z",
+      "appliedSummary": {
+        "mode": "graph-equivalent-source-repair",
+        "ids": [
+          "s0532"
+        ],
+        "sourceGraphDebt": 0,
+        "localGraphDebt": 2
+      }
     },
     {
       "id": "source-jinshi-020-wikisource-34236f9568f7",
@@ -8459,7 +8474,7 @@
     },
     {
       "id": "source-jinshi-023-wikisource-8ae3e5f34d2f",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.846,
@@ -8502,8 +8517,10 @@
         "afterLocal": "臨洮人楊珪上書曰：「河性本濁，而今反清，是水失其性也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text preserves explicit regnal-year/date details that raw Wikisource dropped; removing those date details makes the spans equivalent, so local corpus text was retained.",
+      "reviewedAt": "2026-06-25T01:52:05.979Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-023-wikisource-9bf086714c47",
@@ -8805,7 +8822,7 @@
     },
     {
       "id": "source-jinshi-024-wikisource-151b822a4265",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.429,
@@ -8848,8 +8865,10 @@
         "afterLocal": "原廟，天眷元年以春亭名天元殿，安太祖、太宗、徽宗及諸後禦容。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text preserves explicit regnal-year/date details that raw Wikisource dropped; removing those date details makes the spans equivalent, so local corpus text was retained.",
+      "reviewedAt": "2026-06-25T01:52:05.979Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-024-wikisource-1f7f47697e68",
@@ -8993,7 +9012,7 @@
     },
     {
       "id": "source-jinshi-024-wikisource-4b397d84f175",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.897,
@@ -9045,8 +9064,10 @@
         "afterLocal": "有範河、清河，國名叩隈必剌。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource dropped visible content from repeated name/date/content templates, while the live local corpus preserves the grammatical source text between matching anchors.",
+      "reviewedAt": "2026-06-25T05:44:01.999Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-024-wikisource-546c7abb0234",
@@ -9146,7 +9167,7 @@
     },
     {
       "id": "source-jinshi-024-wikisource-63975d4c055d",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.755,
@@ -9207,12 +9228,14 @@
         "afterLocal": "其山有長白、青嶺、馬紀嶺、完都魯，水有按出虎水、混同江、來流河、宋瓦江、鴨子河。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text preserves explicit regnal-year/date details that raw Wikisource dropped; removing those date details makes the spans equivalent, so local corpus text was retained.",
+      "reviewedAt": "2026-06-25T01:52:05.979Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-024-wikisource-77fa80801a06",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -9273,8 +9296,10 @@
         "afterLocal": "興德宮，後更名永祚宮，睿宗所居也，光興宮，世宗所居也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource dropped visible content from repeated name/date/content templates, while the live local corpus preserves the grammatical source text between matching anchors.",
+      "reviewedAt": "2026-06-25T05:44:01.999Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-024-wikisource-7ad90747d3a2",
@@ -9397,7 +9422,7 @@
     },
     {
       "id": "source-jinshi-024-wikisource-8df159f3d46c",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.761,
@@ -9458,8 +9483,10 @@
         "afterLocal": "朝殿，天眷元年建，殿曰敷德，門曰延光，寢殿曰宵衣，書殿曰稽古。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource omitted explicit date/reign-year detail while the local corpus preserves the fuller source wording; local text retained.",
+      "reviewedAt": "2026-06-25T22:11:49.658Z",
+      "reviewer": "resolve-wikisource-local-fuller-noops"
     },
     {
       "id": "source-jinshi-024-wikisource-90e41b08e83a",
@@ -11038,7 +11065,7 @@
     },
     {
       "id": "source-jinshi-025-wikisource-fc7366ea80ec",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -11081,8 +11108,17 @@
         "afterLocal": "寶豐有豢龍城。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied component-placeholder source repair; English translations retained because only source glyph composition changed.",
+      "reviewedAt": "2026-06-25T04:06:43.588Z",
+      "reviewer": "repair-source-component-placeholders",
+      "appliedAt": "2026-06-25T04:06:43.588Z",
+      "appliedSummary": {
+        "mode": "component-placeholder-source-repair",
+        "replacements": [
+          "氵雖->𣹑"
+        ]
+      }
     },
     {
       "id": "source-jinshi-025-wikisource-fd64808d666b",
@@ -11134,7 +11170,7 @@
     },
     {
       "id": "source-jinshi-025-wikisource-ff15ba02aeb0",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -11177,8 +11213,17 @@
         "afterLocal": "鎮二吳城、北舞。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied component-placeholder source repair; English translations retained because only source glyph composition changed.",
+      "reviewedAt": "2026-06-25T04:06:43.588Z",
+      "reviewer": "repair-source-component-placeholders",
+      "appliedAt": "2026-06-25T04:06:43.588Z",
+      "appliedSummary": {
+        "mode": "component-placeholder-source-repair",
+        "replacements": [
+          "氵雖->𣹑"
+        ]
+      }
     },
     {
       "id": "source-jinshi-026-wikisource-0acbb50d7318",
@@ -11793,7 +11838,7 @@
     },
     {
       "id": "source-jinshi-026-wikisource-68509eac90df",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.837,
@@ -11845,8 +11890,10 @@
         "afterLocal": "產皺、穀、絹、梨肉、櫻桃、煎木耳、硝。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource omitted explicit date/reign-year detail while the local corpus preserves the fuller source wording; local text retained.",
+      "reviewedAt": "2026-06-25T22:11:49.658Z",
+      "reviewer": "resolve-wikisource-local-fuller-noops"
     },
     {
       "id": "source-jinshi-026-wikisource-6dbf81add9fd",
@@ -12517,7 +12564,7 @@
     },
     {
       "id": "source-jinshi-026-wikisource-fbf3762506c5",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.6,
@@ -12560,8 +12607,17 @@
         "afterLocal": "黎城有白岩山、故壺口關。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied component-placeholder source repair; English translations retained because only source glyph composition changed.",
+      "reviewedAt": "2026-06-25T04:06:43.588Z",
+      "reviewer": "repair-source-component-placeholders",
+      "appliedAt": "2026-06-25T04:06:43.588Z",
+      "appliedSummary": {
+        "mode": "component-placeholder-source-repair",
+        "replacements": [
+          "礻虎->裭"
+        ]
+      }
     },
     {
       "id": "source-jinshi-027-wikisource-2860bc38f7c7",
@@ -13042,7 +13098,7 @@
     },
     {
       "id": "source-jinshi-027-wikisource-ab33f33c9a73",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.84,
@@ -13085,12 +13141,14 @@
         "afterLocal": "三年四月，單州刺史顏盞天澤言：「守禦之道，當決大河使北流德、博、觀、滄之境。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text preserves explicit regnal-year/date details that raw Wikisource dropped; removing those date details makes the spans equivalent, so local corpus text was retained.",
+      "reviewedAt": "2026-06-25T01:52:05.979Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-027-wikisource-aca7f2dc5391",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.886,
@@ -13133,12 +13191,14 @@
         "afterLocal": "遂命以各處見錢差能幹官同各州縣清強官一一酬之，續令按察司體究。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource dropped visible content from repeated name/date/content templates, while the live local corpus preserves the grammatical source text between matching anchors.",
+      "reviewedAt": "2026-06-25T05:44:01.999Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-027-wikisource-d513d376a389",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.871,
@@ -13190,8 +13250,10 @@
         "afterLocal": "五年二月，以崔守真言：「黃河危急，芻槁物料雖雲折稅，每年不下五六次，或名為和買，而未嘗還其直。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource dropped visible content from repeated name/date/content templates, while the live local corpus preserves the grammatical source text between matching anchors.",
+      "reviewedAt": "2026-06-25T05:44:01.999Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-027-wikisource-f6cd08516373",
@@ -13477,7 +13539,7 @@
     },
     {
       "id": "source-jinshi-029-wikisource-82575b23acf6",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.789,
@@ -13529,8 +13591,10 @@
         "afterLocal": "皇帝服靴袍，百官常服。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource dropped visible content from repeated name/date/content templates, while the live local corpus preserves the grammatical source text between matching anchors.",
+      "reviewedAt": "2026-06-25T05:44:01.999Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-029-wikisource-d34f7bc05cc5",
@@ -13626,7 +13690,7 @@
     },
     {
       "id": "source-jinshi-030-wikisource-74e3c9e25537",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -13669,8 +13733,10 @@
         "afterLocal": "詔以「三年冬祫、五年夏禘」為常禮。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource omitted explicit date/reign-year detail while the local corpus preserves the fuller source wording; local text retained.",
+      "reviewedAt": "2026-06-25T22:11:49.658Z",
+      "reviewer": "resolve-wikisource-local-fuller-noops"
     },
     {
       "id": "source-jinshi-030-wikisource-83e670b12bdb",
@@ -14435,7 +14501,7 @@
     },
     {
       "id": "source-jinshi-032-wikisource-6d0a9d089254",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.72,
@@ -14487,8 +14553,10 @@
         "afterLocal": "十二月二十五日，奉玉冊、玉寶，恭上尊諡曰大聖武元皇帝，廟號太祖。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as chapter-start/source-boundary mismatch; local structural heading/context is retained. Obvious local scrape artifacts in this class were cleaned separately before closing the queue items.",
+      "reviewedAt": "2026-06-25T00:11:08.877Z",
+      "reviewer": "repair-queue-workbench"
     },
     {
       "id": "source-jinshi-032-wikisource-813b4b7c2506",
@@ -15499,7 +15567,7 @@
     },
     {
       "id": "source-jinshi-035-wikisource-a2f733e09239",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.809,
@@ -15560,8 +15628,10 @@
         "afterLocal": "其冊文雲：「皇帝若曰：古之建邦設都，必有名山大川以為形勝。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream raw witness is visibly truncated or malformed while its Han/number sequence is contained in the fuller local corpus text; local corpus text retained.",
+      "reviewedAt": "2026-06-25T06:54:27.326Z",
+      "reviewer": "close-upstream-witness-artifacts"
     },
     {
       "id": "source-jinshi-035-wikisource-b79d7271a55b",
@@ -16565,7 +16635,7 @@
     },
     {
       "id": "source-jinshi-039-wikisource-806b11c2b059",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.871,
@@ -16608,8 +16678,10 @@
         "afterLocal": "左宣徽使溫敦七十五奏當用樂。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text preserves explicit regnal-year/date details that raw Wikisource dropped; removing those date details makes the spans equivalent, so local corpus text was retained.",
+      "reviewedAt": "2026-06-25T01:52:05.979Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-039-wikisource-8701fc49d5a4",
@@ -16722,7 +16794,7 @@
     },
     {
       "id": "source-jinshi-039-wikisource-c3362ace6716",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -16765,8 +16837,10 @@
         "afterLocal": "泰和初，有司又奏太常工人數少，即以渤海，漢人教坊及大興府樂人兼習以備用。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text preserves explicit regnal-year/date details that raw Wikisource dropped; removing those date details makes the spans equivalent, so local corpus text was retained.",
+      "reviewedAt": "2026-06-25T01:52:05.979Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-039-wikisource-d2aece187a16",
@@ -19158,7 +19232,7 @@
     },
     {
       "id": "source-jinshi-045-wikisource-7c35550f8aee",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.887,
@@ -19210,8 +19284,10 @@
         "afterLocal": "衛禁之法，實自此始。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource omitted explicit date/reign-year detail while the local corpus preserves the fuller source wording; local text retained.",
+      "reviewedAt": "2026-06-25T22:11:49.658Z",
+      "reviewer": "resolve-wikisource-local-fuller-noops"
     },
     {
       "id": "source-jinshi-045-wikisource-8fe3caacefff",
@@ -19515,7 +19591,7 @@
     },
     {
       "id": "source-jinshi-046-wikisource-7472f78000fe",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -19558,8 +19634,10 @@
         "afterLocal": "遂定制，已典賣物業，止隨物推收，析戶異居者許令別籍，戶絕及困弱者減免，新強者詳審增之，止當從實，不必敷足元數。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource dropped visible content from repeated name/date/content templates, while the live local corpus preserves the grammatical source text between matching anchors.",
+      "reviewedAt": "2026-06-25T05:44:01.999Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-046-wikisource-864fb03a135b",
@@ -20738,7 +20816,7 @@
     },
     {
       "id": "source-jinshi-047-wikisource-9fa9d7172dff",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.778,
@@ -20799,8 +20877,10 @@
         "afterLocal": "有言以用度不足，奏預借河北東西路、中都租稅，上以國用雖乏，民力尤艱，遂不允。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource dropped visible content from repeated name/content templates, while the live local corpus preserves the grammatical source text between matching anchors.",
+      "reviewedAt": "2026-06-25T05:33:32.068Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-047-wikisource-b71f3081c002",
@@ -21304,7 +21384,7 @@
     },
     {
       "id": "source-jinshi-048-wikisource-7663e1b92966",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.818,
@@ -21356,12 +21436,14 @@
         "afterLocal": "冬十月，初禁銅越外界，懸罪賞格。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text preserves explicit regnal-year/date details that raw Wikisource dropped; removing those date details makes the spans equivalent, so local corpus text was retained.",
+      "reviewedAt": "2026-06-25T01:52:05.979Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-048-wikisource-7aa92a439476",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.831,
@@ -21413,8 +21495,10 @@
         "afterLocal": "若以鈔買鹽引，每貫權作一貫五十文，庶得多售。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text preserves explicit regnal-year/date details that raw Wikisource dropped; removing those date details makes the spans equivalent, so local corpus text was retained.",
+      "reviewedAt": "2026-06-25T01:52:05.979Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-048-wikisource-d25c50e2737a",
@@ -21568,7 +21652,7 @@
     },
     {
       "id": "source-jinshi-049-wikisource-0dbb0ee2a5c3",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.812,
@@ -21620,8 +21704,10 @@
         "afterLocal": "今擬將元收杓欄錢，以代添支，令各院務驗所收之數，百分中取三，隨課代輸，更不入比，歲約得錢三十余萬，以佐國用。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text preserves explicit regnal-year/date details that raw Wikisource dropped; removing those date details makes the spans equivalent, so local corpus text was retained.",
+      "reviewedAt": "2026-06-25T01:52:05.979Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-049-wikisource-1c4a789b3a02",
@@ -21775,7 +21861,7 @@
     },
     {
       "id": "source-jinshi-049-wikisource-492bf76a282d",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.707,
@@ -21836,8 +21922,10 @@
         "afterLocal": "泰和四年，言事者以金銀百分中取一，諸物取三，今物價視舊為高，除金銀則額所不能盡該，自余金銀可並添一分。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream raw witness is visibly truncated or malformed while its Han/number sequence is contained in the fuller local corpus text; local corpus text retained.",
+      "reviewedAt": "2026-06-25T06:54:27.326Z",
+      "reviewer": "close-upstream-witness-artifacts"
     },
     {
       "id": "source-jinshi-049-wikisource-4c2ed5d7cc2d",
@@ -21991,7 +22079,7 @@
     },
     {
       "id": "source-jinshi-049-wikisource-753623f38862",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.879,
@@ -22043,12 +22131,14 @@
         "afterLocal": "自大定初，以國用不足，設官榷之，以助經用。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text preserves explicit regnal-year/date details that raw Wikisource dropped; removing those date details makes the spans equivalent, so local corpus text was retained.",
+      "reviewedAt": "2026-06-25T01:52:05.979Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-049-wikisource-830b24f2e222",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.846,
@@ -22100,12 +22190,14 @@
         "afterLocal": "西京酒使司，大定間，歲獲錢五萬三千四百六十七貫五百八十八文，承安元年歲獲錢十萬七千八百九十三貫。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream raw witness starts with closing punctuation while its remaining Han/number sequence is contained in the fuller local corpus text; local corpus text retained.",
+      "reviewedAt": "2026-06-25T06:57:52.030Z",
+      "reviewer": "close-upstream-witness-artifacts"
     },
     {
       "id": "source-jinshi-049-wikisource-8921eb752a68",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.81,
@@ -22166,8 +22258,10 @@
         "afterLocal": "三年，省奏中都酒戶多逃，以故課額愈虧。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource dropped visible content from repeated name/content templates, while the live local corpus preserves the grammatical source text between matching anchors.",
+      "reviewedAt": "2026-06-25T05:33:32.068Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-049-wikisource-8a89d646c3bf",
@@ -22321,7 +22415,7 @@
     },
     {
       "id": "source-jinshi-049-wikisource-ac1209ad3cf0",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.766,
@@ -22382,8 +22476,10 @@
         "afterLocal": "八月，罷諸路關稅，止令譏察。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource dropped visible content from repeated name/date/content templates, while the live local corpus preserves the grammatical source text between matching anchors.",
+      "reviewedAt": "2026-06-25T05:44:01.999Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-049-wikisource-b5422af48d41",
@@ -22437,7 +22533,7 @@
     },
     {
       "id": "source-jinshi-049-wikisource-c3b27b321aba",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.888,
@@ -22489,12 +22585,14 @@
         "afterLocal": "十月，尚書省奏：「今天下使司務，既減課額，而監官增虧既有升遷追殿之制，宜罷提點所給賞罰俸之制，但委提刑司，察提點官侵犯場務者，則論如制。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text preserves explicit regnal-year/date details that raw Wikisource dropped; removing those date details makes the spans equivalent, so local corpus text was retained.",
+      "reviewedAt": "2026-06-25T01:52:05.979Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-049-wikisource-c4902543278f",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -22537,8 +22635,10 @@
         "afterLocal": "遂詔置場，設判官、管勾各一員，隸戶部。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource omitted explicit date/reign-year detail while the local corpus preserves the fuller source wording; local text retained.",
+      "reviewedAt": "2026-06-25T22:11:49.658Z",
+      "reviewer": "resolve-wikisource-local-fuller-noops"
     },
     {
       "id": "source-jinshi-049-wikisource-c554d575d2c5",
@@ -22808,7 +22908,7 @@
     },
     {
       "id": "source-jinshi-050-wikisource-3019f69aa68e",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.733,
@@ -22851,8 +22951,10 @@
         "afterLocal": "九年，御史台奏河南府以和買金銀，抑配百姓，且下其直。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text preserves explicit regnal-year/date details that raw Wikisource dropped; removing those date details makes the spans equivalent, so local corpus text was retained.",
+      "reviewedAt": "2026-06-25T01:52:05.979Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-050-wikisource-3317f6294ae6",
@@ -22956,7 +23058,7 @@
     },
     {
       "id": "source-jinshi-050-wikisource-5360e7064ddb",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -22999,12 +23101,14 @@
         "afterLocal": "惟東勝、淨、慶州，來遠軍者仍舊，余皆修完之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text preserves explicit regnal-year/date details that raw Wikisource dropped; removing those date details makes the spans equivalent, so local corpus text was retained.",
+      "reviewedAt": "2026-06-25T01:52:05.979Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-050-wikisource-66d0edd5972f",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.789,
@@ -23056,8 +23160,10 @@
         "afterLocal": "三年，西京饑，詔賣度牒以濟之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource dropped visible content from repeated name/date/content templates, while the live local corpus preserves the grammatical source text between matching anchors.",
+      "reviewedAt": "2026-06-25T05:44:01.999Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-050-wikisource-67949aba79ec",
@@ -23349,7 +23455,7 @@
     },
     {
       "id": "source-jinshi-050-wikisource-9b7405b10809",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -23392,8 +23498,10 @@
         "afterLocal": "侍御史黃摑奴申言：「汝礪所糴足給歲支，民既於租賦之外轉挽而來，亦已勞矣！"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text preserves explicit regnal-year/date details that raw Wikisource dropped; removing those date details makes the spans equivalent, so local corpus text was retained.",
+      "reviewedAt": "2026-06-25T01:52:05.979Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-050-wikisource-b12bd543ab8a",
@@ -23445,7 +23553,7 @@
     },
     {
       "id": "source-jinshi-050-wikisource-b3cb91bf2b27",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.714,
@@ -23506,12 +23614,14 @@
         "afterLocal": "省臣言：「大定舊制，豐年則增市價十之二以糴，儉歲則減市價十之一以出，平歲則已。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource dropped visible content from repeated name/date/content templates, while the live local corpus preserves the grammatical source text between matching anchors.",
+      "reviewedAt": "2026-06-25T05:44:01.999Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-050-wikisource-d972cb5f9e4c",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.862,
@@ -23554,8 +23664,10 @@
         "afterLocal": "於是，有司奏：「中都路去歲不熟，今其價稍減者，以商旅運販繼至故也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource omitted explicit date/reign-year detail while the local corpus preserves the fuller source wording; local text retained.",
+      "reviewedAt": "2026-06-25T22:11:49.658Z",
+      "reviewer": "resolve-wikisource-local-fuller-noops"
     },
     {
       "id": "source-jinshi-050-wikisource-dae3b496b64b",
@@ -23701,7 +23813,7 @@
     },
     {
       "id": "source-jinshi-051-wikisource-31e15f97296c",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.804,
@@ -23744,8 +23856,10 @@
         "afterLocal": "遂令自今舉後，複於《論語》、《孟子》內試小義一道，府會試別作一日引試，命經義試官出題，與本科通考定之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource dropped visible content from repeated name/date/content templates, while the live local corpus preserves the grammatical source text between matching anchors.",
+      "reviewedAt": "2026-06-25T05:44:01.999Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-051-wikisource-3b59b48ab43e",
@@ -24352,7 +24466,7 @@
     },
     {
       "id": "source-jinshi-055-wikisource-4e47454871a5",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.89,
@@ -24413,8 +24527,10 @@
         "afterLocal": "若宣宗之招賢所、經略司，義宗之益政院，雖危亡之政亦必列於其次，以著一時之事雲。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text preserves explicit regnal-year/date details that raw Wikisource dropped; removing those date details makes the spans equivalent, so local corpus text was retained.",
+      "reviewedAt": "2026-06-25T01:52:05.979Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-055-wikisource-4f38f026d670",
@@ -24510,7 +24626,7 @@
     },
     {
       "id": "source-jinshi-055-wikisource-59fb953cee71",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.429,
@@ -24562,8 +24678,10 @@
         "afterLocal": "興定六年罷勸農司，改立司農司。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource omitted explicit date/reign-year detail while the local corpus preserves the fuller source wording; local text retained.",
+      "reviewedAt": "2026-06-25T22:11:49.658Z",
+      "reviewer": "resolve-wikisource-local-fuller-noops"
     },
     {
       "id": "source-jinshi-055-wikisource-71d96370bed4",
@@ -25004,7 +25122,7 @@
     },
     {
       "id": "source-jinshi-055-wikisource-f0b0aad4b323",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.462,
@@ -25056,8 +25174,10 @@
         "afterLocal": "天會三年下燕山，初以左企弓為使，後以劉彥宗。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream span is cleanly contained in the fuller live local text between identical anchors; local corpus text retained.",
+      "reviewedAt": "2026-06-25T00:43:50.024Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-055-wikisource-f4c1c9661ce8",
@@ -27854,7 +27974,7 @@
     },
     {
       "id": "source-jinshi-058-wikisource-5712eb6b28f2",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.883,
@@ -27915,12 +28035,14 @@
         "afterLocal": "遂以職務煩簡定為分數，給兼職之俸。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource dropped visible content from repeated name/content templates, while the live local corpus preserves the grammatical source text between matching anchors.",
+      "reviewedAt": "2026-06-25T05:33:32.068Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-058-wikisource-571aa520b44c",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -27972,12 +28094,14 @@
         "afterLocal": "三師、三公、親王、尚書令並金印，方二寸，重八十兩，駝紐。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource dropped visible content from repeated name/date/content templates, while the live local corpus preserves the grammatical source text between matching anchors.",
+      "reviewedAt": "2026-06-25T05:44:01.999Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-058-wikisource-6b78bc4f4f79",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.814,
@@ -28020,8 +28144,10 @@
         "afterLocal": "六品、七品，紅遍地草錦褾，小白綾八幅，角軸，大安加銀縷。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text preserves explicit regnal-year/date details that raw Wikisource dropped; removing those date details makes the spans equivalent, so local corpus text was retained.",
+      "reviewedAt": "2026-06-25T01:52:05.979Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-058-wikisource-78e9806bb9c7",
@@ -28502,7 +28628,7 @@
     },
     {
       "id": "source-jinshi-058-wikisource-f65c195aeb07",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.744,
@@ -28554,8 +28680,10 @@
         "afterLocal": "硃漆金字者，敕遞用之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text preserves explicit regnal-year/date details that raw Wikisource dropped; removing those date details makes the spans equivalent, so local corpus text was retained.",
+      "reviewedAt": "2026-06-25T01:52:05.979Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-059-wikisource-08a2e47f690d",
@@ -28886,7 +29014,7 @@
     },
     {
       "id": "source-jinshi-059-wikisource-423bbed0c5fc",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.2,
@@ -28929,8 +29057,10 @@
         "afterLocal": "瀛王。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as table-layout no-op (clean-source-equals-local): cleaned upstream table text is already represented in the local chapter; local corpus retained.",
+      "reviewedAt": "2026-06-25T08:41:52.772Z",
+      "reviewedBy": "resolve-table-layout-noop-queue"
     },
     {
       "id": "source-jinshi-059-wikisource-5c2f8c4644e2",
@@ -29138,7 +29268,7 @@
     },
     {
       "id": "source-jinshi-059-wikisource-71a549aa3b42",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.294,
@@ -29181,8 +29311,10 @@
         "afterLocal": "荊王。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as table-layout no-op (clean-source-equals-local): cleaned upstream table text is already represented in the local chapter; local corpus retained.",
+      "reviewedAt": "2026-06-25T08:41:52.772Z",
+      "reviewedBy": "resolve-table-layout-noop-queue"
     },
     {
       "id": "source-jinshi-059-wikisource-787b1bcf401d",
@@ -29603,7 +29735,7 @@
     },
     {
       "id": "source-jinshi-059-wikisource-e9494e7eb515",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.294,
@@ -29646,8 +29778,10 @@
         "afterLocal": "諳班勃極烈、遼王。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as table-layout no-op (clean-source-equals-local): cleaned upstream table text is already represented in the local chapter; local corpus retained.",
+      "reviewedAt": "2026-06-25T08:41:52.772Z",
+      "reviewedBy": "resolve-table-layout-noop-queue"
     },
     {
       "id": "source-jinshi-059-wikisource-ee2430c132ae",
@@ -29719,7 +29853,7 @@
     },
     {
       "id": "source-jinshi-059-wikisource-eedb1b763282",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.804,
@@ -29807,12 +29941,14 @@
         "afterLocal": "太保、兼都元帥。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream raw table span is already represented in the current structured chapter text; local table structure retained.",
+      "reviewedAt": "2026-06-25T07:10:52.036Z",
+      "reviewer": "close-upstream-witness-artifacts"
     },
     {
       "id": "source-jinshi-059-wikisource-f22836b7cc34",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.625,
@@ -29864,8 +30000,10 @@
         "afterLocal": "八世孫。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as table-layout no-op (clean-source-equals-local): cleaned upstream table text is already represented in the local chapter; local corpus retained.",
+      "reviewedAt": "2026-06-25T08:41:52.772Z",
+      "reviewedBy": "resolve-table-layout-noop-queue"
     },
     {
       "id": "source-jinshi-059-wikisource-ff80f560506b",
@@ -30003,7 +30141,7 @@
     },
     {
       "id": "source-jinshi-060-wikisource-64f94f605332",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -30055,8 +30193,10 @@
         "afterLocal": "是月庚午，宗望敗張覺於南京城東，覺夜遁奔於宋。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as table-layout no-op (clean-source-subsequence-of-chapter-after-dropping-ascii-digits): cleaned upstream table text is already represented in the local chapter; local corpus retained.",
+      "reviewedAt": "2026-06-25T13:00:33.506Z",
+      "reviewedBy": "resolve-table-layout-noop-queue"
     },
     {
       "id": "source-jinshi-060-wikisource-6a11519ecf8f",
@@ -30102,7 +30242,7 @@
     },
     {
       "id": "source-jinshi-060-wikisource-8daf1d87d2f4",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.867,
@@ -30154,8 +30294,10 @@
         "afterLocal": "十二月，夏賀正旦使至廣寧，遣人諭以廢立之事，於中路遣還。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as table-layout no-op (clean-source-subsequence-of-chapter-after-dropping-ascii-digits): cleaned upstream table text is already represented in the local chapter; local corpus retained.",
+      "reviewedAt": "2026-06-25T13:00:33.506Z",
+      "reviewedBy": "resolve-table-layout-noop-queue"
     },
     {
       "id": "source-jinshi-060-wikisource-a99331c784e7",
@@ -30278,7 +30420,7 @@
     },
     {
       "id": "source-jinshi-060-wikisource-bf20b3821b6e",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.862,
@@ -30339,8 +30481,10 @@
         "afterLocal": "」高麗遣蒲馬請保州，詔諭高麗曰：「保州近爾邊境，聽爾自取。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as table-layout no-op (clean-source-subsequence-of-chapter-after-dropping-ascii-digits): cleaned upstream table text is already represented in the local chapter; local corpus retained.",
+      "reviewedAt": "2026-06-25T13:00:33.506Z",
+      "reviewedBy": "resolve-table-layout-noop-queue"
     },
     {
       "id": "source-jinshi-060-wikisource-cb3f763db788",
@@ -30386,7 +30530,7 @@
     },
     {
       "id": "source-jinshi-060-wikisource-d302573b524b",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.667,
@@ -30438,12 +30582,14 @@
         "afterLocal": "正月，遣使如高麗報哀。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as table-layout no-op (clean-source-subsequence-of-chapter-after-dropping-ascii-digits): cleaned upstream table text is already represented in the local chapter; local corpus retained.",
+      "reviewedAt": "2026-06-25T13:00:33.506Z",
+      "reviewedBy": "resolve-table-layout-noop-queue"
     },
     {
       "id": "source-jinshi-061-wikisource-2e89396822bb",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.4,
@@ -30522,8 +30668,10 @@
         "afterLocal": "十二月，元帥左監軍高忠建、德昌軍節度使張景仁以罷兵、歸正隆所侵地，報諭宋國。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as table-layout no-op (clean-source-subsequence-of-chapter-after-dropping-ascii-digits): cleaned upstream table text is already represented in the local chapter; local corpus retained.",
+      "reviewedAt": "2026-06-25T13:00:33.506Z",
+      "reviewedBy": "resolve-table-layout-noop-queue"
     },
     {
       "id": "source-jinshi-061-wikisource-8d219581c4f3",
@@ -30617,7 +30765,7 @@
     },
     {
       "id": "source-jinshi-062-wikisource-760bee09ad9c",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.899,
@@ -30723,12 +30871,14 @@
         "afterLocal": "宋人宴犒旬日，以奏稟為辭，和事竟不成。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as table-layout no-op (clean-source-subsequence-of-chapter-after-dropping-ascii-digits): cleaned upstream table text is already represented in the local chapter; local corpus retained.",
+      "reviewedAt": "2026-06-25T13:00:33.506Z",
+      "reviewedBy": "resolve-table-layout-noop-queue"
     },
     {
       "id": "source-jinshi-062-wikisource-a82eedf37b21",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.634,
@@ -30807,8 +30957,10 @@
         "afterLocal": "七月己巳，遣禮部尚書王翛等為賀宋生辰使。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as table-layout no-op (clean-source-subsequence-of-chapter-after-dropping-ascii-digits): cleaned upstream table text is already represented in the local chapter; local corpus retained.",
+      "reviewedAt": "2026-06-25T13:00:33.506Z",
+      "reviewedBy": "resolve-table-layout-noop-queue"
     },
     {
       "id": "source-jinshi-062-wikisource-ab4447c4091c",
@@ -30938,7 +31090,7 @@
     },
     {
       "id": "source-jinshi-062-wikisource-e2ea9c31dee4",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.733,
@@ -30990,12 +31142,14 @@
         "afterLocal": "五月，高麗來賀即位。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as table-layout no-op (clean-source-subsequence-of-chapter-after-dropping-ascii-digits): cleaned upstream table text is already represented in the local chapter; local corpus retained.",
+      "reviewedAt": "2026-06-25T13:00:33.506Z",
+      "reviewedBy": "resolve-table-layout-noop-queue"
     },
     {
       "id": "source-jinshi-062-wikisource-f462d361a0dc",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.818,
@@ -31056,8 +31210,10 @@
         "afterLocal": "十一月，宋賀正旦使入境有期，以大兵在近，姑停之，令有司移報。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as table-layout no-op (clean-source-subsequence-of-chapter-after-dropping-ascii-digits): cleaned upstream table text is already represented in the local chapter; local corpus retained.",
+      "reviewedAt": "2026-06-25T13:00:33.506Z",
+      "reviewedBy": "resolve-table-layout-noop-queue"
     },
     {
       "id": "source-jinshi-063-wikisource-0da3d3f03659",
@@ -32866,7 +33022,7 @@
     },
     {
       "id": "source-jinshi-065-wikisource-26ff1ba5c17f",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.13,
@@ -32918,8 +33074,10 @@
         "afterLocal": "安帝節皇后生獻祖，次曰信德，次曰謝庫德，次曰謝夷保，次曰謝里忽。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as local-fuller no-op (short-label-local-fuller): upstream span is already contained in the local corpus unit; local corpus retained.",
+      "reviewedAt": "2026-06-26T04:12:36.975Z",
+      "reviewer": "resolve-local-contained-source-noops"
     },
     {
       "id": "source-jinshi-065-wikisource-2f2389eb6b2c",
@@ -42769,7 +42927,7 @@
     },
     {
       "id": "source-jinshi-084-wikisource-707fc9c5f4ec",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.667,
@@ -42812,8 +42970,17 @@
         "afterLocal": "諸軍馬瘦弱，遣彥敬往西北路招討司市馬，得六千餘匹。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied component-placeholder source repair; English translations retained because only source glyph composition changed.",
+      "reviewedAt": "2026-06-25T04:06:43.588Z",
+      "reviewer": "repair-source-component-placeholders",
+      "appliedAt": "2026-06-25T04:06:43.588Z",
+      "appliedSummary": {
+        "mode": "component-placeholder-source-repair",
+        "replacements": [
+          "忄栗->慄"
+        ]
+      }
     },
     {
       "id": "source-jinshi-084-wikisource-77938f1a0984",
@@ -42865,7 +43032,7 @@
     },
     {
       "id": "source-jinshi-084-wikisource-916d691b4bac",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.86,
@@ -42917,8 +43084,10 @@
         "afterLocal": "對曰：「君之命，臣敢不敬從，但恨老病疏謬，無以塞責耳。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource dropped visible content from repeated name/date/content templates, while the live local corpus preserves the grammatical source text between matching anchors.",
+      "reviewedAt": "2026-06-25T05:44:01.999Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-084-wikisource-99286a5858a0",
@@ -43210,7 +43379,7 @@
     },
     {
       "id": "source-jinshi-085-wikisource-6928104f7a82",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.837,
@@ -43262,8 +43431,10 @@
         "afterLocal": "沉默寡言笑，勇健絕人，涉書史，好法書名畫。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text preserves explicit regnal-year/date details that raw Wikisource dropped; removing those date details makes the spans equivalent, so local corpus text was retained.",
+      "reviewedAt": "2026-06-25T01:52:05.979Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-085-wikisource-6df4dc8856f7",
@@ -43977,7 +44148,7 @@
     },
     {
       "id": "source-jinshi-086-wikisource-8de5032a1e52",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -44029,8 +44200,17 @@
         "afterLocal": "上命尚書左丞翟永固鞫之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied component-placeholder source repair; English translations retained because only source glyph composition changed.",
+      "reviewedAt": "2026-06-25T04:06:43.588Z",
+      "reviewer": "repair-source-component-placeholders",
+      "appliedAt": "2026-06-25T04:06:43.588Z",
+      "appliedSummary": {
+        "mode": "component-placeholder-source-repair",
+        "replacements": [
+          "钅求->銶"
+        ]
+      }
     },
     {
       "id": "source-jinshi-086-wikisource-8f47c274a5b3",
@@ -44091,7 +44271,7 @@
     },
     {
       "id": "source-jinshi-086-wikisource-a9d08164d5d7",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.895,
@@ -44134,8 +44314,17 @@
         "afterLocal": "久之，封道國公。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied component-placeholder source repair; English translations retained because only source glyph composition changed.",
+      "reviewedAt": "2026-06-25T04:06:43.588Z",
+      "reviewer": "repair-source-component-placeholders",
+      "appliedAt": "2026-06-25T04:06:43.588Z",
+      "appliedSummary": {
+        "mode": "component-placeholder-source-repair",
+        "replacements": [
+          "钅求->銶"
+        ]
+      }
     },
     {
       "id": "source-jinshi-086-wikisource-b8af7402ab2f",
@@ -44515,7 +44704,7 @@
     },
     {
       "id": "source-jinshi-087-wikisource-cd1f3e2a5297",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.818,
@@ -44558,8 +44747,17 @@
         "afterLocal": "右副元帥完顏謀衍既敗之於霿𩃭河，乃擁眾，貪鹵掠，不追討，而縱其子斜哥暴橫軍中，士卒不用命。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied component-placeholder source repair; English translations retained because only source glyph composition changed.",
+      "reviewedAt": "2026-06-25T04:06:43.588Z",
+      "reviewer": "repair-source-component-placeholders",
+      "appliedAt": "2026-06-25T04:06:43.588Z",
+      "appliedSummary": {
+        "mode": "component-placeholder-source-repair",
+        "replacements": [
+          "忄栗->慄"
+        ]
+      }
     },
     {
       "id": "source-jinshi-087-wikisource-e302b5fcf392",
@@ -47897,7 +48095,7 @@
     },
     {
       "id": "source-jinshi-096-wikisource-20751c746d13",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -47940,8 +48138,17 @@
         "afterLocal": "去冗食在乎寵力農，抑遊墮。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied component-placeholder source repair; English translations retained because only source glyph composition changed.",
+      "reviewedAt": "2026-06-25T04:06:43.588Z",
+      "reviewer": "repair-source-component-placeholders",
+      "appliedAt": "2026-06-25T04:06:43.588Z",
+      "appliedSummary": {
+        "mode": "component-placeholder-source-repair",
+        "replacements": [
+          "忄栗->慄"
+        ]
+      }
     },
     {
       "id": "source-jinshi-096-wikisource-23cdcae30c16",
@@ -48087,7 +48294,7 @@
     },
     {
       "id": "source-jinshi-096-wikisource-a3a73f74563b",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.818,
@@ -48130,8 +48337,17 @@
         "afterLocal": "二曰禁遊手。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied component-placeholder source repair; English translations retained because only source glyph composition changed.",
+      "reviewedAt": "2026-06-25T04:06:43.588Z",
+      "reviewer": "repair-source-component-placeholders",
+      "appliedAt": "2026-06-25T04:06:43.588Z",
+      "appliedSummary": {
+        "mode": "component-placeholder-source-repair",
+        "replacements": [
+          "忄栗->慄"
+        ]
+      }
     },
     {
       "id": "source-jinshi-096-wikisource-b83bb2c3067a",
@@ -59254,7 +59470,7 @@
     },
     {
       "id": "source-jinshi-125-wikisource-4b7136e7856d",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.765,
@@ -59297,8 +59513,10 @@
         "afterLocal": "俗傳六國時燕王及太子丹之葬，及啟壙，其東墓之柩題其和曰「燕靈王舊。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: live local text preserves explicit regnal-year/date details that raw Wikisource dropped; removing those date details makes the spans equivalent, so local corpus text was retained.",
+      "reviewedAt": "2026-06-25T01:52:05.979Z",
+      "reviewer": "close-stale-source-correspondence-items"
     },
     {
       "id": "source-jinshi-125-wikisource-4e414ad0b164",
@@ -65594,7 +65812,7 @@
     },
     {
       "id": "source-jinshi-135-wikisource-832ee006195e",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.853,
@@ -65637,8 +65855,10 @@
         "afterLocal": "於是，高麗王曰：「告邊釁者皆官屬祥丹、傍都里、昔畢罕輩也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as graph-variant/punctuation-only source-correspondence no-op; local corpus text retained and English translation unchanged.",
+      "reviewedAt": "2026-06-26T03:28:13.006Z",
+      "reviewer": "broad-graph-variant-review"
     },
     {
       "id": "source-jinshi-135-wikisource-978ef5654778",
@@ -65973,5 +66193,5 @@
       "notes": ""
     }
   ],
-  "updatedAt": "2026-06-24T22:42:09.480Z"
+  "updatedAt": "2026-06-26T04:12:36.975Z"
 }
