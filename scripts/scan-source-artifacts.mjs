@@ -11,6 +11,8 @@ import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
+const QUALITY_DIR = path.join(DATA_DIR, 'quality');
+const SOURCE_ARTIFACT_EXCEPTIONS_PATH = path.join(QUALITY_DIR, 'source-artifact-exceptions.json');
 
 const SOURCE_FIELD_NAMES = new Set([
   'zh',
@@ -340,6 +342,7 @@ function stableHitId(hit) {
 
 function scanFile(file) {
   const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+  const exceptions = loadSourceArtifactExceptions();
   return [...walk(data)].map((hit) => {
     const item = {
       file,
@@ -351,8 +354,57 @@ function scanFile(file) {
       notes: '',
     };
     item.id = stableHitId(item);
+    const exception = exceptions.get(item.id);
+    if (exception && exceptionMatchesItem(exception, item)) {
+      item.status = 'approved';
+      item.decision = 'approved';
+      item.exception = true;
+      item.exceptionReason = exception.reason || 'Approved source-artifact exception.';
+      item.reviewedAt = exception.reviewedAt || exception.approvedAt;
+      item.reviewer = exception.reviewer || 'source-artifact-exceptions';
+      item.notes = appendNote(item.notes, item.exceptionReason);
+    }
     return item;
   });
+}
+
+let sourceArtifactExceptionsCache = null;
+
+function loadSourceArtifactExceptions() {
+  if (sourceArtifactExceptionsCache) return sourceArtifactExceptionsCache;
+  sourceArtifactExceptionsCache = new Map();
+  if (!fs.existsSync(SOURCE_ARTIFACT_EXCEPTIONS_PATH)) return sourceArtifactExceptionsCache;
+  let report;
+  try {
+    report = JSON.parse(fs.readFileSync(SOURCE_ARTIFACT_EXCEPTIONS_PATH, 'utf8'));
+  } catch {
+    return sourceArtifactExceptionsCache;
+  }
+  for (const exception of report.exceptions || []) {
+    if (!exception?.id) continue;
+    sourceArtifactExceptionsCache.set(exception.id, exception);
+  }
+  return sourceArtifactExceptionsCache;
+}
+
+function exceptionMatchesItem(exception, item) {
+  return (
+    exception.book === item.book
+    && exception.chapter === item.chapter
+    && exception.ruleId === item.ruleId
+    && exception.path === item.path
+    && String(exception.sentenceId || '') === String(item.sentenceId || '')
+    && String(exception.found || '') === String(item.found || '')
+  );
+}
+
+function appendNote(notes, addition) {
+  const current = String(notes || '').trim();
+  const note = String(addition || '').trim();
+  if (!note) return current;
+  if (!current) return note;
+  if (current.includes(note)) return current;
+  return `${current}\n${note}`;
 }
 
 function isResolvedQueueItem(item) {
@@ -367,6 +419,7 @@ function isResolvedQueueItem(item) {
     values.has('denied') ||
     values.has('rejected') ||
     values.has('declined') ||
+    values.has('approved') ||
     values.has('false-positive') ||
     values.has('false_positive')
   );

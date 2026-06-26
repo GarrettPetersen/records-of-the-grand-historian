@@ -3437,7 +3437,7 @@
     },
     {
       "id": "source-weishu-001-wikisource-5ebb3f4a3b94",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.6,
@@ -3480,8 +3480,10 @@
         "afterLocal": "先是，西部內侵，國民離散，依於沒鹿回部大人竇賓。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as Wikisource modern-year no-op: upstream inserts Gregorian conversion years not present in the classical source; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:52:15.175Z",
+      "reviewedBy": "resolve-wikisource-gregorian-year-noops"
     },
     {
       "id": "source-weishu-001-wikisource-84a336a588c4",
@@ -3536,7 +3538,7 @@
     },
     {
       "id": "source-weishu-001-wikisource-8d427844677a",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.6,
@@ -3579,8 +3581,10 @@
         "afterLocal": "文皇帝諱沙漠汗，以國太子留洛陽，為魏賓之冠。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as Wikisource modern-year no-op: upstream inserts Gregorian conversion years not present in the classical source; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:52:15.175Z",
+      "reviewedBy": "resolve-wikisource-gregorian-year-noops"
     },
     {
       "id": "source-weishu-001-wikisource-b53667c0a9a8",
@@ -4187,7 +4191,7 @@
     },
     {
       "id": "source-weishu-002-wikisource-3708e10f3c80",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.818,
@@ -4230,8 +4234,10 @@
         "afterLocal": "史臣曰：晉氏崩離，戎羯乘釁，僭偽紛糾，犲狼競馳。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as local-fuller no-op (annotation-boundary-local-fuller): upstream span is already contained in the local corpus unit; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:13:30.024Z",
+      "reviewer": "resolve-local-contained-source-noops"
     },
     {
       "id": "source-weishu-002-wikisource-407502dea59e",
@@ -5742,7 +5748,7 @@
     },
     {
       "id": "source-weishu-003-wikisource-4319b0b45847",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.046,
@@ -5785,8 +5791,10 @@
         "afterLocal": "太祖晚有子，聞而大悅，乃大赦天下。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream witness includes Wikisource page TOC/header residue before __TOC__; the post-TOC source text is already represented in the local range.",
+      "reviewedAt": "2026-06-26T06:13:10.162Z",
+      "reviewer": "close-upstream-witness-artifacts"
     },
     {
       "id": "source-weishu-003-wikisource-49b9ce1e6e9b",
@@ -11518,7 +11526,7 @@
     },
     {
       "id": "source-weishu-008-wikisource-53943db5b8af",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.882,
@@ -11561,8 +11569,21 @@
         "afterLocal": "詔曰：「廷尉者，天下之平，民命之所懸也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Removed inline numeric source-note markers from local Chinese and matching English marker residue; cleaned local source matches upstream witness.",
+      "reviewedAt": "2026-06-26T06:38:11.835Z",
+      "reviewer": "resolve-inline-numeric-note-markers",
+      "appliedAt": "2026-06-26T06:38:11.835Z",
+      "appliedSummary": {
+        "mode": "removed-inline-numeric-note-markers",
+        "localIds": [
+          "s0384"
+        ],
+        "cleanedIds": [
+          "s0384"
+        ],
+        "translationFieldsCleaned": 2
+      }
     },
     {
       "id": "source-weishu-008-wikisource-561f680fd53e",
@@ -20225,7 +20246,7 @@
     },
     {
       "id": "source-weishu-014-wikisource-0e9eb2ad0eca",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.862,
@@ -20268,8 +20289,10 @@
         "afterLocal": "庚午，以太師、趙郡王諶為大司馬，以司空、咸陽王坦為太尉，以開府儀同三司高盛為司徒，以開府儀同三司高昂為司空。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as Wikisource modern-year no-op: upstream inserts Gregorian conversion years not present in the classical source; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:52:15.175Z",
+      "reviewedBy": "resolve-wikisource-gregorian-year-noops"
     },
     {
       "id": "source-weishu-014-wikisource-17a119b4a15b",
@@ -22313,7 +22336,7 @@
     },
     {
       "id": "source-weishu-014-wikisource-bacca1bf6697",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.826,
@@ -22356,8 +22379,10 @@
         "afterLocal": "上書不稱臣，答不稱詔，載天子旌旗，行魏正朔，乘五時副車；"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as Wikisource modern-year no-op: upstream inserts Gregorian conversion years not present in the classical source; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:52:15.175Z",
+      "reviewedBy": "resolve-wikisource-gregorian-year-noops"
     },
     {
       "id": "source-weishu-014-wikisource-bceef789f34a",
@@ -24451,7 +24476,7 @@
     },
     {
       "id": "source-weishu-015-wikisource-9ce769c752ee",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.886,
@@ -24494,8 +24519,10 @@
         "afterLocal": "臨訣，每一稱兄弟，輒拊胸慟泣，遂薨。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as Wikisource modern-year no-op: upstream inserts Gregorian conversion years not present in the classical source; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:52:15.175Z",
+      "reviewedBy": "resolve-wikisource-gregorian-year-noops"
     },
     {
       "id": "source-weishu-015-wikisource-a47fa94fa44f",
@@ -24967,7 +24994,7 @@
     },
     {
       "id": "source-weishu-015-wikisource-f7b31353a2e1",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.789,
@@ -25010,8 +25037,10 @@
         "afterLocal": "高祖仁恕，不欲襲前事，而禀文明太后意，故不果行。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as Wikisource modern-year no-op: upstream inserts Gregorian conversion years not present in the classical source; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:52:15.175Z",
+      "reviewedBy": "resolve-wikisource-gregorian-year-noops"
     },
     {
       "id": "source-weishu-015-wikisource-fb4f8f426066",
@@ -27999,7 +28028,7 @@
     },
     {
       "id": "source-weishu-018-wikisource-38b427e6d63e",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "book": "weishu",
@@ -28079,8 +28108,10 @@
         "afterLocal": "清河王紹，天興六年封。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (114 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-weishu-018-wikisource-4cec1a6a27a3",
@@ -30576,7 +30607,7 @@
     },
     {
       "id": "source-weishu-019-wikisource-5e0e861fab96",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0.024,
@@ -30646,8 +30677,10 @@
         "afterLocal": ""
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as local-fuller no-op (annotation-boundary-local-fuller): upstream span is already contained in the local corpus unit; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:13:30.024Z",
+      "reviewer": "resolve-local-contained-source-noops"
     },
     {
       "id": "source-weishu-019-wikisource-7e565e1af133",
@@ -30822,7 +30855,7 @@
     },
     {
       "id": "source-weishu-019-wikisource-91c58cb17199",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "book": "weishu",
@@ -30911,8 +30944,10 @@
         "afterLocal": "樂平王丕，少有才幹，為世所稱。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (78 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-weishu-019-wikisource-baf9ad259fea",
@@ -58266,7 +58301,7 @@
     },
     {
       "id": "source-weishu-043-wikisource-41ae797330cd",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.714,
@@ -58309,8 +58344,10 @@
         "afterLocal": "贈車騎大將軍、儀同三司、齊州刺史，諡曰清穆。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as local-fuller no-op (annotation-boundary-local-fuller): upstream span is already contained in the local corpus unit; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:13:30.024Z",
+      "reviewer": "resolve-local-contained-source-noops"
     },
     {
       "id": "source-weishu-043-wikisource-41e86653dc0c",
@@ -74068,7 +74105,7 @@
     },
     {
       "id": "source-weishu-062-wikisource-bbc33f079143",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -74111,8 +74148,21 @@
         "afterLocal": "贈左將軍、濟州刺史，諡曰恭。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Removed inline numeric source-note markers from local Chinese and matching English marker residue; cleaned local source matches upstream witness.",
+      "reviewedAt": "2026-06-26T06:38:11.835Z",
+      "reviewer": "resolve-inline-numeric-note-markers",
+      "appliedAt": "2026-06-26T06:38:11.835Z",
+      "appliedSummary": {
+        "mode": "removed-inline-numeric-note-markers",
+        "localIds": [
+          "s0389"
+        ],
+        "cleanedIds": [
+          "s0389"
+        ],
+        "translationFieldsCleaned": 2
+      }
     },
     {
       "id": "source-weishu-062-wikisource-cdb882c50dce",
@@ -76360,7 +76410,7 @@
     },
     {
       "id": "source-weishu-066-wikisource-62389566de3a",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -76403,8 +76453,21 @@
         "afterLocal": "延昌四年卒，年八十一。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Removed inline numeric source-note markers from local Chinese and matching English marker residue; cleaned local source matches upstream witness.",
+      "reviewedAt": "2026-06-26T06:38:11.835Z",
+      "reviewer": "resolve-inline-numeric-note-markers",
+      "appliedAt": "2026-06-26T06:38:11.835Z",
+      "appliedSummary": {
+        "mode": "removed-inline-numeric-note-markers",
+        "localIds": [
+          "s0570"
+        ],
+        "cleanedIds": [
+          "s0570"
+        ],
+        "translationFieldsCleaned": 2
+      }
     },
     {
       "id": "source-weishu-066-wikisource-63f042ff4e4b",
@@ -92919,7 +92982,7 @@
     },
     {
       "id": "source-weishu-092-wikisource-9a6e17d71497",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "weishu",
@@ -92943,8 +93006,10 @@
         "afterLocal": ""
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream source-only edition collation apparatus is not base corpus text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:13:50.186Z",
+      "reviewer": "remove-edition-collation-notes"
     },
     {
       "id": "source-weishu-093-wikisource-66f7a82b584e",
@@ -99554,7 +99619,7 @@
     },
     {
       "id": "source-weishu-102-wikisource-d6bc9f2d8df9",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -99606,8 +99671,23 @@
         "afterLocal": "三年，德宗死，弟德文僭立。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Removed inline numeric source-note markers from local Chinese and matching English marker residue; cleaned local source matches upstream witness.",
+      "reviewedAt": "2026-06-26T06:38:11.835Z",
+      "reviewer": "resolve-inline-numeric-note-markers",
+      "appliedAt": "2026-06-26T06:38:11.835Z",
+      "appliedSummary": {
+        "mode": "removed-inline-numeric-note-markers",
+        "localIds": [
+          "s0432",
+          "s0433"
+        ],
+        "cleanedIds": [
+          "s0432",
+          "s0433"
+        ],
+        "translationFieldsCleaned": 4
+      }
     },
     {
       "id": "source-weishu-102-wikisource-e41e4dcba990",
@@ -109199,7 +109279,7 @@
     },
     {
       "id": "source-weishu-109-wikisource-d5e87e7e4d03",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0.001,
@@ -110304,8 +110384,10 @@
         "afterLocal": ""
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as local-fuller no-op (annotation-boundary-local-fuller): upstream span is already contained in the local corpus unit; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:13:30.024Z",
+      "reviewer": "resolve-local-contained-source-noops"
     },
     {
       "id": "source-weishu-109-wikisource-dadb5fb30da1",
@@ -114757,7 +114839,7 @@
     },
     {
       "id": "source-weishu-114-wikisource-18d9273b0190",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -114800,8 +114882,10 @@
         "afterLocal": "二年九月甲申，歲星入太微，距右執法五寸，光明相及；"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as local-fuller no-op (annotation-boundary-local-fuller): upstream span is already contained in the local corpus unit; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:13:30.024Z",
+      "reviewer": "resolve-local-contained-source-noops"
     },
     {
       "id": "source-weishu-114-wikisource-235847aba3da",
@@ -114964,7 +115048,7 @@
     },
     {
       "id": "source-weishu-114-wikisource-54a818c3c007",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.818,
@@ -115007,8 +115091,10 @@
         "afterLocal": "占曰「貴人死，又饑疫祥也」。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as local-fuller no-op (annotation-boundary-local-fuller): upstream span is already contained in the local corpus unit; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:13:30.024Z",
+      "reviewer": "resolve-local-contained-source-noops"
     },
     {
       "id": "source-weishu-114-wikisource-6db4af3a717d",
@@ -121001,7 +121087,7 @@
     },
     {
       "id": "source-weishu-115-wikisource-3bf6c18d916d",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -121053,8 +121139,10 @@
         "afterLocal": "有武城。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as local-fuller no-op (annotation-boundary-local-fuller): upstream span is already contained in the local corpus unit; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:13:30.024Z",
+      "reviewer": "resolve-local-contained-source-noops"
     },
     {
       "id": "source-weishu-115-wikisource-3c6885ef9218",
@@ -121740,7 +121828,7 @@
     },
     {
       "id": "source-weishu-115-wikisource-5fbb4218734d",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -121783,8 +121871,10 @@
         "afterLocal": "長灣水東流至梁川，北入濁漳。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as local-fuller no-op (annotation-boundary-local-fuller): upstream span is already contained in the local corpus unit; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:13:30.024Z",
+      "reviewer": "resolve-local-contained-source-noops"
     },
     {
       "id": "source-weishu-115-wikisource-627b3214aa8e",
@@ -122846,7 +122936,7 @@
     },
     {
       "id": "source-weishu-115-wikisource-7fc0e873f0f3",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -122889,8 +122979,10 @@
         "afterLocal": "有猗氏城。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as local-fuller no-op (annotation-boundary-local-fuller): upstream span is already contained in the local corpus unit; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:13:30.024Z",
+      "reviewer": "resolve-local-contained-source-noops"
     },
     {
       "id": "source-weishu-115-wikisource-8c268bc7911e",
@@ -123960,7 +124052,7 @@
     },
     {
       "id": "source-weishu-115-wikisource-ec16dde075ac",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.778,
@@ -124003,8 +124095,10 @@
         "afterLocal": "有堯祠。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as local-fuller no-op (annotation-boundary-local-fuller): upstream span is already contained in the local corpus unit; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:13:30.024Z",
+      "reviewer": "resolve-local-contained-source-noops"
     },
     {
       "id": "source-weishu-115-wikisource-ee53b2512a48",
@@ -124464,7 +124558,7 @@
     },
     {
       "id": "source-weishu-116-wikisource-04fb41c3b551",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.846,
@@ -124525,8 +124619,10 @@
         "afterLocal": "真君九年併酸棗，景明二年復。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as local-fuller no-op (annotation-boundary-local-fuller): upstream span is already contained in the local corpus unit; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:13:30.024Z",
+      "reviewer": "resolve-local-contained-source-noops"
     },
     {
       "id": "source-weishu-116-wikisource-0f3485962963",
@@ -124614,7 +124710,7 @@
     },
     {
       "id": "source-weishu-116-wikisource-18eebf9c7733",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -124666,8 +124762,10 @@
         "afterLocal": "真君七年併臨潁，元象二年復。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as local-fuller no-op (annotation-boundary-local-fuller): upstream span is already contained in the local corpus unit; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:13:30.024Z",
+      "reviewer": "resolve-local-contained-source-noops"
     },
     {
       "id": "source-weishu-116-wikisource-26c19d919d2f",
@@ -126241,7 +126339,7 @@
     },
     {
       "id": "source-weishu-116-wikisource-7dd62e3f09a8",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.704,
@@ -126320,8 +126418,10 @@
         "afterLocal": "〈孝昌中陷，興和中復。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (54 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-weishu-116-wikisource-8c17b2224e33",
@@ -127195,7 +127295,7 @@
     },
     {
       "id": "source-weishu-116-wikisource-dded65c4cf58",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.603,
@@ -127274,12 +127374,14 @@
         "afterLocal": "〈天平初置。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (78 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-weishu-116-wikisource-de1b9ee18672",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.271,
@@ -127367,12 +127469,14 @@
         "afterLocal": "〈孝昌三年陷，武定七年復。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as local-fuller no-op (annotation-boundary-local-fuller): upstream span is already contained in the local corpus unit; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:13:30.024Z",
+      "reviewer": "resolve-local-contained-source-noops"
     },
     {
       "id": "source-weishu-116-wikisource-e212fb608959",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0,
@@ -130700,12 +130804,14 @@
         "afterLocal": ""
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as local-fuller no-op (annotation-boundary-local-fuller): upstream span is already contained in the local corpus unit; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:13:30.024Z",
+      "reviewer": "resolve-local-contained-source-noops"
     },
     {
       "id": "source-weishu-116-wikisource-e66e90f8b862",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.858,
@@ -131000,8 +131106,10 @@
         "afterLocal": "有弋陽城、黃水。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (233 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-weishu-116-wikisource-e94df724728e",
@@ -134693,7 +134801,7 @@
     },
     {
       "id": "source-weishu-116-wikisource-f73c68ae3fea",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.444,
@@ -134772,8 +134880,10 @@
         "afterLocal": "永安三年復屬，孝昌中陷，興和中復。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (12 Han/digit chars) is already present in the live chapter between matching before/after anchors (8/14 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-weishu-116-wikisource-f8539a67a07d",
@@ -149474,7 +149584,7 @@
     },
     {
       "id": "source-weishu-123-wikisource-33f3a32d6685",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "weishu",
@@ -149498,8 +149608,10 @@
         "afterLocal": ""
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream source-only annotation/commentary/page residue is not base corpus text; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:13:42.188Z",
+      "reviewedBy": "resolve-source-only-commentary-noops"
     },
     {
       "id": "source-weishu-123-wikisource-7b98b7daacd7",
@@ -151646,7 +151758,7 @@
     },
     {
       "id": "source-weishu-124-wikisource-f4ab794d831c",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0.001,
@@ -152832,8 +152944,10 @@
         "afterLocal": ""
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as local-fuller no-op (annotation-boundary-local-fuller): upstream span is already contained in the local corpus unit; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:13:30.024Z",
+      "reviewer": "resolve-local-contained-source-noops"
     },
     {
       "id": "source-weishu-124-wikisource-f677932a2a41",
@@ -155645,7 +155759,7 @@
     },
     {
       "id": "source-weishu-126-wikisource-781bf4b60e87",
-      "status": "pending",
+      "status": "applied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0.001,
@@ -156660,8 +156774,237 @@
         "afterLocal": ""
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied corpus cleanup: removed local source artifact that is not chapter content.",
+      "reviewedAt": "2026-06-26T07:05:47.151Z",
+      "reviewer": "clean-source-repair-artifact-lane",
+      "appliedAt": "2026-06-26T07:05:47.151Z",
+      "appliedSummary": {
+        "mode": "remove",
+        "ids": [
+          "s0476",
+          "s0477",
+          "s0478",
+          "s0479",
+          "s0480",
+          "s0481",
+          "s0482",
+          "s0483",
+          "s0484",
+          "s0485",
+          "s0486",
+          "s0487",
+          "s0488",
+          "s0489",
+          "s0490",
+          "s0491",
+          "s0492",
+          "s0493",
+          "s0494",
+          "s0495",
+          "s0496",
+          "s0497",
+          "s0498",
+          "s0499",
+          "s0500",
+          "s0501",
+          "s0502",
+          "s0503",
+          "s0504",
+          "s0505",
+          "s0506",
+          "s0507",
+          "s0508",
+          "s0509",
+          "s0510",
+          "s0511",
+          "s0512",
+          "s0513",
+          "s0514",
+          "s0515",
+          "s0516",
+          "s0517",
+          "s0518",
+          "s0519",
+          "s0520",
+          "s0521",
+          "s0522",
+          "s0523",
+          "s0524",
+          "s0525",
+          "s0526",
+          "s0527",
+          "s0528",
+          "s0529",
+          "s0530",
+          "s0531",
+          "s0532",
+          "s0533",
+          "s0534",
+          "s0535",
+          "s0536",
+          "s0537",
+          "s0538",
+          "s0539",
+          "s0540",
+          "s0541",
+          "s0542",
+          "s0543",
+          "s0544",
+          "s0545",
+          "s0546",
+          "s0547",
+          "s0548",
+          "s0549",
+          "s0550",
+          "s0551",
+          "s0552",
+          "s0553",
+          "s0554",
+          "s0555",
+          "s0556",
+          "s0557",
+          "s0558",
+          "s0559",
+          "s0560",
+          "s0561",
+          "s0562",
+          "s0563",
+          "s0564",
+          "s0565",
+          "s0566",
+          "s0567",
+          "s0568",
+          "s0569",
+          "s0570",
+          "s0571",
+          "s0572",
+          "s0573",
+          "s0574",
+          "s0575",
+          "s0576",
+          "s0577",
+          "s0578",
+          "s0579",
+          "s0580",
+          "s0581",
+          "s0582",
+          "s0583",
+          "s0584"
+        ],
+        "before": [
+          "校勘記",
+          "大辟四百九十條千八百八十二事死罪決比凡三千四百七十二條 按漢書卷二三刑法志云：「其後姦滑巧法，轉相比況，禁網寖密。",
+          "律令凡三百五十九章，大辟四百九條，千八百八十二事，死罪決事比萬三千四百七十二事。」",
+          "當即此志所本，然記於于定國為廷尉前，非定國所集。",
+          "漢志大辟四百九條，此志「九」下多「十」字，疑衍。",
+          "又漢志死罪決事比萬三千四百七十二條，此志「萬」作「凡」，疑亦音近而訛。",
+          "便入極默 按「默」本當作「墨」，「墨」本五刑之一，引伸泛指刑法。",
+          "「極墨」猶言「極刑」、「極法」。",
+          "但當時「墨」常作「默」，如「墨曹」常作「默曹」。",
+          "下文高陽王雍議費羊皮、張回罪，亦云：「從有極默之戾」，今仍之。",
+          "而決從真賣 自「決從真賣」至「然」字括號內共三百十七字，為百衲本所據底本之十五頁。",
+          "此頁脫去，第十四頁與十六頁相連，「而」字逕接「賣者既以有罪」，不加細察，文字啣接，似亦可通。",
+          "南本以下諸本遂也不管舊本頁碼不合，接合無痕。",
+          "百衲本且於十六頁邊欄注「此與十五合頁」，以解釋缺頁問題。",
+          "今據冊府卷六一五",
+          "〈七三九四頁〉",
+          "補。",
+          "所缺崔鴻議首數行亦見通典卷一六七雜議下，并用以校冊府訛脫。",
+          "廷尉少卿楊鈞議曰 冊府卷六一五",
+          "〈七三九四頁〉",
+          "「鈞議」作「均義」，宋本冊府作「鈞義」。",
+          "按下崔鴻議中有云：「不得全如鈞議。」",
+          "楊鈞附卷五八楊播傳。",
+          "宋本冊府作「鈞」是，「義」字乃「議」之訛，今並改正。",
+          "處流為允 冊府明本",
+          "〈同上卷頁〉",
+          "「處」訛「虔」，今據宋本冊府改。",
+          "三公郎中崔鴻議曰 冊府",
+          "〈同上卷頁〉",
+          "脫「三」字，今據通典卷一六七補。",
+          "賣五服內親屬 冊府",
+          "〈同上卷頁〉",
+          "「賣」作「買」，「內」作「因」，通典卷一六七作「賣」，但移在下句「期親及妾與子婦流」上，「因」作「內」。",
+          "按「買」「因」二字顯訛，今並據通典改。",
+          "因此流漂 諸本「漂」訛「洞」，不可通，今據冊府卷六一五",
+          "〈七三九五頁〉",
+          "改。",
+          "而似從輕 冊府",
+          "〈同上卷頁〉、",
+          "通典卷一六七「似」作「以」。",
+          "按這是說本州援引強盜條文是「從輕」，原文當作「以」，但作「似」亦可通，今仍之。",
+          "雖已申省 冊府卷六一一",
+          "〈七三三六頁〉",
+          "「雖」作「解」。",
+          "按下文李韶奏有「解送至省」，「連解下鞫」語，「解」是一種公文形式，疑作「解」是，但作「雖」亦通，今仍之。",
+          "處買梟首 諸本「買」作「置」，獨百衲本作「買」。",
+          "按冊府卷六一五",
+          "〈七三九五頁〉",
+          "也作「買」，指「王買」。",
+          "今從百衲本。",
+          "其延陵法㩲等所謂月光童子劉景暉者 諸本及冊府",
+          "〈同上卷頁〉",
+          "「㩲」作「權」，百衲本作「㩲」。",
+          "按上云「冀州妖賊延陵王買」，延陵應是冀州郡、縣名，今地形志冀州下不載，可能字訛，也可能旋置旋廢，或地形志失載，今不可考。",
+          "「法㩲」",
+          "〈或「權」〉，",
+          "疑是「法掾」之訛，故下文稱「姦吏無端，橫生繩墨」。",
+          "但「法」亦姓，今姑作人名標。",
+          "方顯其事 諸本脫「事」字，今據冊府卷六一五",
+          "〈七三九六頁〉",
+          "補。",
+          "河東郡民李憐生行毒藥 冊府",
+          "〈同上卷頁〉、",
+          "通典卷一六七「生」作「坐」，疑是。",
+          "但「憐生」作雙名，下稱「李憐」乃單稱，亦通，今仍之。",
+          "司徒法曹參軍許琰謂州判為允 諸本脫「法」字，今據冊府",
+          "〈同上卷頁〉",
+          "補。",
+          "不可參隣人伍 諸本「伍」訛「任」，不可通，今據冊府",
+          "〈同上卷頁〉",
+          "改。",
+          "不即依決 百衲本「依決」二字空二格，諸本作「施行」，冊府卷六一五",
+          "〈七三九七頁〉",
+          "作「依決」。",
+          "按二語意義不同，「不即依決」是說不即依從判決，「不即施行」則是暫不施行。",
+          "上文門下處奏容妃、慧猛「各入死刑」，詔書「恕死，髠鞭付宮」，則是不依門下的判決，並非暫不施行。",
+          "舊本二字脫，南本當是以意補，諸本從之，今據冊府補。",
+          "然人婦之孕不得非子又依永平四年先朝舊格 諸本「子又依」三字作「一夕生」，冊府",
+          "〈同上卷頁〉、",
+          "通典卷一六七作「子又依」。",
+          "按「不得非一夕生」不可解。",
+          "上文引鬬律祖父母、父母殺子孫條，這裏是說公主雖貴，懷孕之胎，不得謂之「非子」，則劉輝毆公主以至傷胎，也只能算作父殺子。",
+          "下文是說按照永平舊格，定罪應先首後從，這是另一理由，故云「又依」。",
+          "冊府、通典是，今據改。",
+          "〈通典「永平」訛「初平」。〉",
+          "皆首罪判定 諸本「定」訛「官」，不可通，今據冊府",
+          "〈同上卷頁〉、",
+          "通典卷一六七改。",
+          "〈通典「首罪」訛「首末」。〉",
+          "齊奚官之役 百衲本「役」字空格，北、汲、殿三本注「闕」，南本、局本作「律」，冊府",
+          "〈同上卷頁〉、",
+          "通典卷一六七作「役」。",
+          "按南本當是以意補，局本從之，今據冊府、通典補「役」字。",
+          "妹適司士曹參軍羅顯貴 按「司」下當脫「徒」或「空」字。",
+          "從夫家之刑 冊府卷六一五",
+          "〈七三九八頁〉、",
+          "通典卷一六七「刑」作「戮」。",
+          "按「刑」字與上句重複，當時文體通行駢偶，疑作「戮」是。",
+          "期親相隱之謂凡罪 冊府",
+          "〈同上卷頁〉",
+          "「之」作「指」，疑是。",
+          "何得以非正刑書 百衲本「非」字空格，諸本作「非」，冊府",
+          "〈同上卷頁〉",
+          "無「非」字，也不空格。",
+          "按這裏闕一字無疑，冊府不闕，乃刊本之誤。",
+          "但所闕不知何字，今姑從諸本。",
+          "輝悖法亂理 諸本「亂理」作「者之」，不可通，今據冊府",
+          "〈同上卷頁〉、",
+          "通典卷一六七改。"
+        ],
+        "after": []
+      }
     },
     {
       "id": "source-weishu-126-wikisource-802486c4ee57",
@@ -169773,7 +170116,7 @@
     },
     {
       "id": "source-weishu-130-wikisource-e1f8a70308a3",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.867,
@@ -169816,8 +170159,21 @@
         "afterLocal": "自今已後，眾僧犯殺人已上罪者，仍依俗斷，餘犯悉付昭玄，以內律僧制治之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Removed inline numeric source-note markers from local Chinese and matching English marker residue; cleaned local source matches upstream witness.",
+      "reviewedAt": "2026-06-26T06:38:11.835Z",
+      "reviewer": "resolve-inline-numeric-note-markers",
+      "appliedAt": "2026-06-26T06:38:11.835Z",
+      "appliedSummary": {
+        "mode": "removed-inline-numeric-note-markers",
+        "localIds": [
+          "s0377"
+        ],
+        "cleanedIds": [
+          "s0377"
+        ],
+        "translationFieldsCleaned": 2
+      }
     },
     {
       "id": "source-weishu-130-wikisource-e70328db613e",
@@ -170179,5 +170535,5 @@
       "retainedAfterRescan": true
     }
   ],
-  "updatedAt": "2026-06-26T05:46:54.178Z"
+  "updatedAt": "2026-06-26T06:52:15.175Z"
 }

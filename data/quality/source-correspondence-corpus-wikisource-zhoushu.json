@@ -2674,7 +2674,7 @@
     },
     {
       "id": "source-zhoushu-003-wikisource-93dc34a7285a",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "zhoushu",
@@ -2709,8 +2709,10 @@
         "afterLocal": "惟爾文武，咸知時事。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (43 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-zhoushu-003-wikisource-bb740704f559",
@@ -7816,7 +7818,7 @@
     },
     {
       "id": "source-zhoushu-014-wikisource-a7a99b4e411a",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "zhoushu",
@@ -7840,8 +7842,14 @@
         "afterLocal": ""
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Removed standalone edition-collation note from local source; remaining local/source text matches for this queued difference.",
+      "reviewedAt": "2026-06-26T06:13:50.186Z",
+      "reviewer": "remove-edition-collation-notes",
+      "appliedAt": "2026-06-26T06:13:50.186Z",
+      "appliedSummary": {
+        "mode": "edition-collation-note-removal"
+      }
     },
     {
       "id": "source-zhoushu-014-wikisource-bdd4b5927e09",
@@ -15041,7 +15049,7 @@
     },
     {
       "id": "source-zhoushu-027-wikisource-382d4ec6a6ef",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.5,
@@ -15093,8 +15101,10 @@
         "afterLocal": "尋以弘為仁壽城主，以逼宜陽。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (34 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-zhoushu-027-wikisource-44948d123c39",
@@ -17389,7 +17399,7 @@
     },
     {
       "id": "source-zhoushu-031-wikisource-60c12533fe13",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "book": "zhoushu",
@@ -17433,8 +17443,10 @@
         "afterLocal": "爾後遂大舉，再駕而定山東，卒如孝寬之策。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (16 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-zhoushu-031-wikisource-68c90a11c94b",
@@ -24666,7 +24678,7 @@
     },
     {
       "id": "source-zhoushu-042-wikisource-12c1b98d69bc",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "book": "zhoushu",
@@ -24710,8 +24722,10 @@
         "afterLocal": "又令梁州刺史楊乾運守潼州。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (49 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-zhoushu-042-wikisource-175bb80cee04",
@@ -31381,5 +31395,5 @@
       "retainedAfterRescan": true
     }
   ],
-  "updatedAt": "2026-06-26T05:46:54.178Z"
+  "updatedAt": "2026-06-26T06:14:46.736Z"
 }

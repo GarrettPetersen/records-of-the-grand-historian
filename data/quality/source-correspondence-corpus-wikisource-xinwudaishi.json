@@ -3171,7 +3171,7 @@
     },
     {
       "id": "source-xinwudaishi-001-wikisource-ba4835dc96c4",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.688,
@@ -3223,8 +3223,10 @@
         "afterLocal": "其父誠，以《五經》教授鄉里，生三子，曰全昱、存、溫。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (21 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-001-wikisource-bc5e8f4910e1",
@@ -4335,7 +4337,7 @@
     },
     {
       "id": "source-xinwudaishi-002-wikisource-78fe335fe198",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -4359,8 +4361,10 @@
         "afterLocal": "五月己卯，至自河中，杀佑国军节度使王重师。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source-only upstream annotation/gloss text is not part of the base corpus text; matching anchors show the local corpus text should be retained.",
+      "reviewedAt": "2026-06-26T06:29:39.267Z",
+      "reviewedBy": "resolve-source-annotation-noops"
     },
     {
       "id": "source-xinwudaishi-002-wikisource-7e333292668e",
@@ -10580,7 +10584,7 @@
     },
     {
       "id": "source-xinwudaishi-007-wikisource-4676bc2efd38",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.88,
@@ -10632,8 +10636,10 @@
         "afterLocal": "康義誠叛於唐，來降。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (24 Han/digit chars) is already present exactly once in the live chapter; queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-007-wikisource-607fb363707a",
@@ -17559,7 +17565,7 @@
     },
     {
       "id": "source-xinwudaishi-017-wikisource-b09db5cc8926",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -17583,8 +17589,10 @@
         "afterLocal": "凡物生而有知，未有不愛其父母者。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source-only upstream commentary or pronunciation note is not part of the base corpus text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-017-wikisource-b9f4d7018269",
@@ -20170,7 +20178,7 @@
     },
     {
       "id": "source-xinwudaishi-024-wikisource-ccddaa5a52c8",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -20205,8 +20213,10 @@
         "afterLocal": "郭崇韜，代州雁門人也，為河東教練使。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as no-op: local standalone heading is structural and is immediately repeated by the following source/local unit; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:29:39.580Z",
+      "reviewedBy": "resolve-small-structural-noops"
     },
     {
       "id": "source-xinwudaishi-024-wikisource-e8e824af5102",
@@ -24433,7 +24443,7 @@
     },
     {
       "id": "source-xinwudaishi-039-wikisource-4deb80021e31",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -24468,8 +24478,10 @@
         "afterLocal": "羅紹威，字端己，其先長沙人。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as no-op: local standalone heading is structural and is immediately repeated by the following source/local unit; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:29:39.580Z",
+      "reviewedBy": "resolve-small-structural-noops"
     },
     {
       "id": "source-xinwudaishi-039-wikisource-618e33732168",
@@ -29081,7 +29093,7 @@
     },
     {
       "id": "source-xinwudaishi-049-wikisource-7f83408ba171",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -29116,8 +29128,10 @@
         "afterLocal": "唐景思，秦州人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (3 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-049-wikisource-9907d8d3956b",
@@ -29823,7 +29837,7 @@
     },
     {
       "id": "source-xinwudaishi-051-wikisource-b1d7a428cc57",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -29858,8 +29872,10 @@
         "afterLocal": "範延光，字子瑰，相州臨漳人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as no-op: local standalone heading is structural and is immediately repeated by the following source/local unit; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:29:39.580Z",
+      "reviewedBy": "resolve-small-structural-noops"
     },
     {
       "id": "source-xinwudaishi-051-wikisource-c5e199f64009",
@@ -31740,7 +31756,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-04bd15aba008",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -31775,12 +31791,14 @@
         "afterLocal": "置距嶽臺南北里數，以三百六十通之，為步。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (6 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-0a265020c37f",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -31815,8 +31833,10 @@
         "afterLocal": "置朔望月離入歷，加半統，減去定分，各以日躔月離朓朒定數，朓減、朒加之，即所求也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (7 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-0ab7d3a16b72",
@@ -31879,7 +31899,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-0ae2eb2ffc56",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -31914,8 +31934,10 @@
         "afterLocal": "置午中入歷分，以其日損益率乘之，如統法而一，為分；"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (4 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-0b3914fc1cf0",
@@ -31997,7 +32019,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-0beffb43e062",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.7,
@@ -32040,8 +32062,10 @@
         "afterLocal": "交率：一十九萬五千九百二十七，九十七，五十六。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as local-fuller no-op (brief-prefix-local-fuller): upstream span is already contained in the local corpus unit; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:13:30.024Z",
+      "reviewer": "resolve-local-contained-source-noops"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-0ca75cd21a7f",
@@ -32123,7 +32147,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-0db16471e98a",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -32158,8 +32182,10 @@
         "afterLocal": "視距交分，中準以下，皆既；"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (3 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-114b72ae17e4",
@@ -32703,7 +32729,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-2c7033923676",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -32738,8 +32764,10 @@
         "afterLocal": "置加時入歷分秒，以其日損益率乘之，統法而一，損益其日朓朒數，為日躔朓朒定數。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (4 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-2f1dd7a23483",
@@ -32911,7 +32939,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-46ac4784c123",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -32946,8 +32974,10 @@
         "afterLocal": "置天正中氣午前分，便為午中入盈歷日分。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (6 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-477ca9468416",
@@ -33713,7 +33743,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-71edcec6c98e",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -33748,8 +33778,10 @@
         "afterLocal": "置距食分，一千九百一十二以上，用減四千七百八十；"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (5 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-7686692f8595",
@@ -34389,7 +34421,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-9b5114dc4c88",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -34424,8 +34456,10 @@
         "afterLocal": "各置入歷分，以其日損益率乘之，如統法而一，用損益其下晨分，即所求晨定分也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (4 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-9cfbae4e90d8",
@@ -34666,7 +34700,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-a93cddcda8f6",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -34701,8 +34735,10 @@
         "afterLocal": "置日躔入歷，以經法通之，三千二百八十七以下，用減三千二百八十七，為二至後；"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (4 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-adc80b75d9ed",
@@ -34832,7 +34868,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-b3052676c87c",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -34867,8 +34903,10 @@
         "afterLocal": "置入歷分，以其日損益率乘之，如統法而一，用損益其下內外數；"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (6 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-b570fd71c69d",
@@ -35124,7 +35162,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-c63b58713550",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -35159,12 +35197,14 @@
         "afterLocal": "置入歷分，以日躔朓朒定數，朓減、朒加之，程節除之，為限數。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (5 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-c6b634df8fe0",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -35199,8 +35239,10 @@
         "afterLocal": "置入歷分，以其度損益率乘之，經法而一，用損益其下先後數，即所求也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (4 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-c8d2bdca0cf4",
@@ -35378,7 +35420,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-cfa88eb4f32c",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -35413,8 +35455,10 @@
         "afterLocal": "各置日躔入歷，以日躔月離朓朒定數，朓減、朒加之，為定朔加時入歷。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (6 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-d11c0b37d691",
@@ -35718,7 +35762,7 @@
     },
     {
       "id": "source-xinwudaishi-058-wikisource-f3309de2182d",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "xinwudaishi",
@@ -35753,8 +35797,10 @@
         "afterLocal": "置其日晨昏分，以定分減之，為前；"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (5 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-058-wikisource-f6f10d70e202",
@@ -39030,7 +39076,7 @@
     },
     {
       "id": "source-xinwudaishi-069-wikisource-742404fee29b",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -39082,8 +39128,10 @@
         "afterLocal": "保勖卒，拜節度使。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only curated orthographic graph variants with matching punctuation; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-xinwudaishi-069-wikisource-7b1077b360e3",
@@ -40221,5 +40269,5 @@
       "notes": ""
     }
   ],
-  "updatedAt": "2026-06-26T05:46:54.178Z"
+  "updatedAt": "2026-06-26T06:29:39.580Z"
 }

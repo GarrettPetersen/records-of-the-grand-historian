@@ -5394,7 +5394,7 @@
     },
     {
       "id": "source-shiji-002-wikisource-90b7818d26cc",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.778,
@@ -5437,8 +5437,10 @@
         "afterLocal": "太康崩，弟中康立，是為帝中康。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource omitted small structural heading/list prefix text that the local corpus preserves; local text retained.",
+      "reviewedAt": "2026-06-26T06:13:20.731Z",
+      "reviewer": "resolve-wikisource-local-fuller-noops"
     },
     {
       "id": "source-shiji-002-wikisource-982353689eb8",
@@ -65397,7 +65399,7 @@
     },
     {
       "id": "source-shiji-019-wikisource-d430b4b47374",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.077,
@@ -65440,8 +65442,10 @@
         "afterLocal": "高祖十一年為郎。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream raw witness includes MediaWiki table markup/separators while the local structured table cell text is already represented; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:13:10.162Z",
+      "reviewer": "close-upstream-witness-artifacts"
     },
     {
       "id": "source-shiji-019-wikisource-d57bbf185347",
@@ -76129,7 +76133,7 @@
     },
     {
       "id": "source-shiji-025-wikisource-0997918e1ae7",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "book": "shiji",
@@ -76182,8 +76186,10 @@
         "afterLocal": "律數：九九八十一以為宮。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (42 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-025-wikisource-0a92085b4cec",
@@ -77292,7 +77298,7 @@
     },
     {
       "id": "source-shiji-025-wikisource-6ce0b5b7200b",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.333,
@@ -77335,8 +77341,10 @@
         "afterLocal": "軫者，言萬物益大而軫軫然。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as local-fuller no-op (short-label-local-fuller): upstream span is already contained in the local corpus unit; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:13:30.024Z",
+      "reviewer": "resolve-local-contained-source-noops"
     },
     {
       "id": "source-shiji-025-wikisource-6f459bc8323c",
@@ -79130,7 +79138,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-0085d96f1b29",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.157,
@@ -79173,8 +79181,10 @@
         "afterLocal": "曰北方水，太陰之精，主冬，日壬、癸。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-009a759a01fa",
@@ -79229,7 +79239,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-012c94d0d360",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.058,
@@ -79272,8 +79282,10 @@
         "afterLocal": "衡，太微，三光之廷。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-02a3fa670371",
@@ -79356,7 +79368,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-05331eab3085",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.369,
@@ -79399,12 +79411,14 @@
         "afterLocal": "此更為客主人。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary or pronunciation note strips to the live local base text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-05e2d2ad0d8a",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.238,
@@ -79456,12 +79470,14 @@
         "afterLocal": "朝鮮之拔，星茀于河戍；"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-060d1efb034e",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.2,
@@ -79504,8 +79520,10 @@
         "afterLocal": "其南北兩大星，曰南門。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-06c533d95234",
@@ -79671,7 +79689,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-0aae80d5bc87",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.121,
@@ -79714,8 +79732,10 @@
         "afterLocal": "狼比地有大星，曰南極老人。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary or pronunciation note strips to the live local base text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-0b6613cdb210",
@@ -80066,7 +80086,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-1098ec609511",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.078,
@@ -80118,12 +80138,14 @@
         "afterLocal": "斥絕，不和。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-10e4c9ea9ca9",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.269,
@@ -80166,8 +80188,10 @@
         "afterLocal": "火、金、水尤甚：火，軍憂；"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary or pronunciation note strips to the live local base text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-12362277d706",
@@ -80371,7 +80395,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-14269e3ff631",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.122,
@@ -80414,8 +80438,10 @@
         "afterLocal": "是正四時：仲春春分，夕出郊奎、婁、胃東五舍，為齊；"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary or pronunciation note strips to the live local base text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-1510af88b63f",
@@ -80532,7 +80558,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-1698f28cf300",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "shiji",
@@ -80556,8 +80582,10 @@
         "afterLocal": "鉞北，北河；"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source-only upstream commentary or pronunciation note is not part of the base corpus text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-196f4f5c382b",
@@ -80830,7 +80858,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-1f136b0744cf",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.192,
@@ -80891,8 +80919,10 @@
         "afterLocal": "謹視其所見之國，不可舉事用兵。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-1f9ae7f727f1",
@@ -81625,7 +81655,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-2837728be56e",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.2,
@@ -81668,12 +81698,14 @@
         "afterLocal": "其星狀類辰星，去地可六丈。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-2a11a6aa5279",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.535,
@@ -81725,8 +81757,10 @@
         "afterLocal": "兔居太白前，軍罷；"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-2b1bb4190035",
@@ -81853,7 +81887,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-2dc9f1c2046c",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.039,
@@ -81896,8 +81930,10 @@
         "afterLocal": "東，相；"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-2e3527283bfc",
@@ -82598,7 +82634,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-3950eec82161",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.148,
@@ -82650,8 +82686,10 @@
         "afterLocal": "其大星旁小星為附耳。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-398abb6f4889",
@@ -82809,7 +82847,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-3c9e2137125f",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.093,
@@ -82852,8 +82890,10 @@
         "afterLocal": "北斗七星，所謂「旋、璣、玉衡以齊七政」。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-3cae3136ad03",
@@ -83025,7 +83065,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-3fafca1f6905",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.58,
@@ -83068,8 +83108,10 @@
         "afterLocal": "自蚩尤以來，未嘗若斯也。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: after removing explicit upstream commentary apparatus, the source span matches the local base text; local corpus base text retained.",
+      "reviewedAt": "2026-06-26T06:29:39.267Z",
+      "reviewedBy": "resolve-source-annotation-noops"
     },
     {
       "id": "source-shiji-027-wikisource-405649b2a027",
@@ -83393,7 +83435,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-44550bb1f06a",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.326,
@@ -83436,12 +83478,14 @@
         "afterLocal": "火與水合為焠，與金合為鑠，為喪，皆不可舉事，用兵大敗。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream witness interleaves commentary/gloss text that strips to the local base text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:13:10.162Z",
+      "reviewer": "close-upstream-witness-artifacts"
     },
     {
       "id": "source-shiji-027-wikisource-44e922db08ed",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.156,
@@ -83484,12 +83528,14 @@
         "afterLocal": "熒惑也亂，填星也下犯上，太白也彊國以戰敗，辰星也女亂。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary or pronunciation note strips to the live local base text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-45024483d265",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "shiji",
@@ -83513,8 +83559,10 @@
         "afterLocal": "其內五星，五帝坐。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source-only upstream commentary or pronunciation note is not part of the base corpus text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-45227458e24a",
@@ -83601,7 +83649,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-4734143b484b",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.242,
@@ -83644,8 +83692,10 @@
         "afterLocal": "不相逮，不害。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-475c947f5dcc",
@@ -83712,7 +83762,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-4a88bb83bd13",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.126,
@@ -83791,8 +83841,10 @@
         "afterLocal": "其東有大星曰狼。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-4b6a596d8835",
@@ -84179,7 +84231,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-51119f2a66ff",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "shiji",
@@ -84203,8 +84255,10 @@
         "afterLocal": "天行德，天子更立年；"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source-only upstream commentary or pronunciation note is not part of the base corpus text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-51c6239c3378",
@@ -84412,7 +84466,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-55a8b2b2f62a",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "shiji",
@@ -84436,8 +84490,10 @@
         "afterLocal": "燕、齊之疆，候在辰星，占於虛、危。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source-only upstream commentary or pronunciation note is not part of the base corpus text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-55ce47ff631a",
@@ -84576,7 +84632,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-56caa3e01d64",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "shiji",
@@ -84600,8 +84656,10 @@
         "afterLocal": "宋、鄭之疆，候在歲星，占於房、心。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source-only upstream commentary or pronunciation note is not part of the base corpus text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-586bae4c55eb",
@@ -85049,7 +85107,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-5e6b2cbca157",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "shiji",
@@ -85073,8 +85131,10 @@
         "afterLocal": "河、濟之閒，時有墜星。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source-only upstream commentary or pronunciation note is not part of the base corpus text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-5fc891e80bf9",
@@ -85444,7 +85504,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-6b1474a347c9",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "shiji",
@@ -85468,8 +85528,10 @@
         "afterLocal": "平旦建者魁；"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source-only upstream commentary or pronunciation note is not part of the base corpus text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-6b3140c309ce",
@@ -86244,7 +86306,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-75e7af654be5",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.05,
@@ -86287,8 +86349,10 @@
         "afterLocal": "曰東方木，主春，日甲乙。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-762913835d28",
@@ -86321,7 +86385,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-76506383f992",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.192,
@@ -86364,12 +86428,14 @@
         "afterLocal": "金、火尤甚。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-78a02b57bdf2",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.09,
@@ -86412,8 +86478,10 @@
         "afterLocal": "旁有一大星為北落。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary or pronunciation note strips to the live local base text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-7a97b0bb4778",
@@ -86968,7 +87036,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-81620b75a10f",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.036,
@@ -87011,8 +87079,10 @@
         "afterLocal": "用昏建者杓；"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-8171272b9b3e",
@@ -87278,7 +87348,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-8683bc43291c",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "shiji",
@@ -87302,8 +87372,10 @@
         "afterLocal": "兩河、天闕閒為關梁。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source-only upstream commentary or pronunciation note is not part of the base corpus text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-86fa96f239e9",
@@ -88237,7 +88309,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-91d841f1134a",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "shiji",
@@ -88261,8 +88333,10 @@
         "afterLocal": "其北河鼓。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source-only upstream commentary or pronunciation note is not part of the base corpus text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-93030c57e173",
@@ -88295,7 +88369,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-943388f99a90",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.136,
@@ -88338,8 +88412,10 @@
         "afterLocal": "明與四星等，若五星入軫中，兵大起。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-9817399c8049",
@@ -88708,7 +88784,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-9bc7f93663b7",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "shiji",
@@ -88732,8 +88808,10 @@
         "afterLocal": "上而疾，未盡其日，過參天，疾其對國。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source-only upstream commentary or pronunciation note is not part of the base corpus text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-9ce15d5f38d6",
@@ -88785,7 +88863,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-9d42d36d80fc",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "shiji",
@@ -88809,8 +88887,10 @@
         "afterLocal": "房南眾星曰騎官。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source-only upstream commentary or pronunciation note is not part of the base corpus text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-a04dac8e8006",
@@ -89180,7 +89260,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-a39d96f5105c",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "shiji",
@@ -89204,8 +89284,10 @@
         "afterLocal": "旁有兩星曰衿；"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source-only upstream commentary or pronunciation note is not part of the base corpus text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-a3c3afa81721",
@@ -89241,7 +89323,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-a3e5c96ad34a",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.054,
@@ -89284,8 +89366,10 @@
         "afterLocal": "旁有八星，絕漢，曰天潢。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-a46aacd69fb1",
@@ -89774,7 +89858,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-ad126a329bc1",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.378,
@@ -89817,12 +89901,14 @@
         "afterLocal": "若至委曲小變，不可勝道。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-ae69d8764485",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.038,
@@ -89865,8 +89951,10 @@
         "afterLocal": "殺失者，罰出太白。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-ae6b6c6475ae",
@@ -90020,7 +90108,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-af623a78864d",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.5,
@@ -90063,8 +90151,10 @@
         "afterLocal": "負且戴，有喜。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as local-fuller no-op (short-label-local-fuller): upstream span is already contained in the local corpus unit; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:13:30.024Z",
+      "reviewer": "resolve-local-contained-source-noops"
     },
     {
       "id": "source-shiji-027-wikisource-af83343a565c",
@@ -90278,7 +90368,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-b672a9abe76e",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.217,
@@ -90321,8 +90411,10 @@
         "afterLocal": "星去地可六丈，大而赤，數動，有光。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-b69c8ce37bd3",
@@ -90404,7 +90496,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-b81559676041",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.106,
@@ -90456,8 +90548,10 @@
         "afterLocal": "建星者，旗也。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-b85f61eaf760",
@@ -90902,7 +90996,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-be860f40f474",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.243,
@@ -90945,8 +91039,10 @@
         "afterLocal": "其逆入，若不軌道，以所犯命之；"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-bec92e355e80",
@@ -91130,7 +91226,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-c09f00a84794",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "shiji",
@@ -91154,8 +91250,10 @@
         "afterLocal": "江星動，人涉水。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source-only upstream commentary or pronunciation note is not part of the base corpus text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-c10447eb40cc",
@@ -92537,7 +92635,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-db88b717edf4",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.02,
@@ -92580,8 +92678,10 @@
         "afterLocal": "織女，天女孫也。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-dba04a331d44",
@@ -92727,7 +92827,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-dd2891369433",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.496,
@@ -92779,8 +92879,10 @@
         "afterLocal": "日變修德，月變省刑，星變結和。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-dd4381b74599",
@@ -93623,7 +93725,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-e8aadfd77595",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.14,
@@ -93666,8 +93768,10 @@
         "afterLocal": "水則變謀而更事；"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary or pronunciation note strips to the live local base text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-ec2076f1dd82",
@@ -93982,7 +94086,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-ef161d269c5e",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.159,
@@ -94025,8 +94129,10 @@
         "afterLocal": "火犯守角，則有戰。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-f0642f6fca00",
@@ -94323,7 +94429,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-f51e6159ed88",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "shiji",
@@ -94347,8 +94453,10 @@
         "afterLocal": "婁為聚眾。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source-only upstream commentary or pronunciation note is not part of the base corpus text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-f79d9cd550f4",
@@ -94421,7 +94529,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-f8f03c138347",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.222,
@@ -94464,8 +94572,10 @@
         "afterLocal": "星去地可六丈，大而白，類太白。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-f92c9ca44162",
@@ -94532,7 +94642,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-fa28da2b4f2e",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.25,
@@ -94575,8 +94685,10 @@
         "afterLocal": "所出，其下起兵，兵彊；"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-fbaf33b50027",
@@ -94611,7 +94723,7 @@
     },
     {
       "id": "source-shiji-027-wikisource-fcf193031744",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.09,
@@ -94654,8 +94766,10 @@
         "afterLocal": "斥小，疏弱。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: embedded upstream commentary/pronunciation notes strip to the live local base text under local editorial apparatus; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-027-wikisource-fd0265531921",
@@ -96890,7 +97004,7 @@
     },
     {
       "id": "source-shiji-033-wikisource-88695a5f8263",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -96933,8 +97047,10 @@
         "afterLocal": "作此以誡成王。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: raw Wikisource dropped visible linked/template text while the local corpus preserves the fuller source wording; local text retained.",
+      "reviewedAt": "2026-06-26T06:31:30.434Z",
+      "reviewer": "resolve-wikisource-dropped-visible-text"
     },
     {
       "id": "source-shiji-033-wikisource-a0b0ddc77967",
@@ -97091,7 +97207,7 @@
     },
     {
       "id": "source-shiji-033-wikisource-f08fbd99e635",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -97134,8 +97250,10 @@
         "afterLocal": "宣王曰：「然，能訓治其民矣。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants or upstream correction-bracket notation; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:13:10.162Z",
+      "reviewer": "close-upstream-witness-artifacts"
     },
     {
       "id": "source-shiji-033-wikisource-fad4b3caee0d",
@@ -100186,7 +100304,7 @@
     },
     {
       "id": "source-shiji-038-wikisource-739dea84f531",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -100229,8 +100347,10 @@
         "afterLocal": "宋使華元將，鄭敗宋，囚華元。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants or upstream correction-bracket notation; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:13:10.162Z",
+      "reviewer": "close-upstream-witness-artifacts"
     },
     {
       "id": "source-shiji-038-wikisource-826743659517",
@@ -109319,7 +109439,7 @@
     },
     {
       "id": "source-shiji-043-wikisource-d8485a166cc2",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -109362,8 +109482,10 @@
         "afterLocal": "趙與魏伯陽。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants or upstream correction-bracket notation; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:13:10.162Z",
+      "reviewer": "close-upstream-witness-artifacts"
     },
     {
       "id": "source-shiji-043-wikisource-e06b402493c5",
@@ -110344,7 +110466,7 @@
     },
     {
       "id": "source-shiji-044-wikisource-437f3f78f70f",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -110387,8 +110509,10 @@
         "afterLocal": "是歲，惠王卒，子襄王立。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants or upstream correction-bracket notation; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:13:10.162Z",
+      "reviewer": "close-upstream-witness-artifacts"
     },
     {
       "id": "source-shiji-044-wikisource-4571a91e69f5",
@@ -110470,7 +110594,7 @@
     },
     {
       "id": "source-shiji-044-wikisource-46fd61572f99",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.846,
@@ -110522,8 +110646,10 @@
         "afterLocal": "信陵君無忌卒。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants or upstream correction-bracket notation; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:13:10.162Z",
+      "reviewer": "close-upstream-witness-artifacts"
     },
     {
       "id": "source-shiji-044-wikisource-48bf8ea8c40e",
@@ -110794,7 +110920,7 @@
     },
     {
       "id": "source-shiji-044-wikisource-68ae51f7df5e",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -110855,8 +110981,10 @@
         "afterLocal": "文侯受子夏經藝，客段干木，過其閭，未嘗不軾也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants or upstream correction-bracket notation; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:13:10.162Z",
+      "reviewer": "close-upstream-witness-artifacts"
     },
     {
       "id": "source-shiji-044-wikisource-6afc56b3c2ed",
@@ -110911,7 +111039,7 @@
     },
     {
       "id": "source-shiji-044-wikisource-6c328f41d2f0",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.733,
@@ -110963,8 +111091,10 @@
         "afterLocal": "城酸棗。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants or upstream correction-bracket notation; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:13:10.162Z",
+      "reviewer": "close-upstream-witness-artifacts"
     },
     {
       "id": "source-shiji-044-wikisource-774a19fe1609",
@@ -111109,7 +111239,7 @@
     },
     {
       "id": "source-shiji-044-wikisource-88b94daacc0c",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.867,
@@ -111161,8 +111291,10 @@
         "afterLocal": "惠王數被於軍旅，卑禮厚幣以招賢者。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants or upstream correction-bracket notation; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:13:10.162Z",
+      "reviewer": "close-upstream-witness-artifacts"
     },
     {
       "id": "source-shiji-044-wikisource-8ee7c5c24443",
@@ -111226,7 +111358,7 @@
     },
     {
       "id": "source-shiji-044-wikisource-936562b2b30f",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.867,
@@ -111269,8 +111401,10 @@
         "afterLocal": "十九年反，重耳立為晉文公，而令魏武子襲魏氏之後封，列為大夫，治於魏。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants or upstream correction-bracket notation; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:13:10.162Z",
+      "reviewer": "close-upstream-witness-artifacts"
     },
     {
       "id": "source-shiji-044-wikisource-94f43c21b54e",
@@ -111364,7 +111498,7 @@
     },
     {
       "id": "source-shiji-044-wikisource-a7c91bca8afa",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -111416,12 +111550,14 @@
         "afterLocal": "魏太子增質於秦，秦怒，欲囚魏太子增。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants or upstream correction-bracket notation; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:13:10.162Z",
+      "reviewer": "close-upstream-witness-artifacts"
     },
     {
       "id": "source-shiji-044-wikisource-aaeda6be4fea",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.818,
@@ -111482,8 +111618,10 @@
         "afterLocal": "是歲，文侯卒，子擊立，是為武侯。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants or upstream correction-bracket notation; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:13:10.162Z",
+      "reviewer": "close-upstream-witness-artifacts"
     },
     {
       "id": "source-shiji-044-wikisource-bdc7a97a4df7",
@@ -111938,7 +112076,7 @@
     },
     {
       "id": "source-shiji-044-wikisource-ef125b8108ed",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -111981,8 +112119,10 @@
         "afterLocal": "齊宣王用孫子計，救趙擊魏。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants or upstream correction-bracket notation; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:13:10.162Z",
+      "reviewer": "close-upstream-witness-artifacts"
     },
     {
       "id": "source-shiji-044-wikisource-f8a229f0bed3",
@@ -112778,7 +112918,7 @@
     },
     {
       "id": "source-shiji-046-wikisource-0ec6251e01e9",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.667,
@@ -112821,8 +112961,10 @@
         "afterLocal": "田乞使人之魯，迎陽生。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants or upstream correction-bracket notation; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:13:10.162Z",
+      "reviewer": "close-upstream-witness-artifacts"
     },
     {
       "id": "source-shiji-046-wikisource-1dc466a5ce0b",
@@ -114651,7 +114793,7 @@
     },
     {
       "id": "source-shiji-047-wikisource-c83eb908c0e2",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.733,
@@ -114694,8 +114836,10 @@
         "afterLocal": "雖不能至，然心鄉往之。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as local-fuller no-op (brief-prefix-local-fuller): upstream span is already contained in the local corpus unit; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:13:30.024Z",
+      "reviewer": "resolve-local-contained-source-noops"
     },
     {
       "id": "source-shiji-047-wikisource-d8fbb8ea7bc1",
@@ -116048,7 +116192,7 @@
     },
     {
       "id": "source-shiji-056-wikisource-13b4cfe083ab",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -116091,8 +116235,10 @@
         "afterLocal": "項王怒，將誅定殷者將吏。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: normalized upstream span (8 Han/digit chars) is already present in the live chapter between matching before/after anchors (15/10 Han/digit chars); queue item is an alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-056-wikisource-1446d398cb41",
@@ -123579,7 +123725,7 @@
     },
     {
       "id": "source-shiji-081-wikisource-85f1214e2ba7",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.727,
@@ -123622,8 +123768,10 @@
         "afterLocal": "趙惠文王十六年，廉頗為趙將伐齊，大破之，取陽晉，拜為上卿，以勇氣聞於諸侯。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: discrepancy is caused by upstream MediaWiki residue such as __TOC__, Category, or PD-old text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-shiji-081-wikisource-886d45020fb7",
@@ -130936,7 +131084,7 @@
     },
     {
       "id": "source-shiji-116-wikisource-3905fcac99aa",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.667,
@@ -130979,8 +131127,10 @@
         "afterLocal": "在周為文王師，封楚。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as local-fuller no-op (short-label-local-fuller): upstream span is already contained in the local corpus unit; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:13:30.024Z",
+      "reviewer": "resolve-local-contained-source-noops"
     },
     {
       "id": "source-shiji-116-wikisource-5c2ebe93ece7",
@@ -132328,7 +132478,7 @@
     },
     {
       "id": "source-shiji-118-wikisource-7145e5d52210",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.81,
@@ -132371,8 +132521,10 @@
         "afterLocal": "淮南、衡山親為骨肉，疆土千里，列為諸侯，不務遵蕃臣職以承輔天子，而專挾邪僻之計，謀為畔逆，仍父子再亡國，各不終其身，為天下笑。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as local-fuller no-op (brief-prefix-local-fuller): upstream span is already contained in the local corpus unit; local corpus retained.",
+      "reviewedAt": "2026-06-26T06:13:30.024Z",
+      "reviewer": "resolve-local-contained-source-noops"
     },
     {
       "id": "source-shiji-118-wikisource-822592d649ec",
@@ -135533,5 +135685,5 @@
       "retainedAfterRescan": true
     }
   ],
-  "updatedAt": "2026-06-26T05:46:54.178Z"
+  "updatedAt": "2026-06-26T06:14:46.736Z"
 }

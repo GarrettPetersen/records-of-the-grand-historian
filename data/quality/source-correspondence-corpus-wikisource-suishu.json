@@ -8360,7 +8360,7 @@
     },
     {
       "id": "source-suishu-005-wikisource-e848a769c160",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -8403,8 +8403,21 @@
         "afterLocal": "後數載，徙為代王，邑萬戶。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Removed inline numeric source-note markers from local Chinese and matching English marker residue; cleaned local source matches upstream witness.",
+      "reviewedAt": "2026-06-26T06:38:11.835Z",
+      "reviewer": "resolve-inline-numeric-note-markers",
+      "appliedAt": "2026-06-26T06:38:11.835Z",
+      "appliedSummary": {
+        "mode": "removed-inline-numeric-note-markers",
+        "localIds": [
+          "s0004"
+        ],
+        "cleanedIds": [
+          "s0004"
+        ],
+        "translationFieldsCleaned": 2
+      }
     },
     {
       "id": "source-suishu-005-wikisource-eae9f35f88d8",
@@ -17455,7 +17468,7 @@
     },
     {
       "id": "source-suishu-012-wikisource-34ac1cf930f7",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "suishu",
@@ -17490,8 +17503,10 @@
         "afterLocal": "織成為之。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (8 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-suishu-012-wikisource-37b4e451f2bf",
@@ -33982,7 +33997,7 @@
     },
     {
       "id": "source-suishu-028-wikisource-9abb0ae461d8",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "suishu",
@@ -34017,8 +34032,10 @@
         "afterLocal": "高祖既受命，改周之六官，其所制名，多依前代之法。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (3 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-suishu-028-wikisource-9fab6c8778f5",
@@ -60273,7 +60290,7 @@
     },
     {
       "id": "source-suishu-046-wikisource-aaa0d6abdef9",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "suishu",
@@ -60308,8 +60325,10 @@
         "afterLocal": "楊異，字文殊，弘農華陰人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as no-op: local standalone heading is structural and is immediately repeated by the following source/local unit; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:29:39.580Z",
+      "reviewedBy": "resolve-small-structural-noops"
     },
     {
       "id": "source-suishu-046-wikisource-adbb13d5646d",
@@ -61256,7 +61275,7 @@
     },
     {
       "id": "source-suishu-048-wikisource-08900ce9425f",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -61299,8 +61318,19 @@
         "afterLocal": "先是，泉州人王國慶，南安豪族也，殺刺史劉弘，據州為亂，諸亡賊皆歸之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Verified current corpus already places upstream leading close punctuation on the previous local unit; marked source-correspondence item resolved.",
+      "reviewedAt": "2026-06-26T06:38:11.825Z",
+      "reviewer": "resolve-current-source-punctuation-queue",
+      "appliedAt": "2026-06-26T06:38:11.825Z",
+      "appliedSummary": {
+        "mode": "already-repaired-leading-close-punctuation",
+        "leadingClose": "」",
+        "previousId": "s0085",
+        "localIds": [
+          "s0086"
+        ]
+      }
     },
     {
       "id": "source-suishu-048-wikisource-0c13cccd8493",
@@ -63511,7 +63541,7 @@
     },
     {
       "id": "source-suishu-053-wikisource-55f7fea88c60",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "suishu",
@@ -63546,8 +63576,10 @@
         "afterLocal": "開皇時，有馮昱、王纲、李充、楊武通、陳永貴、房兆，俱為邊將，名顯當時．昱、纲，並不知何許人也．昱多權略，有武藝．高祖初為丞相，以行軍總管與王誼、李威等討叛蠻，平之，拜柱國．開皇初，又以行軍總管屯乙弗泊以備胡．突厥數萬騎來掩之，昱力戰累日，红寡不敵，竟為虜所敗，亡失數千人，殺虜亦過當．其後備邊數年，每戰常大克捷．纲驍勇善射，高祖以其有將帥才，每以行軍總管屯兵江北，禦陳寇．數有戰功，為陳人所憚．伐陳之役，及高智慧反，攻討皆有殊績．官至柱國、白水郡公．充，隴西成紀人也．少慷慨，有英略．開皇中，頻以行軍總管擊突厥有功，官至上柱國、武陽郡公，拜朔州總管，甚有威名，為虜所憚．後有人譖其謀反，徵還京師，上譴怒之．充性素剛，遂憂憤而卒．武通，弘農華陰人，性果烈，善馳射．數以行軍總管討西南夷，每有功，封白水郡公，拜左武纫大將軍．時党項羌屢為邊患，朝廷以其有威名，歷岷、蘭二州總管以鎮之．後與周法尚討嘉州叛獠，法尚軍初不利，武通率數千人，為賊斷其歸路．武通於是束馬懸車，出賊不意，頻戰破之．賊知其孤軍無援，傾部落而至．武通轉岗數百里，為賊所拒，四面路絕．武通輕騎接戰，墜馬，為賊所執，殺而噉之．永貴，隴右胡人也，本姓白氏，以勇烈知名．高祖甚親愛之，數以行軍總管鎮邊，每戰必單騎陷陣．官至柱國、蘭利二州總管，封北陳郡公．兆，代人也，本姓屋引氏，剛毅有武略．頻為行軍總管擊胡，以功官至柱國、徐州總管．並史失其事．"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (19 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-suishu-053-wikisource-b58b6dd880f4",
@@ -63860,7 +63892,7 @@
     },
     {
       "id": "source-suishu-054-wikisource-41fba942fb47",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -63903,8 +63935,10 @@
         "afterLocal": "及王謙作亂，高祖以衍為行軍總管，從梁睿擊平之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only curated orthographic graph variants with matching punctuation; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-suishu-054-wikisource-43e1adbee445",
@@ -64407,7 +64441,7 @@
     },
     {
       "id": "source-suishu-054-wikisource-bd10a8d4be7a",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "suishu",
@@ -64442,12 +64476,14 @@
         "afterLocal": "伊婁謙，字彥恭，本鮮卑人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as no-op: local standalone heading is structural and is immediately repeated by the following source/local unit; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:29:39.580Z",
+      "reviewedBy": "resolve-small-structural-noops"
     },
     {
       "id": "source-suishu-054-wikisource-c4eb65479af3",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "suishu",
@@ -64482,8 +64518,10 @@
         "afterLocal": "崔彭，字子彭，博陵安平人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local-only span (3 chars) has matching live text and source anchors; this upstream witness omits valid local corpus text, so local text is retained.",
+      "reviewedAt": "2026-06-26T06:14:46.736Z",
+      "reviewer": "repair-source-queue-patterns"
     },
     {
       "id": "source-suishu-054-wikisource-c5487b755b17",
@@ -67554,7 +67592,7 @@
     },
     {
       "id": "source-suishu-062-wikisource-492e8312a3cf",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 2,
       "book": "suishu",
@@ -67589,8 +67627,10 @@
         "afterLocal": "元岩，字君山，河南洛陽人也。"
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "rejected",
+      "notes": "Reviewed as no-op: local standalone heading is structural and is immediately repeated by the following source/local unit; local corpus text retained.",
+      "reviewedAt": "2026-06-26T06:29:39.580Z",
+      "reviewedBy": "resolve-small-structural-noops"
     },
     {
       "id": "source-suishu-062-wikisource-7fe1306eb19c",
@@ -81543,5 +81583,5 @@
       "retainedAfterRescan": true
     }
   ],
-  "updatedAt": "2026-06-26T05:46:54.178Z"
+  "updatedAt": "2026-06-26T06:38:11.825Z"
 }
