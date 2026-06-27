@@ -31,7 +31,7 @@ function parseArgs() {
 }
 
 function runScanner(book) {
-  const res = spawnSync('node', ['scripts/scan-quote-span-alignment.mjs', '--book', book, '--limit=-1'], {
+  const res = spawnSync('node', ['scripts/scan-quote-span-alignment.mjs', '--book', book, '--publication', '--limit=-1'], {
     cwd: process.cwd(),
     encoding: 'utf8',
     maxBuffer: 1024 * 1024 * 64
@@ -49,7 +49,7 @@ function parseScannerOutput(output) {
   let current = null;
 
   for (const line of output.split(/\n/)) {
-    const head = line.match(/^(data\/[^/]+\/\d{3}\.json)\s+(\S+)\s+block\s+(\d+)/);
+    const head = line.match(/^(data\/[^/]+\/\d{3}\.json)\s+(\S+)\s+block\s+(-?\d+)/);
     if (head) {
       current = {
         file: head[1],
@@ -106,6 +106,64 @@ function categorize(item) {
   return 'needs_review';
 }
 
+function doubleQuoteCount(text) {
+  return Array.from(String(text || '')).filter(char => char === '"' || char === '“' || char === '”').length;
+}
+
+function closesWithDoubleQuote(text) {
+  return /["”]\s*$/u.test(String(text || ''));
+}
+
+function matchingCloseQuote(text) {
+  return String(text || '').includes('“') && !String(text || '').includes('”') ? '”' : '"';
+}
+
+function appendBeforeTrailingSpace(text, value) {
+  const source = String(text || '');
+  const trailing = source.match(/\s*$/u)?.[0] || '';
+  const index = source.length - trailing.length;
+  return `${source.slice(0, index)}${value}${source.slice(index)}`;
+}
+
+function chapterItems(file) {
+  const chapter = JSON.parse(fs.readFileSync(file, 'utf8'));
+  const result = new Map();
+  for (const block of chapter.content || []) {
+    for (const item of [...(block.sentences || []), ...(block.cells || [])]) {
+      if (item.id) result.set(item.id, item);
+    }
+  }
+  return result;
+}
+
+function translationFields(item) {
+  const fields = [];
+  if (item?.translations?.[0]) {
+    fields.push({ field: 'literal', text: item.translations[0].literal || '' });
+    fields.push({ field: 'idiomatic', text: item.translations[0].idiomatic || '' });
+  }
+  if (Object.hasOwn(item || {}, 'literal')) fields.push({ field: 'literal', text: item.literal || '' });
+  if (Object.hasOwn(item || {}, 'idiomatic')) fields.push({ field: 'idiomatic', text: item.idiomatic || '' });
+  if (Object.hasOwn(item || {}, 'translation')) fields.push({ field: 'translation', text: item.translation || '' });
+  return fields.filter(entry => entry.text);
+}
+
+function suggestedFixes(item, itemByFile) {
+  if (!item.problems.some(problem => problem.includes('English quote span crosses'))) return [];
+  const chapterItem = itemByFile.get(item.file)?.get(item.id);
+  if (!chapterItem) return [];
+  return translationFields(chapterItem)
+    .filter(({ text }) => doubleQuoteCount(text) % 2 === 1 && !closesWithDoubleQuote(text))
+    .map(({ field, text }) => ({
+      type: 'append-missing-double-close',
+      field,
+      before: text,
+      after: appendBeforeTrailingSpace(text, matchingCloseQuote(text)),
+      reviewed: false,
+      decision: 'pending',
+    }));
+}
+
 function summarize(items) {
   const byCategory = {};
   const byChapter = {};
@@ -127,9 +185,15 @@ function summarize(items) {
 function main() {
   const opts = parseArgs();
   const output = runScanner(opts.book);
-  const items = parseScannerOutput(output).map(item => ({
+  const rawItems = parseScannerOutput(output);
+  const itemByFile = new Map();
+  for (const file of [...new Set(rawItems.map(item => item.file))]) {
+    itemByFile.set(file, chapterItems(file));
+  }
+  const items = rawItems.map(item => ({
     ...item,
-    category: categorize(item)
+    category: categorize(item),
+    suggestedFixes: suggestedFixes(item, itemByFile),
   }));
   const report = {
     book: opts.book,

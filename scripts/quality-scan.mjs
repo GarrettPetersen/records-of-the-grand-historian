@@ -15,6 +15,7 @@ if (args.includes('--help') || args.includes('-h')) {
 Runs the reusable cheap QA scanners:
   - scan-source-artifacts.mjs
   - scan-translation-artifacts.mjs
+  - scan-placeholder-translations.mjs
   - scan-quote-span-alignment.mjs
   - scan-translation-alignment.mjs
   - scan-compound-name-spacing.mjs
@@ -129,6 +130,12 @@ const commands = [
     args: ['scripts/scan-translation-artifacts.mjs'],
   },
   {
+    id: 'placeholder-translations',
+    label: 'Placeholder translation candidates',
+    command: 'node',
+    args: ['scripts/scan-placeholder-translations.mjs'],
+  },
+  {
     id: 'quote-span-alignment',
     label: 'Quote span alignment candidates',
     command: 'node',
@@ -213,12 +220,12 @@ if (wantsJson) {
   const totalHardHits = reports
     .filter((report) => !report.advisory)
     .reduce((sum, report) => (
-      sum + (Number(report.count) || Number(report.totalHits) || 0)
+      sum + (Number(report.count) || Number(report.totalHits) || Number(report.totalItems) || 0)
     ), 0);
   const totalAdvisoryHits = reports
     .filter((report) => report.advisory)
     .reduce((sum, report) => (
-      sum + (Number(report.count) || Number(report.totalHits) || 0)
+      sum + (Number(report.count) || Number(report.totalHits) || Number(report.totalItems) || 0)
     ), 0);
   console.log(JSON.stringify({
     totalHits: totalHardHits + totalAdvisoryHits,

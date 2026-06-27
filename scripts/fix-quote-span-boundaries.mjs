@@ -11,8 +11,11 @@ const BOUNDARY_OPEN_QUOTES = ['“', '"', '‘', "'"];
 const BOUNDARY_CLOSE_QUOTES = ['”', '"', '’', "'"];
 
 function usage() {
-  console.error('Usage: node scripts/fix-quote-span-boundaries.mjs <chapter.json> [--apply] [--limit=N]');
+  console.error('Usage: node scripts/fix-quote-span-boundaries.mjs <chapter.json> [--apply] [--limit=N] [--unsafe-depth-fixes]');
   console.error('Example: node scripts/fix-quote-span-boundaries.mjs data/shiji/002.json --limit=12');
+  console.error('');
+  console.error('By default, this only moves adjacent quote-boundary punctuation. Depth-based');
+  console.error('English quote add/remove fixes require --unsafe-depth-fixes and manual review.');
   process.exit(1);
 }
 
@@ -25,6 +28,7 @@ function parseArgs() {
   return {
     chapterFile,
     apply: args.includes('--apply'),
+    unsafeDepthFixes: args.includes('--unsafe-depth-fixes'),
     limit: limitArg ? Number.parseInt(limitArg.slice('--limit='.length), 10) : Infinity
   };
 }
@@ -455,6 +459,7 @@ function printProposals(chapterFile, proposals, apply) {
 
 function fixChapterQuoteBoundaries(chapter, options = {}) {
   const limit = options.limit ?? Infinity;
+  const unsafeDepthFixes = options.unsafeDepthFixes === true;
   const proposals = [];
 
   for (const block of chapter.content || []) {
@@ -462,6 +467,7 @@ function fixChapterQuoteBoundaries(chapter, options = {}) {
     const sentences = block.sentences || [];
     const remainingAfterAdjacent = Math.max(0, limit - proposals.length);
     normalizeAdjacentQuoteBoundary(sentences, proposals, remainingAfterAdjacent);
+    if (!unsafeDepthFixes) continue;
     const remainingAfterDepthFixes = Math.max(0, limit - proposals.length);
     normalizeByChineseDepth(sentences, proposals, remainingAfterDepthFixes);
     const remainingAfterSpanFixes = Math.max(0, limit - proposals.length);
@@ -472,9 +478,9 @@ function fixChapterQuoteBoundaries(chapter, options = {}) {
 }
 
 function main() {
-  const { chapterFile, apply, limit } = parseArgs();
+  const { chapterFile, apply, limit, unsafeDepthFixes } = parseArgs();
   const chapter = JSON.parse(fs.readFileSync(chapterFile, 'utf8'));
-  const { proposals } = fixChapterQuoteBoundaries(chapter, { limit });
+  const { proposals } = fixChapterQuoteBoundaries(chapter, { limit, unsafeDepthFixes });
 
   printProposals(chapterFile, proposals, apply);
 

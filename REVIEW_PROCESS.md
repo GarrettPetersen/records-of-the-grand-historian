@@ -55,15 +55,25 @@ Focus on:
 - Tone discipline: keep the translation scholarly and restrained.
 - Terminology consistency: preserve repeated technical terms, rank titles, ritual names, and institutional terms once a form is established.
 - Punctuation and spacing: keep English punctuation clean and readable.
+- Direct quote fidelity: when the Chinese has a direct quote, the English must
+  preserve it as direct quoted speech. Do not paraphrase quoted speech into a
+  summary, even if the quotation marks still line up.
+- Scripted quote fixes are proposal generators, not approval. Review every
+  before/after quote change manually before committing it.
+- Placeholder boilerplate is not a translation, even when it is fluent English.
+  Replace stock lines such as generic commentary/gloss summaries with a real
+  translation of the Chinese source.
 
 ## Common Issues To Fix
 
 - Literal translations that sound unnatural in English.
 - Idiomatic translations that drift away from the source.
+- Direct quotes whose English is merely a summary of the quoted Chinese.
 - Inconsistent names or titles inside the same chapter.
 - Fragments that should be full sentences.
 - English that is too terse, too ornate, or too modern for the passage.
-- Leftover placeholders, empty fields, or Chinese characters in English text.
+- Leftover placeholders, empty fields, Chinese characters in English text, or
+  English boilerplate that describes a note instead of translating it.
 
 ## After Applying Review
 
@@ -72,6 +82,8 @@ Focus on:
 - applies the edited review JSON,
 - recalculates translated sentence counts,
 - runs the translation quality checks,
+- self-tests the quote span checker and checks quote span alignment,
+- self-tests and runs the placeholder-translation scanner,
 - marks the chapter reviewed in `data/manifest.json`,
 - rebuilds the corresponding book.
 

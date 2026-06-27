@@ -2,6 +2,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 
 const CHINESE_OPEN_QUOTES = new Set(['「', '『', '“', '‘']);
 const CHINESE_CLOSE_QUOTES = new Set(['」', '』', '”', '’']);
@@ -503,7 +504,166 @@ function scanChapter(file) {
 }
 
 function isPublicationBlockingQuoteProblem(note) {
-  return /^English (?:begins|ends|has an unmatched)/.test(note);
+  return /^English (?:begins|ends|has an unmatched)/.test(note)
+    || /English (?:has no quote marks|has a closing quote|closes a quote span|has an opening quote)/.test(note)
+    || /English quote span crosses/.test(note)
+    || /Chinese (?:has a complete quoted unit|opens a multi-sentence quote span|closes a multi-sentence quote span|quote stack not closed)/.test(note);
+}
+
+function parseBookChapter(file) {
+  const normalized = String(file || '').split(path.sep).join('/');
+  const match = normalized.match(/(?:^|\/)data\/([^/]+)\/(\d{3})\.json$/u);
+  if (!match) return { book: null, chapter: null };
+  return { book: match[1], chapter: match[2] };
+}
+
+function quoteProblemSeverity(problem) {
+  const notes = (problem.boundaryProblems || []).join(' ');
+  if (/no quote marks|quote stack not closed|unmatched closing|begins with a likely closing|crosses|opens a multi-sentence|closes a multi-sentence/u.test(notes)) {
+    return 3;
+  }
+  return 2;
+}
+
+function problemStableId(problem) {
+  const { book, chapter } = parseBookChapter(problem.file);
+  const key = [
+    book || '',
+    chapter || '',
+    problem.id || '',
+    problem.blockIndex ?? '',
+    (problem.boundaryProblems || []).join('|'),
+    problem.chinese || '',
+    problem.english || '',
+  ].join('\u241f');
+  return `quote-${crypto.createHash('sha1').update(key).digest('hex').slice(0, 12)}`;
+}
+
+function addQuoteCounts(target, item) {
+  target.totalItems = (target.totalItems || 0) + 1;
+  target.pendingItems = (target.pendingItems || 0) + 1;
+  const severity = String(item.severity || 'unknown');
+  target.bySeverity = target.bySeverity || {};
+  target.bySeverity[severity] = target.bySeverity[severity] || {
+    severity,
+    totalItems: 0,
+    pendingItems: 0,
+  };
+  target.bySeverity[severity].totalItems += 1;
+  target.bySeverity[severity].pendingItems += 1;
+  if (Number(item.severity) >= 3) {
+    target.highPendingItems = (target.highPendingItems || 0) + 1;
+  } else if (Number(item.severity) > 0) {
+    target.lowPendingItems = (target.lowPendingItems || 0) + 1;
+  } else {
+    target.unknownPendingItems = (target.unknownPendingItems || 0) + 1;
+  }
+  const currentHighest = Number(target.highestPendingSeverity || 0);
+  if (Number(item.severity) > currentHighest) {
+    target.highestPendingSeverity = Number(item.severity);
+  }
+}
+
+function emptyQuoteCounts(extra = {}) {
+  return {
+    ...extra,
+    totalItems: 0,
+    pendingItems: 0,
+    highPendingItems: 0,
+    lowPendingItems: 0,
+    unknownPendingItems: 0,
+    highestPendingSeverity: null,
+    bySeverity: {},
+  };
+}
+
+function buildReport(files, problems, bookFilter, publicationOnly) {
+  const report = {
+    scanner: 'scan-quote-span-alignment',
+    generatedAt: new Date().toISOString(),
+    scannedFiles: files.length,
+    book: bookFilter,
+    publicationOnly,
+    ...emptyQuoteCounts(),
+    byFile: {},
+    byProblem: {},
+    byChapter: {},
+    items: [],
+  };
+
+  for (const problem of problems) {
+    const { book, chapter } = parseBookChapter(problem.file);
+    const item = {
+      id: problemStableId(problem),
+      book,
+      chapter,
+      file: problem.file,
+      blockIndex: problem.blockIndex,
+      sentenceId: problem.id,
+      severity: quoteProblemSeverity(problem),
+      boundaryProblems: problem.boundaryProblems,
+      chinese: problem.chinese,
+      english: problem.english,
+    };
+    report.items.push(item);
+    report.byFile[item.file] = (report.byFile[item.file] || 0) + 1;
+    for (const note of item.boundaryProblems || []) {
+      report.byProblem[note] = (report.byProblem[note] || 0) + 1;
+    }
+    addQuoteCounts(report, item);
+    if (book && chapter) {
+      const key = `${book}/${chapter}`;
+      report.byChapter[key] = report.byChapter[key] || emptyQuoteCounts({ book, chapter });
+      addQuoteCounts(report.byChapter[key], item);
+    }
+  }
+
+  return report;
+}
+
+function runSelfTest() {
+  const cases = [
+    {
+      name: 'aligned complete quote',
+      items: [
+        { id: 'ok', zh: '帝曰：「善。」', translations: [{ idiomatic: 'The emperor said, “Good.”' }] },
+      ],
+      expectProblem: false,
+    },
+    {
+      name: 'missing English quote marks',
+      items: [
+        { id: 'missing', zh: '帝曰：「善。」', translations: [{ idiomatic: 'The emperor said good.' }] },
+      ],
+      expectProblem: /no quote marks/u,
+    },
+    {
+      name: 'stray English closing quote',
+      items: [
+        { id: 'stray', zh: '帝從之。', translations: [{ idiomatic: 'The emperor accepted it.”' }] },
+      ],
+      expectProblem: /unmatched closing/u,
+    },
+  ];
+
+  const failures = [];
+  for (const testCase of cases) {
+    const problems = scanSequence(testCase.items, 'self-test', 0, { stack: [] }, { depth: 0 });
+    const notes = problems.flatMap(problem => problem.boundaryProblems || []).join('\n');
+    if (testCase.expectProblem === false && problems.length > 0) {
+      failures.push(`${testCase.name}: expected clean, got ${notes}`);
+    } else if (testCase.expectProblem && !testCase.expectProblem.test(notes)) {
+      failures.push(`${testCase.name}: expected ${testCase.expectProblem}, got ${notes || 'no problems'}`);
+    }
+  }
+
+  if (failures.length > 0) {
+    console.error('Quote span alignment self-test failed:');
+    for (const failure of failures) console.error(`- ${failure}`);
+    process.exit(1);
+  }
+
+  console.log('Quote span alignment self-test OK.');
 }
 
 function main() {
@@ -513,21 +673,32 @@ function main() {
   let wantsJson = false;
   let wantsSummary = false;
   let publicationOnly = false;
+  let outPath = null;
+  let failOnProblems = true;
+  let wantsSelfTest = false;
 
   for (let i = 2; i < process.argv.length; i += 1) {
     const arg = process.argv[i];
     if (arg === '--help' || arg === '-h') {
       console.error(`Usage:
-  node scripts/scan-quote-span-alignment.mjs [--book BOOK] [--limit N] [--summary] [--json] [path ...]
+  node scripts/scan-quote-span-alignment.mjs [--book BOOK] [--limit N] [--summary] [--json] [--out PATH] [--no-fail] [path ...]
+  node scripts/scan-quote-span-alignment.mjs --self-test
 
 Options:
   --book BOOK  Scan data/BOOK
   --limit N    Number of detailed problems to show; 0 shows count only, -1 shows all
   --summary    Print count only
   --json       Emit machine-readable report
+  --out PATH   Write machine-readable report to PATH
+  --no-fail    Exit 0 even if problems are found
+  --self-test  Verify quote detection with built-in fixtures
 
 Explicit paths may be chapter files or directories. Use either --book or paths, not both.`);
       process.exit(0);
+    }
+    if (arg === '--self-test') {
+      wantsSelfTest = true;
+      continue;
     }
     if (arg === '--json') {
       wantsJson = true;
@@ -538,6 +709,19 @@ Explicit paths may be chapter files or directories. Use either --book or paths, 
       continue;
     }
     if (arg === '--fail') {
+      failOnProblems = true;
+      continue;
+    }
+    if (arg === '--no-fail') {
+      failOnProblems = false;
+      continue;
+    }
+    if (arg === '--out') {
+      outPath = process.argv[++i];
+      continue;
+    }
+    if (arg.startsWith('--out=')) {
+      outPath = arg.slice('--out='.length);
       continue;
     }
     if (arg === '--summary') {
@@ -568,6 +752,11 @@ Explicit paths may be chapter files or directories. Use either --book or paths, 
     inputs.push(arg);
   }
 
+  if (wantsSelfTest) {
+    runSelfTest();
+    return;
+  }
+
   if (bookFilter && inputs.length > 0) {
     console.error('Use either --book or explicit paths, not both.');
     process.exit(2);
@@ -584,26 +773,16 @@ Explicit paths may be chapter files or directories. Use either --book or paths, 
       .filter(problem => problem.boundaryProblems.length > 0);
   }
 
+  const report = buildReport(files, problems, bookFilter, publicationOnly);
+
+  if (outPath) {
+    fs.mkdirSync(path.dirname(outPath), { recursive: true });
+    fs.writeFileSync(outPath, `${JSON.stringify(report, null, 2)}\n`, 'utf8');
+  }
+
   if (wantsJson) {
-    const byFile = {};
-    const byProblem = {};
-    for (const problem of problems) {
-      byFile[problem.file] = (byFile[problem.file] || 0) + 1;
-      for (const note of problem.boundaryProblems) {
-        byProblem[note] = (byProblem[note] || 0) + 1;
-      }
-    }
-    console.log(JSON.stringify({
-      count: problems.length,
-      totalHits: problems.length,
-      scannedFiles: files.length,
-      book: bookFilter,
-      publicationOnly,
-      byFile,
-      byProblem,
-      problems
-    }, null, 2));
-    process.exitCode = problems.length > 0 ? 1 : 0;
+    console.log(JSON.stringify(report, null, 2));
+    process.exitCode = problems.length > 0 && failOnProblems ? 1 : 0;
     return;
   }
 
@@ -622,11 +801,13 @@ Explicit paths may be chapter files or directories. Use either --book or paths, 
     if (shownProblems.length < problems.length) {
       console.error(`Showing ${shownProblems.length} of ${problems.length}. Use --limit=0 for count only or --limit=-1 for all details.`);
     }
-    process.exitCode = 1;
+    if (outPath) console.error(`Report written to ${outPath}.`);
+    process.exitCode = failOnProblems ? 1 : 0;
     return;
   }
 
   console.log(`Quote span alignment OK (${files.length} chapter files scanned${bookFilter ? ` for ${bookFilter}` : ''}).`);
+  if (outPath) console.log(`Report written to ${outPath}.`);
 }
 
 main();

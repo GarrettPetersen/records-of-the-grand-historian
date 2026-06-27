@@ -22,6 +22,8 @@ const MANIFEST_PATH = './data/manifest.json';
 const DATA_DIR = './data';
 const QUALITY_DIR = './data/quality';
 const LANGUAGE_TOOL_SCORES_PATH = './data/quality/languagetool-scores.json';
+const QUOTE_ALIGNMENT_REPORT_PATH = './data/quality/quote-span-alignment.json';
+const PLACEHOLDER_TRANSLATIONS_REPORT_PATH = './data/quality/placeholder-translations.json';
 
 function parseBookArg() {
   const i = process.argv.indexOf('--book');
@@ -246,6 +248,59 @@ function loadRepairQueueProgress() {
   };
 }
 
+function loadQuoteAlignmentProgress() {
+  if (!fs.existsSync(QUOTE_ALIGNMENT_REPORT_PATH)) {
+    return null;
+  }
+  try {
+    const report = JSON.parse(fs.readFileSync(QUOTE_ALIGNMENT_REPORT_PATH, 'utf8'));
+    return {
+      scanner: report.scanner || 'scan-quote-span-alignment',
+      generatedAt: report.generatedAt || null,
+      scannedFiles: report.scannedFiles || 0,
+      publicationOnly: report.publicationOnly ?? null,
+      totalItems: report.totalItems || 0,
+      pendingItems: report.pendingItems || 0,
+      highPendingItems: report.highPendingItems || 0,
+      lowPendingItems: report.lowPendingItems || 0,
+      unknownPendingItems: report.unknownPendingItems || 0,
+      highestPendingSeverity: report.highestPendingSeverity ?? null,
+      bySeverity: report.bySeverity || {},
+      byProblem: report.byProblem || {},
+      byChapter: report.byChapter || {},
+    };
+  } catch (error) {
+    console.warn(`Could not read quote alignment report ${QUOTE_ALIGNMENT_REPORT_PATH}: ${error.message}`);
+    return null;
+  }
+}
+
+function loadPlaceholderTranslationsProgress() {
+  if (!fs.existsSync(PLACEHOLDER_TRANSLATIONS_REPORT_PATH)) {
+    return null;
+  }
+  try {
+    const report = JSON.parse(fs.readFileSync(PLACEHOLDER_TRANSLATIONS_REPORT_PATH, 'utf8'));
+    return {
+      scanner: report.scanner || 'scan-placeholder-translations',
+      generatedAt: report.generatedAt || null,
+      scannedFiles: report.scannedFiles || 0,
+      totalItems: report.totalItems || 0,
+      pendingItems: report.pendingItems || 0,
+      highPendingItems: report.highPendingItems || 0,
+      lowPendingItems: report.lowPendingItems || 0,
+      unknownPendingItems: report.unknownPendingItems || 0,
+      highestPendingSeverity: report.highestPendingSeverity ?? null,
+      bySeverity: report.bySeverity || {},
+      byPattern: report.byPattern || {},
+      byChapter: report.byChapter || {},
+    };
+  } catch (error) {
+    console.warn(`Could not read placeholder translation report ${PLACEHOLDER_TRANSLATIONS_REPORT_PATH}: ${error.message}`);
+    return null;
+  }
+}
+
 /**
  * Determine chapter status based on analysis
  */
@@ -352,20 +407,44 @@ function getRepairQueueChapterStats(repairQueue, bookId, chapter) {
   return repairQueue?.byChapter?.[`${bookId}/${chapter}`] || null;
 }
 
-function effectiveChapterStatus(baseStatus, repairQueueChapter) {
+function getQuoteAlignmentChapterStats(quoteAlignment, bookId, chapter) {
+  return quoteAlignment?.byChapter?.[`${bookId}/${chapter}`] || null;
+}
+
+function getPlaceholderTranslationsChapterStats(placeholderTranslations, bookId, chapter) {
+  return placeholderTranslations?.byChapter?.[`${bookId}/${chapter}`] || null;
+}
+
+function chapterHasHighPending(stats) {
+  if (!stats) return false;
+  return Number(stats.highPendingItems || 0) > 0
+    || Number(stats.highestPendingSeverity || 0) >= 3;
+}
+
+function chapterHasPending(stats) {
+  return Number(stats?.pendingItems || 0) > 0;
+}
+
+function effectiveChapterStatus(baseStatus, repairQueueChapter, quoteAlignmentChapter, placeholderTranslationsChapter) {
   if (baseStatus === 'red') return 'red';
-  if (repairQueueChapter) {
-    const highPending = Number(repairQueueChapter.highPendingItems || 0);
-    const pending = Number(repairQueueChapter.pendingItems || 0);
-    const highestSeverity = Number(repairQueueChapter.highestPendingSeverity || 0);
-    if (highPending > 0 || highestSeverity >= 3) return 'red';
-    if (pending > 0) return 'yellow';
-  }
+  if (chapterHasHighPending(placeholderTranslationsChapter)) return 'red';
+  if (chapterHasHighPending(quoteAlignmentChapter)) return 'red';
+  if (chapterHasHighPending(repairQueueChapter)) return 'red';
+  if (chapterHasPending(placeholderTranslationsChapter)) return 'yellow';
+  if (chapterHasPending(quoteAlignmentChapter)) return 'yellow';
+  if (chapterHasPending(repairQueueChapter)) return 'yellow';
   if (baseStatus === 'yellow') return 'yellow';
   return baseStatus || 'gray';
 }
 
-function bookProgressFromManifest(bookId, book, languageToolScores = null, repairQueue = null) {
+function bookProgressFromManifest(
+  bookId,
+  book,
+  languageToolScores = null,
+  repairQueue = null,
+  quoteAlignment = null,
+  placeholderTranslations = null,
+) {
   const bookProgress = {
     name: book.name,
     chinese: book.chinese,
@@ -378,9 +457,11 @@ function bookProgressFromManifest(bookId, book, languageToolScores = null, repai
   for (const chapter of book.chapters) {
     const languageTool = getLanguageToolChapterScore(languageToolScores, bookId, chapter.chapter);
     const repairQueueChapter = getRepairQueueChapterStats(repairQueue, bookId, chapter.chapter);
+    const quoteAlignmentChapter = getQuoteAlignmentChapterStats(quoteAlignment, bookId, chapter.chapter);
+    const placeholderTranslationsChapter = getPlaceholderTranslationsChapterStats(placeholderTranslations, bookId, chapter.chapter);
     const translationComplete = (chapter.sentenceCount || 0) > 0 && (chapter.translatedCount || 0) >= (chapter.sentenceCount || 0);
     const status = languageTool?.status || 'gray';
-    const displayStatus = effectiveChapterStatus(status, repairQueueChapter);
+    const displayStatus = effectiveChapterStatus(status, repairQueueChapter, quoteAlignmentChapter, placeholderTranslationsChapter);
     bookProgress.chapters.push({
       chapter: chapter.chapter,
       title: chapter.title,
@@ -414,6 +495,24 @@ function bookProgressFromManifest(bookId, book, languageToolScores = null, repai
         unknownPendingItems: repairQueueChapter.unknownPendingItems,
         highestPendingSeverity: repairQueueChapter.highestPendingSeverity,
         bySeverity: repairQueueChapter.bySeverity,
+      } : null,
+      quoteAlignment: quoteAlignmentChapter ? {
+        totalItems: quoteAlignmentChapter.totalItems,
+        pendingItems: quoteAlignmentChapter.pendingItems,
+        highPendingItems: quoteAlignmentChapter.highPendingItems,
+        lowPendingItems: quoteAlignmentChapter.lowPendingItems,
+        unknownPendingItems: quoteAlignmentChapter.unknownPendingItems,
+        highestPendingSeverity: quoteAlignmentChapter.highestPendingSeverity,
+        bySeverity: quoteAlignmentChapter.bySeverity,
+      } : null,
+      placeholderTranslations: placeholderTranslationsChapter ? {
+        totalItems: placeholderTranslationsChapter.totalItems,
+        pendingItems: placeholderTranslationsChapter.pendingItems,
+        highPendingItems: placeholderTranslationsChapter.highPendingItems,
+        lowPendingItems: placeholderTranslationsChapter.lowPendingItems,
+        unknownPendingItems: placeholderTranslationsChapter.unknownPendingItems,
+        highestPendingSeverity: placeholderTranslationsChapter.highestPendingSeverity,
+        bySeverity: placeholderTranslationsChapter.bySeverity,
       } : null
     });
   }
@@ -472,12 +571,21 @@ function generateProgressData() {
       thresholds: languageToolScores.thresholds,
     } : null,
     repairQueue: loadRepairQueueProgress(),
+    quoteAlignment: loadQuoteAlignmentProgress(),
+    placeholderTranslations: loadPlaceholderTranslationsProgress(),
     books: {}
   };
 
   for (const bookId in manifest.books) {
     const book = manifest.books[bookId];
-    progress.books[bookId] = bookProgressFromManifest(bookId, book, languageToolScores, progress.repairQueue);
+    progress.books[bookId] = bookProgressFromManifest(
+      bookId,
+      book,
+      languageToolScores,
+      progress.repairQueue,
+      progress.quoteAlignment,
+      progress.placeholderTranslations,
+    );
   }
 
   progress.summary = buildProgressSummary(progress.books);
@@ -524,8 +632,17 @@ function mergeProgressSingleBook(bookId) {
     thresholds: languageToolScores.thresholds,
   } : null;
   progress.repairQueue = loadRepairQueueProgress();
+  progress.quoteAlignment = loadQuoteAlignmentProgress();
+  progress.placeholderTranslations = loadPlaceholderTranslationsProgress();
   progress.books = progress.books || {};
-  progress.books[bookId] = bookProgressFromManifest(bookId, manifest.books[bookId], languageToolScores, progress.repairQueue);
+  progress.books[bookId] = bookProgressFromManifest(
+    bookId,
+    manifest.books[bookId],
+    languageToolScores,
+    progress.repairQueue,
+    progress.quoteAlignment,
+    progress.placeholderTranslations,
+  );
   progress.summary = buildProgressSummary(progress.books);
   writeProgress(progress);
   console.log(`Merged progress for book: ${bookId}`);
@@ -558,4 +675,6 @@ export {
   mergeProgressSingleBook,
   buildProgressSummary,
   loadRepairQueueProgress,
+  loadQuoteAlignmentProgress,
+  loadPlaceholderTranslationsProgress,
 };

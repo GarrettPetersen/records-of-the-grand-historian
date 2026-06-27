@@ -535,6 +535,8 @@
                 const reviewLine = chapter.reviewed ? 'Editorial review: done' : 'Editorial review: pending';
                 const lt = chapter.languageTool;
                 const repairLine = repairQueueTooltipLine(chapter.repairQueue);
+                const quoteLine = quoteAlignmentTooltipLine(chapter.quoteAlignment);
+                const placeholderLine = placeholderTranslationsTooltipLine(chapter.placeholderTranslations);
                 const scoreLine = lt
                     ? `LanguageTool: ${lt.matchCount.toLocaleString()} issues, ${Number(lt.matchesPer1000Words || 0).toFixed(1)}/1k words`
                     : 'LanguageTool: not checked';
@@ -542,6 +544,8 @@
                 square.setAttribute('data-tooltip', [
                     `${chapter.chapter}: ${chapter.title.en || chapter.title.zh}`,
                     repairLine,
+                    quoteLine,
+                    placeholderLine,
                     scoreLine,
                     lt ? `Words checked: ${lt.wordCount.toLocaleString()}` : '',
                     reviewLine,
@@ -568,10 +572,22 @@
             }
             if (chapter.status === 'red') return 'red';
             const repairQueue = chapter.repairQueue || {};
+            const quoteAlignment = chapter.quoteAlignment || {};
+            const placeholderTranslations = chapter.placeholderTranslations || {};
+            const quoteHighPending = Number(quoteAlignment.highPendingItems || 0);
+            const quotePending = Number(quoteAlignment.pendingItems || 0);
+            const quoteHighestSeverity = Number(quoteAlignment.highestPendingSeverity || 0);
+            const placeholderHighPending = Number(placeholderTranslations.highPendingItems || 0);
+            const placeholderPending = Number(placeholderTranslations.pendingItems || 0);
+            const placeholderHighestSeverity = Number(placeholderTranslations.highestPendingSeverity || 0);
             const highPending = Number(repairQueue.highPendingItems || 0);
             const pending = Number(repairQueue.pendingItems || 0);
             const highestSeverity = Number(repairQueue.highestPendingSeverity || 0);
+            if (placeholderHighPending > 0 || placeholderHighestSeverity >= 3) return 'red';
+            if (quoteHighPending > 0 || quoteHighestSeverity >= 3) return 'red';
             if (highPending > 0 || highestSeverity >= 3) return 'red';
+            if (placeholderPending > 0) return 'yellow';
+            if (quotePending > 0) return 'yellow';
             if (pending > 0) return 'yellow';
             if (chapter.status === 'yellow') return 'yellow';
             return chapter.status || 'gray';
@@ -595,6 +611,42 @@
             const classified = high + low;
             if (pending > classified) parts.push(`${(pending - classified).toLocaleString()} unclassified`);
             return `Repair queue: ${pending.toLocaleString()} pending (${parts.join(', ')})`;
+        }
+
+        function quoteAlignmentTooltipLine(quoteAlignment) {
+            if (!quoteAlignment || Number(quoteAlignment.totalItems || 0) === 0) {
+                return 'Quote alignment: clean';
+            }
+            const pending = Number(quoteAlignment.pendingItems || 0);
+            const high = Number(quoteAlignment.highPendingItems || 0);
+            const low = Number(quoteAlignment.lowPendingItems || 0);
+            if (pending === 0) {
+                return 'Quote alignment: clean';
+            }
+            const parts = [];
+            if (high > 0) parts.push(`${high.toLocaleString()} high`);
+            if (low > 0) parts.push(`${low.toLocaleString()} low`);
+            const classified = high + low;
+            if (pending > classified) parts.push(`${(pending - classified).toLocaleString()} unclassified`);
+            return `Quote alignment: ${pending.toLocaleString()} issue${pending === 1 ? '' : 's'} (${parts.join(', ')})`;
+        }
+
+        function placeholderTranslationsTooltipLine(placeholderTranslations) {
+            if (!placeholderTranslations || Number(placeholderTranslations.totalItems || 0) === 0) {
+                return 'Placeholder translations: clean';
+            }
+            const pending = Number(placeholderTranslations.pendingItems || 0);
+            const high = Number(placeholderTranslations.highPendingItems || 0);
+            const low = Number(placeholderTranslations.lowPendingItems || 0);
+            if (pending === 0) {
+                return 'Placeholder translations: clean';
+            }
+            const parts = [];
+            if (high > 0) parts.push(`${high.toLocaleString()} high`);
+            if (low > 0) parts.push(`${low.toLocaleString()} low`);
+            const classified = high + low;
+            if (pending > classified) parts.push(`${(pending - classified).toLocaleString()} unclassified`);
+            return `Placeholder translations: ${pending.toLocaleString()} issue${pending === 1 ? '' : 's'} (${parts.join(', ')})`;
         }
 
         function averageLanguageToolScore(chapters) {

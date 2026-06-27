@@ -295,7 +295,8 @@ update:
 		echo "Step 4/8: Skipping LanguageTool cleanup scores (set RUN_LANGUAGETOOL=1 to run)..."; \
 	fi
 	@echo ""
-	@echo "Step 5/8: Generating cleanup progress (merge this book)..."
+	@echo "Step 5/8: Refreshing placeholder translation report and generating cleanup progress (merge this book)..."
+	@$(NODE) scripts/scan-placeholder-translations.mjs --out data/quality/placeholder-translations.json --summary --limit=0
 	@$(NODE) generate-progress.js --book $(BOOK)
 	@echo ""
 	@echo "Step 6/8: Generating static pages..."
@@ -341,7 +342,8 @@ update-all:
 		echo "Step 4/8: Skipping LanguageTool cleanup scores (set RUN_LANGUAGETOOL=1 to run)..."; \
 	fi
 	@echo ""
-	@echo "Step 5/8: Generating cleanup progress..."
+	@echo "Step 5/8: Refreshing placeholder translation report and generating cleanup progress..."
+	@$(NODE) scripts/scan-placeholder-translations.mjs --out data/quality/placeholder-translations.json --summary --limit=0
 	@$(NODE) generate-progress.js
 	@echo ""
 	@echo "Step 6/8: Generating static pages..."
@@ -1035,6 +1037,12 @@ apply-review:
 	$(NODE) apply-reviewed-translations.js "$(CHAPTER)" "$$review_file"
 	@echo "Running quality check..."
 	@$(MAKE) score-translations CHAPTER="$(CHAPTER)"
+	@echo "Running quote integrity scans..."
+	@$(NODE) scripts/scan-quote-span-alignment.mjs --self-test
+	@$(NODE) scripts/scan-quote-span-alignment.mjs "$(CHAPTER)" --limit=-1
+	@echo "Running placeholder translation scan..."
+	@$(NODE) scripts/scan-placeholder-translations.mjs --self-test
+	@$(NODE) scripts/scan-placeholder-translations.mjs "$(CHAPTER)" --fail --limit=-1
 	@echo "Running glossary alignment review scan..."
 	@$(NODE) scripts/scan-translation-alignment.mjs "$(CHAPTER)" --summary --review-priorities --min-severity 2 --min-glossary-risk 4
 	@$(NODE) scripts/scan-translation-alignment.mjs "$(CHAPTER)" --summary --review-priorities --offset-clusters --fail --min-severity 3 --min-glossary-risk 10

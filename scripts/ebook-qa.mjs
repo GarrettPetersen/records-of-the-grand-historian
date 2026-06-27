@@ -150,7 +150,10 @@ function runProduct(productLike, opts) {
   const chapterPaths = chapterPathsForProduct({ ...productLike, book });
   const sourceScopeArgs = chapterPaths || ['--book', book];
 
+  run('Quote span alignment self-test', 'node', ['scripts/scan-quote-span-alignment.mjs', '--self-test']);
   run('Quote span alignment', 'node', ['scripts/scan-quote-span-alignment.mjs', '--publication', '--limit=0', ...sourceScopeArgs]);
+  run('Placeholder translation self-test', 'node', ['scripts/scan-placeholder-translations.mjs', '--self-test']);
+  run('Placeholder translations', 'node', ['scripts/scan-placeholder-translations.mjs', '--summary', '--limit=0', '--fail', ...sourceScopeArgs]);
   run('Translation offset clusters', 'node', [
     'scripts/scan-translation-alignment.mjs',
     '--summary',
