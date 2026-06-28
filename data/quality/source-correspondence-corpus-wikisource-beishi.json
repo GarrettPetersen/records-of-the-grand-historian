@@ -36450,7 +36450,7 @@
     },
     {
       "id": "source-beishi-029-wikisource-25f583b7e6ec",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.789,
@@ -36493,8 +36493,10 @@
         "afterLocal": "武王有亂臣十人，亂者理也，大王當理關中，何所疑慮？"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local text preserves the proper graph 毈 and balanced quotation punctuation; upstream raw witness splits the graph and drops the close quote.",
+      "reviewedAt": "2026-06-27T03:17:30.853Z",
+      "reviewer": "manual-source-repair"
     },
     {
       "id": "source-beishi-029-wikisource-4501a472f3fe",
@@ -44949,7 +44951,7 @@
     },
     {
       "id": "source-beishi-035-wikisource-62f1368b8ce0",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.289,
@@ -45019,8 +45021,10 @@
         "afterLocal": "幼聰慧，愉以為諸孫之龍，故名焉。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied as upstream page/table residue: Wikisource raw text flattens pre-title Zheng Xi family-tree table cells with bare colons. Local chapter title, condensed genealogy summary (s0004), and body text match project convention and are fuller for Wang Huilong (玄孫松年五世孫劭); same issue as source-beishi-035-wikisource-ac36bbae8f83.",
+      "reviewedAt": "2026-06-27T03:41:04.564Z",
+      "reviewer": "sdk-repair-chapter"
     },
     {
       "id": "source-beishi-035-wikisource-6c9fc799d51d",
@@ -53381,7 +53385,7 @@
     },
     {
       "id": "source-beishi-047-wikisource-eeeff741d629",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -53424,8 +53428,10 @@
         "afterLocal": "勰亦大悅，退謂瑩曰：「卿定是神口，今日若不得卿，幾為吳子所屈。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "No-op: upstream leading 」 is punctuation-boundary residue; local s0588 already closes the quoted speech. Upstream 蕭 is a witness defect; 肅 (Wang Su 王肅) is correct in narrative context and matches the Wei Shu parallel.",
+      "reviewedAt": "2026-06-27T03:48:46.981Z",
+      "reviewer": "sdk-repair-chapter"
     },
     {
       "id": "source-beishi-048-wikisource-28f7a4870f16",
@@ -71845,7 +71851,7 @@
     },
     {
       "id": "source-beishi-099-wikisource-a2fb366a8890",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "beishi",
@@ -71869,8 +71875,78 @@
         "afterLocal": "其俗大抵與突厥同。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "自突厥有國，東西征討，皆資其用，以制北荒。",
+          "literal": "From the time the Turks had a state, in campaigns east and west they always drew on the Tiele for use in controlling the northern wilds.",
+          "idiomatic": "Once the Turks had established their realm, every campaign east and west drew on the Tiele to help subdue the northern frontier.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "開皇末，晉王廣北征，納啟人，破步迦可汗，鐵勒於是分散。",
+          "literal": "At the end of the Kaihuang era, Prince of Jin Yang Guang campaigned north, received Qiren, and defeated Qaghan Buka; the Tiele thereupon scattered.",
+          "idiomatic": "In the late Kaihuang period, Prince Yang Guang of Jin led a northern expedition, took in Qiren, and defeated Qaghan Buka, after which the Tiele split apart.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "大業元年，突厥處羅可汗擊鐵勒諸部，厚稅斂其物，又猜忌薛延陀等，恐為變，遂集其魁帥數百人，盡誅之。",
+          "literal": "In the first year of Daye, the Turkic Qaghan Chuluo attacked the Tiele tribes, heavily levied their goods, and also grew suspicious of the Xueyantuo and others, fearing they would rebel; he therefore assembled several hundred of their chieftains and executed them all.",
+          "idiomatic": "In Daye 1 (605), the Turkic qaghan Chuluo attacked the Tiele tribes and exacted heavy tribute; suspecting the Xueyantuo and others of plotting rebellion, he summoned several hundred of their chiefs and put them all to death.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "由是一時反叛，拒處羅。",
+          "literal": "Thereupon they rebelled all at once and resisted Chuluo.",
+          "idiomatic": "They rose in rebellion together and resisted Chuluo.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "遂立俟利發、俟斤契弊歌楞為易勿真莫何可汗，居貪汗山；",
+          "literal": "They then enthroned Irli Fa and Irkin Qibi Geleng as Yiwuzhen Mohe Qaghan, dwelling on Mount Tanhan;",
+          "idiomatic": "They then made Irli Fa and Irkin Qibi Geleng Yiwuzhen Mohe Qaghan, with his seat on Mount Tanhan;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "復立薛延陀內俟斤子也栎至為小可汗。",
+          "literal": "and again enthroned Ziye, son of the inner irkin of the Xueyantuo, as lesser qaghan.",
+          "idiomatic": "and also installed Ziye, son of the Xueyantuo inner irkin, as lesser qaghan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "處羅既敗，莫何可汗始大。",
+          "literal": "After Chuluo was defeated, Mohe Qaghan first grew great.",
+          "idiomatic": "After Chuluo was defeated, Mohe Qaghan first rose to power.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "莫何勇毅絕倫，甚得眾心，為鄰國所憚，伊吾、高昌、焉耆諸國悉附之。",
+          "literal": "Mohe was brave and resolute beyond compare, greatly won the people's hearts, and was feared by neighboring states; Yiwu, Gaochang, Yanqi, and the other states all attached to him.",
+          "idiomatic": "Mohe was incomparably brave and won the people's loyalty; neighboring states feared him, and Yiwu, Gaochang, Yanqi, and the rest all submitted to him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-27T11:14:17.356Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-27T11:14:17.359Z",
+      "appliedSummary": {
+        "id": "source-beishi-099-wikisource-a2fb366a8890",
+        "type": "source_omission_candidate",
+        "start": 468,
+        "removed": 0,
+        "inserted": 8,
+        "delta": 8,
+        "manualTranslationsApplied": 8
+      }
     },
     {
       "id": "source-beishi-099-wikisource-b58777060939",
@@ -72870,5 +72946,5 @@
       "retainedAfterRescan": true
     }
   ],
-  "updatedAt": "2026-06-26T15:45:07.928Z"
+  "updatedAt": "2026-06-27T11:14:17.406Z"
 }

@@ -3444,7 +3444,7 @@
   "items": [
     {
       "id": "source-houhanshu-001-wikisource-61eee20b15ce",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.004,
@@ -3604,8 +3604,11 @@
         "afterLocal": ""
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local chapter 001 is an editorial Introduction page from ChineseNotes, while Wikisource 卷1 is 光武帝紀; that historical text is already in data/houhanshu/002.json. Chapter-numbering offset, not a source omission.",
+      "reviewedAt": "2026-06-27T10:30:31.673Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-houhanshu-002-wikisource-809107a5c338",
@@ -58881,7 +58884,7 @@
     },
     {
       "id": "source-houhanshu-021-wikisource-6ba80bc937af",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "houhanshu",
@@ -58905,8 +58908,11 @@
         "afterLocal": "建武二年春，漢率大司空王梁，建義大將軍朱祐，大將軍杜茂，執金吾賈復，揚化將軍堅鐔，偏將軍王霸，騎都尉劉隆、馬武、陰識，共擊檀鄉賊於鄴東漳水上，大破之。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local chapter already contains the full Wikisource passage as s0357–s0359 (光武北擊群賊…更封舞陽侯) with English translations; fresh rescan reports 0 source-correspondence candidates.",
+      "reviewedAt": "2026-06-27T10:31:46.800Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-houhanshu-021-wikisource-b0214313b69a",
@@ -68113,7 +68119,7 @@
     },
     {
       "id": "source-houhanshu-034-wikisource-43a67c466bf0",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "houhanshu",
@@ -68137,8 +68143,11 @@
         "afterLocal": "時大將軍梁冀威權傾朝，遣弟侍中不疑以車馬、珍玩致遺於厚，欲與相見。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream span is already present in the live chapter as translated sentences s0102-s0118; queue item is a stale alignment false positive and local corpus text is retained.",
+      "reviewedAt": "2026-06-27T07:17:27.027Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-houhanshu-034-wikisource-4439b530803b",
@@ -69017,7 +69026,7 @@
     },
     {
       "id": "source-houhanshu-037-wikisource-0cdd62775c70",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "houhanshu",
@@ -69041,8 +69050,152 @@
         "afterLocal": "興弟就，嗣父封宣恩侯，後改封為新陽侯。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "二十三年，卒，時年三十九。",
+          "literal": "In the twenty-third year he died, aged thirty-nine.",
+          "idiomatic": "In the twenty-third year of Jianwu he died, aged thirty-nine.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "興素與從兄嵩不相能，然敬其威重。",
+          "literal": "Xing had long been incompatible with his cousin-brother Song, yet respected his commanding dignity.",
+          "idiomatic": "Yin Xing had long been at odds with his cousin Yin Song, yet he respected Song's authority.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "興疾病，帝親臨，問以政事以群臣能不。",
+          "literal": "Xing was ill; the emperor personally visited and asked about government affairs and whether the ministers were capable.",
+          "idiomatic": "When Yin Xing fell ill, the emperor visited him in person and asked about state affairs and the competence of his ministers.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "興頓首曰：『臣愚不足以知之。",
+          "literal": "Xing knocked his head and said: 'Your servant is foolish and not sufficient to know this.",
+          "idiomatic": "Yin Xing kowtowed and said: 'I am too foolish to judge this.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "然伏見議郎席廣、謁者陰嵩，並經行明深，逾於公卿。』",
+          "literal": "Yet I respectfully see Consultant Gentleman Xi Guang and Usher Yin Song—both in conduct bright and deep, surpassing the public ministers.'",
+          "idiomatic": "Yet I have observed Consultant Gentleman Xi Guang and Usher Yin Song—both of exemplary conduct who surpass the senior ministers.'",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "興沒後，帝思其言，遂擢廣為光祿勛；",
+          "literal": "After Xing died, the emperor reflected on his words and thereupon promoted Guang to Director of the Imperial Household;",
+          "idiomatic": "After Yin Xing's death the emperor heeded his advice and promoted Xi Guang to Director of the Imperial Household;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "嵩為中郎將，監羽林十餘年，以謹敕見幸。",
+          "literal": "Song as General of the Gentlemen, supervised the Feathered Forest for more than ten years, and through diligence and restraint gained favor.",
+          "idiomatic": "Yin Song became General of the Gentlemen and oversaw the Feathered Forest guard for over ten years, winning favor through diligence and restraint.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "顯宗即位，拜長樂衛尉，遷執金吾。",
+          "literal": "When Emperor Ming ascended the throne, [Song] was appointed Commandant of Changle and transferred to Bearer of the Mace.",
+          "idiomatic": "When Emperor Ming ascended the throne, Song was appointed Commandant of Changle and later transferred to Bearer of the Mace.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "永平元年詔曰：『故侍中衛尉關內侯興，典領禁兵，從平天下，當以軍功顯受封爵，又諸舅比例，應蒙恩澤，興皆固讓，安乎裏巷。",
+          "literal": "In the first year of Yongping an edict said: 'The late Secretariat Director and Commandant of the Guard, Marquis Within the Passes Xing, commanded the palace guards and followed in pacifying the realm—by military merit he should have received open enfeoffment; moreover, as kinsmen of the empress he should have shared proportional grace, yet Xing firmly yielded all and dwelt at ease in lane and alley.",
+          "idiomatic": "In Yongping 1 an edict proclaimed: 'The late Secretariat Director and Commandant of the Guard, Marquis Within the Passes Yin Xing, commanded the palace guards and helped pacify the realm—by military merit he deserved an open fief, and as imperial in-laws his kin were due proportional honors, yet he steadfastly refused and lived quietly in his lane.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "輔導朕躬，有周昌之直，在家仁孝，有曾、閔之行，不幸早卒，朕甚傷之。",
+          "literal": "He guided Our person with Zhou Chang's forthrightness; in the home he was kind and filial, with Zeng and Min's conduct—unfortunately he died young, and We deeply mourn him.",
+          "idiomatic": "He guided me with Zhou Chang's integrity, and at home showed the filial devotion of Zeng and Min. His untimely death grieves Us deeply.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "賢者子孫，宜加優異。",
+          "literal": "The descendants of the worthy should receive special favor.",
+          "idiomatic": "The descendants of the worthy deserve special favor.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "其以汝南之鲖陽封興子慶為鯛陽侯，慶弟博為㶏強侯。』",
+          "literal": "Let Xing's son Qing be enfeoffed as marquis of Diaoyang in Runan, and Qing's younger brother Bo as marquis of Ruqiang.'",
+          "idiomatic": "Let his son Qing be enfeoffed as marquis of Diaoyang in Runan, and Qing's younger brother Bo as marquis of Ruqiang.'",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "博弟員、丹竝為郎，慶推田宅財物悉與員、丹。",
+          "literal": "Bo's younger brothers Yuan and Dan were both made gentlemen of the palace; Qing gave over all his fields, houses, and goods to Yuan and Dan.",
+          "idiomatic": "Bo's younger brothers Yuan and Dan both became palace gentlemen; Qing gave all his land, houses, and property to Yuan and Dan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "帝以慶義讓，擢為黃門侍郎。",
+          "literal": "The emperor, because of Qing's righteous yielding, promoted him to Gentleman Attendant at the Yellow Gate.",
+          "idiomatic": "Impressed by Qing's selfless generosity, the emperor promoted him to Gentleman Attendant at the Yellow Gate.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "慶卒，子琴嗣。",
+          "literal": "Qing died; his son Qin succeeded.",
+          "idiomatic": "When Qing died, his son Qin succeeded him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "建初五年，興夫人卒，肅宗使五官中郎將持節即墓賜策，追謚興曰翼侯。",
+          "literal": "In the fifth year of Jianchu, Xing's lady died; Emperor Zhang sent the General of the Five Offices bearing credentials to the tomb to bestow an edict, posthumously enfeoffing Xing as marquis of Yi.",
+          "idiomatic": "In Jianchu 5, when Yin Xing's wife died, Emperor Zhang sent the General of the Five Offices with imperial credentials to the tomb to grant an edict posthumously enfeoffing Yin Xing as marquis of Yi.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "琴卒，子萬全嗣。",
+          "literal": "Qin died; his son Wanquan succeeded.",
+          "idiomatic": "When Qin died, his son Wanquan succeeded.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "萬全卒，子桂嗣。",
+          "literal": "Wanquan died; his son Gui succeeded.",
+          "idiomatic": "When Wanquan died, his son Gui succeeded.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "manualTranslationImportedAt": "2026-06-27T11:25:18.105Z",
+      "manualTranslationPackets": [
+        "../../../tmp/houhanshu-037-item1-filled.json"
+      ],
+      "reviewedAt": "2026-06-27T11:25:25.956Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-27T11:25:25.970Z",
+      "appliedSummary": {
+        "id": "source-houhanshu-037-wikisource-0cdd62775c70",
+        "type": "source_omission_candidate",
+        "start": 195,
+        "removed": 0,
+        "inserted": 18,
+        "delta": 18,
+        "manualTranslationsApplied": 18
+      }
     },
     {
       "id": "source-houhanshu-037-wikisource-0f85db615e68",
@@ -69106,7 +69259,7 @@
     },
     {
       "id": "source-houhanshu-037-wikisource-16ee453e03ee",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "houhanshu",
@@ -69130,8 +69283,173 @@
         "afterLocal": "十年，鯈卒，赗贈甚厚，謚曰哀侯。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "永平元年，拜長水校尉，與公卿雜定郊祠禮儀，以讖記正《五經》異說。",
+          "literal": "In the first year of Yongping he was appointed Colonel of the Chang River and, with the high ministers, jointly settled suburban sacrifice ritual, using prognostic texts to correct variant readings in the Five Classics.",
+          "idiomatic": "In Yongping 1 he was appointed Colonel of the Chang River and, with the high ministers, jointly settled suburban sacrifice ritual, using prognostic texts to correct variant readings in the Five Classics.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "北海周澤、瑯邪承宮並海內大儒，鯈皆以為師友而致之於朝。",
+          "literal": "Zhou Ze of Beihai and Cheng Gong of Langya were both great Confucian scholars within the realm; Tiao took both as teacher-friends and brought them to court.",
+          "idiomatic": "Zhou Ze of Beihai and Cheng Gong of Langya were both leading scholars of the realm; Fan Tiao took both as teacher-friends and brought them to court.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "上言郡國舉孝廉，率取年少能報恩者，耆宿大賢多見廢棄，宜敕郡國簡用良俊。",
+          "literal": "He memorialized that when commanderies and kingdoms recommended Filial and Incorrupt candidates, they consistently took the young who could repay favors, while elderly great worthies were mostly cast aside—commanderies and kingdoms should be ordered to select good outstanding men.",
+          "idiomatic": "He memorialized that commanderies and kingdoms recommending Filial and Incorrupt candidates favored the young who could repay favors, while elderly worthies were often passed over, and urged that they select truly outstanding men.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "又議刑辟宜須秋月，以順時氣。",
+          "literal": "He also argued that capital punishments should await the autumn month, to accord with seasonal qi.",
+          "idiomatic": "He also argued that capital punishments should await the autumn month, in accord with seasonal qi.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "顯宗並從之。",
+          "literal": "Emperor Ming followed both proposals.",
+          "idiomatic": "Emperor Ming accepted both proposals.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "二年，以壽張國益東平王，徙封鯈燕侯。",
+          "literal": "In the second year, the state of Shouzhang was added to the Prince of Dongping, and Tiao was transferred to marquis of Yan.",
+          "idiomatic": "In the second year the state of Shouzhang was added to the Prince of Dongping, and Fan Tiao was transferred to marquis of Yan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "其後廣陵王荊有罪，帝以至親悼傷之，詔鯈與羽林監南陽任隗雜理其獄。",
+          "literal": "Later Prince Jing of Guangling committed crimes; the emperor, grieving as close kin, ordered Tiao and the Supervisor of the Feathered Forest Ren Wei of Nanyang to jointly try the case.",
+          "idiomatic": "Later Prince Liu Jing of Guangling committed crimes; grieving as close kin, the emperor ordered Fan Tiao and the Supervisor of the Feathered Forest Ren Wei of Nanyang to jointly try the case.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "事竟，奏請誅荊。",
+          "literal": "When the affair was concluded, they memorialized requesting Jing's execution.",
+          "idiomatic": "When the case was concluded, they memorialized requesting Jing's execution.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "引見宣明殿，帝怒曰：『諸卿以我弟故，欲誅之，即我子，卿等敢爾邪！』",
+          "literal": "Summoned to the Hall of Illuminating Clarity, the emperor said angrily: 'You gentlemen wish to execute him because he is my brother—if he were my son, would you dare thus!'",
+          "idiomatic": "Summoned to the Hall of Illuminating Clarity, the emperor said angrily: 'You wish to execute him because he is my brother—if he were my son, would you dare do the same!'",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "鯈仰而對曰：『天下高帝天下，非陛下之天下也。",
+          "literal": "Tiao looked up and replied: 'The realm is Gao Di's realm, not Your Majesty's realm alone.",
+          "idiomatic": "Fan Tiao looked up and replied: 'The realm is Emperor Gao's realm, not Your Majesty's realm alone.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "《春秋》之義。",
+          "literal": "The meaning of the Spring and Autumn Annals:",
+          "idiomatic": "The meaning of the Spring and Autumn Annals:",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "「君親無將，將而誅焉」。",
+          "literal": "\"For lord and parent there must be no rebellious intent—one who rebels shall be executed.\"",
+          "idiomatic": "\"For lord and parent there must be no rebellious intent—one who rebels shall be executed.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "是以周公誅弟，季友鴆兄，經傳大之。",
+          "literal": "Therefore the Duke of Zhou executed his younger brother, and Ji You poisoned his elder brother—the classics and commentaries greatly praise this.",
+          "idiomatic": "Therefore the Duke of Zhou executed his younger brother and Ji You poisoned his elder brother—the classics and commentaries greatly praise this.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "臣等以荊屬託母弟，陛下留聖心，加惻隱，故敢請耳。",
+          "literal": "We, your servants, because Jing is the empress-dowager's younger brother, thought Your Majesty would retain sage consideration and add compassion—therefore we dared only to petition.",
+          "idiomatic": "We thought that because Jing is the empress-dowager's younger brother, Your Majesty would retain sage consideration and show compassion—therefore we dared only to petition.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "如令陛下子，臣等專誅而已。』",
+          "literal": "Had he been Your Majesty's son, we would have executed him outright.'",
+          "idiomatic": "Had he been Your Majesty's son, we would have executed him outright.'",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "帝嘆息良久。",
+          "literal": "The emperor sighed deeply for a long while.",
+          "idiomatic": "The emperor sighed deeply for a long while.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "鯈益以此知名。",
+          "literal": "Tiao became even more famed for this.",
+          "idiomatic": "Fan Tiao became even more renowned for this.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "其後弟鮪為子賞求楚王英女敬鄉公主，鯈聞而止之，曰：『建武時，吾家並受榮寵，一宗五侯。",
+          "literal": "Later his younger brother Wei sought for his son Shang the Princess Jingxiang, daughter of Prince Ying of Chu; Tiao heard of it and stopped him, saying: 'In the Jianwu era our family all received glory and favor—one clan, five marquises.",
+          "idiomatic": "Later his younger brother Wei sought for his son Shang the Princess Jingxiang, daughter of Prince Ying of Chu; Fan Tiao heard of it and stopped him, saying: 'In the Jianwu era our family all received glory and favor—one clan, five marquises.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "時特進一言，女可以配王，男可以尚主，但以貴寵過盛，即為禍患，故不為也。",
+          "literal": "At that time an eminence grandee needed but one word and daughters could marry princes and sons could marry princesses—but because excessive honor becomes calamity, I did not do so.",
+          "idiomatic": "At that time an eminence grandee needed but one word and daughters could marry princes and sons could marry princesses—but because excessive honor becomes calamity, I did not do so.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "且爾一子，奈何棄之於楚乎？』",
+          "literal": "Moreover you have but one son—how can you cast him off to Chu?'",
+          "idiomatic": "Moreover you have but one son—how can you cast him off to Chu?'",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "鮪不從。",
+          "literal": "Wei did not listen.",
+          "idiomatic": "Wei did not listen.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "manualTranslationImportedAt": "2026-06-27T11:25:19.261Z",
+      "manualTranslationPackets": [
+        "../../../tmp/houhanshu-037-item2-filled.json"
+      ],
+      "reviewedAt": "2026-06-27T11:25:27.821Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-27T11:25:27.840Z",
+      "appliedSummary": {
+        "id": "source-houhanshu-037-wikisource-16ee453e03ee",
+        "type": "source_omission_candidate",
+        "start": 63,
+        "removed": 0,
+        "inserted": 21,
+        "delta": 21,
+        "manualTranslationsApplied": 21
+      }
     },
     {
       "id": "source-houhanshu-037-wikisource-71f94ae392d5",
@@ -131516,7 +131834,7 @@
     },
     {
       "id": "source-houhanshu-056-wikisource-0f263a58a681",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.7,
@@ -131586,8 +131904,11 @@
         "afterLocal": "彭城靖王恭，永平九年賜號靈壽王。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream ends with simplified 云 while local uses traditional 雲 for the same particle; local manuscript-damage markup is split across s0072–s0074 and is fuller than the upstream witness; 彭城靖王恭 is the next section heading, not missing upstream text.",
+      "reviewedAt": "2026-06-27T11:27:03.133Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-houhanshu-056-wikisource-113317a064fd",
@@ -181811,7 +182132,7 @@
     },
     {
       "id": "source-houhanshu-076-wikisource-d3f729d3dae8",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.016,
@@ -181854,8 +182175,10 @@
         "afterLocal": "帝不許，有詔原李膺、杜密等，自黃門北寺、若盧、都內諸獄，繫囚罪輕者皆出之。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: memorial text already present in local corpus across s0231–s0252 with quotation marks and English translations; queue localRange still pointed at obsolete s0013 stub.",
+      "reviewedAt": "2026-06-27T06:58:42.574Z",
+      "reviewer": "sdk-repair-chapter"
     },
     {
       "id": "source-houhanshu-077-wikisource-1f99893a780a",
@@ -252197,7 +252520,7 @@
     },
     {
       "id": "source-houhanshu-108-wikisource-33041ad377eb",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "houhanshu",
@@ -252221,8 +252544,89 @@
         "afterLocal": "三十二年正月，上齋，夜讀《河圖會昌符》曰：「赤劉之九，會命岱宗。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "建武三十年二月，羣臣上言，即位三十年，宜封禅泰山。",
+          "literal": "In the second month of the thirtieth year of Jianwu, the host of ministers memorialized that, having reigned thirty years, it was fitting to perform the feng and shan sacrifices on Mount Tai.",
+          "idiomatic": "In the second month of Jianwu 30 (54 CE), ministers urged that after thirty years on the throne the emperor should perform the feng and shan rites on Mount Tai.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "詔書曰：「即位三十年，百姓怨气满腹，吾谁欺，欺天乎？",
+          "literal": "An edict said: \"Thirty years on the throne—the common people are filled with resentment; whom would I deceive—could I deceive Heaven?\"",
+          "idiomatic": "An edict declared: \"After thirty years on the throne, the people are seething with grievance—whom could I fool? Could I fool Heaven?\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "曾谓泰山不如林放，何事污七十二代之編錄！",
+          "literal": "It was once said that Mount Tai is not equal to Lin Fang—why should I defile the records of seventy-two generations!",
+          "idiomatic": "Confucius once held Mount Tai less worthy than Lin Fang—why should I stain the annals of seventy-two dynasties!",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "桓公欲封，管仲非之」若郡縣遠遣吏上壽，盛稱虚美，必髡，兼令屯田。」",
+          "literal": "\"Duke Huan wished to perform feng; Guan Zhong objected.\" If commanderies and counties send officials from afar to offer birthday felicitations with extravagant empty praise, [the offenders] will be shaved bald and also ordered to garrison farming.\"",
+          "idiomatic": "\"Duke Huan wished to perform the feng rite, and Guan Zhong opposed it.\" If any commandery or county sends officials from afar to offer birthday congratulations with lavish empty flattery, the offenders will be shaved and assigned to frontier garrison farming.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "從此羣臣不敢复言。",
+          "literal": "From this point the host of ministers dared not speak of it again.",
+          "idiomatic": "After that, no minister dared raise the subject again.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "三月，上幸鲁，过泰山，告太守以上过，故承詔祭山及梁父。",
+          "literal": "In the third month the Sovereign visited Lu, passed Mount Tai, told the governor of his itinerary, and therefore, following the edict, sacrificed at the mountain and at Liangfu.",
+          "idiomatic": "In the third month the emperor visited Lu, passed Mount Tai, informed the governor of his route, and in accordance with the edict sacrificed at the mountain and at Liangfu.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "時，虎贲中郎將梁松等议：「《記》曰'齊將有事泰山，先有事配林'，蓋諸侯之禮也。",
+          "literal": "At that time Commander of the Tiger Guard Liang Song and others deliberated: \"The Record says, 'When Qi is about to have business at Mount Tai, it first has business at Peilin'—this is roughly the rite of feudal lords.\"",
+          "idiomatic": "At that time Liang Song, commander of the Tiger Guard, and others argued: \"The Record says, 'When Qi is about to perform rites at Mount Tai, it first performs rites at Peilin'—that is essentially the feudal-lord protocol.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "河岳視公侯，王者祭焉。",
+          "literal": "Rivers and marchmounts are treated like dukes and marquises; only kings sacrifice to them.",
+          "idiomatic": "Rivers and marchmounts rank with dukes and marquises; only a king may sacrifice to them directly.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "宜無即事之漸，不祭配林。",
+          "literal": "Accordingly one ought not proceed by degrees toward the main rite without sacrificing at Peilin.",
+          "idiomatic": "One should not advance step by step toward the main rite without first sacrificing at Peilin.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "manualTranslationImportedAt": "2026-06-27T11:30:49.836Z",
+      "manualTranslationPackets": [
+        "../../../tmp/houhanshu-108-item1.json"
+      ],
+      "reviewedAt": "2026-06-27T11:30:49.837Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-27T11:30:54.171Z",
+      "appliedSummary": {
+        "id": "source-houhanshu-108-wikisource-33041ad377eb",
+        "type": "source_omission_candidate",
+        "start": 49,
+        "removed": 0,
+        "inserted": 9,
+        "delta": 9,
+        "manualTranslationsApplied": 9
+      }
     },
     {
       "id": "source-houhanshu-108-wikisource-92278504a4c2",
@@ -252299,7 +252703,7 @@
     },
     {
       "id": "source-houhanshu-108-wikisource-ce3cf21a1bba",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.002,
@@ -252342,8 +252746,362 @@
         "afterLocal": "二十五日甲午，禅，祭地于梁阴，以高后配，山川羣神從，如元始中北郊故事。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "文曰：維建武三十有二年二月，皇帝東巡狩，至於岱宗，柴，望秩于山川，班于羣神，遂觐東后。",
+          "literal": "The text said: In the second month of the thirty-second year of Jianwu, the Emperor made an eastern tour of inspection, arrived at Dai's Marchmount, performed the firewood rite, ranked offerings to mountains and rivers, distributed them among the host of spirits, and then received the Eastern Lord.",
+          "idiomatic": "The inscription read: In the second month of Jianwu 32 (56 CE), the emperor made an eastern tour of inspection, reached the Eastern Marchmount, performed the firewood rite, ranked offerings to mountains and rivers, distributed them among the host of spirits, and then received the Eastern Lord.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "從臣太尉熹、行司徒事特进高密侯禹等。",
+          "literal": "Attending ministers included Grand Commandant Xi, Acting Minister over the Masses and Special Advancement Marquis of Gaomi Yu, and others.",
+          "idiomatic": "Attending ministers included Grand Commandant Xi, Acting Minister over the Masses and Special Advancement Marquis of Gaomi Yu, and others.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "漢宾二王之后在位。",
+          "literal": "The descendants of the two kings who were guests of Han took their places.",
+          "idiomatic": "The descendants of the two kings who were guests of Han took their places.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "孔子之后褒成侯，序在東后，蕃王十二，咸來助祭。",
+          "literal": "The descendant of Confucius, Marquis of Baocheng, was ranked after the Eastern Lord; twelve feudal kings all came to assist in the sacrifice.",
+          "idiomatic": "Confucius's descendant, the Marquis of Baocheng, was ranked after the Eastern Lord; twelve feudal kings all came to assist in the sacrifice.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "《河圖赤伏符》曰：「劉秀發兵捕不道，四夷云集龙斗野，四七之际火爲主。」",
+          "literal": "The Hetu Chifu fu said: \"Liu Xiu raises troops to seize the lawless; the four barbarians gather like clouds at Longdou Field; at the juncture of four and seven, Fire is master.\"",
+          "idiomatic": "The River Chart's Red Talisman of Hidden Submission said: \"Liu Xiu takes up arms against the wicked; the four barbarians gather like clouds at Longdou Field; at the juncture of four and seven, Fire is master.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "《河圖會昌符》曰：「赤帝九世，巡省得中，治平則封，誠合帝道孔矩，則天文靈出，地祇瑞興。",
+          "literal": "The Hetu Huichang fu said: \"The Red Thearch's ninth generation, touring and inspecting, attains the center; when governance is settled, then feng is performed; if truly it matches the Thearch's Way and Confucius's measure, then celestial signs appear and earthly numina bring auspicious omens.\"",
+          "idiomatic": "The River Chart's Talisman of Flourishing Accord said: \"The ninth generation of the Red Thearch, touring and inspecting, attains the center; when governance is settled, then the feng is performed; if truly it matches the Thearch's Way and Confucius's measure, then celestial signs appear and earthly numina bring auspicious omens.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "帝劉之九，會命岱宗，誠善用之，奸伪不萌。",
+          "literal": "The ninth of the Liu Thearchs will convene the mandate on Dai's Marchmount; if truly one uses it well, treachery and falsehood will not sprout.",
+          "idiomatic": "The ninth of the Liu emperors will receive the mandate on the Eastern Marchmount; wielded in good faith, it leaves no room for deceit.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "赤漢德興，九世會昌，巡岱皆當。",
+          "literal": "The Red Han's virtue rises; the ninth generation meets flourishing accord; touring Dai is always fitting.",
+          "idiomatic": "The Red Han's virtue rises; the ninth generation meets flourishing accord; touring Dai is always fitting.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "天地扶九，崇經之常。",
+          "literal": "Heaven and Earth support the Nine; honoring the classics is the constant way.",
+          "idiomatic": "Heaven and Earth support the Nine; honoring the classics is the constant way.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "漢大興之，道在九世之王。",
+          "literal": "When Han greatly rises, the Way lies with the king of the ninth generation.",
+          "idiomatic": "When Han greatly rises, the Way lies with the king of the ninth generation.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "封于泰山，刻石著纪，禅于梁父，退省考五。」",
+          "literal": "Perform feng on Mount Tai, carve stone to set forth the record, perform shan at Liangfu, withdraw and examine the Five.\"",
+          "idiomatic": "Perform the feng on Mount Tai, carve stone to set forth the record, perform the shan at Liangfu, withdraw and examine the Five.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "《河圖合古篇》曰：「帝劉之秀，九名之世，帝行德，封刻政。」",
+          "literal": "The Hetu Hegu pian said: \"The Thearch Liu's Xiu, the generation of the ninth name; the Thearch practices virtue, feng and carving establish governance.\"",
+          "idiomatic": "The River Chart's \"Conforming to Antiquity\" said: \"The Thearch Liu's Xiu, the generation of the ninth name; the Thearch practices virtue, feng and carving establish governance.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "《河圖提劉予》曰：「九世之帝，方明聖，持衡拒，九州平，天下予。」",
+          "literal": "The Hetu Tiliu yu said: \"The Thearch of the ninth generation, squarely bright and sage, holds the balance and resists; the Nine Provinces are pacified, and all under Heaven is granted.\"",
+          "idiomatic": "The River Chart's \"Presenting Liu with the Grant\" said: \"The Thearch of the ninth generation, squarely bright and sage, holds the balance and resists; the Nine Provinces are pacified, and all under Heaven is granted.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "《雒書甄曜度》曰：「赤三德，昌九世，會修符，合帝际，勉刻封。」",
+          "literal": "The Luoshu Zhenyaodu said: \"Red, three virtues; flourishing, nine generations; meeting, repairing the talisman; matching the Thearch's juncture; strive to carve and feng.\"",
+          "idiomatic": "The Luo River Writing's \"Discipline of Radiant Brilliance\" said: \"Red, three virtues; flourishing, nine generations; meeting, repairing the talisman; matching the Thearch's juncture; strive to carve and feng.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "《孝經钩命决》曰：「予谁行，赤劉用帝，三建孝，九會修，专兹竭行封岱青。」",
+          "literal": "The Xiaojing Gouming jue said: \"To whom is the grant—who will act? The Red Liu uses the Thearch; thrice establishing filial piety, nine meetings repairing; exclusively here exhaust effort to perform feng at Dai and Qing.\"",
+          "idiomatic": "The Classic of Filial Piety's \"Hooked Mandate Verdict\" said: \"To whom is the grant—who will act? The Red Liu uses the Thearch; thrice establishing filial piety, nine meetings repairing; exclusively here exhaust effort to perform feng at Dai and Qing.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "《河》、《雒》命后，經讖所传。",
+          "literal": "After the mandates of the River and Luo, the classics and prophecies transmitted them.",
+          "idiomatic": "After the mandates of the River and Luo, the classics and prophecies transmitted them.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "昔在帝尧，聪明密微，让与舜庶，后裔握机。",
+          "literal": "Formerly under Emperor Yao, intelligence was subtle and profound; he yielded to Shun the common people, and his descendants grasped the pivot.",
+          "idiomatic": "Formerly under Emperor Yao, intelligence was subtle and profound; he yielded to Shun the common people, and his descendants grasped the pivot.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "王莽以舅后之家、三司鼎足冢宰之权势，依托周公、霍光辅幼歸政之義，遂以篡叛，僭号自立。",
+          "literal": "Wang Mang, by the power of the empress's clan, the Three Excellencies standing like a tripod, and the Chancellor's authority, relying on the principle of the Duke of Zhou and Huo Guang assisting the young and returning power, then by usurpation and rebellion usurped the title and established himself.",
+          "idiomatic": "Wang Mang, wielding the power of the empress's clan, the Three Excellencies, and the chancellor, invoked the precedent of the Duke of Zhou and Huo Guang assisting a young ruler and returning power—then usurped the throne and rebelled.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "宗廟堕坏，社稷丧亡，不得血食，十有八年。",
+          "literal": "The ancestral temples collapsed and were ruined; the altars of soil and grain perished; they received no blood offerings for eighteen years.",
+          "idiomatic": "The ancestral temples collapsed; the altars of soil and grain perished; they received no blood offerings for eighteen years.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "杨、徐、青三州首乱，兵革横行，延及荆州，豪杰并兼，百里屯聚，往往僭号。",
+          "literal": "The three provinces of Yang, Xu, and Qing first rebelled; weapons and armor ran rampant, extending to Jing Province; heroes and champions annexed one another; within a hundred li they gathered in camps, often usurping titles.",
+          "idiomatic": "The three provinces of Yang, Xu, and Qing first rebelled; warfare spread as far as Jing Province; local strongmen annexed one another; within a hundred li they gathered in camps, often usurping titles.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "北夷作寇，千里無烟，無鸡鸣狗吠之声。",
+          "literal": "Northern barbarians made raids; for a thousand li there was no smoke; there was no sound of crowing cocks or barking dogs.",
+          "idiomatic": "Northern barbarians raided the frontier; for a thousand li there was no smoke; not even the sound of crowing cocks or barking dogs could be heard.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "皇天睠顧皇帝，以匹庶受命中興，年二十八载興兵，以次誅讨，十有餘年，罪人斯得。",
+          "literal": "August Heaven turned its gaze and favored the Emperor; as a common man he received the mandate and restored the dynasty; at age twenty-eight he raised troops, and in sequence punished and suppressed; for more than ten years, the guilty were brought to justice.",
+          "idiomatic": "August Heaven turned its gaze and favored the emperor; as a common man he received the mandate and restored the dynasty; at age twenty-eight he raised troops and in sequence suppressed the rebels; for more than ten years, the guilty were brought to justice.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "黎庶得居尔田，安尔宅。",
+          "literal": "The black-haired people were able to dwell in their fields and settle in their homes.",
+          "idiomatic": "The common people were able to dwell in their fields and settle in their homes.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "舟舆所通，人迹所至，靡不贡职。",
+          "literal": "Where boats and chariots reach, where human tracks extend—none failed to offer tribute and service.",
+          "idiomatic": "Where boats and chariots reach, where human tracks extend—none failed to offer tribute and service.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "建明堂，立辟雍，起靈臺，設庠序。",
+          "literal": "He built the Bright Hall, established the Imperial Academy, raised the Spirit Terrace, and set up schools.",
+          "idiomatic": "He built the Bright Hall, established the Imperial Academy, raised the Spirit Terrace, and set up schools.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "同律、度、量、衡。",
+          "literal": "He standardized pitch pipes, measures, capacity, and weights.",
+          "idiomatic": "He standardized pitch pipes, measures, capacity, and weights.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "修五禮，五玉，三帛，二牲，一死，贽。",
+          "literal": "He restored the Five Rites, five jades, three silks, two victims, one death-offering, and presentation gifts.",
+          "idiomatic": "He restored the Five Rites, five jades, three silks, two victims, one death-offering, and presentation gifts.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "吏各修职，复于舊典。",
+          "literal": "Officials each restored their duties and returned to the old canons.",
+          "idiomatic": "Officials each restored their duties and returned to the old canons.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "在位三十有二年，年六十二。",
+          "literal": "On the throne thirty-two years; age sixty-two.",
+          "idiomatic": "On the throne thirty-two years; age sixty-two.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "乾乾日曰矢，不敢荒宁，涉危历险，亲巡黎元，恭肃神祇，惠恤耆老，理庶遵古，聪允明恕。",
+          "literal": "Diligent day by day, he dared not be idle or at ease; crossing dangers and braving hardships, he personally toured the black-haired people; reverent and solemn toward the numinous powers, he kindly cared for the aged; governing the people he followed antiquity—perceptive, fair, bright, and forgiving.",
+          "idiomatic": "Diligent day by day, he dared not be idle or at ease; crossing dangers and braving hardships, he personally toured the people; reverent and solemn toward the numinous powers, he kindly cared for the aged; governing the people he followed antiquity—perceptive, fair, bright, and forgiving.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "皇帝唯慎《河圖》、《雒書》正文，是月辛卯，柴，登封泰山。",
+          "literal": "The Emperor alone carefully verified the orthodox text of the Hetu and Luoshu; in this month on xinmao, he performed the firewood rite and ascended to feng Mount Tai.",
+          "idiomatic": "The emperor alone carefully verified the orthodox text of the River Chart and Luo River Writing; in this month on xinmao, he performed the firewood rite and ascended to perform the feng on Mount Tai.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "甲午，禅于梁阴。",
+          "literal": "On jiawu, he performed shan at Liang's shady side.",
+          "idiomatic": "On jiawu, he performed the shan at Liang's northern slope.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "以承靈瑞，以爲兆民，永兹一宇，垂于後昆。",
+          "literal": "To receive numinous auspice, to serve as lord of the myriad people, forever in this one realm, handed down to later generations.",
+          "idiomatic": "To receive numinous auspice, to serve as lord of the myriad people, forever in this one realm, handed down to later generations.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "百僚從臣，郡守師尹，咸蒙祉福，永永無极。",
+          "literal": "The host of officials and attending ministers, commandery governors and district chiefs—all received blessed fortune, forever without limit.",
+          "idiomatic": "The host of officials and attending ministers, commandery governors and district chiefs—all received blessed fortune, forever without limit.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "秦相李斯燔《诗》、《書》，乐崩禮坏。",
+          "literal": "Qin's Chancellor Li Si burned the Odes and Documents; music collapsed and rites were ruined.",
+          "idiomatic": "Qin's Chancellor Li Si burned the Odes and Documents; music collapsed and rites were ruined.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "建武元年已前，文書散亡，舊典不具，不能明經文，以章句细微相況八十一卷，明者爲验，又其十卷，皆不昭晰。",
+          "literal": "Before the first year of Jianwu, documents were scattered and lost; old canons were incomplete; the classic texts could not be made clear; fine clauses were compared across eighty-one scrolls, with the clear ones taken as verification; another ten scrolls were all obscure.",
+          "idiomatic": "Before Jianwu 1 (25 CE), documents were scattered and lost; old canons were incomplete; the classic texts could not be made clear; fine clauses were compared across eighty-one scrolls, with the clear ones taken as verification; another ten scrolls were all obscure.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "子贡欲去告朔之饩羊，子曰：「賜也，尔爱其羊，我受其禮。」",
+          "literal": "Zigong wished to abolish the sacrificial sheep for the first-of-month announcement; the Master said: \"Ci, you love the sheep; I receive the rite.\"",
+          "idiomatic": "Zigong wished to abolish the sacrificial sheep for the first-of-month announcement; the Master said: \"Ci, you love the sheep; I receive the rite.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "后有聖人，正失誤，刻石記。",
+          "literal": "Later there will be a sage who corrects errors and records them by carving stone.",
+          "idiomatic": "Later there will be a sage who corrects errors and records them by carving stone.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "二十二日辛卯晨，燎祭天于泰山下南方，羣神皆從，用樂如南郊。",
+          "literal": "On the morning of the twenty-second day, xinmao, they burned offerings and sacrificed to Heaven south of Mount Tai; the host of spirits all followed; music was used as at the southern suburb.",
+          "idiomatic": "On the morning of the twenty-second day, a xinmao day, they burned offerings and sacrificed to Heaven south of Mount Tai; the host of spirits all followed; music was used as at the southern suburb.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "諸王、王者後二公、孔子後褒成君，皆助祭位事也。",
+          "literal": "The kings, the two dukes who were descendants of kings, and the descendant of Confucius, Lord of Baocheng—all assisted in the sacrificial stations and duties.",
+          "idiomatic": "The kings, the two dukes who were descendants of kings, and Confucius's descendant, Lord of Baocheng—all assisted in the sacrificial stations and duties.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "事毕，將升封。",
+          "literal": "When the affair was finished, they were about to ascend for the feng.",
+          "idiomatic": "When the rites were finished, they were about to ascend for the feng.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "或曰：「泰山虽已從食于柴祭，今亲升告功，宜有禮祭。」",
+          "literal": "Someone said: \"Although Mount Tai has already received offerings in the firewood sacrifice, now in personally ascending to announce merit, there ought to be a ritual sacrifice.\"",
+          "idiomatic": "Someone said: \"Although Mount Tai has already received offerings in the firewood sacrifice, now in personally ascending to announce merit, there ought to be a ritual sacrifice.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "于是使謁者以一特牲于常祠泰山處，告祠泰山，如亲耕、貙劉、先祠、先農、先虞故事。",
+          "literal": "Therefore they sent a usher with one specially [raised] victim to the place of the regular sacrifice to Mount Tai, to announce and sacrifice to Mount Tai, following the precedents of the emperor's personal plowing, the autumn hunt, the prior shrine, the prior agriculture, and the prior Yu.",
+          "idiomatic": "Therefore they sent an usher with one specially prepared victim to the place of the regular sacrifice to Mount Tai, to announce and sacrifice to Mount Tai, following the precedents of the emperor's personal plowing, the autumn hunt, the prior shrine, the prior agriculture, and the prior Yu.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "至食時，御輦升山，日中后到山上更衣，早晡時即位于壇，北面。",
+          "literal": "At mealtime the imperial carriage ascended the mountain; after midday he reached the mountain top to change clothes; in early afternoon he took his position on the mound, facing north.",
+          "idiomatic": "At mealtime the imperial carriage ascended the mountain; after midday he reached the summit to change clothes; in early afternoon he took his position on the mound, facing north.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "羣臣以次陳後，西上，毕位升壇。",
+          "literal": "The host of ministers in sequence arrayed behind, ascending from the west; when all were in place they ascended the mound.",
+          "idiomatic": "The ministers in sequence arrayed behind, ascending from the west; when all were in place they ascended the mound.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "尚書令奉玉牒檢，皇帝以寸二分璽亲封之，訖，太常命人发壇上石，尚書令藏玉牒已，复石覆讫，尚書令以五寸印封石檢。",
+          "literal": "The Director of the Masters of Writing bore the jade slip and cover-plate; the Emperor personally sealed it with the one-cun-two-fen seal; when finished, the Grand Master of Ceremonies ordered men to open the stone on the mound; after the Director of the Masters of Writing stored the jade slip, the stone was covered again; the Director of the Masters of Writing sealed the stone cover-plate with the five-cun seal.",
+          "idiomatic": "The Director of the Masters of Writing bore the jade slip and cover-plate; the emperor personally sealed it with the one-cun-two-fen seal; when finished, the Grand Master of Ceremonies ordered men to open the stone on the mound; after the Director of the Masters of Writing stored the jade slip, the stone was covered again; the Director of the Masters of Writing sealed the stone cover-plate with the five-cun seal.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "事毕，皇帝再拜，羣臣稱萬岁。",
+          "literal": "When the affair was finished, the Emperor bowed twice; the host of ministers proclaimed \"Ten thousand years!\"",
+          "idiomatic": "When the rites were finished, the emperor bowed twice; the ministers proclaimed \"Ten thousand years!\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "命人立所刻石碑，乃复道下。",
+          "literal": "He ordered men to set up the carved stone stele; then he descended by the covered way.",
+          "idiomatic": "He ordered men to set up the carved stone stele; then he descended by the covered way.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "manualTranslationImportedAt": "2026-06-27T11:30:50.285Z",
+      "manualTranslationPackets": [
+        "../../../tmp/houhanshu-108-item2.json"
+      ],
+      "reviewedAt": "2026-06-27T11:30:50.287Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-27T11:30:54.786Z",
+      "appliedSummary": {
+        "id": "source-houhanshu-108-wikisource-ce3cf21a1bba",
+        "type": "source_omission_candidate",
+        "start": 94,
+        "removed": 1,
+        "inserted": 48,
+        "delta": 47,
+        "manualTranslationsApplied": 48
+      }
     },
     {
       "id": "source-houhanshu-109-wikisource-46c5d9a9bace",
@@ -293326,7 +294084,7 @@
     },
     {
       "id": "source-houhanshu-128-wikisource-3b5e054f0416",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "houhanshu",
@@ -293350,8 +294108,10 @@
         "afterLocal": "中宫署令一人，六百石。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Ding Fu Han Yi gloss in Wikisource {{*|...}} annotation markup, same class as other denied Houhanshu 128 items (e.g. ec7c93168721, 7b60070b162d); not part of the base corpus text.",
+      "reviewedAt": "2026-06-27T07:04:47.733Z",
+      "reviewer": "sdk-repair-chapter"
     },
     {
       "id": "source-houhanshu-128-wikisource-420722189718",
@@ -299365,5 +300125,5 @@
       "reviewer": "close-stale-source-correspondence-items"
     }
   ],
-  "updatedAt": "2026-06-26T16:46:25.262Z"
+  "updatedAt": "2026-06-27T11:30:54.824Z"
 }

@@ -2321,7 +2321,7 @@
     },
     {
       "id": "source-sanguozhi-001-wikisource-ff7a3547ee16",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -2364,8 +2364,10 @@
         "afterLocal": "旣入坐，謂公曰：「袁氏軍盛，何以待之？"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource has the shorter speech 「來，吾事濟矣！」 while local text preserves the fuller 「子卿遠來，吾事濟矣！」 with Xu You's courtesy name; the fuller wording is attested in Zizhi Tongjian 063 and retained.",
+      "reviewedAt": "2026-06-27T04:59:13.390Z",
+      "reviewer": "sdk-repair-chapter"
     },
     {
       "id": "source-sanguozhi-002-wikisource-027c3947614d",
@@ -38993,7 +38995,7 @@
     },
     {
       "id": "source-sanguozhi-031-wikisource-8144f57f76ca",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.113,
@@ -39054,8 +39056,239 @@
         "afterLocal": "相自稱天子，眾以萬數。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: restore large Pei Songzhi commentary and narrative span omitted between Liu Yan’s Yizhou ambitions and the Ma Xiang rebellion; manual English supplied.",
+      "manualTranslations": [
+        {
+          "zh": "會益州刺史郤儉賦斂煩擾，謠言遠聞，儉，郤正祖也。",
+          "literal": "It happened that Inspector of Yizhou Xi Jian levied taxes in vexing and harassing fashion, and rumors were heard from afar; Jian was a descendant of Xi Zheng.",
+          "idiomatic": "About then Yizhou Inspector Xi Jian was grinding the people with heavy levies until rumor of it spread far; Xi Jian was a descendant of Xi Zheng.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "而并州殺刺史張壹，涼州殺刺史耿鄙，焉謀得施。",
+          "literal": "Meanwhile Bing Province killed Inspector Zhang Yi, and Liang Province killed Inspector Geng Bi; Yan’s plan could be carried out.",
+          "idiomatic": "When Bing Province slew Inspector Zhang Yi and Liang slew Inspector Geng Bi, Liu Yan’s scheme could finally move forward.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "出為監軍使者，領益州牧，封陽城侯，當收儉治罪；",
+          "literal": "He went out as supervisory army envoy, took charge as governor of Yizhou, was enfeoffed as Marquis of Yangcheng, and was to arrest Jian and punish him according to law;",
+          "idiomatic": "He was sent out as supervisory army envoy with the governorship of Yizhou, enfeoffed as Marquis of Yangcheng, and charged to seize Xi Jian and bring him to justice;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "《續漢書》曰：是時用劉虞為幽州，劉焉為益州，劉表為荊州，賈琮為冀州。",
+          "literal": "The Continuation of the Book of Han says: At this time Liu Yu was appointed to You Province, Liu Yan to Yizhou, Liu Biao to Jing Province, and Jia Cong to Ji Province.",
+          "idiomatic": "The Continuation of the Book of Han records that Liu Yu was made governor of You, Liu Yan of Yizhou, Liu Biao of Jing, and Jia Cong of Ji.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "虞等皆海內清名之士，或從列卿尚書以選為牧伯，各以本秩居任。",
+          "literal": "Yu and the others were all men of pure reputation within the realm; some were chosen as regional shepherds from among ranked ministers and masters of writing, each holding office at his original rank.",
+          "idiomatic": "All were men of spotless reputation; some were promoted from the ranks of ministers and palace secretaries to provincial governorships while retaining their former titles.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "舊典：傳車參駕，施赤為帷裳。",
+          "literal": "According to old precedent: relay carriages with three teams, red drapery used as curtains and canopies.",
+          "idiomatic": "By ancient custom they traveled in relay carriages with three teams and red drapery as their canopy.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "臣松之按：靈帝崩後，義軍起，孫堅殺荊州刺史王叡，然後劉表為荊州，不與焉同時也。",
+          "literal": "Your servant Songzhi notes: After Emperor Ling’s death righteous armies rose; Sun Jian killed Inspector of Jing Province Wang Rui, and only then was Liu Biao made governor of Jing—he was not appointed at the same time as Yan.",
+          "idiomatic": "Pei Songzhi remarks: After Emperor Ling died and the loyalist armies rose, Sun Jian killed Jing inspector Wang Rui; Liu Biao’s appointment to Jing came only afterward and was not contemporaneous with Liu Yan’s.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "《漢靈帝紀》曰：帝引見焉，宣示方略，加以賞賜，敕焉為益州刺史。",
+          "literal": "The Annals of Emperor Ling of Han say: The emperor summoned Yan for audience, displayed strategy and plans, bestowed rewards, and ordered Yan to be inspector of Yizhou.",
+          "idiomatic": "The Annals of Emperor Ling record that the emperor received Liu Yan in audience, laid out his plans, rewarded him, and appointed him inspector of Yizhou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "前刺史劉雋、郤儉皆貪殘放濫，取受狼籍，元元無聊，呼嗟充野，焉到便收攝行法，以示萬姓，勿令漏露，使癰疽決潰，為國生梗。",
+          "literal": "The former inspectors Liu Juan and Xi Jian were both greedy, cruel, and unrestrained; their taking and receiving were in disorder; the common people were destitute; cries of lament filled the wilds. When Yan arrived he was to gather them in and enforce the law, to show the myriad people, not letting leaks appear, so that the abscess might burst and drain and not become a running sore for the state.",
+          "idiomatic": "His predecessors Liu Juan and Xi Jian had been rapacious and lawless, their extortion so rampant that the people were destitute and the countryside rang with lament. Yan was to arrest them at once, enforce the law before the people, and drain the abscess before it festered into a national crisis.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "焉受命而行，以道路不通，住荊州東界。",
+          "literal": "Yan received the command and set out; because the roads were impassable, he halted on the eastern border of Jing Province.",
+          "idiomatic": "Liu Yan set out on his commission but, with the roads blocked, halted on Jing Province’s eastern frontier.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "扶亦求為蜀郡西部屬國都尉，及太倉令",
+          "literal": "Fu also requested appointment as commandant of the dependent state in the western part of Shu Commandery, and the grand granary director",
+          "idiomatic": "Dong Fu likewise sought the post of commandant of the dependent state in western Shu Commandery, while the director of the imperial granary",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "（會）",
+          "literal": "(hui “meeting” [variant])",
+          "idiomatic": "Some manuscripts insert “meeting” here.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "巴西趙韙去官，俱隨焉。",
+          "literal": "Zhao Wei of Baxi left office; all followed Yan.",
+          "idiomatic": "Zhao Wei of Baxi resigned his post and went with him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "陳壽《益部耆舊傳》曰：董扶字茂安。",
+          "literal": "Chen Shou’s Records of Elders of Yibu says: Dong Fu, courtesy name Mao’an.",
+          "idiomatic": "Chen Shou’s Records of Elders of Yibu records: Dong Fu, courtesy name Mao’an.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "少從師學，兼通數經，善歐陽尚書，又事聘士楊厚，究極圖讖。",
+          "literal": "In youth he followed teachers in study, mastered several classics, excelled in Ouyang’s Book of Documents, and also served the reclusive scholar Yang Hou, thoroughly investigating charts and prognostications.",
+          "idiomatic": "As a youth he studied under several masters, mastered multiple classics and Ouyang Gao’s version of the Book of Documents, and served the reclusive scholar Yang Hou in the study of prognostic charts.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "遂至京師，遊覽太學，還家講授，弟子自遠而至。",
+          "literal": "Then he reached the capital, toured the Imperial Academy, returned home to lecture and teach, and disciples came from afar.",
+          "idiomatic": "He went to the capital, studied at the Imperial Academy, then returned home to teach; students came from far and wide.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "永康元年167年，日有蝕之，詔舉賢良方正之士，策問得失。",
+          "literal": "In the first year of Yongkang, 167, there was a solar eclipse; an edict summoned worthy and upright candidates, and policy questions were put on gains and losses.",
+          "idiomatic": "In 167, the first year of Yongkang, a solar eclipse prompted an edict summoning worthy and upright candidates for written policy examinations.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "左馮翊趙謙等舉扶，扶以病不詣，遙於長安上封事，遂稱疾篤歸家。",
+          "literal": "Zuo Fengyi Zhao Qian and others recommended Fu; Fu, citing illness, did not go; from afar at Chang’an he submitted a sealed memorial, then claimed grave illness and returned home.",
+          "idiomatic": "Zhao Qian of Zuofengyi and others recommended him, but Fu pleaded illness and stayed away, submitting a sealed memorial from Chang’an before declaring himself gravely ill and going home.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "前後宰府十闢，公車三徵，再舉賢良方正、博士、有道皆不就，名稱尤重。",
+          "literal": "Before and after, ten summonses came from chief ministers’ offices, three imperial carriage summonses, and twice he was recommended as worthy and upright, as erudite, and as possessing the Way—he accepted none; his reputation was especially weighty.",
+          "idiomatic": "Provincial and central offices summoned him ten times, the imperial carriage three times, and he was twice recommended as worthy, erudite, and virtuous—yet he refused every call, and his fame only grew.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "大將軍何進表薦扶曰：「資遊、夏之德，述孔氏之風，內懷焦、董消復之術。",
+          "literal": "Grand General He Jin memorialized recommending Fu, saying: “He possesses the virtue of You and Xia, expounds the style of the Kong clan, and inwardly holds the restorative arts of Jiao and Dong.",
+          "idiomatic": "Grand General He Jin memorialized in his favor: “He has the virtue of the ancient sages You and Xia, carries forward Confucius’s teaching, and holds within him the restorative arts of Jiao and Dong.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "方今並、涼騷擾，西戎蠢叛，宜敕公車特召，待以異禮，諮謀奇策。」",
+          "literal": "Now Bing and Liang are in turmoil, the western Rong foolishly rebel; it is fitting to order the imperial carriage to summon him specially, treat him with exceptional ceremony, and consult him on extraordinary plans.”",
+          "idiomatic": "With Bing and Liang in turmoil and the western tribes in revolt, the throne should summon him by imperial carriage with exceptional honors and seek his counsel on extraordinary measures.”",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "於是靈帝徵扶，即拜侍中。",
+          "literal": "Thereupon Emperor Ling summoned Fu and immediately appointed him Palace Attendant.",
+          "idiomatic": "Emperor Ling then summoned Dong Fu and appointed him palace attendant on the spot.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "在朝稱為儒宗，甚見器重。",
+          "literal": "At court he was called the patriarch of scholars and was greatly valued and trusted.",
+          "idiomatic": "At court he was hailed as the leading Confucian scholar and won deep respect.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "求為蜀郡屬國都尉。",
+          "literal": "He requested appointment as commandant of the dependent state in Shu Commandery.",
+          "idiomatic": "He asked for the post of commandant of Shu’s dependent state.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "扶出一歲而靈帝崩，天下大亂。",
+          "literal": "Fu had been out one year when Emperor Ling died and the realm fell into great chaos.",
+          "idiomatic": "A year after he left the capital Emperor Ling died and the empire plunged into chaos.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "後去官，年八十二卒於家。",
+          "literal": "Later he left office; at age eighty-two he died at home.",
+          "idiomatic": "He later resigned and died at home at eighty-two.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "始扶發辭抗論，益部少雙，故號曰",
+          "literal": "At first, when Fu began to speak in refutation and debate, few in Yibu could match him; therefore he was styled",
+          "idiomatic": "From the start his debating was unmatched in Yizhou, so he was nicknamed",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "（致止）",
+          "literal": "(zhizhi “to stop” [variant])",
+          "idiomatic": "Some manuscripts read “Zhizhi” (“he who stops”).",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "〔至止〕，言人莫能當，所至而談止也。",
+          "literal": "[Zhizhi “to the stop”], meaning no one could withstand him—wherever he went discussion ceased.",
+          "idiomatic": "“Zhizhi”—“the one who stops all talk”—for wherever he went debate fell silent.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "後丞相諸葛亮問秦宓以扶所長，宓曰：「董扶褒秋毫之善，貶纖芥之惡。」",
+          "literal": "Later Chancellor Zhuge Liang asked Qin Mi about Fu’s strengths; Mi said: “Dong Fu praises the good even in an autumn down, and condemns evil even in a fiber of grass.”",
+          "idiomatic": "Later Chancellor Zhuge Liang asked Qin Mi what Dong Fu excelled at. Mi replied: “Dong Fu praises goodness down to the finest hair and condemns wrongdoing down to the smallest flaw.”",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "是時〔益〕州逆賊馬相、趙祗等於綿竹縣自號黃巾，合聚疲役之民，一二日中得數千人，先殺綿竹令李升，吏民翕集，合萬餘人，便前破雒縣，攻益州殺儉，又到蜀郡、犍為，旬月之間，破壞三郡。",
+          "literal": "At this time [Yi] Province’s rebel bandits Ma Xiang, Zhao Qi, and others at Mianzhu County styled themselves Yellow Turbans; they gathered exhausted conscripted people; in one or two days they obtained several thousand men; first they killed Mianzhu magistrate Li Sheng; officials and common people flocked together, totaling more than ten thousand; then they advanced and broke Luoxian, attacked Yizhou and killed Jian, then went to Shu Commandery and Qianwei; within a month or so they destroyed three commanderies.",
+          "idiomatic": "About then rebels Ma Xiang and Zhao Qi in Yizhou raised the Yellow Turban banner at Mianzhu, sweeping up worn-out conscripts. Within a day or two they had thousands of followers; they slew Magistrate Li Sheng, and officials and townsfolk rallied until their host passed ten thousand. They took Luoxian, struck down Inspector Xi Jian of Yizhou, then swept through Shu and Qianwei—three commanderies ruined inside a month.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-27T05:02:47.617Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-27T05:02:47.620Z",
+      "appliedSummary": {
+        "id": "source-sanguozhi-031-wikisource-8144f57f76ca",
+        "type": "source_omission_candidate",
+        "start": 9,
+        "removed": 3,
+        "inserted": 31,
+        "delta": 28,
+        "manualTranslationsApplied": 30
+      }
     },
     {
       "id": "source-sanguozhi-031-wikisource-97673a4c276c",
@@ -44263,7 +44496,7 @@
     },
     {
       "id": "source-sanguozhi-042-wikisource-95ccd4bc35ab",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "sanguozhi",
@@ -44287,8 +44520,110 @@
         "afterLocal": "譙周字允南，巴西西充國人也。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "李譔字欽仲，梓潼涪人也。",
+          "literal": "Li Zuan, courtesy name Qinzhong, was a man of Fu in Zitong.",
+          "idiomatic": "Li Zuan, styled Qinzhong, came from Fu in Zitong.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "父仁，字德賢，與同縣尹默懼遊荊州，從司馬徽、宋忠等學。",
+          "literal": "Father Ren, courtesy name Dexian, with same-county Yin Mo traveled to Jing Province, followed Sima Hui, Song Zhong, and others to study.",
+          "idiomatic": "His father Ren, styled Dexian, traveled to Jingzhou with his fellow townsman Yin Mo and studied under Sima Hui, Song Zhong, and others.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "譔具傳其業，又默講論義理，五經、諸子，無不該覽，加博好技藝，算術、卜數，醫藥、弓弩、機械之巧，皆致思焉。",
+          "literal": "Zuan fully transmitted his father's craft; moreover Mo lectured on principles of meaning—the Five Classics and various masters, none not covered in reading—additionally broadly loved skills and arts: calculation, divination, medicine, bow and crossbow, mechanical ingenuity—all he devoted thought to.",
+          "idiomatic": "Zuan fully inherited his father's learning, while Yin Mo lectured on doctrine; he read the Five Classics and all the masters, and also pursued arithmetic, divination, medicine, archery, and mechanical arts with equal zeal.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "始為州書佐、尚書令史。",
+          "literal": "At first served as provincial clerk and Secretariat recorder.",
+          "idiomatic": "He first served as a provincial clerk and Secretariat recorder.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "延熙元年238年，後主立太子，以譔為庶子，遷為僕射，轉中散大夫、右中郎將，猶侍太子。",
+          "literal": "In the first year of Yanxi (238), the Later Lord installed the crown prince and appointed Zuan as junior tutor; he was promoted to steward, then transferred to palace attendant and right commander of the gentlemen of the interior, still attending the crown prince.",
+          "idiomatic": "In 238, when the Later Ruler established the crown prince, Zuan was made junior tutor, then promoted to steward, palace attendant, and right commander of the gentlemen of the interior, continuing to attend the heir.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "太子愛其多知，甚悅之。",
+          "literal": "The crown prince loved his great knowledge and was very pleased with him.",
+          "idiomatic": "The crown prince delighted in his wide learning and favored him greatly.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "然體輕脫，好戲啁，故世不能重也。",
+          "literal": "Yet his bearing was light and unserious; he loved jesting and mockery—therefore the age could not esteem him.",
+          "idiomatic": "Yet he was frivolous and fond of banter, so the world could not take him seriously.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "著古文《易》、《尚書》、《毛詩》、《三禮》、《左氏傳》、《太玄指歸》，皆依準賈、馬，異於鄭玄。",
+          "literal": "He authored Old Text commentaries on the Changes, Documents, Mao Odes, Three Rites, Zuo Tradition, and Directions to the Supreme Mystery—all following Jia and Ma, differing from Zheng Xuan.",
+          "idiomatic": "He wrote Old Text commentaries on the Changes, Documents, Mao Odes, Three Rites, Zuo Tradition, and Directions to the Supreme Mystery, following Jia Kui and Ma Rong rather than Zheng Xuan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "與王氏殊隔，初不見其所述，而意歸多同。",
+          "literal": "With the Wang lineage he was utterly separate; at first he did not see what they expounded, yet the intent returned mostly the same.",
+          "idiomatic": "He had no contact with the Wang school and had not read their commentaries, yet his conclusions largely agreed with theirs.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "景耀中卒。",
+          "literal": "He died in the Jingyao era.",
+          "idiomatic": "He died during the Jingyao reign.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "時又有漢中陳術，字申伯，亦博學多聞，著《釋部》七篇、《益部耆舊傳》及《志》，位歷三郡太守。",
+          "literal": "At the time there was also Chen Shu of Hanzhong, courtesy name Shenbo, likewise broad in learning and famed in hearing; he authored seven chapters of Explanatory Categories, Records of Elders of Yibu, and a Gazetteer, and his posts spanned three commandery governorships.",
+          "idiomatic": "About the same time Chen Shu of Hanzhong, styled Shenbo, was also widely learned; he wrote seven chapters of Explanatory Categories, Records of Elders of Yibu, and a gazetteer, and served as governor of three commanderies.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "acceptedSourceCorrections": [
+        {
+          "index": 0,
+          "from": "」李譔字欽仲，梓潼涪人也。",
+          "to": "李譔字欽仲，梓潼涪人也。"
+        }
+      ],
+      "manualTranslationImportedAt": "2026-06-27T22:10:35.004Z",
+      "manualTranslationPackets": [
+        "../../../tmp/sgz042-li-zuan-packet.json"
+      ],
+      "reviewedAt": "2026-06-27T22:10:35.006Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-27T22:10:35.159Z",
+      "appliedSummary": {
+        "id": "source-sanguozhi-042-wikisource-95ccd4bc35ab",
+        "type": "source_omission_candidate",
+        "start": 188,
+        "removed": 0,
+        "inserted": 11,
+        "delta": 11,
+        "manualTranslationsApplied": 11
+      }
     },
     {
       "id": "source-sanguozhi-042-wikisource-96d989f87be9",
@@ -44352,7 +44687,7 @@
     },
     {
       "id": "source-sanguozhi-042-wikisource-9a5d404f6421",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -44413,8 +44748,11 @@
         "afterLocal": "州郡辟請，皆不應，州就假師友從事。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local (山幷) decomposition intentionally represents rare CJK glyph 𡸫 (U+21DE3) for Qiao Zhou's father's name; upstream composed form differs only by glyph representation, not meaning.",
+      "reviewedAt": "2026-06-27T22:10:26.765Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-sanguozhi-042-wikisource-9c7f61519b38",
@@ -58926,7 +59264,7 @@
     },
     {
       "id": "source-sanguozhi-054-wikisource-efc5114e0993",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -58978,8 +59316,11 @@
         "afterLocal": "子睦襲爵，領兵馬。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied glyph repair 方乾→方幹 in s0387 with updated English; retained local 鳳皇三年 as standard Eastern Wu era spelling (Wikisource 鳳凰 is an attested variant only).",
+      "reviewedAt": "2026-06-27T22:14:34.291Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-27T22:14:34.291Z"
     },
     {
       "id": "source-sanguozhi-055-wikisource-040bcf766d4b",
@@ -63840,7 +64181,7 @@
     },
     {
       "id": "source-sanguozhi-059-wikisource-6fc656d1cdf7",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "sanguozhi",
@@ -63864,8 +64205,110 @@
         "afterLocal": "孫奮字子揚，霸弟也，母曰仲姬。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "霸二子，基、壹。",
+          "literal": "Ba had two sons, Ji and Yi.",
+          "idiomatic": "Sun Ba had two sons, Ji and Yi.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "五鳳中，封基爲吳侯，壹宛陵侯。",
+          "literal": "In the Wufeng era, Ji was enfeoffed as Marquis of Wu and Yi as Marquis of Wanling.",
+          "idiomatic": "During the Wufeng era, Ji was made Marquis of Wu and Yi Marquis of Wanling.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "基侍孫亮在內，太平二年257年，盜乘御馬，收付獄。",
+          "literal": "Ji attended Sun Liang within the inner palace; in the second year of Taiping (257) he stole and rode an imperial horse and was taken into custody.",
+          "idiomatic": "Ji served Sun Liang in the inner palace. In 257 (the second year of Taiping) he stole and rode an imperial horse and was imprisoned.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "亮問侍中刁玄曰：「盜乘御馬罪云何？」",
+          "literal": "Liang asked Attendant-in-Ordinary Diao Xuan, saying: \"What is the penalty for stealing and riding an imperial horse?\"",
+          "idiomatic": "Sun Liang asked Attendant-in-Ordinary Diao Xuan, \"What is the penalty for stealing and riding an imperial horse?\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "玄對曰：「科應死。",
+          "literal": "Xuan replied, saying: \"By statute the penalty is death.",
+          "idiomatic": "Diao Xuan replied, \"By statute the penalty is death.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "然魯王早終，惟陛下哀原之。」",
+          "literal": "Yet the Prince of Lu died young; I beg Your Majesty to show pity and pardon him.\"",
+          "idiomatic": "Yet the Prince of Lu died young; I beg Your Majesty to show pity and pardon him.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "亮曰：「法者，天下所共，何得阿以親親故邪？",
+          "literal": "Liang said: \"Law is what all under Heaven share; how can one show favoritism because of kinship?",
+          "idiomatic": "Sun Liang said, \"Law belongs to all under Heaven—how can one show favoritism because of kinship?",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "當思惟可以釋此者，柰何以情相迫乎？」",
+          "literal": "One ought to think of what could release this case—why press me with personal sentiment?\"",
+          "idiomatic": "One ought to think of what could release him—why press me with personal sentiment?\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "玄曰：「舊赦有大小，或天下，亦有千里、五百里赦，隨意所及。」",
+          "literal": "Xuan said: \"Amnesties of old came in great and small forms—sometimes for all the realm, sometimes for a radius of a thousand or five hundred li, according to what the sovereign wished to reach.\"",
+          "idiomatic": "Diao Xuan said, \"Amnesties of old came in great and small forms—sometimes for the whole realm, sometimes for a radius of a thousand or five hundred li, as far as the sovereign wished to extend mercy.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "亮曰：「解人不當爾邪！」",
+          "literal": "Liang said: \"Should not someone who understands matters act thus!\"",
+          "idiomatic": "Sun Liang said, \"Should not someone who understands matters act thus!\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "乃赦宮中，基以得免。",
+          "literal": "Thereupon he proclaimed an amnesty within the palace, and Ji thereby escaped punishment.",
+          "idiomatic": "He then proclaimed an amnesty within the palace, and Ji was spared.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "孫皓即位，追和、霸舊隙，削基、壹爵土，與祖母謝姬俱徙會稽烏傷縣。",
+          "literal": "When Sun Hao took the throne, he revived the old enmity between He and Ba, stripped Ji and Yi of their titles and fiefs, and together with their grandmother Lady Xie exiled them to Wushang county in Kuaiji.",
+          "idiomatic": "When Sun Hao succeeded, he revived the old feud between Sun He and Sun Ba, stripped Ji and Yi of their titles and fiefs, and exiled them with their grandmother Lady Xie to Wushang in Kuaiji.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "manualTranslationImportedAt": "2026-06-27T22:18:13.025Z",
+      "manualTranslationPackets": [
+        "data/quality/repair-packets/sanguozhi-059-source-repair.json"
+      ],
+      "reviewedAt": "2026-06-27T22:18:13.027Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-27T22:18:18.489Z",
+      "appliedSummary": {
+        "id": "source-sanguozhi-059-wikisource-6fc656d1cdf7",
+        "type": "source_omission_candidate",
+        "start": 232,
+        "removed": 0,
+        "inserted": 12,
+        "delta": 12,
+        "manualTranslationsApplied": 12
+      }
     },
     {
       "id": "source-sanguozhi-059-wikisource-8168c75f7ef9",
@@ -65090,7 +65533,7 @@
     },
     {
       "id": "source-sanguozhi-059-wikisource-dfb640c59dbd",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "sanguozhi",
@@ -65114,8 +65557,110 @@
         "afterLocal": "孫休立，封和子皓爲烏程侯，自新都之本國。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "太元二年252年正月，封和爲南陽王，遣之長沙。",
+          "literal": "In the first month of the second year of Taiyuan (252), He was enfeoffed as Prince of Nanyang and sent to Changsha.",
+          "idiomatic": "In the first month of 252 (the second year of Taiyuan), Sun He was made Prince of Nanyang and sent to Changsha.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "《吳書》曰：和之長沙，行過蕪湖，有鵲巢于帆檣，故官寮聞之皆憂慘，以爲檣末傾危，非乆安之象。",
+          "literal": "The Wu shu states: On He's road to Changsha he passed Wuhu, and a magpie nested on the sail mast; when his former retainers heard of it they were all distressed, taking it as a sign that the mast's tip was tipping and not an omen of lasting peace.",
+          "idiomatic": "The Wu shu says that on the way to Changsha Sun He passed Wuhu, where a magpie nested on the sail mast. His former retainers were all distressed, taking it as a sign that the mast's tip was tipping and not an omen of lasting peace.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "或言鵲巢之詩有「積行累功以致爵位」之言，今王至德茂行，復受國土，儻神靈以此告寤人意乎？",
+          "literal": "Some said the Ode of the Magpie's Nest contains the words \"accumulated conduct and accumulated merit to attain rank and position\"; now the prince's supreme virtue and abundant conduct have again received a state—might the spirits be using this to awaken people's hearts?",
+          "idiomatic": "Some said the Ode of the Magpie's Nest speaks of \"accumulated conduct and accumulated merit to attain rank and position\"; now the prince's supreme virtue and abundant conduct have again received a state—might the spirits be using this to awaken people's hearts?",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "四月，權薨，諸葛恪秉政。",
+          "literal": "In the fourth month Sun Quan died, and Zhuge Ke took charge of government.",
+          "idiomatic": "In the fourth month Sun Quan died, and Zhuge Ke took charge of government.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "恪即和妃張之舅也。",
+          "literal": "Ke was the maternal uncle of He's consort Zhang.",
+          "idiomatic": "Zhuge Ke was the maternal uncle of Sun He's consort, Lady Zhang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "妃使黃門陳遷之建業上疏中宮，并致問於恪。",
+          "literal": "The consort sent Yellow Gate Attendant Chen Qian to Jiankang to submit a memorial to the inner palace and also to convey inquiries to Ke.",
+          "idiomatic": "The consort sent Yellow Gate Attendant Chen Qian to Jiankang to submit a memorial to the inner palace and also to convey inquiries to Zhuge Ke.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "臨去，恪謂遷曰：「爲我達妃，期當使勝他人。」",
+          "literal": "As he was leaving, Ke told Qian, saying: \"Convey to the consort for me: I intend to see that she prevails over the others.\"",
+          "idiomatic": "As he was leaving, Zhuge Ke told Chen Qian, \"Convey to the consort for me: I intend to see that she prevails over the others.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "此言頗泄。",
+          "literal": "This remark was rather leaked.",
+          "idiomatic": "This remark leaked rather widely.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "又恪有徙都意，使治武昌宮，民間或言欲迎和。",
+          "literal": "Moreover Ke intended to move the capital and had the Wuchang palace repaired; among the people some said he meant to welcome He back.",
+          "idiomatic": "Zhuge Ke also intended to move the capital and had the Wuchang palace repaired; among the people some said he meant to welcome Sun He back.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "及恪被誅，孫峻因此奪和璽綬，徙新都，又遣使者賜死。",
+          "literal": "When Ke was executed, Sun Jun used this as grounds to seize He's seal and ribbon, transfer him to Xindu, and send an envoy to order his death by bestowal.",
+          "idiomatic": "When Zhuge Ke was executed, Sun Jun used the occasion to seize Sun He's seal and ribbon, transfer him to Xindu, and send an envoy to order his death.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "和與妃張辭別，張曰：「吉凶當相隨，終不獨生活也。」",
+          "literal": "He took leave of Consort Zhang; Zhang said: \"Fortune and misfortune should go together—I will never live on alone.\"",
+          "idiomatic": "Sun He took leave of Consort Zhang; she said, \"Fortune and misfortune should go together—I will never live on alone.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "亦自殺，舉邦傷焉。",
+          "literal": "She too killed herself, and the whole state grieved.",
+          "idiomatic": "She too killed herself, and the whole state grieved.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "manualTranslationImportedAt": "2026-06-27T22:18:13.265Z",
+      "manualTranslationPackets": [
+        "data/quality/repair-packets/sanguozhi-059-source-repair.json"
+      ],
+      "reviewedAt": "2026-06-27T22:18:13.267Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-27T22:18:18.280Z",
+      "appliedSummary": {
+        "id": "source-sanguozhi-059-wikisource-dfb640c59dbd",
+        "type": "source_omission_candidate",
+        "start": 175,
+        "removed": 0,
+        "inserted": 12,
+        "delta": 12,
+        "manualTranslationsApplied": 12
+      }
     },
     {
       "id": "source-sanguozhi-060-wikisource-0f67c3a87a35",
@@ -68140,5 +68685,5 @@
       "notes": "Denied: local 【評】 is a retained structural heading, not an upstream text omission."
     }
   ],
-  "updatedAt": "2026-06-26T16:52:47.045Z"
+  "updatedAt": "2026-06-27T22:18:18.521Z"
 }

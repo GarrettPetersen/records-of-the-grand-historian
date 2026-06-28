@@ -106028,7 +106028,7 @@
     },
     {
       "id": "source-weishu-096-wikisource-b6a62deed9ac",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.133,
@@ -106080,8 +106080,11 @@
         "afterLocal": "昔夷齊獲全於周武，華矞不容於太公，何哉？"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource raw prepends the Song collation note and template metadata before chapter text; local JSON already has the full 宋人校語 in 校勘記 (s0266–s0275) with chapter body correctly starting at s0001–s0002.",
+      "reviewedAt": "2026-06-27T10:52:33.764Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-weishu-097-wikisource-00fa1120d4d0",
@@ -110241,7 +110244,7 @@
     },
     {
       "id": "source-weishu-102-wikisource-3a98f324a55d",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -110265,8 +110268,85 @@
         "afterLocal": "是時，昌明年長，嗜酒好內，而昌明弟會稽王道子任居宰相，昏醟尤甚，狎昵諂邪。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "苻堅遣苻雅率將王統、朱彤、楊安、姚萇步騎五萬向駱谷，伐昌明秦州刺史楊纂。",
+          "literal": "Fu Jian sent Fu Ya leading the generals Wang Tong, Zhu Tong, Yang An, and Yao Chang with fifty thousand foot and horse toward Luogu Valley to attack Changming's Inspector of Qinzhou Yang Zuan.",
+          "idiomatic": "Fu Jian sent Fu Ya leading the generals Wang Tong, Zhu Tong, Yang An, and Yao Chang with fifty thousand infantry and cavalry toward Luogu Valley to attack Changming's Inspector of Qinzhou, Yang Zuan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "纂請救於梁州刺史楊亮。",
+          "literal": "Zuan requested rescue from Inspector of Liangzhou Yang Liang.",
+          "idiomatic": "Zuan requested rescue from Inspector of Liangzhou Yang Liang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "亮遣參軍卜靖赴之，敗走。",
+          "literal": "Liang sent Adjutant Bu Jing to go to his aid; he was defeated and fled.",
+          "idiomatic": "Liang sent Adjutant Bu Jing to his aid; he was defeated and fled.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "朱彤至梁州，亮望風奔散，於是堅遂有梁益二州。",
+          "literal": "Zhu Tong reached Liangzhou; Liang fled at the sight of the wind; thus Jian then possessed the two provinces of Liang and Yi.",
+          "idiomatic": "When Zhu Tong reached Liangzhou, Liang fled at the first sign of attack. Jian then possessed Liang and Yi.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "昌明上下莫不憂怖。",
+          "literal": "Throughout Changming's court none did not fear and dread.",
+          "idiomatic": "Throughout Changming's court, all were filled with fear and dread.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "建國三十九年，昌明改年曰太元元年。",
+          "literal": "In the thirty-ninth year of Jianguo, Changming changed the era to the first year of Taiyuan.",
+          "idiomatic": "In the thirty-ninth year of Jianguo, Changming changed the era to the first year of Taiyuan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "太祖七年，苻堅大舉討昌明，令其國曰：「東南平定指日，當以司馬昌明為尚書僕射，可速為起第。」",
+          "literal": "In the seventh year of Taizu, Fu Jian mounted a major campaign against Changming and ordered his kingdom: \"The southeast will be pacified within days. Sima Changming is to be made Vice Director of the Masters of Writing; quickly build him a mansion.\"",
+          "idiomatic": "In the seventh year of Taizu, Fu Jian mounted a major campaign against Changming and ordered his kingdom: \"The southeast will be pacified within days. Sima Changming is to be made Vice Director of the Masters of Writing; quickly build him a mansion.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "堅前後擒張天錫等皆豫築甲宅，至而居之。",
+          "literal": "Those whom Jian captured before and after, such as Zhang Tiansi, all had mansions built in advance; when they arrived they dwelt in them.",
+          "idiomatic": "For those Jian captured before and after, such as Zhang Tiansi, mansions were built in advance, and when they arrived they moved in.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "堅至淮南，大敗奔退。",
+          "literal": "Jian reached Huainan, was greatly defeated, and fled in retreat.",
+          "idiomatic": "Jian reached Huainan, suffered a great defeat, and fled in retreat.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-27T06:02:49.410Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-27T06:02:49.416Z",
+      "appliedSummary": {
+        "id": "source-weishu-102-wikisource-3a98f324a55d",
+        "type": "source_omission_candidate",
+        "start": 306,
+        "removed": 0,
+        "inserted": 9,
+        "delta": 9,
+        "manualTranslationsApplied": 9
+      }
     },
     {
       "id": "source-weishu-102-wikisource-4497d9523a52",
@@ -110702,7 +110782,7 @@
     },
     {
       "id": "source-weishu-102-wikisource-88faf02cd80a",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.056,
@@ -110745,8 +110825,120 @@
         "afterLocal": "平文帝初，叡自稱晉王，改元建武，立宗廟、社稷，置百官，立子紹為太子。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "永嘉元年307年春，敏死，秋，叡始到建業。",
+          "literal": "In the first year of Yongjia (307), in spring Chen Min died; in autumn Rui first arrived at Jianye.",
+          "idiomatic": "In the first year of Yongjia (307), Chen Min died in spring. In autumn Rui first reached Jianye.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "五年，進鎮東將軍、開府儀同三司，又以會稽戶二萬增封，加督揚、江、湘、交、廣五州諸軍事。",
+          "literal": "In the fifth year, he was promoted to General Who Guards the East and Director-in-Chief with credential status equal to the Three Excellencies; he was further given two myriads of households in Kuaiji to enlarge his fief, and was additionally made Supervisor of Military Affairs in the five provinces of Yang, Jiang, Xiang, Jiao, and Guang.",
+          "idiomatic": "In the fifth year he was promoted to General Who Guards the East and Director-in-Chief with credentials equal to the Three Excellencies, given two myriads of households in Kuaiji to enlarge his fief, and made Supervisor of Military Affairs in Yang, Jiang, Xiang, Jiao, and Guang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "六月，王彌、劉曜寇洛陽，懷帝幸平陽，晉司空荀蕃、司隸校尉荀組推叡為盟主。",
+          "literal": "In the sixth month, Wang Mi and Liu Yao raided Luoyang; Emperor Huai fled to Pingyang; Jin's Minister of Works Xun Fan and Director of the Masters of Writing Xun Zu recommended Rui as alliance leader.",
+          "idiomatic": "In the sixth month Wang Mi and Liu Yao raided Luoyang. Emperor Huai fled to Pingyang, and Jin's Minister of Works Xun Fan and Director of the Masters of Writing Xun Zu recommended Rui as alliance leader.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "於是輒改易郡縣，假置名號。",
+          "literal": "Thereupon he at once altered commanderies and counties and provisionally established titles and designations.",
+          "idiomatic": "Thereupon he at once altered commanderies and counties and provisionally established titles and offices.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "江州刺史華軼、北中郎將裴憲並不從之。",
+          "literal": "Inspector of Jiangzhou Hua Yi and Northern General of the Gentlemen of the Household Pei Xian both did not follow him.",
+          "idiomatic": "Inspector of Jiangzhou Hua Yi and Northern General of the Gentlemen of the Household Pei Xian both refused to follow him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "憲自稱鎮東將軍、都督江北五郡軍事，與軼連和。",
+          "literal": "Xian styled himself General Who Guards the East and Director-in-Chief of Military Affairs in the five commanderies north of the Yangtze, and allied with Yi.",
+          "idiomatic": "Xian styled himself General Who Guards the East and Director-in-Chief of Military Affairs in the five commanderies north of the Yangtze and allied with Yi.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "叡遣左將軍王敦、將軍甘卓、周訪等擊軼，斬之。",
+          "literal": "Rui sent Left General Wang Dun, Generals Gan Zhuo and Zhou Fang, and others to attack Yi and beheaded him.",
+          "idiomatic": "Rui sent Left General Wang Dun and Generals Gan Zhuo and Zhou Fang to attack Yi and beheaded him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "憲奔于石勒。",
+          "literal": "Xian fled to Shi Le.",
+          "idiomatic": "Xian fled to Shi Le.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "六年，叡檄四方，稱與穆帝俱討劉淵，大會平陽。",
+          "literal": "In the sixth year, Rui issued proclamations to the four quarters, claiming that he and Emperor Mu would together punish Liu Yuan, and held a great assembly at Pingyang.",
+          "idiomatic": "In the sixth year Rui issued proclamations to the four quarters, claiming that he and Emperor Mu would together punish Liu Yuan, and held a great assembly at Pingyang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "建興元年313年，晉愍帝以叡為侍中、左丞相、大都督、陝東諸軍事，持節、王如故。",
+          "literal": "In the first year of Jianxing (313), Emperor Min of Jin appointed Rui Attendant-in-Ordinary, Left Chancellor, Chief Commander-in-Chief, and Commander-in-Chief of Military Affairs east of Shan, with credentials; his kingship remained as before.",
+          "idiomatic": "In the first year of Jianxing (313), Emperor Min of Jin appointed Rui Attendant-in-Ordinary, Left Chancellor, Chief Commander-in-Chief, and Commander-in-Chief of Military Affairs east of Shan, with credentials; his kingship remained unchanged.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "叡改建業為建康。",
+          "literal": "Rui changed the name of Jianye to Jiankang.",
+          "idiomatic": "Rui changed the name of Jianye to Jiankang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "七月，叡以晉室將滅，潛有他志，乃自大赦，為大都督、都督中外諸軍事，又為丞相。",
+          "literal": "In the seventh month, Rui, seeing that the Jin house was about to perish, secretly harbored other ambitions; he then proclaimed a general amnesty, made himself Chief Commander-in-Chief and Director-in-Chief of all military affairs within and without, and was also made Chancellor.",
+          "idiomatic": "In the seventh month, seeing that the Jin house was about to perish, Rui secretly harbored other ambitions. He proclaimed a general amnesty, made himself Chief Commander-in-Chief and Director-in-Chief of all military affairs within and without, and was also made Chancellor.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "叡號令不行，政刑淫虐，殺督運令史淳于伯，行刑者以刀拭柱，血流上柱二丈三尺，俓頭流下四尺五寸，其直如弦。",
+          "literal": "Rui's orders did not take effect; government and punishments were indulgent and cruel. He killed Registrar of Transport Supervision Chunyu Bo; as the executioner wiped his blade on a pillar, blood ran up the pillar two zhang three chi, head blood flowing down four chi five cun; it ran straight as a bowstring.",
+          "idiomatic": "Rui's orders went unheeded, and government and punishments were indulgent and cruel. He killed Registrar of Transport Supervision Chunyu Bo. As the executioner wiped his blade on a pillar, blood ran up the pillar two zhang three chi, with head blood flowing down four chi five cun in a line straight as a bowstring.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "時人怨之。",
+          "literal": "At the time people resented him.",
+          "idiomatic": "At the time people resented him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-27T06:02:48.821Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-27T06:02:48.824Z",
+      "appliedSummary": {
+        "id": "source-weishu-102-wikisource-88faf02cd80a",
+        "type": "source_omission_candidate",
+        "start": 13,
+        "removed": 1,
+        "inserted": 15,
+        "delta": 14,
+        "manualTranslationsApplied": 14
+      }
     },
     {
       "id": "source-weishu-102-wikisource-d6bc9f2d8df9",
@@ -110822,7 +111014,7 @@
     },
     {
       "id": "source-weishu-102-wikisource-e41e4dcba990",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -110846,8 +111038,92 @@
         "afterLocal": "時盧循執德宗廣州刺史吳隱之，自號平南將軍、廣州刺史，令其黨徐道覆據始興，餘郡皆以親黨居之。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "德宗封桓玄為楚王，玄尋逼德宗手詔禪位。",
+          "literal": "Dezong enfeoffed Huan Xuan as Prince of Chu; Xuan soon forced Dezong by hand-edict to abdicate.",
+          "idiomatic": "Dezong enfeoffed Huan Xuan as Prince of Chu. Xuan soon forced Dezong by hand-edict to abdicate.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "德宗出居永安宮。",
+          "literal": "Dezong went out to dwell at Yong'an Palace.",
+          "idiomatic": "Dezong moved out to Yong'an Palace.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "玄既受禪，封德宗為南康平固縣王，居之尋陽。",
+          "literal": "Once Xuan had accepted the abdication, he enfeoffed Dezong as King of Pinggu County in Nankang, and had him dwell at Xunyang.",
+          "idiomatic": "Once Xuan had accepted the abdication, he enfeoffed Dezong as King of Pinggu County in Nankang and had him dwell at Xunyang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "天賜元年，德宗在姑熟，二月，至尋陽。",
+          "literal": "In the first year of Tiansi, Dezong was at Guniu; in the second month he reached Xunyang.",
+          "idiomatic": "In the first year of Tiansi, Dezong was at Guniu. In the second month he reached Xunyang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "其彭城內史劉裕殺玄徐州刺史桓脩，與劉毅等舉兵討玄。",
+          "literal": "His Administrator of Pengcheng Liu Yu killed Xuan's Inspector of Xuzhou Huan Xiu, and with Liu Yi and others raised troops to punish Xuan.",
+          "idiomatic": "His Administrator of Pengcheng Liu Yu killed Xuan's Inspector of Xuzhou Huan Xiu and, with Liu Yi and others, raised troops to punish Xuan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "玄敗走尋陽，攜德宗兄弟至於江陵，又走荊州。",
+          "literal": "Xuan was defeated and fled to Xunyang, carrying Dezong and his brothers to Jiangling, and again fled into Jingzhou.",
+          "idiomatic": "Xuan was defeated and fled to Xunyang, carrying Dezong and his brothers to Jiangling before fleeing again into Jingzhou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "荊州別駕王康產、南郡相王騰之迎德宗入南郡府。",
+          "literal": "Jingzhou Vice-Director Wang Kangchan and Chancellor of Nan Commandery Wang Tengzhi welcomed Dezong into the Nan Commandery headquarters.",
+          "idiomatic": "Jingzhou Vice-Director Wang Kangchan and Chancellor of Nan Commandery Wang Tengzhi welcomed Dezong into the Nan Commandery headquarters.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "桓玄死。",
+          "literal": "Huan Xuan died.",
+          "idiomatic": "Huan Xuan died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "玄將桓振復襲江陵，斬王康產及騰之。",
+          "literal": "Xuan's general Huan Zhen again raided Jiangling and beheaded Wang Kangchan and Tengzhi.",
+          "idiomatic": "Xuan's general Huan Zhen again raided Jiangling and beheaded Wang Kangchan and Tengzhi.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "將殺德宗，玄揚州刺史、新安王桓謙苦禁之，乃止。",
+          "literal": "About to kill Dezong, Xuan's Inspector of Yangzhou, Prince of Xin'an Huan Qian, strenuously forbade it, and they stopped.",
+          "idiomatic": "About to kill Dezong, Xuan's Inspector of Yangzhou, Prince of Xin'an Huan Qian, strenuously forbade it, and they stopped.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-27T06:02:50.156Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-27T06:02:50.161Z",
+      "appliedSummary": {
+        "id": "source-weishu-102-wikisource-e41e4dcba990",
+        "type": "source_omission_candidate",
+        "start": 443,
+        "removed": 0,
+        "inserted": 10,
+        "delta": 10,
+        "manualTranslationsApplied": 10
+      }
     },
     {
       "id": "source-weishu-103-wikisource-0c291c0fbbb4",
@@ -181897,5 +182173,5 @@
       "retainedAfterRescan": true
     }
   ],
-  "updatedAt": "2026-06-26T22:20:22.715Z"
+  "updatedAt": "2026-06-27T06:02:50.264Z"
 }

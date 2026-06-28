@@ -106181,7 +106181,7 @@
     },
     {
       "id": "source-xintangshu-061-wikisource-67b0c85d7a16",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.536,
@@ -106233,8 +106233,11 @@
         "afterLocal": "相國司馬劉文靜為納言；"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream span is Wikisource table markup (column headers 西元/宰相/三師/三公, ALIGN/bgcolor attributes) concatenated with the first table row; local chapter already has the historical text correctly split as s0669 (618 武德元年戊寅) and s0003 (六月甲戌…知政事) between matching before/after anchors.",
+      "reviewedAt": "2026-06-27T10:53:44.300Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-xintangshu-061-wikisource-67e7afc0668e",
@@ -113357,7 +113360,7 @@
     },
     {
       "id": "source-xintangshu-062-wikisource-6e34fea027fb",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.429,
@@ -113409,8 +113412,11 @@
         "afterLocal": "六月丙辰，兵部尚書郭元振同中書門下三品。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource raw table markup (HTML attributes, column headers 西元/宰相/三師/三公) prepended to the first table row; local s0400+s0001 already contain the same Chinese text without markup.",
+      "reviewedAt": "2026-06-27T10:54:44.444Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-xintangshu-062-wikisource-6e4590b9be9e",
@@ -184826,7 +184832,7 @@
     },
     {
       "id": "source-xintangshu-125-wikisource-2f189271a9d1",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -184869,8 +184875,11 @@
         "afterLocal": "十七年，復爲右丞相，遷左丞相。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource raw text has 君{{PUA|}}死 with the Wang Jun name glyph as a PUA template; local 君㚟死 correctly preserves the same rare character (U+369F). Scanner normalized upstream PUA away, producing a false text_discrepancy; local text is retained.",
+      "reviewedAt": "2026-06-27T10:59:30.582Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-xintangshu-125-wikisource-a2ca8e5d5493",

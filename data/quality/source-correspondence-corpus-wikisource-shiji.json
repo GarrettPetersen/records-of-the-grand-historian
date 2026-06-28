@@ -4882,7 +4882,7 @@
     },
     {
       "id": "source-shiji-002-wikisource-17b84150c8c4",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.818,
@@ -4925,8 +4925,11 @@
         "afterLocal": "啟曰：「嗟！"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource raw uses 作{{書|甘誓}} template markup; scanner stripped the title to 作，. Local text 作甘誓 matches resolved upstream and standard Shiji editions.",
+      "reviewedAt": "2026-06-27T22:09:22.318Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-002-wikisource-2592d3aba30e",
@@ -5133,7 +5136,7 @@
     },
     {
       "id": "source-shiji-002-wikisource-7045cd0e4bf1",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.714,
@@ -5176,8 +5179,11 @@
         "afterLocal": "中康崩，子帝相立。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource raw uses 作{{書|胤征}} template markup; scanner stripped the title to 作。. Local text 作胤征 matches resolved upstream and standard Shiji editions.",
+      "reviewedAt": "2026-06-27T22:09:23.650Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-002-wikisource-7258bd9bb594",
@@ -7412,7 +7418,7 @@
     },
     {
       "id": "source-shiji-013-wikisource-fdeb34850603",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.037,
@@ -7473,8 +7479,10 @@
         "afterLocal": "初封。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Manually restored the missing Five Emperors/Xia/Shang genealogy tables and summary sentences in data/shiji/013.json from Wikisource raw markup; fixed s0010 graph 連山→以來. Not applied via queue because the flattened source span mixed paragraph and Zhou-table cells and the apply script could not locate the local range.",
+      "reviewedAt": "2026-06-27T05:15:30.712Z",
+      "reviewer": "sdk-repair-chapter"
     },
     {
       "id": "source-shiji-014-wikisource-0590e6e5db93",
@@ -16739,7 +16747,7 @@
     },
     {
       "id": "source-shiji-014-wikisource-83beca4f1ab5",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.811,
@@ -20643,8 +20651,10 @@
         "afterLocal": "伯御，武公孫。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Manually repaired missing 841 BCE table row (cells s35–s50) and corrected 宋惠公鮚 graph variant to match ctext/wikisource; remaining bulk table-digit concatenation diff is not a further source change.",
+      "reviewedAt": "2026-06-26T12:00:00.000Z",
+      "reviewer": "sdk-repair-chapter"
     },
     {
       "id": "source-shiji-014-wikisource-86cffae1fc59",
@@ -61392,7 +61402,7 @@
     },
     {
       "id": "source-shiji-018-wikisource-23bc1d34d58c",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -61444,8 +61454,11 @@
         "afterLocal": "以客從起陽武，至霸上，為常山守，得陳餘，為代相，徙趙相，侯。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource 侯第 reads 二十二 for 蒯成, but local 二十一 matches ctext and 史記三家註; retained local witness.",
+      "reviewedAt": "2026-06-27T22:12:53.968Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-018-wikisource-24811748c03c",
@@ -61978,7 +61991,7 @@
     },
     {
       "id": "source-shiji-018-wikisource-71de40e48a27",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.027,
@@ -62021,8 +62034,11 @@
         "afterLocal": ""
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream scrape-boundary residue includes Suoyin shuzan praise/commentary and Wikisource footer metadata after table cell 四十八; corpus preserves base chapter text only.",
+      "reviewedAt": "2026-06-27T22:12:55.231Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-018-wikisource-73d683859dc8",
@@ -63279,7 +63295,7 @@
     },
     {
       "id": "source-shiji-019-wikisource-05290b31ddde",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "shiji",
@@ -63303,8 +63319,11 @@
         "afterLocal": ""
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource page footer/metadata (Footer|title=太史公書|...) is upstream boilerplate, not chapter text; local chapter already ends with 右孝景時三十。",
+      "reviewedAt": "2026-06-27T22:14:17.992Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-019-wikisource-05342f794379",
@@ -64438,7 +64457,7 @@
     },
     {
       "id": "source-shiji-019-wikisource-63d3e70611f7",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "shiji",
@@ -64462,8 +64481,11 @@
         "afterLocal": "平陸。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream raw witness includes MediaWiki wikitable markup and repeated column-header residue (國名侯功孝景十六建元至元封六年三十六太初已後) between 右孝文時二十九。 and 平陸。; local structured table already has those cells and proceeds directly to the 平陸 row.",
+      "reviewedAt": "2026-06-27T22:14:20.289Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-019-wikisource-6b63dba8c68a",
@@ -66208,7 +66230,7 @@
     },
     {
       "id": "source-shiji-020-wikisource-cedcd62de4ae",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "shiji",
@@ -66232,8 +66254,85 @@
         "afterLocal": ""
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "孝武之代，天下多虞。南討甌越，北擊單于。長平鞠旅，冠軍前驅。術陽銜璧，臨蔡破禺。博陸上宰，平津巨儒。金章且佩，紫綬行紆。昭帝已後，勳寵不殊。惜哉絕筆，褚氏補諸。",
+          "literal": "In the era of Emperor Wu, all under Heaven had many troubles. South: campaign against Ou-Yue; north: strike the Chanyu. Changping gathered troops; the Champion led the vanguard. Shuyang bore jade to surrender; Lin Cai broke Yu. Bolu was the chief minister; Pingjin the great Confucian. Gold seals were worn; purple sashes trailed as they went. After Emperor Zhao, meritorious honors and favor were not diminished. Alas, the brush ceased; the Chu clan supplemented these.",
+          "idiomatic": "In the age of Emperor Wu, the realm was beset by many troubles. Campaigns were launched south against Ou-Yue and north against the Chanyu. The Marquis of Changping assembled the armies; the Champion Marquis led the advance. Shuyang came bearing jade in surrender; Lin Cai crushed Yu. The Bolu Marquis served as chief minister; the Pingjin Marquis was a great Confucian scholar. They wore gold seals and purple sashes that trailed in their train. After Emperor Zhao, honors and favor for merit remained undiminished. Alas, the Grand Historian laid down his brush; Master Chu supplemented these records.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "孝武之代，天下多虞。",
+          "literal": "In the era of Emperor Wu, all under Heaven had many troubles.",
+          "idiomatic": "In the age of Emperor Wu, the realm was beset by many troubles.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "南討甌越，北擊單于。",
+          "literal": "South: campaign against Ou-Yue; north: strike the Chanyu.",
+          "idiomatic": "Campaigns were launched south against Ou-Yue and north against the Chanyu.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "長平鞠旅，冠軍前驅。",
+          "literal": "Changping gathered troops; the Champion led the vanguard.",
+          "idiomatic": "The Marquis of Changping assembled the armies; the Champion Marquis led the advance.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "術陽銜璧，臨蔡破禺。",
+          "literal": "Shuyang bore jade to surrender; Lin Cai broke Yu.",
+          "idiomatic": "Shuyang came bearing jade in surrender; Lin Cai crushed Yu.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "博陸上宰，平津巨儒。",
+          "literal": "Bolu was the chief minister; Pingjin the great Confucian.",
+          "idiomatic": "The Bolu Marquis served as chief minister; the Pingjin Marquis was a great Confucian scholar.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "金章且佩，紫綬行紆。",
+          "literal": "Gold seals were worn; purple sashes trailed as they went.",
+          "idiomatic": "They wore gold seals and purple sashes that trailed in their train.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "昭帝已後，勳寵不殊。",
+          "literal": "After Emperor Zhao, meritorious honors and favor were not diminished.",
+          "idiomatic": "After Emperor Zhao, honors and favor for merit remained undiminished.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "惜哉絕筆，褚氏補諸。",
+          "literal": "Alas, the brush ceased; the Chu clan supplemented these.",
+          "idiomatic": "Alas, the Grand Historian laid down his brush; Master Chu supplemented these records.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-27T05:27:04.832Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-27T05:27:04.836Z",
+      "appliedSummary": {
+        "id": "source-shiji-020-wikisource-cedcd62de4ae",
+        "type": "source_omission_candidate",
+        "start": 711,
+        "removed": 0,
+        "inserted": 1,
+        "delta": 1,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-shiji-020-wikisource-e93bb530552f",
@@ -74920,7 +75019,7 @@
     },
     {
       "id": "source-shiji-022-wikisource-e90cf6589e69",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.778,
@@ -75053,8 +75152,10 @@
         "afterLocal": "太僕陳萬年為御史大夫。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream raw Wikisource table flattening drops 延壽卒 and 三月己丑霸薨 and embeds stray row-number residue (54/53/52/51, ~~|); local table text matches ctext and is fuller.",
+      "reviewedAt": "2026-06-27T05:29:11.812Z",
+      "reviewer": "sdk-repair-chapter"
     },
     {
       "id": "source-shiji-022-wikisource-ebf20ce83ad7",
@@ -97956,7 +98057,7 @@
     },
     {
       "id": "source-shiji-034-wikisource-cf3be7f9c6d7",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.778,
@@ -97999,8 +98100,10 @@
         "afterLocal": "樂閒奔趙。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream Wikisource embeds editorial supplement brackets ［樂乘］ and commentary parenthetical （樂乘） from Liang Yuyin's Shiji Zhiyi emendation; local base text 樂乘破卿秦於代。 already preserves the correct reading.",
+      "reviewedAt": "2026-06-26T00:00:00.000Z",
+      "reviewer": "sdk-repair-chapter"
     },
     {
       "id": "source-shiji-034-wikisource-e595dcf72409",
@@ -98146,7 +98249,7 @@
     },
     {
       "id": "source-shiji-035-wikisource-af3ff02f0bcd",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.846,
@@ -98189,8 +98292,10 @@
         "afterLocal": "莊侯三年，齊桓公卒。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Rejected Wikisource 果 variant: local 蔡莊侯甲午 matches the Shiji chronology table entry 蔡莊侯甲午元年 (shiji/014), and the English now renders 甲午 as the jiawu enthronement day rather than a personal name.",
+      "reviewedAt": "2026-06-26T12:00:00.000Z",
+      "reviewer": "sdk-repair-chapter"
     },
     {
       "id": "source-shiji-036-wikisource-7b2cfd1a1a4c",
@@ -109314,7 +109419,7 @@
     },
     {
       "id": "source-shiji-043-wikisource-c5abee326ef2",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.429,
@@ -109357,8 +109462,10 @@
         "afterLocal": "八年，城南行唐。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream Wikisource reign-transition annotation （主父死惠文王立立） is editorial residue, not received Shiji base text; local corpus text retained.",
+      "reviewedAt": "2026-06-26T00:00:00.000Z",
+      "reviewer": "sdk-repair-chapter"
     },
     {
       "id": "source-shiji-043-wikisource-c5efe76bded6",
@@ -112053,7 +112160,7 @@
     },
     {
       "id": "source-shiji-044-wikisource-d85c623f3070",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.87,
@@ -112105,8 +112212,10 @@
         "afterLocal": "衛徙野王。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Editional graph variants only (廿/二十, 爲/為, 朝謌/朝歌); local text retained with standard forms consistent with the rest of the chapter.",
+      "reviewedAt": "2026-06-27T05:44:14.394Z",
+      "reviewer": "sdk-repair-chapter"
     },
     {
       "id": "source-shiji-044-wikisource-ef125b8108ed",
@@ -112853,7 +112962,7 @@
     },
     {
       "id": "source-shiji-045-wikisource-a9b113d4fd07",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -112896,8 +113005,31 @@
         "afterLocal": "晉平公十四年，吳季札使晉，曰：「晉國之政卒歸於韓、魏、趙矣。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: local 宣字 is a corruption; received Shiji and surrounding context (獻子卒，子宣子代) use 宣子 for Han Xuanzi.",
+      "manualTranslations": [
+        {
+          "zh": "宣子徙居州。",
+          "literal": "Xuan Zi moved his residence to Zhou.",
+          "idiomatic": "Xuanzi moved his residence to Zhou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Existing English translation manually checked for this graph-only source repair and retained.",
+      "reviewedAt": "2026-06-27T05:45:50.644Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-27T05:45:50.646Z",
+      "appliedSummary": {
+        "id": "source-shiji-045-wikisource-a9b113d4fd07",
+        "type": "text_discrepancy_candidate",
+        "start": 19,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-shiji-045-wikisource-c593e417db6c",
@@ -114979,7 +115111,7 @@
     },
     {
       "id": "source-shiji-047-wikisource-ed2ed756b61f",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "shiji",
@@ -115003,8 +115135,10 @@
         "afterLocal": ""
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: Wikisource-only Suoyin shuzan praise/commentary (same block as source-shiji-047-wikisource-4f8bb9121177, without the header); this corpus preserves the base chapter text and does not include that later commentary block.",
+      "reviewedAt": "2026-06-27T05:47:24.131Z",
+      "reviewer": "sdk-repair-chapter"
     },
     {
       "id": "source-shiji-048-wikisource-c45b3d95c707",
@@ -115735,7 +115869,7 @@
     },
     {
       "id": "source-shiji-053-wikisource-567cd8d0dd73",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -115778,8 +115912,29 @@
         "afterLocal": "上曰：「吾聞進賢受上賞。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "於是乃令蕭何，賜帶劍履上殿，入朝不趨。",
+          "literal": "Thus, he commanded Xiao He, granting him the right to wear sword and shoes on the hall, and not to hasten when entering court.",
+          "idiomatic": "He thereupon ordered Xiao He and granted him the privilege of wearing his sword and shoes into the audience hall and of walking at his own pace when entering court.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-27T06:14:29.002Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-27T06:14:29.016Z",
+      "appliedSummary": {
+        "id": "source-shiji-053-wikisource-567cd8d0dd73",
+        "type": "text_discrepancy_candidate",
+        "start": 53,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-shiji-053-wikisource-675780e065b9",
@@ -115990,7 +116145,7 @@
     },
     {
       "id": "source-shiji-055-wikisource-62e4c6a9f079",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -116033,12 +116188,34 @@
         "afterLocal": "良曰：「誰為陛下畫此計者？"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "acceptedSourceText": "具以酈生語告於子房，曰：「何如？",
+      "manualTranslations": [
+        {
+          "zh": "具以酈生語告於子房，曰：「何如？」",
+          "literal": "Fully reported Li Yiji's words to Zifang, said: \"What about it?\"",
+          "idiomatic": "He fully recounted Li Yiji's words to Zifang and asked, \"What do you think?\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-27T22:19:04.624Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-27T22:19:04.626Z",
+      "appliedSummary": {
+        "id": "source-shiji-055-wikisource-62e4c6a9f079",
+        "type": "text_discrepancy_candidate",
+        "start": 121,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-shiji-055-wikisource-83cc5d0944d3",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -116081,8 +116258,30 @@
         "afterLocal": "後十年，陳涉等起兵，良亦聚少年百餘人。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "acceptedSourceText": "項伯嘗殺人，從良匿。",
+      "manualTranslations": [
+        {
+          "zh": "項伯嘗殺人，從良匿。",
+          "literal": "Xiang Bo had once killed a man and took refuge with Liang.",
+          "idiomatic": "Xiang Bo, who had once committed murder, took refuge with Liang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-27T22:19:04.840Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-27T22:19:04.843Z",
+      "appliedSummary": {
+        "id": "source-shiji-055-wikisource-83cc5d0944d3",
+        "type": "text_discrepancy_candidate",
+        "start": 38,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-shiji-056-wikisource-0a3bee3ff8e2",
@@ -118276,7 +118475,7 @@
     },
     {
       "id": "source-shiji-067-wikisource-51d9b28e919d",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -118319,8 +118518,10 @@
         "afterLocal": "孔子使開仕，對曰：「吾斯之未能信。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "No-op: upstream span begins with a stray closing quote from the prior speech unit (子路曰…學！); local correctly keeps 孔子曰：「是故惡夫佞者。」 as its own sentence. 漆彫 vs 漆雕 is a harmless surname graph variant; local standard form 漆雕開 is correct.",
+      "reviewedAt": "2026-06-27T06:59:13.335Z",
+      "reviewer": "sdk-repair-chapter"
     },
     {
       "id": "source-shiji-067-wikisource-533dbe0e50ca",
@@ -121466,7 +121667,7 @@
     },
     {
       "id": "source-shiji-068-wikisource-28a8e5e370da",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -121509,8 +121710,11 @@
         "afterLocal": "去之魏。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream span begins with a stray closing quote already attached to s0177 locally; substantive wording 為法自斃 is a popular/idiom-influenced variant, while standard Shiji witnesses (ctext, Ministry Idiom Dictionary) retain 為法之敝.",
+      "reviewedAt": "2026-06-27T22:21:35.145Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-068-wikisource-b66f8d9b9999",
@@ -121596,7 +121800,7 @@
     },
     {
       "id": "source-shiji-068-wikisource-dbb265e5ae6c",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -121639,8 +121843,11 @@
         "afterLocal": "鞅曰：「吾說君以帝王之道比三代，而君曰：『久遠，吾不能待。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: 懽/驩 is a harmless delight-graph variant with identical meaning; local 驩 retained per corpus convention.",
+      "reviewedAt": "2026-06-27T22:21:36.555Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-069-wikisource-543d6e19fcab",
@@ -121797,7 +122004,7 @@
     },
     {
       "id": "source-shiji-069-wikisource-bed60cd6f01c",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.806,
@@ -121858,8 +122065,11 @@
         "afterLocal": "大王誠能聽臣，六國從親，專心并力壹意，則必無彊秦之患。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: edition variants only (緜/綿, 奈/柰, 毫釐/豪氂); local 《周書》 title markup is standard; no missing upstream text.",
+      "reviewedAt": "2026-06-27T22:27:03.826Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-069-wikisource-c74e12d63708",
@@ -122564,7 +122774,7 @@
     },
     {
       "id": "source-shiji-075-wikisource-c320943083b7",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "shiji",
@@ -122588,8 +122798,10 @@
         "afterLocal": ""
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Denied: Wikisource-only Suoyin shuzan praise/commentary section (==索隱述贊==); this corpus preserves the base chapter text ending with 太史公曰 and does not include that later commentary block.",
+      "reviewedAt": "2026-06-27T07:00:53.218Z",
+      "reviewer": "sdk-repair-chapter"
     },
     {
       "id": "source-shiji-075-wikisource-d8dd9d8ab7b5",
@@ -123862,7 +124074,7 @@
     },
     {
       "id": "source-shiji-081-wikisource-967953a13713",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -123905,8 +124117,11 @@
         "afterLocal": "趙奢曰：「胥後令邯鄲。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream span begins with closing punctuation 「」 already attached to previous local unit s0133; remaining 暦/歷 graph variant for Xu Li, local corpus uses 歷 consistently.",
+      "reviewedAt": "2026-06-27T22:28:13.196Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-081-wikisource-96f3fb8483ed",
@@ -124030,7 +124245,7 @@
     },
     {
       "id": "source-shiji-081-wikisource-edf416262ae0",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.667,
@@ -124073,8 +124288,11 @@
         "afterLocal": "君何見之晚也？"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream span begins with closing punctuation 「」 already attached to previous local unit s0178; remaining 籲/吁 graph variant for exclamation, local text retained.",
+      "reviewedAt": "2026-06-27T22:28:14.379Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-081-wikisource-f09d704425af",
@@ -124664,7 +124882,7 @@
     },
     {
       "id": "source-shiji-086-wikisource-4f773ae40ed7",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -124707,8 +124925,11 @@
         "afterLocal": "且前日要政，政徒以老母；"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource witness reads 睚眞諼 (corrupted); local 睚眦之意 is the received Shiji reading and existing English matches.",
+      "reviewedAt": "2026-06-27T22:29:12.626Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-086-wikisource-538191aa3112",
@@ -125267,7 +125488,7 @@
     },
     {
       "id": "source-shiji-086-wikisource-ea2058c6efb5",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -125310,8 +125531,11 @@
         "afterLocal": "久之莫知也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource normalizes variant markup to truncated 韓之; local 韓（購）縣［購］之 preserves the received 懸購 reading and existing English matches.",
+      "reviewedAt": "2026-06-27T22:29:14.090Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-087-wikisource-233f03174173",
@@ -125922,7 +126146,7 @@
     },
     {
       "id": "source-shiji-089-wikisource-c2215de2895e",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "shiji",
@@ -125946,8 +126170,11 @@
         "afterLocal": ""
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource-only Suoyin shuzan praise summary after 太史公曰; local corpus preserves base chapter text and excludes this later commentary block (same policy as shiji/079).",
+      "reviewedAt": "2026-06-27T10:31:22.232Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-089-wikisource-c7af64c59906",
@@ -126672,7 +126899,7 @@
     },
     {
       "id": "source-shiji-092-wikisource-a6cc961ae03e",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "shiji",
@@ -126696,8 +126923,11 @@
         "afterLocal": ""
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource page footer/metadata (Footer|title=..., Category:..., navigation links), not chapter text; local chapter ends correctly at s0382 with matching closing sentence.",
+      "reviewedAt": "2026-06-27T10:32:09.751Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-092-wikisource-d1d1c41414dc",
@@ -127893,7 +128123,7 @@
     },
     {
       "id": "source-shiji-102-wikisource-3517e0556268",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -127936,8 +128166,11 @@
         "afterLocal": "於是使騎捕，屬之廷尉。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource repeats 释之為廷尉 after 頃之, but local s0045 already has 其後拜釋之為廷尉; local text is correct without redundant restatement. Comma after 上行 is harmless punctuation variant.",
+      "reviewedAt": "2026-06-27T10:32:53.698Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-102-wikisource-59c95066dcbf",
@@ -131072,7 +131305,7 @@
     },
     {
       "id": "source-shiji-116-wikisource-331f055550e0",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.783,
@@ -131115,8 +131348,11 @@
         "afterLocal": "恢因兵威使番陽令唐蒙風指曉南越。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource embeds editorial Western-date gloss 前135年 in the reign-year span; local chapter text correctly preserves 建元六年 without upstream annotation.",
+      "reviewedAt": "2026-06-27T22:30:09.938Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-116-wikisource-3905fcac99aa",
@@ -131202,7 +131438,7 @@
     },
     {
       "id": "source-shiji-116-wikisource-794f2a7ea27e",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "shiji",
@@ -131226,8 +131462,11 @@
         "afterLocal": ""
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource-only Suoyin shuzan praise verse (same block as denied 5c2ebe93ece7); corpus preserves base Shiji chapter text and excludes later commentary.",
+      "reviewedAt": "2026-06-27T22:30:11.263Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-117-wikisource-24129e2af196",
@@ -132613,7 +132852,7 @@
     },
     {
       "id": "source-shiji-118-wikisource-cd6ac073e31b",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "shiji",
@@ -132637,8 +132876,11 @@
         "afterLocal": ""
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: rescanned span of the same Suoyin shuzan praise verse (without the 【索隱述贊】 header); this corpus preserves base Shiji chapter text and excludes later Suoyin commentary, consistent with prior denial of source-shiji-118-wikisource-822592d649ec.",
+      "reviewedAt": "2026-06-27T10:34:04.243Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-118-wikisource-f7a26b3c1e41",
@@ -133726,7 +133968,7 @@
     },
     {
       "id": "source-shiji-122-wikisource-47a1b2284519",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -133769,8 +134011,11 @@
         "afterLocal": "滑賊任威。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only orthographic graph variants (爲/為, 濕/溼); local text is semantically identical and consistent with chapter usage.",
+      "reviewedAt": "2026-06-27T10:35:18.338Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-122-wikisource-47ca557b33fe",
@@ -135502,7 +135747,7 @@
     },
     {
       "id": "source-shiji-128-wikisource-4bfec7ef6500",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.898,
@@ -135554,12 +135799,33 @@
         "afterLocal": "日中如食已卜。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "十一月十二月正月二月三月中關內高外下四月首仰足開肣開首俛大五月橫吉首俛大六月七月八月九月十月卜禁曰：子亥戌不可以卜及殺龜。",
+          "literal": "Eleventh month, twelfth month, first month, second month, third month: the inner barrier is high and the outer is low. Fourth month: head raised, feet spread, belly open, head bowed — greatly auspicious. Fifth month: horizontal — auspicious; head bowed — greatly auspicious. Sixth month, seventh month, eighth month, ninth month, tenth month. The divination prohibitions state: On the zi, hai, and xu days, one may not divine or kill a tortoise.",
+          "idiomatic": "Eleventh month, twelfth month, first month, second month, third month: the inner barrier is high and the outer low. Fourth month: head raised, feet spread, belly open, head bowed — greatly auspicious. Fifth month: horizontal — auspicious; head bowed — greatly auspicious. Sixth month, seventh month, eighth month, ninth month, tenth month. The divination prohibitions state: On zi, hai, and xu days, one must not perform divination or kill a tortoise.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-27T22:33:05.901Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-27T22:33:05.904Z",
+      "appliedSummary": {
+        "id": "source-shiji-128-wikisource-4bfec7ef6500",
+        "type": "text_discrepancy_candidate",
+        "start": 365,
+        "removed": 2,
+        "inserted": 1,
+        "delta": -1,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-shiji-128-wikisource-5a40c51b6883",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -135602,8 +135868,30 @@
         "afterLocal": "百僚蕩恐，皆曰龜策能言。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "preserveExistingTranslations": true,
+      "manualTranslations": [
+        {
+          "zh": "素有眥睚不快，因公行誅，恣意所傷，以破族滅門者，不可勝數。",
+          "literal": "Those who had prior grudges would use official punishments to carry out executions, injuring whomever they wished; those whose clans were destroyed and households extinguished were beyond counting.",
+          "idiomatic": "Those who bore old grudges seized on these official proceedings to carry out their vengeance, harming whomever they pleased. The families destroyed and households exterminated in this manner were beyond counting.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-27T22:33:05.668Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-27T22:33:05.670Z",
+      "appliedSummary": {
+        "id": "source-shiji-128-wikisource-5a40c51b6883",
+        "type": "text_discrepancy_candidate",
+        "start": 23,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-shiji-129-wikisource-79522009f71e",
@@ -135738,5 +136026,5 @@
       "retainedAfterRescan": true
     }
   ],
-  "updatedAt": "2026-06-26T08:17:54.420Z"
+  "updatedAt": "2026-06-27T22:33:05.951Z"
 }

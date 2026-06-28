@@ -1,0 +1,107 @@
+You are repairing one chapter in the 24 Histories translation project.
+
+## Assignment
+
+- Book: {book}
+- Chapter: {chapter}
+- Chapter file: {chapter_file}
+- Source repair queue: {source_queue_file}
+- API model id: {model}
+
+## Known pending issue counts for this chapter
+
+- Source correspondence: {source_count}
+- Placeholder translations: {placeholder_count}
+- Quote-span alignment: {quote_count}
+
+{issue_summary}
+
+## Scope
+
+Work only on this chapter. You may edit:
+
+- `{chapter_file}`
+- `{source_queue_file}` only through the source-correspondence helper scripts listed below
+
+Do not edit other chapter files. Do not refresh or edit global generated reports such as `data/quality/quote-span-alignment.json` or `data/quality/placeholder-translations.json`; the orchestrator refreshes those after batches. Do not run a full site rebuild unless a verification command explicitly requires it.
+
+## Repair goals
+
+1. Source correspondence
+   - Inspect pending source queue items for this chapter.
+   - If upstream Chinese has real text missing from the local chapter, accept it, add faithful `manualTranslations`, and apply it with `scripts/apply-source-correspondence.mjs`.
+   - Every `manualTranslations` entry must include `translator: "Garrett M. Petersen (2026)"` and `model: "Composer 2.5"` before applying.
+   - If you add, move, renumber, or otherwise materially repair chapter text for a source queue item, that item is not a no-op: mark it `applied`, not `denied`, and explain what changed.
+   - If the upstream difference is a no-op (raw Wikisource markup, table layout residue, source-page boilerplate, harmless graph variant, or an upstream witness defect where local text is fuller/correct), mark only that queue item `denied` with a clear note by using `scripts/mark-source-correspondence.mjs`.
+   - Do not hand-edit the large source queue JSON for status/decision/notes changes. Use the helper scripts so the file is parsed and reserialized safely.
+   - Never mark an item resolved just to clear the queue. If uncertain, leave it pending and explain why in your final response.
+
+2. Placeholder translations
+   - Replace placeholder English with real translations based on the Chinese source.
+   - Preserve both `literal` and `idiomatic` fields.
+   - Use `translator: "Garrett M. Petersen (2026)"`.
+   - If you add or materially rewrite translations, use `model: "Composer 2.5"`.
+
+3. Quote and speech fidelity
+   - Where Chinese uses direct quotation punctuation (`「」`, `『』`), English must preserve direct speech with balanced quotation marks.
+   - Do not turn direct quotation into indirect paraphrase. For example, do not render `X曰：「Y。」` as `X said that Y`; render it as direct speech.
+   - Make the speaker clear when the English sentence needs a speech tag.
+   - Keep first-person language inside quoted speech when the Chinese speaker refers to themselves.
+   - If Chinese quotation marks enclose a title rather than speech, keep an English title quotation and use normal English punctuation.
+
+4. Opportunistic mistranslation fixes
+   - If you notice a clear mistranslation while repairing the queued issues, fix it.
+   - Keep edits conservative; do not rewrite correct prose for style alone.
+
+## Useful commands
+
+List pending source items for this chapter:
+
+```bash
+node scripts/triage-repair-queue.mjs --book {book} --chapter {chapter} --limit 80
+```
+
+Apply an accepted source queue item after adding `manualTranslations`:
+
+```bash
+node scripts/apply-source-correspondence.mjs --queue {source_queue_file} --approve <ITEM_ID> --item <ITEM_ID> --reviewer sdk-repair-chapter
+```
+
+Deny a no-op source queue item with a note:
+
+```bash
+node scripts/mark-source-correspondence.mjs --queue {source_queue_file} --item <ITEM_ID> --decision denied --notes "Reviewed as no-op: <reason>." --reviewer sdk-repair-chapter
+```
+
+Check quote alignment for this chapter:
+
+```bash
+node scripts/scan-quote-span-alignment.mjs {chapter_file} --publication --limit=-1 --no-fail
+```
+
+Check placeholder translations for this chapter:
+
+```bash
+node scripts/scan-placeholder-translations.mjs {chapter_file} --summary --limit=0
+```
+
+If source correspondence changed or if you need fresh evidence from Wikisource, run a targeted source scan:
+
+```bash
+node scripts/scan-source-correspondence.mjs {chapter_file} --source-name wikisource --min-severity 2 --summary --quiet
+```
+
+## Required final checks
+
+Before you finish:
+
+1. Parse the edited JSON file(s) with Node.
+2. Run the quote scanner for this chapter.
+3. Run the placeholder scanner for this chapter.
+4. Confirm no pending source queue item remains for this chapter unless you intentionally left it pending because it needs human judgment.
+
+In your final response, report:
+
+- What you changed.
+- Which verification commands passed.
+- Any issue you intentionally left unresolved, with the queue item id and reason.
