@@ -1706,11 +1706,11 @@ function englishWordCount(text) {
 
 function isNarrowChineseException(text, reason) {
   const normalizedReason = String(reason || '').toLowerCase();
-  if (!/(?:proper[-\s]?name|source[-\s]?term|title|untransliterated)/u.test(normalizedReason)) {
+  if (!/(?:character|written[-\s]?form|graph|glyph|philological|orthograph|source[-\s]?character)/u.test(normalizedReason)) {
     return false;
   }
-  const withoutAllowedMarks = String(text || '').replace(/[\u4e00-\u9fff\s.,;:'"(){}\[\]<>!?-]+/gu, '');
-  return withoutAllowedMarks.length === 0;
+  return /\b(?:character|graph|glyph|written|pronounced|read|reads|reading|means|meaning|gives|resembles|resembled|becomes|changed to|written as|called|same as|corrupt|corruption|dropped|drop|lacks|lack|missing|repeat|before|superfluous|supplied|amended|suspected)\b/iu.test(String(text || ''))
+    || /[\u4e00-\u9fff]+(?:\s*(?:means|is pronounced|was pronounced|resembles|resembled|becomes|is written|was written|changed to|gives|as|is the same as|is corrupt|is supplied)\s*|[，、]\s*)/u.test(String(text || ''));
 }
 
 export function scanArtifactText(text, opts = {}) {
