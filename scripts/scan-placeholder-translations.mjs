@@ -166,11 +166,14 @@ function walkJsonFiles(dir, files = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory()) {
-      if (fullPath === path.join(DATA_DIR, 'quality')) continue;
+      if (
+        fullPath === path.join(DATA_DIR, 'quality') ||
+        fullPath === path.join(DATA_DIR, 'repair-chapter-claims')
+      ) continue;
       walkJsonFiles(fullPath, files);
       continue;
     }
-    if (entry.isFile() && entry.name.endsWith('.json')) {
+    if (entry.isFile() && /^\d{3}\.json$/.test(entry.name)) {
       files.push(fullPath);
     }
   }

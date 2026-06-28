@@ -209,7 +209,7 @@ ifdef BOOK
 	@echo "  Synced book $(BOOK) only"
 else
 	@for dir in data/*/; do \
-		if [ -d "$$dir" ] && [ "$$(basename $$dir)" != "public" ] && [ "$$(basename $$dir)" != "quality" ]; then \
+		if [ -d "$$dir" ] && [ "$$(basename $$dir)" != "public" ] && [ "$$(basename $$dir)" != "quality" ] && [ "$$(basename $$dir)" != "repair-chapter-claims" ]; then \
 			book=$$(basename $$dir); \
 			mkdir -p public/data/$$book; \
 			cp -r $$dir*.json public/data/$$book/ 2>/dev/null || true; \

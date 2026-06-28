@@ -590,6 +590,16 @@ async function runRepair(record, opts) {
     return { key: record.key, status: 'dry-run' };
   }
 
+  const preflight = verifyChapter(record);
+  if (preflight.ok) {
+    console.log(`[${record.key}] already passes verification; skipping SDK agent`);
+    return {
+      key: record.key,
+      status: 'finished',
+      verification: 'already-passed',
+    };
+  }
+
   const agentOptions = {
     apiKey: opts.apiKey,
     model: buildModelSelection(opts),
@@ -832,6 +842,7 @@ function refreshReports() {
 
 async function main() {
   const opts = parseArgs(process.argv.slice(2));
+  if (opts.refreshReports && !opts.dryRun) refreshReports();
   const items = loadQueue(opts);
 
   if (opts.listQueue) {

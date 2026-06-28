@@ -3440,7 +3440,7 @@
     },
     {
       "id": "source-jinshi-001-wikisource-357d5e78d5ca",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.895,
@@ -3492,8 +3492,11 @@
         "afterLocal": "活羅，吾能獲之，吾豈能爲活羅屈哉！"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: 畔/叛 are interchangeable edition glyphs here (defect/rebel); local 叛 is standard and existing English already renders rebelled/deserter.",
+      "reviewedAt": "2026-06-28T03:06:54.869Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-jinshi-001-wikisource-37eae84df47f",
@@ -3766,7 +3769,7 @@
     },
     {
       "id": "source-jinshi-001-wikisource-adeb91b3ec9c",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -3809,8 +3812,11 @@
         "afterLocal": "遼太平元年辛酉歲生。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream ---- is Wikisource layout residue; 廼/乃 is a harmless graph variant and local 乃 matches the chapter elsewhere.",
+      "reviewedAt": "2026-06-28T03:06:55.033Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-jinshi-001-wikisource-b7c686b4a0fc",
@@ -3946,7 +3952,7 @@
     },
     {
       "id": "source-jinshi-001-wikisource-e5a244d52d89",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -3989,8 +3995,32 @@
         "afterLocal": "景祖伐之，謝野來禦。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "acceptedSourceText": "遼咸雍八年，五國沒拈部謝野勃堇叛遼，鷹路不通。",
+      "manualTranslations": [
+        {
+          "zh": "遼咸雍八年，五國沒拈部謝野勃堇叛遼，鷹路不通。",
+          "literal": "In the eighth year of Liao Xianyong, Xieye, a chief of the Monian tribe among the Five States, rebelled against the Liao, and the hawk route was again cut off.",
+          "idiomatic": "In the eighth year of Liao Xianyong, Chief Xieye of the Monian tribe among the Five States rebelled, once again blocking the hawk-tribute route.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "preserveExistingTranslations": true,
+      "translationReviewNote": "Corrected local 鹹雍 typo to 咸雍 to match upstream and s0153; retained local 沒拈/勃堇/叛 edition forms and existing English.",
+      "reviewedAt": "2026-06-28T03:07:16.047Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T03:07:16.049Z",
+      "appliedSummary": {
+        "id": "source-jinshi-001-wikisource-e5a244d52d89",
+        "type": "text_discrepancy_candidate",
+        "start": 129,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-jinshi-001-wikisource-eeb319a6f817",
@@ -7391,7 +7421,7 @@
     },
     {
       "id": "source-jinshi-017-wikisource-19bcd221f4e3",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jinshi",
@@ -7415,12 +7445,61 @@
         "afterLocal": "六月甲戌，宰執請擊鞠，上以心喪不許，辛卯，立妃徒單氏為皇后。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "五月戊戌，平章政事把胡魯薨。",
+          "literal": "Fifth month, wuxu: Grand Councillor Ba Hulu died.",
+          "idiomatic": "In the fifth month, on wuxu, Grand Councillor Ba Hulu died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "癸卯，樞密副使完顏賽不為平章政事，權參知政事石盞尉忻為尚書右丞，太常卿李蹊為翰林承旨，仍權參政。",
+          "literal": "On guimao Privy Council Vice Commissioner Wanyan Saibu was made grand councillor; acting Participation Councillor Shizhuan Weixin was made Right Vice Director of the Masters of Writing; Court Music Director Li Xi was made Hanlin Academician-in-Chief, still acting as participation councillor.",
+          "idiomatic": "On guimao Privy Council vice commissioner Wanyan Saibu became grand councillor; acting participation councillor Shizhuan Weixin became right vice director of the Masters of Writing; court music director Li Xi became Hanlin academician-in-chief while still acting as participation councillor.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "甲辰，賜策論進士孛朮論長河以下十餘人及第，經義進士張介以下五人及第。",
+          "literal": "On jiachen more than ten policy-discourse jinshi from Bolun Changhe downward were granted degrees, and five classical-exegesis jinshi from Zhang Jie downward.",
+          "idiomatic": "On jiachen more than ten policy-discourse jinshi from Bolun Changhe down received degrees, and five classical-exegesis jinshi from Zhang Jie down.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "戊申，賜詞賦進士王鶚以下五十人及第。",
+          "literal": "On wushen fifty rhapsody-prose jinshi from Wang E downward were granted degrees.",
+          "idiomatic": "On wushen fifty rhapsody-prose jinshi from Wang E down received degrees.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "詔刑部，登聞檢、鼓院，毋銷閉防護，聽有冤者陳訴。",
+          "literal": "An edict to the Ministry of Punishments, the Admonishment Inspection Court, and the Admonishment Drum Court ordered that they not close off guard posts and that anyone with grievances be allowed to lodge complaints.",
+          "idiomatic": "An edict to the Ministry of Punishments and to the Admonishment Inspection and Drum courts ordered them not to shut down guard posts and to hear complaints from anyone with grievances.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T03:10:50.833Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T03:10:50.836Z",
+      "appliedSummary": {
+        "id": "source-jinshi-017-wikisource-19bcd221f4e3",
+        "type": "source_omission_candidate",
+        "start": 45,
+        "removed": 0,
+        "inserted": 5,
+        "delta": 5,
+        "manualTranslationsApplied": 5
+      }
     },
     {
       "id": "source-jinshi-017-wikisource-63aa8738d1a5",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jinshi",
@@ -7444,8 +7523,64 @@
         "afterLocal": "五月癸巳，定國軍節度使慶山奴以受賂，奪一官。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "三月甲戌朔，群臣請依祖宗故事，樞密院聽尚書省節制，不從。",
+          "literal": "Third month, jiaxu new moon: the hundred officials asked that, according to ancestral precedent, the Privy Council be placed under Masters of Writing control; the throne refused.",
+          "idiomatic": "On the jiaxu new moon of the third month, the hundred officials asked that, by ancestral precedent, the Privy Council be placed under Masters of Writing control; the throne refused.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "乙酉，監察禦史烏古論不魯剌劾近侍張文壽、張仁壽、李麟之受饋遺，曲赦其罪而出之。",
+          "literal": "On yiyou Supervising Censor Wugulun Bulia impeached the close attendants Zhang Wenshou, Zhang Renshou, and Li Linzhi for accepting gifts; the throne granted them lenient pardon for their crimes and dismissed them.",
+          "idiomatic": "On yiyou supervising censor Wugulun Bulia accused the emperor's close attendants Zhang Wenshou, Zhang Renshou, and Li Linzhi of accepting bribes; the throne granted them a lenient pardon and had them dismissed.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "夏四月甲辰朔，以禦史言三奸不已，凡四日不視朝。",
+          "literal": "Summer, fourth month, jiachen new moon: because censors spoke of three traitors without end, for four days the emperor did not hold court.",
+          "idiomatic": "In summer, on the jiachen new moon of the fourth month, because censors kept speaking of three traitors, the emperor held no court for four days.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "八日，議放還西夏人口。",
+          "literal": "On the eighth day the court debated returning Xixia captives.",
+          "idiomatic": "On the eighth day the court debated returning Xixia captives.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "丙寅，右丞師安石薨。",
+          "literal": "On bingyin Right Vice Director Shi Anshi died.",
+          "idiomatic": "On bingyin right vice director Shi Anshi died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "親衛軍王咬兒酗酒殺其孫，大理寺當以徒刑，特命斬之。",
+          "literal": "Imperial Guard Wang Yaoer, drunk, killed his grandson; the Court of Judicial Review ruled penal servitude, but he was specially ordered executed.",
+          "idiomatic": "Imperial Guard Wang Yaoer killed his grandson while drunk; the Court of Judicial Review ruled penal servitude, but he was specially ordered executed.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T03:10:51.092Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T03:10:51.095Z",
+      "appliedSummary": {
+        "id": "source-jinshi-017-wikisource-63aa8738d1a5",
+        "type": "source_omission_candidate",
+        "start": 162,
+        "removed": 0,
+        "inserted": 6,
+        "delta": 6,
+        "manualTranslationsApplied": 6
+      }
     },
     {
       "id": "source-jinshi-019-wikisource-1a491ad8f4e8",
@@ -45032,7 +45167,7 @@
     },
     {
       "id": "source-jinshi-081-wikisource-8d35fe823c56",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jinshi",
@@ -45056,8 +45191,50 @@
         "afterLocal": "皇統元年，以本部從宗弼南伐，攻破濠州而還。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "天眷元年，為燕京馬軍都指揮使。",
+          "literal": "In the first year of Tianjuan, he was made Commander-in-Chief of the Yanjing Horse Army.",
+          "idiomatic": "In the first year of Tianjuan he was appointed commander-in-chief of the Yanjing cavalry army.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "從元帥府複收河南，權武定軍節度使，兼本路都統。",
+          "literal": "Following the marshal headquarters in recovering Henan, he was acting military governor of Wuding Army and concurrently route commander-in-chief of that circuit.",
+          "idiomatic": "He followed the marshal headquarters in recovering Henan and was made acting military governor of Wuding Army with concurrent command of that route.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "宋兵據許州，伯龍擊走之，招複其人民。",
+          "literal": "Song troops held Xuzhou; Bolong struck and drove them off and induced the people to return.",
+          "idiomatic": "Song troops held Xuzhou; Bolong drove them off and induced the people to return.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "是年秋，泰安卒徒張貴驅脅良民，據險作亂，伯龍討平之。",
+          "literal": "That autumn, the Taian convict Zhang Gui coerced good civilians, seized difficult terrain, and rebelled; Bolong suppressed and pacified him.",
+          "idiomatic": "That autumn the Taian convict Zhang Gui coerced civilians, seized defensible ground, and rebelled; Bolong put down the revolt.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T03:14:51.547Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T03:14:51.572Z",
+      "appliedSummary": {
+        "id": "source-jinshi-081-wikisource-8d35fe823c56",
+        "type": "source_omission_candidate",
+        "start": 150,
+        "removed": 0,
+        "inserted": 4,
+        "delta": 4,
+        "manualTranslationsApplied": 4
+      }
     },
     {
       "id": "source-jinshi-081-wikisource-96dfb07af363",
@@ -45271,7 +45448,7 @@
     },
     {
       "id": "source-jinshi-081-wikisource-e215c59ffcda",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.016,
@@ -45314,12 +45491,82 @@
         "afterLocal": "宗望伐宋，伯龍為先鋒，次保州，遇敵五萬，破之，招降新樂軍民十余萬。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "王伯龍，沈州雙城人也。",
+          "literal": "Wang Bolong was a native of Shuangcheng in Shenzhou.",
+          "idiomatic": "Wang Bolong was a native of Shuangcheng in Shenzhou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "遼末，聚黨為盜。",
+          "literal": "At the end of Liao, he gathered a band and became a bandit.",
+          "idiomatic": "At the end of the Liao dynasty he gathered followers and turned bandit.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "天輔二年，率眾二萬及其輜重來降，授世襲猛安，知銀州，兼知雙州。",
+          "literal": "In the second year of Tianfu, he led twenty thousand men and their baggage train to submit; he was appointed hereditary meng'an, intendant of Yin Prefecture, and concurrently intendant of Shuang Prefecture.",
+          "idiomatic": "In the second year of Tianfu he led twenty thousand men with their baggage to submit. He received a hereditary meng'an, became intendant of Yin Prefecture, and concurrently intendant of Shuang Prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "四年，太祖攻臨潢，伯龍與韓慶和以兵護糧餉。",
+          "literal": "In the fourth year, when Taizu attacked Linhuang, Bolong and Han Qinghe guarded provisions with troops.",
+          "idiomatic": "In the fourth year, when Taizu attacked Linhuang, Bolong and Han Qinghe escorted provisions with troops.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "挽夫千五百人皆授甲，慶和已將兵行前，伯龍從糧居後，遇遼兵五千余邀于路，伯龍率挽夫擊敗之，獲馬五百匹。",
+          "literal": "Fifteen hundred corvée laborers were all issued armor; Qinghe had already led troops ahead, while Bolong followed the grain train in the rear. They met more than five thousand Liao troops blocking the road; Bolong led the laborers to defeat them and captured five hundred horses.",
+          "idiomatic": "Fifteen hundred corvée porters were all armed. Qinghe had already marched ahead with troops while Bolong followed behind the grain train. More than five thousand Liao troops blocked the road; Bolong led the porters to defeat them and seized five hundred horses.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "六年，從攻下中京，並克境內諸山寨，為靜江軍節度留後。",
+          "literal": "In the sixth year he followed the assault that took Zhongjing and also captured the various mountain stockades within the territory, becoming acting commissioner of the Jingjiang Army.",
+          "idiomatic": "In the sixth year he joined the capture of Zhongjing and the mountain stockades throughout the region, and was made acting commissioner of the Jingjiang Army.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "天會元年，真授節度使，從宗望討張覺于平州，伯龍先登馳擊，手殺數十百人，遷右金吾衛將軍。",
+          "literal": "In the first year of Tianhui he was formally appointed military commissioner; following Zongwang he campaigned against Zhang Jue at Pingzhou. Bolong was first to ascend and charge in attack, personally killing many dozens of men, and was transferred to General of the Right Jinwu Guard.",
+          "idiomatic": "In the first year of Tianhui he was formally appointed military commissioner. Following Zongwang against Zhang Jue at Pingzhou, Bolong was first over the wall in a cavalry charge and personally killed scores of men. He was made general of the Right Jinwu Guard.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "白河之戰，伯龍當其左軍，麾兵疾馳蹂之，宋軍亂，我師乘勝奮擊敗之。",
+          "literal": "In the battle of Baihe, Bolong faced their left army; he commanded troops to charge swiftly and trample them. The Song army fell into disorder, and our forces pressed the advantage and defeated them.",
+          "idiomatic": "At the Battle of Baihe Bolong faced the enemy left wing, wheeled his troops into a swift charge through their ranks, threw the Song army into disorder, and the Jin forces pressed the advantage to victory.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T03:14:51.547Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T03:14:51.572Z",
+      "appliedSummary": {
+        "id": "source-jinshi-081-wikisource-e215c59ffcda",
+        "type": "source_omission_candidate",
+        "start": 115,
+        "removed": 1,
+        "inserted": 8,
+        "delta": 7,
+        "manualTranslationsApplied": 8
+      }
     },
     {
       "id": "source-jinshi-081-wikisource-e37b847e9767",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.056,
@@ -45371,8 +45618,94 @@
         "afterLocal": "黃摑敵古本，世居星顯水。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "阿勒根沒都魯，上京納鄰河人也，後徙咸平路梅黑河。",
+          "literal": "Aleigen Meidoulu was a native of Nalin River in Shangjing; later he moved to Meihei River in the Xianping Route.",
+          "idiomatic": "Aleigen Meidoulu was from Nalin River in Shangjing and later moved to Meihei River in the Xianping Route.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "雄偉美須髯，勇毅善射。",
+          "literal": "He was imposing, with a handsome beard; brave, resolute, and skilled at archery.",
+          "idiomatic": "He was imposing, with a fine beard, and was brave, resolute, and skilled at archery.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "國初伐遼，沒都魯在軍中，領謀克猛安，每遇敵，往來馳突，人莫敢當，故所戰皆克。",
+          "literal": "At the founding of the state in the campaign against Liao, Meidoulu was in the army leading mouke-meng'an forces. Whenever he met the enemy he charged back and forth; none dared stand against him, and therefore he won every battle.",
+          "idiomatic": "In the founding campaign against Liao, Meidoulu served in the army as a mouke-meng'an leader. Whenever he met the enemy he charged to and fro, and none dared stand against him; he won every engagement.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "皇統元年，計功擢宣威將軍。",
+          "literal": "In the first year of Huangtong, his merit was reckoned and he was promoted to Extending Prestige General.",
+          "idiomatic": "In the first year of Huangtong his merit was reckoned and he was promoted to extending prestige general.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "明年，授同知通遠軍節度使，改移剌都抃詳穩。",
+          "literal": "The next year he was appointed associate military commissioner of the Tongyuan Army and changed to xiangwen of Yila Dubian.",
+          "idiomatic": "The next year he became associate military commissioner of the Tongyuan Army and was made xiangwen of Yila Dubian.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "授世襲本路寧打渾河謀克。",
+          "literal": "He was granted hereditary mouke of the Ningda Hunhe on this route.",
+          "idiomatic": "He received hereditary mouke of Ningda Hunhe on this route.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "為滑州刺史，改肇州防禦使、蒲與路節度使，遷驃騎上將軍。",
+          "literal": "He served as prefect of Hua Prefecture, was changed to defender of Zhaozhou and military commissioner of the Puyu Route, and was transferred to Cavalry General-in-Chief.",
+          "idiomatic": "He became prefect of Hua Prefecture, then defender of Zhaozhou and military commissioner of the Puyu Route, and rose to cavalry general-in-chief.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "累官金吾衛上將軍。",
+          "literal": "Through successive offices he reached General-in-Chief of the Jinwu Guard.",
+          "idiomatic": "He rose through successive posts to general-in-chief of the Jinwu Guard.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "是歲，以年老致仕，卒。",
+          "literal": "That year, on account of old age he retired from office and died.",
+          "idiomatic": "That year he retired on account of age and died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "年七十三。",
+          "literal": "He was seventy-three.",
+          "idiomatic": "He was seventy-three.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "acceptedSourceText": "阿勒根沒都魯，上京納鄰河人也，後徙咸平路梅黑河。雄偉美須髯，勇毅善射。國初伐遼，沒都魯在軍中，領謀克猛安，每遇敵，往來馳突，人莫敢當，故所戰皆克。皇統元年，計功擢宣威將軍。明年，授同知通遠軍節度使，改移剌都抃詳穩。授世襲本路寧打渾河謀克。為滑州刺史，改肇州防禦使、蒲與路節度使，遷驃騎上將軍。累官金吾衛上將軍。是歲，以年老致仕，卒。年七十三。",
+      "translationReviewNote": "Accepted upstream bio for Aleigen Meidoulu; corrected Wikisource graph 車 to 軍 in 驃騎上將軍.",
+      "reviewedAt": "2026-06-28T03:14:51.547Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T03:14:51.572Z",
+      "appliedSummary": {
+        "id": "source-jinshi-081-wikisource-e37b847e9767",
+        "type": "source_omission_candidate",
+        "start": 55,
+        "removed": 2,
+        "inserted": 10,
+        "delta": 8,
+        "manualTranslationsApplied": 10
+      }
     },
     {
       "id": "source-jinshi-082-wikisource-0541ba5b0465",
@@ -49440,7 +49773,7 @@
     },
     {
       "id": "source-jinshi-090-wikisource-53ba399336cf",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.025,
@@ -49483,8 +49816,113 @@
         "afterLocal": "窩斡已平，詔罷契丹猛安謀克，其元管戶口，及從窩斡作亂來降者，皆隸女直猛安謀克，遣兀不喝于猛安謀克人戶少處分置。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "完顏兀不喝，會甯府海姑寨人。",
+          "literal": "Wanyan Wubuhe was a native of Haigu Stockade in Huining Prefecture.",
+          "idiomatic": "Wanyan Wubuhe was from Haigu Stockade in Huining Prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "年十三，選充女直字學生。",
+          "literal": "At thirteen he was selected to study the Jurchen script.",
+          "idiomatic": "At thirteen he was chosen to study the Jurchen script.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "補上京女直吏，再習小字兼通契丹文字。",
+          "literal": "He was appointed a Jurchen clerk at the Upper Capital, then studied the small script and also mastered Khitan writing.",
+          "idiomatic": "He was appointed a Jurchen clerk at the Upper Capital, then studied the small script and also mastered Khitan writing.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "充尚書省令史。",
+          "literal": "He served as clerk of the Ministry of Revenue.",
+          "idiomatic": "He served as a clerk in the Ministry of Revenue.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "天德初，除吏部主事，鞫問押懶路詐襲謀克事，人稱其能，擢右拾遺。",
+          "literal": "At the beginning of Tiande he was appointed chief clerk of the Personnel Bureau, investigated the fraudulent inheritance of a mouke commission on the Yalan route, was praised for his ability, and was promoted to Right Remonstrance Official.",
+          "idiomatic": "Early in Tiande he became chief clerk in the Personnel Bureau, investigated a fraudulent mouke inheritance on the Yalan route, won praise for his ability, and was promoted to right remonstrance official.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "海陵謂之曰：「始聞汝名，試以吏部主事。",
+          "literal": "Hailing said to him: \"When I first heard your name I tried you as chief clerk of the Personnel Bureau.",
+          "idiomatic": "Hailing told him, \"When I first heard your name I tried you as chief clerk in the Personnel Bureau.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "今計其實，優於所聞遠矣。」",
+          "literal": "Now judging the reality, you are far better than I had heard.\"",
+          "idiomatic": "Now that I see the reality, you are far better than I had heard.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "累遷右司郎中。",
+          "literal": "He was repeatedly promoted to Right Bureau Director.",
+          "idiomatic": "He rose through successive posts to director of the right bureau.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "從海陵伐宋，至淮南，聞世宗即位于遼陽，兀不喝入白其事，海陵沉思良久，曰：「卿等始聞之邪？",
+          "literal": "He followed Hailing in the campaign against Song; when they reached Huainan and heard that Shizong had taken the throne at Liaoyang, Wubuhe entered and reported the matter; Hailing pondered a long while and said: \"Have you only just heard of this?",
+          "idiomatic": "He followed Hailing on the campaign against Song. When they reached Huainan and heard that Shizong had taken the throne at Liaoyang, Wubuhe reported the news. Hailing pondered a long while and said, \"Have you only just heard of this?",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "我已知之，遣人往矣。",
+          "literal": "I already know; I have sent someone there.",
+          "idiomatic": "I already know—I have sent someone there.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "此大事勿泄於外。」",
+          "literal": "Do not leak this great matter outside.\"",
+          "idiomatic": "Do not leak this great matter outside.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "大定二年，秩滿當代，世宗嘉其善敷奏，特詔再任，謂宰臣曰：「兀不喝為人公忠，後來有如斯人者，卿等宜薦舉之。」",
+          "literal": "In the second year of Dading, when his term expired and he was due to be replaced, Shizong praised his skill at presenting memorials and specially ordered him to serve another term, telling the chief ministers: \"Wubuhe is upright and loyal; if later there are men like him, you should recommend them.\"",
+          "idiomatic": "In the second year of Dading (1162), when his term expired and he was due to be replaced, Shizong praised his skill at presenting memorials and specially ordered him to serve another term. He told the chief ministers, \"Wubuhe is upright and loyal; if you later find men like him, you should recommend them.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "其見知如此。",
+          "literal": "Such was the esteem in which he was held.",
+          "idiomatic": "Such was the esteem in which he was held.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T03:19:32.203Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T03:19:32.205Z",
+      "appliedSummary": {
+        "id": "source-jinshi-090-wikisource-53ba399336cf",
+        "type": "source_omission_candidate",
+        "start": 84,
+        "removed": 1,
+        "inserted": 13,
+        "delta": 12,
+        "manualTranslationsApplied": 13
+      }
     },
     {
       "id": "source-jinshi-090-wikisource-5645ea00159f",
@@ -49740,7 +50178,7 @@
     },
     {
       "id": "source-jinshi-090-wikisource-a6e9822c26ac",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jinshi",
@@ -49764,8 +50202,120 @@
         "afterLocal": "十一年，改戶部尚書。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "大定三年，以察廉治狀不善，下遷同知北京路都轉運使事。",
+          "literal": "In the third year of Dading, because his integrity-inspection record was poor, he was demoted to deputy transport commissioner of the Northern Capital circuit.",
+          "idiomatic": "In the third year of Dading (1163), because his integrity-inspection record was poor, he was demoted to deputy transport commissioner of the Northern Capital circuit.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "是年秋，土河氾濫，水入京城，德基遽命開長樂門，疏分使入禦溝，以殺其勢，水不能為害。",
+          "literal": "That autumn the Tu River overflowed and water entered the capital; Deji immediately ordered Changle Gate opened and channels cut to divert the water into the Imperial Moat and reduce its force, so the flood could not do harm.",
+          "idiomatic": "That autumn the Tu River flooded and water entered the capital. Deji immediately ordered Changle Gate opened and channels cut to divert the water into the Imperial Moat and reduce its force, so the flood did no harm.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "遷刑部侍郎。",
+          "literal": "He was transferred to Vice Minister of Justice.",
+          "idiomatic": "He was transferred to vice minister of justice.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "七年，改中都路都轉運使。",
+          "literal": "In the seventh year he was changed to transport commissioner of the Central Capital Circuit.",
+          "idiomatic": "In the seventh year (1167) he was appointed transport commissioner of the Central Capital Circuit.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "九年，轉刑部尚書。",
+          "literal": "In the ninth year he was transferred to Minister of Justice.",
+          "idiomatic": "In the ninth year (1169) he was appointed minister of justice.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "有犯罪當死者，宰相欲從末減，德基曰：「法無二門，失出猶失入也。」",
+          "literal": "When someone guilty of a capital crime was involved, the chief minister wished to reduce the sentence; Deji said: \"The law has but one gate; letting a guilty man out is the same as letting an innocent man in.\"",
+          "idiomatic": "When someone guilty of a capital crime was involved, the chief minister wished to reduce the sentence. Deji said, \"The law has but one gate; letting a guilty man out is the same as letting an innocent man in.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "不從。",
+          "literal": "They did not follow his view.",
+          "idiomatic": "They did not follow his view.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "及奏，上曰：「刑部議，是也。」",
+          "literal": "When the matter was memorialized, the emperor said: \"The Ministry of Justice's deliberation is correct.\"",
+          "idiomatic": "When the matter was memorialized, the emperor said, \"The Ministry of Justice's deliberation is correct.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "因召諸尚書諭之曰：「自朕即位以來，以政事與宰相爭是非者，德基一人而已。",
+          "literal": "He therefore summoned all the ministers and instructed them: \"Since I took the throne, only Deji has disputed right and wrong with the chief minister over state affairs.",
+          "idiomatic": "He therefore summoned all the ministers and told them, \"Since I took the throne, only Deji has disputed right and wrong with the chief minister over state affairs.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "自今部上省三議不合，即具以聞。」",
+          "literal": "From now on, whenever a ministry and the Secretariat disagree after three deliberations, report the matter in full.\"",
+          "idiomatic": "From now on, whenever a ministry and the Secretariat disagree after three deliberations, report the matter in full.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "為宋主生日使。",
+          "literal": "He served as birthday envoy to the Song emperor.",
+          "idiomatic": "He served as birthday envoy to the Song emperor.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "及還，宋人禮物外附進臘茶三千胯，不親封署。",
+          "literal": "When he returned, apart from the Song gifts an additional three thousand packages of tribute tea were presented, without being personally sealed by him.",
+          "idiomatic": "On his return, apart from the formal Song gifts, an additional three thousand packages of tribute tea were presented without his personal seal.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "德基曰：「侄獻叔，而不署，是無名之物也。」",
+          "literal": "Deji said: \"A nephew presents to his uncle yet does not sign—this is an unnamed thing.\"",
+          "idiomatic": "Deji said, \"A nephew presents to his uncle yet does not sign—this is an unnamed gift.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "卻之。",
+          "literal": "He refused it.",
+          "idiomatic": "He refused it.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T03:19:32.425Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T03:19:32.427Z",
+      "appliedSummary": {
+        "id": "source-jinshi-090-wikisource-a6e9822c26ac",
+        "type": "source_omission_candidate",
+        "start": 62,
+        "removed": 0,
+        "inserted": 14,
+        "delta": 14,
+        "manualTranslationsApplied": 14
+      }
     },
     {
       "id": "source-jinshi-090-wikisource-c3bc16fcfe4a",
@@ -58575,7 +59125,7 @@
     },
     {
       "id": "source-jinshi-116-wikisource-958e5c713ea9",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jinshi",
@@ -58599,8 +59149,78 @@
         "afterLocal": "正大四年，李全據楚州，詔以慶山奴為元帥，同總帥完顏訛可將兵守盱眙，且令城守勿出戰。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "興定元年正月，大元兵及夏人回經甯州，慶山奴以兵邀擊敗之，以功進元帥左都監，兼保大軍節度使，行帥府事於鄜州。",
+          "literal": "In the first month of the first year of Xingding the Great Yuan army together with Xia troops was returning by way of Ning Prefecture; Qingshannu intercepted them with troops and defeated them; for this achievement he was promoted to left metropolitan deputy commander, concurrently military commissioner of the Bao Army, exercising metropolitan headquarters affairs at Fuzhou.",
+          "idiomatic": "In the first month of Xingding 1 the Mongol army and Xia troops were returning by way of Ning Prefecture. Qingshannu intercepted and defeated them. For this achievement he was promoted to left metropolitan deputy commander, concurrently military commissioner of the Bao Army, with authority over the metropolitan headquarters at Fuzhou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "二年五月，夏人率步騎三千由葭州入寇，慶山奴以兵逆之，戰于馬吉峰，殺百餘人，斬酋首二級，生擒數十人，獲馬三十餘疋。",
+          "literal": "In the fifth month of the second year Xia men led three thousand infantry and cavalry to invade through Jia Prefecture; Qingshannu met them with troops and fought at Maji Peak, killing more than a hundred men, beheading two chieftains, capturing several dozen alive, and seizing more than thirty horses.",
+          "idiomatic": "In the fifth month of the second year Xia forces with three thousand infantry and cavalry invaded through Jia Prefecture. Qingshannu met them and fought at Maji Peak, killing more than a hundred men, beheading two chieftains, capturing several dozen alive, and seizing more than thirty horses.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "三年四月，夏人據通秦寨，慶山奴遣提控納合買住討之。",
+          "literal": "In the fourth month of the third year Xia men occupied Tongqin Fort; Qingshannu dispatched controller Nahe Maizhu to campaign against them.",
+          "idiomatic": "In the fourth month of the third year Xia forces occupied Tongqin Fort. Qingshannu dispatched controller Nahe Maizhu to campaign against them.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "夏人以步騎二萬逆戰，買住擊敗之，夏人由葭盧川遁去，凡斬首八百級。",
+          "literal": "Xia men with twenty thousand infantry and cavalry met them in battle; Maizhu defeated them, and the Xia fled away along Jialu Stream, with eight hundred heads cut off in all.",
+          "idiomatic": "Xia forces with twenty thousand infantry and cavalry met them in battle. Maizhu defeated them and the Xia fled along Jialu Stream, with eight hundred heads cut off in all.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "俄而複攻寨據之，慶山奴率兵與戰，斬首千級，複其寨。",
+          "literal": "Shortly afterward they attacked again and occupied the fort; Qingshannu led troops to fight them, cut off one thousand heads, and recovered the fort.",
+          "idiomatic": "Shortly afterward they attacked again and occupied the fort. Qingshannu led troops against them, cut off one thousand heads, and recovered the fort.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "詔賜慶山奴金帶一，將士賞賚有差。",
+          "literal": "An edict bestowed one gold belt on Qingshannu, and officers and men were rewarded in graded amounts.",
+          "idiomatic": "An edict bestowed one gold belt on Qingshannu, and officers and men were rewarded in graded amounts.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "四年四月，破夏兵於宥州，斬首千餘級，遂圍神堆府。",
+          "literal": "In the fourth month of the fourth year he defeated Xia troops at You Prefecture, cut off more than a thousand heads, and then besieged Shendui Prefecture.",
+          "idiomatic": "In the fourth month of the fourth year he defeated Xia troops at You Prefecture, cut off more than a thousand heads, and then besieged Shendui Prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "慶山奴四面攻之，士卒方登陴，援兵大至，複擊走之。",
+          "literal": "Qingshannu attacked on four sides; as his soldiers were just mounting the walls, relief troops arrived in force and he again drove them off.",
+          "idiomatic": "Qingshannu attacked on four sides. As his soldiers were just mounting the walls, relief troops arrived in force and he drove them off again.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T03:22:14.273Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T03:22:14.276Z",
+      "appliedSummary": {
+        "id": "source-jinshi-116-wikisource-958e5c713ea9",
+        "type": "source_omission_candidate",
+        "start": 279,
+        "removed": 0,
+        "inserted": 8,
+        "delta": 8,
+        "manualTranslationsApplied": 8
+      }
     },
     {
       "id": "source-jinshi-116-wikisource-a0b4c876868e",
@@ -58646,7 +59266,7 @@
     },
     {
       "id": "source-jinshi-116-wikisource-c75dd9bf95e8",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jinshi",
@@ -58670,8 +59290,64 @@
         "afterLocal": "是時，惟官奴忠孝軍四百五十人、馬用軍七百人留府中。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "天興元年十二月，從哀宗北渡。",
+          "literal": "In the twelfth month of the first year of Tianxing he followed Emperor Aizong in crossing north of the river.",
+          "idiomatic": "In the twelfth month of Tianxing 1 he followed Emperor Aizong in crossing north of the river.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "上次黃陵岡，平章白撒率諸將戰，官奴之功居多。",
+          "literal": "When the emperor halted at Huangling Hill, chief minister Ba Sa led the generals in battle, and Guannu's merit was the greatest.",
+          "idiomatic": "When the emperor halted at Huangling Hill, chief minister Ba Sa led the generals in battle, and Guannu's merit was the greatest.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "及渡河朔，惟官奴一軍號令明肅，秋毫無犯。",
+          "literal": "After crossing to north of the river, only Guannu's army maintained clear and strict orders and violated nothing, not even the slightest.",
+          "idiomatic": "After crossing to north of the river, only Guannu's army maintained clear and strict orders and violated nothing, not even the slightest.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "明年正月，上至歸德。",
+          "literal": "In the first month of the following year the emperor reached Guide.",
+          "idiomatic": "In the first month of the following year the emperor reached Guide.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "知府石盞女魯歡以軍眾食寡，懼不能給，請於上，令河北潰軍至者就糧于徐、宿、陳三州，親衛軍亦遣出城就食，上不得已從之。",
+          "literal": "Prefect Shizhan Nuluhuan, finding the troops numerous and food scarce, feared he could not supply them; he petitioned the emperor to allow routed troops from Hebei to obtain grain in Xu, Su, and Chen prefectures, and the imperial guard was also sent out of the city to forage; the emperor unwillingly consented.",
+          "idiomatic": "Prefect Shizhan Nuluhuan, finding the troops numerous and food scarce, feared he could not supply them. He petitioned the emperor to allow routed troops from Hebei to obtain grain in Xu, Su, and Chen prefectures, and the imperial guard was also sent out of the city to forage. The emperor unwillingly consented.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "乃召諭官奴曰：「女魯歡盡散衛兵，卿當小心。」",
+          "literal": "He then summoned and instructed Guannu, saying: \"Nuluhuan has dispersed all the guard troops; you must be careful.\"",
+          "idiomatic": "He then summoned and instructed Guannu, saying, \"Nuluhuan has dispersed all the guard troops; you must be careful.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T03:22:14.567Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T03:22:14.570Z",
+      "appliedSummary": {
+        "id": "source-jinshi-116-wikisource-c75dd9bf95e8",
+        "type": "source_omission_candidate",
+        "start": 184,
+        "removed": 0,
+        "inserted": 6,
+        "delta": 6,
+        "manualTranslationsApplied": 6
+      }
     },
     {
       "id": "source-jinshi-116-wikisource-eba1c23dc02b",
@@ -60617,7 +61293,7 @@
     },
     {
       "id": "source-jinshi-121-wikisource-1b3357db0581",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jinshi",
@@ -60641,8 +61317,78 @@
         "afterLocal": "執中死，詔削官爵。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "鄯陽，宗室子。",
+          "literal": "Shanyang was a member of the imperial clan.",
+          "idiomatic": "Shanyang was a member of the imperial clan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "為符寶祗候。",
+          "literal": "He served as talisman attendant.",
+          "idiomatic": "He served as talisman attendant.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "完顏石古乃為護衛十人長。",
+          "literal": "Wanyan Shigu'nai served as ten-man guards captain.",
+          "idiomatic": "Wanyan Shigu'nai served as ten-man guards captain.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "至甯元年八月，紇石烈執中作亂，入自通玄門。",
+          "literal": "In the eighth month of the first year of Zhi'ning, He Shilie Zhizhong rebelled and entered through Tongxuan Gate.",
+          "idiomatic": "In the eighth month of Zhi'ning 1, He Shilie Zhizhong rebelled and entered through Tongxuan Gate.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "是日，變起倉猝，中外不知所為，鄯陽、石古乃往天王寺召大漢軍五百人赴難，與執中戰于東華門外。",
+          "literal": "That day the crisis arose suddenly and court and countryside knew not what to do; Shanyang and Shigu'nai went to Tianwang Temple to summon five hundred Great Han Army troops to the rescue and fought Zhizhong outside Donghua Gate.",
+          "idiomatic": "That day the crisis broke suddenly and no one at court or in the provinces knew what to do. Shanyang and Shigu'nai went to Tianwang Temple, summoned five hundred Great Han Army troops to the rescue, and fought Zhizhong outside Donghua Gate.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "執中揚言曰：「大漢軍反矣，殺一人者賞銀一錠。」",
+          "literal": "Zhizhong proclaimed: \"The Great Han Army has rebelled! A reward of one ingot of silver for each man killed.\"",
+          "idiomatic": "Zhizhong proclaimed, \"The Great Han Army has rebelled! One ingot of silver for each man killed.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "執中兵眾，大漢軍少，二人不勝而死。",
+          "literal": "Zhizhong's troops were many and the Great Han Army few; the two could not prevail and died.",
+          "idiomatic": "Zhizhong's troops were many and the Great Han Army few; the two could not prevail and were killed.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "須臾，執中兵殺五百人殆盡。",
+          "literal": "In a moment Zhizhong's troops had killed nearly all five hundred men.",
+          "idiomatic": "In a moment Zhizhong's troops had killed nearly all five hundred men.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T03:29:48.507Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T03:29:48.511Z",
+      "appliedSummary": {
+        "id": "source-jinshi-121-wikisource-1b3357db0581",
+        "type": "source_omission_candidate",
+        "start": 140,
+        "removed": 0,
+        "inserted": 8,
+        "delta": 8,
+        "manualTranslationsApplied": 8
+      }
     },
     {
       "id": "source-jinshi-121-wikisource-3527aea7e751",
@@ -61108,7 +61854,7 @@
     },
     {
       "id": "source-jinshi-121-wikisource-8d2bc5679858",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -61151,8 +61897,11 @@
         "afterLocal": "夏國報曰：「小國與和州壤地不相接，且不知大石所往也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream Wikisource witness has OCR corruption (耶律大J阯諍蛵州); local 耶律大石在和州之域 is correct.",
+      "reviewedAt": "2026-06-28T03:29:49.152Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-jinshi-121-wikisource-a2b10fefd7b1",
@@ -61366,7 +62115,7 @@
     },
     {
       "id": "source-jinshi-121-wikisource-e659a82ae9be",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.025,
@@ -61383,25 +62132,7 @@
         "ids": [],
         "locations": []
       },
-      "localRange": {
-        "startIndex": 157,
-        "endIndex": 157,
-        "count": 1,
-        "text": "石抹元毅",
-        "ids": [
-          "s0158"
-        ],
-        "locations": [
-          {
-            "blockIndex": 29,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0158"
-          }
-        ]
-      },
+      "localRange": null,
       "context": {
         "beforeSource": "」夏人交刃殺之。",
         "afterSource": "石抹元毅，本名神思，咸平府路酌赤烈猛安莎果歌仙謀克人也。",
@@ -61409,8 +62140,37 @@
         "afterLocal": "石抹元毅，本名神思，咸平府路酌赤烈猛安莎果歌仙謀克人也。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "興定元年，監察禦史郭著按行秦中，得其事以聞。",
+          "literal": "In the first year of Xingding, Investigating Censor Guo Zhu inspected Qinzhong, learned the matter, and reported it.",
+          "idiomatic": "In Xingding 1, Investigating Censor Guo Zhu inspected Qinzhong, learned what had happened, and reported it to the throne.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "詔贈資善大夫、東京留守，仍收其子兀母為筆硯承奉。",
+          "literal": "An edict posthumously awarded him Grand Master for Excellent Counsel and Eastern Capital Defender, and enrolled his son Wumu as Brush-and-Ink Attendant.",
+          "idiomatic": "An edict posthumously made him Grand Master for Excellent Counsel and Eastern Capital Defender, and enrolled his son Wumu as Brush-and-Ink Attendant.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "translationReviewNote": "Scanner misaligned replacement with section heading; cleared localRange so upstream posthumous sentences insert after 夏人交刃殺之 and preserve 石抹元毅 heading.",
+      "reviewedAt": "2026-06-28T03:29:48.742Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T03:29:48.745Z",
+      "appliedSummary": {
+        "id": "source-jinshi-121-wikisource-e659a82ae9be",
+        "type": "source_replacement_candidate",
+        "start": 165,
+        "removed": 0,
+        "inserted": 2,
+        "delta": 2,
+        "manualTranslationsApplied": 2
+      }
     },
     {
       "id": "source-jinshi-121-wikisource-eaa81b88e9a8",
@@ -70365,5 +71125,5 @@
       "notes": ""
     }
   ],
-  "updatedAt": "2026-06-27T11:44:54.413Z"
+  "updatedAt": "2026-06-28T03:29:48.782Z"
 }

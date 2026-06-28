@@ -257,10 +257,10 @@ function listBookDirs() {
     .filter((e) => e.isDirectory())
     .map((e) => e.name)
     .filter((name) => {
-      if (name === 'public' || name === 'quality') return false;
+      if (name === 'public' || name === 'quality' || name === 'repair-chapter-claims') return false;
       const p = path.join(dataDir, name);
       try {
-        return fs.readdirSync(p).some((f) => f.endsWith('.json'));
+        return fs.readdirSync(p).some((f) => /^\d{3}\.json$/.test(f));
       } catch {
         return false;
       }

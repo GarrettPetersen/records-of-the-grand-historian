@@ -21383,7 +21383,7 @@
     },
     {
       "id": "source-zizhitongjian-009-wikisource-1f86b362f590",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.87,
@@ -21444,12 +21444,15 @@
         "afterLocal": "齊王榮將兵會戰，敗，走平原，平原民殺之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream ----7/----8/----9 are Wikisource paragraph markers; local text already has the same Chinese sentences (s0364, s0366, s0368) with translations.",
+      "reviewedAt": "2026-06-28T06:17:16.555Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-zizhitongjian-009-wikisource-227b86276c30",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.789,
@@ -21501,8 +21504,11 @@
         "afterLocal": "赦罪人。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream ----20/----21 are Wikisource paragraph markers; local text already has the same Chinese sentences (s0502, s0504) with translations.",
+      "reviewedAt": "2026-06-28T06:17:16.884Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-zizhitongjian-009-wikisource-4d89cd25a55f",
@@ -21837,7 +21843,7 @@
     },
     {
       "id": "source-zizhitongjian-009-wikisource-ebecad129f75",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.826,
@@ -21889,8 +21895,11 @@
         "afterLocal": "魏王豹降，將兵從；"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream ----10/----11 are Wikisource paragraph markers; local text already has the same Chinese sentences (s0374, s0376) with translations.",
+      "reviewedAt": "2026-06-28T06:17:17.220Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-zizhitongjian-009-wikisource-edaac9d54661",
@@ -22094,7 +22103,7 @@
     },
     {
       "id": "source-zizhitongjian-010-wikisource-8e9978370ccc",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.867,
@@ -22146,8 +22155,11 @@
         "afterLocal": "至櫟陽，梟故塞王欣頭櫟陽市。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as Wikisource structural-residue no-op: upstream-only table or section marker was removed and local corpus retained.",
+      "reviewedAt": "2026-06-28T02:00:02.268Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-zizhitongjian-010-wikisource-9454b9a7ec77",
@@ -22180,7 +22192,7 @@
     },
     {
       "id": "source-zizhitongjian-010-wikisource-be82a7d14552",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.897,
@@ -22241,8 +22253,11 @@
         "afterLocal": "八月，引兵臨河，南鄉，軍小脩武，欲復與楚戰。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as Wikisource structural-residue no-op: upstream-only table or section marker was removed and local corpus retained.",
+      "reviewedAt": "2026-06-28T02:00:02.414Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-zizhitongjian-011-wikisource-12057037da8f",
@@ -47500,7 +47515,7 @@
     },
     {
       "id": "source-zizhitongjian-109-wikisource-5725d06b1bb6",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.818,
@@ -47570,8 +47585,20 @@
         "afterLocal": "以左僕射王珣為尚書令；"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": "Reviewed as no-op: discrepancy is caused by upstream MediaWiki residue such as __TOC__, Category, or PD-old text; local corpus text retained.\nReopened for manual review: previous automatic residue no-op left non-residue punctuation or text unresolved."
+      "decision": "applied",
+      "notes": "Applied missing cyclical date and CE annotation (丁酉，公元三九七年) into s0003; __TOC__ upstream residue ignored. Manual chapter edit because apply-source-correspondence would split on the parenthetical.",
+      "manualTranslations": [
+        {
+          "zh": "安皇帝甲隆安元年（丁酉，公元三九七年）",
+          "literal": "Emperor An's jia, first year of Long'an (dingyou, AD 397).",
+          "idiomatic": "The first year of the Long'an era of Emperor An (dingyou, AD 397).",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T06:37:03.325Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T06:37:03.325Z"
     },
     {
       "id": "source-zizhitongjian-110-wikisource-24a9eebe2042",
@@ -49076,7 +49103,7 @@
     },
     {
       "id": "source-zizhitongjian-144-wikisource-647c684885f9",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.571,
@@ -49119,8 +49146,11 @@
         "afterLocal": "希祖攻拔安成，殺范僧簡，東昏侯以希祖為安成內史。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource OCR artifact B163 for 篹; local 謝篹 matches Nan Qi Shu parallel and existing translation.",
+      "reviewedAt": "2026-06-28T06:44:52.384Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-zizhitongjian-144-wikisource-69d7d3dd4b68",
@@ -49153,7 +49183,7 @@
     },
     {
       "id": "source-zizhitongjian-144-wikisource-a549aa7819a4",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.647,
@@ -49196,12 +49226,15 @@
         "afterLocal": "東昏侯作芳樂苑，山石皆塗以五采。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource OCR artifacts B163 for 篹; local 謝篹/篹敗走 is correct and already translated.",
+      "reviewedAt": "2026-06-28T06:44:52.616Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-zizhitongjian-144-wikisource-e942c86a239c",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.824,
@@ -49244,8 +49277,11 @@
         "afterLocal": "昭冑兄弟與偃等皆伏誅。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource OCR artifact A134 for 幐; local 麝幐 matches Nan Shi parallel (吏於麝幐中得其事蹟).",
+      "reviewedAt": "2026-06-28T06:44:52.812Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-zizhitongjian-145-wikisource-0c0962f0d1df",

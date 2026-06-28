@@ -32338,7 +32338,7 @@
     },
     {
       "id": "source-beishi-028-wikisource-36017f2f5907",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "beishi",
@@ -32362,8 +32362,11 @@
         "afterLocal": "其年，除車騎大將軍、涼州大中正。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: closing quote on s0603 and 書奏，宣武納之。 on s0604 already present; duplicate s0605 removed.",
+      "reviewedAt": "2026-06-28T02:11:22.012Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-beishi-028-wikisource-4545c0a784ef",
@@ -32580,7 +32583,7 @@
     },
     {
       "id": "source-beishi-028-wikisource-4cce813c88cc",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -32623,8 +32626,11 @@
         "afterLocal": "趙彥深於起居省密訪文宗討捍之計。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: source/local difference is only approved graph variants (呉/吳, 暦/曆, 歩/步); local corpus text retained.",
+      "reviewedAt": "2026-06-28T02:11:22.253Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-beishi-028-wikisource-4f54a1ecedc5",
@@ -35282,7 +35288,7 @@
     },
     {
       "id": "source-beishi-028-wikisource-d1956175b679",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -35325,8 +35331,29 @@
         "afterLocal": "子邕與戰，大破之，禽維摩。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "賊帥康維摩守鋸穀，斷絕𭺩棠橋。",
+          "literal": "The rebel chief Kang Weimo held Juguli and cut the Yingtang Bridge.",
+          "idiomatic": "Rebel Kang Weimo held Juguli and cut Yingtang Bridge.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T02:05:39.904Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T02:05:39.907Z",
+      "appliedSummary": {
+        "id": "source-beishi-028-wikisource-d1956175b679",
+        "type": "text_discrepancy_candidate",
+        "start": 685,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-beishi-028-wikisource-d1eaae14623e",
@@ -60876,7 +60903,7 @@
     },
     {
       "id": "source-beishi-067-wikisource-37dbb5457354",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "beishi",
@@ -60900,12 +60927,163 @@
         "afterLocal": "昂字千里。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "周孝閔帝踐阼，進爵為公。",
+          "literal": "When Emperor Xiaomin of Zhou ascended the throne, Min was advanced in rank to duke.",
+          "idiomatic": "When Emperor Xiaomin of Zhou ascended the throne, Min was raised to duke.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "又除河東郡守，尋復徵拜禮部。",
+          "literal": "He was also appointed prefect of Hedong commandery, and soon recalled and again appointed to the Bureau of Rites.",
+          "idiomatic": "He was also made prefect of Hedong, then soon recalled again to the Bureau of Rites.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "出為郢州刺史，甚得物情。",
+          "literal": "He went out as inspector of Ying Prefecture and won people's hearts exceedingly.",
+          "idiomatic": "Sent out as inspector of Ying Prefecture, he won the people's hearts completely.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "及將還朝，夷夏士人，感其惠政，並齎酒肴及物產候之于路。",
+          "literal": "When he was about to return to court, Chinese and non-Chinese gentry, moved by his benevolent rule, all brought wine, food, and local products to wait for him along the road.",
+          "idiomatic": "When he was about to return to court, Chinese and non-Chinese gentry, grateful for his benevolent rule, lined the road with wine, food, and local products to see him off.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "敏乃從他道而還。",
+          "literal": "Min then returned by another route.",
+          "idiomatic": "Min then went back by another route.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "復拜禮部，後改禮部為司宗，仍以敏為之。",
+          "literal": "He was again appointed to the Bureau of Rites; later, when the Bureau of Rites was changed to the Office of the Imperial Clan, Min was still placed over it.",
+          "idiomatic": "He returned to the Bureau of Rites; later, when that office became the Office of the Imperial Clan, Min remained in charge of it.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "敏操履方正，性又恭勤，每日將朝，必夙興待旦。",
+          "literal": "Min's conduct was upright and his nature moreover respectful and diligent; every day before court he always rose early and waited for dawn.",
+          "idiomatic": "Min's conduct was upright and his nature respectful and diligent; every day before court he rose early and waited for dawn.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "又久處台閣，明練故事，近儀或乖先典者，皆案據舊章，刊正取中。",
+          "literal": "Having long served in the ministries, he knew precedent thoroughly; where recent ceremony departed from ancient statutes, he all checked against old regulations, corrected, and took the mean.",
+          "idiomatic": "Having long served in the ministries, he knew precedent thoroughly; where recent ceremony departed from ancient statutes, he checked old regulations, corrected errors, and took the balanced course.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "遷小宗伯，監修國史。",
+          "literal": "He was transferred to Junior Minister of the Imperial Clan and overseer of compiling the national history.",
+          "idiomatic": "He was made Junior Minister of the Imperial Clan and overseer of compiling the national history.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "轉小司馬，又監修律令。",
+          "literal": "He was transferred to Junior Grand Marshal and again oversaw compiling statutes and ordinances.",
+          "idiomatic": "He was transferred to Junior Grand Marshal and again oversaw compiling statutes and ordinances.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "進位大將軍，出為鄜州刺史，以疾不之部。",
+          "literal": "He was advanced to Great General, sent out as inspector of Zhen Prefecture, but owing to illness did not go to his post.",
+          "idiomatic": "Promoted to Great General, he was sent out as inspector of Zhen Prefecture but, owing to illness, never took up the post.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "武帝平齊，進爵武德郡公。",
+          "literal": "When Emperor Wu pacified Qi, he was advanced to Duke of Wude commandery.",
+          "idiomatic": "When Emperor Wu pacified Qi he was raised to Duke of Wude commandery.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "敏自建德以後，寢疾積年，武帝及宣帝並親幸其第問疾焉。",
+          "literal": "From Jiande onward Min lay ill for many years; both Emperor Wu and Emperor Xuan personally visited his home to inquire after his illness.",
+          "idiomatic": "From Jiande onward Min was bedridden for years; both Emperor Wu and Emperor Xuan personally visited his home to inquire after him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "開皇元年，進位上大將軍、太子太保。",
+          "literal": "In the first year of Kaihuang he was advanced to Senior Great General and Grand Tutor of the Heir Apparent.",
+          "idiomatic": "In the first year of Kaihuang he was promoted to Senior Great General and Grand Tutor of the Heir Apparent.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "其年卒。",
+          "literal": "That year he died.",
+          "idiomatic": "He died that same year.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "贈五州諸軍事、晉州刺史。",
+          "literal": "Posthumously granted Coordinator of Military Affairs for five prefectures and inspector of Jin Prefecture.",
+          "idiomatic": "He was posthumously granted coordinator of military affairs for five prefectures and inspector of Jin Prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "臨終戒其子等，喪事所須，務從簡約。",
+          "literal": "On his deathbed he admonished his sons and the like that all matters required for the funeral must be kept as simple as possible.",
+          "idiomatic": "On his deathbed he admonished his sons that everything needed for the funeral must be kept simple.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "其子等並涕泣奉行。",
+          "literal": "His sons and the like all wept and carried out his instructions.",
+          "idiomatic": "His sons wept as they obeyed.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "少子昂。",
+          "literal": "His youngest son Ang.",
+          "idiomatic": "His youngest son was Ang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "manualTranslationImportedAt": "2026-06-28T02:42:29.675Z",
+      "manualTranslationPackets": [
+        "tmp/beishi-067-repair-packets.json"
+      ],
+      "reviewedAt": "2026-06-28T02:42:33.075Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T02:42:33.077Z",
+      "appliedSummary": {
+        "id": "source-beishi-067-wikisource-37dbb5457354",
+        "type": "source_omission_candidate",
+        "start": 328,
+        "removed": 0,
+        "inserted": 19,
+        "delta": 19,
+        "manualTranslationsApplied": 19
+      }
     },
     {
       "id": "source-beishi-067-wikisource-53b0503b40a6",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "beishi",
@@ -60929,8 +61107,75 @@
         "afterLocal": "子德衡，大象末，儀同大將軍。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "保定四年，晉公護東伐，權景宣以山南兵圍豫州，士良舉城降。",
+          "literal": "In the fourth year of Baoding, Duke Yuwen Hu of Jin campaigned east; Quan Jingxuan led the southern mountain troops in besieging Yu Prefecture, and Shiliang surrendered the city.",
+          "idiomatic": "In the fourth year of Baoding, Duke Yuwen Hu campaigned east; Quan Jingxuan led the southern armies in besieging Yu Prefecture, and Shiliang surrendered the city.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "授大將軍、小司徒，賜爵廣昌郡公。",
+          "literal": "He was appointed Great General and Junior Minister of Works, and enfeoffed as Duke of Guangchang commandery.",
+          "idiomatic": "He was appointed Great General and Junior Minister of Works and enfeoffed as Duke of Guangchang commandery.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "尋除荊州總管，行荊州刺史，復入為小司徒。",
+          "literal": "Soon he was appointed commander of Jing Prefecture, acting inspector of Jing Prefecture, and again entered the capital as Junior Minister of Works.",
+          "idiomatic": "Soon appointed commander of Jing Prefecture and acting inspector of Jing, he again returned to court as Junior Minister of Works.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "俄除鄜州史，轉荊州刺史。",
+          "literal": "Shortly he was appointed inspector of Zhen Prefecture, then transferred to inspector of Jing Prefecture.",
+          "idiomatic": "Soon appointed inspector of Zhen Prefecture, he was transferred to inspector of Jing Prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "士良去鄉既久，忽臨本州，耆老故人，猶有存者，遠近咸以為榮。",
+          "literal": "Shiliang had been away from his home district for so long that when he suddenly arrived in his native prefecture, of the old elders and former acquaintances some still survived; near and far all regarded it as an honor.",
+          "idiomatic": "Shiliang had long been away from home; when he suddenly arrived in his native prefecture, some old elders and former acquaintances still survived, and near and far all regarded it as an honor.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "加授上大將軍，以老病乞骸骨，優詔許之。",
+          "literal": "Additionally granted the rank of Senior Great General, he begged to retire on account of old age and illness; a gracious edict permitted it.",
+          "idiomatic": "Granted the additional rank of Senior Great General, he begged to retire on account of old age and illness; a gracious edict permitted it.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "開皇元年卒，時年八十二。",
+          "literal": "He died in the first year of Kaihuang, at the age of eighty-two.",
+          "idiomatic": "He died in the first year of Kaihuang, at the age of eighty-two.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "manualTranslationImportedAt": "2026-06-28T02:42:29.850Z",
+      "manualTranslationPackets": [
+        "tmp/beishi-067-repair-packets.json"
+      ],
+      "reviewedAt": "2026-06-28T02:42:33.350Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T02:42:33.352Z",
+      "appliedSummary": {
+        "id": "source-beishi-067-wikisource-53b0503b40a6",
+        "type": "source_omission_candidate",
+        "start": 404,
+        "removed": 0,
+        "inserted": 7,
+        "delta": 7,
+        "manualTranslationsApplied": 7
+      }
     },
     {
       "id": "source-beishi-067-wikisource-b4c03c7a1472",
@@ -61170,7 +61415,7 @@
     },
     {
       "id": "source-beishi-069-wikisource-4aa9e8242e32",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "beishi",
@@ -61194,12 +61439,96 @@
         "afterLocal": "十六年，大軍東討，周文恐蠕蠕乘虛寇掠，乃遣薦往，更論和好，以安慰之。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "大統元年，蠕蠕請和親，周文遣薦與楊寬使，並結婚而還。",
+          "literal": "In the first year of Datong, the Rouran requested a marriage alliance. Emperor Wen of Zhou sent Jian with Yang Kuan as envoys; together they concluded the marriage and returned.",
+          "idiomatic": "In the first year of Datong the Rouran sought a marriage alliance. Emperor Wen of Zhou sent Jian with Yang Kuan as envoys; they concluded the marriage and returned together.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "進爵為侯。",
+          "literal": "His rank was advanced to Marquis.",
+          "idiomatic": "He was raised to marquis.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "又使薦納幣於蠕蠕。",
+          "literal": "Emperor Wen again sent Jian to deliver betrothal gifts to the Rouran.",
+          "idiomatic": "Emperor Wen again sent Jian to the Rouran to present betrothal gifts.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "魏文帝鬱久閭後崩，周文遣僕射趙善使蠕蠕，更請婚。",
+          "literal": "When Empress Yujiulü of Emperor Wen of Wei died, Emperor Wen of Zhou sent Vice Director Zhao Shan as envoy to the Rouran to request marriage again.",
+          "idiomatic": "After the death of Empress Yujiulü, Emperor Wen of Zhou sent vice director Zhao Shan to the Rouran to renew the marriage request.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "善至夏州，聞蠕蠕貳於東魏，欲執使者，善懼，乃還。",
+          "literal": "When Shan reached Xia Province, he heard the Rouran were duplicitous toward Eastern Wei and intended to seize the envoys. Shan was afraid and returned.",
+          "idiomatic": "When Shan reached Xia Province he learned the Rouran had turned toward Eastern Wei and meant to seize the envoys; fearing for his life, he turned back.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "周文乃使薦往，賜黃金十斤，雜彩三百匹。",
+          "literal": "Emperor Wen of Zhou thereupon sent Jian to go, granting ten catties of gold and three hundred bolts of mixed silks.",
+          "idiomatic": "Emperor Wen then sent Jian in his place, granting him ten catties of gold and three hundred bolts of mixed silks.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "薦至蠕蠕，責其背惠食言，並論結婚之意，蠕蠕感悟，乃遣使隨薦報命焉。",
+          "literal": "When Jian reached the Rouran, he reproached them for turning their backs on kindness and eating their words, and set forth the intent of the marriage alliance. The Rouran were moved to understanding and sent envoys to follow Jian and report back.",
+          "idiomatic": "When Jian reached the Rouran he rebuked them for betraying past kindness and breaking their word, and laid out the purpose of the marriage alliance. The Rouran took his words to heart and sent envoys back with him to report to the court.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "及侯景來附，周文令薦助鎮遏。",
+          "literal": "When Hou Jing came over in submission, Emperor Wen of Zhou ordered Jian to help garrison and restrain him.",
+          "idiomatic": "When Hou Jing defected, Emperor Wen of Zhou ordered Jian to help garrison the area and keep him in check.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "薦知景翻覆，遂求還，具陳事實，周文乃遣使密追助景之兵。",
+          "literal": "Jian knew Jing was fickle and treacherous; he requested to return and fully set forth the facts. Emperor Wen of Zhou then sent envoys in secret pursuit of the troops aiding Jing.",
+          "idiomatic": "Jian saw that Hou Jing was treacherous and unreliable, asked to be recalled, and laid out the facts in full. Emperor Wen then secretly sent envoys to recall the troops supporting Hou Jing.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "尋而景叛。",
+          "literal": "Before long Jing rebelled.",
+          "idiomatic": "Soon afterward Hou Jing rebelled.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T02:45:28.639Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T02:45:28.640Z",
+      "appliedSummary": {
+        "id": "source-beishi-069-wikisource-4aa9e8242e32",
+        "type": "source_omission_candidate",
+        "start": 197,
+        "removed": 0,
+        "inserted": 10,
+        "delta": 10,
+        "manualTranslationsApplied": 10
+      }
     },
     {
       "id": "source-beishi-069-wikisource-dab456f40483",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "beishi",
@@ -61223,8 +61552,106 @@
         "afterLocal": "初，突厥與周和親，許納女為後。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "王慶，字興慶，太原祁人也。",
+          "literal": "Wang Qing, courtesy name Xingqing, was a native of Qi in Taiyuan.",
+          "idiomatic": "Wang Qing, whose courtesy name was Xingqing, came from Qi in Taiyuan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "父因，魏靈州刺史、懷德縣公。",
+          "literal": "His father Yin was Inspector of Ling Province under Wei and Duke of Huaide county.",
+          "idiomatic": "His father Yin had served Wei as inspector of Ling Province and duke of Huaide county.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "慶少開悟，有才略。",
+          "literal": "Qing from youth was quick to understand and had talent and strategy.",
+          "idiomatic": "From youth Qing was quick-witted and resourceful.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "初從周文征伐，復弘農，破沙苑，並有戰功，每獲殊賞。",
+          "literal": "At first he followed Emperor Wen of Zhou on campaigns, recovered Hongnong, broke through Shaya, and had military merit in each; he repeatedly received exceptional rewards.",
+          "idiomatic": "He first followed Emperor Wen of Zhou on campaign, helped recover Hongnong and break through Shaya, and won repeated special rewards for his service.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "大統十年，授殿中將軍。",
+          "literal": "In the tenth year of Datong he was appointed Palace Army General.",
+          "idiomatic": "In the tenth year of Datong he was made palace army general.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "周孝閔帝踐阼，晉公護引為典簽。",
+          "literal": "When Emperor Xiaomin of Zhou took the throne, Duke Yuwen Hu of Jin brought him in as registry clerk.",
+          "idiomatic": "When Emperor Xiaomin ascended, Duke Yuwen Hu made him a registry clerk.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "慶樞機明辯，漸見親待，授大都督。",
+          "literal": "Qing was clear and sharp in counsel on vital affairs and gradually came to be treated with favor; he was appointed Grand Commander.",
+          "idiomatic": "Qing proved sharp in counsel and gradually won favor; he was made grand commander.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "武成元年，以前後功，賜爵始安縣男。",
+          "literal": "In the first year of Wucheng, for his cumulative merit he was granted the title Baron of Shian county.",
+          "idiomatic": "In the first year of Wucheng his accumulated service earned him the barony of Shian.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "二年，行小賓部。",
+          "literal": "In the second year he acted as head of the Junior Guest Department.",
+          "idiomatic": "In the second year he served as acting head of the junior guest department.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "保定二年，使吐谷渾。",
+          "literal": "In the second year of Baoding he was sent on mission to the Tuyuhun.",
+          "idiomatic": "In the second year of Baoding he was sent on mission to the Tuyuhun.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "與其分疆，仍論和好之事。",
+          "literal": "With them he demarcated borders and also discussed matters of peace and alliance.",
+          "idiomatic": "He demarcated borders with them and discussed peace and alliance.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "渾主悅服，遣所親隨慶貢獻。",
+          "literal": "The Tuyuhun ruler was pleased and submitted; he sent his close kin to follow Qing with tribute.",
+          "idiomatic": "The Tuyuhun ruler was won over and sent close kin back with Qing bearing tribute.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T02:45:28.834Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T02:45:28.836Z",
+      "appliedSummary": {
+        "id": "source-beishi-069-wikisource-dab456f40483",
+        "type": "source_omission_candidate",
+        "start": 221,
+        "removed": 0,
+        "inserted": 12,
+        "delta": 12,
+        "manualTranslationsApplied": 12
+      }
     },
     {
       "id": "source-beishi-069-wikisource-ff7d89feef9b",
@@ -72946,5 +73373,5 @@
       "retainedAfterRescan": true
     }
   ],
-  "updatedAt": "2026-06-27T11:14:17.406Z"
+  "updatedAt": "2026-06-28T02:45:28.875Z"
 }
