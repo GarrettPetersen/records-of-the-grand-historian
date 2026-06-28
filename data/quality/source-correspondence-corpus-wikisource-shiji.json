@@ -3337,7 +3337,7 @@
   "items": [
     {
       "id": "source-shiji-001-wikisource-07d3cfbf7c4c",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -3380,8 +3380,11 @@
         "afterLocal": "而百家言黃帝，其文不雅馴，薦紳先生難言之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource scrape dropped {{書|尚書}} markup; local text 然尚書獨載堯以來 is the correct Shiji reading.",
+      "reviewedAt": "2026-06-28T08:35:37.620Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-001-wikisource-0e84bf3eb629",
@@ -4031,7 +4034,7 @@
     },
     {
       "id": "source-shiji-001-wikisource-7372298ffaea",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.281,
@@ -4074,8 +4077,11 @@
         "afterLocal": "非好學深思，心知其意，固難為淺見寡聞道也。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource scrape corrupted {{書|春秋}}, {{書|國語}}, {{書|五帝德}}, {{書|帝繫姓}}, and {{書|書}} book-title markup into empty spans; local s0283–s0284 already has the full correct text.",
+      "reviewedAt": "2026-06-28T08:35:38.589Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-001-wikisource-780502c768ea",
@@ -4301,7 +4307,7 @@
     },
     {
       "id": "source-shiji-001-wikisource-bc43cee8253d",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.526,
@@ -4344,8 +4350,11 @@
         "afterLocal": "余嘗西至空桐，北過涿鹿，東漸於海，南浮江淮矣，至長老皆各往往稱黃帝、堯、舜之處，風教固殊焉，總之不離古文者近是。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource scrape dropped {{書|宰予問五帝德}} and {{書|帝繫姓}} title markup; local text with full work titles is correct.",
+      "reviewedAt": "2026-06-28T08:35:39.478Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-001-wikisource-bdaa29ca04b1",
@@ -4621,7 +4630,7 @@
     },
     {
       "id": "source-shiji-001-wikisource-dff8d51577b4",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -4664,8 +4673,11 @@
         "afterLocal": "天下明德皆自虞帝始。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource scrape dropped {{書|九招}} markup, leaving 興之樂; local 九招之樂 is the correct Shiji reading.",
+      "reviewedAt": "2026-06-28T08:35:40.213Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-001-wikisource-e130ca011b2e",
@@ -125610,7 +125622,7 @@
     },
     {
       "id": "source-shiji-087-wikisource-6d62f7f6dfd6",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -125653,12 +125665,34 @@
         "afterLocal": "李斯子由為三川守，群盜吳廣等西略地，過去弗能禁。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "故吾願賜志廣欲，長享天下而無害，為之奈何？」",
+          "literal": "Therefore I wish to fulfill broad desires and ambitions, long to enjoy all under Heaven without harm—what can be done about it?'",
+          "idiomatic": "Therefore I wish to satisfy my every ambition and desire, to enjoy the realm forever without coming to harm. How can this be achieved?'",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T08:38:04.842Z",
+      "reviewer": "sdk-repair-chapter",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-28T08:38:04.862Z",
+      "appliedSummary": {
+        "id": "source-shiji-087-wikisource-6d62f7f6dfd6",
+        "type": "text_discrepancy_candidate",
+        "start": 225,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-shiji-087-wikisource-79dbf4270495",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -125701,12 +125735,34 @@
         "afterLocal": "先王之時秦地不過千里，兵數十萬。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "逮秦地之狹隘。",
+          "literal": "Reached Qin territory's narrowness.",
+          "idiomatic": "I came when Qin's territory was still narrow and confined.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "preserveExistingTranslations": true,
+      "reviewedAt": "2026-06-28T08:38:04.842Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T08:38:04.862Z",
+      "appliedSummary": {
+        "id": "source-shiji-087-wikisource-79dbf4270495",
+        "type": "text_discrepancy_candidate",
+        "start": 353,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-shiji-087-wikisource-9bec31621f29",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.895,
@@ -125749,12 +125805,34 @@
         "afterLocal": "於是楚戍卒陳勝、吳廣等乃作亂，起於山東，傑俊相立，自置為侯王，叛秦，兵至鴻門而卻。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "又作阿房之宮，治直、馳道，賦斂愈重，戍徭無已。",
+          "literal": "He also built the Epang Palace, constructed the direct roads and imperial highways, taxes and levies grew heavier, military service and corvée labor never ceased.",
+          "idiomatic": "He also began construction of the Epang Palace, laid down straight roads and imperial highways, increased taxes and levies further still, and imposed conscription and corvée labor without end.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "preserveExistingTranslations": true,
+      "reviewedAt": "2026-06-28T08:38:04.842Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T08:38:04.862Z",
+      "appliedSummary": {
+        "id": "source-shiji-087-wikisource-9bec31621f29",
+        "type": "text_discrepancy_candidate",
+        "start": 215,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-shiji-087-wikisource-c9394b615caa",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -125797,8 +125875,11 @@
         "afterLocal": "趙高曰：「嚴法而刻刑，令有罪者相坐誅，至收族，滅大臣而遠骨肉；"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: 柰何/奈何 is a harmless graph variant; the chapter consistently uses 柰何 and the reading is unchanged.",
+      "reviewedAt": "2026-06-28T08:38:05.521Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-087-wikisource-e244c341c126",
@@ -127328,7 +127409,7 @@
     },
     {
       "id": "source-shiji-098-wikisource-19a5cce66ddd",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.846,
@@ -127371,12 +127452,15 @@
         "afterLocal": "擊項悍濟陽下。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource simplified graphs (缯, 蕲) vs local traditional forms (繒, 蘄); same place names.",
+      "reviewedAt": "2026-06-28T12:12:20.237Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-098-wikisource-1ceeee917346",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.899,
@@ -127455,12 +127539,15 @@
         "afterLocal": "破項冠軍魯下。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource simplified/traditional normalization across five sentences (别/別, 邯郸/邯鄲, 敖仓/敖倉, 荥阳/滎陽); local text already correct. Opportunistically corrected 馕→饟 in s0041.",
+      "reviewedAt": "2026-06-28T12:12:21.453Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-shiji-098-wikisource-b6e24b4e74ee",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.846,
@@ -127503,8 +127590,11 @@
         "afterLocal": "高祖十二年，以緤為蒯成侯，除前所食邑。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied: restored missing 信 in 信武侯, removed spurious 『 opener at s0061 and matching 』 at s0071, updated English to Marquis of Xinwu.",
+      "reviewedAt": "2026-06-28T12:12:22.395Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T12:12:22.395Z"
     },
     {
       "id": "source-shiji-099-wikisource-ce03522d3a3e",
@@ -136035,5 +136125,5 @@
       "retainedAfterRescan": true
     }
   ],
-  "updatedAt": "2026-06-27T22:33:05.951Z"
+  "updatedAt": "2026-06-28T08:38:04.902Z"
 }

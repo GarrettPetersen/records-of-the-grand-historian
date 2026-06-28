@@ -5420,7 +5420,7 @@
     },
     {
       "id": "source-liaoshi-003-wikisource-9af7e5a754bf",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.604,
@@ -5481,8 +5481,11 @@
         "afterLocal": "壬午，以龍化州節度使劉居言同中書門下平章事。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local text retains Zhonghua collation notes (原誤「子」 and 據下文…改) and splits the passage across s0140–s0142; Wikisource witness lacks the editorial annotation and repeats 皇太弟 without the corrected reading.",
+      "reviewedAt": "2026-06-28T11:20:38.162Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-liaoshi-003-wikisource-c0f26614c1d3",
@@ -14411,7 +14414,7 @@
     },
     {
       "id": "source-liaoshi-041-wikisource-2b98c7594e43",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "liaoshi",
@@ -14435,12 +14438,156 @@
         "afterLocal": "振武縣。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "豐州，天德軍，節度使。",
+          "literal": "Feng Prefecture, Tiande Army, jiedushi.",
+          "idiomatic": "Feng Prefecture—Tiande Army, with a military commissioner.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "秦為上郡北境，漢屬五原郡。",
+          "literal": "In Qin it was the northern border of Shang Commandery; in Han it belonged to Wuyuan Commandery.",
+          "idiomatic": "In Qin it formed the northern frontier of Shang Commandery; under Han it lay in Wuyuan Commandery.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "地磧鹵，少田疇。",
+          "literal": "The land is saline and alkaline, with little arable fields.",
+          "idiomatic": "The soil was salty and barren, with scant farmland.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "自晉永嘉之亂，屬赫連勃勃。",
+          "literal": "Since the Yongjia turmoil of Jin, it belonged to Helian Bobo.",
+          "idiomatic": "After Jin's Yongjia upheaval it fell under Helian Bobo.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "後周置永豐鎮。",
+          "literal": "Later Zhou established Yongfeng Fort.",
+          "idiomatic": "Later Zhou set up Yongfeng Fort.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "隋開皇中升永豐縣，改豐州。",
+          "literal": "Sui Kaihuang era raised it to Yongfeng County and changed it to Feng Prefecture.",
+          "idiomatic": "In Sui Kaihuang it was promoted to Yongfeng County and renamed Feng Prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "大業七年為五原郡，義寧元年，太守張遜奏改歸順郡。",
+          "literal": "Daye year 7 it became Wuyuan Commandery; in the first year of Yining, Administrator Zhang Xun memorialized to change it to Guishun Commandery.",
+          "idiomatic": "Daye year 7 made it Wuyuan Commandery; Yining year 1 Prefect Zhang Xun petitioned to rename it Guishun Commandery.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "唐武德元年為豐州總管府。",
+          "literal": "Tang Wude year 1 it became Feng Prefecture grand commandant headquarters.",
+          "idiomatic": "In Tang Wude year 1 it became the Feng Prefecture grand commandant headquarters.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "六年省，遷民於白馬縣，遂廢。",
+          "literal": "Year 6 it was abolished; populations were moved to Baima County, and it was then abandoned.",
+          "idiomatic": "In year 6 the prefecture was removed, the populace relocated to Baima County, and it was abandoned.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "貞觀四年分靈州境，置相州都督府，領蕃戶。",
+          "literal": "Zhenguan year 4 split off Ling Prefecture territory, established Xiang Prefecture grand commandant headquarters, governing frontier households.",
+          "idiomatic": "Zhenguan year 4 carved territory from Ling Prefecture, set up Xiang Prefecture grand commandant headquarters, and administered frontier households.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "天寶初改九原郡。",
+          "literal": "Early Tianbao changed it to Jiuyuan Commandery.",
+          "idiomatic": "Early Tianbao it became Jiuyuan Commandery.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "乾元元年復豐州，後入回鶻。",
+          "literal": "Qianyuan year 1 restored Feng Prefecture; later it fell to the Uighurs.",
+          "idiomatic": "Qianyuan year 1 Feng Prefecture was restored; later it passed to the Uighurs.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "會昌中克之，後唐改天德軍。",
+          "literal": "Huichang era recaptured it; Later Tang changed it to Tiande Army.",
+          "idiomatic": "The Huichang period retook it; Later Tang renamed it Tiande Army.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "太祖神冊五年攻下，更名應天軍，復為州。",
+          "literal": "In year 5 of Emperor Taizu's Shence reign it was stormed, renamed Yingtian Army, then restored as a prefecture.",
+          "idiomatic": "Taizu year 5 of Shence seized it, renamed it Yingtian Army, and restored it as a prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "有大鹽濼、九十九泉、沒越濼、古磧口、青冢，即王昭君墓，兵事屬西南面招討司。",
+          "literal": "There are Great Salt Marsh, Ninety-Nine Springs, Moyue Marsh, ancient Qikou Pass, and Qingzhong—the tomb of Wang Zhaojun; military affairs belonged to the Southwest Pacification Office.",
+          "idiomatic": "It has Great Salt Marsh, Ninety-Nine Springs, Moyue Marsh, ancient Qikou Pass, and Qingzhong, Wang Zhaojun's tomb; military affairs came under the Southwest Pacification Office.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "統縣二：富民縣。",
+          "literal": "It governed two counties: Fumin County.",
+          "idiomatic": "The prefecture administered two counties: Fumin County.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "本漢臨戎縣，遼改今名。",
+          "literal": "Originally Han Linrong County; Liao changed to the present name.",
+          "idiomatic": "It was Han Linrong County; Liao gave it the present name.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "戶一千二百。",
+          "literal": "One thousand two hundred households.",
+          "idiomatic": "1,200 registered households.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "manualTranslationImportedAt": "2026-06-28T07:45:27.513Z",
+      "manualTranslationPackets": [
+        "data/quality/repair-packets/manual-translations/liaoshi-041-repair-all.json"
+      ],
+      "reviewedAt": "2026-06-28T07:45:27.515Z",
+      "reviewer": "source-correspondence",
+      "appliedAt": "2026-06-28T07:45:27.650Z",
+      "appliedSummary": {
+        "id": "source-liaoshi-041-wikisource-2b98c7594e43",
+        "type": "source_omission_candidate",
+        "start": 67,
+        "removed": 0,
+        "inserted": 18,
+        "delta": 18,
+        "manualTranslationsApplied": 18
+      }
     },
     {
       "id": "source-liaoshi-041-wikisource-70476747f749",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.029,
@@ -14483,12 +14630,100 @@
         "afterLocal": "河濱縣。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "東勝州，武興軍，下，刺史。",
+          "literal": "Eastern Sheng Prefecture, Wuxing Army, lower grade, cishi.",
+          "idiomatic": "Eastern Sheng Prefecture—Wuxing Army, lower grade, with a prefect.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "隋開皇七年置勝州。",
+          "literal": "Sui Kaihuang year 7 established Sheng Prefecture.",
+          "idiomatic": "Sui Kaihuang year 7 founded Sheng Prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "大業五年改榆林郡。",
+          "literal": "Daye year 5 changed it to Yulin Commandery.",
+          "idiomatic": "Daye year 5 it became Yulin Commandery.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "唐貞觀五年於南河地置決勝州，故謂此為東勝州。",
+          "literal": "Tang Zhenguan year 5 established Juesheng Prefecture on the south-bank lands, hence this was called Eastern Sheng Prefecture.",
+          "idiomatic": "Tang Zhenguan year 5 set up Juesheng Prefecture on the south-bank lands, so this was called Eastern Sheng Prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "天寶七年又為榆林郡。",
+          "literal": "Tianbao year 7 it again became Yulin Commandery.",
+          "idiomatic": "Tianbao year 7 it again became Yulin Commandery.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "乾元元年復為勝州。",
+          "literal": "Qianyuan year 1 restored it as Sheng Prefecture.",
+          "idiomatic": "Qianyuan year 1 it was restored as Sheng Prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "太祖神冊元年破振武軍，勝州之民皆趨河東，州廢。",
+          "literal": "Emperor Taizu Shence year 1 broke Zhenwu Army; the people of Sheng Prefecture all fled east of the river, and the prefecture was abolished.",
+          "idiomatic": "Taizu Shence year 1 stormed Zhenwu Army; Sheng Prefecture's people all fled to the east bank and the prefecture was abandoned.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "晉割代北來獻，復置。",
+          "literal": "Jin ceded the Dai north as tribute and it was restored.",
+          "idiomatic": "When Jin surrendered the Dai north it was re-established.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "兵事屬西南面招討司。",
+          "literal": "Military affairs belonged to the Southwest Pacification Office.",
+          "idiomatic": "Its military affairs came under the Southwest Pacification Office.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "統縣二：榆林縣。",
+          "literal": "It governed two counties: Yulin County.",
+          "idiomatic": "The prefecture administered two counties: Yulin County.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "manualTranslationImportedAt": "2026-06-28T07:45:28.114Z",
+      "manualTranslationPackets": [
+        "data/quality/repair-packets/manual-translations/liaoshi-041-repair-all.json"
+      ],
+      "reviewedAt": "2026-06-28T07:45:28.115Z",
+      "reviewer": "source-correspondence",
+      "appliedAt": "2026-06-28T07:45:28.258Z",
+      "appliedSummary": {
+        "id": "source-liaoshi-041-wikisource-70476747f749",
+        "type": "source_omission_candidate",
+        "start": 325,
+        "removed": 1,
+        "inserted": 10,
+        "delta": 9,
+        "manualTranslationsApplied": 10
+      }
     },
     {
       "id": "source-liaoshi-041-wikisource-9d24c425d7a7",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "liaoshi",
@@ -14512,12 +14747,178 @@
         "afterLocal": "定安縣。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "蔚州，忠順軍，上，節度。",
+          "literal": "Yu Prefecture, Zhongshun Army, upper grade, military commissioner.",
+          "idiomatic": "Yu Prefecture—Zhongshun Army, upper grade, with a military commissioner.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "《周職方》，并州川曰漚夷，在州境飛狐縣。",
+          "literal": "The Zhou \"Offices of the Realm\" records that Bing Province's river was called Ouyi, in Feihu County within the prefecture.",
+          "idiomatic": "The Zhou Offices of the Realm names Bing Province's river Ouyi, located in Feihu County within this prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "趙襄子滅代，武靈王置代郡；",
+          "literal": "Zhao Xiangzi destroyed Dai; King Wuling of Zhao established Dai Commandery;",
+          "idiomatic": "Zhao Xiangzi destroyed Dai; King Wuling of Zhao founded Dai Commandery;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "項羽徙趙歇為代王，歇還趙，立陳余王代；",
+          "literal": "Xiang Yu moved Zhao Xie to be king of Dai; Xie returned to Zhao and Chen Yu was made king of Dai;",
+          "idiomatic": "Xiang Yu installed Zhao Xie as king of Dai; Xie returned to Zhao and Chen Yu was enthroned as king of Dai;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "漢韓信斬余，復置代郡；",
+          "literal": "Han's Han Xin slew Yu and restored Dai Commandery;",
+          "idiomatic": "Han Xin of Han killed Yu and re-established Dai Commandery;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "文帝初封代；",
+          "literal": "Emperor Wen at first enfeoffed Dai here;",
+          "idiomatic": "Emperor Wen first enfeoffed Dai here;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "皆此地。",
+          "literal": "all these events concern this place.",
+          "idiomatic": "all these events took place here.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "周宣帝始置蔚州，隋開皇中廢。",
+          "literal": "Emperor Xuan of Zhou first established Yu Prefecture; Sui Kaihuang abolished it.",
+          "idiomatic": "Emperor Xuan of Zhou first founded Yu Prefecture; Sui Kaihuang abolished it.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "唐武德四年復置。",
+          "literal": "Tang Wude year 4 restored it.",
+          "idiomatic": "Tang Wude year 4 re-established it.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "至德二年改興唐縣。",
+          "literal": "Zhide year 2 changed it to Xingtang County.",
+          "idiomatic": "Zhide year 2 it was renamed Xingtang County.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "乾元元年仍舊。",
+          "literal": "Qianyuan year 1 restored the former name.",
+          "idiomatic": "Qianyuan year 1 it reverted to the former arrangement.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "大中中，朱邪執宜為刺史，有功，賜姓名李國昌。",
+          "literal": "In the Dazhong era Zhuye Zhiyi served as prefect, merited reward, and was granted the surname and personal name Li Guochang.",
+          "idiomatic": "In the Dazhong era Zhuye Zhiyi was prefect; for his service he was granted the surname and name Li Guochang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "子克用乞為留後，僖宗不許。",
+          "literal": "His son Keyong petitioned to remain as acting commissioner; Emperor Xizong refused.",
+          "idiomatic": "His son Keyong asked to stay on as acting commissioner; Emperor Xizong refused.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "廣明初，攻敗國昌，代北無備，太祖來攻，克之，俘掠居民而去。",
+          "literal": "Early Guangming attackers defeated Guochang; the Dai north was undefended; Taizu came, seized it, and carried off the inhabitants.",
+          "idiomatic": "Early Guangming forces defeated Guochang; with the Dai north undefended, Taizu attacked, took it, and carried off the populace.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "石晉獻地，升忠順軍，後更武安軍。",
+          "literal": "Later Jin ceded the territory; it was raised to Zhongshun Army, later changed to Wu'an Army.",
+          "idiomatic": "Later Jin surrendered the territory; it was promoted to Zhongshun Army and later renamed Wu'an Army.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "統和四年入宋，尋復之，降刺史，隸奉聖州，升觀察，復忠順軍節度。",
+          "literal": "Tonghe year 4 it fell to Song, was soon recovered, reduced to a prefect, subordinated to Fengsheng Prefecture, raised to surveillance commissioner, and restored as Zhongshun Army command.",
+          "idiomatic": "Tonghe year 4 it briefly fell to Song but was soon recovered; it was reduced to a prefect, placed under Fengsheng Prefecture, raised to surveillance commissioner, and restored as Zhongshun Army command.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "兵事屬西京都部署司。",
+          "literal": "Military affairs belonged to the Western Capital metropolitan deployment office.",
+          "idiomatic": "Its military affairs came under the Western Capital metropolitan deployment office.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "統縣五：靈仙縣。",
+          "literal": "It governed five counties: Lingxian County.",
+          "idiomatic": "The prefecture administered five counties: Lingxian County.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "唐置興唐縣，梁改隆化縣，後唐同光初復置，晉改今名。",
+          "literal": "Tang established Xingtang County; Liang changed it to Longhua County; early Later Tang Tongguang restored it; Jin changed to the present name.",
+          "idiomatic": "Tang founded Xingtang County; Liang renamed it Longhua County; early Later Tang Tongguang restored it; Jin gave it the present name.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "戶二萬。",
+          "literal": "Twenty thousand households.",
+          "idiomatic": "Twenty thousand registered households.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "acceptedSourceText": "蔚州，忠順軍，上，節度。《周職方》，并州川曰漚夷，在州境飛狐縣。趙襄子滅代，武靈王置代郡；項羽徙趙歇為代王，歇還趙，立陳余王代；漢韓信斬余，復置代郡；文帝初封代；皆此地。周宣帝始置蔚州，隋開皇中廢。唐武德四年復置。至德二年改興唐縣。乾元元年仍舊。大中中，朱邪執宜為刺史，有功，賜姓名李國昌。子克用乞為留後，僖宗不許。廣明初，攻敗國昌，代北無備，太祖來攻，克之，俘掠居民而去。石晉獻地，升忠順軍，後更武安軍。統和四年入宋，尋復之，降刺史，隸奉聖州，升觀察，復忠順軍節度。兵事屬西京都部署司。統縣五：靈仙縣。唐置興唐縣，梁改隆化縣，後唐同光初復置，晉改今名。戶二萬。",
+      "acceptedSourceCorrections": [
+        {
+          "index": 11,
+          "from": "大中從，朱邪執宜為刺史，有功，賜姓名李國昌。",
+          "to": "大中中，朱邪執宜為刺史，有功，賜姓名李國昌。"
+        }
+      ],
+      "manualTranslationImportedAt": "2026-06-28T07:45:27.812Z",
+      "manualTranslationPackets": [
+        "data/quality/repair-packets/manual-translations/liaoshi-041-repair-all.json"
+      ],
+      "reviewedAt": "2026-06-28T07:45:27.813Z",
+      "reviewer": "source-correspondence",
+      "appliedAt": "2026-06-28T07:45:27.950Z",
+      "appliedSummary": {
+        "id": "source-liaoshi-041-wikisource-9d24c425d7a7",
+        "type": "source_omission_candidate",
+        "start": 54,
+        "removed": 0,
+        "inserted": 20,
+        "delta": 20,
+        "manualTranslationsApplied": 20
+      }
     },
     {
       "id": "source-liaoshi-041-wikisource-ddbe931a91f7",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.049,
@@ -14534,34 +14935,140 @@
         "ids": [],
         "locations": []
       },
-      "localRange": {
-        "startIndex": 270,
-        "endIndex": 270,
-        "count": 1,
-        "text": "統州一、縣三：",
-        "ids": [
-          "s0271"
-        ],
-        "locations": [
-          {
-            "blockIndex": 31,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 12,
-            "field": "zh",
-            "id": "s0271"
-          }
-        ]
-      },
+      "localRange": null,
       "context": {
         "beforeSource": "兵事屬西京都部署司。",
         "afterSource": "馬邑縣。",
-        "beforeLocal": "兵事屬西京都部署司。",
+        "beforeLocal": "統州一、縣三：",
         "afterLocal": "馬邑縣。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "鄯陽縣。",
+          "literal": "Zhaoyang County.",
+          "idiomatic": "Zhaoyang County.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "本漢定襄縣地。",
+          "literal": "Originally Han Dingxiang County land.",
+          "idiomatic": "It was originally Han Dingxiang County.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "建安中置新興郡。",
+          "literal": "Jian'an era established Xinxing Commandery.",
+          "idiomatic": "The Jian'an period founded Xinxing Commandery.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "元魏置桑乾郡。",
+          "literal": "Northern Wei established Sanggan Commandery.",
+          "idiomatic": "Northern Wei created Sanggan Commandery.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "高齊置招遠縣，郡仍舊。",
+          "literal": "Northern Qi established Zhaoyuan County; the commandery remained as before.",
+          "idiomatic": "Northern Qi founded Zhaoyuan County while keeping the commandery unchanged.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "隋開皇三年罷郡，隸朔州。",
+          "literal": "Sui Kaihuang year 3 abolished the commandery; it was subordinated to Shuo Prefecture.",
+          "idiomatic": "Sui Kaihuang year 3 removed the commandery and placed it under Shuo Prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "大業元年初名鄯陽縣，遼因之。",
+          "literal": "In the first year of Daye it was first named Zhaoyang County; Liao followed this.",
+          "idiomatic": "Daye year 1 it was first called Zhaoyang County; Liao kept the name.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "戶四千。",
+          "literal": "Four thousand households.",
+          "idiomatic": "Four thousand registered households.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "寧遠縣。",
+          "literal": "Ningyuan County.",
+          "idiomatic": "Ningyuan County.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "齊天保六年，於朔州西置招遠縣。",
+          "literal": "Northern Qi Tianbao year 6 established Zhaoyuan County west of Shuo Prefecture.",
+          "idiomatic": "Northern Qi Tianbao year 6 founded Zhaoyuan County west of Shuo Prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "唐乾元元年改今名，遼因之。",
+          "literal": "Tang Qianyuan year 1 changed to the present name; Liao followed this.",
+          "idiomatic": "Tang Qianyuan year 1 it received the present name; Liao kept it.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "有寧遠鎮。",
+          "literal": "There is Ningyuan Fort.",
+          "idiomatic": "It has Ningyuan Fort.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "東至朔州八十里。",
+          "literal": "Eighty li east to Shuo Prefecture.",
+          "idiomatic": "It lay eighty li east of Shuo Prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "戶二千。",
+          "literal": "Two thousand households.",
+          "idiomatic": "Two thousand registered households.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "acceptedSourceText": "鄯陽縣。本漢定襄縣地。建安中置新興郡。元魏置桑乾郡。高齊置招遠縣，郡仍舊。隋開皇三年罷郡，隸朔州。大業元年初名鄯陽縣，遼因之。戶四千。寧遠縣。齊天保六年，於朔州西置招遠縣。唐乾元元年改今名，遼因之。有寧遠鎮。東至朔州八十里。戶二千。",
+      "acceptedSourceCorrections": [
+        {
+          "index": 0,
+          "from": "統州一、縣三：鄯陽縣。",
+          "to": "鄯陽縣。"
+        }
+      ],
+      "manualTranslationImportedAt": "2026-06-28T07:45:52.934Z",
+      "manualTranslationPackets": [
+        "data/quality/repair-packets/manual-translations/liaoshi-041-repair-all.json"
+      ],
+      "reviewedAt": "2026-06-28T07:45:52.935Z",
+      "reviewer": "source-correspondence",
+      "appliedAt": "2026-06-28T07:45:53.116Z",
+      "appliedSummary": {
+        "id": "source-liaoshi-041-wikisource-ddbe931a91f7",
+        "type": "source_omission_candidate",
+        "start": 309,
+        "removed": 0,
+        "inserted": 14,
+        "delta": 14,
+        "manualTranslationsApplied": 14
+      }
     },
     {
       "id": "source-liaoshi-042-wikisource-1a7cb906c521",
@@ -15150,7 +15657,7 @@
     },
     {
       "id": "source-liaoshi-044-wikisource-5e20d9eb00d8",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.068,
@@ -15202,12 +15709,89 @@
         "afterLocal": "《周官》契壺氏，懸壺必爨之以火。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "歷代儀象表漏，各具於誌。",
+          "literal": "Calendrical instruments, armillary spheres, gnomons, and clepsydrae of successive dynasties are each set out in their respective treatises.",
+          "idiomatic": "The calendrical instruments, armillary spheres, gnomons, and clepsydrae of successive dynasties are each recorded in their own treatises.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "太宗大同元年，得晉歷象、刻漏、渾象。",
+          "literal": "In Taizong's first year of Datong, Jin calendrical instruments, a clepsydra, and an armillary sphere were obtained.",
+          "idiomatic": "In the first year of Datong under Emperor Taizong, the Liao obtained the Jin dynasty's calendrical instruments, water clock, and armillary sphere.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "後唐清泰二年已稱損折不可施用，其至中京者概可知矣。",
+          "literal": "By the second year of Qingtai of Later Tang they were already said to be damaged and broken beyond use; what reached the Central Capital may be generally known.",
+          "idiomatic": "By the second Qingtai year of the Later Tang they were already reported damaged and unusable; what had reached the Central Capital can be inferred well enough.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "古之煉銅，黑黃白青之氣盡，然後用之，故可施久遠。",
+          "literal": "In ancient smelting of bronze, when the black, yellow, white, and green vapors were all spent, then it was used; therefore it could serve for long ages.",
+          "idiomatic": "In antiquity bronze was not put to use until smelting had driven off the black, yellow, white, and green vapors, and so it could last for generations.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "唐沙門一行鑄渾天儀，時稱精妙，未幾銅鐵漸澀，不能自轉，置不復用。",
+          "literal": "The Tang monk Yixing cast a celestial globe; at the time it was praised as ingenious, but before long bronze and iron gradually grew stiff and could not turn by themselves, and it was set aside and not used again.",
+          "idiomatic": "The Tang monk Yixing cast a celestial globe that was hailed at the time for its finesse, but soon its bronze and iron parts stiffened and would no longer turn; it was abandoned.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "金質不精，水性不行，況移之沍寒之地乎！",
+          "literal": "If the quality of metal is poor and water's motion will not run, how much more if it is moved to a land of frozen cold!",
+          "idiomatic": "When the metal is impure and water cannot flow freely, how much less can such devices work if moved to a land of bitter frost!",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "○刻漏",
+          "literal": "○ Clepsydra",
+          "idiomatic": "○ Water Clocks",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "晉天福三年造。",
+          "literal": "Made in the third year of Tianfu of Jin.",
+          "idiomatic": "It was built in the third Tianfu year of the Later Jin.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "○刻漏晉天福三年造。",
+          "literal": "○ Clepsydra: made in the third year of Tianfu of Jin.",
+          "idiomatic": "○ Water Clocks — built in the third Tianfu year of the Later Jin.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T07:49:46.562Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T07:49:46.564Z",
+      "appliedSummary": {
+        "id": "source-liaoshi-044-wikisource-5e20d9eb00d8",
+        "type": "source_omission_candidate",
+        "start": 32,
+        "removed": 2,
+        "inserted": 7,
+        "delta": 5,
+        "manualTranslationsApplied": 7
+      }
     },
     {
       "id": "source-liaoshi-044-wikisource-c0d30e26faa0",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.11,
@@ -15250,8 +15834,64 @@
         "afterLocal": "高麗所進《大遼事跡》載諸王冊文，頗見月朔，因附入。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "（見書568－677頁有表）",
+          "literal": "(See the book, pages 568–677, which contain tables.)",
+          "idiomatic": "(Tables appear on pages 568–677 of the printed edition.)",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "〈（見書568－677頁有表）〉",
+          "literal": "(See the book, pages 568–677, which contain tables.)",
+          "idiomatic": "(Tables appear on pages 568–677 of the printed edition.)",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "宋元豐元年十二月，詔司天監考遼及高麗、日本國歷與《奉元曆》同異。",
+          "literal": "In the twelfth month of the first year of Yuanfeng of Song, an edict ordered the Directorate of Astronomy to examine the calendars of Liao, Goryeo, and Japan for agreement or difference with the 《Fengyuan Calendar》.",
+          "idiomatic": "In the twelfth month of Song Yuanfeng 1, an edict ordered the Directorate of Astronomy to compare the calendars of Liao, Goryeo, and Japan with the 《Fengyuan Calendar》.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "遼己未歲氣朔與《宣明曆》合，日本戊午歲與遼歷相近，高麗戊午年朔與《奉元曆》合，氣有不同。",
+          "literal": "Liao's jiwei year qi and new moon agreed with the 《Xuanming Calendar》; Japan's wuwu year was close to the Liao calendar; Goryeo's wuwu-year new moon agreed with the 《Fengyuan Calendar》, but qi differed.",
+          "idiomatic": "In Liao's jiwei year the qi and new-moon dates matched the 《Xuanming Calendar》; Japan's wuwu year was close to the Liao calendar; Goryeo's wuwu-year new moon matched the 《Fengyuan Calendar》, though the qi dates differed.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "戊午，遼大康四年，己未，五年也。",
+          "literal": "Wuwu was Liao's fourth year of Dakang; jiwei was the fifth year.",
+          "idiomatic": "Wuwu was the fourth Dakang year of Liao, and jiwei the fifth.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "當遼、宋之世，二國司天固相參考矣。",
+          "literal": "In the age of Liao and Song, the two states' astronomical offices certainly consulted one another.",
+          "idiomatic": "During the Liao and Song period, the two courts' astronomical offices plainly cross-checked one another.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T07:49:46.708Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T07:49:46.710Z",
+      "appliedSummary": {
+        "id": "source-liaoshi-044-wikisource-c0d30e26faa0",
+        "type": "source_omission_candidate",
+        "start": 19,
+        "removed": 1,
+        "inserted": 5,
+        "delta": 4,
+        "manualTranslationsApplied": 5
+      }
     },
     {
       "id": "source-liaoshi-045-wikisource-0c2e13e0b55d",
@@ -24871,7 +25511,7 @@
     },
     {
       "id": "source-liaoshi-054-wikisource-773dfec95efe",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -24914,8 +25554,11 @@
         "afterLocal": "是夜，皇帝燕飲，用國樂。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource uses PUA abbreviation 角 for 角觝; local text already has the full standard form.",
+      "reviewedAt": "2026-06-28T11:23:49.069Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-liaoshi-054-wikisource-7fb5d786fd9d",
@@ -24970,7 +25613,7 @@
     },
     {
       "id": "source-liaoshi-054-wikisource-ab243c23c3d5",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -25013,12 +25656,15 @@
         "afterLocal": "散樂，以三音該三才之義，四聲調四時之氣，應十二管之數。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource uses PUA abbreviation 角 for 角觝; local text already has the full standard form.",
+      "reviewedAt": "2026-06-28T11:23:49.262Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-liaoshi-054-wikisource-cc1ed8969e48",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "liaoshi",
@@ -25042,12 +25688,174 @@
         "afterLocal": "冊皇太子儀：太子初入門，《貞安》之樂作。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Restored missing Tonghe-era empress dowager investiture ceremony text with manual translations.",
+      "manualTranslations": [
+        {
+          "zh": "聖宗統和元年，冊承天皇太后，設宮懸、簨虡，太樂工、協律郎入。",
+          "literal": "In the first year of Tonghe, Emperor Shengzong, at the investiture of Empress Dowager Chengtian, suspended bells and music frames were set up; musicians of the Grand Music Office and pitch-tuning officers entered.",
+          "idiomatic": "In the first year of Tonghe, at the investiture of Empress Dowager Chengtian, full suspended bells and music frames were installed; musicians of the Grand Music Office and pitch-tuning officers took their places.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "太后儀衛動，舉麾，《太和》樂作；",
+          "literal": "When the empress dowager's guards moved, the baton was raised and the music Taihe sounded;",
+          "idiomatic": "When the empress dowager's guards moved, the baton was raised and the music Taihe began;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "太樂令、太常卿導引升御坐，簾卷，樂止。",
+          "literal": "the Director of Music and the Director of the Court of Imperial Sacrifices led her up to the imperial seat, the curtains were raised, and the music ceased.",
+          "idiomatic": "the Director of Music and the Director of the Court of Imperial Sacrifices led her up to the throne, the curtains were raised, and the music ceased.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "文武三品以上入，《舒和》樂作；",
+          "literal": "Civil and military officials of the third rank and above entered; the music Shuhe sounded;",
+          "idiomatic": "Civil and military officials of the third rank and above entered; the music Shuhe sounded;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "至位，樂止。",
+          "literal": "when they reached their places, the music ceased.",
+          "idiomatic": "when they reached their places, the music ceased.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "皇帝入門，《雍和》樂作；",
+          "literal": "The emperor entered the gate; the music Yonghe sounded;",
+          "idiomatic": "The emperor entered the gate; the music Yonghe sounded;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "至殿前位，樂止。",
+          "literal": "when he reached his place before the hall, the music ceased.",
+          "idiomatic": "when he reached his place before the hall, the music ceased.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "宰相押冊，皇帝隨冊，樂作；",
+          "literal": "The chief minister escorted the register, the emperor followed the register, music sounded;",
+          "idiomatic": "The chief minister escorted the document of investiture, the emperor followed the register, and music sounded;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "至殿前置冊於案，樂止。",
+          "literal": "when the register was placed on the table before the hall, the music ceased.",
+          "idiomatic": "when the document was set on the table before the hall, the music ceased.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "翰林學士、大將軍舁冊，樂作；",
+          "literal": "Hanlin academicians and the grand general bore the register, music sounded;",
+          "idiomatic": "Hanlin academicians and the grand general bore the register, music sounded;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "置御坐前，樂止。",
+          "literal": "when it was set before the imperial seat, the music ceased.",
+          "idiomatic": "when it was set before the throne, the music ceased.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "丞相上殿，樂作；",
+          "literal": "The chief counselor ascended the hall, music sounded;",
+          "idiomatic": "The chief counselor ascended the hall, music sounded;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "至讀冊位，樂止。",
+          "literal": "when he reached the place for reading the register, the music ceased.",
+          "idiomatic": "when he reached the place for reading the register, the music ceased.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "皇帝下殿，樂作；",
+          "literal": "The emperor descended from the hall, music sounded;",
+          "idiomatic": "The emperor descended from the hall, music sounded;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "至位，樂止。",
+          "literal": "when he reached his place, the music ceased.",
+          "idiomatic": "when he reached his place, the music ceased.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "太后宣答訖，樂作；",
+          "literal": "When the empress dowager had finished her proclamation and response, music sounded;",
+          "idiomatic": "When the empress dowager had finished her proclamation and response, music sounded;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "皇帝至西閣，樂止。",
+          "literal": "when the emperor reached the west side chamber, the music ceased.",
+          "idiomatic": "when the emperor reached the west side chamber, the music ceased.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "親王、丞相上殿，樂作；",
+          "literal": "Princes and the chief counselor ascended the hall, music sounded;",
+          "idiomatic": "Princes and the chief counselor ascended the hall, music sounded;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "退班出，樂止。",
+          "literal": "when they withdrew from the ranks and departed, the music ceased.",
+          "idiomatic": "when they withdrew from the ranks and departed, the music ceased.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "下簾，樂作；",
+          "literal": "The curtains were lowered, music sounded;",
+          "idiomatic": "The curtains were lowered, music sounded;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "皇太后入內，樂止。",
+          "literal": "when the empress dowager entered the inner quarters, the music ceased.",
+          "idiomatic": "when the empress dowager entered the inner quarters, the music ceased.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "acceptedSourceText": "聖宗統和元年，冊承天皇太后，設宮懸、簨虡，太樂工、協律郎入。太后儀衛動，舉麾，《太和》樂作；太樂令、太常卿導引升御坐，簾卷，樂止。文武三品以上入，《舒和》樂作；至位，樂止。皇帝入門，《雍和》樂作；至殿前位，樂止。宰相押冊，皇帝隨冊，樂作；至殿前置冊於案，樂止。翰林學士、大將軍舁冊，樂作；置御坐前，樂止。丞相上殿，樂作；至讀冊位，樂止。皇帝下殿，樂作；至位，樂止。太后宣答訖，樂作；皇帝至西閣，樂止。親王、丞相上殿，樂作；退班出，樂止。下簾，樂作；皇太后入內，樂止。",
+      "reviewedAt": "2026-06-28T11:23:45.079Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T11:23:45.435Z",
+      "appliedSummary": {
+        "id": "source-liaoshi-054-wikisource-cc1ed8969e48",
+        "type": "source_omission_candidate",
+        "start": 48,
+        "removed": 0,
+        "inserted": 21,
+        "delta": 21,
+        "manualTranslationsApplied": 21
+      }
     },
     {
       "id": "source-liaoshi-054-wikisource-fd892564147e",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "liaoshi",
@@ -25071,8 +25879,44 @@
         "afterLocal": "聖宗太平元年，尊號冊禮，設宮懸於殿庭，舉麾位在殿第三重西階之上，協律郎各人就舉麾位，太常博士引太常卿，太常卿引皇帝。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Restored missing upstream ritual-music text with manual translations.",
+      "manualTranslations": [
+        {
+          "zh": "自漢以後，相承雅樂，有古《頌》焉，有古《大雅》焉。",
+          "literal": "From Han onward, court ritual music was inherited in succession; there were the ancient Odes of Praise, and there were the ancient Greater Odes.",
+          "idiomatic": "From the Han dynasty onward, court ritual music was handed down in succession; it included the ancient Odes of Praise and the ancient Greater Odes.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "遼闕郊廟禮，無頌樂。",
+          "literal": "The Liao lacked suburban and temple rites, and had no eulogy music.",
+          "idiomatic": "The Liao lacked suburban altar and temple rites, and therefore had no eulogy music.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "大同元年，太宗自汴將還，得晉太常樂譜、宮懸、樂架，委所司先赴中京。",
+          "literal": "In the first year of Datong, as Emperor Taizong was about to return from Bian, he obtained the Jin Court of Imperial Sacrifices music score, suspended bells, and music stands, ordering the responsible offices to send them first to the Central Capital.",
+          "idiomatic": "In the first year of Datong, as Emperor Taizong was preparing to return from Bian, he obtained the Jin dynasty's Court of Imperial Sacrifices music score, suspended bells, and music stands, and ordered the responsible offices to dispatch them first to the Central Capital.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "acceptedSourceText": "自漢以後，相承雅樂，有古《頌》焉，有古《大雅》焉。遼闕郊廟禮，無頌樂。大同元年，太宗自汴將還，得晉太常樂譜、宮懸、樂架，委所司先赴中京。",
+      "reviewedAt": "2026-06-28T11:23:11.064Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T11:23:11.215Z",
+      "appliedSummary": {
+        "id": "source-liaoshi-054-wikisource-fd892564147e",
+        "type": "source_omission_candidate",
+        "start": 28,
+        "removed": 0,
+        "inserted": 3,
+        "delta": 3,
+        "manualTranslationsApplied": 3
+      }
     },
     {
       "id": "source-liaoshi-055-wikisource-8102197dc989",
@@ -25790,7 +26634,7 @@
     },
     {
       "id": "source-liaoshi-057-wikisource-80ce802e9b1c",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.067,
@@ -25842,8 +26686,75 @@
         "afterLocal": "傳國寶，秦始皇作，用藍玉，螭紐，六面，其正面文「受命於天，既壽永昌」，魚鳥篆，子嬰以上漢高祖。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "__TOC__◎儀衛誌三",
+          "literal": "Ceremonial Guards Treatise, Part Three",
+          "idiomatic": "Ceremonial Guards, Part Three",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "（符印）",
+          "literal": "(Seals and Imprints)",
+          "idiomatic": "(Seals and Imprints)",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "遙輦氏之世，受印於回鶻。",
+          "literal": "In the age of the Yaonian clan, they received seals from the Uighurs.",
+          "idiomatic": "In the era of the Yaonian clan, the Khitan received seals from the Uighurs.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "至耶瀾可汗請印於唐，武宗始賜「奉國契丹印」。",
+          "literal": "When Yelang Khan requested a seal from Tang, Emperor Wuzong first bestowed the \"Khitan Seal of Service to the State.\"",
+          "idiomatic": "Under Khan Yelang, when a seal was requested from Tang, Emperor Wuzong first granted the \"Khitan Seal of Service to the State.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "太祖神冊元年，梁幽州刺史來歸，詔賜印綬。",
+          "literal": "In the first year of Shence, when the military governor of Youzhou in Liang came to submit, an edict bestowed a seal and cord.",
+          "idiomatic": "In the first year of the Shence era (916), when the military governor of Youzhou in Liang came to submit, an edict bestowed a seal and investiture cord.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "是時，太祖受位遙輦十年矣。",
+          "literal": "At that time, Emperor Taizu had already held the Yaonian throne for ten years.",
+          "idiomatic": "By then Emperor Taizu had already held the Yaonian throne for ten years.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "會同九年，太宗伐晉，末帝表上傳國寶一、金印三，天子符瑞於是歸遼。",
+          "literal": "In the ninth year of Huitong, Emperor Taizong campaigned against Jin; the last emperor presented by memorial one transmission seal and three gold seals, and the Son of Heaven's talismans and treasures then passed to Liao.",
+          "idiomatic": "In the ninth year of the Huitong era (942), when Emperor Taizong campaigned against Jin, the last Jin emperor presented by memorial one imperial transmission seal and three gold seals, and the Son of Heaven's talismans and regalia then passed to Liao.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "manualTranslationImportedAt": "2026-06-28T07:52:28.063Z",
+      "manualTranslationPackets": [
+        "data/quality/repair-packets/manual-translations/20260628T075127Z-liaoshi-057-80ce802e9b1c.json"
+      ],
+      "reviewedAt": "2026-06-28T07:52:28.064Z",
+      "reviewer": "source-correspondence",
+      "appliedAt": "2026-06-28T07:52:31.382Z",
+      "appliedSummary": {
+        "id": "source-liaoshi-057-wikisource-80ce802e9b1c",
+        "type": "source_omission_candidate",
+        "start": 0,
+        "removed": 2,
+        "inserted": 7,
+        "delta": 5,
+        "manualTranslationsApplied": 7
+      }
     },
     {
       "id": "source-liaoshi-057-wikisource-8eda6a291b4a",
@@ -38863,7 +39774,7 @@
     },
     {
       "id": "source-liaoshi-082-wikisource-0ed72db288ec",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "liaoshi",
@@ -38887,12 +39798,180 @@
         "afterLocal": "武白，不知何郡人。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "耶律勃古哲，字蒲奴隱，六院夷離堇蒲古只之後。",
+          "literal": "Yelu Boguzhe, style name Punuyin, was a descendant of Chancellery Commissioner Puguzhi of the Six Yuan.",
+          "idiomatic": "Yelu Boguzhe, whose style name was Punuyin, was a descendant of Puguzhi, Chancellery Commissioner of the Six Yuan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "勇悍，善治生。",
+          "literal": "Brave and fierce, skilled at managing livelihood.",
+          "idiomatic": "Brave and fierce, he was skilled at managing livelihood.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "保寧中，為天德軍節度使，歷南京侍衛馬步軍都指揮使。",
+          "literal": "During Baoning he served as Tiande Army Military Commissioner and successively as Nanjing Palace Guard Cavalry and Infantry Commander-in-Chief.",
+          "idiomatic": "During Baoning he served as Tiande Army Military Commissioner and then as Nanjing Commander of the Palace Guard Cavalry and Infantry.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "以討平党項羌阿理撒米、仆裏鱉米，遷南院大王。",
+          "literal": "For suppressing and pacifying the Tangut chiefs Ali Sami and Pulibie Mi, he was transferred to Southern Chancellery Grand Prince.",
+          "idiomatic": "For suppressing the Tangut chiefs Ali Sami and Pulibie Mi, he was promoted to Grand Prince of the Southern Chancellery.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "聖宗即位，太后稱制，會群臣議軍國事，勃古哲上疏陳便宜數事，稱旨，即日兼領山西路諸州事。",
+          "literal": "When Emperor Shengzong succeeded, the empress dowager held regency; at a gathering of ministers to deliberate on military and state affairs, Boguzhe submitted a memorial setting forth several expedient measures; it accorded with the imperial intent, and that same day he was given concurrent charge of the western-circuit prefectures of Shanxi.",
+          "idiomatic": "When Emperor Shengzong succeeded and the empress dowager assumed regency, ministers met to deliberate on military and state affairs. Boguzhe submitted a memorial with several expedient proposals; it pleased the throne, and that same day he was given concurrent charge of the western-circuit prefectures of Shanxi.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "統和四年，宋將曹彬等侵燕，勃古哲擊之甚力，賜輸忠保節致主功臣，總知山西五州。",
+          "literal": "In the fourth year of Tonghe, when Song generals led by Cao Bin invaded Yan, Boguzhe struck them with great force; he was granted the merit title of Loyal Submission, Integrity Preservation, and Sovereign Service, and given overall charge of the five Shanxi prefectures.",
+          "idiomatic": "In the fourth year of Tonghe, when Song generals led by Cao Bin invaded Yan, Boguzhe struck them hard. He received the merit title of Loyal Submission, Integrity Preservation, and Sovereign Service and was given overall charge of the five Shanxi prefectures.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "會有告勃古哲曲法虐民者，按之有狀，以大杖決之。",
+          "literal": "When someone reported that Boguzhe had bent the law and abused the people, investigation found grounds; he was punished with the great staff.",
+          "idiomatic": "When someone reported that Boguzhe had bent the law and abused the people, investigation found grounds, and he was beaten with the great staff.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "八年，為南京統軍使，卒。",
+          "literal": "In the eighth year he became Nanjing Grand General and died.",
+          "idiomatic": "In the eighth year he became Nanjing Grand General and died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "子爻裏，官至詳穩。",
+          "literal": "His son Yaoli ultimately rose to detailed commandant.",
+          "idiomatic": "His son Yaoli rose to detailed commandant.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "蕭陽阿，字稍隱。",
+          "literal": "Xiao Yanga, style name Shaoyin.",
+          "idiomatic": "Xiao Yanga, whose style name was Shaoyin.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "端毅簡嚴，識遼、漢字，通天文、相法。",
+          "literal": "Upright, resolute, concise, and stern, he knew Khitan and Chinese characters and was versed in astronomy and physiognomy.",
+          "idiomatic": "Upright, resolute, concise, and stern, he knew Khitan and Chinese script and was versed in astronomy and physiognomy.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "父卒，自五蕃部親挽喪車至奚王嶺，人稱其孝。",
+          "literal": "When his father died, he personally drew the funeral cart from the Five Fan tribes to Xiwang Ridge; people praised his filial piety.",
+          "idiomatic": "When his father died, he personally drew the funeral cart from the Five Fan tribes to Xiwang Ridge, and people praised his filial devotion.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "年十九，為本班郎君。",
+          "literal": "At nineteen he became an attendant of his corps.",
+          "idiomatic": "At nineteen he became an attendant of his corps.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "歷鐵林、鐵鷂、大鷹三軍詳穩。",
+          "literal": "He successively served as detailed commandant of the Iron Forest, Iron Hawk, and Great Hawk armies.",
+          "idiomatic": "He served in turn as detailed commandant of the Iron Forest, Iron Hawk, and Great Hawk armies.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "乾統元年，由烏古敵烈部屯田太保為易州刺史。",
+          "literal": "In the first year of Qiantong he went from Grand Guardian of the Ugu and Dilie Tribal Garrisons to prefect of Yi Prefecture.",
+          "idiomatic": "In the first year of Qiantong he went from Grand Guardian of the Ugu and Dilie tribal garrisons to prefect of Yi Prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "幸臣劉彥良嘗以事至州，怙寵恣橫，為陽阿所沮。",
+          "literal": "The favored minister Liu Yanliang once came to the prefecture on business and, relying on favor, acted wantonly; Yanga blocked him.",
+          "idiomatic": "The favored minister Liu Yanliang once came to the prefecture on business and, relying on imperial favor, acted wantonly; Yanga blocked him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "彥良歸，妄加毀訾，尋遣人代陽阿。",
+          "literal": "Yanliang returned and slandered him without cause; before long someone was sent to replace Yanga.",
+          "idiomatic": "Yanliang returned and slandered him without cause; before long an envoy was sent to replace Yanga.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "州民千餘詣闕請留，即日授武安州觀察使。",
+          "literal": "More than a thousand people of the prefecture went to court requesting that he remain; that same day he was appointed Observation Commissioner of Wu'an Prefecture.",
+          "idiomatic": "More than a thousand people of the prefecture went to court asking that he remain, and that same day he was appointed Observation Commissioner of Wu'an Prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "歷烏古涅裏、順義、彰信等軍節度使，權知東北路統軍使事。",
+          "literal": "He successively served as military commissioner of the Wugu Nieli, Shunyi, and Zhangxin armies and was given provisional charge of Northeast Route grand general affairs.",
+          "idiomatic": "He served in turn as military commissioner of the Wugu Nieli, Shunyi, and Zhangxin armies and was given provisional charge of Northeast Route grand general affairs.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "聞耶律狼不、鐸魯斡等叛，獨引麾下三十餘人追捕之，身被二創，生擒十餘人，送之行在。",
+          "literal": "Hearing that Yelu Langbu, Duoluwo, and others had rebelled, he alone led more than thirty men under his command in pursuit; he received two wounds, captured more than ten men alive, and sent them to the imperial camp.",
+          "idiomatic": "Hearing that Yelu Langbu, Duoluwo, and others had rebelled, he alone led a little more than thirty men in pursuit. He received two wounds, captured more than ten men alive, and sent them to the imperial camp.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "坐不獲首惡，免官。",
+          "literal": "Because he failed to capture the chief culprit, he was dismissed from office.",
+          "idiomatic": "Because he failed to capture the chief culprit, he was dismissed from office.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "未幾，權南京留守，卒。",
+          "literal": "Before long he served provisionally as Nanjing Military Governor and died.",
+          "idiomatic": "Before long he served provisionally as Nanjing Military Governor and died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T07:58:57.652Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T07:58:57.654Z",
+      "appliedSummary": {
+        "id": "source-liaoshi-082-wikisource-0ed72db288ec",
+        "type": "source_omission_candidate",
+        "start": 92,
+        "removed": 0,
+        "inserted": 22,
+        "delta": 22,
+        "manualTranslationsApplied": 22
+      }
     },
     {
       "id": "source-liaoshi-082-wikisource-1874b011bb79",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "liaoshi",
@@ -38916,12 +39995,222 @@
         "afterLocal": "德威，性剛介，善馳射。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "景宗疾大漸，與耶律斜軫俱受顧命，立梁王為帝，皇后為皇太后，稱制。",
+          "literal": "When Emperor Jingzong fell gravely ill, together with Yelu Xiezhen he received the dying command, enthroned the Prince of Liang as emperor, made the empress empress dowager, and she assumed regency.",
+          "idiomatic": "When Emperor Jingzong fell gravely ill, he and Yelu Xiezhen together received the dying command: they enthroned the Prince of Liang, made the empress empress dowager, and she assumed regency.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "隆運總宿衛事，太后益寵任之。",
+          "literal": "Longyun took overall charge of palace guard affairs, and the empress dowager favored and trusted him all the more.",
+          "idiomatic": "Longyun took overall charge of the palace guards, and the empress dowager favored and trusted him all the more.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "統和元年，加開府儀同三司，兼政事令。",
+          "literal": "In the first year of Tonghe he was given the additional title Director of the Office with Peerage and made concurrent Administrator of Affairs.",
+          "idiomatic": "In the first year of the Tonghe era he was given the additional title Director of the Office with Peerage and made concurrent Administrator of Affairs.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "四年，宋遣曹彬、米信將十萬眾來侵，隆運從太后出師敗之，加守司空，封楚國公。",
+          "literal": "In the fourth year, Song sent Cao Bin and Mi Xin with a hundred thousand troops to invade; Longyun accompanied the empress dowager on campaign and defeated them; he was given the additional title Defender of the Minister of Works and enfeoffed as Duke of Chu.",
+          "idiomatic": "In the fourth year, when Song sent Cao Bin and Mi Xin with a hundred thousand men to invade, Longyun accompanied the empress dowager on campaign and routed them. He received the additional title Defender of the Minister of Works and was enfeoffed as Duke of Chu.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "師還，與北府宰相室昉共執國政。",
+          "literal": "When the army returned, together with Northern Chancellery Chancellor Shi Fang he jointly held state affairs.",
+          "idiomatic": "After the army returned, he and Northern Chancellery Chancellor Shi Fang jointly directed state affairs.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "上言山西四州數被兵，加以歲饑，宜輕稅賦以來流民，從之。",
+          "literal": "He memorialized that the four prefectures of Shanxi had repeatedly suffered warfare and, with famine added, taxes and levies should be lightened to draw back displaced people; the proposal was approved.",
+          "idiomatic": "He memorialized that the four Shanxi prefectures had repeatedly suffered warfare and, with famine added, taxes and levies should be lightened to draw back displaced people, and the court approved.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "六年，太后觀擊鞠，胡裏室突隆運墜馬，命立斬之。",
+          "literal": "In the sixth year, while the empress dowager watched cuju, Hu Lishi charged out and knocked Longyun from his horse; she ordered him beheaded on the spot.",
+          "idiomatic": "In the sixth year, while the empress dowager watched a cuju match, Hu Lishi charged out and knocked Longyun from his horse; she ordered him beheaded on the spot.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "詔率師伐宋，圍沙堆，敵乘夜來襲，隆運嚴軍以待，敗走之，封楚王。",
+          "literal": "By edict he led troops to campaign against Song and besieged Shadui; the enemy came in a night attack; Longyun kept the army strict and ready, defeated them and put them to flight, and was enfeoffed as Prince of Chu.",
+          "idiomatic": "Ordered to lead troops against Song, he besieged Shadui. When the enemy attacked by night, Longyun held the army in strict readiness, routed them, and was enfeoffed as Prince of Chu.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "九年，復言燕人挾奸，茍免賦役，貴族因為囊橐，可遣北院宣徽使趙智戒諭，從之。",
+          "literal": "In the ninth year he again memorialized that the people of Yan harbored malfeasance, sought to evade taxes and corvée, and the nobility used this as a purse; Northern Chancellery Palace Attendant Commissioner Zhao Zhi could be sent to admonish and instruct them; the proposal was approved.",
+          "idiomatic": "In the ninth year he again memorialized that people in Yan harbored malfeasance, sought to evade taxes and corvée, and the nobility profited from it; Northern Chancellery Palace Attendant Commissioner Zhao Zhi could be sent to admonish them, and the court approved.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "十一年，丁母憂，詔強起之。",
+          "literal": "In the eleventh year, when his mother's mourning period began, an edict forcibly recalled him to office.",
+          "idiomatic": "In the eleventh year, when he entered mourning for his mother, an edict forcibly recalled him to office.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "明年，室昉致政，以隆運代為北府宰相，仍領樞密使，監修國史，賜興化功臣。",
+          "literal": "The next year Shi Fang retired from office, and Longyun replaced him as Northern Chancellery Chancellor, still heading the Privy Council, supervising compilation of the national history, and was granted the merit title Xinghua.",
+          "idiomatic": "The following year Shi Fang retired, and Longyun replaced him as Northern Chancellery Chancellor while retaining the Privy Council, supervising compilation of the national history, and receiving the merit title Xinghua.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "十二年六月，奏三京諸鞫獄官吏，多因請托，曲加寬貸，或妄行搒掠，乞行禁止。",
+          "literal": "In the sixth month of the twelfth year he memorialized that judicial officers in the three capitals often, through patronage, bent cases to grant undue leniency or recklessly applied beating and plunder, and requested that this be forbidden.",
+          "idiomatic": "In the sixth month of the twelfth year he memorialized that judicial officers in the three capitals often, through patronage, bent cases to grant undue leniency or recklessly beat and plunder, and asked that this be forbidden.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "上可其奏。",
+          "literal": "The emperor approved the memorial.",
+          "idiomatic": "The emperor approved the memorial.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "又表請任賢去邪，太后喜曰：「進賢輔政，真大臣之職。」",
+          "literal": "He also memorialized requesting appointment of the worthy and removal of the corrupt; the empress dowager said with pleasure: \"To advance the worthy and assist governance is truly the duty of a great minister.\"",
+          "idiomatic": "He also memorialized requesting appointment of the worthy and removal of the corrupt. The empress dowager said with pleasure, \"To advance the worthy and assist governance is truly the duty of a great minister.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "優加賜賚。",
+          "literal": "He was especially favored with gifts and rewards.",
+          "idiomatic": "He received especially generous gifts and rewards.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "服闋，加守太保、兼政事令。",
+          "literal": "When mourning ended, he was given the additional titles Defender of the Grand Mentor and concurrent Administrator of Affairs.",
+          "idiomatic": "When mourning ended, he received the additional titles Defender of the Grand Mentor and concurrent Administrator of Affairs.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "會北院樞密使耶律斜軫薨，詔隆運兼之。",
+          "literal": "When Northern Chancellery Privy Councilor Yelu Xiezhen died, an edict made Longyun hold the post concurrently.",
+          "idiomatic": "When Northern Chancellery Privy Councilor Yelu Xiezhen died, an edict ordered Longyun to hold the post concurrently.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "久之，拜大丞相，進王齊，總二樞府事。",
+          "literal": "Before long he was appointed Grand Chancellor, advanced to Prince of Qi, and took overall charge of both privy councils.",
+          "idiomatic": "Before long he was appointed Grand Chancellor, advanced to Prince of Qi, and took overall charge of both privy councils.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "以南京、平州歲不登，奏免百姓農器錢，及請平諸郡商賈價，並從之。",
+          "literal": "Because Nanjing and Pingzhou had poor harvests, he memorialized to exempt the people from the farm-implement levy and requested standardization of merchant prices in the various commanderies; both were approved.",
+          "idiomatic": "Because Nanjing and Pingzhou had poor harvests, he memorialized to exempt the people from the farm-implement levy and requested standardization of merchant prices in the various commanderies; both were approved.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "二十二年，從太后南征，及河，許宋成而還。",
+          "literal": "In the twenty-second year he accompanied the empress dowager on the southern campaign; reaching the river, Song sued for peace and the army returned.",
+          "idiomatic": "In the twenty-second year he accompanied the empress dowager on the southern campaign; reaching the river, Song sued for peace and the army withdrew.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "徙王晉，賜姓，出宮籍，隸橫帳季父房後，乃改賜今名，位親王上，賜田宅及陪葬地。",
+          "literal": "He was transferred to Prince of Jin, granted the imperial surname, removed from the palace register, attached to the Horizontal-Banner Younger-Father house, then again granted his present name, ranked above the imperial princes, and given fields, residences, and burial land beside the imperial tombs.",
+          "idiomatic": "He was transferred to Prince of Jin, granted the imperial surname, removed from the palace register, and attached to the Horizontal-Banner Younger-Father house. He was then granted his present name, ranked above the imperial princes, and given fields, residences, and burial land beside the imperial tombs.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "從伐高麗還，得末疾，帝與後臨視醫藥。",
+          "literal": "Returning from the campaign against Goryeo, he contracted a terminal illness; the emperor and empress came in person to oversee his medical care.",
+          "idiomatic": "Returning from the campaign against Goryeo, he contracted a terminal illness; the emperor and empress came in person to oversee his medical care.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "薨，年七十一。",
+          "literal": "He died at seventy-one.",
+          "idiomatic": "He died at seventy-one.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "贈尚書令，謚文忠，官給葬具，建廟乾陵側。",
+          "literal": "Posthumously made Grand Preceptor of the Secretariat, given the posthumous title Wenzhong, supplied funeral goods by the state, and a temple was built beside Qianling.",
+          "idiomatic": "He was posthumously made Grand Preceptor of the Secretariat, given the posthumous title Wenzhong, supplied state funeral goods, and a temple was built beside Qianling.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "無子。",
+          "literal": "He had no sons.",
+          "idiomatic": "He had no sons.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "清寧三年，以魏王貼不子耶魯為嗣。",
+          "literal": "In the third year of Qingning, Tiebu's son Yelu of Prince of Wei was made his heir.",
+          "idiomatic": "In the third year of Qingning, Yelu, son of Prince of Wei Tiebu, was made his heir.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "天祚立，以皇子敖盧斡繼之。",
+          "literal": "When Tianzuo succeeded, Prince Aoluwo was made his successor.",
+          "idiomatic": "When Tianzuo succeeded, Prince Aoluwo was made his successor.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "弟德威，侄制心。",
+          "literal": "His younger brother was Dewei; his nephew was Zhixin.",
+          "idiomatic": "His younger brother was Dewei; his nephew was Zhixin.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T07:58:57.352Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T07:58:57.354Z",
+      "appliedSummary": {
+        "id": "source-liaoshi-082-wikisource-1874b011bb79",
+        "type": "source_omission_candidate",
+        "start": 16,
+        "removed": 0,
+        "inserted": 28,
+        "delta": 28,
+        "manualTranslationsApplied": 28
+      }
     },
     {
       "id": "source-liaoshi-082-wikisource-25e07113669b",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "liaoshi",
@@ -38945,12 +40234,89 @@
         "afterLocal": "滌魯神情秀徹，聖宗子視之，興宗待以兄禮，雖貴愈謙。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "滌魯，字遵寧。",
+          "literal": "Dilu, style name Zunning.",
+          "idiomatic": "Dilu, whose style name was Zunning.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "幼養宮中，授小將軍。",
+          "literal": "Raised in the palace in youth, he was appointed Junior General.",
+          "idiomatic": "Raised in the palace as a child, he was appointed Junior General.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "重熙初，歷北院宣徽使、右林牙、副點檢，拜惕隱，改西北路招討使，封漆水郡王，請減軍籍三千二百八十人。",
+          "literal": "At the beginning of Chongxi he successively served as Northern Chancellery Palace Attendant Commissioner, Right Linya, and Deputy Chief Inspector; was appointed Privy Councilor; was changed to Northwestern Frontier Pacification Commissioner; was enfeoffed as Prince of Qishui Commandery; and requested reduction of the military register by three thousand two hundred and eighty men.",
+          "idiomatic": "Early in the Chongxi era he served in turn as Northern Chancellery Palace Attendant Commissioner, Right Linya, and Deputy Chief Inspector, was appointed Privy Councilor, transferred to Northwestern Frontier Pacification Commissioner, enfeoffed as Prince of Qishui, and requested a reduction of three thousand two hundred and eighty men from the military register.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "後以私取回鶻使者獺毛裘，及私取阻卜貢物，事覺，決大杖，削爵免官。",
+          "literal": "Later, for privately taking an otter-fur coat from a Uyghur envoy and privately taking tribute goods from the Zubu, when the matter came to light he was punished with the great staff, stripped of his title, and dismissed from office.",
+          "idiomatic": "Later, for privately taking an otter-fur coat from a Uyghur envoy and privately taking Zubu tribute goods, when the matter came to light he was beaten with the great staff, stripped of his title, and dismissed from office.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "俄起為北院宣徽使。",
+          "literal": "Before long he was forcibly recalled as Northern Chancellery Palace Attendant Commissioner.",
+          "idiomatic": "Before long he was recalled to office as Northern Chancellery Palace Attendant Commissioner.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "十九年，改烏古敵烈部都詳穩，尋為東北路詳穩，封混同郡王。",
+          "literal": "In the nineteenth year he was changed to Chief Detailed Commandant of the Ugu and Dilie tribes; soon afterward he became Detailed Commandant of the Northeast Route and was enfeoffed as Prince of Huntong Commandery.",
+          "idiomatic": "In the nineteenth year he was made Chief Detailed Commandant of the Ugu and Dilie tribes; soon afterward he became Detailed Commandant of the Northeast Route and was enfeoffed as Prince of Huntong.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "清寧初，徙王鄧，擢拜南府宰相。",
+          "literal": "At the beginning of Qingning he was transferred to Prince of Deng and promoted to Southern Chancellery Chancellor.",
+          "idiomatic": "At the beginning of Qingning he was transferred to Prince of Deng and promoted to Southern Chancellery Chancellor.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "以年老乞骸骨，更王漢。",
+          "literal": "On grounds of age he requested retirement; his princedom was changed to Han.",
+          "idiomatic": "On grounds of age he requested retirement, and his title was changed to Prince of Han.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "大康中薨，年八十。",
+          "literal": "He died during Dakang at eighty.",
+          "idiomatic": "He died during the Dakang era at eighty.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T07:58:57.501Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T07:58:57.503Z",
+      "appliedSummary": {
+        "id": "source-liaoshi-082-wikisource-25e07113669b",
+        "type": "source_omission_candidate",
+        "start": 59,
+        "removed": 0,
+        "inserted": 9,
+        "delta": 9,
+        "manualTranslationsApplied": 9
+      }
     },
     {
       "id": "source-liaoshi-082-wikisource-3357559149ef",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "liaoshi",
@@ -38974,8 +40340,92 @@
         "afterLocal": "耶律虎古，字海鄰，六院夷離堇覿烈之孫。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "蕭常哥，字胡獨堇，國舅之族。",
+          "literal": "Xiao Changge, style name Hudujin, was of the imperial maternal uncle's clan.",
+          "idiomatic": "Xiao Changge, whose style name was Hudujin, was of the imperial maternal uncle's clan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "祖約直，同政事門下平章事，父實老，累官節度使。",
+          "literal": "His grandfather Yuezhi was Acting Administrator of Affairs Below the Gate; his father Shilao rose through repeated offices to military commissioner.",
+          "idiomatic": "His grandfather Yuezhi was Acting Administrator of Affairs Below the Gate; his father Shilao rose through successive posts to military commissioner.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "常哥魁偉寡言。",
+          "literal": "Changge was imposing in stature and sparing of speech.",
+          "idiomatic": "Changge was imposing in stature and sparing of speech.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "年三十餘，始為祗候郎君。",
+          "literal": "Only in his thirties did he first become an attendant gentleman.",
+          "idiomatic": "Not until his thirties did he first become an attendant gentleman.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "歷本族將軍、松山州刺史。",
+          "literal": "He successively served as general of his clan and prefect of Songshan Prefecture.",
+          "idiomatic": "He served in turn as general of his clan and prefect of Songshan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "壽隆二年，以女為燕王妃，拜永興宮使。",
+          "literal": "In the second year of Shoulong, because his daughter became Princess of Yan, he was appointed Commissioner of the Yongxing Palace.",
+          "idiomatic": "In the second year of Shoulong, when his daughter became Princess of Yan, he was appointed Commissioner of the Yongxing Palace.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "及妃生子，為南院宣徽使，尋改漢人行宮都部署。",
+          "literal": "When the princess bore a son, he became Southern Chancellery Palace Attendant Commissioner and soon was changed to Commander of the Han Chinese Imperial Palace Detachment.",
+          "idiomatic": "When the princess bore a son, he became Southern Chancellery Palace Attendant Commissioner and soon was made Commander of the Han Chinese Imperial Palace Detachment.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "乾統初，加太子太師，為國舅詳穩。",
+          "literal": "At the beginning of Qiantong he was given the additional title Grand Mentor of the Heir Apparent and made detailed commandant of the imperial maternal uncle's house.",
+          "idiomatic": "At the beginning of Qiantong he received the additional title Grand Mentor of the Heir Apparent and was made detailed commandant of the imperial maternal uncle's house.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "二年，改遼興軍節度使，召為北府宰相，以柴冊禮，加兼侍中。",
+          "literal": "In the second year he was changed to Liaoxing Army Military Commissioner, summoned as Northern Chancellery Chancellor, and because of the imperial succession ceremony given the additional concurrent title Palace Attendant.",
+          "idiomatic": "In the second year he was made Liaoxing Army Military Commissioner, summoned as Northern Chancellery Chancellor, and in recognition of his service at the imperial succession ceremony given the additional concurrent title Palace Attendant.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "天慶元年，致仕，卒，謚曰欽肅。",
+          "literal": "In the first year of Tianqing he retired from office and died; his posthumous title was Qinsu.",
+          "idiomatic": "In the first year of Tianqing he retired from office and died; his posthumous title was Qinsu.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T07:58:57.802Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T07:58:57.804Z",
+      "appliedSummary": {
+        "id": "source-liaoshi-082-wikisource-3357559149ef",
+        "type": "source_omission_candidate",
+        "start": 124,
+        "removed": 0,
+        "inserted": 10,
+        "delta": 10,
+        "manualTranslationsApplied": 10
+      }
     },
     {
       "id": "source-liaoshi-083-wikisource-2f9524f94ce9",
@@ -39335,7 +40785,7 @@
     },
     {
       "id": "source-liaoshi-084-wikisource-aaad865630df",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.017,
@@ -39378,8 +40828,142 @@
         "afterLocal": "蕭幹，小字項烈，字婆典，北府宰相敵魯之子。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Restored missing biography text from Wikisource with manual translations.",
+      "manualTranslations": [
+        {
+          "zh": "耶律抹只，字留隱，仲父隋國王之後。",
+          "literal": "Yelu Mozhi, courtesy name Liuyin, was of the younger line of the King of Sui.",
+          "idiomatic": "Yelu Mozhi, whose courtesy name was Liuyin, was of the younger line of the King of Sui.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "初以皇族入侍。",
+          "literal": "At first he entered attendance by virtue of imperial clan status.",
+          "idiomatic": "He first entered palace service as a member of the imperial clan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "景宗即位，為林牙，以幹給稱。",
+          "literal": "When Emperor Jingzong took the throne, he became linya and was praised for resourceful service.",
+          "idiomatic": "When Emperor Jingzong acceded, he was made linya and won repute for resourceful service.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "保寧間，遷樞密副使。",
+          "literal": "During Baoning he was transferred to vice privy commissioner.",
+          "idiomatic": "In the Baoning period he was promoted to vice privy commissioner.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "乾亨元年春，宋攻河東，南府宰相耶律沙為都統，將兵往援，抹只臨其軍。",
+          "literal": "In spring of the first year of Qianheng, Song attacked Hedong; the Southern Chancellor Yelu Sha served as supreme commander, led troops to relieve it, and Mozhi supervised his army.",
+          "idiomatic": "In the spring of the first year of Qianheng, when the Song attacked Hedong, Southern Chancellor Yelu Sha was made supreme commander and marched to its relief; Mozhi supervised the army.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "及白馬嶺之敗，僅以身免。",
+          "literal": "At the defeat at White Horse Ridge he barely escaped with his life.",
+          "idiomatic": "After the defeat at White Horse Ridge he barely escaped with his life.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "宋乘銳攻燕，將奚兵翊休哥擊敗之。",
+          "literal": "The Song, riding their momentum, attacked Yan; leading Xi troops he assisted Xiuge and defeated them.",
+          "idiomatic": "The Song, emboldened by their momentum, thrust into Yan; Mozhi led Xi troops to assist Yelu Xiuge and routed them.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "上以功釋前過。",
+          "literal": "The emperor, for this merit, released his earlier fault.",
+          "idiomatic": "The emperor pardoned his earlier failures in light of this success.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "是年冬，從都統韓匡嗣伐宋，戰於滿城，為宋將所紿，諸軍奔潰；",
+          "literal": "That winter he followed the supreme commander Han Kuangsi in attacking Song and fought at Mancheng; deceived by a Song general, the armies broke in rout;",
+          "idiomatic": "That winter he followed Supreme Commander Han Kuangsi against the Song and fought at Mancheng; tricked by a Song commander, the armies broke in rout;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "獨抹只部伍不亂，徐整旗鼓而歸。",
+          "literal": "only Mozhi’s ranks did not fall into disorder, and he slowly reformed banners and drums and returned.",
+          "idiomatic": "only Mozhi’s unit held its formation, and he slowly reformed his banners and drums and withdrew in order.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "璽書褒諭，改南海軍節度使。",
+          "literal": "An imperial edict in seal script commended and instructed him, and he was transferred to Military Commissioner of the Nanhai Army.",
+          "idiomatic": "An imperial commendation arrived in seal script, and he was made Military Commissioner of the Nanhai Army.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "乾亨二年，拜樞密副使。",
+          "literal": "In the second year of Qianheng he was appointed vice privy commissioner.",
+          "idiomatic": "In the second year of Qianheng he was appointed vice privy commissioner.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "統和初，為東京留守。",
+          "literal": "At the beginning of Tonghe he became regent of the Eastern Capital.",
+          "idiomatic": "Early in Tonghe he was made regent of the Eastern Capital.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "宋將曹彬、米信等侵邊，抹只引兵至南京，先繕守禦備。",
+          "literal": "When the Song generals Cao Bin, Mi Xin, and others invaded the frontier, Mozhi led troops to Nanjing and first repaired defenses and preparations.",
+          "idiomatic": "When the Song generals Cao Bin, Mi Xin, and others invaded the frontier, Mozhi marched to Nanjing and first strengthened the city’s defenses.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "及車駕臨幸，抹只與耶律休哥逆戰於涿之東，克之，遷開遠軍節度使。",
+          "literal": "When the imperial carriage arrived on inspection, Mozhi together with Yelu Xiuge met the enemy in battle east of Zhuo, took it, and was transferred to Military Commissioner of Kaiyuan Army.",
+          "idiomatic": "When the emperor arrived on inspection, Mozhi and Yelu Xiuge gave battle east of Zhuo, carried the day, and Mozhi was transferred to Military Commissioner of Kaiyuan Army.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "故事，州民歲輸稅，鬥粟折錢五，抹只表請折錢六，部民便之。",
+          "literal": "By precedent the commandery people paid yearly taxes with each dou of grain converted at five cash; Mozhi memorialized requesting conversion at six cash, and the people of the division found it convenient.",
+          "idiomatic": "By precedent the people of the commandery paid yearly taxes with each dou of grain valued at five cash; Mozhi memorialized to raise the rate to six cash, and the people welcomed the change.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "統和末卒。",
+          "literal": "At the end of Tonghe he died.",
+          "idiomatic": "He died late in the Tonghe reign.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "acceptedSourceText": "耶律抹只，字留隱，仲父隋國王之後。初以皇族入侍。景宗即位，為林牙，以幹給稱。保寧間，遷樞密副使。乾亨元年春，宋攻河東，南府宰相耶律沙為都統，將兵往援，抹只臨其軍。及白馬嶺之敗，僅以身免。宋乘銳攻燕，將奚兵翊休哥擊敗之。上以功釋前過。是年冬，從都統韓匡嗣伐宋，戰於滿城，為宋將所紿，諸軍奔潰；獨抹只部伍不亂，徐整旗鼓而歸。璽書褒諭，改南海軍節度使。乾亨二年，拜樞密副使。統和初，為東京留守。宋將曹彬、米信等侵邊，抹只引兵至南京，先繕守禦備。及車駕臨幸，抹只與耶律休哥逆戰於涿之東，克之，遷開遠軍節度使。故事，州民歲輸稅，鬥粟折錢五，抹只表請折錢六，部民便之。統和末卒。",
+      "reviewedAt": "2026-06-28T11:27:52.106Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T11:27:52.258Z",
+      "appliedSummary": {
+        "id": "source-liaoshi-084-wikisource-aaad865630df",
+        "type": "source_omission_candidate",
+        "start": 21,
+        "removed": 1,
+        "inserted": 17,
+        "delta": 16,
+        "manualTranslationsApplied": 17
+      }
     },
     {
       "id": "source-liaoshi-084-wikisource-c393b460e4a0",
@@ -39476,7 +41060,7 @@
     },
     {
       "id": "source-liaoshi-084-wikisource-e7598971f7e0",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.025,
@@ -39519,8 +41103,114 @@
         "afterLocal": "論曰：當高梁、朔州之捷，偏裨之將如沙與抹只，既因休哥、斜軫類見其功，所謂失之東隅，收之桑榆。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Restored missing biography text from Wikisource with manual translations.",
+      "manualTranslations": [
+        {
+          "zh": "耶律海裏，字留隱，令穩拔裏得之長子。",
+          "literal": "Yelu Haili, courtesy name Liuyin, was the eldest son of the lingwen Balede.",
+          "idiomatic": "Yelu Haili, whose courtesy name was Liuyin, was the eldest son of the lingwen Balede.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "察割之亂，其母的魯與焉。",
+          "literal": "During Chagai’s rebellion, his mother Dilu took part in it.",
+          "idiomatic": "During Chagai’s rebellion, his mother Dilu was involved.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "遣人召海裏，海裏拒之。",
+          "literal": "They sent someone to summon Haili, and Haili refused.",
+          "idiomatic": "Chagai’s faction sent envoys to summon Haili, but he refused.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "亂平，的魯以子故獲免。",
+          "literal": "When the rebellion was pacified, Dilu was spared because of her son.",
+          "idiomatic": "After the rebellion was suppressed, Dilu was spared on account of her son.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "海裏儉素，不喜聲利，以射獵自娛。",
+          "literal": "Haili was frugal and plain, disliked sound and profit, and amused himself with archery and hunting.",
+          "idiomatic": "Haili lived frugally and plainly, cared nothing for luxury or gain, and amused himself with archery and hunting.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "雖居閑，人敬之若貴官然。",
+          "literal": "Although he lived in retirement, people respected him as if he were a noble official.",
+          "idiomatic": "Though he lived in retirement, people treated him with the respect due a high official.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "保寧初，拜彰國軍節度使，遷惕隱。",
+          "literal": "At the beginning of Baoning he was appointed Military Commissioner of the Zhangguo Army and transferred to tiyin.",
+          "idiomatic": "Early in Baoning he was made Military Commissioner of the Zhangguo Army and then promoted to tiyin.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "秩滿，稱疾不仕。",
+          "literal": "When his term expired, he pleaded illness and would not serve.",
+          "idiomatic": "When his term expired, he pleaded illness and declined further office.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "久之，復為南院大王。",
+          "literal": "After a long time he again became Great King of the Southern Office.",
+          "idiomatic": "After some years he was again made Great King of the Southern Office.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "及曹彬、米信等來侵，海裏有卻敵功，賜資忠保義匡國功臣。",
+          "literal": "When Cao Bin, Mi Xin, and others came to invade, Haili had merit in repelling the enemy and was granted the title Meritous Minister Loyal in Purpose, Righteous in Conduct, and Stabilizing the State.",
+          "idiomatic": "When Cao Bin, Mi Xin, and others invaded, Haili distinguished himself in repelling the enemy and was granted the title Meritous Minister Loyal in Purpose, Righteous in Conduct, and Stabilizing the State.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "帝屢親征，海裏在南院十餘年，鎮以寬靜，戶口增給，時議重之。",
+          "literal": "The emperor repeatedly campaigned in person; Haili was in the Southern Office for more than ten years, governing with lenience and quiet, increasing registered households and provisions, and contemporary opinion esteemed him.",
+          "idiomatic": "While the emperor repeatedly took the field in person, Haili spent more than ten years in the Southern Office, governing with lenience and calm; households and provisions increased, and contemporaries held him in high regard.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "封漆水郡王，遷上京留守，薨。",
+          "literal": "He was enfeoffed as Prince of Qishui, transferred to regent of the Supreme Capital, and died.",
+          "idiomatic": "He was enfeoffed as Prince of Qishui, made regent of the Supreme Capital, and died in office.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "詔以家貧，給葬具。",
+          "literal": "An edict, because his household was poor, granted funeral goods.",
+          "idiomatic": "Because his household was poor, an edict granted funeral goods.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "acceptedSourceText": "耶律海裏，字留隱，令穩拔裏得之長子。察割之亂，其母的魯與焉。遣人召海裏，海裏拒之。亂平，的魯以子故獲免。海裏儉素，不喜聲利，以射獵自娛。雖居閑，人敬之若貴官然。保寧初，拜彰國軍節度使，遷惕隱。秩滿，稱疾不仕。久之，復為南院大王。及曹彬、米信等來侵，海裏有卻敵功，賜資忠保義匡國功臣。帝屢親征，海裏在南院十餘年，鎮以寬靜，戶口增給，時議重之。封漆水郡王，遷上京留守，薨。詔以家貧，給葬具。",
+      "reviewedAt": "2026-06-28T11:27:52.107Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T11:27:52.437Z",
+      "appliedSummary": {
+        "id": "source-liaoshi-084-wikisource-e7598971f7e0",
+        "type": "source_omission_candidate",
+        "start": 86,
+        "removed": 1,
+        "inserted": 13,
+        "delta": 12,
+        "manualTranslationsApplied": 13
+      }
     },
     {
       "id": "source-liaoshi-085-wikisource-e915825715be",
@@ -41065,7 +42755,7 @@
     },
     {
       "id": "source-liaoshi-096-wikisource-1fb000788d1f",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "liaoshi",
@@ -41089,12 +42779,125 @@
         "afterLocal": "撻不也，字胡獨堇。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "咸雍元年，加於越，改封遼王，與耶律乙辛共知北院樞密事。",
+          "literal": "In the first year of Xianyong he was given the title yuyue, reassigned as Prince of Liao, and jointly administered Northern Court Secretariat affairs with Yelu Yixin.",
+          "idiomatic": "In the first year of the Xianyong reign he was given the title yuyue, reassigned as Prince of Liao, and jointly administered Northern Court Secretariat affairs with Yelu Yixin.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "乙辛恃寵不法，仁先抑之，由是見忌，出為南京留守，改王晉。",
+          "literal": "Yixin relied on favor and acted lawlessly; Renxian restrained him and on that account was resented, sent out as Garrison Commander of the Southern Capital, and reassigned as Prince of Jin.",
+          "idiomatic": "Yixin relied on imperial favor and acted lawlessly. Renxian restrained him, and on that account was resented, sent out as Garrison Commander of the Southern Capital, and reassigned as Prince of Jin.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "恤孤惸，禁奸慝，宋聞風震服。",
+          "literal": "He cared for orphans and the solitary, forbade wickedness and evil, and when Song heard of it they were awed into submission.",
+          "idiomatic": "He cared for orphans and the destitute, forbade wickedness and evil, and when Song heard of his conduct they were awed into submission.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "議者以為自於越休哥之後，惟仁先一人而已。",
+          "literal": "Commentators held that since yuyue Xiuge, Renxian alone had been such a man.",
+          "idiomatic": "Commentators held that since Yelu Xiuge as yuyue, Renxian alone had been such a man.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "阻卜塔裏幹叛命，仁先為西北路招討使，賜鷹紐印及劍。",
+          "literal": "When the Zubu chieftain Taligan rebelled, Renxian was made Pacification Commissioner of the Northwest Circuit and granted an eagle-button seal and a sword.",
+          "idiomatic": "When the Zubu chieftain Taligan rebelled, Renxian was appointed Pacification Commissioner of the Northwest Circuit and granted an eagle-button seal and a sword.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "上諭曰：「卿去朝廷遠，每俟奏行，恐失機會，可便宜從事。」",
+          "literal": "The emperor instructed him, saying, \"You are far from court; if you wait for memorials and orders on every matter, you may miss opportunities. You may act at discretion.\"",
+          "idiomatic": "The emperor instructed him, saying, \"You are far from court. If you wait for memorials and orders on every matter, you may miss your chance. You may act at discretion.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "仁先嚴斥候，扼敵沖，懷柔服從，庶事整飭。",
+          "literal": "Renxian strictly posted scouts, blocked the enemy's thrusts, treated the compliant with kindness, and put all affairs in good order.",
+          "idiomatic": "Renxian strictly posted scouts, blocked the enemy's thrusts, treated those who submitted with kindness, and put all affairs in good order.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "塔裏幹復來寇，仁先逆擊，追殺八十餘里。",
+          "literal": "Taligan came raiding again; Renxian met him in counterattack and pursued, killing for more than eighty li.",
+          "idiomatic": "Taligan came raiding again. Renxian met him in counterattack and pursued the enemy for more than eighty li.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "大軍繼至，又敗之。",
+          "literal": "When the main army arrived it again defeated them.",
+          "idiomatic": "When the main army arrived, it again defeated them.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "別部把裏斯、禿沒等來救，見其屢挫，不敢戰而降。",
+          "literal": "Subordinate divisions Balisi, Tumo, and others came to the rescue; seeing repeated defeats, they did not dare fight and surrendered.",
+          "idiomatic": "Subordinate divisions under Balisi, Tumo, and others came to the rescue, but seeing repeated defeats they did not dare fight and surrendered.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "北邊遂安。",
+          "literal": "The northern frontier was thus pacified.",
+          "idiomatic": "The northern frontier was thus pacified.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "八年卒，年六十，遺命家人薄葬。",
+          "literal": "In the eighth year he died, aged sixty, and left instructions that his family bury him simply.",
+          "idiomatic": "In the eighth year he died at the age of sixty and left instructions that his family bury him simply.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "弟義先、信先，俱有傳。",
+          "literal": "His younger brothers Yixian and Xinxian both have separate biographies.",
+          "idiomatic": "His younger brothers Yixian and Xinxian both have separate biographies.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "子撻不也。",
+          "literal": "His son was Tabuye.",
+          "idiomatic": "His son was Tabuye.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "acceptedSourceText": "咸雍元年，加於越，改封遼王，與耶律乙辛共知北院樞密事。乙辛恃寵不法，仁先抑之，由是見忌，出為南京留守，改王晉。恤孤惸，禁奸慝，宋聞風震服。議者以為自於越休哥之後，惟仁先一人而已。阻卜塔裏幹叛命，仁先為西北路招討使，賜鷹紐印及劍。上諭曰：「卿去朝廷遠，每俟奏行，恐失機會，可便宜從事。」仁先嚴斥候，扼敵沖，懷柔服從，庶事整飭。塔裏幹復來寇，仁先逆擊，追殺八十餘里。大軍繼至，又敗之。別部把裏斯、禿沒等來救，見其屢挫，不敢戰而降。北邊遂安。八年卒，年六十，遺命家人薄葬。弟義先、信先，俱有傳。子撻不也。",
+      "reviewedAt": "2026-06-28T11:32:36.754Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T11:32:36.756Z",
+      "appliedSummary": {
+        "id": "source-liaoshi-096-wikisource-1fb000788d1f",
+        "type": "source_omission_candidate",
+        "start": 50,
+        "removed": 0,
+        "inserted": 14,
+        "delta": 14,
+        "manualTranslationsApplied": 14
+      }
     },
     {
       "id": "source-liaoshi-096-wikisource-4c8e96d9b052",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "liaoshi",
@@ -41118,12 +42921,103 @@
         "afterLocal": "論曰：灤河之變，重元擁兵行幄，微仁先等，道宗其危乎！"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "耶律阿思，字撒班。",
+          "literal": "Yelu Asi, style name Saban.",
+          "idiomatic": "Yelu Asi, whose style name was Saban.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "清寧初，補祗候郎君。",
+          "literal": "Early in Qingning he was appointed Attendant Gentleman.",
+          "idiomatic": "Early in the Qingning reign he was appointed Attendant Gentleman.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "以善射，掌獵事，進渤海近侍詳穩。",
+          "literal": "Because he was skilled at archery he managed hunting affairs and was promoted to Xiangwen of the Bohai Close Attendants.",
+          "idiomatic": "Because he was skilled at archery he managed hunting affairs and was promoted to Xiangwen of the Bohai Close Attendants.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "重元之亂，與護衛蘇射殺涅魯古，賜號靖亂功臣，徙契丹行宮都部署。",
+          "literal": "In Chongyuan's rebellion he together with the guard Su shot and killed Nielugu, was granted the title Meritorious in Quelling Disorder, and was transferred to Garrison Commander of the Khitan Traveling Palace.",
+          "idiomatic": "During Chongyuan's rebellion he and the guard Su shot and killed Nielugu, was granted the title Meritorious in Quelling Disorder, and was transferred to Garrison Commander of the Khitan Traveling Palace.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "大安初，為北院大王，封漆水郡王。",
+          "literal": "Early in Da'an he became Great King of the Northern Court and was enfeoffed as Prince of Qishui.",
+          "idiomatic": "Early in the Da'an reign he became Great King of the Northern Court and was enfeoffed as Prince of Qishui.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "壽隆元年，為北院樞密使，監修國史。",
+          "literal": "In the first year of Shoulong he became Commissioner of the Northern Court Secretariat and supervised compilation of the national history.",
+          "idiomatic": "In the first year of the Shoulong reign he became Commissioner of the Northern Court Secretariat and supervised compilation of the national history.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "道宗崩，受顧命，加於越。",
+          "literal": "When Emperor Daozong died he received the final imperial command and was given the title yuyue.",
+          "idiomatic": "When Emperor Daozong died he received the dying edict and was given the title yuyue.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "錄乙辛黨人，罪重者當籍其家，阿思受賂，多所寬貰。",
+          "literal": "When Yixin's partisans were registered, those whose crimes were grave should have had their households confiscated, but Asi took bribes and pardoned many.",
+          "idiomatic": "When Yixin's partisans were registered, those whose crimes were grave should have had their households confiscated, but Asi took bribes and pardoned many.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "蕭合魯嘗言當修邊備，阿思力沮其事，或譏其以金賣國。",
+          "literal": "Xiao Helu once said that frontier defenses should be strengthened, but Asi strenuously blocked the proposal, and some mocked him for selling the state for gold.",
+          "idiomatic": "Xiao Helu once argued that frontier defenses should be strengthened, but Asi strenuously blocked the proposal, and some mocked him for selling the state for gold.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "後以風疾失音，致仕，加尚父，封趙王。",
+          "literal": "Later, because of wind disorder he lost his voice, retired from office, was given the exalted title Imperial Father, and was enfeoffed as Prince of Zhao.",
+          "idiomatic": "Later he lost his voice to wind disorder, retired from office, was given the exalted title Imperial Father, and was enfeoffed as Prince of Zhao.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "薨，年八十，追封齊國王。",
+          "literal": "He died, aged eighty, and was posthumously enfeoffed as Prince of Qi.",
+          "idiomatic": "He died at the age of eighty and was posthumously enfeoffed as Prince of Qi.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T11:32:37.146Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T11:32:37.148Z",
+      "appliedSummary": {
+        "id": "source-liaoshi-096-wikisource-4c8e96d9b052",
+        "type": "source_omission_candidate",
+        "start": 215,
+        "removed": 0,
+        "inserted": 11,
+        "delta": 11,
+        "manualTranslationsApplied": 11
+      }
     },
     {
       "id": "source-liaoshi-096-wikisource-d7ee469bce95",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "liaoshi",
@@ -41147,12 +43041,110 @@
         "afterLocal": "蕭惟信，字耶寧，楮特部人。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "蕭德，字特末隱，楮特部人。",
+          "literal": "Xiao De, style name Temoyin, was a man of the Chute Tribe.",
+          "idiomatic": "Xiao De, whose style name was Temoyin, was a man of the Chute Tribe.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "性和易，篤學好禮法。",
+          "literal": "His nature was easygoing; he was devoted to learning and loved ritual and law.",
+          "idiomatic": "He was easygoing by nature, devoted to learning, and fond of ritual and law.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "太平中，領牌印、直宿，累遷北院樞密副使，敷奏詳明，多稱上旨。",
+          "literal": "During Taiping he was put in charge of seals and tally and night watch, rose through successive posts to Deputy Commissioner of the Northern Court Secretariat, and in memorials was detailed and clear, often winning approval of the sovereign's intent.",
+          "idiomatic": "During the Taiping reign he was put in charge of seals and tally and night watch, rose through successive appointments to Deputy Commissioner of the Northern Court Secretariat, and in memorials was detailed and clear, often winning approval of the sovereign's intent.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "詔與林牙耶律庶成修《律令》，改契丹行宮都部署，賜宮戶十有五。",
+          "literal": "An edict ordered him together with Linya Yelu Shucheng to compile the Statutes and Ordinances; he was transferred to Garrison Commander of the Khitan Traveling Palace and granted fifteen palace households.",
+          "idiomatic": "An edict ordered him and Linya Yelu Shucheng to compile the Statutes and Ordinances. He was transferred to Garrison Commander of the Khitan Traveling Palace and granted fifteen palace households.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "清寧元年，遷同知北院樞密使，封魯國公。",
+          "literal": "In the first year of Qingning he was transferred to co-administrator of the Northern Court Secretariat and enfeoffed as Duke of Lu.",
+          "idiomatic": "In the first year of the Qingning reign he was transferred to co-administrator of the Northern Court Secretariat and enfeoffed as Duke of Lu.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "上以德為先朝眷遇，拜南府宰相。",
+          "literal": "Because the emperor regarded De as one favored by the previous reign, he was appointed Chancellor of the Southern Office.",
+          "idiomatic": "Because the emperor regarded De as one favored by the previous reign, he was appointed Chancellor of the Southern Office.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "五年，轉南京統軍使。",
+          "literal": "In the fifth year he was transferred to Garrison Commander of the Southern Capital armies.",
+          "idiomatic": "In the fifth year he was transferred to Garrison Commander of the Southern Capital armies.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "九年，復為南府宰相。",
+          "literal": "In the ninth year he again became Chancellor of the Southern Office.",
+          "idiomatic": "In the ninth year he again became Chancellor of the Southern Office.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "重元之亂，推鋒力戰，斬涅魯古首以獻，論功封漢王。",
+          "literal": "In Chongyuan's rebellion he led the van and fought hard, beheaded Nielugu and presented the head, and for his merit was enfeoffed as Prince of Han.",
+          "idiomatic": "During Chongyuan's rebellion he led the van and fought hard, beheaded Nielugu and presented the head, and for his merit was enfeoffed as Prince of Han.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "咸雍初，以告老歸，優詔不許。",
+          "literal": "Early in Xianyong, on grounds of age he requested retirement and return home, but a gracious edict did not permit it.",
+          "idiomatic": "Early in the Xianyong reign, on grounds of age he requested retirement and return home, but a gracious edict did not permit it.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "久之，加尚父，致仕。",
+          "literal": "After some time he was given the exalted title Imperial Father and retired from office.",
+          "idiomatic": "After some time he was given the exalted title Imperial Father and retired from office.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "卒，年七十二。",
+          "literal": "He died, aged seventy-two.",
+          "idiomatic": "He died at the age of seventy-two.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T11:32:36.934Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T11:32:36.936Z",
+      "appliedSummary": {
+        "id": "source-liaoshi-096-wikisource-d7ee469bce95",
+        "type": "source_omission_candidate",
+        "start": 126,
+        "removed": 0,
+        "inserted": 12,
+        "delta": 12,
+        "manualTranslationsApplied": 12
+      }
     },
     {
       "id": "source-liaoshi-097-wikisource-27176c7e640e",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "liaoshi",
@@ -41176,12 +43168,146 @@
         "afterLocal": "趙徽，南京人。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Restored missing Yang Ji biography from Wikisource with manual translations.",
+      "manualTranslations": [
+        {
+          "zh": "楊績，良鄉人。",
+          "literal": "Yang Ji was a man of Liangxiang.",
+          "idiomatic": "Yang Ji was a native of Liangxiang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "太平十一年進士及第，累遷南院樞密副使。",
+          "literal": "In the eleventh year of Taiping he passed the civil examinations and was repeatedly promoted to Vice Commissioner of the Southern Administration.",
+          "idiomatic": "In the eleventh year of Taiping he passed the civil examinations and was repeatedly promoted until he became Vice Commissioner of the Southern Administration.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "與杜防、韓知白等擅給進士堂帖，降長寧軍節度使，徙知涿州。",
+          "literal": "Together with Du Fang, Han Zhibai, and others he arbitrarily issued jinshi hall credentials; he was demoted to Military Commissioner of Changning Army and transferred to administer Zhuo Prefecture.",
+          "idiomatic": "Together with Du Fang, Han Zhibai, and others he arbitrarily issued jinshi hall credentials; he was demoted to Military Commissioner of Changning Army and transferred to administer Zhuo Prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "清寧初，拜參知政事，兼同知樞密院事，為南府宰相。",
+          "literal": "At the beginning of Qingning he was appointed Vice Grand Councilor, concurrently Vice Director of the Military Affairs Commission, and served as Chancellor of the Southern Administration.",
+          "idiomatic": "At the beginning of Qingning he was appointed Vice Grand Councilor, concurrently Vice Director of the Military Affairs Commission, and Chancellor of the Southern Administration.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "九年，聞重元亂，與姚景行勤王，上嘉之。",
+          "literal": "In the ninth year, hearing of Chongyuan's rebellion, he marched with Yao Jingxing to aid the throne, and the emperor commended him.",
+          "idiomatic": "In the ninth year, on hearing of Chongyuan's rebellion, he marched with Yao Jingxing to aid the throne, and the emperor commended him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "十年，知興中府。",
+          "literal": "In the tenth year he administered Xingzhong Prefecture.",
+          "idiomatic": "In the tenth year he administered Xingzhong Prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "咸雍初，入知樞密院事。",
+          "literal": "At the beginning of Xianyong he entered to administer the Military Affairs Commission.",
+          "idiomatic": "At the beginning of Xianyong he entered court to administer the Military Affairs Commission.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "二年，乞致仕，不許，拜南院樞密使。",
+          "literal": "In the second year he requested retirement but was not permitted and was appointed Commissioner of the Southern Administration.",
+          "idiomatic": "In the second year he asked to retire, but permission was refused, and he was appointed Commissioner of the Southern Administration.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "帝以績舊臣，特詔燕見，論古今治亂，人臣邪正。",
+          "literal": "Because Ji was an old minister, the emperor specially summoned him to a private audience to discuss the order and disorder of ancient and modern times and the wickedness and rectitude of ministers.",
+          "idiomatic": "Because Ji was an old minister, the emperor specially summoned him to a private audience to discuss the order and disorder of ancient and modern times and the wickedness and rectitude of ministers.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "帝曰：「方今群臣忠直，耶律玦、劉伸而已；",
+          "literal": "The emperor said: \"Among the ministers today who are loyal and upright, only Yelu Jue and Liu Shen remain;",
+          "idiomatic": "The emperor said, \"Among the ministers today who are loyal and upright, only Yelu Jue and Liu Shen remain;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "然伸不及玦之剛介。」",
+          "literal": "yet Shen does not match Jue in firm integrity.\"",
+          "idiomatic": "yet Shen does not match Jue in firm integrity.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "績拜賀曰：「何代無賢，世亂則獨善其身，主聖則兼濟天下。",
+          "literal": "Ji bowed in congratulation and said: \"What age has lacked worthy men? When the age is chaotic one keeps oneself whole; when the ruler is sage one benefits all under Heaven.",
+          "idiomatic": "Ji bowed in congratulation and said, \"What age has lacked worthy men? When the age is chaotic one keeps oneself whole; when the ruler is sage one benefits all under Heaven.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "陛下銖分邪正，升黜分明，天下幸甚。」",
+          "literal": "Your Majesty minutely distinguishes the wicked and the upright and promotes and demotes with clarity—great fortune for the realm.\"",
+          "idiomatic": "Your Majesty minutely distinguishes the wicked and the upright and promotes and demotes with clarity—great fortune for the realm.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "累表告歸，不許，封趙王。",
+          "literal": "He repeatedly memorialized asking to return home but was not permitted and was enfeoffed as Prince of Zhao.",
+          "idiomatic": "He repeatedly memorialized asking to return home, but permission was refused, and he was enfeoffed as Prince of Zhao.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "大康中，以例改王遼西。",
+          "literal": "During Dakang, by precedent his princedom was changed to Liaoxi.",
+          "idiomatic": "During the Dakang era, by precedent his title was changed to Prince of Liaoxi.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "致仕，加守太保，薨。",
+          "literal": "He retired, was promoted to Defender Grand Guardian, and died.",
+          "idiomatic": "He retired from office, was promoted to Defender Grand Guardian, and died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "子貴忠，知興中府。",
+          "literal": "His son Guizhong administered Xingzhong Prefecture.",
+          "idiomatic": "His son Guizhong administered Xingzhong Prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "acceptedSourceText": "楊績，良鄉人。太平十一年進士及第，累遷南院樞密副使。與杜防、韓知白等擅給進士堂帖，降長寧軍節度使，徙知涿州。清寧初，拜參知政事，兼同知樞密院事，為南府宰相。九年，聞重元亂，與姚景行勤王，上嘉之。十年，知興中府。咸雍初，入知樞密院事。二年，乞致仕，不許，拜南院樞密使。帝以績舊臣，特詔燕見，論古今治亂，人臣邪正。帝曰：「方今群臣忠直，耶律玦、劉伸而已；然伸不及玦之剛介。」績拜賀曰：「何代無賢，世亂則獨善其身，主聖則兼濟天下。陛下銖分邪正，升黜分明，天下幸甚。」累表告歸，不許，封趙王。大康中，以例改王遼西。致仕，加守太保，薨。子貴忠，知興中府。",
+      "reviewedAt": "2026-06-28T11:35:10.163Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T11:35:10.326Z",
+      "appliedSummary": {
+        "id": "source-liaoshi-097-wikisource-27176c7e640e",
+        "type": "source_omission_candidate",
+        "start": 65,
+        "removed": 0,
+        "inserted": 17,
+        "delta": 17,
+        "manualTranslationsApplied": 17
+      }
     },
     {
       "id": "source-liaoshi-097-wikisource-eedb91d62a7e",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "liaoshi",
@@ -41205,8 +43331,93 @@
         "afterLocal": "耶律引吉，字阿括，品部人。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Restored missing biography text from Wikisource with manual translations.",
+      "manualTranslations": [
+        {
+          "zh": "竇景庸，中京人，中書令振之子。",
+          "literal": "Dou Jingyong was a man of the Central Capital and son of Director of the Department of State Affairs Zhen.",
+          "idiomatic": "Dou Jingyong was a native of the Central Capital and the son of Director of the Department of State Affairs Dou Zhen.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "聰敏好學。",
+          "literal": "He was intelligent and quick-witted and loved learning.",
+          "idiomatic": "He was intelligent and loved learning.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "清寧中，第進士，授秘書省校書郎，累遷少府少監。",
+          "literal": "During Qingning he passed the civil examinations, was appointed proofreader of the Secretariat, and was repeatedly promoted to Vice Director of the Court of the Imperial Treasury.",
+          "idiomatic": "During the Qingning era he passed the civil examinations, was appointed proofreader of the Secretariat, and was repeatedly promoted until he became Vice Director of the Court of the Imperial Treasury.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "咸雍六年，授樞密直學士，尋知漢人行宮副部署事。",
+          "literal": "In the sixth year of Xianyong he was appointed Academician of the Military Affairs Commission and soon administered the affairs of Deputy Deployer of the Han Imperial Camp.",
+          "idiomatic": "In the sixth year of Xianyong he was appointed Academician of the Military Affairs Commission and soon served as Acting Deputy Deployer of the Han Imperial Camp.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "大安初，遷南院樞密副使，監修國史，知樞密院事，賜同德功臣，封陳國公。",
+          "literal": "At the beginning of Da'an he was transferred to Vice Commissioner of the Southern Administration, supervised compilation of the National History, administered the Military Affairs Commission, was granted the merit title Meritous Minister of Shared Virtue, and was enfeoffed as Duke of Chen State.",
+          "idiomatic": "At the beginning of Da'an he was transferred to Vice Commissioner of the Southern Administration, supervised compilation of the National History, administered the Military Affairs Commission, was granted the merit title Meritous Minister of Shared Virtue, and was enfeoffed as Duke of Chen State.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "有疾，表請致仕，不從，加太子太保，授武定軍節度使。",
+          "literal": "When he fell ill he memorialized requesting retirement, but was not permitted; he was promoted to Defender Heir Apparent Grand Guardian and appointed Military Commissioner of Wuding Army.",
+          "idiomatic": "When he fell ill he memorialized asking to retire, but permission was refused; he was promoted to Defender Heir Apparent Grand Guardian and appointed Military Commissioner of Wuding Army.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "審決冤滯，輕重得宜，以獄空聞。",
+          "literal": "In reviewing and deciding cases of wrongful detention, he weighed severity and leniency appropriately and became known for empty prisons.",
+          "idiomatic": "In reviewing cases of wrongful detention he weighed severity and leniency appropriately and became known for emptying the prisons.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "七年，拜中京留守。",
+          "literal": "In the seventh year he was appointed Military Governor of the Central Capital.",
+          "idiomatic": "In the seventh year he was appointed Military Governor of the Central Capital.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "九年薨，謚曰肅憲。",
+          "literal": "In the ninth year he died and was posthumously titled Suxian.",
+          "idiomatic": "In the ninth year he died and was given the posthumous title Suxian.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "子瑜，三司副使。",
+          "literal": "His son Yu served as Vice Commissioner of the Three Bureaus.",
+          "idiomatic": "His son Yu served as Vice Commissioner of the Three Bureaus.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "acceptedSourceText": "竇景庸，中京人，中書令振之子。聰敏好學。清寧中，第進士，授秘書省校書郎，累遷少府少監。咸雍六年，授樞密直學士，尋知漢人行宮副部署事。大安初，遷南院樞密副使，監修國史，知樞密院事，賜同德功臣，封陳國公。有疾，表請致仕，不從，加太子太保，授武定軍節度使。審決冤滯，輕重得宜，以獄空聞。七年，拜中京留守。九年薨，謚曰肅憲。子瑜，三司副使。",
+      "reviewedAt": "2026-06-28T11:34:21.884Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T11:34:22.033Z",
+      "appliedSummary": {
+        "id": "source-liaoshi-097-wikisource-eedb91d62a7e",
+        "type": "source_omission_candidate",
+        "start": 43,
+        "removed": 0,
+        "inserted": 10,
+        "delta": 10,
+        "manualTranslationsApplied": 10
+      }
     },
     {
       "id": "source-liaoshi-098-wikisource-6b0ac569be84",
@@ -48376,5 +50587,5 @@
       "retainedAfterRescan": true
     }
   ],
-  "updatedAt": "2026-06-28T04:10:30.508Z"
+  "updatedAt": "2026-06-28T11:35:10.352Z"
 }

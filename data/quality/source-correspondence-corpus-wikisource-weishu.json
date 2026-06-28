@@ -104251,7 +104251,7 @@
     },
     {
       "id": "source-weishu-092-wikisource-55fda9c07c80",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.152,
@@ -104294,8 +104294,11 @@
         "afterLocal": "經云「孝，德之本」，「孝悌之至，通於神明」。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream Wikisource edition collation notes, template metadata, and section navigation are not base corpus text; local chapter correctly begins with the biography name list.",
+      "reviewedAt": "2026-06-28T12:48:48.371Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-weishu-092-wikisource-9a6e17d71497",
@@ -104684,7 +104687,7 @@
     },
     {
       "id": "source-weishu-093-wikisource-778b2d0e6eaf",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.268,
@@ -104727,8 +104730,11 @@
         "afterLocal": "大義重於至聞自日人。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource raw prepends 校勘記 editorial notes and page metadata before the name list; local chapter already has the biography text first and the same collation notes at the end (s0170–s0203).",
+      "reviewedAt": "2026-06-28T12:49:52.890Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-weishu-094-wikisource-493c753e9e6d",
@@ -123126,7 +123132,7 @@
     },
     {
       "id": "source-weishu-111-wikisource-05349ead9b79",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -123150,8 +123156,71 @@
         "afterLocal": "二年二月己丑巳時，日暈帀，白虹貫日不徹。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "孝靜元象元年春正月辛丑朔，日有蝕之。",
+          "literal": "In spring, the first month of the first year of Yuanxiang under Emperor Xiaojing, on the day xinchou at new moon, there was a solar eclipse.",
+          "idiomatic": "In spring, the first month of Yuanxiang 1, during the reign of Emperor Xiaojing, on the xinchou new moon, the sun was eclipsed.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "占曰「大臣死」。",
+          "literal": "The prognostication says: \"A great minister will die.\"",
+          "idiomatic": "The omen reads: \"A high minister will die.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "八月辛卯，司徒公高敖曹戰歿於河陰。",
+          "literal": "In the eighth month, on xinmao, Minister over the Masses Gao Aocao died in battle at Heyin.",
+          "idiomatic": "In the eighth month, on xinmao day, Gao Aocao, minister over the masses, fell in battle at Heyin.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "六月己丑，日暈一重，有兩珥；",
+          "literal": "In the sixth month, on jichou, there was a single-ring solar halo with two mock-suns;",
+          "idiomatic": "In the sixth month, on jichou day, a single-ring solar halo appeared with two mock suns;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "上有背，長二丈餘。",
+          "literal": "above it was a back halo more than two zhang long.",
+          "idiomatic": "above them a back halo more than two zhang long.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "十一月己巳辰時，日暈，南面不合，東西有珥、背；",
+          "literal": "In the eleventh month, on jisi at the chen hour, there was a solar halo; the southern side did not close, and to the east and west were mock-suns and back halos;",
+          "idiomatic": "In the eleventh month, on jisi day at the chen hour, a solar halo appeared with a gap on the south side and mock suns and back halos east and west;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "有白虹，至珥不徹。",
+          "literal": "there was a white rainbow reaching to the mock-suns without penetrating.",
+          "idiomatic": "a white rainbow reached the mock suns without crossing through.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T12:53:31.041Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T12:53:31.058Z",
+      "appliedSummary": {
+        "id": "source-weishu-111-wikisource-05349ead9b79",
+        "type": "source_omission_candidate",
+        "start": 234,
+        "removed": 0,
+        "inserted": 7,
+        "delta": 7,
+        "manualTranslationsApplied": 7
+      }
     },
     {
       "id": "source-weishu-111-wikisource-4223a1577450",
@@ -123208,7 +123277,7 @@
     },
     {
       "id": "source-weishu-111-wikisource-a1b1fedf0888",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -123232,12 +123301,47 @@
         "afterLocal": "十二月丙申，日暈，南北有珥，上有兩抱一背。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "三月丁卯，日暈三重，外青內赤。",
+          "literal": "In the third month, on dingmao, there was a triple solar halo, blue-green without and red within.",
+          "idiomatic": "In the third month, on dingmao day, a triple solar halo appeared, blue-green without and red within.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "占曰「有謀其主」。",
+          "literal": "The prognostication says: \"There will be plotting against the ruler.\"",
+          "idiomatic": "The omen reads: \"Someone will plot against the sovereign.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "孝昌元年正月庚申，徐州刺史元法僧據城反，自稱宋王。",
+          "literal": "In the first month of the first year of Xiaochang, on gengshen, Yuan Faseng, Inspector of Xuzhou, occupied the city and rebelled, styling himself King of Song.",
+          "idiomatic": "In the first month of Xiaochang 1, on gengshen day, Yuan Faseng, Inspector of Xuzhou, seized the city and rebelled, styling himself King of Song.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T12:53:31.041Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T12:53:31.058Z",
+      "appliedSummary": {
+        "id": "source-weishu-111-wikisource-a1b1fedf0888",
+        "type": "source_omission_candidate",
+        "start": 187,
+        "removed": 0,
+        "inserted": 3,
+        "delta": 3,
+        "manualTranslationsApplied": 3
+      }
     },
     {
       "id": "source-weishu-111-wikisource-af45ad04f9e5",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -123261,12 +123365,47 @@
         "afterLocal": "三月辛丑，日暈帀，西北交暈貫日，并有一珥一抱。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "五年正月己亥朔，日有蝕之，從西南角起。",
+          "literal": "In the first month of the fifth year, on the day jihai at new moon, there was a solar eclipse; the bite began at the southwest limb.",
+          "idiomatic": "In the first month of year 5, on the jihai new moon, the sun was eclipsed, the obscuration beginning at the southwest limb.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "占曰「不有崩喪，必有臣亡，天下改服」。",
+          "literal": "The prognostication says: \"Unless there is imperial collapse and mourning, ministers will surely die and the realm will change its garments.\"",
+          "idiomatic": "The omen reads: \"If there is no imperial death and mourning, ministers will die and the realm will go into mourning dress.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "丙午，齊獻武王薨。",
+          "literal": "On bingwu, Prince Xian of Qi died.",
+          "idiomatic": "On bingwu day, Prince Xian of Qi died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T12:53:31.041Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T12:53:31.058Z",
+      "appliedSummary": {
+        "id": "source-weishu-111-wikisource-af45ad04f9e5",
+        "type": "source_omission_candidate",
+        "start": 256,
+        "removed": 0,
+        "inserted": 3,
+        "delta": 3,
+        "manualTranslationsApplied": 3
+      }
     },
     {
       "id": "source-weishu-111-wikisource-e92da9a44f9a",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -123290,8 +123429,64 @@
         "afterLocal": "四月甲辰卯時，日暈帀；"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "肅宗熙平元年三月戊辰朔，日有蝕之。",
+          "literal": "In the third month of the first year of Xiping under Emperor Xiaoming, on the day wuchen at new moon, there was a solar eclipse.",
+          "idiomatic": "In the third month of Xiping 1, on the wuchen new moon, the sun was eclipsed.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "丁丑，日出無光，至于酉時。",
+          "literal": "On dingchou, the sun rose without light until the you hour.",
+          "idiomatic": "On dingchou day the sun rose without light and remained so until the you hour.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "占曰「兵起」。",
+          "literal": "The prognostication says: \"Armies will rise.\"",
+          "idiomatic": "The omen reads: \"War will break out.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "神龜元年正月，秦州羌反；",
+          "literal": "In the first month of the first year of Shengui, the Qiang of Qinzhou rebelled;",
+          "idiomatic": "In the first month of Shengui 1 the Qiang of Qinzhou rose in rebellion;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "二月己酉，東益州氐反；",
+          "literal": "in the second month, on jiyou, the Di of Eastern Yizhou rebelled;",
+          "idiomatic": "in the second month, on jiyou day, the Di of Eastern Yizhou rebelled;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "七月，河州民却鐵怱聚眾反，自稱水池王。",
+          "literal": "in the seventh month, the people of Hezhou, Que Tiecong, gathered a crowd and rebelled, styling himself King of the Water Pool.",
+          "idiomatic": "in the seventh month the people of Hezhou, Que Tiecong, gathered a crowd and rebelled, styling himself King of the Water Pool.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T12:53:31.041Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T12:53:31.058Z",
+      "appliedSummary": {
+        "id": "source-weishu-111-wikisource-e92da9a44f9a",
+        "type": "source_omission_candidate",
+        "start": 162,
+        "removed": 0,
+        "inserted": 6,
+        "delta": 6,
+        "manualTranslationsApplied": 6
+      }
     },
     {
       "id": "source-weishu-112-wikisource-099facb4f44b",
@@ -127524,7 +127719,7 @@
     },
     {
       "id": "source-weishu-114-wikisource-bab252b627f2",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -127548,8 +127743,127 @@
         "afterLocal": "七年九月戊午，月掩歲星，在斗。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "武定二年四月丁巳，熒惑犯南宮上將；",
+          "literal": "In the fourth month of the second year of Wuding on dingsi, Mars crossed the Upper General of the Southern Palace;",
+          "idiomatic": "In the fourth month of Wuding 2, on dingsi day, Mars crossed the Upper General of the Southern Palace;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "戊寅，又犯右執法。",
+          "literal": "On wuyin, it again crossed Right Law Enforcer.",
+          "idiomatic": "On wuyin day it crossed Right Law Enforcer again.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "占曰「中坐成刑，金火尤甚」。",
+          "literal": "The prognostication says: \"The central seat becomes punishment; metal and fire are especially severe.\"",
+          "idiomatic": "The omen read: \"The central seat turns to punishment; metal and fire are especially severe.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "四年四月庚午，金晝見。",
+          "literal": "In the fourth month of the fourth year on gengwu, Venus was visible in daylight.",
+          "idiomatic": "In the fourth month of year 4, on gengwu day, Venus shone visible in broad daylight.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "六月癸巳，月入畢。",
+          "literal": "In the sixth month on guisi, the Moon entered Net.",
+          "idiomatic": "In the sixth month, on guisi day, the Moon entered Net.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "九月壬寅，太白在左執法東南三寸許，是為執法事。",
+          "literal": "In the ninth month on renyin, Venus stood about three cun southeast of Left Law Enforcer—this was an affair of Law Enforcer.",
+          "idiomatic": "In the ninth month, on renyin day, Venus stood about three cun southeast of Left Law Enforcer—a sign concerning Law Enforcer.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "五年正月，月犯畢大星，貴人之謫也。",
+          "literal": "In the first month of the fifth year, the Moon crossed the great star of Net—the demotion of an honored person.",
+          "idiomatic": "In the first month of year 5 the Moon crossed the great star of Net—the demotion of a noble.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "先是九月，大丞相歡圍玉壁不克，是月，歡薨于晉陽。",
+          "literal": "Before this, in the ninth month, Great Chancellor Huan besieged Yubi without success; that month, Huan died at Jinyang.",
+          "idiomatic": "Earlier, in the ninth month, Great Chancellor Huan besieged Yubi without success; that month Huan died at Jinyang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "辛亥，侯景反，僕射慕容紹宗擊之。",
+          "literal": "On xinhai, Hou Jing rebelled, and Vice Director Murong Shaozong attacked him.",
+          "idiomatic": "On xinhai day Hou Jing rebelled, and Vice Director Murong Shaozong attacked him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "八月，淮南三王謀反，誅。",
+          "literal": "In the eighth month, the three princes of Huainan plotted rebellion and were executed.",
+          "idiomatic": "In the eighth month the three princes of Huainan plotted rebellion and were put to death.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "明年，紹宗攻王思政于潁川，竟溺。",
+          "literal": "The following year, Shaozong attacked Wang Sizheng at Yingchuan and in the end drowned.",
+          "idiomatic": "The following year Shaozong attacked Wang Sizheng at Yingchuan and ultimately drowned.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "四年九月，月在翼，暈軒轅、太微帝坐。",
+          "literal": "In the ninth month of the fourth year, the Moon was in Wings and haloed Xuanyuan and the imperial seat of Supreme Splendor.",
+          "idiomatic": "In the ninth month of year 4 the Moon stood in Wings and haloed Xuanyuan and the imperial seat of Supreme Splendor.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "五年二月，暈昴、畢、參、井、五車；",
+          "literal": "In the second month of the fifth year, it haloed Hairy Head, Net, Three Stars, Well, and Five Chariots;",
+          "idiomatic": "In the second month of year 5 it haloed Hairy Head, Net, Three Stars, Well, and the Five Chariots;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "五月，在張，又暈軒轅、太微。",
+          "literal": "In the fifth month, in Extended Net, it again haloed Xuanyuan and Supreme Splendor.",
+          "idiomatic": "In the fifth month, standing in Extended Net, it again haloed Xuanyuan and Supreme Splendor.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "時兵革屢動，東、西帝皆比歲大赦。",
+          "literal": "At the time arms and warfare moved repeatedly; the emperors of east and west both granted general amnesty year after year.",
+          "idiomatic": "At that time war broke out repeatedly, and the emperors of east and west both proclaimed general amnesties year after year.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T09:16:06.462Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T09:16:06.466Z",
+      "appliedSummary": {
+        "id": "source-weishu-114-wikisource-bab252b627f2",
+        "type": "source_omission_candidate",
+        "start": 829,
+        "removed": 0,
+        "inserted": 15,
+        "delta": 15,
+        "manualTranslationsApplied": 15
+      }
     },
     {
       "id": "source-weishu-114-wikisource-d74021d33989",
@@ -127606,7 +127920,7 @@
     },
     {
       "id": "source-weishu-114-wikisource-d74fceaef71c",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -127630,8 +127944,120 @@
         "afterLocal": "正光元年九月辛巳，有彗星光焰如火，出于東方，陰動爭明之異也。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "二年八月己亥，太白犯軒轅；",
+          "literal": "In the eighth month of the second year on jihai, Venus crossed Xuanyuan;",
+          "idiomatic": "In the eighth month of year 2, on jihai day, Venus crossed Xuanyuan;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "是月，月又犯之；",
+          "literal": "That month, the Moon again crossed it;",
+          "idiomatic": "That month the Moon crossed it again;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "至正光元年正月，月又犯軒轅大星。",
+          "literal": "By the first month of the first year of Zhengguang, the Moon again crossed the great star of Xuanyuan.",
+          "idiomatic": "By the first month of Zhengguang 1 the Moon again crossed the great star of Xuanyuan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "四月庚戌，金、火合于井，相去一尺。",
+          "literal": "In the fourth month on gengxu, Venus and Mars met in Well, one chi apart.",
+          "idiomatic": "In the fourth month, on gengxu day, Venus and Mars met in Well, one chi apart.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "占曰「王業易，君失政，大臣首亂，將相戮死，以用師大敗」。",
+          "literal": "The prognostication says: \"The royal enterprise changes; the ruler loses governance; great ministers lead disorder; generals and ministers are executed; through use of armies, great defeat.\"",
+          "idiomatic": "The omen read: \"The royal enterprise will change; the ruler will lose his way; great ministers will lead rebellion; generals and ministers will be slain; and armies will be used to great defeat.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "五月丙午，太白犯月，相距三寸。",
+          "literal": "In the fifth month on bingwu, Venus crossed the Moon, three cun apart.",
+          "idiomatic": "In the fifth month, on bingwu day, Venus crossed the Moon, three cun apart.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "占曰「將相相攻，秦國有戰」。",
+          "literal": "The prognostication says: \"Generals and ministers attack one another; Qin territory will have war.\"",
+          "idiomatic": "The omen read: \"Generals and ministers will attack one another; Qin territory will see war.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "七月，太白犯角。",
+          "literal": "In the seventh month, Venus crossed Horn.",
+          "idiomatic": "In the seventh month Venus crossed Horn.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "角，天門也，是為兵及朝庭。",
+          "literal": "Horn is Heaven's Gate; this means armies and the court.",
+          "idiomatic": "Horn is Heaven's Gate; the sign portended war and the court.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "占曰「有謀不成，破軍斬將」。",
+          "literal": "The prognostication says: \"Plots do not succeed; armies are broken and generals beheaded.\"",
+          "idiomatic": "The omen read: \"Plots will fail; armies will be broken and generals beheaded.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "是月，侍中元叉矯詔幽太后于北宮，殺太傅、清河王懌。",
+          "literal": "That month, Attendant-in-Ordinary Yuan Cha forged an edict and confined the empress dowager in the Northern Palace, killing Grand Tutor, Prince of Qinghe Yi.",
+          "idiomatic": "That month Attendant-in-Ordinary Yuan Cha forged an edict, confined the empress dowager in the Northern Palace, and killed Grand Tutor Prince Yi of Qinghe.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "八月，中山王熙起兵誅元叉，不克遇害。",
+          "literal": "In the eighth month, Prince of Zhongshan Xi raised troops to execute Yuan Cha, failed, and was killed.",
+          "idiomatic": "In the eighth month Prince Xi of Zhongshan raised troops to kill Yuan Cha, failed, and was put to death.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "明春，衞將軍奚康生謀討叉于禁中，事泄又死。",
+          "literal": "The next spring, Guard General Xi Kangsheng plotted to attack Cha in the forbidden precinct; the affair leaked out and he too died.",
+          "idiomatic": "The next spring Guard General Xi Kangsheng plotted to attack Cha within the forbidden precinct; when the plot leaked out he too was killed.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "是冬，諸將伐氐，官軍敗績。",
+          "literal": "That winter, the generals campaigned against the Di, and the government army suffered great defeat.",
+          "idiomatic": "That winter the generals campaigned against the Di, and the government army was routed.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T09:16:05.965Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T09:16:05.968Z",
+      "appliedSummary": {
+        "id": "source-weishu-114-wikisource-d74fceaef71c",
+        "type": "source_omission_candidate",
+        "start": 483,
+        "removed": 0,
+        "inserted": 14,
+        "delta": 14,
+        "manualTranslationsApplied": 14
+      }
     },
     {
       "id": "source-weishu-114-wikisource-f03dc9e53b9b",
@@ -128475,7 +128901,7 @@
     },
     {
       "id": "source-weishu-114-wikisource-f1f042830d6c",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -128499,8 +128925,85 @@
         "afterLocal": "神龜二年四月甲戌，大流星起天市垣西，東南流，轢尾，光明燭地。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "二年六月癸丑，有大流星出河鼓，東南流，至牛；",
+          "literal": "In the sixth month of the second year on guichou, a great meteor emerged from River Drum, flowed southeast, and reached Ox;",
+          "idiomatic": "In the sixth month of year 2, on guichou day, a great meteor rose from River Drum, streamed southeast, and reached Ox;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "十一月，流星起河鼓，色黃赤，西南流，長且三丈，有光照地；",
+          "literal": "In the eleventh month, a meteor rose from River Drum, yellow-red in color, flowed southwest, more than three zhang long, its light shining upon the earth;",
+          "idiomatic": "In the eleventh month a meteor rose from River Drum, yellow-red in hue, streamed southwest more than thirty feet long, and lit the earth with its brilliance;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "至神龜元年四月壬子，有流星起河鼓，西北流，至北斗散滅。",
+          "literal": "By the fourth month of the first year of Shengui on renzi, a meteor rose from River Drum, flowed northwest, reached the Northern Dipper, and dispersed and vanished.",
+          "idiomatic": "By the fourth month of Shengui 1, on renzi day, a meteor rose from River Drum, streamed northwest to the Northern Dipper, and dispersed.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "河鼓，鼓旗之應也，故流星出之兵出，入之兵入。",
+          "literal": "River Drum is the correspondence of drums and banners; hence when a meteor emerges from it armies march out, and when it enters armies return.",
+          "idiomatic": "River Drum corresponds to drums and banners; when a meteor emerges from it armies march out, and when it enters armies return.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "昔宋泰始初，大流星出自河鼓，西南行，竟夜，有小星百數從之。",
+          "literal": "Formerly at the beginning of Taishi under Song, a great meteor emerged from River Drum, traveled southwest all night, and several hundred small stars followed it.",
+          "idiomatic": "Formerly, at the beginning of the Song Taishi era, a great meteor rose from River Drum and traveled southwest all night, followed by several hundred small stars.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "既而諸侯同時作亂。",
+          "literal": "Soon afterward the feudal lords simultaneously rose in rebellion.",
+          "idiomatic": "Soon afterward the feudal lords rebelled all at once.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "至是三出河鼓，秦州屬國羌及南秦、東益氐皆反。",
+          "literal": "Now with three emergences from River Drum, the dependent-state Qiang of Qin Province and the Di of South Qin and East Yi all rebelled.",
+          "idiomatic": "Now, with three emergences from River Drum, the dependent-state Qiang of Qin Province and the Di of South Qin and East Yi all rebelled.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "七月，河州人却鐵怱與羣盜又起，自稱水池王，詔行臺源子恭及諸將四出征之。",
+          "literal": "In the seventh month, Que Tiecong of He Province together with bandits rose again, styled himself King of the Water Pool; an edict ordered Mobile Headquarters Yuan Zigong and the generals on four sides to campaign against him.",
+          "idiomatic": "In the seventh month Que Tiecong of He Province and bandits rose again and styled himself King of the Water Pool; the court ordered Mobile Headquarters Yuan Zigong and generals on four fronts to campaign against him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "朝廷多事，故天應屢見云。",
+          "literal": "The court had many affairs; hence celestial responses repeatedly appeared, as it were.",
+          "idiomatic": "The court was beset with troubles, and so heavenly signs appeared again and again.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T09:16:05.377Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T09:16:05.380Z",
+      "appliedSummary": {
+        "id": "source-weishu-114-wikisource-f1f042830d6c",
+        "type": "source_omission_candidate",
+        "start": 465,
+        "removed": 0,
+        "inserted": 9,
+        "delta": 9,
+        "manualTranslationsApplied": 9
+      }
     },
     {
       "id": "source-weishu-114-wikisource-f8e23d53c0b0",
@@ -182596,5 +183099,5 @@
       "retainedAfterRescan": true
     }
   ],
-  "updatedAt": "2026-06-28T05:11:31.850Z"
+  "updatedAt": "2026-06-28T12:53:31.095Z"
 }
