@@ -103547,7 +103547,7 @@
     },
     {
       "id": "source-weishu-091-wikisource-0c06915161f0",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.137,
@@ -103590,8 +103590,50 @@
         "afterLocal": "封肅，字元邕，勃海人，尚書回之兄子也。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "盧觀，字伯舉，范陽涿人也。",
+          "literal": "Lu Guan, style name Boju, was a man of Zhuo in Fanyang.",
+          "idiomatic": "Lu Guan, whose style was Boju, came from Zhuo in Fanyang commandery.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "少好學，有儁才，舉秀才，射策甲科，除太學博士、著作佐郎。",
+          "literal": "From youth he loved learning and had outstanding talent; he was recommended as Cultivated Talent, ranked first class in the policy examination, and was appointed Erudite of the Imperial Academy and Assistant Gentleman of the Writing Office.",
+          "idiomatic": "From youth he loved learning and showed outstanding talent. Recommended as a cultivated talent, he placed in the top class of the policy examination and was appointed erudite of the Imperial Academy and assistant gentleman of the Writing Office.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "與太常少卿李神儁、光祿大夫王誦等在尚書上省撰定朝儀，拜尚書儀曹郎中。",
+          "literal": "Together with Li Shenjun, Vice Director of the Court of Ceremonials, Wang Song, Grand Master of Splendid Happiness, and others, he compiled and settled court ritual in the upper office of the Masters of Writing, and was appointed Gentleman in the Bureau of Rites of the Masters of Writing.",
+          "idiomatic": "Together with Li Shenjun, vice director of the Court of Ceremonials, Wang Song, grand master of splendid happiness, and others, he helped compile court ritual in the upper office of the Masters of Writing and was appointed gentleman in the Bureau of Rites of the Masters of Writing.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "孝昌元年卒。",
+          "literal": "He died in the first year of Xiaochang.",
+          "idiomatic": "He died in the first year of the Xiaochang reign.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-29T08:44:33.016Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-29T08:44:33.019Z",
+      "appliedSummary": {
+        "id": "source-weishu-091-wikisource-0c06915161f0",
+        "type": "source_omission_candidate",
+        "start": 46,
+        "removed": 1,
+        "inserted": 5,
+        "delta": 4,
+        "manualTranslationsApplied": 4
+      }
     },
     {
       "id": "source-weishu-091-wikisource-210afeca3dca",
@@ -103949,7 +103991,7 @@
     },
     {
       "id": "source-weishu-091-wikisource-26a9355d4490",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.172,
@@ -104001,8 +104043,11 @@
         "afterLocal": "自昔聖達之作，賢哲之書，莫不統理成章，蘊氣標致，其流廣變，諸非一貫，文質推移，與時俱化。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream range mixes Wikisource page metadata (author/section/nav boilerplate) with colophon text already preserved locally in the chapter's editorial notes; local chapter correctly begins with the biography heading and opening prose.",
+      "reviewedAt": "2026-06-29T08:44:35.603Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-weishu-092-wikisource-354d5d56d7b7",
@@ -158228,7 +158273,7 @@
     },
     {
       "id": "source-weishu-120-wikisource-0e37bb33add9",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -158271,8 +158316,11 @@
         "afterLocal": "六宗之祀，禮無明文，名位壇兆，歷代所疑。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream leading 」 belongs to the previous local sentence s0264 (便即施行，著之於令，永為世法。」); local boundary is correct. The [16] footnote marker in s0265 is local editorial apparatus, not missing source text.",
+      "reviewedAt": "2026-06-29T08:47:07.110Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-weishu-120-wikisource-1d1e6f32c658",
@@ -173358,7 +173406,7 @@
     },
     {
       "id": "source-weishu-129-wikisource-12d56aa78749",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "weishu",
@@ -173382,8 +173430,29 @@
         "afterLocal": "七月，詔諸征鎮大將依品開府，以置佐吏。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "神䴥元年三月，置左右僕射、左右丞、諸曹尚書十餘人，各居別寺。",
+          "literal": "In the third month of the first year of Shengui [428], Left and Right Vice Directors, Left and Right Assistants, and more than ten Ministers of the various bureaus were appointed, each residing in a separate office.",
+          "idiomatic": "In the third month of Shengui year 1 (428), Left and Right Vice Directors, Left and Right Assistants, and more than ten Ministers of the various bureaus were appointed, each in a separate office.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-29T08:59:26.962Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-29T08:59:26.965Z",
+      "appliedSummary": {
+        "id": "source-weishu-129-wikisource-12d56aa78749",
+        "type": "source_omission_candidate",
+        "start": 79,
+        "removed": 0,
+        "inserted": 1,
+        "delta": 1,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-weishu-129-wikisource-1784bf29182c",
@@ -173491,7 +173560,7 @@
     },
     {
       "id": "source-weishu-129-wikisource-3c795324fdb3",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.991,
@@ -174506,8 +174575,11 @@
         "afterLocal": "正始元年十一月，罷郡中正。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource :: table column delimiters vs local 〈〉 rank-note brackets; same office titles and rank-order text.",
+      "reviewedAt": "2026-06-29T08:59:29.501Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-weishu-129-wikisource-592f55f9db11",
@@ -177701,7 +177773,7 @@
     },
     {
       "id": "source-weishu-129-wikisource-caf9720714d2",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -177725,8 +177797,36 @@
         "afterLocal": "天興元年十一月，詔吏部郎鄧淵典官制，立爵品。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "皇始元年，始建曹省，備置百官，封拜五等；",
+          "literal": "In Huangshi year 1 (396), the Bureau of Ministries was first established, fully staffing the hundred offices and enfeoffing the five ranks;",
+          "idiomatic": "In Huangshi year 1 (396), the Bureau of Ministries was first established, the hundred offices fully staffed, and the five ranks of enfeoffment conferred;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "外職則刺史、太守、令長已下有未備者，隨而置之。",
+          "literal": "for outside posts from Regional Inspector, Administrator, and Magistrate downward, those not yet in place were added as needed.",
+          "idiomatic": "for outside posts from regional inspector, administrator, and magistrate downward, any not yet established were added as needed.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-29T08:59:42.982Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-29T08:59:42.985Z",
+      "appliedSummary": {
+        "id": "source-weishu-129-wikisource-caf9720714d2",
+        "type": "source_omission_candidate",
+        "start": 25,
+        "removed": 0,
+        "inserted": 2,
+        "delta": 2,
+        "manualTranslationsApplied": 2
+      }
     },
     {
       "id": "source-weishu-129-wikisource-cc59ec36bc1d",
@@ -177885,7 +177985,7 @@
     },
     {
       "id": "source-weishu-129-wikisource-ea2ab0c0d1fa",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.986,
@@ -180115,12 +180215,15 @@
         "afterLocal": "太和十八年十二月，降車、驃將軍，侍中，黃門秩，依魏晉舊事。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource :: table layout residue vs local 〈〉 editorial rank notes; substantive office list matches.",
+      "reviewedAt": "2026-06-29T08:59:29.853Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-weishu-129-wikisource-fd654a140c80",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "weishu",
@@ -180144,8 +180247,29 @@
         "afterLocal": "興安二年正月，置駕部尚書、右士尚書。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "正平元年七月，以諸曹吏多，減其員。",
+          "literal": "In the seventh month of the first year of Zhengping [451], because clerks in the various bureaus were too numerous, their quotas were reduced.",
+          "idiomatic": "In the seventh month of Zhengping year 1 (451), because the various bureaus had too many clerks, their authorized numbers were cut.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-29T08:59:43.322Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-29T08:59:43.328Z",
+      "appliedSummary": {
+        "id": "source-weishu-129-wikisource-fd654a140c80",
+        "type": "source_omission_candidate",
+        "start": 87,
+        "removed": 0,
+        "inserted": 1,
+        "delta": 1,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-weishu-130-wikisource-016f0cfdcaaa",
@@ -183625,5 +183749,5 @@
       "retainedAfterRescan": true
     }
   ],
-  "updatedAt": "2026-06-28T20:02:37.450Z"
+  "updatedAt": "2026-06-29T08:59:43.368Z"
 }
