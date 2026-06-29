@@ -310538,7 +310538,7 @@
     },
     {
       "id": "source-qingshigao-226-wikisource-0a55b2027507",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.714,
@@ -310590,8 +310590,11 @@
         "afterLocal": "崇德三年，以老解職，召見，諭之曰：「爾等舊臣，朕見之輒心喜，可不時來見也！"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource alignment truncates 同知事 and 人; local text 同知事。尋命帥師伐瓦爾喀，俘其人。 is complete and correct.",
+      "reviewedAt": "2026-06-29T18:14:00.154Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-qingshigao-226-wikisource-231c43dfd75f",
@@ -310698,7 +310701,7 @@
     },
     {
       "id": "source-qingshigao-226-wikisource-6669c0e27e81",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.846,
@@ -310741,8 +310744,11 @@
         "afterLocal": "逾年師還，上自出郊宴勞。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream OCR reads 遵三千 for place name 遵化 (Zunhua); local text is correct.",
+      "reviewedAt": "2026-06-29T18:14:00.592Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-qingshigao-226-wikisource-727d8f07bd44",
@@ -310967,7 +310973,7 @@
     },
     {
       "id": "source-qingshigao-226-wikisource-d4d0f8561411",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -311019,8 +311025,11 @@
         "afterLocal": "巴篤理從貝勒莽爾古泰攻之，城下，盡殲明兵。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream has OCR gap 十？ and spurious 使兄弟分領其年; local 十年 is correct.",
+      "reviewedAt": "2026-06-29T18:14:00.996Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-qingshigao-226-wikisource-e7bc6c0964d6",
@@ -337509,7 +337518,7 @@
     },
     {
       "id": "source-qingshigao-387-wikisource-df2684f70de0",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -337552,8 +337561,11 @@
         "afterLocal": "道光中，考封三等輔國將軍，授委散秩大臣、奉宸苑卿。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream Wikisource span prepends later chapter roster names 焦祐瀛 and 陳孚恩 to the opening of 宗室肅順's biography; local s0001 already has the correct body text.",
+      "reviewedAt": "2026-06-29T20:19:09.294Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-qingshigao-388-wikisource-b8a5076f06f4",
@@ -351168,7 +351180,7 @@
     },
     {
       "id": "source-qingshigao-465-wikisource-08a9402a8a0f",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.125,
@@ -351220,12 +351232,118 @@
         "afterLocal": "剛毅，字子良，滿洲鑲藍旗人。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "袁昶、許景澄之死，舉國稱冤，而桐則曰：「是死且有餘辜！",
+          "literal": "At the deaths of Yuan Chang and Xu Jingcheng the whole country called it injustice, but Xu Tong said: \"Even in death they still had guilt to spare!",
+          "idiomatic": "When Yuan Chang and Xu Jingcheng were executed, the nation called it a miscarriage of justice; Xu Tong said: \"They deserved worse than death!",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "」時其子承煜監刑，揚揚頗自得。",
+          "literal": "\" At the time his son Chengyu supervised the execution, looking quite pleased with himself.",
+          "idiomatic": "\" His son Chengyu oversaw the executions, swaggering with evident satisfaction.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "承煜，字楠士。",
+          "literal": "Chengyu, styled Nanshi.",
+          "idiomatic": "Chengyu, whose style was Nanshi.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "拔貢。",
+          "literal": "A senior licentiate by recommendation.",
+          "idiomatic": "He had entered by senior licentiate recommendation.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "以戶部小京官晉遷郎中，累官刑部左侍郎。",
+          "literal": "Starting as a junior secretary in the Ministry of Revenue, he was promoted step by step to director, and eventually rose to Left Vice Minister of Justice.",
+          "idiomatic": "He rose from a junior post in the Ministry of Revenue to director and eventually Left Vice Minister of Justice.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "已，聯軍入，桐倉皇失措，承煜請曰：「父芘拳匪，外人至，必不免，失大臣體。",
+          "literal": "Before long the allied armies entered; Xu Tong was flustered and at a loss, and Chengyu urged: \"Father sheltered the Boxer bandits; when foreigners arrive you cannot escape and will lose the dignity of a great minister.",
+          "idiomatic": "When the allied armies entered Beijing, Xu Tong panicked. Chengyu urged him: \"Father sheltered the Boxers; when the foreigners arrive you cannot escape without disgracing your rank.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "盍殉國？",
+          "literal": "Why not die for the state?",
+          "idiomatic": "Why not die for the state?",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "兒當從侍地下耳！",
+          "literal": "Your son will follow and attend you in the grave!\"",
+          "idiomatic": "Your son will follow you to the grave!\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "」桐乃投繯死，年八十有二矣。",
+          "literal": "\" Xu Tong then hanged himself; he was eighty-two.",
+          "idiomatic": "\" Xu Tong hanged himself at the age of eighty-two.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "而承煜遂亡走，為日軍所拘，置之順天府尹署，與啟秀俱明年正月正法。",
+          "literal": "Chengyu then fled, was seized by the Japanese army, and was placed in the yamen of the prefect of Shuntian; he and Qi Xiu were both executed by lawful punishment in the first month of the following year.",
+          "idiomatic": "Chengyu fled but was seized by Japanese troops and held at the Shuntian prefect's yamen; he and Qi Xiu were executed the following first month.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "命下，日軍官置酒為餞，傳詔旨，承煜色變，口呼冤，痛詆西人不已。",
+          "literal": "When the order came down, a Japanese officer set out wine to send him off and transmitted the edict; Chengyu changed color, cried out his innocence, and bitterly denounced Westerners without cease.",
+          "idiomatic": "When the order came, a Japanese officer offered wine and read the edict; Chengyu turned pale, cried injustice, and bitterly denounced the Westerners.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "翼日，備輿送至菜市，監刑官出席禮之，已昏不知人矣，尋就戮。",
+          "literal": "The next day a carriage was prepared to send him to Caishikou; the supervising execution officer came out to salute him, but he was already unconscious; soon he was put to death.",
+          "idiomatic": "The next day he was taken to Caishikou; the execution officer saluted him, but he was already unconscious when he was killed.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "和議成，褫桐職，奪卹典，旋論棄市，以先死議免。",
+          "literal": "When peace was concluded Xu Tong's offices were stripped and mourning honors revoked; soon decapitation and public display were debated, but because he had died first the sentence was waived.",
+          "idiomatic": "After peace was made Xu Tong's offices and mourning honors were revoked; public execution was debated but waived because he had already died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-29T18:26:07.994Z",
+      "reviewer": "sdk-repair-chapter",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-29T18:26:08.011Z",
+      "appliedSummary": {
+        "id": "source-qingshigao-465-wikisource-08a9402a8a0f",
+        "type": "source_omission_candidate",
+        "start": 42,
+        "removed": 2,
+        "inserted": 13,
+        "delta": 11,
+        "manualTranslationsApplied": 12
+      }
     },
     {
       "id": "source-qingshigao-465-wikisource-434d7082fbd5",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.353,
@@ -351376,12 +351494,286 @@
         "afterLocal": "和議成，奪職。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "裕祿，字壽山，喜塔臘氏，滿洲正白旗人，湖北巡撫崇綸子。",
+          "literal": "Yu Lu, styled Shoushan, of the Xitala clan, was a man of the Plain White Banner of the Manchus and son of Hubei Governor Chonglun.",
+          "idiomatic": "Yu Lu, whose style was Shoushan, of the Xitala clan, came from the Plain White Banner; his father was Hubei Governor Chonglun.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "以刑部筆帖式歷官郎中。",
+          "literal": "Starting as a clerk in the Ministry of Justice, he rose through the posts to director.",
+          "idiomatic": "He rose from clerk in the Ministry of Justice to director.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "出為熱河兵備道，累遷安徽布政使。",
+          "literal": "He went out as military intendant of Rehe and was promoted step by step to provincial treasurer of Anhui.",
+          "idiomatic": "He served as military intendant of Rehe, then rose to provincial treasurer of Anhui.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "同治十三年，擢巡撫，年甫逾三十。",
+          "literal": "In the thirteenth year of Tongzhi he was promoted to governor; he had just passed thirty.",
+          "idiomatic": "In 1874 he was appointed governor at just over thirty.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "前江南提督李世忠本降寇，罷職家居，所為橫恣，裕祿疏請誅之。",
+          "literal": "Former Jiangnan Regional Commander Li Shizhong had originally been a surrendered bandit; dismissed and living at home, his conduct was violent and overbearing, and Yu Lu memorialized requesting his execution.",
+          "idiomatic": "Former Jiangnan commander Li Shizhong, a former surrendered rebel living in retirement, behaved with violent arrogance; Yu Lu memorialized for his execution.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "會以事詣安慶，召飲署中，酒行，出密旨，麾眾縛斬之，而仍卹其家，人以是高其能。",
+          "literal": "When he happened to go to Anqing on business, Li was summoned to drink in the yamen; as the wine was served a secret edict was produced and the crowd was ordered to bind and behead him, yet his family was still granted relief; people therefore admired his ability.",
+          "idiomatic": "When Yu Lu visited Anqing on business, Li was summoned to the yamen; wine was served, a secret edict produced, and Li was bound and beheaded—yet his family still received relief, and people admired Yu Lu's resolve.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "光緒十三年，遷湖廣總督，調兩江，復還鄂。",
+          "literal": "In the thirteenth year of Guangxu he was transferred to Viceroy of Huguang, then to the Two Jiangs, and then returned again to Hubei.",
+          "idiomatic": "In 1887 he became viceroy of Huguang, was transferred to the Two Jiangs, then returned to Hubei.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "廷議修鐵路，起盧溝訖漢口，下群臣議，裕祿力陳不可，忤旨。",
+          "literal": "The court debated building a railway from Lugou Bridge to Hankou and referred it to all officials for discussion; Yu Lu strongly argued it could not be done and offended the throne.",
+          "idiomatic": "When the court debated a railway from Lugou Bridge to Hankou, Yu Lu strongly opposed it and offended the throne.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "十五年，徙為盛京將軍。",
+          "literal": "In the fifteenth year he was moved to be general of Mukden.",
+          "idiomatic": "In 1889 he was transferred to general of Mukden.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "十七年，熱河奸民騷動，毀教堂，殺蒙人，裕祿會師朝陽，擊平之，予優敘。",
+          "literal": "In the seventeenth year ruffians in Rehe stirred up trouble, destroyed churches, and killed Mongols; Yu Lu gathered troops at Chaoyang, struck and pacified them, and received preferential commendation.",
+          "idiomatic": "In 1891 Rehe ruffians destroyed churches and killed Mongols; Yu Lu assembled troops at Chaoyang, suppressed them, and earned commendation.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "二十年秋，朝鮮亂起，奉天戒嚴，坐安東、鳳凰失守，數被議。",
+          "literal": "In the autumn of the twentieth year turmoil broke out in Korea and Fengtian was placed under martial law; because Andong and Fenghuang were lost he was repeatedly criticized.",
+          "idiomatic": "In the autumn of 1894 Korean turmoil led to martial law in Fengtian; the loss of Andong and Fenghuang brought repeated censure.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "明年，調福州，改授四川總督。",
+          "literal": "The next year he was transferred to Fuzhou and then appointed Viceroy of Sichuan.",
+          "idiomatic": "The following year he was posted to Fuzhou, then made viceroy of Sichuan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "二十四年，召為軍機大臣、禮部尚書兼總理各國事務衙門。",
+          "literal": "In the twenty-fourth year he was summoned as Grand Councilor, Minister of Rites, and concurrently head of the Zongli Yamen.",
+          "idiomatic": "In 1898 he was recalled as grand councilor, Minister of Rites, and head of the Zongli Yamen.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "會徵榮祿入樞廷，遂代之督直隸。",
+          "literal": "When Ronglu was summoned into the Grand Council, Yu Lu replaced him as Viceroy of Zhili.",
+          "idiomatic": "When Ronglu entered the Grand Council, Yu Lu replaced him as viceroy of Zhili.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "義和拳起山東，入直境。",
+          "literal": "The Boxers rose in Shandong and entered Zhili territory.",
+          "idiomatic": "The Boxers rose in Shandong and entered Zhili.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "初，義和會源出八卦教乾坎二系，聚黨直、魯間，為臨清郜生文餘孽，後稱團，專仇教。",
+          "literal": "At first the Boxer association sprang from the Qian and Kan branches of the Eight Trigrams teaching, gathered followers between Zhili and Shandong, were remnants of Gao Shengwen of Linqing, and later styled themselves militia, specializing in hatred of Christianity.",
+          "idiomatic": "The movement sprang from the Qian and Kan branches of the Eight Trigrams teaching, gathered followers in Zhili and Shandong, descended from Gao Shengwen of Linqing, and styled themselves militia devoted to anti-Christian violence.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "裕祿初頗持正論，主剿，捕其酋姚洛奇置之法。",
+          "literal": "At first Yu Lu rather held correct views, favored suppression, captured their chieftain Yao Luoqi, and put him to the law.",
+          "idiomatic": "At first Yu Lu favored suppression, captured chieftain Yao Luoqi, and executed him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "逾歲，開州傳舉烽，言匪復至，擒渠率斬以徇。",
+          "literal": "After a year Kaizhou reported beacon fires, saying the bandits had returned; the leaders were seized and beheaded as a warning.",
+          "idiomatic": "A year later Kaizhou reported bandits returning; leaders were seized and beheaded as a warning.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "居無何，毓賢撫山東，縱匪，匪散入河間、深、冀，而裕祿承風指，忽主撫。",
+          "literal": "Before long Yu Xian governed Shandong and indulged the bandits; the bandits scattered into Hejian, Shenzhou, and Jizhou, and Yu Lu, following the prevailing wind, suddenly favored appeasement.",
+          "idiomatic": "Soon Yu Xian governed Shandong and indulged the Boxers; they spread into Hejian, Shenzhou, and Jizhou, and Yu Lu suddenly turned to appeasement.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "袁世凱方將武衛軍，語裕祿：「盍不請嚴旨捕治？",
+          "literal": "Yuan Shikai was then commanding the Wuwei Army and said to Yu Lu: \"Why not request a stern edict to capture and punish them?",
+          "idiomatic": "Yuan Shikai, commanding the Wuwei Army, asked Yu Lu: \"Why not request a stern edict to capture and punish them?",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "」裕祿曰：「拳民無他伎，緩則自消，激則生變。",
+          "literal": "\" Yu Lu said: \"The Boxer people have no other skills; if treated gently they will dissipate on their own, but if provoked they will breed disorder.",
+          "idiomatic": "\" Yu Lu replied: \"The Boxers have no other arts; if handled gently they will fade, but provocation will breed disorder.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "且此委璅事，何煩瀆天聽邪？",
+          "literal": "Moreover this is a petty trifling matter—why trouble Heaven's ear?\"",
+          "idiomatic": "Besides, this petty matter hardly warrants troubling the throne.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "」已而毓賢去，世凱代之，自興兵疾擊，以故匪不敢近山東，而紛紛入畿疆矣。",
+          "literal": "\" Before long Yu Xian left and Yuan Shikai replaced him; he himself raised troops and struck swiftly, so the bandits did not dare approach Shandong but poured into the capital region.",
+          "idiomatic": "\" Yu Xian departed and Yuan Shikai replaced him, striking hard so the Boxers avoided Shandong but flooded the capital region.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "吳橋知縣勞乃宣禁傳習，為書上裕祿，格不行。",
+          "literal": "Lao Naixuan, magistrate of Wuqiao, forbade transmission and practice and wrote a letter to Yu Lu, but it was blocked and not carried out.",
+          "idiomatic": "Wuqiao Magistrate Lao Naixuan forbade Boxer practice and wrote to Yu Lu, but the letter was blocked.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "時直隸官吏多信拳，布政使廷杰獨力主剿辦，嚴定州縣查緝拳匪懲戒辦法。",
+          "literal": "At that time most officials in Zhili believed in the Boxers; only the provincial treasurer Ting Jie alone insisted on suppression and strictly fixed methods for counties and prefectures to search out and punish Boxer bandits.",
+          "idiomatic": "Most Zhili officials then believed in the Boxers; only Provincial Treasurer Ting Jie insisted on suppression and laid down strict county-level measures to hunt and punish them.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "遽奉詔開缺回京，匪愈橫。",
+          "literal": "He was suddenly ordered by edict to vacate his post and return to the capital; the bandits grew still more arrogant.",
+          "idiomatic": "An edict suddenly recalled him to Beijing, and the Boxers grew bolder still.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "張德成居獨流，稱「舉國第一壇」，曹福田為津匪魁，二人者炫神術，為妄妖言相煽誘，裕祿不之問。",
+          "literal": "Zhang Decheng dwelt at Duliang, styled \"the foremost altar in the realm,\" and Cao Futian was chieftain of the Tianjin bandits; the two men boasted of divine arts and incited one another with wild demonic talk, yet Yu Lu did not question them.",
+          "idiomatic": "Zhang Decheng at Duliang styled himself head of \"the foremost altar in the realm,\" and Cao Futian led the Tianjin Boxers; they traded boasts of magic and sedition, and Yu Lu looked the other way.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "已，复致書請餉二十萬，自任滅外人，裕祿馳檄召之，於是二人出入節署，與裕祿抗禮。",
+          "literal": "Before long they again wrote requesting two hundred thousand taels in funds, undertaking themselves to destroy the foreigners; Yu Lu sent urgent dispatches summoning them, and thereafter the two men came and went at the governor's yamen, treating him as an equal in ceremony.",
+          "idiomatic": "They soon demanded two hundred thousand taels, promising to destroy the foreigners; Yu Lu summoned them by urgent dispatch, and thereafter they came and went at his yamen as his equals.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "當是時，津城拳匪至可三萬人，呼嘯周衢市，又以紅燈照熒眾，每入夜，家家懸紅燈，謂「迎仙姑」。",
+          "literal": "At that time the Boxers in Tianjin may have reached thirty thousand; they roared through the streets and markets; moreover the Red Lantern Society inflamed the masses, and each night every household hung red lamps, saying they were \"welcoming the Immortal Maiden.\"",
+          "idiomatic": "Boxers in Tianjin may have numbered thirty thousand, roaring through the streets; the Red Lantern Society stirred the crowds, and every night households hung red lamps to \"welcome the Immortal Maiden.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "頃之，各國兵艦大集，匪猶群聚督轅求槍砲，裕祿命詣軍械所任自擇，盡攫以去。",
+          "literal": "Before long the warships of the various nations gathered in force; the bandits still thronged the governor's yamen demanding guns and cannon; Yu Lu ordered them to the arsenal to choose as they pleased, and they seized everything and left.",
+          "idiomatic": "Soon foreign warships massed offshore, yet the Boxers still crowded the governor's yamen demanding arms; Yu Lu sent them to the arsenal to take what they wanted, and they carried everything away.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "而聯軍絡繹登岸，索大沽砲台，裕祿懼，疏告急，請敕董福祥來援。",
+          "literal": "Meanwhile the allied armies landed in an unbroken stream and demanded the Dagu forts; Yu Lu was afraid, memorialized in urgent alarm, and requested an edict summoning Dong Fuxiang to aid.",
+          "idiomatic": "Allied troops landed in force and demanded the Dagu forts; terrified, Yu Lu sent urgent memorials begging the throne to summon Dong Fuxiang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "聯軍索益堅，提督羅榮光不允，戰失利，而裕祿且上天津團民殺敵狀，於是朝廷以團民為可恃，宣戰詔書遂下，而不知大沽已先數日失矣。",
+          "literal": "The allies pressed their demands more firmly; Regional Commander Luo Rongguang refused; battle was lost; and Yu Lu moreover reported the Tianjin militia's enemy kills, whereupon the court regarded the militia as reliable and the declaration of war was issued—not knowing Dagu had already fallen several days earlier.",
+          "idiomatic": "The allies pressed harder; Regional Commander Luo Rongguang refused and was defeated; Yu Lu reported Tianjin militia kills, and the court issued a declaration of war—unaware Dagu had already fallen days before.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "裕祿又報大捷，盛張拳匪功，發帑金十萬犒團，更薦德成、福田於朝，飾戰狀，獲賞頭品秩、花翎、黃馬褂。",
+          "literal": "Yu Lu again reported a great victory, lavishly extolled the Boxers' merit, disbursed one hundred thousand taels from the treasury to reward the militia, further recommended Decheng and Futian to the court, embellished battle reports, and they received rewards of first-rank titles, peacock feathers, and yellow riding jackets.",
+          "idiomatic": "Yu Lu reported great victory, lavished rewards on the Boxers, recommended Decheng and Futian to the court, and they received top honors.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "事急，官軍戰車站，敗績，裕祿退保北倉。",
+          "literal": "As matters grew urgent government troops fought at the railway station and were defeated; Yu Lu retreated to defend Beicang.",
+          "idiomatic": "Government troops fought at the railway station and were defeated; Yu Lu retreated to Beicang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "閱三日，城陷，德成、福田挾貲走，卒係而罪之。",
+          "literal": "After three days the city fell; Decheng and Futian fled with their loot but were eventually seized and punished.",
+          "idiomatic": "Three days later the city fell; Decheng and Futian fled with their loot but were eventually seized and punished.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "裕祿飛章自劾，詔革職留任。",
+          "literal": "Yu Lu sent a flying memorial impeaching himself; an edict stripped him of office but kept him on duty.",
+          "idiomatic": "Yu Lu urgently memorialized to impeach himself; the throne stripped his rank but left him in post.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "踰月，北倉失，裕祿又退楊村，遂自殺。",
+          "literal": "After a month Beicang was lost; he retreated again to Yangcun, and then committed suicide.",
+          "idiomatic": "A month later Beicang fell; he retreated to Yangcun and took his own life.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-29T18:26:07.994Z",
+      "reviewer": "sdk-repair-chapter",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-29T18:26:08.011Z",
+      "appliedSummary": {
+        "id": "source-qingshigao-465-wikisource-434d7082fbd5",
+        "type": "source_omission_candidate",
+        "start": 141,
+        "removed": 13,
+        "inserted": 37,
+        "delta": 24,
+        "manualTranslationsApplied": 26
+      }
     },
     {
       "id": "source-qingshigao-465-wikisource-45d20f451adb",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 3,
       "similarity": 0.72,
@@ -351469,12 +351861,25 @@
         "afterLocal": "至且親迓之。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-29T18:26:07.994Z",
+      "reviewer": "sdk-repair-chapter",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-29T18:26:08.011Z",
+      "appliedSummary": {
+        "id": "source-qingshigao-465-wikisource-45d20f451adb",
+        "type": "source_replacement_candidate",
+        "start": 34,
+        "removed": 6,
+        "inserted": 6,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-qingshigao-465-wikisource-594916dbe4e7",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.795,
@@ -351562,12 +351967,25 @@
         "afterLocal": "未幾，又命傳致教士駐省城，曰：「縣中兵力薄，防疏失也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-29T18:26:07.994Z",
+      "reviewer": "sdk-repair-chapter",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-29T18:26:08.011Z",
+      "appliedSummary": {
+        "id": "source-qingshigao-465-wikisource-594916dbe4e7",
+        "type": "text_discrepancy_candidate",
+        "start": 201,
+        "removed": 6,
+        "inserted": 6,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-qingshigao-465-wikisource-60e79dd1401d",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.225,
@@ -351646,12 +352064,167 @@
         "afterLocal": "毓賢為更名曰「團」，團建旗幟，皆署「毓」字。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "廷雍，字邵民，滿洲正紅旗人。",
+          "literal": "Ting Yong, styled Shaomin, was a man of the Plain Red Banner of the Manchus.",
+          "idiomatic": "Ting Yong, whose style was Shaomin, came from the Plain Red Banner of the Manchus.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "以貢生累官直隸布政使。",
+          "literal": "A senior licentiate, he rose through the posts to provincial treasurer of Zhili.",
+          "idiomatic": "A senior licentiate, he rose to provincial treasurer of Zhili.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "裕祿死，護總督。",
+          "literal": "When Yu Lu died he acted as governor-general.",
+          "idiomatic": "When Yu Lu died he served as acting governor-general.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "聯軍入保定，被執，並及諸士紳。",
+          "literal": "When the allied armies entered Baoding he was seized, and gentry and scholars were implicated as well.",
+          "idiomatic": "When the allies entered Baoding he was seized along with local gentry and scholars.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "各軍訊其事，雍曰：「保紳夙從令，可釋，事皆由我。",
+          "literal": "The various armies interrogated him about the affair; Yong said: \"The Baoding gentry have long followed orders and may be released; the affair is all my doing.",
+          "idiomatic": "The allied commanders interrogated him; Ting Yong said: \"The Baoding gentry have long obeyed orders and may go free; the blame is mine alone.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "今至此，斧鉞由汝，奚問為？",
+          "literal": "Now that I have come to this, the axe is in your hands—why ask further?\"",
+          "idiomatic": "I am here; the axe is yours—what more is there to ask?\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "」遂見殺。",
+          "literal": "\" He was then killed.",
+          "idiomatic": "\" He was then executed.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "郡人尚多哀之。",
+          "literal": "People of the prefecture still largely mourned him.",
+          "idiomatic": "Many in the prefecture mourned him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "毓賢，字佐臣，內務府正黃旗漢軍。",
+          "literal": "Yu Xian, styled Zuochen, was of the Plain Yellow Banner Han Chinese in the Imperial Household Department.",
+          "idiomatic": "Yu Xian, whose style was Zuochen, served in the Imperial Household Department as a member of the Plain Yellow Banner Han Chinese.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "監生。",
+          "literal": "A student of the Imperial University.",
+          "idiomatic": "He held student status at the Imperial University.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "以同知納貲為山東知府。",
+          "literal": "By purchasing office as subprefect he became prefect of Shandong.",
+          "idiomatic": "He purchased office as subprefect and became prefect of Shandong.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "光緒十四年，署曹州，善治盜，不憚斬戮。",
+          "literal": "In the fourteenth year of Guangxu he acted as prefect of Caozhou, was skilled at controlling bandits, and did not shrink from execution.",
+          "idiomatic": "In 1888 he served as acting prefect of Caozhou, suppressed bandits effectively, and did not shrink from executions.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "以巡撫張曜奏薦，得實授，累遷按察使，權布政使。",
+          "literal": "Because Governor Zhang Yao memorialized recommending him, he received substantive appointment and was promoted step by step to surveillance commissioner and acting provincial treasurer.",
+          "idiomatic": "Governor Zhang Yao recommended him for substantive appointment; he rose to surveillance commissioner and acting provincial treasurer.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "二十四年，調補湖南，署江寧將軍。",
+          "literal": "In the twenty-fourth year he was transferred to Hunan and acted as general of Jiangning.",
+          "idiomatic": "In 1898 he was transferred to Hunan and acted as general of Jiangning.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "裁革陋規萬餘兩，上聞而嘉之。",
+          "literal": "He abolished corrupt customary fees totaling more than ten thousand taels; when the throne heard of it he was commended.",
+          "idiomatic": "He abolished corrupt customary fees exceeding ten thousand taels and earned imperial praise.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "是時李秉衡撫山東，適有大刀會仇西教，秉衡獎借之，戕德國二教士。",
+          "literal": "At that time Li Bingheng was governor of Shandong; there happened to be hostility toward Western religion in the Big Sword Society, and he encouraged and indulged it, killing two German missionaries.",
+          "idiomatic": "Li Bingheng was then governor of Shandong; anti-Christian sentiment ran high in the Big Sword Society, and he encouraged it, resulting in the killing of two German missionaries.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "廷議以毓賢官魯久，諳河務，擢代之。",
+          "literal": "The court considered that Yu Xian had long served in Shandong and understood river works, and promoted him to replace him.",
+          "idiomatic": "The court judged Yu Xian's long service in Shandong and knowledge of river works qualified him, and appointed him in Li's place.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "既蒞事，護大刀會尤力。",
+          "literal": "Once he took up affairs he protected the Big Sword Society with especial force.",
+          "idiomatic": "Once in office he shielded the Big Sword Society more zealously than ever.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "匪首朱紅燈搆亂，倡言滅教。",
+          "literal": "The bandit chieftain Zhu Hongdeng stirred disorder and preached destroying Christianity.",
+          "idiomatic": "The rebel leader Zhu Hongdeng stirred up trouble and preached the extermination of Christianity.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "毓賢令知府盧昌詒按問，匪擊殺官軍數十人，自稱義和拳。",
+          "literal": "Yu Xian ordered Prefect Lu Changyi to investigate; the bandits killed several dozen government troops and styled themselves the Boxer militia.",
+          "idiomatic": "Yu Xian ordered Prefect Lu Changyi to investigate; the rebels killed dozens of government troops and proclaimed themselves the Boxer militia.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-29T18:26:07.994Z",
+      "reviewer": "sdk-repair-chapter",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-29T18:26:08.011Z",
+      "appliedSummary": {
+        "id": "source-qingshigao-465-wikisource-60e79dd1401d",
+        "type": "source_omission_candidate",
+        "start": 179,
+        "removed": 5,
+        "inserted": 20,
+        "delta": 15,
+        "manualTranslationsApplied": 18
+      }
     },
     {
       "id": "source-qingshigao-465-wikisource-af1bc71c66a2",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -351694,12 +352267,25 @@
         "afterLocal": "逢君之惡，孽由自作。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-29T18:26:07.994Z",
+      "reviewer": "sdk-repair-chapter",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-29T18:26:08.011Z",
+      "appliedSummary": {
+        "id": "source-qingshigao-465-wikisource-af1bc71c66a2",
+        "type": "text_discrepancy_candidate",
+        "start": 228,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-qingshigao-465-wikisource-d49c33257d95",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.854,
@@ -351751,12 +352337,25 @@
         "afterLocal": "赦之而彼就範，猶裨國事；"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "reviewedAt": "2026-06-29T18:26:07.994Z",
+      "reviewer": "sdk-repair-chapter",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-29T18:26:08.011Z",
+      "appliedSummary": {
+        "id": "source-qingshigao-465-wikisource-d49c33257d95",
+        "type": "text_discrepancy_candidate",
+        "start": 18,
+        "removed": 2,
+        "inserted": 2,
+        "delta": 0,
+        "manualTranslationsApplied": 0
+      }
     },
     {
       "id": "source-qingshigao-465-wikisource-d582609200cb",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.106,
@@ -351817,12 +352416,140 @@
         "afterLocal": "曰運貨迳至漢口；"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "徐桐 剛毅 趙舒翹 啟秀 英年 裕祿 毓賢。",
+          "literal": "Xu Tong, Gang Yi, Zhao Shuqiao, Qi Xiu, Ying Nian, Yu Lu, Yu Xian.",
+          "idiomatic": "Xu Tong; Gang Yi; Zhao Shuqiao; Qi Xiu; Ying Nian; Yu Lu; Yu Xian.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "徐桐，字蔭軒，漢軍正藍旗人，尚書澤醇子。",
+          "literal": "Xu Tong, styled Yinxuan, was a man of the Plain Blue Banner of the Han Chinese Banners and son of Minister Ze Chun.",
+          "idiomatic": "Xu Tong, whose style was Yinxuan, came from the Plain Blue Banner of the Han Chinese Banners; his father was Minister Ze Chun.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "道光三十年進士，選庶吉士，授編修。",
+          "literal": "In the thirtieth year of Daoguang he passed the jinshi examination, was selected as a bachelor of the Hanlin, and appointed compiler.",
+          "idiomatic": "In 1850 he took his jinshi degree, entered the Hanlin Academy as a bachelor, and was appointed compiler.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "坐修改中卷干磨勘，罷職。",
+          "literal": "Because he altered the middle scroll in an examination and was caught in a review, he was dismissed from office.",
+          "idiomatic": "He was dismissed after altering an examination middle scroll and being caught in a review.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "咸豐十年，特賞檢討，協修文宗實錄。",
+          "literal": "In the tenth year of Xianfeng he was specially granted the post of reviser and helped compile the Veritable Records of Emperor Wenzong.",
+          "idiomatic": "In 1860 he was specially made a reviser and helped compile the Veritable Records of Emperor Wenzong.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "同治初，命在上書房行走，奉懿旨番講治平寶鑑，入直弘德殿，累遷侍講學士。",
+          "literal": "At the beginning of Tongzhi he was ordered to serve in the Upper Study Halls, received an empress-dowager edict to lecture on the Mirror of Governance and Tranquility, entered duty at Hongde Hall, and was promoted step by step to expositor of the Hanlin Academy.",
+          "idiomatic": "Early in the Tongzhi reign he served in the Upper Study Halls, lectured on the Mirror of Governance and Tranquility by empress-dowager order, entered duty at Hongde Hall, and rose to expositor of the Hanlin Academy.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "先後疏請習政事、勤修省，成大學衍義體要以進。",
+          "literal": "He repeatedly memorialized to study state affairs and practice diligent self-examination, and completed the Essentials of the Great Learning in Outline to present.",
+          "idiomatic": "He repeatedly urged study of government and diligent self-examination, and presented his Essentials of the Great Learning in Outline.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "數擢至禮部侍郎。",
+          "literal": "He was promoted several times to Vice Minister of Rites.",
+          "idiomatic": "He was promoted several times to Vice Minister of Rites.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "念外人麕集京師，和議難恃，宜壹意修攘圖自強；",
+          "literal": "Reflecting that foreigners thronged the capital and peace negotiations could not be relied on, he held that one should concentrate on strengthening defenses and plotting self-strengthening;",
+          "idiomatic": "Seeing foreigners massed in the capital and treaties unreliable, he argued the court should focus on defense and self-strengthening;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "因條上簡才能、結民心、裕度支、修邊備四策。",
+          "literal": "he therefore itemized four policies: selecting talent, binding popular hearts, expanding revenue, and repairing frontier defenses.",
+          "idiomatic": "he proposed four policies: appointing capable men, winning popular support, strengthening finances, and repairing frontier defenses.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "光緒初，授禮部尚書，加太子少保。",
+          "literal": "At the beginning of Guangxu he was appointed Minister of Rites and given the additional title Grand Guardian of the Heir Apparent.",
+          "idiomatic": "Early in the Guangxu reign he became Minister of Rites with the additional title Grand Guardian of the Heir Apparent.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "主事吳可讀請豫定大統，以屍諫，桐與翁同龢等謂其未悉本朝家法：「當申明列聖不建儲彝訓，俾知他日紹膺大寶之元良，即為承繼穆宗之聖子。",
+          "literal": "Principal Clerk Wu Kedu requested that the succession be settled in advance and remonstrated with his corpse; Xu Tong and Weng Tonghe and others said he did not understand the house law of the dynasty: \"The instruction of successive sages not to establish an heir in advance ought to be declared, so that people may know the heir apparent who will one day receive the great treasure is the sage son who will succeed Emperor Muzong.",
+          "idiomatic": "When Principal Clerk Wu Kedu petitioned to settle the succession in advance and died remonstrating, Xu Tong and Weng Tonghe argued he misunderstood dynastic law: \"The ancestral rule against naming an heir in advance should be reaffirmed, so all would know the heir who one day receives the throne is the son who succeeds Emperor Muzong.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "揆諸前諭則合，準諸家法則符。",
+          "literal": "Measured against earlier edicts it accords; judged by house law it conforms.",
+          "idiomatic": "That accords with prior edicts and with house law.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "」疏入，詔存毓慶宮備覽。",
+          "literal": "\" When the memorial entered, an edict ordered it kept in the Palace of Accumulated Celebration for reference.",
+          "idiomatic": "\" The memorial was filed and the throne ordered it kept in the Palace of Accumulated Celebration for reference.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "時崇厚擅訂俄約，下群臣議，乃條摘其不可行者：曰伊、塔各城定界；",
+          "literal": "At that time Chonghou had arbitrarily concluded a treaty with Russia; when it was referred to the court for discussion among all officials, [Xu Tong] itemized what could not be accepted: namely, fixing boundaries for the cities of Ili and Tarbagatai;",
+          "idiomatic": "When Chonghou took it upon himself to negotiate the Russian treaty, the matter was laid before the full court. Xu Tong listed the terms that could not be accepted: delimiting the cities of Ili and Tarbagatai;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "曰新疆、蒙古通商；",
+          "literal": "namely, opening trade in Xinjiang and Mongolia;",
+          "idiomatic": "opening trade in Xinjiang and Mongolia;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "acceptedSourceText": "徐桐 剛毅 趙舒翹 啟秀 英年 裕祿 毓賢。徐桐，字蔭軒，漢軍正藍旗人，尚書澤醇子。道光三十年進士，選庶吉士，授編修。坐修改中卷干磨勘，罷職。咸豐十年，特賞檢討，協修文宗實錄。同治初，命在上書房行走，奉懿旨番講治平寶鑑，入直弘德殿，累遷侍講學士。先後疏請習政事、勤修省，成大學衍義體要以進。數擢至禮部侍郎。念外人麕集京師，和議難恃，宜壹意修攘圖自強；因條上簡才能、結民心、裕度支、修邊備四策。光緒初，授禮部尚書，加太子少保。主事吳可讀請豫定大統，以屍諫，桐與翁同龢等謂其未悉本朝家法：「當申明列聖不建儲彝訓，俾知他日紹膺大寶之元良，即為承繼穆宗之聖子。揆諸前諭則合，準諸家法則符。」疏入，詔存毓慶宮備覽。時崇厚擅訂俄約，下群臣議，乃條摘其不可行者：曰伊、塔各城定界；曰新疆、蒙古通商；",
+      "reviewedAt": "2026-06-29T18:26:07.994Z",
+      "reviewer": "sdk-repair-chapter",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-29T18:26:08.011Z",
+      "appliedSummary": {
+        "id": "source-qingshigao-465-wikisource-d582609200cb",
+        "type": "source_omission_candidate",
+        "start": 1,
+        "removed": 3,
+        "inserted": 16,
+        "delta": 13,
+        "manualTranslationsApplied": 15
+      }
     },
     {
       "id": "source-qingshigao-465-wikisource-da724627d3b5",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.418,
@@ -351910,12 +352637,125 @@
         "afterLocal": "太后信其術，思倚以鋤敵而立威。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "聯軍既陷天津，毓賢請勤王，未及行，朝旨趣之再。",
+          "literal": "After the allied armies took Tianjin Yu Xian requested to come to the throne's aid; before he could set out, imperial orders urged him twice.",
+          "idiomatic": "After Tianjin fell Yu Xian asked to march to the emperor's aid; before he could depart, urgent orders from the court summoned him twice.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "兩宮已西幸，毓賢遇諸塗，遂隨扈行。",
+          "literal": "The two palaces had already gone west; he met them on the road and then followed the imperial procession.",
+          "idiomatic": "The court had already fled west; he met the procession on the road and joined the flight.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "和議成，聯軍指索罪魁，中外大臣復交章論劾，始褫職，戍新疆。",
+          "literal": "When peace was concluded the allied armies pointed out and demanded the chief culprits; Chinese and foreign ministers again submitted joint memorials of impeachment; only then was he stripped of office and banished to Xinjiang.",
+          "idiomatic": "After peace was made the allies demanded the ringleaders; Chinese and foreign ministers memorialized again; only then was he stripped of rank and exiled to Xinjiang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "十二月，行抵甘肅，而正法命下。",
+          "literal": "In the twelfth month, as he reached Gansu on the journey, the order for lawful execution was issued.",
+          "idiomatic": "In the twelfth month, as he reached Gansu, the execution order came down.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "時李廷簫權甘督。",
+          "literal": "At that time Li Tingxiao was acting governor of Gansu.",
+          "idiomatic": "Li Tingxiao was then acting governor of Gansu.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "廷簫，籍湖北黃安。",
+          "literal": "Tingxiao was a native of Huang'an in Hubei.",
+          "idiomatic": "Li Tingxiao was a native of Huang'an in Hubei.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "以進士累官山西布政使，嘗附毓賢縱匪。",
+          "literal": "A jinshi, he rose through the posts to provincial treasurer of Shanxi and had once abetted Yu Xian in indulging the bandits.",
+          "idiomatic": "A jinshi, he rose to provincial treasurer of Shanxi and had once abetted Yu Xian in indulging the Boxers.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "至是得旨，持告毓賢，毓賢曰：「死，吾分也，如執事何？",
+          "literal": "At this time he received the order, took it and informed Yu Xian; Yu Xian said: \"Death is my portion—what of your office?",
+          "idiomatic": "He received the order and informed Yu Xian; Yu Xian said: \"Death is my lot—what fault is yours?",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "」廷簫慮譴及，元旦仰藥死。",
+          "literal": "\" Tingxiao feared punishment would reach him and on New Year's Day took poison and died.",
+          "idiomatic": "\" Fearing punishment, Li Tingxiao took poison on New Year's Day and died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "蘭州士民為毓賢呼冤，將集眾代請命，毓賢移書止之。",
+          "literal": "Gentry and commoners of Lanzhou cried injustice for Yu Xian and were about to gather a crowd to plead for his life; Yu Xian sent a letter stopping them.",
+          "idiomatic": "Lanzhou gentry and commoners protested Yu Xian's innocence and were about to petition for his life; he sent a letter stopping them.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "其母留太原，年八十餘矣。",
+          "literal": "His mother remained in Taiyuan, more than eighty years old.",
+          "idiomatic": "His mother remained in Taiyuan, over eighty years old.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "一妾從行，令自裁。",
+          "literal": "One concubine accompanied him on the journey; he ordered her to take her own life.",
+          "idiomatic": "One concubine accompanied him; he ordered her to kill herself.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "逾數日，伏誅未殊，連呼求速死，有僕助斷其頸，為斂而葬之。",
+          "literal": "After several days execution had not yet finished him; he repeatedly cried out begging for swift death; a servant helped break his neck, and he was laid out and buried.",
+          "idiomatic": "Days later the execution had not finished him; he begged for swift death; a servant broke his neck, and he was buried.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "論曰：戊戌政變後，廢立議起，患外人為梗，遂欲仇之，而庚子拳匪之亂乘機作矣。",
+          "literal": "The commentator says: After the coup of 1898, debate over deposing the emperor and installing an heir arose; fearing foreigners as an obstruction, they wished to make them enemies, and the Boxer disturbance of 1900 seized the opportunity to break out.",
+          "idiomatic": "The historian comments: After the coup of 1898, the struggle over deposing the emperor revived; seeing foreigners as the obstacle, the court turned toward hostility, and the Boxer rising of 1900 erupted in that moment.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-29T18:26:07.994Z",
+      "reviewer": "sdk-repair-chapter",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-29T18:26:08.011Z",
+      "appliedSummary": {
+        "id": "source-qingshigao-465-wikisource-da724627d3b5",
+        "type": "source_omission_candidate",
+        "start": 212,
+        "removed": 6,
+        "inserted": 14,
+        "delta": 8,
+        "manualTranslationsApplied": 9
+      }
     },
     {
       "id": "source-qingshigao-465-wikisource-eca98b871db0",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.189,
@@ -351967,8 +352807,58 @@
         "afterLocal": "進士。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "二十二年，拜體仁閣大學士。",
+          "literal": "In the twenty-second year he was appointed Grand Secretary of the Hall of Embodied Benevolence.",
+          "idiomatic": "In the twenty-second year (1896) he was made grand secretary of the Hall of Embodied Benevolence.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "桐崇宋儒說，守舊，惡西學如仇。",
+          "literal": "Xu Tong revered Song Neo-Confucian doctrine, clung to the old ways, and hated Western learning as he would an enemy.",
+          "idiomatic": "Xu Tong revered Song Neo-Confucianism, clung to the old ways, and hated Western learning like a mortal foe.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "門人言新政者，屏不令入謁。",
+          "literal": "Disciples who spoke of new policies he barred and would not receive in audience.",
+          "idiomatic": "He barred disciples who advocated reform from his audience.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "二十四年政變後，太后以其耆臣碩望，頗優禮，朝請令近侍扶掖以寵之。",
+          "literal": "After the coup of the twenty-fourth year the Empress Dowager, because he was an aged minister of great reputation, treated him with especial favor and ordered attendants to support him at court as a mark of grace.",
+          "idiomatic": "After the 1898 coup the Empress Dowager favored this venerable statesman, ordering attendants to support him at court.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "有豫師者，字錫之，內務府漢軍。",
+          "literal": "There was Yu Shi, styled Xizhi, of the Han Chinese Banner in the Imperial Household Department.",
+          "idiomatic": "Yu Shi, whose style was Xizhi, served in the Imperial Household Department as a member of the Han Chinese Banner.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-29T18:26:07.994Z",
+      "reviewer": "sdk-repair-chapter",
+      "preserveExistingTranslations": true,
+      "appliedAt": "2026-06-29T18:26:08.011Z",
+      "appliedSummary": {
+        "id": "source-qingshigao-465-wikisource-eca98b871db0",
+        "type": "source_replacement_candidate",
+        "start": 28,
+        "removed": 2,
+        "inserted": 5,
+        "delta": 3,
+        "manualTranslationsApplied": 5
+      }
     },
     {
       "id": "source-qingshigao-466-wikisource-3f4fe4d1b32c",
@@ -373223,5 +374113,5 @@
       }
     }
   ],
-  "updatedAt": "2026-06-29T11:30:57.145Z"
+  "updatedAt": "2026-06-29T18:26:08.051Z"
 }
