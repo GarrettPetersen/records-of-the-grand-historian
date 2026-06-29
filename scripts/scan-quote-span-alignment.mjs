@@ -505,6 +505,7 @@ function scanChapter(file) {
 
 function isPublicationBlockingQuoteProblem(note) {
   return /^English (?:begins|ends|has an unmatched)/.test(note)
+    || /^English quote stack not closed/.test(note)
     || /English (?:has no quote marks|has a closing quote|closes a quote span|has an opening quote)/.test(note)
     || /English quote span crosses/.test(note)
     || /Chinese (?:has a complete quoted unit|opens a multi-sentence quote span|closes a multi-sentence quote span|quote stack not closed)/.test(note);

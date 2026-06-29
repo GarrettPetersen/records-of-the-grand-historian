@@ -25,6 +25,8 @@ Work only on this chapter. You may edit:
 
 Do not edit other chapter files. Do not refresh or edit global generated reports such as `data/quality/quote-span-alignment.json` or `data/quality/placeholder-translations.json`; the orchestrator refreshes those after batches. Do not run a full site rebuild unless a verification command explicitly requires it.
 
+If you need a one-off helper script or trace/debug script, use an already gitignored temporary pattern such as `tmp-trace-<book>-<chapter>.mjs`, `tmp-*.json`, `temp_chapter.json`, or a file under `temp-repair/`. Do not invent new temp filename patterns that would appear as untracked files.
+
 ## Repair goals
 
 1. Source correspondence
@@ -51,6 +53,7 @@ Do not edit other chapter files. Do not refresh or edit global generated reports
    - Where Chinese uses direct quotation punctuation (`「」`, `『』`), English must preserve direct speech with balanced quotation marks.
    - Use standard English double quotation marks for direct Chinese quotation; reserve single quotation marks for nested quotations inside an existing quote.
    - Do not turn direct quotation into indirect paraphrase. For example, do not render `X曰：「Y。」` as `X said that Y`; render it as direct speech.
+   - For multi-sentence or nested quotes, close the English quotation exactly where the matching Chinese `」` or `』` closes. Do not leave an opening quote to be closed by a later unrelated quotation.
    - Make the speaker clear when the English sentence needs a speech tag.
    - Keep first-person language inside quoted speech when the Chinese speaker refers to themselves.
    - If Chinese quotation marks enclose a title rather than speech, keep an English title quotation and use normal English punctuation.

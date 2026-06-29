@@ -102168,7 +102168,7 @@
     },
     {
       "id": "source-weishu-089-wikisource-4a5b4884d7ed",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -102192,12 +102192,76 @@
         "afterLocal": "僧洗，字湛輝。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "祥，字元吉，襲封。",
+          "literal": "Xiang, styled Yuanji, inherited the title.",
+          "idiomatic": "Xiang, courtesy name Yuanji, inherited the title.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "故事，世襲例皆減邑，唯祥獨得全封。",
+          "literal": "By precedent, hereditary succession always reduced the fief; Xiang alone received the full enfeoffment.",
+          "idiomatic": "By precedent hereditary titles were reduced on succession, but Xiang alone kept the full fief.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "趙平君薨，給東園祕器，肅宗服小功服，舉哀于東堂。",
+          "literal": "When Lady Zhaoping died, the secret vessels of the Eastern Garden were granted; Emperor Suzong wore five-month mourning and raised lamentation at the East Hall.",
+          "idiomatic": "When Lady Zhaoping died, imperial funerary vessels were granted; Emperor Suzong wore five-month mourning and mourned at the East Hall.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "靈太后服齊衰期。",
+          "literal": "Empress Dowager Ling wore one-year mourning.",
+          "idiomatic": "Empress Dowager Ling wore one-year mourning.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "葬於太上君墓左，不得祔合。",
+          "literal": "She was buried to the left of the Grand Supreme Lady's tomb, without joint burial.",
+          "idiomatic": "She was buried to the left of the Grand Supreme Lady's tomb, without being interred together.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "祥歷位殿中尚書、中書監、侍中，改封東平郡公。",
+          "literal": "Xiang served in succession as Director of the Palace, Supervisor of the Palace Secretariat, and Palace Attendant, and was re-enfeoffed as Duke of Dongping Commandery.",
+          "idiomatic": "Xiang served as Director of the Palace, Supervisor of the Palace Secretariat, and Palace Attendant, and was re-enfeoffed as Duke of Dongping Commandery.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "薨，贈開府儀同三司、雍州刺史，諡曰孝景。",
+          "literal": "He died; he was posthumously granted establishment of a headquarters with the Three Insignia and Governor of Yongzhou, with the posthumous title Xiaojing.",
+          "idiomatic": "He died and was posthumously granted Honored with the Three Insignia and establishment of a headquarters and Governor of Yongzhou, with the posthumous epithet Xiaojing.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "acceptedSourceText": "祥，字元吉，襲封。故事，世襲例皆減邑，唯祥獨得全封。趙平君薨，給東園祕器，肅宗服小功服，舉哀于東堂。靈太后服齊衰期。葬於太上君墓左，不得祔合。祥歷位殿中尚書、中書監、侍中，改封東平郡公。薨，贈開府儀同三司、雍州刺史，諡曰孝景。",
+      "reviewedAt": "2026-06-28T19:57:58.050Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T19:57:58.052Z",
+      "appliedSummary": {
+        "id": "source-weishu-089-wikisource-4a5b4884d7ed",
+        "type": "source_omission_candidate",
+        "start": 182,
+        "removed": 0,
+        "inserted": 7,
+        "delta": 7,
+        "manualTranslationsApplied": 7
+      }
     },
     {
       "id": "source-weishu-089-wikisource-5032b0a3790f",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0.04,
@@ -102510,12 +102574,15 @@
         "afterLocal": ""
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local chapter correctly includes the historiographer discussion plus the 校勘記 collation-notes section; upstream Wikisource ends at the discussion sentence and adds category:魏書 markup, not missing local text.",
+      "reviewedAt": "2026-06-28T19:58:00.435Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-weishu-089-wikisource-591503e993f9",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.169,
@@ -102567,8 +102634,11 @@
         "afterLocal": "自云本勃海蓨人，五世祖顧，晉永嘉中避亂入高麗。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream witness bundles Wikisource metadata, colophon notes, and chapter title with the Gao Zhao opening; local JSON correctly begins with chapter headings and biography text.",
+      "reviewedAt": "2026-06-28T19:58:00.728Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-weishu-089-wikisource-a105ca9a8a82",
@@ -162088,7 +162158,7 @@
     },
     {
       "id": "source-weishu-123-wikisource-290158670338",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -162112,8 +162182,65 @@
         "afterLocal": "熙平元年九月，侍中儀同三司崔光表：「奉詔定五時朝服，案北京及遷都以來，未有斯制，輒勒禮官詳據。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "acceptedSourceText": "太祖天興元年冬，詔儀曹郎董謐撰朝覲、饗宴、郊廟、社稷之儀。六年，又詔有司制冠服，隨品秩各有差，時事未暇，多失古禮。世祖經營四方，未能留意，仍世以武力為事，取於便習而已。至高祖太和中，始考舊典，以制冠服，百僚六宮，各有差次。早世升遐，猶未周洽。肅宗時，又詔侍中崔光、安豐王延明及在朝名學更議之，條章粗備焉。",
+      "manualTranslations": [
+        {
+          "zh": "太祖天興元年冬，詔儀曹郎董謐撰朝覲、饗宴、郊廟、社稷之儀。",
+          "literal": "In the winter of the first year of Tianxing under Taizu, an edict ordered Dong Mi, Lang of the Rituals Section, to compile the rites for court audiences, banquets, suburban and temple sacrifices, and the altars of soil and grain.",
+          "idiomatic": "In the winter of the first year of Tianxing under Taizu, an edict ordered Dong Mi, Lang of the Rituals Section, to compile the rites for court audiences, banquets, suburban and temple sacrifices, and the altars of soil and grain.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "六年，又詔有司制冠服，隨品秩各有差，時事未暇，多失古禮。",
+          "literal": "In the sixth year, an edict again ordered the responsible offices to regulate caps and garments, each grade having its distinctions; pressing affairs left no leisure, and much of the ancient ritual was lost.",
+          "idiomatic": "In the sixth year, an edict again ordered the responsible offices to regulate caps and garments, each grade having its distinctions; pressing affairs left no leisure, and much of the ancient ritual was lost.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "世祖經營四方，未能留意，仍世以武力為事，取於便習而已。",
+          "literal": "Emperor Shizu campaigned in all directions and could not attend to these matters; generation after generation military affairs took priority, and what was adopted was whatever was convenient and familiar.",
+          "idiomatic": "Emperor Shizu campaigned in all directions and could not attend to these matters; generation after generation military affairs took priority, and what was adopted was whatever was convenient and familiar.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "至高祖太和中，始考舊典，以制冠服，百僚六宮，各有差次。",
+          "literal": "Only by the Taihe era of Emperor Gaozu did the court begin examining old canon to regulate caps and garments, with the hundred officials and the six palaces each having their gradations.",
+          "idiomatic": "Only by the Taihe era of Emperor Gaozu did the court begin examining old canon to regulate caps and garments, with the hundred officials and the six palaces each having their gradations.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "早世升遐，猶未周洽。",
+          "literal": "The emperor's early passing left the regulations not yet fully implemented.",
+          "idiomatic": "The emperor's early passing left the regulations not yet fully implemented.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "肅宗時，又詔侍中崔光、安豐王延明及在朝名學更議之，條章粗備焉。",
+          "literal": "Under Emperor Suzong, another edict ordered Attendant-in-Ordinary Cui Guang, Prince of Anfeng Yuan Yanming, and the eminent scholars at court to reconsider them, and the articles and regulations were broadly put in order.",
+          "idiomatic": "Under Emperor Suzong, another edict ordered Attendant-in-Ordinary Cui Guang, Prince of Anfeng Yuan Yanming, and the eminent scholars at court to reconsider them, and the articles and regulations were broadly put in order.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T20:00:36.863Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T20:00:36.872Z",
+      "appliedSummary": {
+        "id": "source-weishu-123-wikisource-290158670338",
+        "type": "source_omission_candidate",
+        "start": 588,
+        "removed": 0,
+        "inserted": 6,
+        "delta": 6,
+        "manualTranslationsApplied": 6
+      }
     },
     {
       "id": "source-weishu-123-wikisource-33f3a32d6685",
@@ -162148,7 +162275,7 @@
     },
     {
       "id": "source-weishu-123-wikisource-7b98b7daacd7",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -162172,12 +162299,61 @@
         "afterLocal": "太祖天賜三年十月，占授著作郎王宜弟造兵法。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "孝靜武定五年正月，齊獻武王薨，時祕凶問。",
+          "literal": "In the first month of the fifth year of Wuding under Emperor Xiaojing, Prince Xianwu of Qi died; at the time the death was kept secret and the mourning announcement was withheld.",
+          "idiomatic": "In the first month of the fifth year of Wuding under Emperor Xiaojing, Prince Xianwu of Qi died; at the time the death was kept secret and the mourning announcement was withheld.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "六日，孝靜皇帝舉哀於太極東堂，服齊衰三月。",
+          "literal": "On the sixth day, Emperor Xiaojing raised mourning in the Eastern Hall of Taiji and wore qi-cui mourning for three months.",
+          "idiomatic": "On the sixth day, Emperor Xiaojing raised mourning in the Eastern Hall of Taiji and wore qi-cui mourning for three months.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "及將窆，中練。",
+          "literal": "When the burial was imminent, he entered the middle refinement of mourning.",
+          "idiomatic": "When the burial was imminent, he entered the middle refinement of mourning.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "齊文襄王請自發喪之月，帝使侍中陸子彰舉詔，三往敦喻，王固執，詔不許。",
+          "literal": "Prince Wenxiang of Qi asked that mourning begin from the month when mourning was announced; the emperor sent Attendant-in-Ordinary Lu Zizhang to read out edicts, going three times to press the point, but the prince stubbornly insisted and the edicts were not accepted.",
+          "idiomatic": "Prince Wenxiang of Qi asked that mourning begin from the month when mourning was announced; the emperor sent Attendant-in-Ordinary Lu Zizhang to read out edicts, going three times to press the point, but the prince stubbornly insisted and the edicts were not accepted.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "乃從薨月。",
+          "literal": "Thereupon they followed the month of death.",
+          "idiomatic": "Thereupon they followed the month of death.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T20:00:37.312Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T20:00:37.315Z",
+      "appliedSummary": {
+        "id": "source-weishu-123-wikisource-7b98b7daacd7",
+        "type": "source_omission_candidate",
+        "start": 424,
+        "removed": 0,
+        "inserted": 5,
+        "delta": 5,
+        "manualTranslationsApplied": 5
+      }
     },
     {
       "id": "source-weishu-123-wikisource-8b1e1c1447df",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -162201,8 +162377,113 @@
         "afterLocal": "十一月，侍中、國子祭酒、儀同三司崔光上言：「被臺祠部曹符，文昭皇太后改葬，議至尊、皇太后、羣臣服制輕重。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "神龜元年九月，尼高皇太后崩於瑤光寺。",
+          "literal": "In the ninth month of the first year of Shengui, Empress Dowager Gao Ni died at Yaoguang Temple.",
+          "idiomatic": "In the ninth month of the first year of Shengui, Empress Dowager Gao Ni died at Yaoguang Temple.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "肅宗詔曰：「崇憲皇太后，德協坤儀，徵符月晷，方融壼化，奄至崩殂。",
+          "literal": "Emperor Suzong issued an edict: \"Empress Dowager Chongxian's virtue accorded with the earth's standard, her auspicious signs matched the lunar measure, and just as she was harmonizing transformation within the realm, she suddenly passed away.",
+          "idiomatic": "Emperor Suzong issued an edict: \"Empress Dowager Chongxian's virtue accorded with the earth's standard, her auspicious signs matched the lunar measure, and just as she was harmonizing transformation within the realm, she suddenly passed away.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "朕幼集荼蓼，夙憑德訓，及翕虣定難，是賴謨謀。",
+          "literal": "I gathered bitter hardship from youth and long relied on her moral instruction; when discord was settled and calamity was quieted, it was through her far-reaching counsel.",
+          "idiomatic": "I gathered bitter hardship from youth and long relied on her moral instruction; when discord was settled and calamity was quieted, it was through her far-reaching counsel.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "夫禮沿情制，義循事立，可特為齊衰三月，以申追仰之心。」",
+          "literal": "Ritual follows feeling in its regulation, and rightness is established according to circumstances; she may be granted qi-cui mourning for three months specially, to express my grief and reverence.\"",
+          "idiomatic": "Ritual follows feeling in its regulation, and rightness is established according to circumstances; she may be granted qi-cui mourning for three months specially, to express my grief and reverence.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "有司奏：「案舊事，皇太后崩儀，自復魄斂葬，百官哭臨，其禮甚多。",
+          "literal": "The responsible offices memorialized: \"According to former precedent, the rites for an empress dowager's death, from soul-recalling through encoffinment and burial, with the multitude of officials coming to wail and attend, are very numerous.",
+          "idiomatic": "The responsible offices memorialized: \"According to former precedent, the rites for an empress dowager's death, from soul-recalling through encoffinment and burial, with the multitude of officials coming to wail and attend, are very numerous.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "今尼太后既存委俗尊，憑居道法。",
+          "literal": "Now the Ni Empress Dowager had already withdrawn to worldly renunciation and honorable status, dwelling by the Way and its methods.",
+          "idiomatic": "Now the Ni Empress Dowager had already withdrawn to worldly renunciation and honorable status, dwelling by the Way and its methods.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "凶事簡速，不依配極之典；",
+          "literal": "The bereavement rites should be brief and swift and not follow the canon for one who matched the ultimate;",
+          "idiomatic": "The bereavement rites should be brief and swift and not follow the canon for one who matched the ultimate;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "庭局狹隘，非容百官之位。",
+          "literal": "the courtyard precinct is narrow and cramped, and cannot accommodate the positions of the hundred officials.",
+          "idiomatic": "the courtyard precinct is narrow and cramped, and cannot accommodate the positions of the hundred officials.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "但昔逕奉接，義成君臣，終始情禮，理無廢絕。",
+          "literal": "Yet in the past she had directly received and been attended to, and the relationship of ruler and minister was formed; from beginning to end feeling and ritual were complete, and by principle they ought not be abandoned.",
+          "idiomatic": "Yet in the past she had directly received and been attended to, and the relationship of ruler and minister was formed; from beginning to end feeling and ritual were complete, and by principle they ought not be abandoned.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "輒準故式，立儀如別。",
+          "literal": "We hastily follow the former pattern and establish the rites as set forth separately.",
+          "idiomatic": "We hastily follow the former pattern and establish the rites as set forth separately.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "內外羣官，權改常服，單衣邪巾，奉送至墓，列位哭拜，事訖而除。",
+          "literal": "Inner and outer officials provisionally change from ordinary dress, wear single garments and slanted headcloths, escort her to the tomb, take their places to wail and bow, and when the affair is done discard mourning.",
+          "idiomatic": "Inner and outer officials provisionally change from ordinary dress, wear single garments and slanted headcloths, escort her to the tomb, take their places to wail and bow, and when the affair is done discard mourning.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "止在京師，更不宣下。」",
+          "literal": "This is to be limited to the capital and not announced throughout the realm.\"",
+          "idiomatic": "This is to be limited to the capital and not announced throughout the realm.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "詔可。",
+          "literal": "The edict approved it.",
+          "idiomatic": "The edict approved it.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T20:00:37.794Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T20:00:37.797Z",
+      "appliedSummary": {
+        "id": "source-weishu-123-wikisource-8b1e1c1447df",
+        "type": "source_omission_candidate",
+        "start": 382,
+        "removed": 0,
+        "inserted": 13,
+        "delta": 13,
+        "manualTranslationsApplied": 13
+      }
     },
     {
       "id": "source-weishu-123-wikisource-8b414fd1b17d",
@@ -183052,7 +183333,7 @@
     },
     {
       "id": "source-weishu-130-wikisource-eeaf9cf8749b",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -183076,8 +183357,99 @@
         "afterLocal": "浮屠正號曰佛陀，佛陀與浮圖聲相近，皆西方言，其來轉為二音。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "及開西域，遣張騫使大夏還，傳其旁有身毒國，一名天竺，始聞有浮屠之教。",
+          "literal": "When the Western Regions were opened, Zhang Qian was sent as envoy to Daxia and returned; it was reported that beside it was the country of Shendu, also called Tianzhu, and for the first time the teaching of Futuo was heard of.",
+          "idiomatic": "When the Western Regions were opened, Zhang Qian was sent as envoy to Daxia and returned; it was reported that beside it lay the country of Shendu, also called India, and for the first time the teaching of Buddhism was heard of.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "哀帝元壽元年，博士弟子秦景憲受大月氏王使伊存口授浮屠經。",
+          "literal": "In the first year of Yuanshou of Emperor Ai, the academy student Qin Jingxian received from the Yuezhi king's envoy Yicun an oral transmission of the Buddhist scripture.",
+          "idiomatic": "In the first year of Yuanshou of Emperor Ai, the academy student Qin Jingxian received from the Yuezhi king's envoy Yicun an oral transmission of a Buddhist scripture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "中土聞之，未之信了也。",
+          "literal": "The central lands heard of it but did not yet believe it.",
+          "idiomatic": "The central lands heard of it but did not yet believe it.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "後孝明帝夜夢金人，項有日光，飛行殿庭，乃訪羣臣，傅毅始以佛對。",
+          "literal": "Later Emperor Ming dreamed at night of a golden man with sunlight at the nape, flying through the palace courtyard; he then questioned the officials and ministers, and Fu Yi was the first to answer concerning the Buddha.",
+          "idiomatic": "Later Emperor Ming dreamed one night of a golden man with sunlight at the nape, flying through the palace courtyard; he then questioned his ministers, and Fu Yi was the first to answer that it was the Buddha.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "帝遣郎中蔡愔、博士弟子秦景等使於天竺，寫浮屠遺範。",
+          "literal": "The emperor dispatched Palace Attendant Cai Yin, the academy student Qin Jing, and others as envoys to India to copy Buddhist images.",
+          "idiomatic": "The emperor dispatched Palace Attendant Cai Yin, the academy student Qin Jing, and others as envoys to India to copy Buddhist images.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "愔仍與沙門攝摩騰、竺法蘭東還洛陽。",
+          "literal": "Yin then returned east to Luoyang together with the monks Kāśyapa Mātanga and Zhu Falan.",
+          "idiomatic": "Yin then returned east to Luoyang together with the monks Kāśyapa Mātanga and Zhu Falan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "中國有沙門及跪拜之法，自此始也。",
+          "literal": "China had monks and the method of kneeling and bowing—from this it began.",
+          "idiomatic": "China had monks and the practice of kneeling and bowing—from this it began.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "愔又得佛經四十二章及釋迦立像。",
+          "literal": "Yin also obtained the Sutra in Forty-two Sections and a standing image of Shakyamuni.",
+          "idiomatic": "Yin also obtained the Sutra in Forty-two Sections and a standing image of Shakyamuni.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "明帝令畫工圖佛像，置清涼臺及顯節陵上，經緘於蘭臺石室。",
+          "literal": "Emperor Ming ordered painters to depict Buddha images, placing them on the Cool Terrace and atop the Xianjie Mausoleum; the scriptures were sealed in the Stone Chamber of the Orchid Terrace.",
+          "idiomatic": "Emperor Ming ordered painters to depict Buddha images, placing them on the Cool Terrace and atop the Xianjie Mausoleum; the scriptures were sealed in the Stone Chamber of the Orchid Terrace.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "愔之還也，以白馬負經而至，漢因立白馬寺於洛城雍門西。",
+          "literal": "When Yin returned, a white horse carried the scriptures; Han therefore established the White Horse Temple west of Yong Gate in Luoyang.",
+          "idiomatic": "When Yin returned, a white horse carried the scriptures; Han therefore established the White Horse Temple west of Yong Gate in Luoyang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "摩騰、法蘭咸卒於此寺。",
+          "literal": "Mātanga and Falan both died in this temple.",
+          "idiomatic": "Mātanga and Falan both died in this temple.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-28T20:02:37.378Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-28T20:02:37.380Z",
+      "appliedSummary": {
+        "id": "source-weishu-130-wikisource-eeaf9cf8749b",
+        "type": "source_omission_candidate",
+        "start": 11,
+        "removed": 0,
+        "inserted": 11,
+        "delta": 11,
+        "manualTranslationsApplied": 11
+      }
     },
     {
       "id": "source-weishu-130-wikisource-f53f8b4d9c1c",
@@ -183253,5 +183625,5 @@
       "retainedAfterRescan": true
     }
   ],
-  "updatedAt": "2026-06-28T17:03:05.551Z"
+  "updatedAt": "2026-06-28T20:02:37.450Z"
 }
