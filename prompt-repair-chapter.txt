@@ -27,6 +27,13 @@ Do not edit other chapter files. Do not refresh or edit global generated reports
 
 If you need a one-off helper script or trace/debug script, use an already gitignored temporary pattern such as `tmp-trace-<book>-<chapter>.mjs`, `tmp-*.json`, `temp_chapter.json`, or a file under `temp-repair/`. Do not invent new temp filename patterns that would appear as untracked files.
 
+## Edit discipline
+
+- Make surgical repairs only. Do not retranslate, restyle, or normalize the whole chapter.
+- Preserve existing `literal` and `idiomatic` translations for sentences whose Chinese text is unchanged, unless that exact sentence has a queued placeholder, quote-span, source-correspondence, or obvious mistranslation problem.
+- When source ingestion inserts, deletes, moves, splits, or merges Chinese units, carry forward the existing English translations for unchanged Chinese text whenever possible. Translate only newly inserted Chinese text and materially changed Chinese text.
+- A large chapter-wide translation diff is a failure unless the upstream source truly replaced the whole chapter. If you find yourself changing more than the queued issue locations plus nearby alignment fallout, stop and narrow the edit.
+
 ## Repair goals
 
 1. Source correspondence
