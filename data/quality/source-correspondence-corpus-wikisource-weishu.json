@@ -98402,7 +98402,7 @@
     },
     {
       "id": "source-weishu-083-wikisource-0d0fca933325",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.164,
@@ -98445,8 +98445,44 @@
         "afterLocal": "尊君愛親，臣子所以慎終。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "時靈太后父司徒胡國珍薨，贈相國、太上秦公。",
+          "literal": "At that time Empress Dowager Ling's father, Minister of Works Hu Guozhen, died and was posthumously granted Chancellor and Supreme Father of Qin.",
+          "idiomatic": "At that time Empress Dowager Ling's father, Minister of Works Hu Guozhen, died and was posthumously granted Chancellor and Supreme Father of Qin.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "普惠以前世后父無「太上」之號，詣闕上疏，陳其不可，左右畏懼，莫敢為通。",
+          "literal": "Puhui held that past empresses' fathers had never borne the title \"Supreme\"; he went to the palace gate to submit a memorial arguing it was improper, but attendants were afraid and no one dared pass it through.",
+          "idiomatic": "Puhui held that past empresses' fathers had never borne the title \"Supreme\"; he went to the palace gate to submit a memorial arguing it was improper, but attendants were afraid and no one dared pass it through.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "會聞胡家穿壙下墳有磐石，乃密表曰：",
+          "literal": "When he heard that while Hu's family was digging the tomb a boulder was found blocking the grave, he submitted a secret memorial saying:",
+          "idiomatic": "When he heard that while Hu's family was digging the tomb a boulder was found blocking the grave, he submitted a secret memorial saying:",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "acceptedSourceText": "時靈太后父司徒胡國珍薨，贈相國、太上秦公。普惠以前世后父無「太上」之號，詣闕上疏，陳其不可，左右畏懼，莫敢為通。會聞胡家穿壙下墳有磐石，乃密表曰。臣聞優名寶位，王者之所光錫；",
+      "reviewedAt": "2026-06-30T01:57:34.425Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T01:57:34.427Z",
+      "appliedSummary": {
+        "id": "source-weishu-083-wikisource-0d0fca933325",
+        "type": "source_omission_candidate",
+        "start": 238,
+        "removed": 1,
+        "inserted": 4,
+        "delta": 3,
+        "manualTranslationsApplied": 3
+      }
     },
     {
       "id": "source-weishu-083-wikisource-10cf6fb6f750",
@@ -122480,7 +122516,7 @@
     },
     {
       "id": "source-weishu-110-wikisource-400cc122d437",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "weishu",
@@ -122504,8 +122540,50 @@
         "afterLocal": "二年，受詔撰魏史，除魏尹，故優以祿力，專在史閣，不知郡事。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Approved: restored four omitted sentences between Wen Xiang's remark and the second-year historiography appointment, with manual English translations.",
+      "manualTranslations": [
+        {
+          "zh": "文襄崩，文宣如晉陽，令與黃門郎崔季舒、高德正、吏部郎中尉瑾於北第參掌機密。",
+          "literal": "When Wen Xiang died, Wen Xuan went to Jinyang and ordered Shou, together with Attendant of the Yellow Gates Cui Jishu, Gao Dezheng, and Director in the Ministry of Personnel Wei Jin, to manage confidential affairs at the northern residence.",
+          "idiomatic": "When Wen Xiang died, Wen Xuan went to Jinyang and ordered Shou, together with Attendant of the Yellow Gates Cui Jishu, Gao Dezheng, and Director in the Ministry of Personnel Wei Jin, to handle confidential affairs at the northern residence.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "轉祕書監，兼著作郎，又除定州大中正。",
+          "literal": "He was transferred to Director of the Palace Library, concurrently Compiler, and also appointed Chief Rectifier of Ding Province.",
+          "idiomatic": "He was transferred to Director of the Palace Library, concurrently Compiler, and also appointed Chief Rectifier of Ding Province.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "時齊將受禪，楊愔奏收置之別館，令撰禪代詔冊諸文，遣徐之才守門不聽出。",
+          "literal": "When Qi was about to receive the abdication, Yang Yin memorialized to place Shou in a separate lodge, ordering him to draft the abdication proclamations and related documents, and sent Xu Zhicai to guard the door and forbid him to leave.",
+          "idiomatic": "As Qi prepared to receive the abdication, Yang Yin memorialized to confine Shou in a separate lodge, ordering him to draft the abdication proclamations and related documents, and sent Xu Zhicai to guard the door and keep him from leaving.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "天保元年，除中書令，仍兼著作郎，封富平縣子。",
+          "literal": "In the first year of Tianbao, he was appointed Director of the Secretariat, still concurrently Compiler, and enfeoffed as Viscount of Fuping.",
+          "idiomatic": "In Tianbao 1 he was appointed Director of the Secretariat, still concurrently Compiler, and enfeoffed as Viscount of Fuping.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-29T23:20:29.669Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-29T23:20:29.672Z",
+      "appliedSummary": {
+        "id": "source-weishu-110-wikisource-400cc122d437",
+        "type": "source_omission_candidate",
+        "start": 121,
+        "removed": 0,
+        "inserted": 4,
+        "delta": 4,
+        "manualTranslationsApplied": 4
+      }
     },
     {
       "id": "source-weishu-110-wikisource-7ece7267edb2",
@@ -183803,5 +183881,5 @@
       "retainedAfterRescan": true
     }
   ],
-  "updatedAt": "2026-06-29T08:59:43.368Z"
+  "updatedAt": "2026-06-30T01:57:34.482Z"
 }

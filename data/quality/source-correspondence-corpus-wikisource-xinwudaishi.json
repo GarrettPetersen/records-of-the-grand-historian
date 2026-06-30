@@ -29101,7 +29101,7 @@
     },
     {
       "id": "source-xinwudaishi-035-wikisource-7b4cc887551e",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.769,
@@ -29153,12 +29153,15 @@
         "afterLocal": "父同，為唐容管經略使。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: removed Wikisource ○ heading marker and moved Zhang Ce heading to its own paragraph; local 敦煌 is preferred over upstream 燉煌 variant; biography text already present.",
+      "reviewedAt": "2026-06-29T23:29:23.695Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-xinwudaishi-035-wikisource-cb83e4468627",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.019,
@@ -29210,8 +29213,11 @@
         "afterLocal": "薛貽矩，字熙用，河東聞喜人也，仕唐為兵部侍郎、翰林學士承旨。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Inserted missing Zhao Guangfeng biography (7 sentences, s0138–s0144) between heading and Xue Yiju section with manual English translations.",
+      "reviewedAt": "2026-06-29T23:29:23.545Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-29T23:29:23.545Z"
     },
     {
       "id": "source-xinwudaishi-036-wikisource-2ada67f42648",
