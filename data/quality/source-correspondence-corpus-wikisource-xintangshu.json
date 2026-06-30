@@ -155259,7 +155259,7 @@
     },
     {
       "id": "source-xintangshu-081-wikisource-2a15a988ba00",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -155302,8 +155302,11 @@
         "afterLocal": "左清道率府長史魏光乘作頌，以為天子友悌之祥。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: harmless glyph variant; 脊鸰 and 鶺鴒 are alternate writings of the same bird name (wagtail), and local text already uses the standard form.",
+      "reviewedAt": "2026-06-30T18:06:10.552Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-xintangshu-081-wikisource-33d1e60091db",
@@ -163197,7 +163200,7 @@
     },
     {
       "id": "source-xintangshu-086-wikisource-6a82fce9b863",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "xintangshu",
@@ -163221,8 +163224,86 @@
         "afterLocal": "仁杲多力善騎射，軍中號萬人敵，性賊悍。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "武德元年，豐州總管張長愻擊宗羅睺，舉悉兵援之，屯析墌，以遊軍掠岐、豳。",
+          "literal": "In the first year of Wude, Fengzhou Commander-in-Chief Zhang Changsun attacked Zong Luohou; Ju sent all his troops to aid him, encamped at Xizhi, and sent raiding columns to plunder Qi and Bin.",
+          "idiomatic": "In the first year of Wude, Fengzhou commander Zhang Changsun attacked Zong Luohou. Xue Ju marched out with his whole army to relieve him, encamped at Xizhi, and sent raiders across Qi and Bin.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "秦王禦之，次高墌，度舉糧少，利速鬥，堅壁老其兵。",
+          "literal": "The Prince of Qin met him, halted at Gaoping, judged that Ju had little grain and wanted a quick battle, and ordered stout walls to wear down his troops.",
+          "idiomatic": "The Prince of Qin marched against him and halted at Gaoping. Seeing that Xue Ju was short of grain and eager for a quick fight, he held his walls to wear the enemy down.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "會王疾，臥屯不出，而舉數挑戰。",
+          "literal": "When the Prince fell ill he lay in camp and would not come out, while Ju repeatedly offered challenge.",
+          "idiomatic": "The Prince fell ill and stayed in camp, refusing to come out, while Xue Ju taunted him again and again.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "行軍長史劉文靜、殷開山觀兵於高墌，恃眾不設備，舉兵掩其後，遂大敗，死者十六，大將慕容羅睺、李安遠、劉弘基皆沒。",
+          "literal": "Campaign chief clerk Liu Wenjing and Yin Kaishan reviewed the troops at Gaoping, trusting in their numbers and taking no precautions; Ju's army fell on them from behind and utterly defeated them. Sixteen out of every hundred were killed, and the great generals Murong Luohou, Li Anyuan, and Liu Hongji all perished.",
+          "idiomatic": "Campaign chief clerk Liu Wenjing and Yin Kaishan inspected the troops at Gaoping. Confident in their numbers, they took no precautions, and Xue Ju's army fell on them from behind. The Tang force was routed; sixteen men in every hundred were killed, and the great generals Murong Luohou, Li Anyuan, and Liu Hongji were all lost.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "王還京師，舉拔高墌，仁杲進逼寧州。",
+          "literal": "The Prince returned to the capital; Ju took Gaoping, and Rengao advanced to press Ningzhou.",
+          "idiomatic": "The Prince withdrew to the capital. Xue Ju seized Gaoping, and Rengao pressed on toward Ningzhou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "郝瑗謀曰：「今唐新破，將卒禽俘，人心搖矣，可乘勝直趨長安。」",
+          "literal": "Hao Yuan plotted, saying, \"Tang has just been defeated; officers and soldiers were captured, and hearts are wavering. We can seize the moment and drive straight on Chang'an.\"",
+          "idiomatic": "Hao Yuan urged, \"Tang has just suffered a crushing defeat. Their officers and soldiers were taken prisoner, and morale is shaken. We can strike while we have the advantage and march straight on Chang'an.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "舉然之。",
+          "literal": "Ju approved.",
+          "idiomatic": "Xue Ju agreed.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "方行而病，召巫占視，言唐兵為崇，舉惡之，未幾死。",
+          "literal": "Just as he was setting out he fell ill. He summoned shamans to divine the cause; they said Tang troops were haunting him. Ju detested this, and before long he died.",
+          "idiomatic": "Just as he was setting out he fell ill. He called in shamans, who declared that Tang soldiers were haunting him. Xue Ju was revolted by the omen and soon died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "仁杲代立，偽謚舉武皇帝，未葬而仁杲滅。",
+          "literal": "Rengao succeeded him, gave Ju the false posthumous title Martial Emperor, and before Ju was buried Rengao was destroyed.",
+          "idiomatic": "Rengao took his place, gave Xue Ju the false posthumous title Martial Emperor, and before the father was even buried the son's regime was wiped out.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "acceptedSourceText": "武德元年，豐州總管張長愻擊宗羅睺，舉悉兵援之，屯析墌，以遊軍掠岐、豳。秦王禦之，次高墌，度舉糧少，利速鬥，堅壁老其兵。會王疾，臥屯不出，而舉數挑戰。行軍長史劉文靜、殷開山觀兵於高墌，恃眾不設備，舉兵掩其後，遂大敗，死者十六，大將慕容羅睺、李安遠、劉弘基皆沒。王還京師，舉拔高墌，仁杲進逼寧州。郝瑗謀曰：「今唐新破，將卒禽俘，人心搖矣，可乘勝直趨長安。」舉然之。方行而病，召巫占視，言唐兵為崇，舉惡之，未幾死。仁杲代立，偽謚舉武皇帝，未葬而仁杲滅。",
+      "reviewedAt": "2026-06-30T18:13:59.157Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T18:13:59.160Z",
+      "appliedSummary": {
+        "id": "source-xintangshu-086-wikisource-6a82fce9b863",
+        "type": "source_omission_candidate",
+        "start": 41,
+        "removed": 0,
+        "inserted": 9,
+        "delta": 9,
+        "manualTranslationsApplied": 9
+      }
     },
     {
       "id": "source-xintangshu-086-wikisource-b4c153a3f8d2",
@@ -163268,7 +163349,7 @@
     },
     {
       "id": "source-xintangshu-086-wikisource-b6b6853c4aed",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "xintangshu",
@@ -163292,8 +163373,92 @@
         "afterLocal": "先是，懷戎浮屠高曇晟因縣令具供，與其徒襲殺令，偽號大乘皇帝，以尼靜宣為耶輸皇后，建元法輪，遣使約開道為兄弟，封齊王，開道引眾從之。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "高開道，滄州陽信人。",
+          "literal": "Gao Kaidao was a native of Yangxin in Cangzhou.",
+          "idiomatic": "Gao Kaidao came from Yangxin in Cangzhou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "世煮鹽為生。",
+          "literal": "His family boiled salt for a living.",
+          "idiomatic": "His family made its living boiling salt.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "少矯勇，走及奔馬。",
+          "literal": "In youth he was fierce and bold and could run as fast as a galloping horse.",
+          "idiomatic": "In youth he was fierce and bold and could keep pace with a galloping horse.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "隋大業末，依河間賊格謙，未甚奇之。",
+          "literal": "At the end of the Sui Daye era he attached himself to the bandit Ge Qian of Hejian, who did not think much of him.",
+          "idiomatic": "Late in the Sui Daye reign he joined the Hejian bandit Ge Qian, who did not think much of him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "會謙為隋兵圍捕，左右奔散，無救者，開道獨身決戰，殺數十人，捕兵解，謙得免，遂引為將軍。",
+          "literal": "When Qian was surrounded and seized by Sui troops, his followers scattered in flight and none came to his aid. Kaidao fought alone, killed several dozen men, and the arresting force broke off; Qian escaped and then made him a general.",
+          "idiomatic": "When Sui troops surrounded Ge Qian, his followers scattered and no one came to his aid. Kaidao fought alone, killed several dozen men, and broke the encirclement so Qian could escape. Qian then made him a general.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "謙滅，與其黨百余人亡海曲。",
+          "literal": "When Qian was destroyed, he fled with more than a hundred of his followers to the coastal districts.",
+          "idiomatic": "When Ge Qian fell, Kaidao fled with more than a hundred followers to the coast.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "後出剽滄州，眾稍附，因北掠戍保，自臨渝至懷遠皆破有之。",
+          "literal": "Later he came out to raid Cangzhou; followers gradually joined him. He then raided north through garrison posts and from Linyu to Huaiyuan took and held them all.",
+          "idiomatic": "He later emerged to raid Cangzhou and gradually gathered followers. He swept north through frontier garrisons from Linyu to Huaiyuan, taking and holding them all.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "復引兵圍北平，未下，隋守將李景自度不能支，拔城去，開道據其地。",
+          "literal": "He again led troops to besiege Beiping but could not take it. Sui defending general Li Jing judged he could not hold out, abandoned the city, and left; Kaidao seized the place.",
+          "idiomatic": "He besieged Beiping again but could not take it. Sui defender Li Jing, seeing he could not hold out, abandoned the city and withdrew, and Kaidao occupied it.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "武德元年，陷漁陽郡有之。",
+          "literal": "In the first year of Wude he captured and held Yuyang Commandery.",
+          "idiomatic": "In the first year of Wude he captured Yuyang Commandery and held it.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "有鎧馬數千，眾萬人，自號燕王。",
+          "literal": "He had several thousand armored horses and ten thousand followers, and styled himself King of Yan.",
+          "idiomatic": "He fielded several thousand armored horses and ten thousand men, and declared himself King of Yan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T18:13:59.505Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T18:13:59.509Z",
+      "appliedSummary": {
+        "id": "source-xintangshu-086-wikisource-b6b6853c4aed",
+        "type": "source_omission_candidate",
+        "start": 214,
+        "removed": 0,
+        "inserted": 10,
+        "delta": 10,
+        "manualTranslationsApplied": 10
+      }
     },
     {
       "id": "source-xintangshu-087-wikisource-4260def229bb",
@@ -179618,7 +179783,7 @@
     },
     {
       "id": "source-xintangshu-110-wikisource-f529d96e6cec",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.894,
@@ -179670,8 +179835,11 @@
         "afterLocal": "何力九歲而孤，號大俟利發。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local duplicate name 契苾何力 already corrected; 癘暍 is the correct reading (pestilence and heatstroke) versus Wikisource corruption 癘曷.",
+      "reviewedAt": "2026-06-30T19:38:05.614Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-xintangshu-111-wikisource-019038535d29",
@@ -275178,5 +275346,5 @@
       "retainedAfterRescan": true
     }
   ],
-  "updatedAt": "2026-06-30T16:54:35.051Z"
+  "updatedAt": "2026-06-30T18:13:59.534Z"
 }

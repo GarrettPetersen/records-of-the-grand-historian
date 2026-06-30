@@ -31076,7 +31076,7 @@
     },
     {
       "id": "source-xinwudaishi-037-wikisource-3f06c54f224d",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.368,
@@ -31137,8 +31137,11 @@
         "afterLocal": "魏王繼岌已破蜀，劉皇后聽宦者讒言，遣繼岌賊殺郭崇韜。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource span is a corrupted/truncated witness (幸宗 for 莊宗, missing preceding sentences s0067–s0068); local chapter text is fuller and correct.",
+      "reviewedAt": "2026-06-30T18:14:46.554Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-xinwudaishi-037-wikisource-5852330c1fd4",
@@ -31204,7 +31207,7 @@
     },
     {
       "id": "source-xinwudaishi-037-wikisource-61e0ae60b4d9",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -31247,8 +31250,29 @@
         "afterLocal": "戍卒皇甫暉聞之，由此劫趙在禮作亂。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "貝州人有來鄴者，傳此語以歸。",
+          "literal": "A man from Beizhou who had come to Ye carried this tale home.",
+          "idiomatic": "A traveler from Beizhou heard it in Ye and carried the story back.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T18:15:21.402Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T18:15:21.404Z",
+      "appliedSummary": {
+        "id": "source-xinwudaishi-037-wikisource-61e0ae60b4d9",
+        "type": "text_discrepancy_candidate",
+        "start": 84,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-xinwudaishi-037-wikisource-89acf2ecfcf7",
@@ -31314,7 +31338,7 @@
     },
     {
       "id": "source-xinwudaishi-037-wikisource-a17c70a343f7",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -31357,8 +31381,29 @@
         "afterLocal": "何不饑汝縣民而空此地，以備吾天子之馳騁？"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "奈何縱民稼穡以供稅賦！",
+          "literal": "Why let the people plant grain to supply taxes and levies!",
+          "idiomatic": "Why let peasants sow grain for taxes!",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T18:15:21.609Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T18:15:21.611Z",
+      "appliedSummary": {
+        "id": "source-xinwudaishi-037-wikisource-a17c70a343f7",
+        "type": "text_discrepancy_candidate",
+        "start": 41,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-xinwudaishi-038-wikisource-52e0b24cffea",
@@ -51011,7 +51056,7 @@
     },
     {
       "id": "source-xinwudaishi-070-wikisource-3c26c1d24f50",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "xinwudaishi",
@@ -51035,8 +51080,57 @@
         "afterLocal": "已而兀欲為述軋所弒，述律代立。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "乃以周廣順元年正月戊寅即皇帝位于太原，以子承鈞為太原尹，判官鄭珙、趙華為宰相，都押衙陳光裕為宣徽使，遣通事舍人李𧦬間行使于契丹。",
+          "literal": "He then, on the wuyin day of the first month of the first year of Zhou Guangshun, took the throne at Taiyuan; appointed his son Chengjun governor of Taiyuan; made staff officers Zheng Qing and Zhao Hua chancellors; Chen Guangyu, chief military escort, Commissioner of the Palace Service; and sent Palace Communications Officer Li Gongyan as liaison envoy to the Khitan.",
+          "idiomatic": "On the wuyin day of the first month of Guangshun 1, Min took the throne at Taiyuan, made Chengjun prefect of Taiyuan, appointed staff officers Zheng Qing and Zhao Hua as chancellors, named Chen Guangyu, chief military escort, Commissioner of the Palace Service, and sent Palace Communications Officer Li Gongyan as liaison envoy to the Khitan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "契丹永康王兀欲與旻約為父子之國，旻乃遣宰相鄭珙致書兀欲，稱姪皇帝，以叔父事之而已。",
+          "literal": "The Khitan Prince of Eternal Peace Wuyu agreed with Min on a father-and-son state relationship; Min then sent Chancellor Zheng Qing with a letter to Wuyu, styling himself Nephew Emperor and treating Wuyu only as uncle.",
+          "idiomatic": "Khitan Prince of Eternal Peace Wuyu agreed with Min on a father-and-son state; Min sent Chancellor Zheng Qing to write Wuyu, styling himself Nephew Emperor and treating Wuyu only as uncle.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "兀欲遣燕王述軋、政事令高勳以冊尊旻為大漢神武皇帝，并冊旻妻為皇后。",
+          "literal": "Wuyu sent Prince of Yan Shuzha and Director of Government Affairs Gao Xun with documents to ennoble Min as Divine Martial Emperor of Great Han, and also to ennoble Min's wife as empress.",
+          "idiomatic": "Wuyu sent Prince of Yan Shuzha and Director of Government Affairs Gao Xun with investiture documents to ennoble Min as Divine Martial Emperor of Great Han and Min's wife as empress.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "兀欲性豪儁，漢使者至，輒以酒肉困之，珙素有疾，兀欲彊之飲，一夕而以醉卒。",
+          "literal": "Wuyu was by nature bold and free; whenever Han envoys arrived he wearied them with feasting; Qing had long been ill; Wuyu forced him to drink, and within a night he died drunk.",
+          "idiomatic": "Wuyu was bold and convivial; whenever Han envoys came he overwhelmed them with food and wine. Qing had long been ill, but Wuyu forced him to drink, and he died drunk overnight.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "然兀欲聞旻自立，頗幸中國多故，乃遣其貴臣述軋、高勳以自愛黃騮、九龍十二稻玉帶報聘。",
+          "literal": "Yet hearing Min had declared himself sovereign, Wuyu was quite pleased that the Central States were beset with troubles, and sent his honored ministers Shuzha and Gao Xun with his cherished yellow steed and a jade belt of twelve rice strands with nine dragons in return courtesy.",
+          "idiomatic": "Yet when Wuyu heard Min had declared himself sovereign, he was pleased that the Central States were in turmoil and sent his honored ministers Shuzha and Gao Xun with his cherished yellow steed and a nine-dragon jade belt of twelve rice strands in return courtesy.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T19:38:32.755Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T19:38:32.757Z",
+      "appliedSummary": {
+        "id": "source-xinwudaishi-070-wikisource-3c26c1d24f50",
+        "type": "source_omission_candidate",
+        "start": 30,
+        "removed": 0,
+        "inserted": 5,
+        "delta": 5,
+        "manualTranslationsApplied": 5
+      }
     },
     {
       "id": "source-xinwudaishi-070-wikisource-55c02212c99a",
@@ -52234,5 +52328,5 @@
       "appliedAt": "2026-06-29T21:19:03.730Z"
     }
   ],
-  "updatedAt": "2026-06-30T12:44:08.073Z"
+  "updatedAt": "2026-06-30T19:38:32.773Z"
 }
