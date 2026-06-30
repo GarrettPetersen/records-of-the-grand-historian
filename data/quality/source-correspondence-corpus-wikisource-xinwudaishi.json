@@ -29344,7 +29344,7 @@
     },
     {
       "id": "source-xinwudaishi-036-wikisource-7825892a8926",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.067,
@@ -29387,12 +29387,15 @@
         "afterLocal": "李嗣昭，本姓韓氏，汾州太谷縣民家子也。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource cross-reference to Li Cunshen's separate biography (Fu Cunshen); local chapter correctly opens with Li Sizhao per the chapter title and table of contents.",
+      "reviewedAt": "2026-06-30T02:13:27.760Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-xinwudaishi-036-wikisource-aef928053f91",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "xinwudaishi",
@@ -29416,12 +29419,96 @@
         "afterLocal": ""
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "莊宗即位，拜右武衛上將軍。",
+          "literal": "When Zhuangzong took the throne he appointed Cunxian general of the Right Martial Guard.",
+          "idiomatic": "When Zhuangzong took the throne he made Cunxian general of the Right Martial Guard.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "莊宗亦好角觝，嘗與王較而屢勝，頗以自矜，因顧存賢曰：「爾能勝我，與爾一鎮。」",
+          "literal": "Zhuangzong also loved wrestling; he often tested himself against Wang and won repeatedly, growing quite proud. He turned to Cunxian and said: \"If you can beat me, I will give you a command.\"",
+          "idiomatic": "Zhuangzong also loved wrestling; he often wrestled Wang and kept winning until he grew proud. He turned to Cunxian and said: \"Beat me and I will give you a command.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "存賢搏而勝之。",
+          "literal": "Cunxian wrestled and defeated him.",
+          "idiomatic": "Cunxian wrestled and beat him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "同光二年春，幽州符存審病，莊宗置酒宮中，歎曰：「吾創業故人，零落殆盡，其所存者惟存審耳！",
+          "literal": "In spring of Tongguang 2, Fu Cunshen in Youzhou fell ill. Zhuangzong set out wine in the palace and sighed: \"Of the old companions who built this realm, nearly all are gone—the only one left is Cunshen!",
+          "idiomatic": "In spring of Tongguang 2 Fu Cunshen in Youzhou fell ill. Zhuangzong drank in the palace and sighed: \"Of the friends who built this realm with me, nearly all are gone—the only one left is Cunshen!",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "今又病篤，北方之事誰可代之？」",
+          "literal": "Now he lies gravely ill. Who can take his place in the north?\"",
+          "idiomatic": "Now he is gravely ill. Who can take the north?\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "因顧存賢曰：「無以易卿。",
+          "literal": "He turned again to Cunxian and said: \"No one can replace you.",
+          "idiomatic": "He turned to Cunxian and said: \"No one can replace you.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "角觝之勝，吾不食言。」",
+          "literal": "I will not break my word on that wrestling wager.\"",
+          "idiomatic": "I will not break my word on that wrestling match.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "即日以為盧龍軍節度使。",
+          "literal": "That same day he made him military governor of the Lu Long Army.",
+          "idiomatic": "That day he made him military governor of the Lu Long Army.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "是歲，卒于幽州，年六十五。",
+          "literal": "That year he died in Youzhou, aged sixty-five.",
+          "idiomatic": "That year he died in Youzhou at sixty-five.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "贈太傅。",
+          "literal": "Posthumously enfeoffed as Grand Tutor.",
+          "idiomatic": "Posthumously made Grand Tutor.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T02:13:28.177Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T02:13:28.179Z",
+      "appliedSummary": {
+        "id": "source-xinwudaishi-036-wikisource-aef928053f91",
+        "type": "source_omission_candidate",
+        "start": 193,
+        "removed": 0,
+        "inserted": 10,
+        "delta": 10,
+        "manualTranslationsApplied": 10
+      }
     },
     {
       "id": "source-xinwudaishi-036-wikisource-b1eb937ea293",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "xinwudaishi",
@@ -29445,12 +29532,82 @@
         "afterLocal": "明年，潞州軍亂，殺李克恭以歸唐，梁遣李讜攻李罕之於澤州，存孝以騎兵五千救之。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "存孝，代州飛狐人也。",
+          "literal": "Cunxiao was a native of Feihu in Daizhou.",
+          "idiomatic": "Li Cunxiao came from Feihu in Daizhou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "本姓安，名敬思。",
+          "literal": "Originally surnamed An, personal name Jingsi.",
+          "idiomatic": "Born An Jingsi.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "太祖掠地代北得之，給事帳中，賜姓名，以為子，常從為騎將。",
+          "literal": "When Taizu overran the north beyond Dai he took him, assigned him to serve in the headquarters tent, bestowed surname and personal name, made him a son, and kept him constantly as a cavalry commander.",
+          "idiomatic": "Taizu took him campaigning beyond Dai, put him in the headquarters tent, gave him the Li name, adopted him, and kept him as a cavalry commander.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "文德元年，河南張言襲破河陽，李罕之來歸晉，晉處罕之于澤州，遣存孝與薛阿檀、安休休等以兵七千助罕之還擊河陽。",
+          "literal": "In Wende 1, Zhang Yan of Henan raided and broke Heyang; Li Hanzhi came over to Jin; Jin stationed Hanzhi at Ze Prefecture and sent Cunxiao with Xue Atan, An Xiuxiu, and others with seven thousand men to help Hanzhi strike back at Heyang.",
+          "idiomatic": "In Wende 1 Zhang Yan of Henan stormed Heyang; Li Hanzhi came to Jin; Jin posted Hanzhi at Zezhou and sent Cunxiao with Xue Atan, An Xiuxiu, and seven thousand men to help him retake Heyang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "梁亦遣丁會、牛存節等助言。",
+          "literal": "Liang also sent Ding Hui, Niu Cunjie, and others to aid Yan.",
+          "idiomatic": "Liang sent Ding Hui, Niu Cunjie, and others to aid Yan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "戰于溫縣，梁軍先扼太行，存孝大敗，安休休被執。",
+          "literal": "They fought at Wen County; Liang first held the Taihang passes and Cunxiao was heavily defeated; An Xiuxiu was captured.",
+          "idiomatic": "At Wen County Liang held the Taihang passes first; Cunxiao was smashed and An Xiuxiu was taken.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "是時，晉已得澤、潞，歲出山東，與孟方立爭邢、洺、磁，存孝未嘗不在兵間。",
+          "literal": "At that time Jin had already taken Ze and Lu and each year marched into Shandong to contend with Meng Fangli for Xing, Ming, and Ci; Cunxiao was never absent from the fighting.",
+          "idiomatic": "Jin already held Ze and Lu and each year marched into Shandong against Meng Fangli for Xing, Ming, and Ci; Cunxiao was always in the fighting.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "方立死，晉取三州，存孝功為多。",
+          "literal": "When Fangli died, Jin took the three prefectures and Cunxiao's merit was greatest.",
+          "idiomatic": "When Fangli died Jin took the three prefectures, and Cunxiao's merit was greatest.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T02:13:28.036Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T02:13:28.037Z",
+      "appliedSummary": {
+        "id": "source-xinwudaishi-036-wikisource-b1eb937ea293",
+        "type": "source_omission_candidate",
+        "start": 110,
+        "removed": 0,
+        "inserted": 8,
+        "delta": 8,
+        "manualTranslationsApplied": 8
+      }
     },
     {
       "id": "source-xinwudaishi-036-wikisource-bc6a8034ac3b",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "xinwudaishi",
@@ -29474,8 +29631,64 @@
         "afterLocal": "天復元年，梁破河中，執王珂，取晉、絳、慈、隰，因大舉擊晉，圍太原。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "陝州王珙與其兄珂爭立於河中，遣嗣昭助珂，敗珙於猗氏，獲其將三人。",
+          "literal": "Wang Gong of Shaan Prefecture contended with his elder brother Ke for rule in Hezhong; he sent Sizhao to aid Ke and defeated Gong at Yishi, capturing three of his generals.",
+          "idiomatic": "Wang Gong of Shaanzhou fought his brother Ke for Hezhong; he sent Sizhao to aid Ke, beat Gong at Yishi, and took three of his generals.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "梁軍救珙，嗣昭又敗之于胡壁堡，執其將一人。",
+          "literal": "Liang sent troops to rescue Gong; Sizhao defeated them again at Hubi Fort and seized one general.",
+          "idiomatic": "Liang marched to save Gong; Sizhao beat them again at Hubi Fort and captured a general.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "光化元年，澤州李罕之襲潞州以降梁，梁遣丁會應罕之，嗣昭與會戰含山，執其將一人，斬首三千級，遂取澤州。",
+          "literal": "In Guanghua 1, Li Hanzhi of Ze Prefecture seized Luzhou and surrendered to Liang; Liang sent Ding Hui to meet Hanzhi; Sizhao fought Hui at Hanshan, seized one general, beheaded three thousand, and took Ze Prefecture.",
+          "idiomatic": "In Guanghua 1 Li Hanzhi of Zezhou seized Luzhou for Liang; Liang sent Ding Hui to meet him; Sizhao fought Hui at Hanshan, took a general, beheaded three thousand, and recovered Zezhou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "二年，晉遣李君慶攻梁潞州，君慶為梁所敗，太祖酖殺君慶，嗣昭攻克之。",
+          "literal": "In the second year Jin sent Li Junqing to attack Liang at Luzhou; Junqing was beaten by Liang; Taizu poisoned and killed Junqing, and Sizhao stormed the city and took it.",
+          "idiomatic": "The next year Jin sent Li Junqing against Liang at Luzhou; Liang beat him; Taizu poisoned Junqing; Sizhao stormed the city and took it.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "三年，出山東，取梁洺州，梁太祖自將攻之，遣葛從周設伏於青山口。",
+          "literal": "In the third year he marched into Shandong and took Liang's Ming Prefecture; Liang Taizu came in person to attack and sent Ge Congzhou to lay an ambush at Qingshan Pass.",
+          "idiomatic": "The third year he marched into Shandong and took Liang's Mingzhou; Liang Taizu came in person and sent Ge Congzhou to ambush at Qingshan Pass.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "嗣昭聞梁太祖自來，棄城走，前遇伏兵，因大敗。",
+          "literal": "Hearing Liang Taizu had come himself, Sizhao abandoned the city and fled; he ran into the ambush ahead and suffered a great defeat.",
+          "idiomatic": "Hearing Taizu had come himself, Sizhao abandoned the city and fled straight into the ambush and was crushed.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T02:13:27.896Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T02:13:27.898Z",
+      "appliedSummary": {
+        "id": "source-xinwudaishi-036-wikisource-bc6a8034ac3b",
+        "type": "source_omission_candidate",
+        "start": 15,
+        "removed": 0,
+        "inserted": 6,
+        "delta": 6,
+        "manualTranslationsApplied": 6
+      }
     },
     {
       "id": "source-xinwudaishi-036-wikisource-e2bdb3661030",
@@ -49700,5 +49913,5 @@
       "appliedAt": "2026-06-29T21:19:03.730Z"
     }
   ],
-  "updatedAt": "2026-06-29T21:18:32.157Z"
+  "updatedAt": "2026-06-30T02:13:28.196Z"
 }
