@@ -19737,7 +19737,7 @@
     },
     {
       "id": "source-suishu-017-wikisource-5237b317ffcb",
-      "status": "pending",
+      "status": "applied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0.004,
@@ -26485,8 +26485,11 @@
         "afterLocal": ""
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Removed erroneous chapter 18 duplicate scrape appended after s0708 (隋書總目, 律曆下, and following content); retained legitimate chapter 17 ending at 求日出入所在術 and fixed s0707–s0708 translations.",
+      "reviewedAt": "2026-06-30T06:38:56.205Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T06:38:56.205Z"
     },
     {
       "id": "source-suishu-017-wikisource-75e85e2d9d22",
@@ -26532,7 +26535,7 @@
     },
     {
       "id": "source-suishu-017-wikisource-d3e0e031769c",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.283,
@@ -26638,12 +26641,94 @@
         "afterLocal": "第三，勘氣影長驗。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Inserted eleven missing sentences of the second verification section (勘度差變驗) after s0193, from the Documents quotation through the Great Sui winter-solstice degree check, with new English translations.",
+      "manualTranslations": [
+        {
+          "zh": "《尚書》雲：「日短星昴，以正仲冬。」",
+          "literal": "The Documents says: \"The days are short and the star Mao culminates, marking mid-winter.\"",
+          "idiomatic": "The Documents says: \"The days are short and the star Mao culminates, marking mid-winter.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "即是唐堯之時，冬至之日，日在危宿，合昏之時，昴正午。",
+          "literal": "This was in the time of Tang Yao: on the winter solstice the sun was in the Wei lodge; at dusk Mao was on the meridian.",
+          "idiomatic": "This was in the time of Emperor Yao of Tang: on the winter solstice the sun was in the Wei lodge, and at dusk Mao was on the meridian.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "案《竹書紀年》，堯元年丙子。",
+          "literal": "According to the Bamboo Annals, Yao's first year was bingzi.",
+          "idiomatic": "According to the Bamboo Annals, Yao's first year was bingzi.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "今以甲子元曆術推算得合堯時冬至之日，合昏之時，昴星正午。",
+          "literal": "Calculating now by the Jiazi Origin Calendar method, the winter solstice day in Yao's time and Mao on the meridian at dusk match exactly.",
+          "idiomatic": "Calculated by the Jiazi Origin Calendar method, the winter solstice in Yao's time and Mao on the meridian at dusk match exactly.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "《漢書》武帝太初元年丁丑歲，落下閎等考定太初曆冬至之日，日在牽牛初。",
+          "literal": "The History of Han records that in the first year of Taichu under Emperor Wu, dingchou year, Luoxia Hong and others fixed the winter solstice day of the Taichu Calendar, with the sun at the beginning of Qianniu.",
+          "idiomatic": "The History of Han records that in the first year of Taichu under Emperor Wu (dingchou), Luoxia Hong and others fixed the Taichu Calendar winter solstice, with the sun at the beginning of the Qianniu lodge.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "今以甲子元曆術算，即得斗末牛初矣。",
+          "literal": "Calculating by the Jiazi Origin Calendar method now, one obtains the end of Dipper and beginning of Ox.",
+          "idiomatic": "Calculated by the Jiazi Origin Calendar method, one obtains the end of the Dipper lodge and beginning of the Ox lodge.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "晉時有薑岌，又以月食驗於日度，知冬至之日日在斗十七度。",
+          "literal": "In Jin there was Jiang Ji, who also verified solar degree by lunar eclipse and knew the winter solstice sun was at the seventeenth degree of Dipper.",
+          "idiomatic": "In Jin, Jiang Ji verified solar longitude by lunar eclipse and found the winter solstice sun at the seventeenth degree of the Dipper lodge.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "宋文帝元嘉十年癸酉歲，何承天考驗乾度，亦知冬至之日日在斗十七度。",
+          "literal": "In the tenth year of Yuanjia under Emperor Wen of Song, guiyou year, He Chengtian verified the celestial degree and likewise knew the winter solstice sun was at the seventeenth degree of Dipper.",
+          "idiomatic": "In the tenth year of Yuanjia under Emperor Wen of Song (guiyou), He Chengtian verified celestial longitude and likewise found the winter solstice sun at the seventeenth degree of the Dipper lodge.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "雖言冬至後上三日，前後通融，只合在斗十七度。",
+          "literal": "Although it is said the winter solstice was reported three days later, reconciling before and after, it should only be at the seventeenth degree of Dipper.",
+          "idiomatic": "Although the winter solstice was reported three days late, reconciling the accounts, it should still fall at the seventeenth degree of the Dipper lodge.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "但堯年漢日，所在既殊，唯晉及宋，所在未改，故知其度，理有變差。",
+          "literal": "But Yao's year and Han's day differ in position; only Jin and Song did not change position, so one knows the degree has naturally shifted.",
+          "idiomatic": "Yao's epoch and Han's day differ in solar position; only Jin and Song remained unchanged, showing that the degree has naturally shifted over time.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "至今大隋甲辰之歲，考定歷數象，以稽天道，知冬至之日日在斗十三度。",
+          "literal": "Down to the jiachen year of Great Sui, verifying calendrical numbers and images against the Way of Heaven, we know the winter solstice sun is at the thirteenth degree of Dipper.",
+          "idiomatic": "Down to the jiachen year of Great Sui, verifying calendrical reckoning against the Way of Heaven, we know the winter solstice sun is at the thirteenth degree of the Dipper lodge.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T06:39:24.958Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T06:39:24.958Z"
     },
     {
       "id": "source-suishu-017-wikisource-e4894f525798",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.127,
@@ -26686,8 +26771,11 @@
         "afterLocal": "而乾維難測，斗憲易差，盈縮之期致舛，咎徵之道斯應。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local s0028–s0030 abbreviated Western Wei/Northern Zhou calendar history matches current Wikisource witness; s0073 is Ma Xian's memorial correctly placed later in the chapter, not a scrape omission.",
+      "reviewedAt": "2026-06-30T06:38:57.823Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-suishu-018-wikisource-863482910727",
@@ -76312,7 +76400,7 @@
     },
     {
       "id": "source-suishu-073-wikisource-937ef91166ca",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.882,
@@ -76355,8 +76443,29 @@
         "afterLocal": "威等以儉對。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "大業五年入朝，郡國畢集，帝謂納言蘇威、吏部尚書牛弘曰：「其中清名天下第一者為誰？」",
+          "literal": "In the fifth year of Daye, on entering court, when all commanderies and states were gathered, the emperor said to Supervisor Su Wei and Minister of Personnel Niu Hong: \"Among them, who has the purest reputation first under Heaven?\"",
+          "idiomatic": "In the fifth year of Daye, when he came to court and all the prefectures were assembled, the emperor asked Supervisor Su Wei and Minister of Personnel Niu Hong, \"Who among them has the finest reputation for integrity in the realm?\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T10:59:30.373Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T10:59:30.375Z",
+      "appliedSummary": {
+        "id": "source-suishu-073-wikisource-937ef91166ca",
+        "type": "text_discrepancy_candidate",
+        "start": 282,
+        "removed": 1,
+        "inserted": 1,
+        "delta": 0,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-suishu-073-wikisource-b087286a7fba",
@@ -84919,5 +85028,5 @@
       "retainedAfterRescan": true
     }
   ],
-  "updatedAt": "2026-06-30T04:15:29.757Z"
+  "updatedAt": "2026-06-30T10:59:30.398Z"
 }
