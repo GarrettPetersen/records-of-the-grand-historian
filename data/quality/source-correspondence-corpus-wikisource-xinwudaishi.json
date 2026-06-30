@@ -17602,7 +17602,7 @@
     },
     {
       "id": "source-xinwudaishi-012-wikisource-07ab6001907d",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -17645,12 +17645,15 @@
         "afterLocal": "己亥，克淮南十有四州，以江为界。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: simplified/traditional glyph variant for the place name Yingluan (銮/鑾).",
+      "reviewedAt": "2026-06-30T15:18:54.207Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-xinwudaishi-012-wikisource-092e14446310",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.632,
@@ -17693,12 +17696,24 @@
         "afterLocal": "丙辰，辽州刺史张汉超叛于汉来附。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Inserted Songling location note at Xinzheng County before Fen Prefecture defection entry.",
+      "manualTranslations": [
+        {
+          "zh": "在郑州新郑县。",
+          "literal": "At Xinzheng County in Zheng Prefecture.",
+          "idiomatic": "The tomb lay at Xinzheng County in Zheng Prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T15:18:51.638Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T15:18:51.638Z"
     },
     {
       "id": "source-xinwudaishi-012-wikisource-11b9f5640454",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.765,
@@ -17795,12 +17810,24 @@
         "afterLocal": "三月辛巳，大赦。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Inserted Ouyang Xiu commentary on the Jin Prince enfeoffment after accession at the bier.",
+      "manualTranslations": [
+        {
+          "zh": "于书封晋王，正其非子矣。其余假窃嗣君之礼，不待讥贬而可知，故皆无异辞。",
+          "literal": "In recording the enfeoffment as Prince of Jin, the annals correct the false claim of true sonship. The other usurped rites of a succeeding sovereign need no explicit censure or praise—the facts themselves make the impropriety plain, and so the text records them without further comment.",
+          "idiomatic": "By recording the enfeoffment as Prince of Jin, the annals expose the fiction that he was a true son. The other stolen rites of succession need no added rebuke or praise; the facts speak for themselves, and the text therefore gives them without comment.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T15:18:51.786Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T15:18:51.786Z"
     },
     {
       "id": "source-xinwudaishi-012-wikisource-12be21c4dca0",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.096,
@@ -17843,12 +17870,87 @@
         "afterLocal": "七年春正月甲辰，逊于位。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Restored Gongdi reign narrative from Shizong death through burial at Qingling with translations.",
+      "manualTranslations": [
+        {
+          "zh": "显德六年六月癸巳，世宗崩。",
+          "literal": "On guisi in the sixth month of Xiande 6 Shizong died.",
+          "idiomatic": "On guisi in the sixth month of Xiande 6 Shizong died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "甲午，皇帝即位于柩前。",
+          "literal": "On jiawu the emperor acceded before the coffin.",
+          "idiomatic": "On jiawu the new emperor took the throne before the bier.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "癸卯，范质为大行皇帝山陵使，翰林学士窦俨为礼仪使，兵部尚书张昭为卤簿使，御史中丞边归谠为仪仗使，宣徽南院使、判开封府事昝居润为桥道顿递使。",
+          "literal": "On guimao Fan Zhi was made commissioner for the late emperor’s mausoleum; Hanlin academician Dou Yan, commissioner of ritual; Minister of War Zhang Zhao, commissioner of insignia; Vice Censor-in-Chief Bian Guidang, commissioner of ceremonial guards; and Southern Court Privy Commissioner and acting Mayor of Kaifeng Zan Jurun, commissioner of bridges, roads, and relay stations.",
+          "idiomatic": "On guimao Fan Zhi was named mausoleum commissioner for the late emperor; Dou Yan, Hanlin academician, oversaw ritual; Zhang Zhao, Minister of War, insignia; Bian Guidang, Vice Censor-in-Chief, ceremonial guards; and Zan Jurun, Southern Court privy commissioner acting as mayor of Kaifeng, bridges, roads, and relays.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "秋七月丁未，户部尚书李涛为山陵副使，度支郎中卢億为判官。",
+          "literal": "On dingwei in the seventh month of autumn Li Tao, Minister of Revenue, was made vice commissioner for the mausoleum, and Lu Yi, outer office director of the expenditure bureau, was made adjutant.",
+          "idiomatic": "On dingwei in the seventh month Li Tao, Minister of Revenue, became vice mausoleum commissioner, and Lu Yi of the expenditure bureau served as adjutant.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "八月庚寅，封弟熙让为曹王，熙谨纪王，熙诲蕲王。",
+          "literal": "On gengyin younger brothers Xi Rang were enfeoffed as Prince of Cao, Xi Jin as Prince of Ji, and Xi Hui as Prince of Qi.",
+          "idiomatic": "On gengyin his younger brothers Xi Rang, Xi Jin, and Xi Hui were enfeoffed as Princes of Cao, Ji, and Qi.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "壬寅，高丽遣使者来。",
+          "literal": "On renyin Goryeo sent envoys.",
+          "idiomatic": "On renyin envoys arrived from Goryeo.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "九月丙寅，左骁卫大将军戴交使于高丽。",
+          "literal": "On bingyin in the ninth month Dai Jiao, Grand General of the Left Tiger Guard, was sent as envoy to Goryeo.",
+          "idiomatic": "On bingyin in the ninth month Dai Jiao, Grand General of the Left Tiger Guard, was dispatched to Goryeo.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "冬十一月壬寅，葬睿武孝文皇帝于庆陵。",
+          "literal": "On renyin in the eleventh month of winter the Sagacious Martial Filial Civil Emperor was buried at Qingling.",
+          "idiomatic": "On renyin in the eleventh month Shizong, the Sagacious Martial Filial Civil Emperor, was interred at Qingling.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "在郑州管城县。",
+          "literal": "At Guancheng County in Zheng Prefecture.",
+          "idiomatic": "The tomb lay at Guancheng County in Zheng Prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "高丽遣使者来。",
+          "literal": "Goryeo sent envoys.",
+          "idiomatic": "Goryeo sent envoys again.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T15:18:51.933Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T15:18:51.933Z"
     },
     {
       "id": "source-xinwudaishi-012-wikisource-2b8d3a5de306",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.059,
@@ -17900,12 +18002,164 @@
         "afterLocal": "世宗即位，大臣请封皇子为王，世宗谦抑久之。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Restored Xiande 6 annal entries and commentary between tax-household reform and Gongdi biography.",
+      "manualTranslations": [
+        {
+          "zh": "六年春正月，高丽王昭遣使者来。",
+          "literal": "In the first month of spring in the sixth year King Zhao of Goryeo sent envoys.",
+          "idiomatic": "In the first month of Xiande 6 King Zhao of Goryeo sent envoys.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "辛酉，女真使阿辨来。",
+          "literal": "On xinyou the Jurchen envoy A Bian came.",
+          "idiomatic": "On xinyou the Jurchen envoy A Bian arrived.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "三月己酉，甘州回鹘来献玉，却之。",
+          "literal": "On jiyou in the third month the Ganzhou Uyghurs came to present jade; it was refused.",
+          "idiomatic": "On jiyou in the third month the Ganzhou Uyghurs offered jade; the court declined it.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "庚申，王朴薨。",
+          "literal": "On gengshen Wang Pu died.",
+          "idiomatic": "On gengshen Wang Pu died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "丙寅，宣徽南院使吴延祚留守东京。",
+          "literal": "On bingyin Wu Yanzuo, Southern Court privy commissioner, was left to guard the Eastern Capital.",
+          "idiomatic": "On bingyin Wu Yanzuo, Southern Court privy commissioner, was posted to guard the Eastern Capital.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "癸酉，停给铜鱼。",
+          "literal": "On guiyou the issuance of bronze tally-fish was halted.",
+          "idiomatic": "On guiyou the court stopped issuing bronze tally-fish.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "甲戌，北征。",
+          "literal": "On jiaxu the northern campaign began.",
+          "idiomatic": "On jiaxu the emperor launched the northern campaign.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "是月，吴延祚为左骁卫上将军、枢密使。",
+          "literal": "That month Wu Yanzuo was made Grand General of the Upper Left Tiger Guard and privy commissioner.",
+          "idiomatic": "That month Wu Yanzuo became Grand General of the Upper Left Tiger Guard and privy commissioner.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "夏四月壬辰，取乾宁军。",
+          "literal": "On renchen in the fourth month of summer Qianning command was taken.",
+          "idiomatic": "On renchen in the fourth month Qianning command fell.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "辛丑，取益津关，以为霸州。",
+          "literal": "On xinchou Yijin Pass was taken and made Ba Prefecture.",
+          "idiomatic": "On xinchou Yijin Pass was captured and established as Ba Prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "癸卯，取瓦桥关，以为雄州。",
+          "literal": "On guimao Waqiao Pass was taken and made Xiong Prefecture.",
+          "idiomatic": "On guimao Waqiao Pass was captured and established as Xiong Prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "州县废置不书，此书，重复中国故地。世宗下三关，瓦桥、益津以建州及见，淤口关止置寨，故旧史、实录皆阙不书，遂不见其取得时日，今信安军是也。",
+          "literal": "The abolition and establishment of prefectures and counties is normally not recorded; here it is recorded because Chinese territory was recovered. Shizong took the Three Passes—Waqiao and Yijin were made prefectures and noted as such, while Yankou Pass was only garrisoned—so the old histories and veritable records all omit the record and the dates of capture cannot be seen; present-day Xin’an command is the case.",
+          "idiomatic": "Changes to prefectures and counties are usually omitted; here they are recorded because old Chinese lands were recovered. Shizong took the Three Passes: Waqiao and Yijin were made prefectures and noted, but Yankou was only fortified, so earlier histories and veritable records left the captures undated—today’s Xin’an command is an example.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "五月乙巳朔，取瀛州。",
+          "literal": "On the new-year day yisi in the fifth month Ying Prefecture was taken.",
+          "idiomatic": "On the new-year day yisi in the fifth month Ying Prefecture fell.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "复中国故地，故不书「契丹」。",
+          "literal": "Chinese territory was recovered, and so the text does not say “Khitan.”",
+          "idiomatic": "Because this was recovery of Chinese territory, the text does not say “Khitan.”",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "甲戌，至自雄州。",
+          "literal": "On jiaxu the emperor returned from Xiong Prefecture.",
+          "idiomatic": "On jiaxu he returned from the Xiongzhou campaign.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "六月癸未，立皇后符氏，符氏无国爵，不曰立符氏为皇后，嫌同于不正也。盖其位先定而后娶，故书曰「立皇后符氏」，文理宜然，无褒贬也。",
+          "literal": "On guiwei in the sixth month Lady Fu was installed as empress. Because Lady Fu had no state enfeoffment, the text does not say “installed Lady Fu as empress,” avoiding the appearance of impropriety. Her rank had been fixed before the marriage, and so the wording “installed Empress Lady Fu” is fitting in form and carries no praise or blame.",
+          "idiomatic": "On guiwei in the sixth month Empress Lady Fu was enthroned. She held no state title, so the annals avoid saying “installed Lady Fu as empress” lest it seem irregular. Her status had been settled before the wedding, so the phrasing “installed Empress Lady Fu” is formally correct and carries no judgment.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "封子宗训为梁王、宗让燕国公。",
+          "literal": "His sons Zongxun and Zongrang were enfeoffed as Prince of Liang and Duke of Yan respectively.",
+          "idiomatic": "He enfeoffed Zongxun as Prince of Liang and Zongrang as Duke of Yan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "戊子，占城使莆诃散来。",
+          "literal": "On wuzi the Champa envoy Puhesan came.",
+          "idiomatic": "On wuzi the Champa envoy Puhesan arrived.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "己丑，范质、王溥参知枢密院事，魏仁浦同中书门下平章事。",
+          "literal": "On jichou Fan Zhi and Wang Pu were made participants in Privy Council affairs, and Wei Renpu became associate grand councilor.",
+          "idiomatic": "On jichou Fan Zhi and Wang Pu joined Privy Council affairs, and Wei Renpu became associate grand councilor.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "癸巳，皇帝崩于滋德殿。",
+          "literal": "On guisi the emperor died in Zide Hall.",
+          "idiomatic": "On guisi the emperor died in Zide Hall.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "年三十九。",
+          "literal": "He was thirty-nine years old.",
+          "idiomatic": "He was thirty-nine.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T15:18:52.079Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T15:18:52.079Z"
     },
     {
       "id": "source-xinwudaishi-012-wikisource-3ecd9dd3a83a",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.224,
@@ -17948,12 +18202,24 @@
         "afterLocal": "丁丑，取泰州。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Inserted commentary on 附 versus 降 after Guo Tingwei surrender entry.",
+      "manualTranslations": [
+        {
+          "zh": "身居其地而来降者书「附」，再遇、廷谓虽以地降，既降而不居其地，故不书「附」而书「降」。廷谓不书「叛」，事见南唐世家。",
+          "literal": "Those who lived in the territory and came to submit are recorded with “attached.” Although Zaiyu and Tingwei surrendered their prefectures, once they surrendered they did not remain in their territory, and so the text does not say “attached” but says “surrendered.” Tingwei is not recorded as “rebelled”; the matter is treated in the Southern Tang house chronicle.",
+          "idiomatic": "Defectors who still held their posts are recorded as “attached.” Zaiyu and Tingwei surrendered territory but did not stay to hold it, so the text says “surrendered” rather than “attached.” Tingwei is not called a “rebel”; see the Southern Tang house chronicle.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T15:18:52.232Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T15:18:52.232Z"
     },
     {
       "id": "source-xinwudaishi-012-wikisource-509789810e61",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.857,
@@ -17996,12 +18262,15 @@
         "afterLocal": "六月辛未，放降卒四千六百于唐。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: minor wording variant (遣使/遣使者); meaning unchanged.",
+      "reviewedAt": "2026-06-30T15:18:54.372Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-xinwudaishi-012-wikisource-5ad134b9791b",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "xinwudaishi",
@@ -18025,8 +18294,20 @@
         "afterLocal": "夏四月己巳，至自寿州。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Inserted Liu Renzan martyrdom commentary after Shouzhou capture.",
+      "manualTranslations": [
+        {
+          "zh": "不书刘仁赡降，事见死节传。盖仁赡实不降，故书周自克之尔。「克」者，难取之名也，寿难取，则见仁赡之节著，不书「死之」者，仁赡自以病死，以其至死守节，故列之死节传。",
+          "literal": "The text does not record Liu Renzan’s surrender; the matter appears in the Biographies of Those Who Died for Principle. Renzan in fact did not surrender, and so the annals say Zhou took the city by force. “Took by force” is the term for what is hard to capture; that Shou was hard to capture shows Renzan’s integrity. It does not say “died in the fighting” because Renzan died of illness; because he held the city to the end and kept his integrity, he is listed among those who died for principle.",
+          "idiomatic": "Liu Renzan’s surrender is not recorded; see the Biographies of Those Who Died for Principle. Renzan never truly surrendered, so the annals say Zhou “took” the city—the word for a hard-won capture. Shouzhou’s difficulty shows Renzan’s steadfastness. The text does not say he “died in battle” because he died of illness; having held firm to the end, he belongs in the martyrs’ biographies.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T15:18:52.383Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T15:18:52.383Z"
     },
     {
       "id": "source-xinwudaishi-012-wikisource-5cd5e2b1500e",
@@ -18092,7 +18373,7 @@
     },
     {
       "id": "source-xinwudaishi-012-wikisource-69167f5c2d59",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.892,
@@ -18144,12 +18425,24 @@
         "afterLocal": "冬十月辛酉，葬宣懿皇后于懿陵。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Corrected 种禾 to 种木 and updated English translation.",
+      "manualTranslations": [
+        {
+          "zh": "八月乙丑，课民种木及韭。",
+          "literal": "On yichou in the eighth month the people were ordered to plant trees and leeks.",
+          "idiomatic": "On yichou in the eighth month the court ordered households to plant trees and leeks.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T15:18:52.540Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T15:18:52.540Z"
     },
     {
       "id": "source-xinwudaishi-012-wikisource-6afa7fa14d48",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -18192,12 +18485,15 @@
         "afterLocal": "丁未，克楚州，守将张彦卿、郑昭业死之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: simplified/traditional glyph variant (静/靜).",
+      "reviewedAt": "2026-06-30T15:18:54.532Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-xinwudaishi-012-wikisource-7b3e10b2ff39",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "xinwudaishi",
@@ -18221,12 +18517,24 @@
         "afterLocal": "二月甲寅，取雄州。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Inserted Zhang Yanqing death commentary after Chuzhou capture.",
+      "manualTranslations": [
+        {
+          "zh": "自四年十二月辛酉攻之，彦卿等坚守四十余日乃克之，其不走不降可知，故予其死。然所贵者死尔，本纪著其大节可矣。",
+          "literal": "The assault began on xinyou in the twelfth month of the fourth year; Yanqing and the others held firm for more than forty days before the city fell—clearly they neither fled nor surrendered, and so the text grants them “died in the fighting.” What matters is death itself; the annals need only record their great integrity.",
+          "idiomatic": "The siege began on xinyou in the twelfth month of the fourth year. Yanqing and the others held out more than forty days before the city fell—they plainly neither fled nor surrendered, so the text records their deaths. What counts is dying in place; the annals need only note their steadfastness.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T15:18:52.711Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T15:18:52.711Z"
     },
     {
       "id": "source-xinwudaishi-012-wikisource-8b1ac3337cae",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.422,
@@ -18278,12 +18586,31 @@
         "afterLocal": "丁酉，幸潞州。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Inserted campaign wording and Liu Chong naming commentary around Gaoping battles.",
+      "manualTranslations": [
+        {
+          "zh": "不曰伐，曲在周，不可以大小为言，故用两相攻为文。",
+          "literal": "The text does not say “campaign against,” bending toward Zhou—it cannot speak in terms of large against small, and so uses the phrasing of two sides attacking each other.",
+          "idiomatic": "The annals avoid saying “campaign against,” favoring Zhou without framing the war as large against small, and therefore write of two sides attacking each other.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "与其不屈于周，不与其称帝，故书姓名。",
+          "literal": "Rather than recording his refusal to submit to Zhou, and rather than granting him the title of emperor, the annals therefore give his personal name.",
+          "idiomatic": "The text neither concedes his refusal to bow to Zhou nor calls him emperor, and so records him by personal name.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T15:18:52.941Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T15:18:52.941Z"
     },
     {
       "id": "source-xinwudaishi-012-wikisource-982559f9a140",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.718,
@@ -18344,12 +18671,15 @@
         "afterLocal": "后兄守礼子荣，幼从姑长太祖家，以谨厚见爱，太祖遂以为子。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream __TOC__ residue; local chapter heading and body text are fuller and correct.",
+      "reviewedAt": "2026-06-30T15:18:55.138Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-xinwudaishi-012-wikisource-9f80fe06febb",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.833,
@@ -18392,12 +18722,15 @@
         "afterLocal": "壬戌，立卫国夫人符氏为皇后。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: simplified/traditional glyph variant (宪/憲).",
+      "reviewedAt": "2026-06-30T15:18:54.681Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-xinwudaishi-012-wikisource-a973da8058bd",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.068,
@@ -18449,12 +18782,101 @@
         "afterLocal": "壬寅，南征。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Restored Xiande 2 annal entries and era-name commentary before Xiande 3.",
+      "manualTranslations": [
+        {
+          "zh": "二年五代乱世，以嗣君即位者五，而改元不依古者四，梁末帝、晋出帝即位逾年，宜改元而不改，又明年然后改，汉隐帝、周世宗皆仍称先帝年号，终其世不改，而本纪无讥者，但书其实，自见其失也。",
+          "literal": "In the second year: in the chaotic age of the Five Dynasties, five successors took the throne, yet four did not change the reign title according to ancient practice. The Last Emperor of Liang and the Deposed Emperor of Jin, more than a year after accession, ought to have changed the era name but did not, changing only the following year. The Hidden Emperor of Han and Shizong of Zhou both kept their predecessors’ era names to the end without change, and the annals offer no censure—they simply record the facts, and the fault shows itself.",
+          "idiomatic": "Year two opens with Ouyang Xiu’s note: in the Five Dynasties’ chaos five heirs took throne, yet four broke ancient practice on era names. Liang’s last emperor and Jin’s deposed emperor waited more than a year; Han’s Hidden Emperor and Zhou’s Shizong kept prior reign titles for life. The annals do not rebuke them—they record facts, and the fault is plain.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "春二月，御札求直言。",
+          "literal": "In the second month of spring an imperial note sought blunt counsel.",
+          "idiomatic": "In the second month of spring an imperial note called for frank remonstrance.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "夏五月辛未，宣徽南院使向训、凤翔节度使王景伐蜀。",
+          "literal": "On xinwei in the fifth month of summer Xiang Xun, Southern Court privy commissioner, and Wang Jing, military commissioner of Fengxiang, campaigned against Shu.",
+          "idiomatic": "On xinwei in the fifth month Xiang Xun of the Southern Court and Fengxiang commissioner Wang Jing marched against Shu.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "甲戌，大毁佛寺，禁民亲无侍养而为僧尼及私自度者。",
+          "literal": "On jiaxu Buddhist temples were greatly destroyed, and the people were forbidden to become monks or nuns when their parents lacked support, or to take tonsure privately.",
+          "idiomatic": "On jiaxu the court demolished Buddhist temples on a large scale and forbade ordination without filial support or private tonsure.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "秋九月丙寅朔，颁铜禁。",
+          "literal": "On the new-year day bingyin in the ninth month of autumn the copper ban was promulgated.",
+          "idiomatic": "On the new-year day bingyin in the ninth month the copper ban was issued.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "闰月癸丑，向训克秦州。",
+          "literal": "In the intercalary month on guichou Xiang Xun took Qin Prefecture.",
+          "idiomatic": "In the intercalary month on guichou Xiang Xun captured Qin Prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "冬十月辛未，取成州。",
+          "literal": "On xinwei in the tenth month of winter Cheng Prefecture was taken.",
+          "idiomatic": "On xinwei in the tenth month Cheng Prefecture fell.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "戊寅，高丽使王子太相融来。",
+          "literal": "On wuyin the Goryeo envoy Prince Tae Sang-yung came.",
+          "idiomatic": "On wuyin the Goryeo envoy Prince Tae Sang-yung arrived.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "取阶州。",
+          "literal": "Jie Prefecture was taken.",
+          "idiomatic": "Jie Prefecture was captured.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "十一月乙未朔，李穀为淮南道行营都部署以伐唐。",
+          "literal": "On the new-year day yimao in the eleventh month Li Gu was made overall commander of the Huainan circuit campaign to attack Tang.",
+          "idiomatic": "On the new-year day yimao in the eleventh month Li Gu was appointed overall commander of the Huainan campaign against Southern Tang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "戊申，王景克凤州。",
+          "literal": "On wushen Wang Jing took Feng Prefecture.",
+          "idiomatic": "On wushen Wang Jing captured Feng Prefecture.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "十二月丙戌，郑仁诲薨。",
+          "literal": "On bingxu in the twelfth month Zheng Renhui died.",
+          "idiomatic": "On bingxu in the twelfth month Zheng Renhui died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T15:18:53.221Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T15:18:53.221Z"
     },
     {
       "id": "source-xinwudaishi-012-wikisource-bde0168b005c",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -18497,12 +18919,15 @@
         "afterLocal": "乙酉，如潞州以攻汉。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: simplified/traditional character forms only.",
+      "reviewedAt": "2026-06-30T15:18:54.825Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-xinwudaishi-012-wikisource-c30cf6dffce9",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.308,
@@ -18545,8 +18970,20 @@
         "afterLocal": "四月庚申，祔五室神主于新庙。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Inserted fourteen-prefecture commentary before Li Jing submission feast entry.",
+      "manualTranslations": [
+        {
+          "zh": "并前所得通十四州耳，书之，见其本志所止。",
+          "literal": "Together with what had been taken earlier, fourteen prefectures in all; the text records this to show where his original ambition stopped.",
+          "idiomatic": "With earlier gains, fourteen prefectures in all—the record shows the limit of his original aim.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T15:18:53.467Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T15:18:53.467Z"
     },
     {
       "id": "source-xinwudaishi-012-wikisource-c7ae33c96a6f",
@@ -18612,7 +19049,7 @@
     },
     {
       "id": "source-xinwudaishi-012-wikisource-d7eafb7ed571",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.089,
@@ -18655,12 +19092,73 @@
         "afterLocal": "梁之友珪反，唐戕克宁而杀存乂、从璨，则父子骨肉之恩，几何其不绝矣。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Restored Five Dynasties ending commentary and expanded opening epilogue sentence.",
+      "manualTranslations": [
+        {
+          "zh": "五代之亡，所书不同，随事为文尔。「梁亡」见唐之速，「汉亡」见周之迟也。",
+          "literal": "The endings of the Five Dynasties are written differently, phrased according to the circumstances. “The Liang perished” shows how swiftly Tang arose; “Han perished” shows how slowly Zhou came.",
+          "idiomatic": "Each dynasty’s fall is worded differently as the facts require. “The Liang perished” shows Tang’s swift rise; “Han perished” shows Zhou’s delay.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "唐欺天下以讨贼，周欺天下以立贇。",
+          "literal": "Tang deceived the realm under the pretense of punishing rebels; Zhou deceived the realm under the pretense of enthroning Yun.",
+          "idiomatic": "Tang fooled the empire with talk of punishing rebels; Zhou fooled it with talk of enthroning Yun.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "故书「梁亡」，见唐之立速，则知其志不在讨贼也；「汉亡」见周之立迟，则知立贇者伪也。",
+          "literal": "Therefore “the Liang perished” shows Tang’s swift establishment and reveals that its aim was not to punish rebels; “Han perished” shows Zhou’s slow establishment and reveals that enthroning Yun was a sham.",
+          "idiomatic": "So “the Liang perished” exposes Tang’s haste and its sham crusade; “Han perished” exposes Zhou’s delay and the fraud of enthroning Yun.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "唐亡无辞，庄宗之弑，唐已亡矣，而明宗又称唐，愍帝之奔，唐又亡矣，而废帝又称唐，其亡也不可以屡书，故不书也。",
+          "literal": "Tang’s fall has no wording: Zhuangzong was assassinated and Tang was already dead, yet Mingzong still called himself Tang; Min-di fled and Tang died again, yet the Deposed Emperor still called himself Tang. Its deaths cannot be written again and again, and so they are not written.",
+          "idiomatic": "Later Tang’s end cannot be repeated: after Zhuangzong’s murder Mingzong still claimed Tang; after Min-di’s flight the deposed emperor did too. The annals cannot record every death, so they omit them.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "晋亡曰「契丹灭晋」，明言以深戒。",
+          "literal": "Jin’s fall is written as “the Khitan destroyed Jin,” stating it plainly as a stern warning.",
+          "idiomatic": "Jin’s end reads “the Khitan destroyed Jin”—stated plainly as warning.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "周曰「逊于位」，逊，顺也，能顺乎天命也。",
+          "literal": "Zhou is written as “abdicated the throne”; to abdicate is to yield, to yield to Heaven’s mandate.",
+          "idiomatic": "Zhou is written as “abdicated the throne”—yielding, obeying Heaven’s mandate.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "呜呼，五代本纪备矣！备，谓丧乱之事，无所不有。",
+          "literal": "Alas! The annals of the Five Dynasties are complete—complete in the sense that nothing of disorder and ruin is missing.",
+          "idiomatic": "Alas! The Five Dynasties annals stand complete—complete meaning that every calamity of the age is recorded.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "君臣之际，可胜道哉。",
+          "literal": "How much can be told of what passed between ruler and subject!",
+          "idiomatic": "What can fully be told of the bond between ruler and subject!",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T15:18:53.694Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T15:18:53.694Z"
     },
     {
       "id": "source-xinwudaishi-012-wikisource-da21800a990a",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.889,
@@ -18703,12 +19201,24 @@
         "afterLocal": "庚午，至自太原。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Corrected 前拜 to 遂拜 at Songling visit and updated translation.",
+      "manualTranslations": [
+        {
+          "zh": "乙丑，次新郑，遂拜嵩陵。",
+          "literal": "On yichou he halted at Xinzheng and then paid respects at Songling.",
+          "idiomatic": "On yichou he stopped at Xinzheng and then visited Songling to mourn Taizu.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T15:18:53.871Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T15:18:53.871Z"
     },
     {
       "id": "source-xinwudaishi-012-wikisource-e58a73736d5c",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.818,
@@ -18751,8 +19261,11 @@
         "afterLocal": "丙戌，取扬州。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: simplified/traditional character forms only.",
+      "reviewedAt": "2026-06-30T15:18:54.985Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-xinwudaishi-012-wikisource-f96696b94689",
@@ -18816,7 +19329,7 @@
     },
     {
       "id": "source-xinwudaishi-012-wikisource-fef8f13fd6ad",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -18859,8 +19372,20 @@
         "afterLocal": "乙丑，冯道薨。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Corrected 泌州 to 沁州 and updated English to Qin Prefecture.",
+      "manualTranslations": [
+        {
+          "zh": "取石、沁州。",
+          "literal": "Shi and Qin prefectures were taken.",
+          "idiomatic": "Shi and Qin prefectures were captured.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T15:18:54.031Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T15:18:54.031Z"
     },
     {
       "id": "source-xinwudaishi-013-wikisource-1d8ef573d2f2",
@@ -20493,7 +21018,7 @@
     },
     {
       "id": "source-xinwudaishi-015-wikisource-3225b0dc4a74",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.103,
@@ -20506,7 +21031,7 @@
         "startIndex": 70,
         "endIndex": 75,
         "count": 6,
-        "text": "愍帝哀皇后孔氏，父循，橫海軍節度使。后有賢行，生四子。愍帝即位，立為皇后，未及冊命而難作。愍帝出奔，后病子幼，皆不能從。廢帝入立，后及四子皆見殺。晉高祖立，追謚曰哀。",
+        "text": "愍帝哀皇后孔氏，父循，橫海軍節度使。后有賢行，生四子。愍帝即位，立為皇后，未及冊命而難作。愍帝出奔，后病子幼，皆不能從。廢帝入立，后及四子皆見殺。晉高祖立，追謚曰哀。明宗子",
         "ids": [],
         "locations": []
       },
@@ -20545,12 +21070,66 @@
         "afterLocal": "明宗四子，曰從璟、從榮、從厚、從益。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Replaced heading stub with full Kong empress biography and restored 明宗子 section header.",
+      "manualTranslations": [
+        {
+          "zh": "湣帝哀皇后孔氏，父循，橫海軍節度使。",
+          "literal": "The Last Emperor's Empress Ai, Lady Kong—her father Xun was military governor of the Henghai army.",
+          "idiomatic": "Empress Ai of the Last Emperor, Lady Kong, was daughter of Xun, military governor of Henghai.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "后有賢行，生四子。",
+          "literal": "The empress had virtuous conduct and bore four sons.",
+          "idiomatic": "The empress was known for virtue and bore four sons.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "湣帝即位，立為皇后，未及冊命而難作。",
+          "literal": "When the Last Emperor took the throne she was made empress, but before the enthronement rites could be completed calamity arose.",
+          "idiomatic": "When the Last Emperor succeeded she was named empress, but before the enthronement rites were finished disaster struck.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "湣帝出奔，后病子幼，皆不能從。",
+          "literal": "The Last Emperor fled; the empress was ill and the children young—none could follow.",
+          "idiomatic": "The Last Emperor fled; the empress was sick and the children too young to follow.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "廢帝入立，后及四子皆見殺。",
+          "literal": "When the Deposed Emperor entered and took the throne, the empress and all four sons were killed.",
+          "idiomatic": "When the Deposed Emperor seized the throne, the empress and all four sons were put to death.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "晉高祖立，追謚曰哀。",
+          "literal": "When Jin Gaozu took the throne he posthumously gave her the name Ai.",
+          "idiomatic": "When Jin Gaozu rose he posthumously named her Ai.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "明宗子",
+          "literal": "Mingzong's Sons",
+          "idiomatic": "Mingzong's Sons",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T16:41:42.669Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T16:41:42.669Z"
     },
     {
       "id": "source-xinwudaishi-015-wikisource-4c604e1d58f6",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.143,
@@ -20593,12 +21172,52 @@
         "afterLocal": ""
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Inserted missing Congmin biography after Chongjun entry.",
+      "manualTranslations": [
+        {
+          "zh": "從敏字叔達，為人沉厚寡言，善騎射。",
+          "literal": "Congmin, style Shuda, was deep, steady, and sparing of speech, skilled in horsemanship and archery.",
+          "idiomatic": "Congmin, styled Shuda, was grave, quiet, and skilled in horsemanship and archery.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "初從莊宗為馬步軍都指揮使兼行軍司馬，明宗入立，遷皇城使、保義軍節度使，與討王都。",
+          "literal": "At first he followed Zhuangzong as commander of horse and foot armies and concurrent army marshal; when Mingzong took the throne he was made imperial city envoy and military governor of Baoyi and joined the campaign against Wang Du.",
+          "idiomatic": "He first served Zhuangzong as commander of horse and foot and army marshal; when Mingzong succeeded he became imperial city envoy and governor of Baoyi and joined the campaign against Wang Du.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "歷鎮橫海、義武、成德、歸德、保義、昭義、河陽，封涇王。",
+          "literal": "He governed in succession Henghai, Yiwu, Chengde, Guide, Baoyi, Zhaoyi, and Heyang, and was enfeoffed Prince of Jing.",
+          "idiomatic": "He governed Henghai, Yiwu, Chengde, Guide, Baoyi, Zhaoyi, and Heyang in turn and was enfeoffed Prince of Jing.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "漢高祖時，為西京留守，封秦國公。",
+          "literal": "Under Han Gaozu he was Western Capital regent and enfeoffed Duke of Qin.",
+          "idiomatic": "Under Han Gaozu he was regent of the Western Capital and made Duke of Qin.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "周廣順元年卒，贈中書令，謚曰恭惠。",
+          "literal": "He died in Guangshun 1 of Zhou; posthumously made Director of the Secretariat with posthumous name Gonghui.",
+          "idiomatic": "He died in Zhou's first year Guangshun; posthumously made Director of the Secretariat and named Gonghui.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T16:41:43.294Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T16:41:43.294Z"
     },
     {
       "id": "source-xinwudaishi-015-wikisource-649ceb31734a",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "xinwudaishi",
@@ -20622,12 +21241,80 @@
         "afterLocal": "從溫字德基，初為北京副留守。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Inserted missing Congzhang biography between Congcan and Congwen.",
+      "manualTranslations": [
+        {
+          "zh": "從璋字子良，少善騎射。",
+          "literal": "Congzhang, style Ziliang, was skilled in horsemanship and archery from youth.",
+          "idiomatic": "Congzhang, styled Ziliang, was skilled in horsemanship and archery from youth.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "莊宗時，將兵戍常山，聞明宗兵變于魏，乃亦起兵據邢州。",
+          "literal": "Under Zhuangzong he commanded troops garrisoning Changshan; hearing Mingzong's troops mutiny at Wei, he too raised troops and seized Xingzhou.",
+          "idiomatic": "Under Zhuangzong he garrisoned Changshan; hearing of Mingzong's mutiny at Wei, he too raised troops and seized Xingzhou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "明宗即位，以為捧聖左廂都指揮使，改皇城使，領饒州刺史，拜彰國軍節度使，徙鎮義成。",
+          "literal": "When Mingzong took the throne he was made commander of the left wing of the Sacred Guard, then grand envoy of the imperial city, prefect of Raozhou, military governor of Zhangguo, and transferred to govern Yicheng.",
+          "idiomatic": "When Mingzong succeeded he was made commander of the Sacred Guard's left wing, then imperial city envoy, prefect of Raozhou, governor of Zhangguo, and later transferred to Yicheng.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "明宗幸汴州，從璋欲率民為貢獻，其從事諫以為不可，從璋怒，引弓欲射之，坐罷為右驍衞上將軍。",
+          "literal": "When Mingzong visited Bianzhou, Congzhang wished to lead the people in tribute; his staff officer remonstrated that it was improper; Congzhang in anger drew his bow to shoot him and was demoted to senior general of the Right Martial Guard.",
+          "idiomatic": "When Mingzong visited Bian, Congzhang meant to lead the people in tribute; his aide protested; Congzhang drew his bow in rage and was demoted to senior general of the Right Martial Guard.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "居久之，出鎮保義，徙河中。",
+          "literal": "After a long while he was sent out to govern Baoyi and then transferred to Hezhong.",
+          "idiomatic": "After a time he was sent to govern Baoyi, then transferred to Hezhong.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "長興四年夏，封洋王。",
+          "literal": "In summer of Changxing 4 he was enfeoffed Prince of Yang.",
+          "idiomatic": "In the summer of Changxing 4 he was made Prince of Yang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "晉高祖立，徙鎮威勝，降封隴西郡公。",
+          "literal": "When Jin Gaozu took the throne he was transferred to govern Weisheng and demoted to Duke of Longxi commandery.",
+          "idiomatic": "When Jin Gaozu rose he was moved to Weisheng and demoted to Duke of Longxi.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "從璋為人貪鄙，自鎮保義，始折節自脩，在南陽頗有遺愛。",
+          "literal": "Congzhang was greedy and base by nature; from his governorship of Baoyi he began to restrain himself and cultivate virtue, and at Nanyang left considerable goodwill.",
+          "idiomatic": "Congzhang was greedy and coarse; from his time at Baoyi he began to reform himself and won goodwill at Nanyang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "天福二年卒，年五十一。",
+          "literal": "He died in Tianfu 2 at fifty-one.",
+          "idiomatic": "He died in Tianfu 2 at the age of fifty-one.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T16:41:43.142Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T16:41:43.142Z"
     },
     {
       "id": "source-xinwudaishi-015-wikisource-7515bed2699c",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.097,
@@ -20688,8 +21375,104 @@
         "afterLocal": "淑妃王氏，邠州餅家子也，有美色，號「花見羞」。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": "Reviewed as no-op: discrepancy is caused by upstream MediaWiki residue such as __TOC__, Category, or PD-old text; local corpus text retained.\nReopened for manual review: previous automatic residue no-op left non-residue punctuation or text unresolved."
+      "decision": "applied",
+      "notes": "Inserted empress introduction and Wei biography; stripped upstream __TOC__ residue.",
+      "manualTranslations": [
+        {
+          "zh": "明宗三后一妃：和武憲皇后曹氏生晉國公主；昭懿皇后夏氏生秦王從榮、湣帝；宣憲皇后魏氏，潞王從珂母也；淑妃王氏，許王從益之慈母也。",
+          "literal": "Mingzong had three empresses and one consort: Empress Wuhe, Lady Cao, bore the Jin State Princess; Empress Zhaoyi, Lady Xia, bore the Prince of Qin Congrong and the Last Emperor; Empress Xuanxian, Lady Wei, was mother of the Prince of Lu Congke; Chaste Consort Lady Wang was foster mother of Xu Wang Congyi.",
+          "idiomatic": "Mingzong had three empresses and one consort: Empress Wuhe, Lady Cao, bore the Jin State Princess; Empress Zhaoyi, Lady Xia, bore Congrong, Prince of Qin, and the Last Emperor; Empress Xuanxian, Lady Wei, was mother of Congke, Prince of Lu; Chaste Consort Lady Wang was foster mother to Congyi, Xu Wang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "曹氏、夏氏皆不見其世家。",
+          "literal": "Lady Cao and Lady Xia do not appear in the genealogies.",
+          "idiomatic": "Neither Lady Cao nor Lady Xia appears in the genealogies.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "夏氏無封爵，明宗未即位前卒。",
+          "literal": "Lady Xia held no enfeoffed title; she died before Mingzong took the throne.",
+          "idiomatic": "Lady Xia bore no noble title and died before Mingzong ascended.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "明宗天成元年，封楚國夫人曹氏為淑妃，追封夏氏晉國夫人。",
+          "literal": "In Tiancheng 1 of Mingzong, Lady Cao of Chu was made Chaste Consort and Lady Xia was posthumously enfeoffed Lady of Jin.",
+          "idiomatic": "In Mingzong's first year Tiancheng, Lady Cao of Chu was made Chaste Consort and Lady Xia was posthumously enfeoffed Lady of Jin.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "長興元年，立淑妃為皇后，而夏氏所生二子皆已王，乃追冊為皇后，謚曰昭懿。",
+          "literal": "In Changxing 1 the Chaste Consort was enthroned empress; both sons born of Lady Xia were already princes, so she was posthumously made empress with posthumous name Zhaoyi.",
+          "idiomatic": "In Changxing 1 the Chaste Consort was enthroned as empress; as both of Lady Xia's sons were already princes, Xia was posthumously canonized empress with the temple name Zhaoyi.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "魏氏，鎮州平山人也。",
+          "literal": "Lady Wei was a native of Pingshan in Zhenzhou.",
+          "idiomatic": "Lady Wei came from Pingshan in Zhenzhou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "初適平山民王氏，生子十歲矣。",
+          "literal": "She first married a commoner of Pingshan named Wang and had borne a son of ten years.",
+          "idiomatic": "She had first married a commoner of Pingshan named Wang and bore a son who was ten years old.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "明宗為騎將，掠平山，得其子母以歸。",
+          "literal": "When Mingzong was a cavalry commander he raided Pingshan and took the mother and child home.",
+          "idiomatic": "As a cavalry commander Mingzong raided Pingshan and brought the mother and child away.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "居數年，魏氏卒，葬太原。",
+          "literal": "After several years Lady Wei died and was buried at Taiyuan.",
+          "idiomatic": "Several years later Lady Wei died and was buried at Taiyuan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "其子是為潞王從珂。",
+          "literal": "Her son was Congke, Prince of Lu.",
+          "idiomatic": "Her son was Congke, Prince of Lu.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "明宗時，從珂已王，乃追封魏氏為魯國夫人。",
+          "literal": "In Mingzong's time, when Congke was already a prince, Lady Wei was posthumously enfeoffed Lady of Lu.",
+          "idiomatic": "Once Congke was already a prince under Mingzong, Lady Wei was posthumously enfeoffed Lady of Lu.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "廢帝即位，追尊魏氏為皇太后，議建陵寢，而太原石敬瑭反，乃於京師河南府東立寢宮。",
+          "literal": "When the Deposed Emperor took the throne Lady Wei was posthumously honored as empress dowager; they planned to build a mausoleum, but when Shi Jingtang rebelled at Taiyuan they erected a resting palace east of Henan prefecture in the capital.",
+          "idiomatic": "The Deposed Emperor posthumously honored her as empress dowager and planned a mausoleum, but when Shi Jingtang rebelled at Taiyuan they built a resting palace east of Henan in the capital.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "清泰三年六月丙寅，遣工部尚書崔儉奉上皇太后寶冊，謚曰宣憲。",
+          "literal": "On bingyin of the sixth month, Qingtai 3, Minister of Works Cui Jian was sent to present the empress dowager's seals and patent; her posthumous name was Xuanxian.",
+          "idiomatic": "On bingyin in the sixth month of Qingtai 3 the Minister of Works Cui Jian presented the empress dowager's seals and patent; she was posthumously named Xuanxian.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T16:41:42.481Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T16:41:42.481Z"
     },
     {
       "id": "source-xinwudaishi-015-wikisource-8047b7bc8def",
@@ -20755,7 +21538,7 @@
     },
     {
       "id": "source-xinwudaishi-015-wikisource-a3e79e9d2dc7",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "xinwudaishi",
@@ -20779,12 +21562,80 @@
         "afterLocal": "是歲秋，封從榮秦王。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Inserted missing Prince of Qin Congrong biography before enfeoffment narrative.",
+      "manualTranslations": [
+        {
+          "zh": "秦王從榮，天成元年，以檢校司徒兼御史大夫，拜天雄軍節度使、同中書門下平章事。",
+          "literal": "Congrong, Prince of Qin—in Tiancheng 1 was made Acting Minister of Education and concurrent Censor-in-Chief, appointed military governor of the Tianxiong army and Chief Minister.",
+          "idiomatic": "Congrong, Prince of Qin—in Tiancheng 1 he was made Acting Minister of Education and Censor-in-Chief, military governor of Tianxiong, and Chief Minister.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "三年，徙鎮河東。",
+          "literal": "In the third year he was transferred to govern Hedong.",
+          "idiomatic": "In the third year he was transferred to Hedong.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "長興元年，拜河南尹，兼判六軍諸衞事。",
+          "literal": "In Changxing 1 he was made Governor of Henan and concurrently judged the affairs of the Six Armies and palace guards.",
+          "idiomatic": "In Changxing 1 he was made Governor of Henan and given charge of the Six Armies and palace guards.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "從璟死，從榮於諸皇子次最長，又握兵柄。",
+          "literal": "When Congjing died, Congrong was eldest among the princes in order of birth and also held military power.",
+          "idiomatic": "After Congjing's death Congrong was eldest among the princes and held the army.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "然其為人輕雋而鷹視，頗喜儒，學為歌詩，多招文學之士，賦詩飲酒，故後生浮薄之徒，日進諛佞以驕其心。",
+          "literal": "Yet he was light and sharp in manner with a hawk's gaze; he delighted in Confucian learning, composed songs and poems, and gathered many literary men to versify and drink, so frivolous young men daily advanced flattery to swell his pride.",
+          "idiomatic": "Yet he was quick-witted and sharp-eyed, fond of letters; he wrote verse, gathered scholars to drink and compose, and frivolous youths daily flattered him to feed his pride.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "自將相大臣皆患之，明宗頗知其非而不能裁制。",
+          "literal": "From generals and chancellors downward all were troubled; Mingzong knew well his faults but could not restrain him.",
+          "idiomatic": "Generals and ministers alike were alarmed; Mingzong knew his faults but could not check him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "從榮嘗侍側，明宗問曰：「爾軍政之餘，習何事業？」",
+          "literal": "Once while Congrong attended at his side, Mingzong asked: \"Besides military affairs, what studies do you pursue?\"",
+          "idiomatic": "Once while Congrong stood beside him, Mingzong asked: \"Apart from military duties, what do you study?\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "對曰：「有暇讀書，與諸儒講論經義爾。」",
+          "literal": "He answered: \"When I have leisure I read books and discuss the classics with scholars.\"",
+          "idiomatic": "He answered: \"When I have time I read and debate the classics with scholars.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "明宗曰：「經有君臣父子之道，然須碩儒端士，乃可親之。吾見先帝好作歌詩，甚無謂也。汝將家子，文章非素習，必不能工，傳於人口，徒取笑也。吾老矣，於經義雖不能曉，然尚喜屢聞之，其餘不足學也。」",
+          "literal": "Mingzong said: \"The classics hold the way of lord and subject, father and son, yet only great and upright scholars should be approached. I saw the late emperor fond of composing songs and poems—quite pointless. You are a general's son; writing is not your training and you cannot master it; spread by word of mouth it would only invite mockery. I am old; though I cannot grasp the classics, I still like to hear them often—the rest is not worth learning.\"",
+          "idiomatic": "Mingzong said: \"The classics teach the bonds of lord and subject, father and son, but only great upright scholars are fit company. I saw the late emperor dote on verse—to no purpose. You are a soldier's son; letters are not your trade and you will not excel; let them circulate and you become a laughingstock. I am old; I may not grasp the classics, yet I still like to hear them—the rest is not worth your time.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T16:41:42.826Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T16:41:42.826Z"
     },
     {
       "id": "source-xinwudaishi-015-wikisource-a824073594ee",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.821,
@@ -20836,8 +21687,20 @@
         "afterLocal": "從璨初為右衛大將軍，安重誨用事，自諸王將相皆下之，從璨為人剛猛，不能少屈，而性倜儻，輕財好施，重誨忌之。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Removed scrape heading 明宗四侄 and restored source nephew list sentence.",
+      "manualTranslations": [
+        {
+          "zh": "明宗兄弟皆不見于世家，而有姪四人，曰：從璨、從璋、從溫、從敏。",
+          "literal": "Mingzong's brothers do not appear in the genealogies, but he had four nephews: Congcan, Congzhang, Congwen, and Congmin.",
+          "idiomatic": "Mingzong's brothers are missing from the genealogies, but four nephews are recorded: Congcan, Congzhang, Congwen, and Congmin.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-06-30T16:41:42.985Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-06-30T16:41:42.985Z"
     },
     {
       "id": "source-xinwudaishi-015-wikisource-b50e5edf7f6e",
