@@ -1706,11 +1706,14 @@ function englishWordCount(text) {
 
 function isNarrowChineseException(text, reason) {
   const normalizedReason = String(reason || '').toLowerCase();
+  if (/(?:title|tune|hymn|aria|melody|song)/u.test(normalizedReason) && /《[^》]*[\u4e00-\u9fff][^》]*》/u.test(String(text || ''))) {
+    return true;
+  }
   if (!/(?:character|written[-\s]?form|graph|glyph|philological|orthograph|source[-\s]?character)/u.test(normalizedReason)) {
     return false;
   }
-  return /\b(?:character|graph|glyph|written|pronounced|read|reads|reading|means|meaning|gives|resembles|resembled|becomes|changed to|written as|called|same as|corrupt|corruption|dropped|drop|lacks|lack|missing|repeat|before|superfluous|supplied|amended|suspected)\b/iu.test(String(text || ''))
-    || /[\u4e00-\u9fff]+(?:\s*(?:means|is pronounced|was pronounced|resembles|resembled|becomes|is written|was written|changed to|gives|as|is the same as|is corrupt|is supplied)\s*|[，、]\s*)/u.test(String(text || ''));
+  return /\b(?:character|graph|glyph|written|pronounced|read|reads|reading|means|meaning|gives|resembles|resembled|becomes|changed to|replace|replaces|replaced|written as|called|same as|corrupt|corruption|dropped|drop|lacks|lack|missing|repeat|before|superfluous|supplied|amended|suspected)\b/iu.test(String(text || ''))
+    || /[\u4e00-\u9fff]+(?:\s*(?:means|is pronounced|was pronounced|resembles|resembled|becomes|is written|was written|changed to|is replaced|replaces|replace with|gives|as|is the same as|is corrupt|is supplied)\s*|[，、]\s*)/u.test(String(text || ''));
 }
 
 export function scanArtifactText(text, opts = {}) {

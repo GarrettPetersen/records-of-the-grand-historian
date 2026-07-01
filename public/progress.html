@@ -455,6 +455,57 @@
     </footer>
 
     <script>
+        const CHRONOLOGICAL_ORDER = [
+            'shiji',
+            'hanshu',
+            'houhanshu',
+            'sanguozhi',
+            'jinshu',
+            'songshu',
+            'nanqishu',
+            'liangshu',
+            'chenshu',
+            'weishu',
+            'beiqishu',
+            'zhoushu',
+            'suishu',
+            'nanshi',
+            'beishi',
+            'jiutangshu',
+            'xintangshu',
+            'jiuwudaishi',
+            'xinwudaishi',
+            'songshi',
+            'liaoshi',
+            'jinshi',
+            'yuanshi',
+            'mingshi'
+        ];
+
+        const OTHER_WORKS_ORDER = [
+            'zizhitongjian',
+            'qingshigao'
+        ];
+
+        const BOOK_ORDER = new Map([
+            ...CHRONOLOGICAL_ORDER.map((bookId, index) => [bookId, index]),
+            ...OTHER_WORKS_ORDER.map((bookId, index) => [bookId, CHRONOLOGICAL_ORDER.length + index])
+        ]);
+
+        function orderedBookIds(data, category) {
+            return Object.keys(data.books)
+                .filter(bookId => {
+                    const book = data.books[bookId];
+                    return (book.category || 'twentyFourHistories') === category;
+                })
+                .sort((a, b) => {
+                    const aOrder = BOOK_ORDER.has(a) ? BOOK_ORDER.get(a) : Number.MAX_SAFE_INTEGER;
+                    const bOrder = BOOK_ORDER.has(b) ? BOOK_ORDER.get(b) : Number.MAX_SAFE_INTEGER;
+                    if (aOrder !== bOrder) return aOrder - bOrder;
+                    return a.localeCompare(b);
+                });
+        }
+
         async function loadProgressData() {
             try {
                 const response = await fetch(`data/progress.json?ts=${Date.now()}`, {
@@ -462,9 +513,8 @@
                 });
                 const data = await response.json();
                 if (data.chunked && data.bookChunks) {
-                    const loadedBooks = {};
                     const entries = Object.entries(data.bookChunks);
-                    await Promise.all(entries.map(async ([bookId, url]) => {
+                    const loadedEntries = await Promise.all(entries.map(async ([bookId, url]) => {
                         const bookResponse = await fetch(`${url}?ts=${Date.now()}`, {
                             cache: 'no-store'
                         });
@@ -472,8 +522,12 @@
                             throw new Error(`Could not load progress chunk for ${bookId}: ${bookResponse.status}`);
                         }
                         const chunk = await bookResponse.json();
-                        loadedBooks[bookId] = chunk.book || chunk;
+                        return [bookId, chunk.book || chunk];
                     }));
+                    const loadedBooks = {};
+                    loadedEntries.forEach(([bookId, book]) => {
+                        loadedBooks[bookId] = book;
+                    });
                     data.books = loadedBooks;
                 }
                 return data;
@@ -896,10 +950,7 @@
             ];
 
             groups.forEach(([category, label]) => {
-                const bookIds = Object.keys(data.books).filter(bookId => {
-                    const book = data.books[bookId];
-                    return (book.category || 'twentyFourHistories') === category;
-                });
+                const bookIds = orderedBookIds(data, category);
 
                 if (bookIds.length === 0) return;
 
