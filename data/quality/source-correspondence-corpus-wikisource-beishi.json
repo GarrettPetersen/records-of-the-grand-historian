@@ -6362,7 +6362,7 @@
     },
     {
       "id": "source-beishi-003-wikisource-7a4c10db0d48",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.846,
@@ -6405,8 +6405,11 @@
         "afterLocal": "戊寅，幸未央殿、阿房宮，遂幸昆明池。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource uses edition variants 振/谷; local 賑賜穀帛 is standard relief-grain wording.",
+      "reviewedAt": "2026-07-01T03:36:14.123Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-beishi-003-wikisource-8cb8ca594e62",
@@ -6550,7 +6553,7 @@
     },
     {
       "id": "source-beishi-003-wikisource-af4c39ae6e89",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.824,
@@ -6593,8 +6596,11 @@
         "afterLocal": "六月甲辰，中山王睿薨。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource 農月時耍 is a garbled witness; local 農時要月 matches farming-season context.",
+      "reviewedAt": "2026-07-01T03:36:14.359Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-beishi-003-wikisource-c542ff8ef046",
@@ -77899,7 +77905,7 @@
     },
     {
       "id": "source-beishi-100-wikisource-09760cbe479e",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "beishi",
@@ -77923,8 +77929,85 @@
         "afterLocal": "琰之少機警，善談論，經史百家，無不悉覽，朝廷疑事，多所訪質。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "孝莊初，太尉元天穆北討葛榮，以琰之兼御史中尉，為北道軍司。",
+          "literal": "At the beginning of Emperor Xiaozhuang's reign, Grand Marshal Yuan Tianmu marched north against Ge Rong; Yanzhi was made concurrent Censor-in-Chief and served as army supervisor on the northern route.",
+          "idiomatic": "Early in the reign of Emperor Xiaozhuang, when Grand Marshal Yuan Tianmu campaigned north against Ge Rong, Yanzhi was given the concurrent post of Censor-in-Chief and appointed army supervisor for the northern column.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "還，除征東將軍，仍兼太常，出為衛將軍、荊州刺史，兼尚書左僕射、三荊二郢大行台，尋加散騎常侍。",
+          "literal": "On his return he was appointed General Who Pacifies the East, still concurrently Minister of Ceremonies, then sent out as General of the Guard and Governor of Jing Province, concurrently Left Vice Director of the Secretariat and Grand Mobile Commandery over the three Jing regions and the two Ying regions, and before long given the additional title Regular Attendant of the Scattered Cavalry.",
+          "idiomatic": "After he returned he was appointed General Who Pacifies the East while retaining his post as Minister of Ceremonies, then sent out as General of the Guard and Governor of Jing Province, concurrently as Left Vice Director of the Secretariat and head of the grand mobile headquarters for the three Jing and two Ying circuits, and soon received the additional rank of Regular Attendant of the Scattered Cavalry.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "琰之雖以儒素自業，而每語人，言吾家世將種，猶有關西風氣。",
+          "literal": "Although Yanzhi made his career as a plain scholar, he would tell people, \"My family for generations has been a house of generals,\" and said of himself that he still had the spirit of the Guanxi region.",
+          "idiomatic": "Though Yanzhi built his reputation as a scholar of plain dress and manners, he often told others, \"Our house has bred generals for generations,\" and claimed that he still carried something of the old Guanxi warrior temper.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "及至州之後，大好射獵，以示威武。",
+          "literal": "Once he reached the province he took great delight in archery and hunting to display martial prowess.",
+          "idiomatic": "After he took up his post in the province he threw himself into archery and the chase to display his martial bearing.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "爾硃兆入洛，南陽太守趙脩延以琰之莊帝外戚，誣琰之規奔梁國，襲州城，遂被囚執。",
+          "literal": "When Erzhu Zhao entered Luoyang, the Administrator of Nanyang Zhao Xiuyan, because Yanzhi was a maternal relative of Emperor Zhuangdi, slandered him as plotting to flee to the Liang state, attacked the provincial capital, and had him imprisoned.",
+          "idiomatic": "After Erzhu Zhao seized Luoyang, Zhao Xiuyan, prefect of Nanyang, denounced Yanzhi—who was related to Emperor Zhuangdi by marriage—as planning to defect to Liang, stormed the provincial seat, and threw him in chains.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "脩延仍自行州事。",
+          "literal": "Xiuyan then administered the province on his own.",
+          "idiomatic": "Xiuyan then assumed control of the province himself.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "城內人斬脩延，還推琰之厘州任。",
+          "literal": "The people within the city beheaded Xiuyan and in turn urged Yanzhi to put the province in order.",
+          "idiomatic": "The townspeople killed Xiuyan and pressed Yanzhi to resume charge of the province.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "孝武初，征兼侍中、車騎大將軍、左光祿大夫、儀同三司。",
+          "literal": "At the beginning of Emperor Xiaowu's reign he was summoned as concurrent Attendant-in-Ordinary, General of Chariots and Cavalry, Left Grand Master of the Palace, and Holder of Honors Equal to the Three Excellencies.",
+          "idiomatic": "At the start of Emperor Xiaowu's reign, Yanzhi was recalled to court as Attendant-in-Ordinary with the additional titles of General of Chariots and Cavalry, Left Grand Master of the Palace, and Holder of Honors Equal to the Three Excellencies.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "永熙二年薨，朝廷悼惜之，贈侍中、驃騎大將軍、司徒公、雍州刺史，諡曰文簡。",
+          "literal": "In the second year of the Yongxi era he died; the court mourned and regretted his loss, posthumously awarding him Attendant-in-Ordinary, General of Agile Cavalry, Duke of the Directorate of the Masters of Writing, and Governor of Yong Province, with the posthumous title Wenjian.",
+          "idiomatic": "He died in the second year of Yongxi (534). The court mourned his loss and posthumously granted him the titles of Attendant-in-Ordinary, General of Agile Cavalry, and Duke of the Secretariat, together with the governorship of Yong Province; his posthumous title was Wenjian (Cultured and Unassuming).",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-07-01T03:40:06.995Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T03:40:06.998Z",
+      "appliedSummary": {
+        "id": "source-beishi-100-wikisource-09760cbe479e",
+        "type": "source_omission_candidate",
+        "start": 600,
+        "removed": 0,
+        "inserted": 9,
+        "delta": 9,
+        "manualTranslationsApplied": 9
+      }
     },
     {
       "id": "source-beishi-100-wikisource-2db15a52bd47",
@@ -78513,7 +78596,7 @@
     },
     {
       "id": "source-beishi-100-wikisource-d41826c7fe8e",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "beishi",
@@ -78537,12 +78620,75 @@
         "afterLocal": "後主弟讓，字士遜，雅量凝重，善於謀略，位甯朔將軍，領西羌校尉、輔國將軍、晉敦煌太守、新鄉侯，贈驃騎大將軍，諡曰穆。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "後主諱歆，字士業，武詔王第二子也。",
+          "literal": "The Later Lord's taboo name was Xin, styled Shiye, the second son of the Martial and Illustrious King.",
+          "idiomatic": "The Later Lord, whose taboo name was Xin and whose style was Shiye, was the second son of the Martial and Illustrious King.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "武昭王薨，府僚奉為都督、大將軍、涼公，領涼州牧、護羌校尉，大赦境內，改元為嘉興。",
+          "literal": "When the Martial and Illustrious King died, the staff elevated him as Commander-in-Chief, Grand General, Duke of Liang, concurrently Governor of Liang Province and Colonel Who Protects the Qiang, greatly amnestied the territory, and changed the era name to Jiaxing.",
+          "idiomatic": "When the Martial and Illustrious King died, his officers raised Xin to Commander-in-Chief, Grand General, Duke of Liang, Governor of Liang Province, and Colonel Who Protects the Qiang, proclaimed a general amnesty, and adopted the Jiaxing era.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "尊母尹氏為太后。",
+          "literal": "They honored his mother Lady Yin as empress dowager.",
+          "idiomatic": "They honored his mother, Lady Yin, as empress dowager.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "在位四年，為沮渠蒙遜所敗，國亡。",
+          "literal": "He reigned four years, was defeated by Juqu Mengxun, and the state perished.",
+          "idiomatic": "After four years on the throne he was defeated by Juqu Mengxun and the state fell.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "武昭王以魏道武皇帝天興二年立，後主以明元皇帝泰常五年而亡，據河右凡二世，二十一年。",
+          "literal": "The Martial and Illustrious King was established in the second year of Tianxing under Emperor Daowu of Wei; the Later Lord perished in the fifth year of Taichang under Emperor Mingyuan — holding the lands west of the Yellow River for two reigns over twenty-one years.",
+          "idiomatic": "The Martial and Illustrious King was established in the second year of Tianxing under Emperor Daowu of Wei, and the Later Lord fell in the fifth year of Taichang under Emperor Mingyuan. The house held the lands west of the Yellow River for two reigns over twenty-one years.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "世子重耳奔于江左，遂仕于宋。",
+          "literal": "The heir Chong'er fled to the lands south of the Yangtze and then served Song.",
+          "idiomatic": "The heir Chong'er fled south of the Yangtze and entered the service of Song.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "後歸魏，位恆農太守，即皇室七廟之始也。",
+          "literal": "Later he returned to Wei and held the post of Governor of Hengnong — the beginning of the imperial clan's seven ancestral temples.",
+          "idiomatic": "He later returned to Wei and served as Governor of Hengnong, marking the beginning of the imperial clan's seven ancestral temples.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-07-01T03:40:07.361Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T03:40:07.364Z",
+      "appliedSummary": {
+        "id": "source-beishi-100-wikisource-d41826c7fe8e",
+        "type": "source_omission_candidate",
+        "start": 88,
+        "removed": 0,
+        "inserted": 7,
+        "delta": 7,
+        "manualTranslationsApplied": 7
+      }
     },
     {
       "id": "source-beishi-100-wikisource-d726fe17325b",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "beishi",
@@ -78566,8 +78712,99 @@
         "afterLocal": "承弟茂，字仲宗。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "子諺，字義興。",
+          "literal": "His son Yan, styled Yixing.",
+          "idiomatic": "His son Yan, styled Yixing.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "有幹局，起家太學博士，領殿中侍御史，稍遷東郡太守。",
+          "literal": "He had administrative ability; he began his career as Erudite of the National University, held the post of Palace Censor, and was gradually promoted to Administrator of Dongjun Commandery.",
+          "idiomatic": "He had real administrative talent. He began his career as Erudite of the National University, served as Palace Censor, and was gradually promoted to Administrator of Dongjun Commandery.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "莊帝初，濟、廣二州刺史，加散騎常侍。",
+          "literal": "At the beginning of Emperor Zhuangdi's reign he served as Governor of Ji and Guang provinces and was given the additional title Attendant-in-Ordinary.",
+          "idiomatic": "At the start of Emperor Zhuangdi's reign he served as Governor of Ji and Guang provinces and was given the additional title Attendant-in-Ordinary.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "節閔時，與第三弟通直散騎常侍義真、第七弟太常少卿義邕同為爾硃仲遠所害。",
+          "literal": "During the reign of Emperor Jiemin, he and his third younger brother Yizhen, Regular Attendant of Unrestricted Access, and his seventh younger brother Yiyong, Vice Director of the Court of Imperial Sacrifices, were all killed by Erzhu Zhongyuan.",
+          "idiomatic": "During the reign of Emperor Jiemin, he and his third younger brother Yizhen, Regular Attendant of Unrestricted Access, and his seventh younger brother Yiyong, Vice Director of the Court of Imperial Sacrifices, were all killed by Erzhu Zhongyuan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "義邕，莊帝居籓之日，以外親，甚見親昵。",
+          "literal": "Yiyong, on the days when Emperor Zhuangdi lived in his princely residence, was greatly favored as a maternal relative.",
+          "idiomatic": "While Emperor Zhuangdi was still a prince, Yiyong, as a maternal kinsman, was greatly favored.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "及即位，特蒙信任。",
+          "literal": "When the emperor took the throne, he received special trust.",
+          "idiomatic": "Once the emperor took the throne, he enjoyed special trust.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "爾硃榮之誅，義邕預其事，由是並及禍。",
+          "literal": "When Erzhu Rong was executed, Yiyong took part in the affair, and therefore they all met calamity.",
+          "idiomatic": "When Erzhu Rong was executed, Yiyong took part in the plot—and so they all perished together.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "節閔初，諺贈侍中、驃騎將軍、吏部尚書、冀州刺史，義真贈前將軍、齊州刺史，義邕贈安東將軍、青州刺史。",
+          "literal": "At the beginning of Emperor Jiemin's reign Yan was posthumously given Attendant-in-Ordinary, General of Agile Cavalry, Minister of Personnel, and Governor of Jizhou; Yizhen was posthumously given Former General and Governor of Qizhou; and Yiyong was posthumously given General Who Pacifies the East and Governor of Qingzhou.",
+          "idiomatic": "At the start of Emperor Jiemin's reign Yan was posthumously granted Attendant-in-Ordinary, General of Agile Cavalry, Minister of Personnel, and Governor of Jizhou; Yizhen was posthumously granted Former General and Governor of Qizhou; and Yiyong was posthumously granted General Who Pacifies the East and Governor of Qingzhou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "諺次弟義順，司空屬。",
+          "literal": "Yan's next younger brother Yishun served in the Bureau of the Minister of Works.",
+          "idiomatic": "Yan's next younger brother Yishun served in the Bureau of the Minister of Works.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "第四弟義遠，國子博士。",
+          "literal": "The fourth younger brother Yiyuan served as Erudite of the National University.",
+          "idiomatic": "The fourth younger brother Yiyuan served as Erudite of the National University.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "莊帝初，並于河陰遇害，贈散騎常侍、征東將軍、雍州刺史。",
+          "literal": "At the beginning of Emperor Zhuangdi's reign both were killed at Heyin and posthumously given Attendant-in-Ordinary, General Who Campaigns East, and Governor of Yong Province.",
+          "idiomatic": "At the start of Emperor Zhuangdi's reign both were killed at Heyin and posthumously granted Attendant-in-Ordinary, General Who Campaigns East, and Governor of Yong Province.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-07-01T03:40:07.664Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T03:40:07.672Z",
+      "appliedSummary": {
+        "id": "source-beishi-100-wikisource-d726fe17325b",
+        "type": "source_omission_candidate",
+        "start": 320,
+        "removed": 0,
+        "inserted": 11,
+        "delta": 11,
+        "manualTranslationsApplied": 11
+      }
     },
     {
       "id": "source-beishi-100-wikisource-e3f2945926a9",
@@ -78628,5 +78865,5 @@
       "retainedAfterRescan": true
     }
   ],
-  "updatedAt": "2026-07-01T00:13:21.153Z"
+  "updatedAt": "2026-07-01T03:40:07.829Z"
 }
