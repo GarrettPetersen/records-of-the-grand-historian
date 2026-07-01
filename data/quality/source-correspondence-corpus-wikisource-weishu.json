@@ -140663,7 +140663,7 @@
     },
     {
       "id": "source-weishu-116-wikisource-0105014ef8da",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.509,
@@ -140733,12 +140733,32 @@
         "afterLocal": "有任城、唐陽城、華陽城。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied: restored omitted gazetteer commandery/county entries and added manual English translations.",
+      "manualTranslations": [
+        {
+          "zh": "任城郡",
+          "literal": "Rencheng Commandery",
+          "idiomatic": "Rencheng Commandery",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "〈後漢孝章帝分東平為任城國，晉永嘉後罷，神龜元年分高平置。〉",
+          "literal": "〈In the Zhanghe era of Later Han, Emperor Zhang split Dongping to form the Rencheng kingdom; it was abolished after the Yongjia era of Jin; in the first year of Shengui it was split off from Gaoping and established.〉",
+          "idiomatic": "〈In the Zhanghe era of Later Han, Emperor Zhang split Dongping to form the Rencheng kingdom; it was abolished after the Yongjia era of Jin; in the first year of Shengui it was split off from Gaoping and established.〉",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "acceptedSourceText": "任城郡〈後漢孝章帝分東平為任城國，晉永嘉後罷，神龜元年分高平置。〉領縣三戶八千五十口二萬一千七百八十九任城〈前漢屬東平，後漢、晉屬。",
+      "reviewedAt": "2026-07-01T05:51:25.293Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T05:51:25.293Z"
     },
     {
       "id": "source-weishu-116-wikisource-016dae8ea441",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 3,
       "similarity": 0.369,
@@ -140817,8 +140837,42 @@
         "afterLocal": "泰常八年置。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied: restored omitted gazetteer commandery/county entries and added manual English translations.",
+      "manualTranslations": [
+        {
+          "zh": "黃臺",
+          "literal": "Huangtai",
+          "idiomatic": "Huangtai",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "〈興和元年分陽翟置。有葛溝水、黃臺岡。〉",
+          "literal": "〈Established in the first year of Xinghe by splitting off from Yangzhai. It had Gegou River and Huangtai Ridge.〉",
+          "idiomatic": "〈Established in the first year of Xinghe by splitting off from Yangzhai. It had Gegou River and Huangtai Ridge.〉",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "陽翟",
+          "literal": "Yangzhai",
+          "idiomatic": "Yangzhai",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "〈二漢屬潁川，晉屬河南尹，興和元年屬。有陽翟城、康城、禹山祠、赤沙澗、九山祠、呂不韋墓。〉",
+          "literal": "〈Under the two Han dynasties it belonged to Yingchuan; under Jin to Henan Intendant; from the first year of Xinghe it was subordinate here. It had Yangzhai City, Kang City, Mount Yu Shrine, Chisha Stream, Mount Jiu Shrine, and the tomb of Lü Buwei.〉",
+          "idiomatic": "〈Under the two Han dynasties it belonged to Yingchuan; under Jin to Henan Intendant; from the first year of Xinghe it was subordinate here. It had Yangzhai City, Kang City, Mount Yu Shrine, Chisha Stream, Mount Jiu Shrine, and the tomb of Lü Buwei.〉",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "acceptedSourceText": "陽翟郡領縣二戶一萬四千八百二口六萬三千八百七十黃臺〈興和元年分陽翟置。有葛溝水、黃臺岡。〉陽翟〈二漢屬潁川，晉屬河南尹，興和元年屬。有陽翟城、康城、禹山祠、赤沙澗、九山祠、呂不韋墓。〉濟州〈治濟北碻磝城。",
+      "reviewedAt": "2026-07-01T05:51:25.956Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T05:51:25.956Z"
     },
     {
       "id": "source-weishu-116-wikisource-02bfb81006c1",
@@ -140936,7 +140990,7 @@
     },
     {
       "id": "source-weishu-116-wikisource-032aa0aa8fba",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -140988,8 +141042,11 @@
         "afterLocal": "治亳城。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local editorial markup or fuller Bainà-derived text; Wikisource table-cell structure differs from local 〈〉 gazetteer format.",
+      "reviewedAt": "2026-07-01T05:47:39.991Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-weishu-116-wikisource-04fb41c3b551",
@@ -141061,7 +141118,7 @@
     },
     {
       "id": "source-weishu-116-wikisource-0f3485962963",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.818,
@@ -141140,8 +141197,28 @@
         "afterLocal": "治高平城。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied: restored omitted gazetteer commandery/county entries and added manual English translations.",
+      "manualTranslations": [
+        {
+          "zh": "新城",
+          "literal": "Xincheng",
+          "idiomatic": "Xincheng",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "安定",
+          "literal": "Anding",
+          "idiomatic": "Anding",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "acceptedSourceText": "領縣一新城黃川郡領縣一安定南建州〈蕭衍置，魏因之。",
+      "reviewedAt": "2026-07-01T05:51:26.469Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T05:51:26.469Z"
     },
     {
       "id": "source-weishu-116-wikisource-18eebf9c7733",
@@ -141204,7 +141281,7 @@
     },
     {
       "id": "source-weishu-116-wikisource-26c19d919d2f",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.311,
@@ -141301,8 +141378,11 @@
         "afterLocal": "有滎陽山、滎陽城、敖倉、廣武城、石門城、管叔冢、周苛、紀信冢、滎澤。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied: restored omitted gazetteer commandery/county entries and added manual English translations.",
+      "reviewedAt": "2026-07-01T05:51:30.335Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T05:51:30.335Z"
     },
     {
       "id": "source-weishu-116-wikisource-304ad903d2fd",
@@ -141357,7 +141437,7 @@
     },
     {
       "id": "source-weishu-116-wikisource-36d803aad1c6",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.847,
@@ -141778,12 +141858,15 @@
         "afterLocal": "治鍾離城。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local editorial markup or fuller Bainà-derived text; Wikisource table-cell structure differs from local 〈〉 gazetteer format.",
+      "reviewedAt": "2026-07-01T05:47:40.976Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-weishu-116-wikisource-390ab61d2fa2",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.783,
@@ -141916,12 +141999,53 @@
         "afterLocal": "有關城。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied: restored omitted gazetteer commandery/county entries and added manual English translations.",
+      "manualTranslations": [
+        {
+          "zh": "梁郡",
+          "literal": "Liang Commandery",
+          "idiomatic": "Liang Commandery",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "新息",
+          "literal": "Xinxi",
+          "idiomatic": "Xinxi",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "鮦陽",
+          "literal": "Tongyang",
+          "idiomatic": "Tongyang",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "邊城",
+          "literal": "Biancheng",
+          "idiomatic": "Biancheng",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "義陽",
+          "literal": "Yiyang",
+          "idiomatic": "Yiyang",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "acceptedSourceText": "領郡六縣六梁郡領縣一新息新蔡郡領縣一鮦陽邊城郡〈治石頭城。領縣一邊城義陽郡領縣一義陽新城郡〈治新城。",
+      "reviewedAt": "2026-07-01T05:51:27.290Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T05:51:27.290Z"
     },
     {
       "id": "source-weishu-116-wikisource-4a92e55abc58",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 3,
       "similarity": 0.56,
@@ -142063,12 +142187,15 @@
         "afterLocal": "有潁陰城、南頓城、漢光武廟。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied: restored omitted gazetteer commandery/county entries and added manual English translations.",
+      "reviewedAt": "2026-07-01T05:51:31.035Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T05:51:31.035Z"
     },
     {
       "id": "source-weishu-116-wikisource-4df54f4846f5",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.862,
@@ -142165,12 +142292,39 @@
         "afterLocal": "治豫州鮦縣固始城。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied: restored omitted gazetteer commandery/county entries and added manual English translations.",
+      "manualTranslations": [
+        {
+          "zh": "沛郡",
+          "literal": "Pei Commandery",
+          "idiomatic": "Pei Commandery",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "臨淮郡",
+          "literal": "Linhuai Commandery",
+          "idiomatic": "Linhuai Commandery",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "臨淮",
+          "literal": "Linhuai",
+          "idiomatic": "Linhuai",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "acceptedSourceText": "領郡二縣四沛郡領縣三蕭潁川相臨淮郡領縣一臨淮財州〈武定八年置。",
+      "reviewedAt": "2026-07-01T05:51:27.815Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T05:51:27.815Z"
     },
     {
       "id": "source-weishu-116-wikisource-4e5b87c6338d",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.853,
@@ -142366,12 +142520,53 @@
         "afterLocal": "治大治關城。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied: restored omitted gazetteer commandery/county entries and added manual English translations.",
+      "manualTranslations": [
+        {
+          "zh": "齊昌",
+          "literal": "Qichang",
+          "idiomatic": "Qichang",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "興義",
+          "literal": "Xingyi",
+          "idiomatic": "Xingyi",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "梁興",
+          "literal": "Liangxing",
+          "idiomatic": "Liangxing",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "光城",
+          "literal": "Guangcheng",
+          "idiomatic": "Guangcheng",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "西平",
+          "literal": "Xiping",
+          "idiomatic": "Xiping",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "acceptedSourceText": "領郡六縣六義陽郡領縣一義陽〈州、郡治。齊昌郡領縣一齊昌新昌郡領縣一興義梁安郡〈治建昌城。領縣一梁興光城郡領縣一光城西平齊興郡領縣一湘州〈蕭衍置，魏因之。",
+      "reviewedAt": "2026-07-01T05:51:28.342Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T05:51:28.342Z"
     },
     {
       "id": "source-weishu-116-wikisource-54c43ea04673",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.846,
@@ -142423,12 +142618,15 @@
         "afterLocal": "有離狐城、桃城。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local editorial markup or fuller Bainà-derived text; Wikisource table-cell structure differs from local 〈〉 gazetteer format.",
+      "reviewedAt": "2026-07-01T05:47:40.360Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-weishu-116-wikisource-5c5956a5a637",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.875,
@@ -142507,8 +142705,11 @@
         "afterLocal": "有咸山、祗山、格馬山。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local editorial markup or fuller Bainà-derived text; Wikisource table-cell structure differs from local 〈〉 gazetteer format.",
+      "reviewedAt": "2026-07-01T05:47:40.669Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-weishu-116-wikisource-69510881e013",
@@ -142672,7 +142873,7 @@
     },
     {
       "id": "source-weishu-116-wikisource-7aada903192c",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.867,
@@ -142769,8 +142970,28 @@
         "afterLocal": "治鹿城關。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied: restored omitted gazetteer commandery/county entries and added manual English translations.",
+      "manualTranslations": [
+        {
+          "zh": "建寧",
+          "literal": "Jianning",
+          "idiomatic": "Jianning",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "梁豐",
+          "literal": "Liangfeng",
+          "idiomatic": "Liangfeng",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "acceptedSourceText": "領郡二縣二建寧郡領縣一建寧齊安郡領縣一梁豐北江州〈蕭衍置，魏因之。",
+      "reviewedAt": "2026-07-01T05:51:28.885Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T05:51:28.885Z"
     },
     {
       "id": "source-weishu-116-wikisource-7dd62e3f09a8",
@@ -142860,7 +143081,7 @@
     },
     {
       "id": "source-weishu-116-wikisource-8c17b2224e33",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0,
@@ -142912,8 +143133,11 @@
         "afterLocal": "孝昌中陷，興和中復。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local editorial markup or fuller Bainà-derived text; Wikisource table-cell structure differs from local 〈〉 gazetteer format.",
+      "reviewedAt": "2026-07-01T05:47:41.757Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-weishu-116-wikisource-9d8cbb302956",
@@ -143080,7 +143304,7 @@
     },
     {
       "id": "source-weishu-116-wikisource-a7d2727875c3",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.267,
@@ -143204,12 +143428,15 @@
         "afterLocal": "二漢、晉屬，後罷，孝昌二年復。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied: restored omitted gazetteer commandery/county entries and added manual English translations.",
+      "reviewedAt": "2026-07-01T05:51:31.788Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T05:51:31.788Z"
     },
     {
       "id": "source-weishu-116-wikisource-b39c1ef3b125",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 3,
       "similarity": 0.728,
@@ -143369,12 +143596,15 @@
         "afterLocal": "有寒山、孤山、龜山、黃山、九里山、桓魋冢、亞父冢、楚元王冢、龔勝冢。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied: restored omitted gazetteer commandery/county entries and added manual English translations.",
+      "reviewedAt": "2026-07-01T05:51:32.459Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T05:51:32.459Z"
     },
     {
       "id": "source-weishu-116-wikisource-b74642371f19",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.742,
@@ -143543,12 +143773,53 @@
         "afterLocal": "高祖初，立東徐州，後陷，世宗初，改為鎮，後陷。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied: restored omitted gazetteer commandery/county entries and added manual English translations.",
+      "manualTranslations": [
+        {
+          "zh": "汝陰",
+          "literal": "Ruyin",
+          "idiomatic": "Ruyin",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "〈二漢屬汝南，晉屬。〉",
+          "literal": "〈Under the two Han dynasties it belonged to Runan; under Jin it was subordinate here.〉",
+          "idiomatic": "〈Under the two Han dynasties it belonged to Runan; under Jin it was subordinate here.〉",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "宋",
+          "literal": "Song",
+          "idiomatic": "Song",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "〈前漢曰新郪，屬汝南，後漢改，晉屬，後罷，太和元年復屬。〉",
+          "literal": "〈Under Former Han it was called Xinqi and belonged to Runan; under Later Han it was renamed; under Jin it was subordinate, later abolished, and restored in the first year of Taihe.〉",
+          "idiomatic": "〈Under Former Han it was called Xinqi and belonged to Runan; under Later Han it was renamed; under Jin it was subordinate, later abolished, and restored in the first year of Taihe.〉",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "許昌",
+          "literal": "Xuchang",
+          "idiomatic": "Xuchang",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "acceptedSourceText": "領縣三戶一千七百九十四口八千四百九十八汝陰〈二漢屬汝南，晉屬。〉宋〈前漢曰新郪，屬汝南，後漢改，晉屬，後罷，太和元年復屬。〉許昌丹楊郡領縣四戶二千一百四十四口七千九百三十一秣陵〈有次水。邵陵南陽白水陳留郡〈武定六年置，及縣。領縣四戶三百六十七口七百七十五小黃宋雍丘新蔡東楚州〈司馬德宗置宿豫郡。",
+      "reviewedAt": "2026-07-01T05:51:29.635Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T05:51:29.635Z"
     },
     {
       "id": "source-weishu-116-wikisource-d2b2ec63025d",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 3,
       "similarity": 0.515,
@@ -143672,8 +143943,11 @@
         "afterLocal": "有繁昌城、潁鄉城、安陽城、陽城陂。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied: restored omitted gazetteer commandery/county entries and added manual English translations.",
+      "reviewedAt": "2026-07-01T05:51:33.064Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T05:51:33.064Z"
     },
     {
       "id": "source-weishu-116-wikisource-d6468764c6b1",
@@ -150882,7 +151156,7 @@
     },
     {
       "id": "source-weishu-116-wikisource-f499efe4a2a0",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0.228,
@@ -151231,8 +151505,11 @@
         "afterLocal": "治渦陽城。"
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local editorial markup or fuller Bainà-derived text; Wikisource table-cell structure differs from local 〈〉 gazetteer format.",
+      "reviewedAt": "2026-07-01T05:47:41.398Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-weishu-116-wikisource-f73c68ae3fea",
@@ -151322,7 +151599,7 @@
     },
     {
       "id": "source-weishu-116-wikisource-f8539a67a07d",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.316,
@@ -151392,8 +151669,11 @@
         "afterLocal": "治魯陽。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Applied: restored omitted gazetteer commandery/county entries and added manual English translations.",
+      "reviewedAt": "2026-07-01T05:51:33.602Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T05:51:33.602Z"
     },
     {
       "id": "source-weishu-117-wikisource-167f77dfd57e",
