@@ -652,16 +652,13 @@
             const placeholderHighPending = Number(placeholderTranslations.highPendingItems || 0);
             const placeholderPending = Number(placeholderTranslations.pendingItems || 0);
             const placeholderHighestSeverity = Number(placeholderTranslations.highestPendingSeverity || 0);
-            const glossaryHighPending = Number(translationAlignment.highPendingItems || 0);
             const glossaryPending = Number(translationAlignment.pendingItems || 0);
-            const glossaryHighestSeverity = Number(translationAlignment.highestPendingSeverity || 0);
             const highPending = Number(repairQueue.highPendingItems || 0);
             const pending = Number(repairQueue.pendingItems || 0);
             const highestSeverity = Number(repairQueue.highestPendingSeverity || 0);
             if (placeholderHighPending > 0 || placeholderHighestSeverity >= 3) return 'red';
             if (quoteHighPending > 0 || quoteHighestSeverity >= 3) return 'red';
             if (highPending > 0 || highestSeverity >= 3) return 'red';
-            if (glossaryHighPending > 0 || glossaryHighestSeverity >= 3) return 'red';
             if (placeholderPending > 0) return 'yellow';
             if (quotePending > 0) return 'yellow';
             if (pending > 0) return 'yellow';
@@ -734,8 +731,7 @@
             const lowRate = Number(translationAlignment.lowGlossarySentenceRate || 0);
             const zeroRate = Number(translationAlignment.zeroGlossarySentenceRate || 0);
             const scorable = Number(translationAlignment.scorableSentences || 0);
-            const severity = Number(translationAlignment.highestPendingSeverity || 0) >= 3 ? 'high' : 'moderate';
-            return `Glossary fuzzy health: ${severity} concern (${(coverage * 100).toFixed(0)}% coverage; ${(lowRate * 100).toFixed(0)}% low, ${(zeroRate * 100).toFixed(0)}% zero across ${scorable.toLocaleString()} scored sentences)`;
+            return `Glossary fuzzy health: yellow review signal (${(coverage * 100).toFixed(0)}% coverage; ${(lowRate * 100).toFixed(0)}% low, ${(zeroRate * 100).toFixed(0)}% zero across ${scorable.toLocaleString()} scored sentences)`;
         }
 
         function averageLanguageToolScore(chapters) {

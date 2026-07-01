@@ -17,7 +17,7 @@ import crypto from 'node:crypto';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const GLOSSARY_PATH = path.join(DATA_DIR, 'glossary.json');
-const SCANNER_VERSION = '2026-07-01-chapter-fingerprint-cache';
+const SCANNER_VERSION = '2026-07-01-romanized-name-spacing-fix';
 
 const CHECK_FIELDS = new Set([
   'idiomatic',
@@ -168,7 +168,7 @@ function variantRegex(variants) {
   const parts = expandedEnglishVariants([...new Set(variants)])
     .filter(Boolean)
     .sort((a, b) => b.length - a.length)
-    .map((variant) => escapeRegex(variant).replace(/ /g, "[\\\\s\\-'’]+"));
+    .map((variant) => escapeRegex(variant).replace(/ /g, "[\\s\\-'’]+"));
   if (parts.length === 0) return null;
   return new RegExp(`\\b(?:${parts.join('|')})\\b`, 'i');
 }
