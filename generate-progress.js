@@ -25,6 +25,8 @@ const LANGUAGE_TOOL_SCORES_PATH = './data/quality/languagetool-scores.json';
 const QUOTE_ALIGNMENT_REPORT_PATH = './data/quality/quote-span-alignment.json';
 const PLACEHOLDER_TRANSLATIONS_REPORT_PATH = './data/quality/placeholder-translations.json';
 const TRANSLATION_ALIGNMENT_REPORT_PATH = './data/quality/translation-alignment.json';
+const PUBLIC_PROGRESS_PATH = './public/data/progress.json';
+const PUBLIC_PROGRESS_BOOKS_DIR = './public/data/progress/books';
 
 function parseBookArg() {
   const i = process.argv.indexOf('--book');
@@ -686,12 +688,63 @@ function generateProgressData() {
   return progress;
 }
 
+function publicProgressIndex(progress) {
+  const bookChunks = {};
+  const books = {};
+  for (const [bookId, book] of Object.entries(progress.books || {})) {
+    bookChunks[bookId] = `data/progress/books/${bookId}.json`;
+    books[bookId] = {
+      id: bookId,
+      name: book.name,
+      chinese: book.chinese,
+      pinyin: book.pinyin,
+      dynasty: book.dynasty,
+      totalChapters: Array.isArray(book.chapters) ? book.chapters.length : 0,
+      statusCounts: book.statusCounts || null,
+      summary: book.summary || null,
+    };
+  }
+  return {
+    ...progress,
+    books,
+    bookChunks,
+    chunked: true,
+  };
+}
+
+function writePublicProgress(progress) {
+  fs.mkdirSync(PUBLIC_PROGRESS_BOOKS_DIR, { recursive: true });
+
+  const currentBookFiles = new Set();
+  for (const [bookId, book] of Object.entries(progress.books || {})) {
+    const filename = path.join(PUBLIC_PROGRESS_BOOKS_DIR, `${bookId}.json`);
+    currentBookFiles.add(path.resolve(filename));
+    fs.writeFileSync(filename, JSON.stringify({
+      generatedAt: progress.generatedAt,
+      bookId,
+      book,
+    }, null, 2), 'utf8');
+  }
+
+  for (const entry of fs.readdirSync(PUBLIC_PROGRESS_BOOKS_DIR)) {
+    if (!entry.endsWith('.json')) continue;
+    const filename = path.join(PUBLIC_PROGRESS_BOOKS_DIR, entry);
+    if (!currentBookFiles.has(path.resolve(filename))) {
+      fs.unlinkSync(filename);
+    }
+  }
+
+  const index = publicProgressIndex(progress);
+  fs.writeFileSync(PUBLIC_PROGRESS_PATH, JSON.stringify(index, null, 2), 'utf8');
+  console.log(`Progress index copied to ${PUBLIC_PROGRESS_PATH}`);
+  console.log(`Progress book chunks written to ${PUBLIC_PROGRESS_BOOKS_DIR}`);
+}
+
 function writeProgress(progress) {
   fs.writeFileSync('./data/progress.json', JSON.stringify(progress, null, 2), 'utf8');
   console.log('Progress data written to data/progress.json');
 
-  fs.writeFileSync('./public/data/progress.json', JSON.stringify(progress, null, 2), 'utf8');
-  console.log('Progress data copied to public/data/progress.json');
+  writePublicProgress(progress);
 }
 
 /**

@@ -461,6 +461,21 @@
                     cache: 'no-store'
                 });
                 const data = await response.json();
+                if (data.chunked && data.bookChunks) {
+                    const loadedBooks = {};
+                    const entries = Object.entries(data.bookChunks);
+                    await Promise.all(entries.map(async ([bookId, url]) => {
+                        const bookResponse = await fetch(`${url}?ts=${Date.now()}`, {
+                            cache: 'no-store'
+                        });
+                        if (!bookResponse.ok) {
+                            throw new Error(`Could not load progress chunk for ${bookId}: ${bookResponse.status}`);
+                        }
+                        const chunk = await bookResponse.json();
+                        loadedBooks[bookId] = chunk.book || chunk;
+                    }));
+                    data.books = loadedBooks;
+                }
                 return data;
             } catch (error) {
                 console.error('Error loading progress data:', error);
