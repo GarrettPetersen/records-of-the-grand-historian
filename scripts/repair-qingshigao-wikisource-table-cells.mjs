@@ -167,7 +167,13 @@ function chapterFile(chapter) {
 function tableBlocks(chapter) {
   return (chapter.content || [])
     .map((block, blockIndex) => ({ block, blockIndex }))
-    .filter(({ block }) => String(block?.type || '').startsWith('table') && Array.isArray(block.sentences));
+    .filter(({ block }) => String(block?.type || '').startsWith('table') && Array.isArray(tableUnits(block)));
+}
+
+function tableUnits(block) {
+  if (Array.isArray(block?.cells)) return block.cells;
+  if (Array.isArray(block?.sentences)) return block.sentences;
+  return null;
 }
 
 function stripTemplates(text) {
@@ -273,13 +279,14 @@ function findMatchingTable(rawTables, blocks) {
     if (table.length !== blocks.length) continue;
     let mismatch = false;
     for (let index = 0; index < table.length; index += 1) {
-      const localCells = blocks[index].block.sentences || [];
+      const localCells = tableUnits(blocks[index].block) || [];
       if (table[index].length !== localCells.length) {
         mismatch = true;
         break;
       }
-      const localHeader = normalizeText(localCells[0]?.zh || '');
-      const rawHeader = normalizeText(table[index][0] || '');
+      const field = sourceField(localCells[0]);
+      const localHeader = compactKey(field ? localCells[0]?.[field] : '');
+      const rawHeader = compactKey(table[index][0] || '');
       if (index > 0 && localHeader && rawHeader && localHeader !== rawHeader) {
         mismatch = true;
         break;
@@ -348,7 +355,9 @@ function updateTranslation(unit, zh, english) {
   translation.model = DEFAULT_MODEL;
   if (HAN_RE.test(english)) {
     translation.allowChineseCharacters = true;
+    translation.allowChineseCharactersReason = 'Qing official-name table cell intentionally preserves source characters for names whose romanization is not established.';
     unit.allowChineseCharacters = true;
+    unit.allowChineseCharactersReason = translation.allowChineseCharactersReason;
   }
 }
 
@@ -429,7 +438,7 @@ async function main() {
 
     for (let rowIndex = 0; rowIndex < table.length; rowIndex += 1) {
       const sourceRow = table[rowIndex];
-      const localCells = blocks[rowIndex].block.sentences || [];
+      const localCells = tableUnits(blocks[rowIndex].block) || [];
       for (let cellIndex = 0; cellIndex < sourceRow.length; cellIndex += 1) {
         if (summary.cellsChanged >= opts.limitCells) {
           summary.skipped.afterCellLimit += 1;

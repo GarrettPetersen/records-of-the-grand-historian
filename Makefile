@@ -295,8 +295,9 @@ update:
 		echo "Step 4/8: Skipping LanguageTool cleanup scores (set RUN_LANGUAGETOOL=1 to run)..."; \
 	fi
 	@echo ""
-	@echo "Step 5/8: Refreshing placeholder translation report and generating cleanup progress (merge this book)..."
+	@echo "Step 5/8: Refreshing placeholder/glossary reports and generating cleanup progress (merge this book)..."
 	@$(NODE) scripts/scan-placeholder-translations.mjs --out data/quality/placeholder-translations.json --summary --limit=0
+	@$(NODE) scripts/scan-translation-alignment.mjs --book $(BOOK) --out data/quality/translation-alignment.json --merge-out --cache-current --summary --min-severity 3
 	@$(NODE) generate-progress.js --book $(BOOK)
 	@echo ""
 	@echo "Step 6/8: Generating static pages..."
@@ -342,8 +343,9 @@ update-all:
 		echo "Step 4/8: Skipping LanguageTool cleanup scores (set RUN_LANGUAGETOOL=1 to run)..."; \
 	fi
 	@echo ""
-	@echo "Step 5/8: Refreshing placeholder translation report and generating cleanup progress..."
+	@echo "Step 5/8: Refreshing placeholder/glossary reports and generating cleanup progress..."
 	@$(NODE) scripts/scan-placeholder-translations.mjs --out data/quality/placeholder-translations.json --summary --limit=0
+	@$(NODE) scripts/scan-translation-alignment.mjs --out data/quality/translation-alignment.json --merge-out --cache-current --summary --min-severity 3
 	@$(NODE) generate-progress.js
 	@echo ""
 	@echo "Step 6/8: Generating static pages..."

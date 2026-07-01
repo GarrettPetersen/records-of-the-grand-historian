@@ -281,7 +281,7 @@ function isChineseDirectSpeechUnit(chinese) {
 }
 
 function startsWithDeferredChineseClose(chinese) {
-  return /^[\s'"‘’“”]*[」』”’]/u.test(String(chinese || ''));
+  return /^[\s"‘’“”]*[」』”’']|^[\s"‘’“”]*['"][」』”’]/u.test(String(chinese || ''));
 }
 
 function quoteBoundaryProblems(chinese, english, beforeDepth, afterDepth, openCount, closeCount, innerOpenCount, innerCloseCount, nextChinese) {
@@ -310,7 +310,7 @@ function quoteBoundaryProblems(chinese, english, beforeDepth, afterDepth, openCo
     problems.push('English has an opening quote at the start of an interior unit of a Chinese quote span.');
   }
 
-  if (isInteriorUnit && trail && !lead && englishQuoteCount === 1 && !(innerCloseCount > 0 && preservesTrailingInnerQuote(chinese, english, trail))) {
+  if (isInteriorUnit && trail && !lead && englishQuoteCount === 1 && !startsWithDeferredChineseClose(nextChinese) && !(innerCloseCount > 0 && preservesTrailingInnerQuote(chinese, english, trail))) {
     problems.push('English has a closing quote at the end of an interior unit of a Chinese quote span.');
   }
 
@@ -407,7 +407,7 @@ function scanSequence(items, file, blockIndex, quoteState, englishState) {
           english
         });
       }
-      if (englishBeforeDepth > 0 && englishAfterDepth < englishBeforeDepth) {
+      if (englishBeforeDepth > 0 && englishAfterDepth < englishBeforeDepth && !startsWithDeferredChineseClose(nextChinese)) {
         problems.push({
           file,
           blockIndex,

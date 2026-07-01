@@ -13,9 +13,11 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const GLOSSARY_PATH = path.join(DATA_DIR, 'glossary.json');
+const SCANNER_VERSION = '2026-07-01-chapter-fingerprint-cache';
 
 const CHECK_FIELDS = new Set([
   'idiomatic',
@@ -166,7 +168,7 @@ function variantRegex(variants) {
   const parts = expandedEnglishVariants([...new Set(variants)])
     .filter(Boolean)
     .sort((a, b) => b.length - a.length)
-    .map((variant) => escapeRegex(variant).replace(/\\ /g, '[\\\\s-]+'));
+    .map((variant) => escapeRegex(variant).replace(/ /g, "[\\\\s\\-'’]+"));
   if (parts.length === 0) return null;
   return new RegExp(`\\b(?:${parts.join('|')})\\b`, 'i');
 }
@@ -262,10 +264,11 @@ function sourceIndex(anchors) {
 
 function usage() {
   console.error(`Usage:
-  node scripts/scan-translation-alignment.mjs [--book BOOK] [--json] [--summary] [--fail] [--min-severity N] [--min-glossary-risk N] [--review-priorities] [--offset-clusters] [--glossary-scope all|proper|manual] [--include-sentence-scores] [--no-same-sentence-glossary] [path ...]
+  node scripts/scan-translation-alignment.mjs [--book BOOK] [--json] [--summary] [--fail] [--out PATH] [--merge-out] [--cache-current] [--force] [--min-severity N] [--min-glossary-risk N] [--review-priorities] [--offset-clusters] [--glossary-scope all|proper|manual] [--include-sentence-scores] [--no-same-sentence-glossary] [--no-chapter-glossary-health] [path ...]
 
 Flags likely sentence-misalignment candidates using distinctive manual anchors plus fuzzy aggregate matches from the full glossary.
 Also scores same-sentence glossary coverage and flags suspiciously low coverage when the Chinese sentence has enough distinctive anchors.
+It also reports chapter-level glossary health when fuzzy matches are consistently weak across many scorable sentences.
 Proper nouns carry more weight; common terms are used only when several terms corroborate one another.
 Use --offset-clusters for a hard publication gate: it reports adjacent nearby-anchor
 warnings as probable sentence shifts, and also keeps high-confidence
@@ -285,12 +288,18 @@ function parseArgs(argv) {
     json: false,
     summary: false,
     fail: false,
+    out: null,
+    mergeOut: false,
+    cacheCurrent: false,
+    force: false,
+    quiet: false,
     minSeverity: 3,
     minGlossaryRisk: null,
     reviewPriorities: false,
     offsetClusters: false,
     glossaryScope: 'all',
     sameSentenceGlossary: true,
+    chapterGlossaryHealth: true,
     includeSentenceScores: false,
   };
   for (let i = 0; i < argv.length; i += 1) {
@@ -311,6 +320,38 @@ function parseArgs(argv) {
       opts.fail = true;
       continue;
     }
+    if (arg === '--out') {
+      opts.out = argv[++i];
+      if (!opts.out) {
+        usage();
+        process.exit(2);
+      }
+      continue;
+    }
+    if (arg.startsWith('--out=')) {
+      opts.out = arg.slice('--out='.length);
+      if (!opts.out) {
+        usage();
+        process.exit(2);
+      }
+      continue;
+    }
+    if (arg === '--merge-out') {
+      opts.mergeOut = true;
+      continue;
+    }
+    if (arg === '--cache-current') {
+      opts.cacheCurrent = true;
+      continue;
+    }
+    if (arg === '--force') {
+      opts.force = true;
+      continue;
+    }
+    if (arg === '--quiet') {
+      opts.quiet = true;
+      continue;
+    }
     if (arg === '--review-priorities') {
       opts.reviewPriorities = true;
       continue;
@@ -321,6 +362,10 @@ function parseArgs(argv) {
     }
     if (arg === '--no-same-sentence-glossary') {
       opts.sameSentenceGlossary = false;
+      continue;
+    }
+    if (arg === '--no-chapter-glossary-health') {
+      opts.chapterGlossaryHealth = false;
       continue;
     }
     if (arg === '--include-sentence-scores') {
@@ -403,6 +448,7 @@ function parseArgs(argv) {
 
 function chapterFiles(inputs) {
   const files = [];
+  const isChapterFile = (entry) => /^\d{3}\.json$/u.test(path.basename(entry));
   const enqueue = (entry) => {
     if (!fs.existsSync(entry)) return;
     const st = fs.statSync(entry);
@@ -410,11 +456,70 @@ function chapterFiles(inputs) {
       for (const child of fs.readdirSync(entry).sort()) enqueue(path.join(entry, child));
       return;
     }
-    if (entry.endsWith('.json')) files.push(entry);
+    if (entry.endsWith('.json') && isChapterFile(entry)) files.push(entry);
   };
   if (inputs.length === 0) enqueue(DATA_DIR);
   else inputs.forEach(enqueue);
   return files.sort();
+}
+
+function stableJson(value) {
+  if (Array.isArray(value)) return value.map(stableJson);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([key, nested]) => [key, stableJson(nested)])
+    );
+  }
+  return value;
+}
+
+function sha256(value) {
+  return crypto.createHash('sha256').update(value).digest('hex');
+}
+
+function glossaryFingerprint() {
+  if (!fs.existsSync(GLOSSARY_PATH)) return null;
+  return sha256(fs.readFileSync(GLOSSARY_PATH));
+}
+
+function cacheConfig(opts) {
+  return {
+    scannerVersion: SCANNER_VERSION,
+    glossaryFingerprint: glossaryFingerprint(),
+    glossaryScope: opts.glossaryScope,
+    reviewPriorities: opts.reviewPriorities,
+    offsetClusters: opts.offsetClusters,
+    sameSentenceGlossary: opts.sameSentenceGlossary,
+    chapterGlossaryHealth: opts.chapterGlossaryHealth,
+    includeSentenceScores: opts.includeSentenceScores,
+    minSeverity: opts.minSeverity,
+    minGlossaryRisk: opts.minGlossaryRisk,
+  };
+}
+
+function chapterFingerprint(file, opts) {
+  let chapter;
+  try {
+    chapter = JSON.parse(fs.readFileSync(file, 'utf8'));
+  } catch (error) {
+    throw new Error(`Could not parse ${file} while fingerprinting chapter: ${error.message}`);
+  }
+  const records = sentenceRecords(chapter).map((record) => ({
+    id: record.id,
+    zh: record.zh,
+    english: record.english,
+    supportEnglish: record.supportEnglish,
+  }));
+  return sha256(JSON.stringify(stableJson({
+    config: cacheConfig(opts),
+    records,
+  })));
+}
+
+function progress(opts, message) {
+  if (!opts.quiet) console.error(message);
 }
 
 function sentenceRecords(chapter) {
@@ -769,7 +874,100 @@ function excerpt(text, width = 110) {
   return text.replace(/\s+/g, ' ').trim().slice(0, width);
 }
 
-function scanFile(file, { reviewPriorities = false, sameSentenceGlossary = true, includeSentenceScores = false } = {}) {
+function chapterGlossaryHealthHit(file, records, { reviewPriorities = false } = {}) {
+  const scored = [];
+  for (const record of records) {
+    if (!record.english || !record.zh) continue;
+    const score = scoreSentenceGlossaryCoverage(record);
+    if (!score) continue;
+    if (isCompactTableOrFormulaRecord(record, score)) continue;
+
+    const minSourceScore = reviewPriorities ? 1.75 : 2.5;
+    const hasEnoughAnchorMass = (
+      score.sourceScore >= minSourceScore
+      || score.properCount >= 2
+      || (score.properCount >= 1 && score.commonCount >= 3)
+      || score.commonCount >= 8
+    );
+    if (!hasEnoughAnchorMass) continue;
+
+    scored.push({ record, score });
+  }
+
+  const totalSourceScore = scored.reduce((sum, item) => sum + item.score.sourceScore, 0);
+  const totalMatchedScore = scored.reduce((sum, item) => sum + item.score.matchedScore, 0);
+  const weightedCoverage = totalSourceScore > 0 ? totalMatchedScore / totalSourceScore : 1;
+  const lowItems = scored.filter((item) => item.score.coverage <= 0.35);
+  const zeroItems = scored.filter((item) => item.score.coverage <= 0.05);
+  const lowRate = scored.length > 0 ? lowItems.length / scored.length : 0;
+  const zeroRate = scored.length > 0 ? zeroItems.length / scored.length : 0;
+
+  const minScoredSentences = reviewPriorities ? 12 : 20;
+  const minTotalSourceScore = reviewPriorities ? 35 : 60;
+  if (scored.length < minScoredSentences || totalSourceScore < minTotalSourceScore) return null;
+
+  const sustainedLowScores = lowRate >= 0.4 && weightedCoverage < 0.55;
+  const sustainedVanishingScores = zeroRate >= 0.25 && weightedCoverage < 0.65;
+  if (!sustainedLowScores && !sustainedVanishingScores) return null;
+
+  const missingAnchors = new Map();
+  for (const { score } of lowItems) {
+    for (const anchor of score.missingAnchors) {
+      const current = missingAnchors.get(anchor.label) || { anchor, count: 0 };
+      current.count += 1;
+      missingAnchors.set(anchor.label, current);
+    }
+  }
+
+  const examples = [...lowItems]
+    .sort((a, b) => (
+      (a.score.coverage - b.score.coverage)
+      || (b.score.sourceScore - a.score.sourceScore)
+    ))
+    .slice(0, 5);
+
+  return {
+    file,
+    id: 'chapter',
+    block: 0,
+    sentence: 0,
+    rule: 'LOW_GLOSSARY_CHAPTER_HEALTH',
+    severity: 3,
+    anchor: [...missingAnchors.values()]
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 12)
+      .map((entry) => `${entry.anchor.label} (${entry.count})`)
+      .join(', '),
+    glossarySourceScore: Number(totalSourceScore.toFixed(2)),
+    glossaryMatchedScore: Number(totalMatchedScore.toFixed(2)),
+    glossaryCoverage: Number(weightedCoverage.toFixed(2)),
+    lowGlossarySentenceRate: Number(lowRate.toFixed(2)),
+    zeroGlossarySentenceRate: Number(zeroRate.toFixed(2)),
+    scorableSentences: scored.length,
+    lowGlossarySentences: lowItems.length,
+    zeroGlossarySentences: zeroItems.length,
+    zh: `Chapter-level fuzzy glossary scores are consistently weak across ${scored.length} scorable sentence(s).`,
+    english: examples
+      .map(({ record, score }) => `${record.id}: coverage ${score.coverage.toFixed(2)}; missing ${score.missingAnchors.slice(0, 4).map((anchor) => anchor.label).join(', ')}`)
+      .join(' | '),
+    examples: examples.map(({ record, score }) => ({
+      id: record.id,
+      glossarySourceScore: Number(score.sourceScore.toFixed(2)),
+      glossaryMatchedScore: Number(score.matchedScore.toFixed(2)),
+      glossaryCoverage: Number(score.coverage.toFixed(2)),
+      missingAnchor: score.missingAnchors.slice(0, 8).map((anchor) => anchor.label).join(', '),
+      zh: excerpt(record.zh),
+      english: excerpt(record.english),
+    })),
+  };
+}
+
+function scanFile(file, {
+  reviewPriorities = false,
+  sameSentenceGlossary = true,
+  chapterGlossaryHealth = true,
+  includeSentenceScores = false,
+} = {}) {
   const chapter = JSON.parse(fs.readFileSync(file, 'utf8'));
   const records = sentenceRecords(chapter);
   const hits = [];
@@ -950,6 +1148,11 @@ function scanFile(file, { reviewPriorities = false, sameSentenceGlossary = true,
     }
   }
 
+  if (chapterGlossaryHealth) {
+    const healthHit = chapterGlossaryHealthHit(file, records, { reviewPriorities });
+    if (healthHit) hits.push(healthHit);
+  }
+
   return { hits, sentenceScores };
 }
 
@@ -1060,34 +1263,156 @@ const opts = parseArgs(process.argv.slice(2));
 configureAnchors(opts);
 const inputs = opts.book ? [path.join(DATA_DIR, opts.book)] : opts.inputs;
 const files = chapterFiles(inputs);
+const startedAt = Date.now();
+progress(opts, `Translation alignment scan: ${files.length} chapter file${files.length === 1 ? '' : 's'} selected.`);
+const normalizedReportFile = (file) => {
+  const value = String(file || '');
+  const relative = path.isAbsolute(value) ? path.relative(process.cwd(), value) : value;
+  return relative.replaceAll(path.sep, '/');
+};
+
+let existingReport = null;
+if (opts.out && fs.existsSync(opts.out)) {
+  try {
+    existingReport = JSON.parse(fs.readFileSync(opts.out, 'utf8'));
+  } catch (error) {
+    console.warn(`Could not read existing ${opts.out}: ${error.message}`);
+  }
+}
+
+const fileFingerprints = new Map();
+let fingerprinted = 0;
+let lastFingerprintProgressAt = 0;
+for (const file of files) {
+  fileFingerprints.set(normalizedReportFile(file), chapterFingerprint(file, opts));
+  fingerprinted += 1;
+  const now = Date.now();
+  if (
+    fingerprinted === files.length
+    || fingerprinted % 100 === 0
+    || now - lastFingerprintProgressAt >= 5000
+  ) {
+    const elapsedSeconds = ((now - startedAt) / 1000).toFixed(1);
+    progress(opts, `Prepared cache fingerprint ${fingerprinted}/${files.length} chapter${files.length === 1 ? '' : 's'} (${normalizedReportFile(file)}; ${elapsedSeconds}s elapsed).`);
+    lastFingerprintProgressAt = now;
+  }
+}
+
+const cacheEnabled = Boolean(opts.cacheCurrent && opts.out && existingReport && !opts.force && !opts.offsetClusters);
+const currentCachedFiles = new Set();
+if (cacheEnabled) {
+  const existingFingerprints = existingReport.chapterFingerprints || {};
+  for (const [file, fingerprint] of fileFingerprints.entries()) {
+    if (existingFingerprints[file] === fingerprint) currentCachedFiles.add(file);
+  }
+}
+
+const filesToScan = files.filter((file) => !currentCachedFiles.has(normalizedReportFile(file)));
+if (cacheEnabled) {
+  progress(opts, `Cache: reusing ${currentCachedFiles.size} current chapter${currentCachedFiles.size === 1 ? '' : 's'}; scanning ${filesToScan.length}.`);
+} else if (opts.cacheCurrent) {
+  progress(opts, 'Cache: not available for this run; scanning selected chapters.');
+}
+const cachedHits = cacheEnabled
+  ? (existingReport.hits || [])
+      .map((hit) => ({ ...hit, file: normalizedReportFile(hit.file) }))
+      .filter((hit) => currentCachedFiles.has(hit.file))
+  : [];
+const cachedSentenceScores = cacheEnabled && opts.includeSentenceScores
+  ? (existingReport.sentenceScores || [])
+      .map((score) => ({ ...score, file: normalizedReportFile(score.file) }))
+      .filter((score) => currentCachedFiles.has(score.file))
+  : [];
+
 const scanner = (file) => scanFile(file, {
   reviewPriorities: opts.reviewPriorities,
   sameSentenceGlossary: opts.sameSentenceGlossary,
+  chapterGlossaryHealth: opts.chapterGlossaryHealth,
   includeSentenceScores: opts.includeSentenceScores,
 });
-const scanReports = files.map(scanner);
-let hits = scanReports.flatMap((report) => report.hits)
+const scanReports = [];
+let lastProgressAt = 0;
+for (const [index, file] of filesToScan.entries()) {
+  scanReports.push(scanner(file));
+  const done = index + 1;
+  const now = Date.now();
+  if (done === 1 || done === filesToScan.length || done % 25 === 0 || now - lastProgressAt >= 5000) {
+    const elapsedSeconds = ((now - startedAt) / 1000).toFixed(1);
+    progress(opts, `Scanned ${done}/${filesToScan.length} chapter${filesToScan.length === 1 ? '' : 's'} (${normalizedReportFile(file)}; ${elapsedSeconds}s elapsed).`);
+    lastProgressAt = now;
+  }
+}
+let hits = [...cachedHits, ...scanReports.flatMap((report) => report.hits)
   .filter((hit) => hit.severity >= opts.minSeverity)
   .filter((hit) => (
     opts.minGlossaryRisk === null
     || hit.rule !== 'LOW_GLOSSARY_SAME_SENTENCE_COVERAGE'
     || Number(hit.glossaryRiskScore || 0) >= opts.minGlossaryRisk
-  ));
+  ))];
 if (opts.offsetClusters) {
   const fabricatedHits = hits.filter((hit) => hit.rule === 'FABRICATED_OR_SUBSTITUTED_TRANSLATION');
   hits = [...nearbyAnchorClusters(hits), ...fabricatedHits];
 }
 const sentenceScores = opts.includeSentenceScores
-  ? scanReports.flatMap((report) => report.sentenceScores)
+  ? [...cachedSentenceScores, ...scanReports.flatMap((report) => report.sentenceScores)]
   : [];
 
-if (opts.json) {
-  console.log(JSON.stringify({
+const jsonReport = {
+    scanner: 'scan-translation-alignment',
+    scannerVersion: SCANNER_VERSION,
+    generatedAt: new Date().toISOString(),
     count: hits.length,
     anchorStats: ANCHOR_STATS,
+    cache: {
+      enabled: cacheEnabled,
+      scannedChapters: filesToScan.length,
+      cachedChapters: currentCachedFiles.size,
+    },
+    chapterFingerprints: Object.fromEntries(fileFingerprints.entries()),
     hits,
     ...(opts.includeSentenceScores ? { sentenceScores } : {}),
-  }, null, 2));
+  };
+
+for (const hit of jsonReport.hits) {
+  if (hit?.file) hit.file = normalizedReportFile(hit.file);
+}
+if (Array.isArray(jsonReport.sentenceScores)) {
+  for (const score of jsonReport.sentenceScores) {
+    if (score?.file) score.file = normalizedReportFile(score.file);
+  }
+}
+
+if (opts.out) {
+  if (opts.mergeOut && existingReport) {
+    try {
+      const scannedFiles = new Set(files.map(normalizedReportFile));
+      const existingHits = (existingReport.hits || [])
+        .map((hit) => ({ ...hit, file: normalizedReportFile(hit.file) }))
+        .filter((hit) => !scannedFiles.has(hit.file));
+      jsonReport.hits = [...existingHits, ...jsonReport.hits];
+      jsonReport.count = jsonReport.hits.length;
+      if (opts.includeSentenceScores) {
+        const existingScores = (existingReport.sentenceScores || [])
+          .map((score) => ({ ...score, file: normalizedReportFile(score.file) }))
+          .filter((score) => !scannedFiles.has(score.file));
+        jsonReport.sentenceScores = [...existingScores, ...(jsonReport.sentenceScores || [])];
+      }
+      jsonReport.chapterFingerprints = {
+        ...(existingReport.chapterFingerprints || {}),
+        ...jsonReport.chapterFingerprints,
+      };
+    } catch (error) {
+      console.warn(`Could not merge existing ${opts.out}: ${error.message}`);
+    }
+  }
+  fs.mkdirSync(path.dirname(opts.out), { recursive: true });
+  fs.writeFileSync(opts.out, `${JSON.stringify(jsonReport, null, 2)}\n`);
+}
+
+progress(opts, `Translation alignment scan complete: ${jsonReport.count} hit${jsonReport.count === 1 ? '' : 's'}; scanned ${filesToScan.length}, cached ${currentCachedFiles.size}; ${((Date.now() - startedAt) / 1000).toFixed(1)}s.`);
+
+if (opts.json) {
+  console.log(JSON.stringify(jsonReport, null, 2));
 } else if (opts.summary) {
   printSummary(hits);
 } else {

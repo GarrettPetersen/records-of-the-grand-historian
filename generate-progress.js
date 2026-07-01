@@ -24,6 +24,7 @@ const QUALITY_DIR = './data/quality';
 const LANGUAGE_TOOL_SCORES_PATH = './data/quality/languagetool-scores.json';
 const QUOTE_ALIGNMENT_REPORT_PATH = './data/quality/quote-span-alignment.json';
 const PLACEHOLDER_TRANSLATIONS_REPORT_PATH = './data/quality/placeholder-translations.json';
+const TRANSLATION_ALIGNMENT_REPORT_PATH = './data/quality/translation-alignment.json';
 
 function parseBookArg() {
   const i = process.argv.indexOf('--book');
@@ -301,6 +302,74 @@ function loadPlaceholderTranslationsProgress() {
   }
 }
 
+function glossaryHealthSeverity(hit) {
+  const coverage = Number(hit?.glossaryCoverage);
+  const lowRate = Number(hit?.lowGlossarySentenceRate);
+  const zeroRate = Number(hit?.zeroGlossarySentenceRate);
+  const scorable = Number(hit?.scorableSentences);
+
+  if (!Number.isFinite(coverage) || !Number.isFinite(scorable) || scorable <= 0) {
+    return 2;
+  }
+  if (coverage < 0.35 || zeroRate >= 0.25 || lowRate >= 0.5) {
+    return 3;
+  }
+  return 2;
+}
+
+function loadTranslationAlignmentProgress() {
+  if (!fs.existsSync(TRANSLATION_ALIGNMENT_REPORT_PATH)) {
+    return null;
+  }
+  try {
+    const report = JSON.parse(fs.readFileSync(TRANSLATION_ALIGNMENT_REPORT_PATH, 'utf8'));
+    const chapterHealthHits = (report.hits || [])
+      .filter((hit) => hit.rule === 'LOW_GLOSSARY_CHAPTER_HEALTH');
+    const byChapter = {};
+    for (const hit of chapterHealthHits) {
+      const match = String(hit.file || '').match(/^data\/([^/]+)\/(\d{3})\.json$/u);
+      if (!match) continue;
+      const [, book, chapter] = match;
+      const severity = glossaryHealthSeverity(hit);
+      byChapter[`${book}/${chapter}`] = {
+        book,
+        chapter,
+        rule: hit.rule,
+        severity,
+        totalItems: 1,
+        pendingItems: 1,
+        highPendingItems: severity >= 3 ? 1 : 0,
+        lowPendingItems: severity < 3 ? 1 : 0,
+        unknownPendingItems: 0,
+        highestPendingSeverity: severity,
+        glossaryCoverage: hit.glossaryCoverage,
+        lowGlossarySentenceRate: hit.lowGlossarySentenceRate,
+        zeroGlossarySentenceRate: hit.zeroGlossarySentenceRate,
+        scorableSentences: hit.scorableSentences,
+        lowGlossarySentences: hit.lowGlossarySentences,
+        zeroGlossarySentences: hit.zeroGlossarySentences,
+        examples: hit.examples || [],
+      };
+    }
+    const highPendingItems = Object.values(byChapter).filter((item) => item.highPendingItems > 0).length;
+    const lowPendingItems = Object.values(byChapter).filter((item) => item.lowPendingItems > 0).length;
+    return {
+      scanner: 'scan-translation-alignment',
+      generatedAt: report.generatedAt || null,
+      totalItems: chapterHealthHits.length,
+      pendingItems: chapterHealthHits.length,
+      highPendingItems,
+      lowPendingItems,
+      unknownPendingItems: 0,
+      highestPendingSeverity: highPendingItems > 0 ? 3 : (lowPendingItems > 0 ? 2 : null),
+      byChapter,
+    };
+  } catch (error) {
+    console.warn(`Could not read translation alignment report ${TRANSLATION_ALIGNMENT_REPORT_PATH}: ${error.message}`);
+    return null;
+  }
+}
+
 /**
  * Determine chapter status based on analysis
  */
@@ -415,6 +484,10 @@ function getPlaceholderTranslationsChapterStats(placeholderTranslations, bookId,
   return placeholderTranslations?.byChapter?.[`${bookId}/${chapter}`] || null;
 }
 
+function getTranslationAlignmentChapterStats(translationAlignment, bookId, chapter) {
+  return translationAlignment?.byChapter?.[`${bookId}/${chapter}`] || null;
+}
+
 function chapterHasHighPending(stats) {
   if (!stats) return false;
   return Number(stats.highPendingItems || 0) > 0
@@ -425,14 +498,16 @@ function chapterHasPending(stats) {
   return Number(stats?.pendingItems || 0) > 0;
 }
 
-function effectiveChapterStatus(baseStatus, repairQueueChapter, quoteAlignmentChapter, placeholderTranslationsChapter) {
+function effectiveChapterStatus(baseStatus, repairQueueChapter, quoteAlignmentChapter, placeholderTranslationsChapter, translationAlignmentChapter) {
   if (baseStatus === 'red') return 'red';
   if (chapterHasHighPending(placeholderTranslationsChapter)) return 'red';
   if (chapterHasHighPending(quoteAlignmentChapter)) return 'red';
   if (chapterHasHighPending(repairQueueChapter)) return 'red';
+  if (chapterHasHighPending(translationAlignmentChapter)) return 'red';
   if (chapterHasPending(placeholderTranslationsChapter)) return 'yellow';
   if (chapterHasPending(quoteAlignmentChapter)) return 'yellow';
   if (chapterHasPending(repairQueueChapter)) return 'yellow';
+  if (chapterHasPending(translationAlignmentChapter)) return 'yellow';
   if (baseStatus === 'yellow') return 'yellow';
   return baseStatus || 'gray';
 }
@@ -444,6 +519,7 @@ function bookProgressFromManifest(
   repairQueue = null,
   quoteAlignment = null,
   placeholderTranslations = null,
+  translationAlignment = null,
 ) {
   const bookProgress = {
     name: book.name,
@@ -459,9 +535,10 @@ function bookProgressFromManifest(
     const repairQueueChapter = getRepairQueueChapterStats(repairQueue, bookId, chapter.chapter);
     const quoteAlignmentChapter = getQuoteAlignmentChapterStats(quoteAlignment, bookId, chapter.chapter);
     const placeholderTranslationsChapter = getPlaceholderTranslationsChapterStats(placeholderTranslations, bookId, chapter.chapter);
+    const translationAlignmentChapter = getTranslationAlignmentChapterStats(translationAlignment, bookId, chapter.chapter);
     const translationComplete = (chapter.sentenceCount || 0) > 0 && (chapter.translatedCount || 0) >= (chapter.sentenceCount || 0);
     const status = languageTool?.status || 'gray';
-    const displayStatus = effectiveChapterStatus(status, repairQueueChapter, quoteAlignmentChapter, placeholderTranslationsChapter);
+    const displayStatus = effectiveChapterStatus(status, repairQueueChapter, quoteAlignmentChapter, placeholderTranslationsChapter, translationAlignmentChapter);
     bookProgress.chapters.push({
       chapter: chapter.chapter,
       title: chapter.title,
@@ -513,6 +590,20 @@ function bookProgressFromManifest(
         unknownPendingItems: placeholderTranslationsChapter.unknownPendingItems,
         highestPendingSeverity: placeholderTranslationsChapter.highestPendingSeverity,
         bySeverity: placeholderTranslationsChapter.bySeverity,
+      } : null,
+      translationAlignment: translationAlignmentChapter ? {
+        totalItems: translationAlignmentChapter.totalItems,
+        pendingItems: translationAlignmentChapter.pendingItems,
+        highPendingItems: translationAlignmentChapter.highPendingItems,
+        lowPendingItems: translationAlignmentChapter.lowPendingItems,
+        highestPendingSeverity: translationAlignmentChapter.highestPendingSeverity,
+        glossaryCoverage: translationAlignmentChapter.glossaryCoverage,
+        lowGlossarySentenceRate: translationAlignmentChapter.lowGlossarySentenceRate,
+        zeroGlossarySentenceRate: translationAlignmentChapter.zeroGlossarySentenceRate,
+        scorableSentences: translationAlignmentChapter.scorableSentences,
+        lowGlossarySentences: translationAlignmentChapter.lowGlossarySentences,
+        zeroGlossarySentences: translationAlignmentChapter.zeroGlossarySentences,
+        examples: translationAlignmentChapter.examples,
       } : null
     });
   }
@@ -573,6 +664,7 @@ function generateProgressData() {
     repairQueue: loadRepairQueueProgress(),
     quoteAlignment: loadQuoteAlignmentProgress(),
     placeholderTranslations: loadPlaceholderTranslationsProgress(),
+    translationAlignment: loadTranslationAlignmentProgress(),
     books: {}
   };
 
@@ -585,6 +677,7 @@ function generateProgressData() {
       progress.repairQueue,
       progress.quoteAlignment,
       progress.placeholderTranslations,
+      progress.translationAlignment,
     );
   }
 
@@ -634,6 +727,7 @@ function mergeProgressSingleBook(bookId) {
   progress.repairQueue = loadRepairQueueProgress();
   progress.quoteAlignment = loadQuoteAlignmentProgress();
   progress.placeholderTranslations = loadPlaceholderTranslationsProgress();
+  progress.translationAlignment = loadTranslationAlignmentProgress();
   progress.books = progress.books || {};
   progress.books[bookId] = bookProgressFromManifest(
     bookId,
@@ -642,6 +736,7 @@ function mergeProgressSingleBook(bookId) {
     progress.repairQueue,
     progress.quoteAlignment,
     progress.placeholderTranslations,
+    progress.translationAlignment,
   );
   progress.summary = buildProgressSummary(progress.books);
   writeProgress(progress);
@@ -677,4 +772,5 @@ export {
   loadRepairQueueProgress,
   loadQuoteAlignmentProgress,
   loadPlaceholderTranslationsProgress,
+  loadTranslationAlignmentProgress,
 };

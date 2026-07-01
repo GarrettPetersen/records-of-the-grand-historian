@@ -273,11 +273,15 @@ function loadQueue(opts) {
   }
 
   const placeholders = readJsonIfExists(path.join(QUALITY_DIR, 'placeholder-translations.json'));
-  for (const [key, summary] of Object.entries(placeholders?.byChapter || {})) {
+  const placeholderCounts = new Map();
+  for (const item of placeholders?.items || []) {
+    if (statusOf(item) !== 'pending') continue;
+    const key = `${item.book}/${item.chapter}`;
+    placeholderCounts.set(key, (placeholderCounts.get(key) || 0) + 1);
+  }
+  for (const [key, count] of placeholderCounts.entries()) {
     const [book, chapter] = key.split('/');
     if ((bookFilter && !bookFilter.has(book)) || (chapterFilter && !chapterFilter.has(chapter))) continue;
-    const count = Number(summary.pendingItems || 0);
-    if (count <= 0) continue;
     const record = ensureRecord(records, book, chapter);
     record.counts.placeholders += count;
     addSample(record.samples.placeholders, `${count} placeholder translation(s) reported in ${key}`);
@@ -286,6 +290,7 @@ function loadQueue(opts) {
   const quoteReport = readJsonIfExists(path.join(QUALITY_DIR, 'quote-span-alignment.json'));
   if (Array.isArray(quoteReport?.items)) {
     for (const item of quoteReport.items) {
+      if (statusOf(item) !== 'pending') continue;
       const match = String(item.file || '').match(CHAPTER_FILE_RE);
       if (!match) continue;
       const [, book, chapter] = match;

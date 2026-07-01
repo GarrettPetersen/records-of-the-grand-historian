@@ -32,7 +32,8 @@ Options:
 
 Additional shared scanner options, such as --include-literal, are passed through.
 Translation-alignment options, such as --review-priorities, --glossary-scope,
---min-glossary-risk, and --include-sentence-scores, are applied only to that scanner.`);
+--min-glossary-risk, --include-sentence-scores, and --no-chapter-glossary-health,
+are applied only to that scanner.`);
   process.exit(0);
 }
 
@@ -101,6 +102,7 @@ const argsFor = (scanner) => {
     scannerArgs = scannerArgs.filter(arg => arg !== '--review-priorities');
     scannerArgs = scannerArgs.filter(arg => arg !== '--offset-clusters');
     scannerArgs = scannerArgs.filter(arg => arg !== '--include-sentence-scores');
+    scannerArgs = scannerArgs.filter(arg => arg !== '--no-chapter-glossary-health');
     scannerArgs = omitFlagWithOptionalValue(scannerArgs, '--min-severity');
     scannerArgs = omitFlagWithOptionalValue(scannerArgs, '--min-glossary-risk');
     scannerArgs = omitFlagWithOptionalValue(scannerArgs, '--glossary-scope');
