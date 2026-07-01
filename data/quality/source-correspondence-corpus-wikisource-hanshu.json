@@ -116460,7 +116460,7 @@
     },
     {
       "id": "source-hanshu-074-wikisource-0db68d2aa3e4",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.213,
@@ -116503,8 +116503,12 @@
         "afterLocal": "不可以冠帶之國法度理也。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Repaired corrupted glyph: □發 → 劗髮 (cut hair).",
+      "acceptedSourceText": "越，方外之地，劗髮文身之民也。",
+      "reviewedAt": "2026-07-01T00:13:30.925Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T00:13:30.925Z"
     },
     {
       "id": "source-hanshu-074-wikisource-10432eec7bb0",
@@ -116539,7 +116543,7 @@
     },
     {
       "id": "source-hanshu-074-wikisource-1507c2bf6712",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.333,
@@ -116582,8 +116586,11 @@
         "afterLocal": "其尤親幸者，東方朔、枚皋、嚴助、吾丘壽王、司馬相如。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: 辨/辯 variant and Yan Shigu glosses omitted by design in this corpus.",
+      "reviewedAt": "2026-07-01T00:13:34.105Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-hanshu-074-wikisource-1616f25f66aa",
@@ -116637,7 +116644,7 @@
     },
     {
       "id": "source-hanshu-074-wikisource-16cc9b9cb04f",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 3,
       "similarity": 0.694,
@@ -116716,8 +116723,21 @@
         "afterLocal": "願陛下令諸侯得推恩分子弟，以地侯之。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Corrected misread 朔京師 → 逆京師; omitted Yan Shigu glosses per corpus convention.",
+      "acceptedSourceText": "急則阻其強而合從以逆京師。",
+      "manualTranslations": [
+        {
+          "zh": "急則阻其強而合從以逆京師。",
+          "literal": "if pressed then they block their strength and join in horizontal alliance to rebel against the capital.",
+          "idiomatic": "squeeze them and they league their strength and turn against the imperial capital.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-07-01T00:13:31.290Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T00:13:31.290Z"
     },
     {
       "id": "source-hanshu-074-wikisource-190b077831f7",
@@ -116845,7 +116865,7 @@
     },
     {
       "id": "source-hanshu-074-wikisource-2c481851090e",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.545,
@@ -116888,8 +116908,21 @@
         "afterLocal": "禁民不得挾弓弩，則盜賊執短兵，短兵接則眾者勝。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Corrected 擴弩 → 彍弩 (bows fully drawn); omitted commentary glosses.",
+      "acceptedSourceText": "十賊彍弩，百吏不敢前，盜賊不輒伏辜，免脫者眾，害寡而利多，此盜賊所以蕃也。",
+      "manualTranslations": [
+        {
+          "zh": "十賊彍弩，百吏不敢前，盜賊不輒伏辜，免脫者眾，害寡而利多，此盜賊所以蕃也。",
+          "literal": "Ten thieves with bows fully drawn, a hundred clerks dare not advance—robbers and bandits do not always submit to guilt, those who escape are many; harm few but profit many—this is why robbers and bandits multiply.",
+          "idiomatic": "Ten men with bows at full draw can hold a hundred officers at bay; thieves often walk free while profit is great and risk small—that is why they multiply.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-07-01T00:13:31.678Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T00:13:31.678Z"
     },
     {
       "id": "source-hanshu-074-wikisource-2faa447d11d6",
@@ -117006,7 +117039,7 @@
     },
     {
       "id": "source-hanshu-074-wikisource-3b36b261237d",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.19,
@@ -117049,8 +117082,11 @@
         "afterLocal": "遷侍中中郎，坐法免。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream adds board-game commentaries; local text and 《春秋》 title form retained.",
+      "reviewedAt": "2026-07-01T00:13:34.511Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-hanshu-074-wikisource-4335dabf45c8",
@@ -117085,7 +117121,7 @@
     },
     {
       "id": "source-hanshu-074-wikisource-49f26ece74ff",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 3,
       "similarity": 0.159,
@@ -117209,12 +117245,88 @@
         "afterLocal": "務勝不休，欲攻匈奴，李斯諫曰：「不可。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Inserted Zhufu Yan biography before memorial; preserved existing memorial translations.",
+      "acceptedSourceText": "主父偃，齊國臨菑人也。學長短從橫術。晚迺學易、春秋、百家之言。游齊諸子閒，諸儒生相與排儐，不容於齊。家貧，假貸無所得，北游燕、趙、中山，皆莫能厚，客甚困。以諸侯莫足游者，元光元年，迺入關見衛將軍。衛將軍數言上，上不省。資用乏，留久，諸侯賓客多厭之，迺上書闕下。朝奏，暮召入見。所言九事，其八事為律令，一事諫伐匈奴，曰：臣聞明主不惡切諫以博觀，忠臣不避重誅以直諫，是故事無遺策而功流萬世。今臣不敢隱忠避死，以效愚計，願陛下幸赦而少察之。《司馬法》曰：「國雖大，好戰必亡；天下雖平，忘戰必危。天下既平，天子大愷，春搜秋獮，諸侯春振旅，秋治兵，所以不忘戰也。且怒者逆德也，兵者凶器也，爭者末節也。古之人君一怒必伏屍流血，故聖王重行之。夫務戰勝，窮武事，未有不悔者也。昔秦皇帝任戰勝之威，蠶食天下，併吞戰國，海內為一，功齊三代。",
+      "manualTranslations": [
+        {
+          "zh": "主父偃，齊國臨菑人也。",
+          "literal": "Zhufu Yan was a man of Linzi in the Qi state.",
+          "idiomatic": "Zhufu Yan came from Linzi in Qi.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "學長短從橫術。",
+          "literal": "He studied the arts of short-and-long and vertical-and-horizontal persuasion.",
+          "idiomatic": "He trained in the persuasive arts of coalition politics—the \"short and long\" and \"vertical and horizontal\" schools.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "晚迺學易、春秋、百家之言。",
+          "literal": "Only later did he study the Changes, the Spring and Autumn Annals, and the teachings of the hundred schools.",
+          "idiomatic": "Only later did he turn to the Book of Changes, the Spring and Autumn Annals, and the hundred schools.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "游齊諸子閒，諸儒生相與排儐，不容於齊。",
+          "literal": "He wandered among the princes of Qi; the Confucian scholars together ostracized him, and he found no place in Qi.",
+          "idiomatic": "He moved among Qi's princely households, but the Ru scholars banded against him and Qi would not keep him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "家貧，假貸無所得，北游燕、趙、中山，皆莫能厚，客甚困。",
+          "literal": "His family was poor; he borrowed but obtained nothing. Traveling north through Yan, Zhao, and Zhongshan, none could treat him generously, and as a guest he was greatly distressed.",
+          "idiomatic": "Poor at home and unable to borrow his way forward, he went north through Yan, Zhao, and Zhongshan, but no court would shelter him generously and he lived in bitter want.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "以諸侯莫足游者，元光元年，迺入關見衛將軍。",
+          "literal": "Because no feudal lord seemed worth serving, in the first year of Yuanguang he entered the passes to see the General of Wei.",
+          "idiomatic": "Finding no prince worth his service, in the first year of Yuanguang he entered the capital to seek out General Wei Qing.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "衛將軍數言上，上不省。",
+          "literal": "The General of Wei repeatedly spoke of him to the Emperor, but the Emperor did not take notice.",
+          "idiomatic": "Wei Qing spoke for him again and again, but the emperor paid no heed.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "資用乏，留久，諸侯賓客多厭之，迺上書闕下。",
+          "literal": "His funds were exhausted; he stayed long, and many feudal lords' guests grew weary of him; then he submitted a memorial beneath the palace gate.",
+          "idiomatic": "Money ran out, his stay dragged on, and fellow clients grew tired of him; at last he sent up a memorial at the palace gate.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "朝奏，暮召入見。",
+          "literal": "Memorial in the morning, summoned to audience by evening.",
+          "idiomatic": "He presented it in the morning and was summoned that evening.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "所言九事，其八事為律令，一事諫伐匈奴，曰：",
+          "literal": "Of the nine matters he spoke, eight became statutes and orders; one remonstrated against campaigning against the Xiongnu, saying:",
+          "idiomatic": "Nine proposals followed: eight became statutes, and one warned against war on the Xiongnu. It read:",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-07-01T00:13:32.778Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T00:13:32.778Z"
     },
     {
       "id": "source-hanshu-074-wikisource-4a13502a66de",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.714,
@@ -117266,12 +117378,25 @@
         "afterLocal": "妻恚怒曰：「如公等，終餓死溝中耳，何能富貴！"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Corrected 當富貴 → 當貴 per upstream; omitted 女讀汝 gloss.",
+      "acceptedSourceText": "買臣笑曰：「我年五十當貴，今已四十餘矣。女苦日久，待我富貴報女功。」",
+      "manualTranslations": [
+        {
+          "zh": "買臣笑曰：「我年五十當貴，今已四十餘矣。",
+          "literal": "Maichen laughed, saying: 'I when fifty will become noble; now already forty-odd.",
+          "idiomatic": "He laughed: \"At fifty I shall win rank and honor—I am barely past forty.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-07-01T00:13:32.072Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T00:13:32.072Z"
     },
     {
       "id": "source-hanshu-074-wikisource-51c01d6a2191",
-      "status": "pending",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.316,
@@ -117323,8 +117448,11 @@
         "afterLocal": "自漢初定已來七十二年，吳越人相攻擊者不可勝數，然天子未嘗舉兵而入其地也。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Yan Shigu five-service glosses omitted by design; 遠近勢異/異也 variant only.",
+      "reviewedAt": "2026-07-01T00:13:34.883Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-hanshu-074-wikisource-52ac0222e09f",
@@ -117471,7 +117599,7 @@
     },
     {
       "id": "source-hanshu-074-wikisource-570a5c748e4f",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 3,
       "similarity": 0.57,
@@ -117523,8 +117651,11 @@
         "afterLocal": "由民困而主不恤，下怨而上不知，俗已亂而政不修，此三者陳涉之所以為資也。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local text fuller/correct (疆土, 無鄉曲之譽); glosses omitted by design.",
+      "reviewedAt": "2026-07-01T00:13:35.230Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-hanshu-074-wikisource-58da7fd128f8",
@@ -117570,7 +117701,7 @@
     },
     {
       "id": "source-hanshu-074-wikisource-66695656ddf3",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.5,
@@ -117622,8 +117753,11 @@
         "afterLocal": "吾丘壽王字子贛，趙人也。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: scrape-boundary bleed into next subject; 拕音夫 gloss omitted by design.",
+      "reviewedAt": "2026-07-01T00:13:35.658Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-hanshu-074-wikisource-6a2160722bf9",
@@ -117708,7 +117842,7 @@
     },
     {
       "id": "source-hanshu-074-wikisource-75ac7760c9b9",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 3,
       "similarity": 0.513,
@@ -117769,12 +117903,15 @@
         "afterLocal": "助恐，上書謝稱：「《春秋》天王出居於鄭，不能事母，故絕之。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Yan Shigu/ Zhang Yan glosses omitted; local 《春秋》 and wording retained.",
+      "reviewedAt": "2026-07-01T00:13:36.013Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-hanshu-074-wikisource-782e28c4c649",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "hanshu",
@@ -117798,12 +117935,81 @@
         "afterLocal": "後三歲，閩越復興兵擊南越。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Inserted omitted Jianyuan 3 Dong'ou passage with new translations.",
+      "acceptedSourceText": "建元三年，閩越舉兵圍東甌，東甌告急於漢。時武帝年未二十，以問太尉田蚡。蚡以為越人相攻擊，其常事，又數反覆，不足煩中國往救也，自秦時棄不屬。於是助詰蚡曰：「特患力不能救，德不能覆；誠能，何故棄之？且秦舉咸陽而棄之，何但越也！今小國以窮困來告急，天子不振，尚安所訴，又何以子萬國乎？」上曰：「太尉不足與計。吾新即位，不欲出虎符發兵郡國。」迺遣助以節發兵會稽。會稽守欲距法，不為發。助迺斬一司馬，諭意指，遂發兵浮海救東甌。未至，閩越引兵罷。",
+      "manualTranslations": [
+        {
+          "zh": "建元三年，閩越舉兵圍東甌，東甌告急於漢。",
+          "literal": "In the third year of Jianyuan, Minyue raised troops and besieged Dong'ou; Dong'ou reported emergency to Han.",
+          "idiomatic": "In the third year of Jianyuan, Minyue marched against Dong'ou, and Dong'ou sent an urgent plea to the Han court.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "時武帝年未二十，以問太尉田蚡。",
+          "literal": "At that time Emperor Wu was not yet twenty; he asked Grand Commandant Tian Fen.",
+          "idiomatic": "The emperor was not yet twenty and put the question to Grand Commandant Tian Fen.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "蚡以為越人相攻擊，其常事，又數反覆，不足煩中國往救也，自秦時棄不屬。",
+          "literal": "Fen thought that Yue people attacking one another was their constant affair, and that they had repeatedly turned back and forth; it was not worth troubling the central states to go rescue them—they had been abandoned and not made subject since Qin times.",
+          "idiomatic": "Fen replied that border Yue feuds were nothing new, that their loyalties shifted with the wind, and that the court had rightly left them outside the realm since Qin days.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "於是助詰蚡曰：「特患力不能救，德不能覆；誠能，何故棄之？且秦舉咸陽而棄之，何但越也！今小國以窮困來告急，天子不振，尚安所訴，又何以子萬國乎？」",
+          "literal": "Thereupon Zhu pressed Fen, saying: 'We only fear that strength cannot rescue or virtue cannot shelter; if we truly could, why abandon them? Moreover Qin took Xianyang and then abandoned it—how much more so Yue! Now a small state comes in distress to report emergency; if the Son of Heaven does not rouse himself, where else may they appeal, and how may he be father to the myriad states?'",
+          "idiomatic": "Yan Zhu turned on him: \"You speak as if power and grace were lacking. If they are not lacking, why cast a vassal away? Qin seized Xianyang and still let lands slip—need we speak only of Yue? A small state begs in peril; if the Son of Heaven will not stir, to whom can it cry, and how will the myriad states call him their father?\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "上曰：「太尉不足與計。吾新即位，不欲出虎符發兵郡國。」",
+          "literal": "The Emperor said: 'The Grand Commandant is not worth consulting on this. I have newly ascended; I do not wish to issue the tiger tally and mobilize the commanderies and kingdoms.'",
+          "idiomatic": "\"The Grand Commandant is not the man for this counsel. I have just taken the throne and do not wish to issue the tiger tally and call out the commanderies.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "迺遣助以節發兵會稽。",
+          "literal": "Then he sent Zhu with credentials to mobilize troops at Kuaiji.",
+          "idiomatic": "He therefore dispatched Yan Zhu with imperial credentials to raise troops in Kuaiji.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "會稽守欲距法，不為發。",
+          "literal": "The Kuaiji administrator wished to resist on legal grounds and would not mobilize.",
+          "idiomatic": "The governor of Kuaiji tried to refuse on legal grounds and would not release the troops.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "助迺斬一司馬，諭意指，遂發兵浮海救東甌。",
+          "literal": "Zhu then beheaded a major, made the imperial intent known, and thereupon mobilized troops by sea to rescue Dong'ou.",
+          "idiomatic": "Zhu executed a major, proclaimed the emperor's will, and put an army to sea for Dong'ou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "未至，閩越引兵罷。",
+          "literal": "Before he arrived, Minyue withdrew its troops and ceased.",
+          "idiomatic": "Before the fleet arrived, Minyue had already broken off the siege.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-07-01T00:13:32.441Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T00:13:32.441Z"
     },
     {
       "id": "source-hanshu-074-wikisource-79cd6b583be5",
-      "status": "pending",
+      "status": "applied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0.083,
@@ -117999,8 +118205,11 @@
         "afterLocal": "是時，徐樂、嚴安亦俱上書言世務。"
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Corrected 其勢不可 → 其不可 and □ → 腄 in overlapping span; retained fuller local continuation beyond scrape boundary.",
+      "reviewedAt": "2026-07-01T00:13:33.152Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T00:13:33.152Z"
     },
     {
       "id": "source-hanshu-074-wikisource-7c021d534bc2",
@@ -118612,7 +118821,7 @@
     },
     {
       "id": "source-hanshu-074-wikisource-934136da0e3e",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 3,
       "similarity": 0.607,
@@ -118682,12 +118891,15 @@
         "afterLocal": "是時，征伐四夷，開置邊郡，軍旅數發，內改制度，朝廷多事，婁舉賢良文學之士。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": "Reviewed as no-op: discrepancy is caused by upstream MediaWiki residue such as __TOC__, Category, or PD-old text; local corpus text retained.\nReopened for manual review: previous automatic residue no-op left non-residue punctuation or text unresolved."
+      "decision": "denied",
+      "notes": "Reviewed as no-op: __TOC__ residue and commentary glosses; local chapter heading retained.",
+      "reviewedAt": "2026-07-01T00:13:36.332Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-hanshu-074-wikisource-9bbc8e20964b",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 3,
       "similarity": 0.636,
@@ -118757,8 +118969,28 @@
         "afterLocal": "臣聞圖王不成，其敝足以安。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Corrected 復、子 → 夏、子 and aligned Xu Le memorial wording; omitted Yan Shigu glosses.",
+      "acceptedSourceText": "金石絲竹之聲不絕於耳，帷幄之私、俳優侏儒之笑不乏於前，而天下無宿憂。名何必夏、子，俗何必成、康！雖然，臣竊以陛下天然之質，寬仁之資，而誠以天下為務，則不難侔，而成、康之俗未必不復興也。此二體者立，然後處尊安之實，揚廣譽於當世，親天下而服四夷，余恩遺德為數世隆，南面背依攝袂而揖王公，此陛下之所服也。",
+      "manualTranslations": [
+        {
+          "zh": "名何必夏、子，俗何必成、康！",
+          "literal": "Why must one's name necessarily equal those of Yu and Tang? Why must customs necessarily equal those of Cheng and Kang!",
+          "idiomatic": "You need not yet rival Yu and Tang in fame, nor Cheng and Kang in the purity of your age.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "雖然，臣竊以陛下天然之質，寬仁之資，而誠以天下為務，則不難侔，而成、康之俗未必不復興也。",
+          "literal": "Although it is so, your servant privately thinks that with Your Majesty's heaven-endowed substance and generous benevolent endowment, if you sincerely take all under Heaven as your task, then it is not hard to equal them, and Cheng and Kang's customs may not fail to revive.",
+          "idiomatic": "Yet given your natural breadth of mind, if you make the people's peace your daily work, you may yet rival the sage founders, and the age of Cheng and Kang may rise again.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-07-01T00:13:33.628Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T00:13:33.628Z"
     },
     {
       "id": "source-hanshu-074-wikisource-9d0f73793ad6",
@@ -118844,7 +119076,7 @@
     },
     {
       "id": "source-hanshu-074-wikisource-a0acd29cf2e5",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0.169,
@@ -119085,12 +119317,15 @@
         "afterLocal": "助由是與淮南王相結而還。"
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local retains fuller Yan An memorial dialogue beyond upstream scrape span.",
+      "reviewedAt": "2026-07-01T00:13:36.709Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-hanshu-074-wikisource-a4c951a6d31c",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.649,
@@ -119133,12 +119368,15 @@
         "afterLocal": "得其地，不可郡縣也；"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: 其勢阻 acceptable reading; bamboo-grove glosses omitted by design.",
+      "reviewedAt": "2026-07-01T00:13:37.255Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-hanshu-074-wikisource-a70191ce7469",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.75,
@@ -119190,12 +119428,15 @@
         "afterLocal": "故賢主獨觀萬化之原，明於安危之機，修之廟堂之上，而銷未形之患也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: 土崩之勢/土崩之也 edition variant; local reading retained.",
+      "reviewedAt": "2026-07-01T00:13:37.832Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-hanshu-074-wikisource-a79be00473dd",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.434,
@@ -119238,12 +119479,15 @@
         "afterLocal": "上問所欲，對願為會稽太守。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Yan Shigu glosses and 友壻/友婿 variant only.",
+      "reviewedAt": "2026-07-01T00:13:38.313Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-hanshu-074-wikisource-af51cc86ef0a",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0.017,
@@ -119448,8 +119692,11 @@
         "afterLocal": "弘詘服焉。"
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: upstream scrape truncated; local retains full Wuqiu Shouwang speech.",
+      "reviewedAt": "2026-07-01T00:13:38.835Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-hanshu-074-wikisource-af784bf37b59",
@@ -119484,7 +119731,7 @@
     },
     {
       "id": "source-hanshu-074-wikisource-b1795a8613dd",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 3,
       "similarity": 0.222,
@@ -119599,12 +119846,15 @@
         "afterLocal": "此二體者，安危之明要，賢主之所留意而深察也。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: scrape misalignment; local includes 瓦解 section and complete 土崩之勢 phrasing.",
+      "reviewedAt": "2026-07-01T00:13:39.314Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-hanshu-074-wikisource-b3082bb04f19",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.487,
@@ -119656,8 +119906,11 @@
         "afterLocal": "今聞東越王更徙處南行，去泉山五百里，居大澤中。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Quan Mountain commentary omitted by design.",
+      "reviewedAt": "2026-07-01T00:13:39.696Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-hanshu-074-wikisource-b58038be1e05",
@@ -119771,7 +120024,7 @@
     },
     {
       "id": "source-hanshu-074-wikisource-bd8ae4f0e197",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 3,
       "similarity": 0.552,
@@ -119832,8 +120085,11 @@
         "afterLocal": "壽王謝罪，因言其狀。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Yan Shigu glosses omitted; 不熟/不孰 variant only.",
+      "reviewedAt": "2026-07-01T00:13:40.229Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-hanshu-074-wikisource-bfe35f9bb92c",
@@ -119887,7 +120143,7 @@
     },
     {
       "id": "source-hanshu-074-wikisource-c745a698e240",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.625,
@@ -119930,8 +120186,11 @@
         "afterLocal": "丈夫生不五鼎食，死則五鼎亨耳！"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: leading close-quote residue from prior 從橫 gloss; local quote intact.",
+      "reviewedAt": "2026-07-01T00:13:41.146Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-hanshu-074-wikisource-c9fad2a1b78e",
@@ -120254,7 +120513,7 @@
     },
     {
       "id": "source-hanshu-074-wikisource-d9bc334f1762",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 3,
       "similarity": 0.55,
@@ -120324,8 +120583,11 @@
         "afterLocal": "是時，方築朔方，公孫弘諫，以為罷敝中國。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Yan Shigu glosses omitted; graph variants only.",
+      "reviewedAt": "2026-07-01T00:13:41.804Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-hanshu-074-wikisource-daed7dd54be9",
@@ -120360,7 +120622,7 @@
     },
     {
       "id": "source-hanshu-074-wikisource-e4d956a1c17c",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.406,
@@ -120430,12 +120692,15 @@
         "afterLocal": "秦之末世是也。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local 燕無終 and fuller memorial opening are correct; upstream split mid-paragraph.",
+      "reviewedAt": "2026-07-01T00:13:42.350Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-hanshu-074-wikisource-e4dd634466e4",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.78,
@@ -120487,8 +120752,11 @@
         "afterLocal": "是豈人眾之不足，兵革之不備哉？"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: 逾/踰 graph variant only.",
+      "reviewedAt": "2026-07-01T00:13:42.879Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-hanshu-074-wikisource-e604658456ff",
@@ -120773,7 +121041,7 @@
     },
     {
       "id": "source-hanshu-074-wikisource-fdef5b52583b",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "similarity": 0.026,
@@ -121293,8 +121561,11 @@
         "afterLocal": "漢兵罷。"
       },
       "recommendation": "Local JSON has substantially more text between the surrounding anchors than this external witness. Check for edition differences before removing anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local retains fuller Yan An anti-war memorial beyond upstream scrape span.",
+      "reviewedAt": "2026-07-01T00:13:43.378Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-hanshu-075-wikisource-50b3fd11f346",

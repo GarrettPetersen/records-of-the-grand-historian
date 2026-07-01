@@ -19596,7 +19596,7 @@
     },
     {
       "id": "source-yuanshi-021-wikisource-7ad1eec4b38e",
-      "status": "pending",
+      "status": "denied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.727,
@@ -19639,8 +19639,11 @@
         "afterLocal": "辛酉，以所籍朱清、張瑄江南財產隸中政院。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: Wikisource embeds manuscript variant readings (癸未)/(壬子) in editorial parentheses; local 癸丑 is the adopted cyclical day and matches the following 辛酉 chronology nine days after the fifth-month new moon.",
+      "reviewedAt": "2026-07-01T00:07:04.883Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-yuanshi-021-wikisource-9bc14ef52b1a",
@@ -186675,7 +186678,7 @@
     },
     {
       "id": "source-yuanshi-158-wikisource-4bbbe8e0a9a6",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.867,
@@ -186718,8 +186721,11 @@
         "afterLocal": "時兵亂中，衡夜思晝誦，身體而力踐之，言動必揆諸義而後發。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local text uses the correct reading 徂徠 and book-title marks 《易》; Wikisource collation note （岨崍）〔徂徠〕 is not an omission.",
+      "reviewedAt": "2026-07-01T01:58:54.621Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-yuanshi-158-wikisource-4be74f9b99d1",
@@ -186836,7 +186842,7 @@
     },
     {
       "id": "source-yuanshi-158-wikisource-69ba319fbc21",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.895,
@@ -186879,12 +186885,15 @@
         "afterLocal": "雖或接之以貌，待之以禮，然而言不見用，賢者不處也。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: harmless glyph variants 汎/泛 and 厮/廝; local forms are standard.",
+      "reviewedAt": "2026-07-01T01:58:55.034Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-yuanshi-158-wikisource-86b55fcd6a2a",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "yuanshi",
@@ -186908,8 +186917,106 @@
         "afterLocal": "壬子夏，從世祖徵大理，至曲先腦兒之地。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "憲宗即位，詔凡軍民在赤老溫山南者，聽世祖總之。",
+          "literal": "When Mongke took the throne, an edict ordered that all military and civilian personnel south of Kelüwen Mountain were to be placed under the Prince's overall command.",
+          "idiomatic": "When Mongke took the throne, an edict placed all military and civilian personnel south of Kelüwen Mountain under Kublai's command.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "世祖既奉詔，宴羣下，罷酒將出，遣人止樞，問曰：「頃者諸臣皆賀，汝獨默然，何耶？」",
+          "literal": "Kublai, having received the edict, entertained his subordinates; when the banquet ended and he was about to leave, he sent someone to stop Shu and asked, \"Just now all the ministers offered congratulations—you alone were silent. Why?\"",
+          "idiomatic": "After receiving the edict Kublai entertained his officers. As the banquet ended and he was leaving, he sent for Shu and asked, \"Everyone else congratulated me—you alone were silent. Why?\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "對曰：「今天下土地之廣，人民之殷，財賦之阜，有加漢地者乎？",
+          "literal": "He replied, \"Today is there any land broader, people more numerous, or revenues richer than in the Han territories?",
+          "idiomatic": "Shu answered, \"Is any land today broader, any people more numerous, or any treasury richer than the old Han domains?",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "軍民吾盡有之，天子何為？",
+          "literal": "I already hold all the armies and people—what need is there for the Son of Heaven?",
+          "idiomatic": "I already command all armies and people—what need is there for the Son of Heaven?",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "異時廷臣間之，必悔而見奪，不若惟持兵權，供億之需取之有司，則勢順理安。」",
+          "literal": "When court ministers raise the matter later, you will surely regret it and have it taken away. Better to hold military power alone and take supplies for expenditure from the regular offices—then the situation will be orderly and secure.\"",
+          "idiomatic": "When courtiers raise the matter later, you will regret it and lose what you took. Better to keep military power alone and draw supplies from the regular offices—then your position will stay secure.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "世祖曰：「慮所不及者。」",
+          "literal": "Kublai said, \"A consideration I had not reached.\"",
+          "idiomatic": "Kublai said, \"That is a point I had not considered.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "乃以聞，憲宗從之。",
+          "literal": "Shu reported this; Mongke approved.",
+          "idiomatic": "Shu reported this, and Mongke agreed.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "樞又請置屯田經略司於汴以圖宋；",
+          "literal": "Shu also requested establishing a frontier-agriculture and pacification office at Bian to plan against Song;",
+          "idiomatic": "Shu also asked to establish a frontier-agriculture and pacification office at Bian to prepare against Song;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "置都運司于衞，轉粟于河。",
+          "literal": "and establishing a transport commission at Wei to move grain along the river.",
+          "idiomatic": "and to establish a transport commission at Wei to move grain along the river.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "憲宗大封同姓，敕世祖於南京、關中自擇其一。",
+          "literal": "Mongke granted great enfeoffments to those of the same surname and directed Kublai to choose one between Nanjing and Guanzhong.",
+          "idiomatic": "Mongke enfeoffed many kinsmen and told Kublai to choose either Nanjing or Guanzhong.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "樞曰：「南京河徙無常，土薄水淺，舄鹵生之，不若關中厥田上上，古名天府陸海。」",
+          "literal": "Shu said, \"At Nanjing the river shifts unpredictably, the soil is thin and the water shallow, and salt marshes form—better Guanzhong, whose fields rank highest; since antiquity it has been called the Land within the Passes, land and sea together.\"",
+          "idiomatic": "Shu said, \"At Nanjing the river shifts without pattern, the soil is thin and the water shallow, and salt flats spread. Guanzhong is better—its fields rank highest; since antiquity it has been called the Land within the Passes, rich in land and sea.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "於是世祖願有關中。",
+          "literal": "Thereupon Kublai wished to have Guanzhong.",
+          "idiomatic": "Kublai thereupon chose Guanzhong.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-07-01T01:58:56.496Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T01:58:56.503Z",
+      "appliedSummary": {
+        "id": "source-yuanshi-158-wikisource-86b55fcd6a2a",
+        "type": "source_omission_candidate",
+        "start": 29,
+        "removed": 0,
+        "inserted": 12,
+        "delta": 12,
+        "manualTranslationsApplied": 12
+      }
     },
     {
       "id": "source-yuanshi-158-wikisource-ae666efef3aa",
@@ -187013,7 +187120,7 @@
     },
     {
       "id": "source-yuanshi-158-wikisource-cf464cd918c2",
-      "status": "pending",
+      "status": "denied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.8,
@@ -187056,8 +187163,11 @@
         "afterLocal": "以四正定氣立損益限，以定日之盈縮。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: harmless glyph variants 綫/線 and 闚/窺; local forms are standard.",
+      "reviewedAt": "2026-07-01T01:58:55.641Z",
+      "reviewer": "sdk-repair-chapter",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-yuanshi-158-wikisource-e978d16aa6f4",
@@ -187103,7 +187213,7 @@
     },
     {
       "id": "source-yuanshi-158-wikisource-fdf0286f90e8",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0,
@@ -187120,25 +187230,7 @@
         "ids": [],
         "locations": []
       },
-      "localRange": {
-        "startIndex": 377,
-        "endIndex": 377,
-        "count": 1,
-        "text": "○竇默李俊民附",
-        "ids": [
-          "s0379"
-        ],
-        "locations": [
-          {
-            "blockIndex": 32,
-            "blockType": "paragraph",
-            "kind": "sentence",
-            "sentenceIndex": 0,
-            "field": "zh",
-            "id": "s0379"
-          }
-        ]
-      },
+      "localRange": null,
       "context": {
         "beforeSource": "有數千里來祭哭墓下者。",
         "afterSource": "竇默字子聲，初名傑字漢卿，廣平肥鄉人。",
@@ -187146,8 +187238,114 @@
         "afterLocal": "竇默，字子聲，初名傑，字漢卿，廣平肥鄉人。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "acceptedSourceText": "衡善教，其言煦煦，雖與童子語，如恐傷之。故所至，無貴賤賢不肖皆樂從之，隨其才昏明大小皆有所得，可以為世用。所去，人皆哭泣，不忍舍，服念其教如金科玉條，終身不敢忘。或未嘗及門，傳其緒餘，而折節力行為名世者，往往有之。聽其言，雖武人俗士異端之徒，無不感悟者。丞相安童一見衡，語同列曰：「若輩自謂不相上下，蓋十百與千萬也。」翰林承旨王磐氣概一世，少所與可，獨見衡曰：「先生，神明也。」大德元年，贈榮祿大夫、司徒，諡文正。至大二年，加正學垂憲佐運功臣、太傅、開府儀同三司，封魏國公。皇慶二年，詔從祀孔子廟廷。延祐初，又詔立書院京兆以祀衡，給田奉祠事，名魯齋書院。魯，衡居魏時所署齋名也。子師可。",
+      "manualTranslations": [
+        {
+          "zh": "衡善教，其言煦煦，雖與童子語，如恐傷之。",
+          "literal": "Heng was skilled at teaching; his words were warm and gentle—even when speaking with boys, it was as though he feared to hurt them.",
+          "idiomatic": "Heng was a gifted teacher; his words were gentle and warm—even with children he spoke as if afraid to wound them.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "故所至，無貴賤賢不肖皆樂從之，隨其才昏明大小皆有所得，可以為世用。",
+          "literal": "Therefore wherever he went, without distinction of noble and base, worthy and unworthy, all gladly followed him; according to each person's talent, whether dull or bright, great or small, all gained something and could serve the age.",
+          "idiomatic": "Wherever he went, high and low, worthy and base alike gladly followed him. Each student, bright or dull, great or small, gained something useful to the world.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "所去，人皆哭泣，不忍舍，服念其教如金科玉條，終身不敢忘。",
+          "literal": "When he departed, people all wept and could not bear to let him go; they cherished his teaching as golden statutes and jade rules and dared not forget it their whole lives.",
+          "idiomatic": "When he left, people wept and could not bear to part from him. They treasured his teaching like golden statutes and jade rules and never forgot it.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "或未嘗及門，傳其緒餘，而折節力行為名世者，往往有之。",
+          "literal": "Some who had never entered his gate, receiving the remnant threads of his teaching, reformed themselves and practiced earnestly to become renowned in their age—such cases were often found.",
+          "idiomatic": "Many who never studied at his gate, yet received some trace of his teaching, reformed themselves and became celebrated figures.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "聽其言，雖武人俗士異端之徒，無不感悟者。",
+          "literal": "Hearing his words, even military men, vulgar fellows, and followers of heterodox ways—none failed to be moved to understanding.",
+          "idiomatic": "Even soldiers, common men, and followers of heterodox ways were moved when they heard him speak.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "丞相安童一見衡，語同列曰：「若輩自謂不相上下，蓋十百與千萬也。」",
+          "literal": "Chancellor Antong, upon one meeting with Heng, said to his colleagues, \"You who think yourselves not above or below one another—why, that is like comparing tens and hundreds with thousands and ten thousands.\"",
+          "idiomatic": "When Chancellor Antong met Heng once, he told his colleagues, \"You who think yourselves equals—why, that is like comparing tens and hundreds with thousands and ten thousands.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "翰林承旨王磐氣概一世，少所與可，獨見衡曰：「先生，神明也。」",
+          "literal": "Hanlin Chancellor Wang Pan, imposing in spirit throughout his age and rarely approving anyone, upon meeting Heng alone said, \"Master, you are divine.\"",
+          "idiomatic": "Hanlin Chancellor Wang Pan, proud and hard to please, said on meeting Heng alone, \"Master, you are a spirit among men.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "大德元年，贈榮祿大夫、司徒，諡文正。",
+          "literal": "In the first year of Dade, he was posthumously granted Grand Master of Splendid Happiness and Minister of Education, with the posthumous title Wenzheng.",
+          "idiomatic": "In the first year of Dade he was posthumously made Grand Master of Splendid Happiness and Minister of Education, with the posthumous title Wenzheng.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "至大二年，加正學垂憲佐運功臣、太傅、開府儀同三司，封魏國公。",
+          "literal": "In the second year of Zhide, he was further granted the title of meritorious minister who rectified learning, transmitted norms, and assisted the mandate, Grand Tutor, and Grand Master with credentials equal to the Three Excellencies, and enfeoffed as Duke of Wei.",
+          "idiomatic": "In the second year of Zhide he was further honored as a meritorious minister of rectified learning and assisted mandate, made grand tutor and grand master with credentials equal to the Three Excellencies, and enfeoffed as Duke of Wei.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "皇慶二年，詔從祀孔子廟廷。",
+          "literal": "In the second year of Huangqing, an edict ordered him to be worshipped alongside Confucius in the temple court.",
+          "idiomatic": "In the second year of Huangqing an edict added him to the sacrifices at Confucius's temple.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "延祐初，又詔立書院京兆以祀衡，給田奉祠事，名魯齋書院。",
+          "literal": "At the beginning of Yanyou, another edict ordered establishing an academy in Jingzhao to sacrifice to Heng, granting fields to support the rites, named the Luzhai Academy.",
+          "idiomatic": "Early in Yanyou an edict founded an academy in Jingzhao to honor Heng, granted fields for its sacrifices, and named it the Luzhai Academy.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "魯，衡居魏時所署齋名也。",
+          "literal": "Lu was the name of the studio Heng used when he lived in Wei.",
+          "idiomatic": "Lu was the name of the study Heng kept when he lived in Wei.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "子師可。",
+          "literal": "His son was Shike.",
+          "idiomatic": "His son was Shike.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-07-01T01:58:57.297Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T01:58:57.303Z",
+      "appliedSummary": {
+        "id": "source-yuanshi-158-wikisource-fdf0286f90e8",
+        "type": "source_omission_candidate",
+        "start": 390,
+        "removed": 0,
+        "inserted": 13,
+        "delta": 13,
+        "manualTranslationsApplied": 13
+      }
     },
     {
       "id": "source-yuanshi-159-wikisource-04cd4f13dbbf",
@@ -188215,7 +188413,7 @@
     },
     {
       "id": "source-yuanshi-160-wikisource-20006aa880be",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "yuanshi",
@@ -188239,12 +188437,76 @@
         "afterLocal": ""
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "十一年春，武宗踐祚，復首陳三事，曰「惜名器，明賞罰，擇人材」，言皆剴切。",
+          "literal": "In the spring of the eleventh year, when Wuzong ascended the throne, Fu again led with three points: \"Cherish title and emblems, clarify rewards and punishments, select talent\"—every word was incisive.",
+          "idiomatic": "In the spring of 1307, when Wuzong took the throne, Yan Fu again led with three points: \"Cherish titles and insignia, clarify rewards and punishments, select talent\"—every word was incisive.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "未幾，進階榮祿大夫，遙授平章政事，餘如故，復力辭，不許。",
+          "literal": "Before long he was advanced to Grand Master of Glorious Emolument and given the distant appointment of Grand Councillor, his other posts remaining as before; Fu again pressed his resignation but was not permitted.",
+          "idiomatic": "Soon he was advanced to Grand Master of Glorious Emolument and given the distant appointment of Grand Councillor while retaining his other posts; Yan Fu again pressed to resign but was refused.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "上疏乞骸骨，詔從其請，給半俸終養。",
+          "literal": "He submitted a memorial begging to retire; an edict granted his request and gave half salary for the remainder of his life.",
+          "idiomatic": "He memorialized begging to retire; an edict granted his request and gave him half salary for life.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "時仁宗居東宮，賜以重錦，俾公卿祖道都門外。",
+          "literal": "At that time Renzong resided in the Eastern Palace; he granted heavy brocade and had the grand ministers give a farewell banquet outside the capital gate.",
+          "idiomatic": "Renzong, then in the Eastern Palace, granted him heavy brocade and had the grand ministers give a farewell banquet outside the capital gate.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "及即位，遣使召復，復以病辭。",
+          "literal": "When he ascended the throne, he sent envoys to summon Fu back, but Fu declined on grounds of illness.",
+          "idiomatic": "When Renzong took the throne, he sent envoys to summon Yan Fu back, but Fu declined on grounds of illness.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "皇慶元年三月卒，年七十七，諡文康。",
+          "literal": "In the third month of the first year of Huangqing [1312] he died at the age of seventy-seven; his posthumous name was Wenkang.",
+          "idiomatic": "In the third month of 1312 he died at the age of seventy-seven; his posthumous name was Wenkang.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "有靜軒集五十卷。",
+          "literal": "He left a collection entitled Jingxuan ji in fifty juan.",
+          "idiomatic": "He left a collection entitled Jingxuan ji in fifty juan.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "sourceTextOverride": "十一年春，武宗踐祚，復首陳三事，曰「惜名器，明賞罰，擇人材」，言皆剴切。未幾，進階榮祿大夫，遙授平章政事，餘如故，復力辭，不許。上疏乞骸骨，詔從其請，給半俸終養。時仁宗居東宮，賜以重錦，俾公卿祖道都門外。及即位，遣使召復，復以病辭。皇慶元年三月卒，年七十七，諡文康。有靜軒集五十卷。",
+      "reviewedAt": "2026-07-01T02:07:40.648Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T02:07:40.652Z",
+      "appliedSummary": {
+        "id": "source-yuanshi-160-wikisource-20006aa880be",
+        "type": "source_omission_candidate",
+        "start": 459,
+        "removed": 0,
+        "inserted": 7,
+        "delta": 7,
+        "manualTranslationsApplied": 7
+      }
     },
     {
       "id": "source-yuanshi-160-wikisource-2e2ecf4a987d",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.175,
@@ -188287,8 +188549,100 @@
         "afterLocal": "肅性舒緩，有執守。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "壬子，世祖居潛邸，以肅為邢州安撫使。",
+          "literal": "In renzi [1252], while Kublai held his princely residence, Su was appointed pacification commissioner of Xingzhou.",
+          "idiomatic": "In 1252, while Kublai still held his princely residence, Liu Su was made pacification commissioner of Xingzhou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "肅興鐵冶，及行楮幣，公私賴焉。",
+          "literal": "Su promoted iron smelting and the circulation of paper currency; public and private affairs both relied on these.",
+          "idiomatic": "He revived iron smelting and introduced paper currency, and both public and private affairs came to depend on these measures.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "中統元年，擢真定宣撫使。",
+          "literal": "In the first year of Zhongtong he was promoted to Pacification Commissioner of Zhending.",
+          "idiomatic": "In 1260 he was promoted to Pacification Commissioner of Zhending.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "時中統新鈔行，罷銀鈔不用。",
+          "literal": "At that time the new Zhongtong paper notes were issued and silver notes were abolished and no longer used.",
+          "idiomatic": "At that time the new Zhongtong notes were issued and silver notes were abolished.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "真定以銀鈔交通于外者，凡八千餘貫，公私囂然，莫知所措。",
+          "literal": "In Zhending, silver notes still circulating externally totaled more than eight thousand strings; public and private parties were in uproar and knew not what to do.",
+          "idiomatic": "In Zhending more than eight thousand strings of silver notes were still circulating outside the circuit; public and private parties were in uproar and did not know what to do.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "肅建三策：一曰仍用舊鈔，二曰新舊兼用，三曰官以新鈔如數易舊鈔。",
+          "literal": "Su proposed three policies: first, continue using old notes; second, use old and new together; third, have the government exchange old notes for new at full count.",
+          "idiomatic": "Su proposed three policies: continue using old notes; use old and new together; or have the government exchange old notes for new at full count.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "中書從其第三策，遂降鈔五十萬貫。",
+          "literal": "The Secretariat followed his third policy and thereupon issued five hundred thousand strings of notes.",
+          "idiomatic": "The Secretariat adopted his third policy and issued five hundred thousand strings of notes.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "二年，授左三部尚書，官曹典憲，多所議定。",
+          "literal": "In the second year he was appointed Minister of the Left Three Departments; office regulations and laws were largely determined by him.",
+          "idiomatic": "In 1261 he was appointed Minister of the Left Three Departments and largely determined office regulations and laws.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "未幾，兼商議中書省事。",
+          "literal": "Before long he also served concurrently in deliberating Secretariat affairs.",
+          "idiomatic": "Soon afterward he also served concurrently in deliberating Secretariat affairs.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "三年，致仕，給半俸。",
+          "literal": "In the third year he retired, receiving half salary.",
+          "idiomatic": "In 1262 he retired, receiving half salary.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "四年，卒，年七十六。",
+          "literal": "In the fourth year he died at the age of seventy-six.",
+          "idiomatic": "In 1263 he died at the age of seventy-six.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "sourceTextOverride": "壬子，世祖居潛邸，以肅為邢州安撫使。肅興鐵冶，及行楮幣，公私賴焉。中統元年，擢真定宣撫使。時中統新鈔行，罷銀鈔不用。真定以銀鈔交通于外者，凡八千餘貫，公私囂然，莫知所措。肅建三策：一曰仍用舊鈔，二曰新舊兼用，三曰官以新鈔如數易舊鈔。中書從其第三策，遂降鈔五十萬貫。二年，授左三部尚書，官曹典憲，多所議定。未幾，兼商議中書省事。三年，致仕，給半俸。四年，卒，年七十六。",
+      "reviewedAt": "2026-07-01T02:07:35.904Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T02:07:35.908Z",
+      "appliedSummary": {
+        "id": "source-yuanshi-160-wikisource-2e2ecf4a987d",
+        "type": "source_omission_candidate",
+        "start": 242,
+        "removed": 1,
+        "inserted": 11,
+        "delta": 10,
+        "manualTranslationsApplied": 11
+      }
     },
     {
       "id": "source-yuanshi-160-wikisource-4de5b73e808c",
@@ -188436,7 +188790,7 @@
     },
     {
       "id": "source-yuanshi-160-wikisource-53eb7f55dd92",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.667,
@@ -188488,8 +188842,29 @@
         "afterLocal": "徐世隆字威卿，陳州西華人。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "子偘，官至大名路總管。",
+          "literal": "His son Kan reached the office of administrator of Daming Circuit.",
+          "idiomatic": "His son Kan rose to administrator of Daming Circuit.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-07-01T02:07:41.304Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T02:07:41.308Z",
+      "appliedSummary": {
+        "id": "source-yuanshi-160-wikisource-53eb7f55dd92",
+        "type": "source_replacement_candidate",
+        "start": 329,
+        "removed": 2,
+        "inserted": 1,
+        "delta": -1,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-yuanshi-160-wikisource-828951414e1f",
@@ -188544,7 +188919,7 @@
     },
     {
       "id": "source-yuanshi-160-wikisource-8877254207a5",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "yuanshi",
@@ -188568,12 +188943,89 @@
         "afterLocal": "有言事者，謂宰執非其人，詔儒臣廷議可任宰相者。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "庚申，世祖即位，建元中統。",
+          "literal": "In gengshen [1260] Kublai ascended the throne and established the reign title Zhongtong.",
+          "idiomatic": "In 1260 Kublai took the throne and proclaimed the Zhongtong reign.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "首授翰林學士承旨，制誥典章，皆所裁定。",
+          "literal": "He was first appointed Hanlin expositor-in-chief; edicts, proclamations, and institutional regulations were all determined by him.",
+          "idiomatic": "He was first made Hanlin expositor-in-chief; edicts, proclamations, and institutional regulations were all shaped by him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "至元元年，加資善大夫。",
+          "literal": "In the first year of Zhiyuan he was advanced to Grand Master of Goodness and Charity.",
+          "idiomatic": "In 1264 he was advanced to Grand Master of Goodness and Charity.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "上奏：「自古帝王得失興廢可考者，以有史在也。",
+          "literal": "He submitted a memorial: \"The gains and losses, rise and fall of emperors since antiquity can be examined only because histories exist.",
+          "idiomatic": "He memorialized: \"The rise and fall of rulers can be studied only because histories exist.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "我國家以神武定四方，天戈所臨，無不臣服者，皆出太祖皇帝廟謨雄斷所致，若不乘時紀錄，竊恐久而遺亡，宜置局纂就實錄，附修遼、金二史。」",
+          "literal": "Our state, by divine martial prowess, settled the four quarters; wherever the heavenly spear reached, none failed to submit—all owing to the founding emperor's grand strategy and resolute judgment. If we do not record events while the moment is at hand, I fear they will long be lost to oblivion. A bureau should be established to compile a veritable record and to compile, in addition, the histories of Liao and Jin.\"",
+          "idiomatic": "Our dynasty settled the realm by martial prowess; wherever imperial arms reached, all submitted—thanks to the founding emperor's strategy and resolve. If we do not record events now, I fear they will be lost. A bureau should compile a veritable record and also compile the histories of Liao and Jin.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "又言：「唐太宗始定天下，置弘文舘學士十八人，宋太宗承太祖開創之後，設內外學士院，史冊爛然，號稱文治。",
+          "literal": "He also said, \"When Emperor Taizong of Tang first settled the realm, he appointed eighteen scholars of the Hall for the Expansion of Culture; after Song Taizu opened the dynasty, Song Taizong established inner and outer academicians—historical records flourished and the era was called cultured rule.",
+          "idiomatic": "He also said, \"Tang Taizong, when he first settled the realm, appointed eighteen scholars of the Hall for the Expansion of Culture; Song Taizong, after Taizu founded the dynasty, established inner and outer academicians—records flourished and the age was called cultured rule.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "堂堂國朝，豈無英才如唐、宋者乎！」",
+          "literal": "Is our great dynasty without talents to match Tang and Song!\"",
+          "idiomatic": "Is our great dynasty without talents to match Tang and Song!\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "皆從之，始立翰林學士院，鶚遂薦李冶、李昶、王磐、徐世隆、高鳴為學士。",
+          "literal": "All were approved; the Hanlin Academy was first established, and E thereupon recommended Li Ye, Li Chang, Wang Pan, Xu Shilong, and Gao Ming as academicians.",
+          "idiomatic": "The proposals were all approved; the Hanlin Academy was established, and Wang E recommended Li Ye, Li Chang, Wang Pan, Xu Shilong, and Gao Ming as academicians.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "復奏立十道提舉學校官。",
+          "literal": "He again memorialized to establish school inspectors in ten circuits.",
+          "idiomatic": "He also memorialized to establish school inspectors in ten circuits.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-07-01T02:07:01.324Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T02:07:01.329Z",
+      "appliedSummary": {
+        "id": "source-yuanshi-160-wikisource-8877254207a5",
+        "type": "source_omission_candidate",
+        "start": 108,
+        "removed": 0,
+        "inserted": 9,
+        "delta": 9,
+        "manualTranslationsApplied": 9
+      }
     },
     {
       "id": "source-yuanshi-160-wikisource-a6f30bd4874a",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "yuanshi",
@@ -188597,12 +189049,61 @@
         "afterLocal": "時徵需煩重，行中書省科徵稅賦，雖逋戶不貸，昶移書時相，其略曰：「百姓困於弊政久矣，聖上龍飛，首頒明詔，天下之人，如獲更生，拭目傾耳，以徯太平，半年之間，人漸失望，良以渴仰之心太切，興除之政未孚故也。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "歲己未，世祖伐宋，次濮州，聞昶名，召見，問治國用兵之要。",
+          "literal": "In the jiwei year [1259] Kublai campaigned against Song and halted at Puzhou; hearing Chang's name, he summoned him and asked the essentials of governing the state and employing the army.",
+          "idiomatic": "In 1259, while campaigning against Song, Kublai halted at Puzhou; hearing Li Chang's name, he summoned him and asked the essentials of governing the state and waging war.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "昶上疏：論治國，則以用賢、立法、賞罰、君道、務本、清源為對；",
+          "literal": "Chang submitted a memorial: on governing the state he answered with employing the worthy, establishing law, rewards and punishments, the ruler's way, attending to fundamentals, and purifying the source;",
+          "idiomatic": "Li Chang submitted a memorial: on governing the state he answered with employing the worthy, establishing law, rewards and punishments, the ruler's way, attending to fundamentals, and purifying the source;",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "論用兵，則以伐罪、救民、不嗜殺為對。",
+          "literal": "on employing the army he answered with punishing crime, rescuing the people, and not delighting in killing.",
+          "idiomatic": "on waging war he answered with punishing crime, rescuing the people, and not delighting in killing.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "世祖嘉納之。",
+          "literal": "Kublai commended and accepted it.",
+          "idiomatic": "Kublai praised and accepted his advice.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "明年，世祖即位，召至開平，訪以國事，昶知無不言，眷遇益隆。",
+          "literal": "The next year, when Kublai took the throne, Chang was summoned to Kaiping; questioned on state affairs, he spoke without reserve, and imperial favor grew ever greater.",
+          "idiomatic": "The next year, when Kublai took the throne, Li Chang was summoned to Kaiping; questioned on state affairs, he spoke without reserve, and imperial favor grew ever greater.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-07-01T02:07:07.565Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T02:07:07.570Z",
+      "appliedSummary": {
+        "id": "source-yuanshi-160-wikisource-a6f30bd4874a",
+        "type": "source_omission_candidate",
+        "start": 200,
+        "removed": 0,
+        "inserted": 5,
+        "delta": 5,
+        "manualTranslationsApplied": 5
+      }
     },
     {
       "id": "source-yuanshi-160-wikisource-b8b3e4b7aa69",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "yuanshi",
@@ -188626,12 +189127,82 @@
         "afterLocal": "甲辰冬，世祖在藩邸，訪求遺逸之士，遣使聘鶚。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "金正大元年，中進士第一甲第一人出身，授應奉翰林文字。",
+          "literal": "In the first year of Zhengda he passed the metropolitan examination as first in the first rank of the first class and received appointment as Hanlin draftsman.",
+          "idiomatic": "In 1224 he passed the metropolitan examination as top graduate of the first class and was appointed Hanlin draftsman.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "六年，授歸德府判官，行亳州城父令。",
+          "literal": "In the sixth year he was appointed adjudicator of Guide Prefecture and acted as magistrate of Chengfu in Bozhou.",
+          "idiomatic": "In 1229 he was appointed adjudicator of Guide Prefecture and served as acting magistrate of Chengfu in Bozhou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "七年，改同知申州事，行蔡州汝陽令，丁母憂。",
+          "literal": "In the seventh year he was transferred to vice administrator of Shen Prefecture and acted as magistrate of Ruyang in Cai Prefecture; he then mourned his mother.",
+          "idiomatic": "In 1230 he became vice administrator of Shen Prefecture and acting magistrate of Ruyang in Cai Prefecture, then left office to mourn his mother.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "天興二年，金主遷蔡，詔尚書省移書恒山公武仙進兵，金主覽書，問誰為之，右丞完顏仲德曰：「前翰林應奉王鶚也。」",
+          "literal": "In the second year of Tianxing the Jin ruler moved to Cai; the Secretariat was ordered to send a letter to Prince Hengshan Wu Xian urging military advance. When the Jin ruler read the letter and asked who had written it, Right Censor Wanyan Zhongde said, \"The former Hanlin draftsman Wang E.\"",
+          "idiomatic": "In 1234, when the Jin court moved to Cai, the Secretariat was ordered to write Prince Hengshan Wu Xian urging him to advance. Reading the letter, the Jin ruler asked who had drafted it; Right Censor Wanyan Zhongde said, \"The former Hanlin draftsman Wang E.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "曰：「朕即位時狀元耶？」",
+          "literal": "He said, \"Were you the top metropolitan graduate when I took the throne?\"",
+          "idiomatic": "He asked, \"Were you the top graduate when I took the throne?\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "召見，惜擢用之晚。",
+          "literal": "He was summoned to audience; the ruler regretted having promoted him so late.",
+          "idiomatic": "Wang E was summoned to audience; the ruler regretted having elevated him so late.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "起復，授尚書省右司都事，陞左右司郎中。",
+          "literal": "He was recalled from mourning, appointed director in the Right Department of the Secretariat, and promoted to director in the Left and Right Departments.",
+          "idiomatic": "Recalled from mourning, he was appointed director in the Right Department of the Secretariat and then promoted to director in the Left and Right Departments.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "三年，蔡陷，將被殺，萬戶張柔聞其名，救之，輦歸，舘于保州。",
+          "literal": "In the third year Cai fell; he was about to be killed, but chiliarch Zhang Rou, hearing his name, rescued him, had him carried back, and lodged him at Baozhou.",
+          "idiomatic": "In 1235, when Cai fell, he was about to be executed; chiliarch Zhang Rou, hearing his reputation, rescued him, had him carried back, and lodged him at Baozhou.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-07-01T02:06:35.271Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T02:06:35.276Z",
+      "appliedSummary": {
+        "id": "source-yuanshi-160-wikisource-b8b3e4b7aa69",
+        "type": "source_omission_candidate",
+        "start": 92,
+        "removed": 0,
+        "inserted": 8,
+        "delta": 8,
+        "manualTranslationsApplied": 8
+      }
     },
     {
       "id": "source-yuanshi-160-wikisource-ccba4e9d6b9b",
-      "status": "pending",
+      "status": "applied",
       "type": "text_discrepancy_candidate",
       "severity": 2,
       "similarity": 0.895,
@@ -188674,8 +189245,29 @@
         "afterLocal": "有趙清者，發其罪，既具伏矣，適初置監司，其妻懼無以滅口，召家人飲酒至醉，以利啗之，使夜殺清，清逃獲免，乃盡殺其父母妻子。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "衡水縣達魯花赤忙兀䚟，貪暴不法，縣民苦之。",
+          "literal": "Mangwutai, darughachi of Hengshui County, was greedy, violent, and lawless, and the county people suffered under him.",
+          "idiomatic": "Mangwutai, the Mongol overseer of Hengshui County, was greedy and brutal; the people suffered greatly under him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-07-01T02:07:41.000Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T02:07:41.003Z",
+      "appliedSummary": {
+        "id": "source-yuanshi-160-wikisource-ccba4e9d6b9b",
+        "type": "text_discrepancy_candidate",
+        "start": 18,
+        "removed": 1,
+        "inserted": 2,
+        "delta": 1,
+        "manualTranslationsApplied": 1
+      }
     },
     {
       "id": "source-yuanshi-160-wikisource-dd14eef23cfc",
@@ -188710,7 +189302,7 @@
     },
     {
       "id": "source-yuanshi-160-wikisource-e21ff36003fc",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "yuanshi",
@@ -188734,8 +189326,92 @@
         "afterLocal": "中統元年，擢燕京等路宣撫使，世隆以新民善俗為務。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "",
+      "manualTranslations": [
+        {
+          "zh": "歲壬辰，父歿。",
+          "literal": "In the renchen year [1232] his father died.",
+          "idiomatic": "In 1232 his father died.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "癸巳，世隆奉母北渡河，嚴實招致東平幕府，俾掌書記。",
+          "literal": "In guisi [1233] Shilong escorted his mother north across the river; Yan Shi recruited him to the Dongping headquarters and made him chief secretary.",
+          "idiomatic": "In 1233 Xu Shilong escorted his mother north across the Yellow River; Yan Shi recruited him to the Dongping headquarters and made him chief secretary.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "世隆勸實收養寒素，一時名士多歸之。",
+          "literal": "Shilong urged Yan to support the poor and plain; many eminent men of the time gathered to him.",
+          "idiomatic": "Shilong urged Yan Shi to support the poor and plain, and many leading scholars of the day gathered to him.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "憲宗即位，以為拘榷燕京路課稅官，世隆固辭。",
+          "literal": "When Möngke took the throne, Shilong was named monopoly tax officer for the Yanjing circuit, but he firmly declined.",
+          "idiomatic": "When Möngke took the throne, Shilong was named monopoly tax officer for the Yanjing circuit, but he firmly declined.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "壬子，世祖在潛邸，召見于日月山。",
+          "literal": "In renzi [1252], while Kublai was at his princely residence, Shilong was summoned to audience at Sun-Moon Mountain.",
+          "idiomatic": "In 1252, while Kublai was still at his princely residence, Shilong was summoned to audience at Sun-Moon Mountain.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "時方圖征雲南，以問世隆，對曰：「孟子有言：『不嗜殺人者能一之。』",
+          "literal": "At that time they were planning to campaign against Yunnan and asked Shilong. He answered, \"Mencius said, 'One who does not delight in killing can unify the realm.'",
+          "idiomatic": "They were then planning a campaign against Yunnan and asked Shilong. He answered, \"Mencius said, 'One who does not delight in killing can unify the realm.'",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "夫君人者，不嗜殺人，天下可定，況蕞爾之西南夷乎！」",
+          "literal": "For a ruler, if he does not delight in killing, the realm can be settled—how much more so a petty southwestern frontier!\"",
+          "idiomatic": "For a ruler who does not delight in killing, the realm can be settled—how much more a petty southwestern frontier!\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "世祖曰：「誠如卿言，吾事濟矣。」",
+          "literal": "Kublai said, \"Truly as you say—my cause will succeed.\"",
+          "idiomatic": "Kublai said, \"If it is truly as you say, my cause will succeed.\"",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "實時得金太常登歌樂，世祖遣使取之觀，世隆典領以行，既見，世祖欲留之，世隆以母老辭。",
+          "literal": "At that time Yan Shi had obtained the Jin dynasty's Grand Ceremonial ascent and chorus music; Kublai sent envoys to fetch it for viewing, and Shilong took charge of the mission. After the audience Kublai wished to keep him, but Shilong declined on grounds of his aged mother.",
+          "idiomatic": "Yan Shi had obtained the Jin dynasty's Grand Ceremonial ascent and chorus music; Kublai sent envoys to fetch it for viewing, and Shilong led the mission. After the audience Kublai wished to keep him, but Shilong declined because his mother was old.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        {
+          "zh": "實子忠濟以世隆為東平行臺經歷，於是益贊忠濟興學養士。",
+          "literal": "Yan Shi's son Zhongji appointed Shilong administrator of the Dongping regional office; he thereupon further assisted Zhongji in establishing schools and nurturing scholars.",
+          "idiomatic": "Yan Shi's son Zhongji appointed Shilong administrator of the Dongping regional office, and he further assisted Zhongji in founding schools and nurturing scholars.",
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        }
+      ],
+      "reviewedAt": "2026-07-01T02:07:36.235Z",
+      "reviewer": "sdk-repair-chapter",
+      "appliedAt": "2026-07-01T02:07:36.239Z",
+      "appliedSummary": {
+        "id": "source-yuanshi-160-wikisource-e21ff36003fc",
+        "type": "source_omission_candidate",
+        "start": 334,
+        "removed": 0,
+        "inserted": 10,
+        "delta": 10,
+        "manualTranslationsApplied": 10
+      }
     },
     {
       "id": "source-yuanshi-161-wikisource-297f9eec2566",
@@ -214630,5 +215306,5 @@
       "reviewer": "repair-source-queue-patterns"
     }
   ],
-  "updatedAt": "2026-06-30T21:47:01.651Z"
+  "updatedAt": "2026-07-01T02:07:41.332Z"
 }
