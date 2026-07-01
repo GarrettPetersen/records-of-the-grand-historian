@@ -365,6 +365,132 @@
             line-height: 1.35;
             opacity: 0.78;
         }
+
+        #loading {
+            min-height: 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            opacity: 0.72;
+        }
+
+        .loading-line {
+            margin: -0.5rem 0 1.5rem;
+            color: var(--text-color);
+            font-size: 0.9rem;
+            min-height: 1.4rem;
+            opacity: 0.72;
+            text-align: center;
+        }
+
+        .book-section {
+            transform-origin: center top;
+        }
+
+        .book-section.is-loading {
+            box-shadow: none;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            min-height: 11rem;
+            overflow: hidden;
+        }
+
+        .book-section.is-ready {
+            animation: bookArrive 360ms ease-out both;
+        }
+
+        .book-section.is-loading .book-header h2,
+        .book-section.is-loading .book-subtitle,
+        .book-section.is-loading .stat-item,
+        .book-section.is-loading .progress-square {
+            color: transparent;
+            background: linear-gradient(90deg, rgba(211, 211, 211, 0.5), rgba(255, 255, 255, 0.72), rgba(211, 211, 211, 0.5));
+            background-size: 220% 100%;
+            animation: placeholderShimmer 1.8s ease-in-out infinite;
+        }
+
+        .book-section.is-loading .book-header h2 {
+            width: min(18rem, 70%);
+            height: 2rem;
+            border-radius: 4px;
+        }
+
+        .book-section.is-loading .book-subtitle {
+            width: min(28rem, 86%);
+            height: 1rem;
+            border-radius: 4px;
+        }
+
+        .book-section.is-loading .stat-item {
+            width: 7.5rem;
+            height: 1rem;
+            border-radius: 4px;
+        }
+
+        .book-section.is-loading .progress-square {
+            cursor: default;
+            opacity: 0.75;
+        }
+
+        .book-section.is-loading .progress-square:hover {
+            transform: none;
+        }
+
+        .book-section.is-loading .progress-square:hover::before,
+        .book-section.is-loading .progress-square:hover::after {
+            display: none;
+        }
+
+        .progress-square.pop-in {
+            animation: squarePop 260ms ease-out both;
+            animation-delay: min(calc(var(--pop-index, 0) * 8ms), 180ms);
+        }
+
+        @keyframes placeholderShimmer {
+            0% {
+                background-position: 120% 0;
+            }
+            100% {
+                background-position: -120% 0;
+            }
+        }
+
+        @keyframes bookArrive {
+            0% {
+                opacity: 0;
+                transform: translateY(10px) scale(0.992);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes squarePop {
+            0% {
+                opacity: 0;
+                transform: scale(0.72);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .overall-progress-fill,
+            .repair-severity-fill,
+            .progress-square,
+            .book-section.is-ready,
+            .progress-square.pop-in,
+            .book-section.is-loading .book-header h2,
+            .book-section.is-loading .book-subtitle,
+            .book-section.is-loading .stat-item,
+            .book-section.is-loading .progress-square {
+                animation: none;
+                transition: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -433,6 +559,7 @@
                 </div>
             </div>
 
+            <div class="loading-line" id="books-loading-status" aria-live="polite"></div>
             <div id="books-container"></div>
         </div>
     </main>
@@ -492,44 +619,106 @@
             ...OTHER_WORKS_ORDER.map((bookId, index) => [bookId, CHRONOLOGICAL_ORDER.length + index])
         ]);
 
+        const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const metricAnimations = new WeakMap();
+        const numericValueCache = new Map();
+
+        function formatInteger(value) {
+            return Math.round(Number(value || 0)).toLocaleString();
+        }
+
+        function formatPercent(value) {
+            return `${Number(value || 0).toFixed(1)}%`;
+        }
+
+        function animateNumericText(element, value, formatter = formatInteger) {
+            if (!element) return;
+            const nextValue = Number(value || 0);
+            const countKey = element.dataset.countKey || element.id || '';
+            const cachedValue = countKey && numericValueCache.has(countKey) ? numericValueCache.get(countKey) : null;
+            const previousValue = Number(cachedValue ?? element.dataset.numericValue ?? 0);
+            element.dataset.numericValue = String(nextValue);
+            if (countKey) {
+                numericValueCache.set(countKey, nextValue);
+            }
+
+            if (REDUCED_MOTION || previousValue === nextValue) {
+                element.textContent = formatter(nextValue);
+                return;
+            }
+
+            const existingAnimation = metricAnimations.get(element);
+            if (existingAnimation) {
+                cancelAnimationFrame(existingAnimation);
+            }
+
+            const start = performance.now();
+            const duration = 520;
+            const easeOut = t => 1 - Math.pow(1 - t, 3);
+
+            const tick = now => {
+                const progress = Math.min(1, (now - start) / duration);
+                const current = previousValue + (nextValue - previousValue) * easeOut(progress);
+                element.textContent = formatter(current);
+                if (progress < 1) {
+                    metricAnimations.set(element, requestAnimationFrame(tick));
+                } else {
+                    element.textContent = formatter(nextValue);
+                    metricAnimations.delete(element);
+                }
+            };
+
+            metricAnimations.set(element, requestAnimationFrame(tick));
+        }
+
+        function metricHtml(label, value, note, suffix = '') {
+            return `
+                <div class="overall-metric-label">${label}</div>
+                <div class="overall-metric-value"><span class="js-count" data-value="${Number(value || 0)}"></span>${suffix}</div>
+                <div class="overall-metric-note">${note}</div>
+            `;
+        }
+
+        function animateMetricCounts(root = document) {
+            root.querySelectorAll('.js-count').forEach(element => {
+                animateNumericText(element, Number(element.dataset.value || 0));
+            });
+            root.querySelectorAll('.js-percent-count').forEach(element => {
+                animateNumericText(element, Number(element.dataset.value || 0), formatPercent);
+            });
+        }
+
+        function orderBookIds(bookIds) {
+            return [...bookIds].sort((a, b) => {
+                const aOrder = BOOK_ORDER.has(a) ? BOOK_ORDER.get(a) : Number.MAX_SAFE_INTEGER;
+                const bOrder = BOOK_ORDER.has(b) ? BOOK_ORDER.get(b) : Number.MAX_SAFE_INTEGER;
+                if (aOrder !== bOrder) return aOrder - bOrder;
+                return a.localeCompare(b);
+            });
+        }
+
         function orderedBookIds(data, category) {
-            return Object.keys(data.books)
+            return orderBookIds(Object.keys(data.books)
                 .filter(bookId => {
                     const book = data.books[bookId];
                     return (book.category || 'twentyFourHistories') === category;
-                })
-                .sort((a, b) => {
-                    const aOrder = BOOK_ORDER.has(a) ? BOOK_ORDER.get(a) : Number.MAX_SAFE_INTEGER;
-                    const bOrder = BOOK_ORDER.has(b) ? BOOK_ORDER.get(b) : Number.MAX_SAFE_INTEGER;
-                    if (aOrder !== bOrder) return aOrder - bOrder;
-                    return a.localeCompare(b);
-                });
+                }));
         }
 
-        async function loadProgressData() {
+        async function loadJson(url) {
+            const response = await fetch(`${url}?ts=${Date.now()}`, {
+                cache: 'no-store'
+            });
+            if (!response.ok) {
+                throw new Error(`Could not load ${url}: ${response.status}`);
+            }
+            return response.json();
+        }
+
+        async function loadProgressIndex() {
             try {
-                const response = await fetch(`data/progress.json?ts=${Date.now()}`, {
-                    cache: 'no-store'
-                });
-                const data = await response.json();
-                if (data.chunked && data.bookChunks) {
-                    const entries = Object.entries(data.bookChunks);
-                    const loadedEntries = await Promise.all(entries.map(async ([bookId, url]) => {
-                        const bookResponse = await fetch(`${url}?ts=${Date.now()}`, {
-                            cache: 'no-store'
-                        });
-                        if (!bookResponse.ok) {
-                            throw new Error(`Could not load progress chunk for ${bookId}: ${bookResponse.status}`);
-                        }
-                        const chunk = await bookResponse.json();
-                        return [bookId, chunk.book || chunk];
-                    }));
-                    const loadedBooks = {};
-                    loadedEntries.forEach(([bookId, book]) => {
-                        loadedBooks[bookId] = book;
-                    });
-                    data.books = loadedBooks;
-                }
+                const data = await loadJson('data/progress.json');
+                data.books = data.chunked && data.bookChunks ? {} : (data.books || {});
                 return data;
             } catch (error) {
                 console.error('Error loading progress data:', error);
@@ -538,9 +727,25 @@
             }
         }
 
+        async function loadManifestBooks() {
+            try {
+                const manifest = await loadJson('data/manifest.json');
+                return manifest.books || {};
+            } catch (error) {
+                console.warn('Progress placeholders will use fallback sizes:', error);
+                return {};
+            }
+        }
+
+        async function loadBookChunk(bookId, url) {
+            const chunk = await loadJson(url);
+            return [bookId, chunk.book || chunk];
+        }
+
         function createBookSection(bookId, bookData) {
             const section = document.createElement('div');
-            section.className = 'book-section';
+            section.className = 'book-section is-ready';
+            section.id = `book-progress-${bookId}`;
 
             const stats = {
                 gray: 0,
@@ -597,10 +802,11 @@
             const grid = document.createElement('div');
             grid.className = 'progress-grid';
 
-            bookData.chapters.forEach(chapter => {
+            bookData.chapters.forEach((chapter, index) => {
                 const square = document.createElement('div');
                 const status = effectiveChapterStatus(chapter);
-                square.className = `progress-square ${status}`;
+                square.className = `progress-square ${status}${REDUCED_MOTION ? '' : ' pop-in'}`;
+                square.style.setProperty('--pop-index', index % 32);
                 const reviewLine = chapter.reviewed ? 'Editorial review: done' : 'Editorial review: pending';
                 const lt = chapter.languageTool;
                 const repairLine = repairQueueTooltipLine(chapter.repairQueue);
@@ -634,6 +840,47 @@
             section.appendChild(header);
             section.appendChild(grid);
 
+            return section;
+        }
+
+        function createBookPlaceholder(bookId, manifestBook = {}) {
+            const section = document.createElement('div');
+            section.className = 'book-section is-loading';
+            section.id = `book-progress-${bookId}`;
+            section.setAttribute('aria-busy', 'true');
+
+            const chapterCount = Number(manifestBook.chapterCount || manifestBook.chapters?.length || 80);
+            const name = manifestBook.name || bookId;
+            const subtitleParts = [
+                manifestBook.chinese,
+                manifestBook.pinyin ? `(${manifestBook.pinyin})` : '',
+                manifestBook.dynasty ? `- ${manifestBook.dynasty}` : ''
+            ].filter(Boolean);
+
+            const header = document.createElement('div');
+            header.className = 'book-header';
+            header.innerHTML = `
+                <h2>${name}</h2>
+                <div class="book-subtitle">${subtitleParts.join(' ') || 'Loading'}</div>
+                <div class="progress-stats" aria-hidden="true">
+                    <div class="stat-item"></div>
+                    <div class="stat-item"></div>
+                    <div class="stat-item"></div>
+                    <div class="stat-item"></div>
+                    <div class="stat-item"></div>
+                </div>
+            `;
+
+            const grid = document.createElement('div');
+            grid.className = 'progress-grid';
+            for (let index = 0; index < chapterCount; index += 1) {
+                const square = document.createElement('div');
+                square.className = 'progress-square';
+                grid.appendChild(square);
+            }
+
+            section.appendChild(header);
+            section.appendChild(grid);
             return section;
         }
 
@@ -758,21 +1005,21 @@
             const averageScore = averageLanguageToolScore(chapters);
             const displayPercent = `${cleanPercent.toFixed(1)}%`;
 
-            document.getElementById('overall-progress-percent').textContent = displayPercent;
+            animateNumericText(document.getElementById('overall-progress-percent'), cleanPercent, formatPercent);
             document.getElementById('overall-progress-fill').style.width = displayPercent;
             document.getElementById('overall-progress-books').innerHTML = `
                 <div class="overall-metric-label">Clean Chapters</div>
-                <div class="overall-metric-value">${statusCounts.green.toLocaleString()} / ${chapterTotal.toLocaleString()} (${cleanPercent.toFixed(1)}%)</div>
+                <div class="overall-metric-value"><span class="js-count" data-count-key="overall-clean" data-value="${statusCounts.green}"></span> / <span class="js-count" data-count-key="overall-total" data-value="${chapterTotal}"></span> (${cleanPercent.toFixed(1)}%)</div>
                 <div class="overall-metric-note">Low LanguageTool issue density.</div>
             `;
             document.getElementById('overall-progress-chapters').innerHTML = `
                 <div class="overall-metric-label">Needs Review</div>
-                <div class="overall-metric-value">${(statusCounts.yellow + statusCounts.red).toLocaleString()}</div>
+                <div class="overall-metric-value"><span class="js-count" data-count-key="overall-needs-review" data-value="${statusCounts.yellow + statusCounts.red}"></span></div>
                 <div class="overall-metric-note">${statusCounts.yellow.toLocaleString()} moderate and ${statusCounts.red.toLocaleString()} high-priority chapters.</div>
             `;
             document.getElementById('overall-progress-sentences').innerHTML = `
                 <div class="overall-metric-label">Checked</div>
-                <div class="overall-metric-value">${statusCounts.checked.toLocaleString()} / ${chapterTotal.toLocaleString()} (${checkedPercent.toFixed(1)}%)</div>
+                <div class="overall-metric-value"><span class="js-count" data-count-key="overall-checked" data-value="${statusCounts.checked}"></span> / <span class="js-count" data-count-key="overall-checked-total" data-value="${chapterTotal}"></span> (${checkedPercent.toFixed(1)}%)</div>
                 <div class="overall-metric-note">Chapters scored by LanguageTool.</div>
             `;
             document.getElementById('overall-progress-characters').innerHTML = `
@@ -799,6 +1046,7 @@
                     <div class="overall-metric-note">Run LanguageTool scoring to populate cleanup status.</div>
                 `;
             }
+            animateMetricCounts(document.querySelector('.overall-progress-card'));
         }
 
         function renderRepairQueueProgress(data) {
@@ -821,34 +1069,35 @@
                 ? new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(newestDate)
                 : 'Unavailable';
 
-            document.getElementById('repair-progress-percent').textContent = displayPercent;
+            animateNumericText(document.getElementById('repair-progress-percent'), percent, formatPercent);
             document.getElementById('repair-progress-fill').style.width = displayPercent;
             document.getElementById('repair-progress-completed').innerHTML = `
                 <div class="overall-metric-label">Worked Through</div>
-                <div class="overall-metric-value">${completed.toLocaleString()} / ${total.toLocaleString()} (${displayPercent})</div>
+                <div class="overall-metric-value"><span class="js-count" data-count-key="repair-completed" data-value="${completed}"></span> / <span class="js-count" data-count-key="repair-total" data-value="${total}"></span> (${displayPercent})</div>
                 <div class="overall-metric-note">Applied repairs plus rejected candidates.</div>
             `;
             document.getElementById('repair-progress-applied').innerHTML = `
                 <div class="overall-metric-label">Applied</div>
-                <div class="overall-metric-value">${applied.toLocaleString()}</div>
+                <div class="overall-metric-value"><span class="js-count" data-count-key="repair-applied" data-value="${applied}"></span></div>
                 <div class="overall-metric-note">Approved and included in the source data.</div>
             `;
             document.getElementById('repair-progress-rejected').innerHTML = `
                 <div class="overall-metric-label">Rejected</div>
-                <div class="overall-metric-value">${rejected.toLocaleString()}</div>
+                <div class="overall-metric-value"><span class="js-count" data-count-key="repair-rejected" data-value="${rejected}"></span></div>
                 <div class="overall-metric-note">Reviewed and marked as not a source repair.</div>
             `;
             document.getElementById('repair-progress-pending').innerHTML = `
                 <div class="overall-metric-label">Pending</div>
-                <div class="overall-metric-value">${pending.toLocaleString()}</div>
+                <div class="overall-metric-value"><span class="js-count" data-count-key="repair-pending" data-value="${pending}"></span></div>
                 <div class="overall-metric-note">${approved.toLocaleString()} approved but not yet included.</div>
             `;
             document.getElementById('repair-progress-sources').innerHTML = `
                 <div class="overall-metric-label">Queue Sources</div>
-                <div class="overall-metric-value">${activeSources.length.toLocaleString()}</div>
+                <div class="overall-metric-value"><span class="js-count" data-count-key="repair-sources" data-value="${activeSources.length}"></span></div>
                 <div class="overall-metric-note">Last queue scan: ${formattedDate}.</div>
             `;
             renderRepairSeverityProgress(queue);
+            animateMetricCounts(document.getElementById('repair-progress-heading').closest('.overall-progress-card'));
         }
 
         function repairSeverityMeta(severity) {
@@ -903,15 +1152,15 @@
                     <div class="repair-severity-card">
                         <div class="repair-severity-header">
                             <div class="repair-severity-label">${meta.label}</div>
-                            <div class="repair-severity-percent">${displayPercent}</div>
+                            <div class="repair-severity-percent"><span class="js-percent-count" data-count-key="repair-severity-${severity}-percent" data-value="${percent}"></span></div>
                         </div>
                         <div class="repair-severity-track" aria-label="${meta.label} repair progress">
                             <div class="repair-severity-fill ${meta.className}" style="width: ${displayPercent};"></div>
                         </div>
                         <div class="repair-severity-note">
-                            ${completed.toLocaleString()} / ${total.toLocaleString()} worked through;
-                            ${pending.toLocaleString()} pending.
-                            Applied ${applied.toLocaleString()}, rejected ${rejected.toLocaleString()}, approved not included ${approved.toLocaleString()}.
+                            <span class="js-count" data-count-key="repair-severity-${severity}-completed" data-value="${completed}"></span> / <span class="js-count" data-count-key="repair-severity-${severity}-total" data-value="${total}"></span> worked through;
+                            <span class="js-count" data-count-key="repair-severity-${severity}-pending" data-value="${pending}"></span> pending.
+                            Applied <span class="js-count" data-count-key="repair-severity-${severity}-applied" data-value="${applied}"></span>, rejected <span class="js-count" data-count-key="repair-severity-${severity}-rejected" data-value="${rejected}"></span>, approved not included <span class="js-count" data-count-key="repair-severity-${severity}-approved" data-value="${approved}"></span>.
                             ${meta.note}
                         </div>
                     </div>
@@ -924,8 +1173,95 @@
             return `${label}: ${translated.toLocaleString()} / ${total.toLocaleString()} (${pct}%)`;
         }
 
+        function categoryForBook(bookId, manifestBooks = {}) {
+            return manifestBooks[bookId]?.category || (OTHER_WORKS_ORDER.includes(bookId) ? 'otherWorks' : 'twentyFourHistories');
+        }
+
+        function orderedBookChunkEntries(data, category, manifestBooks = {}) {
+            return orderBookIds(Object.keys(data.bookChunks || {})
+                .filter(bookId => categoryForBook(bookId, manifestBooks) === category))
+                .map(bookId => [bookId, data.bookChunks[bookId]]);
+        }
+
+        function renderBookPlaceholders(container, data, manifestBooks = {}) {
+            container.innerHTML = '';
+            const groups = [
+                ['twentyFourHistories', 'Twenty-Four Histories'],
+                ['otherWorks', 'Other Works']
+            ];
+
+            groups.forEach(([category, label]) => {
+                const entries = data.chunked && data.bookChunks
+                    ? orderedBookChunkEntries(data, category, manifestBooks)
+                    : orderedBookIds(data, category).map(bookId => [bookId, null]);
+
+                if (entries.length === 0) return;
+
+                const heading = document.createElement('h2');
+                heading.className = 'progress-group-heading';
+                heading.textContent = label;
+                container.appendChild(heading);
+
+                entries.forEach(([bookId]) => {
+                    container.appendChild(createBookPlaceholder(bookId, manifestBooks[bookId]));
+                });
+            });
+        }
+
+        function updateBooksLoadingStatus(loaded, total, failed = 0) {
+            const status = document.getElementById('books-loading-status');
+            if (!status) return;
+            if (total === 0 || loaded >= total) {
+                status.textContent = failed > 0
+                    ? `${loaded.toLocaleString()} books loaded; ${failed.toLocaleString()} could not be loaded.`
+                    : '';
+                return;
+            }
+            const suffix = failed > 0 ? `; ${failed.toLocaleString()} failed` : '';
+            status.textContent = `${loaded.toLocaleString()} / ${total.toLocaleString()} books loaded${suffix}`;
+        }
+
+        function replaceBookPlaceholder(bookId, bookSection) {
+            const existing = document.getElementById(`book-progress-${bookId}`);
+            if (existing) {
+                existing.replaceWith(bookSection);
+            }
+        }
+
+        async function hydrateBookChunks(data, manifestBooks = {}) {
+            if (!data.chunked || !data.bookChunks) return;
+
+            const entries = orderBookIds(Object.keys(data.bookChunks)).map(bookId => [bookId, data.bookChunks[bookId]]);
+            let loaded = 0;
+            let failed = 0;
+            updateBooksLoadingStatus(loaded, entries.length);
+
+            await Promise.allSettled(entries.map(async ([bookId, url]) => {
+                try {
+                    const [, book] = await loadBookChunk(bookId, url);
+                    data.books[bookId] = book;
+                    loaded += 1;
+                    replaceBookPlaceholder(bookId, createBookSection(bookId, book));
+                    renderOverallProgress(data);
+                    updateBooksLoadingStatus(loaded, entries.length, failed);
+                } catch (error) {
+                    failed += 1;
+                    console.error(`Error loading ${bookId} progress chunk:`, error);
+                    const placeholder = document.getElementById(`book-progress-${bookId}`);
+                    if (placeholder) {
+                        placeholder.setAttribute('aria-busy', 'false');
+                        placeholder.querySelector('.book-subtitle').textContent = 'Could not load this book';
+                    }
+                    updateBooksLoadingStatus(loaded, entries.length, failed);
+                }
+            }));
+        }
+
         async function init() {
-            const data = await loadProgressData();
+            const [data, manifestBooks] = await Promise.all([
+                loadProgressIndex(),
+                loadManifestBooks()
+            ]);
             if (!data) return;
 
             const loading = document.getElementById('loading');
@@ -939,31 +1275,20 @@
 
             renderOverallProgress(data);
             renderRepairQueueProgress(data);
-
-            const groups = [
-                ['twentyFourHistories', 'Twenty-Four Histories'],
-                ['otherWorks', 'Other Works']
-            ];
-
-            groups.forEach(([category, label]) => {
-                const bookIds = orderedBookIds(data, category);
-
-                if (bookIds.length === 0) return;
-
-                const heading = document.createElement('h2');
-                heading.className = 'progress-group-heading';
-                heading.textContent = label;
-                container.appendChild(heading);
-
-                bookIds.forEach(bookId => {
-                    const bookSection = createBookSection(bookId, data.books[bookId]);
-                    container.appendChild(bookSection);
-                });
-            });
+            renderBookPlaceholders(container, data, manifestBooks);
 
             // Show content
             loading.style.display = 'none';
             content.style.display = 'block';
+
+            if (data.chunked && data.bookChunks) {
+                hydrateBookChunks(data, manifestBooks);
+            } else {
+                Object.entries(data.books || {}).forEach(([bookId, book]) => {
+                    replaceBookPlaceholder(bookId, createBookSection(bookId, book));
+                });
+                renderOverallProgress(data);
+            }
         }
 
         init();

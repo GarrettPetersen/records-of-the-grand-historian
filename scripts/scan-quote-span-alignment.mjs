@@ -190,11 +190,20 @@ function countEnglishQuoteMarks(text) {
   return getEnglishQuoteTokens(String(text || '')).length;
 }
 
+function isChineseContinuationOpen(text, index, char, state) {
+  if (state.stack[state.stack.length - 1] !== char) return false;
+  const prefix = String(text || '').slice(0, index).trim();
+  if (!prefix) return true;
+  return /^(?:\[\d+\]|\(\d+\)|[（(][一二三四五六七八九十百]+[）)])\s*$/u.test(prefix);
+}
+
 function validateChineseQuotes(text, state) {
   const problems = [];
   const zh = String(text || '');
-  for (const char of zh) {
+  for (let index = 0; index < zh.length; index += 1) {
+    const char = zh[index];
     if (CHINESE_OPEN_QUOTES.has(char)) {
+      if (isChineseContinuationOpen(zh, index, char, state)) continue;
       state.stack.push(char);
       continue;
     }
@@ -268,7 +277,7 @@ function preservesTrailingInnerQuote(zh, en, quote) {
 
 function isQuotedGlossHeadword(english) {
   const text = String(english || '').trim();
-  return /^["“'][^"“”']{1,80}["”'](?:\s*\([^)]{1,40}\))?\s*(?:[-—]\s*)?(?:(?:again|also|here|this)\s+)?(?:(?:this|the)\s+(?:character|phrase|line|passage|principle|term)\s+)?(?:means?|signif(?:y|ies)|denotes?|describes?|gloss(?:es|ed)?|images?|symbolizes?|implies?|governs?|omits?|writes?|says?|is|are|was|were|names?|equals?|refers? to|stands? for|pointed to|rewarded)\b/i.test(text)
+  return /^["“'][^"“”']{1,80}["”'](?:\s*\([^)]{1,40}\))?\s*(?:[-—]\s*)?(?:(?:again|also|here|this)\s+)?(?:(?:this|the)\s+(?:character|phrase|line|passage|principle|term)\s+)?(?:means?|meant|signif(?:y|ies)|denotes?|describes?|gloss(?:es|ed)?|images?|symbolizes?|implies?|governs?|omits?|writes?|says?|is|are|was|were|names?|equals?|refers? to|stands? for|pointed to|rewarded)\b/i.test(text)
     || /^["“'][^"“”']{1,40}["”'](?:\s*,?\s*(?:and|or)\s*["“'][^"“”']{1,40}["”'])+\s+(?:refer|refers|mean|means|denote|denotes)\b/i.test(text)
     || /^["“'][^"“”']{1,80}["”']\s+refers(?:\s+\w+)?\s+to\b/i.test(text)
     || /^["“'][^"“”']{1,80}["”']\s*[-—]\s+(?:I|we|your servant|this servant|the minister|the court)\b/i.test(text);
@@ -366,6 +375,15 @@ function idiomaticText(item) {
     '';
 }
 
+function hasQuoteSpanException(item) {
+  return item?.allowUnclosedQuoteSpan === true || item?.quoteSpanException === true ||
+    (item?.quoteSpanException && typeof item.quoteSpanException === 'object');
+}
+
+function stripQuoteSpanExceptionMarks(text) {
+  return String(text || '').replace(/[「『“‘」』”’]/gu, '');
+}
+
 function scanSequence(items, file, blockIndex, quoteState, englishState) {
   const problems = [];
 
@@ -374,10 +392,11 @@ function scanSequence(items, file, blockIndex, quoteState, englishState) {
     const nextItem = items[index + 1];
     const chinese = item.content || item.zh || '';
     const nextChinese = nextItem ? (nextItem.content || nextItem.zh || '') : '';
+    const quoteChinese = hasQuoteSpanException(item) ? stripQuoteSpanExceptionMarks(chinese) : chinese;
     const english = idiomaticText(item);
     const beforeDepth = quoteState.stack.length;
     const englishBeforeDepth = englishState.depth;
-    const chineseQuoteBalanceProblems = validateChineseQuotes(chinese, quoteState);
+    const chineseQuoteBalanceProblems = validateChineseQuotes(quoteChinese, quoteState);
     if (chineseQuoteBalanceProblems.length > 0) {
       problems.push({
         file,
@@ -389,8 +408,8 @@ function scanSequence(items, file, blockIndex, quoteState, englishState) {
       });
     }
 
-    const openCount = countSubstr(chinese, '「') + countSubstr(chinese, '『') + countSubstr(chinese, '“') + countSubstr(chinese, '‘');
-    const closeCount = countSubstr(chinese, '」') + countSubstr(chinese, '』') + countSubstr(chinese, '”') + countSubstr(chinese, '’');
+    const openCount = countSubstr(quoteChinese, '「') + countSubstr(quoteChinese, '『') + countSubstr(quoteChinese, '“') + countSubstr(quoteChinese, '‘');
+    const closeCount = countSubstr(quoteChinese, '」') + countSubstr(quoteChinese, '』') + countSubstr(quoteChinese, '”') + countSubstr(quoteChinese, '’');
     const afterDepth = quoteState.stack.length;
     const inChineseQuoteSpan = beforeDepth > 0 || afterDepth > 0 || openCount > 0 || closeCount > 0;
     const englishOrderProblems = scanEnglishQuoteOrderErrors(english, englishState);
@@ -432,8 +451,8 @@ function scanSequence(items, file, blockIndex, quoteState, englishState) {
       });
     }
 
-    const innerOpenCount = countSubstr(chinese, '『');
-    const innerCloseCount = countSubstr(chinese, '』');
+    const innerOpenCount = countSubstr(quoteChinese, '『');
+    const innerCloseCount = countSubstr(quoteChinese, '』');
     const boundaryProblems = quoteBoundaryProblems(
       chinese,
       english,
