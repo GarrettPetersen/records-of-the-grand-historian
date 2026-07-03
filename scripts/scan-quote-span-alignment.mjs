@@ -66,7 +66,12 @@ function getEnglishQuoteTokens(text) {
     const ch = text[i];
     if (!['"', '“', '”', "'", '‘', '’'].includes(ch)) continue;
 
-    if ((ch === '"' || ch === "'" || ch === '’') && isNumericPrimeMark(text, i)) {
+    if (ch === '"' && isNumericPrimeMark(text, i)) {
+      const priorNeutralQuotes = (text.slice(0, i).match(/"/g) || []).length;
+      if (priorNeutralQuotes % 2 === 0) continue;
+    }
+
+    if ((ch === "'" || ch === '’') && isNumericPrimeMark(text, i)) {
       continue;
     }
 
@@ -123,6 +128,9 @@ function getEnglishQuoteTokens(text) {
       } else {
         const prev = text[i - 1] || '';
         const next = text[i + 1] || '';
+        if ((prev === '"' || prev === '”') && (next === '"' || next === '”' || isWhitespaceOrEnd(next) || isQuoteBoundaryChar(next))) {
+          tokens.push({ index: i, char: ch, type: 'close' });
+        } else
         if (isWhitespaceOrEnd(prev) || /^[:：;\[({<〈—–-“‘'"]/.test(prev)) {
           singleQuoteDepth += 1;
           tokens.push({ index: i, char: ch, type: 'open' });
@@ -384,6 +392,10 @@ function stripQuoteSpanExceptionMarks(text) {
   return String(text || '').replace(/[「『“‘」』”’]/gu, '');
 }
 
+function stripQuoteMarksAndWhitespace(text) {
+  return String(text || '').replace(/[「『“‘」』”’"'‘’\s]/gu, '');
+}
+
 function scanSequence(items, file, blockIndex, quoteState, englishState) {
   const problems = [];
 
@@ -440,7 +452,26 @@ function scanSequence(items, file, blockIndex, quoteState, englishState) {
 
     if (!inChineseQuoteSpan || !english) continue;
 
-    if (beforeDepth === afterDepth && beforeDepth === 0 && (openCount > 0 || closeCount > 0) && englishBeforeDepth !== englishAfterDepth) {
+    if (
+      closeCount > 0 &&
+      openCount === 0 &&
+      englishAfterDepth < englishBeforeDepth &&
+      stripQuoteMarksAndWhitespace(quoteChinese) === '' &&
+      stripQuoteMarksAndWhitespace(english) === ''
+    ) {
+      continue;
+    }
+
+    if (
+      beforeDepth > afterDepth &&
+      englishBeforeDepth > englishAfterDepth &&
+      stripQuoteMarksAndWhitespace(quoteChinese) === '' &&
+      stripQuoteMarksAndWhitespace(english) === ''
+    ) {
+      continue;
+    }
+
+    if (beforeDepth === afterDepth && beforeDepth === 0 && openCount > 0 && closeCount > 0 && englishBeforeDepth !== englishAfterDepth) {
       problems.push({
         file,
         blockIndex,

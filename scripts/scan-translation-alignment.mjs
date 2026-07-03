@@ -500,21 +500,10 @@ function cacheConfig(opts) {
 }
 
 function chapterFingerprint(file, opts) {
-  let chapter;
-  try {
-    chapter = JSON.parse(fs.readFileSync(file, 'utf8'));
-  } catch (error) {
-    throw new Error(`Could not parse ${file} while fingerprinting chapter: ${error.message}`);
-  }
-  const records = sentenceRecords(chapter).map((record) => ({
-    id: record.id,
-    zh: record.zh,
-    english: record.english,
-    supportEnglish: record.supportEnglish,
-  }));
+  const chapterHash = sha256(fs.readFileSync(file));
   return sha256(JSON.stringify(stableJson({
     config: cacheConfig(opts),
-    records,
+    chapterHash,
   })));
 }
 

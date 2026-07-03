@@ -1709,6 +1709,15 @@ function isNarrowChineseException(text, reason) {
   if (/(?:title|tune|hymn|aria|melody|song)/u.test(normalizedReason) && /《[^》]*[\u4e00-\u9fff][^》]*》/u.test(String(text || ''))) {
     return true;
   }
+  if (/(?:proper[-\s]?name|personal[-\s]?name|office[-\s]?table|table[-\s]?cell)/u.test(normalizedReason)) {
+    const value = String(text || '');
+    if (/(?:Officeholder|officeholder|Minister|Vice Minister|Censor|General|Grand Secretary|served|transferred|appointed|relieved|removed|died|declined|did not take|concurrently|granted leave|went on|mourning)[^。]*[\u4e00-\u9fff]/u.test(value)) {
+      return true;
+    }
+    if (/[\u4e00-\u9fff]{2,}(?:[、，][\u4e00-\u9fff]{2,})*[:：]/u.test(value)) {
+      return true;
+    }
+  }
   if (!/(?:character|written[-\s]?form|graph|glyph|philological|orthograph|source[-\s]?character)/u.test(normalizedReason)) {
     return false;
   }
