@@ -2910,14 +2910,15 @@
         "afterLocal": "是日，太白襲月。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": "rejected",
-      "notes": "Reviewed as Wikisource modern-year no-op: upstream inserts Gregorian conversion years not present in the classical source; local corpus retained.",
+      "decision": "denied",
+      "notes": "Rejected Wikisource YL template-expanded year; local Chinese keeps source prose without injected Arabic year, English carries the date.",
       "reviewedAt": "2026-06-26T06:52:15.175Z",
-      "reviewedBy": "resolve-wikisource-gregorian-year-noops"
+      "reviewedBy": "resolve-wikisource-gregorian-year-noops",
+      "reviewer": "manual-repair"
     },
     {
       "id": "source-jinshu-001-wikisource-3e3e12512852",
-      "status": "pending",
+      "status": "reviewed",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jinshu",
@@ -2941,8 +2942,10 @@
         "afterLocal": "及孫權圍江夏，遣其將諸葛瑾、張霸并攻襄陽，帝督諸軍討權，走之。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied manually in data/jinshu/001.json with stable inserted sentence IDs and corresponding English translations.",
+      "reviewedAt": "2026-07-02T14:26:32.885Z",
+      "reviewer": "manual-repair"
     },
     {
       "id": "source-jinshu-001-wikisource-4843850e2562",
@@ -3048,7 +3051,7 @@
     },
     {
       "id": "source-jinshu-001-wikisource-826176530742",
-      "status": "pending",
+      "status": "applied",
       "type": "source_replacement_candidate",
       "severity": 2,
       "similarity": 0.692,
@@ -3091,8 +3094,10 @@
         "afterLocal": "二年，亮又率眾十餘萬出斜谷，壘于郿之渭水南原。"
       },
       "recommendation": "Local and external text diverge between the same anchors. Inspect as a possible scrape skip, duplicate, or edition mismatch.",
-      "decision": null,
-      "notes": ""
+      "decision": "applied",
+      "notes": "Accepted upstream source date 青龍元年 for s0527 and updated the English translation.",
+      "reviewedAt": "2026-07-02T14:26:32.885Z",
+      "reviewer": "manual-repair"
     },
     {
       "id": "source-jinshu-001-wikisource-88ca6b4592d1",
@@ -3252,7 +3257,7 @@
     },
     {
       "id": "source-jinshu-001-wikisource-c6c57c0046ee",
-      "status": "pending",
+      "status": "reviewed",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.179,
@@ -3295,12 +3300,14 @@
         "afterLocal": "天子歸美宰輔，又增帝封邑。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied manually in data/jinshu/001.json with stable inserted sentence IDs and corresponding English translations.",
+      "reviewedAt": "2026-07-02T14:26:32.885Z",
+      "reviewer": "manual-repair"
     },
     {
       "id": "source-jinshu-001-wikisource-ca7e84791b50",
-      "status": "pending",
+      "status": "reviewed",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jinshu",
@@ -3324,8 +3331,10 @@
         "afterLocal": "黃初二年，督軍官罷，遷侍中、尚書右僕射。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied manually in data/jinshu/001.json with stable inserted sentence IDs and corresponding English translations.",
+      "reviewedAt": "2026-07-02T14:26:32.885Z",
+      "reviewer": "manual-repair"
     },
     {
       "id": "source-jinshu-001-wikisource-d538cfd03264",
@@ -3372,10 +3381,11 @@
         "afterLocal": "初，蜀將孟達之降也，魏朝遇之甚厚。"
       },
       "recommendation": "Local and external source text are similar but not identical. Usually this is an edition/variant issue; approve only if the local source should be changed.",
-      "decision": "rejected",
-      "notes": "Reviewed as Wikisource modern-year no-op: upstream inserts Gregorian conversion years not present in the classical source; local corpus retained.",
+      "decision": "denied",
+      "notes": "Rejected Wikisource YL template-expanded year; local Chinese keeps source prose without injected Arabic year, English carries the date.",
       "reviewedAt": "2026-06-26T06:52:15.175Z",
-      "reviewedBy": "resolve-wikisource-gregorian-year-noops"
+      "reviewedBy": "resolve-wikisource-gregorian-year-noops",
+      "reviewer": "manual-repair"
     },
     {
       "id": "source-jinshu-001-wikisource-d5980ca62de2",
@@ -3432,7 +3442,7 @@
     },
     {
       "id": "source-jinshu-001-wikisource-de9da269b925",
-      "status": "pending",
+      "status": "denied",
       "type": "local_extra_candidate",
       "severity": 3,
       "book": "jinshu",
@@ -3818,8 +3828,10 @@
         "afterLocal": ""
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
-      "decision": null,
-      "notes": ""
+      "decision": "denied",
+      "notes": "Reviewed as no-op: local extra is ChineseNotes-style textual apparatus retained as a local note block, not a missing-text repair.",
+      "reviewedAt": "2026-07-02T14:26:32.885Z",
+      "reviewer": "manual-repair"
     },
     {
       "id": "source-jinshu-001-wikisource-f4d42ab4badc",
@@ -12979,7 +12991,7 @@
     },
     {
       "id": "source-jinshu-009-wikisource-5fa028172f35",
-      "status": "pending",
+      "status": "included",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jinshu",
@@ -13003,8 +13015,8 @@
         "afterLocal": "九月，呂光據姑臧，自稱涼州刺史。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied manually in data/jinshu/009.json with translated inserted source text; quote spans, concrete fuzzy hits, and the Shenshou Gate date discrepancy were repaired. Remaining live source differences are Wikisource year-template expansions, local headings, or the rejected 新葵王晁 glyph error."
     },
     {
       "id": "source-jinshu-009-wikisource-69f75171cfab",
@@ -13161,7 +13173,7 @@
     },
     {
       "id": "source-jinshu-009-wikisource-8592b0ed5898",
-      "status": "pending",
+      "status": "included",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jinshu",
@@ -13185,8 +13197,8 @@
         "afterLocal": "十二月，苻堅將呂光稱制于河右，自號酒泉公。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied manually in data/jinshu/009.json with translated inserted source text; quote spans, concrete fuzzy hits, and the Shenshou Gate date discrepancy were repaired. Remaining live source differences are Wikisource year-template expansions, local headings, or the rejected 新葵王晁 glyph error."
     },
     {
       "id": "source-jinshu-009-wikisource-85a607cb7be9",
@@ -13341,7 +13353,7 @@
     },
     {
       "id": "source-jinshu-009-wikisource-97e224f0bbe7",
-      "status": "pending",
+      "status": "included",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.202,
@@ -13384,12 +13396,12 @@
         "afterLocal": "十四年春正月癸亥，詔淮南所獲俘虜付諸作部者一皆散遣，男女自相配匹，賜百日廩，其沿線爲軍賞者悉贖出之，以襄陽、淮南饒沃地各立一縣以居之。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied manually in data/jinshu/009.json with translated inserted source text; quote spans, concrete fuzzy hits, and the Shenshou Gate date discrepancy were repaired. Remaining live source differences are Wikisource year-template expansions, local headings, or the rejected 新葵王晁 glyph error."
     },
     {
       "id": "source-jinshu-009-wikisource-9a1f6544c788",
-      "status": "pending",
+      "status": "included",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jinshu",
@@ -13413,8 +13425,8 @@
         "afterLocal": "戊午，詔曰：「王室多故，穆哀早世，皇胤夙遷，神器無主。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Applied manually in data/jinshu/009.json with translated inserted source text; quote spans, concrete fuzzy hits, and the Shenshou Gate date discrepancy were repaired. Remaining live source differences are Wikisource year-template expansions, local headings, or the rejected 新葵王晁 glyph error."
     },
     {
       "id": "source-jinshu-009-wikisource-d85a8510024c",
@@ -30642,7 +30654,7 @@
     },
     {
       "id": "source-jinshu-020-wikisource-c2cbe2bbfccb",
-      "status": "pending",
+      "status": "included",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.009,
@@ -30685,8 +30697,8 @@
         "afterLocal": "於是太子遂以厭降之議，從國制除衰麻，諒闇終制。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Expanded s0159 into the full Du Yu ritual memorial with translated inserted rows; accepted missing reign-year/date source qualifiers in this chapter; final live Wikisource scan reports zero source items."
     },
     {
       "id": "source-jinshu-020-wikisource-c45fb621b50b",
@@ -31082,7 +31094,7 @@
     },
     {
       "id": "source-jinshu-021-wikisource-2390f10666ff",
-      "status": "pending",
+      "status": "included",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jinshu",
@@ -31106,8 +31118,8 @@
         "afterLocal": "漢儀，季春上巳，官及百姓皆禊于東流水上，洗濯祓除去宿垢。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Inserted missing ritual-history source text in data/jinshu/021.json with corresponding English translations; accepted source graph repairs 藩 and 貙. Remaining live source differences are local heading or edition-style 后/後."
     },
     {
       "id": "source-jinshu-021-wikisource-28d33f400a90",
@@ -31315,7 +31327,7 @@
     },
     {
       "id": "source-jinshu-021-wikisource-443711f7eb21",
-      "status": "pending",
+      "status": "included",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jinshu",
@@ -31339,8 +31351,8 @@
         "afterLocal": "漢魏故事，遣將出征，符節郎授節鉞於朝堂。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Inserted missing ritual-history source text in data/jinshu/021.json with corresponding English translations; accepted source graph repairs 藩 and 貙. Remaining live source differences are local heading or edition-style 后/後."
     },
     {
       "id": "source-jinshu-021-wikisource-474cb3fb6a69",
@@ -31699,7 +31711,7 @@
     },
     {
       "id": "source-jinshu-021-wikisource-812f691af2d5",
-      "status": "pending",
+      "status": "included",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jinshu",
@@ -31723,8 +31735,8 @@
         "afterLocal": "及武帝泰始四年，詔刺史二千石長吏曰：「古之王者，以歲時巡狩方嶽，其次則二伯述職，不然則行人順省。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "included",
+      "notes": "Inserted missing ritual-history source text in data/jinshu/021.json with corresponding English translations; accepted source graph repairs 藩 and 貙. Remaining live source differences are local heading or edition-style 后/後."
     },
     {
       "id": "source-jinshu-021-wikisource-9dd6a29073cd",
@@ -61255,7 +61267,7 @@
     },
     {
       "id": "source-jinshu-030-wikisource-ac49fd326d9c",
-      "status": "pending",
+      "status": "approved",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jinshu",
@@ -61279,8 +61291,11 @@
         "afterLocal": "至章帝時，尚書陳寵上疏曰：「先王之政，賞不僭，刑不濫，與其不得已，寧僭不濫。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Restored the nine omitted Wang Tong and Emperor Ming legal-history sentences after Jinshu 030 s0067, added manual English translations, and repaired adjacent quote/fuzzy issues. Live Wikisource correspondence now reports no items for jinshu/030.",
+      "reviewedAt": "2026-07-02T14:58:24.805Z",
+      "reviewer": "GPT-5 Codex",
+      "retainedAfterRescan": false
     },
     {
       "id": "source-jinshu-030-wikisource-b0b10e6aa88f",
@@ -67173,9 +67188,10 @@
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
       "decision": "denied",
-      "notes": "Reviewed as no-op: local chapter-start heading \"陳騫\" is retained; upstream witness begins with the following body text.",
-      "reviewedAt": "2026-06-22T08:24:39.524Z",
-      "reviewer": "repair-source-queue-patterns"
+      "notes": "Reviewed as deliberate local biography heading 陳騫, not source-body text to remove.",
+      "reviewedAt": "2026-07-02T15:07:17.652Z",
+      "reviewer": "GPT-5 Codex",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-jinshu-035-wikisource-61a17a49adcb",
@@ -67215,9 +67231,10 @@
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
       "decision": "denied",
-      "notes": "Reviewed as no-op: local structural section heading \"秀從弟楷\" is retained; upstream witness omits standalone headings while surrounding body anchors match.",
-      "reviewedAt": "2026-06-24T15:00:49.927Z",
-      "reviewer": "repair-source-queue-patterns"
+      "notes": "Reviewed as deliberate local subsection heading 秀從弟楷, not source-body text to remove.",
+      "reviewedAt": "2026-07-02T15:07:17.652Z",
+      "reviewer": "GPT-5 Codex",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-jinshu-035-wikisource-728aca0e70e9",
@@ -67257,13 +67274,14 @@
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
       "decision": "denied",
-      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
-      "reviewedAt": "2026-06-23T18:01:35.882Z",
-      "reviewer": "triage-repair-queue"
+      "notes": "Reviewed as deliberate local section heading 史評, not source-body text to remove.",
+      "reviewedAt": "2026-07-02T15:07:17.652Z",
+      "reviewer": "GPT-5 Codex",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-jinshu-035-wikisource-819fd0ee2fc9",
-      "status": "pending",
+      "status": "approved",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.027,
@@ -67306,8 +67324,11 @@
         "afterLocal": "王衍之徒攻難交至，並莫能屈。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Restored the omitted Chongyou lun passage after s0201 with 81 inserted translated rows plus the expanded opening sentence. Live Wikisource scan no longer reports this severe omission.",
+      "retainedAfterRescan": false,
+      "reviewedAt": "2026-07-02T15:07:17.652Z",
+      "reviewer": "GPT-5 Codex"
     },
     {
       "id": "source-jinshu-035-wikisource-8427355f1b85",
@@ -67347,9 +67368,10 @@
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
       "decision": "denied",
-      "notes": "Reviewed as no-op: local structural section heading \"子輿\" is retained; upstream witness omits standalone headings while surrounding body anchors match.",
-      "reviewedAt": "2026-06-24T15:00:49.927Z",
-      "reviewer": "repair-source-queue-patterns"
+      "notes": "Reviewed as deliberate local subsection heading 子輿, not source-body text to remove.",
+      "reviewedAt": "2026-07-02T15:07:17.652Z",
+      "reviewer": "GPT-5 Codex",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-jinshu-035-wikisource-942aa0ef75d3",
@@ -67389,9 +67411,10 @@
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
       "decision": "denied",
-      "notes": "Reviewed as no-op: local structural section heading \"楷子憲\" is retained; upstream witness omits standalone headings while surrounding body anchors match.",
-      "reviewedAt": "2026-06-24T15:00:49.927Z",
-      "reviewer": "repair-source-queue-patterns"
+      "notes": "Reviewed as deliberate local subsection heading 楷子憲, not source-body text to remove.",
+      "reviewedAt": "2026-07-02T15:07:17.652Z",
+      "reviewer": "GPT-5 Codex",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-jinshu-035-wikisource-bbb52700c828",
@@ -67451,7 +67474,7 @@
     },
     {
       "id": "source-jinshu-035-wikisource-cacf21381900",
-      "status": "applied",
+      "status": "denied",
       "type": "source_omission_candidate",
       "severity": 2,
       "book": "jinshu",
@@ -67475,19 +67498,21 @@
         "afterLocal": "時以陳准子匡、韓蔚子嵩並侍東宮，頠諫曰：「東宮之建，以儲皇極。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": "applied",
-      "notes": "Reviewed as already repaired: live corpus already contains the upstream source text between the recorded anchors.",
-      "reviewer": "close-stale-source-correspondence-items",
+      "decision": "denied",
+      "notes": "Reviewed as a scanner segmentation false positive: local s0193 already closes the quote and local s0194 already contains 表上，皆優詔敦譬。 No source text is missing.",
+      "reviewer": "GPT-5 Codex",
       "appliedAt": "2026-06-24T22:19:44.081Z",
       "appliedSummary": {
         "mode": "already-present",
         "source": "close-stale-source-correspondence-items",
         "reason": "source-already-present-between-anchors"
-      }
+      },
+      "retainedAfterRescan": true,
+      "reviewedAt": "2026-07-02T15:07:17.652Z"
     },
     {
       "id": "source-jinshu-035-wikisource-edd21aedb0f4",
-      "status": "pending",
+      "status": "approved",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.006,
@@ -67530,8 +67555,11 @@
         "afterLocal": "秀創制朝儀，廣陳刑政，朝廷多遵用之，以為故事。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Restored the omitted Yugong atlas preface after s0107 with 24 inserted translated rows. Live Wikisource scan no longer reports this severe omission.",
+      "retainedAfterRescan": false,
+      "reviewedAt": "2026-07-02T15:07:17.652Z",
+      "reviewer": "GPT-5 Codex"
     },
     {
       "id": "source-jinshu-035-wikisource-f25be46785f3",
@@ -67571,9 +67599,10 @@
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
       "decision": "denied",
-      "notes": "Reviewed as no-op: local structural section heading \"子頠\" is retained; upstream witness omits standalone headings while surrounding body anchors match.",
-      "reviewedAt": "2026-06-24T15:00:49.927Z",
-      "reviewer": "repair-source-queue-patterns"
+      "notes": "Reviewed as deliberate local subsection heading 子頠, not source-body text to remove.",
+      "reviewedAt": "2026-07-02T15:07:17.652Z",
+      "reviewer": "GPT-5 Codex",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-jinshu-035-wikisource-f42b63f68661",
@@ -67613,9 +67642,10 @@
       },
       "recommendation": "Local JSON has source text not found in this external witness. Check for source edition differences before deleting anything.",
       "decision": "denied",
-      "notes": "Reviewed as no-op: local unit is a structural section heading retained for site/chapter navigation; upstream raw witness omits standalone headings.",
-      "reviewedAt": "2026-06-23T18:01:35.882Z",
-      "reviewer": "triage-repair-queue"
+      "notes": "Reviewed as deliberate local biography heading 裴秀, not source-body text to remove.",
+      "reviewedAt": "2026-07-02T15:07:17.652Z",
+      "reviewer": "GPT-5 Codex",
+      "retainedAfterRescan": true
     },
     {
       "id": "source-jinshu-036-wikisource-0f391029f9ab",
@@ -71817,7 +71847,7 @@
     },
     {
       "id": "source-jinshu-037-wikisource-e19442291065",
-      "status": "pending",
+      "status": "approved",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.025,
@@ -71860,8 +71890,11 @@
         "afterLocal": "又表曰：「成都王失道，為奸邪所誤，論王之身，不宜深責。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Restored the omitted 35-unit Xiao/Mao/Zhou Fu memorial after s0470 with 34 inserted translated rows plus the expanded opening sentence. Live Wikisource scan no longer reports this severe omission.",
+      "reviewedAt": "2026-07-02T15:09:44.125Z",
+      "reviewer": "GPT-5 Codex",
+      "retainedAfterRescan": false
     },
     {
       "id": "source-jinshu-037-wikisource-e2b857bf2f6e",
@@ -76930,7 +76963,7 @@
     },
     {
       "id": "source-jinshu-042-wikisource-0d1b7bc7ceff",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.008,
@@ -76973,8 +77006,9 @@
         "afterLocal": "渾又騰周浚書，雲濬軍得吳寶物。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Restored from Wikisource in data/jinshu/042.json with manual English translations; focused source scan now reports no severity-3 omissions for jinshu/042.",
+      "resolvedAt": "2026-07-02T15:18:33.321Z"
     },
     {
       "id": "source-jinshu-042-wikisource-3942cebd0d63",
@@ -77371,7 +77405,7 @@
     },
     {
       "id": "source-jinshu-042-wikisource-e3ef313a70c6",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.004,
@@ -77414,8 +77448,9 @@
         "afterLocal": "濬至京都，有司奏，濬表既不列前後所被七詔月日，又赦後違詔不受渾節度，大不敬，付廷尉科罪。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Restored from Wikisource in data/jinshu/042.json with manual English translations; focused source scan now reports no severity-3 omissions for jinshu/042.",
+      "resolvedAt": "2026-07-02T15:18:33.322Z"
     },
     {
       "id": "source-jinshu-042-wikisource-f06b8aa2b7f1",
@@ -87334,7 +87369,7 @@
     },
     {
       "id": "source-jinshu-049-wikisource-f35d7d531232",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.019,
@@ -87377,8 +87412,9 @@
         "afterLocal": "謙之字子光。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Restored Huwu Fuzhi career notice after s0587 in data/jinshu/049.json with manual English translations; focused source scan now reports no severity-3 omissions for jinshu/049.",
+      "resolvedAt": "2026-07-02T15:20:16.779Z"
     },
     {
       "id": "source-jinshu-049-wikisource-f83323b822b6",
@@ -89327,7 +89363,7 @@
     },
     {
       "id": "source-jinshu-051-wikisource-0193b111d4f7",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.025,
@@ -89370,8 +89406,9 @@
         "afterLocal": "遂不仕。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Restored the opening Xuan Shou lun dialogue after s0018 in data/jinshu/051.json with manual English translations; focused source scan no longer reports this omission.",
+      "resolvedAt": "2026-07-02T15:23:52.357Z"
     },
     {
       "id": "source-jinshu-051-wikisource-03964e859465",
@@ -89417,7 +89454,7 @@
     },
     {
       "id": "source-jinshu-051-wikisource-1d2eb8173361",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.028,
@@ -89460,12 +89497,13 @@
         "afterLocal": "陛下披榛采蘭，並收蒿艾。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Restored Huangfu Mi Shi Quan lun / Explaining Persuasion at s0030 with manual English translations and repaired a missing logical quote close before the later memorial; focused source scan no longer reports this omission.",
+      "resolvedAt": "2026-07-02T15:33:50.785Z"
     },
     {
       "id": "source-jinshu-051-wikisource-2da26358c70e",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.014,
@@ -89508,8 +89546,9 @@
         "afterLocal": "武帝詔曰：「省諸賢良答策，雖所言殊塗，皆明于王義，有益政道。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Restored Huangfu Mi Si You fu at jinshu/051 s0099 with manual English translations; focused Wikisource scan no longer reports this omission.",
+      "resolvedAt": "2026-07-02T15:38:51.704Z"
     },
     {
       "id": "source-jinshu-051-wikisource-3a51fab56f1c",
@@ -89645,7 +89684,7 @@
     },
     {
       "id": "source-jinshu-051-wikisource-8eb7a1e3af4e",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.077,
@@ -89697,8 +89736,9 @@
         "afterLocal": "其《紀年》十三篇，記夏以來至周幽王為犬戎所滅，以事接之，三家分，仍述魏事至安釐王之二十年。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Restored Shu Xi agriculture memorial at s0302 and repaired the following Taikang date line in data/jinshu/051.json with manual English translations; focused source scan no longer reports this omission.",
+      "resolvedAt": "2026-07-02T15:25:48.705Z"
     },
     {
       "id": "source-jinshu-051-wikisource-9d4fdf9d3115",
@@ -89786,7 +89826,7 @@
     },
     {
       "id": "source-jinshu-051-wikisource-d5b2c7f45cb8",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.024,
@@ -89838,8 +89878,9 @@
         "afterLocal": "子童靈、方回等遵其遺命。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Restored Huangfu Mi Du Zhong burial treatise at s0068 and repaired the Taikang death date in data/jinshu/051.json with manual English translations; focused source scan no longer reports this omission.",
+      "resolvedAt": "2026-07-02T15:28:59.778Z"
     },
     {
       "id": "source-jinshu-051-wikisource-f004a1b32f9d",
@@ -93287,7 +93328,7 @@
     },
     {
       "id": "source-jinshu-059-wikisource-253026762d71",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.057,
@@ -93330,12 +93371,13 @@
         "afterLocal": "楊駿之誅也，瑋屯司馬門。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Restored the missing Jinshu 059 source span with manual English translation; focused Wikisource scan no longer reports this omission.",
+      "resolvedAt": "2026-07-02T15:45:05.851Z"
     },
     {
       "id": "source-jinshu-059-wikisource-35798c2d8bcf",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jinshu",
@@ -93359,8 +93401,9 @@
         "afterLocal": "羕字延年。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Restored the missing Jinshu 059 source span with manual English translation; focused Wikisource scan no longer reports this omission.",
+      "resolvedAt": "2026-07-02T15:45:05.852Z"
     },
     {
       "id": "source-jinshu-059-wikisource-3ed6a0fcd6ac",
@@ -93744,7 +93787,7 @@
     },
     {
       "id": "source-jinshu-059-wikisource-d04feeab846d",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jinshu",
@@ -93768,8 +93811,9 @@
         "afterLocal": "宗與王導、庾亮志趣不同，連結輕俠，以為腹心，導、亮並以為言。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Restored the missing Jinshu 059 source span with manual English translation; focused Wikisource scan no longer reports this omission.",
+      "resolvedAt": "2026-07-02T15:45:05.852Z"
     },
     {
       "id": "source-jinshu-059-wikisource-d84368f3d7b4",
@@ -93875,7 +93919,7 @@
     },
     {
       "id": "source-jinshu-059-wikisource-e759b690f4b5",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.033,
@@ -93918,8 +93962,9 @@
         "afterLocal": "冏因眾心怨望，潛與離狐王盛、潁川王處穆謀起兵誅倫。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Restored the missing Jinshu 059 source span with manual English translation; focused Wikisource scan no longer reports this omission.",
+      "resolvedAt": "2026-07-02T15:45:05.853Z"
     },
     {
       "id": "source-jinshu-059-wikisource-edaa9ca86378",
@@ -102946,7 +102991,7 @@
     },
     {
       "id": "source-jinshu-068-wikisource-fe20f2600f1a",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.018,
@@ -102989,8 +103034,9 @@
         "afterLocal": "由是贈榮侍中、驃騎將軍、開府儀同三司，諡曰元。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Restored Yin You memorial for Gu Rong at jinshu/068 s0075 with manual English translation; focused Wikisource scan no longer reports this source omission. Remaining focused source items in this chapter are local-extra edition differences, not missing local text.",
+      "resolvedAt": "2026-07-02T15:48:05.392Z"
     },
     {
       "id": "source-jinshu-068-wikisource-fef6d48161df",
@@ -105384,7 +105430,7 @@
     },
     {
       "id": "source-jinshu-072-wikisource-3a1a11a37025",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.018,
@@ -105427,8 +105473,9 @@
         "afterLocal": "疏奏，優詔報之。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Restored Jinshu 072 missing Guo Pu memorial / Keao source span with manual English translation; focused Wikisource scan no longer reports this omission.",
+      "resolvedAt": "2026-07-02T15:54:58.778Z"
     },
     {
       "id": "source-jinshu-072-wikisource-6a12d75489d2",
@@ -105516,7 +105563,7 @@
     },
     {
       "id": "source-jinshu-072-wikisource-a1973605968c",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.026,
@@ -105559,12 +105606,13 @@
         "afterLocal": "頃之遷尚書郎。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Restored Jinshu 072 missing Guo Pu memorial / Keao source span with manual English translation; focused Wikisource scan no longer reports this omission.",
+      "resolvedAt": "2026-07-02T15:54:58.779Z"
     },
     {
       "id": "source-jinshu-072-wikisource-cb31a31e683e",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.017,
@@ -105616,8 +105664,9 @@
         "afterLocal": "疏奏，納焉，即大赦改年。"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Restored Jinshu 072 missing Guo Pu memorial / Keao source span with manual English translation; focused Wikisource scan no longer reports this omission.",
+      "resolvedAt": "2026-07-02T15:54:58.780Z"
     },
     {
       "id": "source-jinshu-072-wikisource-e28b6bb524e8",
@@ -118838,7 +118887,7 @@
     },
     {
       "id": "source-jinshu-088-wikisource-3aadcc63cd03",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "similarity": 0.009,
@@ -118881,8 +118930,10 @@
         "afterLocal": "帝覽之曰：「士之有名，不虛然哉！"
       },
       "recommendation": "External source has substantially more text between the surrounding anchors than local JSON. Review as a likely scrape omission; if approved, restore the Chinese and translate/realign the affected span.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Restored Li Mi Chenqing biao memorial at jinshu/088 s0034 with manual English translation; focused Wikisource scan no longer reports this omission.",
+      "reviewedAt": "2026-07-02T15:58:31.343Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-jinshu-088-wikisource-41c3138f9b0d",
@@ -142964,7 +143015,7 @@
     },
     {
       "id": "source-jinshu-122-wikisource-75519f364ca3",
-      "status": "pending",
+      "status": "applied",
       "type": "source_omission_candidate",
       "severity": 3,
       "book": "jinshu",
@@ -142988,8 +143039,10 @@
         "afterLocal": "隆多殺豪望，以立威名，內外囂然，人不自固。"
       },
       "recommendation": "Source text appears in the external witness but not in local JSON. Review and, if approved, restore the Chinese and translate/realign following sentences.",
-      "decision": null,
-      "notes": ""
+      "decision": "approved",
+      "notes": "Restored omitted Lü Long accession paragraph after jinshu/122 s0390 with manual English translation; focused Wikisource scan no longer reports the omission.",
+      "reviewedAt": "2026-07-02T16:09:21.075Z",
+      "reviewer": "codex-source-repair"
     },
     {
       "id": "source-jinshu-122-wikisource-b2ed261a30b3",
@@ -145738,5 +145791,5 @@
       "retainedAfterRescan": true
     }
   ],
-  "updatedAt": "2026-07-01T00:26:48.932Z"
+  "updatedAt": "2026-07-02T14:26:32.885Z"
 }

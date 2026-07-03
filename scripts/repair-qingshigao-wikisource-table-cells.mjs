@@ -31,6 +31,7 @@ const QUALITY_DIR = path.join(DATA_DIR, 'quality');
 const DEFAULT_QUEUE = path.join(QUALITY_DIR, 'source-correspondence-corpus-wikisource-qingshigao.json');
 const DEFAULT_CACHE_DIR = path.join(os.tmpdir(), 'qingshigao-wikisource-raw');
 const DEFAULT_REVIEWER = 'repair-qingshigao-wikisource-table-cells';
+const WIKISOURCE_USER_AGENT = 'Mozilla/5.0 (compatible; records-qingshigao-table-repair/1.0)';
 const SOURCE_FIELDS = ['zh', 'content', 'source', 'text'];
 const HAN_OR_DIGIT_RE = /[\p{Script=Han}0-9]/u;
 const HAN_RE = /\p{Script=Han}/u;
@@ -316,7 +317,12 @@ async function rawForChapter(chapter, url, opts) {
   if (opts.offline) throw new Error(`No cached raw source for qingshigao/${chapter}: ${cachePath}`);
   if (!url) throw new Error(`No Wikisource URL for qingshigao/${chapter}`);
 
-  const response = await fetch(url, { redirect: 'follow' });
+  const response = await fetch(url, {
+    redirect: 'follow',
+    headers: {
+      'User-Agent': WIKISOURCE_USER_AGENT,
+    },
+  });
   if (!response.ok) throw new Error(`Fetch failed for ${url}: ${response.status} ${response.statusText}`);
   const raw = await response.text();
   fs.writeFileSync(cachePath, raw, 'utf8');
