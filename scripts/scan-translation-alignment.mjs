@@ -499,10 +499,10 @@ function cacheConfig(opts) {
   };
 }
 
-function chapterFingerprint(file, opts) {
+function chapterFingerprint(file, opts, config = cacheConfig(opts)) {
   const chapterHash = sha256(fs.readFileSync(file));
   return sha256(JSON.stringify(stableJson({
-    config: cacheConfig(opts),
+    config,
     chapterHash,
   })));
 }
@@ -1272,8 +1272,9 @@ if (opts.out && fs.existsSync(opts.out)) {
 const fileFingerprints = new Map();
 let fingerprinted = 0;
 let lastFingerprintProgressAt = 0;
+const fingerprintConfig = cacheConfig(opts);
 for (const file of files) {
-  fileFingerprints.set(normalizedReportFile(file), chapterFingerprint(file, opts));
+  fileFingerprints.set(normalizedReportFile(file), chapterFingerprint(file, opts, fingerprintConfig));
   fingerprinted += 1;
   const now = Date.now();
   if (
