@@ -144,6 +144,10 @@ function localSignatures(chapter) {
   let rows = [];
   for (const block of chapter.content || []) {
     if (isLocalTableBlock(block)) {
+      if (block.type === 'table_header' && rows.length > 0) {
+        signatures.push(signatureFromRows(rows, 'local'));
+        rows = [];
+      }
       rows.push({
         kind: block.type === 'table_header' ? 'header' : 'row',
         cells: tableBlockCells(block).map((cell) => {
@@ -418,7 +422,8 @@ function summarize(results) {
 
 const opts = parseArgs(process.argv.slice(2));
 const queue = readJson(opts.queue);
-let items = queue.items || [];
+const allQueueItems = queue.items || [];
+let items = allQueueItems;
 if (opts.book) items = items.filter((item) => item.book === opts.book);
 if (opts.chapter) items = items.filter((item) => item.chapter === opts.chapter);
 if (Number.isFinite(opts.limit) && opts.limit > 0) items = items.slice(0, opts.limit);
@@ -437,6 +442,16 @@ const report = {
   summary: summarize(results),
   results,
 };
+
+const isScopedDefaultOutput = opts.out === DEFAULT_OUT && results.length < allQueueItems.length;
+if (isScopedDefaultOutput && fs.existsSync(opts.out)) {
+  const existing = readJson(opts.out);
+  const byId = new Map((existing.results || []).map((result) => [result.id, result]));
+  for (const result of results) byId.set(result.id, result);
+  const order = new Map(allQueueItems.map((item, index) => [item.id, index]));
+  report.results = [...byId.values()].sort((a, b) => (order.get(a.id) ?? Infinity) - (order.get(b.id) ?? Infinity));
+  report.summary = summarize(report.results);
+}
 writeJson(opts.out, report);
 
 if (opts.summary) {

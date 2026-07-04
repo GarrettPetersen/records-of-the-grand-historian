@@ -282,6 +282,9 @@ function collectTableRuns(content) {
   let current = null;
   content.forEach((block, index) => {
     if (isTableBlock(block)) {
+      if (block.type === 'table_header' && current) {
+        current = null;
+      }
       if (!current) {
         current = {
           startBlockIndex: index,
@@ -392,17 +395,12 @@ function collectStats(chapter) {
 }
 
 function severityFor(stats) {
-  if ((stats?.interruptions || []).length > 0) return 3;
-  if ((stats?.renderedTableRunCount || 0) > 1) return 2;
   return 1;
 }
 
 function recommendationFor(stats) {
-  if ((stats?.interruptions || []).length > 0) {
-    return 'Compare against upstream: table runs have intervening non-table blocks. Confirm whether these are true prose breaks or table-internal rows misclassified by scraping.';
-  }
   if ((stats?.renderedTableRunCount || 0) > 1) {
-    return 'Compare against upstream: chapter has multiple table runs; confirm they are truly separate tables.';
+    return 'Compare each local table run against upstream and confirm table count, row boundaries, column counts, and spans. Prose between table runs is normal when present upstream.';
   }
   return 'Compare against upstream and confirm table structure, row boundaries, and translations.';
 }
@@ -558,13 +556,13 @@ function printSummary(queue) {
   for (const [severity, count] of Object.entries(summary.bySeverity || {}).sort()) {
     console.log(`  severity ${severity}: ${count}`);
   }
-  const gapCandidates = (queue.items || []).filter((item) => (item.tableStats?.interruptions || []).length > 0);
-  if (gapCandidates.length > 0) {
-    console.log(`  table-run gap candidates requiring upstream check: ${gapCandidates.length}`);
-    for (const item of gapCandidates.slice(0, 10)) {
-      console.log(`    ${item.book}/${item.chapter}: ${item.tableStats.interruptions.map((hit) => hit.excerpt).join(' | ')}`);
+  const multiRun = (queue.items || []).filter((item) => (item.tableStats?.renderedTableRunCount || 0) > 1);
+  if (multiRun.length > 0) {
+    console.log(`  chapters with multiple table runs: ${multiRun.length}`);
+    for (const item of multiRun.slice(0, 10)) {
+      console.log(`    ${item.book}/${item.chapter}: ${item.tableStats.renderedTableRunCount} table runs`);
     }
-    if (gapCandidates.length > 10) console.log(`    ... ${gapCandidates.length - 10} more`);
+    if (multiRun.length > 10) console.log(`    ... ${multiRun.length - 10} more`);
   }
 }
 
