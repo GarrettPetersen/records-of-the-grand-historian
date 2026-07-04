@@ -25,6 +25,7 @@ const LANGUAGE_TOOL_SCORES_PATH = './data/quality/languagetool-scores.json';
 const QUOTE_ALIGNMENT_REPORT_PATH = './data/quality/quote-span-alignment.json';
 const PLACEHOLDER_TRANSLATIONS_REPORT_PATH = './data/quality/placeholder-translations.json';
 const TRANSLATION_ALIGNMENT_REPORT_PATH = './data/quality/translation-alignment.json';
+const QUALITY_SIGNAL_OVERRIDES_PATH = './data/quality/progress-signal-overrides.json';
 const PUBLIC_PROGRESS_PATH = './public/data/progress.json';
 const PUBLIC_PROGRESS_BOOKS_DIR = './public/data/progress/books';
 
@@ -44,6 +45,34 @@ function loadLanguageToolScores() {
     console.warn(`Could not read ${LANGUAGE_TOOL_SCORES_PATH}: ${error.message}`);
     return null;
   }
+}
+
+function loadQualitySignalOverrides() {
+  if (!fs.existsSync(QUALITY_SIGNAL_OVERRIDES_PATH)) {
+    return new Set();
+  }
+  try {
+    const report = JSON.parse(fs.readFileSync(QUALITY_SIGNAL_OVERRIDES_PATH, 'utf8'));
+    const entries = Array.isArray(report.entries) ? report.entries : [];
+    return new Set(entries
+      .filter((entry) => {
+        const status = String(entry?.status || '').toLowerCase();
+        return status === 'false-positive' || status === 'false_positive' || status === 'accepted-risk';
+      })
+      .map((entry) => [
+        entry?.scanner || '',
+        entry?.rule || '',
+        entry?.book || '',
+        entry?.chapter || '',
+      ].join('\u241f')));
+  } catch (error) {
+    console.warn(`Could not read quality signal overrides ${QUALITY_SIGNAL_OVERRIDES_PATH}: ${error.message}`);
+    return new Set();
+  }
+}
+
+function qualitySignalOverrideKey({ scanner, rule, book, chapter }) {
+  return [scanner || '', rule || '', book || '', chapter || ''].join('\u241f');
 }
 
 function repairQueueFiles() {
@@ -324,6 +353,7 @@ function loadTranslationAlignmentProgress() {
     return null;
   }
   try {
+    const overrides = loadQualitySignalOverrides();
     const report = JSON.parse(fs.readFileSync(TRANSLATION_ALIGNMENT_REPORT_PATH, 'utf8'));
     const chapterHealthHits = (report.hits || [])
       .filter((hit) => hit.rule === 'LOW_GLOSSARY_CHAPTER_HEALTH');
@@ -332,6 +362,14 @@ function loadTranslationAlignmentProgress() {
       const match = String(hit.file || '').match(/^data\/([^/]+)\/(\d{3})\.json$/u);
       if (!match) continue;
       const [, book, chapter] = match;
+      if (overrides.has(qualitySignalOverrideKey({
+        scanner: 'scan-translation-alignment',
+        rule: hit.rule,
+        book,
+        chapter,
+      }))) {
+        continue;
+      }
       const severity = glossaryHealthSeverity(hit);
       byChapter[`${book}/${chapter}`] = {
         book,
