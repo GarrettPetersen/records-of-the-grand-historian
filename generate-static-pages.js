@@ -248,6 +248,50 @@ function renderTableHeaderCell(sentence, text) {
   return `<th class="table-header"${attrs}>${cellText}</th>`;
 }
 
+function tableLikeBlocksForQingDraft(bookId, chapterNum, content, startIndex) {
+  if (bookId !== 'qingshigao' || chapterNum < 178 || chapterNum > 208) return null;
+  const startBlock = content[startIndex];
+  if (!startBlock || (startBlock.type !== 'table_header' && startBlock.type !== 'table_row')) return null;
+
+  const blocks = [];
+  let j = startIndex;
+  while (j < content.length && (content[j].type === 'table_header' || content[j].type === 'table_row')) {
+    blocks.push(content[j]);
+    j++;
+  }
+
+  return blocks.length > 1 ? { blocks, endIndex: j - 1 } : null;
+}
+
+function tableBlockCells(block) {
+  if (block.type === 'table_header') {
+    return block.sentences || [];
+  }
+  return block.cells || [];
+}
+
+function renderTableBodyRow(block, language, footnoteContext = null) {
+  const cells = tableBlockCells(block);
+  return `<tr>${cells.map(cell => {
+    if (language === 'zh') {
+      return renderTableCell(cell, cell.content || cell.zh || '');
+    }
+
+    if (block.type === 'table_header') {
+      const translation = cell.translations && cell.translations.length > 0 ? cell.translations[0] : null;
+      let cellText = getSentenceEnglish(cell);
+      if (translation && footnoteContext) {
+        const footnote = addFootnote(translation, footnoteContext.footnotes, footnoteContext.footnoteCounter);
+        footnoteContext.footnoteCounter = footnote.footnoteCounter;
+        cellText += footnote.marker;
+      }
+      return renderTableCell(cell, cellText);
+    }
+
+    return renderTableCell(cell, getTableCellEnglish(cell));
+  }).join('')}</tr>`;
+}
+
 function generateChapterMeta(bookId, chapterData) {
   const book = BOOKS[bookId];
   const chapterNum = parseInt(chapterData.meta.chapter, 10);
@@ -389,6 +433,44 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
 
   for (let i = 0; i < chapterData.content.length; i++) {
     const block = chapterData.content[i];
+    const qingDraftTableRun = tableLikeBlocksForQingDraft(bookId, chapterNum, chapterData.content, i);
+    if (qingDraftTableRun) {
+      const tableTitle = `Table ${tableCounter}`;
+      tableCounter++;
+
+      const footnoteContext = { footnotes, footnoteCounter };
+      const zhRows = qingDraftTableRun.blocks.map(tableBlock => renderTableBodyRow(tableBlock, 'zh')).join('');
+      const enRows = qingDraftTableRun.blocks.map(tableBlock => renderTableBodyRow(tableBlock, 'en', footnoteContext)).join('');
+      footnoteCounter = footnoteContext.footnoteCounter;
+
+      contentHTML += `<div class="tabular-content" id="p-${i}" data-paragraph="${i}" style="margin: 5rem 0;">
+            <!-- Table citation button -->
+            <div class="table-citation-header">
+                <button class="cite-table-btn" data-table="${tableCounter - 1}" title="Cite this table">📋 ${tableTitle}</button>
+            </div>
+
+            <!-- Chinese table -->
+            <div class="table-container chinese-table">
+              <div class="table-scroll">
+                <table class="genealogical-table">
+                  <tbody>${zhRows}</tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- English table -->
+            <div class="table-container english-table">
+              <div class="table-scroll">
+                <table class="genealogical-table">
+                  <tbody>${enRows}</tbody>
+                </table>
+              </div>
+            </div>
+          </div>`;
+
+      i = qingDraftTableRun.endIndex;
+      continue;
+    }
 
     // Handle tables without headers (consecutive table_row blocks)
     if (block.type === 'table_row') {
@@ -600,21 +682,36 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         // Skip the table rows we just processed
         i = j - 1;
       } else {
-        // Just a header without table rows
-        const zhText = block.sentences.map(s => escapeHtml(s.zh)).join('');
-        const sentenceEnText = block.sentences.map(getSentenceEnglish).filter(Boolean).join(' ');
-        const blockTranslation = block.translations && block.translations.length > 0 ? block.translations[0] : null;
-        const blockEnText = blockTranslation
-          ? blockTranslation.idiomatic || blockTranslation.literal || ''
-          : '';
-        const enText = sentenceEnText || blockEnText;
+        const tableTitle = `Table ${tableCounter}`;
+        tableCounter++;
+        const footnoteContext = { footnotes, footnoteCounter };
+        const zhRow = renderTableBodyRow(block, 'zh');
+        const enRow = renderTableBodyRow(block, 'en', footnoteContext);
+        footnoteCounter = footnoteContext.footnoteCounter;
 
-        contentHTML += `
-          <div class="table-header-block">
-            <h3 class="table-title">
-              <span class="chinese-text">${zhText}</span>
-              ${enText ? `<span class="english-text">${escapeHtml(enText)}</span>` : ''}
-            </h3>
+        contentHTML += `<div class="tabular-content" id="p-${i}" data-paragraph="${i}" style="margin: 5rem 0;">
+            <!-- Table citation button -->
+            <div class="table-citation-header">
+                <button class="cite-table-btn" data-table="${tableCounter - 1}" title="Cite this table">📋 ${tableTitle}</button>
+            </div>
+
+            <!-- Chinese table -->
+            <div class="table-container chinese-table">
+              <div class="table-scroll">
+                <table class="genealogical-table">
+                  <tbody>${zhRow}</tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- English table -->
+            <div class="table-container english-table">
+              <div class="table-scroll">
+                <table class="genealogical-table">
+                  <tbody>${enRow}</tbody>
+                </table>
+              </div>
+            </div>
           </div>`;
       }
     } else {

@@ -273,21 +273,57 @@ function wordCount(value) {
   return text.split(/\s+/).filter(Boolean).length;
 }
 
+function splitLongRenderedUnit(unit, maxWords) {
+  const plain = typeof unit === 'string' ? unit : textContent(unit.plain || unit);
+  if (wordCount(plain) <= maxWords) return [unit];
+  const parts = plain.match(/[^;.!?]+[;.!?]+(?:["'’”〉])?|[^;.!?]+$/gu)
+    ?.map((part) => textContent(part))
+    .filter(Boolean) || [];
+  if (parts.length < 2) return [unit];
+
+  const groups = [];
+  let current = [];
+  let currentWords = 0;
+  for (const part of parts) {
+    const partWords = wordCount(part);
+    if (current.length > 0 && currentWords + partWords > maxWords) {
+      groups.push(current.join(' ').trim());
+      current = [];
+      currentWords = 0;
+    }
+    current.push(part);
+    currentWords += partWords;
+  }
+  if (current.length > 0) groups.push(current.join(' ').trim());
+  if (groups.length < 2) return [unit];
+
+  if (typeof unit === 'string') return groups;
+  return groups.map((group, index) => ({
+    plain: group,
+    rendered: `${escapeXml(group)}${index === groups.length - 1 && unit.rendered?.includes('epub:type="noteref"')
+      ? unit.rendered.slice(unit.rendered.indexOf('<a epub:type="noteref"'))
+      : ''}`
+  }));
+}
+
 function splitParagraphSentences(sentences, maxWords = 220) {
   const groups = [];
   let current = [];
   let currentWords = 0;
 
   for (const sent of sentences) {
-    const sText = typeof sent === 'string' ? sent : (sent.plain || sent);
+    const splitUnits = splitLongRenderedUnit(sent, maxWords);
+    for (const unit of splitUnits) {
+    const sText = typeof unit === 'string' ? unit : (unit.plain || unit);
     const sentenceWords = wordCount(sText);
     if (current.length > 0 && currentWords + sentenceWords > maxWords) {
       groups.push(current);
       current = [];
       currentWords = 0;
     }
-    current.push(sent);
+    current.push(unit);
     currentWords += sentenceWords;
+    }
   }
 
   if (current.length > 0) groups.push(current);
@@ -571,6 +607,13 @@ function inferInitialTableHeaders(chapter) {
   return [];
 }
 
+function expandTableHeadersForRow(chapter, headers, columnCount) {
+  if (chapter?.meta?.book === 'shiji' && chapter?.meta?.chapter === '013' && columnCount === 12 && headers.length < 12) {
+    return inferInitialTableHeaders(chapter);
+  }
+  return headers;
+}
+
 function inferChapterTableHeaders(chapter, headers) {
   if (chapter?.meta?.book !== 'shiji') return null;
   const columnCount = headers.length;
@@ -805,6 +848,10 @@ function buildTimestamp(product) {
   return '2000-01-01T00:00:00Z';
 }
 
+function editionField(product) {
+  return String(product.editionNumber ?? product.editionStatus ?? '');
+}
+
 function productId(product) {
   const hex = crypto.createHash('sha1').update(product.slug).digest('hex');
   return `urn:uuid:${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20, 32)}`;
@@ -978,6 +1025,8 @@ function renderKdpMetadata(product) {
 - Language: ${product.language || 'en'}
 - Series: ${product.series || ''}
 - Series number: ${product.seriesNumber || ''}
+- Edition: ${editionField(product)}
+- Edition status: ${product.editionStatus || ''}
 - Copyright: ${product.rights || ''}
 
 ## Description
@@ -1088,7 +1137,8 @@ Generated: ${manifest.generatedAt}
 - Series: ${product.series || ''}
 - Series number: ${product.seriesNumber || ''}
 - ISBN: Not required for the Kindle eBook; leave blank unless assigning your own ISBN.
-- Edition: ${product.editionStatus || ''}
+- Edition: ${editionField(product)}
+- Edition status: ${product.editionStatus || ''}
 - Suggested list price USD: ${kdp.suggestedListPriceUsd || ''}
 - Publishing rights: ${kdp.publishingRights || ''}
 - AI-generated content: ${kdp.aiGeneratedContent || ''}
@@ -1164,7 +1214,8 @@ ${contributors.map(([role, name]) => `  - ${role}: ${name}`).join('\n')}
 - Series: ${product.series || ''}
 - Series number: ${product.seriesNumber || ''}
 - ISBN: Leave blank unless assigning your own ISBN.
-- Edition: ${product.editionStatus || ''}
+- Edition: ${editionField(product)}
+- Edition status: ${product.editionStatus || ''}
 
 ## Rights And AI Disclosure
 
@@ -1229,7 +1280,8 @@ function kdpUploadFields(product, manifest) {
         requiredForKindleEbook: false,
         instruction: 'Leave blank unless assigning your own ISBN.',
       },
-      edition: product.editionStatus || '',
+      edition: editionField(product),
+      editionStatus: product.editionStatus || '',
       rights: product.rights || '',
     },
     kdp: {
@@ -1499,7 +1551,8 @@ ${proseTargets || '- No prose-flow targets available.'}
 - Series: ${product.series || ''}
 - Series number: ${product.seriesNumber || ''}
 - ISBN: Leave blank unless assigning your own ISBN.
-- Edition: ${product.editionStatus || ''}
+- Edition: ${editionField(product)}
+- Edition status: ${product.editionStatus || ''}
 - Suggested list price USD: ${kdp.suggestedListPriceUsd || ''}
 - Publishing rights: ${kdp.publishingRights || ''}
 - AI-generated content: ${kdp.aiGeneratedContent || ''}
@@ -1647,6 +1700,7 @@ function collectChapterBlocks(chapter, qa, chapterQa, footnotes = []) {
       tableStats.translatedCells += translatedCells;
       tableStats.maxCells = Math.max(tableStats.maxCells, cells.length);
       if (translatedCells === 0) tableStats.emptyRows += 1;
+      currentHeaders = expandTableHeadersForRow(chapter, currentHeaders, cells.length);
       const entry = renderTableEntry(block, currentHeaders, chapter, blockIndex, tableRowNumber, qa, tableStats, footnotes);
       if (entry) {
         blocks.push(entry);
@@ -1788,6 +1842,7 @@ function renderFrontMatter(product, bookInfo) {
     <p>${escapeXml(product.rights || '')}</p>
     <p>${escapeXml(aiDisclosure)}</p>
     <p>Chinese source texts were drawn from ${escapeXml(sources)}.</p>
+    ${product.editionNumber ? `<p>Edition: ${escapeXml(editionField(product))}.</p>` : ''}
     <p>Edition status: ${escapeXml(product.editionStatus || '')}.</p>
     ${product.editionNote ? `<p>${escapeXml(product.editionNote)}</p>` : ''}
   </section>

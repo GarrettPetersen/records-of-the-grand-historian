@@ -532,11 +532,46 @@ function expectedRenderedSourceTexts(chapterData) {
   return expected;
 }
 
+function splitLongRenderedTextForValidation(text, maxWords = 220) {
+  const normalized = normalizeVisibleText(text);
+  const parts = normalized.match(/[^;.!?]+[;.!?]+(?:["'’”〉])?|[^;.!?]+$/gu)
+    ?.map((part) => normalizeVisibleText(part))
+    .filter(Boolean) || [];
+  if (parts.length < 2) return [];
+
+  const groups = [];
+  let current = [];
+  let currentWords = 0;
+  for (const part of parts) {
+    const partWords = part.split(/\s+/u).filter(Boolean).length;
+    if (current.length > 0 && currentWords + partWords > maxWords) {
+      groups.push(normalizeVisibleText(current.join(' ')));
+      current = [];
+      currentWords = 0;
+    }
+    current.push(part);
+    currentWords += partWords;
+  }
+  if (current.length > 0) groups.push(normalizeVisibleText(current.join(' ')));
+  return groups.length > 1 ? groups : [];
+}
+
+function renderedIncludesSplitText(renderedText, text) {
+  let cursor = 0;
+  for (const part of splitLongRenderedTextForValidation(text)) {
+    const next = renderedText.indexOf(part, cursor);
+    if (next < 0) return false;
+    cursor = next + part.length;
+  }
+  return cursor > 0;
+}
+
 function validateSourceTextRendered(chapterEntry, chapterData, renderedText) {
   const normalizedRendered = normalizeVisibleText(renderedText);
   const missing = expectedRenderedSourceTexts(chapterData)
     .filter((item) => {
       if (normalizedRendered.includes(item.text)) return false;
+      if (item.kind === 'paragraph sentence' && renderedIncludesSplitText(normalizedRendered, item.text)) return false;
       if (item.kind !== 'table cell') return true;
       const tableNormalized = normalizeTableYearMarkersForValidation(item.text, chapterEntry);
       if (tableNormalized && tableNormalized !== item.text && normalizedRendered.includes(tableNormalized)) return false;
@@ -931,6 +966,7 @@ if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
   const packageText = visibleText(packageXml);
   const frontmatterText = visibleText(unzipText('EPUB/frontmatter.xhtml'));
   const coverText = visibleText(cover);
+  const expectedEdition = String(metadata.editionNumber ?? metadata.editionStatus ?? '');
   validateNoInternalMetadataLeaks('metadata.json', metadataJsonText);
   validateNoInternalMetadataLeaks('kdp-metadata.md', kdpMetadata);
   validateNoInternalMetadataLeaks('upload-checklist.md', uploadChecklist);
@@ -1001,7 +1037,8 @@ if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
       ['language', kdpUploadFields.product?.language, metadata.language || 'en'],
       ['series', kdpUploadFields.product?.series, metadata.series || ''],
       ['seriesNumber', String(kdpUploadFields.product?.seriesNumber ?? ''), String(metadata.seriesNumber ?? '')],
-      ['edition', kdpUploadFields.product?.edition, metadata.editionStatus || ''],
+      ['edition', String(kdpUploadFields.product?.edition ?? ''), expectedEdition],
+      ['editionStatus', kdpUploadFields.product?.editionStatus, metadata.editionStatus || ''],
       ['productDescription', kdpUploadFields.kdp?.productDescription, metadata.productDescription || metadata.description || ''],
       ['suggestedListPriceUsd', kdpUploadFields.kdp?.suggestedListPriceUsd, metadata.kdp?.suggestedListPriceUsd || ''],
       ['publishingRights', kdpUploadFields.kdp?.publishingRights, metadata.kdp?.publishingRights || ''],
@@ -1049,7 +1086,7 @@ if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
     `Author: ${metadata.author}`,
     `Translator: ${metadata.translator}`,
     'ISBN: Not required for the Kindle eBook; leave blank unless assigning your own ISBN.',
-    `Edition: ${metadata.editionStatus}`,
+    `Edition: ${expectedEdition}`,
     'Table rendering review:',
     'table-review.md',
     'AI-generated content:',
