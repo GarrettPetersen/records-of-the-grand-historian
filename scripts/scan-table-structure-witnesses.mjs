@@ -139,12 +139,18 @@ function signatureFromRows(rows, source = 'local') {
   };
 }
 
-function localSignatures(chapter) {
+function isQingDraftChronologicalTable(book, chapter) {
+  const chapterNumber = Number(chapter);
+  return book === 'qingshigao' && chapterNumber >= 178 && chapterNumber <= 208;
+}
+
+function localSignatures(chapter, item = {}) {
   const signatures = [];
   let rows = [];
+  const keepQingDraftRunTogether = isQingDraftChronologicalTable(item.book, item.chapter);
   for (const block of chapter.content || []) {
     if (isLocalTableBlock(block)) {
-      if (block.type === 'table_header' && rows.length > 0) {
+      if (block.type === 'table_header' && rows.length > 0 && !keepQingDraftRunTogether) {
         signatures.push(signatureFromRows(rows, 'local'));
         rows = [];
       }
@@ -270,7 +276,10 @@ function parseWikisourceTables(raw) {
       current.cells.push(...splitMediaWikiCells(trimmed, '|'));
     }
   }
-  return tables.filter((table) => table.rowCount > 0);
+  const mediaWikiTables = tables.filter((table) => table.rowCount > 0);
+  if (mediaWikiTables.length > 0) return mediaWikiTables;
+  if (/<table[\s>]/iu.test(String(raw || ''))) return parseHtmlTables(raw, 'wikisource');
+  return mediaWikiTables;
 }
 
 function htmlCellText($, cell) {
@@ -358,7 +367,7 @@ function compactSignature(signature) {
 
 async function scanItem(item, opts) {
   const chapter = readJson(path.join(process.cwd(), item.file));
-  const local = localSignatures(chapter);
+  const local = localSignatures(chapter, item);
   const witnesses = [];
   for (const candidate of item.upstreamCandidates || []) {
     if (!['ctext', 'wikisource-raw'].includes(candidate.kind)) continue;

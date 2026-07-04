@@ -272,17 +272,23 @@ function isTableBlock(block) {
   return block?.type === 'table_header' || block?.type === 'table_row';
 }
 
+function isQingDraftChronologicalTable(book, chapter) {
+  const chapterNumber = Number(chapter);
+  return book === 'qingshigao' && chapterNumber >= 178 && chapterNumber <= 208;
+}
+
 function blockExcerpt(block) {
   const units = block?.sentences || block?.cells || [];
   return shortText(units.map(unitText).filter(Boolean).join(''));
 }
 
-function collectTableRuns(content) {
+function collectTableRuns(content, context = {}) {
   const runs = [];
   let current = null;
+  const keepQingDraftRunTogether = isQingDraftChronologicalTable(context.book, context.chapter);
   content.forEach((block, index) => {
     if (isTableBlock(block)) {
-      if (block.type === 'table_header' && current) {
+      if (block.type === 'table_header' && current && !keepQingDraftRunTogether) {
         current = null;
       }
       if (!current) {
@@ -352,7 +358,7 @@ function collectInterruptions(content, runs) {
   return interruptions;
 }
 
-function collectStats(chapter) {
+function collectStats(chapter, context = {}) {
   const content = chapter.content || [];
   const tableBlocks = content.filter(isTableBlock);
   const tableRows = content.filter((block) => block.type === 'table_row');
@@ -373,7 +379,7 @@ function collectStats(chapter) {
     }
   }
 
-  const runs = collectTableRuns(content);
+  const runs = collectTableRuns(content, context);
   const interruptions = collectInterruptions(content, runs);
   const first = tableBlocks[0];
   const last = tableBlocks[tableBlocks.length - 1];
@@ -420,7 +426,7 @@ function buildQueue(opts, existing) {
     for (const file of chapterFiles(book)) {
       const chapter = path.basename(file, '.json');
       const data = readJson(file);
-      const stats = collectStats(data);
+      const stats = collectStats(data, { book, chapter });
       if (!stats) continue;
       const id = `table-audit-${book}-${chapter}`;
       const prev = previous.get(id) || {};
