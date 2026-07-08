@@ -85,6 +85,8 @@ help:
 	@echo "  make extract-next-review [BOOK=shiji]  # Extract next unreviewed translated chapter"
 	@echo "  make apply-review CHAPTER=data/shiji/024.json    # Apply reviewed edits and mark manifest"
 	@echo "  make ebook BOOK=shiji                  # Generate one EPUB product from ebooks/manifest.json"
+	@echo "  make publication-descriptions          # Sync editable MD publication descriptions into JSON"
+	@echo "  make publication-descriptions-init     # Preload/update MD descriptions from the JSON artifact"
 	@echo "  make ebook-validate SLUG=shiji            # Run local structural EPUB checks; set EPUBCHECK_JAR for official EPUBCheck"
 	@echo "  make ebook-smoke-calibre SLUG=shiji       # Optional Calibre EPUB→AZW3 conversion smoke test"
 	@echo "  make ebook-qa SLUG=shiji                  # Run reusable EPUB + translation QA gates for one product"
@@ -133,12 +135,22 @@ list:
 .PHONY: ebook
 ebook:
 	@if [ -z "$(BOOK)" ]; then echo "Error: BOOK is required."; exit 1; fi
+	@$(NODE) scripts/sync-publication-descriptions.mjs
 	@$(NODE) scripts/generate-ebook.mjs --book $(BOOK)
 
 .PHONY: ebook-book
 ebook-book:
 	@if [ -z "$(BOOK)" ]; then echo "Error: BOOK is required."; exit 1; fi
+	@$(NODE) scripts/sync-publication-descriptions.mjs
 	@$(NODE) scripts/generate-ebook.mjs --book $(BOOK) --all-products
+
+.PHONY: publication-descriptions
+publication-descriptions:
+	@$(NODE) scripts/sync-publication-descriptions.mjs
+
+.PHONY: publication-descriptions-init
+publication-descriptions-init:
+	@$(NODE) scripts/sync-publication-descriptions.mjs --init-md-from-json
 
 .PHONY: ebook-validate
 ebook-validate:
@@ -244,6 +256,7 @@ generate-sitemap:
 .PHONY: generate-pages
 generate-pages:
 	@echo "Generating static HTML pages..."
+	@$(NODE) scripts/sync-publication-descriptions.mjs
 	@$(NODE) scripts/generate-book-covers.mjs
 	@$(NODE) generate-static-pages.js $(if $(BOOK),--book $(BOOK),)
 	@echo "Building book full-text search corpora..."
@@ -301,6 +314,7 @@ update:
 	@$(NODE) generate-progress.js --book $(BOOK)
 	@echo ""
 	@echo "Step 6/8: Generating static pages..."
+	@$(NODE) scripts/sync-publication-descriptions.mjs
 	@$(NODE) scripts/generate-book-covers.mjs
 	@$(NODE) generate-static-pages.js --book $(BOOK)
 	@echo ""
@@ -349,6 +363,7 @@ update-all:
 	@$(NODE) generate-progress.js
 	@echo ""
 	@echo "Step 6/8: Generating static pages..."
+	@$(NODE) scripts/sync-publication-descriptions.mjs
 	@$(NODE) scripts/generate-book-covers.mjs
 	@$(NODE) generate-static-pages.js
 	@echo ""
