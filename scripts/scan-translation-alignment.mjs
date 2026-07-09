@@ -17,7 +17,7 @@ import crypto from 'node:crypto';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const GLOSSARY_PATH = path.join(DATA_DIR, 'glossary.json');
-const SCANNER_VERSION = '2026-07-09-qing-institutional-anchors';
+const SCANNER_VERSION = '2026-07-09-east-asia-abbreviation-anchors';
 
 const CHECK_FIELDS = new Set([
   'idiomatic',
@@ -51,6 +51,9 @@ const MANUAL_ANCHORS = [
   ['Pengcheng', ['彭城'], /\bPengcheng\b/i],
   ['Jiang-Huai', ['江淮'], /\b(?:Jiang-?Huai|Yangzi and Huai)\b/i],
   ['Yellow River', ['黃河', '黄河'], /\bYellow River\b/],
+  ['Itō Hirobumi', ['伊藤博文'], /\bIt[oō] Hirobumi\b/i],
+  ['Mutsu Munemitsu', ['陸奧宗光', '陆奥宗光'], /\bMutsu Munemitsu\b/i],
+  ['Shimonoseki', ['馬關', '马关'], /\bShimonoseki\b/i],
   // Common topical ethnonyms/titles are too often supplied from context in English;
   // let the glossary aggregate catch them only when several terms shift together.
   ['Linhu', ['林胡'], /\bLinhu\b/i],
@@ -136,6 +139,14 @@ const SUPPLEMENTAL_GLOSSARY_ANCHORS = [
   ['員外郎', ['員外郎', '员外郎'], /\bouter-section member\b/i],
   ['長安令', ['長安令', '长安令'], /\bChang[’']?an magistrate\b/i],
   ['職司', ['職司', '职司'], /\boffices?\b/i],
+  ['口岸', ['口岸'], /\bports?\b/i],
+  ['度量權衡', ['度量權衡', '度量权衡'], /\bweights? and measures?\b/i],
+  ['米穀', ['米穀', '米谷'], /\brice and grain\b/i],
+  ['商牌', ['商牌'], /\btrademarks?\b/i],
+  ['國幣', ['國幣', '国币'], /\bnational currency\b/i],
+  ['領海', ['領海', '领海'], /\bterritorial sea\b/i],
+  ['公海', ['公海'], /\bhigh seas\b/i],
+  ['海里', ['海里'], /\b(?:nautical )?miles?\b/i],
   ['載籍', ['載籍', '载籍'], /\barchival records\b/i],
   ['散亡', ['散亡'], /\bscattered(?: and lost)?\b/i],
   ['祠部', ['祠部'], /\b(?:Sacrificial Affairs|Ministry of Rites)\b/i],
@@ -745,11 +756,17 @@ function hasSource(record, anchor) {
 }
 
 function contextualEnglishAnchorHasSource(record, anchor) {
-  return (
+  if (
     anchor.label === 'Yellow River'
     && String(record.file || '').split(path.sep).join('/').endsWith('data/qingshigao/126.json')
     && /[黃黄]流|[黃黄]水|[黃黄]|河/.test(record.zh)
-  );
+  ) {
+    return true;
+  }
+  if (anchor.label === '中國' && /中[、日]|中日/.test(record.zh)) return true;
+  if (anchor.label === '日本' && /[中、]日|中日/.test(record.zh)) return true;
+  if (anchor.label === '朝鮮' && /駐朝|朝王/.test(record.zh)) return true;
+  return false;
 }
 
 function hasEnglish(record, anchor) {
@@ -1242,6 +1259,7 @@ function scanFile(file, {
       const source = hasSource(record, anchor);
       const english = hasEnglish(record, anchor);
       if (english && !source) {
+        if (contextualEnglishAnchorHasSource(record, anchor)) continue;
         const sameRenderedEntity = matchedEnglishTexts(record, anchor)
           .some((match) => currentMatchedEnglishTexts.has(match));
         if (sameRenderedEntity) continue;
