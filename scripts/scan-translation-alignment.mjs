@@ -78,6 +78,87 @@ const MANUAL_ANCHORS = [
   ['jade cup', ['玉杯'], /\bjade cup\b/i],
 ];
 
+const SUPPLEMENTAL_GLOSSARY_ANCHORS = [
+  ['檢校', ['檢校', '检校'], /\bacting\b/i],
+  ['尚書', ['尚書', '尚书'], /\b(?:minister|Department of State Affairs)\b/i],
+  ['侍郎', ['侍郎'], /\bvice minister\b/i],
+  ['刺史', ['刺史'], /\bprefect\b/i],
+  ['節度使', ['節度使', '节度使', '節度', '节度'], /\b(?:military commissioner|commissioner)\b/i],
+  ['觀察使', ['觀察使', '观察使', '觀察', '观察'], /\b(?:observation|observer)\b/i],
+  ['平章事', ['平章事'], /\bgrand councillor\b/i],
+  ['兵部', ['兵部'], /\b(?:Ministry of War|minister of war)\b/i],
+  ['工部', ['工部'], /\b(?:Ministry of Works|minister of works)\b/i],
+  ['禮部', ['禮部', '礼部'], /\b(?:Ministry of Rites|minister of rites)\b/i],
+  ['刑部', ['刑部'], /\b(?:Ministry of Punishments|Minister of Justice|minister of punishments|minister of justice)\b/i],
+  ['戶部', ['戶部', '户部'], /\b(?:Ministry of Revenue|minister of revenue|revenue commissioner|Revenue)\b/i],
+  ['御史大夫', ['御史大夫'], /\bcensor-in-chief\b/i],
+  ['散騎常侍', ['散騎常侍', '散骑常侍'], /\b(?:attendant cavalier|Cavalier)\b/i],
+  ['紫金魚袋', ['紫金魚袋', '紫金鱼袋'], /\b(?:purple robe and gold fish-bag|purple-gold fish)\b/i],
+  ['金魚袋', ['金魚袋', '金鱼袋'], /\bgold fish-bag\b/i],
+  ['柱國', ['柱國', '柱国'], /\bpillar of state\b/i],
+  ['食邑', ['食邑'], /\b(?:households?|fief)\b/i],
+  ['大都督府', ['大都督府'], /\bgrand commandery\b/i],
+  ['長史', ['長史', '长史'], /\b(?:chief secretary|chief administrator)\b/i],
+  ['翰林學士', ['翰林學士', '翰林学士'], /\bHanlin academician\b/i],
+  ['知制誥', ['知制誥', '知制诰'], /\bdrafter of edicts\b/i],
+  ['承旨', ['承旨'], /\bacademician-in-chief\b/i],
+  ['宰相', ['宰相'], /\b(?:chief ministers?|grand councillors?)\b/i],
+  ['史館', ['史館', '史馆'], /\bHistory Office\b/i],
+  ['故事', ['故事'], /\bprecedent\b/i],
+  ['時政', ['時政', '时政'], /\bcurrent policy\b/i],
+  ['庫部', ['庫部', '库部'], /\bStores Bureau\b/i],
+  ['員外郎', ['員外郎', '员外郎'], /\bouter-section member\b/i],
+  ['長安令', ['長安令', '长安令'], /\bChang[’']?an magistrate\b/i],
+  ['主司', ['主司'], /\bchief examiner\b/i],
+  ['試藝', ['試藝', '试艺'], /\btests? arts\b/i],
+  ['與奪', ['與奪', '与夺'], /\bdecide pass or fail\b/i],
+  ['戍卒', ['戍卒'], /\bgarrison\b/i],
+  ['戍', ['戍'], /\bgarrison(?:ing)?\b/i],
+  ['貞觀', ['貞觀', '贞观'], /\bZhenguan\b/i],
+  ['監察御史', ['監察御史', '监察御史'], /\bSupervising Censor\b/i],
+  ['有限', ['有限'], /\blimits?\b/i],
+  ['隨身', ['隨身', '随身'], /\bpersonal guards?\b/i],
+  ['經略', ['經略', '经略'], /\bfrontier commissioner\b/i],
+  ['都護', ['都護', '都护'], /\bprotector\b/i],
+  ['金紫光祿大夫', ['金紫光祿大夫', '金紫光禄大夫'], /\bGold-Purple Grand Master\b/i],
+  ['留後', ['留後', '留后'], /\bprovisional .*commander\b/i],
+  ['兵馬', ['兵馬', '兵马'], /\b(?:troops|forces)\b/i],
+  ['防禦', ['防禦', '防御'], /\bdefen[cs]e\b/i],
+  ['轉運使', ['轉運使', '转运使'], /\btransport commissioner\b/i],
+  ['鹽鐵', ['鹽鐵', '盐铁'], /\bsalt-and-iron\b/i],
+  ['迴紇', ['迴紇', '回紇', '回鹘'], /\bUighur\b/i],
+  ['京師', ['京師', '京师'], /\b(?:capital|Capital)\b/i],
+  ['御史台', ['御史台'], /\bCensorate\b/i],
+  ['刑獄', ['刑獄', '刑狱'], /\bcriminal cases\b/i],
+  ['尚書省', ['尚書省', '尚书省'], /\b(?:Ministry of State|Department of State Affairs)\b/i],
+  ['朝官', ['朝官'], /\bcourt officials\b/i],
+  ['官吏', ['官吏'], /\bofficials?\b/i],
+  ['百姓', ['百姓'], /\b(?:people|commoners?)\b/i],
+  ['州縣', ['州縣', '州县'], /\bprefectures? and counties\b/i],
+  ['錢物', ['錢物', '钱物'], /\bmoney and goods\b/i],
+  ['什物', ['什物'], /\bgoods\b/i],
+  ['舊例', ['舊例', '旧例'], /\bold categories\b/i],
+  ['諫議大夫', ['諫議大夫', '谏议大夫'], /\bremonstrance grandees?\b/i],
+  ['給事中', ['給事中', '给事中'], /\bsupervising secretar(?:y|ies)\b/i],
+  ['中書舍人', ['中書舍人', '中书舍人'], /\bSecretariat drafters?\b/i],
+  ['寺', ['寺'], /\b(?:temple|monaster(?:y|ies))\b/i],
+  ['僧尼', ['僧尼'], /\bmonks? and nuns?\b/i],
+  ['兩稅戶', ['兩稅戶', '两税户'], /\btwo-tax households?\b/i],
+  ['招提', ['招提'], /\bshrine\b/i],
+  ['蘭若', ['蘭若', '兰若'], /\bhermitage\b/i],
+  ['上田', ['上田'], /\bupper-grade fields?\b/i],
+  ['奴婢', ['奴婢'], /\bbond ?servants?\b/i],
+  ['隋朝', ['隋朝'], /\bSui\b/i],
+  ['帝王', ['帝王'], /\bimperial\b/i],
+  ['詔令', ['詔令', '诏令'], /\bedicts?\b/i],
+  ['制置', ['制置'], /\binstitutions?\b/i],
+  ['錢穀', ['錢穀', '钱谷'], /\b(?:coin|grain)\b/i],
+  ['損益', ['損益', '损益'], /\b(?:changes|gains and losses)\b/i],
+  ['利害', ['利害'], /\b(?:advantages?|dangers?|harm)\b/i],
+  ['僧道', ['僧道'], /\b(?:Buddhism|Daoism|Buddhist|Daoist)\b/i],
+  ['編年', ['編年', '编年'], /\bchronolog(?:y|ical|ically)\b/i],
+];
+
 const COMMON_SOURCE_MIN_LENGTH = 2;
 const VALID_GLOSSARY_SCOPES = new Set(['all', 'proper', 'manual']);
 const PROPER_GLOSSARY_MIN_NEARBY_SCORE = 2.35;
@@ -227,6 +308,15 @@ function configureAnchors({ glossaryScope = 'all' } = {}) {
   const manualAnchors = MANUAL_ANCHORS
     .map(([label, sourceForms, englishRe]) => ({ label, sourceForms, englishRe, manual: true }));
   const glossaryAnchors = [];
+  if (glossaryScope === 'all') {
+    glossaryAnchors.push(...SUPPLEMENTAL_GLOSSARY_ANCHORS.map(([label, sourceForms, englishRe]) => ({
+      label,
+      sourceForms,
+      englishRe,
+      glossary: true,
+      common: true,
+    })));
+  }
   if (glossaryScope !== 'manual') {
     glossaryAnchors.push(...loadGlossaryAnchors({ properOnly: true, mode: 'pinyin' }));
   }
