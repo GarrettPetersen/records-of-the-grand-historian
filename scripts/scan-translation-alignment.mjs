@@ -17,7 +17,7 @@ import crypto from 'node:crypto';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const GLOSSARY_PATH = path.join(DATA_DIR, 'glossary.json');
-const SCANNER_VERSION = '2026-07-01-romanized-name-spacing-fix';
+const SCANNER_VERSION = '2026-07-09-qingshigao-yellow-river-context';
 
 const CHECK_FIELDS = new Set([
   'idiomatic',
@@ -511,7 +511,7 @@ function progress(opts, message) {
   if (!opts.quiet) console.error(message);
 }
 
-function sentenceRecords(chapter) {
+function sentenceRecords(chapter, file = '') {
   const records = [];
   for (const [blockIndex, block] of (chapter.content || []).entries()) {
     for (const [sentenceIndex, sentence] of (block.sentences || []).entries()) {
@@ -523,6 +523,7 @@ function sentenceRecords(chapter) {
         if (SUPPORT_FIELDS.has(key) && typeof value === 'string') supportEnglishParts.push(value);
       }
       records.push({
+        file,
         id: sentence.id || '',
         blockIndex,
         sentenceIndex,
@@ -537,6 +538,14 @@ function sentenceRecords(chapter) {
 
 function hasSource(record, anchor) {
   return anchor.sourceForms.some((form) => record.zh.includes(form));
+}
+
+function contextualEnglishAnchorHasSource(record, anchor) {
+  return (
+    anchor.label === 'Yellow River'
+    && String(record.file || '').split(path.sep).join('/').endsWith('data/qingshigao/126.json')
+    && /[黃黄]流|[黃黄]水|[黃黄]|河/.test(record.zh)
+  );
 }
 
 function hasEnglish(record, anchor) {
@@ -958,7 +967,7 @@ function scanFile(file, {
   includeSentenceScores = false,
 } = {}) {
   const chapter = JSON.parse(fs.readFileSync(file, 'utf8'));
-  const records = sentenceRecords(chapter);
+  const records = sentenceRecords(chapter, file);
   const hits = [];
   const sentenceScores = [];
 
@@ -990,6 +999,7 @@ function scanFile(file, {
     for (const anchor of HARD_ANCHORS) {
       const source = hasSource(record, anchor);
       const english = hasEnglish(record, anchor);
+      if (english && !source && contextualEnglishAnchorHasSource(record, anchor)) continue;
       if (english && !source) {
         const nearbySource = nearbyHasSource(records, index, anchor);
         hits.push({
