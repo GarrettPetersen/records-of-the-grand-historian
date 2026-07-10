@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-10T00:47:17.715Z",
+  "generatedAt": "2026-07-10T04:51:20.361Z",
   "description": "Reviewed progress-dashboard signal overrides. These suppress dashboard color flags only after a scanner hit has been reviewed and judged not to represent actionable publication work.",
   "entries": [
     {
@@ -4324,6 +4324,71 @@
         "scorableSentences": 44,
         "lowGlossarySentences": 22,
         "zeroGlossarySentences": 1
+      }
+    },
+    {
+      "scanner": "scan-translation-alignment",
+      "book": "sanguozhi",
+      "chapter": "001",
+      "status": "false-positive",
+      "reviewedBy": "Codex",
+      "reviewedAt": "2026-07-10",
+      "rule": "LOW_GLOSSARY_SAME_SENTENCE_COVERAGE",
+      "reason": "Reviewed Sanguozhi 001 alignment alerts after repairing real compressed direct-quote passages, a numerical mistranslation, title/name omissions, and typo-level defects; remaining same-sentence glossary misses are faithful translations using English title, office, place, and classical-text equivalents rather than glossary anchor wording.",
+      "metrics": {
+        "remainingReviewedHits": 8
+      }
+    },
+    {
+      "scanner": "scan-translation-alignment",
+      "book": "sanguozhi",
+      "chapter": "001",
+      "status": "false-positive",
+      "reviewedBy": "Codex",
+      "reviewedAt": "2026-07-10",
+      "rule": "COMMON_GLOSSARY_NEARBY_SOURCE",
+      "reason": "Reviewed Sanguozhi 001 nearby-source glossary alerts; remaining hits are adjacent proper-name overlap in correctly translated short campaign sentences, not shifted or missing translation.",
+      "metrics": {
+        "remainingReviewedHits": 3
+      }
+    },
+    {
+      "scanner": "scan-translation-alignment",
+      "book": "sanguozhi",
+      "chapter": "001",
+      "status": "false-positive",
+      "reviewedBy": "Codex",
+      "reviewedAt": "2026-07-10",
+      "rule": "SOURCE_ANCHOR_NEARBY_ENGLISH",
+      "reason": "Reviewed Sanguozhi 001 source-anchor alert for 岱/Liu Dai; Mount Tai anchor noise is a glossary ambiguity, while the sentence correctly identifies Liu Dai as Liu Yao’s elder brother and points to the Book of Wu.",
+      "metrics": {
+        "remainingReviewedHits": 1
+      }
+    },
+    {
+      "scanner": "scan-translation-alignment",
+      "book": "sanguozhi",
+      "chapter": "013",
+      "status": "false-positive",
+      "reviewedBy": "Codex",
+      "reviewedAt": "2026-07-10",
+      "rule": "LOW_GLOSSARY_SAME_SENTENCE_COVERAGE",
+      "reason": "Reviewed Sanguozhi 013 alignment alerts after fixing real title, name, office, and typo issues; remaining same-sentence glossary misses are faithful classical-text, office-title, and idiomatic rendering false positives.",
+      "metrics": {
+        "remainingReviewedHits": 4
+      }
+    },
+    {
+      "scanner": "scan-translation-alignment",
+      "book": "sanguozhi",
+      "chapter": "013",
+      "status": "false-positive",
+      "reviewedBy": "Codex",
+      "reviewedAt": "2026-07-10",
+      "rule": "ENGLISH_ANCHOR_NEARBY_SOURCE",
+      "reason": "Reviewed Sanguozhi 013 English-anchor alerts; remaining hits are cauldron/tripod and Western Capital/Chang’an glossary ambiguities in correctly translated source-note and inscription passages, not shifted or fabricated text.",
+      "metrics": {
+        "remainingReviewedHits": 4
       }
     }
   ]
