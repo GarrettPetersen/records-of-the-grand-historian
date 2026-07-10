@@ -17,7 +17,7 @@ import crypto from 'node:crypto';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const GLOSSARY_PATH = path.join(DATA_DIR, 'glossary.json');
-const SCANNER_VERSION = '2026-07-10-mingshi-river-shorthand';
+const SCANNER_VERSION = '2026-07-10-ritual-anchor-refinements';
 
 const CHECK_FIELDS = new Set([
   'idiomatic',
@@ -31,9 +31,9 @@ const SUPPORT_FIELDS = new Set([
 ]);
 
 const MANUAL_ANCHORS = [
-  ['Taiyi', ['太一', '太翼', '泰一', '泰畤'], /\bTai ?yi\b/i],
+  ['Taiyi', ['太一', '太翼', '泰一', '泰畤', '大同'], /\b(?:Tai ?yi|Great Unity)\b/i],
   ['Shangdi', ['上帝'], /\b(?:Shangdi|Shang Di|Supreme (?:God|Deity))\b/i],
-  ['Houtu', ['后土', '後土'], /\bHou ?tu\b/i],
+  ['Houtu', ['后土', '後土', '後士'], /\bHou ?tu\b/i],
   ['Lingxing', ['靈星', '灵星'], /\bLingxing\b/i],
   ['Penglai', ['蓬萊', '蓬莱'], /\bPenglai\b/i],
   ['Fangzhang', ['方丈'], /\bFangzhang\b/i],
@@ -72,7 +72,7 @@ const MANUAL_ANCHORS = [
     '助河', '黃強', '黄强', '淮不勝黃', '淮不胜黄',
     '分淮導黃', '分淮导黄', '黃會', '黄会', '黃舍故道', '黄舍故道',
     '黃、沁', '黄、沁',
-  ], /\b(?:Yellow(?: River| water| current| flood| flow| estuary| backflow|[-–]Huai| and Huai)|the Yellow)\b/],
+  ], /\b(?:Yellow(?: River| water| current| flood| flow| estuary| backflow|[-–]Huai| and Huai)|the Yellow(?! Emperor))\b/],
   ['Itō Hirobumi', ['伊藤博文'], /\bIt[oō] Hirobumi\b/i],
   ['Mutsu Munemitsu', ['陸奧宗光', '陆奥宗光'], /\bMutsu Munemitsu\b/i],
   ['Shimonoseki', ['馬關', '马关'], /\bShimonoseki\b/i],
@@ -97,7 +97,7 @@ const MANUAL_ANCHORS = [
   ['Great Bird', ['大鳥', '大鸟'], /\bGreat Bird\b/i],
   ['immortals', ['僊', '仙', '神仙'], /\bimmortals?\b/i],
   ['fangshi', ['方士'], /\bfangshi\b/i],
-  ['tripods', ['鼎'], /\b(?:dings?|tripods?|Nine Tripods)\b/],
+  ['tripods', ['鼎', '鼐'], /\b(?:tripods?|cauldrons?|Nine Tripods|Tripod (?:Book|Pavilion)|Cauldron Star)\b/i],
   ['white deer', ['白鹿'], /\bwhite deer\b/i],
   ['white gold', ['白金'], /\bwhite gold\b/i],
   ['jade cup', ['玉杯'], /\bjade cup\b/i],
