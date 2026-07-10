@@ -17,7 +17,7 @@ import crypto from 'node:crypto';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const GLOSSARY_PATH = path.join(DATA_DIR, 'glossary.json');
-const SCANNER_VERSION = '2026-07-10-ritual-anchor-refinements';
+const SCANNER_VERSION = '2026-07-10-river-anchor-context';
 
 const CHECK_FIELDS = new Set([
   'idiomatic',
@@ -845,6 +845,13 @@ function hasSource(record, anchor) {
 }
 
 function contextualEnglishAnchorHasSource(record, anchor) {
+  if (
+    anchor.label === 'Yellow River'
+    && /[黃黄]/.test(record.zh)
+    && /[淮河湖水清壩坝堰汛淤漕運运口隄堤渠]/.test(record.zh)
+  ) {
+    return true;
+  }
   if (
     anchor.label === 'Yellow River'
     && String(record.file || '').split(path.sep).join('/').endsWith('data/qingshigao/126.json')
