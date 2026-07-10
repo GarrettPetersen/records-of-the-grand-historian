@@ -1792,7 +1792,7 @@ function suspiciousHanExceptionMatch(text, reason) {
   const matches = [...value.matchAll(/[\u4e00-\u9fff]+/gu)];
   if (!matches.length) return null;
   if (!/(?:proper[-\s]?name|personal[-\s]?name|office[-\s]?table|table[-\s]?cell)/u.test(normalizedReason)) {
-    return matches[0];
+    return null;
   }
   const officeOrAction = /(?:尚書|侍郎|大臣|將軍|都統|副都統|總督|巡撫|布政使|按察使|提督|總兵|參贊|辦事|領隊|理藩院|內閣|軍機|翰林院|都察院|戶部|吏部|禮部|兵部|刑部|工部|駐藏|休致|出師|改設|兼管|事務|回部|[正一二三四五六七八九十閏]?[月][甲乙丙丁戊己庚辛壬癸子丑寅卯辰巳午未申酉戌亥]+(?:召|殉|卒|休致)?)/u;
   for (const match of matches) {
