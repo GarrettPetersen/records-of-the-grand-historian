@@ -17,7 +17,7 @@ import crypto from 'node:crypto';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const GLOSSARY_PATH = path.join(DATA_DIR, 'glossary.json');
-const SCANNER_VERSION = '2026-07-10-calendar-technical-anchors';
+const SCANNER_VERSION = '2026-07-10-yellow-water-anchors';
 
 const CHECK_FIELDS = new Set([
   'idiomatic',
@@ -50,7 +50,7 @@ const MANUAL_ANCHORS = [
   ['Jiuyuan', ['九原'], /\bJiuyuan\b/i],
   ['Pengcheng', ['彭城'], /\bPengcheng\b/i],
   ['Jiang-Huai', ['江淮'], /\b(?:Jiang-?Huai|Yangzi and Huai)\b/i],
-  ['Yellow River', ['黃河', '黄河'], /\bYellow River\b/],
+  ['Yellow River', ['黃河', '黄河', '黃水', '黄水', '黃流', '黄流'], /\bYellow River\b/],
   ['Itō Hirobumi', ['伊藤博文'], /\bIt[oō] Hirobumi\b/i],
   ['Mutsu Munemitsu', ['陸奧宗光', '陆奥宗光'], /\bMutsu Munemitsu\b/i],
   ['Shimonoseki', ['馬關', '马关'], /\bShimonoseki\b/i],
