@@ -40,11 +40,11 @@ const MANUAL_ANCHORS = [
   ['Yingzhou', ['瀛洲', '瀛州', '潁州', '颍州', '應州', '应州'], /(?<!of\s)\bYingzhou\b/i],
   ['Jianzhang Palace', ['建章宮', '建章宫'], /\bJianzhang Palace\b/i],
   ['Ganquan', ['甘泉'], /\bGanquan\b/i],
-  ['Mount Tai', ['泰山', '太山', '岱'], /\b(?:Mount Tai|Tai Shan|Taishan|Dai zong)\b/i],
+  ['Mount Tai', ['泰山', '太山', '岱山', '岱宗', '海岱'], /\b(?:Mount Tai|Tai Shan|Taishan|Dai ?zong|Daizong)\b/i],
   ['Daizong', ['代宗', '代時', '代时'], /\bDai ?zong\b/i],
   ['Langya', ['瑯邪', '琅邪', '琅琊'], /\bLang(?:ya|ye)\b/i],
   ['Linzi', ['臨菑', '臨淄', '临淄'], /\bLinzi\b/i],
-  ["Chang'an", ['長安', '长安'], /\bChang[’']?an\b/i],
+  ["Chang'an", ['長安', '长安', '西京'], /\b(?:Chang[’']?an|Western Capital)\b/i],
   ['Jieshi', ['碣石'], /\bJieshi\b/i],
   ['Liaoxi', ['遼西', '辽西'], /\bLiaoxi\b/i],
   ['Jiuyuan', ['九原'], /\bJiuyuan\b/i],
@@ -95,9 +95,9 @@ const MANUAL_ANCHORS = [
   ['Jade Hall', ['玉堂'], /\bJade Hall\b/i],
   ['Bi Gate', ['璧門', '璧门'], /\b(?:Bi|Jade) Gate\b/i],
   ['Great Bird', ['大鳥', '大鸟'], /\bGreat Bird\b/i],
-  ['immortals', ['僊', '仙', '神仙'], /\bimmortals?\b/i],
+  ['immortals', ['僊', '仙', '神仙', '彭祖', '僑、松', '乔、松'], /\bimmortals?\b/i],
   ['fangshi', ['方士'], /\bfangshi\b/i],
-  ['tripods', ['鼎', '鼐'], /\b(?:tripods?|cauldrons?|Nine Tripods|Tripod (?:Book|Pavilion)|Cauldron Star)\b/i],
+  ['tripods', ['鼎', '鼐', '釜'], /\b(?:tripods?|cauldrons?|Nine Tripods|Tripod (?:Book|Pavilion)|Cauldron Star)\b/i],
   ['white deer', ['白鹿'], /\bwhite deer\b/i],
   ['white gold', ['白金'], /\bwhite gold\b/i],
   ['jade cup', ['玉杯'], /\bjade cup\b/i],
@@ -805,8 +805,36 @@ function sentenceRecords(chapter, file = '') {
   return records;
 }
 
+function suppressedSourceAnchorMatch(record, anchor, form, index) {
+  const zh = String(record.zh || '');
+  const before = index > 0 ? zh[index - 1] : '';
+  const after = zh[index + form.length] || '';
+  if (anchor.label === 'tripods' && form === '鼎' && (before === '元' || (before === '寶' && after === '元'))) return true;
+  if (anchor.label === 'Mount Tai' && form === '岱' && /[劉刘]岱/.test(zh)) return true;
+  if (
+    anchor.label === 'Yellow River'
+    && /[黃黄]/.test(form)
+    && (after === '門' || after === '门' || after === '巾')
+  ) {
+    return true;
+  }
+  return false;
+}
+
+function sourceAnchorMatchIndex(record, anchor) {
+  const zh = String(record.zh || '');
+  for (const form of anchor.sourceForms) {
+    let index = zh.indexOf(form);
+    while (index !== -1) {
+      if (!suppressedSourceAnchorMatch(record, anchor, form, index)) return index;
+      index = zh.indexOf(form, index + 1);
+    }
+  }
+  return -1;
+}
+
 function hasSource(record, anchor) {
-  return anchor.sourceForms.some((form) => record.zh.includes(form));
+  return sourceAnchorMatchIndex(record, anchor) !== -1;
 }
 
 function contextualEnglishAnchorHasSource(record, anchor) {
@@ -824,6 +852,7 @@ function contextualEnglishAnchorHasSource(record, anchor) {
 }
 
 function hasEnglish(record, anchor) {
+  if (anchor.label === 'tripods' && /\bdings?\b/.test(record.english)) return true;
   anchor.englishRe.lastIndex = 0;
   if (anchor.englishRe.test(record.english)) return true;
   anchor.englishRe.lastIndex = 0;
@@ -885,6 +914,7 @@ function sourceMatchedAnchorsForRecord(record, index) {
     if (!bucket) continue;
     for (const { form, anchor } of bucket) {
       if (!record.zh.startsWith(form, i)) continue;
+      if (suppressedSourceAnchorMatch(record, anchor, form, i)) continue;
       if (seen.has(anchor.label)) continue;
       seen.add(anchor.label);
       matches.push(anchor);
