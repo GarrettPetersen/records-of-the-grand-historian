@@ -95,7 +95,7 @@ const MANUAL_ANCHORS = [
   ['Jade Hall', ['玉堂'], /\bJade Hall\b/i],
   ['Bi Gate', ['璧門', '璧门'], /\b(?:Bi|Jade) Gate\b/i],
   ['Great Bird', ['大鳥', '大鸟'], /\bGreat Bird\b/i],
-  ['immortals', ['僊', '仙', '神仙', '彭祖', '僑、松', '乔、松'], /\bimmortals?\b/i],
+  ['immortals', ['僊', '仙', '神仙', '安期', '彭祖', '僑、松', '乔、松'], /\b(?:immortals?|transcendents?)\b/i],
   ['fangshi', ['方士'], /\bfangshi\b/i],
   ['tripods', ['鼎', '鼐', '釜'], /\b(?:tripods?|cauldrons?|Nine Tripods|Tripod (?:Book|Pavilion)|Cauldron Star)\b/i],
   ['white deer', ['白鹿'], /\bwhite deer\b/i],
@@ -818,6 +818,13 @@ function suppressedSourceAnchorMatch(record, anchor, form, index) {
   ) {
     return true;
   }
+  if (
+    anchor.label === 'immortals'
+    && form === '彭祖'
+    && !/[僊仙壽寿養养]|神仙|不死|安期|僑、松|乔、松/.test(zh)
+  ) {
+    return true;
+  }
   return false;
 }
 
@@ -853,6 +860,13 @@ function contextualEnglishAnchorHasSource(record, anchor) {
 
 function hasEnglish(record, anchor) {
   if (anchor.label === 'tripods' && /\bdings?\b/.test(record.english)) return true;
+  if (
+    anchor.label === 'immortals'
+    && /\b(?:An\s?Qi(?:sheng)?|Anqi(?:\s?Sheng)?|Pengzu)\b/i.test(record.english)
+    && /安期|彭祖/.test(record.zh)
+  ) {
+    return true;
+  }
   anchor.englishRe.lastIndex = 0;
   if (anchor.englishRe.test(record.english)) return true;
   anchor.englishRe.lastIndex = 0;
