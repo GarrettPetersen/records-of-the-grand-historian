@@ -54,6 +54,18 @@ function isAllowedArtifactHit(ruleId, found, text, index) {
 
 export const TRANSLATION_ARTIFACT_RULES = [
   {
+    id: 'RAW_FORMULA_PUNCTUATION_DEBRIS',
+    severity: 3,
+    description: 'Calendrical/table formula translation contains doubled punctuation debris',
+    pattern: /\b(?:[A-Z][A-Za-z-]+(?:\s+[A-Z][A-Za-z-]+){0,3}|fraction|remainder|motion|divisor|degree|day|month|eclipse|tally|appearance|disappearance)[^.!?。！？\n]{0,80}(?:,,|,,,,|,\.)/g,
+  },
+  {
+    id: 'RAW_FORMULA_TERM_FUSION',
+    severity: 3,
+    description: 'Calendrical/table formula translation has fused English terms from source parsing',
+    pattern: /\b(?:Start|End|Lesser|Great|Pure|Grain|White|Cold|Frost|Summer|Winter|Spring|Autumn|Rain|Awakening)[A-Za-z]*(?:Start|End|Lesser|Great|Pure|Grain|White|Cold|Frost|Summer|Winter|Spring|Autumn|Rain|Awakening)\b|\b(?:at|after|before)[A-Z][a-z]+\b/g,
+  },
+  {
     id: 'QUOTE_OPENER_ATTACHED_TO_ATTRIBUTION',
     severity: 3,
     description: 'Opening quote is attached to narrator/attribution text instead of the quoted speech',
