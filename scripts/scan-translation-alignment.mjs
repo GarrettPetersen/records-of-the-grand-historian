@@ -17,7 +17,7 @@ import crypto from 'node:crypto';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const GLOSSARY_PATH = path.join(DATA_DIR, 'glossary.json');
-const SCANNER_VERSION = '2026-07-10-yellow-river-collocation-anchors';
+const SCANNER_VERSION = '2026-07-10-yingzhou-province-yellow-shorthand';
 
 const CHECK_FIELDS = new Set([
   'idiomatic',
@@ -37,7 +37,7 @@ const MANUAL_ANCHORS = [
   ['Lingxing', ['靈星', '灵星'], /\bLingxing\b/i],
   ['Penglai', ['蓬萊', '蓬莱'], /\bPenglai\b/i],
   ['Fangzhang', ['方丈'], /\bFangzhang\b/i],
-  ['Yingzhou', ['瀛洲', '潁州', '颍州'], /(?<!of\s)\bYingzhou\b/i],
+  ['Yingzhou', ['瀛洲', '瀛州', '潁州', '颍州'], /(?<!of\s)\bYingzhou\b/i],
   ['Jianzhang Palace', ['建章宮', '建章宫'], /\bJianzhang Palace\b/i],
   ['Ganquan', ['甘泉'], /\bGanquan\b/i],
   ['Mount Tai', ['泰山', '太山', '岱'], /\b(?:Mount Tai|Tai Shan|Taishan|Dai zong)\b/i],
@@ -60,7 +60,7 @@ const MANUAL_ANCHORS = [
     '攔黃', '拦黄', '黃內灌', '黄内灌', '黃倒灌', '黄倒灌',
     '黃仍灌', '黄仍灌', '黃、淮', '黄、淮', '淮、黃', '淮、黄',
     '黃、運', '黄、运', '河決豐縣', '河决丰县', '重濁之黃', '重浊之黄',
-  ], /\bYellow(?: River| water| current| flood| flow| estuary)?\b/],
+  ], /\b(?:Yellow(?: River| water| current| flood| flow| estuary)|the Yellow)\b/],
   ['Itō Hirobumi', ['伊藤博文'], /\bIt[oō] Hirobumi\b/i],
   ['Mutsu Munemitsu', ['陸奧宗光', '陆奥宗光'], /\bMutsu Munemitsu\b/i],
   ['Shimonoseki', ['馬關', '马关'], /\bShimonoseki\b/i],
