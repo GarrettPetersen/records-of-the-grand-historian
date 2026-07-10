@@ -17,7 +17,7 @@ import crypto from 'node:crypto';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const GLOSSARY_PATH = path.join(DATA_DIR, 'glossary.json');
-const SCANNER_VERSION = '2026-07-10-river-anchor-context';
+const SCANNER_VERSION = '2026-07-10-river-anchor-context-2';
 
 const CHECK_FIELDS = new Set([
   'idiomatic',
@@ -44,7 +44,7 @@ const MANUAL_ANCHORS = [
   ['Daizong', ['代宗', '代時', '代时'], /\bDai ?zong\b/i],
   ['Langya', ['瑯邪', '琅邪', '琅琊'], /\bLang(?:ya|ye)\b/i],
   ['Linzi', ['臨菑', '臨淄', '临淄'], /\bLinzi\b/i],
-  ["Chang'an", ['長安', '长安', '西京'], /\b(?:Chang[’']?an|Western Capital)\b/i],
+  ["Chang'an", ['長安', '长安'], /\bChang[’']?an\b/i],
   ['Jieshi', ['碣石'], /\bJieshi\b/i],
   ['Liaoxi', ['遼西', '辽西'], /\bLiaoxi\b/i],
   ['Jiuyuan', ['九原'], /\bJiuyuan\b/i],
@@ -72,7 +72,7 @@ const MANUAL_ANCHORS = [
     '助河', '黃強', '黄强', '淮不勝黃', '淮不胜黄',
     '分淮導黃', '分淮导黄', '黃會', '黄会', '黃舍故道', '黄舍故道',
     '黃、沁', '黄、沁',
-  ], /\b(?:Yellow(?: River| water| current| flood| flow| estuary| backflow|[-–]Huai| and Huai)|the Yellow(?! Emperor))\b/],
+  ], /\b(?:Yellow(?: River| water| current| flood| flow| estuary| backflow|[-–]Huai| and Huai|[-– ]blocking|[-– ]control| River silt| silt)|Huai and Yellow(?: rivers?)?|Huang and Huai|the Yellow(?! Emperor))\b/],
   ['Itō Hirobumi', ['伊藤博文'], /\bIt[oō] Hirobumi\b/i],
   ['Mutsu Munemitsu', ['陸奧宗光', '陆奥宗光'], /\bMutsu Munemitsu\b/i],
   ['Shimonoseki', ['馬關', '马关'], /\bShimonoseki\b/i],
@@ -819,6 +819,13 @@ function suppressedSourceAnchorMatch(record, anchor, form, index) {
     return true;
   }
   if (
+    anchor.label === 'Yellow River'
+    && (form === '河、汾' || form === '河汾')
+    && /太原/.test(zh)
+  ) {
+    return true;
+  }
+  if (
     anchor.label === 'immortals'
     && form === '彭祖'
     && !/[僊仙壽寿養养]|神仙|不死|安期|僑、松|乔、松/.test(zh)
@@ -849,6 +856,13 @@ function contextualEnglishAnchorHasSource(record, anchor) {
     anchor.label === 'Yellow River'
     && /[黃黄]/.test(record.zh)
     && /[淮河湖水清壩坝堰汛淤漕運运口隄堤渠]/.test(record.zh)
+  ) {
+    return true;
+  }
+  if (
+    anchor.label === 'Yellow River'
+    && /河/.test(record.zh)
+    && /(?:河決|河水|大河|治河|河患|河未漲|河未涨|河沙|河身|流入於河)/.test(record.zh)
   ) {
     return true;
   }
