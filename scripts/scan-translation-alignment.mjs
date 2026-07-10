@@ -17,7 +17,7 @@ import crypto from 'node:crypto';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const GLOSSARY_PATH = path.join(DATA_DIR, 'glossary.json');
-const SCANNER_VERSION = '2026-07-09-east-asia-abbreviation-anchors';
+const SCANNER_VERSION = '2026-07-10-ming-institutional-anchors';
 
 const CHECK_FIELDS = new Set([
   'idiomatic',
@@ -101,6 +101,7 @@ const SUPPLEMENTAL_GLOSSARY_ANCHORS = [
   ['樞密', ['樞密', '枢密'], /\bmilitary affairs\b/i],
   ['都承旨', ['都承旨'], /\bchief reception officer\b/i],
   ['國子祭酒', ['國子祭酒', '国子祭酒'], /\bChancellor of the Directorate of Education\b/i],
+  ['國子監', ['國子監', '国子监'], /\bDirectorate of Education\b/i],
   ['太常', ['太常'], /\b(?:Court of Imperial Sacrifices|sacrifices)\b/i],
   ['承德郎', ['承德郎'], /\bGentleman of Continued Merit\b/i],
   ['儒林郎', ['儒林郎'], /\bGentleman of the Forest of Scholars\b/i],
@@ -241,10 +242,25 @@ const SUPPLEMENTAL_GLOSSARY_ANCHORS = [
   ['指揮僉事', ['指揮僉事', '指挥佥事'], /\bassistant regional commanders?\b/i],
   ['詹事府', ['詹事府'], /\b(?:heir apparent(?:’s|'s)? establishment|Court of the Heir Apparent)\b/i],
   ['太僕寺', ['太僕寺', '太仆寺'], /\bImperial Stud\b/i],
-  ['主簿', ['主簿'], /\bchief clerks?\b/i],
+  ['主簿', ['主簿'], /\b(?:chief clerks?|registr(?:y|ies)|registry halls?)\b/i],
   ['鹽運使司', ['鹽運使司', '盐运使司'], /\bsalt transport commissions?\b/i],
   ['宣慰使司', ['宣慰使司'], /\bpacification commissions?\b/i],
-  ['經歷', ['經歷', '经历'], /\bregistrars?\b/i],
+  ['經歷', ['經歷', '经历'], /\b(?:registrars?|registr(?:y|ies))\b/i],
+  ['鴻臚寺', ['鴻臚寺', '鸿胪寺'], /\bCourt of State Ceremonial\b/i],
+  ['欽天監', ['欽天監', '钦天监'], /\b(?:Directorate of Astronomy|astronomy)\b/i],
+  ['王府', ['王府'], /\bprincely\b/i],
+  ['良醫', ['良醫', '良医'], /\bCourt Physician\b/i],
+  ['宣撫司', ['宣撫司', '宣抚司'], /\bPacification Offices?\b/i],
+  ['布政司', ['布政司'], /\bProvincial Administration Commission\b/i],
+  ['照磨', ['照磨'], /\brubbing(?:-and-copying)?\b/i],
+  ['典簿', ['典簿'], /\bRegistry Halls?\b/i],
+  ['司獄司', ['司獄司', '司狱司'], /\bprison offices?\b/i],
+  ['上林苑監', ['上林苑監', '上林苑监'], /\b(?:Directorate of the )?(?:Imperial Parks|Upper Forest Park)\b/i],
+  ['寶鈔', ['寶鈔', '宝钞'], /\b(?:Treasure Notes|Paper Currency)\b/i],
+  ['四清吏司', ['四清吏司'], /\bfour Clear Officials Bureaus\b/i],
+  ['職方', ['職方', '职方'], /\bAppointments and Operations\b/i],
+  ['車駕', ['車駕', '车驾'], /\bChariots and Travels\b/i],
+  ['武庫', ['武庫', '武库'], /\bMilitary Storehouses\b/i],
   ['都護', ['都護', '都护'], /\bprotector\b/i],
   ['留後', ['留後', '留后'], /\bprovisional .*commander\b/i],
   ['兵馬', ['兵馬', '兵马'], /\b(?:troops|forces)\b/i],
