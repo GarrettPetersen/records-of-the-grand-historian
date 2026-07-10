@@ -1772,7 +1772,7 @@ function isNarrowChineseException(text, reason) {
     if (/(?:Officeholder|officeholder|Minister|Vice Minister|Censor|General|Grand Secretary|served|transferred|appointed|relieved|removed|died|declined|did not take|concurrently|granted leave|went on|mourning)[^。]*[\u4e00-\u9fff]/u.test(value)) {
       return true;
     }
-    if (/[\u4e00-\u9fff][^。]*(?:was reassigned|was dismissed|was appointed|was transferred|was removed|was relieved|was granted leave|was granted the title|was replaced|was restored|was retained|was demoted|was summoned|was arrested|was made|was promoted|served in an acting capacity|concurrently served|became|acted as|acted in|continued to act|temporarily acted|substantively appointed|went on campaign|went to|requested retirement|retired(?: from office)?|returned to|was placed in overall charge|died|declined|did not take|assumed office|changed his name|changed her name|mourning)/iu.test(value)) {
+    if (/[\u4e00-\u9fff][^。]*(?:was reassigned|was dismissed|was appointed|was transferred|was removed|was relieved|was granted leave|was granted the title|was replaced|was restored|was retained|was demoted|was summoned|was arrested|was made|was promoted|served in an acting capacity|concurrently served|became|acted as|acted in|continued to act|temporarily acted|substantively appointed|went on campaign|went to|left office|requested retirement|retired(?: from office)?|returned to|was placed in overall charge|died|declined|did not take|assumed office|changed his name|changed her name|mourning)/iu.test(value)) {
       return true;
     }
     if (/[\u4e00-\u9fff]{2,}(?:[、，][\u4e00-\u9fff]{2,})*[:：]/u.test(value)) {
