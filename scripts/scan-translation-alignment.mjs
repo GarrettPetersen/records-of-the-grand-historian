@@ -17,7 +17,7 @@ import crypto from 'node:crypto';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const GLOSSARY_PATH = path.join(DATA_DIR, 'glossary.json');
-const SCANNER_VERSION = '2026-07-10-yellow-water-anchors';
+const SCANNER_VERSION = '2026-07-10-yingzhou-yellow-water-anchors';
 
 const CHECK_FIELDS = new Set([
   'idiomatic',
@@ -37,7 +37,7 @@ const MANUAL_ANCHORS = [
   ['Lingxing', ['靈星', '灵星'], /\bLingxing\b/i],
   ['Penglai', ['蓬萊', '蓬莱'], /\bPenglai\b/i],
   ['Fangzhang', ['方丈'], /\bFangzhang\b/i],
-  ['Yingzhou', ['瀛洲'], /(?<!of\s)\bYingzhou\b/i],
+  ['Yingzhou', ['瀛洲', '潁州', '颍州'], /(?<!of\s)\bYingzhou\b/i],
   ['Jianzhang Palace', ['建章宮', '建章宫'], /\bJianzhang Palace\b/i],
   ['Ganquan', ['甘泉'], /\bGanquan\b/i],
   ['Mount Tai', ['泰山', '太山', '岱'], /\b(?:Mount Tai|Tai Shan|Taishan|Dai zong)\b/i],
