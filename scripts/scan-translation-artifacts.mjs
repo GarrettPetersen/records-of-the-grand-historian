@@ -106,6 +106,12 @@ export const TRANSLATION_ARTIFACT_RULES = [
     pattern: /\b(?:See editorial note|Editorial footnote marker)(?:\s+\d+|\s+\[\d+\])?\b\.?/gi,
   },
   {
+    id: 'RAW_OFFICEHOLDER_PLACEHOLDER',
+    severity: 3,
+    description: 'Officeholder table placeholder left in English translation text',
+    pattern: /\bOfficeholder:\s*/g,
+  },
+  {
     id: 'MARQUIS_YEAR_ONE',
     severity: 2,
     description: 'Succession formula left as "Marquis X year 1"',
@@ -1764,6 +1770,9 @@ function isNarrowChineseException(text, reason) {
   if (/(?:proper[-\s]?name|personal[-\s]?name|office[-\s]?table|table[-\s]?cell)/u.test(normalizedReason)) {
     const value = String(text || '');
     if (/(?:Officeholder|officeholder|Minister|Vice Minister|Censor|General|Grand Secretary|served|transferred|appointed|relieved|removed|died|declined|did not take|concurrently|granted leave|went on|mourning)[^。]*[\u4e00-\u9fff]/u.test(value)) {
+      return true;
+    }
+    if (/[\u4e00-\u9fff][^。]*(?:was reassigned|was dismissed|was appointed|was transferred|was removed|was relieved|was granted leave|was replaced|served in an acting capacity|concurrently served|went on campaign|retired from office|returned to|died|declined|did not take|mourning)/iu.test(value)) {
       return true;
     }
     if (/[\u4e00-\u9fff]{2,}(?:[、，][\u4e00-\u9fff]{2,})*[:：]/u.test(value)) {
