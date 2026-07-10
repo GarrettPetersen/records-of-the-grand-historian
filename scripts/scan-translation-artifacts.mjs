@@ -1734,6 +1734,18 @@ function englishWordCount(text) {
 
 function isNarrowChineseException(text, reason) {
   const normalizedReason = String(reason || '').toLowerCase();
+  if (/(?:bibliographic|catalog|catalogue|book[-\s]?title)/u.test(normalizedReason)) {
+    const value = String(text || '');
+    if (/《[^》]*[\u4e00-\u9fff][^》]*》/u.test(value)) {
+      return true;
+    }
+    if (/\b(?:composed|annotated|compiled|catalog(?:ue)?|listed|scrolls?)\b[^.。;；]*[\u4e00-\u9fff]/iu.test(value)) {
+      return true;
+    }
+    if (/^[\s《》、，,.;:()A-Za-z0-9'’\-\u4e00-\u9fff]+$/u.test(value) && englishWordCount(value) <= 8) {
+      return true;
+    }
+  }
   if (/(?:title|tune|hymn|aria|melody|song)/u.test(normalizedReason) && /《[^》]*[\u4e00-\u9fff][^》]*》/u.test(String(text || ''))) {
     return true;
   }
