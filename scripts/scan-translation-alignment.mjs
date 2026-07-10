@@ -17,7 +17,7 @@ import crypto from 'node:crypto';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const GLOSSARY_PATH = path.join(DATA_DIR, 'glossary.json');
-const SCANNER_VERSION = '2026-07-10-yingzhou-province-yellow-shorthand';
+const SCANNER_VERSION = '2026-07-10-zztj179-anchor-refinements';
 
 const CHECK_FIELDS = new Set([
   'idiomatic',
@@ -31,7 +31,7 @@ const SUPPORT_FIELDS = new Set([
 ]);
 
 const MANUAL_ANCHORS = [
-  ['Taiyi', ['太一', '泰一', '泰畤'], /\bTai ?yi\b/i],
+  ['Taiyi', ['太一', '太翼', '泰一', '泰畤'], /\bTai ?yi\b/i],
   ['Shangdi', ['上帝'], /\b(?:Shangdi|Shang Di|Supreme (?:God|Deity))\b/i],
   ['Houtu', ['后土', '後土'], /\bHou ?tu\b/i],
   ['Lingxing', ['靈星', '灵星'], /\bLingxing\b/i],
@@ -59,7 +59,7 @@ const MANUAL_ANCHORS = [
     '黃堤', '黄堤', '入黃', '入黄', '刷黃', '刷黄', '射黃', '射黄',
     '攔黃', '拦黄', '黃內灌', '黄内灌', '黃倒灌', '黄倒灌',
     '黃仍灌', '黄仍灌', '黃、淮', '黄、淮', '淮、黃', '淮、黄',
-    '黃、運', '黄、运', '河決豐縣', '河决丰县', '重濁之黃', '重浊之黄',
+    '黃、運', '黄、运', '河、汾', '河汾', '河決豐縣', '河决丰县', '重濁之黃', '重浊之黄',
   ], /\b(?:Yellow(?: River| water| current| flood| flow| estuary)|the Yellow)\b/],
   ['Itō Hirobumi', ['伊藤博文'], /\bIt[oō] Hirobumi\b/i],
   ['Mutsu Munemitsu', ['陸奧宗光', '陆奥宗光'], /\bMutsu Munemitsu\b/i],
