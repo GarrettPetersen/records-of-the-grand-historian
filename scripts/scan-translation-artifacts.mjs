@@ -88,6 +88,12 @@ export const TRANSLATION_ARTIFACT_RULES = [
     pattern: /\*/g,
   },
   {
+    id: 'EDITORIAL_NOTE_BOILERPLATE',
+    severity: 3,
+    description: 'Editorial note boilerplate left in English translation text',
+    pattern: /\b(?:See editorial note|Editorial footnote marker)(?:\s+\d+|\s+\[\d+\])?\b\.?/gi,
+  },
+  {
     id: 'MARQUIS_YEAR_ONE',
     severity: 2,
     description: 'Succession formula left as "Marquis X year 1"',
