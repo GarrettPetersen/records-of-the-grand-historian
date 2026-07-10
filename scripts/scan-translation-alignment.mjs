@@ -17,7 +17,7 @@ import crypto from 'node:crypto';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const GLOSSARY_PATH = path.join(DATA_DIR, 'glossary.json');
-const SCANNER_VERSION = '2026-07-10-zztj179-anchor-refinements';
+const SCANNER_VERSION = '2026-07-10-mingshi-river-shorthand';
 
 const CHECK_FIELDS = new Set([
   'idiomatic',
@@ -37,7 +37,7 @@ const MANUAL_ANCHORS = [
   ['Lingxing', ['靈星', '灵星'], /\bLingxing\b/i],
   ['Penglai', ['蓬萊', '蓬莱'], /\bPenglai\b/i],
   ['Fangzhang', ['方丈'], /\bFangzhang\b/i],
-  ['Yingzhou', ['瀛洲', '瀛州', '潁州', '颍州'], /(?<!of\s)\bYingzhou\b/i],
+  ['Yingzhou', ['瀛洲', '瀛州', '潁州', '颍州', '應州', '应州'], /(?<!of\s)\bYingzhou\b/i],
   ['Jianzhang Palace', ['建章宮', '建章宫'], /\bJianzhang Palace\b/i],
   ['Ganquan', ['甘泉'], /\bGanquan\b/i],
   ['Mount Tai', ['泰山', '太山', '岱'], /\b(?:Mount Tai|Tai Shan|Taishan|Dai zong)\b/i],
@@ -49,7 +49,8 @@ const MANUAL_ANCHORS = [
   ['Liaoxi', ['遼西', '辽西'], /\bLiaoxi\b/i],
   ['Jiuyuan', ['九原'], /\bJiuyuan\b/i],
   ['Pengcheng', ['彭城'], /\bPengcheng\b/i],
-  ['Jiang-Huai', ['江淮'], /\b(?:Jiang-?Huai|Yangzi and Huai)\b/i],
+  ['Jiang-Huai', ['江淮', '江、淮'], /\b(?:Jiang-?Huai|Yangzi and Huai)\b/i],
+  ['Jia River', ['泇', '泇河', '泇渠'], /\b(?:Jia(?: River| channel| project| current| ditch| barrage| route)\b|Jiakou\b|the Jia\b)/i],
   ['Yellow River', [
     '黃河', '黄河', '黃水', '黄水', '黃流', '黄流',
     '借黃', '借黄', '敵黃', '敌黄', '避黃', '避黄', '御黃', '御黄',
@@ -60,7 +61,18 @@ const MANUAL_ANCHORS = [
     '攔黃', '拦黄', '黃內灌', '黄内灌', '黃倒灌', '黄倒灌',
     '黃仍灌', '黄仍灌', '黃、淮', '黄、淮', '淮、黃', '淮、黄',
     '黃、運', '黄、运', '河、汾', '河汾', '河決豐縣', '河决丰县', '重濁之黃', '重浊之黄',
-  ], /\b(?:Yellow(?: River| water| current| flood| flow| estuary)|the Yellow)\b/],
+    '河決房村', '河决房村', '淮、河', '河決碭山', '河决砀山', '河強', '河强',
+    '河、淮', '會河', '会河', '逼淮注黃', '逼淮注黄', '殺黃', '杀黄',
+    '與黃角勝', '与黄角胜', '疏黃', '疏黄', '全河南徙', '黃流倒灌', '黄流倒灌',
+    '避河險', '避河险', '大河入海',
+    '導河以入海', '导河以入海',
+    '導河、浚泇', '导河、浚泇', '黃、泇', '黄、泇', '泇黃', '泇黄',
+    '通河於衛', '通河于卫', '引河入沁', '沁、河', '沁合黃', '沁合黄',
+    '河或南徙', '沁入河', '河沙', '導沁水入河', '导沁水入河',
+    '助河', '黃強', '黄强', '淮不勝黃', '淮不胜黄',
+    '分淮導黃', '分淮导黄', '黃會', '黄会', '黃舍故道', '黄舍故道',
+    '黃、沁', '黄、沁',
+  ], /\b(?:Yellow(?: River| water| current| flood| flow| estuary| backflow|[-–]Huai| and Huai)|the Yellow)\b/],
   ['Itō Hirobumi', ['伊藤博文'], /\bIt[oō] Hirobumi\b/i],
   ['Mutsu Munemitsu', ['陸奧宗光', '陆奥宗光'], /\bMutsu Munemitsu\b/i],
   ['Shimonoseki', ['馬關', '马关'], /\bShimonoseki\b/i],
