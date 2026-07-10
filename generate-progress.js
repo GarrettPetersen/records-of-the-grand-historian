@@ -391,13 +391,14 @@ function loadTranslationAlignmentProgress() {
         examples: hit.examples || [],
       };
     }
+    const pendingItems = Object.keys(byChapter).length;
     const highPendingItems = Object.values(byChapter).filter((item) => item.highPendingItems > 0).length;
     const lowPendingItems = Object.values(byChapter).filter((item) => item.lowPendingItems > 0).length;
     return {
       scanner: 'scan-translation-alignment',
       generatedAt: report.generatedAt || null,
       totalItems: chapterHealthHits.length,
-      pendingItems: chapterHealthHits.length,
+      pendingItems,
       highPendingItems,
       lowPendingItems,
       unknownPendingItems: 0,
