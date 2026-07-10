@@ -1447,7 +1447,7 @@ export const TRANSLATION_ARTIFACT_RULES = [
     id: 'RAW_GRAND_MASTERS',
     severity: 1,
     description: 'Lowercase "grand masters" is usually an awkward rendering of 大夫',
-    pattern: /\bgrand masters\b/gi,
+    pattern: /\bgrand masters\b/g,
   },
   {
     id: 'RAW_TAKE_FAVOR',
@@ -1767,8 +1767,17 @@ function isNarrowChineseException(text, reason) {
   if (/(?:title|tune|hymn|aria|melody|song)/u.test(normalizedReason) && /《[^》]*[\u4e00-\u9fff][^》]*》/u.test(String(text || ''))) {
     return true;
   }
+  if (/(?:technical|term|terminology|not safely romanized|obscure)/u.test(normalizedReason) && /[\u4e00-\u9fff]{1,4}/u.test(String(text || ''))) {
+    return true;
+  }
   if (/(?:proper[-\s]?name|personal[-\s]?name|office[-\s]?table|table[-\s]?cell)/u.test(normalizedReason)) {
     const value = String(text || '');
+    if (/(?:glyph|decomposition|rare|source[-\s]?glyph)/u.test(normalizedReason) && /\[[^\]\n]*[\u4e00-\u9fff][^\]\n]*\+[^\]\n]*\]/u.test(value)) {
+      return true;
+    }
+    if (/(?:disambiguat|same romanization)/u.test(normalizedReason) && /\b[A-Z][A-Za-z'’.-]*\s*\([\u4e00-\u9fff]{1,4}\)/u.test(value)) {
+      return true;
+    }
     if (/(?:Officeholder|officeholder|Minister|Vice Minister|Censor|General|Grand Secretary|served|transferred|appointed|relieved|removed|died|declined|did not take|concurrently|granted leave|went on|mourning)[^。]*[\u4e00-\u9fff]/u.test(value)) {
       return true;
     }
