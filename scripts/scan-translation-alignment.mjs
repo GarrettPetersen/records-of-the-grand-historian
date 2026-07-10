@@ -17,7 +17,7 @@ import crypto from 'node:crypto';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const GLOSSARY_PATH = path.join(DATA_DIR, 'glossary.json');
-const SCANNER_VERSION = '2026-07-10-yingzhou-yellow-water-anchors';
+const SCANNER_VERSION = '2026-07-10-yellow-river-collocation-anchors';
 
 const CHECK_FIELDS = new Set([
   'idiomatic',
@@ -50,7 +50,17 @@ const MANUAL_ANCHORS = [
   ['Jiuyuan', ['九原'], /\bJiuyuan\b/i],
   ['Pengcheng', ['彭城'], /\bPengcheng\b/i],
   ['Jiang-Huai', ['江淮'], /\b(?:Jiang-?Huai|Yangzi and Huai)\b/i],
-  ['Yellow River', ['黃河', '黄河', '黃水', '黄水', '黃流', '黄流'], /\bYellow River\b/],
+  ['Yellow River', [
+    '黃河', '黄河', '黃水', '黄水', '黃流', '黄流',
+    '借黃', '借黄', '敵黃', '敌黄', '避黃', '避黄', '御黃', '御黄',
+    '引黃', '引黄', '分黃', '分黄', '遏黃', '遏黄', '渡黃', '渡黄',
+    '由黃', '由黄', '挽黃', '挽黄', '接黃', '接黄', '拒黃', '拒黄',
+    '會黃', '会黄', '黃漲', '黄涨', '黃落', '黄落', '黃險', '黄险',
+    '黃堤', '黄堤', '入黃', '入黄', '刷黃', '刷黄', '射黃', '射黄',
+    '攔黃', '拦黄', '黃內灌', '黄内灌', '黃倒灌', '黄倒灌',
+    '黃仍灌', '黄仍灌', '黃、淮', '黄、淮', '淮、黃', '淮、黄',
+    '黃、運', '黄、运', '河決豐縣', '河决丰县', '重濁之黃', '重浊之黄',
+  ], /\bYellow(?: River| water| current| flood| flow| estuary)?\b/],
   ['Itō Hirobumi', ['伊藤博文'], /\bIt[oō] Hirobumi\b/i],
   ['Mutsu Munemitsu', ['陸奧宗光', '陆奥宗光'], /\bMutsu Munemitsu\b/i],
   ['Shimonoseki', ['馬關', '马关'], /\bShimonoseki\b/i],
