@@ -17,7 +17,7 @@ import crypto from 'node:crypto';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const GLOSSARY_PATH = path.join(DATA_DIR, 'glossary.json');
-const SCANNER_VERSION = '2026-07-10-ming-institutional-anchors';
+const SCANNER_VERSION = '2026-07-10-calendar-technical-anchors';
 
 const CHECK_FIELDS = new Set([
   'idiomatic',
@@ -168,6 +168,17 @@ const SUPPLEMENTAL_GLOSSARY_ANCHORS = [
   ['樞密院', ['樞密院', '枢密院'], /\bmilitary affairs\b/i],
   ['參知政事', ['參知政事', '参知政事'], /\bparticipants? in governance\b/i],
   ['同知', ['同知'], /\bassociate\b/i],
+  ['五行', ['五行'], /\b(?:Five Phases|five phases)\b/i],
+  ['立春', ['立春'], /\b(?:Spring Begins|Beginning of Spring)\b/i],
+  ['立夏', ['立夏'], /\b(?:Summer Begins|Beginning of Summer)\b/i],
+  ['立秋', ['立秋'], /\b(?:Autumn Begins|Beginning of Autumn)\b/i],
+  ['立冬', ['立冬'], /\b(?:Winter Begins|Beginning of Winter)\b/i],
+  ['四分曆', ['四分曆', '四分历'], /\b(?:Sifen|Quarter-Day) Calendar\b/i],
+  ['春秋', ['春秋'], /\bSpring and Autumn(?: Annals)?\b/i],
+  ['藝文志', ['藝文志', '艺文志'], /\bBibliographic Treatise\b/i],
+  ['日蝕', ['日蝕', '日食'], /\bsolar eclipses?\b/i],
+  ['冬至', ['冬至'], /\bwinter solstice\b/i],
+  ['大餘', ['大餘', '大余'], /\blarge remainder\b/i],
   ['光祿大夫', ['光祿大夫', '光禄大夫'], /\b(?:Grand Master|grandee)s?\b/i],
   ['金紫光祿大夫', ['金紫光祿大夫', '金紫光禄大夫'], /\b(?:Gold-Purple Grand Master|Golden purple grandees?)\b/i],
   ['倉部', ['倉部', '仓部'], /\bGranaries\b/i],
@@ -401,6 +412,10 @@ function capitalizedDefinitionVariants(definitions) {
     .filter((variant) => /(?:^|[\s-])[A-Z][a-z]/.test(variant));
 }
 
+function isBareNumericGlossaryText(text) {
+  return /^[〇零一二兩两三四五六七八九十百千萬万億亿兆又有余餘半分]+$/u.test(text);
+}
+
 function loadGlossaryAnchors({ properOnly = false, commonOnly = false, mode = 'pinyin' } = {}) {
   if (!fs.existsSync(GLOSSARY_PATH)) return [];
   const glossary = Object.values(JSON.parse(fs.readFileSync(GLOSSARY_PATH, 'utf8')));
@@ -413,6 +428,7 @@ function loadGlossaryAnchors({ properOnly = false, commonOnly = false, mode = 'p
     if (commonOnly && isProperNoun) continue;
     if (text.length < (isProperNoun ? 2 : COMMON_SOURCE_MIN_LENGTH)) continue;
     if (/^[一二三四五六七八九十]+月$/.test(text)) continue;
+    if (!isProperNoun && isBareNumericGlossaryText(text)) continue;
     const definitions = Array.isArray(entry.definitions) ? entry.definitions : [];
     let variants = [];
     if (mode === 'pinyin') {
