@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-10T16:17:00.000Z",
+  "generatedAt": "2026-07-10T17:25:00.000Z",
   "description": "Reviewed progress-dashboard signal overrides. These suppress dashboard color flags only after a scanner hit has been reviewed and judged not to represent actionable publication work.",
   "entries": [
     {
@@ -8094,6 +8094,69 @@
         "lowGlossarySentenceRate": 0.55,
         "zeroGlossarySentenceRate": 0.16,
         "scorableSentences": 243
+      }
+    },
+    {
+      "scanner": "scan-translation-alignment",
+      "rule": "LOW_GLOSSARY_CHAPTER_HEALTH",
+      "book": "houhanshu",
+      "chapter": "024",
+      "status": "false-positive",
+      "reviewedBy": "Codex",
+      "reviewedAt": "2026-07-10",
+      "reason": "Reviewed chapter-health examples s0011, s0019, s0040, s0078, and s0168 against their local context. The translations preserve the campaign, office, school/ritual, and direct-speech content; low fuzzy coverage is caused by dynastic titles, personal names, offices, and natural compression rather than source omission, placeholder text, quote mismatch, or mistranslation.",
+      "metrics": {
+        "glossaryCoverage": 0.38,
+        "lowGlossarySentenceRate": 0.47,
+        "zeroGlossarySentenceRate": 0.21,
+        "scorableSentences": 58
+      }
+    },
+    {
+      "scanner": "scan-translation-alignment",
+      "rule": "LOW_GLOSSARY_CHAPTER_HEALTH",
+      "book": "houhanshu",
+      "chapter": "087",
+      "status": "false-positive",
+      "reviewedBy": "Codex",
+      "reviewedAt": "2026-07-10",
+      "reason": "Reviewed chapter-health examples s0018, s0070, s0135, s0302, and s0339 plus the nearby Chang'an anchor context. A contextual over-specific 'toward Chang'an' wording was tightened to 'send west', and a confirmed B6 F9 mojibake artifact in the Ni Kuan line was repaired; remaining low fuzzy coverage reflects classical-learning terminology and proper names rather than unreviewed publication work.",
+      "metrics": {
+        "glossaryCoverage": 0.4,
+        "lowGlossarySentenceRate": 0.41,
+        "zeroGlossarySentenceRate": 0.09,
+        "scorableSentences": 66
+      }
+    },
+    {
+      "scanner": "scan-translation-alignment",
+      "rule": "LOW_GLOSSARY_SAME_SENTENCE_COVERAGE",
+      "book": "shiji",
+      "chapter": "001",
+      "status": "false-positive",
+      "reviewedBy": "Codex",
+      "reviewedAt": "2026-07-10",
+      "reason": "Reviewed concrete alert s0025 against surrounding Yellow Emperor annals text. The translation includes the hundred grains, trees and grasses, birds/beasts/insects/moths, sun/moon/stars, waters/soils/stones/metals/jade, bodily exertion, and husbanding resources; low coverage is glossary wording mismatch rather than omitted source text.",
+      "metrics": {
+        "glossaryCoverage": 0.07,
+        "glossarySourceScore": 5.25,
+        "glossaryMatchedScore": 0.35
+      }
+    },
+    {
+      "scanner": "scan-translation-alignment",
+      "rule": "LOW_GLOSSARY_CHAPTER_HEALTH",
+      "book": "shiji",
+      "chapter": "001",
+      "status": "false-positive",
+      "reviewedBy": "Codex",
+      "reviewedAt": "2026-07-10",
+      "reason": "Reviewed chapter-health examples s0013, s0014, s0021, s0119, s0124, and the concrete same-sentence alert s0025. The flagged passages are faithfully translated; one awkward phrase in s0119 was polished, and the remaining weak fuzzy score reflects classical allusion/geography/ritual terminology rather than source omission, quote mismatch, placeholder, or mistranslation.",
+      "metrics": {
+        "glossaryCoverage": 0.44,
+        "lowGlossarySentenceRate": 0.32,
+        "zeroGlossarySentenceRate": 0.25,
+        "scorableSentences": 44
       }
     }
   ]
