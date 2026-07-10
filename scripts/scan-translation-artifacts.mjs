@@ -1153,7 +1153,7 @@ export const TRANSLATION_ARTIFACT_RULES = [
     id: 'RAW_TABLE_NAME_YEAR_ONE',
     severity: 2,
     description: 'Succession table cell left as "[Name] year 1"',
-    pattern: /(?:^|[.;:]\s+|day,?\s+|month,?\s+)(?:Marquis(?: of)? \p{Lu}[\p{L}’]*(?: \p{Lu}[\p{L}’]*){0,5}|\p{Lu}[\p{L}’]*(?: \p{Lu}[\p{L}’]*){1,5}) year 1\b/gu,
+    pattern: /(?:^|[.;:]\s+|day,?\s+|month,?\s+)(?!In\s)(?:Marquis(?: of)? \p{Lu}[\p{L}’]*(?: \p{Lu}[\p{L}’]*){0,5}|\p{Lu}[\p{L}’]*(?: \p{Lu}[\p{L}’]*){1,5}) year 1\b/gu,
   },
   {
     id: 'RAW_ENFEOFFED_NAME_YEAR_ONE',
