@@ -94,7 +94,7 @@ const MANUAL_ANCHORS = [
   ['Guiyu Qu', ['鬼臾區', '鬼臾区'], /\bGuiyu Qu\b/i],
   ['Jade Hall', ['玉堂'], /\bJade Hall\b/i],
   ['Bi Gate', ['璧門', '璧门'], /\b(?:Bi|Jade) Gate\b/i],
-  ['Great Bird', ['大鳥', '大鸟'], /\bGreat Bird\b/i],
+  ['Great Bird', ['大鳥', '大鸟'], /\bGreat Birds?\b/i],
   ['immortals', ['僊', '仙', '神仙', '安期', '彭祖', '僑、松', '乔、松'], /\b(?:immortals?|transcendents?)\b/i],
   ['fangshi', ['方士'], /\bfangshi\b/i],
   ['tripods', ['鼎', '鼐', '釜'], /\b(?:tripods?|cauldrons?|Nine Tripods|Tripod (?:Book|Pavilion)|Cauldron Star)\b/i],
