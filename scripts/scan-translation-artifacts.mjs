@@ -109,7 +109,7 @@ export const TRANSLATION_ARTIFACT_RULES = [
     id: 'RAW_OFFICEHOLDER_PLACEHOLDER',
     severity: 3,
     description: 'Officeholder table placeholder left in English translation text',
-    pattern: /\bOfficeholder:\s*/g,
+    pattern: /\bofficeholder:\s*/gi,
   },
   {
     id: 'MARQUIS_YEAR_ONE',
@@ -1772,7 +1772,7 @@ function isNarrowChineseException(text, reason) {
     if (/(?:Officeholder|officeholder|Minister|Vice Minister|Censor|General|Grand Secretary|served|transferred|appointed|relieved|removed|died|declined|did not take|concurrently|granted leave|went on|mourning)[^。]*[\u4e00-\u9fff]/u.test(value)) {
       return true;
     }
-    if (/[\u4e00-\u9fff][^。]*(?:was reassigned|was dismissed|was appointed|was transferred|was removed|was relieved|was granted leave|was replaced|served in an acting capacity|concurrently served|went on campaign|retired from office|returned to|died|declined|did not take|mourning)/iu.test(value)) {
+    if (/[\u4e00-\u9fff][^。]*(?:was reassigned|was dismissed|was appointed|was transferred|was removed|was relieved|was granted leave|was granted the title|was replaced|was restored|was retained|was demoted|was summoned|was arrested|was made|was promoted|served in an acting capacity|concurrently served|went on campaign|went to|requested retirement|retired(?: from office)?|returned to|was placed in overall charge|died|declined|did not take|assumed office|changed his name|changed her name|mourning)/iu.test(value)) {
       return true;
     }
     if (/[\u4e00-\u9fff]{2,}(?:[、，][\u4e00-\u9fff]{2,})*[:：]/u.test(value)) {
@@ -1784,6 +1784,22 @@ function isNarrowChineseException(text, reason) {
   }
   return /\b(?:character|graph|glyph|written|write|writes|wrote|pronounced|read|reads|reading|quotes|says|has|have|appears|adds|add|omits|omitting|following|matching|mistake|mistakes|interchangeable|means|meaning|gives|resembles|resembled|becomes|changed to|replace|replaces|replaced|written as|printed|corrected|edition|witness|called|same as|corrupt|corruption|dropped|drop|lacks|lack|missing|repeat|before|superfluous|supplied|amended|suspected)\b/iu.test(String(text || ''))
     || /[\u4e00-\u9fff]+(?:["”']?\s*(?:means|is pronounced|was pronounced|resembles|resembled|becomes|is written|was written|changed to|is replaced|replaces|replace with|gives|as|is the same as|is corrupt|is supplied)\s*|[，、]\s*)/u.test(String(text || ''));
+}
+
+function suspiciousHanExceptionMatch(text, reason) {
+  const value = String(text || '');
+  const normalizedReason = String(reason || '').toLowerCase();
+  const matches = [...value.matchAll(/[\u4e00-\u9fff]+/gu)];
+  if (!matches.length) return null;
+  if (!/(?:proper[-\s]?name|personal[-\s]?name|office[-\s]?table|table[-\s]?cell)/u.test(normalizedReason)) {
+    return matches[0];
+  }
+  const officeOrAction = /(?:尚書|侍郎|大臣|將軍|都統|副都統|總督|巡撫|布政使|按察使|提督|總兵|參贊|辦事|領隊|理藩院|內閣|軍機|翰林院|都察院|戶部|吏部|禮部|兵部|刑部|工部|駐藏|休致|出師|改設|兼管|事務|回部|[正一二三四五六七八九十閏]?[月][甲乙丙丁戊己庚辛壬癸子丑寅卯辰巳午未申酉戌亥]+(?:召|殉|卒|休致)?)/u;
+  for (const match of matches) {
+    const han = match[0];
+    if (officeOrAction.test(han)) return match;
+  }
+  return null;
 }
 
 export function scanArtifactText(text, opts = {}) {
@@ -1801,7 +1817,8 @@ export function scanArtifactText(text, opts = {}) {
     });
   }
   if (opts.allowChineseCharacters && containsHan) {
-    const match = /[\u4e00-\u9fff]+/u.exec(text);
+    const suspiciousMatch = suspiciousHanExceptionMatch(text, opts.allowChineseCharactersReason);
+    const match = suspiciousMatch || /[\u4e00-\u9fff]+/u.exec(text);
     if (!opts.allowChineseCharactersReason) {
       hits.push({
         ruleId: 'CHINESE_CHARACTERS_EXCEPTION_WITHOUT_REASON',
@@ -1811,7 +1828,7 @@ export function scanArtifactText(text, opts = {}) {
         index: match?.index || 0,
         excerpt: excerpt(text, match?.index || 0),
       });
-    } else if (!isNarrowChineseException(text, opts.allowChineseCharactersReason) && englishWordCount(text) >= 6) {
+    } else if ((suspiciousMatch || !isNarrowChineseException(text, opts.allowChineseCharactersReason)) && englishWordCount(text) >= 6) {
       hits.push({
         ruleId: 'BROAD_CHINESE_CHARACTERS_EXCEPTION',
         severity: 2,
