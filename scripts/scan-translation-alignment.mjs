@@ -926,7 +926,7 @@ function contextualEnglishAnchorHasSource(record, anchor) {
   if (anchor.label === "Chang'an" && /去長|去长/.test(record.zh) && /\bChang[’']?an\b/i.test(record.english)) return true;
   if (anchor.label === "Chang'an" && /長安平|长安平|未央宮|未央宫|東市|东市|西市/.test(record.zh) && /\bChang[’']?an\b/i.test(record.english)) return true;
   if (anchor.label === 'Mount Tai' && /東嶽|东岳/.test(record.zh) && /\b(?:Eastern Peak|Mount Tai)\b/i.test(record.english)) return true;
-  if (anchor.label === 'Mount Tai' && /岱禮|岱礼|登岱|介丘/.test(record.zh) && /\b(?:Mount Dai|Mount Tai|feng and shan)\b/i.test(record.english)) return true;
+  if (anchor.label === 'Mount Tai' && /岱禮|岱礼|岱嶽|岱岳|岱覽|岱览|登岱|介丘/.test(record.zh) && /\b(?:Mount Dai|Mount Tai|Daiyue|feng and shan)\b/i.test(record.english)) return true;
   if (anchor.label === "Chang'an" && /四年/.test(record.zh) && /\bfourth year of Chang[’']?an\b/i.test(record.english)) return true;
   if (anchor.label === "Chang'an" && /入援|灞上/.test(record.zh) && /\b(?:reinforce Chang[’']?an|gates of Chang[’']?an)\b/i.test(record.english)) return true;
   if (anchor.label === 'Langya' && /琅邪王/.test(record.zh) && /\bPrince of Langya\b/i.test(record.english)) return true;
@@ -939,7 +939,7 @@ function contextualEnglishAnchorHasSource(record, anchor) {
   if (anchor.label === 'immortals' && /正真/.test(record.zh) && /\bimmortals?\b/i.test(record.english)) return true;
   if (anchor.label === 'immortals' && /上壽賀|上寿贺/.test(record.zh) && /\blongevity congratulations\b/i.test(record.english)) return true;
   if (anchor.label === 'immortals' && /修養|修养|服食|壽|寿|長年|长年|延年|長春|长春/.test(record.zh) && /\b(?:longevity|long life|extending life|Longevity Palace)\b/i.test(record.english)) return true;
-  if (anchor.label === 'Jiang-Huai' && /江[、淮]|江淮/.test(record.zh) && /\b(?:(?:Yangzi|Yangtze|Jiang|Zhe,\s*Jiang)\s*(?:-|,|and)\s*Huai|Jiang-Huai)\b/i.test(record.english)) return true;
+  if (anchor.label === 'Jiang-Huai' && /江[、淮]|江淮/.test(record.zh) && /\b(?:(?:Yangzi|Yangtze|Jiang)\s*(?:-|,|and)\s*Huai|Zhe,\s*Jiang,?\s*and\s*Huai|Jiang-Huai)\b/i.test(record.english)) return true;
   if (anchor.label === 'Langya' && /歸國|归国/.test(record.zh) && /\bLangya\b/i.test(record.english)) return true;
   if (anchor.label === '四川' && /蜀|川/.test(record.zh)) return true;
   if (anchor.label === '陝西' && /秦|[陝陕]/.test(record.zh)) return true;
@@ -1030,7 +1030,7 @@ function hasEnglish(record, anchor) {
   if (
     anchor.label === 'Jiang-Huai'
     && /江[、淮]|江淮/.test(record.zh)
-    && /\b(?:(?:Yangzi|Yangtze|Jiang|Zhe,\s*Jiang)\s*(?:-|,|and)\s*Huai|Jiang-Huai)\b/i.test(record.english)
+    && /\b(?:(?:Yangzi|Yangtze|Jiang)\s*(?:-|,|and)\s*Huai|Zhe,\s*Jiang,?\s*and\s*Huai|Jiang-Huai)\b/i.test(record.english)
   ) {
     return true;
   }
@@ -1043,8 +1043,8 @@ function hasEnglish(record, anchor) {
   }
   if (
     anchor.label === 'Mount Tai'
-    && /東嶽|东岳|岱禮|岱礼|登岱|介丘/.test(record.zh)
-    && /\b(?:Eastern Peak|Mount Tai|Mount Dai|feng and shan)\b/i.test(record.english)
+    && /東嶽|东岳|岱禮|岱礼|岱嶽|岱岳|岱覽|岱览|登岱|介丘/.test(record.zh)
+    && /\b(?:Eastern Peak|Mount Tai|Mount Dai|Daiyue|feng and shan)\b/i.test(record.english)
   ) {
     return true;
   }
@@ -1280,7 +1280,7 @@ function sameSentenceGlossaryCoverage(record, { reviewPriorities = false } = {})
     || (coverage <= SAME_SENTENCE_MAX_COVERAGE && (sourceScore >= 5 || properCount >= 3))
     || (properCount >= 2 && matchedProperCount === 0 && coverage <= SAME_SENTENCE_MAX_COVERAGE)
   );
-  const severity = highSignal ? 3 : 2;
+  const severity = highSignal ? 2 : 1;
 
   return {
     sourceAnchors,
@@ -1463,7 +1463,7 @@ function chapterGlossaryHealthHit(file, records, { reviewPriorities = false } = 
     block: 0,
     sentence: 0,
     rule: 'LOW_GLOSSARY_CHAPTER_HEALTH',
-    severity: 3,
+    severity: 2,
     anchor: [...missingAnchors.values()]
       .sort((a, b) => b.count - a.count)
       .slice(0, 12)
@@ -1598,7 +1598,7 @@ function scanFile(file, {
         block: record.blockIndex + 1,
         sentence: record.sentenceIndex + 1,
         rule: 'COMMON_GLOSSARY_NEARBY_SOURCE',
-        severity: 3,
+        severity: 2,
         offset,
         anchor: group.anchors.slice(0, 8).map((anchor) => anchor.label).join(', '),
         glossaryScore: Number(group.score.toFixed(2)),
@@ -1620,7 +1620,7 @@ function scanFile(file, {
         block: record.blockIndex + 1,
         sentence: record.sentenceIndex + 1,
         rule: 'COMMON_GLOSSARY_NEARBY_ENGLISH',
-        severity: 3,
+        severity: 2,
         offset,
         anchor: group.anchors.slice(0, 8).map((anchor) => anchor.label).join(', '),
         glossaryScore: Number(group.score.toFixed(2)),
