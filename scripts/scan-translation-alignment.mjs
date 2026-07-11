@@ -17,7 +17,7 @@ import crypto from 'node:crypto';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const GLOSSARY_PATH = path.join(DATA_DIR, 'glossary.json');
-const SCANNER_VERSION = '2026-07-11-celestial-xian-anchor';
+const SCANNER_VERSION = '2026-07-11-reviewed-xian-compounds';
 
 const CHECK_FIELDS = new Set([
   'idiomatic',
@@ -31,17 +31,17 @@ const SUPPORT_FIELDS = new Set([
 ]);
 
 const MANUAL_ANCHORS = [
-  ['Taiyi', ['太一', '太翼', '泰一', '泰畤', '大同'], /\b(?:Tai ?yi|Great Unity)\b/i],
-  ['Shangdi', ['上帝'], /\b(?:Shangdi|Shang Di|Supreme (?:God|Deity))\b/i],
+  ['Taiyi', ['太一', '太翼', '泰一', '泰畤'], /\b(?:Tai ?yi|Great Unity)\b/i],
+  ['Shangdi', ['上帝'], /\b(?:Shangdi|Shang Di|Supreme (?:God|Deity)|God of the (?:East|South|Center|West|North)|(?:Eastern|Southern|Central|Western|Northern) God)\b/i],
   ['Houtu', ['后土', '後土', '後士'], /\bHou ?tu\b/i],
   ['Lingxing', ['靈星', '灵星'], /\bLingxing\b/i],
   ['Penglai', ['蓬萊', '蓬莱'], /\bPenglai\b/i],
   ['Fangzhang', ['方丈'], /\bFangzhang\b/i],
-  ['Yingzhou', ['瀛洲', '瀛州', '潁州', '颍州', '應州', '应州'], /(?<!of\s)\bYingzhou\b/i],
+  ['Yingzhou', ['瀛洲', '瀛州', '潁州', '颍州', '應州', '应州'], /\b(?:(?:governor|prefect) of Yingzhou|serving in Yingzhou|Ying Prefecture|(?<!of\s)Yingzhou)\b/i],
   ['Jianzhang Palace', ['建章宮', '建章宫'], /\bJianzhang Palace\b/i],
   ['Ganquan', ['甘泉'], /\bGanquan\b/i],
-  ['Mount Tai', ['泰山', '太山', '岱山', '岱宗', '海岱'], /\b(?:Mount Tai|Tai Shan|Taishan|Dai ?zong|Daizong)\b/i],
-  ['Daizong', ['代宗', '代時', '代时'], /\bDai ?zong\b/i],
+  ['Mount Tai', ['泰山', '太山', '岱山', '岱宗', '海岱'], /\b(?:Mount Tai|Mount Dai|Tai Shan|Taishan|Dai ?zong|Daizong)\b/i],
+  ['Daizong', ['代宗', '代時', '代时', '肅、代', '肃、代'], /\bDai ?zong\b/i],
   ['Langya', ['瑯邪', '琅邪', '琅琊'], /\bLang(?:ya|ye)\b/i],
   ['Linzi', ['臨菑', '臨淄', '临淄'], /\bLinzi\b/i],
   ["Chang'an", ['長安', '长安'], /\bChang[’']?an\b/i],
@@ -49,7 +49,7 @@ const MANUAL_ANCHORS = [
   ['Liaoxi', ['遼西', '辽西'], /\bLiaoxi\b/i],
   ['Jiuyuan', ['九原'], /\bJiuyuan\b/i],
   ['Pengcheng', ['彭城'], /\bPengcheng\b/i],
-  ['Jiang-Huai', ['江淮', '江、淮'], /\b(?:Jiang-?Huai|Yangzi and Huai)\b/i],
+  ['Jiang-Huai', ['江淮', '江、淮'], /\b(?:Jiang-?Huai|Jiang and Huai|Yangzi and Huai)\b/i],
   ['Jia River', ['泇', '泇河', '泇渠'], /\b(?:Jia(?: River| channel| project| current| ditch| barrage| route)\b|Jiakou\b|the Jia\b)/i],
   ['Yellow River', [
     '黃河', '黄河', '黃水', '黄水', '黃流', '黄流',
@@ -72,7 +72,7 @@ const MANUAL_ANCHORS = [
     '助河', '黃強', '黄强', '淮不勝黃', '淮不胜黄',
     '分淮導黃', '分淮导黄', '黃會', '黄会', '黃舍故道', '黄舍故道',
     '黃、沁', '黄、沁',
-  ], /\b(?:Yellow(?: River| water| current| flood| flow| estuary| backflow|[-–]Huai| and Huai|[-– ]blocking|[-– ]control| River silt| silt)|Huai and Yellow(?: rivers?)?|Huang and Huai|the Yellow(?! Emperor))\b/],
+  ], /\b(?:Yellow(?: River| water| current| flood| flow| estuary| backflow|[-–]Huai| and Huai|[-– ]blocking|[-– ]control| River silt| silt)|Huai and Yellow(?: rivers?)?|Huang and Huai|the Yellow(?! (?:Emperor|Gate)))\b/],
   ['Itō Hirobumi', ['伊藤博文'], /\bIt[oō] Hirobumi\b/i],
   ['Mutsu Munemitsu', ['陸奧宗光', '陆奥宗光'], /\bMutsu Munemitsu\b/i],
   ['Shimonoseki', ['馬關', '马关'], /\bShimonoseki\b/i],
@@ -95,9 +95,9 @@ const MANUAL_ANCHORS = [
   ['Jade Hall', ['玉堂'], /\bJade Hall\b/i],
   ['Bi Gate', ['璧門', '璧门'], /\b(?:Bi|Jade) Gate\b/i],
   ['Great Bird', ['大鳥', '大鸟'], /\bGreat Birds?\b/i],
-  ['immortals', ['僊', '仙', '神仙', '羽化', '安期', '彭祖', '僑、松', '乔、松'], /\b(?:immortals?|immortalist|transcendents?|divine transcendence)\b/i],
-  ['fangshi', ['方士'], /\bfangshi\b/i],
-  ['tripods', ['鼎', '鼐', '釜'], /\b(?:tripods?|cauldrons?|Nine Tripods|Tripod (?:Book|Pavilion)|Cauldron Star)\b/i],
+  ['immortals', ['僊', '仙', '神仙', '羽化', '真人', '安期', '彭祖', '僑、松', '乔、松'], /\b(?:immortals?|immortality|immortalist|transcendents?|divine transcendence|transformed by feather|ascended in transformation)\b/i],
+  ['fangshi', ['方士', '方者'], /\b(?:fangshi|occult advisers?)\b/i],
+  ['tripods', ['鼎', '鼐', '釜', '鐺腳', '铛脚'], /\b(?:tripods?|tripod-legged|cauldrons?|Nine Tripods|Tripod (?:Book|Pavilion)|Cauldron Star)\b/i],
   ['white deer', ['白鹿'], /\bwhite deer\b/i],
   ['white gold', ['白金'], /\bwhite gold\b/i],
   ['jade cup', ['玉杯'], /\bjade cup\b/i],
@@ -810,6 +810,9 @@ function suppressedSourceAnchorMatch(record, anchor, form, index) {
   const before = index > 0 ? zh[index - 1] : '';
   const after = zh[index + form.length] || '';
   if (anchor.label === 'tripods' && form === '鼎' && (before === '元' || (before === '寶' && after === '元'))) return true;
+  if (anchor.label === 'tripods' && form === '鼎' && /大鼎/.test(zh)) return true;
+  if (anchor.label === 'tripods' && form === '鼎' && /鼎、澧、辰、沅、靖五郡/.test(zh)) return true;
+  if (anchor.label === 'Yellow River' && (form === '入黃' || form === '入黄') && /[黃黄]崖口/.test(zh)) return true;
   if (anchor.label === 'Mount Tai' && form === '岱' && /[劉刘]岱/.test(zh)) return true;
   if (
     anchor.label === 'Yellow River'
@@ -826,6 +829,13 @@ function suppressedSourceAnchorMatch(record, anchor, form, index) {
     return true;
   }
   if (
+    anchor.label === 'Yellow River'
+    && (form === '會河' || form === '会河')
+    && /[會会]河中/.test(zh)
+  ) {
+    return true;
+  }
+  if (
     anchor.label === 'immortals'
     && form === '彭祖'
     && !/[僊仙壽寿養养]|神仙|不死|安期|僑、松|乔、松/.test(zh)
@@ -835,7 +845,7 @@ function suppressedSourceAnchorMatch(record, anchor, form, index) {
   if (
     anchor.label === 'immortals'
     && form === '仙'
-    && !/神仙|仙人|升仙|散仙|仙仗|仙韶|仙丹|仙群|列仙|群仙|求仙|學仙|学仙|雜仙|杂仙|諸仙|诸仙|八仙|三仙|真仙|成仙|仙都|仙傳|仙传|廣仙|广仙|洞仙|寶仙|宝仙|釋仙|释仙|仙班|登仙|仙方|謫仙|谪仙|葛仙|仙宗/.test(zh)
+    && !/神仙|仙人|上仙|升仙|散仙|迎仙|仙仗|仙韶|仙丹|仙群|仙化|仙變|仙变|列仙|群仙|求仙|學仙|学仙|雜仙|杂仙|諸仙|诸仙|八仙|仙經|仙经|仙道|仙者|集仙|仙真|仙去|仙才|地仙|三仙|真仙|成仙|仙都|仙傳|仙传|廣仙|广仙|洞仙|寶仙|宝仙|釋仙|释仙|仙班|登仙|仙方|謫仙|谪仙|葛仙|仙宗/.test(zh)
   ) {
     return true;
   }
@@ -869,10 +879,22 @@ function contextualEnglishAnchorHasSource(record, anchor) {
   if (
     anchor.label === 'Yellow River'
     && /河/.test(record.zh)
-    && /(?:河決|河水|大河|治河|河患|河未漲|河未涨|河沙|河身|流入於河)/.test(record.zh)
+    && /(?:河決|河水|大河|治河|河患|河未漲|河未涨|河沙|河身|度河|渡河|流入於河)/.test(record.zh)
   ) {
     return true;
   }
+  if (anchor.label === 'Yellow River' && /[全殺][黃黄]/.test(record.zh)) return true;
+  if (anchor.label === 'Yingzhou' && /[瀛潁颍]/.test(record.zh) && /\bYingzhou\b/i.test(record.english)) return true;
+  if (anchor.label === "Chang'an" && /昌安/.test(record.zh) && /\bChangan\b/i.test(record.english)) return true;
+  if (anchor.label === 'immortals' && /正真/.test(record.zh) && /\bimmortals?\b/i.test(record.english)) return true;
+  if (anchor.label === '四川' && /蜀|川/.test(record.zh)) return true;
+  if (anchor.label === '陝西' && /秦|[陝陕]/.test(record.zh)) return true;
+  if (anchor.label === '江西' && /[贛赣]/.test(record.zh)) return true;
+  if (anchor.label === '雲南' && /滇|[雲云]/.test(record.zh)) return true;
+  if (anchor.label === '貴州' && /黔|[貴贵]/.test(record.zh)) return true;
+  if (anchor.label === '甘肅' && /甘|[隴陇]/.test(record.zh)) return true;
+  if (anchor.label === '湖北' && /鄂/.test(record.zh)) return true;
+  if (anchor.label === '廣西' && /桂/.test(record.zh)) return true;
   if (
     anchor.label === 'Yellow River'
     && String(record.file || '').split(path.sep).join('/').endsWith('data/qingshigao/126.json')
@@ -887,7 +909,7 @@ function contextualEnglishAnchorHasSource(record, anchor) {
 }
 
 function hasEnglish(record, anchor) {
-  if (anchor.label === 'tripods' && /\bdings?\b/.test(record.english)) return true;
+  if (anchor.label === 'tripods' && /(?<!-)\bdings?\b/.test(record.english)) return true;
   if (
     anchor.label === 'immortals'
     && /\b(?:An\s?Qi(?:sheng)?|Anqi(?:\s?Sheng)?|Pengzu)\b/i.test(record.english)
