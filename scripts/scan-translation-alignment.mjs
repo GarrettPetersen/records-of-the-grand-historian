@@ -72,7 +72,7 @@ const MANUAL_ANCHORS = [
     '河或南徙', '沁入河', '河沙', '導沁水入河', '导沁水入河',
     '助河', '黃強', '黄强', '淮不勝黃', '淮不胜黄',
     '分淮導黃', '分淮导黄', '黃會', '黄会', '黃舍故道', '黄舍故道',
-    '黃、沁', '黄、沁', '河外',
+    '黃、沁', '黄、沁',
   ], /\b(?:Yellow(?: River| water| current| flood| flow| estuary| backflow|[-–]Huai| and Huai| and Qin|[-– ]blocking|[-– ]control| River silt| silt)|Huai and Yellow(?: rivers?)?|Huang and Huai|the Yellow(?! (?:Emperor|Gate)))\b/],
   ['Itō Hirobumi', ['伊藤博文'], /\bIt[oō] Hirobumi\b/i],
   ['Mutsu Munemitsu', ['陸奧宗光', '陆奥宗光'], /\bMutsu Munemitsu\b/i],
@@ -919,11 +919,19 @@ function contextualEnglishAnchorHasSource(record, anchor) {
   if (anchor.label === 'Yellow River' && /河性/.test(record.zh) && /Yellow River/i.test(record.english)) return true;
   if (anchor.label === 'Yingzhou' && /[瀛潁颍應应]/.test(record.zh) && /\bYingzhou\b/i.test(record.english)) return true;
   if (anchor.label === 'Yingzhou' && /[瀛潁颍應应]州/.test(record.zh) && /\bYing (?:Prefecture|regimental|troops|Province)\b/i.test(record.english)) return true;
+  if (anchor.label === 'Yingzhou' && /郢州/.test(record.zh) && /\bYing Prefecture\b/i.test(record.english)) return true;
+  if (anchor.label === 'Yingzhou' && /瀛/.test(record.zh) && /\bYing prefecture\b/i.test(record.english)) return true;
   if (anchor.label === "Chang'an" && /昌安/.test(record.zh) && /\bChangan\b/i.test(record.english)) return true;
   if (anchor.label === "Chang'an" && /京師|京师|京兆|京城|西京|常安/.test(record.zh) && /\bChang[’']?an\b/i.test(record.english)) return true;
   if (anchor.label === "Chang'an" && /去長|去长/.test(record.zh) && /\bChang[’']?an\b/i.test(record.english)) return true;
   if (anchor.label === "Chang'an" && /長安平|长安平|未央宮|未央宫|東市|东市|西市/.test(record.zh) && /\bChang[’']?an\b/i.test(record.english)) return true;
-  if (anchor.label === 'Mount Tai' && /東嶽|东岳/.test(record.zh) && /\bEastern Peak\b/i.test(record.english)) return true;
+  if (anchor.label === 'Mount Tai' && /東嶽|东岳/.test(record.zh) && /\b(?:Eastern Peak|Mount Tai)\b/i.test(record.english)) return true;
+  if (anchor.label === 'Mount Tai' && /岱禮|岱礼|登岱|介丘/.test(record.zh) && /\b(?:Mount Dai|Mount Tai|feng and shan)\b/i.test(record.english)) return true;
+  if (anchor.label === "Chang'an" && /四年/.test(record.zh) && /\bfourth year of Chang[’']?an\b/i.test(record.english)) return true;
+  if (anchor.label === "Chang'an" && /入援|灞上/.test(record.zh) && /\b(?:reinforce Chang[’']?an|gates of Chang[’']?an)\b/i.test(record.english)) return true;
+  if (anchor.label === 'Langya' && /琅邪王/.test(record.zh) && /\bPrince of Langya\b/i.test(record.english)) return true;
+  if (anchor.label === 'Pengcheng' && /南彭城/.test(record.zh) && /\bNan ?pengcheng\b/i.test(record.english)) return true;
+  if (anchor.label === 'Pengcheng' && /灌彭城|得彭城/.test(record.zh) && /\b(?:flood|fell|Pengcheng)\b/i.test(record.english)) return true;
   if (anchor.label === 'immortals' && /女真詩/.test(record.zh) && /\bLady Immortals\b/i.test(record.english)) return true;
   if (anchor.label === 'immortals' && /神之人/.test(record.zh) && /\bdivine being\b/i.test(record.english)) return true;
   if (anchor.label === 'immortals' && /至人/.test(record.zh) && /\bperfected man\b/i.test(record.english)) return true;
@@ -931,7 +939,8 @@ function contextualEnglishAnchorHasSource(record, anchor) {
   if (anchor.label === 'immortals' && /正真/.test(record.zh) && /\bimmortals?\b/i.test(record.english)) return true;
   if (anchor.label === 'immortals' && /上壽賀|上寿贺/.test(record.zh) && /\blongevity congratulations\b/i.test(record.english)) return true;
   if (anchor.label === 'immortals' && /修養|修养|服食|壽|寿|長年|长年|延年|長春|长春/.test(record.zh) && /\b(?:longevity|long life|extending life|Longevity Palace)\b/i.test(record.english)) return true;
-  if (anchor.label === 'Jiang-Huai' && /江[、淮]|江淮/.test(record.zh) && /\b(?:(?:Yangzi|Yangtze|Jiang)\s*(?:-|,|and)\s*Huai|Jiang-Huai)\b/i.test(record.english)) return true;
+  if (anchor.label === 'Jiang-Huai' && /江[、淮]|江淮/.test(record.zh) && /\b(?:(?:Yangzi|Yangtze|Jiang|Zhe,\s*Jiang)\s*(?:-|,|and)\s*Huai|Jiang-Huai)\b/i.test(record.english)) return true;
+  if (anchor.label === 'Langya' && /歸國|归国/.test(record.zh) && /\bLangya\b/i.test(record.english)) return true;
   if (anchor.label === '四川' && /蜀|川/.test(record.zh)) return true;
   if (anchor.label === '陝西' && /秦|[陝陕]/.test(record.zh)) return true;
   if (anchor.label === '江西' && /[贛赣]/.test(record.zh)) return true;
@@ -1021,14 +1030,28 @@ function hasEnglish(record, anchor) {
   if (
     anchor.label === 'Jiang-Huai'
     && /江[、淮]|江淮/.test(record.zh)
-    && /\b(?:(?:Yangzi|Yangtze|Jiang)\s*(?:-|,|and)\s*Huai|Jiang-Huai)\b/i.test(record.english)
+    && /\b(?:(?:Yangzi|Yangtze|Jiang|Zhe,\s*Jiang)\s*(?:-|,|and)\s*Huai|Jiang-Huai)\b/i.test(record.english)
+  ) {
+    return true;
+  }
+  if (
+    anchor.label === 'Pengcheng'
+    && /南彭城/.test(record.zh)
+    && /\bNan ?pengcheng\b/i.test(record.english)
   ) {
     return true;
   }
   if (
     anchor.label === 'Mount Tai'
-    && /東嶽|东岳/.test(record.zh)
-    && /\bEastern Peak\b/i.test(record.english)
+    && /東嶽|东岳|岱禮|岱礼|登岱|介丘/.test(record.zh)
+    && /\b(?:Eastern Peak|Mount Tai|Mount Dai|feng and shan)\b/i.test(record.english)
+  ) {
+    return true;
+  }
+  if (
+    anchor.label === "Chang'an"
+    && /長安|长安/.test(record.zh)
+    && /\bChang[’']?an era\b/i.test(record.english)
   ) {
     return true;
   }
