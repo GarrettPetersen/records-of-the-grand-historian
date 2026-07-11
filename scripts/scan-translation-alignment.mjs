@@ -18,6 +18,7 @@ import crypto from 'node:crypto';
 const DATA_DIR = path.join(process.cwd(), 'data');
 const GLOSSARY_PATH = path.join(DATA_DIR, 'glossary.json');
 const SCANNER_VERSION = '2026-07-11-reviewed-xian-compounds';
+const SCANNER_SOURCE_HASH = sha256(fs.readFileSync(new URL(import.meta.url)));
 
 const CHECK_FIELDS = new Set([
   'idiomatic',
@@ -95,7 +96,7 @@ const MANUAL_ANCHORS = [
   ['Jade Hall', ['玉堂'], /\bJade Hall\b/i],
   ['Bi Gate', ['璧門', '璧门'], /\b(?:Bi|Jade) Gate\b/i],
   ['Great Bird', ['大鳥', '大鸟'], /\bGreat Birds?\b/i],
-  ['immortals', ['僊', '仙', '神仙', '羽化', '真人', '真君', '女仙', '五真', '不死', '長生', '长生', '仙翁', '安期', '彭祖', '僑、松', '乔、松'], /\b(?:immortals?|immortality|immortalist|longevity|deathless|transcendents?|divine transcendence|transformed by feather|ascended in transformation|true (?:men|man|people|person|ones?)|real (?:man|lord)|realized master|true lord|perfect(?:ed)? (?:lord|one|man))\b/i],
+  ['immortals', ['僊', '仙', '神仙', '羽化', '真人', '真君', '女仙', '五真', '不死', '長生', '长生', '仙翁', '安期', '彭祖', '僑、松', '乔、松'], /\b(?:immortals?|immortality|immortalist|longevity|long life|deathless|transcendents?|divine transcendence|transformed by feather|ascended in transformation|true (?:men|man|people|person|ones?)|real (?:man|lord)|realized master|true lord|perfect(?:ed)? (?:lord|one|man))\b/i],
   ['fangshi', ['方士', '方者'], /\b(?:fangshi|occult advisers?)\b/i],
   ['tripods', ['鼎', '鼐', '釜', '鑊', '镬', '鐺腳', '铛脚'], /\b(?:tripods?|tripod-legged|cauldrons?|kettles?|Nine Tripods|Tripod (?:Book|Pavilion)|Cauldron Star)\b/i],
   ['white deer', ['白鹿'], /\bwhite deer\b/i],
@@ -756,6 +757,7 @@ function glossaryFingerprint() {
 function cacheConfig(opts) {
   return {
     scannerVersion: SCANNER_VERSION,
+    scannerSourceHash: SCANNER_SOURCE_HASH,
     glossaryFingerprint: glossaryFingerprint(),
     glossaryScope: opts.glossaryScope,
     reviewPriorities: opts.reviewPriorities,
@@ -811,7 +813,7 @@ function suppressedSourceAnchorMatch(record, anchor, form, index) {
   const after = zh[index + form.length] || '';
   if (anchor.label === "Chang'an" && (form === '長安' || form === '长安') && after === '平') return true;
   if (anchor.label === 'tripods' && form === '鼎' && (before === '元' || (before === '寶' && after === '元'))) return true;
-  if (anchor.label === 'tripods' && form === '鼎' && /寶鼎|宝鼎/.test(zh)) return true;
+  if (anchor.label === 'tripods' && form === '鼎' && /改[^。；;，,]*為[寶宝]鼎|[寶宝]鼎縣|[寶宝]鼎县/.test(zh)) return true;
   if (anchor.label === 'tripods' && form === '鼎' && /^大鼎|大鼎又/.test(zh)) return true;
   if (anchor.label === 'tripods' && form === '鼎' && /鼎、澧、辰、沅、靖五郡/.test(zh)) return true;
   if (anchor.label === 'Yellow River' && (form === '入黃' || form === '入黄') && /[黃黄]崖口/.test(zh)) return true;
@@ -848,7 +850,7 @@ function suppressedSourceAnchorMatch(record, anchor, form, index) {
   if (
     anchor.label === 'immortals'
     && form === '仙'
-    && !/神仙|仙人|上仙|升仙|散仙|迎仙|仙仗|仙韶|仙丹|仙群|仙化|仙變|仙变|仙源|仙書|仙书|仙苑|仙藥|仙药|仙蹤|仙踪|仙翁|天仙|孝仙|黃仙|黄仙|仙師|仙师|仙期|仙升|列仙|群仙|求仙|學仙|学仙|雜仙|杂仙|諸仙|诸仙|八仙|仙經|仙经|仙道|仙者|集仙|仙真|仙去|仙才|地仙|三仙|真仙|大真人|成仙|仙都|總仙|总仙|仙洞|仙傳|仙传|廣仙|广仙|洞仙|寶仙|宝仙|釋仙|释仙|仙班|登仙|仙方|謫仙|谪仙|葛仙|仙宗/.test(zh)
+    && !/神仙|仙人|上仙|升仙|散仙|迎仙|仙仗|仙韶|仙丹|仙群|仙化|仙變|仙变|仙源|仙書|仙书|仙苑|仙藥|仙药|仙蹤|仙踪|仙翁|天仙|孝仙|黃仙|黄仙|仙師|仙师|仙期|仙升|列仙|群仙|求仙|學仙|学仙|雜仙|杂仙|諸仙|诸仙|八仙|仙經|仙经|仙道|仙者|集仙|仙真|仙去|仙才|地仙|三仙|真仙|大真人|成仙|仙都|總仙|总仙|仙洞|仙傳|仙传|廣仙|广仙|洞仙|寶仙|宝仙|釋仙|释仙|仙班|登仙|仙方|謫仙|谪仙|葛仙|仙宗|左仙|仙桃|已仙/.test(zh)
   ) {
     return true;
   }
@@ -897,6 +899,7 @@ function contextualEnglishAnchorHasSource(record, anchor) {
   if (anchor.label === 'immortals' && /至人/.test(record.zh) && /\bperfected man\b/i.test(record.english)) return true;
   if (anchor.label === 'immortals' && /好仙|得仙/.test(record.zh) && /\bimmortals?\b/i.test(record.english)) return true;
   if (anchor.label === 'immortals' && /正真/.test(record.zh) && /\bimmortals?\b/i.test(record.english)) return true;
+  if (anchor.label === 'immortals' && /上壽賀|上寿贺/.test(record.zh) && /\blongevity congratulations\b/i.test(record.english)) return true;
   if (anchor.label === '四川' && /蜀|川/.test(record.zh)) return true;
   if (anchor.label === '陝西' && /秦|[陝陕]/.test(record.zh)) return true;
   if (anchor.label === '江西' && /[贛赣]/.test(record.zh)) return true;
@@ -931,6 +934,13 @@ function hasEnglish(record, anchor) {
     anchor.label === 'immortals'
     && /\bcelestial\b/i.test(record.english)
     && /[僊仙]|神仙/.test(record.zh)
+  ) {
+    return true;
+  }
+  if (
+    anchor.label === 'immortals'
+    && /不死/.test(record.zh)
+    && /\b(?:(?:did not|does not|would not|will not|not to|not) die|without dying)\b/i.test(record.english)
   ) {
     return true;
   }

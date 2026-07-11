@@ -64,7 +64,13 @@ const PLACEHOLDER_PATTERNS = [
     id: 'cited-text-template',
     severity: 3,
     description: 'The cited text template',
-    regex: /\bthe cited text\b/u,
+    regex: /(?:[A-Za-z]the cited text|\bthe cited text(?=\d|[A-Z《「『（])|\b(?:composed|compiled|annotated|written|edited|translated) by the cited text\b)/u,
+  },
+  {
+    id: 'missing-graph-template',
+    severity: 3,
+    description: 'The missing graph template',
+    regex: /\bmissing graph/iu,
   },
   {
     id: 'raw-note-label-template',
@@ -340,6 +346,9 @@ function runSelfTest() {
     '(Gloss: ) (See Chinese subcommentary for full quotation.)',
     'Collation: 「」「」。',
     'Mao OdesSubcommentary on the Meaning, 5 scrolls, composed by the cited text.',
+    'The Liang catalog listed the cited text2 scrolls.',
+    'Documentsthe cited textTraditionQuestions, 2 scrolls.',
+    'The generals had missing graphthe cited text a thousand vessels carry warriors.',
     'Textual note: 按：「慌」《文選》作「荒」。',
     'Source note: 楚辭曰「折瓊枝以繼佩」也。',
     'Gloss: "Han-school citation cluster supporting the main text.',
@@ -351,6 +360,7 @@ function runSelfTest() {
     'Note: the Palace edition writes "於."',
     'Page 1914, line 11: at "志團團以應懸兮," the Wenxuan writes "團團" as "摶摶."',
     'Textual note: the Palace edition writes "於."',
+    'The cited text says Yuan Shu asked to see Ma Midi\'s staff.',
   ];
   for (const text of shouldMatch) {
     if (!matchPlaceholder(text)) {
