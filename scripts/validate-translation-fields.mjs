@@ -14,7 +14,8 @@ function usage() {
 Validates chapter translations:
   - translations[].text must not be present
   - translations[].literal and translations[].idiomatic must exist, be strings, and contain no Chinese characters
-  - literal/idiomatic may be empty only for rows with non-empty footnote text or source-empty residue rows
+  - literal/idiomatic may be empty only for rows with non-empty footnote text,
+    source-empty residue rows, or explicit excludeFromTranslationCount rows
 
 Set allowChineseCharacters: true on a sentence or translation object for intentional
 short Chinese references such as graph disambiguation or quoted source terms.`);
@@ -90,8 +91,15 @@ function sourceText(sentence) {
   return '';
 }
 
+function hasTranslationExclusion(sentence) {
+  if (sentence?.excludeFromTranslationCount !== true) return false;
+  return typeof sentence?.translationExclusionReason === 'string' && sentence.translationExclusionReason.trim().length > 0;
+}
+
 function canHaveEmptyMainTranslation(translation, sentence) {
-  return Boolean(String(translation?.footnote || '').trim()) || !String(sourceText(sentence)).trim();
+  return hasTranslationExclusion(sentence) ||
+    Boolean(String(translation?.footnote || '').trim()) ||
+    !String(sourceText(sentence)).trim();
 }
 
 function validateEnglishField(translation, field, allowChineseCharacters = false, allowEmpty = false) {
@@ -119,6 +127,13 @@ function validateNode(node, parts = [], sentenceId = '') {
   if (!node || typeof node !== 'object') return issues;
 
   const nextSentenceId = typeof node.id === 'string' ? node.id : sentenceId;
+  if (node.excludeFromTranslationCount === true && !hasTranslationExclusion(node)) {
+    issues.push({
+      path: contextPath([...parts, 'translationExclusionReason']),
+      issue: 'translationExclusionReason missing',
+      sentenceId: nextSentenceId,
+    });
+  }
   if (Array.isArray(node)) {
     for (const [index, item] of node.entries()) {
       issues.push(...validateNode(item, [...parts, index], nextSentenceId));

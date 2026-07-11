@@ -15,6 +15,7 @@
 import fs from 'fs';
 import path from 'path';
 import { scoreChapterFile } from './score-translations.js';
+import { isExcludedFromTranslationCount } from './chapter-counts.mjs';
 import { isPunctuationOnlySentence } from './sentence-utils.mjs';
 import { estimateCompletionFromGitHistory } from './scripts/progress-estimate.mjs';
 
@@ -456,6 +457,9 @@ function analyzeChapterStatus(bookId, chapter, chapterData) {
             // Skip empty or punctuation-only text (blank table cells / scaffolding)
             const chineseText = (sentence.zh || sentence.content || '').trim();
             if (!chineseText || isPunctuationOnlySentence(chineseText)) {
+              continue;
+            }
+            if (isExcludedFromTranslationCount(sentence)) {
               continue;
             }
 

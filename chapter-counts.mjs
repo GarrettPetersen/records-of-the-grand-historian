@@ -15,6 +15,10 @@ function getTranslations(item) {
   return [item];
 }
 
+export function isExcludedFromTranslationCount(item) {
+  return item?.excludeFromTranslationCount === true;
+}
+
 function hasMeaningfulTranslation(item) {
   for (const t of getTranslations(item)) {
     if (
@@ -48,6 +52,7 @@ export function isChapterFullyReviewed(chapterData) {
       for (const sentence of block.sentences || []) {
         const text = getSentenceText(sentence);
         if (!isCountableText(text)) continue;
+        if (isExcludedFromTranslationCount(sentence)) continue;
         if (!hasMeaningfulTranslation(sentence)) continue;
         translated += 1;
         if (!isTranslationReviewed(sentence)) return false;
@@ -56,6 +61,7 @@ export function isChapterFullyReviewed(chapterData) {
       for (const cell of block.cells || []) {
         const text = getSentenceText(cell);
         if (!isCountableText(text)) continue;
+        if (isExcludedFromTranslationCount(cell)) continue;
         if (!hasMeaningfulTranslation(cell)) continue;
         translated += 1;
         if (!isTranslationReviewed(cell)) return false;
@@ -76,6 +82,7 @@ export function countChapterMetrics(chapterData) {
       for (const sentence of block.sentences || []) {
         const text = getSentenceText(sentence);
         if (!isCountableText(text)) continue;
+        if (isExcludedFromTranslationCount(sentence)) continue;
         sentenceCount += 1;
         const chars = text.trim().length;
         characterCount += chars;
@@ -88,6 +95,7 @@ export function countChapterMetrics(chapterData) {
       for (const cell of block.cells || []) {
         const text = getSentenceText(cell);
         if (!isCountableText(text)) continue;
+        if (isExcludedFromTranslationCount(cell)) continue;
         sentenceCount += 1;
         const chars = text.trim().length;
         characterCount += chars;
@@ -101,4 +109,3 @@ export function countChapterMetrics(chapterData) {
 
   return { sentenceCount, translatedCount, characterCount, translatedCharacterCount };
 }
-
