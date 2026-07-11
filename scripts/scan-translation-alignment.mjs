@@ -17,7 +17,7 @@ import crypto from 'node:crypto';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const GLOSSARY_PATH = path.join(DATA_DIR, 'glossary.json');
-const SCANNER_VERSION = '2026-07-10-river-anchor-context-2';
+const SCANNER_VERSION = '2026-07-11-celestial-xian-anchor';
 
 const CHECK_FIELDS = new Set([
   'idiomatic',
@@ -95,7 +95,7 @@ const MANUAL_ANCHORS = [
   ['Jade Hall', ['玉堂'], /\bJade Hall\b/i],
   ['Bi Gate', ['璧門', '璧门'], /\b(?:Bi|Jade) Gate\b/i],
   ['Great Bird', ['大鳥', '大鸟'], /\bGreat Birds?\b/i],
-  ['immortals', ['僊', '仙', '神仙', '安期', '彭祖', '僑、松', '乔、松'], /\b(?:immortals?|transcendents?)\b/i],
+  ['immortals', ['僊', '仙', '神仙', '羽化', '安期', '彭祖', '僑、松', '乔、松'], /\b(?:immortals?|transcendents?|divine transcendence)\b/i],
   ['fangshi', ['方士'], /\bfangshi\b/i],
   ['tripods', ['鼎', '鼐', '釜'], /\b(?:tripods?|cauldrons?|Nine Tripods|Tripod (?:Book|Pavilion)|Cauldron Star)\b/i],
   ['white deer', ['白鹿'], /\bwhite deer\b/i],
@@ -832,6 +832,13 @@ function suppressedSourceAnchorMatch(record, anchor, form, index) {
   ) {
     return true;
   }
+  if (
+    anchor.label === 'immortals'
+    && form === '仙'
+    && !/神仙|仙人|升仙|散仙|仙仗|仙韶|仙丹|仙群|列仙|群仙|求仙|學仙|学仙|雜仙|杂仙|諸仙|诸仙|八仙|謫仙|谪仙|葛仙|仙宗/.test(zh)
+  ) {
+    return true;
+  }
   return false;
 }
 
@@ -885,6 +892,13 @@ function hasEnglish(record, anchor) {
     anchor.label === 'immortals'
     && /\b(?:An\s?Qi(?:sheng)?|Anqi(?:\s?Sheng)?|Pengzu)\b/i.test(record.english)
     && /安期|彭祖/.test(record.zh)
+  ) {
+    return true;
+  }
+  if (
+    anchor.label === 'immortals'
+    && /\bcelestial\b/i.test(record.english)
+    && /[僊仙]|神仙/.test(record.zh)
   ) {
     return true;
   }
