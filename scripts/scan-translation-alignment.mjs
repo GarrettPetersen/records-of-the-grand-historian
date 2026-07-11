@@ -104,6 +104,11 @@ const MANUAL_ANCHORS = [
   ['jade cup', ['玉杯'], /\bjade cup\b/i],
 ];
 
+const SOFT_MANUAL_ANCHOR_LABELS = new Set([
+  'immortals',
+  'tripods',
+]);
+
 const SUPPLEMENTAL_GLOSSARY_ANCHORS = [
   ['檢校', ['檢校', '检校'], /\bacting\b/i],
   ['尚書', ['尚書', '尚书'], /\b(?:minister|Department of State Affairs)\b/i],
@@ -486,9 +491,19 @@ let ANCHOR_STATS = {};
 
 function configureAnchors({ glossaryScope = 'all' } = {}) {
   const manualAnchors = MANUAL_ANCHORS
+    .filter(([label]) => !SOFT_MANUAL_ANCHOR_LABELS.has(label))
     .map(([label, sourceForms, englishRe]) => ({ label, sourceForms, englishRe, manual: true }));
   const glossaryAnchors = [];
   if (glossaryScope === 'all') {
+    glossaryAnchors.push(...MANUAL_ANCHORS
+      .filter(([label]) => SOFT_MANUAL_ANCHOR_LABELS.has(label))
+      .map(([label, sourceForms, englishRe]) => ({
+        label,
+        sourceForms,
+        englishRe,
+        glossary: true,
+        common: true,
+      })));
     glossaryAnchors.push(...SUPPLEMENTAL_GLOSSARY_ANCHORS.map(([label, sourceForms, englishRe]) => ({
       label,
       sourceForms,
@@ -812,12 +827,16 @@ function suppressedSourceAnchorMatch(record, anchor, form, index) {
   const before = index > 0 ? zh[index - 1] : '';
   const after = zh[index + form.length] || '';
   if (anchor.label === "Chang'an" && (form === '長安' || form === '长安') && after === '平') return true;
+  if (anchor.label === "Chang'an" && (form === '長安' || form === '长安') && (after === '嶺' || after === '岭')) return true;
   if (anchor.label === 'tripods' && form === '鼎' && (before === '元' || (before === '寶' && after === '元'))) return true;
+  if (anchor.label === 'tripods' && form === '鼎' && before === '台') return true;
   if (anchor.label === 'tripods' && form === '鼎' && /改[^。；;，,]*為[寶宝]鼎|[寶宝]鼎縣|[寶宝]鼎县/.test(zh)) return true;
+  if (anchor.label === 'tripods' && form === '鼎' && /[寶宝]鼎/.test(zh) && /[縣县]|虞鄉|虞乡|永樂|永乐|安邑|襄陵|稷山/.test(zh)) return true;
   if (anchor.label === 'tripods' && form === '鼎' && /^大鼎|大鼎又/.test(zh)) return true;
   if (anchor.label === 'tripods' && form === '鼎' && /鼎、澧、辰、沅、靖五郡/.test(zh)) return true;
   if (anchor.label === 'Yellow River' && (form === '入黃' || form === '入黄') && /[黃黄]崖口/.test(zh)) return true;
   if (anchor.label === 'Yellow River' && /[黃黄]龍/.test(zh)) return true;
+  if (anchor.label === 'Yellow River' && /[黃黄](?:牛坡|道|陵岡|陵冈)/.test(zh)) return true;
   if (anchor.label === 'Mount Tai' && form === '岱' && /[劉刘]岱/.test(zh)) return true;
   if (
     anchor.label === 'Yellow River'
@@ -888,18 +907,31 @@ function contextualEnglishAnchorHasSource(record, anchor) {
   ) {
     return true;
   }
+  if (
+    anchor.label === 'Yellow River'
+    && /河/.test(record.zh)
+    && /\bYellow River\b/i.test(record.english)
+  ) {
+    return true;
+  }
   if (anchor.label === 'Yellow River' && /[全殺][黃黄]/.test(record.zh)) return true;
   if (anchor.label === 'Yellow River' && /河南之地/.test(record.zh) && /south of the Yellow River/i.test(record.english)) return true;
   if (anchor.label === 'Yellow River' && /河性/.test(record.zh) && /Yellow River/i.test(record.english)) return true;
   if (anchor.label === 'Yingzhou' && /[瀛潁颍應应]/.test(record.zh) && /\bYingzhou\b/i.test(record.english)) return true;
+  if (anchor.label === 'Yingzhou' && /[瀛潁颍應应]州/.test(record.zh) && /\bYing (?:Prefecture|regimental|troops|Province)\b/i.test(record.english)) return true;
   if (anchor.label === "Chang'an" && /昌安/.test(record.zh) && /\bChangan\b/i.test(record.english)) return true;
+  if (anchor.label === "Chang'an" && /京師|京师|京兆|京城|西京|常安/.test(record.zh) && /\bChang[’']?an\b/i.test(record.english)) return true;
   if (anchor.label === "Chang'an" && /去長|去长/.test(record.zh) && /\bChang[’']?an\b/i.test(record.english)) return true;
   if (anchor.label === "Chang'an" && /長安平|长安平|未央宮|未央宫|東市|东市|西市/.test(record.zh) && /\bChang[’']?an\b/i.test(record.english)) return true;
+  if (anchor.label === 'Mount Tai' && /東嶽|东岳/.test(record.zh) && /\bEastern Peak\b/i.test(record.english)) return true;
   if (anchor.label === 'immortals' && /女真詩/.test(record.zh) && /\bLady Immortals\b/i.test(record.english)) return true;
+  if (anchor.label === 'immortals' && /神之人/.test(record.zh) && /\bdivine being\b/i.test(record.english)) return true;
   if (anchor.label === 'immortals' && /至人/.test(record.zh) && /\bperfected man\b/i.test(record.english)) return true;
   if (anchor.label === 'immortals' && /好仙|得仙/.test(record.zh) && /\bimmortals?\b/i.test(record.english)) return true;
   if (anchor.label === 'immortals' && /正真/.test(record.zh) && /\bimmortals?\b/i.test(record.english)) return true;
   if (anchor.label === 'immortals' && /上壽賀|上寿贺/.test(record.zh) && /\blongevity congratulations\b/i.test(record.english)) return true;
+  if (anchor.label === 'immortals' && /修養|修养|服食|壽|寿|長年|长年|延年|長春|长春/.test(record.zh) && /\b(?:longevity|long life|extending life|Longevity Palace)\b/i.test(record.english)) return true;
+  if (anchor.label === 'Jiang-Huai' && /江[、淮]|江淮/.test(record.zh) && /\b(?:(?:Yangzi|Yangtze|Jiang)\s*(?:-|,|and)\s*Huai|Jiang-Huai)\b/i.test(record.english)) return true;
   if (anchor.label === '四川' && /蜀|川/.test(record.zh)) return true;
   if (anchor.label === '陝西' && /秦|[陝陕]/.test(record.zh)) return true;
   if (anchor.label === '江西' && /[贛赣]/.test(record.zh)) return true;
@@ -924,6 +956,20 @@ function contextualEnglishAnchorHasSource(record, anchor) {
 function hasEnglish(record, anchor) {
   if (anchor.label === 'tripods' && /(?<!-)\bdings?\b/.test(record.english)) return true;
   if (
+    anchor.label === 'tripods'
+    && /鼎|釜|鑊|镬/.test(record.zh)
+    && /\b(?:vessel|inscription|pot|cauldron|cauldrons)\b/i.test(record.english)
+  ) {
+    return true;
+  }
+  if (
+    anchor.label === 'Yellow River'
+    && hasSource(record, anchor)
+    && /\b(?:river|Huang(?:shui)?|Yellow)\b/i.test(record.english)
+  ) {
+    return true;
+  }
+  if (
     anchor.label === 'immortals'
     && /\b(?:An\s?Qi(?:sheng)?|Anqi(?:\s?Sheng)?|Pengzu)\b/i.test(record.english)
     && /安期|彭祖/.test(record.zh)
@@ -940,7 +986,49 @@ function hasEnglish(record, anchor) {
   if (
     anchor.label === 'immortals'
     && /不死/.test(record.zh)
-    && /\b(?:(?:did not|does not|would not|will not|not to|not) die|without dying)\b/i.test(record.english)
+    && /\b(?:(?:did not|does not|would not|will not|not to|not) die|not dying|without dying|undying|survive|survived|spare you|promises? (?:you )?life|granting life)\b/i.test(record.english)
+  ) {
+    return true;
+  }
+  if (
+    anchor.label === 'immortals'
+    && /壽|寿|長年|长年|延年|長生|长生|長春|长春/.test(record.zh)
+    && /\b(?:longevity|long life|elixir(?:s)? of life|extending life|Longevity Palace)\b/i.test(record.english)
+  ) {
+    return true;
+  }
+  if (
+    anchor.label === 'immortals'
+    && /仙藥|仙药|長生藥|长生药/.test(record.zh)
+    && /\belixirs?\b/i.test(record.english)
+  ) {
+    return true;
+  }
+  if (
+    anchor.label === 'immortals'
+    && /真君/.test(record.zh)
+    && /\bTrue Lords?\b/i.test(record.english)
+  ) {
+    return true;
+  }
+  if (
+    anchor.label === 'Yingzhou'
+    && /[瀛潁颍應应]州/.test(record.zh)
+    && /\b(?:Yingzhou|Ying Prefecture|Ying Province|Ying regimental|troops of Yingzhou|north of Yingzhou|surrender of Yingzhou)\b/i.test(record.english)
+  ) {
+    return true;
+  }
+  if (
+    anchor.label === 'Jiang-Huai'
+    && /江[、淮]|江淮/.test(record.zh)
+    && /\b(?:(?:Yangzi|Yangtze|Jiang)\s*(?:-|,|and)\s*Huai|Jiang-Huai)\b/i.test(record.english)
+  ) {
+    return true;
+  }
+  if (
+    anchor.label === 'Mount Tai'
+    && /東嶽|东岳/.test(record.zh)
+    && /\bEastern Peak\b/i.test(record.english)
   ) {
     return true;
   }
