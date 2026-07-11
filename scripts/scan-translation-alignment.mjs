@@ -95,7 +95,7 @@ const MANUAL_ANCHORS = [
   ['Jade Hall', ['玉堂'], /\bJade Hall\b/i],
   ['Bi Gate', ['璧門', '璧门'], /\b(?:Bi|Jade) Gate\b/i],
   ['Great Bird', ['大鳥', '大鸟'], /\bGreat Birds?\b/i],
-  ['immortals', ['僊', '仙', '神仙', '羽化', '安期', '彭祖', '僑、松', '乔、松'], /\b(?:immortals?|transcendents?|divine transcendence)\b/i],
+  ['immortals', ['僊', '仙', '神仙', '羽化', '安期', '彭祖', '僑、松', '乔、松'], /\b(?:immortals?|immortalist|transcendents?|divine transcendence)\b/i],
   ['fangshi', ['方士'], /\bfangshi\b/i],
   ['tripods', ['鼎', '鼐', '釜'], /\b(?:tripods?|cauldrons?|Nine Tripods|Tripod (?:Book|Pavilion)|Cauldron Star)\b/i],
   ['white deer', ['白鹿'], /\bwhite deer\b/i],
@@ -835,7 +835,7 @@ function suppressedSourceAnchorMatch(record, anchor, form, index) {
   if (
     anchor.label === 'immortals'
     && form === '仙'
-    && !/神仙|仙人|升仙|散仙|仙仗|仙韶|仙丹|仙群|列仙|群仙|求仙|學仙|学仙|雜仙|杂仙|諸仙|诸仙|八仙|謫仙|谪仙|葛仙|仙宗/.test(zh)
+    && !/神仙|仙人|升仙|散仙|仙仗|仙韶|仙丹|仙群|列仙|群仙|求仙|學仙|学仙|雜仙|杂仙|諸仙|诸仙|八仙|三仙|真仙|成仙|仙都|仙傳|仙传|廣仙|广仙|洞仙|寶仙|宝仙|釋仙|释仙|仙班|登仙|仙方|謫仙|谪仙|葛仙|仙宗/.test(zh)
   ) {
     return true;
   }
