@@ -253,7 +253,13 @@ export const TRANSLATION_ARTIFACT_RULES = [
     id: 'FUSED_COMMON_WORD_BOUNDARY',
     severity: 3,
     description: 'Likely missing space before a common English clause word',
-    pattern: /\b(?:alarmonly|chaptersworks|warare|sawyou|sectyou|mudwho|anywayhardly|rearwhat|handwhere|strengthwhat|kinthat|sorcererall|plansis|victoryis|succeededbut|gloryhow|obscuritythough|elsejust|earswar|themthat|fledwhere|rolesremain|precedentslike|modestythey|countinsufficient|stateno|thatnot|sealsnone)\b/g,
+    pattern: /\b(?:alarmonly|chaptersworks|warare|sawyou|sectyou|mudwho|anywayhardly|rearwhat|handwhere|strengthwhat|kinthat|sorcererall|plansis|victoryis|succeededbut|gloryhow|obscuritythough|elsejust|earswar|themthat|fledwhere|rolesremain|precedentslike|modestythey|countinsufficient|stateno|thatnot|sealsnone|woeit)\b/g,
+  },
+  {
+    id: 'FUSED_REIGN_TABLE_FORMULA',
+    severity: 3,
+    description: 'Administrative table formula has a missing space after a reign name, year, or place',
+    pattern: /\b(?:Wude|Zhide|Zhenguan|Chuigong|Kaiyuan|Tianbao|Dali|Yongzhen|reign|year|county|County|counties|Dabin|Qiongshan|Zhenyang|Wenshui|Jianling|Kaijiang|Xian)(?:established|renamed|split|called|came|was|also|the|seat|again)\b|\b(?:calledNingyuan|enteredGao|fromYangshou|PrefectureXinhui|PrefectureYulin|southJian)\b/g,
   },
   {
     id: 'FUSED_LOWER_UPPER_BOUNDARY',
