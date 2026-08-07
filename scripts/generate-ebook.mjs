@@ -15,6 +15,7 @@ const repoRoot = path.resolve(__dirname, '..');
 const manifestPath = path.join(repoRoot, 'ebooks', 'manifest.json');
 const publicationDescriptionsPath = path.join(repoRoot, 'ebooks', 'publication-descriptions.json');
 const outRoot = path.join(repoRoot, 'dist', 'ebooks');
+const introductionTitle = "Translator's Introduction";
 const publicationDescriptions = (() => {
   if (!fs.existsSync(publicationDescriptionsPath)) return {};
   return readJson(publicationDescriptionsPath);
@@ -59,7 +60,6 @@ function applyPublicationDescriptions(product) {
   const resolved = structuredClone(product);
   if (Object.prototype.hasOwnProperty.call(entry, 'text') || Object.prototype.hasOwnProperty.call(entry, 'productDescription') || Object.prototype.hasOwnProperty.call(entry, 'aboutThisEdition')) {
     const publicationText = publicationTextFromEntry(entry);
-    resolved.productDescription = publicationText;
     resolved.aboutThisEdition = publicationText ? publicationText.split(/\n{2,}/).map((paragraph) => textContent(paragraph)).filter(Boolean) : [];
   }
   return resolved;
@@ -913,7 +913,7 @@ function validateProductMetadata(product, qa) {
   if (!textContent(kdp.suggestedListPriceUsd)) qa.warnings.push('Missing KDP suggested USD list price.');
   if (!textContent(kdp.publishingRights)) qa.warnings.push('Missing KDP publishing-rights note.');
   if (!textContent(kdp.aiGeneratedContent)) qa.warnings.push('Missing KDP AI-generated-content disclosure note.');
-  const productDescription = textContent(product.productDescription);
+  const productDescription = textContent(product.productDescription || product.description);
   if (!productDescription) {
     qa.warnings.push('No product description found for publication metadata.');
   }
@@ -1413,7 +1413,7 @@ function reviewNavigationTargets(product, chapters) {
     { href: 'EPUB/cover.xhtml', text: 'Cover' },
     { href: 'EPUB/frontmatter.xhtml', text: 'Copyright and Source Note' },
     ...(Array.isArray(product.aboutThisEdition) && product.aboutThisEdition.length > 0
-      ? [{ href: 'EPUB/about.xhtml', text: 'About This Edition' }]
+      ? [{ href: 'EPUB/about.xhtml', text: introductionTitle }]
       : []),
     chapterLinks[0],
     chapterLinks[Math.floor(chapterLinks.length / 2)],
@@ -1857,12 +1857,12 @@ function renderAboutThisEdition(product) {
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="en" lang="en">
 <head>
-  <title>About This Edition</title>
+  <title>${introductionTitle}</title>
   <link rel="stylesheet" type="text/css" href="styles/ebook.css" />
 </head>
 <body>
   <section epub:type="frontmatter">
-    <h1>About This Edition</h1>
+    <h1>${introductionTitle}</h1>
     ${paragraphs.map((paragraph) => `<p>${escapeXml(paragraph)}</p>`).join('\n    ')}
   </section>
 </body>
@@ -1876,8 +1876,8 @@ function renderNav(product, chapters) {
     return `<li><a href="text/${chapterFileName(chapter)}">${escapeXml(title)}</a></li>`;
   }).join('\n      ');
   const hasAbout = Array.isArray(product.aboutThisEdition) && product.aboutThisEdition.length > 0;
-  const aboutTocItem = hasAbout ? '<li><a href="about.xhtml">About This Edition</a></li>' : '';
-  const aboutLandmarkItem = hasAbout ? '<li><a epub:type="preface" href="about.xhtml">About This Edition</a></li>' : '';
+  const aboutTocItem = hasAbout ? `<li><a href="about.xhtml">${introductionTitle}</a></li>` : '';
+  const aboutLandmarkItem = hasAbout ? `<li><a epub:type="preface" href="about.xhtml">${introductionTitle}</a></li>` : '';
 
   return `<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html>

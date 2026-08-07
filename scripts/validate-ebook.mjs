@@ -1169,7 +1169,7 @@ if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
     errors.push(`Navigation TOC frontmatter label mismatch: ${navLinks[1]?.text || '(missing)'}.`);
   }
   const chapterNavOffset = metadata.aboutThisEdition?.length ? 3 : 2;
-  if (metadata.aboutThisEdition?.length && navLinks[2]?.text !== 'About This Edition') {
+  if (metadata.aboutThisEdition?.length && navLinks[2]?.text !== "Translator's Introduction") {
     errors.push(`Navigation TOC about-page label mismatch: ${navLinks[2]?.text || '(missing)'}.`);
   }
   for (const [index, chapter] of expectedChapterIds.entries()) {

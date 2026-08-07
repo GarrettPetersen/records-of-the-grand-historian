@@ -215,7 +215,7 @@ const next = {
       status: 'passed',
       tocOk: true,
       firstMiddleLastChapterLinksOk: true,
-      notes: `EPUB nav.xhtml contains cover, frontmatter, About This Edition, and ${product.chapters.length} chapter links; first, middle, and final chapter targets are present.`,
+      notes: `EPUB nav.xhtml contains cover, frontmatter, Translator's Introduction, and ${product.chapters.length} chapter links; first, middle, and final chapter targets are present.`,
     },
     frontmatter: {
       ...(checks.frontmatter || {}),
