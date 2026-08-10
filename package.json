@@ -12,6 +12,14 @@
     "people:normalize-ids": "node scripts/normalize-content-unit-ids.mjs --apply",
     "people:check-ids": "node scripts/normalize-content-unit-ids.mjs --check",
     "people:normalize-ids:self-test": "node scripts/normalize-content-unit-ids.mjs --self-test",
+    "people:packet": "node scripts/build-people-extraction-packet.mjs",
+    "people:packet:self-test": "node scripts/build-people-extraction-packet.mjs --self-test",
+    "people:apply-repairs": "node scripts/apply-people-translation-repairs.mjs",
+    "people:apply-repairs:self-test": "node scripts/apply-people-translation-repairs.mjs --self-test",
+    "people:validate": "node scripts/validate-people-data.mjs",
+    "people:validate-extraction": "node scripts/validate-people-extraction.mjs",
+    "people:validate-extraction:self-test": "node scripts/validate-people-extraction.mjs --self-test",
+    "people:extract": "node scripts/sdk-people-extract.mjs",
     "build:og": "node generate-og-images.js",
     "build:og:incremental": "node generate-og-images.js --incremental",
     "build:og:shiji": "node generate-og-images.js --book shiji",
@@ -156,6 +164,8 @@
   "dependencies": {
     "@cursor/sdk": "^1.0.13",
     "@resvg/resvg-js": "^2.6.2",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
     "cheerio": "^1.1.2",
     "react": "^19.2.5",
     "satori": "^0.26.0"

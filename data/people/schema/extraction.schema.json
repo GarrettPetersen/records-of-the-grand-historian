@@ -1,0 +1,293 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://24histories.com/schema/people/extraction-v1.json",
+  "title": "Chapter person extraction",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "book",
+    "chapter",
+    "input",
+    "run",
+    "people",
+    "mentions",
+    "claims",
+    "translationRepairs",
+    "candidateDispositions",
+    "coverage"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "book": { "type": "string", "pattern": "^[a-z0-9_-]+$" },
+    "chapter": { "type": "string", "pattern": "^\\d{3}$" },
+    "input": { "$ref": "#/$defs/input" },
+    "run": { "$ref": "#/$defs/run" },
+    "people": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/localPerson" }
+    },
+    "mentions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/mention" }
+    },
+    "claims": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/claim" }
+    },
+    "translationRepairs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/translationRepair" }
+    },
+    "candidateDispositions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/candidateDisposition" }
+    },
+    "coverage": { "$ref": "#/$defs/coverage" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unitCount", "chapterFingerprint", "chineseFingerprint", "englishFingerprint", "unitDigests"],
+      "properties": {
+        "unitCount": { "type": "integer", "minimum": 0 },
+        "chapterFingerprint": { "$ref": "#/$defs/digest" },
+        "chineseFingerprint": { "$ref": "#/$defs/digest" },
+        "englishFingerprint": { "$ref": "#/$defs/digest" },
+        "unitDigests": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "zh", "en", "literal"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "zh": { "$ref": "#/$defs/digest" },
+              "en": { "$ref": "#/$defs/digest" },
+              "literal": { "$ref": "#/$defs/digest" }
+            }
+          }
+        }
+      }
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model", "promptVersion"],
+      "properties": {
+        "model": { "type": "string", "minLength": 1 },
+        "promptVersion": { "const": 2 },
+        "agentId": { "type": ["string", "null"] },
+        "runId": { "type": ["string", "null"] },
+        "completedAt": { "type": ["string", "null"], "format": "date-time" }
+      }
+    },
+    "localizedName": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "en": { "type": ["string", "null"] },
+        "zh": { "type": ["string", "null"] },
+        "pinyin": { "type": ["string", "null"] }
+      },
+      "anyOf": [
+        { "required": ["en"] },
+        { "required": ["zh"] }
+      ]
+    },
+    "localPerson": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["localId", "preferredNameSuggestion", "historicity", "descriptorSuggestion", "identityHints"],
+      "properties": {
+        "localId": { "type": "string", "pattern": "^[a-z0-9_-]+:\\d{3}:p\\d{3,}$" },
+        "preferredNameSuggestion": { "$ref": "#/$defs/localizedName" },
+        "historicity": { "enum": ["historical", "legendary", "uncertain", "literary"] },
+        "descriptorSuggestion": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "identityHints": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["nativePlaces", "relatedLocalPeople", "activeDateHints"],
+          "properties": {
+            "nativePlaces": { "type": "array", "items": { "type": "string" } },
+            "relatedLocalPeople": { "type": "array", "items": { "type": "string" } },
+            "activeDateHints": { "type": "array", "items": { "type": "string" } },
+            "polityHints": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "mentionException": { "type": ["string", "null"], "minLength": 1 }
+      }
+    },
+    "unitLocator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "blockIndex", "collection", "itemIndex"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["paragraph-sentence", "table-header-cell", "table-body-cell"] },
+        "blockIndex": { "type": "integer", "minimum": 0 },
+        "collection": { "enum": ["sentences", "cells"] },
+        "itemIndex": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "span": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exact", "occurrence"],
+      "properties": {
+        "exact": { "type": "string", "minLength": 1 },
+        "occurrence": { "type": "integer", "minimum": 0 },
+        "startCodePoint": { "type": "integer", "minimum": 0 },
+        "endCodePoint": { "type": "integer", "minimum": 1 },
+        "unitTextHash": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "mention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "person", "unit", "kind", "spans", "candidateRefs"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9_-]+:\\d{3}:m\\d{4,}$" },
+        "person": { "type": "string", "pattern": "^[a-z0-9_-]+:\\d{3}:p\\d{3,}$" },
+        "unit": { "$ref": "#/$defs/unitLocator" },
+        "kind": {
+          "enum": [
+            "personal-name",
+            "courtesy-name",
+            "childhood-name",
+            "religious-name",
+            "temple-name",
+            "posthumous-name",
+            "alternate-name",
+            "title-reference",
+            "kinship-reference"
+          ]
+        },
+        "spans": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["zh", "en"],
+          "properties": {
+            "zh": { "type": "array", "items": { "$ref": "#/$defs/span" } },
+            "en": { "type": "array", "items": { "$ref": "#/$defs/span" } }
+          }
+        },
+        "candidateRefs": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[a-z0-9_-]+:\\d{3}:cand_[a-f0-9]{16}$" }
+        }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "subject", "predicate", "value", "certainty", "evidence"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9_-]+:\\d{3}:c\\d{4,}$" },
+        "subject": { "type": "string", "pattern": "^[a-z0-9_-]+:\\d{3}:p\\d{3,}$" },
+        "predicate": {
+          "enum": [
+            "name",
+            "role",
+            "sex",
+            "native-place",
+            "lineage",
+            "relationship",
+            "office",
+            "noble-title",
+            "enfeoffment",
+            "polity-association",
+            "birth",
+            "death",
+            "age",
+            "accession",
+            "deposition",
+            "authorship",
+            "same-person",
+            "renamed",
+            "historicity"
+          ]
+        },
+        "value": { "type": "object" },
+        "certainty": {
+          "enum": [
+            "explicit",
+            "explicit-event-contextual-date",
+            "strongly-inferred",
+            "uncertain",
+            "derived",
+            "textual-variant"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^[a-z0-9_-]+:\\d{3}:.+$" }
+        }
+      }
+    },
+    "translationRepair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "unit", "field", "before", "after", "reason", "confidence", "status"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9_-]+:\\d{3}:r\\d{4,}$" },
+        "unit": { "$ref": "#/$defs/unitLocator" },
+        "field": { "enum": ["idiomatic", "literal"] },
+        "before": { "type": "string", "minLength": 1 },
+        "after": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 10, "maxLength": 500 },
+        "confidence": { "enum": ["high", "medium"] },
+        "status": { "enum": ["proposed", "applied"] }
+      }
+    },
+    "candidateDisposition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidate", "disposition", "reason"],
+      "properties": {
+        "candidate": { "type": "string", "pattern": "^[a-z0-9_-]+:\\d{3}:cand_[a-f0-9]{16}$" },
+        "disposition": { "enum": ["not-person", "ambiguous", "unresolved", "duplicate-hint"] },
+        "reason": {
+          "enum": [
+            "place",
+            "office",
+            "book-title",
+            "collective",
+            "deity",
+            "reign-period",
+            "polity",
+            "not-a-name",
+            "ambiguous",
+            "duplicate-candidate",
+            "other"
+          ]
+        },
+        "note": { "type": ["string", "null"] }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allUnitsVisited", "preflightCandidatesAccountedFor", "unresolvedReferences"],
+      "properties": {
+        "allUnitsVisited": { "const": true },
+        "preflightCandidatesAccountedFor": { "const": true },
+        "unresolvedReferences": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["unit", "description"],
+            "properties": {
+              "unit": { "type": "string", "minLength": 1 },
+              "description": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    }
+  }
+}

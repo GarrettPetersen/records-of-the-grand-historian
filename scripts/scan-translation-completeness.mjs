@@ -7,6 +7,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { bookDataDirectories, discoverChapterFiles } from './lib/chapter-files.mjs';
 import { fileURLToPath } from 'node:url';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
@@ -68,21 +69,6 @@ function parseArgs(argv) {
     process.exit(2);
   }
   return opts;
-}
-
-function chapterFiles(inputs) {
-  const files = [];
-  const enqueue = (entry) => {
-    if (!fs.existsSync(entry)) return;
-    const st = fs.statSync(entry);
-    if (st.isDirectory()) {
-      for (const child of fs.readdirSync(entry).sort()) enqueue(path.join(entry, child));
-      return;
-    }
-    if (/^\d{3}\.json$/u.test(path.basename(entry))) files.push(entry);
-  };
-  for (const input of inputs) enqueue(input);
-  return [...new Set(files)].sort();
 }
 
 function text(value) {
@@ -168,12 +154,10 @@ function main() {
   let inputs = opts.inputs;
   if (opts.book) inputs = [path.join(DATA_DIR, opts.book)];
   if (inputs.length === 0) {
-    inputs = fs.readdirSync(DATA_DIR)
-      .map((entry) => path.join(DATA_DIR, entry))
-      .filter((entry) => fs.statSync(entry).isDirectory() && path.basename(entry) !== 'quality');
+    inputs = bookDataDirectories(DATA_DIR);
   }
 
-  const hits = chapterFiles(inputs).flatMap(scanTranslationCompletenessFile);
+  const hits = discoverChapterFiles(inputs).flatMap(scanTranslationCompletenessFile);
   const totalHits = hits.length;
 
   if (opts.json) {

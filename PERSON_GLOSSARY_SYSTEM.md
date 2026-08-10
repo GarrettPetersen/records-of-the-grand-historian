@@ -11,11 +11,49 @@ The design assumes one AI extraction pass over each chapter. Later identity
 resolution may inspect the extracted evidence windows, but it must not require
 agents to read all 4,099 chapters again.
 
+The extraction foundation was implemented on 2026-08-10. Version 1 now has:
+
+- versioned packet, extraction, chronology, resolution, and canonical-person
+  JSON schemas under `data/people/schema/`;
+- shared content-unit enumeration, Unicode span location, hashing, and atomic
+  JSON helpers in `scripts/lib/people-content.mjs`;
+- a scalable proper-noun matcher and deterministic candidate scanner in
+  `scripts/lib/people-candidates.mjs`;
+- `scripts/build-people-extraction-packet.mjs` for reproducible chapter packets;
+- `scripts/validate-people-extraction.mjs` for schema, fingerprint, locator,
+  evidence, candidate-coverage, stale-span, and overlap validation;
+- `scripts/sdk-people-extract.mjs` for resumable Cursor Cloud runs, with
+  artifact-only worker output, host-side acceptance, and validation retries;
+- initial role, polity, and reign vocabularies for the Songshu pilot.
+
+Generated packets, runner state, and temporary workspaces live under
+`data/people/generated/` and are gitignored. Only validated chapter sidecars
+under `data/people/extractions/` are tracked.
+
+Cloud workers never commit, push, or open pull requests. They return extraction
+artifacts to the host. The host validates and accumulates many chapters locally,
+then pushes a deliberate batch to `codex/people-glossary-staging`. Only a final
+staged merge goes to `master`, avoiding a Cloudflare build for every chapter.
+Routine checkpoints remain local because pushes to a staging branch may still
+trigger Cloudflare preview builds. The older `translation-staging` branch is
+not reused because it has substantially diverged from current `master`.
+
+Useful commands:
+
+```sh
+npm run people:packet -- --book songshu --chapter 069 --summary
+npm run people:extract -- --book songshu --chapter 069 --dry-run
+npm run people:extract -- --book songshu --chapter 069
+npm run people:validate
+```
+
 ## Decision Summary
 
 Do **not** insert person metadata into the translation objects. Keep the chapter
 JSON as the source text and translation, and add a tracked sidecar for each
-chapter under `data/people/extractions/<book>/<chapter>.json`.
+chapter under `data/people/extractions/<book>/<chapter>.json`. Clear editorial
+errors found during extraction are returned as structured translation repairs;
+the host validates and applies those changes to chapter JSON separately.
 
 Use three distinct layers:
 
@@ -259,12 +297,12 @@ Each chapter is processed independently. A simplified extraction looks like:
     "chineseFingerprint": "sha256:...",
     "englishFingerprint": "sha256:...",
     "unitDigests": [
-      { "id": "s0001", "zh": "sha256:...", "en": "sha256:..." }
+      { "id": "s0001", "zh": "sha256:...", "en": "sha256:...", "literal": "sha256:..." }
     ]
   },
   "run": {
-    "model": "composer-2.5",
-    "promptVersion": 1
+    "model": "grok-4.5",
+    "promptVersion": 2
   },
   "people": [
     {
@@ -290,13 +328,15 @@ Each chapter is processed independently. A simplified extraction looks like:
         "id": "s0177",
         "kind": "paragraph-sentence",
         "blockIndex": 18,
+        "collection": "sentences",
         "itemIndex": 6
       },
       "kind": "personal-name",
       "spans": {
         "zh": [{ "exact": "採藻", "occurrence": 0 }],
         "en": [{ "exact": "Caizao", "occurrence": 0 }]
-      }
+      },
+      "candidateRefs": ["songshu:069:cand_..."]
     },
     {
       "id": "songshu:069:m0002",
@@ -305,13 +345,15 @@ Each chapter is processed independently. A simplified extraction looks like:
         "id": "s0179",
         "kind": "paragraph-sentence",
         "blockIndex": 18,
+        "collection": "sentences",
         "itemIndex": 8
       },
       "kind": "personal-name",
       "spans": {
         "zh": [{ "exact": "採藻", "occurrence": 0 }],
         "en": [{ "exact": "Caizao", "occurrence": 0 }]
-      }
+      },
+      "candidateRefs": ["songshu:069:cand_..."]
     }
   ],
   "claims": [
@@ -348,6 +390,7 @@ Each chapter is processed independently. A simplified extraction looks like:
       "evidence": ["songshu:069:s0179", "songshu:069:s0226"]
     }
   ],
+  "translationRepairs": [],
   "candidateDispositions": [],
   "coverage": {
     "allUnitsVisited": true,
@@ -812,7 +855,7 @@ Before spending the large batch of credits:
    and span normalizer.
 3. Implement a chronology seed sufficient for pilot chapters.
 4. Run pilots on several different chapter types.
-5. Freeze `schemaVersion: 1` and `promptVersion: 1`.
+5. Freeze `schemaVersion: 1` and `promptVersion: 2`.
 
 Recommended pilots:
 
@@ -835,15 +878,17 @@ The orchestrator creates an isolated packet containing:
 - the exact extraction prompt;
 - an empty output path.
 
-The packet includes all context an agent needs. Agents must not browse, edit the
-translation, run site builds, or touch shared canonical records.
+The packet includes all context an agent needs. Agents must not browse, directly
+edit the translation, run site builds, or touch shared canonical records. Clear
+editorial errors are returned as structured proposals for a separate validated
+repair phase.
 
 ### 3. One agent per chapter
 
-Use the Cursor SDK with bounded concurrency. Each agent writes exactly one
-extraction file. One chapter per agent gives clean retries, predictable context,
-and isolated failures. The orchestrator should use temporary workspaces rather
-than letting many local agents perform Git operations in the main checkout.
+Use Grok 4.5 at high effort through Cursor Cloud with bounded concurrency. Each
+agent writes exactly one extraction artifact. One chapter per agent gives clean
+retries, predictable context, and isolated failures. Agents have
+`autoCreatePR: false` and are explicitly forbidden to commit or push.
 
 The agent performs extraction and a self-audit in one run. It must explicitly
 confirm candidate dispositions, chronology context, name types, and unresolved
@@ -863,8 +908,12 @@ pending -> claimed -> extracted -> validated -> accepted
                               \-> failed/retryable
 ```
 
-Only validated files enter Git. Commit in moderate batches, such as 50-100
-chapter sidecars, so failures and regressions remain reviewable.
+Only validated files enter Git. Create local commits in moderate batches, such
+as 50-100 chapter sidecars, so failures and regressions remain reviewable. Keep
+those checkpoints local during routine processing. At a deliberate larger
+boundary, push the accumulated commits to `codex/people-glossary-staging`;
+merge that branch to `master` only when ready for one production Cloudflare
+build.
 
 ### 5. Resolve identities from dossiers
 

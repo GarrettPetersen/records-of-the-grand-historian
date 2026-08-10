@@ -9,6 +9,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { bookDataDirectories, discoverChapterFiles } from './lib/chapter-files.mjs';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const QUALITY_DIR = path.join(DATA_DIR, 'quality');
@@ -222,22 +223,6 @@ function parseArgs(argv) {
     process.exit(2);
   }
   return opts;
-}
-
-function chapterFiles(inputs) {
-  const files = [];
-  const enqueue = (entry) => {
-    if (!fs.existsSync(entry)) return;
-    const st = fs.statSync(entry);
-    if (st.isDirectory()) {
-      for (const child of fs.readdirSync(entry).sort()) enqueue(path.join(entry, child));
-      return;
-    }
-    if (/^\d{3}\.json$/.test(path.basename(entry))) files.push(entry);
-  };
-
-  for (const input of inputs) enqueue(input);
-  return [...new Set(files)].sort();
 }
 
 function isSourceField(keyPath) {
@@ -503,12 +488,10 @@ function main() {
   let inputs = opts.inputs;
   if (opts.book) inputs = [path.join(DATA_DIR, opts.book)];
   if (inputs.length === 0) {
-    inputs = fs.readdirSync(DATA_DIR)
-      .map((entry) => path.join(DATA_DIR, entry))
-      .filter((entry) => fs.statSync(entry).isDirectory() && path.basename(entry) !== 'quality');
+    inputs = bookDataDirectories(DATA_DIR);
   }
 
-  const files = chapterFiles(inputs);
+  const files = discoverChapterFiles(inputs);
   const hits = files.flatMap(scanFile);
   const report = mergeExistingDecisions({
     generatedAt: new Date().toISOString(),

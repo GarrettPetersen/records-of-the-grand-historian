@@ -1,0 +1,144 @@
+# Person Extraction Assignment
+
+You are extracting every named human individual and every explicit reference to
+them from one chapter of a Chinese historical text. This is evidence capture,
+not identity resolution. Work only from the supplied packet. Do not browse,
+infer facts from general knowledge, or create canonical cross-chapter
+identities.
+
+This is also a final editorial pass. When the supplied English contains a clear
+translation or prose error, record a proposed repair in `translationRepairs`.
+Do not directly edit a chapter file. The host validates and applies proposed
+repairs only after the extraction itself passes validation.
+
+## Files
+
+- `packet.json` contains every Chinese/English content unit, stable locators,
+  preflight candidates, roles, polities, and reign periods supplied for this
+  chapter.
+- `extraction.schema.json` is the exact output schema.
+- `extraction.seed.json` contains the fixed envelope and current fingerprints.
+- Write the completed result to the output path named by the assignment. Do not
+  modify source chapters, commit, push, open a pull request, or modify another
+  tracked file.
+
+## People
+
+Record every named human, including rulers, officials, generals, scholars,
+authors, consorts, servants, religious figures, rebels, merchants, and named
+commoners. Include historical, legendary, literary, and uncertain people, and
+preserve that status.
+
+Do not create people for unnamed roles, groups, clans, armies, offices, places,
+books, reign periods, or nonhuman deities. A pronoun can support a claim but is
+not a linkable mention. When identity is uncertain, create separate local
+people and describe the uncertainty. Do not merge two people merely because
+they share a short name.
+
+Assign local people in first-mention order as `<book>:<chapter>:p001`, `p002`,
+and so on. A concise `descriptorSuggestion` should use the supplied broad role
+vocabulary and say only what the chapter supports, for example `Historian and
+Official` or `Maid`. Exact offices belong in claims.
+
+Every local person requires at least one `name` claim and one `role` claim.
+When no narrower role is established, use the supplied `named-individual` role
+rather than inventing an occupation. A person's preferred-name suggestion does
+not replace the required structured name claim.
+
+## Mentions And Spans
+
+Record every explicit occurrence, not just the first. Link full names, shortened
+names, courtesy and alternate names, temple and posthumous names, and titles
+used as unique references. Do not link pronouns.
+
+Use one mention object for a referring expression in one unit. When Chinese and
+English expressions in that unit refer to the same person, put both languages
+on the same mention. Give only exact visible text and its zero-based occurrence
+within that unit. The host computes offsets and hashes. Spans in one language
+must not overlap. Prefer the longest clear expression, such as `Prince of
+Pengcheng Yikang`, rather than nested mentions for `Yikang` and `Prince`.
+
+Assign mentions in reading order as `<book>:<chapter>:m0001`, `m0002`, and so
+on. Copy the complete unit locator from `packet.json`.
+
+## Preflight Candidates
+
+Candidates are hints, not assertions that something is a person. Every
+candidate ID must be accounted for exactly once:
+
+- If it falls inside a person mention, put its ID in that mention's
+  `candidateRefs`. Chinese and English candidates from the same unit can both
+  point to one bilingual mention. A candidate may be shorter than the chosen
+  longest mention span as long as that span contains it.
+- Otherwise add one `candidateDispositions` entry. Use `not-person` for a clear
+  place, office, book, collective, deity, reign period, polity, or ordinary
+  capitalized word. Use `ambiguous` or `unresolved` only when context genuinely
+  does not establish the referent. Use `duplicate-hint` only when two scanner
+  hints describe the same non-mention candidate.
+
+Do not turn a false-positive candidate into a person merely to reduce work.
+
+## Claims
+
+Capture all identity-relevant facts established by the chapter:
+
+- personal, surname, given, courtesy, childhood, religious, alternate, changed,
+  temple, posthumous, regnal, and title names;
+- explicit sex, native place, lineage, relationships, occupations, broad roles,
+  offices, noble titles, enfeoffments, and authorship;
+- explicit polity associations and the nature of the association;
+- births, deaths, stated ages, accessions, depositions, renamings, and explicit
+  same-person statements;
+- uncertainty, contextual dates, textual variants, and conflicting claims.
+
+Assign claims as `<book>:<chapter>:c0001`, `c0002`, and so on. Every claim needs
+one or more evidence IDs formatted `<book>:<chapter>:<unit-id>`. Keep claim
+values structured. A name value should contain its name kind plus available
+English, Chinese, and pinyin forms. A role value uses a supplied `roleId`.
+
+Never convert dates from memory. Use a supplied reign ID only when it is the
+correct polity and reign. Otherwise retain the source date text and mark the
+reign unresolved without inventing an ID. Record stated age and reckoning; do
+not derive a birth year. Do not assign a polity from lifespan or chapter alone.
+
+## Editorial Repairs
+
+Read the Chinese and both English fields closely. Propose a repair when there is
+a clear semantic error, omitted or invented content, reversed relationship,
+wrong referent or pronoun, mistranslated office or name, fused or corrupted
+word, grammatical failure, or English so unnatural that it obscures the
+meaning. Preserve accurate human-written phrasing and do not rewrite merely to
+impose a different style.
+
+For every repair:
+
+- identify the exact unit locator and either the `idiomatic` or `literal` field;
+- copy the complete current field into `before` and the complete replacement
+  field into `after`;
+- explain the source-based reason specifically enough for editorial review;
+- use `high` confidence when the correction is unambiguous and `medium` only
+  when the problem is clear but the best English wording admits alternatives;
+- set `status` to `proposed`;
+- create at most one repair per unit and field.
+
+All mentions and candidate decisions must still describe the supplied packet's
+current text, not the proposed replacement. The host rebuilds the packet and
+reconciles changed units after applying repairs. Leave `translationRepairs` as
+an empty array when the chapter needs no changes.
+
+## Final Audit
+
+Before finishing:
+
+1. Read every unit in both languages.
+2. Confirm every named human has a local person and every explicit occurrence
+   has a nonoverlapping mention.
+3. Confirm aliases, relationships, dates, ages, roles, offices, and polity clues
+   were captured where stated.
+4. Confirm every candidate is referenced by one mention or has one disposition.
+5. Confirm every local person has structured name and role claims, and audit all
+   proposed translation repairs against the Chinese.
+6. Set both coverage booleans to `true` and record genuinely unresolved
+   references rather than guessing.
+7. Validate the shape against `extraction.schema.json` and write only valid JSON
+   to the assigned output path, with no Markdown fence or commentary.

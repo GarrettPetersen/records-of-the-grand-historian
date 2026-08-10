@@ -2,6 +2,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { bookDataDirectories, discoverChapterFiles } from './lib/chapter-files.mjs';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const PUBLIC_DATA_DIR = path.join(process.cwd(), 'public', 'data');
@@ -55,21 +56,6 @@ function parseArgs(argv) {
 
 function targetRoot(opts) {
   return opts.publicData ? PUBLIC_DATA_DIR : DATA_DIR;
-}
-
-function chapterFiles(inputs) {
-  const files = [];
-  const enqueue = (entry) => {
-    if (!fs.existsSync(entry)) return;
-    const stat = fs.statSync(entry);
-    if (stat.isDirectory()) {
-      for (const child of fs.readdirSync(entry).sort()) enqueue(path.join(entry, child));
-      return;
-    }
-    if (/^\d{3}\.json$/.test(path.basename(entry))) files.push(entry);
-  };
-  for (const input of inputs) enqueue(input);
-  return [...new Set(files)].sort();
 }
 
 function hasOwn(object, key) {
@@ -165,12 +151,10 @@ function main() {
   let inputs = opts.inputs;
   if (opts.book) inputs = [path.join(root, opts.book)];
   if (inputs.length === 0) {
-    inputs = fs.readdirSync(root)
-      .map(entry => path.join(root, entry))
-      .filter(entry => fs.statSync(entry).isDirectory() && path.basename(entry) !== 'quality');
+    inputs = bookDataDirectories(root);
   }
 
-  const files = chapterFiles(inputs);
+  const files = discoverChapterFiles(inputs);
   const issues = [];
   for (const file of files) {
     const data = JSON.parse(fs.readFileSync(file, 'utf8'));

@@ -13,6 +13,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { punctuationAlignmentNotes } from '../translation-guards.mjs';
+import { bookDataDirectories, discoverChapterFiles } from './lib/chapter-files.mjs';
 
 function* iterSentences(data) {
   if (!data?.content) return;
@@ -165,23 +166,8 @@ function chapterFiles(opts) {
     ? opts.inputs
     : opts.book
       ? [path.join(dataRoot, opts.book)]
-      : fs.readdirSync(dataRoot, { withFileTypes: true })
-        .filter((entry) => entry.isDirectory() && entry.name !== 'quality')
-        .map((entry) => path.join(dataRoot, entry.name));
-
-  const files = [];
-  const enqueue = (entry) => {
-    if (!fs.existsSync(entry)) return;
-    const stat = fs.statSync(entry);
-    if (stat.isDirectory()) {
-      for (const child of fs.readdirSync(entry).sort()) enqueue(path.join(entry, child));
-      return;
-    }
-    if (/^\d{3}\.json$/u.test(path.basename(entry))) files.push(entry);
-  };
-
-  for (const input of inputs) enqueue(input);
-  return [...new Set(files)].sort();
+      : bookDataDirectories(dataRoot);
+  return discoverChapterFiles(inputs);
 }
 
 const opts = parseArgs(process.argv.slice(2));

@@ -10,6 +10,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { bookDataDirectories, discoverChapterFiles } from './lib/chapter-files.mjs';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 export const EXPECTED_TRANSLATOR = process.env.TRANSLATOR || 'Garrett M. Petersen (2026)';
@@ -77,21 +78,6 @@ function parseArgs(argv) {
   return opts;
 }
 
-function chapterFiles(inputs) {
-  const files = [];
-  const enqueue = (entry) => {
-    if (!fs.existsSync(entry)) return;
-    const st = fs.statSync(entry);
-    if (st.isDirectory()) {
-      for (const child of fs.readdirSync(entry).sort()) enqueue(path.join(entry, child));
-      return;
-    }
-    if (/^\d{3}\.json$/u.test(path.basename(entry))) files.push(entry);
-  };
-  for (const input of inputs) enqueue(input);
-  return [...new Set(files)].sort();
-}
-
 function nearestContext(keyPath) {
   const sentenceIndex = keyPath.lastIndexOf('sentences');
   if (sentenceIndex >= 0 && keyPath.length > sentenceIndex + 1) {
@@ -155,11 +141,9 @@ function main() {
   let inputs = opts.inputs;
   if (opts.book) inputs = [path.join(DATA_DIR, opts.book)];
   if (inputs.length === 0) {
-    inputs = fs.readdirSync(DATA_DIR)
-      .map((entry) => path.join(DATA_DIR, entry))
-      .filter((entry) => fs.statSync(entry).isDirectory() && path.basename(entry) !== 'quality');
+    inputs = bookDataDirectories(DATA_DIR);
   }
-  const rows = chapterFiles(inputs)
+  const rows = discoverChapterFiles(inputs)
     .map((file) => scanTranslationMetadataFile(file, opts))
     .filter((row) => row.hits.length > 0);
   const totalHits = rows.reduce((sum, row) => sum + row.hits.length, 0);

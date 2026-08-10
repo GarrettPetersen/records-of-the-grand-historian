@@ -2,10 +2,10 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { bookDataDirectories, discoverChapterFiles } from './lib/chapter-files.mjs';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const HAS_LETTER_OR_NUMBER_RE = /[\p{L}\p{N}]/u;
-const CHAPTER_RE = /^\d{3}\.json$/u;
 const OPENING_FRAGMENT_RE = /^[\s"'“‘({[<〈《「『（【〔]+$/u;
 
 function usage() {
@@ -54,22 +54,8 @@ function chapterFiles(opts) {
     ? opts.inputs
     : opts.book
       ? [path.join(DATA_DIR, opts.book)]
-      : fs.readdirSync(DATA_DIR)
-        .map(entry => path.join(DATA_DIR, entry))
-        .filter(entry => fs.statSync(entry).isDirectory() && path.basename(entry) !== 'quality');
-
-  const files = [];
-  const enqueue = (entry) => {
-    if (!fs.existsSync(entry)) return;
-    const stat = fs.statSync(entry);
-    if (stat.isDirectory()) {
-      for (const child of fs.readdirSync(entry).sort()) enqueue(path.join(entry, child));
-      return;
-    }
-    if (CHAPTER_RE.test(path.basename(entry))) files.push(entry);
-  };
-  for (const input of inputs) enqueue(input);
-  return [...new Set(files)].sort();
+      : bookDataDirectories(DATA_DIR);
+  return discoverChapterFiles(inputs);
 }
 
 function sourceKey(item) {
