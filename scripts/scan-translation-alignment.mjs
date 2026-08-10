@@ -14,6 +14,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { bookDataDirectories, discoverChapterFiles } from './lib/chapter-files.mjs';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const GLOSSARY_PATH = path.join(DATA_DIR, 'glossary.json');
@@ -732,20 +733,8 @@ function parseArgs(argv) {
 }
 
 function chapterFiles(inputs) {
-  const files = [];
-  const isChapterFile = (entry) => /^\d{3}\.json$/u.test(path.basename(entry));
-  const enqueue = (entry) => {
-    if (!fs.existsSync(entry)) return;
-    const st = fs.statSync(entry);
-    if (st.isDirectory()) {
-      for (const child of fs.readdirSync(entry).sort()) enqueue(path.join(entry, child));
-      return;
-    }
-    if (entry.endsWith('.json') && isChapterFile(entry)) files.push(entry);
-  };
-  if (inputs.length === 0) enqueue(DATA_DIR);
-  else inputs.forEach(enqueue);
-  return files.sort();
+  const scope = inputs.length === 0 ? bookDataDirectories(DATA_DIR) : inputs;
+  return discoverChapterFiles(scope);
 }
 
 function stableJson(value) {

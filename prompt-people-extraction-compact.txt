@@ -1,0 +1,152 @@
+# Compact Person Extraction Assignment
+
+Extract every named human individual and every explicit reference to them from
+one chapter of a Chinese historical text. This is chapter-local evidence
+capture, not cross-chapter identity resolution. Work only from the supplied
+worker packet. Do not browse or infer facts from general knowledge.
+
+This is also a final editorial pass. Record clear translation or prose errors
+as structured repair proposals. Never edit the source chapter directly.
+
+## Inputs And Output
+
+- The worker packet has compact arrays for every Chinese/English content unit,
+  every deterministic candidate hint, allowed roles, polities, and reigns.
+- Unit rows are `[unitId, kindCode, chinese, idiomatic, literal]`, where kind is
+  `p` (paragraph sentence), `h` (table header), or `t` (table body cell).
+- Candidate rows are
+  `[candidateId, unitId, language, exact, occurrence, detectorKinds]`.
+- The compact schema is the exact output contract.
+- The seeded output has immutable input fingerprints and run metadata.
+
+Replace the seed with one valid compact extraction. Modify no other tracked
+file. Do not commit, push, run `gh`, or open a pull request.
+
+## People Rows
+
+Record every named human: rulers, officials, generals, scholars, authors,
+consorts, servants, religious figures, rebels, merchants, named commoners, and
+historical, legendary, literary, or uncertain people. A unique title can name a
+person. Do not create people for unnamed roles, groups, clans, armies, offices,
+places, books, reigns, or nonhuman deities. Pronouns are not linkable surfaces.
+
+Assign people in first-mention order as `p001`, `p002`, and so on. Each row is:
+
+```text
+[id, [preferredEnglish, preferredChinese, pinyin], historicity, descriptor,
+ hints, names, roles]
+```
+
+Use `null` for an unavailable preferred-name field. `historicity` is one of
+`historical`, `legendary`, `uncertain`, or `literary`. The concise descriptor
+uses supplied broad roles, such as `Historian and Official` or `Maid`.
+
+Hints always have all five keys:
+
+```json
+{"n": ["native places"], "r": ["p002"], "a": ["date hints"],
+ "p": ["polity hints"], "x": null}
+```
+
+`x` is a mention exception and normally remains `null`.
+
+Every person requires one or more structured name rows and role rows. A name
+row is `[valueObject, certainty, [evidenceUnitIds]]`; its value includes `kind`
+plus available `en`, `zh`, and `pinyin`. Capture personal, surname, given,
+courtesy, childhood, religious, alternate, changed, temple, posthumous, regnal,
+and title names. A role row is
+`[roleId, certainty, [evidenceUnitIds]]`. Use `named-individual` only when the
+chapter establishes no narrower role. Do not duplicate a name or role; combine
+all supporting evidence on one row.
+
+## Surface Rows
+
+Record every visible Chinese and English referring expression. Prefer the
+longest clear expression and never create overlapping surfaces in one language.
+Include full and shortened names, courtesy and alternate names, temple and
+posthumous names, and titles or kinship expressions that uniquely identify a
+person. Do not include pronouns.
+
+Each surface row is:
+
+```text
+[personId, mentionKind, language, exactText,
+ [[unitId, [zeroBasedOccurrences]], ...]]
+```
+
+Allowed mention kinds are in the schema. Group repeated use of the same exact
+surface for one person into one row. List every unit and occurrence where it is
+a person reference. If an exact spelling is ambiguous between people, create
+separate rows with only the correct units and occurrences. The host regenerates
+individual link spans, offsets, hashes, and locators from these rules.
+
+## Candidate Coverage
+
+Candidates are overinclusive hints, not assertions. The host automatically
+accounts for a candidate when its exact range is contained in a surface for the
+same unit and language. Every other candidate must occur exactly once in a
+disposition group:
+
+```text
+[disposition, reason, [[candidateId, noteOrNull], ...]]
+```
+
+Use the schema's disposition and reason codes. Do not turn a place, office,
+book, polity, reign, collective, ordinary capitalized phrase, or other false
+positive into a person merely to avoid a disposition. Use `ambiguous` or
+`unresolved` only when the chapter truly does not establish the referent.
+
+## Other Claims
+
+Top-level claim rows contain facts other than names and broad roles:
+
+```text
+[subjectPersonId, predicate, valueObject, certainty, [evidenceUnitIds]]
+```
+
+Capture explicit sex, native place, lineage, relationships, occupations,
+offices, noble titles, enfeoffments, authorship, polity associations, births,
+deaths, stated ages, accessions, depositions, renamings, same-person statements,
+uncertainty, textual variants, and conflicts. Record each distinct fact once
+and combine supporting evidence. Local-person references inside values use
+short IDs such as `p002`.
+
+Never convert dates from memory. Use a supplied reign ID only when its polity
+and reign are correct. Otherwise retain the source date text and mark it
+unresolved. Record stated age and reckoning but do not derive a birth year.
+Never assign a polity from lifespan or chapter alone.
+
+## Editorial Repairs
+
+Read the Chinese and both English fields. Propose a repair for a clear semantic
+error, omission or invention, reversed relationship, wrong referent or pronoun,
+mistranslated office or name, fused/corrupted word, grammatical failure, or
+English so unnatural that it obscures the meaning. Preserve accurate
+human-written phrasing; do not rewrite merely to impose a different style.
+
+Each repair row is:
+
+```text
+[unitId, field, completeBefore, completeAfter, sourceBasedReason,
+ confidence, "proposed"]
+```
+
+`field` is `idiomatic` or `literal`; confidence is `high` or `medium`. Create at
+most one repair per unit and field. All surfaces still describe the packet's
+current text, not the proposed replacement. The host applies proposals in an
+isolated second phase, rebuilds candidates, and reconciles changed surfaces.
+
+## Final Audit
+
+Before finishing:
+
+1. Read every unit in Chinese, idiomatic English, and literal English.
+2. Confirm every named human has one person row, structured names and roles,
+   and every visible occurrence has a nonoverlapping surface rule.
+3. Confirm aliases, relationships, dates, ages, offices, polity clues, and
+   translation errors were captured where stated.
+4. Confirm every candidate is contained in a surface or appears in exactly one
+   disposition group.
+5. Set both coverage booleans to `true`; record genuine unresolved references.
+6. Validate against the compact schema and write JSON only to the assigned
+   output path. Then publish the artifact exactly as instructed by the runner.

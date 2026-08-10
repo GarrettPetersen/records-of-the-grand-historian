@@ -13,8 +13,13 @@ import {
   normalizedChapterId,
   packetPath,
   readJson,
+  writeTextAtomic,
   writeJsonAtomic,
 } from './lib/people-content.mjs';
+import {
+  buildCompactInput,
+  serializeCompactPeopleExtraction,
+} from './lib/people-compact.mjs';
 import {
   candidateScannerVersion,
   loadProperNounMatcher,
@@ -34,13 +39,23 @@ Options:
   --chapter NNN     Chapter number.
   --out PATH        Output path; defaults under data/people/generated/packets/.
   --seed-out PATH   Also write an empty extraction envelope for a worker.
+  --compact-worker  Write a compact worker packet and compact v2 seed.
   --model MODEL     Model recorded in the seed (required with --seed-out).
   --summary         Print candidate detector counts.
   --self-test       Run deterministic packet-builder tests.`);
 }
 
 function parseArgs(argv) {
-  const opts = { book: null, chapter: null, out: null, seedOut: null, model: null, summary: false, selfTest: false };
+  const opts = {
+    book: null,
+    chapter: null,
+    out: null,
+    seedOut: null,
+    model: null,
+    compactWorker: false,
+    summary: false,
+    selfTest: false,
+  };
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
     const next = () => {
@@ -53,6 +68,7 @@ function parseArgs(argv) {
     else if (arg === '--out') opts.out = path.resolve(REPO_ROOT, next());
     else if (arg === '--seed-out') opts.seedOut = path.resolve(REPO_ROOT, next());
     else if (arg === '--model') opts.model = next();
+    else if (arg === '--compact-worker') opts.compactWorker = true;
     else if (arg === '--summary') opts.summary = true;
     else if (arg === '--self-test') opts.selfTest = true;
     else if (arg === '--help' || arg === '-h') {
@@ -165,6 +181,70 @@ export function buildPeopleExtractionSeed(packet, model) {
   };
 }
 
+export function buildPeopleWorkerPacket(packet) {
+  const namespace = `${packet.book}:${packet.chapter}:`;
+  const kindCode = {
+    'paragraph-sentence': 'p',
+    'table-header-cell': 'h',
+    'table-body-cell': 't',
+  };
+  return {
+    version: 1,
+    book: packet.book,
+    chapter: packet.chapter,
+    title: packet.source.title,
+    units: packet.units.map((unit) => [
+      unit.id,
+      kindCode[unit.kind],
+      unit.zh,
+      unit.en,
+      unit.literal,
+    ]),
+    candidates: packet.preflight.candidates.map((candidate) => [
+      candidate.id.slice(namespace.length),
+      candidate.unit,
+      candidate.language,
+      candidate.exact,
+      candidate.occurrence,
+      [...new Set(candidate.detectors.map((detector) => detector.kind))],
+    ]),
+    context: {
+      westernEraStyle: packet.context.westernEraStyle,
+      roles: packet.context.roles.map((role) => [role.id, role.label]),
+      polities: packet.context.polities,
+      reigns: packet.context.reigns,
+    },
+  };
+}
+
+export function buildCompactPeopleExtractionSeed(packet, model) {
+  if (!model?.trim()) throw new Error('A model ID is required to build an extraction seed');
+  const config = readJson(path.join(PEOPLE_DIR, 'config.json'));
+  return {
+    schemaVersion: 2,
+    book: packet.book,
+    chapter: packet.chapter,
+    input: buildCompactInput(packet),
+    run: {
+      model,
+      promptVersion: config.promptVersion,
+      agentId: null,
+      runId: null,
+      completedAt: null,
+    },
+    people: [],
+    surfaces: [],
+    claims: [],
+    translationRepairs: [],
+    candidateDispositions: [],
+    coverage: {
+      allUnitsVisited: true,
+      preflightCandidatesAccountedFor: true,
+      unresolvedReferences: [],
+    },
+  };
+}
+
 function detectorSummary(packet) {
   const counts = new Map();
   for (const candidate of packet.preflight.candidates) {
@@ -194,11 +274,19 @@ async function main() {
     properNounMatcher: loadProperNounMatcher(),
   });
   const out = opts.out ?? packetPath(opts.book, opts.chapter);
-  writeJsonAtomic(out, packet);
+  if (opts.compactWorker) writeTextAtomic(out, `${JSON.stringify(buildPeopleWorkerPacket(packet))}\n`);
+  else writeJsonAtomic(out, packet);
   console.log(`Wrote ${path.relative(REPO_ROOT, out)}: ${packet.units.length} units, ${packet.preflight.candidates.length} candidates`);
   if (opts.seedOut) {
     if (!opts.model) throw new Error('--model is required with --seed-out');
-    writeJsonAtomic(opts.seedOut, buildPeopleExtractionSeed(packet, opts.model));
+    if (opts.compactWorker) {
+      writeTextAtomic(
+        opts.seedOut,
+        serializeCompactPeopleExtraction(buildCompactPeopleExtractionSeed(packet, opts.model)),
+      );
+    } else {
+      writeJsonAtomic(opts.seedOut, buildPeopleExtractionSeed(packet, opts.model));
+    }
     console.log(`Wrote extraction seed ${path.relative(REPO_ROOT, opts.seedOut)}`);
   }
   if (opts.summary) {

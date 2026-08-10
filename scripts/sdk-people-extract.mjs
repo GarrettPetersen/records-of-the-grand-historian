@@ -15,11 +15,20 @@ import {
   extractionPath,
   normalizedChapterId,
   readJson,
+  writeTextAtomic,
   writeJsonAtomic,
 } from './lib/people-content.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
+import {
+  compactPeopleExtraction,
+  isCompactPeopleExtraction,
+  serializeCompactPeopleExtraction,
+} from './lib/people-compact.mjs';
 import { applyTranslationRepairs } from './lib/people-translation-repairs.mjs';
-import { validatePeopleExtraction } from './validate-people-extraction.mjs';
+import {
+  validateCompactPeopleExtraction,
+  validatePeopleExtraction,
+} from './validate-people-extraction.mjs';
 
 loadDotenv(REPO_ROOT);
 
@@ -41,10 +50,10 @@ Options:
   --chapter NNN        Limit extraction to one chapter; requires --book.
   --all                Explicitly allow a corpus-wide queue.
   --limit N            Maximum chapters selected this run.
-  --concurrency N      Parallel Cursor Cloud agents (default: 4, max: 12).
+  --concurrency N      Parallel Cursor Cloud agents (default: 2, max: 12).
   --max-attempts N     Validation attempts per phase (default: 3).
   --model MODEL        Cursor model (default: ${DEFAULT_MODEL}).
-  --effort LEVEL       Model effort: low, medium, or high (default: high).
+  --effort LEVEL       Model effort: low, medium, or high (default: medium).
   --fast               Enable the model's fast variant (default: off).
   --repo URL           Repository URL available to cloud agents.
   --starting-ref REF   Remote branch/ref agents read (default: ${DEFAULT_STARTING_REF}).
@@ -71,10 +80,10 @@ function parseArgs(argv) {
     chapter: null,
     all: false,
     limit: null,
-    concurrency: 4,
+    concurrency: 2,
     maxAttempts: 3,
     model: process.env.SDK_PEOPLE_MODEL ?? DEFAULT_MODEL,
-    effort: process.env.SDK_PEOPLE_EFFORT ?? 'high',
+    effort: process.env.SDK_PEOPLE_EFFORT ?? 'medium',
     fast: false,
     repoUrl: process.env.SDK_PEOPLE_REPO ?? DEFAULT_REPO_URL,
     startingRef: process.env.SDK_PEOPLE_STARTING_REF ?? DEFAULT_STARTING_REF,
@@ -175,7 +184,9 @@ function currentExtractionIsValid(target, packet) {
   const file = extractionPath(target.book, target.chapter);
   if (!fs.existsSync(file)) return false;
   try {
-    validatePeopleExtraction(readJson(file), packet);
+    const extraction = readJson(file);
+    if (isCompactPeopleExtraction(extraction)) validateCompactPeopleExtraction(extraction, packet);
+    else validatePeopleExtraction(extraction, packet);
     return true;
   } catch {
     return false;
@@ -235,17 +246,25 @@ function packetArtifactPath(target) {
   return path.posix.join('data', 'people', 'generated', 'cloud', target.book, `${target.chapter}.packet.json`);
 }
 
+function publishArtifactCommand(target) {
+  const output = artifactPath(target);
+  const artifact = path.posix.join('/opt/cursor/artifacts', output);
+  return `mkdir -p ${path.posix.dirname(artifact)} && cp ${output} ${artifact}`;
+}
+
 function initialPrompt(target, opts) {
   const output = artifactPath(target);
   const packet = packetArtifactPath(target);
   return `Perform the person extraction and final editorial audit for ${target.book}/${target.chapter}.
 
-1. Read prompt-people-extraction.txt completely.
+1. Read prompt-people-extraction-compact.txt completely.
 2. Run:
-   node scripts/build-people-extraction-packet.mjs --book ${target.book} --chapter ${target.chapter} --out ${packet} --seed-out ${output} --model ${opts.model}
-3. Read ${packet}, data/people/schema/extraction.schema.json, and the seeded ${output}.
+   node scripts/build-people-extraction-packet.mjs --book ${target.book} --chapter ${target.chapter} --out ${packet} --seed-out ${output} --model ${opts.model} --compact-worker
+3. Read ${packet}, data/people/schema/compact-extraction.schema.json, and the seeded ${output}.
 4. Process every content unit and replace the seed with the complete extraction at ${output}.
 5. Run node scripts/validate-people-extraction.mjs ${output} --packet ${packet} --normalize.
+6. Publish the validated JSON for the host by running:
+   ${publishArtifactCommand(target)}
 
 Do not edit a source chapter. Do not run git commit, git push, gh, or open a pull request. The only tracked file you may modify is ${output}. Finish the complete chapter in this run.`;
 }
@@ -257,6 +276,9 @@ function retryPrompt(target, errors) {
 node scripts/validate-people-extraction.mjs ${output} --packet ${packet} --normalize
 
 Do not commit, push, open a PR, or edit the source chapter.
+
+After validation succeeds, refresh the host artifact by running:
+${publishArtifactCommand(target)}
 
 VALIDATION ERRORS:
 ${errors.slice(0, 400).map((error) => `- ${error}`).join('\n')}`;
@@ -270,6 +292,8 @@ function repairPrompt(target) {
    node scripts/apply-people-translation-repairs.mjs --book ${target.book} --chapter ${target.chapter} --extraction ${output}
 2. If the command reports changed spans, new candidates, or other validation failures, inspect only the changed units and repair ${output}. Do not add, remove, or rewrite a translation repair.
 3. Run node scripts/validate-people-extraction.mjs ${output} --normalize until it passes.
+4. Publish the reconciled JSON for the host by running:
+   ${publishArtifactCommand(target)}
 
 The source chapter may be modified in this isolated cloud workspace only by the repair command. Do not make any other source edit. Do not commit, push, run gh, or open a pull request. The host will independently apply the exact proposals and validate the final extraction against its own revised packet.`;
 }
@@ -283,6 +307,9 @@ node scripts/apply-people-translation-repairs.mjs --book ${target.book} --chapte
 
 Then inspect only the changed units, fix every extraction error below, and run:
 node scripts/validate-people-extraction.mjs ${output} --normalize
+
+After validation succeeds, refresh the host artifact by running:
+${publishArtifactCommand(target)}
 
 Do not make any source edit except through the repair command. Do not commit, push, run gh, or open a pull request.
 
@@ -348,6 +375,12 @@ function withRunMetadata(extraction, opts, agent, result) {
   };
 }
 
+function validateDownloadedExtraction(extraction, packet) {
+  return isCompactPeopleExtraction(extraction)
+    ? validateCompactPeopleExtraction(extraction, packet)
+    : validatePeopleExtraction(extraction, packet);
+}
+
 function repairContract(repair) {
   const { status: _status, ...contract } = repair;
   return contract;
@@ -374,7 +407,7 @@ async function obtainValidInitialExtraction(agent, target, packet, opts, state) 
     try {
       result = await runAgentTurn(agent, prompt, target, opts, 'extraction');
       const downloaded = withRunMetadata(await downloadExtraction(agent, target), opts, agent, result);
-      const validated = validatePeopleExtraction(downloaded, packet);
+      const validated = validateDownloadedExtraction(downloaded, packet);
       return { extraction: validated.normalized, result, stats: validated.stats };
     } catch (error) {
       errors = validationErrors(error);
@@ -402,10 +435,11 @@ async function obtainValidReconciledExtraction(agent, target, initial, opts, sta
       const result = await runAgentTurn(agent, prompt, target, opts, 'repair reconciliation');
       const downloaded = withRunMetadata(await downloadExtraction(agent, target), opts, agent, result);
       assertSameRepairContract(initial.translationRepairs, downloaded.translationRepairs);
-      const validated = validatePeopleExtraction(downloaded, revisedPacket);
+      const validated = validateDownloadedExtraction(downloaded, revisedPacket);
       return {
         chapter: applied.chapter,
         extraction: validated.normalized,
+        packet: revisedPacket,
         result,
         stats: validated.stats,
       };
@@ -468,9 +502,22 @@ async function processTarget(target, opts, state) {
       );
       writeJsonAtomic(chapterPath(target.book, target.chapter), accepted.chapter);
     } else {
-      accepted = initial;
+      accepted = { ...initial, packet };
     }
-    writeJsonAtomic(extractionPath(target.book, target.chapter), accepted.extraction);
+    const compact = compactPeopleExtraction(accepted.extraction, accepted.packet);
+    validateCompactPeopleExtraction(compact, accepted.packet);
+    const rawArchive = path.join(
+      PEOPLE_DIR,
+      'generated',
+      'raw-extractions',
+      target.book,
+      `${target.chapter}.json`,
+    );
+    writeJsonAtomic(rawArchive, accepted.extraction);
+    writeTextAtomic(
+      extractionPath(target.book, target.chapter),
+      serializeCompactPeopleExtraction(compact),
+    );
     updateState(state, target, {
       status: 'accepted',
       runId: accepted.result.id,

@@ -5,8 +5,12 @@ import path from 'node:path';
 import { buildPeopleExtractionPacket } from './build-people-extraction-packet.mjs';
 import { PEOPLE_DIR, REPO_ROOT, readJson } from './lib/people-content.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
+import { isCompactPeopleExtraction } from './lib/people-compact.mjs';
 import { createPeopleSchemaValidator, formatSchemaErrors } from './lib/people-schema.mjs';
-import { validatePeopleExtraction } from './validate-people-extraction.mjs';
+import {
+  validateCompactPeopleExtraction,
+  validatePeopleExtraction,
+} from './validate-people-extraction.mjs';
 
 function assertUnique(items, key, label, errors) {
   const seen = new Set();
@@ -60,7 +64,7 @@ function validateConfiguration(errors) {
     schemaVersion: 1,
     extractionSchemaVersion: 1,
     packetSchemaVersion: 1,
-    promptVersion: 2,
+    promptVersion: 3,
     candidateScannerVersion: 1,
   };
   for (const [key, expected] of Object.entries(expectedVersions)) {
@@ -90,7 +94,9 @@ async function main() {
   for (const file of files) {
     const extraction = readJson(file);
     const packet = buildPeopleExtractionPacket(extraction.book, extraction.chapter, { properNounMatcher: matcher });
-    const result = validatePeopleExtraction(extraction, packet);
+    const result = isCompactPeopleExtraction(extraction)
+      ? validateCompactPeopleExtraction(extraction, packet)
+      : validatePeopleExtraction(extraction, packet);
     people += result.stats.people;
     mentions += result.stats.mentions;
     claims += result.stats.claims;

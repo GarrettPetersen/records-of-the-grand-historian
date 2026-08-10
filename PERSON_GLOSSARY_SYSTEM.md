@@ -26,9 +26,16 @@ The extraction foundation was implemented on 2026-08-10. Version 1 now has:
   artifact-only worker output, host-side acceptance, and validation retries;
 - initial role, polity, and reign vocabularies for the Songshu pilot.
 
-Generated packets, runner state, and temporary workspaces live under
-`data/people/generated/` and are gitignored. Only validated chapter sidecars
-under `data/people/extractions/` are tracked.
+Generated packets, verbose worker output, runner state, and temporary workspaces
+live under `data/people/generated/` and are gitignored. Only validated compact
+chapter sidecars under `data/people/extractions/` are tracked. Compact sidecars
+are fully reversible: the validator regenerates every language-specific mention
+span and candidate decision from their surface rules before accepting them.
+
+The Songshu 69 pilot completed on 2026-08-10 with 86 people, 315 reusable
+surface rules (956 generated language-specific spans), 372 distinct claims, 821
+candidate decisions, and nine accepted translation repairs. Its tracked compact
+sidecar is 108 KB, down from 796 KB for the verbose draft.
 
 Cloud workers never commit, push, or open pull requests. They return extraction
 artifacts to the host. The host validates and accumulates many chapters locally,
@@ -285,7 +292,10 @@ sentence may contain several separate mentions of the same person.
 
 ## Chapter Extraction Schema
 
-Each chapter is processed independently. A simplified extraction looks like:
+Each chapter is processed independently. The expanded validation form below is
+illustrative; the tracked v2 sidecar folds name and role claims into people,
+groups repeated mentions into compact surface rules, and groups candidate
+dispositions. Build-time expansion must reproduce a valid form equivalent to:
 
 ```json
 {
@@ -302,7 +312,7 @@ Each chapter is processed independently. A simplified extraction looks like:
   },
   "run": {
     "model": "grok-4.5",
-    "promptVersion": 2
+    "promptVersion": 3
   },
   "people": [
     {
@@ -855,7 +865,8 @@ Before spending the large batch of credits:
    and span normalizer.
 3. Implement a chronology seed sufficient for pilot chapters.
 4. Run pilots on several different chapter types.
-5. Freeze `schemaVersion: 1` and `promptVersion: 2`.
+5. Freeze verbose worker schema version 1, compact accepted schema version 2,
+   and `promptVersion: 3`.
 
 Recommended pilots:
 
@@ -885,10 +896,13 @@ repair phase.
 
 ### 3. One agent per chapter
 
-Use Grok 4.5 at high effort through Cursor Cloud with bounded concurrency. Each
-agent writes exactly one extraction artifact. One chapter per agent gives clean
-retries, predictable context, and isolated failures. Agents have
-`autoCreatePR: false` and are explicitly forbidden to commit or push.
+Use Grok 4.5 through Cursor Cloud with bounded concurrency. Medium effort is the
+default bulk lane; high effort is reserved for dense biographies, rhetoric,
+ambiguous identity passages, and chapters that fail semantic QA. Each agent
+writes exactly one compact extraction artifact. One chapter per agent gives
+clean retries, predictable context, and isolated failures. Agents have
+`autoCreatePR: false` and are explicitly forbidden to commit or push. Every
+successful phase copies its result to `/opt/cursor/artifacts/` for host download.
 
 The agent performs extraction and a self-audit in one run. It must explicitly
 confirm candidate dispositions, chronology context, name types, and unresolved

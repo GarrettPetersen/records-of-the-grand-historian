@@ -2,6 +2,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import { bookDataDirectories, discoverChapterFiles } from './lib/chapter-files.mjs';
 
 const DATA_DIR = 'data';
 
@@ -167,29 +168,10 @@ function parseArgs(argv) {
   return opts;
 }
 
-function walkJsonFiles(dir, files = []) {
-  if (!fs.existsSync(dir)) return files;
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      if (
-        fullPath === path.join(DATA_DIR, 'quality') ||
-        fullPath === path.join(DATA_DIR, 'repair-chapter-claims')
-      ) continue;
-      walkJsonFiles(fullPath, files);
-      continue;
-    }
-    if (entry.isFile() && /^\d{3}\.json$/.test(entry.name)) {
-      files.push(fullPath);
-    }
-  }
-  return files;
-}
-
 function inputFiles(opts) {
-  if (opts.files.length > 0) return opts.files;
-  if (opts.book) return walkJsonFiles(path.join(DATA_DIR, opts.book)).sort();
-  return walkJsonFiles(DATA_DIR).sort();
+  if (opts.files.length > 0) return discoverChapterFiles(opts.files);
+  if (opts.book) return discoverChapterFiles([path.join(DATA_DIR, opts.book)]);
+  return discoverChapterFiles(bookDataDirectories(DATA_DIR));
 }
 
 function iterUnits(block) {

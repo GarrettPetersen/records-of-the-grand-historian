@@ -12,9 +12,13 @@ export function readJson(file) {
 }
 
 export function writeJsonAtomic(file, value) {
+  writeTextAtomic(file, `${JSON.stringify(value, null, 2)}\n`);
+}
+
+export function writeTextAtomic(file, value) {
   fs.mkdirSync(path.dirname(file), { recursive: true });
   const temporary = path.join(path.dirname(file), `.${path.basename(file)}.${process.pid}.tmp`);
-  fs.writeFileSync(temporary, `${JSON.stringify(value, null, 2)}\n`);
+  fs.writeFileSync(temporary, value);
   fs.renameSync(temporary, file);
 }
 

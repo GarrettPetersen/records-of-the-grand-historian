@@ -1,0 +1,199 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://24histories.com/schema/people/compact-extraction-v2.json",
+  "title": "Compact accepted chapter person extraction",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "book", "chapter", "input", "run", "people", "surfaces", "claims", "translationRepairs", "candidateDispositions", "coverage"],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "book": { "type": "string", "pattern": "^[a-z0-9_-]+$" },
+    "chapter": { "type": "string", "pattern": "^\\d{3}$" },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unitCount", "chapterFingerprint", "candidateScannerVersion", "unitDigests"],
+      "properties": {
+        "unitCount": { "type": "integer", "minimum": 0 },
+        "chapterFingerprint": { "$ref": "https://24histories.com/schema/people/extraction-v1.json#/$defs/digest" },
+        "candidateScannerVersion": { "type": "integer", "minimum": 1 },
+        "unitDigests": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              { "type": "string", "minLength": 1 },
+              { "type": "string", "pattern": "^[a-f0-9]{24}$" }
+            ],
+            "minItems": 2,
+            "maxItems": 2
+          }
+        }
+      }
+    },
+    "run": { "$ref": "https://24histories.com/schema/people/extraction-v1.json#/$defs/run" },
+    "people": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/person" }
+    },
+    "surfaces": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/surface" }
+    },
+    "claims": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/claim" }
+    },
+    "translationRepairs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/repair" }
+    },
+    "candidateDispositions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/dispositionGroup" }
+    },
+    "coverage": { "$ref": "https://24histories.com/schema/people/extraction-v1.json#/$defs/coverage" }
+  },
+  "$defs": {
+    "localPersonId": { "type": "string", "pattern": "^p\\d{3,}$" },
+    "certainty": {
+      "enum": ["explicit", "explicit-event-contextual-date", "strongly-inferred", "uncertain", "derived", "textual-variant"]
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "person": {
+      "type": "array",
+      "prefixItems": [
+        { "$ref": "#/$defs/localPersonId" },
+        {
+          "type": "array",
+          "prefixItems": [
+            { "type": ["string", "null"] },
+            { "type": ["string", "null"] },
+            { "type": ["string", "null"] }
+          ],
+          "minItems": 3,
+          "maxItems": 3
+        },
+        { "enum": ["historical", "legendary", "uncertain", "literary"] },
+        { "type": "string", "minLength": 1, "maxLength": 120 },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["n", "r", "a", "p", "x"],
+          "properties": {
+            "n": { "type": "array", "items": { "type": "string" } },
+            "r": { "type": "array", "items": { "$ref": "#/$defs/localPersonId" } },
+            "a": { "type": "array", "items": { "type": "string" } },
+            "p": { "type": "array", "items": { "type": "string" } },
+            "x": { "type": ["string", "null"] }
+          }
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              { "type": "object" },
+              { "$ref": "#/$defs/certainty" },
+              { "$ref": "#/$defs/evidence" }
+            ],
+            "minItems": 3,
+            "maxItems": 3
+          }
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              { "type": "string", "pattern": "^[a-z0-9-]+$" },
+              { "$ref": "#/$defs/certainty" },
+              { "$ref": "#/$defs/evidence" }
+            ],
+            "minItems": 3,
+            "maxItems": 3
+          }
+        }
+      ],
+      "minItems": 7,
+      "maxItems": 7
+    },
+    "surface": {
+      "type": "array",
+      "prefixItems": [
+        { "$ref": "#/$defs/localPersonId" },
+        { "enum": ["personal-name", "courtesy-name", "childhood-name", "religious-name", "temple-name", "posthumous-name", "alternate-name", "title-reference", "kinship-reference"] },
+        { "enum": ["zh", "en"] },
+        { "type": "string", "minLength": 1 },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              { "type": "string", "minLength": 1 },
+              { "type": "array", "minItems": 1, "items": { "type": "integer", "minimum": 0 } }
+            ],
+            "minItems": 2,
+            "maxItems": 2
+          }
+        }
+      ],
+      "minItems": 5,
+      "maxItems": 5
+    },
+    "claim": {
+      "type": "array",
+      "prefixItems": [
+        { "$ref": "#/$defs/localPersonId" },
+        { "enum": ["sex", "native-place", "lineage", "relationship", "office", "noble-title", "enfeoffment", "polity-association", "birth", "death", "age", "accession", "deposition", "authorship", "same-person", "renamed", "historicity"] },
+        { "type": "object" },
+        { "$ref": "#/$defs/certainty" },
+        { "$ref": "#/$defs/evidence" }
+      ],
+      "minItems": 5,
+      "maxItems": 5
+    },
+    "repair": {
+      "type": "array",
+      "prefixItems": [
+        { "type": "string", "minLength": 1 },
+        { "enum": ["idiomatic", "literal"] },
+        { "type": "string", "minLength": 1 },
+        { "type": "string", "minLength": 1 },
+        { "type": "string", "minLength": 10, "maxLength": 500 },
+        { "enum": ["high", "medium"] },
+        { "enum": ["proposed", "applied"] }
+      ],
+      "minItems": 7,
+      "maxItems": 7
+    },
+    "dispositionGroup": {
+      "type": "array",
+      "prefixItems": [
+        { "enum": ["not-person", "ambiguous", "unresolved", "duplicate-hint"] },
+        { "enum": ["place", "office", "book-title", "collective", "deity", "reign-period", "polity", "not-a-name", "ambiguous", "duplicate-candidate", "other"] },
+        {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              { "type": "string", "pattern": "^cand_[a-f0-9]{16}$" },
+              { "type": ["string", "null"] }
+            ],
+            "minItems": 2,
+            "maxItems": 2
+          }
+        }
+      ],
+      "minItems": 3,
+      "maxItems": 3
+    }
+  }
+}

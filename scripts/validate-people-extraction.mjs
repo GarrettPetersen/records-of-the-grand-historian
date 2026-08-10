@@ -3,19 +3,30 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildPeopleExtractionPacket } from './build-people-extraction-packet.mjs';
+import {
+  buildPeopleExtractionPacket,
+  buildPeopleWorkerPacket,
+} from './build-people-extraction-packet.mjs';
 import {
   PEOPLE_DIR,
   REPO_ROOT,
   exactSpanAt,
   normalizedChapterId,
   readJson,
+  writeTextAtomic,
   writeJsonAtomic,
 } from './lib/people-content.mjs';
 import { createPeopleSchemaValidator, formatSchemaErrors } from './lib/people-schema.mjs';
+import {
+  compactInputErrors,
+  expandPeopleExtraction,
+  isCompactPeopleExtraction,
+  serializeCompactPeopleExtraction,
+} from './lib/people-compact.mjs';
 
 const EXTRACTION_SCHEMA_ID = 'https://24histories.com/schema/people/extraction-v1.json';
 const PACKET_SCHEMA_ID = 'https://24histories.com/schema/people/extraction-packet-v1.json';
+const COMPACT_SCHEMA_ID = 'https://24histories.com/schema/people/compact-extraction-v2.json';
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
 export class PeopleExtractionValidationError extends Error {
@@ -45,6 +56,35 @@ function requireOrderedIds(items, prefix, digits, label, errors, idKey = 'id') {
     const expected = `${prefix}${String(index + 1).padStart(digits, '0')}`;
     if (item[idKey] !== expected) errors.push(`${label} ${index + 1} must have ID ${expected}, found ${item[idKey]}`);
   }
+}
+
+function canonicalJson(value) {
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
+  if (value && typeof value === 'object') {
+    return `{${Object.keys(value).sort().map((key) => `${JSON.stringify(key)}:${canonicalJson(value[key])}`).join(',')}}`;
+  }
+  return JSON.stringify(value);
+}
+
+function normalizeClaims(claims, namespace) {
+  const merged = [];
+  const byFact = new Map();
+  for (const original of claims) {
+    const claim = structuredClone(original);
+    if (claim.predicate === 'role') claim.value = { roleId: claim.value.roleId };
+    const key = canonicalJson([claim.subject, claim.predicate, claim.value, claim.certainty]);
+    const existing = byFact.get(key);
+    if (existing) {
+      existing.evidence = [...new Set([...existing.evidence, ...claim.evidence])];
+      continue;
+    }
+    byFact.set(key, claim);
+    merged.push(claim);
+  }
+  for (const [index, claim] of merged.entries()) {
+    claim.id = `${namespace}:c${String(index + 1).padStart(4, '0')}`;
+  }
+  return merged;
 }
 
 function nestedValuesWithKey(value, wantedKey, found = []) {
@@ -103,6 +143,7 @@ export function validatePeopleExtraction(extraction, packet) {
   const personIds = uniqueIds(normalized.people, 'local person', errors, 'localId');
   uniqueIds(normalized.mentions, 'mention', errors);
   uniqueIds(normalized.claims, 'claim', errors);
+  normalized.claims = normalizeClaims(normalized.claims, namespace);
   uniqueIds(normalized.translationRepairs, 'translation repair', errors);
   requireOrderedIds(normalized.people, `${namespace}:p`, 3, 'local person', errors, 'localId');
   requireOrderedIds(normalized.mentions, `${namespace}:m`, 4, 'mention', errors);
@@ -276,6 +317,18 @@ export function validatePeopleExtraction(extraction, packet) {
   };
 }
 
+export function validateCompactPeopleExtraction(compact, packet) {
+  const ajv = createPeopleSchemaValidator();
+  const validate = ajv.getSchema(COMPACT_SCHEMA_ID);
+  const errors = [];
+  if (!validate(compact)) {
+    errors.push(...formatSchemaErrors(validate.errors).map((item) => `compact schema: ${item}`));
+  }
+  errors.push(...compactInputErrors(compact, packet));
+  if (errors.length > 0) throw new PeopleExtractionValidationError(errors);
+  return validatePeopleExtraction(expandPeopleExtraction(compact, packet), packet);
+}
+
 function usage() {
   console.log(`Usage:
   node scripts/validate-people-extraction.mjs PATH [--packet PATH] [--normalize] [--out PATH]
@@ -323,13 +376,40 @@ function extractionFiles() {
   return files;
 }
 
+function isPeopleWorkerPacket(value) {
+  return value?.version === 1 && Array.isArray(value.units) && Array.isArray(value.units[0]);
+}
+
+function resolveValidationPacket(extraction, packetFile) {
+  const rebuilt = () => buildPeopleExtractionPacket(
+    extraction.book,
+    normalizedChapterId(extraction.chapter),
+  );
+  if (!packetFile) return rebuilt();
+
+  const supplied = readJson(packetFile);
+  if (!isPeopleWorkerPacket(supplied)) return supplied;
+
+  const packet = rebuilt();
+  if (!deepEqual(supplied, buildPeopleWorkerPacket(packet))) {
+    throw new PeopleExtractionValidationError([
+      'compact worker packet does not exactly match the current chapter and extraction configuration',
+    ]);
+  }
+  return packet;
+}
+
 function validateFile(file, opts) {
   const extraction = readJson(file);
-  const packet = opts.packet
-    ? readJson(opts.packet)
-    : buildPeopleExtractionPacket(extraction.book, normalizedChapterId(extraction.chapter));
-  const result = validatePeopleExtraction(extraction, packet);
-  if (opts.normalize) writeJsonAtomic(opts.out ?? file, result.normalized);
+  const packet = resolveValidationPacket(extraction, opts.packet);
+  const compact = isCompactPeopleExtraction(extraction);
+  const result = compact
+    ? validateCompactPeopleExtraction(extraction, packet)
+    : validatePeopleExtraction(extraction, packet);
+  if (opts.normalize && !compact) writeJsonAtomic(opts.out ?? file, result.normalized);
+  if (opts.normalize && compact) {
+    writeTextAtomic(opts.out ?? file, serializeCompactPeopleExtraction(extraction));
+  }
   console.log(
     `${path.relative(REPO_ROOT, file)}: ok (${result.stats.people} people, ` +
     `${result.stats.mentions} mentions, ${result.stats.claims} claims, ${result.stats.candidates} candidates)`,
@@ -410,6 +490,20 @@ function selfTest() {
 
   const valid = validatePeopleExtraction(extraction, packet);
   if (valid.normalized.mentions[0].spans.zh[0].endCodePoint !== 3) throw new Error('Span normalization failed');
+
+  const workerPacket = buildPeopleWorkerPacket(packet);
+  if (!isPeopleWorkerPacket(workerPacket)) throw new Error('Compact worker packet was not recognized');
+  if (!deepEqual(workerPacket, buildPeopleWorkerPacket(packet))) {
+    throw new Error('Compact worker packet comparison is not deterministic');
+  }
+
+  const duplicatedClaim = structuredClone(extraction);
+  duplicatedClaim.claims.push({
+    ...structuredClone(duplicatedClaim.claims[0]),
+    id: 'testbook:001:c0003',
+  });
+  const deduplicated = validatePeopleExtraction(duplicatedClaim, packet);
+  if (deduplicated.normalized.claims.length !== 2) throw new Error('Duplicate claims were not consolidated');
 
   const stale = structuredClone(extraction);
   stale.mentions[0].spans.en[0].exact = 'Alicia';

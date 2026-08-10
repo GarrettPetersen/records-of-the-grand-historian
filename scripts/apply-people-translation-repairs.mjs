@@ -11,20 +11,31 @@ import {
   normalizedChapterId,
   packetPath,
   readJson,
+  writeTextAtomic,
   writeJsonAtomic,
 } from './lib/people-content.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
 import {
+  compactPeopleExtraction,
+  expandPeopleExtraction,
+  isCompactPeopleExtraction,
+  serializeCompactPeopleExtraction,
+} from './lib/people-compact.mjs';
+import {
   applyTranslationRepairs,
   reconcileExtractionAfterRepairs,
 } from './lib/people-translation-repairs.mjs';
-import { validatePeopleExtraction } from './validate-people-extraction.mjs';
+import {
+  validateCompactPeopleExtraction,
+  validatePeopleExtraction,
+} from './validate-people-extraction.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
 function usage() {
   console.log(`Usage:
   node scripts/apply-people-translation-repairs.mjs --book BOOK --chapter NNN [--extraction PATH]
+  node scripts/apply-people-translation-repairs.mjs --book BOOK --chapter NNN --reconcile-current
   node scripts/apply-people-translation-repairs.mjs --self-test
 
 This command is intended for an isolated worker workspace. It validates all
@@ -35,7 +46,7 @@ for the worker to repair before the host accepts either artifact.`);
 }
 
 function parseArgs(argv) {
-  const opts = { book: null, chapter: null, extraction: null, selfTest: false };
+  const opts = { book: null, chapter: null, extraction: null, reconcileCurrent: false, selfTest: false };
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
     const next = () => {
@@ -46,6 +57,7 @@ function parseArgs(argv) {
     if (arg === '--book') opts.book = next();
     else if (arg === '--chapter') opts.chapter = normalizedChapterId(next());
     else if (arg === '--extraction') opts.extraction = path.resolve(REPO_ROOT, next());
+    else if (arg === '--reconcile-current') opts.reconcileCurrent = true;
     else if (arg === '--self-test') opts.selfTest = true;
     else if (arg === '--help' || arg === '-h') {
       usage();
@@ -122,6 +134,11 @@ function selfTest() {
   const reconciled = reconcileExtractionAfterRepairs(extraction, revisedPacket);
   if (reconciled.unresolvedCandidates.length > 0) throw new Error('Fixture left unresolved candidates');
   validatePeopleExtraction(reconciled.extraction, revisedPacket);
+  const compact = compactPeopleExtraction(reconciled.extraction, revisedPacket);
+  const compactResult = validateCompactPeopleExtraction(compact, revisedPacket);
+  if (compactResult.stats.people !== 1 || compactResult.stats.repairs !== 1) {
+    throw new Error('Compact extraction round trip lost fixture data');
+  }
   console.log('apply-people-translation-repairs self-test: ok');
 }
 
@@ -134,13 +151,39 @@ function main() {
   const extractionFile = opts.extraction ?? extractionPath(opts.book, opts.chapter);
   if (!fs.existsSync(extractionFile)) throw new Error(`Extraction not found: ${path.relative(REPO_ROOT, extractionFile)}`);
   const chapter = readJson(chapterFile);
-  const extraction = readJson(extractionFile);
   const matcher = loadProperNounMatcher();
+  const storedExtraction = readJson(extractionFile);
+  const compactStored = isCompactPeopleExtraction(storedExtraction);
+  const currentPacket = buildPeopleExtractionPacket(opts.book, opts.chapter, { properNounMatcher: matcher });
+  const extraction = compactStored
+    ? expandPeopleExtraction(storedExtraction, currentPacket)
+    : storedExtraction;
   const statuses = new Set(extraction.translationRepairs.map((repair) => repair.status));
 
+  if (opts.reconcileCurrent) {
+    const reconciled = reconcileExtractionAfterRepairs(extraction, currentPacket);
+    const result = validatePeopleExtraction(reconciled.extraction, currentPacket);
+    if (reconciled.unresolvedCandidates.length > 0) {
+      throw new Error(`Unresolved new candidates: ${reconciled.unresolvedCandidates.join(', ')}`);
+    }
+    if (compactStored) {
+      const compact = compactPeopleExtraction(result.normalized, currentPacket);
+      validateCompactPeopleExtraction(compact, currentPacket);
+      writeTextAtomic(extractionFile, serializeCompactPeopleExtraction(compact));
+    } else {
+      writeJsonAtomic(extractionFile, result.normalized);
+    }
+    writeJsonAtomic(packetPath(opts.book, opts.chapter), currentPacket);
+    console.log(
+      `Reconciled current ${opts.book}/${opts.chapter}: ${result.stats.people} people, ` +
+      `${result.stats.claims} claims, ${result.stats.candidates} candidates.`,
+    );
+    return;
+  }
+
   if (statuses.size === 0 || (statuses.size === 1 && statuses.has('applied'))) {
-    const currentPacket = buildPeopleExtractionPacket(opts.book, opts.chapter, { properNounMatcher: matcher });
-    validatePeopleExtraction(extraction, currentPacket);
+    if (compactStored) validateCompactPeopleExtraction(storedExtraction, currentPacket);
+    else validatePeopleExtraction(extraction, currentPacket);
     console.log(`No proposed repairs remain for ${opts.book}/${opts.chapter}.`);
     return;
   }
@@ -148,7 +191,7 @@ function main() {
     throw new Error('Translation repairs must be uniformly proposed or uniformly applied');
   }
 
-  const oldPacket = buildPeopleExtractionPacket(opts.book, opts.chapter, { properNounMatcher: matcher });
+  const oldPacket = currentPacket;
   validatePeopleExtraction(extraction, oldPacket);
   const applied = applyTranslationRepairs(chapter, extraction.translationRepairs);
   const revisedPacket = buildPeopleExtractionPacket(opts.book, opts.chapter, {
@@ -159,7 +202,13 @@ function main() {
   const reconciled = reconcileExtractionAfterRepairs(extraction, revisedPacket);
 
   writeJsonAtomic(chapterFile, applied.chapter);
-  writeJsonAtomic(extractionFile, reconciled.extraction);
+  if (compactStored) {
+    const compact = compactPeopleExtraction(reconciled.extraction, revisedPacket);
+    validateCompactPeopleExtraction(compact, revisedPacket);
+    writeTextAtomic(extractionFile, serializeCompactPeopleExtraction(compact));
+  } else {
+    writeJsonAtomic(extractionFile, reconciled.extraction);
+  }
   writeJsonAtomic(packetPath(opts.book, opts.chapter), revisedPacket);
 
   try {
