@@ -452,7 +452,6 @@ async function processTarget(target, opts, state) {
         workOnCurrentBranch: true,
         autoCreatePR: false,
         skipReviewerRequest: true,
-        metadata: { workflow: 'people-extraction', book: target.book, chapter: target.chapter },
       },
     });
     updateState(state, target, { agentId: agent.agentId });
