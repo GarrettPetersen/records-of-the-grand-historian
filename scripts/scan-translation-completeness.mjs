@@ -117,7 +117,13 @@ function englishFootnote(item) {
   return text(translation?.footnote);
 }
 
+function hasTranslationExclusion(item) {
+  return item?.excludeFromTranslationCount === true &&
+    text(item?.translationExclusionReason).length > 0;
+}
+
 function hit(kind, file, data, blockIndex, itemIndex, item) {
+  if (hasTranslationExclusion(item)) return null;
   const src = sourceText(item);
   const idiomatic = englishIdiomatic(item);
   const literal = englishLiteral(item);
