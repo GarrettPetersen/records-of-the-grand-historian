@@ -1736,7 +1736,7 @@ function printSummary(hits) {
 }
 
 function sentenceNumber(id) {
-  const match = String(id || '').match(/^s(\d+)$/);
+  const match = String(id || '').match(/^s(\d+)[a-z]*$/);
   return match ? Number(match[1]) : null;
 }
 

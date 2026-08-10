@@ -803,6 +803,7 @@ validate:
 			echo "Invalid JSON: $$f"; \
 		fi; \
 	done
+	@$(NODE) scripts/normalize-content-unit-ids.mjs --check
 	@$(NODE) scripts/normalize-punctuation-sentences.mjs
 	@$(NODE) scripts/validate-translation-fields.mjs
 	@$(NODE) scripts/scan-translation-completeness.mjs --fail --summary
