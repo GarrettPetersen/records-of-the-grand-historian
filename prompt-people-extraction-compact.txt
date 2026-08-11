@@ -78,12 +78,15 @@ personal relationship in `r` on both people. These hints do not replace the
 structured claims; they make the later cross-chapter identity dossier usable.
 
 Every person must have at least one source-supported active-date hint in `a`.
-Prefer a Western year or interval such as `AD 445` or `AD 445-446`. If the
-packet chronology cannot safely convert the source date, retain a useful source
-context such as `Yuanshuo era (conversion unresolved)` or `during Emperor
-Xuan's reign (conversion unresolved)`. Use a qualitative marker such as
-`legendary antiquity` only when the text is genuinely undatable. These are
-attested activity dates, not birth/death dates or asserted lifespans.
+Every historical or uncertain person must have a Western year or bounded
+interval such as `AD 445` or `AD 445-446`; `conversion unresolved` is not a
+complete result. Use packet chronology when available. If it is missing,
+verify the conversion against an authoritative chronology with available
+research tools and preserve the source date text without inventing a reign ID.
+If a safe conversion still cannot be established, fail loudly instead of
+asserting `allChronologyCaptured`. Use a qualitative marker such as `legendary
+antiquity` only for genuinely undatable legendary or literary figures. These
+are attested activity dates, not birth/death dates or asserted lifespans.
 
 Every person requires one or more structured name rows and role rows. A name
 row is `[valueObject, certainty, [evidenceUnitIds]]`; its value includes `kind`
@@ -346,11 +349,12 @@ derive the earliest/latest attested interval across chapters. Never describe
 that derived interval as a lifespan.
 
 Never convert dates from memory. Use a supplied reign ID only when its polity
-and reign are correct. Otherwise retain the source date text and mark it
-unresolved. Record stated age and reckoning but do not derive a birth year.
-Never assign a polity from lifespan or chapter alone. Preserve competing dates
-as separate claims joined by `textual-variant` or `conflict`; do not choose one
-silently.
+and reign are correct. When the packet lacks a mapping, independently verify a
+Western year or interval and omit `reignId`; unresolved source dates do not
+satisfy this prompt. Record stated age and reckoning but do not derive a birth
+year. Never assign a polity from lifespan or chapter alone. Preserve competing
+dates as separate claims joined by `textual-variant` or `conflict`; do not
+choose one silently.
 
 This is a complete person-centered source pass, not a separate canonical event
 database. Every linkable mention retains its exact source unit for current

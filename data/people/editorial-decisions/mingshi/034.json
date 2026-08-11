@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "mingshi",
+  "chapter": "034",
+  "input": {
+    "chapterFingerprint": "sha256:160cc9f64717c8fd5e33dde5ff6948871f41e413bf8e2b96b6ab17c0a9ce9ee8",
+    "proposalsFingerprint": "sha256:67d0e26556e57b6fc0a3a2346be5cf10b48a352d90b2648967fe9296c2ec28ac"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-af0a08e8-e0f8-4c4b-abdf-1e67cdca566c",
+    "runId": "run-ea29816d-838d-4caa-ae7d-fd9d91431e59",
+    "completedAt": "2026-08-11T21:30:36.629Z"
+  },
+  "proposals": [
+    {
+      "id": "mingshi:034:r0001",
+      "unit": {
+        "id": "s0002",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "▲ Grand Concordance Calendar Method, Part Two: Ready Reckoners.",
+      "after": "Grand Concordance Calendar Method, Part Two: Ready Reckoners.",
+      "reason": "The idiomatic English invents a leading triangle mark absent from the Chinese source text.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:034:r0002",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "Note: According to the Yuan History, the Season Granting Calendar was completed in the seventeenth year of Zhizheng.",
+      "after": "Note: According to the Yuan History, the Season Granting Calendar was completed in the seventeenth year of Zhiyuan (AD 1280).",
+      "reason": "The received Ming History text has 至正 here, but its cited Yuan History has 至元十七年; Wang Xun and Guo Shoujing belong to the thirteenth century, not the Zhizheng era.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:034:r0003",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "Commentary: According to the Yuan History, in the seventeenth year of Zhizheng the Season Granting Calendar was completed.",
+      "after": "Commentary: According to the Yuan History, in the seventeenth year of Zhiyuan (AD 1280) the Season Granting Calendar was completed.",
+      "reason": "The received Ming History text has 至正 here, but its cited Yuan History has 至元十七年; Wang Xun and Guo Shoujing belong to the thirteenth century, not the Zhizheng era.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "mingshi:034:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 大統曆法二立成 has no leading triangle; the idiomatic ▲ is an invented mark and removing it restores fidelity without changing the wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0002",
+        "excerpt": "大統曆法二立成"
+      }
+    },
+    {
+      "repairId": "mingshi:034:r0002",
+      "decision": "reject",
+      "after": null,
+      "reason": "The chapter text reads 至正十七年, which the current English accurately renders as Zhizheng. Wikisource's Siku Mingshi likewise has 至正十七年, while Yuan History 曆志 has 至元十七年 for the Season Granting Calendar; that citation error is source-critical annotation, not a license to rewrite the Mingshi wording into Zhiyuan.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "至正十七年《授時曆》成"
+      }
+    },
+    {
+      "repairId": "mingshi:034:r0003",
+      "decision": "reject",
+      "after": null,
+      "reason": "Literal English correctly translates received 至正 as Zhizheng. Emending to Zhiyuan (AD 1280) would misrepresent the Mingshi lemma; Yuan History's 十七年冬至，曆成…授時曆 confirms the historical date but does not alter what this chapter says.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "按《元史》，至正十七年《授時曆》成"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

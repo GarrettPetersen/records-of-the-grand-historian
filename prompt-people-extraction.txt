@@ -98,10 +98,15 @@ English, Chinese, and pinyin forms. A role value uses a supplied `roleId`.
 Record each distinct fact once: when several units support the same fact, put
 all of their evidence IDs on one claim instead of duplicating the claim.
 
-Never convert dates from memory. Use a supplied reign ID only when it is the
-correct polity and reign. Otherwise retain the source date text and mark the
-reign unresolved without inventing an ID. Record stated age and reckoning; do
-not derive a birth year. Do not assign a polity from lifespan or chapter alone.
+Never convert dates from memory. Every historical or uncertain person requires
+a source-supported Western year or bounded interval. Use a supplied reign ID
+only when it is the correct polity and reign. If the packet lacks a mapping,
+verify the conversion against an authoritative chronology and omit `reignId`;
+do not return `conversion unresolved` as a complete result. If no safe Western
+date can be established, fail loudly instead of asserting chronology coverage.
+Qualitative chronology is reserved for genuinely undatable legendary or
+literary figures. Record stated age and reckoning; do not derive a birth year.
+Do not assign a polity from lifespan or chapter alone.
 
 ## Editorial Repairs
 

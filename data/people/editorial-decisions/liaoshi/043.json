@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "043",
+  "input": {
+    "chapterFingerprint": "sha256:e259337dfea4ffde031916fa91249092f5c3c53ff74ffa50063c675c0b93a057",
+    "proposalsFingerprint": "sha256:c315b61ca64824080d9cf19578c65b089049ce28903cd02afe8000efd0e34d9f"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-e2ca44ec-9f42-47e4-b391-8a11cef3e0f9",
+    "runId": "run-8858312d-48a7-441e-8bf7-dabada874260",
+    "completedAt": "2026-08-11T21:29:39.659Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:043:r0001",
+      "unit": {
+        "id": "s0024",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 21
+      },
+      "field": "idiomatic",
+      "before": "(Tables occupy pages 540–564 of the printed edition.)〉",
+      "after": "(Tables occupy pages 540–564 of the printed edition.)",
+      "reason": "Stray Chinese closing bracket 〉 appended after the English parenthetical note.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:043:r0002",
+      "unit": {
+        "id": "s0024",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 21
+      },
+      "field": "literal",
+      "before": "(The text has tables on pages 540–564 of the book.)〉",
+      "after": "(The text has tables on pages 540–564 of the book.)",
+      "reason": "Stray Chinese closing bracket 〉 appended after the English parenthetical note.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:043:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese wraps the editorial note in 〈…〉; English already uses parentheses, so the trailing 〉 is a stray artifact and should be removed.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0024",
+        "excerpt": "〈（書540－564頁有表）〉"
+      }
+    },
+    {
+      "repairId": "liaoshi:043:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese wraps the editorial note in 〈…〉; English already uses parentheses, so the trailing 〉 is a stray artifact and should be removed.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0024",
+        "excerpt": "〈（書540－564頁有表）〉"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}
