@@ -222,7 +222,7 @@ function expandClaims(compact, namespace) {
   return claims;
 }
 
-function expandMentions(compact, packet, namespace) {
+function expandMentions(compact, packet, namespace, options = {}) {
   const unitById = new Map(packet.units.map((unit, order) => [unit.id, { ...unit, order }]));
   const disposedCandidates = new Set(
     expandDispositions(compact, namespace).map((item) => item.candidate),
@@ -233,7 +233,19 @@ function expandMentions(compact, packet, namespace) {
       const unit = unitById.get(unitId);
       if (!unit) continue;
       for (const occurrence of occurrences) {
-        const located = exactSpanAt(unit[language], exact, occurrence);
+        let located;
+        try {
+          located = exactSpanAt(unit[language], exact, occurrence);
+        } catch (error) {
+          if (!options.allowStaleSurfaces) throw error;
+          located = {
+            exact,
+            occurrence,
+            startCodePoint: Number.MAX_SAFE_INTEGER,
+            endCodePoint: Number.MAX_SAFE_INTEGER,
+            unitTextHash: null,
+          };
+        }
         drafts.push({
           person: `${namespace}:${person}`,
           unit,
@@ -293,7 +305,7 @@ function expandDispositions(compact, namespace) {
   return dispositions;
 }
 
-export function expandPeopleExtraction(compact, packet) {
+export function expandPeopleExtraction(compact, packet, options = {}) {
   const namespace = `${packet.book}:${packet.chapter}`;
   return {
     schemaVersion: 1,
@@ -302,7 +314,7 @@ export function expandPeopleExtraction(compact, packet) {
     input: packet.input,
     run: compact.run,
     people: expandPeople(compact, namespace),
-    mentions: expandMentions(compact, packet, namespace),
+    mentions: expandMentions(compact, packet, namespace, options),
     claims: expandClaims(compact, namespace),
     translationRepairs: compact.translationRepairs.map((repair, index) => {
       const [unitId, field, before, after, reason, confidence, status] = repair;

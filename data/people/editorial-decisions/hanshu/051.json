@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "hanshu",
+  "chapter": "051",
+  "input": {
+    "chapterFingerprint": "sha256:69342ca82407b565b2efcaa2aad5e46428471dc8682717469b5015b3755c21e4",
+    "proposalsFingerprint": "sha256:a272bc02a323e5cf387465540a6b90df0abb0f21736cfd22220a91661cb29408"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex review of Grok 4.5 draft",
+    "model": null,
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-11T04:46:00.000Z"
+  },
+  "proposals": [
+    {
+      "id": "hanshu:051:r0001",
+      "unit": {
+        "id": "s0098",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "At first Cang's father Chang was not full five chi tall; Cang was more than eight chi tall; Cang's son again was eight chi tall; reaching the grandson Lei was more than six chi tall.",
+      "after": "At first Cang's father's height was not a full five chi; Cang was more than eight chi tall; Cang's son again was eight chi tall; reaching the grandson Lei, [he] was more than six chi tall.",
+      "reason": "In 蒼父長不滿五尺, 長 means height/tallness, not a personal name; the literal invents a father named Chang.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:051:r0002",
+      "unit": {
+        "id": "s0086",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "Cang came; Marquis of Jiang and others honored and established Emperor Xiaowen; in the fourth year he replaced Guan Ying as chancellor.",
+      "after": "Cang, with the Marquis of Jiang and others, honored and established Emperor Xiaowen; in the fourth year he replaced Guan Ying as chancellor.",
+      "reason": "蒼來絳侯等 is coordinate subjects (Cang and the Marquis of Jiang et al.), not “Cang came; Marquis of Jiang…”.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "hanshu:051:r0001",
+      "decision": "revise",
+      "after": "At first, Cang's father was not a full five chi tall; Cang was over eight chi tall; Cang's son was likewise eight chi tall; his grandson Lei was over six chi tall.",
+      "reason": "Parallel 蒼長八尺餘, 蒼子復長八尺, and 孫類長六尺餘 shows that 長 means stature, not a father named Chang; the revised literal also removes the proposal's awkward bracketed pronoun.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0098",
+        "excerpt": "初蒼父長不滿五尺，蒼長八尺餘"
+      }
+    },
+    {
+      "repairId": "hanshu:051:r0002",
+      "decision": "revise",
+      "after": "Zhang Cang and the Marquis of Jiang and the others honored and installed the King of Dai as Emperor Xiaowen; in the fourth year, Cang replaced Guan Ying as chancellor.",
+      "reason": "Wikisource and ctext preserve 蒼與絳侯等尊立代王為孝文皇帝: Cang jointly enthroned the King of Dai. The local 來 and omission of 代王為 are source defects, not wording to retain.",
+      "sourceWitness": {
+        "source": "wikisource",
+        "citation": "Hanshu 42, Zhang Cang biography; corroborated by ctext",
+        "excerpt": "蒼與絳侯等尊立代王為孝文皇帝"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "hanshu",
+  "chapter": "056",
+  "input": {
+    "chapterFingerprint": "sha256:a1ab0fab798884823c82b4b70de8408ac515413ad04eb166dafaab4d53fadf13",
+    "proposalsFingerprint": "sha256:0472edfe50868ad17eeb8a7c18f0475efcf2f9fb3ed81d31b3374540a38458e5"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex review of Grok 4.5 draft",
+    "model": null,
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-11T04:46:00.000Z"
+  },
+  "proposals": [
+    {
+      "id": "hanshu:056:r0001",
+      "unit": {
+        "id": "s0033",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "That November the emperor deposed the heir from the Su clan; the empress dowager began to hope openly that the king of Liang might succeed him.",
+      "after": "That November the emperor deposed Crown Prince Li; the empress dowager began to hope openly that the king of Liang might succeed him.",
+      "reason": "栗太子 is Crown Prince Li (son of Consort Li 栗姬), not an heir of a “Su clan”; Su is a mistranslation of 栗.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:056:r0002",
+      "unit": {
+        "id": "s0033",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "In the eleventh month, the sovereign deposed the Crown Prince of Su; the empress dowager in her heart wished to make the King of Liang heir.",
+      "after": "In the eleventh month, the sovereign deposed Crown Prince Li; the empress dowager in her heart wished to make the King of Liang heir.",
+      "reason": "栗太子 should be Crown Prince Li, not “Crown Prince of Su”.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:056:r0003",
+      "unit": {
+        "id": "s0076",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In Yuanshi 2 Wang Mang, as marquis of Xindu, petitioned the Grand Empress Dowager to revive a fallen line and enfeoffed Nian’s nephew Ruyi as king of Guangzong to continue the sacrifices to King Xiao of Dai’s queen.",
+      "after": "In Yuanshi 2 Wang Mang, as marquis of Xindu, petitioned the Grand Empress Dowager to revive a fallen line and enfeoffed Nian’s nephew Ruyi as king of Guangzong to continue the line of King Xiao of Dai.",
+      "reason": "奉代孝王后 means to continue the sacrificial line after King Xiao of Dai, not “King Xiao of Dai’s queen”.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:056:r0004",
+      "unit": {
+        "id": "s0166",
+        "kind": "paragraph-sentence",
+        "blockIndex": 33,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Li in fear took off his cap and replied: “Li in youth lost father and mother; orphaned and weak he dwelt in the deep palace; alone with eunuchs, maids, and concubines he lived; gradually he was steeped in the customs of a small state; added to this his substance and nature are low and stupid; there is an posture that cannot be shifted.",
+      "after": "Li in fear took off his cap and replied: “Li in youth lost father and mother; orphaned and weak he dwelt in the deep palace; alone with eunuchs, maids, and concubines he lived; gradually he was steeped in the customs of a small state; added to this his substance and nature are low and stupid; there is a posture that cannot be shifted.",
+      "reason": "English article error: “an posture” should be “a posture”.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "hanshu:056:r0001",
+      "decision": "revise",
+      "after": "That November the emperor deposed Crown Prince Li; the empress dowager privately hoped that the king of Liang might succeed him.",
+      "reason": "栗太子 is Crown Prince Li, while 心欲 expresses inward intent; 'privately hoped' corrects both the invented Su clan and the proposal's contradictory 'openly.'",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0033",
+        "excerpt": "上廢栗太子，太后心欲以梁王為嗣"
+      }
+    },
+    {
+      "repairId": "hanshu:056:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "栗太子 is Crown Prince Li; “Crown Prince of Su” misreads 栗.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0033",
+        "excerpt": "上廢栗太子"
+      }
+    },
+    {
+      "repairId": "hanshu:056:r0003",
+      "decision": "revise",
+      "after": "In Yuanshi 2, Wang Mang, Marquis of Xindu, petitioned the Grand Empress Dowager to restore the extinct line. Nian's nephew Ruyi was enfeoffed as King of Guangzong to continue King Xiao of Dai's line.",
+      "reason": "奉代孝王后 means to continue King Xiao of Dai's line, not to serve his queen; splitting the sentence also makes clear that Wang Mang petitioned and Ruyi was enfeoffed.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0076",
+        "excerpt": "奉代孝王后"
+      }
+    },
+    {
+      "repairId": "hanshu:056:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "“An posture” is ungrammatical English; “a posture” is the correct article before the consonant onset of posture.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0166",
+        "excerpt": "有不可移之姿"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

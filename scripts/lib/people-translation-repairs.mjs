@@ -65,6 +65,20 @@ function sharedWordCount(left, right) {
   return [...wordSet(left)].filter((word) => rightWords.has(word)).length;
 }
 
+function isWordCharacter(value) {
+  return typeof value === 'string' && /[\p{L}\p{N}]/u.test(value);
+}
+
+function surfaceContains(container, surface, language) {
+  if (language === 'zh') return container.includes(surface);
+  for (let index = container.indexOf(surface); index >= 0; index = container.indexOf(surface, index + 1)) {
+    const before = [...container.slice(0, index)].at(-1);
+    const after = [...container.slice(index + surface.length)][0];
+    if (!isWordCharacter(before) && !isWordCharacter(after)) return true;
+  }
+  return false;
+}
+
 function spansOverlap(left, right) {
   return left.startCodePoint < right.endCodePoint && right.startCodePoint < left.endCodePoint;
 }
@@ -257,14 +271,23 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         stale.language,
         revisedPacket.preflight.candidates,
       );
-      mapped = addAliasMention(
+      const added = addAliasMention(
         reconciled,
         unit,
         stale.mention.person,
         stale.language,
         alias.kind,
         expanded,
-      ) || mapped;
+      );
+      const alreadyCovered = reconciled.mentions.some((mention) =>
+        mention.person === stale.mention.person &&
+        mention.unit.id === unit.id &&
+        mention.spans[stale.language].some((current) =>
+          current.startCodePoint <= expanded.startCodePoint &&
+          current.endCodePoint >= expanded.endCodePoint
+        )
+      );
+      mapped = added || alreadyCovered || mapped;
     }
     if (!mapped) unresolvedSpans.push(stale);
   }
@@ -350,8 +373,8 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
     const aliasMatches = reconciled.people.flatMap((person) =>
       aliasesForPerson(reconciled, person.localId, candidate.language, candidate.unit)
         .filter((alias) =>
-          candidate.exact.includes(alias.exact) ||
-          (alias.exact.includes(candidate.exact) && exactOccurrences(
+          surfaceContains(candidate.exact, alias.exact, candidate.language) ||
+          (surfaceContains(alias.exact, candidate.exact, candidate.language) && exactOccurrences(
             unitById.get(candidate.unit)[candidate.language],
             alias.exact,
           ).length > 0)

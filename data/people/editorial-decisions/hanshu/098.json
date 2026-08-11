@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "hanshu",
+  "chapter": "098",
+  "input": {
+    "chapterFingerprint": "sha256:3789fa44ab73559bbab278b8c96f021bf801be76d46e25d37a7c77faaee178c0",
+    "proposalsFingerprint": "sha256:543b2d361414a2cc820bec6968f896407e3d2c02637814ccbca9d50e7edbc49c"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex review of Grok 4.5 draft",
+    "model": null,
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-11T04:46:00.000Z"
+  },
+  "proposals": [
+    {
+      "id": "hanshu:098:r0001",
+      "unit": {
+        "id": "s0056",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Share the fisherman's coarse fare, then bathe and shake out your robe; leave what Xu You and Laozi held dear— take up the path of Peng Zu and Prince Xian!",
+      "after": "Share the fisherman's coarse fare, then bathe and shake out your robe; leave what Xu You and Laozi held dear—take up the path Peng Xian left behind!",
+      "reason": "Chinese 彭鹹 is the single figure Peng Xian; the idiomatic English wrongly splits the name into Peng Zu and Prince Xian.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:098:r0002",
+      "unit": {
+        "id": "s0056",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Mingle with the fisherman's soup and drink; bathe clean and shake out your robe; cast aside what Xu You and Laozi treasured— follow the way Peng Zu and Prince Xian left behind!",
+      "after": "Mingle with the fisherman's soup and drink; bathe clean and shake out your robe; cast aside what Xu You and Laozi treasured—follow the way Peng Xian left behind!",
+      "reason": "Literal English also splits 彭鹹 into Peng Zu and Prince Xian; it should remain one name.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:098:r0003",
+      "unit": {
+        "id": "s0150",
+        "kind": "paragraph-sentence",
+        "blockIndex": 30,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "They mourn Lord Wen's wanderings, praise Yu at Dragon Gate, drown old flood sorrow in dredged channels, spread the nine rivers toward the eastern sea.",
+      "after": "They sigh for Duke Wen and pity Jie Tui; they praise Yu at Dragon Gate, drown old flood sorrow in dredged channels, and spread the nine rivers toward the eastern sea.",
+      "reason": "Chinese 愍推 names Jie Tui (介推); the idiomatic English omits 推 and collapses the couplet into Lord Wen's wanderings alone.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:098:r0004",
+      "unit": {
+        "id": "s0178",
+        "kind": "paragraph-sentence",
+        "blockIndex": 33,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Some exalt Shennong and the like— are they the final model for emperors?",
+      "after": "Some exalt Fu Xi and Shen Nong—are they the final model for emperors?",
+      "reason": "Chinese 戲、農 names Fu Xi and Shen Nong; idiomatic English collapses them into 'Shennong and the like'.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "hanshu:098:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit 彭鹹之所遺 names the single Chu Ci figure Peng Xian and what he left behind; the prior idiomatic English wrongly splits 彭鹹 into Peng Zu and Prince Xian. The proposed repair restores the one name and keeps the surrounding Xu You / Laozi contrast intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0056",
+        "excerpt": "彭鹹之所遺"
+      }
+    },
+    {
+      "repairId": "hanshu:098:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same focus phrase 彭鹹之所遺 is one personal name plus what he bequeathed; the prior literal English invents two figures, Peng Zu and Prince Xian. The proposed literal line correctly reads Peng Xian alone.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0056",
+        "excerpt": "彭鹹之所遺"
+      }
+    },
+    {
+      "repairId": "hanshu:098:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus couplet 嗟文公而愍推兮 pairs Duke Wen with 推 (Jie Tui), especially given the preceding view of Mount Jie; the prior idiomatic English drops 推 and invents Lord Wen's wanderings. The proposed repair restores both figures and matches 文公 as Duke Wen.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0150",
+        "excerpt": "嗟文公而愍推兮"
+      }
+    },
+    {
+      "repairId": "hanshu:098:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit 戲、農 abbreviates Fu Xi and Shen Nong as two named culture heroes; the prior idiomatic English collapses them into Shennong and the like, omitting 戲. Naming both Fu Xi and Shen Nong is the accurate repair.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0178",
+        "excerpt": "戲、農"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

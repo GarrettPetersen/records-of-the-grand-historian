@@ -305,6 +305,10 @@ function selfTest() {
       id: 's0002', kind: 'paragraph-sentence', blockIndex: 1,
       collection: 'sentences', itemIndex: 0,
       zh: '河內', en: 'Henei', literal: 'Henei',
+    }, {
+      id: 's0003', kind: 'paragraph-sentence', blockIndex: 2,
+      collection: 'sentences', itemIndex: 0,
+      zh: '', en: 'Liu Xin', literal: 'Liu Xin',
     }],
     preflight: {
       candidates: [{
@@ -319,6 +323,10 @@ function selfTest() {
         id: 'fixture:002:cand_henei_zh', unit: 's0002', language: 'zh',
         exact: '河內', occurrence: 0, startCodePoint: 0, endCodePoint: 2,
         detectors: [{ kind: 'chinese-notes-proper-noun', glossaryId: 36412 }],
+      }, {
+        id: 'fixture:002:cand_liu_xin', unit: 's0003', language: 'en',
+        exact: 'Liu Xin', occurrence: 0, startCodePoint: 0, endCodePoint: 7,
+        detectors: [{ kind: 'english-capitalized-expression' }],
       }],
     },
   };
@@ -333,6 +341,18 @@ function selfTest() {
       preferredNameSuggestion: { en: 'Fu Jiezi', zh: '傅介子' },
       historicity: 'historical',
       descriptorSuggestion: 'Envoy',
+      identityHints: { nativePlaces: [], relatedLocalPeople: [], activeDateHints: [] },
+    }, {
+      localId: 'fixture:002:p002',
+      preferredNameSuggestion: { en: 'Li' },
+      historicity: 'historical',
+      descriptorSuggestion: 'Named Individual',
+      identityHints: { nativePlaces: [], relatedLocalPeople: [], activeDateHints: [] },
+    }, {
+      localId: 'fixture:002:p003',
+      preferredNameSuggestion: { en: 'Liu Xin' },
+      historicity: 'historical',
+      descriptorSuggestion: 'Scholar',
       identityHints: { nativePlaces: [], relatedLocalPeople: [], activeDateHints: [] },
     }],
     mentions: [{
@@ -350,6 +370,14 @@ function selfTest() {
       id: 'fixture:002:c0001', subject: 'fixture:002:p001', predicate: 'name',
       value: { kind: 'personal', en: 'Fu Jiezi', zh: '傅介子' }, certainty: 'explicit',
       evidence: ['fixture:002:s0001'],
+    }, {
+      id: 'fixture:002:c0002', subject: 'fixture:002:p002', predicate: 'name',
+      value: { kind: 'personal', en: 'Li' }, certainty: 'explicit',
+      evidence: ['fixture:002:s0003'],
+    }, {
+      id: 'fixture:002:c0003', subject: 'fixture:002:p003', predicate: 'name',
+      value: { kind: 'personal', en: 'Liu Xin' }, certainty: 'explicit',
+      evidence: ['fixture:002:s0003'],
     }],
     translationRepairs: [],
     candidateDispositions: [{
@@ -372,6 +400,11 @@ function selfTest() {
     item.candidate === 'fixture:002:cand_henei_en' && item.reason === 'place'
   );
   if (!inherited) throw new Error('Bilingual glossary candidate did not inherit its disposition');
+  const boundedName = fragments.extraction.mentions.find((mention) =>
+    mention.person === 'fixture:002:p003' &&
+    mention.spans.en.some((span) => span.exact === 'Liu Xin')
+  );
+  if (!boundedName) throw new Error('English surface matching confused Li with Liu Xin');
   console.log('apply-people-translation-repairs self-test: ok');
 }
 
@@ -389,7 +422,9 @@ function main() {
   const compactStored = isCompactPeopleExtraction(storedExtraction);
   const currentPacket = buildPeopleExtractionPacket(opts.book, opts.chapter, { properNounMatcher: matcher });
   const extraction = compactStored
-    ? expandPeopleExtraction(storedExtraction, currentPacket)
+    ? expandPeopleExtraction(storedExtraction, currentPacket, {
+      allowStaleSurfaces: opts.reconcileCurrent,
+    })
     : storedExtraction;
   const statuses = new Set(extraction.translationRepairs.map((repair) => repair.status));
 
@@ -397,7 +432,6 @@ function main() {
     const reconciled = reconcileExtractionAfterRepairs(extraction, currentPacket, {
       markRepairsApplied: false,
     });
-    const result = validatePeopleExtraction(reconciled.extraction, currentPacket);
     if (reconciled.unresolvedSpans.length > 0) {
       throw new Error(
         `Unresolved stale mention spans: ${reconciled.unresolvedSpans.map((item) =>
@@ -410,6 +444,7 @@ function main() {
         `Unresolved new candidates: ${describeUnresolvedCandidates(reconciled.unresolvedCandidates, currentPacket)}`,
       );
     }
+    const result = validatePeopleExtraction(reconciled.extraction, currentPacket);
     if (compactStored) {
       const compact = compactPeopleExtraction(result.normalized, currentPacket);
       validateCompactPeopleExtraction(compact, currentPacket);
