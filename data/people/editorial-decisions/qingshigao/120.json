@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "120",
+  "input": {
+    "chapterFingerprint": "sha256:f0cc1e28843661addc570c4de442274d54e1052a0e2bb3113cd7d9b91ade467a",
+    "proposalsFingerprint": "sha256:52e23318711d74563510965bf9ab632ac7af9c563f2af60bfff17606ff28ce06"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-a82e83b4-85a7-4018-b4ce-066ded3d35c7",
+    "runId": "run-eb8502d5-8832-496a-91e6-d156c2acdab6",
+    "completedAt": "2026-08-11T21:08:01.882Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:120:r0001",
+      "unit": {
+        "id": "s0013",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "idiomatic",
+      "before": "New policies multiplied and officials strained every nerve for gain, while the sage-kings' counsel—to swell the population, lighten consumption, and husband resources in haste—was left unheeded.",
+      "after": "New policies multiplied and officials strained every nerve for gain, while the sage-kings' counsel—to increase the multitude and lessen consumption, to produce with urgency and spend with ease—was left unheeded.",
+      "reason": "为疾用舒 means produce urgently and spend leisurely/with ease; 'husband resources in haste' reverses and conflates the classical pair.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:120:r0002",
+      "unit": {
+        "id": "s0013",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "literal",
+      "before": "New policies proliferated, and they strove unceasingly to seek profit; yet regarding the way of the ancient sage-kings—to increase the people and reduce consumption, and to use resources sparingly in times of urgency—they were ignorant and did not discuss it.",
+      "after": "New policies proliferated, and they strove unceasingly to seek profit; yet regarding the way of the ancient sage-kings—to increase the people and reduce consumption, and to produce with urgency while spending with ease—they were ignorant and did not discuss it.",
+      "reason": "为疾用舒 is produce-with-urgency and use-with-ease, not 'use resources sparingly in times of urgency'.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:120:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In s0013, 生眾食寡、為疾用舒 is the classical fiscal pair: increase producers/multitude and lessen consumption, then produce with urgency and spend with ease. The prior idiomatic 'husband resources in haste' conflates and reverses 為疾用舒; the proposed replacement restores that sense without inventing content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0013",
+        "excerpt": "生眾食寡、為疾用舒"
+      }
+    },
+    {
+      "repairId": "qingshigao:120:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same focus phrase 為疾用舒 pairs urgent production (為疾) with leisurely spending (用舒). The prior literal 'use resources sparingly in times of urgency' misreads that pair; the proposed 'produce with urgency while spending with ease' matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0013",
+        "excerpt": "為疾用舒"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}
