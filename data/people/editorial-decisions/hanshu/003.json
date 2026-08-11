@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "hanshu",
+  "chapter": "003",
+  "input": {
+    "chapterFingerprint": "sha256:87223520a2be95936d4daca99d365b03916ae177d119f583f099b8de26faeb21",
+    "proposalsFingerprint": "sha256:247a7cefeb972f8b5d0ecde59eb4bb1fc3e6c8018fe3370e6a7aa7c402f86cd1"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-2baf2a09-901e-4b98-9a11-e474a4e2410f",
+    "runId": "run-dbc9cba8-c18d-472f-a7cc-023ffd1c1bd2",
+    "completedAt": "2026-08-11T23:19:18.164Z"
+  },
+  "proposals": [
+    {
+      "id": "hanshu:003:r0001",
+      "unit": {
+        "id": "s0016",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 15
+      },
+      "field": "idiomatic",
+      "before": "He reduced land taxes, restoring the fifteen percent tax.",
+      "after": "He reduced land taxes, restoring the one-in-fifteen tax rate.",
+      "reason": "十五稅一 means a tax of one part in fifteen, not fifteen percent.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:003:r0002",
+      "unit": {
+        "id": "s0016",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 15
+      },
+      "field": "literal",
+      "before": "He reduced land taxes, restoring the fifteen percent tax.",
+      "after": "He reduced land taxes, restoring the one-in-fifteen tax rate.",
+      "reason": "十五稅一 means a tax of one part in fifteen, not fifteen percent.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:003:r0003",
+      "unit": {
+        "id": "s0022",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "He commanded the commanderies and feudal lords to establish high temples.",
+      "after": "He commanded the commanderies and feudal kings to establish temples to Gaozu.",
+      "reason": "高廟 are ancestral temples to Gaozu (高祖), not generic 'high temples'; 諸侯王 are feudal kings.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:003:r0004",
+      "unit": {
+        "id": "s0022",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "He commanded the commanderies and feudal lords to establish high temples.",
+      "after": "He commanded the commanderies and feudal kings to establish temples to Gaozu.",
+      "reason": "高廟 are ancestral temples to Gaozu (高祖), not generic 'high temples'; 諸侯王 are feudal kings.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:003:r0005",
+      "unit": {
+        "id": "s0044",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Changlegong's Hongtai suffered disaster.",
+      "after": "The Hong Terrace of Changle Palace suffered a fire.",
+      "reason": "長樂宮鴻臺 is the Hong Terrace of Changle Palace; the fused 'Changlegong's Hongtai' is unnatural and obscures the place name.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "hanshu:003:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "十五稅一 is a tax of one part in fifteen (~6.7%), not fifteen percent; the proposed idiomatic wording restores that rate correctly.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0016",
+        "excerpt": "減田租，復十五稅一"
+      }
+    },
+    {
+      "repairId": "hanshu:003:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise misrenders 十五稅一 as fifteen percent; one-in-fifteen tax rate matches the Chinese fraction.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0016",
+        "excerpt": "復十五稅一"
+      }
+    },
+    {
+      "repairId": "hanshu:003:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "高廟 is Gaozu's ancestral temple, not a generic high temple, and 諸侯王 are feudal kings; the repair fixes both errors.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0022",
+        "excerpt": "令郡諸侯王立高廟"
+      }
+    },
+    {
+      "repairId": "hanshu:003:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same Chinese: 高廟 names Gaozu's temple and 諸侯王 are kings, so the literal replacement is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0022",
+        "excerpt": "令郡諸侯王立高廟"
+      }
+    },
+    {
+      "repairId": "hanshu:003:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "長樂宮鴻臺 is the Hong Terrace of Changle Palace; fused pinyin obscures the names, and palace 災 conventionally records fire.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0044",
+        "excerpt": "長樂宮鴻臺災"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

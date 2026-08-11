@@ -34,18 +34,23 @@ const ENGLISH_NAMED_PLACE_TERMS = new Set([
   'Dragon City',
   'Fenyin',
   'Hengcheng Gate',
+  'Hong Terrace',
+  'Salt Marsh',
   'Yong',
 ]);
 const ENGLISH_NAMED_POLITY_TERMS = new Set([
   'Eastern Yue',
 ]);
 const ENGLISH_NAMED_OFFICE_TERMS = new Set([
+  'Broad Benefit Office',
+  'Charging Cavalry',
   'Gou Shield',
   'Grandee',
   'Imperial Workshops',
   'Nobility Ranks',
   'Privy Treasurer',
   'Splendid Light',
+  'Three Commanders',
 ]);
 
 function locatorKey(locator) {
@@ -796,7 +801,7 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       accounted.add(candidate.id);
       continue;
     }
-    const aliasMatches = reconciled.people.flatMap((person) =>
+    let aliasMatches = reconciled.people.flatMap((person) =>
       aliasesForPerson(reconciled, person.localId, candidate.language, candidate.unit)
         .filter((alias) => {
           if (surfaceContains(candidate.exact, alias.exact, candidate.language)) return true;
@@ -812,6 +817,25 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         })
         .map((alias) => ({ person: person.localId, alias }))
     );
+    if (aliasMatches.length === 0) {
+      aliasMatches = reconciled.people.flatMap((person) => {
+        const exact = person.preferredNameSuggestion?.[candidate.language];
+        if (exact !== candidate.exact) return [];
+        const nameClaim = reconciled.claims.find((claim) =>
+          claim.subject === person.localId &&
+          claim.predicate === 'name' &&
+          claim.value?.[candidate.language] === exact
+        );
+        return [{
+          person: person.localId,
+          alias: {
+            exact,
+            kind: mentionKindForNameKind(nameClaim?.value?.kind),
+            preferred: true,
+          },
+        }];
+      });
+    }
     const matchingPeople = new Set(aliasMatches.map((item) => item.person));
     if (matchingPeople.size === 1) {
       const person = [...matchingPeople][0];
@@ -1010,8 +1034,17 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
 
   for (const mention of reconciled.mentions) {
     for (const language of ['zh', 'en']) {
+      const widestFirst = [...mention.spans[language]].sort((left, right) =>
+        left.startCodePoint - right.startCodePoint || right.endCodePoint - left.endCodePoint
+      );
+      mention.spans[language] = widestFirst.filter((span, index) =>
+        !widestFirst.slice(0, index).some((earlier) =>
+          earlier.startCodePoint <= span.startCodePoint && span.endCodePoint <= earlier.endCodePoint
+        )
+      );
       mention.spans[language].sort((left, right) => left.startCodePoint - right.startCodePoint);
     }
+    mention.candidateRefs = [...new Set(mention.candidateRefs)];
     mention.candidateRefs.sort((left, right) =>
       (candidateOrder.get(left) ?? Number.MAX_SAFE_INTEGER) -
       (candidateOrder.get(right) ?? Number.MAX_SAFE_INTEGER)

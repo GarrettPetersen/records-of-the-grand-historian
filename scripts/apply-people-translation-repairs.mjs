@@ -350,6 +350,10 @@ function selfTest() {
       id: 's0008', kind: 'paragraph-sentence', blockIndex: 7,
       collection: 'sentences', itemIndex: 0,
       zh: '', en: 'The Privy Treasurer ordered it.', literal: 'The Privy Treasurer ordered it.',
+    }, {
+      id: 's0009', kind: 'paragraph-sentence', blockIndex: 8,
+      collection: 'sentences', itemIndex: 0,
+      zh: '', en: 'Gaozu ordered it.', literal: 'Gaozu ordered it.',
     }],
     preflight: {
       candidates: [{
@@ -388,6 +392,10 @@ function selfTest() {
         id: 'fixture:002:cand_privy', unit: 's0008', language: 'en',
         exact: 'Privy Treasurer', occurrence: 0, startCodePoint: 4, endCodePoint: 19,
         detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_gaozu', unit: 's0009', language: 'en',
+        exact: 'Gaozu', occurrence: 0, startCodePoint: 0, endCodePoint: 5,
+        detectors: [{ kind: 'english-capitalized-expression' }],
       }],
     },
   };
@@ -415,6 +423,12 @@ function selfTest() {
       historicity: 'historical',
       descriptorSuggestion: 'Scholar',
       identityHints: { nativePlaces: [], relatedLocalPeople: [], activeDateHints: [] },
+    }, {
+      localId: 'fixture:002:p004',
+      preferredNameSuggestion: { en: 'Gaozu' },
+      historicity: 'historical',
+      descriptorSuggestion: 'Ruler',
+      identityHints: { nativePlaces: [], relatedLocalPeople: [], activeDateHints: [] },
     }],
     mentions: [{
       id: 'fixture:002:m0001',
@@ -426,6 +440,19 @@ function selfTest() {
       kind: 'personal-name',
       spans: { zh: [], en: [{ exact: 'Fu Jiezi', occurrence: 0 }] },
       candidateRefs: [],
+    }, {
+      id: 'fixture:002:m0002',
+      person: 'fixture:002:p003',
+      unit: {
+        id: 's0003', kind: 'paragraph-sentence', blockIndex: 2,
+        collection: 'sentences', itemIndex: 0,
+      },
+      kind: 'personal-name',
+      spans: {
+        zh: [],
+        en: [{ exact: 'Liu Xin', occurrence: 0 }, { exact: 'Liu', occurrence: 0 }],
+      },
+      candidateRefs: ['fixture:002:cand_liu_xin'],
     }],
     claims: [{
       id: 'fixture:002:c0001', subject: 'fixture:002:p001', predicate: 'name',
@@ -438,6 +465,10 @@ function selfTest() {
     }, {
       id: 'fixture:002:c0003', subject: 'fixture:002:p003', predicate: 'name',
       value: { kind: 'personal', en: 'Liu Xin' }, certainty: 'explicit',
+      evidence: ['fixture:002:s0003'],
+    }, {
+      id: 'fixture:002:c0004', subject: 'fixture:002:p004', predicate: 'name',
+      value: { kind: 'temple-name', en: 'Gaozu' }, certainty: 'explicit',
       evidence: ['fixture:002:s0003'],
     }],
     translationRepairs: [],
@@ -466,6 +497,17 @@ function selfTest() {
     mention.spans.en.some((span) => span.exact === 'Liu Xin')
   );
   if (!boundedName) throw new Error('English surface matching confused Li with Liu Xin');
+  if (boundedName.spans.en.length !== 1 || boundedName.spans.en[0].exact !== 'Liu Xin') {
+    throw new Error('Contained alias span was not collapsed into the widest person mention');
+  }
+  const preferredNameMention = fragments.extraction.mentions.find((mention) =>
+    mention.person === 'fixture:002:p004' &&
+    mention.unit.id === 's0009' &&
+    mention.spans.en.some((span) => span.exact === 'Gaozu')
+  );
+  if (!preferredNameMention) {
+    throw new Error('Unique preferred name did not acquire a mention in a newly repaired unit');
+  }
   const expectedNonPeople = new Map([
     ['fixture:002:cand_only', 'not-a-name'],
     ['fixture:002:cand_am_i', 'not-a-name'],

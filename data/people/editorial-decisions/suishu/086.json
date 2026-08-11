@@ -1,0 +1,200 @@
+{
+  "schemaVersion": 3,
+  "book": "suishu",
+  "chapter": "086",
+  "input": {
+    "chapterFingerprint": "sha256:ace769fae61ead2c71b9ef7709413a09bca38f837110a40f5b6216d761617cff",
+    "proposalsFingerprint": "sha256:6243be5320737765c04aecb0119438cd18b9c8fde053bc52fd536adcce61e759"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-fccc93c9-0d36-4f02-8e07-727267889e19",
+    "runId": "run-29e24bd3-e57f-4e9c-920a-ecade3a7e665",
+    "completedAt": "2026-08-11T23:25:21.178Z"
+  },
+  "proposals": [
+    {
+      "id": "suishu:086:r0001",
+      "unit": {
+        "id": "s0017",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Soon afterward he asked to step down and was appointed Supernumerary.",
+      "after": "Soon afterward he asked to step down and was appointed Specially Advanced.",
+      "reason": "特進 is the honorary title Specially Advanced, not Supernumerary (which this chapter already uses for 給事中).",
+      "confidence": "high"
+    },
+    {
+      "id": "suishu:086:r0002",
+      "unit": {
+        "id": "s0017",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Shortly thereafter he requested to yield his position and was appointed Supernumerary.",
+      "after": "Shortly thereafter he requested to yield his position and was appointed Specially Advanced.",
+      "reason": "特進 should be rendered Specially Advanced, not Supernumerary.",
+      "confidence": "high"
+    },
+    {
+      "id": "suishu:086:r0003",
+      "unit": {
+        "id": "s0018",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "All extant editions now read \"Supernumerary.\"",
+      "after": "All extant editions now read \"Specially Advanced.\"",
+      "reason": "The quoted office is 特進 (Specially Advanced), not Supernumerary.",
+      "confidence": "high"
+    },
+    {
+      "id": "suishu:086:r0004",
+      "unit": {
+        "id": "s0018",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Now all editions uniformly read \"Supernumerary.\"",
+      "after": "Now all editions uniformly read \"Specially Advanced.\"",
+      "reason": "The quoted office is 特進 (Specially Advanced), not Supernumerary.",
+      "confidence": "high"
+    },
+    {
+      "id": "suishu:086:r0005",
+      "unit": {
+        "id": "s0037",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "〈At that time Chen Shou and Chen Ye were appointed to supervise; Right Remonstrator and Direct Historian of the History Office Zhang Guan and others carried out the collation.",
+      "after": "〈At that time Ministers Shou and Ye were appointed to supervise; Right Remonstrator and Direct Historian of the History Office Zhang Guan and others carried out the collation.",
+      "reason": "臣綬、臣燁 uses 臣 as the memorial self-reference “minister/your servant,” not the surname Chen; the literal already has Ministers Shou and Ye.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "suishu:086:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0017 has 拜特進; 特進 is the Tang honorary title Specially Advanced. Rendering it as Supernumerary invents a different office and conflicts with the chapter’s own use of that English for other titles.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0017",
+        "excerpt": "拜特進"
+      }
+    },
+    {
+      "repairId": "suishu:086:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal’s appointment phrase matches 拜特進; Specially Advanced is the correct rendering of 特進, whereas Supernumerary is a different office title.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0017",
+        "excerpt": "俄請遜位，拜特進"
+      }
+    },
+    {
+      "repairId": "suishu:086:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0018 says 今諸本並云特進, quoting the office-name 特進; the English quote must read Specially Advanced, not Supernumerary.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0018",
+        "excerpt": "今諸本並云特進"
+      }
+    },
+    {
+      "repairId": "suishu:086:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise quotes 特進 from 並云特進; replacing Supernumerary with Specially Advanced restores the correct office name in the quotation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0018",
+        "excerpt": "並云特進"
+      }
+    },
+    {
+      "repairId": "suishu:086:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "臣綬、臣燁 uses 臣 as the memorial self-reference “minister/your servant,” not the surname Chen; Ministers Shou and Ye matches the Chinese and the existing literal.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0037",
+        "excerpt": "臣綬、臣燁"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "suishu:086:r0005",
+      "claim": {
+        "id": "suishu:086:c0094",
+        "subject": "suishu:086:p018",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate-name",
+          "en": "Chen Shou",
+          "zh": "綬"
+        },
+        "certainty": "uncertain",
+        "evidence": [
+          "suishu:086:s0037"
+        ]
+      },
+      "reason": "The alternate name Chen Shou was created only by misreading 臣 as the surname Chen; s0037 supports the given name 綬 (Shou) with 臣 as a ministerial self-reference, not a Chen surname.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0037",
+        "excerpt": "臣綬"
+      }
+    },
+    {
+      "repairId": "suishu:086:r0005",
+      "claim": {
+        "id": "suishu:086:c0097",
+        "subject": "suishu:086:p019",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate-name",
+          "en": "Chen Ye",
+          "zh": "燁"
+        },
+        "certainty": "uncertain",
+        "evidence": [
+          "suishu:086:s0037"
+        ]
+      },
+      "reason": "The alternate name Chen Ye was created only by misreading 臣 as the surname Chen; s0037 supports the given name 燁 (Ye) with 臣 as a ministerial self-reference, not a Chen surname.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0037",
+        "excerpt": "臣燁"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

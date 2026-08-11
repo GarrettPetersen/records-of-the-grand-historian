@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "songshu",
+  "chapter": "090",
+  "input": {
+    "chapterFingerprint": "sha256:7d0b009e36462f0f0319f7d092a3ad66a2350ae2a01710ad321aaa7c9dc1f857",
+    "proposalsFingerprint": "sha256:2825126617f8303aada6c9932d737884b2a00e0a1074290699b125359f2a4f1e"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-e2e35c76-4cca-446d-be01-d7dfb334f38a",
+    "runId": "run-7866f437-a1f9-43fd-9174-1aa6cefe3d45",
+    "completedAt": "2026-08-11T23:24:49.020Z"
+  },
+  "proposals": [
+    {
+      "id": "songshu:090:r0001",
+      "unit": {
+        "id": "s0006",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Then came Prince Song of Xinxing, Prince Zan’s twin by the same mother.",
+      "after": "Then came Prince Song of Xinxing, Prince Zan’s full brother by the same mother.",
+      "reason": "Chinese 同生 means born of the same mother, not twin; the idiomatic invents twinship.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:090:r0002",
+      "unit": {
+        "id": "s0012",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "When the Qi founder took the throne from the Song, Song was reduced to county duke of Dingxiang with fifteen hundred households.",
+      "after": "When the Qi founder took the throne from the Song, Prince Song was reduced to county duke of Dingxiang with fifteen hundred households.",
+      "reason": "After 'the Song' (dynasty), bare 'Song' is easily misread as the polity rather than the prince; the Chinese subject is Prince Song.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "songshu:090:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "與武陵王贊同生 states same-mother birth with Prince Zan, not twinship; parallel 同生 at s0004 is already rendered as full brother, so inventing 'twin' is a real error and the proposed wording is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0006",
+        "excerpt": "與武陵王贊同生"
+      }
+    },
+    {
+      "repairId": "songshu:090:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The demotion subject continues Prince Song of Xinxing from s0010–s0011; after 'the Song' for the dynasty, bare 'Song' invites misreading the polity as demoted, so prefixing Prince correctly restores the Chinese agent.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0012",
+        "excerpt": "齊受禪，降封定襄縣公"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

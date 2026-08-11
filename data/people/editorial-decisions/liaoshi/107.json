@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "107",
+  "input": {
+    "chapterFingerprint": "sha256:3118e3a98f79bf3504a4f93b2c2d0bbd647736e8c2eba7148a79ab783e27c6f2",
+    "proposalsFingerprint": "sha256:f5172bc34b57f49a10acd357173a2e171b0b1a397da7aa31fb78dad10fdac2a1"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-d42b2720-96e6-499c-8ec7-3d01d5b426a1",
+    "runId": "run-1b9c9868-34ad-4d16-a472-d13d957d2ed4",
+    "completedAt": "2026-08-11T23:22:32.133Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:107:r0001",
+      "unit": {
+        "id": "s0009",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Her father Chen Sui rose repeatedly to the post of Grand Preceptor under the Five Dynasties.",
+      "after": "Her father Chen Xing rose repeatedly to the post of Minister over the Masses (situ) under the Five Dynasties.",
+      "reason": "Chinese 父陘 names him Xing (陘), not Sui; 司徒 is situ (Minister over the Masses), not Grand Preceptor (太師).",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:107:r0002",
+      "unit": {
+        "id": "s0009",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Her father Chen Sui repeatedly held the office of Grand Preceptor during the Five Dynasties period.",
+      "after": "Her father Chen Xing repeatedly held the office of situ (Minister over the Masses) during the Five Dynasties period.",
+      "reason": "Same errors as the idiomatic line: 陘 is Xing, and 司徒 is not Grand Preceptor.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:107:r0003",
+      "unit": {
+        "id": "s0047",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Lady Xiao, wife of Yelü Nu, known by the childhood name Yixin, was the daughter of the State Uncle and Princess Consort Taosuwo.",
+      "after": "Lady Xiao, wife of Yelü Nu, known by the childhood name Yixin, was the daughter of the State Uncle and Commandant-escort (imperial son-in-law) Taosuwo.",
+      "reason": "駙馬都尉 is the imperial son-in-law office (commandant-escort), not 'Princess Consort'.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:107:r0004",
+      "unit": {
+        "id": "s0047",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "The wife of Yelü Nu, Lady Xiao, childhood name Yixin, daughter of the State Uncle and Princess Consort Taosuwo.",
+      "after": "The wife of Yelü Nu, Lady Xiao, childhood name Yixin, daughter of the State Uncle and Commandant-escort Taosuwo.",
+      "reason": "Literal English likewise mistranslates 駙馬都尉 as Princess Consort.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:107:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0009 父陘 names the father Xing (陘), not Sui, and 累官司徒 is successive appointment to situ (Minister over the Masses), not Grand Preceptor (太師). The proposed English corrects both errors.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0009",
+        "excerpt": "父陘，五代時累官司徒"
+      }
+    },
+    {
+      "repairId": "liaoshi:107:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal line repeats the same mistakes: 陘 is Xing and 司徒 is situ, not Grand Preceptor. The proposed replacement matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0009",
+        "excerpt": "父陘，五代時累官司徒"
+      }
+    },
+    {
+      "repairId": "liaoshi:107:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "國舅駙馬都尉陶蘇斡 marks Taosuwo as State Uncle and commandant-escort (imperial son-in-law); 駙馬都尉 is not a princess consort title. The repair restores the correct office.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0047",
+        "excerpt": "國舅駙馬都尉陶蘇斡之女"
+      }
+    },
+    {
+      "repairId": "liaoshi:107:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal English likewise renders 駙馬都尉 as Princess Consort; Commandant-escort correctly reflects the office held by Taosuwo.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0047",
+        "excerpt": "國舅駙馬都尉陶蘇斡之女"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "liaoshi:107:r0003",
+      "claim": {
+        "id": "liaoshi:107:c0112",
+        "subject": "liaoshi:107:p020",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Princess Consort Taosuwo"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:107:s0047"
+        ]
+      },
+      "reason": "s0047 titles Taosuwo 國舅駙馬都尉, not a princess consort; the title claim exists only because the bad English mistranslated 駙馬都尉.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0047",
+        "excerpt": "國舅駙馬都尉陶蘇斡"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

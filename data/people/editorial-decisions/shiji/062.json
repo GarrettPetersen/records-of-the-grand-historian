@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "062",
+  "input": {
+    "chapterFingerprint": "sha256:7ceab2a61754f8f174ddea826da4dd6a84128e9bc6a24dde0b8162dcab2166c0",
+    "proposalsFingerprint": "sha256:1c19e32466c5443fb0fcb7065ce949c828019e2c625bed7f7b37c9167f7e8438"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-a2c689c5-535c-40ea-b649-be1226188cd1",
+    "runId": "run-44361305-65a4-4968-90f4-1a38d3e2d886",
+    "completedAt": "2026-08-11T23:23:28.910Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:062:r0001",
+      "unit": {
+        "id": "s0029",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "At the Kui meeting, Duke Huan wished to renege on Cao Mo's agreement, but Guan Zhong therefore kept faith with it, and the feudal lords therefore turned to Qi.",
+      "after": "At the Ke meeting, Duke Huan wished to renege on Cao Mo's agreement, but Guan Zhong therefore kept faith with it, and the feudal lords therefore turned to Qi.",
+      "reason": "柯 is Ke, not Kui; the meeting place name is mistransliterated.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:062:r0002",
+      "unit": {
+        "id": "s0029",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "At the Kui meeting, Duke Huan wished to renege on Cao Mo's agreement, Guan Zhong therefore kept faith with it, the feudal lords therefore turned to Qi.",
+      "after": "At the Ke meeting, Duke Huan wished to renege on Cao Mo's agreement, Guan Zhong therefore kept faith with it, the feudal lords therefore turned to Qi.",
+      "reason": "柯 is Ke, not Kui; the meeting place name is mistransliterated.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:062:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "於柯之會 names the meeting place 柯, whose standard pinyin is Ke; Kui is a mistransliteration, and the proposed Ke replacement is otherwise unchanged and accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0029",
+        "excerpt": "於柯之會"
+      }
+    },
+    {
+      "repairId": "shiji:062:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field likewise misrenders 柯 as Kui; correcting to Ke matches the Chinese place name without other semantic change.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0029",
+        "excerpt": "於柯之會"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

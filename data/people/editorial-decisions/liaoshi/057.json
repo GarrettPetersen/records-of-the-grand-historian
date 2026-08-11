@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "057",
+  "input": {
+    "chapterFingerprint": "sha256:b902314fa254ac9303fa95eaca5f4c7ed0c58bbc300a4025724c650e4bb9b4d6",
+    "proposalsFingerprint": "sha256:6adaf8f720e90e45401bb4b0660061b8c2194d505fb965d850e59d759b2aef68"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-1b8a69fa-1a12-4b17-a394-174136235c56",
+    "runId": "run-f5f64d8f-1c03-44c9-a246-f36a4b847efd",
+    "completedAt": "2026-08-11T23:20:52.175Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:057:r0001",
+      "unit": {
+        "id": "s0063",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "In the first year of the Shence era (916), when the military governor of Youzhou in Liang came to submit, an edict bestowed a seal and investiture cord.",
+      "after": "In the first year of the Shence era (916), when the prefect of Youzhou in Liang came to submit, an edict bestowed a seal and investiture cord.",
+      "reason": "Chinese 刺史 is prefect/regional inspector, not military governor (節度使).",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:057:r0002",
+      "unit": {
+        "id": "s0065",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "In the ninth year of the Huitong era (942), when Emperor Taizong campaigned against Jin, the last Jin emperor presented by memorial one imperial transmission seal and three gold seals, and the Son of Heaven's talismans and regalia then passed to Liao.",
+      "after": "In the ninth year of the Huitong era (946), when Emperor Taizong campaigned against Jin, the last Jin emperor presented by memorial one imperial transmission seal and three gold seals, and the Son of Heaven's talismans and regalia then passed to Liao.",
+      "reason": "會同元年 is AD 938; 會同九年 is AD 946, not 942.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:057:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 梁幽州刺史 names a cishi (prefect/regional inspector); rendering him as military governor confuses 刺史 with 節度使.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0063",
+        "excerpt": "梁幽州刺史來歸"
+      }
+    },
+    {
+      "repairId": "liaoshi:057:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "會同元年 is AD 938, so 會同九年 is AD 946; the parenthetical (942) is a wrong Western-year conversion.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0065",
+        "excerpt": "會同九年"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

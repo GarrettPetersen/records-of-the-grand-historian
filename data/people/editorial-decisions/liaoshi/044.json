@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "044",
+  "input": {
+    "chapterFingerprint": "sha256:7677111d7b69a54c78462b70c4ed033859aa735f011064c51d8c836299e23e0a",
+    "proposalsFingerprint": "sha256:1f6c4fe48b50963e0db8e78ec22708ed103c26cdac8a6c4b0ac6b8246715151a"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-4c5ce2b1-11cf-4da5-b219-cb4bb99f338b",
+    "runId": "run-b31b43dd-08ac-4be0-86eb-08202940c375",
+    "completedAt": "2026-08-11T23:20:45.873Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:044:r0001",
+      "unit": {
+        "id": "s0015",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Following the model of the 《Five Dynasties Administrative Geography Study》, this 《Study of New Moons》 records Khitan prefectures and garrisons.",
+      "after": "Following the model of how the 《Five Dynasties Administrative Geography Study》 recorded Khitan prefectures and garrisons, the 《Study of New Moons》 was composed.",
+      "reason": "Chinese 用…例，作《朔考》 means the New Moons study was composed on the model of that geography work's comparative format; the idiomatic wrongly makes the New Moons study itself the record of Khitan prefectures.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:044:r0002",
+      "unit": {
+        "id": "s0031",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Astronomical changes across the six directions' surface could be looked up at—such was the jade sight-rule of Yu's era.",
+      "after": "Astronomical changes across the six directions' surface could be looked up at—such was the jade sight-rule of Youyu's era.",
+      "reason": "有虞 is the dynastic designation of Shun (Youyu), not Yu (禹); the idiomatic correctly has Shun.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:044:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 用《五代職方考》誌契丹州軍例，作《朔考》 makes 《朔考》 the work composed (作) on the model of how the geography treatise recorded Khitan prefectures and armies; the idiomatic wrongly treats 《朔考》 itself as that record of prefectures.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0015",
+        "excerpt": "用《五代職方考》誌契丹州軍例，作《朔考》。"
+      }
+    },
+    {
+      "repairId": "liaoshi:044:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "有虞 names Shun's Youyu designation, parallel to 陶唐 for Yao in the prior sentence; rendering it as Yu (禹) confuses a different legendary ruler, while Youyu matches the Chinese and the idiomatic's Shun.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0031",
+        "excerpt": "有虞之璣"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

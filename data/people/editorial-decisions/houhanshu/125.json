@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "houhanshu",
+  "chapter": "125",
+  "input": {
+    "chapterFingerprint": "sha256:b9c819b11f734270043a7a6306801168d8d55b6b99656f7927da1de5b344bf9c",
+    "proposalsFingerprint": "sha256:aa18cec45151e3eec1f8d24f1cff29c1d6babe60128b1e73ecc519445b3a26b6"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-784804ff-f5ba-4eef-a5da-7da299a29f83",
+    "runId": "run-81e04ebf-deee-43cb-83c7-37a26ff46392",
+    "completedAt": "2026-08-11T23:19:10.143Z"
+  },
+  "proposals": [
+    {
+      "id": "houhanshu:125:r0001",
+      "unit": {
+        "id": "s0075",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Four commands rank with the three dukes: Grand General first, then Palace Charging Cavalry, then Chariots and Cavalry, then Palace Guards.",
+      "after": "Four commands rank with the three dukes: Grand General first, then Charging Cavalry, then Chariots and Cavalry, then Guards.",
+      "reason": "骠骑 and 卫 do not mean 'Palace'; the idiomatic gloss invents 'Palace' before Charging Cavalry and Guards.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:125:r0002",
+      "unit": {
+        "id": "s0081",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "At Guangwu's restoration Wu Han held Grand General merged with Grand Marshal; Jing Dan was Palace Charging Cavalry Grand General, still below ducal rank; many Front, Rear, Left, Right, and miscellaneous generals led field armies only to be disbanded when the fighting ended.",
+      "after": "At Guangwu's restoration Wu Han held Grand General merged with Grand Marshal; Jing Dan was Charging Cavalry Grand General, still below ducal rank; many Front, Rear, Left, Right, and miscellaneous generals led field armies only to be disbanded when the fighting ended.",
+      "reason": "Same invented 'Palace' before 骠骑; Chinese is 骠骑大将军.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:125:r0003",
+      "unit": {
+        "id": "s0082",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Emperor Ming, seeing talent in his brother Prince Cang of Dongping, first named him Palace Charging Cavalry General;",
+      "after": "Emperor Ming, seeing talent in his brother Prince Cang of Dongping, first named him Charging Cavalry General;",
+      "reason": "Same invented 'Palace' before 骠骑将军.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:125:r0004",
+      "unit": {
+        "id": "s0089",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "idiomatic",
+      "before": "As An's government weakened, Geng Bao—the empress's uncle by blood—held Grand General as a resident capital post.",
+      "after": "As An's government weakened, Geng Bao—his full maternal uncle—held Grand General as a resident capital post.",
+      "reason": "嫡舅 is the emperor's maternal uncle (mother's full brother), not the empress's uncle.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "houhanshu:125:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese lists 骠骑将军 and 卫将军; neither title contains a palace/palace-guard sense, so the idiomatic 'Palace' before Charging Cavalry and Guards is invented.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "次骠骑将军，次车骑将军，次卫将军"
+      }
+    },
+    {
+      "repairId": "houhanshu:125:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese has 骠骑大将军 with no palace element; removing the invented 'Palace' restores the title accurately.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0081",
+        "excerpt": "景丹为骠骑大将军"
+      }
+    },
+    {
+      "repairId": "houhanshu:125:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 以为骠骑将军 has no palace sense; the proposed title matches the source and the unit's literal rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0082",
+        "excerpt": "以为骠骑将军"
+      }
+    },
+    {
+      "repairId": "houhanshu:125:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "In context of 安帝, 嫡舅耿宝 is Emperor An's full maternal uncle, parallel to 舅邓骘 in s0088; the original wrongly makes him the empress's uncle.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0089",
+        "excerpt": "始以嫡舅耿宝为大将军"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}
