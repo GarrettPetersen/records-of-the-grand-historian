@@ -21,6 +21,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defaultStaticGenConcurrency, hardwareConcurrency } from './scripts/build-parallelism.mjs';
 import { getBookMetadata, mergeBookInfo } from './scripts/book-metadata.mjs';
+import {
+  chapterPeopleContext,
+  loadPeopleSiteContext,
+  peopleSentenceAnchor,
+  renderUnitWithPeople,
+} from './scripts/lib/people-site.mjs';
 import { getBookDesign } from './public/book-design.js';
 import {
   kindleProductForBook,
@@ -35,6 +41,7 @@ const CANONICAL_SITE = (process.env.SITE_URL || 'https://24histories.com').repla
 const PUBLICATION_DESCRIPTIONS = JSON.parse(
   fs.readFileSync(path.join(__dirname, 'ebooks', 'publication-descriptions.json'), 'utf8')
 );
+const PEOPLE_SITE = loadPeopleSiteContext();
 
 function getTableCellEnglish(cell) {
   if (!cell) return '';
@@ -181,12 +188,15 @@ function darkenHex(hex, amount) {
 }
 
 function siteFooter(prefix = '') {
+  const peopleLink = PEOPLE_SITE.active ? `
+            <a href="${prefix}people/index.html">People</a> |` : '';
   return `<footer>
         <p>
             <a href="${prefix}index.html">Home</a> |
             <a href="${prefix}about.html">About</a> |
             <a href="${prefix}blog.html">Blog</a> |
             <a href="${prefix}progress.html">Progress</a> |
+            ${peopleLink}
             Source texts: <a href="https://chinesenotes.com" target="_blank" rel="noopener noreferrer">Chinese Notes</a>, 
             <a href="https://ctext.org" target="_blank" rel="noopener noreferrer">CText</a>, and 
             <a href="https://zh.wikisource.org" target="_blank" rel="noopener noreferrer">Wikisource</a> |
@@ -231,21 +241,43 @@ function tableSpanAttrs(item, parsed, fallback) {
   return attrs;
 }
 
-function renderTableCell(cell, text) {
+function renderTableCell(cell, text, language, chapterPeople, afterHtml = '') {
   const parsed = parseTableAttributePrefix(text);
   const fallback = parseTableAttributePrefix(cell?.content || cell?.zh || '');
   const attrs = tableSpanAttrs(cell, parsed, fallback);
-  const cellText = escapeHtml(parsed.text);
-  const className = cellText.trim() ? 'table-cell' : 'table-cell empty-cell';
-  return `<td class="${className}"${attrs}>${cellText}</td>`;
+  const cellText = cell?.id && language
+    ? renderUnitWithPeople({
+        unitId: cell.id,
+        text: parsed.text,
+        language,
+        chapterContext: chapterPeople,
+      })
+    : escapeHtml(parsed.text);
+  const className = parsed.text.trim() || afterHtml ? 'table-cell' : 'table-cell empty-cell';
+  const sentence = cell?.id && language
+    ? `<span class="sentence" id="${peopleSentenceAnchor(language, cell.id)}" ` +
+      `data-sentence-id="${escapeHtml(cell.id)}">${cellText}${afterHtml}</span>`
+    : `${cellText}${afterHtml}`;
+  return `<td class="${className}"${attrs}>${sentence}</td>`;
 }
 
-function renderTableHeaderCell(sentence, text) {
+function renderTableHeaderCell(sentence, text, language, chapterPeople, afterHtml = '') {
   const parsed = parseTableAttributePrefix(text);
   const fallback = parseTableAttributePrefix(sentence?.zh || '');
   const attrs = tableSpanAttrs(sentence, parsed, fallback);
-  const cellText = escapeHtml(parsed.text);
-  return `<th class="table-header"${attrs}>${cellText}</th>`;
+  const cellText = sentence?.id && language
+    ? renderUnitWithPeople({
+        unitId: sentence.id,
+        text: parsed.text,
+        language,
+        chapterContext: chapterPeople,
+      })
+    : escapeHtml(parsed.text);
+  const rendered = sentence?.id && language
+    ? `<span class="sentence" id="${peopleSentenceAnchor(language, sentence.id)}" ` +
+      `data-sentence-id="${escapeHtml(sentence.id)}">${cellText}${afterHtml}</span>`
+    : `${cellText}${afterHtml}`;
+  return `<th class="table-header"${attrs}>${rendered}</th>`;
 }
 
 function tableLikeBlocksForQingDraft(bookId, chapterNum, content, startIndex) {
@@ -270,25 +302,26 @@ function tableBlockCells(block) {
   return block.cells || [];
 }
 
-function renderTableBodyRow(block, language, footnoteContext = null) {
+function renderTableBodyRow(block, language, footnoteContext = null, chapterPeople = null) {
   const cells = tableBlockCells(block);
   return `<tr>${cells.map(cell => {
     if (language === 'zh') {
-      return renderTableCell(cell, cell.content || cell.zh || '');
+      return renderTableCell(cell, cell.content || cell.zh || '', language, chapterPeople);
     }
 
     if (block.type === 'table_header') {
       const translation = cell.translations && cell.translations.length > 0 ? cell.translations[0] : null;
       let cellText = getSentenceEnglish(cell);
+      let marker = '';
       if (translation && footnoteContext) {
         const footnote = addFootnote(translation, footnoteContext.footnotes, footnoteContext.footnoteCounter);
         footnoteContext.footnoteCounter = footnote.footnoteCounter;
-        cellText += footnote.marker;
+        marker = footnote.marker;
       }
-      return renderTableCell(cell, cellText);
+      return renderTableCell(cell, cellText, language, chapterPeople, marker);
     }
 
-    return renderTableCell(cell, getTableCellEnglish(cell));
+    return renderTableCell(cell, getTableCellEnglish(cell), language, chapterPeople);
   }).join('')}</tr>`;
 }
 
@@ -419,6 +452,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
   const chapterNum = parseInt(chapterData.meta.chapter, 10);
   const zhTitle = meta.zhTitle;
   const enTitle = meta.enTitle;
+  const chapterPeople = chapterPeopleContext(PEOPLE_SITE, bookId, chapterData.meta.chapter);
 
   // Find previous and next chapters
   const currentIndex = allChapters.findIndex(c => c === chapterData.meta.chapter);
@@ -439,8 +473,10 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
       tableCounter++;
 
       const footnoteContext = { footnotes, footnoteCounter };
-      const zhRows = qingDraftTableRun.blocks.map(tableBlock => renderTableBodyRow(tableBlock, 'zh')).join('');
-      const enRows = qingDraftTableRun.blocks.map(tableBlock => renderTableBodyRow(tableBlock, 'en', footnoteContext)).join('');
+      const zhRows = qingDraftTableRun.blocks
+        .map(tableBlock => renderTableBodyRow(tableBlock, 'zh', null, chapterPeople)).join('');
+      const enRows = qingDraftTableRun.blocks
+        .map(tableBlock => renderTableBodyRow(tableBlock, 'en', footnoteContext, chapterPeople)).join('');
       footnoteCounter = footnoteContext.footnoteCounter;
 
       contentHTML += `<div class="tabular-content" id="p-${i}" data-paragraph="${i}" style="margin: 5rem 0;">
@@ -502,7 +538,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         tableRows.forEach(tableRow => {
           tableHtml += `<tr>`;
           tableRow.cells.forEach(cell => {
-            tableHtml += renderTableCell(cell, cell.content);
+            tableHtml += renderTableCell(cell, cell.content, 'zh', chapterPeople);
           });
           tableHtml += `</tr>`;
         });
@@ -522,7 +558,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
           tableHtml += `<tr>`;
           tableRow.cells.forEach(cell => {
             const cellEnText = getTableCellEnglish(cell);
-            tableHtml += renderTableCell(cell, cellEnText);
+            tableHtml += renderTableCell(cell, cellEnText, 'en', chapterPeople);
           });
           tableHtml += `</tr>`;
         });
@@ -551,10 +587,14 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
       // Chinese text - create sentence spans with word segmentation
       const zhSentences = visibleSentences.map(s => {
         const id = s.id;
-        // [...str] iterates Unicode code points; split('') breaks supplementary planes (e.g. 𨻻).
-        const chars = [...s.zh].filter((c) => c.trim());
-        const wordSpans = chars.map(char => `<span class="word" data-char="${escapeHtml(char)}">${escapeHtml(char)}</span>`).join('');
-        return `<span class="sentence" data-sentence-id="${id}">${wordSpans}</span>`;
+        const linkedText = renderUnitWithPeople({
+          unitId: id,
+          text: s.zh,
+          language: 'zh',
+          chapterContext: chapterPeople,
+        });
+        return `<span class="sentence" id="${peopleSentenceAnchor('zh', id)}" ` +
+          `data-sentence-id="${escapeHtml(id)}">${linkedText}</span>`;
       }).join(' ');
 
       // English text - create sentence spans with translations
@@ -565,7 +605,12 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
 
         let text = '';
         if (sentenceEnglish) {
-          text = escapeHtml(sentenceEnglish);
+          text = renderUnitWithPeople({
+            unitId: id,
+            text: sentenceEnglish,
+            language: 'en',
+            chapterContext: chapterPeople,
+          });
 
           const footnote = addFootnote(translation, footnotes, footnoteCounter);
           footnoteCounter = footnote.footnoteCounter;
@@ -578,7 +623,8 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
           text = '(No translation available)';
         }
 
-        return `<span class="sentence" data-sentence-id="${id}">${text}</span>`;
+        return `<span class="sentence" id="${peopleSentenceAnchor('en', id)}" ` +
+          `data-sentence-id="${escapeHtml(id)}">${text}</span>`;
       }).join(' ');
 
       // No special styling for concluding paragraph - display like any other paragraph
@@ -607,19 +653,19 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
 
       if (tableRows.length > 0) {
         // Generate header rows from table_header sentences
-        const zhHeaderRow = block.sentences.map(s => renderTableHeaderCell(s, s.zh)).join('');
+        const zhHeaderRow = block.sentences
+          .map(s => renderTableHeaderCell(s, s.zh, 'zh', chapterPeople)).join('');
         const enHeaderRow = block.sentences.map(s => {
           const translation = s.translations && s.translations.length > 0 ? s.translations[0] : null;
-          if (!translation || (!translation.idiomatic && !translation.literal && !translation.footnote)) return '<th class="table-header"></th>';
+          if (!translation || (!translation.idiomatic && !translation.literal && !translation.footnote)) {
+            return renderTableHeaderCell(s, '', 'en', chapterPeople);
+          }
 
-          const parsed = parseTableAttributePrefix(translation.idiomatic || translation.literal);
-          let text = escapeHtml(parsed.text);
+          const text = translation.idiomatic || translation.literal || '';
 
           const footnote = addFootnote(translation, footnotes, footnoteCounter);
           footnoteCounter = footnote.footnoteCounter;
-          text += footnote.marker;
-
-          return `<th class="table-header"${tableSpanAttrs(s, parsed, parseTableAttributePrefix(s.zh))}>${text}</th>`;
+          return renderTableHeaderCell(s, text, 'en', chapterPeople, footnote.marker);
         }).join('');
 
         const tableTitle = `Table ${tableCounter}`;
@@ -643,7 +689,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         tableRows.forEach(tableRow => {
           tableHtml += `<tr>`;
           tableRow.cells.forEach(cell => {
-            tableHtml += renderTableCell(cell, cell.content);
+            tableHtml += renderTableCell(cell, cell.content, 'zh', chapterPeople);
           });
           tableHtml += `</tr>`;
         });
@@ -666,7 +712,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
           tableHtml += `<tr>`;
           tableRow.cells.forEach(cell => {
             const cellEnText = getTableCellEnglish(cell);
-            tableHtml += renderTableCell(cell, cellEnText);
+            tableHtml += renderTableCell(cell, cellEnText, 'en', chapterPeople);
           });
           tableHtml += `</tr>`;
         });
@@ -685,8 +731,8 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
         const tableTitle = `Table ${tableCounter}`;
         tableCounter++;
         const footnoteContext = { footnotes, footnoteCounter };
-        const zhRow = renderTableBodyRow(block, 'zh');
-        const enRow = renderTableBodyRow(block, 'en', footnoteContext);
+        const zhRow = renderTableBodyRow(block, 'zh', null, chapterPeople);
+        const enRow = renderTableBodyRow(block, 'en', footnoteContext, chapterPeople);
         footnoteCounter = footnoteContext.footnoteCounter;
 
         contentHTML += `<div class="tabular-content" id="p-${i}" data-paragraph="${i}" style="margin: 5rem 0;">
@@ -716,14 +762,32 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
       }
     } else {
       // Just a header without table rows
-      const zhText = block.sentences.map(s => escapeHtml(s.zh)).join('');
-      const enText = block.sentences.map(getSentenceEnglish).filter(Boolean).join(' ');
+      const zhText = block.sentences.map((sentence) =>
+        `<span class="sentence" id="${peopleSentenceAnchor('zh', sentence.id)}" ` +
+        `data-sentence-id="${escapeHtml(sentence.id)}">${renderUnitWithPeople({
+          unitId: sentence.id,
+          text: sentence.zh,
+          language: 'zh',
+          chapterContext: chapterPeople,
+        })}</span>`
+      ).join('');
+      const enText = block.sentences.map((sentence) => {
+        const text = getSentenceEnglish(sentence);
+        if (!text) return '';
+        return `<span class="sentence" id="${peopleSentenceAnchor('en', sentence.id)}" ` +
+          `data-sentence-id="${escapeHtml(sentence.id)}">${renderUnitWithPeople({
+            unitId: sentence.id,
+            text,
+            language: 'en',
+            chapterContext: chapterPeople,
+          })}</span>`;
+      }).filter(Boolean).join(' ');
 
       contentHTML += `
           <div class="table-header-block">
             <h3 class="table-title">
               <span class="chinese-text">${zhText}</span>
-              ${enText ? `<span class="english-text">${escapeHtml(enText)}</span>` : ''}
+              ${enText ? `<span class="english-text">${enText}</span>` : ''}
             </h3>
           </div>`;
     }
@@ -806,6 +870,22 @@ ${JSON.stringify(structuredData, null, 2)}
       .sentence {
         display: inline;
         margin-right: 0.25em;
+        scroll-margin-top: 7rem;
+      }
+      .sentence:target {
+        background: #fff2b2;
+        box-shadow: 0 0 0 2px #fff2b2;
+      }
+      .person-link {
+        color: #0b57a2;
+        text-decoration: underline;
+        text-decoration-color: rgba(11, 87, 162, 0.35);
+        text-underline-offset: 0.12em;
+      }
+      .person-link:hover,
+      .person-link:focus-visible {
+        color: #073b70;
+        text-decoration-color: currentColor;
       }
       .cite-paragraph-btn {
         background: none;
@@ -1357,9 +1437,8 @@ ${contentHTML}
 </html>`;
 }
 
-async function generateStaticPages(bookId = null, chapterNum = null) {
+async function generateStaticPages(bookId = null, chapterNum = null, outputDir = path.join(__dirname, 'public')) {
   const dataDir = path.join(__dirname, 'data');
-  const outputDir = path.join(__dirname, 'public');
 
   // Get list of books to process
   const booksToProcess = bookId ? [bookId] : Object.keys(BOOKS);
@@ -1370,6 +1449,11 @@ async function generateStaticPages(bookId = null, chapterNum = null) {
     `(STATIC_GEN_CONCURRENCY=${STATIC_GEN_CONCURRENCY}${
       STATIC_GEN_FROM_ENV ? '' : ` auto from ${hardwareConcurrency()} logical`
     })`,
+  );
+  console.log(
+    PEOPLE_SITE.active
+      ? `People links: ${PEOPLE_SITE.preview ? 'preview' : 'publication'} mode`
+      : `People links: disabled (${PEOPLE_SITE.reason})`,
   );
 
   for (const book of booksToProcess) {
@@ -1447,6 +1531,7 @@ Usage:
   node generate-static-pages.js                    Generate all chapters for all books
   node generate-static-pages.js --book <book-id>   Generate all chapters for one book
   node generate-static-pages.js --book <book-id> --chapter <num>
+  node generate-static-pages.js --output-dir <path>
 
 Automatically discovers all books from the data directory.
                                                    Generate one specific chapter
@@ -1461,6 +1546,7 @@ Examples:
 
   let bookId = null;
   let chapterNum = null;
+  let outputDir = path.join(__dirname, 'public');
 
   const bookIdx = args.indexOf('--book');
   if (bookIdx !== -1 && bookIdx + 1 < args.length) {
@@ -1472,7 +1558,12 @@ Examples:
     chapterNum = args[chapterIdx + 1];
   }
 
-  await generateStaticPages(bookId, chapterNum);
+  const outputIdx = args.indexOf('--output-dir');
+  if (outputIdx !== -1 && outputIdx + 1 < args.length) {
+    outputDir = path.resolve(__dirname, args[outputIdx + 1]);
+  }
+
+  await generateStaticPages(bookId, chapterNum, outputDir);
 }
 
 main().catch((e) => {

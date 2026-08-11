@@ -24,6 +24,17 @@ The extraction foundation was implemented on 2026-08-10. Version 1 now has:
   evidence, candidate-coverage, stale-span, and overlap validation;
 - `scripts/sdk-people-extract.mjs` for resumable Cursor Cloud runs, with
   artifact-only worker output, host-side acceptance, and validation retries;
+- `scripts/compile-people-catalog.mjs` for canonical people, reversible local
+  identity mappings, stable family edges, reciprocal family adjacency, and an
+  exact chapter mention index;
+- exact bilingual mention links in generated chapter HTML, one generated page
+  per canonical person, sharded browser search, Person JSON-LD, and sitemap
+  integration;
+- book-scoped EPUB glossaries with chapter-to-person links, exact sentence
+  backlinks, bounded XHTML shards, package/spine/navigation integration, and
+  fragment-level validation;
+- a strict publication gate: partial data can be rendered only with an explicit
+  preview flag and is never included in ordinary website or ebook builds;
 - initial role, polity, and reign vocabularies for the Songshu pilot.
 
 Generated packets, verbose worker output, runner state, and temporary workspaces
@@ -214,24 +225,20 @@ Generated data, which should be reproducible and normally gitignored:
 
 ```text
 data/people/generated/
-  local-person-map.json
-  person-mention-index.json
-  book-person-index/
-  unresolved-identity-queue.json
-  stale-annotation-queue.json
+  catalog.json
+  site-index.json
+  resolution-candidates.json
+  editorial-review-state.json
 
 public/data/people/
-  index.json
-  search-index.json
-  records/<shard>.json
+  site-status.json
+  search/index.json
+  search/part-001.json ...
 
 public/people/
-  <slug>--<person-id>.html
+  index.html
+  <name>-<stable-id-prefix>.html
 ```
-
-The 256 shards are selected by the first byte of the opaque person ID. Shards
-avoid one enormous merge-conflict-prone file without adding tens of thousands
-of tiny source files to Git.
 
 ## Stable Identifiers
 
@@ -1071,8 +1078,10 @@ A person page contains:
 - a current Chinese and English snippet pulled from each referenced paragraph;
 - links to the precise mention in the chapter.
 
-For readability, repeated mentions in the same paragraph are one reference card
-with an occurrence count. The underlying index still retains every mention.
+For readability, references are grouped under collapsible book-and-chapter
+headings. Each distinct referenced content unit gets its current bilingual
+snippet and precise language-specific backlink. The underlying index still
+retains every explicit mention span.
 
 Person pages use current chapter text at build time. They do not store or serve
 AI-generated incident summaries. This avoids stale prose and preserves Garrett's
@@ -1100,6 +1109,12 @@ polities, places, offices, titles, organizations, and named works. Person
 pages use one generic person-page Open Graph image; generating tens of thousands
 of bespoke PNGs would add large build and repository costs for little benefit.
 
+The implemented index is split into bounded JSON parts under
+`public/data/people/search/`. The client retries transient fetch failures with
+backoff and supports a shareable `?q=` query. Person pages and search output are
+generated only when the canonical catalog is complete. `PEOPLE_SITE_PREVIEW=1`
+enables a `noindex,nofollow` local preview without weakening that gate.
+
 ## Ebook Build
 
 For each ebook product, generate a glossary containing every canonical person
@@ -1109,21 +1124,28 @@ Each main-text mention links internally to that person's glossary anchor. Each
 glossary entry contains:
 
 - English and Chinese preferred names;
-- alternate names used in that book;
+- recorded alternate names;
 - concise description;
 - life dates when known;
+- attested activity when birth and death dates are unavailable;
+- broad roles and direct family links to relatives present in the same ebook;
 - chapter references linking back to the exact anchored sentence;
-- a link to the person's 24histories.com page for cross-book references, if
-  external links remain acceptable in final Kindle QA.
 
-Large glossaries are split into bounded XHTML chunks, for example 250-300 people
-per file, rather than one enormous document. The package manifest and navigation
-include all chunks. Internal hrefs are calculated after chunking, so a person's
-mentions always point to the correct file and anchor.
+Large glossaries are split into bounded XHTML chunks of at most 350 people per
+file rather than one enormous document. The package manifest, reading-order
+spine, table of contents, and landmarks include the glossary. Internal hrefs are
+calculated after chunking, so a person's mentions always point to the correct
+file and anchor.
 
 The ebook glossary is book-scoped: Cao Cao's Sanguozhi entry links back to his
 mentions in that ebook, while his website page shows Hou Hanshu, Sanguozhi, and
 later callbacks across the entire corpus.
+
+Ordinary ebook builds omit the glossary until the canonical catalog is
+complete. `PEOPLE_EBOOK_PREVIEW=1 make ebook BOOK=<book>` enables local QA of
+the partial corpus. `scripts/validate-ebook.mjs` checks person counts, index
+counts, chapter mention-link counts, backlink counts, manifest and spine order,
+XHTML validity, and every local file and fragment target.
 
 ## Validation and Failure Policy
 

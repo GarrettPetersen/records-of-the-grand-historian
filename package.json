@@ -5,7 +5,7 @@
   "main": "scrape.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node scripts/sync-publication-descriptions.mjs && node scripts/sync-data-to-public.mjs && node generate-manifest.js && node scripts/scan-placeholder-translations.mjs --out data/quality/placeholder-translations.json --summary --limit=0 && node generate-progress.js && node scripts/generate-book-covers.mjs && node generate-static-pages.js && node scripts/build-book-search-corpus.mjs && node scripts/generate-sitemap.mjs && node generate-og-images.js --incremental && node scripts/verify-og-assets.mjs",
+    "build": "node scripts/sync-publication-descriptions.mjs && node scripts/sync-data-to-public.mjs && node generate-manifest.js && node scripts/scan-placeholder-translations.mjs --out data/quality/placeholder-translations.json --summary --limit=0 && node generate-progress.js && node scripts/generate-book-covers.mjs && node scripts/compile-people-catalog.mjs && node generate-static-pages.js && node scripts/generate-people-pages.mjs && node scripts/verify-people-site.mjs && node scripts/build-book-search-corpus.mjs && node scripts/generate-sitemap.mjs && node generate-og-images.js --incremental && node scripts/verify-og-assets.mjs",
     "publication-descriptions": "node scripts/sync-publication-descriptions.mjs",
     "publication-descriptions:init": "node scripts/sync-publication-descriptions.mjs --init-md-from-json",
     "publication-descriptions:check": "node scripts/sync-publication-descriptions.mjs --check",
@@ -18,6 +18,9 @@
     "people:compile-extraction": "node scripts/compile-people-extraction.mjs",
     "people:catalog": "node scripts/compile-people-catalog.mjs",
     "people:catalog:self-test": "node scripts/compile-people-catalog.mjs --self-test",
+    "people:site": "node scripts/generate-people-pages.mjs",
+    "people:site:self-test": "node scripts/test-people-site.mjs",
+    "people:site:verify": "node scripts/verify-people-site.mjs",
     "people:resolution-candidates": "node scripts/build-people-resolution-candidates.mjs",
     "people:editorial-dossier": "node scripts/build-people-editorial-review.mjs",
     "people:editorial-review": "node scripts/sdk-people-editorial-review.mjs",

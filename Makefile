@@ -136,12 +136,14 @@ list:
 ebook:
 	@if [ -z "$(BOOK)" ]; then echo "Error: BOOK is required."; exit 1; fi
 	@$(NODE) scripts/sync-publication-descriptions.mjs
+	@$(NODE) scripts/compile-people-catalog.mjs
 	@$(NODE) scripts/generate-ebook.mjs --book $(BOOK)
 
 .PHONY: ebook-book
 ebook-book:
 	@if [ -z "$(BOOK)" ]; then echo "Error: BOOK is required."; exit 1; fi
 	@$(NODE) scripts/sync-publication-descriptions.mjs
+	@$(NODE) scripts/compile-people-catalog.mjs
 	@$(NODE) scripts/generate-ebook.mjs --book $(BOOK) --all-products
 
 .PHONY: publication-descriptions
@@ -258,7 +260,10 @@ generate-pages:
 	@echo "Generating static HTML pages..."
 	@$(NODE) scripts/sync-publication-descriptions.mjs
 	@$(NODE) scripts/generate-book-covers.mjs
+	@$(NODE) scripts/compile-people-catalog.mjs
 	@$(NODE) generate-static-pages.js $(if $(BOOK),--book $(BOOK),)
+	@$(NODE) scripts/generate-people-pages.mjs
+	@$(NODE) scripts/verify-people-site.mjs
 	@echo "Building book full-text search corpora..."
 	@$(NODE) scripts/build-book-search-corpus.mjs $(if $(BOOK),--book $(BOOK),)
 	@echo "Generating sitemap and robots.txt..."
@@ -316,7 +321,10 @@ update:
 	@echo "Step 6/8: Generating static pages..."
 	@$(NODE) scripts/sync-publication-descriptions.mjs
 	@$(NODE) scripts/generate-book-covers.mjs
+	@$(NODE) scripts/compile-people-catalog.mjs
 	@$(NODE) generate-static-pages.js --book $(BOOK)
+	@$(NODE) scripts/generate-people-pages.mjs
+	@$(NODE) scripts/verify-people-site.mjs
 	@echo ""
 	@echo "Step 6c: Building book full-text search corpus..."
 	@$(NODE) scripts/build-book-search-corpus.mjs --book $(BOOK)
@@ -365,7 +373,10 @@ update-all:
 	@echo "Step 6/8: Generating static pages..."
 	@$(NODE) scripts/sync-publication-descriptions.mjs
 	@$(NODE) scripts/generate-book-covers.mjs
+	@$(NODE) scripts/compile-people-catalog.mjs
 	@$(NODE) generate-static-pages.js
+	@$(NODE) scripts/generate-people-pages.mjs
+	@$(NODE) scripts/verify-people-site.mjs
 	@echo ""
 	@echo "Step 6c: Building book full-text search corpora..."
 	@$(NODE) scripts/build-book-search-corpus.mjs

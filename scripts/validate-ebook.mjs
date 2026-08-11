@@ -426,6 +426,14 @@ function visibleText(value) {
   return decodeBasicEntities(value.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim());
 }
 
+function visibleSourceText(value) {
+  return decodeBasicEntities(String(value || '')
+    .replace(/<(?:br|hr)\b[^>]*\/?\s*>/giu, ' ')
+    .replace(/<[^>]+>/gu, '')
+    .replace(/\s+/gu, ' ')
+    .trim());
+}
+
 function normalizeVisibleText(value) {
   return decodeBasicEntities(String(value || ''))
     .replace(/\s+/g, ' ')
@@ -940,6 +948,8 @@ if (fs.existsSync(sidecarCover) && png.length > 0) {
 }
 
 const chapterEntries = entries.filter((entry) => /^EPUB\/text\/chapter-\d+\.xhtml$/.test(entry));
+const peopleEntries = entries.filter((entry) => /^EPUB\/people\/.+\.xhtml$/.test(entry)).sort();
+const xhtmlEntries = entries.filter((entry) => /^EPUB\/.+\.xhtml$/.test(entry)).sort();
 if (chapterEntries.length === 0) {
   errors.push('No chapter XHTML files found.');
 }
@@ -1098,6 +1108,7 @@ if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
   }
 
   const expectedChapterIds = Array.isArray(metadata.chapters) ? metadata.chapters.map(String) : [];
+  const peopleQa = qaReportData?.peopleGlossary || { active: false };
   const actualChapterIds = orderedChapterIds(chapterEntries).sort();
   if (expectedChapterIds.length > 0) {
     if (actualChapterIds.length !== expectedChapterIds.length) {
@@ -1107,6 +1118,41 @@ if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
     const extraChapters = actualChapterIds.filter((chapter) => !expectedChapterIds.includes(chapter));
     if (missingChapters.length > 0) errors.push(`EPUB missing chapter file(s): ${missingChapters.join(', ')}.`);
     if (extraChapters.length > 0) errors.push(`EPUB has unexpected chapter file(s): ${extraChapters.join(', ')}.`);
+  }
+
+  if (peopleQa.active) {
+    const expectedPeopleEntries = Number(peopleQa.shards || 0) + 1;
+    if (!peopleEntries.includes('EPUB/people/index.xhtml')) {
+      errors.push('Active people glossary is missing EPUB/people/index.xhtml.');
+    }
+    if (peopleEntries.length !== expectedPeopleEntries) {
+      errors.push(`People glossary XHTML count mismatch: ${peopleEntries.length} != ${expectedPeopleEntries}.`);
+    }
+    const glossaryContent = peopleEntries.map(unzipText).join('\n');
+    const peopleCount = [...glossaryContent.matchAll(/\bid="person-[^"]+"/gu)].length;
+    const indexLinkCount = [...unzipText('EPUB/people/index.xhtml').matchAll(/\bclass="glossary-person-link"/gu)].length;
+    const mentionLinkCount = chapterEntries.reduce((total, entry) =>
+      total + [...unzipText(entry).matchAll(/\bclass="person-link"/gu)].length, 0);
+    const backlinkCount = [...glossaryContent.matchAll(/\bclass="glossary-mention-link"/gu)].length;
+    if (peopleCount !== peopleQa.people) {
+      errors.push(`People glossary entry count mismatch: ${peopleCount} != ${peopleQa.people}.`);
+    }
+    if (indexLinkCount !== peopleQa.people) {
+      errors.push(`People glossary index count mismatch: ${indexLinkCount} != ${peopleQa.people}.`);
+    }
+    if (mentionLinkCount !== peopleQa.expectedMentionLinks) {
+      errors.push(`Chapter person-link count mismatch: ${mentionLinkCount} != ${peopleQa.expectedMentionLinks}.`);
+    }
+    if (backlinkCount !== peopleQa.expectedBacklinks) {
+      errors.push(`People glossary backlink count mismatch: ${backlinkCount} != ${peopleQa.expectedBacklinks}.`);
+    }
+  } else {
+    if (peopleEntries.length > 0) errors.push('People glossary is packaged while its QA publication gate is inactive.');
+    const unexpectedMentionLinks = chapterEntries.reduce((total, entry) =>
+      total + [...unzipText(entry).matchAll(/\bclass="person-link"/gu)].length, 0);
+    if (unexpectedMentionLinks > 0) {
+      errors.push(`Found ${unexpectedMentionLinks} chapter person link(s) while the people glossary gate is inactive.`);
+    }
   }
 
   const manifestItems = [...packageXml.matchAll(/<item\b[^>]*>/g)].map((match) => attrs(match[0]));
@@ -1143,10 +1189,16 @@ if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
     'cover-page',
     'frontmatter',
     ...(metadata.aboutThisEdition?.length ? ['about'] : []),
-    ...expectedChapterIds.map((chapter) => `chapter-${chapter}`)
+    ...expectedChapterIds.map((chapter) => `chapter-${chapter}`),
+    ...(peopleQa.active ? [
+      'people-index',
+      ...Array.from({ length: peopleQa.shards }, (_, index) =>
+        `people-${String(index + 1).padStart(3, '0')}`
+      ),
+    ] : []),
   ];
   if (expectedChapterIds.length > 0 && spineIds.join('|') !== expectedSpineIds.join('|')) {
-    errors.push('Spine order does not match cover page, frontmatter, optional about page, then all product chapters in order.');
+    errors.push('Spine order does not match frontmatter, product chapters, and optional people glossary in order.');
   }
 
   const tocNav = nav.match(/<nav\b[^>]*epub:type="toc"[\s\S]*?<\/nav>/u)?.[0] || '';
@@ -1157,10 +1209,11 @@ if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
     'cover.xhtml',
     'frontmatter.xhtml',
     ...(metadata.aboutThisEdition?.length ? ['about.xhtml'] : []),
-    ...expectedChapterIds.map((chapter) => `text/chapter-${chapter}.xhtml`)
+    ...expectedChapterIds.map((chapter) => `text/chapter-${chapter}.xhtml`),
+    ...(peopleQa.active ? ['people/index.xhtml'] : []),
   ];
   if (expectedChapterIds.length > 0 && navHrefs.join('|') !== expectedNavHrefs.join('|')) {
-    errors.push('Navigation TOC order does not match cover, frontmatter, optional about page, then all product chapters in order.');
+    errors.push('Navigation TOC order does not match frontmatter, product chapters, and optional people glossary in order.');
   }
   if (navLinks[0]?.text !== 'Cover') {
     errors.push(`Navigation TOC cover label mismatch: ${navLinks[0]?.text || '(missing)'}.`);
@@ -1183,6 +1236,9 @@ if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
       errors.push(`Navigation TOC label mismatch for chapter ${chapter}: "${navLink?.text || ''}" != "${source.englishTitle}".`);
     }
   }
+  if (peopleQa.active && navLinks.at(-1)?.text !== 'People Glossary') {
+    errors.push(`Navigation TOC people-glossary label mismatch: ${navLinks.at(-1)?.text || '(missing)'}.`);
+  }
   const allNavHrefs = [...nav.matchAll(/<a\b[^>]*\shref="([^"]+)"/g)].map((match) => match[1]);
   for (const href of allNavHrefs) {
     const entry = normalizeEntry('EPUB/nav.xhtml', href);
@@ -1191,15 +1247,35 @@ if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
     }
   }
 
-  for (const entry of ['EPUB/cover.xhtml', 'EPUB/frontmatter.xhtml', 'EPUB/about.xhtml', 'EPUB/nav.xhtml', ...chapterEntries]) {
-    if (!entries.includes(entry)) continue;
+  const idsByEntry = new Map(xhtmlEntries.map((entry) => {
+    const content = unzipText(entry);
+    return [entry, new Set([...content.matchAll(/\bid="([^"]+)"/gu)].map((match) => decodeBasicEntities(match[1])))];
+  }));
+  for (const entry of xhtmlEntries) {
     const content = unzipText(entry);
     const hrefs = unique([...content.matchAll(/\s(?:href|src)="([^"]+)"/g)].map((match) => match[1]));
     for (const href of hrefs) {
-      if (/^(?:https?:|mailto:|urn:|#)/u.test(href)) continue;
-      const target = normalizeEntry(entry, href);
+      const decodedHref = decodeBasicEntities(href);
+      if (/^(?:https?:|mailto:|urn:|data:)/u.test(decodedHref)) continue;
+      const hashIndex = decodedHref.indexOf('#');
+      const rawPath = hashIndex >= 0 ? decodedHref.slice(0, hashIndex) : decodedHref;
+      const rawFragment = hashIndex >= 0 ? decodedHref.slice(hashIndex + 1) : '';
+      const target = rawPath ? normalizeEntry(entry, rawPath) : entry;
       if (target && !entries.includes(target)) {
         errors.push(`${entry} references missing EPUB entry: ${href}.`);
+        continue;
+      }
+      if (target && rawFragment) {
+        let fragment = rawFragment;
+        try {
+          fragment = decodeURIComponent(fragment);
+        } catch (_error) {
+          errors.push(`${entry} has an invalid encoded fragment in href: ${href}.`);
+          continue;
+        }
+        if (!idsByEntry.get(target)?.has(fragment)) {
+          errors.push(`${entry} references missing fragment ${fragment} in ${target}.`);
+        }
       }
     }
   }
@@ -1212,12 +1288,13 @@ for (const entry of [
   'EPUB/cover.xhtml',
   'EPUB/frontmatter.xhtml',
   'EPUB/about.xhtml',
-  ...chapterEntries
+  ...chapterEntries,
+  ...peopleEntries,
 ]) {
   if (entries.includes(entry)) validateXmlEntry(entry);
 }
 
-for (const entry of ['EPUB/cover.xhtml', 'EPUB/frontmatter.xhtml', 'EPUB/about.xhtml', 'EPUB/nav.xhtml', ...chapterEntries]) {
+for (const entry of ['EPUB/cover.xhtml', 'EPUB/frontmatter.xhtml', 'EPUB/about.xhtml', 'EPUB/nav.xhtml', ...chapterEntries, ...peopleEntries]) {
   if (!entries.includes(entry)) continue;
   const content = unzipText(entry);
   if (!/<html\b[^>]*\b(?:xml:)?lang="en"/u.test(content)) {
@@ -1233,7 +1310,7 @@ if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
     const chapterData = sourceChapterData(metadata.book, chapter);
     if (!source) continue;
     const content = unzipText(chapterEntry);
-    if (chapterData) validateSourceTextRendered(chapterEntry, chapterData, visibleText(content));
+    if (chapterData) validateSourceTextRendered(chapterEntry, chapterData, visibleSourceText(content));
     const pageTitle = firstTagText(content, 'title');
     const h1 = firstTagText(content, 'h1');
     const kicker = content.match(/<p\b[^>]*class="[^"]*\bchapter-kicker\b[^"]*"[^>]*>([\s\S]*?)<\/p>/u);

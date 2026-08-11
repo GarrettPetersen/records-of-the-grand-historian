@@ -11,6 +11,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
 const publicDir = path.join(root, 'public');
 const manifestPath = path.join(root, 'data', 'manifest.json');
+const peopleStatusPath = path.join(publicDir, 'data', 'people', 'site-status.json');
 
 const origin = (process.env.SITE_URL || 'https://24histories.com').replace(/\/$/, '');
 
@@ -71,6 +72,28 @@ function main() {
       const htmlPath = path.join(publicDir, bookId, `${chNum}.html`);
       if (!fs.existsSync(htmlPath)) continue;
       urls.push({ loc: `${origin}/${bookId}/${chNum}.html`, lastmod });
+    }
+  }
+
+  if (fs.existsSync(peopleStatusPath)) {
+    const status = JSON.parse(fs.readFileSync(peopleStatusPath, 'utf8'));
+    if (status.published) {
+      const peopleDir = path.join(publicDir, 'people');
+      const indexPath = path.join(peopleDir, 'index.html');
+      if (!status.complete || !fs.existsSync(indexPath)) {
+        throw new Error('Published people-site status is inconsistent with generated people pages');
+      }
+      const peopleLastmod = typeof status.generatedAt === 'string' ? status.generatedAt.slice(0, 10) : lastmod;
+      urls.push({ loc: `${origin}/people/`, lastmod: peopleLastmod });
+      const personFiles = fs.readdirSync(peopleDir)
+        .filter((name) => name !== 'index.html' && name.endsWith('.html'))
+        .sort();
+      if (personFiles.length !== status.people) {
+        throw new Error(`People sitemap expected ${status.people} person pages, found ${personFiles.length}`);
+      }
+      for (const name of personFiles) {
+        urls.push({ loc: `${origin}/people/${name}`, lastmod: peopleLastmod });
+      }
     }
   }
 
