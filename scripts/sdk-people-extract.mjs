@@ -86,11 +86,12 @@ Options:
   --repo URL           Repository URL available to cloud agents.
   --starting-ref REF   Remote branch/ref agents read (default: ${DEFAULT_STARTING_REF}).
   --dry-run            Build and summarize packets without calling Cursor.
-  --force              Re-extract chapters with a currently valid sidecar.
+  --force              Re-extract chapters with a valid sidecar from the current prompt.
   --retry-failed       Include chapters whose latest state is failed.
   --stream             Stream assistant text; requires concurrency 1.
   --self-test          Run scheduler guardrail tests without Cursor.
 
+Valid sidecars from older prompt versions are automatically queued for upgrade.
 This runner is cloud-only. Workers never commit, push, or open pull requests.
 The host downloads and validates artifacts, queues translation repairs for an
 independent evidence review, and accumulates accepted chapters locally.`);
@@ -490,6 +491,7 @@ function currentExtractionIsValid(target, packet) {
   if (!fs.existsSync(file)) return false;
   try {
     const extraction = readJson(file);
+    if (extraction.run?.promptVersion < PEOPLE_CONFIG.promptVersion) return false;
     if (isCompactPeopleExtraction(extraction)) validateCompactPeopleExtraction(extraction, packet);
     else validatePeopleExtraction(extraction, packet);
     return true;

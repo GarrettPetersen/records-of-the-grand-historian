@@ -29,6 +29,12 @@ import {
 const EXTRACTION_SCHEMA_ID = 'https://24histories.com/schema/people/extraction-v1.json';
 const PACKET_SCHEMA_ID = 'https://24histories.com/schema/people/extraction-packet-v1.json';
 const COMPACT_SCHEMA_ID = 'https://24histories.com/schema/people/compact-extraction-v2.json';
+const V6_COMPLETION_FLAGS = [
+  'allNamedPeopleAndMentionsCaptured',
+  'allDurableFactsCaptured',
+  'allChronologyCaptured',
+  'editorialPassCompleted',
+];
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
 export class PeopleExtractionValidationError extends Error {
@@ -344,6 +350,29 @@ export function validatePeopleExtraction(extraction, packet) {
       if (!unitById.has(unitId)) errors.push(`${claim.id} evidence refers to missing unit ${evidence}`);
     }
     validateClaimVocabulary(claim, packet, errors);
+    if (normalized.run.promptVersion >= 6) {
+      for (const key of ['dateContext', 'startDate', 'endDate']) {
+        for (const value of nestedValuesWithKey(claim.value, key)) {
+          validateAttestationClaim({ id: `${claim.id} ${key}`, value }, errors);
+        }
+      }
+      if (['same-person', 'different-person'].includes(claim.predicate)) {
+        if (typeof claim.value?.personId !== 'string') {
+          errors.push(`${claim.id} ${claim.predicate} value must name the other local person in value.personId`);
+        } else if (!personIds.has(claim.value.personId)) {
+          errors.push(`${claim.id} ${claim.predicate} refers to unknown local person ${claim.value.personId}`);
+        } else if (claim.value.personId === claim.subject) {
+          errors.push(`${claim.id} ${claim.predicate} cannot refer to its own subject`);
+        }
+      }
+      for (const key of ['personId', 'otherPersonId', 'witnessPersonId', 'authorityPersonId']) {
+        for (const value of nestedValuesWithKey(claim.value, key)) {
+          if (typeof value !== 'string' || !personIds.has(value)) {
+            errors.push(`${claim.id} ${key} refers to unknown local person ${JSON.stringify(value)}`);
+          }
+        }
+      }
+    }
   }
   for (const person of normalized.people) {
     const personClaims = claimsByPerson.get(person.localId) ?? [];
@@ -359,6 +388,13 @@ export function validatePeopleExtraction(extraction, packet) {
       }
       if (!personClaims.some((claim) => claim.predicate === 'attestation')) {
         errors.push(`${person.localId} has no evidence-backed attestation required by prompt v5`);
+      }
+    }
+  }
+  if (normalized.run.promptVersion >= 6) {
+    for (const key of V6_COMPLETION_FLAGS) {
+      if (normalized.coverage[key] !== true) {
+        errors.push(`coverage.${key} must be true for prompt v6`);
       }
     }
   }
@@ -626,6 +662,19 @@ function selfTest() {
   try {
     validatePeopleExtraction(missingTemporal, packet);
     throw new Error('Prompt-v5 extraction without an attestation unexpectedly passed');
+  } catch (error) {
+    if (!(error instanceof PeopleExtractionValidationError)) throw error;
+  }
+
+  const comprehensive = structuredClone(temporal);
+  comprehensive.run.promptVersion = 6;
+  Object.assign(comprehensive.coverage, Object.fromEntries(V6_COMPLETION_FLAGS.map((key) => [key, true])));
+  validatePeopleExtraction(comprehensive, packet);
+  const incompleteComprehensive = structuredClone(comprehensive);
+  incompleteComprehensive.coverage.allDurableFactsCaptured = false;
+  try {
+    validatePeopleExtraction(incompleteComprehensive, packet);
+    throw new Error('Prompt-v6 extraction with an incomplete source-pass audit unexpectedly passed');
   } catch (error) {
     if (!(error instanceof PeopleExtractionValidationError)) throw error;
   }

@@ -195,6 +195,10 @@ export function buildPeopleExtractionSeed(packet, model) {
     coverage: {
       allUnitsVisited: true,
       preflightCandidatesAccountedFor: true,
+      allNamedPeopleAndMentionsCaptured: false,
+      allDurableFactsCaptured: false,
+      allChronologyCaptured: false,
+      editorialPassCompleted: false,
       unresolvedReferences: [],
     },
   };
@@ -288,6 +292,10 @@ export function buildCompactPeopleExtractionSeed(packet, model) {
     coverage: {
       allUnitsVisited: true,
       preflightCandidatesAccountedFor: true,
+      allNamedPeopleAndMentionsCaptured: false,
+      allDurableFactsCaptured: false,
+      allChronologyCaptured: false,
+      editorialPassCompleted: false,
       unresolvedReferences: [],
     },
   };

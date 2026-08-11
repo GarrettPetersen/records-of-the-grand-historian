@@ -126,12 +126,83 @@ Top-level claim rows contain facts other than names and broad roles:
 [subjectPersonId, predicate, valueObject, certainty, [evidenceUnitIds]]
 ```
 
-Capture explicit sex, native place, lineage, relationships, occupations,
-offices, noble titles, enfeoffments, authorship, polity associations, births,
-deaths, stated ages, accessions, depositions, renamings, same-person statements,
-uncertainty, textual variants, and conflicts. Record each distinct fact once
-and combine supporting evidence. Local-person references inside values use
-short IDs such as `p002`.
+Capture every durable person fact that the chapter states or strongly
+establishes. This includes:
+
+- identity: sex, ethnicity or people-group, historicity, lineage, and every
+  same-person, different-person, or renaming statement;
+- relationships: kinship, marriage, adoption, teacher/student, patron/client,
+  succession, and other named personal relationships;
+- career and standing: exact occupation, office and its appointment/removal,
+  noble title, enfeoffment, rank, honor, social or legal status, punishment,
+  pardon, captivity, hostage status, enslavement, manumission, and exile;
+- geography and affiliation: native place, residence, posting, travel, exile,
+  death or burial place, polity association, and membership in a named clan,
+  faction, school, religious community, or institution;
+- life and chronology: birth, death and its cause/manner/place, stated age,
+  accession, deposition, and every source-supported activity date or interval;
+- intellectual and attributed material: authorship or another relation to a
+  named work, and attribution of a speech, memorial, letter, poem, prediction,
+  judgment, or consequential action when identifying its speaker, author,
+  addressee, agent, or patient is useful or not obvious from a linkable name;
+- source criticism: explicit textual variants, alternative reports,
+  disagreements, uncertain identifications, and claims one witness accepts or
+  rejects; and
+- uncommon identifying facts: a source-stated physical feature, illness,
+  disability, skill, or other concise biographical attribute that could aid
+  disambiguation or a future person page and fits no narrower predicate.
+
+Use `biographical-attribute` only as the final category, not for general praise,
+abuse, or a summary of every incident. Record each distinct fact once and
+combine supporting evidence. Local-person references inside values use short
+IDs such as `p002`; `same-person` and `different-person` values must use
+`{"personId":"p002",...}` and must connect two distinct local records. Put
+aliases for one local record in its evidence-backed name rows or `renamed`
+claims rather than making a self-referential identity claim.
+
+Use `place-association`, `status`, `office`, `noble-title`, `enfeoffment`,
+`honor`, `legal-action`, `polity-association`, `organization-association`,
+`relationship`, and `work-association` for facts that can change over time.
+Whenever the chapter supplies chronology, include `dateContext`, `startDate`,
+or `endDate` in the value and preserve the source date. Do not flatten a dated
+sequence of appointments, demotions, moves, marriages, captures, or releases
+into one timeless claim.
+
+Use `attribution` for source-grounded authorship, speech, or action attribution
+that would otherwise be lost because the relevant unit uses a pronoun, silent
+subject, quotation continuation, or disputed referent. It records attribution
+as a fact; it does not create a clickable pronoun surface.
+
+Keep values regular enough to compile later. Use these shapes and add only
+source-supported fields:
+
+```json
+{"relation":"father-of","personId":"p002"}
+{"label":{"en":"court astrologer","zh":"太史令"}}
+{"place":{"en":"Xuancheng","zh":"宣城"},"relation":"posted-to"}
+{"status":"exile","action":"entered"}
+{"title":{"en":"Prince of Pengcheng","zh":"彭城王"},"action":"held"}
+{"polityId":"liu-song","relation":"served"}
+{"organization":{"en":"...","zh":"..."},"relation":"member-of"}
+{"work":{"en":"Book of Later Han","zh":"後漢書"},"relation":"author"}
+{"kind":"memorial","role":"author","otherPersonId":"p002"}
+{"field":"death-date","statement":"...","witness":"..."}
+{"kind":"physical-description","statement":"blind in one eye"}
+```
+
+The second shape is for `occupation`; `office`, titles, honors, and legal actions
+use the same localized-label principle plus an `action`. Relationship names may
+be precise (`father-of`, `elder-sister-of`, `wife-of`, `teacher-of`,
+`predecessor-of`) rather than flattened to generic kinship. The resolver can
+derive inverse relations later. Use `textual-variant` for an alternate reading
+or report and `conflict` for incompatible claims; include the named witness when
+the chapter gives one, using `witnessPersonId` when that witness has a local
+person row. Legal actions may similarly use `authorityPersonId`.
+
+Every temporal field above contains an attestation-shaped object: `sourceDate`
+plus `westernYear` or `westernInterval`, an unresolved `sourceDate`, or a
+genuinely qualitative chronology. Do not put an unstructured date string in
+`dateContext`, `startDate`, or `endDate`.
 
 Every person also requires at least one `attestation` claim. Its evidence must
 point to the mention or event and to any earlier unit supplying its date
@@ -144,14 +215,24 @@ context. Use one of these value shapes:
 ```
 
 For a bounded interval, use `westernInterval` with `start` and `end` Western
-year objects. Record multiple dated attestations when the chapter supplies
-them; the resolver will derive the earliest/latest attested interval across
-chapters. Never describe that derived interval as a lifespan.
+year objects. Record an attestation for every distinct dated narrative context
+in which the person appears, even after that person already has one. Combine
+repeated mentions only when they share the same date context. The resolver will
+derive the earliest/latest attested interval across chapters. Never describe
+that derived interval as a lifespan.
 
 Never convert dates from memory. Use a supplied reign ID only when its polity
 and reign are correct. Otherwise retain the source date text and mark it
 unresolved. Record stated age and reckoning but do not derive a birth year.
-Never assign a polity from lifespan or chapter alone.
+Never assign a polity from lifespan or chapter alone. Preserve competing dates
+as separate claims joined by `textual-variant` or `conflict`; do not choose one
+silently.
+
+This is not an exhaustive event graph. Every linkable mention already retains
+its exact source unit, from which the website pulls current Chinese and English
+snippets. Do not summarize every battle, journey, audience, or deed as a claim.
+Do capture its durable biographical outcome, chronology, place/status change,
+relationship, or otherwise-lost attribution under the categories above.
 
 ## Editorial Repairs
 
@@ -180,11 +261,15 @@ Before finishing:
 1. Read every unit in Chinese, idiomatic English, and literal English.
 2. Confirm every named human has one person row, structured names and roles,
    and every visible occurrence has a nonoverlapping surface rule.
-3. Confirm aliases, relationships, dates, ages, offices, polity clues, and
-   translation errors were captured where stated. Every person must have a
-   nonempty active-date hint and an evidence-backed `attestation` claim.
+3. Confirm every durable identity, relationship, career, status, place,
+   affiliation, chronology, work, attribution, source-critical, and unusual
+   identifying fact above was captured. Every person must have a nonempty
+   active-date hint and an evidence-backed `attestation` claim.
 4. Confirm every candidate is contained in a surface or appears in exactly one
    disposition group.
-5. Set both coverage booleans to `true`; record genuine unresolved references.
+5. Set `allUnitsVisited`, `preflightCandidatesAccountedFor`,
+   `allNamedPeopleAndMentionsCaptured`, `allDurableFactsCaptured`,
+   `allChronologyCaptured`, and `editorialPassCompleted` to `true`; record
+   genuine unresolved references.
 6. Validate against the compact schema and write JSON only to the assigned
    output path. Then publish the artifact exactly as instructed by the runner.

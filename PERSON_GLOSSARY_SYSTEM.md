@@ -351,7 +351,7 @@ dispositions. Build-time expansion must reproduce a valid form equivalent to:
   },
   "run": {
     "model": "grok-4.5",
-    "promptVersion": 3
+    "promptVersion": 6
   },
   "people": [
     {
@@ -516,20 +516,87 @@ the chapter states or strongly establishes it:
 - surname and given-name components when known;
 - courtesy names, childhood names, religious names, alternate names, changed
   names, temple names, posthumous names, and posthumous titles;
-- sex or gender only when explicit or linguistically certain;
-- native place and lineage information useful for disambiguation;
-- parent, child, sibling, spouse, adoption, and other explicit kinship;
-- occupations and broad historical roles;
-- significant offices, noble titles, and enfeoffments;
-- polity associations and the nature of each association;
-- birth, death, age-at-event, accession, deposition, and reign-date evidence;
-- authorship of named works when it helps identify or describe the person;
-- explicit renaming and same-person statements;
-- uncertainty, textual variants, and conflicting claims.
+- sex or gender only when explicit or linguistically certain, plus explicitly
+  stated ethnicity or people-group identity;
+- native place, lineage, clan, and other origin information useful for
+  disambiguation;
+- parent, child, sibling, spouse, adoption, teacher/student, patron/client,
+  succession, and other explicit named relationships;
+- exact occupations and broad historical roles;
+- offices and their appointment or removal, noble titles, enfeoffments, ranks,
+  honors, and privileges;
+- time-varying social and legal status, including captivity, hostage status,
+  enslavement, manumission, exile, punishment, pardon, and restoration;
+- native, residential, official-posting, travel, exile, death, and burial-place
+  associations;
+- polity associations and membership in named institutions, factions, schools,
+  and religious communities;
+- birth, death and its cause/manner/place, age-at-event, accession, deposition,
+  and all available activity-date evidence;
+- authorship and other relations to named works;
+- speech, letter, memorial, poem, judgment, and consequential-action
+  attribution when the responsible person or addressee would otherwise be lost
+  behind a pronoun, silent subject, continuation, or disputed referent;
+- explicit renaming, same-person, and different-person statements;
+- uncertainty, textual variants, alternative reports, and conflicting claims;
+- concise source-stated physical, health, disability, skill, or other uncommon
+  identifying attributes that fit no narrower category.
 
 This is not a general event graph. We do not need to structure every battle,
 journey, audience, or speech. The person page can show those incidents through
-dynamically generated mention snippets.
+dynamically generated mention snippets. We do record the durable result of an
+incident, its chronology and location when supplied, and attribution that would
+otherwise disappear. Thus a dismissal becomes a dated office claim and an
+exile becomes dated status and place claims, while an ordinary audience remains
+a cited mention snippet.
+
+### Claim value conventions
+
+Claims retain compact source-grounded values rather than invented prose. Named
+people inside claim values use local person IDs. `same-person` and
+`different-person` use `{"personId":"..."}` between distinct local records so
+the resolver receives both positive and negative identity evidence. Aliases on
+one record remain name or renaming claims rather than self-links. Places,
+organizations, and works retain the source's English and Chinese labels when
+available; canonical IDs may be added later without discarding those labels.
+
+Time-varying claims use `dateContext`, `startDate`, or `endDate` when the chapter
+provides chronology. These date objects use the same source-preserving shape as
+attestations. A sequence of appointments, demotions, moves, captures, releases,
+marriages, or affiliations must remain a sequence rather than being collapsed
+into one timeless label.
+
+`textual-variant` stores a witness and its alternate reading or report.
+`conflict` connects incompatible claims without selecting a winner.
+`biographical-attribute` is an escape hatch for uncommon identifying facts, not
+a license to duplicate incidents or encode the historian's every judgment.
+
+### Captured once versus derived later
+
+The expensive source reading captures person identity, every linkable surface,
+the full claim inventory above, chronology inherited from narrative context,
+otherwise-lost attribution, uncertainty, and translation repairs. Those are the
+facts that require reading Classical Chinese in context and cannot be recovered
+reliably from spelling or proximity.
+
+The build derives mention counts, first and last references, co-occurring named
+people, books and chapters represented, current bilingual snippets, search
+tokens, cross-book backlinks, per-book glossary membership, and earliest/latest
+attested activity. These are mechanical views over source units and claims and
+must not be hand-entered by workers.
+
+We intentionally do not capture clickable pronoun spans, unnamed groups, an
+exhaustive graph of ordinary actions, or AI-written incident summaries. A
+linkable mention retains the complete source-unit pointer, so those incidents
+remain available without freezing duplicate prose. Durable consequences and
+attributions are still claims, which preserves what a future biography,
+timeline, map, network view, or identity resolver could need from this pass.
+
+External identifiers such as CBDB, Wikidata, and authority-file IDs; portraits;
+modern bibliographic references; place coordinates; and normalized office or
+organization IDs are later enrichment. They come from other datasets, not from
+rereading these chapters, and attach to the canonical objects without changing
+the source extraction.
 
 ## Names
 
@@ -687,11 +754,13 @@ explicit same-sentence date from a date inherited from narrative context.
 ### Universal attested chronology
 
 Every canonical person should have a time indicator, even when no birth or
-death year is known. Chapter extraction prompt v5 therefore requires each local
+death year is known. Chapter extraction prompt v6 therefore requires each local
 person to carry at least one evidence-backed `attestation` claim and a concise
 `activeDateHints` entry. The preferred result is a Western year or bounded
-interval. Multiple mentions produce an earliest/latest **attested activity**
-interval; that interval is not a lifespan and must never be displayed as one.
+interval. Every distinct dated narrative context produces an attestation claim;
+mentions sharing one context may share a claim, but a later context may not be
+discarded merely because the person already has a date. The claims produce an
+earliest/latest **attested activity** interval, not a lifespan.
 
 When the source gives a reign year, the claim preserves the source wording and
 the units that establish its context. A deterministic chronology compiler adds
@@ -717,10 +786,11 @@ the system does not invent a year for the Yellow Emperor.
 }
 ```
 
-Prompt-v4 and earlier sidecars remain valid while a dedicated temporal backfill
-uses their mention evidence and chapter chronology. Missing attestations in
-legacy sidecars are reported as migration debt rather than silently treated as
-unknown lifespans.
+Prompt-v5 and earlier sidecars remain schema-readable but are not complete
+first-pass records. The extraction queue automatically schedules them for a
+manual reread of the full Chinese and both English fields under prompt v6.
+Missing attestations and other v6 completion flags are reported as migration
+debt rather than silently treated as unknown facts.
 
 ### Deriving birth years from age at death
 
@@ -763,8 +833,9 @@ from local people and their cited evidence windows. It proposes clusters using:
 - courtesy, temple, posthumous, childhood, and alternate names;
 - native place and lineage;
 - kinship links;
-- offices and titles;
+- offices, titles, statuses, places, and affiliations;
 - compatible dates and polities;
+- explicit same-person and different-person constraints;
 - co-occurring people;
 - highly similar parallel passages across different histories.
 
@@ -809,13 +880,27 @@ One resolved person has one canonical object:
   "historicity": "historical",
   "names": [],
   "roles": [],
+  "ethnicities": [],
+  "lineages": [],
+  "occupations": [],
   "life": {
     "birth": null,
     "death": null,
-    "ageClaims": []
+    "ageClaims": [],
+    "attestedActivity": []
   },
   "polityAssociations": [],
+  "placeAssociations": [],
+  "organizationAssociations": [],
+  "offices": [],
+  "titlesAndHonors": [],
+  "statuses": [],
+  "legalActions": [],
   "relationships": [],
+  "works": [],
+  "attributions": [],
+  "attributes": [],
+  "sourceIssues": [],
   "localPeople": ["songshu:069:p..."],
   "retiredIds": [],
   "curation": {
@@ -857,9 +942,15 @@ A person page contains:
 - preferred English, Chinese, and pinyin names;
 - the concise role description;
 - known life dates, with `c.` or ranges where appropriate;
+- earliest and latest attested activity, clearly labeled as such rather than as
+  a lifespan;
 - all recorded names grouped by type;
 - explicitly evidenced polity associations;
+- significant offices, titles, honors, statuses, places, affiliations, and
+  named works, each with dates where available;
 - selected close relationships when useful;
+- unresolved textual variants or conflicts when they materially affect the
+  person's identity or chronology;
 - references grouped by book and chapter;
 - a current Chinese and English snippet pulled from each referenced paragraph;
 - links to the precise mention in the chapter.
@@ -874,7 +965,8 @@ translation as the reader-facing account.
 ### Search and SEO
 
 The person search index includes all English names, Chinese names, pinyin with
-and without tone marks, alternate names, role labels, and life years. Person
+and without tone marks, alternate names, role labels, life and attested years,
+polities, places, offices, titles, organizations, and named works. Person
 pages use one generic person-page Open Graph image; generating tens of thousands
 of bespoke PNGs would add large build and repository costs for little benefit.
 
@@ -943,7 +1035,7 @@ Before spending the large batch of credits:
 3. Implement a chronology seed sufficient for pilot chapters.
 4. Run pilots on several different chapter types.
 5. Freeze verbose worker schema version 1, compact accepted schema version 2,
-   and `promptVersion: 3`.
+   and `promptVersion: 6`.
 
 Recommended pilots:
 
@@ -1090,7 +1182,14 @@ The chapter-agent prompt must state these rules explicitly:
 - Do not link pronouns or invent people for unnamed roles.
 - Create separate local people when identity is uncertain.
 - Record aliases and relationships that will help a later resolver.
-- Preserve source uncertainty and textual variants.
+- Record explicit same-person and different-person evidence.
+- Record durable career, title, status, place, affiliation, work, honor, legal,
+  and uncommon identifying facts, with dates whenever the chapter supplies
+  them.
+- Preserve source uncertainty, textual variants, alternative reports, and
+  conflicts as claims rather than notes that a resolver cannot inspect.
+- Record otherwise-lost speech, document, and consequential-action attribution
+  when the responsible person or addressee is implicit, continued, or disputed.
 - Record date context even when it occurs earlier than the event sentence.
 - Give every person an evidence-backed attestation: prefer a Western year or
   interval, preserve unresolved source chronology, and use qualitative time
@@ -1102,6 +1201,8 @@ The chapter-agent prompt must state these rules explicitly:
 - Use broad supported roles for the description suggestion; keep exact offices
   as claims.
 - Give every claim evidence and every preflight candidate a disposition.
+- Assert all four prompt-v6 completion flags only after the people/mentions,
+  durable facts, chronology, and editorial audits are each complete.
 - Write only the assigned extraction file.
 
 ## Schema Evolution

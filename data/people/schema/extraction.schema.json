@@ -210,13 +210,20 @@
             "name",
             "role",
             "sex",
+            "ethnicity",
             "native-place",
+            "place-association",
             "lineage",
             "relationship",
+            "occupation",
+            "status",
             "office",
             "noble-title",
             "enfeoffment",
+            "honor",
+            "legal-action",
             "polity-association",
+            "organization-association",
             "birth",
             "death",
             "age",
@@ -224,9 +231,15 @@
             "accession",
             "deposition",
             "authorship",
+            "work-association",
+            "attribution",
             "same-person",
+            "different-person",
             "renamed",
-            "historicity"
+            "historicity",
+            "textual-variant",
+            "conflict",
+            "biographical-attribute"
           ]
         },
         "value": { "type": "object" },
@@ -294,6 +307,10 @@
       "properties": {
         "allUnitsVisited": { "const": true },
         "preflightCandidatesAccountedFor": { "const": true },
+        "allNamedPeopleAndMentionsCaptured": { "type": "boolean" },
+        "allDurableFactsCaptured": { "type": "boolean" },
+        "allChronologyCaptured": { "type": "boolean" },
+        "editorialPassCompleted": { "type": "boolean" },
         "unresolvedReferences": {
           "type": "array",
           "items": {

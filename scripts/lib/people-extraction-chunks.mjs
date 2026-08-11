@@ -187,6 +187,10 @@ export function assembleCompactPeopleChunks(packet, parts, run) {
     coverage: {
       allUnitsVisited: true,
       preflightCandidatesAccountedFor: true,
+      allNamedPeopleAndMentionsCaptured: true,
+      allDurableFactsCaptured: true,
+      allChronologyCaptured: true,
+      editorialPassCompleted: true,
       unresolvedReferences,
     },
   };

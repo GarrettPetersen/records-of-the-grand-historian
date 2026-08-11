@@ -106,7 +106,7 @@ function validateConfiguration(errors) {
     schemaVersion: 1,
     extractionSchemaVersion: 1,
     packetSchemaVersion: 1,
-    promptVersion: 5,
+    promptVersion: 6,
     candidateScannerVersion: 2,
   };
   for (const [key, expected] of Object.entries(expectedVersions)) {
