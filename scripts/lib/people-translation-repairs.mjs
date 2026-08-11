@@ -69,6 +69,26 @@ function spansOverlap(left, right) {
   return left.startCodePoint < right.endCodePoint && right.startCodePoint < left.endCodePoint;
 }
 
+function coveringSpan(text, left, right) {
+  const startCodePoint = Math.min(left.startCodePoint, right.startCodePoint);
+  const endCodePoint = Math.max(left.endCodePoint, right.endCodePoint);
+  const exact = [...text].slice(startCodePoint, endCodePoint).join('');
+  const span = exactOccurrences(text, exact).find((item) => item.startCodePoint === startCodePoint);
+  if (!span) throw new Error(`Could not rebuild covering span ${JSON.stringify(exact)}`);
+  return span;
+}
+
+function glossaryIds(candidate) {
+  return new Set(candidate.detectors.flatMap((detector) =>
+    Number.isInteger(detector.glossaryId) ? [detector.glossaryId] : []
+  ));
+}
+
+function sharedGlossaryEntry(left, right) {
+  const leftIds = glossaryIds(left);
+  return leftIds.size > 0 && [...glossaryIds(right)].some((id) => leftIds.has(id));
+}
+
 function candidateExpandedSpan(aliasSpan, unitId, language, candidates) {
   const enclosing = candidates.filter((candidate) =>
     candidate.unit === unitId &&
@@ -185,6 +205,9 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
   const candidateOrder = new Map(
     revisedPacket.preflight.candidates.map((candidate, index) => [candidate.id, index]),
   );
+  const candidateById = new Map(
+    revisedPacket.preflight.candidates.map((candidate) => [candidate.id, candidate]),
+  );
   const validCandidateIds = new Set(candidateOrder.keys());
   const unitById = new Map(revisedPacket.units.map((unit) => [unit.id, unit]));
   const staleSpans = [];
@@ -254,6 +277,24 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
   const unresolvedCandidates = [];
   for (const candidate of revisedPacket.preflight.candidates) {
     if (accounted.has(candidate.id)) continue;
+    const counterpartDispositions = reconciled.candidateDispositions.filter((disposition) => {
+      const counterpart = candidateById.get(disposition.candidate);
+      return counterpart &&
+        counterpart.unit === candidate.unit &&
+        counterpart.language !== candidate.language &&
+        sharedGlossaryEntry(counterpart, candidate);
+    });
+    const dispositionKinds = new Set(counterpartDispositions.map((item) =>
+      `${item.disposition}\u0000${item.reason}\u0000${item.note ?? ''}`
+    ));
+    if (counterpartDispositions.length > 0 && dispositionKinds.size === 1) {
+      reconciled.candidateDispositions.push({
+        ...structuredClone(counterpartDispositions[0]),
+        candidate: candidate.id,
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
     const containing = reconciled.mentions.filter((mention) => candidateInsideMention(candidate, mention));
     if (containing.length === 1) {
       containing[0].candidateRefs.push(candidate.id);
@@ -285,6 +326,27 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         continue;
       }
     }
+    const partialOverlaps = reconciled.mentions.flatMap((mention) =>
+      mention.unit.id === candidate.unit
+        ? mention.spans[candidate.language]
+          .filter((span) => spansOverlap(candidate, span))
+          .map((span) => ({ mention, span }))
+        : []
+    );
+    if (partialOverlaps.length === 1) {
+      const { mention, span } = partialOverlaps[0];
+      const replacement = coveringSpan(
+        unitById.get(candidate.unit)[candidate.language],
+        candidate,
+        span,
+      );
+      mention.spans[candidate.language] = mention.spans[candidate.language]
+        .filter((item) => item !== span);
+      mention.spans[candidate.language].push(replacement);
+      mention.candidateRefs.push(candidate.id);
+      accounted.add(candidate.id);
+      continue;
+    }
     const aliasMatches = reconciled.people.flatMap((person) =>
       aliasesForPerson(reconciled, person.localId, candidate.language, candidate.unit)
         .filter((alias) =>
@@ -304,6 +366,26 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       const aliasSpan = candidate.exact.includes(match.alias.exact)
         ? exactSpanAt(unit[candidate.language], candidate.exact, candidate.occurrence)
         : exactOccurrences(unit[candidate.language], match.alias.exact)[0];
+      const overlapping = reconciled.mentions.filter((mention) =>
+        mention.person === person &&
+        mention.unit.id === candidate.unit &&
+        mention.spans[candidate.language].some((span) => spansOverlap(span, aliasSpan))
+      );
+      const conflicts = reconciled.mentions.some((mention) =>
+        mention.person !== person &&
+        mention.unit.id === candidate.unit &&
+        mention.spans[candidate.language].some((span) => spansOverlap(span, aliasSpan))
+      );
+      if (overlapping.length === 1 && !conflicts) {
+        const mention = overlapping[0];
+        mention.spans[candidate.language] = mention.spans[candidate.language]
+          .filter((span) => !spansOverlap(span, aliasSpan));
+        mention.spans[candidate.language].push(aliasSpan);
+        mention.kind = match.alias.kind;
+        mention.candidateRefs.push(candidate.id);
+        accounted.add(candidate.id);
+        continue;
+      }
       if (addAliasMention(
         reconciled,
         unit,
@@ -321,6 +403,17 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
     unresolvedCandidates.push(candidate.id);
   }
 
+  // A later candidate can reconstruct a mention that also covers an earlier
+  // unresolved fragment. Recheck after all mention growth so candidate order
+  // does not create a false failure.
+  const unresolvedAfterMentionGrowth = unresolvedCandidates.filter((candidateId) => {
+    const candidate = revisedPacket.preflight.candidates.find((item) => item.id === candidateId);
+    const containing = reconciled.mentions.filter((mention) => candidateInsideMention(candidate, mention));
+    if (containing.length !== 1) return true;
+    containing[0].candidateRefs.push(candidate.id);
+    return false;
+  });
+
   for (const mention of reconciled.mentions) {
     for (const language of ['zh', 'en']) {
       mention.spans[language].sort((left, right) => left.startCodePoint - right.startCodePoint);
@@ -333,5 +426,5 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
 
   renumberMentions(reconciled);
 
-  return { extraction: reconciled, unresolvedCandidates, unresolvedSpans };
+  return { extraction: reconciled, unresolvedCandidates: unresolvedAfterMentionGrowth, unresolvedSpans };
 }

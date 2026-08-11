@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "hanshu",
+  "chapter": "066",
+  "input": {
+    "chapterFingerprint": "sha256:662cdb6b2d6173b5f3b2e76fee4c96cd9f9a4b32383a2b8b00f27066bf4a2d5f",
+    "proposalsFingerprint": "sha256:edbc28e2c22cd5eae755256368387f0d1b15958de3436c0301f91fc2aea45f1d"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex review of Grok 4.5 draft",
+    "model": null,
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-11T04:06:37.000Z"
+  },
+  "proposals": [
+    {
+      "id": "hanshu:066:r0001",
+      "unit": {
+        "id": "s0004",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "In his youth he loved to read books, studied swordsmanship, and his given name was Quanzi.",
+      "after": "In his youth he loved to read books, studied swordsmanship, and his childhood name was Quanzi.",
+      "reason": "Chinese 名犬子 marks a childhood name, not an adult given name; the idiomatic English already renders this correctly.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:066:r0002",
+      "unit": {
+        "id": "s0005",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Once his schooling was done, he so admired the conduct of Lin Xiangru of Zhao that he adopted the name Xiangru for himself.",
+      "after": "Once his schooling was done, he so admired the conduct of Lin Xiangru that he adopted the name Xiangru for himself.",
+      "reason": "Chinese names 藺相如 without Zhao; “of Zhao” is an invented addition absent from the source.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:066:r0003",
+      "unit": {
+        "id": "s0191",
+        "kind": "paragraph-sentence",
+        "blockIndex": 32,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Ban Gu’s note: Lord No-such-person’s description of Shanglin and Sir Vacuity’s catalogue of Cloud Dream swell beyond fact and stray from moral purpose; the historian has therefore trimmed them to essentials and set the discourse back on the proper path.",
+      "after": "Lord No-such-person’s description of Shanglin and Sir Vacuity’s catalogue of Cloud Dream swell beyond fact and stray from moral purpose; the historian has therefore trimmed them to essentials and set the discourse back on the proper path.",
+      "reason": "Chinese does not name Ban Gu; “Ban Gu’s note:” is invented translator framing in the idiomatic English.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "hanshu:066:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "名犬子, followed by later 更名相如, marks the childhood name Quanzi rather than an adult given name; the proposed literal matches the Chinese and the already-correct idiomatic rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0004",
+        "excerpt": "名犬子"
+      }
+    },
+    {
+      "repairId": "hanshu:066:r0002",
+      "decision": "reject",
+      "after": null,
+      "reason": "Although this unit names only 藺相如, 'of Zhao' is an accurate and useful identification of Lin Xiangru, not a translation error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0005",
+        "excerpt": "慕藺相如之為人也"
+      }
+    },
+    {
+      "repairId": "hanshu:066:r0003",
+      "decision": "reject",
+      "after": null,
+      "reason": "The first-person editorial statement identifies the Hanshu compiler's abridgment; 'Ban Gu's note:' is useful authorial framing that preserves attribution rather than a mistranslation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0191",
+        "excerpt": "亡是公言上林廣大"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

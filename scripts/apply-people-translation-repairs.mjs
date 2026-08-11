@@ -92,6 +92,15 @@ function applyReviewedClaimChanges(claims, reviewed) {
     .map((claim) => reviewed.revisedClaims.get(claim.id) ?? claim);
 }
 
+function describeUnresolvedCandidates(candidateIds, packet) {
+  const candidates = new Map(packet.preflight.candidates.map((candidate) => [candidate.id, candidate]));
+  return candidateIds.map((id) => {
+    const candidate = candidates.get(id);
+    if (!candidate) return id;
+    return `${id} (${candidate.unit} ${candidate.language} ${JSON.stringify(candidate.exact)})`;
+  }).join(', ');
+}
+
 function expectDecisionFailure(callback, label) {
   try {
     callback();
@@ -283,6 +292,86 @@ function selfTest() {
   if (compactResult.stats.people !== 1 || compactResult.stats.repairs !== 1) {
     throw new Error('Compact extraction round trip lost fixture data');
   }
+
+  const fragmentPacket = {
+    book: 'fixture',
+    chapter: '002',
+    input: {},
+    units: [{
+      id: 's0001', kind: 'paragraph-sentence', blockIndex: 0,
+      collection: 'sentences', itemIndex: 0,
+      zh: '平樂監傅介子', en: 'Ping Le Supervisor Fu Jiezi', literal: 'Ping Le Supervisor Fu Jiezi',
+    }, {
+      id: 's0002', kind: 'paragraph-sentence', blockIndex: 1,
+      collection: 'sentences', itemIndex: 0,
+      zh: '河內', en: 'Henei', literal: 'Henei',
+    }],
+    preflight: {
+      candidates: [{
+        id: 'fixture:002:cand_title', unit: 's0001', language: 'en',
+        exact: 'Ping Le Supervisor Fu', occurrence: 0, startCodePoint: 0, endCodePoint: 21,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_henei_en', unit: 's0002', language: 'en',
+        exact: 'Henei', occurrence: 0, startCodePoint: 0, endCodePoint: 5,
+        detectors: [{ kind: 'chinese-notes-english-definition', glossaryId: 36412 }],
+      }, {
+        id: 'fixture:002:cand_henei_zh', unit: 's0002', language: 'zh',
+        exact: '河內', occurrence: 0, startCodePoint: 0, endCodePoint: 2,
+        detectors: [{ kind: 'chinese-notes-proper-noun', glossaryId: 36412 }],
+      }],
+    },
+  };
+  const fragmentExtraction = {
+    schemaVersion: 1,
+    book: 'fixture',
+    chapter: '002',
+    input: {},
+    run: { model: 'fixture', promptVersion: 4, agentId: 'fixture' },
+    people: [{
+      localId: 'fixture:002:p001',
+      preferredNameSuggestion: { en: 'Fu Jiezi', zh: '傅介子' },
+      historicity: 'historical',
+      descriptorSuggestion: 'Envoy',
+      identityHints: { nativePlaces: [], relatedLocalPeople: [], activeDateHints: [] },
+    }],
+    mentions: [{
+      id: 'fixture:002:m0001',
+      person: 'fixture:002:p001',
+      unit: {
+        id: 's0001', kind: 'paragraph-sentence', blockIndex: 0,
+        collection: 'sentences', itemIndex: 0,
+      },
+      kind: 'personal-name',
+      spans: { zh: [], en: [{ exact: 'Fu Jiezi', occurrence: 0 }] },
+      candidateRefs: [],
+    }],
+    claims: [{
+      id: 'fixture:002:c0001', subject: 'fixture:002:p001', predicate: 'name',
+      value: { kind: 'personal', en: 'Fu Jiezi', zh: '傅介子' }, certainty: 'explicit',
+      evidence: ['fixture:002:s0001'],
+    }],
+    translationRepairs: [],
+    candidateDispositions: [{
+      candidate: 'fixture:002:cand_henei_zh',
+      disposition: 'not-person', reason: 'place', note: null,
+    }],
+    coverage: { allUnitsVisited: true, preflightCandidatesAccountedFor: true, unresolvedReferences: [] },
+  };
+  const fragments = reconcileExtractionAfterRepairs(fragmentExtraction, fragmentPacket, {
+    markRepairsApplied: false,
+  });
+  if (fragments.unresolvedCandidates.length > 0) {
+    throw new Error('Fragment reconciliation fixture left unresolved candidates');
+  }
+  const widened = fragments.extraction.mentions.find((mention) =>
+    mention.spans.en.some((span) => span.exact === 'Ping Le Supervisor Fu Jiezi')
+  );
+  if (!widened) throw new Error('Overlapping title fragment did not widen the person mention');
+  const inherited = fragments.extraction.candidateDispositions.find((item) =>
+    item.candidate === 'fixture:002:cand_henei_en' && item.reason === 'place'
+  );
+  if (!inherited) throw new Error('Bilingual glossary candidate did not inherit its disposition');
   console.log('apply-people-translation-repairs self-test: ok');
 }
 
@@ -317,7 +406,9 @@ function main() {
       );
     }
     if (reconciled.unresolvedCandidates.length > 0) {
-      throw new Error(`Unresolved new candidates: ${reconciled.unresolvedCandidates.join(', ')}`);
+      throw new Error(
+        `Unresolved new candidates: ${describeUnresolvedCandidates(reconciled.unresolvedCandidates, currentPacket)}`,
+      );
     }
     if (compactStored) {
       const compact = compactPeopleExtraction(result.normalized, currentPacket);
@@ -392,7 +483,9 @@ function main() {
     );
   }
   if (reconciled.unresolvedCandidates.length > 0) {
-    throw new Error(`Unresolved new candidates: ${reconciled.unresolvedCandidates.join(', ')}`);
+    throw new Error(
+      `Unresolved new candidates: ${describeUnresolvedCandidates(reconciled.unresolvedCandidates, revisedPacket)}`,
+    );
   }
   const result = validatePeopleExtraction(reconciled.extraction, revisedPacket);
   let serializedExtraction;

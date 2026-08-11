@@ -37,6 +37,19 @@ function claimFactContract(claim) {
   return JSON.stringify(contract);
 }
 
+function claimCoreContract(claim) {
+  const { id: _id, evidence: _evidence, ...contract } = claim;
+  return JSON.stringify(contract);
+}
+
+function containsReviewedClaim(currentClaims, reviewedClaim) {
+  const reviewedCore = claimCoreContract(reviewedClaim);
+  return currentClaims.some((current) =>
+    claimCoreContract(current) === reviewedCore &&
+    reviewedClaim.evidence.every((item) => current.evidence.includes(item))
+  );
+}
+
 function extractionFiles() {
   const root = path.join(PEOPLE_DIR, 'extractions');
   if (!fs.existsSync(root)) return [];
@@ -209,12 +222,14 @@ async function main() {
           }
         }
         for (const revision of document.claimRevisions) {
-          if (currentClaimFacts.has(claimFactContract(revision.before))) {
+          if (loaded.extraction.claims.some((claim) =>
+            claimCoreContract(claim) === claimCoreContract(revision.before)
+          )) {
             errors.push(
               `${path.relative(REPO_ROOT, file)} revised ${revision.before.id}, but its old fact remains applied`,
             );
           }
-          if (!currentClaimFacts.has(claimFactContract(revision.after))) {
+          if (!containsReviewedClaim(loaded.extraction.claims, revision.after)) {
             errors.push(
               `${path.relative(REPO_ROOT, file)} revised ${revision.before.id}, but its replacement fact is missing`,
             );
