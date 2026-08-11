@@ -18,7 +18,10 @@ const ENGLISH_SENTENCE_INITIAL_NON_NAMES = new Set([
 const ENGLISH_FUNCTION_PHRASE_RE = /^(?:Am I|Even I|Though (?:He|I|It|She|That|These|They|This|Those|We))\b/u;
 const ENGLISH_NAMED_NON_PERSON_TERMS = new Set([
   'Circular Moat',
+  'Earth Goddess',
+  'Five Altars',
   'Mount Shouyang',
+  'Supreme Altar',
   'Three Amnesties',
   'Three Adjuncts',
   'Three Inquiries',
@@ -26,7 +29,20 @@ const ENGLISH_NAMED_NON_PERSON_TERMS = new Set([
   "Wei's Henei",
   'Six Arts',
 ]);
-const ENGLISH_NAMED_OFFICE_TERMS = new Set(['Nobility Ranks', 'Privy Treasurer']);
+const ENGLISH_NAMED_PLACE_TERMS = new Set([
+  'Dragon City',
+  'Fenyin',
+  'Hengcheng Gate',
+  'Yong',
+]);
+const ENGLISH_NAMED_OFFICE_TERMS = new Set([
+  'Gou Shield',
+  'Grandee',
+  'Imperial Workshops',
+  'Nobility Ranks',
+  'Privy Treasurer',
+  'Splendid Light',
+]);
 
 function locatorKey(locator) {
   return `${locator.id}:${locator.blockIndex}:${locator.collection}:${locator.itemIndex}`;
@@ -85,14 +101,38 @@ function aliasesForPerson(extraction, personId, language, unitId) {
     if (claim.subject !== personId || claim.predicate !== 'name' || !claimEvidenceUnit(claim, unitId)) continue;
     add(claim.value?.[language], mentionKindForNameKind(claim.value?.kind));
   }
+  for (const claim of extraction.claims) {
+    if (
+      claim.subject !== personId ||
+      !claimEvidenceUnit(claim, unitId) ||
+      (claim.predicate !== 'office' && claim.predicate !== 'noble-title')
+    ) continue;
+    add(claim.value?.title?.[language], 'title-reference');
+  }
   return [...aliases.values()];
 }
 
-function exactOccurrences(text, exact) {
+function exactOccurrences(text, exact, language = null) {
   const found = [];
   for (let occurrence = 0; ; occurrence += 1) {
     try {
-      found.push(exactSpanAt(text, exact, occurrence));
+      const span = exactSpanAt(text, exact, occurrence);
+      if (language !== 'en') {
+        found.push(span);
+        continue;
+      }
+      const points = [...text];
+      const exactPoints = [...exact];
+      const startsWithWord = isWordCharacter(exactPoints[0]);
+      const endsWithWord = isWordCharacter(exactPoints.at(-1));
+      const before = points[span.startCodePoint - 1];
+      const after = points[span.endCodePoint];
+      if (
+        (!startsWithWord || !isWordCharacter(before)) &&
+        (!endsWithWord || !isWordCharacter(after))
+      ) {
+        found.push(span);
+      }
     } catch {
       break;
     }
@@ -292,7 +332,7 @@ function normalizeMentionSpans(mention, unit, staleSpans) {
   const normalized = structuredClone(mention);
   for (const language of ['zh', 'en']) {
     normalized.spans[language] = normalized.spans[language].flatMap((span) => {
-      const occurrences = exactOccurrences(unit[language], span.exact);
+      const occurrences = exactOccurrences(unit[language], span.exact, language);
       if (occurrences.length === 0) {
         staleSpans.push({ mention, language, span });
         return [];
@@ -375,11 +415,17 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       stale.mention.person,
       stale.language,
       stale.mention.unit.id,
-    ).flatMap((alias) => exactOccurrences(unit[stale.language], alias.exact).map((span) => ({ alias, span })));
-    const related = aliases.filter((item) =>
-      item.alias.preferred || sharedWordCount(stale.span.exact, item.alias.exact) > 0
-    );
-    const selected = related.length > 0 ? related : aliases;
+    ).flatMap((alias) => exactOccurrences(unit[stale.language], alias.exact, stale.language)
+      .map((span) => ({ alias, span })));
+    const scored = aliases.map((item) => ({
+      ...item,
+      sharedWords: sharedWordCount(stale.span.exact, item.alias.exact),
+    }));
+    const bestSharedWordCount = Math.max(0, ...scored.map((item) => item.sharedWords));
+    const preferred = scored.filter((item) => item.alias.preferred);
+    const selected = bestSharedWordCount > 0
+      ? scored.filter((item) => item.sharedWords === bestSharedWordCount)
+      : preferred.length > 0 ? preferred : scored;
     let mapped = false;
     for (const { alias, span } of selected) {
       const expanded = candidateExpandedSpan(
@@ -388,6 +434,19 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         stale.language,
         revisedPacket.preflight.candidates,
       );
+      const alreadyCoveredByPerson = reconciled.mentions.some((mention) =>
+        mention.id !== stale.mention.id &&
+        mention.person === stale.mention.person &&
+        mention.unit.id === unit.id &&
+        mention.spans[stale.language].some((current) =>
+          current.startCodePoint <= expanded.startCodePoint &&
+          current.endCodePoint >= expanded.endCodePoint
+        )
+      );
+      if (alreadyCoveredByPerson) {
+        mapped = true;
+        continue;
+      }
       const targetMention = reconciled.mentions.find((mention) =>
         mention.id === stale.mention.id && mention.person === stale.mention.person
       );
@@ -424,6 +483,15 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       mapped = added || alreadyCovered || mapped;
     }
     if (!mapped) {
+      const hasRemainingUnitContext = reconciled.mentions.some((mention) =>
+        mention.person === stale.mention.person &&
+        mention.unit.id === stale.mention.unit.id &&
+        (mention.spans.zh.length > 0 || mention.spans.en.length > 0)
+      ) || reconciled.claims.some((claim) =>
+        claim.subject === stale.mention.person &&
+        claimEvidenceUnit(claim, stale.mention.unit.id)
+      );
+      if (!hasRemainingUnitContext) continue;
       const hasRemainingMention = reconciled.mentions.some((mention) =>
         mention.person === stale.mention.person &&
         (mention.spans.zh.length > 0 || mention.spans.en.length > 0)
@@ -554,7 +622,11 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
           const fragmentMatch = surfaceContains(alias.exact, candidate.exact, candidate.language) ||
             (candidate.language === 'en' && sharedWordCount(candidate.exact, alias.exact) >= 2);
           if (!fragmentMatch) return false;
-          return exactOccurrences(unitById.get(candidate.unit)[candidate.language], alias.exact)
+          return exactOccurrences(
+            unitById.get(candidate.unit)[candidate.language],
+            alias.exact,
+            candidate.language,
+          )
             .some((span) => spansOverlap(span, candidate));
         })
         .map((alias) => ({ person: person.localId, alias }))
@@ -564,7 +636,11 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       const person = [...matchingPeople][0];
       const unit = unitById.get(candidate.unit);
       const match = aliasMatches.find((item) => item.person === person);
-      const aliasOccurrences = exactOccurrences(unit[candidate.language], match.alias.exact);
+      const aliasOccurrences = exactOccurrences(
+        unit[candidate.language],
+        match.alias.exact,
+        candidate.language,
+      );
       const aliasSpan = candidate.exact.includes(match.alias.exact)
         ? exactSpanAt(unit[candidate.language], candidate.exact, candidate.occurrence)
         : aliasOccurrences.find((span) => spansOverlap(span, candidate)) ?? aliasOccurrences[0];
@@ -608,6 +684,31 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         disposition: 'not-person',
         reason: 'polity',
         note: `Known polity from chapter identity hints: ${candidate.exact}`,
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (
+      candidate.language === 'en' &&
+      /^[ \t]+Commandery\b/u.test(
+        [...unitById.get(candidate.unit).en].slice(candidate.endCodePoint).join('')
+      )
+    ) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'place',
+        note: 'Component of a commandery name, not a person.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (candidate.language === 'en' && ENGLISH_NAMED_PLACE_TERMS.has(candidate.exact)) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'place',
+        note: 'Named place, not a person.',
       });
       accounted.add(candidate.id);
       continue;

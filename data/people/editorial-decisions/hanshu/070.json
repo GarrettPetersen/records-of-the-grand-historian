@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "hanshu",
+  "chapter": "070",
+  "input": {
+    "chapterFingerprint": "sha256:1e654cb14cca379b0c8516d5c7541a4f99051f0ee38d21f57d8e9a1b336b26ab",
+    "proposalsFingerprint": "sha256:a2f3775e3cfa884fc39cbf1a031da8976703b7b30134671a62373eb7dd1789c6"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex review of Grok 4.5 draft",
+    "model": null,
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-11T12:10:41.330Z"
+  },
+  "proposals": [
+    {
+      "id": "hanshu:070:r0001",
+      "unit": {
+        "id": "s0069",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "At this time the four barbarians were harmonious, within the seas peaceful; Yannian attended to affairs three years, and by old age and illness begged for his bones; the Son of Heaven treated him generously, sent the grand coachman with staff to grant Yannien yellow gold one hundred jin, wine, and in addition sent physicians and drugs; Yannien thereupon claimed illness was grave.",
+      "after": "At this time the four barbarians were harmonious, within the seas peaceful; Yannian attended to affairs three years, and by old age and illness begged for his bones; the Son of Heaven treated him generously, sent the grand coachman with staff to grant Yannian yellow gold one hundred jin, wine, and in addition sent physicians and drugs; Yannian thereupon claimed illness was grave.",
+      "reason": "The literal translation misspells Yannian twice as Yannien.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:070:r0002",
+      "unit": {
+        "id": "s0075",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "At the beginning of Yuandi's reign grain prices soared and refugees filled the roads. When the western Qiang rose in Yongguang, Huan repeatedly donated cash and grain to the treasury—hundreds of thousands over several years.",
+      "after": "At the beginning of Emperor Yuan's reign grain prices soared and refugees filled the roads. When the western Qiang rose in Yongguang, Huan repeatedly donated cash and grain to the treasury—several million over the years.",
+      "reason": "The Chinese 前後數百萬 means several million in total, not hundreds of thousands, and 元帝 is Emperor Yuan.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:070:r0003",
+      "unit": {
+        "id": "s0253",
+        "kind": "paragraph-sentence",
+        "blockIndex": 30,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "Look at Shi Dan: there was nothing exceptional in his conduct or ability. Xu Shang, Director of the Imperial Clan, was a man disabled by illness. Both obtained high office only because they attached themselves to Fangjin.",
+      "after": "Look at Shi Dan: there was nothing exceptional in his conduct or ability. Xu Shang, Superintendent of the Imperial Household (Guanglu Xun), was a man disabled by illness. Both obtained high office only because they attached themselves to Fangjin.",
+      "reason": "光祿勳 is the Superintendent of the Imperial Household / Director of Palace Gentlemen, not the Director of the Imperial Clan (宗正).",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:070:r0004",
+      "unit": {
+        "id": "s0253",
+        "kind": "paragraph-sentence",
+        "blockIndex": 30,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "Consider Shi Dan: his conduct and ability were unremarkable, and Director of the Imperial Clan Xu Shang was a man crippled by illness—both gained exalted offices only by attaching themselves to Fangjin.",
+      "after": "Consider Shi Dan: his conduct and ability were unremarkable, and Superintendent of the Imperial Household Xu Shang was a man crippled by illness—both gained exalted offices only by attaching themselves to Fangjin.",
+      "reason": "光祿勳 is mistranslated as Director of the Imperial Clan; that office is 宗正.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:070:r0005",
+      "unit": {
+        "id": "s0202",
+        "kind": "paragraph-sentence",
+        "blockIndex": 31,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Grand minister of works Shi Dan and others impeached Hong for misleading the court and non-dao; he sat guilty and was dismissed to be commoner; Ye again submitted a memorial suing for Hong.",
+      "after": "Grand minister of works Shi Dan and others impeached Hong for misleading the court in a manner contrary to the Way; he was found guilty and reduced to commoner status; Ye again submitted a memorial defending Hong.",
+      "reason": "「不道」rendered as the opaque calque \"non-dao,\" and \"suing for Hong\" misstates 訟宏 (plead/defend on his behalf).",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "hanshu:070:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "The source names him 延年 throughout; the literal inconsistently misspells that name as Yannien in two places, and the repair restores Yannian without other change.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0069",
+        "excerpt": "賜延年黃金百斤、酒，加致醫藥，延年遂稱病篤"
+      }
+    },
+    {
+      "repairId": "hanshu:070:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "前後數百萬 is several million in aggregate, not hundreds of thousands; 元帝 is Emperor Yuan, so both corrections match the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "元帝初即位……前後數百萬"
+      }
+    },
+    {
+      "repairId": "hanshu:070:r0003",
+      "decision": "revise",
+      "after": "Consider Shi Dan: there was nothing exceptional in his conduct or ability. Xu Shang, Superintendent of the Imperial Household, suffered from a disabling illness. Both obtained high office only by attaching themselves to Fangjin.",
+      "reason": "光祿勳 is Superintendent of the Imperial Household; Director of the Imperial Clan translates 宗正, while the revision avoids an unnecessary parenthetical and demeaning phrasing.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0253",
+        "excerpt": "光祿勳許商"
+      }
+    },
+    {
+      "repairId": "hanshu:070:r0004",
+      "decision": "revise",
+      "after": "Consider Shi Dan: his conduct and ability were unremarkable, while Xu Shang, Superintendent of the Imperial Household, suffered from a disabling illness. Both gained exalted offices only by attaching themselves to Fangjin.",
+      "reason": "The literal likewise misrenders 光祿勳 as Director of the Imperial Clan; the revision uses the established office title and preserves the source's criticism without the draft's harsher wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0253",
+        "excerpt": "光祿勳許商"
+      }
+    },
+    {
+      "repairId": "hanshu:070:r0005",
+      "decision": "revise",
+      "after": "Grand Minister of Works Shi Dan and the others impeached Dong Hong for misleading the court and acting contrary to the Way. Hong was convicted, dismissed, and reduced to commoner status; Du Ye again submitted a memorial in his defense.",
+      "reason": "不道 is a charge of acting contrary to the Way, while 訟宏 means defending Dong Hong; restoring the full names also resolves the draft's ambiguous bare references.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0202",
+        "excerpt": "劾宏誤朝不道……業復上書訟宏"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}
