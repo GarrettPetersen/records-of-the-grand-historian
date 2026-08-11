@@ -26,6 +26,10 @@ import {
   scanPeopleCandidates,
 } from './lib/people-candidates.mjs';
 import { createPeopleSchemaValidator, formatSchemaErrors } from './lib/people-schema.mjs';
+import {
+  buildPeopleChunkPacket,
+  planPeopleExtractionChunks,
+} from './lib/people-extraction-chunks.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
@@ -40,6 +44,13 @@ Options:
   --out PATH        Output path; defaults under data/people/generated/packets/.
   --seed-out PATH   Also write an empty extraction envelope for a worker.
   --compact-worker  Write a compact worker packet and compact v2 seed.
+  --chunk-index N   Build one 1-based deterministic chunk instead of the full chapter.
+  --chunk-max-units N
+                    Maximum owned units per chunk (default: 250).
+  --chunk-max-candidates N
+                    Maximum owned candidates per chunk (default: 600).
+  --chunk-context-units N
+                    Read-only units supplied on each side (default: 6).
   --model MODEL     Model recorded in the seed (required with --seed-out).
   --summary         Print candidate detector counts.
   --self-test       Run deterministic packet-builder tests.`);
@@ -53,6 +64,10 @@ function parseArgs(argv) {
     seedOut: null,
     model: null,
     compactWorker: false,
+    chunkIndex: null,
+    chunkMaxUnits: 250,
+    chunkMaxCandidates: 600,
+    chunkContextUnits: 6,
     summary: false,
     selfTest: false,
   };
@@ -69,6 +84,10 @@ function parseArgs(argv) {
     else if (arg === '--seed-out') opts.seedOut = path.resolve(REPO_ROOT, next());
     else if (arg === '--model') opts.model = next();
     else if (arg === '--compact-worker') opts.compactWorker = true;
+    else if (arg === '--chunk-index') opts.chunkIndex = Number(next());
+    else if (arg === '--chunk-max-units') opts.chunkMaxUnits = Number(next());
+    else if (arg === '--chunk-max-candidates') opts.chunkMaxCandidates = Number(next());
+    else if (arg === '--chunk-context-units') opts.chunkContextUnits = Number(next());
     else if (arg === '--summary') opts.summary = true;
     else if (arg === '--self-test') opts.selfTest = true;
     else if (arg === '--help' || arg === '-h') {
@@ -183,23 +202,12 @@ export function buildPeopleExtractionSeed(packet, model) {
 
 export function buildPeopleWorkerPacket(packet) {
   const namespace = `${packet.book}:${packet.chapter}:`;
-  const kindCode = {
-    'paragraph-sentence': 'p',
-    'table-header-cell': 'h',
-    'table-body-cell': 't',
-  };
   return {
     version: 1,
     book: packet.book,
     chapter: packet.chapter,
     title: packet.source.title,
-    units: packet.units.map((unit) => [
-      unit.id,
-      kindCode[unit.kind],
-      unit.zh,
-      unit.en,
-      unit.literal,
-    ]),
+    units: workerUnitRows(packet.units),
     candidates: packet.preflight.candidates.map((candidate) => [
       candidate.id.slice(namespace.length),
       candidate.unit,
@@ -213,6 +221,46 @@ export function buildPeopleWorkerPacket(packet) {
       roles: packet.context.roles.map((role) => [role.id, role.label]),
       polities: packet.context.polities,
       reigns: packet.context.reigns,
+    },
+  };
+}
+
+function workerUnitRows(units) {
+  const kindCode = {
+    'paragraph-sentence': 'p',
+    'table-header-cell': 'h',
+    'table-body-cell': 't',
+  };
+  return units.map((unit) => [
+    unit.id,
+    kindCode[unit.kind],
+    unit.zh,
+    unit.en,
+    unit.literal,
+  ]);
+}
+
+export function buildPeopleChunkWorkerPacket(packet, chunk) {
+  const ownedPacket = buildPeopleChunkPacket(packet, chunk);
+  const worker = buildPeopleWorkerPacket(ownedPacket);
+  return {
+    ...worker,
+    version: 2,
+    scope: {
+      chunkId: chunk.id,
+      chunkIndex: chunk.index,
+      chunkCount: chunk.count,
+      start: chunk.start,
+      end: chunk.end,
+      contextStart: chunk.contextStart,
+      contextEnd: chunk.contextEnd,
+      maxUnits: chunk.maxUnits,
+      maxCandidates: chunk.maxCandidates,
+      contextUnits: chunk.contextUnits,
+    },
+    readOnlyContext: {
+      before: workerUnitRows(packet.units.slice(chunk.contextStart, chunk.start)),
+      after: workerUnitRows(packet.units.slice(chunk.end, chunk.contextEnd)),
     },
   };
 }
@@ -270,13 +318,46 @@ async function main() {
   const opts = parseArgs(process.argv.slice(2));
   if (opts.selfTest) return selfTest();
   if (!opts.book || !opts.chapter) throw new Error('--book and --chapter are required');
-  const packet = buildPeopleExtractionPacket(opts.book, opts.chapter, {
+  const fullPacket = buildPeopleExtractionPacket(opts.book, opts.chapter, {
     properNounMatcher: loadProperNounMatcher(),
   });
+  let packet = fullPacket;
+  let chunk = null;
+  if (opts.chunkIndex !== null) {
+    if (!Number.isInteger(opts.chunkIndex) || opts.chunkIndex < 1) {
+      throw new Error('--chunk-index must be a positive integer');
+    }
+    for (const [flag, value] of [
+      ['--chunk-max-units', opts.chunkMaxUnits],
+      ['--chunk-max-candidates', opts.chunkMaxCandidates],
+    ]) {
+      if (!Number.isInteger(value) || value < 1) throw new Error(`${flag} must be a positive integer`);
+    }
+    if (!Number.isInteger(opts.chunkContextUnits) || opts.chunkContextUnits < 0) {
+      throw new Error('--chunk-context-units must be a nonnegative integer');
+    }
+    const chunks = planPeopleExtractionChunks(fullPacket, {
+      maxUnits: opts.chunkMaxUnits,
+      maxCandidates: opts.chunkMaxCandidates,
+      contextUnits: opts.chunkContextUnits,
+    });
+    chunk = chunks[opts.chunkIndex - 1];
+    if (!chunk) throw new Error(`--chunk-index ${opts.chunkIndex} exceeds the ${chunks.length} planned chunks`);
+    packet = buildPeopleChunkPacket(fullPacket, chunk);
+  }
   const out = opts.out ?? packetPath(opts.book, opts.chapter);
-  if (opts.compactWorker) writeTextAtomic(out, `${JSON.stringify(buildPeopleWorkerPacket(packet))}\n`);
+  if (opts.compactWorker) {
+    const workerPacket = chunk
+      ? buildPeopleChunkWorkerPacket(fullPacket, chunk)
+      : buildPeopleWorkerPacket(packet);
+    writeTextAtomic(out, `${JSON.stringify(workerPacket)}\n`);
+  }
   else writeJsonAtomic(out, packet);
-  console.log(`Wrote ${path.relative(REPO_ROOT, out)}: ${packet.units.length} units, ${packet.preflight.candidates.length} candidates`);
+  const chunkLabel = chunk ? ` chunk ${chunk.id}/${String(chunk.count).padStart(3, '0')}` : '';
+  console.log(
+    `Wrote ${path.relative(REPO_ROOT, out)}${chunkLabel}: ` +
+    `${packet.units.length} owned units, ${packet.preflight.candidates.length} owned candidates`,
+  );
   if (opts.seedOut) {
     if (!opts.model) throw new Error('--model is required with --seed-out');
     if (opts.compactWorker) {

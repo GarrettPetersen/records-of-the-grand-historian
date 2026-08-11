@@ -16,6 +16,13 @@ as structured repair proposals. Never edit the source chapter directly.
   `p` (paragraph sentence), `h` (table header), or `t` (table body cell).
 - Candidate rows are
   `[candidateId, unitId, language, exact, occurrence, detectorKinds]`.
+- A version 2 packet is one chunk of a larger chapter. Its `units` and
+  `candidates` are the complete owned assignment. `readOnlyContext.before` and
+  `.after` provide neighboring unit rows solely to resolve continuations and
+  references. Read them, but never emit their mentions, claims, evidence,
+  candidate dispositions, or translation repairs. Do not create a person seen
+  only in read-only context. A person named in owned units remains in scope even
+  when the context shows earlier or later information about the same person.
 - The compact schema is the exact output contract.
 - The seeded output has immutable input fingerprints and run metadata.
 

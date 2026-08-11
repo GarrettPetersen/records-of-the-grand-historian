@@ -4,9 +4,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
+  buildPeopleChunkWorkerPacket,
   buildPeopleExtractionPacket,
   buildPeopleWorkerPacket,
 } from './build-people-extraction-packet.mjs';
+import { buildPeopleChunkPacket } from './lib/people-extraction-chunks.mjs';
 import {
   PEOPLE_DIR,
   REPO_ROOT,
@@ -377,7 +379,8 @@ function extractionFiles() {
 }
 
 function isPeopleWorkerPacket(value) {
-  return value?.version === 1 && Array.isArray(value.units) && Array.isArray(value.units[0]);
+  return [1, 2].includes(value?.version) && Array.isArray(value.units) &&
+    (value.units.length === 0 || Array.isArray(value.units[0]));
 }
 
 function resolveValidationPacket(extraction, packetFile) {
@@ -391,12 +394,40 @@ function resolveValidationPacket(extraction, packetFile) {
   if (!isPeopleWorkerPacket(supplied)) return supplied;
 
   const packet = rebuilt();
-  if (!deepEqual(supplied, buildPeopleWorkerPacket(packet))) {
+  if (supplied.version === 1 && !deepEqual(supplied, buildPeopleWorkerPacket(packet))) {
     throw new PeopleExtractionValidationError([
       'compact worker packet does not exactly match the current chapter and extraction configuration',
     ]);
   }
-  return packet;
+  if (supplied.version === 1) return packet;
+
+  const scope = supplied.scope;
+  const chunk = scope && {
+    id: scope.chunkId,
+    index: scope.chunkIndex,
+    count: scope.chunkCount,
+    start: scope.start,
+    end: scope.end,
+    contextStart: scope.contextStart,
+    contextEnd: scope.contextEnd,
+    maxUnits: scope.maxUnits,
+    maxCandidates: scope.maxCandidates,
+    contextUnits: scope.contextUnits,
+  };
+  let expected;
+  try {
+    expected = buildPeopleChunkWorkerPacket(packet, chunk);
+  } catch (error) {
+    throw new PeopleExtractionValidationError([
+      `invalid compact chunk scope: ${error instanceof Error ? error.message : String(error)}`,
+    ]);
+  }
+  if (!deepEqual(supplied, expected)) {
+    throw new PeopleExtractionValidationError([
+      'compact chunk packet does not exactly match the current chapter, ownership range, and context',
+    ]);
+  }
+  return buildPeopleChunkPacket(packet, chunk);
 }
 
 function validateFile(file, opts) {
@@ -439,7 +470,7 @@ function selfTest() {
     input,
     units: [{ ...locator, zh: '艾麗絲來。', en: 'Alice came.', literal: 'Alice came.' }],
     preflight: {
-      scannerVersion: 1,
+      scannerVersion: 2,
       candidates: [
         { id: 'testbook:001:cand_1111111111111111', unit: 's0001', language: 'zh', exact: '艾麗絲', occurrence: 0, startCodePoint: 0, endCodePoint: 3, detectors: [{ kind: 'fixture' }] },
         { id: 'testbook:001:cand_2222222222222222', unit: 's0001', language: 'en', exact: 'Alice', occurrence: 0, startCodePoint: 0, endCodePoint: 5, detectors: [{ kind: 'fixture' }] },

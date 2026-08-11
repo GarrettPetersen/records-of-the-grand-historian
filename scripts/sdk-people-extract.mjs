@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
+  buildPeopleChunkWorkerPacket,
   buildPeopleExtractionPacket,
   buildPeopleWorkerPacket,
 } from './build-people-extraction-packet.mjs';
@@ -29,6 +30,11 @@ import {
   serializeCompactPeopleExtraction,
 } from './lib/people-compact.mjs';
 import {
+  assembleCompactPeopleChunks,
+  buildPeopleChunkPacket,
+  planPeopleExtractionChunks,
+} from './lib/people-extraction-chunks.mjs';
+import {
   validateCompactPeopleExtraction,
   validatePeopleExtraction,
 } from './validate-people-extraction.mjs';
@@ -43,6 +49,8 @@ const DEFAULT_PLAN_FILE = path.join(PEOPLE_DIR, 'generated', 'extraction-plan.js
 const DEFAULT_MAX_UNITS = 250;
 const DEFAULT_MAX_CANDIDATES = 600;
 const DEFAULT_MAX_COST_CENTS = 1000;
+const DEFAULT_CHUNK_CONTEXT_UNITS = 6;
+const DEFAULT_AGENT_OVERHEAD_SCORE = 100_000;
 const PEOPLE_CONFIG = readJson(path.join(PEOPLE_DIR, 'config.json'));
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
@@ -61,7 +69,10 @@ Options:
   --order ORDER        Queue order: smallest or book (default: smallest).
   --max-units N        Bulk chapter ceiling (default: ${DEFAULT_MAX_UNITS}).
   --max-candidates N   Bulk candidate ceiling (default: ${DEFAULT_MAX_CANDIDATES}).
-  --allow-large        Bypass chapter-size ceilings after explicit review.
+  --allow-large        Send oversized chapters through one whole-chapter worker.
+  --defer-large        Leave oversized chapters in the plan instead of chunking them.
+  --chunk-context-units N
+                       Read-only neighboring units per chunk side (default: ${DEFAULT_CHUNK_CONTEXT_UNITS}).
   --max-cost DOLLARS   Stop launching agents after this run reaches the charged
                        amount (default: $${(DEFAULT_MAX_COST_CENTS / 100).toFixed(2)}; use unlimited to disable).
   --plan-out PATH      Write the measured queue plan (default: generated data).
@@ -108,6 +119,8 @@ function parseArgs(argv) {
     maxUnits: DEFAULT_MAX_UNITS,
     maxCandidates: DEFAULT_MAX_CANDIDATES,
     allowLarge: false,
+    deferLarge: false,
+    chunkContextUnits: DEFAULT_CHUNK_CONTEXT_UNITS,
     maxCostCents: DEFAULT_MAX_COST_CENTS,
     planOut: DEFAULT_PLAN_FILE,
     maxAttempts: 3,
@@ -139,6 +152,12 @@ function parseArgs(argv) {
     else if (arg === '--max-units') opts.maxUnits = positiveInteger(next(), arg);
     else if (arg === '--max-candidates') opts.maxCandidates = positiveInteger(next(), arg);
     else if (arg === '--allow-large') opts.allowLarge = true;
+    else if (arg === '--defer-large') opts.deferLarge = true;
+    else if (arg === '--chunk-context-units') {
+      const value = next();
+      if (!/^\d+$/u.test(value)) throw new Error(`${arg} must be a nonnegative integer`);
+      opts.chunkContextUnits = Number(value);
+    }
     else if (arg === '--max-cost') opts.maxCostCents = dollarCents(next(), arg);
     else if (arg === '--plan-out') opts.planOut = path.resolve(REPO_ROOT, next());
     else if (arg === '--max-attempts') opts.maxAttempts = positiveInteger(next(), arg, 5);
@@ -163,6 +182,7 @@ function parseArgs(argv) {
   if (opts.chapter && !opts.book) throw new Error('--chapter requires --book');
   if (!opts.book && !opts.all) throw new Error('Specify --book or explicitly pass --all');
   if (opts.all && (opts.book || opts.chapter)) throw new Error('--all cannot be combined with --book or --chapter');
+  if (opts.allowLarge && opts.deferLarge) throw new Error('--allow-large cannot be combined with --defer-large');
   if (opts.stream && opts.concurrency !== 1) throw new Error('--stream requires --concurrency 1');
   return opts;
 }
@@ -221,21 +241,31 @@ function targetMetrics(packet) {
   };
 }
 
+function withDispatchMetrics(target, workerCount = 1) {
+  return {
+    ...target,
+    metrics: {
+      ...target.metrics,
+      workerCount,
+      dispatchScore: target.metrics.workloadScore + workerCount * DEFAULT_AGENT_OVERHEAD_SCORE,
+    },
+  };
+}
+
 function compareBookOrder(left, right) {
   return left.book.localeCompare(right.book) || left.chapter.localeCompare(right.chapter);
 }
 
 function compareWorkload(left, right) {
-  return left.metrics.workloadScore - right.metrics.workloadScore ||
+  return (left.metrics.dispatchScore ?? left.metrics.workloadScore) -
+      (right.metrics.dispatchScore ?? right.metrics.workloadScore) ||
     left.metrics.candidates - right.metrics.candidates ||
     left.metrics.units - right.metrics.units ||
     compareBookOrder(left, right);
 }
 
 function exceedsBulkCeiling(target, opts) {
-  return !opts.allowLarge && (
-    target.metrics.units > opts.maxUnits || target.metrics.candidates > opts.maxCandidates
-  );
+  return target.metrics.units > opts.maxUnits || target.metrics.candidates > opts.maxCandidates;
 }
 
 function planTarget(target) {
@@ -243,16 +273,24 @@ function planTarget(target) {
     book: target.book,
     chapter: target.chapter,
     ...target.metrics,
+    ...(target.chunkCount ? { chunkCount: target.chunkCount } : {}),
   };
 }
 
 function recoverInterruptedState(state) {
   let changed = false;
   for (const entry of Object.values(state.chapters)) {
-    if (!['claimed', 'extracting', 'failed/retryable'].includes(entry.status)) continue;
-    entry.status = 'interrupted';
-    entry.updatedAt = new Date().toISOString();
-    changed = true;
+    if (['claimed', 'extracting', 'failed/retryable'].includes(entry.status)) {
+      entry.status = 'interrupted';
+      entry.updatedAt = new Date().toISOString();
+      changed = true;
+    }
+    for (const chunk of Object.values(entry.chunks ?? {})) {
+      if (!['claimed', 'extracting', 'failed/retryable'].includes(chunk.status)) continue;
+      chunk.status = 'interrupted';
+      chunk.updatedAt = new Date().toISOString();
+      changed = true;
+    }
   }
   if (changed) saveState(state);
 }
@@ -280,10 +318,19 @@ function prepareTargetQueue(rawTargets, opts, state, matcher) {
       stateChanged = true;
     } else if (!opts.retryFailed && state.chapters[stateKey(target)]?.status === 'failed') {
       failed.push(measured);
-    } else if (exceedsBulkCeiling(measured, opts)) {
-      oversized.push(measured);
+    } else if (exceedsBulkCeiling(measured, opts) && !opts.allowLarge) {
+      if (opts.deferLarge) {
+        oversized.push(measured);
+      } else {
+        const chunks = planPeopleExtractionChunks(packet, {
+          maxUnits: opts.maxUnits,
+          maxCandidates: opts.maxCandidates,
+          contextUnits: opts.chunkContextUnits,
+        });
+        eligible.push({ ...withDispatchMetrics(measured, chunks.length), chunkCount: chunks.length });
+      }
     } else {
-      eligible.push(measured);
+      eligible.push(withDispatchMetrics(measured));
     }
     if (rawTargets.length >= 200 && ((index + 1) % 100 === 0 || index + 1 === rawTargets.length)) {
       console.log(`Measured ${index + 1}/${rawTargets.length} chapters for queue planning`);
@@ -302,12 +349,15 @@ function prepareTargetQueue(rawTargets, opts, state, matcher) {
       order: opts.order,
       maxUnits: opts.allowLarge ? null : opts.maxUnits,
       maxCandidates: opts.allowLarge ? null : opts.maxCandidates,
+      largeChapterMode: opts.allowLarge ? 'whole' : opts.deferLarge ? 'defer' : 'chunk',
+      chunkContextUnits: opts.chunkContextUnits,
       maxCostCents: opts.maxCostCents,
       concurrency: opts.concurrency,
     },
     counts: {
       measured: rawTargets.length,
       selected: selected.length,
+      selectedChunked: selected.filter((target) => target.chunkCount).length,
       waitingAfterLimit: waiting.length,
       deferredOversized: oversized.length,
       alreadyCurrent: current.length,
@@ -321,12 +371,13 @@ function prepareTargetQueue(rawTargets, opts, state, matcher) {
   };
   writeJsonAtomic(opts.planOut, plan);
 
-  if (opts.chapter && oversized.length > 0) {
+  if (opts.chapter && opts.deferLarge && oversized.length > 0) {
     const item = oversized[0];
     throw new Error(
       `${item.book}/${item.chapter} has ${item.metrics.units} units and ` +
       `${item.metrics.candidates} candidates, above the bulk ceilings of ` +
-      `${opts.maxUnits}/${opts.maxCandidates}; inspect the plan and pass --allow-large explicitly`,
+      `${opts.maxUnits}/${opts.maxCandidates}; remove --defer-large to use deterministic chunks ` +
+      'or pass --allow-large explicitly',
     );
   }
   return { selected, waiting, oversized, current, failed, plan };
@@ -350,6 +401,24 @@ function updateState(state, target, patch) {
   state.chapters[key] = {
     ...(state.chapters[key] ?? { attempts: 0 }),
     ...patch,
+    updatedAt: new Date().toISOString(),
+  };
+  saveState(state);
+}
+
+function updateChunkState(state, target, chunk, patch) {
+  const key = stateKey(target);
+  const current = state.chapters[key] ?? { attempts: 0 };
+  state.chapters[key] = {
+    ...current,
+    chunks: {
+      ...(current.chunks ?? {}),
+      [chunk.id]: {
+        ...(current.chunks?.[chunk.id] ?? { attempts: 0 }),
+        ...patch,
+        updatedAt: new Date().toISOString(),
+      },
+    },
     updatedAt: new Date().toISOString(),
   };
   saveState(state);
@@ -476,8 +545,25 @@ function packetArtifactPath(target) {
   return path.posix.join('data', 'people', 'generated', 'cloud', target.book, `${target.chapter}.packet.json`);
 }
 
-function publishArtifactCommand(target) {
-  const output = artifactPath(target);
+function chunkArtifactPath(target, chunk) {
+  return path.posix.join(
+    'data', 'people', 'generated', 'cloud', target.book, target.chapter, `chunk-${chunk.id}.json`,
+  );
+}
+
+function chunkPacketArtifactPath(target, chunk) {
+  return path.posix.join(
+    'data', 'people', 'generated', 'cloud', target.book, target.chapter, `chunk-${chunk.id}.packet.json`,
+  );
+}
+
+function chunkArchivePath(target, chunk) {
+  return path.join(
+    PEOPLE_DIR, 'generated', 'chunk-extractions', target.book, target.chapter, `${chunk.id}.json`,
+  );
+}
+
+function publishArtifactCommand(output) {
   const artifact = path.posix.join('/opt/cursor/artifacts', output);
   return `mkdir -p ${path.posix.dirname(artifact)} && cp ${output} ${artifact}`;
 }
@@ -500,7 +586,7 @@ use validation diagnostics only when a correction is necessary.
 4. Process every content unit and replace the seed with the complete extraction at ${output}.
 5. Run node scripts/validate-people-extraction.mjs ${output} --packet ${packet} --normalize.
 6. Publish the validated JSON for the host by running:
-   ${publishArtifactCommand(target)}
+   ${publishArtifactCommand(output)}
 
 Do not edit a source chapter. Do not run git commit, git push, gh, or open a pull request. The only tracked file you may modify is ${output}. Finish the complete chapter in this run.`;
 }
@@ -514,7 +600,59 @@ node scripts/validate-people-extraction.mjs ${output} --packet ${packet} --norma
 Do not commit, push, open a PR, or edit the source chapter.
 
 After validation succeeds, refresh the host artifact by running:
-${publishArtifactCommand(target)}
+${publishArtifactCommand(output)}
+
+VALIDATION ERRORS:
+${errors.slice(0, 400).map((error) => `- ${error}`).join('\n')}`;
+}
+
+function chunkBuildArgs(target, chunk, opts, packet, output) {
+  return [
+    `--book ${target.book}`,
+    `--chapter ${target.chapter}`,
+    `--chunk-index ${chunk.index + 1}`,
+    `--chunk-max-units ${opts.maxUnits}`,
+    `--chunk-max-candidates ${opts.maxCandidates}`,
+    `--chunk-context-units ${opts.chunkContextUnits}`,
+    `--out ${packet}`,
+    `--seed-out ${output}`,
+    `--model ${opts.model}`,
+    '--compact-worker',
+  ].join(' ');
+}
+
+function chunkInitialPrompt(target, chunk, opts) {
+  const output = chunkArtifactPath(target, chunk);
+  const packet = chunkPacketArtifactPath(target, chunk);
+  return `Perform person extraction and the final editorial audit for owned chunk ${chunk.id}/${String(chunk.count).padStart(3, '0')} of ${target.book}/${target.chapter}.
+
+Efficiency boundary: read only prompt-people-extraction-compact.txt, the assigned packet,
+data/people/schema/compact-extraction.schema.json, and the assigned seed. The packet's
+readOnlyContext is context only; output facts and repairs solely for owned units.
+
+1. Read prompt-people-extraction-compact.txt completely.
+2. Run:
+   node scripts/build-people-extraction-packet.mjs ${chunkBuildArgs(target, chunk, opts, packet, output)}
+3. Read ${packet}, data/people/schema/compact-extraction.schema.json, and ${output}.
+4. Process every owned unit and replace the seed with the complete chunk extraction at ${output}.
+5. Run node scripts/validate-people-extraction.mjs ${output} --packet ${packet} --normalize.
+6. Publish the validated JSON for the host by running:
+   ${publishArtifactCommand(output)}
+
+Do not emit annotations for read-only context. Do not edit a source chapter. Do not run
+git commit, git push, gh, or open a pull request. The only file you may modify is ${output}.`;
+}
+
+function chunkRetryPrompt(target, chunk, errors) {
+  const output = chunkArtifactPath(target, chunk);
+  const packet = chunkPacketArtifactPath(target, chunk);
+  return `The host rejected owned chunk ${chunk.id} of ${target.book}/${target.chapter}. Preserve correct work, fix every validation error below, audit all owned units again, and rerun:
+node scripts/validate-people-extraction.mjs ${output} --packet ${packet} --normalize
+
+Do not emit annotations for read-only context. Do not commit, push, open a PR, or edit the source chapter.
+
+After validation succeeds, refresh the host artifact by running:
+${publishArtifactCommand(output)}
 
 VALIDATION ERRORS:
 ${errors.slice(0, 400).map((error) => `- ${error}`).join('\n')}`;
@@ -554,8 +692,7 @@ async function runAgentTurn(agent, prompt, target, opts, phase, control) {
   }
 }
 
-async function downloadExtraction(agent, target) {
-  const wanted = artifactPath(target);
+async function downloadExtraction(agent, wanted) {
   const artifacts = await agent.listArtifacts();
   const artifact = artifacts.find((item) => item.path === wanted || item.path.endsWith(`/${wanted}`));
   if (!artifact) {
@@ -593,33 +730,185 @@ function validateDownloadedExtraction(extraction, packet) {
     : validatePeopleExtraction(extraction, packet);
 }
 
-async function obtainValidInitialExtraction(agent, target, packet, opts, state, control) {
+async function obtainValidInitialExtraction(agent, target, packet, opts, state, control, chunk = null) {
   let errors = [];
   for (let attempt = 1; attempt <= opts.maxAttempts; attempt += 1) {
     if (control.cancelRequested) {
       throw Object.assign(new Error('Extraction cancelled during shutdown'), { errors });
     }
-    const priorAttempts = state.chapters[stateKey(target)]?.attempts ?? 0;
-    updateState(state, target, { status: 'extracting', attempts: priorAttempts + 1, phaseAttempt: attempt });
-    const prompt = attempt === 1 ? initialPrompt(target, opts) : retryPrompt(target, errors);
+    const currentState = chunk
+      ? state.chapters[stateKey(target)]?.chunks?.[chunk.id]
+      : state.chapters[stateKey(target)];
+    const priorAttempts = currentState?.attempts ?? 0;
+    const patch = { status: 'extracting', attempts: priorAttempts + 1, phaseAttempt: attempt };
+    if (chunk) updateChunkState(state, target, chunk, patch);
+    else updateState(state, target, patch);
+    const prompt = attempt === 1
+      ? chunk ? chunkInitialPrompt(target, chunk, opts) : initialPrompt(target, opts)
+      : chunk ? chunkRetryPrompt(target, chunk, errors) : retryPrompt(target, errors);
+    const phase = chunk ? `chunk-${chunk.id}` : 'extraction';
+    const wanted = chunk ? chunkArtifactPath(target, chunk) : artifactPath(target);
     let result;
     try {
-      result = await runAgentTurn(agent, prompt, target, opts, 'extraction', control);
-      const downloaded = withRunMetadata(await downloadExtraction(agent, target), opts, agent, result);
+      result = await runAgentTurn(agent, prompt, target, opts, phase, control);
+      const downloaded = withRunMetadata(await downloadExtraction(agent, wanted), opts, agent, result);
       const validated = validateDownloadedExtraction(downloaded, packet);
       return { extraction: validated.normalized, result, stats: validated.stats };
     } catch (error) {
       errors = validationErrors(error);
-      updateState(state, target, {
+      const failure = {
         status: control.cancelRequested ? 'interrupted' : 'failed/retryable',
         lastErrors: errors,
-      });
-      console.error(`[${stateKey(target)}] extraction attempt ${attempt} failed with ${errors.length} error(s)`);
+      };
+      if (chunk) updateChunkState(state, target, chunk, failure);
+      else updateState(state, target, failure);
+      console.error(
+        `[${stateKey(target)}${chunk ? `/chunk-${chunk.id}` : ''}] ` +
+        `attempt ${attempt} failed with ${errors.length} error(s)`,
+      );
       if (control.cancelRequested) break;
       if (error instanceof CursorAgentError && !error.isRetryable) break;
     }
   }
-  throw Object.assign(new Error(`Initial extraction failed after ${opts.maxAttempts} attempt(s)`), { errors });
+  throw Object.assign(new Error(
+    `${chunk ? `Chunk ${chunk.id}` : 'Initial extraction'} failed after ${opts.maxAttempts} attempt(s)`,
+  ), { errors });
+}
+
+async function recordAgentUsage(agent, target, budget, state, chunk = null) {
+  if (!agent) return;
+  try {
+    const usage = await agent.getUsage();
+    if (chunk) updateChunkState(state, target, chunk, { usage });
+    else updateState(state, target, { usage });
+    budget.chargedCents += usage.cost?.chargedCents ?? 0;
+    const dollars = usage.cost ? `; charged=$${(usage.cost.chargedCents / 100).toFixed(2)}` : '';
+    console.log(
+      `[${stateKey(target)}${chunk ? `/chunk-${chunk.id}` : ''}] Cursor usage: ` +
+      `${usage.usage.totalTokens.toLocaleString('en-US')} tokens${dollars}`,
+    );
+  } catch (error) {
+    console.warn(
+      `[${stateKey(target)}${chunk ? `/chunk-${chunk.id}` : ''}] could not read Cursor usage: ` +
+      `${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+}
+
+function chunkRunRecord(chunk, extraction) {
+  return {
+    chunkId: chunk.id,
+    startOrder: chunk.start,
+    endOrderExclusive: chunk.end,
+    model: extraction.run.model,
+    agentId: extraction.run.agentId ?? null,
+    runId: extraction.run.runId ?? null,
+    completedAt: extraction.run.completedAt ?? null,
+  };
+}
+
+async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, budget) {
+  const packet = buildPeopleChunkPacket(fullPacket, chunk);
+  const archive = chunkArchivePath(target, chunk);
+  if (fs.existsSync(archive)) {
+    try {
+      const extraction = readJson(archive);
+      validateCompactPeopleExtraction(extraction, packet);
+      updateChunkState(state, target, chunk, { status: 'accepted', cached: true, lastErrors: [] });
+      console.log(`[${stateKey(target)}/chunk-${chunk.id}] reused validated local artifact`);
+      return { chunk, extraction };
+    } catch (error) {
+      console.warn(`[${stateKey(target)}/chunk-${chunk.id}] stale local artifact ignored: ${validationErrors(error)[0]}`);
+    }
+  }
+  if (control.stopRequested) throw new Error('Shutdown requested before chunk launch');
+  if (opts.maxCostCents !== null && budget.chargedCents >= opts.maxCostCents) {
+    control.stopRequested = true;
+    control.stopReason = 'cost-ceiling';
+    throw new Error('Run cost ceiling reached before chunk launch');
+  }
+
+  let agent;
+  try {
+    agent = await Agent.create({
+      apiKey: opts.apiKey,
+      name: `People extraction ${stateKey(target)} chunk ${chunk.id}`,
+      model: modelSelection(opts),
+      cloud: {
+        repos: [{ url: opts.repoUrl, startingRef: opts.startingRef }],
+        workOnCurrentBranch: true,
+        autoCreatePR: false,
+        skipReviewerRequest: true,
+      },
+    });
+    updateChunkState(state, target, chunk, { status: 'claimed', agentId: agent.agentId });
+    const accepted = await obtainValidInitialExtraction(
+      agent, target, packet, opts, state, control, chunk,
+    );
+    const compact = compactPeopleExtraction(accepted.extraction, packet);
+    validateCompactPeopleExtraction(compact, packet);
+    writeTextAtomic(archive, serializeCompactPeopleExtraction(compact));
+    updateChunkState(state, target, chunk, {
+      status: 'accepted',
+      runId: accepted.result.id,
+      cached: false,
+      repairs: accepted.stats.repairs,
+      lastErrors: [],
+    });
+    console.log(
+      `[${stateKey(target)}/chunk-${chunk.id}] accepted: ${accepted.stats.people} people, ` +
+      `${accepted.stats.mentions} mentions, ${accepted.stats.claims} claims, ` +
+      `${accepted.stats.repairs} repair proposal(s)`,
+    );
+    return { chunk, extraction: compact };
+  } finally {
+    await recordAgentUsage(agent, target, budget, state, chunk);
+    await closeAgent(agent);
+  }
+}
+
+async function processChunkedTarget(target, packet, opts, state, control, budget) {
+  const key = stateKey(target);
+  const chunks = planPeopleExtractionChunks(packet, {
+    maxUnits: opts.maxUnits,
+    maxCandidates: opts.maxCandidates,
+    contextUnits: opts.chunkContextUnits,
+  });
+  updateState(state, target, {
+    status: 'extracting',
+    chapterFingerprint: packet.input.chapterFingerprint,
+    chunkCount: chunks.length,
+  });
+  console.log(`[${key}] chunked extraction: ${chunks.length} disjoint ownership range(s)`);
+  const parts = [];
+  for (const chunk of chunks) {
+    if (control.stopRequested) throw new Error(`Stopped after ${parts.length}/${chunks.length} chunks`);
+    parts.push(await obtainChunkPart(target, packet, chunk, opts, state, control, budget));
+  }
+  const run = {
+    model: `${opts.model}-chunked`,
+    promptVersion: PEOPLE_CONFIG.promptVersion,
+    agentId: null,
+    runId: null,
+    completedAt: new Date().toISOString(),
+    chunks: parts.map(({ chunk, extraction }) => chunkRunRecord(chunk, extraction)),
+  };
+  const compact = assembleCompactPeopleChunks(packet, parts, run);
+  const validated = validateCompactPeopleExtraction(compact, packet);
+  writeTextAtomic(extractionPath(target.book, target.chapter), serializeCompactPeopleExtraction(compact));
+  updateState(state, target, {
+    status: 'accepted',
+    acceptedPath: path.relative(REPO_ROOT, extractionPath(target.book, target.chapter)),
+    repairs: validated.stats.repairs,
+    repairsPendingReview: validated.normalized.translationRepairs.length,
+    lastErrors: [],
+  });
+  console.log(
+    `[${key}] assembled ${chunks.length} chunks: ${validated.stats.people} local people, ` +
+    `${validated.stats.mentions} mentions, ${validated.stats.claims} claims, ` +
+    `${validated.stats.repairs} repair proposal(s)`,
+  );
+  return { status: 'accepted', stats: validated.stats };
 }
 
 async function processTarget(target, opts, state, control, budget) {
@@ -637,12 +926,28 @@ async function processTarget(target, opts, state, control, budget) {
     return { status: 'skipped-failed' };
   }
   if (opts.dryRun) {
-    console.log(`[dry-run ${key}] ${packet.units.length} units, ${packet.preflight.candidates.length} candidates`);
+    const chunkLabel = target.chunkCount ? `, ${target.chunkCount} planned chunks` : '';
+    console.log(
+      `[dry-run ${key}] ${packet.units.length} units, ` +
+      `${packet.preflight.candidates.length} candidates${chunkLabel}`,
+    );
     return { status: 'dry-run' };
   }
 
   assertCloudSourceMatches(target, packet, opts, opts.properNounMatcher);
   updateState(state, target, { status: 'claimed', chapterFingerprint: packet.input.chapterFingerprint });
+
+  if (exceedsBulkCeiling({ metrics: targetMetrics(packet) }, opts) && !opts.allowLarge) {
+    try {
+      return await processChunkedTarget(target, packet, opts, state, control, budget);
+    } catch (error) {
+      const errors = validationErrors(error);
+      const status = control.stopRequested ? 'interrupted' : 'failed';
+      updateState(state, target, { status, lastErrors: errors });
+      console.error(`[${key}] chunked ${status}: ${errors[0]}`);
+      return { status, errors };
+    }
+  }
 
   let agent;
   try {
@@ -696,21 +1001,7 @@ async function processTarget(target, opts, state, control, budget) {
     console.error(`[${key}] ${status}: ${errors[0]}`);
     return { status, errors };
   } finally {
-    if (agent) {
-      try {
-        const usage = await agent.getUsage();
-        updateState(state, target, { usage });
-        budget.chargedCents += usage.cost?.chargedCents ?? 0;
-        const dollars = usage.cost ? `; charged=$${(usage.cost.chargedCents / 100).toFixed(2)}` : '';
-        console.log(
-          `[${key}] Cursor usage: ${usage.usage.totalTokens.toLocaleString('en-US')} tokens${dollars}`,
-        );
-      } catch (error) {
-        console.warn(
-          `[${key}] could not read Cursor usage: ${error instanceof Error ? error.message : String(error)}`,
-        );
-      }
-    }
+    await recordAgentUsage(agent, target, budget, state);
     await closeAgent(agent);
   }
 }
@@ -725,6 +1016,14 @@ function selfTest() {
   const opts = { allowLarge: false, maxUnits: 250, maxCandidates: 600 };
   if ([large, small].sort(compareWorkload)[0] !== small) {
     throw new Error('Workload ordering did not put the smaller chapter first');
+  }
+  const oneWorker = withDispatchMetrics(small, 1);
+  const fourWorkers = withDispatchMetrics({
+    ...small,
+    metrics: { ...small.metrics, workloadScore: 1 },
+  }, 4);
+  if ([fourWorkers, oneWorker].sort(compareWorkload)[0] !== oneWorker) {
+    throw new Error('Dispatch ordering did not account for per-agent overhead');
   }
   if (exceedsBulkCeiling(small, opts) || !exceedsBulkCeiling(large, opts)) {
     throw new Error('Bulk size ceilings did not classify fixture chapters');
@@ -752,7 +1051,8 @@ async function main() {
   for (const target of targets.slice(0, 20)) {
     console.log(
       `  ${stateKey(target)}: ${target.metrics.units} units, ${target.metrics.candidates} candidates, ` +
-      `${(target.metrics.workerBytes / 1024).toFixed(1)} KiB worker packet`,
+      `${(target.metrics.workerBytes / 1024).toFixed(1)} KiB worker packet` +
+      `${target.chunkCount ? `, ${target.chunkCount} chunks` : ''}`,
     );
   }
   if (targets.length > 20) console.log(`  ... ${targets.length - 20} more selected chapter(s)`);

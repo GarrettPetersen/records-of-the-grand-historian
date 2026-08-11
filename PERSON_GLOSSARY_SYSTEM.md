@@ -59,13 +59,21 @@ not reused because it has substantially diverged from current `master`.
 
 Bulk extraction is size-aware. The host measures every candidate chapter before
 applying `--limit`, ranks by compact worker-packet workload, and records the full
-decision in `data/people/generated/extraction-plan.json`. The default lane admits
-at most 250 content units and 600 preflight candidates per chapter. Larger
-chapters remain explicitly listed as deferred; they are not treated as complete
-or silently skipped. `--allow-large` is required to send one through the whole-
-chapter lane after inspection. A $10 per-invocation charged-cost ceiling stops
-new launches while active agents drain. The first Ctrl-C also drains; a second
-Ctrl-C cancels active SDK runs.
+decision in `data/people/generated/extraction-plan.json`. Ranking includes a
+per-agent overhead term so a four-chunk chapter does not jump ahead merely
+because its serialized text is terse. The whole-chapter lane
+admits at most 250 content units and 600 preflight candidates. Larger chapters
+are divided into deterministic contiguous ownership ranges, with six read-only
+neighboring units on either side for continuity. Chunk workers emit annotations
+only for owned units. The host validates every chunk, caches it for interruption
+recovery, rebases its local IDs, and assembles one sidecar that must pass the
+ordinary full-chapter validator. Repeated people across chunk boundaries remain
+separate local records for conservative identity resolution later; no second
+read of the source chapter is required. `--defer-large` records large chapters
+without launching them, while `--allow-large` explicitly uses one whole-chapter
+worker. A $10 per-invocation charged-cost ceiling stops new launches while
+active agents drain. The first Ctrl-C also drains; a second Ctrl-C cancels active
+SDK runs.
 
 Useful commands:
 
@@ -73,6 +81,7 @@ Useful commands:
 npm run people:packet -- --book songshu --chapter 069 --summary
 npm run people:extract -- --book songshu --chapter 069 --dry-run
 npm run people:extract -- --book songshu --chapter 069
+npm run people:extract -- --book hanshu --chapter 020 --dry-run
 npm run people:extract -- --book hanshu --limit 8 --concurrency 2 --max-cost 10
 npm run people:editorial-review -- --book songshu --chapter 069 --dry-run
 npm run people:editorial-review -- --book songshu --chapter 069
