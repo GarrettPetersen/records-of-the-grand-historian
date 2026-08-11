@@ -3,8 +3,15 @@ import {
   setTranslationField,
 } from './people-content.mjs';
 
-const ENGLISH_FUNCTION_WORD_CANDIDATES = new Set(['Though', 'Under']);
+const ENGLISH_SENTENCE_INITIAL_NON_NAMES = new Set(['All', 'Customs', 'Though', 'Under']);
 const ENGLISH_FUNCTION_PHRASE_RE = /^(?:Even I|Though (?:He|I|It|She|That|These|They|This|Those|We))\b/u;
+const ENGLISH_NAMED_NON_PERSON_TERMS = new Set([
+  'Three Amnesties',
+  'Three Inquiries',
+  'Three Pardons',
+  'Six Arts',
+]);
+const ENGLISH_NAMED_OFFICE_TERMS = new Set(['Nobility Ranks']);
 
 function locatorKey(locator) {
   return `${locator.id}:${locator.blockIndex}:${locator.collection}:${locator.itemIndex}`;
@@ -45,6 +52,10 @@ function aliasesForPerson(extraction, personId, language, unitId) {
     mention.person === personId && mention.unit.id === unitId
   );
   if (hasUnitContext) add(person?.preferredNameSuggestion?.[language], 'personal-name', true);
+  for (const mention of extraction.mentions) {
+    if (mention.person !== personId || mention.unit.id !== unitId) continue;
+    for (const span of mention.spans[language]) add(span.exact, mention.kind);
+  }
   for (const claim of extraction.claims) {
     if (claim.subject !== personId || claim.predicate !== 'name' || !claimEvidenceUnit(claim, unitId)) continue;
     add(claim.value?.[language], mentionKindForNameKind(claim.value?.kind));
@@ -71,6 +82,23 @@ function wordSet(value) {
 function sharedWordCount(left, right) {
   const rightWords = wordSet(right);
   return [...wordSet(left)].filter((word) => rightWords.has(word)).length;
+}
+
+function nestedStringValues(value) {
+  if (typeof value === 'string') return [value];
+  if (Array.isArray(value)) return value.flatMap(nestedStringValues);
+  if (value && typeof value === 'object') return Object.values(value).flatMap(nestedStringValues);
+  return [];
+}
+
+function candidateMatchesClaimValue(extraction, candidate, predicate) {
+  return extraction.claims.some((claim) =>
+    claim.predicate === predicate &&
+    claimEvidenceUnit(claim, candidate.unit) &&
+    nestedStringValues(claim.value).some((value) =>
+      surfaceContains(value.toLocaleLowerCase('en-US'), candidate.exact.toLocaleLowerCase('en-US'), 'en')
+    )
+  );
 }
 
 function isWordCharacter(value) {
@@ -467,9 +495,56 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       accounted.add(candidate.id);
       continue;
     }
+    if (candidate.language === 'en' && ENGLISH_NAMED_NON_PERSON_TERMS.has(candidate.exact)) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'other',
+        note: 'Named legal procedure, not a person.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (candidate.language === 'en' && ENGLISH_NAMED_OFFICE_TERMS.has(candidate.exact)) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'office',
+        note: 'Office-title component, not a person.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
     if (
       candidate.language === 'en' &&
-      (ENGLISH_FUNCTION_WORD_CANDIDATES.has(candidate.exact) ||
+      candidateMatchesClaimValue(reconciled, candidate, 'office')
+    ) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'office',
+        note: 'Component of an office recorded in this unit, not a person name.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (
+      candidate.language === 'en' &&
+      (candidate.exact === 'Feng' || candidate.exact === 'Shan') &&
+      /\bFeng and Shan (?:rites|sacrifices)\b/u.test(unitById.get(candidate.unit).en)
+    ) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'other',
+        note: 'Part of the Feng and Shan sacrifice name, not a person.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (
+      candidate.language === 'en' &&
+      (ENGLISH_SENTENCE_INITIAL_NON_NAMES.has(candidate.exact) ||
         ENGLISH_FUNCTION_PHRASE_RE.test(candidate.exact)) &&
       candidate.detectors.every((detector) => detector.kind === 'english-capitalized-expression')
     ) {
@@ -477,7 +552,7 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         candidate: candidate.id,
         disposition: 'not-person',
         reason: 'not-a-name',
-        note: 'Sentence-initial English function word.',
+        note: 'Sentence-initial English word.',
       });
       accounted.add(candidate.id);
       continue;

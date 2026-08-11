@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "hanshu",
+  "chapter": "082",
+  "input": {
+    "chapterFingerprint": "sha256:2bd5a40635cf567cb2bff1b243fe5cbe1a69bb9de57ab8532c47c97df317ecec",
+    "proposalsFingerprint": "sha256:a4cd71eeb47fbcaf63483a2bf147b3151b075ad1a2404910b64e0b71b67ab4a3"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex review of Grok 4.5 draft",
+    "model": null,
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-11T07:35:05.000Z"
+  },
+  "proposals": [
+    {
+      "id": "hanshu:082:r0001",
+      "unit": {
+        "id": "s0212",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Some years later he was promoted to superintendent of waterways and parks, leapfrogging the commandant of justice.",
+      "after": "Some years later he was promoted to superintendent of waterways and parks and was exceptionally appointed commandant of justice.",
+      "reason": "The Chinese 超過廷尉 denotes exceptional advancement to the office of commandant of justice; the following text confirms that he served eighteen years in that office.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:082:r0002",
+      "unit": {
+        "id": "s0212",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "Some years later he was promoted superintendent of waterways and parks, passing over the commandant of justice.",
+      "after": "Some years later he was promoted to superintendent of waterways and parks and was exceptionally appointed commandant of justice.",
+      "reason": "The Chinese 超過廷尉 denotes exceptional advancement to the office of commandant of justice, not bypassing that office.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "hanshu:082:r0001",
+      "decision": "revise",
+      "after": "Several years later, he was promoted to Superintendent of Waterways and Parks, then advanced exceptionally to Commandant of Justice.",
+      "reason": "數年，遷水衡都尉，超過廷尉 pairs exceptional advancement (超, as in the preceding 超遷) with appointment as 廷尉, not skipping that office; later 為廷尉十八歲 and 于定國為廷尉 confirm he held it. The original “leapfrogging” invents a bypass.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0212",
+        "excerpt": "超過廷尉"
+      }
+    },
+    {
+      "repairId": "hanshu:082:r0002",
+      "decision": "revise",
+      "after": "Several years later, he was promoted to Superintendent of Waterways and Parks, then advanced exceptionally to Commandant of Justice.",
+      "reason": "超過廷尉 means he was exceptionally advanced to commandant of justice; “passing over” reverses the sense. The repair matches the Chinese offices and the exceptional-promotion idiom.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0212",
+        "excerpt": "遷水衡都尉，超過廷尉"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}
