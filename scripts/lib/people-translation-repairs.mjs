@@ -35,6 +35,9 @@ const ENGLISH_NAMED_PLACE_TERMS = new Set([
   'Hengcheng Gate',
   'Yong',
 ]);
+const ENGLISH_NAMED_POLITY_TERMS = new Set([
+  'Eastern Yue',
+]);
 const ENGLISH_NAMED_OFFICE_TERMS = new Set([
   'Gou Shield',
   'Grandee',
@@ -354,6 +357,30 @@ function normalizeMentionSpans(mention, unit, staleSpans) {
   return normalized;
 }
 
+function removeRedundantSamePersonSpans(mentions) {
+  for (const language of ['zh', 'en']) {
+    const located = mentions.flatMap((mention) => mention.spans[language].map((span) => ({
+      mention,
+      span,
+      length: span.endCodePoint - span.startCodePoint,
+    })));
+    for (const current of located) {
+      const covering = located.find((other) =>
+        other !== current &&
+        other.mention.person === current.mention.person &&
+        other.mention.unit.id === current.mention.unit.id &&
+        other.span.startCodePoint <= current.span.startCodePoint &&
+        other.span.endCodePoint >= current.span.endCodePoint &&
+        (other.length > current.length ||
+          (other.length === current.length && other.mention.id < current.mention.id))
+      );
+      if (!covering) continue;
+      current.mention.spans[language] = current.mention.spans[language]
+        .filter((span) => span !== current.span);
+    }
+  }
+}
+
 function candidateInsideMention(candidate, mention) {
   return mention.unit.id === candidate.unit && mention.spans[candidate.language].some((span) =>
     span.startCodePoint <= candidate.startCodePoint && span.endCodePoint >= candidate.endCodePoint
@@ -393,6 +420,7 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
     if (!unit) return mention;
     return normalizeMentionSpans(mention, unit, staleSpans);
   });
+  removeRedundantSamePersonSpans(reconciled.mentions);
 
   for (const mention of reconciled.mentions) {
     mention.candidateRefs = [];
@@ -709,6 +737,16 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         disposition: 'not-person',
         reason: 'place',
         note: 'Named place, not a person.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (candidate.language === 'en' && ENGLISH_NAMED_POLITY_TERMS.has(candidate.exact)) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'polity',
+        note: 'Named polity, not a person.',
       });
       accounted.add(candidate.id);
       continue;

@@ -106,7 +106,7 @@ function validateConfiguration(errors) {
     schemaVersion: 1,
     extractionSchemaVersion: 1,
     packetSchemaVersion: 1,
-    promptVersion: 4,
+    promptVersion: 5,
     candidateScannerVersion: 2,
   };
   for (const [key, expected] of Object.entries(expectedVersions)) {
@@ -133,6 +133,8 @@ async function main() {
   let people = 0;
   let mentions = 0;
   let claims = 0;
+  let peopleMissingAttestations = 0;
+  let peopleMissingActiveDateHints = 0;
   let proposedRepairs = 0;
   let appliedRepairs = 0;
   const extractionByScope = new Map();
@@ -145,6 +147,13 @@ async function main() {
     people += result.stats.people;
     mentions += result.stats.mentions;
     claims += result.stats.claims;
+    const attestedPeople = new Set(result.normalized.claims
+      .filter((claim) => claim.predicate === 'attestation')
+      .map((claim) => claim.subject));
+    for (const person of result.normalized.people) {
+      if (!attestedPeople.has(person.localId)) peopleMissingAttestations += 1;
+      if (person.identityHints.activeDateHints.length === 0) peopleMissingActiveDateHints += 1;
+    }
     for (const repair of result.normalized.translationRepairs) {
       if (repair.status === 'proposed') proposedRepairs += 1;
       else if (repair.status === 'applied') appliedRepairs += 1;
@@ -248,7 +257,9 @@ async function main() {
     `Person data validation passed: ${files.length} extraction(s), ${people} local people, ` +
     `${mentions} mentions, ${claims} claims, ${proposedRepairs} proposed repair(s), ` +
     `${appliedRepairs} applied repair(s), ${editorialDecisions} editorial decision(s), ` +
-    `${claimRetractions} claim retraction(s), ${claimRevisions} claim revision(s).`,
+    `${claimRetractions} claim retraction(s), ${claimRevisions} claim revision(s). ` +
+    `Legacy temporal debt: ${peopleMissingAttestations} person record(s) without an attestation, ` +
+    `${peopleMissingActiveDateHints} without an active-date hint.`,
   );
 }
 

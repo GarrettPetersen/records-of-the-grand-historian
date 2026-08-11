@@ -58,11 +58,19 @@ uses supplied broad roles, such as `Historian and Official` or `Maid`.
 Hints always have all five keys:
 
 ```json
-{"n": ["native places"], "r": ["p002"], "a": ["date hints"],
+{"n": ["native places"], "r": ["p002"], "a": ["active-date hints"],
  "p": ["polity hints"], "x": null}
 ```
 
 `x` is a mention exception and normally remains `null`.
+
+Every person must have at least one source-supported active-date hint in `a`.
+Prefer a Western year or interval such as `AD 445` or `AD 445-446`. If the
+packet chronology cannot safely convert the source date, retain a useful source
+context such as `Yuanshuo era (conversion unresolved)` or `during Emperor
+Xuan's reign (conversion unresolved)`. Use a qualitative marker such as
+`legendary antiquity` only when the text is genuinely undatable. These are
+attested activity dates, not birth/death dates or asserted lifespans.
 
 Every person requires one or more structured name rows and role rows. A name
 row is `[valueObject, certainty, [evidenceUnitIds]]`; its value includes `kind`
@@ -125,6 +133,21 @@ uncertainty, textual variants, and conflicts. Record each distinct fact once
 and combine supporting evidence. Local-person references inside values use
 short IDs such as `p002`.
 
+Every person also requires at least one `attestation` claim. Its evidence must
+point to the mention or event and to any earlier unit supplying its date
+context. Use one of these value shapes:
+
+```json
+{"sourceDate":{"text":"元嘉二十二年","reignId":"liu-song-yuanjia","regnalYear":22},"westernYear":{"era":"AD","year":445,"precision":"year"}}
+{"sourceDate":{"text":"元朔中"},"unresolved":true}
+{"qualitative":"legendary antiquity"}
+```
+
+For a bounded interval, use `westernInterval` with `start` and `end` Western
+year objects. Record multiple dated attestations when the chapter supplies
+them; the resolver will derive the earliest/latest attested interval across
+chapters. Never describe that derived interval as a lifespan.
+
 Never convert dates from memory. Use a supplied reign ID only when its polity
 and reign are correct. Otherwise retain the source date text and mark it
 unresolved. Record stated age and reckoning but do not derive a birth year.
@@ -158,7 +181,8 @@ Before finishing:
 2. Confirm every named human has one person row, structured names and roles,
    and every visible occurrence has a nonoverlapping surface rule.
 3. Confirm aliases, relationships, dates, ages, offices, polity clues, and
-   translation errors were captured where stated.
+   translation errors were captured where stated. Every person must have a
+   nonempty active-date hint and an evidence-backed `attestation` claim.
 4. Confirm every candidate is contained in a surface or appears in exactly one
    disposition group.
 5. Set both coverage booleans to `true`; record genuine unresolved references.

@@ -101,12 +101,88 @@ function nestedValuesWithKey(value, wantedKey, found = []) {
   return found;
 }
 
+function validateWesternYear(value, label, errors) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    errors.push(`${label} must be an object`);
+    return;
+  }
+  if (!['BC', 'AD'].includes(value.era)) errors.push(`${label}.era must be BC or AD`);
+  if (!Number.isInteger(value.year) || value.year < 1) {
+    errors.push(`${label}.year must be a positive integer`);
+  }
+  if (!['year', 'circa'].includes(value.precision)) {
+    errors.push(`${label}.precision must be year or circa`);
+  }
+}
+
+function validateAttestationClaim(claim, errors) {
+  const value = claim.value;
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    errors.push(`${claim.id} attestation value must be an object`);
+    return;
+  }
+  const allowedKeys = new Set([
+    'sourceDate',
+    'westernYear',
+    'westernInterval',
+    'qualitative',
+    'unresolved',
+  ]);
+  for (const key of Object.keys(value)) {
+    if (!allowedKeys.has(key)) errors.push(`${claim.id} attestation has unknown key ${key}`);
+  }
+  if (value.sourceDate !== undefined) {
+    if (!value.sourceDate || typeof value.sourceDate !== 'object' || Array.isArray(value.sourceDate)) {
+      errors.push(`${claim.id} sourceDate must be an object`);
+    } else {
+      if (typeof value.sourceDate.text !== 'string' || !value.sourceDate.text.trim()) {
+        errors.push(`${claim.id} sourceDate.text must be nonempty`);
+      }
+      if (value.sourceDate.regnalYear !== undefined &&
+          (!Number.isInteger(value.sourceDate.regnalYear) || value.sourceDate.regnalYear < 1)) {
+        errors.push(`${claim.id} sourceDate.regnalYear must be a positive integer`);
+      }
+    }
+  }
+  if (value.westernYear !== undefined) {
+    validateWesternYear(value.westernYear, `${claim.id} westernYear`, errors);
+  }
+  if (value.westernInterval !== undefined) {
+    if (!value.westernInterval || typeof value.westernInterval !== 'object' ||
+        Array.isArray(value.westernInterval)) {
+      errors.push(`${claim.id} westernInterval must be an object`);
+    } else {
+      validateWesternYear(value.westernInterval.start, `${claim.id} westernInterval.start`, errors);
+      validateWesternYear(value.westernInterval.end, `${claim.id} westernInterval.end`, errors);
+    }
+  }
+  if (value.qualitative !== undefined &&
+      (typeof value.qualitative !== 'string' || !value.qualitative.trim())) {
+    errors.push(`${claim.id} qualitative chronology must be nonempty`);
+  }
+  if (value.unresolved !== undefined && typeof value.unresolved !== 'boolean') {
+    errors.push(`${claim.id} unresolved must be boolean`);
+  }
+  if (value.westernYear !== undefined && value.westernInterval !== undefined) {
+    errors.push(`${claim.id} must use westernYear or westernInterval, not both`);
+  }
+  const hasResolvedTime = value.westernYear !== undefined ||
+    value.westernInterval !== undefined || value.qualitative !== undefined;
+  if (!hasResolvedTime && !(value.sourceDate && value.unresolved === true)) {
+    errors.push(`${claim.id} attestation needs a Western date, qualitative chronology, or unresolved sourceDate`);
+  }
+  if ((value.westernYear !== undefined || value.westernInterval !== undefined) && !value.sourceDate) {
+    errors.push(`${claim.id} Western attestation must preserve sourceDate`);
+  }
+}
+
 function validateClaimVocabulary(claim, packet, errors) {
   if (claim.predicate === 'role') {
     const roleId = claim.value?.roleId;
     const known = new Set(packet.context.roles.map((role) => role.id));
     if (!known.has(roleId)) errors.push(`${claim.id} uses unknown roleId ${JSON.stringify(roleId)}`);
   }
+  if (claim.predicate === 'attestation') validateAttestationClaim(claim, errors);
   for (const polityId of nestedValuesWithKey(claim.value, 'polityId')) {
     if (!packet.context.polities.some((polity) => polity.id === polityId)) {
       errors.push(`${claim.id} uses polityId ${JSON.stringify(polityId)} not supplied in its packet`);
@@ -276,6 +352,14 @@ export function validatePeopleExtraction(extraction, packet) {
     }
     if (!personClaims.some((claim) => claim.predicate === 'role')) {
       errors.push(`${person.localId} has no role claim; use named-individual when the chapter establishes no narrower role`);
+    }
+    if (normalized.run.promptVersion >= 5) {
+      if (person.identityHints.activeDateHints.length === 0) {
+        errors.push(`${person.localId} has no active-date hint required by prompt v5`);
+      }
+      if (!personClaims.some((claim) => claim.predicate === 'attestation')) {
+        errors.push(`${person.localId} has no evidence-backed attestation required by prompt v5`);
+      }
     }
   }
 
@@ -521,6 +605,30 @@ function selfTest() {
 
   const valid = validatePeopleExtraction(extraction, packet);
   if (valid.normalized.mentions[0].spans.zh[0].endCodePoint !== 3) throw new Error('Span normalization failed');
+
+  const temporal = structuredClone(extraction);
+  temporal.run.promptVersion = 5;
+  temporal.people[0].identityHints.activeDateHints = ['AD 1'];
+  temporal.claims.push({
+    id: 'testbook:001:c0003',
+    subject: 'testbook:001:p001',
+    predicate: 'attestation',
+    value: {
+      sourceDate: { text: 'first year' },
+      westernYear: { era: 'AD', year: 1, precision: 'year' },
+    },
+    certainty: 'explicit-event-contextual-date',
+    evidence: ['testbook:001:s0001'],
+  });
+  validatePeopleExtraction(temporal, packet);
+  const missingTemporal = structuredClone(temporal);
+  missingTemporal.claims.pop();
+  try {
+    validatePeopleExtraction(missingTemporal, packet);
+    throw new Error('Prompt-v5 extraction without an attestation unexpectedly passed');
+  } catch (error) {
+    if (!(error instanceof PeopleExtractionValidationError)) throw error;
+  }
 
   const workerPacket = buildPeopleWorkerPacket(packet);
   if (!isPeopleWorkerPacket(workerPacket)) throw new Error('Compact worker packet was not recognized');

@@ -684,6 +684,44 @@ may have been established earlier in the paragraph or section. A claim may cite
 both the event unit and its date-context unit. `certainty` distinguishes an
 explicit same-sentence date from a date inherited from narrative context.
 
+### Universal attested chronology
+
+Every canonical person should have a time indicator, even when no birth or
+death year is known. Chapter extraction prompt v5 therefore requires each local
+person to carry at least one evidence-backed `attestation` claim and a concise
+`activeDateHints` entry. The preferred result is a Western year or bounded
+interval. Multiple mentions produce an earliest/latest **attested activity**
+interval; that interval is not a lifespan and must never be displayed as one.
+
+When the source gives a reign year, the claim preserves the source wording and
+the units that establish its context. A deterministic chronology compiler adds
+the BC/AD conversion when the supplied reign table supports it. If conversion
+is not yet possible, the claim remains explicitly unresolved but still retains
+useful context such as "during Emperor Xuan's reign." Legendary and genuinely
+undatable material uses a qualitative marker such as "legendary antiquity";
+the system does not invent a year for the Yellow Emperor.
+
+```json
+{
+  "predicate": "attestation",
+  "value": {
+    "sourceDate": {
+      "text": "元嘉二十二年",
+      "reignId": "liu-song-yuanjia",
+      "regnalYear": 22
+    },
+    "westernYear": { "era": "AD", "year": 445, "precision": "year" }
+  },
+  "certainty": "explicit-event-contextual-date",
+  "evidence": ["songshu:069:s0179", "songshu:069:s0226"]
+}
+```
+
+Prompt-v4 and earlier sidecars remain valid while a dedicated temporal backfill
+uses their mention evidence and chapter chronology. Missing attestations in
+legacy sidecars are reported as migration debt rather than silently treated as
+unknown lifespans.
+
 ### Deriving birth years from age at death
 
 Agents record the stated age and its wording; they do not silently perform the
@@ -1054,6 +1092,9 @@ The chapter-agent prompt must state these rules explicitly:
 - Record aliases and relationships that will help a later resolver.
 - Preserve source uncertainty and textual variants.
 - Record date context even when it occurs earlier than the event sentence.
+- Give every person an evidence-backed attestation: prefer a Western year or
+  interval, preserve unresolved source chronology, and use qualitative time
+  only for genuinely undatable material.
 - Never convert a reign year by memory; select a supplied reign ID or mark it
   unresolved.
 - Record stated ages without silently deriving a birth year.
