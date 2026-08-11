@@ -3,6 +3,9 @@ import {
   setTranslationField,
 } from './people-content.mjs';
 
+const ENGLISH_FUNCTION_WORD_CANDIDATES = new Set(['Though', 'Under']);
+const ENGLISH_FUNCTION_PHRASE_RE = /^(?:Even I|Though (?:He|I|It|She|That|These|They|This|Those|We))\b/u;
+
 function locatorKey(locator) {
   return `${locator.id}:${locator.blockIndex}:${locator.collection}:${locator.itemIndex}`;
 }
@@ -36,7 +39,12 @@ function aliasesForPerson(extraction, personId, language, unitId) {
     if (!current || preferred) aliases.set(exact, { exact, kind, preferred });
   };
   const person = extraction.people.find((item) => item.localId === personId);
-  add(person?.preferredNameSuggestion?.[language], 'personal-name', true);
+  const hasUnitContext = extraction.claims.some((claim) =>
+    claim.subject === personId && claimEvidenceUnit(claim, unitId)
+  ) || extraction.mentions.some((mention) =>
+    mention.person === personId && mention.unit.id === unitId
+  );
+  if (hasUnitContext) add(person?.preferredNameSuggestion?.[language], 'personal-name', true);
   for (const claim of extraction.claims) {
     if (claim.subject !== personId || claim.predicate !== 'name' || !claimEvidenceUnit(claim, unitId)) continue;
     add(claim.value?.[language], mentionKindForNameKind(claim.value?.kind));
@@ -223,6 +231,9 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
     revisedPacket.preflight.candidates.map((candidate) => [candidate.id, candidate]),
   );
   const validCandidateIds = new Set(candidateOrder.keys());
+  const previousCandidateById = new Map(
+    (options.previousPacket?.preflight?.candidates ?? []).map((candidate) => [candidate.id, candidate]),
+  );
   const unitById = new Map(revisedPacket.units.map((unit) => [unit.id, unit]));
   const staleSpans = [];
 
@@ -242,6 +253,7 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
   for (const mention of reconciled.mentions) {
     mention.candidateRefs = [];
   }
+  const previousDispositions = structuredClone(reconciled.candidateDispositions);
   reconciled.candidateDispositions = reconciled.candidateDispositions.filter((item) =>
     validCandidateIds.has(item.candidate)
   );
@@ -296,10 +308,30 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
   );
 
   const accounted = new Set(reconciled.candidateDispositions.map((item) => item.candidate));
+  const knownPolities = new Set(reconciled.people.flatMap((person) =>
+    person.identityHints.polityHints ?? []
+  ));
 
   const unresolvedCandidates = [];
   for (const candidate of revisedPacket.preflight.candidates) {
     if (accounted.has(candidate.id)) continue;
+    const priorSurfaceDispositions = previousDispositions.filter((disposition) => {
+      const previous = previousCandidateById.get(disposition.candidate);
+      return previous &&
+        previous.language === candidate.language &&
+        previous.exact === candidate.exact;
+    });
+    const priorDispositionKinds = new Set(priorSurfaceDispositions.map((item) =>
+      `${item.disposition}\u0000${item.reason}\u0000${item.note ?? ''}`
+    ));
+    if (priorSurfaceDispositions.length > 0 && priorDispositionKinds.size === 1) {
+      reconciled.candidateDispositions.push({
+        ...structuredClone(priorSurfaceDispositions[0]),
+        candidate: candidate.id,
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
     const counterpartDispositions = reconciled.candidateDispositions.filter((disposition) => {
       const counterpart = candidateById.get(disposition.candidate);
       return counterpart &&
@@ -372,13 +404,14 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
     }
     const aliasMatches = reconciled.people.flatMap((person) =>
       aliasesForPerson(reconciled, person.localId, candidate.language, candidate.unit)
-        .filter((alias) =>
-          surfaceContains(candidate.exact, alias.exact, candidate.language) ||
-          (surfaceContains(alias.exact, candidate.exact, candidate.language) && exactOccurrences(
-            unitById.get(candidate.unit)[candidate.language],
-            alias.exact,
-          ).length > 0)
-        )
+        .filter((alias) => {
+          if (surfaceContains(candidate.exact, alias.exact, candidate.language)) return true;
+          const fragmentMatch = surfaceContains(alias.exact, candidate.exact, candidate.language) ||
+            (candidate.language === 'en' && sharedWordCount(candidate.exact, alias.exact) >= 2);
+          if (!fragmentMatch) return false;
+          return exactOccurrences(unitById.get(candidate.unit)[candidate.language], alias.exact)
+            .some((span) => spansOverlap(span, candidate));
+        })
         .map((alias) => ({ person: person.localId, alias }))
     );
     const matchingPeople = new Set(aliasMatches.map((item) => item.person));
@@ -386,9 +419,10 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       const person = [...matchingPeople][0];
       const unit = unitById.get(candidate.unit);
       const match = aliasMatches.find((item) => item.person === person);
+      const aliasOccurrences = exactOccurrences(unit[candidate.language], match.alias.exact);
       const aliasSpan = candidate.exact.includes(match.alias.exact)
         ? exactSpanAt(unit[candidate.language], candidate.exact, candidate.occurrence)
-        : exactOccurrences(unit[candidate.language], match.alias.exact)[0];
+        : aliasOccurrences.find((span) => spansOverlap(span, candidate)) ?? aliasOccurrences[0];
       const overlapping = reconciled.mentions.filter((mention) =>
         mention.person === person &&
         mention.unit.id === candidate.unit &&
@@ -422,6 +456,31 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         accounted.add(candidate.id);
         continue;
       }
+    }
+    if (candidate.language === 'en' && knownPolities.has(candidate.exact)) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'polity',
+        note: `Known polity from chapter identity hints: ${candidate.exact}`,
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (
+      candidate.language === 'en' &&
+      (ENGLISH_FUNCTION_WORD_CANDIDATES.has(candidate.exact) ||
+        ENGLISH_FUNCTION_PHRASE_RE.test(candidate.exact)) &&
+      candidate.detectors.every((detector) => detector.kind === 'english-capitalized-expression')
+    ) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'not-a-name',
+        note: 'Sentence-initial English function word.',
+      });
+      accounted.add(candidate.id);
+      continue;
     }
     unresolvedCandidates.push(candidate.id);
   }

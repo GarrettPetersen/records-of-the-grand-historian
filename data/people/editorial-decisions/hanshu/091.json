@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 3,
+  "book": "hanshu",
+  "chapter": "091",
+  "input": {
+    "chapterFingerprint": "sha256:bc007af65c77f6bd9c649e45989bc8741bf1d26f8b91840b0a4ffe7fd1e834c9",
+    "proposalsFingerprint": "sha256:38ff10a3a004d22dd7b56f5d06cdac608a01a09c34713c9155498a183949332d"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex review of Grok 4.5 draft",
+    "model": null,
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-11T06:25:00.000Z"
+  },
+  "proposals": [
+    {
+      "id": "hanshu:091:r0001",
+      "unit": {
+        "id": "s0194",
+        "kind": "paragraph-sentence",
+        "blockIndex": 33,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "The grand empress dowager, treating Ping as Cheng’s heir, enfeoffed Chengdu—son of the Marquis of Taoxiang and great-grandson of Prince Si of Dongping—as king of Zhongshan to carry on Xing’s line.",
+      "after": "The grand empress dowager, treating Ping as Cheng’s heir, enfeoffed Chengdu—son of Marquis Qing of Taoxiang and grandson of Prince Si of Dongping—as king of Zhongshan to carry on Xing’s line.",
+      "reason": "Chinese 東平思王孫桃鄉頃侯子成都 identifies Chengdu as grandson (孫) of Prince Si and son of the Taoxiang marquis, not great-grandson; the literal already has grandson.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:091:r0002",
+      "unit": {
+        "id": "s0211",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "At this New Year's court audience, let him come with one son or younger brother. We enfeoff his son Xun with the four thousand three hundred households of Guangqi county as marquis of Guangqi.\"",
+      "after": "At this New Year's court audience, let him come with one son. We enfeoff his son Xun with the four thousand three hundred households of Guangqi county as marquis of Guangqi.\"",
+      "reason": "Chinese 子男 means a son (male child), not “son or younger brother”; the added alternative is not in the source.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "hanshu:091:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "東平思王孫桃鄉頃侯子成都 makes Chengdu grandson (孫) of Prince Si and son of Marquis Qing (頃侯) of Taoxiang; “great-grandson” and the omitted posthumous 頃 are real errors, and the proposed wording matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0194",
+        "excerpt": "東平思王孫桃鄉頃侯子成都"
+      }
+    },
+    {
+      "repairId": "hanshu:091:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "詔與子男一人俱 specifies one son (子男); “or younger brother” is not in the Chinese and must be removed.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0211",
+        "excerpt": "詔與子男一人俱"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "hanshu:091:r0001",
+      "before": {
+        "id": "hanshu:091:c0358",
+        "subject": "hanshu:091:p080",
+        "predicate": "lineage",
+        "value": {
+          "type": "grandson-of",
+          "personId": "hanshu:091:p009"
+        },
+        "certainty": "strongly-inferred",
+        "evidence": [
+          "hanshu:091:s0194"
+        ]
+      },
+      "after": {
+        "id": "hanshu:091:c0358",
+        "subject": "hanshu:091:p080",
+        "predicate": "lineage",
+        "value": {
+          "type": "son-of",
+          "personId": "hanshu:091:p009"
+        },
+        "certainty": "strongly-inferred",
+        "evidence": [
+          "hanshu:091:s0194"
+        ]
+      },
+      "reason": "With Chengdu restored as 孫 of Prince Si and 子 of Marquis Qing, the marquis is the intervening generation (son of Prince Si), not himself a grandson; the old grandson-of value tracked the bad “great-grandson” reading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0194",
+        "excerpt": "東平思王孫桃鄉頃侯子成都"
+      }
+    }
+  ]
+}

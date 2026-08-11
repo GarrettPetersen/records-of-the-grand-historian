@@ -15,7 +15,7 @@ const ENGLISH_STOP_WORDS = new Set([
   'A', 'Accordingly', 'An', 'And', 'After', 'Although', 'As', 'At', 'Before', 'Because', 'Both', 'But', 'By',
   'Chapter', 'During', 'Earlier', 'For', 'From', 'Had', 'He', 'Her', 'Here', 'His', 'However',
   'I', 'If', 'In', 'It', 'Its', 'Later', 'Meanwhile', 'My', 'No', 'Now', 'On', 'One', 'Our',
-  'Consequently', 'Hence', 'Proud', 'She', 'Since', 'So', 'Soon', 'Such', 'Talent', 'That', 'The',
+  'Consequently', 'Hence', 'Proud', 'Serving', 'She', 'Since', 'So', 'Soon', 'Such', 'Talent', 'That', 'The',
   'Their', 'Then', 'There', 'Therefore', 'Thereupon', 'These', 'They', 'This', 'Those', 'Thus', 'To',
   'Treatise', 'Two', 'Volume', 'We', 'Whatever',
   'When', 'Where', 'While', 'Who', 'Why', 'With', 'Without', 'Yet', 'You', 'Your'

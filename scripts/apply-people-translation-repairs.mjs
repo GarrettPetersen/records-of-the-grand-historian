@@ -277,7 +277,9 @@ function selfTest() {
     claims: applyReviewedClaimChanges(extraction.claims, reviewed),
     translationRepairs: reviewedRepairs,
   };
-  const reconciled = reconcileExtractionAfterRepairs(reviewedExtraction, revisedPacket);
+  const reconciled = reconcileExtractionAfterRepairs(reviewedExtraction, revisedPacket, {
+    previousPacket: oldPacket,
+  });
   if (reconciled.unresolvedCandidates.length > 0) throw new Error('Fixture left unresolved candidates');
   if (reconciled.unresolvedSpans.length > 0) throw new Error('Fixture left unresolved mention spans');
   const repeatedSpans = reconciled.extraction.mentions
@@ -509,7 +511,9 @@ function main() {
     chapterFile,
     properNounMatcher: matcher,
   });
-  const reconciled = reconcileExtractionAfterRepairs(reviewedExtraction, revisedPacket);
+  const reconciled = reconcileExtractionAfterRepairs(reviewedExtraction, revisedPacket, {
+    previousPacket: oldPacket,
+  });
   if (reconciled.unresolvedSpans.length > 0) {
     throw new Error(
       `Unresolved stale mention spans: ${reconciled.unresolvedSpans.map((item) =>
