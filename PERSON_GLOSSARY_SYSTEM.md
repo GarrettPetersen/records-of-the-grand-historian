@@ -37,6 +37,12 @@ surface rules (956 generated language-specific spans), 372 distinct claims, 821
 candidate decisions, and nine accepted translation repairs. Its tracked compact
 sidecar is 108 KB, down from 796 KB for the verbose draft.
 
+Three smaller cloud pilots established the initial economics. Grok 4.5 at low
+effort cost about $0.99 for Shiji 50; Gemini 3.6 Flash at low effort also cost
+about $0.99 for Hanshu 3 and offered no clear savings. A Grok 4.5 medium run on
+Shiji 64 cost about $1.98 after repair retries. These are short chapters, so
+costs must be sampled again before extrapolating across the corpus.
+
 Cloud workers never commit, push, or open pull requests. They return extraction
 artifacts to the host. The host validates and accumulates many chapters locally,
 then pushes a deliberate batch to `codex/people-glossary-staging`. Only a final
@@ -60,7 +66,8 @@ Do **not** insert person metadata into the translation objects. Keep the chapter
 JSON as the source text and translation, and add a tracked sidecar for each
 chapter under `data/people/extractions/<book>/<chapter>.json`. Clear editorial
 errors found during extraction are returned as structured translation repairs;
-the host validates and applies those changes to chapter JSON separately.
+the host queues them for an independent evidence review and applies only
+accepted changes to chapter JSON.
 
 Use three distinct layers:
 
@@ -889,6 +896,12 @@ The orchestrator creates an isolated packet containing:
 - the exact extraction prompt;
 - an empty output path.
 
+Before dispatch, deterministic audits should also flag closed-vocabulary
+mismatches that do not need model judgment, including sexagenary day names,
+reign labels, numerals, and known fused-word patterns. The Hanshu 3 pilot showed
+why: the worker missed `辛未` translated as *xinhai* and `甲子` translated as
+*jiashen*, while a direct source-to-pinyin check identifies both exactly.
+
 The packet includes all context an agent needs. Agents must not browse, directly
 edit the translation, run site builds, or touch shared canonical records. Clear
 editorial errors are returned as structured proposals for a separate validated
@@ -896,9 +909,10 @@ repair phase.
 
 ### 3. One agent per chapter
 
-Use Grok 4.5 through Cursor Cloud with bounded concurrency. Medium effort is the
-default bulk lane; high effort is reserved for dense biographies, rhetoric,
-ambiguous identity passages, and chapters that fail semantic QA. Each agent
+Use Cursor Cloud with bounded concurrency. Grok 4.5 at low effort is the default
+biography and editorial lane; medium/high effort is reserved for dense rhetoric,
+ambiguous identity passages, and chapters that fail semantic QA. Gemini 3.6
+Flash did not reduce pilot cost, so it is not a separate bulk lane. Each agent
 writes exactly one compact extraction artifact. One chapter per agent gives
 clean retries, predictable context, and isolated failures. Agents have
 `autoCreatePR: false` and are explicitly forbidden to commit or push. Every
@@ -929,7 +943,22 @@ boundary, push the accumulated commits to `codex/people-glossary-staging`;
 merge that branch to `master` only when ready for one production Cloudflare
 build.
 
-### 5. Resolve identities from dossiers
+### 5. Review editorial repairs
+
+Extraction workers propose repairs but never apply them. A separate reviewer
+sees the Chinese unit, both English fields, the proposed replacement and reason,
+and a small window of adjacent units. The reviewer must accept, reject, or
+revise each proposal from textual evidence. Source-text corrections require an
+identified textual witness. Accepted repairs are then applied by the host,
+candidates and spans are rebuilt, and the sidecar is revalidated.
+
+This is a focused review of proposed changes, not a second pass over the corpus.
+It is necessary because the pilots found confident false repairs: one worker
+mistook a second-person `君` for Lord Jing, and another interpreted the corrupt
+source character `剨` as frost even though the received Hanshu text has `靁`, a
+variant of `雷` (thunder).
+
+### 6. Resolve identities from dossiers
 
 Once a useful batch is accepted, deterministic matching creates identity
 candidate dossiers. Resolver agents see only structured claims and small cited
@@ -940,7 +969,7 @@ records; uncertain cases remain queued.
 Resolution can run continuously behind extraction. It does not need to delay the
 remaining chapter agents.
 
-### 6. Generate and verify outputs
+### 7. Generate and verify outputs
 
 After coverage is complete:
 

@@ -24,7 +24,6 @@ import {
   isCompactPeopleExtraction,
   serializeCompactPeopleExtraction,
 } from './lib/people-compact.mjs';
-import { applyTranslationRepairs } from './lib/people-translation-repairs.mjs';
 import {
   validateCompactPeopleExtraction,
   validatePeopleExtraction,
@@ -53,7 +52,7 @@ Options:
   --concurrency N      Parallel Cursor Cloud agents (default: 2, max: 12).
   --max-attempts N     Validation attempts per phase (default: 3).
   --model MODEL        Cursor model (default: ${DEFAULT_MODEL}).
-  --effort LEVEL       Model effort: low, medium, or high (default: medium).
+  --effort LEVEL       Model effort/reasoning: low, medium, or high (default: low).
   --fast               Enable the model's fast variant (default: off).
   --repo URL           Repository URL available to cloud agents.
   --starting-ref REF   Remote branch/ref agents read (default: ${DEFAULT_STARTING_REF}).
@@ -63,8 +62,8 @@ Options:
   --stream             Stream assistant text; requires concurrency 1.
 
 This runner is cloud-only. Workers never commit, push, or open pull requests.
-The host downloads artifacts, validates them, applies exact translation repairs,
-and accumulates accepted chapters locally for a later staging batch.`);
+The host downloads and validates artifacts, queues translation repairs for an
+independent evidence review, and accumulates accepted chapters locally.`);
 }
 
 function positiveInteger(value, flag, maximum = Number.MAX_SAFE_INTEGER) {
@@ -83,7 +82,7 @@ function parseArgs(argv) {
     concurrency: 2,
     maxAttempts: 3,
     model: process.env.SDK_PEOPLE_MODEL ?? DEFAULT_MODEL,
-    effort: process.env.SDK_PEOPLE_EFFORT ?? 'medium',
+    effort: process.env.SDK_PEOPLE_EFFORT ?? 'low',
     fast: false,
     repoUrl: process.env.SDK_PEOPLE_REPO ?? DEFAULT_REPO_URL,
     startingRef: process.env.SDK_PEOPLE_STARTING_REF ?? DEFAULT_STARTING_REF,
@@ -129,8 +128,21 @@ function parseArgs(argv) {
 }
 
 function modelSelection(opts) {
-  const params = [{ id: 'fast', value: opts.fast ? 'true' : 'false' }];
-  if (/^grok-4\.(?:5|6)$/u.test(opts.model)) params.unshift({ id: 'effort', value: opts.effort });
+  let params = [];
+  if (/^grok-4\.(?:5|6)$/u.test(opts.model)) {
+    params = [
+      { id: 'effort', value: opts.effort },
+      { id: 'fast', value: opts.fast ? 'true' : 'false' },
+    ];
+  } else if (opts.model === 'gemini-3.6-flash') {
+    params = [{ id: 'effort', value: opts.effort }];
+  } else if (/^gpt-5\.4-(?:mini|nano)$/u.test(opts.model)) {
+    params = [{ id: 'reasoning', value: opts.effort }];
+  } else if (/^composer-/u.test(opts.model)) {
+    params = [{ id: 'fast', value: opts.fast ? 'true' : 'false' }];
+  } else if (opts.model === 'claude-haiku-4-5') {
+    params = [{ id: 'thinking', value: opts.effort === 'low' ? 'false' : 'true' }];
+  }
   return {
     id: opts.model,
     params,
@@ -257,6 +269,12 @@ function initialPrompt(target, opts) {
   const packet = packetArtifactPath(target);
   return `Perform the person extraction and final editorial audit for ${target.book}/${target.chapter}.
 
+Efficiency boundary: read only prompt-people-extraction-compact.txt, the assigned packet,
+data/people/schema/compact-extraction.schema.json, and the assigned seed. Do not inspect
+other extractions, validator/library source, Git history, or unrelated files. Do not browse
+or generate ad hoc analysis scripts. Aim to finish with one direct write and one validation;
+use validation diagnostics only when a correction is necessary.
+
 1. Read prompt-people-extraction-compact.txt completely.
 2. Run:
    node scripts/build-people-extraction-packet.mjs --book ${target.book} --chapter ${target.chapter} --out ${packet} --seed-out ${output} --model ${opts.model} --compact-worker
@@ -284,43 +302,10 @@ VALIDATION ERRORS:
 ${errors.slice(0, 400).map((error) => `- ${error}`).join('\n')}`;
 }
 
-function repairPrompt(target) {
-  const output = artifactPath(target);
-  return `The host validated the proposed translation repairs in ${output}. Reconcile the extraction against only those exact proposals now.
-
-1. Run:
-   node scripts/apply-people-translation-repairs.mjs --book ${target.book} --chapter ${target.chapter} --extraction ${output}
-2. If the command reports changed spans, new candidates, or other validation failures, inspect only the changed units and repair ${output}. Do not add, remove, or rewrite a translation repair.
-3. Run node scripts/validate-people-extraction.mjs ${output} --normalize until it passes.
-4. Publish the reconciled JSON for the host by running:
-   ${publishArtifactCommand(target)}
-
-The source chapter may be modified in this isolated cloud workspace only by the repair command. Do not make any other source edit. Do not commit, push, run gh, or open a pull request. The host will independently apply the exact proposals and validate the final extraction against its own revised packet.`;
-}
-
-function repairRetryPrompt(target, errors) {
-  const output = artifactPath(target);
-  return `The host still rejected the reconciled extraction for ${target.book}/${target.chapter}. Preserve every validated translation-repair contract exactly.
-
-If any repair still has status proposed, first run:
-node scripts/apply-people-translation-repairs.mjs --book ${target.book} --chapter ${target.chapter} --extraction ${output}
-
-Then inspect only the changed units, fix every extraction error below, and run:
-node scripts/validate-people-extraction.mjs ${output} --normalize
-
-After validation succeeds, refresh the host artifact by running:
-${publishArtifactCommand(target)}
-
-Do not make any source edit except through the repair command. Do not commit, push, run gh, or open a pull request.
-
-VALIDATION ERRORS:
-${errors.slice(0, 400).map((error) => `- ${error}`).join('\n')}`;
-}
-
 async function closeAgent(agent) {
   if (!agent) return;
   if (typeof agent[Symbol.asyncDispose] === 'function') await agent[Symbol.asyncDispose]();
-  else agent.close();
+  else await agent.close();
 }
 
 async function runAgentTurn(agent, prompt, target, opts, phase) {
@@ -381,22 +366,6 @@ function validateDownloadedExtraction(extraction, packet) {
     : validatePeopleExtraction(extraction, packet);
 }
 
-function repairContract(repair) {
-  const { status: _status, ...contract } = repair;
-  return contract;
-}
-
-function assertSameRepairContract(initial, final) {
-  const expected = initial.map(repairContract);
-  const actual = final.map(repairContract);
-  if (JSON.stringify(actual) !== JSON.stringify(expected)) {
-    throw new Error('The reconciliation phase changed the validated translation-repair contract');
-  }
-  if (!final.every((repair) => repair.status === 'applied')) {
-    throw new Error('Every reconciled translation repair must have status applied');
-  }
-}
-
 async function obtainValidInitialExtraction(agent, target, packet, opts, state) {
   let errors = [];
   for (let attempt = 1; attempt <= opts.maxAttempts; attempt += 1) {
@@ -417,40 +386,6 @@ async function obtainValidInitialExtraction(agent, target, packet, opts, state) 
     }
   }
   throw Object.assign(new Error(`Initial extraction failed after ${opts.maxAttempts} attempt(s)`), { errors });
-}
-
-async function obtainValidReconciledExtraction(agent, target, initial, opts, state) {
-  const localChapter = readJson(chapterPath(target.book, target.chapter));
-  const applied = applyTranslationRepairs(localChapter, initial.translationRepairs);
-  const revisedPacket = buildPeopleExtractionPacket(target.book, target.chapter, {
-    chapterData: applied.chapter,
-    chapterFile: chapterPath(target.book, target.chapter),
-    properNounMatcher: opts.properNounMatcher,
-  });
-  let errors = [];
-  for (let attempt = 1; attempt <= opts.maxAttempts; attempt += 1) {
-    updateState(state, target, { status: 'reconciling', repairAttempt: attempt });
-    const prompt = attempt === 1 ? repairPrompt(target) : repairRetryPrompt(target, errors);
-    try {
-      const result = await runAgentTurn(agent, prompt, target, opts, 'repair reconciliation');
-      const downloaded = withRunMetadata(await downloadExtraction(agent, target), opts, agent, result);
-      assertSameRepairContract(initial.translationRepairs, downloaded.translationRepairs);
-      const validated = validateDownloadedExtraction(downloaded, revisedPacket);
-      return {
-        chapter: applied.chapter,
-        extraction: validated.normalized,
-        packet: revisedPacket,
-        result,
-        stats: validated.stats,
-      };
-    } catch (error) {
-      errors = validationErrors(error);
-      updateState(state, target, { status: 'failed/retryable', lastErrors: errors });
-      console.error(`[${stateKey(target)}] repair attempt ${attempt} failed with ${errors.length} error(s)`);
-      if (error instanceof CursorAgentError && !error.isRetryable) break;
-    }
-  }
-  throw Object.assign(new Error(`Repair reconciliation failed after ${opts.maxAttempts} attempt(s)`), { errors });
 }
 
 async function processTarget(target, opts, state) {
@@ -489,21 +424,10 @@ async function processTarget(target, opts, state) {
       },
     });
     updateState(state, target, { agentId: agent.agentId });
-    const initial = await obtainValidInitialExtraction(agent, target, packet, opts, state);
-
-    let accepted;
-    if (initial.extraction.translationRepairs.length > 0) {
-      accepted = await obtainValidReconciledExtraction(
-        agent,
-        target,
-        initial.extraction,
-        opts,
-        state,
-      );
-      writeJsonAtomic(chapterPath(target.book, target.chapter), accepted.chapter);
-    } else {
-      accepted = { ...initial, packet };
-    }
+    const accepted = {
+      ...await obtainValidInitialExtraction(agent, target, packet, opts, state),
+      packet,
+    };
     const compact = compactPeopleExtraction(accepted.extraction, accepted.packet);
     validateCompactPeopleExtraction(compact, accepted.packet);
     const rawArchive = path.join(
@@ -523,11 +447,12 @@ async function processTarget(target, opts, state) {
       runId: accepted.result.id,
       acceptedPath: path.relative(REPO_ROOT, extractionPath(target.book, target.chapter)),
       repairs: accepted.stats.repairs,
+      repairsPendingReview: accepted.extraction.translationRepairs.length,
       lastErrors: [],
     });
     console.log(
       `[${key}] accepted: ${accepted.stats.people} people, ${accepted.stats.mentions} mentions, ` +
-      `${accepted.stats.claims} claims, ${accepted.stats.repairs} translation repair(s)`,
+      `${accepted.stats.claims} claims, ${accepted.stats.repairs} translation repair proposal(s)`,
     );
     return { status: 'accepted', stats: accepted.stats };
   } catch (error) {
@@ -536,6 +461,20 @@ async function processTarget(target, opts, state) {
     console.error(`[${key}] failed: ${errors[0]}`);
     return { status: 'failed', errors };
   } finally {
+    if (agent) {
+      try {
+        const usage = await agent.getUsage();
+        updateState(state, target, { usage });
+        const dollars = usage.cost ? `; charged=$${(usage.cost.chargedCents / 100).toFixed(2)}` : '';
+        console.log(
+          `[${key}] Cursor usage: ${usage.usage.totalTokens.toLocaleString('en-US')} tokens${dollars}`,
+        );
+      } catch (error) {
+        console.warn(
+          `[${key}] could not read Cursor usage: ${error instanceof Error ? error.message : String(error)}`,
+        );
+      }
+    }
     await closeAgent(agent);
   }
 }

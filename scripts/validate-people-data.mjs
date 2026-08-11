@@ -91,6 +91,8 @@ async function main() {
   let people = 0;
   let mentions = 0;
   let claims = 0;
+  let proposedRepairs = 0;
+  let appliedRepairs = 0;
   for (const file of files) {
     const extraction = readJson(file);
     const packet = buildPeopleExtractionPacket(extraction.book, extraction.chapter, { properNounMatcher: matcher });
@@ -100,10 +102,15 @@ async function main() {
     people += result.stats.people;
     mentions += result.stats.mentions;
     claims += result.stats.claims;
+    for (const repair of result.normalized.translationRepairs) {
+      if (repair.status === 'proposed') proposedRepairs += 1;
+      else if (repair.status === 'applied') appliedRepairs += 1;
+    }
   }
   console.log(
     `Person data validation passed: ${files.length} extraction(s), ${people} local people, ` +
-    `${mentions} mentions, ${claims} claims.`,
+    `${mentions} mentions, ${claims} claims, ${proposedRepairs} proposed repair(s), ` +
+    `${appliedRepairs} applied repair(s).`,
   );
 }
 
