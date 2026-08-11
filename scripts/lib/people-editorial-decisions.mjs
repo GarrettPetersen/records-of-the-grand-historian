@@ -8,7 +8,7 @@ import {
   formatSchemaErrors,
 } from './people-schema.mjs';
 
-const SCHEMA_ID = 'https://24histories.com/schema/people/editorial-decision-v2.json';
+const SCHEMA_ID = 'https://24histories.com/schema/people/editorial-decision-v3.json';
 
 export class EditorialDecisionValidationError extends Error {
   constructor(errors) {
@@ -44,7 +44,7 @@ export function proposalsFingerprint(extraction) {
 export function editorialDecisionSeed(extraction) {
   const proposals = proposalContracts(extraction);
   return {
-    schemaVersion: 2,
+    schemaVersion: 3,
     book: extraction.book,
     chapter: extraction.chapter,
     input: {
@@ -68,6 +68,7 @@ export function editorialDecisionSeed(extraction) {
       sourceWitness: null,
     })),
     claimRetractions: [],
+    claimRevisions: [],
   };
 }
 
@@ -123,7 +124,33 @@ function editorialDocumentErrors(document) {
     }
   }
 
-  return { errors, proposalById, decisionById, retractedClaimIds };
+  const revisedClaimIds = new Set();
+  for (const revision of document.claimRevisions ?? []) {
+    const claimId = revision.before?.id;
+    if (revisedClaimIds.has(claimId)) errors.push(`duplicate claim revision for ${claimId}`);
+    if (retractedClaimIds.has(claimId)) errors.push(`claim ${claimId} cannot be both retracted and revised`);
+    revisedClaimIds.add(claimId);
+    const proposal = proposalById.get(revision.repairId);
+    if (!proposal) {
+      errors.push(`claim revision refers to unknown proposal ${revision.repairId}`);
+      continue;
+    }
+    const decision = decisionById.get(revision.repairId);
+    if (!decision || decision.decision === 'reject') {
+      errors.push(`claim revision ${claimId} is tied to a rejected repair ${revision.repairId}`);
+    }
+    if (revision.after?.id !== claimId) errors.push(`claim revision ${claimId} must preserve its claim ID`);
+    for (const key of ['subject', 'predicate', 'evidence']) {
+      if (JSON.stringify(revision.before?.[key]) !== JSON.stringify(revision.after?.[key])) {
+        errors.push(`claim revision ${claimId} must preserve ${key}`);
+      }
+    }
+    if (JSON.stringify(revision.before) === JSON.stringify(revision.after)) {
+      errors.push(`claim revision ${claimId} does not change the claim`);
+    }
+  }
+
+  return { errors, proposalById, decisionById, retractedClaimIds, revisedClaimIds };
 }
 
 export function validateEditorialDecisionDocument(document) {
@@ -195,6 +222,26 @@ export function validateEditorialDecisions(document, extraction, packet) {
     retractedClaimIds.add(retraction.claim.id);
   }
 
+  const revisedClaims = new Map();
+  for (const revision of document.claimRevisions ?? []) {
+    const current = claimById.get(revision.before.id);
+    if (!current) {
+      errors.push(`claim revision refers to missing claim ${revision.before.id}`);
+      continue;
+    }
+    if (JSON.stringify(current) !== JSON.stringify(revision.before)) {
+      errors.push(`claim revision contract is stale for ${revision.before.id}`);
+    }
+    const proposal = documentResult.proposalById.get(revision.repairId);
+    const expectedEvidence = `${extraction.book}:${extraction.chapter}:${proposal?.unit.id}`;
+    if (!revision.before.evidence.includes(expectedEvidence)) {
+      errors.push(
+        `claim revision ${revision.before.id} is not evidenced in repaired unit ${proposal?.unit.id}`,
+      );
+    }
+    revisedClaims.set(revision.before.id, structuredClone(revision.after));
+  }
+
   if (errors.length > 0) throw new EditorialDecisionValidationError(errors);
-  return { reviewedRepairs, decisions: documentResult.decisionById, retractedClaimIds };
+  return { reviewedRepairs, decisions: documentResult.decisionById, retractedClaimIds, revisedClaims };
 }

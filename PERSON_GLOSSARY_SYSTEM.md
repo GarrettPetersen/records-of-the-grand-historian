@@ -990,12 +990,16 @@ agent, changed proposal contracts, and any revision that leaves unresolved
 mentions or candidates. It validates the complete revised state before writing
 either chapter or sidecar.
 
-Version 2 decision records may also retract an extraction claim proven to be a
-translation artifact. The reviewer must embed the complete old claim, tie it to
-an accepted or revised repair in the same evidence unit, and provide its own
-source witness. Application removes the claim atomically with the text repair;
-the global audit then proves that the retracted fact is absent. A valid alias or
-fact is never retracted merely because revised English no longer spells it out.
+Version 3 decision records may also retract an extraction claim proven to be a
+translation artifact or revise a claim whose underlying fact remains valid.
+The reviewer embeds the complete old claim, ties the action to an accepted or
+revised repair in the same evidence unit, and provides its own source witness.
+A claim revision additionally embeds the complete replacement while preserving
+the claim ID, subject, predicate, and evidence. Application changes claims
+atomically with the text repair; the global audit then proves that a retracted
+fact is absent and that every revised fact replaced its old form. A valid alias
+or fact is never retracted merely because revised English no longer spells it
+out.
 
 Name-bearing repairs are reconciled atomically. The applier remaps stale English
 spans only from that person's existing preferred name or name/title claims,

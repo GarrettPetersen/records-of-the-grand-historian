@@ -86,6 +86,12 @@ function renumberRepairs(repairs, book, chapter) {
   }));
 }
 
+function applyReviewedClaimChanges(claims, reviewed) {
+  return claims
+    .filter((claim) => !reviewed.retractedClaimIds.has(claim.id))
+    .map((claim) => reviewed.revisedClaims.get(claim.id) ?? claim);
+}
+
 function expectDecisionFailure(callback, label) {
   try {
     callback();
@@ -206,6 +212,20 @@ function selfTest() {
       excerpt: '劉湛',
     },
   });
+  decisions.claimRevisions.push({
+    repairId: extraction.translationRepairs[1].id,
+    before: structuredClone(extraction.claims[0]),
+    after: {
+      ...structuredClone(extraction.claims[0]),
+      value: { ...structuredClone(extraction.claims[0].value), pinyin: 'Liu Zhan' },
+    },
+    reason: 'The accepted repair confirms the normalized pinyin represented by the corrected English name.',
+    sourceWitness: {
+      source: 'chapter-text',
+      citation: 'fixture/001 s0001',
+      excerpt: '劉湛',
+    },
+  });
   const reviewed = validateEditorialDecisions(decisions, extraction, oldPacket);
   const reviewedRepairs = renumberRepairs(reviewed.reviewedRepairs, 'fixture', '001');
   if (reviewedRepairs.length !== 1 || reviewedRepairs[0].id !== 'fixture:001:r0001') {
@@ -240,9 +260,12 @@ function selfTest() {
   if (!reviewed.retractedClaimIds.has('fixture:001:c0003')) {
     throw new Error('Reviewed claim retraction was not returned for application');
   }
+  if (reviewed.revisedClaims.get('fixture:001:c0001')?.value.pinyin !== 'Liu Zhan') {
+    throw new Error('Reviewed claim revision was not returned for application');
+  }
   const reviewedExtraction = {
     ...structuredClone(extraction),
-    claims: extraction.claims.filter((claim) => !reviewed.retractedClaimIds.has(claim.id)),
+    claims: applyReviewedClaimChanges(extraction.claims, reviewed),
     translationRepairs: reviewedRepairs,
   };
   const reconciled = reconcileExtractionAfterRepairs(reviewedExtraction, revisedPacket);
@@ -334,7 +357,7 @@ function main() {
   const reviewedRepairs = renumberRepairs(reviewed.reviewedRepairs, opts.book, opts.chapter);
   const reviewedExtraction = {
     ...structuredClone(extraction),
-    claims: extraction.claims.filter((claim) => !reviewed.retractedClaimIds.has(claim.id)),
+    claims: applyReviewedClaimChanges(extraction.claims, reviewed),
     translationRepairs: reviewedRepairs,
   };
 

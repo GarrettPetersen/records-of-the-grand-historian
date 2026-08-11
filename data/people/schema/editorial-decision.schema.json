@@ -1,12 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://24histories.com/schema/people/editorial-decision-v2.json",
+  "$id": "https://24histories.com/schema/people/editorial-decision-v3.json",
   "title": "Independent editorial decisions for chapter extraction repairs",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "book", "chapter", "input", "reviewer", "proposals", "decisions", "claimRetractions"],
+  "required": ["schemaVersion", "book", "chapter", "input", "reviewer", "proposals", "decisions", "claimRetractions", "claimRevisions"],
   "properties": {
-    "schemaVersion": { "const": 2 },
+    "schemaVersion": { "const": 3 },
     "book": { "type": "string", "pattern": "^[a-z0-9_-]+$" },
     "chapter": { "type": "string", "pattern": "^\\d{3}$" },
     "input": {
@@ -42,6 +42,10 @@
     "claimRetractions": {
       "type": "array",
       "items": { "$ref": "#/$defs/claimRetraction" }
+    },
+    "claimRevisions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/claimRevision" }
     }
   },
   "$defs": {
@@ -125,6 +129,18 @@
       "properties": {
         "repairId": { "type": "string", "pattern": "^[a-z0-9_-]+:\\d{3}:r\\d{4,}$" },
         "claim": { "$ref": "#/$defs/claim" },
+        "reason": { "type": "string", "minLength": 10, "maxLength": 500 },
+        "sourceWitness": { "$ref": "#/$defs/sourceWitness" }
+      }
+    },
+    "claimRevision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repairId", "before", "after", "reason", "sourceWitness"],
+      "properties": {
+        "repairId": { "type": "string", "pattern": "^[a-z0-9_-]+:\\d{3}:r\\d{4,}$" },
+        "before": { "$ref": "#/$defs/claim" },
+        "after": { "$ref": "#/$defs/claim" },
         "reason": { "type": "string", "minLength": 10, "maxLength": 500 },
         "sourceWitness": { "$ref": "#/$defs/sourceWitness" }
       }

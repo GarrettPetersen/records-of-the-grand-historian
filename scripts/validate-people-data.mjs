@@ -93,7 +93,7 @@ function validateConfiguration(errors) {
     schemaVersion: 1,
     extractionSchemaVersion: 1,
     packetSchemaVersion: 1,
-    promptVersion: 3,
+    promptVersion: 4,
     candidateScannerVersion: 2,
   };
   for (const [key, expected] of Object.entries(expectedVersions)) {
@@ -144,6 +144,7 @@ async function main() {
 
   let editorialDecisions = 0;
   let claimRetractions = 0;
+  let claimRevisions = 0;
   for (const file of editorialDecisionFiles()) {
     const document = readJson(file);
     try {
@@ -207,10 +208,23 @@ async function main() {
             );
           }
         }
+        for (const revision of document.claimRevisions) {
+          if (currentClaimFacts.has(claimFactContract(revision.before))) {
+            errors.push(
+              `${path.relative(REPO_ROOT, file)} revised ${revision.before.id}, but its old fact remains applied`,
+            );
+          }
+          if (!currentClaimFacts.has(claimFactContract(revision.after))) {
+            errors.push(
+              `${path.relative(REPO_ROOT, file)} revised ${revision.before.id}, but its replacement fact is missing`,
+            );
+          }
+        }
       }
     }
     editorialDecisions += document.decisions.length;
     claimRetractions += document.claimRetractions.length;
+    claimRevisions += document.claimRevisions.length;
   }
   if (errors.length > 0) {
     throw new Error(`Person data validation failed:\n${errors.map((item) => `- ${item}`).join('\n')}`);
@@ -219,7 +233,7 @@ async function main() {
     `Person data validation passed: ${files.length} extraction(s), ${people} local people, ` +
     `${mentions} mentions, ${claims} claims, ${proposedRepairs} proposed repair(s), ` +
     `${appliedRepairs} applied repair(s), ${editorialDecisions} editorial decision(s), ` +
-    `${claimRetractions} claim retraction(s).`,
+    `${claimRetractions} claim retraction(s), ${claimRevisions} claim revision(s).`,
   );
 }
 
