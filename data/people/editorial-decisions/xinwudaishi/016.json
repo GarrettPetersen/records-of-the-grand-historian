@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "xinwudaishi",
+  "chapter": "016",
+  "input": {
+    "chapterFingerprint": "sha256:93fd26eaaa883211ccf7d5197e122e9a99a166f08cdc97b264d11f9cfe7c75fd",
+    "proposalsFingerprint": "sha256:9bd152e667949a7d7eee7a51372079d9ae92ab1dd582c031b4db5a70b395aed6"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-2e0207a6-1a81-462d-85e2-c7d68e7ec820",
+    "runId": "run-0788b191-0c87-4888-b126-4092b2fb6f83",
+    "completedAt": "2026-08-11T22:24:23.155Z"
+  },
+  "proposals": [
+    {
+      "id": "xinwudaishi:016:r0001",
+      "unit": {
+        "id": "s0008",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "Zhang Lingzhao, chief inspector of the Pingsheng command, expelled Yanhao with the troops stationed under him, and Yanhao fled to Xiangzhou.",
+      "after": "Zhang Lingzhao, chief inspector of the Pengsheng command, expelled Yanhao with the troops stationed under him, and Yanhao fled to Xiangzhou.",
+      "reason": "捧聖 is Pengsheng (Pěngshèng), not Pingsheng; the English mistranscribes the guard-unit name.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:016:r0002",
+      "unit": {
+        "id": "s0008",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "Zhang Lingzhao, chief inspector of the Pingsheng command, drove Yanhao out with the garrison troops under his command, and Yanhao fled to Xiangzhou.",
+      "after": "Zhang Lingzhao, chief inspector of the Pengsheng command, drove Yanhao out with the garrison troops under his command, and Yanhao fled to Xiangzhou.",
+      "reason": "Same mistranscription of 捧聖 as Pingsheng instead of Pengsheng in the literal field.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xinwudaishi:016:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit titles Zhang Lingzhao 捧聖都虞候; 捧 is péng, so the unit name is Pengsheng, not Pingsheng. The proposed replacement corrects that romanization without changing the rest of the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0008",
+        "excerpt": "捧聖都虞候張令昭"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:016:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field has the same mistranscription of 捧聖 as Pingsheng; Pengsheng matches the Chinese and leaves the rest of the rendering intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0008",
+        "excerpt": "捧聖都虞候張令昭"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

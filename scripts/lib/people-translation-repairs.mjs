@@ -20,6 +20,7 @@ const ENGLISH_NAMED_NON_PERSON_TERMS = new Set([
   'Circular Moat',
   'Earth Goddess',
   'Five Altars',
+  'Heaven',
   'Mount Shouyang',
   'Supreme Altar',
   'Three Amnesties',

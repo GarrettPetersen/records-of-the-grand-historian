@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "104",
+  "input": {
+    "chapterFingerprint": "sha256:ffe84912a4421d6d827a14fac8ace1a754ce4a653d630674f6cfbd60b1bfff48",
+    "proposalsFingerprint": "sha256:3af46e2248370215f0342d1aa691248590b44e88d37f8399c117f1d666552f7c"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-c445de20-87a8-4248-a0a7-a495143a0b0f",
+    "runId": "run-820ec02b-907f-42f5-8aad-f0cb4158fba1",
+    "completedAt": "2026-08-11T22:06:52.660Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:104:r0001",
+      "unit": {
+        "id": "s0005",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "She heard and objected: \"Heaven raised us, but so did the people's goodwill; to squeeze their purses before you have eased their lot is no way for a new emperor to show mercy.",
+      "after": "The empress heard of it and remonstrated, saying, \"From the time Jin Gaozu raised the righteous cause down to our dynasty's rise to fortune, although it came from Heaven's will, it was also because the blessing-power of the land and the people arrived together; to fail to show kindness to the multitude yet wish to strip their wealth is not the way a new Son of Heaven should pity the distressed.",
+      "reason": "Idiomatic English omits 晉高祖 and collapses the remonstrance into a paraphrase that invents 'Heaven raised us' while dropping the land-and-people blessing-power argument.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:104:r0002",
+      "unit": {
+        "id": "s0022",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "That year they planned to enthrone Liu Yun from Xuzhou; before the boy arrived Guo Wei had the whole bureaucracy memorialize the dowager to hold court as regent, and she assented in edict form.",
+      "after": "That year they planned to enthrone Liu Yun, the Xuzhou military commissioner; because the welcoming escort had not yet arrived, Guo Wei led the ministers to memorialize the dowager to hold court temporarily as regent, and she thereupon spoke in edict form.",
+      "reason": "Idiomatic invents 'the boy' for 赟 and softens 徐州節度使 / 迎奉未至 / 稱誥 into looser wording.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:104:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit names 晉高祖建義 and argues 雖出於天意，亦土地人民福力同致耳; the prior idiomatic invents 'Heaven raised us,' omits Jin Gaozu, and collapses the land-and-people blessing-power claim. The proposed repair restores that remonstrance accurately and completely.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0005",
+        "excerpt": "自晉高祖建義，及國家興運，雖出於天意，亦土地人民福力同致耳"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:104:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit has 徐州節度使赟, 迎奉未至, 權臨朝聽政, and 稱誥; the prior idiomatic invents 'the boy,' softens the Xuzhou commissioner title, and turns the unfinished welcoming escort into a personal arrival. The proposed repair restores those points without introducing new error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0022",
+        "excerpt": "議立徐州節度使赟為帝，以迎奉未至"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

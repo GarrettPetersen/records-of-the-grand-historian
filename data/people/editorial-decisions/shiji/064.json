@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "064",
+  "input": {
+    "chapterFingerprint": "sha256:574dff5635cea1f044715178be7d6903b99c8d56f77802bb549b46ba02abe357",
+    "proposalsFingerprint": "sha256:f46b120df5e333de0b22cdf75baf446e5df3c2c8fd7830f4964204fa995969fd"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-6732ebd2-f711-4353-8214-f1b045f5811f",
+    "runId": "run-f9dd26e4-bc28-4b4b-ad76-bdf4d2c8f642",
+    "completedAt": "2026-08-11T22:36:44.760Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:064:r0001",
+      "unit": {
+        "id": "s0032",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 31
+      },
+      "field": "literal",
+      "before": "Soldiers' encampments wells stoves food drink asked illness medicine, personally stroked and comforted them.",
+      "after": "As for the soldiers' encampments, wells, stoves, food and drink, and inquiries about illness and medicine, he personally stroked and comforted them.",
+      "reason": "Literal English is telegraphic and omits grammatical subjects and connectors, obscuring that Rangju personally oversaw camp welfare.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:064:r0002",
+      "unit": {
+        "id": "s0033",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 32
+      },
+      "field": "literal",
+      "before": "All took general's provisions to feast soldiers, body shared rations equally with soldiers.",
+      "after": "He took all the general's provisions to feast the soldiers, and personally shared the rations equally with the soldiers.",
+      "reason": "Literal calques 身 as 'body' and drops the subject, making the sense unclear.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:064:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "士卒次舍井灶飲食問疾醫藥，身自拊循之 is a topic–comment line: the welfare list is topicalized and 身自拊循之 means he personally stroked and comforted the soldiers; the before is ungrammatical telegraphic English, and the proposed after restores that structure without inventing or omitting sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0032",
+        "excerpt": "士卒次舍井灶飲食問疾醫藥，身自拊循之"
+      }
+    },
+    {
+      "repairId": "shiji:064:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "悉取將軍之資糧享士卒 means he took all the general's provisions to feast the soldiers (悉 modifies 取, not a plural subject), and 身與士卒平分糧食 means he personally shared rations equally with them; the before's 'All took' and calque 'body' are wrong, and the proposed after matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0033",
+        "excerpt": "悉取將軍之資糧享士卒，身與士卒平分糧食"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

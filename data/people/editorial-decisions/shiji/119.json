@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "119",
+  "input": {
+    "chapterFingerprint": "sha256:e34d2b1bd970298051e54d857fd00bbd8822844973c6199bde548ade4adf0aaf",
+    "proposalsFingerprint": "sha256:09ee478940753821ab6569a1c45de9df7260f5b9b15a46d82d8c0bd149372bf0"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-2df6b4e2-3501-4a43-938f-c293a032c0c2",
+    "runId": "run-83681d8a-fa24-4135-bbd9-4ec0eb1a48d9",
+    "completedAt": "2026-08-11T22:24:42.212Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:119:r0001",
+      "unit": {
+        "id": "s0033",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "Five years, scholars no false records, mourning periods not commanded yet orderly.",
+      "after": "Five years, the shi had no conscription registers; mourning periods were orderly without being commanded.",
+      "reason": "尺籍 are military conscription registers, not 'false records'; 士 here are men of service, not 'scholars'.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:119:r0002",
+      "unit": {
+        "id": "s0072",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "Wen Gong said: 'Son then self consider have crime, sha ren also have crime?'",
+      "after": "Wen Gong said: 'Son then self consider have crime, gua ren also have crime?'",
+      "reason": "寡人 is misrendered as the nonsensical 'sha ren'; it is the ruler's self-reference.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:119:r0003",
+      "unit": {
+        "id": "s0079",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Gong yizi see good cloth yet family woman expel.",
+      "after": "Gongyi zi see good cloth yet family woman expel.",
+      "reason": "公儀子 should be rendered as Gongyi zi (Master Gongyi), not the broken 'Gong yizi'.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:119:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit 士無尺籍 contrasts with the prior literal’s “scholars no false records”: 尺籍 are military conscription registers, and 士 here are men of service, not scholars. The proposed literal restores that sense; 喪期不令而治 is already rightly “mourning periods … orderly without being commanded.”",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0033",
+        "excerpt": "士無尺籍，喪期不令而治"
+      }
+    },
+    {
+      "repairId": "shiji:119:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Duke Wen’s speech has 寡人亦有罪邪, the ruler’s self-reference 寡人 (gua ren), not “sha ren.” Replacing the nonsensical romanization corrects a real mistranslation without changing the rest of the literal.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0072",
+        "excerpt": "寡人亦有罪邪"
+      }
+    },
+    {
+      "repairId": "shiji:119:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "公儀子 is the honorific for Gongyi Xiu (compound surname 公儀 + 子); splitting it as “Gong yizi” is wrong. “Gongyi zi” restores the correct name segmentation while leaving the rest of the literal intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0079",
+        "excerpt": "公儀子見好布而家婦逐"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

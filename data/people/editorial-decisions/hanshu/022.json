@@ -3,46 +3,46 @@
   "book": "hanshu",
   "chapter": "022",
   "input": {
-    "chapterFingerprint": "sha256:371709f2dca3ed444510a8ab90714fbd0f2a09d3d9d5536f7a2c025604fe7f8b",
-    "proposalsFingerprint": "sha256:f30006f51f6deff92e5aec481e019682be26408737374a90fa903743c873c5b4"
+    "chapterFingerprint": "sha256:418effb44f1af00f4cf7e9ea648e383c0c0395d39a426891fa53158a35e9ed92",
+    "proposalsFingerprint": "sha256:ee4829f0d7bfdffdbb4c3eb77038febb20f94b15d8932b659f9ad5e87542ccf8"
   },
   "reviewer": {
     "kind": "cursor-agent",
     "name": "grok-4.5",
     "model": "grok-4.5",
-    "agentId": "bc-fe640ad6-4c13-49c0-b4f3-f83b6eaf4cf6",
-    "runId": "run-6ccef00e-d483-4feb-a2e3-d64974cc8fbc",
-    "completedAt": "2026-08-11T02:25:12.203Z"
+    "agentId": "bc-067ea8ca-7669-44fa-ab05-cc3273cf4efc",
+    "runId": "run-7076fc1b-63e0-4fd8-a1ce-08aa1bc13609",
+    "completedAt": "2026-08-11T22:33:40.582Z"
   },
   "proposals": [
     {
       "id": "hanshu:022:r0001",
       "unit": {
-        "id": "s0013",
+        "id": "s0032",
         "kind": "paragraph-sentence",
-        "blockIndex": 1,
+        "blockIndex": 2,
         "collection": "sentences",
-        "itemIndex": 10
+        "itemIndex": 12
       },
       "field": "idiomatic",
-      "before": "As the Tradition says: take Yao and Shun. When Yu, Ji, and Qi joined them in doing what was right, it was carried out; when Gun and Huan Dou sought to join them in wrongdoing, they were executed.",
-      "after": "As the Tradition says: take Yao and Shun. When Yu, Ji, and Xie joined them in doing what was right, it was carried out; when Gun and Huan Dou sought to join them in wrongdoing, they were executed.",
-      "reason": "Chinese 禼 is the sage-minister Xie (契), not Qi; translating as Qi confuses him with the state of Qi.",
+      "before": "For people whose deeds are clearly recorded in the historical sources, no explanation is needed; where points remain obscure, I occasionally add clarification.\"〉\"",
+      "after": "For people whose deeds are clearly recorded in the historical sources, no explanation is needed; where points remain obscure, I occasionally add clarification.\"〉",
+      "reason": "Extraneous closing quotation mark after the commentary-closing bracket 〉; Chinese ends with 」〉 only.",
       "confidence": "high"
     },
     {
       "id": "hanshu:022:r0002",
       "unit": {
-        "id": "s0013",
+        "id": "s0032",
         "kind": "paragraph-sentence",
-        "blockIndex": 1,
+        "blockIndex": 2,
         "collection": "sentences",
-        "itemIndex": 10
+        "itemIndex": 12
       },
       "field": "literal",
-      "before": "The Tradition says: For example, with Yao and Shun, when Yu, Ji, and Qi joined them in doing good, it was carried out; when Gun and Huan Dou wished to join them in doing evil, they were executed.",
-      "after": "The Tradition says: For example, with Yao and Shun, when Yu, Ji, and Xie joined them in doing good, it was carried out; when Gun and Huan Dou wished to join them in doing evil, they were executed.",
-      "reason": "Chinese 禼 is Xie (契); Qi is a mistranslation of that personal name.",
+      "before": "As for figures whose deeds are seen in histories and biographies and are manifestly knowable, they need no explanation; among them, where there is obscurity, I at times further address it.\"〉\"",
+      "after": "As for figures whose deeds are seen in histories and biographies and are manifestly knowable, they need no explanation; among them, where there is obscurity, I at times further address it.\"〉",
+      "reason": "Extraneous closing quotation mark after the commentary-closing bracket 〉; Chinese ends with 」〉 only.",
       "confidence": "high"
     }
   ],
@@ -51,50 +51,25 @@
       "repairId": "hanshu:022:r0001",
       "decision": "accept",
       "after": null,
-      "reason": "In 禹、稷、禼, 禼 is the sage-minister Xie (契), not Qi; replacing Qi with Xie corrects a real naming error without changing the rest of the sentence.",
+      "reason": "Chinese s0032 ends 焉。」〉 with only 」 before the commentary closer 〉; the English trailing \" after 〉 is an extraneous mark, and the proposed idiomatic text correctly keeps .\"〉.",
       "sourceWitness": {
         "source": "chapter-text",
-        "citation": "s0013",
-        "excerpt": "禹、稷、禼"
+        "citation": "s0032",
+        "excerpt": "時復及焉。」〉"
       }
     },
     {
       "repairId": "hanshu:022:r0002",
       "decision": "accept",
       "after": null,
-      "reason": "The Chinese personal name 禼 in 禹、稷、禼 is Xie (契); Qi is a mistranslation, and the proposed literal replacement is accurate.",
+      "reason": "Chinese s0032 ends 焉。」〉 with no mark after 〉; removing the literal field's extra closing quote after 〉 matches the source punctuation without changing meaning.",
       "sourceWitness": {
         "source": "chapter-text",
-        "citation": "s0013",
-        "excerpt": "禹、稷、禼"
+        "citation": "s0032",
+        "excerpt": "時復及焉。」〉"
       }
     }
   ],
-  "claimRetractions": [
-    {
-      "repairId": "hanshu:022:r0001",
-      "claim": {
-        "id": "hanshu:022:c0018",
-        "subject": "hanshu:022:p007",
-        "predicate": "name",
-        "value": {
-          "kind": "alternate",
-          "en": "Qi",
-          "zh": "禼",
-          "pinyin": "Qi"
-        },
-        "certainty": "explicit",
-        "evidence": [
-          "hanshu:022:s0013"
-        ]
-      },
-      "reason": "The alternate English name Qi for 禼 was created only by the mistranslation; s0013 supports Xie, not Qi, as the English form of this personal name.",
-      "sourceWitness": {
-        "source": "chapter-text",
-        "citation": "s0013",
-        "excerpt": "禼"
-      }
-    }
-  ],
+  "claimRetractions": [],
   "claimRevisions": []
 }

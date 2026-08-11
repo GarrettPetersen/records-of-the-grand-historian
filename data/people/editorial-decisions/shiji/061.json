@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "061",
+  "input": {
+    "chapterFingerprint": "sha256:52dd24ff329b1df4ad415075160906f3b0dbefda4f2fe263721a2a413a83578c",
+    "proposalsFingerprint": "sha256:f21d3e0835014c681e9ff5c1b9d92cc730b340c6e61b1f8be59a86997e69d896"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-65b230ad-0071-43ad-9695-c2027547c1e8",
+    "runId": "run-5ec0afb1-b68e-4b15-aa03-8375546037e2",
+    "completedAt": "2026-08-11T22:20:46.821Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:061:r0001",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "When Yao was about to abdicate the throne and yield it to Yu Shun, the mountain lords and pastors all recommended him. They tested him in office; he held his duties for several decades, and when his merits and achievements had flourished, they transferred the administration to him.",
+      "after": "When Yao was about to abdicate the throne and yield it to Yu Shun—and in the interval between Shun and Yu—the mountain lords and pastors all recommended him. They tested him in office; he held his duties for several decades, and when his merits and achievements had flourished, they transferred the administration to him.",
+      "reason": "Idiomatic English omits 舜禹之閒 ('between Shun and Yu'), collapsing the succession of both sage-kings into Yao yielding only to Shun and obscuring that the recommendation and testing also cover Yu.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:061:r0002",
+      "unit": {
+        "id": "s0051",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "'In the year's cold, then know the pine and cypress wither late.'",
+      "after": "'Only in the cold of the year does one know that the pine and cypress are the last to wither.'",
+      "reason": "The idiomatic rendering is calqued and grammatically incomplete as English, obscuring the Analects sense that adversity reveals enduring virtue.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:061:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "The before text drops 舜禹之閒 after 讓於虞舜, so it covers only Yao yielding to Shun and hides that the 岳牧 recommendation and testing span the Shun–Yu succession as well; the proposed restoration is accurate and grammatical.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "堯將遜位，讓於虞舜，舜禹之閒，岳牧咸薦"
+      }
+    },
+    {
+      "repairId": "shiji:061:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The before calque lacks a grammatical English subject and underplays 然後…後凋; the proposal correctly renders the Analects sense that only in the year's cold does one know pine and cypress are last to wither.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0051",
+        "excerpt": "歲寒，然後知松柏之後凋"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

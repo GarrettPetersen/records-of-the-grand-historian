@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "108",
+  "input": {
+    "chapterFingerprint": "sha256:ae0334e181f80f904b47e3a37f6e19badce698335b3918228baa92e9d2dac8cc",
+    "proposalsFingerprint": "sha256:489aecc32f07282305dcb092e40c74d3db1d1c47bd1c82272d2dbfd70b804262"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-d3c97a68-2270-4327-80d0-6cad3d1858d6",
+    "runId": "run-e15cb197-3ba2-44ef-b05b-c524609fcced",
+    "completedAt": "2026-08-11T22:20:43.265Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:108:r0001",
+      "unit": {
+        "id": "s0061",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Zhilugu, Wang Bai, and Yelü Diru committed no great wrongs or merits — it is right that they be recorded.",
+      "after": "Zhilugu, Wang Bai, and Yelü Diru had neither great merits nor demerits — it is right that they be recorded.",
+      "reason": "得失 means gains/losses or merits/demerits; 'committed no great wrongs or merits' is unnatural and obscures the sense.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:108:r0002",
+      "unit": {
+        "id": "s0013",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "Under Taizong he served as an imperial physician in attendance.",
+      "after": "In Taizong's time he served as an imperial physician in attendance.",
+      "reason": "'Under Taizong' is awkward as a sentence opener and can be misread as a personal name; the Chinese is 太宗時.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:108:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "無大得失 means they had no great merits or demerits (gains or losses); 'committed no great wrongs or merits' misrenders 得失 and pairs 'committed' with merits unnaturally. The proposed 'neither great merits nor demerits' matches the Chinese and is natural English.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0061",
+        "excerpt": "無大得失"
+      }
+    },
+    {
+      "repairId": "liaoshi:108:r0002",
+      "decision": "reject",
+      "after": null,
+      "reason": "太宗時 is accurately rendered by the established historiographical idiom 'Under Taizong'; the proposed 'In Taizong's time' is only a stylistic alternate, not a correction of error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0013",
+        "excerpt": "太宗時"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

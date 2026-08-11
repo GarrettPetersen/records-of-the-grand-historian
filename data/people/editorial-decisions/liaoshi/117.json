@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "117",
+  "input": {
+    "chapterFingerprint": "sha256:1a08b494c3d541e74111ba3f247f32f8385b342bf7821fd2f21bdd6a80365c03",
+    "proposalsFingerprint": "sha256:859a60a1989f5a4cfb9516f9a9dfca988e9af4f586d568037b7954d2125bbeb3"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-4bcaba06-a206-4eb7-bc77-180d65d7af37",
+    "runId": "run-f133ab79-0e1d-4b48-961c-7d58a7d204ae",
+    "completedAt": "2026-08-11T22:34:24.468Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:117:r0001",
+      "unit": {
+        "id": "s0029",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Our Taizu Emperor treated all with equal benevolence and deeply added pity and compassion.",
+      "after": "Our Shizu Emperor treated all with equal benevolence and deeply added pity and compassion.",
+      "reason": "Chinese 世祖 is the temple name Shizu, not Taizu (太祖); the literal English misidentifies the Yuan emperor.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:117:r0002",
+      "unit": {
+        "id": "s0029",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Our Founder Emperor treated all peoples alike with compassion and was deeply moved to pity.",
+      "after": "Our Emperor Shizu treated all peoples alike with compassion and was deeply moved to pity.",
+      "reason": "世祖 is the temple name Shizu; 'Founder Emperor' obscures the specific temple-name referent.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:117:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 世祖 is the temple name Shizu; the literal 'Taizu' wrongly renders 太祖 and misidentifies the emperor.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0029",
+        "excerpt": "我世祖皇帝"
+      }
+    },
+    {
+      "repairId": "liaoshi:117:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "世祖 is the temple name Shizu, not a generic 'Founder'; the proposed 'Emperor Shizu' restores the correct referent.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0029",
+        "excerpt": "我世祖皇帝"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "liaoshi:117:r0002",
+      "before": {
+        "id": "liaoshi:117:c0023",
+        "subject": "liaoshi:117:p006",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Founder Emperor",
+          "zh": "世祖皇帝"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:117:s0029"
+        ]
+      },
+      "after": {
+        "id": "liaoshi:117:c0023",
+        "subject": "liaoshi:117:p006",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Emperor Shizu",
+          "zh": "世祖皇帝"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:117:s0029"
+        ]
+      },
+      "reason": "The English title 'Founder Emperor' came only from the bad idiomatic rendering of 世祖皇帝; accepting r0002 restores Emperor Shizu.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0029",
+        "excerpt": "世祖皇帝"
+      }
+    }
+  ]
+}
