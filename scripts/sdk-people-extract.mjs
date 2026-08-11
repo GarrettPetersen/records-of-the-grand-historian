@@ -51,6 +51,7 @@ const DEFAULT_MAX_CANDIDATES = 600;
 const DEFAULT_MAX_COST_CENTS = 1000;
 const DEFAULT_CHUNK_CONTEXT_UNITS = 6;
 const DEFAULT_AGENT_OVERHEAD_SCORE = 100_000;
+const DEFAULT_AGENT_COST_RESERVE_CENTS = 1000;
 const PEOPLE_CONFIG = readJson(path.join(PEOPLE_DIR, 'config.json'));
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
@@ -75,6 +76,8 @@ Options:
                        Read-only neighboring units per chunk side (default: ${DEFAULT_CHUNK_CONTEXT_UNITS}).
   --max-cost DOLLARS   Stop launching agents after this run reaches the charged
                        amount (default: $${(DEFAULT_MAX_COST_CENTS / 100).toFixed(2)}; use unlimited to disable).
+  --cost-reserve DOLLARS
+                       Budget reserved for each in-flight agent (default: $${(DEFAULT_AGENT_COST_RESERVE_CENTS / 100).toFixed(2)}).
   --plan-out PATH      Write the measured queue plan (default: generated data).
   --max-attempts N     Validation attempts per phase (default: 3).
   --model MODEL        Cursor model (default: ${DEFAULT_MODEL}).
@@ -122,6 +125,7 @@ function parseArgs(argv) {
     deferLarge: false,
     chunkContextUnits: DEFAULT_CHUNK_CONTEXT_UNITS,
     maxCostCents: DEFAULT_MAX_COST_CENTS,
+    agentCostReserveCents: DEFAULT_AGENT_COST_RESERVE_CENTS,
     planOut: DEFAULT_PLAN_FILE,
     maxAttempts: 3,
     model: process.env.SDK_PEOPLE_MODEL ?? DEFAULT_MODEL,
@@ -159,6 +163,7 @@ function parseArgs(argv) {
       opts.chunkContextUnits = Number(value);
     }
     else if (arg === '--max-cost') opts.maxCostCents = dollarCents(next(), arg);
+    else if (arg === '--cost-reserve') opts.agentCostReserveCents = dollarCents(next(), arg);
     else if (arg === '--plan-out') opts.planOut = path.resolve(REPO_ROOT, next());
     else if (arg === '--max-attempts') opts.maxAttempts = positiveInteger(next(), arg, 5);
     else if (arg === '--model') opts.model = next();
@@ -184,6 +189,7 @@ function parseArgs(argv) {
   if (opts.all && (opts.book || opts.chapter)) throw new Error('--all cannot be combined with --book or --chapter');
   if (opts.allowLarge && opts.deferLarge) throw new Error('--allow-large cannot be combined with --defer-large');
   if (opts.stream && opts.concurrency !== 1) throw new Error('--stream requires --concurrency 1');
+  if (opts.agentCostReserveCents === null) throw new Error('--cost-reserve must be a dollar amount');
   return opts;
 }
 
@@ -795,6 +801,42 @@ async function recordAgentUsage(agent, target, budget, state, chunk = null) {
   }
 }
 
+function agentReservationCents(opts, budget) {
+  if (opts.maxCostCents === null) return 0;
+  const reservation = Math.min(opts.agentCostReserveCents, opts.maxCostCents);
+  return budget.chargedCents + budget.reservedCents + reservation <= opts.maxCostCents
+    ? reservation
+    : null;
+}
+
+async function reserveAgentBudget(opts, budget, control) {
+  if (opts.maxCostCents === null) return () => {};
+  while (true) {
+    if (control.stopRequested) throw new Error('Shutdown requested before agent launch');
+    const reservation = agentReservationCents(opts, budget);
+    if (reservation !== null) {
+      budget.reservedCents += reservation;
+      let released = false;
+      return () => {
+        if (released) return;
+        released = true;
+        budget.reservedCents -= reservation;
+      };
+    }
+    if (budget.reservedCents === 0) {
+      control.stopRequested = true;
+      control.stopReason = 'cost-ceiling';
+      throw new Error(
+        `Run cost ceiling leaves less than the $${(Math.min(
+          opts.agentCostReserveCents,
+          opts.maxCostCents,
+        ) / 100).toFixed(2)} agent reservation`,
+      );
+    }
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+}
+
 function chunkRunRecord(chunk, extraction) {
   return {
     chunkId: chunk.id,
@@ -822,14 +864,11 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
     }
   }
   if (control.stopRequested) throw new Error('Shutdown requested before chunk launch');
-  if (opts.maxCostCents !== null && budget.chargedCents >= opts.maxCostCents) {
-    control.stopRequested = true;
-    control.stopReason = 'cost-ceiling';
-    throw new Error('Run cost ceiling reached before chunk launch');
-  }
 
   let agent;
+  let releaseReservation = () => {};
   try {
+    releaseReservation = await reserveAgentBudget(opts, budget, control);
     agent = await Agent.create({
       apiKey: opts.apiKey,
       name: `People extraction ${stateKey(target)} chunk ${chunk.id}`,
@@ -863,6 +902,7 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
     return { chunk, extraction: compact };
   } finally {
     await recordAgentUsage(agent, target, budget, state, chunk);
+    releaseReservation();
     await closeAgent(agent);
   }
 }
@@ -950,7 +990,9 @@ async function processTarget(target, opts, state, control, budget) {
   }
 
   let agent;
+  let releaseReservation = () => {};
   try {
+    releaseReservation = await reserveAgentBudget(opts, budget, control);
     agent = await Agent.create({
       apiKey: opts.apiKey,
       name: `People extraction ${key}`,
@@ -996,12 +1038,13 @@ async function processTarget(target, opts, state, control, budget) {
     return { status: 'accepted', stats: accepted.stats };
   } catch (error) {
     const errors = validationErrors(error);
-    const status = control.cancelRequested ? 'interrupted' : 'failed';
+    const status = control.stopRequested ? 'interrupted' : 'failed';
     updateState(state, target, { status, lastErrors: errors });
     console.error(`[${key}] ${status}: ${errors[0]}`);
     return { status, errors };
   } finally {
     await recordAgentUsage(agent, target, budget, state);
+    releaseReservation();
     await closeAgent(agent);
   }
 }
@@ -1030,6 +1073,15 @@ function selfTest() {
   }
   if (dollarCents('10.25', '--max-cost') !== 1025 || dollarCents('unlimited', '--max-cost') !== null) {
     throw new Error('Cost ceiling parser returned the wrong amount');
+  }
+  const budget = { chargedCents: 400, reservedCents: 600 };
+  const costOpts = { maxCostCents: 2000, agentCostReserveCents: 1000 };
+  if (agentReservationCents(costOpts, budget) !== 1000) {
+    throw new Error('Cost reservation did not admit an agent within the ceiling');
+  }
+  budget.reservedCents = 700;
+  if (agentReservationCents(costOpts, budget) !== null) {
+    throw new Error('Cost reservation admitted an agent beyond the ceiling');
   }
   console.log('sdk-people-extract scheduler self-test: ok');
 }
@@ -1060,13 +1112,14 @@ async function main() {
     `Cursor Cloud concurrency=${opts.concurrency}; model=${opts.model} effort=${opts.effort} ` +
     `fast=${opts.fast ? 'on' : 'off'}; run cost ceiling=` +
     `${opts.maxCostCents === null ? 'unlimited' : `$${(opts.maxCostCents / 100).toFixed(2)}`}; ` +
+    `agent reservation=$${(opts.agentCostReserveCents / 100).toFixed(2)}; ` +
     'no worker git pushes',
   );
   if (!opts.dryRun && targets.length > 0) fetchStartingRef(opts.startingRef);
 
   const control = createRunControl();
   const removeSignalHandlers = opts.dryRun ? () => {} : installSignalHandlers(control);
-  const budget = { chargedCents: 0 };
+  const budget = { chargedCents: 0, reservedCents: 0 };
   let nextIndex = 0;
   const results = [];
   const workers = Array.from({ length: Math.min(opts.concurrency, targets.length) }, async () => {

@@ -1,0 +1,271 @@
+{
+  "schemaVersion": 3,
+  "book": "hanshu",
+  "chapter": "071",
+  "input": {
+    "chapterFingerprint": "sha256:84622b313ae1ac997ff0dd265aaf055a1e8337fa5739021ca6640e35e6dfc793",
+    "proposalsFingerprint": "sha256:f5be1431655369457264c50714781c2d6cb57c6de4559ec360f5d2cd9d97854d"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex review of Grok 4.5 draft",
+    "model": null,
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-11T08:12:00.000Z"
+  },
+  "proposals": [
+    {
+      "id": "hanshu:071:r0001",
+      "unit": {
+        "id": "s0129",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Sun Meng.",
+      "after": "Meng.",
+      "reason": "Chinese 孫 猛 here is a fragment for grandson Meng (孫猛), not the surname Sun; the English invents the surname Sun.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:071:r0002",
+      "unit": {
+        "id": "s0129",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Sun Meng.",
+      "after": "Meng.",
+      "reason": "Chinese 孫 猛 is kinship-plus-given-name fragment (grandson Meng), not surname Sun plus Meng.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:071:r0003",
+      "unit": {
+        "id": "s0130",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Zhang Qian's grandson Sun Meng, styled Ziyou, was a brilliant man who rose to grand counsellor under Emperor Yuan, served on the Xiongnu embassy staff, sat in the inner court, and fell to Shi Xian's slander.",
+      "after": "Zhang Qian's grandson Meng, styled Ziyou, was a brilliant man who rose to grand counsellor under Emperor Yuan, served on the Xiongnu embassy staff, sat in the inner court, and fell to Shi Xian's slander.",
+      "reason": "Chinese 騫孫猛 means Qian’s grandson Meng; 孫 is “grandson,” not the surname Sun.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:071:r0004",
+      "unit": {
+        "id": "s0077",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "On his return Zhang Qian was appointed grand coachman.",
+      "after": "On his return Zhang Qian was appointed director of guests (da xing).",
+      "reason": "大行 is the Han guest/diplomatic office (later dahonglu), not “grand coachman.”",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:071:r0005",
+      "unit": {
+        "id": "s0202",
+        "kind": "paragraph-sentence",
+        "blockIndex": 23,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "idiomatic",
+      "before": "Army Rectifier Zhao Shi, who had piled up the greatest merit, became grand counsellor of the palace;",
+      "after": "Army Rectifier Zhao Shicheng, who had piled up the greatest merit, became grand counsellor of the palace;",
+      "reason": "Chinese name is 趙始成 (Zhao Shicheng); “Zhao Shi” truncates the given name and misreads 成功 as English “success.”",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:071:r0006",
+      "unit": {
+        "id": "s0202",
+        "kind": "paragraph-sentence",
+        "blockIndex": 23,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "literal",
+      "before": "the army rectifier Zhao Shi had the most merit in success and was made grand counsellor of the palace;",
+      "after": "the army rectifier Zhao Shicheng had the most merit and was made grand counsellor of the palace;",
+      "reason": "趙始成 is the personal name; 功最多 means “had the most merit,” not part of the name or “merit in success.”",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:071:r0007",
+      "unit": {
+        "id": "s0077",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Qian returned and was appointed grand coachman.",
+      "after": "Qian returned and was appointed Director of Foreign Relations.",
+      "reason": "大行 is the Han diplomatic office, not the grand coachman; this also aligns the literal field with the established Shiji rendering.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "hanshu:071:r0001",
+      "decision": "revise",
+      "after": "Zhang Meng.",
+      "reason": "孫 is kinship, not the surname Sun; since the next unit identifies Meng as Zhang Qian's grandson, the biography heading should use his full name Zhang Meng.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0129",
+        "excerpt": "孫 猛"
+      }
+    },
+    {
+      "repairId": "hanshu:071:r0002",
+      "decision": "revise",
+      "after": "Zhang Meng.",
+      "reason": "孫 is kinship, not the surname Sun; the heading is naming Zhang Qian's grandson and is clearest in English as Zhang Meng.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0129",
+        "excerpt": "孫 猛"
+      }
+    },
+    {
+      "repairId": "hanshu:071:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "騫孫猛 is Qian’s grandson Meng; 孫 is kinship, so “Sun Meng” invents a surname. The proposed wording is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0130",
+        "excerpt": "騫孫猛"
+      }
+    },
+    {
+      "repairId": "hanshu:071:r0004",
+      "decision": "revise",
+      "after": "On his return Zhang Qian was appointed Director of Foreign Relations.",
+      "reason": "大行 is the Han diplomatic office, not 太僕 'grand coachman'; Director of Foreign Relations also matches the established rendering in the parallel Shiji passage.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0077",
+        "excerpt": "拜為大行"
+      }
+    },
+    {
+      "repairId": "hanshu:071:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "軍正趙始成功最多 parses as army rectifier Zhao Shicheng with the most merit; “Zhao Shi” truncates 始成 and misreads 成 with 功.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0202",
+        "excerpt": "趙始成功最多"
+      }
+    },
+    {
+      "repairId": "hanshu:071:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "趙始成 is the personal name and 功最多 means “had the most merit”; “Zhao Shi” plus “merit in success” mis-segments the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0202",
+        "excerpt": "趙始成功最多"
+      }
+    },
+    {
+      "repairId": "hanshu:071:r0007",
+      "decision": "accept",
+      "after": null,
+      "reason": "大行 is the Han diplomatic office, not the grand coachman; this also aligns the literal field with the established Shiji rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0077",
+        "excerpt": "騫還，拜為大行"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "hanshu:071:r0003",
+      "claim": {
+        "id": "hanshu:071:c0077",
+        "subject": "hanshu:071:p027",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate",
+          "en": "Sun Meng",
+          "zh": "孫 猛",
+          "pinyin": "Sun Meng"
+        },
+        "certainty": "textual-variant",
+        "evidence": [
+          "hanshu:071:s0129",
+          "hanshu:071:s0130"
+        ]
+      },
+      "reason": "The alternate English name Sun Meng was created only by reading kinship 孫 as a surname; 騫孫猛 supports grandson Meng, not a surname Sun.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0130",
+        "excerpt": "騫孫猛"
+      }
+    }
+  ],
+  "claimRevisions": [
+    {
+      "repairId": "hanshu:071:r0004",
+      "before": {
+        "id": "hanshu:071:c0137",
+        "subject": "hanshu:071:p001",
+        "predicate": "office",
+        "value": {
+          "office": {
+            "en": "grand herald",
+            "zh": "大行"
+          }
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "hanshu:071:s0077"
+        ]
+      },
+      "after": {
+        "id": "hanshu:071:c0137",
+        "subject": "hanshu:071:p001",
+        "predicate": "office",
+        "value": {
+          "office": {
+            "en": "Director of Foreign Relations",
+            "zh": "大行"
+          }
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "hanshu:071:s0077"
+        ]
+      },
+      "reason": "The office claim should use the same corrected title as the repaired translation; 大行 is the diplomatic Director of Foreign Relations, not a grand herald or coachman.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0077",
+        "excerpt": "拜為大行"
+      }
+    }
+  ]
+}

@@ -44,6 +44,16 @@ function aliasesForPerson(extraction, personId, language, unitId) {
     if (typeof exact !== 'string' || !exact.trim()) return;
     const current = aliases.get(exact);
     if (!current || preferred) aliases.set(exact, { exact, kind, preferred });
+    if (language === 'en') {
+      const emperor = exact.match(/^([A-Z][a-z]+)di$/u);
+      if (emperor) {
+        const expanded = `Emperor ${emperor[1]}`;
+        const expandedCurrent = aliases.get(expanded);
+        if (!expandedCurrent || preferred) {
+          aliases.set(expanded, { exact: expanded, kind, preferred });
+        }
+      }
+    }
   };
   const person = extraction.people.find((item) => item.localId === personId);
   const hasUnitContext = extraction.claims.some((claim) =>
@@ -204,6 +214,46 @@ function renumberMentions(extraction) {
   }
 }
 
+function remapNestedPersonIds(value, personIdMap) {
+  if (typeof value === 'string') return personIdMap.get(value) ?? value;
+  if (Array.isArray(value)) return value.map((item) => remapNestedPersonIds(item, personIdMap));
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).map(([key, item]) => [
+      key,
+      remapNestedPersonIds(item, personIdMap),
+    ]));
+  }
+  return value;
+}
+
+function renumberPeopleAndClaims(extraction) {
+  const namespace = `${extraction.book}:${extraction.chapter}`;
+  const personIdMap = new Map(extraction.people.map((person, index) => [
+    person.localId,
+    `${namespace}:p${String(index + 1).padStart(3, '0')}`,
+  ]));
+  extraction.people = extraction.people.map((person) => ({
+    ...person,
+    localId: personIdMap.get(person.localId),
+    identityHints: {
+      ...person.identityHints,
+      relatedLocalPeople: person.identityHints.relatedLocalPeople.flatMap((id) =>
+        personIdMap.has(id) ? [personIdMap.get(id)] : []
+      ),
+    },
+  }));
+  extraction.mentions = extraction.mentions.map((mention) => ({
+    ...mention,
+    person: personIdMap.get(mention.person) ?? mention.person,
+  }));
+  extraction.claims = extraction.claims.map((claim, index) => ({
+    ...claim,
+    id: `${namespace}:c${String(index + 1).padStart(4, '0')}`,
+    subject: personIdMap.get(claim.subject) ?? claim.subject,
+    value: remapNestedPersonIds(claim.value, personIdMap),
+  }));
+}
+
 export function applyTranslationRepairs(chapter, repairs) {
   const revised = structuredClone(chapter);
   const changedUnits = new Set();
@@ -287,6 +337,7 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
   );
 
   const unresolvedSpans = [];
+  const orphanedStalePeople = new Set();
   for (const stale of staleSpans) {
     const unit = unitById.get(stale.mention.unit.id);
     if (!unit) {
@@ -329,10 +380,33 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       );
       mapped = added || alreadyCovered || mapped;
     }
-    if (!mapped) unresolvedSpans.push(stale);
+    if (!mapped) {
+      const hasRemainingMention = reconciled.mentions.some((mention) =>
+        mention.person === stale.mention.person &&
+        (mention.spans.zh.length > 0 || mention.spans.en.length > 0)
+      );
+      const hasRemainingClaim = reconciled.claims.some((claim) =>
+        claim.subject === stale.mention.person
+      );
+      if (!hasRemainingMention && !hasRemainingClaim) {
+        orphanedStalePeople.add(stale.mention.person);
+      } else {
+        unresolvedSpans.push(stale);
+      }
+    }
   }
   reconciled.mentions = reconciled.mentions.filter((mention) =>
     mention.spans.zh.length > 0 || mention.spans.en.length > 0
+  );
+  const activePersonIds = new Set(reconciled.mentions.map((mention) => mention.person));
+  for (const claim of reconciled.claims) {
+    activePersonIds.add(claim.subject);
+    for (const value of nestedStringValues(claim.value)) {
+      if (reconciled.people.some((person) => person.localId === value)) activePersonIds.add(value);
+    }
+  }
+  reconciled.people = reconciled.people.filter((person) =>
+    !orphanedStalePeople.has(person.localId) || activePersonIds.has(person.localId)
   );
 
   const accounted = new Set(reconciled.candidateDispositions.map((item) => item.candidate));
@@ -581,6 +655,7 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
     );
   }
 
+  renumberPeopleAndClaims(reconciled);
   renumberMentions(reconciled);
 
   return { extraction: reconciled, unresolvedCandidates: unresolvedAfterMentionGrowth, unresolvedSpans };

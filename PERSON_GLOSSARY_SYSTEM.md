@@ -71,9 +71,12 @@ ordinary full-chapter validator. Repeated people across chunk boundaries remain
 separate local records for conservative identity resolution later; no second
 read of the source chapter is required. `--defer-large` records large chapters
 without launching them, while `--allow-large` explicitly uses one whole-chapter
-worker. A $10 per-invocation charged-cost ceiling stops new launches while
-active agents drain. The first Ctrl-C also drains; a second Ctrl-C cancels active
-SDK runs.
+worker. `--max-cost` sets the invocation budget, and each in-flight agent must
+first reserve the amount configured by `--cost-reserve` (default $10). This
+prevents concurrent launches from treating unknown in-flight charges as zero.
+Workers wait while another reservation may free capacity and stop once the
+remaining budget cannot cover another reservation. The first Ctrl-C also
+drains; a second Ctrl-C cancels active SDK runs.
 
 Useful commands:
 
@@ -82,7 +85,7 @@ npm run people:packet -- --book songshu --chapter 069 --summary
 npm run people:extract -- --book songshu --chapter 069 --dry-run
 npm run people:extract -- --book songshu --chapter 069
 npm run people:extract -- --book hanshu --chapter 020 --dry-run
-npm run people:extract -- --book hanshu --limit 8 --concurrency 2 --max-cost 10
+npm run people:extract -- --book hanshu --limit 8 --concurrency 2 --max-cost 20 --cost-reserve 10
 npm run people:editorial-review -- --book songshu --chapter 069 --dry-run
 npm run people:editorial-review -- --book songshu --chapter 069
 npm run people:apply-repairs -- --book songshu --chapter 069
