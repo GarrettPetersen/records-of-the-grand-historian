@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "hanshu",
+  "chapter": "093",
+  "input": {
+    "chapterFingerprint": "sha256:490a40750fcfbfa8d4cbd978bb1a01541e6b4172c4cf4258c3475b3fc54a926d",
+    "proposalsFingerprint": "sha256:37d4ec045df66de10ddd4a51b2f13122c3fc80e1abc7930a67b44bd644e389c4"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex review of Grok 4.5 draft",
+    "model": null,
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-11T05:26:00.000Z"
+  },
+  "proposals": [
+    {
+      "id": "hanshu:093:r0001",
+      "unit": {
+        "id": "s0052",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "His elder brother inherited their father's marquisate; Shi Dan declined any share of the estate.",
+      "after": "His elder brother inherited their father's marquisate and declined any share of the estate.",
+      "reason": "Chinese 讓不受分 follows 丹兄嗣父爵為侯; the next sentence 丹盡得父財 shows the elder brother yielded the property share, not Shi Dan.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:093:r0002",
+      "unit": {
+        "id": "s0052",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Dan's elder brother inherited their father's marquisate as marquis; Dan yielded and did not accept a share.",
+      "after": "Dan's elder brother inherited their father's marquisate as marquis; he yielded and did not accept a share.",
+      "reason": "The subject of 讓不受分 is the elder brother who took the title, matching 丹盡得父財 in the next unit.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:093:r0003",
+      "unit": {
+        "id": "s0173",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Fu Xi, courtesy name Zhiyou, came from Wen in Henei commandery. He was the younger brother of Grand Empress Dowager Fu of Dingtao, Emperor Ai's grandmother.",
+      "after": "Fu Xi, courtesy name Zhiyou, came from Wen in Henei commandery. He was a paternal cousin of Grand Empress Dowager Fu of Dingtao, Emperor Ai's grandmother.",
+      "reason": "從父弟 means a younger paternal cousin (father's brother's son), not a younger brother.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:093:r0004",
+      "unit": {
+        "id": "s0173",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "Fu Xi, courtesy name Zhiyou, was a man of Wen in Henei; he was the younger brother by the same father of Empress Dowager Fu of Dingtao, Emperor Ai's grandmother.",
+      "after": "Fu Xi, courtesy name Zhiyou, was a man of Wen in Henei; he was a younger paternal cousin of Empress Dowager Fu of Dingtao, Emperor Ai's grandmother.",
+      "reason": "從父弟 is a collateral paternal cousin, not a same-father younger brother.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "hanshu:093:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 丹兄嗣父爵為侯，讓不受分 the continuing subject of 讓不受分 is 丹兄; s0053 丹盡得父財 confirms Shi Dan received the whole estate, so the original attribution of declining the share to Shi Dan is wrong and the proposed repair is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0052",
+        "excerpt": "丹兄嗣父爵為侯，讓不受分"
+      }
+    },
+    {
+      "repairId": "hanshu:093:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "讓不受分 continues the subject 丹兄 from 丹兄嗣父爵為侯; replacing the wrongly inserted subject Dan with he correctly keeps the elder brother as the one who yielded the share, consistent with 丹盡得父財.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0052",
+        "excerpt": "丹兄嗣父爵為侯，讓不受分"
+      }
+    },
+    {
+      "repairId": "hanshu:093:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "從父弟 denotes a younger paternal cousin (son of a father's brother), not a uterine younger brother; the proposed idiomatic line correctly repairs that kinship without altering other accurate content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0173",
+        "excerpt": "定陶傅太后從父弟"
+      }
+    },
+    {
+      "repairId": "hanshu:093:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "從父弟 is a collateral paternal cousin, not a same-father younger brother; younger brother by the same father invents agnatic siblingship that the Chinese does not state, and the proposed literal repair restores the correct kinship.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0173",
+        "excerpt": "定陶傅太后從父弟"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

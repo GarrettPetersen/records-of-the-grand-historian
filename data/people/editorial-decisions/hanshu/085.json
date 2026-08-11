@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "hanshu",
+  "chapter": "085",
+  "input": {
+    "chapterFingerprint": "sha256:478d5555a4b390b7b5d780f7e2118a4a1dce213d9161a03559f5b8275503bc9e",
+    "proposalsFingerprint": "sha256:33efcbf5bcc492fe14c384c2727d970a450789e5fbf800787ecae69d737cb7f4"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex review of Grok 4.5 draft",
+    "model": null,
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-11T05:26:00.000Z"
+  },
+  "proposals": [
+    {
+      "id": "hanshu:085:r0001",
+      "unit": {
+        "id": "s0232",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Huo Guang’s wife Xian and his daughters all had registry access to Changle Palace; some came and went through the edict gate by night, arrogant and unrestrained, and I fear they may gradually escape control.",
+      "after": "Huo Guang’s wife Xian and his daughters all had registry access to Changxin Palace; some came and went through the edict gate by night, arrogant and unrestrained, and I fear they may gradually escape control.",
+      "reason": "Chinese 長信宮 is Changxin Palace, not Changle (長樂) Palace.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:085:r0002",
+      "unit": {
+        "id": "s0232",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Guang’s wife Xian and his daughters all had registry access to Changle Palace; some passed through the edict gate by night, arrogant, extravagant, and unrestrained—I fear they may gradually become ungovernable.",
+      "after": "Guang’s wife Xian and his daughters all had registry access to Changxin Palace; some passed through the edict gate by night, arrogant, extravagant, and unrestrained—I fear they may gradually become ungovernable.",
+      "reason": "Chinese 長信宮 is Changxin Palace, not Changle (長樂) Palace.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:085:r0003",
+      "unit": {
+        "id": "s0175",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In Emperor Yuan’s time, Wu Zun of Chang’an submitted a memorial saying, ‘When your servant was young, I served as a petty clerk in the commandery residence and privately saw Emperor Xuan, then the imperial great-grandson, in the prison there.",
+      "after": "In Emperor Yuan’s time, Zun, a commoner of Chang’an submitted a memorial saying, ‘When your servant was young, I served as a petty clerk in the commandery residence and privately saw Emperor Xuan, then the imperial great-grandson, in the prison there.",
+      "reason": "士伍 is a commoner/soldier status label, not the surname Wu; the personal name is 尊 (Zun).",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:085:r0004",
+      "unit": {
+        "id": "s0081",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 24
+      },
+      "field": "idiomatic",
+      "before": "Chancellor Xiao He and Imperial Clerk Zhou Chang respectfully deliberated with General Liu Ling, Grand Tutor to the Heir Apparent Shusun Tong, and others: The Son of Heaven’s clothing for spring, summer, autumn, and winter should model the numbers of Heaven and earth and attain the mean of human harmony.",
+      "after": "Chancellor Xiao He and Imperial Clerk Zhou Chang respectfully deliberated with General Ling, Grand Tutor to the Heir Apparent Shusun Tong, and others: The Son of Heaven’s clothing for spring, summer, autumn, and winter should model the numbers of Heaven and earth and attain the mean of human harmony.",
+      "reason": "Chinese has only 將軍臣陵 (General Ling); the surname Liu is not in the source.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:085:r0005",
+      "unit": {
+        "id": "s0102",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "Also in his heart he knew the heir apparent had no factual guilt; doubly he pitied the great-grandson’s innocence; Ji selected a careful and honest female convict, ordered her to nurture the great-grand grandson, and placed him in a quiet, dry place.",
+      "after": "Also in his heart he knew the heir apparent had no factual guilt; doubly he pitied the great-grandson’s innocence; Ji selected a careful and honest female convict, ordered her to nurture the great-grandson, and placed him in a quiet, dry place.",
+      "reason": "Typographical duplication: 'great-grand grandson' should be 'great-grandson' for 曾孫.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "hanshu:085:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 通籍長信宮 names Changxin Palace; Changle would be 長樂宮, so the palace-name correction is required.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0232",
+        "excerpt": "通籍長信宮"
+      }
+    },
+    {
+      "repairId": "hanshu:085:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise misrenders 長信宮 as Changle; Changxin is the accurate place name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0232",
+        "excerpt": "通籍長信宮"
+      }
+    },
+    {
+      "repairId": "hanshu:085:r0003",
+      "decision": "revise",
+      "after": "In Emperor Yuan’s time, Chang’an commoner Zun submitted a memorial saying, ‘When your servant was young, I served as a petty clerk in the commandery residence and privately saw Emperor Xuan, then the imperial great-grandson, in the prison there.",
+      "reason": "士伍 is a status term, not surname Wu, and 尊 is Zun; the proposal’s appositive is ungrammatical, so render as ‘Chang’an commoner Zun’.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0175",
+        "excerpt": "長安士伍尊"
+      }
+    },
+    {
+      "repairId": "hanshu:085:r0004",
+      "decision": "revise",
+      "after": "Chancellor Xiao He and Imperial Clerk Zhou Chang respectfully deliberated with General Wang Ling, Grand Tutor to the Heir Apparent Shusun Tong, and others: The Son of Heaven’s clothing for spring, summer, autumn, and winter should model the numbers of Heaven and earth and attain the mean of human harmony.",
+      "reason": "Chinese has only 將軍臣陵; Liu is invented and wrong. Yan Shigu identifies 陵 as Wang Ling, parallel to the other expanded names in this sentence.",
+      "sourceWitness": {
+        "source": "other",
+        "citation": "Hanshu 74 Yan Shigu commentary on 將軍臣陵",
+        "excerpt": "陵，王陵"
+      }
+    },
+    {
+      "repairId": "hanshu:085:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 曾孫 is great-grandson; ‘great-grand grandson’ is a typographical duplication and must be corrected.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0102",
+        "excerpt": "令保養曾孫"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}
