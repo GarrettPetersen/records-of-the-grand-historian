@@ -11,6 +11,7 @@ import {
 } from './lib/people-content.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
 import { isCompactPeopleExtraction } from './lib/people-compact.mjs';
+import { loadValidatedResolutionDocuments } from './lib/people-corpus.mjs';
 import { createPeopleSchemaValidator, formatSchemaErrors } from './lib/people-schema.mjs';
 import {
   editorialDecisionPath,
@@ -106,7 +107,7 @@ function validateConfiguration(errors) {
     schemaVersion: 1,
     extractionSchemaVersion: 1,
     packetSchemaVersion: 1,
-    promptVersion: 6,
+    promptVersion: 7,
     candidateScannerVersion: 2,
   };
   for (const [key, expected] of Object.entries(expectedVersions)) {
@@ -138,6 +139,7 @@ async function main() {
   let proposedRepairs = 0;
   let appliedRepairs = 0;
   const extractionByScope = new Map();
+  const localPersonIds = new Set();
   for (const file of files) {
     const extraction = readJson(file);
     const packet = buildPeopleExtractionPacket(extraction.book, extraction.chapter, { properNounMatcher: matcher });
@@ -151,6 +153,7 @@ async function main() {
       .filter((claim) => claim.predicate === 'attestation')
       .map((claim) => claim.subject));
     for (const person of result.normalized.people) {
+      localPersonIds.add(person.localId);
       if (!attestedPeople.has(person.localId)) peopleMissingAttestations += 1;
       if (person.identityHints.activeDateHints.length === 0) peopleMissingActiveDateHints += 1;
     }
@@ -162,6 +165,12 @@ async function main() {
       extraction: result.normalized,
       packet,
     });
+  }
+
+  try {
+    loadValidatedResolutionDocuments(localPersonIds);
+  } catch (error) {
+    errors.push(error instanceof Error ? error.message : String(error));
   }
 
   let editorialDecisions = 0;

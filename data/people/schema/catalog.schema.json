@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://24histories.com/schema/people/catalog-v1.json",
+  "title": "Compiled canonical people catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "generatedAt", "complete", "currentPromptVersion", "stats", "people", "localPersonMap", "unresolvedCandidateBlockIds"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "complete": { "type": "boolean" },
+    "currentPromptVersion": { "type": "integer", "minimum": 1 },
+    "stats": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["chapters", "localPeople", "canonicalPeople", "mergedLocalPeople", "legacyLocalPeople", "unresolvedCandidateBlocks"],
+      "properties": {
+        "chapters": { "type": "integer", "minimum": 0 },
+        "localPeople": { "type": "integer", "minimum": 0 },
+        "canonicalPeople": { "type": "integer", "minimum": 0 },
+        "mergedLocalPeople": { "type": "integer", "minimum": 0 },
+        "legacyLocalPeople": { "type": "integer", "minimum": 0 },
+        "unresolvedCandidateBlocks": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "people": {
+      "type": "array",
+      "items": { "$ref": "https://24histories.com/schema/people/canonical-person-v1.json" }
+    },
+    "localPersonMap": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z0-9_-]+:\\d{3}:p\\d{3,}$" },
+      "additionalProperties": { "type": "string", "pattern": "^per_[0-9A-HJKMNP-TV-Z]{20,}$" }
+    },
+    "unresolvedCandidateBlockIds": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^block_[0-9A-HJKMNP-TV-Z]{16}$" }
+    }
+  }
+}

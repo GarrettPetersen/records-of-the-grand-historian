@@ -35,6 +35,22 @@ const V6_COMPLETION_FLAGS = [
   'allChronologyCaptured',
   'editorialPassCompleted',
 ];
+const V7_COMPLETION_FLAGS = [
+  ...V6_COMPLETION_FLAGS,
+  'allPersonEventsCaptured',
+  'allClaimProvenanceCaptured',
+  'allFamilyRelationshipsCaptured',
+];
+const FAMILY_RELATIONS = new Set([
+  'parent-of',
+  'child-of',
+  'sibling-of',
+  'spouse-of',
+  'betrothed-to',
+  'ancestor-of',
+  'descendant-of',
+  'kin-of',
+]);
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
 export class PeopleExtractionValidationError extends Error {
@@ -102,6 +118,25 @@ function nestedValuesWithKey(value, wantedKey, found = []) {
     for (const [key, item] of Object.entries(value)) {
       if (key === wantedKey) found.push(item);
       nestedValuesWithKey(item, wantedKey, found);
+    }
+  }
+  return found;
+}
+
+function nestedPersonReferences(value, found = []) {
+  if (Array.isArray(value)) {
+    for (const item of value) nestedPersonReferences(item, found);
+  } else if (value && typeof value === 'object') {
+    for (const [key, item] of Object.entries(value)) {
+      if (/personId$/iu.test(key)) found.push([key, item]);
+      if (/personIds$/iu.test(key)) {
+        if (Array.isArray(item)) {
+          for (const personId of item) found.push([key, personId]);
+        } else {
+          found.push([key, item]);
+        }
+      }
+      nestedPersonReferences(item, found);
     }
   }
   return found;
@@ -189,6 +224,55 @@ function validateClaimVocabulary(claim, packet, errors) {
     if (!known.has(roleId)) errors.push(`${claim.id} uses unknown roleId ${JSON.stringify(roleId)}`);
   }
   if (claim.predicate === 'attestation') validateAttestationClaim(claim, errors);
+  if (claim.predicate === 'assessment' &&
+      (!claim.value?.provenance || typeof claim.value.provenance !== 'object' ||
+       typeof claim.value.provenance.mode !== 'string' || !claim.value.provenance.mode.trim())) {
+    errors.push(`${claim.id} assessment requires provenance.mode`);
+  }
+  if (claim.value?.provenance !== undefined &&
+      (!claim.value.provenance || typeof claim.value.provenance !== 'object' ||
+       Array.isArray(claim.value.provenance) || typeof claim.value.provenance.mode !== 'string' ||
+       !claim.value.provenance.mode.trim())) {
+    errors.push(`${claim.id} provenance must be an object with a nonempty mode`);
+  }
+  for (const negated of nestedValuesWithKey(claim.value, 'negated')) {
+    if (typeof negated !== 'boolean') errors.push(`${claim.id} negated must be boolean`);
+  }
+  if (claim.predicate === 'event-participation') {
+    if (typeof claim.value?.kind !== 'string' || !claim.value.kind.trim()) {
+      errors.push(`${claim.id} event-participation requires a nonempty kind`);
+    }
+    if (![claim.value?.role, claim.value?.action].some((item) => typeof item === 'string' && item.trim())) {
+      errors.push(`${claim.id} event-participation requires a role or action`);
+    }
+  }
+  if (claim.predicate === 'family-relationship') {
+    if (!FAMILY_RELATIONS.has(claim.value?.relation)) {
+      errors.push(`${claim.id} family-relationship uses unknown relation ${JSON.stringify(claim.value?.relation)}`);
+    }
+    if (typeof claim.value?.personId !== 'string') {
+      errors.push(`${claim.id} family-relationship requires personId`);
+    } else if (claim.value.personId === claim.subject) {
+      errors.push(`${claim.id} family-relationship cannot link a person to itself`);
+    }
+    if (claim.value?.generationDistance !== undefined &&
+        (!Number.isInteger(claim.value.generationDistance) || claim.value.generationDistance < 1)) {
+      errors.push(`${claim.id} generationDistance must be a positive integer`);
+    }
+  }
+  if (claim.predicate === 'family-summary') {
+    if (typeof claim.value?.kinshipRole !== 'string' || !claim.value.kinshipRole.trim()) {
+      errors.push(`${claim.id} family-summary requires kinshipRole`);
+    }
+    if (claim.value?.count !== undefined &&
+        (!Number.isInteger(claim.value.count) || claim.value.count < 0)) {
+      errors.push(`${claim.id} family-summary count must be a nonnegative integer`);
+    }
+    if (claim.value?.count === undefined &&
+        (typeof claim.value?.quantity !== 'string' || !claim.value.quantity.trim())) {
+      errors.push(`${claim.id} family-summary requires count or quantity`);
+    }
+  }
   for (const polityId of nestedValuesWithKey(claim.value, 'polityId')) {
     if (!packet.context.polities.some((polity) => polity.id === polityId)) {
       errors.push(`${claim.id} uses polityId ${JSON.stringify(polityId)} not supplied in its packet`);
@@ -225,6 +309,7 @@ export function validatePeopleExtraction(extraction, packet) {
 
   const unitById = new Map(packet.units.map((unit) => [unit.id, unit]));
   const personIds = uniqueIds(normalized.people, 'local person', errors, 'localId');
+  const personById = new Map(normalized.people.map((person) => [person.localId, person]));
   uniqueIds(normalized.mentions, 'mention', errors);
   uniqueIds(normalized.claims, 'claim', errors);
   normalized.claims = normalizeClaims(normalized.claims, namespace);
@@ -365,11 +450,19 @@ export function validatePeopleExtraction(extraction, packet) {
           errors.push(`${claim.id} ${claim.predicate} cannot refer to its own subject`);
         }
       }
-      for (const key of ['personId', 'otherPersonId', 'witnessPersonId', 'authorityPersonId']) {
-        for (const value of nestedValuesWithKey(claim.value, key)) {
-          if (typeof value !== 'string' || !personIds.has(value)) {
-            errors.push(`${claim.id} ${key} refers to unknown local person ${JSON.stringify(value)}`);
-          }
+      for (const [key, value] of nestedPersonReferences(claim.value)) {
+        if (typeof value !== 'string' || !personIds.has(value)) {
+          errors.push(`${claim.id} ${key} refers to unknown local person ${JSON.stringify(value)}`);
+        }
+      }
+      if (normalized.run.promptVersion >= 7 && claim.predicate === 'family-relationship' &&
+          personIds.has(claim.subject) && personIds.has(claim.value?.personId)) {
+        const targetId = claim.value.personId;
+        if (!personById.get(claim.subject).identityHints.relatedLocalPeople.includes(targetId)) {
+          errors.push(`${claim.id} family target ${targetId} is missing from the subject's relatedLocalPeople hints`);
+        }
+        if (!personById.get(targetId).identityHints.relatedLocalPeople.includes(claim.subject)) {
+          errors.push(`${claim.id} family subject ${claim.subject} is missing from the target's relatedLocalPeople hints`);
         }
       }
     }
@@ -392,9 +485,10 @@ export function validatePeopleExtraction(extraction, packet) {
     }
   }
   if (normalized.run.promptVersion >= 6) {
-    for (const key of V6_COMPLETION_FLAGS) {
+    const completionFlags = normalized.run.promptVersion >= 7 ? V7_COMPLETION_FLAGS : V6_COMPLETION_FLAGS;
+    for (const key of completionFlags) {
       if (normalized.coverage[key] !== true) {
-        errors.push(`coverage.${key} must be true for prompt v6`);
+        errors.push(`coverage.${key} must be true for prompt v${normalized.run.promptVersion}`);
       }
     }
   }
@@ -667,14 +761,30 @@ function selfTest() {
   }
 
   const comprehensive = structuredClone(temporal);
-  comprehensive.run.promptVersion = 6;
-  Object.assign(comprehensive.coverage, Object.fromEntries(V6_COMPLETION_FLAGS.map((key) => [key, true])));
+  comprehensive.run.promptVersion = 7;
+  Object.assign(comprehensive.coverage, Object.fromEntries(V7_COMPLETION_FLAGS.map((key) => [key, true])));
   validatePeopleExtraction(comprehensive, packet);
   const incompleteComprehensive = structuredClone(comprehensive);
   incompleteComprehensive.coverage.allDurableFactsCaptured = false;
   try {
     validatePeopleExtraction(incompleteComprehensive, packet);
-    throw new Error('Prompt-v6 extraction with an incomplete source-pass audit unexpectedly passed');
+    throw new Error('Prompt-v7 extraction with an incomplete source-pass audit unexpectedly passed');
+  } catch (error) {
+    if (!(error instanceof PeopleExtractionValidationError)) throw error;
+  }
+
+  const invalidFamily = structuredClone(comprehensive);
+  invalidFamily.claims.push({
+    id: 'testbook:001:c0004',
+    subject: 'testbook:001:p001',
+    predicate: 'family-relationship',
+    value: { relation: 'father-of', personId: 'testbook:001:p999' },
+    certainty: 'explicit',
+    evidence: ['testbook:001:s0001'],
+  });
+  try {
+    validatePeopleExtraction(invalidFamily, packet);
+    throw new Error('Invalid family relationship unexpectedly passed');
   } catch (error) {
     if (!(error instanceof PeopleExtractionValidationError)) throw error;
   }

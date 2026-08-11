@@ -20,9 +20,13 @@ as structured repair proposals. Never edit the source chapter directly.
   `candidates` are the complete owned assignment. `readOnlyContext.before` and
   `.after` provide neighboring unit rows solely to resolve continuations and
   references. Read them, but never emit their mentions, claims, evidence,
-  candidate dispositions, or translation repairs. Do not create a person seen
-  only in read-only context. A person named in owned units remains in scope even
-  when the context shows earlier or later information about the same person.
+  candidate dispositions, or translation repairs. A person named in owned units
+  remains in scope even when context supplies earlier or later facts. A person
+  named only in read-only context also remains in scope when an owned unit
+  refers to that person by pronoun, silent subject, or quotation continuation.
+  Create a local person with `x` explaining the boundary-only reference, emit
+  no visible surface for the pronoun, and cite only owned units. Do not create a
+  person who is neither named nor semantically referenced in an owned unit.
 - The compact schema is the exact output contract.
 - The seeded output has immutable input fingerprints and run metadata.
 
@@ -41,7 +45,13 @@ validate it, and use validation diagnostics for any necessary correction.
 Record every named human: rulers, officials, generals, scholars, authors,
 consorts, servants, religious figures, rebels, merchants, named commoners, and
 historical, legendary, literary, or uncertain people. A unique title can name a
-person. Do not create people for unnamed roles, groups, clans, armies, offices,
+person. Also create a person for a uniquely individuated unnamed relative such
+as "his mother" or "the eldest daughter" when the chapter establishes whose
+relative it is; use a source-grounded display label such as `Mother of Fan Ye`,
+a `descriptive-kinship` name claim, and the visible kinship expression as a
+`kinship-reference` surface. Do not create separate people for an
+undifferentiated plural such as "three sons"; preserve it in `family-summary`.
+Do not create people for other unnamed roles, groups, clans, armies, offices,
 places, books, reigns, or nonhuman deities. Pronouns are not linkable surfaces.
 
 Assign people in first-mention order as `p001`, `p002`, and so on. Each row is:
@@ -63,6 +73,9 @@ Hints always have all five keys:
 ```
 
 `x` is a mention exception and normally remains `null`.
+Put every local person connected by a `family-relationship` or another direct
+personal relationship in `r` on both people. These hints do not replace the
+structured claims; they make the later cross-chapter identity dossier usable.
 
 Every person must have at least one source-supported active-date hint in `a`.
 Prefer a Western year or interval such as `AD 445` or `AD 445-446`. If the
@@ -74,9 +87,13 @@ attested activity dates, not birth/death dates or asserted lifespans.
 
 Every person requires one or more structured name rows and role rows. A name
 row is `[valueObject, certainty, [evidenceUnitIds]]`; its value includes `kind`
-plus available `en`, `zh`, and `pinyin`. Capture personal, surname, given,
-courtesy, childhood, religious, alternate, changed, temple, posthumous, regnal,
-and title names. A role row is
+plus available `en`, `zh`, and `pinyin`. Capture personal, surname, clan or
+house, given, courtesy, childhood, style, nickname, epithet, religious or
+dharma, alternate, changed or taboo-avoidance, native-language or
+transliterated, temple, posthumous, regnal, title, and descriptive-kinship
+names. Preserve the
+source's characters and English spelling; add pinyin only when established. A
+role row is
 `[roleId, certainty, [evidenceUnitIds]]`. Use `named-individual` only when the
 chapter establishes no narrower role. Do not duplicate a name or role; combine
 all supporting evidence on one row.
@@ -131,26 +148,65 @@ establishes. This includes:
 
 - identity: sex, ethnicity or people-group, historicity, lineage, and every
   same-person, different-person, or renaming statement;
-- relationships: kinship, marriage, adoption, teacher/student, patron/client,
-  succession, and other named personal relationships;
-- career and standing: exact occupation, office and its appointment/removal,
-  noble title, enfeoffment, rank, honor, social or legal status, punishment,
-  pardon, captivity, hostage status, enslavement, manumission, and exile;
-- geography and affiliation: native place, residence, posting, travel, exile,
-  death or burial place, polity association, and membership in a named clan,
-  faction, school, religious community, or institution;
-- life and chronology: birth, death and its cause/manner/place, stated age,
-  accession, deposition, and every source-supported activity date or interval;
-- intellectual and attributed material: authorship or another relation to a
-  named work, and attribution of a speech, memorial, letter, poem, prediction,
-  judgment, or consequential action when identifying its speaker, author,
-  addressee, agent, or patient is useful or not obvious from a linkable name;
+- family: ancestry and descent, generation distance, paternal or maternal line,
+  birth order, parent/child, sibling, marriage or betrothal, in-law and other
+  kinship, including biological/adoptive/foster/step parentage, half-siblings,
+  and every explicit family link. Every link between individuated people must
+  be a `family-relationship` edge containing the other local `personId`, never
+  a relative's name stored only as text. Create the other person row even when
+  that relative appears nowhere else. Use `family-summary` for unnamed plural,
+  counted, unknown-count, or explicitly absent relatives;
+- non-family relationships: teacher/student, patron/client,
+  recommender/protege, alliance, rivalry, succession, and every other explicit
+  relation between named people;
+- career and standing: exact occupation; every office appointment, acting or
+  concurrent tenure, promotion, transfer, demotion, suspension, dismissal,
+  resignation, retirement, recall, and restoration; jurisdiction, grade or
+  salary rank when stated; noble title, enfeoffment, rank, honor, privilege,
+  social or legal status, punishment, pardon, captivity, hostage status,
+  enslavement, manumission, and exile;
+- geography and affiliation: birthplace, native or ancestral place, residence,
+  posting, travel, migration, exile, death, burial or tomb place, polity
+  association, and membership in a named clan, faction, school, religious
+  community, military unit, household, or institution;
+- learning and belief: teachers and students, subjects studied, educational
+  institutions, examinations, degrees and other credentials, stated religious
+  or philosophical commitments, languages, arts, crafts, and other skills;
+- life and chronology: birth, death and its cause, manner, place, executioner
+  or responsible authority, treatment of the body, burial and tomb, stated age
+  and age reckoning, accession, deposition, and every source-supported activity
+  date or interval;
+- intellectual and attributed material: authorship, compilation, editing,
+  commentary, translation, sponsorship, transmission, or another relation to a
+  named work; and every embedded speech, memorial, letter, edict, poem,
+  prediction, judgment, or other document, with its speaker/author, addressee,
+  quoted or paraphrased status, and full owned evidence-unit extent;
+- events: every substantive person-centered action or experience not already
+  represented by a narrower claim, including military, diplomatic, political,
+  legal, ritual, travel, disaster, medical, scholarly, and personal events.
+  Preserve each named participant's role, named counterparts, place,
+  chronology, and outcome when stated;
+- attributed assessments: praise, blame, reputation, character judgments, and
+  evaluations stated by the historian, commentator, quoted source, or another
+  named person. Preserve the assessor or witness instead of treating an opinion
+  as an unqualified fact;
+- material associations: source-significant estates, residences, wealth,
+  regalia, seals, weapons, artworks, relics, tombs, and other named or
+  identifying objects possessed, made, bestowed, seized, or used;
 - source criticism: explicit textual variants, alternative reports,
   disagreements, uncertain identifications, and claims one witness accepts or
   rejects; and
 - uncommon identifying facts: a source-stated physical feature, illness,
-  disability, skill, or other concise biographical attribute that could aid
+  disability, or other concise biographical attribute that could aid
   disambiguation or a future person page and fits no narrower predicate.
+
+Use `other-person-fact` as the final safety valve for any source-stated fact
+about a named person that has lasting biographical, chronological, relational,
+geographic, or interpretive value but fits none of the predicates above. Do not
+discard a fact merely because this prompt failed to anticipate its category.
+Capture explicit negative facts such as having no heir, never holding office,
+or refusing an appointment; represent the negation in the value rather than
+turning absence of a claim into a claim of absence.
 
 Use `biographical-attribute` only as the final category, not for general praise,
 abuse, or a summary of every incident. Record each distinct fact once and
@@ -160,32 +216,69 @@ IDs such as `p002`; `same-person` and `different-person` values must use
 aliases for one local record in its evidence-backed name rows or `renamed`
 claims rather than making a self-referential identity claim.
 
+Family edges use one of these canonical directions: `parent-of`, `child-of`,
+`sibling-of`, `spouse-of`, `betrothed-to`, `ancestor-of`, `descendant-of`, or
+`kin-of`. Preserve the exact source kinship term and add structured details when
+stated: `parentage` (`biological`, `adoptive`, `foster`, `step`, `claimed`, or
+`uncertain`), `unionType`, `subjectRole`, `objectRole`, `generationDistance`,
+`line` (`paternal` or `maternal`), `sharedParentage`, `subjectRelativeAge`, and
+birth order. The compiler derives the inverse edge on the target person's
+canonical object. Do not emit a redundant inverse claim unless the source
+independently states it. Conflicting genealogies remain separate claims with
+their own provenance and `conflict` links. Record each stated parent-child edge
+separately; do not infer parentage merely because someone is a parent's spouse.
+For remarriage, divorce, widowhood, concubinage, adoption, or another
+time-varying family state, retain each dated edge or change independently.
+
 Use `place-association`, `status`, `office`, `noble-title`, `enfeoffment`,
 `honor`, `legal-action`, `polity-association`, `organization-association`,
-`relationship`, and `work-association` for facts that can change over time.
+`family-relationship`, `family-summary`, `relationship`, `education`,
+`credential`, `belief-association`, `skill`,
+`work-association`, `event-participation`, `assessment`, and
+`material-association` for the corresponding facts.
 Whenever the chapter supplies chronology, include `dateContext`, `startDate`,
 or `endDate` in the value and preserve the source date. Do not flatten a dated
 sequence of appointments, demotions, moves, marriages, captures, or releases
 into one timeless claim.
 
-Use `attribution` for source-grounded authorship, speech, or action attribution
-that would otherwise be lost because the relevant unit uses a pronoun, silent
-subject, quotation continuation, or disputed referent. It records attribution
-as a fact; it does not create a clickable pronoun surface.
+Use `attribution` for every source-grounded speech, document, quotation, or
+action attribution, including when the name is visible. Cite every owned unit
+belonging to a multi-unit speech or document; neighboring chunks contribute
+their owned parts so identity resolution can recover the complete boundaries.
+It is especially important when a unit uses a pronoun, silent subject,
+quotation continuation, or disputed referent. This records attribution as a
+fact; it does not create a clickable pronoun surface.
+
+Every claim presented as a quotation, self-report, hearsay, allegation, rumor,
+prophecy, dream, omen, historian's judgment, commentator's judgment,
+named-source report, or rejected alternative must include a `provenance`
+object. Use a compact `mode` plus `sourcePersonId`, `witnessPersonId`,
+`sourceWork`, or `speakerPersonId` when supplied. Ordinary unqualified
+narrative assertions need no provenance object. Keep an explicit `negated`
+boolean and exact source quantities wherever those distinctions matter.
 
 Keep values regular enough to compile later. Use these shapes and add only
 source-supported fields:
 
 ```json
-{"relation":"father-of","personId":"p002"}
+{"relation":"teacher-of","personId":"p002"}
+{"relation":"parent-of","personId":"p002","parentage":"biological","subjectRole":"father","objectRole":"son"}
+{"kinshipRole":"sons","count":3}
+{"kinshipRole":"sons","count":0,"negated":true}
 {"label":{"en":"court astrologer","zh":"太史令"}}
 {"place":{"en":"Xuancheng","zh":"宣城"},"relation":"posted-to"}
 {"status":"exile","action":"entered"}
 {"title":{"en":"Prince of Pengcheng","zh":"彭城王"},"action":"held"}
 {"polityId":"liu-song","relation":"served"}
 {"organization":{"en":"...","zh":"..."},"relation":"member-of"}
+{"credential":{"en":"Presented Scholar","zh":"進士"},"action":"earned"}
+{"belief":{"en":"Buddhism","zh":"佛法"},"relation":"adherent-of"}
+{"skill":{"en":"calligraphy","zh":"書"},"level":"renowned"}
 {"work":{"en":"Book of Later Han","zh":"後漢書"},"relation":"author"}
 {"kind":"memorial","role":"author","otherPersonId":"p002"}
+{"kind":"military","role":"commander","action":"defeated","otherPersonId":"p002"}
+{"assessment":"incorruptible","provenance":{"mode":"historian-judgment"}}
+{"item":{"en":"bronze seal","zh":"銅印"},"relation":"bestowed"}
 {"field":"death-date","statement":"...","witness":"..."}
 {"kind":"physical-description","statement":"blind in one eye"}
 ```
@@ -203,6 +296,13 @@ Every temporal field above contains an attestation-shaped object: `sourceDate`
 plus `westernYear` or `westernInterval`, an unresolved `sourceDate`, or a
 genuinely qualitative chronology. Do not put an unstructured date string in
 `dateContext`, `startDate`, or `endDate`.
+
+Preserve all date detail supplied by the text: reign and regnal year, season,
+lunar month, intercalary month, day of month, sexagenary day, relative sequence,
+and whether a date comes from a table heading or inherited narrative context.
+Do not invent a Gregorian month or day. When one event gives a start and a later
+unit gives its end, cite both and retain the interval rather than reducing it to
+one year.
 
 Every person also requires at least one `attestation` claim. Its evidence must
 point to the mention or event and to any earlier unit supplying its date
@@ -228,11 +328,14 @@ Never assign a polity from lifespan or chapter alone. Preserve competing dates
 as separate claims joined by `textual-variant` or `conflict`; do not choose one
 silently.
 
-This is not an exhaustive event graph. Every linkable mention already retains
-its exact source unit, from which the website pulls current Chinese and English
-snippets. Do not summarize every battle, journey, audience, or deed as a claim.
-Do capture its durable biographical outcome, chronology, place/status change,
-relationship, or otherwise-lost attribution under the categories above.
+This is a complete person-centered source pass, not a separate canonical event
+database. Every linkable mention retains its exact source unit for current
+bilingual snippets. Use a narrower claim for an appointment, marriage, exile,
+death, work, or other modeled fact. Also add `event-participation` whenever a
+substantive action or experience would otherwise survive only as
+undifferentiated prose. Do not omit such an event because it seems minor or
+because the person already has another claim. Do not invent event names or
+duplicate the source as an AI-written narrative summary.
 
 ## Editorial Repairs
 
@@ -262,14 +365,19 @@ Before finishing:
 2. Confirm every named human has one person row, structured names and roles,
    and every visible occurrence has a nonoverlapping surface rule.
 3. Confirm every durable identity, relationship, career, status, place,
-   affiliation, chronology, work, attribution, source-critical, and unusual
-   identifying fact above was captured. Every person must have a nonempty
-   active-date hint and an evidence-backed `attestation` claim.
+   affiliation, education, credential, belief, skill, chronology, work,
+   attribution, person-centered event, assessment, material association,
+   source-critical, negative, and unusual identifying fact above was captured.
+   Every person must have a nonempty active-date hint and an evidence-backed
+   `attestation` claim.
+   Confirm every individuated relative has a person row, every family edge has
+   a target `personId`, and every unnamed plural or count has a family summary.
 4. Confirm every candidate is contained in a surface or appears in exactly one
    disposition group.
 5. Set `allUnitsVisited`, `preflightCandidatesAccountedFor`,
    `allNamedPeopleAndMentionsCaptured`, `allDurableFactsCaptured`,
-   `allChronologyCaptured`, and `editorialPassCompleted` to `true`; record
-   genuine unresolved references.
+   `allChronologyCaptured`, `allPersonEventsCaptured`,
+   `allClaimProvenanceCaptured`, `allFamilyRelationshipsCaptured`, and
+   `editorialPassCompleted` to `true`; record genuine unresolved references.
 6. Validate against the compact schema and write JSON only to the assigned
    output path. Then publish the artifact exactly as instructed by the runner.
