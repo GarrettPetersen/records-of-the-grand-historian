@@ -970,6 +970,14 @@ agent, changed proposal contracts, and any revision that leaves unresolved
 mentions or candidates. It validates the complete revised state before writing
 either chapter or sidecar.
 
+Name-bearing repairs are reconciled atomically. The applier remaps stale English
+spans only from that person's existing preferred name or name/title claims,
+limited to claims evidenced in the repaired unit. It may expand a shorter span
+to one enclosing candidate only when no other person overlaps it; ambiguity
+halts the write. Compact sidecars preserve explicit candidate dispositions on
+round trip, even when a disposed place-name candidate lies inside a valid person
+title such as *Marquis of Chang'an*.
+
 This is a focused review of proposed changes, not a second pass over the corpus.
 It is necessary because the pilots found confident false repairs: one worker
 mistook a second-person `君` for Lord Jing, and another interpreted the corrupt

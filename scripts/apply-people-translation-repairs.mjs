@@ -226,7 +226,11 @@ function selfTest() {
   const reviewedExtraction = { ...structuredClone(extraction), translationRepairs: reviewedRepairs };
   const reconciled = reconcileExtractionAfterRepairs(reviewedExtraction, revisedPacket);
   if (reconciled.unresolvedCandidates.length > 0) throw new Error('Fixture left unresolved candidates');
-  if (reconciled.extraction.mentions[0].spans.en.length !== 2) {
+  if (reconciled.unresolvedSpans.length > 0) throw new Error('Fixture left unresolved mention spans');
+  const repeatedSpans = reconciled.extraction.mentions
+    .filter((mention) => mention.person === 'fixture:001:p001' && mention.unit.id === 's0001')
+    .flatMap((mention) => mention.spans.en);
+  if (repeatedSpans.length !== 2) {
     throw new Error('Repeated repaired person surface was not reconciled');
   }
   validatePeopleExtraction(reconciled.extraction, revisedPacket);
@@ -259,6 +263,13 @@ function main() {
   if (opts.reconcileCurrent) {
     const reconciled = reconcileExtractionAfterRepairs(extraction, currentPacket);
     const result = validatePeopleExtraction(reconciled.extraction, currentPacket);
+    if (reconciled.unresolvedSpans.length > 0) {
+      throw new Error(
+        `Unresolved stale mention spans: ${reconciled.unresolvedSpans.map((item) =>
+          `${item.mention.id}:${item.language}:${JSON.stringify(item.span.exact)}`
+        ).join(', ')}`,
+      );
+    }
     if (reconciled.unresolvedCandidates.length > 0) {
       throw new Error(`Unresolved new candidates: ${reconciled.unresolvedCandidates.join(', ')}`);
     }
@@ -326,6 +337,13 @@ function main() {
     properNounMatcher: matcher,
   });
   const reconciled = reconcileExtractionAfterRepairs(reviewedExtraction, revisedPacket);
+  if (reconciled.unresolvedSpans.length > 0) {
+    throw new Error(
+      `Unresolved stale mention spans: ${reconciled.unresolvedSpans.map((item) =>
+        `${item.mention.id}:${item.language}:${JSON.stringify(item.span.exact)}`
+      ).join(', ')}`,
+    );
+  }
   if (reconciled.unresolvedCandidates.length > 0) {
     throw new Error(`Unresolved new candidates: ${reconciled.unresolvedCandidates.join(', ')}`);
   }

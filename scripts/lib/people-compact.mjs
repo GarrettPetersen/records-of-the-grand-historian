@@ -224,6 +224,9 @@ function expandClaims(compact, namespace) {
 
 function expandMentions(compact, packet, namespace) {
   const unitById = new Map(packet.units.map((unit, order) => [unit.id, { ...unit, order }]));
+  const disposedCandidates = new Set(
+    expandDispositions(compact, namespace).map((item) => item.candidate),
+  );
   const drafts = [];
   for (const [person, kind, language, exact, unitOccurrences] of compact.surfaces) {
     for (const [unitId, occurrences] of unitOccurrences) {
@@ -251,6 +254,7 @@ function expandMentions(compact, packet, namespace) {
   );
 
   for (const candidate of packet.preflight.candidates) {
+    if (disposedCandidates.has(candidate.id)) continue;
     const containing = drafts.filter((mention) =>
       mention.unit.id === candidate.unit &&
       mention.language === candidate.language &&

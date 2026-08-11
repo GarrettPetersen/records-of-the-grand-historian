@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "book": "hanshu",
+  "chapter": "001",
+  "input": {
+    "chapterFingerprint": "sha256:46f29e2fd760a055c101857fe8742fee6719b2c10a74ad44911831d5bbec4f97",
+    "proposalsFingerprint": "sha256:c19772b00a4140a214c2b70843ef960f2f0a988c434e608e267eb20fddeda1f0"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-9b5ddfc7-dfd4-4660-aa4b-5577979d5800",
+    "runId": "run-7eb75f0e-e9bc-4798-aa36-d733bbd440e4",
+    "completedAt": "2026-08-11T01:32:46.743Z"
+  },
+  "proposals": [
+    {
+      "id": "hanshu:001:r0001",
+      "unit": {
+        "id": "s0013",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "The Supreme Ancestor often passed through Xianyang, gazed upon the Qin emperor, sighed deeply, said: \"Alas, a great man should be like this!\"",
+      "after": "The Supreme Ancestor once performed corvée service at Xianyang and was allowed to observe the Qin emperor; he sighed deeply and said: \"Alas, a great man should be like this!\"",
+      "reason": "The literal rendering should preserve 繇 as corvée service and 縱 as being permitted.",
+      "confidence": "medium"
+    },
+    {
+      "id": "hanshu:001:r0002",
+      "unit": {
+        "id": "s0034",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "He made him read the faces of the two children, saw Emperor Xiaohui, said: \"Madame's nobility comes from this male child.\"",
+      "after": "She had him read the faces of the two children; when he saw Emperor Xiaohui, he said: \"Madame's nobility comes from this male child.\"",
+      "reason": "Context makes Empress Lü the subject who asks the old man to examine the children.",
+      "confidence": "medium"
+    },
+    {
+      "id": "hanshu:001:r0003",
+      "unit": {
+        "id": "s0036",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "The old man had already left; Gaozu had just come from the neighboring house. Empress Lü told him in full that a guest had passed by and read the faces of her and the children and mother—all were greatly noble.",
+      "after": "The old man had already left; Gaozu had just come from the neighboring house. Empress Lü told him in full that a guest had passed by and read the faces of her and her children—all were greatly noble.",
+      "reason": "子母 is a compound reference to the children and their mother, namely Empress Lü.",
+      "confidence": "medium"
+    },
+    {
+      "id": "hanshu:001:r0004",
+      "unit": {
+        "id": "s0039",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "The old father said: 'Just now madam and children all take after you, your features noble beyond words.'",
+      "after": "The old father said: 'Just now, madam and the children were all judged noble because of you; your features show nobility beyond words.'",
+      "reason": "以君 is causal here and refers to the source of the family's nobility.",
+      "confidence": "medium"
+    },
+    {
+      "id": "hanshu:001:r0005",
+      "unit": {
+        "id": "s0458",
+        "kind": "paragraph-sentence",
+        "blockIndex": 56,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "The King of Han followed his plan, sending Lu Wan and Liu Jia with twenty thousand soldiers and several hundred riders across Baima Ford into Chu territory. They assisted Peng Yue in burning Chu's stockpiles, then attacked and defeated the Chu army west of Yanguo, capturing seventeen cities, including Suiyang and Waihuang.",
+      "after": "The King of Han followed his plan, sending Lu Wan and Liu Jiaa with twenty thousand soldiers and several hundred riders across Baima Ford into Chu territory. They assisted Peng Yue in burning Chu's stockpiles, then attacked and defeated the Chu army west of Yanguo, capturing seventeen cities, including Suiyang and Waihuang.",
+      "reason": "Chinese has 劉賈 (Liu Jia), not 劉季 (Liu Ji); the idiomatic English wrongly uses Liu Ji.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:001:r0006",
+      "unit": {
+        "id": "s0458",
+        "kind": "paragraph-sentence",
+        "blockIndex": 56,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "King Han followed his plan, sending Lu Wan and Liu Jia with 20,000 troops and several hundred cavalry across Baima ford into Chu territory. They assisted Peng Yue in burning Chu's grain stores, then attacked and broke the Chu army west of Yan Guo, capturing Suiyang and Waihuang, 17 cities.",
+      "after": "King Han followed his plan, sending Lu Wan and Liu Jiaa with 20,000 troops and several hundred cavalry across Baima ford into Chu territory. They assisted Peng Yue in burning Chu's grain stores, then attacked and broke the Chu army west of Yan Guo, capturing Suiyang and Waihuang, 17 cities.",
+      "reason": "Literal English also mistranslates 劉賈 as Liu Ji.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "hanshu:001:r0001",
+      "decision": "revise",
+      "after": "The Supreme Ancestor often performed corvée service at Xianyang and was allowed to observe the Qin emperor; he sighed deeply and said: \"Alas, a great man should be like this!\"",
+      "reason": "繇咸陽 is corvée duty at Xianyang and 縱觀 is being allowed to observe, so the original 'passed through'/'gazed' is wrong; but 常 means 'often', not 'once', so the proposal must keep that sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0013",
+        "excerpt": "高祖常繇咸陽，縱觀秦皇帝"
+      }
+    },
+    {
+      "repairId": "hanshu:001:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Preceding units make Empress Lü the agent who fed the old man; 令相兩子 is her having him physiognomize the two children, so the original ambiguous 'He made him' is wrong and the proposed subject is right.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0034",
+        "excerpt": "令相兩子，見孝惠帝"
+      }
+    },
+    {
+      "repairId": "hanshu:001:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "相我子母 means physiognomizing mother-and-children as one unit (Empress Lü and her children); the original invents a separate 'mother' beyond Empress Lü.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0036",
+        "excerpt": "相我子母皆大貴"
+      }
+    },
+    {
+      "repairId": "hanshu:001:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "皆以君 is causal ('because of you'), not resemblance ('take after you'); the proposal correctly ties their judged nobility to Gaozu and keeps 君相貴不可言.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0039",
+        "excerpt": "夫人兒子皆以君，君相貴不可言"
+      }
+    },
+    {
+      "repairId": "hanshu:001:r0005",
+      "decision": "reject",
+      "after": null,
+      "reason": "The idiomatic before already has 'Liu Jia' matching 劉賈; the proposal's claimed Liu Ji error is absent, and 'Liu Jiaa' would introduce a misspelling.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0458",
+        "excerpt": "使盧綰、劉賈將卒二萬人"
+      }
+    },
+    {
+      "repairId": "hanshu:001:r0006",
+      "decision": "reject",
+      "after": null,
+      "reason": "The literal before already correctly renders 劉賈 as Liu Jia; replacing it with 'Liu Jiaa' invents an error rather than fixing one.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0458",
+        "excerpt": "使盧綰、劉賈將卒二萬人"
+      }
+    }
+  ]
+}
