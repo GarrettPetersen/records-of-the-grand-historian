@@ -218,17 +218,41 @@ claims rather than making a self-referential identity claim.
 
 Family edges use one of these canonical directions: `parent-of`, `child-of`,
 `sibling-of`, `spouse-of`, `betrothed-to`, `ancestor-of`, `descendant-of`, or
-`kin-of`. Preserve the exact source kinship term and add structured details when
-stated: `parentage` (`biological`, `adoptive`, `foster`, `step`, `claimed`, or
-`uncertain`), `unionType`, `subjectRole`, `objectRole`, `generationDistance`,
-`line` (`paternal` or `maternal`), `sharedParentage`, `subjectRelativeAge`, and
-birth order. The compiler derives the inverse edge on the target person's
-canonical object. Do not emit a redundant inverse claim unless the source
-independently states it. Conflicting genealogies remain separate claims with
-their own provenance and `conflict` links. Record each stated parent-child edge
-separately; do not infer parentage merely because someone is a parent's spouse.
-For remarriage, divorce, widowhood, concubinage, adoption, or another
-time-varying family state, retain each dated edge or change independently.
+`kin-of`. Every edge must use `personId` to target another local person object.
+Preserve the source term as `kinshipTerm: {"zh":...,"en":...}` and add all
+stated structured details: `parentage` (`biological`, `adoptive`, `foster`,
+`step`, `claimed`, or `uncertain`), a free-text `unionType`, `unionCategory`
+(`marriage`, `primary-marriage`, `secondary-marriage`, `concubinage`,
+`betrothal`, `levirate`, `sororate`, `other`, or `uncertain`), `subjectRole`,
+`objectRole`, `generationDistance`, `line` (`paternal` or `maternal`),
+`sharedParentage` (`full`, `paternal-half`, `maternal-half`,
+`half-unspecified`, `step`, `adoptive`, or `uncertain`),
+`subjectRelativeAge` (`elder`, `younger`, `twin`, or `uncertain`), numeric
+`subjectBirthOrder` and `objectBirthOrder`, and `relationshipState` (`formed`,
+`active`, `ended`, `divorced`, `annulled`, `widowed`, or `uncertain`). Add
+`intermediaryPersonIds` when the source identifies people through whom a more
+distant relation runs.
+
+Make the graph structurally complete wherever the kinship term logically
+entails intermediate people. For example, an assertion that A is B's maternal
+uncle entails B's mother and her sibling relationship to A; a grandson entails
+one intervening parent. Create anonymous-individuated local person rows for those
+unstated intermediaries, connect the direct parent/sibling edges, and mark the
+entailed records and edges `strongly-inferred`. Do not invent an intermediary
+when the kinship path is genuinely ambiguous; retain the exact `kin-of` or
+ancestor/descendant edge instead. Give each inferred intermediary the same
+source-context attestation window as the relationship that establishes them.
+
+The compiler groups all assertions of the same structural relationship into a
+single stable canonical family edge, derives reciprocal adjacency links on the
+two person objects, and preserves every assertion's evidence and metadata. Do
+not emit a redundant inverse claim unless the source independently states it.
+Conflicting genealogies remain separate assertions with their own provenance
+and `conflict` links. Record each stated parent-child edge separately; do not
+infer parentage merely because someone is a parent's spouse. For remarriage,
+divorce, widowhood, concubinage, adoption, or another time-varying family
+state, retain each dated edge or change independently with `dateContext`,
+`startDate`, or `endDate` rather than flattening it into a timeless relation.
 
 Use `place-association`, `status`, `office`, `noble-title`, `enfeoffment`,
 `honor`, `legal-action`, `polity-association`, `organization-association`,
@@ -262,7 +286,7 @@ source-supported fields:
 
 ```json
 {"relation":"teacher-of","personId":"p002"}
-{"relation":"parent-of","personId":"p002","parentage":"biological","subjectRole":"father","objectRole":"son"}
+{"relation":"parent-of","personId":"p002","kinshipTerm":{"zh":"父","en":"father"},"parentage":"biological","subjectRole":"father","objectRole":"son"}
 {"kinshipRole":"sons","count":3}
 {"kinshipRole":"sons","count":0,"negated":true}
 {"label":{"en":"court astrologer","zh":"太史令"}}

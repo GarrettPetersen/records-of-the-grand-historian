@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://24histories.com/schema/people/site-index-v1.json",
+  "title": "Compiled chapter person-link index",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "generatedAt", "complete", "currentPromptVersion", "chapters"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "complete": { "type": "boolean" },
+    "currentPromptVersion": { "type": "integer", "minimum": 1 },
+    "chapters": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z0-9_-]+:\\d{3}$" },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["book", "chapter", "mentions"],
+        "properties": {
+          "book": { "type": "string", "pattern": "^[a-z0-9_-]+$" },
+          "chapter": { "type": "string", "pattern": "^\\d{3}$" },
+          "mentions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["mentionId", "personId", "slug", "kind", "unit", "spans"],
+              "properties": {
+                "mentionId": { "type": "string" },
+                "personId": { "type": "string", "pattern": "^per_[0-9A-HJKMNP-TV-Z]{20,}$" },
+                "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+                "kind": { "type": "string", "minLength": 1 },
+                "unit": { "$ref": "https://24histories.com/schema/people/extraction-v1.json#/$defs/unitLocator" },
+                "spans": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["zh", "en"],
+                  "properties": {
+                    "zh": { "type": "array", "items": { "$ref": "https://24histories.com/schema/people/extraction-v1.json#/$defs/span" } },
+                    "en": { "type": "array", "items": { "$ref": "https://24histories.com/schema/people/extraction-v1.json#/$defs/span" } }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

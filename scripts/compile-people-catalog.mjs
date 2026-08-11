@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import crypto from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildPeopleResolutionCandidateDocument } from './build-people-resolution-candidates.mjs';
@@ -11,6 +12,7 @@ import { personSlug, resolvePeopleClusters } from './lib/people-resolution.mjs';
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 const CANONICAL_SCHEMA_ID = 'https://24histories.com/schema/people/canonical-person-v1.json';
 const CATALOG_SCHEMA_ID = 'https://24histories.com/schema/people/catalog-v1.json';
+const SITE_INDEX_SCHEMA_ID = 'https://24histories.com/schema/people/site-index-v1.json';
 
 const CLAIM_TARGETS = new Map([
   ['ethnicity', 'ethnicities'],
@@ -55,6 +57,7 @@ const FAMILY_RELATION_INVERSES = new Map([
   ['descendant-of', 'ancestor-of'],
   ['kin-of', 'kin-of'],
 ]);
+const SYMMETRIC_FAMILY_RELATIONS = new Set(['sibling-of', 'spouse-of', 'betrothed-to', 'kin-of']);
 
 function canonicalJson(value) {
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
@@ -68,6 +71,7 @@ function parseArgs(argv) {
   const options = {
     out: path.join(PEOPLE_DIR, 'generated', 'catalog.json'),
     candidatesOut: path.join(PEOPLE_DIR, 'generated', 'resolution-candidates.json'),
+    siteIndexOut: path.join(PEOPLE_DIR, 'generated', 'site-index.json'),
     requireResolved: false,
     selfTest: false,
   };
@@ -80,6 +84,7 @@ function parseArgs(argv) {
     };
     if (arg === '--out') options.out = nextPath();
     else if (arg === '--candidates-out') options.candidatesOut = nextPath();
+    else if (arg === '--site-index-out') options.siteIndexOut = nextPath();
     else if (arg === '--require-resolved') options.requireResolved = true;
     else if (arg === '--self-test') options.selfTest = true;
     else if (arg === '--help' || arg === '-h') {
@@ -88,6 +93,7 @@ function parseArgs(argv) {
 Options:
   --out PATH             Generated catalog path.
   --candidates-out PATH  Generated identity-candidate dossier path.
+  --site-index-out PATH  Generated chapter mention-link index path.
   --require-resolved     Fail unless every extraction is prompt-current and every name block is resolved.
   --self-test            Run compiler fixtures.`);
       process.exit(0);
@@ -240,6 +246,99 @@ function swapValueFields(value, left, right) {
   else value[right] = leftValue;
 }
 
+function normalizedFamilyStructure(subjectPersonId, relation, objectPersonId) {
+  let fromPersonId = subjectPersonId;
+  let normalizedRelation = relation;
+  let toPersonId = objectPersonId;
+  if (relation === 'child-of') {
+    fromPersonId = objectPersonId;
+    normalizedRelation = 'parent-of';
+    toPersonId = subjectPersonId;
+  } else if (relation === 'descendant-of') {
+    fromPersonId = objectPersonId;
+    normalizedRelation = 'ancestor-of';
+    toPersonId = subjectPersonId;
+  } else if (SYMMETRIC_FAMILY_RELATIONS.has(relation) && fromPersonId.localeCompare(toPersonId) > 0) {
+    [fromPersonId, toPersonId] = [toPersonId, fromPersonId];
+  }
+  return { fromPersonId, relation: normalizedRelation, toPersonId };
+}
+
+function familyStructureKey(subjectPersonId, relation, objectPersonId) {
+  return canonicalJson(normalizedFamilyStructure(subjectPersonId, relation, objectPersonId));
+}
+
+function familyEdgeId(structure) {
+  const digest = crypto.createHash('sha256')
+    .update(`24histories-family-edge:${canonicalJson(structure)}`)
+    .digest('hex')
+    .slice(0, 24);
+  return `fam_${digest}`;
+}
+
+function buildCanonicalFamilyEdges(people) {
+  const personIds = new Set(people.map((person) => person.id));
+  const byStructure = new Map();
+  for (const source of people) {
+    for (const relationship of source.familyRelationships) {
+      const objectPersonId = relationship.value?.personId;
+      if (!personIds.has(objectPersonId)) {
+        throw new Error(`${source.id} family relationship refers to unknown canonical person ${objectPersonId}`);
+      }
+      if (objectPersonId === source.id) {
+        throw new Error(`${source.id} has a self-referential family relationship; identity resolution likely made a false merge`);
+      }
+      if (!FAMILY_RELATION_INVERSES.has(relationship.value?.relation)) {
+        throw new Error(`${source.id} uses unknown family relation ${JSON.stringify(relationship.value?.relation)}`);
+      }
+      const structure = normalizedFamilyStructure(source.id, relationship.value.relation, objectPersonId);
+      const key = canonicalJson(structure);
+      const edge = byStructure.get(key) ?? {
+        id: familyEdgeId(structure),
+        ...structure,
+        assertions: [],
+      };
+      const details = structuredClone(relationship.value);
+      delete details.relation;
+      delete details.personId;
+      const assertionKey = canonicalJson([
+        source.id,
+        relationship.value.relation,
+        objectPersonId,
+        details,
+        relationship.certainty,
+      ]);
+      const existing = edge.assertions.find((assertion) => assertion._key === assertionKey);
+      if (existing) {
+        existing.evidence = [...new Set([...existing.evidence, ...relationship.evidence])].sort();
+        existing.claimRefs = [...new Set([...existing.claimRefs, ...relationship.claimRefs])].sort();
+      } else {
+        edge.assertions.push({
+          _key: assertionKey,
+          subjectPersonId: source.id,
+          relation: relationship.value.relation,
+          objectPersonId,
+          details,
+          certainty: relationship.certainty,
+          evidence: [...relationship.evidence],
+          claimRefs: [...relationship.claimRefs],
+        });
+      }
+      byStructure.set(key, edge);
+    }
+  }
+  return [...byStructure.values()].map((edge) => ({
+    ...edge,
+    assertions: edge.assertions
+      .map(({ _key, ...assertion }) => assertion)
+      .sort((left, right) =>
+        left.subjectPersonId.localeCompare(right.subjectPersonId) ||
+        left.relation.localeCompare(right.relation) ||
+        canonicalJson(left.details).localeCompare(canonicalJson(right.details))
+      ),
+  })).sort((left, right) => left.id.localeCompare(right.id));
+}
+
 function addInverseFamilyRelationships(people) {
   const byId = new Map(people.map((person) => [person.id, person]));
   const additions = new Map();
@@ -262,7 +361,7 @@ function addInverseFamilyRelationships(people) {
       swapValueFields(value, 'subjectBirthOrder', 'objectBirthOrder');
       if (value.subjectRelativeAge === 'elder') value.subjectRelativeAge = 'younger';
       else if (value.subjectRelativeAge === 'younger') value.subjectRelativeAge = 'elder';
-      const inverse = { ...structuredClone(relationship), value };
+      const inverse = { ...structuredClone(relationship), derivedInverse: true, value };
       if (!additions.has(targetId)) additions.set(targetId, []);
       additions.get(targetId).push(inverse);
     }
@@ -270,6 +369,69 @@ function addInverseFamilyRelationships(people) {
   for (const [targetId, inverseRelationships] of additions) {
     const target = byId.get(targetId);
     target.familyRelationships = dedupeClaimViews([...target.familyRelationships, ...inverseRelationships]);
+  }
+}
+
+function attachFamilyEdgeIds(people, familyEdges) {
+  const edgeByStructure = new Map(familyEdges.map((edge) => [
+    familyStructureKey(edge.fromPersonId, edge.relation, edge.toPersonId),
+    edge.id,
+  ]));
+  for (const source of people) {
+    for (const relationship of source.familyRelationships) {
+      const key = familyStructureKey(source.id, relationship.value.relation, relationship.value.personId);
+      const edgeId = edgeByStructure.get(key);
+      if (!edgeId) throw new Error(`No family graph edge for ${source.id} ${relationship.value.relation}`);
+      relationship.edgeId = edgeId;
+    }
+  }
+}
+
+function validateCanonicalFamilyGraph(people, familyEdges) {
+  const peopleById = new Map(people.map((person) => [person.id, person]));
+  const edgesById = new Map();
+  for (const edge of familyEdges) {
+    if (edgesById.has(edge.id)) throw new Error(`Duplicate canonical family edge ${edge.id}`);
+    edgesById.set(edge.id, edge);
+    if (!peopleById.has(edge.fromPersonId) || !peopleById.has(edge.toPersonId)) {
+      throw new Error(`${edge.id} refers to an unknown canonical person`);
+    }
+    if (edge.fromPersonId === edge.toPersonId) throw new Error(`${edge.id} is self-referential`);
+    const edgeKey = familyStructureKey(edge.fromPersonId, edge.relation, edge.toPersonId);
+    for (const assertion of edge.assertions) {
+      const assertionKey = familyStructureKey(
+        assertion.subjectPersonId,
+        assertion.relation,
+        assertion.objectPersonId,
+      );
+      if (assertionKey !== edgeKey) {
+        throw new Error(`${edge.id} contains an assertion for a different structural relationship`);
+      }
+    }
+    for (const [personId, otherPersonId] of [
+      [edge.fromPersonId, edge.toPersonId],
+      [edge.toPersonId, edge.fromPersonId],
+    ]) {
+      const linked = peopleById.get(personId).familyRelationships.some((relationship) =>
+        relationship.edgeId === edge.id && relationship.value.personId === otherPersonId
+      );
+      if (!linked) throw new Error(`${edge.id} is missing reciprocal adjacency on ${personId}`);
+    }
+  }
+  for (const person of people) {
+    for (const relationship of person.familyRelationships) {
+      const edge = edgesById.get(relationship.edgeId);
+      if (!edge) throw new Error(`${person.id} refers to unknown family edge ${relationship.edgeId}`);
+      const relationshipKey = familyStructureKey(
+        person.id,
+        relationship.value.relation,
+        relationship.value.personId,
+      );
+      const edgeKey = familyStructureKey(edge.fromPersonId, edge.relation, edge.toPersonId);
+      if (relationshipKey !== edgeKey) {
+        throw new Error(`${person.id} adjacency ${relationship.edgeId} does not match its family edge`);
+      }
+    }
   }
 }
 
@@ -283,6 +445,9 @@ function canonicalReferences(members) {
         chapter: member.chapter,
         unitId: mention.unit.id,
         blockIndex: mention.unit.blockIndex,
+        collection: mention.unit.collection,
+        itemIndex: mention.unit.itemIndex,
+        unitKind: mention.unit.kind,
         kinds: new Set(),
         languages: new Set(),
         mentionRefs: [],
@@ -304,6 +469,48 @@ function canonicalReferences(members) {
     left.book.localeCompare(right.book) || left.chapter.localeCompare(right.chapter) ||
     left.blockIndex - right.blockIndex || left.unitId.localeCompare(right.unitId)
   );
+}
+
+function buildPeopleSiteIndex(corpus, catalog) {
+  const personById = new Map(catalog.people.map((person) => [person.id, person]));
+  const chapters = {};
+  for (const chapter of corpus.chapters) {
+    const extraction = chapter.extraction;
+    if (!extraction) continue;
+    const key = `${extraction.book}:${extraction.chapter}`;
+    chapters[key] = {
+      book: extraction.book,
+      chapter: extraction.chapter,
+      mentions: extraction.mentions.map((mention) => {
+        const personId = catalog.localPersonMap[mention.person];
+        const person = personById.get(personId);
+        if (!person) throw new Error(`${mention.id} has no compiled canonical person`);
+        return {
+          mentionId: mention.id,
+          personId,
+          slug: person.slug,
+          kind: mention.kind,
+          unit: structuredClone(mention.unit),
+          spans: structuredClone(mention.spans),
+        };
+      }),
+    };
+  }
+  const siteIndex = {
+    schemaVersion: 1,
+    generatedAt: catalog.generatedAt,
+    complete: catalog.complete,
+    currentPromptVersion: catalog.currentPromptVersion,
+    chapters,
+  };
+  const ajv = createPeopleSchemaValidator();
+  const validate = ajv.getSchema(SITE_INDEX_SCHEMA_ID);
+  if (!validate(siteIndex)) {
+    throw new Error(
+      `People site index validation failed:\n${formatSchemaErrors(validate.errors).map((item) => `- ${item}`).join('\n')}`,
+    );
+  }
+  return siteIndex;
 }
 
 function canonicalRecord(cluster, corpus, localMap, roleLabels, unresolvedLocalPeople, currentPromptVersion) {
@@ -438,7 +645,13 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = []) {
   const people = resolved.clusters.map((cluster) =>
     canonicalRecord(cluster, corpus, localMap, roleLabels, unresolvedLocalPeople, currentPromptVersion)
   );
+  for (const person of people) {
+    for (const relationship of person.familyRelationships) relationship.derivedInverse = false;
+  }
+  const familyEdges = buildCanonicalFamilyEdges(people);
   addInverseFamilyRelationships(people);
+  attachFamilyEdgeIds(people, familyEdges);
+  validateCanonicalFamilyGraph(people, familyEdges);
 
   const ajv = createPeopleSchemaValidator();
   const validate = ajv.getSchema(CANONICAL_SCHEMA_ID);
@@ -464,8 +677,11 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = []) {
         mergedLocalPeople: corpus.localPeople.size - people.length,
         legacyLocalPeople,
         unresolvedCandidateBlocks: unresolvedBlocks.length,
+        familyEdges: familyEdges.length,
+        peopleWithFamily: people.filter((person) => person.familyRelationships.length > 0).length,
       },
       people,
+      familyEdges,
       localPersonMap,
       unresolvedCandidateBlockIds: unresolvedBlocks.map((block) => block.id),
   };
@@ -478,6 +694,7 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = []) {
   return {
     catalog,
     candidates: candidateDocument,
+    siteIndex: buildPeopleSiteIndex(corpus, catalog),
   };
 }
 
@@ -531,9 +748,19 @@ function selfTest() {
     throw new Error('Canonical merge or reference aggregation failed');
   }
   if (!compiledChild.familyRelationships.some((claim) =>
-    claim.value.relation === 'child-of' && claim.value.personId === fan.id
+    claim.value.relation === 'child-of' && claim.value.personId === fan.id && claim.edgeId && claim.derivedInverse
   )) {
     throw new Error('Inverse canonical family relationship was not materialized');
+  }
+  const familyEdge = result.familyEdges[0];
+  if (result.familyEdges.length !== 1 || familyEdge.relation !== 'parent-of' ||
+      familyEdge.fromPersonId !== fan.id || familyEdge.toPersonId !== compiledChild.id ||
+      familyEdge.assertions.length !== 1) {
+    throw new Error('Canonical family graph edge was not compiled correctly');
+  }
+  if (!fan.familyRelationships.some((claim) => claim.edgeId === familyEdge.id && !claim.derivedInverse) ||
+      !compiledChild.familyRelationships.some((claim) => claim.edgeId === familyEdge.id)) {
+    throw new Error('Canonical family edge is not shared by both reciprocal adjacencies');
   }
   if (!/^per_[0-9A-HJKMNP-TV-Z]{20}$/u.test(fan.id)) throw new Error('Stable canonical ID is invalid');
   console.log('compile-people-catalog self-test: ok');
@@ -547,6 +774,7 @@ function main() {
   const result = compilePeopleCatalog(corpus, resolutions);
   writeJsonAtomic(options.out, result.catalog);
   writeJsonAtomic(options.candidatesOut, result.candidates);
+  writeJsonAtomic(options.siteIndexOut, result.siteIndex);
   if (options.requireResolved && !result.catalog.complete) {
     throw new Error(
       `People catalog is incomplete: ${result.catalog.stats.legacyLocalPeople} legacy local people and ` +
@@ -556,7 +784,8 @@ function main() {
   console.log(
     `people catalog: ${result.catalog.stats.canonicalPeople} canonical from ` +
     `${result.catalog.stats.localPeople} local people; ${result.catalog.stats.unresolvedCandidateBlocks} ` +
-    `unresolved block(s) -> ${path.relative(REPO_ROOT, options.out)}`,
+    `unresolved block(s); ${result.catalog.stats.familyEdges} family edge(s) -> ` +
+    `${path.relative(REPO_ROOT, options.out)}`,
   );
 }
 

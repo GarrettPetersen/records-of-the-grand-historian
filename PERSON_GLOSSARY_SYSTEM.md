@@ -595,13 +595,23 @@ available; canonical IDs may be added later without discarding those labels.
 Family data is never stored as a relative's name embedded in prose. A
 `family-relationship` value uses one of `parent-of`, `child-of`, `sibling-of`,
 `spouse-of`, `betrothed-to`, `ancestor-of`, `descendant-of`, or `kin-of`, plus
-the other local `personId`. It preserves the exact kinship term, parentage,
-union type, roles, generation distance, maternal/paternal line, shared
-parentage, relative age, birth order, dates, certainty, and provenance when the
-source gives them. The canonical compiler rewrites the target to a canonical
-person ID, fails on a self-edge caused by a false identity merge, and derives
-the inverse edge onto the target person's object. A later tree visualizer can
-therefore traverse canonical objects directly without parsing labels or prose.
+the other local `personId`. It preserves the exact bilingual kinship term,
+parentage, union type and category, relationship state, roles, generation
+distance, maternal/paternal line, shared parentage, relative age, birth order,
+dates, certainty, and provenance when the source gives them. Individuated
+unnamed relatives are person objects too. When a precise kinship term logically
+entails an unnamed intermediary, such as the mother in a maternal-uncle path,
+the worker creates that intermediary and marks the structural links as strong
+inferences. Vague kinship never licenses an invented path.
+
+The canonical compiler rewrites every endpoint to a canonical person ID and
+fails on a self-edge caused by a false identity merge. It groups repeated or
+oppositely worded assertions under one stable structural edge in the catalog's
+`familyEdges` array. Each assertion retains its original direction, metadata,
+evidence, and claim references. The two person objects receive reciprocal
+adjacency entries carrying the same edge ID. A later tree visualizer can
+therefore traverse canonical objects, collapse corroborating passages, or show
+conflicting source assertions without parsing labels or chapter prose.
 
 Time-varying claims use `dateContext`, `startDate`, or `endDate` when the chapter
 provides chronology. These date objects use the same source-preserving shape as
@@ -979,6 +989,44 @@ One resolved person has one canonical object:
 
 The canonical record selects accepted display values. The complete evidence and
 conflicting alternatives remain in extraction claims and generated dossiers.
+Family adjacency on that record and the corresponding catalog edge look like:
+
+```json
+{
+  "personAdjacency": {
+    "edgeId": "fam_...",
+    "derivedInverse": false,
+    "predicate": "family-relationship",
+    "value": { "relation": "parent-of", "personId": "per_child..." },
+    "certainty": "explicit",
+    "evidence": ["songshu:069:s0019"],
+    "claimRefs": ["songshu:069:c0042"]
+  },
+  "catalogEdge": {
+    "id": "fam_...",
+    "fromPersonId": "per_parent...",
+    "relation": "parent-of",
+    "toPersonId": "per_child...",
+    "assertions": [{
+      "subjectPersonId": "per_parent...",
+      "relation": "parent-of",
+      "objectPersonId": "per_child...",
+      "details": {
+        "parentage": "biological",
+        "kinshipTerm": { "zh": "父", "en": "father" }
+      },
+      "certainty": "explicit",
+      "evidence": ["songshu:069:s0019"],
+      "claimRefs": ["songshu:069:c0042"]
+    }]
+  }
+}
+```
+
+The reciprocal child object carries the same `edgeId` with `child-of`, the
+parent's canonical `personId`, and `derivedInverse: true` unless that direction
+was independently asserted too. The shared edge prevents double counting while
+the assertion list preserves every source formulation.
 
 ## Website Build
 
@@ -1034,12 +1082,15 @@ translation as the reader-facing account.
 
 The compiled catalog contains a bidirectional family graph. Parent-child,
 sibling, spouse, betrothal, ancestor-descendant, and other kin edges always
-point from one canonical person ID to another. Biological, adoptive, foster,
-step, half-sibling, marriage/concubinage, generation, lineage-side, age-order,
-date, and source-variant details remain on the edge. Individuated unnamed kin
-are real person objects with `identificationStatus: anonymous-individuated`;
-undifferentiated counts remain family summaries. The visualizer may add display
-nodes for those summaries, but it never needs to reinterpret chapter prose.
+point from one canonical person ID to another. Every structural edge has a
+stable `fam_...` ID and one or more source assertions; reciprocal adjacency
+entries on person objects point back to that same edge. Biological, adoptive,
+foster, step, half-sibling, marriage/concubinage, generation, lineage-side,
+age-order, date, and source-variant details remain on those assertions.
+Individuated unnamed kin and logically required intermediaries are real person
+objects with `identificationStatus: anonymous-individuated`; undifferentiated
+counts remain family summaries. The visualizer may add display nodes for those
+summaries, but it never needs to reinterpret chapter prose.
 
 ### Search and SEO
 
@@ -1088,6 +1139,10 @@ The build must fail loudly on structural errors. Required checks include:
 - mention spans do not overlap within one language;
 - every local person has at least one mention or an explicit exception;
 - every claim subject exists and every evidence reference resolves;
+- every individuated family relative has a person object and every family edge
+  targets another existing person object;
+- every canonical family edge has two reciprocal person adjacencies carrying
+  the same stable edge ID, while its source assertions retain provenance;
 - every preflight candidate has a disposition;
 - every chapter-local person used by a build maps to exactly one active
   canonical person;

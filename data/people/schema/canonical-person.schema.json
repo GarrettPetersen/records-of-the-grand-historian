@@ -36,7 +36,7 @@
     "titlesAndHonors": { "type": "array", "items": { "type": "object" } },
     "statuses": { "type": "array", "items": { "type": "object" } },
     "legalActions": { "type": "array", "items": { "type": "object" } },
-    "familyRelationships": { "type": "array", "items": { "type": "object" } },
+    "familyRelationships": { "type": "array", "items": { "$ref": "#/$defs/familyRelationship" } },
     "familySummaries": { "type": "array", "items": { "type": "object" } },
     "relationships": { "type": "array", "items": { "type": "object" } },
     "education": { "type": "array", "items": { "type": "object" } },
@@ -67,6 +67,27 @@
     }
   },
   "$defs": {
+    "familyRelationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["edgeId", "derivedInverse", "predicate", "value", "certainty", "evidence", "claimRefs"],
+      "properties": {
+        "edgeId": { "type": "string", "pattern": "^fam_[a-f0-9]{24}$" },
+        "derivedInverse": { "type": "boolean" },
+        "predicate": { "const": "family-relationship" },
+        "value": {
+          "type": "object",
+          "required": ["relation", "personId"],
+          "properties": {
+            "relation": { "enum": ["parent-of", "child-of", "sibling-of", "spouse-of", "betrothed-to", "ancestor-of", "descendant-of", "kin-of"] },
+            "personId": { "type": "string", "pattern": "^per_[0-9A-HJKMNP-TV-Z]{20,}$" }
+          }
+        },
+        "certainty": { "enum": ["explicit", "explicit-event-contextual-date", "strongly-inferred", "uncertain", "derived", "textual-variant"] },
+        "evidence": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "claimRefs": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+      }
+    },
     "name": {
       "type": "object",
       "additionalProperties": false,

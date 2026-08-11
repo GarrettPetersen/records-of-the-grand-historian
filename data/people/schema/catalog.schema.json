@@ -4,7 +4,7 @@
   "title": "Compiled canonical people catalog",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "generatedAt", "complete", "currentPromptVersion", "stats", "people", "localPersonMap", "unresolvedCandidateBlockIds"],
+  "required": ["schemaVersion", "generatedAt", "complete", "currentPromptVersion", "stats", "people", "familyEdges", "localPersonMap", "unresolvedCandidateBlockIds"],
   "properties": {
     "schemaVersion": { "const": 1 },
     "generatedAt": { "type": "string", "format": "date-time" },
@@ -13,19 +13,25 @@
     "stats": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["chapters", "localPeople", "canonicalPeople", "mergedLocalPeople", "legacyLocalPeople", "unresolvedCandidateBlocks"],
+      "required": ["chapters", "localPeople", "canonicalPeople", "mergedLocalPeople", "legacyLocalPeople", "unresolvedCandidateBlocks", "familyEdges", "peopleWithFamily"],
       "properties": {
         "chapters": { "type": "integer", "minimum": 0 },
         "localPeople": { "type": "integer", "minimum": 0 },
         "canonicalPeople": { "type": "integer", "minimum": 0 },
         "mergedLocalPeople": { "type": "integer", "minimum": 0 },
         "legacyLocalPeople": { "type": "integer", "minimum": 0 },
-        "unresolvedCandidateBlocks": { "type": "integer", "minimum": 0 }
+        "unresolvedCandidateBlocks": { "type": "integer", "minimum": 0 },
+        "familyEdges": { "type": "integer", "minimum": 0 },
+        "peopleWithFamily": { "type": "integer", "minimum": 0 }
       }
     },
     "people": {
       "type": "array",
       "items": { "$ref": "https://24histories.com/schema/people/canonical-person-v1.json" }
+    },
+    "familyEdges": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/familyEdge" }
     },
     "localPersonMap": {
       "type": "object",
@@ -35,6 +41,38 @@
     "unresolvedCandidateBlockIds": {
       "type": "array",
       "items": { "type": "string", "pattern": "^block_[0-9A-HJKMNP-TV-Z]{16}$" }
+    }
+  },
+  "$defs": {
+    "personId": { "type": "string", "pattern": "^per_[0-9A-HJKMNP-TV-Z]{20,}$" },
+    "sourceRelation": {
+      "enum": ["parent-of", "child-of", "sibling-of", "spouse-of", "betrothed-to", "ancestor-of", "descendant-of", "kin-of"]
+    },
+    "familyAssertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subjectPersonId", "relation", "objectPersonId", "details", "certainty", "evidence", "claimRefs"],
+      "properties": {
+        "subjectPersonId": { "$ref": "#/$defs/personId" },
+        "relation": { "$ref": "#/$defs/sourceRelation" },
+        "objectPersonId": { "$ref": "#/$defs/personId" },
+        "details": { "type": "object" },
+        "certainty": { "enum": ["explicit", "explicit-event-contextual-date", "strongly-inferred", "uncertain", "derived", "textual-variant"] },
+        "evidence": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "claimRefs": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+      }
+    },
+    "familyEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "fromPersonId", "relation", "toPersonId", "assertions"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^fam_[a-f0-9]{24}$" },
+        "fromPersonId": { "$ref": "#/$defs/personId" },
+        "relation": { "enum": ["parent-of", "sibling-of", "spouse-of", "betrothed-to", "ancestor-of", "kin-of"] },
+        "toPersonId": { "$ref": "#/$defs/personId" },
+        "assertions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/familyAssertion" } }
+      }
     }
   }
 }

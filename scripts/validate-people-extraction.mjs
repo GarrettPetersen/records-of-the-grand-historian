@@ -51,6 +51,30 @@ const FAMILY_RELATIONS = new Set([
   'descendant-of',
   'kin-of',
 ]);
+const PARENTAGE_TYPES = new Set(['biological', 'adoptive', 'foster', 'step', 'claimed', 'uncertain']);
+const FAMILY_LINES = new Set(['paternal', 'maternal']);
+const SHARED_PARENTAGE_TYPES = new Set([
+  'full',
+  'paternal-half',
+  'maternal-half',
+  'half-unspecified',
+  'step',
+  'adoptive',
+  'uncertain',
+]);
+const RELATIVE_AGES = new Set(['elder', 'younger', 'twin', 'uncertain']);
+const UNION_CATEGORIES = new Set([
+  'marriage',
+  'primary-marriage',
+  'secondary-marriage',
+  'concubinage',
+  'betrothal',
+  'levirate',
+  'sororate',
+  'other',
+  'uncertain',
+]);
+const RELATIONSHIP_STATES = new Set(['formed', 'active', 'ended', 'divorced', 'annulled', 'widowed', 'uncertain']);
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
 export class PeopleExtractionValidationError extends Error {
@@ -258,6 +282,37 @@ function validateClaimVocabulary(claim, packet, errors) {
     if (claim.value?.generationDistance !== undefined &&
         (!Number.isInteger(claim.value.generationDistance) || claim.value.generationDistance < 1)) {
       errors.push(`${claim.id} generationDistance must be a positive integer`);
+    }
+    if (claim.value?.parentage !== undefined && !PARENTAGE_TYPES.has(claim.value.parentage)) {
+      errors.push(`${claim.id} parentage uses unknown value ${JSON.stringify(claim.value.parentage)}`);
+    }
+    if (claim.value?.line !== undefined && !FAMILY_LINES.has(claim.value.line)) {
+      errors.push(`${claim.id} line uses unknown value ${JSON.stringify(claim.value.line)}`);
+    }
+    if (claim.value?.sharedParentage !== undefined && !SHARED_PARENTAGE_TYPES.has(claim.value.sharedParentage)) {
+      errors.push(`${claim.id} sharedParentage uses unknown value ${JSON.stringify(claim.value.sharedParentage)}`);
+    }
+    if (claim.value?.subjectRelativeAge !== undefined && !RELATIVE_AGES.has(claim.value.subjectRelativeAge)) {
+      errors.push(`${claim.id} subjectRelativeAge uses unknown value ${JSON.stringify(claim.value.subjectRelativeAge)}`);
+    }
+    if (claim.value?.unionCategory !== undefined && !UNION_CATEGORIES.has(claim.value.unionCategory)) {
+      errors.push(`${claim.id} unionCategory uses unknown value ${JSON.stringify(claim.value.unionCategory)}`);
+    }
+    if (claim.value?.relationshipState !== undefined && !RELATIONSHIP_STATES.has(claim.value.relationshipState)) {
+      errors.push(`${claim.id} relationshipState uses unknown value ${JSON.stringify(claim.value.relationshipState)}`);
+    }
+    for (const field of ['subjectBirthOrder', 'objectBirthOrder']) {
+      if (claim.value?.[field] !== undefined &&
+          (!Number.isInteger(claim.value[field]) || claim.value[field] < 1)) {
+        errors.push(`${claim.id} ${field} must be a positive integer`);
+      }
+    }
+    if (claim.value?.kinshipTerm !== undefined) {
+      const term = claim.value.kinshipTerm;
+      if (!term || typeof term !== 'object' || Array.isArray(term) ||
+          ![term.zh, term.en].some((value) => typeof value === 'string' && value.trim())) {
+        errors.push(`${claim.id} kinshipTerm must be an object with a nonempty zh or en value`);
+      }
     }
   }
   if (claim.predicate === 'family-summary') {
@@ -778,7 +833,12 @@ function selfTest() {
     id: 'testbook:001:c0004',
     subject: 'testbook:001:p001',
     predicate: 'family-relationship',
-    value: { relation: 'father-of', personId: 'testbook:001:p999' },
+    value: {
+      relation: 'father-of',
+      personId: 'testbook:001:p999',
+      parentage: 'invented',
+      kinshipTerm: {},
+    },
     certainty: 'explicit',
     evidence: ['testbook:001:s0001'],
   });
@@ -787,6 +847,10 @@ function selfTest() {
     throw new Error('Invalid family relationship unexpectedly passed');
   } catch (error) {
     if (!(error instanceof PeopleExtractionValidationError)) throw error;
+    if (!error.message.includes('family-relationship uses unknown relation') || !error.message.includes('parentage') ||
+        !error.message.includes('kinshipTerm')) {
+      throw new Error('Invalid family metadata did not produce the expected validation errors');
+    }
   }
 
   const workerPacket = buildPeopleWorkerPacket(packet);
