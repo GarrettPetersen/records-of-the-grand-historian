@@ -3,10 +3,22 @@ import {
   setTranslationField,
 } from './people-content.mjs';
 
-const ENGLISH_SENTENCE_INITIAL_NON_NAMES = new Set(['All', 'Customs', 'Though', 'Under']);
+const ENGLISH_SENTENCE_INITIAL_NON_NAMES = new Set([
+  'All',
+  'Customs',
+  'Even',
+  'How',
+  'Illness',
+  'Once',
+  'Though',
+  'Under',
+]);
 const ENGLISH_FUNCTION_PHRASE_RE = /^(?:Even I|Though (?:He|I|It|She|That|These|They|This|Those|We))\b/u;
 const ENGLISH_NAMED_NON_PERSON_TERMS = new Set([
+  'Circular Moat',
+  'Mount Shouyang',
   'Three Amnesties',
+  'Three Adjuncts',
   'Three Inquiries',
   'Three Pardons',
   'Six Arts',
@@ -574,7 +586,7 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         candidate: candidate.id,
         disposition: 'not-person',
         reason: 'other',
-        note: 'Named legal procedure, not a person.',
+        note: 'Named institution, place, or procedure, not a person.',
       });
       accounted.add(candidate.id);
       continue;
