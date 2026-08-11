@@ -32,6 +32,11 @@ function assertUnique(items, key, label, errors) {
   return seen;
 }
 
+function claimFactContract(claim) {
+  const { id: _id, ...contract } = claim;
+  return JSON.stringify(contract);
+}
+
 function extractionFiles() {
   const root = path.join(PEOPLE_DIR, 'extractions');
   if (!fs.existsSync(root)) return [];
@@ -89,7 +94,7 @@ function validateConfiguration(errors) {
     extractionSchemaVersion: 1,
     packetSchemaVersion: 1,
     promptVersion: 3,
-    candidateScannerVersion: 1,
+    candidateScannerVersion: 2,
   };
   for (const [key, expected] of Object.entries(expectedVersions)) {
     if (config[key] !== expected) errors.push(`config ${key} must be ${expected} for the current implementation`);
@@ -138,6 +143,7 @@ async function main() {
   }
 
   let editorialDecisions = 0;
+  let claimRetractions = 0;
   for (const file of editorialDecisionFiles()) {
     const document = readJson(file);
     try {
@@ -193,9 +199,18 @@ async function main() {
             errors.push(`${path.relative(REPO_ROOT, file)} lost review reasoning for ${decision.repairId}`);
           }
         }
+        const currentClaimFacts = new Set(loaded.extraction.claims.map(claimFactContract));
+        for (const retraction of document.claimRetractions) {
+          if (currentClaimFacts.has(claimFactContract(retraction.claim))) {
+            errors.push(
+              `${path.relative(REPO_ROOT, file)} retracted ${retraction.claim.id}, but its fact remains applied`,
+            );
+          }
+        }
       }
     }
     editorialDecisions += document.decisions.length;
+    claimRetractions += document.claimRetractions.length;
   }
   if (errors.length > 0) {
     throw new Error(`Person data validation failed:\n${errors.map((item) => `- ${item}`).join('\n')}`);
@@ -203,7 +218,8 @@ async function main() {
   console.log(
     `Person data validation passed: ${files.length} extraction(s), ${people} local people, ` +
     `${mentions} mentions, ${claims} claims, ${proposedRepairs} proposed repair(s), ` +
-    `${appliedRepairs} applied repair(s), ${editorialDecisions} editorial decision(s).`,
+    `${appliedRepairs} applied repair(s), ${editorialDecisions} editorial decision(s), ` +
+    `${claimRetractions} claim retraction(s).`,
   );
 }
 

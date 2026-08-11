@@ -146,6 +146,10 @@ function selfTest() {
     }, {
       id: 'fixture:001:c0002', subject: 'fixture:001:p001', predicate: 'role',
       value: { roleId: 'named-individual' }, certainty: 'explicit', evidence: ['fixture:001:s0001'],
+    }, {
+      id: 'fixture:001:c0003', subject: 'fixture:001:p001', predicate: 'name',
+      value: { kind: 'alternate-name', en: 'Liu Zhaan' }, certainty: 'explicit',
+      evidence: ['fixture:001:s0001'],
     }],
     translationRepairs: [{
       id: 'fixture:001:r0001', unit: locator, field: 'literal', before: 'Liu Zhan came.',
@@ -192,6 +196,16 @@ function selfTest() {
       excerpt: '昨日來，劉湛留',
     },
   };
+  decisions.claimRetractions.push({
+    repairId: extraction.translationRepairs[1].id,
+    claim: structuredClone(extraction.claims[2]),
+    reason: 'The accepted repair confirms that this misspelled English alias was only a translation artifact.',
+    sourceWitness: {
+      source: 'chapter-text',
+      citation: 'fixture/001 s0001',
+      excerpt: '劉湛',
+    },
+  });
   const reviewed = validateEditorialDecisions(decisions, extraction, oldPacket);
   const reviewedRepairs = renumberRepairs(reviewed.reviewedRepairs, 'fixture', '001');
   if (reviewedRepairs.length !== 1 || reviewedRepairs[0].id !== 'fixture:001:r0001') {
@@ -223,7 +237,14 @@ function selfTest() {
     chapterFile: '/tmp/fixture-001.json',
     properNounMatcher: matcher,
   });
-  const reviewedExtraction = { ...structuredClone(extraction), translationRepairs: reviewedRepairs };
+  if (!reviewed.retractedClaimIds.has('fixture:001:c0003')) {
+    throw new Error('Reviewed claim retraction was not returned for application');
+  }
+  const reviewedExtraction = {
+    ...structuredClone(extraction),
+    claims: extraction.claims.filter((claim) => !reviewed.retractedClaimIds.has(claim.id)),
+    translationRepairs: reviewedRepairs,
+  };
   const reconciled = reconcileExtractionAfterRepairs(reviewedExtraction, revisedPacket);
   if (reconciled.unresolvedCandidates.length > 0) throw new Error('Fixture left unresolved candidates');
   if (reconciled.unresolvedSpans.length > 0) throw new Error('Fixture left unresolved mention spans');
@@ -261,7 +282,9 @@ function main() {
   const statuses = new Set(extraction.translationRepairs.map((repair) => repair.status));
 
   if (opts.reconcileCurrent) {
-    const reconciled = reconcileExtractionAfterRepairs(extraction, currentPacket);
+    const reconciled = reconcileExtractionAfterRepairs(extraction, currentPacket, {
+      markRepairsApplied: false,
+    });
     const result = validatePeopleExtraction(reconciled.extraction, currentPacket);
     if (reconciled.unresolvedSpans.length > 0) {
       throw new Error(
@@ -311,6 +334,7 @@ function main() {
   const reviewedRepairs = renumberRepairs(reviewed.reviewedRepairs, opts.book, opts.chapter);
   const reviewedExtraction = {
     ...structuredClone(extraction),
+    claims: extraction.claims.filter((claim) => !reviewed.retractedClaimIds.has(claim.id)),
     translationRepairs: reviewedRepairs,
   };
 

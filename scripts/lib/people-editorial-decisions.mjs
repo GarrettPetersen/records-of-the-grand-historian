@@ -8,7 +8,7 @@ import {
   formatSchemaErrors,
 } from './people-schema.mjs';
 
-const SCHEMA_ID = 'https://24histories.com/schema/people/editorial-decision-v1.json';
+const SCHEMA_ID = 'https://24histories.com/schema/people/editorial-decision-v2.json';
 
 export class EditorialDecisionValidationError extends Error {
   constructor(errors) {
@@ -44,7 +44,7 @@ export function proposalsFingerprint(extraction) {
 export function editorialDecisionSeed(extraction) {
   const proposals = proposalContracts(extraction);
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     book: extraction.book,
     chapter: extraction.chapter,
     input: {
@@ -67,6 +67,7 @@ export function editorialDecisionSeed(extraction) {
       reason: '',
       sourceWitness: null,
     })),
+    claimRetractions: [],
   };
 }
 
@@ -106,7 +107,23 @@ function editorialDocumentErrors(document) {
     }
   }
 
-  return { errors, proposalById, decisionById };
+  const retractedClaimIds = new Set();
+  for (const retraction of document.claimRetractions ?? []) {
+    const claimId = retraction.claim?.id;
+    if (retractedClaimIds.has(claimId)) errors.push(`duplicate claim retraction for ${claimId}`);
+    retractedClaimIds.add(claimId);
+    const proposal = proposalById.get(retraction.repairId);
+    if (!proposal) {
+      errors.push(`claim retraction refers to unknown proposal ${retraction.repairId}`);
+      continue;
+    }
+    const decision = decisionById.get(retraction.repairId);
+    if (!decision || decision.decision === 'reject') {
+      errors.push(`claim retraction ${claimId} is tied to a rejected repair ${retraction.repairId}`);
+    }
+  }
+
+  return { errors, proposalById, decisionById, retractedClaimIds };
 }
 
 export function validateEditorialDecisionDocument(document) {
@@ -157,6 +174,27 @@ export function validateEditorialDecisions(document, extraction, packet) {
     });
   }
 
+  const claimById = new Map(extraction.claims.map((claim) => [claim.id, claim]));
+  const retractedClaimIds = new Set();
+  for (const retraction of document.claimRetractions ?? []) {
+    const current = claimById.get(retraction.claim.id);
+    if (!current) {
+      errors.push(`claim retraction refers to missing claim ${retraction.claim.id}`);
+      continue;
+    }
+    if (JSON.stringify(current) !== JSON.stringify(retraction.claim)) {
+      errors.push(`claim retraction contract is stale for ${retraction.claim.id}`);
+    }
+    const proposal = documentResult.proposalById.get(retraction.repairId);
+    const expectedEvidence = `${extraction.book}:${extraction.chapter}:${proposal?.unit.id}`;
+    if (!retraction.claim.evidence.includes(expectedEvidence)) {
+      errors.push(
+        `claim retraction ${retraction.claim.id} is not evidenced in repaired unit ${proposal?.unit.id}`,
+      );
+    }
+    retractedClaimIds.add(retraction.claim.id);
+  }
+
   if (errors.length > 0) throw new EditorialDecisionValidationError(errors);
-  return { reviewedRepairs, decisions: documentResult.decisionById };
+  return { reviewedRepairs, decisions: documentResult.decisionById, retractedClaimIds };
 }

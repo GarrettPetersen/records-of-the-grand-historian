@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "book": "hanshu",
   "chapter": "005",
   "input": {
@@ -7,12 +7,12 @@
     "proposalsFingerprint": "sha256:946b7d1b8ca6981a71ac15e30f86d7340da6857db91b1f678a58e19634a1130c"
   },
   "reviewer": {
-    "kind": "cursor-agent",
-    "name": "grok-4.5",
-    "model": "grok-4.5",
-    "agentId": "bc-3d305664-8098-4d25-b519-db86e1ca55c4",
-    "runId": "run-f14c7e29-3af3-498c-9d5b-3906918866a4",
-    "completedAt": "2026-08-11T01:35:32.670Z"
+    "kind": "codex",
+    "name": "Codex (reviewed Grok 4.5 draft)",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-11T02:12:19.000Z"
   },
   "proposals": [
     {
@@ -249,6 +249,30 @@
         "source": "chapter-text",
         "citation": "s0047",
         "excerpt": "吳王於朕，兄也"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "hanshu:005:r0007",
+      "claim": {
+        "id": "hanshu:005:c0058",
+        "subject": "hanshu:005:p015",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Chen Wu"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "hanshu:005:s0299"
+        ]
+      },
+      "reason": "The reviewed repair establishes that Chen Wu was an invented English name caused by misreading the memorial-style chen before Wu.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0299",
+        "excerpt": "大將軍臣武"
       }
     }
   ]

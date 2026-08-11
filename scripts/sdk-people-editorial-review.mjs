@@ -21,6 +21,7 @@ import {
   validateEditorialDecisions,
 } from './lib/people-editorial-decisions.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
+import { waitForCursorRun } from './lib/cursor-run-wait.mjs';
 
 loadDotenv(REPO_ROOT);
 
@@ -201,10 +202,14 @@ VALIDATION ERRORS:
 ${errors.slice(0, 200).map((error) => `- ${error}`).join('\n')}`;
 }
 
-async function runTurn(agent, prompt, target, phase) {
+async function runTurn(agent, prompt, target, phase, opts) {
   console.log(`[${target.book}/${target.chapter}] ${phase} -> ${agent.agentId}`);
   const run = await agent.send(prompt);
-  const result = await run.wait();
+  const result = await waitForCursorRun(run, {
+    agentId: agent.agentId,
+    apiKey: opts.apiKey,
+    label: `[${target.book}/${target.chapter}] ${phase}`,
+  });
   console.log(`[${target.book}/${target.chapter}] ${result.id} status=${result.status}`);
   if (result.status !== 'finished') {
     throw new Error(result.error?.message ?? `Cursor run ended with status ${result.status}`);
@@ -288,6 +293,7 @@ async function processTarget(target, opts, state, matcher) {
           attempt === 1 ? initialPrompt(target, dossier) : retryPrompt(target, errors),
           target,
           attempt === 1 ? 'independent review' : `validation retry ${attempt}`,
+          opts,
         );
         const document = await downloadDecision(agent, target);
         document.reviewer = {

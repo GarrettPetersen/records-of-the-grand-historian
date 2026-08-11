@@ -5,7 +5,10 @@ import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildPeopleExtractionPacket } from './build-people-extraction-packet.mjs';
+import {
+  buildPeopleExtractionPacket,
+  buildPeopleWorkerPacket,
+} from './build-people-extraction-packet.mjs';
 import { loadDotenv } from './load-dotenv.mjs';
 import {
   DATA_DIR,
@@ -19,6 +22,7 @@ import {
   writeJsonAtomic,
 } from './lib/people-content.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
+import { waitForCursorRun } from './lib/cursor-run-wait.mjs';
 import {
   compactPeopleExtraction,
   isCompactPeopleExtraction,
@@ -35,6 +39,10 @@ const DEFAULT_MODEL = 'grok-4.5';
 const DEFAULT_REPO_URL = 'https://github.com/GarrettPetersen/records-of-the-grand-historian';
 const DEFAULT_STARTING_REF = 'codex/people-glossary-staging';
 const STATE_FILE = path.join(PEOPLE_DIR, 'generated', 'extraction-state.json');
+const DEFAULT_PLAN_FILE = path.join(PEOPLE_DIR, 'generated', 'extraction-plan.json');
+const DEFAULT_MAX_UNITS = 250;
+const DEFAULT_MAX_CANDIDATES = 600;
+const DEFAULT_MAX_COST_CENTS = 1000;
 const PEOPLE_CONFIG = readJson(path.join(PEOPLE_DIR, 'config.json'));
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
@@ -50,6 +58,13 @@ Options:
   --all                Explicitly allow a corpus-wide queue.
   --limit N            Maximum chapters selected this run.
   --concurrency N      Parallel Cursor Cloud agents (default: 2, max: 12).
+  --order ORDER        Queue order: smallest or book (default: smallest).
+  --max-units N        Bulk chapter ceiling (default: ${DEFAULT_MAX_UNITS}).
+  --max-candidates N   Bulk candidate ceiling (default: ${DEFAULT_MAX_CANDIDATES}).
+  --allow-large        Bypass chapter-size ceilings after explicit review.
+  --max-cost DOLLARS   Stop launching agents after this run reaches the charged
+                       amount (default: $${(DEFAULT_MAX_COST_CENTS / 100).toFixed(2)}; use unlimited to disable).
+  --plan-out PATH      Write the measured queue plan (default: generated data).
   --max-attempts N     Validation attempts per phase (default: 3).
   --model MODEL        Cursor model (default: ${DEFAULT_MODEL}).
   --effort LEVEL       Model effort/reasoning: low, medium, or high (default: low).
@@ -60,10 +75,19 @@ Options:
   --force              Re-extract chapters with a currently valid sidecar.
   --retry-failed       Include chapters whose latest state is failed.
   --stream             Stream assistant text; requires concurrency 1.
+  --self-test          Run scheduler guardrail tests without Cursor.
 
 This runner is cloud-only. Workers never commit, push, or open pull requests.
 The host downloads and validates artifacts, queues translation repairs for an
 independent evidence review, and accumulates accepted chapters locally.`);
+}
+
+function dollarCents(value, flag) {
+  if (value === 'unlimited') return null;
+  if (!/^\d+(?:\.\d{1,2})?$/u.test(value) || Number(value) <= 0) {
+    throw new Error(`${flag} must be a positive dollar amount or unlimited`);
+  }
+  return Math.round(Number(value) * 100);
 }
 
 function positiveInteger(value, flag, maximum = Number.MAX_SAFE_INTEGER) {
@@ -80,6 +104,12 @@ function parseArgs(argv) {
     all: false,
     limit: null,
     concurrency: 2,
+    order: 'smallest',
+    maxUnits: DEFAULT_MAX_UNITS,
+    maxCandidates: DEFAULT_MAX_CANDIDATES,
+    allowLarge: false,
+    maxCostCents: DEFAULT_MAX_COST_CENTS,
+    planOut: DEFAULT_PLAN_FILE,
     maxAttempts: 3,
     model: process.env.SDK_PEOPLE_MODEL ?? DEFAULT_MODEL,
     effort: process.env.SDK_PEOPLE_EFFORT ?? 'low',
@@ -91,6 +121,7 @@ function parseArgs(argv) {
     force: false,
     retryFailed: false,
     stream: false,
+    selfTest: false,
   };
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
@@ -104,6 +135,12 @@ function parseArgs(argv) {
     else if (arg === '--all') opts.all = true;
     else if (arg === '--limit') opts.limit = positiveInteger(next(), arg);
     else if (arg === '--concurrency') opts.concurrency = positiveInteger(next(), arg, 12);
+    else if (arg === '--order') opts.order = next();
+    else if (arg === '--max-units') opts.maxUnits = positiveInteger(next(), arg);
+    else if (arg === '--max-candidates') opts.maxCandidates = positiveInteger(next(), arg);
+    else if (arg === '--allow-large') opts.allowLarge = true;
+    else if (arg === '--max-cost') opts.maxCostCents = dollarCents(next(), arg);
+    else if (arg === '--plan-out') opts.planOut = path.resolve(REPO_ROOT, next());
     else if (arg === '--max-attempts') opts.maxAttempts = positiveInteger(next(), arg, 5);
     else if (arg === '--model') opts.model = next();
     else if (arg === '--effort') opts.effort = next();
@@ -114,12 +151,15 @@ function parseArgs(argv) {
     else if (arg === '--force') opts.force = true;
     else if (arg === '--retry-failed') opts.retryFailed = true;
     else if (arg === '--stream') opts.stream = true;
+    else if (arg === '--self-test') opts.selfTest = true;
     else if (arg === '--help' || arg === '-h') {
       usage();
       process.exit(0);
     } else throw new Error(`Unknown option: ${arg}`);
   }
+  if (opts.selfTest) return opts;
   if (!['low', 'medium', 'high'].includes(opts.effort)) throw new Error('--effort must be low, medium, or high');
+  if (!['smallest', 'book'].includes(opts.order)) throw new Error('--order must be smallest or book');
   if (opts.chapter && !opts.book) throw new Error('--chapter requires --book');
   if (!opts.book && !opts.all) throw new Error('Specify --book or explicitly pass --all');
   if (opts.all && (opts.book || opts.chapter)) throw new Error('--all cannot be combined with --book or --chapter');
@@ -169,6 +209,129 @@ function chapterTargets(opts) {
   return targets;
 }
 
+function targetMetrics(packet) {
+  const workerBytes = Buffer.byteLength(JSON.stringify(buildPeopleWorkerPacket(packet)));
+  const units = packet.units.length;
+  const candidates = packet.preflight.candidates.length;
+  return {
+    units,
+    candidates,
+    workerBytes,
+    workloadScore: workerBytes + candidates * 160,
+  };
+}
+
+function compareBookOrder(left, right) {
+  return left.book.localeCompare(right.book) || left.chapter.localeCompare(right.chapter);
+}
+
+function compareWorkload(left, right) {
+  return left.metrics.workloadScore - right.metrics.workloadScore ||
+    left.metrics.candidates - right.metrics.candidates ||
+    left.metrics.units - right.metrics.units ||
+    compareBookOrder(left, right);
+}
+
+function exceedsBulkCeiling(target, opts) {
+  return !opts.allowLarge && (
+    target.metrics.units > opts.maxUnits || target.metrics.candidates > opts.maxCandidates
+  );
+}
+
+function planTarget(target) {
+  return {
+    book: target.book,
+    chapter: target.chapter,
+    ...target.metrics,
+  };
+}
+
+function recoverInterruptedState(state) {
+  let changed = false;
+  for (const entry of Object.values(state.chapters)) {
+    if (!['claimed', 'extracting', 'failed/retryable'].includes(entry.status)) continue;
+    entry.status = 'interrupted';
+    entry.updatedAt = new Date().toISOString();
+    changed = true;
+  }
+  if (changed) saveState(state);
+}
+
+function prepareTargetQueue(rawTargets, opts, state, matcher) {
+  const eligible = [];
+  const oversized = [];
+  const current = [];
+  const failed = [];
+  let stateChanged = false;
+  for (const [index, target] of rawTargets.entries()) {
+    const packet = buildPeopleExtractionPacket(target.book, target.chapter, {
+      properNounMatcher: matcher,
+    });
+    const measured = { ...target, metrics: targetMetrics(packet) };
+    if (!opts.force && currentExtractionIsValid(target, packet)) {
+      current.push(measured);
+      const key = stateKey(target);
+      state.chapters[key] = {
+        ...(state.chapters[key] ?? { attempts: 0 }),
+        status: 'accepted',
+        chapterFingerprint: packet.input.chapterFingerprint,
+        updatedAt: new Date().toISOString(),
+      };
+      stateChanged = true;
+    } else if (!opts.retryFailed && state.chapters[stateKey(target)]?.status === 'failed') {
+      failed.push(measured);
+    } else if (exceedsBulkCeiling(measured, opts)) {
+      oversized.push(measured);
+    } else {
+      eligible.push(measured);
+    }
+    if (rawTargets.length >= 200 && ((index + 1) % 100 === 0 || index + 1 === rawTargets.length)) {
+      console.log(`Measured ${index + 1}/${rawTargets.length} chapters for queue planning`);
+    }
+  }
+  if (stateChanged) saveState(state);
+
+  const ranked = eligible.sort(opts.order === 'smallest' ? compareWorkload : compareBookOrder);
+  const selected = opts.limit ? ranked.slice(0, opts.limit) : ranked;
+  const waiting = ranked.slice(selected.length);
+  const plan = {
+    schemaVersion: 1,
+    createdAt: new Date().toISOString(),
+    scope: opts.all ? { all: true } : { book: opts.book, chapter: opts.chapter },
+    policy: {
+      order: opts.order,
+      maxUnits: opts.allowLarge ? null : opts.maxUnits,
+      maxCandidates: opts.allowLarge ? null : opts.maxCandidates,
+      maxCostCents: opts.maxCostCents,
+      concurrency: opts.concurrency,
+    },
+    counts: {
+      measured: rawTargets.length,
+      selected: selected.length,
+      waitingAfterLimit: waiting.length,
+      deferredOversized: oversized.length,
+      alreadyCurrent: current.length,
+      skippedFailed: failed.length,
+    },
+    selected: selected.map(planTarget),
+    waitingAfterLimit: waiting.map(planTarget),
+    deferredOversized: oversized.sort(compareWorkload).map(planTarget),
+    alreadyCurrent: current.map(planTarget),
+    skippedFailed: failed.map(planTarget),
+  };
+  writeJsonAtomic(opts.planOut, plan);
+
+  if (opts.chapter && oversized.length > 0) {
+    const item = oversized[0];
+    throw new Error(
+      `${item.book}/${item.chapter} has ${item.metrics.units} units and ` +
+      `${item.metrics.candidates} candidates, above the bulk ceilings of ` +
+      `${opts.maxUnits}/${opts.maxCandidates}; inspect the plan and pass --allow-large explicitly`,
+    );
+  }
+  return { selected, waiting, oversized, current, failed, plan };
+}
+
 function loadState() {
   if (!fs.existsSync(STATE_FILE)) return { schemaVersion: 1, chapters: {} };
   return readJson(STATE_FILE);
@@ -190,6 +353,61 @@ function updateState(state, target, patch) {
     updatedAt: new Date().toISOString(),
   };
   saveState(state);
+}
+
+function createRunControl() {
+  return {
+    stopRequested: false,
+    cancelRequested: false,
+    stopReason: null,
+    activeRuns: new Map(),
+  };
+}
+
+async function cancelActiveRuns(control) {
+  control.cancelRequested = true;
+  const active = [...control.activeRuns.values()];
+  if (active.length === 0) return;
+  console.error(`Cancelling ${active.length} active Cursor run(s)...`);
+  await Promise.all(active.map(async ({ run, target }) => {
+    try {
+      if (run.supports('cancel')) await run.cancel();
+      else console.error(`[${stateKey(target)}] run ${run.id} does not support cancellation`);
+    } catch (error) {
+      console.error(
+        `[${stateKey(target)}] could not cancel ${run.id}: ` +
+        `${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
+  }));
+}
+
+function installSignalHandlers(control) {
+  let interruptCount = 0;
+  const onInterrupt = () => {
+    interruptCount += 1;
+    control.stopRequested = true;
+    control.stopReason = 'SIGINT';
+    if (interruptCount === 1) {
+      console.error(
+        `SIGINT received: draining ${control.activeRuns.size} active run(s); ` +
+        'no new agents will start. Press Ctrl-C again to cancel active runs.',
+      );
+      return;
+    }
+    void cancelActiveRuns(control);
+  };
+  const onTerminate = () => {
+    control.stopRequested = true;
+    control.stopReason = 'SIGTERM';
+    void cancelActiveRuns(control);
+  };
+  process.on('SIGINT', onInterrupt);
+  process.on('SIGTERM', onTerminate);
+  return () => {
+    process.off('SIGINT', onInterrupt);
+    process.off('SIGTERM', onTerminate);
+  };
 }
 
 function currentExtractionIsValid(target, packet) {
@@ -308,23 +526,32 @@ async function closeAgent(agent) {
   else await agent.close();
 }
 
-async function runAgentTurn(agent, prompt, target, opts, phase) {
+async function runAgentTurn(agent, prompt, target, opts, phase, control) {
   console.log(`[${stateKey(target)}] ${phase} prompt -> ${agent.agentId}`);
   const run = await agent.send(prompt);
-  if (opts.stream) {
-    for await (const event of run.stream()) {
-      if (event.type !== 'assistant') continue;
-      for (const block of event.message.content) {
-        if (block.type === 'text') process.stdout.write(block.text);
+  control.activeRuns.set(run.id, { run, target });
+  try {
+    if (opts.stream) {
+      for await (const event of run.stream()) {
+        if (event.type !== 'assistant') continue;
+        for (const block of event.message.content) {
+          if (block.type === 'text') process.stdout.write(block.text);
+        }
       }
     }
+    const result = await waitForCursorRun(run, {
+      agentId: agent.agentId,
+      apiKey: opts.apiKey,
+      label: `[${stateKey(target)}] ${phase}`,
+    });
+    console.log(`[${stateKey(target)}] ${phase} run ${result.id} status=${result.status}`);
+    if (result.status !== 'finished') {
+      throw new Error(result.error?.message ?? `Cursor run ended with status ${result.status}`);
+    }
+    return result;
+  } finally {
+    control.activeRuns.delete(run.id);
   }
-  const result = await run.wait();
-  console.log(`[${stateKey(target)}] ${phase} run ${result.id} status=${result.status}`);
-  if (result.status !== 'finished') {
-    throw new Error(result.error?.message ?? `Cursor run ended with status ${result.status}`);
-  }
-  return result;
 }
 
 async function downloadExtraction(agent, target) {
@@ -366,31 +593,38 @@ function validateDownloadedExtraction(extraction, packet) {
     : validatePeopleExtraction(extraction, packet);
 }
 
-async function obtainValidInitialExtraction(agent, target, packet, opts, state) {
+async function obtainValidInitialExtraction(agent, target, packet, opts, state, control) {
   let errors = [];
   for (let attempt = 1; attempt <= opts.maxAttempts; attempt += 1) {
+    if (control.cancelRequested) {
+      throw Object.assign(new Error('Extraction cancelled during shutdown'), { errors });
+    }
     const priorAttempts = state.chapters[stateKey(target)]?.attempts ?? 0;
     updateState(state, target, { status: 'extracting', attempts: priorAttempts + 1, phaseAttempt: attempt });
     const prompt = attempt === 1 ? initialPrompt(target, opts) : retryPrompt(target, errors);
     let result;
     try {
-      result = await runAgentTurn(agent, prompt, target, opts, 'extraction');
+      result = await runAgentTurn(agent, prompt, target, opts, 'extraction', control);
       const downloaded = withRunMetadata(await downloadExtraction(agent, target), opts, agent, result);
       const validated = validateDownloadedExtraction(downloaded, packet);
       return { extraction: validated.normalized, result, stats: validated.stats };
     } catch (error) {
       errors = validationErrors(error);
-      updateState(state, target, { status: 'failed/retryable', lastErrors: errors });
+      updateState(state, target, {
+        status: control.cancelRequested ? 'interrupted' : 'failed/retryable',
+        lastErrors: errors,
+      });
       console.error(`[${stateKey(target)}] extraction attempt ${attempt} failed with ${errors.length} error(s)`);
+      if (control.cancelRequested) break;
       if (error instanceof CursorAgentError && !error.isRetryable) break;
     }
   }
   throw Object.assign(new Error(`Initial extraction failed after ${opts.maxAttempts} attempt(s)`), { errors });
 }
 
-async function processTarget(target, opts, state) {
+async function processTarget(target, opts, state, control, budget) {
   const key = stateKey(target);
-  const packet = buildPeopleExtractionPacket(target.book, target.chapter, {
+  const packet = target.packet ?? buildPeopleExtractionPacket(target.book, target.chapter, {
     properNounMatcher: opts.properNounMatcher,
   });
   if (!opts.force && currentExtractionIsValid(target, packet)) {
@@ -425,7 +659,7 @@ async function processTarget(target, opts, state) {
     });
     updateState(state, target, { agentId: agent.agentId });
     const accepted = {
-      ...await obtainValidInitialExtraction(agent, target, packet, opts, state),
+      ...await obtainValidInitialExtraction(agent, target, packet, opts, state, control),
       packet,
     };
     const compact = compactPeopleExtraction(accepted.extraction, accepted.packet);
@@ -457,14 +691,16 @@ async function processTarget(target, opts, state) {
     return { status: 'accepted', stats: accepted.stats };
   } catch (error) {
     const errors = validationErrors(error);
-    updateState(state, target, { status: 'failed', lastErrors: errors });
-    console.error(`[${key}] failed: ${errors[0]}`);
-    return { status: 'failed', errors };
+    const status = control.cancelRequested ? 'interrupted' : 'failed';
+    updateState(state, target, { status, lastErrors: errors });
+    console.error(`[${key}] ${status}: ${errors[0]}`);
+    return { status, errors };
   } finally {
     if (agent) {
       try {
         const usage = await agent.getUsage();
         updateState(state, target, { usage });
+        budget.chargedCents += usage.cost?.chargedCents ?? 0;
         const dollars = usage.cost ? `; charged=$${(usage.cost.chargedCents / 100).toFixed(2)}` : '';
         console.log(
           `[${key}] Cursor usage: ${usage.usage.totalTokens.toLocaleString('en-US')} tokens${dollars}`,
@@ -479,36 +715,93 @@ async function processTarget(target, opts, state) {
   }
 }
 
+function selfTest() {
+  const small = { book: 'fixture', chapter: '002', metrics: {
+    units: 100, candidates: 200, workerBytes: 10_000, workloadScore: 42_000,
+  } };
+  const large = { book: 'fixture', chapter: '001', metrics: {
+    units: 400, candidates: 900, workerBytes: 30_000, workloadScore: 174_000,
+  } };
+  const opts = { allowLarge: false, maxUnits: 250, maxCandidates: 600 };
+  if ([large, small].sort(compareWorkload)[0] !== small) {
+    throw new Error('Workload ordering did not put the smaller chapter first');
+  }
+  if (exceedsBulkCeiling(small, opts) || !exceedsBulkCeiling(large, opts)) {
+    throw new Error('Bulk size ceilings did not classify fixture chapters');
+  }
+  if (dollarCents('10.25', '--max-cost') !== 1025 || dollarCents('unlimited', '--max-cost') !== null) {
+    throw new Error('Cost ceiling parser returned the wrong amount');
+  }
+  console.log('sdk-people-extract scheduler self-test: ok');
+}
+
 async function main() {
   const opts = parseArgs(process.argv.slice(2));
+  if (opts.selfTest) return selfTest();
   if (!opts.dryRun && !opts.apiKey) throw new Error('CURSOR_API_KEY is required. Get a key from Cursor -> Integrations.');
-  if (!opts.dryRun) fetchStartingRef(opts.startingRef);
   const state = loadState();
+  if (!opts.dryRun) recoverInterruptedState(state);
   opts.properNounMatcher = loadProperNounMatcher();
-  let targets = chapterTargets(opts);
-  if (opts.limit) targets = targets.slice(0, opts.limit);
+  const queue = prepareTargetQueue(chapterTargets(opts), opts, state, opts.properNounMatcher);
+  const targets = queue.selected;
+  const planPath = path.relative(REPO_ROOT, opts.planOut);
   console.log(
-    `Selected ${targets.length} chapter(s); Cursor Cloud concurrency=${opts.concurrency}; ` +
-    `model=${opts.model} effort=${opts.effort} fast=${opts.fast ? 'on' : 'off'}; no worker git pushes`,
+    `Queue plan ${planPath}: selected=${targets.length}, waiting=${queue.waiting.length}, ` +
+    `oversized=${queue.oversized.length}, current=${queue.current.length}, failed=${queue.failed.length}`,
   );
+  for (const target of targets.slice(0, 20)) {
+    console.log(
+      `  ${stateKey(target)}: ${target.metrics.units} units, ${target.metrics.candidates} candidates, ` +
+      `${(target.metrics.workerBytes / 1024).toFixed(1)} KiB worker packet`,
+    );
+  }
+  if (targets.length > 20) console.log(`  ... ${targets.length - 20} more selected chapter(s)`);
+  console.log(
+    `Cursor Cloud concurrency=${opts.concurrency}; model=${opts.model} effort=${opts.effort} ` +
+    `fast=${opts.fast ? 'on' : 'off'}; run cost ceiling=` +
+    `${opts.maxCostCents === null ? 'unlimited' : `$${(opts.maxCostCents / 100).toFixed(2)}`}; ` +
+    'no worker git pushes',
+  );
+  if (!opts.dryRun && targets.length > 0) fetchStartingRef(opts.startingRef);
 
+  const control = createRunControl();
+  const removeSignalHandlers = opts.dryRun ? () => {} : installSignalHandlers(control);
+  const budget = { chargedCents: 0 };
   let nextIndex = 0;
   const results = [];
   const workers = Array.from({ length: Math.min(opts.concurrency, targets.length) }, async () => {
-    while (nextIndex < targets.length) {
+    while (nextIndex < targets.length && !control.stopRequested) {
+      if (opts.maxCostCents !== null && budget.chargedCents >= opts.maxCostCents) {
+        control.stopRequested = true;
+        control.stopReason = 'cost-ceiling';
+        console.error(
+          `Run cost ceiling reached at $${(budget.chargedCents / 100).toFixed(2)}; ` +
+          'no new agents will start.',
+        );
+        break;
+      }
       const target = targets[nextIndex++];
-      results.push(await processTarget(target, opts, state));
+      results.push(await processTarget(target, opts, state, control, budget));
     }
   });
-  await Promise.all(workers);
+  try {
+    await Promise.all(workers);
+  } finally {
+    removeSignalHandlers();
+  }
 
   const counts = new Map();
   for (const result of results) counts.set(result.status, (counts.get(result.status) ?? 0) + 1);
   console.log(`Finished: ${[...counts].map(([status, count]) => `${status}=${count}`).join(', ') || 'no targets'}`);
   console.log(
+    `Charged this invocation: $${(budget.chargedCents / 100).toFixed(2)}; ` +
+    `not started: ${targets.length - nextIndex}; stop reason: ${control.stopReason ?? 'queue-complete'}`,
+  );
+  console.log(
     'Accepted files remain local. Commit locally in batches; push codex/people-glossary-staging only at a deliberate checkpoint.',
   );
   if (counts.has('failed')) process.exitCode = 2;
+  else if (control.stopReason === 'SIGINT' || control.stopReason === 'SIGTERM') process.exitCode = 130;
 }
 
 if (isMain) {

@@ -12,11 +12,12 @@ const GLOSSARY_FILE = path.join(REPO_ROOT, 'data', 'glossary.json');
 const CONFIG_FILE = path.join(PEOPLE_DIR, 'config.json');
 
 const ENGLISH_STOP_WORDS = new Set([
-  'A', 'An', 'And', 'After', 'Although', 'As', 'At', 'Before', 'Because', 'Both', 'But', 'By',
+  'A', 'Accordingly', 'An', 'And', 'After', 'Although', 'As', 'At', 'Before', 'Because', 'Both', 'But', 'By',
   'Chapter', 'During', 'Earlier', 'For', 'From', 'Had', 'He', 'Her', 'Here', 'His', 'However',
   'I', 'If', 'In', 'It', 'Its', 'Later', 'Meanwhile', 'My', 'No', 'Now', 'On', 'One', 'Our',
-  'Proud', 'She', 'Since', 'Soon', 'Such', 'Talent', 'That', 'The', 'Their', 'Then', 'There',
-  'These', 'They', 'This', 'Those', 'Thus', 'To', 'Treatise', 'Two', 'Volume', 'We', 'Whatever',
+  'Consequently', 'Hence', 'Proud', 'She', 'Since', 'So', 'Soon', 'Such', 'Talent', 'That', 'The',
+  'Their', 'Then', 'There', 'Therefore', 'Thereupon', 'These', 'They', 'This', 'Those', 'Thus', 'To',
+  'Treatise', 'Two', 'Volume', 'We', 'Whatever',
   'When', 'Where', 'While', 'Who', 'Why', 'With', 'Without', 'Yet', 'You', 'Your'
 ]);
 

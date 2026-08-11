@@ -57,12 +57,23 @@ Routine checkpoints remain local because pushes to a staging branch may still
 trigger Cloudflare preview builds. The older `translation-staging` branch is
 not reused because it has substantially diverged from current `master`.
 
+Bulk extraction is size-aware. The host measures every candidate chapter before
+applying `--limit`, ranks by compact worker-packet workload, and records the full
+decision in `data/people/generated/extraction-plan.json`. The default lane admits
+at most 250 content units and 600 preflight candidates per chapter. Larger
+chapters remain explicitly listed as deferred; they are not treated as complete
+or silently skipped. `--allow-large` is required to send one through the whole-
+chapter lane after inspection. A $10 per-invocation charged-cost ceiling stops
+new launches while active agents drain. The first Ctrl-C also drains; a second
+Ctrl-C cancels active SDK runs.
+
 Useful commands:
 
 ```sh
 npm run people:packet -- --book songshu --chapter 069 --summary
 npm run people:extract -- --book songshu --chapter 069 --dry-run
 npm run people:extract -- --book songshu --chapter 069
+npm run people:extract -- --book hanshu --limit 8 --concurrency 2 --max-cost 10
 npm run people:editorial-review -- --book songshu --chapter 069 --dry-run
 npm run people:editorial-review -- --book songshu --chapter 069
 npm run people:apply-repairs -- --book songshu --chapter 069
@@ -969,6 +980,13 @@ applier rejects stale or incomplete decisions, self-review by the extraction
 agent, changed proposal contracts, and any revision that leaves unresolved
 mentions or candidates. It validates the complete revised state before writing
 either chapter or sidecar.
+
+Version 2 decision records may also retract an extraction claim proven to be a
+translation artifact. The reviewer must embed the complete old claim, tie it to
+an accepted or revised repair in the same evidence unit, and provide its own
+source witness. Application removes the claim atomically with the text repair;
+the global audit then proves that the retracted fact is absent. A valid alias or
+fact is never retracted merely because revised English no longer spells it out.
 
 Name-bearing repairs are reconciled atomically. The applier remaps stale English
 spans only from that person's existing preferred name or name/title claims,

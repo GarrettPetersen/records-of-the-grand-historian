@@ -80,9 +80,14 @@ export function buildEditorialReviewDossier(book, chapter, options = {}) {
     const start = Math.max(0, center - contextRadius);
     const end = Math.min(packet.units.length, center + contextRadius + 1);
     const { status: _status, ...proposalContract } = proposal;
+    const evidenceId = `${book}:${chapterId}:${proposal.unit.id}`;
+    const relatedClaims = extraction.claims.filter((claim) => claim.evidence.includes(evidenceId));
+    const relatedPeople = new Set(relatedClaims.map((claim) => claim.subject));
     return {
       proposal: proposalContract,
       context: packet.units.slice(start, end).map((unit) => reviewUnit(unit, unit.id === proposal.unit.id)),
+      relatedPeople: extraction.people.filter((person) => relatedPeople.has(person.localId)),
+      relatedClaims,
     };
   });
 
@@ -102,6 +107,7 @@ export function buildEditorialReviewDossier(book, chapter, options = {}) {
       chineseControlsMeaning: true,
       preserveAccurateHumanWording: true,
       externalWitnessRequiredForSourceCorrection: true,
+      retractClaimsInvalidatedByAdvancedRepairs: true,
     },
     items,
     decisionSeed: editorialDecisionSeed(extraction),

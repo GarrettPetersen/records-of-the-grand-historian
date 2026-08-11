@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 2,
+  "book": "hanshu",
+  "chapter": "103",
+  "input": {
+    "chapterFingerprint": "sha256:076177696613fb2b6877461a701ee1934221ffb7fc6735555a57dd24b126abea",
+    "proposalsFingerprint": "sha256:b3e3c651d916f81c86eb99f2cede7dbdca6485d9f629e5afcc8699212d10d2a3"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-02977e01-fd34-4e16-92ad-757bab5f2e9c",
+    "runId": "run-4efbab62-aa9d-4297-8517-4d6bb9c5d624",
+    "completedAt": "2026-08-11T02:27:05.283Z"
+  },
+  "proposals": [
+    {
+      "id": "hanshu:103:r0001",
+      "unit": {
+        "id": "s0052",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "He liked to say, \"Building a fortune takes the cunning of yiyin day or Lü Wang, the timing of Sun Wu's generals, and the ruthlessness of Shang Yang's code.",
+      "after": "He liked to say, \"Building a fortune takes the cunning of Yi Yin or Lü Wang, the timing of Sun and Wu in using troops, and the ruthlessness of Shang Yang's code.",
+      "reason": "Chinese 伊尹 is the personal name Yi Yin; \"yiyin day\" is a corrupted rendering. 孫、吳 names two strategists, not a single \"Sun Wu\".",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:103:r0002",
+      "unit": {
+        "id": "s0052",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "Therefore he said: \"In managing my livelihood it is like the schemes of yiyin day and Lü Shang, Sun and Wu's use of troops, Shang Yang's carrying out of laws.",
+      "after": "Therefore he said: \"In managing my livelihood it is like the schemes of Yi Yin and Lü Shang, Sun and Wu's use of troops, Shang Yang's carrying out of laws.",
+      "reason": "Chinese 伊尹 must be rendered Yi Yin; \"yiyin day\" is a clear corruption of that name.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "hanshu:103:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit 伊尹、呂尚之謀，孫、吳用兵 names Yi Yin and Lü Shang for schemes, then Sun and Wu as two strategists using troops; the prior English corruptly turns 伊尹 into \"yiyin day\" and collapses 孫、吳 into \"Sun Wu's generals\". The proposed idiomatic repair restores both names correctly without inventing content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0052",
+        "excerpt": "伊尹、呂尚之謀，孫、吳用兵"
+      }
+    },
+    {
+      "repairId": "hanshu:103:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit 伊尹 is the personal name Yi Yin; \"yiyin day\" is a mistranslation of that name. The rest of the proposed literal line already matches 呂尚、孫、吳用兵、商鞅行法, so correcting only that name is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0052",
+        "excerpt": "伊尹、呂尚之謀，孫、吳用兵，商鞅行法"
+      }
+    }
+  ],
+  "claimRetractions": []
+}

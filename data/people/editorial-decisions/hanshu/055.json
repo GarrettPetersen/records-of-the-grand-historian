@@ -1,0 +1,204 @@
+{
+  "schemaVersion": 2,
+  "book": "hanshu",
+  "chapter": "055",
+  "input": {
+    "chapterFingerprint": "sha256:aa6ba37f5c9a5393eedc633daf8a0aaaf72395222c9abe4a6645fd46e39b20d9",
+    "proposalsFingerprint": "sha256:f49af5e4e31402ae594a19835adfd66424d5f43764625bfde9457123c79c32e3"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex (reviewed Grok 4.5 draft)",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-11T02:33:28.000Z"
+  },
+  "proposals": [
+    {
+      "id": "hanshu:055:r0001",
+      "unit": {
+        "id": "s0120",
+        "kind": "paragraph-sentence",
+        "blockIndex": 22,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "When the theft surfaced the owner did not suspect Buyi; nevertheless Buyi accepted blame and bought replacement gold.",
+      "after": "When the roommate who had lost the gold noticed, he suspected Buyi; Buyi apologized as if guilty and bought gold to repay.",
+      "reason": "Chinese 亡意不疑 means suspicion fell on Buyi; the anecdote turns on Buyi accepting a false accusation.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:055:r0002",
+      "unit": {
+        "id": "s0120",
+        "kind": "paragraph-sentence",
+        "blockIndex": 22,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "Presently the roommate who had lost the gold noticed; he did not suspect Buyi; Buyi apologized as if guilty and bought gold to repay.",
+      "after": "Presently the roommate who had lost the gold noticed; his suspicion fell on Buyi; Buyi apologized as if guilty and bought gold to repay.",
+      "reason": "Chinese 亡意不疑 means he suspected Buyi, not that he cleared him of suspicion.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:055:r0003",
+      "unit": {
+        "id": "s0109",
+        "kind": "paragraph-sentence",
+        "blockIndex": 19,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Five years on he succeeded Marquis Liu She of Tao as chancellor, filing routine memorials without flourish.",
+      "after": "Five years on he succeeded Marquis She of Tao as chancellor, filing routine memorials without flourish.",
+      "reason": "Chinese 桃侯舍 gives the personal name She only; Liu is not in the source.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:055:r0004",
+      "unit": {
+        "id": "s0158",
+        "kind": "paragraph-sentence",
+        "blockIndex": 29,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "The appraisal says: Confucius said, “The gentleman wishes to be slow in speech yet quick in action”—does this not speak of the Lord of Wan, the Marquis of Jianling, the Marquis of Sai, and Uncle Zhang?",
+      "after": "The appraisal says: Confucius said, “The gentleman wishes to be slow in speech yet quick in action”—does this not speak of the Lord of Wan, the Marquis of Jianling, the Marquis of Sai, and Zhang Shu?",
+      "reason": "張叔 is Zhang Ou’s courtesy name Shu, not “Uncle Zhang.”",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:055:r0005",
+      "unit": {
+        "id": "s0033",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In the second year of Jianyuan the Grand Empress Dowager removed Palace Commandant Wang Zang over his scholarly faction.",
+      "after": "In the second year of Jianyuan, Palace Commandant Wang Zang incurred punishment over literary learning involving the Grand Empress Dowager.",
+      "reason": "Chinese 以文學獲罪皇太后 does not state that the Empress Dowager herself removed him.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:055:r0006",
+      "unit": {
+        "id": "s0068",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "So I have inspected the regions, worshipped at Mount Song, and linked the Eight Spirits with the Xuanyuan rite.",
+      "after": "So I have inspected the regions, worshipped at Mount Song, and communicated with the Eight Spirits, so as to match the work at Xuanfang.",
+      "reason": "宣房 is Xuanfang, not Xuanyuan.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:055:r0007",
+      "unit": {
+        "id": "s0068",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Therefore I have toured the provinces, sacrificed at Mount Song, communicated with the Eight Gods, to join with Xuanyuan House.",
+      "after": "Therefore I have toured the provinces, sacrificed at Mount Song, communicated with the Eight Gods, to join with Xuanfang.",
+      "reason": "宣房 should be rendered Xuanfang, not Xuanyuan House.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "hanshu:055:r0001",
+      "decision": "revise",
+      "after": "When the loss was discovered, Buyi's roommate suspected him. Buyi apologized as though he were guilty and bought gold to repay him.",
+      "reason": "The proposal fixes the reversed suspicion but remains awkward. The roommate suspected Buyi, who accepted the false accusation and made repayment.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0120",
+        "excerpt": "亡意不疑，不疑謝有之"
+      }
+    },
+    {
+      "repairId": "hanshu:055:r0002",
+      "decision": "revise",
+      "after": "Presently, the roommate who had lost the gold noticed and suspected Buyi. Buyi apologized as if he had taken it and bought gold to repay him.",
+      "reason": "The original reverses the suspicion, while the proposed repair is syntactically rough. This preserves the literal sequence and the two uses of Buyi's name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0120",
+        "excerpt": "亡意不疑"
+      }
+    },
+    {
+      "repairId": "hanshu:055:r0003",
+      "decision": "reject",
+      "after": null,
+      "reason": "Marquis She of Tao is Liu She. Hanshu 51 and Shiji 22 explicitly give the full name, so the original expansion is accurate and useful.",
+      "sourceWitness": {
+        "source": "other",
+        "citation": "Hanshu 51",
+        "excerpt": "桃侯劉舍"
+      }
+    },
+    {
+      "repairId": "hanshu:055:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "張叔 is the courtesy name Zhang Shu in the appraisal list of worthies, not kinship “Uncle Zhang.”",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0158",
+        "excerpt": "萬石君、建陵侯、塞侯、張叔"
+      }
+    },
+    {
+      "repairId": "hanshu:055:r0005",
+      "decision": "revise",
+      "after": "In the second year of Jianyuan, Palace Commandant Wang Zang incurred the Grand Empress Dowager's displeasure because of his Confucian learning.",
+      "reason": "The original overstates the action, but the proposal is opaque English. 獲罪皇太后 means that his learning caused him to incur her displeasure.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0033",
+        "excerpt": "郎中令王臧以文學獲罪皇太后"
+      }
+    },
+    {
+      "repairId": "hanshu:055:r0006",
+      "decision": "revise",
+      "after": "Therefore I toured the regions, performed rites at Mount Song, and communed with the Eight Spirits, following the precedent of Xuanfang.",
+      "reason": "The proposal correctly identifies Xuanfang but remains stiff. The clause links the emperor's rites and tour with his earlier work at Xuanfang.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0068",
+        "excerpt": "通八神，以合宣房"
+      }
+    },
+    {
+      "repairId": "hanshu:055:r0007",
+      "decision": "revise",
+      "after": "Therefore I toured the provinces, sacrificed at Mount Song, and communicated with the Eight Gods, thereby bringing these acts into accord with Xuanfang.",
+      "reason": "Xuanfang is correct, but simply 'join with Xuanfang' is not intelligible English. The revision preserves the literal relation expressed by 合.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0068",
+        "excerpt": "以合宣房"
+      }
+    }
+  ],
+  "claimRetractions": []
+}

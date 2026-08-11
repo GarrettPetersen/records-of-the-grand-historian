@@ -31,6 +31,15 @@ Chinese Notes, or Wikisource, identify the site in `source`, and put the exact U
 or edition location in `citation`. Do not claim to have consulted an external
 source unless you actually did.
 
+Each item also lists people and claims evidenced in the repaired unit. If an
+accepted or revised repair proves that one of those claims was created solely by
+the bad translation, add it to top-level `claimRetractions`. Copy the complete
+claim object exactly, identify the advancing `repairId`, and provide a separate
+reason and source witness. For example, retract an invented English personal
+name when the repair corrects that name. Do not retract a valid source-based
+alias or fact merely because the revised English sentence no longer spells it
+out. Leave `claimRetractions` empty when no extraction fact is invalidated.
+
 Preserve `schemaVersion`, `book`, `chapter`, `input`, and `proposals` byte-for-byte
 in meaning and ordering. Complete every decision. Use `after: null` for `accept`
 and `reject`; use the full revised text only for `revise`. Do not edit chapter or

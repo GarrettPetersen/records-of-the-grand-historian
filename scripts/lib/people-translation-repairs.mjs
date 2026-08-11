@@ -180,7 +180,7 @@ function candidateEnclosesMention(candidate, mention) {
   );
 }
 
-export function reconcileExtractionAfterRepairs(extraction, revisedPacket) {
+export function reconcileExtractionAfterRepairs(extraction, revisedPacket, options = {}) {
   const reconciled = structuredClone(extraction);
   const candidateOrder = new Map(
     revisedPacket.preflight.candidates.map((candidate, index) => [candidate.id, index]),
@@ -190,10 +190,12 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket) {
   const staleSpans = [];
 
   reconciled.input = structuredClone(revisedPacket.input);
-  reconciled.translationRepairs = reconciled.translationRepairs.map((repair) => ({
-    ...repair,
-    status: 'applied',
-  }));
+  if (options.markRepairsApplied !== false) {
+    reconciled.translationRepairs = reconciled.translationRepairs.map((repair) => ({
+      ...repair,
+      status: 'applied',
+    }));
+  }
   reconciled.mentions = reconciled.mentions.map((mention) => {
     const unit = unitById.get(mention.unit.id);
     if (!unit) return mention;
