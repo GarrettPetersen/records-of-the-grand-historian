@@ -24,6 +24,7 @@ import {
 import {
   applyTranslationRepairs,
   reconcileExtractionAfterRepairs,
+  remapMentionSpanThroughEdit,
 } from './lib/people-translation-repairs.mjs';
 import {
   editorialDecisionPath,
@@ -111,6 +112,24 @@ function expectDecisionFailure(callback, label) {
 }
 
 function selfTest() {
+  const renamed = remapMentionSpanThroughEdit(
+    { exact: 'Xuan', occurrence: 0, startCodePoint: 17, endCodePoint: 21 },
+    'After three days Xuan let a dagger fall before him.',
+    'After three days Xian let a visiting card fall before him.',
+    'en',
+  );
+  if (renamed?.exact !== 'Xian') {
+    throw new Error('Edited person name was not remapped through surrounding changes');
+  }
+  const renamedAtEnd = remapMentionSpanThroughEdit(
+    { exact: 'Biao', occurrence: 0 },
+    'Bo was the son of Biao.',
+    'Bo was the son of Bing.',
+    'en',
+  );
+  if (renamedAtEnd?.exact !== 'Bing') {
+    throw new Error('Edited person name before punctuation was not remapped');
+  }
   const matcher = loadProperNounMatcher();
   const chapter = {
     meta: { book: 'fixture', chapter: '001', title: { zh: '', en: '' } },

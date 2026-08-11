@@ -143,6 +143,132 @@ function exactOccurrences(text, exact, language = null) {
   return found;
 }
 
+function tokenSpans(text) {
+  const spans = [];
+  const pattern = /\p{Script=Han}|[\p{L}\p{N}]+(?:['’-][\p{L}\p{N}]+)*|[^\s\p{L}\p{N}]/gu;
+  for (const match of text.matchAll(pattern)) {
+    const startCodePoint = [...text.slice(0, match.index)].length;
+    const exact = match[0];
+    spans.push({
+      exact,
+      startCodePoint,
+      endCodePoint: startCodePoint + [...exact].length,
+    });
+  }
+  return spans;
+}
+
+function resolvedOldSpan(text, span) {
+  const points = [...text];
+  if (
+    Number.isInteger(span.startCodePoint) &&
+    Number.isInteger(span.endCodePoint) &&
+    points.slice(span.startCodePoint, span.endCodePoint).join('') === span.exact
+  ) {
+    return { startCodePoint: span.startCodePoint, endCodePoint: span.endCodePoint };
+  }
+  return exactOccurrences(text, span.exact)[span.occurrence ?? 0] ?? null;
+}
+
+function plausibleReplacement(oldExact, replacement, language) {
+  if (!replacement || replacement.length > Math.max(80, [...oldExact].length * 5)) return false;
+  if (language !== 'en') return true;
+  if (/[\p{L}\p{N}]/u.test(oldExact) && !/[\p{L}\p{N}]/u.test(replacement)) return false;
+  if (/^[A-Z]/u.test(oldExact) && !/[A-Z]/u.test(replacement)) return false;
+  return true;
+}
+
+// A reviewed repair may change a person's printed name while also changing other
+// words in the same sentence. Relocate the old span between the nearest unchanged
+// tokens so exact person links survive both edits without guessing an identity.
+export function remapMentionSpanThroughEdit(span, oldText, newText, language) {
+  const oldLocation = resolvedOldSpan(oldText, span);
+  if (!oldLocation || oldText === newText) return null;
+
+  const oldTokens = tokenSpans(oldText);
+  const left = oldTokens
+    .filter((token) => token.endCodePoint <= oldLocation.startCodePoint)
+    .slice(-6)
+    .reverse();
+  const right = oldTokens
+    .filter((token) => token.startCodePoint >= oldLocation.endCodePoint)
+    .slice(0, 6);
+  const newPoints = [...newText];
+  const oldPoints = [...oldText];
+  const leftAnchors = left.flatMap((token, distance) =>
+    exactOccurrences(newText, token.exact).map((found) => ({ token, found, distance }))
+  );
+  const rightAnchors = right.flatMap((token, distance) =>
+    exactOccurrences(newText, token.exact).map((found) => ({ token, found, distance }))
+  );
+  if (oldLocation.startCodePoint === 0) {
+    leftAnchors.push({
+      token: { exact: '', startCodePoint: 0, endCodePoint: 0 },
+      found: { exact: '', startCodePoint: 0, endCodePoint: 0 },
+      distance: 0,
+    });
+  }
+  if (oldLocation.endCodePoint === oldPoints.length) {
+    rightAnchors.push({
+      token: { exact: '', startCodePoint: oldPoints.length, endCodePoint: oldPoints.length },
+      found: { exact: '', startCodePoint: newPoints.length, endCodePoint: newPoints.length },
+      distance: 0,
+    });
+  }
+  if (leftAnchors.length === 0 || rightAnchors.length === 0) return null;
+
+  const candidates = [];
+  for (const leftAnchor of leftAnchors) {
+    for (const rightAnchor of rightAnchors) {
+      if (leftAnchor.found.endCodePoint > rightAnchor.found.startCodePoint) continue;
+      let startCodePoint = leftAnchor.found.endCodePoint;
+      let endCodePoint = rightAnchor.found.startCodePoint;
+      while (startCodePoint < endCodePoint && /\s/u.test(newPoints[startCodePoint])) startCodePoint += 1;
+      while (endCodePoint > startCodePoint && /\s/u.test(newPoints[endCodePoint - 1])) endCodePoint -= 1;
+      const exact = newPoints.slice(startCodePoint, endCodePoint).join('');
+      if (!plausibleReplacement(span.exact, exact, language)) continue;
+
+      const oldLeftGap = oldLocation.startCodePoint - leftAnchor.token.endCodePoint;
+      const oldRightGap = rightAnchor.token.startCodePoint - oldLocation.endCodePoint;
+      const newLeftGap = startCodePoint - leftAnchor.found.endCodePoint;
+      const newRightGap = rightAnchor.found.startCodePoint - endCodePoint;
+      const expectedStart = oldLocation.startCodePoint * newPoints.length / Math.max(1, oldPoints.length);
+      const score =
+        1000 -
+        80 * (leftAnchor.distance + rightAnchor.distance) +
+        5 * ([...leftAnchor.token.exact].length + [...rightAnchor.token.exact].length) -
+        3 * (Math.abs(newLeftGap - oldLeftGap) + Math.abs(newRightGap - oldRightGap)) -
+        Math.abs([...exact].length - [...span.exact].length) -
+        Math.abs(startCodePoint - expectedStart) / 10;
+      candidates.push({ exact, startCodePoint, endCodePoint, score });
+    }
+  }
+  candidates.sort((a, b) =>
+    b.score - a.score ||
+    a.startCodePoint - b.startCodePoint ||
+    a.endCodePoint - b.endCodePoint
+  );
+  const selected = candidates[0];
+  if (!selected) return null;
+  const tied = candidates.some((candidate, index) =>
+    index > 0 &&
+    Math.abs(candidate.score - selected.score) < 0.001 &&
+    (candidate.startCodePoint !== selected.startCodePoint || candidate.endCodePoint !== selected.endCodePoint)
+  );
+  if (tied) return null;
+  const occurrences = exactOccurrences(newText, selected.exact, language);
+  const occurrence = occurrences.findIndex((candidate) =>
+    candidate.startCodePoint === selected.startCodePoint && candidate.endCodePoint === selected.endCodePoint
+  );
+  if (occurrence < 0) return null;
+  return {
+    exact: selected.exact,
+    occurrence,
+    startCodePoint: selected.startCodePoint,
+    endCodePoint: selected.endCodePoint,
+  };
+}
+
 function wordSet(value) {
   return new Set(value.toLocaleLowerCase('en-US').match(/[\p{L}\p{N}]+/gu) ?? []);
 }
@@ -405,6 +531,9 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
   const previousCandidateById = new Map(
     (options.previousPacket?.preflight?.candidates ?? []).map((candidate) => [candidate.id, candidate]),
   );
+  const previousUnitById = new Map(
+    (options.previousPacket?.units ?? []).map((unit) => [unit.id, unit]),
+  );
   const unitById = new Map(revisedPacket.units.map((unit) => [unit.id, unit]));
   const staleSpans = [];
 
@@ -509,6 +638,29 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         )
       );
       mapped = added || alreadyCovered || mapped;
+    }
+    if (!mapped) {
+      const previousUnit = previousUnitById.get(stale.mention.unit.id);
+      const replacement = previousUnit && remapMentionSpanThroughEdit(
+        stale.span,
+        previousUnit[stale.language],
+        unit[stale.language],
+        stale.language,
+      );
+      if (replacement) {
+        const conflicts = reconciled.mentions.some((mention) =>
+          mention.person !== stale.mention.person &&
+          mention.unit.id === unit.id &&
+          mention.spans[stale.language].some((current) => spansOverlap(current, replacement))
+        );
+        const targetMention = reconciled.mentions.find((mention) =>
+          mention.id === stale.mention.id && mention.person === stale.mention.person
+        );
+        if (!conflicts && targetMention) {
+          targetMention.spans[stale.language].push(replacement);
+          mapped = true;
+        }
+      }
     }
     if (!mapped) {
       const hasRemainingUnitContext = reconciled.mentions.some((mention) =>
