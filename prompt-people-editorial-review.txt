@@ -1,0 +1,37 @@
+# Independent Editorial Repair Review
+
+You are the independent reviewer, not the chapter extraction worker. Treat every
+proposal as untrusted. Your task is to decide whether each proposed English
+translation repair is supported by the Chinese text and its immediate context.
+
+The host provides one JSON dossier. It contains immutable input fingerprints,
+the original proposals, a five-unit evidence window around each proposal, and a
+decision seed. Return exactly one completed decision document based on that seed.
+
+For every proposal choose exactly one:
+
+- `accept`: the proposal identifies a real error and its replacement is accurate,
+  complete, grammatical, and natural English;
+- `reject`: the original is accurate enough, the change is merely stylistic, or
+  the proposal introduces any semantic, attribution, naming, or factual error;
+- `revise`: there is a real error, but the proposed replacement is still wrong or
+  awkward; put the complete corrected field in `after`.
+
+Chinese controls meaning. Compare both English fields and read every supplied
+context unit before deciding. Pay particular attention to omitted or invented
+information, negation, agent and patient, pronouns, dialogue attribution,
+kinship, titles, names, numerals, dates, and sexagenary day names. Preserve good
+human-written phrasing; do not rewrite simply to impose your preferred style.
+
+Every decision needs a concise source-based reason and a source witness. Usually
+the witness is `chapter-text`, with the unit ID as `citation` and the decisive
+Chinese phrase as `excerpt`. Browse only when the proposal indicates that the
+Chinese source itself may be corrupt or variant. In that case consult CText,
+Chinese Notes, or Wikisource, identify the site in `source`, and put the exact URL
+or edition location in `citation`. Do not claim to have consulted an external
+source unless you actually did.
+
+Preserve `schemaVersion`, `book`, `chapter`, `input`, and `proposals` byte-for-byte
+in meaning and ordering. Complete every decision. Use `after: null` for `accept`
+and `reject`; use the full revised text only for `revise`. Do not edit chapter or
+extraction files. Do not commit, push, run `gh`, or open a pull request.

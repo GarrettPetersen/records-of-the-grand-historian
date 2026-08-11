@@ -26,6 +26,11 @@ import {
   reconcileExtractionAfterRepairs,
 } from './lib/people-translation-repairs.mjs';
 import {
+  editorialDecisionPath,
+  editorialDecisionSeed,
+  validateEditorialDecisions,
+} from './lib/people-editorial-decisions.mjs';
+import {
   validateCompactPeopleExtraction,
   validatePeopleExtraction,
 } from './validate-people-extraction.mjs';
@@ -34,19 +39,25 @@ const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPat
 
 function usage() {
   console.log(`Usage:
-  node scripts/apply-people-translation-repairs.mjs --book BOOK --chapter NNN [--extraction PATH]
+  node scripts/apply-people-translation-repairs.mjs --book BOOK --chapter NNN [--extraction PATH] [--decisions PATH]
   node scripts/apply-people-translation-repairs.mjs --book BOOK --chapter NNN --reconcile-current
   node scripts/apply-people-translation-repairs.mjs --self-test
 
-This command is intended for an isolated worker workspace. It validates all
-proposals before editing the chapter, applies only their exact replacements,
-rebuilds the packet, and performs deterministic candidate reconciliation.
-If changed text needs semantic attention, it leaves explicit validation errors
-for the worker to repair before the host accepts either artifact.`);
+Proposed repairs require a complete, independently authored editorial-decision
+file. The command validates the review before editing, applies only accepted or
+revised replacements, rebuilds the packet, and reconciles candidates and spans.
+No tracked file is written unless the complete revised state validates.`);
 }
 
 function parseArgs(argv) {
-  const opts = { book: null, chapter: null, extraction: null, reconcileCurrent: false, selfTest: false };
+  const opts = {
+    book: null,
+    chapter: null,
+    extraction: null,
+    decisions: null,
+    reconcileCurrent: false,
+    selfTest: false,
+  };
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
     const next = () => {
@@ -57,6 +68,7 @@ function parseArgs(argv) {
     if (arg === '--book') opts.book = next();
     else if (arg === '--chapter') opts.chapter = normalizedChapterId(next());
     else if (arg === '--extraction') opts.extraction = path.resolve(REPO_ROOT, next());
+    else if (arg === '--decisions') opts.decisions = path.resolve(REPO_ROOT, next());
     else if (arg === '--reconcile-current') opts.reconcileCurrent = true;
     else if (arg === '--self-test') opts.selfTest = true;
     else if (arg === '--help' || arg === '-h') {
@@ -67,6 +79,22 @@ function parseArgs(argv) {
   return opts;
 }
 
+function renumberRepairs(repairs, book, chapter) {
+  return repairs.map((repair, index) => ({
+    ...repair,
+    id: `${book}:${chapter}:r${String(index + 1).padStart(4, '0')}`,
+  }));
+}
+
+function expectDecisionFailure(callback, label) {
+  try {
+    callback();
+  } catch {
+    return;
+  }
+  throw new Error(`Expected editorial decision failure: ${label}`);
+}
+
 function selfTest() {
   const matcher = loadProperNounMatcher();
   const chapter = {
@@ -75,7 +103,7 @@ function selfTest() {
       type: 'paragraph',
       sentences: [{
         id: 's0001',
-        zh: '劉湛來。',
+        zh: '劉湛昨日來，劉湛留。',
         translations: [{ lang: 'en', literal: 'Liu Zhan came.', idiomatic: 'Liu Zhan came.' }],
       }],
     }],
@@ -92,7 +120,7 @@ function selfTest() {
     book: 'fixture',
     chapter: '001',
     input: oldPacket.input,
-    run: { model: 'fixture', promptVersion: 2 },
+    run: { model: 'fixture', promptVersion: 2, agentId: 'fixture-extractor' },
     people: [{
       localId: 'fixture:001:p001',
       preferredNameSuggestion: { en: 'Liu Zhan', zh: '劉湛' },
@@ -105,7 +133,10 @@ function selfTest() {
       person: 'fixture:001:p001',
       unit: locator,
       kind: 'personal-name',
-      spans: { zh: [{ exact: '劉湛', occurrence: 0 }], en: [{ exact: 'Liu Zhan', occurrence: 0 }] },
+      spans: {
+        zh: [{ exact: '劉湛', occurrence: 0 }, { exact: '劉湛', occurrence: 1 }],
+        en: [{ exact: 'Liu Zhan', occurrence: 0 }],
+      },
       candidateRefs: oldPacket.preflight.candidates.map((candidate) => candidate.id),
     }],
     claims: [{
@@ -117,22 +148,87 @@ function selfTest() {
       value: { roleId: 'named-individual' }, certainty: 'explicit', evidence: ['fixture:001:s0001'],
     }],
     translationRepairs: [{
-      id: 'fixture:001:r0001', unit: locator, field: 'idiomatic', before: 'Liu Zhan came.',
-      after: 'Yesterday, Liu Zhan came.', reason: 'Adds the temporal word present in the source fixture.',
+      id: 'fixture:001:r0001', unit: locator, field: 'literal', before: 'Liu Zhan came.',
+      after: 'Yesterday did Liu Zhan come.', reason: 'Attempts to add the temporal word present in the source fixture.',
+      confidence: 'high', status: 'proposed',
+    }, {
+      id: 'fixture:001:r0002', unit: locator, field: 'idiomatic', before: 'Liu Zhan came.',
+      after: 'Liu Zhan came yesterday, and Liu Zhan stayed.',
+      reason: 'Adds the temporal word and second action present in the source fixture.',
       confidence: 'high', status: 'proposed',
     }],
     candidateDispositions: [],
     coverage: { allUnitsVisited: true, preflightCandidatesAccountedFor: true, unresolvedReferences: [] },
   };
   validatePeopleExtraction(extraction, oldPacket);
-  const applied = applyTranslationRepairs(chapter, extraction.translationRepairs);
+  const decisions = editorialDecisionSeed(extraction);
+  decisions.reviewer = {
+    kind: 'human',
+    name: 'Fixture Reviewer',
+    model: null,
+    agentId: null,
+    runId: null,
+    completedAt: '2026-08-10T00:00:00.000Z',
+  };
+  decisions.decisions[0] = {
+    repairId: extraction.translationRepairs[0].id,
+    decision: 'reject',
+    after: null,
+    reason: 'The proposal is ungrammatical even though the source contains the temporal word.',
+    sourceWitness: {
+      source: 'chapter-text',
+      citation: 'fixture/001 s0001',
+      excerpt: '劉湛昨日來，劉湛留。',
+    },
+  };
+  decisions.decisions[1] = {
+    repairId: extraction.translationRepairs[1].id,
+    decision: 'accept',
+    after: null,
+    reason: 'The fixture source explicitly contains the omitted temporal word and second action.',
+    sourceWitness: {
+      source: 'chapter-text',
+      citation: 'fixture/001 s0001',
+      excerpt: '昨日來，劉湛留',
+    },
+  };
+  const reviewed = validateEditorialDecisions(decisions, extraction, oldPacket);
+  const reviewedRepairs = renumberRepairs(reviewed.reviewedRepairs, 'fixture', '001');
+  if (reviewedRepairs.length !== 1 || reviewedRepairs[0].id !== 'fixture:001:r0001') {
+    throw new Error('Reviewed repairs were not filtered and renumbered');
+  }
+  const selfReviewed = structuredClone(decisions);
+  selfReviewed.reviewer = {
+    kind: 'cursor-agent',
+    name: 'fixture',
+    model: 'fixture',
+    agentId: 'fixture-extractor',
+    runId: 'fixture-review',
+    completedAt: '2026-08-10T00:00:00.000Z',
+  };
+  expectDecisionFailure(
+    () => validateEditorialDecisions(selfReviewed, extraction, oldPacket),
+    'self-review',
+  );
+  const stale = structuredClone(decisions);
+  stale.input.chapterFingerprint = `sha256:${'0'.repeat(64)}`;
+  expectDecisionFailure(
+    () => validateEditorialDecisions(stale, extraction, oldPacket),
+    'stale chapter fingerprint',
+  );
+
+  const applied = applyTranslationRepairs(chapter, reviewedRepairs);
   const revisedPacket = buildPeopleExtractionPacket('fixture', '001', {
     chapterData: applied.chapter,
     chapterFile: '/tmp/fixture-001.json',
     properNounMatcher: matcher,
   });
-  const reconciled = reconcileExtractionAfterRepairs(extraction, revisedPacket);
+  const reviewedExtraction = { ...structuredClone(extraction), translationRepairs: reviewedRepairs };
+  const reconciled = reconcileExtractionAfterRepairs(reviewedExtraction, revisedPacket);
   if (reconciled.unresolvedCandidates.length > 0) throw new Error('Fixture left unresolved candidates');
+  if (reconciled.extraction.mentions[0].spans.en.length !== 2) {
+    throw new Error('Repeated repaired person surface was not reconciled');
+  }
   validatePeopleExtraction(reconciled.extraction, revisedPacket);
   const compact = compactPeopleExtraction(reconciled.extraction, revisedPacket);
   const compactResult = validateCompactPeopleExtraction(compact, revisedPacket);
@@ -193,36 +289,64 @@ function main() {
 
   const oldPacket = currentPacket;
   validatePeopleExtraction(extraction, oldPacket);
-  const applied = applyTranslationRepairs(chapter, extraction.translationRepairs);
+  const decisionFile = opts.decisions ?? editorialDecisionPath(opts.book, opts.chapter);
+  if (!fs.existsSync(decisionFile)) {
+    throw new Error(
+      `Independent editorial decisions are required: ${path.relative(REPO_ROOT, decisionFile)}`,
+    );
+  }
+  const decisionDocument = readJson(decisionFile);
+  const reviewed = validateEditorialDecisions(decisionDocument, extraction, oldPacket);
+  const reviewedRepairs = renumberRepairs(reviewed.reviewedRepairs, opts.book, opts.chapter);
+  const reviewedExtraction = {
+    ...structuredClone(extraction),
+    translationRepairs: reviewedRepairs,
+  };
+
+  if (reviewedRepairs.length === 0) {
+    const result = validatePeopleExtraction(reviewedExtraction, oldPacket);
+    if (compactStored) {
+      const compact = compactPeopleExtraction(result.normalized, oldPacket);
+      validateCompactPeopleExtraction(compact, oldPacket);
+      writeTextAtomic(extractionFile, serializeCompactPeopleExtraction(compact));
+    } else {
+      writeJsonAtomic(extractionFile, result.normalized);
+    }
+    console.log(
+      `Reviewed ${extraction.translationRepairs.length} proposal(s) for ${opts.book}/${opts.chapter}; ` +
+      'all were rejected and the chapter was unchanged.',
+    );
+    return;
+  }
+
+  const applied = applyTranslationRepairs(chapter, reviewedRepairs);
   const revisedPacket = buildPeopleExtractionPacket(opts.book, opts.chapter, {
     chapterData: applied.chapter,
     chapterFile,
     properNounMatcher: matcher,
   });
-  const reconciled = reconcileExtractionAfterRepairs(extraction, revisedPacket);
+  const reconciled = reconcileExtractionAfterRepairs(reviewedExtraction, revisedPacket);
+  if (reconciled.unresolvedCandidates.length > 0) {
+    throw new Error(`Unresolved new candidates: ${reconciled.unresolvedCandidates.join(', ')}`);
+  }
+  const result = validatePeopleExtraction(reconciled.extraction, revisedPacket);
+  let serializedExtraction;
+  if (compactStored) {
+    const compact = compactPeopleExtraction(result.normalized, revisedPacket);
+    validateCompactPeopleExtraction(compact, revisedPacket);
+    serializedExtraction = serializeCompactPeopleExtraction(compact);
+  } else {
+    serializedExtraction = `${JSON.stringify(result.normalized, null, 2)}\n`;
+  }
 
   writeJsonAtomic(chapterFile, applied.chapter);
-  if (compactStored) {
-    const compact = compactPeopleExtraction(reconciled.extraction, revisedPacket);
-    validateCompactPeopleExtraction(compact, revisedPacket);
-    writeTextAtomic(extractionFile, serializeCompactPeopleExtraction(compact));
-  } else {
-    writeJsonAtomic(extractionFile, reconciled.extraction);
-  }
+  writeTextAtomic(extractionFile, serializedExtraction);
   writeJsonAtomic(packetPath(opts.book, opts.chapter), revisedPacket);
-
-  try {
-    const result = validatePeopleExtraction(reconciled.extraction, revisedPacket);
-    console.log(
-      `Applied ${extraction.translationRepairs.length} repair(s) to ${opts.book}/${opts.chapter}; ` +
-      `${result.stats.people} people and ${result.stats.candidates} candidates remain valid.`,
-    );
-  } catch (error) {
-    const unresolved = reconciled.unresolvedCandidates.length > 0
-      ? `\nUnresolved new candidates: ${reconciled.unresolvedCandidates.join(', ')}`
-      : '';
-    throw new Error(`${error.message}${unresolved}\nRepair the changed units in the extraction and rerun validation.`);
-  }
+  console.log(
+    `Applied ${reviewedRepairs.length} independently reviewed repair(s) to ` +
+    `${opts.book}/${opts.chapter}; ${result.stats.people} people and ` +
+    `${result.stats.candidates} candidates remain valid.`,
+  );
 }
 
 if (isMain) {

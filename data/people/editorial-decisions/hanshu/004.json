@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "book": "hanshu",
+  "chapter": "004",
+  "input": {
+    "chapterFingerprint": "sha256:938664831b4852668509e98a27eae8d0918ea06c5628f185250c1fa0b891e6f5",
+    "proposalsFingerprint": "sha256:c86152b670c35921d8ba21b0e36f9397cc7717e08d74742adf8058f2e7b4b3d3"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-74a31742-ff9b-4c2b-8c06-45025f4f830f",
+    "runId": "run-86c58592-25d4-42b3-91cc-4fe8a92a71ee",
+    "completedAt": "2026-08-11T00:57:20.170Z"
+  },
+  "proposals": [
+    {
+      "id": "hanshu:004:r0001",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "Chancellor Chen Ping said: 'I have respectfully deliberated with Marquis of Jiang Chen Bo, Marquis of Quzhou Chen Shang, Marquis of Yingyin Chen Ying, Marquis of Anguo Chen Ling, and others. The marquises have fortunately received bestowed meal allowances and fief incomes. Your Majesty adds further favor by establishing court positions according to the order of their merits. Your subject requests that they be stored in the Gao Temple.'",
+      "after": "Chancellor Chen Ping said: 'I have respectfully deliberated with Marquis of Jiang Bo, Marquis of Quzhou Shang, Marquis of Yingyin Ying, Marquis of Anguo Ling, and others. The marquises have fortunately received bestowed meal allowances and fief incomes. Your Majesty adds further favor by establishing court positions according to the order of their merits. Your subject requests that they be stored in the Gao Temple.'",
+      "reason": "Literal English wrongly prefixes Chen to Bo, Shang, Ying, and Ling; the Chinese gives only 勃、商、嬰、陵 after their marquis titles.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:004:r0002",
+      "unit": {
+        "id": "s0059",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Palace Attendant Commander Jia Shou had a messenger come from Qi who, on this occasion, rebuked Chan, saying: 'The king did not return to his state early; now even if he wishes to go, can he still do so?'",
+      "after": "Palace Attendant Commander Jia Shou came as an envoy from Qi and on this occasion rebuked Chan, saying: 'The king did not return to his state early; now even if he wishes to go, can he still do so?'",
+      "reason": "Chinese 賈壽使從齊來 means Jia Shou came from Qi on a mission/as envoy, not that he had a messenger come from Qi.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:004:r0003",
+      "unit": {
+        "id": "s0091",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "She assisted Emperor Gao in settling the realm; three men among her father, brothers, and associates with the emperor were enfeoffed as marquises.",
+      "after": "She assisted Emperor Gao in settling the realm; three men among her father and brothers were enfeoffed as marquises along with the emperor.",
+      "reason": "Chinese 父兄及高祖而侯者三人 refers to three among her father and brothers enfeoffed as marquises, not separate associates.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "hanshu:004:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "The Chinese lists 絳侯臣勃、曲周侯臣商、潁陰侯臣嬰、安國侯臣陵 with given names only; the literal wrongly invents the surname Chen for all four.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "絳侯臣勃、曲周侯臣商、潁陰侯臣嬰、安國侯臣陵"
+      }
+    },
+    {
+      "repairId": "hanshu:004:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "賈壽使從齊來 means Jia Shou himself came from Qi on a mission; the original misreads 使 as sending a separate messenger who then rebukes Chan.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0059",
+        "excerpt": "郎中令賈壽使從齊來，因數產曰"
+      }
+    },
+    {
+      "repairId": "hanshu:004:r0003",
+      "decision": "revise",
+      "after": "She assisted Emperor Gao in settling the realm; three men among her father and brothers were enfeoffed as marquises under Emperor Gao.",
+      "reason": "The original wrongly inserts a third class of 'associates'; 父兄及高祖而侯者三人 means three among her father and brothers were made marquises by Gaozu's time. The proposal correctly drops 'associates' but 'along with the emperor' misrenders 及高祖而侯.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0091",
+        "excerpt": "父兄及高祖而侯者三人"
+      }
+    }
+  ]
+}

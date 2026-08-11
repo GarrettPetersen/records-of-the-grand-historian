@@ -43,6 +43,12 @@ about $0.99 for Hanshu 3 and offered no clear savings. A Grok 4.5 medium run on
 Shiji 64 cost about $1.98 after repair retries. These are short chapters, so
 costs must be sampled again before extrapolating across the corpus.
 
+The first end-to-end independent-review pilot completed on Hanshu 4. Extraction
+cost $0.77 and produced 42 local people, 340 initial mentions, 242 claims, and
+three repair proposals. A separate Grok 4.5 medium reviewer cost $0.25, accepted
+two proposals, and revised the third. After application and repeated-name
+reconciliation, the sidecar generates 341 mentions and remains fully valid.
+
 Cloud workers never commit, push, or open pull requests. They return extraction
 artifacts to the host. The host validates and accumulates many chapters locally,
 then pushes a deliberate batch to `codex/people-glossary-staging`. Only a final
@@ -57,6 +63,9 @@ Useful commands:
 npm run people:packet -- --book songshu --chapter 069 --summary
 npm run people:extract -- --book songshu --chapter 069 --dry-run
 npm run people:extract -- --book songshu --chapter 069
+npm run people:editorial-review -- --book songshu --chapter 069 --dry-run
+npm run people:editorial-review -- --book songshu --chapter 069
+npm run people:apply-repairs -- --book songshu --chapter 069
 npm run people:validate
 ```
 
@@ -951,6 +960,15 @@ and a small window of adjacent units. The reviewer must accept, reject, or
 revise each proposal from textual evidence. Source-text corrections require an
 identified textual witness. Accepted repairs are then applied by the host,
 candidates and spans are rebuilt, and the sidecar is revalidated.
+
+Decision records are tracked under
+`data/people/editorial-decisions/<book>/<chapter>.json`. They embed the immutable
+original proposals, fingerprint both the chapter and proposal set, identify the
+reviewer, and cite a source witness for every accept, reject, or revision. The
+applier rejects stale or incomplete decisions, self-review by the extraction
+agent, changed proposal contracts, and any revision that leaves unresolved
+mentions or candidates. It validates the complete revised state before writing
+either chapter or sidecar.
 
 This is a focused review of proposed changes, not a second pass over the corpus.
 It is necessary because the pilots found confident false repairs: one worker

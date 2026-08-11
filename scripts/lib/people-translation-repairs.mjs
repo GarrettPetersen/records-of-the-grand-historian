@@ -42,6 +42,11 @@ function candidateInsideMention(candidate, mention) {
   );
 }
 
+function mentionUsesExactSurface(candidate, mention) {
+  return mention.unit.id === candidate.unit &&
+    mention.spans[candidate.language].some((span) => span.exact === candidate.exact);
+}
+
 export function reconcileExtractionAfterRepairs(extraction, revisedPacket) {
   const reconciled = structuredClone(extraction);
   const candidateOrder = new Map(
@@ -84,12 +89,28 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket) {
     if (containing.length === 1) {
       containing[0].candidateRefs.push(candidate.id);
       accounted.add(candidate.id);
-    } else {
-      unresolvedCandidates.push(candidate.id);
+      continue;
     }
+    const sameSurface = reconciled.mentions.filter((mention) => mentionUsesExactSurface(candidate, mention));
+    if (sameSurface.length === 1) {
+      const mention = sameSurface[0];
+      const unit = unitById.get(candidate.unit);
+      const span = exactSpanAt(unit[candidate.language], candidate.exact, candidate.occurrence);
+      const duplicate = mention.spans[candidate.language].some((item) =>
+        item.exact === span.exact && item.occurrence === span.occurrence
+      );
+      if (!duplicate) mention.spans[candidate.language].push(span);
+      mention.candidateRefs.push(candidate.id);
+      accounted.add(candidate.id);
+      continue;
+    }
+    unresolvedCandidates.push(candidate.id);
   }
 
   for (const mention of reconciled.mentions) {
+    for (const language of ['zh', 'en']) {
+      mention.spans[language].sort((left, right) => left.startCodePoint - right.startCodePoint);
+    }
     mention.candidateRefs.sort((left, right) =>
       (candidateOrder.get(left) ?? Number.MAX_SAFE_INTEGER) -
       (candidateOrder.get(right) ?? Number.MAX_SAFE_INTEGER)

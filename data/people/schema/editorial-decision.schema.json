@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://24histories.com/schema/people/editorial-decision-v1.json",
+  "title": "Independent editorial decisions for chapter extraction repairs",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "book", "chapter", "input", "reviewer", "proposals", "decisions"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "book": { "type": "string", "pattern": "^[a-z0-9_-]+$" },
+    "chapter": { "type": "string", "pattern": "^\\d{3}$" },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["chapterFingerprint", "proposalsFingerprint"],
+      "properties": {
+        "chapterFingerprint": { "$ref": "#/$defs/digest" },
+        "proposalsFingerprint": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "reviewer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "name", "model", "agentId", "runId", "completedAt"],
+      "properties": {
+        "kind": { "enum": ["human", "cursor-agent", "codex"] },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "model": { "type": ["string", "null"], "minLength": 1 },
+        "agentId": { "type": ["string", "null"], "minLength": 1 },
+        "runId": { "type": ["string", "null"], "minLength": 1 },
+        "completedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "proposals": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/proposal" }
+    },
+    "decisions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/decision" }
+    }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "unitLocator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "blockIndex", "collection", "itemIndex"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["paragraph-sentence", "table-header-cell", "table-body-cell"] },
+        "blockIndex": { "type": "integer", "minimum": 0 },
+        "collection": { "enum": ["sentences", "cells"] },
+        "itemIndex": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "proposal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "unit", "field", "before", "after", "reason", "confidence"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9_-]+:\\d{3}:r\\d{4,}$" },
+        "unit": { "$ref": "#/$defs/unitLocator" },
+        "field": { "enum": ["idiomatic", "literal"] },
+        "before": { "type": "string", "minLength": 1 },
+        "after": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 10, "maxLength": 500 },
+        "confidence": { "enum": ["high", "medium"] }
+      }
+    },
+    "sourceWitness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "citation", "excerpt"],
+      "properties": {
+        "source": { "enum": ["chapter-text", "ctext", "chinesenotes", "wikisource", "other"] },
+        "citation": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "excerpt": { "type": ["string", "null"], "maxLength": 240 }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repairId", "decision", "after", "reason", "sourceWitness"],
+      "properties": {
+        "repairId": { "type": "string", "pattern": "^[a-z0-9_-]+:\\d{3}:r\\d{4,}$" },
+        "decision": { "enum": ["accept", "reject", "revise"] },
+        "after": { "type": ["string", "null"] },
+        "reason": { "type": "string", "minLength": 10, "maxLength": 500 },
+        "sourceWitness": { "$ref": "#/$defs/sourceWitness" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "decision": { "const": "revise" } }, "required": ["decision"] },
+          "then": { "properties": { "after": { "type": "string", "minLength": 1 } } },
+          "else": { "properties": { "after": { "type": "null" } } }
+        }
+      ]
+    }
+  }
+}
