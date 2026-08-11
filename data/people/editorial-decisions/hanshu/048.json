@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "hanshu",
+  "chapter": "048",
+  "input": {
+    "chapterFingerprint": "sha256:2e42c50e24ea5a363901cf574dfbbe04801c5193a8bc519ee4aacea21ce69969",
+    "proposalsFingerprint": "sha256:592a0d0f1f0eb60e961d534e50ff2e9678c407c95289c3a432588f1e1d6ce579"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex review of Grok 4.5 draft",
+    "model": null,
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-11T13:16:31.198Z"
+  },
+  "proposals": [
+    {
+      "id": "hanshu:048:r0001",
+      "unit": {
+        "id": "s0098",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Later Xiao He pleaded for the people: “Chang’an is crowded, while the Shanglin hunting park lies largely empty; let commoners till those fields and leave the stubble for the imperial herds.”",
+      "after": "Later Xiao He pleaded for the people: “Chang’an is crowded, while the Shanglin hunting park lies largely empty; let commoners till those fields, and do not collect the straw as fodder for the beasts.”",
+      "reason": "Chinese 毋收稿為獸食 means not to collect the straw for animal fodder; the idiomatic wording reverses this into leaving stubble for herds.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:048:r0002",
+      "unit": {
+        "id": "s0109",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 15
+      },
+      "field": "idiomatic",
+      "before": "Qin fell because it never heard its own faults; Li Si’s habit of shifting blame is hardly a pattern to follow.",
+      "after": "Qin fell because it never heard its own faults; Li Si’s practice of taking the blame upon himself is hardly a pattern to follow.",
+      "reason": "分過 continues 有惡自予: Li Si took faults on himself, not “shifting blame,” which reverses the sense.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:048:r0003",
+      "unit": {
+        "id": "s0213",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 15
+      },
+      "field": "idiomatic",
+      "before": "He seized Tian Guang, who had been chancellor under the late King of Qi, Xu Zhang who held the seal as acting governor, and the former general Tian Ji.",
+      "after": "He seized Tian Guang, chancellor to the former King of Qi Tian Guang, Xu Zhang who held the seal as acting governor, and the former general Tian Ji.",
+      "reason": "Chinese 故齊王田廣相田光 names two men: former Qi king 田廣 and his chancellor 田光; the idiomatic version collapses them into one person.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:048:r0004",
+      "unit": {
+        "id": "s0213",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 15
+      },
+      "field": "literal",
+      "before": "He captured Tian Guang, chancellor to the former King of Qi Tian Kuang, Xu Zhang the guardian chancellor, and the former general Tian Ji.",
+      "after": "He captured Tian Guang, chancellor to the former King of Qi Tian Guang, Xu Zhang the guardian chancellor, and the former general Tian Ji.",
+      "reason": "Literal romanizes 田廣 as Tian Kuang; 廣 is Guang, and the king and chancellor need distinct identification matching 田廣 and 田光.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:048:r0005",
+      "unit": {
+        "id": "s0256",
+        "kind": "paragraph-sentence",
+        "blockIndex": 26,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Under Emperor Ai the court enfeoffed Benshi—descended from a collateral branch—with two thousand households at Pingyang; he died in Wang Mang’s day.",
+      "after": "Under Emperor Ai the court enfeoffed Benshi—Cao Shen’s great-great-grandson’s grandson—with two thousand households at Pingyang; he died in Wang Mang’s day.",
+      "reason": "Chinese 參玄孫之孫 states direct descent (great-great-grandson’s grandson), not a vague collateral branch.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "hanshu:048:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "毋收稿為獸食 is a prohibition against collecting the straw as fodder for the park beasts; “leave the stubble for the imperial herds” reverses that sense, and the proposed wording restores the negation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0098",
+        "excerpt": "毋收稿為獸食"
+      }
+    },
+    {
+      "repairId": "hanshu:048:r0002",
+      "decision": "revise",
+      "after": "Qin lost the empire because its ruler never heard of his faults. Why imitate Li Si’s practice of assuming blame for his sovereign?",
+      "reason": "In this speech 分過 means taking the ruler's faults upon oneself. The original reverses the agency, while the worker's abstract 'practice' sentence still obscures the contrast with the ruler never hearing criticism.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0109",
+        "excerpt": "李斯之分過"
+      }
+    },
+    {
+      "repairId": "hanshu:048:r0003",
+      "decision": "revise",
+      "after": "He captured Tian Guang (田光), former chancellor to the King of Qi (田廣); Xu Zhang, the acting chancellor; and Tian Ji, a former general.",
+      "reason": "故齊王田廣相田光 names two men whose names are both romanized Tian Guang. Supplying their characters here prevents the English from collapsing the former king and his chancellor into one person.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0213",
+        "excerpt": "故齊王田廣相田光"
+      }
+    },
+    {
+      "repairId": "hanshu:048:r0004",
+      "decision": "revise",
+      "after": "He captured Tian Guang (田光), chancellor to the former King of Qi (田廣); Xu Zhang, the acting chancellor; and the former general Tian Ji.",
+      "reason": "田廣 is Guang, not Kuang, but romanization alone cannot distinguish him from Chancellor 田光. The characters make both named people explicit.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0213",
+        "excerpt": "故齊王田廣相田光"
+      }
+    },
+    {
+      "repairId": "hanshu:048:r0005",
+      "decision": "revise",
+      "after": "Under Emperor Ai, Benshi, a grandson of Cao Shen’s great-great-grandson, was enfeoffed as Marquis of Pingyang with two thousand households; he died in Wang Mang’s time.",
+      "reason": "參玄孫之孫 specifies direct descent. This revision removes the unsupported collateral branch and expresses the relationship in less cumbersome English.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0256",
+        "excerpt": "參玄孫之孫本始"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}
