@@ -311,6 +311,26 @@ function selfTest() {
       id: 's0003', kind: 'paragraph-sentence', blockIndex: 2,
       collection: 'sentences', itemIndex: 0,
       zh: '', en: 'Liu Xin', literal: 'Liu Xin',
+    }, {
+      id: 's0004', kind: 'paragraph-sentence', blockIndex: 3,
+      collection: 'sentences', itemIndex: 0,
+      zh: '', en: 'Only one remains.', literal: 'Only one remains.',
+    }, {
+      id: 's0005', kind: 'paragraph-sentence', blockIndex: 4,
+      collection: 'sentences', itemIndex: 0,
+      zh: '', en: 'Am I also to leave?', literal: 'Am I also to leave?',
+    }, {
+      id: 's0006', kind: 'paragraph-sentence', blockIndex: 5,
+      collection: 'sentences', itemIndex: 0,
+      zh: '', en: 'During the Jianwu era, he served.', literal: 'During the Jianwu era, he served.',
+    }, {
+      id: 's0007', kind: 'paragraph-sentence', blockIndex: 6,
+      collection: 'sentences', itemIndex: 0,
+      zh: '', en: 'Administrator of Nan Commandery', literal: 'Administrator of Nan Commandery',
+    }, {
+      id: 's0008', kind: 'paragraph-sentence', blockIndex: 7,
+      collection: 'sentences', itemIndex: 0,
+      zh: '', en: 'The Privy Treasurer ordered it.', literal: 'The Privy Treasurer ordered it.',
     }],
     preflight: {
       candidates: [{
@@ -328,6 +348,26 @@ function selfTest() {
       }, {
         id: 'fixture:002:cand_liu_xin', unit: 's0003', language: 'en',
         exact: 'Liu Xin', occurrence: 0, startCodePoint: 0, endCodePoint: 7,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_only', unit: 's0004', language: 'en',
+        exact: 'Only', occurrence: 0, startCodePoint: 0, endCodePoint: 4,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_am_i', unit: 's0005', language: 'en',
+        exact: 'Am I', occurrence: 0, startCodePoint: 0, endCodePoint: 4,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_jianwu', unit: 's0006', language: 'en',
+        exact: 'Jianwu', occurrence: 0, startCodePoint: 11, endCodePoint: 18,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_nan', unit: 's0007', language: 'en',
+        exact: 'Nan', occurrence: 0, startCodePoint: 17, endCodePoint: 20,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_privy', unit: 's0008', language: 'en',
+        exact: 'Privy Treasurer', occurrence: 0, startCodePoint: 4, endCodePoint: 19,
         detectors: [{ kind: 'english-capitalized-expression' }],
       }],
     },
@@ -407,6 +447,21 @@ function selfTest() {
     mention.spans.en.some((span) => span.exact === 'Liu Xin')
   );
   if (!boundedName) throw new Error('English surface matching confused Li with Liu Xin');
+  const expectedNonPeople = new Map([
+    ['fixture:002:cand_only', 'not-a-name'],
+    ['fixture:002:cand_am_i', 'not-a-name'],
+    ['fixture:002:cand_jianwu', 'other'],
+    ['fixture:002:cand_nan', 'place'],
+    ['fixture:002:cand_privy', 'office'],
+  ]);
+  for (const [candidate, reason] of expectedNonPeople) {
+    const disposition = fragments.extraction.candidateDispositions.find((item) =>
+      item.candidate === candidate
+    );
+    if (disposition?.reason !== reason) {
+      throw new Error(`Contextual non-person candidate was not classified: ${candidate}`);
+    }
+  }
   console.log('apply-people-translation-repairs self-test: ok');
 }
 

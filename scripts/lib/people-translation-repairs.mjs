@@ -11,10 +11,11 @@ const ENGLISH_SENTENCE_INITIAL_NON_NAMES = new Set([
   'Illness',
   'Is',
   'Once',
+  'Only',
   'Though',
   'Under',
 ]);
-const ENGLISH_FUNCTION_PHRASE_RE = /^(?:Even I|Though (?:He|I|It|She|That|These|They|This|Those|We))\b/u;
+const ENGLISH_FUNCTION_PHRASE_RE = /^(?:Am I|Even I|Though (?:He|I|It|She|That|These|They|This|Those|We))\b/u;
 const ENGLISH_NAMED_NON_PERSON_TERMS = new Set([
   'Circular Moat',
   'Mount Shouyang',
@@ -25,7 +26,7 @@ const ENGLISH_NAMED_NON_PERSON_TERMS = new Set([
   "Wei's Henei",
   'Six Arts',
 ]);
-const ENGLISH_NAMED_OFFICE_TERMS = new Set(['Nobility Ranks']);
+const ENGLISH_NAMED_OFFICE_TERMS = new Set(['Nobility Ranks', 'Privy Treasurer']);
 
 function locatorKey(locator) {
   return `${locator.id}:${locator.blockIndex}:${locator.collection}:${locator.itemIndex}`;
@@ -627,6 +628,34 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         disposition: 'not-person',
         reason: 'office',
         note: 'Office-title component, not a person.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (
+      candidate.language === 'en' &&
+      candidate.exact === 'Jianwu' &&
+      /\bJianwu era\b/u.test(unitById.get(candidate.unit).en)
+    ) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'other',
+        note: 'Jianwu is a reign era, not a person.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (
+      candidate.language === 'en' &&
+      candidate.exact === 'Nan' &&
+      /\bNan Commandery\b/u.test(unitById.get(candidate.unit).en)
+    ) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'place',
+        note: 'Nan is part of the place name Nan Commandery.',
       });
       accounted.add(candidate.id);
       continue;
