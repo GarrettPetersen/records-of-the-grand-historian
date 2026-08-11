@@ -9,6 +9,7 @@ const ENGLISH_SENTENCE_INITIAL_NON_NAMES = new Set([
   'Even',
   'How',
   'Illness',
+  'Is',
   'Once',
   'Though',
   'Under',
@@ -21,6 +22,7 @@ const ENGLISH_NAMED_NON_PERSON_TERMS = new Set([
   'Three Adjuncts',
   'Three Inquiries',
   'Three Pardons',
+  "Wei's Henei",
   'Six Arts',
 ]);
 const ENGLISH_NAMED_OFFICE_TERMS = new Set(['Nobility Ranks']);
@@ -289,12 +291,23 @@ function normalizeMentionSpans(mention, unit, staleSpans) {
   const normalized = structuredClone(mention);
   for (const language of ['zh', 'en']) {
     normalized.spans[language] = normalized.spans[language].flatMap((span) => {
-      try {
-        return [exactSpanAt(unit[language], span.exact, span.occurrence)];
-      } catch {
+      const occurrences = exactOccurrences(unit[language], span.exact);
+      if (occurrences.length === 0) {
         staleSpans.push({ mention, language, span });
         return [];
       }
+      if (!Number.isInteger(span.startCodePoint)) {
+        const occurrence = occurrences[span.occurrence];
+        if (occurrence) return [occurrence];
+        staleSpans.push({ mention, language, span });
+        return [];
+      }
+      occurrences.sort((left, right) =>
+        Math.abs(left.startCodePoint - span.startCodePoint) -
+          Math.abs(right.startCodePoint - span.startCodePoint) ||
+        left.startCodePoint - right.startCodePoint
+      );
+      return [occurrences[0]];
     });
   }
   return normalized;
@@ -374,6 +387,23 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         stale.language,
         revisedPacket.preflight.candidates,
       );
+      const targetMention = reconciled.mentions.find((mention) =>
+        mention.id === stale.mention.id && mention.person === stale.mention.person
+      );
+      const conflicts = reconciled.mentions.some((mention) =>
+        mention.person !== stale.mention.person &&
+        mention.unit.id === unit.id &&
+        mention.spans[stale.language].some((current) => spansOverlap(current, expanded))
+      );
+      if (targetMention && !conflicts) {
+        const alreadyOnTarget = targetMention.spans[stale.language].some((current) =>
+          current.startCodePoint === expanded.startCodePoint &&
+          current.endCodePoint === expanded.endCodePoint
+        );
+        if (!alreadyOnTarget) targetMention.spans[stale.language].push(expanded);
+        mapped = true;
+        continue;
+      }
       const added = addAliasMention(
         reconciled,
         unit,
