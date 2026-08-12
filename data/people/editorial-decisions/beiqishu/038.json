@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "beiqishu",
+  "chapter": "038",
+  "input": {
+    "chapterFingerprint": "sha256:f3e68a0d985bbadc22d9fdebacb6f134f1e345484a1221e82d6c59c6443500bd",
+    "proposalsFingerprint": "sha256:9521f67337e4a187c41805567eebfa93f2b759461c7c97109600821558ca0d15"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-dd5da1a9-81d4-4c6f-9fd6-7e866a8e9093",
+    "runId": "run-d9da79dd-6dae-4d7a-971c-ce05d9d99945",
+    "completedAt": "2026-08-12T19:59:28.324Z"
+  },
+  "proposals": [
+    {
+      "id": "beiqishu:038:r0001",
+      "unit": {
+        "id": "s0010",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In the eighth year of Wuding, Hou Jing rebelled. Shu was made masters of writing on the southeastern mobile grand secretariat and enfeoffed as marquis of Jiangxia. With Gao Yue and others he broke Hou Jing and took Xiao Ming prisoner.",
+      "after": "In the eighth year of Wuding, Hou Jing rebelled. Shu was made masters of writing on the southeastern mobile grand secretariat and enfeoffed as nan (baron) of Jiangxia county. With Gao Yue and others he broke Hou Jing and took Xiao Ming prisoner.",
+      "reason": "Chinese 江夏縣男 is the noble rank nan, not marquis.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:038:r0002",
+      "unit": {
+        "id": "s0071",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "idiomatic",
+      "before": "When the emperor was near death, he and Prince of Pingyuan Guiyan, Prince of Zhao Jun Rui, and others received the final charge and installed Gao Zhan.",
+      "after": "When the emperor was near death, he and Prince of Pingqin Guiyan, Prince of Zhao Jun Rui, and others received the final charge and installed Gao Zhan.",
+      "reason": "Chinese 平秦王 is Pingqin, not Pingyuan.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:038:r0003",
+      "unit": {
+        "id": "s0125",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "When he returned to announce the mourning he praised Yanshen at length, opened the commandery-and-county register for selection, and enfeoffed him as marquis of Anguo county.",
+      "after": "When he returned to announce the mourning he praised Yanshen at length, opened the commandery-and-county register for selection, and enfeoffed him as baron of Anguo county.",
+      "reason": "Chinese 安國縣伯 is bo/baron, not marquis; he is advanced to marquis only later.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:038:r0004",
+      "unit": {
+        "id": "s0101",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "Xing Gong's younger brother Xing Ru was clever and precocious too; late in Wuping he served as an assistant in the Writings Office.",
+      "after": "Xinggong's younger brother Xingru was clever and precocious too; late in Wuping he served as an assistant in the Writings Office.",
+      "reason": "Inconsistent spaced romanization versus Xinggong elsewhere in the chapter.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "beiqishu:038:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "封江夏縣男 enfeoffs Shu as nan of Jiangxia county; marquis would be 侯, so the original rank is wrong and the proposed nan (baron) of Jiangxia county matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0010",
+        "excerpt": "封江夏縣男"
+      }
+    },
+    {
+      "repairId": "beiqishu:038:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "平秦王歸彥 is Prince of Pingqin Guiyan; Pingyuan would be 平原 and is unsupported by this unit.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0071",
+        "excerpt": "平秦王歸彥"
+      }
+    },
+    {
+      "repairId": "beiqishu:038:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "封安國縣伯 is the rank bo (baron) of Anguo county; marquis would be 侯, so the original title is wrong and baron of Anguo county is correct.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0125",
+        "excerpt": "封安國縣伯"
+      }
+    },
+    {
+      "repairId": "beiqishu:038:r0004",
+      "decision": "reject",
+      "after": null,
+      "reason": "行恭弟行如 is already rendered accurately as Xing Gong's younger brother Xing Ru; collapsing the spaced given names is only stylistic romanization consistency, not a semantic repair.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0101",
+        "excerpt": "行恭弟行如"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

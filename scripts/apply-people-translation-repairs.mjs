@@ -729,6 +729,156 @@ function selfTest() {
       throw new Error(`Contextual non-person candidate was not classified: ${candidate}`);
     }
   }
+
+  const semanticUnits = [
+    ['s0001', '懿祖', 'The Virtuous Ancestor (Yizu) arrived.'],
+    ['s0002', '諡曰孝', 'He received the posthumous name Xiao.'],
+    ['s0003', '皇太弟重元', 'The Imperial Younger Brother Chongyuan arrived.'],
+    ['s0004', '太子少傅魏收', 'Junior Tutor to the Crown Prince Wei Shou served.'],
+    ['s0005', '國子監生', 'Imperial Academy students could not serve.'],
+    ['s0006', '北南院兵', 'He led the Northern and Southern Division armies.'],
+    ['s0007', '至澶州', 'He reached Chanzhou.'],
+    ['s0008', '汲郡城旁', "He camped beside Ji commandery's city."],
+    ['s0009', '上柱國', 'He was Supreme Pillar of the State.'],
+  ].map(([id, zh, en], index) => ({
+    id,
+    kind: 'paragraph-sentence',
+    blockIndex: index,
+    collection: 'sentences',
+    itemIndex: 0,
+    zh,
+    en,
+    literal: en,
+  }));
+  const semanticUnit = (id) => semanticUnits.find((unit) => unit.id === id);
+  const semanticSpan = (unitId, language, exact) => {
+    const text = semanticUnit(unitId)[language];
+    const start = text.indexOf(exact);
+    return {
+      exact,
+      occurrence: 0,
+      startCodePoint: [...text.slice(0, start)].length,
+      endCodePoint: [...text.slice(0, start + exact.length)].length,
+    };
+  };
+  const semanticCandidate = (id, unit, exact) => ({
+    id: `fixture:003:${id}`,
+    unit,
+    language: 'en',
+    ...semanticSpan(unit, 'en', exact),
+    detectors: [{ kind: 'english-capitalized-expression' }],
+  });
+  const semanticPacket = {
+    book: 'fixture',
+    chapter: '003',
+    input: {},
+    units: semanticUnits,
+    preflight: {
+      candidates: [
+        semanticCandidate('cand_virtuous', 's0001', 'Virtuous Ancestor'),
+        semanticCandidate('cand_xiao', 's0002', 'Xiao'),
+        semanticCandidate('cand_younger_brother', 's0003', 'Imperial Younger Brother Chongyuan'),
+        semanticCandidate('cand_junior_tutor', 's0004', 'Junior Tutor'),
+        semanticCandidate('cand_academy', 's0005', 'Imperial Academy'),
+        semanticCandidate('cand_northern', 's0006', 'Northern'),
+        semanticCandidate('cand_chanzhou', 's0007', 'Chanzhou'),
+        semanticCandidate('cand_ji', 's0008', 'Ji'),
+        semanticCandidate('cand_supreme_pillar', 's0009', 'Supreme Pillar'),
+      ],
+    },
+  };
+  const semanticPerson = (id, en, zh) => ({
+    localId: `fixture:003:${id}`,
+    preferredNameSuggestion: { en, zh },
+    historicity: 'historical',
+    descriptorSuggestion: 'Named Individual',
+    identityHints: { nativePlaces: [], relatedLocalPeople: [], activeDateHints: [] },
+  });
+  const semanticMention = (id, person, unit, kind, language, exact) => ({
+    id: `fixture:003:${id}`,
+    person: `fixture:003:${person}`,
+    unit: (({ id: unitId, kind: unitKind, blockIndex, collection, itemIndex }) => ({
+      id: unitId,
+      kind: unitKind,
+      blockIndex,
+      collection,
+      itemIndex,
+    }))(semanticUnit(unit)),
+    kind,
+    spans: {
+      zh: language === 'zh' ? [semanticSpan(unit, language, exact)] : [],
+      en: language === 'en' ? [semanticSpan(unit, language, exact)] : [],
+    },
+    candidateRefs: [],
+  });
+  const semanticClaim = (id, person, unit, predicate, value) => ({
+    id: `fixture:003:${id}`,
+    subject: `fixture:003:${person}`,
+    predicate,
+    value,
+    certainty: 'explicit',
+    evidence: [`fixture:003:${unit}`],
+  });
+  const semanticExtraction = {
+    schemaVersion: 1,
+    book: 'fixture',
+    chapter: '003',
+    input: {},
+    run: { model: 'fixture', promptVersion: 7, agentId: 'fixture' },
+    people: [
+      semanticPerson('p001', 'Yizu', '懿祖'),
+      semanticPerson('p002', 'Lu Luyuan', '盧魯元'),
+      semanticPerson('p003', 'The Emperor', '帝'),
+      semanticPerson('p004', 'Yelü Chongyuan', '耶律重元'),
+      semanticPerson('p005', 'Wei Shou', '魏收'),
+    ],
+    mentions: [
+      semanticMention('m0001', 'p001', 's0001', 'temple-name', 'en', 'Yizu'),
+      semanticMention('m0002', 'p002', 's0002', 'posthumous-name', 'zh', '孝'),
+      semanticMention('m0003', 'p003', 's0003', 'title-reference', 'en', 'Imperial Younger Brother'),
+      semanticMention('m0004', 'p004', 's0003', 'personal-name', 'en', 'Chongyuan'),
+      semanticMention('m0005', 'p004', 's0003', 'title-reference', 'zh', '皇太弟重元'),
+    ],
+    claims: [
+      semanticClaim('c0001', 'p001', 's0001', 'name', { kind: 'temple-name', en: 'Yizu', zh: '懿祖' }),
+      semanticClaim('c0002', 'p002', 's0002', 'honor', {
+        label: { en: 'Filial', zh: '孝' }, action: 'posthumous-name',
+      }),
+      semanticClaim('c0003', 'p004', 's0003', 'name', {
+        kind: 'title', en: 'Imperial Younger Brother', zh: '皇太弟',
+      }),
+      semanticClaim('c0004', 'p004', 's0003', 'name', {
+        kind: 'personal', en: 'Chongyuan', zh: '重元',
+      }),
+      semanticClaim('c0005', 'p005', 's0004', 'occupation', {
+        label: { en: 'Junior Tutor to the Crown Prince', zh: '太子少傅' },
+      }),
+    ],
+    translationRepairs: [],
+    candidateDispositions: [],
+    coverage: { allUnitsVisited: true, preflightCandidatesAccountedFor: true, unresolvedReferences: [] },
+  };
+  const semanticResult = reconcileExtractionAfterRepairs(semanticExtraction, semanticPacket, {
+    markRepairsApplied: false,
+  });
+  if (semanticResult.unresolvedCandidates.length > 0) {
+    throw new Error(`Semantic reconciliation fixture left unresolved candidates: ${semanticResult.unresolvedCandidates}`);
+  }
+  const semanticNameKinds = new Map(semanticResult.extraction.claims
+    .filter((claim) => claim.predicate === 'name')
+    .map((claim) => [claim.value?.en, claim.value?.kind]));
+  if (semanticNameKinds.get('Virtuous Ancestor') !== 'temple-name') {
+    throw new Error('A translated temple name before a parenthetical romanization was not linked');
+  }
+  if (semanticNameKinds.get('Xiao') !== 'posthumous-name') {
+    throw new Error('A posthumous-name formula did not create the corresponding person alias');
+  }
+  const titleMention = semanticResult.extraction.mentions.find((mention) =>
+    mention.spans.en.some((span) => span.exact === 'Imperial Younger Brother Chongyuan')
+  );
+  if (titleMention?.person !== 'fixture:003:p004') {
+    throw new Error('A combined title-and-name span was not assigned to the named title holder');
+  }
   console.log('apply-people-translation-repairs self-test: ok');
 }
 

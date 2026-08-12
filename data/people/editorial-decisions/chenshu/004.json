@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "chenshu",
+  "chapter": "004",
+  "input": {
+    "chapterFingerprint": "sha256:3a042705c8dc2f8b8a157ff2a1f32167a6124b3ce129ea654ddda8c31619ddc5",
+    "proposalsFingerprint": "sha256:1f1a5e3503cc29bbb39e66c8808b7d5875219c9eacc1c3e37957b75d71713e5d"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-4ff65f5b-1bf4-43c8-843c-8299f01e6005",
+    "runId": "run-3e90da97-5afc-43a4-90e5-3b13d2ce5f67",
+    "completedAt": "2026-08-12T20:00:25.753Z"
+  },
+  "proposals": [
+    {
+      "id": "chenshu:004:r0001",
+      "unit": {
+        "id": "s0015",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "On gengyin day Xu, Prince of Ancheng—bearer of the staff, minister of works, inspector of Yangzhou, and newly named director of the Masters of Writing—was made grand general of agile cavalry with the staff, promoted to grand mentor and recorder of the Masters of Writing, and given overall command of armies at court and in the field.",
+      "after": "On gengyin day Xu, Prince of Ancheng—cavalry general, minister of works, inspector of Yangzhou, and newly appointed director of the Masters of Writing—was made grand general of agile cavalry, promoted to minister over the masses and recorder of the Masters of Writing, and given overall command of armies at court and in the field.",
+      "reason": "司徒 is Minister over the Masses, not \"grand mentor\" (太傅); \"bearer of the staff\" is not in the Chinese for this appointment.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:004:r0002",
+      "unit": {
+        "id": "s0065",
+        "kind": "paragraph-sentence",
+        "blockIndex": 21,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "On jihai day in the first month of year 2 Xu, Prince of Ancheng—commander of all armies, grand general of agile cavalry with the staff, grand mentor, recorder of the Masters of Writing, and inspector of Yangzhou—was promoted to grand tutor, kept his grand mentor title, received extraordinary honors, and was allowed to wear shoes in the audience hall;",
+      "after": "On jihai day in the first month of year 2 Xu, Prince of Ancheng—palace attendant, commander of all armies, grand general of agile cavalry, minister over the masses, recorder of the Masters of Writing, and inspector of Yangzhou—was promoted to grand tutor, retained the post of minister over the masses, received extraordinary honors, and was allowed to wear shoes in the audience hall;",
+      "reason": "領司徒 means he retained Minister over the Masses, not a \"grand mentor\" title; 侍中 is omitted in the idiomatic rendering.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:004:r0003",
+      "unit": {
+        "id": "s0098",
+        "kind": "paragraph-sentence",
+        "blockIndex": 30,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "Yuan Xiang remained in post, but only to clear rivals from the emperor's side.",
+      "after": "Though the chief minister still held office, [the emperor] only removed those at the ruler's side.",
+      "reason": "元相 is the office \"chief minister,\" not a personal name Yuan Xiang.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:004:r0004",
+      "unit": {
+        "id": "s0098",
+        "kind": "paragraph-sentence",
+        "blockIndex": 30,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "Yuan Xiang though held office, removed only those at the ruler's side.",
+      "after": "Though the chief minister held [his post], [he/the emperor] only removed those at the ruler's side.",
+      "reason": "Same error: 元相 is an office title, not the name Yuan Xiang.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "chenshu:004:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0015 lists prior offices as 驃騎將軍、司空、揚州刺史、新除尚書令 and advances him 為驃騎大將軍，進位司徒、錄尚書、都督中外諸軍事; 司徒 is Minister over the Masses, not grand mentor (太傅), and neither 持節 nor other staff-bearing language appears for this appointment, so the proposed wording correctly replaces the invented staff phrases and the title error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0015",
+        "excerpt": "以驃騎將軍、司空、揚州刺史、新除尚書令安成王頊為驃騎大將軍，進位司徒"
+      }
+    },
+    {
+      "repairId": "chenshu:004:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0065 opens with 侍中 and titles him 驃騎大將軍、司徒 before 進位太傅，領司徒; the original omitted 侍中, invented staff-bearing language, and wrongly rendered both 司徒 and 領司徒 as a grand-mentor title, while the proposal restores palace attendant, Minister over the Masses, and retention of that post.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0065",
+        "excerpt": "侍中、都督中外諸軍事、驃騎大將軍、司徒、錄尚書、揚州刺史安成王頊進位太傅，領司徒"
+      }
+    },
+    {
+      "repairId": "chenshu:004:r0003",
+      "decision": "revise",
+      "after": "Though the chief minister still held office, the emperor only removed those at the ruler's side.",
+      "reason": "元相 is the office of chief minister, not a personal name Yuan Xiang, so the original is wrong; the surrounding edict (s0096–s0097) makes the emperor the agent of the purge, but bracketed “[the emperor]” is awkward editorial markup—supply the subject plainly.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0098",
+        "excerpt": "元相雖持，但除君側"
+      }
+    },
+    {
+      "repairId": "chenshu:004:r0004",
+      "decision": "revise",
+      "after": "Though the chief minister held office, the emperor only removed those at the ruler's side.",
+      "reason": "Same unit: 元相 is an office title, not “Yuan Xiang,” so the literal must be corrected; the proposal’s bracketed hedges “[his post]” and “[he/the emperor]” are awkward—render the office and, from the edict context, the emperor as agent of 除君側 in plain English.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0098",
+        "excerpt": "元相雖持，但除君側"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

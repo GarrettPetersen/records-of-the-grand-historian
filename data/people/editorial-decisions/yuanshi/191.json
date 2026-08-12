@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "yuanshi",
+  "chapter": "191",
+  "input": {
+    "chapterFingerprint": "sha256:7f8fe1885e290e11bda29a3856ae4a9f60603d3061303ea59903626764513e70",
+    "proposalsFingerprint": "sha256:7d4aec86ab52bb6bd7d8bea55c446f53e4bcf1708f656f1be4ece65e4ca2ee04"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-cf439926-a5c0-467f-b74d-05d6e9832460",
+    "runId": "run-c81cb35d-6111-4615-90df-556254a40627",
+    "completedAt": "2026-08-12T20:14:22.197Z"
+  },
+  "proposals": [
+    {
+      "id": "yuanshi:191:r0001",
+      "unit": {
+        "id": "s0087",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "He had eleven sons: Yuqing, Chongqing, and Chongqing; the names of the rest are lost.",
+      "after": "He had eleven sons: Yuqing, Chongqing (重慶), and Chongqing (崇慶); the names of the other eight are lost.",
+      "reason": "The existing English repeats an indistinguishable romanization for two different Chinese names and leaves the explicit count of eight unnamed sons implicit.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:191:r0002",
+      "unit": {
+        "id": "s0087",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Eleven sons: Yuqing, Chongqing, Chongqing—the names of the rest are lost.",
+      "after": "Eleven sons: Yuqing, Chongqing (重慶), and Chongqing (崇慶); the names of the other eight are lost.",
+      "reason": "The existing English repeats an indistinguishable romanization for two different Chinese names and does not preserve the recoverable count of eight unnamed sons.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:191:r0003",
+      "unit": {
+        "id": "s0155",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "idiomatic",
+      "before": "On Mount Ming a tiger was ravaging the countryside. Tianzhang petitioned the spirit of Mount Wenshan, and it was immediately captured.",
+      "after": "On Mount Ming a tiger was ravaging the countryside. Tianzhang sent a formal communication to the mountain spirit, and the tiger was immediately captured.",
+      "reason": "移文山神 means issuing a formal communication to the mountain spirit; 文山 is not the place name Wenshan, and the final pronoun should clearly refer to the tiger.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:191:r0004",
+      "unit": {
+        "id": "s0155",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "literal",
+      "before": "On Mount Ming a tiger was ravaging; Tianzhang petitioned the spirit of Mount Wenshan and immediately captured it.",
+      "after": "On Mount Ming a tiger was ravaging; Tianzhang sent a formal communication to the mountain spirit, and the tiger was immediately captured.",
+      "reason": "移文山神 parses as sending a formal communication to the mountain spirit, not petitioning a spirit of a place called Mount Wenshan.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:191:r0005",
+      "unit": {
+        "id": "s0167",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "He also halted the practice of the surveillance office's fine-forfeiture funds not being remitted to headquarters, keeping them for famine relief. When censors arrived, the people blocked the road to praise him.",
+      "after": "He also ordered that the surveillance office's fine-forfeiture funds not be remitted to headquarters, retaining them for famine relief. When censors arrived, the people blocked the road to praise him.",
+      "reason": "The existing double negative reverses the syntax: he stopped the funds from being remitted and retained them locally for famine relief.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:191:r0006",
+      "unit": {
+        "id": "s0167",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "He also halted the practice of the surveillance office's fine-forfeiture funds not being remitted to headquarters, keeping them for famine relief; when censors arrived, the people blocked the road to praise him.",
+      "after": "He also stopped the surveillance office's fine-forfeiture funds from being remitted to headquarters and retained them for famine relief; when censors arrived, the people blocked the road to praise him.",
+      "reason": "The existing double negative obscures and reverses 止...不輸於台: the funds were withheld from headquarters for famine relief.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "yuanshi:191:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0087 names three distinct sons 餘慶、重慶、崇慶; the English collapses 重慶 and 崇慶 into identical \"Chongqing\" strings. Parenthetical characters disambiguate them, and \"the other eight\" correctly recovers 十一子 minus the three named.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0087",
+        "excerpt": "十一子：餘慶，重慶，崇慶，餘失其名。"
+      }
+    },
+    {
+      "repairId": "yuanshi:191:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field has the same collapse of 重慶 and 崇慶 into one romanization; the proposed glosses and \"other eight\" match the Chinese count and naming.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0087",
+        "excerpt": "餘慶，重慶，崇慶，餘失其名"
+      }
+    },
+    {
+      "repairId": "yuanshi:191:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "移文山神 is a formal dispatch to the mountain spirit, not a petition to a place \"Mount Wenshan\" (misparsing 文山); 立捕獲之 refers to the tiger, which the replacement makes explicit.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0155",
+        "excerpt": "天璋移文山神，立捕獲之"
+      }
+    },
+    {
+      "repairId": "yuanshi:191:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same misparse of 移文山神 as \"spirit of Mount Wenshan\"; the proposed literal correctly treats 移文 as sending an official communication and keeps the tiger as the captured object.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0155",
+        "excerpt": "移文山神，立捕獲之"
+      }
+    },
+    {
+      "repairId": "yuanshi:191:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "止…不輸於台，留用賑饑 means he stopped remitting the fine-forfeiture funds to headquarters and kept them for famine relief; \"halted the practice of … not being remitted\" reverses that sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0167",
+        "excerpt": "止憲司贓罰庫緡錢不輸於台，留用賑饑"
+      }
+    },
+    {
+      "repairId": "yuanshi:191:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal has the same reversed double negative; stopping remittance to 台 and retaining the funds for famine relief matches 止…不輸於台，留用賑饑.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0167",
+        "excerpt": "止憲司贓罰庫緡錢不輸於台，留用賑饑"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "xinwudaishi",
+  "chapter": "053",
+  "input": {
+    "chapterFingerprint": "sha256:cb8721b9abe91ba9be37572b3674fc4b1c35564ffb036e1303086e532216ffb5",
+    "proposalsFingerprint": "sha256:ef14bec3df55ef15abb40c21427d2f6b8a246646084d819a00efd26f8db23bab"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-73fab247-4415-4e33-9aeb-8bbff42625b5",
+    "runId": "run-6cf8a623-bdfb-4af1-a222-d6321e11ab97",
+    "completedAt": "2026-08-12T20:12:48.452Z"
+  },
+  "proposals": [
+    {
+      "id": "xinwudaishi:053:r0001",
+      "unit": {
+        "id": "s0061",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "literal",
+      "before": "Yanchao repeatedly insulted Xingzhou on various pretexts. Xingzhou could not bear it. He saw the chief ministers weeping, stuffed his mouth with dung, and thus made his complaint.",
+      "after": "Yanchao repeatedly insulted Xingzhou on various pretexts. Xingzhou could not bear it. He went before the chief ministers in tears, stuffed his mouth with dung, and thus made his complaint.",
+      "reason": "涕泣 describes Xingzhou weeping as he appeals to the ministers, not the ministers weeping.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:053:r0002",
+      "unit": {
+        "id": "s0102",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "The following May Taizu took the field in person. The city fell. Yanchao and his wife drowned themselves in a well. His son Ji Xun fled with five hundred followers but was captured, and the entire clan was destroyed.",
+      "after": "The following May Taizu took the field in person. The city fell. Yanchao and his wife drowned themselves in a well. His son Jixun fled with five hundred followers but was captured, and the entire clan was destroyed.",
+      "reason": "繼勛 is a single given name; spacing as Ji Xun incorrectly splits it.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:053:r0003",
+      "unit": {
+        "id": "s0102",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "In the fifth month of the next year Taizu campaigned in person. The city fell. Yanchao and his wife both threw themselves into a well and died. His son Ji Xun led five hundred of his followers in flight but was captured, and then his clan was exterminated.",
+      "after": "In the fifth month of the next year Taizu campaigned in person. The city fell. Yanchao and his wife both threw themselves into a well and died. His son Jixun led five hundred of his followers in flight but was captured, and then his clan was exterminated.",
+      "reason": "繼勛 is a single given name; spacing as Ji Xun incorrectly splits it.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xinwudaishi:053:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 見宰相涕泣，以屎塞口以自訴, 見宰相 means Xingzhou appeared before the chief ministers, and 涕泣 is his weeping as he lodges the complaint; the parallel 以屎塞口以自訴 is likewise his act. The before text wrongly makes the ministers the weepers.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0061",
+        "excerpt": "見宰相涕泣，以屎塞口以自訴"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:053:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "其子繼勛 is one given name 繼勛 (Jixun); spacing it as Ji Xun falsely splits the name into two syllables. The proposed Jixun matches the Chinese and is grammatical.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0102",
+        "excerpt": "其子繼勛率其徒五百人出奔被擒"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:053:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "其子繼勛 is one given name 繼勛 (Jixun); the literal’s Ji Xun incorrectly splits it. Replacing with Jixun restores the correct romanization without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0102",
+        "excerpt": "其子繼勛率其徒五百人出奔被擒"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

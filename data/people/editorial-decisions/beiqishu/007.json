@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 3,
+  "book": "beiqishu",
+  "chapter": "007",
+  "input": {
+    "chapterFingerprint": "sha256:12680da8c5063dee58bee9b59cc4fde16ae1cce8a3b822d803d451d3495b36d8",
+    "proposalsFingerprint": "sha256:8d82201e0b5baca025892871a3033a469c4d4571a85a822727f5e2085a723518"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-12b40fda-e0b7-42a6-8437-00fe2efc3f23",
+    "runId": "run-42fffcac-6bb9-42cd-ab8a-36d5037ab485",
+    "completedAt": "2026-08-12T19:59:17.274Z"
+  },
+  "proposals": [
+    {
+      "id": "beiqishu:007:r0001",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "While Emperor Shenwu was working to bring distant peoples into allegiance, he betrothed the prince to the daughter of Anluochen, heir of the Rouran crown prince, who was given the title \"Princess Linhe.\"",
+      "after": "While Emperor Shenwu was working to bring distant peoples into allegiance, he betrothed the prince to the daughter of Anluochen, the Rouran crown prince, who was given the title \"Princess Linhe.\"",
+      "reason": "Chinese 蠕蠕太子庵羅辰 identifies Anluochen as the Rouran crown prince, not the heir of a crown prince.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:007:r0002",
+      "unit": {
+        "id": "s0042",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Grand Tutor to the Crown Prince Wei Shou was made Concurrent Right Vice Director of the Secretariat.",
+      "after": "Junior Tutor to the Crown Prince Wei Shou was made Concurrent Right Vice Director of the Secretariat.",
+      "reason": "Chinese 太子少傅 is the Junior/Lesser Tutor (少傅), not Grand Tutor (太傅).",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:007:r0003",
+      "unit": {
+        "id": "s0068",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "On the jiashen day, Director of the Masters of Writing Prince Run of Fenyang was appointed Minister of Works.",
+      "after": "On the jiashen day, Director of the Masters of Writing Prince Run of Fengyi was appointed Minister of Works.",
+      "reason": "Chinese 馮翊王潤 is Prince of Fengyi (馮翊), not Fenyang.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:007:r0004",
+      "unit": {
+        "id": "s0073",
+        "kind": "paragraph-sentence",
+        "blockIndex": 20,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "On the dinghai day, Grand Commandant Prince Cheng of Rencheng was appointed grand general.",
+      "after": "On the dinghai day, Grand Commandant Prince Jun of Rencheng was appointed grand general.",
+      "reason": "Given name 湝 is Jun, not Cheng; matches the same Rencheng prince elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:007:r0005",
+      "unit": {
+        "id": "s0099",
+        "kind": "paragraph-sentence",
+        "blockIndex": 27,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In spring of the fourth year, on the guimao day of the first month, Grand General Prince Cheng of Rencheng was appointed grand marshal.",
+      "after": "In spring of the fourth year, on the guimao day of the first month, Grand General Prince Jun of Rencheng was appointed grand marshal.",
+      "reason": "Given name 湝 is Jun, not Cheng.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "beiqishu:007:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0003’s 蠕蠕太子庵羅辰 names Anluochen as the Rouran crown prince (太子); “heir of the Rouran crown prince” invents an extra generation. The proposed appositive restores the correct title without other change.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "蠕蠕太子庵羅辰"
+      }
+    },
+    {
+      "repairId": "beiqishu:007:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0042 has 太子少傅, the Junior/Lesser Tutor (少傅), not Grand Tutor (太傅); the replacement corrects that office title and leaves the rest of the sentence intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0042",
+        "excerpt": "太子少傅魏收"
+      }
+    },
+    {
+      "repairId": "beiqishu:007:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0068’s 馮翊王潤 is Prince of Fengyi (馮翊); Fenyang misreads the fief name. The proposed Fengyi matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0068",
+        "excerpt": "馮翊王潤"
+      }
+    },
+    {
+      "repairId": "beiqishu:007:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0073’s 任城王湝 gives the personal name 湝, romanized Jun in this chapter’s naming, not Cheng; the repair restores the correct given name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0073",
+        "excerpt": "任城王湝"
+      }
+    },
+    {
+      "repairId": "beiqishu:007:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0099 again has 任城王湝; Cheng is the same given-name error as in s0073, and Jun is the correct chapter romanization.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0099",
+        "excerpt": "任城王湝"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "beiqishu:007:r0002",
+      "before": {
+        "id": "beiqishu:007:c0436",
+        "subject": "beiqishu:007:p028",
+        "predicate": "occupation",
+        "value": {
+          "label": {
+            "en": "Grand Tutor to the Crown Prince (actually Junior Tutor 少傅)",
+            "zh": "太子少傅"
+          }
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "beiqishu:007:s0042"
+        ]
+      },
+      "after": {
+        "id": "beiqishu:007:c0436",
+        "subject": "beiqishu:007:p028",
+        "predicate": "occupation",
+        "value": {
+          "label": {
+            "en": "Junior Tutor to the Crown Prince",
+            "zh": "太子少傅"
+          }
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "beiqishu:007:s0042"
+        ]
+      },
+      "reason": "Accepted r0002 shows the English occupation label’s “Grand Tutor…(actually Junior Tutor)” came from the mistranslation of 太子少傅; the claim must read Junior Tutor to the Crown Prince while keeping zh, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0042",
+        "excerpt": "太子少傅"
+      }
+    }
+  ]
+}

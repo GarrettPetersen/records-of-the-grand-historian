@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "jinshi",
+  "chapter": "131",
+  "input": {
+    "chapterFingerprint": "sha256:649f5632fb66e33cbb0527e34c6496e90b42399337850bf5499e62d0feeea9fb",
+    "proposalsFingerprint": "sha256:c642c1b44f2d5fbea5c4f530a4d4d6159ec061af2c63ed06a8a1c714ed8f8ff3"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-9aa0f935-348e-4c4a-a7da-265167a70f6d",
+    "runId": "run-3dc1729c-d4fc-4562-a4c1-6580b59f7e90",
+    "completedAt": "2026-08-12T20:01:30.739Z"
+  },
+  "proposals": [
+    {
+      "id": "jinshi:131:r0001",
+      "unit": {
+        "id": "s0009",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "Only Song Gui and Pan Shouheng were fairly able to remonstrate with the Xuande and Aizong emperors and at times were of benefit — outstanding among hirelings, ringing like iron.",
+      "after": "Only Song Gui and Pan Shouheng were fairly able to remonstrate with the Xuanzong and Aizong emperors and at times were of benefit — outstanding among hirelings, ringing like iron.",
+      "reason": "Chinese 宣、哀 refers to Xuanzong and Aizong; Xuande is a different reign name and mistranslates 宣.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:131:r0002",
+      "unit": {
+        "id": "s0040",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "When Guannu went to Bo Prefecture, Gui secretly joined the palace attendant Wugusun Aishi, Nalan Geda, the guardswoman Xilie Wanchu, Fan Chenseng, Wang Shan'er, and others in a plot to kill him.",
+      "after": "When Guannu went to Bo Prefecture, Gui secretly joined the palace attendant Wugusun Aishi, Nalan Geda, the guard Xilie Wanchu, Fan Chenseng, Wang Shan'er, and others in a plot to kill him.",
+      "reason": "女奚烈 is a Jurchen surname, not the word woman; 護衛 marks the office of guard. Rendering Xilie Wanchu as guardswoman invents sex from a surname.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:131:r0003",
+      "unit": {
+        "id": "s0040",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "When Guannu went to Bo Prefecture, Gui secretly plotted with the palace attendant Wugusun Aishi, Nalan Geda, the guardswoman Xilie Wanchu, Fan Chenseng, Wang Shan'er, and others to kill him.",
+      "after": "When Guannu went to Bo Prefecture, Gui secretly plotted with the palace attendant Wugusun Aishi, Nalan Geda, the guard Xilie Wanchu, Fan Chenseng, Wang Shan'er, and others to kill him.",
+      "reason": "Same surname/office error as in the idiomatic line: 女奚烈完出 is the personal name of a guard, not a guardswoman.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jinshi:131:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0009 has 諷諫宣、哀, abbreviating Jin temple names 宣宗 and 哀宗; Xuande is a different era name and wrongly renders 宣, while Xuanzong matches the Chinese and the parallel idiomatic line.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0009",
+        "excerpt": "諷諫宣、哀"
+      }
+    },
+    {
+      "repairId": "jinshi:131:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "護衛女奚烈完出 names a 護衛 (guard) whose Jurchen surname is 女奚烈; the 女 is part of the clan name, not 'woman', so 'guardswoman' invents sex and 'the guard' is the accurate repair.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0040",
+        "excerpt": "護衛女奚烈完出"
+      }
+    },
+    {
+      "repairId": "jinshi:131:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 護衛女奚烈完出 parsing applies to the literal: office 護衛 plus personal name 女奚烈完出, so replacing 'guardswoman' with 'guard' corrects the invented sex.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0040",
+        "excerpt": "護衛女奚烈完出"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

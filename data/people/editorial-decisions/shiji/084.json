@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "084",
+  "input": {
+    "chapterFingerprint": "sha256:e66240112ceb7bef3a07fc044d9c35a1a26521300dc0d1c1c30a48a3ed576dcf",
+    "proposalsFingerprint": "sha256:9b8334b24b6da6f9d8b8831ad046c86a89020207618dc14e133eac73ac8cbe7c"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-a07aeb85-2f1b-4104-903e-5f2be7a45628",
+    "runId": "run-e1cbb353-1545-474d-8ea1-cc07566ba128",
+    "completedAt": "2026-08-12T20:09:50.895Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:084:r0001",
+      "unit": {
+        "id": "s0145",
+        "kind": "paragraph-sentence",
+        "blockIndex": 22,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Jia Sheng already declined went, heard Changsha low wet, self thought longevity not long, moreover banished went, intention not self satisfied.",
+      "after": "Jia Sheng already took leave and departed; heard Changsha was low and damp; thought to himself longevity would not be long; moreover went away in banishment; his spirits were not at ease.",
+      "reason": "辭往行 means took leave and went, not declined; literal wrongly renders 辭 as declined.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:084:r0002",
+      "unit": {
+        "id": "s0044",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "This time Qu Ping already alienated, no longer in position, sent to Qi, looked back, advised Huai Wang said: 'Why not kill Zhang Yi?'",
+      "after": "This time Qu Ping already alienated, no longer in position, sent to Qi; upon returning, advised Huai Wang said: 'Why not kill Zhang Yi?'",
+      "reason": "顧反 means returned (came back), not looked back; the idiomatic translation already has upon his return.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:084:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 賈生既辭往行, 辭往行 means he took leave and set out for Changsha after being appointed Taifu; rendering 辭 as “declined” invents a refusal the Chinese does not support. The proposed literal correctly restores leave-taking and keeps the rest aligned with 聞長沙卑溼, 自以壽不得長, 又以適去, and 意不自得.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0145",
+        "excerpt": "賈生既辭往行"
+      }
+    },
+    {
+      "repairId": "shiji:084:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 使於齊，顧反，諫懷王曰, 顧反 is the classical idiom “return / come back,” not a physical looking back; the next clause (remonstrating with King Huai to kill Zhang Yi) follows that return. Replacing “looked back” with “upon returning” corrects the mistranslation without changing attribution or content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0044",
+        "excerpt": "使於齊，顧反，諫懷王曰"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

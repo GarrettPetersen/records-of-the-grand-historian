@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 3,
+  "book": "mingshi",
+  "chapter": "122",
+  "input": {
+    "chapterFingerprint": "sha256:782da7a204b3de9581bfc35c23ddb86525b99209c27ca8dce76088c760a4b282",
+    "proposalsFingerprint": "sha256:066819ebce9a8fe4db2960f50eba55e74ede7b925d3dc39844cbdc7110501f84"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-7af4792c-b1f1-4c3d-a66d-519cab7a6e42",
+    "runId": "run-1fac6046-f8a4-430b-81f3-80baaf2a4d44",
+    "completedAt": "2026-08-12T20:07:47.135Z"
+  },
+  "proposals": [
+    {
+      "id": "mingshi:122:r0001",
+      "unit": {
+        "id": "s0016",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "She then gave him in marriage the daughter she had raised—the daughter of Master Ma—who became Empress Xiaoci the Great.",
+      "after": "He then gave him in marriage the daughter he had raised—the daughter of Master Ma—who became Empress Xiaoci the Great.",
+      "reason": "Chinese 乃妻以 continues with Zixing (or the household head) as subject; literal correctly has He, but idiomatic wrongly makes Lady Zhang the giver of the marriage.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:122:r0002",
+      "unit": {
+        "id": "s0029",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "Peng Da said, \"As long as I am here, who would dare abuse your father!\"",
+      "after": "Peng Da said, \"As long as I am here, who would dare abuse your father-in-law!\"",
+      "reason": "而翁 here is father-in-law: Taizu had married Zixing's foster daughter, so Zixing is his father-in-law; the literal rendering is correct.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:122:r0003",
+      "unit": {
+        "id": "s0073",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "During Hongzhi (1488–1505), a Guo Hu claimed his fourth-generation ancestor Laoshi was the prince's fourth son and was granted official rank to conduct sacrifices.",
+      "after": "During Hongzhi (1488–1505), a Guo Hu claimed his fourth-generation ancestor Laoshe was the prince's fourth son and was granted official rank to conduct sacrifices.",
+      "reason": "老舍 is rendered Laoshe in s0072 (Guo Laoshe) but inconsistently as Laoshi here.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:122:r0004",
+      "unit": {
+        "id": "s0075",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "The Board of Rites ruled: \"The Hongwu Emperor established these rites and declared the prince had no heirs; the temple stele is explicit—Laoshi was not his son.\"",
+      "after": "The Board of Rites ruled: \"The Hongwu Emperor established these rites and declared the prince had no heirs; the temple stele is explicit—Laoshe was not his son.\"",
+      "reason": "Same 老舍 romanization inconsistency as s0073; should match Guo Laoshe.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "mingshi:122:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "After 子興喜 and Lady Zhang’s speech in s0015, 乃妻以 resumes with Zixing as subject giving the foster daughter in marriage; idiomatic She wrongly makes Lady Zhang the giver, while He matches the Chinese and the literal.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0016",
+        "excerpt": "乃妻以所撫馬公女"
+      }
+    },
+    {
+      "repairId": "mingshi:122:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Peng Da answers Taizu’s appeal (s0028); 而翁 addresses him about Zixing, who is his father-in-law after the Ma foster-daughter marriage, so father-in-law is the correct kinship reading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0029",
+        "excerpt": "孰敢魚肉而翁者"
+      }
+    },
+    {
+      "repairId": "mingshi:122:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0073’s 老舍 is the same name as Guo Laoshe in s0072; Laoshi misromanizes 舍, and Laoshe restores consistent, correct pinyin without other change.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0073",
+        "excerpt": "四世祖老舍"
+      }
+    },
+    {
+      "repairId": "mingshi:122:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0075 again names 老舍, already established as Guo Laoshe; Laoshi is the same romanization error and Laoshe is the accurate replacement.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "老舍非滁陽王子"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "mingshi:122:r0001",
+      "claim": {
+        "id": "mingshi:122:c0333",
+        "subject": "mingshi:122:p006",
+        "predicate": "family-relationship",
+        "value": {
+          "relation": "parent-of",
+          "personId": "mingshi:122:p008",
+          "kinshipTerm": {
+            "zh": "所撫",
+            "en": "raised"
+          },
+          "parentage": "foster"
+        },
+        "certainty": "strongly-inferred",
+        "evidence": [
+          "mingshi:122:s0016"
+        ]
+      },
+      "reason": "Accepted r0001 shows the fosterer of 所撫馬公女 is Zixing, the subject of 乃妻以; Lady Zhang as foster parent was created only by the bad She/she raised reading and has no separate support in s0016.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0016",
+        "excerpt": "乃妻以所撫馬公女"
+      }
+    }
+  ],
+  "claimRevisions": [
+    {
+      "repairId": "mingshi:122:r0003",
+      "before": {
+        "id": "mingshi:122:c0112",
+        "subject": "mingshi:122:p024",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate-name",
+          "en": "Laoshi",
+          "zh": "老舍"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "mingshi:122:s0073"
+        ]
+      },
+      "after": {
+        "id": "mingshi:122:c0112",
+        "subject": "mingshi:122:p024",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate-name",
+          "en": "Laoshe",
+          "zh": "老舍"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "mingshi:122:s0073"
+        ]
+      },
+      "reason": "Accepted r0003 shows English Laoshi came only from the bad romanization of 老舍; the alternate-name claim must read Laoshe while keeping zh, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0073",
+        "excerpt": "老舍"
+      }
+    }
+  ]
+}

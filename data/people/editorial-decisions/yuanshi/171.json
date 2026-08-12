@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "yuanshi",
+  "chapter": "171",
+  "input": {
+    "chapterFingerprint": "sha256:3790ee9a5699ddf35fcaa042f1ffbb811235304324e98944f41317553f188e2b",
+    "proposalsFingerprint": "sha256:bdafe733ee600626339e0f222e0c1aa9c7b3faa9ada7f5c0f32abf4d5dc4bdb6"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-a9cad10a-ad8c-457f-96a6-18aac81f9e35",
+    "runId": "run-9f81959a-fe59-4a93-bcab-6f72795372cd",
+    "completedAt": "2026-08-12T20:13:17.751Z"
+  },
+  "proposals": [
+    {
+      "id": "yuanshi:171:r0001",
+      "unit": {
+        "id": "s0059",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Ouyang Xuan once wrote in praise of Liu Yin's portrait: \"The ardor of the micro-dot, yet with the joy of bathing at Yi above in the wind and rain;",
+      "after": "Ouyang Xuan once wrote in praise of Liu Yin's portrait: \"With Dian's unrestrained spirit, yet with the joy of bathing at the Yi in the wind and rain;",
+      "reason": "微點 alludes to Zeng Dian (曾點), not a literal micro-dot; the portrait praise compares Liu Yin to Dian's free spirit in the Analects.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:171:r0002",
+      "unit": {
+        "id": "s0059",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "Ouyang Xuan once praised Yin's portrait, saying: \"The wildness of the micro-dot, yet with the joy of bathing at Yi above the wind;",
+      "after": "Ouyang Xuan once praised Yin's portrait, saying: \"With Dian's wildness, yet with the joy of bathing at the Yi above the wind;",
+      "reason": "Same Zeng Dian allusion mistranslated as micro-dot in the literal English.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:171:r0003",
+      "unit": {
+        "id": "s0092",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "He also once said to scholars: \"Zhu Xi's achievement in the Way through inquiry and learning is the greater part, while Lu Xiangshan Jing focused chiefly on honoring moral nature.",
+      "after": "He also once said to scholars: \"Zhu Xi's achievement in the Way through inquiry and learning is the greater part, while Lu Xiangshan focused chiefly on honoring moral nature.",
+      "reason": "Literal English wrongly appends Jing after Lu Xiangshan; 子靜 is the courtesy name already rendered by Xiangshan convention, not an extra name Jing.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "yuanshi:171:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0059 微點之狂 pairs with s0060 資由之勇: 點 is Zeng Dian, not a micro-dot; the proposed Dian allusion and 沂上風雩 paraphrase are accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0059",
+        "excerpt": "微點之狂，而有沂上風雩之樂"
+      }
+    },
+    {
+      "repairId": "yuanshi:171:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 微點之狂 requires Dian's wildness in the literal field; micro-dot is a false literalization of 點.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0059",
+        "excerpt": "微點之狂"
+      }
+    },
+    {
+      "repairId": "yuanshi:171:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0092 has 陸子靜 only: 子靜 is the courtesy name (Zijing), already covered by the Xiangshan rendering; trailing Jing is an invented extra name element.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0092",
+        "excerpt": "陸子靜以尊德性為主"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -38,6 +38,9 @@ const ENGLISH_NAMED_PLACE_TERMS = new Set([
   'Salt Marsh',
   'Yong',
 ]);
+const ENGLISH_NAMED_ORGANIZATION_TERMS = new Set([
+  'Imperial Academy',
+]);
 const ENGLISH_NAMED_POLITY_TERMS = new Set([
   'Eastern Yue',
 ]);
@@ -58,6 +61,7 @@ const ENGLISH_NAMED_OFFICE_TERMS = new Set([
   'Privy Treasurer',
   'Situ',
   'Splendid Light',
+  'Supreme Pillar',
   'Three Commanders',
 ]);
 
@@ -157,6 +161,31 @@ function exactOccurrences(text, exact, language = null) {
   return found;
 }
 
+function caseInsensitiveExactOccurrences(text, exact) {
+  const foldedText = text.toLocaleLowerCase('en-US');
+  const foldedExact = exact.toLocaleLowerCase('en-US');
+  const found = [];
+  for (let index = foldedText.indexOf(foldedExact); index >= 0; index = foldedText.indexOf(foldedExact, index + 1)) {
+    const actual = text.slice(index, index + exact.length);
+    const before = [...text.slice(0, index)].at(-1);
+    const after = [...text.slice(index + exact.length)][0];
+    if (
+      actual.toLocaleLowerCase('en-US') === foldedExact &&
+      (!isWordCharacter([...actual][0]) || !isWordCharacter(before)) &&
+      (!isWordCharacter([...actual].at(-1)) || !isWordCharacter(after))
+    ) {
+      const startCodePoint = [...text.slice(0, index)].length;
+      found.push({
+        exact: actual,
+        occurrence: found.length,
+        startCodePoint,
+        endCodePoint: startCodePoint + [...actual].length,
+      });
+    }
+  }
+  return found;
+}
+
 function tokenSpans(text) {
   const spans = [];
   const pattern = /\p{Script=Han}|[\p{L}\p{N}]+(?:['’-][\p{L}\p{N}]+)*|[^\s\p{L}\p{N}]/gu;
@@ -198,6 +227,11 @@ function plausibleReplacement(oldExact, replacement, language) {
 export function remapMentionSpanThroughEdit(span, oldText, newText, language) {
   const oldLocation = resolvedOldSpan(oldText, span);
   if (!oldLocation || oldText === newText) return null;
+
+  if (language === 'en') {
+    const caseOnlyMatches = caseInsensitiveExactOccurrences(newText, span.exact);
+    if (caseOnlyMatches.length === 1) return caseOnlyMatches[0];
+  }
 
   const oldTokens = tokenSpans(oldText);
   const left = oldTokens
@@ -419,6 +453,82 @@ function addAliasMention(extraction, unit, person, language, kind, span) {
     },
     candidateRefs: [],
   });
+  return true;
+}
+
+function addInferredNameClaim(extraction, person, unitId, kind, exact) {
+  if (extraction.claims.some((claim) =>
+    claim.subject === person &&
+    claim.predicate === 'name' &&
+    claim.value?.en === exact
+  )) return;
+  extraction.claims.push({
+    id: `${extraction.book}:${extraction.chapter}:c-reconciled-${extraction.claims.length + 1}`,
+    subject: person,
+    predicate: 'name',
+    value: { kind, en: exact },
+    certainty: 'strongly-inferred',
+    evidence: [`${extraction.book}:${extraction.chapter}:${unitId}`],
+  });
+}
+
+function addLeadingParentheticalAlias(extraction, candidate, unit) {
+  if (candidate.language !== 'en') return false;
+  const points = [...unit.en];
+  if (!/^\s*\(/u.test(points.slice(candidate.endCodePoint).join(''))) return false;
+  const following = extraction.mentions.flatMap((mention) =>
+    mention.unit.id === unit.id
+      ? mention.spans.en
+        .filter((span) =>
+          /^\s*\($/u.test(points.slice(candidate.endCodePoint, span.startCodePoint).join('')) &&
+          /^\)/u.test(points.slice(span.endCodePoint).join(''))
+        )
+        .map((span) => ({ mention, span }))
+      : []
+  );
+  const nearestStart = Math.min(Number.MAX_SAFE_INTEGER, ...following.map(({ span }) => span.startCodePoint));
+  const nearest = following.filter(({ span }) => span.startCodePoint === nearestStart);
+  const people = new Set(nearest.map(({ mention }) => mention.person));
+  if (people.size !== 1) return false;
+
+  const person = [...people][0];
+  const followingSpan = nearest[0].span;
+  const nameClaim = extraction.claims.find((claim) =>
+    claim.subject === person &&
+    claim.predicate === 'name' &&
+    claimEvidenceUnit(claim, unit.id) &&
+    claim.value?.en === followingSpan.exact
+  );
+  const kind = mentionKindForNameKind(nameClaim?.value?.kind, nearest[0].mention.kind);
+  const span = exactSpanAt(unit.en, candidate.exact, candidate.occurrence);
+  if (!addAliasMention(extraction, unit, person, 'en', kind, span)) return false;
+  extraction.mentions.at(-1).candidateRefs.push(candidate.id);
+  addInferredNameClaim(extraction, person, unit.id, kind, candidate.exact);
+  return true;
+}
+
+function addPosthumousNameCandidate(extraction, candidate, unit) {
+  if (candidate.language !== 'en') return false;
+  const before = [...unit.en].slice(0, candidate.startCodePoint).join('');
+  if (!/\bposthumous name\s+$/iu.test(before)) return false;
+  const subjects = new Set([
+    ...extraction.claims
+      .filter((claim) =>
+        claim.predicate === 'honor' &&
+        claim.value?.action === 'posthumous-name' &&
+        claimEvidenceUnit(claim, unit.id)
+      )
+      .map((claim) => claim.subject),
+    ...extraction.mentions
+      .filter((mention) => mention.unit.id === unit.id && mention.kind === 'posthumous-name')
+      .map((mention) => mention.person),
+  ]);
+  if (subjects.size !== 1) return false;
+  const person = [...subjects][0];
+  const span = exactSpanAt(unit.en, candidate.exact, candidate.occurrence);
+  if (!addAliasMention(extraction, unit, person, 'en', 'posthumous-name', span)) return false;
+  extraction.mentions.at(-1).candidateRefs.push(candidate.id);
+  addInferredNameClaim(extraction, person, unit.id, 'posthumous-name', candidate.exact);
   return true;
 }
 
@@ -902,6 +1012,51 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       accounted.add(candidate.id);
       continue;
     }
+    if (partialOverlaps.length > 1 && candidate.language === 'en') {
+      const titleClaims = reconciled.claims.filter((claim) =>
+        claim.predicate === 'name' &&
+        claim.value?.kind === 'title' &&
+        claimEvidenceUnit(claim, candidate.unit) &&
+        typeof claim.value?.en === 'string' &&
+        surfaceContains(candidate.exact, claim.value.en, 'en')
+      );
+      const titledPeople = new Set(titleClaims.flatMap((claim) => {
+        const hasPersonalNameInCandidate = reconciled.claims.some((nameClaim) =>
+          nameClaim.subject === claim.subject &&
+          nameClaim.predicate === 'name' &&
+          nameClaim.value?.kind !== 'title' &&
+          claimEvidenceUnit(nameClaim, candidate.unit) &&
+          typeof nameClaim.value?.en === 'string' &&
+          surfaceContains(candidate.exact, nameClaim.value.en, 'en')
+        );
+        return hasPersonalNameInCandidate ? [claim.subject] : [];
+      }));
+      if (titledPeople.size === 1) {
+        const person = [...titledPeople][0];
+        const titleSurfaces = new Set(titleClaims
+          .filter((claim) => claim.subject === person)
+          .map((claim) => claim.value.en.toLocaleLowerCase('en-US')));
+        for (const { mention, span } of partialOverlaps) {
+          if (titleSurfaces.has(span.exact.toLocaleLowerCase('en-US'))) mention.person = person;
+        }
+      }
+    }
+    if (addLeadingParentheticalAlias(
+      reconciled,
+      candidate,
+      unitById.get(candidate.unit),
+    )) {
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (addPosthumousNameCandidate(
+      reconciled,
+      candidate,
+      unitById.get(candidate.unit),
+    )) {
+      accounted.add(candidate.id);
+      continue;
+    }
     let aliasMatches = reconciled.people.flatMap((person) =>
       aliasesForPerson(reconciled, person.localId, candidate.language, candidate.unit)
         .filter((alias) => {
@@ -1154,6 +1309,32 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         continue;
       }
       if (
+        /^[A-Z][a-z]+zhou$/u.test(candidate.exact) &&
+        /\b(?:at|entered|from|in|into|left|near|reached|to|toward)\s+$/iu.test(before)
+      ) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'place',
+          note: 'Romanized zhou place name identified from its locative context.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (
+        /^(?:Eastern|Northern|Southern|Western)$/u.test(candidate.exact) &&
+        /^(?:\s+and\s+(?:Eastern|Northern|Southern|Western))?\s+(?:Army|Bureau|Command|Court|Division|Office|Palace|Region)\b/iu.test(after)
+      ) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'organization',
+          note: 'Directional component of an institutional or military name, not a person.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (
         candidate.exact === 'Zhao' &&
         /^[ \t]+(?:airs|harps|music|songs|zithers)\b/iu.test(after)
       ) {
@@ -1169,7 +1350,7 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
     }
     if (
       candidate.language === 'en' &&
-      /^[ \t]+Commandery\b/u.test(
+      /^[ \t]+commandery(?:['’]s)?\b/iu.test(
         [...unitById.get(candidate.unit).en].slice(candidate.endCodePoint).join('')
       )
     ) {
@@ -1219,6 +1400,16 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         disposition: 'not-person',
         reason: 'place',
         note: 'Named place, not a person.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (candidate.language === 'en' && ENGLISH_NAMED_ORGANIZATION_TERMS.has(candidate.exact)) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'organization',
+        note: 'Named institution, not a person.',
       });
       accounted.add(candidate.id);
       continue;
@@ -1296,7 +1487,9 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
     }
     if (
       candidate.language === 'en' &&
-      candidateMatchesClaimValue(reconciled, candidate, 'office')
+      ['occupation', 'office'].some((predicate) =>
+        candidateMatchesClaimValue(reconciled, candidate, predicate)
+      )
     ) {
       reconciled.candidateDispositions.push({
         candidate: candidate.id,

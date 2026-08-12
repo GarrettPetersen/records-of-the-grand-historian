@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "088",
+  "input": {
+    "chapterFingerprint": "sha256:2d80db6728947a442e1368cd7c8fa158c18daa0c00450e14740317828b470ae3",
+    "proposalsFingerprint": "sha256:b9477d690d795ace40b698bde2644821e075f64f748c25ef306b4a1a7aa0767b"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-ba40a7be-a617-479e-b99d-c1ba26922733",
+    "runId": "run-a4864a56-6a7c-433e-9cd0-a1ef5e1e7861",
+    "completedAt": "2026-08-12T20:06:35.192Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:088:r0001",
+      "unit": {
+        "id": "s0074",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 18
+      },
+      "field": "idiomatic",
+      "before": "In the second year of Kaitai, while serving as chancellor, he was made Commissioner for the Southwestern Pacification Commissioner.",
+      "after": "In the second year of Kaitai, while serving as chancellor, he was made Southwestern Pacification Commissioner.",
+      "reason": "Chinese 知西南面招討使 is a single office; English doubles \"Commissioner\" redundantly.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:088:r0002",
+      "unit": {
+        "id": "s0114",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "At that time the guard Feng Jianu submitted a report of treason, falsely accusing the empress's younger brother Chubuo and Pike of plotting rebellion while the empress dowager held the regency, so they might deliberate in time who should be enthroned.",
+      "after": "At that time the guard Feng Jianu submitted a report of treason, falsely accusing the empress's younger brother Chubuo and Pike of plotting rebellion so that the empress might hold the regency, and they might then deliberate who should be enthroned.",
+      "reason": "Chinese 以皇后攝政 means the plot aimed at having the empress (皇后) hold the regency, not that the empress dowager already held it.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:088:r0003",
+      "unit": {
+        "id": "s0206",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "yet instead they held difficult terrain and resisted as travelers, making the wise exhaust their stratagems and the brave spend their strength.",
+      "after": "yet instead they held difficult terrain and resisted stubbornly, making the wise exhaust their stratagems and the brave spend their strength.",
+      "reason": "旅拒 means to resist in force/stubbornly, not \"as travelers\".",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:088:r0004",
+      "unit": {
+        "id": "s0064",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "In the thirteenth year he served in succession as Commissioner of the Southern and Northern Division Imperial Clan.",
+      "after": "In the thirteenth year he served in succession as Commissioner of the Northern and Southern Division Court of Palace Attendants.",
+      "reason": "北、南院宣徽使 is Xuanhuishi (Court of Palace Attendants), not \"Imperial Clan\", and the Chinese order is Northern then Southern.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:088:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "知西南面招討使 names one office (西南面招討使); “Commissioner for the Southwestern Pacification Commissioner” doubles Commissioner, and the proposed single title matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0074",
+        "excerpt": "知西南面招討使"
+      }
+    },
+    {
+      "repairId": "liaoshi:088:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "以皇后攝政 is purposive (so that the empress would hold the regency), not a temporal clause about an empress dowager already regenting; 皇后 is empress, not 皇太后.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0114",
+        "excerpt": "以皇后攝政"
+      }
+    },
+    {
+      "repairId": "liaoshi:088:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "旅拒 is the classical compound for stubborn/armed resistance (旅 as troops), not resistance “as travelers”; the replacement matches that sense and the idiomatic already in the chapter.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0206",
+        "excerpt": "乘險旅拒"
+      }
+    },
+    {
+      "repairId": "liaoshi:088:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "北、南院宣徽使 is Xuanhui Commissioner of the Northern then Southern Division Court of Palace Attendants, not Imperial Clan, and the Chinese order is Northern before Southern.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0064",
+        "excerpt": "歷北、南院宣徽使"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

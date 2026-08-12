@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "031",
+  "input": {
+    "chapterFingerprint": "sha256:ce67f8b5d73d8b160e0b4eff47fd09517c93be09b472d4f1049c0aa7dde253f1",
+    "proposalsFingerprint": "sha256:7b648d14f95cdbbf46df0f1d1e8ce60b61927bde34283d5cf4383e5155c6e072"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-790eb58a-1d34-4804-ae4c-6fb3bf1fb884",
+    "runId": "run-c6b96d1d-b3c6-46c9-a476-90242133d6fb",
+    "completedAt": "2026-08-12T20:05:04.339Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:031:r0001",
+      "unit": {
+        "id": "s0024",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "Taizu was called Hongyi Palace, Empress Yingtian was called Changning Palace, Taizong was called Yongxing Palace, Shizong was called Jiqing Palace.",
+      "after": "Taizu: Hongyi Palace; Empress Yingtian: Changning Palace; Taizong: Yongxing Palace; Shizong: Jiqing Palace.",
+      "reason": "Literal English wrongly treats palace designations as names of the rulers rather than naming each ruler’s palace.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:031:r0002",
+      "unit": {
+        "id": "s0141",
+        "kind": "paragraph-sentence",
+        "blockIndex": 41,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Called called Ouliben, called Yansi, called Miansi, called Yiseng, called North Deli, and called South Deli.",
+      "after": "Called Ouliben, called Yansi, called Miansi, called Yiseng, called North Deli, and called South Deli.",
+      "reason": "Duplicated “Called called” is a clear corruption of the literal rendering.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:031:r0003",
+      "unit": {
+        "id": "s0159",
+        "kind": "paragraph-sentence",
+        "blockIndex": 48,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Called called Pusuwan, called Yinian, called Woduwang, called Teman, called Moluwan, called Yidian, called Yue, and called Bodeben.",
+      "after": "Called Pusuwan, called Yinian, called Woduwang, called Teman, called Moluwan, called Yidian, called Yue, and called Bodeben.",
+      "reason": "Duplicated “Called called” is a clear corruption of the literal rendering.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:031:r0004",
+      "unit": {
+        "id": "s0181",
+        "kind": "paragraph-sentence",
+        "blockIndex": 54,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Registered-household gentlemen: At first, when Yaolian Hendejin Khan had the three clans of Puguzhi and others kill Yuyue Shilu, their families were confiscated and entered the wali.",
+      "after": "Registered-household gentlemen: At first, when the three clans of Puguzhi and others killed Yuyue Shilu under Yaolian Hendejin Khan, their families were confiscated and entered the wali.",
+      "reason": "Chinese 以蒲古只等三族害於越釋魯 marks the three clans as the killers; English “had … kill” overstates the khan’s causative agency.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:031:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "太祖曰弘義宮 pairs each ruler with a palace orudo name; “was called Hongyi Palace” wrongly treats the palace designation as the ruler’s own name. The colon list matches the same 曰 palace-naming pattern continued in s0025.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0024",
+        "excerpt": "太祖曰弘義宮，應天皇后曰長寧宮，太宗曰永興宮，世宗曰積慶宮"
+      }
+    },
+    {
+      "repairId": "liaoshi:031:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese begins 曰歐裏本 with a single 曰; the doubled “Called called” is an English corruption with no source warrant.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0141",
+        "excerpt": "曰歐裏本"
+      }
+    },
+    {
+      "repairId": "liaoshi:031:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese begins 曰蒲速碗 with a single 曰; the doubled “Called called” is an English corruption with no source warrant.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0159",
+        "excerpt": "曰蒲速碗"
+      }
+    },
+    {
+      "repairId": "liaoshi:031:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "以蒲古只等三族害於越釋魯 names the three clans as those who harmed Yuyue Shilu; the following 籍沒家屬入瓦裏 is punishment of those killers’ households. “Had … kill” invents khan-ordered causative agency the Chinese does not state.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0181",
+        "excerpt": "以蒲古只等三族害於越釋魯，籍沒家屬入瓦裏"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

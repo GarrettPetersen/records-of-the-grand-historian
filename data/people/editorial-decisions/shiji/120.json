@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "120",
+  "input": {
+    "chapterFingerprint": "sha256:2aaf7d1d80c9c5f1ecd892b04922d3f08b38846b80e3069a59ac0cf501d79c9a",
+    "proposalsFingerprint": "sha256:cb9429b2920bf5b3d65a1b46dfcd4524984ff97c55c17f51c548754abf0be395"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-80579fdf-b733-4026-ba06-b4e8369ddcd6",
+    "runId": "run-6fc55115-7a1b-4731-8750-e5c376557c1b",
+    "completedAt": "2026-08-12T20:10:53.831Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:120:r0001",
+      "unit": {
+        "id": "s0137",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "When Zheng Zhuang served as Grand Director of Agriculture, he instructed his gatekeepers: 'When guests arrive, whether noble or humble, no one is to be kept waiting at the gate.'",
+      "after": "When Zheng Zhuang served as Grand Astrologer, he instructed his gatekeepers: 'When guests arrive, whether noble or humble, no one is to be kept waiting at the gate.'",
+      "reason": "Chinese 太史 means Grand Astrologer/Scribe, but the idiomatic English continues the prior 大農令 office as Grand Director of Agriculture.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:120:r0002",
+      "unit": {
+        "id": "s0137",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "When Zhuang served as Grand Director of Agriculture, he instructed his doorkeepers: 'When guests arrive, whether noble or humble, none are to be kept waiting at the gate.'",
+      "after": "When Zhuang served as Grand Astrologer, he instructed his doorkeepers: 'When guests arrive, whether noble or humble, none are to be kept waiting at the gate.'",
+      "reason": "Literal English also renders 太史 as Grand Director of Agriculture, which does not match the Chinese office title in this unit.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:120:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit has 莊為太史, not 大農令 from s0136. 太史 is the Grand Astrologer/Scribe office; the idiomatic English wrongly carried over Grand Director of Agriculture. The proposed replacement matches the Chinese and leaves the rest of the sentence intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0137",
+        "excerpt": "莊為太史"
+      }
+    },
+    {
+      "repairId": "shiji:120:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same focus Chinese 莊為太史 is misrendered in the literal as Grand Director of Agriculture. Replacing that title with Grand Astrologer corrects the office name without altering the gatekeeping instruction.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0137",
+        "excerpt": "莊為太史"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

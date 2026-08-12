@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 3,
+  "book": "jiutangshu",
+  "chapter": "119",
+  "input": {
+    "chapterFingerprint": "sha256:847265dcd0dced5370d7732a585b59380ce99538d0797048370d252939237a20",
+    "proposalsFingerprint": "sha256:de3959ada9f0ed81b84c753a035250b40f149514582fa9f1a99c50bc7dde2bb9"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-0a4a4f17-aff7-45c5-bd85-79f766216b0f",
+    "runId": "run-2a720098-eaa7-4a6b-927f-a4865919baa1",
+    "completedAt": "2026-08-12T20:01:42.108Z"
+  },
+  "proposals": [
+    {
+      "id": "jiutangshu:119:r0001",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "During the Zhenguan reign he was made Commandant of the Horse Stables for Imperial Sons-in-Law and married Princess Taogu of the Shenyao line.",
+      "after": "During the Zhenguan reign he was made Commandant of the Horse Stables for Imperial Sons-in-Law and married Princess Guantao of the Shenyao line.",
+      "reason": "館陶 is Guantao, not Taogu; the idiomatic English reverses the characters.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiutangshu:119:r0002",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "In the Zhenguan era he was appointed Commandant of the Horse Stables for Imperial Sons-in-Law and married Princess Taogu of the Shenyao lineage.",
+      "after": "In the Zhenguan era he was appointed Commandant of the Horse Stables for Imperial Sons-in-Law and married Princess Guantao of the Shenyao lineage.",
+      "reason": "館陶 is Guantao, not Taogu; the literal English reverses the characters.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiutangshu:119:r0003",
+      "unit": {
+        "id": "s0076",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "When Suzong reached Lingbow, halls and imperial screens all imitated the palace; each prince and princess had a separate courtyard; food sent to the throne exhausted land and water delicacies.",
+      "after": "When Suzong reached Lingwu, halls and imperial screens all imitated the palace; each prince and princess had a separate courtyard; food sent to the throne exhausted land and water delicacies.",
+      "reason": "靈武 is Lingwu; \"Lingbow\" is a corrupted transliteration in the literal English.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiutangshu:119:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit 尚神堯館陶公主 names 館陶 (Guantao), not Taogu; the idiomatic English reverses the characters. The proposed replacement restores the correct princess title while leaving the rest of the sentence intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "尚神堯館陶公主"
+      }
+    },
+    {
+      "repairId": "jiutangshu:119:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same focus unit has 館陶公主; reading it as Taogu reverses 館 and 陶. Guantao is the accurate rendering, matching the Chinese and the corrected idiomatic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "館陶公主"
+      }
+    },
+    {
+      "repairId": "jiutangshu:119:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit 肅宗至靈武 is Lingwu; neighboring units also use 靈武 as Lingwu. \"Lingbow\" is a corrupted transliteration with no support in the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0076",
+        "excerpt": "肅宗至靈武"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "jiutangshu:119:r0001",
+      "before": {
+        "id": "jiutangshu:119:c0015",
+        "subject": "jiutangshu:119:p004",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Princess Taogu of the Shenyao line",
+          "zh": "神堯館陶公主"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiutangshu:119:s0003"
+        ]
+      },
+      "after": {
+        "id": "jiutangshu:119:c0015",
+        "subject": "jiutangshu:119:p004",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Princess Guantao of the Shenyao line",
+          "zh": "神堯館陶公主"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiutangshu:119:s0003"
+        ]
+      },
+      "reason": "Accepted r0001 shows English Taogu came only from reversing 館陶; the name claim must read Guantao while keeping zh, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "神堯館陶公主"
+      }
+    }
+  ]
+}

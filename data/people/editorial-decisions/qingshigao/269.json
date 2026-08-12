@@ -1,0 +1,219 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "269",
+  "input": {
+    "chapterFingerprint": "sha256:2355668b7e43bc840ac5ea9d28cb43dddd62f6b4dbbf33a16620544b4e493a72",
+    "proposalsFingerprint": "sha256:e5847e21a9114d8ae644132e9775b01bef744401d1488296274a31cc9c93ce00"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-a98bbbd5-f01d-43de-be38-93ceab7ba136",
+    "runId": "run-eade8eb3-e03a-40ea-85d8-1fa486fd603e",
+    "completedAt": "2026-08-12T20:07:04.855Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:269:r0001",
+      "unit": {
+        "id": "s0002",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Songgotu of the Heseri clan, a Manchu of the Bordered Yellow Banner, was Sony's second son.",
+      "after": "Songgotu of the Heseri clan, a Manchu of the Plain Yellow Banner, was Sony's second son.",
+      "reason": "正黃旗 is the Plain Yellow Banner, not the Bordered Yellow Banner (鑲黃旗).",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:269:r0002",
+      "unit": {
+        "id": "s0002",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Songgotu, of the Heseri clan, was a bannerman of the Manchu Bordered Yellow Banner and the second son of Sony.",
+      "after": "Songgotu, of the Heseri clan, was a bannerman of the Manchu Plain Yellow Banner and the second son of Sony.",
+      "reason": "正黃旗 is Plain Yellow Banner, not Bordered.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:269:r0003",
+      "unit": {
+        "id": "s0068",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Mingzhu, styled Duanfan, of the Nara clan and the Bordered Yellow Banner, was a grandson of Yehe beile Gintaisi.",
+      "after": "Mingzhu, styled Duanfan, of the Nara clan and the Plain Yellow Banner, was a grandson of Yehe beile Gintaisi.",
+      "reason": "正黃旗 is Plain Yellow Banner, not Bordered.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:269:r0004",
+      "unit": {
+        "id": "s0068",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Mingzhu, style name Duanfan, of the Nara clan, was a bannerman of the Manchu Bordered Yellow Banner and grandson of Yehe beile Gintaisi.",
+      "after": "Mingzhu, style name Duanfan, of the Nara clan, was a bannerman of the Manchu Plain Yellow Banner and grandson of Yehe beile Gintaisi.",
+      "reason": "正黃旗 is Plain Yellow Banner, not Bordered.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:269:r0005",
+      "unit": {
+        "id": "s0014",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "After an earthquake, Left Censor-in-Chief Wei Xiangsu reported Songgotu's abuse of power, greed, and license, and urged severe punishment.",
+      "after": "After an earthquake, Left Censor-in-Chief Wei Xiangshu reported Songgotu's abuse of power, greed, and license, and urged severe punishment.",
+      "reason": "魏象樞 is Wei Xiangshu (樞 shū), not Xiangsu.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:269:r0006",
+      "unit": {
+        "id": "s0014",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "When an earthquake occurred, Left Censor-in-Chief Wei Xiangsu came to audience and set forth Songgotu's abuse of power, greed, and license, asking for severe punishment.",
+      "after": "When an earthquake occurred, Left Censor-in-Chief Wei Xiangshu came to audience and set forth Songgotu's abuse of power, greed, and license, asking for severe punishment.",
+      "reason": "魏象樞 is Wei Xiangshu, not Xiangsu.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:269:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0002 has 滿洲正黃旗人; 正黃旗 is the Plain Yellow Banner, while Bordered Yellow would be 鑲黃旗, so the idiomatic must be corrected.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0002",
+        "excerpt": "滿洲正黃旗人"
+      }
+    },
+    {
+      "repairId": "qingshigao:269:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 正黃旗 in s0002 requires Plain Yellow Banner in the literal; Bordered Yellow Banner invents 鑲.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0002",
+        "excerpt": "正黃旗"
+      }
+    },
+    {
+      "repairId": "qingshigao:269:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0068 has 滿洲正黃旗人 for Mingzhu; Plain Yellow Banner matches 正黃旗, not Bordered.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0068",
+        "excerpt": "滿洲正黃旗人"
+      }
+    },
+    {
+      "repairId": "qingshigao:269:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal likewise misreads 正黃旗 as Bordered; Plain Yellow Banner is the accurate rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0068",
+        "excerpt": "正黃旗"
+      }
+    },
+    {
+      "repairId": "qingshigao:269:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0014 names 魏象樞; 樞 is shū, so Wei Xiangshu is correct and Xiangsu is a romanization error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0014",
+        "excerpt": "魏象樞"
+      }
+    },
+    {
+      "repairId": "qingshigao:269:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 魏象樞 requires Wei Xiangshu in the literal field; Xiangsu mismatches the graph 樞.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0014",
+        "excerpt": "魏象樞"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "qingshigao:269:r0005",
+      "before": {
+        "id": "qingshigao:269:c0046",
+        "subject": "qingshigao:269:p013",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Wei Xiangsu",
+          "zh": "魏象樞",
+          "pinyin": "Wèi Xiàngshū"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:269:s0014"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:269:c0046",
+        "subject": "qingshigao:269:p013",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Wei Xiangshu",
+          "zh": "魏象樞",
+          "pinyin": "Wèi Xiàngshū"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:269:s0014"
+        ]
+      },
+      "reason": "Accepted r0005 shows English Wei Xiangsu came only from the bad romanization of 魏象樞; the personal-name claim must read Wei Xiangshu while keeping zh, pinyin, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0014",
+        "excerpt": "魏象樞"
+      }
+    }
+  ]
+}

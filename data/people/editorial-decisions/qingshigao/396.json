@@ -1,0 +1,247 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "396",
+  "input": {
+    "chapterFingerprint": "sha256:90162e21d5377a10d67d5134edf5c91a08f7b89b2c8f6b19314272571d442628",
+    "proposalsFingerprint": "sha256:c264e2ef773f9add5e8b003ad10bfa2470df4331fabfbe0a8dce23a396b3ea26"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-c3893641-97d6-4701-9259-077cf6a21eca",
+    "runId": "run-33d368ad-d10c-4940-b1dd-5a6f4c64e764",
+    "completedAt": "2026-08-12T20:09:15.163Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:396:r0001",
+      "unit": {
+        "id": "s0122",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Luo Chongguang was appointed governor-general and Jia Hongzhao governor, but neither could reach Yunnan.",
+      "after": "Lao Chongguang was appointed governor-general and Jia Hongzhao governor, but neither could reach Yunnan.",
+      "reason": "Chinese 勞崇光 is Lao Chongguang; Luo mistranslates the surname 勞.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:396:r0002",
+      "unit": {
+        "id": "s0122",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "Luo Chongguang was appointed governor-general and Jia Hongzhao governor; neither could arrive.",
+      "after": "Lao Chongguang was appointed governor-general and Jia Hongzhao governor; neither could arrive.",
+      "reason": "Chinese 勞崇光 is Lao Chongguang; Luo mistranslates the surname 勞.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:396:r0003",
+      "unit": {
+        "id": "s0005",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "As educational commissioner of Shuntian he rooted out abuses and ran a strict administration; during his tenure he was promoted repeatedly, eventually to grand tutor and grand secretary of the Grand Secretariat.",
+      "after": "As educational commissioner of Shuntian he rooted out abuses and ran a strict administration; during his tenure he was promoted repeatedly, eventually to Supervisor of the Household of the Heir Apparent and academician of the Grand Secretariat.",
+      "reason": "詹事 is not grand tutor and 內閣學士 is not grand secretary (大學士); these are standard Qing office mistranslations.",
+      "confidence": "medium"
+    },
+    {
+      "id": "qingshigao:396:r0004",
+      "unit": {
+        "id": "s0140",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Commentary: The commentary says: Wu Wenrong went from vice minister to undertake frontier responsibility for more than ten years; his bearing was stern and severe, and at the time his administrative conduct was ranked second only to Lin Zexu.",
+      "after": "Commentary: Wu Wenrong went from vice minister to undertake frontier responsibility for more than ten years; his bearing was stern and severe, and at the time his administrative conduct was ranked second only to Lin Zexu.",
+      "reason": "Literal English duplicates 'commentary' after already marking 論曰 as Commentary.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:396:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0122 has 授勞崇光總督; 勞 is Lao, so 勞崇光 is Lao Chongguang. Luo is a mistranslation of the surname; the proposed idiomatic corrects only that name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0122",
+        "excerpt": "授勞崇光總督"
+      }
+    },
+    {
+      "repairId": "qingshigao:396:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same Chinese 勞崇光 requires Lao Chongguang in the literal field. Luo misreads 勞; the proposed replacement is accurate and otherwise unchanged.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0122",
+        "excerpt": "勞崇光"
+      }
+    },
+    {
+      "repairId": "qingshigao:396:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0005 has 累擢詹事、內閣學士. 詹事 is Supervisor of the Household of the Heir Apparent, not grand tutor (太傅/太子太傅); 內閣學士 is academician of the Grand Secretariat, not grand secretary (大學士). The proposed titles restore the Qing offices.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0005",
+        "excerpt": "累擢詹事、內閣學士"
+      }
+    },
+    {
+      "repairId": "qingshigao:396:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0140 opens with 論曰, already rendered as the leading Commentary: label; repeating The commentary says: invents a second speech frame not in the Chinese. Removing that duplicate leaves the historian’s judgment intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0140",
+        "excerpt": "論曰：吳文鎔由卿貳出膺疆寄"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "qingshigao:396:r0001",
+      "before": {
+        "id": "qingshigao:396:c0137",
+        "subject": "qingshigao:396:p035",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Luo Chongguang",
+          "zh": "勞崇光"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:396:s0122"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:396:c0137",
+        "subject": "qingshigao:396:p035",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Lao Chongguang",
+          "zh": "勞崇光"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:396:s0122"
+        ]
+      },
+      "reason": "Accepted r0001 shows English Luo Chongguang came only from mistranslating 勞崇光; the personal-name claim must read Lao Chongguang while keeping zh, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0122",
+        "excerpt": "勞崇光"
+      }
+    },
+    {
+      "repairId": "qingshigao:396:r0003",
+      "before": {
+        "id": "qingshigao:396:c0169",
+        "subject": "qingshigao:396:p001",
+        "predicate": "office",
+        "value": {
+          "label": {
+            "en": "grand tutor",
+            "zh": "詹事"
+          },
+          "action": "promoted"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:396:s0005"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:396:c0169",
+        "subject": "qingshigao:396:p001",
+        "predicate": "office",
+        "value": {
+          "label": {
+            "en": "Supervisor of the Household of the Heir Apparent",
+            "zh": "詹事"
+          },
+          "action": "promoted"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:396:s0005"
+        ]
+      },
+      "reason": "Accepted r0003 shows English grand tutor came only from mistranslating 詹事; the office fact remains, but the English label must read Supervisor of the Household of the Heir Apparent.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0005",
+        "excerpt": "詹事"
+      }
+    },
+    {
+      "repairId": "qingshigao:396:r0003",
+      "before": {
+        "id": "qingshigao:396:c0170",
+        "subject": "qingshigao:396:p001",
+        "predicate": "office",
+        "value": {
+          "label": {
+            "en": "grand secretary of the Grand Secretariat",
+            "zh": "內閣學士"
+          },
+          "action": "promoted"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:396:s0005"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:396:c0170",
+        "subject": "qingshigao:396:p001",
+        "predicate": "office",
+        "value": {
+          "label": {
+            "en": "academician of the Grand Secretariat",
+            "zh": "內閣學士"
+          },
+          "action": "promoted"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:396:s0005"
+        ]
+      },
+      "reason": "Accepted r0003 shows English grand secretary came only from conflating 內閣學士 with 大學士; the office claim’s English label must read academician of the Grand Secretariat while keeping zh and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0005",
+        "excerpt": "內閣學士"
+      }
+    }
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "024",
+  "input": {
+    "chapterFingerprint": "sha256:e4dd3f4e3593bc1eb47e7b5b67911d1e694fbfdc4ed20035af6a7297487bb6b7",
+    "proposalsFingerprint": "sha256:cfea06e7b571e1b25eb9cdadd491e53c09ecd83589d43e9bd592888eff749818"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-e94b3559-1a56-4a45-bae6-a62edf87a0ec",
+    "runId": "run-6a6d89b3-9c87-4680-9c6a-2a6accb94d4f",
+    "completedAt": "2026-08-12T20:01:59.983Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:024:r0001",
+      "unit": {
+        "id": "s0100",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "In Dazhun 2 Vice Minister Pei Zan placed him eighth on the list; the roster was posted on the tenth day of the first month—Xunhe's own birthday.",
+      "after": "In Dashun 2 Vice Minister Pei Zan placed him eighth on the list; the roster was posted on the tenth day of the first month—Xunhe's own birthday.",
+      "reason": "大順 is Dashun, not Dazhun; the reign name is mistranscribed in the idiomatic English.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:024:r0002",
+      "unit": {
+        "id": "s0073",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "literal",
+      "before": "At the fifth watch they halted at Baima post, summoned civil and military officers to eat; because the following ministers were not assembled, the procession halted to wait;",
+      "after": "At midmorning they halted at Baima post, summoned civil and military officers to eat; because the following ministers were not assembled, the procession halted to wait;",
+      "reason": "禺中 means midmorning, not the fifth watch; the literal rendering misidentifies the time expression.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:024:r0003",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "When Cheng Yan took Jingzhou he made Ting his chief secretary; Ting delayed some time before accepting.",
+      "after": "When Cheng Rui took Jingzhou he made Ting his chief secretary; Ting delayed some time before accepting.",
+      "reason": "成汭 is Cheng Rui; Yan wrongly romanizes 汭 at first idiomatic mention.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:024:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit opens 大順二年; 大順 is the Tang reign Dashun, so idiomatic Dazhun is a false romanization. Dashun matches the Chinese and leaves the rest of the sentence intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0100",
+        "excerpt": "大順二年"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:024:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit begins 禺中; that classical time term means midmorning, not the fifth watch (五更). The proposed literal reading matches the Chinese and the already-correct idiomatic rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0073",
+        "excerpt": "禺中"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:024:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit names 成汭; 汭 is ruì, so Cheng Yan is a wrong romanization. Cheng Rui is the correct personal name and the rest of the proposed sentence is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "成汭"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "jiuwudaishi:024:r0003",
+      "before": {
+        "id": "jiuwudaishi:024:c0035",
+        "subject": "jiuwudaishi:024:p009",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Cheng Yan",
+          "zh": "成汭",
+          "pinyin": "Cheng Rui"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiuwudaishi:024:s0011"
+        ]
+      },
+      "after": {
+        "id": "jiuwudaishi:024:c0035",
+        "subject": "jiuwudaishi:024:p009",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Cheng Rui",
+          "zh": "成汭",
+          "pinyin": "Cheng Rui"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiuwudaishi:024:s0011"
+        ]
+      },
+      "reason": "Accepted r0003 shows English Cheng Yan came only from misreading 汭; the name claim must use Cheng Rui while keeping zh, pinyin, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "成汭"
+      }
+    }
+  ]
+}

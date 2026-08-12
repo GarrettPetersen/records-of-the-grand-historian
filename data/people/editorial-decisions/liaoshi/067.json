@@ -1,0 +1,203 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "067",
+  "input": {
+    "chapterFingerprint": "sha256:1dbe39a935fd75e77de5d6e4580c1fddd7f88cb310c6fc87f7e44385befa495c",
+    "proposalsFingerprint": "sha256:f626a3436f9100febef03944abbcef2ee42ef59c0ea6ad756830290e017c4f97"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-48d176ce-b935-45e6-89d8-ec4b4bdfb532",
+    "runId": "run-f2e0986c-5d3e-4895-98aa-8a09018344d1",
+    "completedAt": "2026-08-12T20:06:35.513Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:067:r0001",
+      "unit": {
+        "id": "s0008",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "In the first year of Datong (947), as Emperor Taizong prepared to withdraw from Kaifeng, he left his kinsman Xiao Han as military governor of Bianzhou and granted him the Chinese-style name Xiao Han; thereafter the Bali, Yishi, and Shulü lineages all adopted the surname Xiao in keeping with Han convention.",
+      "after": "In the first year of Datong (947), as Emperor Taizong prepared to withdraw from Kaifeng, he left the consort kinsman Xiaohan (小漢) as military governor of Bianzhou and bestowed on him the Chinese-style name Xiao Han (蕭翰); thereafter the Bali, Yishi, and Shulü lineages all adopted the surname Xiao in keeping with Chinese custom.",
+      "reason": "Chinese distinguishes the original name 小漢 from the bestowed name 蕭翰; the idiomatic English collapses both to \"Xiao Han\" and uses \"Han convention\" for 中國之俗.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:067:r0002",
+      "unit": {
+        "id": "s0358",
+        "kind": "table-body-cell",
+        "blockIndex": 29,
+        "collection": "cells",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "The Han family, Chief Deployment Officers of the Han-lineage traveling palace.",
+      "after": "Han Jia, Chief Deployment Officer of the Han traveling palace.",
+      "reason": "韓家 is a personal name parallel to other title+name table cells, not a plural family collective.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:067:r0003",
+      "unit": {
+        "id": "s0358",
+        "kind": "table-body-cell",
+        "blockIndex": 29,
+        "collection": "cells",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Han-lineage Traveling Palace Chief Deployment Officer, the Han family.",
+      "after": "Han traveling-palace Chief Deployment Officer Han Jia.",
+      "reason": "Chinese 韓家 is the official's personal name; literal English should not recast it as a family collective.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:067:r0004",
+      "unit": {
+        "id": "s0394",
+        "kind": "table-body-cell",
+        "blockIndex": 32,
+        "collection": "cells",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Talie, imperial uncle xiangwen.",
+      "after": "Talie, lingwen.",
+      "reason": "Source office is 令穩 (lingwen), not 詳穩 (xiangwen), and the Chinese cell does not call him imperial uncle.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:067:r0005",
+      "unit": {
+        "id": "s0394",
+        "kind": "table-body-cell",
+        "blockIndex": 32,
+        "collection": "cells",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Xiangwen Talie.",
+      "after": "Lingwen Talie.",
+      "reason": "Chinese 令穩 is lingwen; translating it as Xiangwen invents the wrong Liao office title.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:067:r0006",
+      "unit": {
+        "id": "s0322",
+        "kind": "table-body-cell",
+        "blockIndex": 26,
+        "collection": "cells",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Shuanggu, Imperial Uncle xiangwen.",
+      "after": "Shuanggu, Imperial Uncle and xiangwen.",
+      "reason": "詳穩 is an office title held together with 國舅; current English fuses them awkwardly without marking the office.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:067:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0008 leaves 外戚小漢 then 賜姓名曰蕭翰; the before collapses both to Xiao Han and misrenders 中國之俗 as Han convention. The proposed after restores the name distinction and Chinese custom.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0008",
+        "excerpt": "留外戚小漢為汴州節度使，賜姓名曰蕭翰，以從中國之俗"
+      }
+    },
+    {
+      "repairId": "liaoshi:067:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Table cells here are office+personal name; 漢人行宮都部署韓家 parallels that pattern, so 韓家 is Han Jia, not a plural Han family of officers.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0358",
+        "excerpt": "漢人行宮都部署韓家"
+      }
+    },
+    {
+      "repairId": "liaoshi:067:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal English must keep 韓家 as the named official Han Jia after 漢人行宮都部署, not recast the graphs as a family collective.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0358",
+        "excerpt": "漢人行宮都部署韓家"
+      }
+    },
+    {
+      "repairId": "liaoshi:067:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0394 is only 令穩塔列; the before invents imperial uncle and the wrong office 詳穩. Lingwen Talie matches the source.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0394",
+        "excerpt": "令穩塔列"
+      }
+    },
+    {
+      "repairId": "liaoshi:067:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 令穩 is lingwen; Xiangwen invents 詳穩. The proposed Lingwen Talie is the accurate literal.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0394",
+        "excerpt": "令穩塔列"
+      }
+    },
+    {
+      "repairId": "liaoshi:067:r0006",
+      "decision": "reject",
+      "after": null,
+      "reason": "國舅詳穩雙谷 already supports Imperial Uncle and xiangwen; inserting and is stylistic and risks splitting the compound Liao office title.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0322",
+        "excerpt": "國舅詳穩雙谷"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "liaoshi:067:r0002",
+      "claim": {
+        "id": "liaoshi:067:c0226",
+        "subject": "liaoshi:067:p076",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate",
+          "en": "The Han family",
+          "zh": "韓家"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:067:s0358"
+        ]
+      },
+      "reason": "Accepted r0002 shows 韓家 is the personal name Han Jia; the alternate The Han family exists only from the mistranslation as a family collective.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0358",
+        "excerpt": "韓家"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

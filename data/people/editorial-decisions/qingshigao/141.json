@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "141",
+  "input": {
+    "chapterFingerprint": "sha256:c25396180e26b3d661d4130c05591c2aaf3b13fa2a516a8fb470282caaa21a3d",
+    "proposalsFingerprint": "sha256:5be68299d73fa92bf14f559aa771b2542048029635544706d17615757e7ded44"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-89d4ed71-543f-4c4a-8e93-0c0ea666823f",
+    "runId": "run-c7069914-c08a-4bc8-a092-92975c68d3a3",
+    "completedAt": "2026-08-12T20:06:48.360Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:141:r0001",
+      "unit": {
+        "id": "s0080",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "Xianfeng 4 (1854) Yong Fu's memorial let garrisons sell Ili and Tarbagatai stock locally and buy replacements themselves.",
+      "after": "Xianfeng 4 (1854) Gengfu's memorial let garrisons sell Ili and Tarbagatai stock locally and buy replacements themselves.",
+      "reason": "Chinese 賡福 is Gengfu (賡 = gēng); the idiomatic rendering Yong Fu misreads the surname/given name.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:141:r0002",
+      "unit": {
+        "id": "s0080",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "literal",
+      "before": "In the fourth year of Xianfeng, following Yong Fu's request, horses at Ili and Tarbagatai were sold locally at adjusted prices and each garrison ordered to purchase on its own.",
+      "after": "In the fourth year of Xianfeng, following Gengfu's request, horses at Ili and Tarbagatai were sold locally at adjusted prices and each garrison ordered to purchase on its own.",
+      "reason": "Same error as idiomatic: 賡福 should be Gengfu, not Yong Fu.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:141:r0003",
+      "unit": {
+        "id": "s0104",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 22
+      },
+      "field": "idiomatic",
+      "before": "Thereafter Setsen Khan banners and others supplied horses and camels for the war effort; soon came donations of 2,100 horses and 1,200 from Xilin Gol—some accepted, some refused.",
+      "after": "Thereafter Sain Noyan banners and others supplied horses and camels for the war effort; soon came donations of 2,100 horses and 1,200 from Xilin Gol—some accepted, some refused.",
+      "reason": "Chinese 三音諾顏 is Sain Noyan (Sain Noyon), not Setsen Khan (車臣); the idiomatic gloss confuses two distinct Khalkha titles.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:141:r0004",
+      "unit": {
+        "id": "s0104",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 22
+      },
+      "field": "literal",
+      "before": "From then the Setsen Khan departments and others, for military affairs, supplied horses and camels; soon two thousand one hundred horses were donated, Xilin Gol league one thousand two hundred—some kept, some declined.",
+      "after": "From then the Sain Noyan departments and others, for military affairs, supplied horses and camels; soon two thousand one hundred horses were donated, Xilin Gol league one thousand two hundred—some kept, some declined.",
+      "reason": "Same mistranslation of 三音諾顏 as Setsen Khan instead of Sain Noyan.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:141:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0080 has 用賡福請: 賡 is gēng, so the personal name is Gengfu, not Yong Fu (as if 永福). The proposed idiomatic correctly restores that reading while leaving the rest of the sentence intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0080",
+        "excerpt": "用賡福請"
+      }
+    },
+    {
+      "repairId": "qingshigao:141:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same focus unit 用賡福請 requires Gengfu in the literal field as well; replacing Yong Fu with Gengfu corrects the misreading without altering the surrounding wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0080",
+        "excerpt": "用賡福請"
+      }
+    },
+    {
+      "repairId": "qingshigao:141:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0104 names 三音諾顏部, the Sain Noyan (Sain Noyon) Khalkha aimag, not Setsen Khan (車臣). The prior idiomatic confuses two distinct titles; Sain Noyan is the accurate replacement.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0104",
+        "excerpt": "三音諾顏部"
+      }
+    },
+    {
+      "repairId": "qingshigao:141:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal must track the same 三音諾顏部. Replacing Setsen Khan with Sain Noyan restores the correct Khalkha designation named in the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0104",
+        "excerpt": "三音諾顏部"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

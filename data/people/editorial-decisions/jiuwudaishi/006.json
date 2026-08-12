@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "006",
+  "input": {
+    "chapterFingerprint": "sha256:d3c297280f41be6926697b324860deabb7a0fa0cc05211deb502d8c2349c4c8f",
+    "proposalsFingerprint": "sha256:34904f0a5e7e768aa2305da4b6d2c04b574ac2448e6a964b815e82219dc3b725"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-a8b96662-2ea8-490a-8c9a-bd142bcc725c",
+    "runId": "run-2dd2bd28-97bb-4e39-b66a-98cc1588f8fc",
+    "completedAt": "2026-08-12T20:02:00.775Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:006:r0001",
+      "unit": {
+        "id": "s0044",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "That day he was indeed beaten by the Jin and the Zhen and Ding armies; a dozen commanders were taken and the rest broke and ran.",
+      "after": "That day the northern force was indeed beaten by the Jin and the Zhen and Ding armies; a dozen commanders were taken and the rest broke and ran.",
+      "reason": "Chinese has no personal subject; the defeat continues the northern campaign force context (Wang Jingren), not the Emperor personally.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:006:r0002",
+      "unit": {
+        "id": "s0168",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "Gao Wanxing of Yanzhou reported that Gao Wanjin, army commander, took Yanzhou on the fifth of the month; the puppet prefect Gao Xingcun came in bonds to surrender.",
+      "after": "Gao Wanxing of Yanzhou reported that Gao Wanjin, army commander, took Salt Prefecture (鹽州) on the fifth of the month; the puppet prefect Gao Xingcun came in bonds to surrender.",
+      "reason": "Source 收鹽州 is Salt Prefecture (鹽州), distinct from Gao Wanxing's seat 延州; the idiomatic English wrongly uses Yanzhou for both.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:006:r0001",
+      "decision": "revise",
+      "after": "That day the army was indeed beaten by the Jin and the Zhen and Ding armies; a dozen commanders were taken and the rest broke and ran.",
+      "reason": "Focus 是日，果為晉軍及鎮、定之師所敗 has no personal subject, and 都將…餘眾奔潰 describes an army rout, so idiomatic 'he' wrongly attaches the defeat to the Emperor of s0043. The proposed 'northern force' invents a geographic label absent from this unit and the supplied window; render the omitted subject as 'the army', matching s0042 兵可憂矣.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0044",
+        "excerpt": "是日，果為晉軍及鎮、定之師所敗，都將十餘人被擒，餘眾奔潰"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:006:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus 今月五日收鹽州 names Salt Prefecture (鹽州), distinct from the reporter's seat 延州節度使. Idiomatic English wrongly reused Yanzhou for both; Salt Prefecture (鹽州) restores the captured place.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0168",
+        "excerpt": "今月五日收鹽州"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

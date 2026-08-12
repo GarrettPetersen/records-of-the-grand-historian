@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "146",
+  "input": {
+    "chapterFingerprint": "sha256:8975c3183692d5146aefe2d39de0eb0e1c31d00f41095f1e44ee94088d340ed3",
+    "proposalsFingerprint": "sha256:b32b39bb454c24fee69e022e57fb0dff46332dce2c1e269a7c7026d191f979e1"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-6f73a498-180e-439e-8875-b041703da1ed",
+    "runId": "run-f9f0af15-84d6-42dd-8bb7-315b605dfdce",
+    "completedAt": "2026-08-12T20:03:31.876Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:146:r0001",
+      "unit": {
+        "id": "s0022",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "Places that have suffered disaster or calumny and places with annual arrears are not subject to this rule.'",
+      "after": "Places that have suffered disaster or calamity and places with annual arrears are not subject to this rule.'",
+      "reason": "災沴 means natural disaster/calamity, not calumny; the idiomatic rendering already has disaster.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:146:r0002",
+      "unit": {
+        "id": "s0050",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Li Jilin, Prince Ji of Ji and military commissioner of Hezhong, is appointed concurrently to plan revenue and oversee the monopoly salt offices at the Anyi and Jie county pools; he shall draw up detailed regulations at once.'",
+      "after": "Li Jilin, Prince of Ji and military commissioner of Hezhong, is appointed concurrently to plan revenue and oversee the monopoly salt offices at the Anyi and Jie county pools; he shall draw up detailed regulations at once.'",
+      "reason": "冀王 is Prince of Ji; \"Prince Ji of Ji\" doubles the place-name awkwardly.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:146:r0003",
+      "unit": {
+        "id": "s0050",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "Prince Ji of Ji, Li Jilin, military commissioner of Hezhong, is appointed concurrently commissioner for planning revenue and monopoly salt commissioner of the Anyi and Jie county pools; he may at once draw up regulations, item by item.'",
+      "after": "Prince of Ji, Li Jilin, military commissioner of Hezhong, is appointed concurrently commissioner for planning revenue and monopoly salt commissioner of the Anyi and Jie county pools; he may at once draw up regulations, item by item.'",
+      "reason": "Same error as idiomatic: 冀王 should be Prince of Ji, not Prince Ji of Ji.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:146:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit has 災沴, a compound for natural disaster or calamity; calumny is a mistranslation. Replacing it with calamity matches the Chinese and aligns with the idiomatic field's disaster wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0022",
+        "excerpt": "有經災沴及逐年逋處"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:146:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "冀王 is the noble title Prince of Ji; Prince Ji of Ji wrongly treats 冀 as both a personal name and the fief. The proposed Prince of Ji is the correct English rendering and leaves the rest of the sentence intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0050",
+        "excerpt": "河中節度使冀王李繼麟"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:146:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field repeats the same title error; 冀王 should be Prince of Ji, not Prince Ji of Ji. The replacement corrects only that phrasing.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0050",
+        "excerpt": "河中節度使冀王李繼麟"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

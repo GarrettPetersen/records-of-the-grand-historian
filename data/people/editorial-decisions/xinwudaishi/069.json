@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 3,
+  "book": "xinwudaishi",
+  "chapter": "069",
+  "input": {
+    "chapterFingerprint": "sha256:f583570496d0f350a5775251326d7f91be280587b3a2e15f69a2cd2bf168a3e7",
+    "proposalsFingerprint": "sha256:86a326771b03128763592b15dcf969fa2f602324c3dbf82b98508d5f6191364c"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-5852555b-ed27-4c2f-87e2-6ed020d32c1e",
+    "runId": "run-be3b5bab-9213-4dee-8547-f79e9b9db388",
+    "completedAt": "2026-08-12T20:15:12.165Z"
+  },
+  "proposals": [
+    {
+      "id": "xinwudaishi:069:r0001",
+      "unit": {
+        "id": "s0038",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "idiomatic",
+      "before": "After he returned, Jixing told Liang Zhen, \"If I had not taken your advice, I would barely have escaped with my life.\"",
+      "after": "After he returned, Jixing told Liang Zhen, \"I did not listen to your words, and barely escaped with my life.\"",
+      "reason": "Chinese 不聽子言 means he failed to heed Liang Zhen; the idiomatic counterfactual reverses the sense.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:069:r0002",
+      "unit": {
+        "id": "s0024",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "He raised troops again, publicly claiming to aid Liang against Jin while actually moving against Xiang Prefecture. Kong Xun defeated him, and he then withheld tribute for many years.",
+      "after": "He raised troops again, publicly claiming to aid Liang against Jin while actually moving against Xiang Prefecture. Kong defeated him, and he then withheld tribute for many years.",
+      "reason": "Chinese only has 孔; the given name Xun is not in the source text.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:069:r0003",
+      "unit": {
+        "id": "s0048",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Earlier, when Tang forces invaded Shu, Jixing had asked to seize Qian, Zhong, Wan, Gui, Xia, and the other prefectures with his own troops. He was appointed eastern-southern campaign commissioner of the Gorges Route, but never actually marched.",
+      "after": "Earlier, when Tang forces invaded Shu, Jixing had asked to seize Kui, Zhong, Wan, Gui, Xia, and the other prefectures with his own troops. He was appointed eastern-southern campaign commissioner of the Gorges Route, but never actually marched.",
+      "reason": "夔 is Kui, not Qian.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:069:r0004",
+      "unit": {
+        "id": "s0049",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "After the Prince of Wei conquered Shu and Emperor Mingzong took the throne, Jixing asked that Qian, Zhong, and the other prefectures be annexed to his domain. Tang ministers argued that he had promised to take them himself yet had never contributed troops, and refused.",
+      "after": "After the Prince of Wei conquered Shu and Emperor Mingzong took the throne, Jixing asked that Kui, Zhong, and the other prefectures be annexed to his domain. Tang ministers argued that he had promised to take them himself yet had never contributed troops, and refused.",
+      "reason": "夔 is Kui, not Qian; matches Chinese 夔、忠等州.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:069:r0005",
+      "unit": {
+        "id": "s0051",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Mingzong appointed Liu Xun of Xiang Prefecture as campaign commissioner and attacked him without success. Meanwhile the Tang general Xi Fangye seized Qian, Zhong, and Wan. Jixing then submitted Jing, Gui, and Xia to Wu, and Wu enfeoffed him as King of Qin.",
+      "after": "Mingzong appointed Liu Xun of Xiang Prefecture as campaign commissioner and attacked him without success. Meanwhile the Tang general Xi Fangye seized Kui, Zhong, and Wan. Jixing then submitted Jing, Gui, and Xia to Wu, and Wu enfeoffed him as King of Qin.",
+      "reason": "夔 is Kui, not Qian.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xinwudaishi:069:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Preceding narrative has Liang Zhen warn against entering court and 季興不聽; 不聽子言，幾不免 is therefore past failure to heed, not a gratitude counterfactual. The proposed indicative restores that sense without adding content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0038",
+        "excerpt": "不聽子言，幾不免"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:069:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "為孔所敗 names only the surname 孔; Kong Xun invents a given name absent from the unit. Replacing with Kong matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0024",
+        "excerpt": "為孔所敗"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:069:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "夔、忠、萬、歸、峽 begins with 夔 (Kui), not Qian; the proposed place-name correction matches the Chinese list.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0048",
+        "excerpt": "夔、忠、萬、歸、峽等州"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:069:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "夔、忠等州 is Kui and Zhong; Qian misreads 夔. The proposed Kui correction is accurate and otherwise preserves the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0049",
+        "excerpt": "夔、忠等州"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:069:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "克其夔、忠、萬三州 names Kui, not Qian; the rest of the idiomatic already tracks the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0051",
+        "excerpt": "夔、忠、萬三州"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "xinwudaishi:069:r0002",
+      "claim": {
+        "id": "xinwudaishi:069:c0057",
+        "subject": "xinwudaishi:069:p017",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Kong Xun"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xinwudaishi:069:s0024"
+        ]
+      },
+      "reason": "Accepting r0002 shows s0024 only has 孔; the personal-name claim Kong Xun was created solely by the invented given name in the bad idiomatic. Surname Kong remains in c0056.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0024",
+        "excerpt": "為孔所敗"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

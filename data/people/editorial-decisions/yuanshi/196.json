@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "yuanshi",
+  "chapter": "196",
+  "input": {
+    "chapterFingerprint": "sha256:806f72ae3bd88c2ce3d20b28d1587c577749714b94fffb8e4b15c3d3165e40bf",
+    "proposalsFingerprint": "sha256:87a949f0aae595c2533877836c3535b962f59a6627b859065f2e58129b180e55"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-6b743794-eff7-41f0-9bb4-81917306c79e",
+    "runId": "run-21d69cc7-20dc-489b-8dd0-dbd51e01f12c",
+    "completedAt": "2026-08-12T20:14:24.119Z"
+  },
+  "proposals": [
+    {
+      "id": "yuanshi:196:r0001",
+      "unit": {
+        "id": "s0075",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "In 1354 the court appointed Yu Hanlin attendant compiler and Gentleman for Discussion, sent envoys bearing imperial wine and famous silks, and summoned him by sea.",
+      "after": "In 1354 the court appointed Yu as Hanlin attendant compiler and Gentleman for Discussion, sent envoys bearing imperial wine and famous silks, and summoned him by sea.",
+      "reason": "English fuses 'Yu' with 'Hanlin', obscuring that Yu is the person appointed to the Hanlin post.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:196:r0002",
+      "unit": {
+        "id": "s0080",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "In 1357, when Ming forces entered Huizhou, the defending commander was about to hand him over. Yu said, \"Would I serve two dynasties!\"",
+      "after": "In 1357, when Ming forces entered Huizhou, the defending commander was about to bring him over. Yu said, \"Would I serve two dynasties!\"",
+      "reason": "致之 here means bringing/recruiting him to the Ming side, not merely handing him over as a prisoner.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "yuanshi:196:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0075 朝廷除玉翰林待制、奉議大夫 appoints 玉 to the offices 翰林待制 and 奉議大夫; without \"as,\" \"Yu Hanlin\" can be misread as a fused personal name, so the proposed wording correctly separates the person from the Hanlin title.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "朝廷除玉翰林待制、奉議大夫"
+      }
+    },
+    {
+      "repairId": "yuanshi:196:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0080 守將將要致之, followed by 吾豈事二姓者耶, means the commander sought to bring Yu over into Ming service, not hand him over as a captive; \"bring him over\" matches 致之 and the refusal to serve two dynasties, and s0081 因被拘囚 follows that refusal.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0080",
+        "excerpt": "守將將要致之，玉曰：「吾豈事二姓者耶！」"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

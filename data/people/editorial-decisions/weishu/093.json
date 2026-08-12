@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 3,
+  "book": "weishu",
+  "chapter": "093",
+  "input": {
+    "chapterFingerprint": "sha256:033a3368cf1eb7882d52bf3cb91709e1a48a818f80bf38036ea824f6d17381a9",
+    "proposalsFingerprint": "sha256:1cb6987ee54a44527bf9949d722fcc8cc589bb18cff75b654c88e6b8d3c3643b"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-b11c4705-b29e-45b4-975a-6be595d69a00",
+    "runId": "run-1c02f8bb-e3bf-47eb-9789-598637134a13",
+    "completedAt": "2026-08-12T20:11:13.915Z"
+  },
+  "proposals": [
+    {
+      "id": "weishu:093:r0001",
+      "unit": {
+        "id": "s0181",
+        "kind": "paragraph-sentence",
+        "blockIndex": 27,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "〈Yan Yanhe year 3",
+      "after": "〈Northern Wei Yanhe year 3",
+      "reason": "Literal English corruptly reads \"Yan Yanhe\" instead of Northern Wei Yanhe; idiomatic is correct.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "weishu:093:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 魏延和三年 is Northern Wei Yanhe year 3; literal ‘Yan Yanhe’ misrenders 魏 and is a real error. The proposed replacement matches the Chinese and the already-correct idiomatic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0181",
+        "excerpt": "魏延和三年"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

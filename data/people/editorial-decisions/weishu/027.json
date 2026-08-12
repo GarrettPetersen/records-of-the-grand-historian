@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 3,
+  "book": "weishu",
+  "chapter": "027",
+  "input": {
+    "chapterFingerprint": "sha256:ec886342578e0db8651c3d3ff37411fcac9563712513a738098117ec48b37792",
+    "proposalsFingerprint": "sha256:d573f3874e2b98a75d52759c10a4f85fe9cd28c8b10640d2149caad7b21de389"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-67b4b4ac-fb3f-49cf-bd0a-792626c3ced9",
+    "runId": "run-ab555985-c3f5-4042-b2a5-2cac0c386d58",
+    "completedAt": "2026-08-12T20:11:22.813Z"
+  },
+  "proposals": [
+    {
+      "id": "weishu:027:r0001",
+      "unit": {
+        "id": "s0031",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "At dawn Director of Documents Lu Diu sent an urgent report south. Gaozu was shaken and grieved, but outwardly he hid the affair and still rode as far as Bian mouth before turning back.",
+      "after": "At dawn Director of Documents Lu Xiu sent an urgent report south. Gaozu was shaken and grieved, but outwardly he hid the affair and still rode as far as Bian mouth before turning back.",
+      "reason": "Chinese 陸琇 is Lu Xiu; Diu is a transcription error of the given name 琇.",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:027:r0002",
+      "unit": {
+        "id": "s0068",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "While Yu was in Xuzhou he took a concubine, Lady Li, originally surnamed Yang, a man of Dong commandery; hearing her sing at night he was pleased and thereafter she received his favor.",
+      "after": "While Yu was in Xuzhou he took a concubine, Lady Li, originally surnamed Yang, a woman of Dong commandery; hearing her sing at night he was pleased and thereafter she received his favor.",
+      "reason": "東郡人 refers to Lady Li; literal wrongly genders her as a man.",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:027:r0003",
+      "unit": {
+        "id": "s0137",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Empress Dowager Ling, seeing Yi as Xiaoming's honored uncle and a man all eyes followed, entrusted government to him on the model of Zhou Gong and Huo Qubing.",
+      "after": "Empress Dowager Ling, seeing Yi as Xiaoming's honored uncle and a man all eyes followed, entrusted government to him on the model of the Duke of Zhou and Huo Guang.",
+      "reason": "周霍 conventionally means the Duke of Zhou and Huo Guang, not Huo Qubing.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "weishu:027:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0031 names 尚書陸琇; 琇 is Xiu, so Lu Diu is a false transcription and Lu Xiu restores the correct personal name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0031",
+        "excerpt": "尚書陸琇"
+      }
+    },
+    {
+      "repairId": "weishu:027:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "納妾李氏…東郡人 predicates 東郡人 of Lady Li, the concubine; rendering her as a man invents the wrong sex.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0068",
+        "excerpt": "納妾李氏，本姓楊，東郡人"
+      }
+    },
+    {
+      "repairId": "weishu:027:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "事擬周霍 is the conventional regent pair Duke of Zhou and Huo Guang; Huo Qubing is the wrong Huo and must be corrected.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0137",
+        "excerpt": "事擬周霍"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "weishu:027:r0001",
+      "claim": {
+        "id": "weishu:027:c0087",
+        "subject": "weishu:027:p019",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate-name",
+          "en": "Lu Diu",
+          "zh": "陸琇"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "weishu:027:s0031"
+        ]
+      },
+      "reason": "Lu Diu exists only as the bad English spelling of 陸琇; accepting r0001 restores Lu Xiu (already claimed in c0086) and leaves no source support for this alternate-name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0031",
+        "excerpt": "陸琇"
+      }
+    }
+  ],
+  "claimRevisions": [
+    {
+      "repairId": "weishu:027:r0003",
+      "before": {
+        "id": "weishu:027:c0287",
+        "subject": "weishu:027:p081",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Huo Qubing",
+          "zh": "霍"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "weishu:027:s0137"
+        ]
+      },
+      "after": {
+        "id": "weishu:027:c0287",
+        "subject": "weishu:027:p081",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Huo Guang",
+          "zh": "霍"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "weishu:027:s0137"
+        ]
+      },
+      "reason": "Accepted r0003 shows English Huo Qubing came only from misreading 周霍; the Huo of that couplet is Huo Guang, so the personal-name claim must read Huo Guang while keeping zh, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0137",
+        "excerpt": "周霍"
+      }
+    }
+  ]
+}

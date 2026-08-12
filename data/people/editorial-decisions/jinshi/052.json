@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "jinshi",
+  "chapter": "052",
+  "input": {
+    "chapterFingerprint": "sha256:b69a392f9ccf17d88b06fccf594c3a7d2b4cab47e1dc53b449b7056e361f20dc",
+    "proposalsFingerprint": "sha256:d5916dbc70bf55d986bef7fe703cb8df904d1ed511569155a438bcac554f2c11"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-2efe31a8-f367-4531-9bbe-311e47b111e1",
+    "runId": "run-6c86041a-739c-46d8-b1c7-daf2799110f0",
+    "completedAt": "2026-08-12T19:59:46.237Z"
+  },
+  "proposals": [
+    {
+      "id": "jinshi:052:r0001",
+      "unit": {
+        "id": "s0181",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "The civil track had relied only on Left Secretariat recommendations. In Huangtong 8 (1148) provincial ministers said, \"If we only follow the old precedent for recommendations, in time good and bad will not be distinguished and opportunism will multiply.\"",
+      "after": "The civil track had relied only on Left Secretariat recommendations. In Emperor Xizong's Huangtong 8 (1148) provincial ministers said, \"If we only follow the old precedent for recommendations, in time good and bad will not be distinguished and opportunism will multiply.\"",
+      "reason": "Chinese names Emperor Xizong (熙宗) as the Huangtong 8 reign context; the idiomatic English omits him.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:052:r0002",
+      "unit": {
+        "id": "s0163",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "In Dading 29 (1189) those who reached Pacifier of the Realm required an imperial order for further promotion.",
+      "after": "In Zhangzong's Dading 29 (1189) those who reached Pacifier of the Realm received an imperial order for promotion thereafter.",
+      "reason": "Chinese opens with Zhangzong (章宗); the idiomatic English drops the named ruler present in the source and literal.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jinshi:052:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0181 has 至熙宗皇統八年; the idiomatic omits 熙宗, and restoring \"Emperor Xizong's\" before Huangtong 8 is accurate and natural.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0181",
+        "excerpt": "至熙宗皇統八年"
+      }
+    },
+    {
+      "repairId": "jinshi:052:r0002",
+      "decision": "revise",
+      "after": "In Zhangzong's Dading 29 (1189) those who reached Pacifier of the Realm required an imperial order for further promotion.",
+      "reason": "s0163 opens 章宗大定二十九年, so the omitted ruler must be restored; but 取旨升除 means promotions require obtaining an imperial order, and the proposal's \"received…thereafter\" wrongly softens that procedural force—keep the original \"required…for further promotion.\"",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0163",
+        "excerpt": "章宗大定二十九年，遷至鎮國者取旨升除後"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

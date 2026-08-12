@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "liangshu",
+  "chapter": "024",
+  "input": {
+    "chapterFingerprint": "sha256:c4fa4b17a92ed76758cb0d3c97ba162df96e212c8367631b7c50fe0bf2013c6b",
+    "proposalsFingerprint": "sha256:d891470ac8dafc66bff1731a53cc412ba88861c6254b4965b418f08fd460685c"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-33364854-92dd-454a-9286-fdf2c835a921",
+    "runId": "run-1c5bfc61-d93e-400d-8cc6-3753403eb7ce",
+    "completedAt": "2026-08-12T20:03:56.472Z"
+  },
+  "proposals": [
+    {
+      "id": "liangshu:024:r0001",
+      "unit": {
+        "id": "s0006",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "the second was the founding emperor, posthumously known as Emperor Wen;",
+      "after": "the second was the Grand Progenitor, Emperor Wen;",
+      "reason": "太祖文皇帝 is Taizu (temple name) Emperor Wen, Gaozu's father—not himself the founding emperor.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:024:r0002",
+      "unit": {
+        "id": "s0019",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 16
+      },
+      "field": "idiomatic",
+      "before": "Chongzhi rose to prominence through ability and resolve; his administration was notably stern, and he eventually reached the posts of General Who Establishes Might and Administrator of Dongyang.",
+      "after": "Chongzhi rose to prominence through ability and resolve; his administration was notably stern, and he eventually reached the posts of Champion General and Administrator of Dongyang.",
+      "reason": "冠軍將軍 is Champion General, not 'General Who Establishes Might'.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:024:r0003",
+      "unit": {
+        "id": "s0035",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "When Gaozu took the throne, Jing was enfeoffed as Marquis of Wuping with a fief of one thousand households and continued as Bearer of the Staff of Authority, Commander-in-Chief over North and South Yan, Qing, and Ji, General Who Establishes Might, and Governor of Southern Yanzhou.",
+      "after": "When Gaozu took the throne, Jing was enfeoffed as Marquis of Wuping with a fief of one thousand households and continued as Bearer of the Staff of Authority, Commander-in-Chief over North and South Yan, Qing, and Ji, Champion General, and Governor of Southern Yanzhou.",
+      "reason": "冠軍將軍 is Champion General, not 'General Who Establishes Might'.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liangshu:024:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0006 次太祖文皇帝 names Daoci’s second son by temple name 太祖 and posthumous title 文皇帝; he is Gaozu’s father, not the founding emperor, so the proposed idiomatic correctly removes that error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0006",
+        "excerpt": "次太祖文皇帝"
+      }
+    },
+    {
+      "repairId": "liangshu:024:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0019 官至冠軍將軍、東陽太守 gives the office 冠軍將軍, conventionally Champion General; “General Who Establishes Might” is a mistranslation, and the proposed idiomatic restores the correct title.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0019",
+        "excerpt": "冠軍將軍"
+      }
+    },
+    {
+      "repairId": "liangshu:024:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0035 lists Jing’s continued offices as 冠軍將軍 among them; that title is Champion General, not “General Who Establishes Might,” and the proposed idiomatic corrects only that error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0035",
+        "excerpt": "冠軍將軍"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

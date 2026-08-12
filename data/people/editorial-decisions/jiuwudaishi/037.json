@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "037",
+  "input": {
+    "chapterFingerprint": "sha256:f5c95535acdf8c204c92a36b7442d7ebe76f551d2a9fdd05607be0130c9327a7",
+    "proposalsFingerprint": "sha256:f451d9bfc9a0e11c6babb3b8d25f416dfc40c50cb4df21a3280159bd9093d882"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-29193f93-d3b9-40d9-ab48-c5ee4d33b668",
+    "runId": "run-4e98054e-6e7e-4aa5-8230-7b4fbd757d11",
+    "completedAt": "2026-08-12T20:02:33.095Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:037:r0001",
+      "unit": {
+        "id": "s0102",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "On renzi Ma Yin of Jingjiang and Guizhou—acting Grand Preceptor, Secretariat director, and Prince of Fufeng—gained fief and enfeoffment; Ma Xizhen of Li-Lang—acting Grand Tutor and Palace Attendant—became acting Grand Guardian.",
+      "after": "On renzi Ma Cong of Jingjiang and Guizhou—acting Grand Preceptor, Secretariat director, and Prince of Fufeng—gained fief and enfeoffment; Ma Xizhen of Li-Lang—acting Grand Tutor and Palace Attendant—became acting Grand Guardian.",
+      "reason": "Chinese names 馬賨 (Ma Cong), not 馬殷 (Ma Yin); the idiomatic English wrongly reuses Ma Yin for a different person.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:037:r0002",
+      "unit": {
+        "id": "s0102",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "On renzi, Jingjiang army military commissioner, Guizhou circuit surveillance commissioner, acting Grand Preceptor, concurrent Secretariat Director, Prince of Fufeng Ma Yin gained added fief households and enfeoffment; Li-Lang surveillance commissioner, acting Grand Tutor, concurrent Palace Attendant Ma Xizhen was made acting Grand Guardian.",
+      "after": "On renzi, Jingjiang army military commissioner, Guizhou circuit surveillance commissioner, acting Grand Preceptor, concurrent Secretariat Director, Prince of Fufeng Ma Cong gained added fief households and enfeoffment; Li-Lang surveillance commissioner, acting Grand Tutor, concurrent Palace Attendant Ma Xizhen was made acting Grand Guardian.",
+      "reason": "Literal English also renders 馬賨 as Ma Yin; should be Ma Cong.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:037:r0003",
+      "unit": {
+        "id": "s0059",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Mingzong had served under Jianfeng in Taiyuan's inner guard; now Jianfeng lay crippled by stroke, so Mingzong visited to comfort him.",
+      "after": "Mingzong had been a personal guard commander in Taiyuan's inner barracks with Jianfeng as his deputy; now Jianfeng lay crippled by stroke, so Mingzong visited to comfort him.",
+      "reason": "Chinese 帝嘗為太原內牙親將，建豐為副 makes Jianfeng the deputy under the Emperor, not the superior; idiomatic \"served under Jianfeng\" reverses the relationship.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:037:r0004",
+      "unit": {
+        "id": "s0090",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "field": "idiomatic",
+      "before": "On gengyin Li Yan of Guest Reception became Si defense commissioner and Li Ling of Heyang became crown prince mentor.",
+      "after": "On gengyin Li Yan of Guest Reception became Si defense commissioner and Li Ling of Hezhong became crown prince mentor.",
+      "reason": "河中 is Hezhong (Hedong), not Heyang (河陽).",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:037:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese names 馬賨, not 馬殷; idiomatic Ma Yin misidentifies the Prince of Fufeng. The proposed Ma Cong matches 馬賨 and leaves the rest of the sentence intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0102",
+        "excerpt": "扶風郡王馬賨"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:037:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same error in the literal field: the name is 馬賨 (Ma Cong), not Ma Yin. Replacing only that name corrects the mistranslation without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0102",
+        "excerpt": "扶風郡王馬賨"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:037:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "帝嘗為太原內牙親將，建豐為副 makes the Emperor the inner-barracks personal commander and Jianfeng his deputy; idiomatic \"served under Jianfeng\" reverses that hierarchy. The proposed wording restores the correct relationship.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0059",
+        "excerpt": "帝嘗為太原內牙親將，建豐為副"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:037:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 河中 is Hezhong, not 河陽 (Heyang). Changing only that place-name corrects the idiomatic error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0090",
+        "excerpt": "河中節度副使李鈴"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "jiuwudaishi:037:r0003",
+      "before": {
+        "id": "jiuwudaishi:037:c0423",
+        "subject": "jiuwudaishi:037:p008",
+        "predicate": "relationship",
+        "value": {
+          "relation": "former-subordinate-of",
+          "personId": "jiuwudaishi:037:p022"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiuwudaishi:037:s0059"
+        ]
+      },
+      "after": {
+        "id": "jiuwudaishi:037:c0423",
+        "subject": "jiuwudaishi:037:p008",
+        "predicate": "relationship",
+        "value": {
+          "relation": "former-superior-of",
+          "personId": "jiuwudaishi:037:p022"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiuwudaishi:037:s0059"
+        ]
+      },
+      "reason": "Accepted r0003 shows Mingzong was the 親將 with Jianfeng as 副, so the relationship claim's former-subordinate-of value came only from the reversed idiomatic; flip to former-superior-of while keeping id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0059",
+        "excerpt": "帝嘗為太原內牙親將，建豐為副"
+      }
+    }
+  ]
+}

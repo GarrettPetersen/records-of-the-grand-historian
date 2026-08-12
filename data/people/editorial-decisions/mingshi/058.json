@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "mingshi",
+  "chapter": "058",
+  "input": {
+    "chapterFingerprint": "sha256:15568dd7b4c0ad471c2ba624d19ef741cf289c8abff6e7bbe114c25c9c1a56cb",
+    "proposalsFingerprint": "sha256:913ef05f032ff9df8a550ecfde27051cac258520d045a2267b30b1af352de2ec"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-681095ec-b568-44d5-b13e-77cda1a71a77",
+    "runId": "run-44c98f63-bf6a-49bd-af12-1e58075161d6",
+    "completedAt": "2026-08-12T20:06:34.996Z"
+  },
+  "proposals": [
+    {
+      "id": "mingshi:058:r0001",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "(Mourning Rites, Part One)〉",
+      "after": "(Mourning Rites, Part One)",
+      "reason": "Stray closing corner-bracket 〉 was left in the English from the Chinese punctuation wrapper.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:058:r0002",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "(Mourning Rites 1)〉",
+      "after": "(Mourning Rites 1)",
+      "reason": "Stray closing corner-bracket 〉 was left in the English from the Chinese punctuation wrapper.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:058:r0003",
+      "unit": {
+        "id": "s0221",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Taizu's grandfather, posthumously titled Xizu, was buried north of Pingcheng in Sizhou, Fengyang Prefecture; the tomb was given the title Zuling.",
+      "after": "Taizu's grandfather, posthumously titled Xizu, was buried north of Bincheng in Sizhou, Fengyang Prefecture; the tomb was given the title Zuling.",
+      "reason": "Chinese 蠙城 is Bincheng, not Pingcheng (平城).",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:058:r0004",
+      "unit": {
+        "id": "s0221",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "The imperial grandfather, posthumous name Xizu, was buried north of Pingcheng in Sizhou, Fengyang Prefecture; the recommended title was Zuling.",
+      "after": "The imperial grandfather, posthumous name Xizu, was buried north of Bincheng in Sizhou, Fengyang Prefecture; the recommended title was Zuling.",
+      "reason": "Chinese 蠙城 is Bincheng, not Pingcheng (平城).",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "mingshi:058:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0003 Chinese is 〈（凶禮一）〉; the corner brackets are editorial wrappers, so the stray closing 〉 in the idiomatic English is a punctuation leak and should be removed.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "〈（凶禮一）〉"
+      }
+    },
+    {
+      "repairId": "mingshi:058:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same wrapper 〈…〉 appears in the Chinese; literal English likewise retains a stray 〉 that is not part of the glossed title.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "〈（凶禮一）〉"
+      }
+    },
+    {
+      "repairId": "mingshi:058:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0221 places the tomb 在鳳陽府泗州蠙城北; 蠙城 is Bincheng, not Pingcheng (平城), so the idiomatic place name must change.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0221",
+        "excerpt": "墓在鳳陽府泗州蠙城北"
+      }
+    },
+    {
+      "repairId": "mingshi:058:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal English likewise misreads 蠙城 as Pingcheng; Bincheng restores the place named in the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0221",
+        "excerpt": "蠙城"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

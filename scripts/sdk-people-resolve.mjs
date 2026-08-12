@@ -335,10 +335,12 @@ export function validateResolutionDocument(document, dossier, corpus, resolution
   const visible = new Set(Object.keys(dossier.document.people));
   for (const [index, decision] of (document.decisions ?? []).entries()) {
     const label = `decisions[${index}]`;
+    if (!decision || typeof decision !== 'object') continue;
     if (!['merge', 'keep-separate', 'possible-same-as'].includes(decision.decision)) {
       errors.push(`${label} uses unsupported decision ${decision.decision}`);
     }
     if (decision.canonicalPersonId) errors.push(`${label} must not pin a canonicalPersonId`);
+    if (!Array.isArray(decision.localPeople)) continue;
     if (new Set(decision.localPeople).size !== decision.localPeople.length) {
       errors.push(`${label} repeats a local person`);
     }
@@ -475,7 +477,11 @@ async function recoverPublishedShardDocuments(dossiers, opts, corpus, resolution
     } catch (error) {
       console.warn(`[${dossier.batch}] prior cloud artifact was not reusable: ${error.message}`);
     } finally {
-      await closeAgent(agent);
+      try {
+        await closeAgent(agent);
+      } catch (error) {
+        console.warn(`[${dossier.batch}] recovered-agent cleanup failed: ${error.message}`);
+      }
     }
   }
   return recovered;
@@ -534,7 +540,11 @@ async function processDossier(dossier, opts, corpus, resolutions, accepted) {
         console.warn(`[${dossier.batch}] usage unavailable: ${error.message}`);
       }
     }
-    await closeAgent(agent);
+    try {
+      await closeAgent(agent);
+    } catch (error) {
+      console.warn(`[${dossier.batch}] agent cleanup failed after resolution: ${error.message}`);
+    }
   }
 }
 
@@ -553,6 +563,24 @@ function selfTest() {
     throw new Error('Resolver did not keep canonical-overlap blocks in one component');
   }
   if (pairKey('b', 'a') !== pairKey('a', 'b')) throw new Error('Pair keys are unstable');
+  try {
+    validateResolutionDocument({
+      schemaVersion: 1,
+      batch: 'fixture',
+      decisions: [{ decision: 'merge', basis: ['same-name'], confidence: 'low' }],
+    }, {
+      batch: 'fixture',
+      document: {
+        people: { 'a:001:p001': {}, 'a:002:p001': {} },
+        blocks: [{ component: 'fixture-component', localPeople: ['a:001:p001', 'a:002:p001'] }],
+      },
+    }, { localPeople: new Map() }, []);
+    throw new Error('Malformed resolution decision unexpectedly passed validation');
+  } catch (error) {
+    if (error instanceof TypeError || !error.message.includes('localPeople')) {
+      throw new Error(`Malformed resolution decision produced an opaque error: ${error.message}`);
+    }
+  }
   console.log('sdk-people-resolve self-test: ok');
 }
 
@@ -624,7 +652,12 @@ async function main() {
     });
     await Promise.all(workers);
     if (failures.length > 0) {
-      throw new Error(`${failures.length} resolution shard(s) failed; no aggregate was written`);
+      const details = failures.map((error) =>
+        error instanceof Error ? error.message : String(error)
+      );
+      throw new Error(
+        `${failures.length} resolution shard(s) failed; no aggregate was written: ${details.join('; ')}`,
+      );
     }
     const aggregate = {
       schemaVersion: 1,

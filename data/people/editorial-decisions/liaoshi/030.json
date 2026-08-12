@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "030",
+  "input": {
+    "chapterFingerprint": "sha256:fcf1c8e4abbe9fb9920ca874aebf989443bb14fcd75bd056925366c61c6bcebd",
+    "proposalsFingerprint": "sha256:aec1bfabfd0a8cc41f3d25a023dddff787f1409360eccb33d8cedcb34387bfe6"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-69d83425-5ae4-4c86-a853-584b1067803e",
+    "runId": "run-b8f5829e-9959-44ed-9705-a5fa23e9cf77",
+    "completedAt": "2026-08-12T20:04:24.036Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:030:r0001",
+      "unit": {
+        "id": "s0021",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Yelü Chun — his age is known as Northern Liao.",
+      "after": "Yelü Chun — his regime is known as Northern Liao.",
+      "reason": "世號 means the age/world designated his polity as Northern Liao, not that his lifespan is so called.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:030:r0002",
+      "unit": {
+        "id": "s0078",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Yelü Dashi — his age is known as Western Liao (Qara-Khitai).",
+      "after": "Yelü Dashi — his regime is known as Western Liao (Qara-Khitai).",
+      "reason": "Same 世號 pattern as Northern Liao: designates the polity/regime, not a lifespan label.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:030:r0003",
+      "unit": {
+        "id": "s0189",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 17
+      },
+      "field": "idiomatic",
+      "before": "Chancellor Li Chuwen and others secretly admitted Song troops; residents responded from within, and gate guards were killed in great numbers.",
+      "after": "Chancellor Li Chun and others secretly admitted Song troops; residents responded from within, and gate guards were killed in great numbers.",
+      "reason": "Chinese 李純 is Li Chun; Chuwen invents syllables not in the name.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:030:r0004",
+      "unit": {
+        "id": "s0035",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "At age seven he wished to establish him as heir apparent, separately set up inner guard, and enfeoffed him Prince of Liang.",
+      "after": "At age seven, [the court] wished to establish him as heir apparent, separately set up inner guard, and enfeoffed him Prince of Liang.",
+      "reason": "欲立為皇太子 has impersonal/court subject; literal wrongly makes Yali the one wishing.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:030:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "世號為北遼 names the polity by which the age knew Yelü Chun, not his lifespan; “regime” correctly replaces the false “age” reading while keeping the rest of the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0021",
+        "excerpt": "世號為北遼"
+      }
+    },
+    {
+      "repairId": "liaoshi:030:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Parallel 世號為西遼 likewise designates the Western Liao polity, not a lifespan label; “regime” fixes the same mistranslation of 世號.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0078",
+        "excerpt": "世號為西遼"
+      }
+    },
+    {
+      "repairId": "liaoshi:030:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "宰相李純 is Li Chun; “Chuwen” invents syllables absent from 李純. The proposed name matches the Chinese and the already-extracted personal-name claim.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0189",
+        "excerpt": "宰相李純"
+      }
+    },
+    {
+      "repairId": "liaoshi:030:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "七歲，欲立為皇太子 has no subject that is Yali; the wishing is impersonal/court action. Supplying [the court] corrects the false agent without altering the rest of the literal wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0035",
+        "excerpt": "七歲，欲立為皇太子"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

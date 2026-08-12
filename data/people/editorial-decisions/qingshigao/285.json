@@ -1,0 +1,258 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "285",
+  "input": {
+    "chapterFingerprint": "sha256:90a17dcf0a24dffb5d8fd2a3333ea53876c93c7dd77c021f6f0288009270cffa",
+    "proposalsFingerprint": "sha256:200ba1dc6e381c52b9d80fb980c95c3e5a208543f1bc4afd58b9e893ae43cb47"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-4fdc3c1a-5c12-404d-ad56-1c503e102d85",
+    "runId": "run-3f6a8032-acf2-430a-a54a-5609adf22fc1",
+    "completedAt": "2026-08-12T20:09:20.012Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:285:r0001",
+      "unit": {
+        "id": "s0017",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "The Gannan general Jueluo Shushu led imperial guards south into Guangdong and was defeated by Shang Zhixin's general Yan Ziming; the army retreated to within thirty li of Ganzhou.",
+      "after": "The Zhennan General Jueluo Shushu led imperial guards south into Guangdong and was defeated by Shang Zhixin's general Yan Ziming; the army retreated to within thirty li of Ganzhou.",
+      "reason": "鎮南將軍 is Zhennan General (General Who Pacifies the South), not Gannan; literal conflates 鎮南 with 贛南.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:285:r0002",
+      "unit": {
+        "id": "s0034",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "When the special erudition examination opened, Wei Xiangju nominated Zishou and Tang Bin to compete.",
+      "after": "When the special erudition examination opened, Wei Xiangshu nominated Zishou and Tang Bin to compete.",
+      "reason": "魏象樞 is Wei Xiangshu (樞 shū); Xiangju misreads the given name.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:285:r0003",
+      "unit": {
+        "id": "s0034",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "When the Boxue Hongci examination was opened, Wei Xiangju recommended Zishou together with Tang Bin to sit for it.",
+      "after": "When the Boxue Hongci examination was opened, Wei Xiangshu recommended Zishou together with Tang Bin to sit for it.",
+      "reason": "魏象樞 is Wei Xiangshu (樞 shū); Xiangju misreads the given name.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:285:r0004",
+      "unit": {
+        "id": "s0155",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "A man had a stepmother who was wanton and wished also to violate his daughter by the first wife; she refused and was killed.",
+      "after": "A commoner had a second wife who was wanton and wished also to violate his daughter by the first wife; she refused and was killed.",
+      "reason": "繼妻 is the man's subsequent wife (stepmother to the daughter), not the man's stepmother; literal reverses the kinship.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:285:r0005",
+      "unit": {
+        "id": "s0214",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "The emperor sent Minister Zhang Tinglu to investigate; following Mengqiu, conspirators were executed and duped commoners released.",
+      "after": "The emperor sent Minister Zhang Tingshu to investigate; following Mengqiu, conspirators were executed and duped commoners released.",
+      "reason": "張廷樞 is Zhang Tingshu (樞 shū); Tinglu misreads the given name.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:285:r0006",
+      "unit": {
+        "id": "s0214",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "The emperor ordered Minister Zhang Tinglu to investigate; following Mengqiu's proposal those who joined the rebellion were executed and deluded commoners who were enticed were all released.",
+      "after": "The emperor ordered Minister Zhang Tingshu to investigate; following Mengqiu's proposal those who joined the rebellion were executed and deluded commoners who were enticed were all released.",
+      "reason": "張廷樞 is Zhang Tingshu (樞 shū); Tinglu misreads the given name.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:285:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0017 opens with 鎮南將軍覺羅舒恕; 鎮南 is Zhennan (the title), not 贛南 Gannan. The prior literal conflates the title with the Ganzhou region; Zhennan General restores the correct reading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0017",
+        "excerpt": "鎮南將軍覺羅舒恕"
+      }
+    },
+    {
+      "repairId": "qingshigao:285:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0034 names 魏象樞; 樞 is shū, so Wei Xiangshu, not Xiangju. The proposed idiomatic correction fixes a clear given-name misreading without changing sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0034",
+        "excerpt": "魏象樞"
+      }
+    },
+    {
+      "repairId": "qingshigao:285:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same Chinese 魏象樞 requires Wei Xiangshu in the literal field. Xiangju misreads 樞; the proposed replacement is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0034",
+        "excerpt": "魏象樞"
+      }
+    },
+    {
+      "repairId": "qingshigao:285:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0155 has 民有繼妻素淫，欲並亂前妻女; 繼妻 is the commoner's subsequent wife (stepmother to the first wife's daughter), not the man's stepmother. The prior literal reverses kinship; the proposed second wife restores it.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0155",
+        "excerpt": "民有繼妻素淫，欲並亂前妻女"
+      }
+    },
+    {
+      "repairId": "qingshigao:285:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0214 names 尚書張廷樞; 樞 is shū, so Zhang Tingshu, not Tinglu. The proposed idiomatic correction fixes the given-name misreading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0214",
+        "excerpt": "尚書張廷樞"
+      }
+    },
+    {
+      "repairId": "qingshigao:285:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal likewise misreads 張廷樞 as Tinglu; Tingshu matches 樞 and leaves the rest of the sentence intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0214",
+        "excerpt": "張廷樞"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "qingshigao:285:r0002",
+      "before": {
+        "id": "qingshigao:285:c0108",
+        "subject": "qingshigao:285:p023",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Wei Xiangju",
+          "zh": "魏象樞",
+          "pinyin": "Wei Xiangshu"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:285:s0034"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:285:c0108",
+        "subject": "qingshigao:285:p023",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Wei Xiangshu",
+          "zh": "魏象樞",
+          "pinyin": "Wei Xiangshu"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:285:s0034"
+        ]
+      },
+      "reason": "Accepted r0002 shows English Wei Xiangju came only from misreading 樞; the personal-name claim must read Wei Xiangshu while keeping zh, pinyin, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0034",
+        "excerpt": "魏象樞"
+      }
+    },
+    {
+      "repairId": "qingshigao:285:r0005",
+      "before": {
+        "id": "qingshigao:285:c0165",
+        "subject": "qingshigao:285:p042",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Zhang Tinglu",
+          "zh": "張廷樞",
+          "pinyin": "Zhang Tingshu"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:285:s0214"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:285:c0165",
+        "subject": "qingshigao:285:p042",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Zhang Tingshu",
+          "zh": "張廷樞",
+          "pinyin": "Zhang Tingshu"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:285:s0214"
+        ]
+      },
+      "reason": "Accepted r0005 shows English Zhang Tinglu came only from misreading 樞; the personal-name claim must read Zhang Tingshu while keeping zh, pinyin, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0214",
+        "excerpt": "張廷樞"
+      }
+    }
+  ]
+}

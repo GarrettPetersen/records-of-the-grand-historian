@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 3,
+  "book": "mingshi",
+  "chapter": "298",
+  "input": {
+    "chapterFingerprint": "sha256:9a1245118ad76aac696c89a67aca4eb31e5c1cc767aa131a88ea969896842d59",
+    "proposalsFingerprint": "sha256:64e18c40cf5c25550a98d898c42aaab76ea152dc8de95cfa0290879dc877d56f"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-c6478424-eb37-460b-b0e7-ba03242e2cfc",
+    "runId": "run-b0203c12-07e1-4d9e-a97f-5f01c25c75b9",
+    "completedAt": "2026-08-12T20:06:54.310Z"
+  },
+  "proposals": [
+    {
+      "id": "mingshi:298:r0001",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Zhang Jiefu, courtesy name Ziqi, moved from Huaqing to the Wu region.",
+      "after": "Zhang Jiefu, courtesy name Ziqi, moved from Huaiqing to the Wu region.",
+      "reason": "懷慶 is Huaiqing (not Huaqing); the English place name is misspelled.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:298:r0002",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Zhang Jiefu, styled Ziqi, moved from Huaqing to Wu.",
+      "after": "Zhang Jiefu, styled Ziqi, moved from Huaiqing to Wu.",
+      "reason": "懷慶 should be romanized Huaiqing, not Huaqing.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:298:r0003",
+      "unit": {
+        "id": "s0139",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "At the time Liu Lin had returned home after leaving office as prefect, and Long Ni had retired from his post as commissioner. Both were staying in Huzhou and were friendly with the former censor Ling Kun of the prefecture, while Wu Qiong of Changxing lived in seclusion and loved to entertain guests. All three presided as hosts in Qiong's home.",
+      "after": "At the time Liu Lin had returned home after leaving office as prefect, and Long Ni had retired from his post as commissioner. Both were staying in Huzhou and were friendly with the former censor Ling Kun of the prefecture, while Wu Qiong of Changxing lived in seclusion and loved to entertain guests. The three all lodged as guests in Qiong's home.",
+      "reason": "主於其家 means they stayed/lodged at Wu Qiong's home as guests, not that they presided as hosts.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:298:r0004",
+      "unit": {
+        "id": "s0150",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "A townsman named Chen Mengxian was the son of Chen Jizhi, master of the Five Classics.",
+      "after": "A townsman named Chen Mengxian was the son of Chen Ji, the Five Classics master.",
+      "reason": "陳五經繼 is Chen Ji (繼), titled 五經; 之 belongs to 之子, not the personal name.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "mingshi:298:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0011’s 自懷慶徙吳中 names Huaiqing (懷慶); Huaqing is a misspelling, and Huaiqing restores the correct place-name romanization without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "自懷慶徙吳中"
+      }
+    },
+    {
+      "repairId": "mingshi:298:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same unit’s 懷慶 must be Huaiqing in the literal as well; Huaqing is wrong, and the proposed wording otherwise matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "懷慶"
+      }
+    },
+    {
+      "repairId": "mingshi:298:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "三人者並主於其家, after 吳珫隱居好客, means the three lodged as guests at Qiong’s home; classical 主於 is guest-lodging, not acting as hosts.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0139",
+        "excerpt": "三人者並主於其家"
+      }
+    },
+    {
+      "repairId": "mingshi:298:r0004",
+      "decision": "revise",
+      "after": "A townsman named Chen Mengxian was the son of Chen Ji, master of the Five Classics.",
+      "reason": "陳五經繼之子也 is Chen Ji (繼), titled 五經; 之 belongs to 之子, so Chen Jizhi is wrong. The proposal’s name fix is right, but ‘the Five Classics master’ is awkward beside the existing natural ‘master of the Five Classics.’",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0150",
+        "excerpt": "陳五經繼之子也"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "mingshi:298:r0001",
+      "before": {
+        "id": "mingshi:298:c0333",
+        "subject": "mingshi:298:p001",
+        "predicate": "native-place",
+        "value": {
+          "place": {
+            "en": "Huaqing",
+            "zh": "懷慶"
+          },
+          "relation": "moved-from"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "mingshi:298:s0011"
+        ]
+      },
+      "after": {
+        "id": "mingshi:298:c0333",
+        "subject": "mingshi:298:p001",
+        "predicate": "native-place",
+        "value": {
+          "place": {
+            "en": "Huaiqing",
+            "zh": "懷慶"
+          },
+          "relation": "moved-from"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "mingshi:298:s0011"
+        ]
+      },
+      "reason": "Accepted r0001 shows English Huaqing came only from the bad romanization of 懷慶; the native-place claim must read Huaiqing while keeping zh, relation, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "懷慶"
+      }
+    }
+  ]
+}
