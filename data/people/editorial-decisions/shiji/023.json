@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "023",
+  "input": {
+    "chapterFingerprint": "sha256:8cc9d3e7d7b96001ec0a5b89edea7c1264c291262c47a0c87fac40eee98ef525",
+    "proposalsFingerprint": "sha256:c2938154d12af97e5ed147a4f3aa53c336b737e4d390d8fa9efb4150c5830a23"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-bc34fe72-4615-471a-9ed0-63a3311dffb5",
+    "runId": "run-3ae380f3-6643-428c-b7e2-f650041aa264",
+    "completedAt": "2026-08-12T01:54:04.302Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:023:r0001",
+      "unit": {
+        "id": "s0022",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "Filial Wen ascended throne, officials discussed wished establish ceremony rites, Filial Wen fond Daoist learning, considered elaborate rites decorated appearances, no benefit to governing, personal transformation what ear, therefore dismissed them.",
+      "after": "Filial Wen ascended throne, officials discussed wished establish ceremony rites, Filial Wen fond Daoist learning, considered elaborate rites decorated appearances, no benefit to governing, personal transformation is what mattered, therefore dismissed them.",
+      "reason": "The particle 耳 marks understatement ('merely'), not the noun 'ear'; the literal rendering 'what ear' is a mistranslation.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:023:r0002",
+      "unit": {
+        "id": "s0078",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 15
+      },
+      "field": "literal",
+      "before": "Zhou cut open Bi Gan, imprisoned jizi, made the heated-pillar torture, punished killed innocent, time ministers below fearful, none certain their fate.",
+      "after": "Zhou cut open Bi Gan, imprisoned Jizi, made the heated-pillar torture, punished killed innocent, time ministers below fearful, none certain their fate.",
+      "reason": "The personal name 箕子 is capitalized as Jizi elsewhere and in the idiomatic line; lowercase 'jizi' is a clear orthographic error.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:023:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 躬化謂何耳, 耳 is a sentence-final particle of understatement, not the noun 'ear'; the before literal's 'what ear' is wrong, and 'personal transformation is what mattered' correctly renders the rhetorical force of 謂何耳.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0022",
+        "excerpt": "躬化謂何耳"
+      }
+    },
+    {
+      "repairId": "shiji:023:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "箕子 is the personal name Jizi; parallel Bi Gan is already capitalized, and lowercase 'jizi' is only an orthographic error with no semantic change.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0078",
+        "excerpt": "囚箕子"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "090",
+  "input": {
+    "chapterFingerprint": "sha256:3aff84be552563e8076aba879b696b30bb972ab27013c880f364174afc55460a",
+    "proposalsFingerprint": "sha256:66ccc6d2fb215bd49eb612fcb77072516f1b25b9f2e0d7e1973062449dd96f58"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-7307e74d-3755-48b4-b7fc-42747c0e822d",
+    "runId": "run-adb5f846-a093-495b-b784-0e17f751ba73",
+    "completedAt": "2026-08-12T02:25:58.565Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:090:r0001",
+      "unit": {
+        "id": "s0027",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 20
+      },
+      "field": "idiomatic",
+      "before": "In his sixteenth year as Palace Front Command inspector he campaigned against Punnuli, won many surrenders, and returned with the tribal chief Taodeli; the emperor wrote him a personal commendation, and for his merit he was made Nanjing military governor and enfeoffed Prince of Wuchang Commandery.",
+      "after": "In the sixteenth year he was palace front command inspector; in punishing Punnuli he induced many to surrender, brought back their chieftain Taodeli, received an imperial autograph commendation, and for merit was transferred to Nanjing military governor, enfeoffed Prince of Wuchang Commandery.",
+      "reason": "Chinese 十六年，為殿前都點檢 means “in the sixteenth year [of Chongxi] he was made Palace Front Command inspector,” not that he had already held that post for sixteen years; the literal rendering matches the source.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:090:r0002",
+      "unit": {
+        "id": "s0079",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Ala denounced the sycophantic, lawless Xiao Ge; Taowei warned that using Asi would sow calamity; Talage, by tolerating injustice, brought annihilation on his house while blaming Chaguo — yet their devotion to the realm was genuine.",
+      "after": "Ala rebuked Xiao Ge for sycophancy and lawlessness; Taowei warned that employing Asi must lay the root of disaster; Talage blamed Chaguo that by persisting in injustice he would only bring annihilation on his own clan — their hearts may be called loyal.",
+      "reason": "Parallel 以…責察割 means Talage reproached Chaguo with the charge that enduring injustice would bring clan extermination, not that Talage himself brought annihilation on his house; the current idiomatic reverses the agency.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:090:r0001",
+      "decision": "revise",
+      "after": "In the sixteenth year he was made Palace Front Command inspector; he campaigned against Punnuli, won many surrenders, and returned with the tribal chief Taodeli; the emperor wrote him a personal commendation, and for his merit he was made Nanjing military governor and enfeoffed Prince of Wuchang Commandery.",
+      "reason": "十六年，為殿前都點檢 dates the appointment to the sixteenth year; it does not mean he had already held the post for sixteen years. The proposed replacement fixes that error but is awkward and overly literal, so the idiomatic wording is retained with only the dating corrected.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0027",
+        "excerpt": "十六年，為殿前都點檢"
+      }
+    },
+    {
+      "repairId": "liaoshi:090:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Parallel 以…折/言/責 marks the content of each rebuke; 塔剌葛以忍行不義徒自取赤族之罪責察割 means Talage reproached Chaguo that enduring injustice would bring clan extermination on himself, not that Talage by tolerating injustice destroyed his own house.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0079",
+        "excerpt": "塔剌葛以忍行不義徒自取赤族之罪責察割"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -24,6 +24,7 @@ import {
 } from './lib/people-content.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
 import { waitForCursorRun } from './lib/cursor-run-wait.mjs';
+import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
 import {
   compactPeopleExtraction,
   isCompactPeopleExtraction,
@@ -45,6 +46,7 @@ const DEFAULT_MODEL = 'grok-4.5';
 const DEFAULT_REPO_URL = 'https://github.com/GarrettPetersen/records-of-the-grand-historian';
 const DEFAULT_STARTING_REF = 'codex/people-glossary-staging';
 const STATE_FILE = path.join(PEOPLE_DIR, 'generated', 'extraction-state.json');
+const RUN_LOCK_FILE = path.join(PEOPLE_DIR, 'generated', 'extraction-run.lock');
 const DEFAULT_PLAN_FILE = path.join(PEOPLE_DIR, 'generated', 'extraction-plan.json');
 const DEFAULT_MAX_UNITS = 250;
 const DEFAULT_MAX_CANDIDATES = 600;
@@ -302,6 +304,18 @@ function recoverInterruptedState(state) {
   if (changed) saveState(state);
 }
 
+function recordCurrentExtraction(state, target, packet, opts) {
+  if (opts.dryRun) return false;
+  const key = stateKey(target);
+  state.chapters[key] = {
+    ...(state.chapters[key] ?? { attempts: 0 }),
+    status: 'accepted',
+    chapterFingerprint: packet.input.chapterFingerprint,
+    updatedAt: new Date().toISOString(),
+  };
+  return true;
+}
+
 function prepareTargetQueue(rawTargets, opts, state, matcher) {
   const eligible = [];
   const oversized = [];
@@ -315,14 +329,7 @@ function prepareTargetQueue(rawTargets, opts, state, matcher) {
     const measured = { ...target, metrics: targetMetrics(packet) };
     if (!opts.force && currentExtractionIsValid(target, packet)) {
       current.push(measured);
-      const key = stateKey(target);
-      state.chapters[key] = {
-        ...(state.chapters[key] ?? { attempts: 0 }),
-        status: 'accepted',
-        chapterFingerprint: packet.input.chapterFingerprint,
-        updatedAt: new Date().toISOString(),
-      };
-      stateChanged = true;
+      stateChanged = recordCurrentExtraction(state, target, packet, opts) || stateChanged;
     } else if (!opts.retryFailed && state.chapters[stateKey(target)]?.status === 'failed') {
       failed.push(measured);
     } else if (exceedsBulkCeiling(measured, opts) && !opts.allowLarge) {
@@ -1085,6 +1092,50 @@ function selfTest() {
   if (agentReservationCents(costOpts, budget) !== null) {
     throw new Error('Cost reservation admitted an agent beyond the ceiling');
   }
+  const dryRunState = {
+    schemaVersion: 1,
+    chapters: {
+      'fixture/001': {
+        status: 'extracting',
+        agentId: 'bc-fixture',
+        updatedAt: '2026-01-01T00:00:00.000Z',
+      },
+    },
+  };
+  const beforeDryRun = JSON.stringify(dryRunState);
+  const changed = recordCurrentExtraction(
+    dryRunState,
+    { book: 'fixture', chapter: '001' },
+    { input: { chapterFingerprint: 'sha256:fixture' } },
+    { dryRun: true },
+  );
+  if (changed || JSON.stringify(dryRunState) !== beforeDryRun) {
+    throw new Error('Dry-run queue planning mutated extraction state');
+  }
+  const lockDirectory = fs.mkdtempSync(path.join(REPO_ROOT, '.people-extract-lock-test-'));
+  const lockFile = path.join(lockDirectory, 'run.lock');
+  try {
+    const release = acquireProcessRunLock(lockFile, { label: 'People extraction scheduler' });
+    let duplicateRejected = false;
+    try {
+      acquireProcessRunLock(lockFile, { label: 'People extraction scheduler' });
+    } catch (error) {
+      duplicateRejected = /already running/u.test(error.message);
+    }
+    if (!duplicateRejected) throw new Error('Concurrent extraction scheduler lock was not rejected');
+    release();
+    const stale = {
+      schemaVersion: 1,
+      pid: 2147483647,
+      token: 'stale',
+      startedAt: '2026-01-01T00:00:00.000Z',
+      argv: [],
+    };
+    fs.writeFileSync(lockFile, `${JSON.stringify(stale)}\n`);
+    acquireProcessRunLock(lockFile, { label: 'People extraction scheduler' })();
+  } finally {
+    fs.rmSync(lockDirectory, { recursive: true, force: true });
+  }
   console.log('sdk-people-extract scheduler self-test: ok');
 }
 
@@ -1092,71 +1143,78 @@ async function main() {
   const opts = parseArgs(process.argv.slice(2));
   if (opts.selfTest) return selfTest();
   if (!opts.dryRun && !opts.apiKey) throw new Error('CURSOR_API_KEY is required. Get a key from Cursor -> Integrations.');
-  const state = loadState();
-  if (!opts.dryRun) recoverInterruptedState(state);
-  opts.properNounMatcher = loadProperNounMatcher();
-  const queue = prepareTargetQueue(chapterTargets(opts), opts, state, opts.properNounMatcher);
-  const targets = queue.selected;
-  const planPath = path.relative(REPO_ROOT, opts.planOut);
-  console.log(
-    `Queue plan ${planPath}: selected=${targets.length}, waiting=${queue.waiting.length}, ` +
-    `oversized=${queue.oversized.length}, current=${queue.current.length}, failed=${queue.failed.length}`,
-  );
-  for (const target of targets.slice(0, 20)) {
-    console.log(
-      `  ${stateKey(target)}: ${target.metrics.units} units, ${target.metrics.candidates} candidates, ` +
-      `${(target.metrics.workerBytes / 1024).toFixed(1)} KiB worker packet` +
-      `${target.chunkCount ? `, ${target.chunkCount} chunks` : ''}`,
-    );
-  }
-  if (targets.length > 20) console.log(`  ... ${targets.length - 20} more selected chapter(s)`);
-  console.log(
-    `Cursor Cloud concurrency=${opts.concurrency}; model=${opts.model} effort=${opts.effort} ` +
-    `fast=${opts.fast ? 'on' : 'off'}; run cost ceiling=` +
-    `${opts.maxCostCents === null ? 'unlimited' : `$${(opts.maxCostCents / 100).toFixed(2)}`}; ` +
-    `agent reservation=$${(opts.agentCostReserveCents / 100).toFixed(2)}; ` +
-    'no worker git pushes',
-  );
-  if (!opts.dryRun && targets.length > 0) fetchStartingRef(opts.startingRef);
-
-  const control = createRunControl();
-  const removeSignalHandlers = opts.dryRun ? () => {} : installSignalHandlers(control);
-  const budget = { chargedCents: 0, reservedCents: 0 };
-  let nextIndex = 0;
-  const results = [];
-  const workers = Array.from({ length: Math.min(opts.concurrency, targets.length) }, async () => {
-    while (nextIndex < targets.length && !control.stopRequested) {
-      if (opts.maxCostCents !== null && budget.chargedCents >= opts.maxCostCents) {
-        control.stopRequested = true;
-        control.stopReason = 'cost-ceiling';
-        console.error(
-          `Run cost ceiling reached at $${(budget.chargedCents / 100).toFixed(2)}; ` +
-          'no new agents will start.',
-        );
-        break;
-      }
-      const target = targets[nextIndex++];
-      results.push(await processTarget(target, opts, state, control, budget));
-    }
-  });
+  const releaseRunLock = opts.dryRun
+    ? () => {}
+    : acquireProcessRunLock(RUN_LOCK_FILE, { label: 'People extraction scheduler' });
   try {
-    await Promise.all(workers);
-  } finally {
-    removeSignalHandlers();
-  }
+    const state = loadState();
+    if (!opts.dryRun) recoverInterruptedState(state);
+    opts.properNounMatcher = loadProperNounMatcher();
+    const queue = prepareTargetQueue(chapterTargets(opts), opts, state, opts.properNounMatcher);
+    const targets = queue.selected;
+    const planPath = path.relative(REPO_ROOT, opts.planOut);
+    console.log(
+      `Queue plan ${planPath}: selected=${targets.length}, waiting=${queue.waiting.length}, ` +
+      `oversized=${queue.oversized.length}, current=${queue.current.length}, failed=${queue.failed.length}`,
+    );
+    for (const target of targets.slice(0, 20)) {
+      console.log(
+        `  ${stateKey(target)}: ${target.metrics.units} units, ${target.metrics.candidates} candidates, ` +
+        `${(target.metrics.workerBytes / 1024).toFixed(1)} KiB worker packet` +
+        `${target.chunkCount ? `, ${target.chunkCount} chunks` : ''}`,
+      );
+    }
+    if (targets.length > 20) console.log(`  ... ${targets.length - 20} more selected chapter(s)`);
+    console.log(
+      `Cursor Cloud concurrency=${opts.concurrency}; model=${opts.model} effort=${opts.effort} ` +
+      `fast=${opts.fast ? 'on' : 'off'}; run cost ceiling=` +
+      `${opts.maxCostCents === null ? 'unlimited' : `$${(opts.maxCostCents / 100).toFixed(2)}`}; ` +
+      `agent reservation=$${(opts.agentCostReserveCents / 100).toFixed(2)}; ` +
+      'no worker git pushes',
+    );
+    if (!opts.dryRun && targets.length > 0) fetchStartingRef(opts.startingRef);
 
-  const counts = new Map();
-  for (const result of results) counts.set(result.status, (counts.get(result.status) ?? 0) + 1);
-  console.log(`Finished: ${[...counts].map(([status, count]) => `${status}=${count}`).join(', ') || 'no targets'}`);
-  console.log(
-    `Charged this invocation: $${(budget.chargedCents / 100).toFixed(2)}; ` +
-    `not started: ${targets.length - nextIndex}; stop reason: ${control.stopReason ?? 'queue-complete'}`,
-  );
-  console.log(
-    'Accepted files remain local. Commit locally in batches; push codex/people-glossary-staging only at a deliberate checkpoint.',
-  );
-  if (counts.has('failed')) process.exitCode = 2;
-  else if (control.stopReason === 'SIGINT' || control.stopReason === 'SIGTERM') process.exitCode = 130;
+    const control = createRunControl();
+    const removeSignalHandlers = opts.dryRun ? () => {} : installSignalHandlers(control);
+    const budget = { chargedCents: 0, reservedCents: 0 };
+    let nextIndex = 0;
+    const results = [];
+    const workers = Array.from({ length: Math.min(opts.concurrency, targets.length) }, async () => {
+      while (nextIndex < targets.length && !control.stopRequested) {
+        if (opts.maxCostCents !== null && budget.chargedCents >= opts.maxCostCents) {
+          control.stopRequested = true;
+          control.stopReason = 'cost-ceiling';
+          console.error(
+            `Run cost ceiling reached at $${(budget.chargedCents / 100).toFixed(2)}; ` +
+            'no new agents will start.',
+          );
+          break;
+        }
+        const target = targets[nextIndex++];
+        results.push(await processTarget(target, opts, state, control, budget));
+      }
+    });
+    try {
+      await Promise.all(workers);
+    } finally {
+      removeSignalHandlers();
+    }
+
+    const counts = new Map();
+    for (const result of results) counts.set(result.status, (counts.get(result.status) ?? 0) + 1);
+    console.log(`Finished: ${[...counts].map(([status, count]) => `${status}=${count}`).join(', ') || 'no targets'}`);
+    console.log(
+      `Charged this invocation: $${(budget.chargedCents / 100).toFixed(2)}; ` +
+      `not started: ${targets.length - nextIndex}; stop reason: ${control.stopReason ?? 'queue-complete'}`,
+    );
+    console.log(
+      'Accepted files remain local. Commit locally in batches; push codex/people-glossary-staging only at a deliberate checkpoint.',
+    );
+    if (counts.has('failed')) process.exitCode = 2;
+    else if (control.stopReason === 'SIGINT' || control.stopReason === 'SIGTERM') process.exitCode = 130;
+  } finally {
+    releaseRunLock();
+  }
 }
 
 if (isMain) {

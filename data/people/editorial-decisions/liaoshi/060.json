@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "060",
+  "input": {
+    "chapterFingerprint": "sha256:095e4201cd79b2be22e200441f1c663b9199ad4d804de22498324e748f59351e",
+    "proposalsFingerprint": "sha256:399c015d38f08eab61b1a669d06d58eb6b503f11aaf3ddafc7a2d694c81e87ea"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-12T02:41:33Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:060:r0001",
+      "unit": {
+        "id": "s0006",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "Xiong, Gaochang, and Bohai also established mutual markets to connect goods from the northwestern tribes of the Southern Song and Korea; therefore the Jurchen brought gold, silk, cloth, honey, wax, and various medicinals, and the Tieli, Mohe, Yujue, and other tribes brought clam pearls, blue mice, sable mice, fish glue skins, oxen, sheep, camels, horses, felt rugs, and such things to trade with Liao—the roads were continuous with traders.",
+      "after": "Xiong, Gaochang, and Bohai also established mutual markets to connect goods from the northwestern tribes of Song to the south and from Korea; therefore the Jurchen brought gold, silk, cloth, honey, wax, and various medicinals, and the Tieli, Mohe, Yujue, and other tribes brought clam pearls, blue mice, sable mice, fish glue skins, oxen, sheep, camels, horses, felt rugs, and such things to trade with Liao—the roads were continuous with traders.",
+      "reason": "In Liao-era usage 南宋 means Song to the south, not the later Southern Song dynasty; the literal gloss is anachronistic.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:060:r0002",
+      "unit": {
+        "id": "s0067",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 17
+      },
+      "field": "idiomatic",
+      "before": "The herds north of Songmo passed to the Great Stone Yabgu.",
+      "after": "The herds north of Songmo passed to the Great Stone Linya.",
+      "reason": "林牙 is the Liao office linya, not the Turkic title yabgu.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:060:r0003",
+      "unit": {
+        "id": "s0067",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 17
+      },
+      "field": "literal",
+      "before": "The old horses north of Songmo all came into the possession of the Great Stone Yabgu.",
+      "after": "The old horses north of Songmo all came into the possession of the Great Stone Linya.",
+      "reason": "Same office mistranslation as in the idiomatic field: 林牙 should be Linya.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:060:r0004",
+      "unit": {
+        "id": "s0015",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "The settlement lay south of Coal Mountain near productive salt ponds—the site of the Later Wei Huayan Salt county—and all eight tribes drew their salt from it.",
+      "after": "The settlement lay south of Coal Mountain near productive salt ponds—the site of the Later Wei county of Huayan—and all eight tribes drew their salt from it.",
+      "reason": "滑鹽縣 is the proper county name Huayan; Salt should not be inserted into the English proper name.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:060:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In Liao sources 南宋 denotes the Song polity to Liao's south, not the post-1127 Southern Song dynasty; the proposed 'Song to the south' removes that anachronism while preserving the rest of the literal.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0006",
+        "excerpt": "以通南宋西北諸部、高麗之貨"
+      }
+    },
+    {
+      "repairId": "liaoshi:060:r0002",
+      "decision": "revise",
+      "after": "The herds north of Songmo all passed to Yelü Dashi, the linya.",
+      "reason": "大石 is Yelü Dashi's personal name here and 林牙 is his Liao office. The revised wording identifies the person instead of translating his name as ‘Great Stone.’",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0067",
+        "excerpt": "大石林牙"
+      }
+    },
+    {
+      "repairId": "liaoshi:060:r0003",
+      "decision": "revise",
+      "after": "The old horses north of Songmo all came into the possession of Dashi Linya.",
+      "reason": "The literal should transliterate 大石 as Dashi and 林牙 as the office linya, rather than translate the personal name or substitute the unrelated title yabgu.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0067",
+        "excerpt": "大石林牙"
+      }
+    },
+    {
+      "repairId": "liaoshi:060:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "後魏滑鹽縣 is the Later Wei county named 滑鹽 (Huayan); inserting Salt into the English proper name double-marks 鹽. County of Huayan matches the Chinese and the unit's own literal.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0015",
+        "excerpt": "即後魏滑鹽縣也"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "liaoshi:060:r0002",
+      "claim": {
+        "id": "liaoshi:060:c0048",
+        "subject": "liaoshi:060:p016",
+        "predicate": "role",
+        "value": {
+          "roleId": "aristocrat"
+        },
+        "certainty": "strongly-inferred",
+        "evidence": [
+          "liaoshi:060:s0067"
+        ]
+      },
+      "reason": "The aristocrat role was strongly inferred from mistranslating 林牙 as the Turkic noble title yabgu; s0067 only supports the Liao office linya (official), already claimed in c0047.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0067",
+        "excerpt": "大石林牙"
+      }
+    }
+  ],
+  "claimRevisions": [
+    {
+      "repairId": "liaoshi:060:r0002",
+      "before": {
+        "id": "liaoshi:060:c0046",
+        "subject": "liaoshi:060:p016",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Great Stone Yabgu"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:060:s0067"
+        ]
+      },
+      "after": {
+        "id": "liaoshi:060:c0046",
+        "subject": "liaoshi:060:p016",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Dashi Linya",
+          "zh": "大石林牙",
+          "pinyin": "Dàshí Línyá"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:060:s0067"
+        ]
+      },
+      "reason": "The old claim mistranslated both the personal name 大石 and the office 林牙. Dashi Linya preserves the source designation while keeping id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0067",
+        "excerpt": "大石林牙"
+      }
+    }
+  ]
+}

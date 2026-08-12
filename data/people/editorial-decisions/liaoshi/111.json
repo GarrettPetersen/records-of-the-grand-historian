@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "111",
+  "input": {
+    "chapterFingerprint": "sha256:d6486f9c3f5d9a4e687d78ba788769128efcb693ffc3e69570adbc17835ac79b",
+    "proposalsFingerprint": "sha256:3c145b9b2a4898f25a860f4e2c064c8b8d6b83dac2a0dd3b29c1f14d9815e636"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-551c5232-9242-4306-8967-59278b0360ef",
+    "runId": "run-ae2c350c-787d-44d8-b6d9-d4577b904321",
+    "completedAt": "2026-08-12T02:06:56.624Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:111:r0001",
+      "unit": {
+        "id": "s0012",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "When Yixin schemed against the crown prince, Yulili did much to make it succeed; he was then put in charge of Northern Court privy affairs and granted the title Meritious Subject of Sincere Support.",
+      "after": "When Yixin schemed against the crown prince, Yulili did much to make it succeed; he was then put in charge of Northern Court privy affairs and granted the title Meritorious Subject of Sincere Support.",
+      "reason": "Corrects the misspelling Meritious to Meritorious in the honorific title.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:111:r0002",
+      "unit": {
+        "id": "s0012",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "literal",
+      "before": "When Yixin plotted against the crown prince, Yulili greatly helped bring it about; he then administered Northern Court privy affairs and was granted the title Meritious Subject of Sincere Support.",
+      "after": "When Yixin plotted against the crown prince, Yulili greatly helped bring it about; he then administered Northern Court privy affairs and was granted the title Meritorious Subject of Sincere Support.",
+      "reason": "Corrects the same Meritious misspelling in the literal rendering.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:111:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "賜推誠協贊功臣 grants an honorific whose 功臣 is English Meritorious Subject; Meritious is a misspelling, and Meritorious Subject of Sincere Support correctly renders the title without changing other sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0012",
+        "excerpt": "賜推誠協贊功臣"
+      }
+    },
+    {
+      "repairId": "liaoshi:111:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field has the same misspelling Meritious for 功臣; correcting to Meritorious matches the Chinese honorific and leaves the rest of the literal rendering intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0012",
+        "excerpt": "賜推誠協贊功臣"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

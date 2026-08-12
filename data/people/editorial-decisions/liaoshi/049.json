@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "049",
+  "input": {
+    "chapterFingerprint": "sha256:87480942b135d29085306542cff8f0d72a9f14bb11a04bc63ced373e7af9f955",
+    "proposalsFingerprint": "sha256:412756601265b5fbb3d835759f74a5bda9ccf6aa2e21d1e0bd8beca0cc2199e4"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-12T02:41:33Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:049:r0001",
+      "unit": {
+        "id": "s0021",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 19
+      },
+      "field": "idiomatic",
+      "before": "The National History Institute now holds Chen Daren's Jin-dynasty \"Liao Ritual Treatise,\" which records their native customs, and also a \"Miscellaneous Liao Rites,\" largely in the Chinese style.",
+      "after": "The National History Institute now holds Jin Chen Daren's \"Liao Ritual Treatise,\" which records their native customs, and also a \"Miscellaneous Liao Rites,\" largely in the Chinese style.",
+      "reason": "Chinese 金陳大任 marks Jin-dynasty affiliation before the name; idiomatic 'Chen Daren's Jin-dynasty' reverses that attribution.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:049:r0002",
+      "unit": {
+        "id": "s0075",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "Whoever hit the willow pledged goods against the marker of the willow's crown and robes; whoever missed pledged crown and robes as stake.",
+      "after": "Whoever hit the willow took as pledge the crown and robes of the willow's marker; whoever missed pledged his own crown and robes.",
+      "reason": "Chinese 中柳者質誌柳者冠服 means hitters take the marker's pledged regalia; the literal reverses the pledge direction.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:049:r0001",
+      "decision": "revise",
+      "after": "The National History Institute now holds a \"Liao Ritual Treatise\" by Chen Daren of the Jin dynasty, which records Liao native customs, and also a \"Miscellaneous Liao Rites,\" largely in the Chinese style.",
+      "reason": "金 identifies Chen Daren as a Jin-dynasty author. The revised wording preserves that relationship in natural English instead of the awkward possessive ‘Jin Chen Daren's.’",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0021",
+        "excerpt": "金陳大任《遼禮儀志》"
+      }
+    },
+    {
+      "repairId": "liaoshi:049:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "中柳者質誌柳者冠服 means the hitter takes the willow-marker's crown and robes as pledge; the original literal reverses that direction, and the proposed wording matches 不中者以冠服質之 for the misser's own stake.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "中柳者質誌柳者冠服，不中者以冠服質之"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

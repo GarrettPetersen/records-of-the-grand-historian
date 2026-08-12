@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "weishu",
+  "chapter": "019",
+  "input": {
+    "chapterFingerprint": "sha256:a52b85e5ebbedc5c0ff856b659c444843027d1a811beebf39be2a911ea65809d",
+    "proposalsFingerprint": "sha256:c88b7cccf568b2f1b4ba51c39d6c293a25fc92261657f9e48a45898eee5a75c8"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-12T02:41:33Z"
+  },
+  "proposals": [
+    {
+      "id": "weishu:019:r0001",
+      "unit": {
+        "id": "s0002",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Empress Dowager Du bore Shizu Emperor Taiwu.",
+      "after": "Empress Dowager Du Mi bore Shizu Emperor Taiwu.",
+      "reason": "Idiomatic English omits 密 from 杜密皇后, which the parallel literal preserves as Du Mi.",
+      "confidence": "medium"
+    },
+    {
+      "id": "weishu:019:r0002",
+      "unit": {
+        "id": "s0047",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Shizu had no son yet and once said: \"A brother's son is like one's own son.",
+      "after": "Shizu had no son yet and once said: \"A brother's son is like one's own son.\"",
+      "reason": "Literal English is missing the closing quotation mark after the emperor's speech.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "weishu:019:r0001",
+      "decision": "revise",
+      "after": "Empress Mi of the Du clan bore Shizu Emperor Taiwu.",
+      "reason": "In 杜密皇后, 杜 is the clan name and 密 is the empress's posthumous style. ‘Empress Mi of the Du clan’ preserves both without misreading Du Mi as a personal name or calling her empress dowager.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0002",
+        "excerpt": "杜密皇后"
+      }
+    },
+    {
+      "repairId": "weishu:019:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0047 quotes Shizu with closed 「兄弟之子猶子也。」; the literal opens the English quote but drops the closing mark, so restoring \" corrects a real punctuation defect without changing sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0047",
+        "excerpt": "嘗曰：「兄弟之子猶子也。」"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

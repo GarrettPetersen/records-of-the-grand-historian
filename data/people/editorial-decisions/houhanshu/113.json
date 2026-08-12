@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "houhanshu",
+  "chapter": "113",
+  "input": {
+    "chapterFingerprint": "sha256:fec66eb13863ca439d873fc0dca65f3f02acc024f279a147d53e2a6b8b464941",
+    "proposalsFingerprint": "sha256:3656423da9ae6d23621f125c0c229fbfa681f572c53a88c6e9592d9fae4532ab"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-0aff5000-c8c1-4df8-8fc8-01060e0e63f2",
+    "runId": "run-3f2e1c17-271b-42ab-b08b-d83ec69b33b5",
+    "completedAt": "2026-08-12T01:45:12.530Z"
+  },
+  "proposals": [
+    {
+      "id": "houhanshu:113:r0001",
+      "unit": {
+        "id": "s0042",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "In the tenth month of Yanxi 5 Nanyang governor Li Su was charged after tribal raiders sacked his jurisdiction, looted more than a hundred million in goods, and he fled into his yamen only to seize the bronze tiger tally and abandon the walls;",
+      "after": "In the tenth month of Yanxi 5 Nanjun governor Li Su was charged after tribal raiders sacked his jurisdiction, looted more than a hundred million in goods, and he fled into his yamen only to seize the bronze tiger tally and abandon the walls;",
+      "reason": "Chinese has 南郡太守 (governor of Nanjun/South Commandery), not 南阳 (Nanyang); the idiomatic rendering misidentifies the commandery.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:113:r0002",
+      "unit": {
+        "id": "s0061",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "idiomatic",
+      "before": "Inspectors of Jingzhou and Jiaozhi were captured by rebels, Guiyang’s Ren Yin fled before the enemy, and all were executed in the marketplace—the fulfillment of Mars on the Ghosts’ attendant star.",
+      "after": "Jingzhou inspector Zhi and Jiaozhi inspector Ge Zhi were both captured by rebels, Guiyang’s Ren Yin fled before the enemy, and all were executed in the marketplace—the fulfillment of Mars on the Ghosts’ attendant star.",
+      "reason": "Idiomatic English omits the personal name 芝 (Zhi) present in the Chinese and in the literal line, collapsing him into an unnamed plural.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:113:r0003",
+      "unit": {
+        "id": "s0168",
+        "kind": "paragraph-sentence",
+        "blockIndex": 31,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "The Spring and Autumn Annals for Xi 16 of Song records five stones falling in Song; the Zuozhuan gloss calls them fallen stars.",
+      "after": "The Spring and Autumn Annals, in Duke Xi’s sixteenth year, records five meteorites falling in Song; the commentary says they were fallen stars.",
+      "reason": "Chinese 僖公十六年，陨石于宋五 dates the entry to Duke Xi year 16 and locates the fall in Song; it does not make Xi “Duke Xi of Song.”",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "houhanshu:113:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 南郡太守 names Li Su as governor of Nanjun; the original’s “Nanyang” (南阳) is a different commandery, and the proposed “Nanjun governor” restores the source title.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0042",
+        "excerpt": "南郡太守李肃"
+      }
+    },
+    {
+      "repairId": "houhanshu:113:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 荆州刺史芝、交阯刺史葛祗 names both inspectors; the original collapses them into unnamed plurals, while the repair restores Zhi and Ge Zhi as in the source.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0061",
+        "excerpt": "荆州刺史芝、交阯刺史葛祗"
+      }
+    },
+    {
+      "repairId": "houhanshu:113:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 《春秋》僖公十六年，陨石于宋五 dates the entry to Duke Xi’s sixteenth year and places the fall in Song; “Xi 16 of Song” wrongly ties the duke/year to Song, and the repair separates date from location.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0168",
+        "excerpt": "《春秋》僖公十六年，陨石于宋五"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -301,6 +301,17 @@ function candidateMatchesClaimValue(extraction, candidate, predicate) {
   );
 }
 
+function candidateMatchesNamedTitleClaim(extraction, candidate) {
+  return extraction.claims.some((claim) =>
+    ['honor', 'noble-title'].includes(claim.predicate) &&
+    claimEvidenceUnit(claim, candidate.unit) &&
+    nestedStringValues(claim.value).some((value) =>
+      typeof value === 'string' &&
+      surfaceContains(value.toLocaleLowerCase('en-US'), candidate.exact.toLocaleLowerCase('en-US'), 'en')
+    )
+  );
+}
+
 function isWordCharacter(value) {
   return typeof value === 'string' && /[\p{L}\p{N}]/u.test(value);
 }
@@ -489,7 +500,7 @@ function normalizeMentionSpans(mention, unit, staleSpans) {
   return normalized;
 }
 
-function removeRedundantSamePersonSpans(mentions) {
+function removeRedundantSamePersonSpans(mentions, candidateById = new Map()) {
   for (const language of ['zh', 'en']) {
     const located = mentions.flatMap((mention) => mention.spans[language].map((span) => ({
       mention,
@@ -507,6 +518,16 @@ function removeRedundantSamePersonSpans(mentions) {
           (other.length === current.length && other.mention.id < current.mention.id))
       );
       if (!covering) continue;
+      const transferredCandidateRefs = current.mention.candidateRefs.filter((candidateId) => {
+        const candidate = candidateById.get(candidateId);
+        return candidate?.language === language &&
+          covering.span.startCodePoint <= candidate.startCodePoint &&
+          candidate.endCodePoint <= covering.span.endCodePoint;
+      });
+      covering.mention.candidateRefs.push(...transferredCandidateRefs);
+      current.mention.candidateRefs = current.mention.candidateRefs.filter((candidateId) =>
+        !transferredCandidateRefs.includes(candidateId)
+      );
       current.mention.spans[language] = current.mention.spans[language]
         .filter((span) => span !== current.span);
     }
@@ -555,7 +576,7 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
     if (!unit) return mention;
     return normalizeMentionSpans(mention, unit, staleSpans);
   });
-  removeRedundantSamePersonSpans(reconciled.mentions);
+  removeRedundantSamePersonSpans(reconciled.mentions, candidateById);
 
   for (const mention of reconciled.mentions) {
     mention.candidateRefs = [];
@@ -714,6 +735,37 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
   const unresolvedCandidates = [];
   for (const candidate of revisedPacket.preflight.candidates) {
     if (accounted.has(candidate.id)) continue;
+    const remappedPriorDispositions = previousDispositions.filter((disposition) => {
+      const previous = previousCandidateById.get(disposition.candidate);
+      if (
+        !previous ||
+        previous.unit !== candidate.unit ||
+        previous.language !== candidate.language
+      ) return false;
+      const previousUnit = previousUnitById.get(previous.unit);
+      const revisedUnit = unitById.get(candidate.unit);
+      if (!previousUnit || !revisedUnit) return false;
+      const remapped = remapMentionSpanThroughEdit(
+        { exact: previous.exact, occurrence: previous.occurrence },
+        previousUnit[previous.language],
+        revisedUnit[candidate.language],
+        candidate.language,
+      );
+      return remapped?.exact === candidate.exact &&
+        remapped.startCodePoint === candidate.startCodePoint &&
+        remapped.endCodePoint === candidate.endCodePoint;
+    });
+    const remappedDispositionKinds = new Set(remappedPriorDispositions.map((item) =>
+      `${item.disposition}\u0000${item.reason}\u0000${item.note ?? ''}`
+    ));
+    if (remappedPriorDispositions.length > 0 && remappedDispositionKinds.size === 1) {
+      reconciled.candidateDispositions.push({
+        ...structuredClone(remappedPriorDispositions[0]),
+        candidate: candidate.id,
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
     const priorSurfaceDispositions = previousDispositions.filter((disposition) => {
       const previous = previousCandidateById.get(disposition.candidate);
       return previous &&
@@ -817,6 +869,8 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         })
         .map((alias) => ({ person: person.localId, alias }))
     );
+    const exactAliasMatches = aliasMatches.filter((item) => item.alias.exact === candidate.exact);
+    if (exactAliasMatches.length > 0) aliasMatches = exactAliasMatches;
     if (aliasMatches.length === 0) {
       aliasMatches = reconciled.people.flatMap((person) => {
         const exact = person.preferredNameSuggestion?.[candidate.language];
@@ -1020,6 +1074,19 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
     }
     if (
       candidate.language === 'en' &&
+      candidateMatchesNamedTitleClaim(reconciled, candidate)
+    ) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'title',
+        note: 'Component of an honorific or noble title recorded in this unit.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (
+      candidate.language === 'en' &&
       (candidate.exact === 'Feng' || candidate.exact === 'Shan') &&
       /\bFeng and Shan (?:rites|sacrifices)\b/u.test(unitById.get(candidate.unit).en)
     ) {
@@ -1028,6 +1095,21 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         disposition: 'not-person',
         reason: 'other',
         note: 'Part of the Feng and Shan sacrifice name, not a person.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (
+      candidate.language === 'en' &&
+      /^[ \t]+hour\b/iu.test(
+        [...unitById.get(candidate.unit).en].slice(candidate.endCodePoint).join('')
+      )
+    ) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'other',
+        note: 'Traditional hour label, not a person name.',
       });
       accounted.add(candidate.id);
       continue;
@@ -1060,6 +1142,14 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
     containing[0].candidateRefs.push(candidate.id);
     return false;
   });
+
+  // Candidate reconciliation can widen an existing alias or add a second
+  // mention for the same person. Collapse those spans only after all mention
+  // growth has finished, and preserve the candidate accounting on the cover.
+  removeRedundantSamePersonSpans(reconciled.mentions, candidateById);
+  reconciled.mentions = reconciled.mentions.filter((mention) =>
+    mention.spans.zh.length > 0 || mention.spans.en.length > 0
+  );
 
   for (const mention of reconciled.mentions) {
     for (const language of ['zh', 'en']) {

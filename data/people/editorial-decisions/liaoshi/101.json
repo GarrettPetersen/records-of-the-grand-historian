@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "101",
+  "input": {
+    "chapterFingerprint": "sha256:d47747a9c4cd0975a610123d11367ef44d4b5e50376b7b3b70fa5abed044785c",
+    "proposalsFingerprint": "sha256:a5293aaf6b0a91b082ef067d4bf6b30cf6932bb7ef8132948ea5be645ba94482"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-12T03:03:41Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:101:r0001",
+      "unit": {
+        "id": "s0026",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "The Bohai people of Raozhou rose at a subordinate city under Goutou, fielding more than thirty thousand infantry and cavalry; no summons could make them submit.",
+      "after": "The Bohai people of Raozhou organized touxia subordinate cities in rebellion, fielding more than thirty thousand infantry and cavalry; no summons could make them submit.",
+      "reason": "結構頭下城 means organizing/joining touxia (頭下) cities, not a personal name Goutou; the idiomatic reading invents a person absent from the Chinese.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:101:r0002",
+      "unit": {
+        "id": "s0032",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 16
+      },
+      "field": "idiomatic",
+      "before": "He later retired as Grand Mentor of the Heir Apparent and died in office.",
+      "after": "He later retired as Grand Mentor of the Heir Apparent and died.",
+      "reason": "Chinese 以致仕，卒 records retirement then death, not death while still in office; \"died in office\" contradicts 致仕.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:101:r0003",
+      "unit": {
+        "id": "s0073",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "For his merit he was made chancellor of the Northern Prefecture, with the additional title of left vice director and concurrent commander of the Eastern Route army.",
+      "after": "For his merit he was made chancellor of the Northern Prefecture, with the additional title of left vice director and concurrent commander of the Northeast Route army.",
+      "reason": "東北路 is the Northeast Route, not Eastern Route; the idiomatic omits 北.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:101:r0001",
+      "decision": "revise",
+      "after": "The Bohai people of Raozhou joined forces with a touxia appanage city in rebellion, fielding more than thirty thousand infantry and cavalry; summonses failed to bring them to submit.",
+      "reason": "頭下城 is a Liao touxia appanage city, not a person named Goutou, and 結構 means to conspire or join forces. The revision restores the institution and natural syntax without turning the city type into a plural organizer.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0026",
+        "excerpt": "結構頭下城以叛"
+      }
+    },
+    {
+      "repairId": "liaoshi:101:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "後以太子太傅致仕，卒 records retirement from office (致仕) followed by death (卒); \"died in office\" contradicts 致仕. The proposed English correctly separates retirement and death.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0032",
+        "excerpt": "後以太子太傅致仕，卒"
+      }
+    },
+    {
+      "repairId": "liaoshi:101:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "兼東北路都統 names the Northeast Route (東北路), not an Eastern Route; the idiomatic English dropped 北. The proposed replacement restores the full route name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0073",
+        "excerpt": "兼東北路都統"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

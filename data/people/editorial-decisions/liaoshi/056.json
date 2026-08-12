@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "056",
+  "input": {
+    "chapterFingerprint": "sha256:5525301915c059e0465346c367b51df3be28405e576042c857e536b61d348731",
+    "proposalsFingerprint": "sha256:e82a7a443695b441d3f1834f3b85462ff1dbbd3f6aada8fb5aa6d905d0d9fd77"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-635bc946-58c2-4590-a00a-394c28f7a08f",
+    "runId": "run-8b0d8f18-da14-4cc6-bb3e-96f0e98dd3c0",
+    "completedAt": "2026-08-12T01:53:56.415Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:056:r0001",
+      "unit": {
+        "id": "s0007",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Taizu became emperor of the north; Taizong ruled China. Purple-silver sable, baskets of gauze and silk—herds of loads arrived.",
+      "after": "Taizu became emperor of the north; Taizong ruled China. Purple-silver sable, baskets of gauze and silk—loads arrived in abundance.",
+      "reason": "Chinese 麇載 means abundant piled loads, not literal herds; 'herds of loads' is a mistranslation that obscures the sense.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:056:r0002",
+      "unit": {
+        "id": "s0111",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Thereafter Tang took the regalia crown and blue-green robes as sacrificial dress, tongtian hats and crimson robes as court dress, and plain headcloths with robe-trousers as everyday dress.",
+      "after": "Thereafter, Tang took the regalia crown and blue-green robes as sacrificial dress, tongtian hats and crimson robes as court dress, and plain headcloths with robe-trousers as everyday dress.",
+      "reason": "Chinese 厥後唐 means 'thereafter, Tang'; the comma prevents misreading the false compound 後唐 (Later Tang).",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:056:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 麇載而至, 麇 marks dense abundance of loads, not animal herds; 'herds of loads' misreads the figure, and 'loads arrived in abundance' restores the sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0007",
+        "excerpt": "麇載而至"
+      }
+    },
+    {
+      "repairId": "liaoshi:056:r0002",
+      "decision": "reject",
+      "after": null,
+      "reason": "厥後唐 is already correctly rendered as 'Thereafter Tang'; English 'Thereafter' cannot be read as the dynasty name Later Tang (後唐), so the added comma is merely stylistic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0111",
+        "excerpt": "厥後唐以冕冠"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

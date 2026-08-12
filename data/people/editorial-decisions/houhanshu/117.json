@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "houhanshu",
+  "chapter": "117",
+  "input": {
+    "chapterFingerprint": "sha256:17d6a0296bfd7410d00f58d9354ff2666e2d7dd173d8e200688236ef1ab2f509",
+    "proposalsFingerprint": "sha256:b8bf51acefa3c3fef0f37091d1e70f2401b5709f99f8097dd153e2370d63fd3f"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-674b2162-009f-4e96-95e0-9f632dd12144",
+    "runId": "run-e94a9f23-01da-470f-937f-73bb229cf754",
+    "completedAt": "2026-08-12T01:45:44.634Z"
+  },
+  "proposals": [
+    {
+      "id": "houhanshu:117:r0001",
+      "unit": {
+        "id": "s0079",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Yonghe 3, ninth month: the earth shook on jimao and again on gengyin.",
+      "after": "Jianhe 3, ninth month: the earth shook on jimao and again on gengyin.",
+      "reason": "Chinese 三年 follows Jianhe-era narrative (s0075–s0078); idiomatic wrongly labels it Yonghe 3.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:117:r0002",
+      "unit": {
+        "id": "s0062",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "On the day yihai in the third month of the third year the capital, Jincheng, and Longxi suffered earthquakes and splitting; many city walls and houses were ruined, and people were crushed to death.",
+      "after": "On the day yihai in the second month of the third year the capital, Jincheng, and Longxi suffered earthquakes and splitting; many city walls and houses were ruined, and people were crushed to death.",
+      "reason": "Chinese has 二月 (second month); the literal English incorrectly says third month.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:117:r0003",
+      "unit": {
+        "id": "s0164",
+        "kind": "paragraph-sentence",
+        "blockIndex": 41,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Yuanchu 4, summer: Pei and Bohai counted thirty thousand trees down.",
+      "after": "Yuanchu 6, fourth month of summer: Pei and Bohai counted thirty thousand trees down.",
+      "reason": "Chinese 六年夏四月 is Yuanchu year 6, summer fourth month; idiomatic wrongly says Yuanchu 4.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:117:r0004",
+      "unit": {
+        "id": "s0164",
+        "kind": "paragraph-sentence",
+        "blockIndex": 41,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "In the sixth month of summer of the fourth year Pei and Bohai had a great wind that uprooted more than thirty thousand trees.",
+      "after": "In the fourth month of summer of the sixth year Pei and Bohai had a great wind that uprooted more than thirty thousand trees.",
+      "reason": "Chinese 六年夏四月; literal wrongly says fourth year and sixth month.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "houhanshu:117:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Bare 三年 follows 桓帝建和元年 (s0075) and precedes 元嘉元年 (s0080); the digression in s0078 does not change the era, so Yonghe 3 is wrong and Jianhe 3 is correct.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0079",
+        "excerpt": "三年九月己卯，地震，庚寅又震。"
+      }
+    },
+    {
+      "repairId": "houhanshu:117:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 三年二月乙亥 has 二月; the literal English wrongly says the third month, and the proposed second month matches the source.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0062",
+        "excerpt": "三年二月乙亥"
+      }
+    },
+    {
+      "repairId": "houhanshu:117:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 六年夏四月 under the Yuanchu sequence begun at s0163 is year 6, summer fourth month; the idiomatic Yuanchu 4 and omitted month are errors, and the proposed wording restores both.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0164",
+        "excerpt": "六年夏四月"
+      }
+    },
+    {
+      "repairId": "houhanshu:117:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 六年夏四月 is the sixth year and the fourth month of summer; the literal English swaps them into fourth year and sixth month, and the proposal corrects both.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0164",
+        "excerpt": "六年夏四月"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

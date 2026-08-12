@@ -138,6 +138,9 @@ function selfTest() {
       sentences: [{
         id: 's0001',
         zh: '劉湛昨日來，劉湛留。',
+        literal: 'Liu Zhan came.',
+        idiomatic: 'Liu Zhan came.',
+        translation: 'Liu Zhan came.',
         translations: [{ lang: 'en', literal: 'Liu Zhan came.', idiomatic: 'Liu Zhan came.' }],
       }],
     }],
@@ -280,6 +283,15 @@ function selfTest() {
   );
 
   const applied = applyTranslationRepairs(chapter, reviewedRepairs);
+  const appliedUnit = applied.chapter.content[0].sentences[0];
+  const appliedEnglish = 'Liu Zhan came yesterday, and Liu Zhan stayed.';
+  if (
+    appliedUnit.translation !== appliedEnglish ||
+    appliedUnit.idiomatic !== appliedEnglish ||
+    appliedUnit.translations[0].idiomatic !== appliedEnglish
+  ) {
+    throw new Error('Duplicated idiomatic translation fields were not updated together');
+  }
   const revisedPacket = buildPeopleExtractionPacket('fixture', '001', {
     chapterData: applied.chapter,
     chapterFile: '/tmp/fixture-001.json',
@@ -363,6 +375,26 @@ function selfTest() {
       collection: 'sentences', itemIndex: 0,
       zh: '', en: 'He took five prefectures: Wei, Xin, Wu, Gui, and Ru.',
       literal: 'He took five prefectures: Wei, Xin, Wu, Gui, and Ru.',
+    }, {
+      id: 's0012', kind: 'paragraph-sentence', blockIndex: 11,
+      collection: 'sentences', itemIndex: 0,
+      zh: '芝、葛祗皆被執。', en: 'Zhi and Ge Zhi were both captured.',
+      literal: 'Zhi and Ge Zhi were both captured.',
+    }, {
+      id: 's0013', kind: 'paragraph-sentence', blockIndex: 12,
+      collection: 'sentences', itemIndex: 0,
+      zh: '賜保義功臣。', en: 'He was granted the title Meritorious Subject of Sincere Support.',
+      literal: 'He was granted the title Meritorious Subject of Sincere Support.',
+    }, {
+      id: 's0014', kind: 'paragraph-sentence', blockIndex: 13,
+      collection: 'sentences', itemIndex: 0,
+      zh: '國舅詳穩。', en: 'Guojiu Xiangwen presented offerings.',
+      literal: 'Guojiu Xiangwen presented offerings.',
+    }, {
+      id: 's0015', kind: 'paragraph-sentence', blockIndex: 14,
+      collection: 'sentences', itemIndex: 0,
+      zh: '禺中。', en: 'Trade continued through the Wei hour.',
+      literal: 'Trade continued through the Wei hour.',
     }],
     preflight: {
       candidates: [{
@@ -413,6 +445,22 @@ function selfTest() {
         id: 'fixture:002:cand_ru_prefecture', unit: 's0011', language: 'en',
         exact: 'Ru', occurrence: 0, startCodePoint: 49, endCodePoint: 51,
         detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_ge_zhi', unit: 's0012', language: 'en',
+        exact: 'Ge Zhi', occurrence: 0, startCodePoint: 8, endCodePoint: 14,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_meritorious_subject', unit: 's0013', language: 'en',
+        exact: 'Meritorious Subject', occurrence: 0, startCodePoint: 25, endCodePoint: 44,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_guojiu', unit: 's0014', language: 'en',
+        exact: 'Guojiu Xiangwen', occurrence: 0, startCodePoint: 0, endCodePoint: 15,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_wei_hour', unit: 's0015', language: 'en',
+        exact: 'Wei', occurrence: 0, startCodePoint: 28, endCodePoint: 31,
+        detectors: [{ kind: 'english-capitalized-expression' }],
       }],
     },
   };
@@ -446,6 +494,18 @@ function selfTest() {
       historicity: 'historical',
       descriptorSuggestion: 'Ruler',
       identityHints: { nativePlaces: [], relatedLocalPeople: [], activeDateHints: [] },
+    }, {
+      localId: 'fixture:002:p005',
+      preferredNameSuggestion: { en: 'Zhi', zh: '芝' },
+      historicity: 'historical',
+      descriptorSuggestion: 'Official',
+      identityHints: { nativePlaces: [], relatedLocalPeople: [], activeDateHints: [] },
+    }, {
+      localId: 'fixture:002:p006',
+      preferredNameSuggestion: { en: 'Ge Zhi', zh: '葛祗' },
+      historicity: 'historical',
+      descriptorSuggestion: 'Official',
+      identityHints: { nativePlaces: [], relatedLocalPeople: [], activeDateHints: [] },
     }],
     mentions: [{
       id: 'fixture:002:m0001',
@@ -470,6 +530,26 @@ function selfTest() {
         en: [{ exact: 'Liu Xin', occurrence: 0 }, { exact: 'Liu', occurrence: 0 }],
       },
       candidateRefs: ['fixture:002:cand_liu_xin'],
+    }, {
+      id: 'fixture:002:m0003',
+      person: 'fixture:002:p005',
+      unit: {
+        id: 's0012', kind: 'paragraph-sentence', blockIndex: 11,
+        collection: 'sentences', itemIndex: 0,
+      },
+      kind: 'personal-name',
+      spans: { zh: [{ exact: '芝', occurrence: 0 }], en: [] },
+      candidateRefs: [],
+    }, {
+      id: 'fixture:002:m0004',
+      person: 'fixture:002:p006',
+      unit: {
+        id: 's0012', kind: 'paragraph-sentence', blockIndex: 11,
+        collection: 'sentences', itemIndex: 0,
+      },
+      kind: 'personal-name',
+      spans: { zh: [{ exact: '葛祗', occurrence: 0 }], en: [] },
+      candidateRefs: [],
     }],
     claims: [{
       id: 'fixture:002:c0001', subject: 'fixture:002:p001', predicate: 'name',
@@ -487,15 +567,40 @@ function selfTest() {
       id: 'fixture:002:c0004', subject: 'fixture:002:p004', predicate: 'name',
       value: { kind: 'temple-name', en: 'Gaozu' }, certainty: 'explicit',
       evidence: ['fixture:002:s0003'],
+    }, {
+      id: 'fixture:002:c0005', subject: 'fixture:002:p005', predicate: 'name',
+      value: { kind: 'personal', en: 'Zhi', zh: '芝' }, certainty: 'explicit',
+      evidence: ['fixture:002:s0012'],
+    }, {
+      id: 'fixture:002:c0006', subject: 'fixture:002:p006', predicate: 'name',
+      value: { kind: 'personal', en: 'Ge Zhi', zh: '葛祗' }, certainty: 'explicit',
+      evidence: ['fixture:002:s0012'],
+    }, {
+      id: 'fixture:002:c0007', subject: 'fixture:002:p001', predicate: 'honor',
+      value: { label: { en: 'Meritorious Subject of Sincere Support', zh: '保義功臣' } },
+      certainty: 'explicit', evidence: ['fixture:002:s0013'],
     }],
     translationRepairs: [],
     candidateDispositions: [{
       candidate: 'fixture:002:cand_henei_zh',
       disposition: 'not-person', reason: 'place', note: null,
+    }, {
+      candidate: 'fixture:002:cand_guoguo',
+      disposition: 'not-person', reason: 'office', note: null,
     }],
     coverage: { allUnitsVisited: true, preflightCandidatesAccountedFor: true, unresolvedReferences: [] },
   };
+  const previousFragmentPacket = structuredClone(fragmentPacket);
+  const previousOfficeUnit = previousFragmentPacket.units.find((unit) => unit.id === 's0014');
+  previousOfficeUnit.en = 'Guoguo Xiangwen presented offerings.';
+  previousOfficeUnit.literal = 'Guoguo Xiangwen presented offerings.';
+  const previousOfficeCandidate = previousFragmentPacket.preflight.candidates.find((candidate) =>
+    candidate.id === 'fixture:002:cand_guojiu'
+  );
+  previousOfficeCandidate.id = 'fixture:002:cand_guoguo';
+  previousOfficeCandidate.exact = 'Guoguo Xiangwen';
   const fragments = reconcileExtractionAfterRepairs(fragmentExtraction, fragmentPacket, {
+    previousPacket: previousFragmentPacket,
     markRepairsApplied: false,
   });
   if (fragments.unresolvedCandidates.length > 0) {
@@ -525,6 +630,14 @@ function selfTest() {
   if (!preferredNameMention) {
     throw new Error('Unique preferred name did not acquire a mention in a newly repaired unit');
   }
+  const restoredFullName = fragments.extraction.mentions.find((mention) =>
+    mention.person === 'fixture:002:p006' &&
+    mention.unit.id === 's0012' &&
+    mention.spans.en.some((span) => span.exact === 'Ge Zhi')
+  );
+  if (!restoredFullName) {
+    throw new Error('Restored full name did not outrank its contained shorter alias');
+  }
   const expectedNonPeople = new Map([
     ['fixture:002:cand_only', 'not-a-name'],
     ['fixture:002:cand_am_i', 'not-a-name'],
@@ -533,6 +646,9 @@ function selfTest() {
     ['fixture:002:cand_privy', 'office'],
     ['fixture:002:cand_xi_people', 'collective'],
     ['fixture:002:cand_ru_prefecture', 'place'],
+    ['fixture:002:cand_meritorious_subject', 'title'],
+    ['fixture:002:cand_guojiu', 'office'],
+    ['fixture:002:cand_wei_hour', 'other'],
   ]);
   for (const [candidate, reason] of expectedNonPeople) {
     const disposition = fragments.extraction.candidateDispositions.find((item) =>

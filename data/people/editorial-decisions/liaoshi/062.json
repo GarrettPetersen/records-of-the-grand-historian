@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "062",
+  "input": {
+    "chapterFingerprint": "sha256:89e1bd09b1e9100fc9b5dad05ec66ec9c86da999d73b5f05b0b4a21931c5e670",
+    "proposalsFingerprint": "sha256:c89682d2537f2d4fd062a5c6f77ebb0df01521c5bb36d46fe7d80af977675975"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-0918c0de-ebfe-4822-947c-000ea8d0abca",
+    "runId": "run-4bc3efc2-7092-4006-b21f-e90296f47a22",
+    "completedAt": "2026-08-12T01:53:52.729Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:062:r0001",
+      "unit": {
+        "id": "s0094",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "idiomatic",
+      "before": "Consort Wen's elder daughter was married to Yelü Tahieli and her younger to Yelü Yudu; Fengxian then falsely accused Yudu and others of plotting to enthrone the Prince of Jin and make Tianzuo Retired Emperor.",
+      "after": "Consort Wen's elder sister was married to Yelü Tahieli and her younger sister to Yelü Yudu; Fengxian then falsely accused Yudu and others of plotting to enthrone the Prince of Jin and make Tianzuo Retired Emperor.",
+      "reason": "Chinese 女兄/女弟 means elder/younger sister, not daughter.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:062:r0002",
+      "unit": {
+        "id": "s0094",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "literal",
+      "before": "It happened that Consort Wen's elder daughter by marriage was wed to Yelü Tahieli and her younger to Yelü Yudu; Fengxian then falsely reported that Yudu and others plotted to enthrone the Prince of Jin and honor Tianzuo as Retired Emperor.",
+      "after": "It happened that Consort Wen's elder sister was wed to Yelü Tahieli and her younger sister to Yelü Yudu; Fengxian then falsely reported that Yudu and others plotted to enthrone the Prince of Jin and honor Tianzuo as Retired Emperor.",
+      "reason": "Chinese 女兄/女弟 means elder/younger sister; 'daughter by marriage' is a mistranslation.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:062:r0003",
+      "unit": {
+        "id": "s0075",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 37
+      },
+      "field": "idiomatic",
+      "before": "Campaign General Yelü Nieli and three others who shot deer in the imperial preserve were all executed in the marketplace.",
+      "after": "Campaign General Yelü Nieli and two others who shot deer in the imperial preserve were all executed in the marketplace.",
+      "reason": "Chinese 耶律涅裏三人 indicates three persons total including Nieli, not Nieli plus three others.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:062:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "文妃之女兄 and 女弟 are Consort Wen's elder and younger sisters, not her daughters; the proposed idiomatic correctly restores sibling kinship while leaving the rest of the sentence intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0094",
+        "excerpt": "文妃之女兄適耶律撻曷裏，女弟適耶律余睹"
+      }
+    },
+    {
+      "repairId": "liaoshi:062:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "女兄/女弟 means elder/younger sister; 'elder daughter by marriage' invents a daughter reading the Chinese does not support, and the proposed literal correctly names the sisters.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0094",
+        "excerpt": "文妃之女兄適耶律撻曷裏，女弟適耶律余睹"
+      }
+    },
+    {
+      "repairId": "liaoshi:062:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "耶律涅裏三人 counts three people in total, with Nieli included; 'and three others' wrongly makes four, while 'and two others' matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "耶律涅裏三人"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

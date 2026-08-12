@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "027",
+  "input": {
+    "chapterFingerprint": "sha256:a5a18d2a0c8b9e1406af5bfbc157ca2f2d9048bcff0efd3113a0b05afe4f492d",
+    "proposalsFingerprint": "sha256:e301f474709000fe0049021aa008e69fde54d701ad603eb059f442beffb5e55d"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-4bb69e03-df41-4f66-ba5e-27f7de520025",
+    "runId": "run-1e7bb17e-fe51-400c-81d6-b1eacae94000",
+    "completedAt": "2026-08-12T01:54:19.703Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:027:r0001",
+      "unit": {
+        "id": "s0005",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "In Kangxi 8 the Kangxi emperor, on Verbiest's advice, commissioned six new instruments: ecliptic theodolite, equatorial theodolite, azimuth theodolite, altitude quadrant, astronomical quadrant, and celestial globe.",
+      "after": "In Kangxi 8 the Kangxi emperor, on Verbiest's advice, commissioned six new instruments: ecliptic theodolite, equatorial theodolite, azimuth theodolite, altitude quadrant, sextant, and celestial globe.",
+      "reason": "紀限儀 is a sixty-degree instrument (one sixth of a circle), i.e. a sextant, not a quadrant; s0063 confirms the arc is 六十度 / one sixth of a circle.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:027:r0002",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "The half ring borne above, front and rear running true north-south, rises straight to the celestial pole and cuts the horizon at center.",
+      "after": "The half ring borne above, front and rear running true north-south, rises straight to the zenith and cuts the horizon at center.",
+      "reason": "天頂 means zenith, not celestial pole (北極).",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:027:r0003",
+      "unit": {
+        "id": "s0050",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "The line within the axle is always the plumb line to the celestial pole.",
+      "after": "The line within the axle is always the plumb line to the zenith.",
+      "reason": "天頂 means zenith; the idiomatic already correctly says zenith plumb line.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:027:r0004",
+      "unit": {
+        "id": "s0063",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "The astronomical quadrant's arc is one sixth of a circle, graduated to sixty degrees.",
+      "after": "The sextant's arc is one sixth of a circle, graduated to sixty degrees.",
+      "reason": "An arc of one sixth of a circle (六十度) is a sextant; calling 紀限儀 a quadrant contradicts the stated geometry.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:027:r0005",
+      "unit": {
+        "id": "s0086",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "A single ring leans obliquely as the fixed ecliptic equator circle; both faces are engraved with the circuit of the sun's twelve hours; zi and wu noon rightly occupy the meridian double ring's hollow half, knotting at its midpoint—that is celestial latitude.",
+      "after": "A single ring leans obliquely as the fixed celestial equator circle; both faces are engraved with the circuit of the sun's twelve hours; zi and wu noon rightly occupy the meridian double ring's hollow half, knotting at its midpoint—that is celestial latitude.",
+      "reason": "天常赤道圈 is the fixed celestial equator ring, not an ecliptic equator; the idiomatic correctly says fixed equator.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:027:r0006",
+      "unit": {
+        "id": "s0091",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "Again according to the capital's north polar altitude in degrees and minutes, count upward to complete one quadrant—that is the celestial pole.",
+      "after": "Again according to the capital's north polar altitude in degrees and minutes, count upward to complete one quadrant—that is the zenith.",
+      "reason": "天頂 means zenith; counting a quadrant up from polar altitude yields the zenith, matching the idiomatic.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:027:r0007",
+      "unit": {
+        "id": "s0093",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "At the celestial pole set a small nail to suspend the plumb line; the plumb rightly reaches the earth's center and also rightly cuts the double ring's face.",
+      "after": "At the zenith set a small nail to suspend the plumb line; the plumb rightly reaches the earth's center and also rightly cuts the double ring's face.",
+      "reason": "天頂 means zenith; a plumb is suspended from the zenith toward the nadir.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:027:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0005 lists 紀限儀 among the six remade instruments; s0063 states its arc is 全圓六分之一 / 六十度, i.e. a sextant. Rendering it as 'astronomical quadrant' contradicts that geometry; 'sextant' is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0063",
+        "excerpt": "紀限儀，弧面為全圓六分之一，分六十度"
+      }
+    },
+    {
+      "repairId": "qingshigao:027:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0011 has 上直天頂; 天頂 is the zenith, not the celestial pole (北極). The prior literal misreads it; 'rises straight to the zenith' matches the Chinese and the idiomatic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "上直天頂"
+      }
+    },
+    {
+      "repairId": "qingshigao:027:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0050 says 恆為天頂之垂線; 天頂 means zenith. 'Plumb line to the celestial pole' is wrong; 'plumb line to the zenith' restores the sense already correct in the idiomatic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0050",
+        "excerpt": "天頂之垂線"
+      }
+    },
+    {
+      "repairId": "qingshigao:027:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0063 itself defines 紀限儀 as an arc of one sixth of a full circle divided into sixty degrees. Calling it an 'astronomical quadrant' contradicts that definition; 'sextant' is the correct English term.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0063",
+        "excerpt": "弧面為全圓六分之一，分六十度"
+      }
+    },
+    {
+      "repairId": "qingshigao:027:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0086 names the ring 天常赤道圈, the fixed celestial equator, not an ecliptic equator. 'Fixed ecliptic equator circle' invents an ecliptic sense absent from the Chinese; 'fixed celestial equator circle' matches 天常赤道圈.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0086",
+        "excerpt": "天常赤道圈"
+      }
+    },
+    {
+      "repairId": "qingshigao:027:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0091 ends 即天頂 after counting one quadrant up from the capital's north polar altitude. 天頂 is the zenith, not the celestial pole; the proposed replacement matches the Chinese and the idiomatic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0091",
+        "excerpt": "上數至成一象限，即天頂"
+      }
+    },
+    {
+      "repairId": "qingshigao:027:r0007",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0093 places the nail 于天頂 to hang the plumb toward 地心. 天頂 is the zenith; suspending from the celestial pole would misstate both the Chinese and the geometry of a plumb.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0093",
+        "excerpt": "于天頂施小釘懸垂線"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

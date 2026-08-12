@@ -22,6 +22,7 @@ import {
 } from './lib/people-editorial-decisions.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
 import { waitForCursorRun } from './lib/cursor-run-wait.mjs';
+import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
 
 loadDotenv(REPO_ROOT);
 
@@ -29,6 +30,7 @@ const DEFAULT_MODEL = 'grok-4.5';
 const DEFAULT_REPO_URL = 'https://github.com/GarrettPetersen/records-of-the-grand-historian';
 const DEFAULT_STARTING_REF = 'codex/people-glossary-staging';
 const STATE_FILE = path.join(PEOPLE_DIR, 'generated', 'editorial-review-state.json');
+const RUN_LOCK_FILE = path.join(PEOPLE_DIR, 'generated', 'editorial-review-run.lock');
 const REVIEW_PROMPT = fs.readFileSync(path.join(REPO_ROOT, 'prompt-people-editorial-review.txt'), 'utf8');
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
@@ -350,26 +352,33 @@ async function processTarget(target, opts, state, matcher) {
 async function main() {
   const opts = parseArgs(process.argv.slice(2));
   if (!opts.dryRun && !opts.apiKey) throw new Error('CURSOR_API_KEY is required');
-  const selected = targets(opts);
-  const state = loadState();
-  const matcher = loadProperNounMatcher();
-  console.log(
-    `Selected ${selected.length} chapter(s); reviewer concurrency=${opts.concurrency}; ` +
-    `model=${opts.model} effort=${opts.effort}; no Git pushes`,
-  );
+  const releaseRunLock = opts.dryRun
+    ? () => {}
+    : acquireProcessRunLock(RUN_LOCK_FILE, { label: 'People editorial review scheduler' });
+  try {
+    const selected = targets(opts);
+    const state = loadState();
+    const matcher = loadProperNounMatcher();
+    console.log(
+      `Selected ${selected.length} chapter(s); reviewer concurrency=${opts.concurrency}; ` +
+      `model=${opts.model} effort=${opts.effort}; no Git pushes`,
+    );
 
-  let next = 0;
-  const results = [];
-  const workers = Array.from({ length: Math.min(opts.concurrency, selected.length) }, async () => {
-    while (next < selected.length) {
-      results.push(await processTarget(selected[next++], opts, state, matcher));
-    }
-  });
-  await Promise.all(workers);
-  const counts = new Map();
-  for (const result of results) counts.set(result.status, (counts.get(result.status) ?? 0) + 1);
-  console.log(`Finished: ${[...counts].map(([status, count]) => `${status}=${count}`).join(', ') || 'no targets'}`);
-  if (counts.has('failed')) process.exitCode = 2;
+    let next = 0;
+    const results = [];
+    const workers = Array.from({ length: Math.min(opts.concurrency, selected.length) }, async () => {
+      while (next < selected.length) {
+        results.push(await processTarget(selected[next++], opts, state, matcher));
+      }
+    });
+    await Promise.all(workers);
+    const counts = new Map();
+    for (const result of results) counts.set(result.status, (counts.get(result.status) ?? 0) + 1);
+    console.log(`Finished: ${[...counts].map(([status, count]) => `${status}=${count}`).join(', ') || 'no targets'}`);
+    if (counts.has('failed')) process.exitCode = 2;
+  } finally {
+    releaseRunLock();
+  }
 }
 
 if (isMain) {

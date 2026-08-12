@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "houhanshu",
+  "chapter": "037",
+  "input": {
+    "chapterFingerprint": "sha256:8736972a6d3ef6f358c37ccbf30eb8a893e231b1aee5d3f3eb9fd08763e0a696",
+    "proposalsFingerprint": "sha256:37d6460807c4f02cc418c47c974b82dffb32c2c9d2e43e87276ac20ef55b3ca0"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-e577fb93-d430-44ed-ba29-5fcec800b294",
+    "runId": "run-616926cf-4ca9-4364-96b7-1eb4b2aa4c6b",
+    "completedAt": "2026-08-12T01:54:13.294Z"
+  },
+  "proposals": [
+    {
+      "id": "houhanshu:037:r0001",
+      "unit": {
+        "id": "s0001",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Fan Hong, courtesy name Miqqing, came from Huyang in Nanyang and was Emperor Guangwu's uncle by marriage.",
+      "after": "Fan Hong, courtesy name Miqing, came from Huyang in Nanyang and was Emperor Guangwu's maternal uncle.",
+      "reason": "靡卿 is Miqing (not Miqqing); 舅 denotes maternal uncle, not uncle by marriage.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:037:r0002",
+      "unit": {
+        "id": "s0001",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Fan Hong, courtesy name Miqqing, was a man of Huyang in Nanyang; he was Shizu's maternal uncle.",
+      "after": "Fan Hong, courtesy name Miqing, was a man of Huyang in Nanyang; he was Shizu's maternal uncle.",
+      "reason": "靡卿 romanization should be Miqing, not Miqqing.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:037:r0003",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "literal",
+      "before": "The county praised his beauty and pushed him to be one of the three elders.",
+      "after": "The county praised his excellence and pushed him to be one of the three elders.",
+      "reason": "稱美 here means praise for virtue/excellence, not physical beauty.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:037:r0004",
+      "unit": {
+        "id": "s0014",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "literal",
+      "before": "Creditors who heard were all ashamed and vied to go repay; his sons followed the command and to the end refused to accept.",
+      "after": "Debtors who heard were all ashamed and vied to go repay; his sons followed the command and to the end refused to accept.",
+      "reason": "責家 are debtors owing money, not creditors.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "houhanshu:037:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "字靡卿 is Miqing (靡+卿), not Miqqing; 世祖之舅 means Shizu's maternal uncle, not uncle by marriage. The proposed idiomatic corrects both errors accurately.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0001",
+        "excerpt": "字靡卿……世祖之舅"
+      }
+    },
+    {
+      "repairId": "houhanshu:037:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "字靡卿 romanizes as Miqing; the literal's Miqqing is a spelling error, and the proposed fix is exact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0001",
+        "excerpt": "字靡卿"
+      }
+    },
+    {
+      "repairId": "houhanshu:037:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "縣中稱美 praises Chong's excellence/virtue that led to being named 三老, not physical beauty; replacing beauty with excellence matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "縣中稱美"
+      }
+    },
+    {
+      "repairId": "houhanshu:037:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "After Chong ordered the loan contracts burned (假貸……焚削文契), 責家 who rush to 償之 are the debtors who owe repayment, not creditors; Creditors is inverted.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0014",
+        "excerpt": "責家聞者皆慚，爭往償之"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

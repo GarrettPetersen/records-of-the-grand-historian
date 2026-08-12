@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "houhanshu",
+  "chapter": "031",
+  "input": {
+    "chapterFingerprint": "sha256:7c7bd1ae134824edab9dbd4d9a79e08a3cb3181cd1ac54fc660eb648ccf630dd",
+    "proposalsFingerprint": "sha256:71c9a8a546f2706b2313d5599cb594952644d4f9c967dff8f7d320a9046ad925"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-ede94f92-f25c-4b60-94c9-05ab2cf7266f",
+    "runId": "run-a0f01627-45be-43a8-8598-0197504cc033",
+    "completedAt": "2026-08-12T01:45:30.238Z"
+  },
+  "proposals": [
+    {
+      "id": "houhanshu:031:r0001",
+      "unit": {
+        "id": "s0228",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Tian Yi went out to meet his mother, younger brother, wife, and children and was captured by Liu Yan.",
+      "after": "Tian Yi's mother, younger brother, wife, and children, whom he went out to receive, were captured by Liu Yan.",
+      "reason": "Later units show Tian Yi still campaigning while his mother and brothers are held; 為延所獲 refers to the family, not Tian Yi himself.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:031:r0002",
+      "unit": {
+        "id": "s0228",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Yi went out to welcome his mother, younger brother, wife, and children, and was captured by Yan.",
+      "after": "Yi went out to welcome his mother, younger brother, wife, and children, who were captured by Yan.",
+      "reason": "Parallel narrative (s0177) has the mother and brothers seized; Yi continues as actor, so the capture target is the kin group.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:031:r0003",
+      "unit": {
+        "id": "s0214",
+        "kind": "paragraph-sentence",
+        "blockIndex": 28,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "Someone said to him, 'Was not your husband the one who cursed you?'",
+      "after": "Someone said to him, 'Was that not the one who cursed you?'",
+      "reason": "夫非罵爾者邪 refers to the elder wife he married, not a husband; the idiomatic English already has the correct referent.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "houhanshu:031:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "邑迎母弟妻子，為延所獲 is followed by 後邑聞更始敗…遣使詣洛陽, so Tian Yi remains free and acting; the capture object is the kin group he went out to meet, not Yi himself.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0228",
+        "excerpt": "邑迎母弟妻子，為延所獲"
+      }
+    },
+    {
+      "repairId": "houhanshu:031:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same Chinese as r0001: 為延所獲 attaches to 母弟妻子; Yi continues as actor in the next sentence, so the literal must not make Yi the captive.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0228",
+        "excerpt": "邑迎母弟妻子，為延所獲"
+      }
+    },
+    {
+      "repairId": "houhanshu:031:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "In the anecdote, after 取其長者 someone asks 夫非罵爾者邪; 夫 is the classical demonstrative pointing to that elder wife who had cursed him, not 'husband'.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0214",
+        "excerpt": "夫非罵爾者邪"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

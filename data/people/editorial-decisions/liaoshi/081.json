@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "081",
+  "input": {
+    "chapterFingerprint": "sha256:7b68987ef19c1197b20ea12307e533d31df3b52a39d6d249e6d7c98e7751ec50",
+    "proposalsFingerprint": "sha256:133fbb046dec9d515001ad0c6419ff8db27bbffe255ccccac90c608675561bfb"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-87da384e-e356-4259-9b75-5606e39da724",
+    "runId": "run-f225357f-c0e7-4c28-a7e4-43e453e5bbd3",
+    "completedAt": "2026-08-12T02:03:41.585Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:081:r0001",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Orris)〉",
+      "after": "(Orris)",
+      "reason": "Corrupted heading punctuation retained in idiomatic English; restore balanced parenthetical form for the section label.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:081:r0002",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "(Orris)〉",
+      "after": "(Orris)",
+      "reason": "Corrupted heading punctuation retained in literal English; restore balanced parenthetical form for the section label.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:081:r0003",
+      "unit": {
+        "id": "s0012",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "After peace with Song was concluded, he was made specially advanced grand councilor of the Secretariat and granted the title Meritous Subject of Sincere Devotion and Steadfast Loyalty.",
+      "after": "After peace with Song was concluded, he was made specially advanced grand councilor of the Secretariat and granted the title Meritorious Subject of Sincere Devotion and Steadfast Loyalty.",
+      "reason": "Clear typographical error: Meritous → Meritorious in the honorific title.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:081:r0004",
+      "unit": {
+        "id": "s0012",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "When the Song peace treaty was concluded, he was made specially advanced grand councilor of the Secretariat and granted the title Meritous Subject of Sincere Devotion and Steadfast Loyalty.",
+      "after": "When the Song peace treaty was concluded, he was made specially advanced grand councilor of the Secretariat and granted the title Meritorious Subject of Sincere Devotion and Steadfast Loyalty.",
+      "reason": "Clear typographical error: Meritous → Meritorious in the honorific title.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:081:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 〈（歐裏斯）〉 is a balanced parenthetical label for 歐裏斯; idiomatic Orris)〉 drops the opening parenthesis and retains a stray Chinese closing bracket.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "〈（歐裏斯）〉"
+      }
+    },
+    {
+      "repairId": "liaoshi:081:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 〈（歐裏斯）〉 closes cleanly; literal (Orris)〉 keeps a stray Chinese closing bracket after an otherwise correct English parenthetical.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "〈（歐裏斯）〉"
+      }
+    },
+    {
+      "repairId": "liaoshi:081:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "功臣 is rendered Meritorious Subject; idiomatic Meritous is a misspelling of Meritorious and does not change the honorific 推誠竭節保義功臣.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0012",
+        "excerpt": "賜推誠竭節保義功臣"
+      }
+    },
+    {
+      "repairId": "liaoshi:081:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "功臣 is rendered Meritorious Subject; literal Meritous is a misspelling of Meritorious and does not change the honorific 推誠竭節保義功臣.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0012",
+        "excerpt": "賜推誠竭節保義功臣"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

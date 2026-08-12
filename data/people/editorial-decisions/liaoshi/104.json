@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "104",
+  "input": {
+    "chapterFingerprint": "sha256:161717288d8ff48abc7b86beac3762bc4d85f3e183a1561b5571983cc832bfdb",
+    "proposalsFingerprint": "sha256:8efe47228d9e1b088d1931ea2adfbd6b45bd5281b157fe3345869e53128d4db5"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-ea119ba9-40ff-43cb-81b6-00762322915e",
+    "runId": "run-36e15bdc-27e5-4746-9214-e8c570ef9680",
+    "completedAt": "2026-08-12T01:58:09.590Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:104:r0001",
+      "unit": {
+        "id": "s0009",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "He was posted as judicial aide on the Yizhou Observation Commission, then made magistrate of Lianshui County, and rose in time to Hanlin Academician.",
+      "after": "He was posted as judicial aide on the Yizhou Observation Commission, then made magistrate of Laishui County, and rose in time to Hanlin Academician.",
+      "reason": "淶水 is Laishui (modern Hebei), not Lianshui; the place-name romanization is wrong.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:104:r0002",
+      "unit": {
+        "id": "s0009",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "He was assigned as judicial aide to the Yizhou Observation Commission, then transferred to magistrate of Lianshui County, and was repeatedly promoted to Hanlin Academician.",
+      "after": "He was assigned as judicial aide to the Yizhou Observation Commission, then transferred to magistrate of Laishui County, and was repeatedly promoted to Hanlin Academician.",
+      "reason": "淶水 should be Laishui, matching the Chinese toponym.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:104:r0003",
+      "unit": {
+        "id": "s0096",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 28
+      },
+      "field": "idiomatic",
+      "before": "He was made Commissioner of Guozhou for Observation, built schools, and enrolled students.",
+      "after": "He was made Commissioner of Gaozhou for Observation, built schools, and enrolled students.",
+      "reason": "高州 is Gaozhou, not Guozhou; mistranslation of the place name.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:104:r0004",
+      "unit": {
+        "id": "s0096",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 28
+      },
+      "field": "literal",
+      "before": "He was transferred to Commissioner of Guozhou for Observation, built schools, and enrolled students.",
+      "after": "He was transferred to Commissioner of Gaozhou for Observation, built schools, and enrolled students.",
+      "reason": "高州 must be Gaozhou in the literal rendering as well.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:104:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0009 改淶水縣令 names Laishui County (淶水); Lianshui is a different place (漣水). The proposed Laishui corrects the romanization without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0009",
+        "excerpt": "改淶水縣令"
+      }
+    },
+    {
+      "repairId": "liaoshi:104:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal line likewise renders 淶水 as Lianshui; Laishui matches the Chinese toponym.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0009",
+        "excerpt": "改淶水縣令"
+      }
+    },
+    {
+      "repairId": "liaoshi:104:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0096 改高州觀察使 is Gaozhou Observation Commissioner; Guozhou misreads 高. The proposed Gaozhou is correct.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0096",
+        "excerpt": "改高州觀察使"
+      }
+    },
+    {
+      "repairId": "liaoshi:104:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal English also has Guozhou for 高州; Gaozhou is the accurate reading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0096",
+        "excerpt": "改高州觀察使"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

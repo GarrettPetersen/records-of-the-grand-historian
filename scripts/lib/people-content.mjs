@@ -152,9 +152,11 @@ export function setTranslationField(chapter, locator, field, currentText, replac
   if (field === 'idiomatic' && typeof unit.translation === 'string') {
     owners.push({ owner: unit, key: 'translation' });
   }
-  const target = owners.find(({ owner, key }) => typeof owner[key] === 'string' && owner[key] === currentText);
-  if (!target) throw new Error(`Could not find current ${field} text for ${locator.id}`);
-  target.owner[target.key] = replacement;
+  const targets = owners.filter(({ owner, key }) =>
+    typeof owner[key] === 'string' && owner[key] === currentText
+  );
+  if (targets.length === 0) throw new Error(`Could not find current ${field} text for ${locator.id}`);
+  for (const target of targets) target.owner[target.key] = replacement;
 }
 
 export function namespacedUnitId(book, chapter, unitId) {

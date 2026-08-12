@@ -1,0 +1,230 @@
+{
+  "schemaVersion": 3,
+  "book": "xinwudaishi",
+  "chapter": "020",
+  "input": {
+    "chapterFingerprint": "sha256:736a4e8c902ad02f90dbb9fa845d70a74a9629b4f3a13c63f2c2229b4cccb2fd",
+    "proposalsFingerprint": "sha256:b1521d15ae514e050480ca05c374e996a720956a10daad65e1caf900cf8a74f1"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-ca6729db-5254-4341-ba26-91ce2ca5005c",
+    "runId": "run-5f4c527c-dc74-491c-a0c7-51821b7b2b1e",
+    "completedAt": "2026-08-12T02:00:08.921Z"
+  },
+  "proposals": [
+    {
+      "id": "xinwudaishi:020:r0001",
+      "unit": {
+        "id": "s0024",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Empress Xuanyi of the Fu clan was descended from Prince of Qin Cunjian on her grandfather's side and from Prince of Wei Yanqing on her father's.",
+      "after": "Empress Xuanyi of the Fu clan was descended from Prince of Qin Cunshen on her grandfather's side and from Prince of Wei Yanqing on her father's.",
+      "reason": "存審 is Cunshen (審 shěn), not Cunjian; the personal name is mistranscribed.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:020:r0002",
+      "unit": {
+        "id": "s0024",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Empress Xuanyi, née Fu—her grandfather was Prince of Qin Cunjian; her father, Prince of Wei Yanqing.",
+      "after": "Empress Xuanyi, née Fu—her grandfather was Prince of Qin Cunshen; her father, Prince of Wei Yanqing.",
+      "reason": "Same error: 審 should be romanized Cunshen, not Cunjian.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:020:r0003",
+      "unit": {
+        "id": "s0025",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "She came from the distinguished Wang military line. Clever, resolute, and ambitious, she was a woman of uncommon force of character.",
+      "after": "She came from a later generation of that princely house, born to the nobility of generals and ministers. Clever, resolute, and ambitious, she was a woman of uncommon force of character.",
+      "reason": "後世王家 means a later generation of the princely/royal house (Fu princes), not the Wang surname.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:020:r0004",
+      "unit": {
+        "id": "s0025",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "The lady came from the Wang clan of later generations, born of the nobility of generals and ministers; as a person she was clear-minded, resolute, and possessed of great ambition.",
+      "after": "The lady came from a later generation of the princely house, born of the nobility of generals and ministers; as a person she was clear-minded, resolute, and possessed of great ambition.",
+      "reason": "王家 here is princely house, not the surname Wang.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:020:r0005",
+      "unit": {
+        "id": "s0033",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "When Han troops entered the house the lady sat composed in the hall, turned to the soldiers, and said, \"Lord Guo and my grandfather-by-marriage were old friends—you must not harm me!\"",
+      "after": "When Han troops entered the house the lady sat composed in the hall, turned to the soldiers, and said, \"Lord Guo and my grandfather were old friends—you must not harm me!\"",
+      "reason": "王父 means paternal grandfather, not grandfather-by-marriage; idiomatic already has grandfather.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xinwudaishi:020:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "秦王存審 names the grandfather 存審; 審 is shěn, so Cunshen is required and Cunjian is a mistranscription. The proposed idiomatic line corrects only that name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0024",
+        "excerpt": "其祖秦王存審"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:020:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise misreads 存審 as Cunjian; Cunshen matches 審, and the rest of the rendering (grandfather Prince of Qin; father Prince of Wei Yanqing) already tracks the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0024",
+        "excerpt": "秦王存審"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:020:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Following 符氏 and the Qin/Wei princely ancestry in s0024, 後世王家 means a later generation of that princely house, not a Wang surname line; the proposal also restores 出於將相之貴 while keeping the human character assessment.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0025",
+        "excerpt": "後世王家，出於將相之貴"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:020:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "王家 here is the princely house of the Fu princes, not the surname Wang; replacing 'Wang clan of later generations' with 'later generation of the princely house' fixes the misreading without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0025",
+        "excerpt": "後世王家"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:020:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "吾王父 is the speaker's paternal grandfather, not a grandfather-by-marriage; the idiomatic already has 'grandfather', and the proposed literal swap removes the invented affinal kinship.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0033",
+        "excerpt": "郭公與吾王父有舊"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "xinwudaishi:020:r0001",
+      "before": {
+        "id": "xinwudaishi:020:c0064",
+        "subject": "xinwudaishi:020:p018",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Cunjian",
+          "zh": "存審",
+          "pinyin": "Cúnshěn"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xinwudaishi:020:s0024"
+        ]
+      },
+      "after": {
+        "id": "xinwudaishi:020:c0064",
+        "subject": "xinwudaishi:020:p018",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Cunshen",
+          "zh": "存審",
+          "pinyin": "Cúnshěn"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xinwudaishi:020:s0024"
+        ]
+      },
+      "reason": "The English personal name Cunjian was created solely by the bad romanization of 存審; accepting r0001 restores Cunshen while zh and pinyin already match 審.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0024",
+        "excerpt": "存審"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:020:r0001",
+      "before": {
+        "id": "xinwudaishi:020:c0066",
+        "subject": "xinwudaishi:020:p018",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Prince of Qin Cunjian",
+          "zh": "秦王存審"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xinwudaishi:020:s0024"
+        ]
+      },
+      "after": {
+        "id": "xinwudaishi:020:c0066",
+        "subject": "xinwudaishi:020:p018",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Prince of Qin Cunshen",
+          "zh": "秦王存審"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xinwudaishi:020:s0024"
+        ]
+      },
+      "reason": "The compound English title inherited the Cunjian mistranscription; accepting r0001 revises it to Prince of Qin Cunshen without changing the underlying 秦王存審 fact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0024",
+        "excerpt": "秦王存審"
+      }
+    }
+  ]
+}

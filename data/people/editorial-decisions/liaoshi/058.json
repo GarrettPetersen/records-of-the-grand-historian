@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "058",
+  "input": {
+    "chapterFingerprint": "sha256:42d4f5fb660a735c9398de3742398b743e38a75d8d148255707dfa54bb52293a",
+    "proposalsFingerprint": "sha256:80323e85c86c226381b000e309d75d3a2ee6bbfe49d52d21e1392dcb8d33cb2d"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-12T02:41:33Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:058:r0001",
+      "unit": {
+        "id": "s0015",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "From the time the Mohe clan of the Greater He received Tang's gift of drums and banners, this became the Liao national regalia.",
+      "after": "From the time Mohe of the Dahe clan received Tang's gift of drums and banners, this became the Liao national regalia.",
+      "reason": "Chinese 大賀氏摩會 names Mohe (摩會) as an individual of the Dahe clan (大賀氏), not a \"Mohe clan of the Greater He\".",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:058:r0002",
+      "unit": {
+        "id": "s0015",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Liao, from the time the Mohe clan of the Greater He received Tang's gift of drums and banners, took this as national paraphernalia.",
+      "after": "Liao, from the time Mohe of the Dahe clan received Tang's gift of drums and banners, took this as national paraphernalia.",
+      "reason": "Same error as idiomatic: 摩會 is a personal name within 大賀氏, not a clan name.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:058:r0003",
+      "unit": {
+        "id": "s0030",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Thereafter they exchanged embassies with Liang and sent missions to Tang, undaunted by the hardships of the journey.",
+      "after": "Thereafter they exchanged embassies with Liang and sent missions to Tang, undaunted by toil and hardship.",
+      "reason": "Chinese 不憚勞珝 appears corrupt (珝); rendering as a specific \"journey\" invents detail not securely in the text.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:058:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "大賀氏摩會 is Mohe of the Dahe clan: 大賀氏 is the clan name and 摩會 the personal name. The prior English wrongly turns 摩會 into a clan and 大賀 into \"Greater He\".",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0015",
+        "excerpt": "大賀氏摩會"
+      }
+    },
+    {
+      "repairId": "liaoshi:058:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same parsing as the idiomatic field: 摩會 is the person within 大賀氏, not a \"Mohe clan of the Greater He\".",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0015",
+        "excerpt": "大賀氏摩會"
+      }
+    },
+    {
+      "repairId": "liaoshi:058:r0003",
+      "decision": "revise",
+      "after": "Thereafter they exchanged envoys with Liang and sent embassies to Tang, never shrinking from the effort.",
+      "reason": "The Siku witness reads 不憚勞勩, ‘not shrinking from the toil.’ The revised sentence removes invented road travel and renders the attested text naturally.",
+      "sourceWitness": {
+        "source": "other",
+        "citation": "https://raw.githubusercontent.com/Kanripo/KR2a0033/master/KR2a0033_058.txt",
+        "excerpt": "不憚勞勩"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

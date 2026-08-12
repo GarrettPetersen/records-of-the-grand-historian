@@ -29,6 +29,11 @@ insufficient. A false merge is worse than a temporary duplicate.
 
 Run `npm run people:resolution-candidates` to rebuild the ignored resolver
 dossier and `npm run people:catalog` to compile the current canonical catalog.
+Run `npm run people:resolve -- --batch NAME --chapters BOOK/NNN,...` to shard
+the unresolved blocks touching a reviewed chapter batch across independent
+Cursor workers. Workers publish local artifacts only; the host rejects
+out-of-scope and contradictory decisions before writing one tracked resolution
+document.
 `npm run people:catalog -- --require-resolved` is the publication gate: it fails
 while any chapter still needs the current source pass or any name block lacks a
 merge/separation decision.

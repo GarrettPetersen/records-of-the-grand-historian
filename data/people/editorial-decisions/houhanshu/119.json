@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "houhanshu",
+  "chapter": "119",
+  "input": {
+    "chapterFingerprint": "sha256:22b7f4b88b3f0a32e71bd3485b49222752e4e49c6b94063ed3ed3fe60c72bb46",
+    "proposalsFingerprint": "sha256:57ab760c59266544f08799d4e5190247d6c36e768d387c1db1ab97a801607e97"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-12T02:41:33Z"
+  },
+  "proposals": [
+    {
+      "id": "houhanshu:119:r0001",
+      "unit": {
+        "id": "s0032",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "That October Empress Guo was cast aside with an edict declaring her unfit to \"maintain the ancestral sacrifices.\"",
+      "after": "That tenth month Empress Guo was cast aside with an edict declaring her unfit to \"maintain the ancestral sacrifices.\"",
+      "reason": "十月 is the tenth lunar month, not the Gregorian month October.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:119:r0002",
+      "unit": {
+        "id": "s0055",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "At month's end on renyin in the eighth month of Yongping 8 (65), a total eclipse reached eleven degrees in Dou.",
+      "after": "At month's end on renyin in the tenth month of Yongping 8 (65), a total eclipse reached eleven degrees in Dou.",
+      "reason": "Chinese has 十月 (tenth month); idiomatic wrongly says eighth month.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:119:r0003",
+      "unit": {
+        "id": "s0159",
+        "kind": "paragraph-sentence",
+        "blockIndex": 23,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Two years later Empress Liang died and her brothers in the Liang clan were put to death.",
+      "after": "Two years later Empress Liang died, and Yi and his brothers were executed.",
+      "reason": "Chinese 翼兄弟 does not say Liang; idiomatic invents Liang-clan brothers. Literal already has Yi brothers.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:119:r0004",
+      "unit": {
+        "id": "s0171",
+        "kind": "paragraph-sentence",
+        "blockIndex": 25,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "That August six provinces were inundated and the Bohai tide surged over the coast.",
+      "after": "That eighth month six provinces were inundated and the Bohai tide surged over the coast.",
+      "reason": "八月 is the eighth lunar month, not Gregorian August.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:119:r0005",
+      "unit": {
+        "id": "s0043",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "The princes had been patronizing scholars and debaters; the year before, a memorial warned that their clients included descendants of convicted men and demanded a vetting process.\"",
+      "after": "The princes had been patronizing scholars and debaters; the year before, a memorial warned that their clients included descendants of convicted men and demanded a vetting process.",
+      "reason": "Idiomatic English ends with a stray closing quotation mark not opened in this sentence.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "houhanshu:119:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "其十月 is the tenth lunar month; rendering it as Gregorian October is wrong, and neighboring units already use “Nth month,” so the proposed fix restores the source month without other change.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0032",
+        "excerpt": "其十月，废郭皇后"
+      }
+    },
+    {
+      "repairId": "houhanshu:119:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "八年十月壬寅晦 names the tenth month; the idiomatic “eighth month” contradicts the Chinese and is correctly replaced by “tenth month.”",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0055",
+        "excerpt": "八年十月壬寅晦"
+      }
+    },
+    {
+      "repairId": "houhanshu:119:r0003",
+      "decision": "revise",
+      "after": "Two years later Empress Liang died, and Liang Ji and his brothers were executed.",
+      "reason": "The transmitted text requires Liang Ji: 翼 is an OCR error for 冀 in 梁冀, and 冀兄弟 means Liang Ji and his brothers, not the empress's brothers generically.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0159",
+        "excerpt": "梁皇后崩，冀兄弟被诛"
+      }
+    },
+    {
+      "repairId": "houhanshu:119:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "其八月 is the eighth lunar month, not Gregorian August; the chapter’s dating style uses numbered months, and the proposed wording corrects only that error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0171",
+        "excerpt": "其八月，六州大水"
+      }
+    },
+    {
+      "repairId": "houhanshu:119:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "The idiomatic paraphrase does not open a quotation, yet ends with a stray closing quote; removing it restores grammatical English without changing meaning.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0043",
+        "excerpt": "有人上奏：「诸王所招待者，或真伪杂，受刑罚者子孙，宜可分别。」"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}
