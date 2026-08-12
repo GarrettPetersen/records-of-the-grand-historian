@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "028",
+  "input": {
+    "chapterFingerprint": "sha256:5a97eb670c83b07a2ce3da89987fd11a67d342f967af3d08a40a55d5c3627dc0",
+    "proposalsFingerprint": "sha256:fdb0f9201eb216ee2e9236df8d830b87e148d7bc1a17aef025f6ffe3d03dcb29"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-5850697a-93af-4a21-bf1d-d8dd210a817a",
+    "runId": "run-ea8535a1-ca98-4a8e-b6f2-c9fb115a19f8",
+    "completedAt": "2026-08-12T11:10:23.330Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:028:r0001",
+      "unit": {
+        "id": "s0007",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Saturn appears egg-shaped; older observers spoke of \"ears,\" but telescopes show a narrow ring edge-on near the equatorial stars and a broad ring when seen obliquely.",
+      "after": "Saturn appears egg-shaped; older observers spoke of \"ears,\" but new measures find the disk very narrow near the equator and very wide far from the equator.",
+      "reason": "Chinese 近於赤道星面 refers to Saturn's disk near the equator, not equatorial stars; 遠赤道所宕 describes the wide extent away from the equator.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:028:r0002",
+      "unit": {
+        "id": "s0007",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Saturn's body is egg-shaped; old measures said two ears at its sides; new measures find the disk near the equatorial stars very narrow and the disk far from the equator very wide.",
+      "after": "Saturn's body is egg-shaped; old measures said two ears at its sides; new measures find the disk near the equator very narrow and far from the equator very wide.",
+      "reason": "Literal English likewise misreads 赤道星面 as equatorial stars; 星面 is the planet's disk face at the equator.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:028:r0003",
+      "unit": {
+        "id": "s0161",
+        "kind": "paragraph-sentence",
+        "blockIndex": 78,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Cold Dew—dusk: Northern Dipper, 53′ west of the meridian.",
+      "after": "Cold Dew—dusk: Ox, 53′ west of the meridian.",
+      "reason": "牽牛 is the Ox (Lead Ox) lodge, not the Northern Dipper (北斗/北斗七星).",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:028:r0004",
+      "unit": {
+        "id": "s0161",
+        "kind": "paragraph-sentence",
+        "blockIndex": 78,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Cold Dew—dusk: Northern Dipper on the meridian, 53′ west of center.",
+      "after": "Cold Dew—dusk: Ox on the meridian, 53′ west of center.",
+      "reason": "Literal English repeats the same mistranslation of 牽牛 as Northern Dipper.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:028:r0005",
+      "unit": {
+        "id": "s0183",
+        "kind": "paragraph-sentence",
+        "blockIndex": 89,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Clear Bright—dusk: Seven Culminating Stars, 5° 14′ east of the meridian.",
+      "after": "Clear Bright—dusk: Seven Stars, 5° 14′ east of the meridian.",
+      "reason": "Parallel dusk entries use lodge + 中; 七中星 is best read as 七星 (Seven Stars) culminating, not a separate asterism name.",
+      "confidence": "medium"
+    },
+    {
+      "id": "qingshigao:028:r0006",
+      "unit": {
+        "id": "s0183",
+        "kind": "paragraph-sentence",
+        "blockIndex": 89,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Clear Bright—dusk: Seven Culminating Stars on the meridian, 5° 14′ east of center.",
+      "after": "Clear Bright—dusk: Seven Stars on the meridian, 5° 14′ east of center.",
+      "reason": "Literal English should match the lodge name 七星 used elsewhere in the chapter.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:028:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0007 says 今測近於赤道星面相逼甚窄，於遠赤道所宕甚寬: 星面 is Saturn's disk face near the equator, not equatorial stars, and 今測 is new measures, not telescopes or an edge-on/oblique ring gloss. The proposed idiomatic restores that sense without inventing ring geometry.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0007",
+        "excerpt": "今測近於赤道星面相逼甚窄，於遠赤道所宕甚寬"
+      }
+    },
+    {
+      "repairId": "qingshigao:028:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same clause 近於赤道星面 is 赤道 + 星面 (disk near the equator), not 赤道星. The prior literal's 'equatorial stars' is a false parse; the proposed literal matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0007",
+        "excerpt": "近於赤道星面相逼甚窄"
+      }
+    },
+    {
+      "repairId": "qingshigao:028:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0161 has 寒露昏牽牛中; 牽牛 is the Ox lodge. Northern Dipper would be 北斗, absent here; 'Ox' is the correct lodge name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0161",
+        "excerpt": "寒露昏牽牛中偏西五十三分"
+      }
+    },
+    {
+      "repairId": "qingshigao:028:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal English likewise renders 牽牛 as Northern Dipper; the Chinese names the Ox lodge culminating at Cold Dew dusk. 'Ox on the meridian' is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0161",
+        "excerpt": "牽牛中"
+      }
+    },
+    {
+      "repairId": "qingshigao:028:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "Neighboring dusk lines use lodge + 中 (東井中, and dawn 房中 / 帝座中). 七中星 is the same formula with 中 and 星 transposed for the lodge 七星, not a distinct 'Seven Culminating Stars' asterism; 'Seven Stars' matches that reading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0183",
+        "excerpt": "清明昏七中星偏東五度十四分"
+      }
+    },
+    {
+      "repairId": "qingshigao:028:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal should name the lodge 七星 under the same dusk-culmination pattern, not treat 七中星 as a separate asterism title. 'Seven Stars on the meridian' is the correct literal.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0183",
+        "excerpt": "七中星"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

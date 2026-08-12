@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "080",
+  "input": {
+    "chapterFingerprint": "sha256:bf0e04bd254bff15cdd4ec88cf97a80dfa7e2847718ab1d2f1601f107f1049d3",
+    "proposalsFingerprint": "sha256:656d8fbbfa8be121e1d22e68c92e9b239de526550eb0fcbea44f6fa68752ca3b"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-364eed4d-1ab7-4634-b29a-db723ed97d2d",
+    "runId": "run-692284ed-8d93-4509-9e5a-4dfd5aa766f7",
+    "completedAt": "2026-08-12T11:14:03.917Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:080:r0001",
+      "unit": {
+        "id": "s0074",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Formerly wuzi Xu's persuasion was listened to by He Lu, and the Wu king went far to Ying;",
+      "after": "Formerly Wu Zixu's counsel was heeded by Helü, and the king of Wu pushed as far as Ying;",
+      "reason": "Idiomatic English misspells 伍子胥 as 'wuzi Xu' and 闔閭 as 'He Lu'; use standard Wu Zixu and Helü.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:080:r0002",
+      "unit": {
+        "id": "s0115",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Gao Di enfeoffed him as Yue Qing, numbered as Hua Cheng Jun.",
+      "after": "Gao Di enfeoffed him at Yueqing and titled him Lord Huacheng.",
+      "reason": "號曰 means 'titled/called', not 'numbered'; 樂卿 is the fief place, not a personal name 'Yue Qing'.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:080:r0003",
+      "unit": {
+        "id": "s0009",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Yue Yi thus served as envoy from Wei Zhao Wang to Yan, the Yan king treated him with guest courtesy.",
+      "after": "Yue Yi thus served as envoy from King Zhao of Wei to Yan; the king of Yan treated him with guest courtesy.",
+      "reason": "'Wei Zhao Wang' is untranslated romanization; render as King Zhao of Wei for consistency with other royal titles.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:080:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit names 伍子胥 and 闔閭; idiomatic 'wuzi Xu' and 'He Lu' are wrong name forms, while Wu Zixu and Helü restore the standard readings, and 遠跡至郢 is fairly rendered as pushing as far as Ying.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0074",
+        "excerpt": "昔伍子胥說聽於闔閭，而吳王遠跡至郢"
+      }
+    },
+    {
+      "repairId": "shiji:080:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "封之樂卿 enfeoffs Yue Shu at the place 樂卿, and 號曰華成君 titles him Lord Huacheng; the before wrongly treats 樂卿 as a personal name and mistranslates 號曰 as 'numbered'.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0115",
+        "excerpt": "高帝封之樂卿，號曰華成君"
+      }
+    },
+    {
+      "repairId": "shiji:080:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "魏昭王 is King Zhao of Wei; leaving 'Wei Zhao Wang' untranslated is a real title error, and the after matches the chapter's 'King Zhao of Yan' pattern while preserving 使於燕 and guest courtesy.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0009",
+        "excerpt": "樂毅於是為魏昭王使於燕"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "shiji:080:r0001",
+      "before": {
+        "id": "shiji:080:c0055",
+        "subject": "shiji:080:p019",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "He Lu",
+          "zh": "闔閭",
+          "pinyin": "Helü"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "shiji:080:s0074"
+        ]
+      },
+      "after": {
+        "id": "shiji:080:c0055",
+        "subject": "shiji:080:p019",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Helü",
+          "zh": "闔閭",
+          "pinyin": "Helü"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "shiji:080:s0074"
+        ]
+      },
+      "reason": "Accepted r0001 shows English He Lu came only from the bad idiomatic of 闔閭; the personal-name claim must read Helü while keeping zh, pinyin, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0074",
+        "excerpt": "闔閭"
+      }
+    },
+    {
+      "repairId": "shiji:080:r0003",
+      "before": {
+        "id": "shiji:080:c0025",
+        "subject": "shiji:080:p008",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Wei Zhao Wang",
+          "zh": "魏昭王",
+          "pinyin": "Wei Zhao Wang"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "shiji:080:s0009"
+        ]
+      },
+      "after": {
+        "id": "shiji:080:c0025",
+        "subject": "shiji:080:p008",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "King Zhao of Wei",
+          "zh": "魏昭王",
+          "pinyin": "Wei Zhao Wang"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "shiji:080:s0009"
+        ]
+      },
+      "reason": "Accepted r0003 shows English Wei Zhao Wang came only from untranslated romanization of 魏昭王; the title claim must read King Zhao of Wei while keeping zh, pinyin, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0009",
+        "excerpt": "魏昭王"
+      }
+    }
+  ]
+}

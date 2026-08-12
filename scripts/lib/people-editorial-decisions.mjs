@@ -140,10 +140,31 @@ function editorialDocumentErrors(document) {
       errors.push(`claim revision ${claimId} is tied to a rejected repair ${revision.repairId}`);
     }
     if (revision.after?.id !== claimId) errors.push(`claim revision ${claimId} must preserve its claim ID`);
-    for (const key of ['subject', 'predicate', 'evidence']) {
+    for (const key of ['subject', 'predicate']) {
       if (JSON.stringify(revision.before?.[key]) !== JSON.stringify(revision.after?.[key])) {
         errors.push(`claim revision ${claimId} must preserve ${key}`);
       }
+    }
+    const repairedEvidence = proposal
+      ? `${document.book}:${document.chapter}:${proposal.unit.id}`
+      : null;
+    const beforeEvidence = revision.before?.evidence ?? [];
+    const afterEvidence = revision.after?.evidence ?? [];
+    const removesOnlyRepairedEvidence =
+      repairedEvidence &&
+      beforeEvidence.includes(repairedEvidence) &&
+      afterEvidence.length > 0 &&
+      JSON.stringify(afterEvidence) === JSON.stringify(
+        beforeEvidence.filter((evidence) => evidence !== repairedEvidence),
+      );
+    if (
+      JSON.stringify(beforeEvidence) !== JSON.stringify(afterEvidence) &&
+      !removesOnlyRepairedEvidence
+    ) {
+      errors.push(
+        `claim revision ${claimId} may only remove the repaired unit from evidence ` +
+        'while preserving at least one other citation',
+      );
     }
     if (JSON.stringify(revision.before) === JSON.stringify(revision.after)) {
       errors.push(`claim revision ${claimId} does not change the claim`);

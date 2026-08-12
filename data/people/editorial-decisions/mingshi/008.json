@@ -1,0 +1,289 @@
+{
+  "schemaVersion": 3,
+  "book": "mingshi",
+  "chapter": "008",
+  "input": {
+    "chapterFingerprint": "sha256:abd6d9137fea281edc394302ad0ebc3a9c65619a4d89c63e69630e3cb8f865d7",
+    "proposalsFingerprint": "sha256:18c382edb0c35252f57131759bef20c0053e483201112502aa9ebb4854da13d4"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-cad89180-2fff-4537-b1b7-89dcbc8c3a35",
+    "runId": "run-aba19469-bed1-4bfb-b8fb-ea71702033c1",
+    "completedAt": "2026-08-12T10:14:50.432Z"
+  },
+  "proposals": [
+    {
+      "id": "mingshi:008:r0001",
+      "unit": {
+        "id": "s0039",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "In the eighth month on jiawu the death testament reached the capital and the imperial great-grandson was sent to meet the bier at Kaiping.",
+      "after": "In the eighth month on jiachen the death testament reached the capital and the imperial great-grandson was sent to meet the bier at Kaiping.",
+      "reason": "甲辰 is jiachen, not jiawu (甲午).",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:008:r0002",
+      "unit": {
+        "id": "s0039",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "In the eighth month on jiawu the final edict arrived; the imperial great-grandson was dispatched to receive the coffin at Kaiping.",
+      "after": "In the eighth month on jiachen the final edict arrived; the imperial great-grandson was dispatched to receive the coffin at Kaiping.",
+      "reason": "甲辰 is jiachen, not jiawu.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:008:r0003",
+      "unit": {
+        "id": "s0041",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "On disi he ascended the throne.",
+      "after": "On dingsi he ascended the throne.",
+      "reason": "丁巳 is dingsi, not disi.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:008:r0004",
+      "unit": {
+        "id": "s0041",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "On disi he assumed the imperial throne.",
+      "after": "On dingsi he assumed the imperial throne.",
+      "reason": "丁巳 is dingsi, not disi.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:008:r0005",
+      "unit": {
+        "id": "s0052",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "field": "idiomatic",
+      "before": "On jiwei an edict required civil officials to retire at seventy.",
+      "after": "On jisi an edict required civil officials to retire at seventy.",
+      "reason": "己巳 is jisi; jiwei is 己未.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:008:r0006",
+      "unit": {
+        "id": "s0052",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "field": "literal",
+      "before": "On jiwei an edict fixed retirement at seventy for civil officials.",
+      "after": "On jisi an edict fixed retirement at seventy for civil officials.",
+      "reason": "己巳 is jisi; jiwei is 己未.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:008:r0007",
+      "unit": {
+        "id": "s0098",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 34
+      },
+      "field": "idiomatic",
+      "before": "On bingyin Zhenyuan Marquis Gu Xingzu crushed the rebels of Pingyao and Xunzhou.",
+      "after": "On bingyin Zhenyuan Marquis Gu Xingzu crushed the rebels of Pingle and Xunzhou.",
+      "reason": "平樂 is Pingle, not Pingyao (平遙).",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:008:r0008",
+      "unit": {
+        "id": "s0098",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 34
+      },
+      "field": "literal",
+      "before": "On bingyin Gu Xingzu Marquis of Zhenyuan broke the Pingyao and Xunzhou tribes.",
+      "after": "On bingyin Gu Xingzu Marquis of Zhenyuan broke the Pingle and Xunzhou tribes.",
+      "reason": "平樂 is Pingle, not Pingyao.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "mingshi:008:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0039 has 八月甲辰; 甲辰 is jiachen, while jiawu is 甲午, so the idiomatic day name must be corrected.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0039",
+        "excerpt": "八月甲辰"
+      }
+    },
+    {
+      "repairId": "mingshi:008:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 八月甲辰 requires literal jiachen rather than jiawu; the rest of the sentence already matches 遺詔至，遣皇太孫迎喪開平.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0039",
+        "excerpt": "八月甲辰"
+      }
+    },
+    {
+      "repairId": "mingshi:008:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0041 opens with 丁巳; the sexagenary reading is dingsi, and disi is a malformed romanization of that day.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0041",
+        "excerpt": "丁巳"
+      }
+    },
+    {
+      "repairId": "mingshi:008:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal English likewise misreads 丁巳 as disi; dingsi restores the correct day name without changing the accession wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0041",
+        "excerpt": "丁巳"
+      }
+    },
+    {
+      "repairId": "mingshi:008:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0052 has 己巳; that day is jisi, whereas jiwei is 己未, so the idiomatic date is wrong.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0052",
+        "excerpt": "己巳"
+      }
+    },
+    {
+      "repairId": "mingshi:008:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field repeats the same 己巳→jiwei error; jisi matches the Chinese day name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0052",
+        "excerpt": "己巳"
+      }
+    },
+    {
+      "repairId": "mingshi:008:r0007",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0098 has 平樂、潯州蠻; 平樂 is Pingle, not Pingyao (平遙), so the place name in the idiomatic must change.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0098",
+        "excerpt": "平樂、潯州蠻"
+      }
+    },
+    {
+      "repairId": "mingshi:008:r0008",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal English likewise turns 平樂 into Pingyao; Pingle restores the Guangxi place named in the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0098",
+        "excerpt": "平樂"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "mingshi:008:r0007",
+      "before": {
+        "id": "mingshi:008:c0350",
+        "subject": "mingshi:008:p027",
+        "predicate": "event-participation",
+        "value": {
+          "kind": "military",
+          "role": "commander",
+          "action": "defeated Pingyao and Xunzhou rebels",
+          "dateContext": {
+            "sourceDate": {
+              "text": "丙寅"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 1424,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "mingshi:008:s0098"
+        ]
+      },
+      "after": {
+        "id": "mingshi:008:c0350",
+        "subject": "mingshi:008:p027",
+        "predicate": "event-participation",
+        "value": {
+          "kind": "military",
+          "role": "commander",
+          "action": "defeated Pingle and Xunzhou rebels",
+          "dateContext": {
+            "sourceDate": {
+              "text": "丙寅"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 1424,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "mingshi:008:s0098"
+        ]
+      },
+      "reason": "Accepted r0007 shows the English action string inherited Pingyao from the bad translation of 平樂; the event remains valid but must name Pingle instead.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0098",
+        "excerpt": "平樂、潯州蠻"
+      }
+    }
+  ]
+}

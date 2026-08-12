@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "beiqishu",
+  "chapter": "009",
+  "input": {
+    "chapterFingerprint": "sha256:524f1de0a24e7e10b87158ed9e8d9694f9fec0c02c2563597ed5aae20495cc9b",
+    "proposalsFingerprint": "sha256:1ed85eedea5f1bc5bccfcb3901d37db02d0cdc2e29491832effdec45d559f0e4"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-1611b50d-e7c5-4f74-a1b2-5f021ec6aaf7",
+    "runId": "run-958b3b81-8e8f-49d5-9dbe-8c8f21c97f5d",
+    "completedAt": "2026-08-12T11:42:06.952Z"
+  },
+  "proposals": [
+    {
+      "id": "beiqishu:009:r0001",
+      "unit": {
+        "id": "s0007",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "When he was enfeoffed Princess Consort of Bohai, all affairs of the inner quarters were decided by her.",
+      "after": "When she was enfeoffed Princess Consort of Bohai, all affairs of the inner quarters were decided by her.",
+      "reason": "Chinese 拜渤海王妃 refers to Lou being made princess consort; idiomatic wrongly makes \"he\" the subject of that enfeoffment.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:009:r0002",
+      "unit": {
+        "id": "s0075",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "idiomatic",
+      "before": "Later she became pregnant; Prince Shao of Taiyuan came to her gate but could not see her, and angrily said, \"Does the boy not know? My elder sister's belly is great — that is why she will not see the boy.\"",
+      "after": "Later she became pregnant; Prince Shao of Taiyuan came to her gate but could not see her, and angrily said, \"Does the boy not know? Mother's belly is great — that is why she will not see the boy.\"",
+      "reason": "In Northern Dynasties usage 姊姊 addresses one's mother; rendering it as \"elder sister\" reverses the kinship and obscures that Shaode is speaking about Empress Li.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "beiqishu:009:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0007’s 及拜渤海王妃 continues the biography of Lou: she is the one appointed Princess Consort of Bohai, and 閫闈之事悉決焉 then has her deciding inner-quarters affairs. English “he was enfeoffed Princess Consort” wrongly makes a male the subject of that enfeoffment; “she was enfeoffed” matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0007",
+        "excerpt": "及拜渤海王妃"
+      }
+    },
+    {
+      "repairId": "beiqishu:009:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "In s0075 Shaode cannot see the pregnant empress and says 姊姊腹大. Preceding units identify that woman as his mother (Empress Li), and in Northern Dynasties usage 姊姊 addresses one’s mother, not an elder sister. “My elder sister’s belly” reverses the kinship; “Mother’s belly” restores the correct referent.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "姊姊腹大，故不見兒"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

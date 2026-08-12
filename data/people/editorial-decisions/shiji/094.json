@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "094",
+  "input": {
+    "chapterFingerprint": "sha256:dad30edafa2dd3dcfcf9c4de71bf62ccdb4719523863df91c6094f100b662be1",
+    "proposalsFingerprint": "sha256:26b8db0652c7036c300cea93d4ab32cefb221a9f33fe042fff3607f20ca73d68"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-e7f07ff5-30b1-43e7-b3d9-7e369f4b48e3",
+    "runId": "run-e9ca5bde-19bd-4f93-840c-d4f8d49aaa6c",
+    "completedAt": "2026-08-12T11:13:33.199Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:094:r0001",
+      "unit": {
+        "id": "s0004",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Tian Dan pretended to bind his slave and followed some youths to the county court, intending to meet with the magistrate and kill the slave.",
+      "after": "Tian Dan pretended to bind his slave and, accompanied by some young men, went to the county court, intending to request (as a pretext) that the slave be executed.",
+      "reason": "The Chinese 欲謁殺奴 is the feigned petition to have the slave killed, not an intention to kill the slave; the magistrate is killed in the next sentence.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:094:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "欲謁殺奴 means he meant to petition for the slave’s official execution, not to kill the slave himself; the next unit 因擊殺令 shows the magistrate is the one struck dead, so the proposed literal correctly restores that petition-pretext reading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0004",
+        "excerpt": "欲謁殺奴"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

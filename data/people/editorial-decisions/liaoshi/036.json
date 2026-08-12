@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "036",
+  "input": {
+    "chapterFingerprint": "sha256:e85c7df438d0a26262e4f96d123e637ddc185ac9cc345a648931685242f09aaf",
+    "proposalsFingerprint": "sha256:0b4c9b8c181797eded0cd908b2861e9cb3ca1ece2f16c65e825602f45eda2ada"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-b0d5d0d1-0f6e-4285-8271-cb16dcf2e707",
+    "runId": "run-03202ef6-988b-4254-a0b6-00419ebd7add",
+    "completedAt": "2026-08-12T10:38:56.210Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:036:r0001",
+      "unit": {
+        "id": "s0158",
+        "kind": "paragraph-sentence",
+        "blockIndex": 29,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "There was also the Iron-Forbidden State: in Shengzong's Chongxi year 17 it begged troops to assist the attack on Western Xia; the edict refused.",
+      "after": "There was also the Iron-Forbidden State: in Xingzong's Chongxi year 17 it begged troops to assist the attack on Western Xia; the edict refused.",
+      "reason": "Chinese 興宗重熙十七年 names Xingzong, not Shengzong; Chongxi was Xingzong's reign.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:036:r0002",
+      "unit": {
+        "id": "s0158",
+        "kind": "paragraph-sentence",
+        "blockIndex": 29,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "The Iron-Forbidden State once asked in Chongxi year 17 to join an attack on Western Xia; the court denied the request.",
+      "after": "In Xingzong's Chongxi year 17 the Iron-Forbidden State once asked to join an attack on Western Xia; the court denied the request.",
+      "reason": "Idiomatic English omits 興宗 (Xingzong), who is named in the Chinese as the reigning emperor for Chongxi 17.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:036:r0003",
+      "unit": {
+        "id": "s0222",
+        "kind": "paragraph-sentence",
+        "blockIndex": 31,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Small Goryeo still drained Liao forces again and again—perhaps its rugged ground alone could explain it.",
+      "after": "Goryeo was a small state yet repeatedly cost Liao armies—was it not because its difficult terrain was enough to rely on?",
+      "reason": "Chinese 險阻足恃 means the rugged terrain was sufficient to rely on, not that it was hard to rely on; the rhetorical question affirms terrain as an asset.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:036:r0004",
+      "unit": {
+        "id": "s0222",
+        "kind": "paragraph-sentence",
+        "blockIndex": 31,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Goryeo was a small state yet repeatedly cost Liao armies—was it not because its terrain was hard to rely on?",
+      "after": "Goryeo was a small state yet repeatedly cost Liao armies—was it not because its difficult terrain was sufficient to rely on?",
+      "reason": "Literal reverses 足恃: the terrain is relied upon as a defense, not unreliable.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:036:r0005",
+      "unit": {
+        "id": "s0220",
+        "kind": "paragraph-sentence",
+        "blockIndex": 31,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Only when Song's Taizong attacked Northern Han could Liao not relieve the target; otherwise Liao mostly lost, and wins rarely paid for themselves.",
+      "after": "Only when Song's Taizong campaigned against Northern Han could Liao not save it; otherwise Liao mostly lost, and even victories did not repay the cost.",
+      "reason": "“Relieve the target” obscures 遼不能救: Liao could not rescue Northern Han; align with the Chinese referent.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:036:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 興宗重熙十七年 names Xingzong; Shengzong (聖宗) is a different Liao emperor, and Chongxi was Xingzong's era.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0158",
+        "excerpt": "興宗重熙十七年"
+      }
+    },
+    {
+      "repairId": "liaoshi:036:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The Chinese explicitly names 興宗 before 重熙十七年; the idiomatic omits that temple name, and restoring Xingzong matches the source.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0158",
+        "excerpt": "興宗重熙十七年"
+      }
+    },
+    {
+      "repairId": "liaoshi:036:r0003",
+      "decision": "reject",
+      "after": null,
+      "reason": "The idiomatic already treats rugged ground as the explanation for Goryeo's success; it does not reverse 足恃. The proposed rewrite mainly restyles the rhetorical question.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0222",
+        "excerpt": "非以險阻足恃故歟"
+      }
+    },
+    {
+      "repairId": "liaoshi:036:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "足恃 means the terrain was sufficient to rely on as a defense; 'hard to rely on' reverses that sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0222",
+        "excerpt": "險阻足恃"
+      }
+    },
+    {
+      "repairId": "liaoshi:036:r0005",
+      "decision": "revise",
+      "after": "Only when Song's Taizong campaigned against Northern Han could Liao not save it; otherwise Song mostly lost, and even victories did not repay the cost.",
+      "reason": "遼不能救 correctly means Liao could not rescue Northern Han, but 餘多敗衄 continues the Song subject (clarified by s0221 on China's loss of the five passes); the proposal still wrongly makes Liao the loser.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0220",
+        "excerpt": "宋惟太宗征北漢，遼不能救，餘多敗衄"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

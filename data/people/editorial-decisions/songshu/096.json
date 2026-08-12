@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "songshu",
+  "chapter": "096",
+  "input": {
+    "chapterFingerprint": "sha256:7fd4a909c194f8563933d033b4013738a1e7ad5858257d3088a7eeaebdd49c73",
+    "proposalsFingerprint": "sha256:45b1f3b048242be282e2ab1c9990bd03a6e0fa22e2bb850b82e2cb918735c7e8"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-5af9f916-1d55-424a-8f13-2ba38082ec55",
+    "runId": "run-bd8123a2-759a-4028-b941-20cc99a62d14",
+    "completedAt": "2026-08-12T10:19:46.952Z"
+  },
+  "proposals": [
+    {
+      "id": "songshu:096:r0001",
+      "unit": {
+        "id": "s0062",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "When Qiao Zong threw Shu into chaos, Achai sent his cousin, the Western Qiang Duke Tuyuhun Chi, with Nai to extend their lands to Longgu and Pingkang.",
+      "after": "When Qiao Zong threw Shu into chaos, Achai sent his cousin, the Western Qiang Duke Tuyuhun Chilai Ni, to expand their territory as far as Longgu and Pingkang.",
+      "reason": "Chinese 吐谷渾敕來泥 is one personal name; 拓土 means expand territory, not a person Nai.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:096:r0002",
+      "unit": {
+        "id": "s0062",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "When Qiao Zong threw Shu into disorder, Achai sent his cousin the Western Qiang Duke Tuyuhun Chi to bring Nai to expand territory as far as Longgu and Pingkang.",
+      "after": "When Qiao Zong threw Shu into disorder, Achai sent his cousin the Western Qiang Duke Tuyuhun Chilai Ni to expand territory as far as Longgu and Pingkang.",
+      "reason": "Same error as idiomatic: 敕來泥 is the given name; 拓土 is the verb phrase.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:096:r0003",
+      "unit": {
+        "id": "s0090",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "In the nineteenth year Achai was posthumously granted his former offices—Commander of Military Affairs in Qin and Sha, Governor of Shazhou, Colonel Protecting the Qiang, and King of Longxi.",
+      "after": "In the nineteenth year Achai was posthumously granted his former titles—General Who Pacifies the West, Commander of Military Affairs in the three provinces of Qin and Sha, Governor of Shazhou, Colonel Protecting the Qiang, and King of Longxi.",
+      "reason": "Chinese 本號安西 was omitted; 安西 is the Anxi/Pacifies-the-West general title.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "songshu:096:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "吐谷渾敕來泥 is one personal name; 拓土至 is the verb phrase 'expand territory as far as', not a companion Nai. Splitting 敕來泥 into Chi and Nai invents a person and misreads the clause.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0062",
+        "excerpt": "吐谷渾敕來泥拓土至龍涸、平康"
+      }
+    },
+    {
+      "repairId": "songshu:096:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same segmentation error as the idiomatic: 敕來泥 belongs with 吐谷渾 as the cousin's name, and 拓土 is the expansion verb, so 'bring Nai' is unsupported.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0062",
+        "excerpt": "西彊公吐谷渾敕來泥拓土"
+      }
+    },
+    {
+      "repairId": "songshu:096:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "追贈…本號安西 lists his former Anxi title first; omitting 安西 and 三州 leaves out General Who Pacifies the West and the three provinces of Qin and Sha, which the repair restores accurately.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0090",
+        "excerpt": "本號安西、秦沙三州諸軍事"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

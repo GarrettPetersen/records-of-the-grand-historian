@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "121",
+  "input": {
+    "chapterFingerprint": "sha256:42d8a99bdd90c4db6709bd549f5184b64fa199cb4b0105f7855c11ba126c1b4a",
+    "proposalsFingerprint": "sha256:e1d66ca456b017760c64040140d50f7e13a8801e3ba7faf016992cf25df953d3"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-22df167a-29a4-43d8-9b9f-d6994e85f7e8",
+    "runId": "run-9b54e681-109a-4479-9bad-1f66a451dde1",
+    "completedAt": "2026-08-12T10:36:22.612Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:121:r0001",
+      "unit": {
+        "id": "s0071",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "His wife, as her own daughter could not bear children, obtained the lady and cherished her more than a birth child; nurse and tutor instructed her, and her deportment was fully complete.",
+      "after": "His wife, who had no daughter that lived (or could not raise a daughter of her own), obtained the lady and cherished her more than a birth child; nurse and tutor instructed her, and her deportment was fully complete.",
+      "reason": "息女不育 means the wife had no surviving/raised daughter of her own, not that a daughter was infertile.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:121:r0002",
+      "unit": {
+        "id": "s0071",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "His wife, who had no children of her own, took her in and loved her more than a daughter of her own blood; nurses and tutors trained her until her manners were flawless.",
+      "after": "His wife, who had no daughter of her own that lived, took her in and loved her more than a birth child; nurses and tutors trained her until her manners were flawless.",
+      "reason": "Idiomatic overgeneralizes 息女不育 to 'no children'; Chinese specifies daughter.",
+      "confidence": "medium"
+    },
+    {
+      "id": "jiuwudaishi:121:r0003",
+      "unit": {
+        "id": "s0063",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "After he took the throne he posthumously invested her as Honored Consort and proclaimed mourning, which is why Shizong later issued an order for him to leave mourning.",
+      "after": "After he took the throne he posthumously invested her as Honored Consort and proclaimed mourning; therefore there was an order for Shizong to leave mourning and resume office.",
+      "reason": "起復之命 applies to 世宗 (Shizong), not an order Shizong issued for Taizu; the translation reverses the referent.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:121:r0001",
+      "decision": "revise",
+      "after": "His wife, who had no daughter that lived, obtained the lady and cherished her more than a birth child; nurse and tutor instructed her, and her deportment was fully complete.",
+      "reason": "s0071 息女不育 means the wife had no surviving/raised daughter of her own, not that a daughter was infertile; the proposal’s parenthetical hedge is awkward, so a single clean rendering is used.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0071",
+        "excerpt": "其妻以息女不育"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:121:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0071 specifies 息女, a daughter; ‘no children’ overgeneralizes, and ‘no daughter … that lived’ restores the Chinese scope while keeping natural idiomatic English.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0071",
+        "excerpt": "息女不育"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:121:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "故世宗有起復之命 means Shizong was the one ordered to leave mourning and resume office; the prior English wrongly makes Shizong the issuer of an order for Taizu.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0063",
+        "excerpt": "故世宗有起復之命"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

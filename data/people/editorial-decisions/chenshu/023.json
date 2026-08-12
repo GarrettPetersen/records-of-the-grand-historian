@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "chenshu",
+  "chapter": "023",
+  "input": {
+    "chapterFingerprint": "sha256:61ddfa26899033e138857d11aa48c82ea381d773c92602a372078d3d98c9397d",
+    "proposalsFingerprint": "sha256:1934d9dc189a7a477866285e17b839e9c08856db4e29b3d3ade9d18649a4e041"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-7a48d9ad-3b65-4f72-9223-5e509f66c718",
+    "runId": "run-34fa7af6-49ab-41a3-96db-d7a976196876",
+    "completedAt": "2026-08-12T10:34:18.891Z"
+  },
+  "proposals": [
+    {
+      "id": "chenshu:023:r0001",
+      "unit": {
+        "id": "s0042",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "In the first year of Guangda he was appointed director of the personnel bureau in the Ministry of Works.",
+      "after": "In the first year of Guangda he was appointed director of the personnel bureau in the Department of State Affairs.",
+      "reason": "尚書吏部郎 is a personnel post in the Department of State Affairs (尚書), not the Ministry of Works.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:023:r0002",
+      "unit": {
+        "id": "s0042",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "In the first year of Guangda he was appointed Director of the Personnel Bureau in the Ministry of Works.",
+      "after": "In the first year of Guangda he was appointed Director of the Personnel Bureau in the Department of State Affairs.",
+      "reason": "Same office mistranslation: 吏部 belongs to 尚書省, not Works.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:023:r0003",
+      "unit": {
+        "id": "s0078",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Before long he was appointed right vice director of the ministry of works; before he could assume the post he was additionally made palace attendant and transferred to left vice director, with a share in personnel selection, while retaining his palace attendant rank.",
+      "after": "Before long he was appointed right vice director of the Department of State Affairs; before he could assume the post he was additionally made palace attendant and transferred to left vice director, with a share in personnel selection, while retaining his palace attendant rank.",
+      "reason": "尚書右僕射 is vice director of the Department of State Affairs, not Ministry of Works.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:023:r0004",
+      "unit": {
+        "id": "s0106",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "He was appointed director in the personnel bureau of the ministry of works; his post as commandant of footsoldiers remained unchanged, and he continued to attend the eastern palace.",
+      "after": "He was appointed director in the personnel bureau of the Department of State Affairs; his post as commandant of footsoldiers remained unchanged, and he continued to attend the eastern palace.",
+      "reason": "尚書吏部郎中 is not Ministry of Works.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:023:r0005",
+      "unit": {
+        "id": "s0111",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "He was transferred to right vice director of the ministry of works and soon to left vice director, with a share in personnel selection, while retaining his palace attendant rank.",
+      "after": "He was transferred to right vice director of the Department of State Affairs and soon to left vice director, with a share in personnel selection, while retaining his palace attendant rank.",
+      "reason": "尚書僕射 is Department of State Affairs.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "chenshu:023:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "尚書吏部郎 is a personnel directorate under the Department of State Affairs (尚書省); Ministry of Works would be 工部, which the Chinese does not support.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0042",
+        "excerpt": "尚書吏部郎"
+      }
+    },
+    {
+      "repairId": "chenshu:023:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same unit: 尚書吏部郎 belongs to 尚書省 (Department of State Affairs), not the Ministry of Works.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0042",
+        "excerpt": "尚書吏部郎"
+      }
+    },
+    {
+      "repairId": "chenshu:023:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "尚書右僕射 (and the following 左僕射) are vice directors of the Department of State Affairs; Ministry of Works is unsupported.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0078",
+        "excerpt": "尚書右僕射"
+      }
+    },
+    {
+      "repairId": "chenshu:023:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "尚書吏部郎中 is personnel bureau director under the Department of State Affairs, not the Ministry of Works.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0106",
+        "excerpt": "尚書吏部郎中"
+      }
+    },
+    {
+      "repairId": "chenshu:023:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "尚書右僕射 / 左僕射 are Department of State Affairs vice directors; the English Ministry of Works misreads 尚書.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0111",
+        "excerpt": "尚書右僕射"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

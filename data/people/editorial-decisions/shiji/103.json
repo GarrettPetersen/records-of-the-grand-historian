@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "103",
+  "input": {
+    "chapterFingerprint": "sha256:a1d26d42b32ff665e20f8076eeadedec9da56cd856793aa9f5d56bf706e3be24",
+    "proposalsFingerprint": "sha256:e536dfa1b7b9c87d03dd90a3c1aeda9699f2f1bccd6817523239a00234c06ce0"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-edbd3911-b7e7-4bbe-996a-05de77afb185",
+    "runId": "run-6eb7ce04-34a5-4f0d-9bde-c4d7b7247eb4",
+    "completedAt": "2026-08-12T11:43:20.376Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:103:r0001",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "When Gaozu struck east against Xiang Ji, passing through Henan, at that time Fen was fifteen years old, serving as a minor official attending Gaozu.",
+      "after": "When Gaozu struck east against Xiang Ji, passing through Henei, at that time Fen was fifteen years old, serving as a minor official attending Gaozu.",
+      "reason": "河內 is Henei, not Henan; the idiomatic line already has Henei.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:103:r0002",
+      "unit": {
+        "id": "s0026",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "The servants and attendants Xin Xin as it should be, only cautious.",
+      "after": "The servants and attendants were cheerful and only cautious.",
+      "reason": "訢訢如也 is adverbial 'cheerfully'; 'Xin Xin' is a corrupted transliteration, not a name.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:103:r0003",
+      "unit": {
+        "id": "s0070",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "He yielded to Qing with a letter, Qing was very ashamed, then again oversaw affairs.",
+      "after": "He rebuked Qing by letter; Qing was very ashamed, then again oversaw affairs.",
+      "reason": "讓 here means to reproach/rebuke (as in the idiomatic), not 'yield'.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:103:r0004",
+      "unit": {
+        "id": "s0077",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "The Marquis of Jianling Wei Wan was a person from Daliang in Dai.",
+      "after": "The Marquis of Jianling Wei Wan was a person from Daling in Dai.",
+      "reason": "大陵 is Daling, not Daliang; idiomatic correctly has Daling.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:103:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 過河內 names the commandery 河內 (Henei); literal Henan confuses it with 河南, and Henei matches the graph and the idiomatic rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "過河內"
+      }
+    },
+    {
+      "repairId": "shiji:103:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 僮仆訢訢如也 uses 訢訢如也 as an adverbial manner phrase 'cheerfully', parallel to 申申如也; literal 'Xin Xin' wrongly treats it as a personal name, and 'were cheerful and only cautious' restores the sense with 唯謹.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0026",
+        "excerpt": "僮仆訢訢如也，唯謹"
+      }
+    },
+    {
+      "repairId": "shiji:103:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 以書讓慶 uses 讓 in the sense of reproach/rebuke (責讓); the emperor's prior rebuke context and Qing's shame confirm this is not 'yield', and 'rebuked Qing by letter' matches the idiomatic rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0070",
+        "excerpt": "以書讓慶"
+      }
+    },
+    {
+      "repairId": "shiji:103:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 代大陵人也 names the place 大陵 (Daling) in Dai; literal Daliang confuses it with 大梁, and Daling matches the graph and the idiomatic rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0077",
+        "excerpt": "代大陵人也"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

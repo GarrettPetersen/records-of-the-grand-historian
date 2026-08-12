@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 3,
+  "book": "weishu",
+  "chapter": "024",
+  "input": {
+    "chapterFingerprint": "sha256:432bfba494f38f5688456de3c779429bd0d0546a48acb0610dccf92739b8c757",
+    "proposalsFingerprint": "sha256:e4dabbd32d12825c4fcb2cc84f463100632330f8224d3dfeefa91c2236c91e68"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-368d322b-57fd-413d-8096-4466a952557c",
+    "runId": "run-3c4707fd-8114-4eca-88d4-b4f39ac8332e",
+    "completedAt": "2026-08-12T11:44:36.884Z"
+  },
+  "proposals": [
+    {
+      "id": "weishu:024:r0001",
+      "unit": {
+        "id": "s0002",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Changle, Prince of Anle, was made Prince of Changchang in Huangxing year 4 and later transferred to Anle.",
+      "after": "Changle, Prince of Anle, was made Prince of Jianchang in Huangxing year 4 and later transferred to Anle.",
+      "reason": "建昌 is Jianchang, not Changchang; the English fief name is corrupted.",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:024:r0002",
+      "unit": {
+        "id": "s0098",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Early in Yanzhang, in a year of great famine, Yanming spent his household wealth to save several dozen guests and support their families as well.",
+      "after": "Early in Yanchang, in a year of great famine, Yanming spent his household wealth to save several dozen guests and support their families as well.",
+      "reason": "延昌 is Yanchang, not Yanzhang.",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:024:r0003",
+      "unit": {
+        "id": "s0102",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "He, Prince of Zhongshan Xi, and his younger brother Prince of Linhuai Yu were among those whose learning and reputation shone across the age.",
+      "after": "He, Prince of Zhongshan Xi, and Xi's younger brother Prince of Linhuai Yu were among those whose learning and reputation shone across the age.",
+      "reason": "弟臨淮王彧 is Xi's younger brother; English his is ambiguous and may attach to Yanming.",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:024:r0004",
+      "unit": {
+        "id": "s0118",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "When the Deposed Emperor came to the throne he was posthumously titled grand mentor, his princedom left as before, with the temple name Prince Wenzuan.",
+      "after": "When the Deposed Emperor came to the throne he was posthumously titled grand mentor, his princedom left as before, with the posthumous name Prince Wenzuan.",
+      "reason": "諡曰文宣 is a posthumous name (諡), not a temple name.",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:024:r0005",
+      "unit": {
+        "id": "s0146",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 19
+      },
+      "field": "idiomatic",
+      "before": "Because Gaozu had not taken his mother, Lady Chang, according to proper ritual, he did not permit her to be made princess.",
+      "after": "Because his mother, Lady Chang, had not been taken as consort according to proper ritual, Gaozu did not permit her to be made princess.",
+      "reason": "納不以禮 refers to Lady Chang's marriage into the household, not Gaozu taking her; the idiomatic English reverses the agent.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "weishu:024:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0002 enfeoffs 建昌王; Jianchang matches 建昌, while Changchang invents a wrong fief reading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0002",
+        "excerpt": "封建昌王"
+      }
+    },
+    {
+      "repairId": "weishu:024:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0098 dates the famine 延昌初; Yanchang is the correct era reading, not Yanzhang.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0098",
+        "excerpt": "延昌初"
+      }
+    },
+    {
+      "repairId": "weishu:024:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "及弟臨淮王彧 attaches 弟 to 中山王熙; ‘his’ after ‘He…Xi…’ can misread Yu as Yanming’s brother, so naming Xi as the elder is a real fix.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0102",
+        "excerpt": "與中山王熙及弟臨淮王彧"
+      }
+    },
+    {
+      "repairId": "weishu:024:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "諡曰文宣 is a posthumous name (諡), not a temple name (廟號); replacing ‘temple name’ corrects a terminology error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0118",
+        "excerpt": "諡曰文宣"
+      }
+    },
+    {
+      "repairId": "weishu:024:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "高祖以納不以禮，不許其為妃 makes 納不以禮 the ground for Gaozu’s refusal; Gaozu is not the agent who took Lady Chang, so the proposed passive is required.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0146",
+        "excerpt": "高祖以納不以禮，不許其為妃"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "weishu:024:r0001",
+      "before": {
+        "id": "weishu:024:c0019",
+        "subject": "weishu:024:p005",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Prince of Changchang",
+          "zh": "建昌王",
+          "pinyin": "Jiànchāng wáng"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "weishu:024:s0002"
+        ]
+      },
+      "after": {
+        "id": "weishu:024:c0019",
+        "subject": "weishu:024:p005",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Prince of Jianchang",
+          "zh": "建昌王",
+          "pinyin": "Jiànchāng wáng"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "weishu:024:s0002"
+        ]
+      },
+      "reason": "Accepted r0001 shows English Prince of Changchang came only from the bad idiomatic of 建昌王; the title claim must read Prince of Jianchang while keeping zh, pinyin, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0002",
+        "excerpt": "建昌王"
+      }
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "mingshi",
+  "chapter": "019",
+  "input": {
+    "chapterFingerprint": "sha256:6b5dfc6065270ee3e167801b19d9bc19e5cc5d850b23fe9420ff2d61796e0a6f",
+    "proposalsFingerprint": "sha256:793df25799f4d70612291e96be7f4f8e37e46f0862b824c91bb9ff0fd7e88fe1"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-1ff0bacd-bb01-4463-8e41-504080c1aea9",
+    "runId": "run-1a6a2a19-d675-4391-b937-be99551ab680",
+    "completedAt": "2026-08-12T10:38:44.457Z"
+  },
+  "proposals": [
+    {
+      "id": "mingshi:019:r0001",
+      "unit": {
+        "id": "s0131",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "On jiyou his illness turned critical; Grand Secretaries Gao Gong, Zhang Juyi, and Gao Yi were summoned to receive his deathbed charge.",
+      "after": "On jiyou his illness turned critical; Grand Secretaries Gao Gong, Zhang Juzheng, and Gao Yi were summoned to receive his deathbed charge.",
+      "reason": "Chinese 張居正 is Zhang Juzheng; Zhang Juyi is a mistransliteration of the same name already rendered Zhang Juzheng elsewhere in the chapter.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:019:r0002",
+      "unit": {
+        "id": "s0131",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "Day jiyou: his illness became critical; Grand Secretaries Gao Gong, Zhang Juyi, and Gao Yi were summoned to receive his deathbed charge.",
+      "after": "Day jiyou: his illness became critical; Grand Secretaries Gao Gong, Zhang Juzheng, and Gao Yi were summoned to receive his deathbed charge.",
+      "reason": "Chinese 張居正 is Zhang Juzheng; Zhang Juyi is a mistransliteration.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:019:r0003",
+      "unit": {
+        "id": "s0096",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 16
+      },
+      "field": "idiomatic",
+      "before": "On guimao raiders attacked Datong and Vice Regional Commander Qian Dong was killed in battle.",
+      "after": "On guiwei raiders attacked Datong and Vice Regional Commander Qian Dong was killed in battle.",
+      "reason": "Chinese sexagenary day is 癸未 (guiwei), not guimao (癸卯).",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:019:r0004",
+      "unit": {
+        "id": "s0096",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 16
+      },
+      "field": "literal",
+      "before": "Day guimao: raiders violated Datong; Vice Regional Commander Qian Dong died in battle.",
+      "after": "Day guiwei: raiders violated Datong; Vice Regional Commander Qian Dong died in battle.",
+      "reason": "Chinese sexagenary day is 癸未 (guiwei), not guimao (癸卯).",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "mingshi:019:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 張居正 is Zhang Juzheng; the idiomatic Zhang Juyi is a mistransliteration of the same name, and the proposed replacement is otherwise accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0131",
+        "excerpt": "張居正"
+      }
+    },
+    {
+      "repairId": "mingshi:019:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 張居正 is Zhang Juzheng; the literal Zhang Juyi is a mistransliteration, and the proposed replacement is otherwise accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0131",
+        "excerpt": "張居正"
+      }
+    },
+    {
+      "repairId": "mingshi:019:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese day is 癸未 (guiwei); guimao would be 癸卯. Preceding 壬午 and following 戊子 also confirm the sequential reading as guiwei.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0096",
+        "excerpt": "癸未"
+      }
+    },
+    {
+      "repairId": "mingshi:019:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese day is 癸未 (guiwei); the literal guimao misreads 未 as 卯, and the proposed guiwei is the correct reading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0096",
+        "excerpt": "癸未"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

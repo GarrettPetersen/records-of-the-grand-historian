@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "suishu",
+  "chapter": "082",
+  "input": {
+    "chapterFingerprint": "sha256:00795db80178df848d6d4866fe1e15bd06644fd34f8b98e4ee56700936511941",
+    "proposalsFingerprint": "sha256:f1076d65c348f369d960df169fd0b7a8a0b494fd038b7275a70c3551c5782291"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-6486e6fe-e960-4ac0-a1d3-383b55e22bba",
+    "runId": "run-6d0d3fb2-85f0-4aae-b411-c8be79109e7a",
+    "completedAt": "2026-08-12T10:20:26.642Z"
+  },
+  "proposals": [
+    {
+      "id": "suishu:082:r0001",
+      "unit": {
+        "id": "s0041",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "After Gaozu pacified Chen, he sent envoys to present local products; thereafter tribute missions ceased.",
+      "after": "After Gaozu pacified Chen, [Linyi] then sent envoys to present local products; thereafter tribute missions ceased.",
+      "reason": "The silent subject of 遣使獻方物 is Linyi, not Gaozu; the idiomatic already has this right, but the literal wrongly makes Gaozu the sender.",
+      "confidence": "high"
+    },
+    {
+      "id": "suishu:082:r0002",
+      "unit": {
+        "id": "s0168",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "In the sea was a fish called Jiantong, four-legged, scaleless, its snout like an elephant's; sucking water it spurted upward fifty or sixty zhang high.",
+      "after": "In the sea was a fish called Jiantong, four-legged, scaleless, its snout like an elephant's; sucking water it spurted upward fifty or sixty chi high.",
+      "reason": "Chinese 尺 means chi (feet), not zhang; the literal incorrectly renders 尺 as zhang.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "suishu:082:r0001",
+      "decision": "revise",
+      "after": "After Gaozu pacified Chen, Linyi then sent envoys to present local products; thereafter tribute missions ceased.",
+      "reason": "高祖既平陳 is only the temporal clause; the silent agent of 乃遣使獻方物 is Linyi (獻方物 is tributary presentation to the court, not something Gaozu does), matching the following 朝貢遂絕 and the idiomatic line. The proposal correctly restores that subject, but bracketed [Linyi] is awkward editorial markup—supply Linyi plainly.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0041",
+        "excerpt": "乃遣使獻方物"
+      }
+    },
+    {
+      "repairId": "suishu:082:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "高五六十尺 uses 尺 (chi), not 丈 (zhang); the literal’s “zhang” is a unit mistranslation, and “chi” restores the correct measure.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0168",
+        "excerpt": "高五六十尺"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

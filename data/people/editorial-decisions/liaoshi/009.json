@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "009",
+  "input": {
+    "chapterFingerprint": "sha256:a77a1f9b079ca90e1df33f10481c7e4388eb8ee25b6644e390870522062ea882",
+    "proposalsFingerprint": "sha256:c80c6f022c5060fae2f2f13662f3451ca1210025b3b069f2730f7bf89b2da97a"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-78ca5835-4803-4ee4-8f0a-87fcdf95bef1",
+    "runId": "run-c8f2e21d-7d80-40bc-aabd-d7cd919dc8b4",
+    "completedAt": "2026-08-12T10:14:48.509Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:009:r0001",
+      "unit": {
+        "id": "s0114",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Appraisal: In more than sixty years since Liao's founding, from Shendian through Huitong, the court knew no day of rest;",
+      "after": "Appraisal: In more than sixty years since Liao's founding, from Shence through Huitong, the court knew no day of rest;",
+      "reason": "神冊 is the Shence era name; \"Shendian\" is a mistransliteration.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:009:r0002",
+      "unit": {
+        "id": "s0114",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Appraisal: In over sixty years since Liao's rise, between the Shendian and Huitong reigns, there was no day with spare time;",
+      "after": "Appraisal: In over sixty years since Liao's rise, between the Shence and Huitong reigns, there was no day with spare time;",
+      "reason": "神冊 corresponds to Shence, not Shendian.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:009:r0003",
+      "unit": {
+        "id": "s0078",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "In the second year of Qianheng, spring, first month, on bingzi day the new moon, the princes Longxu was enfeoffed as Prince of Liang and Longqing as Prince of Heng.",
+      "after": "In the second year of Qianheng, spring, first month, on bingzi day the new moon, the imperial sons Longxu was enfeoffed as Prince of Liang and Longqing as Prince of Heng.",
+      "reason": "Subject-verb disagreement: \"the princes Longxu was\" is ungrammatical; the Chinese 皇子 marks imperial sons.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:009:r0004",
+      "unit": {
+        "id": "s0126",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "On the fourth summer month the Emperor personally led a southern campaign.",
+      "after": "In the fourth summer month the Emperor personally led a southern campaign.",
+      "reason": "English date phrase requires \"In\" rather than \"On\" before a month.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:009:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0114 神冊 is the Liao era name Shence; idiomatic Shendian is a mistransliteration, and Shence restores the correct romanization without otherwise changing the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0114",
+        "excerpt": "神冊、會同之間"
+      }
+    },
+    {
+      "repairId": "liaoshi:009:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal likewise misreads 神冊 as Shendian; Shence matches the era name while leaving the rest of the wording intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0114",
+        "excerpt": "神冊、會同之間"
+      }
+    },
+    {
+      "repairId": "liaoshi:009:r0003",
+      "decision": "revise",
+      "after": "In the second year of Qianheng, spring, first month, on bingzi day the new moon, the imperial son Longxu was enfeoffed as Prince of Liang and Longqing as Prince of Heng.",
+      "reason": "封皇子隆緒為梁王，隆慶為恒王 marks Longxu and Longqing as imperial sons, so princes is wrong; the proposed plural imperial sons still disagrees with was. Singular imperial son with the existing elliptical Longqing clause is grammatical and faithful.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0078",
+        "excerpt": "封皇子隆緒為梁王，隆慶為恒王"
+      }
+    },
+    {
+      "repairId": "liaoshi:009:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "夏四月 is a month span, not a calendar day; English requires In before the month, so On the fourth summer month is ungrammatical and In the fourth summer month is the correct minimal repair.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0126",
+        "excerpt": "夏四月"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

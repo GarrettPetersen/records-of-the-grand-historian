@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 3,
+  "book": "nanqishu",
+  "chapter": "020",
+  "input": {
+    "chapterFingerprint": "sha256:3f0f773fb4c3e3784fdb7039e20161fba56f9b2b481c5beaa6cc5599fb7db289",
+    "proposalsFingerprint": "sha256:68a39a274651069eafd0fefa56faee41da5ba4349110ad8c4dd5388df708c058"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-63c1a1f1-d14b-4adf-bfcc-d2fe6087ac60",
+    "runId": "run-4473a165-37da-4b26-bbfe-8f86e0b43cc9",
+    "completedAt": "2026-08-12T10:16:52.781Z"
+  },
+  "proposals": [
+    {
+      "id": "nanqishu:020:r0001",
+      "unit": {
+        "id": "s0013",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "She married Emperor Xuan and bore by concubines Prince Daodu of Hengyang and Prince Daosheng of Shi'an; afterward she bore the Grand Ancestor.",
+      "after": "She married Emperor Xuan; Prince Daodu of Hengyang and Prince Daosheng of Shi'an were secondary-born (by concubines); afterward she bore the Grand Ancestor.",
+      "reason": "The Chinese 庶生 marks Daodu and Daosheng as born of concubines, not borne by the empress; the literal wrongly makes her their mother.",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:020:r0002",
+      "unit": {
+        "id": "s0018",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "She called Xiao Daocheng by his childhood name Doujiang and said, \"It must be you.\"",
+      "after": "She called the Grand Ancestor by his childhood name and said, \"It must be you.\"",
+      "reason": "The Chinese only has 小字 without giving the name Doujiang; the idiomatic invents a childhood name not in the source unit.",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:020:r0003",
+      "unit": {
+        "id": "s0024",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "idiomatic",
+      "before": "Her father Chen Zhao was made household minister with the purple-gold seal and posthumously titled Marquis Jing.",
+      "after": "Her maternal grandfather Zhao was made household minister with the purple-gold seal and posthumously titled Marquis Jing.",
+      "reason": "This unit's Chinese says 外祖父 (maternal grandfather), not father; the idiomatic contradicts the unit Chinese (though s0011 calls 肇之 father).",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "nanqishu:020:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 嫁于宣帝，庶生衡陽元王道度、始安貞王道生，后生太祖, 庶生 marks Daodu and Daosheng as secondary-born (of concubines), while only 后生太祖 attributes maternity to the empress. The original literal's 'bore by concubines' wrongly makes her their mother; the proposed wording restores that distinction.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0013",
+        "excerpt": "庶生衡陽元王道度、始安貞王道生，后生太祖"
+      }
+    },
+    {
+      "repairId": "nanqishu:020:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "呼太祖小字曰 records only that she addressed him by childhood name; the graph 小字 does not supply the syllables Doujiang. Removing the invented childhood name aligns the idiomatic with the Chinese and with the existing literal.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0018",
+        "excerpt": "呼太祖小字曰"
+      }
+    },
+    {
+      "repairId": "nanqishu:020:r0003",
+      "decision": "revise",
+      "after": "His maternal grandfather Chen Zhaozhi was made household minister with the purple-gold seal and posthumously titled Marquis Jing.",
+      "reason": "The emperor is the implicit possessor in 外祖父肇之, so this is his maternal grandfather; 肇之 is the man's full given name Zhaozhi, not Zhao. The revision preserves the Chen surname supplied by the preceding genealogy and corrects both the relationship and name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0024",
+        "excerpt": "贈外祖父肇之金紫光祿大夫，諡曰敬侯"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "nanqishu:020:r0002",
+      "claim": {
+        "id": "nanqishu:020:c0029",
+        "subject": "nanqishu:020:p007",
+        "predicate": "name",
+        "value": {
+          "kind": "childhood-name",
+          "en": "Doujiang"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "nanqishu:020:s0018"
+        ]
+      },
+      "reason": "Accepting r0002 shows the childhood name Doujiang was invented by the bad idiomatic; s0018 only has 小字 and supplies no such name form.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0018",
+        "excerpt": "呼太祖小字曰"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

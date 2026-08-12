@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "008",
+  "input": {
+    "chapterFingerprint": "sha256:a64baab0911e7f2d78f1802b9d60a3faae8b98bf18dff6ed4bbf89b01287ed69",
+    "proposalsFingerprint": "sha256:59cbfdb046fedfdec0c6bd992fd2f71e94187ae89dd9fccfe4bb104270c7c404"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-7a1b46aa-59b5-418e-b556-be99faa72380",
+    "runId": "run-a84d8578-5934-4e45-a8e6-285cff907022",
+    "completedAt": "2026-08-12T10:36:45.555Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:008:r0001",
+      "unit": {
+        "id": "s0097",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "In the third month Song sent envoys seeking peace; Youzhou Prefecture prefect Yelü Changzhu was also made Palace Attendant to negotiate terms with Song.",
+      "after": "In the third month Song sent envoys seeking peace; Zhuo Prefecture prefect Yelü Changzhu was also made Palace Attendant to negotiate terms with Song.",
+      "reason": "Chinese 涿州刺史 is prefect of Zhuo Prefecture (Zhuozhou), not Youzhou.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:008:r0002",
+      "unit": {
+        "id": "s0097",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "In the third month Song sent envoys requesting peace; Youzhou Prefecture prefect Yelü Changzhu was additionally made Palace Attendant to negotiate peace with Song.",
+      "after": "In the third month Song sent envoys requesting peace; Zhuo Prefecture prefect Yelü Changzhu was additionally made Palace Attendant to negotiate peace with Song.",
+      "reason": "Chinese 涿州 is Zhuo Prefecture; Youzhou is a mistranslation.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:008:r0003",
+      "unit": {
+        "id": "s0132",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "On renwu day Han, under attack by Song, sent envoys begging aid; Southern Court chancellor Yelü Sha and Prince of Ji Delie were ordered to march to their relief.",
+      "after": "On renwu day Han, under attack by Song, sent envoys begging aid; Southern Court chancellor Yelü Sha and Prince of Ji Dilie were ordered to march to their relief.",
+      "reason": "Same person 敵烈 was romanized Dilie earlier in the chapter; Delie is inconsistent spelling.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:008:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "涿州刺史 names Zhuo Prefecture (涿州), not Youzhou (幽州); the proposed replacement corrects that place-name error without changing the rest of the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0097",
+        "excerpt": "涿州刺史"
+      }
+    },
+    {
+      "repairId": "liaoshi:008:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same unit: 涿州 is Zhuo Prefecture; Youzhou is a mistranslation of a different place name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0097",
+        "excerpt": "涿州"
+      }
+    },
+    {
+      "repairId": "liaoshi:008:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "冀王敵烈 is the same Prince of Ji already rendered Dilie elsewhere; Delie misreads 敵 (dí) and breaks chapter naming consistency.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0132",
+        "excerpt": "冀王敵烈"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

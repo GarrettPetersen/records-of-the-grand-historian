@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "nanqishu",
+  "chapter": "010",
+  "input": {
+    "chapterFingerprint": "sha256:0df062659dd69d30f651b7ec889af2858c4d7411701857aa688a341ba029b9a5",
+    "proposalsFingerprint": "sha256:a3bd6e713849b02c6b3a4a62f0ba02926ef41092e14cabd48856f861efe198f7"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-19062028-dff1-4427-9f06-6f000172a35f",
+    "runId": "run-e748653a-fd19-4cd2-8c38-75d8140044cb",
+    "completedAt": "2026-08-12T10:39:50.619Z"
+  },
+  "proposals": [
+    {
+      "id": "nanqishu:010:r0001",
+      "unit": {
+        "id": "s0154",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Once the imperial grandson's three-year term is complete, Nankang's ministers should wear the full one-year dressed sackcloth.",
+      "after": "Once the imperial grandson's three-year term is complete, the Nan Commandery domain's ministers should wear the full one-year dressed sackcloth.",
+      "reason": "Chinese 南郡國臣 is Nan Commandery (Nanjun), not Nankang; the idiomatic rendering invents the wrong place-name.",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:010:r0002",
+      "unit": {
+        "id": "s0144",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "the third year of Jianyuan: the crown prince's Consort Mu died; retainers of the prince of Nan Commandery and the duke of Wenxi disputed how to mourn a lord's stepmother.",
+      "after": "In the third year of Jianyuan, the crown prince's Consort Mu died; retainers of the prince of Nan Commandery and the duke of Wenxi disputed how to mourn a lord's mother.",
+      "reason": "Sentence is missing the capital In and 君母 is the lord's mother (Consort Mu), not stepmother; the chapter elsewhere treats her as their mother.",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:010:r0003",
+      "unit": {
+        "id": "s0207",
+        "kind": "paragraph-sentence",
+        "blockIndex": 23,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "In the second year of Taishi of Song, on Emperor Xiaowu's day of major xiang, at that time the hundred offices entered for condolence, all changed into military dress at the palace gate, put on border mourning garments, entered for condolence and when finished went out, then put on military dress again.\"",
+      "after": "In the second year of Taishi of Song, on Emperor Xiaowu's day of major xiang, at that time the hundred offices entered for condolence, all changed out of military dress at the palace gate, put on border mourning garments, entered for condolence and when finished went out, then put on military dress again.\"",
+      "reason": "變戎服 here means changing from military dress before mourning entry, matching the idiomatic \"changed out of\"; \"changed into\" reverses the sense.",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:010:r0004",
+      "unit": {
+        "id": "s0201",
+        "kind": "paragraph-sentence",
+        "blockIndex": 22,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "For the dynastic founder Zong, on xiang taboo days the sovereign should wear condolence dress and ascend the hall; ministers should share his grief; when the rite ends, officials should go to Xuande Palace to present a memorial and still mourn at the imperial tomb—to deepen the longing for those long gone.\"",
+      "after": "For Shizong, on xiang taboo days the sovereign should wear condolence dress and ascend the hall; ministers should share his grief; when the rite ends, officials should go to Xuande Palace to present a memorial and still mourn at the imperial tomb—to deepen the longing for those long gone.\"",
+      "reason": "Chinese continues 世宗祥忌 after the collation; Zong is temple name Shizong (Emperor Wen), not a \"dynastic founder\" epithet for Gao.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "nanqishu:010:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 南郡國臣 names Nan Commandery (南郡), not Nankang (南康); the proposed \"Nan Commandery domain's ministers\" restores the correct place while keeping the rest of the sentence intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0154",
+        "excerpt": "南郡國臣"
+      }
+    },
+    {
+      "repairId": "nanqishu:010:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 建元三年 requires an opening \"In\", and for the domain retainers 君母服 is mourning for the lord's mother (Consort Mu), not a stepmother; the replacement fixes both errors without inventing content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0144",
+        "excerpt": "建元三年，太子穆妃薨，南郡王聞喜公國臣疑制君母服"
+      }
+    },
+    {
+      "repairId": "nanqishu:010:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Preceding 理不容以兵服臨喪 and following 還襲戎衣 show 變戎服 means changing out of military dress before putting on mourning clothes, then resuming it; \"changed into\" reverses that sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0207",
+        "excerpt": "皆於宮門變戎服，著衣𢂿，入臨畢出外，還襲戎衣"
+      }
+    },
+    {
+      "repairId": "nanqishu:010:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Across the collation, 世 plus emended 宗 yields temple name 世宗; \"dynastic founder Zong\" misreads that as a founder epithet plus a personal name, and \"Shizong\" is the accurate English.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0201",
+        "excerpt": "宗祥忌"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

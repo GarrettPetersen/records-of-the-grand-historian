@@ -43,12 +43,20 @@ const ENGLISH_NAMED_POLITY_TERMS = new Set([
 ]);
 const ENGLISH_NAMED_OFFICE_TERMS = new Set([
   'Broad Benefit Office',
+  'Champion',
   'Charging Cavalry',
+  'Commander-in-Chief',
+  'Direct Attendant',
+  'Education',
+  'Flourishing Talent',
   'Gou Shield',
   'Grandee',
+  'Imperial Secretariat',
   'Imperial Workshops',
+  'Masses',
   'Nobility Ranks',
   'Privy Treasurer',
+  'Situ',
   'Splendid Light',
   'Three Commanders',
 ]);
@@ -548,6 +556,24 @@ function removeRedundantSamePersonSpans(mentions, candidateById = new Map()) {
   }
 }
 
+function coalesceOverlappingMentionSpans(mention, unit) {
+  for (const language of ['zh', 'en']) {
+    const ordered = [...mention.spans[language]].sort((left, right) =>
+      left.startCodePoint - right.startCodePoint || left.endCodePoint - right.endCodePoint
+    );
+    const coalesced = [];
+    for (const span of ordered) {
+      const previous = coalesced.at(-1);
+      if (!previous || !spansOverlap(previous, span)) {
+        coalesced.push(span);
+        continue;
+      }
+      coalesced[coalesced.length - 1] = coveringSpan(unit[language], previous, span);
+    }
+    mention.spans[language] = coalesced;
+  }
+}
+
 function candidateInsideMention(candidate, mention) {
   return mention.unit.id === candidate.unit && mention.spans[candidate.language].some((span) =>
     span.startCodePoint <= candidate.startCodePoint && span.endCodePoint >= candidate.endCodePoint
@@ -966,6 +992,29 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       const codePoints = [...unitText];
       const before = codePoints.slice(0, candidate.startCodePoint).join('');
       const after = codePoints.slice(candidate.endCodePoint).join('');
+      if (/^(?:and|but|or) (?:asked|replied|said)$/u.test(candidate.exact)) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'not-a-name',
+          note: 'Speech-introducing function phrase, not a person name.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (
+        /^(?:[ \t]+(?:era|reign|year)\b|[ \t]*\(\d{3,4}\))/iu.test(after) ||
+        /\b(?:beginning|opening|year) of[ \t]+$/iu.test(before)
+      ) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'reign-period',
+          note: 'Capitalized reign-period name identified from its date context.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
       if (/^[ \t]+(?:people|peoples|tribe|tribes|clan|clans)\b/iu.test(after)) {
         reconciled.candidateDispositions.push({
           candidate: candidate.id,
@@ -978,13 +1027,26 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       }
       if (
         /\bprefectures?\b[^.;!?]*$/iu.test(before) ||
-        /^[ \t]+Prefecture\b/u.test(after)
+        /^[ \t]+(?:Prefecture|Province)\b/u.test(after)
       ) {
         reconciled.candidateDispositions.push({
           candidate: candidate.id,
           disposition: 'not-person',
           reason: 'place',
           note: 'Prefecture name, not a person.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (
+        candidate.exact === 'Zhao' &&
+        /^[ \t]+(?:airs|harps|music|songs|zithers)\b/iu.test(after)
+      ) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'other',
+          note: 'Regional descriptor for a musical tradition or instrument, not a person.',
         });
         accounted.add(candidate.id);
         continue;
@@ -1101,6 +1163,19 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
     }
     if (
       candidate.language === 'en' &&
+      candidateMatchesClaimValue(reconciled, candidate, 'credential')
+    ) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'other',
+        note: 'Credential or recommendation category recorded in this unit, not a person name.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (
+      candidate.language === 'en' &&
       candidateMatchesClaimValue(reconciled, candidate, 'organization-association')
     ) {
       reconciled.candidateDispositions.push({
@@ -1175,13 +1250,11 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
   // A later candidate can reconstruct a mention that also covers an earlier
   // unresolved fragment. Recheck after all mention growth so candidate order
   // does not create a false failure.
-  const unresolvedAfterMentionGrowth = unresolvedCandidates.filter((candidateId) => {
+  for (const candidateId of unresolvedCandidates) {
     const candidate = revisedPacket.preflight.candidates.find((item) => item.id === candidateId);
     const containing = reconciled.mentions.filter((mention) => candidateInsideMention(candidate, mention));
-    if (containing.length !== 1) return true;
-    containing[0].candidateRefs.push(candidate.id);
-    return false;
-  });
+    if (containing.length === 1) containing[0].candidateRefs.push(candidate.id);
+  }
 
   // Candidate reconciliation can widen an existing alias or add a second
   // mention for the same person. Collapse those spans only after all mention
@@ -1190,19 +1263,28 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
   reconciled.mentions = reconciled.mentions.filter((mention) =>
     mention.spans.zh.length > 0 || mention.spans.en.length > 0
   );
+  for (const mention of reconciled.mentions) {
+    const unit = unitById.get(mention.unit.id);
+    if (unit) coalesceOverlappingMentionSpans(mention, unit);
+  }
+
+  // Span growth and deduplication can move candidate coverage between
+  // mentions. Re-account from the final geometry so no valid candidate ref is
+  // lost merely because its containing mention was widened later in the pass.
+  const finalAccounted = new Set(reconciled.candidateDispositions.map((item) => item.candidate));
+  for (const mention of reconciled.mentions) {
+    for (const candidateId of mention.candidateRefs) finalAccounted.add(candidateId);
+  }
+  const unresolvedAfterFinalMerge = revisedPacket.preflight.candidates.filter((candidate) => {
+    if (finalAccounted.has(candidate.id)) return false;
+    const containing = reconciled.mentions.filter((mention) => candidateInsideMention(candidate, mention));
+    if (containing.length !== 1) return true;
+    containing[0].candidateRefs.push(candidate.id);
+    finalAccounted.add(candidate.id);
+    return false;
+  }).map((candidate) => candidate.id);
 
   for (const mention of reconciled.mentions) {
-    for (const language of ['zh', 'en']) {
-      const widestFirst = [...mention.spans[language]].sort((left, right) =>
-        left.startCodePoint - right.startCodePoint || right.endCodePoint - left.endCodePoint
-      );
-      mention.spans[language] = widestFirst.filter((span, index) =>
-        !widestFirst.slice(0, index).some((earlier) =>
-          earlier.startCodePoint <= span.startCodePoint && span.endCodePoint <= earlier.endCodePoint
-        )
-      );
-      mention.spans[language].sort((left, right) => left.startCodePoint - right.startCodePoint);
-    }
     mention.candidateRefs = [...new Set(mention.candidateRefs)];
     mention.candidateRefs.sort((left, right) =>
       (candidateOrder.get(left) ?? Number.MAX_SAFE_INTEGER) -
@@ -1213,5 +1295,5 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
   renumberPeopleAndClaims(reconciled);
   renumberMentions(reconciled);
 
-  return { extraction: reconciled, unresolvedCandidates: unresolvedAfterMentionGrowth, unresolvedSpans };
+  return { extraction: reconciled, unresolvedCandidates: unresolvedAfterFinalMerge, unresolvedSpans };
 }

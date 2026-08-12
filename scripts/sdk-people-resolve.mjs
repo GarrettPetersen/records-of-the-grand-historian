@@ -432,13 +432,40 @@ async function recoverPublishedShardDocuments(dossiers, opts, corpus, resolution
         }
         published = await downloadDocument(agent, dossier);
       }
-      const document = validateResolutionDocument(
-        published,
-        dossier,
-        corpus,
-        resolutions,
-        accepted,
-      );
+      let document;
+      let errors = [];
+      for (let attempt = 1; attempt <= opts.maxAttempts; attempt += 1) {
+        try {
+          document = validateResolutionDocument(
+            published,
+            dossier,
+            corpus,
+            resolutions,
+            accepted,
+          );
+          break;
+        } catch (error) {
+          errors = error?.errors ?? [error instanceof Error ? error.message : String(error)];
+          if (attempt === opts.maxAttempts) throw error;
+          console.warn(
+            `[${dossier.batch}] recovered artifact failed validation: ${errors[0]}`,
+          );
+          console.log(
+            `[${dossier.batch}] recovered retry ${attempt + 1} -> ${agent.agentId}`,
+          );
+          const run = await agent.send(retryPrompt(dossier, errors));
+          const result = await waitForCursorRun(run, {
+            agentId: agent.agentId,
+            apiKey: opts.apiKey,
+            label: `[${dossier.batch}] recovered identity resolution`,
+          });
+          if (result.status !== 'finished') {
+            throw new Error(result.error?.message ?? `run status ${result.status}`);
+          }
+          published = await downloadDocument(agent, dossier);
+        }
+      }
+      if (!document) throw new Error(`${dossier.batch} recovery produced no validated document`);
       writeShardCheckpoint(dossier, document);
       accepted.push(document);
       recovered.push(dossier);

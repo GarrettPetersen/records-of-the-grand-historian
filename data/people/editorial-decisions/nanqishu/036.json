@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "nanqishu",
+  "chapter": "036",
+  "input": {
+    "chapterFingerprint": "sha256:33cd944fff8c9d1104de59fd45228777173acf66c7b4234a042fe014f99f2fc2",
+    "proposalsFingerprint": "sha256:151b35b2e8cc77fe264981e7f4133808c84441afa259a885464737a329101787"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-7f395f4e-f3df-42bd-8397-55a394964432",
+    "runId": "run-ddca7a51-9aab-4aec-841e-fd868ae78fc1",
+    "completedAt": "2026-08-12T11:09:46.402Z"
+  },
+  "proposals": [
+    {
+      "id": "nanqishu:036:r0001",
+      "unit": {
+        "id": "s0033",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "The relevant office memorialized to compose suburban and temple hymns; the emperor ordered Chancellor Chu Yuan, attendant Xie Tiao, attendant at leisure Kong Zhigui, Erudite Wang Xuanzhi, Zongming scholars Liu Rong, He Fajiong, and He Yanxiu — ten in all — to compose; only Chaozong's hymn was used.",
+      "after": "The relevant office memorialized to compose suburban and temple hymns; the emperor ordered Chancellor Chu Yuan, attendant Xie Fei, attendant at leisure Kong Zhigui, Erudite Wang Xuanzhi, Zongming scholars Liu Rong, He Fajiong, and He Tanxiu — ten in all — to compose; only Chaozong's hymn was used.",
+      "reason": "謝朏 is Xie Fei, not Xie Tiao (謝朓); 何曇秀 is He Tanxiu, not He Yanxiu.",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:036:r0002",
+      "unit": {
+        "id": "s0184",
+        "kind": "paragraph-sentence",
+        "blockIndex": 38,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "bright night's glow does not open the blind man's eyes.",
+      "after": "Therefore mountain-breaking thunder does not start the deaf man's ear;",
+      "reason": "Chinese unit is only the deaf-ear clause; blind-eye clause belongs to s0185.",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:036:r0003",
+      "unit": {
+        "id": "s0185",
+        "kind": "paragraph-sentence",
+        "blockIndex": 38,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Someone presented Xiang's Linked Pearls; the emperor ordered Ren Xia to memorialize:",
+      "after": "Bright night's glow does not open the blind elder's eyes.",
+      "reason": "Chinese 朗夜之輝，不開矇叟之目 is the Linked Pearls close; English wrongly advances to the presentation narrative of s0186.",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:036:r0004",
+      "unit": {
+        "id": "s0185",
+        "kind": "paragraph-sentence",
+        "blockIndex": 38,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "Someone presented Xiang's Linked Pearls to the emperor; the emperor ordered acting censor Ren Xia to memorialize:",
+      "after": "Bright night's glow does not open the blind elder's eyes.",
+      "reason": "Literal English matches s0186, not the Chinese of s0185.",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:036:r0005",
+      "unit": {
+        "id": "s0207",
+        "kind": "paragraph-sentence",
+        "blockIndex": 41,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Your prisoner entered office twenty-odd years from coarse cloth, sunk in hardship without heaven's clarity.",
+      "after": "When the imperial fortune was first established, he was plucked up — sacrifice officer and chief clerk, both in the former dynasty's chancellor offices.",
+      "reason": "Idiomatic English duplicates s0206 instead of translating 皇運初基，便蒙抽擢，祭酒主簿，竝皆先朝相府.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "nanqishu:036:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 侍中謝朏 and 何曇秀 require Xie Fei and He Tanxiu; Xie Tiao and He Yanxiu misread those graphs, and the proposed literal otherwise matches the unit.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0033",
+        "excerpt": "侍中謝朏……何曇秀"
+      }
+    },
+    {
+      "repairId": "nanqishu:036:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Unit s0184 is only 故破山之雷，不發聾夫之耳; the blind-eye English belongs to the next unit, and the proposed clause restores this couplet half accurately.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0184",
+        "excerpt": "故破山之雷，不發聾夫之耳"
+      }
+    },
+    {
+      "repairId": "nanqishu:036:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 朗夜之輝，不開矇叟之目 closes the Linked Pearls couplet; the current idiomatic jumps ahead to the presentation narrative that begins only in s0186.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0185",
+        "excerpt": "朗夜之輝，不開矇叟之目"
+      }
+    },
+    {
+      "repairId": "nanqishu:036:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same Chinese of s0185 has no Linked Pearls presentation or Ren Xia; the proposed literal restores the bright-night/blind-elder clause and leaves that narrative to s0186.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0185",
+        "excerpt": "朗夜之輝，不開矇叟之目"
+      }
+    },
+    {
+      "repairId": "nanqishu:036:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 皇運初基，便蒙抽擢，祭酒主簿，竝皆先朝相府 is not the coarse-cloth career summary of s0206; the proposed idiomatic accurately renders the early-Qi promotion and former-dynasty chancellor posts.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0207",
+        "excerpt": "皇運初基，便蒙抽擢，祭酒主簿，竝皆先朝相府"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

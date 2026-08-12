@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "054",
+  "input": {
+    "chapterFingerprint": "sha256:d6cb6424f7b68db2d54571083a7e9104bca5aa306944b32d823b87ce4dc66b0a",
+    "proposalsFingerprint": "sha256:5352af14a489973f49a64c860f1a4b142b1751add4aa734d0c10b2f6889fd370"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-815c47ff-e4b1-4dcc-8e55-49a36841b779",
+    "runId": "run-c7eb8fd1-1e8c-41bd-9c9d-331e51a93bfe",
+    "completedAt": "2026-08-12T11:08:31.349Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:054:r0001",
+      "unit": {
+        "id": "s0005",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "The music of Xian, Shao, Xia, and Wu—the sounds are lost and the books scattered; He Jian composed a Record, and Sima Qian took it as a Book—how sparse and rare! For Liao music, to view this suffices.",
+      "after": "The music of Xian, Shao, Xia, and Wu—the sounds are lost and the books scattered; the Lord of Hejian composed a Record, and Sima Qian took it as a Book—how sparse and rare! For Liao music, to view this suffices.",
+      "reason": "河間 denotes the Lord of Hejian, not a personal name “He Jian”.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:054:r0002",
+      "unit": {
+        "id": "s0045",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In the ninth year of Chongxi, when the Khitan document of investiture was presented, the music Long Peace was played as the emperor came forth.",
+      "after": "In the ninth year of Chongxi, when Emperor Xingzong presented the Khitan document of investiture, the music Long Peace was played as the emperor came forth.",
+      "reason": "The Chinese opens with 興宗; idiomatic English drops Emperor Xingzong while the literal retains him.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:054:r0003",
+      "unit": {
+        "id": "s0194",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In the first year of Tonghe, at the investiture of Empress Dowager Chengtian, full suspended bells and music frames were installed; musicians of the Grand Music Office and pitch-tuning officers took their places.",
+      "after": "In the first year of Tonghe, at Emperor Shengzong’s investiture of Empress Dowager Chengtian, full suspended bells and music frames were installed; musicians of the Grand Music Office and pitch-tuning officers took their places.",
+      "reason": "Chinese 聖宗統和元年 names Emperor Shengzong; idiomatic English omits him though the literal includes him.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:054:r0004",
+      "unit": {
+        "id": "s0073",
+        "kind": "paragraph-sentence",
+        "blockIndex": 22,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In the first year of Tonghe, when Empress Dowager Chengtian was invested, the boy-disciple musical corps escorted the empress dowager's carriage with music to the Golden Phoenix Gate.",
+      "after": "In the first year of Tonghe, when Emperor Shengzong invested Empress Dowager Chengtian, the boy-disciple musical corps escorted the empress dowager’s carriage with music to the Golden Phoenix Gate.",
+      "reason": "Chinese 聖宗統和元年 names Emperor Shengzong; idiomatic English omits him though the literal includes him.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:054:r0005",
+      "unit": {
+        "id": "s0198",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "when he reached his place, the music ceased.",
+      "after": "when they reached their places, the music ceased.",
+      "reason": "The antecedent is plural 文武三品以上; “he” wrongly singularizes the officials.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:054:r0006",
+      "unit": {
+        "id": "s0020",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In the third year of Huitong, when Jin commissioners of the Palace Secretariat Yang Duan, Wang Tuo, and others came to court together with envoys from various states, Emperor Taizong received them in the side hall and granted a banquet.",
+      "after": "In the third year of Huitong, when Jin commissioners of the Palace Domestic Service Yang Duan, Wang Tuo, and others came to court together with envoys from various states, Emperor Taizong received them in the side hall and granted a banquet.",
+      "reason": "宣徽使 is the Palace Domestic Service commissioner, not the Palace Secretariat.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:054:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "河間作《記》 refers to the Lord of Hejian (河間獻王), not a personal name He Jian; the proposed literal matches the Chinese title and the idiomatic already used.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0005",
+        "excerpt": "河間作《記》"
+      }
+    },
+    {
+      "repairId": "liaoshi:054:r0002",
+      "decision": "revise",
+      "after": "In the ninth year of Chongxi under Emperor Xingzong, when the Khitan document of investiture was presented, the music Long Peace was played as the emperor came forth.",
+      "reason": "興宗重熙九年 is a reign dating formula that the idiomatic drops, but 上契丹冊 does not clearly make Xingzong the presenter; restore 興宗 in the date without inventing that agency.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0045",
+        "excerpt": "興宗重熙九年，上契丹冊"
+      }
+    },
+    {
+      "repairId": "liaoshi:054:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "聖宗統和元年，冊承天皇太后 names Shengzong as the reigning emperor who invests Empress Dowager Chengtian; the idiomatic wrongly omits him.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0194",
+        "excerpt": "聖宗統和元年，冊承天皇太后"
+      }
+    },
+    {
+      "repairId": "liaoshi:054:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "聖宗統和元年，冊承天皇太后 likewise names Shengzong as the agent of the investiture; restoring him corrects the idiomatic omission.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0073",
+        "excerpt": "聖宗統和元年，冊承天皇太后"
+      }
+    },
+    {
+      "repairId": "liaoshi:054:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "Preceding 文武三品以上入 makes the subject of 至位 plural officials; singular he/his is wrong, and they/their restores agreement.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0197",
+        "excerpt": "文武三品以上入"
+      }
+    },
+    {
+      "repairId": "liaoshi:054:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "晉宣徽使 is the Jin Palace Domestic Service commissioner (宣徽使), not a Palace Secretariat office; the replacement corrects the title.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0020",
+        "excerpt": "晉宣徽使"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

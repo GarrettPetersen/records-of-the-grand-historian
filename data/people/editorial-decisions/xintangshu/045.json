@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 3,
+  "book": "xintangshu",
+  "chapter": "045",
+  "input": {
+    "chapterFingerprint": "sha256:1b96ef97adc7813384fb8e7e913c238bf990cb344122c40ab352157a464a8dbb",
+    "proposalsFingerprint": "sha256:4e091c3b692eff4f16305ea715557be93c4a4f604d023ec4936e6da626ed2df7"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-e2ff78ba-76f3-4c1a-ba35-5a20606d76e7",
+    "runId": "run-2095f83d-fe16-4135-b17a-9de0e301b29c",
+    "completedAt": "2026-08-12T11:14:03.112Z"
+  },
+  "proposals": [
+    {
+      "id": "xintangshu:045:r0001",
+      "unit": {
+        "id": "s0139",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "After the Wei clan's fall, Song Jing, Li Yi, Lu Congyuan, Yao Yuanzhi, Lu Xiangxian, and Lu Huaiqian abolished slanted-seal posts, matched vacancies to candidates, and refused men of high seniority but no real ability.",
+      "after": "After the Wei clan's fall, Song Jing, Li Yi, Lu Congyuan, Yao Yuanzhi, Lu Xiangxian, and Lu Huaishen abolished slanted-seal posts, matched vacancies to candidates, and refused men of high seniority but no real ability.",
+      "reason": "Chinese 盧懷慎 romanizes as Lu Huaishen; Huaiqian is incorrect.",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:045:r0002",
+      "unit": {
+        "id": "s0139",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "When the Wei clan fell, Song Jing was first made Minister of Personnel, Li Yi and Lu Congyuan vice ministers, Yao Yuanzhi Minister of War, Lu Xiangxian and Lu Huaiqian vice ministers; all memorialized to abolish slanted-seal officials, measured vacancies and retained men; though seniority was high and examination deep, those without real talent were not taken.",
+      "after": "When the Wei clan fell, Song Jing was first made Minister of Personnel, Li Yi and Lu Congyuan vice ministers, Yao Yuanzhi Minister of War, Lu Xiangxian and Lu Huaishen vice ministers; all memorialized to abolish slanted-seal officials, measured vacancies and retained men; though seniority was high and examination deep, those without real talent were not taken.",
+      "reason": "Chinese 盧懷慎 romanizes as Lu Huaishen; Huaiqian is incorrect.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xintangshu:045:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 盧懷慎 is Lu Huaishen (懷 Huái + 慎 Shèn); Huaiqian misreads 慎. The proposed replacement corrects only that name and leaves the rest of the idiomatic intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0139",
+        "excerpt": "盧懷慎"
+      }
+    },
+    {
+      "repairId": "xintangshu:045:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 盧懷慎 is Lu Huaishen (懷 Huái + 慎 Shèn); Huaiqian misreads 慎. The proposed replacement corrects only that name and leaves the rest of the literal intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0139",
+        "excerpt": "盧懷慎"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "xintangshu:045:r0001",
+      "before": {
+        "id": "xintangshu:045:c0083",
+        "subject": "xintangshu:045:p023",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Lu Huaiqian",
+          "zh": "盧懷慎",
+          "pinyin": "Lú Huáishèn"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xintangshu:045:s0139"
+        ]
+      },
+      "after": {
+        "id": "xintangshu:045:c0083",
+        "subject": "xintangshu:045:p023",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Lu Huaishen",
+          "zh": "盧懷慎",
+          "pinyin": "Lú Huáishèn"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xintangshu:045:s0139"
+        ]
+      },
+      "reason": "Accepted r0001 shows English Lu Huaiqian came only from the bad translation of 盧懷慎; the personal-name claim must read Lu Huaishen while keeping zh, pinyin, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0139",
+        "excerpt": "盧懷慎"
+      }
+    }
+  ]
+}

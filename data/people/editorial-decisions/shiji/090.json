@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "090",
+  "input": {
+    "chapterFingerprint": "sha256:82f7ef8dcb90008bdf041d37c9e1492dd366f6eb35f5aeb38c21f71ce04a4c11",
+    "proposalsFingerprint": "sha256:f885c4e591d0a235fb6e24b2c9b27f799b60d19fa48efdc4af744589249ada0f"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-e4eaad18-3dec-4d03-9e06-4825b347430b",
+    "runId": "run-add98f18-62c5-4fb3-aa3e-3b4c589b67e2",
+    "completedAt": "2026-08-12T10:18:58.777Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:090:r0001",
+      "unit": {
+        "id": "s0062",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "In the winter of the fourth year of Han, when the King of Xiang and the King of Han were facing each other at Xingyang, Peng Yue attacked and took Suiyang, Waihuang, and seventeen other cities.",
+      "after": "In the winter of the fourth year of Han, when the King of Xiang and the King of Han were facing each other at Xingyang, Peng Yue attacked and took seventeen cities including Suiyang and Waihuang.",
+      "reason": "Chinese 睢陽、外黃十七城 means seventeen cities (named exemplars Suiyang and Waihuang), not seventeen cities in addition to those two; the literal invents 'other'.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:090:r0002",
+      "unit": {
+        "id": "s0101",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 17
+      },
+      "field": "idiomatic",
+      "before": "Empress Lu then had one of Peng Yue's own retainers accuse him of plotting a fresh rebellion.",
+      "after": "Empress Lu then had one of his retainers accuse Peng Yue of plotting rebellion again.",
+      "reason": "Chinese 令其舍人彭越復謀反 names Peng Yue as the accused in the retainer's charge; the idiomatic 'accuse him' is ambiguous after 'Peng Yue's own retainers'.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:090:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "睢陽、外黃十七城 names Suiyang and Waihuang as exemplars within a total of seventeen cities. Adding “other” invents nineteen captures; the proposed literal matches the Chinese count and the idiomatic field’s “seventeen cities, including…”.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0062",
+        "excerpt": "彭越攻下睢陽、外黃十七城"
+      }
+    },
+    {
+      "repairId": "shiji:090:r0002",
+      "decision": "reject",
+      "after": null,
+      "reason": "令其舍人…彭越復謀反 is already rendered accurately: Empress Lu has Peng Yue’s retainer accuse him of plotting rebellion again. After “Peng Yue's own retainers,” “him” unambiguously means Peng Yue; swapping names and “fresh”/“again” is stylistic, not a semantic fix.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0101",
+        "excerpt": "呂后乃令其舍人彭越復謀反"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

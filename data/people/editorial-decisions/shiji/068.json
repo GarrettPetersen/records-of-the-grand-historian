@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "068",
+  "input": {
+    "chapterFingerprint": "sha256:a48601034502a6fcb2ca68f0880c07bc2265d623aa5f8000507fe47b29dce410",
+    "proposalsFingerprint": "sha256:f8742594ab541851614b94fe5fbb32b338565d7eb21d012f1c679373763d5037"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-82f5ae86-311c-4d45-8830-b035ccdae53e",
+    "runId": "run-60c41b5a-565f-4b12-8740-4ac266d251f6",
+    "completedAt": "2026-08-12T11:12:16.354Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:068:r0001",
+      "unit": {
+        "id": "s0013",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "literal",
+      "before": "Yang said: 'If he cannot employ you by following your recommendation to use me, how can he employ you by following your recommendation to kill me?'",
+      "after": "Yang said: 'If that king cannot follow your advice to appoint me, how can he follow your advice to kill me?'",
+      "reason": "The literal rendering reverses the sense of 用君之言任/殺臣 by making the king 'employ you' rather than follow Gongshu's advice about Yang.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:068:r0002",
+      "unit": {
+        "id": "s0022",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Five days later, Yang again requested an audience.",
+      "after": "Five days later, he again requested an audience with Yang.",
+      "reason": "Chinese 復求見鞅 takes Yang as the person to be seen; the packet literal wrongly makes Yang the requester, contradicting the idiomatic and the Chinese object 鞅.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:068:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Before misreads 用君之言 as employing Gongshu; 用 here governs 君之言 (follow your advice), with 任臣/殺臣 as the advised acts toward Yang. The proposal restores that structure, including 彼王 as 'that king', and matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0013",
+        "excerpt": "彼王不能用君之言任臣，又安能用君之言殺臣乎"
+      }
+    },
+    {
+      "repairId": "shiji:068:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "復求見鞅 makes 鞅 the object of the audience request, not the requester; before wrongly casts Yang as subject. The proposal correctly leaves an implied third-person subject seeking Yang, consistent with the following 鞅復見孝公.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0022",
+        "excerpt": "復求見鞅"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

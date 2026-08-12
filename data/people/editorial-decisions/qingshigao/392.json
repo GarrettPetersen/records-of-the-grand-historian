@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "392",
+  "input": {
+    "chapterFingerprint": "sha256:bfd8244e221c261fd8e02753e19c9ad4b686a7704a5c4356a79c056b4c93d300",
+    "proposalsFingerprint": "sha256:d6f99e5eb15bd26777f8be95367066c64b0d9e7ed7bd9c7e7e03897d813f5af8"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-f7d5cfdb-8c77-45eb-b596-7948a22896f1",
+    "runId": "run-9f531fda-9bed-4adb-a50e-0da28dcccbb8",
+    "completedAt": "2026-08-12T11:11:20.669Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:392:r0001",
+      "unit": {
+        "id": "s0058",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "In the eighth year of Jiaqing he passed the translation-track metropolitan examination, was appointed a director in the Ministry of Rites for the imperial consorts' tombs, was transferred to the Ministry of Works, and was repeatedly promoted to director.",
+      "after": "In the eighth year of Jiaqing he passed the translation-track metropolitan examination, was appointed a secretary (zhushi) in the Ministry of Rites for the imperial consorts' tombs, was transferred to the Ministry of Works, and was repeatedly promoted to director.",
+      "reason": "主事 is a secretary/principal post, not 郎中 (director); the literal rendering wrongly uses director for the initial appointment.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:392:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0058 reads 授妃園寢禮部主事…洊升郎中: the initial appointment is 主事 (zhushi/secretary), distinct from later promotion to 郎中 (director). The prior literal wrongly calls the first post a director; the proposed secretary (zhushi) rendering is accurate and keeps director for 郎中.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0058",
+        "excerpt": "授妃園寢禮部主事，調工部，洊升郎中"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

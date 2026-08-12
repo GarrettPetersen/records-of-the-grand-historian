@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "012",
+  "input": {
+    "chapterFingerprint": "sha256:747585a1d015819f699c1fd27f91f1e9dcaf78191e5abc4ebba628f631f6205c",
+    "proposalsFingerprint": "sha256:7c4caac9945de5d438f100791d40e8738b069e0bc232ea5de1ba234d873a46cd"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-2bfc3a1a-8d1c-425a-a205-800f647ce29e",
+    "runId": "run-12b89e31-87d0-4196-a0b8-9482056b4555",
+    "completedAt": "2026-08-12T11:07:26.406Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:012:r0001",
+      "unit": {
+        "id": "s0004",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "After the usurper Zhu Youzhen seized power, Quan Yu was made military commissioner of Song.",
+      "after": "After the commoner (Zhu Yougui) usurped the throne, Quan Yu was made military commissioner of Songzhou.",
+      "reason": "Chinese 庶人篡位 refers to Zhu Yougui (友珪), later degraded to commoner, not Zhu Youzhen (末帝).",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:012:r0002",
+      "unit": {
+        "id": "s0007",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "(The 《Five Dynasties Essentials》 records that Quan Yu was posthumously honored as Minister of Works with the temple name Dejing.",
+      "after": "(The 《Five Dynasties Essentials》 records that Quan Yu was posthumously honored as Director of the Imperial Secretariat (尚書令) with the posthumous title Dejing.",
+      "reason": "尚書令 is not Minister of Works (司空), and 諡 marks a posthumous name, not a temple name.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:012:r0003",
+      "unit": {
+        "id": "s0012",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "Hu Zhu notes in the 《History of Liang》 biography of Prince Guang that Quan Yu was coarse and habitually addressed the emperor as \"Third.\"",
+      "after": "Your subject Hu notes in the 《History of Liang》 biography of Prince Guang that Quan Yu was coarse and habitually addressed the emperor as \"Third.\"",
+      "reason": "Chinese has 臣護 only; the added surname Zhu is not in the source.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:012:r0004",
+      "unit": {
+        "id": "s0042",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 18
+      },
+      "field": "idiomatic",
+      "before": "Pressing the rebel stronghold at Shilou, he charged from a ridge when Wang's line wavered; his horse fell and he died in the melee.",
+      "after": "Pressing the rebel stronghold at Shilou, he charged from a ridge when the royal army slightly wavered; his horse fell and he died in the melee.",
+      "reason": "王師 means the royal/imperial army, not a person named Wang.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:012:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus 庶人篡位，授宋州節度使 names the usurper only as 庶人 and the post as 宋州節度使. In Later Liang usage 庶人 is Zhu Yougui (友珪) after degradation, not Zhu Youzhen; the prior idiomatic invents the wrong personal name and truncates 宋州 to Song. The proposed wording restores both points without new error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0004",
+        "excerpt": "庶人篡位，授宋州節度使"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:012:r0002",
+      "decision": "revise",
+      "after": "(The 《Five Dynasties Essentials》 records that Quan Yu was posthumously honored as Director of the Imperial Secretariat with the posthumous title Dejing.",
+      "reason": "Focus 贈尚書令，諡德靖 grants Director of the Imperial Secretariat, not Minister of Works, and 諡 is a posthumous title, not a temple name. The revised replacement corrects both mistranslations without leaving untranslated Chinese in the English field.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0007",
+        "excerpt": "贈尚書令，諡德靖"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:012:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus 臣護按 names the annotator only as 護 under the self-reference 臣; the prior idiomatic invents the surname Zhu. \"Your subject Hu\" restores 臣護 without changing the quoted biography content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0012",
+        "excerpt": "臣護按"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:012:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus 王師小卻 means the royal/imperial army slightly retreated; 王師 is not a person named Wang. The proposed wording corrects that misreading and preserves 小卻 as \"slightly wavered.\"",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0042",
+        "excerpt": "王師小卻"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

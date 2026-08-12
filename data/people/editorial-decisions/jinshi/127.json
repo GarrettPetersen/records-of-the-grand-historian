@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "jinshi",
+  "chapter": "127",
+  "input": {
+    "chapterFingerprint": "sha256:574d12fdd6f7e43f0d85a0c6efe85b50c762492ff6292136ad8c8576ac6ead30",
+    "proposalsFingerprint": "sha256:9c8785272883763f5d216dac4c567d1386d63a7d4ee514368b6111059143218a"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-dc2ccb43-0746-4857-bf25-7747f1dcc5a0",
+    "runId": "run-4d919ff6-8634-4ff3-971f-e4868bae8a3e",
+    "completedAt": "2026-08-12T11:41:54.900Z"
+  },
+  "proposals": [
+    {
+      "id": "jinshi:127:r0001",
+      "unit": {
+        "id": "s0009",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "Yet in the age of Tang and Yu, when it was said that \"the black-haired people were obstructed by famine,\" Yi Ji had to be appointed; when \"the common people were not affectionate and the five relations were not in order,\" Qi had to be appointed — from this one knows that harmonious success cannot be assured, just as filial piety and friendship are not easily obtained.",
+      "after": "Yet in the age of Tang and Yu, when it was said that \"the black-haired people were obstructed by famine,\" Ji had to be appointed; when \"the common people were not affectionate and the five relations were not in order,\" Qi had to be appointed — from this one knows that harmonious success cannot be assured, just as filial piety and friendship are not easily obtained.",
+      "reason": "The literal adds an erroneous \"Yi\" before Ji; the Chinese has only 稷 (Ji).",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:127:r0002",
+      "unit": {
+        "id": "s0082",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Zhao Zhi, styled Jingdao, was a descendant of Sixianwen of the Liao.",
+      "after": "Zhao Zhi, styled Jingdao, was a descendant of Siwen, a chancellor of the Liao.",
+      "reason": "Chinese 遼相思溫 means Liao chancellor Siwen; \"Sixianwen\" wrongly fuses 相 with 思溫.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:127:r0003",
+      "unit": {
+        "id": "s0082",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Zhao Zhi, style name Jingdao, was a descendant of Sixianwen of the Liao.",
+      "after": "Zhao Zhi, style name Jingdao, was a descendant of Siwen, chancellor of the Liao.",
+      "reason": "Same fusion error as in the idiomatic: 相 is the office, 思溫 the name.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:127:r0004",
+      "unit": {
+        "id": "s0115",
+        "kind": "paragraph-sentence",
+        "blockIndex": 19,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Xue Jiyuan",
+      "after": "Xue Jixian",
+      "reason": "Section header 薛繼元 conflicts with the biography name 薛繼先 in the next unit; personal name should match 薛繼先.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:127:r0005",
+      "unit": {
+        "id": "s0115",
+        "kind": "paragraph-sentence",
+        "blockIndex": 19,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Xue Jiyuan",
+      "after": "Xue Jixian",
+      "reason": "Header romanization should match biography 薛繼先 (Xue Jixian), not 薛繼元.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jinshi:127:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0009 has 不免以命稷, naming only 稷 (Ji); the literal's \"Yi Ji\" invents a syllable absent from the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0009",
+        "excerpt": "不免以命稷"
+      }
+    },
+    {
+      "repairId": "jinshi:127:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "遼相思溫 is Liao chancellor Siwen (相 = office; 思溫 = name); \"Sixianwen\" wrongly fuses the title into the personal name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0082",
+        "excerpt": "遼相思溫之裔"
+      }
+    },
+    {
+      "repairId": "jinshi:127:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 遼相思溫 parsing applies to the literal: 相 is chancellor and 思溫 is Siwen, so \"Sixianwen\" must be split.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0082",
+        "excerpt": "遼相思溫之裔"
+      }
+    },
+    {
+      "repairId": "jinshi:127:r0004",
+      "decision": "reject",
+      "after": null,
+      "reason": "This unit's Chinese is 薛繼元, so Xue Jiyuan is the accurate rendering; Wikisource preserves the section heading 薛繼元 while the biography opens 薛繼先, a transmitted heading/body discrepancy, not a translation error to silently emend.",
+      "sourceWitness": {
+        "source": "wikisource",
+        "citation": "https://zh.wikisource.org/wiki/%E9%87%91%E5%8F%B2/%E5%8D%B7127",
+        "excerpt": "## 薛繼元\n薛繼先，字曼卿。"
+      }
+    },
+    {
+      "repairId": "jinshi:127:r0005",
+      "decision": "reject",
+      "after": null,
+      "reason": "Literal of s0115 must follow 薛繼元 (Xue Jiyuan); external witnesses keep that heading form beside biography 薛繼先, so rewriting the English as Xue Jixian would misrepresent this unit.",
+      "sourceWitness": {
+        "source": "wikisource",
+        "citation": "https://zh.wikisource.org/wiki/%E9%87%91%E5%8F%B2/%E5%8D%B7127",
+        "excerpt": "## 薛繼元\n薛繼先，字曼卿。"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

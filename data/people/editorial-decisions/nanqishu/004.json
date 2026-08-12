@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "nanqishu",
+  "chapter": "004",
+  "input": {
+    "chapterFingerprint": "sha256:2429222cfa1436efb09ed212a73f940aea170e700db09a7b8ad97d56cc1df56a",
+    "proposalsFingerprint": "sha256:fb4936321c18418acef8b74351e429fcbf2fb67f47bb575975504c8808be2fef"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-e8f65258-40ae-4a19-93ed-6ebbef0ee1fc",
+    "runId": "run-d4498fb1-16bb-414e-81ad-30807550b85c",
+    "completedAt": "2026-08-12T10:17:15.913Z"
+  },
+  "proposals": [
+    {
+      "id": "nanqishu:004:r0001",
+      "unit": {
+        "id": "s0004",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "His childhood taboo was Fashen.",
+      "after": "His childhood name was Fashen.",
+      "reason": "法身 is a 小名 (childhood name), not a 'taboo' name; 小名 ≠ childhood taboo.",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:004:r0002",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "After Crown Prince Wenhui died, Zhaoye was made imperial great-grandson and moved into the Eastern Palace.",
+      "after": "After Crown Prince Wenhui died, Zhaoye was made imperial grandson-heir and moved into the Eastern Palace.",
+      "reason": "太孫 is the emperor's grandson designated as heir, not a great-grandson.",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:004:r0003",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "When Crown Prince Wenhui died, Zhaoye was established as imperial great-grandson and dwelt in the Eastern Palace.",
+      "after": "When Crown Prince Wenhui died, Zhaoye was established as imperial grandson-heir and dwelt in the Eastern Palace.",
+      "reason": "太孫 ≠ great-grandson; it denotes the grandson-heir.",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:004:r0004",
+      "unit": {
+        "id": "s0012",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "When Emperor Wu died, the great-grandson ascended.",
+      "after": "When Emperor Wu died, the imperial grandson-heir ascended.",
+      "reason": "太孫 is grandson-heir, not great-grandson.",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:004:r0005",
+      "unit": {
+        "id": "s0012",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "When Emperor Wu died, the great-grandson took the throne.",
+      "after": "When Emperor Wu died, the imperial grandson-heir took the throne.",
+      "reason": "太孫 is grandson-heir, not great-grandson.",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:004:r0006",
+      "unit": {
+        "id": "s0103",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "He Yin of the Secretariat, the empress's cousin, was kept close and set to attend in the Hall of Direct Service. Once the emperor walked behind him calling him \"Three Fathers.\" They plotted to kill the High Ancestor and put Yin in charge; Yin would not take it, stalled and talked him down, and the plan died away.",
+      "after": "He Yin of the Secretariat, the empress's paternal uncle (collateral uncle), was kept close and set to attend in the Hall of Direct Service. Once the emperor walked behind him calling him \"Three Fathers.\" They plotted to kill the High Ancestor and put Yin in charge; Yin would not take it, stalled and talked him down, and the plan died away.",
+      "reason": "從叔 is a paternal collateral uncle, not a cousin.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "nanqishu:004:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 小名法身 names a childhood personal name (小名), not a taboo name (諱); 'childhood taboo' is wrong, and 'childhood name' restores the correct sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0004",
+        "excerpt": "小名法身"
+      }
+    },
+    {
+      "repairId": "nanqishu:004:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "皇太孫 is the emperor's grandson established as heir after the crown prince's death, not a great-grandson; the proposed 'imperial grandson-heir' matches 立昭業爲皇太孫.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "立昭業爲皇太孫"
+      }
+    },
+    {
+      "repairId": "nanqishu:004:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same unit: 皇太孫 denotes the imperial grandson-heir, not 'imperial great-grandson'; the literal repair correctly replaces the false generation term.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "立昭業爲皇太孫"
+      }
+    },
+    {
+      "repairId": "nanqishu:004:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 世祖崩，太孫卽位 the subject 太孫 is the same grandson-heir just established as 皇太孫, not a great-grandson; 'imperial grandson-heir' is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0012",
+        "excerpt": "太孫卽位"
+      }
+    },
+    {
+      "repairId": "nanqishu:004:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal 太孫 likewise means the imperial grandson-heir who takes the throne, not a great-grandson; the proposed replacement is correct.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0012",
+        "excerpt": "太孫卽位"
+      }
+    },
+    {
+      "repairId": "nanqishu:004:r0006",
+      "decision": "revise",
+      "after": "He Yin of the Secretariat, the empress's collateral paternal uncle, was kept close and set to attend in the Hall of Direct Service. Once the emperor walked behind him calling him \"Three Fathers.\" They plotted to kill the High Ancestor and put Yin in charge; Yin would not take it, stalled and talked him down, and the plan died away.",
+      "reason": "從叔 is a collateral paternal uncle, so 'cousin' is wrong; the proposal's sense is right, but 'paternal uncle (collateral uncle)' is redundant—use 'collateral paternal uncle'.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0103",
+        "excerpt": "皇后從叔"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

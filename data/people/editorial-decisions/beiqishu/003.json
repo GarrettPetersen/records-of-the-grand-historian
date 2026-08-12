@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 3,
+  "book": "beiqishu",
+  "chapter": "003",
+  "input": {
+    "chapterFingerprint": "sha256:490888daf0ef9627bc828fa62bc8510d27a7807ef9a3b07e64bb00596c2a96a3",
+    "proposalsFingerprint": "sha256:799fe45c7a4b9402b60e123514370d2cf3674a829cd4c870354574fcffdabedb"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-c422e874-ced2-4766-a152-0a98bf0f07e9",
+    "runId": "run-eeaec07c-aa59-4346-8e70-0a8de6716d94",
+    "completedAt": "2026-08-12T10:34:54.658Z"
+  },
+  "proposals": [
+    {
+      "id": "beiqishu:003:r0001",
+      "unit": {
+        "id": "s0104",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "the Dowager Empress was held prisoner in Chu yet asked for soup as calmly as ever.",
+      "after": "the Grand Emperor was held prisoner in Chu yet asked for soup as calmly as ever.",
+      "reason": "Chinese 太上 here is the Grand Emperor (Han Gaozu's father), not a Dowager Empress.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:003:r0002",
+      "unit": {
+        "id": "s0017",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "Gao Cheng then had Cui Xuan of the Ministry of Personnel appointed Vice Censor-in-Chief; he impeached the powerful without sparing any, custom was renewed, and private wrongdoing and bribery ceased.",
+      "after": "Gao Cheng then had Cui Xian of the Ministry of Personnel appointed Vice Censor-in-Chief; he impeached the powerful without sparing any, custom was renewed, and private wrongdoing and bribery ceased.",
+      "reason": "崔暹 is standardly Cui Xian (暹 xiān), not Cui Xuan.",
+      "confidence": "medium"
+    },
+    {
+      "id": "beiqishu:003:r0003",
+      "unit": {
+        "id": "s0157",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 23
+      },
+      "field": "idiomatic",
+      "before": "At the time Prince of Taiyuan Gao Yang was at the Twin Hall east of the city; he entered and punished the traitors, dismembering Jing and the rest and lacquering their heads.",
+      "after": "At the time Duke of Taiyuan Gao Yang was at the Twin Hall east of the city; he entered and punished the traitors, dismembering Jing and the rest and lacquering their heads.",
+      "reason": "Chinese 太原公 is Duke of Taiyuan, matching s0029; Prince overstates the title.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:003:r0004",
+      "unit": {
+        "id": "s0083",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Yet when the hundred millions of the Yi people submitted, the ten rebels of Zhou fell; Zhou's hundred victories in the end left him without heirs—the battle at Yingchuan is the warning of Yin.",
+      "after": "Yet when the hundred millions of the Yi people submitted, Zhou's ten capable ministers prevailed; King Zhou's hundred victories in the end left him without heirs—the battle at Yingchuan is the warning of Yin.",
+      "reason": "十亂 are Zhou's capable ministers, distinct from 紂 (King Zhou); the English conflates both as Zhou.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "beiqishu:003:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0104’s 太上, paired with Wang Ling’s mother in Chu, is the Grand Emperor (太上皇, Han Gaozu’s father), not a Dowager Empress; the proposed replacement restores the correct identity without other change.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0104",
+        "excerpt": "太上囚楚，乞羹自若"
+      }
+    },
+    {
+      "repairId": "beiqishu:003:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0017 names 崔暹; 暹 is xiān, so Cui Xian is the standard reading and Cui Xuan is a real romanization error, not a stylistic preference.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0017",
+        "excerpt": "崔暹"
+      }
+    },
+    {
+      "repairId": "beiqishu:003:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0157 has 太原公洋; 公 is Duke, not Prince (王), so Duke of Taiyuan corrects an overstated title while leaving the rest of the sentence intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0157",
+        "excerpt": "太原公洋"
+      }
+    },
+    {
+      "repairId": "beiqishu:003:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0083 contrasts 十亂 (Zhou’s ten capable ministers, 亂臣) with 紂之百克 (King Zhou of Shang’s hundred victories); the original wrongly turns 十亂 into “ten rebels” and collapses both figures into “Zhou.” The proposal separates them accurately.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0083",
+        "excerpt": "卒降十亂，紂之百克"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "beiqishu:003:r0001",
+      "before": {
+        "id": "beiqishu:003:c0093",
+        "subject": "beiqishu:003:p029",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Dowager Empress",
+          "zh": "太上",
+          "pinyin": "Taishang"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "beiqishu:003:s0104"
+        ]
+      },
+      "after": {
+        "id": "beiqishu:003:c0093",
+        "subject": "beiqishu:003:p029",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Grand Emperor",
+          "zh": "太上",
+          "pinyin": "Taishang"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "beiqishu:003:s0104"
+        ]
+      },
+      "reason": "Accepted r0001 shows English Dowager Empress came only from the mistranslation of 太上; the title claim must read Grand Emperor while keeping zh, pinyin, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0104",
+        "excerpt": "太上"
+      }
+    },
+    {
+      "repairId": "beiqishu:003:r0002",
+      "before": {
+        "id": "beiqishu:003:c0037",
+        "subject": "beiqishu:003:p008",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Cui Xuan",
+          "zh": "崔暹",
+          "pinyin": "Cui Xian"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "beiqishu:003:s0017"
+        ]
+      },
+      "after": {
+        "id": "beiqishu:003:c0037",
+        "subject": "beiqishu:003:p008",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Cui Xian",
+          "zh": "崔暹",
+          "pinyin": "Cui Xian"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "beiqishu:003:s0017"
+        ]
+      },
+      "reason": "Accepted r0002 shows English Cui Xuan came only from the bad romanization of 崔暹; the personal-name claim must read Cui Xian while keeping zh, pinyin, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0017",
+        "excerpt": "崔暹"
+      }
+    }
+  ]
+}

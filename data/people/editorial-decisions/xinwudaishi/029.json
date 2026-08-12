@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "xinwudaishi",
+  "chapter": "029",
+  "input": {
+    "chapterFingerprint": "sha256:d35bf0d2050b01277ca324a6fdd43559de9fbbd38effc5b63e5222e9b46f5f86",
+    "proposalsFingerprint": "sha256:33c82926708c79d8899c5fa50d5c63061d1385f6b94fdb51d6089df8b122a0b8"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-8a42b082-ec7f-4f48-95b2-de4590567590",
+    "runId": "run-47098728-0105-4bbe-bd4b-7eb27a7c216b",
+    "completedAt": "2026-08-12T11:45:07.647Z"
+  },
+  "proposals": [
+    {
+      "id": "xinwudaishi:029:r0001",
+      "unit": {
+        "id": "s0051",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 15
+      },
+      "field": "idiomatic",
+      "before": "When Deguang reached the capital, he had the body inspected, accepted that Weihan had hanged himself, and returned the corpse to the family, but Yan Ze had stripped the estate bare.",
+      "after": "When Deguang reached the capital, he had the body inspected, accepted that Weihan had hanged himself, and returned the corpse to the family, but Yanzhe had stripped the estate bare.",
+      "reason": "Yan Ze is the same person as Zhang Yanzhe (张彦泽); the spelling should match Yanzhe used elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:029:r0002",
+      "unit": {
+        "id": "s0051",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 15
+      },
+      "field": "literal",
+      "before": "When Deguang reached the capital, he sent someone to inspect the corpse, believed that it truly was death by hanging, and then gave the body to the family, but all the property had been plundered by Yan Ze.",
+      "after": "When Deguang reached the capital, he sent someone to inspect the corpse, believed that it truly was death by hanging, and then gave the body to the family, but all the property had been plundered by Yanzhe.",
+      "reason": "Yan Ze should be Yanzhe to match 彦泽 and other units.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:029:r0003",
+      "unit": {
+        "id": "s0106",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Wu Luan, styled Baochuan, came from Lu County in Yan Prefecture.",
+      "after": "Wu Luan, styled Baochuan, came from Lu County in Yun Prefecture.",
+      "reason": "郓州 is Yun Prefecture (Yunzhou), not Yan Prefecture.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:029:r0004",
+      "unit": {
+        "id": "s0106",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Wu Luan, styled Baochuan, was a native of Lu County in Yan Prefecture.",
+      "after": "Wu Luan, styled Baochuan, was a native of Lu County in Yun Prefecture.",
+      "reason": "郓州 should be rendered Yun Prefecture.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xinwudaishi:029:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit says 彦泽所掠; adjacent s0049 already renders 彦泽 as Yanzhe, so “Yan Ze” is a wrong split of the same name, and the proposed Yanzhe matches the Chinese without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0051",
+        "excerpt": "赀财悉为彦泽所掠"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:029:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field has the same error: 彦泽 must be Yanzhe, not Yan Ze, matching the Chinese and neighboring units.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0051",
+        "excerpt": "赀财悉为彦泽所掠"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:029:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit places Wu Luan in 郓州卢县; 郓州 is Yun Prefecture, so “Yan Prefecture” is a mistranslation and Yun Prefecture is the correct repair.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0106",
+        "excerpt": "郓州卢县人也"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:029:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field likewise misrenders 郓州 as Yan Prefecture; Yun Prefecture matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0106",
+        "excerpt": "郓州卢县人也"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

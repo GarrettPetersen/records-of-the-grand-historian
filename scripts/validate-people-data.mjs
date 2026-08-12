@@ -240,9 +240,7 @@ async function main() {
           }
         }
         for (const revision of document.claimRevisions) {
-          if (loaded.extraction.claims.some((claim) =>
-            claimCoreContract(claim) === claimCoreContract(revision.before)
-          )) {
+          if (containsReviewedClaim(loaded.extraction.claims, revision.before)) {
             errors.push(
               `${path.relative(REPO_ROOT, file)} revised ${revision.before.id}, but its old fact remains applied`,
             );

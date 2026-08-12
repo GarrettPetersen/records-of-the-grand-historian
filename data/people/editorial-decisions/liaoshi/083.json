@@ -1,0 +1,219 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "083",
+  "input": {
+    "chapterFingerprint": "sha256:86bc34af265eae08dcce5a19e5a9f51ea8a26d2633985024f5df6ff88d2e9780",
+    "proposalsFingerprint": "sha256:b84dfb833c485fb94af112cdf9abe24087f55d89334bd4d5502aaee33c9118a5"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-7c04c6de-be9e-4584-bdd1-5d2d06852fa8",
+    "runId": "run-cf05e701-93e7-4295-a904-0834fde5db5a",
+    "completedAt": "2026-08-12T10:39:04.219Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:083:r0001",
+      "unit": {
+        "id": "s0107",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Yelu Xidi was descended from the Prince of Chu on his mother's side.",
+      "after": "Yelu Xidi was a descendant of the Prince of Chu of the Mengfu (Meng Father) lineage.",
+      "reason": "孟父 is a Khitan Yelu lineage term (Meng Father line), not \"mother's side\".",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:083:r0002",
+      "unit": {
+        "id": "s0107",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Yelu Xidi was a descendant of the Prince of Chu on his mother's side.",
+      "after": "Yelu Xidi was a descendant of the Prince of Chu of the Mengfu lineage.",
+      "reason": "Same error as idiomatic: 孟父 ≠ maternal side.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:083:r0003",
+      "unit": {
+        "id": "s0152",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "The empress dowager agreed and added the titles Golden Purple Glory Grandee and Inspector Grand Preceptor.",
+      "after": "The empress dowager agreed and added the titles Golden Purple Glory Grandee and Inspector Grand Commandant.",
+      "reason": "太尉 is Grand Commandant/Grand Marshal, not Grand Preceptor (太傅).",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:083:r0004",
+      "unit": {
+        "id": "s0152",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "literal",
+      "before": "The empress dowager followed this and added the titles Golden Purple Glory Grandee and Grand Preceptor on inspection.",
+      "after": "The empress dowager followed this and added the titles Golden Purple Glory Grandee and Inspector Grand Commandant.",
+      "reason": "太尉 misread as Grand Preceptor.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:083:r0005",
+      "unit": {
+        "id": "s0075",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "He answered, \"Each morning I recite the precepts left by Taizu, Taizong, and my forebears; I have had no time for Buddhism.\"",
+      "after": "He answered, \"Each morning I recite the precepts left by Taizu, Taizong, and my late forebear; I have had no time for Buddhism.\"",
+      "reason": "先臣 is singular (Xiuge), not plural forebears.",
+      "confidence": "medium"
+    },
+    {
+      "id": "liaoshi:083:r0006",
+      "unit": {
+        "id": "s0119",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Yelu Xuegu, whose courtesy name was Yixin, was a grandson by a concubine of the Yuyue Wa.",
+      "after": "Yelu Xuegu, whose courtesy name was Yixinyin, was a grandson by a concubine of the Yuyue Wa.",
+      "reason": "乙辛隱 is three characters; Yixin drops 隱.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:083:r0001",
+      "decision": "revise",
+      "after": "Yelu Xidi was a descendant of the Prince of Chu of the Mengfu lineage.",
+      "reason": "孟父楚國王之後 names the Mengfu (eldest-uncle) Yelu lineage, not maternal descent; the proposed fix is right in substance, but the parenthetical '(Meng Father)' is awkward in idiomatic English.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0107",
+        "excerpt": "孟父楚國王之後"
+      }
+    },
+    {
+      "repairId": "liaoshi:083:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "孟父 is the Mengfu lineage label, not 'mother's side'; the proposed 'Prince of Chu of the Mengfu lineage' restores the correct sense of 孟父楚國王之後.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0107",
+        "excerpt": "孟父楚國王之後"
+      }
+    },
+    {
+      "repairId": "liaoshi:083:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "檢校太尉 is Inspector Grand Commandant; 太尉 is not Grand Preceptor (太傅), so the proposed title is the accurate repair.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0152",
+        "excerpt": "檢校太尉"
+      }
+    },
+    {
+      "repairId": "liaoshi:083:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "檢校太尉 means Inspector Grand Commandant; rendering 太尉 as Grand Preceptor and 'on inspection' misreads both 太尉 and 檢校.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0152",
+        "excerpt": "檢校太尉"
+      }
+    },
+    {
+      "repairId": "liaoshi:083:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "先臣 is singular for the speaker's late father/forebear-minister, not plural 'forebears'; 'my late forebear' matches 先臣遺訓.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "太祖、太宗及先臣遺訓"
+      }
+    },
+    {
+      "repairId": "liaoshi:083:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "字乙辛隱 is the three-character courtesy name Yixinyin; 'Yixin' omits 隱 and is incomplete.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0119",
+        "excerpt": "字乙辛隱"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "liaoshi:083:r0006",
+      "before": {
+        "id": "liaoshi:083:c0119",
+        "subject": "liaoshi:083:p037",
+        "predicate": "name",
+        "value": {
+          "kind": "courtesy",
+          "en": "Yixin",
+          "zh": "乙辛隱",
+          "pinyin": "Yǐxīnyǐn"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:083:s0119"
+        ]
+      },
+      "after": {
+        "id": "liaoshi:083:c0119",
+        "subject": "liaoshi:083:p037",
+        "predicate": "name",
+        "value": {
+          "kind": "courtesy",
+          "en": "Yixinyin",
+          "zh": "乙辛隱",
+          "pinyin": "Yǐxīnyǐn"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:083:s0119"
+        ]
+      },
+      "reason": "Accepted r0006 shows English Yixin came only from dropping 隱 in 乙辛隱; the courtesy-name claim must read Yixinyin while zh, pinyin, id, subject, predicate, certainty, and evidence stay the same.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0119",
+        "excerpt": "字乙辛隱"
+      }
+    }
+  ]
+}

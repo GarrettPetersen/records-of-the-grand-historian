@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "468",
+  "input": {
+    "chapterFingerprint": "sha256:0b95a74dbc6587be6708551d660be47e6fa1c459217df9af3a215d213921272a",
+    "proposalsFingerprint": "sha256:0a12200be4d11982f3d883fe048caea4c6eb3346b26671dd33c8381b702a2f64"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-5f3c7d94-bdf0-4594-ba59-06ff83ab5be9",
+    "runId": "run-b9282799-b4af-420e-966c-45d62ffe7b0f",
+    "completedAt": "2026-08-12T10:18:55.585Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:468:r0001",
+      "unit": {
+        "id": "s0072",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "It happened that the war in the Middle East arose; the Japanese army held Weihai, separately seized Rongcheng, and Dengzhou was greatly shaken; Yirong requested to return home to train local militia.",
+      "after": "It happened that the Sino-Japanese war arose; the Japanese army held Weihai, separately seized Rongcheng, and Dengzhou was greatly shaken; Yirong requested to return home to train local militia.",
+      "reason": "中東戰事 here means the Sino-Japanese War (China–Japan), not the Middle East; the literal gloss invents a wrong geography.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:468:r0002",
+      "unit": {
+        "id": "s0117",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "I beg to go to the traveling palace and state this forcefully.",
+      "after": "I beg you to go to the traveling court and state this forcefully on my behalf.",
+      "reason": "乞赴行在 asks the addressee (the colleague) to go to the traveling court; the literal makes Shou Fu the traveler.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:468:r0003",
+      "unit": {
+        "id": "s0118",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "Shi has already died in this place; though he lectured on Western learning, he never surrendered to the enemy.'",
+      "after": "Your servant has already died in this place; though he lectured on Western learning, he never surrendered to the enemy.",
+      "reason": "侍 is a humble first-person self-reference (“your servant”), not a personal name Shi.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:468:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0072 中東戰事, with 日軍據威海 and Guangxu year 20–21 context, denotes the Sino-Japanese War (China and Japan), not the Middle East; the proposed literal correctly removes the invented geography.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0072",
+        "excerpt": "中東戰事"
+      }
+    },
+    {
+      "repairId": "qingshigao:468:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "In the letter to a colleague (s0116 貽書同官), 乞赴行在 asks that colleague to go to the traveling court and clear Shou Fu; the original literal wrongly makes Shou Fu the traveler. The proposed agent and beneficiary match the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0117",
+        "excerpt": "乞赴行在，力為表明"
+      }
+    },
+    {
+      "repairId": "qingshigao:468:r0003",
+      "decision": "revise",
+      "after": "Your servant has already died in this place; though he lectured on Western learning, he never surrendered to the enemy.'",
+      "reason": "侍 is a humble self-reference (“your servant”), not a name Shi; the proposal fixes that correctly, but the Chinese closes the quotation with 」, so the literal should keep the closing quote mark that the before field had.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0118",
+        "excerpt": "侍已死於此地"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

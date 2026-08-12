@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "chenshu",
+  "chapter": "025",
+  "input": {
+    "chapterFingerprint": "sha256:90d965abb9359ae8e7bc6c8ea3c21ca3742990450666cf30db2e47732db2fd12",
+    "proposalsFingerprint": "sha256:25b22ebd507ea176431377994ca5e61fa7869229ec6766345e4b338a7d319019"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-5087d111-4fbb-4e3a-8cec-d711d1b8974c",
+    "runId": "run-6282f22b-cacf-48ed-b58a-24bd7ce21b9d",
+    "completedAt": "2026-08-12T10:34:25.597Z"
+  },
+  "proposals": [
+    {
+      "id": "chenshu:025:r0001",
+      "unit": {
+        "id": "s0019",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "At the opening of Tiancheng (560) he was sent out as bearer of the staff and interior minister of Nankang.",
+      "after": "At the opening of Tianjia (560) he was sent out as bearer of the staff and interior minister of Nankang.",
+      "reason": "Chinese 天嘉 is Tianjia, not Tiancheng; AD 560 matches Tianjia 1.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:025:r0002",
+      "unit": {
+        "id": "s0019",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "At the beginning of Tiancheng he went out as Bearer of the Staff and Interior Minister of Nankang.",
+      "after": "At the beginning of Tianjia he went out as Bearer of the Staff and Interior Minister of Nankang.",
+      "reason": "Chinese 天嘉 is Tianjia, not Tiancheng.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:025:r0003",
+      "unit": {
+        "id": "s0040",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "In the Taiping turmoil he received acting credentials as fierce-martial general and army commander.",
+      "after": "In the Taiqing turmoil he received acting credentials as fierce-martial general and army commander.",
+      "reason": "Chinese 太清 is Taiqing; Taiping is a different reign name.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:025:r0004",
+      "unit": {
+        "id": "s0040",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "In the turmoil of Taiping he was given acting staff, made Fierce Martial General, and made army commander.",
+      "after": "In the turmoil of Taiqing he was given acting staff, made Fierce Martial General, and made army commander.",
+      "reason": "Chinese 太清 is Taiqing, not Taiping.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:025:r0005",
+      "unit": {
+        "id": "s0060",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In the first year of Tiancheng (560) he was made bearer of the staff, scattered-cavalry regular attendant, pacifying-the-south general and inspector of Xiang, and enfeoffed as Marquis of Dingxiang with one thousand households.",
+      "after": "In the first year of Tianjia (560) he was made bearer of the staff, scattered-cavalry regular attendant, pacifying-the-south general and inspector of Xiang, and enfeoffed as Marquis of Dingxiang with one thousand households.",
+      "reason": "Chinese 天嘉 is Tianjia, not Tiancheng; year 1 is AD 560.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:025:r0006",
+      "unit": {
+        "id": "s0060",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "In the first year of Tiancheng he was given Bearer of the Staff, Scattered Cavalry Regular Attendant, Pacifying-the-South General, and Inspector of Xiang, enfeoffed Marquis of Dingxiang county with a fief of one thousand households.",
+      "after": "In the first year of Tianjia he was given Bearer of the Staff, Scattered Cavalry Regular Attendant, Pacifying-the-South General, and Inspector of Xiang, enfeoffed Marquis of Dingxiang county with a fief of one thousand households.",
+      "reason": "Chinese 天嘉 is Tianjia, not Tiancheng.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "chenshu:025:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "天嘉 is the Chen era Tianjia; Tiancheng (天成) is a different reign name. AD 560 matches Tianjia 1, and the rest of the proposed sentence matches 出為持節、南康內史.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0019",
+        "excerpt": "天嘉初"
+      }
+    },
+    {
+      "repairId": "chenshu:025:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "天嘉 romanizes as Tianjia, not Tiancheng; the proposed literal correctly replaces only that misreading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0019",
+        "excerpt": "天嘉初"
+      }
+    },
+    {
+      "repairId": "chenshu:025:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "太清 is Liang Taiqing; Taiping (太平) is a different era. Context with Hou Jing confirms the Taiqing disaster reading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0040",
+        "excerpt": "太清之難"
+      }
+    },
+    {
+      "repairId": "chenshu:025:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "太清 must be Taiqing, not Taiping; the proposed literal restores the correct reign name without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0040",
+        "excerpt": "太清之難"
+      }
+    },
+    {
+      "repairId": "chenshu:025:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "天嘉元年 is Tianjia 1 (AD 560), not Tiancheng; the proposed idiomatic keeps the offices and enfeoffment intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0060",
+        "excerpt": "天嘉元年"
+      }
+    },
+    {
+      "repairId": "chenshu:025:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "天嘉元年 is Tianjia year 1; replacing Tiancheng with Tianjia corrects the era romanization only.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0060",
+        "excerpt": "天嘉元年"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

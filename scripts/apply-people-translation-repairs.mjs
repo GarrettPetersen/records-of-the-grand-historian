@@ -303,6 +303,27 @@ function selfTest() {
   if (reviewed.revisedClaims.get('fixture:001:c0001')?.value.pinyin !== 'Liu Zhan') {
     throw new Error('Reviewed claim revision was not returned for application');
   }
+  const evidenceRemoval = structuredClone(decisions);
+  evidenceRemoval.claimRevisions[0].before.evidence = [
+    'fixture:001:s0001',
+    'fixture:001:s0002',
+  ];
+  evidenceRemoval.claimRevisions[0].after.evidence = ['fixture:001:s0002'];
+  extraction.claims[0].evidence = ['fixture:001:s0001', 'fixture:001:s0002'];
+  const evidenceReviewed = validateEditorialDecisions(evidenceRemoval, extraction, oldPacket);
+  if (
+    JSON.stringify(evidenceReviewed.revisedClaims.get('fixture:001:c0001')?.evidence) !==
+    JSON.stringify(['fixture:001:s0002'])
+  ) {
+    throw new Error('Reviewed claim evidence removal was not returned for application');
+  }
+  const overbroadEvidenceRemoval = structuredClone(evidenceRemoval);
+  overbroadEvidenceRemoval.claimRevisions[0].after.evidence = [];
+  expectDecisionFailure(
+    () => validateEditorialDecisions(overbroadEvidenceRemoval, extraction, oldPacket),
+    'claim evidence removal without a remaining citation',
+  );
+  extraction.claims[0].evidence = ['fixture:001:s0001'];
   const reviewedExtraction = {
     ...structuredClone(extraction),
     claims: applyReviewedClaimChanges(extraction.claims, reviewed),

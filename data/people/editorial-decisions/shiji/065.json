@@ -1,0 +1,229 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "065",
+  "input": {
+    "chapterFingerprint": "sha256:57f0d73155e884323c169a4032fe6dd3091e54c65ae674dec8dca289efd9486b",
+    "proposalsFingerprint": "sha256:75f33af2051c8ada7355056c191ccd631ef581b2bd2a05463f02e59a3af90390"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-35b73841-0174-48a8-8cb0-be2d9d71bea6",
+    "runId": "run-7ab12529-e570-4c7b-a643-c3a4e87059df",
+    "completedAt": "2026-08-12T11:43:25.814Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:065:r0001",
+      "unit": {
+        "id": "s0087",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "The Lord of Lu suspected him, so Wu Qi killed his wife to seek the generalship.",
+      "after": "Wu Qi then went to Lu, studied military methods, and served the Lord of Lu.",
+      "reason": "Literal English is a duplicate of the following unit and does not translate 起乃之魯，學兵法以事魯君.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:065:r0002",
+      "unit": {
+        "id": "s0088",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "The Lord of Lu suspected him, so Qi killed his wife to seek the generalship.",
+      "after": "The Lord of Lu suspected him, so Wu Qi killed his wife to seek the generalship.",
+      "reason": "Literal wrongly shortens 起 to Qi (the state) instead of Wu Qi.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:065:r0003",
+      "unit": {
+        "id": "s0131",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "After Tian Wen died, Gongsun became chancellor, married a Wei princess, and plotted against Wu Qi.",
+      "after": "After Tian Wen died, Gongshu became chancellor, married a Wei princess, and plotted against Wu Qi.",
+      "reason": "Chinese 公叔 is Gongshu; Gongsun is a mistranslation inconsistent with s0132.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:065:r0004",
+      "unit": {
+        "id": "s0133",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Gongsun said, “What is to be done?”",
+      "after": "Gongshu said, “What is to be done?”",
+      "reason": "Chinese 公叔 should be Gongshu, matching the servant line and the name 公叔.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:065:r0005",
+      "unit": {
+        "id": "s0047",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "When it came time for the race, Sun Tzu said: 'Now use your lowest chariot against their highest, your highest against their middle, your middle against their lowest.'",
+      "after": "When it came time for the race, Sun Bin said: 'Now use your lowest chariot against their highest, your highest against their middle, your middle against their lowest.'",
+      "reason": "In the Sun Bin narrative, 孫子 refers to Sun Bin; literal wrongly uses Sun Tzu.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:065:r0006",
+      "unit": {
+        "id": "s0067",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "Sun Tzu calculated their march route—they should arrive at Malings by dusk.",
+      "after": "Sun Bin calculated their march route—they should arrive at Maling by dusk.",
+      "reason": "Referent is Sun Bin; place name 馬陵 is Maling, not Malings.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:065:r0007",
+      "unit": {
+        "id": "s0068",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "The Malings road was narrow, with many obstacles and defiles on the sides, suitable for ambushing troops. They cut a large tree white and wrote on it: 'Pang Juan dies beneath this tree.'",
+      "after": "The Maling road was narrow, with many obstacles and defiles on the sides, suitable for ambushing troops. They cut a large tree white and wrote on it: 'Pang Juan dies beneath this tree.'",
+      "reason": "Place name 馬陵 should be Maling, not Malings.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:065:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0087 is 起乃之魯，學兵法以事魯君 (Wu Qi then went to Lu, studied military methods, and served the Lord of Lu); the before text is the content of s0088 and does not translate this sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0087",
+        "excerpt": "起乃之魯，學兵法以事魯君"
+      }
+    },
+    {
+      "repairId": "shiji:065:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 魯君疑之，起殺妻以求將, 起 is Wu Qi’s given name; bare English “Qi” wrongly suggests the state of Qi, and “Wu Qi” correctly identifies the agent.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0088",
+        "excerpt": "起殺妻以求將"
+      }
+    },
+    {
+      "repairId": "shiji:065:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0131 has 公叔為相, and s0132 continues 公叔之僕; 公叔 is Gongshu, not Gongsun, so the proposed name correction matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0131",
+        "excerpt": "公叔為相"
+      }
+    },
+    {
+      "repairId": "shiji:065:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0133 opens 公叔曰; the speaker is Gongshu, consistent with 公叔 in s0131–s0132, so replacing Gongsun is required.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0133",
+        "excerpt": "公叔曰"
+      }
+    },
+    {
+      "repairId": "shiji:065:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "In this Sun Bin episode, 孫子曰 names Sun Bin (cf. adjacent units); English “Sun Tzu” misidentifies him as Sun Wu, and “Sun Bin” restores the correct referent.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0047",
+        "excerpt": "孫子曰"
+      }
+    },
+    {
+      "repairId": "shiji:065:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "孫子 again refers to Sun Bin in this campaign narrative, and 馬陵 is the place name Maling; “Sun Tzu” and plural “Malings” are both wrong.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0067",
+        "excerpt": "孫子度其行，暮當至馬陵"
+      }
+    },
+    {
+      "repairId": "shiji:065:r0007",
+      "decision": "accept",
+      "after": null,
+      "reason": "馬陵道 is the road at Maling; “Malings” is an incorrect English place-name form, and the rest of the proposed literal matches 道陜…斫大樹白而書之.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0068",
+        "excerpt": "馬陵道陜"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "shiji:065:r0003",
+      "claim": {
+        "id": "shiji:065:c0088",
+        "subject": "shiji:065:p027",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Gongsun"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "shiji:065:s0131",
+          "shiji:065:s0133"
+        ]
+      },
+      "reason": "Accepted r0003 shows English “Gongsun” was created only by mistranslating 公叔; the Chinese supports Gongshu (c0087), not a separate Gongsun name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0131",
+        "excerpt": "公叔為相"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

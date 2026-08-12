@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "zhoushu",
+  "chapter": "018",
+  "input": {
+    "chapterFingerprint": "sha256:dad07a389c707e432852363368a76042fdf777839797f273ac651f043057fa69",
+    "proposalsFingerprint": "sha256:ad18c95616bf3e1acdd559355f1f18f8c0fc831a6677ff1e1b4bbea6e5f28ffe"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-c591f34d-bf2c-463d-8f1a-7bcee8586820",
+    "runId": "run-95f8ed01-1f72-4a31-8439-ab0eb265686a",
+    "completedAt": "2026-08-12T10:40:28.052Z"
+  },
+  "proposals": [
+    {
+      "id": "zhoushu:018:r0001",
+      "unit": {
+        "id": "s0026",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "field": "idiomatic",
+      "before": "He was soon made grand general of chariots and cavalry and governor of Jing Province.",
+      "after": "He was soon made grand general of chariots and cavalry and governor of Jingzhou (涇州).",
+      "reason": "Chinese has 涇州刺史 (Jingzhou 涇州), not 荊州; idiomatic English collapses this into ambiguous “Jing Province.”",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:018:r0002",
+      "unit": {
+        "id": "s0061",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "There was also a guest dining with Pi on melon; (Ke xiao gua) emended: the guest pared the melon, cutting the flesh rather thick; Pi inwardly disliked it.",
+      "after": "There was also a guest dining with Pi on melon; the guest pared the melon, cutting the flesh rather thick; Pi inwardly disliked it.",
+      "reason": "Literal English contains a corrupted editorial insertion “(Ke xiao gua) emended:” absent from the Chinese.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "zhoushu:018:r0001",
+      "decision": "revise",
+      "after": "He was soon made grand general of chariots and cavalry and governor of Jingzhou (Jing Prefecture).",
+      "reason": "s0026 has 涇州刺史, the northern Jingzhou (Jing Prefecture), not 荊州. The revised replacement removes untranslated Chinese from the English field while preserving the needed distinction.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0026",
+        "excerpt": "涇州刺史"
+      }
+    },
+    {
+      "repairId": "zhoushu:018:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0061 Chinese is only 又有客與羆食瓜，客削瓜侵膚稍厚，羆意嫌之; the parenthetical “(Ke xiao gua) emended:” is an editorial artifact absent from the source, and removing it leaves an accurate literal rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0061",
+        "excerpt": "又有客與羆食瓜，客削瓜侵膚稍厚，羆意嫌之"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}
