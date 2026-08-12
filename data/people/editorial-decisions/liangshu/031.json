@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 3,
+  "book": "liangshu",
+  "chapter": "031",
+  "input": {
+    "chapterFingerprint": "sha256:7b1c8e73f76c7a1836d8f0eddb737269da884bf3f52766d84d26d92024a2b0b2",
+    "proposalsFingerprint": "sha256:3d4430660a993d7eb45a203071bbbfdc098f0a5afa9c084eb2f4997279169150"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-b1d98527-defa-4ab3-a555-24f482fd744a",
+    "runId": "run-8867aff3-6466-425d-9899-aca3cacf4551",
+    "completedAt": "2026-08-12T04:17:10.401Z"
+  },
+  "proposals": [
+    {
+      "id": "liangshu:031:r0001",
+      "unit": {
+        "id": "s0009",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "Later he and Tuan went together to see their uncle by marriage, Minister of Education Yuan Can. Can told Tuan, \"Orphaned so young, yet he has come to this — renown and high office will surely be his.\"",
+      "after": "Later he and Tuan went together to see their collateral uncle, Minister of Education Yuan Can. Can told Tuan, \"Orphaned so young, yet he has come to this — renown and high office will surely be his.\"",
+      "reason": "從叔 means a paternal collateral uncle (father's cousin or junior uncle of the same surname), not an uncle by marriage.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:031:r0002",
+      "unit": {
+        "id": "s0124",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "literal",
+      "before": "He was enfeoffed with the posthumous title Duke of Reverent Uprightness.",
+      "after": "He was granted by patent the posthumous title Duke of Reverent Uprightness.",
+      "reason": "册諡 is the grant of a posthumous title by patent, not an enfeoffment of a fief.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:031:r0003",
+      "unit": {
+        "id": "s0018",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Ang had been orphaned young and was raised by Tuan; he therefore instituted full mourning dress.",
+      "after": "Ang had been orphaned young and was raised by Tuan; he therefore put on one-year mourning dress.",
+      "reason": "制朞服 (碁/期服) is the one-year mourning grade, not a generic 'full mourning' institution.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liangshu:031:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0009 從叔司徒粲 names Yuan Can as a paternal collateral uncle (same surname, junior uncle), not an uncle by marriage; the proposed idiomatic correctly replaces that kinship error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0009",
+        "excerpt": "從叔司徒粲"
+      }
+    },
+    {
+      "repairId": "liangshu:031:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0124 册諡曰穆正公 records conferral of a posthumous title by patent; 册諡 is not enfeoffment, so replacing 'enfeoffed' with 'granted by patent' is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0124",
+        "excerpt": "册諡曰穆正公"
+      }
+    },
+    {
+      "repairId": "liangshu:031:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0018 乃制棊服 uses 棊/期服, the one-year mourning grade; 'full mourning' overstates the grade, and the proposed literal restores the correct term.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0018",
+        "excerpt": "乃制棊服"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "liangshu:031:r0003",
+      "before": {
+        "id": "liangshu:031:c0217",
+        "subject": "liangshu:031:p001",
+        "predicate": "event-participation",
+        "value": {
+          "kind": "ritual",
+          "role": "mourner",
+          "action": "wore full mourning for cousin Tuan"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liangshu:031:s0018"
+        ]
+      },
+      "after": {
+        "id": "liangshu:031:c0217",
+        "subject": "liangshu:031:p001",
+        "predicate": "event-participation",
+        "value": {
+          "kind": "ritual",
+          "role": "mourner",
+          "action": "wore one-year mourning for cousin Tuan"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liangshu:031:s0018"
+        ]
+      },
+      "reason": "Accepted r0003 shows 'full mourning' came only from the bad literal of 棊服; the ritual claim must record one-year mourning while keeping id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0018",
+        "excerpt": "乃制棊服"
+      }
+    }
+  ]
+}

@@ -256,14 +256,14 @@ function validCurrentDecision(target, loaded) {
 async function processTarget(target, opts, state, matcher) {
   const key = `${target.book}/${target.chapter}`;
   const loaded = loadEditorialReviewChapter(target.book, target.chapter, { properNounMatcher: matcher });
-  const dossier = buildEditorialReviewDossier(target.book, target.chapter, {
-    properNounMatcher: matcher,
-    context: 2,
-  });
   if (!opts.force && validCurrentDecision(target, loaded)) {
     console.log(`[${key}] current independent decisions already validate; skip`);
     return { status: 'skipped' };
   }
+  const dossier = buildEditorialReviewDossier(target.book, target.chapter, {
+    properNounMatcher: matcher,
+    context: 2,
+  });
   if (!opts.retryFailed && state.chapters[key]?.status === 'failed') {
     console.log(`[${key}] previous review failed; pass --retry-failed to retry`);
     return { status: 'skipped-failed' };

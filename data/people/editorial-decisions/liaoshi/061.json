@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "061",
+  "input": {
+    "chapterFingerprint": "sha256:8ac94ab4efca7e169369ba9c9eda1a9c8ccfe13a89606c8bcfb1fa922c3e6860",
+    "proposalsFingerprint": "sha256:4e0007fdb998e35c5bc5a93477d5133749340cfcd872696f859097ff5018391c"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-00535296-2faa-48e6-bea7-23f492bcef34",
+    "runId": "run-d78c364a-b551-4b32-9adc-4269a27d4992",
+    "completedAt": "2026-08-12T03:48:07.234Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:061:r0001",
+      "unit": {
+        "id": "s0126",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "By precedent, the Commissioner of the Bureau of Military Affairs did not personally decide major state matters; all lawsuits were handled by the yilibi alone.",
+      "after": "By precedent, the Commissioner of the Bureau of Military Affairs never personally decided matters that were not major affairs of state; all lawsuits were handled by the yilibi alone.",
+      "reason": "Chinese 非國家重務，未嘗親決 means he did not personally decide non-major affairs, not that he avoided major ones; the idiomatic reverses the scope of 非.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:061:r0002",
+      "unit": {
+        "id": "s0126",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "By precedent, the Commissioner of the Bureau of Military Affairs did not personally decide state weighty affairs; all lawsuits were presided over only by the yilibi.",
+      "after": "By precedent, the Commissioner of the Bureau of Military Affairs never personally decided affairs that were not weighty state matters; all lawsuits were presided over only by the yilibi.",
+      "reason": "Same reversal of 非國家重務 as in the idiomatic: 非 negates 'weighty state affairs' as the class he left undecided personally.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:061:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "非國家重務，未嘗親決 means that for affairs that were not major state matters the commissioner never decided them personally; the original reverses 非 and contradicts s0127, where later commissioners first began hearing lawsuits themselves.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0126",
+        "excerpt": "樞密使非國家重務，未嘗親決"
+      }
+    },
+    {
+      "repairId": "liaoshi:061:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 非 scopes the class left undecided: affairs that were not weighty state matters; the proposed literal restores that negation without changing the rest of the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0126",
+        "excerpt": "非國家重務，未嘗親決"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -9,6 +9,8 @@ import { loadDotenv } from './load-dotenv.mjs';
 import {
   PEOPLE_DIR,
   REPO_ROOT,
+  readJson,
+  sha256,
   writeJsonAtomic,
 } from './lib/people-content.mjs';
 import {
@@ -30,6 +32,7 @@ const DEFAULT_REPO_URL = 'https://github.com/GarrettPetersen/records-of-the-gran
 const DEFAULT_STARTING_REF = 'codex/people-glossary-staging';
 const PROMPT = fs.readFileSync(path.join(REPO_ROOT, 'prompt-people-resolution.txt'), 'utf8');
 const RUN_LOCK_FILE = path.join(PEOPLE_DIR, 'generated', 'resolution-run.lock');
+const SHARD_CHECKPOINT_DIR = path.join(PEOPLE_DIR, 'generated', 'resolution-shards');
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
 function usage() {
@@ -213,7 +216,7 @@ function shardComponents(components, count, people) {
   return shards.sort((left, right) => left.blocks[0].id.localeCompare(right.blocks[0].id));
 }
 
-function buildDossiers(opts, corpus, resolutions) {
+export function buildDossiers(opts, corpus, resolutions) {
   const candidates = buildResolutionCandidates(corpus.localPeople);
   const compiled = compilePeopleCatalog(corpus, resolutions);
   const unresolved = new Set(compiled.catalog.unresolvedCandidateBlockIds);
@@ -271,6 +274,31 @@ function artifactPath(dossier) {
   return path.posix.join('data', 'people', 'generated', 'resolver-artifacts', `${dossier.batch}.json`);
 }
 
+function shardCheckpointPath(dossier) {
+  const batch = dossier.batch.replace(/-shard-\d+$/u, '');
+  return path.join(SHARD_CHECKPOINT_DIR, batch, `${dossier.batch}.json`);
+}
+
+function dossierFingerprint(dossier) {
+  return sha256(JSON.stringify(dossier.document));
+}
+
+function writeShardCheckpoint(dossier, document) {
+  writeJsonAtomic(shardCheckpointPath(dossier), {
+    schemaVersion: 1,
+    dossierFingerprint: dossierFingerprint(dossier),
+    document,
+  });
+}
+
+function readShardCheckpoint(dossier) {
+  const checkpoint = readJson(shardCheckpointPath(dossier));
+  if (checkpoint.schemaVersion !== 1 || checkpoint.dossierFingerprint !== dossierFingerprint(dossier)) {
+    throw new Error(`Stale resolver shard checkpoint for ${dossier.batch}`);
+  }
+  return checkpoint.document;
+}
+
 function publishCommand(dossier) {
   const output = artifactPath(dossier);
   return `mkdir -p /opt/cursor/artifacts/${path.posix.dirname(output)} && cp ${output} /opt/cursor/artifacts/${output}`;
@@ -298,7 +326,7 @@ VALIDATION ERRORS:
 ${errors.slice(0, 200).map((error) => `- ${error}`).join('\n')}`;
 }
 
-function validateResolutionDocument(document, dossier, corpus, resolutions, accepted = []) {
+export function validateResolutionDocument(document, dossier, corpus, resolutions, accepted = []) {
   const ajv = createPeopleSchemaValidator();
   const validate = ajv.getSchema('https://24histories.com/schema/people/resolution-v1.json');
   const errors = [];
@@ -351,6 +379,77 @@ async function downloadDocument(agent, dossier) {
   } catch (error) {
     throw new Error(`${wanted} is not valid JSON: ${error.message}`);
   }
+}
+
+async function recoverPublishedShardDocuments(dossiers, opts, corpus, resolutions, accepted) {
+  if (dossiers.length === 0) return [];
+  const wanted = new Map(dossiers.map((dossier) => [`People resolution ${dossier.batch}`, dossier]));
+  const latestByName = new Map();
+  let cursor;
+  do {
+    const page = await Agent.list({
+      runtime: 'cloud',
+      apiKey: opts.apiKey,
+      limit: 100,
+      cursor,
+    });
+    for (const candidate of page.items) {
+      if (!wanted.has(candidate.name)) continue;
+      const current = latestByName.get(candidate.name);
+      if (!current || (candidate.createdAt ?? 0) > (current.createdAt ?? 0)) {
+        latestByName.set(candidate.name, candidate);
+      }
+    }
+    cursor = page.nextCursor;
+  } while (cursor);
+
+  const recovered = [];
+  for (const dossier of dossiers) {
+    const prior = latestByName.get(`People resolution ${dossier.batch}`);
+    if (!prior) continue;
+    let agent;
+    try {
+      agent = await Agent.resume(prior.agentId, { apiKey: opts.apiKey });
+      let published;
+      try {
+        published = await downloadDocument(agent, dossier);
+      } catch (error) {
+        const runs = await Agent.listRuns(prior.agentId, {
+          runtime: 'cloud',
+          apiKey: opts.apiKey,
+          limit: 20,
+        });
+        const running = runs.items.find((run) => run.status === 'running');
+        if (!running) throw error;
+        console.log(`[${dossier.batch}] waiting for existing cloud run ${running.id}`);
+        const result = await waitForCursorRun(running, {
+          agentId: prior.agentId,
+          apiKey: opts.apiKey,
+          label: `[${dossier.batch}] recovered identity resolution`,
+        });
+        if (result.status !== 'finished') {
+          throw new Error(result.error?.message ?? `run status ${result.status}`);
+        }
+        published = await downloadDocument(agent, dossier);
+      }
+      const document = validateResolutionDocument(
+        published,
+        dossier,
+        corpus,
+        resolutions,
+        accepted,
+      );
+      writeShardCheckpoint(dossier, document);
+      accepted.push(document);
+      recovered.push(dossier);
+      console.log(`[${dossier.batch}] recovered validated shard from ${prior.agentId}`);
+    } catch (error) {
+      console.warn(`[${dossier.batch}] prior cloud artifact was not reusable: ${error.message}`);
+    } finally {
+      await closeAgent(agent);
+    }
+  }
+  return recovered;
 }
 
 async function processDossier(dossier, opts, corpus, resolutions, accepted) {
@@ -452,12 +551,39 @@ async function main() {
 
     let next = 0;
     const accepted = [];
+    let pending = [];
+    for (const dossier of dossiers) {
+      const checkpoint = shardCheckpointPath(dossier);
+      if (!fs.existsSync(checkpoint)) {
+        pending.push(dossier);
+        continue;
+      }
+      const document = validateResolutionDocument(
+        readShardCheckpoint(dossier),
+        dossier,
+        corpus,
+        resolutions,
+        accepted,
+      );
+      accepted.push(document);
+      console.log(`[${dossier.batch}] resumed validated shard checkpoint`);
+    }
+    const recovered = new Set(await recoverPublishedShardDocuments(
+      pending,
+      opts,
+      corpus,
+      resolutions,
+      accepted,
+    ));
+    pending = pending.filter((dossier) => !recovered.has(dossier));
     const failures = [];
-    const workers = Array.from({ length: Math.min(opts.concurrency, dossiers.length) }, async () => {
-      while (next < dossiers.length) {
-        const dossier = dossiers[next++];
+    const workers = Array.from({ length: Math.min(opts.concurrency, pending.length) }, async () => {
+      while (next < pending.length) {
+        const dossier = pending[next++];
         try {
-          accepted.push(await processDossier(dossier, opts, corpus, resolutions, accepted));
+          const document = await processDossier(dossier, opts, corpus, resolutions, accepted);
+          writeShardCheckpoint(dossier, document);
+          accepted.push(document);
         } catch (error) {
           failures.push(error);
         }
@@ -481,6 +607,7 @@ async function main() {
       },
     }, corpus, resolutions);
     writeJsonAtomic(opts.out, aggregate);
+    fs.rmSync(path.join(SHARD_CHECKPOINT_DIR, opts.batch), { recursive: true, force: true });
     console.log(`Accepted ${aggregate.decisions.length} identity decision(s) -> ${path.relative(REPO_ROOT, opts.out)}`);
   } finally {
     release();

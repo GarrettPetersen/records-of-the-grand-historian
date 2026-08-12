@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "songshu",
+  "chapter": "070",
+  "input": {
+    "chapterFingerprint": "sha256:628c172ffa54a6b6f6c5a1e25be6a8c0b23e818f5c79db45d5474f856408e6be",
+    "proposalsFingerprint": "sha256:7da5b4ab59f10678c8cb9f7ac0efb5c94d3ecece97c49ba5dc50c33304dd2c8f"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-20b139a0-435f-4e6a-8f95-459f9a50e9e3",
+    "runId": "run-b3e80ef7-aa6d-43aa-8e24-b8538592f25a",
+    "completedAt": "2026-08-12T03:53:12.718Z"
+  },
+  "proposals": [
+    {
+      "id": "songshu:070:r0001",
+      "unit": {
+        "id": "s0019",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "He went out as chief clerk of the pacification of the north to Prince of Shixing and administrator of Eastern Nanhai.",
+      "after": "He went out as chief clerk of the pacification of the north to Prince of Shixing and administrator of Southern Donghai.",
+      "reason": "南東海 is Southern Donghai, not Eastern Nanhai.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:070:r0002",
+      "unit": {
+        "id": "s0019",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "He went out as Chief Clerk of the Pacification of the North to the Prince of Shixing and Administrator of Eastern Nanhai.",
+      "after": "He went out as Chief Clerk of the Pacification of the North to the Prince of Shixing and Administrator of Southern Donghai.",
+      "reason": "南東海 is Southern Donghai, not Eastern Nanhai.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:070:r0003",
+      "unit": {
+        "id": "s0051",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "The fine men of Si and Bian stream like stars and flash like lightning; Yan and Fu's stern troops gather like rain and clouds; trample disorder north of Sangxi, shake collapse south of Huanghai; cut their root so they cannot plant again—the bound dry tree, how can it not rot?",
+      "after": "The fine men of Si and Bian stream like stars and flash like lightning; Xu and Fu's stern troops gather like rain and clouds; trample disorder north of Sangxi, shake collapse south of Huanghai; cut their root so they cannot plant again—the bound dry tree, how can it not rot?",
+      "reason": "Chinese 徐、阜 is Xu and Fu; literal wrongly has Yan.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:070:r0004",
+      "unit": {
+        "id": "s0057",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "If the state chooses deeply from districts, bears utmost secrets, traces the far—one whose clarity shines, excellence declares itself, sincerity moves rain, spirit awes heroes, knowledge exhausts sages, judges fortune and loss, harmonizes hearts, knows dull and keen, lays plans on cinnabar steps, raises counsel on green rush, persuades the throne and quiets plain speech—he could settle the people and save disaster.",
+      "after": "If the state chooses deeply from districts, bears utmost secrets, traces the far—one whose clarity shines, excellence declares itself, sincerity moves rain, spirit awes Fei and Ben, knowledge exhausts Ju and Qi, judges fortune and loss, harmonizes hearts, knows dull and keen, lays plans on cinnabar steps, raises counsel on green rush, persuades the throne and quiets plain speech—he could settle the people and save disaster.",
+      "reason": "Idiomatic drops named exemplars 飛、賁 and 苴、起 present in the Chinese.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:070:r0005",
+      "unit": {
+        "id": "s0108",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 19
+      },
+      "field": "literal",
+      "before": "Shao therefore ordered those around him: \"Give him a blade in hand.\"",
+      "after": "Shao therefore ordered those around him: \"Put him to the blade.\"",
+      "reason": "與手刃 means to kill by the blade, not to hand him a weapon.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "songshu:070:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "南東海太守 names the commandery Southern Donghai; Eastern Nanhai misreads 南東海 and invents the wrong place.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0019",
+        "excerpt": "南東海太守"
+      }
+    },
+    {
+      "repairId": "songshu:070:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "南東海太守 is Administrator of Southern Donghai; the literal's Eastern Nanhai is the same place-name error as in the idiomatic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0019",
+        "excerpt": "南東海太守"
+      }
+    },
+    {
+      "repairId": "songshu:070:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "徐、阜嚴兵 names Xu and Fu; Yan (燕) is not in the Chinese, and the idiomatic already has Xu and Fu.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0051",
+        "excerpt": "徐、阜嚴兵"
+      }
+    },
+    {
+      "repairId": "songshu:070:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "氣懾飛、賁，知窮苴、起 names Fei, Ben, Ju, and Qi as exemplars; replacing them with generic heroes/sages omits those names, and the proposed restoration matches the Chinese and the literal.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0057",
+        "excerpt": "氣懾飛、賁，知窮苴、起"
+      }
+    },
+    {
+      "repairId": "songshu:070:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "與手刃 is an order to put him to the blade; the next unit 見殺於奉化門外 confirms execution, not handing him a weapon.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0108",
+        "excerpt": "與手刃"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

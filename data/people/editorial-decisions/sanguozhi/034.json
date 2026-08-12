@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "sanguozhi",
+  "chapter": "034",
+  "input": {
+    "chapterFingerprint": "sha256:174207d3538fed0a8b7cd5fab8fdf5486c3cb5876961915b01921746fdd30d35",
+    "proposalsFingerprint": "sha256:fa973c846858cb7e2950d1e7ec84b0fd1a143e8664ccbba12b485ee86c7928f8"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-0dfdcc76-7da1-45a6-8643-5e5317a9c9a3",
+    "runId": "run-7ee3171b-01a9-4efc-bede-173827db8194",
+    "completedAt": "2026-08-12T04:02:26.749Z"
+  },
+  "proposals": [
+    {
+      "id": "sanguozhi:034:r0001",
+      "unit": {
+        "id": "s0088",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "The Spring and Autumn of Han and Jin says Wei gave Shu palace women to generals without wives. Lady Li, an imperial lady of splendid deportment, said, \"I cannot endure repeated humiliation.\"",
+      "after": "The Spring and Autumn of Han and Jin says Wei gave Shu palace women to generals without wives. Lady Li, the Zhaoyi, said, \"I cannot endure repeated humiliation.\"",
+      "reason": "昭儀 is a Han consort rank-title (Zhaoyi), not a description of 'splendid deportment'.",
+      "confidence": "high"
+    },
+    {
+      "id": "sanguozhi:034:r0002",
+      "unit": {
+        "id": "s0088",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "The Spring and Autumn of Han and Jin states: Wei gave Shu palace women to generals without wives; Lady Li, imperial lady of splendid deportment, said, \"I cannot endure repeated humiliation.\"",
+      "after": "The Spring and Autumn of Han and Jin states: Wei gave Shu palace women to generals without wives; Lady Li the Zhaoyi said, \"I cannot endure repeated humiliation.\"",
+      "reason": "昭儀 is a consort rank-title, not 'imperial lady of splendid deportment'.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "sanguozhi:034:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 李昭儀, 昭儀 is the Han consort rank Zhaoyi, not a gloss of splendid deportment; the proposed title restores the Chinese naming.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0088",
+        "excerpt": "李昭儀"
+      }
+    },
+    {
+      "repairId": "sanguozhi:034:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 李昭儀, 昭儀 is the consort rank Zhaoyi, not 'imperial lady of splendid deportment'; the literal repair correctly restores the title.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0088",
+        "excerpt": "李昭儀"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

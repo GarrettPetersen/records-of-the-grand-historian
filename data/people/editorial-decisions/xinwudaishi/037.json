@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "xinwudaishi",
+  "chapter": "037",
+  "input": {
+    "chapterFingerprint": "sha256:34b0b315a338eea08988d04cc3d4c4569964950a5385b3b0fa60faf988aa5f34",
+    "proposalsFingerprint": "sha256:46576b9bc3d56e343334e1abd1ab45ddb68bf4b5ca7f6ffe45a28d814bf3ce61"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-3968b4de-5b50-47f8-8678-fd1931caa78e",
+    "runId": "run-b2b59313-887b-47c7-aabe-df970014bba5",
+    "completedAt": "2026-08-12T04:14:10.652Z"
+  },
+  "proposals": [
+    {
+      "id": "xinwudaishi:037:r0001",
+      "unit": {
+        "id": "s0082",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Youqian’s son Jianhui governed Cizhou; orders came for Yanqiong to kill him; Yanqiong hid the command and fled the city at midnight.",
+      "after": "Youqian’s son Jianhui governed Chanzhou; orders came for Yanqiong to kill him; Yanqiong hid the command and fled the city at midnight.",
+      "reason": "澶州 is Chanzhou (not Cizhou); the idiomatic place name is wrong.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:037:r0002",
+      "unit": {
+        "id": "s0075",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "field": "literal",
+      "before": "Jin then slandered Youqian: “Chongtao is about to be executed; Youqian is ill at ease and will surely rebel—he should be executed together.”",
+      "after": "Jin then slandered Youqian: “Chongtao has been executed; Youqian is ill at ease and will surely rebel—he should be executed together.”",
+      "reason": "In narrative sequence Chongtao is already dead; 且誅 here means the execution has occurred, not that it is still impending.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xinwudaishi:037:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit has 澶州刺史; 澶州 is Chanzhou, not Cizhou (磁/慈). The proposed place-name fix is accurate and leaves the rest of the sentence unchanged.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0082",
+        "excerpt": "友謙子建徽為澶州刺史"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:037:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Prior unit already narrates Chongtao’s imprisonment and death (乃囚而殺之); Jin’s next speech premises Youqian’s fear on that purge. Reading 崇韜且誅 as an impending execution contradicts the sequence and the idiomatic ‘With Chongtao gone’; ‘has been executed’ restores the correct temporal force.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "崇韜且誅，友謙不自安"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

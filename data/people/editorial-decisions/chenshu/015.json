@@ -1,0 +1,260 @@
+{
+  "schemaVersion": 3,
+  "book": "chenshu",
+  "chapter": "015",
+  "input": {
+    "chapterFingerprint": "sha256:f46415580c6a55348879823bf01fa1ecd4558d76e33825db4b1ff61675cc1f7f",
+    "proposalsFingerprint": "sha256:b80b3b40e355333e9940de51050e704deab92546afbe7966259fe6c0be61cb30"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-48d855a1-4e60-491a-a89a-2ae7a27e3dd4",
+    "runId": "run-69139d68-b945-42d6-a65d-82322fe54307",
+    "completedAt": "2026-08-12T04:02:37.770Z"
+  },
+  "proposals": [
+    {
+      "id": "chenshu:015:r0001",
+      "unit": {
+        "id": "s0046",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Chen Huiji, whose style name was Yuanfang, was a great-grandson of the Founder on the collateral line.",
+      "after": "Chen Huiji, whose style name was Yuanfang, was a grandnephew of the Founder on the collateral line.",
+      "reason": "從孫 means collateral grandson/grandnephew of the Founder, not great-grandson.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:015:r0002",
+      "unit": {
+        "id": "s0061",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 15
+      },
+      "field": "idiomatic",
+      "before": "In the first year of Zhenming, Xiao Yan, prince of Ping'an and left vice director of the masters of writing under Xiao Cong, Xiao Fan, prince of Jinxi, and others[3] led more than twenty thousand followers, men and women together, to offer surrender to Huiji, who marched out with troops to receive them.",
+      "after": "In the first year of Zhenming, Xiao Yan, prince of Anping and left vice director of the masters of writing under Xiao Cong, Xiao Huan, prince of Jinxi, and others[3] led more than twenty thousand followers, men and women together, to offer surrender to Huiji, who marched out with troops to receive them.",
+      "reason": "安平王 is Prince of Anping (not Ping'an); 蕭瓛 is Huan, not Fan.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:015:r0003",
+      "unit": {
+        "id": "s0065",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "At Hankou he was blocked by the army of the Prince of Qin and could not advance; he therefore joined Xiao Shuwen, prince of Jinxi and prefect of Xiangzhou, Bi Bao, prefect of Bazhou, and others in offering surrender.",
+      "after": "At Hankou he was blocked by the army of the Prince of Qin and could not advance; he therefore joined Shuwen, prince of Jinxi and prefect of Xiangzhou, Bi Bao, prefect of Bazhou, and others in offering surrender.",
+      "reason": "晉熙王叔文 is the Chen prince Shuwen, not a Xiao; the Xiao surname is invented in the English.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "chenshu:015:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "高祖之從孫 marks Huiji as a collateral grandson/grandnephew of the Founder (same generation as 孫). Great-grandson would be 曾孫; the proposed grandnephew restores the correct kinship.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0046",
+        "excerpt": "高祖之從孫也"
+      }
+    },
+    {
+      "repairId": "chenshu:015:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "安平王 is Prince of Anping (安平), not Ping'an (平安). 蕭瓛 romanizes as Xiao Huan (瓛 huán), not Fan. Both proposed corrections match the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0061",
+        "excerpt": "安平王蕭巖、晉熙王蕭瓛"
+      }
+    },
+    {
+      "repairId": "chenshu:015:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "晉熙王叔文 names the Chen prince Shuwen with no 蕭 surname. Xiao Shuwen was invented by confusion with earlier 蕭瓛; dropping Xiao restores the source.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0065",
+        "excerpt": "晉熙王叔文"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "chenshu:015:r0001",
+      "before": {
+        "id": "chenshu:015:c0249",
+        "subject": "chenshu:015:p003",
+        "predicate": "family-relationship",
+        "value": {
+          "relation": "kin-of",
+          "personId": "chenshu:015:p004",
+          "kinshipTerm": {
+            "zh": "從孫",
+            "en": "great-grandson on the collateral line"
+          },
+          "generationDistance": 2,
+          "relationshipState": "active"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "chenshu:015:s0046"
+        ]
+      },
+      "after": {
+        "id": "chenshu:015:c0249",
+        "subject": "chenshu:015:p003",
+        "predicate": "family-relationship",
+        "value": {
+          "relation": "kin-of",
+          "personId": "chenshu:015:p004",
+          "kinshipTerm": {
+            "zh": "從孫",
+            "en": "grandnephew on the collateral line"
+          },
+          "generationDistance": 2,
+          "relationshipState": "active"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "chenshu:015:s0046"
+        ]
+      },
+      "reason": "Accepted r0001 shows English great-grandson came only from the bad idiomatic of 從孫; the kinship claim must read grandnephew while keeping generationDistance 2, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0046",
+        "excerpt": "從孫"
+      }
+    },
+    {
+      "repairId": "chenshu:015:r0002",
+      "before": {
+        "id": "chenshu:015:c0122",
+        "subject": "chenshu:015:p027",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Prince of Ping'an",
+          "zh": "安平王"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "chenshu:015:s0061"
+        ]
+      },
+      "after": {
+        "id": "chenshu:015:c0122",
+        "subject": "chenshu:015:p027",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Prince of Anping",
+          "zh": "安平王"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "chenshu:015:s0061"
+        ]
+      },
+      "reason": "Accepted r0002 shows Prince of Ping'an came only from reversing 安平; the title claim must read Prince of Anping while keeping zh, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0061",
+        "excerpt": "安平王"
+      }
+    },
+    {
+      "repairId": "chenshu:015:r0002",
+      "before": {
+        "id": "chenshu:015:c0126",
+        "subject": "chenshu:015:p028",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Xiao Fan",
+          "zh": "蕭瓛"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "chenshu:015:s0061"
+        ]
+      },
+      "after": {
+        "id": "chenshu:015:c0126",
+        "subject": "chenshu:015:p028",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Xiao Huan",
+          "zh": "蕭瓛"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "chenshu:015:s0061"
+        ]
+      },
+      "reason": "Accepted r0002 shows English Xiao Fan came only from the bad romanization of 蕭瓛; the personal-name claim must read Xiao Huan while keeping zh, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0061",
+        "excerpt": "蕭瓛"
+      }
+    },
+    {
+      "repairId": "chenshu:015:r0002",
+      "before": {
+        "id": "chenshu:015:c0463",
+        "subject": "chenshu:015:p028",
+        "predicate": "different-person",
+        "value": {
+          "personId": "chenshu:015:p036",
+          "note": "Liang Xiao Fan vs Chen Shuwen, both titled Prince of Jinxi at different times in chapter"
+        },
+        "certainty": "strongly-inferred",
+        "evidence": [
+          "chenshu:015:s0061",
+          "chenshu:015:s0065"
+        ]
+      },
+      "after": {
+        "id": "chenshu:015:c0463",
+        "subject": "chenshu:015:p028",
+        "predicate": "different-person",
+        "value": {
+          "personId": "chenshu:015:p036",
+          "note": "Liang Xiao Huan vs Chen Shuwen, both titled Prince of Jinxi at different times in chapter"
+        },
+        "certainty": "strongly-inferred",
+        "evidence": [
+          "chenshu:015:s0061",
+          "chenshu:015:s0065"
+        ]
+      },
+      "reason": "Accepted r0002 restores 蕭瓛 as Xiao Huan; the different-person note must update the English name while the disambiguation fact, id, subject, predicate, certainty, and evidence remain.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0061",
+        "excerpt": "蕭瓛"
+      }
+    }
+  ]
+}

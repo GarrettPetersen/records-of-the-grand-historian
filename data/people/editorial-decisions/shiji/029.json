@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "029",
+  "input": {
+    "chapterFingerprint": "sha256:5cfed8323d22f60ea36583d87067de9957c35ad0635cfb2200fd6f767f4a07bc",
+    "proposalsFingerprint": "sha256:acf4e16b195a984becabcdc8adbf29ff276230514950c5b2dc421b5b153ec98d"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-1edf881a-fd1e-45cf-b4a3-3e2f8512f68e",
+    "runId": "run-f846db94-960f-4711-aa1a-6fd106260b10",
+    "completedAt": "2026-08-12T04:22:00.565Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:029:r0001",
+      "unit": {
+        "id": "s0014",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "In Shu, Li Bing, the Shu commandery administrator, cut through the Dui Dike, cleared away the damage caused by the Miao River, and drove the two streams through the center of Chengdu.",
+      "after": "In Shu, Li Bing, the Shu commandery administrator, cut through Lidui, averted the harm of the Mo River, and drove the two streams through the center of Chengdu.",
+      "reason": "離碓 is the place-name Lidui, not a 'Dui Dike'; 沫水 is the Mo River, not 'Miao River'.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:029:r0002",
+      "unit": {
+        "id": "s0014",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "In Shu, Li Bing, the commandery administrator of Shu, cut through the Dui Dike and cleared away the damage caused by the Miao River, piercing the two rivers through the center of Chengdu.",
+      "after": "In Shu, Li Bing, the commandery administrator of Shu, cut through Lidui and averted the harm of the Mo River, piercing the two rivers through the center of Chengdu.",
+      "reason": "Same corrections as idiomatic: Lidui for 離碓 and Mo River for 沫水.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:029:r0003",
+      "unit": {
+        "id": "s0064",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "After the Son of Heaven performed the fengshan rites, inspected the mountains and rivers, and offered sacrifices to them, drought came the following year, and Qianfeng received little rain.",
+      "after": "After the Son of Heaven performed the fengshan rites, inspected the mountains and rivers, and offered sacrifices to them, drought came the following year, and the sealed altar was dry with little rain.",
+      "reason": "乾封少雨 describes the fengshan sealed earth being dry from drought, not a place named Qianfeng.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:029:r0004",
+      "unit": {
+        "id": "s0064",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "After the Son of Heaven had performed the fengshan rites and inspected and sacrificed to the mountains and rivers, the following year brought drought, and Qianfeng had little rain.",
+      "after": "After the Son of Heaven had performed the fengshan rites and inspected and sacrificed to the mountains and rivers, the following year brought drought, and the sealed altar was dry with little rain.",
+      "reason": "乾封 here means the sealed feng altar, not the later place/reign name Qianfeng.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:029:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "鑿離碓 names the place Lidui, not a 'Dui Dike'; 沫水 is the Mo River (mó), not 'Miao'; 辟沫水之害 means averting that river's harm. The proposed idiomatic line restores all three points without inventing content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0014",
+        "excerpt": "鑿離碓，辟沫水之害"
+      }
+    },
+    {
+      "repairId": "shiji:029:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same Chinese phrases require Lidui and Mo River in the literal line; 'Dui Dike' and 'Miao River' are naming errors, and 'averted the harm' correctly renders 辟…之害.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0014",
+        "excerpt": "鑿離碓，辟沫水之害"
+      }
+    },
+    {
+      "repairId": "shiji:029:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "After 旱, 乾封少雨 continues the drought description: 乾封 is the dried sealed feng-altar earth, not a toponym Qianfeng; the proposed wording matches that reading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0064",
+        "excerpt": "旱，乾封少雨"
+      }
+    },
+    {
+      "repairId": "shiji:029:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "乾封 in this fengshan-drought context is the sealed altar becoming dry, not the later reign/place name Qianfeng; the literal replacement is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0064",
+        "excerpt": "旱，乾封少雨"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

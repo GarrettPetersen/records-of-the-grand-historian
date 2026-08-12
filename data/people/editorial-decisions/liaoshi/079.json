@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "079",
+  "input": {
+    "chapterFingerprint": "sha256:8243197e4f4a109fa8b6d4040877d609e39b7707b6a415a8e9899536dac1597b",
+    "proposalsFingerprint": "sha256:01ca1d9b3d0c3fbccc1317ee8500a32a694894e8dc244bd45c930257184573c1"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-da4be1ed-ff0e-485c-95df-302c30728f36",
+    "runId": "run-b2c7b331-e5a4-4b08-bbad-aedd27c292d7",
+    "completedAt": "2026-08-12T03:53:20.894Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:079:r0001",
+      "unit": {
+        "id": "s0005",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "In the early Tonghe reign he earned the jinshi degree and was appointed a patrol officer in Lulong.",
+      "after": "In the early Huitong reign he earned the jinshi degree and was appointed a patrol officer in Lulong.",
+      "reason": "會同 is the Huitong reign (AD 938–947), not 統和 Tonghe; the mistranslation contradicts the following Taizong/Tianlu career sequence.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:079:r0002",
+      "unit": {
+        "id": "s0005",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "At the beginning of Tonghe he passed the jinshi examination and became a patrol officer in Lulong.",
+      "after": "At the beginning of Huitong he passed the jinshi examination and became a patrol officer in Lulong.",
+      "reason": "會同 must be rendered Huitong, not Tonghe (統和).",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:079:r0003",
+      "unit": {
+        "id": "s0029",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 27
+      },
+      "field": "idiomatic",
+      "before": "The emperor mourned him deeply, suspended court for two days, and posthumously appointed him Grand Preceptor of the Secretariat.",
+      "after": "The emperor mourned him deeply, suspended court for two days, and posthumously appointed him Director of the Imperial Secretariat.",
+      "reason": "尚書令 is Director/President of the Imperial Secretariat (Shangshu ling), not Grand Preceptor (太師).",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:079:r0004",
+      "unit": {
+        "id": "s0029",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 27
+      },
+      "field": "literal",
+      "before": "The emperor sighed in grief, suspended court for two days, and posthumously appointed him Grand Preceptor of the Secretariat.",
+      "after": "The emperor sighed in grief, suspended court for two days, and posthumously appointed him Director of the Imperial Secretariat.",
+      "reason": "尚書令 is not Grand Preceptor; correct the office title.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:079:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 會同初 names the Huitong reign; Tonghe (統和) is a different later era, and the following Taizong/Tianlu sequence confirms Huitong.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0005",
+        "excerpt": "會同初"
+      }
+    },
+    {
+      "repairId": "liaoshi:079:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 會同 must be Huitong, not Tonghe (統和); the literal field repeats the same era error as the idiomatic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0005",
+        "excerpt": "會同初"
+      }
+    },
+    {
+      "repairId": "liaoshi:079:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 贈尚書令 is a posthumous Shangshu ling appointment; Grand Preceptor would be 太師, so Director of the Imperial Secretariat is the correct office.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0029",
+        "excerpt": "贈尚書令"
+      }
+    },
+    {
+      "repairId": "liaoshi:079:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 尚書令 is not Grand Preceptor; correcting the literal title to Director of the Imperial Secretariat matches the source.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0029",
+        "excerpt": "贈尚書令"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

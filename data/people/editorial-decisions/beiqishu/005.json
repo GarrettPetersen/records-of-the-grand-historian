@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "beiqishu",
+  "chapter": "005",
+  "input": {
+    "chapterFingerprint": "sha256:92556c9d6b4197140c918ca2a8a2424ebb7a9520ebda398d09470e0a9e96e209",
+    "proposalsFingerprint": "sha256:c502738091aa7e0f49ab00378cb38a647d71a327a25af6619c349d5cc6e5e11d"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-7928b8f0-9f87-4c30-9593-48325de4b277",
+    "runId": "run-137e004c-3ede-474d-b003-6dfbf4947fa6",
+    "completedAt": "2026-08-12T03:59:21.413Z"
+  },
+  "proposals": [
+    {
+      "id": "beiqishu:005:r0001",
+      "unit": {
+        "id": "s0047",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In the eighth month of autumn, on the renwu day, the grand empress dowager deposed Emperor Fei as Prince of Jinan with the income of a single commandery, and installed the grand chief minister, Prince Yan of Changshan, as successor to the throne.",
+      "after": "In the eighth month of autumn, on the renwu day, the grand empress dowager demoted Emperor Fei to Prince of Jinan with the income of a single commandery, and installed the grand chief minister, Prince Yan of Changshan, as successor to the throne.",
+      "reason": "Chinese 廢帝爲濟南王 means demoting/deposing him to the status of Prince of Jinan, not “deposed … as” which reads as if “Prince of Jinan” were the office removed.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:005:r0002",
+      "unit": {
+        "id": "s0007",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "When his attendants asked why, the crown prince said, \"This is where Shizong was killed; the Prince of Hejian has no place here.\"",
+      "after": "When his attendants asked why, the crown prince said, \"This is where Shizong met the assassins; why should the Prince of Hejian be here again?\"",
+      "reason": "Chinese 遇賊處 is “where he met the assassins/bandits,” and 復何宜在此 includes “again” (復); the idiomatic version over-translates to “killed” and drops 復.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "beiqishu:005:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0047’s 廢帝爲濟南王 means the grand empress dowager stripped him of the emperorship and made him Prince of Jinan. English “deposed … as Prince of Jinan” wrongly suggests Prince of Jinan was the office removed; “demoted … to Prince of Jinan” matches the Chinese construction.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0047",
+        "excerpt": "廢帝爲濟南王"
+      }
+    },
+    {
+      "repairId": "beiqishu:005:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "世宗遇賊處 is the place where Shizong met the assassins/bandits, not an explicit “was killed,” and 復何宜在此 includes 復 “again.” The proposed wording restores both points without adding unstated content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0007",
+        "excerpt": "世宗遇賊處，河間王復何宜在此"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

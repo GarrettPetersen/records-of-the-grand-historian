@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "beiqishu",
+  "chapter": "048",
+  "input": {
+    "chapterFingerprint": "sha256:9004743dc3dea59bbf8dfce5ff0de8423c4c362f67d628967eddb64f5eea59cc",
+    "proposalsFingerprint": "sha256:4d55c3c2b5d6071cef5a78c24b9378d2013adbf0c74d3e5b7ebedbd87ce4e6d4"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-a2c49865-9e69-4da1-959e-4a92db8ae1a8",
+    "runId": "run-c25bace7-1aab-40b6-ae6b-481b7b2e7d90",
+    "completedAt": "2026-08-12T03:52:59.531Z"
+  },
+  "proposals": [
+    {
+      "id": "beiqishu:048:r0001",
+      "unit": {
+        "id": "s0072",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "Xiaoyu urged him to seek advancement; He Shikai deeply hated this, and therefore memorialized to remove Xiaoyu as Administrator of Zhangwu Commandery and to send Yuanliang and the others out as well.",
+      "after": "Xiaoyu urged him to seek advancement; He Shikai deeply hated this, and therefore memorialized to appoint Xiaoyu as Administrator of Zhangwu Commandery and to send Yuanliang and the others out as well.",
+      "reason": "Chinese 除…為 means to appoint someone to an office, not to remove them from that office; the literal English reverses the appointment sense.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:048:r0002",
+      "unit": {
+        "id": "s0021",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Erzhu Wenchang was the fourth son of Rong.",
+      "after": "Erzhu Wenchang was the fourth son of Erzhu Rong.",
+      "reason": "Literal English drops the surname on 榮, obscuring that Rong is Erzhu Rong named in full in the idiomatic line.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "beiqishu:048:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0072 has 奏除孝裕為章武郡守: 除…為 is the standard appointment formula, not removal. The original literal reverses that sense; 'appoint … as Administrator of Zhangwu Commandery' matches the Chinese and the sidelining of 元亮等皆出.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0072",
+        "excerpt": "奏除孝裕為章武郡守"
+      }
+    },
+    {
+      "repairId": "beiqishu:048:r0002",
+      "decision": "reject",
+      "after": null,
+      "reason": "s0021 reads 榮第四子也, naming the father only as 榮. 'Fourth son of Rong' is accurate for the literal field; expanding to 'Erzhu Rong' is stylistic clarification already present in the idiomatic line, not a semantic error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0021",
+        "excerpt": "榮第四子也"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

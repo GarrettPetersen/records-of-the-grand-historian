@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "091",
+  "input": {
+    "chapterFingerprint": "sha256:f2ee033e4710edc918bda2e6ae30bb741b4dcb3cd534e139fcdff87cdf6828ac",
+    "proposalsFingerprint": "sha256:dbd2bf0f3878c1d10aea540d1b0174e23c1fced2f4b27da408e3b7f2194266d1"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-fe6e3899-d972-4f0f-8113-eb30167c4a86",
+    "runId": "run-e60160cb-5275-4915-8045-ef10e963b046",
+    "completedAt": "2026-08-12T03:48:18.578Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:091:r0001",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "(Yaoshinu)]〉",
+      "after": "(Yaoshinu)",
+      "reason": "Remove corrupted bracket characters from the glossed name annotation.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:091:r0002",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "(Yaoshinu)]〉",
+      "after": "(Yaoshinu)",
+      "reason": "Remove corrupted bracket characters from the glossed name annotation.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:091:r0003",
+      "unit": {
+        "id": "s0019",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "Once he received the edict, he became ever more utterly loyal and careful, spoke freely of whatever he knew, and his perquisites grew ever more numerous.",
+      "after": "Once he received the edict, he became ever more utterly loyal and careful, spoke freely of whatever he knew, and his beneficial counsel was abundant.",
+      "reason": "便益為多 refers to abundant beneficial advice/measures, not personal perquisites.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:091:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 〈（藥師奴）〉 is a parenthetical name gloss; the English retains stray ]〉 from the annotation brackets and must be cleaned to (Yaoshinu).",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "〈（藥師奴）〉"
+      }
+    },
+    {
+      "repairId": "liaoshi:091:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same corruption as the idiomatic field: literal English keeps leftover ]〉 after (Yaoshinu) while the Chinese is only the nested gloss 〈（藥師奴）〉.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "〈（藥師奴）〉"
+      }
+    },
+    {
+      "repairId": "liaoshi:091:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "After 知無不言, 便益為多 means the beneficial counsel or measures he offered were many, not that his personal perquisites increased; the proposed replacement restores that sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0019",
+        "excerpt": "知無不言，便益為多"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

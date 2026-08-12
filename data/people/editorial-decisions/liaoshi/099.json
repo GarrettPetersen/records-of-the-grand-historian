@@ -1,0 +1,292 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "099",
+  "input": {
+    "chapterFingerprint": "sha256:2895ff3e747a8f35290889c80ba1b4343d210bcea1b1925e79ff89c44236490e",
+    "proposalsFingerprint": "sha256:26067a37e41d914d5e56ad049fe10fc709bac890353479bfec412dbb1b3b2287"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "Codex host audit",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-12T04:41:28.000Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:099:r0001",
+      "unit": {
+        "id": "s0010",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "In a secret memorial he reported that because Yixin had the Crown Prince administer state affairs, Yixin was ill at ease, met often with Zhang Xiaojie, and he feared there was a covert plot to shake the Crown Prince.",
+      "after": "In a secret memorial he reported that because the Crown Prince administered state affairs, Yixin was ill at ease, met often with Zhang Xiaojie, and he feared there was a covert plot to shake the Crown Prince.",
+      "reason": "Literal reverses agency: 以皇太子知國政 means the Crown Prince administered affairs, not that Yixin had him do so.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:099:r0002",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "The emperor took the point and posted Yixin as military commissioner at Zhongjing.",
+      "after": "The emperor took the point and posted Yixin as regent (liushou) of Zhongjing.",
+      "reason": "中京留守 is Zhongjing regent/liushou, not military commissioner (節度使).",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:099:r0003",
+      "unit": {
+        "id": "s0012",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "On Yixin's birthday the emperor sent the courtier Yelu Aisiben with gifts; Yixin asked him privately to tell the throne, \"I see villains at court and Your Majesty isolated in danger.",
+      "after": "On Yixin's birthday the emperor sent the courtier Yelu Baisiben with gifts; Yixin asked him privately to tell the throne, \"I see villains at court and Your Majesty isolated in danger.",
+      "reason": "耶律白斯本 is Baisiben (白斯本), not Aisiben; 白 is Bai.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:099:r0004",
+      "unit": {
+        "id": "s0014",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "idiomatic",
+      "before": "When Aisiben returned he reported this to the emperor.",
+      "after": "When Baisiben returned he reported this to the emperor.",
+      "reason": "Matches the Chinese given name 白斯本 (Baisiben), not Aisiben.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:099:r0005",
+      "unit": {
+        "id": "s0022",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Yelu Sala, styled Jinyin, was grandson of the Southern Chancellery King's Molugu.",
+      "after": "Yelu Sala, styled Jinyin, was grandson of Molugu, the Southern Chancellery King.",
+      "reason": "Literal 'Southern Chancellery King's Molugu' misorders the apposition; Molugu held the title 南院大王.",
+      "confidence": "medium"
+    },
+    {
+      "id": "liaoshi:099:r0006",
+      "unit": {
+        "id": "s0027",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "In the second year of Dakang, with Yelu Yixin at Zhongjing, the court deliberated recalling him—yet none of the ministers dared speak plainly.",
+      "after": "In the second year of Dakang, with Yelu Yixin as regent of Zhongjing, the court deliberated recalling him—yet none of the ministers dared speak plainly.",
+      "reason": "中京留守 is regent/liushou, not military commissioner.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:099:r0007",
+      "unit": {
+        "id": "s0095",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "idiomatic",
+      "before": "If the late emperor had accepted the charges against Empress Shunsheng, Yixin would count as a meritorious minister—how then could Your Majesty have ascended the throne?",
+      "after": "If the late emperor had accepted the charges concerning Empress Shunkao as true, Yixin would count as a meritorious minister—how then could Your Majesty have ascended the throne?",
+      "reason": "Chinese 順考 should be rendered consistently as Shunkao here (as elsewhere), not Shunsheng.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:099:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "密奏乙辛以皇太子知國政，心不自安 treats 以皇太子知國政 as the circumstance that made Yixin uneasy: the Crown Prince administered state affairs. The old literal wrongly makes Yixin the agent who had the prince do so; the proposed wording restores the correct agency.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0010",
+        "excerpt": "乙辛以皇太子知國政，心不自安"
+      }
+    },
+    {
+      "repairId": "liaoshi:099:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "出乙辛為中京留守 names the office 留守 (capital regent/liushou), not 節度使. Calling him military commissioner is a title error; the proposed regent (liushou) matches the Chinese office.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "出乙辛為中京留守"
+      }
+    },
+    {
+      "repairId": "liaoshi:099:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "近臣耶律白斯本 begins with 白 (Bai); the given name is Baisiben, not Aisiben. The replacement corrects the mistransliteration without other change.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0012",
+        "excerpt": "耶律白斯本"
+      }
+    },
+    {
+      "repairId": "liaoshi:099:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "白斯本還 names the same courtier as 白斯本 (Baisiben). Aisiben is unsupported by the Chinese characters.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0014",
+        "excerpt": "白斯本還"
+      }
+    },
+    {
+      "repairId": "liaoshi:099:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "南院大王磨魯古之孫 is apposition: Molugu, who was Southern Chancellery King. \"the Southern Chancellery King's Molugu\" wrongly reads as possession; the proposed apposition matches the Chinese order of title then name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0022",
+        "excerpt": "南院大王磨魯古之孫"
+      }
+    },
+    {
+      "repairId": "liaoshi:099:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "耶律乙辛為中京留守 states that Yixin held the Zhongjing liushou post. \"at Zhongjing\" omits the office 為…留守; \"as regent of Zhongjing\" restores that explicit appointment.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0027",
+        "excerpt": "耶律乙辛為中京留守"
+      }
+    },
+    {
+      "repairId": "liaoshi:099:r0007",
+      "decision": "revise",
+      "after": "If the late emperor had believed the accusations against your late father, Yixin would count as a meritorious minister—how then could Your Majesty have ascended the throne?",
+      "reason": "The Siku Liao Shi and the imperial biography identify 順考 as Emperor Tianzuo's deceased father, Crown Prince Yelu Jun, posthumously Emperor Daxiao Shunsheng and Shunzong. The sentence concerns accusations against the prince, not an empress or a person named Shunkao.",
+      "sourceWitness": {
+        "source": "wikisource",
+        "citation": "https://zh.wikisource.org/zh-hant/遼史_(四庫全書本)/卷099; compare liaoshi/027 s0034",
+        "excerpt": "先帝若以順考為實；皇考昭懷太子曰大孝順聖皇帝，廟號順宗"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "liaoshi:099:r0003",
+      "claim": {
+        "id": "liaoshi:099:c0065",
+        "subject": "liaoshi:099:p014",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Yelu Aisiben"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:099:s0012"
+        ]
+      },
+      "reason": "Yelu Aisiben exists only as a mistransliteration of 耶律白斯本; accepting r0003 leaves no source support for this English personal name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0012",
+        "excerpt": "耶律白斯本"
+      }
+    },
+    {
+      "repairId": "liaoshi:099:r0004",
+      "claim": {
+        "id": "liaoshi:099:c0067",
+        "subject": "liaoshi:099:p014",
+        "predicate": "name",
+        "value": {
+          "kind": "given",
+          "en": "Aisiben"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:099:s0014"
+        ]
+      },
+      "reason": "Aisiben is solely the bad English for 白斯本; accepting r0004 restores Baisiben and removes any basis for this given-name claim.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0014",
+        "excerpt": "白斯本"
+      }
+    }
+  ],
+  "claimRevisions": [
+    {
+      "repairId": "liaoshi:099:r0002",
+      "before": {
+        "id": "liaoshi:099:c0354",
+        "subject": "liaoshi:099:p011",
+        "predicate": "office",
+        "value": {
+          "label": {
+            "en": "Zhongjing military commissioner / 留守",
+            "zh": "中京留守"
+          },
+          "action": "appointed"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:099:s0011"
+        ]
+      },
+      "after": {
+        "id": "liaoshi:099:c0354",
+        "subject": "liaoshi:099:p011",
+        "predicate": "office",
+        "value": {
+          "label": {
+            "en": "Zhongjing regent (liushou) / 留守",
+            "zh": "中京留守"
+          },
+          "action": "appointed"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:099:s0011"
+        ]
+      },
+      "reason": "The office claim's English label repeated the bad \"military commissioner\" rendering of 中京留守; accepting r0002 requires correcting the label to regent/liushou while keeping zh and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "中京留守"
+      }
+    }
+  ]
+}

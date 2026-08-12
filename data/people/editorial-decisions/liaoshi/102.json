@@ -1,0 +1,221 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "102",
+  "input": {
+    "chapterFingerprint": "sha256:592f53de7cef93c4b6c5b60ac523f2559726f63d479ac80f5f31128b1dc43625",
+    "proposalsFingerprint": "sha256:cf8beb162643c63ff71d796f6a0dad8c07d00dedde3ac23268bbfb9daac3c34d"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-9cbad9b3-cbfa-4977-ab05-6888a00c7f22",
+    "runId": "run-c583ed35-9576-458a-bf70-eef64a67cb47",
+    "completedAt": "2026-08-12T04:13:43.361Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:102:r0001",
+      "unit": {
+        "id": "s0009",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "The emperor secretly said to Fengxian: \"Aguda is so overbearing as this; he may be entrusted with frontier affairs and put to death.\"",
+      "after": "The emperor secretly said to Fengxian: \"Aguda is so overbearing as this; we may find a pretext in frontier affairs and put him to death.\"",
+      "reason": "Chinese 可托以邊事誅之 means to kill him on a frontier pretext, not to entrust him with frontier affairs.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:102:r0002",
+      "unit": {
+        "id": "s0014",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "idiomatic",
+      "before": "The emperor appointed Fengxian's younger brother Suxian commander-in-chief and sent him with Jurchen and Han forces to campaign against them, encamping at Chuhe Ford.",
+      "after": "The emperor appointed Fengxian's younger brother Suxian commander-in-chief and sent him with Khitan and Han forces to campaign against them, encamping at Chuhe Ford.",
+      "reason": "In Liao usage 番、漢兵 means Khitan/tribal and Han troops, not Jurchen forces (the enemy).",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:102:r0003",
+      "unit": {
+        "id": "s0014",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "literal",
+      "before": "The emperor ordered Fengxian's younger brother Suxian as commander-in-chief, leading Jurchen and Han troops to campaign against them, encamped at Chuhe Ford.",
+      "after": "The emperor ordered Fengxian's younger brother Suxian as commander-in-chief, leading Khitan and Han troops to campaign against them, encamped at Chuhe Ford.",
+      "reason": "Same 番、漢 mistranslation as Jurchen; here 番 denotes Liao's non-Han forces.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:102:r0004",
+      "unit": {
+        "id": "s0043",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "Chuwen, together with his clansman Chuneng and his son Shi, outwardly invoked the support of the Resentful Army and joined commander-in-chief Xiao Gan in a plot to install Prince Chun of Wei. They summoned Jurchen and Han officials to the prince's mansion to urge him to take the throne.",
+      "after": "Chuwen, together with his clansman Chuneng and his son Shi, outwardly invoked the support of the Resentful Army and joined commander-in-chief Xiao Gan in a plot to install Prince Chun of Wei. They summoned Khitan and Han officials to the prince's mansion to urge him to take the throne.",
+      "reason": "番、漢官屬 are Khitan and Han officials, not Jurchen officials.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:102:r0005",
+      "unit": {
+        "id": "s0047",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "idiomatic",
+      "before": "When the Prince of Wei fell ill and knew he would not recover, he secretly appointed Chuwen overall commander of Jurchen and Han forces, intending to entrust him with what followed.",
+      "after": "When the Prince of Wei fell ill and knew he would not recover, he secretly appointed Chuwen overall commander of Khitan and Han forces, intending to entrust him with what followed.",
+      "reason": "番漢馬步軍 denotes Khitan and Han cavalry and infantry, not Jurchen forces.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:102:r0006",
+      "unit": {
+        "id": "s0047",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "literal",
+      "before": "When the Prince of Wei fell ill, knowing he would not recover, he secretly invested Chuwen as overall commander of Jurchen and Han horse and foot forces, intending to entrust him with later affairs.",
+      "after": "When the Prince of Wei fell ill, knowing he would not recover, he secretly invested Chuwen as overall commander of Khitan and Han horse and foot forces, intending to entrust him with later affairs.",
+      "reason": "Same 番漢 mistranslation as Jurchen.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:102:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "可托以邊事誅之 uses 托 as pretext (假托), not entrustment; the literal's \"entrusted with frontier affairs\" invents the wrong sense of 托. The proposed \"find a pretext in frontier affairs and put him to death\" matches the Chinese and the unit's idiomatic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0009",
+        "excerpt": "可托以邊事誅之"
+      }
+    },
+    {
+      "repairId": "liaoshi:102:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "將番、漢兵往討 are Liao Fan/Khitan and Han troops sent to campaign; the next unit names the enemy as 女直 (Jurchen). Rendering 番 as Jurchen falsely equates Liao forces with the foe.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0014",
+        "excerpt": "將番、漢兵往討"
+      }
+    },
+    {
+      "repairId": "liaoshi:102:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same unit: 番、漢兵 are Liao non-Han and Han troops, not Jurchen. The literal must match 番 as Khitan/tribal forces opposing 女直 in s0015.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0014",
+        "excerpt": "番、漢兵"
+      }
+    },
+    {
+      "repairId": "liaoshi:102:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "召番、漢官屬詣魏王府勸進 summons Liao Fan/Khitan and Han subordinate officials to urge enthronement; Jurchen officials are unsupported and anachronistic for this palace plot.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0043",
+        "excerpt": "召番、漢官屬詣魏王府勸進"
+      }
+    },
+    {
+      "repairId": "liaoshi:102:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "番漢馬步軍都元帥 is overall command of Liao Fan/Khitan and Han cavalry and infantry; Jurchen forces are not what 番漢 names here, as s0049's 契丹兵 confirms the Khitan side of the dual army.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0047",
+        "excerpt": "番漢馬步軍都元帥"
+      }
+    },
+    {
+      "repairId": "liaoshi:102:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise misreads 番漢 as Jurchen and Han; Khitan and Han horse and foot restores the Liao dual-force title 番漢馬步軍.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0047",
+        "excerpt": "番漢馬步軍都元帥"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "liaoshi:102:r0006",
+      "before": {
+        "id": "liaoshi:102:c0278",
+        "subject": "liaoshi:102:p002",
+        "predicate": "office",
+        "value": {
+          "label": {
+            "en": "overall commander of Jurchen and Han horse and foot forces",
+            "zh": "番漢馬步軍都元帥"
+          },
+          "action": "appointed"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:102:s0047"
+        ]
+      },
+      "after": {
+        "id": "liaoshi:102:c0278",
+        "subject": "liaoshi:102:p002",
+        "predicate": "office",
+        "value": {
+          "label": {
+            "en": "overall commander of Khitan and Han horse and foot forces",
+            "zh": "番漢馬步軍都元帥"
+          },
+          "action": "appointed"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:102:s0047"
+        ]
+      },
+      "reason": "The English office label Jurchen came only from the bad literal of 番漢; accepting r0006 restores Khitan while the underlying appointment to 番漢馬步軍都元帥 remains.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0047",
+        "excerpt": "番漢馬步軍都元帥"
+      }
+    }
+  ]
+}

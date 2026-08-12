@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "xinwudaishi",
+  "chapter": "071",
+  "input": {
+    "chapterFingerprint": "sha256:00a99e147ded795a327f4498d57adcb27bc259b20f15dc9b015ad9fa64f70ed2",
+    "proposalsFingerprint": "sha256:68ed076635e6b87024b3356d555082d8f67be75f2877599a2e2658b17feea825"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-351fe419-7265-41ce-896b-9205fd87f9ad",
+    "runId": "run-5e77ccdd-7a2d-404d-8bf2-f7b59da97bc2",
+    "completedAt": "2026-08-12T04:27:23.857Z"
+  },
+  "proposals": [
+    {
+      "id": "xinwudaishi:071:r0001",
+      "unit": {
+        "id": "s0022",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "To record them as barbarians would imply that the rulers of the Five Dynasties themselves could be treated as barbarians.",
+      "after": "To record them as barbarians would mean that the rulers of the Five Dynasties could not treat them as barbarians.",
+      "reason": "Chinese 未可以夷狄之 means the Five Dynasties rulers cannot treat the Ten Kingdoms as barbarians; the idiomatic reverses this into the rulers themselves being treated as barbarians.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:071:r0002",
+      "unit": {
+        "id": "s0022",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "To record them as barbarians would mean the rulers of the Five Dynasties could not be treated as barbarians.",
+      "after": "To record them as barbarians would mean the rulers of the Five Dynasties could not treat them as barbarians.",
+      "reason": "Chinese 未可以夷狄之也 has the Five Dynasties rulers as agents who cannot barbarianize (treat as barbarians) the Ten Kingdoms; the literal makes the rulers the patients.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xinwudaishi:071:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit 五代之君未可以夷狄之也 makes the Five Dynasties rulers the agents who cannot treat the Ten Kingdoms as barbarians (夷狄之, object 之), matching s0020’s parallel 夷狄之則未可也. The prior idiomatic wrongly makes the rulers patients who could themselves be treated as barbarians; the proposed line restores agency and negation accurately.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0022",
+        "excerpt": "五代之君未可以夷狄之也"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:071:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same clause has 五代之君 as subject of 未可以夷狄之, not as patients of being treated as barbarians. The prior literal inverts agent and patient; the proposed replacement correctly has the rulers unable to treat them as barbarians.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0022",
+        "excerpt": "未可以夷狄之也"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

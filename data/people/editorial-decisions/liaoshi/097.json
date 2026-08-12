@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "097",
+  "input": {
+    "chapterFingerprint": "sha256:1ccb3482adf744985c3a4a25d226816b443c6284324732521fc1fcfdefeec978",
+    "proposalsFingerprint": "sha256:9e4fac512a55ead43fcbac0e0603e5ebabf9e53f33280cc32ad507af34a80c4c"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-e51aa8aa-9481-4736-9b30-43b7fb84d087",
+    "runId": "run-a88cf4fa-bbdd-46b2-a230-37e4131bce3b",
+    "completedAt": "2026-08-12T04:27:37.871Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:097:r0001",
+      "unit": {
+        "id": "s0055",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "idiomatic",
+      "before": "Yixin therefore hated him all the more, removed him as Military Commissioner of Huaide Army, transferred him to Grand Guardian of the Huashui Horse Herds in the far north, and he died in office.",
+      "after": "Yixin therefore hated him all the more, appointed him Military Commissioner of Huaide Army, transferred him to Grand Guardian of the Huashui Horse Herds in the far north, and he died.",
+      "reason": "除 means to appoint to office, not to remove; the Chinese sequence 除懷德軍節度使，徙… is appointment then transfer.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:097:r0002",
+      "unit": {
+        "id": "s0055",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "literal",
+      "before": "Yixin therefore hated him all the more, removed him as Military Commissioner of Huaide Army, transferred him to Grand Guardian of the Huashui Horse Herds in the far north, and he died.",
+      "after": "Yixin therefore hated him all the more, appointed him Military Commissioner of Huaide Army, transferred him to Grand Guardian of the Huashui Horse Herds in the far north, and he died.",
+      "reason": "除 means appoint; “removed him as” reverses the office action in 除懷德軍節度使.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:097:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0055 除懷德軍節度使，徙… uses 除 as appointment to office, then transfer; “removed him as” reverses the action. Dropping “in office” also matches bare 卒.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0055",
+        "excerpt": "除懷德軍節度使，徙漠北猾水馬群太保，卒"
+      }
+    },
+    {
+      "repairId": "liaoshi:097:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise misreads 除懷德軍節度使 as removal; appoint then 徙 is the correct sequence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0055",
+        "excerpt": "除懷德軍節度使"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

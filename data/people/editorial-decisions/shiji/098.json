@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "098",
+  "input": {
+    "chapterFingerprint": "sha256:c98e7bce312e5a5719c4bdc03914e5329dd3e2bde96cecef977cbe2b5adc28e0",
+    "proposalsFingerprint": "sha256:02478e416a33ba0e096d273506ece3bb032f873dd71827bac07172bc022885b8"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-5998f06b-7429-4255-8f6d-463215c07d24",
+    "runId": "run-e64ac016-fe68-48f6-bee1-8e505d48ee40",
+    "completedAt": "2026-08-12T03:48:34.908Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:098:r0001",
+      "unit": {
+        "id": "s0008",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "He followed in attacking Xiang Guan, Zhou Lan, and Long Qu. The troops he led beheaded one cavalry general below Ao, and his fief was increased.",
+      "after": "He followed in attacking Xiang Guan, Zhou Lan, and Long Ju. The troops he led beheaded one cavalry general below Ao, and his fief was increased.",
+      "reason": "龍且 is Long Ju (jū), not Long Qu; the idiomatic field already has the correct reading.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:098:r0002",
+      "unit": {
+        "id": "s0035",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "He separately went to Henan, struck Zhao general Fen Hao's army at Zhaoge, broke it. The troops he led captured two cavalry generals and 250 teams of chariots and horses.",
+      "after": "He separately went to Henei, struck Zhao general Ben Hao's army at Zhaoge, broke it. The troops he led captured two cavalry generals and 250 teams of chariots and horses.",
+      "reason": "河內 is Henei, not Henan; 賁郝 is Ben Hao (matching the idiomatic field), not Fen Hao.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:098:r0003",
+      "unit": {
+        "id": "s0039",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "He separately took Pingyang, personally beheaded the defending chancellor. The troops he led beheaded one garrison commander and one commandery governor each, and surrendered Ye.",
+      "after": "He separately took Pingyang, personally beheaded the defending chancellor. The troops he led beheaded one garrison commander and one commandery governor each, and induced the surrender of Ye.",
+      "reason": "降鄴 means he induced Ye to surrender, not that he himself surrendered Ye.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:098:r0004",
+      "unit": {
+        "id": "s0049",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "For merit, he was promoted to Chariot Cavalry General, combined leading the chariot cavalry of Liang, Zhao, Qi, Yan, and Chu. He separately struck Chen Xi's chancellor Chang, broke him, and thereby surrendered Quni.",
+      "after": "For merit, he was promoted to Chariot Cavalry General, combined leading the chariot cavalry of Liang, Zhao, Qi, Yan, and Chu. He separately struck Chen Xi's chancellor Chang, broke him, and thereby induced the surrender of Quni.",
+      "reason": "因降曲逆 means he thereby induced Quni to surrender, not that he surrendered it himself.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:098:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit lists 龍且 among the opponents; 且 is read jū, so Long Ju is correct and Long Qu is a wrong reading. The proposed literal restores that name while leaving the rest of the calque unchanged.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0008",
+        "excerpt": "龍且"
+      }
+    },
+    {
+      "repairId": "shiji:098:r0002",
+      "decision": "revise",
+      "after": "He separately went to Henei, struck Zhao general Ben Hao's army at Zhaoge, broke it. The troops he led captured two cavalry generals and 250 chariot horses.",
+      "reason": "河內 is Henei and 賁郝 is Ben Hao, so those proposed fixes are right, but 車馬二百五十匹 counts 250 horses (匹), not “teams of chariots and horses.” The revised literal keeps the place and name corrections and renders 匹 accurately.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0035",
+        "excerpt": "別之河內，擊趙將賁郝軍朝歌……車馬二百五十匹"
+      }
+    },
+    {
+      "repairId": "shiji:098:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 降鄴 the victor is subject: he forced or accepted Ye’s surrender. English “surrendered Ye” wrongly makes him the one who yielded the place; “induced the surrender of Ye” matches the Chinese and the chapter’s parallel uses of 降.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0039",
+        "excerpt": "降鄴"
+      }
+    },
+    {
+      "repairId": "shiji:098:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "因降曲逆 likewise means that defeating chancellor Chang led to Quni’s surrender. “Thereby surrendered Quni” reverses agent and patient; “thereby induced the surrender of Quni” restores the sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0049",
+        "excerpt": "因降曲逆"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "124",
+  "input": {
+    "chapterFingerprint": "sha256:bdd3049bb88cac1b3ff3d9b5628c14c91e372d76e39e27cdabae6b9a44d74261",
+    "proposalsFingerprint": "sha256:e8d43b65b831609cb74c4e95d1a275dd385b54114dcf27097c5f99f9de6804dd"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-d7d7c850-8dea-4707-9d6f-e5b55bfab01b",
+    "runId": "run-af64f77a-5348-445a-84e8-1ada1aa4b67d",
+    "completedAt": "2026-08-12T04:02:26.999Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:124:r0001",
+      "unit": {
+        "id": "s0009",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "The Grand Historian remarks: In the old days, Emperor Shun was nearly killed in a well and a granary. yiyin labored among the pots and cutting boards. Fu Yue hid himself at the cliffs of Fu. Lu Shang was reduced to desperate straits at Jijin. Guan Zhong wore fetters. Baili Xi fed cattle for a living. Confucius was besieged at Kuang and went hungry until his face turned sallow between Chen and Cai.",
+      "after": "The Grand Historian remarks: In the old days, Emperor Shun was nearly killed in a well and a granary. Yi Yin labored among the pots and cutting boards. Fu Yue hid himself at the cliffs of Fu. Lu Shang was reduced to desperate straits at Jijin. Guan Zhong wore fetters. Baili Xi fed cattle for a living. Confucius was besieged at Kuang and went hungry until his face turned sallow between Chen and Cai.",
+      "reason": "Chinese 伊尹 is the personal name Yi Yin; idiomatic English incorrectly fuses and lowercases it as \"yiyin\".",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:124:r0002",
+      "unit": {
+        "id": "s0009",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "The Grand Historian said: In ancient times, Emperor Shun was trapped in a well and a granary; yiyin bore the burdens of the cooking vessels; Fu Yue hid at the cliff of Fu; Lu Shang was stranded at Jijin; Guan Zhong wore fetters; Baili Xi herded cattle; Confucius was threatened at Kuang, and his face grew gaunt at Chen and Cai.",
+      "after": "The Grand Historian said: In ancient times, Emperor Shun was trapped in a well and a granary; Yi Yin bore the burdens of the cooking vessels; Fu Yue hid at the cliff of Fu; Lu Shang was stranded at Jijin; Guan Zhong wore fetters; Baili Xi herded cattle; Confucius was threatened at Kuang, and his face grew gaunt at Chen and Cai.",
+      "reason": "Chinese 伊尹 should be rendered Yi Yin in literal English, not the fused lowercase \"yiyin\".",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:124:r0003",
+      "unit": {
+        "id": "s0050",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "After them, new figures emerged one after another: Zhu Bai of Dai, Han Wubi of Liang, Xue Xiong of Yangzhai, and Han Ru of Shan.",
+      "after": "After them, new figures emerged one after another: the Bai clan of Dai, Han Wubi of Liang, Xue Xiong of Yangzhai, and Han Ru of Shan.",
+      "reason": "代諸白 denotes the Bai people/clan of Dai (諸 marking plurality), not an individual named Zhu Bai.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:124:r0004",
+      "unit": {
+        "id": "s0050",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Afterwards, Zhu Bai of Dai, Han Wubi of Liang, Xue Xiong of Yangzhai, and Han Ru of Shan emerged one after another.",
+      "after": "Afterwards, the Bai of Dai, Han Wubi of Liang, Xue Xiong of Yangzhai, and Han Ru of Shan emerged one after another.",
+      "reason": "代諸白 is a plural/clan designation, not a single personal name Zhu Bai.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:124:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit has 伊尹, the personal name of the Shang minister Yi Yin. The idiomatic “yiyin” wrongly fuses and lowercases that name; “Yi Yin” is the correct English rendering and leaves the rest of the sentence intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0009",
+        "excerpt": "伊尹負於鼎俎"
+      }
+    },
+    {
+      "repairId": "shiji:124:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 伊尹 must be “Yi Yin” in the literal field; fused lowercase “yiyin” is not a valid name form. The proposed replacement corrects only that error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0009",
+        "excerpt": "伊尹負於鼎俎"
+      }
+    },
+    {
+      "repairId": "shiji:124:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "代諸白 parallels clan-style listings (cf. 濟南瞷氏): 代 is the place, 諸 marks plurality, and 白 is the surname. Reading it as a personal name “Zhu Bai” invents an individual; “the Bai clan of Dai” restores the plural/clan sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0050",
+        "excerpt": "代諸白"
+      }
+    },
+    {
+      "repairId": "shiji:124:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "In the literal, 代諸白 is likewise a place-plus-plural-surname group, not “Zhu Bai.” “the Bai of Dai” correctly drops the false personal name while staying close to the Chinese wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0050",
+        "excerpt": "代諸白"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

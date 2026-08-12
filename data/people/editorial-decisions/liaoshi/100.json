@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "100",
+  "input": {
+    "chapterFingerprint": "sha256:b007b4cd6ddbf99a98ee20dc1b5cc8ec2ec78f32313414b667e76a8e3c5cacdc",
+    "proposalsFingerprint": "sha256:c7e26c6e348a0dc49a8c578e09713d17433b36b2517cee7a5e40981dd6a787cc"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-f165ab00-bfe5-42fa-abed-5380646b9406",
+    "runId": "run-433248c4-7214-49dc-97c8-de3016752582",
+    "completedAt": "2026-08-12T04:13:05.348Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:100:r0001",
+      "unit": {
+        "id": "s0029",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "Senior Consort Xiao, who was married to Delidi's nephew, said to him, \"You held the government in your hands and brought the sovereign to this ruin—how can you bear to go on living!\"",
+      "after": "Senior Consort Xiao, Delidi's niece, said to him, \"You held the government in your hands and brought the sovereign to this ruin—how can you bear to go on living!\"",
+      "reason": "Chinese 得裏底之侄 apposes 元妃蕭氏 herself as Delidi's niece (侄), not as the wife of a nephew; the idiomatic English invents a marriage link absent from the Chinese.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:100:r0002",
+      "unit": {
+        "id": "s0029",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "literal",
+      "before": "Senior Consort Xiao, Delidi's nephew's wife, said to Delidi, \"You hold the reins of state and have brought the ruler to this pass—how can you go on living!\"",
+      "after": "Senior Consort Xiao, Delidi's niece, said to Delidi, \"You hold the reins of state and have brought the ruler to this pass—how can you go on living!\"",
+      "reason": "Chinese 得裏底之侄 identifies the consort as Delidi's niece; \"nephew's wife\" reverses the kinship.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:100:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "元妃蕭氏，得裏底之侄 apposes the consort herself as Delidi's 侄 (niece); the prior idiomatic invents a marriage to a nephew that the Chinese does not state. The proposed English restores that kinship accurately.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0029",
+        "excerpt": "元妃蕭氏，得裏底之侄"
+      }
+    },
+    {
+      "repairId": "liaoshi:100:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same apposition: 得裏底之侄 identifies Senior Consort Xiao as Delidi's niece, not as a nephew's wife. The literal repair corrects the reversed kinship without other change.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0029",
+        "excerpt": "得裏底之侄"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

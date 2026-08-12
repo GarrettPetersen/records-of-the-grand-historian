@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "053",
+  "input": {
+    "chapterFingerprint": "sha256:26b419e06131b1ecb4a5971dca7a52752af84af8be93989ec7b816c985dc7b16",
+    "proposalsFingerprint": "sha256:2f0b8dcc654738a5db2d60209eb7928183abb65f747caa6f95cf4f92f2aa5aeb"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-ffc4b31e-2ecc-48bd-8ef8-53d4bccd40e3",
+    "runId": "run-f2238531-238d-48e6-9970-48e2d3d955b6",
+    "completedAt": "2026-08-12T04:16:50.737Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:053:r0001",
+      "unit": {
+        "id": "s0077",
+        "kind": "paragraph-sentence",
+        "blockIndex": 35,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "Yet at lunar culmination the horizontal parallax is smallest while true motion is slowest, which would make the separation distance larger.",
+      "after": "Yet when the Moon is at apogee the horizontal parallax is smallest while true motion is slowest, which would make the separation distance larger.",
+      "reason": "Chinese 最高 in this lunar-parallax and true-motion context means apogee, not meridian culmination; the idiomatic rendering invents the wrong astronomical term.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:053:r0002",
+      "unit": {
+        "id": "s0144",
+        "kind": "paragraph-sentence",
+        "blockIndex": 72,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "When the Moon's southern latitude exceeds 60° of quadrant distance, or northern latitude exceeds 70°, apply the following procedure.",
+      "after": "When the Moon is in southern latitude and its quadrant distance exceeds 60°, or in northern latitude with quadrant distance exceeding 70°, apply the following procedure.",
+      "reason": "The Chinese separately states lunar latitude side (緯南/緯北) and quadrant-distance thresholds (月距限過六十/七十度); the idiomatic fuses them into “southern latitude exceeds 60° of quadrant distance,” which misstates the condition.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:053:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0077 places the Moon 在最高時 with 地半徑差最小 and 月實行必遲. Smallest horizontal parallax and slowest true motion mark lunar apogee, not meridian culmination; 'at apogee' restores the orbital sense of 最高.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0077",
+        "excerpt": "月在最高時，地半徑差最小，而其月實行必遲"
+      }
+    },
+    {
+      "repairId": "qingshigao:053:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0144 states two paired conditions: 月在緯南 with 月距限過六十度, and 月在緯北 with 月距限過七十度. The prior idiomatic fuses latitude side into the degree threshold; the proposed wording keeps latitude side and quadrant-distance limits separate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0144",
+        "excerpt": "月在緯南，月距限過六十度，及月在緯北，月距限過七十度"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

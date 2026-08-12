@@ -1,0 +1,231 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "035",
+  "input": {
+    "chapterFingerprint": "sha256:9ef61ffc2c9c9a05fa5a3c6a70bb38e0a69918015e61cdb06d22224ff8f141ef",
+    "proposalsFingerprint": "sha256:a626c8a60a28901bbe9e5e628839ebd2cb4bc1f9111c16af76e01ff04546f99a"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-58c1be81-ff6c-44ce-bb47-32df8ae2f23a",
+    "runId": "run-0c7247a3-ef38-4bd1-a917-a91a8eaa5e21",
+    "completedAt": "2026-08-12T03:53:30.507Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:035:r0001",
+      "unit": {
+        "id": "s0032",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "The Wenzhong princely establishment of Yelü Longyun: ten thousand registered households, sixteen thousand Fan and Han rotating households, and ten thousand cavalry.",
+      "after": "The Wenzhong princely establishment: ten thousand registered households, sixteen thousand Fan and Han rotating households, and ten thousand cavalry.",
+      "reason": "Chinese 文忠王府 names only the princely establishment/title; the personal name Yelü Longyun is an invented English gloss not present in the source.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:035:r0002",
+      "unit": {
+        "id": "s0083",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Yuwang's army.",
+      "after": "Yuyuewang's army.",
+      "reason": "於越王 is the Khitan honorific title yuyue plus wang; rendering it as fused Yuwang obscures the title 於越.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:035:r0003",
+      "unit": {
+        "id": "s0083",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "Yuwang's army.",
+      "after": "Yuyuewang's army.",
+      "reason": "Literal English should likewise preserve 於越 as Yuyue rather than collapsing it into Yuwang.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:035:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 文忠王府 names only the Wenzhong princely establishment; 耶律隆運 / Yelü Longyun does not appear in s0032, so the idiomatic gloss invents a personal name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0032",
+        "excerpt": "文忠王府"
+      }
+    },
+    {
+      "repairId": "liaoshi:035:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "於越王軍 preserves the Khitan honorific 於越 plus 王; Yuwang drops 越 and misreads the title, while Yuyuewang matches the source and the adjacent Weiwang / Yongkangwang naming pattern.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0083",
+        "excerpt": "於越王軍"
+      }
+    },
+    {
+      "repairId": "liaoshi:035:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise collapses 於越王 into Yuwang; Yuyuewang restores the full title reading of 於越王軍.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0083",
+        "excerpt": "於越王軍"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "liaoshi:035:r0001",
+      "claim": {
+        "id": "liaoshi:035:c0021",
+        "subject": "liaoshi:035:p006",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Yelü Longyun",
+          "zh": null,
+          "pinyin": "Yēlǜ Lóngyùn"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:035:s0032"
+        ]
+      },
+      "reason": "The personal name Yelü Longyun was created only by the bad idiomatic gloss; s0032 states 文忠王府 and supplies no personal name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0032",
+        "excerpt": "文忠王府"
+      }
+    },
+    {
+      "repairId": "liaoshi:035:r0001",
+      "claim": {
+        "id": "liaoshi:035:c0022",
+        "subject": "liaoshi:035:p006",
+        "predicate": "name",
+        "value": {
+          "kind": "surname",
+          "en": "Yelü",
+          "zh": null,
+          "pinyin": "Yēlǜ"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:035:s0032"
+        ]
+      },
+      "reason": "The surname Yelü was inferred solely from the invented personal-name gloss; s0032 does not attest any surname.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0032",
+        "excerpt": "文忠王府"
+      }
+    }
+  ],
+  "claimRevisions": [
+    {
+      "repairId": "liaoshi:035:r0002",
+      "before": {
+        "id": "liaoshi:035:c0033",
+        "subject": "liaoshi:035:p010",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Yuwang",
+          "zh": "於越王",
+          "pinyin": "Yúyuè wáng"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:035:s0083"
+        ]
+      },
+      "after": {
+        "id": "liaoshi:035:c0033",
+        "subject": "liaoshi:035:p010",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Yuyuewang",
+          "zh": "於越王",
+          "pinyin": "Yúyuè wáng"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:035:s0083"
+        ]
+      },
+      "reason": "Accepting r0002 restores the English title reading of 於越王; Yuwang omitted 越 and must be corrected to Yuyuewang while preserving id, subject, predicate, zh, evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0083",
+        "excerpt": "於越王"
+      }
+    },
+    {
+      "repairId": "liaoshi:035:r0002",
+      "before": {
+        "id": "liaoshi:035:c0076",
+        "subject": "liaoshi:035:p010",
+        "predicate": "organization-association",
+        "value": {
+          "organization": {
+            "en": "Yuwang's army",
+            "zh": "於越王軍"
+          },
+          "relation": "commander-of"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:035:s0083"
+        ]
+      },
+      "after": {
+        "id": "liaoshi:035:c0076",
+        "subject": "liaoshi:035:p010",
+        "predicate": "organization-association",
+        "value": {
+          "organization": {
+            "en": "Yuyuewang's army",
+            "zh": "於越王軍"
+          },
+          "relation": "commander-of"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:035:s0083"
+        ]
+      },
+      "reason": "The organization English name followed the collapsed Yuwang rendering; after r0002 it must match 於越王軍 as Yuyuewang's army.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0083",
+        "excerpt": "於越王軍"
+      }
+    }
+  ]
+}

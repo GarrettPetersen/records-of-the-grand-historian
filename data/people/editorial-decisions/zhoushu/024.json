@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "zhoushu",
+  "chapter": "024",
+  "input": {
+    "chapterFingerprint": "sha256:d1ab06cae0116d9b84961e7e24079f80f0706c9fdc2f5999c0f24dec99f07879",
+    "proposalsFingerprint": "sha256:3d133b157a85b18d979fe416eced095dec52bf5ebc389e9ae13135632be026a7"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-79d52ae8-67bd-477f-b20d-eec42dbbc3f7",
+    "runId": "run-e3a45931-2b11-4a27-9bbe-973b84aef33d",
+    "completedAt": "2026-08-12T04:09:11.534Z"
+  },
+  "proposals": [
+    {
+      "id": "zhoushu:024:r0001",
+      "unit": {
+        "id": "s0116",
+        "kind": "paragraph-sentence",
+        "blockIndex": 23,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Martial and Martial-Fang Generals; the Huaihai and Mountain-Forest Commandants; and staff officers of the various bureaus of the Far-Pacifying, Loyalty-Establishing, Stalwart, Northern-Soothing, Far-Soothing, Glory-Raising, Wave-Quelling, and Light-Chariot headquarters.",
+      "after": "Might and Martial-Fang Generals; the Huaihai and Mountain-Forest Commandants; and staff officers of the various bureaus of the Far-Pacifying, Loyalty-Establishing, Stalwart, Northern-Soothing, Far-Soothing, Glory-Raising, Wave-Quelling, and Light-Chariot headquarters.",
+      "reason": "Chinese 威、武牙將軍 opens with 威 (“Might”), not 武 (“Martial”); the idiomatic rendering collapses 威 into “Martial”.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:024:r0002",
+      "unit": {
+        "id": "s0116",
+        "kind": "paragraph-sentence",
+        "blockIndex": 23,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Martial and Martial-Fang Generals; Huaihai and Mountain-Forest Commandants; staff officers of the various bureaus of the Far-Pacifying, Loyalty-Establishing, Stalwart, Northern-Soothing, Far-Soothing, Glory-Raising, Wave-Quelling, and Light-Chariot headquarters.",
+      "after": "Might and Martial-Fang Generals; Huaihai and Mountain-Forest Commandants; staff officers of the various bureaus of the Far-Pacifying, Loyalty-Establishing, Stalwart, Northern-Soothing, Far-Soothing, Glory-Raising, Wave-Quelling, and Light-Chariot headquarters.",
+      "reason": "Chinese 威 is “Might/Authority,” distinct from 武 in 武牙; literal English wrongly starts with “Martial”.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "zhoushu:024:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0116 lists 威、武牙將軍 as two titles (parallel to 曠野、橫野將軍); 威 is distinct from 武, so replacing the collapsed “Martial and Martial-Fang” with “Might and Martial-Fang” restores the correct first title without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0116",
+        "excerpt": "威、武牙將軍"
+      }
+    },
+    {
+      "repairId": "zhoushu:024:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 威、武牙 pair opens the literal sentence; rendering 威 as “Martial” conflates it with 武 in 武牙, and “Might and Martial-Fang Generals” correctly separates the two titles.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0116",
+        "excerpt": "威、武牙將軍"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

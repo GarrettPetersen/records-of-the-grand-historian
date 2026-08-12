@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "weishu",
+  "chapter": "092",
+  "input": {
+    "chapterFingerprint": "sha256:eaf6b9115221653e19fa5837f1a98662c09350155438eca1df78d2ee68e784ea",
+    "proposalsFingerprint": "sha256:5fe758274a18a4acca40ce83bdd9c71e5c11f60a0a119c4fc241c3b2611719f9"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-6f1495fc-b49f-4745-a678-e44cd86e66af",
+    "runId": "run-ee2390db-827a-4556-b12b-a648f6b7f022",
+    "completedAt": "2026-08-12T04:09:53.424Z"
+  },
+  "proposals": [
+    {
+      "id": "weishu:092:r0001",
+      "unit": {
+        "id": "s0007",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Zhao Yan, courtesy name Shuq, was from Tianshui.",
+      "after": "Zhao Yan, courtesy name Shuqi, was from Tianshui.",
+      "reason": "The courtesy name 叔起 should be romanized Shuqi, not truncated Shuq.",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:092:r0002",
+      "unit": {
+        "id": "s0007",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Zhao Yan, styled Shuq, was a man of Tianshui.",
+      "after": "Zhao Yan, styled Shuqi, was a man of Tianshui.",
+      "reason": "The courtesy name 叔起 should be romanized Shuqi, not truncated Shuq.",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:092:r0003",
+      "unit": {
+        "id": "s0025",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 18
+      },
+      "field": "literal",
+      "before": "When the capital was moved to Luoyang, when the capital was moved to Luoyang, Ying and the others were finally able to return home and bury them.",
+      "after": "When the capital was moved to Luoyang, Ying and the others were finally able to return home and bury them.",
+      "reason": "Chinese and literal English duplicate 遷都洛陽 / the capital-move clause.",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:092:r0004",
+      "unit": {
+        "id": "s0035",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "Lu and his five brothers are each still young.",
+      "after": "We five brothers are each still young.",
+      "reason": "Chinese 慮兄弟五人 means five brothers in all (including Lu), not Lu plus five others.",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:092:r0005",
+      "unit": {
+        "id": "s0035",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "Lu and his five brothers are each still young.",
+      "after": "Lu's brothers, five in all, are each still young.",
+      "reason": "Chinese 慮兄弟五人 means a total of five brothers including Lu.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "weishu:092:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "字叔起 is Shuqi; idiomatic ‘Shuq’ truncates 起 and must be restored to Shuqi.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0007",
+        "excerpt": "字叔起"
+      }
+    },
+    {
+      "repairId": "weishu:092:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same courtesy name 叔起 requires Shuqi in the literal; ‘Shuq’ is a truncation error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0007",
+        "excerpt": "字叔起"
+      }
+    },
+    {
+      "repairId": "weishu:092:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chapter s0025 dittographs 遷都洛陽; CText Weishu 孝感 reads a single 遷都洛陽 before 子應等乃還鄉葬焉, so collapsing the English capital-move clause is correct.",
+      "sourceWitness": {
+        "source": "ctext",
+        "citation": "https://ctext.org/wiki.pl?chapter=191993&if=gb",
+        "excerpt": "年八十卒。遷都洛陽，子應等乃還鄉葬焉。"
+      }
+    },
+    {
+      "repairId": "weishu:092:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "慮兄弟五人 means five brothers including Lu, not Lu plus five; petition voice (s0034–s0037) supports first-person ‘We five brothers’.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0035",
+        "excerpt": "慮兄弟五人"
+      }
+    },
+    {
+      "repairId": "weishu:092:r0005",
+      "decision": "revise",
+      "after": "Lu and his brothers, five in all, are each still young.",
+      "reason": "Before wrongly implies six siblings; the proposed ‘Lu's brothers, five in all’ still reads as five excluding Lu. ‘Lu and his brothers, five in all’ matches 慮兄弟五人.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0035",
+        "excerpt": "慮兄弟五人"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

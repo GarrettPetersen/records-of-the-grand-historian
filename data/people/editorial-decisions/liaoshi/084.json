@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "084",
+  "input": {
+    "chapterFingerprint": "sha256:88814f39fd77ffe0b0d23001a78432e768619faa6ab57b01dcde5bde3523d982",
+    "proposalsFingerprint": "sha256:fd00ccec36bc0ba3f411ae32ab3066fe4488868cdad3d55738ce71fe398decc2"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-245efad6-98d8-4bcd-b37a-52708caa35ca",
+    "runId": "run-5057ed90-ee29-4cc7-8b13-2d71e3b6dd19",
+    "completedAt": "2026-08-12T04:13:43.431Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:084:r0001",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "Dilie, his son Wage, Sha's son Deli, the lingwen Dumin, the xiangwen Tanghua, and three other commanders—five generals in all—were killed.",
+      "after": "Dilie, his son Wage, Sha's son Deli, the lingwen Dumin, and the xiangwen Tanghua—five generals in all—were killed.",
+      "reason": "Chinese lists exactly these five commanders as the 五將; the idiomatic invents 'and three other commanders'.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:084:r0002",
+      "unit": {
+        "id": "s0053",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Yelu Shanbu, whose courtesy name was Yaosheng, was a descendant of the younger line of the King of Chu.",
+      "after": "Yelu Shanbu, whose courtesy name was Yaosheng, was a descendant of the Mengfu line of the King of Chu.",
+      "reason": "孟父 is the senior Mengfu paternal line of the Yelu clan, not a 'younger line' (that would be 仲父).",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:084:r0003",
+      "unit": {
+        "id": "s0053",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Yelu Shanbu, courtesy name Yaosheng, descendant of the younger father, King of Chu.",
+      "after": "Yelu Shanbu, courtesy name Yaosheng, descendant of the Mengfu King of Chu.",
+      "reason": "孟父 should not be rendered 'younger father'; it names the Mengfu branch.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:084:r0004",
+      "unit": {
+        "id": "s0072",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "The historian remarks: At the victories at Gaoliang and Shuozhou, subordinate commanders such as Sha and Mozhi—though they had first been disgraced—won distinction alongside men like Xiuge and Xiezhen; this is truly a case of losing at dawn yet making good the loss at dusk.",
+      "after": "The historian remarks: At the victories at Gaoliang and Shuozhou, subordinate commanders such as Sha and Mozhi, having through the likes of Xiuge and Xiezhen come to display their merit, exemplify what is called losing at the eastern corner yet gaining at the mulberry and elm.",
+      "reason": "The clause 既因休哥、斜軫類見其功 does not say they had first been disgraced; that is an invented addition.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:084:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "敵烈及其子蛙哥、沙之子德裏、令穩都敏、詳穩唐筈等五將 names exactly these five as the 五將; idiomatic's 'and three other commanders' invents three more people and contradicts the total.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "敵烈及其子蛙哥、沙之子德裏、令穩都敏、詳穩唐筈等五將俱沒"
+      }
+    },
+    {
+      "repairId": "liaoshi:084:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "孟父楚國王之後 identifies the Mengfu (eldest-uncle) branch of the Yelu; 'younger line' would be 仲父 or 季父, so the proposed Mengfu line is correct.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0053",
+        "excerpt": "孟父楚國王之後"
+      }
+    },
+    {
+      "repairId": "liaoshi:084:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "孟父 is the Mengfu branch name, not 'younger father'; the proposed 'Mengfu King of Chu' restores the correct lineage label.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0053",
+        "excerpt": "孟父楚國王之後"
+      }
+    },
+    {
+      "repairId": "liaoshi:084:r0004",
+      "decision": "revise",
+      "after": "The historian remarks: At the victories at Gaoliang and Shuozhou, subordinate commanders such as Sha and Mozhi, having through the likes of Xiuge and Xiezhen come to have their merit recognized, exemplify what is called losing at dawn yet making good the loss at dusk.",
+      "reason": "既因休哥、斜軫類見其功 means their merit was recognized through the likes of Xiuge and Xiezhen; it does not say they had first been disgraced. The proposed calque of 失之東隅，收之桑榆 is unnecessary for the idiomatic field, so the existing dawn/dusk proverb is kept.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0072",
+        "excerpt": "既因休哥、斜軫類見其功，所謂失之東隅，收之桑榆"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

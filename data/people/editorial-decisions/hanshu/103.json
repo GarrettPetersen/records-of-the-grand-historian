@@ -3,47 +3,62 @@
   "book": "hanshu",
   "chapter": "103",
   "input": {
-    "chapterFingerprint": "sha256:076177696613fb2b6877461a701ee1934221ffb7fc6735555a57dd24b126abea",
-    "proposalsFingerprint": "sha256:b3e3c651d916f81c86eb99f2cede7dbdca6485d9f629e5afcc8699212d10d2a3"
+    "chapterFingerprint": "sha256:285bd625b1d600a0f54a722d3c1e9acc5144013a1f556594eaa92e2f6ce13e75",
+    "proposalsFingerprint": "sha256:ca31305191c965527f9c0bc924047936d0690e041a198faa1d739630745e68cd"
   },
   "reviewer": {
     "kind": "cursor-agent",
-    "name": "grok-4.5",
-    "model": "grok-4.5",
-    "agentId": "bc-02977e01-fd34-4e16-92ad-757bab5f2e9c",
-    "runId": "run-4efbab62-aa9d-4297-8517-4d6bb9c5d624",
-    "completedAt": "2026-08-11T02:27:05.283Z"
+    "name": "Codex host audit",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-12T04:41:28.000Z"
   },
   "proposals": [
     {
       "id": "hanshu:103:r0001",
       "unit": {
-        "id": "s0052",
+        "id": "s0117",
         "kind": "paragraph-sentence",
-        "blockIndex": 6,
+        "blockIndex": 22,
         "collection": "sentences",
-        "itemIndex": 3
+        "itemIndex": 1
       },
-      "field": "idiomatic",
-      "before": "He liked to say, \"Building a fortune takes the cunning of yiyin day or Lü Wang, the timing of Sun Wu's generals, and the ruthlessness of Shang Yang's code.",
-      "after": "He liked to say, \"Building a fortune takes the cunning of Yi Yin or Lü Wang, the timing of Sun and Wu in using troops, and the ruthlessness of Shang Yang's code.",
-      "reason": "Chinese 伊尹 is the personal name Yi Yin; \"yiyin day\" is a corrupted rendering. 孫、吳 names two strategists, not a single \"Sun Wu\".",
+      "field": "literal",
+      "before": "Only the Wuyan clan put out a thousand in gold on loan, its interest being one in ten.",
+      "after": "Only the Wuyan clan put out a thousand in gold on loan, its interest being tenfold.",
+      "reason": "Chinese 其息十之 matches 息十倍 in the next units and means tenfold interest, not one-in-ten.",
       "confidence": "high"
     },
     {
       "id": "hanshu:103:r0002",
       "unit": {
-        "id": "s0052",
+        "id": "s0050",
         "kind": "paragraph-sentence",
         "blockIndex": 6,
         "collection": "sentences",
-        "itemIndex": 3
+        "itemIndex": 1
       },
       "field": "literal",
-      "before": "Therefore he said: \"In managing my livelihood it is like the schemes of yiyin day and Lü Shang, Sun and Wu's use of troops, Shang Yang's carrying out of laws.",
-      "after": "Therefore he said: \"In managing my livelihood it is like the schemes of Yi Yin and Lü Shang, Sun and Wu's use of troops, Shang Yang's carrying out of laws.",
-      "reason": "Chinese 伊尹 must be rendered Yi Yin; \"yiyin day\" is a clear corruption of that name.",
-      "confidence": "high"
+      "before": "When Marquis Wen of Wei was on the throne, Li Kui devoted himself to exhausting the productive power of the land, while Bai Gui delighted in observing how the times shifted; therefore when others cast goods aside he took them, when others seized goods he supplied them.",
+      "after": "When Marquis Wen of Wei was on the throne, Li Shi devoted himself to exhausting the productive power of the land, while Bai Gui delighted in observing how the times shifted; therefore when others cast goods aside he took them, when others seized goods he supplied them.",
+      "reason": "The Chinese personal name is 李史 (Li Shi); rendering it as Li Kui silently substitutes the conventional identification.",
+      "confidence": "medium"
+    },
+    {
+      "id": "hanshu:103:r0003",
+      "unit": {
+        "id": "s0050",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Under Marquis Wen of Wei, Li Kui worked every field for its utmost yield, while Bai Gui thrived on contrarian timing—buying what the market dumped and selling into every rush.",
+      "after": "Under Marquis Wen of Wei, Li Shi worked every field for its utmost yield, while Bai Gui thrived on contrarian timing—buying what the market dumped and selling into every rush.",
+      "reason": "Idiomatic English should preserve the chapter’s 李史 rather than replacing it with the conventional name Li Kui.",
+      "confidence": "medium"
     }
   ],
   "decisions": [
@@ -51,22 +66,33 @@
       "repairId": "hanshu:103:r0001",
       "decision": "accept",
       "after": null,
-      "reason": "Focus unit 伊尹、呂尚之謀，孫、吳用兵 names Yi Yin and Lü Shang for schemes, then Sun and Wu as two strategists using troops; the prior English corruptly turns 伊尹 into \"yiyin day\" and collapses 孫、吳 into \"Sun Wu's generals\". The proposed idiomatic repair restores both names correctly without inventing content.",
+      "reason": "Focus unit 其息十之 means interest of ten on the principal (tenfold), not one-in-ten; the next unit’s 息十倍 confirms the same sense. The proposed literal repair corrects that numeral error without adding or dropping content.",
       "sourceWitness": {
         "source": "chapter-text",
-        "citation": "s0052",
-        "excerpt": "伊尹、呂尚之謀，孫、吳用兵"
+        "citation": "s0117",
+        "excerpt": "其息十之"
       }
     },
     {
       "repairId": "hanshu:103:r0002",
-      "decision": "accept",
-      "after": null,
-      "reason": "Focus unit 伊尹 is the personal name Yi Yin; \"yiyin day\" is a mistranslation of that name. The rest of the proposed literal line already matches 呂尚、孫、吳用兵、商鞅行法, so correcting only that name is accurate.",
+      "decision": "revise",
+      "after": "When Marquis Wen of Wei was on the throne, Li Ke devoted himself to exhausting the productive power of the land, while Bai Gui delighted in observing how the times shifted; therefore when others cast goods aside he took them, when others seized goods he supplied them.",
+      "reason": "The Wuying Palace Han Shu witness at Chinese Text Project reads 李克, not the corrupted local 李史. Preserve this chapter's reading as Li Ke; Li Kui (李悝) remains an alternate form for the same reformer.",
       "sourceWitness": {
-        "source": "chapter-text",
-        "citation": "s0052",
-        "excerpt": "伊尹、呂尚之謀，孫、吳用兵，商鞅行法"
+        "source": "ctext",
+        "citation": "https://ctext.org/han-shu/huo-zhi-zhuan/zh",
+        "excerpt": "當魏文侯時，李克務盡地力"
+      }
+    },
+    {
+      "repairId": "hanshu:103:r0003",
+      "decision": "revise",
+      "after": "Under Marquis Wen of Wei, Li Ke worked every field for its utmost yield, while Bai Gui thrived on contrarian timing—buying what the market dumped and selling into every rush.",
+      "reason": "The primary Han Shu witness reads 李克 in this sentence. The idiomatic translation therefore uses Li Ke, while the glossary retains Li Kui (李悝) as the alternate form by which the reformer is commonly known.",
+      "sourceWitness": {
+        "source": "ctext",
+        "citation": "https://ctext.org/han-shu/huo-zhi-zhuan/zh",
+        "excerpt": "當魏文侯時，李克務盡地力"
       }
     }
   ],

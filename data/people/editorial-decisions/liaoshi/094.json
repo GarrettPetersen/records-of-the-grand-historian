@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "094",
+  "input": {
+    "chapterFingerprint": "sha256:cc8f1067370eeef106c31fda1cf411ee5c6ad3d2d7a82716bc366c668e0cb96f",
+    "proposalsFingerprint": "sha256:613e38a155e61b044689c0a17d3d64b9d68f7f06b3cc31ceec7129858f089cbf"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-0e6a92e1-cfe1-4040-9517-e18e99764532",
+    "runId": "run-41c12272-71ea-4652-b2e7-fc8bc70faf18",
+    "completedAt": "2026-08-12T04:02:31.601Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:094:r0001",
+      "unit": {
+        "id": "s0095",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Xiao Aludai, whose courtesy name was Yixin, came from the Wuwei tribe.",
+      "after": "Xiao Aludai, whose courtesy name was Yixinyin, came from the Wuwei tribe.",
+      "reason": "Chinese courtesy name 乙辛隱 is three characters; English drops 隱 and should read Yixinyin.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:094:r0002",
+      "unit": {
+        "id": "s0095",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Xiao Aludai, courtesy name Yixin, was a man of the Wuwei tribe.",
+      "after": "Xiao Aludai, courtesy name Yixinyin, was a man of the Wuwei tribe.",
+      "reason": "Literal English likewise truncates 乙辛隱 to Yixin; restore Yixinyin.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:094:r0003",
+      "unit": {
+        "id": "s0104",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "In the third year of Qiantong, for keeping Song captives who should have been sent back as slaves, he was dismissed from office.",
+      "after": "In the third year of Qiantong, for keeping as slaves Song captives who should have been sent back, he was dismissed from office.",
+      "reason": "Chinese 當遣還者為奴 means captives who ought to be repatriated were kept as slaves; the literal reverses the relation.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:094:r0004",
+      "unit": {
+        "id": "s0048",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "idiomatic",
+      "before": "During Shoulong he rose through several posts to tiyin and vice director, and was granted the title of meritous minister who preserves integrity.",
+      "after": "During Shoulong he rose through several posts to tiyin and vice director, and was granted the title of meritorious minister who preserves integrity.",
+      "reason": "English spelling error: meritous → meritorious.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:094:r0005",
+      "unit": {
+        "id": "s0048",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "literal",
+      "before": "During Shoulong he was repeatedly promoted to Tiyin, concurrently Vice Director, and granted the title Meritous Minister who Preserves Integrity.",
+      "after": "During Shoulong he was repeatedly promoted to Tiyin, concurrently Vice Director, and granted the title Meritorious Minister who Preserves Integrity.",
+      "reason": "Same spelling error in the literal English field.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:094:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "字乙辛隱 is a three-character courtesy name; idiomatic Yixin drops 隱, and Yixinyin restores the full romanization without changing the rest of the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0095",
+        "excerpt": "字乙辛隱"
+      }
+    },
+    {
+      "repairId": "liaoshi:094:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal likewise truncates 乙辛隱 to Yixin; Yixinyin matches the Chinese courtesy name while preserving the rest of the wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0095",
+        "excerpt": "字乙辛隱"
+      }
+    },
+    {
+      "repairId": "liaoshi:094:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "坐留宋俘當遣還者為奴 means he kept as slaves Song captives who ought to have been repatriated; “sent back as slaves” misattaches 為奴 to the repatriation clause, and the proposed reordering fixes that relation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0104",
+        "excerpt": "留宋俘當遣還者為奴"
+      }
+    },
+    {
+      "repairId": "liaoshi:094:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "保節功臣 is rendered meritorious minister who preserves integrity; idiomatic meritous is a misspelling of meritorious and does not change the Chinese honorific.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0048",
+        "excerpt": "賜保節功臣"
+      }
+    },
+    {
+      "repairId": "liaoshi:094:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal Meritous is the same misspelling of Meritorious for 保節功臣; correcting the spelling restores the standard English rendering of 功臣.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0048",
+        "excerpt": "賜保節功臣"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

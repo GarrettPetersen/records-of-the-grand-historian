@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 3,
+  "book": "xinwudaishi",
+  "chapter": "003",
+  "input": {
+    "chapterFingerprint": "sha256:f6ec688a4d56074a88f5ec55aa6715aa5c0cb76af48cc433a2b12226313c1197",
+    "proposalsFingerprint": "sha256:bbb13c6b6aac7fe8eabfa1821a18e723acc7ad783e12d408b31c931062c52eb2"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-681fffc8-de66-4d15-a99d-725d53799a3e",
+    "runId": "run-646e410b-fd11-40c5-a027-c09fb1b8b876",
+    "completedAt": "2026-08-12T04:22:24.933Z"
+  },
+  "proposals": [
+    {
+      "id": "xinwudaishi:003:r0001",
+      "unit": {
+        "id": "s0097",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "Zhang Yanshi was the chief culprit, but he is omitted because he was a minor figure. Delun could have executed him and failed to do so, so Delun alone is made to bear the blame.",
+      "after": "Zhang Yan was in fact the chief culprit, but he is omitted because he was a minor figure. Delun could have executed him and failed to do so, so Delun alone is made to bear the blame.",
+      "reason": "Chinese 張彥實首惡 uses 實 as “in fact/actually,” not as part of the personal name; the person is 張彥 (Zhang Yan), confirmed by the following 彥，微者.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:003:r0002",
+      "unit": {
+        "id": "s0097",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "Zhang Yanshi was the chief culprit, but he is omitted and not written; Yan was a minor man, while Delun could have executed him and did not, so Delun alone is made to bear the responsibility.",
+      "after": "Zhang Yan was in fact the chief culprit, but he is omitted and not written; Yan was a minor man, while Delun could have executed him and did not, so Delun alone is made to bear the responsibility.",
+      "reason": "Chinese 實 means “actually,” not a name syllable; keep 彥 as Zhang Yan.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:003:r0003",
+      "unit": {
+        "id": "s0020",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 21
+      },
+      "field": "idiomatic",
+      "before": "In the ninth month of autumn, on the day jiachen, Censor-in-Chief Yao Gui became vice director of the Secretariat and co-equal grand councilor.",
+      "after": "In the ninth month of autumn, on the day jiachen, Censor-in-Chief Yao Ji became vice director of the Secretariat and co-equal grand councilor.",
+      "reason": "姚洎 is standardly read Ji (jì), not Gui.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xinwudaishi:003:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit has 張彥實首惡 then 彥，微者: 實 is the adverb “in fact,” not a name syllable, and the sequel names him 彥 alone. “Zhang Yanshi” invents a wrong personal name; the proposed “Zhang Yan was in fact” matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0097",
+        "excerpt": "張彥實首惡，而略不書，彥，微者"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:003:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same misreading in the literal field: 實 is not part of the name 張彥. The replacement correctly renders 張彥實 as “Zhang Yan was in fact” while preserving the rest of the literal wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0097",
+        "excerpt": "張彥實首惡"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:003:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The name in the focus unit is 姚洎; 洎 is read jì, so English “Yao Gui” is a false romanization. Changing only the name to Yao Ji corrects the error without altering the rest of the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0020",
+        "excerpt": "御史大夫姚洎"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "xinwudaishi:003:r0003",
+      "before": {
+        "id": "xinwudaishi:003:c0048",
+        "subject": "xinwudaishi:003:p013",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Yao Gui",
+          "zh": "姚洎",
+          "pinyin": "Yao Ji"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xinwudaishi:003:s0020"
+        ]
+      },
+      "after": {
+        "id": "xinwudaishi:003:c0048",
+        "subject": "xinwudaishi:003:p013",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Yao Ji",
+          "zh": "姚洎",
+          "pinyin": "Yao Ji"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xinwudaishi:003:s0020"
+        ]
+      },
+      "reason": "Accepted repair shows the English personal-name value “Yao Gui” was only a bad reading of 姚洎; the person and evidence remain, so the en form is corrected to Yao Ji to match zh/pinyin.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0020",
+        "excerpt": "姚洎"
+      }
+    }
+  ]
+}

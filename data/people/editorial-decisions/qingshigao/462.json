@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "462",
+  "input": {
+    "chapterFingerprint": "sha256:52d0bb1e4826516b7cc22ec74e03f87e74dd22ee8fde9c52bd833b5edc3a173b",
+    "proposalsFingerprint": "sha256:8aadd59d253f2f82faead8dc3efc9ac72aae49441499d0454cb038f7e0ee6402"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-9ab88b7c-157b-40ef-956a-822cdea95e9a",
+    "runId": "run-27fa14c7-73f8-4443-ac61-cb46450bdc31",
+    "completedAt": "2026-08-12T04:09:14.563Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:462:r0001",
+      "unit": {
+        "id": "s0004",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "He first served in the Yangtze River navy, joined Liu Mingchuan in suppressing the Nian rebels, and rose through merit to adjutant.",
+      "after": "He first served in the Yangtze River navy, joined Liu Mingchuan in suppressing the Nian rebels, and rose through merit to assistant brigade commander (canjiang).",
+      "reason": "Qing 參將 is a mid-rank combat command grade (assistant brigade commander), not an adjutant staff post.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:462:r0002",
+      "unit": {
+        "id": "s0004",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "At first he belonged to the Yangtze naval force; following Liu Mingchuan against the Nian, he accumulated merit until made adjutant.",
+      "after": "At first he belonged to the Yangtze naval force; following Liu Mingchuan against the Nian, he accumulated merit until made assistant brigade commander (canjiang).",
+      "reason": "Same mistranslation of 參將 as adjutant in the literal rendering.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:462:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0004 ends 積勳至參將. Qing 參將 is a Green Standard mid-rank combat command grade (canjiang), not a staff adjutant; the proposed replacement restores that rank without adding or omitting content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0004",
+        "excerpt": "積勳至參將"
+      }
+    },
+    {
+      "repairId": "qingshigao:462:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same focus phrase 積勳至參將 is mistranslated as 'adjutant' in the literal field; 'assistant brigade commander (canjiang)' correctly renders the combat rank.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0004",
+        "excerpt": "積勳至參將"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "qingshigao:462:r0001",
+      "before": {
+        "id": "qingshigao:462:c0139",
+        "subject": "qingshigao:462:p001",
+        "predicate": "office",
+        "value": {
+          "label": {
+            "en": "adjutant-general (canjiang)",
+            "zh": "參將"
+          },
+          "action": "appointed"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:462:s0004"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:462:c0139",
+        "subject": "qingshigao:462:p001",
+        "predicate": "office",
+        "value": {
+          "label": {
+            "en": "assistant brigade commander (canjiang)",
+            "zh": "參將"
+          },
+          "action": "appointed"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:462:s0004"
+        ]
+      },
+      "reason": "Accepted r0001 shows the English office label 'adjutant-general (canjiang)' came from mistranslating 參將 as an adjutant post; the office fact remains, but the English label must read assistant brigade commander (canjiang).",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0004",
+        "excerpt": "參將"
+      }
+    }
+  ]
+}

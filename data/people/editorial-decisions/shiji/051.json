@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "051",
+  "input": {
+    "chapterFingerprint": "sha256:7d03ed0a3304bb89927fb6c5218b189251abcd5778edc764f2b4a012a9e108e3",
+    "proposalsFingerprint": "sha256:2c2bbfd50be1c7d8422c29b124a7ea530975e2d2c12d45fece483f5c44239c7f"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-a5dea473-c731-44de-9585-70e716819c63",
+    "runId": "run-0c4df35c-4e21-44de-93f1-0f539755fbfe",
+    "completedAt": "2026-08-12T03:53:27.101Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:051:r0001",
+      "unit": {
+        "id": "s0026",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Two years later, Liu Ze sent a messenger to tell Tian Sheng: 'I will not help you anymore.'",
+      "after": "In the second year, Liu Ze sent a messenger to tell Tian Sheng: 'I will not help you anymore.'",
+      "reason": "Chinese 二年 in this annalistic sequence after 高后時 marks Empress Lü year 2, not a relative \"two years later.\"",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:051:r0002",
+      "unit": {
+        "id": "s0008",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "The Han King then commanded Liu Jia to lead the Jiujiang troops southwest with Grand Marshal Lu Wan to attack King Linjiang Gong Wei.",
+      "after": "The Han King then commanded Liu Jia to lead the Jiujiang troops southwest with Grand Commandant Lu Wan to attack King Linjiang Gong Wei.",
+      "reason": "太尉 is Grand Commandant; rendering it Grand Marshal conflates it with 大司馬 used earlier for Zhou Yin.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:051:r0003",
+      "unit": {
+        "id": "s0062",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Dingguo wished to have an official killed—the magistrate of Feiru, a man from Ying. When this man and others reported Dingguo's crimes, Dingguo had the court usher bring trumped-up charges against them, arresting and killing the man from Ying to silence him.",
+      "after": "Dingguo wished to kill an official, Yingren the magistrate of Feiru. When Yingren and others reported Dingguo's crimes, Dingguo had the court usher bring trumped-up charges against them, arresting and killing Yingren to silence him.",
+      "reason": "肥如令郢人 treats 郢人 as the official's name/designation, not a vague demonym \"a man from Ying.\"",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:051:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In this annalistic stretch, 二年 is the second year of the reign already in force (高后時), not a relative span after the gold gift; \"Two years later\" misreads the dating formula, and \"In the second year\" restores it.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0026",
+        "excerpt": "二年，澤使人謂田生曰"
+      }
+    },
+    {
+      "repairId": "shiji:051:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The unit has 太尉盧綰, while s0006 has 大司馬周殷; Grand Marshal for 太尉 conflates the offices, and Grand Commandant matches 太尉 and the idiomatic of this same unit.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0008",
+        "excerpt": "與太尉盧綰"
+      }
+    },
+    {
+      "repairId": "shiji:051:r0003",
+      "decision": "revise",
+      "after": "Dingguo wished to have an official killed—Yingren, the magistrate of Feiru. When Yingren and others reported Dingguo's crimes, Dingguo had the court usher bring trumped-up charges against them, arresting and killing Yingren to silence him.",
+      "reason": "肥如令郢人 names the official 郢人 (Yingren), not a demonym \"man from Ying\"; the proposal is right on that point but awkwardly rewrites the verb and drops the em-dash apposition, so the repair keeps the original phrasing while substituting the personal name throughout.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0062",
+        "excerpt": "肥如令郢人，郢人等告定國"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

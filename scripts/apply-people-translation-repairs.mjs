@@ -395,6 +395,21 @@ function selfTest() {
       collection: 'sentences', itemIndex: 0,
       zh: '禺中。', en: 'Trade continued through the Wei hour.',
       literal: 'Trade continued through the Wei hour.',
+    }, {
+      id: 's0016', kind: 'paragraph-sentence', blockIndex: 15,
+      collection: 'sentences', itemIndex: 0,
+      zh: '遙輦窪可汗宮人。', en: 'Yaolian Waqaghan Palace enrolled him.',
+      literal: 'Yaolian Waqaghan Palace enrolled him.',
+    }, {
+      id: 's0017', kind: 'paragraph-sentence', blockIndex: 16,
+      collection: 'sentences', itemIndex: 0,
+      zh: '安平王。', en: 'The Prince of Anping arrived.',
+      literal: 'The Prince of Anping arrived.',
+    }, {
+      id: 's0018', kind: 'paragraph-sentence', blockIndex: 17,
+      collection: 'sentences', itemIndex: 0,
+      zh: '離碓。', en: 'Lidui was surveyed.',
+      literal: 'Lidui was surveyed.',
     }],
     preflight: {
       candidates: [{
@@ -460,6 +475,18 @@ function selfTest() {
       }, {
         id: 'fixture:002:cand_wei_hour', unit: 's0015', language: 'en',
         exact: 'Wei', occurrence: 0, startCodePoint: 28, endCodePoint: 31,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_yaolian_palace', unit: 's0016', language: 'en',
+        exact: 'Yaolian Waqaghan', occurrence: 0, startCodePoint: 0, endCodePoint: 16,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_anping_title', unit: 's0017', language: 'en',
+        exact: 'Anping', occurrence: 0, startCodePoint: 14, endCodePoint: 20,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_lidui_place', unit: 's0018', language: 'en',
+        exact: 'Lidui', occurrence: 0, startCodePoint: 0, endCodePoint: 5,
         detectors: [{ kind: 'english-capitalized-expression' }],
       }],
     },
@@ -579,6 +606,18 @@ function selfTest() {
       id: 'fixture:002:c0007', subject: 'fixture:002:p001', predicate: 'honor',
       value: { label: { en: 'Meritorious Subject of Sincere Support', zh: '保義功臣' } },
       certainty: 'explicit', evidence: ['fixture:002:s0013'],
+    }, {
+      id: 'fixture:002:c0008', subject: 'fixture:002:p001', predicate: 'organization-association',
+      value: { organization: { en: 'Yaolian Waqaghan Palace', zh: '遙輦窪可汗宮' }, relation: 'member-of' },
+      certainty: 'explicit', evidence: ['fixture:002:s0016'],
+    }, {
+      id: 'fixture:002:c0009', subject: 'fixture:002:p001', predicate: 'name',
+      value: { kind: 'title', en: 'Prince of Anping', zh: '安平王' },
+      certainty: 'explicit', evidence: ['fixture:002:s0017'],
+    }, {
+      id: 'fixture:002:c0010', subject: 'fixture:002:p001', predicate: 'place-association',
+      value: { place: { en: 'Lidui', zh: '離碓' }, relation: 'worked-at' },
+      certainty: 'explicit', evidence: ['fixture:002:s0018'],
     }],
     translationRepairs: [],
     candidateDispositions: [{
@@ -638,6 +677,15 @@ function selfTest() {
   if (!restoredFullName) {
     throw new Error('Restored full name did not outrank its contained shorter alias');
   }
+  const restoredTitle = fragments.extraction.mentions.find((mention) =>
+    mention.person === 'fixture:002:p001' &&
+    mention.unit.id === 's0017' &&
+    mention.kind === 'title-reference' &&
+    mention.spans.en.some((span) => span.exact === 'Prince of Anping')
+  );
+  if (!restoredTitle) {
+    throw new Error('A corrected full title did not become a linked person mention');
+  }
   const expectedNonPeople = new Map([
     ['fixture:002:cand_only', 'not-a-name'],
     ['fixture:002:cand_am_i', 'not-a-name'],
@@ -649,6 +697,8 @@ function selfTest() {
     ['fixture:002:cand_meritorious_subject', 'title'],
     ['fixture:002:cand_guojiu', 'office'],
     ['fixture:002:cand_wei_hour', 'other'],
+    ['fixture:002:cand_yaolian_palace', 'organization'],
+    ['fixture:002:cand_lidui_place', 'place'],
   ]);
   for (const [candidate, reason] of expectedNonPeople) {
     const disposition = fragments.extraction.candidateDispositions.find((item) =>

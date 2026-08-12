@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "100",
+  "input": {
+    "chapterFingerprint": "sha256:6e2c0df8d76d8f680ad5d75451c3f35a57b92676d9c83ab4d5e2e743fa66d6fc",
+    "proposalsFingerprint": "sha256:2e6840e6731054c4c4b3f91ab370fd3ac688975c31689146bde6ebcbe71e6719"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-d375affc-1880-48be-80fb-97bb8fca2cd6",
+    "runId": "run-bc1fa6aa-40b6-4fac-a83d-128bfc475ceb",
+    "completedAt": "2026-08-12T04:21:56.479Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:100:r0001",
+      "unit": {
+        "id": "s0063",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "He once served as zhong sima, and even the zhong wei Zhi Bu dared not fail to show him proper respect.",
+      "after": "He once served as zhong sima, and even the zhong wei Zhi Du dared not fail to show him proper respect.",
+      "reason": "Literal English misreads 郅都 as Zhi Bu; the name is Zhi Du.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:100:r0002",
+      "unit": {
+        "id": "s0016",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 15
+      },
+      "field": "literal",
+      "before": "Zhu Jia said: 'You sir regard Ji Bu what kind person?'",
+      "after": "Zhu Jia said, 'What kind of man do you consider Ji Bu to be?'",
+      "reason": "Literal English is a broken word-for-word gloss that obscures the meaning.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:100:r0003",
+      "unit": {
+        "id": "s0018",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 17
+      },
+      "field": "literal",
+      "before": "Zhu Jia said: 'Ministers each for their lord use, Ji Bu for Xiang Ji use, duty only.",
+      "after": "Zhu Jia said, 'Each minister serves his own lord. Ji Bu served Xiang Ji—that was merely his duty.",
+      "reason": "Literal English is an ungrammatical gloss that obscures the meaning.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:100:r0004",
+      "unit": {
+        "id": "s0046",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "Ji Bu declined and returned to his office.",
+      "after": "Ji Bu took his leave and returned to his office.",
+      "reason": "辭之官 means he took leave to return to his post, not that he declined an office.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:100:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 中尉郅都 names the Commandant as 郅都 (Zhi Du); literal Zhi Bu misreads 都 as Bu, and Zhi Du matches the graph and the idiomatic rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0063",
+        "excerpt": "中尉郅都"
+      }
+    },
+    {
+      "repairId": "shiji:100:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "君視季布何如人也 asks what kind of man Teng Gong takes Ji Bu to be; the before is an ungrammatical calque that obscures that question, and the proposed after restores the sense accurately.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0016",
+        "excerpt": "君視季布何如人也"
+      }
+    },
+    {
+      "repairId": "shiji:100:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "臣各為其主用，季布為項籍用，職耳 means each minister serves his own lord and Ji Bu's service of Xiang Ji was merely his duty; the before is an unreadable gloss, and the proposed after renders that sense without inventing or omitting content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0018",
+        "excerpt": "臣各為其主用，季布為項籍用，職耳"
+      }
+    },
+    {
+      "repairId": "shiji:100:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "布辭之官 means Ji Bu took leave and went to his office/post; 辭 here is leave-taking after the audience, not declining an appointment, so 'took his leave and returned to his office' corrects the false 'declined'.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0046",
+        "excerpt": "布辭之官"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

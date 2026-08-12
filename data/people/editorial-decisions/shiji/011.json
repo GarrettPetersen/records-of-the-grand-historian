@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "011",
+  "input": {
+    "chapterFingerprint": "sha256:4edc670119604b78a1476137d21bd8cc9302b90c210e0b452fc286800e54f170",
+    "proposalsFingerprint": "sha256:33bd09451596da811bd8c4aca3a96c30c3b05c4138a5633a401e9ac44b4e2ed9"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-cc271cde-5675-4e7b-bf4e-b0b4069eaa24",
+    "runId": "run-877401ec-cf40-4e43-87e9-4d096568c162",
+    "completedAt": "2026-08-12T04:26:46.430Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:011:r0001",
+      "unit": {
+        "id": "s0115",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "He released palace women to return home, thereby restoring households that had lacked someone to rely on.",
+      "after": "He released palace women to return to their homes, exempting them from further obligations.",
+      "reason": "復無所與 means remitting taxes/corvée obligations for the returned palace women, not restoring dependent households.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:011:r0002",
+      "unit": {
+        "id": "s0046",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Liang Chu two kings both passed away.",
+      "after": "The two kings of Liang and Chu both passed away.",
+      "reason": "Literal English is word-for-word and obscures that 梁楚二王 means the two kings of Liang and Chu.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:011:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 出宮人歸其家，復無所與, 復無所與 is the standard Han formula remitting tax/corvée so the released palace women have nothing to contribute; the before invents 'restoring households that had lacked someone to rely on,' while the after correctly renders the exemption.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0115",
+        "excerpt": "復無所與"
+      }
+    },
+    {
+      "repairId": "shiji:011:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "梁楚二王 means the two kings of the states of Liang and Chu; the before's word-for-word 'Liang Chu two kings' is broken English that obscures that structure, and the after restores the correct reading without changing sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0046",
+        "excerpt": "梁楚二王皆薨"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

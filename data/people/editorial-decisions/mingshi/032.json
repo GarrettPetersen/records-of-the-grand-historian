@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "mingshi",
+  "chapter": "032",
+  "input": {
+    "chapterFingerprint": "sha256:59537c7c96a0cdc2089d164304e92564ebe16b3e4e33e9c6599567a96beacc6e",
+    "proposalsFingerprint": "sha256:2753fd357ef8c63c9835bb8f5022cb172bc54f9a3ebefc7b72e35053107fdb6c"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-d35af04b-d61e-4ee2-9baa-e33af37b8fea",
+    "runId": "run-d1a370d8-ef2c-4125-ba25-49dcd9290844",
+    "completedAt": "2026-08-12T03:53:11.565Z"
+  },
+  "proposals": [
+    {
+      "id": "mingshi:032:r0001",
+      "unit": {
+        "id": "s0072",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 20
+      },
+      "field": "literal",
+      "before": "When less than one second, leaf-discard is not used; same below.",
+      "after": "When less than one second, discard and do not use; the same below.",
+      "reason": "Chinese 葉不用 is the calendrical discard formula (likely 棄不用): remainders under one second are thrown away, not 'leaf-discard is not used'.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:032:r0002",
+      "unit": {
+        "id": "s0073",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "In all the sagitta obtained is eighty seconds; for the remaining degrees each follows the above method, seeking down to the sagitta, to serve as the root of yellow-and-red mutual seeking and their inner and outer degrees.",
+      "after": "In all the sagitta obtained is eighty-two seconds; for the remaining degrees each follows the above method, seeking down to the sagitta, to serve as the root of yellow-and-red mutual seeking and their inner and outer degrees.",
+      "reason": "Chinese 八十二秒 is eighty-two seconds; the literal omitted 二 and conflicts with the idiomatic 82″ and the worked example.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:032:r0003",
+      "unit": {
+        "id": "s0091",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Within subtract ecliptic sagitta eighty seconds; remainder sixty degrees eighty-six minutes sixty-eight as small chord of yellow and red paths.",
+      "after": "Within subtract ecliptic sagitta eighty-two seconds; remainder sixty degrees eighty-six minutes sixty-eight as small chord of yellow and red paths.",
+      "reason": "Chinese 八十二秒 is eighty-two seconds; the literal omitted 二, disagreeing with the idiomatic 82″.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "mingshi:032:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "不足一秒葉不用 is the calendrical discard formula: remainders under one second are thrown away unused. 'Leaf-discard is not used' misreads 葉 as 'leaf' and reverses the sense; 'discard and do not use' restores the meaning supported by the calculation context and the idiomatic rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0072",
+        "excerpt": "不足一秒葉不用，下同"
+      }
+    },
+    {
+      "repairId": "mingshi:032:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "矢度八十二秒 is eighty-two seconds; the literal's 'eighty seconds' omits 二 and conflicts with the idiomatic 82″ and the same figure in s0091.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0073",
+        "excerpt": "凡求得矢度八十二秒"
+      }
+    },
+    {
+      "repairId": "mingshi:032:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "黃道矢八十二秒 is eighty-two seconds; the literal's 'eighty seconds' omits 二 and disagrees with the idiomatic 82″ and the sagitta stated in s0073.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0091",
+        "excerpt": "內減黃道矢八十二秒"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

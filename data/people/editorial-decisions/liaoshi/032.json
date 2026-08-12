@@ -1,0 +1,246 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "032",
+  "input": {
+    "chapterFingerprint": "sha256:583df69fe21151d3ea569b92ba687cd3042e0295498ce02390b69b224e727347",
+    "proposalsFingerprint": "sha256:6443332cf834201da6ccd4959d124ff32d80185c9d415eeb9395372b381e7811"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-8a58bb03-3046-4e14-85c4-19dacca6b86e",
+    "runId": "run-2f5b42b3-9599-43e5-b31a-ae1a3f7b83b9",
+    "completedAt": "2026-08-12T04:22:22.222Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:032:r0001",
+      "unit": {
+        "id": "s0029",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Each year Daozong first visited Black Mountain, paid respects at the tombs of Emperors Shengzong and Xingzong, and rewarded golden lotus.",
+      "after": "Each year Daozong first visited Black Mountain, paid respects at the tombs of Emperors Shengzong and Xingzong, and admired the golden lotus.",
+      "reason": "賞 here means to enjoy or view the golden lotus, not to bestow a reward.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:032:r0002",
+      "unit": {
+        "id": "s0076",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "some had a bu but were organized as a zu—such were the Xi King and Shimo;",
+      "after": "some had a bu but were organized as a zu—such were the Xi King and Shiwei;",
+      "reason": "室韋 is the people-name Shiwei, not Shimo.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:032:r0003",
+      "unit": {
+        "id": "s0076",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "some had a bu but were a zu—such were the Xi King and Shimo;",
+      "after": "some had a bu but were a zu—such were the Xi King and Shiwei;",
+      "reason": "室韋 is Shiwei; the literal English repeats the same mistranslation.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:032:r0004",
+      "unit": {
+        "id": "s0147",
+        "kind": "paragraph-sentence",
+        "blockIndex": 19,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "When Tang was in the Kaiyuan and Tianbao era, the Dahe clan had already declined; Liao founding ancestor Nieli installed Dichianzu Li as Khan Zuwu.",
+      "after": "When Tang was in the Kaiyuan and Tianbao era, the Dahe clan had already declined; Liao founding ancestor Nieli installed Dilian Zuli as Khan Zuwu.",
+      "reason": "迪輦祖裏 is one personal name conventionally rendered Dilian Zuli, not split as Dichianzu Li.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:032:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 賞金蓮 after the tomb visit, 賞 means to view or enjoy the golden lotus, not to bestow a reward; 'rewarded golden lotus' invents a gift act unsupported by the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0029",
+        "excerpt": "賞金蓮"
+      }
+    },
+    {
+      "repairId": "liaoshi:032:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "室韋 is the ethnonym Shiwei; Shimo is a wrong reading of the same characters.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0076",
+        "excerpt": "奚王、室韋"
+      }
+    },
+    {
+      "repairId": "liaoshi:032:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal repeats the same error: 室韋 is Shiwei, not Shimo.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0076",
+        "excerpt": "奚王、室韋"
+      }
+    },
+    {
+      "repairId": "liaoshi:032:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "迪輦祖裏 is one personal name; Dichianzu Li wrongly splits 裏 as Li, while Dilian Zuli matches the four-character name as conventionally romanized.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0147",
+        "excerpt": "立迪輦祖裏為阻午可汗"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "liaoshi:032:r0004",
+      "before": {
+        "id": "liaoshi:032:c0022",
+        "subject": "liaoshi:032:p008",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Dichianzu Li",
+          "zh": "迪輦祖裏"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:032:s0147"
+        ]
+      },
+      "after": {
+        "id": "liaoshi:032:c0022",
+        "subject": "liaoshi:032:p008",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Dilian Zuli",
+          "zh": "迪輦祖裏"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:032:s0147"
+        ]
+      },
+      "reason": "Accepted repair r0004 restores the English personal name for 迪輦祖裏 from the garbled Dichianzu Li to Dilian Zuli; the claim still names the same person from the same evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0147",
+        "excerpt": "迪輦祖裏"
+      }
+    },
+    {
+      "repairId": "liaoshi:032:r0004",
+      "before": {
+        "id": "liaoshi:032:c0169",
+        "subject": "liaoshi:032:p008",
+        "predicate": "renamed",
+        "value": {
+          "from": {
+            "en": "Dichianzu Li",
+            "zh": "迪輦祖裏"
+          },
+          "to": {
+            "en": "Khan Zuwu",
+            "zh": "阻午可汗"
+          },
+          "dateContext": {
+            "sourceDate": {
+              "text": "立迪輦祖裏為阻午可汗"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 713,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 756,
+                "precision": "year"
+              }
+            }
+          }
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:032:s0147"
+        ]
+      },
+      "after": {
+        "id": "liaoshi:032:c0169",
+        "subject": "liaoshi:032:p008",
+        "predicate": "renamed",
+        "value": {
+          "from": {
+            "en": "Dilian Zuli",
+            "zh": "迪輦祖裏"
+          },
+          "to": {
+            "en": "Khan Zuwu",
+            "zh": "阻午可汗"
+          },
+          "dateContext": {
+            "sourceDate": {
+              "text": "立迪輦祖裏為阻午可汗"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 713,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 756,
+                "precision": "year"
+              }
+            }
+          }
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:032:s0147"
+        ]
+      },
+      "reason": "The renamed-from English still carried Dichianzu Li; after r0004 it must be Dilian Zuli while the installation as Khan Zuwu remains unchanged.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0147",
+        "excerpt": "立迪輦祖裏為阻午可汗"
+      }
+    }
+  ]
+}

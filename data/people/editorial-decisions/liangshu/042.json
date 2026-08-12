@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "liangshu",
+  "chapter": "042",
+  "input": {
+    "chapterFingerprint": "sha256:f8e5b8c880d54034ff4a9c6a39e92d74c99758de0cab531149bf255689e1247f",
+    "proposalsFingerprint": "sha256:c3ae4d39b95ffad1678e55be5762881089a99eba46a63814be8e224a9d95e835"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-a80c3e1f-7bfe-4a75-9d12-28964926d882",
+    "runId": "run-9a9ff861-91f3-4167-a64f-f1a7012aa4d2",
+    "completedAt": "2026-08-12T04:13:19.474Z"
+  },
+  "proposals": [
+    {
+      "id": "liangshu:042:r0001",
+      "unit": {
+        "id": "s0009",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "When the High Ancestor secured the capital and set up his headquarters, Dun joined the staff of General of Agile Cavalry as penal and judicial aide.",
+      "after": "When the High Ancestor secured the capital and set up his headquarters, Weizhen was brought onto the staff of General of Agile Cavalry as penal and judicial aide.",
+      "reason": "Chinese silent subject continues Zang Weizhen's career; English wrongly names Dun.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:042:r0002",
+      "unit": {
+        "id": "s0009",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "When the High Ancestor pacified the capital region and established the hegemon's headquarters, Dun was brought in as penal and judicial aide on the staff of General of Agile Cavalry.",
+      "after": "When the High Ancestor pacified the capital region and established the hegemon's headquarters, Weizhen was brought in as penal and judicial aide on the staff of General of Agile Cavalry.",
+      "reason": "Chinese silent subject continues Weizhen; English wrongly inserts Dun.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:042:r0003",
+      "unit": {
+        "id": "s0006",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "His father Weizhen was broadly learned in letters and history and gifted in affairs; in youth he won the notice of his maternal uncle Zhou Yong of Runan.",
+      "after": "His father Weizhen was broadly learned in letters and history and gifted in affairs; in youth he won the notice of his maternal cousin Zhou Yong of Runan.",
+      "reason": "外兄 is maternal cousin, not maternal uncle.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:042:r0004",
+      "unit": {
+        "id": "s0069",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "His father Hui, under Heavenly Surveillance, held Shan and Jiankang in succession, likewise famed for ability, and reached staff adviser to Rapid Cavalry.",
+      "after": "His father Hui, under Heavenly Surveillance, held Shanyin and Jiankang in succession, likewise famed for ability, and reached staff adviser to Rapid Cavalry.",
+      "reason": "山陰 was mistranslated as Shan; restore Shanyin.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:042:r0005",
+      "unit": {
+        "id": "s0073",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "At that time the northern suburban altar was being rebuilt; Qi was first put in charge of construction, and when the work was finished he was appointed as if under the new regulations.",
+      "after": "At that time the northern suburban altar was being rebuilt; Qi was first put in charge of construction, and when the work was finished he was appointed magistrate of Ruxin.",
+      "reason": "除如新令 means appointed magistrate of Ruxin (如新), not 'as if under the new regulations'.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:042:r0006",
+      "unit": {
+        "id": "s0073",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "At that time the northern suburban altar was being newly built; Qi was first put in charge of supervising construction, and when the work was done he was appointed as if under the new regulations.",
+      "after": "At that time the northern suburban altar was being newly built; Qi was first put in charge of supervising construction, and when the work was done he was appointed magistrate of Ruxin.",
+      "reason": "除如新令 is a county appointment to Ruxin, not a regulatory phrase.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liangshu:042:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0006 introduces 父未甄 and s0007–s0009 continue that career with a silent subject; 引爲 does not name Dun, so the idiomatic English wrongly inserts him.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0009",
+        "excerpt": "引爲驃騎刑獄參軍"
+      }
+    },
+    {
+      "repairId": "liangshu:042:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same silent subject after 父未甄 is Weizhen; the literal’s named Dun is not in the Chinese and must be corrected to Weizhen.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0009",
+        "excerpt": "高祖平京邑，霸府建，引爲驃騎刑獄參軍"
+      }
+    },
+    {
+      "repairId": "liangshu:042:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "外兄 is a maternal cousin, not a maternal uncle (舅); the literal’s uncle rendering invents the wrong kinship grade.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0006",
+        "excerpt": "少爲外兄汝南周顒所知"
+      }
+    },
+    {
+      "repairId": "liangshu:042:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "歷山陰、建康令 names the county 山陰 (Shanyin), already correctly rendered in s0068; cutting it to Shan is a place-name error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0069",
+        "excerpt": "歷山陰、建康令"
+      }
+    },
+    {
+      "repairId": "liangshu:042:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "除如新令 is the standard appointment formula for magistrate (令) of the county 如新; s0074’s 縣民 confirms a county post, not ‘new regulations’.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0073",
+        "excerpt": "除如新令"
+      }
+    },
+    {
+      "repairId": "liangshu:042:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise misreads 除如新令; the Chinese appoints Fu Qi magistrate of Ruxin, matching the following county-case narrative.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0073",
+        "excerpt": "事畢，除如新令"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

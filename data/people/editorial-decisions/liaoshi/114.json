@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "114",
+  "input": {
+    "chapterFingerprint": "sha256:6dcf6fdaf6bc9115f58863d04254412c1866a1b733c3599b3d60a4fe1d681830",
+    "proposalsFingerprint": "sha256:97d1e5f9be15857aa6acfed8b7da0088514bb437d03a364e5b845b7d7d1864e5"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-25a8413e-6db9-4cb9-b7b8-e9e684e1b52c",
+    "runId": "run-9508f5a9-016a-4f67-865b-757da480a958",
+    "completedAt": "2026-08-12T03:59:12.841Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:114:r0001",
+      "unit": {
+        "id": "s0033",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "During Taiping, as a maternal kinsman he was appointed attendant gentleman and served as Xianchang Palace commissioner and deputy front-hall inspector.",
+      "after": "During Taiping, as a maternal kinsman he was appointed attendant gentleman and served as Yanchang Palace commissioner and deputy front-hall inspector.",
+      "reason": "延昌 is Yanchang, not Xianchang; 咸 would be Xian.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:114:r0002",
+      "unit": {
+        "id": "s0033",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "During Taiping, as a maternal relative he was appointed attendant gentleman, and served as Xianchang Palace commissioner and deputy front-hall inspector.",
+      "after": "During Taiping, as a maternal relative he was appointed attendant gentleman, and served as Yanchang Palace commissioner and deputy front-hall inspector.",
+      "reason": "延昌 is Yanchang, not Xianchang; 咸 would be Xian.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:114:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Source 延昌宮使 uses 延 (yán), not 咸 (xián); Xianchang is a wrong reading, and Yanchang Palace commissioner correctly renders the office while leaving the rest of the idiomatic sentence intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0033",
+        "excerpt": "延昌宮使"
+      }
+    },
+    {
+      "repairId": "liaoshi:114:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field has the same misreading of 延昌 as Xianchang; Yanchang matches 延昌 and corrects the palace-office name without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0033",
+        "excerpt": "延昌宮使"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

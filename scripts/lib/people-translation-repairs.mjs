@@ -303,7 +303,21 @@ function candidateMatchesClaimValue(extraction, candidate, predicate) {
 
 function candidateMatchesNamedTitleClaim(extraction, candidate) {
   return extraction.claims.some((claim) =>
-    ['honor', 'noble-title'].includes(claim.predicate) &&
+    (
+      ['honor', 'noble-title'].includes(claim.predicate) ||
+      (claim.predicate === 'name' && claim.value?.kind === 'title')
+    ) &&
+    claimEvidenceUnit(claim, candidate.unit) &&
+    nestedStringValues(claim.value).some((value) =>
+      typeof value === 'string' &&
+      surfaceContains(value.toLocaleLowerCase('en-US'), candidate.exact.toLocaleLowerCase('en-US'), 'en')
+    )
+  );
+}
+
+function candidateMatchesPlaceClaim(extraction, candidate) {
+  return extraction.claims.some((claim) =>
+    ['native-place', 'place-association'].includes(claim.predicate) &&
     claimEvidenceUnit(claim, candidate.unit) &&
     nestedStringValues(claim.value).some((value) =>
       typeof value === 'string' &&
@@ -1061,6 +1075,19 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
     }
     if (
       candidate.language === 'en' &&
+      candidateMatchesPlaceClaim(reconciled, candidate)
+    ) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'place',
+        note: 'Place name recorded in this unit, not a person name.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (
+      candidate.language === 'en' &&
       candidateMatchesClaimValue(reconciled, candidate, 'office')
     ) {
       reconciled.candidateDispositions.push({
@@ -1068,6 +1095,19 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         disposition: 'not-person',
         reason: 'office',
         note: 'Component of an office recorded in this unit, not a person name.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (
+      candidate.language === 'en' &&
+      candidateMatchesClaimValue(reconciled, candidate, 'organization-association')
+    ) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'organization',
+        note: 'Component of an organization recorded in this unit, not a person name.',
       });
       accounted.add(candidate.id);
       continue;

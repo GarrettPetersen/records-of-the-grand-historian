@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 3,
+  "book": "xinwudaishi",
+  "chapter": "038",
+  "input": {
+    "chapterFingerprint": "sha256:cc9778ad760779f7daa430f432c29f414ba054b4095cae0a36206d4b60bc9320",
+    "proposalsFingerprint": "sha256:4f2f36766b757100ba42e477968dfc9062990927af4bc50678220abae7aed6e4"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-3a21689b-916c-42b0-9d95-281a49b49311",
+    "runId": "run-80abcf9c-4755-431d-b84e-862f33548a15",
+    "completedAt": "2026-08-12T04:09:15.860Z"
+  },
+  "proposals": [
+    {
+      "id": "xinwudaishi:038:r0001",
+      "unit": {
+        "id": "s0008",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "When the Prince of Jin campaigned against Wang Xingyu, Chengye shuttled among the armies; Li Keyong took a liking to him.",
+      "after": "When the Prince of Jin campaigned against Wang Xingyu, Chengye shuttled among the armies; the Prince of Jin took a liking to him.",
+      "reason": "Chinese has only 晉王 twice; idiomatic invents the personal name Li Keyong for the second reference.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:038:r0002",
+      "unit": {
+        "id": "s0019",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Zhuangzong held a banquet in the vault. Wine deep, he made his son Jiji dance for Chengye; when the boy finished, Chengye offered a jeweled belt, silks, and a horse. Zhuangzong pointed at the coin stacks and called to Chengye by Jiji’s pet name: “Hege needs money—give him that whole pile. Why offer belt and horse?”",
+      "after": "Zhuangzong held a banquet in the vault. Wine deep, he made his son Jiji dance for Chengye; when the boy finished, Chengye offered a jeweled belt, silks, and a horse. Zhuangzong pointed at the coin stacks and, calling Jiji by his pet name, said to Chengye: “Hege needs money—give him that whole pile. Why offer belt and horse?”",
+      "reason": "Chinese 呼繼岌小字以語承業 means he addressed Chengye while using Jiji’s pet name, not that he called Chengye by that name.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:038:r0003",
+      "unit": {
+        "id": "s0104",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Later, when Emperor Min fled to Weizhou, Hanqiong went west to meet the deposed emperor on the road; the deposed emperor despised him and had him killed.",
+      "after": "Later, when Emperor Min fled to Weizhou, Hanqiong went west to meet the deposed emperor on the road; the deposed emperor hated him and had him killed.",
+      "reason": "Idiomatic “despised” softens 惡; literal “hated” better matches the lethal outcome.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xinwudaishi:038:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit repeats 晉王 for both the campaign and 喜其為人; the idiomatic second clause invents the personal name Li Keyong, which is not in the Chinese. Restoring “the Prince of Jin” matches the source.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0008",
+        "excerpt": "晉王喜其為人"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:038:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "呼繼岌小字以語承業曰 means Zhuangzong used Jiji’s childhood name while speaking to Chengye; the before wording wrongly makes Chengye the one addressed by that pet name. The proposed fix restores the attribution.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0019",
+        "excerpt": "呼繼岌小字以語承業曰"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:038:r0003",
+      "decision": "reject",
+      "after": null,
+      "reason": "廢帝惡而殺之 is already rendered accurately enough as “despised…and had him killed”; swapping despised for hated is stylistic preference, not a semantic correction.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0104",
+        "excerpt": "廢帝惡而殺之"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "xinwudaishi:038:r0001",
+      "claim": {
+        "id": "xinwudaishi:038:c0019",
+        "subject": "xinwudaishi:038:p004",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Li Keyong",
+          "pinyin": "Li Keyong"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xinwudaishi:038:s0008"
+        ]
+      },
+      "reason": "Accepting r0001 shows the personal name Li Keyong was invented by the bad idiomatic; s0008 only names 晉王, already claimed in c0018.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0008",
+        "excerpt": "晉王喜其為人"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

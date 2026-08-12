@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 3,
+  "book": "yuanshi",
+  "chapter": "037",
+  "input": {
+    "chapterFingerprint": "sha256:dcc02d17bf5e4c9671ab7a6244d5ff8c934f40b16c24a3307abd753ad65b5132",
+    "proposalsFingerprint": "sha256:f774b81a2c925b9f703443c34130816c5062af49b4200e3fd402d37d25d3afec"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-0d09d1c0-1e5b-4887-8092-a578f98f0cab",
+    "runId": "run-61889531-ff5c-4a83-8fb3-7318741df6bd",
+    "completedAt": "2026-08-12T04:13:25.354Z"
+  },
+  "proposals": [
+    {
+      "id": "yuanshi:037:r0001",
+      "unit": {
+        "id": "s0002",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "His mother was Empress Budashiri of the Naiman clan.",
+      "after": "His mother was Empress Babusha of the Naiman Zhen clan.",
+      "reason": "Chinese 八不沙 is Babusha (Ningzong's mother), not Budashiri (卜答失里, Wenzong's empress); 乃蠻真氏 is the Naiman Zhen clan name.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:037:r0002",
+      "unit": {
+        "id": "s0002",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "His mother was Empress Budashiri of the Naiman clan.",
+      "after": "His mother was Empress Babusha of the Naiman Zhen clan.",
+      "reason": "Same as idiomatic: 八不沙 is Babusha, not Budashiri.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:037:r0003",
+      "unit": {
+        "id": "s0079",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 25
+      },
+      "field": "idiomatic",
+      "before": "In the eleventh month, on the jisi day, an edict ordered the Hanlin National History Office, the Academy of Gathered Worthies, and the Kui Zhang Academy to assemble and deliberate on the late emperor's temple name, spirit tablet, elevation of Empress Wuzong to joint worship, and changing the era name.",
+      "after": "In the eleventh month, on the jisi day, an edict ordered the Hanlin National History Office, the Academy of Gathered Worthies, and the Kui Zhang Academy to assemble and deliberate on the late emperor's temple name, spirit tablet, elevation of Wuzong's empress to joint worship, and changing the era name.",
+      "reason": "武宗皇后 means the empress of Wuzong, not a personal name \"Empress Wuzong\".",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "yuanshi:037:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0002 has 八不沙皇后，乃蠻真氏: 八不沙 is Babusha, not Budashiri, and 乃蠻真氏 requires the full Naiman Zhen clan name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0002",
+        "excerpt": "母曰八不沙皇后，乃蠻真氏"
+      }
+    },
+    {
+      "repairId": "yuanshi:037:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same Chinese 八不沙皇后，乃蠻真氏 shows Budashiri and bare Naiman are wrong in the literal field; Babusha of the Naiman Zhen clan is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0002",
+        "excerpt": "母曰八不沙皇后，乃蠻真氏"
+      }
+    },
+    {
+      "repairId": "yuanshi:037:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "升祔武宗皇后 means elevating Wuzong's empress to joint temple worship; Empress Wuzong wrongly treats 武宗 as her personal name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0079",
+        "excerpt": "升祔武宗皇后"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "yuanshi:037:r0003",
+      "before": {
+        "id": "yuanshi:037:c0120",
+        "subject": "yuanshi:037:p041",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Empress Wuzong",
+          "zh": "武宗皇后"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "yuanshi:037:s0079"
+        ]
+      },
+      "after": {
+        "id": "yuanshi:037:c0120",
+        "subject": "yuanshi:037:p041",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Empress of Wuzong",
+          "zh": "武宗皇后"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "yuanshi:037:s0079"
+        ]
+      },
+      "reason": "Accepted r0003 shows English Empress Wuzong came only from the bad idiomatic of 武宗皇后; the title claim must read Empress of Wuzong while keeping zh, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0079",
+        "excerpt": "武宗皇后"
+      }
+    }
+  ]
+}

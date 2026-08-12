@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "007",
+  "input": {
+    "chapterFingerprint": "sha256:83e207ba948a8e4d57d3b90d691de7110add972be91ad0e425f30fc5dd0df8c9",
+    "proposalsFingerprint": "sha256:cc0c498a28140c347699ec8d1872e859c925bde37d14797c7ed5b48eb8b94070"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-b4f9de6c-cdba-4da2-90c5-34c85417a8ed",
+    "runId": "run-31c89c14-d629-4038-8b6f-dd935cd1037a",
+    "completedAt": "2026-08-12T04:02:38.394Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:007:r0001",
+      "unit": {
+        "id": "s0022",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 20
+      },
+      "field": "literal",
+      "before": "Within his jurisdiction he held sole authority over offenses up to and including capital crimes.",
+      "after": "Within his jurisdiction he held sole authority over offenses short of capital crimes.",
+      "reason": "死罪以下 means offenses below capital crimes, not including capital punishment; the literal overstates his authority.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:007:r0002",
+      "unit": {
+        "id": "s0111",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 20
+      },
+      "field": "idiomatic",
+      "before": "On wuzi day in the ninth month he executed xiangwen Balu, Zhuahen Du, and two others.",
+      "after": "On wuzi day in the ninth month he executed xiangwen Balu, yila Hendun, and two others.",
+      "reason": "拽剌 is a Khitan office title (yila); 痕篤 is the personal name. Fusing them as Zhuahen Du obscures the office and name.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:007:r0003",
+      "unit": {
+        "id": "s0133",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "literal",
+      "before": "That night attendants Xiaoge, washer Huage, cook Xingu, and six others in all rebelled; the Emperor met assassination at age thirty-nine; his temple name was Muzong.",
+      "after": "That night attendants Xiaoge, washer Huage, cook Xingu, and three others — six men in all — rebelled; the Emperor met assassination at age thirty-nine; his temple name was Muzong.",
+      "reason": "等六人 means six persons in total including the three named, not six additional persons.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:007:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "死罪以下 means offenses below the capital grade, so sole jurisdiction stops short of capital crimes; the original 'up to and including capital crimes' overstates the authority.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0022",
+        "excerpt": "死罪以下得專之"
+      }
+    },
+    {
+      "repairId": "liaoshi:007:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "詳穩八剌、拽剌痕篤 pairs office title with personal name in each case; 拽剌 is the yila office and 痕篤 the name, so Zhuahen Du wrongly fuses them.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0111",
+        "excerpt": "殺詳穩八剌、拽剌痕篤等四人"
+      }
+    },
+    {
+      "repairId": "liaoshi:007:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "等六人 counts six rebels in all, including the three named attendants; 'six others in all' wrongly adds six more people.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0133",
+        "excerpt": "近侍小哥、盥人花哥、庖人辛古等六人反"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "liaoshi:007:r0002",
+      "claim": {
+        "id": "liaoshi:007:c0234",
+        "subject": "liaoshi:007:p081",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate",
+          "en": "Zhuahen Du",
+          "zh": "拽剌痕篤"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:007:s0111"
+        ]
+      },
+      "reason": "Accepted r0002 shows Zhuahen Du was invented by fusing the yila office title 拽剌 with the personal name 痕篤; s0111 supports no such alternate name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0111",
+        "excerpt": "拽剌痕篤"
+      }
+    }
+  ],
+  "claimRevisions": [
+    {
+      "repairId": "liaoshi:007:r0002",
+      "before": {
+        "id": "liaoshi:007:c0233",
+        "subject": "liaoshi:007:p081",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "yila Hendun",
+          "zh": "拽剌痕篤"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:007:s0111"
+        ]
+      },
+      "after": {
+        "id": "liaoshi:007:c0233",
+        "subject": "liaoshi:007:p081",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "yila",
+          "zh": "拽剌"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liaoshi:007:s0111"
+        ]
+      },
+      "reason": "Parallel to 詳穩/xiangwen for Balu, the title claim should be only 拽剌/yila; 痕篤 is the personal name already claimed in c0232.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0111",
+        "excerpt": "拽剌痕篤"
+      }
+    }
+  ]
+}
