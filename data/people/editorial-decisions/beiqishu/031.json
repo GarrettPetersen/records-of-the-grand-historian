@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "beiqishu",
+  "chapter": "031",
+  "input": {
+    "chapterFingerprint": "sha256:4336db303165b6a23d0f63d148752163a7f1e97decdd1db287f8a70eb7633995",
+    "proposalsFingerprint": "sha256:2d59d20f23c40d96147129cd5519c8693e8add540ec2d7aded0236ed47c5de42"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-9fed6955-2643-4e1a-ac9a-9e2bd45f0059",
+    "runId": "run-4ee1cada-f90a-4d4a-b49d-8476fa3e03b7",
+    "completedAt": "2026-08-12T16:12:38.601Z"
+  },
+  "proposals": [
+    {
+      "id": "beiqishu:031:r0001",
+      "unit": {
+        "id": "s0059",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "At the beginning of Yong'an in Wei, his second elder brother Hui was betrothed to Liang; he memorialized that Xi be released from commoner status and made attendant cavalier, and Xi was summoned to serve as recorder on the staff of Prince of Guangping's opening office.",
+      "after": "At the beginning of Yong'an in Wei, his second elder brother Hui went on mission to Liang; he memorialized that Xi be released from commoner status and made attendant cavalier, and Xi was summoned to serve as recorder on the staff of Prince of Guangping's opening office.",
+      "reason": "聘梁 means a diplomatic mission/envoy posting to Liang, not betrothal.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:031:r0002",
+      "unit": {
+        "id": "s0132",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "When the prince reached Ye, Yang Yin, Murong Yan and others were executed; an edict made him grand chancellor, commander-in-chief of all armies within and without, overseeing civil and military affairs; he returned to Bing.",
+      "after": "When the prince reached Ye, Yang, Yan and others were executed; an edict made him grand chancellor, commander-in-chief of all armies within and without, overseeing civil and military affairs; he returned to Bing.",
+      "reason": "Chinese has 楊、燕 without Murong; idiomatic invents the surname Murong.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:031:r0003",
+      "unit": {
+        "id": "s0190",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "Xi had his wife answer; the wife never spoke; Xi pat his chest with his hand and withdrew.",
+      "after": "Xi had his wife answer; the wife never spoke; Xi patted his chest with his hand and withdrew.",
+      "reason": "English verb form error: \"pat\" should be \"patted\".",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "beiqishu:031:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In s0059, 第二兄暉聘梁 is an envoy posting to Liang, not a betrothal; 'was betrothed to Liang' misreads 聘 and invents a marriage alliance with a state.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0059",
+        "excerpt": "第二兄暉聘梁"
+      }
+    },
+    {
+      "repairId": "beiqishu:031:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese has only 誅楊、燕等; 'Murong Yan' invents a surname absent from the unit, and reducing to 'Yang, Yan and others' matches the source abbreviations.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0132",
+        "excerpt": "誅楊、燕等"
+      }
+    },
+    {
+      "repairId": "beiqishu:031:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Narrative past tense requires 'patted' for 拊胸; the literal's 'pat' is an English verb-form error, and the proposed fix matches the Chinese action.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0190",
+        "excerpt": "晞以手拊胸而退"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

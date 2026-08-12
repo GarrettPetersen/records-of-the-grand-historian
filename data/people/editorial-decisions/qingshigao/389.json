@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "389",
+  "input": {
+    "chapterFingerprint": "sha256:dc96cd4ffa7c5cdcbd14458593c878915ec23870dcbae8bb6077848cfaff3154",
+    "proposalsFingerprint": "sha256:05853b4bda621afd5340f3e953b44e97e56a1d696d1f9b2feb9ecf1a319d0eb8"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-ed9ed517-41c9-4d42-90bc-f388436afe58",
+    "runId": "run-299c4d1c-9058-4fb7-a5d3-1330656645d1",
+    "completedAt": "2026-08-12T16:17:22.385Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:389:r0001",
+      "unit": {
+        "id": "s0001",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Baizhan, originally named Songzhan, with the style Jingtao, was of the Balute clan and a Mongol of the Plain Blue Banner.",
+      "after": "Bai Jun, originally named Songjun, with the style Jingtao, was of the Balute clan and a Mongol of the Plain Blue Banner.",
+      "reason": "葰 is jun, not zhan; Baizhan/Songzhan misromanize 柏葰/松葰 (title uses Bai Jun).",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:389:r0002",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "literal",
+      "before": "Soon afterward, together with Granary Vice Minister Chen Fu'en he audited the Shandong provincial treasury, impeaching Provincial Administration Commissioner Wang Du for employing private secretaries improperly and local officials for condoning banditry; the governor-general Chong'en and others below were censured to varying degrees.",
+      "after": "Soon afterward, together with Granary Vice Minister Chen Fu'en he audited the Shandong provincial treasury, impeaching Provincial Administration Commissioner Wang Du for employing private secretaries improperly and local officials for condoning banditry; the governor Chong'en and others below were censured to varying degrees.",
+      "reason": "Chinese 巡撫 is governor, not governor-general; literal wrongly elevates Chong'en.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:389:r0003",
+      "unit": {
+        "id": "s0046",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "His son Zhong Lian, a candidate vice director, was then granted a fourth-rank Qing title and appointed to a department directorship in one of the Six Ministries as vacancies opened.",
+      "after": "His son Zhong Lian, a candidate vice director, was then granted a fourth-rank qing title and appointed to a department directorship in one of the Six Ministries as vacancies opened.",
+      "reason": "四品卿銜 is a fourth-rank qing honorific; rendering 'Qing title' confuses the dynasty name with the office grade.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:389:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0001 reads 柏葰，原名松葰; 葰 is jun, so the names are Bai Jun and Songjun, not Baizhan and Songzhan. The proposed idiomatic correctly restores that reading, matching the chapter title and the claims' pinyin.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0001",
+        "excerpt": "柏葰，原名松葰"
+      }
+    },
+    {
+      "repairId": "qingshigao:389:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0011 has 巡撫崇恩; 巡撫 is the provincial governor (xunfu), not governor-general (總督). The literal wrongly elevates Chong'en; the proposed governor matches the Chinese and the idiomatic field.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "巡撫崇恩"
+      }
+    },
+    {
+      "repairId": "qingshigao:389:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0046 grants 四品卿銜; 卿 is the office grade qing, not the dynasty name Qing. Capitalizing Qing invents a dynasty-linked title; lowercase qing correctly names the honorific.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0046",
+        "excerpt": "賜四品卿銜"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "qingshigao:389:r0001",
+      "before": {
+        "id": "qingshigao:389:c0001",
+        "subject": "qingshigao:389:p001",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Baizhan",
+          "zh": "柏葰",
+          "pinyin": "Bai Jun"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:389:s0001"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:389:c0001",
+        "subject": "qingshigao:389:p001",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Bai Jun",
+          "zh": "柏葰",
+          "pinyin": "Bai Jun"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:389:s0001"
+        ]
+      },
+      "reason": "Accepted r0001 shows English Baizhan came only from misreading 葰 as zhan; the personal-name claim must read Bai Jun while zh, pinyin, id, subject, predicate, certainty, and evidence stay the same.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0001",
+        "excerpt": "柏葰"
+      }
+    },
+    {
+      "repairId": "qingshigao:389:r0001",
+      "before": {
+        "id": "qingshigao:389:c0002",
+        "subject": "qingshigao:389:p001",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate-name",
+          "en": "Songzhan",
+          "zh": "松葰",
+          "pinyin": "Song Jun"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:389:s0001"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:389:c0002",
+        "subject": "qingshigao:389:p001",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate-name",
+          "en": "Songjun",
+          "zh": "松葰",
+          "pinyin": "Song Jun"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:389:s0001"
+        ]
+      },
+      "reason": "Accepted r0001 shows English Songzhan came only from the same misreading of 葰; the alternate-name claim must read Songjun while zh, pinyin, id, subject, predicate, certainty, and evidence stay the same.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0001",
+        "excerpt": "松葰"
+      }
+    }
+  ]
+}

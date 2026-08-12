@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "yuanshi",
+  "chapter": "207",
+  "input": {
+    "chapterFingerprint": "sha256:2be124fc8e214117c36ed47d5f005a66b8961565a5df4102bac4bc117f790dbe",
+    "proposalsFingerprint": "sha256:d8c61c522e579ae8453be3601b80e0ac24edd53d6639fc04859853f9ac25aef6"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-6981966f-e675-459c-831f-e6a191d185b6",
+    "runId": "run-b40b1e98-8cf9-4d6e-8a7f-03ca275ea138",
+    "completedAt": "2026-08-12T16:20:00.199Z"
+  },
+  "proposals": [
+    {
+      "id": "yuanshi:207:r0001",
+      "unit": {
+        "id": "s0006",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "The following first month he promoted Tie Shi to grand master for thriving affairs and ordered him to restore discipline in the censorate, with an edict announced at home and abroad.",
+      "after": "In the first month of the year after next he again ordered Grand Censor Tie Shi to restore discipline in the censorate, with an edict announced at home and abroad.",
+      "reason": "申命 means to reiterate an order to the existing Grand Censor (大夫), not a promotion to a title \"Grand Master for Thriving Affairs\".",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:207:r0002",
+      "unit": {
+        "id": "s0006",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "In the first month of the year after next, Tie Shi was promoted to Grand Master for Thriving Affairs and charged to revive the standards of the censorate; an edict was proclaimed throughout the court and the realm.",
+      "after": "In the first month of the year after next, Grand Censor Tie Shi was again ordered to revive the standards of the censorate; an edict was proclaimed throughout the court and the realm.",
+      "reason": "申命大夫 means again ordering the Grand Censor, not promoting him to \"Grand Master for Thriving Affairs\".",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:207:r0003",
+      "unit": {
+        "id": "s0025",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Yang Cheng then held Youzhou. In the sixth month Pingzhang Yuelu Buhua and privy council vice director Balahuozhe were sent to hunt him down, and in the seventh month they besieged the city.",
+      "after": "Yang Cheng then held Weizhou. In the sixth month Pingzhang Yuelu Buhua and privy council vice director Balahuozhe were sent to hunt him down, and in the seventh month they besieged the city.",
+      "reason": "蔚州 is Weizhou, not Youzhou (幽州); the place name is mistranslated.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:207:r0004",
+      "unit": {
+        "id": "s0025",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "At that time Yang Cheng held Youzhou. In the sixth month an edict sent Pingzhang Yuelu Buhua and Vice Director of the Privy Council Balahuozhe to supervise troops in capturing him; in the seventh month they besieged his city.",
+      "after": "At that time Yang Cheng held Weizhou. In the sixth month an edict sent Pingzhang Yuelu Buhua and Vice Director of the Privy Council Balahuozhe to supervise troops in capturing him; in the seventh month they besieged his city.",
+      "reason": "蔚州 is Weizhou, not Youzhou (幽州); the place name is mistranslated.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "yuanshi:207:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0006 has 申命大夫鐵失，振舉臺綱: 申命 reiterates an order to the existing 大夫 (Grand Censor in this censorate context), not a promotion to a fabricated title \"grand master for thriving affairs\"; 又明年正月 is also restored correctly.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0006",
+        "excerpt": "申命大夫鐵失，振舉臺綱"
+      }
+    },
+    {
+      "repairId": "yuanshi:207:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field makes the same error: 申命大夫鐵失 is again ordering Grand Censor Tie Shi, not promoting him to \"Grand Master for Thriving Affairs\". The proposed replacement matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0006",
+        "excerpt": "申命大夫鐵失"
+      }
+    },
+    {
+      "repairId": "yuanshi:207:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0025 has 據蔚州; 蔚州 is Weizhou, not Youzhou (幽州). The proposed idiomatic correctly replaces only the place name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0025",
+        "excerpt": "據蔚州"
+      }
+    },
+    {
+      "repairId": "yuanshi:207:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise mistranslates 蔚州 as Youzhou; Weizhou is the correct reading, and the rest of the proposed sentence is unchanged and accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0025",
+        "excerpt": "據蔚州"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "xinwudaishi",
+  "chapter": "011",
+  "input": {
+    "chapterFingerprint": "sha256:b2bbf0dcca647277dc5c6c9f3f26fa8739927203d97f37c6132b82b3f0f1d7e4",
+    "proposalsFingerprint": "sha256:52d3aaceae80e7a7323d46823e343efc372224cd8aa73d7c64ff410a08c7fe25"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-c1570371-ce00-4727-be03-fad797a0673c",
+    "runId": "run-9b41b7e0-0467-435c-b1ec-98468fac124b",
+    "completedAt": "2026-08-12T14:35:54.310Z"
+  },
+  "proposals": [
+    {
+      "id": "xinwudaishi:011:r0001",
+      "unit": {
+        "id": "s0076",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "On xinwei in the fifth month he ennobled his forebears: great-grandfather Jing as emperor Ruihe, temple Xinzu, and great-grandmother Lady Zhang as empress Ruigong;",
+      "after": "On xinwei in the fifth month he posthumously honored his ancestors as emperors and ancestresses as empresses: great-great-grandfather Jing, posthumous title Ruihe, temple name Xinzu; great-great-grandmother Lady Zhang, posthumous title Ruigong;",
+      "reason": "Chinese 高祖 is great-great-grandfather (four generations up), not great-grandfather; the idiomatic generation labels are reversed relative to 高祖/曾祖.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:011:r0002",
+      "unit": {
+        "id": "s0077",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "field": "idiomatic",
+      "before": "great-great-grandfather Chen as emperor Mingxian, temple Xizu, and great-great-grandmother Lady Shen as empress Mingxiao;",
+      "after": "great-grandfather Chen, posthumous title Mingxian, temple name Xizu; great-grandmother Lady Shen, posthumous title Mingxiao;",
+      "reason": "Chinese 曾祖 is great-grandfather; the idiomatic text incorrectly calls him great-great-grandfather.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:011:r0003",
+      "unit": {
+        "id": "s0042",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "The Hidden Emperor and Li Ye had already struck down Shi Hongzhao and his allies. He now ordered Li Hongyi of Zhenning to murder Wang Yin, foot commander of the Palace Guard, at Chanzou, and Guo Chong, horse commander, to kill Wei and Wang Jun, commissioner of the Palace Secretariat, at Wei prefecture.",
+      "after": "The Hidden Emperor and Li Ye had already struck down Shi Hongzhao and his allies. He now ordered Li Hongyi of Zhenning to murder Wang Yin, foot commander of the Palace Guard, at Chanzhou, and Guo Chong, horse commander, to kill Wei and Wang Jun, commissioner of the Palace Secretariat, at Wei prefecture.",
+      "reason": "澶州 is Chanzhou, not Chanzou.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xinwudaishi:011:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit has 高祖璟 followed by 曾祖諶, 祖蘊, and 考: 高祖 is the fourth-generation ancestor (great-great-grandfather), not great-grandfather. The before text reverses the 高祖/曾祖 generation labels; the proposed wording restores great-great-grandfather/great-great-grandmother and correctly renders 追尊 and 謚曰 as posthumous honor and posthumous title.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0076",
+        "excerpt": "追尊祖考為皇帝，妣為皇后：高祖璟謚曰睿和，廟號信祖，祖妣張氏謚曰睿恭"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:011:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit names 曾祖諶 between 高祖璟 and 祖蘊; 曾祖 is great-grandfather. Calling him great-great-grandfather contradicts the Chinese kinship ladder; the proposed great-grandfather/great-grandmother labels and posthumous-title phrasing match 謚曰 and 廟號.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0077",
+        "excerpt": "曾祖諶謚曰明憲，廟號僖祖，祖妣申氏謚曰明孝"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:011:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit places the murder order 於澶州; 澶州 romanizes as Chanzhou, not Chanzou. The replacement corrects only that place name and leaves the rest of the sentence intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0042",
+        "excerpt": "殺侍衛步軍指揮使王殷於澶州"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

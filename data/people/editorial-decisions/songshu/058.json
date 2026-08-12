@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "songshu",
+  "chapter": "058",
+  "input": {
+    "chapterFingerprint": "sha256:2dd3f842be36bc3124f3650c4310faad08b80dc3d82e66fb93dae8613c4d0a0e",
+    "proposalsFingerprint": "sha256:4180d8935bc95a96aec2845de706d2b8816f415886466aea870501154b870a6e"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-a08a107b-b40b-4148-ac13-83de46d4a3d1",
+    "runId": "run-e97eb5e0-14bf-4b8e-8b6d-e0c938078cb8",
+    "completedAt": "2026-08-12T16:17:56.838Z"
+  },
+  "proposals": [
+    {
+      "id": "songshu:058:r0001",
+      "unit": {
+        "id": "s0167",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "When the Grand Ancestor took the throne, he became Palace Attendant of the Yellow Gates; with Wang Hua, Wang Shoushou, Yin Jingren, and Liu Zhan he was called one of the Five Ministers.",
+      "after": "When the Grand Ancestor took the throne, he became Palace Attendant of the Yellow Gates; with Wang Hua, Wang Tanshou, Yin Jingren, and Liu Zhan he was called one of the Five Ministers.",
+      "reason": "王曇首 is Wang Tanshou; \"Shoushou\" misreads 曇首.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:058:r0002",
+      "unit": {
+        "id": "s0167",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "When the Grand Ancestor took the throne, he became Palace Attendant of the Yellow Gates; with Wang Hua, Wang Shoushou, Yin Jingren, and Liu Zhan he was called one of the Five Ministers.",
+      "after": "When the Grand Ancestor took the throne, he became Palace Attendant of the Yellow Gates; with Wang Hua, Wang Tanshou, Yin Jingren, and Liu Zhan he was called one of the Five Ministers.",
+      "reason": "王曇首 is Wang Tanshou; \"Shoushou\" misreads 曇首.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:058:r0003",
+      "unit": {
+        "id": "s0111",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Wang Qiu, styled Qianyu, came from Langya Linyi and was a distant cousin of Grand Tutor Wang Hui.",
+      "after": "Wang Qiu, styled Qianyu, came from Langya Linyi and was a paternal cousin of Grand Master of Sacrifices Wang Hui.",
+      "reason": "太常惠 is Grand Master of Sacrifices Hui, not Grand Tutor (太保).",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:058:r0004",
+      "unit": {
+        "id": "s0120",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "He entered court as Palace Attendant and Champion General, also served as Senior Arbiter of his home province, then became Inspector of the Masters of Writing while retaining his post as Palace Attendant.",
+      "after": "He entered court as Palace Attendant and Champion General, also served as Senior Arbiter of his home province, then became Director of the Imperial Secretariat while retaining his post as Palace Attendant.",
+      "reason": "中書令 is Director of the Imperial Secretariat, not an inspector of the Masters of Writing (尚書).",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "songshu:058:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "王曇首 is Wang Tanshou; \"Shoushou\" misreads 曇 as 壽/Shou and invents a wrong personal name among the Five Ministers.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0167",
+        "excerpt": "王曇首"
+      }
+    },
+    {
+      "repairId": "songshu:058:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same naming error as the idiomatic: 王曇首 must be Wang Tanshou, not Wang Shoushou.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0167",
+        "excerpt": "與王華、王曇首、殷景仁、劉湛"
+      }
+    },
+    {
+      "repairId": "songshu:058:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "太常惠 names Hui by the office 太常 (Grand Master of Sacrifices), not Grand Tutor; 從父弟 is a paternal cousin, so \"distant cousin of Grand Tutor\" misstates both title and kinship.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0111",
+        "excerpt": "太常惠從父弟也"
+      }
+    },
+    {
+      "repairId": "songshu:058:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "徙中書令 is transfer to Director of the Imperial Secretariat; \"Inspector of the Masters of Writing\" wrongly maps 中書令 onto a 尚書 office.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0120",
+        "excerpt": "徙中書令，侍中如故"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

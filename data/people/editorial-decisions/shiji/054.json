@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "054",
+  "input": {
+    "chapterFingerprint": "sha256:d540285c95c18887e8929ab3d44e82a515864d97056e32c0217b7cbbdac736e9",
+    "proposalsFingerprint": "sha256:844a808dab3e39d9cce53a169657671a0b8a7c9ddcb3da1f822ef69bbe5b339b"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-895c2ad1-2473-47e0-9a53-abba488e66db",
+    "runId": "run-719405ad-8d79-473a-a2dd-c362c4dc8d20",
+    "completedAt": "2026-08-12T14:33:41.680Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:054:r0001",
+      "unit": {
+        "id": "s0069",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 15
+      },
+      "field": "idiomatic",
+      "before": "He captured Tian Guang, the former king of Qi; Tian Guang, his chancellor; Xu Zhang, acting chancellor in charge of the defense; and Tian Ji, the former Jiaodong general.",
+      "after": "He captured Tian Guang, the chancellor of the former King of Qi Tian Guang; Xu Zhang, the defending chancellor; and Tian Ji, the former Jiaodong general of Qi.",
+      "reason": "Chinese 故齊王田廣相田光 identifies 田光 as chancellor of former Qi king 田廣; the idiomatic English wrongly treats the king as a captive and fails to distinguish the two men.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:054:r0002",
+      "unit": {
+        "id": "s0069",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 15
+      },
+      "field": "literal",
+      "before": "Among his prisoners were the former King of Qi, Tian Guang, Chancellor Tian Guang, the defending chancellor Xu Zhang, and the former Jiaodong general Tian Ji.",
+      "after": "He obtained the former King of Qi Tian Guang's chancellor Tian Guang, his defending chancellor Xu Zhang, and the former Jiaodong general of Qi Tian Ji.",
+      "reason": "Literal English likewise misreads the capture list as including the king rather than his chancellor 田光.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:054:r0003",
+      "unit": {
+        "id": "s0075",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "His fief income was Pingyang with 16,630 households, titled Marquis of Pingyang, removing his previous fief income.",
+      "after": "His fief income was Pingyang with 10,630 households, titled Marquis of Pingyang, removing his previous fief income.",
+      "reason": "萬六百三十戶 is 10,630 households, not 16,630.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:054:r0004",
+      "unit": {
+        "id": "s0138",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "His son Dai succeeded as marquis.",
+      "after": "His son Shi succeeded as marquis.",
+      "reason": "子時 is the name Shi (時); 代侯 means succeeded as marquis, not a personal name Dai.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:054:r0005",
+      "unit": {
+        "id": "s0139",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Dai married Princess Pingyang, fathering son Xiang.",
+      "after": "Shi married Princess Pingyang, fathering son Xiang.",
+      "reason": "時 is Shi, not Dai.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:054:r0006",
+      "unit": {
+        "id": "s0140",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "Dai fell ill and returned to his state.",
+      "after": "Shi fell ill and returned to his state.",
+      "reason": "時 is Shi, not Dai.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:054:r0007",
+      "unit": {
+        "id": "s0143",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "Xiang married Princess Chang Wei, fathering son Zong.",
+      "after": "Xiang married the Elder Princess of Wei, fathering son Zong.",
+      "reason": "衛長公主 is the Elder Princess of Wei, not \"Princess Chang Wei\".",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:054:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "得故齊王田廣相田光 names captives starting with chancellor 田光 of former Qi king 田廣, not the king himself; the proposed list restores that parse and keeps 守相許章 and 故齊膠東將軍田既.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0069",
+        "excerpt": "得故齊王田廣相田光，其守相許章，及故齊膠東將軍田既"
+      }
+    },
+    {
+      "repairId": "shiji:054:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise misreads 故齊王田廣相田光 as capturing both king and chancellor; 得 takes 相田光 (and then 守相許章, 將軍田既) as the objects obtained.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0069",
+        "excerpt": "得故齊王田廣相田光，其守相許章，及故齊膠東將軍田既"
+      }
+    },
+    {
+      "repairId": "shiji:054:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "食邑平陽萬六百三十戶 is 10,630 households (萬 + 六百三十), not 16,630; the proposed numeral matches the Chinese and the idiomatic reading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "食邑平陽萬六百三十戶"
+      }
+    },
+    {
+      "repairId": "shiji:054:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "子時代侯 parallels 子奇代侯: 時 is the personal name Shi and 代侯 means succeeded as marquis, so Dai is a false name from misreading 代.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0138",
+        "excerpt": "子時代侯"
+      }
+    },
+    {
+      "repairId": "shiji:054:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "時尚平陽公主 continues the subject 時 (Shi) from the prior sentence; Dai is not in the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0139",
+        "excerpt": "時尚平陽公主，生子襄"
+      }
+    },
+    {
+      "repairId": "shiji:054:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "時病癘，歸國 likewise has 時 as Shi; replacing Dai with Shi corrects the same misread personal name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0140",
+        "excerpt": "時病癘，歸國"
+      }
+    },
+    {
+      "repairId": "shiji:054:r0007",
+      "decision": "accept",
+      "after": null,
+      "reason": "衛長公主 is the Elder Princess of Wei (衛 + 長公主), not a personal name Chang Wei; the proposed title matches the Chinese and the idiomatic rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0143",
+        "excerpt": "襄尚衛長公主"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

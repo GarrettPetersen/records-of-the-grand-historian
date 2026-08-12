@@ -549,7 +549,22 @@ async function renderHomepage() {
   initGlobalChapterSearch(buildFlatChapterSearchIndex(fullManifest));
 }
 
+async function revealPublishedPeopleFeature() {
+  const feature = document.getElementById('home-people-feature');
+  const footerLink = document.getElementById('home-people-footer-link');
+  if (!feature && !footerLink) return;
+  const response = await fetch('/data/people/site-status.json', { cache: 'no-store' });
+  const contentType = response.headers.get('content-type') || '';
+  if (response.status === 404 || !contentType.includes('application/json')) return;
+  if (!response.ok) throw new Error(`People publication status failed with HTTP ${response.status}`);
+  const status = await response.json();
+  if (status.published !== true || status.complete !== true) return;
+  if (feature) feature.hidden = false;
+  if (footerLink) footerLink.hidden = false;
+}
+
 // Initialize on page load
 if (document.getElementById('histories-grid')) {
   renderHomepage();
+  revealPublishedPeopleFeature().catch((error) => console.error(error));
 }

@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { load as loadHtml } from 'cheerio';
-import { PEOPLE_DIR, readJson, REPO_ROOT } from './lib/people-content.mjs';
+import { listHtmlFilesRecursively, PEOPLE_DIR, readJson, REPO_ROOT } from './lib/people-content.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
@@ -78,6 +78,10 @@ export function verifyPeopleSite(options = parseArgs([])) {
     : [];
   assert(pageFiles.length === catalog.people.length,
     `Expected ${catalog.people.length} person pages, found ${pageFiles.length}`, errors);
+  const allPeopleHtml = fs.existsSync(peopleDir) ? listHtmlFilesRecursively(peopleDir) : [];
+  const browseFiles = allPeopleHtml.filter((name) => name.includes(path.sep));
+  assert(browseFiles.length === status.browsePages,
+    `Expected ${status.browsePages} people browse pages, found ${browseFiles.length}`, errors);
 
   const expectedSlugs = new Set(catalog.people.map((person) => person.slug));
   const peopleById = new Map(catalog.people.map((person) => [person.id, person]));
@@ -103,10 +107,33 @@ export function verifyPeopleSite(options = parseArgs([])) {
     }
   }
 
+  const directorySlugs = new Set();
+  for (const relativeFile of browseFiles) {
+    const html = fs.readFileSync(path.join(peopleDir, relativeFile), 'utf8');
+    const document = loadHtml(html);
+    assert(document('h1').length === 1, `${relativeFile} must have one h1`, errors);
+    assert(document('link[rel="canonical"]').length === 1, `${relativeFile} has no canonical URL`, errors);
+    assert(document('script[type="application/ld+json"]').length === 1, `${relativeFile} has no collection JSON-LD`, errors);
+    if (relativeFile.startsWith(`directory${path.sep}`)) {
+      document('a[href^="../"][href$=".html"]').each((_, link) => {
+        const href = document(link).attr('href');
+        if (href && /^\.\.\/[^/]+\.html$/u.test(href) && href !== '../index.html') {
+          directorySlugs.add(href.slice(3, -5));
+        }
+      });
+    }
+  }
+  assert(directorySlugs.size === expectedSlugs.size,
+    `A-Z directory links to ${directorySlugs.size}/${expectedSlugs.size} people`, errors);
+  for (const slug of expectedSlugs) assert(directorySlugs.has(slug), `A-Z directory omits ${slug}`, errors);
+
   const searchEntries = loadSearchEntries(options.outputRoot, errors);
   const searchSlugs = new Set(searchEntries.map((entry) => entry[0]));
   assert(searchSlugs.size === expectedSlugs.size, 'People search contains duplicate or missing slugs', errors);
   for (const slug of expectedSlugs) assert(searchSlugs.has(slug), `Search data omits ${slug}`, errors);
+  for (const entry of searchEntries) {
+    assert(Array.isArray(entry) && entry.length >= 11, `Search entry ${entry?.[0] ?? '(unknown)'} is not version 2`, errors);
+  }
 
   if (!options.skipChapterLinks) {
     for (const chapter of Object.values(siteIndex.chapters)) {

@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "351",
+  "input": {
+    "chapterFingerprint": "sha256:6633104d91c06a745ca2ea134a456a2746e46fd6bb19149e6169db773436d9a4",
+    "proposalsFingerprint": "sha256:e0e1070607cb617919b52cc448d65c78c1c583f6f7bb0a8dd8743418e1c20421"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-8499e7f6-2f54-4e36-bfaa-cf3520bc4b68",
+    "runId": "run-af4c3756-8281-4322-85cf-ef8a5155db8d",
+    "completedAt": "2026-08-12T14:29:48.490Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:351:r0001",
+      "unit": {
+        "id": "s0120",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "That year sectarian rebels erupted in Huaxian and spread into Shandong; he impeached Heze instructor Song Xuan, a military licentiate who had joined the rebels and escaped detection; sought honors for Kong Yujun and licentiate Kong Yuzhong of Caozhou, who died fighting the rebels; and rewarded Jinxiang licentiate Li Jiubiao for capturing a rebel leader.",
+      "after": "That year sectarian rebels erupted in Huaxian and spread into Shandong; he impeached and dismissed Song Xuan, the Heze instructor, for failing to detect military licentiates practicing the sect; sought honors for Kong Yujun and licentiate Kong Yuzhong of Caozhou, who died fighting the rebels; and rewarded Jinxiang licentiate Li Jiubiao for capturing a rebel leader.",
+      "reason": "Chinese 劾罷失察武生習教之菏澤訓導宋璇 marks Song Xuan as the instructor dismissed for 失察 (failure to detect) regarding 武生習教, not as himself having joined the rebels.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:351:r0002",
+      "unit": {
+        "id": "s0007",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "In the 32nd year, he was assigned to the Maojin Hall, where he joined others in copying sutras to pray for blessings for the Empress Dowager.",
+      "after": "In the 32nd year, he was assigned to the Maoqin Hall, where he joined others in copying sutras to pray for blessings for the Empress Dowager.",
+      "reason": "懋勤殿 is Maoqin Hall (Hall of Assiduous Diligence), not Maojin; the idiomatic rendering is already correct.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:351:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0120 has 劾罷失察武生習教之菏澤訓導宋璇: Song Xuan is the Heze instructor impeached and dismissed for failure to detect military licentiates practicing the sect, not himself a rebel. The prior idiomatic invents that he joined the rebels; the proposed wording restores the Chinese sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0120",
+        "excerpt": "劾罷失察武生習教之菏澤訓導宋璇"
+      }
+    },
+    {
+      "repairId": "qingshigao:351:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0007 has 直懋勤殿; 懋勤 is Maoqin (Hall of Assiduous Diligence), not Maojin. The literal misromanization is a real error; Maoqin Hall matches the Chinese and the idiomatic sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0007",
+        "excerpt": "直懋勤殿"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

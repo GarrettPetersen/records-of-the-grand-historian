@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "085",
+  "input": {
+    "chapterFingerprint": "sha256:b77279695dbf9046d690c45f8a9aa0ea2ea36ce352c446a380aa27bb780441ee",
+    "proposalsFingerprint": "sha256:49912fb8ce9a298fd0a1c33926b4fa595b98d790ef3189a7f3788be98256a051"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-2e8b7a94-e480-4dfb-8c2c-146c40d37300",
+    "runId": "run-2d5a2470-8cfb-4ffd-9704-58568affeb3a",
+    "completedAt": "2026-08-12T14:34:14.083Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:085:r0001",
+      "unit": {
+        "id": "s0073",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Empress Dowager Huayang, the queen of King Xiaowen, was to be interred with King Xiaowen at the Shouling tomb.",
+      "after": "Empress Dowager Huayang, the queen of King Xiaowen, was buried with King Xiaowen at the Shouling tomb.",
+      "reason": "Chinese 會葬 states the burial as a completed arrangement, not a prospective plan; 'was to be interred' wrongly implies futurity.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:085:r0002",
+      "unit": {
+        "id": "s0073",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "The queen of King Xiaowen, called Empress Dowager Huayang, was to be buried with King Xiaowen at the Shouling tomb.",
+      "after": "The queen of King Xiaowen, called Empress Dowager Huayang, was buried with King Xiaowen at the Shouling tomb.",
+      "reason": "Same futurity error as the idiomatic rendering of 會葬.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:085:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "會葬 records the completed joint burial of Empress Dowager Huayang with King Xiaowen at Shouling; the following contrast with Empress Dowager Xia’s separate burial (獨別葬) confirms this as narrative fact, so “was to be interred” wrongly adds futurity and “was buried” is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0073",
+        "excerpt": "與孝文王會葬壽陵"
+      }
+    },
+    {
+      "repairId": "shiji:085:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 會葬 is a completed joint-burial statement, not a prospective plan; replacing “was to be buried” with “was buried” removes the false futurity while preserving the rest of the literal rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0073",
+        "excerpt": "與孝文王會葬壽陵"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

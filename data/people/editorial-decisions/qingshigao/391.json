@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "391",
+  "input": {
+    "chapterFingerprint": "sha256:b0000d37df71ebee218dfb8e43eeb1baeaf4859488fc34932834cb84a856c30c",
+    "proposalsFingerprint": "sha256:b42209194bdfa50b276a3e3af784de3113b5d1d47c2cb284f6e6e8f0c28d3e65"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-d4e436d2-ef8d-4061-b07b-9954a0880d02",
+    "runId": "run-26d40edb-c94b-4bd4-ab77-4f1dc85842bb",
+    "completedAt": "2026-08-12T16:16:38.054Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:391:r0001",
+      "unit": {
+        "id": "s0028",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Soon he was given the rank of vice president of the Censorate and appointed assistant commissioner at Yarkand.",
+      "after": "Soon he was given the rank of vice banner commander and appointed assistant commissioner at Yarkand.",
+      "reason": "副都統 is a banner vice commander-in-chief rank, not a vice president of the Censorate.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:391:r0002",
+      "unit": {
+        "id": "s0063",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "He died soon after. The court granted him the posthumous rank of Grand Tutor, enshrined him in the Shrine of Worthy Officials, and gave him the temple name Wenduan.",
+      "after": "He died soon after. The court granted him the posthumous rank of Grand Tutor, enshrined him in the Shrine of Worthy Officials, and gave him the posthumous name Wenduan.",
+      "reason": "諡 marks a posthumous name, not a temple name.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:391:r0003",
+      "unit": {
+        "id": "s0120",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "The court was stricken; Prince Zaiye was sent to offer libations, gold was granted for the funeral, and Tangjie was posthumously made grand guardian of the heir apparent with the temple name Wenqing.",
+      "after": "The court was stricken; Prince Zaiye was sent to offer libations, gold was granted for the funeral, and Tangjie was posthumously made grand guardian of the heir apparent with the posthumous name Wenqing.",
+      "reason": "諡 marks a posthumous name, not a temple name.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:391:r0004",
+      "unit": {
+        "id": "s0146",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Grand Secretary Sengbao arrived in command and demanded lavish supplies; Magistrate Wang Hong, crushed by the demand, tried to kill himself and barely survived.",
+      "after": "Grand Secretariat Academician Sengbao arrived in command and demanded lavish supplies; Magistrate Wang Hong, crushed by the demand, tried to kill himself and barely survived.",
+      "reason": "內閣學士 is Grand Secretariat Academician, not Grand Secretary (大學士).",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:391:r0005",
+      "unit": {
+        "id": "s0146",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Grand Secretary Sengbao arrived at Hejian commanding troops and demanded supplies with great urgency; Magistrate Wang Hong, pressed to meet them, attempted suicide and nearly died.",
+      "after": "Grand Secretariat Academician Sengbao arrived at Hejian commanding troops and demanded supplies with great urgency; Magistrate Wang Hong, pressed to meet them, attempted suicide and nearly died.",
+      "reason": "內閣學士 is Grand Secretariat Academician, not Grand Secretary (大學士).",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:391:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0028 reads 尋予副都統銜: 副都統 is a banner military rank (vice commander-in-chief), not a Censorate office. The prior literal's 'vice president of the Censorate' is a mistranslation; the proposed 'vice banner commander' matches the Chinese and the unit's idiomatic rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0028",
+        "excerpt": "尋予副都統銜，充葉爾羌幫辦大臣"
+      }
+    },
+    {
+      "repairId": "qingshigao:391:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0063 ends 諡文端: 諡 denotes a posthumous name (谥号), not a temple name (庙号). Replacing 'temple name' with 'posthumous name Wenduan' corrects the English while preserving the rest of the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0063",
+        "excerpt": "諡文端"
+      }
+    },
+    {
+      "repairId": "qingshigao:391:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0120 ends 諡文清: 諡 is a posthumous name, not a temple name. The proposed swap to 'posthumous name Wenqing' is accurate; the remaining funeral honors follow the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0120",
+        "excerpt": "諡文清"
+      }
+    },
+    {
+      "repairId": "qingshigao:391:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0146 opens 內閣學士勝保: 內閣學士 is Grand Secretariat Academician, distinct from 大學士 (Grand Secretary). The proposed title fix is correct and leaves the supply-demand narrative intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0146",
+        "excerpt": "內閣學士勝保督師至河間"
+      }
+    },
+    {
+      "repairId": "qingshigao:391:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same unit as r0004: literal also misrenders 內閣學士 as Grand Secretary. The proposed 'Grand Secretariat Academician' is the accurate office title for the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0146",
+        "excerpt": "內閣學士勝保督師至河間"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "143",
+  "input": {
+    "chapterFingerprint": "sha256:d1332ca81df4f52d2c65fb126ee2e2866e36c01f2ded6e9c6968e98359ded9e9",
+    "proposalsFingerprint": "sha256:3b4616cdb113ea179da8861bf97f58dd84cf5408882b25d64106d985bb576204"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-225e5763-a20d-4976-bbca-a97ac034712d",
+    "runId": "run-defa7539-6180-442e-b509-36f0b058a174",
+    "completedAt": "2026-08-12T14:29:57.424Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:143:r0001",
+      "unit": {
+        "id": "s0110",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Lingchi applied to the gravest offenses among the Ten Abominations—unfilial conduct and worse—and was regarded as the supreme penalty.",
+      "after": "Lingchi applied to the gravest offenses among the Ten Abominations—crimes of inhumanity (budao) and above—and was regarded as the supreme penalty.",
+      "reason": "不道 is the Ten Abominations category of inhuman/unnatural crimes, not unfilial conduct (不孝).",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:143:r0002",
+      "unit": {
+        "id": "s0110",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Lingchi was applied to such grave offenses among the Ten Abominations as unfilial conduct and above, and was called the extreme punishment.",
+      "after": "Lingchi was applied to such grave offenses among the Ten Abominations as inhumanity (budao) and above, and was called the extreme punishment.",
+      "reason": "不道 should not be rendered as unfilial conduct; that sense belongs to 不孝.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:143:r0003",
+      "unit": {
+        "id": "s0160",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 24
+      },
+      "field": "idiomatic",
+      "before": "From Jin onward families could still share punishment, but Tang law limited guilt by association to rebellion, felonious sons, and unfilial conduct alone.",
+      "after": "From Jin onward families could still share punishment, but Tang law limited guilt by association to rebellion, felonious contumacy against parents or grandparents (e'ni), and crimes of inhumanity (budao) alone.",
+      "reason": "惡逆 and 不道 are distinct Ten Abominations categories; 不道 is not unfilial conduct.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:143:r0004",
+      "unit": {
+        "id": "s0160",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 24
+      },
+      "field": "literal",
+      "before": "From Jin onward there remained laws for family members to share punishment; in the Tang Code only rebellion, felonious sons, and unfilial conduct had guilt by association in the code—nothing else did.",
+      "after": "From Jin onward there remained laws for family members to share punishment; in the Tang Code only rebellion, felonious contumacy (e'ni), and inhumanity (budao) had guilt by association in the code—nothing else did.",
+      "reason": "不道 is mistranslated as unfilial conduct; 惡逆 is better as felonious contumacy than only felonious sons.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:143:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0110 has 十惡中不道以上: 不道 is the Ten Abominations category of inhumanity, distinct from 不孝 (unfilial conduct). The prior idiomatic wrongly renders 不道 as unfilial conduct; the proposed replacement restores the correct category and keeps the rest of the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0110",
+        "excerpt": "十惡中不道以上"
+      }
+    },
+    {
+      "repairId": "qingshigao:143:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same phrase 不道以上 must not be read as unfilial conduct. The prior literal conflates 不道 with 不孝; rendering it as inhumanity (budao) and above matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0110",
+        "excerpt": "十惡中不道以上"
+      }
+    },
+    {
+      "repairId": "qingshigao:143:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0160 lists Tang guilt-by-association as 反叛、惡逆、不道—three distinct categories. The prior idiomatic turns 惡逆 into 'felonious sons' and 不道 into 'unfilial conduct' (不孝); the proposed e'ni and budao wording corrects both names without changing the sentence structure.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0160",
+        "excerpt": "唐律惟反叛、惡逆、不道"
+      }
+    },
+    {
+      "repairId": "qingshigao:143:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal must track the same triad 反叛、惡逆、不道. Replacing 'felonious sons' and 'unfilial conduct' with felonious contumacy (e'ni) and inhumanity (budao) restores the Ten Abominations terms named in the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0160",
+        "excerpt": "唐律惟反叛、惡逆、不道"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -3,35 +3,20 @@
   "book": "hanshu",
   "chapter": "066",
   "input": {
-    "chapterFingerprint": "sha256:662cdb6b2d6173b5f3b2e76fee4c96cd9f9a4b32383a2b8b00f27066bf4a2d5f",
-    "proposalsFingerprint": "sha256:edbc28e2c22cd5eae755256368387f0d1b15958de3436c0301f91fc2aea45f1d"
+    "chapterFingerprint": "sha256:5fdf22080c93c6b13e1c953c258ab48659348d5b37899b72c2f8f162d3dc89d6",
+    "proposalsFingerprint": "sha256:821da56937453dc4c08f1e062dc27112e5f0b6c49ab525e06808c3028f4e641d"
   },
   "reviewer": {
-    "kind": "codex",
-    "name": "Codex review of Grok 4.5 draft",
-    "model": null,
-    "agentId": null,
-    "runId": null,
-    "completedAt": "2026-08-11T04:06:37.000Z"
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-a8c5f178-d367-4ec4-b77d-318ad62e23d8",
+    "runId": "run-6984d9ca-1551-4311-9763-1e0b0d06747f",
+    "completedAt": "2026-08-12T16:12:44.498Z"
   },
   "proposals": [
     {
       "id": "hanshu:066:r0001",
-      "unit": {
-        "id": "s0004",
-        "kind": "paragraph-sentence",
-        "blockIndex": 2,
-        "collection": "sentences",
-        "itemIndex": 1
-      },
-      "field": "literal",
-      "before": "In his youth he loved to read books, studied swordsmanship, and his given name was Quanzi.",
-      "after": "In his youth he loved to read books, studied swordsmanship, and his childhood name was Quanzi.",
-      "reason": "Chinese 名犬子 marks a childhood name, not an adult given name; the idiomatic English already renders this correctly.",
-      "confidence": "high"
-    },
-    {
-      "id": "hanshu:066:r0002",
       "unit": {
         "id": "s0005",
         "kind": "paragraph-sentence",
@@ -42,7 +27,22 @@
       "field": "idiomatic",
       "before": "Once his schooling was done, he so admired the conduct of Lin Xiangru of Zhao that he adopted the name Xiangru for himself.",
       "after": "Once his schooling was done, he so admired the conduct of Lin Xiangru that he adopted the name Xiangru for himself.",
-      "reason": "Chinese names 藺相如 without Zhao; “of Zhao” is an invented addition absent from the source.",
+      "reason": "Chinese has no 趙; 'of Zhao' is an invention not in the source sentence.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:066:r0002",
+      "unit": {
+        "id": "s0016",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "When they were deep in wine, the magistrate stepped forward with a zither and said, “I hear you are fond of this instrument—may I offer you a tune for your pleasure?”",
+      "after": "When they were deep in wine, the magistrate stepped forward with a zither and said, “I have heard that Zhangqing is fond of this; I wish to amuse myself with it.”",
+      "reason": "願以自娛 means the magistrate wishes to amuse himself by playing, not to offer Xiangru a tune for Xiangru's pleasure.",
       "confidence": "high"
     },
     {
@@ -57,7 +57,7 @@
       "field": "idiomatic",
       "before": "Ban Gu’s note: Lord No-such-person’s description of Shanglin and Sir Vacuity’s catalogue of Cloud Dream swell beyond fact and stray from moral purpose; the historian has therefore trimmed them to essentials and set the discourse back on the proper path.",
       "after": "Lord No-such-person’s description of Shanglin and Sir Vacuity’s catalogue of Cloud Dream swell beyond fact and stray from moral purpose; the historian has therefore trimmed them to essentials and set the discourse back on the proper path.",
-      "reason": "Chinese does not name Ban Gu; “Ban Gu’s note:” is invented translator framing in the idiomatic English.",
+      "reason": "Chinese does not name Ban Gu; the English frame 'Ban Gu's note:' is translator-added attribution not present in the unit.",
       "confidence": "high"
     }
   ],
@@ -66,18 +66,7 @@
       "repairId": "hanshu:066:r0001",
       "decision": "accept",
       "after": null,
-      "reason": "名犬子, followed by later 更名相如, marks the childhood name Quanzi rather than an adult given name; the proposed literal matches the Chinese and the already-correct idiomatic rendering.",
-      "sourceWitness": {
-        "source": "chapter-text",
-        "citation": "s0004",
-        "excerpt": "名犬子"
-      }
-    },
-    {
-      "repairId": "hanshu:066:r0002",
-      "decision": "reject",
-      "after": null,
-      "reason": "Although this unit names only 藺相如, 'of Zhao' is an accurate and useful identification of Lin Xiangru, not a translation error.",
+      "reason": "s0005 has only 慕藺相如之為人也; 趙 is absent, so English “of Zhao” invents polity not stated in this sentence, and dropping it restores the Chinese scope.",
       "sourceWitness": {
         "source": "chapter-text",
         "citation": "s0005",
@@ -85,10 +74,21 @@
       }
     },
     {
-      "repairId": "hanshu:066:r0003",
-      "decision": "reject",
+      "repairId": "hanshu:066:r0002",
+      "decision": "accept",
       "after": null,
-      "reason": "The first-person editorial statement identifies the Hanshu compiler's abridgment; 'Ban Gu's note:' is useful authorial framing that preserves attribution rather than a mistranslation.",
+      "reason": "The quoted speech is 竊聞長卿好之，願以自娛: the magistrate names Zhangqing and says he wishes to amuse himself; “offer you a tune for your pleasure” reverses agent and beneficiary.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0016",
+        "excerpt": "竊聞長卿好之，願以自娛"
+      }
+    },
+    {
+      "repairId": "hanshu:066:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The Chinese unit never names 班固; “Ban Gu’s note:” is translator framing added only in the idiomatic English and must be removed.",
       "sourceWitness": {
         "source": "chapter-text",
         "citation": "s0191",
@@ -96,6 +96,154 @@
       }
     }
   ],
-  "claimRetractions": [],
+  "claimRetractions": [
+    {
+      "repairId": "hanshu:066:r0003",
+      "claim": {
+        "id": "hanshu:066:c0100",
+        "subject": "hanshu:066:p027",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Ban Gu",
+          "zh": "班固",
+          "pinyin": "Bān Gù"
+        },
+        "certainty": "uncertain",
+        "evidence": [
+          "hanshu:066:s0191"
+        ]
+      },
+      "reason": "The personal name Ban Gu appears only in the invented English frame “Ban Gu’s note:”; s0191 never prints 班固.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0191",
+        "excerpt": "故刪取其要，歸正道而論之"
+      }
+    },
+    {
+      "repairId": "hanshu:066:r0003",
+      "claim": {
+        "id": "hanshu:066:c0101",
+        "subject": "hanshu:066:p027",
+        "predicate": "role",
+        "value": {
+          "roleId": "historian"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "hanshu:066:s0191"
+        ]
+      },
+      "reason": "Assigning Ban Gu the role historian at s0191 depends on the English-only Ban Gu frame; the Chinese gives an impersonal editorial abridgment without naming him.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0191",
+        "excerpt": "故刪取其要，歸正道而論之"
+      }
+    },
+    {
+      "repairId": "hanshu:066:r0003",
+      "claim": {
+        "id": "hanshu:066:c0102",
+        "subject": "hanshu:066:p027",
+        "predicate": "role",
+        "value": {
+          "roleId": "commentator"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "hanshu:066:s0191"
+        ]
+      },
+      "reason": "The commentator role for Ban Gu was extracted from the translator’s “Ban Gu’s note” label, not from any Chinese naming or title in s0191.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0191",
+        "excerpt": "亡是公言上林廣大"
+      }
+    },
+    {
+      "repairId": "hanshu:066:r0003",
+      "claim": {
+        "id": "hanshu:066:c0134",
+        "subject": "hanshu:066:p027",
+        "predicate": "attestation",
+        "value": {
+          "sourceDate": {
+            "text": "historiographical note framing"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 32,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 92,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "uncertain",
+        "evidence": [
+          "hanshu:066:s0191"
+        ]
+      },
+      "reason": "The AD 32–92 Ban Gu attestation is keyed to the English historiographical framing, not to any date or personal name in the Chinese of s0191.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0191",
+        "excerpt": "故刪取其要，歸正道而論之"
+      }
+    },
+    {
+      "repairId": "hanshu:066:r0003",
+      "claim": {
+        "id": "hanshu:066:c0157",
+        "subject": "hanshu:066:p027",
+        "predicate": "sex",
+        "value": {
+          "sex": "male"
+        },
+        "certainty": "strongly-inferred",
+        "evidence": [
+          "hanshu:066:s0191"
+        ]
+      },
+      "reason": "Sex for Ban Gu was inferred only after the English frame invented his presence at s0191; the Chinese unit does not name him.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0191",
+        "excerpt": "亡是公言上林廣大"
+      }
+    },
+    {
+      "repairId": "hanshu:066:r0003",
+      "claim": {
+        "id": "hanshu:066:c0252",
+        "subject": "hanshu:066:p027",
+        "predicate": "assessment",
+        "value": {
+          "assessment": "Sir Vacuity and Shanglin catalogues swell beyond fact and stray from moral purpose; trimmed to essentials",
+          "provenance": {
+            "mode": "historian-judgment",
+            "sourcePersonId": "hanshu:066:p027"
+          }
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "hanshu:066:s0191"
+        ]
+      },
+      "reason": "The abridgment judgment is in the Chinese, but attributing it to Ban Gu as subject depends solely on the invented English “Ban Gu’s note” frame.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0191",
+        "excerpt": "侈靡多過其實，且非義理所止，故刪取其要"
+      }
+    }
+  ],
   "claimRevisions": []
 }

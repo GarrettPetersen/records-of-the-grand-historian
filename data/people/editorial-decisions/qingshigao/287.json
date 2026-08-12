@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "287",
+  "input": {
+    "chapterFingerprint": "sha256:c48e5f65dd00f6cc036156219c23a50b0674a5c5c84a8e530a3f9a7ed4072c0a",
+    "proposalsFingerprint": "sha256:b58f713904bebcaf53b2cdf9973cb51d58841b8500d32b20cc76e051837d0fd3"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-02b7f34e-ac52-461b-a47f-55ce42cb97bc",
+    "runId": "run-7f0a8479-e42b-4fee-9c82-219a19ce38e5",
+    "completedAt": "2026-08-12T16:15:24.291Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:287:r0001",
+      "unit": {
+        "id": "s0190",
+        "kind": "paragraph-sentence",
+        "blockIndex": 22,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "The commentary says: After Prince Limi was deposed, from Princes Yinqi and Yin'e to the great ministers, many plotted to install Yinshi, but the Sacred Ancestor never permitted it.",
+      "after": "The commentary says: After Prince Limi was deposed, from Princes Yintang and Yin'e to the great ministers, many plotted to install Yinshi, but the Sacred Ancestor never permitted it.",
+      "reason": "允禟 is conventionally Yintang (or Yinsi), not Yinqi; Yinqi misreads the personal name.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:287:r0002",
+      "unit": {
+        "id": "s0002",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Tong Guowei · Ma Qi (Fuliang; Ma Wu; Baozhu) · A Ling A (Aersong'a) · Kui Xu · E Lundai",
+      "after": "Tong Guowei · Ma Qi (Fuliang; Ma Wu; Baozhu) · Aringa (Aersong'a) · Kui Xu · Olondai",
+      "reason": "Chapter body consistently uses Aringa and Olondai; title line A Ling A / E Lundai are nonstandard splits of the same names.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:287:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 允禟 is Yintang; Yinqi misreads a different imperial name (允祺). The proposed replacement corrects only that personal name and leaves the rest of the idiomatic intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0190",
+        "excerpt": "允禟"
+      }
+    },
+    {
+      "repairId": "qingshigao:287:r0002",
+      "decision": "reject",
+      "after": null,
+      "reason": "阿靈阿 and 鄂倫岱 are accurately rendered by the syllable-spaced A Ling A and E Lundai; switching to Aringa/Olondai is a romanization-style preference for consistency, not a semantic correction of the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0002",
+        "excerpt": "阿靈阿…鄂倫岱"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "qingshigao:287:r0001",
+      "before": {
+        "id": "qingshigao:287:c0171",
+        "subject": "qingshigao:287:p047",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Yinqi",
+          "zh": "允禟",
+          "pinyin": "Yinqi"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:287:s0190"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:287:c0171",
+        "subject": "qingshigao:287:p047",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Yintang",
+          "zh": "允禟",
+          "pinyin": "Yintang"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:287:s0190"
+        ]
+      },
+      "reason": "Accepted r0001 shows English Yinqi (and matching pinyin) came only from misreading 允禟; the personal-name claim must read Yintang while keeping zh, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0190",
+        "excerpt": "允禟"
+      }
+    }
+  ]
+}

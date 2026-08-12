@@ -1,0 +1,219 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "436",
+  "input": {
+    "chapterFingerprint": "sha256:2c3721b61133aec9f5af5142d23d466f1a6eb981ce3a75be55c8eeae662c8e67",
+    "proposalsFingerprint": "sha256:d21685056cf0c93b728d077bfc8efd978d8b47367b70d3cc6ec1de63cb38bd8b"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-e7e37385-9105-4947-a6c8-5dbe3f9d9354",
+    "runId": "run-4cc5a5fb-54e9-46bc-8e9d-480558787249",
+    "completedAt": "2026-08-12T14:32:19.551Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:436:r0001",
+      "unit": {
+        "id": "s0039",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "idiomatic",
+      "before": "When his mother died, the Empress Dowager cited precedents from the Yongzheng and Qianlong reigns involving ministers such as Sun Jiaxian and ordered Hongzao to leave office for mourning, but after a hundred days to resume tutoring the emperor while continuing to serve on the Grand Council.",
+      "after": "When his mother died, the Empress Dowager cited precedents from the Yongzheng and Qianlong reigns involving ministers such as Sun Jiagan and ordered Hongzao to leave office for mourning, but after a hundred days to resume tutoring the emperor while continuing to serve on the Grand Council.",
+      "reason": "孫嘉淦 is Sun Jiagan (Jiagan), not Sun Jiaxian; 淦 is gan not xian.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:436:r0002",
+      "unit": {
+        "id": "s0039",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "literal",
+      "before": "When his mother died, the Empress Dowager's decree, citing the precedents of ministers such as Sun Jiaxian in the Yongzheng and Qianlong reigns, ordered Hongzao to vacate his post and observe mourning, yet after a hundred days to resume tutoring and concurrently take part in council affairs.",
+      "after": "When his mother died, the Empress Dowager's decree, citing the precedents of ministers such as Sun Jiagan in the Yongzheng and Qianlong reigns, ordered Hongzao to vacate his post and observe mourning, yet after a hundred days to resume tutoring and concurrently take part in council affairs.",
+      "reason": "Same name error as idiomatic: 孫嘉淦 = Sun Jiagan.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:436:r0003",
+      "unit": {
+        "id": "s0004",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "He rose step by step to become a grand secretary of the Grand Secretariat.",
+      "after": "He rose step by step to become an academician of the Grand Secretariat.",
+      "reason": "內閣學士 is academician/bachelor of the Grand Secretariat, not 大學士 (grand secretary).",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:436:r0004",
+      "unit": {
+        "id": "s0035",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "He rose step by step to grand secretary of the Grand Secretariat.",
+      "after": "He rose step by step to academician of the Grand Secretariat.",
+      "reason": "內閣學士 is not grand secretary (大學士).",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:436:r0005",
+      "unit": {
+        "id": "s0104",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "He rose step by step to grand secretary of the Grand Secretariat.",
+      "after": "He rose step by step to academician of the Grand Secretariat.",
+      "reason": "內閣學士 is not grand secretary (大學士).",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:436:r0006",
+      "unit": {
+        "id": "s0140",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "field": "literal",
+      "before": "Yuwen replied citing repeated defeats of the enemy; the emperor blamed lax rewards and punishments for having brought matters to this pass.",
+      "after": "Yuwen replied citing repeated defeats at the front; the emperor blamed lax rewards and punishments for having brought matters to this pass.",
+      "reason": "前敵屢敗 means repeated defeats of one's own front-line forces, not defeats of the enemy.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:436:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0039 names 孫嘉淦; 淦 is gan, so the minister is Sun Jiagan, not Sun Jiaxian. The proposed idiomatic corrects that misreading without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0039",
+        "excerpt": "大臣孫嘉淦等故事"
+      }
+    },
+    {
+      "repairId": "qingshigao:436:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 孫嘉淦 in s0039 must be Sun Jiagan in the literal; Sun Jiaxian invents a wrong reading of 淦, and the proposed wording fixes only that name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0039",
+        "excerpt": "孫嘉淦"
+      }
+    },
+    {
+      "repairId": "qingshigao:436:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0004 is 累遷內閣學士; 內閣學士 is academician of the Grand Secretariat, not 大學士 (grand secretary). The replacement restores the correct office.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0004",
+        "excerpt": "累遷內閣學士"
+      }
+    },
+    {
+      "repairId": "qingshigao:436:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0035 likewise reads 累遷內閣學士; rendering it as grand secretary confuses 學士 with 大學士. Academician of the Grand Secretariat is the accurate office.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0035",
+        "excerpt": "累遷內閣學士"
+      }
+    },
+    {
+      "repairId": "qingshigao:436:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0104 is again 累遷內閣學士; grand secretary is the wrong rank. The proposed academician wording matches the Chinese office title.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0104",
+        "excerpt": "累遷內閣學士"
+      }
+    },
+    {
+      "repairId": "qingshigao:436:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0140 has 以前敵屢敗對: 前敵 means the (Qing) front, so repeated defeats of one’s own front-line forces, not of the enemy. The prior literal reverses the patient; ‘defeats at the front’ is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0140",
+        "excerpt": "以前敵屢敗對"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "qingshigao:436:r0001",
+      "before": {
+        "id": "qingshigao:436:c0049",
+        "subject": "qingshigao:436:p012",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "zh": "孫嘉淦",
+          "en": "Sun Jiaxian",
+          "pinyin": "Sun Jiagan"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:436:s0039"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:436:c0049",
+        "subject": "qingshigao:436:p012",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "zh": "孫嘉淦",
+          "en": "Sun Jiagan",
+          "pinyin": "Sun Jiagan"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:436:s0039"
+        ]
+      },
+      "reason": "Accepted r0001 shows English Sun Jiaxian came only from misreading 淦; the name claim’s en must be Sun Jiagan while zh, pinyin, id, subject, predicate, certainty, and evidence stay the same.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0039",
+        "excerpt": "孫嘉淦"
+      }
+    }
+  ]
+}

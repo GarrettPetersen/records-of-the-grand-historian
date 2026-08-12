@@ -1,0 +1,231 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "006",
+  "input": {
+    "chapterFingerprint": "sha256:ad05080d965989b912460a867d4fec86d7587fcc41d5d88d47fb2a19ba902704",
+    "proposalsFingerprint": "sha256:7bc64c7744514d5dfb16f5956f9aa2df3d6b2c8df1be35f7287043dd3bf98f05"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-1ff85941-4cc3-427f-9808-1c24e5227b65",
+    "runId": "run-8ba2c035-4c2c-495f-9f2d-4e3cdf409c30",
+    "completedAt": "2026-08-12T16:12:24.532Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:006:r0001",
+      "unit": {
+        "id": "s0002",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Emperor Muzong, Filial, Peaceful, Reverent, and Upright, whose personal name was Jing and whose courtesy name was Shulü.",
+      "after": "Emperor Muzong, Filial, Peaceful, Reverent, and Upright, whose personal name was Jing and whose childhood name was Shulü.",
+      "reason": "小字 means childhood/pet name, not courtesy name (字).",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:006:r0002",
+      "unit": {
+        "id": "s0002",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Emperor Muzong, Filial, Peaceful, Reverent, and Upright — personal name Jing, courtesy name Shulü.",
+      "after": "Emperor Muzong, Filial, Peaceful, Reverent, and Upright — personal name Jing, childhood name Shulü.",
+      "reason": "小字 means childhood/pet name, not courtesy name (字).",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:006:r0003",
+      "unit": {
+        "id": "s0078",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "In the ninth month, on bingchen day, as Zhou invaded Han, Han sent envoys to report the attack.",
+      "after": "In the ninth month, on bingshen day, as Zhou invaded Han, Han sent envoys to report the attack.",
+      "reason": "丙申 is bingshen, not bingchen (丙辰).",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:006:r0004",
+      "unit": {
+        "id": "s0078",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "literal",
+      "before": "In the ninth month, on bingchen day, Han, invaded by the people of Zhou, sent envoys to report it.",
+      "after": "In the ninth month, on bingshen day, Han, invaded by the people of Zhou, sent envoys to report it.",
+      "reason": "丙申 is bingshen, not bingchen (丙辰).",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:006:r0005",
+      "unit": {
+        "id": "s0089",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "That autumn, in the seventh month on gengchen day, the ruler of Han fell ill and sent envoys to announce it.",
+      "after": "That autumn, in the ninth month on gengchen day, the ruler of Han fell ill and sent envoys to announce it.",
+      "reason": "Chinese 九月 is the ninth month; translation wrongly says seventh month.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:006:r0006",
+      "unit": {
+        "id": "s0089",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "In the seventh month of autumn, on gengchen day, the Han ruler fell ill and sent envoys to report it.",
+      "after": "In the ninth month of autumn, on gengchen day, the Han ruler fell ill and sent envoys to report it.",
+      "reason": "Chinese 九月 is the ninth month; translation wrongly says seventh month.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:006:r0007",
+      "unit": {
+        "id": "s0101",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "That winter, in the eleventh month, on renchen day, the Biegude brought tribute.",
+      "after": "That winter, in the eleventh month, on renyin day, the Biegude brought tribute.",
+      "reason": "壬寅 is renyin, not renchen (壬辰).",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:006:r0008",
+      "unit": {
+        "id": "s0101",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "In the eleventh month of winter, on day renchen, the Biegude came to pay tribute.",
+      "after": "In the eleventh month of winter, on day renyin, the Biegude came to pay tribute.",
+      "reason": "壬寅 is renyin, not renchen (壬辰).",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:006:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0002 has 小字述律; 小字 is a childhood/pet name, not a courtesy name (字), so replacing 'courtesy name' with 'childhood name' corrects a real terminological error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0002",
+        "excerpt": "小字述律"
+      }
+    },
+    {
+      "repairId": "liaoshi:006:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 小字述律 governs the literal field; 'courtesy name' misreads 小字 as 字, and 'childhood name' is the accurate rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0002",
+        "excerpt": "小字述律"
+      }
+    },
+    {
+      "repairId": "liaoshi:006:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0078 dates the event 九月丙申; 丙申 is bingshen, whereas bingchen would be 丙辰, so the proposed day name matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0078",
+        "excerpt": "九月丙申"
+      }
+    },
+    {
+      "repairId": "liaoshi:006:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise must follow 丙申 as bingshen, not bingchen (丙辰).",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0078",
+        "excerpt": "九月丙申"
+      }
+    },
+    {
+      "repairId": "liaoshi:006:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0089 opens 秋九月庚辰; 九月 is the ninth month, so the original 'seventh month' is a factual mistranslation and the proposed ninth month is correct.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0089",
+        "excerpt": "秋九月庚辰"
+      }
+    },
+    {
+      "repairId": "liaoshi:006:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal must likewise render 九月 as the ninth month of autumn, not the seventh.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0089",
+        "excerpt": "秋九月庚辰"
+      }
+    },
+    {
+      "repairId": "liaoshi:006:r0007",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0101 has 冬十一月壬寅; 壬寅 is renyin, whereas renchen would be 壬辰, so the replacement day name is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0101",
+        "excerpt": "冬十一月壬寅"
+      }
+    },
+    {
+      "repairId": "liaoshi:006:r0008",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 壬寅 requires renyin in the literal field; renchen (壬辰) is the wrong stem-branch reading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0101",
+        "excerpt": "冬十一月壬寅"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

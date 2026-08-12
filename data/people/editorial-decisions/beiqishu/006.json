@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "beiqishu",
+  "chapter": "006",
+  "input": {
+    "chapterFingerprint": "sha256:1dceae2fa5f6be21240d394e2cf9593affb97557e9ddd9aa4cd4abb8911496ec",
+    "proposalsFingerprint": "sha256:bcc6c176c3bd538dfa8d3e7e72a1b5dcaed5bd223b1931f3ce8fff84b95f7fbc"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-bd06df21-ba69-4118-89f3-5b7aa74d4461",
+    "runId": "run-d3b86f56-1221-4b45-b5ac-b6989af61add",
+    "completedAt": "2026-08-12T16:11:54.612Z"
+  },
+  "proposals": [
+    {
+      "id": "beiqishu:006:r0001",
+      "unit": {
+        "id": "s0065",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "On the renshen day of the eighth month of the first year of Huangjian, the emperor ascended the throne in the Xuande Hall at Jinyang, proclaimed a general amnesty, and changed the era name from Qianming to Huangjian.",
+      "after": "On the renwu day of the eighth month of the first year of Huangjian, the emperor ascended the throne in the Xuande Hall at Jinyang, proclaimed a general amnesty, and changed the era name from Qianming to Huangjian.",
+      "reason": "Chinese 壬午 is renwu, not renshen (壬申).",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:006:r0002",
+      "unit": {
+        "id": "s0065",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "On the renshen day of the eighth month of Huangjian year 1, the emperor ascended the throne in the Xuande Hall at Jinyang, proclaimed a general amnesty, and changed the era name from Qianming year 1 to Huangjian.",
+      "after": "On the renwu day of the eighth month of Huangjian year 1, the emperor ascended the throne in the Xuande Hall at Jinyang, proclaimed a general amnesty, and changed the era name from Qianming year 1 to Huangjian.",
+      "reason": "Chinese 壬午 is renwu, not renshen (壬申).",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:006:r0003",
+      "unit": {
+        "id": "s0098",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "On the bingzi day of the tenth month, Minister of the Left and Prince of Pengcheng Gao You was made Grand Guardian, and Prince of Changle Wei Can was made Grand Commander.",
+      "after": "On the bingzi day of the tenth month, Director of the Masters of Writing and Prince of Pengcheng Gao You was made Grand Guardian, and Prince of Changle Wei Can was made Grand Commander.",
+      "reason": "尚書令 is Director/Chief of the Masters of Writing, not Minister of the Left (左僕射).",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:006:r0004",
+      "unit": {
+        "id": "s0098",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "On the bingzi day of the tenth month of winter, Minister of the Left and Prince of Pengcheng Gao You was appointed Grand Guardian, and Prince of Changle Wei Can was appointed Grand Commander.",
+      "after": "On the bingzi day of the tenth month of winter, Director of the Masters of Writing and Prince of Pengcheng Gao You was appointed Grand Guardian, and Prince of Changle Wei Can was appointed Grand Commander.",
+      "reason": "尚書令 is Director/Chief of the Masters of Writing, not Minister of the Left (左僕射).",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:006:r0005",
+      "unit": {
+        "id": "s0121",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "field": "literal",
+      "before": "Prince of Zhao Rui and Kudi Xian'an were in attendance seated beside him. The Emperor said: \"Xu Ba is my paternal cousin; Xian'an is the son of my aunt by marriage. Today let us observe family rites and set aside the respect due between ruler and minister—you may speak of where I fall short.",
+      "after": "Prince of Zhao Rui and Kudi Xian'an were in attendance seated beside him. The Emperor said: \"Xu Ba is my paternal cousin; Xian'an is the son of my paternal aunt. Today let us observe family rites and set aside the respect due between ruler and minister—you may speak of where I fall short.",
+      "reason": "親姑 denotes a paternal aunt (father's sister), not an aunt by marriage.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "beiqishu:006:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0065’s 壬午 is the sexagenary day renwu; English “renshen” would be 壬申. The proposed idiomatic wording corrects the day name and otherwise preserves the accurate translation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0065",
+        "excerpt": "皇建元年八月壬午"
+      }
+    },
+    {
+      "repairId": "beiqishu:006:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0065’s 壬午 is renwu, not renshen (壬申). The literal field’s day-name error is the same as in the idiomatic field; the proposed replacement is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0065",
+        "excerpt": "八月壬午"
+      }
+    },
+    {
+      "repairId": "beiqishu:006:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0098 names Gao You’s prior office as 尚書令 (Director of the Masters of Writing), not 左僕射 (Minister of the Left). The proposed title correction matches the Chinese; the rest of the sentence is unchanged and sound.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0098",
+        "excerpt": "以尚書令、彭城王浟為太保"
+      }
+    },
+    {
+      "repairId": "beiqishu:006:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field likewise misrenders 尚書令 as “Minister of the Left.” “Director of the Masters of Writing” correctly distinguishes it from 左僕射 while keeping the rest of the appointment wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0098",
+        "excerpt": "尚書令、彭城王浟"
+      }
+    },
+    {
+      "repairId": "beiqishu:006:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "親姑 is the emperor’s own paternal aunt (father’s sister), not an aunt by marriage. Replacing “aunt by marriage” with “paternal aunt” restores the kinship sense of 顯安我親姑子.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0121",
+        "excerpt": "顯安我親姑子"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "xinwudaishi",
+  "chapter": "035",
+  "input": {
+    "chapterFingerprint": "sha256:ebacc07af5c6743b46427a29633fadcb59983d69489c67d6034e6f23dd4e4c14",
+    "proposalsFingerprint": "sha256:7788d173965ab473ccd6646276e4afb1254f2f25f2d633aad2a4e0ddedb50c38"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-b824a1ad-577d-4849-949a-edb24f1cd6a1",
+    "runId": "run-3c1b1377-2d35-414c-98da-bd3f82987b48",
+    "completedAt": "2026-08-12T16:19:25.032Z"
+  },
+  "proposals": [
+    {
+      "id": "xinwudaishi:035:r0001",
+      "unit": {
+        "id": "s0068",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "(Du Xiao appended)〉",
+      "after": "(Du Xiao appended)",
+      "reason": "Idiomatic English retains a stray Chinese closing bracket after the appended note.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:035:r0002",
+      "unit": {
+        "id": "s0068",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "(Du Xiao appended)〉",
+      "after": "(Du Xiao appended)",
+      "reason": "Literal English retains a stray Chinese closing bracket after the appended note.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:035:r0003",
+      "unit": {
+        "id": "s0048",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "idiomatic",
+      "before": "When the Prince of Jin attacked Xingyu, Ce had a maid carry his mother east through deep snow; passersby pitied them.",
+      "after": "When the Prince of Jin Li Keyong attacked Xingyu, Ce with a maid carried his mother east in a sedan through deep snow; passersby pitied them.",
+      "reason": "Idiomatic omits Li Keyong’s name present in the Chinese and makes only the maid the carrier, whereas 與婢肩輿 marks Ce acting with the maid to carry his mother.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xinwudaishi:035:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese editorial mark 〈（杜曉附）〉 is rendered as the English note “(Du Xiao appended)”; the trailing 〉 is a leftover Chinese book-bracket, not English punctuation, so removing it is a real cleanup with no meaning change.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0068",
+        "excerpt": "〈（杜曉附）〉"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:035:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same unit on the literal field: the English already translates （杜曉附）; the leftover Chinese closing bracket 〉 after the parenthetical is an artifact and should be dropped.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0068",
+        "excerpt": "〈（杜曉附）〉"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:035:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit has 晉王李克用攻行瑜 and 策與婢肩輿其母東歸: the name Li Keyong is present, and 與婢 marks Ce acting with the maid to carry his mother by sedan. The before text omits the personal name and wrongly makes only the maid the carrier; the proposed after restores both points accurately.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0048",
+        "excerpt": "晉王李克用攻行瑜，策與婢肩輿其母東歸"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

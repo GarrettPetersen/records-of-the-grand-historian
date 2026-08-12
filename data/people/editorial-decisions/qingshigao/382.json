@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "382",
+  "input": {
+    "chapterFingerprint": "sha256:b885f2f6af9cdaab3e6f8f473964a6f74fc37d1b5f306a1665f5b6927dac1d59",
+    "proposalsFingerprint": "sha256:3aaa5abeb660adff885d74be2a8f23f98e830efe1058a1aac936300da6e24180"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-63182cb5-8945-4e80-a982-5a839b50be5a",
+    "runId": "run-1e61de14-003e-4788-aeac-1d02a44cbac0",
+    "completedAt": "2026-08-12T14:30:56.665Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:382:r0001",
+      "unit": {
+        "id": "s0122",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "In the first year of Xianfeng he was made Plain White Mongol commander; when censors accused Qishan of slaughter in the Qinghai fan campaign, Sa Ying'a was sent to Xining to investigate.",
+      "after": "In the first year of Xianfeng he was made Plain White Manchu Banner commander; when censors accused Qishan of slaughter in the Qinghai fan campaign, Sa Ying'a was sent to Xining to investigate.",
+      "reason": "Chinese 正白旗滿洲都統 is Plain White Manchu Banner commander; the idiomatic English wrongly says Mongol.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:382:r0002",
+      "unit": {
+        "id": "s0122",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "In the first year of Xianfeng [1851], he was summoned and appointed Mongol commander of the Plain White Banner; joining Shaanxi-Gansu Governor-General Qishan in suppressing Qinghai fan bandits, censors impeached Qishan for indiscriminate killing, and Sa Ying'a was ordered to Xining to investigate.",
+      "after": "In the first year of Xianfeng [1851], he was summoned and appointed Manchu commander of the Plain White Banner; when Shaanxi-Gansu Governor-General Qishan was suppressing Qinghai fan bandits, censors impeached Qishan for indiscriminate killing, and Sa Ying'a was ordered to Xining to investigate.",
+      "reason": "Chinese specifies 滿洲 (Manchu), not Mongol; the literal English mistranslates the banner affiliation.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:382:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0122 reads 召授正白旗滿洲都統: the office is Manchu (滿洲) Plain White Banner commander, not Mongol. The proposed idiomatic replacement corrects that error without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0122",
+        "excerpt": "召授正白旗滿洲都統"
+      }
+    },
+    {
+      "repairId": "qingshigao:382:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0122 has 滿洲都統, so Mongol is wrong; 會陝甘總督琦善剿青海番匪 marks the concurrent Qinghai campaign when censors impeached Qishan, not Sa Ying'a joining that campaign. The proposed Manchu wording and when-clause fix both errors accurately.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0122",
+        "excerpt": "召授正白旗滿洲都統，會陝甘總督琦善剿青海番匪，言官劾其妄殺"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

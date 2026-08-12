@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "066",
+  "input": {
+    "chapterFingerprint": "sha256:e6d0774afbb5931fe496b530473e1741701617bc49cc6b0933611543476e3a89",
+    "proposalsFingerprint": "sha256:6722c254deabbad1734bb1dce370877ab3d264e2eefc358ca40a5217c9326cdc"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-2267e957-835b-4e0c-9c81-5068d75c0d0d",
+    "runId": "run-c58cbde2-080d-4f55-adca-a40d73aaeb51",
+    "completedAt": "2026-08-12T16:12:38.889Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:066:r0001",
+      "unit": {
+        "id": "s0037",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Eastern Chuan's Dong Zhang held difficult country and defied control; when Wuyou Yu was sent to Mianzhou, Zhang's suspicions deepened and he imprisoned Yu and rebelled.",
+      "after": "Eastern Chuan's Dong Zhang held difficult country and defied control; when Wu Qianyu was sent to Mianzhou, Zhang's suspicions deepened and he imprisoned Yu and rebelled.",
+      "reason": "武虔裕 is Wu Qianyu, not Wuyou Yu; the idiomatic rendering mis-splits the name.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:066:r0002",
+      "unit": {
+        "id": "s0061",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Next day the deputy asked leave to clothe the bodies; only after urgent pleas was it allowed.",
+      "after": "Next day the deputy commissioner and judge Bai Congzhang asked Congzhang leave to cover the corpses with clothing; only after earnest pleading was it allowed.",
+      "reason": "Chinese names 白從璋 as the deputy who petitioned; the idiomatic English omits this personal name.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:066:r0003",
+      "unit": {
+        "id": "s0062",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "When Congzhang inventoried Chonghui's household goods they did not reach several thousand strings; observers said Chonghui had great merit in ordering the altars of state, yet his ambition exceeded his talent, he could not avoid the favor of power, personally honored scholar-officials, sought far-reaching plans to preserve himself and assist the state, yet indulged his own breast entirely, and so met overturn in the end.",
+      "after": "When Congzhang inventoried Chonghui's household goods they did not reach several thousand strings; observers said Chonghui had great merit in ordering the altars of state, yet his ambition exceeded his talent; he could not avoid clinging to power and favor, failed to personally honor scholar-officials and seek far-reaching plans to preserve himself and assist the state, and instead indulged his own breast entirely, and so met overturn in the end.",
+      "reason": "不能 governs the following coordinated verbs; the literal English wrongly treats courting literati as something he did rather than failed to do.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:066:r0004",
+      "unit": {
+        "id": "s0080",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "He took Fengxiang; Shi Jingtang's Shu campaign stalled; An Chonghui volunteered to go west.",
+      "after": "He took Fengxiang; when the court ordered Shi Jingtang to lead an army against Shu and long failed, An Chonghui volunteered to go west.",
+      "reason": "Chinese 會朝廷命石敬塘帥師伐蜀，久未成功 states the court appointment and prolonged failure; the idiomatic version overly compresses that sequence.",
+      "confidence": "medium"
+    },
+    {
+      "id": "jiuwudaishi:066:r0005",
+      "unit": {
+        "id": "s0098",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 24
+      },
+      "field": "idiomatic",
+      "before": "My daughter is your son's wife—fetch her at once lest she be harmed.\"",
+      "after": "My son's wife is your daughter—fetch her at once lest she be harmed.\"",
+      "reason": "Chinese 吾兒婦，君之女也 means Mu's son's wife is Hongzhao's daughter; the idiomatic English reverses the kinship.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:066:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit names 武虔裕 as Mianzhou prefect; that is Wu Qianyu, not the mis-split Wuyou Yu. The proposed replacement restores the correct personal name without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0037",
+        "excerpt": "乃以武虔裕為綿州刺史"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:066:r0002",
+      "decision": "revise",
+      "after": "Next day the deputy commissioner and judge Bai Congzhang asked leave to clothe the bodies; only after urgent pleas was it allowed.",
+      "reason": "副使判官白從璋 is the petitioner Bai Congzhang, omitted in the idiomatic English, but the Chinese does not say he asked another Congzhang for leave—only that he wished to cover the corpses and was permitted after earnest pleading. Restore the titles and name without inventing that addressee.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0061",
+        "excerpt": "副使判官白從璋，願以衣服覆其屍，堅請方許"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:066:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "After 誌大才短, 不能 scopes over 回避權寵, 親禮士大夫, and 求周身輔國之遠圖, contrasted by 而悉自恣胸襟. The literal wrongly treats honoring literati and seeking far plans as acts he performed; the proposed reading matches the Chinese and the idiomatic line.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0062",
+        "excerpt": "不能回避權寵，親禮士大夫，求周身輔國之遠圖，而悉自恣胸襟"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:066:r0004",
+      "decision": "reject",
+      "after": null,
+      "reason": "出鎮鳳翔 and 安重誨自請西行 are already rendered; 久未成功 is captured by “stalled,” and naming Shi Jingtang’s Shu campaign adequately conveys the campaign without inventing error. Expanding 朝廷命 is stylistic compression repair, not a required semantic correction.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0080",
+        "excerpt": "會朝廷命石敬塘帥師伐蜀，久未成功"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:066:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "Mu Yanhui tells Hongzhao 吾兒婦，君之女也: his son’s wife is Hongzhao’s daughter. The idiomatic line reverses that kinship; the proposed replacement restores the correct relation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0098",
+        "excerpt": "吾兒婦，君之女也"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -1,0 +1,250 @@
+{
+  "schemaVersion": 3,
+  "book": "beiqishu",
+  "chapter": "049",
+  "input": {
+    "chapterFingerprint": "sha256:df33dc46483d3e6d4bb59187a05efa46fa4402db9788d80d8d23366a3e875236",
+    "proposalsFingerprint": "sha256:87095250fb671ade00585e70e474af7f8b56b4842d063155a4e615b1855103f9"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-f0b6e968-f8c0-40c6-8a51-b19d0fa83a57",
+    "runId": "run-7f71a55a-e774-4a36-b27e-93a075ecb6fe",
+    "completedAt": "2026-08-12T14:25:36.510Z"
+  },
+  "proposals": [
+    {
+      "id": "beiqishu:049:r0001",
+      "unit": {
+        "id": "s0006",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "You Wudao Rong was from Langye.",
+      "after": "Youwu Daorong was from Langye.",
+      "reason": "The Chinese surname/given-name sequence 由吾道榮 is Youwu Daorong, not You Wudao Rong.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:049:r0002",
+      "unit": {
+        "id": "s0006",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "You Wudao Rong was a native of Langye.",
+      "after": "Youwu Daorong was a native of Langye.",
+      "reason": "The literal translation should preserve the correct name segmentation 由吾道榮 as Youwu Daorong.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:049:r0003",
+      "unit": {
+        "id": "s0030",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "He bound his son and offered him as hostage, asking to be beheaded himself if he proved wrong.",
+      "after": "He bound his son and offered him as a hostage, asking that the son be beheaded if his prediction proved wrong.",
+      "reason": "The object of 斬之 is the son offered as hostage, not Wang Chun himself.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:049:r0004",
+      "unit": {
+        "id": "s0133",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Jiefa Xuan was from Henei.",
+      "after": "Xie Faxuan was from Henei.",
+      "reason": "解法選 is the personal name Xie Faxuan; the current English incorrectly segments it as Jiefa Xuan.",
+      "confidence": "medium"
+    },
+    {
+      "id": "beiqishu:049:r0005",
+      "unit": {
+        "id": "s0133",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Jiefa Xuan was a native of Henei.",
+      "after": "Xie Faxuan was a native of Henei.",
+      "reason": "The literal translation should render 解法選 as Xie Faxuan rather than Jiefa Xuan.",
+      "confidence": "medium"
+    },
+    {
+      "id": "beiqishu:049:r0006",
+      "unit": {
+        "id": "s0167",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "That night Langye’s fifth son urgently summoned Yongluo, claiming an edict.",
+      "after": "That night five envoys from the Prince of Langye urgently summoned Yongluo, claiming an edict.",
+      "reason": "琅邪王五使 means five envoys of the Prince of Langye, not the prince's fifth son.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:049:r0007",
+      "unit": {
+        "id": "s0167",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "That night the fifth son of the Prince of Langye urgently summoned Yongluo, saying it was an edict summons.",
+      "after": "That night five envoys of the Prince of Langye urgently summoned Yongluo, saying it was an edict summons.",
+      "reason": "王五使 parses as the prince sent five envoys; it is not a reference to a fifth son.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "beiqishu:049:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0006 names 由吾道榮: compound surname 由吾 plus given name 道榮, i.e. Youwu Daorong. “You Wudao Rong” mis-segments the name; the proposed English is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0006",
+        "excerpt": "由吾道榮"
+      }
+    },
+    {
+      "repairId": "beiqishu:049:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same unit’s literal must match 由吾道榮 as Youwu Daorong. The original literal inherits the same false segmentation as the idiomatic line.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0006",
+        "excerpt": "由吾道榮，琅邪人。"
+      }
+    },
+    {
+      "repairId": "beiqishu:049:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0030 遽縛其子詣王為質，不勝請斬之: 之 resumes the son just offered as hostage. The idiomatic wrongly makes Wang Chun himself the one to be beheaded; the proposal restores the correct patient.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0030",
+        "excerpt": "縛其子詣王為質，不勝請斬之"
+      }
+    },
+    {
+      "repairId": "beiqishu:049:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0133 names 解法選: surname 解 (Xie) and given name 法選 (Faxuan). “Jiefa Xuan” invents a wrong compound-surname cut; Xie Faxuan is the correct segmentation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0133",
+        "excerpt": "解法選"
+      }
+    },
+    {
+      "repairId": "beiqishu:049:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field for the same name must likewise render 解法選 as Xie Faxuan, not Jiefa Xuan.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0133",
+        "excerpt": "解法選，河內人。"
+      }
+    },
+    {
+      "repairId": "beiqishu:049:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0167 琅邪王五使切召永洛: 五使 means five envoys, not a fifth son (which would be 第五子/五子). The original idiomatic invents kinship; the proposal matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0167",
+        "excerpt": "琅邪王五使切召永洛"
+      }
+    },
+    {
+      "repairId": "beiqishu:049:r0007",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal’s “fifth son of the Prince of Langye” likewise misreads 五使. “Five envoys of the Prince of Langye” is the correct parse and natural English.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0167",
+        "excerpt": "琅邪王五使"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "beiqishu:049:r0001",
+      "claim": {
+        "id": "beiqishu:049:c0020",
+        "subject": "beiqishu:049:p008",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate",
+          "en": "You Wudao Rong"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "beiqishu:049:s0006"
+        ]
+      },
+      "reason": "Accepted r0001 shows “You Wudao Rong” exists only as a mistranslation of 由吾道榮; the Chinese supports Youwu Daorong (c0019), not this alternate English segmentation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0006",
+        "excerpt": "由吾道榮"
+      }
+    },
+    {
+      "repairId": "beiqishu:049:r0004",
+      "claim": {
+        "id": "beiqishu:049:c0141",
+        "subject": "beiqishu:049:p050",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate",
+          "en": "Jiefa Xuan"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "beiqishu:049:s0133"
+        ]
+      },
+      "reason": "Accepted r0004 shows “Jiefa Xuan” was created only by mis-segmenting 解法選; the Chinese supports Xie Faxuan (c0140), not this alternate form.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0133",
+        "excerpt": "解法選"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

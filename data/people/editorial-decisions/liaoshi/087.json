@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "087",
+  "input": {
+    "chapterFingerprint": "sha256:73f485738bf14d9d78c96048dd32a155cb3e82dd172269ffa66a597a3ccd33bf",
+    "proposalsFingerprint": "sha256:3085d73942b623ceb9f1ec610e72b5a363a9777064aa238c6a97d044869ee59b"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-f49b57f1-60be-4381-aea8-e9cf3f8618d2",
+    "runId": "run-1d7a6891-c125-4002-bf03-405680ec1608",
+    "completedAt": "2026-08-12T14:27:37.716Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:087:r0001",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "(See the biographies of Saba, Xiaoxian, and Xiaoyou)〉",
+      "after": "(See the biographies of Saba, Xiaoxian, and Xiaoyou)",
+      "reason": "Stray fullwidth closing bracket 〉 remains after the parenthetical cross-reference.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:087:r0002",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "(Saba, Xiaoxian, and Xiaoyou have separate biographies)〉",
+      "after": "(Saba, Xiaoxian, and Xiaoyou have separate biographies)",
+      "reason": "Stray fullwidth closing bracket 〉 remains after the parenthetical cross-reference.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:087:r0003",
+      "unit": {
+        "id": "s0058",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 22
+      },
+      "field": "idiomatic",
+      "before": "In the fourth year his title was changed from Prince of Chu to Prince of Jin.",
+      "after": "In the fourth year his title was changed to Prince of Jin.",
+      "reason": "The Chinese only says 徙王晉; 'from Prince of Chu' is invented context not in this unit.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:087:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 〈（撒八孝先孝友）〉 uses fullwidth brackets as source markup; the English parenthetical correctly renders the cross-reference but leaves a stray 〉 that must be removed.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "〈（撒八孝先孝友）〉"
+      }
+    },
+    {
+      "repairId": "liaoshi:087:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same stray 〉 after the literal parenthetical; Chinese 〈（撒八孝先孝友）〉 justifies English parentheses without retaining the fullwidth closer.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "〈（撒八孝先孝友）〉"
+      }
+    },
+    {
+      "repairId": "liaoshi:087:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "四年，徙王晉 states only a transfer of the princedom to Jin; “from Prince of Chu” is not in this unit and invents prior title information.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0058",
+        "excerpt": "四年，徙王晉。"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

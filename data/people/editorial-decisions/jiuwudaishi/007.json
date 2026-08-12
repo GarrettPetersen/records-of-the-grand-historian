@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "007",
+  "input": {
+    "chapterFingerprint": "sha256:8bbb03cbff09e5369073b5bd143d9312b8843bd78958a15aab29d7c3ed7f41d1",
+    "proposalsFingerprint": "sha256:4d195d038e79aa0df0a44ecb2d6f3c97c189fe33045a739ea178baaf726ffd3b"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-ccb6b5b8-a663-44d9-ab36-8ab1106edd27",
+    "runId": "run-a0d0d4b4-3073-488e-ac39-386025231f26",
+    "completedAt": "2026-08-12T16:12:05.070Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:007:r0001",
+      "unit": {
+        "id": "s0001",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In the first month of Qianhua 2, the court proclaimed: \"On Lantern Festival night, every market and ward may hang colored lamps; the Gold Crow need not enforce the curfew.\"",
+      "after": "In the first month of Qianhua 2, the court proclaimed: \"On Lantern Festival night, every market and ward may hang colored lamps; the Jinwu need not enforce the curfew.\"",
+      "reason": "金吾 is the Jinwu (capital guard) office, not a \"Gold Crow\".",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:007:r0002",
+      "unit": {
+        "id": "s0001",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "In the first month of Qianhua 2, an announcement stated: \"On the Lantern Festival night, let every market and ward hang colored lamps; the Gold Crow need not enforce the curfew.\"",
+      "after": "In the first month of Qianhua 2, an announcement stated: \"On the Lantern Festival night, let every market and ward hang colored lamps; the Jinwu need not enforce the curfew.\"",
+      "reason": "金吾 is the Jinwu office title, mistranslated as Gold Crow.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:007:r0003",
+      "unit": {
+        "id": "s0088",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "At his death the Emperor mourned at length, sent Luoyuan commissioner Cao Shoucong to condole, and cancelled court for the sixth through eighth; chancellor and officials filed condolence at the Upper Gate.",
+      "after": "At his death the Emperor mourned at length, sent Luoyuan commissioner Cao Shoudang to condole, and cancelled court for the sixth through eighth; chancellor and officials filed condolence at the Upper Gate.",
+      "reason": "璫 is dàng; Cao Shoucong misreads 曹守璫.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:007:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit 金吾不用禁夜 names the Jinwu capital-guard office that enforced the night curfew; \"Gold Crow\" is a false character-by-character reading. Jinwu is the correct office title.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0001",
+        "excerpt": "金吾不用禁夜"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:007:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same focus unit 金吾不用禁夜; literal \"Gold Crow\" mistranslates the Jinwu office. The proposed Jinwu reading matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0001",
+        "excerpt": "金吾不用禁夜"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:007:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit names 曹守璫; 璫 is dàng, so Cao Shoucong is a misreading. Cao Shoudang is the correct personal name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0088",
+        "excerpt": "曹守璫"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "jiuwudaishi:007:r0003",
+      "before": {
+        "id": "jiuwudaishi:007:c0100",
+        "subject": "jiuwudaishi:007:p033",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Cao Shoucong",
+          "zh": "曹守璫",
+          "pinyin": "Cao Shoucong"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiuwudaishi:007:s0088"
+        ]
+      },
+      "after": {
+        "id": "jiuwudaishi:007:c0100",
+        "subject": "jiuwudaishi:007:p033",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Cao Shoudang",
+          "zh": "曹守璫",
+          "pinyin": "Cao Shoudang"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiuwudaishi:007:s0088"
+        ]
+      },
+      "reason": "Accepted r0003 shows English Cao Shoucong came only from misreading 璫; the name claim must use Cao Shoudang while keeping zh, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0088",
+        "excerpt": "曹守璫"
+      }
+    }
+  ]
+}

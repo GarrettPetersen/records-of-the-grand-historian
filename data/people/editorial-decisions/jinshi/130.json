@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "jinshi",
+  "chapter": "130",
+  "input": {
+    "chapterFingerprint": "sha256:1b9e49c815fc8f6a960ecd6d22cd7005acdb4b6e614d2d9e7d34e1dc336f82a2",
+    "proposalsFingerprint": "sha256:1243cb265728c7fdc121315446f3a71ccad92f43e9e68afe57b45f0ba6d1ef3d"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-c0fb816e-9ae1-433f-98d8-6fb5cc471569",
+    "runId": "run-54935496-c21b-4273-9e08-766b2896aaba",
+    "completedAt": "2026-08-12T14:25:10.435Z"
+  },
+  "proposals": [
+    {
+      "id": "jinshi:130:r0001",
+      "unit": {
+        "id": "s0010",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "In the sixth year of Tianfu (1118), mutineers from Huanglong Prefecture raided the neighboring tribes around Chao.",
+      "after": "In the sixth year of Tianfu (1118), mutineers from Huanglong Prefecture raided the neighboring tribes.",
+      "reason": "Chinese 旁近部族 means nearby tribes; idiomatic invents a place name Chao.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:130:r0002",
+      "unit": {
+        "id": "s0016",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "The wife of Li Baoxin was the Wang clan.",
+      "after": "The wife of Li Baoxin was a woman of the Wang clan.",
+      "reason": "Literal English omits that 王氏 denotes a woman of the Wang clan, reading as if she were the clan itself.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:130:r0003",
+      "unit": {
+        "id": "s0044",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "The wife of Li Ying was the Zhang clan.",
+      "after": "The wife of Li Ying was a woman of the Zhang clan.",
+      "reason": "Literal English omits that 張氏 denotes a woman of the Zhang clan.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:130:r0004",
+      "unit": {
+        "id": "s0090",
+        "kind": "paragraph-sentence",
+        "blockIndex": 24,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "The people of Fu were terrified and made ready to defend the city. Because fodder for the western route was late, the defending official ordered Chao to Pingliang to hurry the supplies.",
+      "after": "The people of Fu were terrified and made ready to defend the city. Because fodder and grain for the western route were late, the defending official ordered Chao to Pingliang to hurry the supplies.",
+      "reason": "Chinese has 芻粟 (fodder and grain); idiomatic drops 粟.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jinshi:130:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0010 has 攻鈔旁近部族, i.e. raided neighboring tribes; no place name Chao appears in the Chinese, so \"around Chao\" is invented and the proposed cut is correct.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0010",
+        "excerpt": "攻鈔旁近部族"
+      }
+    },
+    {
+      "repairId": "jinshi:130:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "王氏 names her as a woman of the Wang clan (née Wang); \"was the Wang clan\" misreads the surname formula, and the proposed wording matches standard English for this construction.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0016",
+        "excerpt": "李寶信妻王氏"
+      }
+    },
+    {
+      "repairId": "jinshi:130:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "張氏 likewise means a woman of the Zhang clan; \"was the Zhang clan\" is the same surname-formula error, and the replacement is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0044",
+        "excerpt": "李英妻張氏"
+      }
+    },
+    {
+      "repairId": "jinshi:130:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "西路輸芻粟不時至 has both 芻 (fodder) and 粟 (grain); the idiomatic omitted 粟, and restoring \"fodder and grain\" is faithful and grammatical.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0090",
+        "excerpt": "西路輸芻粟不時至"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

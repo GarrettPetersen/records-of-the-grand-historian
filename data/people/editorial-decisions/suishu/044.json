@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "suishu",
+  "chapter": "044",
+  "input": {
+    "chapterFingerprint": "sha256:1fa7595c9f48d9ff5c9be563e66d834d40d14d22ded40977242ac8ea54f2ddca",
+    "proposalsFingerprint": "sha256:d8591e2690e99f5fae2fcf42b916afc3dba10b28ed8e53451de7cebeddd3eeae"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-c95dcc39-198c-46b9-8356-ad452a5fc47d",
+    "runId": "run-3189fd2d-714a-478d-b5f4-bfef6aed7d98",
+    "completedAt": "2026-08-12T16:18:57.172Z"
+  },
+  "proposals": [
+    {
+      "id": "suishu:044:r0001",
+      "unit": {
+        "id": "s0001",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Book of Sui, 44th year of Volume, ninth year of Biographies",
+      "after": "Book of Sui, Volume Forty-Four, Biographies Nine",
+      "reason": "Chinese 卷四十四列傳第九 means Volume 44, Biographies 9, not regnal or ordinal 'years'.",
+      "confidence": "high"
+    },
+    {
+      "id": "suishu:044:r0002",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Prince Teng the Mu, Zan, styled Hengsheng and also known as Hui, was a maternal cousin of Emperor Gaozu.",
+      "after": "Prince Teng the Mu, Zan, styled Hengsheng and also known as Hui, was a younger brother of Emperor Gaozu by the same mother.",
+      "reason": "母弟 means younger brother of the same mother, not maternal cousin; later 異母弟 for Shuang confirms siblingship.",
+      "confidence": "high"
+    },
+    {
+      "id": "suishu:044:r0003",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Teng the Mu Prince Zan, styled Hengsheng, also named Hui, was a younger cousin on Empress Gao's side.",
+      "after": "Teng the Mu Prince Zan, styled Hengsheng, also named Hui, was Gaozu's younger brother by the same mother.",
+      "reason": "高祖母弟 is Gaozu's same-mother younger brother, not a cousin of Empress Gao.",
+      "confidence": "high"
+    },
+    {
+      "id": "suishu:044:r0004",
+      "unit": {
+        "id": "s0064",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "After Gaozu took the throne, Song was posthumously created Prince of Dao with the temple name Xuan.",
+      "after": "After Gaozu took the throne, Song was posthumously created Prince of Dao with the posthumous name Xuan.",
+      "reason": "諡曰宣 is a posthumous name (諡), not a temple name (廟號).",
+      "confidence": "high"
+    },
+    {
+      "id": "suishu:044:r0005",
+      "unit": {
+        "id": "s0117",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "After Gaozu took the throne, Zheng was posthumously created Prince of Cai with the temple name Jing.",
+      "after": "After Gaozu took the throne, Zheng was posthumously created Prince of Cai with the posthumous name Jing.",
+      "reason": "諡曰景 is a posthumous name (諡), not a temple name (廟號).",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "suishu:044:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "卷四十四列傳第九 is Volume Forty-Four, Biographies Nine; the idiomatic line wrongly reads 卷/第 as 'year' and invents regnal-style dating that the Chinese does not support.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0001",
+        "excerpt": "隋書卷四十四列傳第九"
+      }
+    },
+    {
+      "repairId": "suishu:044:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "高祖母弟 means Gaozu's younger brother by the same mother, not a maternal cousin; the proposed idiomatic wording restores the kinship correctly.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "高祖母弟也"
+      }
+    },
+    {
+      "repairId": "suishu:044:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "高祖母弟 is Gaozu's same-mother younger brother; the literal wrongly takes 高祖 as Empress Gao and 母弟 as cousin on her side.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "高祖母弟也"
+      }
+    },
+    {
+      "repairId": "suishu:044:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "諡曰宣 grants the posthumous name Xuan (諡), not a temple name (廟號); replacing 'temple name' with 'posthumous name' matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0064",
+        "excerpt": "諡曰宣"
+      }
+    },
+    {
+      "repairId": "suishu:044:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "諡曰景 grants the posthumous name Jing (諡), not a temple name (廟號); the proposed replacement is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0117",
+        "excerpt": "諡曰景"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -22,6 +22,16 @@ export function writeTextAtomic(file, value) {
   fs.renameSync(temporary, file);
 }
 
+export function listHtmlFilesRecursively(directory, relative = '') {
+  const found = [];
+  for (const entry of fs.readdirSync(path.join(directory, relative), { withFileTypes: true })) {
+    const name = path.join(relative, entry.name);
+    if (entry.isDirectory()) found.push(...listHtmlFilesRecursively(directory, name));
+    else if (entry.isFile() && entry.name.endsWith('.html')) found.push(name);
+  }
+  return found;
+}
+
 export function sha256(value) {
   return `sha256:${crypto.createHash('sha256').update(String(value ?? '')).digest('hex')}`;
 }

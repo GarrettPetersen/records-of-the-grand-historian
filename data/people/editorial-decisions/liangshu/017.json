@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "liangshu",
+  "chapter": "017",
+  "input": {
+    "chapterFingerprint": "sha256:1e8755f6a231d9f5f70aaefaccaf7a8e790fb7068871729ba2688efa0d9c86c8",
+    "proposalsFingerprint": "sha256:c3841715e25fdd3658f533a2034b215b19ba4f77283d5d8ad6759caa8e8189ac"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-a2054549-20af-44a5-b7d1-7afb99926a53",
+    "runId": "run-5a8956f8-529e-4af0-b3e1-1ed9d24a2fe3",
+    "completedAt": "2026-08-12T16:11:56.268Z"
+  },
+  "proposals": [
+    {
+      "id": "liangshu:017:r0001",
+      "unit": {
+        "id": "s0014",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "He was then transferred to prefect of Ba and Ping.",
+      "after": "He was then transferred to prefect of Badong and Jianping.",
+      "reason": "Chinese 巴東、建平 are Badong and Jianping; 'Ba and Ping' drops syllables and confuses the place names.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:017:r0002",
+      "unit": {
+        "id": "s0039",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "He went out bearer of staff, commander of Liang and Qin military affairs, campaign general who subdues barbarians, and inspector of Nan and Liang.",
+      "after": "He went out bearer of staff, commander of Liang and Qin military affairs, campaign general who subdues barbarians, and inspector of Nan Qin and Liang.",
+      "reason": "Chinese 南秦梁二州 is Nan Qin and Liang; omitting Qin reverses the jurisdiction.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:017:r0003",
+      "unit": {
+        "id": "s0084",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "Xianpin was recalled for the failure and made cloud-cavalry general.",
+      "after": "Xianpin was held responsible, recalled, and made cloud-cavalry general.",
+      "reason": "'Sat out the blame' / vague phrasing; 坐 marks being held liable for the defeat.",
+      "confidence": "medium"
+    },
+    {
+      "id": "liangshu:017:r0004",
+      "unit": {
+        "id": "s0113",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "The next year Gaozu received the abdication; Qi was enfeoffed as Marquis of Anchang county in Qi with a fief of five hundred households, and remained Pacification North General and Administrator of Liyang.",
+      "after": "The next year Gaozu received the abdication; Qi was enfeoffed as Marquis of Anchang county with a fief of five hundred households, and remained Pacification North General and Administrator of Liyang.",
+      "reason": "Chinese 安昌縣侯 has no 'in Qi'; the literal invents a place qualifier from the personal name Qi.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liangshu:017:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0014 巴東、建平二郡太守 names the commanderies Badong and Jianping; “Ba and Ping” truncates both place names, and the proposed idiomatic restores them.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0014",
+        "excerpt": "巴東、建平"
+      }
+    },
+    {
+      "repairId": "liangshu:017:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0039 南秦梁二州刺史 is inspector of the two provinces Nan Qin and Liang; the before’s “Nan and Liang” drops 秦 and misstates the jurisdiction, while the proposed idiomatic restores it.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0039",
+        "excerpt": "南秦梁二州"
+      }
+    },
+    {
+      "repairId": "liangshu:017:r0003",
+      "decision": "reject",
+      "after": null,
+      "reason": "s0084 坐徵還 already supports the idiomatic “recalled for the failure,” which conveys liability for the prior defeat; “held responsible, recalled” is only a stylistic rewording, not a needed correction.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0084",
+        "excerpt": "坐徵還"
+      }
+    },
+    {
+      "repairId": "liangshu:017:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0113 封齊安昌縣侯 enfeoffs the person 齊 as Marquis of Anchang county; “in Qi” is an invented place qualifier from his name, and removing it matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0113",
+        "excerpt": "封齊安昌縣侯"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

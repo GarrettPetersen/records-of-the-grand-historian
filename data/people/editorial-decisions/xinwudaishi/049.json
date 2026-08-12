@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "xinwudaishi",
+  "chapter": "049",
+  "input": {
+    "chapterFingerprint": "sha256:805f8e09697e14abd167f03af84fc5bf11f7dc57f40e9ff6b5342b15abbc61dd",
+    "proposalsFingerprint": "sha256:910d6ef72a809656f093bdf38f5571d5a20f7f2a9de63e4b6ac72a44d06c2c15"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-ea33ecfd-c1cc-4ec8-82fe-496f80d0f147",
+    "runId": "run-b311af3b-d07f-4d73-a6e1-da2ad6b4a9ce",
+    "completedAt": "2026-08-12T16:20:20.486Z"
+  },
+  "proposals": [
+    {
+      "id": "xinwudaishi:049:r0001",
+      "unit": {
+        "id": "s0024",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "He followed Mingzong against Yang Li and joined Jiji in pacifying Shu, rising to prefect of Qiong and Xing.",
+      "after": "He followed Mingzong against Yang Li and the Prince of Wei Jiji in pacifying Shu, rising to prefect of Kui and Xing.",
+      "reason": "Chinese 夔、興 is Kui and Xing, not Qiong; idiomatic also weakens 魏王繼岌 to bare Jiji.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:049:r0002",
+      "unit": {
+        "id": "s0060",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "They made a junior officer chief; he refused and they killed him too. With both heads they went to Zhao Zaili, who joined them. That night they burned Bei and entered Wei. Zaili made Fuhui horse-and-foot commander.",
+      "after": "The soldiers knew they could not force him, so they beheaded him; they pushed a junior officer to be leader, he refused, and they beheaded him too. Carrying the two heads they went to deputy Zhao Zaili; Zaili followed them. That night they burned Bei and entered Wei; Zaili made Fuhui horse-and-foot commander.",
+      "reason": "Idiomatic omits 遂斬之 killing Yang Rencheng before the junior officer episode, though 'both heads' presupposes it.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:049:r0003",
+      "unit": {
+        "id": "s0103",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "When I set down the old histories and came to Wang Jin’s story, I never failed to lay aside the book and sigh: How extreme! The rulers of the Five Dynasties all rose as men of war; the fierce soldiers and brutal troops who rose with them each carved out land and were enfeoffed as marquises and kings—how unlike wolves herding men!",
+      "after": "When I set down the old histories and came to Wang Jin’s story, I never failed to lay aside the book and sigh: How extreme! The rulers of the Five Dynasties all rose as men of war; the fierce soldiers and brutal troops who rose with them each carved out land and were enfeoffed as marquises and kings—what difference from wolves herding these people!",
+      "reason": "何異 means 'what difference from' (i.e. just like), not 'how unlike'.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:049:r0004",
+      "unit": {
+        "id": "s0012",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "Han Gaozu entered the capital and made him Grand General of the Right Stern Guard and Left Golden Crow and street commissioner.",
+      "after": "Han Gaozu entered the capital and made him Grand General of the Right Stern Guard and Grand General of the Left Jinwu Guard, and street commissioner.",
+      "reason": "金吾 is the Jinwu (imperial insignia) guard title, not 'Golden Crow'.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xinwudaishi:049:r0001",
+      "decision": "revise",
+      "after": "He followed Mingzong against Yang Li and joined the Prince of Wei Jiji in pacifying Shu, rising to prefect of Kui and Xing.",
+      "reason": "Chinese 累遷夔、興 names Kui and Xing, not Qiong (邛), and 魏王繼岌 needs the Prince of Wei title; but the proposal’s “against Yang Li and the Prince of Wei Jiji in pacifying Shu” can be read as one campaign with Jiji among Mingzong’s targets. The顿号 separates 討楊立 from 魏王繼岌平蜀, so keep “joined … in pacifying” while restoring the title and Kui.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0024",
+        "excerpt": "從明宗討楊立、魏王繼岌平蜀，累遷夔、興二州刺史"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:049:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "After Rencheng’s refusal, 軍士知不可強，遂斬之 is the first beheading; the before text jumps to the junior officer and only implies a prior death via “both heads.” The proposed wording restores 遂斬之, 裨將, and 攜二首 without inventing content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0060",
+        "excerpt": "軍士知不可強，遂斬之，推一小校為主，不從，又斬之，乃攜二首"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:049:r0003",
+      "decision": "revise",
+      "after": "When I set down the old histories and came to Wang Jin’s story, I never failed to lay aside the book and sigh: How extreme! The rulers of the Five Dynasties all rose as men of war; the fierce soldiers and brutal troops who rose with them each carved out land and were enfeoffed as marquises and kings—what difference is there from wolves herding these people!",
+      "reason": "何異豺狼之牧斯人也 is a rhetorical “what difference from,” equating the warlords with wolves herding the people; “how unlike” reverses the sense. The proposal fixes the polarity and 斯人, but “what difference from” is incomplete English—add “is there.”",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0103",
+        "excerpt": "何異豺狼之牧斯人也"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:049:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "左金吾大將軍 is the Left Jinwu (imperial insignia) Guard grand generalship; “Golden Crow” confuses 金吾 with mythic 金烏. Restating Grand General for the second office and Jinwu Guard matches the Chinese title pair.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0012",
+        "excerpt": "右領軍衛大將軍、左金吾大將軍"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

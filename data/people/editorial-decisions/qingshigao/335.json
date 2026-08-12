@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "335",
+  "input": {
+    "chapterFingerprint": "sha256:78473554c7b8b27858503d3d3b25fd852eabcee867ab4e9c08bdaa1f73c46e8e",
+    "proposalsFingerprint": "sha256:e28b7104663506a93d0b037d0efc43fbf23f321187d4b7e9692dec6ee2ff4a97"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-ccf8fbd3-1fe4-42b2-acc1-75a09d854ff2",
+    "runId": "run-7b53da95-b9c4-4760-bae5-dc572027a535",
+    "completedAt": "2026-08-12T16:14:25.352Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:335:r0001",
+      "unit": {
+        "id": "s0038",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "Yi Leitu fought alongside Assistant Military Governor Agui, took three stockades, and killed more than five thousand of the enemy.",
+      "after": "Yi Leitu fought alongside Assistant Military Governor Aligun, took three stockades, and killed more than five thousand of the enemy.",
+      "reason": "Chinese 阿里袞 is Aligun, not Agui (阿桂); the idiomatic English conflates two distinct officials.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:335:r0002",
+      "unit": {
+        "id": "s0085",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 24
+      },
+      "field": "idiomatic",
+      "before": "Governor-General Agui's force arrived as well; operating on separate lines they rounded up the rebels until every band was taken.",
+      "after": "Governor-General Aligun's force arrived as well; operating on separate lines they rounded up the rebels until every band was taken.",
+      "reason": "Chinese 阿里袞 is Aligun, not Agui (阿桂); keep distinct from 阿桂 later in the chapter.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:335:r0003",
+      "unit": {
+        "id": "s0041",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "Torghut Khan Oboi, Taiji Cebeke Duolji, and others led more than thirty thousand households of their people back to allegiance, having sent envoys ahead to Ili with letters of submission.",
+      "after": "Torghut Khan Ubashi, Taiji Cebeke Duolji, and others led more than thirty thousand households of their people back to allegiance, having sent envoys ahead to Ili with letters of submission.",
+      "reason": "Chinese 渥巴錫 is Ubashi (Torghut khan); Oboi conventionally renders 鼇拜 and misidentifies him.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:335:r0004",
+      "unit": {
+        "id": "s0089",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 28
+      },
+      "field": "idiomatic",
+      "before": "He died in the twenty-fifth year of Qianlong and was posthumously titled Qinmin.",
+      "after": "He died in the twenty-fifth year of Qianlong and was posthumously titled Qinque.",
+      "reason": "Posthumous title 勤愨 is Qinque; Qinmin would correspond to 勤敏.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:335:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0038 names the co-commander 參贊大臣阿里袞. Agui renders 阿桂, a different official; Aligun is the correct English for 阿里袞.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0038",
+        "excerpt": "伊勒圖偕參贊大臣阿里袞與戰"
+      }
+    },
+    {
+      "repairId": "qingshigao:335:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0085 has 總督阿里袞, not 阿桂. The prior idiomatic misnames him Agui; Aligun matches the Chinese and keeps him distinct from Agui elsewhere.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0085",
+        "excerpt": "總督阿里袞軍亦至"
+      }
+    },
+    {
+      "repairId": "qingshigao:335:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0041 names 土爾扈特汗渥巴錫. Ubashi is the Torghut khan; Oboi is the conventional rendering of 鼇拜 and wrongly identifies him.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0041",
+        "excerpt": "土爾扈特汗渥巴錫"
+      }
+    },
+    {
+      "repairId": "qingshigao:335:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0089 gives the posthumous title 勤愨. Qinque matches 愨; Qinmin would correspond to 勤敏 and is unsupported.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0089",
+        "excerpt": "諡勤愨"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

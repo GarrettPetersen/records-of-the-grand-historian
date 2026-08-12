@@ -6,6 +6,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { listHtmlFilesRecursively } from './lib/people-content.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
@@ -84,15 +85,23 @@ function main() {
         throw new Error('Published people-site status is inconsistent with generated people pages');
       }
       const peopleLastmod = typeof status.generatedAt === 'string' ? status.generatedAt.slice(0, 10) : lastmod;
-      urls.push({ loc: `${origin}/people/`, lastmod: peopleLastmod });
       const personFiles = fs.readdirSync(peopleDir)
         .filter((name) => name !== 'index.html' && name.endsWith('.html'))
         .sort();
       if (personFiles.length !== status.people) {
         throw new Error(`People sitemap expected ${status.people} person pages, found ${personFiles.length}`);
       }
-      for (const name of personFiles) {
-        urls.push({ loc: `${origin}/people/${name}`, lastmod: peopleLastmod });
+      const allPeopleHtml = listHtmlFilesRecursively(peopleDir).sort();
+      const browsePages = allPeopleHtml.filter((name) => name.includes(path.sep)).length;
+      if (browsePages !== status.browsePages) {
+        throw new Error(`People sitemap expected ${status.browsePages} browse pages, found ${browsePages}`);
+      }
+      for (const name of allPeopleHtml) {
+        const webPath = name.split(path.sep).join('/');
+        urls.push({
+          loc: name === 'index.html' ? `${origin}/people/` : `${origin}/people/${webPath}`,
+          lastmod: peopleLastmod,
+        });
       }
     }
   }

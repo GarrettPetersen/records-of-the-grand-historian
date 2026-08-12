@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "songshi",
+  "chapter": "013",
+  "input": {
+    "chapterFingerprint": "sha256:379a652b61cfd80eea4d5d9016297c909b67b756e32357ef5157ae8080a646ec",
+    "proposalsFingerprint": "sha256:b2f770f5095fe40f144c9a63d133622a72990e9aff74d47ed647f580537f6ed9"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-233e2cb9-8a57-45f9-a5db-5edfe54c0a97",
+    "runId": "run-9f3bf4dd-b876-46fb-ab9d-3773d7658537",
+    "completedAt": "2026-08-12T16:17:08.335Z"
+  },
+  "proposals": [
+    {
+      "id": "songshi:013:r0001",
+      "unit": {
+        "id": "s0006",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Precious Origin 2, when the heir was born, he returned to the Pu mansion.",
+      "after": "Precious Origin 2, when Prince Yu was born, he returned to the Pu mansion.",
+      "reason": "Chinese 豫王 is Prince Yu, not a generic “heir”; the idiomatic gloss invents heirship.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:013:r0002",
+      "unit": {
+        "id": "s0006",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "In the second year of Precious Origin, when the Heir Apparent was born, he returned to the Pu residence.",
+      "after": "In the second year of Precious Origin, when Prince Yu was born, he returned to the Pu residence.",
+      "reason": "Chinese 豫王 should be rendered Prince Yu, not Heir Apparent.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:013:r0003",
+      "unit": {
+        "id": "s0066",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Third month, renyin: the tomb of Prince Zhao was restored and staffed with guardians.",
+      "after": "Third month, renyin: the tomb of the Qin Mourning Prince was restored and staffed with guardians.",
+      "reason": "Chinese 秦悼王 is the Qin Mourning Prince; “Prince Zhao” drops the Qin title and misreads 悼.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:013:r0004",
+      "unit": {
+        "id": "s0101",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "Western tribesman Zha Qimizheng of the Zhaizi came in.",
+      "after": "Zha Qimizheng, son of the western tribesman Zha Zhan, came in to submit.",
+      "reason": "Chinese 瞎氊子瞎欺米征 means the son of 瞎氊 named 瞎欺米征, not “Zhaizi Zha Qimizheng.”",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "songshi:013:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Source 豫王生 names Prince Yu’s birth, not an unnamed heir; “the heir” invents heirship absent from the Chinese, and “Prince Yu” restores the titled person.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0006",
+        "excerpt": "豫王生"
+      }
+    },
+    {
+      "repairId": "songshi:013:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "豫王 is the titled Prince Yu; “Heir Apparent” (太子) is not in the Chinese, so rendering him as Heir Apparent is a factual mistranslation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0006",
+        "excerpt": "豫王生"
+      }
+    },
+    {
+      "repairId": "songshi:013:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "秦悼王 is the Qin Mourning Prince (fief Qin + posthumous 悼); “Prince Zhao” drops 秦 and misreads 悼, so the proposed title is the accurate fix.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0066",
+        "excerpt": "秦悼王"
+      }
+    },
+    {
+      "repairId": "songshi:013:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "瞎氊子瞎欺米征 is kinship plus personal name—son of 瞎氊 named 瞎欺米征—and 內附 means submission; “Zhaizi” invents a tribe and omits the father–son link.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0101",
+        "excerpt": "瞎氊子瞎欺米征內附"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

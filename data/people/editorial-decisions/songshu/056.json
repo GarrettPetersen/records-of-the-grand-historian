@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "songshu",
+  "chapter": "056",
+  "input": {
+    "chapterFingerprint": "sha256:e733e77fe27acf9078432a0b2d45cf02617baefeb21936a6e6cddca0bb22fd5a",
+    "proposalsFingerprint": "sha256:2d6ab5674b9c0eba3d2680506477677ded18c9b0e9abf1da771d170cdddcc651"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-4f2bca21-e6a6-4b66-acc9-8767715f3cd6",
+    "runId": "run-7d086e3f-5403-459e-bfff-16a7faddaa45",
+    "completedAt": "2026-08-12T16:17:06.686Z"
+  },
+  "proposals": [
+    {
+      "id": "songshu:056:r0001",
+      "unit": {
+        "id": "s0016",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "Emperor Gaozu appointed Zhan to Wu Commandery, but Zhan petitioned again on his own behalf and was instead made administrator of Yuzhang.",
+      "after": "Emperor Gaozu appointed Zhan to Wuxing Commandery, but Zhan petitioned again on his own behalf and was instead made administrator of Yuzhang.",
+      "reason": "吳興郡 is Wuxing Commandery, not Wu Commandery.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:056:r0002",
+      "unit": {
+        "id": "s0016",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "Emperor Gaozu appointed Zhan to Wu Commandery; he petitioned again on his own behalf and was then made Administrator of Yuzhang.",
+      "after": "Emperor Gaozu appointed Zhan to Wuxing Commandery; he petitioned again on his own behalf and was then made Administrator of Yuzhang.",
+      "reason": "吳興郡 is Wuxing Commandery, not Wu Commandery.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:056:r0003",
+      "unit": {
+        "id": "s0147",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "He was sent out as administrator of Wu Commandery and was dismissed for official misconduct.",
+      "after": "He was sent out as administrator of Wuxing Commandery and was dismissed for official misconduct.",
+      "reason": "吳興 denotes Wuxing, not Wu Commandery.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:056:r0004",
+      "unit": {
+        "id": "s0147",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "He went out as Administrator of Wu Commandery and was dismissed for official misconduct.",
+      "after": "He went out as Administrator of Wuxing Commandery and was dismissed for official misconduct.",
+      "reason": "吳興 denotes Wuxing, not Wu Commandery.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:056:r0005",
+      "unit": {
+        "id": "s0150",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "He memorialized to impeach the minister of works Xu Xianzhi: \"I have heard that serving superiors by upholding the law is respect, and governing subordinates with authority is order.",
+      "after": "He memorialized to impeach the Director of the Imperial Secretariat Xu Xianzhi: \"I have heard that serving superiors by upholding the law is respect, and governing subordinates with authority is order.",
+      "reason": "尚書令 is Director of the Imperial Secretariat, not Minister of Works (司空).",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:056:r0006",
+      "unit": {
+        "id": "s0150",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "He memorialized to impeach the Minister of Works Xu Xianzhi, saying, \"Your servant has heard that serving superiors with observance of statutes is respect, and facing subordinates with awe and dignity is order.",
+      "after": "He memorialized to impeach the Director of the Imperial Secretariat Xu Xianzhi, saying, \"Your servant has heard that serving superiors with observance of statutes is respect, and facing subordinates with awe and dignity is order.",
+      "reason": "尚書令 is Director of the Imperial Secretariat, not Minister of Works (司空).",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "songshu:056:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 吳興郡 is Wuxing Commandery; rendering it as Wu Commandery (吳郡) drops 興 and names the wrong place. The proposed replacement restores the correct commandery name without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0016",
+        "excerpt": "高祖以瞻為吳興郡"
+      }
+    },
+    {
+      "repairId": "songshu:056:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same place-name error as the idiomatic: 吳興郡 must be Wuxing Commandery, not Wu Commandery; the repair corrects only that mistranslation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0016",
+        "excerpt": "以瞻為吳興郡"
+      }
+    },
+    {
+      "repairId": "songshu:056:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "出為吳興太守 names Wuxing, not Wu Commandery; 'Wu Commandery' omits 興 and confuses distinct commanderies. The replacement is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0147",
+        "excerpt": "出為吳興太守"
+      }
+    },
+    {
+      "repairId": "songshu:056:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal likewise misreads 吳興太守 as Wu Commandery; Wuxing Commandery matches the Chinese, and the rest of the sentence is unchanged and correct.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0147",
+        "excerpt": "吳興太守，公事免"
+      }
+    },
+    {
+      "repairId": "songshu:056:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "奏劾尚書令徐羨之 titles Xu as 尚書令 (Director of the Imperial Secretariat), not 司空 (Minister of Works). The repair corrects that office title only.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0150",
+        "excerpt": "奏劾尚書令徐羨之"
+      }
+    },
+    {
+      "repairId": "songshu:056:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same office mistranslation in the literal: 尚書令 is Director of the Imperial Secretariat, not Minister of Works; the proposed wording is accurate and complete.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0150",
+        "excerpt": "尚書令徐羨之"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

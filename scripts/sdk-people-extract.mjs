@@ -23,7 +23,11 @@ import {
   writeJsonAtomic,
 } from './lib/people-content.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
-import { waitForCursorRun } from './lib/cursor-run-wait.mjs';
+import {
+  isCursorAgentBusy,
+  sendCursorAgentWhenReady,
+  waitForCursorRun,
+} from './lib/cursor-run-wait.mjs';
 import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
 import {
   compactPeopleExtraction,
@@ -685,7 +689,9 @@ async function closeAgent(agent) {
 
 async function runAgentTurn(agent, prompt, target, opts, phase, control) {
   console.log(`[${stateKey(target)}] ${phase} prompt -> ${agent.agentId}`);
-  const run = await agent.send(prompt);
+  const run = await sendCursorAgentWhenReady(agent, prompt, {
+    label: `[${stateKey(target)}] ${phase}`,
+  });
   control.activeRuns.set(run.id, { run, target });
   try {
     if (opts.stream) {
@@ -747,6 +753,56 @@ function validateDownloadedExtraction(extraction, packet) {
   return isCompactPeopleExtraction(extraction)
     ? validateCompactPeopleExtraction(extraction, packet)
     : validatePeopleExtraction(extraction, packet);
+}
+
+async function recoverInterruptedExtraction(target, packet, opts, state, control) {
+  const prior = state.chapters[stateKey(target)];
+  if (prior?.status !== 'interrupted' || !prior.agentId) return null;
+
+  let agent;
+  let run;
+  try {
+    console.log(`[${stateKey(target)}] resuming interrupted agent ${prior.agentId}`);
+    updateState(state, target, { status: 'recovering' });
+    agent = await Agent.resume(prior.agentId, { apiKey: opts.apiKey });
+    const runs = await Agent.listRuns(prior.agentId, {
+      runtime: 'cloud',
+      apiKey: opts.apiKey,
+      limit: 20,
+    });
+    run = runs.items.find((candidate) => candidate.status === 'running') ?? runs.items[0];
+    if (!run) throw new Error('interrupted agent has no cloud runs');
+    if (run.status === 'running') {
+      control.activeRuns.set(run.id, { run, target });
+      run = await waitForCursorRun(run, {
+        agentId: prior.agentId,
+        apiKey: opts.apiKey,
+        label: `[${stateKey(target)}] recovered extraction`,
+      });
+    }
+    if (run.status !== 'finished') {
+      throw new Error(run.error?.message ?? `recovered run ended with status ${run.status}`);
+    }
+    const downloaded = withRunMetadata(
+      await downloadExtraction(agent, artifactPath(target)),
+      opts,
+      agent,
+      run,
+    );
+    const validated = validateDownloadedExtraction(downloaded, packet);
+    console.log(`[${stateKey(target)}] recovered validated artifact from run ${run.id}`);
+    return { extraction: validated.normalized, result: run, stats: validated.stats, packet };
+  } catch (error) {
+    console.warn(
+      `[${stateKey(target)}] interrupted agent was not recoverable: ` +
+      `${error instanceof Error ? error.message : String(error)}`,
+    );
+    updateState(state, target, { status: 'interrupted', lastErrors: validationErrors(error) });
+    return null;
+  } finally {
+    if (run?.id) control.activeRuns.delete(run.id);
+    await closeAgent(agent);
+  }
 }
 
 async function obtainValidInitialExtraction(agent, target, packet, opts, state, control, chunk = null) {
@@ -980,6 +1036,34 @@ async function processChunkedTarget(target, packet, opts, state, control, budget
   return { status: 'accepted', stats: validated.stats };
 }
 
+function acceptWholeExtraction(target, accepted, state) {
+  const compact = compactPeopleExtraction(accepted.extraction, accepted.packet);
+  validateCompactPeopleExtraction(compact, accepted.packet);
+  const rawArchive = path.join(
+    PEOPLE_DIR,
+    'generated',
+    'raw-extractions',
+    target.book,
+    `${target.chapter}.json`,
+  );
+  writeJsonAtomic(rawArchive, accepted.extraction);
+  writeAcceptedExtraction(target, compact);
+  updateState(state, target, {
+    status: 'accepted',
+    runId: accepted.result.id,
+    acceptedPath: path.relative(REPO_ROOT, extractionPath(target.book, target.chapter)),
+    repairs: accepted.stats.repairs,
+    repairsPendingReview: accepted.extraction.translationRepairs.length,
+    lastErrors: [],
+  });
+  console.log(
+    `[${stateKey(target)}] accepted: ${accepted.stats.people} people, ` +
+    `${accepted.stats.mentions} mentions, ${accepted.stats.claims} claims, ` +
+    `${accepted.stats.repairs} translation repair proposal(s)`,
+  );
+  return { status: 'accepted', stats: accepted.stats };
+}
+
 async function processTarget(target, opts, state, control, budget) {
   const key = stateKey(target);
   const packet = target.packet ?? buildPeopleExtractionPacket(target.book, target.chapter, {
@@ -1004,6 +1088,8 @@ async function processTarget(target, opts, state, control, budget) {
   }
 
   assertCloudSourceMatches(target, packet, opts, opts.properNounMatcher);
+  const recovered = await recoverInterruptedExtraction(target, packet, opts, state, control);
+  if (recovered) return acceptWholeExtraction(target, recovered, state);
   updateState(state, target, { status: 'claimed', chapterFingerprint: packet.input.chapterFingerprint });
 
   if (exceedsBulkCeiling({ metrics: targetMetrics(packet) }, opts) && !opts.allowLarge) {
@@ -1038,30 +1124,7 @@ async function processTarget(target, opts, state, control, budget) {
       ...await obtainValidInitialExtraction(agent, target, packet, opts, state, control),
       packet,
     };
-    const compact = compactPeopleExtraction(accepted.extraction, accepted.packet);
-    validateCompactPeopleExtraction(compact, accepted.packet);
-    const rawArchive = path.join(
-      PEOPLE_DIR,
-      'generated',
-      'raw-extractions',
-      target.book,
-      `${target.chapter}.json`,
-    );
-    writeJsonAtomic(rawArchive, accepted.extraction);
-    writeAcceptedExtraction(target, compact);
-    updateState(state, target, {
-      status: 'accepted',
-      runId: accepted.result.id,
-      acceptedPath: path.relative(REPO_ROOT, extractionPath(target.book, target.chapter)),
-      repairs: accepted.stats.repairs,
-      repairsPendingReview: accepted.extraction.translationRepairs.length,
-      lastErrors: [],
-    });
-    console.log(
-      `[${key}] accepted: ${accepted.stats.people} people, ${accepted.stats.mentions} mentions, ` +
-      `${accepted.stats.claims} claims, ${accepted.stats.repairs} translation repair proposal(s)`,
-    );
-    return { status: 'accepted', stats: accepted.stats };
+    return acceptWholeExtraction(target, accepted, state);
   } catch (error) {
     const errors = validationErrors(error);
     const status = control.stopRequested ? 'interrupted' : 'failed';
@@ -1075,7 +1138,7 @@ async function processTarget(target, opts, state, control, budget) {
   }
 }
 
-function selfTest() {
+async function selfTest() {
   const small = { book: 'fixture', chapter: '002', metrics: {
     units: 100, candidates: 200, workerBytes: 10_000, workloadScore: 42_000,
   } };
@@ -1134,6 +1197,31 @@ function selfTest() {
   }
   if (dollarCents('10.25', '--max-cost') !== 1025 || dollarCents('unlimited', '--max-cost') !== null) {
     throw new Error('Cost ceiling parser returned the wrong amount');
+  }
+  if (!isCursorAgentBusy({ code: 'agent_busy' }) ||
+      !isCursorAgentBusy(new Error('[agent_busy] Agent already has an active run')) ||
+      isCursorAgentBusy(new Error('unrelated failure'))) {
+    throw new Error('Cursor agent-busy errors were not classified correctly');
+  }
+  let sendAttempts = 0;
+  const fakeRun = await sendCursorAgentWhenReady({
+    async send() {
+      sendAttempts += 1;
+      if (sendAttempts === 1) {
+        throw Object.assign(new Error('[agent_busy] Agent already has an active run'), {
+          code: 'agent_busy',
+        });
+      }
+      return { id: 'run-fixture' };
+    },
+  }, 'fixture prompt', {
+    label: '[fixture] extraction',
+    initialDelayMs: 0,
+    maxDelayMs: 0,
+    timeoutMs: 100,
+  });
+  if (sendAttempts !== 2 || fakeRun.id !== 'run-fixture') {
+    throw new Error('Cursor agent-busy retry did not preserve the logical turn');
   }
   const budget = { chargedCents: 400, reservedCents: 600 };
   const costOpts = { maxCostCents: 2000, agentCostReserveCents: 1000 };

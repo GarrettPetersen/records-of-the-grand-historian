@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "beiqishu",
+  "chapter": "035",
+  "input": {
+    "chapterFingerprint": "sha256:6ca8b00299b48106792b8bc4f24ae3d3f8fbbb7cb5bab616e543c2c16c3a8815",
+    "proposalsFingerprint": "sha256:1fb660ab94130e2e275852095223b333d1f473d837f5be26adf5f34b26d13951"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-d9339c64-9749-440b-82a5-f4ecf17babe5",
+    "runId": "run-512020da-660d-4487-8676-9f466f5f0e1c",
+    "completedAt": "2026-08-12T14:26:05.673Z"
+  },
+  "proposals": [
+    {
+      "id": "beiqishu:035:r0001",
+      "unit": {
+        "id": "s0046",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "Minister of works Gao Gan wrote inviting him to serve as household census aide.\"",
+      "after": "Minister of works Gao Gan wrote inviting him to serve as household census aide.",
+      "reason": "Stray closing quotation mark at end of the idiomatic sentence with no matching opener.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:035:r0002",
+      "unit": {
+        "id": "s0101",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Xing Shao also befriended Lu Ang and his son Zhang. Once he said to Zhang, \"I call you the old clam that bore the pearl—do you want everyone to bow to Ji Ke?\"",
+      "after": "Xing Shao also associated with Ang and his father Zizhang. He once said to Zizhang, \"I take you as the old clam that bore the pearl—shall I have the company all bow in homage?\"",
+      "reason": "Chinese 卬父子彰 means Ang and his father Zizhang, not Ang and his son; the English reverses the kinship.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:035:r0003",
+      "unit": {
+        "id": "s0101",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "Shao also associated with Ang and his son Zhang in friendship. He once said to Zih Zhang, \"I take you as the old clam that bore the pearl—do you wish the assembly all to bow to Ji Ke?\"",
+      "after": "Shao also associated with Ang and his father Zizhang in friendship. He once said to Zizhang, \"I take you as the old clam that bore the pearl—do you wish the assembly all to bow in homage?\"",
+      "reason": "Literal likewise misreads 父 as son and garbles 子彰 as Zih Zhang.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:035:r0004",
+      "unit": {
+        "id": "s0111",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Ang and six brothers were all children of the same mother.",
+      "after": "Ang and his brothers were six in all, all children of the same mother.",
+      "reason": "昆季六人 means a sibling set of six including Ang, not Ang plus six others.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:035:r0005",
+      "unit": {
+        "id": "s0111",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Ang had six brothers, all born of the mistress.",
+      "after": "Ang's brotherly set numbered six, all born of the mistress.",
+      "reason": "Literal overcounts the brothers relative to 昆季六人.",
+      "confidence": "medium"
+    },
+    {
+      "id": "beiqishu:035:r0006",
+      "unit": {
+        "id": "s0144",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 16
+      },
+      "field": "idiomatic",
+      "before": "The third son, Xing Shao, was the most famous.",
+      "after": "The third son, Shao, was the most famous.",
+      "reason": "Chinese 第三子卲 names Songnian's son Shao, not the earlier Xing Shao.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "beiqishu:035:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0046’s idiomatic paraphrase has no opening quotation, yet ends with a stray closing quote; removing that mark matches the Chinese sentence form without changing meaning.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0046",
+        "excerpt": "司空高乾致書曰：「相屈為戶曹參軍。」"
+      }
+    },
+    {
+      "repairId": "beiqishu:035:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "卬父子彰 is Ang and his father Zizhang (父 + 子彰), not Ang and a son Zhang; 嘗謂子彰曰 addresses that father, and 可乎 is a permission tag, not a name Ji Ke—the proposed English restores kinship, addressee, and the question.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0101",
+        "excerpt": "卲又與卬父子彰交遊，嘗謂子彰曰"
+      }
+    },
+    {
+      "repairId": "beiqishu:035:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise turns 父 into “son” and splits 子彰 into “Zih Zhang”; replacing with father Zizhang and dropping the false Ji Ke reading follows 父子彰 / 子彰 and 可乎.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0101",
+        "excerpt": "卬父子彰……嘗謂子彰曰……可乎"
+      }
+    },
+    {
+      "repairId": "beiqishu:035:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "昆季六人 counts a sibling set of six that includes Ang; “Ang and six brothers” would make seven, while “were six in all” matches the Chinese tally.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0111",
+        "excerpt": "卬昆季六人"
+      }
+    },
+    {
+      "repairId": "beiqishu:035:r0005",
+      "decision": "revise",
+      "after": "Ang and his brothers numbered six, all born of the mistress.",
+      "reason": "“Ang had six brothers” overcounts relative to 昆季六人; the proposal’s count is right, but “brotherly set numbered” is awkward—use the clearer sibling-total wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0111",
+        "excerpt": "卬昆季六人，並主所生"
+      }
+    },
+    {
+      "repairId": "beiqishu:035:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "In Wang Songnian’s close, 第三子卲 names his third son Shao only; inserting “Xing” wrongly identifies him with the earlier Xing Shao (邢卲).",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0144",
+        "excerpt": "第三子卲"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

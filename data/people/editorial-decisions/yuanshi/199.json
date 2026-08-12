@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "yuanshi",
+  "chapter": "199",
+  "input": {
+    "chapterFingerprint": "sha256:7d0e9ece2ea07422060cc055651e21393ed948ff09ef141df091e1daca458f16",
+    "proposalsFingerprint": "sha256:e75166563eaf37c1583e0388fd77f8e92943680bc47da05dbc3a1138e302ff54"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-693e9796-e791-4fea-9386-7881b08061ff",
+    "runId": "run-a63d37a1-76f9-434d-beb7-ddb98845bf73",
+    "completedAt": "2026-08-12T16:18:53.089Z"
+  },
+  "proposals": [
+    {
+      "id": "yuanshi:199:r0001",
+      "unit": {
+        "id": "s0088",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "At the time there was Zhang Shu, an elder of Jinhua in Wu prefecture, who likewise refused repeated summons.",
+      "after": "At the time there was Zhang Shu, courtesy name Zichang, a man of Jinhua in Wu prefecture, who likewise refused repeated summons.",
+      "reason": "Chinese 張樞子長 follows the name-plus-courtesy pattern; 子長 is courtesy name Zichang, not the English noun \"elder\".",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:199:r0002",
+      "unit": {
+        "id": "s0054",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "He bound the slaves and jailed them; the son, hiding elsewhere, was captured and, as a close kinsman of the general, received a reduced sentence short of death.",
+      "after": "He bound the slaves and jailed them; the son, hiding elsewhere, was captured and, because of near kinship (近族), received a reduced sentence short of death.",
+      "reason": "Idiomatic invents \"as a close kinsman of the general\"; Chinese 近族 more naturally marks near imperial/clan kinship without specifying the general.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "yuanshi:199:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0088 張樞子長者 uses the standard personal-name plus courtesy-name pattern; 子長 is Zichang, not \"elder,\" and 婺之金華人 supports \"a man of Jinhua in Wu prefecture.\"",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0088",
+        "excerpt": "張樞子長者，婺之金華人"
+      }
+    },
+    {
+      "repairId": "yuanshi:199:r0002",
+      "decision": "revise",
+      "after": "He bound the slaves and jailed them; the son, hiding elsewhere, was captured and, because of near kinship, received a reduced sentence short of death.",
+      "reason": "s0054 以近族得減死論 gives only near kinship as the ground for a reduced death sentence and does not name the general; the original invents \"of the general,\" but the proposed idiomatic is awkward for inserting Chinese 近族 in parentheses.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0054",
+        "excerpt": "以近族得減死論"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

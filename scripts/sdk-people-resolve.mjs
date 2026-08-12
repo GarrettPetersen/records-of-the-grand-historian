@@ -17,7 +17,7 @@ import {
   loadValidatedPeopleCorpus,
   loadValidatedResolutionDocuments,
 } from './lib/people-corpus.mjs';
-import { waitForCursorRun } from './lib/cursor-run-wait.mjs';
+import { sendCursorAgentWhenReady, waitForCursorRun } from './lib/cursor-run-wait.mjs';
 import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
 import {
   buildResolutionCandidates,
@@ -453,7 +453,9 @@ async function recoverPublishedShardDocuments(dossiers, opts, corpus, resolution
           console.log(
             `[${dossier.batch}] recovered retry ${attempt + 1} -> ${agent.agentId}`,
           );
-          const run = await agent.send(retryPrompt(dossier, errors));
+          const run = await sendCursorAgentWhenReady(agent, retryPrompt(dossier, errors), {
+            label: `[${dossier.batch}] recovered identity resolution`,
+          });
           const result = await waitForCursorRun(run, {
             agentId: agent.agentId,
             apiKey: opts.apiKey,
@@ -497,7 +499,11 @@ async function processDossier(dossier, opts, corpus, resolutions, accepted) {
     for (let attempt = 1; attempt <= opts.maxAttempts; attempt += 1) {
       try {
         console.log(`[${dossier.batch}] ${attempt === 1 ? 'resolve' : `retry ${attempt}`} -> ${agent.agentId}`);
-        const run = await agent.send(attempt === 1 ? initialPrompt(dossier) : retryPrompt(dossier, errors));
+        const run = await sendCursorAgentWhenReady(
+          agent,
+          attempt === 1 ? initialPrompt(dossier) : retryPrompt(dossier, errors),
+          { label: `[${dossier.batch}] identity resolution` },
+        );
         const result = await waitForCursorRun(run, {
           agentId: agent.agentId,
           apiKey: opts.apiKey,

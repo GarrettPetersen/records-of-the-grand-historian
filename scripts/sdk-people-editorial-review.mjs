@@ -21,7 +21,7 @@ import {
   validateEditorialDecisions,
 } from './lib/people-editorial-decisions.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
-import { waitForCursorRun } from './lib/cursor-run-wait.mjs';
+import { sendCursorAgentWhenReady, waitForCursorRun } from './lib/cursor-run-wait.mjs';
 import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
 
 loadDotenv(REPO_ROOT);
@@ -206,7 +206,9 @@ ${errors.slice(0, 200).map((error) => `- ${error}`).join('\n')}`;
 
 async function runTurn(agent, prompt, target, phase, opts) {
   console.log(`[${target.book}/${target.chapter}] ${phase} -> ${agent.agentId}`);
-  const run = await agent.send(prompt);
+  const run = await sendCursorAgentWhenReady(agent, prompt, {
+    label: `[${target.book}/${target.chapter}] ${phase}`,
+  });
   const result = await waitForCursorRun(run, {
     agentId: agent.agentId,
     apiKey: opts.apiKey,

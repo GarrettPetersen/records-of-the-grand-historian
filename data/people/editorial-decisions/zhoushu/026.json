@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "zhoushu",
+  "chapter": "026",
+  "input": {
+    "chapterFingerprint": "sha256:2fce612dec3e1e1b50e035f14ee7385e8fd2641f325e8a7f08c76900cceefe0b",
+    "proposalsFingerprint": "sha256:d69477fc6adb5bffc41300b85697c701f7afda0825c786a2d1c0b79119253c7e"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-1261468c-cac1-4523-a2dc-b26454c883c0",
+    "runId": "run-796374b4-d1b9-470a-b8ae-d333e4b9a1de",
+    "completedAt": "2026-08-12T14:36:02.326Z"
+  },
+  "proposals": [
+    {
+      "id": "zhoushu:026:r0001",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "After He Ba Yue was murdered, Grand Progenitor Yuwen Tai marched to Pingliang; Zhangsun Jian took part in every major plan and policy.",
+      "after": "After Heba Yue was murdered, Grand Progenitor Yuwen Tai marched to Pingliang; Zhangsun Jian took part in every major plan and policy.",
+      "reason": "賀拔 is the compound surname Heba; splitting as He Ba misrepresents the name.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:026:r0002",
+      "unit": {
+        "id": "s0022",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "I formerly heard \"king's ministers are forthright, for the sake of not the person alone\"—this broadly means worrying for the public and forgetting the private, knowing nothing and not acting—but [only] this.",
+      "after": "I formerly heard \"king's ministers are forthright, not for their own persons\"—this broadly means worrying for the public and forgetting the private, and acting on all one knows—but only this.",
+      "reason": "知無不為 means act on whatever one knows; the literal reverses it to 'knowing nothing and not acting'.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:026:r0003",
+      "unit": {
+        "id": "s0035",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Again removed [from current post] and made Executive Office Vice Director and Governor of Jing Province.",
+      "after": "Again appointed Executive Office Vice Director and Governor of Jing Province.",
+      "reason": "除 here means appoint to office, not remove from office.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:026:r0004",
+      "unit": {
+        "id": "s0104",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "Pei Zheng was appointed Lesser Minister of Works.",
+      "after": "Zhangsun Shaoyuan was appointed Lesser Minister of Works.",
+      "reason": "Chinese 授小司空 has no new subject after the Shaoyuan debate; naming Pei Zheng invents the wrong appointee.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "zhoushu:026:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0011 names 賀拔岳; 賀拔 is the compound Xianbei surname Heba, so splitting it as “He Ba Yue” misrepresents the name, and “Heba Yue” restores the correct form without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "賀拔岳被害"
+      }
+    },
+    {
+      "repairId": "zhoushu:026:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0022 glosses the quotation with 知無不為, “act on all one knows / leave nothing known undone”; the prior literal “knowing nothing and not acting” reverses that sense, and the proposed replacement restores it while also clarifying 匪躬之故.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0022",
+        "excerpt": "憂公忘私，知無不為"
+      }
+    },
+    {
+      "repairId": "zhoushu:026:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "In appointment idiom, 除 means to install in office; s0035 又除行臺僕射、荊州刺史 records another appointment, matching the idiomatic rendering, so “removed” is a semantic error and “Again appointed…” is correct.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0035",
+        "excerpt": "又除行臺僕射、荊州刺史"
+      }
+    },
+    {
+      "repairId": "zhoushu:026:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0104 is only 授小司空 with no new subject after s0103’s debate with 紹遠; the continuing subject is Zhangsun Shaoyuan, and “Pei Zheng” is invented against the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0104",
+        "excerpt": "授小司空"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "086",
+  "input": {
+    "chapterFingerprint": "sha256:9e361d06dfdfb6949212cb72aff82905a3987225f8058bec6930841420a5ab07",
+    "proposalsFingerprint": "sha256:eaf2b00b8fd6ebf6857e823ba3b40b790568b0403543686ed122673f46348eef"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-2fdf8aeb-660d-4029-b279-153451eac8c4",
+    "runId": "run-9970b164-0841-43da-9aba-e2e078adeafe",
+    "completedAt": "2026-08-12T16:14:28.663Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:086:r0001",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "(Temuo)]〉",
+      "after": "(Temuo)",
+      "reason": "Garbled punctuation and brackets around the Temuo annotation; clean to a simple parenthetical name.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:086:r0002",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "(Temuo)]〉",
+      "after": "(Temuo)",
+      "reason": "Same garbled annotation as idiomatic; restore a clean parenthetical.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:086:r0003",
+      "unit": {
+        "id": "s0037",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 16
+      },
+      "field": "literal",
+      "before": "At the time Regent Han Kuangsi had followed the court north; Jing and his son Derang jointly administered capital affairs.",
+      "after": "At the time Regent Han Kuangsi had followed the court north; Jing and Han's son Derang jointly administered capital affairs.",
+      "reason": "Chinese 與其子德讓 refers to Han Kuangsi's son Derang, not Liu Jing's son; literal wrongly attaches Derang to Jing.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:086:r0004",
+      "unit": {
+        "id": "s0125",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "idiomatic",
+      "before": "In the autumn of the twenty-first year, at the rites for Empress Rend, the court ordered scholar-officials to compose poems; Fang's ranked first, and he was granted a gold belt.",
+      "after": "In the autumn of the twenty-first year, at the rites for Empress Rende, the court ordered scholar-officials to compose poems; Fang's ranked first, and he was granted a gold belt.",
+      "reason": "Posthumous title 仁德皇后 is Rende, not truncated Rend.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:086:r0005",
+      "unit": {
+        "id": "s0125",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "literal",
+      "before": "In the autumn of the twenty-first year, at the sacrifice for Empress Rend, the court ordered Confucian officials to compose poems; Fang's was foremost, and he was granted a gold belt.",
+      "after": "In the autumn of the twenty-first year, at the sacrifice for Empress Rende, the court ordered Confucian officials to compose poems; Fang's was foremost, and he was granted a gold belt.",
+      "reason": "Same incomplete romanization of 仁德皇后.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:086:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 〈（特末）〉 is a parenthetical annotation for 特末; the English retains stray ]〉 after the name, so cleaning to (Temuo) fixes real garbling without changing meaning.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "〈（特末）〉"
+      }
+    },
+    {
+      "repairId": "liaoshi:086:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same unit 〈（特末）〉; literal likewise has garbled trailing ]〉, and (Temuo) restores a clean parenthetical matching the annotation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "〈（特末）〉"
+      }
+    },
+    {
+      "repairId": "liaoshi:086:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 景與其子德讓共理京事, 其 refers to the preceding 留守韓匡嗣, so Derang is Han's son; the literal's 'Jing and his son Derang' wrongly makes Derang Liu Jing's son, and 'Han's son Derang' corrects that.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0037",
+        "excerpt": "時留守韓匡嗣因扈從北上，景與其子德讓共理京事"
+      }
+    },
+    {
+      "repairId": "liaoshi:086:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "仁德皇后 romanizes as Empress Rende; 'Rend' truncates 德 and is an incomplete title error that the proposed Rende fixes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0125",
+        "excerpt": "祭仁德皇后"
+      }
+    },
+    {
+      "repairId": "liaoshi:086:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same 仁德皇后 in the literal field; restoring Empress Rende completes the posthumous title truncated as Rend.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0125",
+        "excerpt": "祭仁德皇后"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

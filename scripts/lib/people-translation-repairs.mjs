@@ -729,6 +729,16 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         }
       }
     }
+    if (!mapped && stale.language === 'en' && !stale.span.exact.endsWith('s')) {
+      const pluralSpans = exactOccurrences(unit.en, `${stale.span.exact}s`, 'en');
+      const targetMention = reconciled.mentions.find((mention) =>
+        mention.id === stale.mention.id && mention.person === stale.mention.person
+      );
+      if (pluralSpans.length === 1 && targetMention) {
+        targetMention.spans.en.push(pluralSpans[0]);
+        mapped = true;
+      }
+    }
     if (!mapped) {
       const hasRemainingUnitContext = reconciled.mentions.some((mention) =>
         mention.person === stale.mention.person &&
@@ -738,7 +748,6 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         claim.subject === stale.mention.person &&
         claimEvidenceUnit(claim, stale.mention.unit.id)
       );
-      if (!hasRemainingUnitContext) continue;
       const hasRemainingMention = reconciled.mentions.some((mention) =>
         mention.person === stale.mention.person &&
         (mention.spans.zh.length > 0 || mention.spans.en.length > 0)
@@ -748,7 +757,7 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       );
       if (!hasRemainingMention && !hasRemainingClaim) {
         orphanedStalePeople.add(stale.mention.person);
-      } else {
+      } else if (hasRemainingUnitContext) {
         unresolvedSpans.push(stale);
       }
     }
@@ -911,6 +920,25 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
     );
     const exactAliasMatches = aliasMatches.filter((item) => item.alias.exact === candidate.exact);
     if (exactAliasMatches.length > 0) aliasMatches = exactAliasMatches;
+    if (
+      aliasMatches.length === 0 &&
+      candidate.language === 'en' &&
+      (candidate.exact.includes(' ') || [...candidate.exact].length >= 4)
+    ) {
+      aliasMatches = reconciled.claims.flatMap((claim) => {
+        if (claim.predicate !== 'name' || claim.value?.[candidate.language] !== candidate.exact) {
+          return [];
+        }
+        return [{
+          person: claim.subject,
+          alias: {
+            exact: candidate.exact,
+            kind: mentionKindForNameKind(claim.value?.kind),
+            preferred: false,
+          },
+        }];
+      });
+    }
     if (aliasMatches.length === 0) {
       aliasMatches = reconciled.people.flatMap((person) => {
         const exact = person.preferredNameSuggestion?.[candidate.language];
@@ -975,6 +1003,93 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         mention.candidateRefs.push(candidate.id);
         accounted.add(candidate.id);
         continue;
+      }
+    }
+    const overlapPeople = new Set(partialOverlaps.map(({ mention }) => mention.person));
+    if (partialOverlaps.length > 1 && overlapPeople.size > 1) {
+      const titlePeople = new Set(partialOverlaps
+        .filter(({ mention }) => mention.kind === 'title-reference')
+        .map(({ mention }) => mention.person));
+      const nameOverlaps = partialOverlaps.filter(({ mention }) => mention.kind !== 'title-reference');
+      if (titlePeople.size === 1 && nameOverlaps.length === 1) {
+        const titlePerson = [...titlePeople][0];
+        const displacedPerson = nameOverlaps[0].mention.person;
+        const repeated = reconciled.mentions.find((mention) =>
+          mention !== nameOverlaps[0].mention &&
+          mention.person === titlePerson &&
+          mention.unit.id === candidate.unit &&
+          mention.spans[candidate.language].some((span) =>
+            span.exact === nameOverlaps[0].span.exact && !spansOverlap(span, candidate)
+          )
+        );
+        if (displacedPerson !== titlePerson && repeated) {
+          nameOverlaps[0].mention.person = titlePerson;
+          repeated.person = displacedPerson;
+          overlapPeople.clear();
+          overlapPeople.add(titlePerson);
+        }
+      }
+    }
+    if (partialOverlaps.length > 1 && overlapPeople.size === 1) {
+      const target = partialOverlaps[0].mention;
+      const unit = unitById.get(candidate.unit);
+      const candidateSpan = exactSpanAt(
+        unit[candidate.language],
+        candidate.exact,
+        candidate.occurrence,
+      );
+      const mergedSpan = partialOverlaps.reduce(
+        (span, current) => coveringSpan(unit[candidate.language], span, current.span),
+        candidateSpan,
+      );
+      for (const { mention, span } of partialOverlaps) {
+        mention.spans[candidate.language] = mention.spans[candidate.language]
+          .filter((item) => item !== span);
+        target.candidateRefs.push(...mention.candidateRefs);
+      }
+      target.spans[candidate.language].push(mergedSpan);
+      target.candidateRefs.push(candidate.id);
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (candidate.language === 'en') {
+      const unit = unitById.get(candidate.unit);
+      const points = [...unit.en];
+      const preceding = reconciled.mentions.flatMap((mention) =>
+        mention.unit.id === candidate.unit
+          ? mention.spans.en
+            .filter((span) => /^\s*\($/u.test(
+              points.slice(span.endCodePoint, candidate.startCodePoint).join(''),
+            ))
+            .map((span) => ({ mention, span }))
+          : []
+      );
+      const nearestEnd = Math.max(-1, ...preceding.map(({ span }) => span.endCodePoint));
+      const nearest = preceding.filter(({ span }) => span.endCodePoint === nearestEnd);
+      const precedingPeople = new Set(nearest.map(({ mention }) => mention.person));
+      const closesParenthesis = /^\)/u.test(points.slice(candidate.endCodePoint).join(''));
+      if (closesParenthesis && precedingPeople.size === 1) {
+        const person = [...precedingPeople][0];
+        const span = exactSpanAt(unit.en, candidate.exact, candidate.occurrence);
+        if (addAliasMention(reconciled, unit, person, 'en', 'alternate-name', span)) {
+          reconciled.mentions.at(-1).candidateRefs.push(candidate.id);
+          if (!reconciled.claims.some((claim) =>
+            claim.subject === person &&
+            claim.predicate === 'name' &&
+            claim.value?.en === candidate.exact
+          )) {
+            reconciled.claims.push({
+              id: `${reconciled.book}:${reconciled.chapter}:c-parenthetical-alias`,
+              subject: person,
+              predicate: 'name',
+              value: { kind: 'alternate-name', en: candidate.exact },
+              certainty: 'strongly-inferred',
+              evidence: [`${reconciled.book}:${reconciled.chapter}:${candidate.unit}`],
+            });
+          }
+          accounted.add(candidate.id);
+          continue;
+        }
       }
     }
     if (candidate.language === 'en' && knownPolities.has(candidate.exact)) {
@@ -1063,6 +1178,37 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         disposition: 'not-person',
         reason: 'place',
         note: 'Component of a commandery name, not a person.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (
+      candidate.language === 'en' &&
+      /^[ \t]+Hall\b/u.test(
+        [...unitById.get(candidate.unit).en].slice(candidate.endCodePoint).join('')
+      )
+    ) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'place',
+        note: 'Component of a hall name, not a person.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (
+      candidate.language === 'en' &&
+      /^Biographies\b/u.test(candidate.exact) &&
+      /\bVolume\b[^.;!?]*,\s*$/u.test(
+        [...unitById.get(candidate.unit).en].slice(0, candidate.startCodePoint).join('')
+      )
+    ) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'book-title',
+        note: 'Volume section heading, not a person.',
       });
       accounted.add(candidate.id);
       continue;

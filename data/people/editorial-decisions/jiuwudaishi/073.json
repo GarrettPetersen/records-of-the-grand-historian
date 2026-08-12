@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "073",
+  "input": {
+    "chapterFingerprint": "sha256:7c0bfdbad4d865d58647ffd322c8a5d0fe1db9ef16e0625d5e697e4e41426c93",
+    "proposalsFingerprint": "sha256:6b7c93216c72f98b29dfcf0732f1882b4d09ab2068f20c71e6c9936793587e5e"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-cc1e867a-e0ab-4b35-aedc-72b9425a8492",
+    "runId": "run-3ef808d9-8268-4242-83dd-42fbf2f55aad",
+    "completedAt": "2026-08-12T14:27:56.903Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:073:r0001",
+      "unit": {
+        "id": "s0010",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "Not long afterward Mao turned the prefecture over to Tang Emperor Zhuangzong, who made him prefect of Qizhou; he eventually rose to command the Canghai circuit.)〉",
+      "after": "Not long afterward Mao turned the prefecture over to Tang Emperor Zhuangzong, who made him prefect of that prefecture; he eventually rose to command the Canghai circuit.)〉",
+      "reason": "Chinese 其州刺史 means prefect of that (just-surrendered) prefecture, not Qizhou.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:073:r0002",
+      "unit": {
+        "id": "s0010",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "Before long, Mao surrendered the prefecture to Tang's Emperor Zhuangzong, who appointed Mao prefect of Qizhou; in the end he came to command the Canghai circuit.)〉",
+      "after": "Before long, Mao surrendered the prefecture to Tang's Emperor Zhuangzong, who appointed Mao prefect of that prefecture; in the end he came to command the Canghai circuit.)〉",
+      "reason": "Chinese 其州 is 'that prefecture,' not the place-name Qizhou.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:073:r0003",
+      "unit": {
+        "id": "s0049",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "He was transferred to Xuzhou as military commissioner and eventually rose to acting Grand Preceptor and Grand Councilor.",
+      "after": "He was transferred to Xuzhou as military commissioner and eventually rose to acting Grand Commandant and Grand Councilor.",
+      "reason": "檢校太尉 is Grand Commandant (太尉), not Grand Preceptor (太師).",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:073:r0004",
+      "unit": {
+        "id": "s0049",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "He was transferred to military commissioner of Xuzhou and rose through successive posts to acting Grand Preceptor and Grand Councilor.",
+      "after": "He was transferred to military commissioner of Xuzhou and rose through successive posts to acting Grand Commandant and Grand Councilor.",
+      "reason": "太尉 should be rendered Grand Commandant, not Grand Preceptor.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:073:r0005",
+      "unit": {
+        "id": "s0027",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "Censor-in-chief Lü Mengqi, considering that Zhang had previously been cleared and that Yanzuo now pursued him over a failed bribe, was fabricating charges again, and thus he slightly favored Zhang.",
+      "after": "Censor-in-chief Lü Mengqi, considering that Zhang had previously been cleared and that Yanzuo, now pursuing him over a failed bribe, was fabricating charges again, thus slightly favored Zhang.",
+      "reason": "Literal English misattaches 'was fabricating' so the subject is unclear; Yanzuo is the fabricator.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:073:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit has 莊宗以毛為其州刺史; 其州 is the demonstrative 'that prefecture' just surrendered (以州歸命), not a place-name Qizhou (齊州/祁州). The proposed wording correctly restores that reading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0010",
+        "excerpt": "莊宗以毛為其州刺史"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:073:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field has the same error: 其州 means 'that prefecture,' not Qizhou. The replacement matches the Chinese without other semantic change.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0010",
+        "excerpt": "為其州刺史"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:073:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit has 檢校太尉、平章事; 太尉 is Grand Commandant, whereas Grand Preceptor is 太師. The proposed replacement corrects that title alone.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0049",
+        "excerpt": "檢校太尉、平章事"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:073:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise mistranslates 太尉 as Grand Preceptor; Grand Commandant is the accurate English for 太尉 and leaves the rest of the sentence intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0049",
+        "excerpt": "累官至檢校太尉、平章事"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:073:r0005",
+      "decision": "revise",
+      "after": "Censor-in-chief Lü Mengqi, considering that Zhang had previously been cleared and that Yanzuo, now pursuing him over a failed bribe, was fabricating charges again, and thus he slightly favored Zhang.",
+      "reason": "Chinese 今延祚以責賂之故，復加織羅 makes Yanzuo the agent of the renewed fabrications, so the original literal wrongly lets 'was fabricating' attach to Lü Mengqi. The proposal fixes that attribution, but dropping 'and thus he' leaves the main clause awkward; restore those words while keeping Yanzuo as fabricator.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0027",
+        "excerpt": "今延祚以責賂之故，復加織羅"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

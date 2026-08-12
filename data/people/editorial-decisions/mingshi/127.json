@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "mingshi",
+  "chapter": "127",
+  "input": {
+    "chapterFingerprint": "sha256:fdf68ecd9f42988bf33c7dd8fa7c30b37f8e47ee969cd1d6f7672e30cbf9fa16",
+    "proposalsFingerprint": "sha256:3a6b42829049a17b8f9532c0381826042e24a8a11ec88382b19b54e86dcfddf8"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-59bc2f1c-9061-43d3-be00-d0989f4c587f",
+    "runId": "run-e7aeed0e-ae05-4cf3-bed5-57c83279c444",
+    "completedAt": "2026-08-12T14:28:18.616Z"
+  },
+  "proposals": [
+    {
+      "id": "mingshi:127:r0001",
+      "unit": {
+        "id": "s0079",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "Once wishing to build a mansion, he borrowed three hundred guard soldiers from Duke of Trust Guo He; He secretly reported it.",
+      "after": "Once wishing to build a mansion, he borrowed three hundred guard soldiers from Duke of Trust Tang He; He secretly reported it.",
+      "reason": "Chinese 湯和 is Tang He; literal incorrectly renders the surname as Guo.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:127:r0002",
+      "unit": {
+        "id": "s0104",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "Between Shanzhang and Hu Weiyong it was only the closeness of sons; toward Your Majesty he had close sons and daughters.",
+      "after": "Between Shanzhang and Hu Weiyong it was only the closeness of a nephew (son of a brother); toward Your Majesty he was bound as by sons and daughters (through the princess marriage).",
+      "reason": "Literal misreads 猶子之親 and 親子女; idiomatic sense is kinship via brother's son versus imperial marriage, not that Shanzhang had sons/daughters with the emperor.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "mingshi:127:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 信國公湯和 names Duke of Trust Tang He; the literal’s Guo He misreads 湯 as Guo, and Tang He restores the correct surname without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0079",
+        "excerpt": "信國公湯和"
+      }
+    },
+    {
+      "repairId": "mingshi:127:r0002",
+      "decision": "revise",
+      "after": "Between Shanzhang and Hu Weiyong it was only the closeness of a brother's son; toward Your Majesty he was bound by the kinship of sons and daughters.",
+      "reason": "猶子之親 is nephew-degree kinship (brother’s son), set up by s0103’s 兄弟之子, and 親子女 is the closer sons-and-daughters bond to the emperor—not that Shanzhang ‘had sons and daughters’ with him. The proposal correctly rejects the before reading, but its parentheticals are awkward and ‘through the princess marriage’ is not in this unit’s Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0104",
+        "excerpt": "猶子之親耳，于陛下則親子女也"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

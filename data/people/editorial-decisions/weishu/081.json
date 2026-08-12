@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "weishu",
+  "chapter": "081",
+  "input": {
+    "chapterFingerprint": "sha256:a9b4d4e5049049629ff411955d834d5013911635c967468503afc17eead9fb49",
+    "proposalsFingerprint": "sha256:78d190d0ffe3cb9b990dd6a834593d58d8a045fd77ae298fb17d835b7dae0f76"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-7f040f88-fc87-4c7b-beef-79547b5042f0",
+    "runId": "run-03925482-d44a-44cf-b9d5-e5c6c1e55de2",
+    "completedAt": "2026-08-12T16:19:47.067Z"
+  },
+  "proposals": [
+    {
+      "id": "weishu:081:r0001",
+      "unit": {
+        "id": "s0089",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "His great-grandfather Xi served the Murong as Right Vice Director of the Masters of Writing.",
+      "after": "His great-great-grandfather Xi served the Murong as Right Vice Director of the Masters of Writing.",
+      "reason": "Chinese 高祖 denotes great-great-grandfather; idiomatic English wrongly says great-grandfather.",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:081:r0002",
+      "unit": {
+        "id": "s0089",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "His great-grandfather Xi was Right Vice Director of the Masters of Writing under the Murong.",
+      "after": "His great-great-grandfather Xi was Right Vice Director of the Masters of Writing under the Murong.",
+      "reason": "Literal English likewise mistranslates 高祖 as great-grandfather.",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:081:r0003",
+      "unit": {
+        "id": "s0090",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "His great-great-grandfather Xun was Regular Attendant of the Cavalry; he followed Murong De south across the Yangzi and settled at Linzi in Qi Commandery.",
+      "after": "His great-grandfather Xun was Regular Attendant of the Cavalry; he followed Murong De south across the Yangzi and settled at Linzi in Qi Commandery.",
+      "reason": "Chinese 曾祖 denotes great-grandfather; idiomatic English wrongly says great-great-grandfather.",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:081:r0004",
+      "unit": {
+        "id": "s0090",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "His great-great-grandfather Xun was Regular Attendant of the Cavalry, followed Murong De south across the river, and thus settled at Linzi in Qi Commandery.",
+      "after": "His great-grandfather Xun was Regular Attendant of the Cavalry, followed Murong De south across the river, and thus settled at Linzi in Qi Commandery.",
+      "reason": "Literal English likewise mistranslates 曾祖 as great-great-grandfather.",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:081:r0005",
+      "unit": {
+        "id": "s0155",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "In the third year of Xiaochang he was appointed Left General, Grand Master of Palace Counsel, and concurrent Left Assistant Director, and served as mobile headquarters over Qi and the two Yanzhou provinces directing Grand Commander-in-Chief Li Shuren.",
+      "after": "In the third year of Xiaochang he was appointed Left General, Grand Master of Palace Counsel, and concurrent Left Assistant Director, and served as mobile headquarters over the two provinces of Qi and Yan directing Grand Commander-in-Chief Li Shuren.",
+      "reason": "齊兗二州 means the two provinces Qi and Yan, not Qi and the two Yanzhou provinces.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "weishu:081:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In the ancestor list, 高祖悕 is Zhang Lie’s paternal great-great-grandfather Xi; ‘great-grandfather’ understates 高祖 by one generation (cf. following 曾祖恂).",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0089",
+        "excerpt": "高祖悕"
+      }
+    },
+    {
+      "repairId": "weishu:081:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same kinship term 高祖 requires great-great-grandfather in the literal; ‘great-grandfather’ is the wrong generation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0089",
+        "excerpt": "高祖悕"
+      }
+    },
+    {
+      "repairId": "weishu:081:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "曾祖恂 is Zhang Lie’s paternal great-grandfather Xun; idiomatic ‘great-great-grandfather’ overstates 曾祖 by one generation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0090",
+        "excerpt": "曾祖恂"
+      }
+    },
+    {
+      "repairId": "weishu:081:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same kinship term 曾祖 requires great-grandfather in the literal; ‘great-great-grandfather’ is the wrong generation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0090",
+        "excerpt": "曾祖恂"
+      }
+    },
+    {
+      "repairId": "weishu:081:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "齊兗二州 means the two provinces Qi and Yan; ‘Qi and the two Yanzhou provinces’ misreads 二州 as modifying 兗 alone.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0155",
+        "excerpt": "齊兗二州"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -509,119 +509,796 @@ footer .site-copyright {
     }
 }
 
-/* --- Canonical people directory and person pages --- */
+/* Home entry point for the people index. */
+.home-people-feature {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2rem;
+    align-items: center;
+    margin: 2rem 0 3.5rem;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    border-left: 5px solid #a43d32;
+    background: #172b30;
+    color: #fff;
+}
+
+.home-people-feature[hidden] {
+    display: none;
+}
+
+.home-people-feature h2 {
+    margin: 0.15rem 0 0.65rem;
+    color: #fff;
+    font-family: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', serif;
+    font-size: clamp(1.7rem, 4vw, 2.7rem);
+    font-weight: 500;
+    line-height: 1.05;
+}
+
+.home-people-feature p {
+    max-width: 46rem;
+    margin: 0;
+    color: #cbdcd6;
+}
+
+.home-people-feature .home-people-kicker {
+    color: #d5b471;
+    font-family: ui-sans-serif, -apple-system, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 750;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+}
+
+.home-people-feature a {
+    display: inline-block;
+    margin-top: 1.15rem;
+    color: #fff;
+    font-family: ui-sans-serif, -apple-system, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-underline-offset: 0.25em;
+}
+
+.home-people-mark {
+    writing-mode: vertical-rl;
+    color: #d5b471 !important;
+    font-family: 'Songti SC', 'STSong', serif;
+    font-size: clamp(2rem, 6vw, 4rem);
+    letter-spacing: 0.2em;
+}
+
+@media (max-width: 600px) {
+    .home-people-feature {
+        grid-template-columns: 1fr;
+    }
+
+    .home-people-mark {
+        display: none;
+    }
+}
+
+/* --- People discovery and source-linked biographies --- */
 .person-page,
-.people-index-page {
-  background: #f7f8f5;
-  color: #26333a;
+.people-index-page,
+.people-browse-page {
+  --people-paper: #edf2ed;
+  --people-paper-bright: #fbfcf8;
+  --people-ink: #172b30;
+  --people-indigo: #2c5861;
+  --people-celadon: #9eb9af;
+  --people-celadon-light: #dce8e1;
+  --people-seal: #a43d32;
+  --people-gold: #b79555;
+  --people-muted: #65777a;
+  --people-rule: #c5d2ca;
+  background: var(--people-paper);
+  color: var(--people-ink);
+  font-family: Georgia, 'Songti SC', 'SimSun', serif;
+}
+
+.person-page a,
+.people-index-page a,
+.people-browse-page a {
+  text-underline-offset: 0.18em;
 }
 
 .person-header,
-.people-index-header {
-  background: #22313f;
-  border-bottom: 5px solid #a24335;
+.people-index-header,
+.people-browse-header {
+  padding: 0;
+  border: 0;
+  background-color: var(--people-ink);
+  background-image:
+    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 4.75rem 4.75rem;
+  box-shadow: none;
   color: #fff;
+  text-align: left;
 }
 
 .person-header-inner,
 .people-index-header > div,
+.people-browse-header > div,
 .person-content,
-.people-index-content {
-  width: min(1120px, calc(100% - 2rem));
+.people-index-content,
+.people-browse-content {
+  width: min(1180px, calc(100% - 3rem));
   margin: 0 auto;
 }
 
 .person-header-inner,
-.people-index-header > div {
-  padding: 2.5rem 0 2.2rem;
+.people-index-header > div,
+.people-browse-header > div {
+  padding: 1.35rem 0 3rem;
 }
 
-.person-back {
-  display: inline-block;
-  margin-bottom: 1.25rem;
-  color: #c8e4ea;
-  font-size: 0.92rem;
-  font-weight: 600;
+.people-breadcrumbs {
+  margin-bottom: clamp(2rem, 5vw, 4.5rem);
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
-.person-back:hover,
-.person-back:focus-visible {
+.people-breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.people-breadcrumbs li:not(:last-child)::after {
+  margin-left: 0.35rem;
+  color: var(--people-celadon);
+  content: '／';
+}
+
+.people-breadcrumbs a,
+.people-breadcrumbs span {
+  color: #d9e5df;
+}
+
+.people-breadcrumbs a:hover,
+.people-breadcrumbs a:focus-visible {
   color: #fff;
+}
+
+.people-eyebrow {
+  margin: 0 0 0.75rem;
+  color: var(--people-seal);
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.person-header .people-eyebrow,
+.people-index-header .people-eyebrow,
+.people-browse-header .people-eyebrow {
+  color: #c9a870;
 }
 
 .person-header h1,
-.people-index-header h1 {
+.people-index-header h1,
+.people-browse-header h1,
+.people-section-heading h2,
+.person-section h2 {
+  font-family: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', 'Songti SC', serif;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+
+.person-header h1,
+.people-index-header h1,
+.people-browse-header h1 {
   margin: 0;
   color: #fff;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 600;
-  line-height: 1.08;
-  letter-spacing: 0;
+  font-size: clamp(2.6rem, 7vw, 5.7rem);
+  line-height: 0.98;
 }
 
-.person-header h1 span {
-  margin-left: 0.35rem;
-  color: #f0d5b0;
-  font-weight: 500;
+.person-header h1 span,
+.people-browse-header h1 span {
+  display: block;
+  margin: 0.18em 0 0;
+  color: #c9ddd5;
+  font-family: 'Songti SC', 'STSong', 'SimSun', serif;
+  font-size: 0.7em;
+  font-weight: 400;
+  line-height: 1;
+  white-space: nowrap;
 }
 
-.person-pinyin,
-.person-description,
-.person-chronology,
-.people-index-header p {
-  margin: 0.65rem 0 0;
+.people-index-title,
+.person-title-lockup {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(2rem, 7vw, 7rem);
+  align-items: end;
 }
 
-.person-pinyin {
-  color: #c8e4ea;
-  font-size: 1.05rem;
+.people-index-deck {
+  max-width: 48rem;
+  margin: 1.25rem 0 0;
+  color: #cfddd8;
+  font-size: clamp(1.05rem, 2vw, 1.32rem);
+  line-height: 1.6;
 }
 
-.person-description {
+.people-index-seal {
+  display: grid;
+  width: 7.5rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 2px solid #d7b678;
+  color: #f5e4bf;
+  transform: rotate(2deg);
+}
+
+.people-index-seal span {
+  writing-mode: vertical-rl;
+  font-family: 'Songti SC', 'STSong', serif;
+  font-size: 2.15rem;
+  letter-spacing: 0.25em;
+}
+
+.people-index-stats,
+.person-record-counts {
+  display: flex;
+  gap: 0;
+  margin: 2.5rem 0 0;
+}
+
+.people-index-stats div,
+.person-record-counts div {
+  min-width: 9rem;
+  padding: 0.8rem 1.5rem 0.8rem 0;
+  border-top: 1px solid rgba(202, 221, 213, 0.42);
+}
+
+.people-index-stats div + div,
+.person-record-counts div + div {
+  padding-left: 1.5rem;
+}
+
+.people-index-stats dt,
+.person-record-counts dt {
+  color: #9fb9b0;
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.people-index-stats dd,
+.person-record-counts dd {
+  margin: 0.2rem 0 0;
   color: #fff;
-  font-size: 1.2rem;
-}
-
-.person-chronology,
-.people-index-header p {
-  color: #e9d7c0;
+  font-size: 1.35rem;
   font-variant-numeric: tabular-nums;
 }
 
-.person-content,
-.people-index-content {
-  padding: 2.2rem 0 4rem;
+.person-pinyin,
+.person-chronology,
+.people-browse-header p {
+  margin: 0.8rem 0 0;
+  color: #c8d9d3;
+}
+
+.person-pinyin {
+  font-size: 1.05rem;
+}
+
+.person-chronology {
+  color: #e1c792;
+  font-size: 1.12rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.person-record-counts {
+  margin: 0;
+}
+
+.person-record-counts div {
+  min-width: 6.5rem;
+}
+
+.people-index-content,
+.people-browse-content,
+.person-content {
+  max-width: none;
+  padding: clamp(2.8rem, 6vw, 5rem) 0 6rem;
+}
+
+.people-index-content > section + section {
+  margin-top: clamp(5rem, 9vw, 8rem);
+}
+
+.people-section-heading {
+  display: grid;
+  grid-template-columns: minmax(14rem, 0.72fr) minmax(18rem, 1.3fr);
+  gap: 0 3rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.15rem;
+  border-bottom: 1px solid var(--people-rule);
+}
+
+.people-section-heading .people-eyebrow {
+  grid-column: 1 / -1;
+}
+
+.people-section-heading h2 {
+  margin: 0;
+  color: var(--people-ink);
+  font-size: clamp(1.85rem, 4vw, 3rem);
+  line-height: 1.06;
+}
+
+.people-section-heading > p:last-child {
+  align-self: end;
+  margin: 0;
+  color: var(--people-muted);
+  line-height: 1.65;
+}
+
+.people-search-box {
+  position: relative;
+}
+
+.people-search-box input {
+  width: 100%;
+  min-height: 4.3rem;
+  padding: 0.9rem 5.5rem 0.9rem 1.2rem;
+  border: 1px solid #78948c;
+  border-bottom: 3px solid var(--people-indigo);
+  border-radius: 0;
+  background: var(--people-paper-bright);
+  color: var(--people-ink);
+  font: 1.08rem Georgia, 'Songti SC', serif;
+}
+
+.people-search-box input:focus,
+.people-search-filters select:focus {
+  border-color: var(--people-seal);
+  box-shadow: 0 0 0 3px rgba(164, 61, 50, 0.14);
+  outline: 0;
+}
+
+.people-search-box button {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  padding: 0.35rem 0.55rem;
+  border: 0;
+  background: transparent;
+  color: var(--people-indigo);
+  cursor: pointer;
+  font: 700 0.78rem ui-sans-serif, -apple-system, sans-serif;
+  transform: translateY(-50%);
+}
+
+.people-search-filters {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.people-search-filters label {
+  color: var(--people-muted);
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.people-search-filters select {
+  display: block;
+  width: 100%;
+  min-height: 2.8rem;
+  margin-top: 0.35rem;
+  padding: 0.45rem 2rem 0.45rem 0.65rem;
+  border: 1px solid var(--people-rule);
+  border-radius: 0;
+  background: var(--people-paper-bright);
+  color: var(--people-ink);
+  font: 0.87rem Georgia, 'Songti SC', serif;
+  text-transform: none;
+}
+
+.people-search-status {
+  min-height: 1.4rem;
+  margin: 0.9rem 0 1rem;
+  color: var(--people-muted);
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.8rem;
+}
+
+.people-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+  padding: 1px;
+  background: var(--people-rule);
+  list-style: none;
+}
+
+.people-card {
+  min-width: 0;
+  background: var(--people-paper-bright);
+}
+
+.people-card a {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 0.2rem 0.8rem;
+  min-height: 13.5rem;
+  padding: 1.35rem 1.35rem 1.2rem 1.6rem;
+  color: var(--people-ink);
+  text-decoration: none;
+}
+
+.people-card a::before {
+  position: absolute;
+  top: 1.55rem;
+  bottom: 1.35rem;
+  left: 0.75rem;
+  width: 1px;
+  background: var(--people-celadon);
+  content: '';
+}
+
+.people-card a::after {
+  position: absolute;
+  top: 1.45rem;
+  left: 0.56rem;
+  width: 0.42rem;
+  height: 0.42rem;
+  border: 1px solid var(--people-seal);
+  background: var(--people-paper-bright);
+  content: '';
+  transform: rotate(45deg);
+}
+
+.people-card a:hover,
+.people-card a:focus-visible {
+  z-index: 1;
+  background: #f5f8f3;
+  box-shadow: inset 0 -3px 0 var(--people-seal);
+  outline: 2px solid transparent;
+}
+
+.people-card-name {
+  color: var(--people-ink);
+  font-family: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', serif;
+  font-size: 1.35rem;
+  font-weight: 650;
+  line-height: 1.1;
+}
+
+.people-card-zh {
+  color: var(--people-seal);
+  font-family: 'Songti SC', 'STSong', serif;
+  font-size: 1.15rem;
+}
+
+.people-card-life {
+  grid-column: 1 / -1;
+  color: var(--people-indigo);
+  font-size: 0.84rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.people-card-description {
+  grid-column: 1 / -1;
+  align-self: start;
+  margin-top: 0.65rem;
+  color: #42575a;
+  line-height: 1.5;
+}
+
+.people-card-meta {
+  grid-column: 1 / -1;
+  align-self: end;
+  padding-top: 0.8rem;
+  border-top: 1px solid #dce5df;
+  color: var(--people-muted);
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.72rem;
+}
+
+.people-browse-strip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  border-top: 1px solid var(--people-rule);
+  border-left: 1px solid var(--people-rule);
+}
+
+.people-browse-strip a {
+  position: relative;
+  display: grid;
+  min-height: 8rem;
+  padding: 1rem;
+  border-right: 1px solid var(--people-rule);
+  border-bottom: 1px solid var(--people-rule);
+  color: var(--people-ink);
+  text-decoration: none;
+}
+
+.people-browse-strip a:hover,
+.people-browse-strip a:focus-visible {
+  background: var(--people-celadon-light);
+  box-shadow: inset 0 -3px 0 var(--people-seal);
+}
+
+.people-browse-strip span {
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.people-browse-strip small {
+  margin-top: 0.2rem;
+  color: var(--people-muted);
+  font-size: 0.73rem;
+}
+
+.people-browse-strip strong {
+  align-self: end;
+  color: var(--people-indigo);
+  font-family: ui-sans-serif, -apple-system, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.people-more-facets {
+  margin-top: 1rem;
+}
+
+.people-more-facets summary {
+  padding: 0.65rem 0;
+  color: var(--people-indigo);
+  cursor: pointer;
+  font-family: ui-sans-serif, -apple-system, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.people-alphabet {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.people-alphabet > * {
+  display: grid;
+  min-height: 4.3rem;
+  place-items: center;
+  border: 1px solid var(--people-rule);
+  background: var(--people-paper-bright);
+  color: var(--people-ink);
+  text-decoration: none;
+}
+
+.people-alphabet a:hover,
+.people-alphabet a:focus-visible {
+  border-color: var(--people-seal);
+  color: var(--people-seal);
+}
+
+.people-alphabet small {
+  margin-top: -1.25rem;
+  color: var(--people-muted);
+  font: 0.65rem ui-sans-serif, -apple-system, sans-serif;
+}
+
+.people-alphabet > span[aria-disabled='true'] {
+  opacity: 0.4;
+}
+
+.people-browse-header h1 {
+  font-size: clamp(2.6rem, 6vw, 4.8rem);
+}
+
+.people-browse-tools {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  color: var(--people-muted);
+  font-family: ui-sans-serif, -apple-system, sans-serif;
+  font-size: 0.8rem;
+}
+
+.people-browse-tools > a {
+  color: var(--people-indigo);
+  font-weight: 700;
+}
+
+.people-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+  font-family: ui-sans-serif, -apple-system, sans-serif;
+  font-size: 0.75rem;
+}
+
+.people-browse-tools .people-pagination {
+  margin-top: 0;
+}
+
+.people-pagination a,
+.people-pagination span {
+  display: grid;
+  min-width: 2rem;
+  min-height: 2rem;
+  padding: 0.25rem;
+  place-items: center;
+  border: 1px solid var(--people-rule);
+  background: var(--people-paper-bright);
+  color: var(--people-ink);
+  text-decoration: none;
+}
+
+.people-pagination span[aria-current='page'] {
+  border-color: var(--people-seal);
+  background: var(--people-seal);
+  color: #fff;
+}
+
+/* Person record: a marginal chronology line ties evidence sections together. */
+.person-content-grid {
+  display: grid;
+  grid-template-columns: 13rem minmax(0, 1fr);
+  gap: clamp(2.5rem, 7vw, 6rem);
+  align-items: start;
+}
+
+.person-local-nav {
+  position: sticky;
+  top: 1.5rem;
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.person-local-nav p {
+  margin: 0 0 0.75rem;
+  color: var(--people-seal);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.person-local-nav ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.person-local-nav li {
+  border-top: 1px solid var(--people-rule);
+}
+
+.person-local-nav a {
+  display: block;
+  padding: 0.48rem 0;
+  color: #526568;
+  font-size: 0.76rem;
+  line-height: 1.3;
+  text-decoration: none;
+}
+
+.person-local-nav a:hover,
+.person-local-nav a:focus-visible {
+  color: var(--people-seal);
+}
+
+.person-record {
+  position: relative;
+  min-width: 0;
+  padding-left: 2.2rem;
+}
+
+.person-record::before {
+  position: absolute;
+  top: 0.65rem;
+  bottom: 1rem;
+  left: 0.35rem;
+  width: 1px;
+  background: linear-gradient(var(--people-seal), var(--people-celadon) 12rem, var(--people-rule));
+  content: '';
 }
 
 .person-section {
-  padding: 1.7rem 0;
-  border-bottom: 1px solid #cfd6d2;
+  position: relative;
+  padding: 0 0 3.5rem;
+  scroll-margin-top: 1.5rem;
 }
 
-.person-section:last-child {
-  border-bottom: 0;
+.person-section::before {
+  position: absolute;
+  top: 0.35rem;
+  left: -2.1rem;
+  width: 0.55rem;
+  height: 0.55rem;
+  border: 1px solid var(--people-seal);
+  background: var(--people-paper);
+  content: '';
+  transform: rotate(45deg);
 }
 
 .person-section h2 {
-  margin: 0 0 1rem;
-  color: #22313f;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 1.45rem;
-  letter-spacing: 0;
+  margin: 0 0 1.2rem;
+  color: var(--people-ink);
+  font-size: clamp(1.55rem, 3vw, 2.2rem);
 }
 
 .person-section h3 {
-  margin: 1.25rem 0 0.5rem;
-  color: #7e332d;
-  font-size: 1rem;
-  letter-spacing: 0;
+  margin: 1.4rem 0 0.55rem;
+  color: var(--people-seal);
+  font-family: ui-sans-serif, -apple-system, sans-serif;
+  font-size: 0.76rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.person-lede {
+  max-width: 49rem;
+  margin: 0;
+  color: #31484c;
+  font-size: 1.12rem;
+  line-height: 1.8;
+}
+
+.person-section-intro {
+  margin: -0.4rem 0 1.2rem;
+  color: var(--people-muted);
+}
+
+.person-facets {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.8rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--people-rule);
+  border-bottom: 1px solid var(--people-rule);
+}
+
+.person-facets > div > span:first-child {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--people-muted);
+  font: 700 0.66rem ui-sans-serif, -apple-system, sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.person-facets a {
+  color: var(--people-indigo);
+  font-size: 0.84rem;
+}
+
+.person-facet-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.6rem;
 }
 
 .person-role-list,
 .person-family-list,
-.person-fact-list,
-.people-search-results {
+.person-fact-list {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -635,20 +1312,20 @@ footer .site-copyright {
 }
 
 .person-identity-list div {
-  padding-left: 0.75rem;
-  border-left: 3px solid #91a4aa;
+  padding: 0.8rem;
+  border-top: 2px solid var(--people-celadon);
+  background: rgba(251, 252, 248, 0.7);
 }
 
 .person-identity-list dt {
-  color: #68777c;
-  font-size: 0.78rem;
-  font-weight: 700;
+  color: var(--people-muted);
+  font: 700 0.67rem ui-sans-serif, -apple-system, sans-serif;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .person-identity-list dd {
-  margin: 0.2rem 0 0;
-  color: #26383f;
+  margin: 0.25rem 0 0;
 }
 
 .person-role-list {
@@ -658,19 +1335,18 @@ footer .site-copyright {
 }
 
 .person-role-list li {
-  padding: 0.32rem 0.55rem;
-  border: 1px solid #91a4aa;
-  border-radius: 4px;
-  background: #fff;
-  color: #34474e;
-  font-size: 0.9rem;
+  padding: 0.3rem 0.55rem;
+  border: 1px solid var(--people-celadon);
+  background: var(--people-paper-bright);
+  color: #344e52;
+  font: 0.82rem ui-sans-serif, -apple-system, sans-serif;
 }
 
 .person-fact-list li,
 .person-family-list li {
   padding: 0.8rem 0;
-  border-bottom: 1px solid #dfe4e1;
-  line-height: 1.55;
+  border-bottom: 1px solid #d7e1da;
+  line-height: 1.6;
 }
 
 .person-fact-list li:last-child,
@@ -684,20 +1360,20 @@ footer .site-copyright {
 
 .person-fact-key,
 .person-family-relation {
-  color: #5a6b70;
-  font-size: 0.86rem;
-  font-weight: 700;
+  color: #4f6568;
+  font: 700 0.78rem ui-sans-serif, -apple-system, sans-serif;
 }
 
 .person-fact-source,
 .person-family-details {
   margin-top: 0.25rem;
-  color: #6c787c;
-  font-size: 0.82rem;
+  color: var(--people-muted);
+  font: 0.74rem ui-sans-serif, -apple-system, sans-serif;
 }
 
-.person-fact-source a {
-  color: #0b6280;
+.person-fact-source a,
+.person-family-list a {
+  color: var(--people-indigo);
 }
 
 .person-table-wrap {
@@ -707,53 +1383,55 @@ footer .site-copyright {
 .person-table {
   width: 100%;
   border-collapse: collapse;
-  background: #fff;
+  background: var(--people-paper-bright);
 }
 
 .person-table th,
 .person-table td {
   padding: 0.65rem 0.75rem;
-  border: 1px solid #d6ddda;
+  border: 1px solid var(--people-rule);
   text-align: left;
 }
 
 .person-table thead th {
-  background: #edf0ed;
-  color: #34474e;
-  font-size: 0.82rem;
+  background: var(--people-celadon-light);
+  color: #344e52;
+  font: 700 0.72rem ui-sans-serif, -apple-system, sans-serif;
 }
 
 .person-reference-group {
   margin-bottom: 0.8rem;
-  border: 1px solid #cfd6d2;
-  border-radius: 4px;
-  background: #fff;
+  border: 1px solid var(--people-rule);
+  background: var(--people-paper-bright);
 }
 
 .person-reference-group summary {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.8rem 1rem;
+  padding: 0.85rem 1rem;
   cursor: pointer;
-  color: #283b43;
+  color: var(--people-ink);
   font-weight: 700;
 }
 
 .person-reference-group summary span:last-child {
-  color: #65757b;
-  font-size: 0.85rem;
-  font-weight: 500;
+  color: var(--people-muted);
+  font: 0.78rem ui-sans-serif, -apple-system, sans-serif;
   text-align: right;
 }
 
 .person-reference-actions {
   padding: 0 1rem 0.7rem;
-  font-size: 0.85rem;
+  font: 0.76rem ui-sans-serif, -apple-system, sans-serif;
+}
+
+.person-reference-actions a {
+  color: var(--people-indigo);
 }
 
 .person-reference-list {
-  border-top: 1px solid #dfe4e1;
+  border-top: 1px solid var(--people-rule);
 }
 
 .person-reference {
@@ -761,7 +1439,7 @@ footer .site-copyright {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 1.4rem;
   padding: 1rem;
-  border-bottom: 1px solid #e3e7e4;
+  border-bottom: 1px solid #dfe7e2;
 }
 
 .person-reference:last-child {
@@ -769,114 +1447,123 @@ footer .site-copyright {
 }
 
 .person-reference a {
-  color: #2c3e43;
-  line-height: 1.65;
+  color: #2c4246;
+  line-height: 1.7;
   text-decoration: none;
 }
 
 .person-reference a:hover,
 .person-reference a:focus-visible {
-  color: #0b6280;
+  color: var(--people-seal);
   text-decoration: underline;
 }
 
 .person-reference-zh {
-  font-size: 1.05rem;
+  font-size: 1.03rem;
 }
 
-.people-search {
-  max-width: 900px;
-  margin: 0 auto;
-}
+@media (max-width: 900px) {
+  .people-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 
-.people-search label {
-  display: block;
-  margin-bottom: 0.55rem;
-  color: #34474e;
-  font-weight: 700;
-}
+  .people-browse-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 
-.people-search input {
-  width: 100%;
-  min-height: 48px;
-  padding: 0.7rem 0.8rem;
-  border: 1px solid #879ba2;
-  border-radius: 4px;
-  background: #fff;
-  color: #22313f;
-  font: inherit;
-}
+  .people-alphabet {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
 
-.people-search input:focus {
-  border-color: #0b6280;
-  box-shadow: 0 0 0 3px rgba(11, 98, 128, 0.16);
-  outline: 0;
-}
+  .person-content-grid {
+    grid-template-columns: 1fr;
+  }
 
-.people-search-status {
-  min-height: 1.25rem;
-  margin: 0.6rem 0;
-  color: #66767b;
-  font-size: 0.87rem;
-}
+  .person-local-nav {
+    position: static;
+  }
 
-.people-search-results {
-  border-top: 1px solid #cfd6d2;
-}
+  .person-local-nav ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1rem;
+  }
 
-.people-search-results li {
-  border-bottom: 1px solid #d9dfdc;
-}
-
-.people-search-results a {
-  display: grid;
-  grid-template-columns: minmax(10rem, 1.2fr) minmax(5rem, 0.7fr) minmax(12rem, 2fr);
-  gap: 1rem;
-  padding: 0.75rem 0.25rem;
-  color: #26383f;
-  text-decoration: none;
-}
-
-.people-search-results a:hover,
-.people-search-results a:focus-visible {
-  background: #eef2ef;
-  color: #0b6280;
-}
-
-.people-search-results span:nth-child(2) {
-  color: #7e332d;
-}
-
-.people-search-results span:nth-child(3) {
-  color: #68777c;
-  font-size: 0.9rem;
-}
-
-.people-search mark {
-  background: #f5dfa4;
-  color: inherit;
+  .person-local-nav li {
+    border: 0;
+  }
 }
 
 @media (max-width: 720px) {
   .person-header-inner,
   .people-index-header > div,
+  .people-browse-header > div,
   .person-content,
-  .people-index-content {
-    width: min(100% - 1.25rem, 1120px);
+  .people-index-content,
+  .people-browse-content {
+    width: min(100% - 1.25rem, 1180px);
   }
 
   .person-header-inner,
-  .people-index-header > div {
-    padding: 1.6rem 0;
+  .people-index-header > div,
+  .people-browse-header > div {
+    padding-bottom: 2.1rem;
+  }
+
+  .people-index-title,
+  .person-title-lockup,
+  .people-section-heading {
+    grid-template-columns: 1fr;
+  }
+
+  .people-index-seal {
+    display: none;
+  }
+
+  .person-record-counts {
+    margin-top: 1.8rem;
+  }
+
+  .people-index-stats,
+  .person-record-counts {
+    flex-wrap: wrap;
+  }
+
+  .people-index-stats div,
+  .person-record-counts div {
+    min-width: 33.333%;
+    padding: 0.65rem 0.6rem 0.4rem 0;
+  }
+
+  .people-index-stats div + div,
+  .person-record-counts div + div {
+    padding-left: 0.6rem;
+  }
+
+  .people-section-heading > p:last-child {
+    margin-top: 0.9rem;
+  }
+
+  .people-search-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .people-browse-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .people-alphabet {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .person-facets,
+  .person-identity-list {
+    grid-template-columns: 1fr;
   }
 
   .person-reference {
     grid-template-columns: 1fr;
     gap: 0.65rem;
-  }
-
-  .person-identity-list {
-    grid-template-columns: 1fr;
   }
 
   .person-reference-group summary {
@@ -891,14 +1578,32 @@ footer .site-copyright {
     margin-top: 0.25rem;
     text-align: left;
   }
+}
 
-  .people-search-results a {
-    grid-template-columns: 1fr auto;
-    gap: 0.25rem 0.75rem;
+@media (max-width: 520px) {
+  .people-card-grid {
+    grid-template-columns: 1fr;
   }
 
-  .people-search-results span:nth-child(3) {
-    grid-column: 1 / -1;
+  .people-card a {
+    min-height: 11.5rem;
+  }
+
+  .people-search-filters,
+  .people-browse-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .people-alphabet {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .person-record {
+    padding-left: 1.65rem;
+  }
+
+  .person-section::before {
+    left: -1.55rem;
   }
 }
 

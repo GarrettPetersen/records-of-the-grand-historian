@@ -1,0 +1,220 @@
+{
+  "schemaVersion": 3,
+  "book": "sanguozhi",
+  "chapter": "062",
+  "input": {
+    "chapterFingerprint": "sha256:890b44d2ffa410960b74aa04380373be34ca3640519e5213fb5e7976f4a60b5f",
+    "proposalsFingerprint": "sha256:c936cceff70c67e2dcbe753b0b760984c094f3008ff6330cc9c5f45aaf19be5f"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-2f7560ae-5cfe-4ee8-a2dd-215e62661691",
+    "runId": "run-89d9d519-54a5-4df4-afae-92ec7299069a",
+    "completedAt": "2026-08-12T16:17:44.218Z"
+  },
+  "proposals": [
+    {
+      "id": "sanguozhi:062:r0001",
+      "unit": {
+        "id": "s0015",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "field": "idiomatic",
+      "before": "After Jingzhou fell the court moved to Wuchang, where Shi Yi became a rear-guard general, then village marquis at the metropolitan gate, while remaining palace attendant.",
+      "after": "After Jingzhou fell the court moved to Wuchang, where Shi Yi became a subordinate general (pi jiangjun), then village marquis of the capital precinct, while remaining palace attendant.",
+      "reason": "裨將軍 is subordinate/assistant general, not “rear-guard general” (後將軍).",
+      "confidence": "high"
+    },
+    {
+      "id": "sanguozhi:062:r0002",
+      "unit": {
+        "id": "s0143",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Hu Zong (courtesy Weize)",
+      "after": "Hu Zong (courtesy Weize).",
+      "reason": "Sentence is truncated; should be a complete identifying sentence matching the Chinese.",
+      "confidence": "medium"
+    },
+    {
+      "id": "sanguozhi:062:r0003",
+      "unit": {
+        "id": "s0169",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "field": "idiomatic",
+      "before": "Yet Guang left a year ago and not a word has returned—did my message ever reach you? I gaze south and sigh as the months pass; even Lu Wang and Gao Zi scarcely match my longing! And now I am treated coldly; slander never stops—I am sure to suffer for it, only sooner or later.",
+      "after": "Yet Guang left a year ago and not a word has returned—did my message ever reach you? I gaze south and sigh as the months pass; even Lu’s longing for Gaozi scarcely matches this! And now I am treated coldly; slander never stops—I am sure to suffer for it, only sooner or later.",
+      "reason": "魯望高子 is the classic allusion “Lu longed for Gaozi,” not two men named Lu Wang and Gao Zi.",
+      "confidence": "high"
+    },
+    {
+      "id": "sanguozhi:062:r0004",
+      "unit": {
+        "id": "s0141",
+        "kind": "paragraph-sentence",
+        "blockIndex": 19,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Chen Shou concludes that Shi Yi, Xu Xiang, and Hu Zong were the men who kept Sun Quan's government running.",
+      "after": "The appraisal states that Shi Yi, Xu Xiang, and Hu Zong were the men who kept Sun Quan's government running.",
+      "reason": "Chinese 評曰 does not name Chen Shou; the English invents the historian’s name.",
+      "confidence": "high"
+    },
+    {
+      "id": "sanguozhi:062:r0005",
+      "unit": {
+        "id": "s0171",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 16
+      },
+      "field": "literal",
+      "before": "Moreover, on a day when your subject Zhi is clearly guilty, he ought of himself to rush to the cauldron and cauldron, binding his body to await punishment—this is what a minister should do.",
+      "after": "Moreover, on a day when your subject Zhi is clearly guilty, he ought of himself to rush to the cauldron and wok, binding his body to await punishment—this is what a minister should do.",
+      "reason": "Duplicate “cauldron and cauldron” for 鼎鑊; second vessel is a wok/cauldron pair.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "sanguozhi:062:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "拜裨將軍 names the subordinate/assistant generalship 裨將軍, not 後將軍 “rear-guard general”; 都亭侯 is the capital-precinct village marquis. The proposed idiomatic line corrects both mistranslations without adding unsupported content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0015",
+        "excerpt": "拜裨將軍，後封都亭侯"
+      }
+    },
+    {
+      "repairId": "sanguozhi:062:r0002",
+      "decision": "reject",
+      "after": null,
+      "reason": "胡綜字偉則 is fully conveyed by the existing name-plus-courtesy gloss; appending only a period is stylistic and still leaves an incomplete sentence, so the change does not repair a real semantic error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0143",
+        "excerpt": "胡綜字偉則"
+      }
+    },
+    {
+      "repairId": "sanguozhi:062:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "魯望高子 is the classical allusion of Lu longing for Gaozi, not two persons Lu Wang and Gao Zi; the proposed wording restores that sense and removes the invented name Lu Wang.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0169",
+        "excerpt": "魯望高子，何足以喻"
+      }
+    },
+    {
+      "repairId": "sanguozhi:062:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "評曰 introduces the historian’s appraisal without naming Chen Shou; “Chen Shou concludes” invents an attribution absent from the Chinese, and “The appraisal states” matches 評曰.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0141",
+        "excerpt": "評曰"
+      }
+    },
+    {
+      "repairId": "sanguozhi:062:r0005",
+      "decision": "revise",
+      "after": "Moreover, on a day when your subject Zhi is clearly guilty, he ought of himself to rush to the tripod and the cauldron, binding his body to await punishment—this is what a minister should do.",
+      "reason": "鼎鑊 is the paired execution vessels ding and huo; “cauldron and cauldron” wrongly duplicates one gloss, but “cauldron and wok” is awkward for this punishment context—render the pair as tripod and cauldron.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0171",
+        "excerpt": "奔赴鼎鑊"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "sanguozhi:062:r0003",
+      "claim": {
+        "id": "sanguozhi:062:c0166",
+        "subject": "sanguozhi:062:p049",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Gao Zi",
+          "zh": null,
+          "pinyin": null
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "sanguozhi:062:s0169"
+        ]
+      },
+      "reason": "Accepted r0003 shows the spaced English personal-name “Gao Zi” (with null zh/pinyin) was created only by the bad two-person reading of 魯望高子; the valid Gaozi name remains in c0165.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0169",
+        "excerpt": "魯望高子"
+      }
+    }
+  ],
+  "claimRevisions": [
+    {
+      "repairId": "sanguozhi:062:r0001",
+      "before": {
+        "id": "sanguozhi:062:c0240",
+        "subject": "sanguozhi:062:p001",
+        "predicate": "office",
+        "value": {
+          "label": {
+            "en": "General of the Rear Guard / Lieutenant General (裨將軍)",
+            "zh": "裨將軍"
+          },
+          "action": "appointed"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "sanguozhi:062:s0015"
+        ]
+      },
+      "after": {
+        "id": "sanguozhi:062:c0240",
+        "subject": "sanguozhi:062:p001",
+        "predicate": "office",
+        "value": {
+          "label": {
+            "en": "subordinate general (裨將軍)",
+            "zh": "裨將軍"
+          },
+          "action": "appointed"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "sanguozhi:062:s0015"
+        ]
+      },
+      "reason": "Accepted r0001 shows “General of the Rear Guard” came only from mistranslating 裨將軍; the office label must read subordinate general while keeping zh, action, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0015",
+        "excerpt": "拜裨將軍"
+      }
+    }
+  ]
+}

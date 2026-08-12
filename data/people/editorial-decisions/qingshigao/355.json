@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "355",
+  "input": {
+    "chapterFingerprint": "sha256:886b41d3965342808d36e86e01442db9c9611d4d16eceb719bb9eff410c8bacc",
+    "proposalsFingerprint": "sha256:aecb7e854f49700de61998c246cc32aac70d2a69baf6c6185b8972b7eb45b6f2"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-8ebf05dd-c3b3-41af-8ba1-b59b5265f4be",
+    "runId": "run-870b6764-92b1-41ef-b70f-ed37c590468e",
+    "completedAt": "2026-08-12T14:31:30.100Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:355:r0001",
+      "unit": {
+        "id": "s0008",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Wula Na was notoriously corrupt, squeezed his subordinates for bribes, and winked at foreign pirates, whose vessels clustered outside the Wuhu Gate unchecked.",
+      "after": "Wula Na was notoriously corrupt, squeezed his subordinates for bribes, and winked at foreign pirates, whose vessels clustered outside the Five Tiger Gate unchecked.",
+      "reason": "Chinese 五虎門 is the Five Tiger Gate near Fuzhou; “Wuhu Gate” wrongly suggests Wuhu (蕪湖).",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:355:r0002",
+      "unit": {
+        "id": "s0087",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "He sent agents to verify the facts and punished Yisang’a by law.",
+      "after": "An imperial commissioner was sent to verify the facts, and Yisang’a was punished by law.",
+      "reason": "After Chu’s impeachment, 遣使勘實 is the throne dispatching investigators, not Chu Pengling sending agents.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:355:r0003",
+      "unit": {
+        "id": "s0027",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "Vice Minister Zhou Xingdai went to join the inquiry; soon Kui Lun was arrested and granted death, and his son Zhala Fen was banished to Yili.",
+      "after": "Vice Minister Zhou Xingdai went to join the inquiry; soon he was arrested to the capital and granted death, and his son Zhala Fen was banished to Yili.",
+      "reason": "Source 逮克賜死 is likely 逮京賜死 (arrested to the capital and granted suicide); literal should not invent the name Kui Lun.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:355:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0008 has 五虎門, the coastal Five Tiger Gate near Fuzhou; Wuhu Gate wrongly evokes 蕪湖 and is a clear mistranslation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0008",
+        "excerpt": "盜艇集五虎門外不問"
+      }
+    },
+    {
+      "repairId": "qingshigao:355:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "After Chu’s 途次劾 in s0086, s0087’s 遣使勘實，置伊桑阿於法 is the throne sending investigators and punishing by law, not Chu dispatching his own agents.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0087",
+        "excerpt": "遣使勘實，置伊桑阿於法"
+      }
+    },
+    {
+      "repairId": "qingshigao:355:r0003",
+      "decision": "reject",
+      "after": null,
+      "reason": "Wikisource and CText match the chapter’s 逮克賜死; 逮京 is unsupported there. Naming Kui Lun correctly resolves the subject from s0026, while the proposal’s “he” could be read as Zhou Xingdai and “arrested to the capital” is awkward.",
+      "sourceWitness": {
+        "source": "wikisource",
+        "citation": "https://zh.wikisource.org/wiki/清史稿/卷355",
+        "excerpt": "侍郎周興岱往會鞫，尋逮克賜死，子扎拉芬戍伊犁"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

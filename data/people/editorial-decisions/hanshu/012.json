@@ -3,110 +3,50 @@
   "book": "hanshu",
   "chapter": "012",
   "input": {
-    "chapterFingerprint": "sha256:e8ed3faf9367e28848da13a0b50fd0e324f4bddd643df5ecdaf50a2443fc32fd",
-    "proposalsFingerprint": "sha256:847876a0474254600bdeac2c55ba8412e589c4d98a4e7ebef642c6dcd7ea962a"
+    "chapterFingerprint": "sha256:4e711752b3977f1d39b03cdeef57a2f8eeaa3b05eb2f612bdbb005b75fd203f1",
+    "proposalsFingerprint": "sha256:eaa026f5d58324b92a17ab2ae0d333096ec01f27a70350a43bc8360423a678bc"
   },
   "reviewer": {
-    "kind": "codex",
-    "name": "Codex review of Grok 4.5 draft",
-    "model": null,
-    "agentId": null,
-    "runId": null,
-    "completedAt": "2026-08-11T04:06:37.000Z"
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-ee9f221a-4a59-4c07-a59a-2d7aa127fdab",
+    "runId": "run-df26c169-e85d-4105-a6a8-c19380f83871",
+    "completedAt": "2026-08-12T14:25:45.933Z"
   },
   "proposals": [
     {
       "id": "hanshu:012:r0001",
       "unit": {
-        "id": "s0107",
+        "id": "s0004",
         "kind": "paragraph-sentence",
-        "blockIndex": 26,
+        "blockIndex": 0,
         "collection": "sentences",
-        "itemIndex": 0
+        "itemIndex": 3
       },
       "field": "idiomatic",
-      "before": "In the sixth month of summer, King Kuang of Lu's son, Marquis Min of Wuxiang, was installed as king.",
-      "after": "In the sixth month of summer, King Qing of Lu's son, Marquis Min of Wuxiang, was installed as king.",
-      "reason": "Chinese 頃王 is Qing (qǐng), not Kuang; the idiomatic English misreads the posthumous title.",
+      "before": "In the fourth year of the Yuanyan era (12 BCE), he came to court accompanied by his entire retinue: his tutor, chancellor, and commandant.",
+      "after": "In the fourth year of the Yuanyan era (9 BCE), he came to court accompanied by his entire retinue: his tutor, chancellor, and commandant.",
+      "reason": "Yuanyan 1 is 12 BCE, so Yuanyan 4 is 9 BCE; the parenthetical Western year is wrong.",
       "confidence": "high"
     },
     {
       "id": "hanshu:012:r0002",
       "unit": {
-        "id": "s0107",
+        "id": "s0035",
         "kind": "paragraph-sentence",
-        "blockIndex": 26,
+        "blockIndex": 3,
         "collection": "sentences",
-        "itemIndex": 0
+        "itemIndex": 3
       },
-      "field": "literal",
-      "before": "In the sixth month of summer, he established King Kuang of Lu's son Marquis Wuxiang Min as king.",
-      "after": "In the sixth month of summer, he established King Qing of Lu's son Marquis Wuxiang Min as king.",
-      "reason": "Chinese 頃王 is Qing (qǐng), not Kuang; the literal English repeats the same error.",
+      "field": "idiomatic",
+      "before": "He enfeoffed his maternal uncle Ding Ming as Marquis of Yang'an, and Ding Ming's son Man as Marquis of Pingzhou.",
+      "after": "He enfeoffed his maternal uncle Ding Ming as Marquis of Yang'an, and his maternal uncle's son Man as Marquis of Pingzhou.",
+      "reason": "Chinese 舅子滿 means son of a maternal uncle, not specifically Ding Ming's son; s0036 names Man's father as Zhong (忠), a different (deceased) uncle.",
       "confidence": "high"
     },
     {
       "id": "hanshu:012:r0003",
-      "unit": {
-        "id": "s0114",
-        "kind": "paragraph-sentence",
-        "blockIndex": 30,
-        "collection": "sentences",
-        "itemIndex": 0
-      },
-      "field": "idiomatic",
-      "before": "In the second month, the emperor enfeoffed the Imperial Grand Empress Dowager's younger cousin, Chamberlain Fu Shang, as Marquis of Ruchang, and the Empress Dowager's uterine younger brother, Chamberlain Zheng Ye, as Marquis of Yangxin.",
-      "after": "In the second month, the emperor enfeoffed the Imperial Grand Empress Dowager's younger cousin, Chamberlain Fu Shang, as Marquis of Ruchang, and the Empress Dowager's uterine younger brother's son, Chamberlain Zheng Ye, as Marquis of Yangxin.",
-      "reason": "Chinese 太后同母弟子 denotes the son of the empress dowager's uterine younger brother; the idiomatic English drops 子.",
-      "confidence": "high"
-    },
-    {
-      "id": "hanshu:012:r0004",
-      "unit": {
-        "id": "s0115",
-        "kind": "paragraph-sentence",
-        "blockIndex": 31,
-        "collection": "sentences",
-        "itemIndex": 0
-      },
-      "field": "idiomatic",
-      "before": "In the third month, Chamberlain Dong Xian, Commandant of Equipage, Gentleman of the Interior Xi Fu Gong, and Governor Sun Chong of Nanyang were all enfeoffed as marquises for reporting on the King of Dongping.",
-      "after": "In the third month, Chamberlain and Commandant of Equipage Dong Xian, Gentleman of the Interior Xi Fugong, and Governor Sun Chong of Nanyang were all enfeoffed as marquises for reporting on the King of Dongping.",
-      "reason": "Chinese 侍中駙馬都尉董賢 gives both offices to Dong Xian; the idiomatic English splits Commandant of Equipage away from him.",
-      "confidence": "high"
-    },
-    {
-      "id": "hanshu:012:r0005",
-      "unit": {
-        "id": "s0130",
-        "kind": "paragraph-sentence",
-        "blockIndex": 43,
-        "collection": "sentences",
-        "itemIndex": 1
-      },
-      "field": "idiomatic",
-      "before": "Guard General Dong Xian was appointed Grand Commandant; Chancellor Kong Guang became Grand Minister of Works; Chamberlain Peng Xuan became Grand Minister of Agriculture and was enfeoffed as Marquis of Changping.",
-      "after": "Grand Commandant and Guard General Dong Xian was appointed Grand Commandant; Chancellor Kong Guang became Grand Minister over the Masses; Censor-in-Chief Peng Xuan became Grand Minister of Works and was enfeoffed as Marquis of Changping.",
-      "reason": "Chinese 大司徒 and 大司空 are mistranslated (Works/Agriculture swapped), and 御史大夫 is Censor-in-Chief rather than Chamberlain.",
-      "confidence": "high"
-    },
-    {
-      "id": "hanshu:012:r0006",
-      "unit": {
-        "id": "s0130",
-        "kind": "paragraph-sentence",
-        "blockIndex": 43,
-        "collection": "sentences",
-        "itemIndex": 1
-      },
-      "field": "literal",
-      "before": "Grand Commandant Guard General Dong Xian became Grand Commandant, Chancellor Kong Guang became Grand Minister of Works, Chamberlain for the Palace Revenues Peng Xuan became Grand Minister of Agriculture, and was enfeoffed as Marquis of Changping.",
-      "after": "Grand Commandant Guard General Dong Xian became Grand Commandant, Chancellor Kong Guang became Grand Minister over the Masses, Censor-in-Chief Peng Xuan became Grand Minister of Works, and was enfeoffed as Marquis of Changping.",
-      "reason": "Literal English likewise mislabels 大司徒/大司空 and 御史大夫.",
-      "confidence": "high"
-    },
-    {
-      "id": "hanshu:012:r0007",
       "unit": {
         "id": "s0094",
         "kind": "paragraph-sentence",
@@ -115,10 +55,40 @@
         "itemIndex": 0
       },
       "field": "idiomatic",
-      "before": "In the eighth month, an imperial edict declared: 'Previously I commanded Xia Helang and others to propose changing the reign title and extending the calendar periods, believing this would bring lasting stability to the nation.",
-      "after": "In the eighth month, an imperial edict declared: 'Previously I commanded Xia Heliang and others to propose changing the reign title and extending the calendar periods, believing this would bring lasting stability to the nation.",
-      "reason": "Chinese 夏賀良 is Heliang; Helang is an inconsistent romanization compared with Xia Heliang in s0139.",
-      "confidence": "medium"
+      "before": "In the eighth month, an imperial edict declared: 'Previously I commanded Xia Heliang and others to propose changing the reign title and extending the calendar periods, believing this would bring lasting stability to the nation.",
+      "after": "In the eighth month, an imperial edict declared: 'Attendant-at-edict Xia Heliang and others proposed changing the reign title and extending the calendar periods, believing this would bring lasting stability to the nation.",
+      "reason": "時詔/侍詔 is the office title Attendant-at-edict (as correctly rendered in s0139), not a verb meaning the emperor commanded them.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:012:r0004",
+      "unit": {
+        "id": "s0094",
+        "kind": "paragraph-sentence",
+        "blockIndex": 21,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "In the eighth month, an edict stated: 'At the time I ordered Xia Helang and others to propose changing the era name and designation, increasing the water clock periods, believing it could permanently secure the state.",
+      "after": "In the eighth month, an edict stated: 'Attendant-at-edict Xia Helang and others proposed changing the era name and designation, increasing the water clock periods, believing it could permanently secure the state.",
+      "reason": "Literal likewise misreads 時詔 as \"I ordered\"; it is the office 侍詔.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:012:r0005",
+      "unit": {
+        "id": "s0114",
+        "kind": "paragraph-sentence",
+        "blockIndex": 30,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "In the second month, he enfeoffed Imperial Grand Empress Dowager's younger cousin Chamberlain Fu Shang as Marquis of Ruchang, and Empress Dowager's uterine younger brother Chamberlain Zheng Ye as Marquis of Yangxin.",
+      "after": "In the second month, he enfeoffed Imperial Grand Empress Dowager's younger cousin Chamberlain Fu Shang as Marquis of Ruchang, and the son of the Empress Dowager's uterine younger brother, Chamberlain Zheng Ye, as Marquis of Yangxin.",
+      "reason": "Chinese 太后同母弟子 means son of the uterine younger brother; the literal omits 子 and makes Zheng Ye the brother himself.",
+      "confidence": "high"
     }
   ],
   "decisions": [
@@ -126,234 +96,58 @@
       "repairId": "hanshu:012:r0001",
       "decision": "accept",
       "after": null,
-      "reason": "魯頃王 uses the posthumous title 頃 (qǐng); Kuang invents a different title not present in the Chinese.",
+      "reason": "元延四年 is Yuanyan year 4; with Yuanyan 1 = 12 BCE, year 4 is 9 BCE, so the parenthetical (12 BCE) is a conversion error and the proposed (9 BCE) is correct.",
       "sourceWitness": {
         "source": "chapter-text",
-        "citation": "s0107",
-        "excerpt": "魯頃王"
+        "citation": "s0004",
+        "excerpt": "元延四年入朝"
       }
     },
     {
       "repairId": "hanshu:012:r0002",
       "decision": "accept",
       "after": null,
-      "reason": "The literal likewise misreads 頃 as Kuang; Qing correctly renders 魯頃王.",
+      "reason": "舅子滿 means a maternal uncle's son Man, not Ding Ming's son; the next unit names Man's father as Zhong (忠), so the before text invents a false filiation that the proposal correctly removes.",
       "sourceWitness": {
         "source": "chapter-text",
-        "citation": "s0107",
-        "excerpt": "魯頃王"
+        "citation": "s0035",
+        "excerpt": "封舅丁明為陽安侯，舅子滿為平周侯"
       }
     },
     {
       "repairId": "hanshu:012:r0003",
-      "decision": "revise",
-      "after": "In the second month, the emperor enfeoffed the Imperial Grand Empress Dowager's younger cousin, Chamberlain Fu Shang, as Marquis of Ruchang, and the son of the Empress Dowager's younger uterine brother, Chamberlain Zheng Ye, as Marquis of Yangxin.",
-      "reason": "太后同母弟子 identifies Zheng Ye as the son of the Empress Dowager's younger uterine brother; the revised wording restores 子 and states the relationship naturally in English.",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chapter 時詔 is a corrupt writing of the office 待詔/侍詔 (Attendant-at-edict); Yan Shigu's text emends （時）〔待〕詔, and reading it as 'I commanded' invents imperial agency the Chinese does not support. The proposed office-title rendering is accurate.",
       "sourceWitness": {
-        "source": "chapter-text",
-        "citation": "s0114",
-        "excerpt": "太后同母弟子侍中鄭業"
+        "source": "wikisource",
+        "citation": "https://zh.wikisource.org/wiki/漢書顏師古註/卷011",
+        "excerpt": "（時）〔待〕詔夏賀良等建言改元易號"
       }
     },
     {
       "repairId": "hanshu:012:r0004",
       "decision": "accept",
       "after": null,
-      "reason": "侍中駙馬都尉董賢 assigns both offices to Dong Xian before the enumeration break; separating Commandant of Equipage invents a distinct office-holder, and Xi Fugong correctly treats 息夫 as the compound surname.",
+      "reason": "The literal's 'At the time I ordered' likewise misreads 時詔; critical editions restore 待詔 as Xia Heliang's office title, so Attendant-at-edict is the correct sense.",
       "sourceWitness": {
-        "source": "chapter-text",
-        "citation": "s0115",
-        "excerpt": "侍中駙馬都尉董賢、光祿大夫息夫躬"
+        "source": "wikisource",
+        "citation": "https://zh.wikisource.org/wiki/漢書顏師古註/卷011",
+        "excerpt": "（時）〔待〕詔夏賀良等建言改元易號，增益漏刻"
       }
     },
     {
       "repairId": "hanshu:012:r0005",
-      "decision": "revise",
-      "after": "Dong Xian, formerly Grand Commandant and General of the Guard, became Grand Commandant; Chancellor Kong Guang became Grand Minister over the Masses; Censor-in-Chief Peng Xuan became Grand Minister of Works and was enfeoffed as Marquis of Changping.",
-      "reason": "The title corrections match 大司徒, 御史大夫, and 大司空, while 'formerly' makes the apparent reform from Dong Xian's combined offices to Grand Commandant legible in English.",
-      "sourceWitness": {
-        "source": "chapter-text",
-        "citation": "s0130",
-        "excerpt": "大司馬衛將軍董賢為大司馬，丞相孔光為大司徒，御史大夫彭宣為大司空"
-      }
-    },
-    {
-      "repairId": "hanshu:012:r0006",
       "decision": "accept",
       "after": null,
-      "reason": "The literal repeats the same office errors for 大司徒, 御史大夫, and 大司空; the proposed titles match the Chinese.",
+      "reason": "太后同母弟子侍中鄭業 means Zheng Ye is the son of the Empress Dowager's uterine younger brother; the before literal drops 子 and wrongly makes Zheng Ye that brother himself.",
       "sourceWitness": {
         "source": "chapter-text",
-        "citation": "s0130",
-        "excerpt": "丞相孔光為大司徒，御史大夫彭宣為大司空"
-      }
-    },
-    {
-      "repairId": "hanshu:012:r0007",
-      "decision": "accept",
-      "after": null,
-      "reason": "夏賀良 is Hèliáng; Helang misreads 良 and should be Heliang.",
-      "sourceWitness": {
-        "source": "chapter-text",
-        "citation": "s0094",
-        "excerpt": "夏賀良"
+        "citation": "s0114",
+        "excerpt": "太后同母弟子侍中鄭業為陽信侯"
       }
     }
   ],
   "claimRetractions": [],
-  "claimRevisions": [
-    {
-      "repairId": "hanshu:012:r0001",
-      "before": {
-        "id": "hanshu:012:c0144",
-        "subject": "hanshu:012:p039",
-        "predicate": "name",
-        "value": {
-          "kind": "posthumous",
-          "en": "King Kuang of Lu",
-          "zh": "魯頃王",
-          "pinyin": "Lǔ Qǐng wáng"
-        },
-        "certainty": "explicit",
-        "evidence": [
-          "hanshu:012:s0107"
-        ]
-      },
-      "after": {
-        "id": "hanshu:012:c0144",
-        "subject": "hanshu:012:p039",
-        "predicate": "name",
-        "value": {
-          "kind": "posthumous",
-          "en": "King Qing of Lu",
-          "zh": "魯頃王",
-          "pinyin": "Lǔ Qǐng wáng"
-        },
-        "certainty": "explicit",
-        "evidence": [
-          "hanshu:012:s0107"
-        ]
-      },
-      "reason": "Accepted r0001 restores Qing for 頃; the extracted English posthumous name King Kuang of Lu was created by the mistranslation.",
-      "sourceWitness": {
-        "source": "chapter-text",
-        "citation": "s0107",
-        "excerpt": "魯頃王"
-      }
-    },
-    {
-      "repairId": "hanshu:012:r0003",
-      "before": {
-        "id": "hanshu:012:c0265",
-        "subject": "hanshu:012:p046",
-        "predicate": "relationship",
-        "value": {
-          "type": "uterine-younger-brother-of",
-          "personId": "hanshu:012:p014"
-        },
-        "certainty": "explicit",
-        "evidence": [
-          "hanshu:012:s0114"
-        ]
-      },
-      "after": {
-        "id": "hanshu:012:c0265",
-        "subject": "hanshu:012:p046",
-        "predicate": "relationship",
-        "value": {
-          "type": "maternal-nephew-of",
-          "personId": "hanshu:012:p014",
-          "via": "younger uterine brother"
-        },
-        "certainty": "explicit",
-        "evidence": [
-          "hanshu:012:s0114"
-        ]
-      },
-      "reason": "Revised r0003 shows Zheng Ye is 太后同母弟子, the Empress Dowager's maternal nephew through her younger uterine brother; the relationship claim must include 子.",
-      "sourceWitness": {
-        "source": "chapter-text",
-        "citation": "s0114",
-        "excerpt": "太后同母弟子"
-      }
-    },
-    {
-      "repairId": "hanshu:012:r0004",
-      "before": {
-        "id": "hanshu:012:c0178",
-        "subject": "hanshu:012:p048",
-        "predicate": "name",
-        "value": {
-          "kind": "personal",
-          "en": "Xi Fu Gong",
-          "zh": "息夫躬",
-          "pinyin": "Xīfū Gōng"
-        },
-        "certainty": "explicit",
-        "evidence": [
-          "hanshu:012:s0115"
-        ]
-      },
-      "after": {
-        "id": "hanshu:012:c0178",
-        "subject": "hanshu:012:p048",
-        "predicate": "name",
-        "value": {
-          "kind": "personal",
-          "en": "Xi Fugong",
-          "zh": "息夫躬",
-          "pinyin": "Xīfū Gōng"
-        },
-        "certainty": "explicit",
-        "evidence": [
-          "hanshu:012:s0115"
-        ]
-      },
-      "reason": "Accepted r0004 advances Xi Fugong for 息夫躬, treating 息夫 as the compound surname rather than three spaced syllables.",
-      "sourceWitness": {
-        "source": "chapter-text",
-        "citation": "s0115",
-        "excerpt": "息夫躬"
-      }
-    },
-    {
-      "repairId": "hanshu:012:r0007",
-      "before": {
-        "id": "hanshu:012:c0124",
-        "subject": "hanshu:012:p033",
-        "predicate": "name",
-        "value": {
-          "kind": "personal",
-          "en": "Xia Helang",
-          "zh": "夏賀良",
-          "pinyin": "Xià Hèliáng"
-        },
-        "certainty": "explicit",
-        "evidence": [
-          "hanshu:012:s0094"
-        ]
-      },
-      "after": {
-        "id": "hanshu:012:c0124",
-        "subject": "hanshu:012:p033",
-        "predicate": "name",
-        "value": {
-          "kind": "personal",
-          "en": "Xia Heliang",
-          "zh": "夏賀良",
-          "pinyin": "Xià Hèliáng"
-        },
-        "certainty": "explicit",
-        "evidence": [
-          "hanshu:012:s0094"
-        ]
-      },
-      "reason": "Accepted r0007 corrects Helang to Heliang for 賀良; the extracted English personal name followed the bad romanization.",
-      "sourceWitness": {
-        "source": "chapter-text",
-        "citation": "s0094",
-        "excerpt": "夏賀良"
-      }
-    }
-  ]
+  "claimRevisions": []
 }
