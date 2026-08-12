@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "116",
+  "input": {
+    "chapterFingerprint": "sha256:b9933eac77aa509aa91f7a9755881541d7109da3686fc04244b69839fee3ffd3",
+    "proposalsFingerprint": "sha256:67cc550651e2af63b7a5c795c09f77c55a5f596d9f7685a7feadcd1e41fa8ec2"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-a3f1adbb-c17a-41cc-9cc7-4bebc3e4e3b3",
+    "runId": "run-e4911d5c-55da-45f9-b8a1-a7347548ee5e",
+    "completedAt": "2026-08-12T07:22:24.586Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:116:r0001",
+      "unit": {
+        "id": "s0046",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "The Emperor thereupon ordered Wang Ranyu, Bo Shichang, Lu Yueren, and others to slip through the western Yi territories and press westward in search of the kingdom of Shendu.",
+      "after": "The Emperor thereupon ordered Wang Ranyu, Bo Shichang, Lü Yueren, and others to slip through the western Yi territories and press westward in search of the kingdom of Shendu.",
+      "reason": "呂越人 uses the surname Lü (呂); \"Lu\" loses the umlaut and can be confused with 魯.",
+      "confidence": "medium"
+    },
+    {
+      "id": "shiji:116:r0002",
+      "unit": {
+        "id": "s0064",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "The Emperor sent Wang Ranyu to use the military prestige from the defeat of the Yue and the punishment of the southern Yi, like wind to persuade the King of Dian to come to court.",
+      "after": "The Emperor sent Wang Ranyu to use the military prestige from the defeat of the Yue and the punishment of the southern Yi to persuade the King of Dian to come to court.",
+      "reason": "Literal \"like wind to persuade\" is an unidiomatic calque of 風喻 that obscures the meaning of persuasion by intimidation/example.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:116:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit names 呂越人 with surname 呂 (Lü), not 魯 (Lu); idiomatic \"Lu Yueren\" drops the umlaut and conflates the surnames, while \"Lü Yueren\" matches the graph and the unit's own literal/pinyin.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0046",
+        "excerpt": "呂越人"
+      }
+    },
+    {
+      "repairId": "shiji:116:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 兵威風喻滇王入朝, 風喻 means to persuade by intimidation or example, not \"like wind\"; the before invents a false wind calque, and the proposed literal restores persuasion without adding or omitting other content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0064",
+        "excerpt": "兵威風喻滇王入朝"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "shiji:116:r0001",
+      "before": {
+        "id": "shiji:116:c0052",
+        "subject": "shiji:116:p017",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Lu Yueren",
+          "zh": "呂越人",
+          "pinyin": "Lü Yueren"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "shiji:116:s0046"
+        ]
+      },
+      "after": {
+        "id": "shiji:116:c0052",
+        "subject": "shiji:116:p017",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Lü Yueren",
+          "zh": "呂越人",
+          "pinyin": "Lü Yueren"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "shiji:116:s0046"
+        ]
+      },
+      "reason": "Accepted r0001 shows English Lu Yueren came only from the bad idiomatic of 呂越人; the personal name claim must read Lü Yueren while keeping zh, pinyin, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0046",
+        "excerpt": "呂越人"
+      }
+    }
+  ]
+}

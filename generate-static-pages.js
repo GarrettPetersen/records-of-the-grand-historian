@@ -1437,11 +1437,26 @@ ${contentHTML}
 </html>`;
 }
 
-async function generateStaticPages(bookId = null, chapterNum = null, outputDir = path.join(__dirname, 'public')) {
+async function generateStaticPages(
+  bookId = null,
+  chapterNum = null,
+  outputDir = path.join(__dirname, 'public'),
+  peopleAnnotatedOnly = false,
+) {
   const dataDir = path.join(__dirname, 'data');
 
   // Get list of books to process
-  const booksToProcess = bookId ? [bookId] : Object.keys(BOOKS);
+  if (peopleAnnotatedOnly && !PEOPLE_SITE.active) {
+    throw new Error('--people-annotated requires an active people catalog or PEOPLE_SITE_PREVIEW=1');
+  }
+  const annotatedChapters = peopleAnnotatedOnly
+    ? Object.values(PEOPLE_SITE.siteIndex.chapters)
+    : [];
+  let booksToProcess = Object.keys(BOOKS);
+  if (peopleAnnotatedOnly) {
+    booksToProcess = [...new Set(annotatedChapters.map((chapter) => chapter.book))].sort();
+  }
+  if (bookId) booksToProcess = [bookId];
 
   let totalGenerated = 0;
 
@@ -1475,9 +1490,14 @@ async function generateStaticPages(bookId = null, chapterNum = null, outputDir =
     }
 
     // Get chapters to process
-    const chapterFiles = chapterNum
-      ? [`${String(chapterNum).padStart(3, '0')}.json`]
-      : fs.readdirSync(bookDataDir).filter(f => f.endsWith('.json'));
+    let chapterFiles = fs.readdirSync(bookDataDir).filter(f => f.endsWith('.json'));
+    if (peopleAnnotatedOnly) {
+      chapterFiles = annotatedChapters
+        .filter((chapter) => chapter.book === book)
+        .map((chapter) => `${chapter.chapter}.json`)
+        .sort();
+    }
+    if (chapterNum) chapterFiles = [`${String(chapterNum).padStart(3, '0')}.json`];
 
     console.log(`\nGenerating static pages for ${book}...`);
 
@@ -1532,9 +1552,10 @@ Usage:
   node generate-static-pages.js --book <book-id>   Generate all chapters for one book
   node generate-static-pages.js --book <book-id> --chapter <num>
   node generate-static-pages.js --output-dir <path>
+  node generate-static-pages.js --people-annotated --output-dir <path>
 
 Automatically discovers all books from the data directory.
-                                                   Generate one specific chapter
+--people-annotated emits only chapters present in the generated people site index.
 
 Examples:
   node generate-static-pages.js
@@ -1547,6 +1568,7 @@ Examples:
   let bookId = null;
   let chapterNum = null;
   let outputDir = path.join(__dirname, 'public');
+  const peopleAnnotatedOnly = args.includes('--people-annotated');
 
   const bookIdx = args.indexOf('--book');
   if (bookIdx !== -1 && bookIdx + 1 < args.length) {
@@ -1563,7 +1585,7 @@ Examples:
     outputDir = path.resolve(__dirname, args[outputIdx + 1]);
   }
 
-  await generateStaticPages(bookId, chapterNum, outputDir);
+  await generateStaticPages(bookId, chapterNum, outputDir, peopleAnnotatedOnly);
 }
 
 main().catch((e) => {

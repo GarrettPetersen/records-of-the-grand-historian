@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "075",
+  "input": {
+    "chapterFingerprint": "sha256:19da294560977e02a26be413d6e164403535e31c717bface0b5da9bca722e078",
+    "proposalsFingerprint": "sha256:54eec5105cfd7bb34980a9c3807e61a5f46652d557cd0596cf1081e17b2195e8"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-8467b71f-32bf-4b17-9d56-001205040efc",
+    "runId": "run-affdc7af-d8c1-4583-b7bf-590c333d9c0d",
+    "completedAt": "2026-08-12T06:55:30.342Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:075:r0001",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "(Yuzhi))〉",
+      "after": "(Yuzhi)",
+      "reason": "Corrupted trailing punctuation and angle bracket from markup leakage.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:075:r0002",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "(Yuzhi))〉",
+      "after": "(Yuzhi)",
+      "reason": "Corrupted trailing punctuation and angle bracket from markup leakage.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:075:r0003",
+      "unit": {
+        "id": "s0006",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "(Gu and Tulubu))〉",
+      "after": "(Gu and Tulubu)",
+      "reason": "Corrupted trailing punctuation and angle bracket from markup leakage.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:075:r0004",
+      "unit": {
+        "id": "s0006",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "(Gu and Tulubu))〉",
+      "after": "(Gu and Tulubu)",
+      "reason": "Corrupted trailing punctuation and angle bracket from markup leakage.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:075:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 〈（羽之）〉 is a parenthetical name annotation for 羽之 (Yuzhi); the trailing ))〉 is leaked Chinese markup, and (Yuzhi) correctly restores the English.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "〈（羽之）〉"
+      }
+    },
+    {
+      "repairId": "liaoshi:075:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 〈（羽之）〉 denotes the name 羽之; literal's trailing ))〉 is markup leakage, and (Yuzhi) is the accurate clean rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "〈（羽之）〉"
+      }
+    },
+    {
+      "repairId": "liaoshi:075:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 〈（古突呂不）〉 is a parenthetical name annotation; the trailing ))〉 is leaked markup, and (Gu and Tulubu) correctly removes that corruption without changing the attested names.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0006",
+        "excerpt": "〈（古突呂不）〉"
+      }
+    },
+    {
+      "repairId": "liaoshi:075:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 〈（古突呂不）〉 supports the names Gu and Tulubu; literal's trailing ))〉 is markup leakage, and (Gu and Tulubu) is the accurate clean rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0006",
+        "excerpt": "〈（古突呂不）〉"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

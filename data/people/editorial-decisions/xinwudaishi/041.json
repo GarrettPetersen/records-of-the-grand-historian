@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 3,
+  "book": "xinwudaishi",
+  "chapter": "041",
+  "input": {
+    "chapterFingerprint": "sha256:274b1a8c9dbac965426cc9e0c8e5e6761bd706938817861c25056e02a532fa40",
+    "proposalsFingerprint": "sha256:10696d64bac0a287ddc3c3253b4aae204c16b5b2fb24ba6fa98d5147b86f2038"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-b2193212-0797-4c7e-bb1c-39aa0bc13592",
+    "runId": "run-b39b5c71-168b-4470-a329-1eaa0b1486fb",
+    "completedAt": "2026-08-12T06:56:17.468Z"
+  },
+  "proposals": [
+    {
+      "id": "xinwudaishi:041:r0001",
+      "unit": {
+        "id": "s0070",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "When Zhu Wen attacked Yan, Zhu Jin called on Jin. Li Keyong sent Shi Yan and a few thousand men. Jin fell anyway, and Jin, Zhu, Shi Yan, and the rest fled to Huainan.",
+      "after": "When Zhu Wen attacked Yan Prefecture, Zhu Jin begged Jin for aid; Jin sent Shi Yan and others with several thousand troops to rescue Jin. Jin was defeated and fled with Yan and the rest to Huainan.",
+      "reason": "Idiomatic invents Li Keyong where Chinese only has 晉, and garbles the flight clause as “Jin, Zhu, Shi Yan” instead of Zhu Jin with Shi Yan.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:041:r0002",
+      "unit": {
+        "id": "s0089",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "In the third year Yan Gong fled to Yang Xingmi. Ma Yin captured his younger brother Yan Xiong and seven others, sent them to Liang, and had them executed in the Bian market. Yan Gong died in Huainan, and Li and Lang thereafter fell to Chu.",
+      "after": "In the third year Yan Gong fled to Yang Xingmi. Ma Yin captured his younger brother Yan Xiong and others—seven men in all—sent them to Liang, and had them executed in the Bian market. Yan Gong died in Huainan, and Li and Lang thereafter fell to Chu.",
+      "reason": "Chinese 彥雄等七人 means Yan Xiong and company totaling seven, not Yan Xiong plus seven others.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:041:r0003",
+      "unit": {
+        "id": "s0056",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "idiomatic",
+      "before": "Quanfeng said: “I let old Zhong keep the seal three years. Now it is my turn.”",
+      "after": "Quanfeng said: “I let Master Zhong be military commissioner three years; now I shall take the post myself.”",
+      "reason": "鍾郎 after Zhong Chuan’s death refers to Kuangshi as Master Zhong; “old Zhong” wrongly suggests the deceased father.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xinwudaishi:041:r0001",
+      "decision": "revise",
+      "after": "When Zhu Wen attacked Yan Prefecture, Zhu Jin begged Jin for aid; Jin sent Shi Yan and others with several thousand troops to rescue Zhu Jin. Zhu Jin was defeated and fled with Yan and the rest to Huainan.",
+      "reason": "Chinese has 晉遣…救瑾，瑾敗，與儼等奔, so the before text wrongly invents Li Keyong and garbles the fugitives as “Jin, Zhu, Shi Yan.” The proposal fixes both, but “rescue Jin… Jin was defeated” collides 晉 and 瑾; naming Zhu Jin in those clauses keeps the sense clear.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0070",
+        "excerpt": "晉遣史儼等將兵數千救瑾，瑾敗，與儼等奔於淮南"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:041:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "彥雄等七人 is the standard “X and others, N persons in all,” so the total is seven including Yan Xiong. “Yan Xiong and seven others” invents an eighth captive; the proposed wording restores the count.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0089",
+        "excerpt": "彥雄等七人"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:041:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "After 傳卒，子匡時自稱留後, Quanfeng’s 鍾郎 names the living son Kuangshi as Master Zhong, not the dead father; “old Zhong” misidentifies the referent, and 節度使 is military commissioner rather than “the seal.”",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0056",
+        "excerpt": "聽鍾郎為節度使三年"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "xinwudaishi:041:r0001",
+      "claim": {
+        "id": "xinwudaishi:041:c0373",
+        "subject": "xinwudaishi:041:p043",
+        "predicate": "attestation",
+        "value": {
+          "sourceDate": {
+            "text": "太祖攻兗州"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 897,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 897,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit-event-contextual-date",
+        "evidence": [
+          "xinwudaishi:041:s0070"
+        ]
+      },
+      "reason": "Advancing the repair shows s0070 only has 晉 acting, not the personal name Li Keyong; the Li Keyong attestation dated from this unit alone was created by the bad idiomatic invention.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0070",
+        "excerpt": "朱瑾求救於晉，晉遣史儼等"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "191",
+  "input": {
+    "chapterFingerprint": "sha256:674fea0be5f9355f4cace8409df6b7d8a63853f2c5e663e87c347b11b5c01338",
+    "proposalsFingerprint": "sha256:00458bd1b9af5a6a89118907f0fce7044cff80736549f3ba32dd00b42f1c5027"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-596f8083-4ed1-4eb1-bef4-fdbefbac1205",
+    "runId": "run-d00492f1-712d-46d1-bc13-a8763c696acf",
+    "completedAt": "2026-08-12T06:40:13.461Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:191:r0001",
+      "unit": {
+        "id": "s0103",
+        "kind": "table-header-cell",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "聯奎. On the jiyou day of the fourth month, 富廉: Left Deputy Censor-in-Chief.",
+      "after": "聯奎 [continued]. On the jiyou day of the fourth month, 富廉: Left Deputy Censor-in-Chief.",
+      "reason": "The English fragment '聯奎.' alone is unclear; Chinese continues 聯奎 in office before recording 富廉's appointment.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:191:r0001",
+      "decision": "reject",
+      "after": null,
+      "reason": "s0103 opens with bare 聯奎 then 四月己酉富廉左副都御史, the standard table shorthand for the incumbent before a dated replacement; the current '聯奎. On the jiyou day…' already matches that and neighbors such as 朱嶟./程庭桂. Adding '[continued]' is an interpretive gloss, not a semantic correction.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0103",
+        "excerpt": "聯奎四月己酉富廉左副都御史。"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

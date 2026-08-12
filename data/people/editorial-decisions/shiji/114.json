@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "114",
+  "input": {
+    "chapterFingerprint": "sha256:c793d436ce0b235c592e9fdc8ec422eec714abcb0e69d4d44b5dffebf3dcdd3d",
+    "proposalsFingerprint": "sha256:b856df6bd2933dda0bb32361758892114e250f43df6d41be643a33129a2fb3bb"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-9aeb33eb-9f18-4206-b445-591d2876da7e",
+    "runId": "run-739af705-4335-4e92-bf91-7d587d45eb7a",
+    "completedAt": "2026-08-12T07:07:07.170Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:114:r0001",
+      "unit": {
+        "id": "s0017",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "After all, Qin took all under heaven as far as Xianyang and then abandoned it—how much less should we trouble ourselves over Yue!",
+      "after": "Moreover, Qin abandoned even Xianyang itself—how much less should we fuss about Yue!",
+      "reason": "Idiomatic invents “took all under heaven as far as Xianyang”; Chinese 秦舉咸陽而棄之 means Qin abandoned Xianyang (the capital), matching the literal.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:114:r0002",
+      "unit": {
+        "id": "s0042",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 16
+      },
+      "field": "idiomatic",
+      "before": "A palace attendant was then dispatched to install Chou as the King of Yueyao, charged with maintaining the ancestral rites of the Minyue.",
+      "after": "A Palace Gentleman-General was then dispatched to install Chou as the King of Yueyao, charged with maintaining the ancestral rites of the Minyue.",
+      "reason": "郎中將 is a military title (Palace Gentleman-General), not merely “palace attendant”.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:114:r0001",
+      "decision": "revise",
+      "after": "Moreover, Qin abandoned even Xianyang itself—how much less should we trouble ourselves over Yue!",
+      "reason": "Focus unit 且秦舉咸陽而棄之 has 舉咸陽 as even/the whole of Xianyang that Qin abandoned, not ‘took all under heaven as far as Xianyang.’ The proposed fix is right on that point, but ‘fuss about’ is weaker register than the original idiomatic’s ‘trouble ourselves over,’ which already fits Zhuang Zhu’s a fortiori rebuke of abandoning Yue.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0017",
+        "excerpt": "且秦舉咸陽而棄之，何乃越也！"
+      }
+    },
+    {
+      "repairId": "shiji:114:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "乃使郎中將立丑 names the envoy by the official title 郎中將 (Palace Gentleman-General / leader of the palace gentlemen), not a generic ‘palace attendant’ (closer to 侍中 or plain 郎). The proposed title correction is accurate; the rest of the sentence matches 立丑為越繇王，奉閩越先祭祀.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0042",
+        "excerpt": "乃使郎中將立丑為越繇王"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

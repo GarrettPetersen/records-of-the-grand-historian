@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "077",
+  "input": {
+    "chapterFingerprint": "sha256:4604d110567c91ff9f2d868de6e96919df6d2c79d47ac153073416b81bca5979",
+    "proposalsFingerprint": "sha256:f7082de9b87405f3bd0e29d6e496b4c32ac0f4e5a318bab7c8a101bebc45c14d"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-83322abb-a2c7-4bc9-9db3-c66947c207b4",
+    "runId": "run-3de7a775-0002-429e-8245-a9a20bc17d85",
+    "completedAt": "2026-08-12T07:54:18.607Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:077:r0001",
+      "unit": {
+        "id": "s0092",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "He picked eight thousand of the best troops and marched against the Qin army.",
+      "after": "He selected eighty thousand of the best troops and marched against the Qin army.",
+      "reason": "Chinese 八萬人 means eighty thousand, not eight thousand.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:077:r0002",
+      "unit": {
+        "id": "s0092",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "He selected eight thousand elite troops and advanced to attack the Qin army.",
+      "after": "He selected eighty thousand elite troops and advanced to attack the Qin army.",
+      "reason": "Chinese 八萬人 means eighty thousand, not eight thousand.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:077:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 八萬人 is eighty thousand troops; idiomatic “eight thousand” understates the figure by a factor of ten, and “eighty thousand” restores the correct numeral without distorting the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0092",
+        "excerpt": "八萬人"
+      }
+    },
+    {
+      "repairId": "shiji:077:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 八萬人 appears in the literal English as “eight thousand”; correcting to “eighty thousand” matches the Chinese numeral while leaving the rest of the calque intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0092",
+        "excerpt": "八萬人"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

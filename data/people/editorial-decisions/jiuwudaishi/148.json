@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "148",
+  "input": {
+    "chapterFingerprint": "sha256:7e04aae27c9b9010dda38831738f457f66b3882faba55e026019944ce85ad688",
+    "proposalsFingerprint": "sha256:4996f029b21667df963cc1856c1cb4b26b67a22a8766989e14871114d1426c4e"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-cc12fca9-e7b7-4ef7-b7d7-f0bff5a33772",
+    "runId": "run-921ce30c-caae-4589-91bd-e576921816e9",
+    "completedAt": "2026-08-12T06:46:01.021Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:148:r0001",
+      "unit": {
+        "id": "s0015",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In the third month of Tianfu 3 of Jin, Cui Zhuang, Academician Expositor-in-Chief, Vice Minister of War, and acting supervisor of the examinations, wrote: \"I have been favored beyond my deserts and now hold the literary scales in my hands. I fear that mediocre talent will fail Your Majesty's purpose of gathering the worthy, and I dare not fail to scrutinize the dull and shut out favoritism—first to show that Your Majesty truly seeks talent, and second so that ordinary men may still find a way forward.",
+      "after": "In the third month of Tianfu 3 of Jin, Cui Zhuo, Academician Expositor-in-Chief, Vice Minister of War, and acting supervisor of the examinations, wrote: \"I have been favored beyond my deserts and now hold the literary scales in my hands. I fear that mediocre talent will fail Your Majesty's purpose of gathering the worthy, and I dare not fail to scrutinize the dull and shut out favoritism—first to show that Your Majesty truly seeks talent, and second so that ordinary men may still find a way forward.",
+      "reason": "Chinese 崔棁 is Cui Zhuo (棁 = zhuō), not Zhuang; the idiomatic English misspells the personal name.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:148:r0002",
+      "unit": {
+        "id": "s0020",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "but if he lodges a false complaint, let the candidate be severely punished.",
+      "after": "but if he lodges a false complaint, we beg that the candidate be severely punished.",
+      "reason": "Chinese 舉人乞痛加懲斷 is the memorialist's plea that false complainants be punished, not that the candidate himself begs for punishment.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:148:r0003",
+      "unit": {
+        "id": "s0061",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In the second month of Guangshun 2 of Zhou, Zhao Shangjiao, Vice Minister of Rites, asked that all examination categories drop general-meaning tests and replace fifty oral questions with ten written ones.\"",
+      "after": "In the second month of Guangshun 2 of Zhou, Zhao Shangjiao, Vice Minister of Rites, asked that all examination categories drop general-meaning tests and replace fifty oral questions with ten written ones.",
+      "reason": "Stray closing quotation mark at the end of the idiomatic sentence with no matching open quote.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:148:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit names 崔棁; 棁 is Zhuo, not Zhuang. The proposed Cui Zhuo corrects a real personal-name error without other wording changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0015",
+        "excerpt": "崔棁"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:148:r0002",
+      "decision": "reject",
+      "after": null,
+      "reason": "The idiomatic already correctly makes the false complainant the patient of punishment (let the candidate be severely punished). The claimed misreading that the candidate begs for punishment is not in this field; adding we beg is only stylistic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0020",
+        "excerpt": "舉人乞痛加懲斷"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:148:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The idiomatic paraphrases Zhao Shangjiao's memorial without an opening quote, so the trailing closing quotation mark is a typographical error; removing it restores clean English.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0061",
+        "excerpt": "趙上交奏：「貢院諸科，今欲不試泛義，其口義五十道，改試墨義十道。」"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "jiuwudaishi:148:r0001",
+      "before": {
+        "id": "jiuwudaishi:148:c0012",
+        "subject": "jiuwudaishi:148:p003",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Cui Zhuang",
+          "zh": "崔棁",
+          "pinyin": "Cui Zhuo"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiuwudaishi:148:s0015"
+        ]
+      },
+      "after": {
+        "id": "jiuwudaishi:148:c0012",
+        "subject": "jiuwudaishi:148:p003",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Cui Zhuo",
+          "zh": "崔棁",
+          "pinyin": "Cui Zhuo"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiuwudaishi:148:s0015"
+        ]
+      },
+      "reason": "Accepting r0001 shows the English personal name Cui Zhuang was produced only by the bad idiomatic; the person remains 崔棁, so the claim value must use Cui Zhuo.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0015",
+        "excerpt": "崔棁"
+      }
+    }
+  ]
+}

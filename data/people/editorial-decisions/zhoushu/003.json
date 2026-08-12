@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "zhoushu",
+  "chapter": "003",
+  "input": {
+    "chapterFingerprint": "sha256:a9f71a3efd2dfa088aaf8c113fd15a075e52e554d71aca0613d2ff252200c3bb",
+    "proposalsFingerprint": "sha256:2b7f02565533b83e067d3dd2e182d99358c36bde4a099b51406f6da9c87706ab"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-a4ed2829-4460-4eb7-a34d-a806db9936e8",
+    "runId": "run-697c06db-0a56-4d7f-ade1-1e545d99fb4b",
+    "completedAt": "2026-08-12T07:54:26.257Z"
+  },
+  "proposals": [
+    {
+      "id": "zhoushu:003:r0001",
+      "unit": {
+        "id": "s0071",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "Yet We failed to keep harmony, and Duke of Chu Gui, displeased with Us, joined Moqi Jitong, Chinu Xing, Wang Longren, Yuchi Sengyan, and others in secret plots against the state.",
+      "after": "Yet We failed to keep harmony, and Duke of Chu Gui, displeased with Us, joined Moqi Jitong, Chinu Xing, Wang Longren, Zhangsun Sengyan, and others in secret plots against the state.",
+      "reason": "Chinese 長孫僧衍 is Zhangsun Sengyan, not Yuchi Sengyan.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:003:r0002",
+      "unit": {
+        "id": "s0071",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "Yet We are not enlightened and could not harmonize them, causing Duke of Chu Gui to be displeased with Us and, with Moqi Jitong, Chinu Xing, Wang Longren, and Yuchi Sengyan and others, secretly to set up false commissions and plot to endanger the altars of state.",
+      "after": "Yet We are not enlightened and could not harmonize them, causing Duke of Chu Gui to be displeased with Us and, with Moqi Jitong, Chinu Xing, Wang Longren, and Zhangsun Sengyan and others, secretly to set up false commissions and plot to endanger the altars of state.",
+      "reason": "Chinese 長孫僧衍 is Zhangsun Sengyan; Yuchi is a wrong surname.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:003:r0003",
+      "unit": {
+        "id": "s0154",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "idiomatic",
+      "before": "Li Bi, Duke of Zhao and Grand Minister of Agriculture, became Grand Preceptor; Zhao Gui, Duke of Nanyang and Grand Director of Ritual, Grand Tutor and Grand Chancellor; Dugu Xin, Duke of Henei and Grand Marshal, Grand Protector and Grand Director of Ritual; and Hu of Zhongshan, Grand Duke and Grand Marshal.",
+      "after": "Li Bi, Duke of Zhao and Grand Minister of the Masses, became Grand Preceptor; Zhao Gui, Duke of Nanyang and Grand Director of Ritual, Grand Tutor and Grand Chancellor; Dugu Xin, Duke of Henei and Grand Marshal, Grand Protector and Grand Director of Ritual; and Hu of Zhongshan, Pillar of State and Grand Marshal.",
+      "reason": "大司徒 is Grand Minister of the Masses/Situ, not Agriculture (司空); 柱國 is Pillar of State.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:003:r0004",
+      "unit": {
+        "id": "s0154",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "literal",
+      "before": "Grand Minister of Agriculture Li Bi, Duke of Zhao commandery, was made Grand Preceptor; Grand Director of Ritual Zhao Gui, Duke of Nanyang, Grand Tutor and Grand Chancellor; Grand Marshal Dugu Xin, Duke of Henei, Grand Protector and Grand Director of Ritual; and Grand Duke Hu of Zhongshan, Grand Marshal.",
+      "after": "Grand Minister of the Masses Li Bi, Duke of Zhao commandery, was made Grand Preceptor; Grand Director of Ritual Zhao Gui, Duke of Nanyang, Grand Tutor and Grand Chancellor; Grand Marshal Dugu Xin, Duke of Henei, Grand Protector and Grand Director of Ritual; and Pillar of State Hu of Zhongshan, Grand Marshal.",
+      "reason": "大司徒 is not Minister of Agriculture; 柱國 is Pillar of State rather than Grand Duke.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "zhoushu:003:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0071 lists 長孫僧衍 among the conspirators; 長孫 is Zhangsun, not Yuchi (尉遲), so replacing Yuchi Sengyan with Zhangsun Sengyan corrects a real naming error without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0071",
+        "excerpt": "長孫僧衍"
+      }
+    },
+    {
+      "repairId": "zhoushu:003:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 長孫僧衍 appears in the literal field of s0071; Yuchi is the wrong surname, and Zhangsun Sengyan accurately renders the Chinese name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0071",
+        "excerpt": "長孫僧衍"
+      }
+    },
+    {
+      "repairId": "zhoushu:003:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0154 has 大司徒 for Li Bi’s prior office and 柱國 for Hu of Zhongshan; 大司徒 is Grand Minister of the Masses (Situ), not Agriculture (司空), and 柱國 is Pillar of State, not Grand Duke. The proposed replacements fix both errors cleanly.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0154",
+        "excerpt": "大司徒、趙郡公李弼…柱國、中山公護"
+      }
+    },
+    {
+      "repairId": "zhoushu:003:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal of s0154 likewise mistranslates 大司徒 as Grand Minister of Agriculture and 柱國 as Grand Duke; Grand Minister of the Masses and Pillar of State restore the correct offices.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0154",
+        "excerpt": "大司徒…柱國、中山公護"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

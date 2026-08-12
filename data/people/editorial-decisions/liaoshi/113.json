@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "113",
+  "input": {
+    "chapterFingerprint": "sha256:f03158a66e5dc871bd6b1d53b5aa55a4cf7458fb191fc5a1353c1dc49ed1762c",
+    "proposalsFingerprint": "sha256:9cc8106185d3e915cdcd4615b814115253a0edc41a9e477027b3424412eac91e"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-0fe3de10-e3fa-4990-a574-76ff2c07d0a2",
+    "runId": "run-fb6c56f0-a46f-430f-9ab5-725eadb2d117",
+    "completedAt": "2026-08-12T07:42:36.091Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:113:r0001",
+      "unit": {
+        "id": "s0013",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "The emperor repented and said, \"This is what comes of heeding my own counsel!\"",
+      "after": "The emperor repented and said, \"This is what comes of heeding that counsel!\"",
+      "reason": "Chinese 用言 refers to following Han's advice just given, not the emperor's own counsel.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:113:r0002",
+      "unit": {
+        "id": "s0159",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "Prince Shou'an used Dili's stratagem to lure Chagai out and kill him; not one of those who had been coerced was harmed, and that was entirely Dili's doing.",
+      "after": "Prince Shou'an used Dilie's stratagem to lure Chagai out and kill him; not one of those who had been coerced was harmed, and that was entirely Dilie's doing.",
+      "reason": "English shortens 敵獵 to Dili; the established spelling elsewhere is Dilie.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:113:r0003",
+      "unit": {
+        "id": "s0159",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "literal",
+      "before": "Prince Shou'an used Dili's plan to lure and kill Chagai; of all who had been coerced, not one was harmed—it was all Dili's doing.",
+      "after": "Prince Shou'an used Dilie's plan to lure and kill Chagai; of all who had been coerced, not one was harmed—it was all Dilie's doing.",
+      "reason": "Literal English likewise misspells Dilie as Dili.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:113:r0004",
+      "unit": {
+        "id": "s0122",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 34
+      },
+      "field": "idiomatic",
+      "before": "In the autumn of the ninth year Ge married his son to Chongyuan; Ge took part in the conspiracy and was executed by dismemberment.",
+      "after": "In the autumn of the ninth year Ge made his son Chongyuan's son-in-law; Ge took part in the conspiracy and was executed by dismemberment.",
+      "reason": "Chinese 為重元婿 means made his son Chongyuan's son-in-law, not that Ge married his son to Chongyuan himself.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:113:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 此吾用言之過至此, 吾用言 is the emperor's fault in heeding advice; s0011 帝從其言 shows that counsel was another's, so \"my own counsel\" wrongly makes the advice his invention, and \"heeding that counsel\" restores the sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0013",
+        "excerpt": "此吾用言之過至此"
+      }
+    },
+    {
+      "repairId": "liaoshi:113:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Source 敵獵 is Dilie in the surrounding units (s0157, s0161); \"Dili\" is an inconsistent truncation of the same name, and Dilie corrects the spelling without changing the rest of the idiomatic sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0159",
+        "excerpt": "敵獵"
+      }
+    },
+    {
+      "repairId": "liaoshi:113:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field has the same truncated spelling of 敵獵 as Dili; Dilie matches the Chinese name used in this unit and adjacent context.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0159",
+        "excerpt": "敵獵"
+      }
+    },
+    {
+      "repairId": "liaoshi:113:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "革以其子為重元婿 means Ge made his son Chongyuan's 婿 (son-in-law), not that he married his son to Chongyuan; the proposed wording corrects that kinship error while leaving the conspiracy and execution clauses intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0122",
+        "excerpt": "革以其子為重元婿"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

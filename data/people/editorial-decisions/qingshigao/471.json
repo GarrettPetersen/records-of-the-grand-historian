@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "471",
+  "input": {
+    "chapterFingerprint": "sha256:251978f20e162d336dee021c70c2cbca4afaac2d5f259dc0d1a4e7b4793c4c8b",
+    "proposalsFingerprint": "sha256:7d0bb1a4995fe119ce938ca2defc5bde9be10c7e63e008ab1b6212548c928699"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-81a99c4c-df8c-41f4-aca3-12d10c497e8d",
+    "runId": "run-51195550-6be5-437b-bae7-85efe5f9d20d",
+    "completedAt": "2026-08-12T07:45:55.357Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:471:r0001",
+      "unit": {
+        "id": "s0014",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "He diverted Jinzho mining funds to build telegraph lines in Jiangsu, Zhejiang, Fujian, and Guangdong for military use; the ministry found his accounts unclear and ordered him demoted and transferred.",
+      "after": "He diverted Jinzhou mining funds to build telegraph lines in Jiangsu, Zhejiang, Fujian, and Guangdong for military use; the ministry found his accounts unclear and ordered him demoted and transferred.",
+      "reason": "金州 is Jinzhou; \"Jinzho\" is a truncated misspelling in the idiomatic English.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:471:r0002",
+      "unit": {
+        "id": "s0082",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Studying the causes of calamity, he devoted himself further to waterworks; his regulation of the Xiaoxiao River brought especially wide benefit.",
+      "after": "Studying the causes of calamity, he devoted himself further to waterworks; his regulation of the Xiaoqing River brought especially wide benefit.",
+      "reason": "小清河 is the Xiaoqing River; \"Xiaoxiao\" misreads 清 as a reduplicated 小.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:471:r0003",
+      "unit": {
+        "id": "s0082",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Investigating causes of disaster, he devoted himself further to water conservancy; his work on the Xiaoxiao River was especially beneficial.",
+      "after": "Investigating causes of disaster, he devoted himself further to water conservancy; his work on the Xiaoqing River was especially beneficial.",
+      "reason": "Same Xiaoqing River correction for the literal field.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:471:r0004",
+      "unit": {
+        "id": "s0084",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Rui Cheng, whose style name was Xinru, was a Manchu of the Plain Yellow Banner, grandson of Grand Secretary Qishan and son of General Gongjin.",
+      "after": "Rui Cheng, whose style name was Xinru, was a Manchu of the Plain Yellow Banner, grandson of Grand Secretary Qishan and son of General Gongtang.",
+      "reason": "恭鏜 is Gongtang; \"Gongjin\" is an incorrect English rendering of 鏜.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:471:r0005",
+      "unit": {
+        "id": "s0084",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Rui Cheng, style name Xinru, was a Plain Yellow Banner Manchu, grandson of Grand Secretary Qishan and son of General Gongjin.",
+      "after": "Rui Cheng, style name Xinru, was a Plain Yellow Banner Manchu, grandson of Grand Secretary Qishan and son of General Gongtang.",
+      "reason": "Same Gongtang correction for the literal field.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:471:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0014 has 金州; standard pinyin is Jinzhou, and \"Jinzho\" is a truncated misspelling with no other change to the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0014",
+        "excerpt": "金州"
+      }
+    },
+    {
+      "repairId": "qingshigao:471:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0082 has 小清河 (Xiaoqing River); \"Xiaoxiao\" wrongly reduplicates 小 and drops 清, so the proposed replacement is the accurate toponym.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0082",
+        "excerpt": "小清河"
+      }
+    },
+    {
+      "repairId": "qingshigao:471:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same focus phrase 小清河 is mistranslated as Xiaoxiao River in the literal field; Xiaoqing River correctly renders 小清河.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0082",
+        "excerpt": "小清河"
+      }
+    },
+    {
+      "repairId": "qingshigao:471:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0084 names 將軍恭鏜; 鏜 is tang, so Gongtang is the correct English name and Gongjin is a mistranslation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0084",
+        "excerpt": "將軍恭鏜"
+      }
+    },
+    {
+      "repairId": "qingshigao:471:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same focus phrase 將軍恭鏜 is rendered Gongjin in the literal field; Gongtang restores the correct reading of 鏜.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0084",
+        "excerpt": "將軍恭鏜"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "qingshigao:471:r0004",
+      "claim": {
+        "id": "qingshigao:471:c0073",
+        "subject": "qingshigao:471:p022",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate",
+          "en": "Gongjin"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:471:s0084"
+        ]
+      },
+      "reason": "Accepted r0004 shows alternate name Gongjin for 恭鏜 arose only from the mistranslation; s0084 supports Gongtang (c0072), not a separate Gongjin alias.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0084",
+        "excerpt": "恭鏜"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

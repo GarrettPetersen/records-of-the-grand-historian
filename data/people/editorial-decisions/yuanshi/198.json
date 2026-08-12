@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "yuanshi",
+  "chapter": "198",
+  "input": {
+    "chapterFingerprint": "sha256:c34d76043450a50a6e745fbbede6014679684250c27b5ede952a49916df0b85c",
+    "proposalsFingerprint": "sha256:48fb098950eb51909a4021a159f9508bc6e7f83c2919f668636afa7cdcba6956"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-8b5407a9-4758-4652-8447-f684d72d9b26",
+    "runId": "run-5dfe519e-ff2a-4521-bc29-170e79b0942b",
+    "completedAt": "2026-08-12T07:45:38.613Z"
+  },
+  "proposals": [
+    {
+      "id": "yuanshi:198:r0001",
+      "unit": {
+        "id": "s0082",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Zeng De of Yuyang was the fifty-seventh-generation descendant of Confucius.",
+      "after": "Zeng De of Yuyang was the fifty-seventh-generation descendant of the Duke of Zongsheng.",
+      "reason": "宗聖公 is the temple title of Zengzi (Zeng Shen), not Confucius; the English wrongly substitutes Confucius.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:198:r0002",
+      "unit": {
+        "id": "s0100",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "He died in the second year of Zhiyuantong—exactly twelve years later, as he had vowed.",
+      "after": "He died in the second year of Yuantong—exactly twelve years later, as he had vowed.",
+      "reason": "元統 is the Yuantong reign; Zhiyuantong is a fused mistranslation of 至 + 元統.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:198:r0003",
+      "unit": {
+        "id": "s0100",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "In the second year of Zhiyuantong he died—indeed matching the count of one cycle.",
+      "after": "In the second year of Yuantong he died—indeed matching the count of one cycle.",
+      "reason": "Same 元統 reign-name error as in the idiomatic line.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "yuanshi:198:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0082 has 宗聖公五十七代孫: 宗聖公 is Zengzi's temple title, not Confucius; the proposed idiomatic correctly restores Duke of Zongsheng.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0082",
+        "excerpt": "宗聖公五十七代孫"
+      }
+    },
+    {
+      "repairId": "yuanshi:198:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0100 has 至元統二年: 至 is the temporal verb \"when it came to,\" and 元統 is the Yuantong reign; Zhiyuantong wrongly fuses them. Contrast s0102 至元二年, where Zhiyuan is the actual reign name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0100",
+        "excerpt": "至元統二年乃歿"
+      }
+    },
+    {
+      "repairId": "yuanshi:198:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field has the same fusion of 至 + 元統 into Zhiyuantong; Yuantong correctly names the reign in 至元統二年.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0100",
+        "excerpt": "至元統二年乃歿"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

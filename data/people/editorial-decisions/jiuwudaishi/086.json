@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "086",
+  "input": {
+    "chapterFingerprint": "sha256:b296783ab72d16312e4caff4fdc8a5950929b2e831da0dfa11b3e13ea22ad34a",
+    "proposalsFingerprint": "sha256:930f508fa8c0a8ee537c89d44b3e13dc4852dbfc802c72a13632754e4f7bef54"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-4ec024ce-a489-4576-bc55-436c42de8875",
+    "runId": "run-e3d81ce2-a196-475d-bb31-834eb0bb70bb",
+    "completedAt": "2026-08-12T07:02:33.146Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:086:r0001",
+      "unit": {
+        "id": "s0035",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 31
+      },
+      "field": "idiomatic",
+      "before": "together with her sons Yanxu and Yanbao, the whole clan followed the Marquis of Jin northward.",
+      "after": "together with his sons Yanxu and Yanbao, the whole clan followed the Marquis of Jin northward.",
+      "reason": "Chinese 子延煦延寶 continues the list with the emperor's sons (earlier 孫男 for Empress Li); idiomatic 'her sons' wrongly makes them Empress Li's sons.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:086:r0002",
+      "unit": {
+        "id": "s0008",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "In the ninth month of Qingtai 2 she was restyled Princess of Jin;",
+      "after": "In the ninth month of Qingtai 2 she was restyled Senior Princess of Jin;",
+      "reason": "Chinese 晉國長公主 includes 長 (senior); the idiomatic English drops that rank marker.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:086:r0001",
+      "decision": "revise",
+      "after": "together with the sons Yanxu and Yanbao, the whole clan followed the Marquis of Jin northward.",
+      "reason": "s0034–s0035 list 太后與馮氏、皇弟重睿、子延煦延寶; 子 names the emperor's sons Yanxu and Yanbao (cf. s0037 皇子延煦), not Empress Li's sons, so idiomatic 'her sons' is wrong. The proposed 'his sons' still misfires: after 皇弟重睿 the nearest male antecedent is Chongrui. Render 子 as 'the sons' without a possessive.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0035",
+        "excerpt": "子延煦延寶"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:086:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit 改封晉國長公主 includes the rank 長公主; idiomatic 'Princess of Jin' omits 長, and 'Senior Princess of Jin' restores that title marker accurately.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0008",
+        "excerpt": "改封晉國長公主"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "jiuwudaishi:086:r0002",
+      "before": {
+        "id": "jiuwudaishi:086:c0007",
+        "subject": "jiuwudaishi:086:p001",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Princess of Jin",
+          "zh": "晉國長公主"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiuwudaishi:086:s0008"
+        ]
+      },
+      "after": {
+        "id": "jiuwudaishi:086:c0007",
+        "subject": "jiuwudaishi:086:p001",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Senior Princess of Jin",
+          "zh": "晉國長公主"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiuwudaishi:086:s0008"
+        ]
+      },
+      "reason": "Accepted r0002 shows the English title must include Senior for 長; keep zh 晉國長公主 and the claim identity fields unchanged.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0008",
+        "excerpt": "晉國長公主"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:086:r0002",
+      "before": {
+        "id": "jiuwudaishi:086:c0259",
+        "subject": "jiuwudaishi:086:p001",
+        "predicate": "enfeoffment",
+        "value": {
+          "title": {
+            "en": "Princess of Jin",
+            "zh": "晉國長公主"
+          },
+          "action": "changed",
+          "startDate": {
+            "sourceDate": {
+              "text": "清泰二年九月"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 935,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiuwudaishi:086:s0008"
+        ]
+      },
+      "after": {
+        "id": "jiuwudaishi:086:c0259",
+        "subject": "jiuwudaishi:086:p001",
+        "predicate": "enfeoffment",
+        "value": {
+          "title": {
+            "en": "Senior Princess of Jin",
+            "zh": "晉國長公主"
+          },
+          "action": "changed",
+          "startDate": {
+            "sourceDate": {
+              "text": "清泰二年九月"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 935,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiuwudaishi:086:s0008"
+        ]
+      },
+      "reason": "Accepted r0002 likewise requires the enfeoffment English title to read Senior Princess of Jin for 晉國長公主; other claim fields stay the same.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0008",
+        "excerpt": "改封晉國長公主"
+      }
+    }
+  ]
+}

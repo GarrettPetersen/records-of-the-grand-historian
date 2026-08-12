@@ -1,0 +1,314 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "483",
+  "input": {
+    "chapterFingerprint": "sha256:7de11cb7622e047ed6b56bc871950fb33dcb4628a2c2a9dcb59029bd86f52644",
+    "proposalsFingerprint": "sha256:bd1420a03b1f98dab2f9d013b90b22b0420399ec4903ae8b2cb6964ca69b8692"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-e02f7d74-5b78-4eed-a2c1-965cfbe17aab",
+    "runId": "run-d8786b33-69ff-4219-87cf-9b9963c46138",
+    "completedAt": "2026-08-12T07:11:35.258Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:483:r0001",
+      "unit": {
+        "id": "s0033",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "field": "idiomatic",
+      "before": "When his coffin returned home, the Emperor ordered the third imperial son and Prince Zhuang Yunlu to attend the mourning, sent officials to escort the procession, granted state burial, and gave him the posthumous title Gongmin.",
+      "after": "When his coffin returned home, the Emperor ordered the third imperial son and Prince Zhuang Yunlu to attend the mourning, sent officials to escort the procession, granted state burial, and gave him the posthumous title Gongque.",
+      "reason": "Posthumous name 恭愨 is Gongque (愨 què), not Gongmin.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:483:r0002",
+      "unit": {
+        "id": "s0033",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "field": "literal",
+      "before": "When the coffin returned home, the Emperor ordered the third imperial son and Prince Zhuang Yunlu to attend the mourning rites, officials to escort the procession, granted burial honors, and conferred the posthumous title Gongmin.",
+      "after": "When the coffin returned home, the Emperor ordered the third imperial son and Prince Zhuang Yunlu to attend the mourning rites, officials to escort the procession, granted burial honors, and conferred the posthumous title Gongque.",
+      "reason": "Posthumous name 恭愨 is Gongque, not Gongmin.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:483:r0003",
+      "unit": {
+        "id": "s0099",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "He died in the third year of Guangxu and received the posthumous title Zhuangmin.",
+      "after": "He died in the third year of Guangxu and received the posthumous title Zhuangque.",
+      "reason": "Posthumous name 莊愨 is Zhuangque (愨 què), not Zhuangmin.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:483:r0004",
+      "unit": {
+        "id": "s0099",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "In the third year of Guangxu he died; his posthumous title was Zhuangmin.",
+      "after": "In the third year of Guangxu he died; his posthumous title was Zhuangque.",
+      "reason": "Posthumous name 莊愨 is Zhuangque, not Zhuangmin.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:483:r0005",
+      "unit": {
+        "id": "s0106",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "Censor Wei Tingpu memorialized that the old practice should be kept; Grand Secretariat of State Ceremonies Lin Lingxu also asked that a descendant of the Quzhou Kong line serve as Qufu magistrate. The matter was referred to the court for deliberation; Tingpu's view was adopted, and the Duke Yansheng was still to forward nominations while the provincial governor examined candidates and appointed by imperial topic.",
+      "after": "Censor Wei Tingpu memorialized that the old practice should be kept; Director of the Court of State Ceremonial Lin Lingxu also asked that a descendant of the Quzhou Kong line serve as Qufu magistrate. The matter was referred to the court for deliberation; Tingpu's view was adopted, and the Duke Yansheng was still to forward nominations while the provincial governor examined candidates and filled the post by imperial appointment.",
+      "reason": "鴻臚寺卿 is Director of the Court of State Ceremonial, not Grand Secretariat; 題補 means filling a post by imperial appointment.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:483:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0033 ends with 諡恭愨. 愨 is què, so the posthumous name is Gongque; Gongmin misreads 愨 and is not supported by the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0033",
+        "excerpt": "諡恭愨"
+      }
+    },
+    {
+      "repairId": "qingshigao:483:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise renders 恭愨 as Gongmin; Gongque is the correct reading of 愨 què and matches the idiomatic repair.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0033",
+        "excerpt": "諡恭愨"
+      }
+    },
+    {
+      "repairId": "qingshigao:483:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0099 has 諡莊愨. 愨 is què, so Zhuangque is correct; Zhuangmin is an unsupported misreading of the same graph.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0099",
+        "excerpt": "諡莊愨"
+      }
+    },
+    {
+      "repairId": "qingshigao:483:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise misreads 莊愨 as Zhuangmin; Zhuangque restores the correct posthumous name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0099",
+        "excerpt": "諡莊愨"
+      }
+    },
+    {
+      "repairId": "qingshigao:483:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "鴻臚寺卿 is the Director of the Court of State Ceremonial, not a Grand Secretariat office; 題補 means filling the vacancy by imperial appointment, not 'appointed by imperial topic'. The proposed literal corrects both errors without inventing content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0106",
+        "excerpt": "鴻臚寺卿林令旭又請以衢州孔氏子孫為曲阜知縣……巡撫考試題補"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "qingshigao:483:r0001",
+      "before": {
+        "id": "qingshigao:483:c0027",
+        "subject": "qingshigao:483:p007",
+        "predicate": "name",
+        "value": {
+          "kind": "posthumous-name",
+          "en": "Gongmin",
+          "zh": "恭愨",
+          "pinyin": "Gongque"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:483:s0033"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:483:c0027",
+        "subject": "qingshigao:483:p007",
+        "predicate": "name",
+        "value": {
+          "kind": "posthumous-name",
+          "en": "Gongque",
+          "zh": "恭愨",
+          "pinyin": "Gongque"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:483:s0033"
+        ]
+      },
+      "reason": "Accepted r0001 shows English Gongmin came only from misreading 愨; the posthumous-name claim must read Gongque while zh, pinyin, id, subject, predicate, certainty, and evidence stay the same.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0033",
+        "excerpt": "諡恭愨"
+      }
+    },
+    {
+      "repairId": "qingshigao:483:r0001",
+      "before": {
+        "id": "qingshigao:483:c0287",
+        "subject": "qingshigao:483:p007",
+        "predicate": "honor",
+        "value": {
+          "label": {
+            "en": "posthumous title Gongmin",
+            "zh": "諡恭愨"
+          },
+          "action": "conferred"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:483:s0033"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:483:c0287",
+        "subject": "qingshigao:483:p007",
+        "predicate": "honor",
+        "value": {
+          "label": {
+            "en": "posthumous title Gongque",
+            "zh": "諡恭愨"
+          },
+          "action": "conferred"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:483:s0033"
+        ]
+      },
+      "reason": "The honor label's English name must track the corrected reading Gongque of 恭愨; the underlying conferral fact remains valid.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0033",
+        "excerpt": "諡恭愨"
+      }
+    },
+    {
+      "repairId": "qingshigao:483:r0003",
+      "before": {
+        "id": "qingshigao:483:c0112",
+        "subject": "qingshigao:483:p031",
+        "predicate": "name",
+        "value": {
+          "kind": "posthumous-name",
+          "en": "Zhuangmin",
+          "zh": "莊愨",
+          "pinyin": "Zhuangque"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:483:s0099"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:483:c0112",
+        "subject": "qingshigao:483:p031",
+        "predicate": "name",
+        "value": {
+          "kind": "posthumous-name",
+          "en": "Zhuangque",
+          "zh": "莊愨",
+          "pinyin": "Zhuangque"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:483:s0099"
+        ]
+      },
+      "reason": "Accepted r0003 shows English Zhuangmin came only from misreading 愨; the posthumous-name claim must read Zhuangque while zh, pinyin, id, subject, predicate, certainty, and evidence stay the same.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0099",
+        "excerpt": "諡莊愨"
+      }
+    },
+    {
+      "repairId": "qingshigao:483:r0003",
+      "before": {
+        "id": "qingshigao:483:c0415",
+        "subject": "qingshigao:483:p031",
+        "predicate": "honor",
+        "value": {
+          "label": {
+            "en": "posthumous title Zhuangmin",
+            "zh": "諡莊愨"
+          },
+          "action": "conferred"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:483:s0099"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:483:c0415",
+        "subject": "qingshigao:483:p031",
+        "predicate": "honor",
+        "value": {
+          "label": {
+            "en": "posthumous title Zhuangque",
+            "zh": "諡莊愨"
+          },
+          "action": "conferred"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:483:s0099"
+        ]
+      },
+      "reason": "The honor label's English name must track the corrected reading Zhuangque of 莊愨; the underlying conferral fact remains valid.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0099",
+        "excerpt": "諡莊愨"
+      }
+    }
+  ]
+}

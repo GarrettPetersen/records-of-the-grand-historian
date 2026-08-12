@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "110",
+  "input": {
+    "chapterFingerprint": "sha256:6359be08a0c1594a7eda95bc8b7eeec2e3d13833079471b8fd273d0d1e2fcced",
+    "proposalsFingerprint": "sha256:51e8b5d8c35b07184b476d1516f868fbad566ff5310e215576bdea389d468adf"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-064ab432-4251-47f6-8701-4b3a2766a9e3",
+    "runId": "run-4ad1216f-cd40-4c21-908a-642dfd8f932f",
+    "completedAt": "2026-08-12T07:27:24.605Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:110:r0001",
+      "unit": {
+        "id": "s0116",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 24
+      },
+      "field": "literal",
+      "before": "His two sons, Dilede and Nianjing, both submitted to execution.",
+      "after": "His two sons, Dilede and Nianjing, were both executed.",
+      "reason": "伏誅 means were executed; “submitted to execution” is an unnatural calque that obscures the meaning.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:110:r0001",
+      "decision": "reject",
+      "after": null,
+      "reason": "For the literal field, 皆伏誅 is already rendered accurately by the calque “both submitted to execution”; the names, sonship, and death outcome match 二子：的裏得、念經，皆伏誅. Replacing it with “were both executed” only restyles the same sense already given in the idiomatic line.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0116",
+        "excerpt": "皆伏誅"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

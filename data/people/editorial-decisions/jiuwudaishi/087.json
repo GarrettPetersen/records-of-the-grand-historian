@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "087",
+  "input": {
+    "chapterFingerprint": "sha256:0f04e82e934357199690a72d3277d59918db98b90820ec6b4577411a116b933a",
+    "proposalsFingerprint": "sha256:b9080e92f61a08be5ac118e7a2ef25aa6dc43c387c24d21c58e358717b2d8d2d"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-96627b06-860b-4b2a-ae29-842d8bb76d5d",
+    "runId": "run-a1f9d361-b6fe-4353-9561-399e050184ab",
+    "completedAt": "2026-08-12T06:50:05.982Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:087:r0001",
+      "unit": {
+        "id": "s0085",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "(The Song History, Biography of Shi Xi: during Tianfu he served Xi as general of the Right Divine Martial Guard, continuing through Han into Zhou as general of the Right Martial Guard and the Left Divine Martial Guard.",
+      "after": "(The Song History, Biography of Shi Xi: during Tianfu, Xi was appointed general of the Right Divine Martial Guard, continuing through Han into Zhou as general of the Right Martial Guard and the Left Divine Martial Guard.",
+      "reason": "Literal English wrongly reads 以曦為 as \"served Xi as\"; the Chinese means Xi was appointed to the office.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:087:r0002",
+      "unit": {
+        "id": "s0077",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "He was military commissioner of Shan.",
+      "after": "He was military commissioner of Shanzhou.",
+      "reason": "陜州 is the prefecture Shanzhou; \"Shan\" alone is ambiguous and omits 州.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:087:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit has 以曦為右神武將軍: 以 A 為 B means Xi was appointed to the office, not that someone \"served Xi as\" that general. The proposed literal restores the correct agent and appointment sense; related office claims already treat Xi as holder, so no claim actions.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0085",
+        "excerpt": "以曦為右神武將軍"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:087:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit is 為陜州節度使; 陜州 is the prefecture Shanzhou, and \"Shan\" alone drops 州. The replacement matches the Chinese and the existing office claim label, without inventing content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0077",
+        "excerpt": "陜州節度使"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

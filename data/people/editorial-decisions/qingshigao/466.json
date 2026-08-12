@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "466",
+  "input": {
+    "chapterFingerprint": "sha256:0f68a8ef5a534ff75b86087f244b15d372d57e7ef9330f3bc95492a75adb388d",
+    "proposalsFingerprint": "sha256:093d82daeabf1f8dd217d81a57230c5db7df27014b0dfa2a4998cadcf0b8aef7"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-1660370c-80f4-409a-b82f-b03dfbcb9dfe",
+    "runId": "run-e6c68c9f-ce0a-4075-acde-35373ed5686f",
+    "completedAt": "2026-08-12T07:22:22.252Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:466:r0001",
+      "unit": {
+        "id": "s0033",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Well versed in current affairs, he was recommended by Grand Secretary Wenshang for talent in foreign service.",
+      "after": "Well versed in current affairs, he was recommended by Grand Secretary Wenxiang for talent in foreign service.",
+      "reason": "文祥 is Wenxiang; Wenshang is a misspelling of the personal name in the idiomatic English.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:466:r0002",
+      "unit": {
+        "id": "s0033",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "He was well versed in current affairs; Grand Secretary Wenshang recommended him for diplomatic talent.",
+      "after": "He was well versed in current affairs; Grand Secretary Wenxiang recommended him for diplomatic talent.",
+      "reason": "文祥 is Wenxiang; Wenshang is a misspelling of the personal name in the literal English.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:466:r0003",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "In the ninth year of Xianfeng he passed the metropolitan examination in Shuntian; at the beginning of the Tongzhi reign he served as a Grand Council clerk and concurrently attended the Zongli Yamen.",
+      "after": "In the ninth year of Xianfeng he passed the provincial examination in Shuntian; at the beginning of the Tongzhi reign he served as a Grand Council clerk and concurrently attended the Zongli Yamen.",
+      "reason": "鄉試 is the provincial examination; metropolitan (會試) is incorrect in the literal rendering.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:466:r0004",
+      "unit": {
+        "id": "s0024",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "On the fifteenth day of the seventh month Boxers suddenly arrested him at home and marched him to Prince Zhuang's residence.",
+      "after": "On the sixteenth day of the seventh month Boxers suddenly arrested him at home and marched him to Prince Zhuang's residence.",
+      "reason": "既望 is the day after the full moon (望), i.e. the sixteenth, not the fifteenth.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:466:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0033 names 大學士文祥; standard Mandarin for 文祥 is Wenxiang, so idiomatic 'Wenshang' is a misspelling. The proposed replacement corrects only that name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0033",
+        "excerpt": "大學士文祥"
+      }
+    },
+    {
+      "repairId": "qingshigao:466:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same focus phrase 大學士文祥 is misspelled 'Wenshang' in the literal field; 'Wenxiang' correctly romanizes 文祥 without changing the rest of the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0033",
+        "excerpt": "大學士文祥"
+      }
+    },
+    {
+      "repairId": "qingshigao:466:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0003 has 舉順天鄉試. 鄉試 is the provincial examination; 會試 would be the metropolitan examination. The literal 'metropolitan examination' is wrong, and the proposed 'provincial examination' matches the Chinese (and the already-correct idiomatic rendering).",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "舉順天鄉試"
+      }
+    },
+    {
+      "repairId": "qingshigao:466:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0024 dates the arrest 七月既望. 望 is the fifteenth (full moon); 既望 is the day after, the sixteenth. Idiomatic 'fifteenth' misreads 既望 as 望; the proposed sixteenth is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0024",
+        "excerpt": "七月既望"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "qingshigao:466:r0001",
+      "before": {
+        "id": "qingshigao:466:c0070",
+        "subject": "qingshigao:466:p014",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Wenshang",
+          "zh": "文祥",
+          "pinyin": "Wenxiang"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:466:s0033"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:466:c0070",
+        "subject": "qingshigao:466:p014",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Wenxiang",
+          "zh": "文祥",
+          "pinyin": "Wenxiang"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:466:s0033"
+        ]
+      },
+      "reason": "Accepted r0001 shows the English personal name 'Wenshang' was created solely by the bad romanization of 文祥; the name claim remains, but en must be Wenxiang to match the Chinese and pinyin already recorded.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0033",
+        "excerpt": "文祥"
+      }
+    }
+  ]
+}

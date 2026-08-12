@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "nanqishu",
+  "chapter": "005",
+  "input": {
+    "chapterFingerprint": "sha256:694062194cea2aec9e35b8107bf6ba56bd4b6289a7980ec24345254391e1cec1",
+    "proposalsFingerprint": "sha256:225e69ed0f8847297943ccbd5f0accbd5706ed5c1c6c48f403e2a7a597e9f5f2"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-c38c0990-0585-45be-b395-18a2a74f633e",
+    "runId": "run-73448add-8f93-4bf0-977e-8129eddff151",
+    "completedAt": "2026-08-12T06:45:17.258Z"
+  },
+  "proposals": [
+    {
+      "id": "nanqishu:005:r0001",
+      "unit": {
+        "id": "s0028",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Day guimao: Xiao Chao, newly made minister of education and prince of Poyang, and Xiao Zilong, prince of Suizhou and central-army general-in-chief, were put to death.",
+      "after": "Day guiwei: Xiao Chao, newly made minister of education and prince of Poyang, and Xiao Zilong, prince of Suizhou and central-army general-in-chief, were put to death.",
+      "reason": "Chinese 癸未 is guiwei, not guimao (癸卯).",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:005:r0002",
+      "unit": {
+        "id": "s0028",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "Day guimao: the newly appointed Minister of Education Prince Chao of Poyang and Central-Army General-in-Chief Prince Zilong of Suizhou were executed.",
+      "after": "Day guiwei: the newly appointed Minister of Education Prince Chao of Poyang and Central-Army General-in-Chief Prince Zilong of Suizhou were executed.",
+      "reason": "Chinese 癸未 is guiwei, not guimao (癸卯).",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:005:r0003",
+      "unit": {
+        "id": "s0032",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "Also killed were Xiao Rui, prince of Nanping and inspector of Xiangzhou; Xiao Chao, prince of Jinxi and inspector of Ying; and Xiao Keng, prince of Yidu and inspector of South Yuzhou.",
+      "after": "Also killed were Xiao Rui, prince of Nanping and inspector of Xiangzhou; Xiao Qiu, prince of Jinxi and inspector of Ying; and Xiao Keng, prince of Yidu and inspector of South Yuzhou.",
+      "reason": "Given name 銶 is Qiu, not Chao; Chao belongs to 鏘 (Prince of Poyang).",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:005:r0004",
+      "unit": {
+        "id": "s0032",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "Also executed were Inspector of Xiangzhou Prince Rui of Nanping, Inspector of Yingzhou Prince Chao of Jinxi, and Inspector of South Yuzhou Prince Keng of Yidu.",
+      "after": "Also executed were Inspector of Xiangzhou Prince Rui of Nanping, Inspector of Yingzhou Prince Qiu of Jinxi, and Inspector of South Yuzhou Prince Keng of Yidu.",
+      "reason": "Given name 銶 is Qiu, not Chao; Chao belongs to 鏘 (Prince of Poyang).",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "nanqishu:005:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese day graph 癸未 is the sexagenary day guiwei; the original English guimao corresponds to 癸卯 and is a real naming error. The proposed replacement corrects only that day name and otherwise matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0028",
+        "excerpt": "癸未"
+      }
+    },
+    {
+      "repairId": "nanqishu:005:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese day graph 癸未 is guiwei, not guimao (癸卯); the literal field makes the same day-name error as the idiomatic, and the proposed fix restores the correct reading without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0028",
+        "excerpt": "癸未"
+      }
+    },
+    {
+      "repairId": "nanqishu:005:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 晉熙王銶 names Prince Qiu of Jinxi; 銶 is Qiu, while Chao belongs to 鏘 (鄱陽王鏘) in s0028. The original idiomatic wrongly transfers Chao onto this prince, and the proposed Xiao Qiu is the accurate given-name reading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0032",
+        "excerpt": "晉熙王銶"
+      }
+    },
+    {
+      "repairId": "nanqishu:005:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 晉熙王銶 is Prince Qiu of Jinxi; the literal Prince Chao misreads 銶 as Chao (proper to 鏘). Replacing Chao with Qiu corrects the given name without altering the rest of the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0032",
+        "excerpt": "晉熙王銶"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

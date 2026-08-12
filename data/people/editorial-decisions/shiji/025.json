@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "025",
+  "input": {
+    "chapterFingerprint": "sha256:526b43214c59831c7a6e10dae85d2755b56b2b6a5beaab2a766ba1e04657e802",
+    "proposalsFingerprint": "sha256:f5773ab0d6dbbb26791b3c1c50c6b63e5e047f538e3368bffc6c49eb5aa6f990"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-b50b30d3-a37d-45dd-a598-93cf877484ef",
+    "runId": "run-42322a8a-16c9-48da-9a66-0255032b0a21",
+    "completedAt": "2026-08-12T07:02:21.967Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:025:r0001",
+      "unit": {
+        "id": "s0075",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 21
+      },
+      "field": "idiomatic",
+      "before": "Dalu is the pitch-pipe in which yin qi is gathered and stored.",
+      "after": "Dalu.",
+      "reason": "The Chinese text is only the incomplete lemma 「大呂者。」 and does not state that yin qi is gathered and stored; the idiomatic English invents that gloss.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:025:r0002",
+      "unit": {
+        "id": "s0075",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 21
+      },
+      "field": "literal",
+      "before": "Dalu ones, yin qi gathered stored.",
+      "after": "Dalu ones.",
+      "reason": "The Chinese text is only 「大呂者。」; the literal English invents a yin-qi gloss not present in the unit.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:025:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0075 is only the incomplete lemma 「大呂者。」; neighboring s0073 shows a full 者…也 gloss pattern, but this unit has no yin-qi wording, so the before idiomatic invents content and the proposed 'Dalu.' matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "大呂者。"
+      }
+    },
+    {
+      "repairId": "shiji:025:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The Chinese of s0075 is only 「大呂者。」; the before literal's 'yin qi gathered stored' is not present in the unit, and 'Dalu ones.' is the accurate parallel to the chapter's 者 literal style.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "大呂者。"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

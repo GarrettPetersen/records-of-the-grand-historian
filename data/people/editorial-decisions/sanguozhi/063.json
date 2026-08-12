@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "sanguozhi",
+  "chapter": "063",
+  "input": {
+    "chapterFingerprint": "sha256:1e24f05e9bcc2b78c718a6f157ec87f4590fad3c628cf061c1bfe3894abef5c5",
+    "proposalsFingerprint": "sha256:424209697e7e79297e794ded4ebc24b1aad79147d6027ff16473c30d249d0690"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-dd466a9a-448d-4d4f-ad9b-d55fb403e881",
+    "runId": "run-55f05c3e-05fe-4340-b3fd-cf06f58212f1",
+    "completedAt": "2026-08-12T07:31:03.630Z"
+  },
+  "proposals": [
+    {
+      "id": "sanguozhi:063:r0001",
+      "unit": {
+        "id": "s0064",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 17
+      },
+      "field": "idiomatic",
+      "before": "〈The Kuaiji Canon records: Wei Teng, style Zhoulin—his grandfather Lang governed Henei as Shaoying, counted among the Eight Talents.",
+      "after": "〈The Kuaiji Canon records: Wei Teng, courtesy name Zhoulin—his grandfather Lang, courtesy name Shaoying, was Administrator of Henei and ranked among the Eight Talents.",
+      "reason": "Shaoying is Lang's courtesy name, not a place or style of governing; the idiomatic line collapses courtesy name into the office phrasing.",
+      "confidence": "high"
+    },
+    {
+      "id": "sanguozhi:063:r0002",
+      "unit": {
+        "id": "s0100",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "After eating Zhao Da said they had no wine or delicacies—then took one chopstick, crossed it repeatedly, and declared a hu of wine and three jin of deer meat hid east of the east wall—though guests sat nearby and knew the host felt exposed.",
+      "after": "After the meal the host said they suddenly lacked wine and fine dishes with which to show goodwill—Zhao Da then took the single chopsticks from the dish, crossed them repeatedly, and declared that east of the east wall lay a hu of fine wine and three jin of venison; other guests present inwardly grasped the host's embarrassment.",
+      "reason": "Chinese attributes the apology for lacking wine to the host (知故), then has Zhao Da perform the divination; the idiomatic English wrongly makes Zhao Da the speaker of the apology.",
+      "confidence": "high"
+    },
+    {
+      "id": "sanguozhi:063:r0003",
+      "unit": {
+        "id": "s0119",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Zhao Da answered, “Han Gaozu began his era in the twelfth cycle—you will double that span.”",
+      "after": "Zhao Da answered, “Gaozu's reign-era ran twelve years—Your Majesty will double that.”",
+      "reason": "建元十二年 means a twelve-year span (doubled to twenty-four), not a 'twelfth cycle'; the literal already has the correct sense.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "sanguozhi:063:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 祖父河内太守朗，字少英 separates Lang’s office (河内太守) from his courtesy name (字少英); the before line wrongly folds Shaoying into the governing phrase, and the proposed repair restores both accurately.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0064",
+        "excerpt": "祖父河内太守朗，字少英"
+      }
+    },
+    {
+      "repairId": "sanguozhi:063:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "After 知故為之具食, 謂曰 opens the host’s apology for lacking wine, then 達因…乃言 introduces Zhao Da’s divination; the before line wrongly makes Zhao Da the apologizer, and the repair correctly splits the speakers.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0100",
+        "excerpt": "食畢，謂曰：“倉卒乏酒…達因取盤中只箸…乃言"
+      }
+    },
+    {
+      "repairId": "sanguozhi:063:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "達曰：“高祖建元十二年，陛下倍之” means Gaozu’s founding reign lasted twelve years and the emperor will double that span, not that an era began in a “twelfth cycle”; the proposed wording matches that sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0119",
+        "excerpt": "高祖建元十二年，陛下倍之"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

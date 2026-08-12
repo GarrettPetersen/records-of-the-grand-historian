@@ -39,6 +39,10 @@ import {
   validateCompactPeopleExtraction,
   validatePeopleExtraction,
 } from './validate-people-extraction.mjs';
+import {
+  invalidateResolutionReferences,
+  pruneResolutionDocument,
+} from './lib/people-resolution-invalidation.mjs';
 
 loadDotenv(REPO_ROOT);
 
@@ -858,6 +862,22 @@ function chunkRunRecord(chunk, extraction) {
   };
 }
 
+function writeAcceptedExtraction(target, compact) {
+  const file = extractionPath(target.book, target.chapter);
+  const serialized = serializeCompactPeopleExtraction(compact);
+  if (fs.existsSync(file) && fs.readFileSync(file, 'utf8') !== serialized) {
+    const invalidated = invalidateResolutionReferences([target]);
+    if (invalidated.removedReferences > 0) {
+      console.warn(
+        `[${stateKey(target)}] replacement extraction invalidated ` +
+        `${invalidated.removedReferences} stale reference(s) in ` +
+        `${invalidated.touchedDecisions} identity decision(s)`,
+      );
+    }
+  }
+  writeTextAtomic(file, serialized);
+}
+
 async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, budget) {
   const packet = buildPeopleChunkPacket(fullPacket, chunk);
   const archive = chunkArchivePath(target, chunk);
@@ -944,7 +964,7 @@ async function processChunkedTarget(target, packet, opts, state, control, budget
   };
   const compact = assembleCompactPeopleChunks(packet, parts, run);
   const validated = validateCompactPeopleExtraction(compact, packet);
-  writeTextAtomic(extractionPath(target.book, target.chapter), serializeCompactPeopleExtraction(compact));
+  writeAcceptedExtraction(target, compact);
   updateState(state, target, {
     status: 'accepted',
     acceptedPath: path.relative(REPO_ROOT, extractionPath(target.book, target.chapter)),
@@ -1028,10 +1048,7 @@ async function processTarget(target, opts, state, control, budget) {
       `${target.chapter}.json`,
     );
     writeJsonAtomic(rawArchive, accepted.extraction);
-    writeTextAtomic(
-      extractionPath(target.book, target.chapter),
-      serializeCompactPeopleExtraction(compact),
-    );
+    writeAcceptedExtraction(target, compact);
     updateState(state, target, {
       status: 'accepted',
       runId: accepted.result.id,
@@ -1066,6 +1083,41 @@ function selfTest() {
     units: 400, candidates: 900, workerBytes: 30_000, workloadScore: 174_000,
   } };
   const opts = { allowLarge: false, maxUnits: 250, maxCandidates: 600 };
+  const invalidationFixture = {
+    schemaVersion: 1,
+    batch: 'fixture',
+    decisions: [
+      {
+        decision: 'merge',
+        localPeople: ['hanshu:004:p001', 'shiji:001:p001', 'shiji:002:p001'],
+        canonicalPersonId: 'per_fixture',
+        basis: ['same-person'],
+        confidence: 'high',
+      },
+      {
+        decision: 'keep-separate',
+        localPeople: ['hanshu:004:p002', 'shiji:003:p001'],
+        basis: ['different-people'],
+        confidence: 'high',
+      },
+      {
+        decision: 'merge',
+        localPeople: ['shiji:004:p001', 'shiji:005:p001'],
+        basis: ['same-person'],
+        confidence: 'high',
+      },
+    ],
+  };
+  const invalidated = pruneResolutionDocument(invalidationFixture, [{ book: 'hanshu', chapter: '004' }]);
+  if (
+    invalidated.stats.removedReferences !== 2
+    || invalidated.stats.removedDecisions !== 1
+    || invalidated.document.decisions.length !== 2
+    || invalidated.document.decisions[0].localPeople.length !== 2
+    || 'canonicalPersonId' in invalidated.document.decisions[0]
+  ) {
+    throw new Error('Replacement extraction did not invalidate stale identity references');
+  }
   if ([large, small].sort(compareWorkload)[0] !== small) {
     throw new Error('Workload ordering did not put the smaller chapter first');
   }

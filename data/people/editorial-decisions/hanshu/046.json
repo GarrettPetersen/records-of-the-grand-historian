@@ -3,16 +3,16 @@
   "book": "hanshu",
   "chapter": "046",
   "input": {
-    "chapterFingerprint": "sha256:dac669c30b12ea960caf1638779eaf75151c53896ea16e9bbd9e5382585c937e",
-    "proposalsFingerprint": "sha256:8c528ff55a994dd0555ac0efba3ac04b63ba2ef222386c7a6d35835dd4a78488"
+    "chapterFingerprint": "sha256:989b9d036d94951374f7360a18d90b352f82424b674c7efb30019fa6648135c9",
+    "proposalsFingerprint": "sha256:6a9ba8655a5169e5463e2225c6e2c67951030528978ae659bd62050b5857abce"
   },
   "reviewer": {
-    "kind": "codex",
-    "name": "Codex (reviewed Grok 4.5 draft)",
-    "model": "GPT-5",
-    "agentId": null,
-    "runId": null,
-    "completedAt": "2026-08-11T02:28:40.000Z"
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-0d383a2a-f756-4946-a6e7-14215a31bf9e",
+    "runId": "run-24cb5710-1f1b-4c93-bfa6-bf16ddd77a81",
+    "completedAt": "2026-08-12T07:02:32.008Z"
   },
   "proposals": [
     {
@@ -25,103 +25,47 @@
         "itemIndex": 0
       },
       "field": "idiomatic",
-      "before": "The rhetorician Cao Qiusheng traded on influence for gold, curried favor with men such as the favorite Zhao Tan, and was close to Dou Zhang, the empress's brother.",
-      "after": "The rhetorician Cao Qiusheng traded on influence for gold, curried favor with men such as the favorite Zhao Tan, and was close to Dou Zhangjun.",
-      "reason": "Chinese 與竇長君善 does not identify Dou as the empress's brother; that kinship is an invention.",
+      "before": "The rhetorician Cao Qiusheng repeatedly cultivated influence and sought money, attached himself to prominent men such as Zhao Tan, and befriended Dou Changjun, the empress's elder brother.",
+      "after": "The rhetorician Cao Qiusheng repeatedly cultivated influence and sought money, attached himself to prominent men such as Zhao Tan, and befriended Dou Changjun.",
+      "reason": "Chinese 與竇長君善 does not identify Dou Changjun as the empress's elder brother; that gloss is invented in the idiomatic English.",
       "confidence": "high"
-    },
-    {
-      "id": "hanshu:046:r0002",
-      "unit": {
-        "id": "s0009",
-        "kind": "paragraph-sentence",
-        "blockIndex": 0,
-        "collection": "sentences",
-        "itemIndex": 8
-      },
-      "field": "idiomatic",
-      "before": "Then he traveled to Luoyang to see Xiahou Ying, the Marquis of Ru-yin, and argued, \"What wrong has Ji Bu done?",
-      "after": "Then he traveled to Luoyang to see the Marquis of Ruyin, Lord Teng, and argued, \"What wrong has Ji Bu done?",
-      "reason": "Chinese has only 汝陰侯滕公; the personal name Xiahou Ying is not in the source sentence.",
-      "confidence": "medium"
-    },
-    {
-      "id": "hanshu:046:r0003",
-      "unit": {
-        "id": "s0063",
-        "kind": "paragraph-sentence",
-        "blockIndex": 6,
-        "collection": "sentences",
-        "itemIndex": 1
-      },
-      "field": "literal",
-      "before": "When Peng Yue was a commoner family man, he once roamed with Bu; in poverty and straits, he sold labor in Qi and was a wine-shop guarantor.",
-      "after": "When Peng Yue was a commoner family man, he once roamed with Bu; in poverty and straits, they hired out labor in Qi, and Bu was a wine-shop guard.",
-      "reason": "為酒家保 refers to Luan Bu in parallel with the idiomatic reading, not Peng Yue alone as the tavern guarantor.",
-      "confidence": "medium"
-    },
-    {
-      "id": "hanshu:046:r0004",
-      "unit": {
-        "id": "s0016",
-        "kind": "paragraph-sentence",
-        "blockIndex": 0,
-        "collection": "sentences",
-        "itemIndex": 15
-      },
-      "field": "idiomatic",
-      "before": "Xiahou Ying knew Zhu Jia for a famous man of chivalry and guessed Ji Bu lay hidden with him; he agreed to speak.",
-      "after": "Lord Teng knew Zhu Jia for a famous man of chivalry and guessed Ji Bu lay hidden with him; he agreed to speak.",
-      "reason": "Chinese subject is 滕公; Xiahou Ying is not stated in this sentence.",
-      "confidence": "medium"
     }
   ],
   "decisions": [
     {
       "repairId": "hanshu:046:r0001",
-      "decision": "revise",
-      "after": "The rhetorician Cao Qiusheng repeatedly cultivated influence and sought money, attached himself to prominent men such as Zhao Tan, and befriended Dou Changjun, the empress's elder brother.",
-      "reason": "The proposal correctly repairs Dou Zhang but wrongly discards a valid identification. Shiji 49 explicitly identifies Dou Changjun as Empress Dou's elder brother.",
-      "sourceWitness": {
-        "source": "other",
-        "citation": "Shiji 49",
-        "excerpt": "竇皇后兄竇長君"
-      }
-    },
-    {
-      "repairId": "hanshu:046:r0002",
-      "decision": "reject",
+      "decision": "accept",
       "after": null,
-      "reason": "Marquis of Ruyin and Lord Teng identify Xiahou Ying. Expanding a title to his established personal name is accurate and improves continuity rather than inventing a person.",
-      "sourceWitness": {
-        "source": "other",
-        "citation": "Hanshu 50",
-        "excerpt": "初嬰為滕令奉車，故號滕公"
-      }
-    },
-    {
-      "repairId": "hanshu:046:r0003",
-      "decision": "revise",
-      "after": "When Peng Yue was a commoner family man, he once roamed with Bu; in poverty and straits, they hired out labor in Qi, and Bu was a wine-shop guarantor.",
-      "reason": "窮困，賣庸於齊，為酒家保 is shared hardship with Bu, and 為酒家保 belongs to Bu (as the parallel idiomatic already has); the proposed 'wine-shop guard' misrenders 保, so keep 'guarantor' while correcting the agent.",
+      "reason": "s0040 only has 與竇長君善, friendship with Dou Changjun; the appositive 'the empress's elder brother' is not in the Chinese and is an invented kinship gloss. The proposed after is complete, grammatical, and faithful.",
       "sourceWitness": {
         "source": "chapter-text",
-        "citation": "s0063",
-        "excerpt": "窮困，賣庸於齊，為酒家保"
-      }
-    },
-    {
-      "repairId": "hanshu:046:r0004",
-      "decision": "reject",
-      "after": null,
-      "reason": "Lord Teng is Xiahou Ying. Retaining his personal name is an accurate explanatory identification and keeps the actor clear across the passage.",
-      "sourceWitness": {
-        "source": "other",
-        "citation": "Hanshu 50",
-        "excerpt": "初嬰為滕令奉車，故號滕公"
+        "citation": "s0040",
+        "excerpt": "與竇長君善"
       }
     }
   ],
-  "claimRetractions": [],
+  "claimRetractions": [
+    {
+      "repairId": "hanshu:046:r0001",
+      "claim": {
+        "id": "hanshu:046:c0063",
+        "subject": "hanshu:046:p016",
+        "predicate": "role",
+        "value": {
+          "roleId": "royal-family-member"
+        },
+        "certainty": "uncertain",
+        "evidence": [
+          "hanshu:046:s0040"
+        ]
+      },
+      "reason": "Accepting r0001 shows the royal-family-member role for Dou Changjun was created only by the invented idiomatic gloss 'the empress's elder brother'; s0040 supports only 與竇長君善.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0040",
+        "excerpt": "與竇長君善"
+      }
+    }
+  ],
   "claimRevisions": []
 }

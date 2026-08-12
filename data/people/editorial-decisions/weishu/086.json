@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "weishu",
+  "chapter": "086",
+  "input": {
+    "chapterFingerprint": "sha256:8cb498484910bd31818a3dbb0e281c3f3ced12eaa98aad2de9e3e793a6639d6f",
+    "proposalsFingerprint": "sha256:21adec3d17076f3cde4404e52ab20d7f9b1f49a2f7b30f8614c80fc5b79cec9f"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-b9c9610d-1fdb-4a6d-b1b0-6ae11c9b5a8e",
+    "runId": "run-b8aef4aa-dad5-4039-8209-da0d7922d949",
+    "completedAt": "2026-08-12T07:09:57.744Z"
+  },
+  "proposals": [
+    {
+      "id": "weishu:086:r0001",
+      "unit": {
+        "id": "s0005",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "Soon he was removed and made Grand Master of Splendid Horses.",
+      "after": "Soon he was appointed Grand Master of Splendid Horses.",
+      "reason": "除 means to appoint to office, not to remove; the literal English reverses the sense.",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:086:r0002",
+      "unit": {
+        "id": "s0040",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Wei was stationed at the Divine Martial Gate; his wife's cousin, a leader of the feathered guard, beat a straight officer at the palace gate, and Wei at once impeached him.",
+      "after": "Wei was stationed at the Divine Martial Gate; his wife's junior paternal uncle (congshu), a leader of the feathered guard, beat a straight officer at the palace gate, and Wei at once impeached him.",
+      "reason": "從叔 is a junior paternal uncle of the collateral line, not a cousin.",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:086:r0003",
+      "unit": {
+        "id": "s0057",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Sheng and the other four were all killed at Heyin, exactly as she had foretold.",
+      "after": "Sheng and the other three were all killed at Heyin, exactly as she had foretold.",
+      "reason": "昇等四人 means the four men including Sheng (Yuan Sheng and his three companions), not Sheng plus four others.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "weishu:086:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In appointment idiom, 除 means to appoint (or transfer) to office; ‘removed and made’ reverses the sense of 尋除太僕卿, and ‘appointed’ restores it.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0005",
+        "excerpt": "尋除太僕卿"
+      }
+    },
+    {
+      "repairId": "weishu:086:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "其妻從叔 is the wife's junior paternal uncle of the collateral line, not a cousin; the proposed kinship wording matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0040",
+        "excerpt": "其妻從叔"
+      }
+    },
+    {
+      "repairId": "weishu:086:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "昇等四人 counts four men in all including Sheng, not Sheng plus four; ‘the other three’ restores the correct total.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0057",
+        "excerpt": "昇等四人"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

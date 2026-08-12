@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "nanqishu",
+  "chapter": "021",
+  "input": {
+    "chapterFingerprint": "sha256:45a4bc9003b0598fd9bbfe6afa3cdfb4f01b22dbd055ab0572399f6952acc758",
+    "proposalsFingerprint": "sha256:b55cc5081b025424591259db7231b6aa057ec9393b39db64b0c97cd5a77dd46b"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-7b790920-1bfc-4ed8-9b27-0966d29ecf9c",
+    "runId": "run-7bf07322-56be-42b6-a47a-88bfda0b51dd",
+    "completedAt": "2026-08-12T07:22:24.859Z"
+  },
+  "proposals": [
+    {
+      "id": "nanqishu:021:r0001",
+      "unit": {
+        "id": "s0092",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 43
+      },
+      "field": "idiomatic",
+      "before": "The crown prince said: \"Because it is not reached by practice that it can be the root of virtue.\"",
+      "after": "The crown prince said: \"It is because it is not reached by practice that it can be the root of virtue.\"",
+      "reason": "Idiomatic English is ungrammatical; the Chinese 不因積習而至，所以可爲德本 needs a cleft or inverted result clause.",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:021:r0002",
+      "unit": {
+        "id": "s0106",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "Because when Emperor Ming of Jin was crown prince had built the Western Pool, he memorialized Shizu citing that precedent and asked to raise a small park on the Eastern Fields; the emperor granted it.",
+      "after": "Because when Emperor Ming of Jin was crown prince he had built the Western Pool, he memorialized Shizu citing that precedent and asked to raise a small park on the Eastern Fields; the emperor granted it.",
+      "reason": "Literal English omits the subject pronoun 'he' before 'had built', yielding an ungrammatical clause.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "nanqishu:021:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 不因積習而至，所以可爲德本 is a causal cleft: it is precisely because filial piety is not attained through accumulated practice that it can be the root of virtue. The original lacks the opening 'It is' and is ungrammatical; the proposed cleft restores that sense without changing meaning.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0092",
+        "excerpt": "不因積習而至，所以可爲德本"
+      }
+    },
+    {
+      "repairId": "nanqishu:021:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 以晉明帝爲太子時立西池 the builder of 西池 is Emperor Ming while crown prince; the original subordinate clause drops the finite subject before 'had built' and is ungrammatical. Adding 'he' restores grammar and keeps agent, patient, and the petition to Shizu intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0106",
+        "excerpt": "以晉明帝爲太子時立西池，乃啓世祖引前例，求東田起小苑，上許之"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

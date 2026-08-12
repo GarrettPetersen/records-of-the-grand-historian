@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "098",
+  "input": {
+    "chapterFingerprint": "sha256:a201ecba1677a63078e13fdbf07293be5e0076d406d8f3b52ac209f3bbbed425",
+    "proposalsFingerprint": "sha256:7eab3a021c6ad02d3d6aef7184a934f3a710c21d7edbe4029b0af84f024cf94a"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-2224d49d-4f53-4a78-807e-39660004f371",
+    "runId": "run-ff14d07d-841c-40c7-ada0-10f1a0eb26f8",
+    "completedAt": "2026-08-12T07:34:06.960Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:098:r0001",
+      "unit": {
+        "id": "s0043",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 18
+      },
+      "field": "idiomatic",
+      "before": "Tianzuo, mindful that Wuna was a senior minister of Daozong's reign who had helped settle the succession, often consulted him on policy; Wuna answered without reserve.",
+      "after": "Tianzuo, mindful that Wuna was a senior minister of the former reign who had helped settle the succession, often consulted him on policy; Wuna answered without reserve.",
+      "reason": "The Chinese reads 先朝, 'former reign,' and does not explicitly name Daozong in this unit.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:098:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0043 has 先朝重臣, which means a senior minister of the former reign; the Chinese does not name 道宗 here, so 'Daozong's reign' invents a proper name absent from the unit, and 'the former reign' restores the source wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0043",
+        "excerpt": "先朝重臣"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

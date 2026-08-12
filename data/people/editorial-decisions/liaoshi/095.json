@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "095",
+  "input": {
+    "chapterFingerprint": "sha256:1f74238c9a886d67e1eeb2de0df44b3a079c148bf1b7eb536af5a6ec7a161c82",
+    "proposalsFingerprint": "sha256:031d7fadb6b04331a6f84966754ac710e323fcdb919454c3cd01769a479bf895"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-2b7ce8a3-d424-44d5-95cd-9b67e4b7b030",
+    "runId": "run-39db5a5d-8651-40ec-b7bf-e45a8ba65a04",
+    "completedAt": "2026-08-12T06:38:35.693Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:095:r0001",
+      "unit": {
+        "id": "s0087",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "He clashed with Commissioner of Military Affairs Yelu Asi over policy and, falling under suspicion, was sent out as Grand Protector of the Horse Herds.",
+      "after": "He clashed with Commissioner of Military Affairs Yelu Asi over policy and, being resented by him, was sent out as Grand Protector of the Horse Herds.",
+      "reason": "見忌 means he was resented or viewed with hostility by Asi, not that he himself fell under unspecified suspicion.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:095:r0002",
+      "unit": {
+        "id": "s0100",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "It campaigned against Western Xia, attacked the Tangut, broke the Zubu, pacified the Dilie, and the tribes were all shaken with fear; at the sound of war drums their courage fell from their bellies and their leggings dropped — this may truly be called a fiercely martial state.",
+      "after": "It campaigned against Western Xia, attacked the Tangut, broke the Zubu, pacified the Dilie, and the tribes were all shaken with fear; at the sound of war drums their courage failed and their thighs trembled — this may truly be called a fiercely martial state.",
+      "reason": "股弁 describes thighs trembling with fear, not leggings dropping; 膽落 is loss of courage.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:095:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "見忌 after 與…論事不合 means Moluwo was resented or envied by Asi, not that he fell under vague suspicion; “being resented by him” restores that sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0087",
+        "excerpt": "與樞密使耶律阿思論事不合，見忌"
+      }
+    },
+    {
+      "repairId": "liaoshi:095:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "膽落股弁 is courage failing and thighs trembling; “courage fell from their bellies and their leggings dropped” misreads both 膽落 and 股弁.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0100",
+        "excerpt": "聞鼙鼓而膽落股弁"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

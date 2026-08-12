@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 3,
+  "book": "yuanshi",
+  "chapter": "116",
+  "input": {
+    "chapterFingerprint": "sha256:2239dd79561c67d6cc95f9ad09fdabc593f22d95b57705bc968cfb145c71de77",
+    "proposalsFingerprint": "sha256:89e2e95f85e47a3d39ca3a28671a42485fdd9fa9343cc2752379cd3d8621dbe7"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-cceae0cf-8bb9-4f70-925a-99aa682a4ab2",
+    "runId": "run-6a2cc314-a233-43af-aa52-00996e557898",
+    "completedAt": "2026-08-12T06:51:17.419Z"
+  },
+  "proposals": [
+    {
+      "id": "yuanshi:116:r0001",
+      "unit": {
+        "id": "s0066",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Empress Zhaoxian Yuansheng of Emperor Shunzong Darmabala was named Daji of the Hongjira clan, daughter of Qundutemür, grandson of Anchannayan of the An clan.",
+      "after": "Empress Zhaoxian Yuansheng of Emperor Shunzong Darmabala was named Daji of the Hongjira clan, daughter of Qundutemür, grandson of Anchen.",
+      "reason": "Chinese 按陳 is the personal name Anchen; the idiomatic 'Anchannayan of the An clan' invents a clan label not in the source.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:116:r0002",
+      "unit": {
+        "id": "s0066",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Empress Zhaoxian Yuansheng of Emperor Shunzong, personal name Daji, of the Hongjira clan, daughter of Anchannayan's grandson Qundutemür of the An clan.",
+      "after": "Empress Zhaoxian Yuansheng of Emperor Shunzong, personal name Daji, of the Hongjira clan, daughter of Anchen's grandson Qundutemür.",
+      "reason": "Literal likewise invents 'of the An clan' and uses Anchannayan for 按陳.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:116:r0003",
+      "unit": {
+        "id": "s0117",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 33
+      },
+      "field": "idiomatic",
+      "before": "The Empress Dowager saw that in youth Gegeen Khan had heroic spirit, while Buyantu was somewhat soft and timid. Various petty men thought that establishing Gegeen Khan would certainly be unfavorable to themselves and therefore supported Buyantu.",
+      "after": "The Empress Dowager saw that in youth Mingzong had heroic spirit, while Yingzong was somewhat soft and timid. Various petty men thought that establishing Mingzong would certainly be unfavorable to themselves and therefore supported Yingzong.",
+      "reason": "Chinese contrasts 明宗 and 英宗; idiomatic wrongly maps them to Gegeen Khan (Yingzong) and Buyantu (Renzong).",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:116:r0004",
+      "unit": {
+        "id": "s0118",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 34
+      },
+      "field": "idiomatic",
+      "before": "When he had taken the throne, the Empress Dowager came to congratulate. Buyantu immediately showed it firmly in his expression. The empress withdrew and regretted, saying, \"Did I not intend to raise this child!\"",
+      "after": "When he had taken the throne, the Empress Dowager came to congratulate. Yingzong immediately showed it firmly in his expression. The empress withdrew and regretted, saying, \"Did I not intend to raise this child!\"",
+      "reason": "Chinese 英宗 is Yingzong; idiomatic incorrectly uses Buyantu.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:116:r0005",
+      "unit": {
+        "id": "s0123",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "When Buyantu was established, the group of favorites were executed, and thereafter her power suddenly ceased.",
+      "after": "When Yingzong was established, the group of favorites were executed, and thereafter her power suddenly ceased.",
+      "reason": "Chinese 英宗立 refers to Yingzong, not Buyantu (Renzong).",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "yuanshi:116:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0066 has 按陳孫渾都帖木兒之女: 按陳 is the personal name Anchen, with no An clan; Anchannayan of the An clan invents both the nayan form and a clan label.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0066",
+        "excerpt": "按陳孫渾都帖木兒之女"
+      }
+    },
+    {
+      "repairId": "yuanshi:116:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same Chinese 按陳孫渾都帖木兒之女 shows Anchannayan and of the An clan are wrong in the literal; Anchen's grandson Qundutemür is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0066",
+        "excerpt": "按陳孫渾都帖木兒之女"
+      }
+    },
+    {
+      "repairId": "yuanshi:116:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0117 contrasts 明宗 and 英宗; mapping them to Gegeen Khan and Buyantu swaps identities, while Mingzong and Yingzong match the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0117",
+        "excerpt": "太后見明宗少時有英氣，而英宗稍柔懦"
+      }
+    },
+    {
+      "repairId": "yuanshi:116:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0118 has 英宗即毅然見於色; Buyantu is Renzong, not Yingzong, so the proposed Yingzong restores the correct subject.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0118",
+        "excerpt": "英宗即毅然見於色"
+      }
+    },
+    {
+      "repairId": "yuanshi:116:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0123 has 及英宗立; Yingzong, not Buyantu, is the emperor whose accession ends the favorites' power.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0123",
+        "excerpt": "及英宗立"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "yuanshi:116:r0001",
+      "before": {
+        "id": "yuanshi:116:c0100",
+        "subject": "yuanshi:116:p025",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Anchannayan",
+          "zh": "按陳"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "yuanshi:116:s0066"
+        ]
+      },
+      "after": {
+        "id": "yuanshi:116:c0100",
+        "subject": "yuanshi:116:p025",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Anchen",
+          "zh": "按陳"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "yuanshi:116:s0066"
+        ]
+      },
+      "reason": "Accepted r0001 shows English Anchannayan came only from the bad idiomatic of 按陳; the personal-name claim must read Anchen while keeping zh, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0066",
+        "excerpt": "按陳"
+      }
+    }
+  ]
+}

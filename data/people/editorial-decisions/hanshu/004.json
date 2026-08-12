@@ -3,16 +3,16 @@
   "book": "hanshu",
   "chapter": "004",
   "input": {
-    "chapterFingerprint": "sha256:938664831b4852668509e98a27eae8d0918ea06c5628f185250c1fa0b891e6f5",
-    "proposalsFingerprint": "sha256:c86152b670c35921d8ba21b0e36f9397cc7717e08d74742adf8058f2e7b4b3d3"
+    "chapterFingerprint": "sha256:7f019d7f452e48bda7b28aab6339b0410c2b0a36015a124dad7e16d460c75135",
+    "proposalsFingerprint": "sha256:e7b839f6061d3aa8794449d8c754b956f2cdb5660fb8d887a67abf8429d78ae0"
   },
   "reviewer": {
     "kind": "cursor-agent",
     "name": "grok-4.5",
     "model": "grok-4.5",
-    "agentId": "bc-74a31742-ff9b-4c2b-8c06-45025f4f830f",
-    "runId": "run-86c58592-25d4-42b3-91cc-4fe8a92a71ee",
-    "completedAt": "2026-08-11T00:57:20.170Z"
+    "agentId": "bc-c7399e0a-1033-4e42-8d94-40e786c5b620",
+    "runId": "run-68b3f8c5-9b39-4ef5-a699-0a0083c200d8",
+    "completedAt": "2026-08-12T07:02:46.814Z"
   },
   "proposals": [
     {
@@ -24,25 +24,25 @@
         "collection": "sentences",
         "itemIndex": 4
       },
-      "field": "literal",
-      "before": "Chancellor Chen Ping said: 'I have respectfully deliberated with Marquis of Jiang Chen Bo, Marquis of Quzhou Chen Shang, Marquis of Yingyin Chen Ying, Marquis of Anguo Chen Ling, and others. The marquises have fortunately received bestowed meal allowances and fief incomes. Your Majesty adds further favor by establishing court positions according to the order of their merits. Your subject requests that they be stored in the Gao Temple.'",
-      "after": "Chancellor Chen Ping said: 'I have respectfully deliberated with Marquis of Jiang Bo, Marquis of Quzhou Shang, Marquis of Yingyin Ying, Marquis of Anguo Ling, and others. The marquises have fortunately received bestowed meal allowances and fief incomes. Your Majesty adds further favor by establishing court positions according to the order of their merits. Your subject requests that they be stored in the Gao Temple.'",
-      "reason": "Literal English wrongly prefixes Chen to Bo, Shang, Ying, and Ling; the Chinese gives only 勃、商、嬰、陵 after their marquis titles.",
+      "field": "idiomatic",
+      "before": "Chancellor Chen Ping memorialized: 'I have respectfully deliberated with Marquis of Jiang Bo, Marquis of Quzhou Shang, Marquis of Yingyin Ying, Marquis of Anguo Ling, and others. The marquises have fortunately received bestowed meal allowances and fief incomes. Your Majesty adds further favor by establishing court positions according to the order of their merits. I request that these rankings be preserved in the Gao Temple.'",
+      "after": "Chancellor Chen Ping memorialized: 'I have respectfully deliberated with Bo, Marquis of Jiang; Shang, Marquis of Quzhou; Ying, Marquis of Yingyin; Ling, Marquis of Anguo; and others. The marquises have fortunately received bestowed meal allowances and fief incomes. Your Majesty adds further favor by establishing court positions according to the order of their merits. I request that these rankings be preserved in the Gao Temple.'",
+      "reason": "The fused forms 'Marquis of Jiang Bo' etc. make the given name look like part of the place-name; the Chinese pairs fief title with the minister's given name.",
       "confidence": "high"
     },
     {
       "id": "hanshu:004:r0002",
       "unit": {
-        "id": "s0059",
+        "id": "s0011",
         "kind": "paragraph-sentence",
-        "blockIndex": 11,
+        "blockIndex": 1,
         "collection": "sentences",
-        "itemIndex": 1
+        "itemIndex": 4
       },
       "field": "literal",
-      "before": "Palace Attendant Commander Jia Shou had a messenger come from Qi who, on this occasion, rebuked Chan, saying: 'The king did not return to his state early; now even if he wishes to go, can he still do so?'",
-      "after": "Palace Attendant Commander Jia Shou came as an envoy from Qi and on this occasion rebuked Chan, saying: 'The king did not return to his state early; now even if he wishes to go, can he still do so?'",
-      "reason": "Chinese 賈壽使從齊來 means Jia Shou came from Qi on a mission/as envoy, not that he had a messenger come from Qi.",
+      "before": "Chancellor Chen Ping said: 'I have respectfully deliberated with Marquis of Jiang Bo, Marquis of Quzhou Shang, Marquis of Yingyin Ying, Marquis of Anguo Ling, and others. The marquises have fortunately received bestowed meal allowances and fief incomes. Your Majesty adds further favor by establishing court positions according to the order of their merits. Your subject requests that they be stored in the Gao Temple.'",
+      "after": "Chancellor Chen Ping said: 'I have respectfully deliberated with Bo, Marquis of Jiang; Shang, Marquis of Quzhou; Ying, Marquis of Yingyin; Ling, Marquis of Anguo; and others. The marquises have fortunately received bestowed meal allowances and fief incomes. Your Majesty adds further favor by establishing court positions according to the order of their merits. Your subject requests that they be stored in the Gao Temple.'",
+      "reason": "Same fused marquis-name pattern as in the idiomatic line; separate fief title from given name.",
       "confidence": "high"
     },
     {
@@ -54,11 +54,11 @@
         "collection": "sentences",
         "itemIndex": 1
       },
-      "field": "idiomatic",
+      "field": "literal",
       "before": "She assisted Emperor Gao in settling the realm; three men among her father, brothers, and associates with the emperor were enfeoffed as marquises.",
-      "after": "She assisted Emperor Gao in settling the realm; three men among her father and brothers were enfeoffed as marquises along with the emperor.",
-      "reason": "Chinese 父兄及高祖而侯者三人 refers to three among her father and brothers enfeoffed as marquises, not separate associates.",
-      "confidence": "medium"
+      "after": "She assisted Emperor Gao in settling the realm; three men among her father and brothers were enfeoffed as marquises under Emperor Gao.",
+      "reason": "Literal invents 'associates with the emperor'; 父兄及高祖而侯者三人 means father/brothers who became marquises in Gaozu's time.",
+      "confidence": "high"
     }
   ],
   "decisions": [
@@ -66,7 +66,7 @@
       "repairId": "hanshu:004:r0001",
       "decision": "accept",
       "after": null,
-      "reason": "The Chinese lists 絳侯臣勃、曲周侯臣商、潁陰侯臣嬰、安國侯臣陵 with given names only; the literal wrongly invents the surname Chen for all four.",
+      "reason": "Chinese 絳侯臣勃、曲周侯臣商、潁陰侯臣嬰、安國侯臣陵 pairs each fief title with the minister's given name; 'Marquis of Jiang Bo' etc. wrongly fuse the name into the title, while 'Bo, Marquis of Jiang' correctly separates them.",
       "sourceWitness": {
         "source": "chapter-text",
         "citation": "s0011",
@@ -77,18 +77,18 @@
       "repairId": "hanshu:004:r0002",
       "decision": "accept",
       "after": null,
-      "reason": "賈壽使從齊來 means Jia Shou himself came from Qi on a mission; the original misreads 使 as sending a separate messenger who then rebukes Chan.",
+      "reason": "Same structure as the idiomatic line: each 侯 title is followed by 臣 plus the given name alone; separating 'Bo, Marquis of Jiang' (and parallel forms) removes the fused-name error without changing sense.",
       "sourceWitness": {
         "source": "chapter-text",
-        "citation": "s0059",
-        "excerpt": "郎中令賈壽使從齊來，因數產曰"
+        "citation": "s0011",
+        "excerpt": "絳侯臣勃、曲周侯臣商、潁陰侯臣嬰、安國侯臣陵"
       }
     },
     {
       "repairId": "hanshu:004:r0003",
-      "decision": "revise",
-      "after": "She assisted Emperor Gao in settling the realm; three men among her father and brothers were enfeoffed as marquises under Emperor Gao.",
-      "reason": "The original wrongly inserts a third class of 'associates'; 父兄及高祖而侯者三人 means three among her father and brothers were made marquises by Gaozu's time. The proposal correctly drops 'associates' but 'along with the emperor' misrenders 及高祖而侯.",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 父兄及高祖而侯者三人, 及高祖而侯 means those among her father and brothers who became marquises under Gaozu; the before invents 'associates with the emperor,' and the after matches the Chinese and the already-correct idiomatic reading.",
       "sourceWitness": {
         "source": "chapter-text",
         "citation": "s0091",

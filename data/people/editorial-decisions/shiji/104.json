@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "104",
+  "input": {
+    "chapterFingerprint": "sha256:32ff892df9637cdd7619446d4ed19e77af37950e058e96dbcf2de0fadfd82815",
+    "proposalsFingerprint": "sha256:f0cbaefa9d8a4bd326cb07f8844c5e182074bcd09a92db195727e17eec989e08"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-aadee986-dbab-4a56-9085-1756b6e83aab",
+    "runId": "run-54437d3a-5d8d-4364-bbe4-c6db49908fdb",
+    "completedAt": "2026-08-12T08:07:24.664Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:104:r0001",
+      "unit": {
+        "id": "s0101",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "After Zhao Yu departed, the general told the two men: \"Each of you must furnish your own carriage canopy and crimson robes yourselves.\"",
+      "after": "After Zhao Yu departed, the general told the two men: \"Each of you must furnish your own saddled horses and crimson robes yourselves.\"",
+      "reason": "Chinese 樾象 is likely a corruption of 鞍馬 (saddled horses), matching the equipment required in s0092; \"carriage canopy\" misreads the corrupted graph.",
+      "confidence": "medium"
+    },
+    {
+      "id": "shiji:104:r0002",
+      "unit": {
+        "id": "s0101",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "After Zhao Yu left, the general told the two men: \"Each of you must prepare your own carriage canopy and crimson robes at your own expense.\"",
+      "after": "After Zhao Yu left, the general told the two men: \"Each of you must prepare your own saddled horses and crimson robes at your own expense.\"",
+      "reason": "Same 樾象/鞍馬 corruption; literal English should track saddled horses, not a carriage canopy.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:104:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chapter s0101 has corrupt 樾象, which cannot mean “carriage canopy”; CText’s critical text of 田叔列傳 reads 各自具鞍馬新絳衣, and the same paragraph already requires 鞌馬/鞍馬 equipment, so replacing “carriage canopy” with “saddled horses” is the correct repair.",
+      "sourceWitness": {
+        "source": "ctext",
+        "citation": "https://ctext.org/wiki.pl?chapter=375239&if=gb",
+        "excerpt": "各自具鞍馬新絳衣"
+      }
+    },
+    {
+      "repairId": "shiji:104:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same corrupt 樾象 in s0101; CText’s edition restores 鞍馬 (“saddled horses”), matching the earlier 鞌馬/鞍馬 kit, so the literal must abandon “carriage canopy” for “saddled horses.”",
+      "sourceWitness": {
+        "source": "ctext",
+        "citation": "https://ctext.org/wiki.pl?chapter=375239&if=gb",
+        "excerpt": "各自具鞍馬新絳衣"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

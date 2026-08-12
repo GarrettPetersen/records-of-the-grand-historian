@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "093",
+  "input": {
+    "chapterFingerprint": "sha256:a16b97ff4b3f4038cd4ed5537b3d8052e1a1bb7dce3012263c4d1a6cf1f72c50",
+    "proposalsFingerprint": "sha256:5907740e8b7dcf4c239d44c560e709520b5c0d24835e5b0e4e5ac9313b730424"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-d44ef2de-c323-4622-9d12-a4d579f1a7c4",
+    "runId": "run-8b8de874-36a0-4844-b0bc-ee1cb2d6039c",
+    "completedAt": "2026-08-12T07:42:26.247Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:093:r0001",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "(Cishinu)〉",
+      "after": "(Cishinu)",
+      "reason": "Remove stray fullwidth closing bracket left from source annotation markup.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:093:r0002",
+      "unit": {
+        "id": "s0006",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "(Duoluwo)〉",
+      "after": "(Duoluwo)",
+      "reason": "Remove stray fullwidth closing bracket left from source annotation markup.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:093:r0003",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "(Cishinu)〉",
+      "after": "(Cishinu)",
+      "reason": "Remove stray fullwidth closing bracket left from source annotation markup.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:093:r0004",
+      "unit": {
+        "id": "s0006",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "(Duoluwo)〉",
+      "after": "(Duoluwo)",
+      "reason": "Remove stray fullwidth closing bracket left from source annotation markup.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:093:r0005",
+      "unit": {
+        "id": "s0008",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Xiao Hui, whose courtesy name was Boren and childhood name Tuogusi, was a fifth-generation descendant of Aguzhi, the empress's younger brother.",
+      "after": "Xiao Hui, whose courtesy name was Boren and childhood name Tuogusi, was a fifth-generation descendant of Aguzhi, younger brother of Empress Chunqin.",
+      "reason": "Idiomatic English drops the empress's title-name 淳欽皇后 present in the Chinese and literal, leaving only \"the empress\".",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:093:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 〈（慈氏奴）〉 is a nested parenthetical name gloss; idiomatic English correctly renders (Cishinu) but retains a stray fullwidth 〉 from the annotation markup.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "〈（慈氏奴）〉"
+      }
+    },
+    {
+      "repairId": "liaoshi:093:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 〈（鐸盧斡）〉 closes cleanly as a nested gloss; idiomatic (Duoluwo)〉 keeps a leftover fullwidth bracket after an otherwise correct English parenthetical.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0006",
+        "excerpt": "〈（鐸盧斡）〉"
+      }
+    },
+    {
+      "repairId": "liaoshi:093:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same markup artifact as the idiomatic field: literal (Cishinu)〉 retains stray 〉 while the Chinese unit is only the gloss 〈（慈氏奴）〉.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "〈（慈氏奴）〉"
+      }
+    },
+    {
+      "repairId": "liaoshi:093:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same corruption as the idiomatic field for 鐸盧斡: literal English keeps leftover 〉 after (Duoluwo).",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0006",
+        "excerpt": "〈（鐸盧斡）〉"
+      }
+    },
+    {
+      "repairId": "liaoshi:093:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "淳欽皇后弟阿古只 identifies Aguzhi as younger brother of Empress Chunqin; idiomatic \"the empress\" drops the title-name present in the Chinese, and the repair restores it without changing kinship or lineage.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0008",
+        "excerpt": "淳欽皇后弟阿古只五世孫"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

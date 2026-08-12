@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "145",
+  "input": {
+    "chapterFingerprint": "sha256:5d8b3dce8f068c8c67ee7c30b491c48b6d39c697b7430b99b38c8dec3fc4032a",
+    "proposalsFingerprint": "sha256:a5a543acb6a63c4573230bd600bee00470ca067fea276672946f0f2807d95627"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-1a3ff5e4-b3d1-4f69-869c-c76672985c0f",
+    "runId": "run-660c3174-87c9-4698-be6c-ea283437350c",
+    "completedAt": "2026-08-12T07:34:28.730Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:145:r0001",
+      "unit": {
+        "id": "s0054",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "Emperor Taizong of Tang restored the ancient tradition and had Zu Xiaosun and Zhang Wenshou revise the court music, so that the eighty-four circulatory modes reappeared and no instrument in the bell-chime ensemble remained mute. The An Lushan rebellion left the capital in ruins; scarcely one instrument or craftsman in ten survived, and the music performed grew ever more corrupt.",
+      "after": "Emperor Taizong of Tang restored the ancient tradition and had Zu Xiaosun and Zhang Wenshou revise the court music, so that the eighty-four circulatory modes reappeared and no instrument in the bell-chime ensemble remained mute. The An and Shi rebellion left the capital in ruins; scarcely one instrument or craftsman in ten survived, and the music performed grew ever more corrupt.",
+      "reason": "Chinese 安、史之亂 names both An and Shi; idiomatic English collapses this to An Lushan alone.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:145:r0002",
+      "unit": {
+        "id": "s0113",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 23
+      },
+      "field": "idiomatic",
+      "before": "After the An Lushan rebellion, the heartland was laid waste.",
+      "after": "After the An and Shi rebellion, the heartland was laid waste.",
+      "reason": "Chinese 安、史亂離 names both rebels; idiomatic English omits Shi.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:145:r0003",
+      "unit": {
+        "id": "s0103",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "Emperor Wu of Liang, himself expert in pitch theory, devised twelve four-way flutes to sound the eight categories of instruments.",
+      "after": "Emperor Wu of Liang, himself expert in pitch theory, devised four sitong pitch-standards and twelve flutes to sound the eight categories of instruments.",
+      "reason": "Chinese 四通十二笛 is four sitong devices plus twelve flutes, not twelve four-way flutes.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:145:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0054 has 安、史之亂, naming both An and Shi; the before text reduces this to An Lushan alone. The proposed \"An and Shi rebellion\" restores both names without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0054",
+        "excerpt": "安、史之亂"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:145:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0113 has 安、史亂離; the before text again names only An Lushan. \"An and Shi rebellion\" correctly reflects both rebels named in the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0113",
+        "excerpt": "安、史亂離"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:145:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0103 自造四通十二笛 is four 通 (sitong pitch-standards) plus twelve flutes, not twelve \"four-way\" flutes. The proposed English correctly separates the two instrument types.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0103",
+        "excerpt": "自造四通十二笛"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

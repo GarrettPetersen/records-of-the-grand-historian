@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "105",
+  "input": {
+    "chapterFingerprint": "sha256:51d7a0bfbfc5e3b508ad3ffeb673af0413a1b19bb3969b1f3ee9b88e6eb76027",
+    "proposalsFingerprint": "sha256:d0122eab18fb4b1b0c9d1f449bc7f121b07e0c9accad407c0326e81f86530e60"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-f953278d-1d64-4e6a-aef5-92ffd9f9b019",
+    "runId": "run-d720c80c-d5e2-47b6-85f6-0793622a73ca",
+    "completedAt": "2026-08-12T07:14:54.892Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:105:r0001",
+      "unit": {
+        "id": "s0001",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Capable Officials — Da Gongding, Xiao Wen, Ma Renwang, Yelü Duo, Luwo, Yang Zunxu, and Wang Tang",
+      "after": "Capable Officials — Da Gongding, Xiao Wen, Ma Renwang, Yelü Duoluwo, Yang Zunxu, and Wang Tang",
+      "reason": "Chinese 耶律鐸魯斡 is one personal name; the idiomatic English incorrectly splits it into two people (Yelü Duo, Luwo).",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:105:r0002",
+      "unit": {
+        "id": "s0001",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Capable Officials ○ Da Gongding, Xiao Wen, Ma Renwang, Yelü Duo, Luwo, Yang Zunxu, Wang Tang",
+      "after": "Capable Officials ○ Da Gongding, Xiao Wen, Ma Renwang, Yelü Duoluwo, Yang Zunxu, Wang Tang",
+      "reason": "Literal English likewise splits 耶律鐸魯斡 into two names; it should remain one person.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:105:r0003",
+      "unit": {
+        "id": "s0021",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "literal",
+      "before": "He reformed the magistrates of Liang Township, reduced corvée and labor service, devoted effort to farming and sericulture, built a Confucian temple and school, and the people of his district submitted to transformation.",
+      "after": "He was transferred to magistrate of Liangxiang, reduced corvée and labor service, devoted effort to farming and sericulture, built a Confucian temple and school, and the people of his district submitted to transformation.",
+      "reason": "改良鄉令 means he was reassigned as magistrate of Liangxiang, not that he reformed (plural) magistrates of a township.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:105:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0001 lists six officials ending in 耶律鐸魯斡楊遵勖王棠; 耶律鐸魯斡 is one personal name (Yelü Duoluwo), not two people. The proposed reunification matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0001",
+        "excerpt": "耶律鐸魯斡"
+      }
+    },
+    {
+      "repairId": "liaoshi:105:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal line likewise splits 耶律鐸魯斡 into Yelü Duo and Luwo; one name Yelü Duoluwo is required.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0001",
+        "excerpt": "耶律鐸魯斡"
+      }
+    },
+    {
+      "repairId": "liaoshi:105:r0003",
+      "decision": "revise",
+      "after": "He was reassigned as magistrate of Liangxiang, reduced corvée and labor service, devoted effort to farming and sericulture, built a Confucian temple and school, and the people of his district submitted to transformation.",
+      "reason": "s0021 改良鄉令 is career transfer into the magistracy of Liangxiang (良鄉令), not reforming plural township magistrates. The proposal’s sense is right, but “transferred to magistrate” is ungrammatical; “reassigned as magistrate of Liangxiang” is the accurate wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0021",
+        "excerpt": "改良鄉令"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "liaoshi:105:r0001",
+      "claim": {
+        "id": "liaoshi:105:c0023",
+        "subject": "liaoshi:105:p004",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate",
+          "en": "Yelü Duo",
+          "zh": "耶律鐸"
+        },
+        "certainty": "uncertain",
+        "evidence": [
+          "liaoshi:105:s0001"
+        ]
+      },
+      "reason": "Accepting r0001 shows “Yelü Duo” / 耶律鐸 exists only as the first half of the mistranslated split of 耶律鐸魯斡; s0001 supports no such alternate name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0001",
+        "excerpt": "耶律鐸魯斡"
+      }
+    },
+    {
+      "repairId": "liaoshi:105:r0001",
+      "claim": {
+        "id": "liaoshi:105:c0024",
+        "subject": "liaoshi:105:p004",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate",
+          "en": "Luwo",
+          "zh": "魯斡"
+        },
+        "certainty": "uncertain",
+        "evidence": [
+          "liaoshi:105:s0001"
+        ]
+      },
+      "reason": "Accepting r0001 shows “Luwo” / 魯斡 exists only as the second half of the mistranslated split of 耶律鐸魯斡; s0001 supports no such alternate name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0001",
+        "excerpt": "耶律鐸魯斡"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "liangshu",
+  "chapter": "015",
+  "input": {
+    "chapterFingerprint": "sha256:a031176240f4c2fb39f5d65e93c26026e508cce862d3b8a9aafe2799926e492d",
+    "proposalsFingerprint": "sha256:726e0a5467d6d3226cc7a860a7c89c9479d41f762abfc9b696968be9c9b0ab41"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-3b1b4005-2425-4362-b307-7c0bd7c64ebe",
+    "runId": "run-d834259e-d0c6-4fea-b226-8b8e0d838713",
+    "completedAt": "2026-08-12T07:18:05.332Z"
+  },
+  "proposals": [
+    {
+      "id": "liangshu:015:r0001",
+      "unit": {
+        "id": "s0055",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "Hence Chang Fu's long bow to the Chu minister won praise in the southern states;",
+      "after": "Hence the long bow to the Chu minister won praise in the southern states;",
+      "reason": "Chinese 長揖楚相 is an allusion (“long bow to the Chu minister”); it does not name a person “Chang Fu.”",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:015:r0002",
+      "unit": {
+        "id": "s0122",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Once Qi Mingdi, Lan's father Di, and Donghai's Xu Xiaosi had all ruled Wuxing as famed administrators—Lan meant to outdo them all!",
+      "after": "Once Qi Mingdi, Lan's father Fu, and Donghai's Xu Xiaosi had all ruled Wuxing as famed administrators—Lan meant to outdo them all!",
+      "reason": "Chinese 覽父綍 is Fu (綍), not Di; the given name was mistranslated.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:015:r0003",
+      "unit": {
+        "id": "s0122",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Earlier Qi Mingdi, Lan's father Di, and Xu Xiaosi of Donghai had all governed Wuxing and been called famed administrators—Lan wished to surpass them all!",
+      "after": "Earlier Qi Mingdi, Lan's father Fu, and Xu Xiaosi of Donghai had all governed Wuxing and been called famed administrators—Lan wished to surpass them all!",
+      "reason": "Chinese 覽父綍 is Fu (綍), not Di.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:015:r0004",
+      "unit": {
+        "id": "s0088",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "A messenger from the palace guard staff officer Wang Guo was again sent to convey the edict with earnest persuasion.",
+      "after": "Palace guard staff officer Wang Guo was again sent to convey the edict with earnest persuasion.",
+      "reason": "Chinese 遣領軍司馬王果 means Wang Guo himself was sent; the literal invents an extra messenger.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liangshu:015:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0055 長揖楚相 is an allusion to long-bowing to the Chu chancellor; 長揖 is not a personal name, so “Chang Fu” is invented and the proposed literal correctly removes it.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0055",
+        "excerpt": "長揖楚相"
+      }
+    },
+    {
+      "repairId": "liangshu:015:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0122 覽父綍 names Lan’s father as 綍 (Fu); “Di” is a mistranslation, and the proposed idiomatic restores the correct given name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0122",
+        "excerpt": "覽父綍"
+      }
+    },
+    {
+      "repairId": "liangshu:015:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0122 覽父綍 is Fu (綍), not Di; the proposed literal matches the Chinese personal name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0122",
+        "excerpt": "覽父綍"
+      }
+    },
+    {
+      "repairId": "liangshu:015:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0088 遣領軍司馬王果宣旨敦譬 has Wang Guo himself as the person sent to proclaim the edict; the before invents an intervening messenger, and the proposed literal removes that error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0088",
+        "excerpt": "遣領軍司馬王果宣旨敦譬"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

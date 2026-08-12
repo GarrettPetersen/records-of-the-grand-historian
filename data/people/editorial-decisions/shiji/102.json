@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "102",
+  "input": {
+    "chapterFingerprint": "sha256:9bc747b6ab8cb3b8aefb8a43c6f3d192c45619439a6bc9277d31b68e6fed8b82",
+    "proposalsFingerprint": "sha256:c9abc582d073f06dcd6f92c933fdb44b1ce17f077dab38a2c1ca11555de07e77"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-a3542f60-99c8-42d0-b6c8-b6e719d0fc2d",
+    "runId": "run-912b2ded-921e-46af-bcbb-2518b2ccbf43",
+    "completedAt": "2026-08-12T07:57:56.661Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:102:r0001",
+      "unit": {
+        "id": "s0083",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "His son was named Zhang Ni, courtesy name Changgong, served as grand master, then was dismissed.",
+      "after": "His son was named Zhang Zhi, courtesy name Changgong, served as grand master, then was dismissed.",
+      "reason": "Chinese 張摯 is Zhang Zhi; literal wrongly renders 摯 as Ni.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:102:r0002",
+      "unit": {
+        "id": "s0129",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 22
+      },
+      "field": "literal",
+      "before": "That day he commanded Feng Tang to hold the imperial seal and pardon Wei Shang, restoring him as Yunzhong governor, and appointed Tang as Chariot and Cavalry Colonel, overseeing the Colonel of the Guard and the chariot soldiers of commanderies and kingdoms.",
+      "after": "That day he commanded Feng Tang to hold the imperial tally and pardon Wei Shang, restoring him as Yunzhong governor, and appointed Tang as Chariot and Cavalry Colonel, overseeing the Colonel of the Guard and the chariot soldiers of commanderies and kingdoms.",
+      "reason": "Chinese 節 denotes an imperial tally/credentials, not a seal; idiomatic correctly has tally.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:102:r0003",
+      "unit": {
+        "id": "s0114",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "Entrusted with authority and held responsible for success, therefore Li Mu was able to exhaust his wisdom and ability, dispatching selected chariots one thousand three hundred, archer cavalry thirteen thousand, valiant warriors of a hundred gold ten thousand, thus driving the Chanyu north, breaking Donghu, destroying Danlin, suppressing strong Qin to the west, supporting Han and Wei to the south.",
+      "after": "Entrusted with authority and held responsible for success, therefore Li Mu was able to exhaust his wisdom and ability, dispatching selected chariots one thousand three hundred, archer cavalry thirteen thousand, valiant warriors of a hundred gold one hundred thousand, thus driving the Chanyu north, breaking Donghu, destroying Danlin, suppressing strong Qin to the west, supporting Han and Wei to the south.",
+      "reason": "Chinese 十萬 means 100,000; literal's 'ten thousand' undercounts; idiomatic correctly has a hundred thousand.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:102:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 其子曰張摯 names the son 張摯 (Zhang Zhi); literal Zhang Ni misreads 摯 as Ni, and Zhang Zhi matches the graph and the idiomatic rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0083",
+        "excerpt": "其子曰張摯"
+      }
+    },
+    {
+      "repairId": "shiji:102:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 持節 means to carry the imperial tally/credentials (節); a seal would be 璽 or 印, so 'imperial seal' is wrong and 'imperial tally' correctly restores the sense, matching the idiomatic rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0129",
+        "excerpt": "持節赦魏尚"
+      }
+    },
+    {
+      "repairId": "shiji:102:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 百金之士十萬 uses 十萬 'one hundred thousand'; literal 'ten thousand' undercounts by a factor of ten, and the proposed 'one hundred thousand' matches the numeral and the idiomatic rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0114",
+        "excerpt": "百金之士十萬"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

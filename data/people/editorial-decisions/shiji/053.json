@@ -1,0 +1,225 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "053",
+  "input": {
+    "chapterFingerprint": "sha256:ad7257fcfc4606fa49f88ae9d2b42aadc8044156d902e7f309e3986c8ac1398d",
+    "proposalsFingerprint": "sha256:e49ced8d5aaa977278dc2a39813874fe0cd600f3995ed64003cc98290d0c1df0"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-40f6bdd9-774c-4af8-9389-ba480271849b",
+    "runId": "run-78659397-0ea5-45d0-98df-a466d0491d48",
+    "completedAt": "2026-08-12T08:14:33.400Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:053:r0001",
+      "unit": {
+        "id": "s0002",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Through his mastery of documents and the law (wen Wuhai), he became the chief clerk of Pei.",
+      "after": "Through his mastery of documents and faultless administration, he became the chief clerk of Pei.",
+      "reason": "文無害 is an administrative virtue phrase, not a personal name \"Wuhai\"; the parenthetical invents a false name.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:053:r0002",
+      "unit": {
+        "id": "s0082",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "The emperor laughed and said, 'So the Prime Minister has been looking after the people's interests!'",
+      "after": "The emperor laughed and said, 'So the Prime Minister has been profiting from the people!'",
+      "reason": "利民 here is sarcastic (taking advantage of the people), not sincere \"looking after their interests.\"",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:053:r0003",
+      "unit": {
+        "id": "s0063",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Everyone offered congratulations, but Zhao Ping alone came to offer condolences.",
+      "after": "Everyone offered congratulations, but Shao Ping alone came to offer condolences.",
+      "reason": "召 as a surname is Shào; Zhao (趙) is a different surname.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:053:r0004",
+      "unit": {
+        "id": "s0064",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Zhao Ping had been the Marquis of Dongling under the Qin dynasty.",
+      "after": "Shao Ping had been the Marquis of Dongling under the Qin dynasty.",
+      "reason": "召平 should be Shao Ping, not Zhao Ping.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:053:r0005",
+      "unit": {
+        "id": "s0065",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "After Qin fell, he became a poor commoner and grew melons east of Chang'an. The melons were so fine that people called them 'Dongling melons' after his former title.",
+      "after": "After Qin fell, he became a poor commoner and grew melons east of Chang'an. The melons were so fine that people called them 'Dongling melons' after Shao Ping's former title.",
+      "reason": "Keep referent clear; surname 召 is Shao throughout this episode.",
+      "confidence": "medium"
+    },
+    {
+      "id": "shiji:053:r0006",
+      "unit": {
+        "id": "s0066",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "Zhao Ping said to the Prime Minister, 'This is where your troubles begin.",
+      "after": "Shao Ping said to the Prime Minister, 'This is where your troubles begin.",
+      "reason": "召平 should be Shao Ping, not Zhao Ping.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:053:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "文無害 is a clerkly virtue meaning faultless handling of documents, not a personal name; the literal's parenthetical \"wen Wuhai\" invents a false person, and \"faultless administration\" restores the sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0002",
+        "excerpt": "以文無害為沛主吏掾"
+      }
+    },
+    {
+      "repairId": "shiji:053:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "After petitions accusing Xiao He of forcibly buying people's land cheaply, 上笑曰「夫相國乃利民」 is ironic; 利民 means taking profit from the people, not sincerely looking after their interests, and the handoff of the memorials for apology confirms the sarcasm.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0082",
+        "excerpt": "夫相國乃利民"
+      }
+    },
+    {
+      "repairId": "shiji:053:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The surname is 召 (Shào), not 趙 (Zhào); \"Zhao Ping\" misreads 召平, and \"Shao Ping\" corrects the English name while preserving the rest of the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0063",
+        "excerpt": "召平獨弔"
+      }
+    },
+    {
+      "repairId": "shiji:053:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "召平者 names the same man as Shao Ping; rendering him Zhao Ping confuses 召 with 趙, and the replacement keeps the Dongling marquisate intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0064",
+        "excerpt": "召平者，故秦東陵侯"
+      }
+    },
+    {
+      "repairId": "shiji:053:r0005",
+      "decision": "reject",
+      "after": null,
+      "reason": "This unit already uses pronouns after 召平 has been identified; \"after his former title\" accurately glosses 東陵瓜／從召平以為名也 without inventing Zhao, so swapping in \"Shao Ping's\" is stylistic clarity rather than fixing an error in this sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0065",
+        "excerpt": "從召平以為名也"
+      }
+    },
+    {
+      "repairId": "shiji:053:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "召平謂相國曰 again has the surname 召; \"Zhao Ping\" is the wrong romanization, and \"Shao Ping\" restores the speaker's name without changing the quoted warning.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0066",
+        "excerpt": "召平謂相國曰"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "shiji:053:r0003",
+      "before": {
+        "id": "shiji:053:c0052",
+        "subject": "shiji:053:p012",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Zhao Ping",
+          "zh": "召平",
+          "pinyin": "Shào Píng"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "shiji:053:s0063",
+          "shiji:053:s0064",
+          "shiji:053:s0065",
+          "shiji:053:s0066"
+        ]
+      },
+      "after": {
+        "id": "shiji:053:c0052",
+        "subject": "shiji:053:p012",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Shao Ping",
+          "zh": "召平",
+          "pinyin": "Shào Píng"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "shiji:053:s0063",
+          "shiji:053:s0064",
+          "shiji:053:s0065",
+          "shiji:053:s0066"
+        ]
+      },
+      "reason": "Accepted r0003 shows English Zhao Ping came only from misreading 召 as 趙; the personal-name claim must read Shao Ping while keeping zh, pinyin, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0063",
+        "excerpt": "召平"
+      }
+    }
+  ]
+}

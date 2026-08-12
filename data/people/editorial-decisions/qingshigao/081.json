@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "081",
+  "input": {
+    "chapterFingerprint": "sha256:ce396e14cd9f1f18c7bb91ac904710138dd5f4e40d522ee801ced0d1e9b0f854",
+    "proposalsFingerprint": "sha256:d3984db2ffd7b5fc36b3d6a2a3ab818e15c5eb0104b7689e0a7bf7ca1436b61a"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-ac8c35d0-3fb7-45d9-8378-4f349eb26a53",
+    "runId": "run-08f6c315-33b1-4bc7-88fe-e2d51a0778f5",
+    "completedAt": "2026-08-12T06:38:18.477Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:081:r0001",
+      "unit": {
+        "id": "s0010",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "In Kangxi 14 Burne's brothers rebelled, were suppressed and executed, and the people were relocated to graze beyond the Xuanhua–Datong border.",
+      "after": "In Kangxi 14 his son Burne and his brothers rebelled, were suppressed and executed, and the people were relocated to graze beyond the Xuanhua–Datong border.",
+      "reason": "Chinese 其子布爾呢兄弟叛 names Burne with his brothers as the rebel subject; the idiomatic \"Burne's brothers\" wrongly excludes Burne himself.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:081:r0002",
+      "unit": {
+        "id": "s0010",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "In the fourteenth year of Kangxi, his son Burne's brothers rebelled; they were suppressed and put to death, and the tribespeople were moved to pasture beyond the Xuanhua and Datong frontier.",
+      "after": "In the fourteenth year of Kangxi, his son Burne and his brothers rebelled; they were suppressed and put to death, and the tribespeople were moved to pasture beyond the Xuanhua and Datong frontier.",
+      "reason": "Chinese 布爾呢兄弟 is Burne together with his brothers, not only the brothers of Burne.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:081:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0010 reads 其子布爾呢兄弟叛: 布爾呢兄弟 is Burne together with his brothers as the rebel subject, and 其子 marks Burne as the prior figure's son. The idiomatic \"Burne's brothers\" wrongly excludes Burne and drops 其子; the proposed wording restores both.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0010",
+        "excerpt": "其子布爾呢兄弟叛"
+      }
+    },
+    {
+      "repairId": "qingshigao:081:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0010's 布爾呢兄弟 is the classical \"X and his brothers\" construction, not \"the brothers of Burne.\" The possessive \"Burne's brothers\" excludes Burne from the rebellion; \"his son Burne and his brothers\" matches 其子布爾呢兄弟.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0010",
+        "excerpt": "布爾呢兄弟叛"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

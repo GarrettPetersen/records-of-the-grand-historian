@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "193",
+  "input": {
+    "chapterFingerprint": "sha256:6796089341317c31330e4e05b45b753f17bbc5a0be9607a59ee1c70f879c95dc",
+    "proposalsFingerprint": "sha256:28e7f9bed94712015a80c8a933a8c958c8f36c6166dd7f6f75a70d9bb9478830"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-1fd78e8f-a34a-4406-afb5-38d6531f5518",
+    "runId": "run-fbb59988-f055-4435-9073-7c75782d1586",
+    "completedAt": "2026-08-12T06:47:21.987Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:193:r0001",
+      "unit": {
+        "id": "s0061",
+        "kind": "table-header-cell",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 28
+      },
+      "field": "idiomatic",
+      "before": "On the gengxu day of the seventh month, 鍾岱 was transferred. In the eighth month, 十三恆恩: Left Deputy Censor-in-Chief.",
+      "after": "On the gengxu day of the seventh month, Zhongdai was transferred. On the thirteenth day of the eighth month, Heng'en: Left Deputy Censor-in-Chief.",
+      "reason": "Chinese 八月十三恆恩 means day 13 of the eighth month then the name Heng'en; English wrongly fused 十三恆恩 as one name and left other names untranslated.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:193:r0002",
+      "unit": {
+        "id": "s0061",
+        "kind": "table-header-cell",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 28
+      },
+      "field": "literal",
+      "before": "On the gengxu day of the seventh month, 鍾岱 was transferred. In the eighth month, 十三恆恩: Left Deputy Censor-in-Chief.",
+      "after": "On the gengxu day of the seventh month, Zhongdai was transferred. On the thirteenth day of the eighth month, Heng'en: Left Deputy Censor-in-Chief.",
+      "reason": "Same fused-name error as in the idiomatic field: 十三 is the day number, not part of the personal name.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:193:r0003",
+      "unit": {
+        "id": "s0042",
+        "kind": "table-header-cell",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "晏端書差. On the guihai day of the fourth month, 王茂蔭 served in an acting capacity as Left Deputy Censor-in-Chief.",
+      "after": "Yan Duanshu was on assignment. On the guihai day of the fourth month, Wang Maoyin served in an acting capacity as Left Deputy Censor-in-Chief.",
+      "reason": "Chinese 差 marks detached assignment; English left 晏端書差 untranslated and left 王茂蔭 unromanized.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:193:r0004",
+      "unit": {
+        "id": "s0042",
+        "kind": "table-header-cell",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "晏端書差. On the guihai day of the fourth month, 王茂蔭 served in an acting capacity as Left Deputy Censor-in-Chief.",
+      "after": "Yan Duanshu was on assignment. On the guihai day of the fourth month, Wang Maoyin served in an acting capacity as Left Deputy Censor-in-Chief.",
+      "reason": "Literal line repeats the untranslated 晏端書差 and unromanized names.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:193:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0061 reads 八月十三恆恩左副都御史: 十三 is the calendar day of the eighth month, then the name 恆恩. The prior idiomatic fuses 十三恆恩 as one personal name; the proposed split and romanizations match the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0061",
+        "excerpt": "八月十三恆恩左副都御史"
+      }
+    },
+    {
+      "repairId": "qingshigao:193:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same Chinese 八月十三恆恩 makes 十三 a day number and 恆恩 the person. The prior literal's fused name is wrong; the proposed wording correctly dates the appointment and names Heng'en.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0061",
+        "excerpt": "八月十三恆恩"
+      }
+    },
+    {
+      "repairId": "qingshigao:193:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0042 opens 晏端書差, where 差 marks detached assignment, then 王茂蔭署左副都御史. Leaving 晏端書差 untranslated and 王茂蔭 unromanized is incomplete; the proposed English renders both accurately.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0042",
+        "excerpt": "晏端書差。四月癸亥王茂蔭署左副都御史"
+      }
+    },
+    {
+      "repairId": "qingshigao:193:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal must also render 晏端書差 as Yan Duanshu on assignment and romanize 王茂蔭. The proposed replacement matches 晏端書差 and 王茂蔭署左副都御史 without adding or dropping content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0042",
+        "excerpt": "晏端書差"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "080",
+  "input": {
+    "chapterFingerprint": "sha256:60b0cf5705b185acc728877b5e17150278907fd04df4a88a6568aa01637fa03c",
+    "proposalsFingerprint": "sha256:3e16b1d1413ee02a944d81a9295eb3430cc38e2a7651f1d711ec5107de605940"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-8e63c635-2e5e-4886-afff-363bfac394bd",
+    "runId": "run-ad4f158c-849d-4b3d-bbaf-5354ed2410c2",
+    "completedAt": "2026-08-12T06:38:18.829Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:080:r0001",
+      "unit": {
+        "id": "s0035",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 20
+      },
+      "field": "idiomatic",
+      "before": "In the twenty-second year of his tenure he died, aged ninety-one; an edict ordered his burial in Wanping county.",
+      "after": "In the twenty-second year he died, aged ninety-one; an edict ordered his burial in Wanping county.",
+      "reason": "Chinese 二十二年 continues Chongxi dating from s0015 and does not say “of his tenure.”",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:080:r0002",
+      "unit": {
+        "id": "s0084",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "When Dazhonglin rebelled, an edict ordered him to pacify the Eastern Capital, with authority to act at his discretion as circumstances required.",
+      "after": "When Da Yanlin rebelled, an edict ordered him to pacify the Eastern Capital, with authority to act at his discretion as circumstances required.",
+      "reason": "大延琳 is the personal name Da Yanlin; “Dazhonglin” misreads the name.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:080:r0003",
+      "unit": {
+        "id": "s0084",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "literal",
+      "before": "When Dazhonglin rebelled, an edict ordered him to pacify the Eastern Capital, acting at his discretion as circumstances required.",
+      "after": "When Da Yanlin rebelled, an edict ordered him to pacify the Eastern Capital, acting at his discretion as circumstances required.",
+      "reason": "大延琳 is the personal name Da Yanlin; “Dazhonglin” misreads the name.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:080:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 二十二年 states only the year; “of his tenure” is not in the source and invents a career-length framing for an era year count.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0035",
+        "excerpt": "二十二年"
+      }
+    },
+    {
+      "repairId": "liaoshi:080:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 大延琳 is the personal name Da Yanlin; “Dazhonglin” is a misreading of that name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0084",
+        "excerpt": "大延琳"
+      }
+    },
+    {
+      "repairId": "liaoshi:080:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 大延琳 is Da Yanlin; the literal field repeats the same misreading “Dazhonglin.”",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0084",
+        "excerpt": "大延琳"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

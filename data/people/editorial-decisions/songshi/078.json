@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "songshi",
+  "chapter": "078",
+  "input": {
+    "chapterFingerprint": "sha256:a1c6ea03c1b80d03ec5053c4008f1fef363a48c3f8db720024e3b1c7e61fefc8",
+    "proposalsFingerprint": "sha256:3f62ca71b0d4958ab1e363fe2b47c961e44c9d6af9324d64bdc78c3cd37877cb"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-c2ee1601-f929-4e12-b893-14a86a23c213",
+    "runId": "run-c6ed8b8c-9741-477c-8837-71fc45096f65",
+    "completedAt": "2026-08-12T06:39:54.786Z"
+  },
+  "proposals": [
+    {
+      "id": "songshi:078:r0001",
+      "unit": {
+        "id": "s0119",
+        "kind": "paragraph-sentence",
+        "blockIndex": 72,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Circuit day: 115, remainder 10,052, seconds 7.",
+      "after": "Circuit day: 115, remainder 10,552, seconds 7.",
+      "reason": "Chinese 一萬五百五十二 is 10,552; the idiomatic remainder 10,052 drops the hundreds digit.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:078:r0002",
+      "unit": {
+        "id": "s0119",
+        "kind": "paragraph-sentence",
+        "blockIndex": 72,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Circuit day: one hundred fifteen, remainder ten thousand fifty-two, seven seconds.",
+      "after": "Circuit day: one hundred fifteen, remainder ten thousand five hundred fifty-two, seven seconds.",
+      "reason": "Chinese 一萬五百五十二 is 10,552; the literal omits 'five hundred'.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "songshi:078:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "余一萬五百五十二 is 10,000 + 500 + 52 = 10,552 (classical zero omission); idiomatic 10,052 wrongly drops the hundreds place, and the proposed 10,552 restores the Chinese total.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0119",
+        "excerpt": "余一萬五百五十二"
+      }
+    },
+    {
+      "repairId": "songshi:078:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same numeral 一萬五百五十二 includes 五百; the literal 'ten thousand fifty-two' omits that hundreds component, and 'ten thousand five hundred fifty-two' is the accurate reading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0119",
+        "excerpt": "余一萬五百五十二"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}
