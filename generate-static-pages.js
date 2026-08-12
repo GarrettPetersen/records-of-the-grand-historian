@@ -21,6 +21,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defaultStaticGenConcurrency, hardwareConcurrency } from './scripts/build-parallelism.mjs';
 import { getBookMetadata, mergeBookInfo } from './scripts/book-metadata.mjs';
+import { canonicalUrlForHtmlFile } from './scripts/lib/site-urls.mjs';
 import { getBookDesign } from './public/book-design.js';
 import {
   kindleProductForBook,
@@ -328,7 +329,7 @@ function generateBookLandingHTML(bookId) {
   const kindleProduct = kindleProductForBook(bookId);
   const kindleIntro = publicationIntroForBook(bookId);
   const title = `${book.chinese} — ${book.name}`;
-  const pageUrl = `${CANONICAL_SITE}/book/${bookId}.html`;
+  const pageUrl = canonicalUrlForHtmlFile(CANONICAL_SITE, `book/${bookId}.html`);
   const ogImage = `${CANONICAL_SITE}/og/books/${bookId}.png`;
   const desc = `Browse chapters of ${book.name} (${book.chinese}).`;
   return `<!DOCTYPE html>
@@ -730,7 +731,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
   }
 
   const chapterSlug = String(chapterData.meta.chapter).padStart(3, '0');
-  const chapterUrl = `${CANONICAL_SITE}/${bookId}/${chapterSlug}.html`;
+  const chapterUrl = canonicalUrlForHtmlFile(CANONICAL_SITE, `${bookId}/${chapterSlug}.html`);
   const ogImageUrl = `${CANONICAL_SITE}/og/chapters/${bookId}/${chapterSlug}.png`;
 
   return `<!DOCTYPE html>

@@ -5,7 +5,8 @@
   "main": "scrape.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node scripts/sync-publication-descriptions.mjs && node scripts/sync-data-to-public.mjs && node generate-manifest.js && node scripts/scan-placeholder-translations.mjs --out data/quality/placeholder-translations.json --summary --limit=0 && node generate-progress.js && node scripts/generate-book-covers.mjs && node generate-static-pages.js && node scripts/build-book-search-corpus.mjs && node scripts/generate-sitemap.mjs && node generate-og-images.js --incremental && node scripts/verify-og-assets.mjs",
+    "build": "node scripts/test-site-urls.mjs && node scripts/sync-publication-descriptions.mjs && node scripts/sync-data-to-public.mjs && node generate-manifest.js && node scripts/scan-placeholder-translations.mjs --out data/quality/placeholder-translations.json --summary --limit=0 && node generate-progress.js && node scripts/generate-book-covers.mjs && node generate-static-pages.js && node scripts/build-book-search-corpus.mjs && node scripts/generate-sitemap.mjs && node generate-og-images.js --incremental && node scripts/verify-og-assets.mjs",
+    "test:site-urls": "node scripts/test-site-urls.mjs",
     "publication-descriptions": "node scripts/sync-publication-descriptions.mjs",
     "publication-descriptions:init": "node scripts/sync-publication-descriptions.mjs --init-md-from-json",
     "publication-descriptions:check": "node scripts/sync-publication-descriptions.mjs --check",
