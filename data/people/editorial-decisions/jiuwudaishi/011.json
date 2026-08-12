@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "011",
+  "input": {
+    "chapterFingerprint": "sha256:ac61d85240cc14269d62545563ef61c7fc7d1d6640e274b6e745a48fd021165c",
+    "proposalsFingerprint": "sha256:aeedae20bc5ceee7aa6930c8b298758e76198dcb07dacc88a71576c1130d7d9b"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-f97e3855-51ff-4d49-8ec9-7f9c6bffbb73",
+    "runId": "run-a4e160cf-981a-497c-8ea8-7ea245b05724",
+    "completedAt": "2026-08-12T00:44:13.401Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:011:r0001",
+      "unit": {
+        "id": "s0022",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 20
+      },
+      "field": "literal",
+      "before": "Wen set out wine for his mother, very merry, and speaking of family affairs said to her: \"Zhu Five Classics toiled at Confucian learning yet never received a single appointment; now I have a son who is military commissioner—no disgrace to our forebears!\"",
+      "after": "Wen set out wine for his mother, very merry, and speaking of family affairs said to her: \"Zhu Five Classics toiled at Confucian learning yet never received a single appointment; now there is a son who is military commissioner—no disgrace to our forebears!\"",
+      "reason": "Chinese 今有子為節度使 means Wen is that son of Zhu Five Classics, not that Wen himself has a son who is jiedushi; the literal invents Wen as father.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:011:r0002",
+      "unit": {
+        "id": "s0033",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "At Tongzhou Wen took Zhang from among the captives and married her properly.",
+      "after": "When Wen was at Tongzhou he took Zhang from among the captives and married her properly.",
+      "reason": "Chinese 及溫在同州 marks Wen's location at Tongzhou; fusing as 'Tongzhou Wen' obscures the place/person boundary.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:011:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus speech 今有子為節度使 means Zhu Five Classics now has a son who is jiedushi (Wen of himself); the prior literal's \"I have a son who is military commissioner\" invents Wen as that son's father. Mother's reply in s0023 (汝致身及此) confirms Wen is the risen son. The proposed wording restores the correct kinship without new error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0022",
+        "excerpt": "今有子為節度使"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:011:r0002",
+      "decision": "reject",
+      "after": null,
+      "reason": "及溫在同州 is already clear in \"At Tongzhou Wen took Zhang…\": English locative plus subject, not a fused personal name. Meaning matches the Chinese and the companion literal; the proposed rewrite is only stylistic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0033",
+        "excerpt": "及溫在同州"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

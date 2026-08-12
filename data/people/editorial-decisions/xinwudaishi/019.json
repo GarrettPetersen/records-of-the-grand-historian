@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "xinwudaishi",
+  "chapter": "019",
+  "input": {
+    "chapterFingerprint": "sha256:33701ae36c34200878bf27bf11a813e5edb2679c0af664b3c117133bc03b9d30",
+    "proposalsFingerprint": "sha256:057db4a4704c06de74c630925182dd53dfbc1698beedb3375440ca27e129f177"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-12T00:59:01Z"
+  },
+  "proposals": [
+    {
+      "id": "xinwudaishi:019:r0001",
+      "unit": {
+        "id": "s0006",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "By the time Taizu ascended the throne, she had already died. He then decreed: \"The late Lady Chai is posthumously installed as empress, with the temple name Shengmui.\"",
+      "after": "By the time Taizu ascended the throne, she had already died. He then decreed: \"The late Lady Chai is posthumously installed as empress, with the posthumous title Shengmui.\"",
+      "reason": "Chinese 謚曰聖穆 is a posthumous title (謚), not a temple name; the literal translation already has this correctly.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:019:r0002",
+      "unit": {
+        "id": "s0053",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "and that Dingge be posthumously made general of the Left Thousand-Ox Guard and given the name Xun.",
+      "after": "and that Dingge be posthumously made general of the Left Thousand-Oxen Guard and given the name Xun.",
+      "reason": "Parallel unit s0058 writes 左千牛衞; s0053's 千年 is a likely textual corruption of 千牛 (Thousand Oxen). English already intends that office.",
+      "confidence": "medium"
+    },
+    {
+      "id": "xinwudaishi:019:r0003",
+      "unit": {
+        "id": "s0057",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "Xin shall be Minister over the Masses and Prince of Qi.\"",
+      "after": "Xin shall be posthumously made Minister over the Masses and enfeoffed as Prince of Qi.\"",
+      "reason": "Parallel to Tong's fuller grant wording in s0056; the Chinese omits 可贈 but the sense is posthumous grant and enfeoffment, not a present-tense office.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xinwudaishi:019:r0001",
+      "decision": "revise",
+      "after": "By the time Taizu ascended the throne, she had already died. He then decreed: \"The late Lady Chai is posthumously installed as empress, with the posthumous title Shengmu.\"",
+      "reason": "謚曰聖穆 assigns the posthumous title Shengmu, not a temple name; Shengmui is also a misspelling.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0006",
+        "excerpt": "謚曰聖穆"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:019:r0002",
+      "decision": "reject",
+      "after": null,
+      "reason": "Wikisource and the parallel edict read 左千牛衞將軍; the local 千年 is corrupt, but the existing English already renders that office as Thousand-Ox. Changing Ox to Oxen is only stylistic, not a semantic repair.",
+      "sourceWitness": {
+        "source": "wikisource",
+        "citation": "https://zh.wikisource.org/wiki/新五代史/卷19",
+        "excerpt": "定哥贈左千牛衞將軍，賜名遜"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:019:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0055–s0056 establish posthumous grants for the dead brothers; elliptical 信司徒，𣏌王 parallel to 侗可贈太傅，追封郯王, so adding 'posthumously made' and 'enfeoffed as' restores the grant sense without inventing new offices.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0057",
+        "excerpt": "信司徒，𣏌王"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

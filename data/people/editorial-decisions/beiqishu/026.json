@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 3,
+  "book": "beiqishu",
+  "chapter": "026",
+  "input": {
+    "chapterFingerprint": "sha256:828831c79f5d7cd61b9bfea1cd1d8a1163c80315f378b5ca39cd2762eae3f1dd",
+    "proposalsFingerprint": "sha256:321916cf06a00d32268e3ea18845965fe0a14583ec4b05cfe2a326013f5420e9"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-e3c1fb92-246b-49ce-a02f-e7961d98ec88",
+    "runId": "run-1b2ef723-9e40-41dc-969b-660499797f6e",
+    "completedAt": "2026-08-12T00:39:12.205Z"
+  },
+  "proposals": [
+    {
+      "id": "beiqishu:026:r0001",
+      "unit": {
+        "id": "s0045",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "Gao Huan accepted neither counsel, and thus came the defeat at Shawei.",
+      "after": "Gao Huan accepted neither counsel, and thus came the defeat at Shaoyuan.",
+      "reason": "沙苑 is Shaoyuan (Sha Yuan), not Shawei; the battle name is mis-romanized in both English fields.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:026:r0002",
+      "unit": {
+        "id": "s0045",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "literal",
+      "before": "The Grand Ancestor accepted neither counsel, and thus came the defeat at Shawei.",
+      "after": "The Grand Ancestor accepted neither counsel, and thus came the defeat at Shaoyuan.",
+      "reason": "沙苑 is Shaoyuan (Sha Yuan), not Shawei; the battle name is mis-romanized in both English fields.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:026:r0003",
+      "unit": {
+        "id": "s0054",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "Beguiled by her slander, he drove off his former wife, the Yu clan, and would not acknowledge his son. Resentment filled the household; one after another they reported him to the authorities. He was deeply scorned by the age.",
+      "after": "Beguiled by her slander, he drove off his former wife of the Yu clan, and would not acknowledge his son. Resentment filled the household; one after another they reported him to the authorities. He was deeply scorned by the age.",
+      "reason": "于氏 is a woman of the Yu clan (née Yu), not 'the Yu clan' itself; the literal rendering misidentifies the referent.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:026:r0004",
+      "unit": {
+        "id": "s0072",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Late in Xiaochang bandits rose everywhere. Seeing that the realm would soon fall into disorder, he went to Luoyang and befriended Murong Yan in the trade of hiring out horses.",
+      "after": "Late in Xiaochang bandits rose everywhere. Seeing that the realm would soon fall into disorder, he went to Luoyang and befriended Murong Yan as a fellow horseman.",
+      "reason": "騎馬為友 means becoming friends through riding together, not engaging in the trade of hiring out horses; the idiomatic English invents a business not in the Chinese.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "beiqishu:026:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0045 has 沙苑之敗; 沙苑 is Shaoyuan, not Shawei. The proposed romanization corrects a real place-name error while leaving the rest of the sentence intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0045",
+        "excerpt": "沙苑之敗"
+      }
+    },
+    {
+      "repairId": "beiqishu:026:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal line likewise mistranslates 沙苑 as Shawei; Shaoyuan matches the Chinese battle place-name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0045",
+        "excerpt": "遂有沙苑之敗"
+      }
+    },
+    {
+      "repairId": "beiqishu:026:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "前妻于氏 names the former wife as a woman of the Yu clan (née Yu). The appositive 'the Yu clan' wrongly equates her with the clan; 'of the Yu clan' restores the correct referent and aligns with the idiomatic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0054",
+        "excerpt": "逐前妻于氏"
+      }
+    },
+    {
+      "repairId": "beiqishu:026:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "與慕容儼騎馬為友 means they became friends through riding horses together. The original invents a horse-hiring trade absent from the Chinese; 'fellow horseman' correctly removes that invention.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0072",
+        "excerpt": "與慕容儼騎馬為友"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "beiqishu:026:r0004",
+      "claim": {
+        "id": "beiqishu:026:c0258",
+        "subject": "beiqishu:026:p003",
+        "predicate": "occupation",
+        "value": {
+          "label": {
+            "en": "engaged with Murong Yan in hiring out horses",
+            "zh": "騎馬"
+          }
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "beiqishu:026:s0072"
+        ]
+      },
+      "reason": "s0072’s 騎馬為友 describes friendship formed while riding, not an occupation of hiring out horses; claim c0258 exists only because the bad idiomatic invented that trade.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0072",
+        "excerpt": "騎馬為友"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "houhanshu",
+  "chapter": "110",
+  "input": {
+    "chapterFingerprint": "sha256:2ee5a42003abbaaca79752fe3bc3fd31ce8316f6afacc8487dedda186e35c4fc",
+    "proposalsFingerprint": "sha256:1e9a2b4b0c53f86f0d4ee9a6dd6ad51ed5371244dedc84def9f5c5a5a1fb52ea"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-8083eced-3423-40f1-9850-c6c55eb4fb6b",
+    "runId": "run-65718aed-e97c-464c-9e9c-098b0c2a27d7",
+    "completedAt": "2026-08-12T00:41:19.175Z"
+  },
+  "proposals": [
+    {
+      "id": "houhanshu:110:r0001",
+      "unit": {
+        "id": "s0061",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Jianwu 2 saw the great altars of soil and grain east of Luoyang, south of the temples—open-air square mounds with a gate.",
+      "after": "In Jianwu 2 the grand altars of soil and grain were founded at Luoyang, to the right of the ancestral temples—open-air square mounds with only a walled gateway.",
+      "reason": "Chinese 在宗庙之右 means to the right of the ancestral temples; the idiomatic rendering invents “east of Luoyang, south of the temples.”",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:110:r0002",
+      "unit": {
+        "id": "s0073",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "In the eighth year after the founding of Han someone said that when Zhou rose it founded sacrifice to Hou Ji in the capital; therefore Gaozu ordered She altars named Lingxing established empire-wide.",
+      "after": "In the eighth year after the founding of Han someone said that when Zhou rose it founded sacrifice to Hou Ji in the capital; therefore Emperor Gao ordered Lingxing shrines established empire-wide.",
+      "reason": "Chinese 立灵星祠 is establishing Lingxing shrines, not She altars renamed Lingxing.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:110:r0003",
+      "unit": {
+        "id": "s0137",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 22
+      },
+      "field": "idiomatic",
+      "before": "Lingdi, the Jiedu marquis and Hejian prince’s great-great-grandson, likewise raised his ancestors.",
+      "after": "Lingdi, the Jiedu marquis and Hejian prince’s great-grandson, likewise raised his ancestors.",
+      "reason": "Classical 曾孙 denotes a great-grandson (son’s son’s son); “great-great-grandson” overstates the generation distance.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:110:r0004",
+      "unit": {
+        "id": "s0137",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 22
+      },
+      "field": "literal",
+      "before": "Emperor Ling, the marquis of Jiedu, a great-great-grandson of the Filial King of Hejian, succeeded and likewise posthumously honored his forebears.",
+      "after": "Emperor Ling, the marquis of Jiedu, a great-grandson of the Filial King of Hejian, succeeded and likewise posthumously honored his forebears.",
+      "reason": "Same generation error as in the idiomatic line: 曾孙 is great-grandson.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "houhanshu:110:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 立太社稷于雒阳，在宗庙之右 places the altars at Luoyang to the right of the ancestral temples; the original invents “east of Luoyang, south of the temples,” and 有墙门而已 supports “only a walled gateway.”",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0061",
+        "excerpt": "立太社稷于雒阳，在宗庙之右，方坛，无屋，有墙门而已"
+      }
+    },
+    {
+      "repairId": "houhanshu:110:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 令天下立灵星祠 orders Lingxing shrines established empire-wide; the original’s “She altars named Lingxing” is invented, and 高帝 is correctly rendered Emperor Gao.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0073",
+        "excerpt": "于是高帝令天下立灵星祠"
+      }
+    },
+    {
+      "repairId": "houhanshu:110:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 河间孝王曾孙 uses 曾孙, the standard term for great-grandson; “great-great-grandson” overstates the generation distance.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0137",
+        "excerpt": "灵帝以河间孝王曾孙解犊侯即位"
+      }
+    },
+    {
+      "repairId": "houhanshu:110:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same source term 曾孙 requires great-grandson in the literal line; the proposed replacement matches the Chinese kinship term.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0137",
+        "excerpt": "河间孝王曾孙"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

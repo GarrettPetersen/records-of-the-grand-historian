@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "050",
+  "input": {
+    "chapterFingerprint": "sha256:53beb048b2081fad3a59a2867da9ae41770aee1c0f01fefd631f1a3f121e582d",
+    "proposalsFingerprint": "sha256:49112ccbd937bc183a5cf080c63ffa5848c12a7289c35a341d8f67e7a67addc1"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-12T00:59:01Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:050:r0001",
+      "unit": {
+        "id": "s0018",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "After Han pacified Wu and Chu, Emperor Jing wanted to continue Wu with the son of Marquis De, and continue Chu with Prince Yuan's son Liu Li.",
+      "after": "After Han pacified Wu and Chu, Emperor Jing wanted to continue Wu with the son of Marquis De, and continue Chu with Prince Yuan's son Li.",
+      "reason": "Chinese 元王子禮 does not supply the surname Liu; the literal English invents Liu before Li.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:050:r0002",
+      "unit": {
+        "id": "s0028",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "King Zhao Liu Sui—his father was Gaozu's middle son, named You, posthumously titled \"You.\"",
+      "after": "King Zhao Liu Sui—his father was Gaozu's middle son, named You (友), posthumously titled You (幽, \"the Secluded\").",
+      "reason": "Personal name 友 and posthumous name 幽 are different graphs both rendered You; the literal fails to distinguish them or convey 幽.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:050:r0003",
+      "unit": {
+        "id": "s0030",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Empress Dowager Gao installed Lu Lu as King of Zhao, but within a year she passed away.",
+      "after": "Empress Dowager Gao installed Lü Lu as King of Zhao, but within a year she passed away.",
+      "reason": "Chinese 呂祿 uses the surname Lü; idiomatic Lu Lu drops the umlaut and obscures the Lü clan identity.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:050:r0001",
+      "decision": "revise",
+      "after": "After Han pacified Wu and Chu, Emperor Jing wanted to continue Wu with the son of Marquis De, and continue Chu with King Yuan's son Liu Li.",
+      "reason": "Although this unit abbreviates the name to 禮, the genealogy identifies King Yuan's son as Liu Li (劉禮); retaining the surname supports correct identity resolution.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0018",
+        "excerpt": "以元王子禮續楚"
+      }
+    },
+    {
+      "repairId": "shiji:050:r0002",
+      "decision": "revise",
+      "after": "King Zhao Liu Sui—his father was Gaozu's middle son, whose personal name was You and whose posthumous title was You, \"the Secluded.\"",
+      "reason": "The personal name You and posthumous title You represent different Chinese words; naming each category and translating the latter distinguishes them without inserting Chinese into the English field.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0028",
+        "excerpt": "名友，謚曰「幽」"
+      }
+    },
+    {
+      "repairId": "shiji:050:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "呂祿 is the Lü surname; idiomatic Lu Lu loses the umlaut and conflates it with unrelated Lu surnames, while Lü Lu matches the Chinese and the unit's own literal.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0030",
+        "excerpt": "高后王呂祿於趙"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "shiji:050:r0003",
+      "before": {
+        "id": "shiji:050:c0106",
+        "subject": "shiji:050:p028",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Lu Lu",
+          "zh": "呂祿",
+          "pinyin": "Lü Lu"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "shiji:050:s0030"
+        ]
+      },
+      "after": {
+        "id": "shiji:050:c0106",
+        "subject": "shiji:050:p028",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Lü Lu",
+          "zh": "呂祿",
+          "pinyin": "Lü Lu"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "shiji:050:s0030"
+        ]
+      },
+      "reason": "Accepted r0003 shows English Lu Lu came only from the bad idiomatic of 呂祿; the personal-name claim must read Lü Lu while keeping zh, pinyin, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0030",
+        "excerpt": "呂祿"
+      }
+    }
+  ]
+}

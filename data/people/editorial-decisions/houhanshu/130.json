@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "houhanshu",
+  "chapter": "130",
+  "input": {
+    "chapterFingerprint": "sha256:90fa2a32099c83f1fe3a65de9d1e2307724f95ff4934e8d85e00a827bd4e36ff",
+    "proposalsFingerprint": "sha256:10ae99aa5ab36d5e1c226b1e6d0054fd6dc07968dd60e52db9bcda79db064ef6"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-08a25eef-78d1-446e-b778-1bd387ef2f71",
+    "runId": "run-40b9843f-4cd5-4433-ab85-7f81e2b07184",
+    "completedAt": "2026-08-12T00:42:50.303Z"
+  },
+  "proposals": [
+    {
+      "id": "houhanshu:130:r0001",
+      "unit": {
+        "id": "s0031",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "field": "literal",
+      "before": "Descending to the Warring States, extravagance and usurpation blazed hotter; they cut away the ritual canopies, probably hating words that harmed themselves.",
+      "after": "Descending to the Warring States, extravagance and usurpation blazed hotter; they cut away the ritual registers, probably hating words that harmed themselves.",
+      "reason": "Chinese 禮籍 means ritual registers/texts, not canopies; the literal rendering mistranslates 籍.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:130:r0002",
+      "unit": {
+        "id": "s0110",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "When Qin swallowed the rival kingdoms it seized their court trains, which is why the Han “great progress” runs eighty-one follow-cars while the statutory halving uses thirty-six.",
+      "after": "When Qin swallowed the rival kingdoms it seized their court trains, which is why the great equipage has eighty-one attendant chariots, while the statutory equipage is half that.",
+      "reason": "Chinese 故大駕屬車八十一乘，法駕半之 does not name the Han; the idiomatic gloss invents “Han” and restates a count already given as thirty-six.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "houhanshu:130:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 削滅禮籍 means they destroyed the ritual registers/codices; 籍 is registers or written records, not canopies, and the proposed literal matches that sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0031",
+        "excerpt": "削滅禮籍"
+      }
+    },
+    {
+      "repairId": "houhanshu:130:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 故大駕屬車八十一乘，法駕半之 names neither Han nor thirty-six; the proposal removes those inventions and renders 大駕/法駕半之 as great equipage and statutory equipage half that.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0110",
+        "excerpt": "故大駕屬車八十一乘，法駕半之"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

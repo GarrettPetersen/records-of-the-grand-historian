@@ -354,6 +354,15 @@ function selfTest() {
       id: 's0009', kind: 'paragraph-sentence', blockIndex: 8,
       collection: 'sentences', itemIndex: 0,
       zh: '', en: 'Gaozu ordered it.', literal: 'Gaozu ordered it.',
+    }, {
+      id: 's0010', kind: 'paragraph-sentence', blockIndex: 9,
+      collection: 'sentences', itemIndex: 0,
+      zh: '', en: 'He held all the Xi and Xí peoples.', literal: 'He held all the Xi and Xí peoples.',
+    }, {
+      id: 's0011', kind: 'paragraph-sentence', blockIndex: 10,
+      collection: 'sentences', itemIndex: 0,
+      zh: '', en: 'He took five prefectures: Wei, Xin, Wu, Gui, and Ru.',
+      literal: 'He took five prefectures: Wei, Xin, Wu, Gui, and Ru.',
     }],
     preflight: {
       candidates: [{
@@ -395,6 +404,14 @@ function selfTest() {
       }, {
         id: 'fixture:002:cand_gaozu', unit: 's0009', language: 'en',
         exact: 'Gaozu', occurrence: 0, startCodePoint: 0, endCodePoint: 5,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_xi_people', unit: 's0010', language: 'en',
+        exact: 'Xí', occurrence: 0, startCodePoint: 23, endCodePoint: 25,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_ru_prefecture', unit: 's0011', language: 'en',
+        exact: 'Ru', occurrence: 0, startCodePoint: 49, endCodePoint: 51,
         detectors: [{ kind: 'english-capitalized-expression' }],
       }],
     },
@@ -514,6 +531,8 @@ function selfTest() {
     ['fixture:002:cand_jianwu', 'other'],
     ['fixture:002:cand_nan', 'place'],
     ['fixture:002:cand_privy', 'office'],
+    ['fixture:002:cand_xi_people', 'collective'],
+    ['fixture:002:cand_ru_prefecture', 'place'],
   ]);
   for (const [candidate, reason] of expectedNonPeople) {
     const disposition = fragments.extraction.candidateDispositions.find((item) =>

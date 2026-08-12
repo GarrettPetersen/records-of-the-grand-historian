@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 3,
+  "book": "houhanshu",
+  "chapter": "032",
+  "input": {
+    "chapterFingerprint": "sha256:d9962fa5d0ad7143f20fc625c92ec9326f0e8d05de4836aa3e1a64fea2d6658a",
+    "proposalsFingerprint": "sha256:20c38b5d1fab3d2163e35c675ec4460f0388435b2b926359d73c80900682ef26"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-bf14353c-8dbf-453e-bf7c-1138283f502a",
+    "runId": "run-37e06946-7f58-4d21-90c2-46deccb7ec4d",
+    "completedAt": "2026-08-12T00:39:43.338Z"
+  },
+  "proposals": [
+    {
+      "id": "houhanshu:032:r0001",
+      "unit": {
+        "id": "s0115",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "I would punish poseurs who feign sainthood and bring down slanderers like Zang Cang;",
+      "after": "I would punish Li Chu for posing as a sage and bring down slanderers like Zang Cang;",
+      "reason": "Chinese names 犁鋤 as a specific person; idiomatic \"poseurs\" erases the personal name parallel to Zang Cang.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:032:r0002",
+      "unit": {
+        "id": "s0035",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Then I would shut my gate to study moral teaching and read Confucius and Laozi, hoping for something of the immortals' ease; I would climb the Long ridges and high hills, send my spirit wandering through heaven and earth, and let my eyes sweep the eight reaches of the world.",
+      "after": "Then I would shut my gate to study moral teaching and read Confucius and Laozi, hoping for something of the blessing of [Chisongzi] Song and Wangzi Qiao; I would climb the Long ridges and high hills, send my spirit wandering through heaven and earth, and let my eyes sweep the eight reaches of the world.",
+      "reason": "Chinese 松、喬 names the immortals Chisongzi and Wangzi Qiao; idiomatic reduces them to generic \"immortals\".",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "houhanshu:032:r0001",
+      "decision": "revise",
+      "after": "I would punish Li Chu for obstructing the sage and chastise Zang Cang for slandering the wise;",
+      "reason": "誅犁鋤之介聖兮，討臧倉之訴知 names Li Chu parallel to Zang Cang, so erasing 犁鋤 as generic \"poseurs\" is wrong; but 介聖 means interposing against / obstructing the sage, not posing as one, and 訴知 is Zang Cang's slander of the wise.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0115",
+        "excerpt": "誅犁鋤之介聖兮，討臧倉之訴知"
+      }
+    },
+    {
+      "repairId": "houhanshu:032:r0002",
+      "decision": "revise",
+      "after": "Then I would shut my gate to study moral teaching and read Confucius and Laozi, hoping for something of the blessing of Chisongzi and Wangzi Qiao; I would climb the Long ridges and high hills, send my spirit wandering through heaven and earth, and let my eyes sweep the eight reaches of the world.",
+      "reason": "庶幾乎松、喬之福 names the immortals Song/Chisongzi and Qiao/Wangzi Qiao and seeks their 福 (blessing), so \"immortals' ease\" erases the names and mistranslates 福; the proposal's bracketed \"[Chisongzi] Song\" is still awkward for idiomatic English.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0035",
+        "excerpt": "庶幾乎松、喬之福"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "houhanshu:032:r0001",
+      "before": {
+        "id": "houhanshu:032:c0137",
+        "subject": "houhanshu:032:p051",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Li",
+          "zh": "犁鋤",
+          "pinyin": "Lí Chú"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "houhanshu:032:s0115"
+        ]
+      },
+      "after": {
+        "id": "houhanshu:032:c0137",
+        "subject": "houhanshu:032:p051",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Li Chu",
+          "zh": "犁鋤",
+          "pinyin": "Lí Chú"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "houhanshu:032:s0115"
+        ]
+      },
+      "reason": "The truncated English name \"Li\" does not match 犁鋤; revising r0001 restores the full personal name Li Chu.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0115",
+        "excerpt": "犁鋤"
+      }
+    },
+    {
+      "repairId": "houhanshu:032:r0002",
+      "before": {
+        "id": "houhanshu:032:c0058",
+        "subject": "houhanshu:032:p018",
+        "predicate": "name",
+        "value": {
+          "kind": "religious-name",
+          "en": "Prince Song",
+          "zh": "松",
+          "pinyin": "Sōng"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "houhanshu:032:s0035"
+        ]
+      },
+      "after": {
+        "id": "houhanshu:032:c0058",
+        "subject": "houhanshu:032:p018",
+        "predicate": "name",
+        "value": {
+          "kind": "religious-name",
+          "en": "Chisongzi",
+          "zh": "松",
+          "pinyin": "Sōng"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "houhanshu:032:s0035"
+        ]
+      },
+      "reason": "松 in the pair 松、喬 is Chisongzi, not \"Prince Song\"; the princely title belongs to Wangzi Qiao, and revising r0002 restores the correct religious name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0035",
+        "excerpt": "松、喬"
+      }
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "005",
+  "input": {
+    "chapterFingerprint": "sha256:5fe31c000263a35762590a5a63c6236832ed459d0962cc079279917e99865013",
+    "proposalsFingerprint": "sha256:eb02ae75aa047c83cc7d6f6d75333d43050744f43494b6883f316ed681f73c46"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-12T00:59:01Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:005:r0001",
+      "unit": {
+        "id": "s0004",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "Learning that the Emperor had succeeded, the Empress Dowager sent his younger brother Li Hu with an army to oppose him.",
+      "after": "Learning that the Emperor had succeeded, the Empress Dowager sent the imperial younger brother Li Hu with an army to oppose him.",
+      "reason": "太弟 denotes the imperial younger brother (of Taizong), not Shizong's younger brother; 'his younger brother' misattributes the kinship.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:005:r0002",
+      "unit": {
+        "id": "s0004",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "When the Empress Dowager heard the Emperor had succeeded, she sent his younger brother Li Hu with troops to resist him.",
+      "after": "When the Empress Dowager heard the Emperor had succeeded, she sent the imperial younger brother Li Hu with troops to resist him.",
+      "reason": "太弟 is 'imperial younger brother,' not 'his younger brother' of the newly enthroned emperor.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:005:r0003",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 16
+      },
+      "field": "idiomatic",
+      "before": "He executed Minister of Agriculture Huashe and Chubuli.",
+      "after": "He executed Situ Huashe and Chubuli.",
+      "reason": "司徒 is the Situ (Minister over the Masses), not Minister of Agriculture (大司農).",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:005:r0004",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 16
+      },
+      "field": "literal",
+      "before": "Minister of Agriculture Huashe and Chubuli were put to death.",
+      "after": "Situ Huashe and Chubuli were put to death.",
+      "reason": "司徒 should not be rendered as Minister of Agriculture.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:005:r0001",
+      "decision": "revise",
+      "after": "Learning that the Emperor had succeeded, the Empress Dowager sent Li Hu, the Imperial Younger Brother, with an army to oppose him.",
+      "reason": "太弟 is Li Hu's formal title, not kinship to the new emperor; apposition and capitalization make that distinction clear in English.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0004",
+        "excerpt": "遣太弟李胡率兵拒之"
+      }
+    },
+    {
+      "repairId": "liaoshi:005:r0002",
+      "decision": "revise",
+      "after": "When the Empress Dowager heard the Emperor had succeeded, she sent Li Hu, the Imperial Younger Brother, with troops to resist him.",
+      "reason": "The literal must preserve 太弟 as Li Hu's formal title without implying that he was the newly enthroned emperor's brother.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0004",
+        "excerpt": "遣太弟李胡率兵拒之"
+      }
+    },
+    {
+      "repairId": "liaoshi:005:r0003",
+      "decision": "revise",
+      "after": "He executed Minister over the Masses Huashe and Chubuli.",
+      "reason": "司徒 is Minister over the Masses, not Minister of Agriculture; translating the office is clearer than leaving the title as Situ.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "誅司徒劃設及楚補裏"
+      }
+    },
+    {
+      "repairId": "liaoshi:005:r0004",
+      "decision": "revise",
+      "after": "Minister over the Masses Huashe and Chubuli were put to death.",
+      "reason": "司徒 is Minister over the Masses, not Minister of Agriculture; translating the office is clearer than leaving the title as Situ.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "誅司徒劃設及楚補裏"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "houhanshu",
+  "chapter": "131",
+  "input": {
+    "chapterFingerprint": "sha256:2e3bb3a6b11979aedf11d4eac411cd99caef8eaecc779163990ea157c5b4fa13",
+    "proposalsFingerprint": "sha256:9946a150926eb72be4b634b58b9669bab362e5c53a4af0bee2aacfe33e08be1e"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-d5d1b83e-b3b8-47dd-a6da-01a38e44746b",
+    "runId": "run-750d2549-5df2-461d-8e9a-e052b6e02fec",
+    "completedAt": "2026-08-12T00:42:59.456Z"
+  },
+  "proposals": [
+    {
+      "id": "houhanshu:131:r0001",
+      "unit": {
+        "id": "s0066",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Legend made the xiezhi a one-horned creature that knew justice from injustice; Chu’s kings turned its image into headgear.",
+      "after": "Legend made the xiezhi a one-horned creature that knew justice from injustice; the king of Chu once obtained one and therefore made it into a cap.",
+      "reason": "Chinese 楚王嘗獲之 is singular and states the king obtained the xiezhi; idiomatic wrongly pluralizes and drops that clause.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:131:r0002",
+      "unit": {
+        "id": "s0150",
+        "kind": "paragraph-sentence",
+        "blockIndex": 29,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Kings of Liu blood wore a red-based four-color ribbon about twenty-one feet long.",
+      "after": "Feudal kings wore a red-based four-color ribbon about twenty-one feet long.",
+      "reason": "Chinese 諸侯王 does not specify Liu blood; that lineage detail is invented in the idiomatic English.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "houhanshu:131:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 楚王嘗獲之，故以爲冠 is singular and states that the king of Chu once obtained a xiezhi and therefore made a cap from it; the idiomatic plural 'Chu’s kings' and 'turned its image into headgear' omit the acquisition and invent a plural subject.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0066",
+        "excerpt": "楚王嘗獲之，故以爲冠"
+      }
+    },
+    {
+      "repairId": "houhanshu:131:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 諸侯王 means feudal kings and does not name the Liu lineage; 'Kings of Liu blood' invents kinship detail absent from the source.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0150",
+        "excerpt": "諸侯王赤綬"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "082",
+  "input": {
+    "chapterFingerprint": "sha256:14a1c3209c2ee2a7e50b91152848471e84515b8b40da0c63f42af5a3cc35ee14",
+    "proposalsFingerprint": "sha256:5624da079a36dc03dbabe929edb555a7945bd7ee9dcc118039a902357a2f9426"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-1eba3f19-5628-4613-952f-36214d5f8491",
+    "runId": "run-32dc58cc-23d4-4b01-9988-ef4868be2c32",
+    "completedAt": "2026-08-12T00:46:02.584Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:082:r0001",
+      "unit": {
+        "id": "s0056",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Initially, Nao Chi killed Min Wang, Ju people sought Min Wang son Fa Zhang, got him Grand Historian Tao home, for person irrigated garden.",
+      "after": "Initially, Nao Chi killed Min Wang, Ju people sought Min Wang son Fa Zhang, got him Grand Historian Jiao home, for person irrigated garden.",
+      "reason": "Literal wrongly renders 嬓 as Tao; idiomatic correctly uses Jiao.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:082:r0002",
+      "unit": {
+        "id": "s0057",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Tao daughter pitied good treated him.",
+      "after": "Jiao daughter pitied good treated him.",
+      "reason": "Literal continues the Tao misreading of 嬓; should match Jiao.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:082:r0003",
+      "unit": {
+        "id": "s0060",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Yan initially entered Qi, heard Hua yi person Wang Juan worthy, ordered army middle said 'surround Hua yi thirty li none enter', because Wang Juan reason.",
+      "after": "Yan initially entered Qi, heard Hua yi person Wang Zhu worthy, ordered army middle said 'surround Hua yi thirty li none enter', because Wang Zhu reason.",
+      "reason": "Literal misreads 蠋 as Juan; idiomatic correctly uses Zhu.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:082:r0004",
+      "unit": {
+        "id": "s0061",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Soon after sent person told Juan said: 'Qi people much esteem your righteousness, I make you general, enfeoff you ten thousand households.'",
+      "after": "Soon after sent person told Zhu said: 'Qi people much esteem your righteousness, I make you general, enfeoff you ten thousand households.'",
+      "reason": "Literal continues Wang Juan for 蠋; should be Zhu.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:082:r0005",
+      "unit": {
+        "id": "s0062",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Juan firmly declined.",
+      "after": "Zhu firmly declined.",
+      "reason": "Literal continues Juan for 蠋; should be Zhu.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:082:r0006",
+      "unit": {
+        "id": "s0064",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "Wang Juan said: 'Loyal minister not serve two lords, chaste woman not change two husbands.",
+      "after": "Wang Zhu said: 'Loyal minister not serve two lords, chaste woman not change two husbands.",
+      "reason": "Literal misreads 王蠋 as Wang Juan; should be Wang Zhu.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:082:r0007",
+      "unit": {
+        "id": "s0070",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "literal",
+      "before": "Qi perished grandees heard this, said: 'Wang Juan, commoner, righteousness not face north to Yan, moreover officials in position eating salary!'",
+      "after": "Qi perished grandees heard this, said: 'Wang Zhu, commoner, righteousness not face north to Yan, moreover officials in position eating salary!'",
+      "reason": "Literal misreads 王蠋 as Wang Juan; should be Wang Zhu.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:082:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 太史嬓 names the Grand Historian as 嬓 (Jiao); literal Tao is a wrong reading, and the proposed Jiao matches the character and the idiomatic rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0056",
+        "excerpt": "太史嬓"
+      }
+    },
+    {
+      "repairId": "shiji:082:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 嬓女 is Jiao's daughter; literal Tao repeats the same misreading of 嬓, and Jiao is the correct name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0057",
+        "excerpt": "嬓女"
+      }
+    },
+    {
+      "repairId": "shiji:082:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 王蠋 is Wang Zhu; literal Juan misreads 蠋, and the proposed Zhu is the correct reading used in the idiomatic text.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0060",
+        "excerpt": "王蠋"
+      }
+    },
+    {
+      "repairId": "shiji:082:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The addressee in 謂蠋曰 is 蠋 (Zhu), not Juan; replacing Juan with Zhu corrects the name without changing the rest of the literal calque.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0061",
+        "excerpt": "謂蠋曰"
+      }
+    },
+    {
+      "repairId": "shiji:082:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "Subject 蠋固謝 is Zhu declining; Juan is the same misreading of 蠋 and should be Zhu.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0062",
+        "excerpt": "蠋固謝"
+      }
+    },
+    {
+      "repairId": "shiji:082:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "Speech attribution 王蠋曰 names Wang Zhu as speaker; Wang Juan is an incorrect reading of 蠋.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0064",
+        "excerpt": "王蠋曰"
+      }
+    },
+    {
+      "repairId": "shiji:082:r0007",
+      "decision": "accept",
+      "after": null,
+      "reason": "The officials quote 王蠋; literal Wang Juan again misreads 蠋, and Wang Zhu is the accurate name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0070",
+        "excerpt": "王蠋"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

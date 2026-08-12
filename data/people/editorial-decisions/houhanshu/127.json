@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "houhanshu",
+  "chapter": "127",
+  "input": {
+    "chapterFingerprint": "sha256:7ed97b8e3a8a1580bcda5840a517c9dad3705497b9d91b3d9e487d65f7a8f0b3",
+    "proposalsFingerprint": "sha256:2f609a732be4a23b26b100fc299f93bf7d07e2ad1a2d630b31742bd30e539940"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-6ec2046e-2fa9-4f4e-a3a8-16e90e93b325",
+    "runId": "run-bd7bbac0-d7d2-4d50-8345-55e5713bff23",
+    "completedAt": "2026-08-12T00:42:46.520Z"
+  },
+  "proposals": [
+    {
+      "id": "houhanshu:127:r0001",
+      "unit": {
+        "id": "s0184",
+        "kind": "paragraph-sentence",
+        "blockIndex": 37,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "Also struck were ten Shanglin pond stewards, the chief and deputy for the palace birth-attendant corps, three eunuch-led directorates including Kun Terrace and the flying-archer guard, and twenty-one assistant posts.",
+      "after": "Also struck were ten Shanglin pond stewards, the chief and deputy of the palace kitchen attendants, three eunuch-led directorates including Kun Terrace and the flying-archer guard, and twenty-one assistant posts.",
+      "reason": "胞人 is the Han kitchen/butcher office (通“庖”), not a birth or placenta attendant corps.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:127:r0002",
+      "unit": {
+        "id": "s0184",
+        "kind": "paragraph-sentence",
+        "blockIndex": 37,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "Further abolished were ten pool overseers of Shanglin, the chief and assistant of the placenta attendants, three directors of eunuchs, Kun Terrace, and flying archers, and twenty-one assistants.",
+      "after": "Further abolished were ten pool overseers of Shanglin, the chief and assistant of the kitchen attendants, three directors of eunuchs, Kun Terrace, and flying archers, and twenty-one assistants.",
+      "reason": "胞人 is the Han kitchen/butcher office (通“庖”), not placenta attendants.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "houhanshu:127:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In s0184 胞人长丞 sits with Shanglin pond stewards and other Shaofu service offices; 胞人 is the Han kitchen/butcher post (通庖), so 'birth-attendant corps' is a false reading and 'palace kitchen attendants' restores the office correctly.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0184",
+        "excerpt": "胞人长丞"
+      }
+    },
+    {
+      "repairId": "houhanshu:127:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 胞人长丞 is the kitchen/butcher office under the Privy Treasurer, not placenta attendants; 'kitchen attendants' matches the Chinese and the surrounding liquor-office and kitchen context.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0184",
+        "excerpt": "胞人长丞"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

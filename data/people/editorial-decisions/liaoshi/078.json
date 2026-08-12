@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "078",
+  "input": {
+    "chapterFingerprint": "sha256:145b4f8d7c373114d66dec690e1caf52d5e69928adebe3b3c57f3fcf7dbc91a6",
+    "proposalsFingerprint": "sha256:e3d57d6632516d962dfebbf28b753fd07c9c9239ccb5a5fe70522078364ecaff"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-12T00:59:01Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:078:r0001",
+      "unit": {
+        "id": "s0066",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Judged by these precedents, Yilige's remonstrance was stern and commanding — nearly the bearing of the gentlemen of old.",
+      "after": "Judged by these precedents, Yilage's remonstrance was stern and commanding — nearly the bearing of the gentlemen of old.",
+      "reason": "Idiomatic misspells the chapter subject Yelage as Yilige.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:078:r0002",
+      "unit": {
+        "id": "s0041",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 21
+      },
+      "field": "idiomatic",
+      "before": "When the Zhou emperor Shizong returned north ill, Siwen withdrew to Yijin and pretended not to know where the enemy were.",
+      "after": "When the Zhou ruler Rong returned ill, Siwen withdrew to Yijin and pretended not to know where the enemy were.",
+      "reason": "Chinese 周主榮 names the Zhou ruler as Rong; idiomatic invents temple name Shizong and adds north.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:078:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 夷臘葛 is the chapter subject Yilage (耶律夷臘葛); idiomatic's Yilige is a misspelling, and the proposed Yilage matches the rest of the chapter.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0066",
+        "excerpt": "夷臘葛之諫"
+      }
+    },
+    {
+      "repairId": "liaoshi:078:r0002",
+      "decision": "revise",
+      "after": "When the Later Zhou emperor Chai Rong returned because of illness, Siwen withdrew to Yijin and pretended not to know where the enemy was.",
+      "reason": "周主榮 identifies the Later Zhou emperor Chai Rong; the source says he returned because of illness but does not say that he returned north.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0041",
+        "excerpt": "周主榮以病歸"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

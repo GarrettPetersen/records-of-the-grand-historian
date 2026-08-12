@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "houhanshu",
+  "chapter": "115",
+  "input": {
+    "chapterFingerprint": "sha256:93744ff7728feaf5468955e2d2aef9633365ff97ae63448c57f9898a07221267",
+    "proposalsFingerprint": "sha256:daf4335d829cc293842e220aab6d3f02112988829e1abc0bab8d38619aadaf79"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-12T00:59:47Z"
+  },
+  "proposals": [
+    {
+      "id": "houhanshu:115:r0001",
+      "unit": {
+        "id": "s0012",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Peng Chong had quarreled with the regional inspector Zhu Fu, brooded on slander, and—on his wife’s advice—defied the recall; he rose against Zhu Fu and was destroyed.",
+      "after": "Peng Chong had quarreled with the Shepherd of Youzhou Zhu Fu, brooded on slander, and—on his wife’s advice—defied the recall; he rose against Zhu Fu and was destroyed.",
+      "reason": "幽州牧 is the provincial shepherd/governor (牧), not the regional inspector (刺史).",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:115:r0002",
+      "unit": {
+        "id": "s0037",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "After two more years the palace carriage feasted its late halt.",
+      "after": "After two more years the palace carriage made its late halt.",
+      "reason": "宴驾 is the death euphemism 晏驾; “feasted” mistranslates 宴 and obscures the meaning that the emperor died.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:115:r0003",
+      "unit": {
+        "id": "s0074",
+        "kind": "paragraph-sentence",
+        "blockIndex": 24,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "On gengshen in the fifth month Lady Dong’s Yongle apartments beside Deyang Hall caught fire.",
+      "after": "On gengshen in the fifth month the Yongle empress dowager’s palace offices inside the northwest entry of the Deyang front hall caught fire.",
+      "reason": "Chinese names only 永乐太后; “Lady Dong” is an invented personal name not present in the source unit.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:115:r0004",
+      "unit": {
+        "id": "s0118",
+        "kind": "paragraph-sentence",
+        "blockIndex": 36,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Government was rotten, Liang Ji twisted the law, and the emperor doted on Empress Deng—another season of winged ill omens.",
+      "after": "Government was rotten, Liang Ji twisted the law, and the emperor doted on the empress of Bo—another season of winged ill omens.",
+      "reason": "毫后 is the Bo empress; rendering her as “Empress Deng” conflates her with Empress Deng (邓皇后) earlier in the chapter.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "houhanshu:115:r0001",
+      "decision": "revise",
+      "after": "Peng Chong had quarreled with Zhu Fu, governor of Youzhou, brooded on slander, and—on his wife’s advice—defied the recall; he rose against Zhu Fu and was destroyed.",
+      "reason": "幽州牧 is the governorship of Youzhou, not the inspectorate; the revised syntax also makes Zhu Fu's name and office clear.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0012",
+        "excerpt": "幽州牧朱浮"
+      }
+    },
+    {
+      "repairId": "houhanshu:115:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "宫车宴驾 is the imperial-death euphemism (晏驾); “feasted” wrongly reads 宴 as a banquet and obscures that the emperor died, while “made its late halt” keeps the calque without that error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0037",
+        "excerpt": "宫车宴驾"
+      }
+    },
+    {
+      "repairId": "houhanshu:115:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The unit names only 永乐太后 and locates 宫署 inside 德阳前殿西北入门内; “Lady Dong” and “apartments beside Deyang Hall” invent a personal name and misplace the offices.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0074",
+        "excerpt": "德阳前殿西北入门内永乐太后宫署"
+      }
+    },
+    {
+      "repairId": "houhanshu:115:r0004",
+      "decision": "revise",
+      "after": "Government was rotten, Liang Ji twisted the law, and the emperor doted on Empress Bo—another season of winged ill omens.",
+      "reason": "毫后 uses the temporary surname Bo by which Deng Mengnü was known; Empress Bo preserves the source's designation while the person record retains her full identity.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0118",
+        "excerpt": "上幸毫后"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

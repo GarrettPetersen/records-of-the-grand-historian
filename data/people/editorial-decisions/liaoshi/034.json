@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "034",
+  "input": {
+    "chapterFingerprint": "sha256:1e2695919bc3533b91f792823daeae90144db689add66308fe180241b3b0f8fb",
+    "proposalsFingerprint": "sha256:dbc5cf620df35e6914a13d8270811b275b39203f23040101ffda64f6649b8883"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-12T00:59:47Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:034:r0001",
+      "unit": {
+        "id": "s0018",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 16
+      },
+      "field": "idiomatic",
+      "before": "In the twelfth year Dezong campaigned against the Xi and took seven thousand households.",
+      "after": "In the twelfth year Dezu campaigned against the Xi and took seven thousand households.",
+      "reason": "Chinese 德祖 is the temple name Dezu (Taizu's father), not Dezong.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:034:r0002",
+      "unit": {
+        "id": "s0018",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 16
+      },
+      "field": "literal",
+      "before": "In the twelfth year Dezong attacked the Xi and captured seven thousand households.",
+      "after": "In the twelfth year Dezu attacked the Xi and captured seven thousand households.",
+      "reason": "Chinese 德祖 is Dezu, not Dezong.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:034:r0003",
+      "unit": {
+        "id": "s0020",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 18
+      },
+      "field": "idiomatic",
+      "before": "In the fifth year of his reign the Taizu attacked western and eastern Xi, subdued them entirely, and held all the Xi and Mohe peoples.",
+      "after": "In the fifth year of his reign the Taizu attacked western and eastern Xi, subdued them entirely, and held all the Xi and Ru peoples.",
+      "reason": "Chinese 霫 denotes the Ru people paired with the Xi, not the Mohe (靺鞨).",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:034:r0004",
+      "unit": {
+        "id": "s0020",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 18
+      },
+      "field": "literal",
+      "before": "In the fifth year of the Taizu's reign he attacked the western and eastern Xi, pacified them all, and wholly possessed the Xi and Mohe peoples.",
+      "after": "In the fifth year of the Taizu's reign he attacked the western and eastern Xi, pacified them all, and wholly possessed the Xi and Ru peoples.",
+      "reason": "Chinese 霫 denotes the Ru people, not Mohe.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:034:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 德祖 is the temple name Dezu; Dezong (德宗) is a different title, so the idiomatic misnames the campaigner.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0018",
+        "excerpt": "德祖討奚"
+      }
+    },
+    {
+      "repairId": "liaoshi:034:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 德祖 is Dezu, not Dezong; the literal repeats the same wrong temple name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0018",
+        "excerpt": "德祖討奚"
+      }
+    },
+    {
+      "repairId": "liaoshi:034:r0003",
+      "decision": "revise",
+      "after": "In the fifth year of his reign the Taizu attacked western and eastern Xi, subdued them entirely, and held all the Xi and Xí peoples.",
+      "reason": "霫 denotes the Xí people, distinct from both the Xi (奚) and the Mohe (靺鞨); the worker's reading Ru was incorrect.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0020",
+        "excerpt": "盡有奚、霫之眾"
+      }
+    },
+    {
+      "repairId": "liaoshi:034:r0004",
+      "decision": "revise",
+      "after": "In the fifth year of the Taizu's reign he attacked the western and eastern Xi, pacified them all, and wholly possessed the Xi and Xí peoples.",
+      "reason": "霫 denotes the Xí people, distinct from both the Xi (奚) and the Mohe (靺鞨); the worker's reading Ru was incorrect.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0020",
+        "excerpt": "奚、霫之眾"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

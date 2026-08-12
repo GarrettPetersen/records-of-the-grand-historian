@@ -893,6 +893,35 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       accounted.add(candidate.id);
       continue;
     }
+    if (candidate.language === 'en') {
+      const unitText = unitById.get(candidate.unit).en;
+      const codePoints = [...unitText];
+      const before = codePoints.slice(0, candidate.startCodePoint).join('');
+      const after = codePoints.slice(candidate.endCodePoint).join('');
+      if (/^[ \t]+(?:people|peoples|tribe|tribes|clan|clans)\b/iu.test(after)) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'collective',
+          note: 'Ethnic or social collective named immediately before its group noun.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (
+        /\bprefectures?\b[^.;!?]*$/iu.test(before) ||
+        /^[ \t]+Prefecture\b/u.test(after)
+      ) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'place',
+          note: 'Prefecture name, not a person.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+    }
     if (
       candidate.language === 'en' &&
       /^[ \t]+Commandery\b/u.test(

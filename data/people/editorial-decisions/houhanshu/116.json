@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "houhanshu",
+  "chapter": "116",
+  "input": {
+    "chapterFingerprint": "sha256:ada83477a9dd9ec98b8a70b1a9f49007ee0fed497af28f5b8e3ad6161ff77f6b",
+    "proposalsFingerprint": "sha256:4557a63cb6b32e5b51b3a99fa201628d5f1d6d035eb97661f1a718182027e15c"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-1163ee7a-f11d-45f7-8b29-8c02685181f7",
+    "runId": "run-7bee072d-5302-4fe9-8eaf-1cc6de51d850",
+    "completedAt": "2026-08-12T00:41:31.815Z"
+  },
+  "proposals": [
+    {
+      "id": "houhanshu:116:r0001",
+      "unit": {
+        "id": "s0025",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "At that time Minister of Works Zhou Zhang and others, because Empress Dowager Deng had not enthroned Prince Sheng as heir but the prince of Qinghe, therefore plotted to depose and replace.",
+      "after": "At that time Minister of Works Zhou Zhang and others, because Empress Dowager Deng had not enthroned Heir Apparent Sheng but the son of the Prince of Qinghe, therefore plotted to depose and replace.",
+      "reason": "Chinese 清河王子 means “son of the Prince of Qinghe,” not “the prince of Qinghe”; the literal line drops 子 and misidentifies who was enthroned.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:116:r0002",
+      "unit": {
+        "id": "s0143",
+        "kind": "paragraph-sentence",
+        "blockIndex": 53,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "That year the Colonel Protecting the Wuhuan Xia Yu, the General Breaking the Xianbei Tian Yan, and the Commissioner over the Xianbei Zang Min, leading the Southern Shanyu and those below, set out on three routes together to punish the Xianbei.",
+      "after": "That year the Colonel Protecting the Wuhuan Xia Yu, the Gentleman-General Breaking the Xianbei Tian Yan, and the Gentleman-General Commissioner over the Xiongnu Zang Min, leading the Southern Shanyu and those below, set out on three routes together to punish the Xianbei.",
+      "reason": "Chinese 使匈奴中郎将 is Commissioner/Gentleman-General over the Xiongnu, not “over the Xianbei”; the literal line conflates 匈奴 with 鲜卑.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:116:r0003",
+      "unit": {
+        "id": "s0060",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Guanghe 6 (183 CE), autumn: the Jinzhou reach of the Yellow River spread miles beyond its banks.",
+      "after": "Guanghe 6 (183 CE), autumn: the Jincheng reach of the Yellow River spread miles beyond its banks.",
+      "reason": "Chinese 金城 is Jincheng, not Jinzhou; the idiomatic line mistranslates the commandery name.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "houhanshu:116:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 不立皇太子胜而立清河王子 contrasts Heir Apparent Sheng with the son of the Prince of Qinghe; the original drops 子 and wrongly makes the Prince of Qinghe himself the enthroned person.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0025",
+        "excerpt": "不立皇太子胜而立清河王子"
+      }
+    },
+    {
+      "repairId": "houhanshu:116:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese lists three distinct offices culminating in 使匈奴中郎将臧旻; the original wrongly makes Zang Min commissioner over the Xianbei, conflating 匈奴 with 鲜卑, while the proposed titles restore both 中郎将 and 匈奴.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0143",
+        "excerpt": "使匈奴中郎将臧旻"
+      }
+    },
+    {
+      "repairId": "houhanshu:116:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 金城 is the commandery Jincheng; Jinzhou is a mistranslation of that place-name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0060",
+        "excerpt": "金城河溢"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "houhanshu",
+  "chapter": "118",
+  "input": {
+    "chapterFingerprint": "sha256:c31f07972a026fee264e4a262194c8e54c350c0aacc106ac1c897ea10208cba3",
+    "proposalsFingerprint": "sha256:cf8418154d8b5fc3cb2ffaddafab63c8f6dfba825ded689df321b37f29e0ea47"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-8f3d6721-52b1-44b3-afc8-834297323473",
+    "runId": "run-d95ad3fc-c5e9-4682-9b19-abaff24fa27d",
+    "completedAt": "2026-08-12T00:42:29.821Z"
+  },
+  "proposals": [
+    {
+      "id": "houhanshu:118:r0001",
+      "unit": {
+        "id": "s0005",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Huang\" means the ruler.",
+      "after": "\"Huang\" means the ruler.",
+      "reason": "Literal English is missing the opening quotation mark before Huang.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:118:r0002",
+      "unit": {
+        "id": "s0056",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "No catastrophe since Emperor Yuan's reign had matched it.",
+      "after": "No catastrophe since the beginning of the Han had matched it.",
+      "reason": "汉元以来 means since the beginning of Han, not Emperor Yuan.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:118:r0003",
+      "unit": {
+        "id": "s0057",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In the fourth year of Xiping (175), Zhang Bo of Wei Commandery delivered an iron stove to the imperial kitchen, then raved in a memorial about palace halls and the forbidden inner quarters, leapt from the rooftops, and whooped as he ran.",
+      "after": "In the fourth year of Zhongping (187), Zhang Bo of Wei Commandery delivered an iron stove to the imperial kitchen, then raved in a memorial about palace halls and the forbidden inner quarters, leapt from the rooftops, and whooped as he ran.",
+      "reason": "After Zhongping years 1–2, 四年 is Zhongping 4 (AD 187), not Xiping.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "houhanshu:118:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal gloss of 皇，君也。 is missing its opening quotation mark; neighboring glosses quote the lemma, and restoring \"Huang\" matches that pattern without changing meaning.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0005",
+        "excerpt": "皇，君也。"
+      }
+    },
+    {
+      "repairId": "houhanshu:118:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "汉元以来 means from the founding (元) of the Han onward, not from Emperor Yuan (元帝); the original idiomatic wrongly names that reign.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0056",
+        "excerpt": "汉元以来，祸莫逾此。"
+      }
+    },
+    {
+      "repairId": "houhanshu:118:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Bare 四年 follows 中平元年 and 二年 in the preceding narrative, so it is Zhongping 4 (AD 187), not Xiping; the proposed year is accurate and otherwise leaves the sentence intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0057",
+        "excerpt": "四年，魏郡男子张博送铁卢诣太官"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}
