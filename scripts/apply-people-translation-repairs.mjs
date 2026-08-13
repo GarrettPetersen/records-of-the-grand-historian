@@ -281,6 +281,13 @@ function selfTest() {
     () => validateEditorialDecisions(stale, extraction, oldPacket),
     'stale chapter fingerprint',
   );
+  const cjkReplacement = structuredClone(decisions);
+  cjkReplacement.decisions[1].decision = 'revise';
+  cjkReplacement.decisions[1].after = 'Liu Zhan (劉湛) came yesterday and stayed.';
+  expectDecisionFailure(
+    () => validateEditorialDecisions(cjkReplacement, extraction, oldPacket),
+    'Chinese characters in an English replacement',
+  );
 
   const applied = applyTranslationRepairs(chapter, reviewedRepairs);
   const appliedUnit = applied.chapter.content[0].sentences[0];
@@ -856,7 +863,7 @@ function selfTest() {
     ['fixture:002:cand_only', 'not-a-name'],
     ['fixture:002:cand_am_i', 'not-a-name'],
     ['fixture:002:cand_not', 'not-a-name'],
-    ['fixture:002:cand_jianwu', 'other'],
+    ['fixture:002:cand_jianwu', 'reign-period'],
     ['fixture:002:cand_nan', 'place'],
     ['fixture:002:cand_privy', 'office'],
     ['fixture:002:cand_xi_people', 'collective'],

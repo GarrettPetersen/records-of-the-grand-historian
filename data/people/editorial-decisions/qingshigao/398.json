@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "398",
+  "input": {
+    "chapterFingerprint": "sha256:8a54622d3f6cf60ed0ca49ca342d17e5de252e14b8b78f097e36b6a61dc72951",
+    "proposalsFingerprint": "sha256:f43809059b93e1d182eaa0401f8c2f40fee160985cd10b9ba675e33b5e8382ff"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-de77bb4c-4696-4992-9551-c8c1de00478e",
+    "runId": "run-f01e805c-b320-45e4-a192-1cd5833efeaf",
+    "completedAt": "2026-08-13T05:02:07.144Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:398:r0001",
+      "unit": {
+        "id": "s0104",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "He soon joined Senggelinqin and Sengbao in campaigns against the rebels in the capital region.",
+      "after": "He soon joined Senggelinqin and Shengbao in campaigns against the rebels in the capital region.",
+      "reason": "勝保 is conventionally romanized Shengbao, not Sengbao.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:398:r0002",
+      "unit": {
+        "id": "s0104",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Soon afterward he followed Senggelinqin and Sengbao in suppressing rebels in the capital region.",
+      "after": "Soon afterward he followed Senggelinqin and Shengbao in suppressing rebels in the capital region.",
+      "reason": "勝保 is conventionally romanized Shengbao, not Sengbao.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:398:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0104 has 僧格林沁、勝保; 勝 is shèng, so 勝保 is Shengbao. Sengbao wrongly echoes 僧 from Senggelinqin; the proposed idiomatic corrects only that name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0104",
+        "excerpt": "僧格林沁、勝保"
+      }
+    },
+    {
+      "repairId": "qingshigao:398:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same Chinese 勝保 requires Shengbao in the literal field. Sengbao misreads 勝; the proposed replacement is accurate and otherwise unchanged.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0104",
+        "excerpt": "勝保"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

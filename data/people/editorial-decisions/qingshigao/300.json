@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "300",
+  "input": {
+    "chapterFingerprint": "sha256:fe3f13daecbe0892cb073d4e99c4da9cd75c8c8b2d03ac9e6068be691edcfa99",
+    "proposalsFingerprint": "sha256:acf448c244e48d2154cccb4091e6bfab2bf77595b1d03935412c332d072a7b2d"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-7d6a1432-65f6-4706-9085-3dd268cd8944",
+    "runId": "run-cbacf9be-258e-4770-87e2-5d5003f6341e",
+    "completedAt": "2026-08-13T04:59:59.504Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:300:r0001",
+      "unit": {
+        "id": "s0136",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "Yet Weihan was bold in action. Surveying strategic points, he converted the Lzhou Guard thousand-household post into Qingxi County.",
+      "after": "Yet Weihan was bold in action. Surveying strategic points, he converted the Lizhou Guard thousand-household post into Qingxi County.",
+      "reason": "黎州 is Lizhou, not Lzhou; the fused romanization obscures the place name.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:300:r0002",
+      "unit": {
+        "id": "s0136",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "literal",
+      "before": "Yet Weihan was bold in undertaking affairs; surveying key points, he changed the Lzhou Guard thousand-household post and established Qingxi County.",
+      "after": "Yet Weihan was bold in undertaking affairs; surveying key points, he changed the Lizhou Guard thousand-household post and established Qingxi County.",
+      "reason": "黎州 is Lizhou; Lzhou is a corrupted romanization of the place name.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:300:r0003",
+      "unit": {
+        "id": "s0130",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "Censor Wu Tao had falsified land surveys in eastern Sichuan, and Weihan was sent to assist the investigation.",
+      "after": "Censor Wu Tao had surveyed land falsely in eastern Sichuan, and Weihan was sent to assist him.",
+      "reason": "Chinese 以維翰助之 means Weihan was sent to assist Wu Tao, not a separate investigation; the next sentence shows he then replaced Wu Tao.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:300:r0004",
+      "unit": {
+        "id": "s0231",
+        "kind": "paragraph-sentence",
+        "blockIndex": 24,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "The commentator writes: Qi Yuan was deeply versed in the classics. When court governance favored severity, he maintained fairness and forbearance.",
+      "after": "The commentator writes: Qiyuan was deeply versed in the classics. When court governance favored severity, he maintained fairness and forbearance.",
+      "reason": "起元 is elsewhere rendered Qiyuan as one word; the spaced Qi Yuan obscures identity with Shen Qiyuan.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:300:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 黎州 is Lizhou; Lzhou drops the medial vowel and corrupts the place name. The proposed idiomatic keeps the rest of the accurate wording and only restores Lizhou.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0136",
+        "excerpt": "黎州"
+      }
+    },
+    {
+      "repairId": "qingshigao:300:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 黎州 is Lizhou; Lzhou is a corrupted romanization. The proposed literal corrects only that place name while preserving the accurate establishment wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0136",
+        "excerpt": "黎州"
+      }
+    },
+    {
+      "repairId": "qingshigao:300:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "以維翰助之 means Weihan was assigned to assist Wu Tao (之), not to assist a separate investigation; 丈田不實 is surveying land inaccurately. The proposed idiomatic restores both points, and s0131’s replacement follows from assisting him first.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0130",
+        "excerpt": "以維翰助之"
+      }
+    },
+    {
+      "repairId": "qingshigao:300:r0004",
+      "decision": "reject",
+      "after": null,
+      "reason": "起元 is already rendered accurately as Qi Yuan; collapsing the spaced given name to Qiyuan is only romanization-style consistency with Shen Qiyuan elsewhere, not a semantic correction of the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0231",
+        "excerpt": "起元"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

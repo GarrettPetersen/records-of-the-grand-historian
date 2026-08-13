@@ -37,6 +37,7 @@ const ENGLISH_NAMED_PLACE_TERMS = new Set([
   'Hengcheng Gate',
   'Hong Terrace',
   'Salt Marsh',
+  'Shannan East',
   'Yong',
 ]);
 const ENGLISH_NAMED_ORGANIZATION_TERMS = new Set([
@@ -55,7 +56,9 @@ const ENGLISH_NAMED_OFFICE_TERMS = new Set([
   'Flourishing Talent',
   'Gou Shield',
   'Grandee',
+  'Imperial Sacrifices',
   'Imperial Secretariat',
+  'Imperial Stud',
   'Imperial Workshops',
   'Masses',
   'Nobility Ranks',
@@ -64,6 +67,10 @@ const ENGLISH_NAMED_OFFICE_TERMS = new Set([
   'Splendid Light',
   'Supreme Pillar',
   'Three Commanders',
+]);
+const ENGLISH_NOBLE_TITLE_TERMS = new Set([
+  'Baron',
+  'Prince',
 ]);
 const ENGLISH_INSTITUTIONAL_SUFFIX_RE = /\b(?:Academy|Administration|Bureau|Chancellery|Commission|Court|Department|Directorate|Household|Ministry|Office|Secretariat)$/u;
 
@@ -935,6 +942,19 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
   const knownPolities = new Set(reconciled.people.flatMap((person) =>
     person.identityHints.polityHints ?? []
   ));
+  const knownReignPeriods = new Set();
+  for (const unit of revisedPacket.units) {
+    for (const text of [unit.en, unit.literal]) {
+      for (const match of text.matchAll(/\b([A-Z][\p{L}'’-]*)[ \t]+era\b/gu)) {
+        knownReignPeriods.add(match[1]);
+      }
+      for (const match of text.matchAll(
+        /\b(?:in|of)[ \t]+([A-Z][\p{L}'’-]*)[ \t]+(?:year[ \t]+\d+|\d+)\b/gu,
+      )) {
+        knownReignPeriods.add(match[1]);
+      }
+    }
+  }
 
   const unresolvedCandidates = [];
   for (const candidate of revisedPacket.preflight.candidates) {
@@ -1302,6 +1322,16 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       accounted.add(candidate.id);
       continue;
     }
+    if (candidate.language === 'en' && knownReignPeriods.has(candidate.exact)) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'reign-period',
+        note: `Reign-period name established elsewhere in the chapter: ${candidate.exact}`,
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
     if (candidate.language === 'en') {
       const unitText = unitById.get(candidate.unit).en;
       const codePoints = [...unitText];
@@ -1319,7 +1349,8 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       }
       if (
         /^(?:[ \t]+(?:era|reign|year)\b|[ \t]*\(\d{3,4}\))/iu.test(after) ||
-        /\b(?:beginning|opening|year) of[ \t]+$/iu.test(before)
+        /\b(?:beginning|opening|year) of[ \t]+$/iu.test(before) ||
+        (/\b(?:in|of)[ \t]+$/iu.test(before) && /^[ \t]+\d+\b/u.test(after))
       ) {
         reconciled.candidateDispositions.push({
           candidate: candidate.id,
@@ -1374,8 +1405,7 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         continue;
       }
       if (
-        /^[A-Z][a-z]+zhou$/u.test(candidate.exact) &&
-        /\b(?:at|entered|from|in|into|left|near|reached|to|toward)\s+$/iu.test(before)
+        /^[A-Z][a-z]+zhou$/u.test(candidate.exact)
       ) {
         reconciled.candidateDispositions.push({
           candidate: candidate.id,
@@ -1515,6 +1545,16 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         disposition: 'not-person',
         reason: 'office',
         note: 'Office-title component, not a person.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (candidate.language === 'en' && ENGLISH_NOBLE_TITLE_TERMS.has(candidate.exact)) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'title',
+        note: 'Noble-rank component, not a person name by itself.',
       });
       accounted.add(candidate.id);
       continue;

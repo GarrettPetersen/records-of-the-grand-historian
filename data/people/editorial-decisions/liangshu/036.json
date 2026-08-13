@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "liangshu",
+  "chapter": "036",
+  "input": {
+    "chapterFingerprint": "sha256:75e1d1ca00ffa3f5fa07026d6ef423e8327c7c42c271cf27347a367486cfa66a",
+    "proposalsFingerprint": "sha256:584bf0add206ce5cd198a93e9910a14ae4dc4db90304b7444dc91e358d7b5022"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-0a139714-255a-4d4a-a646-a6185d70ca8c",
+    "runId": "run-a46a5f4b-a9ba-49f1-bf43-5ffea1585762",
+    "completedAt": "2026-08-13T04:53:10.011Z"
+  },
+  "proposals": [
+    {
+      "id": "liangshu:036:r0001",
+      "unit": {
+        "id": "s0093",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "When Prince of Jian'an became inspector of Yongzhou and asked for a chief secretary, Ge was made secretary to the northern expedition staff and concurrently commander of the central banners.",
+      "after": "When Prince of Jian'an became inspector of Yongzhou and asked for a chief secretary, Ge was made secretary to the northern expedition staff and concurrently magistrate of Zhonglu.",
+      "reason": "中廬令 is the magistracy of Zhonglu, not 'commander of the central banners'.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:036:r0002",
+      "unit": {
+        "id": "s0093",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Prince of Jian'an was made Inspector of Yong province and requested a chief secretary; Ge was made Secretary to the Northern Expedition, concurrently Commander of the Central Banners.",
+      "after": "Prince of Jian'an was made Inspector of Yong province and requested a chief secretary; Ge was made Secretary to the Northern Expedition, concurrently Magistrate of Zhonglu.",
+      "reason": "中廬令 denotes Magistrate of Zhonglu; 'Commander of the Central Banners' invents a military office.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:036:r0003",
+      "unit": {
+        "id": "s0101",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "He entered court as Palace Writer Attendant, Left Assistant Director of the Ministry of Works, and Minister of Agriculture, then went out again as chief clerk to Prince Jin'an of Cloud Banner, administrator of Xunyang, and acting head of Jiangzhou affairs.",
+      "after": "He entered court as Palace Writer Attendant, Left Assistant Director of the Masters of Writing, and Minister of Agriculture, then went out again as chief clerk to Prince Jin'an of Cloud Banner, administrator of Xunyang, and acting head of Jiangzhou affairs.",
+      "reason": "尚書左丞 belongs to the Masters of Writing (Department of State Affairs), not the Ministry of Works.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liangshu:036:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0093 has 帶中廬令; 中廬令 is concurrent magistrate of Zhonglu, not commander of the central banners.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0093",
+        "excerpt": "帶中廬令"
+      }
+    },
+    {
+      "repairId": "liangshu:036:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0093 has 帶中廬令; 中廬令 denotes Magistrate of Zhonglu, and 'Commander of the Central Banners' invents a military office.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0093",
+        "excerpt": "帶中廬令"
+      }
+    },
+    {
+      "repairId": "liangshu:036:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0101 has 尚書左丞; 尚書左丞 is Left Assistant Director of the Masters of Writing, not of the Ministry of Works (工部).",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0101",
+        "excerpt": "尚書左丞"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

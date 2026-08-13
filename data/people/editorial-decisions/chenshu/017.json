@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 3,
+  "book": "chenshu",
+  "chapter": "017",
+  "input": {
+    "chapterFingerprint": "sha256:3ea132a58db0c0029289990d886a86ef9c2a949eb6e783b0189f6b795e2404b5",
+    "proposalsFingerprint": "sha256:140d7847aa5de6ba21e82f652f911f00daed92d6abffb578caacea672823055f"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-105b16c4-652a-4cd9-ab95-4b7505d3b1ce",
+    "runId": "run-45b2c447-33ae-4206-8c7a-7f84ed7fab8e",
+    "completedAt": "2026-08-13T04:42:14.646Z"
+  },
+  "proposals": [
+    {
+      "id": "chenshu:017:r0001",
+      "unit": {
+        "id": "s0007",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Chong's mother was Princess Xin'an Mu, a sister of Emperor Wu of Liang. She died in Qi times, and the emperor, finding Chong a fatherless child, doted on him.",
+      "after": "Chong's mother was Princess Xin'an Mu, a sister of Emperor Wu of Liang. She died in Qi times, and the emperor, seeing that Chong had been left partially orphaned, doted on him.",
+      "reason": "偏孤 cannot mean fatherless here because the father is still alive until the later mourning notice; it means left partially orphaned by his mother.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:017:r0002",
+      "unit": {
+        "id": "s0048",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "He was posthumously made palace attendant and minister of works, with the posthumous name Yuancian.",
+      "after": "He was posthumously made palace attendant and minister of works, with the posthumous name Yuanjian.",
+      "reason": "元簡 should be romanized Yuanjian; Yuancian is an erroneous spelling.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:017:r0003",
+      "unit": {
+        "id": "s0097",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "Wu was then in turmoil and the people were destitute; Mo was put in charge of Wu commandery of Xing.",
+      "after": "Wu was then in turmoil and the people were destitute; Mo was put in charge of Wuxing commandery.",
+      "reason": "吳興郡 is the commandery name Wuxing, not Wu commandery of Xing.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:017:r0004",
+      "unit": {
+        "id": "s0133",
+        "kind": "paragraph-sentence",
+        "blockIndex": 21,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "[City] Wang.",
+      "after": "merit clerk in the two establishments of the Prince of Xuancheng.",
+      "reason": "The unit completes 中軍宣[城]王二府功曹史 from the preceding line; the current English is only a broken fragment.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "chenshu:017:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0007 武帝以沖偏孤 follows the mother's death in Qi; 偏孤 means half-orphaned (one parent lost). Father Maozhang is still identified as alive in s0006, so \"fatherless\" is wrong and \"partially orphaned\" matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0007",
+        "excerpt": "武帝以沖偏孤"
+      }
+    },
+    {
+      "repairId": "chenshu:017:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0048 諡曰元簡: 元 is Yuan and 簡 is jian, so the posthumous name is Yuanjian; Yuancian is a misspelling and the rest of the sentence is unchanged.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0048",
+        "excerpt": "諡曰元簡"
+      }
+    },
+    {
+      "repairId": "chenshu:017:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0097 監吳興郡 names the single commandery Wuxing (吳興); \"Wu commandery of Xing\" wrongly splits the toponym, and Wuxing commandery restores the correct place.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0097",
+        "excerpt": "監吳興郡"
+      }
+    },
+    {
+      "repairId": "chenshu:017:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "With s0131–s0132, the Chinese continues as 中軍宣[城]王二府功曹史; \"[City] Wang.\" is a broken fragment, and the proposed completion correctly supplies Xuancheng and the merit-clerk office of the two establishments.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0133",
+        "excerpt": "[城]王二府功曹史"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "chenshu:017:r0002",
+      "before": {
+        "id": "chenshu:017:c0003",
+        "subject": "chenshu:017:p001",
+        "predicate": "name",
+        "value": {
+          "kind": "posthumous",
+          "en": "Yuancian",
+          "zh": "元簡",
+          "pinyin": "Yuanjian"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "chenshu:017:s0048"
+        ]
+      },
+      "after": {
+        "id": "chenshu:017:c0003",
+        "subject": "chenshu:017:p001",
+        "predicate": "name",
+        "value": {
+          "kind": "posthumous",
+          "en": "Yuanjian",
+          "zh": "元簡",
+          "pinyin": "Yuanjian"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "chenshu:017:s0048"
+        ]
+      },
+      "reason": "Accepted r0002 restores the posthumous name as Yuanjian; claim c0003 still stored the erroneous English form Yuancian while zh/pinyin were already correct.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0048",
+        "excerpt": "諡曰元簡"
+      }
+    }
+  ]
+}

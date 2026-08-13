@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "340",
+  "input": {
+    "chapterFingerprint": "sha256:d87a559463436078650b4b9f4b93d59b700f50cea44e9b3e663a73f13127a62a",
+    "proposalsFingerprint": "sha256:42086ea5d3ac66a7a8cd51a75753f6489a716ed6282fa1ea7f3c41be9d5dfec2"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-b477f10c-202b-490c-b98f-972b9744f6e6",
+    "runId": "run-005eaaa5-d813-426a-a918-23dedae22fe3",
+    "completedAt": "2026-08-13T05:00:11.055Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:340:r0001",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "After five promotions he rose to Grand Secretary of the Inner Cabinet.",
+      "after": "After five promotions he rose to Academician of the Grand Secretariat.",
+      "reason": "內閣學士 is not 大學士 (Grand Secretary); the idiomatic rendering conflates the two ranks.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:340:r0002",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "After five promotions he reached the post of Grand Secretary of the Inner Cabinet.",
+      "after": "After five promotions he reached the post of Academician of the Grand Secretariat.",
+      "reason": "Same conflation of 內閣學士 with Grand Secretary in the literal line.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:340:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0011 is 五遷至內閣學士; 內閣學士 is academician of the Grand Secretariat, not 大學士 (Grand Secretary). The replacement restores the correct mid-rank office.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "五遷至內閣學士"
+      }
+    },
+    {
+      "repairId": "qingshigao:340:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0011 is 五遷至內閣學士; the literal likewise conflates 內閣學士 with Grand Secretary. Academician of the Grand Secretariat matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "內閣學士"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "qingshigao:340:r0001",
+      "before": {
+        "id": "qingshigao:340:c0185",
+        "subject": "qingshigao:340:p001",
+        "predicate": "office",
+        "value": {
+          "label": {
+            "en": "Grand Secretary of the Inner Cabinet / 內閣學士",
+            "zh": "內閣學士"
+          },
+          "action": "appointed"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:340:s0011"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:340:c0185",
+        "subject": "qingshigao:340:p001",
+        "predicate": "office",
+        "value": {
+          "label": {
+            "en": "Academician of the Grand Secretariat / 內閣學士",
+            "zh": "內閣學士"
+          },
+          "action": "appointed"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:340:s0011"
+        ]
+      },
+      "reason": "Accepted r0001 shows English Grand Secretary of the Inner Cabinet came only from conflating 內閣學士 with 大學士; the office claim’s English label must read Academician of the Grand Secretariat while keeping zh, action, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "內閣學士"
+      }
+    }
+  ]
+}

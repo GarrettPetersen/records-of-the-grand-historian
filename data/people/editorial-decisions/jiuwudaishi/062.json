@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "062",
+  "input": {
+    "chapterFingerprint": "sha256:1898d50779dfa57cbdade3e497c35de98bb514894299250f3abd31962ef90187",
+    "proposalsFingerprint": "sha256:c4082f8a51ceff4b1b22a0df531f0f9f49ea90f5f9daad704d9540b59f65374e"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-4e3bfffa-85f6-4979-ba36-698252da0475",
+    "runId": "run-478b3557-c185-4a22-ae18-cce8d444ab95",
+    "completedAt": "2026-08-13T04:49:31.166Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:062:r0001",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "(The Old History of the Tang states he was a man of Xing Prefecture; the Comprehensive Mirror states he was a man of Qian Prefecture.)〉",
+      "after": "(Ouyang Xiu's history states he was a man of Xing Prefecture; the Comprehensive Mirror states he was a man of Qian Prefecture.)〉",
+      "reason": "歐陽史 refers to Ouyang Xiu's history, not the Old Tang History.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:062:r0002",
+      "unit": {
+        "id": "s0055",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 37
+      },
+      "field": "literal",
+      "before": "The Old History of the Tang states: In the first year of Tianfu the Liang sent Shi Shuzong to attack Jin, coming out through Tianjing Pass; Qian opened the gates and surrendered, guiding the Liang army to attack Taiyuan, but they did not take it;",
+      "after": "Ouyang Xiu's history states: In the first year of Tianfu the Liang sent Shi Shuzong to attack Jin, coming out through Tianjing Pass; Qian opened the gates and surrendered, guiding the Liang army to attack Taiyuan, but they did not take it;",
+      "reason": "歐陽史 is Ouyang Xiu's history, not the Old Tang History.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:062:r0003",
+      "unit": {
+        "id": "s0080",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Wenli exploited their disaffection and secretly incited them: \"The prince has ordered me to slaughter you all. I remember how for more than ten years you bore arms for me, for family and state alike; if I obey and kill you, I betray you;",
+      "after": "Wenli exploited their disaffection and secretly incited them: \"The lord has ordered me to bury you all alive. I remember how for more than ten years you bore arms and followed me, for family and state; if I do not kill you at once, I offend the lord;",
+      "reason": "Chinese 我若不即殺爾，則得罪於令公 means if he does NOT kill them at once he offends the lord; idiomatic reverses the conditional.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:062:r0004",
+      "unit": {
+        "id": "s0124",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Thereafter Zhang pleaded that the land was narrow and the people poor, and only ten thousand tribute was permitted.",
+      "after": "Thereafter Zhang pleaded that the land was narrow and the people poor, and only one hundred thousand tribute was permitted.",
+      "reason": "十萬 means one hundred thousand, not ten thousand.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:062:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0003 cites 《歐陽史》, Ouyang Xiu's history (Xin Wudai Shi), not the Old Tang History; the proposed literal matches the source label already used in the idiomatic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "《歐陽史》"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:062:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0055 again opens with 《歐陽史》云; rendering that as the Old History of the Tang invents the wrong work, and Ouyang Xiu's history restores the citation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0055",
+        "excerpt": "《歐陽史》云"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:062:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0080 has 我若不即殺爾，則得罪於令公 (if I do not kill you at once, I offend the lord); the prior idiomatic reverses the conditional, and 盡坑爾曹 / 荷戈隨我 support bury-alive and followed-me.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0080",
+        "excerpt": "我若不即殺爾，則得罪於令公"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:062:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0124 reads 許貢十萬而已; 十萬 is one hundred thousand, matching the idiomatic and contrasting the prior demand of 五十萬.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0124",
+        "excerpt": "許貢十萬而已"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

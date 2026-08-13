@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 3,
+  "book": "suishu",
+  "chapter": "043",
+  "input": {
+    "chapterFingerprint": "sha256:05f6f0f3f9c6480f1bca88c27c1457ae31ad4c77bcc99be5128ba913fefacec1",
+    "proposalsFingerprint": "sha256:448465f48dd52954759628e926982b973e7c7b1763e59e91fbeae9403679cfb5"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-df230d9f-4ea3-4713-8fd0-3617a1d9428e",
+    "runId": "run-8836d809-1f0f-4f5a-ba2b-9f01d6406360",
+    "completedAt": "2026-08-13T05:07:24.646Z"
+  },
+  "proposals": [
+    {
+      "id": "suishu:043:r0001",
+      "unit": {
+        "id": "s0001",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Book of Sui, 43th year of Volume, eighth year of Biographies",
+      "after": "Book of Sui, Volume 43, Biographies 8",
+      "reason": "Idiomatic English garbles volume/biography numbering as years.",
+      "confidence": "high"
+    },
+    {
+      "id": "suishu:043:r0002",
+      "unit": {
+        "id": "s0004",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Hejian Wang Hong, styled Bie'e, was a younger male cousin of Emperor Gaozu's father.",
+      "after": "Hejian Wang Hong, styled Bie'e, was a younger paternal-line cousin of Gaozu.",
+      "reason": "從祖弟 means a same-generation junior cousin of Gaozu, not a cousin of Gaozu's father.",
+      "confidence": "high"
+    },
+    {
+      "id": "suishu:043:r0003",
+      "unit": {
+        "id": "s0030",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 26
+      },
+      "field": "idiomatic",
+      "before": "sixth year of In of Daye (610), he was posthumously created Prince of Xun.",
+      "after": "In the sixth year of Daye (610), he was posthumously created Prince of Xun.",
+      "reason": "Garbled reign-date phrasing (\"In of Daye\").",
+      "confidence": "high"
+    },
+    {
+      "id": "suishu:043:r0004",
+      "unit": {
+        "id": "s0121",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "When the emperor visited the Yunyang Palace, Prince Zhi of Wei rebelled and led his followers in an assault on the Su Zang Gate; Xiong met the attack and routed them.",
+      "after": "When the emperor visited the Yunyang Palace, Prince Zhi of Wei rebelled and led his followers in an assault on the Suzhang Gate; Xiong met the attack and routed them.",
+      "reason": "肅章門 is Suzhang Gate; \"Su Zang\" is a corrupted transcription.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "suishu:043:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "卷四十三列傳第八 is Volume 43, Biographies 8; the idiomatic wrongly reads 卷/第 as 'year' and invents dating the Chinese does not support.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0001",
+        "excerpt": "隋書卷四十三列傳第八"
+      }
+    },
+    {
+      "repairId": "suishu:043:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "高祖從祖弟也 makes Hong Gaozu's junior paternal-line cousin (從祖弟), not a cousin of Gaozu's father; the proposed literal restores that kinship.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0004",
+        "excerpt": "高祖從祖弟也"
+      }
+    },
+    {
+      "repairId": "suishu:043:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "大業六年 is the sixth year of Daye; 'In of Daye' is a garbled reign title and the proposed fix matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0030",
+        "excerpt": "大業六年，追封郇王"
+      }
+    },
+    {
+      "repairId": "suishu:043:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "肅章門 is the Suzhang Gate; 'Su Zang' is a corrupted transcription, and the proposed idiomatic wording corrects the gate name without changing the rest of the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0121",
+        "excerpt": "襲肅章門"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "suishu:043:r0004",
+      "before": {
+        "id": "suishu:043:c0469",
+        "subject": "suishu:043:p045",
+        "predicate": "event-participation",
+        "value": {
+          "kind": "rebellion",
+          "role": "rebel",
+          "action": "attacked Su Zang Gate"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "suishu:043:s0121"
+        ]
+      },
+      "after": {
+        "id": "suishu:043:c0469",
+        "subject": "suishu:043:p045",
+        "predicate": "event-participation",
+        "value": {
+          "kind": "rebellion",
+          "role": "rebel",
+          "action": "attacked Suzhang Gate"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "suishu:043:s0121"
+        ]
+      },
+      "reason": "Accepted r0004 restores Suzhang for 肅章門; the event-participation action's 'Su Zang Gate' spelling came only from the bad idiomatic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0121",
+        "excerpt": "肅章門"
+      }
+    }
+  ]
+}

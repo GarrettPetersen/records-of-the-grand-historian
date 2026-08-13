@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "099",
+  "input": {
+    "chapterFingerprint": "sha256:18ef45a0de5f2cae95691f8bc4f89a5c47536f7f1992cbee028becc06cf5af9a",
+    "proposalsFingerprint": "sha256:dac4faab62924d760fe1ba48f01c54a5490320f8aee8c894796e4c42e3f2edf2"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-86756782-9e44-49a6-a98e-c290f1ea6fb9",
+    "runId": "run-a392124f-7db4-4b40-9918-961ecb885c23",
+    "completedAt": "2026-08-13T05:03:53.894Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:099:r0001",
+      "unit": {
+        "id": "s0010",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Lou Jing said: 'Your Majesty took all-under-heaven differs from Zhou house.",
+      "after": "Lou Jing said: 'Your Majesty took all-under-heaven differently from the Zhou house.",
+      "reason": "Literal English is ungrammatical (\"differs\" without a subject auxiliary); the Chinese contrasts how the empire was obtained.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:099:r0002",
+      "unit": {
+        "id": "s0102",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 20
+      },
+      "field": "literal",
+      "before": "He was defeated at Dingtao and followed the Huai King.",
+      "after": "After the defeat at Dingtao, he followed the Huai King.",
+      "reason": "The silent subject who follows King Huai is Shusun Tong; Xiang Liang was the one defeated at Dingtao, so \"he was defeated\" misattributes the defeat.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:099:r0003",
+      "unit": {
+        "id": "s0157",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "When Shusun Tong went out, he gave each of the scholars five hundred jin of gold.",
+      "after": "When Shusun Tong went out, he gave the five hundred jin of gold to the scholars.",
+      "reason": "Chinese 皆以五百斤金賜諸生 refers to distributing the previously bestowed five hundred jin, not five hundred jin to each scholar; the idiomatic rendering matches the narrative.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:099:r0004",
+      "unit": {
+        "id": "s0044",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "literal",
+      "before": "He then went, arrived at Pingcheng, and the Xiongnu indeed sent crack troops that surrounded the Gao Emperor at Baiteng. Only after seven days did he get release.",
+      "after": "He then went, arrived at Pingcheng, and the Xiongnu indeed sent crack troops that surrounded the Gao Emperor at Baideng. Only after seven days did he get release.",
+      "reason": "白登 is Baideng; \"Baiteng\" is a corrupted romanization inconsistent with the idiomatic line.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:099:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus Chinese 取天下與周室異 contrasts how the empire was obtained with the Zhou house. The original literal \"took all-under-heaven differs\" is ungrammatical; \"differently from the Zhou house\" restores that contrast without changing speaker or sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0010",
+        "excerpt": "取天下與周室異"
+      }
+    },
+    {
+      "repairId": "shiji:099:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Preceding unit has Shusun Tong follow Xiang Liang; 敗於定陶，從懷王 then marks the Dingtao defeat as circumstance before he follows King Huai. \"He was defeated\" wrongly makes Shusun the defeated party; \"After the defeat at Dingtao, he followed the Huai King\" keeps the biography's subject as follower only.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0102",
+        "excerpt": "敗於定陶，從懷王"
+      }
+    },
+    {
+      "repairId": "shiji:099:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "皆以五百斤金賜諸生 means he used that five-hundred-jin sum to reward the scholars, not that each received five hundred jin. Removing \"each of\" corrects the quantity error while matching the narrative and idiomatic sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0157",
+        "excerpt": "皆以五百斤金賜諸生"
+      }
+    },
+    {
+      "repairId": "shiji:099:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "白登 is Baideng; \"Baiteng\" is a wrong romanization of the same place name. The proposed literal only corrects that reading and leaves the siege narrative intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0044",
+        "excerpt": "白登"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

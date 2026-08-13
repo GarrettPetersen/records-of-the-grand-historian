@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "jinshi",
+  "chapter": "069",
+  "input": {
+    "chapterFingerprint": "sha256:a33414f8d54bbe82dae75dbf064069774f54f72c3d2f9f4538db4696dac3b65a",
+    "proposalsFingerprint": "sha256:5215d304a5a4ac0f7124082f06d409b5db354f670cb26b5edba4aa470ed6ee89"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-18619602-30d4-4919-9af7-1f2e4b4f1286",
+    "runId": "run-0a24d1eb-b54c-43dd-9047-04614b7a1ed0",
+    "completedAt": "2026-08-13T04:48:28.478Z"
+  },
+  "proposals": [
+    {
+      "id": "jinshi:069:r0001",
+      "unit": {
+        "id": "s0096",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "After he killed Xizong, he sent for Prince of Ge Zong Min.",
+      "after": "After he killed Xizong, he had the Prince of Ge summon Zong Min.",
+      "reason": "Chinese 使葛王宗敏 means sending the Prince of Ge to fetch Zong Min; the English fuses two people.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:069:r0002",
+      "unit": {
+        "id": "s0049",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Kexi was fierce in battle beyond others, cruel and eager for disorder; a grandson of Taizu in the yi line, he nursed no small designs.",
+      "after": "Kexi was fierce in battle beyond others, cruel and eager for disorder; as a grandson of Taizu, he nursed no small designs.",
+      "reason": "自乙太祖孫 is almost certainly 自以太祖孫; yi line is not meaningful.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:069:r0003",
+      "unit": {
+        "id": "s0037",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "In the twenty-third year, Shuang's illness lingered. An edict instructed the offices: \"When Prince Rong's mourning leave reaches one hundred days, he shall receive a prince's stipend.\"",
+      "after": "In the twenty-third year, Shuang's illness lingered. An edict instructed the offices: \"When Prince Rong's sick leave reaches one hundred days, he shall receive a prince's stipend.\"",
+      "reason": "告 here is sick leave, not mourning; idiomatic already correct.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jinshi:069:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0096 使葛王宗敏, with s0097 identifying 葛王 as Shizong's first title and s0098 treating 宗敏 as a separate person summoned by Hailing, shows two people; the idiomatic wrongly fuses them, and separating Ge Wang as the agent who summons Zong Min matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0096",
+        "excerpt": "使葛王宗敏"
+      }
+    },
+    {
+      "repairId": "jinshi:069:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chapter 自乙太祖孫 yields no meaningful 'yi line'; CText Jinshi ch. 69 reads 自以太祖孫 ('regarding himself as Taizu's grandson'), so dropping the invented lineage phrase is the correct repair.",
+      "sourceWitness": {
+        "source": "ctext",
+        "citation": "https://ctext.org/wiki.pl?chapter=861016&if=en",
+        "excerpt": "自以太祖孫"
+      }
+    },
+    {
+      "repairId": "jinshi:069:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0037 opens with 爽疾久不愈 and the edict 榮王告滿百日; 告 here is sick leave during lingering illness (death only at s0038 既薨), so 'mourning leave' is wrong and 'sick leave' is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0037",
+        "excerpt": "榮王告滿百日"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

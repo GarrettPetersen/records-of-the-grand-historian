@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "074",
+  "input": {
+    "chapterFingerprint": "sha256:5444b9ee362a36f5e92b1ca7550eb78ef058a1b8d4d6a8753528c0975a7deebc",
+    "proposalsFingerprint": "sha256:7d4f441681ba25a3a97a57e656cbb29b9eb60230277511b6e680933f1fc2710e"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-f29624ff-7abd-4d93-9d97-7275133850f1",
+    "runId": "run-515bbcd5-29d8-42db-b7bc-dacba4fa9d9b",
+    "completedAt": "2026-08-13T04:50:15.563Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:074:r0001",
+      "unit": {
+        "id": "s0064",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "Early in the Tiancheng era his son Fa disinterred it and took it away.",
+      "after": "Early in the Tiancheng era his son disinterred it and took it away.",
+      "reason": "Chinese 其子發之攜去 means the son dug it up (發之) and carried it away; 發 is the verb, not a personal name Fa.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:074:r0002",
+      "unit": {
+        "id": "s0064",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "literal",
+      "before": "At the beginning of the Tiancheng reign his son Fa took it away.",
+      "after": "At the beginning of the Tiancheng reign his son dug it up and took it away.",
+      "reason": "Literal English invents the name Fa; 發之 means opened/disinterred it.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:074:r0003",
+      "unit": {
+        "id": "s0096",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "Li declared himself acting commissioner and led soldiers and civilians in a memorial requesting formal appointment.",
+      "after": "Yang Li declared himself acting commissioner and led soldiers and civilians in a memorial requesting formal appointment.",
+      "reason": "Subject is 立 (Yang Li); rendering as Li wrongly suggests a different Li-surname figure.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:074:r0004",
+      "unit": {
+        "id": "s0097",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "Zhuangzong was furious and ordered Mingzong and Li Shaozhen to attack. Within a month the city fell. Li and more than ten of his accomplices were taken alive, sent to the capital, and dismembered in the marketplace.",
+      "after": "Zhuangzong was furious and ordered Mingzong and Li Shaozhen to attack. Within a month the city fell. Yang Li and more than ten of his accomplices were taken alive, sent to the capital, and dismembered in the marketplace.",
+      "reason": "Second Li refers to Yang Li (立), not another Li; needs disambiguation from Li Shaozhen in the same sentence.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:074:r0005",
+      "unit": {
+        "id": "s0098",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "Luzhou's walls were high and its moat deep, yet Li had dared to hold it. Zhuangzong therefore ordered every circuit to dismantle its outer defensive works.",
+      "after": "Luzhou's walls were high and its moat deep, yet Yang Li had dared to hold it. Zhuangzong therefore ordered every circuit to dismantle its outer defensive works.",
+      "reason": "Referent is Yang Li (立), not an unspecified Li.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:074:r0006",
+      "unit": {
+        "id": "s0026",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "idiomatic",
+      "before": "Before long Chongtao was killed on Siji's orders. The two men then turned on Dong Zhang. \"Which door will you straddle now?\" they demanded.\"",
+      "after": "Before long Chongtao was killed on Siji's orders. The two men then turned on Dong Zhang. \"Which door will you straddle now?\" they demanded.",
+      "reason": "Extraneous closing quotation mark after demanded.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:074:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "其子發之攜去: 發之 is the verb phrase “disinterred/opened it,” not a personal name; inventing “Fa” as the son’s name is unsupported, and removing it restores the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0064",
+        "excerpt": "其子發之攜去"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:074:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal English invents “Fa”; 發之 must be rendered as dug up/disinterred, and 攜去 as took it away—the proposed literal matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0064",
+        "excerpt": "其子發之攜去"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:074:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Subject 立 is Yang Li’s given name; bare “Li” in English reads as a Li-surname agent and conflicts with nearby 李繼珂. Expanding to Yang Li correctly identifies the referent.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0096",
+        "excerpt": "立自稱留後"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:074:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "生擒立 is Yang Li (立), while 李紹真 is a different Li; bare “Li” after naming Li Shaozhen misattributes the captive. “Yang Li” disambiguates correctly.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0097",
+        "excerpt": "生擒立及其同惡十餘人"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:074:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "攻立輒敢據之 continues the Yang Li (立) rebellion narrative; English “Li” is ambiguous and should be Yang Li.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0098",
+        "excerpt": "攻立輒敢據之"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:074:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese closes the dialogue at 何門？; the idiomatic already ends the quote at “now?”, so the extra closing quote after “demanded.” is a punctuation error with no source support.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0026",
+        "excerpt": "公復首鼠何門？"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

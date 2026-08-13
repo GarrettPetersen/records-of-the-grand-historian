@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "beiqishu",
+  "chapter": "050",
+  "input": {
+    "chapterFingerprint": "sha256:59f6ebf8ceb07bf82aabc122627091ccb8a9dbff39f2087224c85ce3546f2b57",
+    "proposalsFingerprint": "sha256:66acdfd2c7f013bb28a692dc2cd0d60f5768a5bbdb9cc2545038a47f058776de"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-4d5e4c82-c552-41ff-8665-b73fca979104",
+    "runId": "run-5dd7f72f-2c7a-4a5e-8e89-79f52440d575",
+    "completedAt": "2026-08-13T04:53:06.251Z"
+  },
+  "proposals": [
+    {
+      "id": "beiqishu:050:r0001",
+      "unit": {
+        "id": "s0129",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Gao Anagujin was a master of flattery.",
+      "after": "Gao Anagujin was a native of Shanwu.",
+      "reason": "Chinese 善無人也 means a native of Shanwu (善無), not a master of flattery.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:050:r0002",
+      "unit": {
+        "id": "s0129",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Gao Anagujin was skilled at ingratiation.",
+      "after": "Gao Anagujin was a native of Shanwu.",
+      "reason": "Chinese 善無人也 is the native-place formula (person of Shanwu), not “skilled at ingratiation.”",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:050:r0003",
+      "unit": {
+        "id": "s0168",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 22
+      },
+      "field": "idiomatic",
+      "before": "The Later Lord had Attendant Hulu Xiaoxiao investigate; Xiaoxiao said, \"This man speaks falsely.\"",
+      "after": "The Later Lord had Attendant Hulu Xiaoqing investigate; Xiaoqing said, \"This man speaks falsely.\"",
+      "reason": "斛律孝卿 is Xiaoqing/Xiaoqing, not “Xiaoxiao.”",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:050:r0004",
+      "unit": {
+        "id": "s0168",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 22
+      },
+      "field": "literal",
+      "before": "The Later Lord ordered Attendant-in-Ordinary Hulu Xiaoxiao to investigate; Xiaoxiao said, \"This man speaks falsely.\"",
+      "after": "The Later Lord ordered Attendant-in-Ordinary Hulu Xiaoqing to investigate; Xiaoqing said, \"This man speaks falsely.\"",
+      "reason": "孝卿 should be Xiaoqing, not Xiaoxiao.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:050:r0005",
+      "unit": {
+        "id": "s0195",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "Sent to build a fortress at Liyang on the river, he said, \"In a pinch we can hold this and play king of Kucha; life is brief—why not enjoy it?\"",
+      "after": "Later the emperor sent him to build a riverside fortress at Liyang and said, \"In an emergency we can hold this and play the princes of Kucha; how much more that human life is a lodging—one should only seek pleasure; why grieve?\"",
+      "reason": "Chinese 後帝使…曰 marks the emperor as speaker; the idiomatic English wrongly attributes the speech to Han Feng.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "beiqishu:050:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "善無人也 is the standard native-place formula naming Shanwu (善無), not a claim that he was skilled at flattery.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0129",
+        "excerpt": "善無人也"
+      }
+    },
+    {
+      "repairId": "beiqishu:050:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "善無人也 identifies Gao Anagujin as a man of Shanwu; “skilled at ingratiation” misreads 善無 as a verb phrase.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0129",
+        "excerpt": "善無人也"
+      }
+    },
+    {
+      "repairId": "beiqishu:050:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "斛律孝卿 is Hulu Xiaoqing (孝卿); Xiaoxiao is a wrong reading of the given name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0168",
+        "excerpt": "斛律孝卿"
+      }
+    },
+    {
+      "repairId": "beiqishu:050:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "孝卿 romanizes as Xiaoqing, not Xiaoxiao; the proposed literal correctly restores the name while leaving the rest intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0168",
+        "excerpt": "孝卿"
+      }
+    },
+    {
+      "repairId": "beiqishu:050:r0005",
+      "decision": "revise",
+      "after": "Later the emperor sent him to build a fortress at Liyang on the river and said, \"In a pinch we can hold this and play at being princes of Kucha; human life is but a sojourn—one should only seek pleasure; why grieve?\"",
+      "reason": "後帝使…曰 makes the emperor the speaker, so the original wrongfully attributes the speech to Han Feng; the proposed after fixes attribution but is awkward (“how much more that human life is a lodging”), so the idiomatic wording is revised for natural English while keeping the emperor as speaker and the fuller sense of 人生如寄…何因愁為.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0195",
+        "excerpt": "後帝使於黎陽臨河築城戍，曰"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

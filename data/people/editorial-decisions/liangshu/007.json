@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "liangshu",
+  "chapter": "007",
+  "input": {
+    "chapterFingerprint": "sha256:257232e5872ed07e00f825e8da8d845d1b77203820784938864bc9d0ac7e97db",
+    "proposalsFingerprint": "sha256:2b4b7b825ddc3dc3e06453d984ca79ccc23b1fd5d4c794f312a0024b55d8b6cc"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-3d3db71e-73b6-4eaa-b157-0d7f7b04d6ad",
+    "runId": "run-dc452de8-e09d-4339-b090-54316d272bd7",
+    "completedAt": "2026-08-13T04:52:04.560Z"
+  },
+  "proposals": [
+    {
+      "id": "liangshu:007:r0001",
+      "unit": {
+        "id": "s0049",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Ye had married Emperor Wen of Song's daughter, the Princess of Xunyang; in early Qi he was reduced to Lady of Songzi county.",
+      "after": "Ye had married Emperor Wen of Song's daughter, the Princess of Xunyang; in early Qi she was reduced to Lady of Songzi county.",
+      "reason": "Chinese 降封松滋縣君 refers to the princess (縣君 is a female title), not Ye.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:007:r0002",
+      "unit": {
+        "id": "s0201",
+        "kind": "paragraph-sentence",
+        "blockIndex": 37,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "In the fifth month of Taiping year 3 she was put to death by imperial reproof and buried at Jiangling's Waguan Temple.",
+      "after": "In the fifth month of Taiqing year 3 she was put to death by imperial reproof and buried at Jiangling's Waguan Temple.",
+      "reason": "Chinese 太清三年 is Taiqing, not Taiping; Taiqing 3 is AD 549.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:007:r0003",
+      "unit": {
+        "id": "s0099",
+        "kind": "paragraph-sentence",
+        "blockIndex": 21,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "In the sixth month of Song's Taiyu year 1, officials debated showing clerkly respect to Emperor Chen's mother, the Honored Consort—yet while Emperor Ming of Song lived, no official had shown such respect.",
+      "after": "In the sixth month of Song's Taiyu year 1, officials debated showing clerkly respect to the emperor's birth mother, Honored Consort Chen—yet while Emperor Ming of Song lived, no official had shown such respect.",
+      "reason": "陳太妃 is Consort Chen, the emperor's birth mother; 'Emperor Chen' wrongly reads 陳 as a personal/dynastic name for the emperor.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:007:r0004",
+      "unit": {
+        "id": "s0098",
+        "kind": "paragraph-sentence",
+        "blockIndex": 21,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "He who bore the royal heir—one cannot fail to show him respect.",
+      "after": "She who bore the royal heir—one cannot fail to show her respect.",
+      "reason": "所生 refers to the mother of the heir; English wrongly uses masculine pronouns.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liangshu:007:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0049 齊初降封松滋縣君 uses the female title 縣君 and follows 尋陽公主, so the demotion is the princess's, not Ye's; changing he to she corrects the agent.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0049",
+        "excerpt": "齊初降封松滋縣君"
+      }
+    },
+    {
+      "repairId": "liangshu:007:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0201 太清三年 is the Taiqing era name; Taiping is a misreading, and the proposed idiomatic restores Taiqing.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0201",
+        "excerpt": "太清三年五月"
+      }
+    },
+    {
+      "repairId": "liangshu:007:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0099 帝所生陳太妃 names Honored Consort Chen as the emperor's birth mother; 陳 is her surname, not an emperor called Chen, so the proposed idiomatic corrects the misparse.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0099",
+        "excerpt": "帝所生陳太妃"
+      }
+    },
+    {
+      "repairId": "liangshu:007:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0098 皇儲所生 means the mother who bore the heir (parallel to 母以子貴); masculine he/him is wrong, and the proposed literal correctly uses she/her.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0098",
+        "excerpt": "皇儲所生"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "yuanshi",
+  "chapter": "179",
+  "input": {
+    "chapterFingerprint": "sha256:0aae7b6c8d2994f619a3f60d55f0338c639372dafca731fdd72ad145a0fcd5a3",
+    "proposalsFingerprint": "sha256:2a4577e086fcd96e6f5457a4f817b1bb458af07c530d5296e471918f6f7fd12a"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-f4a21997-3385-45b9-acf2-7a601cc65d1e",
+    "runId": "run-90587dd9-65cb-4768-8b68-5bfa95e35f3c",
+    "completedAt": "2026-08-13T05:12:29.796Z"
+  },
+  "proposals": [
+    {
+      "id": "yuanshi:179:r0001",
+      "unit": {
+        "id": "s0166",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "The guilt of these two men is not yet clear. The matter should be reported to the empress dowager and thoroughly investigated. If they are truly innocent, execution can wait.\"",
+      "after": "The guilt of these two men is not yet clear. The matter should be reported to the empress dowager and thoroughly investigated. If they are truly not wronged, it will not be too late to execute them.\"",
+      "reason": "Chinese 若果無冤 means if there is truly no wrongful injustice against them (the charges hold), not that they are innocent; the idiomatic version reverses the condition.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:179:r0002",
+      "unit": {
+        "id": "s0166",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "The crimes of the two men are not yet clear; the matter should be reported to the Empress Dowager and thoroughly tried; if they are truly without injustice, execution will not be too late.\"",
+      "after": "The crimes of the two men are not yet clear; the matter should be reported to the Empress Dowager and thoroughly tried; if they are truly without being wronged, execution will not be too late.\"",
+      "reason": "Clarify 無冤 as absence of wrongful condemnation rather than ambiguous phrasing.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "yuanshi:179:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0166 若果無冤，誅之未晚 means if investigation shows they are not wrongfully condemned (charges hold), execution will not be too late; \"innocent\" / \"execution can wait\" reverses that condition and softens 誅之未晚. The proposed wording restores the Chinese logic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0166",
+        "excerpt": "若果無冤，誅之未晚"
+      }
+    },
+    {
+      "repairId": "yuanshi:179:r0002",
+      "decision": "reject",
+      "after": null,
+      "reason": "The literal already pairs 若果無冤 with 誅之未晚 correctly as \"without injustice\" then \"execution will not be too late\"; swapping to \"without being wronged\" is a stylistic clarification, not a semantic repair.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0166",
+        "excerpt": "若果無冤，誅之未晚"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "378",
+  "input": {
+    "chapterFingerprint": "sha256:520d9f737d9227cfebfecea87dab51d305d3d22eed71a8bff3642d23ecf6038d",
+    "proposalsFingerprint": "sha256:73bb9c0097db0587156a4cf1150835b85233bd5ec32dc0a6f10b55de3464f7a7"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-a686e176-c334-4d20-85da-40b2c953731e",
+    "runId": "run-cfbe92f6-8cef-4716-83a4-62dfd7800938",
+    "completedAt": "2026-08-13T05:00:50.655Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:378:r0001",
+      "unit": {
+        "id": "s0168",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "At the beginning of Tongzhi, on recommendation of Chinese and foreign ministers, he was appointed intendant of the Kai-Gui-Chen-Xu circuit in Henan, served as provincial treasurer, and was promoted to Governor-General of the Eastern Rivers.",
+      "after": "At the beginning of Tongzhi, on recommendation of capital and provincial ministers, he was appointed intendant of the Kai-Gui-Chen-Xu circuit in Henan, served as provincial treasurer, and was promoted to Governor-General of the Eastern Rivers.",
+      "reason": "中外大臣 means inner/outer court (capital and provincial) officials, not Chinese and foreign ministers.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:378:r0002",
+      "unit": {
+        "id": "s0080",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "After mourning for his parents he was appointed vice minister of the Court of Imperial Entertainments.",
+      "after": "After a period of mourning he was appointed vice minister of the Court of Imperial Entertainments.",
+      "reason": "遭憂 does not specify both parents; idiomatic invents \"parents\".",
+      "confidence": "medium"
+    },
+    {
+      "id": "qingshigao:378:r0003",
+      "unit": {
+        "id": "s0152",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "After mourning for his parents he was made supervising secretary.",
+      "after": "After a period of mourning he was made supervising secretary.",
+      "reason": "遭憂 does not specify both parents; idiomatic invents \"parents\".",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:378:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0168 has 以中外大臣薦. In Qing official usage 中外大臣 means capital and provincial high officials, not Chinese and foreign ministers; the proposed wording corrects that mistranslation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0168",
+        "excerpt": "以中外大臣薦"
+      }
+    },
+    {
+      "repairId": "qingshigao:378:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0080 says 遭憂歸，服闋, which marks entry into mourning and its completion but does not name both parents; idiomatic 'mourning for his parents' invents that detail, and the proposed wording removes it without adding new error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0080",
+        "excerpt": "遭憂歸，服闋"
+      }
+    },
+    {
+      "repairId": "qingshigao:378:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0152 says 遭憂去官，服闋, likewise without specifying both parents; removing invented 'parents' restores fidelity while keeping a natural idiomatic appointment clause.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0152",
+        "excerpt": "遭憂去官，服闋"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

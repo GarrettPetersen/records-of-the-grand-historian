@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "yuanshi",
+  "chapter": "117",
+  "input": {
+    "chapterFingerprint": "sha256:f8d75969658fdb289fc797a963678d67c96520e7114783f91f73aa728e0e2ba1",
+    "proposalsFingerprint": "sha256:a27999175b9b143b0ed670f2e2e745c3957abd02c8b9bc372a0d805de3203fff"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-d66e289f-101d-4b06-9ccb-9d6d188047e1",
+    "runId": "run-d3562aa7-c76d-4f34-b9df-10ed3fcc1ad0",
+    "completedAt": "2026-08-13T05:10:39.159Z"
+  },
+  "proposals": [
+    {
+      "id": "yuanshi:117:r0001",
+      "unit": {
+        "id": "s0084",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 18
+      },
+      "field": "idiomatic",
+      "before": "When Emperor Wuzong raised troops in the northern steppe, Yahudou asked that his son Tele Temür accompany him.",
+      "after": "When Emperor Wuzong raised troops in the northern steppe, he asked that Yahudou's son Tele Temür accompany him.",
+      "reason": "The Chinese 請 has Emperor Wuzong as its continuing subject; the current idiomatic version wrongly makes Yahudou the requester.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:117:r0002",
+      "unit": {
+        "id": "s0170",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "Yan Temür succeeded at the age of twelve. His consort was of the Kongirat clan, granddaughter of the consort of Prince Haqar and a cousin of Empress Sugeshili.",
+      "after": "Yan Temür succeeded at the age of twelve. His consort was of the Kongirat clan, granddaughter of the imperial son-in-law Haqar and a cousin of Empress Sugeshili.",
+      "reason": "哈只兒駙馬 means the imperial son-in-law Haqar; it does not mean the consort of a Prince Haqar.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "yuanshi:117:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In s0084, 武宗 is the subject of 撫兵 and continues as the subject of 請; the idiomatic wrongly makes Yahudou the requester, while the repair correctly has Wuzong ask that Yahudou's son Tele Temür accompany him.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0084",
+        "excerpt": "武宗撫兵漠北，請以子脫列帖木兒從"
+      }
+    },
+    {
+      "repairId": "yuanshi:117:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "哈只兒駙馬 names Haqar as an imperial son-in-law (駙馬); the idiomatic misreads this as the consort of a Prince Haqar, and the proposed replacement is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0170",
+        "excerpt": "哈只兒駙馬之女孫"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

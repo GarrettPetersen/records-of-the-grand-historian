@@ -1,0 +1,216 @@
+{
+  "schemaVersion": 3,
+  "book": "songshu",
+  "chapter": "086",
+  "input": {
+    "chapterFingerprint": "sha256:630bd127d5464af7e600ca021008ff7d5574425319fe84897237a271a32ce641",
+    "proposalsFingerprint": "sha256:6ea132427b7ddabf76cd49c25b1d352dda0aab74c0501389b4ae9d25dfe077e3"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-fd321a3b-9dc9-45cc-a438-ab3d1baf7bba",
+    "runId": "run-08359013-1627-4c71-be41-afc83d15892a",
+    "completedAt": "2026-08-13T05:07:02.389Z"
+  },
+  "proposals": [
+    {
+      "id": "songshu:086:r0001",
+      "unit": {
+        "id": "s0061",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Jiang Province governor Prince Jin'an Zixun rebelled and the four quarters rose in response. Mian, retaining his existing office, served as adjutant on the pacification staff of Prince Pingling Jingsu and advanced to hold Liang Mountain.",
+      "after": "Jiang Province governor Prince Jin'an Zixun rebelled and the four quarters rose in response. Mian, retaining his existing office, served as adjutant on the pacification staff of Prince Jianping Jingsu and advanced to hold Liang Mountain.",
+      "reason": "Chinese 建平王 is Prince of Jianping, not Pingling.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:086:r0002",
+      "unit": {
+        "id": "s0061",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Jiang Province Governor Prince of Jin'an Zixun rebelled and the four quarters responded; Mian with his existing office served as adjutant on the pacification staff of Prince of Pingling Jingsu and advanced to hold Liang Mountain.",
+      "after": "Jiang Province Governor Prince of Jin'an Zixun rebelled and the four quarters responded; Mian with his existing office served as adjutant on the pacification staff of Prince of Jianping Jingsu and advanced to hold Liang Mountain.",
+      "reason": "Chinese 建平 is Jianping, not Pingling.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:086:r0003",
+      "unit": {
+        "id": "s0139",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "The emperor said, \"The two princes of Baling and Pingping both have a will to go their own way.",
+      "after": "The emperor said, \"The two princes of Baling and Jianping both have a will to go their own way.",
+      "reason": "Chinese 建平 is Jianping; Pingping is a corruption.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:086:r0004",
+      "unit": {
+        "id": "s0139",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "The emperor said: \"The two princes of Baling and Pingping both have a will to go their own way.",
+      "after": "The emperor said: \"The two princes of Baling and Jianping both have a will to go their own way.",
+      "reason": "Chinese 建平 is Jianping; Pingping is a corruption.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:086:r0005",
+      "unit": {
+        "id": "s0161",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "In former times Wang Yun held fast to sincerity and Bian Huai had stern integrity. Both matched the virtue of the past and return glory to the former track.",
+      "after": "In former times Wang Yun held fast to sincerity and Bian Kun had stern integrity. Both matched the virtue of the past and return glory to the former track.",
+      "reason": "卞壼 is Bian Kun (or Bian Hu), not Bian Huai.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "songshu:086:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0061 建平王景素 is Prince Jianping Jingsu; Pingling misreads 建平 and the proposed Jianping wording is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0061",
+        "excerpt": "建平王景素"
+      }
+    },
+    {
+      "repairId": "songshu:086:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0061 建平王景素 is Prince of Jianping Jingsu; Pingling is a false reading of 建平 and the proposed replacement matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0061",
+        "excerpt": "建平王景素"
+      }
+    },
+    {
+      "repairId": "songshu:086:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0139 巴陵、建平二王 names the princes of Baling and Jianping; Pingping is not in the Chinese and Jianping restores 建平.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0139",
+        "excerpt": "巴陵、建平二王"
+      }
+    },
+    {
+      "repairId": "songshu:086:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0139 建平 is Jianping; the before's Pingping invents a title absent from 巴陵、建平二王, and the proposed fix is correct.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0139",
+        "excerpt": "巴陵、建平二王"
+      }
+    },
+    {
+      "repairId": "songshu:086:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0161 卞壼 is Bian Kun (pinyin Kǔn); Bian Huai is a wrong English name, and the proposed Bian Kun correctly matches the person named in the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0161",
+        "excerpt": "卞壼"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "songshu:086:r0001",
+      "claim": {
+        "id": "songshu:086:c0129",
+        "subject": "songshu:086:p033",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Prince Pingling Jingsu"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "songshu:086:s0061"
+        ]
+      },
+      "reason": "Accepting r0001 shows \"Prince Pingling Jingsu\" was created only by misreading 建平王 as Pingling; the correct title claim remains in c0128.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0061",
+        "excerpt": "建平王景素"
+      }
+    }
+  ],
+  "claimRevisions": [
+    {
+      "repairId": "songshu:086:r0005",
+      "before": {
+        "id": "songshu:086:c0237",
+        "subject": "songshu:086:p063",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Bian Huai",
+          "zh": "卞壼",
+          "pinyin": "Biàn Kǔn"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "songshu:086:s0161"
+        ]
+      },
+      "after": {
+        "id": "songshu:086:c0237",
+        "subject": "songshu:086:p063",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Bian Kun",
+          "zh": "卞壼",
+          "pinyin": "Biàn Kǔn"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "songshu:086:s0161"
+        ]
+      },
+      "reason": "Accepted r0005 restores the English personal name to Bian Kun so it matches 卞壼 / Biàn Kǔn.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0161",
+        "excerpt": "卞壼"
+      }
+    }
+  ]
+}

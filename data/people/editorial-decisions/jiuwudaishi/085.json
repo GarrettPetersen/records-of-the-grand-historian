@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "085",
+  "input": {
+    "chapterFingerprint": "sha256:62f7b3ed21b5516dbeeea03f9affbcc29436c78caffe80c78667ba6dc6aa9342",
+    "proposalsFingerprint": "sha256:f912706d9299d07a07a27b6c8a5f0fe4af5581275fb117957cd7124a78f9dd34"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-81af34ed-6dbb-41eb-a1d4-183306aed9da",
+    "runId": "run-e6882d96-db9d-458e-9ae8-842564fd42f0",
+    "completedAt": "2026-08-13T04:51:06.501Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:085:r0001",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "On xinwei Du Wei, military governor of Yedu, was appointed overall commander of the northern field army; Li Shouzhen, commander of the Imperial Guard and military governor of Yanzhou, became overall supervisor of troops and horses; An Shenqi of Yanzhou commanded both wings; Fu Yanqing of Xuzhou the left wing of cavalry; Huangfu Yu of Huazhou the right wing of cavalry; Liang Hanzhang of Beizhou marshal of the cavalry array; Song Yanyun, former prefect of Dengzhou, the left wing of infantry; Wang Rao of the Fengguo left wing the right wing of infantry; and Xue Huairang, regimental trainer of Mozhou, vanguard commander.",
+      "after": "On xinwei Du Wei, military governor of Yedu, was appointed overall commander of the northern field army; Li Shouzhen, commander of the Imperial Guard and military governor of Yunzhou, became overall supervisor of troops and horses; An Shenqi of Yanzhou commanded both wings; Fu Yanqing of Xuzhou the left wing of cavalry; Huangfu Yu of Huazhou the right wing of cavalry; Liang Hanzhang of Beizhou marshal of the cavalry array; Song Yanyun, former prefect of Dengzhou, the left wing of infantry; Wang Rao of the Fengguo left wing the right wing of infantry; and Xue Huairang, regimental trainer of Mozhou, vanguard commander.",
+      "reason": "鄆州 (Yunzhou) and 兗州 (Yanzhou) are distinct; both were rendered Yanzhou, collapsing two different places.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:085:r0002",
+      "unit": {
+        "id": "s0028",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "On gengshen former Minister of Revenue Chu Yanying became Mentor of the Heir Apparent.",
+      "after": "On gengshen former Minister of Agriculture Chu Yanying became Mentor of the Heir Apparent.",
+      "reason": "司農卿 is the Minister of Agriculture (Chamberlain for the National Treasury), not the Minister of Revenue (戶部).",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:085:r0003",
+      "unit": {
+        "id": "s0025",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "The Comprehensive Mirror records that on the dingsi new moon Li Gu wrote a secret memorial in his own hand describing the army's dire peril, asking that the emperor go to Huazhou with Gao Xingzhou and Fu Yanqing as escort, and that troops be sent to hold Chenzhou and Heyang against a sudden enemy thrust.",
+      "after": "The Comprehensive Mirror records that on the dingsi new moon Li Gu wrote a secret memorial in his own hand describing the army's dire peril, asking that the emperor go to Huazhou with Gao Xingzhou and Fu Yanqing as escort, and that troops be sent to hold Chanzhou and Heyang against a sudden enemy thrust.",
+      "reason": "澶州 is Chanzhou, not Chenzhou (陳州).",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:085:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit has 鄆州節度使李守貞 and separately 兗州安審琦; the prior idiomatic collapses both to Yanzhou. Changing Li Shouzhen’s post to Yunzhou restores the distinct place-names without other alterations.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "鄆州節度使李守貞"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:085:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit has 前司農卿; 司農卿 is Chamberlain for the National Treasury / Minister of Agriculture, not Minister of Revenue (戶部). The proposed title fix is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0028",
+        "excerpt": "前司農卿"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:085:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit has 守澶州、河陽; 澶州 is Chanzhou, distinct from 陳州 (Chenzhou). Replacing Chenzhou with Chanzhou corrects the place-name and leaves the rest intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0025",
+        "excerpt": "守澶州、河陽"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

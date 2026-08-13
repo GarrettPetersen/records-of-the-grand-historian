@@ -1,0 +1,217 @@
+{
+  "schemaVersion": 3,
+  "book": "suishu",
+  "chapter": "052",
+  "input": {
+    "chapterFingerprint": "sha256:2677ff81d92741fc4246ed7052f6f4c3a3ff5bc341c426dab70a3a0095450b82",
+    "proposalsFingerprint": "sha256:906b6564a38d2c7e854bf53054b45dac486ac44b43343d420421eeeea05b510f"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-044d95f2-34ba-4ccd-90ce-e63cd0d63bde",
+    "runId": "run-e3bae9ef-0807-4eab-8c8f-5dfd3243373e",
+    "completedAt": "2026-08-13T05:08:26.260Z"
+  },
+  "proposals": [
+    {
+      "id": "suishu:052:r0001",
+      "unit": {
+        "id": "s0001",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Book of Sui, 52th year of Volume, 17th year of Biographies.",
+      "after": "Book of Sui, Volume 52, Biographies 17.",
+      "reason": "Mistranslates 卷五十二 / 列傳第十七 as ordinal \"year\" instead of volume and biography numbers.",
+      "confidence": "high"
+    },
+    {
+      "id": "suishu:052:r0002",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Han Qinhu, whose courtesy name was Zitong, came from Donyuan in Henan; his family later moved to Xin'an.",
+      "after": "Han Qinhu, whose courtesy name was Zitong, came from Dongyuan in Henan; his family later moved to Xin'an.",
+      "reason": "東垣 is Dongyuan, not Donyuan.",
+      "confidence": "high"
+    },
+    {
+      "id": "suishu:052:r0003",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Han Qinhu, courtesy name Zitong, was a native of Donyuan in Henan; later his family settled in Xin'an.",
+      "after": "Han Qinhu, courtesy name Zitong, was a native of Dongyuan in Henan; later his family settled in Xin'an.",
+      "reason": "東垣 is Dongyuan, not Donyuan.",
+      "confidence": "high"
+    },
+    {
+      "id": "suishu:052:r0004",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "When Chen troops pressed Guangzhou, Qinhu, serving as Campaign Commander, routed them.",
+      "after": "When Chen troops pressed Guang Prefecture (Guangzhou), Qinhu, serving as Campaign Commander, routed them.",
+      "reason": "光州 is Guang Prefecture, not the city commonly meant by Guangzhou (廣州).",
+      "confidence": "medium"
+    },
+    {
+      "id": "suishu:052:r0005",
+      "unit": {
+        "id": "s0123",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "○ He Ruo Bi",
+      "after": "○ He Ruobi",
+      "reason": "Inconsistent spacing of the surname He Ruo / given name Bi versus He Ruobi used elsewhere in the chapter.",
+      "confidence": "medium"
+    },
+    {
+      "id": "suishu:052:r0006",
+      "unit": {
+        "id": "s0124",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "He Ruo Bi, whose courtesy name was Fubo, came from Luoyang in Henan.",
+      "after": "He Ruobi, whose courtesy name was Fubo, came from Luoyang in Henan.",
+      "reason": "Aligns personal-name spacing with the predominant chapter form He Ruobi.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "suishu:052:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0001 reads 隋書卷五十二列傳第十七; 卷 marks the volume and 列傳第十七 the biography section number, so “year of Volume/Biographies” is a clear mistranslation and the proposed wording matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0001",
+        "excerpt": "隋書卷五十二列傳第十七"
+      }
+    },
+    {
+      "repairId": "suishu:052:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0003 has 河南東垣人; 東垣 romanizes as Dongyuan, so idiomatic “Donyuan” is a spelling error and the proposed Dongyuan is correct.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "河南東垣人也"
+      }
+    },
+    {
+      "repairId": "suishu:052:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 東垣 in s0003 requires Dongyuan in the literal field; “Donyuan” is simply the wrong romanization.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "河南東垣人也"
+      }
+    },
+    {
+      "repairId": "suishu:052:r0004",
+      "decision": "revise",
+      "after": "When Chen troops pressed Guang Prefecture, Qinhu, serving as Campaign Commander, routed them.",
+      "reason": "s0011 has 光州, the prefecture Guang, not 廣州 the city usually meant by bare “Guangzhou.” The proposed parenthetical still reuses that ambiguous city form; naming the place Guang Prefecture alone fixes the identity without inviting the 廣州 reading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "陳人逼光州"
+      }
+    },
+    {
+      "repairId": "suishu:052:r0005",
+      "decision": "reject",
+      "after": null,
+      "reason": "s0123 is only the heading 賀若弼; “He Ruo Bi” already names the same person, and respacing to “He Ruobi” is a chapter-style preference rather than a semantic or attribution error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0123",
+        "excerpt": "賀若弼"
+      }
+    },
+    {
+      "repairId": "suishu:052:r0006",
+      "decision": "reject",
+      "after": null,
+      "reason": "s0124’s 賀若弼 is already correctly identified; changing “He Ruo Bi” to “He Ruobi” only normalizes spacing to another acceptable English form and does not repair meaning.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0124",
+        "excerpt": "賀若弼"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "suishu:052:r0004",
+      "before": {
+        "id": "suishu:052:c0228",
+        "subject": "suishu:052:p001",
+        "predicate": "event-participation",
+        "value": {
+          "kind": "military",
+          "role": "commander",
+          "action": "defeated-Chen-at-Guangzhou"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "suishu:052:s0011"
+        ]
+      },
+      "after": {
+        "id": "suishu:052:c0228",
+        "subject": "suishu:052:p001",
+        "predicate": "event-participation",
+        "value": {
+          "kind": "military",
+          "role": "commander",
+          "action": "defeated-Chen-at-Guang-Prefecture"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "suishu:052:s0011"
+        ]
+      },
+      "reason": "Advanced r0004 shows the engagement was at 光州 (Guang Prefecture); the event-participation action must not use bare Guangzhou, which English readers take as 廣州.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "陳人逼光州"
+      }
+    }
+  ]
+}

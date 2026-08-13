@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "057",
+  "input": {
+    "chapterFingerprint": "sha256:2aca729f2fba550be21b906d726ebd8f87d5c911b8a3b40eeed9a827d3b5c8f3",
+    "proposalsFingerprint": "sha256:931b77aad0585d9a55fa2b5519c7f0db7670befc654493558c80920c2dfef214"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-d8fc7089-ce96-4b49-b9fd-a1c17aa4afab",
+    "runId": "run-ec19386a-f54b-4251-b2a9-339e17a5e27d",
+    "completedAt": "2026-08-13T05:03:45.806Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:057:r0001",
+      "unit": {
+        "id": "s0070",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "He then turned his forces elsewhere and captured the Governor of Yunzhong, Su, along with the chancellor jisi and the general Xun.",
+      "after": "He then turned his forces elsewhere and captured the Governor of Yunzhong, Su, along with the chancellor Ji Si and the general Xun.",
+      "reason": "Personal name 箕肆 should be capitalized as Ji Si, not lowercase jisi.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:057:r0002",
+      "unit": {
+        "id": "s0127",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "appointed Hedong governor Yafu as general, stationed at Xiliu: to prepare against the Xiongnu.",
+      "after": "appointed Henei governor Yafu as general, stationed at Xiliu: to prepare against the Xiongnu.",
+      "reason": "Chinese 河內守 is Henei, not Hedong (河東); idiomatic already has Henei.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:057:r0003",
+      "unit": {
+        "id": "s0229",
+        "kind": "paragraph-sentence",
+        "blockIndex": 23,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Even yiyin and the Duke of Zhou could scarcely have done more!",
+      "after": "Even Yi Yin and the Duke of Zhou could scarcely have done more!",
+      "reason": "伊尹 should be rendered Yi Yin with standard capitalization, not lowercase yiyin.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:057:r0004",
+      "unit": {
+        "id": "s0229",
+        "kind": "paragraph-sentence",
+        "blockIndex": 23,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Even yiyin and Zhou Gong, what could surpass this!",
+      "after": "Even Yi Yin and Zhou Gong, what could surpass this!",
+      "reason": "伊尹 should be Yi Yin in the literal English as well.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:057:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "丞相箕肆 names the chancellor 箕肆; lowercase \"jisi\" misformats that personal name, and \"Ji Si\" restores standard capitalization without changing meaning.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0070",
+        "excerpt": "丞相箕肆"
+      }
+    },
+    {
+      "repairId": "shiji:057:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The Chinese has 河內守, which is Henei, not Hedong (河東); the literal's \"Hedong\" is a place-name error, and the idiomatic already correctly has Henei.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0127",
+        "excerpt": "以河內守亞夫為將軍"
+      }
+    },
+    {
+      "repairId": "shiji:057:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "伊尹 is the personal name Yi Yin; lowercase \"yiyin\" is an incorrect rendering of that name, and \"Yi Yin\" matches standard English usage alongside 周公 as the Duke of Zhou.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0229",
+        "excerpt": "雖伊尹、周公"
+      }
+    },
+    {
+      "repairId": "shiji:057:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 伊尹 in the literal must be \"Yi Yin,\" not lowercase \"yiyin\"; the proposed fix corrects the name without altering the rest of the calque.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0229",
+        "excerpt": "雖伊尹、周公"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

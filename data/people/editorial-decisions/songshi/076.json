@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "songshi",
+  "chapter": "076",
+  "input": {
+    "chapterFingerprint": "sha256:b005f274b25a2efd89c412bf1b1ea678d581ee95af09e49c7e93425aeca70204",
+    "proposalsFingerprint": "sha256:6b6f694821795995701734543bc1df5aa829613d84990f9b27e74b19fd33f0c2"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-116114cd-3811-4f18-951d-285a3b9c3ac3",
+    "runId": "run-42915068-bf74-43fa-a1e9-e4e6877e17d5",
+    "completedAt": "2026-08-13T05:05:29.048Z"
+  },
+  "proposals": [
+    {
+      "id": "songshi:076:r0001",
+      "unit": {
+        "id": "s0201",
+        "kind": "paragraph-sentence",
+        "blockIndex": 135,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "Dividing the dividend by the divisor yields winter solstice's added hour at thirty-one ke after midnight—one day later than the Yuankai Calendar, which matches the true count of celestial days.",
+      "after": "Dividing the dividend by the divisor yields winter solstice's added hour at thirty-one ke after midnight—one day later than the Yuanjia Calendar, which matches the true count of celestial days.",
+      "reason": "元嘉曆 is Yuanjia, not Yuankai; the packet English misspells the calendar name.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:076:r0002",
+      "unit": {
+        "id": "s0201",
+        "kind": "paragraph-sentence",
+        "blockIndex": 135,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "literal",
+      "before": "Divide the dividend by the divisor; one obtains winter solstice's added hour at thirty-one ke after midnight, one day later than the Yuankai Calendar—the correct reckoning of heaven's days.",
+      "after": "Divide the dividend by the divisor; one obtains winter solstice's added hour at thirty-one ke after midnight, one day later than the Yuanjia Calendar—the correct reckoning of heaven's days.",
+      "reason": "元嘉曆 is Yuanjia; literal English incorrectly has Yuankai.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:076:r0003",
+      "unit": {
+        "id": "s0188",
+        "kind": "paragraph-sentence",
+        "blockIndex": 135,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In the third year of the Xiaping era of Later Han, the Monograph on the Quarter-remainder Calendar records the mid-term shadow at Start of Winter as 1 zhang and at Beginning of Spring as 9 chi 6 cun.",
+      "after": "In the third year of the Xiping era of Later Han, the Monograph on the Quarter-remainder Calendar records the mid-term shadow at Start of Winter as 1 zhang and at Beginning of Spring as 9 chi 6 cun.",
+      "reason": "熹平 is Xiping in standard pinyin; Xiaping is a misspelling (cf. s0205 Xiping).",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:076:r0004",
+      "unit": {
+        "id": "s0193",
+        "kind": "paragraph-sentence",
+        "blockIndex": 135,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "In Xiaping year 3, the calendar then in use fixed the winter solstice on dingchou, with the added hour exactly at midday.",
+      "after": "In Xiping year 3, the calendar then in use fixed the winter solstice on dingchou, with the added hour exactly at midday.",
+      "reason": "熹平 should be Xiping, matching the corrected form used later in the chapter.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:076:r0005",
+      "unit": {
+        "id": "s0098",
+        "kind": "paragraph-sentence",
+        "blockIndex": 45,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Measured with the new table: 9 chi 6 cun 7 fen and a half; Wang Pu's calculation: 1 zhang 1 chi 5 fen; new method: 1 zhang 6 cun 8 fen 7 small fen.",
+      "after": "Measured with the new table: 9 chi 6 cun 7 fen and a half; Wang Pu's calculation: 1 zhang 1 cun 5 fen; new method: 1 zhang 6 cun 8 fen 7 small fen.",
+      "reason": "Chinese 一丈一寸五分 is 1 zhang 1 cun 5 fen; idiomatic invents an extra chi.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:076:r0006",
+      "unit": {
+        "id": "s0098",
+        "kind": "paragraph-sentence",
+        "blockIndex": 45,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "New table measured shadow length 9 chi 6 cun 7 fen half; Wang Pu calculated shadow length 1 zhang 1 chi 5 fen; new method calculated shadow length 1 zhang 6 cun 8 fen small fen 7.",
+      "after": "New table measured shadow length 9 chi 6 cun 7 fen half; Wang Pu calculated shadow length 1 zhang 1 cun 5 fen; new method calculated shadow length 1 zhang 6 cun 8 fen small fen 7.",
+      "reason": "Chinese 一丈一寸五分 lacks 尺; literal wrongly inserts chi.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "songshi:076:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Source 《元嘉曆》 is the Yuanjia Calendar (元嘉); Yuankai misreads 嘉 as kai, and the proposed Yuanjia restores the correct calendar name without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0201",
+        "excerpt": "《元嘉曆》"
+      }
+    },
+    {
+      "repairId": "songshi:076:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 《元嘉曆》 must be Yuanjia in the literal field; Yuankai is a pinyin error, and the replacement corrects only that name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0201",
+        "excerpt": "《元嘉曆》"
+      }
+    },
+    {
+      "repairId": "songshi:076:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Source 熹平三年 uses the era 熹平, standard pinyin Xiping; Xiaping invents an incorrect first syllable, and the proposed form matches the Chinese era name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0188",
+        "excerpt": "熹平三年"
+      }
+    },
+    {
+      "repairId": "songshi:076:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Unit 熹平三年 again names the Xiping era; idiomatic Xiaping is the same misspelling, and Xiping is the accurate repair.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0193",
+        "excerpt": "熹平三年"
+      }
+    },
+    {
+      "repairId": "songshi:076:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "王朴算景長一丈一寸五分 is 1 zhang 1 cun 5 fen with no 尺; idiomatic “1 zhang 1 chi 5 fen” invents a chi, and “1 zhang 1 cun 5 fen” restores the Chinese measures.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0098",
+        "excerpt": "一丈一寸五分"
+      }
+    },
+    {
+      "repairId": "songshi:076:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 一丈一寸五分 lacks 尺; literal “1 zhang 1 chi 5 fen” wrongly inserts chi, and “1 zhang 1 cun 5 fen” is the accurate reading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0098",
+        "excerpt": "一丈一寸五分"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

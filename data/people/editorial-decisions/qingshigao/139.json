@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "139",
+  "input": {
+    "chapterFingerprint": "sha256:4df69939b3383e485323fd3b3b26c63d5053217df00164e26a43db04cb428571",
+    "proposalsFingerprint": "sha256:34f7efd94ba3d73b72ebd426276c6e1d1f00006cb1211e1f6228cacaab031f21"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-942b62d0-81a2-4e6d-857b-a7bf86e5ab76",
+    "runId": "run-b123bb4c-65d7-4c0d-bad2-9f8f87db1ddf",
+    "completedAt": "2026-08-13T04:57:50.072Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:139:r0001",
+      "unit": {
+        "id": "s0133",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "In year 5 four hundred banner horses went to the patrol brigade for Manchu and Mongol cavalry archery, inspected each spring and autumn; a grand review was set for three years on. In year 8 Nayancheng expanded frontier garrisons, funded them, set drill rules, picked two thousand Kashgar men to train, and ordered diligent archery drill for Ili Manchu under the resident and regional commander.",
+      "after": "In year 5 Yinghe's request was granted: four hundred banner pasture horses were reassigned to the patrol brigade for Manchu and Mongol cavalry archery, inspected each spring and autumn by the foot-soldiers commandant with the wing regional commanders; after three years the emperor would personally hold a grand review. In year 8 Nayancheng and others expanded Muslim-frontier garrisons, funded them, set drill rules, picked two thousand Kashgar men to train, and ordered diligent archery drill for Ili Manchu under the resident and regional commander.",
+      "reason": "Idiomatic English omits 允英和之請 (Yinghe's granted request) and softens several concrete offices present in the Chinese.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:139:r0002",
+      "unit": {
+        "id": "s0104",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "Scaling-ladder boats were also set up on Kunming Lake for the vanguard to practice naval combat, boat handling, and sailing skills.",
+      "after": "Gan-zeng boats were also set up on Kunming Lake for the vanguard to practice naval combat, boat handling, and sailing skills.",
+      "reason": "趕繒船 are gan-zeng (fishing/war) boats, not scaling-ladder boats; the literal conflates 趕繒 with 雲梯.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:139:r0003",
+      "unit": {
+        "id": "s0157",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Long-slack Guangdong and Fujian camps were told to pick brave banner and Green Standard officers to learn Western tactics.",
+      "after": "Because Guangdong and Fujian camps had long been slack, Qiling, Liu Changyou, and others were ordered, within banner and Green Standard camps, to select brave officers to study foreign military methods.",
+      "reason": "Idiomatic English omits the named officials 耆齡 and 劉長佑 present in the Chinese.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:139:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0133 opens with 允英和之請 and specifies 八旗圈馬四百匹改撥巡捕營, spring–autumn inspection by 步軍統領會同左右翼總兵, and 三年後親臨大閱; year 8 has 那彥成等回疆增設防兵. The prior idiomatic drops Yinghe’s granted request, pasture reassignment, inspecting offices, imperial presence at the review, “and others,” and the Muslim frontier; the proposed replacement restores those points accurately.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0133",
+        "excerpt": "允英和之請，以八旗圈馬四百匹，改撥巡捕營"
+      }
+    },
+    {
+      "repairId": "qingshigao:139:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0104 has 趕繒船, a gan-zeng boat type; 雲梯 (scaling ladders) belongs to the prior unit s0103. Rendering them as “scaling-ladder boats” is a mistranslation; “Gan-zeng boats” correctly transliterates the Chinese term for the literal field.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0104",
+        "excerpt": "趕繒船"
+      }
+    },
+    {
+      "repairId": "qingshigao:139:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0157 names 耆齡、劉長佑等 as the officials ordered to select brave officers from banner and Green Standard camps to study 外國兵法. The prior idiomatic omits those names and softens the command; the proposed replacement restores Qiling, Liu Changyou, and others with accurate agency and wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0157",
+        "excerpt": "飭耆齡、劉長佑等於旗、綠營營內"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

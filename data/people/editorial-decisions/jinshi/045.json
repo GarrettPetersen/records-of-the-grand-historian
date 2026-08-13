@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "jinshi",
+  "chapter": "045",
+  "input": {
+    "chapterFingerprint": "sha256:56b0508058caa6a71c3d60e6865f65f8e6b02c3bb7066c3ae8d2c138ea63af2d",
+    "proposalsFingerprint": "sha256:b420e319645bea5db384a1f2f6cdf6a32690f499240719589c74174308e086c5"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-f448bc0b-c214-4292-9022-ef1cc1cba27b",
+    "runId": "run-fe8b0e84-98c0-412c-8bd3-72ffc345bf18",
+    "completedAt": "2026-08-13T04:47:42.778Z"
+  },
+  "proposals": [
+    {
+      "id": "jinshi:045:r0001",
+      "unit": {
+        "id": "s0038",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "In the third year, after recovering the Henan region, the court issued an edict its inhabitants that all criminal law applied there should follow statutory text, abolishing jailers' cruel instruments of torture in favor of lenient treatment.",
+      "after": "In the third year, after recovering the Henan region, the court issued an edict to its inhabitants that all criminal law applied there should follow statutory text, abolishing jailers' cruel instruments of torture in favor of lenient treatment.",
+      "reason": "Missing preposition 'to' after 'edict' makes the English ungrammatical.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:045:r0002",
+      "unit": {
+        "id": "s0039",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "By the Huangtong period, ministers were commanded to compile law drawing on the dynasty's own old institutions, incorporating elements of Sui and Tang practice and referencing Liao and Song codes.",
+      "after": "By the Huangtong period, an edict ordered the ministers to compile law drawing on the dynasty's own old institutions, incorporating elements of Sui and Tang practice and referencing Liao and Song codes.",
+      "reason": "Chinese 詔諸臣 is an edict to ministers; current phrasing obscures the edict.",
+      "confidence": "medium"
+    },
+    {
+      "id": "jinshi:045:r0003",
+      "unit": {
+        "id": "s0082",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 52
+      },
+      "field": "idiomatic",
+      "before": "In the fifteenth year, the emperor issued an edict officials: 'I hold human life supremely precious; yet the regulations execute thieves when stolen goods reach fifty strings—from now on let the threshold be eighty strings.'",
+      "after": "In the fifteenth year, the emperor issued an edict to officials: 'I hold human life supremely precious; yet the regulations execute thieves when stolen goods reach fifty strings—from now on let the threshold be eighty strings.'",
+      "reason": "Missing preposition 'to' after 'edict'.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:045:r0004",
+      "unit": {
+        "id": "s0116",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "The emperor said: 'Fan De was about the same age as You's parents and should have treated them with the deference owed to elders; that he beat one of them to death makes mitigation difficult—adjudicate strictly according to law.'",
+      "after": "The emperor said: 'Fan De was about the same age as You's parents; You ought to have treated him with the deference owed to parents, yet you beat him to death—mitigation is difficult; adjudicate strictly according to law.'",
+      "reason": "Chinese makes Liu You the agent who should have treated Fan De as a parent and who beat him to death; the idiomatic reverses the referent.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jinshi:045:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0038 has 乃詔其民; the idiomatic omits the required preposition after \"edict,\" and inserting \"to\" before \"its inhabitants\" restores grammatical English without changing meaning.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0038",
+        "excerpt": "乃詔其民"
+      }
+    },
+    {
+      "repairId": "jinshi:045:r0002",
+      "decision": "reject",
+      "after": null,
+      "reason": "s0039's 詔諸臣 is already conveyed by \"ministers were commanded\"; making \"edict\" explicit is a stylistic preference, not a semantic or grammatical repair.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0039",
+        "excerpt": "詔諸臣"
+      }
+    },
+    {
+      "repairId": "jinshi:045:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0082 has 詔有司曰; the idiomatic lacks \"to\" after \"edict,\" and \"edict to officials\" correctly mirrors the Chinese without altering the quoted content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0082",
+        "excerpt": "詔有司曰"
+      }
+    },
+    {
+      "repairId": "jinshi:045:r0004",
+      "decision": "revise",
+      "after": "The emperor said: 'Fan De was about the same age as You's parents; You ought to have treated him with the deference owed to parents, yet You beat him to death—mitigation is difficult; adjudicate strictly according to law.'",
+      "reason": "s0114–s0116 show Liu You (祐) beat Fan De to death; 自當如父母相待…毆殺之 makes You the agent who should have treated Fan De as a parent. The original reverses agent and patient. The proposal fixes that, but lowercase \"you\" clashes with the established name rendering \"You,\" so capitalize consistently.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0116",
+        "excerpt": "范德與祐父母年相若，自當如父母相待，至毆殺之"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

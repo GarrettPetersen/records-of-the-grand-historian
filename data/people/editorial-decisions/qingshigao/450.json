@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "450",
+  "input": {
+    "chapterFingerprint": "sha256:835770d70097bc6b24b2b6e72604e0ca35fbd61eaa1977d19585fc5f8deded7c",
+    "proposalsFingerprint": "sha256:e7daa4393b1e976e4fcd3d68ff768c599c23f5da7fc7db2ae10c439883b03c93"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-209f6ed6-9b5d-4399-96e7-bab4a8b6bec0",
+    "runId": "run-a50fe03c-6167-4a08-8962-3b9dbe72c950",
+    "completedAt": "2026-08-13T05:02:51.428Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:450:r0001",
+      "unit": {
+        "id": "s0076",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "He also joined Governor-General Wu Yuanbing of the Two Jiangs in a memorial to restore the Huai River's old course, arguing in summary: \"More than forty rivers feed the Huai into Hongze Lake; below Yangzhuang, Yunti Pass marks the old route to the sea, and the river's remaining flow enters the canal to support grain transport.",
+      "after": "He also joined Governor-General Wu Yuanbing of the Two Jiangs in a memorial to restore the Huai River's old course, arguing in summary: \"The Huai River gathers more than forty streams and pools them in Hongze Lake; below Yangzhuang, Yunti Pass marks the old route to the sea, and the river's remaining flow enters the canal to support grain transport.",
+      "reason": "Chinese 淮水匯四十餘河瀦於洪澤湖 means the Huai gathers tributaries into Hongze Lake, not that rivers feed the Huai into the lake.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:450:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "淮水匯四十餘河瀦於洪澤湖 takes 淮水 as subject: the Huai gathers more than forty streams and pools them in Hongze Lake. The prior idiomatic “More than forty rivers feed the Huai into Hongze Lake” misassigns the subject and garbles the hydrology; the proposed wording matches the Chinese and is natural English.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0076",
+        "excerpt": "淮水匯四十餘河瀦於洪澤湖"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

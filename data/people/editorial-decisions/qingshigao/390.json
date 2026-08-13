@@ -1,0 +1,245 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "390",
+  "input": {
+    "chapterFingerprint": "sha256:90e34437a42e54fd5e416301fcf3b8bc5e4643573800b0bbf100ffe3b039061a",
+    "proposalsFingerprint": "sha256:80bf34f49efdee1d113dcd3b25016750563879d026c8d55a314bca90ce98f026"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-1eb25c9c-36d7-49c9-bb4e-d4399f9589e0",
+    "runId": "run-51074cb6-354f-4727-99fe-0fff16fab190",
+    "completedAt": "2026-08-13T05:01:28.802Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:390:r0001",
+      "unit": {
+        "id": "s0002",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "His father Yun Sheng had taken his jinshi degree in the sixtieth year of the Qianlong reign and advanced from Hanlin compiler to Vice Minister of War.",
+      "after": "His father Yunsheng had taken his jinshi degree in the sixtieth year of the Qianlong reign and advanced from Hanlin compiler to Vice Minister of War.",
+      "reason": "允升 is a single given name; spacing as Yun Sheng obscures the personal name.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:390:r0002",
+      "unit": {
+        "id": "s0111",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Fengbiao joined Ministers Weng Qing, Quan Qing, and Wang Qingyun in a joint memorial: \"Huai'an is ground the rebels are certain to contest; if their forces cross the river, the people of Henan and Shandong will be thrown into alarm and suppression will become far more difficult.",
+      "after": "Fengbiao joined Minister Wenqing and Vice Ministers Quanqing and Wang Qingyun in a joint memorial: \"Huai'an is ground the rebels are certain to contest; if their forces cross the river, the people of Henan and Shandong will be thrown into alarm and suppression will become far more difficult.",
+      "reason": "文慶 is Wenqing, not Weng Qing; 尚書文慶，侍郎全慶、王慶雲 marks Wenqing as minister and the other two as vice ministers.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:390:r0003",
+      "unit": {
+        "id": "s0127",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "In the seventh year of Tongzhi, As Minister of Personnel he was made Associate Grand Secretary and also chancellor of the Hanlin Academy.",
+      "after": "In the seventh year of Tongzhi, as Minister of Personnel he was made Associate Grand Secretary and also chancellor of the Hanlin Academy.",
+      "reason": "Capital A after the comma is a clear grammatical error.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:390:r0004",
+      "unit": {
+        "id": "s0089",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "He also reported that resistance to tax collection and arrest had become widespread near the capital because unfit men held local office, and ordered governors-general and governors to select officials impartially without favoritism.",
+      "after": "He also reported that resistance to tax collection and arrest had become widespread near the capital because unfit men held local office, and asked that governors-general and governors be instructed to select officials impartially without favoritism.",
+      "reason": "疏言…諭各督撫 requests that the throne instruct the governors; the idiomatic English wrongly makes Zhou the one who ordered them.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:390:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0002 names the father 允升 as one given name; spacing it Yun Sheng invents a two-part Western personal name. Unspaced Yunsheng matches the Chinese and the parallel given-name claim already recorded as Yunsheng.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0002",
+        "excerpt": "父允升"
+      }
+    },
+    {
+      "repairId": "qingshigao:390:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0111 has 尚書文慶，侍郎全慶、王慶雲: 文慶 romanizes as Wenqing (not Weng Qing), 全慶 as Quanqing, and only Wenqing is 尚書 while Quanqing and Wang Qingyun are 侍郎. The proposed titles and names restore that reading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0111",
+        "excerpt": "尚書文慶，侍郎全慶、王慶雲"
+      }
+    },
+    {
+      "repairId": "qingshigao:390:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0127 is continuous prose (同治七年，以吏部尚書…); capital As after the comma is only an English capitalization error, and lowercase as is the correct fix without changing meaning.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0127",
+        "excerpt": "同治七年，以吏部尚書協辦大學士"
+      }
+    },
+    {
+      "repairId": "qingshigao:390:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "In s0089 又言…諭各督撫 is still memorial language asking the throne to instruct the governors-general and governors; 諭 is the imperial directive requested, not an order Zhou himself issued. The proposed wording correctly restores that agency.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0089",
+        "excerpt": "又言近畿各處抗糧拒捕成風，由於州縣不得其人，諭各督撫秉公遴選"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "qingshigao:390:r0001",
+      "before": {
+        "id": "qingshigao:390:c0008",
+        "subject": "qingshigao:390:p002",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Yun Sheng",
+          "zh": "允升",
+          "pinyin": "Yunsheng"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:390:s0002"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:390:c0008",
+        "subject": "qingshigao:390:p002",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Yunsheng",
+          "zh": "允升",
+          "pinyin": "Yunsheng"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:390:s0002"
+        ]
+      },
+      "reason": "Accepted r0001 shows English Yun Sheng came only from spacing 允升 as two words; the personal-name claim must read Yunsheng while zh, pinyin, id, subject, predicate, certainty, and evidence stay the same.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0002",
+        "excerpt": "允升"
+      }
+    },
+    {
+      "repairId": "qingshigao:390:r0002",
+      "before": {
+        "id": "qingshigao:390:c0153",
+        "subject": "qingshigao:390:p044",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Weng Qing",
+          "zh": "文慶",
+          "pinyin": "Wenqing"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:390:s0111"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:390:c0153",
+        "subject": "qingshigao:390:p044",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Wenqing",
+          "zh": "文慶",
+          "pinyin": "Wenqing"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:390:s0111"
+        ]
+      },
+      "reason": "Accepted r0002 shows English Weng Qing came only from misromanizing 文慶; the personal-name claim must read Wenqing while zh, pinyin, id, subject, predicate, certainty, and evidence stay the same.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0111",
+        "excerpt": "文慶"
+      }
+    },
+    {
+      "repairId": "qingshigao:390:r0002",
+      "before": {
+        "id": "qingshigao:390:c0155",
+        "subject": "qingshigao:390:p045",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Quan Qing",
+          "zh": "全慶",
+          "pinyin": "Quanqing"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:390:s0111"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:390:c0155",
+        "subject": "qingshigao:390:p045",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Quanqing",
+          "zh": "全慶",
+          "pinyin": "Quanqing"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:390:s0111"
+        ]
+      },
+      "reason": "Accepted r0002 shows English Quan Qing came only from spacing 全慶 as two words; the personal-name claim must read Quanqing while zh, pinyin, id, subject, predicate, certainty, and evidence stay the same.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0111",
+        "excerpt": "全慶"
+      }
+    }
+  ]
+}

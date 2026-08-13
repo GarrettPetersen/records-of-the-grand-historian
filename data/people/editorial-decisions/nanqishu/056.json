@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "nanqishu",
+  "chapter": "056",
+  "input": {
+    "chapterFingerprint": "sha256:1079965d0844ead11de2bde7a329cd19084d07f8972801baf1f8c71e79d544c4",
+    "proposalsFingerprint": "sha256:9829d60186c6483331c1569da58c14e58ee8668c23823d049219a4b3d5e10a06"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-4ac91024-8a94-43bd-a948-e345587231b3",
+    "runId": "run-3b024a40-e962-417c-a16b-cb059675643b",
+    "completedAt": "2026-08-13T04:57:03.766Z"
+  },
+  "proposals": [
+    {
+      "id": "nanqishu:056:r0001",
+      "unit": {
+        "id": "s0030",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Ji Sengzhen was a native of Jianye in Danyang commandery.",
+      "after": "Ji Sengzhen was a native of Jiankang in Danyang commandery.",
+      "reason": "Chinese 建康 is Jiankang in the Southern Dynasties; Jianye is an earlier name and mismatches the source.",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:056:r0002",
+      "unit": {
+        "id": "s0089",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "When Dan raised troops at Guangling everyone in the city was put to death, but an edict from Shen Qingzhi pardoned Xizong and appointed him calligrapher to the Eastern Palace.",
+      "after": "When Dan raised troops at Guangling everyone in the city was put to death, but an edict ordered Shen Qingzhi to pardon Xizong, who was then appointed calligrapher to the Eastern Palace.",
+      "reason": "Chinese 敕沈慶之赦係宗 means an imperial edict had Shen Qingzhi pardon Xizong, not an edict issued by Shen.",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:056:r0003",
+      "unit": {
+        "id": "s0122",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "In the last years of Emperor Xiaowu he instituted drinking regulations with excessive flogging; on a hunting expedition to the lands south of the Yangzi he selected one hundred eighty attendants in plain dress, all with wealthy faces and households, and accompanied them to the southern regions; more than half received the lash.",
+      "after": "In the last years of Emperor Xiaowu he instituted drinking regulations with excessive flogging; on a hunting expedition to the lands south of the Yangzi he selected one hundred eighty attendants in plain dress, all handsome men from wealthy households, and took them to the southern regions; more than half received the lash.",
+      "reason": "面首 means handsome favorites/attendants, not \"wealthy faces\"; 富室 are wealthy households.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "nanqishu:056:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0030 gives the native place as 丹陽建康; 建康 is Jiankang, not Jianye (建業). The replacement corrects the place name without altering the rest of the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0030",
+        "excerpt": "丹陽建康人也"
+      }
+    },
+    {
+      "repairId": "nanqishu:056:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0089 reads 敕沈慶之赦係宗: an imperial edict ordered Shen Qingzhi to pardon Xizong, not an edict issued by Shen. The proposed wording restores that command structure and keeps the Eastern Palace appointment.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0089",
+        "excerpt": "敕沈慶之赦係宗，以爲東宮侍書"
+      }
+    },
+    {
+      "repairId": "nanqishu:056:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0122’s 皆面首富室 means handsome attendants from wealthy households; “wealthy faces” misreads 面首. The proposed literal restores that sense while leaving the rest of the unit intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0122",
+        "excerpt": "皆面首富室"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

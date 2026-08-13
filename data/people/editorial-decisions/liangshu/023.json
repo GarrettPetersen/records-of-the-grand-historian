@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "liangshu",
+  "chapter": "023",
+  "input": {
+    "chapterFingerprint": "sha256:59aa5631590b15965c258e61e0d1271100f0f9daf5cb50dbf1e89527f0ba5f81",
+    "proposalsFingerprint": "sha256:f2f03c3964d7022c1d94603c3117d1fad50733bfa1b8108f3f44f91a3397ca66"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-610019ad-1550-4c40-b8f1-861e716e76d1",
+    "runId": "run-753b9e9a-6802-40ff-bdb0-8606333afad7",
+    "completedAt": "2026-08-13T04:53:10.219Z"
+  },
+  "proposals": [
+    {
+      "id": "liangshu:023:r0001",
+      "unit": {
+        "id": "s0043",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "In the ninth year he was relieved as Director of the Secretariat and reassigned as General Who Pacifies the Rear, charged with Langye and Pengcheng and concurrently governing South Langye.",
+      "after": "In the ninth year he was appointed Director of the Secretariat and reassigned as General Who Pacifies the Rear, charged with Langye and Pengcheng and concurrently governing South Langye.",
+      "reason": "Chinese 除 means to appoint, not to relieve or dismiss; the idiomatic reverses the sense of the Secretariat appointment.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:023:r0002",
+      "unit": {
+        "id": "s0043",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "literal",
+      "before": "In the ninth year he was dismissed as Director of the Secretariat and reassigned as General Who Pacifies the Rear, with charge of the two commanderies Langye and Pengcheng and concurrent governorship of South Langye.",
+      "after": "In the ninth year he was appointed Director of the Secretariat and reassigned as General Who Pacifies the Rear, with charge of the two commanderies Langye and Pengcheng and concurrent governorship of South Langye.",
+      "reason": "Chinese 除 means to appoint; 'dismissed' reverses the meaning.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:023:r0003",
+      "unit": {
+        "id": "s0082",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "He often felt his rank and stipend were too great and always thought of resigning. His household was quiet and still, and guests rarely called. Crown Prince Zhao especially revered and loved him.",
+      "after": "He often felt his rank and stipend were too great and always thought of resigning. His household was quiet and still, and guests rarely called. Taizong especially revered and loved him.",
+      "reason": "Chinese 太宗 is the temple name Taizong, not 'Crown Prince Zhao'; the idiomatic invents an unsupported name Zhao.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liangshu:023:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0043 九年，除中書令 uses 除 in the officialese sense of appointment to office; “relieved” reverses that sense, and the proposed idiomatic correctly restores appointment as Director of the Secretariat before 改授.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0043",
+        "excerpt": "除中書令"
+      }
+    },
+    {
+      "repairId": "liangshu:023:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0043 除中書令 means he was appointed Director of the Secretariat; “dismissed” reverses 除, and the proposed literal corrects that error while leaving the rest intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0043",
+        "excerpt": "除中書令"
+      }
+    },
+    {
+      "repairId": "liangshu:023:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0082 ends 太宗尤敬愛之; 太宗 is the temple name Taizong, and “Crown Prince Zhao” invents an unsupported personal name Zhao, so the proposed idiomatic is the accurate repair.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0082",
+        "excerpt": "太宗尤敬愛之"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

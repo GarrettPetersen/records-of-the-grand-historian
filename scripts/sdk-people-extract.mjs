@@ -841,6 +841,12 @@ async function obtainValidInitialExtraction(agent, target, packet, opts, state, 
         `[${stateKey(target)}${chunk ? `/chunk-${chunk.id}` : ''}] ` +
         `attempt ${attempt} failed with ${errors.length} error(s)`,
       );
+      for (const diagnostic of errors.slice(0, 20)) {
+        console.error(`  - ${String(diagnostic).replaceAll('\n', '\n    ')}`);
+      }
+      if (errors.length > 20) {
+        console.error(`  - ... ${errors.length - 20} more error(s)`);
+      }
       if (control.cancelRequested) break;
       if (error instanceof CursorAgentError && !error.isRetryable) break;
     }

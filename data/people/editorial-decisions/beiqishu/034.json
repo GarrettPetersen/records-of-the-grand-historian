@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 3,
+  "book": "beiqishu",
+  "chapter": "034",
+  "input": {
+    "chapterFingerprint": "sha256:7e79e002c59240ed4d5c3a61f9652b300706ef6deb7be03696dce40f5f7f88b5",
+    "proposalsFingerprint": "sha256:052f5568261afc9c468b9d425d55cc1dcc1e005ae3c7e43bd8b016efc1a6c059"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-0835d90e-e920-4417-9301-a31f16c94f36",
+    "runId": "run-98eedc85-a5a3-4b96-be67-5e8c64a0ebe9",
+    "completedAt": "2026-08-13T04:42:34.408Z"
+  },
+  "proposals": [
+    {
+      "id": "beiqishu:034:r0001",
+      "unit": {
+        "id": "s0023",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "For military merit he was made supervisor of the Feathered Forest, enfeoffed as Marquis of Weichang, and did not accept.",
+      "after": "For military merit he was made supervisor of the Feathered Forest, enfeoffed as Baron of Weichang, and did not accept.",
+      "reason": "Chinese 男 is the noble rank baron, not marquis (侯).",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:034:r0002",
+      "unit": {
+        "id": "s0054",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "At that time the hegemonic design was newly begun and military and state affairs were broad; proclamations, orders, and edicts all issued from Yin and Cui Xian.",
+      "after": "At that time the hegemonic design was newly begun and military and state affairs were broad; proclamations, orders, and edicts all issued from Yin and Cui Lingquan.",
+      "reason": "Chinese 崔㥄悛 does not read as Cui Xian; 㥄 is Ling.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:034:r0003",
+      "unit": {
+        "id": "s0174",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 32
+      },
+      "field": "literal",
+      "before": "Sheep was Yin; 'horn' written was using a knife; 'Daoist' meant the deposed emperor's childhood name; the princess of Taiyuan had once been a nun, hence 'Auntie'; Yin's Zixian and Tianhe were both the emperor's brothers-in-law.",
+      "after": "Sheep was Yin; 'horn' written was using a knife; 'Daoist' meant the deposed emperor's childhood name; the princess of Taiyuan had once been a nun, hence 'Auntie'; Zixian and Tianhe were both the emperor's sisters' husbands (姑夫).",
+      "reason": "Chinese 子獻、天和 are not 'Yin's Zixian'; 姑夫 means the emperor's aunt's husband.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:034:r0004",
+      "unit": {
+        "id": "s0100",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "He also had a clerk call out men's names and by mistake called Lu Shishen Shichen; Shichen spoke up himself, and Yin said, \"Master Lu, jade lustrous—therefore the jade radical. From nature it is so.\"",
+      "after": "He also had a clerk call out men's names and by mistake took Lu Shishen for Shichen; Shichen spoke up himself, and Yin said, \"Master Lu is jade-lustrous—therefore the jade radical.\"",
+      "reason": "Chinese 誤以盧士深為士琛 means mistaking 士深 for 士琛; fused English and added clause obscure the Chinese.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:034:r0005",
+      "unit": {
+        "id": "s0151",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "Your servant and Zhan took the weight of state upon ourselves; Heba Ren and Hulu Jin cherished Gao Huan's foundation; we seized Zunyan and his fellows and brought them into the palace. We have not yet executed them; for our presumption we deserve ten thousand deaths.\"",
+      "after": "Your servant and Zhan took the weight of state upon ourselves; Heba Ren and Hulu Jin cherished Emperor Xian's foundation; we seized Zunyan and his fellows and brought them into the palace. We have not yet executed them; for our presumption we deserve ten thousand deaths.\"",
+      "reason": "Chinese has 獻皇帝 (Emperor Xian), not the personal name Gao Huan.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "beiqishu:034:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0023’s 賜爵魏昌男 uses the noble rank 男 (baron), not 侯 (marquis); Marquis of Weichang is a rank error and Baron of Weichang matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0023",
+        "excerpt": "賜爵魏昌男"
+      }
+    },
+    {
+      "repairId": "beiqishu:034:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0054 names 崔㥄悛; 㥄 reads Ling and 悛 Quan, so Cui Lingquan is required and Cui Xian is an unsupported reading of the same characters.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0054",
+        "excerpt": "崔㥄悛"
+      }
+    },
+    {
+      "repairId": "beiqishu:034:r0003",
+      "decision": "revise",
+      "after": "Sheep was Yin; 'horn' written was using a knife; 'Daoist' meant the deposed emperor's childhood name; the princess of Taiyuan had once been a nun, hence 'Auntie'; Yin, Zixian, and Tianhe were all the emperor's aunts' husbands.",
+      "reason": "愔子獻、天和皆帝姑夫 lists Yin, Zixian, and Tianhe as all 姑夫; the before invents 'Yin's Zixian' and weakens 姑夫 to brothers-in-law, while the proposal drops 愔 and wrongly turns 姑夫 into the emperor's sisters' husbands.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0174",
+        "excerpt": "愔子獻、天和皆帝姑夫"
+      }
+    },
+    {
+      "repairId": "beiqishu:034:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "誤以盧士深為士琛 is mistaking 士深 for 士琛, and Yin’s reply ends at 所以從玉; the before fuses the mix-up and invents 'From nature it is so,' which the proposed wording removes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0100",
+        "excerpt": "誤以盧士深為士琛，士琛自言，愔曰：「盧郎玉潤，所以從玉。」"
+      }
+    },
+    {
+      "repairId": "beiqishu:034:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0151 has 惜獻皇帝基業; the title is 獻皇帝 (Emperor Xian), and substituting the personal name Gao Huan is not what the Chinese says.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0151",
+        "excerpt": "惜獻皇帝基業"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "beiqishu:034:r0002",
+      "claim": {
+        "id": "beiqishu:034:c0092",
+        "subject": "beiqishu:034:p024",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Cui Xian",
+          "zh": "崔㥄悛"
+        },
+        "certainty": "uncertain",
+        "evidence": [
+          "beiqishu:034:s0054"
+        ]
+      },
+      "reason": "Accepted r0002 shows Cui Xian exists only as a mistranslation of 崔㥄悛; the Chinese supports Cui Lingquan (c0091), not this English name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0054",
+        "excerpt": "崔㥄悛"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

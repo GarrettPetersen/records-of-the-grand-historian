@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "438",
+  "input": {
+    "chapterFingerprint": "sha256:ffbd598f0e30cbe3de7f1a87c1a360e736967951287688d7a81c081fa661a17a",
+    "proposalsFingerprint": "sha256:5f7fc325c8438b90db7155cd38a9b4d9634449b667078ea4fb1e8a7df230e92c"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-a15b7850-828e-4674-bb4d-fe6880b889ce",
+    "runId": "run-a232a16e-1783-4545-9b69-801beb859a06",
+    "completedAt": "2026-08-13T05:01:49.346Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:438:r0001",
+      "unit": {
+        "id": "s0014",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "idiomatic",
+      "before": "He then moved his own forces to Boxing.",
+      "after": "He then moved his own forces to Boping.",
+      "reason": "Chinese 博平 is Boping (Shandong), not Boxing (博興).",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:438:r0002",
+      "unit": {
+        "id": "s0014",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "literal",
+      "before": "He himself moved the army to Boxing.",
+      "after": "He himself moved the army to Boping.",
+      "reason": "Chinese 博平 is Boping, not Boxing.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:438:r0003",
+      "unit": {
+        "id": "s0082",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "Zhiwan stationed the army at Xuzhou; having dispatched various generals to set defenses, he himself led the army back to the provincial capital;",
+      "after": "Zhiwan stationed the army at Xuchang; having dispatched various generals to set defenses, he himself led the army back to the provincial capital;",
+      "reason": "Chinese 許州 is Xuchang; literal incorrectly renders it as Xuzhou (徐州).",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:438:r0004",
+      "unit": {
+        "id": "s0101",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "In the fifteenth year of his reign he was appointed Grand Secretary of the Tiren Pavilion and then transferred to the Eastern Pavilion.",
+      "after": "In the fifteenth year he was appointed Grand Secretary of the Tiren Pavilion and then transferred to the Eastern Pavilion.",
+      "reason": "Source has 十五年 in Guangxu narrative context, not 'of his reign' as emperor.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:438:r0005",
+      "unit": {
+        "id": "s0129",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Britain incited the Gurkhas to war with Tibet, while the people of Dromo, ground down by harsh treatment from Tibetan officials, wished to submit to the Qing.",
+      "after": "Britain incited the Gurkhas to war with Tibet, while the people of Zhantui, ground down by harsh treatment from Tibetan officials, wished to submit to the Qing.",
+      "reason": "瞻對 is Zhantui/Nyarong, not Dromo (Chumbi).",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:438:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0014 reads 博平; with Dongchang, Shen, and the Grand Canal in the surrounding units this is Boping in Shandong, not Boxing (博興). The proposed replacement is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0014",
+        "excerpt": "博平"
+      }
+    },
+    {
+      "repairId": "qingshigao:438:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same focus unit has 博平; literal Boxing misidentifies the place. Boping restores the correct toponym without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0014",
+        "excerpt": "博平"
+      }
+    },
+    {
+      "repairId": "qingshigao:438:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0082 has 許州; Xuzhou would be 徐州. The idiomatic already has Xuchang, and s0083’s raid on 許 confirms the Henan prefecture. The proposed literal fix is correct.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0082",
+        "excerpt": "許州"
+      }
+    },
+    {
+      "repairId": "qingshigao:438:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0101 is only 十五年 after an established Guangxu sequence (s0099–s0100); ‘of his reign’ wrongly casts Zhang Zhiwan as the reigning emperor. Dropping that phrase matches the source and parallel year phrasing.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0101",
+        "excerpt": "十五年"
+      }
+    },
+    {
+      "repairId": "qingshigao:438:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0129 has 瞻對; s0130 calls it 蜀門戶, which fits Zhantui/Nyarong on the Sichuan–Kham frontier, not Dromo/Chumbi. Zhantui is the accurate repair.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0129",
+        "excerpt": "瞻對"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "xintangshu",
+  "chapter": "055",
+  "input": {
+    "chapterFingerprint": "sha256:e7db69d77e6e2764292c34f16415c501b81a57d7a800610e5246597df20fe81e",
+    "proposalsFingerprint": "sha256:569600476c64155c2af90f37ebef55b58ba02dd8680cc6d9ac9189d2e95c17e0"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-aea22cff-6a7e-476f-af00-96f25615ee6c",
+    "runId": "run-d400dc41-bbd6-4f4c-bdf8-b89cb1049b4a",
+    "completedAt": "2026-08-13T05:08:36.433Z"
+  },
+  "proposals": [
+    {
+      "id": "xintangshu:055:r0001",
+      "unit": {
+        "id": "s0026",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Gao Jifu, Attendant Drafting the Secretariat, urged: 'Junior provincial officials are destitute; they ought to receive salaries to support their families.'",
+      "after": "Gao Jifu, Attendant Drafting the Secretariat, urged: 'Junior provincial officials are destitute; they ought to receive salaries to support their parents.'",
+      "reason": "Chinese 養親 means support parents/elders; idiomatic wrongly generalizes to families.",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:055:r0002",
+      "unit": {
+        "id": "s0075",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "In Guangzai 1 (684), because eighth- and ninth-rank capital officials were poorly paid, the court granted eighth rank three general servants per year and ninth rank two.",
+      "after": "In Guangzhai 1 (684), because eighth- and ninth-rank capital officials were poorly paid, the court granted eighth rank three general servants per year and ninth rank two.",
+      "reason": "Reign name 光宅 is Guangzhai, not Guangzai.",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:055:r0003",
+      "unit": {
+        "id": "s0116",
+        "kind": "paragraph-sentence",
+        "blockIndex": 24,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Chancellor Yang Guozhong personally held several offices; beyond hall seals he was monthly given one million cash.",
+      "after": "Chancellor Yang Guozhong personally held several offices; beyond hall-seal emoluments he was monthly given one million cash.",
+      "reason": "堂封 denotes chancellor seal/hall emoluments, not literal seals.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xintangshu:055:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 養親 specifically means supporting parents/elders, not households in general; replacing 'families' with 'parents' restores the source sense without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0026",
+        "excerpt": "養親"
+      }
+    },
+    {
+      "repairId": "xintangshu:055:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The reign title 光宅 is Guangzhai; 'Guangzai' is a pinyin error. The proposed spelling and year (684) match the Chinese era name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "光宅元年"
+      }
+    },
+    {
+      "repairId": "xintangshu:055:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "堂封 is the chancellor's hall emolument, not physical seals; 'hall-seal emoluments' correctly marks it as a stipend term while staying close to the literal wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0116",
+        "excerpt": "堂封"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

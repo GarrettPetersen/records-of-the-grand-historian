@@ -9,6 +9,7 @@ import {
 } from './people-schema.mjs';
 
 const SCHEMA_ID = 'https://24histories.com/schema/people/editorial-decision-v3.json';
+const HANZI_RE = /\p{Script=Han}/u;
 
 export class EditorialDecisionValidationError extends Error {
   constructor(errors) {
@@ -99,12 +100,18 @@ function editorialDocumentErrors(document) {
   }
   for (const decision of document.decisions ?? []) {
     const proposal = proposalById.get(decision.repairId);
-    if (!proposal || decision.decision !== 'revise') continue;
-    if (decision.after === proposal.before) {
-      errors.push(`${proposal.id} revised replacement is identical to its original text`);
+    if (!proposal || decision.decision === 'reject') continue;
+    const reviewedAfter = decision.decision === 'revise' ? decision.after : proposal.after;
+    if (HANZI_RE.test(reviewedAfter)) {
+      errors.push(`${proposal.id} reviewed English replacement contains Chinese characters`);
     }
-    if (decision.after === proposal.after) {
-      errors.push(`${proposal.id} uses revise without changing the proposal; use accept`);
+    if (decision.decision === 'revise') {
+      if (decision.after === proposal.before) {
+        errors.push(`${proposal.id} revised replacement is identical to its original text`);
+      }
+      if (decision.after === proposal.after) {
+        errors.push(`${proposal.id} uses revise without changing the proposal; use accept`);
+      }
     }
   }
 

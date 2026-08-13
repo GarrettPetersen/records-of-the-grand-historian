@@ -1,0 +1,254 @@
+{
+  "schemaVersion": 3,
+  "book": "songshu",
+  "chapter": "076",
+  "input": {
+    "chapterFingerprint": "sha256:840de2a75bf831b606ef2770b5be5c55967ef1cb86a3c0b31682bb368cd4af82",
+    "proposalsFingerprint": "sha256:aed57b1c0a15473936b0a53805b94f44d585f73d686ea254bc2e360eb0e48bab"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-3e5a6b04-d6b0-46b4-905d-44d1a1c8cfac",
+    "runId": "run-4ccb6f4a-f794-4ea2-b620-622d5c1d9a1f",
+    "completedAt": "2026-08-13T05:06:11.863Z"
+  },
+  "proposals": [
+    {
+      "id": "songshu:076:r0001",
+      "unit": {
+        "id": "s0006",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Xiuzhi advanced from a provincial chief clerk to an attendant in the Masters of Writing section of the Secretariat. Emperor Wen told him, \"Your great-grandfather once served as a director in Chancellor Wang Dao's secretariat, and you now hold the same post under Wang Hong—you have not disgraced your forebears.\"",
+      "after": "Xiuzhi advanced from provincial chief clerk to Attendant Gentleman under the Minister over the Masses (Situ). Emperor Wen told him, \"Your great-grandfather once served as a director in Chancellor Wang Dao's secretariat, and you now hold the same post under Wang Hong—you have not disgraced your forebears.\"",
+      "reason": "司徒從事中郎 is an attendant gentleman of the Situ, not a Masters of Writing/Secretariat post.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:076:r0002",
+      "unit": {
+        "id": "s0006",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Xiuzhi rose from provincial chief clerk to Attendant of the Masters of Writing in the Secretariat. Emperor Wen said to him, \"Your great-grandfather once served as Director of the Secretariat under Chancellor Wang Dao, and you now serve as Director under Wang Hong—you truly do not disgrace your ancestor.\"",
+      "after": "Xiuzhi rose from provincial chief clerk to Attendant Gentleman of the Minister over the Masses. Emperor Wen said to him, \"Your great-grandfather once served as Director under Chancellor Wang Dao, and you now serve as Director under Wang Hong—you truly do not disgrace your ancestor.\"",
+      "reason": "Literal likewise misrenders 司徒從事中郎 as Secretariat/Masters of Writing.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:076:r0003",
+      "unit": {
+        "id": "s0083",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Six generations back, his ancestor Hong had been Administrator of Hedong and Marquis of Mianzhu. When his kinsman by marriage, Minister of Works Wang Yun, met disaster, Hong resigned and moved north to Xinxing, later serving as administrator of Xinxing and Yanmen—so his own family record ran.",
+      "after": "Six generations back, his ancestor Hong had been Administrator of Hedong and Marquis of Mianzhu. When his collateral paternal uncle, Minister of Works Wang Yun, met disaster, Hong resigned and moved north to Xinxing, later serving as administrator of Xinxing and Yanmen—so his own family record ran.",
+      "reason": "從叔 means a collateral paternal uncle, not a kinsman by marriage.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:076:r0004",
+      "unit": {
+        "id": "s0139",
+        "kind": "paragraph-sentence",
+        "blockIndex": 21,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "He even had a wooden statue carved of Lingxiu's father, Grand Master Shuxian, and sent it to their reception hall.",
+      "after": "He even had a wooden statue carved of Lingxiu's father, Chamberlain for the Imperial Clan Shuxian, and sent it to their reception hall.",
+      "reason": "光祿勳 is Chamberlain/Minister of the Imperial Clan, not undifferentiated Grand Master.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:076:r0005",
+      "unit": {
+        "id": "s0139",
+        "kind": "paragraph-sentence",
+        "blockIndex": 21,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "He also carved a wooden image of Lingxiu's father, the Grand Master of Splendid Happiness Shuxian, and sent it to their family hall.",
+      "after": "He also carved a wooden image of Lingxiu's father, the Chamberlain for the Imperial Clan Shuxian, and sent it to their family hall.",
+      "reason": "Literal wrongly equates 光祿勳 with Grand Master of Splendid Happiness (光祿大夫).",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:076:r0006",
+      "unit": {
+        "id": "s0063",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In the thirtieth year, when Emperor Xiaowu marched against the deposed heir Yuanxiong, Que served as advising officer on the Southern Palace Attendant's staff and commanded the central guard.",
+      "after": "In the thirtieth year, when Emperor Xiaowu marched against the deposed heir Yuanxiong, Que served as advising officer on the Southern General of the Household's staff and commanded the central troops.",
+      "reason": "南中郎 is Southern Zhonglang (General of the Household), not Southern Palace Attendant.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "songshu:076:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "司徒從事中郎 is Attendant Gentleman of the Situ (Minister over the Masses), not a Masters of Writing/Secretariat post; the proposed office title matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0006",
+        "excerpt": "遷司徒從事中郎"
+      }
+    },
+    {
+      "repairId": "songshu:076:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise misrenders 司徒從事中郎 as Masters of Writing in the Secretariat; Attendant Gentleman of the Minister over the Masses restores the correct office.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0006",
+        "excerpt": "遷司徒從事中郎"
+      }
+    },
+    {
+      "repairId": "songshu:076:r0003",
+      "decision": "revise",
+      "after": "Six generations back, his ancestor Hong had been Administrator of Hedong and Marquis of Mianzhu. When his collateral paternal uncle, Minister over the Masses Wang Yun, met disaster, Hong resigned and moved north to Xinxing, later serving as administrator of Xinxing and Yanmen—so his own family record ran.",
+      "reason": "從叔 is a collateral paternal uncle, so ‘kinsman by marriage’ is wrong; but 司徒允 is Minister over the Masses, not Minister of Works (司空), and the proposal still keeps that office error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0083",
+        "excerpt": "以從叔司徒允之難"
+      }
+    },
+    {
+      "repairId": "songshu:076:r0004",
+      "decision": "revise",
+      "after": "He even had a wooden statue carved of Lingxiu's father, Superintendent of the Imperial Household Shuxian, and sent it to their reception hall.",
+      "reason": "光祿勳 is not undifferentiated Grand Master (光祿大夫), but Chamberlain for the Imperial Clan is 宗正; the office is Superintendent of the Imperial Household.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0139",
+        "excerpt": "靈秀父光祿勳叔獻"
+      }
+    },
+    {
+      "repairId": "songshu:076:r0005",
+      "decision": "revise",
+      "after": "He also carved a wooden image of Lingxiu's father, the Superintendent of the Imperial Household Shuxian, and sent it to their family hall.",
+      "reason": "Grand Master of Splendid Happiness renders 光祿大夫, not 光祿勳; the proposal’s Chamberlain for the Imperial Clan is 宗正, so revise to Superintendent of the Imperial Household.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0139",
+        "excerpt": "光祿勳叔獻"
+      }
+    },
+    {
+      "repairId": "songshu:076:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "南中郎諮議參軍 is an advising officer on the Southern General of the Household’s staff, not a Southern Palace Attendant; 領中兵 is command of the central troops.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0063",
+        "excerpt": "南中郎諮議參軍，領中兵"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "songshu:076:r0003",
+      "before": {
+        "id": "songshu:076:c0172",
+        "subject": "songshu:076:p047",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Minister of Works",
+          "zh": "司徒"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "songshu:076:s0083"
+        ]
+      },
+      "after": {
+        "id": "songshu:076:c0172",
+        "subject": "songshu:076:p047",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Minister over the Masses",
+          "zh": "司徒"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "songshu:076:s0083"
+        ]
+      },
+      "reason": "Advancing r0003 restores 司徒允 as Minister over the Masses; the claim’s English ‘Minister of Works’ names 司空 and must be corrected while the title fact remains valid.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0083",
+        "excerpt": "司徒允"
+      }
+    },
+    {
+      "repairId": "songshu:076:r0004",
+      "before": {
+        "id": "songshu:076:c0254",
+        "subject": "songshu:076:p071",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Grand Master of the Imperial Clan",
+          "zh": "光祿勳"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "songshu:076:s0139"
+        ]
+      },
+      "after": {
+        "id": "songshu:076:c0254",
+        "subject": "songshu:076:p071",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Superintendent of the Imperial Household",
+          "zh": "光祿勳"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "songshu:076:s0139"
+        ]
+      },
+      "reason": "Advancing r0004 restores 光祿勳 as Superintendent of the Imperial Household; the claim’s hybrid ‘Grand Master of the Imperial Clan’ conflates 光祿大夫 and 宗正.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0139",
+        "excerpt": "光祿勳叔獻"
+      }
+    }
+  ]
+}

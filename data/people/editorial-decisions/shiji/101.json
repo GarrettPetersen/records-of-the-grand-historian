@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "101",
+  "input": {
+    "chapterFingerprint": "sha256:ac81e52100a391bb21e376e52664b8284442c23f1ec372ee516faf7fcadf16b9",
+    "proposalsFingerprint": "sha256:61e94990e73d710243499a99481271715bfc966f94d6f70bfea99e23a1e09ff4"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-9c44b330-bde3-4a86-89a4-02e3f8e883e1",
+    "runId": "run-f8835a78-2d3c-4954-be5a-7c969c2bad76",
+    "completedAt": "2026-08-13T05:04:48.656Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:101:r0001",
+      "unit": {
+        "id": "s0025",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "When the plot of the heir of the Marquis of Jipu, Chai Wu, was uncovered and investigated, the trail led to the King of Huainan. The king was summoned, and the Emperor ordered him banished to Shu, to be transported in a prisoner's cart from station to station.",
+      "after": "When the plot of the heir of Marquis of Jipu Chai Wu was uncovered and investigated, the trail led to the King of Huainan. The king was summoned, and the Emperor ordered him banished to Shu, to be transported in a prisoner's cart from station to station.",
+      "reason": "Chinese 棘蒲侯柴武太子 means the heir of Marquis of Jipu Chai Wu; the comma before Chai Wu wrongly makes Chai Wu the heir.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:101:r0002",
+      "unit": {
+        "id": "s0181",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "A little over ten days after his death, the seven kingdoms of Wu and Chu rose in rebellion, using the execution of Cuo as their pretext.",
+      "after": "A little over ten days after his death, the seven kingdoms of Wu and Chu rose in rebellion, using the demand to execute Cuo as their pretext.",
+      "reason": "以誅錯為名 means their slogan/pretext was to execute Cuo, not that Cuo had already been executed.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:101:r0001",
+      "decision": "revise",
+      "after": "When the plot of the heir of the Marquis of Jipu Chai Wu was uncovered and investigated, the trail led to the King of Huainan. The king was summoned, and the Emperor ordered him banished to Shu, to be transported in a prisoner's cart from station to station.",
+      "reason": "棘蒲侯柴武太子 is the heir of Chai Wu, Marquis of Jipu; the comma after Jipu makes Chai Wu read as the heir. The proposed fix removes that error but drops the needed article before Marquis; restore 'the Marquis of Jipu Chai Wu'.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0025",
+        "excerpt": "棘蒲侯柴武太子"
+      }
+    },
+    {
+      "repairId": "shiji:101:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "以誅錯為名 means the rebels used 'execute Cuo' as their slogan/pretext, not that Cuo was already executed; s0182 shows his beheading came only after the rising, so 'demand to execute Cuo' is the correct reading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0181",
+        "excerpt": "以誅錯為名"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

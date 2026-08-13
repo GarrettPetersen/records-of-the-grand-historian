@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "142",
+  "input": {
+    "chapterFingerprint": "sha256:54f890ac93c8d559b08692bf0412c3d8e8640c4cd8d7f45cdc90085bf89f5aec",
+    "proposalsFingerprint": "sha256:1f408a776af87bd80620efd9336c0761807dae5556e3d91552ce7db3b70077c7"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-25f8bdf2-581a-457d-88a9-190e1bdceb14",
+    "runId": "run-b48faea4-423d-42be-89f1-0dd6f32e5e6a",
+    "completedAt": "2026-08-13T04:58:10.011Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:142:r0001",
+      "unit": {
+        "id": "s0101",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "The Qianlong Emperor reigned for sixty years. Proud and sharply perceptive by nature, he scrutinized every criminal case that came before him, insisting that the facts and the sentence fit together justly. He sought to meet the infinite variety of human circumstances with an equally varied body of legal precedent.",
+      "after": "The Qianlong Emperor reigned for sixty years. By nature meticulous and keenly discerning, he scrutinized every criminal case that came before him, insisting that the facts and the sentence fit together justly. He sought to meet the infinite variety of human circumstances with an equally varied body of legal precedent.",
+      "reason": "性矜明察 means he prized careful discernment; \"Proud\" overreads 矜 as arrogance rather than scrupulous self-regard about being perceptive.",
+      "confidence": "medium"
+    },
+    {
+      "id": "qingshigao:142:r0002",
+      "unit": {
+        "id": "s0182",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 35
+      },
+      "field": "literal",
+      "before": "Only the Court Organization Law, Public Order Offenses Law, and Opium Prohibition Regulations were all promulgated in Xuantong 2; together with the Current Penal Code, which had been in force for only one year, the abdication edict was then issued.",
+      "after": "Only the Court Organization Law, Public Order Offenses Law, and Opium Prohibition Regulations were all promulgated in Xuantong 2; and the Current Penal Code had been in force for only one year when the abdication edict was issued.",
+      "reason": "與現行刑律僅行之一年，而遜位之詔下矣 marks a temporal limit before abdication, not that the three laws were promulgated together with the Current Penal Code.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:142:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In s0101, 性矜明察 precedes his scrutiny of criminal dossiers (每閱讞牘) and demand that facts and punishment match (情罪曲當). Here 矜 marks scrupulous exactness in discernment, not arrogance; \"Proud\" is a real mistranslation. \"By nature meticulous and keenly discerning\" accurately renders the phrase while preserving the rest of the human idiomatic wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0101",
+        "excerpt": "性矜明察"
+      }
+    },
+    {
+      "repairId": "qingshigao:142:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0182 has two coordinated facts: 法院編制法、違警律、禁煙條例均經宣統二年頒布, then 與現行刑律僅行之一年，而遜位之詔下矣. The 與…而… clause times the Current Penal Code's one-year force against abdication; it does not group that code with the three laws as co-promulgated. The prior \"together with… the abdication edict was then issued\" misreads the syntax; the proposed literal matches the Chinese and the already-correct idiomatic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0182",
+        "excerpt": "與現行刑律僅行之一年，而遜位之詔下矣"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "qingshigao:142:r0001",
+      "before": {
+        "id": "qingshigao:142:c0140",
+        "subject": "qingshigao:142:p004",
+        "predicate": "assessment",
+        "value": {
+          "assessment": "性矜明察; proud and sharply perceptive",
+          "provenance": {
+            "mode": "historian-judgment"
+          }
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:142:s0101"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:142:c0140",
+        "subject": "qingshigao:142:p004",
+        "predicate": "assessment",
+        "value": {
+          "assessment": "性矜明察; meticulous and keenly discerning",
+          "provenance": {
+            "mode": "historian-judgment"
+          }
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:142:s0101"
+        ]
+      },
+      "reason": "Accepted r0001 shows the English gloss \"proud and sharply perceptive\" came only from misreading 矜 as arrogance; the assessment claim remains source-based but must use \"meticulous and keenly discerning\" while keeping id, subject, predicate, zh phrase, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0101",
+        "excerpt": "性矜明察"
+      }
+    }
+  ]
+}

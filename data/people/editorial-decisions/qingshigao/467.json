@@ -1,0 +1,224 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "467",
+  "input": {
+    "chapterFingerprint": "sha256:4835880559926af2079149847f7508c3800e67dbdb509b42c8ded036e8a28162",
+    "proposalsFingerprint": "sha256:6fc773b355689b8f0742f1e020996c55198756514e3b06e8848b7543300bab75"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-d2966854-edc5-469b-be03-e1d026a0a268",
+    "runId": "run-d0da4fbb-cfce-4f8d-a9e5-b8f26abfcb48",
+    "completedAt": "2026-08-13T05:03:35.889Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:467:r0001",
+      "unit": {
+        "id": "s0018",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "When the appointment as acting governor-general was announced, cheers rolled like thunder.",
+      "after": "When the appointment as acting governor was announced, cheers rolled like thunder.",
+      "reason": "護撫 means acting provincial governor (巡撫), not governor-general.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:467:r0002",
+      "unit": {
+        "id": "s0022",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "His earlier appointment as acting governor-general was confirmed; he reorganized the camps and regulations, elevated the able, provided for Vietnamese refugees, and the Vietnamese crisis gradually quieted.",
+      "after": "His earlier appointment as acting governor was confirmed; he reorganized the camps and regulations, elevated the able, provided for Vietnamese refugees, and the Vietnamese crisis gradually quieted.",
+      "reason": "護撫 is acting governor, not governor-general.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:467:r0003",
+      "unit": {
+        "id": "s0083",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "On New Year's Eve he feasted his officers and laid ambushes in advance; the Japanese attacked as expected and were routed at Fen Shuiling, where the Japanese officer Fukushima was beheaded.",
+      "after": "On New Year's Eve he feasted his officers and laid ambushes in advance; the Japanese attacked as expected and were routed at Fen Shuiling, where the Japanese officer Fugang Sanzo (Tomigō Sanzō) was beheaded.",
+      "reason": "富剛三造 is not Fukushima (福島); preserve a reading of the Chinese name.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:467:r0004",
+      "unit": {
+        "id": "s0083",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "literal",
+      "before": "On New Year's Eve he set out wine for his officers and beforehand laid ambushes; the Japanese indeed came to attack and were utterly defeated at Fen Shuiling; the Japanese officer Fukushima was beheaded.",
+      "after": "On New Year's Eve he set out wine for his officers and beforehand laid ambushes; the Japanese indeed came to attack and were utterly defeated at Fen Shuiling; the Japanese officer Fugang Sanzo was beheaded.",
+      "reason": "Same mistranslation of 富剛三造 as Fukushima in the literal field.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:467:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0018 has 護撫命下. 護撫 is acting/provisional 巡撫 (provincial governor), not 總督 (governor-general). Immediate context confirms this: s0023 has 新任巡撫沈秉成 taking the substantive governorship. Idiomatic 'governor-general' is wrong; 'acting governor' matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0018",
+        "excerpt": "護撫命下"
+      }
+    },
+    {
+      "repairId": "qingshigao:467:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0022 has 重申前命為護撫—the same 護撫 office as s0018. Rendering it again as 'acting governor-general' repeats the error; 'acting governor' is accurate, and the rest of the proposed sentence is unchanged and sound.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0022",
+        "excerpt": "重申前命為護撫"
+      }
+    },
+    {
+      "repairId": "qingshigao:467:r0003",
+      "decision": "revise",
+      "after": "On New Year's Eve he feasted his officers and laid ambushes in advance; the Japanese attacked as expected and were routed at Fen Shuiling, where the Japanese officer Fugang Sanzo was beheaded.",
+      "reason": "s0083 names 日將富剛三造. 富剛三造 is not 福島 (Fukushima), so the original English is wrong. The proposal correctly drops Fukushima, but the parenthetical 'Tomigō Sanzō' invents an unsupported Japanese reading of these characters. Keep a Mandarin reading of the chapter form—Fugang Sanzo—without that conjecture.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0083",
+        "excerpt": "斬日將富剛三造"
+      }
+    },
+    {
+      "repairId": "qingshigao:467:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field likewise turns 富剛三造 into Fukushima. Replacing it with Fugang Sanzo restores a reading of the Chinese name without inventing Fukushima or an extra Japanese gloss; the rest of the sentence already tracks the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0083",
+        "excerpt": "斬日將富剛三造"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "qingshigao:467:r0003",
+      "before": {
+        "id": "qingshigao:467:c0109",
+        "subject": "qingshigao:467:p033",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Fukushima",
+          "zh": "富剛三造"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:467:s0083"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:467:c0109",
+        "subject": "qingshigao:467:p033",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Fugang Sanzo",
+          "zh": "富剛三造"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:467:s0083"
+        ]
+      },
+      "reason": "Revised r0003 shows English Fukushima came only from mistranslating 富剛三造; the personal-name claim must read Fugang Sanzo while keeping zh, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0083",
+        "excerpt": "富剛三造"
+      }
+    },
+    {
+      "repairId": "qingshigao:467:r0003",
+      "before": {
+        "id": "qingshigao:467:c0395",
+        "subject": "qingshigao:467:p003",
+        "predicate": "event-participation",
+        "value": {
+          "kind": "military",
+          "role": "commander",
+          "action": "beheaded Japanese officer Fukushima at Fen Shuiling",
+          "otherPersonId": "qingshigao:467:p033",
+          "dateContext": {
+            "sourceDate": {
+              "text": "除夕"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 1895,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:467:s0083"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:467:c0395",
+        "subject": "qingshigao:467:p003",
+        "predicate": "event-participation",
+        "value": {
+          "kind": "military",
+          "role": "commander",
+          "action": "beheaded Japanese officer Fugang Sanzo at Fen Shuiling",
+          "otherPersonId": "qingshigao:467:p033",
+          "dateContext": {
+            "sourceDate": {
+              "text": "除夕"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 1895,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:467:s0083"
+        ]
+      },
+      "reason": "Revised r0003 shows the event-participation action string inherited the false English name Fukushima; replace it with Fugang Sanzo while preserving the rest of the claim.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0083",
+        "excerpt": "斬日將富剛三造"
+      }
+    }
+  ]
+}

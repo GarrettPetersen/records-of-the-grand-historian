@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "259",
+  "input": {
+    "chapterFingerprint": "sha256:1dfcc7bb58416f508937805956caebdf5c6887306c5371f000fdb40ec4ba4386",
+    "proposalsFingerprint": "sha256:d28a129b0e79faafabbb83a2c2cb77eb04edaea7146f3ea7bcf5c21a8088d8af"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-ba2caf18-db1d-4abd-b1a6-b0fe385fc80d",
+    "runId": "run-7c10358e-7bd8-4f7e-b6c1-37909e99449c",
+    "completedAt": "2026-08-13T04:59:30.125Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:259:r0001",
+      "unit": {
+        "id": "s0005",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "An imperial grace edict raised him to first-class baron.",
+      "after": "An imperial grace edict raised him to first-class count.",
+      "reason": "Chinese 一等伯 is a first-class count (伯), not a baron.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:259:r0002",
+      "unit": {
+        "id": "s0005",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "By grace edict he was advanced to first-class baron.",
+      "after": "By grace edict he was advanced to first-class count.",
+      "reason": "Chinese 一等伯 is a first-class count (伯), not a baron.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:259:r0003",
+      "unit": {
+        "id": "s0136",
+        "kind": "paragraph-sentence",
+        "blockIndex": 22,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "In Kangxi 18 (1679) Wu Shifan attacked Wuzhou and Chengye defeated him.",
+      "after": "In Kangxi 18 (1679) Wu Shicong attacked Wuzhou and Chengye defeated him.",
+      "reason": "Chinese 吳世琮 is Wu Shicong; Wu Shifan (吳世璠) is a different person introduced later.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:259:r0004",
+      "unit": {
+        "id": "s0137",
+        "kind": "paragraph-sentence",
+        "blockIndex": 22,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "Shifan abandoned camp and fled by night; Chengye captured Xunzhou.",
+      "after": "Shicong abandoned camp and fled by night; Chengye captured Xunzhou.",
+      "reason": "Refers to 世琮 (Wu Shicong), not 世璠 (Wu Shifan).",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:259:r0005",
+      "unit": {
+        "id": "s0138",
+        "kind": "paragraph-sentence",
+        "blockIndex": 22,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "Shifan posted a hundred thousand men at key passes in Guizhou and Guangxi while he personally besieged Nanning.",
+      "after": "Shicong posted a hundred thousand men at key passes in Guizhou and Guangxi while he personally besieged Nanning.",
+      "reason": "Refers to 世琮 (Wu Shicong), not 世璠.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:259:r0006",
+      "unit": {
+        "id": "s0139",
+        "kind": "paragraph-sentence",
+        "blockIndex": 22,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "Chengye marched to relieve Nanning, coordinated a pincer with the garrison, and on West Mountain at Xincun killed more than six thousand. Shifan was badly wounded and fled; the siege was raised.",
+      "after": "Chengye marched to relieve Nanning, coordinated a pincer with the garrison, and on West Mountain at Xincun killed more than six thousand. Shicong was badly wounded and fled; the siege was raised.",
+      "reason": "Refers to 世琮 (Wu Shicong), not 世璠.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:259:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0005 reads 恩詔進一等伯; 伯 is the count rank (cf. s0004 三等伯爵 already rendered as countship). Baron would be 男; the proposed 'first-class count' corrects the mistranslation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0005",
+        "excerpt": "恩詔進一等伯"
+      }
+    },
+    {
+      "repairId": "qingshigao:259:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0005 has 一等伯, not 一等男. Adjacent s0004 already treats 伯爵 as a countship; advancing that title to 'first-class count' matches the Chinese, while 'baron' does not.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0005",
+        "excerpt": "進一等伯"
+      }
+    },
+    {
+      "repairId": "qingshigao:259:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0136 names the attacker 吳世琮. That is Wu Shicong; Wu Shifan is 吳世璠, a different person. Replacing Shifan with Shicong restores the correct identity.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0136",
+        "excerpt": "吳世琮犯梧州"
+      }
+    },
+    {
+      "repairId": "qingshigao:259:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0137 continues with 世琮棄營宵遁 after s0136's 吳世琮; the short form still refers to Wu Shicong, not 世璠 (Wu Shifan). 'Shicong' is the correct English short name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0137",
+        "excerpt": "世琮棄營宵遁"
+      }
+    },
+    {
+      "repairId": "qingshigao:259:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0138 again subjects the clause to 世琮, the same Wu Shicong of s0136–s0137. Rendering him as Shifan conflates him with 吳世璠; 'Shicong' is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0138",
+        "excerpt": "世琮以十萬人分屯貴州、廣西諸要隘"
+      }
+    },
+    {
+      "repairId": "qingshigao:259:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0139 has 世琮負重傷敗走, still Wu Shicong from the preceding sentences. Changing Shifan to Shicong corrects the misidentification without altering the rest of the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0139",
+        "excerpt": "世琮負重傷敗走"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}
