@@ -1,0 +1,221 @@
+{
+  "schemaVersion": 3,
+  "book": "zhoushu",
+  "chapter": "017",
+  "input": {
+    "chapterFingerprint": "sha256:b1dea8538f5d4e2b6df94e9d14772551ceba756f2cab3e6cd4ee75e3e6e6f6cd",
+    "proposalsFingerprint": "sha256:d8e777684368fdbcb3f5db177295e3e2f53a34487db4802046dcf0c3379fb59c"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-01449846-2876-44db-8d6a-3fbde9156bb9",
+    "runId": "run-8eaed1c7-6283-4ef1-a920-f4d651c61694",
+    "completedAt": "2026-08-13T00:04:18.037Z"
+  },
+  "proposals": [
+    {
+      "id": "zhoushu:017:r0001",
+      "unit": {
+        "id": "s0062",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "In Jianade 2 (573) he was made pillar-of-state.",
+      "after": "In Jiande 2 (573) he was made pillar-of-state.",
+      "reason": "Source reign name is 建德 (Jiande); \"Jianade\" is a misspelling.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:017:r0002",
+      "unit": {
+        "id": "s0067",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "His grandfather Wen served as governor of Ji Province.",
+      "after": "His great-grandfather Wen served as governor of Ji Province.",
+      "reason": "Chinese 曾祖 means great-grandfather, not grandfather.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:017:r0003",
+      "unit": {
+        "id": "s0001",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Liang Yu — Guo Ganhui — Yi Feng — Liu Liang — Wang De",
+      "after": "Liang Yu — Ruogan Hui — Yi Feng — Liu Liang — Wang De",
+      "reason": "若干 is the Xianbei surname Ruogan, not Guo; Guo Ganhui misrenders 若干惠.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:017:r0004",
+      "unit": {
+        "id": "s0028",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Guo Ganhui, styled Huibao, came from Wuchuan in Dai commandery.",
+      "after": "Ruogan Hui, styled Huibao, came from Wuchuan in Dai commandery.",
+      "reason": "Same surname error: 若干 should be Ruogan, not Guo.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:017:r0005",
+      "unit": {
+        "id": "s0155",
+        "kind": "paragraph-sentence",
+        "blockIndex": 26,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Guo Ganhui and Wang De were famed for bold resolve, yet also lived by filial duty—no small thing.",
+      "after": "Ruogan Hui and Wang De were famed for bold resolve, yet also lived by filial duty—no small thing.",
+      "reason": "Same 若干/Guo surname error in the historiographer appraisal.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:017:r0006",
+      "unit": {
+        "id": "s0197",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "Gan Hui sighed to himself: \"My parents are old—when will I be able to give them something like this?\"",
+      "after": "Gan Hui sighed to himself: \"My mother is old—when will I be able to give her something like this?\"",
+      "reason": "Earlier text states he lost his father early (早喪父); 親 here refers to his surviving parent.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "zhoushu:017:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0062 has 建德二年; Jianade is a misspelling of the Northern Zhou reign name Jiande, and the proposed replacement is otherwise unchanged and accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0062",
+        "excerpt": "建德二年"
+      }
+    },
+    {
+      "repairId": "zhoushu:017:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0067 has 曾祖文, which is great-grandfather (generation three), not grandfather; the preceding 高祖寬 confirms the generational ladder, so great-grandfather is the correct repair.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0067",
+        "excerpt": "曾祖文"
+      }
+    },
+    {
+      "repairId": "zhoushu:017:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0001 names 若干惠; 若干 is the Xianbei compound surname Ruogan, so Guo Ganhui is a false English rendering and Ruogan Hui restores the supported name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0001",
+        "excerpt": "若干惠"
+      }
+    },
+    {
+      "repairId": "zhoushu:017:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0028 opens 若干惠字惠保; the surname is 若干 (Ruogan), not Guo, and the given name is 惠 (Hui), so Ruogan Hui is the accurate personal name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0028",
+        "excerpt": "若干惠字惠保"
+      }
+    },
+    {
+      "repairId": "zhoushu:017:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0155 abbreviates to 惠、德, referring to 若干惠 and 王德 from this chapter; replacing the false Guo Ganhui with Ruogan Hui corrects the naming while keeping the appraisal sense intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0155",
+        "excerpt": "惠、德"
+      }
+    },
+    {
+      "repairId": "zhoushu:017:r0006",
+      "decision": "revise",
+      "after": "Ruogan Hui sighed to himself: \"My mother is old—when will I be able to give her something like this?\"",
+      "reason": "s0195 早喪父 shows his father was already dead, so s0197 親老矣 refers to the surviving mother, not plural parents; the proposed mother/her fix is right, but Gan Hui remains the false short form of Guo Ganhui and must be Ruogan Hui.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0197",
+        "excerpt": "親老矣"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "zhoushu:017:r0003",
+      "before": {
+        "id": "zhoushu:017:c0013",
+        "subject": "zhoushu:017:p002",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Guo Ganhui",
+          "zh": "若干惠",
+          "pinyin": "Ruogan Hui"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "zhoushu:017:s0001",
+          "zhoushu:017:s0028"
+        ]
+      },
+      "after": {
+        "id": "zhoushu:017:c0013",
+        "subject": "zhoushu:017:p002",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Ruogan Hui",
+          "zh": "若干惠",
+          "pinyin": "Ruogan Hui"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "zhoushu:017:s0001",
+          "zhoushu:017:s0028"
+        ]
+      },
+      "reason": "Accepted r0003/r0004 show English Guo Ganhui came only from the bad rendering of 若干惠; the personal-name claim must read Ruogan Hui while keeping zh, pinyin, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0001",
+        "excerpt": "若干惠"
+      }
+    }
+  ]
+}

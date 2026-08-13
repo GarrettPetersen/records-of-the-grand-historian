@@ -1,0 +1,253 @@
+{
+  "schemaVersion": 3,
+  "book": "xintangshu",
+  "chapter": "161",
+  "input": {
+    "chapterFingerprint": "sha256:a8d51202b096d58b66f5a1e85ea0628ead83b15cb3bedadde819086553df7b63",
+    "proposalsFingerprint": "sha256:8c3c77d44a6d0c3379ecce3cbfb5d6d961576a84abc2895994bee0628763defa"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-b7762e1c-ca2e-4d0b-8add-0e107f8946b9",
+    "runId": "run-b0efa97a-5652-4a5d-9655-6f7a456c6f85",
+    "completedAt": "2026-08-13T00:02:29.484Z"
+  },
+  "proposals": [
+    {
+      "id": "xintangshu:161:r0001",
+      "unit": {
+        "id": "s0010",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "Wei Chawei of the Ministry of Personnel, on reading his examination answers, declared that no one under heaven could match him.",
+      "after": "Qian Weidao of the Ministry of Personnel, on reading his examination answers, declared that no one under heaven could match him.",
+      "reason": "Chinese 騫味道 is Qian Weidao; surname 騫 was mistranslated as Wei.",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:161:r0002",
+      "unit": {
+        "id": "s0010",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "Wei Chawei, Vice Director of the Ministry of Personnel, seeing his examination answers, declared him unmatched under heaven.",
+      "after": "Qian Weidao, Vice Director of the Ministry of Personnel, seeing his examination answers, declared him unmatched under heaven.",
+      "reason": "Chinese 騫味道 is Qian Weidao; surname 騫 was mistranslated as Wei.",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:161:r0003",
+      "unit": {
+        "id": "s0090",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Qu Huan of Chenxu recruited him to his headquarters; unable to endure him long, Huan falsely accused him of \"receiving gold from Wu Shaochuan as a spy and repeatedly speaking of fortune and misfortune to delude the masses.\"",
+      "after": "Qu Huan of Chenxu recruited him to his headquarters; unable to endure him long, Huan falsely accused him of \"receiving gold from Wu Shaocheng as a spy and repeatedly speaking of fortune and misfortune to delude the masses.\"",
+      "reason": "吳少誠 is Wu Shaocheng, not Wu Shaochuan.",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:161:r0004",
+      "unit": {
+        "id": "s0090",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Qu Huan of Chenxu recruited him to his headquarters; unable to endure it long, Huan falsely accused him of \"receiving gold from Wu Shaochuan as a spy, repeatedly speaking of fortune and misfortune to delude the masses.\"",
+      "after": "Qu Huan of Chenxu recruited him to his headquarters; unable to endure it long, Huan falsely accused him of \"receiving gold from Wu Shaocheng as a spy, repeatedly speaking of fortune and misfortune to delude the masses.\"",
+      "reason": "吳少誠 is Wu Shaocheng, not Wu Shaochuan.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xintangshu:161:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 騫味道 is Qian Weidao (騫 Qiān + 味道 Wèidào); Wei Chawei misreads the surname and given name. The proposed idiomatic corrects only that personal name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0010",
+        "excerpt": "騫味道"
+      }
+    },
+    {
+      "repairId": "xintangshu:161:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise has Wei Chawei for 騫味道; Qian Weidao is the correct reading, and the rest of the proposed literal matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0010",
+        "excerpt": "騫味道"
+      }
+    },
+    {
+      "repairId": "xintangshu:161:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 吳少誠 is Wu Shaocheng (誠 Chéng), not Wu Shaochuan; the proposed idiomatic restores the correct given name and leaves the accusation wording intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0090",
+        "excerpt": "吳少誠"
+      }
+    },
+    {
+      "repairId": "xintangshu:161:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal also misreads 吳少誠 as Wu Shaochuan; Wu Shaocheng matches 誠, and the proposed replacement corrects only that name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0090",
+        "excerpt": "吳少誠"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "xintangshu:161:r0001",
+      "claim": {
+        "id": "xintangshu:161:c0024",
+        "subject": "xintangshu:161:p006",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Wei Chawei",
+          "zh": "騫味道"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xintangshu:161:s0010"
+        ]
+      },
+      "reason": "Wei Chawei exists only as the bad English spelling of 騫味道; accepting r0001 restores Qian Weidao (already claimed in c0025) and leaves no source support for this personal-name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0010",
+        "excerpt": "騫味道"
+      }
+    },
+    {
+      "repairId": "xintangshu:161:r0003",
+      "claim": {
+        "id": "xintangshu:161:c0153",
+        "subject": "xintangshu:161:p055",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Wu Shaochuan",
+          "zh": "吳少誠"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xintangshu:161:s0090"
+        ]
+      },
+      "reason": "Wu Shaochuan exists only as the bad English spelling of 吳少誠; accepting r0003 restores Wu Shaocheng (already claimed in c0154) and leaves no source support for this personal-name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0090",
+        "excerpt": "吳少誠"
+      }
+    }
+  ],
+  "claimRevisions": [
+    {
+      "repairId": "xintangshu:161:r0001",
+      "before": {
+        "id": "xintangshu:161:c0025",
+        "subject": "xintangshu:161:p006",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Qian Weidao",
+          "zh": "騫味道",
+          "pinyin": "Qian Weidao"
+        },
+        "certainty": "strongly-inferred",
+        "evidence": [
+          "xintangshu:161:s0010"
+        ]
+      },
+      "after": {
+        "id": "xintangshu:161:c0025",
+        "subject": "xintangshu:161:p006",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Qian Weidao",
+          "zh": "騫味道",
+          "pinyin": "Qian Weidao"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xintangshu:161:s0010"
+        ]
+      },
+      "reason": "Accepted r0001 shows 騫味道 is explicitly Qian Weidao in s0010; with Wei Chawei retracted, c0025 must be explicit rather than strongly-inferred while keeping id, subject, predicate, value, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0010",
+        "excerpt": "騫味道"
+      }
+    },
+    {
+      "repairId": "xintangshu:161:r0003",
+      "before": {
+        "id": "xintangshu:161:c0154",
+        "subject": "xintangshu:161:p055",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Wu Shaocheng",
+          "zh": "吳少誠",
+          "pinyin": "Wu Shaocheng"
+        },
+        "certainty": "strongly-inferred",
+        "evidence": [
+          "xintangshu:161:s0090"
+        ]
+      },
+      "after": {
+        "id": "xintangshu:161:c0154",
+        "subject": "xintangshu:161:p055",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Wu Shaocheng",
+          "zh": "吳少誠",
+          "pinyin": "Wu Shaocheng"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xintangshu:161:s0090"
+        ]
+      },
+      "reason": "Accepted r0003 shows 吳少誠 is explicitly Wu Shaocheng in s0090; with Wu Shaochuan retracted, c0154 must be explicit rather than strongly-inferred while keeping id, subject, predicate, value, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0090",
+        "excerpt": "吳少誠"
+      }
+    }
+  ]
+}

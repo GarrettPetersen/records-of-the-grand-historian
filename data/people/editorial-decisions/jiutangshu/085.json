@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "jiutangshu",
+  "chapter": "085",
+  "input": {
+    "chapterFingerprint": "sha256:dbe8706c0f921b4431bd80fe51230eecc4f7f282b001bbe1e7c8dda041f1f88b",
+    "proposalsFingerprint": "sha256:b0a37841140c2c52ec23781ba8ac8c2f77c10309029b532306545dacdca5754e"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-526e7586-2ff5-4e5a-908f-c3aa384691be",
+    "runId": "run-d4149552-79e8-4d38-b12b-5fc414094e34",
+    "completedAt": "2026-08-12T23:52:43.249Z"
+  },
+  "proposals": [
+    {
+      "id": "jiutangshu:085:r0001",
+      "unit": {
+        "id": "s0034",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "for an offense he was demoted to Prefect of Chaozhou.",
+      "after": "In the fourth year of Xianqing, for an offense he was demoted to Prefect of Chaozhou.",
+      "reason": "Chinese opens with 顯慶四年, which the idiomatic rendering keeps but the literal omits.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiutangshu:085:r0002",
+      "unit": {
+        "id": "s0039",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Previously, selection assemblies had no limit and appointees were filled as they arrived; as the times gradually became peaceful the candidates grew somewhat numerous, and Jiao first requested that a great assembly be held at the winter solstice and concluded by the end of spring—this is practiced to the present.",
+      "after": "Previously, selection assemblies had no limit and appointees were filled as they arrived; as the times gradually became peaceful the candidates grew somewhat numerous, and Jiao first requested that a great assembly be held in early winter and concluded by the end of spring—this is practiced to the present.",
+      "reason": "冬初 means early winter, not the winter solstice; the literal mistranslates the season.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiutangshu:085:r0003",
+      "unit": {
+        "id": "s0040",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "He later served as long-term governor of Yizhou.",
+      "after": "He later served as Administrator of Yizhou.",
+      "reason": "長史 is the Administrator (chief clerk) of a prefecture, not a \"long-term governor\".",
+      "confidence": "high"
+    },
+    {
+      "id": "jiutangshu:085:r0004",
+      "unit": {
+        "id": "s0076",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "At the time the Duke of Ying Li Ji was Long Governor; he deeply honored him.",
+      "after": "At the time the Duke of Ying Li Ji was Administrator; he deeply honored him.",
+      "reason": "長史 should be Administrator, not \"Long Governor\".",
+      "confidence": "high"
+    },
+    {
+      "id": "jiutangshu:085:r0005",
+      "unit": {
+        "id": "s0162",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 30
+      },
+      "field": "idiomatic",
+      "before": "Li Renbao, prefect of Dao, and his brother, magistrate of Yuci, were framed by Tang Fengyi for private divination plotting to restore the Li house.",
+      "after": "Li Renbao, prefect of Dao, and his younger brother Changsha, magistrate of Yuci, were framed by Tang Fengyi for private divination plotting to restore the Li house.",
+      "reason": "Chinese names the brother 長沙; the idiomatic English drops the personal name.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiutangshu:085:r0006",
+      "unit": {
+        "id": "s0193",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "literal",
+      "before": "Thereupon Lady Pang's death was reduced; she was banished beyond the Ling tables; Yougong was removed from name and made commoner.",
+      "after": "Thereupon Lady Pang's death was reduced; she was banished beyond the Lingnan frontier; Yougong was removed from name and made commoner.",
+      "reason": "嶺表 means the Lingnan frontier region; \"Ling tables\" is a mistranslation.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiutangshu:085:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0034 opens with 顯慶四年; the literal omits that date while the rest of the proposed sentence matches 坐事，貶為潮州刺史.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0034",
+        "excerpt": "顯慶四年"
+      }
+    },
+    {
+      "repairId": "jiutangshu:085:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit has 冬初一時大集; 冬初 is early winter, not the winter solstice (冬至). Replacing “at the winter solstice” with “in early winter” corrects the season without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0039",
+        "excerpt": "冬初"
+      }
+    },
+    {
+      "repairId": "jiutangshu:085:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0040 has 益州長史; 長史 is the prefectural Administrator office title, not “long-term governor” (a false temporal reading of 長). “Administrator of Yizhou” restores the office correctly.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0040",
+        "excerpt": "益州長史"
+      }
+    },
+    {
+      "repairId": "jiutangshu:085:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0076 has 英國公李勣為長史; 長史 is Administrator, and “Long Governor” invents a mistranslation of the same title. The proposed literal keeps Duke of Ying Li Ji and the honor clause intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0076",
+        "excerpt": "為長史"
+      }
+    },
+    {
+      "repairId": "jiutangshu:085:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0162 names 弟榆次令長沙; 長沙 is the younger brother’s personal name and 弟 marks younger brother. The idiomatic had dropped the name; the proposal restores both without inventing content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0162",
+        "excerpt": "弟榆次令長沙"
+      }
+    },
+    {
+      "repairId": "jiutangshu:085:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0193 has 流於嶺表; 嶺表 is the Lingnan frontier region, not “Ling tables.” The replacement “beyond the Lingnan frontier” matches the Chinese place term.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0193",
+        "excerpt": "嶺表"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

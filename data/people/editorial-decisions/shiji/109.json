@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "109",
+  "input": {
+    "chapterFingerprint": "sha256:8ad3ceb26b0f840d51b3a8f29106e477e1225909f5c9b71b88067a71db94f143",
+    "proposalsFingerprint": "sha256:4cf967aa63cde8907ece9507f26ad30e169728d84d71292231aaee05de6bcc9e"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-ed53262a-790f-4408-820c-85203a4f3d87",
+    "runId": "run-e16b0759-d484-4c55-bc35-213b8842caf0",
+    "completedAt": "2026-08-13T00:00:09.245Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:109:r0001",
+      "unit": {
+        "id": "s0061",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Guang home with former Yingyin marquis grandson Pingye resided Lantian south mountain middle shot hunted.",
+      "after": "Guang's household lived in seclusion with a grandson of the former Marquis of Yingyin in the mountains south of Lantian, where they went hunting.",
+      "reason": "屏野 means 'live in seclusion/retirement,' not a personal name Pingye; the literal misreads it as a name.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:109:r0002",
+      "unit": {
+        "id": "s0157",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "literal",
+      "before": "But Gan had daughter as crown prince middle person, loved favored, Gan son Yu had favor with crown prince, but liked profit, Li clan Ling declined weakened.",
+      "after": "But Gan had a daughter who was a palace woman of the Crown Prince and was favored; Gan's son Yu had favor with the Crown Prince, but liked profit, and the Li clan gradually declined and weakened.",
+      "reason": "陵遲 is the verb 'to decline gradually,' not the personal name Ling; the literal wrongly treats 陵 as Li Ling.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:109:r0003",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Wu Chu army time, Guang became fierce cavalry commandery governor, followed commander Ya fu attacked Wu Chu army, took flag, displayed merit fame Changyi below.",
+      "after": "Wu-Chu army time, Guang became brave-cavalry commandant, followed Grand Commandant Yafu attacking Wu-Chu armies, took a flag, and displayed merit and fame below Changyi.",
+      "reason": "都尉 is commandant, not commandery governor; 太尉亞夫 is Grand Commandant Yafu (Zhou Yafu).",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:109:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In s0061, 屏野居 is the verb phrase “lived in seclusion,” not a personal name; the literal’s “Pingye” invents a name between 故潁陰侯孫 and 居藍田南山中, so the repair correctly restores seclusion and hunting with the marquis’s grandson.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0061",
+        "excerpt": "屏野居"
+      }
+    },
+    {
+      "repairId": "shiji:109:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "In s0157, 陵遲衰微 means the Li clan “gradually declined and weakened”; 陵 is not Li Ling (who only appears in the next sentence 李陵既壯), so replacing “Ling declined” with gradual decline is required.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0157",
+        "excerpt": "李氏陵遲衰微矣"
+      }
+    },
+    {
+      "repairId": "shiji:109:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "In s0011, 驍騎都尉 is a cavalry commandant, not a commandery governor, and 太尉亞夫 is Grand Commandant Yafu; the repair corrects both office and title misreadings without inventing content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "驍騎都尉，從太尉亞夫"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

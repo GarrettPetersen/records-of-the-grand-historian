@@ -1,0 +1,199 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "003",
+  "input": {
+    "chapterFingerprint": "sha256:da7a496ba8dae373a9ddd47aef8118f3093999f6d645807fcba5e5e662f43843",
+    "proposalsFingerprint": "sha256:f0fcb26803b4054774e71446b2cade760d7d6e91f13a010129cd85063968e43a"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-0ee6337a-3e18-489d-b446-ca3160658303",
+    "runId": "run-0d2e77bf-a91a-4ff1-9109-fbe2c5038dd8",
+    "completedAt": "2026-08-12T23:59:11.894Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:003:r0001",
+      "unit": {
+        "id": "s0025",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "yiyin replied: \"How clear—",
+      "after": "Yi Yin replied: \"How clear—",
+      "reason": "English personal name yiyin is left uncapitalized; standardize to Yi Yin.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:003:r0002",
+      "unit": {
+        "id": "s0031",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "yiyin was styled Aheng.",
+      "after": "Yi Yin was named Aheng.",
+      "reason": "Uncapitalized yiyin; 名 marks an alternate name rather than a style name.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:003:r0003",
+      "unit": {
+        "id": "s0106",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "Wuxian brought order to the royal house and composed Salted Mugwort and Taiwu.",
+      "after": "Wuxian brought order to the royal house and composed Xian Ai and Taiwu.",
+      "reason": "咸艾 is a document title, not the foods 'salted mugwort'.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:003:r0004",
+      "unit": {
+        "id": "s0187",
+        "kind": "paragraph-sentence",
+        "blockIndex": 30,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "He named Western Earl Chang, the Nine Marquises, and the Marquis of E as the three high dukes.",
+      "after": "He named Western Earl Chang, the Marquis of Jiu, and the Marquis of E as the three high dukes.",
+      "reason": "九侯 is a singular lordly title, not a plural 'Nine Marquises'.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:003:r0005",
+      "unit": {
+        "id": "s0190",
+        "kind": "paragraph-sentence",
+        "blockIndex": 30,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "The Marquis of E disputed it strongly, argued it swiftly; together he pickled the Marquis of E.",
+      "after": "The Marquis of E disputed it strongly and argued it swiftly; [Zhou] also pickled the Marquis of E.",
+      "reason": "Subject of 脯 is Zhou, not the Marquis himself; literal English wrongly makes him the agent.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:003:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit 伊尹曰 names 伊尹; uncapitalized English “yiyin” is an orthographic error, and “Yi Yin” correctly renders the personal name while leaving the rest of the sentence unchanged.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0025",
+        "excerpt": "伊尹曰"
+      }
+    },
+    {
+      "repairId": "shiji:003:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "伊尹名阿衡 uses 名 (“was named”), not a style-name formula such as 字; capitalizing Yi Yin and replacing “styled” with “named” both match the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0031",
+        "excerpt": "伊尹名阿衡"
+      }
+    },
+    {
+      "repairId": "shiji:003:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "作咸艾，作太戊 is the parallel document-composition formula (cf. 作原命 in s0107); “Salted Mugwort” invents a food sense for the title 咸艾, and “Xian Ai” correctly treats it as a work title.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0106",
+        "excerpt": "作咸艾，作太戊"
+      }
+    },
+    {
+      "repairId": "shiji:003:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "以西伯昌、九侯、鄂侯為三公 lists three singular lords as the three dukes; 九侯 is one titled individual parallel to 鄂侯, not a plural “Nine Marquises,” as the following units’ daughter and execution narrative confirm.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0187",
+        "excerpt": "以西伯昌、九侯、鄂侯為三公"
+      }
+    },
+    {
+      "repairId": "shiji:003:r0005",
+      "decision": "revise",
+      "after": "The Marquis of E disputed it strongly and argued it swiftly; Zhou also pickled the Marquis of E.",
+      "reason": "Continuing from 紂怒……醢九侯, 并脯鄂侯 has Zhou as the agent of 脯 and 并 as “also”; the before wrongly makes the Marquis pickle himself. The proposal’s agent fix is right, but bracketed “[Zhou]” is editorial markup, so the revised literal names Zhou in natural English.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0190",
+        "excerpt": "并脯鄂侯"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "shiji:003:r0001",
+      "claim": {
+        "id": "shiji:003:c0067",
+        "subject": "shiji:003:p021",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "yiyin"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "shiji:003:s0025"
+        ]
+      },
+      "reason": "Accepted r0001 shows English “yiyin” was created only by the uncapitalized mistranslation of 伊尹; the Chinese supports the correct personal name already recorded as Yi Yin (c0065), not a separate “yiyin” name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0025",
+        "excerpt": "伊尹曰"
+      }
+    },
+    {
+      "repairId": "shiji:003:r0004",
+      "claim": {
+        "id": "shiji:003:c0241",
+        "subject": "shiji:003:p073",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Nine Marquises",
+          "zh": "九侯"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "shiji:003:s0187"
+        ]
+      },
+      "reason": "Accepted r0004 shows English “Nine Marquises” was created only by misreading singular 九侯 as a plural; the Chinese supports the singular title Marquis of Jiu (c0240), not a separate plural name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0187",
+        "excerpt": "九侯"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

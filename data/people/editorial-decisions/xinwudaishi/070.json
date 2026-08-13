@@ -1,0 +1,275 @@
+{
+  "schemaVersion": 3,
+  "book": "xinwudaishi",
+  "chapter": "070",
+  "input": {
+    "chapterFingerprint": "sha256:89dc16926d178ea61391941f124bdf5469f30fbbbd993eac8926b3bda1c23c64",
+    "proposalsFingerprint": "sha256:a2c8b30c67bf1ce531ab455cb26248bde1c41a095bb6cf8ad19bf771a0d8a544"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-0102beaa-9ccd-410e-8462-b7e26d341f83",
+    "runId": "run-3e376609-df18-46aa-b71d-ca597485f992",
+    "completedAt": "2026-08-13T00:02:38.435Z"
+  },
+  "proposals": [
+    {
+      "id": "xinwudaishi:070:r0001",
+      "unit": {
+        "id": "s0007",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Yin was still a child, so state affairs were in the hands of the senior ministers. Guo Wei, lately appointed chief of the privy council, had just crushed the three major rebellions and won towering credit—yet he and Min had old grievances. Min grew increasingly uneasy and asked his staff officer Zheng Qing, \"The Son of Heaven is young, and power sits with the men at court. Guo and I have never been on good terms—how do you read the situation?\"",
+      "after": "Yin was still a child, so state affairs were in the hands of the senior ministers. Guo Wei, lately appointed chief of the privy council, had just crushed the three major rebellions and won towering credit—yet he and Min had old grievances. Min grew increasingly uneasy and asked his staff officer Zheng Gong, \"The Son of Heaven is young, and power sits with the men at court. Guo and I have never been on good terms—how do you read the situation?\"",
+      "reason": "Chinese 鄭珙 is Zheng Gong (珙 gǒng), not Qing.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:070:r0002",
+      "unit": {
+        "id": "s0008",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Qing replied, \"The Han regime is heading for chaos!",
+      "after": "Gong replied, \"The Han regime is heading for chaos!",
+      "reason": "Short name should match 珙 Gong, not Qing.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:070:r0003",
+      "unit": {
+        "id": "s0088",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "He told Zhao Hua, \"Your counsel almost saved me—",
+      "after": "He told Zhao Hua, \"Not heeding your words, I nearly came to ruin.",
+      "reason": "Chinese 不聽公言，幾至於敗 means failure came from not listening, not that counsel almost saved him.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:070:r0004",
+      "unit": {
+        "id": "s0088",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Chengjun said to Zhao Hua: \"Had I listened to you, I would nearly have failed.",
+      "after": "Chengjun said to Zhao Hua: \"Not heeding your words, I nearly came to ruin.",
+      "reason": "Literal reverses the conditional; source says because he did not listen he nearly failed.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:070:r0005",
+      "unit": {
+        "id": "s0090",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Thereafter he prized scholars and installed the mountain man Guo Youwei in counsel.",
+      "after": "Thereafter he prized scholars and installed the mountain man Guo Wuwei in counsel.",
+      "reason": "郭無為 is Guo Wuwei (無為 Wúwéi), not Youwei.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xinwudaishi:070:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "判官鄭珙 names the aide 鄭珙; 珙 is Gong, so Zheng Qing is a wrong reading. The proposed Zheng Gong matches the Chinese and leaves the rest of the sentence intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0007",
+        "excerpt": "謂判官鄭珙曰"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:070:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "珙曰 continues the same person as 鄭珙 in s0007; the short form must be Gong, not Qing. The replacement corrects only that name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0008",
+        "excerpt": "珙曰"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:070:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "不聽公言，幾至於敗 states that not heeding Zhao Hua nearly brought ruin; “Your counsel almost saved me” invents the opposite sense. The proposed wording restores the source meaning without adding content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0088",
+        "excerpt": "不聽公言，幾至於敗"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:070:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The prior literal “Had I listened to you, I would nearly have failed” reverses 不聽 into a contrary-to-fact listen. “Not heeding your words, I nearly came to ruin” follows the Chinese negation and result.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0088",
+        "excerpt": "不聽公言，幾至於敗"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:070:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "抱腹山人郭無為 is Guo Wuwei (無為 Wúwéi); Youwei misreads the given name. Guo Wuwei is the accurate English form.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0090",
+        "excerpt": "抱腹山人郭無為"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "xinwudaishi:070:r0001",
+      "before": {
+        "id": "xinwudaishi:070:c0027",
+        "subject": "xinwudaishi:070:p005",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Zheng Qing",
+          "zh": "鄭珙",
+          "pinyin": "Zheng Gong"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xinwudaishi:070:s0007",
+          "xinwudaishi:070:s0156"
+        ]
+      },
+      "after": {
+        "id": "xinwudaishi:070:c0027",
+        "subject": "xinwudaishi:070:p005",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Zheng Gong",
+          "zh": "鄭珙",
+          "pinyin": "Zheng Gong"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xinwudaishi:070:s0007",
+          "xinwudaishi:070:s0156"
+        ]
+      },
+      "reason": "Accepted r0001 shows English Zheng Qing came only from the bad idiomatic of 鄭珙; the personal-name claim must read Zheng Gong while keeping zh, pinyin, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0007",
+        "excerpt": "鄭珙"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:070:r0002",
+      "before": {
+        "id": "xinwudaishi:070:c0028",
+        "subject": "xinwudaishi:070:p005",
+        "predicate": "name",
+        "value": {
+          "kind": "given",
+          "en": "Qing",
+          "zh": "珙",
+          "pinyin": "Gong"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xinwudaishi:070:s0008",
+          "xinwudaishi:070:s0159"
+        ]
+      },
+      "after": {
+        "id": "xinwudaishi:070:c0028",
+        "subject": "xinwudaishi:070:p005",
+        "predicate": "name",
+        "value": {
+          "kind": "given",
+          "en": "Gong",
+          "zh": "珙",
+          "pinyin": "Gong"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xinwudaishi:070:s0008",
+          "xinwudaishi:070:s0159"
+        ]
+      },
+      "reason": "Accepted r0002 shows the given-name English Qing was only a bad reading of 珙; the claim remains valid with en corrected to Gong to match zh/pinyin.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0008",
+        "excerpt": "珙"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:070:r0005",
+      "before": {
+        "id": "xinwudaishi:070:c0170",
+        "subject": "xinwudaishi:070:p049",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Guo Youwei",
+          "zh": "郭無為",
+          "pinyin": "Guo Wuwei"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xinwudaishi:070:s0090"
+        ]
+      },
+      "after": {
+        "id": "xinwudaishi:070:c0170",
+        "subject": "xinwudaishi:070:p049",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Guo Wuwei",
+          "zh": "郭無為",
+          "pinyin": "Guo Wuwei"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xinwudaishi:070:s0090"
+        ]
+      },
+      "reason": "Accepted r0005 shows English Guo Youwei came only from the bad idiomatic of 郭無為; the personal-name claim must read Guo Wuwei while keeping zh, pinyin, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0090",
+        "excerpt": "郭無為"
+      }
+    }
+  ]
+}

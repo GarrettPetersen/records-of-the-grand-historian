@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "zhoushu",
+  "chapter": "009",
+  "input": {
+    "chapterFingerprint": "sha256:7b4c792a730bb80dda10bf98981c966eda5e958e70d0267a33f6bbf28e8ba31b",
+    "proposalsFingerprint": "sha256:227bde1071b618c1e86e3db81049c21d6e36154de0e9e0e0d53cfa1f9a7a7f51"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-4b46c11b-a7e3-4864-95b5-bf9f77ba1e11",
+    "runId": "run-dc98cb3a-d856-44b4-8258-945fb6a72eb5",
+    "completedAt": "2026-08-13T00:03:42.555Z"
+  },
+  "proposals": [
+    {
+      "id": "zhoushu:009:r0001",
+      "unit": {
+        "id": "s0038",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "Fourth month, on dingsi day, she was buried at Yong Guling.",
+      "after": "Fourth month, on dingsi day, she was buried at Yonggu Mausoleum.",
+      "reason": "永固陵 is the Yonggu Mausoleum; 'Yong Guling' incorrectly splits the tomb name.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:009:r0002",
+      "unit": {
+        "id": "s0038",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "Fourth month, on dingsi day, she was buried at Yong Guling.",
+      "after": "Fourth month, on dingsi day, she was buried at Yonggu Mausoleum.",
+      "reason": "Same mistranslation of 永固陵 as in the idiomatic field.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:009:r0003",
+      "unit": {
+        "id": "s0076",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Emperor Xuan Yuwen Yun and the empress styled themselves Heavenly Primordial Emperor and Heavenly Primordial Empress.",
+      "after": "Emperor Xuan Yuwen Yun styled himself Heavenly Primordial Emperor and titled the empress Heavenly Primordial Empress.",
+      "reason": "Chinese 帝后自稱天元皇帝，號后為天元皇后 means the emperor assumed the title and designated the empress; both did not style themselves emperor.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:009:r0004",
+      "unit": {
+        "id": "s0093",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "The emperor was greatly enraged and thereupon ordered the empress to die, forcing her to take farewell.",
+      "after": "The emperor was greatly enraged and thereupon ordered the empress to die, forcing her to commit suicide.",
+      "reason": "逼令引訣 means forcing her to take her own life, not merely to take farewell.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "zhoushu:009:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0038 葬永固陵 names the tomb Yonggu Mausoleum as one word; 'Yong Guling' wrongly splits 永固 and 陵, and Yonggu Mausoleum is the accurate English rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0038",
+        "excerpt": "葬永固陵"
+      }
+    },
+    {
+      "repairId": "zhoushu:009:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field of s0038 has the same error for 永固陵; replacing 'Yong Guling' with Yonggu Mausoleum corrects the place name without inventing content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0038",
+        "excerpt": "永固陵"
+      }
+    },
+    {
+      "repairId": "zhoushu:009:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0076 pairs 自稱天元皇帝 with 號后為天元皇后: the emperor alone assumed the emperor title and then titled the empress; the original wrongly has both styling themselves.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0076",
+        "excerpt": "帝后自稱天元皇帝，號后為天元皇后"
+      }
+    },
+    {
+      "repairId": "zhoushu:009:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0093 逼令引訣 is the classical idiom for compelling suicide after 賜后死; 'take farewell' misreads 訣 and understates the forced self-killing.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0093",
+        "excerpt": "逼令引訣"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

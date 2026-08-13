@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "077",
+  "input": {
+    "chapterFingerprint": "sha256:1f4e17c6b6e6933550bfd5f4c09535ad4ade7c9498a832237c4dffda1b304c4a",
+    "proposalsFingerprint": "sha256:06cdf789e54e983162cddb221965a6951507cee87bb4614878a363cb4e89d8b6"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-7ecd619d-daa4-4ad6-a20a-875ef28519cd",
+    "runId": "run-1c7e99a0-c0ce-4ee2-8874-9bd3d9146336",
+    "completedAt": "2026-08-12T23:56:27.590Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:077:r0001",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Helubu)〉",
+      "after": "Helubu",
+      "reason": "Annotation gloss is corrupted with stray closing punctuation from the Chinese editorial brackets.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:077:r0002",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "(Helubu)〉 (alternate name, closing parenthesis)〉",
+      "after": "(Helubu)",
+      "reason": "Literal field is garbled by duplicated bracket artifacts from the Chinese annotation.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:077:r0003",
+      "unit": {
+        "id": "s0046",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 41
+      },
+      "field": "idiomatic",
+      "before": "Wuzhi took a counting stick from an attendant and, holding it, asked the empress dowager, \"When Emperor Ren was still alive, why did you enthrone Emperor Sishheng?\"",
+      "after": "Wuzhi took a counting stick from an attendant and, holding it, asked the empress dowager, \"When Emperor Ren was still alive, why did you enthrone Emperor Sisheng?\"",
+      "reason": "嗣聖 should be romanized Sisheng, not the doubled-h typo Sishheng.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:077:r0004",
+      "unit": {
+        "id": "s0075",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Before long Liuge invited the emperor to watch a game of pitch-pot, raised a cup in toast, and advanced with a blade hidden in his sleeve.",
+      "after": "Before long Liuge invited the emperor to watch a game of chupu, raised a cup in toast, and advanced with a blade hidden in his sleeve.",
+      "reason": "樗蒲 is the gambling game chupu, not pitch-pot (投壺); the literal correctly has chestnut-burr gambling.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:077:r0005",
+      "unit": {
+        "id": "s0088",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 16
+      },
+      "field": "idiomatic",
+      "before": "Wuzhi said, \"Your Highness is a son of Emperor Sishheng; if the rebels seize you, they will not spare you.",
+      "after": "Wuzhi said, \"Your Highness is a son of Emperor Sisheng; if the rebels seize you, they will not spare you.",
+      "reason": "Same Sishheng typo for 嗣聖; should be Sisheng.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:077:r0001",
+      "decision": "revise",
+      "after": "(Helubu)",
+      "reason": "Chinese 〈（何魯不）〉 is a parenthetical annotation for 何魯不; idiomatic's Helubu)〉 leaks closing markup, but bare Helubu drops the English parentheses that mark the gloss—use (Helubu).",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "〈（何魯不）〉"
+      }
+    },
+    {
+      "repairId": "liaoshi:077:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 〈（何魯不）〉 is the parenthetical name 何魯不; literal's duplicated )〉 and 'alternate name, closing parenthesis' text are markup artifacts, and (Helubu) is the accurate clean rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "〈（何魯不）〉"
+      }
+    },
+    {
+      "repairId": "liaoshi:077:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 嗣聖 is Sisheng; idiomatic's Sishheng is a doubled-h typo, and the proposed Sisheng is the correct romanization.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0046",
+        "excerpt": "何故立嗣聖"
+      }
+    },
+    {
+      "repairId": "liaoshi:077:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 樗蒲 is the gambling game chupu, not pitch-pot (投壺); replacing pitch-pot with chupu restores the source meaning.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "觀樗蒲"
+      }
+    },
+    {
+      "repairId": "liaoshi:077:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 嗣聖 is Sisheng; idiomatic's Sishheng is the same doubled-h typo, and Sisheng correctly names the emperor in 大王嗣聖子.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0088",
+        "excerpt": "大王嗣聖子"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

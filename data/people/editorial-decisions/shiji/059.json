@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "059",
+  "input": {
+    "chapterFingerprint": "sha256:a67184a599f6e93a3b5f8716310a5f02862adf3a9434fad2f75c93c698a05523",
+    "proposalsFingerprint": "sha256:0291ab5f01d81b9ee0f653786c474684f3a890b0960f488a16a644a0ba1ac998"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-f08c583e-6390-424b-9bc0-0abe806eeb84",
+    "runId": "run-7893ccf3-0f6b-4a48-bab9-6d8e97bd61f2",
+    "completedAt": "2026-08-12T23:59:42.821Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:059:r0001",
+      "unit": {
+        "id": "s0007",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "King Xian of Hejian, De, was made King of Hejian as imperial son in Emperor Xiaojing's second year before his reign.",
+      "after": "King Xian of Hejian, De, was made King of Hejian as imperial son in the second year of Emperor Xiaojing's early reign.",
+      "reason": "前二年 means year 2 of Emperor Jing's early (前) reign, not a year before accession.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:059:r0002",
+      "unit": {
+        "id": "s0013",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "King Ai of Linjiang, A Yu, was made King of Linjiang as imperial son in Emperor Xiaojing's second year before his reign.",
+      "after": "King Ai of Linjiang, Eyu, was made King of Linjiang as imperial son in the second year of Emperor Xiaojing's early reign.",
+      "reason": "前二年 is early-reign year 2; align name with idiomatic Eyu.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:059:r0003",
+      "unit": {
+        "id": "s0015",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "King Min of Linjiang, Rong, was made crown prince in Emperor Xiaojing's fourth year before his reign. He was deposed after four years and the former crown prince was made King of Linjiang.",
+      "after": "King Min of Linjiang, Rong, was made crown prince in the fourth year of Emperor Xiaojing's early reign. He was deposed after four years and the former crown prince was made King of Linjiang.",
+      "reason": "前四年 is early-reign year 4.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:059:r0004",
+      "unit": {
+        "id": "s0026",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "King Gong of Lu, Yu, was made King of Huaiyang as imperial son in Emperor Xiaojing's second year before his reign.",
+      "after": "King Gong of Lu, Yu, was made King of Huaiyang as imperial son in the second year of Emperor Xiaojing's early reign.",
+      "reason": "前二年 is early-reign year 2.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:059:r0005",
+      "unit": {
+        "id": "s0027",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Two years after the Wu and Chu rebellion was crushed, he was moved to become King of Lu in Emperor Xiaojing's third year before his reign.",
+      "after": "Two years after the Wu and Chu rebellion was crushed, he was moved to become King of Lu in the third year of Emperor Xiaojing's early reign.",
+      "reason": "前三年 is early-reign year 3.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:059:r0006",
+      "unit": {
+        "id": "s0117",
+        "kind": "paragraph-sentence",
+        "blockIndex": 25,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "From then on, King Qi repeatedly submitted memorials accusing Han's nobles and ministers as well as favored officials like Zhong and others.",
+      "after": "From then on, King Qi repeatedly submitted memorials accusing Han's nobles and ministers as well as favored officials like Suo Zhong and others.",
+      "reason": "所忠 is the personal name Suo Zhong; the literal omits the surname 所.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:059:r0007",
+      "unit": {
+        "id": "s0147",
+        "kind": "paragraph-sentence",
+        "blockIndex": 31,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "literal",
+      "before": "Officials urgently sought to capture Bo, sending men to beat and torture him, arbitrarily releasing prisoners suspected by Han.",
+      "after": "When officials urgently sought to apprehend Bo, he had men inflict beatings and floggings, and arbitrarily released prisoners whom the Han court held under suspicion.",
+      "reason": "使人致擊笞掠 and 擅出 are Bo's actions under pressure, not the officials torturing Bo.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:059:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "孝景帝前二年 names year 2 of Jing's early (前) era, not a year before accession; the proposed early-reign wording matches the Chinese and the chapter's parallel date formulas.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0007",
+        "excerpt": "以孝景帝前二年用皇子為河閒王"
+      }
+    },
+    {
+      "repairId": "shiji:059:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "閼于 is the single given name Eyu, not split \"A Yu,\" and 前二年 is early-reign year 2; both proposed corrections restore the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0013",
+        "excerpt": "臨江哀王閼于，以孝景帝前二年用皇子為臨江王"
+      }
+    },
+    {
+      "repairId": "shiji:059:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "孝景前四年 is year 4 of Jing's early reign; \"before his reign\" misreads 前, and the rest of the unit already tracks 為皇太子，四歲廢，用故太子為臨江王.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0015",
+        "excerpt": "以孝景前四年為皇太子"
+      }
+    },
+    {
+      "repairId": "shiji:059:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "以孝景前二年用皇子為淮陽王 again uses the early-reign era label 前, so \"early reign\" is required and \"before his reign\" is false.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0026",
+        "excerpt": "以孝景前二年用皇子為淮陽王"
+      }
+    },
+    {
+      "repairId": "shiji:059:r0005",
+      "decision": "revise",
+      "after": "In the second year, after the Wu and Chu rebellion was crushed, he was moved to become King of Lu in the third year of Emperor Xiaojing's early reign.",
+      "reason": "前三年 correctly needs early-reign year 3, but 二年，吳楚反破後 is his second year (as Huaiyang king) after the rebellion was crushed, not \"two years after\" the crushing; the revise keeps the date fix and restores that structure.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0027",
+        "excerpt": "二年，吳楚反破後，以孝景前三年徙為魯王"
+      }
+    },
+    {
+      "repairId": "shiji:059:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "幸臣所忠等 names the favorite 所忠 (Suo Zhong); omitting 所 as mere \"Zhong\" drops the surname and invents a truncated personal name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0117",
+        "excerpt": "漢公卿及幸臣所忠等"
+      }
+    },
+    {
+      "repairId": "shiji:059:r0007",
+      "decision": "accept",
+      "after": null,
+      "reason": "After 吏求捕勃大急, 使人致擊笞掠 and 擅出漢所疑囚者 are Bo's obstructive acts under pressure (hiding witnesses in s0146), not officials torturing Bo; Han officials would not \"arbitrarily release\" Han-suspected prisoners.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0147",
+        "excerpt": "吏求捕勃大急，使人致擊笞掠，擅出漢所疑囚者"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

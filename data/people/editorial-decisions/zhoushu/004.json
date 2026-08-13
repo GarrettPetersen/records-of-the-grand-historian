@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "zhoushu",
+  "chapter": "004",
+  "input": {
+    "chapterFingerprint": "sha256:8a8c3c2ad5cdb862b02c8752e107581a79f64ed55bbd8dc8eeb6b7eb21fe15d7",
+    "proposalsFingerprint": "sha256:33de9e8c3628459796d674f850fe56ffdf46e9272c5aaf9a28d64c75cc6e22b3"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-52a80056-f776-4f59-9278-10f0ddbd7958",
+    "runId": "run-453bccc9-85e2-4fd2-909c-ccfac4db9204",
+    "completedAt": "2026-08-13T00:02:57.514Z"
+  },
+  "proposals": [
+    {
+      "id": "zhoushu:004:r0001",
+      "unit": {
+        "id": "s0018",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In the twelfth month, on gengwu day, he visited Chengl Mausoleum.",
+      "after": "In the twelfth month, on gengwu day, he visited Chengling Mausoleum.",
+      "reason": "Chinese 成陵 is Chengling; 'Chengl' is a truncated romanization error.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:004:r0002",
+      "unit": {
+        "id": "s0048",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Sixth month, on guihai day, Tuyuhun sent envoys with tribute.",
+      "after": "Sixth month, on guihai day, the Hephthalites (Yeda) sent envoys with tribute.",
+      "reason": "Chinese 獻噠 denotes the Hephthalites/Yeda, not Tuyuhun (吐谷渾), which appears elsewhere in the chapter.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:004:r0003",
+      "unit": {
+        "id": "s0048",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "In the sixth month, day guihai, Tuyuhun sent envoys presenting tribute goods.",
+      "after": "In the sixth month, day guihai, Yeda sent envoys presenting tribute goods.",
+      "reason": "Chinese 獻噠 is Yeda/Hephthalites; Tuyuhun is a different polity named 吐谷渾 elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:004:r0004",
+      "unit": {
+        "id": "s0079",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "On renywu day a general amnesty was proclaimed throughout the realm.",
+      "after": "On renwu day a general amnesty was proclaimed throughout the realm.",
+      "reason": "Chinese 壬午 is renwu; 'renywu' is a typographical corruption.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:004:r0005",
+      "unit": {
+        "id": "s0152",
+        "kind": "paragraph-sentence",
+        "blockIndex": 28,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Yuwen Yong, Duke of Lu, is my younger brother by the same mother—generous, open, and famed throughout the realm. He can carry our Zhou house forward, and he must be the one.",
+      "after": "Yuwen Yong, Duke of Lu, is my younger brother—generous, open, and famed throughout the realm. He can carry our Zhou house forward, and he must be the one.",
+      "reason": "Chinese 介弟 means younger brother and does not specify uterine/same-mother kinship; 'by the same mother' is an invention.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:004:r0006",
+      "unit": {
+        "id": "s0020",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "On gengchen day he made the grand general, Duke of Fucheng Yu, a pillar-of-state.",
+      "after": "On gengchen day he made the grand general, Duke of Fucheng Yong (邕), a pillar-of-state.",
+      "reason": "Chinese 邕 is the given name Yong; rendering it as surname 'Yu' is a wrong referent.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "zhoushu:004:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0018 has 成陵; Chengling is the correct romanization, and 'Chengl' is a truncated error with no other semantic change.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0018",
+        "excerpt": "成陵"
+      }
+    },
+    {
+      "repairId": "zhoushu:004:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0048 names 獻噠 as the tribute sender; that is the Hephthalites (Yeda), not Tuyuhun (吐谷渾). The replacement restores the correct polity.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0048",
+        "excerpt": "獻噠"
+      }
+    },
+    {
+      "repairId": "zhoushu:004:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 獻噠 in the literal of s0048 was mistranslated as Tuyuhun; Yeda correctly names that polity without inventing other content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0048",
+        "excerpt": "獻噠"
+      }
+    },
+    {
+      "repairId": "zhoushu:004:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0079 begins 壬午; the sexagenary reading is renwu, so 'renywu' is a typographical corruption and the fix is exact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0079",
+        "excerpt": "壬午"
+      }
+    },
+    {
+      "repairId": "zhoushu:004:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0152 calls Yuwen Yong 朕之介弟; 介弟 means younger brother and does not assert same-mother (同母) kinship, so removing 'by the same mother' deletes an invented detail while keeping the rest.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0152",
+        "excerpt": "朕之介弟"
+      }
+    },
+    {
+      "repairId": "zhoushu:004:r0006",
+      "decision": "revise",
+      "after": "On gengchen day he made the grand general, Duke of Fucheng Yong, a pillar-of-state.",
+      "reason": "s0020 has 輔城公邕; 邕 is the given name Yong, not a surname Yu. The revision restores the correct personal name without inserting Chinese characters into the English text.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0020",
+        "excerpt": "輔城公邕"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

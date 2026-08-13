@@ -431,6 +431,51 @@ function selfTest() {
       collection: 'sentences', itemIndex: 0,
       zh: '離碓。', en: 'Lidui was surveyed.',
       literal: 'Lidui was surveyed.',
+    }, {
+      id: 's0019', kind: 'paragraph-sentence', blockIndex: 18,
+      collection: 'sentences', itemIndex: 0,
+      zh: '詹事。', en: 'Heir Apparent’s Household',
+      literal: 'Heir Apparent’s Household',
+    }, {
+      id: 's0020', kind: 'paragraph-sentence', blockIndex: 19,
+      collection: 'sentences', itemIndex: 0,
+      zh: '滑、濮、澶、鄆。', en: 'They went to Hua, Pu, Chan, and Yun prefectures.',
+      literal: 'They went to Hua, Pu, Chan, and Yun prefectures.',
+    }, {
+      id: 's0021', kind: 'paragraph-sentence', blockIndex: 20,
+      collection: 'sentences', itemIndex: 0,
+      zh: '伊、洛、澶、澗皆溢。', en: 'Yi, Luo, Chan, and Jian rivers overflowed.',
+      literal: 'Yi, Luo, Chan, and Jian rivers overflowed.',
+    }, {
+      id: 's0022', kind: 'paragraph-sentence', blockIndex: 21,
+      collection: 'sentences', itemIndex: 0,
+      zh: '為官。', en: 'He became an official.',
+      literal: 'Bao became an official.',
+    }, {
+      id: 's0023', kind: 'paragraph-sentence', blockIndex: 22,
+      collection: 'sentences', itemIndex: 0,
+      zh: '在福州。', en: 'He served in Fuzhou.',
+      literal: 'He served in Fuzhou.',
+    }, {
+      id: 's0024', kind: 'paragraph-sentence', blockIndex: 23,
+      collection: 'sentences', itemIndex: 0,
+      zh: '傅介子安平王。', en: 'Fu Jiezi, Prince of Anping, returned.',
+      literal: 'Fu Jiezi, Prince of Anping, returned.',
+    }, {
+      id: 's0025', kind: 'paragraph-sentence', blockIndex: 24,
+      collection: 'sentences', itemIndex: 0,
+      zh: '未久。', en: 'Not long after, it ended.',
+      literal: 'Not long after, it ended.',
+    }, {
+      id: 's0026', kind: 'paragraph-sentence', blockIndex: 25,
+      collection: 'sentences', itemIndex: 0,
+      zh: '引新史。', en: 'He cited the New History.',
+      literal: 'He cited the New History.',
+    }, {
+      id: 's0027', kind: 'paragraph-sentence', blockIndex: 26,
+      collection: 'sentences', itemIndex: 0,
+      zh: '寧朔將軍。', en: 'He became General Who Pacifies the North.',
+      literal: 'He became General Who Pacifies the North.',
     }],
     preflight: {
       candidates: [{
@@ -508,6 +553,38 @@ function selfTest() {
       }, {
         id: 'fixture:002:cand_lidui_place', unit: 's0018', language: 'en',
         exact: 'Lidui', occurrence: 0, startCodePoint: 0, endCodePoint: 5,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_heir_household', unit: 's0019', language: 'en',
+        exact: 'Heir Apparent’s Household', occurrence: 0, startCodePoint: 0, endCodePoint: 25,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_nested_place', unit: 's0020', language: 'en',
+        exact: 'Chan', occurrence: 0, startCodePoint: 22, endCodePoint: 26,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_river_list', unit: 's0021', language: 'en',
+        exact: 'Chan', occurrence: 0, startCodePoint: 9, endCodePoint: 13,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_reused_title_prefix', unit: 's0024', language: 'en',
+        exact: 'Prince', occurrence: 0, startCodePoint: 10, endCodePoint: 16,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_reused_title_place', unit: 's0024', language: 'en',
+        exact: 'Anping', occurrence: 0, startCodePoint: 20, endCodePoint: 26,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_not', unit: 's0025', language: 'en',
+        exact: 'Not', occurrence: 0, startCodePoint: 0, endCodePoint: 3,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_work_title', unit: 's0026', language: 'en',
+        exact: 'New History', occurrence: 0, startCodePoint: 13, endCodePoint: 24,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_office_direction', unit: 's0027', language: 'en',
+        exact: 'North', occurrence: 0, startCodePoint: 35, endCodePoint: 40,
         detectors: [{ kind: 'english-capitalized-expression' }],
       }],
     },
@@ -598,6 +675,39 @@ function selfTest() {
       kind: 'personal-name',
       spans: { zh: [{ exact: '葛祗', occurrence: 0 }], en: [] },
       candidateRefs: [],
+    }, {
+      id: 'fixture:002:m0005',
+      person: 'fixture:002:p001',
+      unit: {
+        id: 's0022', kind: 'paragraph-sentence', blockIndex: 21,
+        collection: 'sentences', itemIndex: 0,
+      },
+      kind: 'personal-name',
+      spans: { zh: [], en: [{ exact: 'Bao', occurrence: 0 }] },
+      candidateRefs: [],
+    }, {
+      id: 'fixture:002:m0006',
+      person: 'fixture:002:p001',
+      unit: {
+        id: 's0023', kind: 'paragraph-sentence', blockIndex: 22,
+        collection: 'sentences', itemIndex: 0,
+      },
+      kind: 'personal-name',
+      spans: { zh: [], en: [{ exact: 'Fu', occurrence: 0, startCodePoint: 13, endCodePoint: 15 }] },
+      candidateRefs: [],
+    }, {
+      id: 'fixture:002:m0007',
+      person: 'fixture:002:p001',
+      unit: {
+        id: 's0024', kind: 'paragraph-sentence', blockIndex: 23,
+        collection: 'sentences', itemIndex: 0,
+      },
+      kind: 'personal-name',
+      spans: {
+        zh: [{ exact: '傅介子', occurrence: 0 }],
+        en: [{ exact: 'Fu Jiezi', occurrence: 0 }],
+      },
+      candidateRefs: [],
     }],
     claims: [{
       id: 'fixture:002:c0001', subject: 'fixture:002:p001', predicate: 'name',
@@ -639,6 +749,18 @@ function selfTest() {
       id: 'fixture:002:c0010', subject: 'fixture:002:p001', predicate: 'place-association',
       value: { place: { en: 'Lidui', zh: '離碓' }, relation: 'worked-at' },
       certainty: 'explicit', evidence: ['fixture:002:s0018'],
+    }, {
+      id: 'fixture:002:c0011', subject: 'fixture:002:p001', predicate: 'event-participation',
+      value: { kind: 'travel', place: { en: 'Hua, Pu, Chan, and Yun prefectures' } },
+      certainty: 'explicit', evidence: ['fixture:002:s0020'],
+    }, {
+      id: 'fixture:002:c0012', subject: 'fixture:002:p001', predicate: 'attestation',
+      value: { westernYear: { era: 'AD', year: 900, precision: 'year' } },
+      certainty: 'explicit-event-contextual-date', evidence: ['fixture:002:s0023'],
+    }, {
+      id: 'fixture:002:c0013', subject: 'fixture:002:p001', predicate: 'authorship',
+      value: { work: { en: 'New History of the Five Dynasties' }, relation: 'author' },
+      certainty: 'explicit', evidence: ['fixture:002:s0026'],
     }],
     translationRepairs: [],
     candidateDispositions: [{
@@ -665,6 +787,21 @@ function selfTest() {
   });
   if (fragments.unresolvedCandidates.length > 0) {
     throw new Error('Fragment reconciliation fixture left unresolved candidates');
+  }
+  if (fragments.extraction.mentions.some((mention) =>
+    mention.spans.en.some((span) => span.exact === 'Bao')
+  )) {
+    throw new Error('Literal-only English surface survived as a display-text mention');
+  }
+  if (
+    fragments.extraction.mentions.some((mention) =>
+      mention.spans.en.some((span) => span.exact === 'Fu')
+    ) ||
+    fragments.extraction.claims.some((claim) =>
+      claim.predicate === 'attestation' && claim.evidence.includes('fixture:002:s0023')
+    )
+  ) {
+    throw new Error('Unbounded subword surface or its derived attestation survived reconciliation');
   }
   const widened = fragments.extraction.mentions.find((mention) =>
     mention.spans.en.some((span) => span.exact === 'Ping Le Supervisor Fu Jiezi')
@@ -707,9 +844,18 @@ function selfTest() {
   if (!restoredTitle) {
     throw new Error('A corrected full title did not become a linked person mention');
   }
+  const reusedTitle = fragments.extraction.mentions.find((mention) =>
+    mention.person === 'fixture:002:p001' &&
+    mention.unit.id === 's0024' &&
+    mention.spans.en.some((span) => span.exact === 'Prince of Anping')
+  );
+  if (!reusedTitle) {
+    throw new Error('Established title was not reused for a later explicit person context');
+  }
   const expectedNonPeople = new Map([
     ['fixture:002:cand_only', 'not-a-name'],
     ['fixture:002:cand_am_i', 'not-a-name'],
+    ['fixture:002:cand_not', 'not-a-name'],
     ['fixture:002:cand_jianwu', 'other'],
     ['fixture:002:cand_nan', 'place'],
     ['fixture:002:cand_privy', 'office'],
@@ -720,6 +866,11 @@ function selfTest() {
     ['fixture:002:cand_wei_hour', 'other'],
     ['fixture:002:cand_yaolian_palace', 'organization'],
     ['fixture:002:cand_lidui_place', 'place'],
+    ['fixture:002:cand_heir_household', 'organization'],
+    ['fixture:002:cand_nested_place', 'place'],
+    ['fixture:002:cand_river_list', 'place'],
+    ['fixture:002:cand_work_title', 'book-title'],
+    ['fixture:002:cand_office_direction', 'office'],
   ]);
   for (const [candidate, reason] of expectedNonPeople) {
     const disposition = fragments.extraction.candidateDispositions.find((item) =>

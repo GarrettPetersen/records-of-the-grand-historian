@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "072",
+  "input": {
+    "chapterFingerprint": "sha256:19363c37c9433030bf7979f70e4fd8d7511069c5d4c3f0035ea9160064a9476d",
+    "proposalsFingerprint": "sha256:bacce1b4627ce003e11bced5849cea4fb8a7781bd95e017c39c825b5d9a89e88"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-90929afb-fcf5-4aa6-bae2-6a4481188549",
+    "runId": "run-a5d174fb-dc9b-4ece-980f-e22284503656",
+    "completedAt": "2026-08-12T23:54:25.482Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:072:r0001",
+      "unit": {
+        "id": "s0007",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "While the court was at Fengxiang, Chengye repeatedly urged sending troops from Jin and Jiang to pin down Li Maozhen's Qi forces from the flank.",
+      "after": "While the court was at Fengxiang, Chengye repeatedly urged sending troops from Jin and Jiang to pin down the Qi forces from the flank.",
+      "reason": "Chinese has only 岐人 (the Qi people/forces); the idiomatic English invents the personal name Li Maozhen.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:072:r0002",
+      "unit": {
+        "id": "s0135",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "(The 《Zizhi Tongjian》: Hanqiong was dispatched to campaign against Conghou and was also made acting administrator of the Tianxiong military governorship.)〉",
+      "after": "(The 《Zizhi Tongjian》: Hanqiong was dispatched to summon Conghou and was also made acting administrator of the Tianxiong military governorship.)〉",
+      "reason": "In context 征從厚 means summon (徵) Conghou, matching the prior sentence about recalling Emperor Min; 'campaign against' reverses the sense.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:072:r0003",
+      "unit": {
+        "id": "s0135",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "(The 《Zizhi Tongjian》: Hanqiong was dispatched to campaign against Conghou and was also made acting administrator of the Tianxiong military governorship.)〉",
+      "after": "(The 《Zizhi Tongjian》: Hanqiong was dispatched to summon Conghou and was also made acting administrator of the Tianxiong military governorship.)〉",
+      "reason": "Same 征/徵 summon sense as in the idiomatic line; 'campaign against' is a clear semantic error.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:072:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit has only 岐人 for the Qi forces; 李茂貞 / Li Maozhen is not in the Chinese. Removing the invented personal name restores fidelity without other change.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0007",
+        "excerpt": "以為岐人掎角"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:072:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The Tongjian note 遣漢瓊征從厚 parallels the prior sentence 召閔帝於鄴: 征 stands for 徵 'summon,' not a military campaign against Conghou. 'Campaign against' reverses the sense; 'summon' matches the context and the succession that follows.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0135",
+        "excerpt": "遣漢瓊征從厚"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:072:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field has the same error on 征從厚; with s0133's 召閔帝於鄴 and Conghou's subsequent accession, 'summon' is the correct reading and 'campaign against' is not.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0135",
+        "excerpt": "征從厚"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -10,6 +10,7 @@ const ENGLISH_SENTENCE_INITIAL_NON_NAMES = new Set([
   'How',
   'Illness',
   'Is',
+  'Not',
   'Once',
   'Only',
   'Though',
@@ -64,6 +65,7 @@ const ENGLISH_NAMED_OFFICE_TERMS = new Set([
   'Supreme Pillar',
   'Three Commanders',
 ]);
+const ENGLISH_INSTITUTIONAL_SUFFIX_RE = /\b(?:Academy|Administration|Bureau|Chancellery|Commission|Court|Department|Directorate|Household|Ministry|Office|Secretariat)$/u;
 
 function locatorKey(locator) {
   return `${locator.id}:${locator.blockIndex}:${locator.collection}:${locator.itemIndex}`;
@@ -119,7 +121,11 @@ function aliasesForPerson(extraction, personId, language, unitId) {
     for (const span of mention.spans[language]) add(span.exact, mention.kind);
   }
   for (const claim of extraction.claims) {
-    if (claim.subject !== personId || claim.predicate !== 'name' || !claimEvidenceUnit(claim, unitId)) continue;
+    if (
+      claim.subject !== personId ||
+      claim.predicate !== 'name' ||
+      (!claimEvidenceUnit(claim, unitId) && !hasUnitContext)
+    ) continue;
     add(claim.value?.[language], mentionKindForNameKind(claim.value?.kind));
   }
   for (const claim of extraction.claims) {
@@ -359,9 +365,12 @@ function candidateMatchesNamedTitleClaim(extraction, candidate) {
 
 function candidateMatchesPlaceClaim(extraction, candidate) {
   return extraction.claims.some((claim) =>
-    ['native-place', 'place-association'].includes(claim.predicate) &&
     claimEvidenceUnit(claim, candidate.unit) &&
-    nestedStringValues(claim.value).some((value) =>
+    nestedStringValues(
+      ['native-place', 'place-association'].includes(claim.predicate)
+        ? claim.value
+        : claim.value?.place
+    ).some((value) =>
       typeof value === 'string' &&
       surfaceContains(value.toLocaleLowerCase('en-US'), candidate.exact.toLocaleLowerCase('en-US'), 'en')
     )
@@ -738,6 +747,7 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
 
   const unresolvedSpans = [];
   const orphanedStalePeople = new Set();
+  const invalidSubwordContexts = new Set();
   for (const stale of staleSpans) {
     const unit = unitById.get(stale.mention.unit.id);
     if (!unit) {
@@ -849,6 +859,31 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         mapped = true;
       }
     }
+    if (!mapped && stale.language === 'en') {
+      const previousUnit = previousUnitById.get(stale.mention.unit.id);
+      const wasNeverDisplayText = previousUnit &&
+        exactOccurrences(previousUnit.en, stale.span.exact, 'en').length === 0 &&
+        exactOccurrences(previousUnit.literal, stale.span.exact, 'en').length > 0;
+      if (wasNeverDisplayText) {
+        // Extraction spans link the displayed idiomatic text. A literal-only
+        // surface was mis-scoped by the worker and should not become a link.
+        mapped = true;
+      }
+    }
+    if (!mapped && stale.language === 'en') {
+      const previousUnit = previousUnitById.get(stale.mention.unit.id);
+      const points = [...(previousUnit?.en ?? '')];
+      const storedSubword = previousUnit &&
+        Number.isInteger(stale.span.startCodePoint) &&
+        Number.isInteger(stale.span.endCodePoint) &&
+        points.slice(stale.span.startCodePoint, stale.span.endCodePoint).join('') === stale.span.exact &&
+        exactOccurrences(previousUnit.en, stale.span.exact, 'en').length === 0 &&
+        exactOccurrences(previousUnit.literal, stale.span.exact, 'en').length === 0;
+      if (storedSubword) {
+        invalidSubwordContexts.add(`${stale.mention.person}\u0000${stale.mention.unit.id}`);
+        mapped = true;
+      }
+    }
     if (!mapped) {
       const hasRemainingUnitContext = reconciled.mentions.some((mention) =>
         mention.person === stale.mention.person &&
@@ -872,6 +907,16 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       }
     }
   }
+  reconciled.claims = reconciled.claims.filter((claim) => {
+    if (claim.predicate !== 'attestation' || claim.evidence.length !== 1) return true;
+    const unitId = claim.evidence[0].split(':').at(-1);
+    if (!invalidSubwordContexts.has(`${claim.subject}\u0000${unitId}`)) return true;
+    return reconciled.mentions.some((mention) =>
+      mention.person === claim.subject &&
+      mention.unit.id === unitId &&
+      (mention.spans.zh.length > 0 || mention.spans.en.length > 0)
+    );
+  });
   reconciled.mentions = reconciled.mentions.filter((mention) =>
     mention.spans.zh.length > 0 || mention.spans.en.length > 0
   );
@@ -1308,6 +1353,26 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         accounted.add(candidate.id);
         continue;
       }
+      if (/^(?:,\s*(?:and\s+)?[A-Z][\p{L}'’-]*)*\s+rivers?\b/u.test(after)) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'place',
+          note: 'Named river in a bounded geographic list, not a person.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (/\b(?:Pacifies|Pacifying) the\s+$/u.test(before)) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'office',
+          note: 'Directional component of a military office title, not a person.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
       if (
         /^[A-Z][a-z]+zhou$/u.test(candidate.exact) &&
         /\b(?:at|entered|from|in|into|left|near|reached|to|toward)\s+$/iu.test(before)
@@ -1414,6 +1479,16 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       accounted.add(candidate.id);
       continue;
     }
+    if (candidate.language === 'en' && ENGLISH_INSTITUTIONAL_SUFFIX_RE.test(candidate.exact)) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'organization',
+        note: 'Capitalized institutional name, not a person.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
     if (candidate.language === 'en' && ENGLISH_NAMED_POLITY_TERMS.has(candidate.exact)) {
       reconciled.candidateDispositions.push({
         candidate: candidate.id,
@@ -1509,6 +1584,21 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         disposition: 'not-person',
         reason: 'other',
         note: 'Credential or recommendation category recorded in this unit, not a person name.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (
+      candidate.language === 'en' &&
+      ['authorship', 'work-association'].some((predicate) =>
+        candidateMatchesClaimValue(reconciled, candidate, predicate)
+      )
+    ) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'book-title',
+        note: 'Component of a cited or authored work recorded in this unit.',
       });
       accounted.add(candidate.id);
       continue;

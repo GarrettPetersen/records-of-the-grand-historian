@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "songshi",
+  "chapter": "144",
+  "input": {
+    "chapterFingerprint": "sha256:3ede74926b602faaeeb2bbad39b5de6da0d786e2fdac31d9e54053c27c029de9",
+    "proposalsFingerprint": "sha256:729293f07846251a2bb24d7279cea7a3bf3ae8b9b5a566f80601c69868b01cea"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-c33ed5db-890c-45f0-971d-f06d25850b33",
+    "runId": "run-bc25e51b-aca6-428f-8c90-6c25b548756b",
+    "completedAt": "2026-08-13T00:06:15.102Z"
+  },
+  "proposals": [
+    {
+      "id": "songshi:144:r0001",
+      "unit": {
+        "id": "s0057",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In the first year of Kangding, Vice Grand Councilor Song Qi said: \"On imperial tours, apart from suburban and temple rites when the full guard of honor is deployed, the everyday escort amounts to a carriage leader ahead and umbrellas and fans behind—nothing like the grand procession of dukes and ministers leading the way described in the ritual canon.",
+      "after": "In the first year of Kangding, Vice Grand Councilor Song Xiang said: \"On imperial tours, apart from suburban and temple rites when the full guard of honor is deployed, the everyday escort amounts to a carriage leader ahead and umbrellas and fans behind—nothing like the grand procession of dukes and ministers leading the way described in the ritual canon.",
+      "reason": "Chinese 宋庠 is Song Xiang; Song Qi is 宋祁, a different official.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:144:r0002",
+      "unit": {
+        "id": "s0057",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "In the first year of Kangding under Emperor Renzong, Vice Grand Councilor Song Qi said: \"When the imperial carriage tours, apart from suburban and temple great rites with the full guard of honor deployed, on ordinary days the escort has only the carriage leader before and umbrellas and fans behind—far from the grandeur of dukes and ministers leading as recorded in ritual canon.",
+      "after": "In the first year of Kangding under Emperor Renzong, Vice Grand Councilor Song Xiang said: \"When the imperial carriage tours, apart from suburban and temple great rites with the full guard of honor deployed, on ordinary days the escort has only the carriage leader before and umbrellas and fans behind—far from the grandeur of dukes and ministers leading as recorded in ritual canon.",
+      "reason": "Chinese 宋庠 is Song Xiang, not Song Qi (宋祁).",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "songshi:144:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Source names 參知政事宋庠; 宋庠 is Song Xiang, whereas Song Qi is 宋祁, so the proposed name correction is required and otherwise leaves a sound idiomatic rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0057",
+        "excerpt": "參知政事宋庠言"
+      }
+    },
+    {
+      "repairId": "songshi:144:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same unit’s 宋庠 must be Song Xiang in the literal field; Song Qi misidentifies the speaker and the replacement restores the correct personal name without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0057",
+        "excerpt": "宋庠"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

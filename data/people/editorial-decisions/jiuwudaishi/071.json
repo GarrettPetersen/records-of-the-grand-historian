@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "071",
+  "input": {
+    "chapterFingerprint": "sha256:32671a6e80ed0d7e2c3198a8401cdfe98b284203e6b05a0e0c39b917eb153f89",
+    "proposalsFingerprint": "sha256:7df36f6f8af57e8fff28da86fc2ed582b54474f92584efdf07edcde69120f66c"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-0f3ee25a-e2ee-42e3-94b6-e9ee10a3c9b6",
+    "runId": "run-c6096ae4-7c7d-42d8-9008-3024b0c94a00",
+    "completedAt": "2026-08-12T23:54:17.105Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:071:r0001",
+      "unit": {
+        "id": "s0017",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 16
+      },
+      "field": "idiomatic",
+      "before": "On another visit he produced an iron pestle from his boot, broke it into bits, and ate it.",
+      "after": "On another visit he produced an iron pestle from his boot, crushed them, and ate them.",
+      "reason": "Chinese 碎而食之 refers to crushing the dried lotus seeds with the pestle, not breaking the pestle itself.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:071:r0002",
+      "unit": {
+        "id": "s0087",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "He was already eighty when appointed Rector of the Imperial University, and past eighty by then, yet his bearing and vigor had not faded.",
+      "after": "He was already eighty [as Vice Minister]; when he became Rector of the Imperial University he was over eighty, yet his bearing and vigor had not faded.",
+      "reason": "Chinese distinguishes age at the prior office from age as Rector (八十餘); the idiomatic fuses them into one appointment.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:071:r0003",
+      "unit": {
+        "id": "s0111",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 18
+      },
+      "field": "idiomatic",
+      "before": "Chongtao followed, arguing each point; Zhuangzong shut the hall doors himself and could not get in.",
+      "after": "Chongtao followed, arguing each point; Zhuangzong shut the hall doors himself, and Chongtao could not get in.",
+      "reason": "Chinese 不得入 has Chongtao as subject unable to enter after Zhuangzong closed the doors; idiomatic English makes Zhuangzong the one who could not get in.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:071:r0004",
+      "unit": {
+        "id": "s0088",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "He often forgot things; he claimed Yuan Zhen should never have taken the jinshi because his father Yuan Lushan had entered through the name Jin—errors of that sort were common with him.",
+      "after": "He often forgot things; he claimed Yuan Zhen should never have taken the jinshi because his father Yuan Lushan had entered through that name/reputation—errors of that sort were common with him.",
+      "reason": "Chinese 以父元魯山名進 means advancement through his father Yuan Lushan's name/reputation; rendering \"name Jin\" invents an unrelated name.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:071:r0001",
+      "decision": "revise",
+      "after": "On another visit he produced an iron pestle from his boot, crushed the seeds, and ate them.",
+      "reason": "After 乾藕子 that seemed inedible, 靴中出一鐵楇，碎而食之 means he crushed those seeds with the pestle and ate them, not that he broke and ate the pestle. The proposal fixes the object, but bare 'them' is awkward right after 'pestle'; name the seeds.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0017",
+        "excerpt": "靴中出一鐵楇，碎而食之"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:071:r0002",
+      "decision": "revise",
+      "after": "He was already eighty then; when he became Rector of the Imperial University he was over eighty, yet his bearing and vigor had not faded.",
+      "reason": "縞時年已八十，及為國子祭酒，八十餘矣 separates age at the prior moment (戶部侍郎 in s0086) from age when he became Rector; the original fuses both onto one appointment. Bracketed '[as Vice Minister]' is an editorial gloss; 'then' preserves the Chinese 時 link without inventing brackets.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0087",
+        "excerpt": "縞時年已八十，及為國子祭酒，八十餘矣"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:071:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "莊宗自闔殿門，不得入: after Zhuangzong shut the doors, the one who 不得入 is Chongtao who had followed to argue, not Zhuangzong. The proposed wording restores that agent correctly.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0111",
+        "excerpt": "莊宗自闔殿門，不得入"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:071:r0004",
+      "decision": "revise",
+      "after": "He often forgot things; he claimed Yuan Zhen should never have taken the jinshi because he had advanced by his father Yuan Lushan's name—errors of that sort were common with him.",
+      "reason": "以父元魯山名進 means advancing by means of father Yuan Lushan's name/fame; 'name Jin' invents a personal name. The proposal rightly drops Jin, but keeps the father as subject of 進 and uses awkward 'name/reputation'; the topic of 進 is Yuan Zhen.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0088",
+        "excerpt": "以父元魯山名進"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

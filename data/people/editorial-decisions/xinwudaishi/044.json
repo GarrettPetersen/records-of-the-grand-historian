@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "xinwudaishi",
+  "chapter": "044",
+  "input": {
+    "chapterFingerprint": "sha256:7db57293bef5bf48cc125eb406298b38d6639973cef86206f97e506106cc1acd",
+    "proposalsFingerprint": "sha256:108ab595851e8c7da5296b1fa07c5a2df97d3fb1622b1a59d49d071c5396b06f"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-0e1b1a43-aa9e-4633-8f86-6218b8f34f79",
+    "runId": "run-c368c34c-fd95-4222-9133-6596c47e5d1c",
+    "completedAt": "2026-08-13T00:02:29.702Z"
+  },
+  "proposals": [
+    {
+      "id": "xinwudaishi:044:r0001",
+      "unit": {
+        "id": "s0010",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Gao Wanxing of Yan broke from Chongben and came over to Liang. Zhu Wen sent Zhijun to join him; they took Dan, Yan, Bin, and Fang. Zhijun was made acting Grand Mentor and Palace Attendant and enfeoffed Prince of Dapeng.",
+      "after": "Gao Wanxing of Yan broke from Chongben and came over to Liang. Zhu Wen sent Zhijun to join him; they took Dan, Yan, Fu, and Fang. Zhijun was made acting Grand Mentor and Palace Attendant and enfeoffed Prince of Dapeng.",
+      "reason": "Chinese 鄜州 is Fu, not Bin (邠); the idiomatic list wrongly uses Bin for 鄜.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:044:r0002",
+      "unit": {
+        "id": "s0012",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Once Bin and Fang were his, the Founder ordered Zhijun back against Bin. Zhijun would not march: the army had no grain.",
+      "after": "Once Fu and Fang were his, the Founder ordered Zhijun back against Bin. Zhijun would not march: the army had no grain.",
+      "reason": "Chinese 已下鄜、坊 refers to Fu and Fang already taken, not Bin; Bin (邠州) is only the next target.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:044:r0003",
+      "unit": {
+        "id": "s0050",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 18
+      },
+      "field": "idiomatic",
+      "before": "Li Keyong brought him to Taiyuan, gave him a grand house, and set him above the other generals.",
+      "after": "The Prince of Jin brought him to Taiyuan, gave him a grand house, and set him above the other generals.",
+      "reason": "Chinese has 晉王, not Li Keyong; by this campaign the Prince of Jin was Li Cunxu (later Zhuangzong).",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:044:r0004",
+      "unit": {
+        "id": "s0078",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "Li Keyong made him acting Grand Mentor and Secretariat co-equal, military governor of Tianping and southeastern-route pacifier, set above the other generals.",
+      "after": "The Prince of Jin made him acting Grand Mentor and Secretariat co-equal, military governor of Tianping and southeastern-route pacifier, set above the other generals.",
+      "reason": "Chinese has 晉王; after 908 this is Li Cunxu, not Li Keyong.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:044:r0005",
+      "unit": {
+        "id": "s0150",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Zhenming 1: Yang Shihou of Wei died. The Last Emperor, finding Wei troops proud and unruly, carved out Xiang, Cao, and Wei for a new Zhaode command under Zhang Jun;",
+      "after": "Zhenming 1: Yang Shihou of Wei died. The Last Emperor, finding Wei troops proud and unruly, carved out Xiang, Chan, and Wei for a new Zhaode command under Zhang Yun;",
+      "reason": "澶 is Chan (not Cao), and 張筠 is Zhang Yun (not Zhang Jun), matching the earlier Suzhou prefect.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:044:r0006",
+      "unit": {
+        "id": "s0148",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "As a youth he was a tooth officer at Huazhou.",
+      "after": "As a youth he was a tooth officer at Hua Prefecture (滑州).",
+      "reason": "滑州 is Hua (滑), easily confused with 華州; clarify the prefecture intended by the Chinese.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xinwudaishi:044:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit lists 丹、延、鄜、坊; 鄜 is Fuzhou (Fu), distinct from 邠 (Bin) in s0009 and s0012. The idiomatic wrongly renders 鄜 as Bin; Fu restores the toponym.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0010",
+        "excerpt": "攻下丹、延、鄜、坊四州"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:044:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "太祖已下鄜、坊 names Fu and Fang as already taken; 邠州 appears only as the next target in 復攻邠州. Replacing the first Bin with Fu corrects the place already held without changing the Bin campaign order.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0012",
+        "excerpt": "太祖已下鄜、坊，遣知俊復攻邠州"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:044:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese has 晉王, not a personal name. The prior idiomatic invents Li Keyong; after Hui’s surrender in s0049 and before 莊宗立 in s0051, 晉王 is Li Cunxu. “The Prince of Jin” matches the source wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0050",
+        "excerpt": "晉王以會歸於太原"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:044:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit opens 晉王拜寶; the idiomatic wrongly names Li Keyong. Adjacent s0080’s 莊宗 shows this is Li Cunxu’s Jin court. “The Prince of Jin” restores the title actually written.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0078",
+        "excerpt": "晉王拜寶檢校太尉"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:044:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 分相、澶、衞 has 澶 (Chan), not 曹 (Cao), and 以張筠為節度使: 筠 is Yun, not Jun. Both proposed corrections match the characters; the rest of the sentence can stand.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0150",
+        "excerpt": "乃分相、澶、衞三州建昭德軍，以張筠為節度使"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:044:r0006",
+      "decision": "reject",
+      "after": null,
+      "reason": "滑州 is already rendered accurately as Huazhou; adding “Hua Prefecture (滑州)” is only disambiguation style, not a meaning error. Preserve the existing idiomatic wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0148",
+        "excerpt": "少為滑州牙將"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

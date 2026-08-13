@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "zhoushu",
+  "chapter": "021",
+  "input": {
+    "chapterFingerprint": "sha256:6097773ab9dc70b7dcb0ad27bb73c56037a0ac962fad5b8d8159a30aa1150cb4",
+    "proposalsFingerprint": "sha256:02a15bf926c758d8cf0f30c41cef3010546170094d4f9f6b1979b5dcf59536de"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-23c60e40-1aea-4666-956c-8b93ce404217",
+    "runId": "run-32729528-07c1-4365-b27c-fc4588b18b70",
+    "completedAt": "2026-08-13T00:04:29.554Z"
+  },
+  "proposals": [
+    {
+      "id": "zhoushu:021:r0001",
+      "unit": {
+        "id": "s0039",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 24
+      },
+      "field": "idiomatic",
+      "before": "Xiao Hui came with his son, Prince Su of Yidu, and his civil and military staff to the camp gate to surrender; Yuchi Jiong received them with full courtesy.",
+      "after": "Xiao Hui came with Ji's son, Prince Su of Yidu, and his civil and military staff to the camp gate to surrender; Yuchi Jiong received them with full courtesy.",
+      "reason": "Chinese 撝與紀子宜都王肅 means Hui together with Ji's son Prince Su of Yidu, not Hui's own son.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:021:r0002",
+      "unit": {
+        "id": "s0039",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 24
+      },
+      "field": "literal",
+      "before": "Hui together with his son, Prince Su of Yidu, and his civil and military officials and attendants came to the camp gate to request audience; Jiong received them with ceremony.",
+      "after": "Hui together with Ji's son, Prince Su of Yidu, and his civil and military officials and attendants came to the camp gate to request audience; Jiong received them with ceremony.",
+      "reason": "Literal English wrongly makes Su Hui's son; 紀子 is Ji's son.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:021:r0003",
+      "unit": {
+        "id": "s0175",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "Yang Jian ordered Yun Inspector-General Wang Yi as commander-in-chief and dispatched Jing-Xiang troops to suppress him.",
+      "after": "Yang Jian ordered Xiang Inspector-General Wang Yi as commander-in-chief and dispatched Jing-Xiang troops to suppress him.",
+      "reason": "Chinese 襄州總管 is Xiang, not Yun; literal mistranslates the province.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:021:r0004",
+      "unit": {
+        "id": "s0113",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "From the crown prince against Tuyuhun, he fought hard and had merit.",
+      "after": "He accompanied the crown prince against Tuyuhun, fought hard, and had merit.",
+      "reason": "Literal omits the verb of accompanying present in 從皇太子 and reads as a fragment.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "zhoushu:021:r0001",
+      "decision": "revise",
+      "after": "Xiao Hui came with Xiao Ji's son, Prince Su of Yidu, and his civil and military staff to the camp gate to surrender; Yuchi Jiong received them with full courtesy.",
+      "reason": "s0039 has 撝與紀子宜都王肅: 紀子 names Su as Xiao Ji's son, not Hui's; using Xiao Ji's full name corrects the kinship without leaving an ambiguous English reference.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0039",
+        "excerpt": "撝與紀子宜都王肅"
+      }
+    },
+    {
+      "repairId": "zhoushu:021:r0002",
+      "decision": "revise",
+      "after": "Hui together with Xiao Ji's son, Prince Su of Yidu, and his civil and military officials and attendants came to the camp gate to request audience; Jiong received them with ceremony.",
+      "reason": "The same 紀子 in s0039 makes Su Xiao Ji's son; the literal “his son” wrongly attaches him to Hui, and the full name keeps the corrected kinship unambiguous.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0039",
+        "excerpt": "紀子宜都王肅"
+      }
+    },
+    {
+      "repairId": "zhoushu:021:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0175 has 襄州總管王誼; 襄 is Xiang, not Yun, so “Xiang Inspector-General” correctly matches the Chinese office title.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0175",
+        "excerpt": "襄州總管"
+      }
+    },
+    {
+      "repairId": "zhoushu:021:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0113 從皇太子討吐谷渾 means he accompanied the crown prince on the campaign; “From the crown prince” misreads 從 and is ungrammatical, and the proposed literal restores that sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0113",
+        "excerpt": "從皇太子討吐谷渾"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

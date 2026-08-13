@@ -1,0 +1,224 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "111",
+  "input": {
+    "chapterFingerprint": "sha256:750462c74ebf411f5ad64fcb5789fa4c646c783a878ba58ac467df0adc742b85",
+    "proposalsFingerprint": "sha256:54dd4951b0ef4691ad9a259d6d3642200642f7cb9e608294859eaccd6de25111"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-26aae30f-abac-437d-81c2-7a04cfaefce5",
+    "runId": "run-c71f11a2-6207-4afd-8ffa-fd02e5378b13",
+    "completedAt": "2026-08-12T23:57:46.322Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:111:r0001",
+      "unit": {
+        "id": "s0028",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "In the first year of Tangxi, the capital inspection was abolished and only the triennial completion review was used.",
+      "after": "In the first year of Kangxi, the capital inspection was abolished and only the triennial completion review was used.",
+      "reason": "Source 唐熙 is a corruption of 康熙 (Kangxi); idiomatic already has Kangxi, but literal wrongly reads Tangxi.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:111:r0002",
+      "unit": {
+        "id": "s0114",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "Grand Secretary Chen Mingxia strongly supported it, as did Supervising Secretary Wei Xiangdong.",
+      "after": "Grand Secretary Chen Mingxia strongly supported it, as did Supervising Secretary Wei Xiangshu.",
+      "reason": "魏象樞 is Xiangshu, not Xiangdong; the given name 象樞 is misromanized in the idiomatic English.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:111:r0003",
+      "unit": {
+        "id": "s0114",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "Grand Secretary Chen Mingxia strongly upheld it; Supervising Secretary Wei Xiangdong also requested it.",
+      "after": "Grand Secretary Chen Mingxia strongly upheld it; Supervising Secretary Wei Xiangshu also requested it.",
+      "reason": "Same misreading of 魏象樞 as Wei Xiangdong instead of Wei Xiangshu in the literal English.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:111:r0004",
+      "unit": {
+        "id": "s0115",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "An edict was received: impeaching officials who, following grand-assessment disposition, impeached falsely out of private motive would be punished.",
+      "after": "An edict was received: officials who made supplementary impeachments would be punished according to grand-assessment rules if they impeached falsely out of private motive.",
+      "reason": "The literal English fuses 糾拾官照大計處分 and 挾私妄糾者論 into a reversed, ungrammatical reading.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:111:r0005",
+      "unit": {
+        "id": "s0224",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 28
+      },
+      "field": "idiomatic",
+      "before": "In Yongzheng 6 (1728), Regional Commander Yuan Lisong of Taiyuan memorialized that Garrison Commander Liang Yulian of Pingyuan was honest, capable, and skilled, yet was impeached for age.",
+      "after": "In Yongzheng 6 (1728), Regional Commander Yuan Lisong of Taiyuan memorialized that Garrison Commander Liang Yu of Pingyuan was honest, keen, and skilled, yet was impeached for age.",
+      "reason": "Chinese 梁玉廉潔敏練 names 梁玉 (Liang Yu); 廉潔敏練 are descriptors. English wrongly fused 廉 into the personal name as Liang Yulian.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:111:r0006",
+      "unit": {
+        "id": "s0224",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 28
+      },
+      "field": "literal",
+      "before": "In the sixth year, Taiyuan regional commander Yuan Lisong of Shanxi memorialized that Pingyuan garrison commander Liang Yulian was honest, keen, and skilled, yet was impeached on account of age.",
+      "after": "In the sixth year, Taiyuan regional commander Yuan Lisong of Shanxi memorialized that Pingyuan garrison commander Liang Yu was honest, keen, and skilled, yet was impeached on account of age.",
+      "reason": "Same name-boundary error: 梁玉 is the personal name; 廉潔敏練 means honest, keen, and skilled.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:111:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Wikisource preserves the same received graph 唐熙 as the chapter; there is no Tangxi era. After Shunzhi 17, the 元年/三年/六年 sequence is Kangxi, and the idiomatic already reads Kangxi, so the literal must be emended from Tangxi.",
+      "sourceWitness": {
+        "source": "wikisource",
+        "citation": "https://zh.wikisource.org/wiki/清史稿/卷111",
+        "excerpt": "唐熙元年罷京察，專用三年考滿例"
+      }
+    },
+    {
+      "repairId": "qingshigao:111:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "給事中魏象樞 names Wei Xiangshu; 樞 is shū, not dong. Xiangdong is a misromanization, and the proposed idiomatic line corrects only that name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0114",
+        "excerpt": "給事中魏象樞亦以為請"
+      }
+    },
+    {
+      "repairId": "qingshigao:111:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise misreads 魏象樞 as Wei Xiangdong; Xiangshu matches 象樞, and the rest of the rendering already tracks 力主之 / 亦以為請.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0114",
+        "excerpt": "魏象樞"
+      }
+    },
+    {
+      "repairId": "qingshigao:111:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "得旨，糾拾官照大計處分挾私妄糾者論 means supplementary-impeachment officials are punished by grand-assessment rules when they falsely impeach from private motive. The prior literal reverses and garbles that structure; the proposed wording restores it.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0115",
+        "excerpt": "糾拾官照大計處分挾私妄糾者論"
+      }
+    },
+    {
+      "repairId": "qingshigao:111:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "平垣營守備梁玉廉潔敏練 names 梁玉; 廉潔敏練 are the descriptors honest, keen, and skilled. Liang Yulian wrongly absorbs 廉 into the personal name; keen better matches 敏.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0224",
+        "excerpt": "平垣營守備梁玉廉潔敏練"
+      }
+    },
+    {
+      "repairId": "qingshigao:111:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal has the same name-boundary error: 梁玉 is the person, and 廉潔敏練 are already rendered as honest, keen, and skilled. Changing only Yulian to Yu is correct.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0224",
+        "excerpt": "梁玉廉潔敏練"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "qingshigao:111:r0002",
+      "claim": {
+        "id": "qingshigao:111:c0111",
+        "subject": "qingshigao:111:p026",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate-name",
+          "en": "Wei Xiangdong"
+        },
+        "certainty": "uncertain",
+        "evidence": [
+          "qingshigao:111:s0114"
+        ]
+      },
+      "reason": "Accepting r0002 shows s0114 only supports 魏象樞 / Wei Xiangshu; the alternate-name Wei Xiangdong was created solely by the misromanized English.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0114",
+        "excerpt": "魏象樞"
+      }
+    },
+    {
+      "repairId": "qingshigao:111:r0005",
+      "claim": {
+        "id": "qingshigao:111:c0161",
+        "subject": "qingshigao:111:p035",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate-name",
+          "en": "Liang Yulian"
+        },
+        "certainty": "uncertain",
+        "evidence": [
+          "qingshigao:111:s0224"
+        ]
+      },
+      "reason": "Accepting r0005 shows s0224 names 梁玉 with following descriptors 廉潔敏練; Liang Yulian was created solely by fusing 廉 into the personal name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0224",
+        "excerpt": "梁玉廉潔敏練"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

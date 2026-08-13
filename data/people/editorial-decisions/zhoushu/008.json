@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "zhoushu",
+  "chapter": "008",
+  "input": {
+    "chapterFingerprint": "sha256:ed70f54595cddde5ac943413d6fda7d2aa310f2a09ffb122303c61b3be4830f0",
+    "proposalsFingerprint": "sha256:f6005523416779cf9a5e7fc2e7996a97adef37e95f3f4eb74457a4398a3c9efe"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-ab249240-4ffe-4aac-a66a-6979866f880a",
+    "runId": "run-9618ea93-968a-4001-8c21-f4dac6aa1e8c",
+    "completedAt": "2026-08-13T00:04:40.321Z"
+  },
+  "proposals": [
+    {
+      "id": "zhoushu:008:r0001",
+      "unit": {
+        "id": "s0018",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "On xinyou day Pillar-of-State Yuwen Chun, Duke of Qi; Yu Shi, Duke of Yan; and Helan Fu'en, Duke of Gao were all made superior pillars-of-state.",
+      "after": "On xinyou day Pillar-of-State Yuwen Chun, Duke of Qi; Yu Shi, Duke of Yan; and Heba Fu'en, Duke of Gao were all made superior pillars-of-state.",
+      "reason": "Chinese 賀拔伏恩 is Heba (not Helan); English surname mismatches the Chinese surname.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:008:r0002",
+      "unit": {
+        "id": "s0012",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Prince Zhao Zhao, Prince Chen Chun, and Prince of Yue",
+      "after": "Prince Zhao Zhao; Prince Chen Chun; and the Prince of Yue",
+      "reason": "Literal doubles Zhao as both title and name incorrectly fused as \"Prince Zhao Zhao\".",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:008:r0003",
+      "unit": {
+        "id": "s0063",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Yang Yong'an, Man leader of Sha Province and Kai Fu, gathered troops in response to Wang Qian; Grand General Daxi Ru, Duke of Le'ning, was sent to suppress him.",
+      "after": "Yang Yong'an, Di leader of Sha Province and Kai Fu, gathered troops in response to Wang Qian; Grand General Daxi Ru, Duke of Le'ning, was sent to suppress him.",
+      "reason": "Chinese 氐帥 means Di tribal commander, not Man.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:008:r0004",
+      "unit": {
+        "id": "s0066",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "The six provincial inspector-generals of Xiang, Qing, Jing, Jin, Jin, and Liang were abolished.",
+      "after": "The six provincial inspector-generals of Xiang, Qing, Jing, Jin (Jinzhou/金), Jin (Jinzhou/晉), and Liang were abolished.",
+      "reason": "Chinese lists 金 and 晉 as separate provinces; English repeats identical \"Jin\" without distinguishing them.",
+      "confidence": "medium"
+    },
+    {
+      "id": "zhoushu:008:r0005",
+      "unit": {
+        "id": "s0114",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 24
+      },
+      "field": "idiomatic",
+      "before": "On renshen day General Yang Yong, Duke of Changning, was made superior pillar-of-state and grand marshal; Junior Steward of Tombs Yuan Xiaoju, Duke of Shiping West, was made grand minister of justice.",
+      "after": "On renshen day General Yang Yong, Duke of Changning, was made superior pillar-of-state and grand marshal; Junior Steward of Tombs Yuan Xiaoju, Duke of Shiping, was made grand minister of justice.",
+      "reason": "Chinese 始平西元孝矩 is best read as Duke of Shiping, Yuan Xiaoju; \"Shiping West\" invents a geographic qualifier not established as his title.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "zhoushu:008:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0018 names 郜國公賀拔伏恩; 賀拔 is the surname Heba, not Helan (賀蘭), so Heba Fu'en is the accurate English rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0018",
+        "excerpt": "郜國公賀拔伏恩"
+      }
+    },
+    {
+      "repairId": "zhoushu:008:r0002",
+      "decision": "reject",
+      "after": null,
+      "reason": "趙王招 is rendered in the chapter's literal style as Prince Zhao Zhao (title then personal name), matching nearby 滕王逌 as Prince Teng You; the proposed after still keeps Prince Zhao Zhao and only changes punctuation and an article, so it does not correct any semantic error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0012",
+        "excerpt": "趙王招、陳王純、越王"
+      }
+    },
+    {
+      "repairId": "zhoushu:008:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0063 has 沙州氐帥; 氐 is the Di people, not 蠻 Man, so Di leader correctly restores the ethnic designation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0063",
+        "excerpt": "沙州氐帥"
+      }
+    },
+    {
+      "repairId": "zhoushu:008:r0004",
+      "decision": "revise",
+      "after": "The six provincial inspector-generals of Xiang, Qing, Jing, the two Jin prefectures, and Liang were abolished.",
+      "reason": "s0066 lists distinct provinces 金 and 晉, both romanized Jin; referring to them as the two Jin prefectures distinguishes them naturally without inserting Chinese characters into the English text.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0066",
+        "excerpt": "廢相、青、荊、金、晉、梁六州總管"
+      }
+    },
+    {
+      "repairId": "zhoushu:008:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chapter s0114 reads 始平西元孝矩, but Wikisource Zhou Shu juan 8 has 始平公元孝矩; Yuan Xiaoju's title is Duke of Shiping, and Shiping West is unsupported.",
+      "sourceWitness": {
+        "source": "wikisource",
+        "citation": "https://zh.wikisource.org/wiki/%E5%91%A8%E6%9B%B8/%E5%8D%B708",
+        "excerpt": "小冢宰、始平公元孝矩為大司寇"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

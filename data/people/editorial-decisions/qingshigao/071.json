@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "071",
+  "input": {
+    "chapterFingerprint": "sha256:658e678564eb63b525db942c3f830e0714a3e780a2d99bdc609283f41167c45b",
+    "proposalsFingerprint": "sha256:6df6f9085829a53aecbecd230a28ca2bb2f3f3e6c71d53de114c530245123ec1"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-0fe174a1-2f50-4b25-b0ee-bee2c6914065",
+    "runId": "run-56a921b3-eb9e-4d22-b3e7-90c2c7cb7e67",
+    "completedAt": "2026-08-12T23:56:52.305Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:071:r0001",
+      "unit": {
+        "id": "s0010",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "His son Zheng Jing renamed the Eastern Capital Dongning Province and elevated the two counties to prefecture rank.",
+      "after": "His son Zheng Jing renamed the Eastern Capital Dongning Province and elevated the two counties to departments.",
+      "reason": "Chinese 升二縣為州 means elevation to zhou (departments), not prefectures (府).",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:071:r0002",
+      "unit": {
+        "id": "s0028",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 24
+      },
+      "field": "idiomatic",
+      "before": "Between Jiayi to the east and Zhanghua to the south, from the Zhuoshui River to the Gushigui River—a district of roughly four hundred li—we propose a new Yunlin County.",
+      "after": "East of Jiayi and south of Zhanghua, from the Zhuoshui River to the Gushigui River—a district of roughly four hundred li—we propose a new Yunlin County.",
+      "reason": "嘉義之東，彰化之南 means east of Jiayi and south of Zhanghua, not 'between Jiayi to the east and Zhanghua to the south'.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:071:r0003",
+      "unit": {
+        "id": "s0037",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 33
+      },
+      "field": "idiomatic",
+      "before": "We propose Taitung Directly Subordinate Prefecture, bounded by Yilan on the west and Hengchun on the east—over five hundred li long and ten to forty li wide—still under the Taiwan military intendant.",
+      "after": "We propose Taitung Directly Subordinate Prefecture, bounded on the left by Yilan and on the right by Hengchun—over five hundred li long and ten to forty li wide—still under the Taiwan military intendant.",
+      "reason": "左界宜蘭，右界恆春 are left/right bounds (Yilan northward, Hengchun southward), not west and east.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:071:r0004",
+      "unit": {
+        "id": "s0048",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 44
+      },
+      "field": "idiomatic",
+      "before": "It lies seven thousand two hundred fifty li northwest of the capital.",
+      "after": "Northwestward it is seven thousand two hundred fifty li from the capital.",
+      "reason": "西北距京師 states distance northwest to the capital (capital lies NW of Taiwan), not that Taiwan lies northwest of the capital.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:071:r0005",
+      "unit": {
+        "id": "s0104",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "It lay two hundred li northeast of the provincial capital.",
+      "after": "Northeastward it lay two hundred li from the provincial capital.",
+      "reason": "東北距省治 means distance northeast to the provincial seat from Tainan, not that Tainan lay northeast of the capital.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:071:r0006",
+      "unit": {
+        "id": "s0153",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "It lay three hundred fifty li southwest of the provincial capital.",
+      "after": "Southwestward it lay three hundred fifty li from the provincial capital.",
+      "reason": "西南距省治 means distance southwest to the provincial seat from Taipei, not that Taipei lay southwest of the capital.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:071:r0007",
+      "unit": {
+        "id": "s0189",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "It lay five hundred li northwest of the provincial capital.",
+      "after": "Northwestward it lay five hundred li from the provincial capital.",
+      "reason": "西北距省治 means distance northwest to the provincial seat from Taitung, not that Taitung lay northwest of the capital.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:071:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0010 states 升二縣為州: the two counties are raised to 州 (departments), not 府 (prefectures). Adjacent s0009 and s0011 reserve 府 for Chengtian/Taiwan prefectures, so 'prefecture rank' misranks the elevation; 'departments' matches 州.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0010",
+        "excerpt": "升二縣為州"
+      }
+    },
+    {
+      "repairId": "qingshigao:071:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0028 reads 嘉義之東，彰化之南: east of Jiayi and south of Zhanghua. 'Between Jiayi to the east and Zhanghua to the south' garbles the two directional genitives; the proposed wording restores both.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0028",
+        "excerpt": "嘉義之東，彰化之南"
+      }
+    },
+    {
+      "repairId": "qingshigao:071:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0037 has 左界宜蘭，右界恆春: left and right bounds are Yilan and Hengchun. Mapping these to west and east invents cardinal directions the Chinese does not give; preserving left/right is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0037",
+        "excerpt": "左界宜蘭，右界恆春"
+      }
+    },
+    {
+      "repairId": "qingshigao:071:r0004",
+      "decision": "revise",
+      "after": "The capital is seven thousand two hundred fifty li to the northwest.",
+      "reason": "s0048's 西北距京師七千二百五十里 places the capital 7,250 li northwest of the province; this wording preserves that orientation in natural English.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0048",
+        "excerpt": "西北距京師七千二百五十里"
+      }
+    },
+    {
+      "repairId": "qingshigao:071:r0005",
+      "decision": "revise",
+      "after": "The provincial capital lay two hundred li to the northeast.",
+      "reason": "s0104's 東北距省治二百里 places the provincial capital 200 li northeast of Tainan Prefecture; this wording preserves that orientation in natural English.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0104",
+        "excerpt": "東北距省治二百里"
+      }
+    },
+    {
+      "repairId": "qingshigao:071:r0006",
+      "decision": "revise",
+      "after": "The provincial capital lay three hundred fifty li to the southwest.",
+      "reason": "s0153's 西南距省治三百五十里 places the provincial capital 350 li southwest of Taipei Prefecture; this wording preserves that orientation in natural English.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0153",
+        "excerpt": "西南距省治三百五十里"
+      }
+    },
+    {
+      "repairId": "qingshigao:071:r0007",
+      "decision": "revise",
+      "after": "The provincial capital lay five hundred li to the northwest.",
+      "reason": "s0189's 西北距省治五百里 places the provincial capital 500 li northwest of Taitung; this wording preserves that orientation in natural English.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0189",
+        "excerpt": "西北距省治五百里"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

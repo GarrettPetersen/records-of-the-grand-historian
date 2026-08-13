@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "beiqishu",
+  "chapter": "047",
+  "input": {
+    "chapterFingerprint": "sha256:67b5370d99980c130288f493ef33eff3e3012804094228e3bafa9190d0ffa297",
+    "proposalsFingerprint": "sha256:c58cb46eabd1cbadb507f9eafe27197fcaa3a499eaf940520b77d2a31d10e6cf"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-54bff190-fb7e-4222-9362-ec37c66ea9cc",
+    "runId": "run-f8db9a34-0111-420e-ac81-5db6298ed17b",
+    "completedAt": "2026-08-12T23:53:13.612Z"
+  },
+  "proposals": [
+    {
+      "id": "beiqishu:047:r0001",
+      "unit": {
+        "id": "s0021",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "When Emperor Xiaozhuang took the throne, Youdao became Left Central Army Bureau gentleman; censured by Director Yuan Ye of Huaiyang, Youdao held his board and bowed: \"I thank your anger, my lord, not your reasoning.\"",
+      "after": "When Emperor Xiaozhuang took the throne, Youdao became Left Central Army Bureau gentleman; censured by Director Yuan Ye, Prince of Linhuai, Youdao held his board and bowed: \"I thank your anger, my lord, not your reasoning.\"",
+      "reason": "Chinese 臨淮王 is Prince of Linhuai, not Huaiyang.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:047:r0002",
+      "unit": {
+        "id": "s0026",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Director Yuan Ye of Huaiyang is Fu's nephew; within three days his clerk Xie Yuan pressed eight times for approval by precedent.",
+      "after": "Director Yuan Ye, Prince of Linhuai, is Fu's nephew; within three days his clerk Xie Yuan pressed eight times for approval by precedent.",
+      "reason": "臨淮王 mistranslated as Huaiyang.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:047:r0003",
+      "unit": {
+        "id": "s0030",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "Or they summoned me to the Masters of Writing hall: 'You petty gentleman—is your care for the state thicker than mine?'",
+      "after": "Ye then summoned me to the Masters of Writing hall: 'You petty gentleman—is your care for the state thicker than mine?'",
+      "reason": "彧乃召臣 is Yuan Ye, not English 'Or'.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:047:r0004",
+      "unit": {
+        "id": "s0031",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "Ugly abuse overflowed their mouths, heedless of court law; Vice Director Chen Shilong, Bureau gentleman Xue Ju, and more than a hundred others heard and saw.",
+      "after": "Ugly abuse overflowed their mouths, heedless of court law; Right Vice Director Shilong, Bureau gentleman Xue Chu, and more than a hundred others heard and saw.",
+      "reason": "世隆 has no surname Chen in the Chinese; 薛琡 is Xue Chu.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:047:r0005",
+      "unit": {
+        "id": "s0056",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "Entering office, Youdao impeached Grand Tutor Wang Tan of Xianyang, Grand Guardian Sun Teng, Minister of Works Gao Longzhi, Minister Hou Jing, Director Yuan Bi, Director Sima Ziru and others for official loans of gold and silver—though not direct bribery, he did not spare the powerful.",
+      "after": "Entering office, Youdao impeached Grand Tutor Tan, Prince of Xianyang, Grand Guardian Sun Teng, Minister of Education Gao Longzhi, Minister of Works Hou Jing, Director Yuan Bi, Director Sima Ziru and others for official loans of gold and silver—though not direct bribery, he did not spare the powerful.",
+      "reason": "咸陽王坦 is Prince Tan; 司徒/司空 offices are mislabeled.",
+      "confidence": "medium"
+    },
+    {
+      "id": "beiqishu:047:r0006",
+      "unit": {
+        "id": "s0181",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "He was soon released and made left chief clerk of the ministry of works.",
+      "after": "He was soon released and made Left Chief Clerk to the Minister of Education (Situ).",
+      "reason": "司徒左長史 is Situ's aide, not Ministry of Works.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "beiqishu:047:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0021 has 尚書令臨淮王彧; 臨淮王 is Prince of Linhuai, so “of Huaiyang” is a place-name error and “Director Yuan Ye, Prince of Linhuai” restores the title without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0021",
+        "excerpt": "尚書令臨淮王彧"
+      }
+    },
+    {
+      "repairId": "beiqishu:047:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0026 again names 尚書令臨淮王彧; replacing “of Huaiyang” with “Prince of Linhuai” corrects the same mistranslation while leaving the nephew and clerk clauses intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0026",
+        "excerpt": "尚書令臨淮王彧"
+      }
+    },
+    {
+      "repairId": "beiqishu:047:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The chapter unit reads 或乃召臣, but the Siku text on Wikisource has 彧乃召臣; English “Or they” misreads the graph as the conjunction “or.” Context (臨淮王彧 in s0026; later 彧賜怒) shows Yuan Ye summoned Youdao, so “Ye then summoned” is correct.",
+      "sourceWitness": {
+        "source": "wikisource",
+        "citation": "https://zh.wikisource.org/wiki/北齊書_(四庫全書本)/卷47",
+        "excerpt": "彧乃召臣於尚書都堂"
+      }
+    },
+    {
+      "repairId": "beiqishu:047:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0031 has 右僕射臣世隆 with no surname Chen, and 薛琡 is Xue Chu not Xue Ju; “Right Vice Director Shilong” and “Xue Chu” remove the invented Chen and fix the given name while restoring 右.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0031",
+        "excerpt": "右僕射臣世隆、吏部郎中臣薛琡"
+      }
+    },
+    {
+      "repairId": "beiqishu:047:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0056 lists 太師咸陽王坦 (Grand Tutor Tan, Prince of Xianyang—not surname Wang), 司徒高隆之 (Minister of Education), and 司空侯景 (Minister of Works); the proposal corrects the invented Wang, the princely title, and the swapped 司徒/司空 offices.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0056",
+        "excerpt": "太師咸陽王坦、太保孫騰、司徒高隆之、司空侯景"
+      }
+    },
+    {
+      "repairId": "beiqishu:047:r0006",
+      "decision": "revise",
+      "after": "He was soon released and made Left Chief Clerk to the Minister of Education.",
+      "reason": "s0181 司徒左長史 is Left Chief Clerk under the Situ (Minister of Education), not the Ministry of Works; the proposal’s office fix is right, but the parenthetical “(Situ)” is awkward in running English, so the revised line keeps the correction without the gloss.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0181",
+        "excerpt": "司徒左長史"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

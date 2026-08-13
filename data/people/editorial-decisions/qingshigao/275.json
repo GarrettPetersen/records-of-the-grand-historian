@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "275",
+  "input": {
+    "chapterFingerprint": "sha256:dbb935cd0c71d289f454cae2370b9fee89058cb1e49ed58809f1a7c4693b5f47",
+    "proposalsFingerprint": "sha256:e1eb14472fa85a81089e2649e11a37197f8c23b9927c8cb5bd5ceee53e9e13b7"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-7e27e878-e9f2-4878-a93f-dbc02bb1b70a",
+    "runId": "run-74c1749f-0657-4950-9698-65ea59727869",
+    "completedAt": "2026-08-12T23:57:23.529Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:275:r0001",
+      "unit": {
+        "id": "s0059",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Having passed the jinshi examination in Kangxi 3 (1664), he was appointed investigating censor of Pingyuan in Guizhou.",
+      "after": "Having passed the jinshi examination in Kangxi 3 (1664), he was appointed prefectural judge of Pingyuan in Guizhou.",
+      "reason": "推官 is a prefectural judicial post, not an investigating censor.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:275:r0002",
+      "unit": {
+        "id": "s0059",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "A jinshi of the third year of Kangxi, he was appointed investigating censor of Pingyuan in Guizhou.",
+      "after": "A jinshi of the third year of Kangxi, he was appointed prefectural judge of Pingyuan in Guizhou.",
+      "reason": "推官 is a prefectural judicial post, not an investigating censor.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:275:r0003",
+      "unit": {
+        "id": "s0077",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "He repaired the walls and moat, restored schools, lectured at the academy on the classics and the Song Neo-Confucian traditions of Zhou Dunyi, the Cheng brothers, Zhang Zai, and the Fujian school, and scholarly morale revived sharply.",
+      "after": "He repaired the walls and moat, restored schools, lectured at the academy on the classics and histories and the Lian, Luo, Guan, and Min schools, and scholarly morale revived sharply.",
+      "reason": "The Chinese names the four Neo-Confucian school labels 濂、洛、關、閩, not the individual masters inserted by the idiomatic expansion.",
+      "confidence": "medium"
+    },
+    {
+      "id": "qingshigao:275:r0004",
+      "unit": {
+        "id": "s0125",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "After three years in office he died.",
+      "after": "After three years he died.",
+      "reason": "居三年，卒 means three years later he died; the literal invents 'in office'.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:275:r0005",
+      "unit": {
+        "id": "s0143",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "In a separate memorial he said Jiangning's market taxes burdened the people with house tax, gallery fees, and shed rent, and asked that they be remitted.\"",
+      "after": "In a separate memorial he said Jiangning's market taxes burdened the people with house tax, gallery fees, and shed rent, and asked that they be remitted.",
+      "reason": "Stray closing quotation mark at the end of the idiomatic English.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:275:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0059 has 授貴州平遠推官; 推官 is a prefectural judicial post, not an investigating censor (御史). The proposed prefectural judge wording matches the Chinese office.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0059",
+        "excerpt": "授貴州平遠推官"
+      }
+    },
+    {
+      "repairId": "qingshigao:275:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise misrenders 推官 as investigating censor. Prefectural judge of Pingyuan in Guizhou correctly translates 貴州平遠推官.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0059",
+        "excerpt": "授貴州平遠推官"
+      }
+    },
+    {
+      "repairId": "qingshigao:275:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0077 has 講論經史及濂、洛、關、閩之學: classics and histories plus the four school labels. The before text omits 史 and invents Zhou Dunyi, the Cheng brothers, Zhang Zai, and a Fujian-school gloss; the proposed after restores histories and the Lian, Luo, Guan, and Min labels.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0077",
+        "excerpt": "講論經史及濂、洛、關、閩之學"
+      }
+    },
+    {
+      "repairId": "qingshigao:275:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "居三年，卒 states only that three years passed before death; it does not say he held office. Preceding s0124 restores rank after dismissal, so 'in office' is invented; the proposed after matches the Chinese and the idiomatic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0125",
+        "excerpt": "居三年，卒"
+      }
+    },
+    {
+      "repairId": "qingshigao:275:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "The idiomatic paraphrases 別疏言 without opening English quotation marks, so the trailing closing quote is a stray punctuation error; removing it is correct.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0143",
+        "excerpt": "別疏言：「江寧廛稅累民"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

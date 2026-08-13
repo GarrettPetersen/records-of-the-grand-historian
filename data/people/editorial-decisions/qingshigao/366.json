@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "366",
+  "input": {
+    "chapterFingerprint": "sha256:f316f966e4bacbbc0fecd4e880a40e943f0d74de731bf5c8dcceab065e65f8f1",
+    "proposalsFingerprint": "sha256:7ce58d6a42ea7dab86d1c5b1fba973ef1d6d5b806a669c9826a2a922a8671365"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-c22a2465-3e0c-45f9-962b-58d7c4b93a24",
+    "runId": "run-234bf507-e68d-4cba-8e70-a7934fa56a86",
+    "completedAt": "2026-08-12T23:58:20.929Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:366:r0001",
+      "unit": {
+        "id": "s0066",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "His grandson Yuwen, top graduate of the first rank in the twenty-fourth year of Daoguang, rose to provincial judicial commissioner of Zhejiang;",
+      "after": "His grandson Yugui, top graduate of the first rank in the twenty-fourth year of Daoguang, rose to provincial judicial commissioner of Zhejiang;",
+      "reason": "Chinese 毓溎 is Yugui/Yukui, not Yuwen; the next sentence's 毓汶 is the distinct grandson Yuwen.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:366:r0002",
+      "unit": {
+        "id": "s0066",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "His grandson Yuwen, top graduate of the first rank in the twenty-fourth year of Daoguang, rose to provincial judicial commissioner of Zhejiang;",
+      "after": "His grandson Yugui, top graduate of the first rank in the twenty-fourth year of Daoguang, rose to provincial judicial commissioner of Zhejiang;",
+      "reason": "Chinese 毓溎 should be romanized Yugui, distinct from 毓汶 Yuwen in the following unit.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:366:r0003",
+      "unit": {
+        "id": "s0070",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Jiang Youxian, courtesy name Litang, was a bondservant of the Bordered Red Banner.",
+      "after": "Jiang Youxian, courtesy name Litang, was a man of the Hanjun Bordered Red Banner.",
+      "reason": "漢軍鑲紅旗 denotes the Chinese Martial Bordered Red Banner, not a bondservant (包衣) status.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:366:r0004",
+      "unit": {
+        "id": "s0070",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Jiang Youxian, styled Litang, was a bondservant of the Bordered Red Banner.",
+      "after": "Jiang Youxian, styled Litang, was a man of the Hanjun Bordered Red Banner.",
+      "reason": "Literal likewise misrenders 漢軍 as bondservant; it is the Hanjun banner organization.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:366:r0005",
+      "unit": {
+        "id": "s0083",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "In the eighteenth year, responding to an edict, he memorialized in summary: \"Our dynasty's accumulated merit over generations rests with the people, yet disorderly people pityingly do not fear the law and changes arise unexpectedly—all this comes from failure to repair official governance.",
+      "after": "In the eighteenth year, responding to an edict, he memorialized in summary: \"Our dynasty's accumulated merit over generations rests with the people, yet disorderly people recklessly do not fear the law and upheavals arise unexpectedly—all this comes from failure to repair official governance.",
+      "reason": "愍不畏法 means recklessly/without regard for the law; 'pityingly' mistranslates 愍 here.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:366:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0066 names 孫毓溎; 毓溎 is Yugui, while s0067's distinct 毓汶 is Yuwen. The prior idiomatic wrongly collapses both into Yuwen; Yugui restores the Chinese name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0066",
+        "excerpt": "孫毓溎"
+      }
+    },
+    {
+      "repairId": "qingshigao:366:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0066 has 孫毓溎, distinct from s0067 毓汶. Literal Yuwen is a false romanization of 毓溎; Yugui matches the characters and separates the two grandsons.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0066",
+        "excerpt": "孫毓溎"
+      }
+    },
+    {
+      "repairId": "qingshigao:366:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0070 has 漢軍鑲紅旗人: he is a man of the Hanjun Bordered Red Banner. Bondservant (包衣) is not in the Chinese; the proposal correctly restores banner affiliation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0070",
+        "excerpt": "漢軍鑲紅旗人"
+      }
+    },
+    {
+      "repairId": "qingshigao:366:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0070 漢軍鑲紅旗人 identifies Hanjun banner membership, not bondservant status. The literal repair matches the Chinese organization term.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0070",
+        "excerpt": "漢軍鑲紅旗人"
+      }
+    },
+    {
+      "repairId": "qingshigao:366:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0083 亂民愍不畏法 uses 愍 as reckless disregard, not pity; pityingly invents that sense. Recklessly and upheavals for 變出意外 restore the memorial's meaning.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0083",
+        "excerpt": "亂民愍不畏法，變出意外"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "qingshigao:366:r0001",
+      "before": {
+        "id": "qingshigao:366:c0072",
+        "subject": "qingshigao:366:p020",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Yuwen",
+          "zh": "毓溎",
+          "pinyin": "Yùguī"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:366:s0066"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:366:c0072",
+        "subject": "qingshigao:366:p020",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Yugui",
+          "zh": "毓溎",
+          "pinyin": "Yùguī"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:366:s0066"
+        ]
+      },
+      "reason": "Accepted r0001 shows English Yuwen came only from the bad translation of 毓溎; the personal-name claim must read Yugui while keeping zh, pinyin, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0066",
+        "excerpt": "毓溎"
+      }
+    }
+  ]
+}

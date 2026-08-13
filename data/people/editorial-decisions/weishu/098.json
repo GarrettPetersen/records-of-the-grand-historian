@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 3,
+  "book": "weishu",
+  "chapter": "098",
+  "input": {
+    "chapterFingerprint": "sha256:5aa6bee6f4053348ca268aa0ea8c84a3a90b29b252aed585ed9118c390bbaa5a",
+    "proposalsFingerprint": "sha256:b78bbe2b8bb1b273e29728dae5d6ae571aed37781f85e10ab438949163f22fbe"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-c293a112-3c41-4892-a495-9b7a5a4743e0",
+    "runId": "run-9f1a7386-28ec-4031-b214-8463e2e73885",
+    "completedAt": "2026-08-13T00:01:19.807Z"
+  },
+  "proposals": [
+    {
+      "id": "weishu:098:r0001",
+      "unit": {
+        "id": "s0071",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 16
+      },
+      "field": "idiomatic",
+      "before": "Her son Ji was then less than ten days old; she reared him within the inner quarters and never once left the house.",
+      "after": "Her son Ji was then less than one hundred days old; she reared him within the inner quarters and never once left the house.",
+      "reason": "十旬 is ten ten-day periods, so 未十旬 means less than one hundred days old, not less than ten days old.",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:098:r0002",
+      "unit": {
+        "id": "s0071",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 16
+      },
+      "field": "literal",
+      "before": "At that time her son Ji was not yet ten days old; she reared him within the inner chambers and never went out the door.",
+      "after": "At that time her son Ji was not yet one hundred days old; she reared him within the inner chambers and never went out the door.",
+      "reason": "十旬 is ten ten-day periods, so 未十旬 means less than one hundred days old, not less than ten days old.",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:098:r0003",
+      "unit": {
+        "id": "s0213",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "Though Zong was not a legitimate heir, her filial devotion overcame all bounds; though she failed to preserve her life, her resolve was fierce and her righteousness profound. Without special honor, how may we guide those adrift in shallow ways?",
+      "after": "Though Zong was not a direct male heir, her filial devotion could not overcome her grief; though she failed to preserve her life, her resolve was fierce and her righteousness profound. Without special honor, how may we guide those adrift in shallow ways?",
+      "reason": "非嫡子 says she was not a direct male heir, while 孝不勝哀 says her filial devotion could not overcome her grief; the current wording reverses the latter relationship.",
+      "confidence": "medium"
+    },
+    {
+      "id": "weishu:098:r0004",
+      "unit": {
+        "id": "s0225",
+        "kind": "paragraph-sentence",
+        "blockIndex": 19,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Lu then walked on foot with her aged mother-in-law to the Secretariat and reported the truth herself.",
+      "after": "Lu then walked on foot with her aged mother-in-law to the Office of the Minister of Works and reported the truth herself.",
+      "reason": "司徒府 is the Office of the Minister of Works/Masses, not the Secretariat.",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:098:r0005",
+      "unit": {
+        "id": "s0225",
+        "kind": "paragraph-sentence",
+        "blockIndex": 19,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "Lu then walked on foot with her aged mother-in-law to the Secretariat Director's office and reported the circumstances herself.",
+      "after": "Lu then walked on foot with her aged mother-in-law to the Office of the Minister of Works and reported the circumstances herself.",
+      "reason": "司徒府 is the Office of the Minister of Works/Masses, not the Secretariat Director’s office.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "weishu:098:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "旬 is a ten-day period, so 十旬 is one hundred days; 生未十旬 means Ji was not yet one hundred days old, and ‘ten days’ is a real mistranslation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0071",
+        "excerpt": "子緝生未十旬"
+      }
+    },
+    {
+      "repairId": "weishu:098:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 未十旬 requires ‘not yet one hundred days old’ in the literal; ‘ten days’ undercounts by reading 旬 as a single day.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0071",
+        "excerpt": "子緝生未十旬"
+      }
+    },
+    {
+      "repairId": "weishu:098:r0003",
+      "decision": "revise",
+      "after": "Though Zong was not a legitimate male heir, her filial devotion could not overcome her grief; though she departed from due moderation, her resolve was fierce and her righteousness profound. Without special honor, how may we guide those adrift in shallow ways?",
+      "reason": "孝不勝哀 means filial devotion could not overcome grief, so the before reverses that relation and must be fixed; but 乖俯就 is departure from mourning moderation (俯就), not ‘failed to preserve her life’, which the proposal still retains.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0213",
+        "excerpt": "孝不勝哀，雖乖俯就"
+      }
+    },
+    {
+      "repairId": "weishu:098:r0004",
+      "decision": "revise",
+      "after": "Lu then walked on foot with her aged mother-in-law to the Office of the Minister over the Masses and reported the truth herself.",
+      "reason": "司徒府 is the Situ’s office (Minister over the Masses/Education), not the Secretariat; the proposal’s ‘Minister of Works’ is 司空, so the office title still needs correction.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0225",
+        "excerpt": "詣司徒府"
+      }
+    },
+    {
+      "repairId": "weishu:098:r0005",
+      "decision": "revise",
+      "after": "Lu then walked on foot with her aged mother-in-law to the Office of the Minister over the Masses and reported the circumstances herself.",
+      "reason": "Literal likewise misrenders 司徒府 as the Secretariat Director’s office; replacing it with Minister of Works still confuses 司徒 with 司空.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0225",
+        "excerpt": "詣司徒府"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "weishu:098:r0004",
+      "before": {
+        "id": "weishu:098:c0654",
+        "subject": "weishu:098:p028",
+        "predicate": "event-participation",
+        "value": {
+          "kind": "legal",
+          "action": "walked with her aged mother-in-law to report her circumstances to the Office of the Minister of Works",
+          "otherPersonId": "weishu:098:p093"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "weishu:098:s0224",
+          "weishu:098:s0225"
+        ]
+      },
+      "after": {
+        "id": "weishu:098:c0654",
+        "subject": "weishu:098:p028",
+        "predicate": "event-participation",
+        "value": {
+          "kind": "legal",
+          "action": "walked with her aged mother-in-law to report her circumstances to the Office of the Minister over the Masses",
+          "otherPersonId": "weishu:098:p093"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "weishu:098:s0224",
+          "weishu:098:s0225"
+        ]
+      },
+      "reason": "Advancing r0004 restores 司徒府 as the Minister over the Masses; the claim’s ‘Minister of Works’ names 司空 and must be corrected while the reporting event remains valid.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0225",
+        "excerpt": "詣司徒府"
+      }
+    }
+  ]
+}

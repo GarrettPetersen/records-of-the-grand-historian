@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "065",
+  "input": {
+    "chapterFingerprint": "sha256:0251acab029776fabd0bd94f7014f4e289a3d6a5c2cff04b2f331d529c66ba6e",
+    "proposalsFingerprint": "sha256:4429f90c7aec51fff224f1a1b10cff4e55c78af7aebf47be1a13631ed6ef2de2"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-03f9adcc-1b89-4acf-b7ce-f524a8fb2366",
+    "runId": "run-f60816f4-d6cb-49e0-b2f6-6fd5d30561b7",
+    "completedAt": "2026-08-12T23:54:11.817Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:065:r0001",
+      "unit": {
+        "id": "s0001",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Li Jianji was from Xuzhou.",
+      "after": "Li Jianji was from Xu Prefecture.",
+      "reason": "許州 is Xu Prefecture (around modern Xuchang), not Xuzhou (徐州).",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:065:r0002",
+      "unit": {
+        "id": "s0001",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Li Jianji was a native of Xuzhou.",
+      "after": "Li Jianji was a native of Xu Prefecture.",
+      "reason": "許州 should not be rendered as Xuzhou (徐州).",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:065:r0003",
+      "unit": {
+        "id": "s0074",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 18
+      },
+      "field": "idiomatic",
+      "before": "The court posthumously enfeoffed him as Grand Preceptor.",
+      "after": "The court posthumously enfeoffed him as Grand Commandant.",
+      "reason": "太尉 is Grand Commandant/Grand Marshal, not Grand Preceptor (太師).",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:065:r0004",
+      "unit": {
+        "id": "s0074",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 18
+      },
+      "field": "literal",
+      "before": "An edict posthumously enfeoffed him as Grand Preceptor.",
+      "after": "An edict posthumously enfeoffed him as Grand Commandant.",
+      "reason": "太尉 is Grand Commandant, not Grand Preceptor.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:065:r0005",
+      "unit": {
+        "id": "s0083",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "His father Jingrou had been prefect in turn of Ying, Ping, Ru, Tan, and Ying.",
+      "after": "His father Jingrou had been prefect in turn of Ying (瀛), Ping, Ru, Tan, and Ying (營).",
+      "reason": "瀛 and 營 are distinct prefectures both rendered only as Ying, obscuring the fifth posting.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:065:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0001 reads 許州人; 許州 is Xu Prefecture (Xuchang region), not 徐州. Rendering it as Xuzhou invents the wrong place, and Xu Prefecture restores the source.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0001",
+        "excerpt": "許州人"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:065:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise turns 許州 into Xuzhou; Xu Prefecture matches the Chinese place-name and avoids confusion with 徐州.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0001",
+        "excerpt": "許州"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:065:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "詔贈太尉 records a posthumous grant of 太尉 (Grand Commandant), not 太師 (Grand Preceptor); the proposed title is the correct office.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0074",
+        "excerpt": "詔贈太尉"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:065:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal also mistranslates 太尉 as Grand Preceptor; Grand Commandant is the accurate English for that title.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0074",
+        "excerpt": "太尉"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:065:r0005",
+      "decision": "revise",
+      "after": "His father Jingrou had been prefect in turn of Ying, Ping, Ru, Tan, and a second Ying Prefecture.",
+      "reason": "The source lists five prefectures 瀛、平、儒、檀、營; the first and last are distinct places both romanized Ying. Calling the latter a second Ying Prefecture preserves the distinction without inserting Chinese characters into the English text.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0083",
+        "excerpt": "曆瀛、平、儒、檀、營五州刺史"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

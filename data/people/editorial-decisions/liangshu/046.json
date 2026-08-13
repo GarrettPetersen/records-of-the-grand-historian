@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "liangshu",
+  "chapter": "046",
+  "input": {
+    "chapterFingerprint": "sha256:b886a20489c762050a061ee271cc8c1c07d96493c37d94a0619ff01b40847ccc",
+    "proposalsFingerprint": "sha256:6aa72e449db6048279176c5f215befbb7ffb72d5ec71f1bbdfb012ebc9bbec0b"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-33e97567-285a-43ea-a0e9-12f4eca50a29",
+    "runId": "run-c9bd2748-60b1-41dd-9cc3-08e92864cf01",
+    "completedAt": "2026-08-12T23:55:22.110Z"
+  },
+  "proposals": [
+    {
+      "id": "liangshu:046:r0001",
+      "unit": {
+        "id": "s0005",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "In Great Treasure year two Hou Jing raided Jing-Shan and besieged Wang Sengbian at Baling; Shizu freed Sengyou, made him acting staff bearer, General of Martial Ferocity, and Marquis of Xinxian, and sent him to relieve the siege.",
+      "after": "In Great Treasure year two Hou Jing raided Jing-Shan and besieged Wang Sengbian at Baling; Shizu freed Sengyou, made him acting staff bearer, General of Martial Ferocity, and Marquis of Xinshi, and sent him to relieve the siege.",
+      "reason": "Chinese 新市 is Xinshi, not Xinxian.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:046:r0002",
+      "unit": {
+        "id": "s0005",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "In the second year of Great Treasure, when Hou Jing raided Jing and Shan and besieged Wang Sengbian at Baling, Shizu brought Sengyou out of prison, made him acting bearer of the staff, General of Martial Ferocity, and Marquis of Xinxian county, and ordered him to relieve the siege.",
+      "after": "In the second year of Great Treasure, when Hou Jing raided Jing and Shan and besieged Wang Sengbian at Baling, Shizu brought Sengyou out of prison, made him acting bearer of the staff, General of Martial Ferocity, and Marquis of Xinshi county, and ordered him to relieve the siege.",
+      "reason": "Chinese 新市縣侯 is Marquis of Xinshi county.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:046:r0003",
+      "unit": {
+        "id": "s0057",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "Yang Zhao, Di king of Wu Xing in Qin, rebelled; Huaibao defeated him.",
+      "after": "Yang Shao, Di king of Wu Xing in Qin, rebelled; Huaibao defeated him.",
+      "reason": "Chinese 楊紹 is Yang Shao, not Yang Zhao.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:046:r0004",
+      "unit": {
+        "id": "s0057",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "Qin prefecture's dependent Wu Xing had Di king Yang Zhao rebel; Huaibao defeated and broke him.",
+      "after": "Qin prefecture's dependent Wu Xing had Di king Yang Shao rebel; Huaibao defeated and broke him.",
+      "reason": "Chinese 楊紹 is Yang Shao, not Yang Zhao.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:046:r0005",
+      "unit": {
+        "id": "s0123",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "Because Baxian was neither noble by birth nor his troops were crude and mixed, in headquarters days Kan never took Baxian to heart;",
+      "after": "Because Baxian was not of noble birth and his troops were crude and mixed, in headquarters days Kan never took Baxian to heart;",
+      "reason": "The literal mishandles 旣非…兵又… as a broken “neither…nor…” correlative; the Chinese marks birth and troop quality as two parallel defects under causal 以.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:046:r0006",
+      "unit": {
+        "id": "s0151",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Xu Wensheng won merit at first yet could not finish his fame—shame.",
+      "after": "Xu Wensheng won merit at first yet could not finish establishing his name—this was unrighteous.",
+      "reason": "Chinese 爲不義也 means the conduct was unrighteous/unjust, not merely “shame.”",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liangshu:046:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0005 封新市縣侯 enfeoffs Sengyou as Marquis of Xinshi county; 新市 is Xinshi, so “Xinxian” misreads 市 as 縣 and the proposed idiomatic restores the place name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0005",
+        "excerpt": "封新市縣侯"
+      }
+    },
+    {
+      "repairId": "liangshu:046:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0005 新市縣侯 is Marquis of Xinshi county; the literal’s “Xinxian” is wrong and the proposed “Xinshi county” matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0005",
+        "excerpt": "新市縣侯"
+      }
+    },
+    {
+      "repairId": "liangshu:046:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0057 武興氐王楊紹 names the Di king 楊紹 (Yang Shao); “Zhao” is a mistranslation of 紹, and the proposed idiomatic restores the correct name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0057",
+        "excerpt": "楊紹"
+      }
+    },
+    {
+      "repairId": "liangshu:046:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0057 楊紹 is Shao, not Zhao; the proposed literal corrects the personal name to match the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0057",
+        "excerpt": "楊紹"
+      }
+    },
+    {
+      "repairId": "liangshu:046:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0123 旣非貴素，兵又猥雜 states two parallel defects under causal 以—Baxian was not noble-born and his troops were crude and mixed; the broken “neither…nor…” misconstrues the correlative and the proposed literal restores both faults.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0123",
+        "excerpt": "旣非貴素，兵又猥雜"
+      }
+    },
+    {
+      "repairId": "liangshu:046:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0151 爲不義也 judges the conduct unrighteous, not a vague “shame”; with 不能終其成名, the proposed idiomatic restores the moral verdict and the unfinished making of a name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0151",
+        "excerpt": "爲不義也"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

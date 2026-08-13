@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "354",
+  "input": {
+    "chapterFingerprint": "sha256:43784c10e10321785fb96e8c08d32351151168bf25d08bc69f434ead8d0755c7",
+    "proposalsFingerprint": "sha256:4256a9f4b25364d2347c32b2352193c5f5e010dad7b15fe866470945e2c3248b"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-002f46da-0a54-4447-86de-0d583d8c3ca9",
+    "runId": "run-72996c8f-62f2-413f-b0df-4054a1066474",
+    "completedAt": "2026-08-12T23:58:17.013Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:354:r0001",
+      "unit": {
+        "id": "s0043",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "When great floods struck along the river, the education commissioner was stationed at Jiangyin; Xiying witnessed the disaster, wrote to the governor and provincial commander, kept officials who had long won the people's trust to manage relief, borrowed thirty thousand taels from the treasury to buy grain and sell it at fair price, and the people were grateful.",
+      "after": "When great floods struck along the river, the education commissioner was stationed at Jiangyin; Xiying witnessed the disaster, wrote to the governor-general and governor, kept officials who had long won the people's trust to manage relief, borrowed thirty thousand taels from the treasury to buy grain and sell it at fair price, and the people were grateful.",
+      "reason": "督撫 means governor-general and governor, not governor and provincial commander.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:354:r0002",
+      "unit": {
+        "id": "s0018",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "In the fourteenth year, when the emperor celebrated his fiftieth birthday, Chengfeng asked to leave his post and return to the capital to offer congratulations; the throne rebuked him sharply and demoted him to grand secretary of the Grand Secretariat.",
+      "after": "In the fourteenth year, when the emperor celebrated his fiftieth birthday, Chengfeng asked to leave his post and return to the capital to offer congratulations; the throne rebuked him sharply and demoted him to academician of the Grand Secretariat.",
+      "reason": "內閣學士 is an academician of the Grand Secretariat, not a grand secretary (大學士).",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:354:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0043 has 貽書督撫; 督撫 is the standard pair governor-general (總督) and governor (巡撫), not governor and provincial commander (提督). The proposed literal restores that pair and matches the already-correct idiomatic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0043",
+        "excerpt": "貽書督撫"
+      }
+    },
+    {
+      "repairId": "qingshigao:354:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0018 is 左遷內閣學士; 內閣學士 is academician of the Grand Secretariat, not 大學士 (grand secretary). The replacement restores the correct demotion office.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0018",
+        "excerpt": "左遷內閣學士"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "qingshigao:354:r0002",
+      "before": {
+        "id": "qingshigao:354:c0229",
+        "subject": "qingshigao:354:p001",
+        "predicate": "office",
+        "value": {
+          "label": {
+            "en": "grand secretary of the Grand Secretariat",
+            "zh": "內閣學士"
+          },
+          "action": "demoted",
+          "dateContext": {
+            "sourceDate": {
+              "text": "嘉慶十四年",
+              "regnalYear": 14
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 1809,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:354:s0018"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:354:c0229",
+        "subject": "qingshigao:354:p001",
+        "predicate": "office",
+        "value": {
+          "label": {
+            "en": "academician of the Grand Secretariat",
+            "zh": "內閣學士"
+          },
+          "action": "demoted",
+          "dateContext": {
+            "sourceDate": {
+              "text": "嘉慶十四年",
+              "regnalYear": 14
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 1809,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:354:s0018"
+        ]
+      },
+      "reason": "Accepted r0002 shows English grand secretary came only from conflating 內閣學士 with 大學士; the office claim’s English label must read academician of the Grand Secretariat while keeping zh, action, dateContext, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0018",
+        "excerpt": "左遷內閣學士"
+      }
+    }
+  ]
+}

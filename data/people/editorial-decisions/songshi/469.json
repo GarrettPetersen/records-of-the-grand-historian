@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "songshi",
+  "chapter": "469",
+  "input": {
+    "chapterFingerprint": "sha256:1d7fa0f665946fa22282f6ce4a7f250b263d773e1439103d189321d26034468f",
+    "proposalsFingerprint": "sha256:afee26be605cf0495f4052971444292ba5155f4800bdd9cf1863ac5ce1f3efc7"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-7e918990-6dd0-4197-a6b7-42e4c1316248",
+    "runId": "run-7ef05b2a-729b-49aa-a1bd-72abf5023083",
+    "completedAt": "2026-08-13T00:00:34.195Z"
+  },
+  "proposals": [
+    {
+      "id": "songshi:469:r0001",
+      "unit": {
+        "id": "s0109",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "Giving-of-Petition Zhong Wenzhi returned the draft and changed it to an outer stipend.",
+      "after": "Giving-of-Petition Yuwen Jia returned the draft and changed it to an outer stipend.",
+      "reason": "Chinese 宇文價 is the surname-name Yuwen Jia, not Zhong Wenzhi.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:469:r0002",
+      "unit": {
+        "id": "s0109",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "Giving-of-Petition Zhong Wenzhi returned the recorded yellow slip and changed it to an outer temple stipend.",
+      "after": "Giving-of-Petition Yuwen Jia returned the recorded yellow slip and changed it to an outer temple stipend.",
+      "reason": "Chinese 宇文價 is Yuwen Jia; the English personal name is mistranslated.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:469:r0003",
+      "unit": {
+        "id": "s0034",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Wang Yuan met the bandits and did not fight; he handed Kang Lu and obtained Bureau Commissioner.",
+      "after": "Wang Yuan met the bandits and did not fight; through association with Kang Lu he obtained Bureau Commissioner.",
+      "reason": "交康履 means association/connection with Kang Lu, not \"handed Kang Lu\".",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:469:r0004",
+      "unit": {
+        "id": "s0005",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Feng Yi, Zhang Quwei, Chen Yuan, Gan, Wang Deqian, Guan Li, Dong Songchen",
+      "after": "Feng Yi, Zhang Quwei, Chen Yuan, Gan Bian, Wang Deqian, Guan Li, Dong Songchen",
+      "reason": "Title list omits 昪 after 甘 in Chinese, but idiomatic correctly has Gan Bian; literal should match the intended name Gan Bian.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "songshi:469:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "給事中 is the office title; 宇文價 is the compound surname Yuwen plus Jia. “Zhong Wenzhi” invents a different person and must be corrected to Yuwen Jia.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0109",
+        "excerpt": "給事 中宇文價封還錄黃"
+      }
+    },
+    {
+      "repairId": "songshi:469:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same unit names 宇文價; the literal’s “Zhong Wenzhi” is the same personal-name error and Yuwen Jia is the accurate replacement.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0109",
+        "excerpt": "宇文價"
+      }
+    },
+    {
+      "repairId": "songshi:469:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "交康履得樞密 means Wang Yuan gained the Bureau Commissioner post through association with Kang Lu; “handed Kang Lu” misreads 交 as a physical transfer.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0034",
+        "excerpt": "交康履得樞 密"
+      }
+    },
+    {
+      "repairId": "songshi:469:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The unit string drops 昪 after 甘, but Wikisource’s Songshi vol. 469 heading and biography are 甘昪; restoring Gan Bian matches the intended name already used in the idiomatic field.",
+      "sourceWitness": {
+        "source": "wikisource",
+        "citation": "https://zh.wikisource.org/wiki/宋史/卷469",
+        "excerpt": "甘昪"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "beiqishu",
+  "chapter": "033",
+  "input": {
+    "chapterFingerprint": "sha256:32f5510217a3ad5b46480ddf34f8bb4f86adafac26609b102ae3076463ad3f71",
+    "proposalsFingerprint": "sha256:4c952dd67a921d940e623dc7597488289d478b152972a266626101bd27c062fd"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-b2e63c4e-24e6-40a8-b3fe-b77e8573a7f7",
+    "runId": "run-a6a02ece-1bd2-4c84-84f9-1f368e2fcc7b",
+    "completedAt": "2026-08-12T23:52:17.663Z"
+  },
+  "proposals": [
+    {
+      "id": "beiqishu:033:r0001",
+      "unit": {
+        "id": "s0025",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "Ming submitted a memorial sending his second son Zhang Chi to the capital to bow in thanks before the palace.",
+      "after": "Ming submitted a memorial sending his second son Zhang hurrying to the capital to bow in thanks before the palace.",
+      "reason": "Chinese 第二息章馳到京都: 章 is the son's name and 馳到 means \"hurried/galloped to\"; \"Zhang Chi\" wrongly treats 馳 as part of the name.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:033:r0002",
+      "unit": {
+        "id": "s0025",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "Ming submitted a memorial sending his second son Zhang Chi to the capital to bow in thanks before the palace.",
+      "after": "Ming submitted a memorial sending his second son Zhang hurrying to the capital to bow in thanks before the palace.",
+      "reason": "Same misreading of 章馳到 as a personal name Zhang Chi.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:033:r0003",
+      "unit": {
+        "id": "s0087",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "In the time of Emperor Wu of Liang he was enfeoffed Marquis of Chang'an county.",
+      "after": "In the time of Emperor Wu he was enfeoffed Marquis of Chang'an county.",
+      "reason": "After Xu Zhicai's arrival in Luoyang under Northern Wei, 武帝時 refers to the northern Emperor Wu (Xiaowu), not Liang Emperor Wu; the literal English already omits \"of Liang\".",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:033:r0004",
+      "unit": {
+        "id": "s0101",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "Before long he was relieved of attendant-in-ordinary and enfeoffed as marquis of Chiyang county.",
+      "after": "Before long he was appointed palace attendant and enfeoffed as earl of Chiyang county.",
+      "reason": "除侍中 means appointment to 侍中, not relief from office; 伯 is earl/count, not marquis.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:033:r0005",
+      "unit": {
+        "id": "s0101",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "Soon he was removed as Attendant-in-Ordinary and enfeoffed as Marquis of Chiyang county.",
+      "after": "Soon he was appointed Attendant-in-Ordinary and enfeoffed as Earl of Chiyang county.",
+      "reason": "Same errors: 除 is appoint; 伯 is not marquis.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:033:r0006",
+      "unit": {
+        "id": "s0023",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "Palace attendant Pei Yingqi guarded and escorted Ming into Jiankang; he then assumed the imperial title, changed the fourth year of Chengsheng to the first year of Tiancheng, and proclaimed a general amnesty—Yuwen Heitu, the rebel Chao, and the like were not within the amnesty.",
+      "after": "Palace attendant Pei Yingqi guarded and escorted Ming into Jiankang; he then assumed the imperial title, changed the fourth year of Chengsheng to the first year of Tiancheng, and proclaimed a general amnesty—Yuwen Heitu, the rebel Cha, and the like were not within the amnesty.",
+      "reason": "賊詧 is Xiao Cha (詧); \"Chao\" is the wrong reading of the name.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "beiqishu:033:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In s0025, 第二息章馳到京都 names the second son 章 and uses 馳到 as the verb of travel; reading 章馳 as the personal name Zhang Chi invents a two-character name and drops the hurrying sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0025",
+        "excerpt": "第二息章馳到京都"
+      }
+    },
+    {
+      "repairId": "beiqishu:033:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same Chinese parses as son 章 plus 馳到京都; the literal's Zhang Chi wrongly absorbs 馳 into the name, and the proposed Zhang hurrying to restores both name and verb.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0025",
+        "excerpt": "第二息章馳到京都"
+      }
+    },
+    {
+      "repairId": "beiqishu:033:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0087's bare 武帝時 sits after Xu Zhicai's Northern Wei Luoyang career and before Eastern Wei 天平; adding of Liang misidentifies the emperor as Liang Wudi rather than the northern Emperor Wu.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0087",
+        "excerpt": "武帝時，封昌安縣侯"
+      }
+    },
+    {
+      "repairId": "beiqishu:033:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "尋除侍中 is appointment to 侍中, not relief from office, and 池陽縣伯 is an earldom (伯), not a marquisate (侯); the proposed wording corrects both errors.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0101",
+        "excerpt": "尋除侍中，封池陽縣伯"
+      }
+    },
+    {
+      "repairId": "beiqishu:033:r0005",
+      "decision": "revise",
+      "after": "Soon he was appointed Palace Attendant and enfeoffed as Earl of Chiyang county.",
+      "reason": "除侍中 and 池陽縣伯 do require appointment and earl, but Attendant-in-Ordinary is this chapter's rendering of 散騎常侍 (s0089), not 侍中; Palace Attendant matches the Chinese office.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0101",
+        "excerpt": "尋除侍中，封池陽縣伯"
+      }
+    },
+    {
+      "repairId": "beiqishu:033:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "賊詧 is the rebel named 詧 (Xiao Cha); Chao is the wrong reading of 詧, and Cha restores the attested personal name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0023",
+        "excerpt": "賊詧"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

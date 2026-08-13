@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "nanqishu",
+  "chapter": "050",
+  "input": {
+    "chapterFingerprint": "sha256:79756c5693e5ec36f42e6488e97ce48d57cba205c52b1f1c1e90ff0e0d0cf2e4",
+    "proposalsFingerprint": "sha256:b323c0df635608e8b93c33e9dffde4f206435c1ddb46592577abbcdf7ca5c73a"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-233c8980-f301-41bd-a2cf-fdb33e317acd",
+    "runId": "run-e0509599-f527-4af7-88e7-600fab12c2ad",
+    "completedAt": "2026-08-12T23:56:30.275Z"
+  },
+  "proposals": [
+    {
+      "id": "nanqishu:050:r0001",
+      "unit": {
+        "id": "s0031",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Bao Xuan had taken as his consort the daughter of Minister of Works Xu Xiaosi. After Xiaosi was executed they were separated, and the young emperor sent him two junior consorts in her place. Bao Xuan nursed resentment and secretly plotted rebellion.",
+      "after": "Bao Xuan had taken as his consort the daughter of Director of the Imperial Secretariat Xu Xiaosi. After Xiaosi was executed they were separated, and the young emperor sent him two junior consorts in her place. Bao Xuan nursed resentment and secretly plotted rebellion.",
+      "reason": "尚書令 is Director of the Imperial Secretariat (or Minister of the Masters of Writing), not Minister of Works (司空).",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:050:r0002",
+      "unit": {
+        "id": "s0113",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "He returned to the capital with his former title and was appointed General of the Central Army and Superintendent of the Masters of Writing.",
+      "after": "He returned to the capital with his former title and was appointed General of the Central Army and Director of the Palace Library.",
+      "reason": "秘書監 is the Director of the Palace Library/Imperial Archives, not Superintendent of the Masters of Writing (尚書).",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:050:r0003",
+      "unit": {
+        "id": "s0021",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "In the first year of Yongyuan (498), he was granted twenty halberd-bearers as an escort.",
+      "after": "In the first year of Yongyuan (499), he was granted twenty halberd-bearers as an escort.",
+      "reason": "Yongyuan 1 under the Marquis of Donghun corresponds to AD 499, not 498 (498 is Yongtai 1).",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:050:r0004",
+      "unit": {
+        "id": "s0045",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "In the first year of Yongyuan (498) he was promoted to General Who Pacifies the East.",
+      "after": "In the first year of Yongyuan (499) he was promoted to General Who Pacifies the East.",
+      "reason": "Yongyuan 1 corresponds to AD 499, not 498.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "nanqishu:050:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0031 names Xu Xiaosi 尚書令; that office is Director of the Imperial Secretariat, whereas Minister of Works is 司空. The proposed title corrects a real office mistranslation without changing the rest of the accurate wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0031",
+        "excerpt": "尚書令徐孝嗣"
+      }
+    },
+    {
+      "repairId": "nanqishu:050:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0113 appoints him 祕書監 after 中軍將軍; 祕書監 is Director of the Palace Library, not an office of the Masters of Writing (尚書). The replacement restores the correct office title.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0113",
+        "excerpt": "授中軍將軍，祕書監"
+      }
+    },
+    {
+      "repairId": "nanqishu:050:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The unit dates the grant to 永元元年. Under the Marquis of Donghun, Yongyuan 1 is AD 499; AD 498 is Yongtai 1. The parenthetical year correction is factually required.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0021",
+        "excerpt": "永元元年"
+      }
+    },
+    {
+      "repairId": "nanqishu:050:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The promotion is dated 永元元年, which corresponds to AD 499, not 498. Correcting the Western year matches the reign-year and leaves the office wording intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0045",
+        "excerpt": "永元元年"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

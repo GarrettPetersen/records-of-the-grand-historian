@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "108",
+  "input": {
+    "chapterFingerprint": "sha256:1ed0e6997e4d1eb65b05985ec9e3a1e5e44878fcba3e7ad40130824c9c59b543",
+    "proposalsFingerprint": "sha256:14094eb8e9b63ad03ad008256769cff512f6575d952e245f7a95dd1cba7d9e45"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-18a414bd-9945-4e90-806f-d81e4002d63e",
+    "runId": "run-89e5f7c5-0552-45ee-a94b-3a10bf1d807e",
+    "completedAt": "2026-08-13T00:00:25.296Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:108:r0001",
+      "unit": {
+        "id": "s0031",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "Anguo laughed and said, \"He may be drowned now!",
+      "after": "Anguo laughed and said, \"You may urinate on them now!",
+      "reason": "Chinese 溺 echoes Tian Jia's threat to urinate on dead ashes (s0026), not drowning.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:108:r0002",
+      "unit": {
+        "id": "s0031",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "Anguo laughed and said: \"He may be drowned now!",
+      "after": "Anguo laughed and said: \"You may urinate now!",
+      "reason": "Literal 溺 matches the urine joke of s0026, not drowning.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:108:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In s0031 可溺矣, 溺 resumes Tian Jia’s s0026 threat 然即溺之 (“urinate on them”), not drowning; after Jia’s apology Anguo ironically invites him to do so, so “You may urinate on them now!” is accurate and natural.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0031",
+        "excerpt": "可溺矣"
+      }
+    },
+    {
+      "repairId": "shiji:108:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0031 溺 has the same sense as s0026 溺之 (urinate), not “drown”; the original “He may be drowned” is wrong, and “You may urinate now!” correctly renders the ironic invitation without inventing drowning.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0031",
+        "excerpt": "可溺矣"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

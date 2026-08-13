@@ -1,0 +1,388 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "317",
+  "input": {
+    "chapterFingerprint": "sha256:cf157546c18912fce7016528585416753bab958f3eea28078edb4aeaf9d5ce8e",
+    "proposalsFingerprint": "sha256:3c11cd77652067fd3a294000b41a3798d5ee83bc8bbb71e89121adad8aa05d06"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-75203f0e-7dfc-4814-9110-816c60aa5cf6",
+    "runId": "run-b7f9a7b9-92ad-4e54-93bb-6bb1cf10880a",
+    "completedAt": "2026-08-12T23:58:29.203Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:317:r0001",
+      "unit": {
+        "id": "s0024",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "He died and was posthumously titled Zhuangmin.",
+      "after": "He died and was posthumously titled Zhuangque.",
+      "reason": "Posthumous name 壯愨 uses 愨 (que/que), not 愍 (min); Zhuangmin misreads the character.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:317:r0002",
+      "unit": {
+        "id": "s0024",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "He died and was given the posthumous title Zhuangmin.",
+      "after": "He died and was given the posthumous title Zhuangque.",
+      "reason": "Posthumous name 壯愨 should be Zhuangque, not Zhuangmin.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:317:r0003",
+      "unit": {
+        "id": "s0044",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 19
+      },
+      "field": "idiomatic",
+      "before": "In the twenty-seventh year he died at eighty-four; he was posthumously made Senior Guardian of the Heir Apparent and titled Zhuangmin.",
+      "after": "In the twenty-seventh year he died at eighty-four; he was posthumously made Senior Guardian of the Heir Apparent and titled Zhuangque.",
+      "reason": "Posthumous 壯愨 is Zhuangque, not Zhuangmin.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:317:r0004",
+      "unit": {
+        "id": "s0070",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 15
+      },
+      "field": "idiomatic",
+      "before": "In the eighteenth year he died and was posthumously titled Gongmin.",
+      "after": "In the eighteenth year he died and was posthumously titled Gongque.",
+      "reason": "Posthumous 恭愨 is Gongque, not Gongmin.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:317:r0005",
+      "unit": {
+        "id": "s0007",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Frontier Commissioner Zhang Guangsi directed Wudang to assault Taigong, Daitai, and Xiong in separate columns, and all were captured.",
+      "after": "Frontier Commissioner Zhang Guangsi directed Wudang to assault Taigong and Daitaixiong in separate columns, and they were captured.",
+      "reason": "台拱大台雄 is Taigong and the place Daitaixiong (大台雄), not three separate places Daitai and Xiong.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:317:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0024 has 諡壯愨. 愨 is què, so Zhuangque is correct; Zhuangmin would require 愍 and is an unsupported misreading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0024",
+        "excerpt": "諡壯愨"
+      }
+    },
+    {
+      "repairId": "qingshigao:317:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise renders 壯愨 as Zhuangmin; Zhuangque restores the correct reading of 愨 què.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0024",
+        "excerpt": "諡壯愨"
+      }
+    },
+    {
+      "repairId": "qingshigao:317:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0044 ends 諡壯愨. The rest of the sentence (death at eighty-four; 太子太保) is already accurate; only the posthumous-name reading needs Zhuangque, not Zhuangmin.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0044",
+        "excerpt": "諡壯愨"
+      }
+    },
+    {
+      "repairId": "qingshigao:317:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0070 has 諡恭愨. 愨 is què, so Gongque is correct; Gongmin misreads the same graph as 愍.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0070",
+        "excerpt": "諡恭愨"
+      }
+    },
+    {
+      "repairId": "qingshigao:317:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "分攻台拱大台雄 lists two targets: 台拱 (already Taigong in s0005) and 大台雄 as one place-name; splitting 大台雄 into Daitai and Xiong invents a third site. The proposed Taigong and Daitaixiong matches the Chinese without adding content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0007",
+        "excerpt": "分攻台拱大台雄，克之"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "qingshigao:317:r0001",
+      "before": {
+        "id": "qingshigao:317:c0009",
+        "subject": "qingshigao:317:p002",
+        "predicate": "name",
+        "value": {
+          "kind": "posthumous",
+          "en": "Zhuangmin",
+          "zh": "壯愨"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:317:s0024"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:317:c0009",
+        "subject": "qingshigao:317:p002",
+        "predicate": "name",
+        "value": {
+          "kind": "posthumous",
+          "en": "Zhuangque",
+          "zh": "壯愨"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:317:s0024"
+        ]
+      },
+      "reason": "Accepted r0001 shows English Zhuangmin came only from misreading 愨; the posthumous-name claim must read Zhuangque while zh, id, subject, predicate, certainty, and evidence stay the same.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0024",
+        "excerpt": "諡壯愨"
+      }
+    },
+    {
+      "repairId": "qingshigao:317:r0001",
+      "before": {
+        "id": "qingshigao:317:c0261",
+        "subject": "qingshigao:317:p002",
+        "predicate": "honor",
+        "value": {
+          "label": {
+            "en": "posthumous title Zhuangmin",
+            "zh": "諡壯愨"
+          },
+          "action": "bestowed"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:317:s0024"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:317:c0261",
+        "subject": "qingshigao:317:p002",
+        "predicate": "honor",
+        "value": {
+          "label": {
+            "en": "posthumous title Zhuangque",
+            "zh": "諡壯愨"
+          },
+          "action": "bestowed"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:317:s0024"
+        ]
+      },
+      "reason": "The honor label's English name must track the corrected reading Zhuangque of 壯愨; the underlying conferral fact remains valid.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0024",
+        "excerpt": "諡壯愨"
+      }
+    },
+    {
+      "repairId": "qingshigao:317:r0003",
+      "before": {
+        "id": "qingshigao:317:c0034",
+        "subject": "qingshigao:317:p008",
+        "predicate": "name",
+        "value": {
+          "kind": "posthumous",
+          "en": "Zhuangmin",
+          "zh": "壯愨"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:317:s0044"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:317:c0034",
+        "subject": "qingshigao:317:p008",
+        "predicate": "name",
+        "value": {
+          "kind": "posthumous",
+          "en": "Zhuangque",
+          "zh": "壯愨"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:317:s0044"
+        ]
+      },
+      "reason": "Accepted r0003 shows English Zhuangmin came only from misreading 愨; the posthumous-name claim must read Zhuangque while zh, id, subject, predicate, certainty, and evidence stay the same.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0044",
+        "excerpt": "諡壯愨"
+      }
+    },
+    {
+      "repairId": "qingshigao:317:r0003",
+      "before": {
+        "id": "qingshigao:317:c0308",
+        "subject": "qingshigao:317:p008",
+        "predicate": "honor",
+        "value": {
+          "label": {
+            "en": "posthumous title Zhuangmin",
+            "zh": "諡壯愨"
+          },
+          "action": "bestowed"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:317:s0044"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:317:c0308",
+        "subject": "qingshigao:317:p008",
+        "predicate": "honor",
+        "value": {
+          "label": {
+            "en": "posthumous title Zhuangque",
+            "zh": "諡壯愨"
+          },
+          "action": "bestowed"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:317:s0044"
+        ]
+      },
+      "reason": "The honor label's English name must track the corrected reading Zhuangque of 壯愨; the underlying conferral fact remains valid.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0044",
+        "excerpt": "諡壯愨"
+      }
+    },
+    {
+      "repairId": "qingshigao:317:r0004",
+      "before": {
+        "id": "qingshigao:317:c0074",
+        "subject": "qingshigao:317:p018",
+        "predicate": "name",
+        "value": {
+          "kind": "posthumous",
+          "en": "Gongmin",
+          "zh": "恭愨"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:317:s0070"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:317:c0074",
+        "subject": "qingshigao:317:p018",
+        "predicate": "name",
+        "value": {
+          "kind": "posthumous",
+          "en": "Gongque",
+          "zh": "恭愨"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:317:s0070"
+        ]
+      },
+      "reason": "Accepted r0004 shows English Gongmin came only from misreading 愨; the posthumous-name claim must read Gongque while zh, id, subject, predicate, certainty, and evidence stay the same.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0070",
+        "excerpt": "諡恭愨"
+      }
+    },
+    {
+      "repairId": "qingshigao:317:r0004",
+      "before": {
+        "id": "qingshigao:317:c0378",
+        "subject": "qingshigao:317:p018",
+        "predicate": "honor",
+        "value": {
+          "label": {
+            "en": "posthumous title Gongmin",
+            "zh": "諡恭愨"
+          },
+          "action": "bestowed"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:317:s0070"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:317:c0378",
+        "subject": "qingshigao:317:p018",
+        "predicate": "honor",
+        "value": {
+          "label": {
+            "en": "posthumous title Gongque",
+            "zh": "諡恭愨"
+          },
+          "action": "bestowed"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:317:s0070"
+        ]
+      },
+      "reason": "The honor label's English name must track the corrected reading Gongque of 恭愨; the underlying conferral fact remains valid.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0070",
+        "excerpt": "諡恭愨"
+      }
+    }
+  ]
+}

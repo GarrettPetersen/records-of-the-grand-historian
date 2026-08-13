@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "445",
+  "input": {
+    "chapterFingerprint": "sha256:1eb163c17d1ae166cb19ba8f42c32b18d28b830de8863f82da0f6fe23f58c1fe",
+    "proposalsFingerprint": "sha256:1778a8b0e205e7ce66c9852ed621cafc010c19500fcf981d95c8d80cba550dbd"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-584e116a-2143-4cf3-9570-a65c0f081a3a",
+    "runId": "run-a3244064-53c6-4124-8cf4-94f0578c0a5c",
+    "completedAt": "2026-08-12T23:58:57.134Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:445:r0001",
+      "unit": {
+        "id": "s0072",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 15
+      },
+      "field": "literal",
+      "before": "Yet affairs are often neglected in minute matters, and feeling easily drowns in familiar attendants; none who serve and attend are not upright men—one should distinguish early.\"",
+      "after": "Yet affairs are often neglected in minute matters, and feeling easily drowns in familiar attendants; those who serve and attend should all be upright men—one should distinguish early.\"",
+      "reason": "Literal double negative “none … are not upright” reverses 罔非正人 (all should be upright); idiomatic already has the correct sense.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:445:r0002",
+      "unit": {
+        "id": "s0119",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "He cited the Han precedent of removing the Three Excellencies because of heaven's warnings and asked that the grand councilors be dismissed to turn heaven's mind.\"",
+      "after": "He cited the Han precedent of removing the Three Excellencies because of heaven's warnings and asked that the grand councilors be dismissed to turn heaven's mind.",
+      "reason": "Trailing stray quotation mark at end of the literal field with no matching opener.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:445:r0003",
+      "unit": {
+        "id": "s0150",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 21
+      },
+      "field": "literal",
+      "before": "He was ordered stripped of office and sent to the military garrison.\"",
+      "after": "He was ordered stripped of office and sent to the military garrison.",
+      "reason": "Trailing stray quotation mark at end of the literal field; the imperial rescript quotation ended in the prior unit.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:445:r0004",
+      "unit": {
+        "id": "s0167",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Wen Ti, as a remonstrating official acting at others' direction, factionally shielded revenge and confused the censorate, and therefore memorialized: \"Kang Youwei was previously unknown to me when he suddenly came to my door seeking an audience and presented his writings; reading them, I found reform to be his doctrine.",
+      "after": "Wen Ti, taking remonstrating officials to be directed by others in factional shielding and revenge that confused the censorate, therefore memorialized: \"Kang Youwei was previously unknown to me when he suddenly came to my door seeking an audience and presented his writings; reading them, I found reform to be his doctrine.",
+      "reason": "Chinese 以言官為人指使，黨庇報復，紊亂臺諫 states Wen Ti’s grounds for remonstrance (that censors were being used for factional revenge), not that Wen Ti himself was acting at others’ direction.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:445:r0001",
+      "decision": "reject",
+      "after": null,
+      "reason": "s0072’s 罔非正人 is the double-negative stock phrase “none who are not upright,” i.e. all are upright; the prior literal “none who serve and attend are not upright men” preserves that polarity and does not reverse it. Shifting the literal toward the idiomatic “should all be” is interpretive style, not a required correction of a polarity error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0072",
+        "excerpt": "侍御僕從，罔非正人"
+      }
+    },
+    {
+      "repairId": "qingshigao:445:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0119 is narrative 乃援漢代天災策免三公為言，請罷樞臣、回天意 with no quoted speech; the dialogue closed in s0118. The trailing quotation mark in the literal has no opener and must be removed.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0119",
+        "excerpt": "乃援漢代天災策免三公為言，請罷樞臣、回天意。"
+      }
+    },
+    {
+      "repairId": "qingshigao:445:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0150 is the narrative order 命革職發軍台; the imperial rescript quotation ends in s0149. The stray closing quote on the literal is unsupported and should be deleted.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0150",
+        "excerpt": "命革職發軍台。"
+      }
+    },
+    {
+      "repairId": "qingshigao:445:r0004",
+      "decision": "revise",
+      "after": "Wen Ti, holding that remonstrating officials were directed by others, engaged in factional shielding and revenge, and threw the censorate into disorder, therefore memorialized: \"Kang Youwei was previously unknown to me when he suddenly came to my door seeking an audience and presented his writings; reading them, I found reform to be his doctrine.",
+      "reason": "以言官為人指使，黨庇報復，紊亂臺諫 gives Wen Ti’s grounds—that censors were directed by others, practiced factional shielding and revenge, and disordered the censorate—not that Wen Ti himself acted at others’ direction. The proposal’s agent fix is right, but “directed by others in factional shielding and revenge that confused…” collapses the three parallel predicates awkwardly; keep them coordinated.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0167",
+        "excerpt": "文悌以言官為人指使，黨庇報復，紊亂臺諫，遂上疏言"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

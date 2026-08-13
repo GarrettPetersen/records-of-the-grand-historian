@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "435",
+  "input": {
+    "chapterFingerprint": "sha256:88f1d054398168b3bcc2171a93bfbb9cf8328d062770dff3c6886a8353d82a64",
+    "proposalsFingerprint": "sha256:9b467fc4bdb410dfdd1390674ad3a193040a389aa0fb42b43d47adea8eff4de9"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-fea528a5-eaf4-4a52-b8df-3365cc42e79d",
+    "runId": "run-2f6a0f4c-0f2b-4b83-adba-9755ede10acf",
+    "completedAt": "2026-08-12T23:58:42.216Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:435:r0001",
+      "unit": {
+        "id": "s0131",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Hart, courtesy name Lubin, was from Belfast in Ireland.",
+      "after": "Hart, courtesy name Lubin, was from Belfast in Britain.",
+      "reason": "Chinese states 英國倍爾發司; Ireland is not in the source wording.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:435:r0002",
+      "unit": {
+        "id": "s0147",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "In 1889, when Tibetan troops raided Bhutan and British forces intervened, Hart sent his brother Commissioner Hart to Tibet to negotiate the boundary with the resident commissioner.",
+      "after": "In 1889, when Tibetan troops raided Sikkim and British forces intervened, Hart sent his brother Commissioner Hart to Tibet to negotiate the boundary with the resident commissioner.",
+      "reason": "哲孟雄 is Sikkim, not Bhutan.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:435:r0003",
+      "unit": {
+        "id": "s0147",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "In the fifteenth year Tibetan troops raided Bhutan; British troops took advantage to intrude; Hart sent his younger brother, Customs Commissioner Hart junior, posthaste to confer with the resident commissioner in Tibet on boundary matters.",
+      "after": "In the fifteenth year Tibetan troops raided Sikkim; British troops took advantage to intrude; Hart sent his younger brother, Customs Commissioner Hart junior, posthaste to confer with the resident commissioner in Tibet on boundary matters.",
+      "reason": "哲孟雄 is Sikkim, not Bhutan.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:435:r0004",
+      "unit": {
+        "id": "s0159",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "After the 1911 revolution he died in office and received generous posthumous honors.",
+      "after": "After the 1911 revolution he died of illness and received generous posthumous honors.",
+      "reason": "Chinese is 病卒; he had already resigned earlier, so “in office” invents a false circumstance.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:435:r0005",
+      "unit": {
+        "id": "s0174",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "field": "idiomatic",
+      "before": "He concluded joint postal regulations with France, Germany, and British India.",
+      "after": "He concluded joint postal regulations with France, Germany, and British Natal.",
+      "reason": "英屬那達 refers to Natal, not British India; the literal already preserves Nada/Natal.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:435:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0131 reads 英國倍爾發司人; the source places Belfast in Britain (英國) and never names Ireland. Replacing Ireland with Britain restores the Chinese polity label without other change.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0131",
+        "excerpt": "英國倍爾發司人"
+      }
+    },
+    {
+      "repairId": "qingshigao:435:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0147 has 藏兵寇哲孟雄; 哲孟雄 is Sikkim, not Bhutan (不丹). The proposed idiomatic corrects that place-name error and otherwise preserves the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0147",
+        "excerpt": "藏兵寇哲孟雄"
+      }
+    },
+    {
+      "repairId": "qingshigao:435:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 哲孟雄 in s0147 must be Sikkim in the literal; Bhutan invents the wrong polity. The proposed replacement fixes only that toponym.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0147",
+        "excerpt": "哲孟雄"
+      }
+    },
+    {
+      "repairId": "qingshigao:435:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0159 is 辛亥後，病卒，賜優恤; 病卒 means he died of illness. “Died in office” invents a circumstance absent from the Chinese; the proposed wording restores 病卒 accurately.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0159",
+        "excerpt": "辛亥後，病卒"
+      }
+    },
+    {
+      "repairId": "qingshigao:435:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0174 names 英屬那達, distinct from 英屬印度 in s0172; 那達 is Natal. British India misreads that toponym, and British Natal matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0174",
+        "excerpt": "英屬那達"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}
