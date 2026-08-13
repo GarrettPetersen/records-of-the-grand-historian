@@ -1034,7 +1034,10 @@ function selfTest() {
   const titleMention = semanticResult.extraction.mentions.find((mention) =>
     mention.spans.en.some((span) => span.exact === 'Imperial Younger Brother Chongyuan')
   );
-  if (titleMention?.person !== 'fixture:003:p004') {
+  const chongyuan = semanticResult.extraction.people.find((person) =>
+    person.preferredNameSuggestion.en === 'Yelü Chongyuan'
+  );
+  if (titleMention?.person !== chongyuan?.localId) {
     throw new Error('A combined title-and-name span was not assigned to the named title holder');
   }
   console.log('apply-people-translation-repairs self-test: ok');

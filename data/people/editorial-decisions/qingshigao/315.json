@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "315",
+  "input": {
+    "chapterFingerprint": "sha256:82f1f94049cb3ab2ea8537a418cc3c64d689cf2b48657efde7d1006415e689ee",
+    "proposalsFingerprint": "sha256:a19f4d7a879e9b9c892da5decbcb833a32f8bc8a6759ec1d11d39d2bad145fe8"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-4a3a9153-bd8d-4843-83bf-a04c8a11ac91",
+    "runId": "run-321a8ae9-4719-4973-a71f-a015d833f348",
+    "completedAt": "2026-08-13T10:36:27.967Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:315:r0001",
+      "unit": {
+        "id": "s0075",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "He was soon reappointed vice director and ordered to escort the Jebtsundamba Khutuktu from Baringol to Ili and to oversee the pastures of Pacification Deputy General-in-Chief Sarlar.",
+      "after": "He was soon reappointed vice director and ordered to escort the Jilong Khutuktu from Baringol to Ili and to oversee the pastures of Pacification Deputy General-in-Chief Sarlar.",
+      "reason": "濟隆呼圖克圖 is the Jilong Khutuktu, not the Jebtsundamba (哲布尊丹巴) Khutuktu.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:315:r0002",
+      "unit": {
+        "id": "s0075",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "Shortly afterward he was again appointed vice director and ordered to escort the Jebtsundamba Khutuktu from Baringol to Ili and to supervise the pastures of Pacification Deputy General-in-Chief Sarlar.",
+      "after": "Shortly afterward he was again appointed vice director and ordered to escort the Jilong Khutuktu from Baringol to Ili and to supervise the pastures of Pacification Deputy General-in-Chief Sarlar.",
+      "reason": "Literal English repeats the same misidentification of 濟隆呼圖克圖 as Jebtsundamba.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:315:r0003",
+      "unit": {
+        "id": "s0175",
+        "kind": "paragraph-sentence",
+        "blockIndex": 19,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "His grandson Sun {Shu} inherited the hereditary rank and rose to commander of the Dengzhou garrison in Shandong.",
+      "after": "His grandson Shu inherited the hereditary rank and rose to commander of the Dengzhou garrison in Shandong.",
+      "reason": "孫 means 'grandson', not the surname Sun; the corrupted glyph is the given name 澍 (Shu).",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:315:r0004",
+      "unit": {
+        "id": "s0175",
+        "kind": "paragraph-sentence",
+        "blockIndex": 19,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "His grandson Sun {Shu} inherited the hereditary office and rose to be commander of the Dengzhou garrison in Shandong.",
+      "after": "His grandson Shu inherited the hereditary office and rose to be commander of the Dengzhou garrison in Shandong.",
+      "reason": "Same error as the idiomatic line: 孫 is kinship 'grandson', and the personal name is 澍.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:315:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0075 has 濟隆呼圖克圖, the Jilong Khutuktu; Jebtsundamba would require 哲布尊丹巴 and is a different lineage. The rest of the sentence (reappointment, Baringol to Ili, Sarlar’s pastures) is already accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "濟隆呼圖克圖"
+      }
+    },
+    {
+      "repairId": "qingshigao:315:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field likewise misidentifies 濟隆呼圖克圖 as Jebtsundamba; Jilong Khutuktu restores the correct reading without altering the surrounding accurate phrasing.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "濟隆呼圖克圖"
+      }
+    },
+    {
+      "repairId": "qingshigao:315:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0175 opens 孫{澍}: 孫 is the kinship term ‘grandson’, not the surname Sun, and the personal name is 澍 (Shu). Removing the invented surname leaves an accurate inheritance and Dengzhou appointment.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0175",
+        "excerpt": "孫{澍}"
+      }
+    },
+    {
+      "repairId": "qingshigao:315:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal repeats the same error: 孫 is ‘grandson’ and the given name is 澍; ‘His grandson Shu’ matches the Chinese without inventing a surname Sun.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0175",
+        "excerpt": "孫{澍}"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "qingshigao:315:r0001",
+      "before": {
+        "id": "qingshigao:315:c0130",
+        "subject": "qingshigao:315:p045",
+        "predicate": "name",
+        "value": {
+          "kind": "religious",
+          "en": "Jebtsundamba Khutuktu",
+          "zh": "濟隆呼圖克圖"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:315:s0075"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:315:c0130",
+        "subject": "qingshigao:315:p045",
+        "predicate": "name",
+        "value": {
+          "kind": "religious",
+          "en": "Jilong Khutuktu",
+          "zh": "濟隆呼圖克圖"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:315:s0075"
+        ]
+      },
+      "reason": "Accepted r0001 shows English Jebtsundamba Khutuktu came only from mistranslating 濟隆呼圖克圖; the religious-name claim must read Jilong Khutuktu while keeping zh, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "濟隆呼圖克圖"
+      }
+    }
+  ]
+}

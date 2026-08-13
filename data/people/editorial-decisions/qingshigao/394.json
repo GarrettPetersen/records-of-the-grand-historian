@@ -1,0 +1,197 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "394",
+  "input": {
+    "chapterFingerprint": "sha256:d05098be5a812d47cd22dd5b06dfa18366c05516659fe9cb35a5805e181ff99d",
+    "proposalsFingerprint": "sha256:36c7c88a4b20bb8690a7a65f409a35d2fa29cc1a585d35c27a43206a7125e7fd"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-26290e90-690c-48a8-ba99-8b079399fd74",
+    "runId": "run-6fd967c2-7edf-4b4c-bd63-465f808efb85",
+    "completedAt": "2026-08-13T10:41:33.890Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:394:r0001",
+      "unit": {
+        "id": "s0012",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Governor-General Qishan had already negotiated with the British to postpone entry for two years; he was soon recalled to the capital, and Guangjin took his place.",
+      "after": "Governor-General Qiying had already negotiated with the British to postpone entry for two years; he was soon recalled to the capital, and Guangjin took his place.",
+      "reason": "Chinese 耆英 is Qiying/Keying, not Qishan (琦善); the translation misidentifies the person.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:394:r0002",
+      "unit": {
+        "id": "s0012",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Governor-General Qishan had already agreed with the English to defer the matter for two years; soon he was recalled to the capital, and Guangjin succeeded him.",
+      "after": "Governor-General Qiying had already agreed with the English to defer the matter for two years; soon he was recalled to the capital, and Guangjin succeeded him.",
+      "reason": "Chinese 耆英 is Qiying/Keying, not Qishan; literal English repeats the same misidentification.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:394:r0003",
+      "unit": {
+        "id": "s0016",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "In the twenty-ninth year (1849) Bonham argued that the two-year deferral had expired and demanded that the agreement be honored; Guangjin cited the terms Qishan had granted.",
+      "after": "In the twenty-ninth year (1849) Bonham argued that the two-year deferral had expired and demanded that the agreement be honored; Guangjin cited the terms Qiying had granted.",
+      "reason": "耆英 is Qiying, not Qishan.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:394:r0004",
+      "unit": {
+        "id": "s0044",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 25
+      },
+      "field": "idiomatic",
+      "before": "In the thirtieth year (1850) Bonham again wrote to Grand Secretaries Mujangga and Qishan and sent couriers to deliver the letters at Shanghai and Tianjin.",
+      "after": "In the thirtieth year (1850) Bonham again wrote to Grand Secretaries Mujangga and Qiying and sent couriers to deliver the letters at Shanghai and Tianjin.",
+      "reason": "耆英 is Qiying, not Qishan.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:394:r0005",
+      "unit": {
+        "id": "s0159",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Militia sprang up everywhere; recalling how Xu Guangjin had blocked British entry with gentry and commoners behind him, the Xianfeng Emperor wanted to revive that strategy and ordered retired officials Luo Dunyi, Long Yuanxi, and Su Tingkui to organize the militia.",
+      "after": "Militia sprang up everywhere; recalling how Xu Guangjin had blocked British entry with gentry and commoners behind him, the Xianfeng Emperor wanted to revive that strategy and ordered retired Vice Minister Luo Dunyi, capital official Long Yuanxi, and Supervising Secretary Su Tingkui to organize the militia.",
+      "reason": "侍郎 means vice minister / board vice president, not Grand Secretary; 在籍侍郎 should not be translated as retired Grand Secretary.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:394:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0012 names 總督耆英; 耆英 is Qiying (Keying), not Qishan (琦善). The prior idiomatic misidentifies the governor-general; the proposed Qiying replacement is accurate and otherwise preserves the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0012",
+        "excerpt": "總督耆英既與英人議緩俟二年之後"
+      }
+    },
+    {
+      "repairId": "qingshigao:394:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same s0012 Chinese 耆英 is misrendered as Qishan in the literal field; replacing with Qiying corrects the person while leaving the rest of the literal wording intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0012",
+        "excerpt": "總督耆英既與英人議緩俟二年之後，尋內召，廣縉繼任"
+      }
+    },
+    {
+      "repairId": "qingshigao:394:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0016 reads 廣縉諭以耆英所許; the grantor is again 耆英 (Qiying), not Qishan. The proposed idiomatic fix is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0016",
+        "excerpt": "廣縉諭以耆英所許"
+      }
+    },
+    {
+      "repairId": "qingshigao:394:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0044 has 大學士穆彰阿、耆英; the second addressee is 耆英 (Qiying), not Qishan. Correcting the name while keeping Grand Secretaries for both is faithful to the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0044",
+        "excerpt": "文翰又遺書大學士穆彰阿、耆英"
+      }
+    },
+    {
+      "repairId": "qingshigao:394:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0159 orders 在籍侍郎羅惇衍、京卿龍元僖、給事中蘇廷魁: only Luo is 在籍侍郎 (retired vice minister), Long is 京卿, and Su is 給事中. The prior idiomatic 'retired officials' wrongly extends retirement to all three and drops the ranks; the proposed titles restore the Chinese distinctions.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0159",
+        "excerpt": "命在籍侍郎羅惇衍、京卿龍元僖、給事中蘇廷魁治團練"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "qingshigao:394:r0001",
+      "before": {
+        "id": "qingshigao:394:c0027",
+        "subject": "qingshigao:394:p005",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Qishan",
+          "zh": "耆英",
+          "pinyin": "Qiying"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:394:s0012",
+          "qingshigao:394:s0016",
+          "qingshigao:394:s0044"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:394:c0027",
+        "subject": "qingshigao:394:p005",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Qiying",
+          "zh": "耆英",
+          "pinyin": "Qiying"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:394:s0012",
+          "qingshigao:394:s0016",
+          "qingshigao:394:s0044"
+        ]
+      },
+      "reason": "Accepted r0001 shows English Qishan came only from mistranslating 耆英; the personal-name claim must read Qiying while zh, pinyin, id, subject, predicate, certainty, and evidence stay the same.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0012",
+        "excerpt": "耆英"
+      }
+    }
+  ]
+}

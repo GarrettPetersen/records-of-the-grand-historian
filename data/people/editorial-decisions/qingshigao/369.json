@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "369",
+  "input": {
+    "chapterFingerprint": "sha256:c009a630c0ba5600bae5ee598c326d2b6b8cb8b6d5ba230371574564d2bffafa",
+    "proposalsFingerprint": "sha256:a4df3317f68573be863aaa2dfc68e392c48e1e88f638901f585594899cc2cffb"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-1574884c-57a7-445e-bd31-23bcb5d79077",
+    "runId": "run-341b1341-05db-4d82-8c18-1574b60a5aaf",
+    "completedAt": "2026-08-13T10:39:25.619Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:369:r0001",
+      "unit": {
+        "id": "s0044",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 43
+      },
+      "field": "idiomatic",
+      "before": "Governor-General Deng Tingzhen had already tightened enforcement of the ban and arrested opium offenders; the merchant Dent had already fled home.",
+      "after": "Governor-General Deng Tingzhen had already tightened enforcement of the ban and arrested opium offenders; the merchant Jardine had already fled home.",
+      "reason": "Chinese 查頓 is Jardine (William Jardine), not Dent (顛地); the idiomatic English misidentifies the merchant.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:369:r0002",
+      "unit": {
+        "id": "s0206",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 205
+      },
+      "field": "idiomatic",
+      "before": "Serving under Imperial Commissioner Senggelinqin, he fought rebels at Jinghai, won four successive engagements, and pursued them to Xiaxihe. Vice Commander-in-Chief Tong Jian and Tianjin Magistrate Xie Zicheng were killed in action.",
+      "after": "Serving under Imperial Commissioner Shengbao, he fought rebels at Jinghai, won four successive engagements, and pursued them to Xiaxihe. Vice Commander-in-Chief Tong Jian and Tianjin Magistrate Xie Zicheng were killed in action.",
+      "reason": "Chinese 勝保 is Shengbao, not Senggelinqin (僧格林沁); the idiomatic English misidentifies the commissioner.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:369:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0044 has 洋商查頓; 查頓 is Jardine, while Dent is 顛地. The proposed idiomatic corrects only that misidentification.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0044",
+        "excerpt": "洋商查頓先避回國"
+      }
+    },
+    {
+      "repairId": "qingshigao:369:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0206 has 欽差大臣勝保; 勝保 is Shengbao. Senggelinqin is 僧格林沁, a different person, so the proposed replacement is required.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0206",
+        "excerpt": "欽差大臣勝保"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "qingshigao:369:r0001",
+      "claim": {
+        "id": "qingshigao:369:c0048",
+        "subject": "qingshigao:369:p011",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate-name",
+          "en": "Jardine",
+          "zh": "查頓"
+        },
+        "certainty": "strongly-inferred",
+        "evidence": [
+          "qingshigao:369:s0044"
+        ]
+      },
+      "reason": "Accepted r0001 restores Jardine as the personal name for 查頓; the alternate-name Jardine claim existed only to compensate for the bad Dent personal-name and is no longer a distinct source-supported alias.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0044",
+        "excerpt": "洋商查頓"
+      }
+    },
+    {
+      "repairId": "qingshigao:369:r0002",
+      "claim": {
+        "id": "qingshigao:369:c0155",
+        "subject": "qingshigao:369:p039",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate-name",
+          "en": "Senggelinqin",
+          "zh": "勝保"
+        },
+        "certainty": "uncertain",
+        "evidence": [
+          "qingshigao:369:s0206"
+        ]
+      },
+      "reason": "Accepted r0002 shows Senggelinqin was invented by the bad idiomatic of 勝保; Senggelinqin is 僧格林沁, not an alias of Shengbao, so this alternate-name claim has no source support.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0206",
+        "excerpt": "勝保"
+      }
+    }
+  ],
+  "claimRevisions": [
+    {
+      "repairId": "qingshigao:369:r0001",
+      "before": {
+        "id": "qingshigao:369:c0047",
+        "subject": "qingshigao:369:p011",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Dent",
+          "zh": "查頓"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:369:s0044"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:369:c0047",
+        "subject": "qingshigao:369:p011",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Jardine",
+          "zh": "查頓"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:369:s0044"
+        ]
+      },
+      "reason": "Accepted r0001 restores Jardine for 查頓; the English personal-name Dent came only from the bad idiomatic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0044",
+        "excerpt": "洋商查頓"
+      }
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "286",
+  "input": {
+    "chapterFingerprint": "sha256:d4e37d8cf7d386d525c175b90884bffae0a9e8d69af65407481ea69793c59dda",
+    "proposalsFingerprint": "sha256:50b012a1d5ec6333033c910c970b642e145cf4e7119dddd9ff4ed5247ad9bd92"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-e04da873-97d9-4d8e-91b5-85ae92f53f7b",
+    "runId": "run-01a94ab6-db68-442c-98d7-e39275a6c70e",
+    "completedAt": "2026-08-13T10:35:28.214Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:286:r0001",
+      "unit": {
+        "id": "s0004",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Wang Shan, whose style was Zaosru, came from Taicang in Jiangnan. He was the grandson of the Ming Grand Secretary Xijue.",
+      "after": "Wang Shan, whose style was Zaoru, came from Taicang in Jiangnan. He was the grandson of the Ming Grand Secretary Xijue.",
+      "reason": "Chinese 藻儒 is Zaoru; idiomatic Zaosru is a clear misspelling.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:286:r0002",
+      "unit": {
+        "id": "s0004",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Wang Shan, style Zaosru, was a native of Taicang in Jiangnan; he was the grandson of Xijue, Grand Secretary of the Ming.",
+      "after": "Wang Shan, style Zaoru, was a native of Taicang in Jiangnan; he was the grandson of Xijue, Grand Secretary of the Ming.",
+      "reason": "Chinese 藻儒 is Zaoru; literal Zaosru is a clear misspelling.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:286:r0003",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "In 1691 he was specially promoted to Grand Secretary of the Grand Secretariat.",
+      "after": "In 1691 he was specially promoted to Academician of the Grand Secretariat.",
+      "reason": "內閣學士 is Academician of the Grand Secretariat, not Grand Secretary (大學士).",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:286:r0004",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "In the thirtieth year he was promoted by special selection to Grand Secretary of the Grand Secretariat.",
+      "after": "In the thirtieth year he was promoted by special selection to Academician of the Grand Secretariat.",
+      "reason": "內閣學士 is Academician of the Grand Secretariat, not Grand Secretary (大學士).",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:286:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0004 gives 字藻儒; 藻儒 is Zaoru, so idiomatic Zaosru is a misspelling. The proposed Zaoru restores the correct courtesy name without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0004",
+        "excerpt": "字藻儒"
+      }
+    },
+    {
+      "repairId": "qingshigao:286:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 藻儒 requires Zaoru in the literal field; Zaosru is a misspelling, and the proposed replacement is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0004",
+        "excerpt": "字藻儒"
+      }
+    },
+    {
+      "repairId": "qingshigao:286:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0011 has 超擢內閣學士; 內閣學士 is Academician of the Grand Secretariat, distinct from 大學士 Grand Secretary. The prior idiomatic conflates the ranks; the proposed title is correct.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "超擢內閣學士"
+      }
+    },
+    {
+      "repairId": "qingshigao:286:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal likewise renders 內閣學士 as Grand Secretary; Academician of the Grand Secretariat matches the Chinese office and leaves the rest of the sentence intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "內閣學士"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

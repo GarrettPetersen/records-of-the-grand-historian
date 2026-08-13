@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "chenshu",
+  "chapter": "029",
+  "input": {
+    "chapterFingerprint": "sha256:f64c74cf5dfb37e80fa8f1f6da1761fc2218cc7fd760bb9d7a812de4832bfd20",
+    "proposalsFingerprint": "sha256:71478cd8189b47091aa1a304ccf94f066af090fa14d6d85dee322e91261dc540"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-b4838ee5-e93e-4df9-b516-bac736693a86",
+    "runId": "run-7ca37317-4daf-4cc3-84cd-d304b1eaef68",
+    "completedAt": "2026-08-13T10:17:44.612Z"
+  },
+  "proposals": [
+    {
+      "id": "chenshu:029:r0001",
+      "unit": {
+        "id": "s0051",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "In the third year of Tiancheng (562), he was promoted to advising officer of the northern expedition and concurrently supervisor of the court of ceremonial rites.",
+      "after": "In the third year of Tianjia (562), he was promoted to advising officer of the northern expedition and concurrently supervisor of the Court of Judicial Review.",
+      "reason": "Chinese 天嘉 is Tianjia, not Tiancheng; 廷尉監 is a Judicial Review post, not ceremonial rites.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:029:r0002",
+      "unit": {
+        "id": "s0051",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "In the third year of Tiancheng, he was promoted to advising officer of the Northern Expedition and concurrently supervisor of the Court of Ceremonial Rites.",
+      "after": "In the third year of Tianjia, he was promoted to advising officer of the Northern Expedition and concurrently supervisor of the Court of Judicial Review.",
+      "reason": "Same errors as idiomatic: era name and office mistranslated.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:029:r0003",
+      "unit": {
+        "id": "s0066",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In the fourth year of Zhide (586) he died; Houzhu mourned him long and issued an edict: \"Care in the end and remembrance of the distant, reverence for old norms, closing the coffin and fixing the posthumous title—these suppress former canons.",
+      "after": "In the fourth year of Zhide (586) he died; Houzhu mourned him long and issued an edict: \"Care in the end and remembrance of the distant, reverence for old norms, closing the coffin and fixing the posthumous title—these are indeed the former canons.",
+      "reason": "抑乃前典 means 'these are indeed former canons,' not 'suppress.'",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "chenshu:029:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0051 has 天嘉三年 and 廷尉監; Tiancheng and ceremonial rites misread the Chen era name and the judicial office, and the proposed idiomatic replacement is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0051",
+        "excerpt": "天嘉三年，遷征北諮議參軍，兼廷尉監。"
+      }
+    },
+    {
+      "repairId": "chenshu:029:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same unit: 天嘉 is Tianjia and 廷尉監 is the Court of Judicial Review supervisorship, not ceremonial rites; the proposed literal replacement matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0051",
+        "excerpt": "天嘉三年……兼廷尉監"
+      }
+    },
+    {
+      "repairId": "chenshu:029:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "In the edict clause 抑乃前典, 抑乃 affirms that coffin-closing and posthumous titles are indeed the former canons; reading 抑 as 'suppress' reverses the sense, and the proposed wording restores it.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0066",
+        "excerpt": "闔棺定諡，抑乃前典。"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

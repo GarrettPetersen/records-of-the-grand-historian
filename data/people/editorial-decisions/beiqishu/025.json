@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 3,
+  "book": "beiqishu",
+  "chapter": "025",
+  "input": {
+    "chapterFingerprint": "sha256:2d338431a426daab671c09aedc4924b1c83fc6c00846a8744902ac35c2c30c84",
+    "proposalsFingerprint": "sha256:8f217208a7ddc8450de54eb87ed785204c74f3db31fb1bf73b39e82bcf725d0e"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-27dce288-6a82-46d1-afd1-b0c9392dcfc3",
+    "runId": "run-316b32bd-326b-4961-acb2-5373049d456e",
+    "completedAt": "2026-08-13T10:18:42.132Z"
+  },
+  "proposals": [
+    {
+      "id": "beiqishu:025:r0001",
+      "unit": {
+        "id": "s0009",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Gao Huan memorialized to trim state enfeoffments and reward civil and military officials; Zuan received the usual grant and was enfeoffed marquis of Shouzhang.",
+      "after": "Gao Huan memorialized to trim state enfeoffments and reward civil and military officials; Zuan received the usual grant and was enfeoffed baron of Shouzhang.",
+      "reason": "Chinese 壽張伯 is baron/earl (伯), not marquis (侯).",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:025:r0002",
+      "unit": {
+        "id": "s0100",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "He was sent out as inspector of West Yan Province, where he investigated and enforced prohibitions. After more than a year he was dismissed when the charges could not be proved.",
+      "after": "He was sent out as inspector of West Yan Province, where he investigated and enforced prohibitions. After more than a year he was cleared when the charges could not be proved.",
+      "reason": "獲免 means he obtained exoneration/release, not dismissal from office.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:025:r0003",
+      "unit": {
+        "id": "s0144",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "In the first year of Heqing he was summoned and appointed minister of the imperial clan.",
+      "after": "In the first year of Heqing he was summoned and appointed minister of sacrificial worships.",
+      "reason": "祠部尚書 is the board of sacrifices/rites, not the imperial clan office (宗正).",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:025:r0004",
+      "unit": {
+        "id": "s0185",
+        "kind": "paragraph-sentence",
+        "blockIndex": 20,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In Xinghe Zhong, Gao Cheng summoned him as vault attendant and made him court gentleman attendant.",
+      "after": "During Xinghe, Gao Cheng summoned him as vault attendant and made him court gentleman attendant.",
+      "reason": "興和中 means during the Xinghe era, not a place or name 'Xinghe Zhong'.",
+      "confidence": "high"
+    },
+    {
+      "id": "beiqishu:025:r0005",
+      "unit": {
+        "id": "s0218",
+        "kind": "paragraph-sentence",
+        "blockIndex": 26,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "When Shizong died, he barred the gate — to the end, bright in faith and obedience.",
+      "after": "By the tree-death and the barred gate — to the end, bright in faith and obedience.",
+      "reason": "樹死拒關 pairs Erzhu Zhao's hanging from a tree with Zhang Yao's refusing the gate; it does not mention Shizong.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "beiqishu:025:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0009 has 封壽張伯; 伯 is the baron/earl rank, not marquis (侯), so “baron of Shouzhang” correctly matches the Chinese title.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0009",
+        "excerpt": "封壽張伯"
+      }
+    },
+    {
+      "repairId": "beiqishu:025:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0100’s 以無驗獲免 means he obtained clearance when nothing was proven; “dismissed” wrongly suggests removal from office, while “cleared” matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0100",
+        "excerpt": "以無驗獲免"
+      }
+    },
+    {
+      "repairId": "beiqishu:025:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0144 has 祠部尚書, the board of sacrificial worships/rites, not the imperial-clan office (宗正); “minister of sacrificial worships” restores the correct office.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0144",
+        "excerpt": "徵拜祠部尚書"
+      }
+    },
+    {
+      "repairId": "beiqishu:025:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0185’s 興和中 is the conventional “during Xinghe”; treating 中 as part of a name “Xinghe Zhong” invents a place/person the Chinese does not support.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0185",
+        "excerpt": "興和中"
+      }
+    },
+    {
+      "repairId": "beiqishu:025:r0005",
+      "decision": "revise",
+      "after": "Tree-death and barred gate — to the end, bright in faith and obedience.",
+      "reason": "s0218 is only 樹死拒關，終明信順 and never names Shizong; the proposal rightly removes that invention, but “By the tree-death” is awkward, so the revision keeps the terse allusive pair.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0218",
+        "excerpt": "樹死拒關，終明信順"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "beiqishu:025:r0001",
+      "before": {
+        "id": "beiqishu:025:c0005",
+        "subject": "beiqishu:025:p001",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Marquis of Shouzhang",
+          "zh": "壽張伯"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "beiqishu:025:s0009"
+        ]
+      },
+      "after": {
+        "id": "beiqishu:025:c0005",
+        "subject": "beiqishu:025:p001",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Baron of Shouzhang",
+          "zh": "壽張伯"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "beiqishu:025:s0009"
+        ]
+      },
+      "reason": "Accepted r0001 restores baron for 伯; the English title claim’s “Marquis” came only from the bad idiomatic and must change while keeping id, subject, predicate, zh, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0009",
+        "excerpt": "壽張伯"
+      }
+    }
+  ]
+}

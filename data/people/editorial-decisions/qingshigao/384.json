@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "384",
+  "input": {
+    "chapterFingerprint": "sha256:34949f5cf699cc582d29b8caf8481cdc15a8f5233f2680130de8bc083bf82206",
+    "proposalsFingerprint": "sha256:2b13555c5ddeffc36e96adb7526a60323c490125aae44b9afe8f57d1573fa8a0"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-19f8e41d-55f7-4088-90a2-57fda1c185fd",
+    "runId": "run-9a9076c3-3e35-4f33-88d7-d1aa906545d3",
+    "completedAt": "2026-08-13T10:41:05.171Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:384:r0001",
+      "unit": {
+        "id": "s0092",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "When war broke out on the coast, he accompanied Governor Yuxie to Zhejiang.",
+      "after": "When war broke out on the coast, he accompanied Governor Yuqian to Zhejiang.",
+      "reason": "裕謙 is standardly romanized Yuqian, not Yuxie; 謙 is qian.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:384:r0002",
+      "unit": {
+        "id": "s0092",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "When coastal military affairs arose, he followed Governor Yuxie to Zhejiang.",
+      "after": "When coastal military affairs arose, he followed Governor Yuqian to Zhejiang.",
+      "reason": "Same romanization error for 裕謙 in the literal field.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:384:r0003",
+      "unit": {
+        "id": "s0093",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "After Yuxie died in battle, Huang was implicated and exiled to Yili; when Lin Zexu was sent to the same frontier and colonization was proposed, Huang helped manage the irrigation works with distinction and was eventually pardoned and allowed to return.",
+      "after": "After Yuqian died in battle, Huang was implicated and exiled to Yili; when Lin Zexu was sent to the same frontier and colonization was proposed, Huang helped manage the irrigation works with distinction and was eventually pardoned and allowed to return.",
+      "reason": "Consistent romanization of 裕謙 as Yuqian.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:384:r0004",
+      "unit": {
+        "id": "s0093",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "Yuxie died in the line of duty; Mian was implicated and sent in exile to Yili; soon Lin Zexu also arrived in exile; when colonization farming was proposed, Mian assisted in managing waterworks with merit and was pardoned and returned.",
+      "after": "Yuqian died in the line of duty; Mian was implicated and sent in exile to Yili; soon Lin Zexu also arrived in exile; when colonization farming was proposed, Mian assisted in managing waterworks with merit and was pardoned and returned.",
+      "reason": "Consistent romanization of 裕謙 as Yuqian in the literal field.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:384:r0005",
+      "unit": {
+        "id": "s0183",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Yao studied under his kinsman Yao Nai, cared little for pedantic textual scholarship, sought the larger meaning, and put it into practice.",
+      "after": "Yao studied under his collateral ancestor Yao Nai, cared little for pedantic textual scholarship, sought the larger meaning, and put it into practice.",
+      "reason": "從祖 denotes a collateral paternal ancestor (great-uncle generation), not a generic kinsman.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:384:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0092 names 總督裕謙; 謙 is qian, so Yuxie misromanizes the personal name, and Yuqian restores the standard reading without changing the rest of the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0092",
+        "excerpt": "從總督裕謙赴浙江"
+      }
+    },
+    {
+      "repairId": "qingshigao:384:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 裕謙 appears in the literal English as Yuxie; correcting to Yuqian matches the Chinese name while leaving the surrounding calque intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0092",
+        "excerpt": "裕謙"
+      }
+    },
+    {
+      "repairId": "qingshigao:384:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0093 opens with 裕謙死難; replacing the repeated Yuxie with Yuqian corrects the same misreading of 謙 without altering the rest of the idiomatic sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0093",
+        "excerpt": "裕謙死難"
+      }
+    },
+    {
+      "repairId": "qingshigao:384:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise begins from 裕謙; Yuqian is the accurate romanization, and the remainder already tracks 死難…遣戍伊犁…林則徐…屯田…水利…赦還.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0093",
+        "excerpt": "裕謙"
+      }
+    },
+    {
+      "repairId": "qingshigao:384:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "瑩師事從祖鼐 uses 從祖, a specific collateral paternal-ancestor kinship term, not a vague kinsman; collateral ancestor Yao Nai restores that sense and matches the unit’s literal.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0183",
+        "excerpt": "瑩師事從祖鼐"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "qingshigao:384:r0001",
+      "claim": {
+        "id": "qingshigao:384:c0104",
+        "subject": "qingshigao:384:p023",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Yuxie",
+          "zh": "裕謙"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:384:s0092"
+        ]
+      },
+      "reason": "Accepted r0001 shows Yuxie was invented by the bad romanization of 裕謙; s0092 supports only Yuqian, already claimed in c0103.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0092",
+        "excerpt": "裕謙"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "songshu",
+  "chapter": "071",
+  "input": {
+    "chapterFingerprint": "sha256:83cb0f8e687785c0d7606af2bb2f6d1ba0d26d4c83224613cbec453af189ee5c",
+    "proposalsFingerprint": "sha256:00ee4305908895ee39d7f7afc077195c9e2521fdebedf2405a1356dbb55c3749"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-3ee365f7-80b9-4419-b889-e6637c43fc50",
+    "runId": "run-c473508d-e492-454f-b286-8e93aeabc398",
+    "completedAt": "2026-08-13T10:47:33.918Z"
+  },
+  "proposals": [
+    {
+      "id": "songshu:071:r0001",
+      "unit": {
+        "id": "s0009",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "He was posthumously enfeoffed as Vice Director of the Central Secretariat.",
+      "after": "He was posthumously granted the title of Vice Director of the Central Secretariat.",
+      "reason": "追贈 is a posthumous office grant, not an enfeoffment.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:071:r0002",
+      "unit": {
+        "id": "s0044",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "Duke Xu of Ancheng, son of Wuji, and Duke Lingxiu of Linru, son of Chang, were equally lavish; with Zhanzhi they competed in cuisine, furnishings, dress, and equipage.",
+      "after": "He Xu, Duke of Ancheng, son of Wuji, and Meng Lingxiu, Duke of Linru, son of Chang, were equally lavish; with Zhanzhi they competed in cuisine, furnishings, dress, and equipage.",
+      "reason": "Chinese 安成公何勖 is He Xu; English wrongly turns the surname into 'Duke Xu'.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:071:r0003",
+      "unit": {
+        "id": "s0047",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "literal",
+      "before": "Xu rose to Palace Attendant and was posthumously given the temple name Duke of Dissipation.",
+      "after": "Xu rose to Palace Attendant and was posthumously given the posthumous name Duke of Dissipation.",
+      "reason": "諡 is a posthumous name, not a temple name.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:071:r0004",
+      "unit": {
+        "id": "s0048",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "idiomatic",
+      "before": "Lingxiu was a master of pitch-pot and rose to Director of the Secretariat.",
+      "after": "Lingxiu was a master of the board game tanqi and rose to Director of the Secretariat.",
+      "reason": "彈棋 is the board game tanqi, not pitch-pot.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:071:r0005",
+      "unit": {
+        "id": "s0131",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "He had three sons: Yuzhi and Qianzhi were killed by Liu Shao.",
+      "after": "Of his three sons, Yuzhi and Qianzhi were killed by Liu Shao.",
+      "reason": "The colon listing reads as if only two sons exist; Hengzhi is the third, named next.",
+      "confidence": "medium"
+    },
+    {
+      "id": "songshu:071:r0006",
+      "unit": {
+        "id": "s0195",
+        "kind": "paragraph-sentence",
+        "blockIndex": 21,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "Dan's consort was Xu Zhanzhi's daughter; Shuo's consort was his sister.",
+      "after": "Dan's consort was Xu Zhanzhi's daughter; Shuo's consort was Xu Zhanzhi's sister.",
+      "reason": "'his sister' is ambiguous; Chinese 湛妹 refers to Zhanzhi's sister.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "songshu:071:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "追贈中書侍郎 is a posthumous grant of office; enfeoffment (封) is not in the Chinese, and the proposed wording matches the sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0009",
+        "excerpt": "追贈中書侍郎"
+      }
+    },
+    {
+      "repairId": "songshu:071:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "安成公何勖 and 臨汝公孟靈休 name He Xu and Meng Lingxiu; ‘Duke Xu’ and ‘Duke Lingxiu’ wrongly treat personal names as surnames/titles.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0044",
+        "excerpt": "安成公何勖……臨汝公孟靈休"
+      }
+    },
+    {
+      "repairId": "songshu:071:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "追諡荒公 awards a posthumous name (諡); temple name (廟號) is a different category and is not present here.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0047",
+        "excerpt": "追諡荒公"
+      }
+    },
+    {
+      "repairId": "songshu:071:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "彈棋 is the board game tanqi; pitch-pot is 投壺 and is not the game named here.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0048",
+        "excerpt": "靈休善彈棋"
+      }
+    },
+    {
+      "repairId": "songshu:071:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "三子：聿之、謙之，為元凶所殺 names only two of the three sons as killed; the colon-list English wrongly implies the roster is complete in this sentence, while 恆之 follows in s0132.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0131",
+        "excerpt": "三子：聿之、謙之，為元凶所殺"
+      }
+    },
+    {
+      "repairId": "songshu:071:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "鑠妃即湛妹 makes Shuo’s consort Zhanzhi’s sister; ‘his sister’ could be read as Dan’s or Shuo’s sister, so naming Xu Zhanzhi removes the ambiguity.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0195",
+        "excerpt": "鑠妃即湛妹"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

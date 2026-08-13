@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "xintangshu",
+  "chapter": "121",
+  "input": {
+    "chapterFingerprint": "sha256:c30271bf337e4b7b7587dd4d898c48ff10ff0d082a59eae476637228cf992d51",
+    "proposalsFingerprint": "sha256:c5d0bc1b4fa6318a71c76c45ff13b1396289ce0298ff383ce22ff2aa280261ec"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-de18ce0b-9517-4ce2-9ffc-056bdf20c381",
+    "runId": "run-44b062f5-8fb3-40f5-a4be-b718afc144ac",
+    "completedAt": "2026-08-13T10:47:13.095Z"
+  },
+  "proposals": [
+    {
+      "id": "xintangshu:121:r0001",
+      "unit": {
+        "id": "s0031",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "The Emperor secretly pleaded on their behalf, and they were banished—Youqiu to Fengzhou, Wei to Fengzhou, and Guangbin to Xiuzhou.",
+      "after": "The Emperor secretly pleaded on their behalf, and they were banished—Youqiu to Fengzhou, Wei to Peak Prefecture (Fengzhou), and Guangbin to Xiuzhou.",
+      "reason": "Chinese 暐於峰州 is Peak Prefecture, not the same Fengzhou (封州) as Youqiu's exile; the literal conflates both as Fengzhou.",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:121:r0002",
+      "unit": {
+        "id": "s0198",
+        "kind": "paragraph-sentence",
+        "blockIndex": 28,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "He married into Ge Fushun's family; Shoude, Tang Diwen, son of Left Gate Guardian General Lu Longzi, the Left and Right Martial Guard generals Wang Jingyao and Gao Guangji, and dozens more relied on Maozhong in wrongdoing.",
+      "after": "He married into Ge Fushun's family; Shoude, Left Gate Guardian General Lu Longzi Tang Diwen, the Left and Right Martial Guard generals Wang Jingyao and Gao Guangji, and dozens more relied on Maozhong in wrongdoing.",
+      "reason": "Chinese 左監門將軍盧龍子唐地文 names one officer (appellation 盧龍子 + name 唐地文); the idiomatic English wrongly splits Lu Longzi as Tang Diwen's father.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xintangshu:121:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 流幽求於封州、暐於峰州 distinguishes Youqiu's 封州 from Wei's 峰州; the original literal wrongly renders both as Fengzhou, and Peak Prefecture (Fengzhou) correctly marks 峰州.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0031",
+        "excerpt": "流幽求於封州、暐於峰州、光賓於繡州"
+      }
+    },
+    {
+      "repairId": "xintangshu:121:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 左監門將軍盧龍子唐地文 is one officer (title + appellation 盧龍子 + name 唐地文); the idiomatic wrongly invents a father–son split, and the proposed wording restores a single person.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0198",
+        "excerpt": "左監門將軍盧龍子唐地文"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "143",
+  "input": {
+    "chapterFingerprint": "sha256:49bc483885bc228cdd45fedbf643cfcda6667678314c9f579cc2093fcd33e345",
+    "proposalsFingerprint": "sha256:cc7f3c91863f5b9f504a7dd6d09479578d94f5b960f6a3190961c613c9b025f1"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-d1682bcc-d1e4-4819-ad27-4931e660ad23",
+    "runId": "run-910812a9-ad77-4659-a0d3-fef884a86a96",
+    "completedAt": "2026-08-13T10:29:50.600Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:143:r0001",
+      "unit": {
+        "id": "s0049",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "literal",
+      "before": "Chongyi also cited the Winter Office, Jade Workers: \"The perforation of the bi is three cun,\" and the Erya: \"When the rim is twice the perforation it is called a bi\"; the rim on each side is three cun, and the perforation altogether nine cun—thus the nine-cun bi is clear.",
+      "after": "Chongyi also cited the Winter Office, Jade Workers: \"The perforation of the bi is three cun,\" and the Erya: \"When the rim is twice the perforation it is called a bi\"; the rim on each side is three cun, which together with the perforation makes nine cun in all—thus the nine-cun bi is clear.",
+      "reason": "Literal English wrongly collapses rim-plus-hole into “the perforation altogether nine cun,” contradicting the Chinese arithmetic (兩邊肉各三寸，通好共九寸).",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:143:r0002",
+      "unit": {
+        "id": "s0146",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Your subjects observe that Jingzong in life was once emperor; offerings continue the ancestral line—having been called Jingzong, he should enter the ancestral temple; if he does not enter the ancestral temple, it is difficult to speak of 'zong.",
+      "after": "Your subjects observe that Jingzong in life was once emperor; offerings continue the ancestral line—having been called Jingzong, he should enter the ancestral temple; if he does not enter the ancestral temple, it is difficult to speak of 'zong.'",
+      "reason": "Literal English drops the closing quotation mark after zong and truncates the sentence punctuation present in the Chinese sense.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:143:r0003",
+      "unit": {
+        "id": "s0153",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "The Rites say: \"After the end of wailing, the steward takes a wooden clapper and announces through the palace, saying 'Abandon the old taboo and observe the new.'",
+      "after": "The Rites say: \"After the end of wailing, the steward takes a wooden clapper and announces through the palace, saying 'Abandon the old taboo and observe the new.'\"",
+      "reason": "Literal English omits the closing quotation marks that close the embedded and outer quotations.",
+      "confidence": "medium"
+    },
+    {
+      "id": "jiuwudaishi:143:r0004",
+      "unit": {
+        "id": "s0154",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "Old' means the lord of a destroyed temple; when favor is distant and kinship severed, the name need not be tabooed.",
+      "after": "'Old' means the lord of a destroyed temple; when favor is distant and kinship severed, the name need not be tabooed.",
+      "reason": "Idiomatic English begins with Old' without an opening quotation mark, though it glosses the quoted 故.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:143:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "兩邊肉各三寸，通好共九寸 means each rim is three cun and, together with the perforation (好), totals nine cun. The before wrongly makes the perforation alone nine cun; the after restores the rim-plus-hole arithmetic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0049",
+        "excerpt": "兩邊肉各三寸，通好共九寸"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:143:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The focus unit ends 難以言宗。; the literal opens a quote on 'zong but never closes it. Adding the closing mark after zong fixes a real punctuation defect without changing sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0146",
+        "excerpt": "難以言宗"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:143:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese closes the Rites citation with 」 after 舍故而諱新; the literal opens a double quote for that citation and never closes it. The after supplies the missing outer closing quote.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0153",
+        "excerpt": "《禮》云：「卒哭之後，宰執木鐸徇於宮，曰舍故而諱新。」"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:143:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "故 is glossed as the quoted Old from the prior Rites line; idiomatic begins Old' with only a closing mark. Restoring the opening quote matches the Chinese lemma and the already-correct literal.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0154",
+        "excerpt": "故，謂毀廟之主也"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

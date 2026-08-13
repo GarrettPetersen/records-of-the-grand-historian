@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "278",
+  "input": {
+    "chapterFingerprint": "sha256:bce141e341980b0db27d1c0369a40222010df94fb007c5fd139acaa9790e3fd2",
+    "proposalsFingerprint": "sha256:1d878231a4daf8ee8817b72d366b87a908e5da0ce64e877d4746aa910c5d5350"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-2684a2fc-97a7-4fa0-aae4-d49eb7983139",
+    "runId": "run-fa6097c9-1f4a-4670-b0db-8c5745d26141",
+    "completedAt": "2026-08-13T10:35:28.566Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:278:r0001",
+      "unit": {
+        "id": "s0010",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "Governor Malaqi and Governor-General Ma Hu wrote: \"Tianyan is honest, capable, and energetic. He is clearing long-standing tax arrears and untangling misallocated payments, but the task is unfinished. We ask that he be permitted to observe mourning without leaving his post.\"",
+      "after": "Governor-General Malaqi and Governor Ma Hu wrote: \"Tianyan is honest, capable, and energetic. He is clearing long-standing tax arrears and untangling misallocated payments, but the task is unfinished. We ask that he be permitted to observe mourning without leaving his post.\"",
+      "reason": "Chinese 總督麻勒吉、巡撫瑪祜 assigns governor-general to Malaqi and provincial governor to Ma Hu; the idiomatic English reverses these offices.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:278:r0002",
+      "unit": {
+        "id": "s0027",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Jiangnan's waterways form a dense network. As provincial treasurer, Tianyan asked Governor-General Ma Hu to dredge the silted Wusong and Liu rivers.",
+      "after": "Jiangnan's waterways form a dense network. As provincial treasurer, Tianyan asked Governor Ma Hu to dredge the silted Wusong and Liu rivers.",
+      "reason": "Chinese 巡撫瑪祜 is provincial governor, not governor-general; same office error as in s0010.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:278:r0003",
+      "unit": {
+        "id": "s0027",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Jiangnan's waterways crisscross one another. While Tianyan was provincial treasurer, he asked Governor-General Ma Hu to dredge the silted channels of the Wusong River and the Liu River.",
+      "after": "Jiangnan's waterways crisscross one another. While Tianyan was provincial treasurer, he asked Governor Ma Hu to dredge the silted channels of the Wusong River and the Liu River.",
+      "reason": "Literal English also mistranslates 巡撫 as Governor-General.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:278:r0004",
+      "unit": {
+        "id": "s0194",
+        "kind": "paragraph-sentence",
+        "blockIndex": 20,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "Ga Li is not fit to speak of this; Tianyan and A Shan cannot be compared either.",
+      "after": "Ga Li is not fit to speak of this; indeed Tianyan and A Shan also could not understand it.",
+      "reason": "Chinese 弗能喻 means could not understand/grasp this point, not 'cannot be compared'.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:278:r0005",
+      "unit": {
+        "id": "s0194",
+        "kind": "paragraph-sentence",
+        "blockIndex": 20,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "Ga Li is not fit to speak of this; indeed Tianyan and A Shan also cannot be compared.",
+      "after": "Ga Li is not fit to speak of this; indeed Tianyan and A Shan also could not understand it.",
+      "reason": "Literal likewise mistranslates 喻 as 'compared' rather than 'understand'.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:278:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0010 has 總督麻勒吉、巡撫瑪祜: 總督 belongs to Malaqi and 巡撫 to Ma Hu. The original English reverses the offices; the proposed Governor-General / Governor pairing matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0010",
+        "excerpt": "總督麻勒吉、巡撫瑪祜"
+      }
+    },
+    {
+      "repairId": "qingshigao:278:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0027 has 請於巡撫瑪祜; 巡撫 is provincial governor, not governor-general. Changing Governor-General Ma Hu to Governor Ma Hu corrects the office title.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0027",
+        "excerpt": "請於巡撫瑪祜"
+      }
+    },
+    {
+      "repairId": "qingshigao:278:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise renders 巡撫瑪祜 as Governor-General; Governor Ma Hu is the accurate title for 巡撫.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0027",
+        "excerpt": "巡撫瑪祜"
+      }
+    },
+    {
+      "repairId": "qingshigao:278:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0194 ends 蓋天顏、阿山亦弗能喻也; 喻 means understand/grasp, not compare. The proposed 'could not understand it' restores the sense of 弗能喻.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0194",
+        "excerpt": "蓋天顏、阿山亦弗能喻也"
+      }
+    },
+    {
+      "repairId": "qingshigao:278:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal repeats the same misreading of 喻 as 'compared'; 'could not understand it' correctly translates 弗能喻.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0194",
+        "excerpt": "亦弗能喻也"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

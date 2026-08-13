@@ -1,0 +1,269 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "068",
+  "input": {
+    "chapterFingerprint": "sha256:28857eed8f87cba62619a70c2f4f2521c253267fb786ffd7244eef64b7074725",
+    "proposalsFingerprint": "sha256:f9d02736a5aff99bbb4f5be9cffa9e27db6b53ea5268c8140ceb4cbc715849b3"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-47c15dac-4a54-4f8b-b75e-703c107261d3",
+    "runId": "run-b62d41a8-5473-406f-b26b-a2d374b6b88b",
+    "completedAt": "2026-08-13T10:53:49.984Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:068:r0001",
+      "unit": {
+        "id": "s0023",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "He was the youngest son of Wei Gongxuan, Duke of Wei, who had served as chief councilor under Emperor Xuanzong.",
+      "after": "He was the youngest son of Cui Xuan, Duke of Wei, who had served as chief councilor in the Dazhong era.",
+      "reason": "Chinese 魏公鉉 is Duke of Wei, Xuan (Cui Xuan), not a fused personal name Wei Gongxuan.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:068:r0002",
+      "unit": {
+        "id": "s0029",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "The minister concurred and moved him to the post of grand censor.",
+      "after": "The minister concurred and moved him to the post of Grand Master of Remonstrance.",
+      "reason": "諫議大夫 is a remonstrance office, not 'grand censor' (御史).",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:068:r0003",
+      "unit": {
+        "id": "s0079",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "According to the New Book of Tang's tables of chief ministers, the Feng clan had long resided in Raoyang County in Bohai.",
+      "after": "According to the New Book of Tang's tables of chief ministers, the Feng clan had long resided in Tiao County in Bohai.",
+      "reason": "蓚縣 is Tiao County, not Raoyang (饒陽).",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:068:r0004",
+      "unit": {
+        "id": "s0120",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "and discussed penal law with Vice Minister of War Xi Yinxiang.",
+      "after": "and discussed penal law with Xi Yinxiang, Vice Minister of War.",
+      "reason": "Candidate/parsing 'War Xi Yinxiang' shows the office and name were fused awkwardly; keep name intact.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:068:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit 大中時宰相魏公鉉之幼子也 titles the father as 魏公 plus given name 鉉, not a fused Wei Gongxuan; surrounding 崔沂 supplies the surname Cui. Timing is the era name 大中時, not an invented Emperor Xuanzong. The proposed wording matches that parsing.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0023",
+        "excerpt": "大中時宰相魏公鉉之幼子也"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:068:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit moves him 移為諫議大夫; that office is Grand Master of Remonstrance, not a censorate post (御史). The later 御史司憲 posting in s0030 confirms the distinction. The proposed title corrects the mistranslation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0029",
+        "excerpt": "移為諫議大夫"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:068:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit places the Feng clan in 渤海蓚縣; 蓚縣 is Tiao County, not Raoyang (饒陽). The proposed place name restores the Chinese toponym.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0079",
+        "excerpt": "封氏世居渤海蓚縣"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:068:r0004",
+      "decision": "reject",
+      "after": null,
+      "reason": "Focus unit 與兵部侍郎郗殷象論刑法事 is already clear in the before text as Vice Minister of War Xi Yinxiang; reordering the title and name is stylistic only and does not fix a semantic error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0120",
+        "excerpt": "與兵部侍郎郗殷象論刑法事"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "jiuwudaishi:068:r0001",
+      "claim": {
+        "id": "jiuwudaishi:068:c0040",
+        "subject": "jiuwudaishi:068:p012",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Emperor Xuanzong"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiuwudaishi:068:s0023"
+        ]
+      },
+      "reason": "Accepted r0001 shows Emperor Xuanzong was invented only to gloss 大中時; s0023 names the Dazhong era, not that emperor title.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0023",
+        "excerpt": "大中時"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:068:r0001",
+      "claim": {
+        "id": "jiuwudaishi:068:c0041",
+        "subject": "jiuwudaishi:068:p012",
+        "predicate": "role",
+        "value": {
+          "roleId": "ruler"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiuwudaishi:068:s0023"
+        ]
+      },
+      "reason": "Accepted r0001 removes the invented Emperor Xuanzong; no ruler is named in s0023, so this ruler role has no source support.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0023",
+        "excerpt": "大中時宰相魏公鉉之幼子也"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:068:r0001",
+      "claim": {
+        "id": "jiuwudaishi:068:c0310",
+        "subject": "jiuwudaishi:068:p012",
+        "predicate": "sex",
+        "value": {
+          "sex": "male"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiuwudaishi:068:s0023"
+        ]
+      },
+      "reason": "Accepted r0001 shows the Emperor Xuanzong person existed only in the bad idiomatic; s0023 supplies no such person whose sex could be claimed.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0023",
+        "excerpt": "大中時"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:068:r0001",
+      "claim": {
+        "id": "jiuwudaishi:068:c0311",
+        "subject": "jiuwudaishi:068:p012",
+        "predicate": "attestation",
+        "value": {
+          "sourceDate": {
+            "text": "大中時"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 847,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 860,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit-event-contextual-date",
+        "evidence": [
+          "jiuwudaishi:068:s0023"
+        ]
+      },
+      "reason": "Accepted r0001 shows 大中時 dates Cui Xuan's chief-councilor service, already claimed on p010; attaching that date to an invented Emperor Xuanzong has no source support.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0023",
+        "excerpt": "大中時宰相魏公鉉"
+      }
+    }
+  ],
+  "claimRevisions": [
+    {
+      "repairId": "jiuwudaishi:068:r0003",
+      "before": {
+        "id": "jiuwudaishi:068:c0412",
+        "subject": "jiuwudaishi:068:p035",
+        "predicate": "native-place",
+        "value": {
+          "place": {
+            "en": "Raoyang County, Bohai",
+            "zh": "渤海蓚縣"
+          },
+          "relation": "ancestral"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiuwudaishi:068:s0079"
+        ]
+      },
+      "after": {
+        "id": "jiuwudaishi:068:c0412",
+        "subject": "jiuwudaishi:068:p035",
+        "predicate": "native-place",
+        "value": {
+          "place": {
+            "en": "Tiao County, Bohai",
+            "zh": "渤海蓚縣"
+          },
+          "relation": "ancestral"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiuwudaishi:068:s0079"
+        ]
+      },
+      "reason": "Accepted r0003 shows English Raoyang County misread 蓚縣; the native-place claim must read Tiao County while keeping zh 渤海蓚縣 and the other claim fields.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0079",
+        "excerpt": "渤海蓚縣"
+      }
+    }
+  ]
+}

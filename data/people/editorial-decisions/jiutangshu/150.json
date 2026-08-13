@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "jiutangshu",
+  "chapter": "150",
+  "input": {
+    "chapterFingerprint": "sha256:c56da2443b4ff00d2b2be1bb8072bde30122d69133377ca5a5691da7d3db8f1b",
+    "proposalsFingerprint": "sha256:7e0470328b4f0224f046eb7c9ff1e5985d08d87743bf3b706c35b2d4de837097"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-5089e93a-b495-4ed3-8700-4133c9082092",
+    "runId": "run-c8203690-aab1-45ed-9002-f6591360dc04",
+    "completedAt": "2026-08-13T10:23:05.908Z"
+  },
+  "proposals": [
+    {
+      "id": "jiutangshu:150:r0001",
+      "unit": {
+        "id": "s0128",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "Lady Cui, wife of the posthumously made Minister of Works Shen Yiliang, was the empress dowager's youngest aunt and uncle. Whenever the emperor saw her, he was still slipping on his shoes and boots and would summon the two beauties Wang and Wei to come out and bow.",
+      "after": "Lady Cui, wife of the posthumously made Minister of Works Shen Yiliang, was the wife of the empress dowager's youngest paternal uncle. Whenever the emperor saw her, he was still slipping on his shoes and boots and would summon the two beauties Wang and Wei to come out and bow.",
+      "reason": "Chinese 太后之季父母 identifies Shen Yiliang (with Lady Cui) as the empress dowager's youngest paternal uncle (季父), not jointly an aunt and uncle.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiutangshu:150:r0002",
+      "unit": {
+        "id": "s0128",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "At first, Lady Cui, wife of the posthumously made Minister of Works Shen Yiliang, was the empress dowager's youngest aunt and uncle; whenever the emperor saw her, he was just slipping on his shoes and putting on his boots and summoned the two beauties Wang and Wei to come out and bow.",
+      "after": "At first, Lady Cui, wife of the posthumously made Minister of Works Shen Yiliang, was [wife in] the empress dowager's youngest paternal uncle's household; whenever the emperor saw her, he was just slipping on his shoes and putting on his boots and summoned the two beauties Wang and Wei to come out and bow.",
+      "reason": "季父母 here denotes the youngest paternal uncle (and his wife); the singular subject 崔氏 is the uncle's wife, not an aunt-and-uncle pair.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiutangshu:150:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0128 has 沈易良之妻崔氏，即太后之季父母也: 季父母 names the youngest paternal uncle and his wife, so singular 崔氏 is that uncle's wife, not an aunt-and-uncle pair; the proposed wording is accurate and natural.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0128",
+        "excerpt": "太后之季父母"
+      }
+    },
+    {
+      "repairId": "jiutangshu:150:r0002",
+      "decision": "revise",
+      "after": "At first, Lady Cui, wife of the posthumously made Minister of Works Shen Yiliang, was the wife of the empress dowager's youngest paternal uncle; whenever the emperor saw her, he was just slipping on his shoes and putting on his boots and summoned the two beauties Wang and Wei to come out and bow.",
+      "reason": "s0128 即太后之季父母也 correctly makes 崔氏 the wife of the empress dowager's youngest paternal uncle, so the aunt-and-uncle reading is wrong; the proposed '[wife in] ... household' fix is still awkward.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0128",
+        "excerpt": "太后之季父母"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

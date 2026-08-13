@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "115",
+  "input": {
+    "chapterFingerprint": "sha256:34f66495a246392fff87abdfb59e486e9327524167da53f221e5c05fc134b340",
+    "proposalsFingerprint": "sha256:f8cf7d21d6a60e0caf7c41cf8d19fb9e41beb3278c9f5c2bb3dcef8b01cf4cc5"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-ec65d75e-d627-4568-bec4-8301d9ae11c2",
+    "runId": "run-9452e1b8-a104-40d5-bfd0-b8618a98d693",
+    "completedAt": "2026-08-13T10:27:22.432Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:115:r0001",
+      "unit": {
+        "id": "s0116",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "On xinhai an edict ordered: “Henceforth sick, aged, or weak horses shall be sent to the Shazhou and Weizhou pasturages to graze and recover their strength.”",
+      "after": "On xinhai an edict ordered: “Henceforth sick, aged, or weak horses shall be sent to the Shayuan Pasturage in Tongzhou and the Horse Pasturage in Weizhou to graze and recover their strength.”",
+      "reason": "同州沙苑監 is the Shayuan Pasturage in Tongzhou, not a place called Shazhou; the current rendering drops Tongzhou and misidentifies Shayuan.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:115:r0002",
+      "unit": {
+        "id": "s0116",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "On day xinhai, an edict: \"Hereafter all horses that are sick, aged, or weak shall be sent to the Shazhou Pasturage of Tongzhou and the Horse Pasturage of Weizhou, where they may have water and grass and fully satisfy their nature of drinking and grazing.\"",
+      "after": "On day xinhai, an edict: “Hereafter all horses that are sick, aged, or weak shall be sent to the Shayuan Pasturage of Tongzhou and the Horse Pasturage of Weizhou, where they may have water and grass and fully satisfy their nature of drinking and grazing.”",
+      "reason": "The literal translation misreads 沙苑 (Shayuan) as 沙州 (Shazhou); 同州 modifies the Shayuan Pasturage and must remain Tongzhou.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:115:r0003",
+      "unit": {
+        "id": "s0141",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "idiomatic",
+      "before": "Earlier, because the western army had camped long and supply was difficult, the Emperor sent the heir apparent by post relay to the front to observe the campaign.",
+      "after": "Earlier, because the western army had camped long and supply was difficult, the Emperor sent His present Majesty by post relay to the front to observe the campaign.",
+      "reason": "今上 means the sovereign reigning when the source was written, “His present Majesty,” not “the heir apparent”; the source does not name him here.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:115:r0004",
+      "unit": {
+        "id": "s0141",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "literal",
+      "before": "Previously, because the western army had long been stationed and grain transport was difficult, the Emperor ordered the heir apparent to ride post-horses to the army front to observe the situation of attack and battle.",
+      "after": "Previously, because the western army had long been stationed and grain transport was difficult, the Emperor ordered His present Majesty to ride post-horses to the army front to observe the situation of attack and battle.",
+      "reason": "今上 is an editorial reference to the present sovereign and does not mean “heir apparent”; no personal name should be supplied.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:115:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit has 同州沙苑監 and 衛州牧馬監; the prior idiomatic misreads 沙苑 as Shazhou and drops Tongzhou. The proposed repair correctly identifies the Shayuan Pasturage in Tongzhou and the Horse Pasturage in Weizhou.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0116",
+        "excerpt": "同州沙苑監、衛州牧馬監"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:115:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit reads 沙苑監, not 沙州; the prior literal wrongly renders Shayuan as Shazhou while keeping Tongzhou. The proposed repair corrects that place-name error without altering the rest.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0116",
+        "excerpt": "同州沙苑監"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:115:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit has 命今上乘驛赴軍前; 今上 is the historiographical label for the reigning sovereign at the time of writing, not the heir apparent. The proposed repair restores that reference without inventing a personal name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0141",
+        "excerpt": "命今上乘驛赴軍前"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:115:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit’s 今上 is an editorial designation of the present sovereign, not 太子 or another heir-apparent title. The proposed literal repair correctly replaces “the heir apparent” with “His present Majesty.”",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0141",
+        "excerpt": "命今上乘驛赴軍前"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

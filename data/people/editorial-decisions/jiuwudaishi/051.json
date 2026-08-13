@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "051",
+  "input": {
+    "chapterFingerprint": "sha256:d961296e13e76c89b54773e2f2fca1c026e748dbf2a6ce69482e68a9e7df687d",
+    "proposalsFingerprint": "sha256:6be2e3a974e1a88368dd73ac538e7876e2f520f4f6a57da4fe41a655ccfec611"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-de315bc5-84e2-41fe-8e6e-ff3b50a03513",
+    "runId": "run-c879ae0f-811a-4c77-99c4-ccfd43572591",
+    "completedAt": "2026-08-13T10:24:24.705Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:051:r0001",
+      "unit": {
+        "id": "s0010",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Prince Yong Cunmei, a son of the Martial Emperor and Zhuangzong's third younger brother, received his title in Tongguang 3.",
+      "after": "Prince of Yong (邕) Cunmei, a son of the Martial Emperor and Zhuangzong's third younger brother, received his title in Tongguang 3.",
+      "reason": "邕王 is a different fief character from 永王; English 'Prince Yong' conflates the two titles.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:051:r0002",
+      "unit": {
+        "id": "s0105",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Congrong then nominated Vice Minister of Justice Liu Zan as his tutor and Hanlin Academician Cui Ruan as chief administrator of the marshal's headquarters.",
+      "after": "Congrong then nominated Vice Minister of Justice Liu Zan as his tutor and Hanlin Academician Cui Zhuo as chief administrator of the marshal's headquarters.",
+      "reason": "崔棁 is Cui Zhuo; 'Ruan' is a wrong reading of 棁.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:051:r0003",
+      "unit": {
+        "id": "s0105",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "Congrong then memorialized for Vice Minister of Justice Liu Zan as prince tutor and for Hanlin Academician Cui Ruan as chief administrator of the marshal's headquarters.",
+      "after": "Congrong then memorialized for Vice Minister of Justice Liu Zan as prince tutor and for Hanlin Academician Cui Zhuo as chief administrator of the marshal's headquarters.",
+      "reason": "Same misreading of 棁 as Ruan in the literal field.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:051:r0004",
+      "unit": {
+        "id": "s0107",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "Congrong was displeased. Withdrawing, he told his attendants, \"I am given the marshal's command, yet my choice of staff is blocked—and no explanation of the emperor's intent is offered.\"",
+      "after": "Congrong was displeased. Withdrawing, he told his attendants, \"Having been given the marshal's charge, yet my request for staff is blocked, and the imperial intent has not been explained.\"",
+      "reason": "Source Chinese writes 衣榮 (corruption of 從榮); idiomatic already names Congrong correctly, but the second clause is awkward and obscures 未諭製旨.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:051:r0001",
+      "decision": "revise",
+      "after": "Prince of Yong Cunmei, a son of the Martial Emperor and Zhuangzong's third younger brother, received his title in Tongguang 3.",
+      "reason": "Focus unit titles him 邕王存美; 'Prince Yong' under-renders the noble title. 'Prince of Yong' is the correct English form, but the proposed parenthetical Chinese character cannot appear in the English field.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0010",
+        "excerpt": "邕王存美"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:051:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit names 崔棁; 棁 is Zhuo, not Ruan. Cui Zhuo corrects a real personal-name error and leaves the rest of the idiomatic intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0105",
+        "excerpt": "崔棁"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:051:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 崔棁 governs the literal field; Ruan is an unsupported reading of 棁, and Cui Zhuo restores the correct name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0105",
+        "excerpt": "翰林學士崔棁"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:051:r0004",
+      "decision": "reject",
+      "after": null,
+      "reason": "Idiomatic already correctly identifies 衣榮 as Congrong and accurately renders 既付以元帥之任, 阻予請僚佐, and 未諭製旨. The proposed rewrite is stylistic and yields an incomplete English sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0107",
+        "excerpt": "既付以元帥之任，而阻予請僚佐，又未諭製旨也"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

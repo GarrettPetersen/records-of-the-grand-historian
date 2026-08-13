@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "393",
+  "input": {
+    "chapterFingerprint": "sha256:f1f4776743a2f4216593bca9835a13be2c102b4ca0871a7a76845d83c8f1fc3b",
+    "proposalsFingerprint": "sha256:f161779576cb0cd16d3a352ef9b9030bd7483b1912b09c8124cbe50d33018c1b"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-9334c522-fd81-477c-b1f6-8c91a69e4bef",
+    "runId": "run-ff86cb1e-7ef8-4723-ba91-da56356a75f9",
+    "completedAt": "2026-08-13T10:40:42.745Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:393:r0001",
+      "unit": {
+        "id": "s0064",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Some impeached him for cruelty, but Governor-General Jiang Yinshen memorialized: \"Tianjue loves the people as his own children and hates evil as his own enemy — he is an official in the ancient mold.\"",
+      "after": "Some impeached him for cruelty, but Governor-General Jiang Youxian memorialized: \"Tianjue loves the people as his own children and hates evil as his own enemy — he is an official in the ancient mold.\"",
+      "reason": "Chinese 蔣攸銛 is Jiang Youxian; packet English wrongly renders Yinshen.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:393:r0002",
+      "unit": {
+        "id": "s0064",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Some impeached him for cruelty; Governor-General Jiang Yinshen memorialized: \"Tianjue loves the people as his children and hates evil as his enemy — he is an exemplary official of antiquity.\"",
+      "after": "Some impeached him for cruelty; Governor-General Jiang Youxian memorialized: \"Tianjue loves the people as his children and hates evil as his enemy — he is an exemplary official of antiquity.\"",
+      "reason": "Chinese 蔣攸銛 is Jiang Youxian; literal English also has Jiang Yinshen.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:393:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0064 names the memorialist 總督蔣攸銛; 攸銛 is Youxian, not Yinshen. The idiomatic replacement corrects the misread name and leaves the rest of the sentence intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0064",
+        "excerpt": "總督蔣攸銛"
+      }
+    },
+    {
+      "repairId": "qingshigao:393:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same focus phrase 蔣攸銛 is misrendered Jiang Yinshen in the literal field; Jiang Youxian restores the correct reading without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0064",
+        "excerpt": "蔣攸銛"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "qingshigao:393:r0001",
+      "claim": {
+        "id": "qingshigao:393:c0080",
+        "subject": "qingshigao:393:p025",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate",
+          "en": "Jiang Yinshen"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:393:s0064"
+        ]
+      },
+      "reason": "Accepted r0001 shows alternate name Jiang Yinshen for 蔣攸銛 arose only from the mistranslation; s0064 supports Jiang Youxian (c0079), not a separate Yinshen alias.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0064",
+        "excerpt": "蔣攸銛"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

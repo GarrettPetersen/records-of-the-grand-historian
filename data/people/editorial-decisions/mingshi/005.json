@@ -1,0 +1,202 @@
+{
+  "schemaVersion": 3,
+  "book": "mingshi",
+  "chapter": "005",
+  "input": {
+    "chapterFingerprint": "sha256:36a84bac35e04a7db5f787a59fc0ce38e3c94ff77a6423ed715526c80d2ea742",
+    "proposalsFingerprint": "sha256:f2214ca24669b311bd322616e7cd0e30541b8b8ffea7e7b152b0c10086092270"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-b37f5e40-117e-47eb-9b8b-7f44962fe3ed",
+    "runId": "run-dc222184-0487-405d-85a4-0bf30714837a",
+    "completedAt": "2026-08-13T10:33:34.202Z"
+  },
+  "proposals": [
+    {
+      "id": "mingshi:005:r0001",
+      "unit": {
+        "id": "s0157",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 18
+      },
+      "field": "idiomatic",
+      "before": "In the fifth month, on jichou, he seized Sizhou, paid homage at the ancestral tombs, and offered his father’s spirit an old ox and wine.",
+      "after": "In the fifth month, on jichou, he seized Sizhou, paid homage at the ancestral tombs, and bestowed oxen and wine on the local elders.",
+      "reason": "Chinese 賜父老牛酒 means he bestowed oxen and wine on the elders (父老), not an offering to his father’s spirit.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:005:r0002",
+      "unit": {
+        "id": "s0157",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 18
+      },
+      "field": "literal",
+      "before": "In the fifth month, on the jichou day, he took Sizhou, visited the imperial tombs, and bestowed an old ox and wine on his father.",
+      "after": "In the fifth month, on the jichou day, he took Sizhou, visited the imperial tombs, and bestowed oxen and wine on the elders.",
+      "reason": "父老 denotes local elders/commoner elders, not ‘his father’.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:005:r0003",
+      "unit": {
+        "id": "s0172",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "On yichou he came to Jinchuan Gate. The Prince of Gu, Zhu Yunyi, Li Jinglong, and others opened the gates and let him in. The capital fell that day.",
+      "after": "On yichou he came to Jinchuan Gate. The Prince of Gu, Zhu Hui, Li Jinglong, and others opened the gates and let him in. The capital fell that day.",
+      "reason": "Chinese personal name is 橞 (Hui), not Yunyi; the English given name mismatches the Chinese.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:005:r0004",
+      "unit": {
+        "id": "s0172",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "literal",
+      "before": "On the yichou day, he reached Jinchuan Gate; the Prince of Gu Zhu Yunyi, Li Jinglong, and others opened the gate and admitted the Prince; the capital city then fell.",
+      "after": "On the yichou day, he reached Jinchuan Gate; the Prince of Gu Zhu Hui, Li Jinglong, and others opened the gate and admitted the Prince; the capital city then fell.",
+      "reason": "Chinese 橞 is Hui; Yunyi is a mistranslation of the given name.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:005:r0005",
+      "unit": {
+        "id": "s0208",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "On renshen the Prince of Gu, Zhu Yunyi, was moved to a new fief at Changsha.",
+      "after": "On renshen the Prince of Gu, Zhu Hui, was moved to a new fief at Changsha.",
+      "reason": "Chinese 橞 corresponds to Hui, not Yunyi.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:005:r0006",
+      "unit": {
+        "id": "s0208",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "On the renshen day, the Prince of Gu Zhu Yunyi was transferred in enfeoffment to Changsha.",
+      "after": "On the renshen day, the Prince of Gu Zhu Hui was transferred in enfeoffment to Changsha.",
+      "reason": "Chinese 橞 is Hui; Yunyi is incorrect.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "mingshi:005:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0157 賜父老牛酒 means he bestowed oxen and wine on the elders (父老); the original misreads 父老 as an offering to his father’s spirit and attaches 老 to 牛.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0157",
+        "excerpt": "賜父老牛酒"
+      }
+    },
+    {
+      "repairId": "mingshi:005:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "父老 is the fixed compound for local elders, not ‘his father’; 牛酒 is oxen and wine as a gift, so the literal’s ‘old ox … on his father’ is wrong.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0157",
+        "excerpt": "賜父老牛酒"
+      }
+    },
+    {
+      "repairId": "mingshi:005:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0172 names 谷王橞; 橞 is Hui (Zhu Hui). Zhu Yunyi is not supported by the Chinese personal name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0172",
+        "excerpt": "谷王橞"
+      }
+    },
+    {
+      "repairId": "mingshi:005:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal must render 橞 as Hui; Yunyi invents a different given name not present in 谷王橞.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0172",
+        "excerpt": "谷王橞、李景隆等开門納王"
+      }
+    },
+    {
+      "repairId": "mingshi:005:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0208 again has 谷王橞; the personal name is Hui, so Zhu Yunyi must be corrected to Zhu Hui.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0208",
+        "excerpt": "徙封谷王橞於长沙"
+      }
+    },
+    {
+      "repairId": "mingshi:005:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal 谷王橞 requires Zhu Hui; Yunyi is an English mistranslation of the same given name 橞.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0208",
+        "excerpt": "谷王橞"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "mingshi:005:r0003",
+      "claim": {
+        "id": "mingshi:005:c0190",
+        "subject": "mingshi:005:p073",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate",
+          "en": "Zhu Yunyi"
+        },
+        "certainty": "textual-variant",
+        "evidence": [
+          "mingshi:005:s0172"
+        ]
+      },
+      "reason": "Accepted r0003 shows Zhu Yunyi was invented solely by mistranslating 橞; s0172 supports the personal name Hui (橞), not an alternate Yunyi.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0172",
+        "excerpt": "谷王橞"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

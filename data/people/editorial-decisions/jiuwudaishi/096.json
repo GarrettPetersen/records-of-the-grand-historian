@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "096",
+  "input": {
+    "chapterFingerprint": "sha256:998baeed5702a0b219e81605c19d71acb2d264adfaa3ae1a87c939b6b6002e92",
+    "proposalsFingerprint": "sha256:6b8293efd15f74fa52260e42d8e08cf6f31ec15483540c3f90ffd02069496056"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-e3c03917-5e39-4f51-9e84-82e2e4c7bcd6",
+    "runId": "run-415b8686-487a-466a-bf1c-28c718946fae",
+    "completedAt": "2026-08-13T10:27:30.205Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:096:r0001",
+      "unit": {
+        "id": "s0008",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "(Editor's note: the passage below is missing.)〉",
+      "after": "(Editor's note: the passage below is missing.)",
+      "reason": "Stray fullwidth closing bracket 〉 was left at the end of the English note.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:096:r0002",
+      "unit": {
+        "id": "s0008",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "(Note: the text below is defective.)〉",
+      "after": "(Note: the text below is defective.)",
+      "reason": "Stray fullwidth closing bracket 〉 was left at the end of the literal note.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:096:r0003",
+      "unit": {
+        "id": "s0134",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "field": "idiomatic",
+      "before": "Ying believed him and put him in charge of the work together with Wang Ren.",
+      "after": "Ying believed him and therefore had him manage the matter jointly with the imperial commissioner.",
+      "reason": "王人 here is the classical term for an imperial/court commissioner, not a personal name Wang Ren.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:096:r0004",
+      "unit": {
+        "id": "s0134",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "field": "literal",
+      "before": "Ying trusted him and therefore had him jointly manage the matter with Wang Ren.",
+      "after": "Ying trusted him and therefore had him jointly manage the matter with the king's commissioner.",
+      "reason": "王人 denotes the sovereign's envoy/commissioner rather than a person named Wang Ren.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:096:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese s0008 is wrapped in annotation brackets 〈…〉; the idiomatic English already uses parentheses for the editor's note, so the leftover fullwidth 〉 after the closing parenthesis is a stray artifact and should be removed.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0008",
+        "excerpt": "〈（案：以下殘闕。）〉"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:096:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same unit: the literal note already renders the editorial content in ASCII parentheses, so the trailing fullwidth 〉 is not English text and correctly deleted.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0008",
+        "excerpt": "〈（案：以下殘闕。）〉"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:096:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus Chinese 瑩信之，因使與王人同掌其事 uses 王人 as the classical office/term for a royal or imperial commissioner, not a personal name Wang Ren; the proposed idiomatic restores that sense and also reflects 因 and 同掌.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0134",
+        "excerpt": "與王人同掌其事"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:096:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal before invents the person Wang Ren from 王人; the classical term means the sovereign's envoy/commissioner, and \"the king's commissioner\" is an accurate literal gloss with no invented personal name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0134",
+        "excerpt": "王人"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

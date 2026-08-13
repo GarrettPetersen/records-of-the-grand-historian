@@ -72,7 +72,7 @@ const ENGLISH_NOBLE_TITLE_TERMS = new Set([
   'Baron',
   'Prince',
 ]);
-const ENGLISH_INSTITUTIONAL_SUFFIX_RE = /\b(?:Academy|Administration|Bureau|Chancellery|Commission|Court|Department|Directorate|Household|Ministry|Office|Secretariat)$/u;
+const ENGLISH_INSTITUTIONAL_SUFFIX_RE = /\b(?:Academy|Administration|Bureau|Chancellery|Commission|Court|Department|Directorate|Household|Ministry|Office|Pasturage|Secretariat)$/u;
 
 function locatorKey(locator) {
   return `${locator.id}:${locator.blockIndex}:${locator.collection}:${locator.itemIndex}`;
@@ -712,6 +712,36 @@ function candidateEnclosesMention(candidate, mention) {
   );
 }
 
+function isStoredEnglishSubwordSpan(span, previousUnit) {
+  if (!previousUnit) return false;
+  const points = [...previousUnit.en];
+  const exactPoints = [...span.exact];
+  return Number.isInteger(span.startCodePoint) &&
+    Number.isInteger(span.endCodePoint) &&
+    points.slice(span.startCodePoint, span.endCodePoint).join('') === span.exact &&
+    (
+      (isWordCharacter(exactPoints[0]) && isWordCharacter(points[span.startCodePoint - 1])) ||
+      (isWordCharacter(exactPoints.at(-1)) && isWordCharacter(points[span.endCodePoint]))
+    );
+}
+
+function isStoredEnglishSubword(stale, previousUnit) {
+  return stale.language === 'en' && isStoredEnglishSubwordSpan(stale.span, previousUnit);
+}
+
+function shortenedNameCandidate(stale, revisedPacket) {
+  if (stale.language !== 'en') return null;
+  const matches = revisedPacket.preflight.candidates.filter((candidate) =>
+    candidate.unit === stale.mention.unit.id &&
+    candidate.language === 'en' &&
+    (
+      stale.span.exact.startsWith(`${candidate.exact} `) ||
+      stale.span.exact.endsWith(` ${candidate.exact}`)
+    )
+  );
+  return matches.length === 1 ? matches[0] : null;
+}
+
 export function reconcileExtractionAfterRepairs(extraction, revisedPacket, options = {}) {
   const reconciled = structuredClone(extraction);
   const candidateOrder = new Map(
@@ -729,6 +759,7 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
   );
   const unitById = new Map(revisedPacket.units.map((unit) => [unit.id, unit]));
   const staleSpans = [];
+  const invalidSubwordContexts = new Set();
 
   reconciled.input = structuredClone(revisedPacket.input);
   if (options.markRepairsApplied !== false) {
@@ -737,11 +768,28 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       status: 'applied',
     }));
   }
+  for (const mention of reconciled.mentions) {
+    const previousUnit = previousUnitById.get(mention.unit.id);
+    mention.spans.en = mention.spans.en.filter((span) => {
+      if (!isStoredEnglishSubwordSpan(span, previousUnit)) return true;
+      invalidSubwordContexts.add(`${mention.person}\u0000${mention.unit.id}`);
+      return false;
+    });
+  }
   reconciled.mentions = reconciled.mentions.map((mention) => {
     const unit = unitById.get(mention.unit.id);
     if (!unit) return mention;
     return normalizeMentionSpans(mention, unit, staleSpans);
   });
+  for (const mention of reconciled.mentions) {
+    const unit = unitById.get(mention.unit.id);
+    if (!unit || mention.kind !== 'title-reference' || mention.spans.en.length > 0) continue;
+    mention.spans.zh = mention.spans.zh.filter((span) => {
+      if (span.exact !== '上') return true;
+      const after = [...unit.zh].slice(span.endCodePoint).join('');
+      return !/^所/u.test(after);
+    });
+  }
   removeRedundantSamePersonSpans(reconciled.mentions, candidateById);
 
   for (const mention of reconciled.mentions) {
@@ -754,12 +802,32 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
 
   const unresolvedSpans = [];
   const orphanedStalePeople = new Set();
-  const invalidSubwordContexts = new Set();
   for (const stale of staleSpans) {
     const unit = unitById.get(stale.mention.unit.id);
     if (!unit) {
       unresolvedSpans.push(stale);
       continue;
+    }
+    const previousUnit = previousUnitById.get(stale.mention.unit.id);
+    let mapped = false;
+    if (isStoredEnglishSubword(stale, previousUnit)) {
+      invalidSubwordContexts.add(`${stale.mention.person}\u0000${stale.mention.unit.id}`);
+      mapped = true;
+    }
+    const shortenedCandidate = !mapped && shortenedNameCandidate(stale, revisedPacket);
+    if (shortenedCandidate) {
+      const targetMention = reconciled.mentions.find((mention) =>
+        mention.id === stale.mention.id && mention.person === stale.mention.person
+      );
+      if (targetMention) {
+        targetMention.spans.en.push(exactSpanAt(
+          unit.en,
+          shortenedCandidate.exact,
+          shortenedCandidate.occurrence,
+        ));
+        targetMention.candidateRefs.push(shortenedCandidate.id);
+        mapped = true;
+      }
     }
     const aliases = aliasesForPerson(
       reconciled,
@@ -777,8 +845,8 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
     const selected = bestSharedWordCount > 0
       ? scored.filter((item) => item.sharedWords === bestSharedWordCount)
       : preferred.length > 0 ? preferred : scored;
-    let mapped = false;
     for (const { alias, span } of selected) {
+      if (mapped) break;
       const expanded = candidateExpandedSpan(
         span,
         unit.id,
@@ -834,7 +902,6 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       mapped = added || alreadyCovered || mapped;
     }
     if (!mapped) {
-      const previousUnit = previousUnitById.get(stale.mention.unit.id);
       const replacement = previousUnit && remapMentionSpanThroughEdit(
         stale.span,
         previousUnit[stale.language],
@@ -874,20 +941,6 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       if (wasNeverDisplayText) {
         // Extraction spans link the displayed idiomatic text. A literal-only
         // surface was mis-scoped by the worker and should not become a link.
-        mapped = true;
-      }
-    }
-    if (!mapped && stale.language === 'en') {
-      const previousUnit = previousUnitById.get(stale.mention.unit.id);
-      const points = [...(previousUnit?.en ?? '')];
-      const storedSubword = previousUnit &&
-        Number.isInteger(stale.span.startCodePoint) &&
-        Number.isInteger(stale.span.endCodePoint) &&
-        points.slice(stale.span.startCodePoint, stale.span.endCodePoint).join('') === stale.span.exact &&
-        exactOccurrences(previousUnit.en, stale.span.exact, 'en').length === 0 &&
-        exactOccurrences(previousUnit.literal, stale.span.exact, 'en').length === 0;
-      if (storedSubword) {
-        invalidSubwordContexts.add(`${stale.mention.person}\u0000${stale.mention.unit.id}`);
         mapped = true;
       }
     }
@@ -1225,6 +1278,35 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         continue;
       }
     }
+    if (candidate.language === 'en') {
+      const unitIndex = revisedPacket.units.findIndex((unit) => unit.id === candidate.unit);
+      const previousUnitId = revisedPacket.units[unitIndex - 1]?.id;
+      const precedingMatches = reconciled.mentions.filter((mention) =>
+        mention.unit.id === previousUnitId &&
+        mention.spans.en.some((span) => span.exact === candidate.exact)
+      );
+      const precedingPeople = new Set(precedingMatches.map((mention) => mention.person));
+      if (precedingPeople.size === 1) {
+        const prior = precedingMatches[0];
+        const span = exactSpanAt(
+          unitById.get(candidate.unit).en,
+          candidate.exact,
+          candidate.occurrence,
+        );
+        if (addAliasMention(
+          reconciled,
+          unitById.get(candidate.unit),
+          prior.person,
+          'en',
+          prior.kind,
+          span,
+        )) {
+          reconciled.mentions.at(-1).candidateRefs.push(candidate.id);
+          accounted.add(candidate.id);
+          continue;
+        }
+      }
+    }
     const overlapPeople = new Set(partialOverlaps.map(({ mention }) => mention.person));
     if (partialOverlaps.length > 1 && overlapPeople.size > 1) {
       const titlePeople = new Set(partialOverlaps
@@ -1343,6 +1425,19 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
           disposition: 'not-person',
           reason: 'not-a-name',
           note: 'Speech-introducing function phrase, not a person name.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (
+        (candidate.exact === 'Song' && /^\s+of\s+[A-Z]/u.test(after)) ||
+        (/\(Song of\s+$/u.test(before) && /^\)/u.test(after))
+      ) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'book-title',
+          note: 'Component of an explicitly labeled song title, not a person.',
         });
         accounted.add(candidate.id);
         continue;
@@ -1545,6 +1640,20 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         disposition: 'not-person',
         reason: 'office',
         note: 'Office-title component, not a person.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (
+      candidate.language === 'en' &&
+      [...ENGLISH_NAMED_OFFICE_TERMS].some((term) => surfaceContains(candidate.exact, term, 'en')) &&
+      [...ENGLISH_NOBLE_TITLE_TERMS].some((term) => surfaceContains(candidate.exact, term, 'en'))
+    ) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'office',
+        note: 'Scanner span crosses an office-title and noble-title boundary.',
       });
       accounted.add(candidate.id);
       continue;
@@ -1760,6 +1869,22 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       (candidateOrder.get(right) ?? Number.MAX_SAFE_INTEGER)
     );
   }
+
+  const claimSubjects = new Set(reconciled.claims.map((claim) => claim.subject));
+  const nestedClaimReferences = new Set(reconciled.claims.flatMap((claim) =>
+    nestedStringValues(claim.value).filter((value) =>
+      reconciled.people.some((person) => person.localId === value)
+    )
+  ));
+  const unsupportedPeople = new Set(reconciled.people.flatMap((person) =>
+    !claimSubjects.has(person.localId) && !nestedClaimReferences.has(person.localId)
+      ? [person.localId]
+      : []
+  ));
+  reconciled.people = reconciled.people.filter((person) => !unsupportedPeople.has(person.localId));
+  reconciled.mentions = reconciled.mentions.filter((mention) =>
+    !unsupportedPeople.has(mention.person)
+  );
 
   renumberPeopleAndClaims(reconciled);
   renumberMentions(reconciled);

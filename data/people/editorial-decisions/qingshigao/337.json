@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "337",
+  "input": {
+    "chapterFingerprint": "sha256:9d0b8623cb3f193a8e412e5da2e05c310c66e0f0cad581cd396904e8e2dec72c",
+    "proposalsFingerprint": "sha256:c266c383115af8f0fcb232da4a69b5c3cd055145d507863b16835b408b47ec55"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-4669cab6-f734-4af5-8d58-6b4f7bceb516",
+    "runId": "run-c7162e1d-ca93-4b98-bd2c-c431a5c41ec2",
+    "completedAt": "2026-08-13T10:37:41.131Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:337:r0001",
+      "unit": {
+        "id": "s0015",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "In 1736, when the Qianlong Emperor took the throne, Chao reported that flood-hit districts had not technically qualified as disaster areas. The emperor replied: 'Even if the floods have not risen to the level of a declared disaster, you must still relieve the people with special care and keep the poor from losing their livelihoods.'",
+      "after": "In 1735, when the Qianlong Emperor took the throne, Chao reported that flood-hit districts had not technically qualified as disaster areas. The emperor replied: 'Even if the floods have not risen to the level of a declared disaster, you must still relieve the people with special care and keep the poor from losing their livelihoods.'",
+      "reason": "雍正十三年 corresponds to AD 1735, and Gaozong's accession occurred in that year, not 1736.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:337:r0002",
+      "unit": {
+        "id": "s0131",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "After Yinpei was transferred to Fujian, Governor Chang Jun protected Hongsui. Qilang cried injustice and impeached Zhaolin, who memorialized in turn.",
+      "after": "After Yinpei was transferred to Fujian, Governor Chang Jun shielded Hongsui and impeached Zhaolin, citing Qilang's cry of injustice. Zhaolin also memorialized the throne.",
+      "reason": "The subject of 劾兆麟 is Governor Chang Jun; 以七郎呼冤 gives the grounds for his impeachment, not Qilang as the impeaching subject.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:337:r0003",
+      "unit": {
+        "id": "s0193",
+        "kind": "paragraph-sentence",
+        "blockIndex": 20,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "In 1789, blaming slack Fujian governance on him, Jingsu was punished retroactively and exiled to Ili.",
+      "after": "In 1789, citing slack Fujian governance, the emperor held the late Jingsu accountable and exiled his son Zhao to Ili.",
+      "reason": "Jingsu died in s0189; the graphically transmitted 戍召 continues the punishment through his son 炤 (Zhao), who was named in s0192.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:337:r0004",
+      "unit": {
+        "id": "s0194",
+        "kind": "paragraph-sentence",
+        "blockIndex": 20,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "In 1794 he was released and allowed to return.",
+      "after": "In 1794 Zhao was released and allowed to return.",
+      "reason": "The silent subject continues from the son Zhao who was exiled in s0193; Jingsu had already died in s0189.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:337:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Preceding units date Yongzheng 十一/十二年 as 1733/1734, so 十三年 is AD 1735; s0016's 乾隆元年 is 1736. Gaozong's accession in 雍正十三年 is 1735, not 1736.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0015",
+        "excerpt": "十三年，高宗即位"
+      }
+    },
+    {
+      "repairId": "qingshigao:337:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "After 巡撫常鈞庇宏燧, 以七郎呼冤劾兆麟 takes Chang Jun as the subject of 劾, with Qilang's cry of injustice as the pretext; the original wrongly makes Qilang the impeacher.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0131",
+        "excerpt": "巡撫常鈞庇宏燧，以七郎呼冤劾兆麟"
+      }
+    },
+    {
+      "repairId": "qingshigao:337:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "追咎景素 is posthumous blame of Jingsu; the exile verb 戍 applies to his son 炤 (Zhao), named in s0192. Wikisource/editions read 戍炤 (chapter 戍召 is a graphic garble of 炤), so the original wrongly exiles the already-dead Jingsu.",
+      "sourceWitness": {
+        "source": "wikisource",
+        "citation": "https://zh.wikisource.org/wiki/清史稿/卷337",
+        "excerpt": "追咎景素，戍炤伊犁"
+      }
+    },
+    {
+      "repairId": "qingshigao:337:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "釋回 has no new subject; it continues from the person exiled in s0193, i.e. Zhao (炤), not the dead Jingsu. Naming Zhao removes the false antecedent.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0194",
+        "excerpt": "五十九年，釋回。"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

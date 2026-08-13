@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "070",
+  "input": {
+    "chapterFingerprint": "sha256:932f8e8f00e51fe7f9dbdaed11ade184c82de3e54e7b9f2c72ba44a8e1712ef2",
+    "proposalsFingerprint": "sha256:080479177a558bf3fe0adaaef5f36a281d1a4f168ba9f385869f1ad848820d1b"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-c4bfec26-1059-4d0c-8a7f-5c8ef22e6634",
+    "runId": "run-114de5bf-7a7a-4d04-ae37-df75b55b6b5a",
+    "completedAt": "2026-08-13T10:27:49.681Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:070:r0001",
+      "unit": {
+        "id": "s0055",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "Yanzhang looked back and said, \"Aren't you my old friend Yu?\"",
+      "after": "Yanzhang looked back and said, \"Aren't you my old friend?\"",
+      "reason": "餘 means 'I/my' in classical Chinese, not a personal name Yu; the question is 'Are you not my old friend?'",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:070:r0002",
+      "unit": {
+        "id": "s0055",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "literal",
+      "before": "Yanzhang looked back and said: \"Are you not my old friend Yu?\"",
+      "after": "Yanzhang looked back and said: \"Are you not my old friend?\"",
+      "reason": "餘 is the first-person pronoun, not the name Yu.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:070:r0003",
+      "unit": {
+        "id": "s0114",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 23
+      },
+      "field": "idiomatic",
+      "before": "Wang Yan's rule was failing, and Yan saw that Shu could be taken. He sent him back to report in full, and thus the plan to conquer Shu began with Yan.",
+      "after": "Wang Yan's rule was failing, and Yan saw that Shu could be taken. He returned and reported in full, and thus the plan to conquer Shu began with Yan.",
+      "reason": "使還具奏 means Li Yan himself returned to report, not that he sent someone else back.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:070:r0004",
+      "unit": {
+        "id": "s0171",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "literal",
+      "before": "Before long, when Jin Gaozu raised the righteous army, the Last Emperor issued an edict Jingda as overall pacification commissioner of the northern campaign and still had him lead all his subordinate troops to besiege Taiyuan, with Yang Guangyuan, military governor of Dingzhou, as deputy.",
+      "after": "Before long, when Jin Gaozu raised the righteous army, the Last Emperor issued an edict making Jingda overall pacification commissioner of the northern campaign and still had him lead all his subordinate troops to besiege Taiyuan, with Yang Guangyuan, military governor of Dingzhou, as deputy.",
+      "reason": "Missing verb 'making' after 'edict' renders the English ungrammatical.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:070:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus 爾非餘故人乎 uses 餘 as the classical first-person pronoun ('my'), not a personal name; rendering it as 'Yu' invents a friend named Yu. Dropping that name restores the question accurately.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0055",
+        "excerpt": "爾非餘故人乎"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:070:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same focus phrase: 餘 is first-person ('I/my'), so literal 'old friend Yu' misreads the pronoun as a name. The proposed wording matches 爾非餘故人乎.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0055",
+        "excerpt": "爾非餘故人乎"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:070:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "嚴知其可取，使還具奏 continues Yan as subject: as the envoy he returned and reported in full. 'He sent him back' invents a second agent; 'He returned and reported in full' matches 使還具奏.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0114",
+        "excerpt": "嚴知其可取，使還具奏"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:070:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "詔以敬達為北面行營都招討使 requires a verb of appointment; 'issued an edict Jingda as…' is ungrammatical. Inserting 'making' restores the 以…為 construction without changing sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0171",
+        "excerpt": "末帝詔以敬達為北面行營都招討使"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

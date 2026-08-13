@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "076",
+  "input": {
+    "chapterFingerprint": "sha256:bf13af2199a20274807c35bfa40a6f26aea09c3e18b2dee86be6211b34b1fc24",
+    "proposalsFingerprint": "sha256:5a7290b3e9d13347d3003c8fd1aa259cf1ceaec8d069233bf801111405011ad9"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-0c18bffe-be34-4e00-abbe-08a63c64676c",
+    "runId": "run-0080084a-e4e5-468c-abd2-2a44d2acb9d1",
+    "completedAt": "2026-08-13T10:44:30.432Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:076:r0001",
+      "unit": {
+        "id": "s0036",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Nineteen people tell Mao Sui: Mister ascend.",
+      "after": "The nineteen men said to Mao Sui: “Master, go up.”",
+      "reason": "The literal field is an ungrammatical word-for-word fragment; this restores the subject, addressee, and imperative.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:076:r0002",
+      "unit": {
+        "id": "s0038",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "Today out speak vertical, day middle not decide, why?\"",
+      "after": "We began speaking of the alliance at sunrise, yet by noon no decision had been reached. Why?",
+      "reason": "The literal field is an ungrammatical calque; this restores the temporal contrast and the alliance sense of 從.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:076:r0003",
+      "unit": {
+        "id": "s0043",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "Mao Sui press sword before: Wang so scold Sui, with Chu country crowd.",
+      "after": "Mao Sui advanced with his hand on his sword and said: “Your Majesty rebukes me because you rely on Chu's great multitude.”",
+      "reason": "The literal field leaves Chinese words untranslated and obscures Mao Sui's action and the king's reliance on Chu.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:076:r0004",
+      "unit": {
+        "id": "s0127",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "The next year Qin attacked the king again, and the king had no rescue.\"",
+      "after": "Next year Qin will attack Your Majesty again, and you will have no one to rescue you.”",
+      "reason": "The literal field incorrectly shifts the prediction into past tense; 來年 and 復攻 require a future warning.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:076:r0005",
+      "unit": {
+        "id": "s0136",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "field": "literal",
+      "before": "This did not minister dare take responsibility.\"",
+      "after": "This is not a responsibility your minister dares to assume.”",
+      "reason": "The literal field is syntactically broken; this gives the negative and ministerial self-reference their normal sense.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:076:r0006",
+      "unit": {
+        "id": "s0179",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Qin Zhao construct difficulty yet world all pleased, why?",
+      "after": "When Qin and Zhao become embroiled in conflict, the whole world is pleased. Why?",
+      "reason": "The literal field mechanically renders 構難 as “construct difficulty”; the phrase means to become embroiled in conflict.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:076:r0007",
+      "unit": {
+        "id": "s0184",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "literal",
+      "before": "Zhao and perish, what Qin scheme!",
+      "after": "Zhao is about to perish—what use will Qin's plans be then?",
+      "reason": "The literal field is an ungrammatical calque; this restores the imminent-peril statement and rhetorical question.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:076:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "十九人謂毛遂曰：「先生上。」 needs a finite past narrative with addressee and imperative; the broken calque “Nineteen people tell… Mister ascend” is not English, and “The nineteen men said… Master, go up” restores subject, verb, and 先生上 without inventing content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0036",
+        "excerpt": "十九人謂毛遂曰：「先生上。」"
+      }
+    },
+    {
+      "repairId": "shiji:076:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "今日出而言從，日中不決，何也 records sunrise-to-noon talks about the vertical alliance (從) with no decision; the word-for-word “Today out speak vertical…” is unreadable, and the proposed English restores that temporal contrast and sense of 從.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0038",
+        "excerpt": "今日出而言從，日中不決，何也？"
+      }
+    },
+    {
+      "repairId": "shiji:076:r0003",
+      "decision": "revise",
+      "after": "Mao Sui advanced, gripping his sword, and said: “Your Majesty rebukes me because of Chu's great multitude.",
+      "reason": "按劍而前曰 and 王之所以叱遂者，以楚國之眾也 do need repair of the broken calque, but the proposal adds “rely on” (恃 belongs to the next unit) and wrongly closes the still-open quotation; keep advance-with-sword and “because of Chu's great multitude” without inventing reliance or ending the speech.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0043",
+        "excerpt": "毛遂按劍而前曰：「王之所以叱遂者，以楚國之眾也。"
+      }
+    },
+    {
+      "repairId": "shiji:076:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "來年秦復攻王，王無救矣 is Yu Qing’s forward warning (“next year Qin will attack again”), not a past event; the original past-tense literal falsifies 來年/復攻, and the proposed future warning matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0127",
+        "excerpt": "來年秦復攻王，王無救矣。"
+      }
+    },
+    {
+      "repairId": "shiji:076:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "此非臣之所敢任也 is Zhao Hao’s closing disclaimer that the projected outcome is not a responsibility he dares assume; the broken “This did not minister dare…” is not English, and “your minister” correctly renders court 臣.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0136",
+        "excerpt": "此非臣之所敢任也。"
+      }
+    },
+    {
+      "repairId": "shiji:076:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "秦趙構難而天下皆說，何也 uses 構難 for becoming embroiled in conflict and 說 for being pleased; “construct difficulty” is a false calque, and the proposed rendering matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0179",
+        "excerpt": "夫秦趙構難而天下皆說，何也？"
+      }
+    },
+    {
+      "repairId": "shiji:076:r0007",
+      "decision": "accept",
+      "after": null,
+      "reason": "趙且亡，何秦之圖乎 pairs imminent peril (且亡) with a rhetorical question about Qin’s designs; the calque “Zhao and perish, what Qin scheme!” is broken, and the proposed English restores both parts without changing the counsel.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0184",
+        "excerpt": "趙且亡，何秦之圖乎？"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

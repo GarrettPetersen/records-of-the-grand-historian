@@ -1,0 +1,202 @@
+{
+  "schemaVersion": 3,
+  "book": "jiutangshu",
+  "chapter": "130",
+  "input": {
+    "chapterFingerprint": "sha256:ad856fff94ec7979246e156258210d1709688765900f6a2a9e4860ec796abfb8",
+    "proposalsFingerprint": "sha256:8d9aeb163462229dabeb811f590cdf9fa9746055e2000cbcc70e3abba615a4f3"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-c2d93110-c544-482e-a2db-a506a4051a1b",
+    "runId": "run-f60f832f-eddb-460c-b08e-497e8870b9a2",
+    "completedAt": "2026-08-13T10:22:56.334Z"
+  },
+  "proposals": [
+    {
+      "id": "jiutangshu:130:r0001",
+      "unit": {
+        "id": "s0002",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "He was the great-grandson of Xuantao, academician of the Prince of Qin's establishment and supervising censor, and the son of Chengyu, director of the Secretariat, posthumously honored as Minister of the Ministry of Personnel.",
+      "after": "He was the great-great-grandson of Xuantao, academician of the Prince of Qin's establishment and supervising censor, and the son of Chengyu, director of the Secretariat, posthumously honored as Minister of the Ministry of Personnel.",
+      "reason": "Chinese 玄孫 is great-great-grandson (as correctly rendered for the same term in s0156), not great-grandson.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiutangshu:130:r0002",
+      "unit": {
+        "id": "s0005",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "He was next made Right Supplementation Censor and Attendant of the Heir Apparent, with responsibility for memorials from members of the imperial clan.",
+      "after": "He was next made Right Supplementation Censor and Imperial Diarist, with responsibility for memorials from members of the imperial clan.",
+      "reason": "起居郎 is Imperial Diarist / Attendant Gentleman, not Attendant of the Heir Apparent.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiutangshu:130:r0003",
+      "unit": {
+        "id": "s0005",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "He was transferred to Right Supplementation Censor and Attendant of the Heir Apparent, and was charged with imperial-clan memorials and reports.",
+      "after": "He was transferred to Right Supplementation Censor and Imperial Diarist, and was charged with imperial-clan memorials and reports.",
+      "reason": "起居郎 is Imperial Diarist, not Attendant of the Heir Apparent.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiutangshu:130:r0004",
+      "unit": {
+        "id": "s0080",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "His father Qing was a military staff officer of the Right Martial Guards; through Shaoyou's honors he was repeatedly enfeoffed as minister of works.",
+      "after": "His father Qing was a military staff officer of the Right Martial Guards; through Shaoyou's honors he was repeatedly posthumously honored as minister of works.",
+      "reason": "贈 means posthumous honor, not enfeoffment.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiutangshu:130:r0005",
+      "unit": {
+        "id": "s0134",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "Liu Changqing had once been transport commissioner and was ruined by Wu Zhongru; Cui Zhong had hoarded army funds and was executed by Guo Guangbi. Ji was terrified and did not resist. All funds bound for the capital were seized by Shaoyou.",
+      "after": "Liu Changqing had once been transport commissioner and was ruined by Wu Zhongru; Cui Zhong had hoarded army funds and was executed by Li Guangbi. Ji was terrified and did not resist. All funds bound for the capital were seized by Shaoyou.",
+      "reason": "光弼 refers to Li Guangbi (李光弼), not Guo Guangbi.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiutangshu:130:r0006",
+      "unit": {
+        "id": "s0134",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "Changqing had once served as transport commissioner and was trapped by Wu Zhongru; Cui Zhong was stingy with army funds and was killed by Guo Guangbi—hence he mentioned them. Ji was greatly afraid and did not dare firmly protect the goods; all money and silks about to be transported to the capital were seized by Shaoyou.",
+      "after": "Changqing had once served as transport commissioner and was trapped by Wu Zhongru; Cui Zhong was stingy with army funds and was killed by Li Guangbi—hence he mentioned them. Ji was greatly afraid and did not dare firmly protect the goods; all money and silks about to be transported to the capital were seized by Shaoyou.",
+      "reason": "光弼 is Li Guangbi, not Guo Guangbi.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiutangshu:130:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0002 has 玄道玄孫; 玄孫 is great-great-grandson (four generations), not great-grandson (曾孫). The proposed literal corrects that kinship term and leaves the rest intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0002",
+        "excerpt": "玄道玄孫"
+      }
+    },
+    {
+      "repairId": "jiutangshu:130:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0005 has 改右補闕、起居郎; 起居郎 is the Imperial Diarist office, not Attendant of the Heir Apparent. Replacing that title restores the office named in the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0005",
+        "excerpt": "起居郎"
+      }
+    },
+    {
+      "repairId": "jiutangshu:130:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal likewise misreads 起居郎 as Attendant of the Heir Apparent; Imperial Diarist matches the office title in s0005.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0005",
+        "excerpt": "起居郎"
+      }
+    },
+    {
+      "repairId": "jiutangshu:130:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0080 has 以少遊累贈工部尚書; 贈 marks posthumous honor, not enfeoffment (封). “Repeatedly posthumously honored” matches 累贈 and aligns with the already-correct idiomatic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0080",
+        "excerpt": "累贈工部尚書"
+      }
+    },
+    {
+      "repairId": "jiutangshu:130:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0134 has 為光弼所殺; 光弼 is Li Guangbi. “Guo Guangbi” invents a surname absent from the Chinese and is not supported by the unit.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0134",
+        "excerpt": "為光弼所殺"
+      }
+    },
+    {
+      "repairId": "jiutangshu:130:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal likewise replaces invented Guo Guangbi with Li Guangbi for 光弼 in 為光弼所殺; the rest of the sentence is unchanged and accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0134",
+        "excerpt": "為光弼所殺"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "jiutangshu:130:r0005",
+      "claim": {
+        "id": "jiutangshu:130:c0148",
+        "subject": "jiutangshu:130:p046",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate-name",
+          "en": "Guo Guangbi"
+        },
+        "certainty": "textual-variant",
+        "evidence": [
+          "jiutangshu:130:s0134"
+        ]
+      },
+      "reason": "Accepted r0005 shows alternate-name Guo Guangbi was created only by the bad English; s0134 supports 光弼 as Li Guangbi (already claimed in c0147), not a Guo surname or textual variant.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0134",
+        "excerpt": "光弼"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "songshi",
+  "chapter": "359",
+  "input": {
+    "chapterFingerprint": "sha256:6dfa1afc9a5a9a84ebd92b334a975e861c563c2eead9a9ecb9a861b19384224f",
+    "proposalsFingerprint": "sha256:0dc4ea76009373fbfb5f08c62c579bb30e7da23944dd1a1a499e72fa38cc9e70"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-7530d7ba-b0d0-4657-81b1-4d1b88ac98e3",
+    "runId": "run-c392c06d-9acd-4db7-b6d7-37f72a803c4c",
+    "completedAt": "2026-08-13T10:46:12.683Z"
+  },
+  "proposals": [
+    {
+      "id": "songshi:359:r0001",
+      "unit": {
+        "id": "s0053",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Jianye has long been called the abode of emperors; its rivers and mountains are majestic and its terrain broad, and the Six Dynasties in succession made it their capital.",
+      "after": "Jiankang has long been called the abode of emperors; its rivers and mountains are majestic and its terrain broad, and the Six Dynasties in succession made it their capital.",
+      "reason": "Chinese 建康 is Jiankang; rendering it as Jianye (建業), an earlier name, mismatches the source graph and later units that correctly use Jiankang.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:359:r0002",
+      "unit": {
+        "id": "s0054",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Your minister once surveyed the strategic geography of the whole realm and ranked Guanzhong first; speaking now of the southeast alone, Jianye is the better choice.",
+      "after": "Your minister once surveyed the strategic geography of the whole realm and ranked Guanzhong first; speaking now of the southeast alone, Jiankang is the better choice.",
+      "reason": "Same 建康→Jianye mismatch as s0053.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:359:r0003",
+      "unit": {
+        "id": "s0055",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Since the imperial carriage has not yet returned to the old capital, it would be best to halt temporarily at Jianye as an expedient measure.",
+      "after": "Since the imperial carriage has not yet returned to the old capital, it would be best to halt temporarily at Jiankang as an expedient measure.",
+      "reason": "Same 建康→Jianye mismatch as s0053.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:359:r0004",
+      "unit": {
+        "id": "s0138",
+        "kind": "paragraph-sentence",
+        "blockIndex": 22,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Your subject wishes Your Majesty to command the chief ministers to join hearts and combine strength, exert all human effort and then await Heaven's decree — then recovering territory, cutting down whales and crocodiles, and welcoming back the two palaces will surely come to pass in time.",
+      "after": "Your subject wishes Your Majesty to command the chief ministers to join hearts and combine strength, exert all human effort and then await Heaven's decree — then recovering territory, cutting down whales and crocodiles, and welcoming back the Two Sovereigns will surely come to pass in time.",
+      "reason": "兩宮 here denotes the two captive emperors (parallel to idiomatic Two Sovereigns), not architectural palaces.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "songshi:359:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Source 建康 is Jiankang; idiomatic Jianye (建業) substitutes an earlier toponym for a different graph, and Jiankang restores the place-name as written.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0053",
+        "excerpt": "建康自昔號帝王之宅"
+      }
+    },
+    {
+      "repairId": "songshi:359:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "則當以建康為便 names Jiankang as the preferred southeast seat; idiomatic Jianye mismatches that graph and the same place named 建康 in the flanking units.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0054",
+        "excerpt": "則當以建康為便"
+      }
+    },
+    {
+      "repairId": "songshi:359:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "且于建康權宜駐蹕 specifies a temporary halt at Jiankang; rendering the site as Jianye invents the wrong toponym against the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0055",
+        "excerpt": "且于建康權宜駐蹕"
+      }
+    },
+    {
+      "repairId": "songshi:359:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "迎還兩宮 in this memorial means welcoming back the two captive emperors, as the unit’s idiomatic Two Sovereigns already renders; lowercase two palaces wrongly suggests buildings, and Two Sovereigns restores the persons meant.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0138",
+        "excerpt": "迎還兩宮"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

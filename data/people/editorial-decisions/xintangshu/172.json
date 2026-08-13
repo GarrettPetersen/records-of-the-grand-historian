@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "xintangshu",
+  "chapter": "172",
+  "input": {
+    "chapterFingerprint": "sha256:e82e732f650bf69dedacc59e9365df5060309ca9f459766f04196b0a6713a1b1",
+    "proposalsFingerprint": "sha256:fbd1eae8ca6f1f6bd3aa96fc364607b9f5c13806832976dfa22001f9a1aabf0e"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-02c7b9f8-755b-4265-bff4-c3948a39b779",
+    "runId": "run-7d7209a0-8c5e-4c95-8cc3-d997cc2544ac",
+    "completedAt": "2026-08-13T10:49:36.485Z"
+  },
+  "proposals": [
+    {
+      "id": "xintangshu:172:r0001",
+      "unit": {
+        "id": "s0059",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Wang Zhixing, style name Kuangjian, was from Wen in Huazhou.",
+      "after": "Wang Zhixing, style name Kuangjian, was from Wen in Huaizhou.",
+      "reason": "懷州 is Huaizhou, not Huazhou; the current translation misidentifies the native place.",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:172:r0002",
+      "unit": {
+        "id": "s0101",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "He was called Yan Zai at first, but later dropped the surname \"Yan\" and went by Zai alone.",
+      "after": "He was called Yan Zai at first, but later dropped the generational name \"Yan\" and went by Zai alone.",
+      "reason": "晏 is part of the given name/generational element 晏宰, not a surname; the repair preserves the renaming.",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:172:r0003",
+      "unit": {
+        "id": "s0101",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Yan Zai, afterward he removed \"Yan\" and was known by the single name Zai.",
+      "after": "Yan Zai later removed \"Yan\" and was known by the single name Zai.",
+      "reason": "晏 is part of the name 晏宰, not a surname; the literal should describe dropping that name element.",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:172:r0004",
+      "unit": {
+        "id": "s0079",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "When Zhixing returned, Qun sent staff members to welcome him and ordered the soldiers to enter in armor season by season.",
+      "after": "When Zhixing returned, Qun sent staff members to welcome him and ordered the soldiers to enter in armor.",
+      "reason": "季甲 is not an idiom meaning season by season here; the context requires entering in armor.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xintangshu:172:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 懷州溫人 names the native place as Wen in Huaizhou; Huazhou would be 華州, so the proposed Huaizhou correction matches the source.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0059",
+        "excerpt": "懷州溫人"
+      }
+    },
+    {
+      "repairId": "xintangshu:172:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "晏宰，後去「晏」，獨名宰 drops the name element 晏 from 晏宰; calling 晏 a surname invents a false family name, while “generational name” correctly identifies the dropped given-name element.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0101",
+        "excerpt": "晏宰，後去「晏」，獨名宰"
+      }
+    },
+    {
+      "repairId": "xintangshu:172:r0003",
+      "decision": "reject",
+      "after": null,
+      "reason": "The literal already says he removed “Yan” and was known by the single name Zai, without calling 晏 a surname; changing “afterward he” to “later” is only stylistic and does not repair meaning.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0101",
+        "excerpt": "晏宰，後去「晏」，獨名宰"
+      }
+    },
+    {
+      "repairId": "xintangshu:172:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "令士季甲而入 means the soldiers were ordered to enter armored; reading 季 as “season by season” invents a temporal sense absent from the reception scene, and dropping that phrase restores the armor sense already in the idiomatic line.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0079",
+        "excerpt": "令士季甲而入"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

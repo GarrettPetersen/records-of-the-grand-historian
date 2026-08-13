@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "yuanshi",
+  "chapter": "192",
+  "input": {
+    "chapterFingerprint": "sha256:f55c200d71e8ef4ae08bd6308e1192cf2eb4920ea61f63456de2d00f959140c7",
+    "proposalsFingerprint": "sha256:064adc18124fb04a01409d7fca0fb8439c71fa48a2b9abdd04921b062c822947"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-721ee49d-16cf-47b8-b7b1-0ca881c7f522",
+    "runId": "run-1efd3660-c88c-4945-92ba-2c536b2e092a",
+    "completedAt": "2026-08-13T10:49:24.788Z"
+  },
+  "proposals": [
+    {
+      "id": "yuanshi:192:r0001",
+      "unit": {
+        "id": "s0113",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 16
+      },
+      "field": "idiomatic",
+      "before": "Through further inquiry Guanyinnu established the facts, punished Yang, restored the fields to the Wang family, rebuked the shrine, and had it torn down.\"",
+      "after": "Through further inquiry Guanyinnu established the facts, punished Yang, restored the fields to the Wang family, rebuked the shrine, and had it torn down.",
+      "reason": "Trailing quotation mark incorrectly continues the shaman's speech over Guanyinnu's subsequent judicial actions.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:192:r0002",
+      "unit": {
+        "id": "s0113",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 16
+      },
+      "field": "literal",
+      "before": "Through interrogation Guanyinnu obtained the truth, punished Yang, returned the fields to the Wang family, rebuked the god, and demolished the shrine.\"",
+      "after": "Through interrogation Guanyinnu obtained the truth, punished Yang, returned the fields to the Wang family, rebuked the god, and demolished the shrine.",
+      "reason": "Trailing quotation mark incorrectly continues the shaman's speech over Guanyinnu's subsequent judicial actions.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "yuanshi:192:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0113 opens with '」 closing the nested quote and the shaman's confession from s0112; 觀音奴因訊得其實…責神而撤其祠 is narrator text about Guanyinnu's judgment, so the trailing English quotation mark wrongly continues the speech and must be removed.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0113",
+        "excerpt": "'」觀音奴因訊得其實，坐楊罪，歸其田王氏，責神而撤其祠。"
+      }
+    },
+    {
+      "repairId": "yuanshi:192:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same unit-boundary quote closure '」 ends the shaman's report before 觀音奴因訊得其實; the literal trailing quotation mark incorrectly folds Guanyinnu's judicial actions into quoted speech and should be dropped.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0113",
+        "excerpt": "'」觀音奴因訊得其實，坐楊罪，歸其田王氏，責神而撤其祠。"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

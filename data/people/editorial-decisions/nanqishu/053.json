@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 3,
+  "book": "nanqishu",
+  "chapter": "053",
+  "input": {
+    "chapterFingerprint": "sha256:5ec27de6cb9298cd3f51b192e571c678606f8223616a07295c8cf78bcc632efb",
+    "proposalsFingerprint": "sha256:e536082bdae98739c44b3c5af3a79b4f4d6cfdebe59ab41bf039f3451c0b4c65"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-620df18b-f6d6-4c49-8471-7ea0649dd087",
+    "runId": "run-342b5fa3-7db8-45f8-ad35-917c7f6bbdcf",
+    "completedAt": "2026-08-13T10:33:30.552Z"
+  },
+  "proposals": [
+    {
+      "id": "nanqishu:053:r0001",
+      "unit": {
+        "id": "s0162",
+        "kind": "paragraph-sentence",
+        "blockIndex": 28,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Shen Xian, courtesy name Yanehang, was a native of Wukang in Wuxing commandery.",
+      "after": "Shen Xian, courtesy name Yanzhang, was a native of Wukang in Wuxing commandery.",
+      "reason": "The Chinese courtesy name 彥璋 is read Yanzhang; Yanehang is a clear romanization typo.",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:053:r0002",
+      "unit": {
+        "id": "s0162",
+        "kind": "paragraph-sentence",
+        "blockIndex": 28,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Shen Xian, courtesy name Yanehang, was a man of Wukang in Wuxing.",
+      "after": "Shen Xian, courtesy name Yanzhang, was a man of Wukang in Wuxing.",
+      "reason": "The Chinese courtesy name 彥璋 is read Yanzhang; Yanehang is a clear romanization typo.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "nanqishu:053:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0162 gives courtesy name 彥璋 (Yànzhāng). Yanehang is a clear romanization error; Yanzhang restores the correct reading without changing the rest of the accurate sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0162",
+        "excerpt": "字彥璋"
+      }
+    },
+    {
+      "repairId": "nanqishu:053:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same unit 沈憲字彥璋 requires Yanzhang, not Yanehang, in the literal field. The proposed spelling corrects the typo and leaves the remaining wording intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0162",
+        "excerpt": "字彥璋"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "nanqishu:053:r0001",
+      "before": {
+        "id": "nanqishu:053:c0019",
+        "subject": "nanqishu:053:p005",
+        "predicate": "name",
+        "value": {
+          "kind": "courtesy",
+          "en": "Yanehang",
+          "zh": "彥璋",
+          "pinyin": "Yànzhāng"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "nanqishu:053:s0162"
+        ]
+      },
+      "after": {
+        "id": "nanqishu:053:c0019",
+        "subject": "nanqishu:053:p005",
+        "predicate": "name",
+        "value": {
+          "kind": "courtesy",
+          "en": "Yanzhang",
+          "zh": "彥璋",
+          "pinyin": "Yànzhāng"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "nanqishu:053:s0162"
+        ]
+      },
+      "reason": "Accepted r0001 shows English Yanehang came only from the bad romanization of 彥璋; the courtesy-name claim remains valid with en corrected to Yanzhang while zh, pinyin, id, subject, predicate, certainty, and evidence stay unchanged.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0162",
+        "excerpt": "字彥璋"
+      }
+    }
+  ]
+}

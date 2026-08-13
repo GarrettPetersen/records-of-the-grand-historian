@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "464",
+  "input": {
+    "chapterFingerprint": "sha256:93f4dd831c7b905abfff3cb67d4de371e46d600d772b741ff02f337ab0648e3d",
+    "proposalsFingerprint": "sha256:006794d3faf3d14ad7c90785ed55e9c9ae3e6c5314e63bd51d957dc74eb208d1"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-aa47f78f-98b4-41e7-8c37-cbbc29dd68b7",
+    "runId": "run-aed2b0c1-6ad1-49af-9e3f-c40b9828c707",
+    "completedAt": "2026-08-13T10:43:14.424Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:464:r0001",
+      "unit": {
+        "id": "s0001",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Li Duanfen, Xu Zhijing, Zi Renzhu, Chen Baozhen, Huang Zunxian, Zeng He, Yang Shenxiu, Yang Rui, Liu Guangdi, Tan Sitong, Tang Caichang, Lin Xu, and Kang Guangren. Li Duanfen, whose courtesy name was Biyuan, came from Guizhu in Guizhou.",
+      "after": "Li Duanfen, Xu Zhijing, his son Ren Zhu, Chen Baozhen, Huang Zunxian, Zeng He, Yang Shenxiu, Yang Rui, Liu Guangdi, Tan Sitong, Tang Caichang, Lin Xu, and Kang Guangren. Li Duanfen, whose courtesy name was Biyuan, came from Guizhu in Guizhou.",
+      "reason": "Chinese 子仁鑄 means Xu Zhijing's son Ren Zhu, not a separate person named Zi Renzhu.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:464:r0002",
+      "unit": {
+        "id": "s0001",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Li Duanfen, Xu Zhijing, Zi Renzhu, Chen Baozhen, Huang Zunxian, Zeng He, Yang Shenxiu, Yang Rui, Liu Guangdi, Tan Sitong, Tang Caichang, Lin Xu, and Kang Guangren. Li Duanfen, courtesy name Biyuan, was a native of Guizhu in Guizhou.",
+      "after": "Li Duanfen, Xu Zhijing, son Ren Zhu, Chen Baozhen, Huang Zunxian, Zeng He, Yang Shenxiu, Yang Rui, Liu Guangdi, Tan Sitong, Tang Caichang, Lin Xu, and Kang Guangren. Li Duanfen, courtesy name Biyuan, was a native of Guizhu in Guizhou.",
+      "reason": "Chinese 子仁鑄 is kinship plus personal name, not the fused given name Zi Renzhu.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:464:r0001",
+      "decision": "revise",
+      "after": "Li Duanfen, Xu Zhijing, his son Renzhu, Chen Baozhen, Huang Zunxian, Zeng He, Yang Shenxiu, Yang Rui, Liu Guangdi, Tan Sitong, Tang Caichang, Lin Xu, and Kang Guangren. Li Duanfen, whose courtesy name was Biyuan, came from Guizhu in Guizhou.",
+      "reason": "s0001 徐致靖 子仁鑄 marks kinship 子 plus given name 仁鑄 after Xu Zhijing, not a separate Zi Renzhu; the proposal rightly restores sonship but should keep the given name as one unit Renzhu.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0001",
+        "excerpt": "徐致靖 子仁鑄"
+      }
+    },
+    {
+      "repairId": "qingshigao:464:r0002",
+      "decision": "revise",
+      "after": "Li Duanfen, Xu Zhijing, son Renzhu, Chen Baozhen, Huang Zunxian, Zeng He, Yang Shenxiu, Yang Rui, Liu Guangdi, Tan Sitong, Tang Caichang, Lin Xu, and Kang Guangren. Li Duanfen, courtesy name Biyuan, was a native of Guizhu in Guizhou.",
+      "reason": "s0001 子仁鑄 is kinship marker plus given name 仁鑄, not Zi Renzhu; the proposal correctly separates sonship from the name but should not space the given name as Ren Zhu.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0001",
+        "excerpt": "徐致靖 子仁鑄"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

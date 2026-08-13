@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "jiutangshu",
+  "chapter": "131",
+  "input": {
+    "chapterFingerprint": "sha256:e9daa482dd4cf29db79aa92e71f5cfb9695939f7c8889fa8ddecc5bc82eaa2fe",
+    "proposalsFingerprint": "sha256:0b7809c254ad4743386b403fe96333e01a749c3a1ae85c8d8aae4863522149a0"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-b4a36992-7840-4232-a068-802ecca76659",
+    "runId": "run-e55d47a2-201c-4919-9603-0a2df97c28a6",
+    "completedAt": "2026-08-13T10:21:22.052Z"
+  },
+  "proposals": [
+    {
+      "id": "jiutangshu:131:r0001",
+      "unit": {
+        "id": "s0123",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "When the imperial army recovered the capital he was due for the extreme penalty; Lin was already over seventy, and Li Sheng pitied his age and memorialized to reduce the sentence to death.",
+      "after": "When the imperial army recovered the capital he was due for the extreme penalty; Lin was already over seventy, and Li Sheng pitied his age and memorialized to commute the death sentence.",
+      "reason": "減死 means commute/reduce a death sentence, not reduce the sentence to death.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiutangshu:131:r0002",
+      "unit": {
+        "id": "s0123",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "When the imperial army recovered the capital he was due for the extreme penalty; Lin was already over seventy, and Li Sheng pitied his age and memorialized to reduce the sentence to death.",
+      "after": "When the imperial army recovered the capital he was due for the extreme penalty; Lin was already over seventy, and Li Sheng pitied his age and memorialized to commute the death sentence.",
+      "reason": "Same error in literal: 減死 is commutation of death, not reduction to death.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiutangshu:131:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0123 ends 表請減死: Li Sheng petitioned to commute the death penalty already implied by 當處極刑. \"Reduce the sentence to death\" reverses that meaning; \"commute the death sentence\" matches 減死 and the next unit's refused-execution outcome.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0123",
+        "excerpt": "表請減死"
+      }
+    },
+    {
+      "repairId": "jiutangshu:131:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same focus unit has 表請減死; the literal likewise turns commutation into \"reduce … to death.\" The proposed \"commute the death sentence\" restores the Chinese sense without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0123",
+        "excerpt": "表請減死"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}
