@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "songshi",
+  "chapter": "110",
+  "input": {
+    "chapterFingerprint": "sha256:504f76a9df2e1ec8e6dd8c98c3cf62a4b3b995264c5888c0d1264500833a1523",
+    "proposalsFingerprint": "sha256:0d98ca8a8e14839ce0cdc4702bdb366860ded2377aff4d14aa1cbd8e114196a9"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-feb48f4a-3b5f-4e78-881f-b417e51814a9",
+    "runId": "run-f0163814-96cc-4b02-9b06-c2d1d84b923f",
+    "completedAt": "2026-08-13T14:50:40.580Z"
+  },
+  "proposals": [
+    {
+      "id": "songshi:110:r0001",
+      "unit": {
+        "id": "s0078",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Advance officers led the emperor into the small resting pavilion and lowered the curtain. When the Supreme Emperor had taken the throne, the curtain was raised. Advance officers led the emperor up the eastern steps to before the folding balustrade and requested that he bow. After the emperor bowed twice, they led him slightly forward to report on the Supreme Emperor's health, then led him back to bow twice again, and finally to stand west of the Supreme Emperor's throne, facing west.",
+      "after": "Advance officers led the emperor into the small resting pavilion and lowered the curtain. When the Supreme Emperor had taken the throne, the curtain was raised. Advance officers led the emperor up the eastern steps to before the folding balustrade and requested that he bow. After the emperor bowed twice, they led him slightly forward to report on the Supreme Emperor's health, then led him back to bow twice again, and finally to stand east of the Supreme Emperor's throne, facing west.",
+      "reason": "Chinese 御坐之東，西向立 means east of the throne, facing west; idiomatic wrongly says \"west of the ... throne\".",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:110:r0002",
+      "unit": {
+        "id": "s0047",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "When Huizong abdicated, Qinzong conferred on him the honorific title Supreme Emperor, Lord Who Teaches the Way, and he took up residence at Longde Palace.",
+      "after": "When Huizong abdicated, Qinzong conferred on him the honorific title Teaching Lord and Daoist Sovereign Supreme Emperor, and he took up residence at Longde Palace.",
+      "reason": "教主道君太上皇帝 is a single honorific; the idiomatic splits it awkwardly as \"Supreme Emperor, Lord Who Teaches the Way\".",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "songshi:110:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0078 ends 詣太上皇帝御坐之東，西向立: the emperor stands east of the Supreme Emperor's throne facing west; idiomatic \"west of the ... throne\" reverses 之東, and the proposed east correction matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0078",
+        "excerpt": "詣太上皇帝御坐之東，西向立"
+      }
+    },
+    {
+      "repairId": "songshi:110:r0002",
+      "decision": "reject",
+      "after": null,
+      "reason": "s0047 教主道君太上皇帝 is one honorific for Huizong; \"Supreme Emperor, Lord Who Teaches the Way\" already conveys that title adequately, and the proposed rephrasing is stylistic rather than correcting a semantic or naming error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0047",
+        "excerpt": "教主道君太上皇帝"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

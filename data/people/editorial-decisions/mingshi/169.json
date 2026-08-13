@@ -1,0 +1,219 @@
+{
+  "schemaVersion": 3,
+  "book": "mingshi",
+  "chapter": "169",
+  "input": {
+    "chapterFingerprint": "sha256:a2e0b64fefa7218772941db9378ce133e0786b6b7b91ed65bb82c5d101f53b37",
+    "proposalsFingerprint": "sha256:2264dbb267ed43c408ca7de436e623650742ec602b8bb7707954e167ee8543fd"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-8c7a9ba2-61ab-47e2-b4bd-e5397781f944",
+    "runId": "run-eb7b6865-c7d8-4a1c-bff3-95b2210f8a6d",
+    "completedAt": "2026-08-13T14:46:10.781Z"
+  },
+  "proposals": [
+    {
+      "id": "mingshi:169:r0001",
+      "unit": {
+        "id": "s0075",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 22
+      },
+      "field": "idiomatic",
+      "before": "Hu Ying said, \"Emperor Taizu laid the imperial tombs here to show his line a capital they must not abandon.\"",
+      "after": "Hu Ying said, \"Emperor Wen laid the imperial tombs here to show his line a capital they must not abandon.\"",
+      "reason": "Chinese 文皇 is Emperor Wen (Yongle/Chengzu), not Taizu.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:169:r0002",
+      "unit": {
+        "id": "s0152",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "The great ministers asked the empress dowager to install the prince as heir apparent and have the Prince of Fu act as regent.",
+      "after": "The great ministers asked the empress dowager to install the prince as heir apparent and have the Prince of Cheng act as regent.",
+      "reason": "郕王 is Prince of Cheng, not Fu.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:169:r0003",
+      "unit": {
+        "id": "s0152",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "The great ministers together asked the Empress Dowager to establish the prince as heir apparent and order the Prince of Fu to govern as regent.",
+      "after": "The great ministers together asked the Empress Dowager to establish the prince as heir apparent and order the Prince of Cheng to govern as regent.",
+      "reason": "郕王 is Prince of Cheng, not Fu.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:169:r0004",
+      "unit": {
+        "id": "s0054",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "The next year he came to court and was kept at the Nanjing ministry of rites, soon advanced to minister.",
+      "after": "The next year he came to court and was kept at the traveling-court Ministry of Rites, soon advanced to minister.",
+      "reason": "行在禮部 is the traveling-court ministry, not Nanjing.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:169:r0005",
+      "unit": {
+        "id": "s0214",
+        "kind": "paragraph-sentence",
+        "blockIndex": 24,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Then Huang Ying, native-office prefect of Siming, memorialized asking for it.",
+      "after": "Then Huang Zeng, native-office prefect of Siming, memorialized asking for it.",
+      "reason": "黃矰 is Huang Zeng; Ying is a mistranslation of 矰.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:169:r0006",
+      "unit": {
+        "id": "s0249",
+        "kind": "paragraph-sentence",
+        "blockIndex": 28,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Between Yingzong and Jingtai the realm was in upheaval and minds were unsettled; many who held power flattered to please.",
+      "after": "Between Yingzong and Jingtai the national situation was newly changed and people's hearts were watchful; many ministers who held power and handled affairs flattered to please.",
+      "reason": "Idiomatic 'upheaval' and 'unsettled' overstate 國勢初更 and 人心觀望; the literal rendering matches the Chinese more closely.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "mingshi:169:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0075 has 文皇, Emperor Wen (Yongle/Chengzu), not Taizu (太祖); the proposed Emperor Wen matches the Chinese while preserving the rest of the idiomatic sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "文皇定陵寢於此"
+      }
+    },
+    {
+      "repairId": "mingshi:169:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0152 has 郕王, the Prince of Cheng; Fu (福) is unsupported, and Prince of Cheng restores the correct princely title.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0152",
+        "excerpt": "命郕王攝政"
+      }
+    },
+    {
+      "repairId": "mingshi:169:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same focus unit 命郕王攝政 names the Prince of Cheng; the literal’s Prince of Fu is the same title error and the proposed Cheng fix is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0152",
+        "excerpt": "命郕王攝政"
+      }
+    },
+    {
+      "repairId": "mingshi:169:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0054 has 行在禮部, the traveling-court Ministry of Rites; Nanjing (南京) is not in the Chinese, and the proposed replacement corrects that misidentification.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0054",
+        "excerpt": "乃留行在禮部"
+      }
+    },
+    {
+      "repairId": "mingshi:169:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0214 names 黃矰, read Huang Zeng; Ying invents a reading of 矰, and Huang Zeng restores the correct personal name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0214",
+        "excerpt": "思明土知府黃矰"
+      }
+    },
+    {
+      "repairId": "mingshi:169:r0006",
+      "decision": "revise",
+      "after": "Between Yingzong and Jingtai, when the realm's situation had just changed and people watched and waited, many ministers who held power and handled affairs flattered to please.",
+      "reason": "國勢初更 is a newly changed political situation, not upheaval, and 人心觀望 is wait-and-see watching, not unsettled minds; 執政任事之臣 also includes those handling affairs. The proposal rightly rejects the overstated before reading, but 'national situation was newly changed' and 'people's hearts were watchful' are stiff calques.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0249",
+        "excerpt": "國勢初更，人心觀望，執政任事之臣多阿意取容"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "mingshi:169:r0005",
+      "before": {
+        "id": "mingshi:169:c0189",
+        "subject": "mingshi:169:p060",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Huang Ying",
+          "zh": "黃矰",
+          "pinyin": "Huang Zeng"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "mingshi:169:s0214"
+        ]
+      },
+      "after": {
+        "id": "mingshi:169:c0189",
+        "subject": "mingshi:169:p060",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Huang Zeng",
+          "zh": "黃矰",
+          "pinyin": "Huang Zeng"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "mingshi:169:s0214"
+        ]
+      },
+      "reason": "Accepted r0005 restores Huang Zeng for 黃矰; the English name claim's Huang Ying came only from the bad idiomatic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0214",
+        "excerpt": "黃矰"
+      }
+    }
+  ]
+}

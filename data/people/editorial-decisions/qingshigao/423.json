@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "423",
+  "input": {
+    "chapterFingerprint": "sha256:827fee18dace1b7afb0c99942f302e7187e223ba9cf5d6cc82b2a25f1fc0852f",
+    "proposalsFingerprint": "sha256:d82485bbaf8ed5f8a8383eaebeb14c11cc56d2c911784e9646879ae9ece6b90b"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-b84f4d97-17b3-4eba-90fe-a941a07c75b2",
+    "runId": "run-d7424f75-22b0-4b77-9ba0-a7f889f818b1",
+    "completedAt": "2026-08-13T14:48:06.189Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:423:r0001",
+      "unit": {
+        "id": "s0208",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 207
+      },
+      "field": "idiomatic",
+      "before": "In the twelfth year (1886) the emperor assumed personal rule and ordered repairs to the Old Summer Palace for the empress dowager's residence.",
+      "after": "In the twelfth year (1873) the emperor assumed personal rule and ordered repairs to the Old Summer Palace for the empress dowager's residence.",
+      "reason": "Tongzhi 12 corresponds to AD 1873 (Yuanmingyuan repair debate under Tongzhi), not Guangxu 12 / 1886.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:423:r0002",
+      "unit": {
+        "id": "s0017",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 16
+      },
+      "field": "idiomatic",
+      "before": "Lately the two Hu provinces have been held up chiefly by a few scholar-officials—Hu Linyi and Luo Zinan—who drilled their men in courage and led from the front.",
+      "after": "Lately the two Hu provinces have been held up chiefly by a few scholar-officials—Hu Linyi and Luo Zenan—who drilled their men in courage and led from the front.",
+      "reason": "羅澤南 is Luo Zenan; Zinan is incorrect romanization of 澤南.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:423:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0208 places 十二年 with 上親政 and 葺治圓明園 for the empress dowager, immediately followed by Shen Huai's and You Baichuan's remonstrance—the Tongzhi-era Yuanmingyuan repair debate. Tongzhi 12 is AD 1873; the prior parenthetical 1886 wrongly treats the year as Guangxu 12.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0208",
+        "excerpt": "十二年，上親政，命葺治圓明園，奉皇太后駐蹕。"
+      }
+    },
+    {
+      "repairId": "qingshigao:423:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0017 names 羅澤南 beside 胡林翼; 澤南 is Zenan, not Zinan. The proposed idiomatic correction restores the standard romanization without changing the rest of the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0017",
+        "excerpt": "羅澤南"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "qingshigao:423:r0002",
+      "before": {
+        "id": "qingshigao:423:c0031",
+        "subject": "qingshigao:423:p011",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Luo Zinan",
+          "zh": "羅澤南",
+          "pinyin": "Luo Zenan"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:423:s0017"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:423:c0031",
+        "subject": "qingshigao:423:p011",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Luo Zenan",
+          "zh": "羅澤南",
+          "pinyin": "Luo Zenan"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:423:s0017"
+        ]
+      },
+      "reason": "Accepted r0002 shows English Luo Zinan came only from the bad romanization of 羅澤南; the personal-name claim must read Luo Zenan while keeping zh, pinyin, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0017",
+        "excerpt": "羅澤南"
+      }
+    }
+  ]
+}

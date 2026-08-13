@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "xintangshu",
+  "chapter": "044",
+  "input": {
+    "chapterFingerprint": "sha256:8efb5ecfd44b23ff0857c1aa7310d5e39afbd01aef7324506e8afbc02c2a73a6",
+    "proposalsFingerprint": "sha256:94c10572dc91f6f0926431d16c8de9768a2210bd03e45bc5e759a6b82b84ec6a"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-da2995b3-f50f-4777-a623-66d3c5f30a72",
+    "runId": "run-6b2d810b-0dbf-424b-ae33-ea9565a17b8a",
+    "completedAt": "2026-08-13T14:54:13.627Z"
+  },
+  "proposals": [
+    {
+      "id": "xintangshu:044:r0001",
+      "unit": {
+        "id": "s0016",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Enrollment was limited to imperial relatives within the zimama degree and closer; relatives of the empress dowager and empress within the dagong degree and closer; and sons of chancellors, first-rank honorary officials, meritorious officials receiving substantive enfeoffment income, capital active-duty officials from the third rank down, and Secretariat and Chancellery vice-directors.",
+      "after": "Enrollment was limited to imperial relatives within the zimama degree and closer; relatives of the empress dowager and empress within the dagong degree and closer; and sons of chancellors, first-rank honorary officials, meritorious officials receiving substantive enfeoffment income, capital active-duty officials of the junior third rank, and Secretariat and Chancellery vice-directors.",
+      "reason": "從三品 denotes the junior/lower third rank (rank 3b), not officials from the third rank downward (三品以下).",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:044:r0002",
+      "unit": {
+        "id": "s0016",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "They were drawn from imperial kin within the zimama degree and closer, kin of the empress dowager and empress within the dagong degree and closer, sons of chancellors and first-rank honorary officials, meritorious officials receiving substantive enfeoffment income, and sons of capital active-duty officials from the third rank down and Secretariat and Chancellery vice-directors.",
+      "after": "They were drawn from imperial kin within the zimama degree and closer, kin of the empress dowager and empress within the dagong degree and closer, sons of chancellors and first-rank honorary officials, meritorious officials receiving substantive enfeoffment income, and sons of capital active-duty officials of the junior third rank and of Secretariat and Chancellery vice-directors.",
+      "reason": "從三品 is junior third rank, not “from the third rank down.”",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:044:r0003",
+      "unit": {
+        "id": "s0153",
+        "kind": "paragraph-sentence",
+        "blockIndex": 25,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "An edict ordered Palace Attendants Li Qiyun and Li Yi, Left Assistant Minister of the Secretariat Jia Zhi, and Jingzhao Intendant and concurrent Censor-in-Chief Yan Wu to deliberate.",
+      "after": "An edict ordered Palace Attendants Li Qiyun and Li Yi, Left Assistant Director of the Department of State Affairs Jia Zhi, and Jingzhao Intendant and concurrent Censor-in-Chief Yan Wu to deliberate.",
+      "reason": "尚書左丞 is Left Assistant Director of the Department of State Affairs (尚書省), not an office of the Secretariat (中書省).",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xintangshu:044:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 京官職事從三品 names capital active-duty officials of the junior third rank (從三品 = rank 3b). The original “from the third rank down” confuses 從 with 三品以下; the proposed idiomatic corrects only that phrase.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0016",
+        "excerpt": "京官職事從三品"
+      }
+    },
+    {
+      "repairId": "xintangshu:044:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 京官職事從三品 is junior third rank, not a downward range from the third rank. The proposed literal fixes that reading and keeps 中書黃門侍郎 parallel as another son-eligibility category.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0016",
+        "excerpt": "京官職事從三品、中書黃門侍郎"
+      }
+    },
+    {
+      "repairId": "xintangshu:044:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 尚書左丞 is the Left Assistant Director of the Department of State Affairs (尚書省), not an office of the Secretariat (中書省). The proposed literal corrects the agency misattribution while leaving the rest intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0153",
+        "excerpt": "尚書左丞賈至"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

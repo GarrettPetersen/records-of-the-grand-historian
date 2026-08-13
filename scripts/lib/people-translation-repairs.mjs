@@ -5,6 +5,7 @@ import {
 
 const ENGLISH_SENTENCE_INITIAL_NON_NAMES = new Set([
   'All',
+  'Construction',
   'Customs',
   'Even',
   'How',
@@ -13,6 +14,13 @@ const ENGLISH_SENTENCE_INITIAL_NON_NAMES = new Set([
   'Not',
   'Once',
   'Only',
+  'People',
+  'Recently I',
+  'Rites',
+  'So-and-so',
+  'Some',
+  'Start',
+  'Three',
   'Though',
   'Under',
 ]);
@@ -21,7 +29,9 @@ const ENGLISH_NAMED_NON_PERSON_TERMS = new Set([
   'Circular Moat',
   'Earth Goddess',
   'Five Altars',
+  'Forty-one Spiritual Terrace',
   'Heaven',
+  'Imperial Ox',
   'Mount Shouyang',
   'Supreme Altar',
   'Three Amnesties',
@@ -56,11 +66,13 @@ const ENGLISH_NAMED_OFFICE_TERMS = new Set([
   'Flourishing Talent',
   'Gou Shield',
   'Grandee',
+  'Household Grandee',
   'Imperial Sacrifices',
   'Imperial Secretariat',
   'Imperial Stud',
   'Imperial Workshops',
   'Masses',
+  'Middle Grandee',
   'Nobility Ranks',
   'Privy Treasurer',
   'Situ',
@@ -72,10 +84,29 @@ const ENGLISH_NOBLE_TITLE_TERMS = new Set([
   'Baron',
   'Prince',
 ]);
+const ENGLISH_CONTEXTUAL_PERSON_TITLES = new Set([
+  'Crown Prince',
+  'Emperor',
+  'Empress',
+  'Empress Dowager',
+  'Heir Apparent',
+  'King',
+  'Queen',
+  'Regent',
+]);
 const ENGLISH_INSTITUTIONAL_SUFFIX_RE = /\b(?:Academy|Administration|Bureau|Chancellery|Commission|Court|Department|Directorate|Household|Ministry|Office|Pasturage|Secretariat)$/u;
 
 function locatorKey(locator) {
   return `${locator.id}:${locator.blockIndex}:${locator.collection}:${locator.itemIndex}`;
+}
+
+export function removeDispositionMentionConflicts(extraction) {
+  const mentionedCandidates = new Set(extraction.mentions.flatMap((mention) =>
+    mention.candidateRefs
+  ));
+  extraction.candidateDispositions = extraction.candidateDispositions.filter((item) =>
+    !mentionedCandidates.has(item.candidate)
+  );
 }
 
 function claimEvidenceUnit(claim, unitId) {
@@ -944,6 +975,26 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         mapped = true;
       }
     }
+    if (!mapped && stale.language === 'en') {
+      const previousUnit = previousUnitById.get(stale.mention.unit.id);
+      const removedFromDisplay = previousUnit &&
+        exactOccurrences(previousUnit.en, stale.span.exact, 'en').length > 0 &&
+        exactOccurrences(unit.en, stale.span.exact, 'en').length === 0;
+      const supportedElsewhere = reconciled.mentions.some((mention) =>
+        mention.id !== stale.mention.id &&
+        mention.person === stale.mention.person &&
+        (mention.spans.zh.length > 0 || mention.spans.en.length > 0)
+      ) || reconciled.claims.some((claim) =>
+        claim.subject === stale.mention.person &&
+        !claimEvidenceUnit(claim, stale.mention.unit.id)
+      );
+      if (removedFromDisplay && supportedElsewhere) {
+        // The reviewed edit removed a fabricated explicit name but the person
+        // remains supported elsewhere. Contextual claims in this unit may
+        // still be valid even though this particular link is retired.
+        mapped = true;
+      }
+    }
     if (!mapped) {
       const hasRemainingUnitContext = reconciled.mentions.some((mention) =>
         mention.person === stale.mention.person &&
@@ -1196,6 +1247,7 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
     if (
       aliasMatches.length === 0 &&
       candidate.language === 'en' &&
+      !ENGLISH_CONTEXTUAL_PERSON_TITLES.has(candidate.exact) &&
       (candidate.exact.includes(' ') || [...candidate.exact].length >= 4)
     ) {
       aliasMatches = reconciled.claims.flatMap((claim) => {
@@ -1212,7 +1264,13 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         }];
       });
     }
-    if (aliasMatches.length === 0) {
+    if (
+      aliasMatches.length === 0 &&
+      !(
+        candidate.language === 'en' &&
+        ENGLISH_CONTEXTUAL_PERSON_TITLES.has(candidate.exact)
+      )
+    ) {
       aliasMatches = reconciled.people.flatMap((person) => {
         const exact = person.preferredNameSuggestion?.[candidate.language];
         if (exact !== candidate.exact) return [];
@@ -1425,6 +1483,26 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
           disposition: 'not-person',
           reason: 'not-a-name',
           note: 'Speech-introducing function phrase, not a person name.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (/^:\s+(?:a\s+)?place name\b/iu.test(after)) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'place',
+          note: 'Headword explicitly glossed as a place name.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (/\ba title for (?:tribal )?chiefs\b/iu.test(unitText)) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'office',
+          note: 'Headword or variant explicitly glossed as a title for chiefs.',
         });
         accounted.add(candidate.id);
         continue;
@@ -1862,6 +1940,11 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
     return false;
   }).map((candidate) => candidate.id);
 
+  // A span can widen late in reconciliation and come to cover a scanner
+  // fragment that was provisionally classified as a non-person. The final
+  // person mention is the stronger accounting result.
+  removeDispositionMentionConflicts(reconciled);
+
   for (const mention of reconciled.mentions) {
     mention.candidateRefs = [...new Set(mention.candidateRefs)];
     mention.candidateRefs.sort((left, right) =>
@@ -1871,19 +1954,18 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
   }
 
   const claimSubjects = new Set(reconciled.claims.map((claim) => claim.subject));
-  const nestedClaimReferences = new Set(reconciled.claims.flatMap((claim) =>
-    nestedStringValues(claim.value).filter((value) =>
-      reconciled.people.some((person) => person.localId === value)
-    )
-  ));
+  const mentionedPeople = new Set(reconciled.mentions.map((mention) => mention.person));
   const unsupportedPeople = new Set(reconciled.people.flatMap((person) =>
-    !claimSubjects.has(person.localId) && !nestedClaimReferences.has(person.localId)
+    !claimSubjects.has(person.localId) && !mentionedPeople.has(person.localId)
       ? [person.localId]
       : []
   ));
   reconciled.people = reconciled.people.filter((person) => !unsupportedPeople.has(person.localId));
   reconciled.mentions = reconciled.mentions.filter((mention) =>
     !unsupportedPeople.has(mention.person)
+  );
+  reconciled.claims = reconciled.claims.filter((claim) =>
+    !nestedStringValues(claim.value).some((value) => unsupportedPeople.has(value))
   );
 
   renumberPeopleAndClaims(reconciled);

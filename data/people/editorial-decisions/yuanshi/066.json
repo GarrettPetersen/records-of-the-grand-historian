@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "yuanshi",
+  "chapter": "066",
+  "input": {
+    "chapterFingerprint": "sha256:792c7830accab87db5a458664189024bdba5fc9d2078775bb03239b7b2dcffbb",
+    "proposalsFingerprint": "sha256:9db894128a942c2ce74fbc83667a9fb7d8163184f29b89946504baa51c15b998"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-19609e3e-6b95-4d68-8bb5-d87ccd2f3d75",
+    "runId": "run-98e9b406-7213-47d6-bd22-6067a3987e6a",
+    "completedAt": "2026-08-13T14:56:21.111Z"
+  },
+  "proposals": [
+    {
+      "id": "yuanshi:066:r0001",
+      "unit": {
+        "id": "s0140",
+        "kind": "paragraph-sentence",
+        "blockIndex": 19,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Jia Lu poured out every resource of mind and courage, shrank from no toil and no ridicule, to repay the emperor's trust in recognizing talent.",
+      "after": "Jia Lu poured out every resource of mind and courage, shrank from no toil and no ridicule, to repay the ruler and chancellor's discernment in recognizing talent.",
+      "reason": "Chinese 君相 means both the ruler and the chancellor; the idiomatic English mentions only the emperor.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:066:r0002",
+      "unit": {
+        "id": "s0140",
+        "kind": "paragraph-sentence",
+        "blockIndex": 19,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Lu was able to exhaust the ingenuity of his mind and cleverness in planning, ride the vigor of his spirit and courage, not sparing strenuous labor, not fearing ridicule and criticism, to repay the ruler's knowledge of men.",
+      "after": "Lu was able to exhaust the ingenuity of his mind and cleverness in planning, ride the vigor of his spirit and courage, not sparing strenuous labor, not fearing ridicule and criticism, to repay the ruler and chancellor's knowledge of men.",
+      "reason": "Literal English likewise drops 相 from 君相, leaving only the ruler.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:066:r0003",
+      "unit": {
+        "id": "s0235",
+        "kind": "paragraph-sentence",
+        "blockIndex": 38,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Though Xu Youren's memorial was ignored, work began in the first month and was declared finished by the fourth.",
+      "after": "Once the memorial was submitted, the chancellor ultimately would not follow it; work began in the first month and was completed in the fourth.",
+      "reason": "Chinese subjects 丞相 (the chancellor), not Xu Youren; the idiomatic sentence invents Xu Youren as the ignored memorial's owner in a concessive clause.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "yuanshi:066:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0140 ends with 以報君相知人之明; 君相 is ruler and chancellor together, and 知人之明 is discernment in recognizing talent. The before text keeps only the emperor and softens 明 to trust; the proposed idiomatic restores both agents and the sense of discernment.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0140",
+        "excerpt": "以報君相知人之明"
+      }
+    },
+    {
+      "repairId": "yuanshi:066:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 君相 in s0140 requires both ruler and chancellor in the literal field; dropping 相 leaves only the ruler, and the proposed replacement correctly restores the compound.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0140",
+        "excerpt": "以報君相知人之明"
+      }
+    },
+    {
+      "repairId": "yuanshi:066:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0235 has 議既上，丞相終不從，遂以正月興工，至四月功畢: the memorial is unnamed, 丞相 is the agent who would not follow it, and work then began and finished. The before text invents Xu Youren and a concessive passive; the proposed idiomatic matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0235",
+        "excerpt": "議既上，丞相終不從，遂以正月興工，至四月功畢"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

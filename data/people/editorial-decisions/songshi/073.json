@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "songshi",
+  "chapter": "073",
+  "input": {
+    "chapterFingerprint": "sha256:8131befc316fa72918afe44ab60e4ccd8a4e4efaa8239c76f605fd7d451cd1bc",
+    "proposalsFingerprint": "sha256:170481678d6e3d3c0c63087b1a2a177a2afe79edf5c95c3f6053bd4f88ad0534"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-5aa1cbd6-9546-4749-8d19-0294a4c44d42",
+    "runId": "run-0dab61ac-3c15-45cf-8eda-e9a23e805f22",
+    "completedAt": "2026-08-13T14:50:26.549Z"
+  },
+  "proposals": [
+    {
+      "id": "songshi:073:r0001",
+      "unit": {
+        "id": "s0220",
+        "kind": "paragraph-sentence",
+        "blockIndex": 111,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Then set that segment's first-day motion parts to one hundred, divide the difference for days with the remainder as parts, and add or subtract the result from the fixed accumulation — add for morning appearance and subtract for evening concealment.",
+      "after": "Then add one hundred parts to that segment's first-day motion parts, divide the difference for days with the remainder as parts, and add or subtract the result from the fixed accumulation — add for morning appearance and subtract for evening concealment.",
+      "reason": "In calendar computational Chinese, 如一百 means add one hundred parts (parallel to 減去一百分 at s0216 and 一百分加 at s0218), not set the value equal to one hundred.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:073:r0002",
+      "unit": {
+        "id": "s0220",
+        "kind": "paragraph-sentence",
+        "blockIndex": 111,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Then set that segment's first-day motion parts equal to one hundred, divide the difference for days, what does not fill, reduce back for parts; the result is used to add or subtract the fixed accumulation — add for morning appearance and subtract for evening concealment.",
+      "after": "Then set that segment's first-day motion parts and add one hundred, divide the difference for days, what does not fill, reduce back for parts; the result is used to add or subtract the fixed accumulation — add for morning appearance and subtract for evening concealment.",
+      "reason": "Literal 如一百 is an additive operation in this formula register, not equating the motion parts to one hundred.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:073:r0003",
+      "unit": {
+        "id": "s0250",
+        "kind": "paragraph-sentence",
+        "blockIndex": 124,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Subtract the excess-deficit parts by the distance-from-conjunction difference day — that is the distance-from-conjunction difference degree;",
+      "after": "Subtract the distance-from-conjunction difference day from the excess-deficit parts — that is the distance-from-conjunction difference degree;",
+      "reason": "Chinese 以距合差日減盈縮分 means subtract the difference day from the excess-deficit parts; the literal English reverses the operands.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:073:r0004",
+      "unit": {
+        "id": "s0256",
+        "kind": "paragraph-sentence",
+        "blockIndex": 126,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Then subtract one hundred parts from that segment's first-day motion parts, divide the difference by the remainder for days with the remainder as parts, and add or subtract the result from the general-use accumulation — add for morning appearance and subtract for evening concealment.",
+      "after": "Then set that segment's first-day motion parts and overturn-subtract them from one hundred parts; use the remainder to divide the difference, obtaining days, and reduce back any shortfall into parts; add or subtract the result from the general-use accumulation — add for morning appearance and subtract for evening concealment.",
+      "reason": "Chinese 覆減一百分 means overturn-subtract the first-day motion parts from one hundred (100 − first-day), not subtract one hundred from the first-day motion.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:073:r0005",
+      "unit": {
+        "id": "s0261",
+        "kind": "paragraph-sentence",
+        "blockIndex": 129,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Then subtract one hundred parts from that segment's first-day motion parts, divide the difference by the remainder for days with the remainder as parts, and add or subtract the result from the general-use accumulation — add for evening appearance and subtract for morning concealment.",
+      "after": "Then set that segment's first-day motion parts, subtract one hundred parts, and take the remainder.",
+      "reason": "The Chinese unit ends at 餘 after subtracting one hundred parts; the idiomatic invents the later division and add/subtract steps not present in this unit.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "songshi:073:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In this calendrical register 如一百 is additive, parallel to s0218 一百分加其日行分; the before wrongly equates 初日行分 to one hundred, and the proposed add-one-hundred reading restores the correct divisor construction.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0220",
+        "excerpt": "乃置其段初日行分，如一百"
+      }
+    },
+    {
+      "repairId": "songshi:073:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same 如一百 is an addend after 置其段初日行分, not an equality; the before's 'equal to one hundred' invents equating, and the proposed 'add one hundred' matches the formula sense already used in s0218.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0220",
+        "excerpt": "乃置其段初日行分，如一百"
+      }
+    },
+    {
+      "repairId": "songshi:073:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "以距合差日減盈縮分 is standard 以A減B (B−A): subtract 距合差日 from 盈縮分; the before reverses the operands, and the proposed wording matches the already-correct idiomatic for this unit.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0250",
+        "excerpt": "以距合差日減盈縮分"
+      }
+    },
+    {
+      "repairId": "songshi:073:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "覆減一百分 after 置其段初日行分 means overturn-subtract the first-day motion from one hundred (100−初日行分), as in s0255 覆減周天度; the before subtracts one hundred from the motion parts and reverses the operands.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0256",
+        "excerpt": "乃置其段初日行分，覆減一百分"
+      }
+    },
+    {
+      "repairId": "songshi:073:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "The Chinese unit is only 乃置其段初日行分，減去一百分，餘; the before invents division of the difference and evening-appearance/morning-concealment add/subtract steps absent from this unit, and the proposed remainder-only wording matches the source bound.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0261",
+        "excerpt": "乃置其段初日行分，減去一百分，餘"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

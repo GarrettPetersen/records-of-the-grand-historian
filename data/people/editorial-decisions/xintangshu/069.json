@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "xintangshu",
+  "chapter": "069",
+  "input": {
+    "chapterFingerprint": "sha256:e875950ca35375e0ef98cc211a21e4154080e916e0bc334cf7305fb7cdb50b4c",
+    "proposalsFingerprint": "sha256:d191162a7bcadb5cc8b2e4290bb89a06e97556d97698112a0aec5a8261a0cc9b"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-110b6c96-87d2-459a-b8d7-adc77d8696d9",
+    "runId": "run-ea235065-1046-4b59-8f06-d8ca5fefaa8b",
+    "completedAt": "2026-08-13T14:54:31.487Z"
+  },
+  "proposals": [
+    {
+      "id": "xintangshu:069:r0001",
+      "unit": {
+        "id": "s0051",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "After the Kaiyao era, a Guizhou intra-circuit frontier commissioner was appointed, commanding fourteen prefectures—Gui, Wu, He, Lian, Liu, Fu, Zhao, Meng, Yan, Huanrong, Gu, Sitang, and Gong—from his seat at Guizhou.",
+      "after": "After the Kaiyao era, a Guizhou intra-circuit frontier commissioner was appointed, commanding fourteen prefectures—Gui, Wu, He, Lian, Liu, Fu, Zhao, Meng, Yan, Huan, Rong, Gu, Sitang, and Gong—from his seat at Guizhou.",
+      "reason": "Chinese lists fourteen prefectures; 環融 must be two (環 and 融). English fused them as Huanrong, leaving only thirteen names.",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:069:r0002",
+      "unit": {
+        "id": "s0051",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "After Kaiyao, a Guizhou intra-circuit frontier commissioner was established, holding Gui, Wu, He, Lian, Liu, Fu, Zhao, Meng, Yan, Huanrong, Gu, Sitang, and Gong prefectures—fourteen in all—with seat at Guizhou.",
+      "after": "After Kaiyao, a Guizhou intra-circuit frontier commissioner was established, holding Gui, Wu, He, Lian, Liu, Fu, Zhao, Meng, Yan, Huan, Rong, Gu, Sitang, and Gong prefectures—fourteen in all—with seat at Guizhou.",
+      "reason": "Chinese lists fourteen prefectures; 環融 must be two (環 and 融). Literal English fused them as Huanrong, leaving only thirteen names.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xintangshu:069:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 領…十四州 enumerates fourteen prefectures; with 環融 kept as one name the list has only thirteen. Splitting 環融 into 環 and 融 yields fourteen single-name prefectures matching the stated total; English Huanrong must become Huan, Rong.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0051",
+        "excerpt": "領桂、梧、賀、連、柳、富、昭、蒙、嚴、環融、古、思唐、龔十四州"
+      }
+    },
+    {
+      "repairId": "xintangshu:069:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same unit: 十四州 requires fourteen names; 環融 is two prefectures (環、融) omitted as a separator in the Chinese list. Literal Huanrong is the fused error; Huan, Rong restores the count and naming.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0051",
+        "excerpt": "環融、古、思唐、龔十四州"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

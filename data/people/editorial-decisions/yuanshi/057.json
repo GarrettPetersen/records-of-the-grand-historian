@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "yuanshi",
+  "chapter": "057",
+  "input": {
+    "chapterFingerprint": "sha256:231e0ac40fbf13b1933e129843441da4dbad6bae424d79cc894ce189350ba8d7",
+    "proposalsFingerprint": "sha256:398a9d1e12a3a96cd2f55ee9822f34e3ee6860c89a265108b8c99411416093e7"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-8cd1ca1e-1296-424c-8e78-d137f2eede20",
+    "runId": "run-02473362-5a28-4d2e-b0bb-7032eda8fc5c",
+    "completedAt": "2026-08-13T14:56:01.657Z"
+  },
+  "proposals": [
+    {
+      "id": "yuanshi:057:r0001",
+      "unit": {
+        "id": "s0096",
+        "kind": "paragraph-sentence",
+        "blockIndex": 27,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "If before crossing in the yin calendar subtraction is insufficient, reverse the subtraction,",
+      "after": "If before crossing in the yin calendar subtraction is insufficient, reverse the subtraction — reverse-subtract the eclipse difference.",
+      "reason": "Chinese 反減食差 (“reverse-subtract the eclipse difference”) is omitted after 反減之 in the idiomatic English.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:057:r0002",
+      "unit": {
+        "id": "s0096",
+        "kind": "paragraph-sentence",
+        "blockIndex": 27,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "If before crossing in the yin calendar it is insufficient to subtract, reverse the subtraction,",
+      "after": "If before crossing in the yin calendar it is insufficient to subtract, reverse the subtraction — reverse-subtract the eclipse difference.",
+      "reason": "Chinese 反減食差 (“reverse-subtract the eclipse difference”) is omitted after 反減之 in the literal English.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:057:r0003",
+      "unit": {
+        "id": "s0067",
+        "kind": "paragraph-sentence",
+        "blockIndex": 20,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "〈To find the solar motion accumulated degree at eclipse greatest〉",
+      "after": "〈To find the daily solar motion accumulated degree at solar and lunar eclipse greatest〉",
+      "reason": "Heading 求日月食甚日行積度 covers both solar and lunar eclipse greatest; idiomatic English drops the moon/lunar scope.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:057:r0004",
+      "unit": {
+        "id": "s0129",
+        "kind": "paragraph-sentence",
+        "blockIndex": 35,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "For each as the expansion-contraction hour-addition method to find them — that yields the lunar eclipse's three-limit chen and ke.",
+      "after": "For each use the expansion-contraction hour-addition method to find them — that yields the lunar eclipse's three-limit chen and ke.",
+      "reason": "Literal English has a clear grammar failure (“For each as the … method”); parallel unit s0138 correctly uses “use”.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "yuanshi:057:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0096 Chinese ends with 反減食差 after 反減之; the idiomatic omits that clause, and the proposed restoration matches the source.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0096",
+        "excerpt": "反減之，反減食差"
+      }
+    },
+    {
+      "repairId": "yuanshi:057:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0096 Chinese ends with 反減食差 after 反減之; the literal omits that clause, and the proposed restoration matches the source.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0096",
+        "excerpt": "反減之，反減食差"
+      }
+    },
+    {
+      "repairId": "yuanshi:057:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Heading 求日月食甚日行積度 scopes both sun and moon (日月食甚); the idiomatic drops lunar scope, and the repair restores it with accurate 日行積度 wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0067",
+        "excerpt": "求日月食甚日行積度"
+      }
+    },
+    {
+      "repairId": "yuanshi:057:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "各如…求之 means apply/use the method for each; “For each as the … method” is ungrammatical, and “use” is the correct fix.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0129",
+        "excerpt": "各如發斂加時法求之"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

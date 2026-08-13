@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 3,
+  "book": "liangshu",
+  "chapter": "004",
+  "input": {
+    "chapterFingerprint": "sha256:22b60e2a5f85699f46e682f4738ae1a75ff708f68f147d3623ec51e351e3bc4d",
+    "proposalsFingerprint": "sha256:830829fedf36932b3b17ec88543ca3ab0c66a20003ab4bf897e5948e634169e7"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-00922c5b-4ccb-43cb-bac6-7b04ab8e7f83",
+    "runId": "run-a49d5857-6c92-4062-b95f-8bcccee172c9",
+    "completedAt": "2026-08-13T14:44:32.205Z"
+  },
+  "proposals": [
+    {
+      "id": "liangshu:004:r0001",
+      "unit": {
+        "id": "s0048",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "That month Jiujiang suffered great famine; one in fourteen or fifteen people ate human flesh.",
+      "after": "That month Jiujiang suffered great famine; four or five out of ten people ate human flesh.",
+      "reason": "Classical 十四五 here means roughly four or five tenths (40–50%), not one in fourteen or fifteen.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:004:r0002",
+      "unit": {
+        "id": "s0082",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "That month Prince Lun of Shaoling came from Xunyang to Xiakou; Jingzhou inspector Prince Ke of Nanping yielded the province to him.",
+      "after": "That month Prince Lun of Shaoling came from Xunyang to Xiakou; Yingzhou inspector Prince Ke of Nanping yielded the province to him.",
+      "reason": "Chinese 郢州刺史 is Yingzhou inspector, not Jingzhou (荊州).",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:004:r0003",
+      "unit": {
+        "id": "s0090",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "On jiawu in the eighth month Prince Yi of Xiangdong sent Army Inspector General Wang Senbian with troops to press Yingzhou.",
+      "after": "On jiawu in the eighth month Prince Yi of Xiangdong sent Army Inspector General Wang Sengbian with troops to press Yingzhou.",
+      "reason": "王僧辯 is conventionally Sengbian; Senbian is a mistranscription of 僧.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:004:r0004",
+      "unit": {
+        "id": "s0106",
+        "kind": "paragraph-sentence",
+        "blockIndex": 21,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "On guwei in the fifth month Prince Yi of Xiangdong urgently sent mobile corps general Hu Sengyou and Xin province inspector Lu Fahe to relieve Baling; Hou Jing sent Ren Yue with an army to block them.",
+      "after": "On guwei in the fifth month Prince Yi of Xiangdong sent mobile corps general Hu Sengyou and Xin province inspector Lu Fahe to relieve Baling; Hou Jing sent Ren Yue with an army to block them.",
+      "reason": "Chinese 湘東王驛遣 is a corruption of 湘東王繹遣; 驛 is not an adverb 'urgently'.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:004:r0005",
+      "unit": {
+        "id": "s0071",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 19
+      },
+      "field": "literal",
+      "before": "Western Wei raided Anlu, seized Sizhou Inspector Liu Zhongli, and wholly lost the lands east of the Han.",
+      "after": "Western Wei raided Anlu, seized Sizhou Inspector Liu Zhongli, and wholly took the lands east of the Han.",
+      "reason": "盡沒漢東之地 means the lands east of the Han were entirely lost/taken; literal 'wholly lost' with Western Wei as subject reverses the sense.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liangshu:004:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0048’s famine formula 人相食十四五 uses 十四五 as four or five tenths (什四五), the standard dynastic proportion, not one person in fourteen or fifteen; the replacement restores that sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0048",
+        "excerpt": "人相食十四五"
+      }
+    },
+    {
+      "repairId": "liangshu:004:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0082 has 郢州刺史; 郢州 is Yingzhou, distinct from Jingzhou (荊州), so the replacement corrects the province name without other change.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0082",
+        "excerpt": "郢州刺史南平王恪"
+      }
+    },
+    {
+      "repairId": "liangshu:004:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0090 names 王僧辯; 僧 is Seng, and Sengbian is the conventional romanization, so Senbian is a mistranscription of that syllable.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0090",
+        "excerpt": "王僧辯"
+      }
+    },
+    {
+      "repairId": "liangshu:004:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chapter s0106’s 湘東王驛遣 is a graphic corruption of 湘東王繹遣; 驛 is not an urgency adverb. Liangshu juan 5’s parallel for the same relief of Baling is simply 世祖遣, confirming Prince Yi sent the force without ‘urgently’.",
+      "sourceWitness": {
+        "source": "wikisource",
+        "citation": "https://zh.wikisource.org/zh-hant/%E6%A2%81%E6%9B%B8/%E5%8D%B705",
+        "excerpt": "五月癸未，世祖遣游擊將軍胡僧祐、信州刺史陸法和帥衆下援巴陵"
+      }
+    },
+    {
+      "repairId": "liangshu:004:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "In s0071 Western Wei is the subject of 寇…執…盡沒; 沒 here means the lands east of the Han were wholly taken/annexed, so ‘wholly lost’ reverses the agent’s action.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0071",
+        "excerpt": "盡沒漢東之地"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "liangshu:004:r0003",
+      "before": {
+        "id": "liangshu:004:c0171",
+        "subject": "liangshu:004:p037",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Wang Senbian",
+          "zh": "王僧辯",
+          "pinyin": "Wang Sengbian"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liangshu:004:s0090",
+          "liangshu:004:s0105"
+        ]
+      },
+      "after": {
+        "id": "liangshu:004:c0171",
+        "subject": "liangshu:004:p037",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Wang Sengbian",
+          "zh": "王僧辯",
+          "pinyin": "Wang Sengbian"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "liangshu:004:s0090",
+          "liangshu:004:s0105"
+        ]
+      },
+      "reason": "Accepted r0003 shows English Senbian came only from the bad romanization of 僧辯; the personal-name claim’s en value must read Sengbian.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0090",
+        "excerpt": "王僧辯"
+      }
+    }
+  ]
+}

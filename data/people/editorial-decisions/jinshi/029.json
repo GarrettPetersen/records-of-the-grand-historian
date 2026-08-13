@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "jinshi",
+  "chapter": "029",
+  "input": {
+    "chapterFingerprint": "sha256:7555b8bbbfc836dbd2b8228dfdd249cccaa8533d6e8c186be42e905d466990fe",
+    "proposalsFingerprint": "sha256:e934959d29b41df01f2e63ee578b57211489ae5c33d70a82fa2015845a76f355"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-33a1438a-910b-405e-ac20-447eb3b83f61",
+    "runId": "run-c3fc9477-56fb-4cd7-82c2-51dd4c292b16",
+    "completedAt": "2026-08-13T14:42:07.602Z"
+  },
+  "proposals": [
+    {
+      "id": "jinshi:029:r0001",
+      "unit": {
+        "id": "s0015",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "They also erected a food canopy outside the inner embankment's east gate, south of the path on the north side, facing south.",
+      "after": "They also erected a food canopy outside the inner embankment's east gate, north of the path, facing south.",
+      "reason": "Chinese 道北南向 means north of the path and facing south; the idiomatic rendering contradicts itself with 'south of the path on the north side'.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:029:r0002",
+      "unit": {
+        "id": "s0115",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Ritual attendants and presenters then led the Director of Grand Harmony, the Director of Imperial Victuals and his aide, the supervising ritual academician and censor, the kitchen director, and others to the outer victim pen east of the inner gate.",
+      "after": "Ritual attendants and presenters then led the Director of Grand Harmony, the Director of Imperial Victuals and his aide, the supervising ritual academician and censor, the kitchen director, and others to the victim-inspection station outside the inner embankment's east gate.",
+      "reason": "Chinese 內壝東門外省牲位 is the inspection station outside the inner embankment's east gate, not an 'outer victim pen east of the inner gate'.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:029:r0003",
+      "unit": {
+        "id": "s0234",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "The Palace Attendant led the emperor to his place; facing south, he bowed twice, offered incense, and bowed again.",
+      "after": "The Palace Attendant led the emperor to his place; facing south, he bowed twice, offered incense, and bowed twice again.",
+      "reason": "Chinese 又再拜 means bowed twice again, not a single additional bow; the literal field already has the correct reading.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:029:r0004",
+      "unit": {
+        "id": "s0245",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 19
+      },
+      "field": "idiomatic",
+      "before": "The emperor bowed twice, offered incense, then bowed again.",
+      "after": "The emperor bowed twice, offered incense, then bowed twice again.",
+      "reason": "Chinese 又再拜 means bowed twice again; matching the parallel wording in the literal field.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jinshi:029:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0015 道北南向 places the canopy north of the path and facing south; parallel s0014 道南，北向 confirms the same orientation formula, so 'south of the path on the north side' is a real error and the proposed wording is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0015",
+        "excerpt": "道北南向"
+      }
+    },
+    {
+      "repairId": "jinshi:029:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0115 內壝東門外省牲位 is the victim-inspection station outside the inner embankment's east gate; s0114 already calls this 省位 an inspection station, so 'outer victim pen east of the inner gate' misnames and mislocates it, and the proposed replacement is correct.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0115",
+        "excerpt": "內壝東門外省牲位"
+      }
+    },
+    {
+      "repairId": "jinshi:029:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0234 has 再拜…又再拜: 再拜 is two bows, and 又再拜 is another pair, not a single further bow; the proposed 'bowed twice again' restores that count.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0234",
+        "excerpt": "再拜，上香，又再拜"
+      }
+    },
+    {
+      "repairId": "jinshi:029:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0245 皇帝再拜，上香，訖，又再拜 likewise requires a second pair of bows after incense; 'bowed again' undercounts, and 'bowed twice again' matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0245",
+        "excerpt": "再拜，上香，訖，又再拜"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

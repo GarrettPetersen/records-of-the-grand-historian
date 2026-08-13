@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "songshi",
+  "chapter": "083",
+  "input": {
+    "chapterFingerprint": "sha256:9a74a29d4bd2984937629fe3a0cb1e7c55b9b2aea54bb418c3695813d627931e",
+    "proposalsFingerprint": "sha256:c40d5388381d239c72d6685a9d94b3ecc3f1c30c9c3ad8ec88f7835867465c3b"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-07b85071-466e-4e20-b9a7-ca99eb025f8d",
+    "runId": "run-c3f88ac2-b85c-4f41-aabc-77fa454ebb80",
+    "completedAt": "2026-08-13T14:50:17.418Z"
+  },
+  "proposals": [
+    {
+      "id": "songshi:083:r0001",
+      "unit": {
+        "id": "s0005",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "For the Huiyuan calendar, from the Superior Origin in the year jiazi to the third year of Shaoxi (1190), year xinhai, the accumulated count is 25,494,767 years.",
+      "after": "For the Huiyuan calendar, from the Superior Origin in the year jiazi to the third year of Shaoxi (1192), year xinhai, the accumulated count is 25,494,767 years.",
+      "reason": "Shaoxi 3 corresponds to AD 1192, not 1190 (Shaoxi 1). The parenthetical Western year is wrong.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:083:r0002",
+      "unit": {
+        "id": "s0053",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Huiyuan: 2,322,200.",
+      "after": "Huiyuan: 2,322,000.",
+      "reason": "Chinese 二百三十二萬二千 is 2,322,000; the English adds an erroneous extra 200.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:083:r0003",
+      "unit": {
+        "id": "s0053",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "Huiyuan: two million three hundred twenty-two thousand two hundred.",
+      "after": "Huiyuan: two million three hundred twenty-two thousand.",
+      "reason": "Chinese 二百三十二萬二千 is 2,322,000; the literal invents “two hundred.”",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:083:r0004",
+      "unit": {
+        "id": "s0204",
+        "kind": "paragraph-sentence",
+        "blockIndex": 67,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Dusk-and-dawn remainder count: 173 and seven-eighths.",
+      "after": "Dusk-and-dawn remainder count: 173¼.",
+      "reason": "In calendrical fractions 少 means one quarter, not seven-eighths.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:083:r0005",
+      "unit": {
+        "id": "s0204",
+        "kind": "paragraph-sentence",
+        "blockIndex": 67,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Dusk-and-dawn remainder count: one hundred seventy-three and slightly less.",
+      "after": "Dusk-and-dawn remainder count: one hundred seventy-three and a quarter.",
+      "reason": "少 is the calendrical quarter fraction, not “slightly less.”",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "songshi:083:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 紹熙三年 is Shaoxi year 3 (AD 1192); the parenthetical (1190) is Shaoxi 1 and must be corrected to 1192.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0005",
+        "excerpt": "紹熙三年辛亥"
+      }
+    },
+    {
+      "repairId": "songshi:083:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "二百三十二萬二千 is 2,322,000 (232×10,000 + 2,000); 2,322,200 invents an extra 200 absent from the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0053",
+        "excerpt": "二百三十二萬二千"
+      }
+    },
+    {
+      "repairId": "songshi:083:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "二百三十二萬二千 reads “two million three hundred twenty-two thousand”; the literal’s “two hundred” is not in the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0053",
+        "excerpt": "二百三十二萬二千"
+      }
+    },
+    {
+      "repairId": "songshi:083:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "In calendrical remainder notation 少 is the quarter fraction (¼), not seven-eighths; 一百七十三少 is therefore 173¼.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0204",
+        "excerpt": "一百七十三少"
+      }
+    },
+    {
+      "repairId": "songshi:083:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "少 after an integer remainder is the calendrical quarter, not “slightly less”; the literal should be “one hundred seventy-three and a quarter.”",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0204",
+        "excerpt": "一百七十三少"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

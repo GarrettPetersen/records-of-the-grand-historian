@@ -24,6 +24,7 @@ import {
 import {
   applyTranslationRepairs,
   reconcileExtractionAfterRepairs,
+  removeDispositionMentionConflicts,
   remapMentionSpanThroughEdit,
 } from './lib/people-translation-repairs.mjs';
 import {
@@ -898,6 +899,8 @@ function selfTest() {
     ['s0007', '至澶州', 'He reached Chanzhou.'],
     ['s0008', '汲郡城旁', "He camped beside Ji commandery's city."],
     ['s0009', '上柱國', 'He was Supreme Pillar of the State.'],
+    ['s0010', '塔里捨，地名。', 'Talise: a place name.'],
+    ['s0011', '莫弗紇，諸部酋長稱。', 'Mofu He: a title for tribal chiefs; also called Mofu Ho.'],
   ].map(([id, zh, en], index) => ({
     id,
     kind: 'paragraph-sentence',
@@ -942,6 +945,8 @@ function selfTest() {
         semanticCandidate('cand_chanzhou', 's0007', 'Chanzhou'),
         semanticCandidate('cand_ji', 's0008', 'Ji'),
         semanticCandidate('cand_supreme_pillar', 's0009', 'Supreme Pillar'),
+        semanticCandidate('cand_place_headword', 's0010', 'Talise'),
+        semanticCandidate('cand_chief_title', 's0011', 'Mofu Ho'),
       ],
     },
   };
@@ -1031,6 +1036,16 @@ function selfTest() {
   if (semanticNameKinds.get('Xiao') !== 'posthumous-name') {
     throw new Error('A posthumous-name formula did not create the corresponding person alias');
   }
+  const semanticDispositions = new Map(semanticResult.extraction.candidateDispositions.map((item) => [
+    item.candidate,
+    item.reason,
+  ]));
+  if (semanticDispositions.get('fixture:003:cand_place_headword') !== 'place') {
+    throw new Error('An explicit place-name headword was not classified as a place');
+  }
+  if (semanticDispositions.get('fixture:003:cand_chief_title') !== 'office') {
+    throw new Error('A tribal-chief title variant was not classified as an office');
+  }
   const titleMention = semanticResult.extraction.mentions.find((mention) =>
     mention.spans.en.some((span) => span.exact === 'Imperial Younger Brother Chongyuan')
   );
@@ -1039,6 +1054,83 @@ function selfTest() {
   );
   if (titleMention?.person !== chongyuan?.localId) {
     throw new Error('A combined title-and-name span was not assigned to the named title holder');
+  }
+
+  const contextualTitlePacket = {
+    book: 'fixture',
+    chapter: '004',
+    input: {},
+    units: [{
+      id: 's0001',
+      kind: 'paragraph-sentence',
+      blockIndex: 0,
+      collection: 'sentences',
+      itemIndex: 0,
+      zh: '帝歸。',
+      en: 'The Emperor returned.',
+      literal: 'The Emperor returned.',
+    }],
+    preflight: {
+      candidates: [{
+        id: 'fixture:004:cand_emperor',
+        unit: 's0001',
+        language: 'en',
+        exact: 'Emperor',
+        occurrence: 0,
+        startCodePoint: 4,
+        endCodePoint: 11,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }],
+    },
+  };
+  const contextualTitleExtraction = {
+    schemaVersion: 1,
+    book: 'fixture',
+    chapter: '004',
+    input: {},
+    run: { model: 'fixture', promptVersion: 7, agentId: 'fixture' },
+    people: [{
+      localId: 'fixture:004:p001',
+      preferredNameSuggestion: { en: 'Earlier Emperor', zh: '先帝' },
+      historicity: 'historical',
+      descriptorSuggestion: 'Ruler',
+      identityHints: { nativePlaces: [], relatedLocalPeople: [], activeDateHints: [] },
+    }],
+    mentions: [],
+    claims: [{
+      id: 'fixture:004:c0001',
+      subject: 'fixture:004:p001',
+      predicate: 'name',
+      value: { kind: 'title', en: 'Emperor', zh: '帝' },
+      certainty: 'explicit',
+      evidence: ['fixture:004:s0000'],
+    }],
+    translationRepairs: [],
+    candidateDispositions: [],
+    coverage: { allUnitsVisited: true, preflightCandidatesAccountedFor: true, unresolvedReferences: [] },
+  };
+  const contextualTitleResult = reconcileExtractionAfterRepairs(
+    contextualTitleExtraction,
+    contextualTitlePacket,
+    { markRepairsApplied: false },
+  );
+  if (!contextualTitleResult.unresolvedCandidates.includes('fixture:004:cand_emperor')) {
+    throw new Error('A generic sovereign title was assigned from unrelated cross-unit evidence');
+  }
+
+  const candidateConflictFixture = {
+    mentions: [{ candidateRefs: ['fixture:candidate:person'] }],
+    candidateDispositions: [
+      { candidate: 'fixture:candidate:person', disposition: 'not-person', reason: 'not-a-name' },
+      { candidate: 'fixture:candidate:place', disposition: 'not-person', reason: 'place' },
+    ],
+  };
+  removeDispositionMentionConflicts(candidateConflictFixture);
+  if (
+    candidateConflictFixture.candidateDispositions.length !== 1 ||
+    candidateConflictFixture.candidateDispositions[0].candidate !== 'fixture:candidate:place'
+  ) {
+    throw new Error('Final person mentions did not supersede stale non-person dispositions');
   }
   console.log('apply-people-translation-repairs self-test: ok');
 }

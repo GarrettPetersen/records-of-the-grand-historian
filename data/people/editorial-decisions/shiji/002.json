@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "002",
+  "input": {
+    "chapterFingerprint": "sha256:40a0f85609a4ae70254c3869c4edab748efd9ea5f2f1887e5b42d544cb7e95e7",
+    "proposalsFingerprint": "sha256:354777a4cdb03dc94d57250fbaf698b1b56384ffb43543e1c46d25caec9136ba"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-9b3039c0-46a2-4595-8019-5d2bd44b519e",
+    "runId": "run-681cfe14-77b9-4fa8-bfef-0c53762573b8",
+    "completedAt": "2026-08-13T14:49:15.503Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:002:r0001",
+      "unit": {
+        "id": "s0075",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Its soil soil; lower soil loam.",
+      "after": "Its soil was soil; the lower soil was rich loam.",
+      "reason": "Literal repeats “soil” unnaturally and under-translates 墳壚; clarify upland versus richer lowland soil.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:002:r0002",
+      "unit": {
+        "id": "s0018",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Shun said, \"Alas—yes!\"",
+      "after": "Shun said, \"Ah—yes!\"",
+      "reason": "Here 嗟 marks assent, not lament; “Alas” misreads Shun’s approving reply.",
+      "confidence": "medium"
+    },
+    {
+      "id": "shiji:002:r0003",
+      "unit": {
+        "id": "s0185",
+        "kind": "paragraph-sentence",
+        "blockIndex": 22,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Yu said, \"I marry Tushan on xinren, guijia, bore Qi I not treat as son, thereby able complete earth-water merit.",
+      "after": "Yu said, \"I married at Tushan on the days xin and ren; on gui and jia [Qi] was born, and I did not act as a [doting] father to my son, and thereby could complete the flood works.\"",
+      "reason": "Literal is broken English and obscures the xin-ren/gui-jia day sequence and 予不子.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:002:r0004",
+      "unit": {
+        "id": "s0247",
+        "kind": "paragraph-sentence",
+        "blockIndex": 32,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "field": "literal",
+      "before": "Kongjia granted him the surname Dragon-tamer and received the Shiwei as his fief.",
+      "after": "Kongjia granted him the surname Dragon-tamer, and he received the succession of the Shiwei.",
+      "reason": "受豕韋之後 means receiving the Shiwei line’s succession, not that Kongjia received Shiwei as his own fief.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:002:r0005",
+      "unit": {
+        "id": "s0252",
+        "kind": "paragraph-sentence",
+        "blockIndex": 33,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Fa died and his son Lügui became the tyrant Jie.",
+      "after": "Fa died and his son Lügui was established; this was Jie.",
+      "reason": "Chinese 是為桀 only identifies Lügui as Jie; 'tyrant' is not in the source and invents a moral label.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:002:r0001",
+      "decision": "revise",
+      "after": "Its soil was soft loam; the lower soil was fertile clay.",
+      "reason": "其土壤，下土墳壚 is broken as “Its soil soil,” and the proposal’s “Its soil was soil” still fails to render 壤 as a soil grade. 壤 is soft/loamy earth and 墳壚 the richer lower clay, so both halves need that quality wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "其土壤，下土墳壚"
+      }
+    },
+    {
+      "repairId": "shiji:002:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "After the Four Peaks recommend Yu, 舜曰：「嗟，然！」is approving assent (matching the following charge to Yu), not lament; “Alas” misreads 嗟, and “Ah—yes!” restores the approving interjection.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0018",
+        "excerpt": "舜曰：「嗟，然！」"
+      }
+    },
+    {
+      "repairId": "shiji:002:r0003",
+      "decision": "revise",
+      "after": "Yu said, \"I married a woman of Tushan on the days xin and ren; on gui and jia Qi was born, and I did not treat him as a son, and thereby could complete the earth-and-water works.\"",
+      "reason": "The before text is ungrammatical and the xin-ren / gui-jia sequence plus 予不子 must be repaired, but the proposal’s “married at Tushan” turns 娶涂山 into a wedding place, and the bracketed “[doting]” / “[Qi]” glosses invent tone not in the literal. Keep the day-pair reading and render 娶涂山 as marrying a woman of Tushan, 生啟 as Qi’s birth, and 予不子 as not treating him as a son.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0185",
+        "excerpt": "予（辛壬）娶涂山，［辛壬］癸甲，生啟予不子，以故能成水土功"
+      }
+    },
+    {
+      "repairId": "shiji:002:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 孔甲賜之姓曰御龍氏，受豕韋之後 the implied subject of 受 is Liu Lei (之), who receives the Shiwei line’s succession; the before text wrongly makes Kongjia the one who “received the Shiwei as his fief.”",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0247",
+        "excerpt": "孔甲賜之姓曰御龍氏，受豕韋之後"
+      }
+    },
+    {
+      "repairId": "shiji:002:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "帝發崩，子帝履癸立，是為桀 only records Fa’s death, Lügui’s accession, and the identification 是為桀; “tyrant” is not in the Chinese and invents a moral label the unit does not state.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0252",
+        "excerpt": "帝發崩，子帝履癸立，是為桀"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

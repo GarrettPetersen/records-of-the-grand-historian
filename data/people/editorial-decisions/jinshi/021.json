@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "jinshi",
+  "chapter": "021",
+  "input": {
+    "chapterFingerprint": "sha256:665f08cda862592da7a6747c04cc000f9bc378300548cc79df8302e42350d5b9",
+    "proposalsFingerprint": "sha256:3946e98ed69df41c459cf118d82c8025d3cd63c87fc3625aa4bdd7aa706cdccd"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-e661c98b-8e9d-4fbd-9853-a20f7d2490bd",
+    "runId": "run-b51679a4-b5a7-4ba4-9442-620d2d9f3e31",
+    "completedAt": "2026-08-13T14:41:56.750Z"
+  },
+  "proposals": [
+    {
+      "id": "jinshi:021:r0001",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "Prognostication and observation drifted apart; the Directorate ordered Zhao Zhiwei to revise the Grand Clarity Calendar, and in eleven years the revision was done.",
+      "after": "Prognostication and observation drifted apart; Zhao Zhiwei, Director of the Astronomical Directorate, was therefore ordered to revise the Grand Clarity Calendar, and in the eleventh year the calendar was completed.",
+      "reason": "Chinese 命司天監趙知微 takes Zhao Zhiwei (with office title 司天監) as the person ordered, not the Directorate as agent; 十一年曆成 is the eleventh year, not a span of eleven years.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:021:r0002",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "From this prognostication and observation drifted; therefore the Directorate ordered Zhao Zhiwei to revise the Grand Clarity Calendar—it was completed in the eleventh year.",
+      "after": "From this prognostication and observation drifted; therefore Zhao Zhiwei, Director of the Astronomical Directorate, was ordered to revise the Grand Clarity Calendar—it was completed in the eleventh year.",
+      "reason": "Chinese 命司天監趙知微 names Zhao Zhiwei with the title 司天監 as the object of 命; the Directorate is not the ordering agent.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:021:r0003",
+      "unit": {
+        "id": "s0014",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "Early in Mingchang the calendar office proposed yet another revision; Zhang Xingjian of the Rites Bureau said, \"Wait for another solar eclipse, re-check until there is no discrepancy, and only then adopt it.\"",
+      "after": "Early in Mingchang the calendar office proposed yet another revision; Zhang Xingjian, Director of the Ministry of Rites, said, \"Please wait for another solar or lunar eclipse, re-check until there is no discrepancy, and only then adopt it.\"",
+      "reason": "Chinese 日月食 means a solar or lunar eclipse, not solar only; 禮部郎中 is his office title, not a vague Rites Bureau affiliation.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:021:r0004",
+      "unit": {
+        "id": "s0014",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "literal",
+      "before": "Early Mingchang, the Directorate again reformed a new calendar; Zhang Xingjian, Director of Rites, said: \"Please wait for another solar eclipse, re-verify without discrepancy, then use it.\"",
+      "after": "Early Mingchang, the Directorate again reformed a new calendar; Zhang Xingjian, Director of Rites, said: \"Please wait for another solar or lunar eclipse, re-verify without discrepancy, then use it.\"",
+      "reason": "Chinese 日月食 covers sun or moon eclipse; rendering it as solar eclipse alone omits the lunar alternative.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:021:r0005",
+      "unit": {
+        "id": "s0250",
+        "kind": "paragraph-sentence",
+        "blockIndex": 137,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Cover and subtract the day factor; the remainder is sunset fen.",
+      "after": "Cover and subtract from the day factor; the remainder is sunset fen.",
+      "reason": "覆減日法 means subtract (sunrise fen) from the day factor; parallel s0257 correctly uses “from,” and the current wording leaves the minuend ambiguous.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:021:r0006",
+      "unit": {
+        "id": "s0252",
+        "kind": "paragraph-sentence",
+        "blockIndex": 137,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Subtract sunrise fen by dusk-and-dawn fen for dawn fen; add to sunset fen for dusk fen.",
+      "after": "Subtract dusk-and-dawn fen from sunrise fen for dawn fen; add to sunset fen for dusk fen.",
+      "reason": "“Subtract A by B” is ungrammatical English and reverses the subtract-from relation that 以昏明分減日出分 states.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jinshi:021:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0011 命司天監趙知微 takes Zhao Zhiwei with title 司天監 as the object of 命, not the Directorate as agent; 十一年曆成 is the eleventh year, not a span of eleven years; the proposed wording is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "乃命司天監趙知微重修《大明曆》，十一年曆成"
+      }
+    },
+    {
+      "repairId": "jinshi:021:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0011 命司天監趙知微 names Zhao Zhiwei under the title 司天監 as the person ordered; the Directorate is not the ordering agent, so the literal correction is required and accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "乃命司天監趙知微重修《大明曆》"
+      }
+    },
+    {
+      "repairId": "jinshi:021:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0014 has 禮部郎中張行簡 and 請俟他日月食; 日月食 covers solar or lunar eclipse, and 禮部郎中 is his office title, so the proposed idiomatic repair is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0014",
+        "excerpt": "禮部郎中張行簡言：「請俟他日月食，覆校無差，然後用之。」"
+      }
+    },
+    {
+      "repairId": "jinshi:021:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0014 請俟他日月食 means wait for another solar or lunar eclipse; rendering only a solar eclipse omits the lunar alternative, and the proposed literal fix is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0014",
+        "excerpt": "請俟他日月食"
+      }
+    },
+    {
+      "repairId": "jinshi:021:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "After s0249 yields sunrise fen, s0250 覆減日法 means subtract that result from the day factor; adding “from” correctly identifies the minuend and matches the remainder as sunset fen.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0250",
+        "excerpt": "覆減日法，餘為日入分"
+      }
+    },
+    {
+      "repairId": "jinshi:021:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0252 以昏明分減日出分 is subtract dusk-and-dawn fen from sunrise fen; “subtract sunrise fen by …” reverses the relation and is ungrammatical, so the proposed literal is required.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0252",
+        "excerpt": "以昏明分減日出分為晨分"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "songshu",
+  "chapter": "055",
+  "input": {
+    "chapterFingerprint": "sha256:f3f52ae8a898a85ed03678e2832c866ee7b45c29e7fc19b925ef9394d8435c73",
+    "proposalsFingerprint": "sha256:4d5daa8eb74e3c275e129ea197416f20b7b5115c60af2dca6cbf6467850de35a"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-31c3453f-6d5d-4eae-8516-9a4aa3a195bc",
+    "runId": "run-f79db62e-06e2-4410-a248-59f15597db61",
+    "completedAt": "2026-08-13T14:52:20.077Z"
+  },
+  "proposals": [
+    {
+      "id": "songshu:055:r0001",
+      "unit": {
+        "id": "s0110",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "He also served as northern campaign aide on the staff of Sima Tian, staff officer to Prince Qiao.",
+      "after": "He also served as northern campaign aide on the staff of Sima Tian, Prince of Qiao.",
+      "reason": "Chinese 譙王司馬恬 is one person (Sima Tian, Prince of Qiao), not a staff officer serving a separate Prince Qiao.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:055:r0002",
+      "unit": {
+        "id": "s0110",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "He also served as northern campaign aide under Prince Qiao's staff officer Sima Tian.",
+      "after": "He also served as northern campaign aide under Sima Tian, Prince of Qiao.",
+      "reason": "Chinese 譙王司馬恬 names one man; the packet literal splits him into Prince Qiao's staff officer Sima Tian.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:055:r0003",
+      "unit": {
+        "id": "s0235",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "The Spring and Autumn principle is that a mother is honored through her son; once she bears the title of consort, ritual mourning follows the standard form. Thus Duke Cheng gave his mother the title of lady, and Duke Wen wore three years of mourning.",
+      "after": "The Spring and Autumn principle is that a mother is honored through her son; once she bears the title of consort, ritual mourning follows the standard form. Thus Cheng Feng received the title of lady, and Duke Wen wore three years of mourning.",
+      "reason": "成風 is the woman Cheng Feng (as earlier in the chapter), not Duke Cheng; 文公 is Duke Wen.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:055:r0004",
+      "unit": {
+        "id": "s0235",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "The meaning of the Spring and Autumn Annals is that the mother is ennobled through the son; once she is styled lady, ritual garments follow the orthodox rule. Thus Duke Cheng displayed the title of lady, and Duke Wen wore three years of mourning.",
+      "after": "The meaning of the Spring and Autumn Annals is that the mother is ennobled through the son; once she is styled lady, ritual garments follow the orthodox rule. Thus Cheng Feng displayed the title of lady, and Duke Wen wore three years of mourning.",
+      "reason": "成風 is Cheng Feng, not Duke Cheng; packet literal misreads the name.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:055:r0005",
+      "unit": {
+        "id": "s0155",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "He again served as aide on the campaign against the barbarians in Kuaiji.",
+      "after": "He again served as aide to the General Who Pacifies the Barbarians of Kuaiji.",
+      "reason": "會稽征虜參軍 is an office under the Kuaiji Pacifies-Barbarians command, not a campaign against barbarians in Kuaiji.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "songshu:055:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "譙王司馬恬 is one titled name (Sima Tian, Prince of Qiao). The original splits him into Sima Tian plus a separate Prince Qiao and invents a staff-officer relation; the replacement restores the correct apposition.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0110",
+        "excerpt": "又譙王司馬恬鎮北參軍"
+      }
+    },
+    {
+      "repairId": "songshu:055:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same unit: 譙王司馬恬 is not 'Prince Qiao's staff officer Sima Tian.' The proposed literal correctly names one man as Sima Tian, Prince of Qiao.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0110",
+        "excerpt": "譙王司馬恬鎮北參軍"
+      }
+    },
+    {
+      "repairId": "songshu:055:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "成風 is the lady Cheng Feng who 顯夫人之號; reading it as Duke Cheng invents a male duke and wrong agency. The repair correctly names Cheng Feng and keeps Duke Wen for 文公.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0235",
+        "excerpt": "故成風顯夫人之號，文公服三年之喪"
+      }
+    },
+    {
+      "repairId": "songshu:055:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal likewise misreads 成風 as Duke Cheng; Cheng Feng displayed the title of lady matches 成風顯夫人之號, and Duke Wen remains correct for 文公.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0235",
+        "excerpt": "成風顯夫人之號"
+      }
+    },
+    {
+      "repairId": "songshu:055:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "會稽征虜參軍 is a staff office under the Kuaiji 征虜 (Pacifies the Barbarians) command, not a campaign fought against barbarians in Kuaiji; the replacement restores the office sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0155",
+        "excerpt": "復為會稽征虜參軍"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

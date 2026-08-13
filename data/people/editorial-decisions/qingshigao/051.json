@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "051",
+  "input": {
+    "chapterFingerprint": "sha256:3f737bdf6a9bb9a73f534e37be2533726aa7080106454f5f4691b2b4351de38b",
+    "proposalsFingerprint": "sha256:8e9cfac6cad3e4eb283345ff07970785127735fce446ce3274e3c8a75e57e16f"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-25c41ad6-b171-4020-8b2d-6b414cd73ab7",
+    "runId": "run-31a768e9-49e6-4ccc-8570-268cece10497",
+    "completedAt": "2026-08-13T14:47:01.296Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:051:r0001",
+      "unit": {
+        "id": "s0023",
+        "kind": "paragraph-sentence",
+        "blockIndex": 20,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Inspect a given month's moon mean nodal longitude entering the edible limit, then that is the month having eclipse.",
+      "after": "Inspect a given month's moon mean nodal longitude entering the eclipse-possible limit, then that is the month having eclipse.",
+      "reason": "可食之限 is the eclipse-possible nodal limit, not an “edible” limit; literal English invents a food sense that obscures the astronomy.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:051:r0002",
+      "unit": {
+        "id": "s0024",
+        "kind": "paragraph-sentence",
+        "blockIndex": 20,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Nodal longitude from fifth mansion 14°51′ to sixth mansion 15°09′, from eleventh mansion 14°51′ to first mansion 15°09′, all are edible limits.",
+      "after": "Nodal longitude from fifth mansion 14°51′ to sixth mansion 15°09′, from eleventh mansion 14°51′ to first mansion 15°09′, all are eclipse-possible limits.",
+      "reason": "可食之限 means eclipse-capable / possible-eclipse limits; “edible limits” is a false-friend mistranslation of 食.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:051:r0003",
+      "unit": {
+        "id": "s0120",
+        "kind": "paragraph-sentence",
+        "blockIndex": 47,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Inspect a given month entering edible limit, then that is the month having eclipse.",
+      "after": "Inspect a given month entering the eclipse-possible limit, then that is the month having eclipse.",
+      "reason": "可食之限 is the possible-eclipse zone, not an “edible” limit.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:051:r0004",
+      "unit": {
+        "id": "s0121",
+        "kind": "paragraph-sentence",
+        "blockIndex": 47,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Nodal longitude from fifth mansion 8°42′ to sixth mansion 9°14′, and from eleventh mansion 20°46′ to first mansion 21°18′, all are edible limits.",
+      "after": "Nodal longitude from fifth mansion 8°42′ to sixth mansion 9°14′, and from eleventh mansion 20°46′ to first mansion 21°18′, all are eclipse-possible limits.",
+      "reason": "可食之限 means eclipse-possible limits; “edible” misreads 食 as food rather than eclipse.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:051:r0005",
+      "unit": {
+        "id": "s0364",
+        "kind": "paragraph-sentence",
+        "blockIndex": 196,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "To find the sun's and moon's geocentric distance, by plane triangle: take the solar double eccentricity as the side opposite the right angle and the true solar anomaly as the other angle; within three mansions use the degree as given, beyond three mansions subtract six mansions, beyond nine mansions subtract the full circle, and use the remainder.",
+      "after": "To find the sun's and moon's geocentric distance, by plane triangle: take the solar double eccentricity as the side opposite the right angle and the true solar anomaly as the other angle; within three mansions use the degree as given; beyond three mansions, subtract from six mansions; beyond nine mansions, subtract from the full circle; and use the remainder.",
+      "reason": "Chinese 與六宮相減 and 與全周相減 mean take the difference from six mansions and from the full circle, not subtract those quantities as subtrahends from the anomaly.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:051:r0006",
+      "unit": {
+        "id": "s0364",
+        "kind": "paragraph-sentence",
+        "blockIndex": 196,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "To find sun and moon geocentric distance, use plane triangle, solar motion double two-center difference as side opposite right angle, solar true anomaly as another angle, within three mansions use original degree, past three mansions subtract six mansions, past nine mansions subtract full circle, use the remainder.",
+      "after": "To find sun and moon geocentric distance, use plane triangle, solar motion double two-center difference as side opposite right angle, solar true anomaly as another angle, within three mansions use original degree, past three mansions subtract from six mansions, past nine mansions subtract from full circle, use the remainder.",
+      "reason": "Chinese 與六宮相減 / 與全周相減 is difference-from six mansions / full circle; literal English reversed the subtraction direction.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:051:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0023 可食之限, with 有食之月 and nearby 入食限, is the nodal zone where eclipse is possible; 食 is eclipse, not food. “Edible limit” invents a food sense; “eclipse-possible limit” matches the astronomy.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0023",
+        "excerpt": "入可食之限，即為有食之月"
+      }
+    },
+    {
+      "repairId": "qingshigao:051:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0024 ends 皆可食之限 for the stated nodal ranges that admit eclipse. “Edible limits” misreads 食 as food; “eclipse-possible limits” is the correct technical sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0024",
+        "excerpt": "皆可食之限"
+      }
+    },
+    {
+      "repairId": "qingshigao:051:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0120 入可食之限…有食之月 parallels the lunar-eclipse wording: 可食之限 is the possible-eclipse zone. “Edible limit” is a false-friend; the proposed wording restores that sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0120",
+        "excerpt": "入可食之限，即為有食之月"
+      }
+    },
+    {
+      "repairId": "qingshigao:051:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0121 labels the listed nodal ranges 皆可食之限. Context is solar-eclipse limits, so 食 means eclipse capability, not edibility; “eclipse-possible limits” is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0121",
+        "excerpt": "皆可食之限"
+      }
+    },
+    {
+      "repairId": "qingshigao:051:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0364 與六宮相減 / 與全周相減 means take the difference from six mansions and from the full circle (use the remainder). “Subtract six mansions / the full circle” reverses minuend and subtrahend; “subtract from …” restores the reduction.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0364",
+        "excerpt": "過三宮與六宮相減，過九宮與全周相減，用其餘"
+      }
+    },
+    {
+      "repairId": "qingshigao:051:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same Chinese as r0005: 與六宮相減 and 與全周相減 are difference-from six mansions and the full circle. Literal “subtract six mansions / full circle” reverses the subtraction; “subtract from …” is correct.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0364",
+        "excerpt": "過三宮與六宮相減，過九宮與全周相減，用其餘"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

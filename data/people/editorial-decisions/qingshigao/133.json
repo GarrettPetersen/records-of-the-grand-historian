@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "133",
+  "input": {
+    "chapterFingerprint": "sha256:16d69b234e505c9f30812c3a7b0abd7e68fbd6ecd59d04c930b06479daca5298",
+    "proposalsFingerprint": "sha256:f3787bcee36ed4157815418aa798d6a53db55d4f6ddb1b06a87ffbbf3da058b2"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-fa192c0e-4841-45a3-8e20-8a847934b23a",
+    "runId": "run-92775b35-8a00-4f95-89d3-2dc7122873ae",
+    "completedAt": "2026-08-13T14:47:23.425Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:133:r0001",
+      "unit": {
+        "id": "s0191",
+        "kind": "paragraph-sentence",
+        "blockIndex": 27,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In the sixth year of Guangxu, Governor-General Zhang Zhidong recruited one thousand sand-dwellers for Humen; Yang Yuken added one thousand men and five hundred for the Huiqing Camp; Zheng Shaozhong raised two thousand An braves—all organized as local militia under defensive brave regulations.",
+      "after": "In the sixth year of Guangxu, Governor-General Zhang Zhidong recruited one thousand sand-dwellers for Humen; Yang Yuke added one thousand men and five hundred for the Huiqing Camp; Zheng Shaozhong raised two thousand An braves—all organized as local militia under defensive brave regulations.",
+      "reason": "楊玉科 is Yang Yuke; 'Yuken' is a clear transliteration error in the idiomatic English.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:133:r0002",
+      "unit": {
+        "id": "s0191",
+        "kind": "paragraph-sentence",
+        "blockIndex": 27,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Sixth year of Guangxu, Governor-General Zhang Zhidong of the Two Guangs recruited one thousand sand-dwellers to help garrison Humen; Yang Yuken added one thousand and five hundred for the Huiqing Camp; Zheng Shaozhong recruited two thousand An braves—all recruited local militia organized under defensive brave regulations.",
+      "after": "Sixth year of Guangxu, Governor-General Zhang Zhidong of the Two Guangs recruited one thousand sand-dwellers to help garrison Humen; Yang Yuke added one thousand and five hundred for the Huiqing Camp; Zheng Shaozhong recruited two thousand An braves—all recruited local militia organized under defensive brave regulations.",
+      "reason": "楊玉科 is Yang Yuke; 'Yuken' is a clear transliteration error in the literal English.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:133:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0191 names 楊玉科; standard pinyin is Yang Yuke, so idiomatic 'Yuken' is a real transliteration error and the proposed replacement is otherwise unchanged and accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0191",
+        "excerpt": "楊玉科"
+      }
+    },
+    {
+      "repairId": "qingshigao:133:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 楊玉科 appears in the literal field as 'Yang Yuken'; correcting to Yang Yuke fixes the romanization without changing any other meaning.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0191",
+        "excerpt": "楊玉科"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

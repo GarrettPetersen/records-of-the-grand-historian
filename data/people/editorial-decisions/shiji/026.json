@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "026",
+  "input": {
+    "chapterFingerprint": "sha256:8a698b4f2570bb152cbd482b59b8b7d13719419b28082b3796b58b6b6b56f98e",
+    "proposalsFingerprint": "sha256:7be31aed9bf7fef448d8030e2d83a34ffb252077692995d070a5d32456a7cbd0"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-bd9a63ae-3a74-4080-84d6-056223c3b24a",
+    "runId": "run-75b8db86-89f1-4666-920b-f0bdc7d28d47",
+    "completedAt": "2026-08-13T14:49:27.378Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:026:r0001",
+      "unit": {
+        "id": "s0132",
+        "kind": "paragraph-sentence",
+        "blockIndex": 35,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "There is large remainder is 0, and the small remainder is 24.",
+      "after": "The large remainder is 0, and the small remainder is 24.",
+      "reason": "Idiomatic English has a grammar error (“There is large remainder is 0”); corrected to match the parallel remainder formula used elsewhere in the table.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:026:r0002",
+      "unit": {
+        "id": "s0258",
+        "kind": "paragraph-sentence",
+        "blockIndex": 75,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Zhu Li Xie Qiao, the fifth year.",
+      "after": "Zhu Li Xie Xia, the fifth year.",
+      "reason": "協洽 is xiéqià; Qiao misreads 洽 as if it were 喬.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:026:r0003",
+      "unit": {
+        "id": "s0258",
+        "kind": "paragraph-sentence",
+        "blockIndex": 75,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Zhu Li Xie Qiao fifth year.",
+      "after": "Zhu Li Xie Xia fifth year.",
+      "reason": "協洽 is xiéqià; Qiao misreads 洽 as if it were 喬.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:026:r0004",
+      "unit": {
+        "id": "s0261",
+        "kind": "paragraph-sentence",
+        "blockIndex": 76,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Shang Heng Dun Tan, the first year of Jianzhao.",
+      "after": "Shang Heng Tun Tan, the first year of Jianzhao.",
+      "reason": "涒灘 is tūntān; Dun misreads 涒.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:026:r0005",
+      "unit": {
+        "id": "s0261",
+        "kind": "paragraph-sentence",
+        "blockIndex": 76,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Shang Heng Dun Tan Jian Zhao first year.",
+      "after": "Shang Heng Tun Tan Jian Zhao first year.",
+      "reason": "涒灘 is tūntān; Dun misreads 涒.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:026:r0006",
+      "unit": {
+        "id": "s0276",
+        "kind": "paragraph-sentence",
+        "blockIndex": 81,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Duameng Chi Fen Ruo, the first year of Jingning.",
+      "after": "Duanmeng Chi Fen Ruo, the first year of Jingning.",
+      "reason": "端蒙 is Duānméng; Duameng omits n and conflicts with s0291 Duanmeng.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:026:r0007",
+      "unit": {
+        "id": "s0276",
+        "kind": "paragraph-sentence",
+        "blockIndex": 81,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Duameng Chi Fen Ruo Jing Ning first year.",
+      "after": "Duanmeng Chi Fen Ruo Jing Ning first year.",
+      "reason": "端蒙 is Duānméng; Duameng omits n and conflicts with s0291 Duanmeng.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:026:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit 無大餘，小餘二十四 has a broken idiomatic (“There is large remainder is 0”); rendering 無大餘 as “the large remainder is 0” matches the chapter’s parallel treatment of 無小餘 as “the small remainder is 0,” and the proposed sentence is grammatical.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0132",
+        "excerpt": "無大餘，小餘二十四"
+      }
+    },
+    {
+      "repairId": "shiji:026:r0002",
+      "decision": "revise",
+      "after": "Zhu Li Xie Qia, the fifth year.",
+      "reason": "祝犁協洽五年 has 協洽 = xiéqià; Qiao wrongly treats 洽 as 喬, but Xia is also wrong—qià romanizes as Qia in this chapter’s syllable style, so the idiomatic must be Xie Qia.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0258",
+        "excerpt": "協洽"
+      }
+    },
+    {
+      "repairId": "shiji:026:r0003",
+      "decision": "revise",
+      "after": "Zhu Li Xie Qia fifth year.",
+      "reason": "The same 協洽 in the literal is misread as Qiao; the proposal’s Xia still mismatches qià, so revise to Xie Qia while keeping the rest of the calque.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0258",
+        "excerpt": "協洽"
+      }
+    },
+    {
+      "repairId": "shiji:026:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "商橫涒灘建昭元年 has 涒灘 = tūntān; Dun misreads 涒 (as if 敦), and Tun Tan restores the correct year-name reading without changing the rest of the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0261",
+        "excerpt": "涒灘"
+      }
+    },
+    {
+      "repairId": "shiji:026:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise has Dun Tan for 涒灘; Tun Tan matches tūntān and leaves Jian Zhao first year intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0261",
+        "excerpt": "涒灘"
+      }
+    },
+    {
+      "repairId": "shiji:026:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "端蒙赤奮若竟寧元年 begins with 端蒙 = Duānméng; Duameng drops the n, and Duanmeng restores the standard reading used for this year name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0276",
+        "excerpt": "端蒙"
+      }
+    },
+    {
+      "repairId": "shiji:026:r0007",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal’s Duameng is the same omitted-n error for 端蒙; Duanmeng is the correct romanization and otherwise preserves the calque.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0276",
+        "excerpt": "端蒙"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

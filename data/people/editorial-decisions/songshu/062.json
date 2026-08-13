@@ -1,0 +1,219 @@
+{
+  "schemaVersion": 3,
+  "book": "songshu",
+  "chapter": "062",
+  "input": {
+    "chapterFingerprint": "sha256:4f21885a6cd034b31e68bfa5cfd115bb50f471434e248b496dc445ca9b1b0c02",
+    "proposalsFingerprint": "sha256:5a35e8509714ff0a664bb565ece4123babf68f9609036b902caedbfa5a5768d8"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-f881acfd-36ad-4c59-81b4-e74a13473787",
+    "runId": "run-b4ac7014-9a40-4e10-96e4-326dc13e59f4",
+    "completedAt": "2026-08-13T14:52:36.013Z"
+  },
+  "proposals": [
+    {
+      "id": "songshu:062:r0001",
+      "unit": {
+        "id": "s0038",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "His younger brother Hui, courtesy name Jingyou, was widely thought to surpass Xin in reputation.",
+      "after": "His younger brother Hui, courtesy name Jingyou; worldly praise mostly favored Xin.",
+      "reason": "Chinese 世譽多欣 means contemporary praise mostly went to Xin, not that Hui surpassed Xin; the literal field is correct.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:062:r0002",
+      "unit": {
+        "id": "s0181",
+        "kind": "paragraph-sentence",
+        "blockIndex": 22,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Recently He Jianchuo sent your letter; though I know it was in jest, I know you truly cannot pity me.",
+      "after": "Recently I saw Jianchuo deliver your letter; though I know it was in jest, I know you truly cannot pity me.",
+      "reason": "綽 is Wang Sengchuo elsewhere; 何見 is 'how/when I saw', not a surname He attached to Jianchuo.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:062:r0003",
+      "unit": {
+        "id": "s0047",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "When he saw his father's younger brother's wife he was often moved to grief and choked with sobs.",
+      "after": "When he saw his maternal aunt (from-mother) he was often moved to grief and choked with sobs.",
+      "reason": "從母 is the mother's sister (maternal aunt), not father's younger brother's wife.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:062:r0004",
+      "unit": {
+        "id": "s0246",
+        "kind": "paragraph-sentence",
+        "blockIndex": 31,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Past noon he did not come—I was already weary with hope; now how can I stand? Examining myself, dim poison—no more human reason.",
+      "after": "Past noon he did not come—I was already weary with longing; now how can I stand? Examining myself in dim anguish—I am no longer within human norms.",
+      "reason": "惛毒 means confused/dim anguish of grief, not literal poison; 愒望 is weary longing; 無復人理 means no longer within human norms.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshu:062:r0005",
+      "unit": {
+        "id": "s0248",
+        "kind": "paragraph-sentence",
+        "blockIndex": 31,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "If my thoughts cannot be fulfilled, Xie can think of it like madness, not knowing whom to tell; plainly writing these sheets without order or reason, briefly tracing our paths—of ten thousand things not one is written.",
+      "after": "If my thoughts find no outlet, Xie may ponder them in frenzy, not knowing whom to tell; plainly writing these sheets without order or reason, briefly tracing our paths—of ten thousand things not one is written.",
+      "reason": "意慮不遂 means thoughts find no outlet/fulfillment; 思之如狂 is to ponder in frenzy—current phrasing is unclear about Xie's role.",
+      "confidence": "medium"
+    },
+    {
+      "id": "songshu:062:r0006",
+      "unit": {
+        "id": "s0262",
+        "kind": "paragraph-sentence",
+        "blockIndex": 32,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "Chief Clerk He was Yan.",
+      "after": "Chief Clerk He was Yan (He Yan).",
+      "reason": "偃 is the given name of 何偃; bare 'Yan' obscures the surname already established by 何長史.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "songshu:062:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "世譽多欣 means worldly praise mostly favored Xin; the before text reverses the comparison and invents Hui surpassing Xin.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0038",
+        "excerpt": "世譽多欣"
+      }
+    },
+    {
+      "repairId": "songshu:062:r0002",
+      "decision": "revise",
+      "after": "Recently I saw Chuo deliver your letter; though I know it was in jest, I know you truly cannot pity me.",
+      "reason": "何見綽 is 'saw Chuo', not a surname He or a compound Jianchuo; 何見 is the seeing, and 綽 alone names the courier (Wang Sengchuo).",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0181",
+        "excerpt": "近日何見綽送卿書"
+      }
+    },
+    {
+      "repairId": "songshu:062:r0003",
+      "decision": "revise",
+      "after": "When he saw his maternal aunt he was often moved to grief and choked with sobs.",
+      "reason": "從母 is the mother's sister (maternal aunt), not father's younger brother's wife; drop the awkward parenthetical while keeping that sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0047",
+        "excerpt": "見從母"
+      }
+    },
+    {
+      "repairId": "songshu:062:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "愒望 is weary longing, 惛毒 is dim anguish of grief rather than literal poison, and 無復人理 means no longer within human norms.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0246",
+        "excerpt": "已自愒望……自省惛毒，無復人理"
+      }
+    },
+    {
+      "repairId": "songshu:062:r0005",
+      "decision": "reject",
+      "after": null,
+      "reason": "意慮不遂 and 謝能思之如狂 are already rendered accurately enough; 'find no outlet' and 'ponder them in frenzy' are stylistic rewrites, not error fixes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0248",
+        "excerpt": "儻意慮不遂，謝能思之如狂"
+      }
+    },
+    {
+      "repairId": "songshu:062:r0006",
+      "decision": "reject",
+      "after": null,
+      "reason": "何長史者，偃也 literally identifies him as Yan after 何長史 already supplies the surname; the parenthetical He Yan is an idiomatic gloss, not a literal correction.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0262",
+        "excerpt": "何長史者，偃也"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "songshu:062:r0002",
+      "before": {
+        "id": "songshu:062:c0262",
+        "subject": "songshu:062:p060",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate",
+          "en": "Jianchuo",
+          "zh": "綽"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "songshu:062:s0181",
+          "songshu:062:s0206"
+        ]
+      },
+      "after": {
+        "id": "songshu:062:c0262",
+        "subject": "songshu:062:p060",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate",
+          "en": "Chuo",
+          "zh": "綽"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "songshu:062:s0181",
+          "songshu:062:s0206"
+        ]
+      },
+      "reason": "Revised r0002 shows English Jianchuo came only from fusing 見綽; the alternate-name claim for 綽 must read Chuo while keeping zh, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0181",
+        "excerpt": "何見綽送卿書"
+      }
+    }
+  ]
+}

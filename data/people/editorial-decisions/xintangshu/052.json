@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 3,
+  "book": "xintangshu",
+  "chapter": "052",
+  "input": {
+    "chapterFingerprint": "sha256:55ffc4d17773c605f2f54db19b3a6a0ad9b1d5d0ecf75d093e0f38e27b49ac47",
+    "proposalsFingerprint": "sha256:79d242ff4cbed6b3dfad306a426319baf309e25f57ab1d311fd6d9166df5fb6a"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-42c56e47-b2e9-49f1-9fc6-e56cef7ecf7e",
+    "runId": "run-1b681a5a-dabb-4939-bd1b-20ba2f52e97d",
+    "completedAt": "2026-08-13T14:54:53.097Z"
+  },
+  "proposals": [
+    {
+      "id": "xintangshu:052:r0001",
+      "unit": {
+        "id": "s0171",
+        "kind": "paragraph-sentence",
+        "blockIndex": 19,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "When Liu Zan died, aide Yan Shou emptied the commandery treasury for tribute and became vice minister of justice.",
+      "after": "When Liu Zan died, aide Yan Shou emptied the commandery treasury for tribute and became a Vice Director of the Ministry of Justice.",
+      "reason": "刑部員外郎 is a Yuanwailang (Vice Director) post, not the Vice Minister (侍郎) rank.",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:052:r0002",
+      "unit": {
+        "id": "s0196",
+        "kind": "paragraph-sentence",
+        "blockIndex": 23,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Wang Sui and Li Chong, famed extortionists, were sent to rich Xuan-She and Zhexi to raise revenue.",
+      "after": "Wang Sui and Li Xiao, famed extortionists, were sent to rich Xuan-She and Zhexi to raise revenue.",
+      "reason": "李翛 is Li Xiao (翛), not Chong; the idiomatic spelling mismatches the Chinese name.",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:052:r0003",
+      "unit": {
+        "id": "s0196",
+        "kind": "paragraph-sentence",
+        "blockIndex": 23,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "The Minister of Agriculture Wang Sui and the Prefect of Jingzhao Li Chong were famed for gathering wealth and were made observation commissioners of Xuan-She and Zhexi, given rich territories to handle fiscal levies.",
+      "after": "The Minister of Agriculture Wang Sui and the Prefect of Jingzhao Li Xiao were famed for gathering wealth and were made observation commissioners of Xuan-She and Zhexi, given rich territories to handle fiscal levies.",
+      "reason": "李翛 should be romanized Li Xiao, matching the Chinese characters.",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:052:r0004",
+      "unit": {
+        "id": "s0246",
+        "kind": "paragraph-sentence",
+        "blockIndex": 30,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Under Yizong, Nanzhao raids drove troops south to Lingnan.",
+      "after": "Under Yizong, Yunnan barbarians repeatedly raided inward, and troops were shifted to garrison Lingnan.",
+      "reason": "Chinese 雲南蠻 means Yunnan barbarians; the idiomatic rendering invents the specific polity name Nanzhao, which is not in the source.",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:052:r0005",
+      "unit": {
+        "id": "s0253",
+        "kind": "paragraph-sentence",
+        "blockIndex": 30,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "Besieged at Fengxiang by Liang forces, Zhaozong ate gruel while the court starved; the city turned to cannibalism.",
+      "after": "Zhaozong was at Fengxiang, besieged by Liang troops; in the city people ate one another, fathers eating their sons, while the Son of Heaven ate gruel; the six palaces and the imperial clan mostly starved to death.",
+      "reason": "Idiomatic omits fathers eating sons and that the six palaces and imperial clan mostly starved to death, collapsing distinct source details.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xintangshu:052:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 刑部員外郎 is a yuanwailang (Vice Director) post in the Ministry of Justice; vice minister would be 侍郎. The replacement correctly restores that rank while leaving the rest of the sentence unchanged.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0171",
+        "excerpt": "召為刑部員外郎"
+      }
+    },
+    {
+      "repairId": "xintangshu:052:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The personal name 李翛 is Li Xiao (翛 = xiāo), not Chong; the idiomatic 'Li Chong' misreads the character, and 'Li Xiao' restores the correct romanization.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0196",
+        "excerpt": "京兆尹李翛"
+      }
+    },
+    {
+      "repairId": "xintangshu:052:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same unit as r0002: 李翛 must be Li Xiao in the literal field; replacing 'Li Chong' corrects the romanization without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0196",
+        "excerpt": "京兆尹李翛"
+      }
+    },
+    {
+      "repairId": "xintangshu:052:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Source has 雲南蠻數內寇 (Yunnan barbarians repeatedly raided inward) and 徙兵戍嶺南 (troops shifted to garrison Lingnan); 'Nanzhao' is not in the Chinese and invents a specific polity name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0246",
+        "excerpt": "雲南蠻數內寇，徙兵戍嶺南"
+      }
+    },
+    {
+      "repairId": "xintangshu:052:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese states 城中人相食，父食其子 and 六宮及宗室多餓死 as distinct facts beside the emperor eating gruel; the prior idiomatic collapsed these, and the proposed text restores them accurately.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0253",
+        "excerpt": "城中人相食，父食其子，而天子食粥，六宮及宗室多餓死"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "xintangshu:052:r0002",
+      "before": {
+        "id": "xintangshu:052:c0117",
+        "subject": "xintangshu:052:p044",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Li Chong",
+          "zh": "李翛",
+          "pinyin": "Lǐ Xiāo"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xintangshu:052:s0196"
+        ]
+      },
+      "after": {
+        "id": "xintangshu:052:c0117",
+        "subject": "xintangshu:052:p044",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Li Xiao",
+          "zh": "李翛",
+          "pinyin": "Lǐ Xiāo"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xintangshu:052:s0196"
+        ]
+      },
+      "reason": "Accepted r0002/r0003 show English Li Chong came only from the bad rendering of 李翛; the personal-name claim must read Li Xiao while keeping zh, pinyin, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0196",
+        "excerpt": "李翛"
+      }
+    }
+  ]
+}
