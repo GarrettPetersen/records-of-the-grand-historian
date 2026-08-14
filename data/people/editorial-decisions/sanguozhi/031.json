@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 3,
+  "book": "sanguozhi",
+  "chapter": "031",
+  "input": {
+    "chapterFingerprint": "sha256:4eb12d48fe92b8bfb2c9b1ed191eb755482577ee875b535fa06d8f283d999412",
+    "proposalsFingerprint": "sha256:ad63d5cc06dec68332894073406a35e41e255c6dba6a62655c91bc3d260e71d8"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-2d05f6e1-013a-4e7a-9d0c-175403e16367",
+    "runId": "run-a5846e6e-6f72-47d0-b5d7-35c3be1ac57a",
+    "completedAt": "2026-08-14T05:28:34.310Z"
+  },
+  "proposals": [
+    {
+      "id": "sanguozhi:031:r0001",
+      "unit": {
+        "id": "s0129",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "About then Yizhou Inspector Xi Jian was grinding the people with heavy levies until rumor of it spread far; Xi Jian was a descendant of Xi Zheng.",
+      "after": "About then Yizhou Inspector Xi Jian was grinding the people with heavy levies until rumor of it spread far; Xi Jian was an ancestor of Xi Zheng.",
+      "reason": "Chinese 儉，郤正祖也 means Xi Jian was the ancestor of Xi Zheng, not his descendant.",
+      "confidence": "high"
+    },
+    {
+      "id": "sanguozhi:031:r0002",
+      "unit": {
+        "id": "s0129",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "It happened that Inspector of Yizhou Xi Jian levied taxes in vexing and harassing fashion, and rumors were heard from afar; Jian was a descendant of Xi Zheng.",
+      "after": "It happened that Inspector of Yizhou Xi Jian levied taxes in vexing and harassing fashion, and rumors were heard from afar; Jian was the ancestor of Xi Zheng.",
+      "reason": "Same kinship direction error as the idiomatic line: 祖 marks Jian as Xi Zheng's ancestor.",
+      "confidence": "high"
+    },
+    {
+      "id": "sanguozhi:031:r0003",
+      "unit": {
+        "id": "s0115",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "After Liu Bei conquered Shu, Pang Xi served as major to the general of the left. Liu Zhang had prevailed on Pang Xi to keep Liu Xun in the west, and Liu Bei then commissioned Liu Xun as gentleman of the household for the chariot.",
+      "after": "After Liu Bei conquered Shu, Pang Xi served as major to the general of the left. Liu Zhang at that time followed Pang Xi's petition to keep Liu Xun, and Liu Bei then commissioned Liu Xun as gentleman of the household for the chariot.",
+      "reason": "Chinese 璋時從羲啟留循 means Zhang followed Xi's memorial/petition to detain Xun; idiomatic reverses agency by making Zhang prevail on Pang Xi.",
+      "confidence": "high"
+    },
+    {
+      "id": "sanguozhi:031:r0004",
+      "unit": {
+        "id": "s0127",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "Some manuscripts read “Liu Guang” here instead of the name in the following line.",
+      "after": "(Liu Guang)",
+      "reason": "The Chinese unit is only the parenthetical variant reading （劉光）; the idiomatic English invents an explanatory manuscript note not present in the source line.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "sanguozhi:031:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "儉，郤正祖也 identifies Jian as Xi Zheng's ancestor (祖); “descendant” reverses the kinship, and the proposed “ancestor” restores the Chinese direction.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0129",
+        "excerpt": "儉，郤正祖也"
+      }
+    },
+    {
+      "repairId": "sanguozhi:031:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same clause 儉，郤正祖也 marks Jian as Xi Zheng's ancestor, not descendant; the literal repair correctly restores that kinship direction.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0129",
+        "excerpt": "儉，郤正祖也"
+      }
+    },
+    {
+      "repairId": "sanguozhi:031:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "璋時從羲啟留循 means Zhang followed Pang Xi's petition to keep Xun; “had prevailed on Pang Xi” reverses agency, and the proposed wording restores the Chinese subject and 從羲啟.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0115",
+        "excerpt": "璋時從羲啟留循"
+      }
+    },
+    {
+      "repairId": "sanguozhi:031:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The Chinese unit is only the parenthetical （劉光）; the idiomatic before invents a manuscript explanation absent from this line, and “(Liu Guang)” matches the source form (and the existing literal).",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0127",
+        "excerpt": "（劉光）"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "sanguozhi:031:r0004",
+      "claim": {
+        "id": "sanguozhi:031:c0702",
+        "subject": "sanguozhi:031:p099",
+        "predicate": "textual-variant",
+        "value": {
+          "field": "personal-name",
+          "statement": "Some manuscripts read 劉光 (Liu Guang) here for 劉先 (Liu Xian) in the following line"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "sanguozhi:031:s0127",
+          "sanguozhi:031:s0128"
+        ]
+      },
+      "reason": "Accepted r0004 shows the explicit “some manuscripts read… for Liu Xian” statement was created solely by the invented idiomatic note; s0127 supplies only （劉光）, while the alternate-name claim c0377 remains.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0127",
+        "excerpt": "（劉光）"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

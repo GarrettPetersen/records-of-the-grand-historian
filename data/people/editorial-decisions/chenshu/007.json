@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "chenshu",
+  "chapter": "007",
+  "input": {
+    "chapterFingerprint": "sha256:a292cee06a3b7d31b646353798039727c085036e7cafb3eb2aca6d2c95612e0c",
+    "proposalsFingerprint": "sha256:dd759d9fddc8a68cb5d4a07e9203da2aa2929b2d875828ea1ec654f559fed231"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-20c85576-048c-4103-9a93-060c4c7a4d3a",
+    "runId": "run-5bcef66b-3c6e-49b0-9564-80c2db288b16",
+    "completedAt": "2026-08-14T05:17:58.462Z"
+  },
+  "proposals": [
+    {
+      "id": "chenshu:007:r0001",
+      "unit": {
+        "id": "s0009",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "In the first year of Tianjia (562) Emperor Wen fixed the number of inner-palace posts and for the first time created three offices—noble consort, noble concubine, and noble lady—to match the ancient three chief consorts.",
+      "after": "In the first year of Tianjia (560) Emperor Wen fixed the number of inner-palace posts and for the first time created three offices—noble consort, noble concubine, and noble lady—to match the ancient three chief consorts.",
+      "reason": "Tianjia 1 corresponds to AD 560, not 562; the parenthetical Western year is wrong.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:007:r0002",
+      "unit": {
+        "id": "s0035",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "In Guangda year 2 (569) she issued an order deposing the Deposed Emperor as Prince of Linhai and installing Emperor Xuan in his place.",
+      "after": "In Guangda year 2 (568) she issued an order deposing the Deposed Emperor as Prince of Linhai and installing Emperor Xuan in his place.",
+      "reason": "Guangda 2 is AD 568; Taijian 1 (next unit) is 569, so the parenthetical year is wrong.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:007:r0003",
+      "unit": {
+        "id": "s0076",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "In the first year of Tianjia (562) she became crown princess; when the Deposed Emperor succeeded she was made empress.",
+      "after": "In the first year of Tianjia (560) she became crown princess; when the Deposed Emperor succeeded she was made empress.",
+      "reason": "Tianjia 1 is AD 560, not 562.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:007:r0004",
+      "unit": {
+        "id": "s0195",
+        "kind": "paragraph-sentence",
+        "blockIndex": 40,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "On \"before Guangzhao Hall he raised Linchun, Jieqi, and Wangxian\": the Southern Dynasties biography of Precious Consort Zhang and the Comprehensive Mirror read Guangzhao Hall.",
+      "after": "On \"before Guangzhao Hall (光照殿) he raised Linchun, Jieqi, and Wangxian\": the Southern Dynasties biography of Precious Consort Zhang and the Comprehensive Mirror read Guangzhao Hall (光昭殿).",
+      "reason": "Idiomatic English collapses 光照殿 and 光昭殿 to the same romanization Guangzhao, obscuring the collation variant the note records.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:007:r0005",
+      "unit": {
+        "id": "s0195",
+        "kind": "paragraph-sentence",
+        "blockIndex": 40,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "\"Then before the Guangzhao Hall he raised the three pavilions Linchun, Jieqi, and Wangxian\"—\"Guangzhao Hall\" in the Biography of Precious Consort Zhang in the History of the Southern Dynasties reads Guangzhao Hall; the Comprehensive Mirror agrees.",
+      "after": "\"Then before the Guangzhao Hall (光照殿) he raised the three pavilions Linchun, Jieqi, and Wangxian\"—\"Guangzhao Hall\" in the Biography of Precious Consort Zhang in the History of the Southern Dynasties reads Guangzhao Hall (光昭殿); the Comprehensive Mirror agrees.",
+      "reason": "Literal English likewise fails to distinguish 光照 and 光昭, so the note's point is lost.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "chenshu:007:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0009 dates the edict to 世祖天嘉初; Tianjia began in AD 560, so the early/first year is AD 560, not 562. The proposed parenthetical corrects the Western year without changing the rest of the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0009",
+        "excerpt": "世祖天嘉初"
+      }
+    },
+    {
+      "repairId": "chenshu:007:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0035 has 光大二年; the next unit s0036 is 太建元年, already glossed as AD 569, so Guangda year 2 must be AD 568. The parenthetical 569 wrongly duplicates Taijian 1.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0035",
+        "excerpt": "光大二年"
+      }
+    },
+    {
+      "repairId": "chenshu:007:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0076 has 天嘉元年; Tianjia year 1 is AD 560, not 562. The replacement corrects only the Western year.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0076",
+        "excerpt": "天嘉元年"
+      }
+    },
+    {
+      "repairId": "chenshu:007:r0004",
+      "decision": "revise",
+      "after": "On \"before Guangzhao Hall (zhao, illumine) he raised Linchun, Jieqi, and Wangxian\": the Southern Dynasties biography of Precious Consort Zhang and the Comprehensive Mirror read Guangzhao Hall (zhao, manifest).",
+      "reason": "The note contrasts base-text Guangzhao written with zhao 'illumine' (光照殿) against Nanshi/Tongjian Guangzhao with zhao 'manifest' (光昭殿); the proposal rightly sees that identical romanization hides the variant, but English replacements must not insert Chinese graphs. Gloss the homophones in English, as the neighboring note does for ge (sing) vs ge (unit).",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0195",
+        "excerpt": "「光照殿」《南史·張貴妃傳》作「光昭殿」"
+      }
+    },
+    {
+      "repairId": "chenshu:007:r0005",
+      "decision": "revise",
+      "after": "\"Then before the Guangzhao Hall (zhao, illumine) he raised the three pavilions Linchun, Jieqi, and Wangxian\"—\"Guangzhao Hall\" in the Biography of Precious Consort Zhang in the History of the Southern Dynasties reads Guangzhao Hall (zhao, manifest); the Comprehensive Mirror agrees.",
+      "reason": "Same unit on the literal field: both forms were rendered Guangzhao Hall, so the collation point vanished. Distinguish them with English glosses (zhao, illumine) vs (zhao, manifest) rather than parenthetical Chinese characters.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0195",
+        "excerpt": "「光照殿」《南史·張貴妃傳》作「光昭殿」，《通鑑》同"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

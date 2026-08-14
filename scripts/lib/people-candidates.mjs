@@ -120,10 +120,17 @@ function englishFormulaMatches(text) {
 
 function englishCapitalizedMatches(text) {
   const matches = [];
-  const pattern = /\b[\p{Lu}][\p{L}\p{M}'’-]*(?:[ \t]+[\p{Lu}][\p{L}\p{M}'’-]*){0,3}\b/dgu;
+  const pattern = /(?<![\p{L}\p{M}'’-])[\p{Lu}][\p{L}\p{M}'’-]*(?:[ \t]+[\p{Lu}][\p{L}\p{M}'’-]*){0,3}(?![\p{L}\p{M}'’-])/dgu;
   for (const match of text.matchAll(pattern)) {
-    let exact = match[0].replace(/[ \t]+/gu, ' ').replace(/[’']s$/u, '');
     let startUtf16 = match.indices[0][0];
+    let exact = match[0].replace(/[ \t]+/gu, ' ').replace(/[’']s$/u, '');
+    const openingQuote = text.slice(0, startUtf16).at(-1);
+    if (
+      (openingQuote === '‘' && exact.endsWith('’')) ||
+      (openingQuote === "'" && exact.endsWith("'"))
+    ) exact = exact.slice(0, -1);
+    else exact = exact.replace(/(?<![sS])[’']$/u, '');
+    if (!/^[\p{Script=Latin}\p{M}'’\- \t]+$/u.test(exact)) continue;
     let tokens = exact.split(' ');
     while (tokens.length > 1 && ENGLISH_STOP_WORDS.has(tokens[0])) {
       startUtf16 += tokens.shift().length + 1;

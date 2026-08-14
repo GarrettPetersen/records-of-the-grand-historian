@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "liangshu",
+  "chapter": "030",
+  "input": {
+    "chapterFingerprint": "sha256:6a628cf9b5a020425551a7c1ae0d9735e41288e1f095844e0d7f597cba15ba1c",
+    "proposalsFingerprint": "sha256:b84bc08e202dd1009b73aea4a441886141fd8aee865fa0a36cdcef13565216e4"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-14503ef1-62b2-44df-8d5c-b39aa78f020e",
+    "runId": "run-3fc39d58-2bf9-4f49-b76c-be43528b8fca",
+    "completedAt": "2026-08-14T05:22:17.807Z"
+  },
+  "proposals": [
+    {
+      "id": "liangshu:030:r0001",
+      "unit": {
+        "id": "s0020",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In the second year, Marquis of Ping of Wu Xiao Jing became regional inspector of South Yanzhou and took Ziye on as recorder for the Champion General; when the headquarters was transferred, the appointment ended.",
+      "after": "In the second year, Marquis of Wuping Xiao Jing became regional inspector of South Yanzhou and took Ziye on as recorder for the Champion General; when the headquarters was transferred, the appointment ended.",
+      "reason": "吳平侯 is the title Marquis of Wuping, not 'Marquis of Ping of Wu'.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:030:r0002",
+      "unit": {
+        "id": "s0053",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "At that time Marquis of Ping of Wu Xiao Mai and Zhang Zuan of Fanyang, whenever they discussed the classics and histories, would all defer to Ziye's judgment.",
+      "after": "At that time Marquis of Wuping Xiao Mai and Zhang Zuan of Fanyang, whenever they discussed the classics and histories, would all defer to Ziye's judgment.",
+      "reason": "吳平侯 should be rendered Marquis of Wuping, matching the title form.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:030:r0003",
+      "unit": {
+        "id": "s0129",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "His grandfather Xu Pingdao had been regional inspector of Hailing under the Song.",
+      "after": "His grandfather Xu Pingdao had been governor of Hailing under the Song.",
+      "reason": "太守 is a commandery governor (taishou), not regional inspector (刺史).",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:030:r0004",
+      "unit": {
+        "id": "s0129",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "His grandfather Pingdao was regional inspector of Hailing under Song.",
+      "after": "His grandfather Pingdao was governor of Hailing under Song.",
+      "reason": "Literal English also mistranslates 太守 as regional inspector.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:030:r0005",
+      "unit": {
+        "id": "s0201",
+        "kind": "paragraph-sentence",
+        "blockIndex": 24,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "In modeling oneself on Ziyou and Zizhang, following in the footsteps of Yan Hui and Zigong, and combining literary talent with moral conduct — all of this we see in Pei Jiyuan.",
+      "after": "In modeling oneself on Ziyou and Zixia, following in the footsteps of Yan Hui and Min Ziqian, and combining literary talent with moral conduct — all of this we see in Pei Jiyuan.",
+      "reason": "Chinese 游、夏 are Confucius's literary disciples Ziyou (子游) and Zixia (子夏), not Zizhang (子張); 回、騫 are Yan Hui (顏回) and Min Ziqian (閔子騫), not Zigong (子貢). The literal line correctly has You/Xia and Yan/Qian.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liangshu:030:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0020 吳平侯蕭景 titles Xiao Jing 吳平侯, the Marquis of Wuping (place-name Wuping + hou), not 'Marquis of Ping of Wu'; the proposed idiomatic corrects that parsing error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0020",
+        "excerpt": "吳平侯蕭景"
+      }
+    },
+    {
+      "repairId": "liangshu:030:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0053 吳平侯蕭勱 likewise uses the title 吳平侯 for Xiao Mai; 'Marquis of Ping of Wu' misparses the fief name, and Marquis of Wuping is the accurate rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0053",
+        "excerpt": "吳平侯蕭勱"
+      }
+    },
+    {
+      "repairId": "liangshu:030:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0129 宋海陵太守 names Pingdao 海陵太守 (commandery governor); 太守 is not 刺史, so replacing 'regional inspector' with 'governor' is required.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0129",
+        "excerpt": "宋海陵太守"
+      }
+    },
+    {
+      "repairId": "liangshu:030:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0129 宋海陵太守 has the same office term in the literal field; 'regional inspector' wrongly equates 太守 with 刺史, and 'governor of Hailing' restores the correct office.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0129",
+        "excerpt": "海陵太守"
+      }
+    },
+    {
+      "repairId": "liangshu:030:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0201 憲章游、夏，祖述回、騫 pairs 游/夏 as Ziyou and Zixia and 回/騫 as Yan Hui and Min Ziqian; the before text invents Zizhang and Zigong, and the proposed idiomatic matches the Chinese and the correct literal.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0201",
+        "excerpt": "憲章游、夏，祖述回、騫"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

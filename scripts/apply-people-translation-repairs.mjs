@@ -131,6 +131,15 @@ function selfTest() {
   if (renamedAtEnd?.exact !== 'Bing') {
     throw new Error('Edited person name before punctuation was not remapped');
   }
+  const removedAttribution = remapMentionSpanThroughEdit(
+    { exact: 'Confucius', occurrence: 0 },
+    'He often quoted Confucius: "Lead with virtue."',
+    'He often took as principle: "Lead with virtue."',
+    'en',
+  );
+  if (removedAttribution !== null) {
+    throw new Error('Removed person attribution was remapped onto ordinary replacement prose');
+  }
   const matcher = loadProperNounMatcher();
   const chapter = {
     meta: { book: 'fixture', chapter: '001', title: { zh: '', en: '' } },
@@ -494,6 +503,26 @@ function selfTest() {
       collection: 'sentences', itemIndex: 0,
       zh: '廷尉亦當奏。', en: 'The Commandant of Justice should also report.',
       literal: 'The Commandant of Justice should also report.',
+    }, {
+      id: 's0030', kind: 'paragraph-sentence', blockIndex: 29,
+      collection: 'sentences', itemIndex: 0,
+      zh: '尚書顧命篇。', en: 'The Documents cites the Testamentary Charge.',
+      literal: 'The Documents cites the Testamentary Charge.',
+    }, {
+      id: 's0031', kind: 'paragraph-sentence', blockIndex: 30,
+      collection: 'sentences', itemIndex: 0,
+      zh: '其中。', en: 'Among them, none objected.',
+      literal: 'Among them, none objected.',
+    }, {
+      id: 's0032', kind: 'paragraph-sentence', blockIndex: 31,
+      collection: 'sentences', itemIndex: 0,
+      zh: '三父房。', en: "The Three Fathers' lines were noble.",
+      literal: "The Three Fathers' lines were noble.",
+    }, {
+      id: 's0033', kind: 'paragraph-sentence', blockIndex: 32,
+      collection: 'sentences', itemIndex: 0,
+      zh: '王府近侍。', en: "Princes' attendants served.",
+      literal: "Princes' attendants served.",
     }],
     preflight: {
       candidates: [{
@@ -611,6 +640,22 @@ function selfTest() {
       }, {
         id: 'fixture:002:cand_justice', unit: 's0029', language: 'en',
         exact: 'Justice', occurrence: 0, startCodePoint: 18, endCodePoint: 25,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_testamentary_charge', unit: 's0030', language: 'en',
+        exact: 'Testamentary Charge', occurrence: 0, startCodePoint: 24, endCodePoint: 43,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_among', unit: 's0031', language: 'en',
+        exact: 'Among', occurrence: 0, startCodePoint: 0, endCodePoint: 5,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_three_fathers', unit: 's0032', language: 'en',
+        exact: "Three Fathers'", occurrence: 0, startCodePoint: 4, endCodePoint: 18,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_princes', unit: 's0033', language: 'en',
+        exact: "Princes'", occurrence: 0, startCodePoint: 0, endCodePoint: 8,
         detectors: [{ kind: 'english-capitalized-expression' }],
       }],
     },
@@ -898,6 +943,10 @@ function selfTest() {
     ['fixture:002:cand_work_title', 'book-title'],
     ['fixture:002:cand_office_direction', 'office'],
     ['fixture:002:cand_justice', 'office'],
+    ['fixture:002:cand_testamentary_charge', 'book-title'],
+    ['fixture:002:cand_among', 'not-a-name'],
+    ['fixture:002:cand_three_fathers', 'organization'],
+    ['fixture:002:cand_princes', 'collective'],
     ['fixture:002:cand_what', 'not-a-name'],
   ]);
   for (const [candidate, reason] of expectedNonPeople) {
@@ -921,6 +970,9 @@ function selfTest() {
     ['s0009', '上柱國', 'He was Supreme Pillar of the State.'],
     ['s0010', '塔里捨，地名。', 'Talise: a place name.'],
     ['s0011', '莫弗紇，諸部酋長稱。', 'Mofu He: a title for tribal chiefs; also called Mofu Ho.'],
+    ['s0012', '征斡羅思部。', "He campaigned against the Rus'."],
+    ['s0013', '鎮守斡羅思。', "He was sent to garrison Rus'."],
+    ['s0014', '博啓圖遷。', 'Boqitu was transferred.'],
   ].map(([id, zh, en], index) => ({
     id,
     kind: 'paragraph-sentence',
@@ -967,6 +1019,8 @@ function selfTest() {
         semanticCandidate('cand_supreme_pillar', 's0009', 'Supreme Pillar'),
         semanticCandidate('cand_place_headword', 's0010', 'Talise'),
         semanticCandidate('cand_chief_title', 's0011', 'Mofu Ho'),
+        semanticCandidate('cand_rus_collective', 's0012', "Rus'"),
+        semanticCandidate('cand_rus_place', 's0013', "Rus'"),
       ],
     },
   };
@@ -1014,6 +1068,7 @@ function selfTest() {
       semanticPerson('p003', 'The Emperor', '帝'),
       semanticPerson('p004', 'Yelü Chongyuan', '耶律重元'),
       semanticPerson('p005', 'Wei Shou', '魏收'),
+      semanticPerson('p006', 'Boqitu', '博啓圖'),
     ],
     mentions: [
       semanticMention('m0001', 'p001', 's0001', 'temple-name', 'en', 'Yizu'),
@@ -1021,6 +1076,7 @@ function selfTest() {
       semanticMention('m0003', 'p003', 's0003', 'title-reference', 'en', 'Imperial Younger Brother'),
       semanticMention('m0004', 'p004', 's0003', 'personal-name', 'en', 'Chongyuan'),
       semanticMention('m0005', 'p004', 's0003', 'title-reference', 'zh', '皇太弟重元'),
+      semanticMention('m0006', 'p006', 's0014', 'personal-name', 'zh', '博啓圖'),
     ],
     claims: [
       semanticClaim('c0001', 'p001', 's0001', 'name', { kind: 'temple-name', en: 'Yizu', zh: '懿祖' }),
@@ -1035,6 +1091,9 @@ function selfTest() {
       }),
       semanticClaim('c0005', 'p005', 's0004', 'occupation', {
         label: { en: 'Junior Tutor to the Crown Prince', zh: '太子少傅' },
+      }),
+      semanticClaim('c0006', 'p006', 's0014', 'name', {
+        kind: 'personal', en: 'Boqitu', zh: '博啓圖',
       }),
     ],
     translationRepairs: [],
@@ -1066,6 +1125,12 @@ function selfTest() {
   if (semanticDispositions.get('fixture:003:cand_chief_title') !== 'office') {
     throw new Error('A tribal-chief title variant was not classified as an office');
   }
+  if (semanticDispositions.get('fixture:003:cand_rus_collective') !== 'collective') {
+    throw new Error('The Rus campaign target was not classified as a collective');
+  }
+  if (semanticDispositions.get('fixture:003:cand_rus_place') !== 'place') {
+    throw new Error('Rus as garrisoned territory was not classified as a place');
+  }
   const titleMention = semanticResult.extraction.mentions.find((mention) =>
     mention.spans.en.some((span) => span.exact === 'Imperial Younger Brother Chongyuan')
   );
@@ -1074,6 +1139,15 @@ function selfTest() {
   );
   if (titleMention?.person !== chongyuan?.localId) {
     throw new Error('A combined title-and-name span was not assigned to the named title holder');
+  }
+  if (!semanticResult.extraction.mentions.some((mention) =>
+    mention.person === semanticResult.extraction.people.find((person) =>
+      person.preferredNameSuggestion.en === 'Boqitu'
+    )?.localId &&
+    mention.unit.id === 's0014' &&
+    mention.spans.en.some((span) => span.exact === 'Boqitu')
+  )) {
+    throw new Error('A preferred romanization introduced once by a repair was not linked');
   }
 
   const contextualTitlePacket = {
@@ -1174,6 +1248,10 @@ function main() {
     })
     : storedExtraction;
   const statuses = new Set(extraction.translationRepairs.map((repair) => repair.status));
+  const invalidStatuses = [...statuses].filter((status) => !['applied', 'proposed'].includes(status));
+  if (invalidStatuses.length > 0) {
+    throw new Error(`Unknown translation repair status: ${invalidStatuses.join(', ')}`);
+  }
 
   if (opts.reconcileCurrent) {
     const reconciled = reconcileExtractionAfterRepairs(extraction, currentPacket, {
@@ -1207,14 +1285,11 @@ function main() {
     return;
   }
 
-  if (statuses.size === 0 || (statuses.size === 1 && statuses.has('applied'))) {
+  if (!statuses.has('proposed')) {
     if (compactStored) validateCompactPeopleExtraction(storedExtraction, currentPacket);
     else validatePeopleExtraction(extraction, currentPacket);
     console.log(`No proposed repairs remain for ${opts.book}/${opts.chapter}.`);
     return;
-  }
-  if (statuses.size !== 1 || !statuses.has('proposed')) {
-    throw new Error('Translation repairs must be uniformly proposed or uniformly applied');
   }
 
   const oldPacket = currentPacket;
@@ -1227,11 +1302,15 @@ function main() {
   }
   const decisionDocument = readJson(decisionFile);
   const reviewed = validateEditorialDecisions(decisionDocument, extraction, oldPacket);
-  const reviewedRepairs = renumberRepairs(reviewed.reviewedRepairs, opts.book, opts.chapter);
+  const retainedRepairs = renumberRepairs([
+    ...extraction.translationRepairs.filter((repair) => repair.status === 'applied'),
+    ...reviewed.reviewedRepairs,
+  ], opts.book, opts.chapter);
+  const reviewedRepairs = retainedRepairs.filter((repair) => repair.status === 'proposed');
   const reviewedExtraction = {
     ...structuredClone(extraction),
     claims: applyReviewedClaimChanges(extraction.claims, reviewed),
-    translationRepairs: reviewedRepairs,
+    translationRepairs: retainedRepairs,
   };
 
   if (reviewedRepairs.length === 0) {

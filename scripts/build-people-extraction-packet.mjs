@@ -318,12 +318,24 @@ function detectorSummary(packet) {
 }
 
 function selfTest() {
-  const units = [{ id: 's0001', order: 0, zh: '劉湛，字弘仁。', en: 'Liu Zhan, courtesy name Hongren.' }];
+  const units = [{
+    id: 's0001',
+    order: 0,
+    zh: '劉湛，字弘仁。熊賜履至。',
+    en: "Liu Zhan, courtesy name Hongren. Xiong Cilü arrived. He cited 'On Knowing Fate' and ‘Monthly Ordinances’. Ω and Γ label paths; Ω and Γ recur, while EΞ and EΞ label lines.",
+  }];
   const matcher = loadProperNounMatcher();
   const candidates = scanPeopleCandidates({ book: 'songshu', chapter: '069', units, properNounMatcher: matcher });
   if (!candidates.some((item) => item.exact === 'Liu Zhan')) throw new Error('English name candidate missing');
   if (!candidates.some((item) => item.exact === 'Hongren')) throw new Error('Courtesy-name candidate missing');
   if (!candidates.some((item) => item.exact === '弘仁')) throw new Error('Chinese formula candidate missing');
+  if (!candidates.some((item) => item.exact === 'Xiong Cilü')) throw new Error('Diacritic name candidate was truncated');
+  if (candidates.some((item) => item.exact === 'Xiong Cil')) throw new Error('Truncated diacritic candidate survived');
+  if (!candidates.some((item) => item.exact === 'Knowing Fate')) throw new Error('Quoted title candidate missing');
+  if (candidates.some((item) => item.exact === "Knowing Fate'")) throw new Error('Closing quotation mark survived in candidate');
+  if (!candidates.some((item) => item.exact === 'Monthly Ordinances')) throw new Error('Curly-quoted title candidate missing');
+  if (candidates.some((item) => item.exact === 'Monthly Ordinances’')) throw new Error('Curly closing quotation mark survived in candidate');
+  if (candidates.some((item) => /[\p{Script=Greek}]/u.test(item.exact))) throw new Error('Greek formula label survived as a person candidate');
   if (new Set(candidates.map((item) => item.id)).size !== candidates.length) throw new Error('Candidate IDs are not unique');
   console.log(`build-people-extraction-packet self-test: ok (${candidates.length} candidates)`);
 }

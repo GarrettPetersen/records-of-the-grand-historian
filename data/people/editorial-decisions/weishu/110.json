@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "weishu",
+  "chapter": "110",
+  "input": {
+    "chapterFingerprint": "sha256:476bb4c883cfda51d850204beb5bc428e6637d7d28f8168e249a554e62f4d989",
+    "proposalsFingerprint": "sha256:d3e1886bf2b3fc7b017a96069a9a91ed11b0e87af2e77536767695f3d99d641a"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-25cfd750-9e65-4dad-8db0-4fe66b7b8c2b",
+    "runId": "run-dc775efb-74cd-4e49-8ce4-7febdb88f1df",
+    "completedAt": "2026-08-14T05:30:35.508Z"
+  },
+  "proposals": [
+    {
+      "id": "weishu:110:r0001",
+      "unit": {
+        "id": "s0018",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "literal",
+      "before": "Fu Shuyan's son Jinghe, Regional Inspector of Liangzhou, felt shame at heart; in Luoyang he extensively engaged in bribery, seeking the mobile office position.",
+      "after": "Jinghe, son of Fu Shuyan, Regional Inspector of Liangzhou, felt shame at heart; in Luoyang he extensively engaged in bribery, seeking the mobile office position.",
+      "reason": "Chinese 梁州刺史傅豎眼子敬和 makes Fu Shuyan the Liangzhou inspector and Jinghe his son; the literal English wrongly makes Jinghe the inspector.",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:110:r0002",
+      "unit": {
+        "id": "s0120",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "Fan received the letter and marched west with his troops, whereupon Governor Cui Shengian of □ Province entered and seized his city.",
+      "after": "Fan received the letter and marched west with his troops, whereupon Governor Cui Shengnian of □ Province entered and seized his city.",
+      "reason": "Chinese 崔聖念 is Cui Shengnian; idiomatic 'Shengian' is a transliteration error.",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:110:r0003",
+      "unit": {
+        "id": "s0171",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "〈the Former Deposed Emperor〉",
+      "after": "〈the Later Deposed Emperor〉",
+      "reason": "Chinese 後廢帝 means Later/Latter Deposed Emperor; Former would be 前廢帝, so Former mistranslates 後.",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:110:r0004",
+      "unit": {
+        "id": "s0171",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "〈the Former Deposed Emperor〉",
+      "after": "〈the Later Deposed Emperor〉",
+      "reason": "Chinese 後廢帝 means Later/Latter Deposed Emperor; Former would be 前廢帝, so Former mistranslates 後.",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:110:r0005",
+      "unit": {
+        "id": "s0174",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "On \"Broadly gathered and weighed\"—the Nan, Dian, and Ju editions and scroll 37 of the History of Northern Qi read \"devoted\" for \"gathered\" and \"transmitted\" for \"weighed\"; the Baipu, Bei, and Ji editions read \"transmitted\" for \"gathered\";",
+      "after": "On \"Broadly gathered and weighed\"—the Nan, Dian, and Ju editions and scroll 37 of the History of Northern Qi read \"devoted\" for \"gathered\"; the Baipu, Bei, and Ji editions read \"transmitted\" for \"gathered\";",
+      "reason": "Chinese only records variants of 博 (gathered) as 專 or 傳; it does not say 傳 replaces 酌 (weighed).",
+      "confidence": "high"
+    },
+    {
+      "id": "weishu:110:r0006",
+      "unit": {
+        "id": "s0174",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "\"Broadly gathered and weighed\"—in the Nan, Dian, and Ju editions and scroll 37 of the History of Northern Qi, \"gathered\" reads \"devoted\" and \"weighed\" reads \"transmitted\"; the Baipu, Bei, and Ji editions read \"transmitted\" for \"gathered\";",
+      "after": "\"Broadly gathered and weighed\"—in the Nan, Dian, and Ju editions and scroll 37 of the History of Northern Qi, \"gathered\" reads \"devoted\"; the Baipu, Bei, and Ji editions read \"transmitted\" for \"gathered\";",
+      "reason": "Chinese only records variants of 博 (gathered) as 專 or 傳; it does not say 傳 replaces 酌 (weighed).",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "weishu:110:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "梁州刺史傅豎眼子敬和 attaches 梁州刺史 to 傅豎眼, with 敬和 as his son; the before appositive wrongly makes Jinghe the inspector, and the proposed reorder restores that structure.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0018",
+        "excerpt": "梁州刺史傅豎眼子敬和"
+      }
+    },
+    {
+      "repairId": "weishu:110:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "崔聖念 romanizes as Cui Shengnian (聖念); idiomatic Shengian drops the n of 念 and is a clear transliteration error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0120",
+        "excerpt": "崔聖念"
+      }
+    },
+    {
+      "repairId": "weishu:110:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "〈後廢帝〉 is Later/Latter Deposed Emperor; Former would require 前廢帝, so the idiomatic Former mistranslates 後.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0171",
+        "excerpt": "後廢帝"
+      }
+    },
+    {
+      "repairId": "weishu:110:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal likewise renders 後廢帝 as Former; Later Deposed Emperor matches 後 rather than 前.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0171",
+        "excerpt": "後廢帝"
+      }
+    },
+    {
+      "repairId": "weishu:110:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "The note only variants 博 as 專 (Nan/Dian/Ju and NQS 37) or 傳 (Baipu/Bei/Ji); it never says 傳 replaces 酌, so the invented \"transmitted\" for \"weighed\" must go.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0174",
+        "excerpt": "「博」作「專」，百衲本、北本、汲本作「傳」"
+      }
+    },
+    {
+      "repairId": "weishu:110:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal invents the same false 酌→傳 variant; Chinese only records 博→專 and 博→傳 among named editions.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0174",
+        "excerpt": "「博」作「專」，百衲本、北本、汲本作「傳」"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -28,7 +28,7 @@ export function isCursorRateLimited(error) {
 
 export function cursorRateLimitDelayMs(error, options = {}) {
   const message = errorText(error);
-  if (RATE_LIMIT_HOUR.test(message)) return options.hourDelayMs ?? 5 * 60 * 1000;
+  if (RATE_LIMIT_HOUR.test(message)) return options.hourDelayMs ?? 61 * 60 * 1000;
   if (RATE_LIMIT_MINUTE.test(message)) return options.minuteDelayMs ?? 65 * 1000;
   return options.defaultDelayMs ?? 65 * 1000;
 }
@@ -63,7 +63,7 @@ export function isCursorAgentBusy(error) {
 
 export async function sendCursorAgentWhenReady(agent, prompt, options = {}) {
   const timeoutMs = options.timeoutMs ?? 45 * 60 * 1000;
-  const maxDelayMs = options.maxDelayMs ?? 5000;
+  const maxDelayMs = options.maxDelayMs ?? 2 * 60 * 1000;
   const deadline = Date.now() + timeoutMs;
   let delayMs = options.initialDelayMs ?? 1000;
 
@@ -110,7 +110,7 @@ function terminalResult(run) {
 }
 
 export async function waitForCursorRun(run, options) {
-  const timeoutMs = options.timeoutMs ?? 45 * 60 * 1000;
+  const timeoutMs = options.timeoutMs ?? 90 * 60 * 1000;
   const pollMs = options.pollMs ?? 30 * 1000;
   const deadline = Date.now() + timeoutMs;
   let streamOutcome;

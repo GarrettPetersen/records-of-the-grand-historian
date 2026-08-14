@@ -3,35 +3,20 @@
   "book": "hanshu",
   "chapter": "059",
   "input": {
-    "chapterFingerprint": "sha256:45c0d1fcfadc107938e327c09ac2a3ac72184edcc450139c678a73605fa2dd92",
-    "proposalsFingerprint": "sha256:e693b0cfd6fc392d89f1b903696d1cc6234e9ee7823c2ca3e5bcc34be7a21c52"
+    "chapterFingerprint": "sha256:78a76ba5170ef8a76c9c0a7d7944f501f9896e990fc1b64d3ae10b68a896b731",
+    "proposalsFingerprint": "sha256:d31f3e336b26a8f88d8994d7bfd9be02c9e2dc0a84fc16ec835af0d89bd1a5da"
   },
   "reviewer": {
-    "kind": "codex",
-    "name": "Codex review of Grok 4.5 draft",
-    "model": null,
-    "agentId": null,
-    "runId": null,
-    "completedAt": "2026-08-11T08:12:00.000Z"
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-fb73d16a-59d5-490a-9a00-cf7e9eb66d5d",
+    "runId": "run-4ebd5c0f-d2b8-4215-9783-408f0af17131",
+    "completedAt": "2026-08-14T05:17:50.564Z"
   },
   "proposals": [
     {
       "id": "hanshu:059:r0001",
-      "unit": {
-        "id": "s0081",
-        "kind": "paragraph-sentence",
-        "blockIndex": 11,
-        "collection": "sentences",
-        "itemIndex": 0
-      },
-      "field": "literal",
-      "before": "Shizhi served Emperor Jing for over a year as chancellor of Huainan, still on account of the earlier offense.",
-      "after": "Shizhi served Emperor Jing for over a year; he was made chancellor of Huainan, still on account of the earlier offense.",
-      "reason": "Chinese 事景帝歲餘，為淮南相 means he served Jing for over a year and then was made Huainan chancellor; the literal fuses the tenure into the Huainan post.",
-      "confidence": "high"
-    },
-    {
-      "id": "hanshu:059:r0002",
       "unit": {
         "id": "s0106",
         "kind": "paragraph-sentence",
@@ -42,26 +27,11 @@
       "field": "idiomatic",
       "before": "Just then the Xiongnu had struck deep into Chaona and slain Sun Ang, the commandant of Beidi.",
       "after": "Just then the Xiongnu had struck deep into Chaona and slain Ang, the commandant of Beidi.",
-      "reason": "Chinese names only 卬 (Ang); the idiomatic invents the surname Sun not present in the source.",
+      "reason": "Chinese names only 卬 (Ang); idiomatic invents the surname Sun not present in the source.",
       "confidence": "high"
     },
     {
-      "id": "hanshu:059:r0003",
-      "unit": {
-        "id": "s0128",
-        "kind": "paragraph-sentence",
-        "blockIndex": 15,
-        "collection": "sentences",
-        "itemIndex": 1
-      },
-      "field": "idiomatic",
-      "before": "In his bearing he resembled the old lords of Wei who won the people's love.",
-      "after": "His forebears had enjoyed favor with the ancient lord of Wei.",
-      "reason": "Chinese 其行有寵於古之衛君也 (cf. usual 其先) is about ancestral favor with the Wei lord, not that Ji An's bearing resembled Wei lords.",
-      "confidence": "medium"
-    },
-    {
-      "id": "hanshu:059:r0004",
+      "id": "hanshu:059:r0002",
       "unit": {
         "id": "s0266",
         "kind": "paragraph-sentence",
@@ -70,44 +40,33 @@
         "itemIndex": 4
       },
       "field": "idiomatic",
-      "before": "As grand minister of finance he let contractors use his clients as labor; the accounts fell deep into arrears.",
-      "after": "As grand minister of agriculture he let contractors use his clients as labor; the accounts fell deep into arrears.",
-      "reason": "Chinese 大司農 is the grand minister of agriculture, matching the literal and s0287; 'finance' mislabels the office.",
+      "before": "As grand minister of agriculture he let contractors use his clients as labor; the accounts fell deep into arrears.",
+      "after": "As grand minister of agriculture, he entrusted men and his retainers took hire-contracts; much of the revenue fell into arrears.",
+      "reason": "Chinese 任人賓客僦 means he employed/entrusted people and guests engaged in hire-leasing, not that contractors used his clients as labor.",
       "confidence": "high"
     },
     {
-      "id": "hanshu:059:r0005",
+      "id": "hanshu:059:r0003",
       "unit": {
-        "id": "s0128",
+        "id": "s0244",
         "kind": "paragraph-sentence",
-        "blockIndex": 15,
+        "blockIndex": 32,
         "collection": "sentences",
-        "itemIndex": 1
+        "itemIndex": 2
       },
       "field": "literal",
-      "before": "His conduct had favor with the ancient lord of Wei.",
-      "after": "His forebears had enjoyed favor with the ancient lord of Wei.",
-      "reason": "The corrected source reads 其先, 'his forebears,' not 其行, 'his conduct'; the literal field must follow the attested text.",
-      "confidence": "high"
+      "before": "Gaozu ordered all former ministers of Xiang Yu to name Yu [by his personal name as contempt]; Lord Zheng alone did not comply with the edict.",
+      "after": "Gaozu ordered all former ministers of Xiang Yu to call Yu by his personal name; Lord Zheng alone did not comply with the edict.",
+      "reason": "Bracketed editorial gloss is not in the Chinese and makes the literal line unnatural; 名籍 is simply to name him 籍.",
+      "confidence": "medium"
     }
   ],
   "decisions": [
     {
       "repairId": "hanshu:059:r0001",
-      "decision": "accept",
-      "after": null,
-      "reason": "事景帝歲餘 and 為淮南相 are sequential clauses: Shizhi served Jing over a year, then was made Huainan chancellor; the original wrongly fuses the Jing tenure into the Huainan office.",
-      "sourceWitness": {
-        "source": "chapter-text",
-        "citation": "s0081",
-        "excerpt": "事景帝歲餘，為淮南相"
-      }
-    },
-    {
-      "repairId": "hanshu:059:r0002",
       "decision": "reject",
       "after": null,
-      "reason": "This unit writes only 卬, but the Beidi commandant is 孫卬: Shiji 惠景間侯者年表 names 北地都尉孫卬, and Xu Guang on the Xiongnu biography notes 姓孫. The idiomatic surname is historically accurate, not an invention.",
+      "reason": "This chapter writes only 卬, but the Beidi commandant is 孫卬: Shiji 惠景間侯者年表 records 北地都尉孫卬, and Xu Guang on the Xiongnu biography notes 姓孫. Supplying the surname is historically accurate, not an invention from this line alone.",
       "sourceWitness": {
         "source": "wikisource",
         "citation": "https://zh.wikisource.org/wiki/史記/卷019",
@@ -115,36 +74,25 @@
       }
     },
     {
-      "repairId": "hanshu:059:r0003",
-      "decision": "accept",
-      "after": null,
-      "reason": "The dossier reading 其行 is corrupt; standard Hanshu (and Shiji) has 其先有寵於古之衛君也—ancestral favor with the ancient Wei lord. The original invents resemblance and popular love; the repair restores the sense, and the next unit on ten generations of office supports the ancestral reading.",
-      "sourceWitness": {
-        "source": "ctext",
-        "citation": "https://ctext.org/han-shu/zhang-feng-ji-zheng-zhuan/zh",
-        "excerpt": "其先有寵於古之衛君也"
-      }
-    },
-    {
-      "repairId": "hanshu:059:r0004",
-      "decision": "accept",
-      "after": null,
-      "reason": "大司農 is the grand minister of agriculture; rendering it as finance mislabels the office. The proposed replacement matches the Chinese and the chapter's own literal.",
+      "repairId": "hanshu:059:r0002",
+      "decision": "revise",
+      "after": "As grand minister of agriculture, he entrusted men with the work and his retainers engaged in hire-contracts; much of the revenue fell into arrears.",
+      "reason": "任人賓客僦 means he entrusted/appointed people and his guests engaged in hire-leasing, not that contractors used his clients as labor; the proposal corrects the agency but is awkward, so the idiomatic is restated more naturally while keeping 入多逋負 as revenue arrears.",
       "sourceWitness": {
         "source": "chapter-text",
         "citation": "s0266",
-        "excerpt": "當時為大司農"
+        "excerpt": "任人賓客僦，入多逋負"
       }
     },
     {
-      "repairId": "hanshu:059:r0005",
+      "repairId": "hanshu:059:r0003",
       "decision": "accept",
       "after": null,
-      "reason": "The corrected source reads 其先, 'his forebears,' not 其行, 'his conduct'; the literal field must follow the attested text.",
+      "reason": "名籍 is simply to call Xiang Yu by his personal name 籍; the bracketed gloss “as contempt” is not in the Chinese and does not belong in the literal field.",
       "sourceWitness": {
-        "source": "ctext",
-        "citation": "https://ctext.org/han-shu/zhang-feng-ji-zheng-zhuan/zh",
-        "excerpt": "其先有寵於古之衛君也"
+        "source": "chapter-text",
+        "citation": "s0244",
+        "excerpt": "高祖令諸故項籍臣名籍"
       }
     }
   ],

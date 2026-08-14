@@ -5,6 +5,7 @@ import {
 
 const ENGLISH_SENTENCE_INITIAL_NON_NAMES = new Set([
   'All',
+  'Among',
   'Construction',
   'Customs',
   'Even',
@@ -34,6 +35,7 @@ const ENGLISH_NAMED_NON_PERSON_TERMS = new Set([
   'Five Altars',
   'Forty-one Spiritual Terrace',
   'Heaven',
+  "Heaven's Norm",
   'Imperial Ox',
   'Mount Shouyang',
   'Supreme Altar',
@@ -47,35 +49,89 @@ const ENGLISH_NAMED_NON_PERSON_TERMS = new Set([
 const ENGLISH_NAMED_PLACE_TERMS = new Set([
   'Dragon City',
   'Fenyin',
+  "Five Capitals'",
   'Hengcheng Gate',
   'Hong Terrace',
+  'Hubei',
+  'Mount Linlü',
+  'Mount Yiwulü',
   'Salt Marsh',
   "Scholars' Grove",
   'Shannan East',
   'Yong',
+  'Zhejiang',
 ]);
 const ENGLISH_NAMED_ORGANIZATION_TERMS = new Set([
+  'China Merchants Steam Navigation',
+  "China Merchants'",
+  'Company',
+  "Divine Engine Corps'",
+  "Eight Banners'",
+  "Hanyang Ironworks'",
   'Imperial Academy',
+  "Six Armies'",
+  "Three Departments'",
+  "Three Fathers'",
+]);
+const ENGLISH_COLLECTIVE_PERSON_TERMS = new Set([
+  "Commoners'",
+  "Five Hegemons'",
+  "Five Lords'",
+  "Five Emperors'",
+  'Five Emperors’',
+  "Five Thearchs'",
+  'Five Thearchs’',
+  "Former Kings'",
+  "Northern Princes'",
+  "Nine Ministers'",
+  "Princes'",
+  "Three Dukes'",
+  "Three Feudatories'",
+  "Three Kings'",
+  'Three Kings’',
+  "Three Sovereigns'",
+  "Zhangs'",
+  'Yujuelü',
 ]);
 const ENGLISH_NAMED_POLITY_TERMS = new Set([
+  "Central States'",
   'Eastern Yue',
+  'Five Dynasties’',
+  "Three Dynasties'",
+]);
+const ENGLISH_BOOK_TITLE_TERMS = new Set([
+  "Annals'",
+  "Autumn Annals'",
+  "Five Parasites'",
+  'Indignation',
+  'Odes’',
+  "Open Boxes'",
+  'Preface',
+  'Sorrow',
+  'Testamentary Charge',
+  "Zhou Offices'",
 ]);
 const ENGLISH_NAMED_OFFICE_TERMS = new Set([
   'Broad Benefit Office',
+  "Ceremonies'",
   'Champion',
   'Charging Cavalry',
   'Commander-in-Chief',
   'Direct Attendant',
+  'Directors',
   'Education',
   'Flourishing Talent',
   'Gou Shield',
   'Grandee',
   'Household Grandee',
+  "Imperial Rites'",
   'Imperial Sacrifices',
+  "Imperial Sacrifices'",
   'Imperial Secretariat',
   'Imperial Stud',
   'Imperial Workshops',
   'Justice',
+  'Khitan Yüehü',
   'Masses',
   'Middle Grandee',
   'Nobility Ranks',
@@ -85,6 +141,7 @@ const ENGLISH_NAMED_OFFICE_TERMS = new Set([
   'Supreme Pillar',
   'Three Commanders',
   'Three Preceptors',
+  'Vice Supervisor',
 ]);
 const ENGLISH_NOBLE_TITLE_TERMS = new Set([
   'Baron',
@@ -267,7 +324,10 @@ function plausibleReplacement(oldExact, replacement, language) {
   if (!replacement || replacement.length > Math.max(80, [...oldExact].length * 5)) return false;
   if (language !== 'en') return true;
   if (/[\p{L}\p{N}]/u.test(oldExact) && !/[\p{L}\p{N}]/u.test(replacement)) return false;
-  if (/^[A-Z]/u.test(oldExact) && !/[A-Z]/u.test(replacement)) return false;
+  if (
+    /^\p{Lu}/u.test(oldExact) &&
+    !/^[\p{Lu}][\p{L}\p{M}'’-]*(?:[ \t]+(?:(?:al|bin|bint|ibn|of|the)|[\p{Lu}][\p{L}\p{M}'’-]*)){0,5}$/u.test(replacement)
+  ) return false;
   return true;
 }
 
@@ -1493,6 +1553,19 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         accounted.add(candidate.id);
         continue;
       }
+      if (
+        ['Dalü', 'Zhonglü', 'Nanlü', 'Zhong Lü', 'Nan Lü'].includes(candidate.exact) &&
+        /\b(?:inches|music|modes?|note|pairing|palace(?:-of)?|pitch(?:es)?|pitch-?pipe|refers to|sang)\b/iu.test(unitText)
+      ) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'not-a-name',
+          note: 'Named musical pitch standard in a technical definition or measurement.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
       if (/^:\s+(?:a\s+)?place name\b/iu.test(after)) {
         reconciled.candidateDispositions.push({
           candidate: candidate.id,
@@ -1515,7 +1588,8 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       }
       if (
         (candidate.exact === 'Song' && /^\s+of\s+[A-Z]/u.test(after)) ||
-        (/\(Song of\s+$/u.test(before) && /^\)/u.test(after))
+        (/\(Song of\s+$/u.test(before) && /^\)/u.test(after)) ||
+        (candidate.exact === 'Wind' && /['’]South[ \t]*$/u.test(before))
       ) {
         reconciled.candidateDispositions.push({
           candidate: candidate.id,
@@ -1540,12 +1614,162 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         accounted.add(candidate.id);
         continue;
       }
-      if (/^[ \t]+(?:people|peoples|tribe|tribes|clan|clans)\b/iu.test(after)) {
+      if (/^(?:[ \t]+and[ \t]+[\p{Lu}][\p{L}'’–-]*)*[ \t]+(?:people|peoples|tribe|tribes|clan|clans|clansmen|faction|kings|kingships)\b/iu.test(after)) {
         reconciled.candidateDispositions.push({
           candidate: candidate.id,
           disposition: 'not-person',
           reason: 'collective',
           note: 'Ethnic or social collective named immediately before its group noun.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (candidate.exact === "Rus'" && /\bagainst the[ \t]*$/iu.test(before)) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'collective',
+          note: 'The Rus people named as the object of a campaign, not an individual.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (candidate.exact === "Rus'" && /\b(?:garrison|hold)[ \t]*$/iu.test(before)) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'place',
+          note: 'Rus named as the territory being garrisoned, not an individual.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (candidate.exact === 'Zhou' && /\b(?:entering|within)[ \t]*$/iu.test(before)) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'polity',
+          note: 'Northern Zhou named as a polity or political territory, not an individual.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (candidate.exact === 'Lü' && /\bamong the[ \t]*$/iu.test(before)) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'collective',
+          note: 'The Lü clan named collectively, not Empress Lü or another individual.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (candidate.exact === 'Lü' && /\bextirpated the[ \t]*$/iu.test(before)) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'collective',
+          note: 'The Lü clansmen named collectively as the object of extirpation.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (
+        candidate.exact === 'Lü' &&
+        (/\b(?:clans|maternal kin|mother's people)\b/iu.test(unitText) ||
+          /\b(?:Shen and Lü|Lü and Huo)\b/u.test(unitText))
+      ) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'collective',
+          note: 'The Lü clan or maternal kin are named collectively, not an individual Lü.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (candidate.exact === 'Yi' && /\bMan and[ \t]*$/u.test(before)) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'collective',
+          note: 'The Yi people paired with the Man peoples, not the person Yi Yin.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (
+        candidate.exact === 'Yelü' &&
+        (/^[ \t]+bu\b/iu.test(after) ||
+          /\bdivided three[ \t]*$/iu.test(before) ||
+          /\b(?:clan|names?|surname)\b/iu.test(unitText))
+      ) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'collective',
+          note: 'The Yelü clan, its divisions, or its surname is named collectively, not an individual clan member.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (
+        candidate.exact === 'Shulü' &&
+        ((/\bthe[ \t]*$/iu.test(before) && /^[ \t]+were\b/iu.test(after)) ||
+          /^[ \t]+lineages\b/iu.test(after))
+      ) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'collective',
+          note: 'The Shulü lineage is named collectively, not an individual clan member.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (candidate.exact === 'Three Yelü' && /^\s*:/u.test(after)) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'collective',
+          note: 'Heading for the three Yelü clan divisions, not an individual person.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (candidate.exact === 'Yan' && /\bin[ \t]*$/iu.test(before)) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'polity',
+          note: 'The state of Yan in a locative construction, not a person.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (
+        candidate.exact === 'Shu' &&
+        /\bOnly[ \t]*$/u.test(before) &&
+        /^[ \t]+produces\b/iu.test(after)
+      ) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'polity',
+          note: 'The region of Shu identified as the producer of a commodity, not a person.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (
+        candidate.exact === 'Tang' &&
+        /^[ \t]+(?:regulations|rules)\b/iu.test(after)
+      ) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'polity',
+          note: 'The Tang dynasty modifying its regulations or rules, not a person.',
         });
         accounted.add(candidate.id);
         continue;
@@ -1572,14 +1796,14 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       }
       if (
         /\bprefectures?\b[^.;!?]*$/iu.test(before) ||
-        /^[ \t]+(?:Prefecture|Province)\b/u.test(after) ||
+        /^[ \t]+(?:County|Prefecture|Province)\b/u.test(after) ||
         /^(?:,\s*[\p{Lu}][\p{L}'’-]*)*(?:,\s*)?(?:and\s+)?other prefectures?\b/iu.test(after)
       ) {
         reconciled.candidateDispositions.push({
           candidate: candidate.id,
           disposition: 'not-person',
           reason: 'place',
-          note: 'Prefecture name, not a person.',
+          note: 'Administrative place name, not a person.',
         });
         accounted.add(candidate.id);
         continue;
@@ -1695,6 +1919,29 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
     }
     if (
       candidate.language === 'en' &&
+      /^(?:Cloth|Coin|Knife)(?: Worth)? (?:One|Twenty|Thirty|Forty|Fifty|Five Hundred|Five Thousand|One Hundred)$/u.test(candidate.exact)
+    ) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'other',
+        note: 'Currency or commodity denomination label, not a person.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (candidate.language === 'en' && candidate.exact === 'Ghosts’') {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'other',
+        note: 'Possessive form of the Ghosts asterism (輿鬼), not a person or deity.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (
+      candidate.language === 'en' &&
       /^Biographies\b/u.test(candidate.exact) &&
       /\bVolume\b[^.;!?]*,\s*$/u.test(
         [...unitById.get(candidate.unit).en].slice(0, candidate.startCodePoint).join('')
@@ -1729,6 +1976,16 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       accounted.add(candidate.id);
       continue;
     }
+    if (candidate.language === 'en' && ENGLISH_COLLECTIVE_PERSON_TERMS.has(candidate.exact)) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'collective',
+        note: 'Plural class of title holders, not an individual person.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
     if (candidate.language === 'en' && ENGLISH_INSTITUTIONAL_SUFFIX_RE.test(candidate.exact)) {
       reconciled.candidateDispositions.push({
         candidate: candidate.id,
@@ -1745,6 +2002,16 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         disposition: 'not-person',
         reason: 'polity',
         note: 'Named polity, not a person.',
+      });
+      accounted.add(candidate.id);
+      continue;
+    }
+    if (candidate.language === 'en' && ENGLISH_BOOK_TITLE_TERMS.has(candidate.exact)) {
+      reconciled.candidateDispositions.push({
+        candidate: candidate.id,
+        disposition: 'not-person',
+        reason: 'book-title',
+        note: 'Named work or chapter title, not a person.',
       });
       accounted.add(candidate.id);
       continue;
@@ -2014,6 +2281,38 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
   reconciled.claims = reconciled.claims.filter((claim) =>
     !nestedStringValues(claim.value).some((value) => unsupportedPeople.has(value))
   );
+
+  // A reviewed repair can introduce a person's preferred romanization only
+  // once, below the scanner's repeated-single-token threshold. When that
+  // person is already evidenced in the same unit, restore the exact display
+  // link after stale conflicting spans and unsupported people are gone.
+  for (const person of reconciled.people) {
+    const exact = person.preferredNameSuggestion?.en;
+    if (typeof exact !== 'string' || !exact.trim()) continue;
+    const contextUnits = new Set([
+      ...reconciled.mentions
+        .filter((mention) => mention.person === person.localId)
+        .map((mention) => mention.unit.id),
+      ...reconciled.claims
+        .filter((claim) => claim.subject === person.localId)
+        .flatMap((claim) => claim.evidence.map((evidence) => evidence.split(':').at(-1))),
+    ]);
+    for (const unitId of contextUnits) {
+      const unit = unitById.get(unitId);
+      if (!unit) continue;
+      for (const span of exactOccurrences(unit.en, exact, 'en')) {
+        const alreadyLinked = reconciled.mentions.some((mention) =>
+          mention.person === person.localId &&
+          mention.unit.id === unitId &&
+          mention.spans.en.some((current) =>
+            current.startCodePoint <= span.startCodePoint && current.endCodePoint >= span.endCodePoint
+          )
+        );
+        if (alreadyLinked) continue;
+        addAliasMention(reconciled, unit, person.localId, 'en', 'personal-name', span);
+      }
+    }
+  }
 
   renumberPeopleAndClaims(reconciled);
   renumberMentions(reconciled);

@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "001",
+  "input": {
+    "chapterFingerprint": "sha256:195954bbcede67709cb0abef1d265af6a631da25ea247dd98dcd89771918042b",
+    "proposalsFingerprint": "sha256:04ab78b0c9daed17145934d567a479276b19b98af5d1067f8af358f914d4d5d5"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-6a19e03b-ad51-4756-a593-5f4d017e5c1c",
+    "runId": "run-cdf0c3ab-581b-4140-ac26-8d2b51a7c048",
+    "completedAt": "2026-08-14T05:28:44.229Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:001:r0001",
+      "unit": {
+        "id": "s0189",
+        "kind": "paragraph-sentence",
+        "blockIndex": 21,
+        "collection": "sentences",
+        "itemIndex": 22
+      },
+      "field": "idiomatic",
+      "before": "Shun answered gently, “Yes, you are still my brother.”",
+      "after": "Shun said, “Yes—you have nearly the right feeling!”",
+      "reason": "爾其庶矣 means Xiang is close to proper feeling/conduct, not a literal affirmation that he is still Shun's brother.",
+      "confidence": "medium"
+    },
+    {
+      "id": "shiji:001:r0002",
+      "unit": {
+        "id": "s0277",
+        "kind": "paragraph-sentence",
+        "blockIndex": 27,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Qi, also known as Hou Ji, founded Zhou with the clan name Ji.",
+      "after": "Qi founded Zhou with the clan name Ji.",
+      "reason": "Idiomatic English invents “also known as Hou Ji,” which is absent from the Chinese 棄為周，姓姬氏。",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:001:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "舜曰：「然，爾其庶矣！」uses 庶矣 for nearly attaining proper brotherly feeling after Xiang’s excuse; “you are still my brother” and “answered gently” are unsupported.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0189",
+        "excerpt": "爾其庶矣"
+      }
+    },
+    {
+      "repairId": "shiji:001:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "棄為周，姓姬氏 states only that Qi founded Zhou under the Ji surname; “also known as Hou Ji” is absent from this unit.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0277",
+        "excerpt": "棄為周，姓姬氏"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "shiji:001:r0002",
+      "claim": {
+        "id": "shiji:001:c0171",
+        "subject": "shiji:001:p063",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate",
+          "en": "Hou Ji"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "shiji:001:s0277"
+        ]
+      },
+      "reason": "Accepted r0002 shows the alternate name Hou Ji was created only by the invented idiomatic phrase; 棄為周，姓姬氏 supplies no such alias.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0277",
+        "excerpt": "棄為周，姓姬氏"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "096",
+  "input": {
+    "chapterFingerprint": "sha256:2269d8f938b1966bedc1e6017baf26e78aa3d740562a1cdb6ef08441702e9007",
+    "proposalsFingerprint": "sha256:ad1e2740d77f03057bc388fc00a4d5428ae4b4d83d40387aa28f1e47adeeccf4"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-5dd72831-13f1-4f41-8210-fe4b154bbab3",
+    "runId": "run-98e08419-e361-44a9-bf83-83cfdbbde7d2",
+    "completedAt": "2026-08-14T05:23:21.278Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:096:r0001",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "(Tabuye)〉",
+      "after": "(Tabuye)",
+      "reason": "Remove stray closing bracket from parenthetical name.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:096:r0002",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "(Tabuye)〉",
+      "after": "(Tabuye)",
+      "reason": "Remove stray closing bracket from parenthetical name.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:096:r0003",
+      "unit": {
+        "id": "s0043",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "He then ringed the carts into a camp, dismantled the traveling horses to make weapons, and led more than thirty mounted officials and close attendants to form a battle line outside the barrier posts.",
+      "after": "He then ringed the carts into a camp, dismantled the cheval-de-frise to make weapons, and led more than thirty mounted officials and close attendants to form a battle line outside the barrier posts.",
+      "reason": "行馬 denotes a defensive barrier (cheval-de-frise), not traveling horses.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:096:r0004",
+      "unit": {
+        "id": "s0043",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "literal",
+      "before": "Thereupon he ringed the carts into a camp, dismantled the traveling horses, fashioned weapons, and led more than thirty mounted officials and close attendants to form a battle line outside the barrier posts.",
+      "after": "Thereupon he ringed the carts into a camp, dismantled the cheval-de-frise, fashioned weapons, and led more than thirty mounted officials and close attendants to form a battle line outside the barrier posts.",
+      "reason": "行馬 denotes a defensive barrier (cheval-de-frise), not traveling horses.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:096:r0005",
+      "unit": {
+        "id": "s0184",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "The emperor asked about the relative merits of Confucian scholars ancient and modern; his divinatory reply pleased the emperor, and he was made Administrator of Xingzhong Prefecture, then transferred to Military Commissioner of the Shuofang Army.",
+      "after": "The emperor asked about the relative merits of Confucian scholars ancient and modern; his extempore reply pleased the emperor, and he was made Administrator of Xingzhong Prefecture, then transferred to Military Commissioner of the Shuofang Army.",
+      "reason": "占對 here means answering readily in conversation, not divination.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:096:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0003 〈（撻不也）〉 is a parenthetical name; the idiomatic “(Tabuye)〉” retains a stray closing book-title mark from the Chinese punctuation, so removing it is a real cleanup.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "〈（撻不也）〉"
+      }
+    },
+    {
+      "repairId": "liaoshi:096:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same stray 〉 remains in the literal “(Tabuye)〉”; stripping it matches the Chinese parenthetical without inventing or omitting content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "〈（撻不也）〉"
+      }
+    },
+    {
+      "repairId": "liaoshi:096:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 拆行馬，作兵仗 amid ringing carts into a camp and lining up outside 柢枑, 行馬 is a defensive barrier (cheval-de-frise), not traveling horses; the proposed wording corrects that misreading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0043",
+        "excerpt": "拆行馬，作兵仗"
+      }
+    },
+    {
+      "repairId": "liaoshi:096:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise renders 行馬 as traveling horses; cheval-de-frise fits 拆行馬…作兵仗 and the surrounding camp and barrier-post context.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0043",
+        "excerpt": "拆行馬，作兵仗"
+      }
+    },
+    {
+      "repairId": "liaoshi:096:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "占對稱旨 after the emperor’s question on Confucian scholars means an extempore oral reply that pleased him, not a divinatory answer.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0184",
+        "excerpt": "占對稱旨"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

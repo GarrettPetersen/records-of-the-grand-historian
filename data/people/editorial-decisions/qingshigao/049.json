@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "049",
+  "input": {
+    "chapterFingerprint": "sha256:95579dcd8da35a217d975168b1e991ce2b8c68fe98500a3a69bab225d8c4f935",
+    "proposalsFingerprint": "sha256:0d084a12880721f3094f31a40d31c9327d38002350de4f03e0fbb7eec5e455f6"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-71e47818-1fda-416a-a04d-62cae9e3c435",
+    "runId": "run-9c568e79-91b1-499b-8a0e-9868cbf23f5f",
+    "completedAt": "2026-08-14T05:25:55.028Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:049:r0001",
+      "unit": {
+        "id": "s0090",
+        "kind": "paragraph-sentence",
+        "blockIndex": 43,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Combine this result with the hourly mean moon-sun elongation: if both equations call for addition, add the larger second equation and subtract the smaller; if both call for subtraction, subtract the larger and add the smaller.",
+      "after": "Combine this result with the hourly mean moon-sun elongation: if both equations call for addition, add when the second equation is larger and subtract when it is smaller.",
+      "reason": "Idiomatic English invents the same-sign subtraction case that belongs to the next sentence; Chinese only states the both-add rule.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:049:r0002",
+      "unit": {
+        "id": "s0243",
+        "kind": "paragraph-sentence",
+        "blockIndex": 87,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "To find apparent-time moon distance from limit: subtract sun ecliptic longitude from apparent-time ecliptic-horizon quadrant mansion degree, remainder is moon distance from limit; follow whether limit is east or west.",
+      "after": "Then subtract the apparent-time ecliptic-horizon quadrant mansion degree from the sun ecliptic longitude; the remainder is the moon distance from the limit; follow whether the limit is east or west.",
+      "reason": "Literal reverses the subtraction order; s0244 treats sun longitude greater than the quadrant mansion as limit-east, so quadrant is subtracted from sun.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:049:r0003",
+      "unit": {
+        "id": "s0388",
+        "kind": "paragraph-sentence",
+        "blockIndex": 175,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Beyond forty-five degrees, first contact is to the upper right and last contact to the lower left.",
+      "after": "Beyond forty-five degrees, first contact is rightward with an upward bias, and last contact leftward with a downward bias.",
+      "reason": "Chinese 右偏上/左偏下 marks right/left as primary with up/down bias; the prior English collapsed this into the same “upper right/lower left” wording used for 上偏右/下偏左 in s0387.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:049:r0004",
+      "unit": {
+        "id": "s0390",
+        "kind": "paragraph-sentence",
+        "blockIndex": 175,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Past ninety degrees, first contact is to the lower right and last contact to the upper left.",
+      "after": "Past ninety degrees, first contact is rightward with a downward bias, and last contact leftward with an upward bias.",
+      "reason": "Chinese 右偏下/左偏上 marks right/left as primary; “to the lower right/upper left” obscures the distinction from 下偏右/上偏左.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:049:r0005",
+      "unit": {
+        "id": "s0392",
+        "kind": "paragraph-sentence",
+        "blockIndex": 175,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Beyond forty-five degrees, first contact is to the lower right and last contact to the upper left.",
+      "after": "Beyond forty-five degrees, first contact is rightward with a downward bias, and last contact leftward with an upward bias.",
+      "reason": "Chinese 右偏下/左偏上 should keep right/left as the primary direction with a vertical bias, not the same phrasing as 下偏右/上偏左.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:049:r0006",
+      "unit": {
+        "id": "s0394",
+        "kind": "paragraph-sentence",
+        "blockIndex": 175,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "Past ninety degrees, first contact is to the upper right and last contact to the lower left.",
+      "after": "Past ninety degrees, first contact is rightward with an upward bias, and last contact leftward with a downward bias.",
+      "reason": "Chinese 右偏上/左偏下 marks right/left as primary; the prior English collapsed it into “upper right/lower left,” the same wording used for 上偏右/下偏左.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:049:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0090 only states the both-add case (兩均同加，後均大則加，小則減); the both-subtract rule is the separate next sentence s0091. The before invents that same-sign subtraction case here; the proposed after keeps only the both-add rule and matches 後均大則加，小則減.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0090",
+        "excerpt": "兩均同加，後均大則加，小則減"
+      }
+    },
+    {
+      "repairId": "qingshigao:049:r0002",
+      "decision": "revise",
+      "after": "To find apparent-time moon distance from limit: subtract apparent-time ecliptic-horizon quadrant mansion degree from sun ecliptic longitude, remainder is moon distance from limit; follow whether limit is east or west.",
+      "reason": "s0244 treats sun ecliptic longitude greater than the quadrant mansion as limit-east, so the remainder is sun minus quadrant; the literal before reverses that subtraction. The proposal’s order is right, but it drops 求用時月距限 (“To find…”) and starts with an unsupported “Then,” so restore the framing while correcting the operands.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0243",
+        "excerpt": "以太陽黃道經度與用時黃平象限宮度相減"
+      }
+    },
+    {
+      "repairId": "qingshigao:049:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0388 has 初虧右偏上，復圓左偏下, with right/left primary and up/down as bias; s0387’s 上偏右/下偏左 is the reverse hierarchy. Rendering both as “upper right/lower left” erases that distinction; “rightward with an upward bias” / “leftward with a downward bias” restores it.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0388",
+        "excerpt": "初虧右偏上，復圓左偏下"
+      }
+    },
+    {
+      "repairId": "qingshigao:049:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0390’s 初虧右偏下，復圓左偏上 marks right/left as primary with vertical bias, distinct from 下偏右/上偏左. “To the lower right/upper left” collapses that contrast; the proposed bias phrasing is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0390",
+        "excerpt": "初虧右偏下，復圓左偏上"
+      }
+    },
+    {
+      "repairId": "qingshigao:049:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0392 again has 右偏下/左偏上 against s0391’s 下偏右/上偏左; using the same “lower right/upper left” wording for both is a real loss of directional hierarchy. The replacement keeps right/left primary with vertical bias.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0392",
+        "excerpt": "初虧右偏下，復圓左偏上"
+      }
+    },
+    {
+      "repairId": "qingshigao:049:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0394’s 初虧右偏上，復圓左偏下 is the right/left-primary form, not the same as 上偏右/下偏左. The before collapses them; “rightward with an upward bias” / “leftward with a downward bias” matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0394",
+        "excerpt": "初虧右偏上，復圓左偏下"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -33,14 +33,22 @@ function assertUnique(items, key, label, errors) {
   return seen;
 }
 
+function canonicalize(value) {
+  if (Array.isArray(value)) return value.map(canonicalize);
+  if (!value || typeof value !== 'object') return value;
+  return Object.fromEntries(
+    Object.keys(value).sort().map((key) => [key, canonicalize(value[key])]),
+  );
+}
+
 function claimFactContract(claim) {
   const { id: _id, ...contract } = claim;
-  return JSON.stringify(contract);
+  return JSON.stringify(canonicalize(contract));
 }
 
 function claimCoreContract(claim) {
   const { id: _id, evidence: _evidence, ...contract } = claim;
-  return JSON.stringify(contract);
+  return JSON.stringify(canonicalize(contract));
 }
 
 function containsReviewedClaim(currentClaims, reviewedClaim) {

@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "houhanshu",
+  "chapter": "089",
+  "input": {
+    "chapterFingerprint": "sha256:ea831d4b45f2074bed431d95bcf0229286e4edd834d0582eba2c5982fa7f21a9",
+    "proposalsFingerprint": "sha256:383c2a0dd06d050274dac83a10372d81c6f9297bc352c354d8bc30cc610bcb14"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-c3c4f454-cb57-46d3-b594-ceb419dd08c2",
+    "runId": "run-5c70248d-c538-49c5-b41a-26b892a19a8c",
+    "completedAt": "2026-08-14T05:19:27.378Z"
+  },
+  "proposals": [
+    {
+      "id": "houhanshu:089:r0001",
+      "unit": {
+        "id": "s0132",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "On his mother's side his great-grandfather was Xin Wu-xian, General Who Subdues the Qiang, celebrated for strategic daring.",
+      "after": "On his mother's side his high ancestor (maternal great-great-grandfather) was Xin Wuxian, General Who Subdues the Qiang, celebrated for strategic daring.",
+      "reason": "Chinese 外高祖 denotes the maternal great-great-grandfather (fourth ascending generation), not a great-grandfather.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:089:r0002",
+      "unit": {
+        "id": "s0194",
+        "kind": "paragraph-sentence",
+        "blockIndex": 33,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Yongyuan 1 saw Dou Xian, Grand General, recall Fu Yi as chief clerk and name Cui Yin registrar.",
+      "after": "Yongyuan 1 saw Dou Xian, General of Chariots and Cavalry, recall Fu Yi as chief clerk and name Cui Yin registrar.",
+      "reason": "Chinese 车骑将军 is General of Chariots and Cavalry; Grand General (大将军) appears only when Dou is later promoted.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:089:r0003",
+      "unit": {
+        "id": "s0194",
+        "kind": "paragraph-sentence",
+        "blockIndex": 33,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "In the first Yongyuan year Grand General Dou Xian again named Yi chief secretary and Cui Yin registrar.",
+      "after": "In the first Yongyuan year General of Chariots and Cavalry Dou Xian again named Yi chief secretary and Cui Yin registrar.",
+      "reason": "Chinese 车骑将军 is mistranslated as Grand General in the literal line.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:089:r0004",
+      "unit": {
+        "id": "s0280",
+        "kind": "paragraph-sentence",
+        "blockIndex": 50,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Cui Qi, styled Ziwei, from Anping in Zhuo, shared descent with Jinbei chancellor Cui Yuan.",
+      "after": "Cui Qi, styled Ziwei, from Anping in Zhuo, shared descent with Jibei chancellor Cui Yuan.",
+      "reason": "济北 is Jibei, not Jinbei; the English mistranscribes the place name.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:089:r0005",
+      "unit": {
+        "id": "s0280",
+        "kind": "paragraph-sentence",
+        "blockIndex": 50,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Cui Qi, courtesy name Ziwei, was a man of Anping in Zhuo commandery, of the same lineage as Chancellor of Jinbei Cui Yuan.",
+      "after": "Cui Qi, courtesy name Ziwei, was a man of Anping in Zhuo commandery, of the same lineage as Chancellor of Jibei Cui Yuan.",
+      "reason": "济北 is Jibei; Jinbei is a mistranslation of the commandery/kingdom name.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:089:r0006",
+      "unit": {
+        "id": "s0264",
+        "kind": "paragraph-sentence",
+        "blockIndex": 47,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "In Yongchu of Emperor An, recommended filial and incorrupt; served as Privy Treasurer aide; submitted four convenient proposals; appointed magistrate of Tangyin.",
+      "after": "In Yongchu of Emperor An, recommended filial and incorrupt; served as Grand Provisioner aide; submitted four convenient proposals; appointed magistrate of Tangyin.",
+      "reason": "太官丞 is an aide of the Grand Provisioner (imperial kitchen), not the Privy Treasurer (少府).",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "houhanshu:089:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "外高祖 is the maternal high ancestor (great-great-grandfather, fourth ascending generation), not great-grandfather (外曾祖); the repair also normalizes Xin Wuxian.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0132",
+        "excerpt": "笃之外高祖破羌将军辛武贤"
+      }
+    },
+    {
+      "repairId": "houhanshu:089:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0194 titles Dou 车骑将军; 大将军 appears only later in s0195 when he is promoted, so Grand General is wrong here.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0194",
+        "excerpt": "车骑将军窦宪"
+      }
+    },
+    {
+      "repairId": "houhanshu:089:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal line must match 车骑将军 as General of Chariots and Cavalry; Grand General conflates with the later 大将军 promotion.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0194",
+        "excerpt": "车骑将军窦宪"
+      }
+    },
+    {
+      "repairId": "houhanshu:089:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "濟北相 is Chancellor of Jibei; Jinbei misreads 济/濟 as Jin.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0280",
+        "excerpt": "濟北相瑗之宗也"
+      }
+    },
+    {
+      "repairId": "houhanshu:089:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal Jinbei likewise errs; 濟北 is Jibei, matching the idiomatic repair.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0280",
+        "excerpt": "濟北相瑗"
+      }
+    },
+    {
+      "repairId": "houhanshu:089:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "太官丞 is Grand Provisioner aide (imperial kitchen), not Privy Treasurer (少府); the idiomatic line already has the kitchen sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0264",
+        "excerpt": "为太官丞"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}
