@@ -49,7 +49,7 @@ Options:
   --all-unresolved      Process every unresolved candidate block.
   --shards N            Connected-component bins (default: 8, max: 16).
   --concurrency N       Parallel Cursor agents (default: 4, max: 8).
-  --max-attempts N      Validation attempts per shard (default: 2).
+  --max-attempts N      Validation attempts per shard (default: 4).
   --model MODEL         Cursor model (default: ${DEFAULT_MODEL}).
   --effort LEVEL        low, medium, or high (default: medium).
   --fast                Enable the model's fast variant.
@@ -57,6 +57,8 @@ Options:
   --starting-ref REF    Remote reference for the cloud workspace.
   --dossier-dir DIR     Tracked repository directory containing shard dossiers.
   --prepare-dossiers    Write shard dossiers to --dossier-dir, then exit.
+  --skip-cloud-recovery Do not inspect prior Cursor agents for shard artifacts.
+  --recover-agent N=ID  Recover shard N from a specific Cursor agent (repeatable).
   --out PATH            Final tracked resolution document.
   --dry-run             Build and summarize dossiers without Cursor.
   --self-test           Run scheduler fixtures without Cursor.
@@ -90,7 +92,7 @@ function parseArgs(argv) {
     allUnresolved: false,
     shards: 8,
     concurrency: 4,
-    maxAttempts: 2,
+    maxAttempts: 4,
     model: process.env.SDK_PEOPLE_RESOLUTION_MODEL ?? DEFAULT_MODEL,
     effort: process.env.SDK_PEOPLE_RESOLUTION_EFFORT ?? 'medium',
     fast: false,
@@ -98,6 +100,8 @@ function parseArgs(argv) {
     startingRef: process.env.SDK_PEOPLE_STARTING_REF ?? DEFAULT_STARTING_REF,
     dossierDir: null,
     prepareDossiers: false,
+    skipCloudRecovery: false,
+    recoverAgents: new Map(),
     out: null,
     dryRun: false,
     selfTest: false,
@@ -123,6 +127,13 @@ function parseArgs(argv) {
     else if (arg === '--starting-ref') opts.startingRef = next();
     else if (arg === '--dossier-dir') opts.dossierDir = path.resolve(REPO_ROOT, next());
     else if (arg === '--prepare-dossiers') opts.prepareDossiers = true;
+    else if (arg === '--skip-cloud-recovery') opts.skipCloudRecovery = true;
+    else if (arg === '--recover-agent') {
+      const value = next();
+      const match = value.match(/^(\d{1,3})=(bc-[a-z0-9-]+)$/u);
+      if (!match) throw new Error('--recover-agent must use SHARD=bc-AGENT-ID');
+      opts.recoverAgents.set(Number(match[1]), match[2]);
+    }
     else if (arg === '--out') opts.out = path.resolve(REPO_ROOT, next());
     else if (arg === '--dry-run') opts.dryRun = true;
     else if (arg === '--self-test') opts.selfTest = true;
@@ -418,6 +429,117 @@ VALIDATION ERRORS:
 ${errors.slice(0, 200).map((error) => `- ${error}`).join('\n')}`;
 }
 
+const COMPONENT_NAME_KINDS = new Set(['given', 'given-name', 'surname']);
+const FULL_IDENTITY_NAME_KINDS = new Set([
+  'alternate-name',
+  'birth-name',
+  'changed-name',
+  'personal',
+  'personal-name',
+  'regnal-name',
+  'temple-name',
+]);
+
+function genericNameKey(key) {
+  return /^zh:.{1,2}氏$/u.test(key) ||
+    /^en:(?:consort|lady|madam|mother|princess|queen|wife) [a-z]+$/u.test(key);
+}
+
+function strongIdentityEdge(left, right) {
+  const rightByKey = new Map(right.nameKeys.map((entry) => [entry.key, entry]));
+  for (const leftName of left.nameKeys) {
+    const rightName = rightByKey.get(leftName.key);
+    if (!rightName || genericNameKey(leftName.key)) continue;
+    const leftKinds = new Set(leftName.kinds);
+    const rightKinds = new Set(rightName.kinds);
+    const leftPreferred = leftKinds.has('preferred');
+    const rightPreferred = rightKinds.has('preferred');
+    if (leftPreferred && rightPreferred) return true;
+    const leftFull = [...leftKinds].some((kind) => FULL_IDENTITY_NAME_KINDS.has(kind));
+    const rightFull = [...rightKinds].some((kind) => FULL_IDENTITY_NAME_KINDS.has(kind));
+    if (leftFull && rightFull) return true;
+    const leftOnlyComponent = [...leftKinds].every((kind) =>
+      kind === 'preferred' || COMPONENT_NAME_KINDS.has(kind)
+    );
+    const rightOnlyComponent = [...rightKinds].every((kind) =>
+      kind === 'preferred' || COMPONENT_NAME_KINDS.has(kind)
+    );
+    if (leftPreferred && !rightOnlyComponent) return true;
+    if (rightPreferred && !leftOnlyComponent) return true;
+  }
+  return false;
+}
+
+export function mergeHasIdentityEvidence(localPeople, people) {
+  if (localPeople.length < 2) return false;
+  const connected = new Set([localPeople[0]]);
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const leftId of [...connected]) {
+      for (const rightId of localPeople) {
+        if (connected.has(rightId)) continue;
+        if (strongIdentityEdge(people[leftId], people[rightId])) {
+          connected.add(rightId);
+          changed = true;
+        }
+      }
+    }
+  }
+  return connected.size === localPeople.length;
+}
+
+export function enforcePriorSeparations(document, corpus, resolutions, accepted = []) {
+  const baseline = resolvePeopleClusters(corpus.localPeople, [...resolutions, ...accepted]);
+  const rootByLocal = new Map();
+  const membersByRoot = new Map();
+  for (const cluster of baseline.clusters) {
+    const members = new Set(cluster.localPeople);
+    membersByRoot.set(cluster.canonicalPersonId, members);
+    for (const localId of members) rootByLocal.set(localId, cluster.canonicalPersonId);
+  }
+  const separatedFrom = new Map();
+  for (const key of baseline.keepSeparate) {
+    const [left, right] = key.split('\u0000');
+    if (!separatedFrom.has(left)) separatedFrom.set(left, new Set());
+    if (!separatedFrom.has(right)) separatedFrom.set(right, new Set());
+    separatedFrom.get(left).add(right);
+    separatedFrom.get(right).add(left);
+  }
+  const repaired = structuredClone(document);
+  let repairCount = 0;
+  for (const decision of repaired.decisions ?? []) {
+    if (decision.decision !== 'merge') continue;
+    const roots = [...new Set(decision.localPeople.map((localId) => rootByLocal.get(localId)))];
+    const combined = new Set(roots.flatMap((root) => [...membersByRoot.get(root)]));
+    const conflict = [...combined].some((localId) =>
+      [...(separatedFrom.get(localId) ?? [])].some((other) => combined.has(other))
+    );
+    if (conflict) {
+      const directPair = decision.localPeople.length === 2 && baseline.keepSeparate.has(
+        pairKey(decision.localPeople[0], decision.localPeople[1]),
+      );
+      decision.decision = directPair ? 'keep-separate' : 'possible-same-as';
+      decision.basis = [...new Set([...(decision.basis ?? []), 'authoritative-prior-separation'])];
+      decision.confidence = directPair ? 'high' : 'low';
+      decision.notes = [...new Set([
+        ...(decision.notes ?? []),
+        'Host reconciled this proposal with an existing keep-separate decision.',
+      ])];
+      repairCount += 1;
+      continue;
+    }
+    if (roots.length < 2) continue;
+    const keepRoot = roots.sort()[0];
+    membersByRoot.set(keepRoot, combined);
+    for (const root of roots) {
+      if (root !== keepRoot) membersByRoot.delete(root);
+    }
+    for (const localId of combined) rootByLocal.set(localId, keepRoot);
+  }
+  return { document: repaired, repairCount };
+}
+
 export function validateResolutionDocument(document, dossier, corpus, resolutions, accepted = []) {
   const ajv = createPeopleSchemaValidator();
   const validate = ajv.getSchema('https://24histories.com/schema/people/resolution-v1.json');
@@ -439,6 +561,13 @@ export function validateResolutionDocument(document, dossier, corpus, resolution
     if (decision.localPeople.length < 2) errors.push(`${label} needs at least two local people`);
     for (const localId of decision.localPeople) {
       if (!visible.has(localId)) errors.push(`${label} refers to out-of-scope ${localId}`);
+    }
+    if (
+      decision.decision === 'merge' &&
+      decision.localPeople.every((localId) => visible.has(localId)) &&
+      !mergeHasIdentityEvidence(decision.localPeople, dossier.document.people)
+    ) {
+      errors.push(`${label} lacks shared full-name or alias evidence for a merge`);
     }
     const components = new Set(dossier.document.blocks
       .filter((block) => block.localPeople.some((id) => decision.localPeople.includes(id)))
@@ -475,27 +604,42 @@ async function downloadDocument(agent, dossier) {
   }
 }
 
-async function recoverPublishedShardDocuments(dossiers, opts, corpus, resolutions, accepted) {
+async function recoverPublishedShardDocuments(
+  dossiers,
+  opts,
+  corpus,
+  resolutions,
+  accepted,
+  explicitAgents = null,
+) {
   if (dossiers.length === 0) return [];
   const wanted = new Map(dossiers.map((dossier) => [`People resolution ${dossier.batch}`, dossier]));
-  const latestByName = new Map();
-  let cursor;
-  do {
-    const page = await Agent.list({
-      runtime: 'cloud',
-      apiKey: opts.apiKey,
-      limit: 100,
-      cursor,
-    });
-    for (const candidate of page.items) {
-      if (!wanted.has(candidate.name)) continue;
-      const current = latestByName.get(candidate.name);
-      if (!current || (candidate.createdAt ?? 0) > (current.createdAt ?? 0)) {
-        latestByName.set(candidate.name, candidate);
+  let latestByName;
+  if (explicitAgents) {
+    latestByName = new Map(dossiers.map((dossier) => [
+      `People resolution ${dossier.batch}`,
+      { agentId: explicitAgents.get(dossier.shard) },
+    ]));
+  } else {
+    latestByName = new Map();
+    let cursor;
+    do {
+      const page = await Agent.list({
+        runtime: 'cloud',
+        apiKey: opts.apiKey,
+        limit: 100,
+        cursor,
+      });
+      for (const candidate of page.items) {
+        if (!wanted.has(candidate.name)) continue;
+        const current = latestByName.get(candidate.name);
+        if (!current || (candidate.createdAt ?? 0) > (current.createdAt ?? 0)) {
+          latestByName.set(candidate.name, candidate);
+        }
       }
-    }
-    cursor = page.nextCursor;
-  } while (cursor);
+      cursor = page.nextCursor;
+    } while (cursor);
+  }
 
   const recovered = [];
   for (const dossier of dossiers) {
@@ -530,8 +674,19 @@ async function recoverPublishedShardDocuments(dossiers, opts, corpus, resolution
       let errors = [];
       for (let attempt = 1; attempt <= opts.maxAttempts; attempt += 1) {
         try {
-          document = validateResolutionDocument(
+          const reconciled = enforcePriorSeparations(
             published,
+            corpus,
+            resolutions,
+            accepted,
+          );
+          if (reconciled.repairCount > 0) {
+            console.warn(
+              `[${dossier.batch}] reconciled ${reconciled.repairCount} merge(s) with prior separations`,
+            );
+          }
+          document = validateResolutionDocument(
+            reconciled.document,
             dossier,
             corpus,
             resolutions,
@@ -609,7 +764,12 @@ async function processDossier(dossier, opts, corpus, resolutions, accepted) {
         });
         if (result.status !== 'finished') throw new Error(result.error?.message ?? `run status ${result.status}`);
         return validateResolutionDocument(
-          await downloadDocument(agent, dossier),
+          enforcePriorSeparations(
+            await downloadDocument(agent, dossier),
+            corpus,
+            resolutions,
+            accepted,
+          ).document,
           dossier,
           corpus,
           resolutions,
@@ -655,6 +815,51 @@ function selfTest() {
     throw new Error('Resolver did not keep canonical-overlap blocks in one component');
   }
   if (pairKey('b', 'a') !== pairKey('a', 'b')) throw new Error('Pair keys are unstable');
+  const separationCorpus = {
+    localPeople: new Map([
+      ['a:001:p001', { localId: 'a:001:p001', claims: [] }],
+      ['a:002:p001', { localId: 'a:002:p001', claims: [] }],
+    ]),
+  };
+  const separation = [{
+    batch: 'prior-separation',
+    decisions: [{
+      decision: 'keep-separate',
+      localPeople: ['a:001:p001', 'a:002:p001'],
+      basis: ['different-people'],
+      confidence: 'high',
+    }],
+  }];
+  const reconciled = enforcePriorSeparations({
+    schemaVersion: 1,
+    batch: 'fixture-shard-001',
+    decisions: [{
+      decision: 'merge',
+      localPeople: ['a:001:p001', 'a:002:p001'],
+      basis: ['same-name'],
+      confidence: 'low',
+    }],
+  }, separationCorpus, separation);
+  if (reconciled.repairCount !== 1 || reconciled.document.decisions[0].decision !== 'keep-separate') {
+    throw new Error('Resolver did not enforce an authoritative prior separation');
+  }
+  const identityPeople = {
+    ladyOne: { nameKeys: [{ key: 'zh:王氏', kinds: ['preferred', 'personal-name'] }] },
+    ladyTwo: { nameKeys: [{ key: 'zh:王氏', kinds: ['preferred', 'personal-name'] }] },
+    changedName: { nameKeys: [{ key: 'zh:和寧', kinds: ['preferred', 'personal-name'] }] },
+    laterName: { nameKeys: [{ key: 'zh:和寧', kinds: ['personal-name'] }] },
+    givenName: { nameKeys: [{ key: 'zh:安世', kinds: ['given-name'] }] },
+    fullName: { nameKeys: [{ key: 'zh:安世', kinds: ['preferred', 'personal-name'] }] },
+  };
+  if (mergeHasIdentityEvidence(['ladyOne', 'ladyTwo'], identityPeople)) {
+    throw new Error('Generic surname labels unexpectedly supplied merge evidence');
+  }
+  if (!mergeHasIdentityEvidence(['changedName', 'laterName'], identityPeople)) {
+    throw new Error('An attested alternate full name did not supply merge evidence');
+  }
+  if (mergeHasIdentityEvidence(['givenName', 'fullName'], identityPeople)) {
+    throw new Error('A shared given-name component unexpectedly supplied merge evidence');
+  }
   const promptDossier = {
     batch: 'fixture-shard-001',
     document: { outputSeed: { batch: 'fixture-shard-001' }, people: { unique_inline_marker: {} } },
@@ -751,13 +956,25 @@ async function main() {
       accepted.push(document);
       console.log(`[${dossier.batch}] resumed validated shard checkpoint`);
     }
+    const explicitPending = pending.filter((dossier) => opts.recoverAgents.has(dossier.shard));
     const recovered = new Set(await recoverPublishedShardDocuments(
-      pending,
+      explicitPending,
       opts,
       corpus,
       resolutions,
       accepted,
+      opts.recoverAgents,
     ));
+    pending = pending.filter((dossier) => !recovered.has(dossier));
+    if (!opts.skipCloudRecovery) {
+      for (const dossier of await recoverPublishedShardDocuments(
+        pending,
+        opts,
+        corpus,
+        resolutions,
+        accepted,
+      )) recovered.add(dossier);
+    }
     pending = pending.filter((dossier) => !recovered.has(dossier));
     const failures = [];
     const workers = Array.from({ length: Math.min(opts.concurrency, pending.length) }, async () => {
