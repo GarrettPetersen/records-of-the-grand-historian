@@ -7,6 +7,10 @@ import { buildPeopleResolutionCandidateDocument } from './build-people-resolutio
 import { loadValidatedPeopleCorpus, loadValidatedResolutionDocuments } from './lib/people-corpus.mjs';
 import { PEOPLE_DIR, REPO_ROOT, readJson, writeJsonAtomic } from './lib/people-content.mjs';
 import { createPeopleSchemaValidator, formatSchemaErrors } from './lib/people-schema.mjs';
+import {
+  assertPeopleCatalogPublicationState,
+  peopleCatalogIsComplete,
+} from './lib/people-publication.mjs';
 import { personSlug, resolvePeopleClusters } from './lib/people-resolution.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
@@ -631,6 +635,14 @@ function unresolvedCandidateBlocks(candidateDocument, localMap, keepSeparate) {
 }
 
 export function compilePeopleCatalog(corpus, resolutionDocuments = []) {
+  if (!corpus.coverage || !Number.isInteger(corpus.coverage.sourceChapters) ||
+      !Number.isInteger(corpus.coverage.extractedChapters) || !Array.isArray(corpus.coverage.missingChapterIds)) {
+    throw new Error('People corpus is missing authoritative chapter coverage metadata');
+  }
+  if (corpus.coverage.extractedChapters !== corpus.chapters.length ||
+      corpus.coverage.sourceChapters !== corpus.coverage.extractedChapters + corpus.coverage.missingChapterIds.length) {
+    throw new Error('People corpus chapter coverage metadata is internally inconsistent');
+  }
   const candidateDocument = buildPeopleResolutionCandidateDocument(corpus);
   const resolved = resolvePeopleClusters(corpus.localPeople, resolutionDocuments);
   const currentPromptVersion = readJson(path.join(PEOPLE_DIR, 'config.json')).promptVersion;
@@ -664,27 +676,41 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = []) {
   if (errors.length > 0) throw new Error(`Canonical person validation failed:\n${errors.map((item) => `- ${item}`).join('\n')}`);
 
   const legacyLocalPeople = [...corpus.localPeople.values()].filter((person) => person.promptVersion < currentPromptVersion).length;
+  const legacyChapters = corpus.chapters.filter(({ extraction }) =>
+    extraction.run.promptVersion < currentPromptVersion
+  ).length;
+  const pendingTranslationRepairs = corpus.chapters.reduce((count, { extraction }) =>
+    count + extraction.translationRepairs.filter((repair) => repair.status === 'proposed').length, 0);
+  const missingChapterIds = [...corpus.coverage.missingChapterIds];
   const localPersonMap = Object.fromEntries([...localMap.entries()].sort((a, b) => a[0].localeCompare(b[0])));
+  const stats = {
+    chapters: corpus.chapters.length,
+    sourceChapters: corpus.coverage.sourceChapters,
+    extractedChapters: corpus.coverage.extractedChapters,
+    missingChapters: missingChapterIds.length,
+    localPeople: corpus.localPeople.size,
+    canonicalPeople: people.length,
+    mergedLocalPeople: corpus.localPeople.size - people.length,
+    legacyLocalPeople,
+    legacyChapters,
+    pendingTranslationRepairs,
+    unresolvedCandidateBlocks: unresolvedBlocks.length,
+    familyEdges: familyEdges.length,
+    peopleWithFamily: people.filter((person) => person.familyRelationships.length > 0).length,
+  };
   const catalog = {
       schemaVersion: 1,
       generatedAt: new Date().toISOString(),
-      complete: legacyLocalPeople === 0 && unresolvedBlocks.length === 0,
+      complete: peopleCatalogIsComplete(stats),
       currentPromptVersion,
-      stats: {
-        chapters: corpus.chapters.length,
-        localPeople: corpus.localPeople.size,
-        canonicalPeople: people.length,
-        mergedLocalPeople: corpus.localPeople.size - people.length,
-        legacyLocalPeople,
-        unresolvedCandidateBlocks: unresolvedBlocks.length,
-        familyEdges: familyEdges.length,
-        peopleWithFamily: people.filter((person) => person.familyRelationships.length > 0).length,
-      },
+      stats,
       people,
       familyEdges,
       localPersonMap,
       unresolvedCandidateBlockIds: unresolvedBlocks.map((block) => block.id),
+      missingChapterIds,
   };
+  assertPeopleCatalogPublicationState(catalog);
   const validateCatalog = ajv.getSchema(CATALOG_SCHEMA_ID);
   if (!validateCatalog(catalog)) {
     throw new Error(
@@ -731,8 +757,17 @@ function selfTest() {
     evidence: ['fixture:001:s0001'],
   });
   const corpus = {
-    chapters: [{}, {}, {}],
+    chapters: ['001', '002', '003'].map((chapter) => ({
+      extraction: {
+        book: 'fixture',
+        chapter,
+        run: { promptVersion: 7 },
+        mentions: [],
+        translationRepairs: [],
+      },
+    })),
     localPeople: new Map([[left.localId, left], [right.localId, right], [child.localId, child]]),
+    coverage: { sourceChapters: 3, extractedChapters: 3, missingChapterIds: [] },
   };
   const resolution = [{
     schemaVersion: 1,
@@ -763,6 +798,28 @@ function selfTest() {
     throw new Error('Canonical family edge is not shared by both reciprocal adjacencies');
   }
   if (!/^per_[0-9A-HJKMNP-TV-Z]{20}$/u.test(fan.id)) throw new Error('Stable canonical ID is invalid');
+  if (!result.complete) throw new Error('Fully covered fixture catalog was not marked complete');
+  const incompleteCorpus = structuredClone(corpus);
+  incompleteCorpus.coverage = { sourceChapters: 4, extractedChapters: 3, missingChapterIds: ['fixture:004'] };
+  const incomplete = compilePeopleCatalog(incompleteCorpus, resolution).catalog;
+  if (incomplete.complete || incomplete.stats.missingChapters !== 1 ||
+      incomplete.missingChapterIds[0] !== 'fixture:004') {
+    throw new Error('Missing chapter coverage did not keep the catalog gated');
+  }
+  const pendingRepairCorpus = structuredClone(corpus);
+  pendingRepairCorpus.chapters[0].extraction.translationRepairs.push({ status: 'proposed' });
+  const pendingRepair = compilePeopleCatalog(pendingRepairCorpus, resolution).catalog;
+  if (pendingRepair.complete || pendingRepair.stats.pendingTranslationRepairs !== 1) {
+    throw new Error('Pending translation repair did not keep the catalog gated');
+  }
+  const contradictory = structuredClone(incomplete);
+  contradictory.complete = true;
+  try {
+    assertPeopleCatalogPublicationState(contradictory);
+    throw new Error('Contradictory publication state unexpectedly passed');
+  } catch (error) {
+    if (!String(error.message).includes('contradicts')) throw error;
+  }
   console.log('compile-people-catalog self-test: ok');
 }
 
@@ -778,6 +835,9 @@ function main() {
   if (options.requireResolved && !result.catalog.complete) {
     throw new Error(
       `People catalog is incomplete: ${result.catalog.stats.legacyLocalPeople} legacy local people and ` +
+      `${result.catalog.stats.legacyChapters} legacy chapter(s), ` +
+      `${result.catalog.stats.missingChapters} missing chapter(s), ` +
+      `${result.catalog.stats.pendingTranslationRepairs} pending translation repair(s), and ` +
       `${result.catalog.stats.unresolvedCandidateBlocks} unresolved identity block(s)`,
     );
   }

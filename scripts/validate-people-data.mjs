@@ -11,7 +11,11 @@ import {
 } from './lib/people-content.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
 import { isCompactPeopleExtraction } from './lib/people-compact.mjs';
-import { loadValidatedResolutionDocuments } from './lib/people-corpus.mjs';
+import {
+  loadValidatedResolutionDocuments,
+  peopleExtractionFiles,
+  sourceChapterIds,
+} from './lib/people-corpus.mjs';
 import { createPeopleSchemaValidator, formatSchemaErrors } from './lib/people-schema.mjs';
 import {
   editorialDecisionPath,
@@ -57,20 +61,6 @@ function containsReviewedClaim(currentClaims, reviewedClaim) {
     claimCoreContract(current) === reviewedCore &&
     reviewedClaim.evidence.every((item) => current.evidence.includes(item))
   );
-}
-
-function extractionFiles() {
-  const root = path.join(PEOPLE_DIR, 'extractions');
-  if (!fs.existsSync(root)) return [];
-  const files = [];
-  for (const book of fs.readdirSync(root).sort()) {
-    const directory = path.join(root, book);
-    if (!fs.statSync(directory).isDirectory()) continue;
-    for (const name of fs.readdirSync(directory).filter((file) => /^\d{3}\.json$/u.test(file)).sort()) {
-      files.push(path.join(directory, name));
-    }
-  }
-  return files;
 }
 
 function editorialDecisionFiles() {
@@ -137,7 +127,8 @@ async function main() {
   validateChronology(ajv, errors);
   if (errors.length > 0) throw new Error(`Person data validation failed:\n${errors.map((item) => `- ${item}`).join('\n')}`);
 
-  const files = extractionFiles();
+  const files = peopleExtractionFiles();
+  const sourceChapters = sourceChapterIds();
   const matcher = files.length > 0 ? loadProperNounMatcher() : null;
   let people = 0;
   let mentions = 0;
@@ -274,7 +265,9 @@ async function main() {
     `${appliedRepairs} applied repair(s), ${editorialDecisions} editorial decision(s), ` +
     `${claimRetractions} claim retraction(s), ${claimRevisions} claim revision(s). ` +
     `Legacy temporal debt: ${peopleMissingAttestations} person record(s) without an attestation, ` +
-    `${peopleMissingActiveDateHints} without an active-date hint.`,
+    `${peopleMissingActiveDateHints} without an active-date hint. ` +
+    `Corpus coverage: ${files.length}/${sourceChapters.length} chapter(s), ` +
+    `${sourceChapters.length - files.length} remaining.`,
   );
 }
 

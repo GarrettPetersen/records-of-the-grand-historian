@@ -5,6 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { load as loadHtml } from 'cheerio';
 import { listHtmlFilesRecursively, PEOPLE_DIR, readJson, REPO_ROOT } from './lib/people-content.mjs';
+import { assertPeopleCatalogPublicationState } from './lib/people-publication.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
@@ -54,6 +55,7 @@ function loadSearchEntries(outputRoot, errors) {
 export function verifyPeopleSite(options = parseArgs([])) {
   const errors = [];
   const catalog = readJson(path.join(PEOPLE_DIR, 'generated', 'catalog.json'));
+  assertPeopleCatalogPublicationState(catalog);
   const siteIndex = readJson(path.join(PEOPLE_DIR, 'generated', 'site-index.json'));
   const statusPath = path.join(options.outputRoot, 'data', 'people', 'site-status.json');
   if (!fs.existsSync(statusPath)) {
@@ -68,6 +70,17 @@ export function verifyPeopleSite(options = parseArgs([])) {
   const status = readJson(statusPath);
   assert(status.generatedAt === catalog.generatedAt, 'People site status is stale relative to catalog', errors);
   assert(status.people === catalog.people.length, 'People site status count differs from catalog', errors);
+  assert(status.sourceChapters === catalog.stats.sourceChapters,
+    'People site status source-chapter count differs from catalog', errors);
+  assert(status.extractedChapters === catalog.stats.extractedChapters,
+    'People site status extracted-chapter count differs from catalog', errors);
+  assert(status.missingChapters === catalog.stats.missingChapters,
+    'People site status missing-chapter count differs from catalog', errors);
+  if (status.published) {
+    assert(status.extractedChapters === status.sourceChapters,
+      'Published people site does not cover every source chapter', errors);
+    assert(status.missingChapters === 0, 'Published people site reports missing chapters', errors);
+  }
   if (status.preview && !options.allowPreview) errors.push('People site is a noindex preview, not a publication build');
   if (!status.preview && !status.published) errors.push('People site is not marked published');
 

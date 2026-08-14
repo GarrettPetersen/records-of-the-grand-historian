@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { exactSpanAt, PEOPLE_DIR, readJson } from './people-content.mjs';
+import { assertPeopleCatalogPublicationState } from './people-publication.mjs';
 
 const CATALOG_PATH = path.join(PEOPLE_DIR, 'generated', 'catalog.json');
 const SITE_INDEX_PATH = path.join(PEOPLE_DIR, 'generated', 'site-index.json');
@@ -27,6 +28,7 @@ export function loadPeopleSiteContext({ allowMissing = true, allowPreview = prev
 
   const catalog = readJson(CATALOG_PATH);
   const siteIndex = readJson(SITE_INDEX_PATH);
+  assertPeopleCatalogPublicationState(catalog);
   if (catalog.complete !== siteIndex.complete || catalog.generatedAt !== siteIndex.generatedAt ||
       catalog.currentPromptVersion !== siteIndex.currentPromptVersion) {
     throw new Error('Generated people catalog and site index are out of sync; rerun people:catalog');

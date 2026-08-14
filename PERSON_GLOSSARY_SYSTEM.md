@@ -1147,6 +1147,14 @@ the partial corpus. `scripts/validate-ebook.mjs` checks person counts, index
 counts, chapter mention-link counts, backlink counts, manifest and spine order,
 XHTML validity, and every local file and fragment target.
 
+Catalog completeness is a strict conjunction, not a synonym for resolved
+identities. Publication remains gated until every source chapter has a validated
+extraction sidecar, every sidecar uses the current prompt version, no proposed
+translation repair awaits editorial disposition, and no identity candidate
+block remains unresolved. Generated catalog and site-status data carry source,
+extracted, and missing chapter counts so the site verifier can audit this gate
+without inferring coverage from the number of people found.
+
 ## Validation and Failure Policy
 
 The build must fail loudly on structural errors. Required checks include:
@@ -1155,6 +1163,11 @@ The build must fail loudly on structural errors. Required checks include:
 - extraction book and chapter match the source chapter;
 - every current unit has a matching coverage digest or a completed delta
   extraction;
+- every source chapter has exactly one validated extraction sidecar before the
+  website or ebook glossary can be published;
+- every extraction sidecar uses the current prompt version, including chapters
+  in which no named person was found;
+- no proposed translation repair remains without an editorial disposition;
 - every mention references an existing unit and local person;
 - every exact span resolves to the recorded occurrence;
 - normalized offsets and hashes match current text;

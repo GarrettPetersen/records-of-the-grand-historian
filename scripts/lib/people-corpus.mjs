@@ -4,7 +4,7 @@ import { buildPeopleExtractionPacket } from '../build-people-extraction-packet.m
 import { validateCompactPeopleExtraction, validatePeopleExtraction } from '../validate-people-extraction.mjs';
 import { loadProperNounMatcher } from './people-candidates.mjs';
 import { isCompactPeopleExtraction } from './people-compact.mjs';
-import { PEOPLE_DIR, REPO_ROOT, readJson } from './people-content.mjs';
+import { DATA_DIR, PEOPLE_DIR, REPO_ROOT, readJson } from './people-content.mjs';
 import { createPeopleSchemaValidator, formatSchemaErrors } from './people-schema.mjs';
 
 export function peopleExtractionFiles() {
@@ -19,6 +19,18 @@ export function peopleExtractionFiles() {
     }
   }
   return files;
+}
+
+export function sourceChapterIds() {
+  const chapterIds = [];
+  for (const entry of fs.readdirSync(DATA_DIR, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
+    if (!entry.isDirectory()) continue;
+    const directory = path.join(DATA_DIR, entry.name);
+    for (const name of fs.readdirSync(directory).filter((file) => /^\d{3}\.json$/u.test(file)).sort()) {
+      chapterIds.push(`${entry.name}:${name.slice(0, -5)}`);
+    }
+  }
+  return chapterIds;
 }
 
 export function peopleResolutionFiles() {
@@ -65,9 +77,12 @@ export function loadValidatedResolutionDocuments(localPeople) {
 
 export function loadValidatedPeopleCorpus() {
   const files = peopleExtractionFiles();
+  const expectedChapterIds = sourceChapterIds();
+  const expectedChapterSet = new Set(expectedChapterIds);
   const matcher = files.length > 0 ? loadProperNounMatcher() : null;
   const chapters = [];
   const localPeople = new Map();
+  const extractedChapterIds = new Set();
 
   for (const file of files) {
     const raw = readJson(file);
@@ -76,6 +91,12 @@ export function loadValidatedPeopleCorpus() {
       ? validateCompactPeopleExtraction(raw, packet)
       : validatePeopleExtraction(raw, packet);
     const extraction = result.normalized;
+    const chapterId = `${extraction.book}:${extraction.chapter}`;
+    if (!expectedChapterSet.has(chapterId)) {
+      throw new Error(`${path.relative(REPO_ROOT, file)} does not correspond to a source chapter`);
+    }
+    if (extractedChapterIds.has(chapterId)) throw new Error(`Duplicate people extraction scope ${chapterId}`);
+    extractedChapterIds.add(chapterId);
     const claimsByPerson = new Map();
     const mentionsByPerson = new Map();
     for (const claim of extraction.claims) {
@@ -100,5 +121,13 @@ export function loadValidatedPeopleCorpus() {
     chapters.push({ file, packet, extraction });
   }
 
-  return { chapters, localPeople };
+  return {
+    chapters,
+    localPeople,
+    coverage: {
+      sourceChapters: expectedChapterIds.length,
+      extractedChapters: extractedChapterIds.size,
+      missingChapterIds: expectedChapterIds.filter((chapterId) => !extractedChapterIds.has(chapterId)),
+    },
+  };
 }

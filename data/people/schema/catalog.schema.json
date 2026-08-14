@@ -4,7 +4,7 @@
   "title": "Compiled canonical people catalog",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "generatedAt", "complete", "currentPromptVersion", "stats", "people", "familyEdges", "localPersonMap", "unresolvedCandidateBlockIds"],
+  "required": ["schemaVersion", "generatedAt", "complete", "currentPromptVersion", "stats", "people", "familyEdges", "localPersonMap", "unresolvedCandidateBlockIds", "missingChapterIds"],
   "properties": {
     "schemaVersion": { "const": 1 },
     "generatedAt": { "type": "string", "format": "date-time" },
@@ -13,13 +13,18 @@
     "stats": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["chapters", "localPeople", "canonicalPeople", "mergedLocalPeople", "legacyLocalPeople", "unresolvedCandidateBlocks", "familyEdges", "peopleWithFamily"],
+      "required": ["chapters", "sourceChapters", "extractedChapters", "missingChapters", "localPeople", "canonicalPeople", "mergedLocalPeople", "legacyLocalPeople", "legacyChapters", "pendingTranslationRepairs", "unresolvedCandidateBlocks", "familyEdges", "peopleWithFamily"],
       "properties": {
         "chapters": { "type": "integer", "minimum": 0 },
+        "sourceChapters": { "type": "integer", "minimum": 0 },
+        "extractedChapters": { "type": "integer", "minimum": 0 },
+        "missingChapters": { "type": "integer", "minimum": 0 },
         "localPeople": { "type": "integer", "minimum": 0 },
         "canonicalPeople": { "type": "integer", "minimum": 0 },
         "mergedLocalPeople": { "type": "integer", "minimum": 0 },
         "legacyLocalPeople": { "type": "integer", "minimum": 0 },
+        "legacyChapters": { "type": "integer", "minimum": 0 },
+        "pendingTranslationRepairs": { "type": "integer", "minimum": 0 },
         "unresolvedCandidateBlocks": { "type": "integer", "minimum": 0 },
         "familyEdges": { "type": "integer", "minimum": 0 },
         "peopleWithFamily": { "type": "integer", "minimum": 0 }
@@ -41,6 +46,11 @@
     "unresolvedCandidateBlockIds": {
       "type": "array",
       "items": { "type": "string", "pattern": "^block_[0-9A-HJKMNP-TV-Z]{16}$" }
+    },
+    "missingChapterIds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9_-]+:\\d{3}$" }
     }
   },
   "$defs": {

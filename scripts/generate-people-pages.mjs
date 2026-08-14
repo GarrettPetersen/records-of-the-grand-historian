@@ -632,6 +632,9 @@ function writeSearchData(outputRoot, people, context) {
     published: context.active && !context.preview,
     people: people.length,
     browsePages: context.browsePages ?? 0,
+    sourceChapters: context.catalog.stats.sourceChapters,
+    extractedChapters: context.catalog.stats.extractedChapters,
+    missingChapters: context.catalog.stats.missingChapters,
   });
 }
 
