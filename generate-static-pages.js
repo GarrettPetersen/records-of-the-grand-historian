@@ -189,16 +189,16 @@ function darkenHex(hex, amount) {
 }
 
 function siteFooter(prefix = '') {
-  const peopleLink = PEOPLE_SITE.active ? `
-            <a href="${prefix}people/index.html">People</a> |` : '';
+  const peopleLink = PEOPLE_SITE.active
+    ? `            <a href="${prefix}people/index.html">People</a> |\n`
+    : '';
   return `<footer>
         <p>
             <a href="${prefix}index.html">Home</a> |
             <a href="${prefix}about.html">About</a> |
             <a href="${prefix}blog.html">Blog</a> |
             <a href="${prefix}progress.html">Progress</a> |
-            ${peopleLink}
-            Source texts: <a href="https://chinesenotes.com" target="_blank" rel="noopener noreferrer">Chinese Notes</a>, 
+${peopleLink}            Source texts: <a href="https://chinesenotes.com" target="_blank" rel="noopener noreferrer">Chinese Notes</a>,
             <a href="https://ctext.org" target="_blank" rel="noopener noreferrer">CText</a>, and 
             <a href="https://zh.wikisource.org" target="_blank" rel="noopener noreferrer">Wikisource</a> |
             <a href="${prefix}privacy.html">Privacy Policy</a>
