@@ -7,6 +7,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { listHtmlFilesRecursively } from './lib/people-content.mjs';
+import { canonicalUrlForHtmlFile } from './lib/site-urls.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
@@ -57,14 +58,14 @@ function main() {
   for (const name of staticHtml) {
     const p = path.join(publicDir, name);
     if (!fs.existsSync(p)) continue;
-    urls.push({ loc: `${origin}/${name}`, lastmod });
+    urls.push({ loc: canonicalUrlForHtmlFile(origin, name), lastmod });
   }
 
   const books = manifest.books || {};
   for (const bookId of Object.keys(books)) {
     const hub = path.join(publicDir, 'book', `${bookId}.html`);
     if (fs.existsSync(hub)) {
-      urls.push({ loc: `${origin}/book/${bookId}.html`, lastmod });
+      urls.push({ loc: canonicalUrlForHtmlFile(origin, `book/${bookId}.html`), lastmod });
     }
 
     const b = books[bookId];
@@ -72,7 +73,7 @@ function main() {
       const chNum = String(ch.chapter).padStart(3, '0');
       const htmlPath = path.join(publicDir, bookId, `${chNum}.html`);
       if (!fs.existsSync(htmlPath)) continue;
-      urls.push({ loc: `${origin}/${bookId}/${chNum}.html`, lastmod });
+      urls.push({ loc: canonicalUrlForHtmlFile(origin, `${bookId}/${chNum}.html`), lastmod });
     }
   }
 
