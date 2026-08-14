@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "yuanshi",
+  "chapter": "102",
+  "input": {
+    "chapterFingerprint": "sha256:8bf0d2d330d45582a18473ac6130a4f2f1a6aa35b613040b350c634fd3b86f41",
+    "proposalsFingerprint": "sha256:d147a6d12a0624616316882257379e4877541786c46f8294bb0010a63c19eae3"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-048e147d-5061-405f-9283-abe66f0da55c",
+    "runId": "run-2d5d9dcb-f41e-47d5-96e9-3b34f9bd5ae9",
+    "completedAt": "2026-08-13T21:27:29.071Z"
+  },
+  "proposals": [
+    {
+      "id": "yuanshi:102:r0001",
+      "unit": {
+        "id": "s0091",
+        "kind": "paragraph-sentence",
+        "blockIndex": 25,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Anyone who forces entry into the palace shouting to reach the emperor's ear shall receive 107 strokes and be deported to the Yuan homeland.",
+      "after": "Anyone who forces entry into the palace shouting to reach the emperor's ear shall receive 107 strokes and be sent back to their original household register.",
+      "reason": "發元籍 means return to the offender's original household register, not deportation to a Yuan homeland.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:102:r0002",
+      "unit": {
+        "id": "s0091",
+        "kind": "paragraph-sentence",
+        "blockIndex": 25,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "As to persons wishing to present a matter who force their way into the palace halls, shouting in hope that the sovereign will hear—one hundred seven blows of the cudgel, and deportation to the Yuan homeland register.",
+      "after": "As to persons wishing to present a matter who force their way into the palace halls, shouting in hope that the sovereign will hear—one hundred seven blows of the cudgel, and return to the original household register.",
+      "reason": "元籍 is the original household registration; the literal rendering as Yuan homeland register is misleading.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:102:r0003",
+      "unit": {
+        "id": "s0204",
+        "kind": "paragraph-sentence",
+        "blockIndex": 29,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "idiomatic",
+      "before": "Court-attending officials who gather in partisan factions without cause are punished and their appointment is deferred.",
+      "after": "Court-attending officials who without cause fail to assemble for public business are punished and their appointment is deferred.",
+      "reason": "無故不公聚 means failing without cause to attend public assembly, not gathering in partisan factions.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:102:r0004",
+      "unit": {
+        "id": "s0204",
+        "kind": "paragraph-sentence",
+        "blockIndex": 29,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "literal",
+      "before": "As to court-attending officials who without cause gather for partisan purposes, guilt attaches and appointment by selection is delayed.",
+      "after": "As to court-attending officials who without cause fail to assemble publicly, guilt attaches and appointment by selection is delayed.",
+      "reason": "不公聚 is failure to assemble for official business, not partisan gathering.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:102:r0005",
+      "unit": {
+        "id": "s0280",
+        "kind": "paragraph-sentence",
+        "blockIndex": 35,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "As to Miao and Liao bandits raiding at the borders of Hunan, Hubei, Jiangxi, and the two Guang regions—supervising officials who do not strictly prohibit and punish, or who deliberately condone—military officers thirty-seven blows of flogging, civilian officials twenty-seven blows, and all have one received rank grade reduced, with a demerit recorded.",
+      "after": "As to creek-and-cave tribal bandits raiding at the borders of Hunan, Hubei, Jiangxi, and the two Guang regions—supervising officials who do not strictly prohibit and punish, or who deliberately condone—military officers thirty-seven blows of flogging, civilian officials twenty-seven blows, and all have one received rank grade reduced, with a demerit recorded.",
+      "reason": "Chinese 蠻獠 denotes southern tribal/barbarian groups in general; the literal invents specific ethnonyms Miao and Liao not present in the source.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "yuanshi:102:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0091 ends 發元籍: 元籍 is the original household register, not a Yuan homeland; the proposed idiomatic correctly replaces the invented deportation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0091",
+        "excerpt": "發元籍"
+      }
+    },
+    {
+      "repairId": "yuanshi:102:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0091 發元籍 uses 元 as original (household registration), not the dynastic name; the literal correctly drops the Yuan-homeland misreading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0091",
+        "excerpt": "發元籍"
+      }
+    },
+    {
+      "repairId": "yuanshi:102:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0204 無故不公聚 is without-cause failure to assemble for public business; 不 negates 公聚, so partisan-faction gathering invents the opposite sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0204",
+        "excerpt": "無故不公聚"
+      }
+    },
+    {
+      "repairId": "yuanshi:102:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0204 不公聚 is failure to assemble publicly/for official business, not gathering for partisan purposes; the proposed literal restores the negation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0204",
+        "excerpt": "不公聚"
+      }
+    },
+    {
+      "repairId": "yuanshi:102:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0280 溪洞蠻獠 is creek-and-cave southern tribal peoples; 蠻獠 is a general label and does not name Miao or Liao as ethnonyms.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0280",
+        "excerpt": "溪洞蠻獠"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

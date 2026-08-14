@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 3,
+  "book": "mingshi",
+  "chapter": "115",
+  "input": {
+    "chapterFingerprint": "sha256:2dd9d0e59244cda1f0627735267fe5046bf2a7df424f80ed3c5e34ad2ea40d75",
+    "proposalsFingerprint": "sha256:570708866e21e3b5609f9024ac623df4c614761236e6c31bac7d706d10a2cc47"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-de54503d-9c07-462a-a44e-563047d34a30",
+    "runId": "run-2ef0bb5b-2614-4c8e-8b14-03634640d7a6",
+    "completedAt": "2026-08-13T21:18:59.378Z"
+  },
+  "proposals": [
+    {
+      "id": "mingshi:115:r0001",
+      "unit": {
+        "id": "s0086",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "Zhang Cong also wrote \"Questions on the Great Rites\"; Huo Tao and Gui E, section directors, and Xiong Shi, supervising secretary, agreed with him.",
+      "after": "Zhang Cong also wrote \"Questions on the Great Rites\"; Huo Tao and Gui E, section directors, and Xiong Jia, supervising secretary, agreed with him.",
+      "reason": "熊浹 is Xiong Jia (浹 jiā), not Xiong Shi.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:115:r0002",
+      "unit": {
+        "id": "s0156",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "Attendant Lü Zhen, supervising secretary Zeng Yan, censor Liu Xian, section director Yue Lun, and others then memorialized in turn.",
+      "after": "Attendant Lü Nan, supervising secretary Zeng Ting, censor Liu Xian, section director Yue Lun, and others then memorialized in turn.",
+      "reason": "呂柟 is Lü Nan (柟 nán), not Zhen; 烶 is Ting.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:115:r0003",
+      "unit": {
+        "id": "s0193",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 24
+      },
+      "field": "idiomatic",
+      "before": "At the same time Prince of Qin Fang took Wang Baobao's sister as consort and Deng Yu's daughter as a secondary match—precedents unknown in earlier ages.",
+      "after": "At the same time Prince of Qin Shuang took Wang Baobao's sister as consort and Deng Yu's daughter as a secondary match—precedents unknown in earlier ages.",
+      "reason": "秦王樉 is Zhu Shuang (樉 shuǎng), not Fang.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "mingshi:115:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0086 names 給事中熊浹; 浹 is Jia, so Xiong Shi is a wrong reading and Xiong Jia is the accurate replacement.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0086",
+        "excerpt": "給事中熊浹"
+      }
+    },
+    {
+      "repairId": "mingshi:115:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0156 has 侍御呂柟 and 給事中曾烶; 柟 is Nan and 烶 is Ting, so Lü Zhen and Zeng Yan are misreadings and the proposed names restore the Chinese correctly.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0156",
+        "excerpt": "侍御呂柟、給事中曾烶"
+      }
+    },
+    {
+      "repairId": "mingshi:115:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0193 names 秦王樉; 樉 is Shuang, so Prince of Qin Fang misreads the personal name and Shuang is the correct English form.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0193",
+        "excerpt": "秦王樉"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "mingshi:115:r0002",
+      "before": {
+        "id": "mingshi:115:c0318",
+        "subject": "mingshi:115:p107",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Zeng Yan",
+          "zh": "曾烶"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "mingshi:115:s0156"
+        ]
+      },
+      "after": {
+        "id": "mingshi:115:c0318",
+        "subject": "mingshi:115:p107",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Zeng Ting",
+          "zh": "曾烶"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "mingshi:115:s0156"
+        ]
+      },
+      "reason": "Accepted r0002 shows English Zeng Yan came only from misreading 烶; the personal-name claim must read Zeng Ting while keeping zh, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0156",
+        "excerpt": "曾烶"
+      }
+    }
+  ]
+}

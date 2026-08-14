@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "045",
+  "input": {
+    "chapterFingerprint": "sha256:710e20b81f7d86f523dc46f13a766f3387950bfcedd39fb0200120abfb89244e",
+    "proposalsFingerprint": "sha256:8389758bb0eaad00b0d40fc1a8fe282199e284c72fef760c1caf7a14734b7a20"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-9d0531ed-6627-47ca-93d7-7ec59365f703",
+    "runId": "run-4a49b133-eb0a-471a-a66c-e6107e2a7cc7",
+    "completedAt": "2026-08-13T21:21:41.413Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:045:r0001",
+      "unit": {
+        "id": "s0033",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "During Marquis Jing Qian began his tenure, they attacked Zheng and captured Yongqiu.",
+      "after": "In the first year of Marquis Jing Qian, they attacked Zheng and captured Yongqiu.",
+      "reason": "English is ungrammatical ('During Marquis Jing Qian began'); the Chinese 元年 marks the first regnal year.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:045:r0002",
+      "unit": {
+        "id": "s0048",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "During Marquis Ai began his tenure, Han, together with Zhao and Wei, partitioned the state of Jin.",
+      "after": "In the first year of Marquis Ai, Han, together with Zhao and Wei, partitioned the state of Jin.",
+      "reason": "Same ungrammatical 'During ... began his tenure' pattern; 元年 is the first regnal year.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:045:r0003",
+      "unit": {
+        "id": "s0056",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "During Marquis Zhao began his tenure, Qin defeated Han forces at Xishan.",
+      "after": "In the first year of Marquis Zhao, Qin defeated Han forces at Xishan.",
+      "reason": "Same ungrammatical tenure phrasing; Chinese is 昭侯元年.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:045:r0004",
+      "unit": {
+        "id": "s0121",
+        "kind": "paragraph-sentence",
+        "blockIndex": 24,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Prince Jiu and Prince Jiu Jie contended to become crown prince.",
+      "after": "Prince Jiu and Prince Jishi contended to become crown prince.",
+      "reason": "蟣蝨 is Jishi/Ji Shi, not 'Jiu Jie'; the literal conflates 咎 and 蟣蝨.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:045:r0005",
+      "unit": {
+        "id": "s0088",
+        "kind": "paragraph-sentence",
+        "blockIndex": 21,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "Even if Han cannot listen to us, Han will certainly virtue the wang and will not come in wild goose formation. This means Qin and Han are not harmonious. Though troops arrive, Chu will not be greatly harmed.",
+      "after": "Even if Han cannot listen to us, Han will certainly feel grateful to the king and will not come in wild-goose formation. This means Qin and Han are not in accord. Though troops arrive, Chu will not be greatly harmed.",
+      "reason": "'virtue the wang' is not intelligible English for 德王; the sense is gratitude toward the Chu king.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:045:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "景侯虔元年 is the first regnal year of Marquis Jing Qian; the before text is ungrammatical, and “In the first year of Marquis Jing Qian…” correctly renders 元年 while preserving 伐鄭，取雍丘.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0033",
+        "excerpt": "景侯虔元年，伐鄭，取雍丘。"
+      }
+    },
+    {
+      "repairId": "shiji:045:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "哀侯元年 marks Marquis Ai’s first year; the broken “During … began his tenure” phrasing is wrong, and the proposed first-year wording matches 與趙、魏分晉國.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0048",
+        "excerpt": "哀侯元年，與趙、魏分晉國。"
+      }
+    },
+    {
+      "repairId": "shiji:045:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "昭侯元年 is Marquis Zhao’s first year; replacing the ungrammatical tenure formula with “In the first year of Marquis Zhao” correctly renders the date before 秦敗我西山.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0056",
+        "excerpt": "昭侯元年，秦敗我西山。"
+      }
+    },
+    {
+      "repairId": "shiji:045:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "公子咎、公子蟣蝨 names two princes: 咎 (Jiu) and 蟣蝨 (Jishi); “Prince Jiu Jie” wrongly conflates them, and “Prince Jishi” restores the second name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0121",
+        "excerpt": "公子咎、公子蟣蝨爭為太子。"
+      }
+    },
+    {
+      "repairId": "shiji:045:r0005",
+      "decision": "revise",
+      "after": "Even if Han cannot listen to us, Han will certainly feel grateful to the wang and will not come in wild goose formation. This means Qin and Han are not harmonious. Though troops arrive, Chu will not be greatly harmed.",
+      "reason": "德王 means Han will feel grateful to the addressed wang, so “virtue the wang” is broken; the proposal’s sense is right, but neighboring literals keep “wang,” and the rest of the before text already renders 鴈行 / 不和 adequately, so only the 德王 clause needs repair.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0088",
+        "excerpt": "韓必德王也"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

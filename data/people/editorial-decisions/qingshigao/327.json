@@ -1,0 +1,219 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "327",
+  "input": {
+    "chapterFingerprint": "sha256:6f755f7225d151753ea68e7864ded209d05555f15b99c439a3c16fc9e5a78d95",
+    "proposalsFingerprint": "sha256:e49a69716667ae7a76cbf7577f7cacc77645b8907f0757560d0480d3cb925ccb"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-b0822f9e-f4c6-4f96-b35d-e7bf82a8f769",
+    "runId": "run-475adc25-22a2-49d2-9d61-7d5b1d340b03",
+    "completedAt": "2026-08-13T21:21:12.469Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:327:r0001",
+      "unit": {
+        "id": "s0063",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "The Burmese chief Mang Dala had been usurped by the Musuo chief; he defeated the Guizhou Mohang, and the Guizhou chief Gong Guyan fled to Menglian.",
+      "after": "The Burmese chief Mang Dala had been usurped by the Musuo chief; he defeated the Gui Family of Mohang, and the Gui chief Gong Guyan fled to Menglian.",
+      "reason": "貴家 is the Gui Family (Chinese settlers), not the province Guizhou (貴州); 貴酋 means the Gui chief.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:327:r0002",
+      "unit": {
+        "id": "s0063",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "The Burmese chief Mang Dala had been usurped by the Musuo chief; he defeated the Guizhou Mohang; the Guizhou chief Gong Guyan fled to Menglian.",
+      "after": "The Burmese chief Mang Dala had been usurped by the Musuo chief; he defeated the Gui Family Mohang; the Gui chief Gong Guyan fled to Menglian.",
+      "reason": "Same 貴家/貴酋 mistranslation as Guizhou instead of Gui Family.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:327:r0003",
+      "unit": {
+        "id": "s0119",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In the second month of the thirtieth year the Muslims of Ush rebelled; the Vice Commander-in-Chief stationed there, Such eng, killed himself; the rebels made the petty beg Lai Heimutula their leader and held out behind the walls.",
+      "after": "In the second month of the thirtieth year the Muslims of Ush rebelled; the Vice Commander-in-Chief stationed there, Sucheng, killed himself; the rebels made the petty beg Lai Heimutula their leader and held out behind the walls.",
+      "reason": "Proper name 素誠 is split as \"Such eng\" with an erroneous space.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:327:r0004",
+      "unit": {
+        "id": "s0119",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "In the second month of the thirtieth year the Muslims of Ush rebelled; the Vice Commander-in-Chief stationed at Ush, Such eng, killed himself; the rebels made the petty beg Lai Heimutula their leader and held out in defense.",
+      "after": "In the second month of the thirtieth year the Muslims of Ush rebelled; the Vice Commander-in-Chief stationed at Ush, Sucheng, killed himself; the rebels made the petty beg Lai Heimutula their leader and held out in defense.",
+      "reason": "Same erroneous space in \"Such eng\" for 素誠.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:327:r0005",
+      "unit": {
+        "id": "s0134",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "In the eleventh month he reached Wanding and advanced against Mohang; the rebels fled. He left Coordinator Zhulun'e and Surveillance Commissioner Yang Zhongying to hold the place, then led more than ten thousand men across the Xibo River to attack Manjie.",
+      "after": "In the eleventh month he reached Wanding and advanced against Mohang; the rebels fled. He left Coordinator Zhulun'e and Surveillance Commissioner Yang Chongying to hold the place, then led more than ten thousand men across the Xibo River to attack Manjie.",
+      "reason": "楊重英 is the same Chongying (重英) treated earlier; Zhongying is an inconsistent romanization.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:327:r0006",
+      "unit": {
+        "id": "s0160",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 17
+      },
+      "field": "idiomatic",
+      "before": "Before the edict arrived, in the first month of the thirty-third year the rebels attacked Mohang; Vice Commander-in-Chief Zhulun'e's army collapsed and he killed himself, and Yang Zhongying was seized and taken away.",
+      "after": "Before the edict arrived, in the first month of the thirty-third year the rebels attacked Mohang; Vice Commander-in-Chief Zhulun'e's army collapsed and he killed himself, and Yang Chongying was seized and taken away.",
+      "reason": "Same inconsistent Zhongying for 重英/楊重英 elsewhere rendered Chongying.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:327:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0063 has 貴家木邦 and 貴酋, not 貴州; Gui Family / Gui chief correctly replaces the false Guizhou reading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0063",
+        "excerpt": "擊敗貴家木邦，貴酋宮裹雁奔孟連"
+      }
+    },
+    {
+      "repairId": "qingshigao:327:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same unit: 貴家 and 貴酋 are Gui Family and Gui chief, not Guizhou; the literal replacement removes that error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0063",
+        "excerpt": "貴家木邦，貴酋"
+      }
+    },
+    {
+      "repairId": "qingshigao:327:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0119 names 素誠 as one word; the space in \"Such eng\" is a typographical split of the proper name Sucheng.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0119",
+        "excerpt": "駐烏什副都統素誠自戕"
+      }
+    },
+    {
+      "repairId": "qingshigao:327:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal field has the same erroneous space; 素誠 is Sucheng.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0119",
+        "excerpt": "素誠"
+      }
+    },
+    {
+      "repairId": "qingshigao:327:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0134 楊重英 is Chongying (重英), matching the chapter figure; Zhongying is a wrong tone/romanization.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0134",
+        "excerpt": "按察使楊重英"
+      }
+    },
+    {
+      "repairId": "qingshigao:327:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0160 執重英以去 is the same 重英/楊重英 as Chongying; Zhongying must be corrected for consistency.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0160",
+        "excerpt": "執重英以去"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "qingshigao:327:r0006",
+      "before": {
+        "id": "qingshigao:327:c0106",
+        "subject": "qingshigao:327:p031",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Yang Zhongying",
+          "zh": "楊重英",
+          "pinyin": "Yang Zhongying"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:327:s0160"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:327:c0106",
+        "subject": "qingshigao:327:p031",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Yang Chongying",
+          "zh": "楊重英",
+          "pinyin": "Yang Chongying"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:327:s0160"
+        ]
+      },
+      "reason": "Accepted r0006 shows English Zhongying came only from the bad romanization of 重英; the name claim must read Chongying while keeping zh, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0160",
+        "excerpt": "重英"
+      }
+    }
+  ]
+}

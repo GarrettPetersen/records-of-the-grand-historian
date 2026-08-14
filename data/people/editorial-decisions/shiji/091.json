@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "091",
+  "input": {
+    "chapterFingerprint": "sha256:5d838a9b68af4813274f2b30affee3bac92e09eb8c2a53b4de0a5117abffbe6c",
+    "proposalsFingerprint": "sha256:2ea52f0ccda0ba5392a842640a4636f5b4e00445e80b21b58861a2c5cd4fa17e"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-de54738c-e62b-4074-9469-c2cdd52f25db",
+    "runId": "run-54507321-327c-4294-a5b3-4f55ecab23ce",
+    "completedAt": "2026-08-13T21:22:59.803Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:091:r0001",
+      "unit": {
+        "id": "s0079",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "When the King of Huainan arrived, the Emperor was lounging on his couch having his feet washed. He summoned Bu in for an audience in this state. Bu was seized with fury and regretted having come, nearly wanting to take his own life.",
+      "after": "When the King of Huainan arrived, the Emperor was lounging on his couch having his feet washed. He summoned Bu in for an audience in this state. Bu was seized with fury and regretted having come, wanting to take his own life.",
+      "reason": "Chinese 欲自殺 means he wished to kill himself; idiomatic 'nearly wanting' softens and adds 'nearly' absent from the source.",
+      "confidence": "medium"
+    },
+    {
+      "id": "shiji:091:r0002",
+      "unit": {
+        "id": "s0172",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "The seeds of his downfall were sown by a beloved concubine; jealousy and suspicion bred calamity, and in the end they brought about the destruction of his kingdom!",
+      "after": "The seeds of his downfall were sown by a beloved concubine; jealousy and envy bred calamity, and in the end they brought about the destruction of his kingdom!",
+      "reason": "妒媢 means jealousy and envy, not suspicion; the idiomatic rendering invents a different emotion.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:091:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "欲自殺 states that Bu wished to kill himself; “nearly wanting” invents a hedge absent from the Chinese. Removing “nearly” restores the source force without changing agents or other content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0079",
+        "excerpt": "悔來，欲自殺"
+      }
+    },
+    {
+      "repairId": "shiji:091:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "妒媢 denotes jealousy and envy, not suspicion. Replacing “suspicion” with “envy” corrects the invented emotion while preserving the rest of the human wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0172",
+        "excerpt": "妒媢生患"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

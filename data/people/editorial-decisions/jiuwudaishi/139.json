@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "139",
+  "input": {
+    "chapterFingerprint": "sha256:51ab7c2cab5fc0c6c2ad1024bc412392e8f040bff46a9d5096f82ac4551f41be",
+    "proposalsFingerprint": "sha256:0497662243e58d02823bff73a50477a0c84d94226473d17b29c8ebe2215e2388"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-c6251c31-bef5-400e-b4ff-874d5decbbdb",
+    "runId": "run-dc8177f0-38ee-4c93-a320-e101dbb87619",
+    "completedAt": "2026-08-13T21:15:02.329Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:139:r0001",
+      "unit": {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "(Editor's note: The preface to the Astronomical Treatise in Xue Juzheng's History and the Yongle Encyclopedia are lost in the sources we have, but the chapters on solar eclipses, stellar changes, and related topics survive with their records intact and are fuller than the Heavenly Offices treatise in Ouyang Xiu's New History.)",
+      "after": "(Editor's note: The preface to the Astronomical Treatise in Xue Juzheng's History is originally missing from the Yongle Encyclopedia, but the chapters on solar eclipses, stellar changes, and related topics survive with their records intact and are fuller than the Heavenly Offices treatise in Ouyang Xiu's New History.)",
+      "reason": "Chinese 原闕 applies to the treatise preface as preserved in the Yongle Encyclopedia, not to both Xue's History and the encyclopedia being lost.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:139:r0002",
+      "unit": {
+        "id": "s0197",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "In the fifth year, on dingchou of the eleventh month the moon was eclipsed within the Hare's Head celestial division.",
+      "after": "In the fifth year, on dingchou of the eleventh month the moon was eclipsed within the Quail's Head celestial division.",
+      "reason": "鶉首 is the Quail Head Jupiter-station, not Hare's Head.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:139:r0003",
+      "unit": {
+        "id": "s0197",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "In the fifth year, on dingchou of the eleventh month, the moon was eclipsed within the Hare's Head asterism division.",
+      "after": "In the fifth year, on dingchou of the eleventh month, the moon was eclipsed within the Quail's Head asterism division.",
+      "reason": "鶉首 is Quail Head; Hare's Head misreads the Jupiter-station name.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:139:r0004",
+      "unit": {
+        "id": "s0183",
+        "kind": "paragraph-sentence",
+        "blockIndex": 48,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "After the third hour several streaks of white vapor followed one another westward until they dispersed after the third watch.",
+      "after": "After the third point of the watch several streaks of white vapor followed one another westward until they dispersed after the third watch.",
+      "reason": "三點 denotes the third point within a night watch (after 一鼓初), not a clock “hour”; the idiomatic rendering misreads the watch-point term.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:139:r0005",
+      "unit": {
+        "id": "s0183",
+        "kind": "paragraph-sentence",
+        "blockIndex": 48,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "By after the third point of the night, afterward there were several streaks of white vapor, one after another streaming west, until after the third drum they dispersed.",
+      "after": "After the third point, there were afterward several streaks of white vapor, one after another streaming west, until after the third drum they dispersed.",
+      "reason": "“By after … of the night” invents a vague night scope and awkward prepositioning; 至三點後 is simply “after the third point,” with 後有 as a separate “there were afterward.”",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:139:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "《薛史天文志序》《永樂大典》原闕 is the standard reconstruction note that the Xue History Astronomical Treatise preface is originally missing from the Yongle Encyclopedia, not that both works are lost; the proposed after restores that scope while keeping the surviving-sections contrast.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "《薛史天文志序》《永樂大典》原闕"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:139:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "鶉首 is the Jupiter-station Quail Head; Hare's Head invents a wrong station name. The proposed Quail's Head correctly names the celestial division of the lunar eclipse.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0197",
+        "excerpt": "月蝕鶉首之分"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:139:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same Chinese 鶉首 as r0002; the literal field likewise misreads it as Hare's Head. Quail's Head is the accurate station name for this eclipse locus.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0197",
+        "excerpt": "月蝕鶉首之分"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:139:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Preceding s0181 dates the omen at 一鼓初; 至三點後 continues that night-watch chronology as the third point within a watch, not a clock hour. Replacing “third hour” with “third point of the watch” corrects the misreading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0183",
+        "excerpt": "至三點後"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:139:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "至三點後 means simply after the third point; “By after … of the night” is ungrammatical and invents a night scope, while 後有 is the separate afterward-existence clause. The proposed literal restores both segments cleanly.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0183",
+        "excerpt": "至三點後，後有白氣數條"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

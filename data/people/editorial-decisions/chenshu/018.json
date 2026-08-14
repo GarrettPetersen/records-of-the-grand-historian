@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "chenshu",
+  "chapter": "018",
+  "input": {
+    "chapterFingerprint": "sha256:25faa04a41c3cc64059c34f81b1bff893b4c60b5dcd776e25e9333b4106f6eff",
+    "proposalsFingerprint": "sha256:ba2ba4fe07d30e102e26849de18e2c8a6ed69b263faf8d3d4e58d34f260e73ea"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-f3e8c14b-5164-4dd6-bcf7-08525f6d42d4",
+    "runId": "run-6a3f78a7-58ed-4f11-80f8-142c9ed4b3c0",
+    "completedAt": "2026-08-13T21:12:20.430Z"
+  },
+  "proposals": [
+    {
+      "id": "chenshu:018:r0001",
+      "unit": {
+        "id": "s0019",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "He was soon promoted to left chief clerk of the Secretariat.",
+      "after": "He was soon promoted to left chief clerk to the minister of education.",
+      "reason": "Chinese 司徒 is the minister of education / director of instruction, not the Secretariat (中書).",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:018:r0002",
+      "unit": {
+        "id": "s0122",
+        "kind": "paragraph-sentence",
+        "blockIndex": 28,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "When Emperor Xuan was regent he made Zhi left chief clerk of the Secretariat, retaining his general's title.",
+      "after": "When Emperor Xuan was regent he made Zhi left chief clerk to the minister of education, retaining his general's title.",
+      "reason": "Chinese 司徒左長史 is left chief clerk to the minister of education, not of the Secretariat.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:018:r0003",
+      "unit": {
+        "id": "s0092",
+        "kind": "paragraph-sentence",
+        "blockIndex": 22,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "When Yu Xiaoqing attacked Jin'an by sea, Shancai again went to Kuaiji in his existing office and directed the strategy.",
+      "after": "When Yu Xiaoxu attacked Jin'an by sea, Shancai again went to Kuaiji in his existing office and directed the strategy.",
+      "reason": "Chinese 余孝頃 is the same person earlier rendered Yu Xiaoxu; Xiaoqing is an inconsistent transliteration.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:018:r0004",
+      "unit": {
+        "id": "s0147",
+        "kind": "paragraph-sentence",
+        "blockIndex": 32,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "He then sent Zai's clansman Hui bearing a letter to explain to Zai the reason for executing Wang Sengbian, and also presented an edict of Emperor Jing of Liang, edict ordering Zai to disarm.",
+      "after": "He then sent Zai's clansman Hui bearing a letter to explain to Zai the reason for executing Wang Sengbian, and also presented an edict of Emperor Jing of Liang ordering Zai to disarm.",
+      "reason": "Literal English repeats 'edict' redundantly and obscures the single-command reading of 敕載解兵.",
+      "confidence": "medium"
+    },
+    {
+      "id": "chenshu:018:r0005",
+      "unit": {
+        "id": "s0162",
+        "kind": "paragraph-sentence",
+        "blockIndex": 37,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "His grandfather Ai was Liang general who assists the state.",
+      "after": "His grandfather Ai was Liang's General Who Assists the State.",
+      "reason": "The office 輔國將軍 is a formal title and needs the definite title form plus a possessive/article so English does not read as a bare common noun phrase.",
+      "confidence": "medium"
+    },
+    {
+      "id": "chenshu:018:r0006",
+      "unit": {
+        "id": "s0173",
+        "kind": "paragraph-sentence",
+        "blockIndex": 37,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "literal",
+      "before": "During Taijian he died in office and was posthumously presented as inspector of Ming, Huo, and Luo provinces.",
+      "after": "During Taijian he died in office and was posthumously made inspector of Ming, Huo, and Luo provinces.",
+      "reason": "贈 marks posthumous conferral of office; English “presented as” misstates the appointment sense already rendered correctly in the idiomatic field.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "chenshu:018:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0019 尋遷司徒左長史 names the office under 司徒 (minister of education / one of the Three Dukes), not the Secretariat (中書); “left chief clerk of the Secretariat” is a mistranslation, and the proposed replacement matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0019",
+        "excerpt": "尋遷司徒左長史"
+      }
+    },
+    {
+      "repairId": "chenshu:018:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0122 以為司徒左長史 again has 司徒, not 中書; “left chief clerk of the Secretariat” is wrong, and “left chief clerk to the minister of education” correctly renders the office while keeping the regency and general-title clauses intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0122",
+        "excerpt": "以為司徒左長史"
+      }
+    },
+    {
+      "repairId": "chenshu:018:r0003",
+      "decision": "reject",
+      "after": null,
+      "reason": "s0092 余孝頃 romanizes as Yu Xiaoqing (頃 = qǐng). Changing to Yu Xiaoxu would misread 頃 and introduce a naming error; consistency with another English spelling does not override the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0092",
+        "excerpt": "余孝頃"
+      }
+    },
+    {
+      "repairId": "chenshu:018:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0147 并奉梁敬帝敕，敕載解兵 is one edict that orders Zai to disarm; the literal’s bare second “edict” is broken English, and dropping the redundant noun keeps the letter, Jing’s edict, and the disarm order without adding or omitting content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0147",
+        "excerpt": "并奉梁敬帝敕，敕載解兵"
+      }
+    },
+    {
+      "repairId": "chenshu:018:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0162 梁輔國將軍 is the formal title 輔國將軍 under Liang; “Liang general who assists the state” reads as a bare common noun and is ungrammatical, while “Liang's General Who Assists the State” correctly titles the office.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0162",
+        "excerpt": "梁輔國將軍"
+      }
+    },
+    {
+      "repairId": "chenshu:018:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0173 贈明、霍、羅三州刺史 uses 贈 for posthumous conferral of office; “presented as” misstates that sense, and “posthumously made” matches the appointment meaning already used in the idiomatic field.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0173",
+        "excerpt": "贈明、霍、羅三州刺史"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

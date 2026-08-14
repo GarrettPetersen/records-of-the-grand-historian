@@ -484,6 +484,16 @@ function selfTest() {
       collection: 'sentences', itemIndex: 0,
       zh: '寧朔將軍。', en: 'He became General Who Pacifies the North.',
       literal: 'He became General Who Pacifies the North.',
+    }, {
+      id: 's0028', kind: 'paragraph-sentence', blockIndex: 27,
+      collection: 'sentences', itemIndex: 0,
+      zh: '不能決者。', en: 'What they cannot decide should be reported.',
+      literal: 'What they cannot decide should be reported.',
+    }, {
+      id: 's0029', kind: 'paragraph-sentence', blockIndex: 28,
+      collection: 'sentences', itemIndex: 0,
+      zh: '廷尉亦當奏。', en: 'The Commandant of Justice should also report.',
+      literal: 'The Commandant of Justice should also report.',
     }],
     preflight: {
       candidates: [{
@@ -593,6 +603,14 @@ function selfTest() {
       }, {
         id: 'fixture:002:cand_office_direction', unit: 's0027', language: 'en',
         exact: 'North', occurrence: 0, startCodePoint: 35, endCodePoint: 40,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_what', unit: 's0028', language: 'en',
+        exact: 'What', occurrence: 0, startCodePoint: 0, endCodePoint: 4,
+        detectors: [{ kind: 'english-capitalized-expression' }],
+      }, {
+        id: 'fixture:002:cand_justice', unit: 's0029', language: 'en',
+        exact: 'Justice', occurrence: 0, startCodePoint: 18, endCodePoint: 25,
         detectors: [{ kind: 'english-capitalized-expression' }],
       }],
     },
@@ -879,6 +897,8 @@ function selfTest() {
     ['fixture:002:cand_river_list', 'place'],
     ['fixture:002:cand_work_title', 'book-title'],
     ['fixture:002:cand_office_direction', 'office'],
+    ['fixture:002:cand_justice', 'office'],
+    ['fixture:002:cand_what', 'not-a-name'],
   ]);
   for (const [candidate, reason] of expectedNonPeople) {
     const disposition = fragments.extraction.candidateDispositions.find((item) =>

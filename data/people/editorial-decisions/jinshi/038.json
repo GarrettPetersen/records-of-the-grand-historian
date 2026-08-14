@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "jinshi",
+  "chapter": "038",
+  "input": {
+    "chapterFingerprint": "sha256:1a079937a06da8a809b1e3341abae4519c4b6ac7c2f464ff8282ed05242618bf",
+    "proposalsFingerprint": "sha256:cb9f1f13e3a3e8fd1015ab0bd606320863ddd73f767dec5feceb4740149d9f20"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-9c3d313e-aced-4b37-851e-fff2870e886c",
+    "runId": "run-305e3db3-3f91-47ca-bbc8-0dcf2a4e108e",
+    "completedAt": "2026-08-13T21:12:52.446Z"
+  },
+  "proposals": [
+    {
+      "id": "jinshi:038:r0001",
+      "unit": {
+        "id": "s0082",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "The Grand Councilors Zhang Rulin and Liu Wei and others said: \"A ruler should display trustworthiness. To change the date merely because rain and flooding block the roads may cause the court to lose credibility.",
+      "after": "Pingzhang of Political Affairs Zhang Rulin, Participant in Determining Governmental Matters Liu Wei, and others said: \"A ruler should display trustworthiness. To change the date merely because rain and flooding block the roads may cause the court to lose credibility.",
+      "reason": "Chinese distinguishes 平章政事 for Zhang Rulin from 參知政事 for Liu Wei; idiomatic English collapses both to Grand Councilors.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:038:r0002",
+      "unit": {
+        "id": "s0082",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "The Grand Councilors Zhang Rulin and Liu Wei and others said: \"A ruler should display trustworthiness; to change the date merely because rain and flooding block the roads may cause loss of faith.",
+      "after": "Pingzhang of Political Affairs Zhang Rulin, Participant in Determining Governmental Matters Liu Wei, and others said: \"A ruler should display trustworthiness; to change the date merely because rain and flooding block the roads may cause loss of faith.",
+      "reason": "Literal English likewise merges distinct offices 平章政事 and 參知政事.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:038:r0003",
+      "unit": {
+        "id": "s0170",
+        "kind": "paragraph-sentence",
+        "blockIndex": 9,
+        "collection": "sentences",
+        "itemIndex": 25
+      },
+      "field": "idiomatic",
+      "before": "When the reading aloud was finished, by precedent the letter was not read in full.",
+      "after": "When that step was finished, by precedent the letter was not read.",
+      "reason": "故事皆不讀 states that by precedent there was no reading; 'read in full' softens and partly contradicts 轉讀畢.",
+      "confidence": "medium"
+    },
+    {
+      "id": "jinshi:038:r0004",
+      "unit": {
+        "id": "s0316",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "There were three gold belts, three gold-plated silver girdles, three gold-overlaid silver decorated saddles and bridles, three gold-overlaid silver fully wrapped document cases, and one each of gold-inlaid silver-mounted black-lacquer edict cases with document wrappers and edict-case covers.",
+      "after": "There were three gold belts, three gold-plated silver girdles, three gold-overlaid silver decorated saddles and bridles, and one each of a gold-overlaid silver fully wrapped document case, a gold-inlaid silver-mounted black-lacquer edict case with document wrappers, and an edict-case cover.",
+      "reason": "After 鞍轡三 the Chinese continues 金塗銀渾裹書匣…各一; 書匣 is not marked with 三, so the document case and following items are one each, not three document cases.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:038:r0005",
+      "unit": {
+        "id": "s0316",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "Three gold belts, three gold-plated silver girdles, three gold-overlaid silver decorated saddles and bridles, three gold-overlaid silver fully wrapped document cases, and one each of gold-inlaid silver-mounted black-lacquer edict cases with document wrappers and edict-case covers.",
+      "after": "Three gold belts, three gold-plated silver girdles, three gold-overlaid silver decorated saddles and bridles, and one each of a gold-overlaid silver fully wrapped document case, a gold-inlaid silver-mounted black-lacquer edict case with document wrappers, and an edict-case cover.",
+      "reason": "After 鞍轡三 the Chinese continues 金塗銀渾裹書匣…各一; 書匣 is not marked with 三, so the document case and following items are one each, not three document cases.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jinshi:038:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0082 names 平章政事張汝霖 and 參知政事劉瑋 as distinct offices; collapsing both to “Grand Councilors” erases that distinction. The proposed titles match the Chinese and leave the rest of the sentence intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0082",
+        "excerpt": "平章政事張汝霖、參知政事劉瑋等言"
+      }
+    },
+    {
+      "repairId": "jinshi:038:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same Chinese pairs 平章政事 with Zhang Rulin and 參知政事 with Liu Wei; the literal’s shared “Grand Councilors” is inaccurate, and the proposed office titles restore the source distinction without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0082",
+        "excerpt": "平章政事張汝霖、參知政事劉瑋等言"
+      }
+    },
+    {
+      "repairId": "jinshi:038:r0003",
+      "decision": "revise",
+      "after": "When the reading aloud was finished, by precedent the letter was not read.",
+      "reason": "故事皆不讀 means by precedent there was no reading, so “not read in full” wrongly softens 皆不讀; but 轉讀畢 still means the reading-aloud stage finished, and the proposal’s “that step” erases 轉讀.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0170",
+        "excerpt": "轉讀畢，故事皆不讀"
+      }
+    },
+    {
+      "repairId": "jinshi:038:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "After 鞍轡三, the Chinese continues 金塗銀渾裹書匣、間金塗銀裝釘黑油詔匣及包書、詔匣複各一 with no 三 on 書匣; 各一 covers the document case and the following items as one each, so the original “three … document cases” is wrong.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0316",
+        "excerpt": "金塗銀渾裹書匣、間金塗銀裝釘黑油詔匣及包書、詔匣複各一"
+      }
+    },
+    {
+      "repairId": "jinshi:038:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise invents “three” document cases; the source places 書匣 under the final 各一 with the edict case, wrappers, and cover, so one each is correct.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0316",
+        "excerpt": "金塗銀渾裹書匣、間金塗銀裝釘黑油詔匣及包書、詔匣複各一"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

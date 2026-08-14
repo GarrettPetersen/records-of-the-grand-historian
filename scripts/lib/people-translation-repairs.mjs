@@ -11,6 +11,7 @@ const ENGLISH_SENTENCE_INITIAL_NON_NAMES = new Set([
   'How',
   'Illness',
   'Is',
+  'Investigation',
   'Not',
   'Once',
   'Only',
@@ -23,10 +24,12 @@ const ENGLISH_SENTENCE_INITIAL_NON_NAMES = new Set([
   'Three',
   'Though',
   'Under',
+  'What',
 ]);
 const ENGLISH_FUNCTION_PHRASE_RE = /^(?:Am I|Even I|Though (?:He|I|It|She|That|These|They|This|Those|We))\b/u;
 const ENGLISH_NAMED_NON_PERSON_TERMS = new Set([
   'Circular Moat',
+  'Correct Month',
   'Earth Goddess',
   'Five Altars',
   'Forty-one Spiritual Terrace',
@@ -47,6 +50,7 @@ const ENGLISH_NAMED_PLACE_TERMS = new Set([
   'Hengcheng Gate',
   'Hong Terrace',
   'Salt Marsh',
+  "Scholars' Grove",
   'Shannan East',
   'Yong',
 ]);
@@ -71,6 +75,7 @@ const ENGLISH_NAMED_OFFICE_TERMS = new Set([
   'Imperial Secretariat',
   'Imperial Stud',
   'Imperial Workshops',
+  'Justice',
   'Masses',
   'Middle Grandee',
   'Nobility Ranks',
@@ -79,6 +84,7 @@ const ENGLISH_NAMED_OFFICE_TERMS = new Set([
   'Splendid Light',
   'Supreme Pillar',
   'Three Commanders',
+  'Three Preceptors',
 ]);
 const ENGLISH_NOBLE_TITLE_TERMS = new Set([
   'Baron',
@@ -1544,9 +1550,30 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         accounted.add(candidate.id);
         continue;
       }
+      if (/^(?:\s+and\s+[\p{Lu}][\p{L}'’-]*)?\s+ruling houses?\b/u.test(after)) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'polity',
+          note: 'Ruling-clan house, not an individual person.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (/^[ \t]+(?:army|command|division|garrison)\b/iu.test(after)) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'organization',
+          note: 'Named military organization, not a person.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
       if (
         /\bprefectures?\b[^.;!?]*$/iu.test(before) ||
-        /^[ \t]+(?:Prefecture|Province)\b/u.test(after)
+        /^[ \t]+(?:Prefecture|Province)\b/u.test(after) ||
+        /^(?:,\s*[\p{Lu}][\p{L}'’-]*)*(?:,\s*)?(?:and\s+)?other prefectures?\b/iu.test(after)
       ) {
         reconciled.candidateDispositions.push({
           candidate: candidate.id,
@@ -1563,6 +1590,26 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
           disposition: 'not-person',
           reason: 'place',
           note: 'Named river in a bounded geographic list, not a person.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (/\bsurplus salt from(?:[ \t]+[\p{Lu}][\p{L}'’-]*,?)*[ \t]*$/u.test(before)) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'place',
+          note: 'Territorial source in a list of surplus-salt origins, not a person.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (/\bprinces of\s+$/iu.test(before)) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'polity',
+          note: 'Dynastic or territorial label governing a group of princes.',
         });
         accounted.add(candidate.id);
         continue;

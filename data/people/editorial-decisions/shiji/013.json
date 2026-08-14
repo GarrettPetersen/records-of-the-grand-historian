@@ -1,0 +1,282 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "013",
+  "input": {
+    "chapterFingerprint": "sha256:1599e0251f5f514476dc78955bee6f6900c30c4081e1f4ddcb9230089558b60d",
+    "proposalsFingerprint": "sha256:82722dfa2404f57c8b42205e3662089efc48b8f07b246351c46ced1d076ccde7"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-d98b5594-986a-48f9-9568-3316b107ee18",
+    "runId": "run-14ffd500-31b1-4fdf-8514-267e41deb55c",
+    "completedAt": "2026-08-13T21:21:53.454Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:013:r0001",
+      "unit": {
+        "id": "s111",
+        "kind": "table-body-cell",
+        "blockIndex": 58,
+        "collection": "cells",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "Song: Wei Zi Qi, younger brother of King Zhou by a concubine. First enfeoffment.",
+      "after": "Song: Wei Zi Qi, elder brother of King Zhou by a concubine. First enfeoffment.",
+      "reason": "Chinese 庶兄 means elder half-brother by a secondary consort, not younger brother.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:013:r0002",
+      "unit": {
+        "id": "s111",
+        "kind": "table-body-cell",
+        "blockIndex": 58,
+        "collection": "cells",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "Song Wei Zi Qi, Zhou younger brother by concubine. First enfeoffed.",
+      "after": "Song Wei Zi Qi, Zhou elder brother by concubine. First enfeoffed.",
+      "reason": "Chinese 庶兄 is elder half-brother; literal English wrongly has younger.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:013:r0003",
+      "unit": {
+        "id": "s0048",
+        "kind": "paragraph-sentence",
+        "blockIndex": 69,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "Qi was born wise, Yao established him as Minister of Rites, and gave him the surname Zi.",
+      "after": "Qi was born wise, Yao established him as Minister of the Multitudes (Situ), and gave him the surname Zi.",
+      "reason": "司徒 is Situ (Minister of the Multitudes/Masses), not Minister of Rites (which would be 宗伯/禮官).",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:013:r0004",
+      "unit": {
+        "id": "s0048",
+        "kind": "paragraph-sentence",
+        "blockIndex": 69,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "Qi born wise, Yao established as Minister of Rites, surnamed him Zi clan.",
+      "after": "Qi born wise, Yao established as Minister of the Multitudes (Situ), surnamed him Zi clan.",
+      "reason": "Literal English inherits the same office mistranslation of 司徒 as Rites.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:013:r0005",
+      "unit": {
+        "id": "s134",
+        "kind": "table-body-cell",
+        "blockIndex": 60,
+        "collection": "cells",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Xiong Meng",
+      "after": "Xiong Tan",
+      "reason": "黮 is read tán (Tan), not Meng; the English personal name mismatches the Chinese characters.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:013:r0006",
+      "unit": {
+        "id": "s134",
+        "kind": "table-body-cell",
+        "blockIndex": 60,
+        "collection": "cells",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Xiong Meng",
+      "after": "Xiong Tan",
+      "reason": "Literal field repeats the wrong reading Meng for 黮.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:013:r0007",
+      "unit": {
+        "id": "s0088",
+        "kind": "paragraph-sentence",
+        "blockIndex": 71,
+        "collection": "sentences",
+        "itemIndex": 15
+      },
+      "field": "idiomatic",
+      "before": "Speaking in terms of the Three Dynasties genealogical transmissions, Hou Ji had a father named Emperor Ku (Gaoxin);",
+      "after": "Speaking in terms of the Three Dynasties genealogical transmissions, Hou Ji had a father named Gaoxin;",
+      "reason": "Chinese only has 高辛; inserting Emperor Ku is an interpretive addition not in this unit.",
+      "confidence": "medium"
+    },
+    {
+      "id": "shiji:013:r0008",
+      "unit": {
+        "id": "s0089",
+        "kind": "paragraph-sentence",
+        "blockIndex": 71,
+        "collection": "sentences",
+        "itemIndex": 16
+      },
+      "field": "idiomatic",
+      "before": "Emperor Ku (Gaoxin) was the great-grandson of the Yellow Emperor.",
+      "after": "Gaoxin was the great-grandson of the Yellow Emperor.",
+      "reason": "Chinese names only 高辛; Emperor Ku is not in the source clause.",
+      "confidence": "medium"
+    },
+    {
+      "id": "shiji:013:r0009",
+      "unit": {
+        "id": "s0049",
+        "kind": "paragraph-sentence",
+        "blockIndex": 69,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "Zi means 'this';",
+      "after": "Zi means 'to increase';",
+      "reason": "茲 here is glossed in the next sentence as 益大; literal 'this' obscures the etymological point carried by the idiomatic rendering.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:013:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 宋微子啟，紂庶兄, 庶兄 means elder half-brother by a secondary consort; the before wrongly has younger brother, and the after restores that kinship correctly.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s111",
+        "excerpt": "紂庶兄"
+      }
+    },
+    {
+      "repairId": "shiji:013:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 庶兄 in s111 requires elder, not younger, in the literal field; the after correctly replaces younger with elder without other change.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s111",
+        "excerpt": "庶兄"
+      }
+    },
+    {
+      "repairId": "shiji:013:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "堯立為司徒 names the office 司徒 (Situ, Minister of the Multitudes), not rites; Minister of Rites would be 宗伯/禮官, so the after is the accurate rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0048",
+        "excerpt": "堯立為司徒"
+      }
+    },
+    {
+      "repairId": "shiji:013:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal likewise mistranslates 司徒 as Minister of Rites; replacing with Minister of the Multitudes (Situ) matches the Chinese office title.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0048",
+        "excerpt": "司徒"
+      }
+    },
+    {
+      "repairId": "shiji:013:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "The cell is 熊黮; 黮 is read tán, so Xiong Tan is the correct English name and Xiong Meng mismatches the characters.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s134",
+        "excerpt": "熊黮"
+      }
+    },
+    {
+      "repairId": "shiji:013:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal repeats the same wrong Meng reading for 黮; Xiong Tan is the correct reading of 熊黮.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s134",
+        "excerpt": "黮"
+      }
+    },
+    {
+      "repairId": "shiji:013:r0007",
+      "decision": "accept",
+      "after": null,
+      "reason": "后稷有父名高辛 names only 高辛; Emperor Ku is an interpretive insertion absent from this unit, and the after keeps the source name alone.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0088",
+        "excerpt": "后稷有父名高辛"
+      }
+    },
+    {
+      "repairId": "shiji:013:r0008",
+      "decision": "accept",
+      "after": null,
+      "reason": "高辛，黃帝曾孫 likewise has only 高辛; stripping the inserted Emperor Ku restores the clause without changing the great-grandson claim.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0089",
+        "excerpt": "高辛，黃帝曾孫"
+      }
+    },
+    {
+      "repairId": "shiji:013:r0009",
+      "decision": "accept",
+      "after": null,
+      "reason": "子者茲 is immediately glossed as 茲，益大也, so 茲 here carries the 'increase' sense (滋), not demonstrative 'this'; the after matches that etymological gloss.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0049",
+        "excerpt": "子者茲"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "shiji:013:r0007",
+      "claim": {
+        "id": "shiji:013:c0573",
+        "subject": "shiji:013:p211",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Emperor Ku",
+          "zh": "帝嚳",
+          "pinyin": "Di Ku"
+        },
+        "certainty": "uncertain",
+        "evidence": [
+          "shiji:013:s0088"
+        ]
+      },
+      "reason": "Accepted r0007 shows Emperor Ku / 帝嚳 was introduced only by the bad idiomatic of s0088; the Chinese names solely 高辛 and supplies no support for this title claim.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0088",
+        "excerpt": "后稷有父名高辛"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

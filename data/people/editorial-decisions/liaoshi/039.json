@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "039",
+  "input": {
+    "chapterFingerprint": "sha256:08920a508109cb254b3c3f0838d23180238b208bb7f8c14ab48e023b1c68636a",
+    "proposalsFingerprint": "sha256:a2fcd83f790b8f139bb98ce3ee3a31f2c56595a6f6f8e2fce402577815c66ac7"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-2c736117-dd3e-4acd-ad9b-5245947104cf",
+    "runId": "run-ff26cbbb-801a-488f-a53e-dd7c50afea30",
+    "completedAt": "2026-08-13T21:17:09.375Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:039:r0001",
+      "unit": {
+        "id": "s0214",
+        "kind": "paragraph-sentence",
+        "blockIndex": 27,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "After Bohai's conquest, Xing Prefecture's Shengji captives were settled and the county founded.",
+      "after": "Taizu pacified Bohai; captives from Xing Prefecture's Shengji County were settled here and the county founded.",
+      "reason": "Idiomatic English omits the explicit subject 太祖 present in the Chinese and literal, leaving the conquest agent unnamed.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:039:r0002",
+      "unit": {
+        "id": "s0246",
+        "kind": "paragraph-sentence",
+        "blockIndex": 33,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Anduan's son Chalie died for treason; the domain was seized and the seat shortened to Chuan Prefecture.",
+      "after": "Anduan's son Chalie was executed for great treason; the domain was confiscated and the seat abbreviated to Chuan Prefecture.",
+      "reason": "Chinese 誅 means execution, not merely dying; 大逆 and 沒入 are softened or imprecise in the idiomatic wording.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:039:r0003",
+      "unit": {
+        "id": "s0267",
+        "kind": "paragraph-sentence",
+        "blockIndex": 38,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Under Xingsheng Palace, then attached to Xingzhong.",
+      "after": "Under Xingsheng Palace; then attached here.",
+      "reason": "Chinese 來屬 does not name Xingzhong; it means the prefecture came under the jurisdiction being described.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:039:r0004",
+      "unit": {
+        "id": "s0274",
+        "kind": "paragraph-sentence",
+        "blockIndex": 39,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "It has Jianjian Mountain.",
+      "after": "It has Jiangan Mountain.",
+      "reason": "箭笴 is jiǎn'gǎn (arrow-shaft), not a doubled 'jian'; the English place name is a misreading.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:039:r0005",
+      "unit": {
+        "id": "s0274",
+        "kind": "paragraph-sentence",
+        "blockIndex": 39,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "There is Jianjian Mountain.",
+      "after": "There is Jiangan Mountain.",
+      "reason": "箭笴 is jiǎn'gǎn (arrow-shaft), not a doubled 'jian'; the English place name is a misreading.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:039:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 太祖平渤海 names Taizu as the agent who pacified Bohai; the idiomatic version wrongly drops that subject, and the proposed wording restores it with 盛吉縣民來居 intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0214",
+        "excerpt": "太祖平渤海，俘興州盛吉縣民來居，因置縣。"
+      }
+    },
+    {
+      "repairId": "liaoshi:039:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 以大逆誅 means execution for great treason, not mere death for treason, and 沒入 is confiscation; the proposal corrects those senses without adding unsupported detail.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0246",
+        "excerpt": "安端子察割以大逆誅，沒入，省曰川州。"
+      }
+    },
+    {
+      "repairId": "liaoshi:039:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 來屬 does not name Xingzhong; it only says the seat came under the jurisdiction under discussion, so inventing Xingzhong is an error and “attached here” matches the source.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0267",
+        "excerpt": "隸興聖宮，來屬。"
+      }
+    },
+    {
+      "repairId": "liaoshi:039:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "箭笴 is jiàn + gǎn (arrow-shaft), not a doubled jian reading; Jiangan Mountain corrects the misread place name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0274",
+        "excerpt": "箭笴山"
+      }
+    },
+    {
+      "repairId": "liaoshi:039:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same misreading as in the idiomatic field: 箭笴 is jiàn + gǎn, so the literal must read Jiangan Mountain, not Jianjian.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0274",
+        "excerpt": "箭笴山"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

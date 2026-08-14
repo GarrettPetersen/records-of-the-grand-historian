@@ -24,7 +24,9 @@ import {
 } from './lib/people-content.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
 import {
+  cursorRateLimitDelayMs,
   isCursorAgentBusy,
+  isCursorRateLimited,
   sendCursorAgentWhenReady,
   waitForCursorRun,
 } from './lib/cursor-run-wait.mjs';
@@ -98,6 +100,7 @@ Options:
   --dry-run            Build and summarize packets without calling Cursor.
   --force              Re-extract chapters with a valid sidecar from the current prompt.
   --retry-failed       Include chapters whose latest state is failed.
+  --only-failed        Process only failed chapters; implies --retry-failed.
   --stream             Stream assistant text; requires concurrency 1.
   --self-test          Run scheduler guardrail tests without Cursor.
 
@@ -148,6 +151,7 @@ function parseArgs(argv) {
     dryRun: false,
     force: false,
     retryFailed: false,
+    onlyFailed: false,
     stream: false,
     selfTest: false,
   };
@@ -185,6 +189,10 @@ function parseArgs(argv) {
     else if (arg === '--dry-run') opts.dryRun = true;
     else if (arg === '--force') opts.force = true;
     else if (arg === '--retry-failed') opts.retryFailed = true;
+    else if (arg === '--only-failed') {
+      opts.onlyFailed = true;
+      opts.retryFailed = true;
+    }
     else if (arg === '--stream') opts.stream = true;
     else if (arg === '--self-test') opts.selfTest = true;
     else if (arg === '--help' || arg === '-h') {
@@ -338,6 +346,8 @@ function prepareTargetQueue(rawTargets, opts, state, matcher) {
     if (!opts.force && currentExtractionIsValid(target, packet)) {
       current.push(measured);
       stateChanged = recordCurrentExtraction(state, target, packet, opts) || stateChanged;
+    } else if (opts.onlyFailed && state.chapters[stateKey(target)]?.status !== 'failed') {
+      continue;
     } else if (!opts.retryFailed && state.chapters[stateKey(target)]?.status === 'failed') {
       failed.push(measured);
     } else if (exceedsBulkCeiling(measured, opts) && !opts.allowLarge) {
@@ -1208,6 +1218,21 @@ async function selfTest() {
       !isCursorAgentBusy(new Error('[agent_busy] Agent already has an active run')) ||
       isCursorAgentBusy(new Error('unrelated failure'))) {
     throw new Error('Cursor agent-busy errors were not classified correctly');
+  }
+  if (
+    !isCursorRateLimited(new Error('You have exceeded the rate limit of 6000 requests per hour')) ||
+    !isCursorRateLimited({ status: 429 }) ||
+    isCursorRateLimited(new Error('unrelated failure')) ||
+    cursorRateLimitDelayMs(
+      new Error('You have exceeded the rate limit of 30 requests per minute'),
+      { minuteDelayMs: 123, hourDelayMs: 456 },
+    ) !== 123 ||
+    cursorRateLimitDelayMs(
+      new Error('You have exceeded the rate limit of 6000 requests per hour'),
+      { minuteDelayMs: 123, hourDelayMs: 456 },
+    ) !== 456
+  ) {
+    throw new Error('Cursor rate-limit errors were not classified correctly');
   }
   let sendAttempts = 0;
   const fakeRun = await sendCursorAgentWhenReady({

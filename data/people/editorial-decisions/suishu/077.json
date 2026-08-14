@@ -1,0 +1,202 @@
+{
+  "schemaVersion": 3,
+  "book": "suishu",
+  "chapter": "077",
+  "input": {
+    "chapterFingerprint": "sha256:0264d3572bd738d3b0b2e7be742f34f209bfdfbf9909e358a16dca7143fc318b",
+    "proposalsFingerprint": "sha256:71821cb0498dc7977b3b040f89a599b2787175f3e35cc922203b1af6cd69d1db"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-184e1cda-c34e-44f0-b000-bf61a8c6638d",
+    "runId": "run-1989ef59-64f9-4001-aeb5-a5c2b6730202",
+    "completedAt": "2026-08-13T21:24:17.588Z"
+  },
+  "proposals": [
+    {
+      "id": "suishu:077:r0001",
+      "unit": {
+        "id": "s0001",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Book of Sui, 77th year of Volume, 42th year of Biography",
+      "after": "Book of Sui, Volume 77, Biography 42",
+      "reason": "Idiomatic English mistranslates 卷七十七 / 列傳第四十二 as ordinal years instead of volume and biography numbers.",
+      "confidence": "high"
+    },
+    {
+      "id": "suishu:077:r0002",
+      "unit": {
+        "id": "s0105",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Early in the Kaihuang reign, Prince Xia of Qin recommended him; he placed at the top of the policy examination and was ordered to join the Confucian scholars in fixing rites and music, receiving appointment as Collator.",
+      "after": "Early in the Kaihuang reign, Prince Xiao of Qin recommended him; he placed at the top of the policy examination and was ordered to join the Confucian scholars in fixing rites and music, receiving appointment as Collator.",
+      "reason": "秦孝王 is Prince Xiao (Filial) of Qin; \"Xia\" misreads 孝.",
+      "confidence": "high"
+    },
+    {
+      "id": "suishu:077:r0003",
+      "unit": {
+        "id": "s0175",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "During the Taikang period of Chen he answered a summons and stayed for a time at the Zhizhen Abbey.",
+      "after": "During the Taijian period of Chen he answered a summons and stayed for a time at the Zhizhen Abbey.",
+      "reason": "陳太建 is the Taijian era of Chen (569–582), not Taikang.",
+      "confidence": "high"
+    },
+    {
+      "id": "suishu:077:r0004",
+      "unit": {
+        "id": "s0175",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "During the Taikang era of Chen, summoned, he came to rest at the Zhizhen Abbey.",
+      "after": "During the Taijian era of Chen, summoned, he came to rest at the Zhizhen Abbey.",
+      "reason": "Literal field likewise misrenders 太建 as Taikang.",
+      "confidence": "high"
+    },
+    {
+      "id": "suishu:077:r0005",
+      "unit": {
+        "id": "s0253",
+        "kind": "paragraph-sentence",
+        "blockIndex": 22,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "Yet Shiqian, hearing praise, was not pleased; Wenbi, seeing injury, was not angry; Ze's aim lay in deep obscurity—none could draw him near or push him away, none could make him noble or base—all were men who embraced simplicity.",
+      "after": "Yet Shiqian, hearing praise, was not pleased; Wenxu, seeing injury, was not angry; Ze's aim lay in deep obscurity—none could draw him near or push him away, none could make him noble or base—all were men who embraced simplicity.",
+      "reason": "Chinese 文詡 is Wenxu (詡 = xǔ); English Wenbi is a wrong romanization of the same person reference.",
+      "confidence": "high"
+    },
+    {
+      "id": "suishu:077:r0006",
+      "unit": {
+        "id": "s0253",
+        "kind": "paragraph-sentence",
+        "blockIndex": 22,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "Yet Shiqian, hearing praise, was not pleased; Wenbi, seeing injury, was not angry; Ze's aim lay in deep obscurity—none could draw him near or push him away, none could make him noble or base—all were men who embraced simplicity.",
+      "after": "Yet Shiqian, hearing praise, was not pleased; Wenxu, seeing injury, was not angry; Ze's aim lay in deep obscurity—none could draw him near or push him away, none could make him noble or base—all were men who embraced simplicity.",
+      "reason": "Chinese 文詡 is Wenxu (詡 = xǔ); English Wenbi is a wrong romanization of the same person reference.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "suishu:077:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0001 is 隋書卷七十七列傳第四十二: 卷七十七 and 列傳第四十二 are volume and biography numbers, not years. Volume 77, Biography 42 matches the Chinese and the existing literal.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0001",
+        "excerpt": "隋書卷七十七列傳第四十二"
+      }
+    },
+    {
+      "repairId": "suishu:077:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0105 has 秦孝王; 孝 is Xiao (filial), so Prince Xiao of Qin is required. Xia misreads that character.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0105",
+        "excerpt": "秦孝王"
+      }
+    },
+    {
+      "repairId": "suishu:077:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0175 dates the episode to 陳太建時; 太建 is the Chen era Taijian, not Taikang. The proposed idiomatic fix restores the correct era name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0175",
+        "excerpt": "陳太建時"
+      }
+    },
+    {
+      "repairId": "suishu:077:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise misrenders 太建 in 陳太建時 as Taikang; Taijian is the correct reading of that Chen era name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0175",
+        "excerpt": "陳太建時"
+      }
+    },
+    {
+      "repairId": "suishu:077:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0253 names 文詡; 詡 is xǔ, so Wenxu is required. Wenbi is a wrong romanization of the same person.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0253",
+        "excerpt": "文詡"
+      }
+    },
+    {
+      "repairId": "suishu:077:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal likewise misromanizes 文詡 as Wenbi; Wenxu restores the correct reading of 詡.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0253",
+        "excerpt": "文詡"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "suishu:077:r0002",
+      "claim": {
+        "id": "suishu:077:c0115",
+        "subject": "suishu:077:p034",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Prince Xia of Qin"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "suishu:077:s0105"
+        ]
+      },
+      "reason": "The title Prince Xia of Qin was created only by misreading 孝 as Xia in 秦孝王; s0105 supports Prince Xiao of Qin (already recorded in c0114), not a Xia title.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0105",
+        "excerpt": "秦孝王"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "songshi",
+  "chapter": "077",
+  "input": {
+    "chapterFingerprint": "sha256:ccc2e736c4aef769cf349f28e91833bef05ddd98350c90f0026f528817c84398",
+    "proposalsFingerprint": "sha256:100c15d7e008d0c49ccf6be7487beaefa9e09f82e9cfacdad19abda8d2109bce"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-fb9f39c0-354f-4117-bc7b-119713ca3547",
+    "runId": "run-760f0cc7-4cc0-4985-af8c-92358e210105",
+    "completedAt": "2026-08-13T21:23:00.146Z"
+  },
+  "proposals": [
+    {
+      "id": "songshi:077:r0001",
+      "unit": {
+        "id": "s0181",
+        "kind": "paragraph-sentence",
+        "blockIndex": 132,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "The section on ecliptic lodge passage was supplemented by Wu Ze and others of the Astronomical Bureau; the versions of Wu Shiju of Kaifeng, Cheng Xi of the National University, and Zhang Wenjin of Changzhou all lack it.",
+      "after": "The ecliptic lodge-passage section was supplemented and corrected by Wu Ze and others of the Astronomical Bureau; the versions of Wu Shiju, Presented Scholar of Kaifeng, Cheng Xi, Presented Scholar of the National University, and Zhang Wenjin, commoner of Changzhou, all lack it.",
+      "reason": "Chinese 補治 means supplement and correct, and 開封進士/國學進士/常州百姓 are credentials/status titles attached to the names, not mere place of-phrases.",
+      "confidence": "medium"
+    },
+    {
+      "id": "songshi:077:r0002",
+      "unit": {
+        "id": "s0281",
+        "kind": "paragraph-sentence",
+        "blockIndex": 179,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "At conjunction, if it is not a true crossing, the sun lies on the ecliptic and the moon on the nine paths at the lodges entered—though the amounts differ.",
+      "after": "At conjunction, if it is not a true crossing, the sun lies on the ecliptic and the moon on the nine paths at the lodges entered.",
+      "reason": "Chinese s0281 ends at 所入宿度; 雖多少不同 belongs to the next sentence (s0282) and was incorrectly fused into this unit.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:077:r0003",
+      "unit": {
+        "id": "s0281",
+        "kind": "paragraph-sentence",
+        "blockIndex": 179,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Whenever at conjunction, if it is not a true crossing, the sun is on the Yellow Path and the moon on the nine paths, at the lodges entered—though the amounts differ.",
+      "after": "Whenever at conjunction, if it is not a true crossing, the sun is on the Yellow Path and the moon on the nine paths, at the lodges entered.",
+      "reason": "Chinese s0281 ends at 所入宿度; 雖多少不同 belongs to the next sentence (s0282) and was incorrectly fused into this unit.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "songshi:077:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "補治 requires both supplement and correct, and 開封進士、國學進士、常州百姓 mark credential/status, not bare place-of phrases; the proposed wording restores those senses without inventing content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0181",
+        "excerpt": "太史局吳澤等補治有此一段，開封進士吳時舉、國學進士程憙、常州百姓張文進本並無之"
+      }
+    },
+    {
+      "repairId": "songshi:077:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0281 ends at 所入宿度; 雖多少不同 opens s0282, so the fused clause “though the amounts differ” does not belong in this unit.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0281",
+        "excerpt": "凡合朔加時，若非正交，即日在黃道、月在九道所入宿度。"
+      }
+    },
+    {
+      "repairId": "songshi:077:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The Chinese unit stops at 所入宿度; 雖多少不同 is the start of s0282, so removing the fused clause from the literal is required.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0281",
+        "excerpt": "凡合朔加時，若非正交，即日在黃道、月在九道所入宿度。"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

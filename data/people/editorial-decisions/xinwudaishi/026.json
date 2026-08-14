@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "book": "xinwudaishi",
+  "chapter": "026",
+  "input": {
+    "chapterFingerprint": "sha256:6b6b52494d06b2d851b3aa4008d9737130ead1b1d54db60db435c72988b1d13e",
+    "proposalsFingerprint": "sha256:dea42297039b83b419a767f4d81d2e221329c7f78b10a4a457590a30d440eb90"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-f338e175-d7a7-4e37-9880-f32c7a92c664",
+    "runId": "run-f4c40178-51b6-420e-b83e-df3fcab71942",
+    "completedAt": "2026-08-13T21:27:18.986Z"
+  },
+  "proposals": [
+    {
+      "id": "xinwudaishi:026:r0001",
+      "unit": {
+        "id": "s0063",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "Zhuangzong raged at his shirking and meant to punish him by law. Only Jing Jin, the eunuch-official, talked him out of it.",
+      "after": "Zhuangzong raged at his shirking and meant to punish him by law. Only Jing Jin, the court entertainer, talked him out of it.",
+      "reason": "伶官景進 is a court entertainer (伶人), not a eunuch-official.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:026:r0002",
+      "unit": {
+        "id": "s0024",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "After slightly more than a year he suffered a stroke and died; he was posthumously enfeoffed as Grand Preceptor.",
+      "after": "After slightly more than a year he suffered a stroke and died; he was posthumously granted the honor of Grand Preceptor.",
+      "reason": "贈太師 is posthumous honorific grant, not enfeoffment.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:026:r0003",
+      "unit": {
+        "id": "s0109",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Yan answered: “Two years ago the Son of Heaven took the great title at Ye. From Yan he drove on Bian and settled the realm in less than ten days—and Liang’s surrendered troops still numbered three hundred thousand. East to the sea, west to Gan and Liang, north to You and Ling, south beyond Min Ridge: for ten thousand li in every direction, all bowed as subjects.",
+      "after": "Yan answered: “Two years ago the Son of Heaven took the great title at Ye. From Yunzhou he drove on to Bian and settled the realm in less than ten days—and Liang’s surrendered troops still numbered three hundred thousand. East to the sea, west to Gan and Liang, north to You and Ling, south beyond Min Ridge: for ten thousand li in every direction, all bowed as subjects.",
+      "reason": "自鄆趨汴 refers to Yun/Yunzhou (鄆), not Yan.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:026:r0004",
+      "unit": {
+        "id": "s0186",
+        "kind": "paragraph-sentence",
+        "blockIndex": 20,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Zhang petitioned from below. An informer said Mengqi had taken a bribe and stopped the inquiry short. The case went to the military patrol prison.",
+      "after": "When Zhang’s confession was submitted upward, an informer said Mengqi had taken a bribe and stopped the inquiry short. The case went to the military patrol prison.",
+      "reason": "款上 means the deposition/confession was submitted upward to the court, not that Zhang petitioned from below.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xinwudaishi:026:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit names 伶官景進; 伶官 are court entertainers/musicians with official status, not eunuchs (宦官). Replacing “eunuch-official” with “court entertainer” corrects the office type without other wording changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0063",
+        "excerpt": "賴伶官景進救解之"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:026:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit has 贈太師: 贈 marks a posthumous honorific grant, not a territorial enfeoffment (封). The proposed “posthumously granted the honor of Grand Preceptor” matches that sense and is grammatical.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0024",
+        "excerpt": "贈太師"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:026:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit has 自鄆趨汴; 鄆 is Yun/Yunzhou, not Yan (燕). The prior idiomatic “From Yan” misreads the place; “From Yunzhou he drove on to Bian” restores the Chinese route.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0109",
+        "excerpt": "自鄆趨汴"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:026:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit begins 璋款上: in this legal context 款 is the confession/deposition submitted upward, not a petition from below. The proposed replacement matches that sense and keeps the rest of the sentence accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0186",
+        "excerpt": "璋款上"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

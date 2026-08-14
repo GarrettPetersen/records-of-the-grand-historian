@@ -1,0 +1,234 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "443",
+  "input": {
+    "chapterFingerprint": "sha256:f0bdc3a7f4b2ef8090e0e5eebf740afee7372e15832fd5d1682f270d65236dfc",
+    "proposalsFingerprint": "sha256:32c877bae46e4271b8ce080b83df5e3a940555e8a616401fe0f015557119864f"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-9a17f4b3-7bd5-44a8-bcf3-a428e1a743a4",
+    "runId": "run-ee3fa301-7f6f-4237-b687-672debfd7ce1",
+    "completedAt": "2026-08-13T21:21:17.457Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:443:r0001",
+      "unit": {
+        "id": "s0017",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "After returning to the capital he was appointed Grand Secretary of the Titren Hall.",
+      "after": "After returning to the capital he was appointed Grand Secretary of the Tiren Hall.",
+      "reason": "體仁閣 is Tiren Hall; Titren is a typographical corruption of Tiren.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:443:r0002",
+      "unit": {
+        "id": "s0017",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "After returning to the capital he was appointed Grand Secretary of the Titren Hall.",
+      "after": "After returning to the capital he was appointed Grand Secretary of the Tiren Hall.",
+      "reason": "體仁閣 is Tiren Hall; Titren is a typographical corruption of Tiren.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:443:r0003",
+      "unit": {
+        "id": "s0042",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "He also impeached Prince Su Shiduo for monopolizing Grand Council affairs, hoarding power, and taking bribes; when war began Shiduo relied entirely on Hongzhang and thereby mishandled military timing. None of these memorials received a response.",
+      "after": "He also impeached Prince Li Shiduo for monopolizing Grand Council affairs, hoarding power, and taking bribes; when war began Shiduo relied entirely on Hongzhang and thereby mishandled military timing. None of these memorials received a response.",
+      "reason": "禮親王 is Prince Li, not Prince Su (肅親王).",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:443:r0004",
+      "unit": {
+        "id": "s0057",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "Baixi memorialized that Wu Jilun, prefect of Jizhou, be given fifth-rank minister status and made general instructor of the university.",
+      "after": "Baixi memorialized that Wu Rulun, prefect of Jizhou, be given fifth-rank minister status and made general instructor of the university.",
+      "reason": "吳汝綸 is Wu Rulun; Jilun misreads 汝綸.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:443:r0005",
+      "unit": {
+        "id": "s0023",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "At that time an edict directed all ministers to take turns lecturing before the throne. Jianai composed lectures on the Four Books of the Book of Documents and presented them.",
+      "after": "At that time an edict directed all ministers to take turns lecturing before the throne. Jianai composed lectures on the Book of Documents and the Four Books and presented them.",
+      "reason": "尚書四子書 means the Documents and the Four Books, not Four Books of the Documents.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:443:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0017 has 拜體仁閣大學士. 體仁閣 is Tiren Hall; \"Titren\" is a typographical corruption with no source support. The proposed replacement corrects only that hall name and leaves the rest of the accurate idiomatic wording intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0017",
+        "excerpt": "體仁閣"
+      }
+    },
+    {
+      "repairId": "qingshigao:443:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same focus unit 還京，拜體仁閣大學士 is mistranslated in the literal field as Titren Hall. Tiren Hall correctly romanizes 體仁閣; the rest of the literal sentence already matches the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0017",
+        "excerpt": "體仁閣大學士"
+      }
+    },
+    {
+      "repairId": "qingshigao:443:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0042 names 禮親王世鐸. 禮親王 is Prince Li; Prince Su would be 肅親王, which is not in the text. Changing Su to Li restores the correct princely title without altering the impeachment charges or outcome.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0042",
+        "excerpt": "禮親王世鐸"
+      }
+    },
+    {
+      "repairId": "qingshigao:443:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0057 has 冀州知州吳汝綸. 汝綸 is Rulun, not Jilun; the proposed idiomatic restores the standard personal name while preserving the prefecture, honor, and university-instructor content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0057",
+        "excerpt": "吳汝綸"
+      }
+    },
+    {
+      "repairId": "qingshigao:443:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0023 has 尚書四子書講義: 尚書 (Book of Documents) and 四子書 (the Four Books) are coordinated titles, not \"Four Books of the Book of Documents.\" The proposed literal matches that reading and the already-correct idiomatic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0023",
+        "excerpt": "尚書四子書"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "qingshigao:443:r0001",
+      "before": {
+        "id": "qingshigao:443:c0250",
+        "subject": "qingshigao:443:p001",
+        "predicate": "office",
+        "value": {
+          "label": {
+            "en": "Grand Secretary of the Titren Hall",
+            "zh": "體仁閣大學士"
+          },
+          "action": "appointed"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:443:s0017"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:443:c0250",
+        "subject": "qingshigao:443:p001",
+        "predicate": "office",
+        "value": {
+          "label": {
+            "en": "Grand Secretary of the Tiren Hall",
+            "zh": "體仁閣大學士"
+          },
+          "action": "appointed"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:443:s0017"
+        ]
+      },
+      "reason": "Accepted r0001 shows the English office label \"Titren Hall\" came only from the corrupted translation of 體仁閣; the appointment fact remains, but the English label must read Tiren Hall.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0017",
+        "excerpt": "體仁閣大學士"
+      }
+    },
+    {
+      "repairId": "qingshigao:443:r0004",
+      "before": {
+        "id": "qingshigao:443:c0103",
+        "subject": "qingshigao:443:p027",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Wu Jilun",
+          "zh": "吳汝綸",
+          "pinyin": "Wu Rulun"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:443:s0057"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:443:c0103",
+        "subject": "qingshigao:443:p027",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Wu Rulun",
+          "zh": "吳汝綸",
+          "pinyin": "Wu Rulun"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:443:s0057"
+        ]
+      },
+      "reason": "Accepted r0004 shows the English personal name \"Wu Jilun\" was created by misreading 汝綸; the name claim remains source-based, but the English form must be Wu Rulun to match 吳汝綸 and the existing pinyin.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0057",
+        "excerpt": "吳汝綸"
+      }
+    }
+  ]
+}

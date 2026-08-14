@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "113",
+  "input": {
+    "chapterFingerprint": "sha256:bc5163e33ff224861ebda5feced2eeed480998f20f35eb2f48b2b449c982e36a",
+    "proposalsFingerprint": "sha256:75d8bdeb3f35541cefe93ce5a3329cac0ebd8d5c352796ec9446891f145a9391"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-dbbf2286-41b5-448d-b8cc-1c21dac10091",
+    "runId": "run-38463f5b-5c59-43ee-be3b-841522b2402f",
+    "completedAt": "2026-08-13T21:23:12.486Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:113:r0001",
+      "unit": {
+        "id": "s0072",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "The chancellor, Lu Jia, was advanced in years. He had served as chancellor under three successive kings, and more than seventy members of his clan held senior offices. Every one of his sons had married a princess, and every one of his daughters had married a prince or a member of the royal clan. He was also linked by marriage to Zhao Guang, the King of Cangwu.",
+      "after": "The chancellor, Lu Jia, was advanced in years. He had served as chancellor under three successive kings, and more than seventy members of his clan held senior offices. Every one of his sons had married a princess, and every one of his daughters had married a prince or a member of the royal clan. He was also linked by marriage to the Qin King of Cangwu.",
+      "reason": "Chinese only has 蒼梧秦王 ('Qin King of Cangwu'); the personal name Zhao Guang is not in this sentence and is introduced later.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:113:r0002",
+      "unit": {
+        "id": "s0072",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "The chancellor, Lu Jia, was advanced in years and had served as chancellor to three kings. Over seventy members of his clan held senior offices. All his sons had married daughters of the royal house, and all his daughters had married princes, royal brothers, or members of the royal clan. He also had marital ties to Zhao Guang, the King of Cangwu.",
+      "after": "The chancellor, Lu Jia, was advanced in years and had served as chancellor to three kings. Over seventy members of his clan held senior offices. All his sons had married daughters of the royal house, and all his daughters had married princes, royal brothers, or members of the royal clan. He also had marital ties to the Qin King of Cangwu.",
+      "reason": "Literal English inserts the name Zhao Guang, which is absent from the Chinese at this point.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:113:r0003",
+      "unit": {
+        "id": "s0138",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "When the Longlü campaign foundered in the southern damps and plagues, Tuo's arrogance only grew.",
+      "after": "When Longlü was stricken by the southern damps and plagues, Tuo's arrogance only grew.",
+      "reason": "Chinese 隆慮 is the titled commander (parallel to 樓船 and 伏波), not a campaign name; 離溼疫 means he encountered damp and plague.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:113:r0004",
+      "unit": {
+        "id": "s0138",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "When the Longlü campaign was stricken by the damp climate and plague, Tuo grew all the more arrogant.",
+      "after": "When Longlü encountered the damp climate and plague, Tuo grew all the more arrogant.",
+      "reason": "Chinese subject 隆慮 is the person/title, with 離 meaning encounter/suffer; rendering it as a campaign invents a different subject.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:113:r0005",
+      "unit": {
+        "id": "s0142",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "Lu Jia's narrow-minded loyalty brought about the extinction of the Zhao line.",
+      "after": "Lu Jia's narrow-minded loyalty brought about the extinction of Tuo's line.",
+      "reason": "Chinese 令佗無後 refers to Tuo's posterity; Zhao is not in this sentence and invents a clan label.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:113:r0006",
+      "unit": {
+        "id": "s0142",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "Lu Jia's petty loyalty left the Zhao house without successors.",
+      "after": "Lu Jia's petty loyalty left Tuo without successors.",
+      "reason": "Chinese 令佗無後 has 佗, not Zhao/趙; the literal English invents a house name.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:113:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Focus unit ends 及蒼梧秦王有連: only the title 蒼梧秦王 appears; the personal name 趙光/Zhao Guang is not in this sentence. Replacing the invented name with ‘the Qin King of Cangwu’ restores the Chinese wording accurately.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0072",
+        "excerpt": "及蒼梧秦王有連"
+      }
+    },
+    {
+      "repairId": "shiji:113:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The Chinese has 蒼梧秦王, not 趙光; inserting Zhao Guang in the literal is anachronistic to this unit. ‘marital ties to the Qin King of Cangwu’ matches 及蒼梧秦王有連.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0072",
+        "excerpt": "及蒼梧秦王有連"
+      }
+    },
+    {
+      "repairId": "shiji:113:r0003",
+      "decision": "revise",
+      "after": "When Longlü was stricken by the damps and plagues, Tuo's arrogance only grew.",
+      "reason": "隆慮 is the titled commander (subject of 離溼疫), not a ‘campaign,’ so treating Longlü as the person who suffered damp and plague is right; but 溼疫 has no 南, so the proposal’s retained ‘southern’ still invents content and must be dropped.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0138",
+        "excerpt": "隆慮離溼疫，佗得以益驕"
+      }
+    },
+    {
+      "repairId": "shiji:113:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "Subject 隆慮 with verb 離 (‘encounter/suffer’) makes Longlü the person stricken by 溼疫; ‘the Longlü campaign’ invents a different subject. The proposed ‘Longlü encountered the damp climate and plague’ is accurate and complete.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0138",
+        "excerpt": "隆慮離溼疫"
+      }
+    },
+    {
+      "repairId": "shiji:113:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "令佗無後 names 佗 (Tuo) as the one left without posterity; ‘the Zhao line’ invents 趙, which is absent here. ‘extinction of Tuo's line’ correctly restores that referent.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0142",
+        "excerpt": "令佗無後"
+      }
+    },
+    {
+      "repairId": "shiji:113:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "Literal 令佗無後 has 佗, not a Zhao house; ‘left Tuo without successors’ matches the Chinese without inventing a clan label.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0142",
+        "excerpt": "令佗無後"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

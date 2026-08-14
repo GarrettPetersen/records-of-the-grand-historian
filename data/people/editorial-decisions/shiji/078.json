@@ -1,0 +1,219 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "078",
+  "input": {
+    "chapterFingerprint": "sha256:1dd1f659216a54a884a70e45365905c282ff8a621b40996e6dac718823393aca",
+    "proposalsFingerprint": "sha256:deefd55d581bb0c902b8cb2029f1bd36cb9b80eccb2d705092cb2dc7201f2617"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-ef3fa40f-25b6-4b8e-aad9-eb6d561a0152",
+    "runId": "run-4bb381bf-8466-4d58-97d5-2facb864fc3e",
+    "completedAt": "2026-08-13T21:22:30.413Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:078:r0001",
+      "unit": {
+        "id": "s0006",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "At this time, Qin had already sent Bai Qi to attack Chu, taking the commanderies of Wu and Qianzhong, capturing Ying and Yiling, and advancing east to Jingling. King Qingxiang of Chu moved his capital east to Chen county.",
+      "after": "At this time, Qin had already sent Bai Qi to attack Chu, taking the commanderies of Wu and Qianzhong, capturing Yan and Ying, and advancing east to Jingling. King Qingxiang of Chu moved his capital east to Chen county.",
+      "reason": "鄢郢 is Yan and Ying (Chu capitals), not \"Ying and Yiling\"; 竟陵 is Jingling.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:078:r0002",
+      "unit": {
+        "id": "s0031",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "In former times, the Zhi clan saw the advantage of attacking Zhao but did not foresee the disaster at Yuxi. Wu saw the convenience of attacking Qi but did not foresee defeat at Gusu.",
+      "after": "In former times, the Zhi clan saw the advantage of attacking Zhao but did not foresee the disaster at Yuci. Wu saw the convenience of attacking Qi but did not foresee defeat at Gantui.",
+      "reason": "榆次 is Yuci, not Yuxi; 干隧 should be Gantui (as in the literal), not Gusu.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:078:r0003",
+      "unit": {
+        "id": "s0130",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "A Zhao native named Li Yuan brought his younger sister, intending to present her to the King of Chu. Learning she was barren, he feared her favor would not last.",
+      "after": "A Zhao native named Li Yuan brought his younger sister, intending to present her to the King of Chu. Hearing that the king was not producing sons, he feared her favor would not last.",
+      "reason": "聞其不宜子 refers to the king failing to have sons, not that the sister herself was barren.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:078:r0004",
+      "unit": {
+        "id": "s0154",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "The King of Chu now lies ill and will die any day. Your Lordship aids the young ruler, seizes control of the government, and ascends the throne like yiyin and the Duke of Zhou. When the king comes of age, you return power to him. If not, you proclaim yourself ruler facing south and take possession of the kingdom of Chu.",
+      "after": "The King of Chu now lies ill and will die any day. Your Lordship aids the young ruler, seizes control of the government, and ascends the throne like Yi Yin and the Duke of Zhou. When the king comes of age, you return power to him. If not, you proclaim yourself ruler facing south and take possession of the kingdom of Chu.",
+      "reason": "伊尹 must be capitalized as Yi Yin, not \"yiyin\".",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:078:r0005",
+      "unit": {
+        "id": "s0169",
+        "kind": "paragraph-sentence",
+        "blockIndex": 20,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Liao Ai also stirred up rebellion in Qin, was exposed, his three clans executed to the last member, and Lü Buwei was dismissed from office.",
+      "after": "Lao Ai also stirred up rebellion in Qin, was exposed, his three clans executed to the last member, and Lü Buwei was dismissed from office.",
+      "reason": "嫪毐 is Lao Ai, not Liao Ai.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:078:r0006",
+      "unit": {
+        "id": "s0141",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "literal",
+      "before": "It is not just empty talk. Your Lordship has been noble and in power for long, has offended the king's brothers many times. If brothers truly ascend, disaster will reach Your Lordship. How can you preserve the prime minister's seal and Jiangdong enfeoffment?",
+      "after": "It is not just empty talk. Your Lordship has been noble and in power for long, has offended the king's brothers many times. If brothers truly ascend, disaster will reach Your Lordship. How can you preserve the prime minister's seal and the Jiangdong enfeoffment?",
+      "reason": "相印江東 is the prime minister seal and Jiangdong fief, not a fused place \"印江\".",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:078:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "拔鄢郢 names the Chu cities Yan and Ying; idiomatic “Ying and Yiling” invents 夷陵 and drops 鄢, while “Yan and Ying” restores both places without changing the rest of the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0006",
+        "excerpt": "拔鄢郢"
+      }
+    },
+    {
+      "repairId": "shiji:078:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "榆次之禍 and 干隧之敗 are the place-names Yuci and Gantui; “Yuxi” and “Gusu” (姑蘇) misread both sites, and the proposed forms match the Chinese and the unit’s own literal.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0031",
+        "excerpt": "榆次之禍……干隧之敗"
+      }
+    },
+    {
+      "repairId": "shiji:078:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 欲進之楚王，聞其不宜子, 其 refers to the King of Chu (already said to have no sons in s0129), not the sister; “she was barren” invents a false attribute that the proposed wording correctly removes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0130",
+        "excerpt": "欲進之楚王，聞其不宜子"
+      }
+    },
+    {
+      "repairId": "shiji:078:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "伊尹 is the personal name Yi Yin; uncapitalized “yiyin” is a naming error, and capitalizing as Yi Yin beside the Duke of Zhou is the accurate fix.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0154",
+        "excerpt": "如伊尹、周公"
+      }
+    },
+    {
+      "repairId": "shiji:078:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "嫪毐 is Lao Ai; idiomatic “Liao Ai” misromanizes the name, and “Lao Ai” restores the standard form without other changes.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0169",
+        "excerpt": "嫪毐"
+      }
+    },
+    {
+      "repairId": "shiji:078:r0006",
+      "decision": "reject",
+      "after": null,
+      "reason": "The literal already correctly splits 相印 and 江東之封 as “the prime minister's seal and Jiangdong enfeoffment”; inserting “the” before Jiangdong is stylistic only, and no fused “印江” reading appears in the before text.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0141",
+        "excerpt": "何以保相印江東之封乎"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "shiji:078:r0005",
+      "before": {
+        "id": "shiji:078:c0086",
+        "subject": "shiji:078:p027",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Liao Ai",
+          "zh": "嫪毐",
+          "pinyin": "Lao Ai"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "shiji:078:s0169"
+        ]
+      },
+      "after": {
+        "id": "shiji:078:c0086",
+        "subject": "shiji:078:p027",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Lao Ai",
+          "zh": "嫪毐",
+          "pinyin": "Lao Ai"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "shiji:078:s0169"
+        ]
+      },
+      "reason": "Accepted r0005 shows English Liao Ai came only from the bad idiomatic of 嫪毐; the personal-name claim must read Lao Ai while keeping zh, pinyin, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0169",
+        "excerpt": "嫪毐"
+      }
+    }
+  ]
+}

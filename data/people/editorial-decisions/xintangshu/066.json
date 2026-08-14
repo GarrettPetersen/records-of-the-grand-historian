@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 3,
+  "book": "xintangshu",
+  "chapter": "066",
+  "input": {
+    "chapterFingerprint": "sha256:bd4a3e6777c7d2f538e595fbe7fda5d77d88e5078b71d7af62dc3f56f79c6e74",
+    "proposalsFingerprint": "sha256:e0538500785f7fabe2057fd16539fa01367da996ce09a9164e575ae0a0519c10"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-3b5c0e35-fb7d-4f6b-8de6-6eaea650014b",
+    "runId": "run-0fe29c6e-a48c-49fa-9da8-c85b15c9e0ef",
+    "completedAt": "2026-08-13T21:25:32.327Z"
+  },
+  "proposals": [
+    {
+      "id": "xintangshu:066:r0001",
+      "unit": {
+        "id": "s0121",
+        "kind": "paragraph-sentence",
+        "blockIndex": 86,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "The Xiang–Wei six-prefecture circuit received the title Zhaoyi Army circuit; later Tian Chengsi seized four of its prefectures, leaving only two.",
+      "after": "The Xiang–Wei six-prefecture circuit received the title Zhaoyi Army circuit; later Tian Chengsi seized Xiang, Wei, Ming, and Bei prefectures—four in all—leaving only two.",
+      "reason": "Idiomatic English omits the four prefecture names that the Chinese and literal fields explicitly list (相、衛、洺、貝).",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:066:r0002",
+      "unit": {
+        "id": "s0088",
+        "kind": "paragraph-sentence",
+        "blockIndex": 45,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "The Youzhou deputy military commissioner concurrently led the Pinglu Army deputy military commissioner, with seat at Shunhua Prefecture.",
+      "after": "The Youzhou deputy military commissioner concurrently served as Pinglu Army deputy military commissioner, with seat at Shunhua Prefecture.",
+      "reason": "Literal English unnaturally says he 'led' the deputy office itself; 領 here means he concurrently held that deputy commissionership.",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:066:r0003",
+      "unit": {
+        "id": "s0060",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "The Youzhou circuit concurrently served as frontier commissioner of its home prefecture and army, and also as grand commissioner over all Hebei forces.",
+      "after": "The Youzhou military commissioner concurrently served as frontier commissioner of his home prefecture and army, and also as grand commissioner over all Hebei forces.",
+      "reason": "Literal English treats the Youzhou circuit as the officeholder; the Chinese 幽州節度 refers to the military commissioner, as the idiomatic field correctly renders.",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:066:r0004",
+      "unit": {
+        "id": "s0282",
+        "kind": "paragraph-sentence",
+        "blockIndex": 272,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "An observation commissioner for Ping, Ying, Mo, and neighboring prefectures was appointed.",
+      "after": "An observation commissioner for Ping, Ying, Ying, Mo, and neighboring prefectures was appointed.",
+      "reason": "Chinese lists four prefectures 平、營、瀛、莫; the idiomatic English omits 營 (Ying), leaving only three named prefectures.",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:066:r0005",
+      "unit": {
+        "id": "s0282",
+        "kind": "paragraph-sentence",
+        "blockIndex": 272,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "The observation commissioner for Ping, Ying, Ying, Mo, and other prefectures was established.",
+      "after": "The observation commissioner for Ping, Ying (Yingzhou 營), Ying (Yingzhou 瀛), Mo, and other prefectures was established.",
+      "reason": "Literal English repeats Ying twice without distinguishing 營 and 瀛, obscuring that two different prefectures are named.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xintangshu:066:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0121 names the seized prefectures as 相、衛、洺、貝四州; the idiomatic summary “four of its prefectures” drops those explicit place names. Restoring Xiang, Wei, Ming, and Bei matches the Chinese list and the unit’s literal rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0121",
+        "excerpt": "盜取相、衛、洺、貝四州"
+      }
+    },
+    {
+      "repairId": "xintangshu:066:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 幽州節度副使領平盧軍節度副使, 領 marks concurrent tenure of the Pinglu deputy commissionership, not command over that office as an object. “Served as” matches the administrative sense and the idiomatic field.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0088",
+        "excerpt": "領平盧軍節度副使"
+      }
+    },
+    {
+      "repairId": "xintangshu:066:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "幽州節度 is the military commissioner (節度使), the person who 兼 holds further posts; rendering the subject as “Youzhou circuit” with “its” misattributes the officeholder. “Military commissioner” and “his” align with the Chinese and the idiomatic field.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0060",
+        "excerpt": "幽州節度兼本軍州經略大使"
+      }
+    },
+    {
+      "repairId": "xintangshu:066:r0004",
+      "decision": "revise",
+      "after": "An observation commissioner for Ping, Ying Prefecture, a second Ying Prefecture, Mo, and neighboring prefectures was appointed.",
+      "reason": "置平、營、瀛、莫等州 lists four prefectures; the idiomatic text omits 營. The proposal’s undifferentiated “Ying, Ying” restores the count but still collapses two distinct places both romanized Ying; marking the latter as a second Ying Prefecture keeps both without Chinese in the English.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0282",
+        "excerpt": "平、營、瀛、莫"
+      }
+    },
+    {
+      "repairId": "xintangshu:066:r0005",
+      "decision": "revise",
+      "after": "The observation commissioner for Ping, Ying Prefecture, a second Ying Prefecture, Mo, and other prefectures was established.",
+      "reason": "The literal already has two Ying forms for 營 and 瀛 but does not mark which is which. Calling the latter a second Ying Prefecture distinguishes the two places without Chinese characters or the proposed “Ying (Yingzhou …)” wording.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0282",
+        "excerpt": "平、營、瀛、莫"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

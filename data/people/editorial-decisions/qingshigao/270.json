@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "270",
+  "input": {
+    "chapterFingerprint": "sha256:710d1c42220070c48e5b76430e8eae3da2420f089543805dcf18769aa8cd0996",
+    "proposalsFingerprint": "sha256:f114c0793b769b260819ad0c40d52631ed0e737de3fa79a24cf762e87132fbdd"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-c90efb55-da47-4fc7-a638-9f08964fb706",
+    "runId": "run-fefb9605-1c7f-44a0-91df-1dd253993f33",
+    "completedAt": "2026-08-13T21:19:54.103Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:270:r0001",
+      "unit": {
+        "id": "s0002",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Hao Yu; Zilin; Yang Suyun; Guo Xiu",
+      "after": "Hao Yu; his son Lin; Yang Suyun; Guo Xiu",
+      "reason": "Chinese 子林 means “son Lin,” not a personal name Zilin.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:270:r0002",
+      "unit": {
+        "id": "s0002",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Hao Yu; Zilin; Yang Suyun; Guo Xiu",
+      "after": "Hao Yu; his son Lin; Yang Suyun; Guo Xiu",
+      "reason": "Chinese 子林 means “son Lin,” not a personal name Zilin.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:270:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0002 lists 郝浴子林楊素蘊郭琇; 子林 is kinship 子 plus given name 林 (Hao Yu’s son Lin), not a personal name Zilin, so the idiomatic repair is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0002",
+        "excerpt": "郝浴子林"
+      }
+    },
+    {
+      "repairId": "qingshigao:270:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 子林 in s0002 must be read as “son Lin” in the literal; Zilin invents a compound given name the Chinese does not support.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0002",
+        "excerpt": "子林"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "qingshigao:270:r0001",
+      "claim": {
+        "id": "qingshigao:270:c0011",
+        "subject": "qingshigao:270:p002",
+        "predicate": "name",
+        "value": {
+          "kind": "alternate-name",
+          "en": "Zilin",
+          "zh": null,
+          "pinyin": null
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:270:s0002"
+        ]
+      },
+      "reason": "Accepted r0001 shows Zilin exists only as a mistranslation of 子林; the source supports kinship 子 plus given name 林 (already claimed), not an alternate personal name Zilin.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0002",
+        "excerpt": "子林"
+      }
+    }
+  ],
+  "claimRevisions": []
+}

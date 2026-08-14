@@ -3,70 +3,70 @@
   "book": "hanshu",
   "chapter": "082",
   "input": {
-    "chapterFingerprint": "sha256:2bd5a40635cf567cb2bff1b243fe5cbe1a69bb9de57ab8532c47c97df317ecec",
-    "proposalsFingerprint": "sha256:a4cd71eeb47fbcaf63483a2bf147b3151b075ad1a2404910b64e0b71b67ab4a3"
+    "chapterFingerprint": "sha256:b2e0117271adc5d672394cd53856549c878f0fad51d77c8426c47eac854e09bc",
+    "proposalsFingerprint": "sha256:65b38370be707dcccacf153159cabf7e9bda9d244849fdb663721bf91bbcb905"
   },
   "reviewer": {
-    "kind": "codex",
-    "name": "Codex review of Grok 4.5 draft",
-    "model": null,
-    "agentId": null,
-    "runId": null,
-    "completedAt": "2026-08-11T07:35:05.000Z"
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-7f5458e5-3fcd-4979-b311-ba82a02131ba",
+    "runId": "run-07c3b3fa-aab8-4c77-a710-081ab20d1915",
+    "completedAt": "2026-08-13T21:12:52.819Z"
   },
   "proposals": [
     {
       "id": "hanshu:082:r0001",
       "unit": {
-        "id": "s0212",
+        "id": "s0189",
         "kind": "paragraph-sentence",
-        "blockIndex": 14,
+        "blockIndex": 30,
         "collection": "sentences",
-        "itemIndex": 4
+        "itemIndex": 1
       },
-      "field": "idiomatic",
-      "before": "Some years later he was promoted to superintendent of waterways and parks, leapfrogging the commandant of justice.",
-      "after": "Some years later he was promoted to superintendent of waterways and parks and was exceptionally appointed commandant of justice.",
-      "reason": "The Chinese 超過廷尉 denotes exceptional advancement to the office of commandant of justice; the following text confirms that he served eighteen years in that office.",
+      "field": "literal",
+      "before": "Xuan submitted memorial saying: \"The three dukes like a tripod's feet support the lord; if one foot does not bear, then it overturns and confuses the fine fruit.",
+      "after": "Xuan submitted a memorial saying: \"The three dukes support the lord like the legs of a tripod; if one foot cannot bear its weight, then it overturns and spoils the fine contents.",
+      "reason": "美實 refers to the precious contents of the tripod vessel, not literal fruit; 'confuses the fine fruit' obscures the metaphor.",
       "confidence": "high"
     },
     {
       "id": "hanshu:082:r0002",
       "unit": {
-        "id": "s0212",
+        "id": "s0191",
         "kind": "paragraph-sentence",
-        "blockIndex": 14,
+        "blockIndex": 30,
         "collection": "sentences",
-        "itemIndex": 4
+        "itemIndex": 3
       },
       "field": "literal",
-      "before": "Some years later he was promoted superintendent of waterways and parks, passing over the commandant of justice.",
-      "after": "Some years later he was promoted to superintendent of waterways and parks and was exceptionally appointed commandant of justice.",
-      "reason": "The Chinese 超過廷尉 denotes exceptional advancement to the office of commandant of justice, not bypassing that office.",
+      "before": "Mang reported to the Empress Dowager, ordered Xuan with document: \"Only you, days in office are few, merit and virtue not yet effected, pressed by old dimness and confusion—it is not the means to aid the state and pacify within the seas.",
+      "after": "Mang reported to the Empress Dowager and issued a written rescript to Xuan: \"You have held office only a few days, and your merit and virtue are not yet established; pressed by old dimness and confusion, this is not the means to aid the state and pacify all within the seas.",
+      "reason": "策宣曰 is issuing a rescript addressing Xuan, not 'ordered Xuan with document'; the literal prose is ungrammatical and obscures the speech act.",
       "confidence": "high"
     }
   ],
   "decisions": [
     {
       "repairId": "hanshu:082:r0001",
-      "decision": "revise",
-      "after": "Several years later, he was promoted to Superintendent of Waterways and Parks, then advanced exceptionally to Commandant of Justice.",
-      "reason": "數年，遷水衡都尉，超過廷尉 pairs exceptional advancement (超, as in the preceding 超遷) with appointment as 廷尉, not skipping that office; later 為廷尉十八歲 and 于定國為廷尉 confirm he held it. The original “leapfrogging” invents a bypass.",
+      "decision": "accept",
+      "after": null,
+      "reason": "In the tripod metaphor, 覆亂美實 means overturning and spoiling the vessel’s fine/precious contents; “confuses the fine fruit” misreads 美實 as fruit and obscures 亂. The proposed literal restores that sense without inventing content.",
       "sourceWitness": {
         "source": "chapter-text",
-        "citation": "s0212",
-        "excerpt": "超過廷尉"
+        "citation": "s0189",
+        "excerpt": "則覆亂美實"
       }
     },
     {
       "repairId": "hanshu:082:r0002",
-      "decision": "revise",
-      "after": "Several years later, he was promoted to Superintendent of Waterways and Parks, then advanced exceptionally to Commandant of Justice.",
-      "reason": "超過廷尉 means he was exceptionally advanced to commandant of justice; “passing over” reverses the sense. The repair matches the Chinese offices and the exceptional-promotion idiom.",
+      "decision": "accept",
+      "after": null,
+      "reason": "策宣曰 is Mang issuing a written rescript addressed to Xuan, not “ordered Xuan with document”; the repair restores the speech act and readable English while keeping 惟君視事日寡 and 功德未效 intact.",
       "sourceWitness": {
         "source": "chapter-text",
-        "citation": "s0212",
-        "excerpt": "遷水衡都尉，超過廷尉"
+        "citation": "s0191",
+        "excerpt": "莽白太后，策宣曰"
       }
     }
   ],
