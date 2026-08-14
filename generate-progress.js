@@ -7,9 +7,8 @@
  *   node generate-progress.js
  *   node generate-progress.js --book shiji   # Recompute one book; merge into existing progress.json
  *
- * Status colors now represent cleanup/refinement scores when LanguageTool
- * results are available. Without those cached scores, the legacy translation
- * completion analysis is used as a fallback.
+ * Translation cleanup fields remain available to the SDK orchestration tools.
+ * The public progress UI uses the peopleGlossary fields added here.
  */
 
 import fs from 'fs';
@@ -29,6 +28,8 @@ const TRANSLATION_ALIGNMENT_REPORT_PATH = './data/quality/translation-alignment.
 const QUALITY_SIGNAL_OVERRIDES_PATH = './data/quality/progress-signal-overrides.json';
 const PUBLIC_PROGRESS_PATH = './public/data/progress.json';
 const PUBLIC_PROGRESS_BOOKS_DIR = './public/data/progress/books';
+const PEOPLE_CONFIG_PATH = './data/people/config.json';
+const PEOPLE_EXTRACTIONS_DIR = './data/people/extractions';
 
 function parseBookArg() {
   const i = process.argv.indexOf('--book');
@@ -557,6 +558,139 @@ function effectiveChapterStatus(baseStatus, repairQueueChapter, quoteAlignmentCh
   return baseStatus || 'gray';
 }
 
+function assertPeopleProgress(condition, message) {
+  if (!condition) throw new Error(`People progress: ${message}`);
+}
+
+function compactPersonFactCount(person) {
+  assertPeopleProgress(Array.isArray(person), 'compact person record must be an array');
+  const names = person[5] ?? [];
+  const roles = person[6] ?? [];
+  assertPeopleProgress(Array.isArray(names) && Array.isArray(roles), 'compact person names and roles must be arrays');
+  return names.length + roles.length;
+}
+
+function claimPredicate(claim, compact) {
+  return compact ? claim?.[1] : claim?.predicate;
+}
+
+function repairStatus(repair, compact) {
+  return compact ? repair?.[6] : repair?.status;
+}
+
+function countRepairStatus(repairs, compact, status) {
+  return repairs.filter((repair) => repairStatus(repair, compact) === status).length;
+}
+
+function peopleProgressFromExtraction(extraction, currentPromptVersion) {
+  assertPeopleProgress(extraction && typeof extraction === 'object', 'extraction must be an object');
+  assertPeopleProgress([1, 2].includes(extraction.schemaVersion), `${extraction.book}/${extraction.chapter} has unsupported schemaVersion`);
+  assertPeopleProgress(Array.isArray(extraction.people), `${extraction.book}/${extraction.chapter} has no people array`);
+  assertPeopleProgress(Array.isArray(extraction.claims), `${extraction.book}/${extraction.chapter} has no claims array`);
+  assertPeopleProgress(Array.isArray(extraction.translationRepairs), `${extraction.book}/${extraction.chapter} has no translationRepairs array`);
+  assertPeopleProgress(Number.isInteger(extraction.run?.promptVersion), `${extraction.book}/${extraction.chapter} has no prompt version`);
+
+  const compact = extraction.schemaVersion === 2;
+  const embeddedFactClaims = compact
+    ? extraction.people.reduce((count, person) => count + compactPersonFactCount(person), 0)
+    : 0;
+  const state = extraction.run.promptVersion >= currentPromptVersion ? 'current' : 'rereview';
+  return {
+    state,
+    promptVersion: extraction.run.promptVersion,
+    unitCount: Number(extraction.input?.unitCount || 0),
+    peopleRecords: extraction.people.length,
+    factClaims: extraction.claims.length + embeddedFactClaims,
+    familyRelationships: extraction.claims.filter((claim) => claimPredicate(claim, compact) === 'family-relationship').length,
+    attestations: extraction.claims.filter((claim) => claimPredicate(claim, compact) === 'attestation').length,
+    appliedTranslationRepairs: countRepairStatus(extraction.translationRepairs, compact, 'applied'),
+    pendingTranslationRepairs: countRepairStatus(extraction.translationRepairs, compact, 'proposed'),
+  };
+}
+
+function peopleExtractionFiles() {
+  assertPeopleProgress(fs.existsSync(PEOPLE_EXTRACTIONS_DIR), `missing ${PEOPLE_EXTRACTIONS_DIR}`);
+  const files = [];
+  for (const bookEntry of fs.readdirSync(PEOPLE_EXTRACTIONS_DIR, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
+    if (!bookEntry.isDirectory()) continue;
+    const directory = path.join(PEOPLE_EXTRACTIONS_DIR, bookEntry.name);
+    for (const name of fs.readdirSync(directory).filter((entry) => /^\d{3}\.json$/u.test(entry)).sort()) {
+      files.push(path.join(directory, name));
+    }
+  }
+  return files;
+}
+
+function buildPeopleGlossaryProgress(manifest) {
+  assertPeopleProgress(fs.existsSync(PEOPLE_CONFIG_PATH), `missing ${PEOPLE_CONFIG_PATH}`);
+  const config = JSON.parse(fs.readFileSync(PEOPLE_CONFIG_PATH, 'utf8'));
+  assertPeopleProgress(Number.isInteger(config.promptVersion), 'current prompt version is invalid');
+
+  const expected = new Map();
+  for (const [bookId, book] of Object.entries(manifest.books || {})) {
+    for (const chapter of book.chapters || []) {
+      const chapterId = `${bookId}:${chapter.chapter}`;
+      assertPeopleProgress(!expected.has(chapterId), `duplicate source chapter ${chapterId}`);
+      expected.set(chapterId, {
+        state: 'missing',
+        promptVersion: null,
+        unitCount: 0,
+        peopleRecords: 0,
+        factClaims: 0,
+        familyRelationships: 0,
+        attestations: 0,
+        appliedTranslationRepairs: 0,
+        pendingTranslationRepairs: 0,
+      });
+    }
+  }
+
+  const extracted = new Set();
+  for (const file of peopleExtractionFiles()) {
+    const extraction = JSON.parse(fs.readFileSync(file, 'utf8'));
+    const relative = path.relative(PEOPLE_EXTRACTIONS_DIR, file).split(path.sep);
+    const expectedBook = relative[0];
+    const expectedChapter = path.basename(relative[1], '.json');
+    assertPeopleProgress(
+      extraction.book === expectedBook && extraction.chapter === expectedChapter,
+      `${file} scope does not match its path`,
+    );
+    const chapterId = `${extraction.book}:${extraction.chapter}`;
+    assertPeopleProgress(expected.has(chapterId), `${file} does not correspond to a manifest chapter`);
+    assertPeopleProgress(!extracted.has(chapterId), `duplicate extraction ${chapterId}`);
+    extracted.add(chapterId);
+    expected.set(chapterId, peopleProgressFromExtraction(extraction, config.promptVersion));
+  }
+
+  const chapters = [...expected.values()];
+  const sum = (field) => chapters.reduce((total, chapter) => total + Number(chapter[field] || 0), 0);
+  const sourceChapters = chapters.length;
+  const currentChapters = chapters.filter((chapter) => chapter.state === 'current').length;
+  const rereviewChapters = chapters.filter((chapter) => chapter.state === 'rereview').length;
+  const extractedChapters = currentChapters + rereviewChapters;
+  const missingChapters = sourceChapters - extractedChapters;
+
+  return {
+    byChapter: expected,
+    summary: {
+      currentPromptVersion: config.promptVersion,
+      sourceChapters,
+      extractedChapters,
+      currentChapters,
+      rereviewChapters,
+      missingChapters,
+      currentPercent: sourceChapters > 0 ? (currentChapters / sourceChapters) * 100 : 0,
+      extractedPercent: sourceChapters > 0 ? (extractedChapters / sourceChapters) * 100 : 0,
+      peopleRecords: sum('peopleRecords'),
+      factClaims: sum('factClaims'),
+      familyRelationships: sum('familyRelationships'),
+      attestations: sum('attestations'),
+      appliedTranslationRepairs: sum('appliedTranslationRepairs'),
+      pendingTranslationRepairs: sum('pendingTranslationRepairs'),
+    },
+  };
+}
+
 function bookProgressFromManifest(
   bookId,
   book,
@@ -565,6 +699,7 @@ function bookProgressFromManifest(
   quoteAlignment = null,
   placeholderTranslations = null,
   translationAlignment = null,
+  peopleByChapter = new Map(),
 ) {
   const bookProgress = {
     name: book.name,
@@ -649,7 +784,8 @@ function bookProgressFromManifest(
         lowGlossarySentences: translationAlignmentChapter.lowGlossarySentences,
         zeroGlossarySentences: translationAlignmentChapter.zeroGlossarySentences,
         examples: translationAlignmentChapter.examples,
-      } : null
+      } : null,
+      peopleGlossary: peopleByChapter.get(`${bookId}:${chapter.chapter}`) ?? null,
     });
   }
 
@@ -698,6 +834,7 @@ function buildProgressSummary(books) {
 function generateProgressData() {
   const manifest = JSON.parse(fs.readFileSync(MANIFEST_PATH, 'utf8'));
   const languageToolScores = loadLanguageToolScores();
+  const peopleGlossary = buildPeopleGlossaryProgress(manifest);
   const progress = {
     generatedAt: new Date().toISOString(),
     qualityScoring: languageToolScores ? {
@@ -710,6 +847,7 @@ function generateProgressData() {
     quoteAlignment: loadQuoteAlignmentProgress(),
     placeholderTranslations: loadPlaceholderTranslationsProgress(),
     translationAlignment: loadTranslationAlignmentProgress(),
+    peopleGlossary: peopleGlossary.summary,
     books: {}
   };
 
@@ -723,6 +861,7 @@ function generateProgressData() {
       progress.quoteAlignment,
       progress.placeholderTranslations,
       progress.translationAlignment,
+      peopleGlossary.byChapter,
     );
   }
 
@@ -797,6 +936,7 @@ function writeProgress(progress) {
 function mergeProgressSingleBook(bookId) {
   const manifest = JSON.parse(fs.readFileSync(MANIFEST_PATH, 'utf8'));
   const languageToolScores = loadLanguageToolScores();
+  const peopleGlossary = buildPeopleGlossaryProgress(manifest);
   if (!manifest.books?.[bookId]) {
     console.error(`Unknown book or not in manifest: ${bookId}`);
     process.exit(1);
@@ -824,6 +964,7 @@ function mergeProgressSingleBook(bookId) {
   progress.quoteAlignment = loadQuoteAlignmentProgress();
   progress.placeholderTranslations = loadPlaceholderTranslationsProgress();
   progress.translationAlignment = loadTranslationAlignmentProgress();
+  progress.peopleGlossary = peopleGlossary.summary;
   progress.books = progress.books || {};
   progress.books[bookId] = bookProgressFromManifest(
     bookId,
@@ -833,7 +974,13 @@ function mergeProgressSingleBook(bookId) {
     progress.quoteAlignment,
     progress.placeholderTranslations,
     progress.translationAlignment,
+    peopleGlossary.byChapter,
   );
+  for (const [existingBookId, existingBook] of Object.entries(progress.books)) {
+    for (const chapter of existingBook.chapters || []) {
+      chapter.peopleGlossary = peopleGlossary.byChapter.get(`${existingBookId}:${chapter.chapter}`) ?? null;
+    }
+  }
   progress.summary = buildProgressSummary(progress.books);
   writeProgress(progress);
   console.log(`Merged progress for book: ${bookId}`);
@@ -845,12 +992,12 @@ function mergeProgressSingleBook(bookId) {
 function main() {
   const onlyBook = parseBookArg();
   if (onlyBook) {
-    console.log(`Generating cleanup progress for single book: ${onlyBook}...`);
+    console.log(`Generating site progress for single book: ${onlyBook}...`);
     mergeProgressSingleBook(onlyBook);
     return;
   }
 
-  console.log('Generating cleanup progress data...');
+  console.log('Generating site progress data...');
   const progress = generateProgressData();
   writeProgress(progress);
 }
@@ -869,4 +1016,6 @@ export {
   loadQuoteAlignmentProgress,
   loadPlaceholderTranslationsProgress,
   loadTranslationAlignmentProgress,
+  peopleProgressFromExtraction,
+  buildPeopleGlossaryProgress,
 };

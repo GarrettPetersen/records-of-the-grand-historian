@@ -1,0 +1,446 @@
+:root {
+    --glossary-ink: #17324d;
+    --glossary-ink-soft: #35546e;
+    --glossary-current: #218a63;
+    --glossary-current-deep: #176949;
+    --glossary-rereview: #d69a2d;
+    --glossary-rereview-deep: #976510;
+    --glossary-missing: #d7dde2;
+    --glossary-rule: #c8d0d7;
+    --glossary-paper: #ffffff;
+    --glossary-muted: #61707c;
+    --glossary-repair: #a43c32;
+}
+
+.people-progress-page {
+    background: #f4f7f8;
+}
+
+.progress-page-header {
+    background: var(--glossary-ink);
+    box-shadow: none;
+    padding: 2.5rem 2rem 2.25rem;
+    text-align: left;
+}
+
+.progress-header-inner {
+    margin: 0 auto;
+    max-width: 1240px;
+}
+
+.progress-page-header .back-link {
+    color: #fff;
+    display: inline-block;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.85rem;
+    margin-bottom: 1.35rem;
+    opacity: 0.82;
+    text-decoration: none;
+}
+
+.progress-page-header .back-link:hover,
+.progress-page-header .back-link:focus-visible {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.progress-page-header h1 {
+    font-size: 2.7rem;
+    font-weight: normal;
+    letter-spacing: 0;
+    line-height: 1.08;
+    margin: 0;
+}
+
+.progress-page-header p {
+    color: #d8e3eb;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 1rem;
+    margin: 0.55rem 0 0;
+}
+
+.progress-main {
+    max-width: 1240px;
+    padding: 2.75rem 2rem 4rem;
+}
+
+#loading {
+    color: var(--glossary-ink-soft);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    min-height: 9rem;
+}
+
+.corpus-overview {
+    border-bottom: 1px solid var(--glossary-rule);
+    padding-bottom: 2.75rem;
+}
+
+.overview-heading-row,
+.ledger-heading-row,
+.book-progress-header {
+    align-items: flex-end;
+    display: flex;
+    gap: 1.5rem;
+    justify-content: space-between;
+}
+
+.progress-kicker {
+    color: var(--glossary-repair);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    margin: 0 0 0.35rem;
+    text-transform: uppercase;
+}
+
+.corpus-overview h2,
+.chapter-ledger h2 {
+    color: var(--glossary-ink);
+    font-size: 1.85rem;
+    font-weight: normal;
+    letter-spacing: 0;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.coverage-figure {
+    color: var(--glossary-current-deep);
+    flex: 0 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 2.35rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 750;
+    line-height: 1;
+}
+
+.coverage-track {
+    background: var(--glossary-missing);
+    border: 1px solid #bec7ce;
+    border-radius: 4px;
+    display: flex;
+    height: 1.35rem;
+    margin-top: 1.35rem;
+    overflow: hidden;
+    width: 100%;
+}
+
+.coverage-segment {
+    height: 100%;
+    min-width: 0;
+    transition: width 300ms ease-out;
+}
+
+.coverage-segment.current {
+    background: var(--glossary-current);
+}
+
+.coverage-segment.rereview {
+    background: var(--glossary-rereview);
+}
+
+.coverage-key {
+    color: var(--glossary-muted);
+    display: flex;
+    flex-wrap: wrap;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.82rem;
+    gap: 0.65rem 1.35rem;
+    margin-top: 0.8rem;
+}
+
+.coverage-key span,
+.book-stat {
+    align-items: center;
+    display: inline-flex;
+    gap: 0.45rem;
+}
+
+.status-swatch {
+    border: 1px solid rgba(23, 50, 77, 0.18);
+    border-radius: 2px;
+    display: inline-block;
+    height: 0.72rem;
+    width: 0.72rem;
+}
+
+.status-swatch.current {
+    background: var(--glossary-current);
+}
+
+.status-swatch.rereview {
+    background: var(--glossary-rereview);
+}
+
+.status-swatch.missing {
+    background: var(--glossary-missing);
+}
+
+.corpus-metrics {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    margin-top: 1.7rem;
+}
+
+.corpus-metric {
+    background: var(--glossary-paper);
+    border: 1px solid var(--glossary-rule);
+    border-radius: 6px;
+    min-height: 6.5rem;
+    padding: 0.9rem 0.95rem;
+}
+
+.corpus-metric-label {
+    color: var(--glossary-muted);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.corpus-metric-value {
+    color: var(--glossary-ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 1.35rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 750;
+    line-height: 1.15;
+    margin-top: 0.55rem;
+}
+
+.corpus-metric-note {
+    color: var(--glossary-muted);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.75rem;
+    line-height: 1.3;
+    margin-top: 0.28rem;
+}
+
+.publication-note {
+    border-left: 3px solid var(--glossary-ink-soft);
+    color: var(--glossary-ink-soft);
+    font-size: 0.92rem;
+    margin: 1.5rem 0 0;
+    padding: 0.2rem 0 0.2rem 0.85rem;
+}
+
+.chapter-ledger {
+    padding-top: 2.75rem;
+}
+
+.ledger-note,
+.books-loading-status,
+.book-subtitle,
+.book-progress-stats {
+    color: var(--glossary-muted);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.ledger-note {
+    font-size: 0.86rem;
+    margin: 0;
+}
+
+.books-loading-status {
+    font-size: 0.85rem;
+    min-height: 1.4rem;
+    padding: 1.25rem 0 0;
+}
+
+.progress-group-heading {
+    color: var(--glossary-ink-soft);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 750;
+    letter-spacing: 0;
+    margin: 2.5rem 0 0;
+    text-transform: uppercase;
+}
+
+.book-progress-section {
+    border-top: 1px solid var(--glossary-rule);
+    padding: 1.55rem 0 1.75rem;
+}
+
+.book-progress-header {
+    align-items: flex-start;
+}
+
+.book-progress-title {
+    color: var(--glossary-ink);
+    font-size: 1.38rem;
+    font-weight: normal;
+    letter-spacing: 0;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.book-subtitle {
+    font-size: 0.82rem;
+    line-height: 1.35;
+    margin-top: 0.3rem;
+}
+
+.book-progress-percent {
+    color: var(--glossary-current-deep);
+    flex: 0 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 1.12rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 750;
+}
+
+.book-progress-stats {
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 0.78rem;
+    gap: 0.45rem 1.1rem;
+    margin-top: 0.85rem;
+}
+
+.chapter-progress-grid {
+    display: grid;
+    gap: 3px;
+    grid-template-columns: repeat(auto-fill, minmax(17px, 1fr));
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.chapter-progress-square {
+    aspect-ratio: 1;
+    border: 1px solid rgba(23, 50, 77, 0.16);
+    border-radius: 2px;
+    display: block;
+    min-height: 17px;
+    position: relative;
+    transition: transform 120ms ease-out, box-shadow 120ms ease-out;
+}
+
+.chapter-progress-square.current {
+    background: var(--glossary-current);
+}
+
+.chapter-progress-square.rereview {
+    background: var(--glossary-rereview);
+}
+
+.chapter-progress-square.missing {
+    background: var(--glossary-missing);
+}
+
+.chapter-progress-square:hover,
+.chapter-progress-square:focus-visible {
+    box-shadow: 0 3px 10px rgba(23, 50, 77, 0.28);
+    outline: 2px solid var(--glossary-ink);
+    outline-offset: 2px;
+    transform: scale(1.18);
+    z-index: 3;
+}
+
+.chapter-progress-square::after {
+    background: #102b43;
+    border-radius: 4px;
+    bottom: calc(100% + 8px);
+    color: #fff;
+    content: attr(data-tooltip);
+    display: none;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.75rem;
+    left: 50%;
+    line-height: 1.4;
+    max-width: min(25rem, 82vw);
+    min-width: 18rem;
+    padding: 0.65rem 0.75rem;
+    pointer-events: none;
+    position: absolute;
+    text-align: left;
+    transform: translateX(-50%);
+    white-space: pre-line;
+    z-index: 8;
+}
+
+.chapter-progress-square:hover::after,
+.chapter-progress-square:focus-visible::after {
+    display: block;
+}
+
+.last-updated {
+    color: var(--glossary-muted);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.78rem;
+    margin: -2.25rem auto 2.5rem;
+    max-width: 1240px;
+    padding: 0 2rem;
+    text-align: left;
+}
+
+@media (max-width: 1000px) {
+    .corpus-metrics {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .progress-page-header {
+        padding: 2rem 1rem 1.75rem;
+    }
+
+    .progress-page-header h1 {
+        font-size: 2.1rem;
+    }
+
+    .progress-main {
+        padding: 2rem 1rem 3.5rem;
+    }
+
+    .overview-heading-row,
+    .ledger-heading-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.85rem;
+    }
+
+    .coverage-figure {
+        font-size: 2rem;
+    }
+
+    .corpus-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .corpus-metric {
+        min-height: 6rem;
+        padding: 0.8rem;
+    }
+
+    .book-progress-header {
+        gap: 0.75rem;
+    }
+
+    .chapter-progress-grid {
+        gap: 2px;
+        grid-template-columns: repeat(auto-fill, minmax(13px, 1fr));
+    }
+
+    .chapter-progress-square {
+        min-height: 13px;
+    }
+
+    .chapter-progress-square::after {
+        display: none !important;
+    }
+
+    .last-updated {
+        padding: 0 1rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .coverage-segment,
+    .chapter-progress-square {
+        transition: none;
+    }
+}

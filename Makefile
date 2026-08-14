@@ -53,7 +53,7 @@ help:
 	@echo "  make fix-counts             # Recalculate sentenceCount and translatedCount in all chapter files"
 	@echo "  make nuke-translations      # ⚠️  Emergency: Remove ALL translations from a chapter"
 	@echo "  make manifest               # Generate manifest.json (includes sync)"
-	@echo "  make progress               # Generate cleanup/refinement progress data"
+	@echo "  make progress               # Generate people glossary and translation progress data"
 	@echo "  make generate-pages         # Static HTML + sitemap/robots + Open Graph PNGs"
 	@echo "  make generate-book-covers   # Generate reusable book-cover SVGs for cards and e-books"
 	@echo "  make generate-sitemap       # public/sitemap.xml + robots.txt (after static HTML)"
@@ -313,9 +313,10 @@ update:
 		echo "Step 4/8: Skipping LanguageTool cleanup scores (set RUN_LANGUAGETOOL=1 to run)..."; \
 	fi
 	@echo ""
-	@echo "Step 5/8: Refreshing placeholder/glossary reports and generating cleanup progress (merge this book)..."
+	@echo "Step 5/8: Refreshing quality reports and generating site progress (merge this book)..."
 	@$(NODE) scripts/scan-placeholder-translations.mjs --out data/quality/placeholder-translations.json --summary --limit=0
 	@$(NODE) scripts/scan-translation-alignment.mjs --book $(BOOK) --out data/quality/translation-alignment.json --merge-out --cache-current --summary --min-severity 3
+	@$(NODE) scripts/test-people-progress.mjs
 	@$(NODE) generate-progress.js --book $(BOOK)
 	@echo ""
 	@echo "Step 6/8: Generating static pages..."
@@ -365,9 +366,10 @@ update-all:
 		echo "Step 4/8: Skipping LanguageTool cleanup scores (set RUN_LANGUAGETOOL=1 to run)..."; \
 	fi
 	@echo ""
-	@echo "Step 5/8: Refreshing placeholder/glossary reports and generating cleanup progress..."
+	@echo "Step 5/8: Refreshing quality reports and generating site progress..."
 	@$(NODE) scripts/scan-placeholder-translations.mjs --out data/quality/placeholder-translations.json --summary --limit=0
 	@$(NODE) scripts/scan-translation-alignment.mjs --out data/quality/translation-alignment.json --merge-out --cache-current --summary --min-severity 3
+	@$(NODE) scripts/test-people-progress.mjs
 	@$(NODE) generate-progress.js
 	@echo ""
 	@echo "Step 6/8: Generating static pages..."
@@ -436,12 +438,11 @@ manifest:
 	@echo "Manifest generated at data/manifest.json"
 	@$(MAKE) sync $(if $(BOOK),BOOK=$(BOOK),)
 
-# Generate cleanup/refinement progress data (optional: BOOK=<id> recomputes one book in progress.json)
+# Generate site progress data (optional: BOOK=<id> recomputes one book in progress.json)
 .PHONY: progress
 progress:
-	@echo "Updating LanguageTool cleanup scores..."
-	@$(NODE) scripts/score-languagetool.mjs $(if $(BOOK),--book $(BOOK),--all)
-	@echo "Generating cleanup progress data..."
+	@echo "Generating people glossary and translation progress data..."
+	@$(NODE) scripts/test-people-progress.mjs
 	@$(NODE) generate-progress.js $(if $(BOOK),--book $(BOOK),)
 	@echo "Progress data generated at data/progress.json"
 	@$(MAKE) sync $(if $(BOOK),BOOK=$(BOOK),)

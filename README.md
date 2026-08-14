@@ -468,7 +468,7 @@ This will (per book with `make update BOOK=…`, or all books with `make update-
 1. Update citations
 2. Fix translated counts
 3. Regenerate manifest (single-book mode merges that book into the existing manifest)
-4. Generate translation progress data (single-book mode merges that book into `progress.json`)
+4. Generate people glossary and translation progress data (single-book mode merges that book into `progress.json`)
 5. Generate static HTML pages for SEO
 6. Generate Open Graph share images (PNG)
 7. Sync chapter JSON to `public/data/` (single-book sync copies only that book’s JSON plus manifest and glossary)
@@ -705,8 +705,8 @@ make generate-pages              # Static HTML + OG images (all books)
 make generate-pages BOOK=shiji   # Same for one book only
 make sync                        # Copy all book JSON + manifest + glossary to public/data/
 make sync BOOK=shiji             # Copy one book’s JSON + manifest + glossary
-make progress                    # Regenerate progress.json (all books)
-make progress BOOK=shiji         # Recompute one book in progress.json (merge)
+make progress                    # Regenerate glossary/translation progress.json (all books)
+make progress BOOK=shiji         # Recompute one book while refreshing glossary coverage
 ```
 
 ### Static Pages for SEO
