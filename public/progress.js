@@ -142,8 +142,8 @@ function renderOverview(summary) {
 
     const publicationNote = document.getElementById('publication-note');
     publicationNote.textContent = summary.missingChapters === 0 && summary.rereviewChapters === 0
-        ? 'Chapter extraction is complete. Cross-book identity resolution remains part of the publication gate.'
-        : `People pages and chapter links remain unpublished until all chapters are current and cross-book identities are resolved. ${formatInteger(summary.familyRelationships)} family relationships have been recorded so far.`;
+        ? 'Chapter extraction is complete. Cross-book identity resolution and editorial refinement continue.'
+        : `The published people index currently covers ${formatInteger(summary.extractedChapters)} of ${formatInteger(summary.sourceChapters)} chapters and grows with each reviewed batch. ${formatInteger(summary.familyRelationships)} family relationships have been recorded so far.`;
     if (summary.pendingTranslationRepairs > 0) {
         publicationNote.textContent += ` ${formatInteger(summary.pendingTranslationRepairs)} proposed translation repairs still await editorial review.`;
     }

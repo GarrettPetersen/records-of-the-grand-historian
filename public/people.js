@@ -15,6 +15,7 @@ const FIELD = Object.freeze({
   sources: 8,
   passages: 9,
   period: 10,
+  directory: 11,
 });
 
 function escapeHtml(value) {
@@ -67,14 +68,14 @@ async function fetchJsonWithRetry(url) {
 
 async function loadEntries() {
   const index = await fetchJsonWithRetry(`${SEARCH_ROOT}/index.json`);
-  if (index.v !== 2 || !Array.isArray(index.parts) || index.parts.length === 0) {
+  if (index.v !== 3 || !Array.isArray(index.parts) || index.parts.length === 0) {
     throw new Error('Unsupported people search index');
   }
   const parts = await Promise.all(index.parts.map((part) =>
     fetchJsonWithRetry(`${SEARCH_ROOT}/${encodeURIComponent(part.file)}`)
   ));
   const entries = parts.flatMap((part) => {
-    if (part.v !== 2 || !Array.isArray(part.entries)) throw new Error('Invalid people search shard');
+    if (part.v !== 3 || !Array.isArray(part.entries)) throw new Error('Invalid people search shard');
     return part.entries;
   });
   if (entries.length !== index.people) {
@@ -84,6 +85,7 @@ async function loadEntries() {
 }
 
 function scoreEntry(entry, query) {
+  const nameFields = [entry[FIELD.en], entry[FIELD.zh], entry[FIELD.pinyin]].map(normalize);
   const fields = [
     entry[FIELD.en],
     entry[FIELD.zh],
@@ -96,25 +98,19 @@ function scoreEntry(entry, query) {
   const tokens = normalizedQuery.split(/\s+/u).filter(Boolean);
   if (!tokens.length) return 0;
   if (!tokens.every((token) => fields.some((field) => field.includes(token)))) return null;
-  let score = 0;
-  if (fields[0] === normalizedQuery || fields[1] === normalizedQuery || fields[2] === normalizedQuery) score += 1000;
-  if (fields[0].startsWith(normalizedQuery) || fields[1].startsWith(normalizedQuery) || fields[2].startsWith(normalizedQuery)) score += 450;
-  if (fields[0].includes(normalizedQuery) || fields[1].includes(normalizedQuery) || fields[2].includes(normalizedQuery)) score += 220;
-  for (const token of tokens) {
-    if (fields[0].includes(token)) score += 80;
-    if (fields[1].includes(token)) score += 85;
-    if (fields[2].includes(token)) score += 70;
-    if (fields[3].includes(token)) score += 30;
-    if (fields[4].includes(token)) score += 10;
-    if (fields[5].includes(token)) score += 20;
-  }
-  return score - String(entry[FIELD.en]).length / 100;
+  if (nameFields.slice(0, 2).some((field) => field === normalizedQuery)) return 1000;
+  if (nameFields.some((field) => field.startsWith(normalizedQuery))) return 800;
+  if (nameFields.some((field) => field.includes(normalizedQuery))) return 600;
+  if (tokens.every((token) => nameFields.some((field) => field.includes(token)))) return 400;
+  if (fields[3].includes(normalizedQuery) || fields[5].includes(normalizedQuery)) return 200;
+  return 100;
 }
 
 function matchesFilters(entry, filters) {
   return (!filters.period || entry[FIELD.period] === filters.period) &&
     (!filters.role || entry[FIELD.roles].includes(filters.role)) &&
-    (!filters.source || entry[FIELD.sources].includes(filters.source));
+    (!filters.source || entry[FIELD.sources].includes(filters.source)) &&
+    (!filters.letter || entry[FIELD.directory] === filters.letter);
 }
 
 function renderEntries(element, entries) {
@@ -136,6 +132,7 @@ function currentFilters(elements) {
     role: elements.role.value,
     source: elements.source.value,
     sort: elements.sort.value,
+    letter: elements.letter,
   };
 }
 
@@ -147,6 +144,7 @@ function syncUrl(filters) {
     role: filters.role,
     source: filters.source,
     sort: filters.sort === 'relevance' ? '' : filters.sort,
+    letter: filters.letter,
   })) {
     if (value) url.searchParams.set(key, value);
     else url.searchParams.delete(key);
@@ -157,6 +155,7 @@ function syncUrl(filters) {
 function restoreUrl(elements) {
   const params = new URLSearchParams(window.location.search);
   elements.input.value = params.get('q') ?? '';
+  elements.letter = params.get('letter') ?? '';
   for (const [key, element] of [['period', elements.period], ['role', elements.role], ['source', elements.source], ['sort', elements.sort]]) {
     const value = params.get(key);
     if (value && [...element.options].some((option) => option.value === value)) element.value = value;
@@ -175,6 +174,7 @@ async function main() {
     sort: document.getElementById('people-sort'),
   };
   if (Object.values(elements).some((element) => !element)) return;
+  elements.letter = '';
 
   restoreUrl(elements);
   let entries;
@@ -205,7 +205,7 @@ async function main() {
     elements.status.textContent = total === 0
       ? 'No matching people. Try fewer terms or clear a filter.'
       : `${total.toLocaleString('en-US')} ${total === 1 ? 'person' : 'people'}${total > MAX_RESULTS ? ` · first ${MAX_RESULTS} shown` : ''}`;
-    elements.clear.hidden = !filters.query && !filters.period && !filters.role && !filters.source && filters.sort === 'relevance';
+    elements.clear.hidden = !filters.query && !filters.period && !filters.role && !filters.source && !filters.letter && filters.sort === 'relevance';
     syncUrl(filters);
   };
 
@@ -223,6 +223,7 @@ async function main() {
     elements.role.value = '';
     elements.source.value = '';
     elements.sort.value = 'relevance';
+    elements.letter = '';
     apply();
     elements.input.focus();
   });

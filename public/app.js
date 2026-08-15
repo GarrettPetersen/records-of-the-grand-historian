@@ -558,7 +558,7 @@ async function revealPublishedPeopleFeature() {
   if (response.status === 404 || !contentType.includes('application/json')) return;
   if (!response.ok) throw new Error(`People publication status failed with HTTP ${response.status}`);
   const status = await response.json();
-  if (status.published !== true || status.complete !== true) return;
+  if (status.published !== true) return;
   if (feature) feature.hidden = false;
   if (footerLink) footerLink.hidden = false;
 }

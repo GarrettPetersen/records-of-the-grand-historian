@@ -1607,6 +1607,244 @@ footer .site-copyright {
   }
 }
 
+/* Keep the people index and records in the visual language of the main site. */
+.person-page,
+.people-index-page,
+.people-browse-page {
+  --people-paper: var(--bg-color);
+  --people-paper-bright: var(--card-bg);
+  --people-ink: var(--text-color);
+  --people-indigo: var(--primary-color);
+  --people-celadon: #a9bfd4;
+  --people-celadon-light: #eaf2f9;
+  --people-muted: #66727d;
+  --people-rule: var(--border-color);
+  background: var(--bg-color);
+}
+
+.person-header,
+.people-index-header,
+.people-browse-header {
+  background: linear-gradient(135deg, var(--primary-color) 0%, #0d3a66 100%);
+  box-shadow: var(--shadow);
+}
+
+.person-header-inner,
+.people-index-header > div,
+.people-browse-header > div {
+  padding: 1.35rem 0 2.5rem;
+}
+
+.people-breadcrumbs {
+  margin-bottom: 2rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.person-header h1,
+.people-index-header h1,
+.people-browse-header h1 {
+  font-size: clamp(2.25rem, 5vw, 3.4rem);
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+.person-header h1 span,
+.people-browse-header h1 span {
+  display: inline;
+  margin-left: 0.3em;
+  color: #dceaf6;
+  white-space: normal;
+}
+
+.people-index-deck {
+  max-width: 52rem;
+  color: #e4eef7;
+}
+
+.people-index-seal {
+  width: 6.5rem;
+  border-color: rgba(255, 255, 255, 0.6);
+  color: #fff;
+}
+
+.people-index-stats dt,
+.person-record-counts dt {
+  color: #d3e3f1;
+}
+
+.people-coverage-note {
+  max-width: 58rem;
+  margin: 1.25rem 0 0;
+  color: #dce8f2;
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.person-chronology {
+  color: #fff1c7;
+}
+
+.people-index-content,
+.people-browse-content,
+.person-content {
+  padding-top: 3rem;
+}
+
+.people-card-grid {
+  gap: 1rem;
+  padding: 0;
+  background: transparent;
+}
+
+.people-card {
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.people-card a:hover,
+.people-card a:focus-visible {
+  background: var(--highlight-color);
+  box-shadow: inset 0 -3px 0 var(--primary-color);
+}
+
+.people-card-name,
+.people-section-heading h2,
+.person-section h2 {
+  color: var(--primary-color);
+  letter-spacing: 0;
+}
+
+.people-browse-strip {
+  gap: 0.75rem;
+  border: 0;
+}
+
+.people-browse-strip a {
+  min-height: 7rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--card-bg);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.people-browse-strip a:hover,
+.people-browse-strip a:focus-visible {
+  background: var(--highlight-color);
+  box-shadow: inset 0 -3px 0 var(--primary-color);
+}
+
+.people-alphabet > * {
+  border-radius: 6px;
+}
+
+.home-people-feature {
+  border: 1px solid var(--border-color);
+  border-left: 5px solid var(--primary-color);
+  border-radius: 8px;
+  background: var(--card-bg);
+  box-shadow: var(--shadow);
+  color: var(--text-color);
+}
+
+.home-people-feature h2,
+.home-people-feature a,
+.home-people-mark,
+.home-people-feature .home-people-kicker {
+  color: var(--primary-color) !important;
+}
+
+.home-people-feature p {
+  color: #555;
+}
+
+.person-family-tree-shell {
+  margin: 0 0 1.5rem;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: #f7fafc;
+}
+
+.person-family-chart.f3 {
+  --background-color: #f7fafc;
+  --text-color: #39536b;
+  --female-color: #f4e0e5;
+  --male-color: #dceaf6;
+  --genderless-color: #e8ecef;
+  width: 100%;
+  height: min(34rem, 70vh);
+  min-height: 25rem;
+  font-family: Georgia, 'Songti SC', serif;
+}
+
+.person-family-chart .family-tree-card {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding: 0.7rem 0.75rem;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid rgba(26, 84, 144, 0.2);
+  border-radius: 5px;
+  color: #253a4d;
+  text-align: left;
+  text-decoration: none;
+}
+
+.person-family-chart .family-tree-card.is-current {
+  border: 2px solid var(--primary-color);
+  background: #fff;
+}
+
+.person-family-chart .family-tree-card strong,
+.person-family-chart .family-tree-card span,
+.person-family-chart .family-tree-card small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.person-family-chart .family-tree-card strong {
+  color: var(--primary-color);
+  font-size: 0.92rem;
+}
+
+.person-family-chart .family-tree-card span {
+  color: #a43d32;
+  font-size: 0.84rem;
+}
+
+.person-family-chart .family-tree-card small {
+  margin-top: 0.18rem;
+  color: #65727c;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 0.66rem;
+}
+
+.person-family-tree-note {
+  margin: 0;
+  padding: 0.65rem 0.8rem;
+  border-top: 1px solid var(--border-color);
+  color: #66727d;
+  font: 0.75rem system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.person-family-tree-shell.is-unavailable .person-family-chart {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .person-family-chart.f3 {
+    height: 28rem;
+    min-height: 22rem;
+  }
+}
+
 /* Very narrow screens (phones) - full width alternating layout */
 @media (max-width: 480px) {
     /* Static page responsive styles */

@@ -22,6 +22,13 @@ export function peopleCatalogIsComplete(stats) {
   return peopleCatalogPublicationBlockers(stats).length === 0;
 }
 
+export function peopleCatalogIsPublishable(catalog) {
+  const stats = catalog?.stats;
+  return Array.isArray(catalog?.people) && catalog.people.length > 0 &&
+    Number.isInteger(stats?.extractedChapters) && stats.extractedChapters > 0 &&
+    Number.isInteger(stats?.pendingTranslationRepairs) && stats.pendingTranslationRepairs === 0;
+}
+
 export function assertPeopleCatalogPublicationState(catalog) {
   const stats = catalog?.stats;
   for (const field of ['sourceChapters', 'extractedChapters', 'missingChapters']) {

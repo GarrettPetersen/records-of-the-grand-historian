@@ -15,6 +15,10 @@ import {
 } from './lib/people-content.mjs';
 import { loadPeopleSiteContext } from './lib/people-site.mjs';
 import {
+  PERSON_PAGE_SHARD_COUNT,
+  personPageShardName,
+} from '../functions/lib/people-shards.js';
+import {
   formatPersonWesternYear,
   humanizePeopleValue,
   personAlternateNames,
@@ -27,9 +31,15 @@ import {
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 const SITE_URL = (process.env.SITE_URL || 'https://24histories.com').replace(/\/$/u, '');
 const SEARCH_PART_MAX_BYTES = 6 * 1024 * 1024;
-const BROWSE_PAGE_SIZE = 240;
 const FEATURED_PEOPLE_COUNT = 12;
-const PEOPLE_ASSET_VERSION = '20260812-chronicle';
+const FAMILY_TREE_MAX_PEOPLE = 36;
+const PEOPLE_ASSET_VERSION = '20260814-people-publication-v2';
+const PEOPLE_FAMILY_SOURCE = path.join(REPO_ROOT, 'scripts', 'assets', 'people-family.js');
+const FAMILY_CHART_PACKAGE = path.join(REPO_ROOT, 'node_modules', 'family-chart', 'dist');
+const D3_PACKAGE = path.join(REPO_ROOT, 'node_modules', 'd3', 'dist', 'd3.min.js');
+const periodCache = new WeakMap();
+const referenceStatsCache = new WeakMap();
+const lifeSummaryCache = new WeakMap();
 
 const HISTORICAL_PERIODS = [
   { slug: 'ancient-china', label: 'Ancient China', shortLabel: 'Before 221 BC', start: -10_000, end: -222 },
@@ -72,18 +82,33 @@ function slugify(value) {
 }
 
 function periodForPerson(person) {
-  if (person.historicity === 'legendary') return HISTORICAL_PERIODS[0];
-  if (person.historicity === 'literary') return HISTORICAL_PERIODS.at(-1);
-  const year = representativePersonYear(person);
-  if (year === null) return HISTORICAL_PERIODS.at(-1);
-  return HISTORICAL_PERIODS.find((period) => period.start !== null && year >= period.start && year <= period.end)
-    ?? HISTORICAL_PERIODS.at(-1);
+  if (periodCache.has(person)) return periodCache.get(person);
+  let period;
+  if (person.historicity === 'legendary') period = HISTORICAL_PERIODS[0];
+  else if (person.historicity === 'literary') period = HISTORICAL_PERIODS.at(-1);
+  else {
+    const year = representativePersonYear(person);
+    period = year === null
+      ? HISTORICAL_PERIODS.at(-1)
+      : HISTORICAL_PERIODS.find((item) => item.start !== null && year >= item.start && year <= item.end)
+        ?? HISTORICAL_PERIODS.at(-1);
+  }
+  periodCache.set(person, period);
+  return period;
 }
 
 function personReferenceStats(person) {
+  if (referenceStatsCache.has(person)) return referenceStatsCache.get(person);
   const chapters = new Set(person.references.map((reference) => `${reference.book}:${reference.chapter}`));
   const books = new Set(person.references.map((reference) => reference.book));
-  return { passages: person.references.length, chapters: chapters.size, books: books.size };
+  const stats = { passages: person.references.length, chapters: chapters.size, books: books.size };
+  referenceStatsCache.set(person, stats);
+  return stats;
+}
+
+function lifeSummaryForPerson(person) {
+  if (!lifeSummaryCache.has(person)) lifeSummaryCache.set(person, personLifeSummary(person));
+  return lifeSummaryCache.get(person);
 }
 
 function personDirectoryKey(person) {
@@ -139,6 +164,23 @@ Options:
 function cleanOwnedOutput(outputRoot) {
   fs.rmSync(path.join(outputRoot, 'people'), { recursive: true, force: true });
   fs.rmSync(path.join(outputRoot, 'data', 'people'), { recursive: true, force: true });
+  fs.rmSync(path.join(outputRoot, 'vendor', 'family-chart'), { recursive: true, force: true });
+  fs.rmSync(path.join(outputRoot, 'people-family.js'), { force: true });
+}
+
+function copyPeopleAssets(outputRoot) {
+  const vendorDir = path.join(outputRoot, 'vendor', 'family-chart');
+  fs.mkdirSync(vendorDir, { recursive: true });
+  const assets = [
+    [PEOPLE_FAMILY_SOURCE, path.join(outputRoot, 'people-family.js')],
+    [D3_PACKAGE, path.join(vendorDir, 'd3.min.js')],
+    [path.join(FAMILY_CHART_PACKAGE, 'family-chart.min.js'), path.join(vendorDir, 'family-chart.min.js')],
+    [path.join(FAMILY_CHART_PACKAGE, 'styles', 'family-chart.css'), path.join(vendorDir, 'family-chart.css')],
+  ];
+  for (const [source, destination] of assets) {
+    if (!fs.existsSync(source)) throw new Error(`Missing people-site asset ${path.relative(REPO_ROOT, source)}`);
+    fs.copyFileSync(source, destination);
+  }
 }
 
 function flattenText(value, found = []) {
@@ -237,9 +279,68 @@ function renderExternalData(person, peopleById) {
   return `${identifiers}${media}`;
 }
 
-function renderFamily(person, peopleById, familyEdgesById) {
+function uniqueFamilyRelationships(person) {
+  const found = new Map();
+  for (const claim of person.familyRelationships) {
+    const key = `${claim.value.relation}:${claim.value.personId}`;
+    if (!found.has(key)) found.set(key, claim);
+  }
+  return [...found.values()];
+}
+
+function familyTreeData(person, peopleById) {
+  const chartRelations = new Set(['parent-of', 'child-of', 'spouse-of']);
+  const directRelationships = uniqueFamilyRelationships(person)
+    .filter((claim) => chartRelations.has(claim.value.relation) && peopleById.has(claim.value.personId))
+    .sort((left, right) => {
+      const leftPerson = peopleById.get(left.value.personId);
+      const rightPerson = peopleById.get(right.value.personId);
+      return personReferenceStats(rightPerson).passages - personReferenceStats(leftPerson).passages ||
+        personDisplayName(leftPerson).localeCompare(personDisplayName(rightPerson), 'en');
+    })
+    .slice(0, FAMILY_TREE_MAX_PEOPLE - 1);
+  if (!directRelationships.length) return [];
+
+  const selected = new Map([[person.id, person]]);
+  for (const relationship of directRelationships) {
+    selected.set(relationship.value.personId, peopleById.get(relationship.value.personId));
+  }
+  const records = new Map([...selected.values()].map((relative) => [relative.id, {
+    id: relative.id,
+    data: {
+      gender: relative.sex === 'male' ? 'M' : relative.sex === 'female' ? 'F' : 'U',
+      name: personDisplayName(relative),
+      zh: relative.preferredName.zh ?? '',
+      life: lifeSummaryForPerson(relative),
+      role: relative.description.en,
+      href: `${relative.slug}.html`,
+      current: relative.id === person.id,
+    },
+    rels: { parents: [], spouses: [], children: [] },
+  }]));
+  const add = (record, key, id) => {
+    if (!record.rels[key].includes(id)) record.rels[key].push(id);
+  };
+  for (const relationship of directRelationships) {
+    const root = records.get(person.id);
+    const relative = records.get(relationship.value.personId);
+    if (relationship.value.relation === 'parent-of') {
+      add(root, 'children', relative.id);
+      add(relative, 'parents', root.id);
+    } else if (relationship.value.relation === 'child-of') {
+      add(root, 'parents', relative.id);
+      add(relative, 'children', root.id);
+    } else {
+      add(root, 'spouses', relative.id);
+      add(relative, 'spouses', root.id);
+    }
+  }
+  return [records.get(person.id), ...[...records.values()].filter((record) => record.id !== person.id)];
+}
+
+function renderFamily(person, peopleById, familyEdgesById, treeData) {
   if (!person.familyRelationships.length && !person.familySummaries.length) return '';
-  const relationships = person.familyRelationships.map((claim) => {
+  const relationships = uniqueFamilyRelationships(person).map((claim) => {
     const target = peopleById.get(claim.value.personId);
     if (!target) throw new Error(`${person.id} family relationship targets missing person ${claim.value.personId}`);
     const edge = familyEdgesById.get(claim.edgeId);
@@ -250,7 +351,12 @@ function renderFamily(person, peopleById, familyEdgesById) {
       `${assertions.length ? `<div class="person-family-details">${assertions.join('<br>')}</div>` : ''}</li>`;
   }).join('');
   const summaries = renderClaimList(person.familySummaries, peopleById);
-  return `${relationships ? `<ul class="person-family-list">${relationships}</ul>` : ''}${summaries}`;
+  const chart = treeData.length > 1 ? `<div class="person-family-tree-shell">
+    <div id="person-family-chart" class="f3 person-family-chart" aria-label="Interactive family tree for ${escapeAttribute(personDisplayName(person))}"></div>
+    <p class="person-family-tree-note">Immediate source-linked family. Drag to pan, scroll or pinch to zoom, and select a person to open their record.</p>
+    <script id="person-family-data" type="application/json">${JSON.stringify(treeData).replace(/</gu, '\\u003c')}</script>
+  </div>` : '';
+  return `${chart}${relationships ? `<ul class="person-family-list">${relationships}</ul>` : ''}${summaries}`;
 }
 
 const CLAIM_SECTIONS = [
@@ -358,7 +464,7 @@ function personJsonLd(person) {
         '@id': `${personUrl}#person`,
         name: personDisplayName(person),
         alternateName: personAlternateNames(person),
-        description: `${person.description.en}. ${personLifeSummary(person)}. ${plural(person.references.length, 'source passage')}.`,
+        description: `${person.description.en}. ${lifeSummaryForPerson(person)}. ${plural(person.references.length, 'source passage')}.`,
         url: personUrl,
         mainEntityOfPage: { '@id': `${personUrl}#page` },
         ...(person.sex && ['male', 'female'].includes(person.sex) ? { gender: humanizePeopleValue(person.sex) } : {}),
@@ -431,7 +537,7 @@ function pageFooter(prefix = '../') {
     `<p class="site-copyright">English translations © 2026 Garrett M. Petersen. The original Chinese texts are in the public domain.</p></footer>`;
 }
 
-function pageHead({ title, description, canonicalPath, preview, jsonLd = null, assetPrefix = '../', ogType = 'website' }) {
+function pageHead({ title, description, canonicalPath, preview, jsonLd = null, assetPrefix = '../', ogType = 'website', extraHead = '' }) {
   const canonical = `${SITE_URL}${canonicalPath}`;
   return `<meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -447,7 +553,8 @@ function pageHead({ title, description, canonicalPath, preview, jsonLd = null, a
   <meta property="og:url" content="${escapeAttribute(canonical)}">
   <meta property="og:image" content="${SITE_URL}/og/site.png">
   <meta name="twitter:card" content="summary_large_image">
-  ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</gu, '\\u003c')}</script>` : ''}`;
+  ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</gu, '\\u003c')}</script>` : ''}
+  ${extraHead}`;
 }
 
 function renderBreadcrumbs(items) {
@@ -463,7 +570,7 @@ function renderPersonCard(person, hrefPrefix = '') {
     <a href="${escapeAttribute(hrefPrefix)}${escapeAttribute(person.slug)}.html">
       <span class="people-card-name">${escapeHtml(personDisplayName(person))}</span>
       ${person.preferredName.zh ? `<span class="people-card-zh" lang="zh-Hant">${escapeHtml(person.preferredName.zh)}</span>` : ''}
-      <span class="people-card-life">${escapeHtml(personLifeSummary(person))}</span>
+      <span class="people-card-life">${escapeHtml(lifeSummaryForPerson(person))}</span>
       <span class="people-card-description">${escapeHtml(person.description.en)}</span>
       <span class="people-card-meta">${escapeHtml(period.label)} · ${plural(stats.passages, 'passage')}</span>
     </a>
@@ -483,13 +590,13 @@ function personOverview(person) {
 function renderPersonFacets(person) {
   const period = periodForPerson(person);
   const roles = person.roles.slice(0, 6).map((role) =>
-    `<a href="role/${escapeAttribute(role.roleId)}.html">${escapeHtml(role.label)}</a>`
+    `<a href="index.html?role=${encodeURIComponent(role.roleId)}#find-a-person">${escapeHtml(role.label)}</a>`
   );
   const books = [...new Set(person.references.map((reference) => reference.book))].slice(0, 6).map((book) =>
-    `<a href="source/${escapeAttribute(book)}.html">${escapeHtml(sourceLabel(book, [person]))}</a>`
+    `<a href="index.html?source=${encodeURIComponent(book)}#find-a-person">${escapeHtml(sourceLabel(book, [person]))}</a>`
   );
   return `<div class="person-facets">
-    <div><span>Period</span><a href="period/${escapeAttribute(period.slug)}.html">${escapeHtml(period.label)}</a></div>
+    <div><span>Period</span><a href="index.html?period=${encodeURIComponent(period.slug)}#find-a-person">${escapeHtml(period.label)}</a></div>
     ${roles.length ? `<div><span>Roles</span><span class="person-facet-links">${roles.join('')}</span></div>` : ''}
     ${books.length ? `<div><span>Found in</span><span class="person-facet-links">${books.join('')}</span></div>` : ''}
   </div>`;
@@ -504,7 +611,7 @@ function renderPersonLocalNav(items) {
 
 function generatePersonHtml(person, context) {
   const title = `${personFullDisplayName(person)} | 24 Histories`;
-  const chronology = personLifeSummary(person);
+  const chronology = lifeSummaryForPerson(person);
   const stats = personReferenceStats(person);
   const description = `${personFullDisplayName(person)} — ${person.description.en}. ${chronology}; ${stats.passages} cited passages across the Chinese histories.`;
   const lifeBody = [
@@ -514,6 +621,7 @@ function generatePersonHtml(person, context) {
     person.life.attestedActivity.length ? `<h3>Attested activity</h3>${renderClaimList(person.life.attestedActivity, context.peopleById)}` : '',
   ].join('');
   const contentSections = [];
+  const treeData = familyTreeData(person, context.peopleById);
   const addSection = (label, body, className = '', id = slugify(label)) => {
     if (body) contentSections.push({ label, id, html: section(label, body, className, id) });
   };
@@ -522,7 +630,7 @@ function generatePersonHtml(person, context) {
   addSection('Identity', renderIdentity(person, context.peopleById));
   addSection('Roles', renderRoles(person));
   addSection('Life and dates', lifeBody, 'person-chronicle-section', 'life-and-dates');
-  addSection('Family', renderFamily(person, context.peopleById, context.familyEdgesById));
+  addSection('Family', renderFamily(person, context.peopleById, context.familyEdgesById, treeData));
   for (const [label, keys] of CLAIM_SECTIONS) {
     const claims = keys.flatMap((key) => person[key] ?? []);
     addSection(label, renderClaimList(claims, context.peopleById));
@@ -544,6 +652,9 @@ function generatePersonHtml(person, context) {
     preview: context.preview,
     jsonLd: personJsonLd(person),
     ogType: 'profile',
+    extraHead: treeData.length > 1
+      ? `<link rel="stylesheet" href="../vendor/family-chart/family-chart.css?v=${PEOPLE_ASSET_VERSION}">`
+      : '',
   })}</head>
 <body class="person-page">
   <header class="person-header"><div class="person-header-inner">
@@ -567,6 +678,9 @@ function generatePersonHtml(person, context) {
     <div class="person-record">${contentSections.map(({ html }) => html).join('')}</div>
   </div></main>
   ${pageFooter()}
+  ${treeData.length > 1 ? `<script src="../vendor/family-chart/d3.min.js?v=${PEOPLE_ASSET_VERSION}"></script>
+  <script src="../vendor/family-chart/family-chart.min.js?v=${PEOPLE_ASSET_VERSION}"></script>
+  <script src="../people-family.js?v=${PEOPLE_ASSET_VERSION}"></script>` : ''}
 </body>
 </html>`;
 }
@@ -580,7 +694,7 @@ function searchEntry(person) {
   const text = [
     ...person.names.flatMap((name) => [name.en, name.zh, name.pinyin, name.kind]),
     ...person.roles.flatMap((role) => [role.label, role.roleId]),
-    personLifeSummary(person),
+    lifeSummaryForPerson(person),
     ...searchableKeys.flatMap((key) => flattenText(person[key])),
   ].filter(Boolean).join(' ');
   const stats = personReferenceStats(person);
@@ -591,12 +705,33 @@ function searchEntry(person) {
     person.preferredName.pinyin ?? '',
     person.description.en,
     text,
-    personLifeSummary(person),
+    lifeSummaryForPerson(person),
     person.roles.map((role) => role.roleId),
     [...new Set(person.references.map((reference) => reference.book))],
     stats.passages,
     periodForPerson(person).slug,
+    personDirectoryKey(person),
   ];
+}
+
+function writePersonPageShards(outputRoot, people, context) {
+  const pagesDir = path.join(outputRoot, 'data', 'people', 'pages');
+  fs.mkdirSync(pagesDir, { recursive: true });
+  const buckets = Array.from({ length: PERSON_PAGE_SHARD_COUNT }, () => []);
+  for (const person of people) {
+    buckets[Number.parseInt(personPageShardName(person.slug), 10)].push(person);
+  }
+  let written = 0;
+  for (let index = 0; index < buckets.length; index += 1) {
+    if (!buckets[index].length) continue;
+    const pages = Object.fromEntries(buckets[index].map((person) => [person.slug, generatePersonHtml(person, context)]));
+    writeTextAtomic(
+      path.join(pagesDir, `${String(index).padStart(4, '0')}.json`),
+      `${JSON.stringify({ v: 1, pages })}\n`,
+    );
+    written += 1;
+  }
+  return written;
 }
 
 function writeSearchData(outputRoot, people, context) {
@@ -605,21 +740,26 @@ function writeSearchData(outputRoot, people, context) {
   const entries = people.map(searchEntry);
   const parts = [];
   let current = [];
+  let currentBytes = Buffer.byteLength('{"v":2,"entries":[]}\n', 'utf8');
   for (const entry of entries) {
-    const next = [...current, entry];
-    if (Buffer.byteLength(JSON.stringify({ v: 1, entries: next }), 'utf8') > SEARCH_PART_MAX_BYTES && current.length) {
+    const entryBytes = Buffer.byteLength(JSON.stringify(entry), 'utf8') + (current.length ? 1 : 0);
+    if (currentBytes + entryBytes > SEARCH_PART_MAX_BYTES && current.length) {
       parts.push(current);
       current = [entry];
-    } else current = next;
+      currentBytes = Buffer.byteLength('{"v":2,"entries":[]}\n', 'utf8') + entryBytes;
+    } else {
+      current.push(entry);
+      currentBytes += entryBytes;
+    }
   }
   if (current.length) parts.push(current);
   const files = parts.map((part, index) => {
     const file = `part-${String(index + 1).padStart(3, '0')}.json`;
-    writeJsonAtomic(path.join(searchDir, file), { v: 2, entries: part });
+    writeTextAtomic(path.join(searchDir, file), `${JSON.stringify({ v: 3, entries: part })}\n`);
     return { file, entries: part.length };
   });
   writeJsonAtomic(path.join(searchDir, 'index.json'), {
-    v: 2,
+    v: 3,
     generatedAt: context.catalog.generatedAt,
     complete: context.catalog.complete,
     people: people.length,
@@ -631,7 +771,7 @@ function writeSearchData(outputRoot, people, context) {
     preview: context.preview,
     published: context.active && !context.preview,
     people: people.length,
-    browsePages: context.browsePages ?? 0,
+    pageShards: context.pageShards ?? 0,
     sourceChapters: context.catalog.stats.sourceChapters,
     extractedChapters: context.catalog.stats.extractedChapters,
     missingChapters: context.catalog.stats.missingChapters,
@@ -642,8 +782,8 @@ function rankedPeople(people) {
   return [...people].sort((left, right) => {
     const leftStats = personReferenceStats(left);
     const rightStats = personReferenceStats(right);
-    return rightStats.books - leftStats.books || rightStats.chapters - leftStats.chapters ||
-      rightStats.passages - leftStats.passages ||
+    return rightStats.passages - leftStats.passages || rightStats.chapters - leftStats.chapters ||
+      rightStats.books - leftStats.books ||
       personDisplayName(left).localeCompare(personDisplayName(right), 'en');
   });
 }
@@ -654,14 +794,10 @@ function sortPeopleAlphabetically(people) {
   );
 }
 
-function browseFileName(slug, page) {
-  return page === 1 ? `${slug}.html` : `${slug}-${page}.html`;
-}
-
 function buildBrowseCollections(people) {
   const periods = HISTORICAL_PERIODS.map((period) => ({
     ...period,
-    people: rankedPeople(people.filter((person) => periodForPerson(person).slug === period.slug)),
+    people: people.filter((person) => periodForPerson(person).slug === period.slug),
   }));
   const roleMap = new Map();
   for (const person of people) {
@@ -671,7 +807,7 @@ function buildBrowseCollections(people) {
     }
   }
   const roles = [...roleMap.values()]
-    .map((role) => ({ ...role, people: rankedPeople(role.people) }))
+    .map((role) => ({ ...role }))
     .sort((left, right) => right.people.length - left.people.length || left.label.localeCompare(right.label, 'en'));
   const sourceMap = new Map();
   for (const person of people) {
@@ -684,7 +820,7 @@ function buildBrowseCollections(people) {
     slug: book,
     label: sourceLabel(book, people),
     zh: sourceChineseLabel(book, people),
-    people: rankedPeople(sourcePeople),
+    people: sourcePeople,
   })).sort((left, right) => right.people.length - left.people.length || left.label.localeCompare(right.label, 'en'));
   const directory = DIRECTORY_KEYS.map((entry) => ({
     ...entry,
@@ -693,78 +829,9 @@ function buildBrowseCollections(people) {
   return { periods, roles, sources, directory };
 }
 
-function browsePagination({ slug, page, pageCount }) {
-  if (pageCount <= 1) return '';
-  const links = Array.from({ length: pageCount }, (_, index) => index + 1).map((number) =>
-    number === page
-      ? `<span aria-current="page">${number}</span>`
-      : `<a href="${escapeAttribute(browseFileName(slug, number))}">${number}</a>`
-  ).join('');
-  return `<nav class="people-pagination" aria-label="Browse pages">${links}</nav>`;
-}
-
-function generateBrowseHtml({ kind, item, page, pageCount, pagePeople, context }) {
-  const kindLabels = { period: 'Historical periods', role: 'Roles', source: 'Source histories', directory: 'A-Z directory' };
-  const kindLabel = kindLabels[kind];
-  const canonicalPath = `/people/${kind}/${browseFileName(item.slug, page)}`;
-  const pageSuffix = page > 1 ? `, page ${page}` : '';
-  const title = `${item.label} — People in Chinese History${pageSuffix} | 24 Histories`;
-  const detail = kind === 'period' ? item.shortLabel
-    : kind === 'source' ? `People named in ${item.label}${item.zh ? ` (${item.zh})` : ''}`
-      : kind === 'role' ? `People identified as ${item.label.toLocaleLowerCase('en')}`
-        : `People whose English names begin with ${item.label}`;
-  const description = `${detail}. Browse ${item.people.length} source-linked person records from the Chinese histories.`;
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>${pageHead({
-    title,
-    description,
-    canonicalPath,
-    preview: context.preview,
-    assetPrefix: '../../',
-    jsonLd: collectionJsonLd({ name: item.label, description, canonicalPath, people: pagePeople }),
-  })}</head>
-<body class="people-browse-page">
-  <header class="people-browse-header"><div>
-    ${renderBreadcrumbs([['People', '../index.html'], [kindLabel, '../index.html'], [item.label, browseFileName(item.slug, page)]])}
-    <p class="people-eyebrow">${escapeHtml(kindLabel)}</p>
-    <h1>${escapeHtml(item.label)}${item.zh ? ` <span lang="zh-Hant">${escapeHtml(item.zh)}</span>` : ''}</h1>
-    <p>${escapeHtml(detail)} · ${plural(item.people.length, 'person', 'people')}</p>
-  </div></header>
-  <main class="people-browse-content">
-    <div class="people-browse-tools"><a href="../index.html#find-a-person">Search all people</a>${browsePagination({ slug: item.slug, page, pageCount })}</div>
-    <ol class="people-card-grid people-browse-results">${pagePeople.map((person) => renderPersonCard(person, '../')).join('')}</ol>
-    ${browsePagination({ slug: item.slug, page, pageCount })}
-  </main>
-  ${pageFooter('../../')}
-</body>
-</html>`;
-}
-
-function writeBrowsePages(outputRoot, collections, context) {
-  let written = 0;
-  for (const kind of ['period', 'role', 'source', 'directory']) {
-    const directory = path.join(outputRoot, 'people', kind);
-    fs.mkdirSync(directory, { recursive: true });
-    for (const item of collections[kind === 'period' ? 'periods' : kind === 'role' ? 'roles' : kind === 'source' ? 'sources' : 'directory']) {
-      if (!item.people.length) continue;
-      const pageCount = Math.ceil(item.people.length / BROWSE_PAGE_SIZE);
-      for (let page = 1; page <= pageCount; page += 1) {
-        const pagePeople = item.people.slice((page - 1) * BROWSE_PAGE_SIZE, page * BROWSE_PAGE_SIZE);
-        writeTextAtomic(
-          path.join(directory, browseFileName(item.slug, page)),
-          generateBrowseHtml({ kind, item, page, pageCount, pagePeople, context }),
-        );
-        written += 1;
-      }
-    }
-  }
-  return written;
-}
-
 function renderBrowseStrip(items, kind, limit = items.length) {
   return `<div class="people-browse-strip">${items.filter((item) => item.people.length).slice(0, limit).map((item) =>
-    `<a href="${kind}/${escapeAttribute(item.slug)}.html"><span>${escapeHtml(item.label)}</span>` +
+    `<a href="index.html?${kind}=${encodeURIComponent(item.slug)}#find-a-person"><span>${escapeHtml(item.label)}</span>` +
     `${item.shortLabel ? `<small>${escapeHtml(item.shortLabel)}</small>` : item.zh ? `<small lang="zh-Hant">${escapeHtml(item.zh)}</small>` : ''}` +
     `<strong>${item.people.length.toLocaleString('en-US')}</strong></a>`
   ).join('')}</div>`;
@@ -810,6 +877,7 @@ function generateIndexHtml(people, context, collections) {
       <div><dt>Source histories</dt><dd>${sourceCount.toLocaleString('en-US')}</dd></div>
       <div><dt>Chapters indexed</dt><dd>${chapterCount.toLocaleString('en-US')}</dd></div>
     </dl>
+    <p class="people-coverage-note">This growing index currently covers ${chapterCount.toLocaleString('en-US')} of ${context.catalog.stats.sourceChapters.toLocaleString('en-US')} chapters. Person records and cross-book identifications will continue to expand as the remaining chapters are reviewed.</p>
   </div></header>
   <main class="people-index-content">
     <section id="find-a-person" class="people-search" aria-labelledby="people-search-heading">
@@ -839,7 +907,7 @@ function generateIndexHtml(people, context, collections) {
     </section>
 
     <section class="people-discovery-section" aria-labelledby="documented-heading">
-      <div class="people-section-heading"><p class="people-eyebrow">A place to begin</p><h2 id="documented-heading">Most documented in the translated histories</h2><p>These are the people currently found across the greatest number of source histories and chapters—not a ranking of historical importance.</p></div>
+      <div class="people-section-heading"><p class="people-eyebrow">A place to begin</p><h2 id="documented-heading">Most mentioned in the translated histories</h2><p>These people have the most indexed source passages. The ordering reflects the surviving text, not a judgment of historical importance.</p></div>
       <ol class="people-card-grid people-featured-grid">${featured.map((person) => renderPersonCard(person)).join('')}</ol>
     </section>
 
@@ -857,7 +925,7 @@ function generateIndexHtml(people, context, collections) {
     <section class="people-discovery-section people-directory-section" aria-labelledby="directory-heading">
       <div class="people-section-heading"><p class="people-eyebrow">Complete directory</p><h2 id="directory-heading">Browse A-Z</h2><p>Every person page is linked through this directory, including records with uncertain dates or sparse evidence.</p></div>
       <nav class="people-alphabet" aria-label="People directory">${collections.directory.map((item) => item.people.length
-        ? `<a href="directory/${escapeAttribute(item.slug)}.html"><span>${escapeHtml(item.label)}</span><small>${item.people.length.toLocaleString('en-US')}</small></a>`
+        ? `<a href="index.html?letter=${encodeURIComponent(item.slug)}&sort=az#find-a-person"><span>${escapeHtml(item.label)}</span><small>${item.people.length.toLocaleString('en-US')}</small></a>`
         : `<span aria-disabled="true"><span>${escapeHtml(item.label)}</span><small>0</small></span>`).join('')}</nav>
     </section>
   </main>
@@ -876,6 +944,7 @@ export function generatePeoplePages(options = parseArgs([])) {
   }
 
   cleanOwnedOutput(options.outputRoot);
+  copyPeopleAssets(options.outputRoot);
   const peopleDir = path.join(options.outputRoot, 'people');
   fs.mkdirSync(peopleDir, { recursive: true });
   const allPeople = sortPeopleAlphabetically(context.catalog.people);
@@ -887,22 +956,24 @@ export function generatePeoplePages(options = parseArgs([])) {
   }
   if (options.limit) selected = selected.slice(0, options.limit);
 
-  for (const person of selected) {
-    writeTextAtomic(path.join(peopleDir, `${person.slug}.html`), generatePersonHtml(person, context));
+  if (options.person || options.limit) {
+    for (const person of selected) {
+      writeTextAtomic(path.join(peopleDir, `${person.slug}.html`), generatePersonHtml(person, context));
+    }
+    context.pageShards = 0;
+  } else {
+    context.pageShards = writePersonPageShards(options.outputRoot, allPeople, context);
   }
-  context.browsePages = options.person || options.limit
-    ? 0
-    : writeBrowsePages(options.outputRoot, collections, context);
   writeTextAtomic(path.join(peopleDir, 'index.html'), generateIndexHtml(allPeople, context, collections));
   writeSearchData(options.outputRoot, allPeople, context);
   console.log(
-    `people pages: ${selected.length} person page(s), ${context.browsePages} browse page(s), ` +
+    `people pages: ${selected.length} person record(s), ${context.pageShards} page shard(s), ` +
     `${allPeople.length} search entries ` +
     `(${context.preview ? 'preview' : 'publication'} mode)`,
   );
   return {
     generated: selected.length,
-    browsePages: context.browsePages,
+    pageShards: context.pageShards,
     active: true,
     preview: context.preview,
     people: allPeople.length,

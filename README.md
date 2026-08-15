@@ -732,6 +732,36 @@ node generate-static-pages.js --book shiji
 node generate-static-pages.js --book shiji --chapter 006
 ```
 
+### People Directory
+
+The People directory publishes a searchable index at `/people/`, links recognized
+names in chapter translations to their records, and exposes one canonical URL per
+person. Search accepts English names, Chinese names, pinyin, and partial matches;
+results are ranked first by match quality and then by cited passage count.
+
+Person URLs are SEO-ready HTML, but they are not stored as one physical file per
+person. `scripts/generate-people-pages.mjs` pre-renders the records into 1,024
+deterministic JSON shards, and the Cloudflare Pages Function at
+`functions/people/[slug].js` returns the requested record. This preserves distinct
+URLs, metadata, JSON-LD, and source text for crawlers without allowing a complete
+catalog to consume the Pages file limit. The generated shards, index page, and
+vendored family-tree browser assets are gitignored and rebuilt during deployment.
+
+```bash
+# Rebuild the directory, person records, and local family-tree assets
+npm run people:site
+
+# Verify every generated record and every linked chapter mention
+npm run people:site:verify
+
+# Test the Pages Function locally (plain python cannot serve dynamic person URLs)
+npx wrangler pages dev public
+```
+
+The sitemap generator reads the compact People search index and includes every
+person URL without needing physical person HTML files. It automatically writes a
+sitemap index when the URL count exceeds one sitemap's configured threshold.
+
 ### Running Locally
 
 ```bash
@@ -739,6 +769,9 @@ cd public && python3 -m http.server 8000
 ```
 
 Then visit http://localhost:8000
+
+Use `npx wrangler pages dev public` instead when testing `/people/<slug>.html`,
+because those records are served by a Pages Function.
 
 ### Deployment (Cloudflare Pages)
 
@@ -753,7 +786,7 @@ Then visit http://localhost:8000
 | **Root directory** | `/` (repository root) |
 | **Node.js version** | **22** (see `.node-version` and `package.json` `engines`) |
 
-The build runs, in order: sync chapter JSON into `public/data/`, regenerate `manifest.json` and `progress.json`, regenerate static HTML, then write **`public/sitemap.xml`** and **`public/robots.txt`** (`scripts/generate-sitemap.mjs`), then render OG PNGs incrementally (first build may download the Noto CJK font; network required). It intentionally skips LanguageTool cleanup scoring, because Cloudflare does not run the local LanguageTool server; run `make update BOOK=…`, `make update-all`, or `make score-languagetool` locally when score updates are part of the change. `wrangler.toml` only sets `pages_build_output_dir` for Wrangler CLI; it does **not** replace the dashboard build command for Git-connected Pages.
+The build runs, in order: sync chapter JSON into `public/data/`, regenerate `manifest.json` and `progress.json`, compile the People catalog, regenerate static chapter HTML and person-page shards, verify person records and chapter links, write **`public/sitemap.xml`** and **`public/robots.txt`** (`scripts/generate-sitemap.mjs`), then render OG PNGs incrementally (first build may download the Noto CJK font; network required). It intentionally skips LanguageTool cleanup scoring, because Cloudflare does not run the local LanguageTool server; run `make update BOOK=…`, `make update-all`, or `make score-languagetool` locally when score updates are part of the change. `wrangler.toml` only sets `pages_build_output_dir` and local compatibility settings for Wrangler CLI; it does **not** replace the dashboard build command for Git-connected Pages.
 
 **Open Graph rasters** live under **`public/og/`** as **`*.png`** plus **`*.png.sha256`** input fingerprints; they are **committed** so Pages clones include them and incremental skips avoid re-rendering when sources are unchanged. If `/og/site.png` ever returns HTML instead of PNG after a deploy, see `AGENTS.md` under Cloudflare Pages.
 

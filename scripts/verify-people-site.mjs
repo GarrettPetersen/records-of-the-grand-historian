@@ -4,8 +4,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { load as loadHtml } from 'cheerio';
-import { listHtmlFilesRecursively, PEOPLE_DIR, readJson, REPO_ROOT } from './lib/people-content.mjs';
-import { assertPeopleCatalogPublicationState } from './lib/people-publication.mjs';
+import { PEOPLE_DIR, readJson, REPO_ROOT } from './lib/people-content.mjs';
+import {
+  assertPeopleCatalogPublicationState,
+  peopleCatalogIsPublishable,
+} from './lib/people-publication.mjs';
+import {
+  PERSON_PAGE_SHARD_COUNT,
+  personPageShardName,
+} from '../functions/lib/people-shards.js';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
@@ -59,7 +66,7 @@ export function verifyPeopleSite(options = parseArgs([])) {
   const siteIndex = readJson(path.join(PEOPLE_DIR, 'generated', 'site-index.json'));
   const statusPath = path.join(options.outputRoot, 'data', 'people', 'site-status.json');
   if (!fs.existsSync(statusPath)) {
-    if (!catalog.complete && !options.allowPreview) {
+    if (!peopleCatalogIsPublishable(catalog) && !options.allowPreview) {
       const staleIndex = path.join(options.outputRoot, 'people', 'index.html');
       if (fs.existsSync(staleIndex)) throw new Error('Incomplete catalog left stale published people pages');
       console.log('people site verification: publication correctly gated while catalog is incomplete');
@@ -77,75 +84,73 @@ export function verifyPeopleSite(options = parseArgs([])) {
   assert(status.missingChapters === catalog.stats.missingChapters,
     'People site status missing-chapter count differs from catalog', errors);
   if (status.published) {
-    assert(status.extractedChapters === status.sourceChapters,
-      'Published people site does not cover every source chapter', errors);
-    assert(status.missingChapters === 0, 'Published people site reports missing chapters', errors);
+    assert(peopleCatalogIsPublishable(catalog), 'Published people site is not publishable', errors);
   }
   if (status.preview && !options.allowPreview) errors.push('People site is a noindex preview, not a publication build');
   if (!status.preview && !status.published) errors.push('People site is not marked published');
 
   const peopleDir = path.join(options.outputRoot, 'people');
   assert(fs.existsSync(path.join(peopleDir, 'index.html')), 'Missing people index page', errors);
-  const pageFiles = fs.existsSync(peopleDir)
-    ? fs.readdirSync(peopleDir).filter((name) => name !== 'index.html' && name.endsWith('.html'))
-    : [];
-  assert(pageFiles.length === catalog.people.length,
-    `Expected ${catalog.people.length} person pages, found ${pageFiles.length}`, errors);
-  const allPeopleHtml = fs.existsSync(peopleDir) ? listHtmlFilesRecursively(peopleDir) : [];
-  const browseFiles = allPeopleHtml.filter((name) => name.includes(path.sep));
-  assert(browseFiles.length === status.browsePages,
-    `Expected ${status.browsePages} people browse pages, found ${browseFiles.length}`, errors);
-
   const expectedSlugs = new Set(catalog.people.map((person) => person.slug));
   const peopleById = new Map(catalog.people.map((person) => [person.id, person]));
-  const actualSlugs = new Set(pageFiles.map((file) => file.slice(0, -5)));
+  const peopleBySlug = new Map(catalog.people.map((person) => [person.slug, person]));
+  const pagesDir = path.join(options.outputRoot, 'data', 'people', 'pages');
+  const shardFiles = fs.existsSync(pagesDir)
+    ? fs.readdirSync(pagesDir).filter((name) => /^\d{4}\.json$/u.test(name)).sort()
+    : [];
+  assert(shardFiles.length === status.pageShards,
+    `Expected ${status.pageShards} person-page shards, found ${shardFiles.length}`, errors);
+  assert(shardFiles.length <= PERSON_PAGE_SHARD_COUNT,
+    `Person-page shard count exceeds ${PERSON_PAGE_SHARD_COUNT}`, errors);
+  const actualSlugs = new Set();
+  for (const file of shardFiles) {
+    const fullPath = path.join(pagesDir, file);
+    assert(fs.statSync(fullPath).size < 25 * 1024 * 1024, `${file} exceeds Cloudflare's 25 MiB asset limit`, errors);
+    const shard = readJson(fullPath);
+    assert(shard.v === 1 && shard.pages && typeof shard.pages === 'object', `${file} is not a v1 page shard`, errors);
+    for (const [slug, html] of Object.entries(shard.pages ?? {})) {
+      const person = peopleBySlug.get(slug);
+      assert(Boolean(person), `${file} contains unknown person ${slug}`, errors);
+      assert(personPageShardName(slug) === file.slice(0, -5), `${slug} is stored in the wrong shard`, errors);
+      assert(!actualSlugs.has(slug), `${slug} appears in more than one page shard`, errors);
+      actualSlugs.add(slug);
+      if (!person || typeof html !== 'string') continue;
+      assert((html.match(/<h1(?:\s|>)/gu) ?? []).length === 1, `${slug} must have one h1`, errors);
+      assert(html.includes(`href="https://24histories.com/people/${slug}.html"`), `${slug} has no canonical URL`, errors);
+      assert(html.includes('type="application/ld+json"'), `${slug} has no Person JSON-LD`, errors);
+      assert((html.match(/class="person-reference"/gu) ?? []).length === person.references.length,
+        `${slug} has the wrong number of reference snippets`, errors);
+      const uniqueFamily = new Set();
+      let chartExpected = false;
+      for (const relationship of person.familyRelationships) {
+        const target = peopleById.get(relationship.value.personId);
+        const key = `${relationship.value.relation}:${relationship.value.personId}`;
+        if (uniqueFamily.has(key)) continue;
+        uniqueFamily.add(key);
+        assert(Boolean(target), `${slug} has a family link to an unknown person`, errors);
+        if (target) assert(html.includes(`href="${target.slug}.html"`),
+          `${slug} does not link to family target ${target.slug}`, errors);
+        if (['parent-of', 'child-of', 'spouse-of'].includes(relationship.value.relation)) chartExpected = true;
+      }
+      if (chartExpected) {
+        assert(html.includes('id="person-family-chart"'), `${slug} omits its family chart`, errors);
+        assert(html.includes('../people-family.js'), `${slug} omits the family-chart runtime`, errors);
+      }
+    }
+  }
   for (const slug of expectedSlugs) assert(actualSlugs.has(slug), `Missing person page ${slug}.html`, errors);
   for (const slug of actualSlugs) assert(expectedSlugs.has(slug), `Unexpected person page ${slug}.html`, errors);
 
-  for (const person of catalog.people) {
-    const file = path.join(peopleDir, `${person.slug}.html`);
-    if (!fs.existsSync(file)) continue;
-    const html = fs.readFileSync(file, 'utf8');
-    const document = loadHtml(html);
-    assert(document('h1').length === 1, `${person.slug}.html must have one h1`, errors);
-    assert(document('link[rel="canonical"]').length === 1, `${person.slug}.html has no canonical URL`, errors);
-    assert(document('script[type="application/ld+json"]').length === 1, `${person.slug}.html has no Person JSON-LD`, errors);
-    assert(document('.person-reference').length === person.references.length,
-      `${person.slug}.html has ${document('.person-reference').length}/${person.references.length} reference snippets`, errors);
-    for (const relationship of person.familyRelationships) {
-      const target = peopleById.get(relationship.value.personId);
-      assert(Boolean(target), `${person.slug}.html has a family link to an unknown person`, errors);
-      if (target) assert(document(`a[href="${target.slug}.html"]`).length > 0,
-        `${person.slug}.html does not link to family target ${target.slug}`, errors);
-    }
-  }
-
-  const directorySlugs = new Set();
-  for (const relativeFile of browseFiles) {
-    const html = fs.readFileSync(path.join(peopleDir, relativeFile), 'utf8');
-    const document = loadHtml(html);
-    assert(document('h1').length === 1, `${relativeFile} must have one h1`, errors);
-    assert(document('link[rel="canonical"]').length === 1, `${relativeFile} has no canonical URL`, errors);
-    assert(document('script[type="application/ld+json"]').length === 1, `${relativeFile} has no collection JSON-LD`, errors);
-    if (relativeFile.startsWith(`directory${path.sep}`)) {
-      document('a[href^="../"][href$=".html"]').each((_, link) => {
-        const href = document(link).attr('href');
-        if (href && /^\.\.\/[^/]+\.html$/u.test(href) && href !== '../index.html') {
-          directorySlugs.add(href.slice(3, -5));
-        }
-      });
-    }
-  }
-  assert(directorySlugs.size === expectedSlugs.size,
-    `A-Z directory links to ${directorySlugs.size}/${expectedSlugs.size} people`, errors);
-  for (const slug of expectedSlugs) assert(directorySlugs.has(slug), `A-Z directory omits ${slug}`, errors);
+  const indexDocument = loadHtml(fs.readFileSync(path.join(peopleDir, 'index.html'), 'utf8'));
+  assert(indexDocument('h1').length === 1, 'People index must have one h1', errors);
+  assert(indexDocument('link[rel="canonical"]').length === 1, 'People index has no canonical URL', errors);
 
   const searchEntries = loadSearchEntries(options.outputRoot, errors);
   const searchSlugs = new Set(searchEntries.map((entry) => entry[0]));
   assert(searchSlugs.size === expectedSlugs.size, 'People search contains duplicate or missing slugs', errors);
   for (const slug of expectedSlugs) assert(searchSlugs.has(slug), `Search data omits ${slug}`, errors);
   for (const entry of searchEntries) {
-    assert(Array.isArray(entry) && entry.length >= 11, `Search entry ${entry?.[0] ?? '(unknown)'} is not version 2`, errors);
+    assert(Array.isArray(entry) && entry.length >= 12, `Search entry ${entry?.[0] ?? '(unknown)'} is not version 3`, errors);
   }
 
   if (!options.skipChapterLinks) {
@@ -156,10 +161,16 @@ export function verifyPeopleSite(options = parseArgs([])) {
         continue;
       }
       const document = loadHtml(fs.readFileSync(chapterFile, 'utf8'));
+      const renderedLinks = new Set();
+      document('a[data-person-id]').each((_, link) => {
+        const personId = document(link).attr('data-person-id');
+        const sentenceId = document(link).closest('[id^="zh-"], [id^="en-"]').attr('id');
+        if (personId && sentenceId) renderedLinks.add(`${sentenceId}:${personId}`);
+      });
       for (const mention of chapter.mentions) {
         for (const language of ['zh', 'en']) {
           if (!(mention.spans[language] ?? []).length) continue;
-          assert(document(`#${language}-${mention.unit.id} a[data-person-id="${mention.personId}"]`).length > 0,
+          assert(renderedLinks.has(`${language}-${mention.unit.id}:${mention.personId}`),
             `${chapter.book}/${chapter.chapter} omits ${language} link ${mention.mentionId}`, errors);
         }
       }
@@ -171,7 +182,7 @@ export function verifyPeopleSite(options = parseArgs([])) {
     throw new Error(`People site verification failed (${errors.length} error(s)):\n${shown}`);
   }
   console.log(
-    `people site verification passed: ${catalog.people.length} pages, ${searchEntries.length} search entries, ` +
+    `people site verification passed: ${catalog.people.length} edge-rendered records, ${searchEntries.length} search entries, ` +
     `${Object.keys(siteIndex.chapters).length} annotated chapters${options.skipChapterLinks ? ' (chapter links skipped)' : ''}`,
   );
   return { people: catalog.people.length, searchEntries: searchEntries.length };

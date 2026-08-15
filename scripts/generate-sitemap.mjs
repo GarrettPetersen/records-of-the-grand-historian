@@ -6,7 +6,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { listHtmlFilesRecursively } from './lib/people-content.mjs';
 import { canonicalUrlForHtmlFile } from './lib/site-urls.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -82,45 +81,55 @@ function main() {
     if (status.published) {
       const peopleDir = path.join(publicDir, 'people');
       const indexPath = path.join(peopleDir, 'index.html');
-      if (!status.complete || !fs.existsSync(indexPath)) {
+      if (!fs.existsSync(indexPath)) {
         throw new Error('Published people-site status is inconsistent with generated people pages');
       }
       const peopleLastmod = typeof status.generatedAt === 'string' ? status.generatedAt.slice(0, 10) : lastmod;
-      const personFiles = fs.readdirSync(peopleDir)
-        .filter((name) => name !== 'index.html' && name.endsWith('.html'))
-        .sort();
-      if (personFiles.length !== status.people) {
-        throw new Error(`People sitemap expected ${status.people} person pages, found ${personFiles.length}`);
+      urls.push({ loc: `${origin}/people/`, lastmod: peopleLastmod });
+      const searchDir = path.join(publicDir, 'data', 'people', 'search');
+      const searchIndex = JSON.parse(fs.readFileSync(path.join(searchDir, 'index.json'), 'utf8'));
+      let peopleFound = 0;
+      for (const part of searchIndex.parts ?? []) {
+        const data = JSON.parse(fs.readFileSync(path.join(searchDir, part.file), 'utf8'));
+        for (const entry of data.entries ?? []) {
+          urls.push({ loc: `${origin}/people/${encodeURIComponent(entry[0])}.html`, lastmod: peopleLastmod });
+          peopleFound += 1;
+        }
       }
-      const allPeopleHtml = listHtmlFilesRecursively(peopleDir).sort();
-      const browsePages = allPeopleHtml.filter((name) => name.includes(path.sep)).length;
-      if (browsePages !== status.browsePages) {
-        throw new Error(`People sitemap expected ${status.browsePages} browse pages, found ${browsePages}`);
-      }
-      for (const name of allPeopleHtml) {
-        const webPath = name.split(path.sep).join('/');
-        urls.push({
-          loc: name === 'index.html' ? `${origin}/people/` : `${origin}/people/${webPath}`,
-          lastmod: peopleLastmod,
-        });
+      if (peopleFound !== status.people) {
+        throw new Error(`People sitemap expected ${status.people} person URLs, found ${peopleFound}`);
       }
     }
   }
 
   urls.sort((a, b) => (a.loc < b.loc ? -1 : a.loc > b.loc ? 1 : 0));
 
-  const urlset = urls
+  const renderUrlset = (entries) => entries
     .map((u) => {
       const lm = u.lastmod ? `\n    <lastmod>${escapeXml(u.lastmod)}</lastmod>` : '';
       return `  <url>\n    <loc>${escapeXml(u.loc)}</loc>${lm}\n  </url>`;
     })
     .join('\n');
-
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+  const sitemapDir = path.join(publicDir, 'sitemaps');
+  fs.rmSync(sitemapDir, { recursive: true, force: true });
+  let xml;
+  if (urls.length <= 45_000) {
+    xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urlset}
+${renderUrlset(urls)}
 </urlset>
 `;
+  } else {
+    fs.mkdirSync(sitemapDir, { recursive: true });
+    const files = [];
+    for (let offset = 0; offset < urls.length; offset += 45_000) {
+      const file = `sitemap-${String(files.length + 1).padStart(3, '0')}.xml`;
+      const body = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${renderUrlset(urls.slice(offset, offset + 45_000))}\n</urlset>\n`;
+      fs.writeFileSync(path.join(sitemapDir, file), body, 'utf8');
+      files.push(file);
+    }
+    xml = `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${files.map((file) => `  <sitemap>\n    <loc>${escapeXml(`${origin}/sitemaps/${file}`)}</loc>\n  </sitemap>`).join('\n')}\n</sitemapindex>\n`;
+  }
 
   const sitemapPath = path.join(publicDir, 'sitemap.xml');
   fs.writeFileSync(sitemapPath, xml, 'utf8');

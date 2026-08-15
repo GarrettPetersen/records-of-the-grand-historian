@@ -1,7 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { exactSpanAt, PEOPLE_DIR, readJson } from './people-content.mjs';
-import { assertPeopleCatalogPublicationState } from './people-publication.mjs';
+import {
+  assertPeopleCatalogPublicationState,
+  peopleCatalogIsPublishable,
+} from './people-publication.mjs';
 
 const CATALOG_PATH = path.join(PEOPLE_DIR, 'generated', 'catalog.json');
 const SITE_INDEX_PATH = path.join(PEOPLE_DIR, 'generated', 'site-index.json');
@@ -34,14 +37,15 @@ export function loadPeopleSiteContext({ allowMissing = true, allowPreview = prev
     throw new Error('Generated people catalog and site index are out of sync; rerun people:catalog');
   }
 
-  const preview = !catalog.complete && allowPreview;
-  const active = catalog.complete || preview;
+  const publishable = peopleCatalogIsPublishable(catalog);
+  const preview = !publishable && allowPreview;
+  const active = publishable || preview;
   const peopleById = new Map(catalog.people.map((person) => [person.id, person]));
   const familyEdgesById = new Map((catalog.familyEdges ?? []).map((edge) => [edge.id, edge]));
   return {
     active,
     preview,
-    reason: active ? null : 'catalog-incomplete',
+    reason: active ? null : 'catalog-not-publishable',
     catalog,
     siteIndex,
     peopleById,
