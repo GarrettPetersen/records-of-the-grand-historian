@@ -2016,6 +2016,16 @@ footer .site-copyright {
   overflow: hidden;
 }
 
+.person-family-chart #f3Canvas > svg.main_svg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.person-family-chart #htmlSvg {
+  z-index: 1 !important;
+}
+
 .person-family-chart.f3 {
   --background-color: #f7fafc;
   --text-color: #39536b;
@@ -2051,6 +2061,18 @@ footer .site-copyright {
   color: #253a4d;
   text-align: left;
   text-decoration: none;
+}
+
+.person-family-chart .card-male .family-tree-card {
+  background: var(--male-color);
+}
+
+.person-family-chart .card-female .family-tree-card {
+  background: var(--female-color);
+}
+
+.person-family-chart .card-genderless .family-tree-card {
+  background: var(--genderless-color);
 }
 
 .person-family-chart .family-tree-card.is-current {

@@ -12,6 +12,38 @@
       .replace(/'/gu, '&#039;');
   }
 
+  function constrainNavigation(chart) {
+    const canvas = container.querySelector('#f3Canvas');
+    const zoom = canvas?.__zoomObj;
+    const tree = chart.store?.getTree?.();
+    if (!canvas || !zoom || !tree?.dim) throw new Error('Family Chart navigation is unavailable');
+
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    const padding = 28;
+    const treeExtent = [
+      [-tree.dim.x_off - padding, -tree.dim.y_off - padding],
+      [tree.dim.width - tree.dim.x_off + padding, tree.dim.height - tree.dim.y_off + padding],
+    ];
+    const viewportExtent = [[0, 0], [width, height]];
+    const minimumScale = Math.min(
+      1,
+      width / (tree.dim.width + 2 * padding),
+      height / (tree.dim.height + 2 * padding),
+    );
+    const originalFilter = zoom.filter();
+
+    zoom
+      .extent(viewportExtent)
+      .translateExtent(treeExtent)
+      .scaleExtent([minimumScale, 1.5])
+      .filter(function filterFamilyNavigation(event) {
+        if (event.type === 'wheel' && !event.ctrlKey) return false;
+        if (event.touches && event.touches.length < 2) return false;
+        return originalFilter.call(this, event);
+      });
+  }
+
   try {
     if (!window.f3?.createChart) throw new Error('Family Chart did not load');
     const data = JSON.parse(dataElement.textContent);
@@ -39,6 +71,7 @@
         if (href && !event.target.closest('a')) window.location.assign(href);
       });
     chart.updateTree({ initial: true, tree_position: 'fit' });
+    constrainNavigation(chart);
     const viewport = container.closest('.person-family-tree-viewport');
     if (viewport && viewport.scrollWidth > viewport.clientWidth) window.requestAnimationFrame(() => {
       const currentCard = container.querySelector('.family-tree-card.is-current');
