@@ -39,6 +39,14 @@
         if (href && !event.target.closest('a')) window.location.assign(href);
       });
     chart.updateTree({ initial: true, tree_position: 'fit' });
+    const viewport = container.closest('.person-family-tree-viewport');
+    if (viewport && viewport.scrollWidth > viewport.clientWidth) window.requestAnimationFrame(() => {
+      const currentCard = container.querySelector('.family-tree-card.is-current');
+      if (!currentCard) throw new Error('Family tree does not contain the current person');
+      const viewportRect = viewport.getBoundingClientRect();
+      const cardRect = currentCard.getBoundingClientRect();
+      viewport.scrollLeft += cardRect.left + cardRect.width / 2 - viewportRect.left - viewportRect.width / 2;
+    });
   } catch (error) {
     console.error(error);
     container.closest('.person-family-tree-shell')?.classList.add('is-unavailable');

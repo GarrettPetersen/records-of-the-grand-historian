@@ -39,7 +39,7 @@ const FAMILY_TREE_MAX_PEOPLE = 36;
 const KEY_SOURCE_COUNT = 5;
 const CLAIM_PREVIEW_COUNT = 6;
 const REFERENCE_FILTER_THRESHOLD = 8;
-const PEOPLE_ASSET_VERSION = '20260814-people-record-v3';
+const PEOPLE_ASSET_VERSION = '20260815-people-record-v5';
 const PEOPLE_FAMILY_SOURCE = path.join(REPO_ROOT, 'scripts', 'assets', 'people-family.js');
 const FAMILY_CHART_PACKAGE = path.join(REPO_ROOT, 'node_modules', 'family-chart', 'dist');
 const D3_PACKAGE = path.join(REPO_ROOT, 'node_modules', 'd3', 'dist', 'd3.min.js');
@@ -204,11 +204,88 @@ function renderPersonRef(personId, peopleById) {
   return `<a href="${escapeAttribute(target.slug)}.html">${escapeHtml(personFullDisplayName(target))}</a>`;
 }
 
+const TOKEN_VALUE_FIELDS = new Set([
+  'action', 'cause', 'kind', 'manner', 'outcome', 'parentage', 'provenance', 'reckoning',
+  'relation', 'relationshipState', 'role', 'sharedParentage', 'status', 'subjectRelativeAge',
+  'objectRelativeAge', 'unionCategory', 'unionType',
+]);
+
+const CLAIM_FIELD_LABELS = new Map([
+  ['asOf', 'As of'],
+  ['authorityPersonId', 'Authority'],
+  ['addresseePersonId', 'Addressed to'],
+  ['killerPersonId', 'Killed by'],
+  ['otherPersonId', 'With'],
+  ['otherPersonIds', 'With'],
+  ['personId', 'Person'],
+  ['place', 'At'],
+  ['recipientPersonId', 'Recipient'],
+  ['speakerPersonId', 'Speaker'],
+  ['startDate', 'From'],
+  ['endDate', 'Until'],
+]);
+
+const CLAIM_CERTAINTY_LABELS = new Map([
+  ['explicit', 'Directly stated'],
+  ['explicit-event-contextual-date', 'Dated from the passage context'],
+  ['strongly-inferred', 'Strongly inferred'],
+  ['uncertain', 'Uncertain'],
+  ['derived', 'Derived from the source'],
+  ['textual-variant', 'Textual variant'],
+]);
+
+function renderLocalizedValue(value) {
+  const parts = [];
+  if (value.en) parts.push(escapeHtml(value.en));
+  if (value.zh && value.zh !== value.en) {
+    parts.push(`<span class="person-fact-original" lang="zh-Hant">${escapeHtml(value.zh)}</span>`);
+  }
+  if (value.pinyin && value.pinyin !== value.en && value.pinyin !== value.zh) {
+    parts.push(`<span class="person-fact-pinyin">${escapeHtml(value.pinyin)}</span>`);
+  }
+  return parts.join(' ');
+}
+
+function renderWesternInterval(value) {
+  if (!value?.start || !value?.end) return null;
+  const start = formatPersonWesternYear(value.start);
+  const end = formatPersonWesternYear(value.end);
+  return start && end ? `${escapeHtml(start)} to ${escapeHtml(end)}` : null;
+}
+
+function sourceDateText(value) {
+  if (typeof value === 'string') return value;
+  if (!value || typeof value !== 'object') return '';
+  return String(value.text ?? value.zh ?? value.en ?? '').trim();
+}
+
+function renderDateValue(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  const context = value.dateContext && typeof value.dateContext === 'object' ? value.dateContext : value;
+  const western = formatPersonWesternYear(context.westernYear) ||
+    renderWesternInterval(context.westernInterval) ||
+    formatPersonWesternYear(context);
+  const source = sourceDateText(context.sourceDate) || String(context.dateText ?? '').trim();
+  if (!western && !source) return null;
+  const westernHtml = western ? `<span class="person-fact-date">${western}</span>` : '';
+  const sourceHtml = source && source !== western
+    ? `<span class="person-fact-date-source" lang="zh-Hant">${escapeHtml(source)}</span>`
+    : '';
+  return [westernHtml, sourceHtml].filter(Boolean).join(' ');
+}
+
+function renderScalarValue(value, key = null) {
+  if (typeof value === 'string' && TOKEN_VALUE_FIELDS.has(key)) {
+    return escapeHtml(humanizePeopleValue(value));
+  }
+  return escapeHtml(value);
+}
+
 function renderStructuredValue(value, peopleById, key = null) {
   if (value === null || value === undefined || value === '') return '<span class="person-fact-empty">Unknown</span>';
   if (typeof value === 'string') {
     if (/^per_[0-9A-HJKMNP-TV-Z]{20,}$/u.test(value)) return renderPersonRef(value, peopleById);
-    return escapeHtml(value);
+    return renderScalarValue(value, key);
   }
   if (typeof value === 'number' || typeof value === 'boolean') return escapeHtml(String(value));
   if (Array.isArray(value)) {
@@ -217,9 +294,7 @@ function renderStructuredValue(value, peopleById, key = null) {
   const western = formatPersonWesternYear(value);
   if (western) return escapeHtml(western);
   if (value.en || value.zh || value.pinyin) {
-    const bits = [value.en, value.zh, value.pinyin].filter(Boolean);
-    const unique = [...new Set(bits)];
-    return unique.map(escapeHtml).join(' / ');
+    return renderLocalizedValue(value);
   }
   return Object.entries(value).map(([field, item]) =>
     `<span class="person-fact-field"><span class="person-fact-key">${escapeHtml(humanizePeopleValue(field))}:</span> ` +
@@ -227,15 +302,129 @@ function renderStructuredValue(value, peopleById, key = null) {
   ).join(' · ');
 }
 
+function renderClaimDetail(field, value, peopleById) {
+  if (field === 'zh') return `<span class="person-fact-original" lang="zh-Hant">${escapeHtml(value)}</span>`;
+  if (field === 'pinyin') return `<span class="person-fact-pinyin">${escapeHtml(value)}</span>`;
+  if (field === 'note') return escapeHtml(value);
+  if (field === 'quoted' && typeof value === 'boolean') return value ? 'Direct quotation' : 'Paraphrased';
+  if (field === 'provenance' && value && typeof value === 'object' && !Array.isArray(value)) {
+    return Object.entries(value).map(([key, item]) => renderClaimDetail(key, item, peopleById)).join(' ');
+  }
+  if (field === 'action' || field === 'kind' || field === 'role' || field === 'manner' || field === 'status') {
+    return renderStructuredValue(value, peopleById, field);
+  }
+  const label = CLAIM_FIELD_LABELS.get(field) ?? humanizePeopleValue(field);
+  return `<span class="person-fact-key">${escapeHtml(label)}</span> ${renderStructuredValue(value, peopleById, field)}`;
+}
+
+function renderClaimValue(claim, peopleById) {
+  const value = claim.value;
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return renderStructuredValue(value, peopleById);
+  }
+  const valueKeys = Object.keys(value);
+  if (valueKeys.every((key) => ['en', 'zh', 'pinyin'].includes(key))) return renderStructuredValue(value, peopleById);
+
+  const date = renderDateValue(value);
+  const dateFirst = ['attestation', 'birth', 'death'].includes(claim.predicate);
+  const primaryKeys = claim.predicate === 'age'
+    ? ['statedAge', 'age', 'value', 'qualitative', 'statement']
+    : ['label', 'title', 'office', 'name', 'work', 'statement', 'description', 'qualitative', 'text', 'action', 'en'];
+  const primaryKey = primaryKeys.find((field) => value[field] !== null && value[field] !== undefined && value[field] !== '');
+  const primary = dateFirst && date
+    ? date
+    : primaryKey
+      ? primaryKey === 'en'
+        ? renderLocalizedValue(value)
+        : renderStructuredValue(value[primaryKey], peopleById, primaryKey)
+      : date;
+  const ignored = new Set([
+    primaryKey,
+    'dateContext', 'sourceDate', 'westernYear', 'westernInterval', 'dateText',
+    'subjectRole', 'objectRole', 'unresolved',
+  ]);
+  if (primaryKey === 'en') {
+    ignored.add('zh');
+    ignored.add('pinyin');
+    ignored.add('kind');
+  }
+  if (claim.predicate === 'age' && value.kind === 'age') ignored.add('kind');
+  const details = [];
+  if (date && primary !== date) details.push(date);
+  for (const [field, item] of Object.entries(value)) {
+    if (ignored.has(field) || item === null || item === undefined || item === '') continue;
+    details.push(renderClaimDetail(field, item, peopleById));
+  }
+  if (!primary) return details.join(' <span class="person-fact-divider">·</span> ');
+  return `<div class="person-fact-value">${primary}</div>` +
+    (details.length ? `<div class="person-fact-detail">${details.join(' <span class="person-fact-divider">·</span> ')}</div>` : '');
+}
+
+function evidenceLabel(evidence) {
+  const match = String(evidence).match(/^([a-z0-9_-]+):(\d{3}):([a-z])(\d+)$/u);
+  if (!match) return String(evidence);
+  const [, book, chapter, unitType, unitNumber] = match;
+  const bookLabel = chapterRecord(book, chapter).bookLabel || book;
+  const unitLabel = unitType === 's' ? 'passage' : 'claim';
+  return `${bookLabel} ${Number.parseInt(chapter, 10)}, ${unitLabel} ${Number.parseInt(unitNumber, 10)}`;
+}
+
+function numberRanges(numbers) {
+  const sorted = [...new Set(numbers)].sort((left, right) => left - right);
+  const ranges = [];
+  for (const number of sorted) {
+    const current = ranges.at(-1);
+    if (current && number === current[1] + 1) current[1] = number;
+    else ranges.push([number, number]);
+  }
+  return ranges.map(([start, end]) => start === end ? String(start) : `${start}-${end}`).join(', ');
+}
+
+function renderEvidence(evidence) {
+  const grouped = new Map();
+  const ungrouped = [];
+  for (const item of [...new Set(evidence ?? [])]) {
+    const match = String(item).match(/^([a-z0-9_-]+):(\d{3}):s(\d+)$/u);
+    if (!match) {
+      ungrouped.push(item);
+      continue;
+    }
+    const [, book, chapter, unitNumber] = match;
+    const key = `${book}:${chapter}`;
+    if (!grouped.has(key)) grouped.set(key, { book, chapter, items: [], passages: [] });
+    grouped.get(key).items.push(item);
+    grouped.get(key).passages.push(Number.parseInt(unitNumber, 10));
+  }
+  const links = [...grouped.values()].map(({ book, chapter, items, passages }) => {
+    const first = items[0];
+    const bookLabel = chapterRecord(book, chapter).bookLabel || book;
+    const passageLabel = passages.length === 1 ? `passage ${passages[0]}` : `passages ${numberRanges(passages)}`;
+    return `<a href="${escapeAttribute(chapterHrefFromEvidence(first))}" title="${escapeAttribute(items.join(', '))}">` +
+      `${escapeHtml(`${bookLabel} ${Number.parseInt(chapter, 10)}, ${passageLabel}`)}</a>`;
+  });
+  for (const item of ungrouped) {
+    const href = chapterHrefFromEvidence(item);
+    const label = evidenceLabel(item);
+    links.push(href
+      ? `<a href="${escapeAttribute(href)}" title="${escapeAttribute(item)}">${escapeHtml(label)}</a>`
+      : escapeHtml(label));
+  }
+  return links.join('; ');
+}
+
+function certaintyLabel(certainty) {
+  return CLAIM_CERTAINTY_LABELS.get(certainty) ?? humanizePeopleValue(certainty);
+}
+
+function renderClaimSource(claim) {
+  const evidence = renderEvidence(claim.evidence);
+  const certainty = claim.certainty ? certaintyLabel(claim.certainty) : '';
+  if (!certainty && !evidence) return '';
+  return `<div class="person-fact-source">${escapeHtml(certainty)}${certainty && evidence ? ' · ' : ''}${evidence}</div>`;
+}
+
 function renderClaimItems(claims, peopleById) {
-  return claims.map((claim) => {
-    const evidence = (claim.evidence ?? []).map((item) => {
-      const href = chapterHrefFromEvidence(item);
-      return href ? `<a href="${escapeAttribute(href)}">${escapeHtml(item)}</a>` : escapeHtml(item);
-    }).join(', ');
-    return `<li><div>${renderStructuredValue(claim.value, peopleById)}</div>` +
-      `<div class="person-fact-source">${escapeHtml(humanizePeopleValue(claim.certainty))}${evidence ? ` · ${evidence}` : ''}</div></li>`;
-  }).join('');
+  return claims.map((claim) => `<li>${renderClaimValue(claim, peopleById)}${renderClaimSource(claim)}</li>`).join('');
 }
 
 function renderClaimList(claims, peopleById, options = {}) {
@@ -285,6 +474,55 @@ function uniqueFamilyRelationships(person) {
     if (!found.has(key)) found.set(key, claim);
   }
   return [...found.values()];
+}
+
+function renderFamilyAssertionDetails(details, peopleById) {
+  const items = [];
+  if (details.kinshipTerm) items.push(renderStructuredValue(details.kinshipTerm, peopleById));
+  if (details.parentage && details.parentage !== 'biological') {
+    items.push(`${renderStructuredValue(details.parentage, peopleById, 'parentage')} parentage`);
+  }
+  const kinshipEnglish = String(details.kinshipTerm?.en ?? '');
+  const unionIsImplied =
+    (details.unionCategory === 'marriage' && /wife|husband|spouse|consort|empress|queen/iu.test(kinshipEnglish)) ||
+    (details.unionCategory === 'concubinage' && /concubine/iu.test(kinshipEnglish));
+  if (details.unionCategory && !unionIsImplied) {
+    items.push(renderStructuredValue(details.unionCategory, peopleById, 'unionCategory'));
+  }
+  else if (details.unionType) items.push(renderStructuredValue(details.unionType, peopleById, 'unionType'));
+  if (details.sharedParentage) {
+    items.push(details.sharedParentage === 'full' ? 'Full siblings' : `${humanizePeopleValue(details.sharedParentage)} siblings`);
+  }
+  if (details.line) items.push(`${renderStructuredValue(details.line, peopleById)} line`);
+  if (Number.isInteger(details.generationDistance) && details.generationDistance > 1) {
+    items.push(`${details.generationDistance} generations`);
+  }
+  if (details.relationshipState && !['active', 'formed'].includes(details.relationshipState)) {
+    items.push(renderStructuredValue(details.relationshipState, peopleById, 'relationshipState'));
+  }
+  if (details.intermediaryPersonIds?.length) {
+    items.push(`Through ${renderStructuredValue(details.intermediaryPersonIds, peopleById)}`);
+  }
+  const date = renderDateValue(details.dateContext ?? details.startDate);
+  if (date) items.push(date);
+  if (details.endDate) items.push(`<span class="person-fact-key">Until</span> ${renderStructuredValue(details.endDate, peopleById)}`);
+  if (details.note) items.push(escapeHtml(details.note));
+  if (details.statement) items.push(renderStructuredValue(details.statement, peopleById));
+  if (details.negated) items.push('Relationship negated in the source');
+  return [...new Set(items)].join(' <span class="person-fact-divider">·</span> ');
+}
+
+function renderFamilyEvidence(assertions) {
+  const evidence = assertions.flatMap((assertion) => assertion.evidence ?? []);
+  const certainties = [...new Set(assertions.map((assertion) => assertion.certainty).filter(Boolean))];
+  const certainty = certainties.length === 1
+    ? certaintyLabel(certainties[0])
+    : certainties.length > 1
+      ? 'Sources vary in certainty'
+      : '';
+  const sources = renderEvidence(evidence);
+  if (!certainty && !sources) return '';
+  return `<div class="person-family-source">${escapeHtml(certainty)}${certainty && sources ? ' · ' : ''}${sources}</div>`;
 }
 
 function familyTreeData(person, peopleById) {
@@ -344,15 +582,18 @@ function renderFamily(person, peopleById, familyEdgesById, treeData) {
     if (!target) throw new Error(`${person.id} family relationship targets missing person ${claim.value.personId}`);
     const edge = familyEdgesById.get(claim.edgeId);
     if (!edge) throw new Error(`${person.id} family relationship targets missing edge ${claim.edgeId}`);
-    const assertions = edge.assertions.map((assertion) => renderStructuredValue(assertion.details, peopleById)).filter(Boolean);
+    const assertions = [...new Set(edge.assertions
+      .map((assertion) => renderFamilyAssertionDetails(assertion.details, peopleById))
+      .filter(Boolean))];
     return `<li><span class="person-family-relation">${escapeHtml(humanizePeopleValue(claim.value.relation))}</span> ` +
       `<a href="${escapeAttribute(target.slug)}.html">${escapeHtml(personFullDisplayName(target))}</a>` +
-      `${assertions.length ? `<div class="person-family-details">${assertions.join('<br>')}</div>` : ''}</li>`;
+      `${assertions.length ? `<div class="person-family-details">${assertions.join('<br>')}</div>` : ''}` +
+      `${renderFamilyEvidence(edge.assertions)}</li>`;
   }).join('');
   const summaries = renderClaimList(person.familySummaries, peopleById);
-  const chart = treeData.length > 1 ? `<div class="person-family-tree-shell">
-    <div id="person-family-chart" class="f3 person-family-chart" aria-label="Interactive family tree for ${escapeAttribute(personDisplayName(person))}"></div>
-    <p class="person-family-tree-note">Immediate source-linked family. Drag to pan, scroll or pinch to zoom, and select a person to open their record.</p>
+  const chart = treeData.length > 1 ? `<div class="person-family-tree-shell${treeData.length <= 8 ? ' is-compact' : ''}${treeData.length > 4 ? ' is-wide' : ''}">
+    <div class="person-family-tree-viewport"><div id="person-family-chart" class="f3 person-family-chart" aria-label="Interactive family tree for ${escapeAttribute(personDisplayName(person))}"></div></div>
+    <p class="person-family-tree-note">Immediate relationships attested in the translated histories.</p>
     <script id="person-family-data" type="application/json">${JSON.stringify(treeData).replace(/</gu, '\\u003c')}</script>
   </div>` : '';
   return `${chart}${relationships ? `<ul class="person-family-list">${relationships}</ul>` : ''}${summaries}`;

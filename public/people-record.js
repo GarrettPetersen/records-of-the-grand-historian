@@ -1,6 +1,36 @@
 (() => {
   'use strict';
 
+  const localNav = document.querySelector('.person-local-nav');
+  if (localNav) {
+    const links = [...localNav.querySelectorAll('a[href^="#"]')];
+    const sections = links.map((link) => document.getElementById(link.hash.slice(1)));
+    if (!links.length || sections.some((section) => !section)) {
+      throw new Error('Person section navigation does not match the page sections');
+    }
+    let frame = null;
+    const updateCurrentSection = () => {
+      frame = null;
+      const offset = window.innerWidth <= 900 ? 112 : 40;
+      let current = sections[0];
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top <= offset) current = section;
+        else break;
+      }
+      for (const link of links) {
+        if (link.hash === `#${current.id}`) link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+      }
+    };
+    const queueUpdate = () => {
+      if (frame === null) frame = window.requestAnimationFrame(updateCurrentSection);
+    };
+    window.addEventListener('scroll', queueUpdate, { passive: true });
+    window.addEventListener('resize', queueUpdate);
+    window.addEventListener('hashchange', queueUpdate);
+    updateCurrentSection();
+  }
+
   const tools = document.querySelector('[data-person-reference-tools]');
   if (!tools) return;
 

@@ -81,7 +81,7 @@ assert.deepEqual(
   personCoherentActivityClaims(chronologyFixture),
   [chronologyFixture.life.attestedActivity[0], chronologyFixture.life.attestedActivity[3]],
 );
-assert.equal(personLifeSummary(chronologyFixture), 'Active by BC 209; died BC 195');
+assert.equal(personLifeSummary(chronologyFixture), 'First attested BC 209; died BC 195');
 assert.equal(
   personPublicDescription({ description: { en: 'Northern Qi prince and commander -- s0179 wrongly identifies his father' } }),
   'Northern Qi prince and commander',

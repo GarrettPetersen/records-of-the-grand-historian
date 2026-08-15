@@ -1191,17 +1191,37 @@ footer .site-copyright {
 }
 
 .person-local-nav a {
+  position: relative;
   display: block;
-  padding: 0.48rem 0;
+  padding: 0.48rem 0 0.48rem 0.7rem;
   color: #526568;
   font-size: 0.76rem;
   line-height: 1.3;
   text-decoration: none;
 }
 
+.person-local-nav a::before {
+  position: absolute;
+  top: 0.52rem;
+  bottom: 0.52rem;
+  left: 0;
+  width: 2px;
+  background: transparent;
+  content: '';
+}
+
 .person-local-nav a:hover,
-.person-local-nav a:focus-visible {
+.person-local-nav a:focus-visible,
+.person-local-nav a[aria-current='location'] {
   color: var(--people-seal);
+}
+
+.person-local-nav a[aria-current='location'] {
+  font-weight: 700;
+}
+
+.person-local-nav a[aria-current='location']::before {
+  background: var(--people-seal);
 }
 
 .person-record {
@@ -1319,6 +1339,45 @@ footer .site-copyright {
   display: inline;
 }
 
+.person-fact-value {
+  color: #263f43;
+  font-size: 1rem;
+}
+
+.person-fact-detail {
+  margin-top: 0.16rem;
+  color: #4f6266;
+  font-size: 0.88rem;
+}
+
+.person-fact-date {
+  color: #263f43;
+  font-weight: 700;
+}
+
+.person-fact-original {
+  color: #7f342d;
+}
+
+.person-fact-date-source,
+.person-fact-pinyin {
+  color: var(--people-muted);
+  font-size: 0.9em;
+}
+
+.person-fact-date-source::before {
+  content: '(';
+}
+
+.person-fact-date-source::after {
+  content: ')';
+}
+
+.person-fact-divider {
+  padding: 0 0.12rem;
+  color: #9aa9a4;
+}
+
 .person-fact-key,
 .person-family-relation {
   color: #4f6568;
@@ -1326,15 +1385,25 @@ footer .site-copyright {
 }
 
 .person-fact-source,
-.person-family-details {
+.person-family-details,
+.person-family-source {
   margin-top: 0.25rem;
   color: var(--people-muted);
   font: 0.74rem ui-sans-serif, -apple-system, sans-serif;
 }
 
 .person-fact-source a,
+.person-family-source a,
 .person-family-list a {
   color: var(--people-indigo);
+}
+
+.person-family-details {
+  color: #506468;
+}
+
+.person-family-source {
+  margin-top: 0.12rem;
 }
 
 .person-table-wrap {
@@ -1587,19 +1656,40 @@ footer .site-copyright {
 
   .person-content-grid {
     grid-template-columns: 1fr;
+    gap: 1.4rem;
   }
 
   .person-local-nav {
-    position: static;
-    overflow-x: auto;
-    padding-bottom: 0.35rem;
+    position: sticky;
+    z-index: 8;
+    top: 0;
+    width: 100%;
+    min-width: 0;
+    margin: 0 -0.6rem;
+    padding: 0.55rem 0.6rem 0.35rem;
+    overflow: hidden;
+    border-bottom: 1px solid var(--people-rule);
+    background: rgba(250, 249, 245, 0.96);
+    box-shadow: 0 0.35rem 0.75rem rgba(24, 49, 53, 0.05);
+    backdrop-filter: blur(8px);
+  }
+
+  .person-local-nav p {
+    margin-bottom: 0.3rem;
   }
 
   .person-local-nav ol {
     display: flex;
-    width: max-content;
+    width: 100%;
     flex-wrap: nowrap;
     gap: 0;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  .person-local-nav ol::-webkit-scrollbar {
+    display: none;
   }
 
   .person-local-nav li {
@@ -1608,7 +1698,22 @@ footer .site-copyright {
   }
 
   .person-local-nav a {
-    padding: 0.45rem 0.7rem;
+    padding: 0.45rem 0.7rem 0.5rem;
+    scroll-snap-align: start;
+    white-space: nowrap;
+  }
+
+  .person-local-nav a::before {
+    top: auto;
+    right: 0.7rem;
+    bottom: 0.14rem;
+    left: 0.7rem;
+    width: auto;
+    height: 2px;
+  }
+
+  .person-section {
+    scroll-margin-top: 5.5rem;
   }
 }
 
@@ -1907,6 +2012,10 @@ footer .site-copyright {
   background: #f7fafc;
 }
 
+.person-family-tree-viewport {
+  overflow: hidden;
+}
+
 .person-family-chart.f3 {
   --background-color: #f7fafc;
   --text-color: #39536b;
@@ -1917,6 +2026,16 @@ footer .site-copyright {
   height: min(34rem, 70vh);
   min-height: 25rem;
   font-family: Georgia, 'Songti SC', serif;
+}
+
+.person-family-tree-shell.is-compact .person-family-chart.f3 {
+  height: 25rem;
+  min-height: 21rem;
+}
+
+.person-family-chart .links_view path.link {
+  stroke: #7d979f !important;
+  stroke-width: 1.75px !important;
 }
 
 .person-family-chart .family-tree-card {
@@ -1981,6 +2100,16 @@ footer .site-copyright {
   .person-family-chart.f3 {
     height: 28rem;
     min-height: 22rem;
+  }
+
+  .person-family-tree-shell.is-wide .person-family-tree-viewport {
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+  }
+
+  .person-family-tree-shell.is-wide .person-family-chart.f3 {
+    width: 48rem;
+    max-width: none;
   }
 }
 

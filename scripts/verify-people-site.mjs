@@ -123,6 +123,9 @@ export function verifyPeopleSite(options = parseArgs([])) {
       assert((html.match(/<h1(?:\s|>)/gu) ?? []).length === 1, `${slug} must have one h1`, errors);
       assert(html.includes(`href="https://24histories.com/people/${slug}.html"`), `${slug} has no canonical URL`, errors);
       assert(html.includes('type="application/ld+json"'), `${slug} has no Person JSON-LD`, errors);
+      assert(!html.includes('>Date Context<'), `${slug} exposes the internal date-context field`, errors);
+      assert(!html.includes('Subject Role'), `${slug} exposes the internal family subject role`, errors);
+      assert(!html.includes('Object Role'), `${slug} exposes the internal family object role`, errors);
       const publicAliases = personPublicAliases(person);
       assert(publicAliases.length <= MAX_PUBLIC_PERSON_ALIASES,
         `${slug} exposes more than ${MAX_PUBLIC_PERSON_ALIASES} public aliases`, errors);

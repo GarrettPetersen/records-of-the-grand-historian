@@ -152,7 +152,7 @@ export function personLifeSummary(person) {
   if (died) {
     const deathSort = deaths[0].sort;
     const earliest = active.find((value) => value.sort < deathSort);
-    return earliest ? `Active by ${earliest.label}; died ${died}` : `Died ${died}`;
+    return earliest ? `First attested ${earliest.label}; died ${died}` : `Died ${died}`;
   }
   if (active.length === 1) return `Attested ${active[0].label}`;
   if (active.length > 1) return `Attested ${active[0].label} - ${active.at(-1).label}`;
