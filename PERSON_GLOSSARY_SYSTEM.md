@@ -696,6 +696,32 @@ Noble and official titles are normally claims rather than names. They are also
 recorded as name-like aliases only when the text actually uses the title as the
 person's identifying expression.
 
+### Public preferred names
+
+Name type alone does not determine the clearest public label. *Emperor Wu of
+Han* is more recognizable than *Liu Che*, while *Cao Cao* is more recognizable
+than his posthumous imperial name. Chapter-level preferred-name suggestions and
+exact mention counts may therefore rank records for editorial review, but they
+must not rename published people automatically.
+
+Reviewed exceptions live in `data/people/curation/overrides.json`, keyed by the
+stable canonical person ID. Every override must match at least one source-backed
+name claim; compilation fails on unsupported names or unknown IDs. The existing
+slug remains derived from the source default so that improving a displayed name
+does not break public URLs.
+
+```json
+{
+  "preferredName": {
+    "kind": "posthumous-name",
+    "en": "Emperor Wu of Han",
+    "zh": "漢武帝",
+    "pinyin": "Hàn Wǔdì"
+  },
+  "reason": "Standard English name; Liu Che remains a personal-name alias."
+}
+```
+
 ## Roles and One-Line Descriptions
 
 The public page uses a compact label, not an invented mini-biography:

@@ -22,9 +22,12 @@ import {
   formatPersonWesternYear,
   humanizePeopleValue,
   personAlternateNames,
+  personCoherentActivityClaims,
   personDisplayName,
   personFullDisplayName,
   personLifeSummary,
+  personPublicDescription,
+  personPublicAliases,
   representativePersonYear,
 } from './lib/people-presentation.mjs';
 
@@ -33,13 +36,17 @@ const SITE_URL = (process.env.SITE_URL || 'https://24histories.com').replace(/\/
 const SEARCH_PART_MAX_BYTES = 6 * 1024 * 1024;
 const FEATURED_PEOPLE_COUNT = 12;
 const FAMILY_TREE_MAX_PEOPLE = 36;
-const PEOPLE_ASSET_VERSION = '20260814-people-publication-v2';
+const KEY_SOURCE_COUNT = 5;
+const CLAIM_PREVIEW_COUNT = 6;
+const REFERENCE_FILTER_THRESHOLD = 8;
+const PEOPLE_ASSET_VERSION = '20260814-people-record-v3';
 const PEOPLE_FAMILY_SOURCE = path.join(REPO_ROOT, 'scripts', 'assets', 'people-family.js');
 const FAMILY_CHART_PACKAGE = path.join(REPO_ROOT, 'node_modules', 'family-chart', 'dist');
 const D3_PACKAGE = path.join(REPO_ROOT, 'node_modules', 'd3', 'dist', 'd3.min.js');
 const periodCache = new WeakMap();
 const referenceStatsCache = new WeakMap();
 const lifeSummaryCache = new WeakMap();
+const referenceGroupsCache = new WeakMap();
 
 const HISTORICAL_PERIODS = [
   { slug: 'ancient-china', label: 'Ancient China', shortLabel: 'Before 221 BC', start: -10_000, end: -222 },
@@ -118,12 +125,6 @@ function personDirectoryKey(person) {
 
 function plural(count, singular, pluralForm = `${singular}s`) {
   return `${count.toLocaleString('en-US')} ${count === 1 ? singular : pluralForm}`;
-}
-
-function naturalJoin(values) {
-  if (values.length <= 1) return values[0] ?? '';
-  if (values.length === 2) return `${values[0]} and ${values[1]}`;
-  return `${values.slice(0, -1).join(', ')}, and ${values.at(-1)}`;
 }
 
 function withIndefiniteArticle(value) {
@@ -226,16 +227,30 @@ function renderStructuredValue(value, peopleById, key = null) {
   ).join(' · ');
 }
 
-function renderClaimList(claims, peopleById) {
-  if (!claims?.length) return '';
-  return `<ul class="person-fact-list">${claims.map((claim) => {
+function renderClaimItems(claims, peopleById) {
+  return claims.map((claim) => {
     const evidence = (claim.evidence ?? []).map((item) => {
       const href = chapterHrefFromEvidence(item);
       return href ? `<a href="${escapeAttribute(href)}">${escapeHtml(item)}</a>` : escapeHtml(item);
     }).join(', ');
     return `<li><div>${renderStructuredValue(claim.value, peopleById)}</div>` +
       `<div class="person-fact-source">${escapeHtml(humanizePeopleValue(claim.certainty))}${evidence ? ` · ${evidence}` : ''}</div></li>`;
-  }).join('')}</ul>`;
+  }).join('');
+}
+
+function renderClaimList(claims, peopleById, options = {}) {
+  if (!claims?.length) return '';
+  const collapseAfter = options.collapseAfter ?? CLAIM_PREVIEW_COUNT;
+  if (claims.length <= collapseAfter) {
+    return `<ul class="person-fact-list">${renderClaimItems(claims, peopleById)}</ul>`;
+  }
+  const visible = claims.slice(0, collapseAfter);
+  const remaining = claims.slice(collapseAfter);
+  return `<ul class="person-fact-list">${renderClaimItems(visible, peopleById)}</ul>
+    <details class="person-more-claims">
+      <summary>Show ${remaining.length.toLocaleString('en-US')} more source-backed claim${remaining.length === 1 ? '' : 's'}</summary>
+      <ul class="person-fact-list">${renderClaimItems(remaining, peopleById)}</ul>
+    </details>`;
 }
 
 function section(title, body, className = '', id = slugify(title)) {
@@ -244,29 +259,13 @@ function section(title, body, className = '', id = slugify(title)) {
 }
 
 function renderNames(person) {
-  const rows = person.names.map((name) => `<tr>
+  const rows = personPublicAliases(person).map((name) => `<tr>
     <th>${escapeHtml(humanizePeopleValue(name.kind || 'name'))}</th>
     <td>${escapeHtml(name.en || '')}</td>
     <td lang="zh-Hant">${escapeHtml(name.zh || '')}</td>
     <td>${escapeHtml(name.pinyin || '')}</td>
   </tr>`).join('');
   return rows ? `<div class="person-table-wrap"><table class="person-table"><thead><tr><th>Type</th><th>English</th><th>Chinese</th><th>Pinyin</th></tr></thead><tbody>${rows}</tbody></table></div>` : '';
-}
-
-function renderRoles(person) {
-  if (!person.roles.length) return '';
-  return `<ul class="person-role-list">${person.roles.map((role) => `<li>${escapeHtml(role.label)}</li>`).join('')}</ul>`;
-}
-
-function renderIdentity(person, peopleById) {
-  const rows = [
-    ['Historicity', humanizePeopleValue(person.historicity)],
-    ['Identification', humanizePeopleValue(person.identificationStatus)],
-    ['Sex', person.sex ? humanizePeopleValue(person.sex) : 'Uncertain'],
-  ];
-  return `<dl class="person-identity-list">${rows.map(([term, value]) =>
-    `<div><dt>${escapeHtml(term)}</dt><dd>${escapeHtml(value)}</dd></div>`
-  ).join('')}</dl>${renderClaimList(person.sexClaims, peopleById)}`;
 }
 
 function renderExternalData(person, peopleById) {
@@ -312,7 +311,7 @@ function familyTreeData(person, peopleById) {
       name: personDisplayName(relative),
       zh: relative.preferredName.zh ?? '',
       life: lifeSummaryForPerson(relative),
-      role: relative.description.en,
+      role: personPublicDescription(relative),
       href: `${relative.slug}.html`,
       current: relative.id === person.id,
     },
@@ -403,17 +402,93 @@ function visibleTableText(value) {
   return String(value ?? '').replace(/^((?:(?:rowspan|colspan|valign|align|style|class)\s*=\s*"[^"]*"\s*)+)\|\s*/iu, '');
 }
 
-function renderReferences(person) {
-  if (!person.references.length) return '';
+function personReferenceGroups(person) {
+  if (referenceGroupsCache.has(person)) return referenceGroupsCache.get(person);
   const groups = new Map();
   for (const reference of person.references) {
     const key = `${reference.book}:${reference.chapter}`;
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key).push(reference);
   }
-  return [...groups.entries()].map(([key, references], groupIndex) => {
+  const result = [...groups.entries()].map(([key, references]) => {
     const [book, chapter] = key.split(':');
     const chapterInfo = chapterRecord(book, chapter);
+    return { key, book, chapter, chapterInfo, references, chapterBase: `../${book}/${chapter}.html` };
+  });
+  referenceGroupsCache.set(person, result);
+  return result;
+}
+
+function normalizedSourceLabel(value) {
+  return String(value ?? '')
+    .normalize('NFKD')
+    .replace(/\p{Mark}+/gu, '')
+    .toLocaleLowerCase('en')
+    .replace(/[^a-z0-9\p{Script=Han}]+/gu, ' ')
+    .trim();
+}
+
+function chapterNamesPerson(group, person) {
+  const title = normalizedSourceLabel([
+    group.chapterInfo.label,
+    group.chapterInfo.data.meta?.title?.zh,
+  ].filter(Boolean).join(' '));
+  const names = [person.preferredName, ...personPublicAliases(person)];
+  for (const name of names) {
+    const zh = normalizedSourceLabel(name.zh);
+    if (zh.length >= 2 && title.includes(zh)) return true;
+    for (const value of [name.en, name.pinyin]) {
+      const normalized = normalizedSourceLabel(value);
+      if (normalized.length >= 4 && title.includes(normalized)) return true;
+      const distinctive = normalized.split(' ')
+        .filter((token) => token.length >= 4 && !['emperor', 'empress', 'prince', 'princess'].includes(token));
+      if (distinctive.some((token) => title.split(' ').includes(token))) return true;
+    }
+  }
+  return false;
+}
+
+function renderKeySources(person) {
+  const groups = personReferenceGroups(person);
+  if (groups.length < 2) return '';
+  const keyGroups = [...groups].sort((left, right) =>
+    Number(chapterNamesPerson(right, person)) - Number(chapterNamesPerson(left, person)) ||
+    right.references.length - left.references.length ||
+    left.key.localeCompare(right.key)
+  ).slice(0, KEY_SOURCE_COUNT);
+  return `<ol class="person-key-sources">${keyGroups.map((group) => `<li>
+    <a href="${group.chapterBase}">
+      <strong>${escapeHtml(group.chapterInfo.bookLabel)}, Chapter ${Number.parseInt(group.chapter, 10)}</strong>
+      <span>${escapeHtml(group.chapterInfo.label)}</span>
+    </a>
+    <span>${plural(group.references.length, 'passage')}</span>
+  </li>`).join('')}</ol>`;
+}
+
+function renderReferenceControls(person, groups) {
+  if (person.references.length < REFERENCE_FILTER_THRESHOLD) return '';
+  const books = new Map();
+  for (const group of groups) books.set(group.book, group.chapterInfo.bookLabel);
+  const options = [...books].sort((left, right) => left[1].localeCompare(right[1]))
+    .map(([book, label]) => `<option value="${escapeAttribute(book)}">${escapeHtml(label)}</option>`).join('');
+  return `<div class="person-reference-tools" data-person-reference-tools>
+    <div class="person-reference-search-field">
+      <label for="person-reference-search">Search passages</label>
+      <div><input id="person-reference-search" type="search" autocomplete="off" placeholder="Name, place, phrase…">
+      <button type="button" data-person-reference-clear aria-label="Clear passage search" title="Clear passage search" hidden>&times;</button></div>
+    </div>
+    <label class="person-reference-book-field" for="person-reference-book">History
+      <select id="person-reference-book"><option value="">All histories</option>${options}</select>
+    </label>
+    <p class="person-reference-status" aria-live="polite" data-person-reference-status>${plural(person.references.length, 'passage')}</p>
+  </div>`;
+}
+
+function renderReferences(person) {
+  if (!person.references.length) return '';
+  const groups = personReferenceGroups(person);
+  const renderedGroups = groups.map((group, groupIndex) => {
+    const { book, chapter, chapterInfo, references, chapterBase } = group;
     const snippets = references.map((reference) => {
       const unit = sourceUnitAt(chapterInfo.data, {
         id: reference.unitId,
@@ -424,20 +499,21 @@ function renderReferences(person) {
       });
       const zh = visibleTableText(chineseText(unit));
       const en = visibleTableText(englishText(unit));
-      const chapterBase = `../${book}/${chapter}.html`;
-      return `<article class="person-reference">
+      return `<article class="person-reference" data-person-reference-item>
         ${zh ? `<a class="person-reference-zh" lang="zh-Hant" href="${chapterBase}#zh-${escapeAttribute(reference.unitId)}">${escapeHtml(zh)}</a>` : ''}
         ${en ? `<a class="person-reference-en" href="${chapterBase}#en-${escapeAttribute(reference.unitId)}">${escapeHtml(en)}</a>` : ''}
       </article>`;
     }).join('');
-    const chapterBase = `../${book}/${chapter}.html`;
-    return `<details class="person-reference-group"${groupIndex === 0 ? ' open' : ''}>
+    return `<details class="person-reference-group" data-person-reference-group data-book="${escapeAttribute(book)}"${groupIndex === 0 ? ' open' : ''}>
       <summary><span>${escapeHtml(chapterInfo.bookLabel)}, Chapter ${Number.parseInt(chapter, 10)}</span>` +
       `<span>${escapeHtml(chapterInfo.label)} · ${references.length} passage${references.length === 1 ? '' : 's'}</span></summary>
       <div class="person-reference-actions"><a href="${chapterBase}">Open chapter</a></div>
       <div class="person-reference-list">${snippets}</div>
     </details>`;
   }).join('');
+  return `${renderReferenceControls(person, groups)}
+    <p class="person-reference-empty" data-person-reference-empty hidden>No matching passages.</p>
+    <div data-person-reference-groups>${renderedGroups}</div>`;
 }
 
 function personJsonLd(person) {
@@ -464,7 +540,7 @@ function personJsonLd(person) {
         '@id': `${personUrl}#person`,
         name: personDisplayName(person),
         alternateName: personAlternateNames(person),
-        description: `${person.description.en}. ${lifeSummaryForPerson(person)}. ${plural(person.references.length, 'source passage')}.`,
+        description: `${personPublicDescription(person)}. ${lifeSummaryForPerson(person)}. ${plural(person.references.length, 'source passage')}.`,
         url: personUrl,
         mainEntityOfPage: { '@id': `${personUrl}#page` },
         ...(person.sex && ['male', 'female'].includes(person.sex) ? { gender: humanizePeopleValue(person.sex) } : {}),
@@ -571,20 +647,30 @@ function renderPersonCard(person, hrefPrefix = '') {
       <span class="people-card-name">${escapeHtml(personDisplayName(person))}</span>
       ${person.preferredName.zh ? `<span class="people-card-zh" lang="zh-Hant">${escapeHtml(person.preferredName.zh)}</span>` : ''}
       <span class="people-card-life">${escapeHtml(lifeSummaryForPerson(person))}</span>
-      <span class="people-card-description">${escapeHtml(person.description.en)}</span>
+      <span class="people-card-description">${escapeHtml(personPublicDescription(person))}</span>
       <span class="people-card-meta">${escapeHtml(period.label)} · ${plural(stats.passages, 'passage')}</span>
     </a>
   </li>`;
 }
 
 function personOverview(person) {
-  const stats = personReferenceStats(person);
-  const roles = person.roles.map((role) => role.label).filter(Boolean);
-  const selectedRoles = (roles.length ? roles.slice(0, 4) : [person.description.en]).map((role) => role.toLocaleLowerCase('en'));
-  const roleText = naturalJoin([withIndefiniteArticle(selectedRoles[0]), ...selectedRoles.slice(1)]);
-  return `<p class="person-lede">The translated histories identify ${escapeHtml(personDisplayName(person))} as ${escapeHtml(roleText)}. ` +
-    `This record brings together ${plural(stats.passages, 'passage')} from ${plural(stats.chapters, 'chapter')} ` +
-    `across ${plural(stats.books, 'history', 'histories')}, with names, dates, relationships, offices, and events preserved as source-backed claims.</p>`;
+  const name = personDisplayName(person);
+  const description = personPublicDescription(person).replace(/[.!?]+$/u, '');
+  let sentence;
+  let match = description.match(/^founding emperor of (.+)$/iu);
+  if (match) sentence = `${name} was the founding emperor of ${match[1]}.`;
+  else if ((match = description.match(/^(.+?) founding emperor$/iu))) {
+    sentence = `${name} was the founding emperor of ${match[1]}.`;
+  } else if ((match = description.match(/^founder of (.+)$/iu))) {
+    sentence = `${name} was the founder of ${match[1]}.`;
+  } else {
+    const phrase = description.replace(
+      /^(Administrator|Aristocrat|Consort|Court official|Emperor|Empress|Envoy|Eunuch|Family member|General|Historian|King|Military officer|Minister|Named individual|Official|Palace attendant|Prince|Princess|Queen|Rebel|Royal family member|Ruler|Scholar|Statesman|Tribal leader|Warlord)\b/u,
+      (word) => word.toLocaleLowerCase('en'),
+    );
+    sentence = `${name} was ${withIndefiniteArticle(phrase || 'named individual')}.`;
+  }
+  return `<p class="person-lede">${escapeHtml(sentence)}</p>`;
 }
 
 function renderPersonFacets(person) {
@@ -592,13 +678,20 @@ function renderPersonFacets(person) {
   const roles = person.roles.slice(0, 6).map((role) =>
     `<a href="index.html?role=${encodeURIComponent(role.roleId)}#find-a-person">${escapeHtml(role.label)}</a>`
   );
-  const books = [...new Set(person.references.map((reference) => reference.book))].slice(0, 6).map((book) =>
+  const allBooks = [...new Set(person.references.map((reference) => reference.book))];
+  const books = allBooks.slice(0, 5).map((book) =>
     `<a href="index.html?source=${encodeURIComponent(book)}#find-a-person">${escapeHtml(sourceLabel(book, [person]))}</a>`
   );
+  const identity = [
+    humanizePeopleValue(person.historicity),
+    person.sex ? humanizePeopleValue(person.sex) : null,
+    person.identificationStatus !== 'named' ? humanizePeopleValue(person.identificationStatus) : null,
+  ].filter(Boolean).join(' · ');
   return `<div class="person-facets">
     <div><span>Period</span><a href="index.html?period=${encodeURIComponent(period.slug)}#find-a-person">${escapeHtml(period.label)}</a></div>
+    <div><span>Identity</span>${escapeHtml(identity)}</div>
     ${roles.length ? `<div><span>Roles</span><span class="person-facet-links">${roles.join('')}</span></div>` : ''}
-    ${books.length ? `<div><span>Found in</span><span class="person-facet-links">${books.join('')}</span></div>` : ''}
+    ${books.length ? `<div><span>Found in</span><span class="person-facet-links">${books.join('')}${allBooks.length > books.length ? `<span class="person-facet-more">+${allBooks.length - books.length} more</span>` : ''}</span></div>` : ''}
   </div>`;
 }
 
@@ -613,12 +706,14 @@ function generatePersonHtml(person, context) {
   const title = `${personFullDisplayName(person)} | 24 Histories`;
   const chronology = lifeSummaryForPerson(person);
   const stats = personReferenceStats(person);
-  const description = `${personFullDisplayName(person)} — ${person.description.en}. ${chronology}; ${stats.passages} cited passages across the Chinese histories.`;
+  const publicDescription = personPublicDescription(person);
+  const description = `${personFullDisplayName(person)} — ${publicDescription}. ${chronology}; ${stats.passages} cited passages across the Chinese histories.`;
+  const coherentActivity = personCoherentActivityClaims(person);
   const lifeBody = [
     person.life.birth.length ? `<h3>Birth</h3>${renderClaimList(person.life.birth, context.peopleById)}` : '',
     person.life.death.length ? `<h3>Death</h3>${renderClaimList(person.life.death, context.peopleById)}` : '',
     person.life.ageClaims.length ? `<h3>Age</h3>${renderClaimList(person.life.ageClaims, context.peopleById)}` : '',
-    person.life.attestedActivity.length ? `<h3>Attested activity</h3>${renderClaimList(person.life.attestedActivity, context.peopleById)}` : '',
+    coherentActivity.length ? `<h3>Attested activity</h3>${renderClaimList(coherentActivity, context.peopleById)}` : '',
   ].join('');
   const contentSections = [];
   const treeData = familyTreeData(person, context.peopleById);
@@ -626,11 +721,10 @@ function generatePersonHtml(person, context) {
     if (body) contentSections.push({ label, id, html: section(label, body, className, id) });
   };
   addSection('Overview', `${personOverview(person)}${renderPersonFacets(person)}`, 'person-overview-section');
-  addSection('Names', renderNames(person));
-  addSection('Identity', renderIdentity(person, context.peopleById));
-  addSection('Roles', renderRoles(person));
+  addSection('Other names', renderNames(person));
   addSection('Life and dates', lifeBody, 'person-chronicle-section', 'life-and-dates');
   addSection('Family', renderFamily(person, context.peopleById, context.familyEdgesById, treeData));
+  addSection('Key source chapters', renderKeySources(person), 'person-key-sources-section', 'key-source-chapters');
   for (const [label, keys] of CLAIM_SECTIONS) {
     const claims = keys.flatMap((key) => person[key] ?? []);
     addSection(label, renderClaimList(claims, context.peopleById));
@@ -638,7 +732,7 @@ function generatePersonHtml(person, context) {
   addSection('External records', renderExternalData(person, context.peopleById));
   addSection(
     'References in the histories',
-    `<p class="person-section-intro">Open any source group to read the Chinese and English passage in context.</p>${renderReferences(person)}`,
+    renderReferences(person),
     'person-references-section',
     'references',
   );
@@ -661,7 +755,7 @@ function generatePersonHtml(person, context) {
     ${renderBreadcrumbs([['People', 'index.html'], [personDisplayName(person), `${person.slug}.html`]])}
     <div class="person-title-lockup">
       <div class="person-title-copy">
-        <p class="people-eyebrow">${escapeHtml(period.label)} · ${escapeHtml(person.description.en)}</p>
+        <p class="people-eyebrow">${escapeHtml(period.label)} · ${escapeHtml(publicDescription)}</p>
         <h1>${escapeHtml(personDisplayName(person))}${person.preferredName.zh ? ` <span lang="zh-Hant">${escapeHtml(person.preferredName.zh)}</span>` : ''}</h1>
         ${person.preferredName.pinyin && person.preferredName.pinyin !== person.preferredName.en ? `<p class="person-pinyin">${escapeHtml(person.preferredName.pinyin)}</p>` : ''}
         <p class="person-chronology">${escapeHtml(chronology)}</p>
@@ -681,6 +775,7 @@ function generatePersonHtml(person, context) {
   ${treeData.length > 1 ? `<script src="../vendor/family-chart/d3.min.js?v=${PEOPLE_ASSET_VERSION}"></script>
   <script src="../vendor/family-chart/family-chart.min.js?v=${PEOPLE_ASSET_VERSION}"></script>
   <script src="../people-family.js?v=${PEOPLE_ASSET_VERSION}"></script>` : ''}
+  <script src="../people-record.js?v=${PEOPLE_ASSET_VERSION}"></script>
 </body>
 </html>`;
 }

@@ -21,6 +21,7 @@ import {
   personDisplayName,
   personFullDisplayName,
   personLifeSummary,
+  personPublicDescription,
 } from './lib/people-presentation.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -2076,7 +2077,7 @@ function renderEbookGlossaryEntry(person, ebookPeople, chapterTitles) {
   const lifeSummary = personLifeSummary(person);
   return `<section class="glossary-entry" id="${ebookPersonAnchor(person.id)}">
   <h2>${escapeXml(personDisplayName(person))}${person.preferredName.zh ? ` <span lang="zh-Hant">${escapeXml(person.preferredName.zh)}</span>` : ''}</h2>
-  <p class="glossary-description">${escapeXml(person.description.en)}</p>
+  <p class="glossary-description">${escapeXml(personPublicDescription(person))}</p>
   ${lifeSummary ? `<p class="glossary-dates">${escapeXml(lifeSummary)}</p>` : ''}
   ${roles.length ? `<p><strong>Roles:</strong> ${escapeXml(formatList(roles))}</p>` : ''}
   ${aliases.length ? `<p><strong>Other names:</strong> ${escapeXml(formatList(aliases))}</p>` : ''}
@@ -2090,7 +2091,7 @@ function renderEbookPeopleIndex(ebookPeople) {
     const file = ebookPeople.fileByPersonId.get(person.id);
     return `<li><a class="glossary-person-link" href="${escapeXml(file)}#${ebookPersonAnchor(person.id)}">` +
       `${escapeXml(personDisplayName(person))}${person.preferredName.zh ? ` <span lang="zh-Hant">${escapeXml(person.preferredName.zh)}</span>` : ''}` +
-      `</a><span>${escapeXml(person.description.en)}</span></li>`;
+      `</a><span>${escapeXml(personPublicDescription(person))}</span></li>`;
   }).join('\n      ');
   return `<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html>

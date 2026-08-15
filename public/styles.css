@@ -1261,14 +1261,9 @@ footer .site-copyright {
   line-height: 1.8;
 }
 
-.person-section-intro {
-  margin: -0.4rem 0 1.2rem;
-  color: var(--people-muted);
-}
-
 .person-facets {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
   margin-top: 1.8rem;
   padding: 1rem 0;
@@ -1296,50 +1291,16 @@ footer .site-copyright {
   gap: 0.2rem 0.6rem;
 }
 
-.person-role-list,
+.person-facet-more {
+  color: var(--people-muted);
+  font-size: 0.78rem;
+}
+
 .person-family-list,
 .person-fact-list {
   margin: 0;
   padding: 0;
   list-style: none;
-}
-
-.person-identity-list {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
-  margin: 0;
-}
-
-.person-identity-list div {
-  padding: 0.8rem;
-  border-top: 2px solid var(--people-celadon);
-  background: rgba(251, 252, 248, 0.7);
-}
-
-.person-identity-list dt {
-  color: var(--people-muted);
-  font: 700 0.67rem ui-sans-serif, -apple-system, sans-serif;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.person-identity-list dd {
-  margin: 0.25rem 0 0;
-}
-
-.person-role-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-}
-
-.person-role-list li {
-  padding: 0.3rem 0.55rem;
-  border: 1px solid var(--people-celadon);
-  background: var(--people-paper-bright);
-  color: #344e52;
-  font: 0.82rem ui-sans-serif, -apple-system, sans-serif;
 }
 
 .person-fact-list li,
@@ -1397,6 +1358,155 @@ footer .site-copyright {
   background: var(--people-celadon-light);
   color: #344e52;
   font: 700 0.72rem ui-sans-serif, -apple-system, sans-serif;
+}
+
+.person-more-claims {
+  margin-top: 0.65rem;
+  border-top: 1px solid var(--people-rule);
+}
+
+.person-more-claims summary {
+  padding: 0.75rem 0;
+  cursor: pointer;
+  color: var(--people-indigo);
+  font: 700 0.78rem ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.person-key-sources {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.person-key-sources li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--people-rule);
+}
+
+.person-key-sources li:last-child {
+  border-bottom: 1px solid var(--people-rule);
+}
+
+.person-key-sources a {
+  display: grid;
+  gap: 0.2rem;
+  color: var(--people-ink);
+  text-decoration: none;
+}
+
+.person-key-sources a:hover strong,
+.person-key-sources a:focus-visible strong {
+  color: var(--people-seal);
+  text-decoration: underline;
+}
+
+.person-key-sources strong {
+  color: var(--people-indigo);
+  font-size: 0.92rem;
+}
+
+.person-key-sources a span,
+.person-key-sources li > span {
+  color: var(--people-muted);
+  font: 0.76rem ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.person-key-sources li > span {
+  white-space: nowrap;
+}
+
+.person-reference-tools {
+  display: grid;
+  grid-template-columns: minmax(14rem, 1fr) minmax(11rem, 0.45fr) auto;
+  gap: 0.8rem;
+  align-items: end;
+  margin-bottom: 1.2rem;
+  padding: 0 0 1.1rem;
+  border-bottom: 1px solid var(--people-rule);
+}
+
+.person-reference-search-field > label,
+.person-reference-book-field {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--people-muted);
+  font: 700 0.7rem ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.person-reference-search-field > div {
+  position: relative;
+}
+
+.person-reference-search-field input,
+.person-reference-book-field select {
+  width: 100%;
+  min-height: 2.7rem;
+  border: 1px solid var(--people-rule);
+  border-radius: 4px;
+  background: var(--people-paper-bright);
+  color: var(--people-ink);
+  font: 0.9rem ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.person-reference-search-field input {
+  padding: 0.6rem 2.7rem 0.6rem 0.75rem;
+}
+
+.person-reference-book-field select {
+  padding: 0.6rem 2rem 0.6rem 0.7rem;
+}
+
+.person-reference-search-field input:focus,
+.person-reference-book-field select:focus {
+  border-color: var(--people-indigo);
+  outline: 2px solid rgba(26, 84, 144, 0.16);
+  outline-offset: 1px;
+}
+
+.person-reference-search-field button {
+  position: absolute;
+  top: 50%;
+  right: 0.35rem;
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--people-muted);
+  cursor: pointer;
+  font-size: 1.35rem;
+  transform: translateY(-50%);
+}
+
+.person-reference-search-field button:hover,
+.person-reference-search-field button:focus-visible {
+  color: var(--people-indigo);
+}
+
+.person-reference-search-field button[hidden] {
+  display: none;
+}
+
+.person-reference-status {
+  min-width: 6.8rem;
+  margin: 0 0 0.72rem;
+  color: var(--people-muted);
+  font: 0.76rem ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  text-align: right;
+}
+
+.person-reference-empty {
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--people-rule);
+  color: var(--people-muted);
 }
 
 .person-reference-group {
@@ -1481,16 +1591,24 @@ footer .site-copyright {
 
   .person-local-nav {
     position: static;
+    overflow-x: auto;
+    padding-bottom: 0.35rem;
   }
 
   .person-local-nav ol {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0 1rem;
+    width: max-content;
+    flex-wrap: nowrap;
+    gap: 0;
   }
 
   .person-local-nav li {
     border: 0;
+    border-right: 1px solid var(--people-rule);
+  }
+
+  .person-local-nav a {
+    padding: 0.45rem 0.7rem;
   }
 }
 
@@ -1556,9 +1674,16 @@ footer .site-copyright {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
-  .person-facets,
-  .person-identity-list {
-    grid-template-columns: 1fr;
+  .person-facets {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .person-reference-tools {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .person-reference-search-field {
+    grid-column: 1 / -1;
   }
 
   .person-reference {
@@ -1600,6 +1725,20 @@ footer .site-copyright {
 
   .person-record {
     padding-left: 1.65rem;
+  }
+
+  .person-facets,
+  .person-reference-tools {
+    grid-template-columns: 1fr;
+  }
+
+  .person-reference-status {
+    margin: 0;
+    text-align: left;
+  }
+
+  .person-key-sources li {
+    align-items: start;
   }
 
   .person-section::before {

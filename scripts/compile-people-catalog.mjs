@@ -149,15 +149,75 @@ function frequencyChoice(values) {
   return [...counts.entries()].sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))[0]?.[0] ?? null;
 }
 
-function preferredName(members) {
-  const suggestions = members.map((member) => member.preferredNameSuggestion);
-  const scored = suggestions.map((value, order) => ({
-    value,
+const GENERIC_DESCRIPTOR_WORDS = new Set([
+  'administrator', 'and', 'aristocrat', 'attendant', 'consort', 'court', 'emperor', 'empress',
+  'envoy', 'eunuch', 'family', 'figure', 'general', 'historian', 'individual', 'king', 'lady',
+  'leader', 'man', 'member', 'military', 'minister', 'named', 'officer', 'official', 'palace',
+  'person', 'prince', 'princess', 'queen', 'rebel', 'royal', 'ruler', 'scholar', 'statesman',
+  'the', 'tribal', 'woman', 'warlord',
+]);
+
+function normalizeDescriptor(value) {
+  return String(value ?? '').trim().replace(/\s+/gu, ' ');
+}
+
+function descriptorIsGeneric(value, roles) {
+  const normalized = normalizeDescriptor(value).toLocaleLowerCase('en').replace(/[^a-z0-9]+/gu, ' ').trim();
+  if (!normalized) return true;
+  const roleLabels = new Set(roles.flatMap((role) => [role.label, role.roleId])
+    .map((label) => normalizeDescriptor(label).toLocaleLowerCase('en').replace(/[^a-z0-9]+/gu, ' ').trim()));
+  if (roleLabels.has(normalized)) return true;
+  return normalized.split(' ').every((word) => GENERIC_DESCRIPTOR_WORDS.has(word));
+}
+
+function preferredDescriptor(values, roles) {
+  const counts = new Map();
+  for (const raw of values) {
+    const value = normalizeDescriptor(raw);
+    if (value) counts.set(value, (counts.get(value) ?? 0) + 1);
+  }
+  const entries = [...counts.entries()];
+  const specific = entries.filter(([value]) => !descriptorIsGeneric(value, roles));
+  const pool = specific.length ? specific : entries;
+  return pool.sort((left, right) =>
+    right[1] - left[1] ||
+    Math.min(right[0].split(' ').length, 16) - Math.min(left[0].split(' ').length, 16) ||
+    left[0].length - right[0].length ||
+    left[0].localeCompare(right[0])
+  )[0]?.[0] ?? null;
+}
+
+function sourcePreferredNameSuggestion(members) {
+  return members.map((member, order) => ({
+    value: member.preferredNameSuggestion,
     order,
-    score: Number(Boolean(value.en)) * 4 + Number(Boolean(value.zh)) * 4 + Number(Boolean(value.pinyin)),
-  })).sort((left, right) => right.score - left.score || left.order - right.order);
-  const selected = scored[0]?.value ?? {};
+    score: Number(Boolean(member.preferredNameSuggestion.en)) * 4 +
+      Number(Boolean(member.preferredNameSuggestion.zh)) * 4 +
+      Number(Boolean(member.preferredNameSuggestion.pinyin)),
+  })).sort((left, right) => right.score - left.score || left.order - right.order)[0]?.value ?? {};
+}
+
+function preferredName(members, override = null) {
   const nameClaims = members.flatMap((member) => member.claims).filter((claim) => claim.predicate === 'name');
+  if (override) {
+    const selected = override.preferredName;
+    const claimRefs = nameClaims.filter((claim) =>
+      (!selected.en || claim.value?.en === selected.en) &&
+      (!selected.zh || claim.value?.zh === selected.zh)
+    ).map((claim) => claim.id);
+    if (!claimRefs.length) {
+      throw new Error(`Preferred-name override ${JSON.stringify(selected)} is not supported by a source name claim`);
+    }
+    return {
+      kind: selected.kind,
+      en: selected.en ?? null,
+      zh: selected.zh ?? null,
+      pinyin: selected.pinyin ?? null,
+      preferred: true,
+      claimRefs: [...new Set(claimRefs)].sort(),
+    };
+  }
+  const selected = sourcePreferredNameSuggestion(members);
   const claimRefs = nameClaims
     .filter((claim) =>
       (selected.en && claim.value?.en === selected.en) || (selected.zh && claim.value?.zh === selected.zh)
@@ -517,12 +577,13 @@ function buildPeopleSiteIndex(corpus, catalog) {
   return siteIndex;
 }
 
-function canonicalRecord(cluster, corpus, localMap, roleLabels, unresolvedLocalPeople, currentPromptVersion) {
+function canonicalRecord(cluster, corpus, localMap, roleLabels, unresolvedLocalPeople, currentPromptVersion, override) {
   const members = cluster.localPeople.map((localId) => corpus.localPeople.get(localId));
-  const preferred = preferredName(members);
+  const preferred = preferredName(members, override);
+  const slugName = sourcePreferredNameSuggestion(members);
   const roles = canonicalRoles(members, roleLabels);
   const descriptors = members.map((member) => member.descriptorSuggestion);
-  const descriptor = frequencyChoice(descriptors) ??
+  const descriptor = preferredDescriptor(descriptors, roles) ?? frequencyChoice(descriptors) ??
     (roles.map((role) => role.label).slice(0, 3).join(' and ') || 'Named Individual');
   const roleClaimRefs = roles.flatMap((role) => role.claimRefs);
   const historicities = new Set(members.map((member) => member.historicity));
@@ -561,7 +622,8 @@ function canonicalRecord(cluster, corpus, localMap, roleLabels, unresolvedLocalP
 
   return {
     id: cluster.canonicalPersonId,
-    slug: personSlug(preferred.en ?? preferred.pinyin ?? preferred.zh, cluster.canonicalPersonId),
+    // Public URLs must remain stable when later evidence improves the displayed name.
+    slug: personSlug(slugName.en ?? slugName.pinyin ?? slugName.zh, cluster.canonicalPersonId),
     preferredName: preferred,
     description: { en: descriptor, claimRefs: [...new Set(roleClaimRefs)].sort() },
     historicity,
@@ -634,7 +696,7 @@ function unresolvedCandidateBlocks(candidateDocument, localMap, keepSeparate) {
   return unresolved;
 }
 
-export function compilePeopleCatalog(corpus, resolutionDocuments = []) {
+export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationOverrides = {}) {
   if (!corpus.coverage || !Number.isInteger(corpus.coverage.sourceChapters) ||
       !Number.isInteger(corpus.coverage.extractedChapters) || !Array.isArray(corpus.coverage.missingChapterIds)) {
     throw new Error('People corpus is missing authoritative chapter coverage metadata');
@@ -654,8 +716,21 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = []) {
   const unresolvedLocalPeople = new Set(unresolvedBlocks.flatMap((block) => block.localPeople));
   const roleData = readJson(path.join(PEOPLE_DIR, 'curation', 'role-vocabulary.json'));
   const roleLabels = new Map(roleData.roles.map((role) => [role.id, role.label]));
+  const canonicalIds = new Set(resolved.clusters.map((cluster) => cluster.canonicalPersonId));
+  const unknownOverrides = Object.keys(curationOverrides).filter((personId) => !canonicalIds.has(personId));
+  if (unknownOverrides.length) {
+    throw new Error(`People curation contains unknown canonical IDs: ${unknownOverrides.join(', ')}`);
+  }
   const people = resolved.clusters.map((cluster) =>
-    canonicalRecord(cluster, corpus, localMap, roleLabels, unresolvedLocalPeople, currentPromptVersion)
+    canonicalRecord(
+      cluster,
+      corpus,
+      localMap,
+      roleLabels,
+      unresolvedLocalPeople,
+      currentPromptVersion,
+      curationOverrides[cluster.canonicalPersonId] ?? null,
+    )
   );
   for (const person of people) {
     for (const relationship of person.familyRelationships) relationship.derivedInverse = false;
@@ -747,7 +822,66 @@ function selfTest() {
   });
   const left = makePerson('fixture:001:p001', 'Fan Ye', '范曄');
   const right = makePerson('fixture:002:p001', 'Fan Ye', '范曄');
+  right.descriptorSuggestion = 'Historian and compiler of the Book of Later Han';
   const child = makePerson('fixture:003:p001', 'Fan Child', '范子');
+  const emperorWu = makePerson('fixture:004:p001', 'Che', '徹');
+  emperorWu.claims.push({
+    id: 'fixture:004:c0004',
+    subject: emperorWu.localId,
+    predicate: 'name',
+    value: { kind: 'personal-name', en: 'Liu Che', zh: '劉徹', pinyin: 'Liu Che' },
+    certainty: 'explicit',
+    evidence: ['fixture:004:s0001'],
+  });
+  emperorWu.claims.push({
+    id: 'fixture:004:c0005',
+    subject: emperorWu.localId,
+    predicate: 'name',
+    value: { kind: 'posthumous-name', en: 'Emperor Wu of Han', zh: '漢武帝', pinyin: 'Han Wudi' },
+    certainty: 'explicit',
+    evidence: ['fixture:004:s0001'],
+  });
+  const emperorOverride = {
+    preferredName: {
+      kind: 'posthumous-name',
+      en: 'Emperor Wu of Han',
+      zh: '漢武帝',
+      pinyin: 'Hàn Wǔdì',
+    },
+    reason: 'Standard English name',
+  };
+  const curatedEmperorName = preferredName([emperorWu], emperorOverride);
+  if (curatedEmperorName.en !== 'Emperor Wu of Han' || curatedEmperorName.zh !== '漢武帝') {
+    throw new Error('A source-backed preferred-name override was not applied');
+  }
+  if (sourcePreferredNameSuggestion([emperorWu]).en !== 'Che') {
+    throw new Error('An improved public identity changed an established person URL');
+  }
+  const caoCao1 = makePerson('fixture:009:p001', 'Cao Cao', '曹操');
+  const caoCao2 = makePerson('fixture:010:p001', 'Cao Cao', '曹操');
+  caoCao1.claims.push({
+    id: 'fixture:009:c0004',
+    subject: caoCao1.localId,
+    predicate: 'name',
+    value: { kind: 'posthumous-name', en: 'Emperor Wu of Wei', zh: '魏武帝', pinyin: 'Wei Wudi' },
+    certainty: 'explicit',
+    evidence: ['fixture:009:s0001'],
+  });
+  if (preferredName([caoCao1, caoCao2]).en !== 'Cao Cao') {
+    throw new Error('A rarely used posthumous title displaced a commonly attested personal name');
+  }
+  const confucius = makePerson('fixture:005:p001', 'Confucius', '孔子');
+  confucius.claims.push({
+    id: 'fixture:005:c0004',
+    subject: confucius.localId,
+    predicate: 'name',
+    value: { kind: 'personal-name', en: 'Kong Qiu', zh: '孔丘', pinyin: 'Kong Qiu' },
+    certainty: 'explicit',
+    evidence: ['fixture:005:s0001'],
+  });
+  if (preferredName([confucius]).en !== 'Confucius') {
+    throw new Error('An unrelated alternate form replaced an established primary name');
+  }
   left.claims.push({
     id: 'fixture:001:c0004',
     subject: left.localId,
@@ -781,6 +915,9 @@ function selfTest() {
   const compiledChild = result.people.find((person) => person.preferredName.en === 'Fan Child');
   if (result.people.length !== 2 || fan.references.length !== 2) {
     throw new Error('Canonical merge or reference aggregation failed');
+  }
+  if (fan.description.en !== 'Historian and compiler of the Book of Later Han') {
+    throw new Error('Specific canonical description did not outrank a generic role label');
   }
   if (!compiledChild.familyRelationships.some((claim) =>
     claim.value.relation === 'child-of' && claim.value.personId === fan.id && claim.edgeId && claim.derivedInverse
@@ -828,7 +965,20 @@ function main() {
   if (options.selfTest) return selfTest();
   const corpus = loadValidatedPeopleCorpus();
   const resolutions = loadValidatedResolutionDocuments(corpus.localPeople);
-  const result = compilePeopleCatalog(corpus, resolutions);
+  const curation = readJson(path.join(PEOPLE_DIR, 'curation', 'overrides.json'));
+  if (curation.schemaVersion !== 1 || !curation.people || Array.isArray(curation.people) ||
+      typeof curation.people !== 'object') {
+    throw new Error('People curation overrides must contain schemaVersion 1 and a people object');
+  }
+  for (const [personId, override] of Object.entries(curation.people)) {
+    const name = override?.preferredName;
+    if (!/^per_[0-9A-HJKMNP-TV-Z]{20}$/u.test(personId) || !name || typeof name.kind !== 'string' ||
+        ![name.en, name.zh, name.pinyin].some((value) => typeof value === 'string' && value.trim()) ||
+        typeof override.reason !== 'string' || !override.reason.trim()) {
+      throw new Error(`Invalid people curation override for ${personId}`);
+    }
+  }
+  const result = compilePeopleCatalog(corpus, resolutions, curation.people);
   writeJsonAtomic(options.out, result.catalog);
   writeJsonAtomic(options.candidatesOut, result.candidates);
   writeJsonAtomic(options.siteIndexOut, result.siteIndex);

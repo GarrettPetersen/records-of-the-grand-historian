@@ -13,6 +13,10 @@ import {
   PERSON_PAGE_SHARD_COUNT,
   personPageShardName,
 } from '../functions/lib/people-shards.js';
+import {
+  MAX_PUBLIC_PERSON_ALIASES,
+  personPublicAliases,
+} from './lib/people-presentation.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
@@ -91,6 +95,7 @@ export function verifyPeopleSite(options = parseArgs([])) {
 
   const peopleDir = path.join(options.outputRoot, 'people');
   assert(fs.existsSync(path.join(peopleDir, 'index.html')), 'Missing people index page', errors);
+  assert(fs.existsSync(path.join(options.outputRoot, 'people-record.js')), 'Missing person record runtime', errors);
   const expectedSlugs = new Set(catalog.people.map((person) => person.slug));
   const peopleById = new Map(catalog.people.map((person) => [person.id, person]));
   const peopleBySlug = new Map(catalog.people.map((person) => [person.slug, person]));
@@ -118,8 +123,23 @@ export function verifyPeopleSite(options = parseArgs([])) {
       assert((html.match(/<h1(?:\s|>)/gu) ?? []).length === 1, `${slug} must have one h1`, errors);
       assert(html.includes(`href="https://24histories.com/people/${slug}.html"`), `${slug} has no canonical URL`, errors);
       assert(html.includes('type="application/ld+json"'), `${slug} has no Person JSON-LD`, errors);
+      const publicAliases = personPublicAliases(person);
+      assert(publicAliases.length <= MAX_PUBLIC_PERSON_ALIASES,
+        `${slug} exposes more than ${MAX_PUBLIC_PERSON_ALIASES} public aliases`, errors);
+      const otherNamesSection = html.match(/<section id="other-names"[\s\S]*?<\/section>/u)?.[0] ?? '';
+      const renderedAliasRows = (otherNamesSection.match(/<tbody>[\s\S]*<\/tbody>/u)?.[0].match(/<tr>/gu) ?? []).length;
+      assert(renderedAliasRows === publicAliases.length,
+        `${slug} renders ${renderedAliasRows} alias rows for ${publicAliases.length} public aliases`, errors);
       assert((html.match(/class="person-reference"/gu) ?? []).length === person.references.length,
         `${slug} has the wrong number of reference snippets`, errors);
+      if (person.references.length >= 8) {
+        assert(html.includes('data-person-reference-tools'), `${slug} omits reference filters`, errors);
+        assert(html.includes('../people-record.js'), `${slug} omits the person record runtime`, errors);
+      }
+      const referenceChapters = new Set(person.references.map((reference) => `${reference.book}:${reference.chapter}`));
+      if (referenceChapters.size >= 2) {
+        assert(html.includes('id="key-source-chapters"'), `${slug} omits key source chapters`, errors);
+      }
       const uniqueFamily = new Set();
       let chartExpected = false;
       for (const relationship of person.familyRelationships) {
