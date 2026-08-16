@@ -20,6 +20,8 @@
     "people:compile-extraction": "node scripts/compile-people-extraction.mjs",
     "people:catalog": "node scripts/compile-people-catalog.mjs",
     "people:catalog:self-test": "node scripts/compile-people-catalog.mjs --self-test",
+    "people:maintenance": "npm run people:catalog && node scripts/generate-people-maintenance-report.mjs",
+    "people:maintenance:self-test": "node scripts/generate-people-maintenance-report.mjs --self-test",
     "people:site": "node scripts/generate-people-pages.mjs",
     "people:site:self-test": "node scripts/test-people-site.mjs",
     "people:site:verify": "node scripts/verify-people-site.mjs",

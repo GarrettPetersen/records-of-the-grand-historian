@@ -22,6 +22,7 @@ import { sendCursorAgentWhenReady, waitForCursorRun } from './lib/cursor-run-wai
 import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
 import {
   buildResolutionCandidates,
+  connectedBlockComponents,
   resolvePeopleClusters,
 } from './lib/people-resolution.mjs';
 import { createPeopleSchemaValidator, formatSchemaErrors } from './lib/people-schema.mjs';
@@ -177,48 +178,6 @@ function modelSelection(opts) {
 
 function pairKey(left, right) {
   return [left, right].sort().join('\u0000');
-}
-
-class UnionFind {
-  constructor(values) {
-    this.parent = new Map([...values].map((value) => [value, value]));
-  }
-
-  find(value) {
-    const parent = this.parent.get(value);
-    if (parent === undefined) throw new Error(`Unknown component key ${value}`);
-    if (parent === value) return value;
-    const root = this.find(parent);
-    this.parent.set(value, root);
-    return root;
-  }
-
-  union(left, right) {
-    const roots = [this.find(left), this.find(right)].sort();
-    if (roots[0] !== roots[1]) this.parent.set(roots[1], roots[0]);
-  }
-}
-
-export function connectedBlockComponents(blocks, canonicalByLocal) {
-  const groupIds = new Set(blocks.flatMap((block) =>
-    block.localPeople.map((localId) => canonicalByLocal.get(localId) ?? localId)
-  ));
-  const union = new UnionFind(groupIds);
-  for (const block of blocks) {
-    const groups = [...new Set(block.localPeople.map((localId) =>
-      canonicalByLocal.get(localId) ?? localId
-    ))];
-    for (let index = 1; index < groups.length; index += 1) union.union(groups[0], groups[index]);
-  }
-  const byRoot = new Map();
-  for (const block of blocks) {
-    const root = union.find(canonicalByLocal.get(block.localPeople[0]) ?? block.localPeople[0]);
-    if (!byRoot.has(root)) byRoot.set(root, []);
-    byRoot.get(root).push(block);
-  }
-  return [...byRoot.values()].sort((left, right) =>
-    right.length - left.length || left[0].id.localeCompare(right[0].id)
-  );
 }
 
 function shardComponents(components, count, people) {

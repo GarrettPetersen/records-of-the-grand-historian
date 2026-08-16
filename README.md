@@ -762,6 +762,13 @@ The sitemap generator reads the compact People search index and includes every
 person URL without needing physical person HTML files. It automatically writes a
 sitemap index when the URL count exceeds one sitemap's configured threshold.
 
+For work planning, `npm run people:maintenance` rebuilds the catalog and writes
+ignored JSON and Markdown reports under `data/people/generated/`. The report
+ranks connected identity-resolution work and weak chronology by cited-passage
+impact, marks oversized identity work for chapter-seeded batches, and lists
+old-prompt chapters separately. It never infers a date or merges two people;
+its year hints are pointers that still require source evidence.
+
 ### Running Locally
 
 ```bash

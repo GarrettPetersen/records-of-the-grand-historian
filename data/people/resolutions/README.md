@@ -37,3 +37,11 @@ document.
 `npm run people:catalog -- --require-resolved` is the publication gate: it fails
 while any chapter still needs the current source pass or any name block lacks a
 merge/separation decision.
+
+Run `npm run people:maintenance` to write a human-readable priority queue to
+`data/people/generated/maintenance-report.md` and the complete machine-readable
+queue beside it as JSON. Connected identity groups are ranked by the number of
+cited passages they affect, with ready-to-use chapter scopes for
+`people:resolve`; oversized components are explicitly routed to seeded batches.
+Chronology and old-prompt rereads are kept in separate queues so uncertain date
+hints are not mistaken for sourced claims.

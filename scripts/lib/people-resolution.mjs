@@ -221,6 +221,28 @@ class UnionFind {
   }
 }
 
+export function connectedBlockComponents(blocks, canonicalByLocal) {
+  const groupIds = new Set(blocks.flatMap((block) =>
+    block.localPeople.map((localId) => canonicalByLocal.get(localId) ?? localId)
+  ));
+  const union = new UnionFind(groupIds);
+  for (const block of blocks) {
+    const groups = [...new Set(block.localPeople.map((localId) =>
+      canonicalByLocal.get(localId) ?? localId
+    ))];
+    for (let index = 1; index < groups.length; index += 1) union.union(groups[0], groups[index]);
+  }
+  const byRoot = new Map();
+  for (const block of blocks) {
+    const root = union.find(canonicalByLocal.get(block.localPeople[0]) ?? block.localPeople[0]);
+    if (!byRoot.has(root)) byRoot.set(root, []);
+    byRoot.get(root).push(block);
+  }
+  return [...byRoot.values()].sort((left, right) =>
+    right.length - left.length || left[0].id.localeCompare(right[0].id)
+  );
+}
+
 export function resolvePeopleClusters(localPeople, resolutionDocuments = []) {
   const ids = [...localPeople.keys()];
   const union = new UnionFind(ids);
