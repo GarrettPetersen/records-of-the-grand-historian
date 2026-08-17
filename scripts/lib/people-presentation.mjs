@@ -41,6 +41,7 @@ function yearClaims(claims) {
         if (formatted) values.push({
           label: formatted,
           sort: value.era === 'BC' ? -value.year : value.year,
+          value,
         });
         else Object.values(value).forEach(visit);
       }
@@ -48,6 +49,98 @@ function yearClaims(claims) {
     visit(claim.value);
     return values;
   });
+}
+
+function astronomicalWesternYear(value) {
+  if (!value || !Number.isInteger(value.year)) return null;
+  if (value.era === 'AD') return value.year;
+  if (value.era === 'BC') return 1 - value.year;
+  return null;
+}
+
+function westernYearFromAstronomical(year) {
+  return year >= 1
+    ? { era: 'AD', year, precision: 'circa' }
+    : { era: 'BC', year: 1 - year, precision: 'circa' };
+}
+
+function numericAge(value) {
+  if (!value || typeof value !== 'object') return null;
+  const candidates = [
+    value.age,
+    value.value,
+    value.years,
+    value.statedAge,
+    value.quantity,
+    value.age?.value,
+    value.age?.age,
+  ];
+  return candidates.find((age) => Number.isInteger(age) && age > 0 && age <= 150) ?? null;
+}
+
+function evidenceOverlaps(left, right) {
+  const rightEvidence = new Set(right.evidence ?? []);
+  return (left.evidence ?? []).some((evidence) => rightEvidence.has(evidence));
+}
+
+function explicitlyAtDeath(value) {
+  if (!value || typeof value !== 'object') return false;
+  return /(?:death|died|at death|享年|卒年|薨年|崩年)/iu.test(JSON.stringify(value));
+}
+
+function inferredBirthCandidates(person) {
+  const deaths = person.life?.death ?? [];
+  const activity = person.life?.attestedActivity ?? [];
+  const datedDeaths = deaths.filter((claim) => yearClaims([claim]).length > 0);
+  const datedActivity = activity.filter((claim) => yearClaims([claim]).length > 0);
+  const candidates = [];
+  const add = (age, claims, priority) => {
+    if (!age) return;
+    for (const claim of claims) {
+      for (const year of yearClaims([claim])) {
+        const eventYear = astronomicalWesternYear(year.value);
+        if (eventYear !== null) candidates.push({ year: eventYear - age + 1, priority });
+      }
+    }
+  };
+
+  for (const death of datedDeaths) add(numericAge(death.value), [death], 4);
+  for (const ageClaim of person.life?.ageClaims ?? []) {
+    const age = numericAge(ageClaim.value);
+    if (!age) continue;
+    const ownYears = yearClaims([ageClaim]);
+    if (ownYears.length > 0) {
+      const overlapsDeathYear = datedDeaths.some((death) => {
+        const deathYears = new Set(yearClaims([death]).map(({ value }) => astronomicalWesternYear(value)));
+        return ownYears.some(({ value }) => deathYears.has(astronomicalWesternYear(value)));
+      });
+      add(age, [ageClaim], overlapsDeathYear ? 4 : 2);
+      continue;
+    }
+    const matchingDeaths = datedDeaths.filter((death) => evidenceOverlaps(ageClaim, death));
+    if (matchingDeaths.length > 0) {
+      add(age, matchingDeaths, 4);
+      continue;
+    }
+    if (explicitlyAtDeath(ageClaim.value)) {
+      add(age, datedDeaths, 4);
+      continue;
+    }
+    add(age, datedActivity.filter((claim) => evidenceOverlaps(ageClaim, claim)), 2);
+  }
+  return candidates;
+}
+
+export function inferredPersonBirthYear(person) {
+  const candidates = inferredBirthCandidates(person);
+  if (candidates.length === 0) return null;
+  const highestPriority = Math.max(...candidates.map(({ priority }) => priority));
+  const years = [...new Set(candidates
+    .filter(({ priority }) => priority === highestPriority)
+    .map(({ year }) => year))].sort((left, right) => left - right);
+  const coherent = densestTemporalCluster(years, (year) => year, 4);
+  const midpoint = Math.floor((coherent[0] + coherent.at(-1)) / 2);
+  return westernYearFromAstronomical(midpoint);
 }
 
 function densestTemporalCluster(values, pointFor, maxSpan = 80) {
@@ -145,7 +238,8 @@ export function personLifeSummary(person) {
   const births = yearClaims(person.life.birth);
   const deaths = yearClaims(person.life.death);
   const active = coherentActivityYears(personCoherentActivityClaims(person)).sort((a, b) => a.sort - b.sort);
-  const born = births[0]?.label ?? null;
+  const inferredBirth = births.length === 0 ? inferredPersonBirthYear(person) : null;
+  const born = births[0]?.label ?? formatPersonWesternYear(inferredBirth);
   const died = deaths[0]?.label ?? null;
   if (born && died) return `${born} - ${died}`;
   if (born) return `Born ${born}`;

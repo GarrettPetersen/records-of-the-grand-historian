@@ -5,6 +5,7 @@ import { onRequestGet, onRequestHead } from '../functions/people/[slug].js';
 import { personPageShardName } from '../functions/lib/people-shards.js';
 import {
   MAX_PUBLIC_PERSON_ALIASES,
+  inferredPersonBirthYear,
   personAlternateNames,
   personCoherentActivityClaims,
   personLifeSummary,
@@ -82,6 +83,55 @@ assert.deepEqual(
   [chronologyFixture.life.attestedActivity[0], chronologyFixture.life.attestedActivity[3]],
 );
 assert.equal(personLifeSummary(chronologyFixture), 'First attested BC 209; died BC 195');
+
+const inferredBirthFixture = {
+  life: {
+    birth: [],
+    death: [{
+      value: { dateContext: { westernYear: { era: 'AD', year: 445, precision: 'year' } } },
+      evidence: ['fixture:s0001'],
+    }],
+    ageClaims: [{
+      value: { age: 48, reckoning: 'sui', unitText: '時年四十八' },
+      evidence: ['fixture:s0001'],
+    }],
+    attestedActivity: [{
+      value: { westernYear: { era: 'AD', year: 420, precision: 'year' } },
+      evidence: ['fixture:s0002'],
+    }],
+  },
+};
+assert.deepEqual(inferredPersonBirthYear(inferredBirthFixture), { era: 'AD', year: 398, precision: 'circa' });
+assert.equal(personLifeSummary(inferredBirthFixture), 'c. AD 398 - AD 445');
+
+const explicitBirthFixture = structuredClone(inferredBirthFixture);
+explicitBirthFixture.life.birth.push({
+  value: { westernYear: { era: 'AD', year: 399, precision: 'circa' } },
+});
+assert.equal(personLifeSummary(explicitBirthFixture), 'c. AD 399 - AD 445');
+
+const datedChildhoodFixture = {
+  life: {
+    birth: [],
+    death: [{ value: { westernYear: { era: 'BC', year: 74, precision: 'year' } } }],
+    ageClaims: [{
+      value: {
+        age: 8,
+        reckoning: 'sui',
+        dateContext: { westernYear: { era: 'BC', year: 87, precision: 'year' } },
+      },
+    }],
+    attestedActivity: [{ value: { westernYear: { era: 'BC', year: 87, precision: 'year' } } }],
+  },
+};
+assert.equal(personLifeSummary(datedChildhoodFixture), 'c. BC 94 - BC 74');
+
+const unrelatedAgeFixture = structuredClone(chronologyFixture);
+unrelatedAgeFixture.life.ageClaims.push({
+  value: { age: 12, context: 'learned to read' },
+  evidence: ['fixture:s0099'],
+});
+assert.equal(personLifeSummary(unrelatedAgeFixture), 'First attested BC 209; died BC 195');
 assert.equal(
   personPublicDescription({ description: { en: 'Northern Qi prince and commander -- s0179 wrongly identifies his father' } }),
   'Northern Qi prince and commander',
