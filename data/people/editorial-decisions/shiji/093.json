@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "093",
+  "input": {
+    "chapterFingerprint": "sha256:fc643c5ee182622fbddcb55a418fe7cf3eb98125db3a8ec3e734bf97e196f194",
+    "proposalsFingerprint": "sha256:49553f2afa40bea97442e99993bb02b6a4707d8afbcb4408673e494bf2ed6c37"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-5699a1cb-02cc-447a-87ef-b03acf799283",
+    "runId": "run-2b236b78-c482-4364-8846-119934d452ef",
+    "completedAt": "2026-08-19T23:10:17.805Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:093:r0001",
+      "unit": {
+        "id": "s0031",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "Moreover, two rulers should not press each other into a corner.' After seven days, the Xiongnu cavalry gradually withdrew.\"",
+      "after": "Moreover, two rulers should not press each other into a corner.' After seven days, the Xiongnu cavalry gradually withdrew.",
+      "reason": "Remove the extraneous final quotation mark after the narrative continuation following the consort's speech.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:093:r0002",
+      "unit": {
+        "id": "s0031",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "Moreover, two rulers should not corner each other.' After seven days, the Hu cavalry gradually withdrew.'",
+      "after": "Moreover, two rulers should not corner each other.' After seven days, the Hu cavalry gradually withdrew.",
+      "reason": "Remove the extraneous trailing quotation mark after the narrative sentence.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:093:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese closes the consort’s speech at 不相緱」; 居七日，胡騎稍引去 is narrative, so the closing quote after “corner.” is correct and the final \" after “withdrew.” is extraneous.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0031",
+        "excerpt": "且兩主不相緱」居七日，胡騎稍引去。"
+      }
+    },
+    {
+      "repairId": "shiji:093:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The speech ends at 不相緱」; 居七日，胡騎稍引去 continues in the narrator’s voice, so the quote after “each other.” is right and the trailing quote after “withdrew.” must be removed.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0031",
+        "excerpt": "且兩主不相緱」居七日，胡騎稍引去。"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

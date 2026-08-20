@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "129",
+  "input": {
+    "chapterFingerprint": "sha256:c14f4ffe610f9a03dd4abe8911f42176fa2c1ae0aa02a530d8dd0e8af6a32c85",
+    "proposalsFingerprint": "sha256:8056823038d3c2e8dfc723908803febab5c5587f7a3ecefa621e101f5a5f2663"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-ac183719-7a4c-478a-b941-9c14ad56a9b3",
+    "runId": "run-9a72c9aa-48f0-4145-86ef-e29532f32eac",
+    "completedAt": "2026-08-19T23:33:53.700Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:129:r0001",
+      "unit": {
+        "id": "s0091",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 16
+      },
+      "field": "idiomatic",
+      "before": "He declared: 'My approach to managing commerce and production is comparable to the stratagems of yiyin and Lü Shang, the military art of Sunzi and Wu Qi, and Shang Yang's implementation of the law.",
+      "after": "He declared: 'My approach to managing commerce and production is comparable to the stratagems of Yi Yin and Lü Shang, the military art of Sunzi and Wu Qi, and Shang Yang's implementation of the law.",
+      "reason": "Chinese 伊尹 is the personal name Yi Yin; the idiomatic English incorrectly lowercases and fuses it as \"yiyin\".",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:129:r0002",
+      "unit": {
+        "id": "s0027",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "and Guan Zhong himself possessed the 'three returns,' held the rank of a mere vassal's vassal, yet was wealthier than the rulers of the feudal states.\"",
+      "after": "and Guan Zhong himself possessed the 'three returns,' held the rank of a mere vassal's vassal, yet was wealthier than the rulers of the feudal states.",
+      "reason": "Literal English ends with a stray closing quotation mark that is not opened in this unit and is not present in the Chinese.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:129:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "伊尹 is the personal name Yi Yin; fused lowercase \"yiyin\" is a naming error, and the proposed spacing and capitalization restore the correct form without changing sense.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0091",
+        "excerpt": "伊尹"
+      }
+    },
+    {
+      "repairId": "shiji:129:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "而管氏亦有三歸，位在陪臣，富於列國之君。 has no quotation marks; the trailing \" in the literal field is an unopened stray punctuation error, and removing it leaves an accurate rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0027",
+        "excerpt": "而管氏亦有三歸，位在陪臣，富於列國之君。"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

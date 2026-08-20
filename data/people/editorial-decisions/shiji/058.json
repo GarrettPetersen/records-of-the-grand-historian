@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "058",
+  "input": {
+    "chapterFingerprint": "sha256:6ab43b5a3c5e0b0f9a0123ff378c72db97b923cb41826e7c15f2867f4e44c603",
+    "proposalsFingerprint": "sha256:a2d63655f4ff6849d3620027e92a0324715ea6e15fe09f262ec68284bffce8e7"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-89db6589-af75-4257-9818-47fe7be1f8cd",
+    "runId": "run-c4046a89-a5eb-4e9a-83a5-ef2a7c694295",
+    "completedAt": "2026-08-19T23:32:58.001Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:058:r0001",
+      "unit": {
+        "id": "s0108",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "idiomatic",
+      "before": "Empress Dowager Li was furious. When the Han envoys arrived, she wished to speak with them herself, but King Ping and Queen Ren barred her way and shut the gates. The Empress Dowager struggled at the doors, pointing at them and reviling them, but in the end was prevented from seeing the Han envoys.",
+      "after": "Empress Dowager Li was furious. When the Han envoys arrived, she wished to speak with them herself, but King Ping and Queen Ren barred her way and shut the gates. The Empress Dowager struggled at the doors and had her finger caught and crushed in them, and in the end was prevented from seeing the Han envoys.",
+      "reason": "措指 means her finger was pinched/crushed in the gate (traditional commentary), not that she pointed and reviled them.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:058:r0002",
+      "unit": {
+        "id": "s0108",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "literal",
+      "before": "Empress Dowager Li greatly angered, Han envoys came, wished to speak herself, King Ping Xiang and Queen Ren blocked and stopped her, closed the gate, Empress Dowager Li contended at the gate, pointed and cursed, thus could not see the Han envoys.",
+      "after": "Empress Dowager Li greatly angered, Han envoys came, wished to speak herself, King Ping Xiang and Queen Ren blocked and stopped her, closed the gate, Empress Dowager Li contended at the gate, her finger was pinched, thus could not see the Han envoys.",
+      "reason": "措指 is finger caught in the door, not pointing and cursing.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:058:r0003",
+      "unit": {
+        "id": "s0086",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Thus, memorialized to the empress dowager, the empress dowager then was pleased, added one extra drink for the emperor.",
+      "after": "Thus, memorialized to the empress dowager, the empress dowager then was pleased, added one extra meal for the emperor.",
+      "reason": "湌 is a variant of 餐 (meal), not drink.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:058:r0004",
+      "unit": {
+        "id": "s0113",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "In Yuanshuo period, among Suiyang people there was one Lei Qian who was rebellious, someone had insulted his father, and he went out in the same carriage as the Huaiyang governor's guest.",
+      "after": "In Yuanshuo period, among Suiyang people there was one Lei Qianfan; someone had insulted his father, and that enemy went out in the same carriage as the Huaiyang governor's guest.",
+      "reason": "類犴反 is the personal name Lei Qianfan; 反 is not the adjective 'rebellious' here.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:058:r0005",
+      "unit": {
+        "id": "s0132",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "The one killed submitted a memorial to report.",
+      "after": "The son of one who was killed submitted a memorial to report.",
+      "reason": "所殺者子 means the son of a person who had been killed, not the killed person himself.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:058:r0006",
+      "unit": {
+        "id": "s0007",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "Emperor Xiaowen ascended the throne in year 2, enfeoffing Wu as King of Dai, Shen as King of Taiyuan, Sheng as King of Liang.",
+      "after": "In the second year after Emperor Xiaowen ascended the throne, he enfeoffed Wu as King of Dai, Shen as King of Taiyuan, and Sheng as King of Liang.",
+      "reason": "即位二年 means the second year of the reign after accession, not that he ascended in year 2.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:058:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 李太后與爭門，措指，遂不得見漢使者, 措指 means her finger was caught/crushed in the gate during the struggle; the before invents pointing and reviling, which the Chinese does not say.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0108",
+        "excerpt": "李太后與爭門，措指"
+      }
+    },
+    {
+      "repairId": "shiji:058:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 措指 in the literal must be rendered as the finger being pinched in the door, not \"pointed and cursed\"; the proposed replacement restores the sense without adding content.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0108",
+        "excerpt": "措指"
+      }
+    },
+    {
+      "repairId": "shiji:058:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "為帝加壹湌 uses 湌 as a variant of 餐 (meal); \"drink\" is a mistranslation, and the idiomatic already correctly has \"meal.\"",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0086",
+        "excerpt": "為帝加壹湌"
+      }
+    },
+    {
+      "repairId": "shiji:058:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "睢陽人類犴反者 names a man 類犴反 (Lei Qianfan); 反 is part of the name, not \"rebellious.\" The clause 人有辱其父，而與淮陽太守客出同車 makes the insulting enemy the one riding with the governor's guest, as s0114's 類犴反殺其仇 confirms.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0113",
+        "excerpt": "睢陽人類犴反者，人有辱其父，而與淮陽太守客出同車"
+      }
+    },
+    {
+      "repairId": "shiji:058:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "所殺者子上書言 means the son of someone who had been killed submitted the memorial; the before drops 子 and wrongly makes the dead person the memorialist.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0132",
+        "excerpt": "所殺者子"
+      }
+    },
+    {
+      "repairId": "shiji:058:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "孝文帝即位二年 marks the second year after accession, not that he ascended \"in year 2\"; the proposed wording matches the Chinese and the already-correct idiomatic.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0007",
+        "excerpt": "孝文帝即位二年"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

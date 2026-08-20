@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "066",
+  "input": {
+    "chapterFingerprint": "sha256:803a0f35f0bc3b49671dd4141c38ae797e5d2fe39c0b000a94c53e1df4fd331c",
+    "proposalsFingerprint": "sha256:1497e38e1aa53292cb959639430c36325b88515340315ca8342808bb5cbe440b"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-d2f2e274-7d45-43a0-a14f-c813b070ef09",
+    "runId": "run-a5bb2159-b1fa-4850-ba1d-030a1c4cb18a",
+    "completedAt": "2026-08-19T23:10:39.232Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:066:r0001",
+      "unit": {
+        "id": "s0168",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "The Wu king said: 'Because of your words, I too had my doubts.'",
+      "after": "The Wu king said: 'Without your words, I too would have suspected him.'",
+      "reason": "Chinese 微子之言 means 'if it were not for your words' / 'without your words', not 'because of your words'.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:066:r0002",
+      "unit": {
+        "id": "s0039",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 16
+      },
+      "field": "literal",
+      "before": "Shang having been captured, the envoy captured Wu Zixu.",
+      "after": "Shang having been captured, the envoy then tried to capture Wu Zixu.",
+      "reason": "捕 here is attempted seizure; the next sentence shows the envoy dared not advance, matching the idiomatic 'tried to capture'.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:066:r0003",
+      "unit": {
+        "id": "s0124",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Chu feared Wu again greatly come, then left Ying, moved to Jiao.",
+      "after": "Chu feared Wu again greatly come, then left Ying, moved to Ruo.",
+      "reason": "鄀 should be Ruo (or Ruo/Juo), not Jiao; idiomatic already has Ruo.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:066:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "In 微子之言，吾亦疑之, classical 微 means ‘if it were not for / without,’ not ‘because of’; the before inverts that conditional, while the proposed after correctly renders the counterfactual and 疑之 as suspicion of the person just denounced.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0168",
+        "excerpt": "微子之言，吾亦疑之"
+      }
+    },
+    {
+      "repairId": "shiji:066:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "使者捕伍胥 names the envoy’s attempt to seize Wu Zixu; s0040 shows 使者不敢進 and Wu Zixu’s escape, so a completed ‘captured’ is false and ‘tried to capture’ matches the Chinese sequence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0039",
+        "excerpt": "尚既就執，使者捕伍胥"
+      }
+    },
+    {
+      "repairId": "shiji:066:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "徙於鄀 uses the place-name 鄀, read Ruo; English ‘Jiao’ is a wrong reading of that graph, and replacing it with Ruo corrects the toponym without other semantic change.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0124",
+        "excerpt": "徙於鄀"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

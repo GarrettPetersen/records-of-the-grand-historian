@@ -38,12 +38,30 @@ import {
 } from './validate-people-extraction.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+const EXPLICIT_NON_PERSON_REASONS = new Set([
+  'place',
+  'office',
+  'organization',
+  'title',
+  'book-title',
+  'collective',
+  'deity',
+  'reign-period',
+  'polity',
+  'not-a-name',
+]);
 
 function usage() {
   console.log(`Usage:
   node scripts/apply-people-translation-repairs.mjs --book BOOK --chapter NNN [--extraction PATH] [--decisions PATH]
   node scripts/apply-people-translation-repairs.mjs --book BOOK --chapter NNN --reconcile-current
   node scripts/apply-people-translation-repairs.mjs --self-test
+
+Options:
+  --candidate-disposition ID=REASON
+                         Explicitly classify a new revised-packet candidate as
+                         a non-person. May be repeated; REASON must be one of:
+                         ${[...EXPLICIT_NON_PERSON_REASONS].join(', ')}.
 
 Proposed repairs require a complete, independently authored editorial-decision
 file. The command validates the review before editing, applies only accepted or
@@ -58,6 +76,7 @@ function parseArgs(argv) {
     extraction: null,
     decisions: null,
     reconcileCurrent: false,
+    candidateDispositions: [],
     selfTest: false,
   };
   for (let index = 0; index < argv.length; index += 1) {
@@ -72,6 +91,24 @@ function parseArgs(argv) {
     else if (arg === '--extraction') opts.extraction = path.resolve(REPO_ROOT, next());
     else if (arg === '--decisions') opts.decisions = path.resolve(REPO_ROOT, next());
     else if (arg === '--reconcile-current') opts.reconcileCurrent = true;
+    else if (arg === '--candidate-disposition') {
+      const value = next();
+      const separator = value.lastIndexOf('=');
+      const candidate = value.slice(0, separator);
+      const reason = value.slice(separator + 1);
+      if (separator < 1 || !EXPLICIT_NON_PERSON_REASONS.has(reason)) {
+        throw new Error(
+          `${arg} must be ID=REASON, with REASON one of: ` +
+          [...EXPLICIT_NON_PERSON_REASONS].join(', '),
+        );
+      }
+      opts.candidateDispositions.push({
+        candidate,
+        disposition: 'not-person',
+        reason,
+        note: 'Explicitly classified while applying an independently reviewed translation repair.',
+      });
+    }
     else if (arg === '--self-test') opts.selfTest = true;
     else if (arg === '--help' || arg === '-h') {
       usage();
@@ -103,6 +140,34 @@ function describeUnresolvedCandidates(candidateIds, packet) {
   }).join(', ');
 }
 
+function applyExplicitCandidateDispositions(reconciled, packet, requested) {
+  if (requested.length === 0) return reconciled;
+  const packetCandidates = new Set(packet.preflight.candidates.map((candidate) => candidate.id));
+  const accounted = new Set([
+    ...reconciled.extraction.mentions.flatMap((mention) => mention.candidateRefs),
+    ...reconciled.extraction.candidateDispositions.map((item) => item.candidate),
+  ]);
+  const unresolved = new Set(reconciled.unresolvedCandidates);
+  for (const disposition of requested) {
+    if (!packetCandidates.has(disposition.candidate)) {
+      throw new Error(`Explicit candidate disposition is not in the revised packet: ${disposition.candidate}`);
+    }
+    if (accounted.has(disposition.candidate)) {
+      throw new Error(`Explicit candidate disposition is already accounted for: ${disposition.candidate}`);
+    }
+    if (!unresolved.has(disposition.candidate)) {
+      throw new Error(`Explicit candidate disposition is not unresolved: ${disposition.candidate}`);
+    }
+    reconciled.extraction.candidateDispositions.push(disposition);
+    accounted.add(disposition.candidate);
+    unresolved.delete(disposition.candidate);
+  }
+  return {
+    ...reconciled,
+    unresolvedCandidates: reconciled.unresolvedCandidates.filter((candidate) => unresolved.has(candidate)),
+  };
+}
+
 function expectDecisionFailure(callback, label) {
   try {
     callback();
@@ -113,6 +178,31 @@ function expectDecisionFailure(callback, label) {
 }
 
 function selfTest() {
+  const candidateId = 'fixture:001:cand_1234567890abcdef';
+  const explicitClassification = applyExplicitCandidateDispositions({
+    extraction: { mentions: [], candidateDispositions: [] },
+    unresolvedCandidates: [candidateId],
+    unresolvedSpans: [],
+  }, {
+    preflight: { candidates: [{ id: candidateId }] },
+  }, [{
+    candidate: candidateId,
+    disposition: 'not-person',
+    reason: 'polity',
+    note: 'Fixture classification.',
+  }]);
+  if (
+    explicitClassification.unresolvedCandidates.length !== 0 ||
+    explicitClassification.extraction.candidateDispositions[0]?.candidate !== candidateId
+  ) {
+    throw new Error('Explicit revised-packet candidate disposition was not applied');
+  }
+  expectDecisionFailure(() => applyExplicitCandidateDispositions(
+    explicitClassification,
+    { preflight: { candidates: [{ id: candidateId }] } },
+    [{ candidate: candidateId, disposition: 'not-person', reason: 'polity' }],
+  ), 'already-accounted explicit candidate disposition');
+
   const renamed = remapMentionSpanThroughEdit(
     { exact: 'Xuan', occurrence: 0, startCodePoint: 17, endCodePoint: 21 },
     'After three days Xuan let a dagger fall before him.',
@@ -1254,9 +1344,13 @@ function main() {
   }
 
   if (opts.reconcileCurrent) {
-    const reconciled = reconcileExtractionAfterRepairs(extraction, currentPacket, {
-      markRepairsApplied: false,
-    });
+    const reconciled = applyExplicitCandidateDispositions(
+      reconcileExtractionAfterRepairs(extraction, currentPacket, {
+        markRepairsApplied: false,
+      }),
+      currentPacket,
+      opts.candidateDispositions,
+    );
     if (reconciled.unresolvedSpans.length > 0) {
       throw new Error(
         `Unresolved stale mention spans: ${reconciled.unresolvedSpans.map((item) =>
@@ -1335,9 +1429,13 @@ function main() {
     chapterFile,
     properNounMatcher: matcher,
   });
-  const reconciled = reconcileExtractionAfterRepairs(reviewedExtraction, revisedPacket, {
-    previousPacket: oldPacket,
-  });
+  const reconciled = applyExplicitCandidateDispositions(
+    reconcileExtractionAfterRepairs(reviewedExtraction, revisedPacket, {
+      previousPacket: oldPacket,
+    }),
+    revisedPacket,
+    opts.candidateDispositions,
+  );
   if (reconciled.unresolvedSpans.length > 0) {
     throw new Error(
       `Unresolved stale mention spans: ${reconciled.unresolvedSpans.map((item) =>

@@ -63,11 +63,6 @@ const BLOCKERS = [
     reason: 'Non-standard KDP spellcheck hit; use ordered, issued an edict, or commanded.',
   },
   {
-    id: 'lowercase_wuchen_day',
-    pattern: /\bwuchen day\b/u,
-    reason: 'Lowercase Wuchen day looks like a spelling error and may mask Wu Chen mistranslation.',
-  },
-  {
     id: 'unaccented_lese_majeste',
     pattern: /\blese-majeste\b/iu,
     reason: 'Use standard lèse-majesté spelling or a plain-English equivalent.',

@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "041",
+  "input": {
+    "chapterFingerprint": "sha256:9de9ca2f81d2581d82a44eba0eb6f12845b895bee938db7a50ad88c83e26ca16",
+    "proposalsFingerprint": "sha256:cc3e3640aa909777cddca71dc81f75c9fd9ba9a972266447449b1f2b3dff26bf"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-51d9b89b-cb04-4e84-967c-ebac2485e7b5",
+    "runId": "run-843668c5-1ea1-437d-9536-77e9f4e361f1",
+    "completedAt": "2026-08-19T23:32:52.658Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:041:r0001",
+      "unit": {
+        "id": "s0073",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "The Grand Administrator Pi heard this and repeatedly argued with Wu Zixu over Yue policy. He then slandered Wu Zixu, saying, “Wu Yuan appears loyal, but in truth he is cruel. He did not get his way when advising against Yue, and since then he has resented Your Majesty.",
+      "after": "The Grand Administrator Pi heard this and repeatedly argued with Wu Zixu over Yue policy. He then slandered Wu Zixu, saying, “Wu Yuan appears loyal, but in truth he is cruel. He disregarded his own father and elder brother; how can he care for Your Majesty?",
+      "reason": "其父兄不顧 says that Wu Yuan disregarded his own father and elder brother; the current English invents resentment over advice about Yue.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:041:r0002",
+      "unit": {
+        "id": "s0148",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 18
+      },
+      "field": "idiomatic",
+      "before": "He said, “Chu’s three grandees have spread out nine armies. In the north they surround Quwo and Yuzhong, reaching as far as the Wujia Pass, a distance of three thousand seven hundred li. Jing is the point where Chu and Xia meet.",
+      "after": "He said, “Chu’s three grandees have spread out nine armies. In the north they surround Quwo and Yuzhong, reaching as far as the Wujia Pass, a distance of three thousand seven hundred li. Jing Cui’s army gathers in the north at Lu, Qi, and Nanyang. Could the division be any greater than this?",
+      "reason": "景翠之軍北聚魯、齊、南陽 identifies Jing Cui's army and its northern gathering places; the current English instead invents a Chu–Xia meeting point.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:041:r0003",
+      "unit": {
+        "id": "s0239",
+        "kind": "paragraph-sentence",
+        "blockIndex": 26,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Gou Jian can not be called worthy!",
+      "after": "Could Gou Jian be called anything but worthy!",
+      "reason": "可不謂賢哉 is a positive rhetorical question praising Goujian; the current literal wording reads as a negation of his worthiness.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:041:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 其父兄不顧，安能顧王？ charges Wu Yuan with disregarding his own father and elder brother and asks how he could care for the king; the before text invents Yue-advice resentment (that theme belongs to s0074’s Qi remonstrance), while the proposal restores the kinship slur accurately.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0073",
+        "excerpt": "其父兄不顧，安能顧王？"
+      }
+    },
+    {
+      "repairId": "shiji:041:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "景翠之軍北聚魯、齊、南陽，分有大此者乎 names Jing Cui’s army gathering north at Lu, Qi, and Nanyang and asks whether any division is greater; “Jing is the point where Chu and Xia meet” invents a Chu–Xia junction absent from the Chinese, and the proposal matches the source.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0148",
+        "excerpt": "景翠之軍北聚魯、齊、南陽，分有大此者乎？"
+      }
+    },
+    {
+      "repairId": "shiji:041:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "句踐可不謂賢哉！ is a rhetorical affirmation of Goujian’s worthiness; “Gou Jian can not be called worthy!” reads in English as denying that worth, whereas “Could Gou Jian be called anything but worthy!” preserves the positive force.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0239",
+        "excerpt": "句踐可不謂賢哉！"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}
