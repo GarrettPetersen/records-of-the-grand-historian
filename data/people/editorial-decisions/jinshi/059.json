@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 3,
+  "book": "jinshi",
+  "chapter": "059",
+  "input": {
+    "chapterFingerprint": "sha256:630035a8cecf6ec8dd1eb34ef24f60b7c4d48f87a1578bc5d0d4b3732dc6e7c1",
+    "proposalsFingerprint": "sha256:8a3c3abebe54a719e02e91387b4578de8d4a7d669abe7bc9507cd08a91b2ab38"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-bc1dedcb-7178-4442-8311-e5e019fe1d78",
+    "runId": "run-b3d42f70-eaa2-4fe2-a3e0-2362cf79f36e",
+    "completedAt": "2026-08-20T00:56:23.712Z"
+  },
+  "proposals": [
+    {
+      "id": "jinshi:059:r0001",
+      "unit": {
+        "id": "s0810",
+        "kind": "table-body-cell",
+        "blockIndex": 176,
+        "collection": "cells",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Shigu (great-great-grandson of Zhao Zu; Eastern Capital Defender).",
+      "after": "Shigu (great-grandson of the Bright Ancestor; Eastern Capital Defender).",
+      "reason": "Chinese 曾孫 means great-grandson; great-great-grandson would be 玄孫 (as used for Chongcheng).",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:059:r0002",
+      "unit": {
+        "id": "s0815",
+        "kind": "table-body-cell",
+        "blockIndex": 177,
+        "collection": "cells",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Chongcheng (great-great-great-grandson of Zhao Zu; Commander of the Martial Army).",
+      "after": "Chongcheng (great-great-grandson of the Bright Ancestor; Commander of the Martial Army).",
+      "reason": "Chinese 玄孫 is great-great-grandson (son of a 曾孫), not great-great-great-grandson.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshi:059:r0003",
+      "unit": {
+        "id": "s0240",
+        "kind": "table-body-cell",
+        "blockIndex": 51,
+        "collection": "cells",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Ang (born Wute; Associate Councilor of State and Prince of Yan).",
+      "after": "Ang (born Wute; Associate Councilor of State and Prince of Yun).",
+      "reason": "鄆王 is Prince of Yun; Yan would be 燕.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jinshi:059:r0001",
+      "decision": "revise",
+      "after": "Shigu (great-grandson of Zhao Zu; Eastern Capital Defender).",
+      "reason": "s0810 昭祖曾孫 makes Shigu Zhao Zu's great-grandson, so 'great-great-grandson' is wrong; keep the established 'Zhao Zu' for 昭祖 rather than substituting 'the Bright Ancestor.'",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0810",
+        "excerpt": "昭祖曾孫"
+      }
+    },
+    {
+      "repairId": "jinshi:059:r0002",
+      "decision": "revise",
+      "after": "Chongcheng (great-great-grandson of Zhao Zu; Commander of the Martial Army).",
+      "reason": "s0815 昭祖玄孫 is great-great-grandson, not great-great-great-grandson; retain 'Zhao Zu' for 昭祖 instead of the proposal's 'Bright Ancestor' rename.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0815",
+        "excerpt": "昭祖玄孫"
+      }
+    },
+    {
+      "repairId": "jinshi:059:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0240 鄆王 is Prince of Yun; Yan would be 燕, so replacing 'Prince of Yan' with 'Prince of Yun' is accurate.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0240",
+        "excerpt": "鄆王"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "jinshi:059:r0003",
+      "before": {
+        "id": "jinshi:059:c1010",
+        "subject": "jinshi:059:p091",
+        "predicate": "office",
+        "value": {
+          "label": {
+            "en": "Associate Councilor of State and Prince of Yan",
+            "zh": "平章政事、鄆王"
+          },
+          "action": "held"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jinshi:059:s0240"
+        ]
+      },
+      "after": {
+        "id": "jinshi:059:c1010",
+        "subject": "jinshi:059:p091",
+        "predicate": "office",
+        "value": {
+          "label": {
+            "en": "Associate Councilor of State and Prince of Yun",
+            "zh": "平章政事、鄆王"
+          },
+          "action": "held"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jinshi:059:s0240"
+        ]
+      },
+      "reason": "Accepted r0003 shows English 'Prince of Yan' came only from misreading 鄆 as 燕; the office label must read Prince of Yun while keeping zh, id, subject, predicate, certainty, and evidence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0240",
+        "excerpt": "鄆王"
+      }
+    }
+  ]
+}

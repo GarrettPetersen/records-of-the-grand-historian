@@ -49,6 +49,10 @@ import {
   invalidateResolutionReferences,
   pruneResolutionDocument,
 } from './lib/people-resolution-invalidation.mjs';
+import {
+  editorialDecisionPath,
+  validateAppliedEditorialDecisions,
+} from './lib/people-editorial-decisions.mjs';
 
 loadDotenv(REPO_ROOT);
 
@@ -934,9 +938,56 @@ function chunkRunRecord(chunk, extraction) {
   };
 }
 
-function writeAcceptedExtraction(target, compact) {
+function repairTarget(repair) {
+  return `${repair.unit.id}:${repair.field}`;
+}
+
+function preservePriorAppliedRepairs(previous, replacement) {
+  const priorApplied = previous.translationRepairs.filter((repair) => repair.status === 'applied');
+  const priorPending = previous.translationRepairs.filter((repair) => repair.status === 'proposed');
+  if (priorPending.length > 0) {
+    throw new Error('Cannot replace an extraction while its translation repairs are awaiting review');
+  }
+  if (replacement.translationRepairs.some((repair) => repair.status === 'proposed')) {
+    throw new Error(
+      'Replacement extraction proposed new translation repairs for a chapter with existing editorial history',
+    );
+  }
+  const replacementByTarget = new Map(replacement.translationRepairs.map((repair) => [
+    repairTarget(repair),
+    repair,
+  ]));
+  for (const repair of priorApplied) {
+    const replacementRepair = replacementByTarget.get(repairTarget(repair));
+    if (replacementRepair && JSON.stringify(replacementRepair) !== JSON.stringify(repair)) {
+      throw new Error(`Replacement extraction changed applied repair ${repair.id}`);
+    }
+    if (!replacementRepair) replacement.translationRepairs.push(structuredClone(repair));
+  }
+  return replacement;
+}
+
+function preserveEditorialHistory(target, compact, packet) {
   const file = extractionPath(target.book, target.chapter);
-  const serialized = serializeCompactPeopleExtraction(compact);
+  const decisionsFile = editorialDecisionPath(target.book, target.chapter);
+  if (!fs.existsSync(file) || !fs.existsSync(decisionsFile)) return compact;
+
+  const previousRaw = readJson(file);
+  const previous = isCompactPeopleExtraction(previousRaw)
+    ? validateCompactPeopleExtraction(previousRaw, packet).normalized
+    : validatePeopleExtraction(previousRaw, packet).normalized;
+  const replacement = validateCompactPeopleExtraction(compact, packet).normalized;
+  preservePriorAppliedRepairs(previous, replacement);
+  const protectedCompact = compactPeopleExtraction(replacement, packet);
+  const protectedExtraction = validateCompactPeopleExtraction(protectedCompact, packet).normalized;
+  validateAppliedEditorialDecisions(readJson(decisionsFile), protectedExtraction);
+  return protectedCompact;
+}
+
+function writeAcceptedExtraction(target, compact, packet) {
+  const protectedCompact = preserveEditorialHistory(target, compact, packet);
+  const file = extractionPath(target.book, target.chapter);
+  const serialized = serializeCompactPeopleExtraction(protectedCompact);
   if (fs.existsSync(file) && fs.readFileSync(file, 'utf8') !== serialized) {
     const invalidated = invalidateResolutionReferences([target]);
     if (invalidated.removedReferences > 0) {
@@ -948,6 +999,7 @@ function writeAcceptedExtraction(target, compact) {
     }
   }
   writeTextAtomic(file, serialized);
+  return protectedCompact;
 }
 
 async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, budget) {
@@ -1034,14 +1086,15 @@ async function processChunkedTarget(target, packet, opts, state, control, budget
     completedAt: new Date().toISOString(),
     chunks: parts.map(({ chunk, extraction }) => chunkRunRecord(chunk, extraction)),
   };
-  const compact = assembleCompactPeopleChunks(packet, parts, run);
+  let compact = assembleCompactPeopleChunks(packet, parts, run);
+  compact = writeAcceptedExtraction(target, compact, packet);
   const validated = validateCompactPeopleExtraction(compact, packet);
-  writeAcceptedExtraction(target, compact);
   updateState(state, target, {
     status: 'accepted',
     acceptedPath: path.relative(REPO_ROOT, extractionPath(target.book, target.chapter)),
     repairs: validated.stats.repairs,
-    repairsPendingReview: validated.normalized.translationRepairs.length,
+    repairsPendingReview: validated.normalized.translationRepairs
+      .filter((repair) => repair.status === 'proposed').length,
     lastErrors: [],
   });
   console.log(
@@ -1053,7 +1106,7 @@ async function processChunkedTarget(target, packet, opts, state, control, budget
 }
 
 function acceptWholeExtraction(target, accepted, state) {
-  const compact = compactPeopleExtraction(accepted.extraction, accepted.packet);
+  let compact = compactPeopleExtraction(accepted.extraction, accepted.packet);
   validateCompactPeopleExtraction(compact, accepted.packet);
   const rawArchive = path.join(
     PEOPLE_DIR,
@@ -1063,13 +1116,15 @@ function acceptWholeExtraction(target, accepted, state) {
     `${target.chapter}.json`,
   );
   writeJsonAtomic(rawArchive, accepted.extraction);
-  writeAcceptedExtraction(target, compact);
+  compact = writeAcceptedExtraction(target, compact, accepted.packet);
+  const persisted = validateCompactPeopleExtraction(compact, accepted.packet);
   updateState(state, target, {
     status: 'accepted',
     runId: accepted.result.id,
     acceptedPath: path.relative(REPO_ROOT, extractionPath(target.book, target.chapter)),
     repairs: accepted.stats.repairs,
-    repairsPendingReview: accepted.extraction.translationRepairs.length,
+    repairsPendingReview: persisted.normalized.translationRepairs
+      .filter((repair) => repair.status === 'proposed').length,
     lastErrors: [],
   });
   console.log(
@@ -1155,6 +1210,40 @@ async function processTarget(target, opts, state, control, budget) {
 }
 
 async function selfTest() {
+  const appliedRepair = {
+    id: 'fixture:001:r0001',
+    unit: { id: 's0001' },
+    field: 'idiomatic',
+    before: 'wrong',
+    after: 'right',
+    reason: 'Reviewed fixture correction.',
+    confidence: 'high',
+    status: 'applied',
+  };
+  const replacement = preservePriorAppliedRepairs(
+    { translationRepairs: [appliedRepair] },
+    { translationRepairs: [] },
+  );
+  if (
+    replacement.translationRepairs.length !== 1 ||
+    replacement.translationRepairs[0] === appliedRepair ||
+    replacement.translationRepairs[0].after !== 'right'
+  ) {
+    throw new Error('Replacement extraction did not preserve prior applied repairs');
+  }
+  let pendingReplacementRejected = false;
+  try {
+    preservePriorAppliedRepairs(
+      { translationRepairs: [appliedRepair] },
+      { translationRepairs: [{ ...appliedRepair, status: 'proposed' }] },
+    );
+  } catch (error) {
+    pendingReplacementRejected = /existing editorial history/u.test(error.message);
+  }
+  if (!pendingReplacementRejected) {
+    throw new Error('Replacement extraction admitted new repairs over existing editorial history');
+  }
+
   const small = { book: 'fixture', chapter: '002', metrics: {
     units: 100, candidates: 200, workerBytes: 10_000, workloadScore: 42_000,
   } };

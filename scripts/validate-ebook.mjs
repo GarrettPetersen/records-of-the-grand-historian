@@ -7,6 +7,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { scanArtifactText } from './scan-translation-artifacts.mjs';
 import { renderBookCover } from './generate-book-covers.mjs';
+import { isSemanticTableHeader, tableCellRepeatsLabel, tableCells } from './lib/table-structure.mjs';
 
 const epubPath = process.argv[2];
 const CHILD_TIMEOUT_MS = 10_000;
@@ -529,8 +530,8 @@ function expectedRenderedSourceTexts(chapterData) {
       }
       continue;
     }
-    if (block.type === 'table_row') {
-      const cells = Array.isArray(block.cells) ? block.cells : (block.sentences || []);
+    if (block.type === 'table_row' || (block.type === 'table_header' && !isSemanticTableHeader(block))) {
+      const cells = tableCells(block);
       for (const [cellIndex, cell] of cells.entries()) {
         const text = normalizeVisibleText(sourceItemTranslation(cell));
         if (text) expected.push({ blockIndex, cellIndex, kind: 'table cell', id: cell.id || '', text });
@@ -538,6 +539,26 @@ function expectedRenderedSourceTexts(chapterData) {
     }
   }
   return expected;
+}
+
+function expectedRenderedTableFieldCounts(chapterData) {
+  const counts = [];
+  let headers = [];
+  for (const block of chapterData?.content || []) {
+    if (block.type === 'table_header' && isSemanticTableHeader(block)) {
+      headers = tableCells(block).map((cell) => (
+        normalizeVisibleText(sourceItemTranslation(cell)).replace(/[.!?]+$/u, '').trim()
+      ));
+      continue;
+    }
+    if (block.type !== 'table_row' && block.type !== 'table_header') continue;
+    const count = tableCells(block).filter((cell, cellIndex) => {
+      const text = normalizeVisibleText(sourceItemTranslation(cell));
+      return text && !tableCellRepeatsLabel(headers[cellIndex], text);
+    }).length;
+    if (count > 0) counts.push(count);
+  }
+  return counts;
 }
 
 function splitLongRenderedTextForValidation(text, maxWords = 220) {
@@ -832,6 +853,11 @@ function validateRenderedTableEntries(chapterEntry, content) {
   const qaChapter = qaChapterById.get(chapter);
   const expectedRows = qaChapter?.tableRendering?.renderedRows || 0;
   const sections = tableEntrySections(content);
+  const chapterData = sourceChapterData(sourceProduct?.book, chapter);
+  const sourceFieldCounts = expectedRenderedTableFieldCounts(chapterData);
+  const expectedFieldCounts = sourceFieldCounts.length === sections.length
+    ? sourceFieldCounts
+    : null;
 
   if (expectedRows === 0 && sections.length === 0) return;
   if (sections.length !== expectedRows) {
@@ -845,6 +871,9 @@ function validateRenderedTableEntries(chapterEntry, content) {
     const heading = firstTagText(section, 'h3');
     const dts = countTags(section, 'dt');
     const dds = countTags(section, 'dd');
+    const unlabeledDds = [...section.matchAll(/<dd\b[^>]*class="[^"]*\btable-entry-unlabeled\b[^"]*"/gu)].length;
+    const renderedFields = 1 + dds;
+    const expectedFields = expectedFieldCounts?.[index] ?? null;
     const labels = tagTexts(section, 'dt');
     if (!heading) {
       errors.push(`${chapterEntry} table entry ${index + 1} has no visible heading.`);
@@ -856,11 +885,17 @@ function validateRenderedTableEntries(chapterEntry, content) {
     if (/\(No translation available\)|\bundefined\b|\bnull\b/iu.test(heading)) {
       errors.push(`${chapterEntry} table entry ${index + 1} has an invalid heading: ${heading}.`);
     }
-    if (!/<dl\b/u.test(section) && !/chapter-0(1[3-9]|20)\.xhtml/.test(chapterEntry)) {
+    if (expectedFields != null && renderedFields !== expectedFields) {
+      errors.push(`${chapterEntry} table entry ${index + 1} rendered ${renderedFields} field(s); expected ${expectedFields} from the source row.`);
+    }
+    if (expectedFields != null && expectedFields > 1 && !/<dl\b/u.test(section)) {
       errors.push(`${chapterEntry} table entry ${index + 1} has no definition list for table cells.`);
     }
-    if (dts !== dds) {
-      errors.push(`${chapterEntry} table entry ${index + 1} has mismatched table field labels/values: ${dts} dt vs ${dds} dd.`);
+    if (expectedFields == null && !/<dl\b/u.test(section) && !/chapter-0(1[3-9]|20)\.xhtml/.test(chapterEntry)) {
+      errors.push(`${chapterEntry} table entry ${index + 1} has no definition list for table cells; source-row alignment was unavailable.`);
+    }
+    if (dts + unlabeledDds !== dds) {
+      errors.push(`${chapterEntry} table entry ${index + 1} has mismatched table field labels/values: ${dts} labeled, ${unlabeledDds} unlabeled, ${dds} value(s).`);
     }
     const duplicateLabels = [...new Set(labels.filter((label, labelIndex) => labels.indexOf(label) !== labelIndex))];
     if (duplicateLabels.length > 0 && !/chapter-013\.xhtml/.test(chapterEntry)) {
@@ -870,7 +905,7 @@ function validateRenderedTableEntries(chapterEntry, content) {
     if (punctuatedLabels.length > 0) {
       errors.push(`${chapterEntry} table entry ${index + 1} has sentence punctuation in table field label(s): ${punctuatedLabels.join(', ')}.`);
     }
-    if (dts === 0 && dds === 0 && qaChapter?.tableRendering?.maxCells > 1 && !/chapter-0(1[3-9]|20)\.xhtml/.test(chapterEntry)) {
+    if (expectedFields == null && dts === 0 && dds === 0 && qaChapter?.tableRendering?.maxCells > 1 && !/chapter-0(1[3-9]|20)\.xhtml/.test(chapterEntry)) {
       errors.push(`${chapterEntry} table entry ${index + 1} has no rendered table fields.`);
     }
   }

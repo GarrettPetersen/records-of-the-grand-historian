@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 3,
+  "book": "mingshi",
+  "chapter": "033",
+  "input": {
+    "chapterFingerprint": "sha256:83eab329c8af14f90e3b7b8314f56c64babae305fd207405f832509f31b6ee8f",
+    "proposalsFingerprint": "sha256:50c206dc9bac1dae528258a43445e62b011f5994d5a52b39175d8d7923fc7709"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-2620f23d-e4ba-4d7d-8511-574aa131ea18",
+    "runId": "run-179610b6-08d5-4477-82fe-d1d9db2838f6",
+    "completedAt": "2026-08-20T00:56:00.288Z"
+  },
+  "proposals": [
+    {
+      "id": "mingshi:033:r0001",
+      "unit": {
+        "id": "s0133",
+        "kind": "paragraph-sentence",
+        "blockIndex": 96,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Mei Wencheng of Xuancheng supplied illustrated explanations that set forth why mean and standing differences work and how pile summation operates.",
+      "after": "Mei Wending of Xuancheng supplied illustrated explanations that set forth why mean and standing differences work and how pile summation operates.",
+      "reason": "梅文鼎 is standardly Mei Wending (Wéndǐng), not Wencheng; the given name 文鼎 is Wending.",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:033:r0002",
+      "unit": {
+        "id": "s0133",
+        "kind": "paragraph-sentence",
+        "blockIndex": 96,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Mei Wencheng of Xuancheng made illustrated explanations, elucidating the rationale of mean difference and standing difference and the method of pile summation.",
+      "after": "Mei Wending of Xuancheng made illustrated explanations, elucidating the rationale of mean difference and standing difference and the method of pile summation.",
+      "reason": "Same transliteration correction: 梅文鼎 = Mei Wending.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "mingshi:033:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "Chinese 梅文鼎 names the Xuancheng scholar; 文鼎 is Wéndǐng (Wending), not Wencheng. The proposed idiomatic replacement corrects that mistransliteration without changing the rest of the accurate rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0133",
+        "excerpt": "宣城梅文鼎爲之圖解"
+      }
+    },
+    {
+      "repairId": "mingshi:033:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same source phrase 梅文鼎 requires Mei Wending in the literal field; 'Wencheng' misreads 鼎. The proposed replacement restores the standard romanization and leaves the rest of the literal intact.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0133",
+        "excerpt": "宣城梅文鼎爲之圖解"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { Resvg } from '@resvg/resvg-js';
 import { getBookMetadata } from './book-metadata.mjs';
 import { renderBookCover } from './generate-book-covers.mjs';
+import { isSemanticTableHeader, tableCellRepeatsLabel, tableCells } from './lib/table-structure.mjs';
 import {
   chapterPeopleContext,
   loadPeopleSiteContext,
@@ -373,7 +374,7 @@ function recordCjkOccurrence(qa, chapter, blockIndex, text, allowed) {
 }
 
 function tableFieldLabel(headers, cellIndex) {
-  const header = textContent(headers[cellIndex] || '');
+  const header = textContent(headers[cellIndex] || '').replace(/[.!?]+$/u, '').trim();
   return header;
 }
 
@@ -592,7 +593,7 @@ function tableDisplayText(label, text, chapter) {
   const normalizedLabel = textContent(label || '');
   const normalizedText = textContent(text || '');
   if (!normalizedLabel || !normalizedText || isGenericTableFieldLabel(normalizedLabel)) return normalizedText;
-  if (normalizedText.replace(/[.:：。]\s*$/u, '').toLowerCase() === normalizedLabel.toLowerCase()) return '';
+  if (tableCellRepeatsLabel(normalizedLabel, normalizedText)) return '';
   const prefix = `${normalizedLabel}:`;
   const withoutDuplicatePrefix = normalizedText.toLowerCase().startsWith(prefix.toLowerCase())
     ? normalizedText.slice(prefix.length).trim()
@@ -602,10 +603,6 @@ function tableDisplayText(label, text, chapter) {
 
 function hasSuspiciousTableTitlePunctuation(title) {
   return /^[\p{Lu}\p{Lt}0-9][\p{L}0-9'’𨜓 -]{0,60}\.$/u.test(title);
-}
-
-function tableCells(block) {
-  return block.cells || block.sentences || [];
 }
 
 function renderTableHeaderSummary(headers, headerItems = [], chapterContext = null, ebookPeople = null) {
@@ -635,6 +632,22 @@ function promotableHeaderRow(block) {
 }
 
 function inferInitialTableHeaders(chapter) {
+  if (chapter?.meta?.book === 'mingshi' && /^(?:100|101|102|103|104)$/u.test(chapter?.meta?.chapter || '')) {
+    return [
+      'First enfeoffment',
+      'Son (first generation)',
+      'Grandson (second generation)',
+      'Great-grandson (third generation)',
+      'Fifth generation',
+      'Sixth generation',
+      'Seventh generation',
+      'Eighth generation',
+      'Ninth generation',
+      'Tenth generation',
+      'Eleventh generation',
+      'Twelfth generation',
+    ];
+  }
   if (chapter?.meta?.book === 'shiji' && chapter?.meta?.chapter === '013') {
     return ['Zhou', 'Lu', 'Qi', 'Jin', 'Qin', 'Chu', 'Song', 'Wei', 'Chen', 'Cai', 'Cao', 'Yan'];
   }
@@ -1465,14 +1478,14 @@ function tableReviewRows(chapter) {
       pendingBlankHeader = false;
       continue;
     }
-    if (block.type === 'table_header') {
+    if (block.type === 'table_header' && isSemanticTableHeader(block)) {
       currentHeaders = (block.sentences || []).map(getTranslation).map(textContent);
       currentHeaders = inferChapterTableHeaders(chapter, currentHeaders) || currentHeaders;
       pendingBlankHeader = isBlankHeader(currentHeaders);
       rowNumber = 0;
       continue;
     }
-    if (block.type !== 'table_row') continue;
+    if (block.type !== 'table_row' && block.type !== 'table_header') continue;
 
     if (pendingBlankHeader && rowNumber === 0) {
       const promotedHeaders = promotableHeaderRow(block);
@@ -1802,7 +1815,7 @@ function collectChapterBlocks(chapter, qa, chapterQa, footnotes = [], ebookPeopl
       continue;
     }
 
-    if (block.type === 'table_header') {
+    if (block.type === 'table_header' && isSemanticTableHeader(block)) {
       currentHeaderItems = block.sentences || [];
       currentHeaders = currentHeaderItems.map(getTranslation).map(textContent);
       currentHeaders = inferChapterTableHeaders(chapter, currentHeaders) || currentHeaders;
@@ -1819,7 +1832,7 @@ function collectChapterBlocks(chapter, qa, chapterQa, footnotes = [], ebookPeopl
       continue;
     }
 
-    if (block.type === 'table_row') {
+    if (block.type === 'table_row' || block.type === 'table_header') {
       if (pendingBlankHeader && tableRowNumber === 0) {
         const promotedHeaders = promotableHeaderRow(block);
         if (promotedHeaders) {

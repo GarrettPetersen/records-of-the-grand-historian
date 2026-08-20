@@ -19,6 +19,7 @@ import {
 import { createPeopleSchemaValidator, formatSchemaErrors } from './lib/people-schema.mjs';
 import {
   editorialDecisionPath,
+  validateAppliedEditorialDecisions,
   validateEditorialDecisions,
   validateEditorialDecisionDocument,
 } from './lib/people-editorial-decisions.mjs';
@@ -35,32 +36,6 @@ function assertUnique(items, key, label, errors) {
     seen.add(value);
   }
   return seen;
-}
-
-function canonicalize(value) {
-  if (Array.isArray(value)) return value.map(canonicalize);
-  if (!value || typeof value !== 'object') return value;
-  return Object.fromEntries(
-    Object.keys(value).sort().map((key) => [key, canonicalize(value[key])]),
-  );
-}
-
-function claimFactContract(claim) {
-  const { id: _id, ...contract } = claim;
-  return JSON.stringify(canonicalize(contract));
-}
-
-function claimCoreContract(claim) {
-  const { id: _id, evidence: _evidence, ...contract } = claim;
-  return JSON.stringify(canonicalize(contract));
-}
-
-function containsReviewedClaim(currentClaims, reviewedClaim) {
-  const reviewedCore = claimCoreContract(reviewedClaim);
-  return currentClaims.some((current) =>
-    claimCoreContract(current) === reviewedCore &&
-    reviewedClaim.evidence.every((item) => current.evidence.includes(item))
-  );
 }
 
 function editorialDecisionFiles() {
@@ -201,54 +176,10 @@ async function main() {
           errors.push(...(error.errors ?? [error.message]).map((item) => `${path.relative(REPO_ROOT, file)}: ${item}`));
         }
       } else {
-        if (
-          document.reviewer.agentId &&
-          loaded.extraction.run.agentId &&
-          document.reviewer.agentId === loaded.extraction.run.agentId
-        ) {
-          errors.push(`${path.relative(REPO_ROOT, file)} was self-reviewed by the extraction agent`);
-        }
-        const appliedByTarget = new Map(loaded.extraction.translationRepairs.map((repair) => [
-          `${repair.unit.id}:${repair.field}`,
-          repair,
-        ]));
-        const proposalById = new Map(document.proposals.map((proposal) => [proposal.id, proposal]));
-        for (const decision of document.decisions) {
-          const proposal = proposalById.get(decision.repairId);
-          const target = `${proposal.unit.id}:${proposal.field}`;
-          const applied = appliedByTarget.get(target);
-          if (decision.decision === 'reject') {
-            if (applied?.before === proposal.before) {
-              errors.push(`${path.relative(REPO_ROOT, file)} rejected ${decision.repairId}, but it is applied`);
-            }
-            continue;
-          }
-          const expectedAfter = decision.decision === 'revise' ? decision.after : proposal.after;
-          if (!applied || applied.before !== proposal.before || applied.after !== expectedAfter) {
-            errors.push(`${path.relative(REPO_ROOT, file)} does not match applied decision ${decision.repairId}`);
-          } else if (applied.reason !== decision.reason) {
-            errors.push(`${path.relative(REPO_ROOT, file)} lost review reasoning for ${decision.repairId}`);
-          }
-        }
-        const currentClaimFacts = new Set(loaded.extraction.claims.map(claimFactContract));
-        for (const retraction of document.claimRetractions) {
-          if (currentClaimFacts.has(claimFactContract(retraction.claim))) {
-            errors.push(
-              `${path.relative(REPO_ROOT, file)} retracted ${retraction.claim.id}, but its fact remains applied`,
-            );
-          }
-        }
-        for (const revision of document.claimRevisions) {
-          if (containsReviewedClaim(loaded.extraction.claims, revision.before)) {
-            errors.push(
-              `${path.relative(REPO_ROOT, file)} revised ${revision.before.id}, but its old fact remains applied`,
-            );
-          }
-          if (!containsReviewedClaim(loaded.extraction.claims, revision.after)) {
-            errors.push(
-              `${path.relative(REPO_ROOT, file)} revised ${revision.before.id}, but its replacement fact is missing`,
-            );
-          }
+        try {
+          validateAppliedEditorialDecisions(document, loaded.extraction);
+        } catch (error) {
+          errors.push(...(error.errors ?? [error.message]).map((item) => `${path.relative(REPO_ROOT, file)}: ${item}`));
         }
       }
     }

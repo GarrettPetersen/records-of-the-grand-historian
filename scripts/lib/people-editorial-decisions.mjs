@@ -28,6 +28,32 @@ function proposalContract(repair) {
   return contract;
 }
 
+function canonicalize(value) {
+  if (Array.isArray(value)) return value.map(canonicalize);
+  if (!value || typeof value !== 'object') return value;
+  return Object.fromEntries(
+    Object.keys(value).sort().map((key) => [key, canonicalize(value[key])]),
+  );
+}
+
+function claimFactContract(claim) {
+  const { id: _id, ...contract } = claim;
+  return JSON.stringify(canonicalize(contract));
+}
+
+function claimCoreContract(claim) {
+  const { id: _id, evidence: _evidence, ...contract } = claim;
+  return JSON.stringify(canonicalize(contract));
+}
+
+function containsReviewedClaim(currentClaims, reviewedClaim) {
+  const reviewedCore = claimCoreContract(reviewedClaim);
+  return currentClaims.some((current) =>
+    claimCoreContract(current) === reviewedCore &&
+    reviewedClaim.evidence.every((item) => current.evidence.includes(item))
+  );
+}
+
 export function proposalContracts(extraction) {
   return extraction.translationRepairs
     .filter((repair) => repair.status === 'proposed')
@@ -185,6 +211,59 @@ export function validateEditorialDecisionDocument(document) {
   const result = editorialDocumentErrors(document);
   if (result.errors.length > 0) throw new EditorialDecisionValidationError(result.errors);
   return result;
+}
+
+export function validateAppliedEditorialDecisions(document, extraction) {
+  const documentResult = editorialDocumentErrors(document);
+  const errors = [...documentResult.errors];
+  if (
+    document.reviewer?.agentId &&
+    extraction.run?.agentId &&
+    document.reviewer.agentId === extraction.run.agentId
+  ) {
+    errors.push('the extraction agent cannot review its own editorial proposals');
+  }
+
+  const appliedByTarget = new Map(extraction.translationRepairs.map((repair) => [
+    `${repair.unit.id}:${repair.field}`,
+    repair,
+  ]));
+  for (const decision of document.decisions ?? []) {
+    const proposal = documentResult.proposalById.get(decision.repairId);
+    if (!proposal) continue;
+    const target = `${proposal.unit.id}:${proposal.field}`;
+    const applied = appliedByTarget.get(target);
+    if (decision.decision === 'reject') {
+      if (applied?.before === proposal.before) {
+        errors.push(`rejected ${decision.repairId}, but it is applied`);
+      }
+      continue;
+    }
+    const expectedAfter = decision.decision === 'revise' ? decision.after : proposal.after;
+    if (!applied || applied.before !== proposal.before || applied.after !== expectedAfter) {
+      errors.push(`does not match applied decision ${decision.repairId}`);
+    } else if (applied.reason !== decision.reason) {
+      errors.push(`lost review reasoning for ${decision.repairId}`);
+    }
+  }
+
+  const currentClaimFacts = new Set(extraction.claims.map(claimFactContract));
+  for (const retraction of document.claimRetractions ?? []) {
+    if (currentClaimFacts.has(claimFactContract(retraction.claim))) {
+      errors.push(`retracted ${retraction.claim.id}, but its fact remains applied`);
+    }
+  }
+  for (const revision of document.claimRevisions ?? []) {
+    if (containsReviewedClaim(extraction.claims, revision.before)) {
+      errors.push(`revised ${revision.before.id}, but its old fact remains applied`);
+    }
+    if (!containsReviewedClaim(extraction.claims, revision.after)) {
+      errors.push(`revised ${revision.before.id}, but its replacement fact is missing`);
+    }
+  }
+
+  if (errors.length > 0) throw new EditorialDecisionValidationError(errors);
+  return documentResult;
 }
 
 export function validateEditorialDecisions(document, extraction, packet) {

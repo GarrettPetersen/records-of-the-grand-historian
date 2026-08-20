@@ -28,6 +28,7 @@ import {
   renderUnitWithPeople,
 } from './scripts/lib/people-site.mjs';
 import { canonicalUrlForHtmlFile } from './scripts/lib/site-urls.mjs';
+import { isSemanticTableHeader } from './scripts/lib/table-structure.mjs';
 import { getBookDesign } from './public/book-design.js';
 import {
   kindleProductForBook,
@@ -509,8 +510,8 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
       continue;
     }
 
-    // Handle tables without headers (consecutive table_row blocks)
-    if (block.type === 'table_row') {
+    // Handle tables without semantic headers, including source rows mistagged as headers.
+    if (block.type === 'table_row' || (block.type === 'table_header' && !isSemanticTableHeader(block))) {
       // Check if this is the start of a table (not following a table_header)
       let tableRows = [block];
       let j = i + 1;
@@ -538,8 +539,8 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
 
         tableRows.forEach(tableRow => {
           tableHtml += `<tr>`;
-          tableRow.cells.forEach(cell => {
-            tableHtml += renderTableCell(cell, cell.content, 'zh', chapterPeople);
+          tableBlockCells(tableRow).forEach(cell => {
+            tableHtml += renderTableCell(cell, cell.content || cell.zh || '', 'zh', chapterPeople);
           });
           tableHtml += `</tr>`;
         });
@@ -557,7 +558,7 @@ function generateChapterHTML(bookId, chapterData, allChapters = []) {
 
         tableRows.forEach(tableRow => {
           tableHtml += `<tr>`;
-          tableRow.cells.forEach(cell => {
+          tableBlockCells(tableRow).forEach(cell => {
             const cellEnText = getTableCellEnglish(cell);
             tableHtml += renderTableCell(cell, cellEnText, 'en', chapterPeople);
           });
