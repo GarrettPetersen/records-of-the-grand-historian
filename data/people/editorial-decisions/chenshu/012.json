@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 3,
+  "book": "chenshu",
+  "chapter": "012",
+  "input": {
+    "chapterFingerprint": "sha256:b296534cec547c5e57925cd2be03b42aee44b27580381699746ee7a63c21c714",
+    "proposalsFingerprint": "sha256:17d5382a1e5d552ec16c78921718136f03592ef2d408ac41a3ce8189db23ee98"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-84682670-d888-419d-ba23-c7536649f0fa",
+    "runId": "run-611d03f0-4a02-4c4b-aea7-4fb2b8aecfef",
+    "completedAt": "2026-08-21T20:09:33.985Z"
+  },
+  "proposals": [
+    {
+      "id": "chenshu:012:r0011",
+      "unit": {
+        "id": "s0069",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "He was sent out as Bearer of the Staff with Credentials, Area Commander over military affairs in the nine commanderies of Kuaiji, Dongyang, Linhai, Yongjia, Xin'an, Xinning, Xin'an, Jin'an, and Jian'an, General Who Guards the East, and Administrator of Kuaiji.",
+      "after": "He was sent out as Bearer of the Staff with Credentials, Area Commander over military affairs in the nine commanderies of Kuaiji, Dongyang, Linhai, Yongjia, Xīn'an, Xinning, Xìn'an, Jin'an, and Jian'an, General Who Guards the East, and Administrator of Kuaiji.",
+      "reason": "新安 and 信安 are distinct commanderies; the tone-marked forms Xīn'an and Xìn'an preserve both names without conflation.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:012:r0012",
+      "unit": {
+        "id": "s0109",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "He then traveled to Lingnan and served Liang's Inspector of Guangzhou, the Prince of Xinyu, Xiao Ying.",
+      "after": "He then traveled to Lingnan and served Liang's Inspector of Guangzhou, the Marquis of Xinyu, Xiao Ying.",
+      "reason": "新渝侯 is Marquis of Xinyu, not Prince of Xinyu; the literal field has the same rank error as the repaired idiomatic field.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:012:r0013",
+      "unit": {
+        "id": "s0114",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "When the Founder killed Wang Sengbian, he drew Leng, Hou Andu, and the others into the planning, but Leng objected.",
+      "after": "When the Founder prepared to kill Wang Sengbian, he drew Leng, Hou Andu, and the others into the planning, but Leng objected.",
+      "reason": "The council precedes Wang Sengbian's death, so completed \"killed\" creates false chronology; \"prepared to kill\" preserves the lethal sense of 誅.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:012:r0014",
+      "unit": {
+        "id": "s0126",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "He was sent out as Cloud-Banner General and Administrator of Jinling, with his salary raised to middle two thousand dan.",
+      "after": "He was sent out as Cloud-Standard General and Administrator of Jinling, with his salary raised to middle two thousand dan.",
+      "reason": "雲麾將軍 is Cloud-Standard General; the literal field retains the same Cloud-Banner mistranslation already repaired in the idiomatic field.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:012:r0015",
+      "unit": {
+        "id": "s0144",
+        "kind": "paragraph-sentence",
+        "blockIndex": 22,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "When Liang's Prince of Xinyu, Xiao Ying, was commandery general, Ke was summoned as chief clerk.",
+      "after": "When Liang's Marquis of Xinyu, Xiao Ying, was commandery general, Ke was summoned as chief clerk.",
+      "reason": "新渝侯 is Marquis of Xinyu, not Prince of Xinyu; the literal field has the same rank error as the repaired idiomatic field.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "chenshu:012:r0011",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0069 lists nine commanderies including both 新安 and 信安; untone-marked Xin'an twice conflates distinct places, and Xīn'an / Xìn'an correctly separates them.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0069",
+        "excerpt": "新安新寧信安"
+      }
+    },
+    {
+      "repairId": "chenshu:012:r0012",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0109 新渝侯 is Marquis of Xinyu (侯), not Prince (王); Prince of Xinyu invents a higher rank unsupported by the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0109",
+        "excerpt": "新渝侯蕭映"
+      }
+    },
+    {
+      "repairId": "chenshu:012:r0013",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0114 高祖誅王僧辯 is followed by counsel (引稜…共議) and s0115 懼其泄己 shows the killing is still only a plan; completed \"killed\" falsifies the chronology, while \"prepared to kill\" keeps the lethal sense of 誅.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0114",
+        "excerpt": "高祖誅王僧辯，引稜與侯安都等共議"
+      }
+    },
+    {
+      "repairId": "chenshu:012:r0014",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0126 雲麾將軍 uses 麾 as the military standard; Cloud-Standard General is the accurate title, and Cloud-Banner misrenders that office.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0126",
+        "excerpt": "雲麾將軍"
+      }
+    },
+    {
+      "repairId": "chenshu:012:r0015",
+      "decision": "accept",
+      "after": null,
+      "reason": "s0144 新渝侯 again names Marquis of Xinyu; Prince of Xinyu is the same unsupported rank error as in s0109.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0144",
+        "excerpt": "新渝侯蕭映"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "chenshu:012:r0013",
+      "before": {
+        "id": "chenshu:012:c0667",
+        "subject": "chenshu:012:p047",
+        "predicate": "event-participation",
+        "value": {
+          "kind": "political",
+          "role": "actor",
+          "action": "killed",
+          "otherPersonId": "chenshu:012:p052"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "chenshu:012:s0114"
+        ]
+      },
+      "after": {
+        "id": "chenshu:012:c0667",
+        "subject": "chenshu:012:p047",
+        "predicate": "event-participation",
+        "value": {
+          "kind": "political",
+          "role": "actor",
+          "action": "prepared-to-kill",
+          "otherPersonId": "chenshu:012:p052"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "chenshu:012:s0114"
+        ]
+      },
+      "reason": "Accepted r0013 shows s0114 narrates planning to 誅 Wang Sengbian before the act; the event-participation action must be prepared-to-kill, not completed killed.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0114",
+        "excerpt": "高祖誅王僧辯，引稜與侯安都等共議"
+      }
+    }
+  ]
+}
