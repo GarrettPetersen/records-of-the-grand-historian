@@ -3,96 +3,70 @@
   "book": "nanqishu",
   "chapter": "048",
   "input": {
-    "chapterFingerprint": "sha256:3e86511e42d78e0a62c0da1cc84eac04c352c38cefa711277302940d99c873e7",
-    "proposalsFingerprint": "sha256:b29c2dc9632861797dce752a7ec32ced0f4f8fb13261fec55d8489cd218008b0"
+    "chapterFingerprint": "sha256:d8dd443304d2b4810333e74d3e9c7ed56e8ea1dc91ef978c57b49ef9102d4d53",
+    "proposalsFingerprint": "sha256:f62babd394995e8256db22982c62273adf6e4d0b003b1bbf0ce94017020801c5"
   },
   "reviewer": {
-    "kind": "cursor-agent",
-    "name": "grok-4.5",
-    "model": "grok-4.5",
-    "agentId": "bc-c6857b23-2d60-4a29-819e-6679e794fd18",
-    "runId": "run-5acada14-eb0c-4017-ac8c-d21c174fc4a4",
-    "completedAt": "2026-08-14T05:24:39.793Z"
+    "kind": "codex",
+    "name": "Codex",
+    "model": null,
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-22T07:54:02Z"
   },
   "proposals": [
     {
-      "id": "nanqishu:048:r0001",
-      "unit": {
-        "id": "s0013",
-        "kind": "paragraph-sentence",
-        "blockIndex": 3,
-        "collection": "sentences",
-        "itemIndex": 4
-      },
-      "field": "idiomatic",
-      "before": "His uncle by marriage, Minister Over the Masses Can, and his maternal uncle, General Who Pacifies the West Cai Xingzong, both valued him highly.",
-      "after": "His collateral paternal uncle, Minister Over the Masses Can, and his maternal uncle, General Who Campaigns West Cai Xingzong, both valued him highly.",
-      "reason": "從叔 means collateral paternal uncle, not uncle by marriage; 征西 is campaign-west, not pacify-west (安西).",
-      "confidence": "high"
-    },
-    {
-      "id": "nanqishu:048:r0002",
-      "unit": {
-        "id": "s0013",
-        "kind": "paragraph-sentence",
-        "blockIndex": 3,
-        "collection": "sentences",
-        "itemIndex": 4
-      },
-      "field": "literal",
-      "before": "His uncle by marriage, Minister Over the Masses Can, and his maternal uncle, General Who Pacifies the West Cai Xingzong, both held him in esteem.",
-      "after": "His collateral paternal uncle, Minister Over the Masses Can, and his maternal uncle, General Who Campaigns West Cai Xingzong, both held him in esteem.",
-      "reason": "Same errors as idiomatic: 從叔 and 征西 mistranslated.",
-      "confidence": "high"
-    },
-    {
       "id": "nanqishu:048:r0003",
       "unit": {
-        "id": "s0130",
+        "id": "s0152",
         "kind": "paragraph-sentence",
-        "blockIndex": 17,
+        "blockIndex": 18,
         "collection": "sentences",
-        "itemIndex": 2
+        "itemIndex": 20
+      },
+      "field": "literal",
+      "before": "Hence when Wei Qing and Huo Qubing went beyond the passes, a thousand companies did not return; when the Second Division entered the desert, a hundred hosts collapsed in surrender; Li Guang was defeated at the vanguard, Li Ling lost at the rear—the rest fled north in numbers beyond counting.",
+      "after": "Hence when Wei Qing and Huo Qubing went beyond the passes, a thousand companies did not return; when the General of Ershi entered the desert, a hundred hosts collapsed in surrender; Li Guang was defeated at the vanguard, Li Ling was lost at the rear; the rest fled in defeat in numbers beyond counting.",
+      "reason": "貳師 is Li Guangli's title, the General of Ershi, not a military unit called the Second Division; 奔北 means to flee in defeat, not to flee north.",
+      "confidence": "high"
+    },
+    {
+      "id": "nanqishu:048:r0004",
+      "unit": {
+        "id": "s0152",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 20
       },
       "field": "idiomatic",
-      "before": "Because the barbarians had invaded the south year after year, corvée labor never ceased, and the common people were dying and wounded, Zhigui",
-      "after": "Because the barbarians had invaded the south year after year, corvée labor never ceased, and the common people were dying and wounded,",
-      "reason": "Sentence is incomplete/fused with the following unit; trailing 'Zhigui' should not end the idiomatic clause alone.",
-      "confidence": "medium"
+      "before": "Hence when Wei Qing and Huo Qubing went beyond the passes, a thousand companies did not return; when the Second Division entered the desert, a hundred hosts collapsed in surrender; Li Guang was defeated at the vanguard, Li Ling lost at the rear—the rest fled north in numbers beyond counting.",
+      "after": "Thus, when Wei Qing and Huo Qubing campaigned beyond the passes, a thousand companies failed to return; when the General of Ershi entered the desert, a hundred formations surrendered at once. Li Guang was defeated in the vanguard and Li Ling was lost in the rear; the others who fled in defeat were beyond counting.",
+      "reason": "貳師 is the General of Ershi, Li Guangli's title; 奔北 is the idiom for fleeing in defeat rather than a literal northward movement.",
+      "confidence": "high"
     }
   ],
   "decisions": [
     {
-      "repairId": "nanqishu:048:r0001",
-      "decision": "accept",
-      "after": null,
-      "reason": "s0013 has 從叔司徒粲 and 征西將軍蔡興宗; 從叔 is a collateral paternal uncle, not an uncle by marriage, and 征西 is campaign-west, not pacify-west (安西/平西).",
-      "sourceWitness": {
-        "source": "chapter-text",
-        "citation": "s0013",
-        "excerpt": "從叔司徒粲、外舅征西將軍蔡興宗"
-      }
-    },
-    {
-      "repairId": "nanqishu:048:r0002",
-      "decision": "accept",
-      "after": null,
-      "reason": "The same Chinese fixes apply to the literal: 從叔 is collateral paternal uncle and 征西將軍 is General Who Campaigns West, not Pacifies the West.",
-      "sourceWitness": {
-        "source": "chapter-text",
-        "citation": "s0013",
-        "excerpt": "從叔司徒粲、外舅征西將軍蔡興宗"
-      }
-    },
-    {
       "repairId": "nanqishu:048:r0003",
-      "decision": "reject",
+      "decision": "accept",
       "after": null,
-      "reason": "s0130 begins with subject 稚珪 and continues into s0131 乃上表曰; the trailing Zhigui bridges that join, and removing it leaves the fused reading subjectless.",
+      "reason": "The source uses 貳師 as Li Guangli's established military title and 奔北 as the idiom for flight after defeat; both literal renderings in the proposal are therefore required.",
       "sourceWitness": {
         "source": "chapter-text",
-        "citation": "s0130",
-        "excerpt": "稚珪以虜連歲南侵"
+        "citation": "s0152",
+        "excerpt": "貳師入漠，百旅頓降；其餘奔北，不可勝數"
+      }
+    },
+    {
+      "repairId": "nanqishu:048:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The idiomatic revision accurately identifies the General of Ershi and renders 奔北 as fleeing in defeat while preserving the sentence's parallel military examples.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0152",
+        "excerpt": "貳師入漠，百旅頓降；其餘奔北，不可勝數"
       }
     }
   ],
