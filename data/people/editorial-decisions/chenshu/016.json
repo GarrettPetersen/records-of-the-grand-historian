@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "chenshu",
+  "chapter": "016",
+  "input": {
+    "chapterFingerprint": "sha256:facd197da42d45ae3952e1c23fa7911424dcbe457e086b2a6713f7130f780924",
+    "proposalsFingerprint": "sha256:37f25a0bb67db03c72a0b532220db30ec862923920be2227988e6f98f1bd7398"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-ec9c888b-af0b-4c2f-9145-325095cfe418",
+    "runId": "run-1bbc4e86-f845-485e-8ad5-10942167895d",
+    "completedAt": "2026-08-22T00:27:31.460Z"
+  },
+  "proposals": [
+    {
+      "id": "chenshu:016:r0006",
+      "unit": {
+        "id": "s0046",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "As men of letters they are broadly learned Confucians, men of outstanding talent and great vessel; their ornamented prose shines and their brushwork weaves brocade; Yang Xiong cannot match their pens, Yu Xin cannot surpass their records; a letter flies and Liaocheng falls; pure talk rises and Ying's army retreats.",
+      "after": "As men of letters they are broadly learned scholars, outstanding talents of great capacity; their ornate prose shines, and their writing unfolds in gorgeous patterns. Yang Xiong cannot match their pens, nor Yuanyu surpass their records; a brief letter flies and Liaocheng submits, while eloquent argument rises and Ying's army retreats.",
+      "reason": "子雲 and 元瑜 are the courtesy names of Yang Xiong and Ruan Yu. The literal field correctly recognizes Yang Xiong but invents Yu Xin, a different and later writer; it should match the independently reviewed correction already applied to the idiomatic field.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:016:r0007",
+      "unit": {
+        "id": "s0062",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "Formerly Zengzi with broken ribs wandered in Qin and suddenly met Pan Cai; carrying matting he entered Zhao and at once was detained—today though I am a sojourner, compared with that it is not equal; the burden of Fan Lin—how could I bear it?",
+      "after": "Formerly, a man whose ribs had been broken went to Qin and unexpectedly found favor; another entered Zhao carrying a long-handled rain hat and was promptly retained. Though I too am now a sojourner, I cannot compare with them; how could I be worthy of such favor?",
+      "reason": "折脅 and 檐籦 invoke the stories of Fan Ju and Yu Qing without naming them. The current literal translation fabricates Zengzi, Pan Cai, and Fan Lin; it also mistakes 籦, an ancient long-handled rain hat or umbrella, for matting. The replacement preserves the source's implicit allusions in intelligible English.",
+      "confidence": "high"
+    },
+    {
+      "id": "chenshu:016:r0008",
+      "unit": {
+        "id": "s0085",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "In the sixth year, because his wife's elder brother Liu Xia had relied on Jingli's power to commit repeated frauds and had also accepted one hundred bolts of silk from Ouyang Wuwei, Jingli was dismissed from office.",
+      "after": "In the sixth year, he was implicated when his wife's elder brother Liu Qia relied on Jingli's power and influence to commit repeated frauds and accepted a gift of one hundred bolts of silk from Ouyang Wuwei; Jingli was dismissed from office. [4]",
+      "reason": "劉洽 is Liu Qia, not Liu Xia. The literal field retains the same false reading already corrected through independent review in the idiomatic field, and its syntax should make clear that Jingli was dismissed because of his brother-in-law's misconduct.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "chenshu:016:r0006",
+      "decision": "revise",
+      "after": "As men of letters they are broadly learned Confucians, men of outstanding talent and great vessel; their ornamented prose shines and their brushwork weaves brocade; Yang Xiong cannot match their pens, Yuanyu cannot surpass their records; a letter flies and Liaocheng falls; pure talk rises and Ying's army retreats.",
+      "reason": "元瑜 is the courtesy name of Ruan Yu, not the later writer Yu Xin; that name error is real. The rest of the proposed rewrite is stylistic (通儒, 摛掞絢藻, 清談) and needlessly alters accurate wording; keep the human phrasing and only replace Yu Xin with Yuanyu.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0046",
+        "excerpt": "子雲不能抗其筆，元瑜無以高其記"
+      }
+    },
+    {
+      "repairId": "chenshu:016:r0007",
+      "decision": "accept",
+      "after": null,
+      "reason": "折脅遊秦 and 檐簦入趙 allude to Fan Ju and Yu Qing without naming them; 盼採 means favor or selection, not a person Pan Cai; 簦 is a bamboo rain-hat, not matting; Zengzi and Fan Lin as named actors are invented. The proposed wording restores the unnamed allusions and sense of 樊林之賁 as favor.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0062",
+        "excerpt": "昔折脅遊秦，忽逢盼採，檐簦入趙，便致留連……樊林之賁，何用克堪"
+      }
+    },
+    {
+      "repairId": "chenshu:016:r0008",
+      "decision": "accept",
+      "after": null,
+      "reason": "劉洽 romanizes as Liu Qia, not Liu Xia; 坐 marks Jingli as implicated for his wife's elder brother's frauds, and the note marker [4] belongs in the English. The proposed literal restores the name, the 坐 construction, and the footnote.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0085",
+        "excerpt": "坐妻兄劉洽依倚景歷權勢……[4]免官"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

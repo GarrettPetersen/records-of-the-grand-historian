@@ -25,6 +25,7 @@ import {
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
 import {
   cursorRateLimitDelayMs,
+  CursorRunLimitExceededError,
   isCursorAgentBusy,
   isCursorRateLimited,
   sendCursorAgentWhenReady,
@@ -39,7 +40,9 @@ import {
 import {
   assembleCompactPeopleChunks,
   buildPeopleChunkPacket,
+  normalizePeopleExtractionChunkPlan,
   planPeopleExtractionChunks,
+  splitPeopleExtractionChunk,
 } from './lib/people-extraction-chunks.mjs';
 import {
   validateCompactPeopleExtraction,
@@ -65,6 +68,9 @@ const DEFAULT_PLAN_FILE = path.join(PEOPLE_DIR, 'generated', 'extraction-plan.js
 const DEFAULT_MAX_UNITS = 250;
 const DEFAULT_MAX_CANDIDATES = 600;
 const DEFAULT_MAX_COST_CENTS = 1000;
+const DEFAULT_MAX_RUN_COST_CENTS = 300;
+const DEFAULT_MAX_RUN_TOKENS = 2_000_000;
+const DEFAULT_RUN_POLL_MS = 15_000;
 const DEFAULT_CHUNK_CONTEXT_UNITS = 6;
 const DEFAULT_AGENT_OVERHEAD_SCORE = 100_000;
 const DEFAULT_AGENT_COST_RESERVE_CENTS = 1000;
@@ -90,10 +96,13 @@ Options:
   --defer-large        Leave oversized chapters in the plan instead of chunking them.
   --chunk-context-units N
                        Read-only neighboring units per chunk side (default: ${DEFAULT_CHUNK_CONTEXT_UNITS}).
-  --max-cost DOLLARS   Stop launching agents after this run reaches the charged
-                       amount (default: $${(DEFAULT_MAX_COST_CENTS / 100).toFixed(2)}; use unlimited to disable).
+  --max-cost DOLLARS   Stop launching agents after this invocation reaches the raw
+                       usage cost (default: $${(DEFAULT_MAX_COST_CENTS / 100).toFixed(2)}; use unlimited to disable).
   --cost-reserve DOLLARS
                        Budget reserved for each in-flight agent (default: $${(DEFAULT_AGENT_COST_RESERVE_CENTS / 100).toFixed(2)}).
+  --max-run-cost DOLLARS
+                       Cancel one active run at this raw usage cost (default: $${(DEFAULT_MAX_RUN_COST_CENTS / 100).toFixed(2)}; use unlimited to disable).
+  --max-run-tokens N   Cancel one active run at this token count (default: ${DEFAULT_MAX_RUN_TOKENS.toLocaleString('en-US')}; use unlimited to disable).
   --plan-out PATH      Write the measured queue plan (default: generated data).
   --max-attempts N     Validation attempts per phase (default: 3).
   --model MODEL        Cursor model (default: ${DEFAULT_MODEL}).
@@ -129,6 +138,10 @@ function positiveInteger(value, flag, maximum = Number.MAX_SAFE_INTEGER) {
   return Number(value);
 }
 
+function positiveIntegerOrUnlimited(value, flag) {
+  return value === 'unlimited' ? null : positiveInteger(value, flag);
+}
+
 function parseArgs(argv) {
   const opts = {
     book: null,
@@ -144,6 +157,8 @@ function parseArgs(argv) {
     chunkContextUnits: DEFAULT_CHUNK_CONTEXT_UNITS,
     maxCostCents: DEFAULT_MAX_COST_CENTS,
     agentCostReserveCents: DEFAULT_AGENT_COST_RESERVE_CENTS,
+    maxRunCostCents: DEFAULT_MAX_RUN_COST_CENTS,
+    maxRunTokens: DEFAULT_MAX_RUN_TOKENS,
     planOut: DEFAULT_PLAN_FILE,
     maxAttempts: 3,
     model: process.env.SDK_PEOPLE_MODEL ?? DEFAULT_MODEL,
@@ -183,6 +198,8 @@ function parseArgs(argv) {
     }
     else if (arg === '--max-cost') opts.maxCostCents = dollarCents(next(), arg);
     else if (arg === '--cost-reserve') opts.agentCostReserveCents = dollarCents(next(), arg);
+    else if (arg === '--max-run-cost') opts.maxRunCostCents = dollarCents(next(), arg);
+    else if (arg === '--max-run-tokens') opts.maxRunTokens = positiveIntegerOrUnlimited(next(), arg);
     else if (arg === '--plan-out') opts.planOut = path.resolve(REPO_ROOT, next());
     else if (arg === '--max-attempts') opts.maxAttempts = positiveInteger(next(), arg, 5);
     else if (arg === '--model') opts.model = next();
@@ -212,6 +229,9 @@ function parseArgs(argv) {
   if (opts.all && (opts.book || opts.chapter)) throw new Error('--all cannot be combined with --book or --chapter');
   if (opts.allowLarge && opts.deferLarge) throw new Error('--allow-large cannot be combined with --defer-large');
   if (opts.stream && opts.concurrency !== 1) throw new Error('--stream requires --concurrency 1');
+  if (opts.stream && (opts.maxRunCostCents !== null || opts.maxRunTokens !== null)) {
+    throw new Error('--stream requires --max-run-cost unlimited and --max-run-tokens unlimited');
+  }
   if (opts.agentCostReserveCents === null) throw new Error('--cost-reserve must be a dollar amount');
   return opts;
 }
@@ -647,7 +667,10 @@ function chunkBuildArgs(target, chunk, opts, packet, output) {
   return [
     `--book ${target.book}`,
     `--chapter ${target.chapter}`,
-    `--chunk-index ${chunk.index + 1}`,
+    `--chunk-start ${chunk.start}`,
+    `--chunk-end ${chunk.end}`,
+    `--chunk-id ${chunk.id}`,
+    `--chunk-count ${chunk.count}`,
     `--chunk-max-units ${opts.maxUnits}`,
     `--chunk-max-candidates ${opts.maxCandidates}`,
     `--chunk-context-units ${opts.chunkContextUnits}`,
@@ -720,6 +743,9 @@ async function runAgentTurn(agent, prompt, target, opts, phase, control) {
       agentId: agent.agentId,
       apiKey: opts.apiKey,
       label: `[${stateKey(target)}] ${phase}`,
+      pollMs: DEFAULT_RUN_POLL_MS,
+      maxRawCostCents: opts.maxRunCostCents,
+      maxTotalTokens: opts.maxRunTokens,
     });
     console.log(`[${stateKey(target)}] ${phase} run ${result.id} status=${result.status}`);
     if (result.status !== 'finished') {
@@ -792,6 +818,9 @@ async function recoverInterruptedExtraction(target, packet, opts, state, control
         agentId: prior.agentId,
         apiKey: opts.apiKey,
         label: `[${stateKey(target)}] recovered extraction`,
+        pollMs: DEFAULT_RUN_POLL_MS,
+        maxRawCostCents: opts.maxRunCostCents,
+        maxTotalTokens: opts.maxRunTokens,
       });
     }
     if (run.status !== 'finished') {
@@ -807,6 +836,10 @@ async function recoverInterruptedExtraction(target, packet, opts, state, control
     console.log(`[${stateKey(target)}] recovered validated artifact from run ${run.id}`);
     return { extraction: validated.normalized, result: run, stats: validated.stats, packet };
   } catch (error) {
+    if (error instanceof CursorRunLimitExceededError) {
+      control.stopRequested = true;
+      control.stopReason = 'run-limit';
+    }
     console.warn(
       `[${stateKey(target)}] interrupted agent was not recoverable: ` +
       `${error instanceof Error ? error.message : String(error)}`,
@@ -844,10 +877,15 @@ async function obtainValidInitialExtraction(agent, target, packet, opts, state, 
       const validated = validateDownloadedExtraction(downloaded, packet);
       return { extraction: validated.normalized, result, stats: validated.stats };
     } catch (error) {
+      if (error instanceof CursorRunLimitExceededError) {
+        control.stopRequested = true;
+        control.stopReason = 'run-limit';
+      }
       errors = validationErrors(error);
       const failure = {
-        status: control.cancelRequested ? 'interrupted' : 'failed/retryable',
+        status: control.stopRequested ? 'interrupted' : 'failed/retryable',
         lastErrors: errors,
+        ...(error instanceof CursorRunLimitExceededError ? { stopReason: 'run-limit' } : {}),
       };
       if (chunk) updateChunkState(state, target, chunk, failure);
       else updateState(state, target, failure);
@@ -862,6 +900,7 @@ async function obtainValidInitialExtraction(agent, target, packet, opts, state, 
         console.error(`  - ... ${errors.length - 20} more error(s)`);
       }
       if (control.cancelRequested) break;
+      if (error instanceof CursorRunLimitExceededError) break;
       if (error instanceof CursorAgentError && !error.isRetryable) break;
     }
   }
@@ -876,8 +915,12 @@ async function recordAgentUsage(agent, target, budget, state, chunk = null) {
     const usage = await agent.getUsage();
     if (chunk) updateChunkState(state, target, chunk, { usage });
     else updateState(state, target, { usage });
+    budget.rawCostCents += usage.cost?.rawCostCents ?? 0;
     budget.chargedCents += usage.cost?.chargedCents ?? 0;
-    const dollars = usage.cost ? `; charged=$${(usage.cost.chargedCents / 100).toFixed(2)}` : '';
+    const dollars = usage.cost
+      ? `; raw=$${(usage.cost.rawCostCents / 100).toFixed(2)}; ` +
+        `charged=$${(usage.cost.chargedCents / 100).toFixed(2)}`
+      : '';
     console.log(
       `[${stateKey(target)}${chunk ? `/chunk-${chunk.id}` : ''}] Cursor usage: ` +
       `${usage.usage.totalTokens.toLocaleString('en-US')} tokens${dollars}`,
@@ -893,7 +936,7 @@ async function recordAgentUsage(agent, target, budget, state, chunk = null) {
 function agentReservationCents(opts, budget) {
   if (opts.maxCostCents === null) return 0;
   const reservation = Math.min(opts.agentCostReserveCents, opts.maxCostCents);
-  return budget.chargedCents + budget.reservedCents + reservation <= opts.maxCostCents
+  return budget.rawCostCents + budget.reservedCents + reservation <= opts.maxCostCents
     ? reservation
     : null;
 }
@@ -936,6 +979,69 @@ function chunkRunRecord(chunk, extraction) {
     runId: extraction.run.runId ?? null,
     completedAt: extraction.run.completedAt ?? null,
   };
+}
+
+function persistedChunkPlan(chunks) {
+  return chunks.map((chunk) => ({
+    id: chunk.id,
+    start: chunk.start,
+    end: chunk.end,
+    ...(chunk.parentId ? { parentId: chunk.parentId } : {}),
+    ...(chunk.adaptiveDepth ? { adaptiveDepth: chunk.adaptiveDepth } : {}),
+  }));
+}
+
+function chunkPlanForTarget(target, packet, opts, state) {
+  const prior = state.chapters[stateKey(target)];
+  if (prior?.chapterFingerprint === packet.input.chapterFingerprint && prior.chunkPlan?.length) {
+    const restored = normalizePeopleExtractionChunkPlan(packet, prior.chunkPlan, {
+      contextUnits: opts.chunkContextUnits,
+    });
+    console.log(`[${stateKey(target)}] restored adaptive ${restored.length}-range chunk plan`);
+    return restored;
+  }
+  let planned = planPeopleExtractionChunks(packet, {
+    maxUnits: opts.maxUnits,
+    maxCandidates: opts.maxCandidates,
+    contextUnits: opts.chunkContextUnits,
+  });
+  for (const chunk of [...planned]) {
+    const previousChunk = prior?.chunks?.[chunk.id];
+    const hitRunLimit = previousChunk?.stopReason === 'run-limit' ||
+      previousChunk?.lastErrors?.some((error) =>
+        /cancelled cloud run .* (?:tokens|raw usage cost)/iu.test(error)
+      );
+    if (!hitRunLimit) continue;
+    planned = replaceChunkWithChildren(target, packet, planned, chunk, opts, state);
+  }
+  return planned;
+}
+
+function replaceChunkWithChildren(target, packet, chunks, failedChunk, opts, state) {
+  const children = splitPeopleExtractionChunk(packet, failedChunk, {
+    contextUnits: opts.chunkContextUnits,
+  });
+  const failedIndex = chunks.findIndex((chunk) => chunk.id === failedChunk.id);
+  if (failedIndex < 0) throw new Error(`Cannot split missing chunk ${failedChunk.id}`);
+  const revised = normalizePeopleExtractionChunkPlan(packet, [
+    ...chunks.slice(0, failedIndex),
+    ...children,
+    ...chunks.slice(failedIndex + 1),
+  ], { contextUnits: opts.chunkContextUnits });
+  updateChunkState(state, target, failedChunk, {
+    status: 'split',
+    childChunks: children.map((child) => child.id),
+  });
+  updateState(state, target, {
+    status: 'interrupted',
+    chunkCount: revised.length,
+    chunkPlan: persistedChunkPlan(revised),
+  });
+  console.error(
+    `[${stateKey(target)}/chunk-${failedChunk.id}] split after run limit into ` +
+    children.map((child) => `${child.id} (${child.start}:${child.end})`).join(', '),
+  );
+  return revised;
 }
 
 function repairTarget(repair) {
@@ -1062,11 +1168,7 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
 
 async function processChunkedTarget(target, packet, opts, state, control, budget) {
   const key = stateKey(target);
-  const chunks = planPeopleExtractionChunks(packet, {
-    maxUnits: opts.maxUnits,
-    maxCandidates: opts.maxCandidates,
-    contextUnits: opts.chunkContextUnits,
-  });
+  const chunks = chunkPlanForTarget(target, packet, opts, state);
   updateState(state, target, {
     status: 'extracting',
     chapterFingerprint: packet.input.chapterFingerprint,
@@ -1076,7 +1178,14 @@ async function processChunkedTarget(target, packet, opts, state, control, budget
   const parts = [];
   for (const chunk of chunks) {
     if (control.stopRequested) throw new Error(`Stopped after ${parts.length}/${chunks.length} chunks`);
-    parts.push(await obtainChunkPart(target, packet, chunk, opts, state, control, budget));
+    try {
+      parts.push(await obtainChunkPart(target, packet, chunk, opts, state, control, budget));
+    } catch (error) {
+      if (error instanceof CursorRunLimitExceededError) {
+        replaceChunkWithChildren(target, packet, chunks, chunk, opts, state);
+      }
+      throw error;
+    }
   }
   const run = {
     model: `${opts.model}-chunked`,
@@ -1095,6 +1204,7 @@ async function processChunkedTarget(target, packet, opts, state, control, budget
     repairs: validated.stats.repairs,
     repairsPendingReview: validated.normalized.translationRepairs
       .filter((repair) => repair.status === 'proposed').length,
+    chunkPlan: null,
     lastErrors: [],
   });
   console.log(
@@ -1343,7 +1453,7 @@ async function selfTest() {
   if (sendAttempts !== 2 || fakeRun.id !== 'run-fixture') {
     throw new Error('Cursor agent-busy retry did not preserve the logical turn');
   }
-  const budget = { chargedCents: 400, reservedCents: 600 };
+  const budget = { rawCostCents: 400, chargedCents: 0, reservedCents: 600 };
   const costOpts = { maxCostCents: 2000, agentCostReserveCents: 1000 };
   if (agentReservationCents(costOpts, budget) !== 1000) {
     throw new Error('Cost reservation did not admit an agent within the ceiling');
@@ -1352,6 +1462,45 @@ async function selfTest() {
   if (agentReservationCents(costOpts, budget) !== null) {
     throw new Error('Cost reservation admitted an agent beyond the ceiling');
   }
+  async function assertGuardCancellation({ totalTokens, rawCostCents, metric }) {
+    let cancelledForLimit = false;
+    const neverFinishes = new Promise(() => {});
+    const guardedRun = {
+      id: `run-${metric}-fixture`,
+      usage: undefined,
+      supports: () => true,
+      wait: () => neverFinishes,
+      cancel: async () => { cancelledForLimit = true; },
+    };
+    let limitError;
+    try {
+      await waitForCursorRun(guardedRun, {
+        agentId: 'bc-limit-fixture',
+        apiKey: 'fixture',
+        label: '[fixture] guarded run',
+        pollMs: 1,
+        timeoutMs: 100,
+        maxRawCostCents: 100,
+        maxTotalTokens: 1_000,
+        readUsage: async () => ({
+          usage: { totalTokens },
+          cost: { rawCostCents, chargedCents: 0 },
+        }),
+      });
+    } catch (error) {
+      limitError = error;
+    }
+    if (
+      !(limitError instanceof CursorRunLimitExceededError)
+      || !cancelledForLimit
+      || limitError.isRetryable
+      || limitError.metric !== metric
+    ) {
+      throw new Error(`In-flight ${metric} limit did not cancel with a non-retryable error`);
+    }
+  }
+  await assertGuardCancellation({ totalTokens: 1_001, rawCostCents: 99, metric: 'tokens' });
+  await assertGuardCancellation({ totalTokens: 999, rawCostCents: 101, metric: 'raw-cost' });
   const dryRunState = {
     schemaVersion: 1,
     chapters: {
@@ -1430,22 +1579,24 @@ async function main() {
       `fast=${opts.fast ? 'on' : 'off'}; run cost ceiling=` +
       `${opts.maxCostCents === null ? 'unlimited' : `$${(opts.maxCostCents / 100).toFixed(2)}`}; ` +
       `agent reservation=$${(opts.agentCostReserveCents / 100).toFixed(2)}; ` +
+      `per-run raw ceiling=${opts.maxRunCostCents === null ? 'unlimited' : `$${(opts.maxRunCostCents / 100).toFixed(2)}`}; ` +
+      `per-run token ceiling=${opts.maxRunTokens === null ? 'unlimited' : opts.maxRunTokens.toLocaleString('en-US')}; ` +
       'no worker git pushes',
     );
     if (!opts.dryRun && targets.length > 0) fetchStartingRef(opts.startingRef);
 
     const control = createRunControl();
     const removeSignalHandlers = opts.dryRun ? () => {} : installSignalHandlers(control);
-    const budget = { chargedCents: 0, reservedCents: 0 };
+    const budget = { rawCostCents: 0, chargedCents: 0, reservedCents: 0 };
     let nextIndex = 0;
     const results = [];
     const workers = Array.from({ length: Math.min(opts.concurrency, targets.length) }, async () => {
       while (nextIndex < targets.length && !control.stopRequested) {
-        if (opts.maxCostCents !== null && budget.chargedCents >= opts.maxCostCents) {
+        if (opts.maxCostCents !== null && budget.rawCostCents >= opts.maxCostCents) {
           control.stopRequested = true;
           control.stopReason = 'cost-ceiling';
           console.error(
-            `Run cost ceiling reached at $${(budget.chargedCents / 100).toFixed(2)}; ` +
+            `Run raw cost ceiling reached at $${(budget.rawCostCents / 100).toFixed(2)}; ` +
             'no new agents will start.',
           );
           break;
@@ -1464,13 +1615,15 @@ async function main() {
     for (const result of results) counts.set(result.status, (counts.get(result.status) ?? 0) + 1);
     console.log(`Finished: ${[...counts].map(([status, count]) => `${status}=${count}`).join(', ') || 'no targets'}`);
     console.log(
-      `Charged this invocation: $${(budget.chargedCents / 100).toFixed(2)}; ` +
+      `Raw usage cost this invocation: $${(budget.rawCostCents / 100).toFixed(2)}; ` +
+      `charged: $${(budget.chargedCents / 100).toFixed(2)}; ` +
       `not started: ${targets.length - nextIndex}; stop reason: ${control.stopReason ?? 'queue-complete'}`,
     );
     console.log(
       'Accepted files remain local. Commit locally in batches; push codex/people-glossary-staging only at a deliberate checkpoint.',
     );
     if (counts.has('failed')) process.exitCode = 2;
+    else if (control.stopReason === 'run-limit') process.exitCode = 2;
     else if (control.stopReason === 'SIGINT' || control.stopReason === 'SIGTERM') process.exitCode = 130;
   } finally {
     releaseRunLock();
