@@ -254,6 +254,13 @@ backfill-og-sidecars:
 generate-sitemap:
 	@$(NODE) scripts/generate-sitemap.mjs
 
+# Canonical-person merges can change mention URLs in any previously annotated
+# chapter, so a single-book rebuild must refresh this cross-book subset too.
+.PHONY: generate-people-annotated-pages
+generate-people-annotated-pages:
+	@echo "Refreshing all people-annotated chapter pages..."
+	@$(NODE) generate-static-pages.js --people-annotated
+
 # Generate static HTML pages for SEO
 .PHONY: generate-pages
 generate-pages:
@@ -262,6 +269,7 @@ generate-pages:
 	@$(NODE) scripts/generate-book-covers.mjs
 	@$(NODE) scripts/compile-people-catalog.mjs
 	@$(NODE) generate-static-pages.js $(if $(BOOK),--book $(BOOK),)
+	@if [ -n "$(BOOK)" ]; then $(MAKE) generate-people-annotated-pages; fi
 	@$(NODE) scripts/generate-people-pages.mjs
 	@$(NODE) scripts/verify-people-site.mjs
 	@echo "Building book full-text search corpora..."
@@ -324,6 +332,7 @@ update:
 	@$(NODE) scripts/generate-book-covers.mjs
 	@$(NODE) scripts/compile-people-catalog.mjs
 	@$(NODE) generate-static-pages.js --book $(BOOK)
+	@$(MAKE) generate-people-annotated-pages
 	@$(NODE) scripts/generate-people-pages.mjs
 	@$(NODE) scripts/verify-people-site.mjs
 	@echo ""

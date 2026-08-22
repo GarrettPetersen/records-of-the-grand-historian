@@ -5,7 +5,14 @@ const WEAK_ENGLISH_NAMES = new Set([
   'emperor', 'empress', 'king', 'queen', 'prince', 'princess', 'duke', 'marquis',
   'lord', 'lady', 'master', 'minister', 'general', 'governor', 'official', 'ruler',
 ]);
-const NON_BLOCKING_NAME_KINDS = new Set(['surname', 'given', 'title', 'regnal']);
+const NON_BLOCKING_NAME_KINDS = new Set([
+  'surname',
+  'given',
+  'title',
+  'regnal',
+  'temple',
+  'posthumous',
+]);
 
 function canonicalJson(value) {
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
