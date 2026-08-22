@@ -623,8 +623,8 @@ function canonicalRecord(cluster, corpus, localMap, roleLabels, unresolvedLocalP
 
   return {
     id: cluster.canonicalPersonId,
-    // Public URLs must remain stable when later evidence improves the displayed name.
-    slug: personSlug(slugName.en ?? slugName.pinyin ?? slugName.zh, cluster.canonicalPersonId),
+    // Explicit curation preserves a live URL when a later merge changes the earliest source name.
+    slug: override?.preferredSlug ?? personSlug(slugName.en ?? slugName.pinyin ?? slugName.zh, cluster.canonicalPersonId),
     preferredName: preferred,
     description: { en: descriptor, claimRefs: [...new Set(roleClaimRefs)].sort() },
     historicity,
@@ -751,6 +751,12 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
       resolvedCurationOverrides[cluster.canonicalPersonId] ?? null,
     )
   );
+  const peopleBySlug = new Map();
+  for (const person of people) {
+    const existing = peopleBySlug.get(person.slug);
+    if (existing) throw new Error(`People ${existing} and ${person.id} share public slug ${person.slug}`);
+    peopleBySlug.set(person.slug, person.id);
+  }
   for (const person of people) {
     for (const relationship of person.familyRelationships) relationship.derivedInverse = false;
   }
@@ -960,11 +966,13 @@ function selfTest() {
         kind: 'personal', en: 'Fan Ye', zh: '范曄', pinyin: 'Fàn Yè',
       },
       preferredDescription: 'Later Han historian',
+      preferredSlug: 'fan-ye-stable',
       reason: 'Retired-ID fixture',
     },
   }).catalog;
   const curatedFan = retiredOverrideResult.people.find((person) => person.id === fan.id);
-  if (curatedFan.preferredName.pinyin !== 'Fàn Yè' || curatedFan.description.en !== 'Later Han historian') {
+  if (curatedFan.preferredName.pinyin !== 'Fàn Yè' || curatedFan.description.en !== 'Later Han historian' ||
+      curatedFan.slug !== 'fan-ye-stable') {
     throw new Error('Curation keyed by a retired canonical ID did not follow the surviving cluster');
   }
   if (!result.complete) throw new Error('Fully covered fixture catalog was not marked complete');
@@ -1005,13 +1013,18 @@ function main() {
   for (const [personId, override] of Object.entries(curation.people)) {
     const name = override?.preferredName;
     const description = override?.preferredDescription;
+    const preferredSlug = override?.preferredSlug;
     const keys = Object.keys(override ?? {});
     const validName = !name || (typeof name.kind === 'string' &&
       [name.en, name.zh, name.pinyin].some((value) => typeof value === 'string' && value.trim()));
     const validDescription = description === undefined ||
       (typeof description === 'string' && description.trim() && description.length <= 200);
-    if (!/^per_[0-9A-HJKMNP-TV-Z]{20}$/u.test(personId) || (!name && description === undefined) ||
-        !validName || !validDescription || keys.some((key) => !['preferredName', 'preferredDescription', 'reason'].includes(key)) ||
+    const validSlug = preferredSlug === undefined ||
+      (typeof preferredSlug === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/u.test(preferredSlug));
+    if (!/^per_[0-9A-HJKMNP-TV-Z]{20}$/u.test(personId) ||
+        (!name && description === undefined && preferredSlug === undefined) ||
+        !validName || !validDescription || !validSlug ||
+        keys.some((key) => !['preferredName', 'preferredDescription', 'preferredSlug', 'reason'].includes(key)) ||
         typeof override.reason !== 'string' || !override.reason.trim()) {
       throw new Error(`Invalid people curation override for ${personId}`);
     }
