@@ -28,6 +28,7 @@ import {
 import { createPeopleSchemaValidator, formatSchemaErrors } from './lib/people-schema.mjs';
 import {
   buildPeopleChunkPacket,
+  createPeopleExtractionChunk,
   planPeopleExtractionChunks,
 } from './lib/people-extraction-chunks.mjs';
 
@@ -45,6 +46,10 @@ Options:
   --seed-out PATH   Also write an empty extraction envelope for a worker.
   --compact-worker  Write a compact worker packet and compact v2 seed.
   --chunk-index N   Build one 1-based deterministic chunk instead of the full chapter.
+  --chunk-start N   Build an explicit zero-based ownership range; requires --chunk-end.
+  --chunk-end N     Exclusive end of an explicit ownership range.
+  --chunk-id ID     Stable ID for an explicit range.
+  --chunk-count N   Total ranges represented in the worker scope.
   --chunk-max-units N
                     Maximum owned units per chunk (default: 250).
   --chunk-max-candidates N
@@ -65,6 +70,10 @@ function parseArgs(argv) {
     model: null,
     compactWorker: false,
     chunkIndex: null,
+    chunkStart: null,
+    chunkEnd: null,
+    chunkId: null,
+    chunkCount: null,
     chunkMaxUnits: 250,
     chunkMaxCandidates: 600,
     chunkContextUnits: 6,
@@ -85,6 +94,10 @@ function parseArgs(argv) {
     else if (arg === '--model') opts.model = next();
     else if (arg === '--compact-worker') opts.compactWorker = true;
     else if (arg === '--chunk-index') opts.chunkIndex = Number(next());
+    else if (arg === '--chunk-start') opts.chunkStart = Number(next());
+    else if (arg === '--chunk-end') opts.chunkEnd = Number(next());
+    else if (arg === '--chunk-id') opts.chunkId = next();
+    else if (arg === '--chunk-count') opts.chunkCount = Number(next());
     else if (arg === '--chunk-max-units') opts.chunkMaxUnits = Number(next());
     else if (arg === '--chunk-max-candidates') opts.chunkMaxCandidates = Number(next());
     else if (arg === '--chunk-context-units') opts.chunkContextUnits = Number(next());
@@ -349,10 +362,17 @@ async function main() {
   });
   let packet = fullPacket;
   let chunk = null;
-  if (opts.chunkIndex !== null) {
-    if (!Number.isInteger(opts.chunkIndex) || opts.chunkIndex < 1) {
-      throw new Error('--chunk-index must be a positive integer');
-    }
+  const explicitChunk = opts.chunkStart !== null || opts.chunkEnd !== null;
+  if (opts.chunkIndex !== null && explicitChunk) {
+    throw new Error('--chunk-index cannot be combined with --chunk-start or --chunk-end');
+  }
+  if (explicitChunk && (opts.chunkStart === null || opts.chunkEnd === null)) {
+    throw new Error('--chunk-start and --chunk-end must be supplied together');
+  }
+  if (!explicitChunk && (opts.chunkId !== null || opts.chunkCount !== null)) {
+    throw new Error('--chunk-id and --chunk-count require --chunk-start and --chunk-end');
+  }
+  if (opts.chunkIndex !== null || explicitChunk) {
     for (const [flag, value] of [
       ['--chunk-max-units', opts.chunkMaxUnits],
       ['--chunk-max-candidates', opts.chunkMaxCandidates],
@@ -362,6 +382,11 @@ async function main() {
     if (!Number.isInteger(opts.chunkContextUnits) || opts.chunkContextUnits < 0) {
       throw new Error('--chunk-context-units must be a nonnegative integer');
     }
+  }
+  if (opts.chunkIndex !== null) {
+    if (!Number.isInteger(opts.chunkIndex) || opts.chunkIndex < 1) {
+      throw new Error('--chunk-index must be a positive integer');
+    }
     const chunks = planPeopleExtractionChunks(fullPacket, {
       maxUnits: opts.chunkMaxUnits,
       maxCandidates: opts.chunkMaxCandidates,
@@ -369,6 +394,19 @@ async function main() {
     });
     chunk = chunks[opts.chunkIndex - 1];
     if (!chunk) throw new Error(`--chunk-index ${opts.chunkIndex} exceeds the ${chunks.length} planned chunks`);
+    packet = buildPeopleChunkPacket(fullPacket, chunk);
+  } else if (explicitChunk) {
+    if (opts.chunkCount !== null && (!Number.isInteger(opts.chunkCount) || opts.chunkCount < 1)) {
+      throw new Error('--chunk-count must be a positive integer');
+    }
+    chunk = createPeopleExtractionChunk(fullPacket, {
+      id: opts.chunkId ?? `${opts.chunkStart}-${opts.chunkEnd}`,
+      start: opts.chunkStart,
+      end: opts.chunkEnd,
+      count: opts.chunkCount ?? 1,
+      maxUnits: opts.chunkMaxUnits,
+      maxCandidates: opts.chunkMaxCandidates,
+    }, { contextUnits: opts.chunkContextUnits });
     packet = buildPeopleChunkPacket(fullPacket, chunk);
   }
   const out = opts.out ?? packetPath(opts.book, opts.chapter);

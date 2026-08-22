@@ -7,6 +7,16 @@ const RATE_LIMIT_MINUTE = /requests per minute/iu;
 const RATE_LIMIT_HOUR = /requests per hour/iu;
 const TRANSIENT_READ = /(?:service unavailable|temporarily unavailable|fetch failed|econnreset|etimedout|socket hang up)/iu;
 
+export class CursorRunLimitExceededError extends Error {
+  constructor(message, details = {}) {
+    super(message);
+    this.name = 'CursorRunLimitExceededError';
+    this.code = 'cursor_run_limit_exceeded';
+    this.isRetryable = false;
+    Object.assign(this, details);
+  }
+}
+
 let cursorApiBlockedUntil = 0;
 let announcedCursorApiBlockUntil = 0;
 
@@ -109,6 +119,57 @@ function terminalResult(run) {
   };
 }
 
+async function cancelRunForLimit(run, options, error) {
+  try {
+    if (options.cancelRun) await options.cancelRun(run);
+    else if (run.supports('cancel')) await run.cancel();
+    else {
+      await Agent.cancelRun(run.id, {
+        runtime: 'cloud',
+        agentId: options.agentId,
+        apiKey: options.apiKey,
+      });
+    }
+  } catch (cancelError) {
+    error.message += `; cancellation also failed: ${errorText(cancelError)}`;
+    error.cancelError = cancelError;
+  }
+  throw error;
+}
+
+async function enforceRunLimits(run, options) {
+  const maxRawCostCents = options.maxRawCostCents ?? null;
+  const maxTotalTokens = options.maxTotalTokens ?? null;
+  if (maxRawCostCents === null && maxTotalTokens === null) return;
+
+  const readUsage = options.readUsage ?? (() => Agent.getUsage(options.agentId, {
+    apiKey: options.apiKey,
+    runId: run.id,
+  }));
+  const billed = await readUsage(run);
+  const totalTokens = Math.max(
+    billed?.usage?.totalTokens ?? 0,
+    run.usage?.totalTokens ?? 0,
+  );
+  const rawCostCents = billed?.cost?.rawCostCents ?? null;
+
+  if (maxTotalTokens !== null && totalTokens >= maxTotalTokens) {
+    await cancelRunForLimit(run, options, new CursorRunLimitExceededError(
+      `${options.label}: cancelled cloud run ${run.id} at ` +
+      `${totalTokens.toLocaleString('en-US')} tokens (limit ` +
+      `${maxTotalTokens.toLocaleString('en-US')})`,
+      { metric: 'tokens', observed: totalTokens, limit: maxTotalTokens },
+    ));
+  }
+  if (maxRawCostCents !== null && rawCostCents !== null && rawCostCents >= maxRawCostCents) {
+    await cancelRunForLimit(run, options, new CursorRunLimitExceededError(
+      `${options.label}: cancelled cloud run ${run.id} at $${(rawCostCents / 100).toFixed(2)} ` +
+      `raw usage cost (limit $${(maxRawCostCents / 100).toFixed(2)})`,
+      { metric: 'raw-cost', observed: rawCostCents, limit: maxRawCostCents },
+    ));
+  }
+}
+
 export async function waitForCursorRun(run, options) {
   const timeoutMs = options.timeoutMs ?? 90 * 60 * 1000;
   const pollMs = options.pollMs ?? 30 * 1000;
@@ -119,6 +180,7 @@ export async function waitForCursorRun(run, options) {
     (error) => { streamOutcome = { error }; },
   );
   let announcedPolling = false;
+  let usageReadFailures = 0;
 
   while (Date.now() < deadline) {
     if (streamOutcome) await sleep(pollMs);
@@ -135,6 +197,25 @@ export async function waitForCursorRun(run, options) {
       !isCursorRateLimited(streamOutcome.error)
     ) {
       throw streamOutcome.error;
+    }
+    try {
+      await enforceRunLimits(run, options);
+      usageReadFailures = 0;
+    } catch (error) {
+      if (error instanceof CursorRunLimitExceededError) throw error;
+      usageReadFailures += 1;
+      const maximum = options.maxUsageReadFailures ?? 3;
+      if (usageReadFailures >= maximum) {
+        await cancelRunForLimit(run, options, new CursorRunLimitExceededError(
+          `${options.label}: cancelled cloud run ${run.id} because usage monitoring failed ` +
+          `${usageReadFailures} consecutive times: ${errorText(error)}`,
+          { metric: 'usage-monitor', observed: usageReadFailures, limit: maximum, cause: error },
+        ));
+      }
+      console.warn(
+        `${options.label}: usage monitor read failed ${usageReadFailures}/${maximum}; ` +
+        `${errorText(error)}`,
+      );
     }
     if (streamOutcome && !announcedPolling) {
       console.warn(`${options.label}: SDK stream was lost; polling cloud run ${run.id}`);

@@ -6,7 +6,9 @@ import { buildCompactInput } from './lib/people-compact.mjs';
 import {
   assembleCompactPeopleChunks,
   buildPeopleChunkPacket,
+  normalizePeopleExtractionChunkPlan,
   planPeopleExtractionChunks,
+  splitPeopleExtractionChunk,
 } from './lib/people-extraction-chunks.mjs';
 import { validateCompactPeopleExtraction } from './validate-people-extraction.mjs';
 
@@ -122,6 +124,23 @@ if (chunks.length !== 3 || chunks.map((chunk) => chunk.units).join(',') !== '2,2
 const worker = buildPeopleChunkWorkerPacket(packet, chunks[1]);
 if (worker.version !== 2 || worker.readOnlyContext.before.length !== 1 || worker.readOnlyContext.after.length !== 1) {
   throw new Error('Chunk worker context was not bounded as expected');
+}
+
+const split = splitPeopleExtractionChunk(packet, chunks[0], { contextUnits: 1 });
+const adaptive = normalizePeopleExtractionChunkPlan(packet, [
+  ...split,
+  ...chunks.slice(1),
+], { contextUnits: 1 });
+if (
+  adaptive.length !== 4 ||
+  adaptive.map((chunk) => `${chunk.id}:${chunk.start}-${chunk.end}`).join(',') !==
+    '001a:0-1,001b:1-2,002:2-4,003:4-5'
+) {
+  throw new Error(`Adaptive chunk split did not preserve exact coverage: ${JSON.stringify(adaptive)}`);
+}
+const adaptiveWorker = buildPeopleChunkWorkerPacket(packet, adaptive[1]);
+if (adaptiveWorker.scope.start !== 1 || adaptiveWorker.scope.end !== 2 || adaptiveWorker.scope.chunkId !== '001b') {
+  throw new Error('Explicit adaptive worker scope was not preserved');
 }
 
 const parts = chunks.map((chunk) => {

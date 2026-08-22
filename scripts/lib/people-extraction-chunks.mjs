@@ -17,6 +17,90 @@ function candidateCountsByUnit(packet) {
   return counts;
 }
 
+function candidateCountForRange(packet, start, end) {
+  const owned = new Set(packet.units.slice(start, end).map((unit) => unit.id));
+  return packet.preflight.candidates.filter((candidate) => owned.has(candidate.unit)).length;
+}
+
+export function createPeopleExtractionChunk(packet, range, options = {}) {
+  const { start, end } = range;
+  if (!Number.isInteger(start) || !Number.isInteger(end) ||
+      start < 0 || end <= start || end > packet.units.length) {
+    throw new Error(`Invalid chunk ownership range ${start}:${end}`);
+  }
+  const id = String(range.id ?? `${start}-${end}`);
+  if (!/^[A-Za-z0-9._-]+$/u.test(id)) throw new Error(`Invalid chunk ID: ${id}`);
+  const contextUnits = Number.isInteger(options.contextUnits) && options.contextUnits >= 0
+    ? options.contextUnits
+    : 6;
+  const candidates = candidateCountForRange(packet, start, end);
+  return {
+    index: range.index ?? 0,
+    id,
+    start,
+    end,
+    contextStart: Math.max(0, start - contextUnits),
+    contextEnd: Math.min(packet.units.length, end + contextUnits),
+    units: end - start,
+    candidates,
+    singleUnitOverCeiling: end - start === 1 && candidates > (range.maxCandidates ?? candidates),
+    count: range.count ?? 1,
+    maxUnits: range.maxUnits ?? end - start,
+    maxCandidates: range.maxCandidates ?? Math.max(1, candidates),
+    contextUnits,
+    ...(range.parentId ? { parentId: range.parentId } : {}),
+    ...(range.adaptiveDepth ? { adaptiveDepth: range.adaptiveDepth } : {}),
+  };
+}
+
+export function normalizePeopleExtractionChunkPlan(packet, ranges, options = {}) {
+  if (!Array.isArray(ranges) || ranges.length === 0) throw new Error('Chunk plan must not be empty');
+  const count = ranges.length;
+  const chunks = ranges.map((range, index) => createPeopleExtractionChunk(packet, {
+    ...range,
+    index,
+    count,
+  }, options));
+  let expectedStart = 0;
+  const ids = new Set();
+  for (const chunk of chunks) {
+    if (chunk.start !== expectedStart) {
+      throw new Error(`Chunk ${chunk.id} starts at ${chunk.start}; expected ${expectedStart}`);
+    }
+    if (ids.has(chunk.id)) throw new Error(`Duplicate chunk ID: ${chunk.id}`);
+    ids.add(chunk.id);
+    expectedStart = chunk.end;
+  }
+  if (expectedStart !== packet.units.length) {
+    throw new Error(`Chunk plan ends at ${expectedStart}; chapter has ${packet.units.length} units`);
+  }
+  return chunks;
+}
+
+export function splitPeopleExtractionChunk(packet, chunk, options = {}) {
+  if (chunk.end - chunk.start < 2) {
+    throw new Error(`Chunk ${chunk.id} owns one unit and cannot be split further`);
+  }
+  const midpoint = chunk.start + Math.floor((chunk.end - chunk.start) / 2);
+  const depth = (chunk.adaptiveDepth ?? 0) + 1;
+  return [
+    createPeopleExtractionChunk(packet, {
+      id: `${chunk.id}a`,
+      start: chunk.start,
+      end: midpoint,
+      parentId: chunk.id,
+      adaptiveDepth: depth,
+    }, options),
+    createPeopleExtractionChunk(packet, {
+      id: `${chunk.id}b`,
+      start: midpoint,
+      end: chunk.end,
+      parentId: chunk.id,
+      adaptiveDepth: depth,
+    }, options),
+  ];
+}
+
 export function planPeopleExtractionChunks(packet, options = {}) {
   const maxUnits = positiveInteger(options.maxUnits ?? 250, 'maxUnits');
   const maxCandidates = positiveInteger(options.maxCandidates ?? 600, 'maxCandidates');
