@@ -113,6 +113,14 @@ For review prioritization, run `npm run quality:scan -- --book <book> --summary 
 
 The translation-alignment scanner uses Chinese Notes glossary anchors to catch likely sentence drift and low same-sentence glossary coverage. Run `npm run quality:translation-alignment -- --book <book> --summary --glossary-scope all --review-priorities --min-severity 3 --min-glossary-risk 10` for the publication top queue: proper nouns carry the most weight, while common multi-character glossary terms only count as fuzzy evidence when enough terms make the check meaningful. If that is too noisy for a book, rerun with `--glossary-scope proper`; for a smoke check using only curated high-confidence terms, use `--glossary-scope manual`. Severity 3+ findings above the risk cutoff should be treated as review candidates, especially when a cluster of glossary anchors appears in adjacent English or a sentence has very low glossary coverage. Use `--include-sentence-scores --json` to export per-sentence glossary scores for review prioritization beyond the top queue.
 
+People glossaries are added automatically only when every chapter in the ebook
+has a current people extraction and none of the included people retain an
+unresolved identity or legacy-review flag. Until that product-level gate is
+green, normal builds omit the glossary and all chapter person links rather than
+shipping a misleading partial index. Set `PEOPLE_EBOOK_PREVIEW=1` only for local
+inspection of work in progress; the EPUB publication validator rejects preview
+glossaries.
+
 For publication readiness, add `REQUIRE_LANGUAGETOOL_CURRENT=1` to fail if cached LanguageTool scores are stale or missing for the product's source chapters. This does not contact the LanguageTool server; it verifies cache fingerprints. Refresh stale scores with `make score-languagetool BOOK=<book>` once the local LanguageTool server is running.
 
 `ebook-manual-qa` creates and validates an artifact-bound human signoff file under `ebooks/manual-qa/`. It records Kindle Previewer, reader rendering, cover behavior, TOC navigation, frontmatter, table-heavy chapter review, and KDP draft ingestion. Use `make ebook-local-signoff SLUG=<slug> CHECKED_BY="Garrett M. Petersen" KINDLE_PREVIEWER_VERSION="<version>"` after local Kindle Previewer and reader checks pass; this records the local evidence while intentionally leaving KDP draft ingestion pending. After the unpublished KDP draft has been created and checked, use `make ebook-kdp-signoff SLUG=<slug> CHECKED_BY="Garrett M. Petersen" CONFIRM_KDP_DRAFT=1` to record the final account-side evidence. Normal site/e-book builds should not require this gate, but a book should not be treated as publishable until `make ebook-qa SLUG=<slug> REQUIRE_LANGUAGETOOL_CURRENT=1 REQUIRE_MANUAL_SIGNOFF=1` passes against the current EPUB and cover hashes.

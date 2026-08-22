@@ -24,6 +24,7 @@ import {
   personLifeSummary,
   personPublicDescription,
 } from './lib/people-presentation.mjs';
+import { assessEbookPeopleReadiness } from './lib/ebook-people-readiness.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
@@ -32,9 +33,10 @@ const publicationDescriptionsPath = path.join(repoRoot, 'ebooks', 'publication-d
 const outRoot = path.join(repoRoot, 'dist', 'ebooks');
 const introductionTitle = "Translator's Introduction";
 const peopleGlossaryTitle = 'People Glossary';
+const PEOPLE_EBOOK_PREVIEW = process.env.PEOPLE_EBOOK_PREVIEW === '1';
 const PEOPLE_EBOOK = loadPeopleSiteContext({
   allowMissing: true,
-  allowPreview: process.env.PEOPLE_EBOOK_PREVIEW === '1',
+  allowPreview: PEOPLE_EBOOK_PREVIEW,
 });
 const publicationDescriptions = (() => {
   if (!fs.existsSync(publicationDescriptionsPath)) return {};
@@ -881,15 +883,14 @@ function ebookPersonAnchor(personId) {
 }
 
 function buildEbookPeople(product) {
-  if (!PEOPLE_EBOOK.active) return null;
-  const chapterIds = new Set(product.chapters.map((chapter) => String(chapter).padStart(3, '0')));
-  const people = PEOPLE_EBOOK.catalog.people.filter((person) => person.localPeople.some((localId) => {
-    const [book, chapter] = localId.split(':');
-    return book === product.book && chapterIds.has(chapter);
-  })).sort((left, right) =>
+  const readiness = assessEbookPeopleReadiness(PEOPLE_EBOOK, product, {
+    allowPreview: PEOPLE_EBOOK_PREVIEW,
+  });
+  if (!readiness.active) return readiness;
+  const { chapterIds } = readiness;
+  const people = readiness.people.sort((left, right) =>
     personDisplayName(left).localeCompare(personDisplayName(right), 'en') || left.id.localeCompare(right.id)
   );
-  if (!people.length) return null;
   const peopleById = new Map(people.map((person) => [person.id, person]));
   const shards = [];
   const shardSize = 350;
@@ -928,10 +929,16 @@ function buildEbookPeople(product) {
       reference.book === product.book && chapterIds.has(reference.chapter)
     ).length, 0);
   return {
-    preview: PEOPLE_EBOOK.preview,
+    active: true,
+    ready: readiness.ready,
+    preview: readiness.preview,
+    reason: null,
     book: product.book,
     chapterIds,
     people,
+    missingChapters: readiness.missingChapters,
+    legacyChapters: readiness.legacyChapters,
+    peopleNeedingReview: readiness.peopleNeedingReview,
     peopleById,
     shards,
     fileByPersonId,
@@ -2659,20 +2666,31 @@ function buildProduct(product) {
     }
     return { chapter, data, qa: chapterQa };
   });
-  const ebookPeople = buildEbookPeople(product);
+  const ebookPeopleState = buildEbookPeople(product);
+  const ebookPeople = ebookPeopleState.active ? ebookPeopleState : null;
   qa.peopleGlossary = ebookPeople ? {
     active: true,
+    ready: ebookPeople.ready,
     preview: ebookPeople.preview,
     people: ebookPeople.people.length,
+    availablePeople: ebookPeople.people.length,
     shards: ebookPeople.shards.length,
+    missingChapters: ebookPeople.missingChapters,
+    legacyChapters: ebookPeople.legacyChapters,
+    peopleNeedingReview: ebookPeople.peopleNeedingReview.length,
     expectedMentionLinks: ebookPeople.expectedMentionLinks,
     expectedBacklinks: ebookPeople.expectedBacklinks,
   } : {
     active: false,
+    ready: false,
     preview: false,
-    reason: PEOPLE_EBOOK.reason ?? 'no-people-in-product',
+    reason: ebookPeopleState.reason,
     people: 0,
+    availablePeople: ebookPeopleState.people.length,
     shards: 0,
+    missingChapters: ebookPeopleState.missingChapters,
+    legacyChapters: ebookPeopleState.legacyChapters,
+    peopleNeedingReview: ebookPeopleState.peopleNeedingReview.length,
     expectedMentionLinks: 0,
     expectedBacklinks: 0,
   };

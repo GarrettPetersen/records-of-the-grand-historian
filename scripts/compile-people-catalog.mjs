@@ -16,7 +16,7 @@ import { personSlug, resolvePeopleClusters } from './lib/people-resolution.mjs';
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 const CANONICAL_SCHEMA_ID = 'https://24histories.com/schema/people/canonical-person-v1.json';
 const CATALOG_SCHEMA_ID = 'https://24histories.com/schema/people/catalog-v1.json';
-const SITE_INDEX_SCHEMA_ID = 'https://24histories.com/schema/people/site-index-v1.json';
+const SITE_INDEX_SCHEMA_ID = 'https://24histories.com/schema/people/site-index-v2.json';
 
 const CLAIM_TARGETS = new Map([
   ['ethnicity', 'ethnicities'],
@@ -545,6 +545,7 @@ function buildPeopleSiteIndex(corpus, catalog) {
     chapters[key] = {
       book: extraction.book,
       chapter: extraction.chapter,
+      promptVersion: extraction.run.promptVersion,
       mentions: extraction.mentions.map((mention) => {
         const personId = catalog.localPersonMap[mention.person];
         const person = personById.get(personId);
@@ -561,7 +562,7 @@ function buildPeopleSiteIndex(corpus, catalog) {
     };
   }
   const siteIndex = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     generatedAt: catalog.generatedAt,
     complete: catalog.complete,
     currentPromptVersion: catalog.currentPromptVersion,

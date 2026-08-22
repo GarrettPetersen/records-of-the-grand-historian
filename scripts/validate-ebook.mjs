@@ -1156,6 +1156,13 @@ if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
   }
 
   if (peopleQa.active) {
+    if (peopleQa.ready !== true || peopleQa.preview === true) {
+      errors.push('People glossary is an incomplete preview and is not valid for publication.');
+    }
+    if ((peopleQa.missingChapters?.length || 0) > 0 || (peopleQa.legacyChapters?.length || 0) > 0 ||
+        Number(peopleQa.peopleNeedingReview || 0) > 0) {
+      errors.push('Active people glossary retains chapter-coverage or identity-review blockers.');
+    }
     const expectedPeopleEntries = Number(peopleQa.shards || 0) + 1;
     if (!peopleEntries.includes('EPUB/people/index.xhtml')) {
       errors.push('Active people glossary is missing EPUB/people/index.xhtml.');

@@ -1,12 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://24histories.com/schema/people/site-index-v1.json",
+  "$id": "https://24histories.com/schema/people/site-index-v2.json",
   "title": "Compiled chapter person-link index",
   "type": "object",
   "additionalProperties": false,
   "required": ["schemaVersion", "generatedAt", "complete", "currentPromptVersion", "chapters"],
   "properties": {
-    "schemaVersion": { "const": 1 },
+    "schemaVersion": { "const": 2 },
     "generatedAt": { "type": "string", "format": "date-time" },
     "complete": { "type": "boolean" },
     "currentPromptVersion": { "type": "integer", "minimum": 1 },
@@ -16,10 +16,11 @@
       "additionalProperties": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["book", "chapter", "mentions"],
+        "required": ["book", "chapter", "promptVersion", "mentions"],
         "properties": {
           "book": { "type": "string", "pattern": "^[a-z0-9_-]+$" },
           "chapter": { "type": "string", "pattern": "^\\d{3}$" },
+          "promptVersion": { "type": "integer", "minimum": 1 },
           "mentions": {
             "type": "array",
             "items": {

@@ -32,6 +32,9 @@ export function loadPeopleSiteContext({ allowMissing = true, allowPreview = prev
   const catalog = readJson(CATALOG_PATH);
   const siteIndex = readJson(SITE_INDEX_PATH);
   assertPeopleCatalogPublicationState(catalog);
+  if (siteIndex.schemaVersion !== 2) {
+    throw new Error('Generated people site index is obsolete; rerun people:catalog');
+  }
   if (catalog.complete !== siteIndex.complete || catalog.generatedAt !== siteIndex.generatedAt ||
       catalog.currentPromptVersion !== siteIndex.currentPromptVersion) {
     throw new Error('Generated people catalog and site index are out of sync; rerun people:catalog');
