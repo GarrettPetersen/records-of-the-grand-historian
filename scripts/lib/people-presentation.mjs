@@ -392,11 +392,15 @@ function normalizeChineseName(value) {
   return String(value ?? '').replace(/[\s\p{P}\p{S}]+/gu, '');
 }
 
-function rawNameFamily(name) {
-  const kind = String(name.kind ?? 'alternate').toLocaleLowerCase('en');
+export function personNameKindFamily(kindValue) {
+  const kind = String(kindValue ?? 'alternate').toLocaleLowerCase('en');
   const family = NAME_KIND_FAMILIES.get(kind);
-  if (!family) throw new Error(`Unknown person name kind ${JSON.stringify(name.kind)}`);
+  if (!family) throw new Error(`Unknown person name kind ${JSON.stringify(kindValue)}`);
   return family;
+}
+
+function rawNameFamily(name) {
+  return personNameKindFamily(name.kind);
 }
 
 function publicNameFamily(name) {

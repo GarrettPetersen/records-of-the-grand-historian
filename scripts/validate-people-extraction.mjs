@@ -25,6 +25,7 @@ import {
   isCompactPeopleExtraction,
   serializeCompactPeopleExtraction,
 } from './lib/people-compact.mjs';
+import { personNameKindFamily } from './lib/people-presentation.mjs';
 
 const EXTRACTION_SCHEMA_ID = 'https://24histories.com/schema/people/extraction-v1.json';
 const PACKET_SCHEMA_ID = 'https://24histories.com/schema/people/extraction-packet-v1.json';
@@ -490,6 +491,13 @@ export function validatePeopleExtraction(extraction, packet) {
       if (!unitById.has(unitId)) errors.push(`${claim.id} evidence refers to missing unit ${evidence}`);
     }
     validateClaimVocabulary(claim, packet, errors);
+    if (claim.predicate === 'name') {
+      try {
+        personNameKindFamily(claim.value?.kind);
+      } catch (error) {
+        errors.push(`${claim.id} ${error.message}`);
+      }
+    }
     if (normalized.run.promptVersion >= 6) {
       for (const key of ['dateContext', 'startDate', 'endDate']) {
         for (const value of nestedValuesWithKey(claim.value, key)) {
@@ -806,6 +814,18 @@ function selfTest() {
 
   const valid = validatePeopleExtraction(extraction, packet);
   if (valid.normalized.mentions[0].spans.zh[0].endCodePoint !== 3) throw new Error('Span normalization failed');
+
+  const unknownNameKind = structuredClone(extraction);
+  unknownNameKind.claims[0].value.kind = 'renamed';
+  try {
+    validatePeopleExtraction(unknownNameKind, packet);
+    throw new Error('Extraction with an unsupported person name kind unexpectedly passed');
+  } catch (error) {
+    if (!(error instanceof PeopleExtractionValidationError) ||
+        !error.message.includes('Unknown person name kind')) {
+      throw new Error('Unsupported name kind did not produce the expected validation error');
+    }
+  }
 
   const temporal = structuredClone(extraction);
   temporal.run.promptVersion = 5;
