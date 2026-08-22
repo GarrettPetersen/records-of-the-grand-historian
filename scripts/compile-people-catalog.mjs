@@ -674,8 +674,9 @@ function canonicalRecord(cluster, corpus, localMap, roleLabels, unresolvedLocalP
   };
 }
 
-function unresolvedCandidateBlocks(candidateDocument, localMap, keepSeparate) {
-  const unresolved = [];
+function unresolvedCandidateState(candidateDocument, localMap, keepSeparate) {
+  const blocks = [];
+  const localPeople = new Set();
   for (const block of candidateDocument.blocks) {
     const roots = new Map();
     for (const localId of block.localPeople) {
@@ -685,16 +686,19 @@ function unresolvedCandidateBlocks(candidateDocument, localMap, keepSeparate) {
     }
     if (roots.size <= 1) continue;
     const groups = [...roots.values()];
-    let everyGroupSeparated = true;
+    let blockUnresolved = false;
     for (let left = 0; left < groups.length; left += 1) {
       for (let right = left + 1; right < groups.length; right += 1) {
         const separated = groups[left].some((a) => groups[right].some((b) => keepSeparate.has([a, b].sort().join('\u0000'))));
-        if (!separated) everyGroupSeparated = false;
+        if (separated) continue;
+        blockUnresolved = true;
+        for (const localId of groups[left]) localPeople.add(localId);
+        for (const localId of groups[right]) localPeople.add(localId);
       }
     }
-    if (!everyGroupSeparated) unresolved.push(block);
+    if (blockUnresolved) blocks.push(block);
   }
-  return unresolved;
+  return { blocks, localPeople };
 }
 
 export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationOverrides = {}) {
@@ -713,8 +717,9 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
   for (const cluster of resolved.clusters) {
     for (const localId of cluster.localPeople) localMap.set(localId, cluster.canonicalPersonId);
   }
-  const unresolvedBlocks = unresolvedCandidateBlocks(candidateDocument, localMap, resolved.keepSeparate);
-  const unresolvedLocalPeople = new Set(unresolvedBlocks.flatMap((block) => block.localPeople));
+  const unresolvedState = unresolvedCandidateState(candidateDocument, localMap, resolved.keepSeparate);
+  const unresolvedBlocks = unresolvedState.blocks;
+  const unresolvedLocalPeople = unresolvedState.localPeople;
   const roleData = readJson(path.join(PEOPLE_DIR, 'curation', 'role-vocabulary.json'));
   const roleLabels = new Map(roleData.roles.map((role) => [role.id, role.label]));
   const canonicalByKnownId = new Map();
@@ -958,6 +963,43 @@ function selfTest() {
   if (!fan.familyRelationships.some((claim) => claim.edgeId === familyEdge.id && !claim.derivedInverse) ||
       !compiledChild.familyRelationships.some((claim) => claim.edgeId === familyEdge.id)) {
     throw new Error('Canonical family edge is not shared by both reciprocal adjacencies');
+  }
+  const resolvedHomonym = makePerson('fixture:011:p001', 'Shared Title', '同名');
+  const ambiguousHomonymA = makePerson('fixture:012:p001', 'Shared Title', '同名');
+  const ambiguousHomonymB = makePerson('fixture:013:p001', 'Shared Title', '同名');
+  const homonymCorpus = {
+    chapters: ['011', '012', '013'].map((chapter) => ({
+      extraction: {
+        book: 'fixture', chapter, run: { promptVersion: 7 }, mentions: [], translationRepairs: [],
+      },
+    })),
+    localPeople: new Map([
+      [resolvedHomonym.localId, resolvedHomonym],
+      [ambiguousHomonymA.localId, ambiguousHomonymA],
+      [ambiguousHomonymB.localId, ambiguousHomonymB],
+    ]),
+    coverage: { sourceChapters: 3, extractedChapters: 3, missingChapterIds: [] },
+  };
+  const homonymResolution = [{
+    schemaVersion: 1,
+    batch: 'homonym-fixture',
+    authority: 'curated',
+    decisions: [ambiguousHomonymA, ambiguousHomonymB].map((other) => ({
+      decision: 'keep-separate',
+      localPeople: [resolvedHomonym.localId, other.localId],
+      basis: ['fixture'],
+      confidence: 'high',
+    })),
+  }];
+  const homonymCatalog = compilePeopleCatalog(homonymCorpus, homonymResolution).catalog;
+  const resolvedPage = homonymCatalog.people.find((person) => person.localPeople.includes(resolvedHomonym.localId));
+  const ambiguousPages = homonymCatalog.people.filter((person) =>
+    person.localPeople.includes(ambiguousHomonymA.localId) ||
+    person.localPeople.includes(ambiguousHomonymB.localId)
+  );
+  if (resolvedPage.curation.status !== 'machine-reviewed' ||
+      ambiguousPages.some((person) => person.curation.status !== 'needs-review')) {
+    throw new Error('An unresolved pair contaminated a separately resolved participant in the same candidate block');
   }
   if (!/^per_[0-9A-HJKMNP-TV-Z]{20}$/u.test(fan.id)) throw new Error('Stable canonical ID is invalid');
   const retiredOverrideResult = compilePeopleCatalog(corpus, resolution, {
