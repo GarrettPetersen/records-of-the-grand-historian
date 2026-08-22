@@ -900,7 +900,7 @@ async function obtainValidInitialExtraction(agent, target, packet, opts, state, 
         console.error(`  - ... ${errors.length - 20} more error(s)`);
       }
       if (control.cancelRequested) break;
-      if (error instanceof CursorRunLimitExceededError) break;
+      if (error instanceof CursorRunLimitExceededError) throw error;
       if (error instanceof CursorAgentError && !error.isRetryable) break;
     }
   }
@@ -993,18 +993,19 @@ function persistedChunkPlan(chunks) {
 
 function chunkPlanForTarget(target, packet, opts, state) {
   const prior = state.chapters[stateKey(target)];
+  let planned;
   if (prior?.chapterFingerprint === packet.input.chapterFingerprint && prior.chunkPlan?.length) {
-    const restored = normalizePeopleExtractionChunkPlan(packet, prior.chunkPlan, {
+    planned = normalizePeopleExtractionChunkPlan(packet, prior.chunkPlan, {
       contextUnits: opts.chunkContextUnits,
     });
-    console.log(`[${stateKey(target)}] restored adaptive ${restored.length}-range chunk plan`);
-    return restored;
+    console.log(`[${stateKey(target)}] restored adaptive ${planned.length}-range chunk plan`);
+  } else {
+    planned = planPeopleExtractionChunks(packet, {
+      maxUnits: opts.maxUnits,
+      maxCandidates: opts.maxCandidates,
+      contextUnits: opts.chunkContextUnits,
+    });
   }
-  let planned = planPeopleExtractionChunks(packet, {
-    maxUnits: opts.maxUnits,
-    maxCandidates: opts.maxCandidates,
-    contextUnits: opts.chunkContextUnits,
-  });
   for (const chunk of [...planned]) {
     const previousChunk = prior?.chunks?.[chunk.id];
     const hitRunLimit = previousChunk?.stopReason === 'run-limit' ||
