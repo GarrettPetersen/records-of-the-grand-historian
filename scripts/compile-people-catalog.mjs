@@ -199,7 +199,7 @@ function sourcePreferredNameSuggestion(members) {
 
 function preferredName(members, override = null) {
   const nameClaims = members.flatMap((member) => member.claims).filter((claim) => claim.predicate === 'name');
-  if (override) {
+  if (override?.preferredName) {
     const selected = override.preferredName;
     const claimRefs = nameClaims.filter((claim) =>
       (!selected.en || claim.value?.en === selected.en) &&
@@ -584,7 +584,7 @@ function canonicalRecord(cluster, corpus, localMap, roleLabels, unresolvedLocalP
   const slugName = sourcePreferredNameSuggestion(members);
   const roles = canonicalRoles(members, roleLabels);
   const descriptors = members.map((member) => member.descriptorSuggestion);
-  const descriptor = preferredDescriptor(descriptors, roles) ?? frequencyChoice(descriptors) ??
+  const descriptor = override?.preferredDescription ?? preferredDescriptor(descriptors, roles) ?? frequencyChoice(descriptors) ??
     (roles.map((role) => role.label).slice(0, 3).join(' and ') || 'Named Individual');
   const roleClaimRefs = roles.flatMap((role) => role.claimRefs);
   const historicities = new Set(members.map((member) => member.historicity));
@@ -959,11 +959,12 @@ function selfTest() {
       preferredName: {
         kind: 'personal', en: 'Fan Ye', zh: '范曄', pinyin: 'Fàn Yè',
       },
+      preferredDescription: 'Later Han historian',
       reason: 'Retired-ID fixture',
     },
   }).catalog;
   const curatedFan = retiredOverrideResult.people.find((person) => person.id === fan.id);
-  if (curatedFan.preferredName.pinyin !== 'Fàn Yè') {
+  if (curatedFan.preferredName.pinyin !== 'Fàn Yè' || curatedFan.description.en !== 'Later Han historian') {
     throw new Error('Curation keyed by a retired canonical ID did not follow the surviving cluster');
   }
   if (!result.complete) throw new Error('Fully covered fixture catalog was not marked complete');
@@ -1003,8 +1004,14 @@ function main() {
   }
   for (const [personId, override] of Object.entries(curation.people)) {
     const name = override?.preferredName;
-    if (!/^per_[0-9A-HJKMNP-TV-Z]{20}$/u.test(personId) || !name || typeof name.kind !== 'string' ||
-        ![name.en, name.zh, name.pinyin].some((value) => typeof value === 'string' && value.trim()) ||
+    const description = override?.preferredDescription;
+    const keys = Object.keys(override ?? {});
+    const validName = !name || (typeof name.kind === 'string' &&
+      [name.en, name.zh, name.pinyin].some((value) => typeof value === 'string' && value.trim()));
+    const validDescription = description === undefined ||
+      (typeof description === 'string' && description.trim() && description.length <= 200);
+    if (!/^per_[0-9A-HJKMNP-TV-Z]{20}$/u.test(personId) || (!name && description === undefined) ||
+        !validName || !validDescription || keys.some((key) => !['preferredName', 'preferredDescription', 'reason'].includes(key)) ||
         typeof override.reason !== 'string' || !override.reason.trim()) {
       throw new Error(`Invalid people curation override for ${personId}`);
     }
