@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import assert from 'node:assert/strict';
-import { resolvePeopleClusters } from './lib/people-resolution.mjs';
+import { resolvePeopleClusters, stableCanonicalPersonId } from './lib/people-resolution.mjs';
 
 function person(localId, claims = []) {
   return [localId, { localId, claims }];
@@ -42,6 +42,39 @@ function resolution(batch, decisions, authority) {
 
 {
   const people = new Map([
+    person('confucius-a'),
+    person('confucius-b'),
+    person('laozi-a'),
+    person('laozi-b'),
+  ]);
+  const result = resolvePeopleClusters(people, [
+    resolution('model-confucius', [['merge', ['confucius-a', 'confucius-b', 'laozi-b']]]),
+    resolution('model-laozi', [['merge', ['laozi-a', 'laozi-b']]]),
+    resolution('human-separation', [['keep-separate', ['confucius-a', 'laozi-a']]], 'curated'),
+    resolution('human-laozi', [['merge', ['laozi-a', 'laozi-b']]], 'curated'),
+  ]);
+  assert.deepEqual(result.clusters.map((cluster) => cluster.localPeople), [
+    ['confucius-a', 'confucius-b'],
+    ['laozi-a', 'laozi-b'],
+  ]);
+}
+
+{
+  const people = new Map([
+    person('a', [{
+      predicate: 'different-person',
+      certainty: 'explicit',
+      value: { personId: 'b' },
+    }]),
+    person('b'),
+  ]);
+  assert.throws(() => resolvePeopleClusters(people, [
+    resolution('model-merge', [['merge', ['a', 'b']]]),
+  ]), /explicitly identified as different/u);
+}
+
+{
+  const people = new Map([
     person('a', [{
       predicate: 'different-person',
       certainty: 'explicit',
@@ -60,6 +93,22 @@ function resolution(batch, decisions, authority) {
     resolution('human-merge', [['merge', ['a', 'b']]], 'curated'),
     resolution('human-separation', [['keep-separate', ['a', 'b']]], 'curated'),
   ]), /explicitly kept separate/u);
+}
+
+{
+  const people = new Map([person('a'), person('b')]);
+  assert.throws(() => resolvePeopleClusters(people, [{
+    schemaVersion: 1,
+    batch: 'colliding-pin',
+    authority: 'curated',
+    decisions: [{
+      decision: 'merge',
+      canonicalPersonId: stableCanonicalPersonId('b'),
+      localPeople: ['a'],
+      basis: ['self-test'],
+      confidence: 'high',
+    }],
+  }]), /Duplicate canonical person ID/u);
 }
 
 console.log('People resolution self-test passed.');

@@ -1,7 +1,19 @@
 export const PERSON_PAGE_SHARD_COUNT = 1024;
+const PERSON_ID_PATTERN = /^per_([0-9A-HJKMNP-TV-Z]{20})$/u;
+const PERSON_SLUG_SUFFIX_PATTERN = /(?:^|-)([0-9a-hjkmnp-tv-z]{8})$/u;
 
 export function normalizePersonPageSlug(value) {
   return String(value ?? '').replace(/\.html$/u, '');
+}
+
+export function personIdSlugSuffix(value) {
+  const match = PERSON_ID_PATTERN.exec(String(value ?? ''));
+  if (!match) throw new Error(`Invalid canonical person ID: ${value}`);
+  return match[1].slice(0, 8).toLocaleLowerCase('en');
+}
+
+export function personPageSlugSuffix(value) {
+  return PERSON_SLUG_SUFFIX_PATTERN.exec(normalizePersonPageSlug(value))?.[1] ?? null;
 }
 
 export function personPageShardName(value) {

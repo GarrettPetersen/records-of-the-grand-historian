@@ -11,6 +11,7 @@ import {
 } from './lib/people-publication.mjs';
 import {
   PERSON_PAGE_SHARD_COUNT,
+  personIdSlugSuffix,
   personPageShardName,
 } from '../functions/lib/people-shards.js';
 import {
@@ -163,6 +164,51 @@ export function verifyPeopleSite(options = parseArgs([])) {
   }
   for (const slug of expectedSlugs) assert(actualSlugs.has(slug), `Missing person page ${slug}.html`, errors);
   for (const slug of actualSlugs) assert(expectedSlugs.has(slug), `Unexpected person page ${slug}.html`, errors);
+
+  const expectedRedirects = new Map();
+  const addExpectedRedirect = (personId, targetSlug) => {
+    const suffix = personIdSlugSuffix(personId);
+    const existing = expectedRedirects.get(suffix);
+    assert(!existing || existing === targetSlug,
+      `Person ID suffix ${suffix} has conflicting targets ${existing} and ${targetSlug}`, errors);
+    expectedRedirects.set(suffix, targetSlug);
+  };
+  for (const person of catalog.people) {
+    addExpectedRedirect(person.id, person.slug);
+    for (const retiredId of person.retiredIds) addExpectedRedirect(retiredId, person.slug);
+  }
+  assert(status.personIdRedirects === expectedRedirects.size,
+    `Expected ${expectedRedirects.size} person-ID redirects, status reports ${status.personIdRedirects}`, errors);
+  const redirectsDir = path.join(options.outputRoot, 'data', 'people', 'redirects');
+  const redirectShardFiles = fs.existsSync(redirectsDir)
+    ? fs.readdirSync(redirectsDir).filter((name) => /^\d{4}\.json$/u.test(name)).sort()
+    : [];
+  assert(redirectShardFiles.length === status.redirectShards,
+    `Expected ${status.redirectShards} redirect shards, found ${redirectShardFiles.length}`, errors);
+  assert(redirectShardFiles.length <= PERSON_PAGE_SHARD_COUNT,
+    `Person redirect shard count exceeds ${PERSON_PAGE_SHARD_COUNT}`, errors);
+  const actualRedirects = new Map();
+  for (const file of redirectShardFiles) {
+    const fullPath = path.join(redirectsDir, file);
+    assert(fs.statSync(fullPath).size < 25 * 1024 * 1024, `${file} redirect shard exceeds 25 MiB`, errors);
+    const shard = readJson(fullPath);
+    assert(shard.v === 1 && shard.redirects && typeof shard.redirects === 'object',
+      `${file} is not a v1 redirect shard`, errors);
+    for (const [suffix, targetSlug] of Object.entries(shard.redirects ?? {})) {
+      assert(/^[0-9a-hjkmnp-tv-z]{8}$/u.test(suffix), `${file} has invalid person-ID suffix ${suffix}`, errors);
+      assert(personPageShardName(suffix) === file.slice(0, -5), `${suffix} is stored in the wrong redirect shard`, errors);
+      assert(!actualRedirects.has(suffix), `${suffix} appears in more than one redirect shard`, errors);
+      assert(expectedSlugs.has(targetSlug), `${suffix} redirects to unknown person ${targetSlug}`, errors);
+      actualRedirects.set(suffix, targetSlug);
+    }
+  }
+  for (const [suffix, targetSlug] of expectedRedirects) {
+    assert(actualRedirects.get(suffix) === targetSlug,
+      `Missing person-ID redirect ${suffix} -> ${targetSlug}`, errors);
+  }
+  for (const suffix of actualRedirects.keys()) {
+    assert(expectedRedirects.has(suffix), `Unexpected person-ID redirect ${suffix}`, errors);
+  }
 
   const indexDocument = loadHtml(fs.readFileSync(path.join(peopleDir, 'index.html'), 'utf8'));
   assert(indexDocument('h1').length === 1, 'People index must have one h1', errors);

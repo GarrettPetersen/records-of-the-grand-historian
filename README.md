@@ -744,8 +744,12 @@ person. `scripts/generate-people-pages.mjs` pre-renders the records into 1,024
 deterministic JSON shards, and the Cloudflare Pages Function at
 `functions/people/[slug].js` returns the requested record. This preserves distinct
 URLs, metadata, JSON-LD, and source text for crawlers without allowing a complete
-catalog to consume the Pages file limit. The generated shards, index page, and
-vendored family-tree browser assets are gitignored and rebuilt during deployment.
+catalog to consume the Pages file limit. A second sharded lookup covers every
+canonical and retired person ID; when a merge or name correction changes a slug,
+the old URL returns a permanent redirect to the surviving canonical page. The
+site verifier requires complete redirect coverage and rejects ID-prefix
+collisions. The generated shards, index page, and vendored family-tree browser
+assets are gitignored and rebuilt during deployment.
 
 ```bash
 # Rebuild the directory, person records, and local family-tree assets

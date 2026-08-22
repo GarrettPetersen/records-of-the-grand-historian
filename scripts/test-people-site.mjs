@@ -2,7 +2,11 @@
 
 import assert from 'node:assert/strict';
 import { onRequestGet, onRequestHead } from '../functions/people/[slug].js';
-import { personPageShardName } from '../functions/lib/people-shards.js';
+import {
+  personIdSlugSuffix,
+  personPageShardName,
+  personPageSlugSuffix,
+} from '../functions/lib/people-shards.js';
 import {
   MAX_PUBLIC_PERSON_ALIASES,
   inferredPersonBirthYear,
@@ -178,10 +182,53 @@ const head = await onRequestHead(context);
 assert.equal(head.status, 200);
 assert.equal(await head.text(), '');
 
+assert.equal(personIdSlugSuffix('per_DEADBEEF0123456789AB'), 'deadbeef');
+assert.equal(personPageSlugSuffix('former-fan-ye-deadbeef.html'), 'deadbeef');
+assert.equal(personPageSlugSuffix('former-fan-ye.html'), null);
+assert.throws(() => personIdSlugSuffix('not-a-person-id'), /Invalid canonical person ID/u);
+const retiredSlug = 'former-fan-ye-deadbeef';
+const retiredSuffix = personPageSlugSuffix(retiredSlug);
+const canonicalSlug = 'fan-ye-fixture';
+const redirectEnv = {
+  ASSETS: {
+    async fetch(request) {
+      const pathname = new URL(request.url).pathname;
+      if (pathname === `/data/people/pages/${personPageShardName(retiredSlug)}.json`) {
+        return Response.json({ v: 1, pages: {} });
+      }
+      assert.equal(pathname, `/data/people/redirects/${personPageShardName(retiredSuffix)}.json`);
+      return Response.json({ v: 1, redirects: { [retiredSuffix]: canonicalSlug } });
+    },
+  },
+};
+const redirected = await onRequestGet({
+  params: { slug: `${retiredSlug}.html` },
+  request: new Request(`https://24histories.com/people/${retiredSlug}.html`),
+  env: redirectEnv,
+});
+assert.equal(redirected.status, 301);
+assert.equal(redirected.headers.get('location'), `https://24histories.com/people/${canonicalSlug}.html`);
+const redirectedHead = await onRequestHead({
+  params: { slug: `${retiredSlug}.html` },
+  request: new Request(`https://24histories.com/people/${retiredSlug}.html`, { method: 'HEAD' }),
+  env: redirectEnv,
+});
+assert.equal(redirectedHead.status, 301);
+assert.equal(redirectedHead.headers.get('location'), `https://24histories.com/people/${canonicalSlug}.html`);
+assert.equal(await redirectedHead.text(), '');
+
 const missing = await onRequestGet({
   ...context,
   params: { slug: 'unknown-person.html' },
-  env: { ASSETS: { fetch: async () => Response.json({ v: 1, pages: {} }) } },
+  env: {
+    ASSETS: {
+      async fetch(request) {
+        return new URL(request.url).pathname.includes('/pages/')
+          ? Response.json({ v: 1, pages: {} })
+          : new Response(null, { status: 404 });
+      },
+    },
+  },
 });
 assert.equal(missing.status, 404);
 console.log('people edge page tests: ok');

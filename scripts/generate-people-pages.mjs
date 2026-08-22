@@ -16,6 +16,7 @@ import {
 import { loadPeopleSiteContext } from './lib/people-site.mjs';
 import {
   PERSON_PAGE_SHARD_COUNT,
+  personIdSlugSuffix,
   personPageShardName,
 } from '../functions/lib/people-shards.js';
 import {
@@ -1070,6 +1071,44 @@ function writePersonPageShards(outputRoot, people, context) {
   return written;
 }
 
+function personIdRedirects(people) {
+  const redirects = new Map();
+  const add = (personId, targetSlug) => {
+    const suffix = personIdSlugSuffix(personId);
+    const existing = redirects.get(suffix);
+    if (existing && existing !== targetSlug) {
+      throw new Error(`Person ID suffix ${suffix} points to both ${existing} and ${targetSlug}`);
+    }
+    redirects.set(suffix, targetSlug);
+  };
+  for (const person of people) {
+    add(person.id, person.slug);
+    for (const retiredId of person.retiredIds) add(retiredId, person.slug);
+  }
+  return redirects;
+}
+
+function writePersonRedirectShards(outputRoot, people) {
+  const redirects = personIdRedirects(people);
+  const redirectsDir = path.join(outputRoot, 'data', 'people', 'redirects');
+  fs.mkdirSync(redirectsDir, { recursive: true });
+  const buckets = Array.from({ length: PERSON_PAGE_SHARD_COUNT }, () => []);
+  for (const entry of redirects) {
+    buckets[Number.parseInt(personPageShardName(entry[0]), 10)].push(entry);
+  }
+  let written = 0;
+  for (let index = 0; index < buckets.length; index += 1) {
+    if (!buckets[index].length) continue;
+    const entries = buckets[index].sort(([left], [right]) => left.localeCompare(right, 'en'));
+    writeTextAtomic(
+      path.join(redirectsDir, `${String(index).padStart(4, '0')}.json`),
+      `${JSON.stringify({ v: 1, redirects: Object.fromEntries(entries) })}\n`,
+    );
+    written += 1;
+  }
+  return { redirects: redirects.size, shards: written };
+}
+
 function writeSearchData(outputRoot, people, context) {
   const searchDir = path.join(outputRoot, 'data', 'people', 'search');
   fs.mkdirSync(searchDir, { recursive: true });
@@ -1108,6 +1147,8 @@ function writeSearchData(outputRoot, people, context) {
     published: context.active && !context.preview,
     people: people.length,
     pageShards: context.pageShards ?? 0,
+    redirectShards: context.redirectShards ?? 0,
+    personIdRedirects: context.personIdRedirects ?? 0,
     sourceChapters: context.catalog.stats.sourceChapters,
     extractedChapters: context.catalog.stats.extractedChapters,
     missingChapters: context.catalog.stats.missingChapters,
@@ -1297,19 +1338,27 @@ export function generatePeoplePages(options = parseArgs([])) {
       writeTextAtomic(path.join(peopleDir, `${person.slug}.html`), generatePersonHtml(person, context));
     }
     context.pageShards = 0;
+    context.redirectShards = 0;
+    context.personIdRedirects = 0;
   } else {
     context.pageShards = writePersonPageShards(options.outputRoot, allPeople, context);
+    const redirectStats = writePersonRedirectShards(options.outputRoot, allPeople);
+    context.redirectShards = redirectStats.shards;
+    context.personIdRedirects = redirectStats.redirects;
   }
   writeTextAtomic(path.join(peopleDir, 'index.html'), generateIndexHtml(allPeople, context, collections));
   writeSearchData(options.outputRoot, allPeople, context);
   console.log(
     `people pages: ${selected.length} person record(s), ${context.pageShards} page shard(s), ` +
+    `${context.personIdRedirects} person-ID redirect(s) in ${context.redirectShards} shard(s), ` +
     `${allPeople.length} search entries ` +
     `(${context.preview ? 'preview' : 'publication'} mode)`,
   );
   return {
     generated: selected.length,
     pageShards: context.pageShards,
+    redirectShards: context.redirectShards,
+    personIdRedirects: context.personIdRedirects,
     active: true,
     preview: context.preview,
     people: allPeople.length,
