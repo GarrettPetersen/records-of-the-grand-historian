@@ -245,27 +245,35 @@ export function connectedBlockComponents(blocks, canonicalByLocal) {
 
 export function resolvePeopleClusters(localPeople, resolutionDocuments = []) {
   const ids = [...localPeople.keys()];
-  const union = new UnionFind(ids);
+  const modelUnion = new UnionFind(ids);
   const constraints = explicitIdentityConstraints(localPeople);
   for (const key of constraints.same) {
     const [left, right] = key.split('\u0000');
-    union.union(left, right);
+    modelUnion.union(left, right);
   }
 
-  const keepSeparate = new Set(constraints.different);
+  const modelKeepSeparate = new Set();
+  const curatedKeepSeparate = new Set();
+  const curatedMerges = [];
   const pins = new Map();
   for (const document of resolutionDocuments) {
+    const curated = document.authority === 'curated';
     for (const decision of document.decisions) {
       for (const localId of decision.localPeople) {
         if (!localPeople.has(localId)) throw new Error(`${document.batch} refers to unknown local person ${localId}`);
       }
       if (decision.decision === 'merge') {
-        const [first, ...rest] = decision.localPeople;
-        for (const other of rest) union.union(first, other);
+        if (curated) {
+          curatedMerges.push(decision.localPeople);
+        } else {
+          const [first, ...rest] = decision.localPeople;
+          for (const other of rest) modelUnion.union(first, other);
+        }
       } else if (['keep-separate', 'split'].includes(decision.decision)) {
+        const target = curated ? curatedKeepSeparate : modelKeepSeparate;
         for (let left = 0; left < decision.localPeople.length; left += 1) {
           for (let right = left + 1; right < decision.localPeople.length; right += 1) {
-            keepSeparate.add(pairKey(decision.localPeople[left], decision.localPeople[right]));
+            target.add(pairKey(decision.localPeople[left], decision.localPeople[right]));
           }
         }
       }
@@ -273,6 +281,33 @@ export function resolvePeopleClusters(localPeople, resolutionDocuments = []) {
         for (const localId of decision.localPeople) pins.set(localId, decision.canonicalPersonId);
       }
     }
+  }
+
+  const modelRoots = new Set(ids.map((localId) => modelUnion.find(localId)));
+  const curatedRootUnion = new UnionFind(modelRoots);
+  const curatedRootsTouched = new Set();
+  for (const localPeopleGroup of curatedMerges) {
+    const roots = [...new Set(localPeopleGroup.map((localId) => modelUnion.find(localId)))];
+    for (const root of roots) curatedRootsTouched.add(root);
+    const [first, ...rest] = roots;
+    for (const other of rest) curatedRootUnion.union(first, other);
+  }
+
+  const keepSeparate = new Set([...constraints.different, ...curatedKeepSeparate]);
+  for (const key of modelKeepSeparate) {
+    const [left, right] = key.split('\u0000');
+    const leftRoot = modelUnion.find(left);
+    const rightRoot = modelUnion.find(right);
+    const overriddenByCuration = curatedRootsTouched.has(leftRoot)
+      && curatedRootsTouched.has(rightRoot)
+      && curatedRootUnion.find(leftRoot) === curatedRootUnion.find(rightRoot);
+    if (!overriddenByCuration) keepSeparate.add(key);
+  }
+
+  const union = modelUnion;
+  for (const localPeopleGroup of curatedMerges) {
+    const [first, ...rest] = localPeopleGroup;
+    for (const other of rest) union.union(first, other);
   }
 
   const clustersByRoot = new Map();

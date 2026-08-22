@@ -21,7 +21,16 @@ import {
   validateEditorialDecisions,
 } from './lib/people-editorial-decisions.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
-import { sendCursorAgentWhenReady, waitForCursorRun } from './lib/cursor-run-wait.mjs';
+import {
+  CursorRunLimitExceededError,
+  sendCursorAgentWhenReady,
+  waitForCursorRun,
+} from './lib/cursor-run-wait.mjs';
+import {
+  describeCursorRunLimits,
+  parseCursorDollarLimit,
+  parseCursorIntegerLimit,
+} from './lib/cursor-cli-limits.mjs';
 import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
 
 loadDotenv(REPO_ROOT);
@@ -31,6 +40,9 @@ const DEFAULT_REPO_URL = 'https://github.com/GarrettPetersen/records-of-the-gran
 const DEFAULT_STARTING_REF = 'codex/people-glossary-staging';
 const STATE_FILE = path.join(PEOPLE_DIR, 'generated', 'editorial-review-state.json');
 const RUN_LOCK_FILE = path.join(PEOPLE_DIR, 'generated', 'editorial-review-run.lock');
+const DEFAULT_MAX_RUN_COST_CENTS = 100;
+const DEFAULT_MAX_RUN_TOKENS = 750_000;
+const DEFAULT_RUN_POLL_MS = 15_000;
 const REVIEW_PROMPT = fs.readFileSync(path.join(REPO_ROOT, 'prompt-people-editorial-review.txt'), 'utf8');
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
@@ -47,6 +59,9 @@ Options:
   --limit N            Maximum chapters selected.
   --concurrency N      Parallel independent reviewers (default: 2, max: 8).
   --max-attempts N     Validation attempts per chapter (default: 2).
+  --max-run-cost DOLLARS
+                       Cancel one active run at this raw usage cost (default: $${(DEFAULT_MAX_RUN_COST_CENTS / 100).toFixed(2)}; use unlimited to disable).
+  --max-run-tokens N   Cancel one active run at this token count (default: ${DEFAULT_MAX_RUN_TOKENS.toLocaleString('en-US')}; use unlimited to disable).
   --model MODEL        Reviewer model (default: ${DEFAULT_MODEL}).
   --effort LEVEL       Reviewer effort: low, medium, or high (default: medium).
   --fast               Enable the model's fast variant.
@@ -75,6 +90,8 @@ function parseArgs(argv) {
     limit: null,
     concurrency: 2,
     maxAttempts: 2,
+    maxRunCostCents: DEFAULT_MAX_RUN_COST_CENTS,
+    maxRunTokens: DEFAULT_MAX_RUN_TOKENS,
     model: process.env.SDK_PEOPLE_REVIEW_MODEL ?? DEFAULT_MODEL,
     effort: process.env.SDK_PEOPLE_REVIEW_EFFORT ?? 'medium',
     fast: false,
@@ -98,6 +115,8 @@ function parseArgs(argv) {
     else if (arg === '--limit') opts.limit = integer(next(), arg, Number.MAX_SAFE_INTEGER);
     else if (arg === '--concurrency') opts.concurrency = integer(next(), arg, 8);
     else if (arg === '--max-attempts') opts.maxAttempts = integer(next(), arg, 5);
+    else if (arg === '--max-run-cost') opts.maxRunCostCents = parseCursorDollarLimit(next(), arg);
+    else if (arg === '--max-run-tokens') opts.maxRunTokens = parseCursorIntegerLimit(next(), arg);
     else if (arg === '--model') opts.model = next();
     else if (arg === '--effort') opts.effort = next();
     else if (arg === '--fast') opts.fast = true;
@@ -213,6 +232,9 @@ async function runTurn(agent, prompt, target, phase, opts) {
     agentId: agent.agentId,
     apiKey: opts.apiKey,
     label: `[${target.book}/${target.chapter}] ${phase}`,
+    pollMs: DEFAULT_RUN_POLL_MS,
+    maxRawCostCents: opts.maxRunCostCents,
+    maxTotalTokens: opts.maxRunTokens,
   });
   console.log(`[${target.book}/${target.chapter}] ${result.id} status=${result.status}`);
   if (result.status !== 'finished') {
@@ -326,7 +348,10 @@ async function processTarget(target, opts, state, matcher) {
         errors = errorList(error);
         updateState(state, target, { status: 'failed/retryable', lastErrors: errors });
         console.error(`[${key}] review attempt ${attempt} failed: ${errors[0]}`);
-        if (error instanceof CursorAgentError && !error.isRetryable) break;
+        if (
+          error instanceof CursorRunLimitExceededError ||
+          (error instanceof CursorAgentError && !error.isRetryable)
+        ) break;
       }
     }
     throw Object.assign(new Error(`Review failed after ${opts.maxAttempts} attempt(s)`), { errors });
@@ -339,7 +364,9 @@ async function processTarget(target, opts, state, matcher) {
       try {
         const usage = await agent.getUsage();
         updateState(state, target, { usage });
-        const dollars = usage.cost ? `; charged=$${(usage.cost.chargedCents / 100).toFixed(2)}` : '';
+        const dollars = usage.cost
+          ? `; raw=$${(usage.cost.rawCostCents / 100).toFixed(2)}; charged=$${(usage.cost.chargedCents / 100).toFixed(2)}`
+          : '';
         console.log(`[${key}] Cursor usage: ${usage.usage.totalTokens.toLocaleString('en-US')} tokens${dollars}`);
       } catch (error) {
         console.warn(
@@ -363,7 +390,7 @@ async function main() {
     const matcher = loadProperNounMatcher();
     console.log(
       `Selected ${selected.length} chapter(s); reviewer concurrency=${opts.concurrency}; ` +
-      `model=${opts.model} effort=${opts.effort}; no Git pushes`,
+      `model=${opts.model} effort=${opts.effort}; ${describeCursorRunLimits(opts)}; no Git pushes`,
     );
 
     let next = 0;

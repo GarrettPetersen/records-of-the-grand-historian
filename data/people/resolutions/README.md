@@ -27,6 +27,14 @@ Use `merge` only when the evidence establishes one person. Use `keep-separate`
 for homonyms or reused titles, and `possible-same-as` when the evidence remains
 insufficient. A false merge is worse than a temporary duplicate.
 
+Most resolver output has implicit `"authority": "model"`. A manually audited
+correction may set top-level `"authority": "curated"`. Curated merges override
+older model-generated separations inside the corrected identity cluster, which
+allows a personal name, temple name, and posthumous title to be reunited after
+their relationship has been verified. Explicit `different-person` claims in a
+chapter extraction and curated separations remain hard constraints and cannot
+be overridden by a curated merge.
+
 Run `npm run people:resolution-candidates` to rebuild the ignored resolver
 dossier and `npm run people:catalog` to compile the current canonical catalog.
 Run `npm run people:resolve -- --batch NAME --chapters BOOK/NNN,...` to shard

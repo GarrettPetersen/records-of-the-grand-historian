@@ -31,6 +31,14 @@ import {
   sendCursorAgentWhenReady,
   waitForCursorRun,
 } from './lib/cursor-run-wait.mjs';
+import {
+  parseCursorDollarLimit,
+  parseCursorIntegerLimit,
+} from './lib/cursor-cli-limits.mjs';
+import {
+  createRunControl,
+  installSignalHandlers,
+} from './lib/cursor-run-control.mjs';
 import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
 import {
   compactPeopleExtraction,
@@ -123,23 +131,11 @@ The host downloads and validates artifacts, queues translation repairs for an
 independent evidence review, and accumulates accepted chapters locally.`);
 }
 
-function dollarCents(value, flag) {
-  if (value === 'unlimited') return null;
-  if (!/^\d+(?:\.\d{1,2})?$/u.test(value) || Number(value) <= 0) {
-    throw new Error(`${flag} must be a positive dollar amount or unlimited`);
-  }
-  return Math.round(Number(value) * 100);
-}
-
 function positiveInteger(value, flag, maximum = Number.MAX_SAFE_INTEGER) {
   if (!/^\d+$/u.test(value) || Number(value) < 1 || Number(value) > maximum) {
     throw new Error(`${flag} must be an integer from 1 to ${maximum}`);
   }
   return Number(value);
-}
-
-function positiveIntegerOrUnlimited(value, flag) {
-  return value === 'unlimited' ? null : positiveInteger(value, flag);
 }
 
 function parseArgs(argv) {
@@ -196,10 +192,10 @@ function parseArgs(argv) {
       if (!/^\d+$/u.test(value)) throw new Error(`${arg} must be a nonnegative integer`);
       opts.chunkContextUnits = Number(value);
     }
-    else if (arg === '--max-cost') opts.maxCostCents = dollarCents(next(), arg);
-    else if (arg === '--cost-reserve') opts.agentCostReserveCents = dollarCents(next(), arg);
-    else if (arg === '--max-run-cost') opts.maxRunCostCents = dollarCents(next(), arg);
-    else if (arg === '--max-run-tokens') opts.maxRunTokens = positiveIntegerOrUnlimited(next(), arg);
+    else if (arg === '--max-cost') opts.maxCostCents = parseCursorDollarLimit(next(), arg);
+    else if (arg === '--cost-reserve') opts.agentCostReserveCents = parseCursorDollarLimit(next(), arg);
+    else if (arg === '--max-run-cost') opts.maxRunCostCents = parseCursorDollarLimit(next(), arg);
+    else if (arg === '--max-run-tokens') opts.maxRunTokens = parseCursorIntegerLimit(next(), arg);
     else if (arg === '--plan-out') opts.planOut = path.resolve(REPO_ROOT, next());
     else if (arg === '--max-attempts') opts.maxAttempts = positiveInteger(next(), arg, 5);
     else if (arg === '--model') opts.model = next();
@@ -478,61 +474,6 @@ function updateChunkState(state, target, chunk, patch) {
     updatedAt: new Date().toISOString(),
   };
   saveState(state);
-}
-
-function createRunControl() {
-  return {
-    stopRequested: false,
-    cancelRequested: false,
-    stopReason: null,
-    activeRuns: new Map(),
-  };
-}
-
-async function cancelActiveRuns(control) {
-  control.cancelRequested = true;
-  const active = [...control.activeRuns.values()];
-  if (active.length === 0) return;
-  console.error(`Cancelling ${active.length} active Cursor run(s)...`);
-  await Promise.all(active.map(async ({ run, target }) => {
-    try {
-      if (run.supports('cancel')) await run.cancel();
-      else console.error(`[${stateKey(target)}] run ${run.id} does not support cancellation`);
-    } catch (error) {
-      console.error(
-        `[${stateKey(target)}] could not cancel ${run.id}: ` +
-        `${error instanceof Error ? error.message : String(error)}`,
-      );
-    }
-  }));
-}
-
-function installSignalHandlers(control) {
-  let interruptCount = 0;
-  const onInterrupt = () => {
-    interruptCount += 1;
-    control.stopRequested = true;
-    control.stopReason = 'SIGINT';
-    if (interruptCount === 1) {
-      console.error(
-        `SIGINT received: draining ${control.activeRuns.size} active run(s); ` +
-        'no new agents will start. Press Ctrl-C again to cancel active runs.',
-      );
-      return;
-    }
-    void cancelActiveRuns(control);
-  };
-  const onTerminate = () => {
-    control.stopRequested = true;
-    control.stopReason = 'SIGTERM';
-    void cancelActiveRuns(control);
-  };
-  process.on('SIGINT', onInterrupt);
-  process.on('SIGTERM', onTerminate);
-  return () => {
-    process.off('SIGINT', onInterrupt);
-    process.off('SIGTERM', onTerminate);
-  };
 }
 
 function currentExtractionIsValid(target, packet) {
@@ -1411,7 +1352,10 @@ async function selfTest() {
   if (exceedsBulkCeiling(small, opts) || !exceedsBulkCeiling(large, opts)) {
     throw new Error('Bulk size ceilings did not classify fixture chapters');
   }
-  if (dollarCents('10.25', '--max-cost') !== 1025 || dollarCents('unlimited', '--max-cost') !== null) {
+  if (
+    parseCursorDollarLimit('10.25', '--max-cost') !== 1025 ||
+    parseCursorDollarLimit('unlimited', '--max-cost') !== null
+  ) {
     throw new Error('Cost ceiling parser returned the wrong amount');
   }
   if (!isCursorAgentBusy({ code: 'agent_busy' }) ||

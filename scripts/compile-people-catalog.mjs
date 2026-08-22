@@ -716,8 +716,26 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
   const unresolvedLocalPeople = new Set(unresolvedBlocks.flatMap((block) => block.localPeople));
   const roleData = readJson(path.join(PEOPLE_DIR, 'curation', 'role-vocabulary.json'));
   const roleLabels = new Map(roleData.roles.map((role) => [role.id, role.label]));
-  const canonicalIds = new Set(resolved.clusters.map((cluster) => cluster.canonicalPersonId));
-  const unknownOverrides = Object.keys(curationOverrides).filter((personId) => !canonicalIds.has(personId));
+  const canonicalByKnownId = new Map();
+  for (const cluster of resolved.clusters) {
+    canonicalByKnownId.set(cluster.canonicalPersonId, cluster.canonicalPersonId);
+    for (const retiredId of cluster.retiredIds) {
+      canonicalByKnownId.set(retiredId, cluster.canonicalPersonId);
+    }
+  }
+  const resolvedCurationOverrides = {};
+  const unknownOverrides = [];
+  for (const [personId, override] of Object.entries(curationOverrides)) {
+    const canonicalPersonId = canonicalByKnownId.get(personId);
+    if (!canonicalPersonId) {
+      unknownOverrides.push(personId);
+      continue;
+    }
+    if (resolvedCurationOverrides[canonicalPersonId]) {
+      throw new Error(`Multiple people curation entries resolve to ${canonicalPersonId}`);
+    }
+    resolvedCurationOverrides[canonicalPersonId] = override;
+  }
   if (unknownOverrides.length) {
     throw new Error(`People curation contains unknown canonical IDs: ${unknownOverrides.join(', ')}`);
   }
@@ -729,7 +747,7 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
       roleLabels,
       unresolvedLocalPeople,
       currentPromptVersion,
-      curationOverrides[cluster.canonicalPersonId] ?? null,
+      resolvedCurationOverrides[cluster.canonicalPersonId] ?? null,
     )
   );
   for (const person of people) {
@@ -935,6 +953,18 @@ function selfTest() {
     throw new Error('Canonical family edge is not shared by both reciprocal adjacencies');
   }
   if (!/^per_[0-9A-HJKMNP-TV-Z]{20}$/u.test(fan.id)) throw new Error('Stable canonical ID is invalid');
+  const retiredOverrideResult = compilePeopleCatalog(corpus, resolution, {
+    [fan.retiredIds[0]]: {
+      preferredName: {
+        kind: 'personal', en: 'Fan Ye', zh: '范曄', pinyin: 'Fàn Yè',
+      },
+      reason: 'Retired-ID fixture',
+    },
+  }).catalog;
+  const curatedFan = retiredOverrideResult.people.find((person) => person.id === fan.id);
+  if (curatedFan.preferredName.pinyin !== 'Fàn Yè') {
+    throw new Error('Curation keyed by a retired canonical ID did not follow the surviving cluster');
+  }
   if (!result.complete) throw new Error('Fully covered fixture catalog was not marked complete');
   const incompleteCorpus = structuredClone(corpus);
   incompleteCorpus.coverage = { sourceChapters: 4, extractedChapters: 3, missingChapterIds: ['fixture:004'] };

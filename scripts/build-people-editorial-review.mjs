@@ -26,14 +26,16 @@ const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPat
 function usage() {
   console.log(`Usage:
   node scripts/build-people-editorial-review.mjs --book BOOK --chapter NNN [--out PATH] [--context N]
+    [--decision-seed-out PATH]
 
 Builds the bounded evidence dossier for an independent review of proposed
 translation repairs. The default output is gitignored under
-data/people/generated/editorial-review/.`);
+data/people/generated/editorial-review/. --decision-seed-out writes the
+immutable decision scaffold for a human or Codex reviewer.`);
 }
 
 function parseArgs(argv) {
-  const opts = { book: null, chapter: null, out: null, context: 2 };
+  const opts = { book: null, chapter: null, out: null, decisionSeedOut: null, context: 2 };
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
     const next = () => {
@@ -44,6 +46,7 @@ function parseArgs(argv) {
     if (arg === '--book') opts.book = next();
     else if (arg === '--chapter') opts.chapter = normalizedChapterId(next());
     else if (arg === '--out') opts.out = path.resolve(REPO_ROOT, next());
+    else if (arg === '--decision-seed-out') opts.decisionSeedOut = path.resolve(REPO_ROOT, next());
     else if (arg === '--context') {
       const value = next();
       if (!/^\d+$/u.test(value) || Number(value) > 5) throw new Error('--context must be an integer from 0 to 5');
@@ -140,9 +143,11 @@ function main() {
   );
   const dossier = buildEditorialReviewDossier(opts.book, opts.chapter, { context: opts.context });
   writeJsonAtomic(out, dossier);
+  if (opts.decisionSeedOut) writeJsonAtomic(opts.decisionSeedOut, dossier.decisionSeed);
   console.log(
     `${path.relative(REPO_ROOT, out)}: ${dossier.items.length} proposal(s), ` +
-    `context radius ${opts.context}`,
+    `context radius ${opts.context}` +
+    (opts.decisionSeedOut ? `; decision seed ${path.relative(REPO_ROOT, opts.decisionSeedOut)}` : ''),
   );
 }
 

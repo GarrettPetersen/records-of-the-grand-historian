@@ -143,7 +143,7 @@ if (adaptiveWorker.scope.start !== 1 || adaptiveWorker.scope.end !== 2 || adapti
   throw new Error('Explicit adaptive worker scope was not preserved');
 }
 
-const parts = chunks.map((chunk) => {
+const parts = adaptive.map((chunk) => {
   const extraction = compactPart(chunk);
   validateCompactPeopleExtraction(extraction, buildPeopleChunkPacket(packet, chunk));
   return { chunk, extraction };
@@ -154,7 +154,7 @@ const assembled = assembleCompactPeopleChunks(packet, parts, {
   agentId: null,
   runId: null,
   completedAt: '2026-08-10T00:00:00.000Z',
-  chunks: chunks.map((chunk) => ({
+  chunks: adaptive.map((chunk) => ({
     chunkId: chunk.id,
     startOrder: chunk.start,
     endOrderExclusive: chunk.end,
@@ -168,7 +168,7 @@ const validated = validateCompactPeopleExtraction(assembled, packet);
 if (validated.stats.people !== 5 || assembled.people.at(-1)[0] !== 'p005') {
   throw new Error('Chunk assembly did not rebase all local people contiguously');
 }
-if (assembled.people[2][4].r[0] !== 'p004' || assembled.claims[1][2].person !== 'p004') {
+if (assembled.people[2][4].r[0] !== 'p004' || assembled.claims[0][2].person !== 'p004') {
   throw new Error('Chunk assembly did not rebase nested local-person references');
 }
 console.log('people extraction chunk self-test: ok (3 chunks, 5 people, complete candidate coverage)');

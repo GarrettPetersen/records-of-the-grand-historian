@@ -4,14 +4,47 @@ Resolve chapter-local person records that may represent the same historical
 individual. Work only from the supplied dossier. Do not browse, reread chapter
 files, edit extractions, or infer unsupported facts from general knowledge.
 
+This is a bounded artifact task, not an open-ended research session. Read the
+schema and dossier once, process the supplied blocks in order once, write the
+document, and publish it. Do not narrate a plan, repeatedly reconsider earlier
+blocks, search the repository, or spend time trying to force a decision for an
+ambiguous block. When evidence is insufficient, emit a concise
+`possible-same-as` decision or omit that block and continue immediately.
+
 The dossier contains unresolved name blocks, concise source-derived records,
 current canonical groups, and prior keep-separate constraints. A local person
 ID is evidence from one chapter; merging IDs says those records identify one
 person. A false merge is much worse than a temporary duplicate.
 
-Write one resolution document matching
-`data/people/schema/resolution.schema.json`. Preserve the supplied `batch`
-exactly. Emit only decisions supported by the dossier:
+If the dossier has `projection.mode` set to
+`canonical-group-representatives`, every visible local ID stands for its
+complete already-merged canonical group in the host's full dossier. Compare
+and decide between those representatives; do not search for the hidden group
+members. The host applies and validates the result against the full groups.
+
+Write one resolution document using exactly this self-contained shape. Do not
+open the repository schema or search for examples; basis codes are concise
+free-form strings such as `same-Chinese-name`, `compatible-dates`,
+`different-dates`, or `same-family-context`.
+
+```json
+{
+  "schemaVersion": 1,
+  "batch": "copy outputSeed.batch exactly",
+  "decisions": [
+    {
+      "decision": "merge",
+      "localPeople": ["book:001:p001", "book:002:p001"],
+      "basis": ["same-Chinese-name", "compatible-dates"],
+      "confidence": "high",
+      "notes": ["One concise statement of the decisive dossier evidence."]
+    }
+  ]
+}
+```
+
+`decisions` may be empty. Preserve the supplied `batch` exactly. Emit only
+decisions supported by the dossier:
 
 - `merge`: all listed local people are the same individual. Require agreement
   beyond a short or generic name: compatible dates, polity, offices, family,
@@ -33,5 +66,9 @@ local IDs from those groups when joining groups, but do not emit a no-op merge
 within one current group. Prior separations are binding. Cover high-confidence
 cases first; leave uncertainty explicit instead of guessing. Use concise basis
 codes and notes that state the decisive evidence.
+
+Finish by writing and publishing the requested JSON artifact even when some
+blocks remain unresolved. A conservative partial resolution document is a
+successful result; prolonged deliberation without an artifact is not.
 
 Modify no tracked file. Do not commit, push, run `gh`, or open a pull request.
