@@ -132,6 +132,24 @@ unrelatedAgeFixture.life.ageClaims.push({
   evidence: ['fixture:s0099'],
 });
 assert.equal(personLifeSummary(unrelatedAgeFixture), 'First attested BC 209; died BC 195');
+const legendaryChronologyFixture = {
+  life: {
+    birth: [],
+    death: [],
+    ageClaims: [],
+    attestedActivity: [{ value: { qualitative: 'legendary antiquity' } }],
+  },
+};
+assert.equal(personLifeSummary(legendaryChronologyFixture), 'Legendary antiquity');
+const vagueChronologyFixture = structuredClone(legendaryChronologyFixture);
+vagueChronologyFixture.life.attestedActivity = [];
+assert.equal(personLifeSummary(vagueChronologyFixture), 'Dates uncertain');
+const conflictingChronologyFixture = structuredClone(legendaryChronologyFixture);
+conflictingChronologyFixture.life.attestedActivity.push({ value: { qualitative: 'literary antiquity' } });
+assert.equal(personLifeSummary(conflictingChronologyFixture), 'Dates uncertain');
+const verboseChronologyFixture = structuredClone(legendaryChronologyFixture);
+verboseChronologyFixture.life.attestedActivity[0].value.qualitative = 'x'.repeat(81);
+assert.equal(personLifeSummary(verboseChronologyFixture), 'Dates uncertain');
 assert.equal(
   personPublicDescription({ description: { en: 'Northern Qi prince and commander -- s0179 wrongly identifies his father' } }),
   'Northern Qi prince and commander',

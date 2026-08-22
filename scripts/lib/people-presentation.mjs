@@ -207,6 +207,14 @@ function coherentActivityYears(claims) {
   return densestTemporalCluster(points, ({ point }) => point).flatMap(({ values }) => values);
 }
 
+function qualitativeActivitySummary(person) {
+  const labels = [...new Set((person.life?.attestedActivity ?? [])
+    .map((claim) => String(claim.value?.qualitative ?? '').replace(/\s+/gu, ' ').trim())
+    .filter(Boolean))];
+  if (labels.length !== 1 || labels[0].length > 80) return null;
+  return labels[0].replace(/^./u, (letter) => letter.toLocaleUpperCase('en'));
+}
+
 function medianClaimYear(claims) {
   return median(claims.map(claimRepresentativeYear).filter((year) => year !== null));
 }
@@ -250,6 +258,8 @@ export function personLifeSummary(person) {
   }
   if (active.length === 1) return `Attested ${active[0].label}`;
   if (active.length > 1) return `Attested ${active[0].label} - ${active.at(-1).label}`;
+  const qualitative = qualitativeActivitySummary(person);
+  if (qualitative) return qualitative;
   return 'Dates uncertain';
 }
 
