@@ -3,16 +3,16 @@
   "book": "houhanshu",
   "chapter": "094",
   "input": {
-    "chapterFingerprint": "sha256:113f6fbc8e5cf94cee32a591a3d99b20e6cf9db2e6618dc4c544fe3d6f1bbcf5",
-    "proposalsFingerprint": "sha256:c6e5f971fc7581c5b52c182ffd668afdf4b755607c982bcbdfcaf48fdecde37e"
+    "chapterFingerprint": "sha256:58c5f912be82d5d5d59edb4a046e5a6524fee001930e726354e6db89388e055c",
+    "proposalsFingerprint": "sha256:974139c89ab9e3b9dd0bdcf9c7500a4c0b76476804d31375220c91f1ffb37a05"
   },
   "reviewer": {
-    "kind": "cursor-agent",
-    "name": "grok-4.5",
-    "model": "grok-4.5",
-    "agentId": "bc-19b5c62f-6a44-4994-87a9-6b97b9bf56a9",
-    "runId": "run-45aa5b0e-dbcc-4044-ad04-d400d90ac94f",
-    "completedAt": "2026-08-14T05:20:22.316Z"
+    "kind": "codex",
+    "name": "Codex source reviews",
+    "model": null,
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-23T09:00:28.000Z"
   },
   "proposals": [
     {
@@ -134,6 +134,96 @@
       "after": "He was Ma Rong's and Su Zhang's contemporary; though Ma won fame for breadth and Su for honesty, both deferred to Shen as their senior.",
       "reason": "推先于慎 means they ranked Shen ahead/senior, not that they bowed to him as their moral 'better'.",
       "confidence": "medium"
+    },
+    {
+      "id": "houhanshu:094:r0009",
+      "unit": {
+        "id": "s0101",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Under Guangwu both men were summoned; neither appeared.",
+      "after": "During the Jianwu era, all three men were summoned, but none appeared.",
+      "reason": "并 refers back to Zhou Dang, Tan Xian, and Yin Mo in the preceding sentence. The draft wrongly counts only two and substitutes the emperor's title for the dated Jianwu era.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:094:r0010",
+      "unit": {
+        "id": "s0101",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "In the Jianwu era they were summoned, yet neither came.",
+      "after": "During the Jianwu era, all three were summoned, but none came.",
+      "reason": "The preceding sentence names three men, so 'neither' is the wrong number for 并不到.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:094:r0011",
+      "unit": {
+        "id": "s0108",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "Minister Hou Ba offered him the higher seat.",
+      "after": "Minister of Education Hou Ba offered to yield his office to Wang Ba.",
+      "reason": "让位于霸 means Hou Ba offered to yield his own office to Wang Ba; 'the higher seat' is vague and leaves the second Ba unidentified.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:094:r0012",
+      "unit": {
+        "id": "s0108",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "Minister of Education Hou Ba yielded his place to Ba.",
+      "after": "Minister of Education Hou Ba offered to yield his office to Wang Ba.",
+      "reason": "The two men share the given name Ba. Expanding the recipient to Wang Ba prevents a false reference to Hou Ba while preserving the proposal expressed by 让位.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:094:r0013",
+      "unit": {
+        "id": "s0110",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "Hou dropped the idea.",
+      "after": "The matter was consequently dropped.",
+      "reason": "遂止 does not name Hou Ba as the agent; the passive wording preserves the source's deliberately unstated subject after Yan Yang's criticism.",
+      "confidence": "high"
+    },
+    {
+      "id": "houhanshu:094:r0014",
+      "unit": {
+        "id": "s0112",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "Further summons failed; he died at home in old age.",
+      "after": "He was repeatedly summoned but never appeared, and eventually died at an advanced age.",
+      "reason": "The source says Wang Ba was repeatedly summoned and died after a long life; it does not say he died at home.",
+      "confidence": "high"
     }
   ],
   "decisions": [
@@ -223,6 +313,72 @@
         "source": "chapter-text",
         "citation": "s0284",
         "excerpt": "然皆推先于慎"
+      }
+    },
+    {
+      "repairId": "houhanshu:094:r0009",
+      "decision": "accept",
+      "after": null,
+      "reason": "并 refers to all three men named in the preceding sentence, and 建武中 is the Jianwu era rather than a direct title reference to Guangwu.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0101",
+        "excerpt": "党与同郡谭贤伯升、雁门殷谟君长……建武中，征，并不到"
+      }
+    },
+    {
+      "repairId": "houhanshu:094:r0010",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal also must use a plural form appropriate to the three named men.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0101",
+        "excerpt": "建武中，征，并不到"
+      }
+    },
+    {
+      "repairId": "houhanshu:094:r0011",
+      "decision": "revise",
+      "after": "Hou Ba, the Minister of Education, offered to yield his office to Wang Ba.",
+      "reason": "让位于霸 identifies Hou Ba's own office as the position offered and Wang Ba as the recipient; expanding both names prevents confusion.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0108",
+        "excerpt": "司徒侯霸让位于霸"
+      }
+    },
+    {
+      "repairId": "houhanshu:094:r0012",
+      "decision": "revise",
+      "after": "Hou Ba, the Minister of Education, offered to yield his office to Wang Ba.",
+      "reason": "The same two-name clarification is required in the literal field because both men share the given name Ba.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0108",
+        "excerpt": "侯霸让位于霸"
+      }
+    },
+    {
+      "repairId": "houhanshu:094:r0013",
+      "decision": "accept",
+      "after": null,
+      "reason": "遂止 leaves the agent unstated after Yan Yang's criticism, so the draft's claim that Hou personally dropped the idea is too specific.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0110",
+        "excerpt": "阎阳毁之曰……遂止"
+      }
+    },
+    {
+      "repairId": "houhanshu:094:r0014",
+      "decision": "accept",
+      "after": null,
+      "reason": "连征 and 以寿终 support repeated unanswered summons and death at an advanced age, but not the invented claim that Wang Ba died at home.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0112",
+        "excerpt": "连征，不至，以寿终"
       }
     }
   ],
