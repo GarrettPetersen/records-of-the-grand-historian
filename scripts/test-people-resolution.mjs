@@ -67,6 +67,15 @@ function candidatePerson(localId, preferredNameSuggestion, nameKind, alias) {
 }
 
 {
+  const people = new Map([person('a'), person('b')]);
+  const result = resolvePeopleClusters(people, [
+    resolution('deduplicated-separation', [['keep-separate', ['a', 'a', 'b']]], 'curated'),
+  ]);
+  assert.deepEqual(result.clusters.map((cluster) => cluster.localPeople), [['a'], ['b']]);
+  assert.equal(result.keepSeparate.size, 1);
+}
+
+{
   const people = new Map([
     candidatePerson(
       'sui-emperor',

@@ -261,25 +261,26 @@ export function resolvePeopleClusters(localPeople, resolutionDocuments = []) {
   for (const document of resolutionDocuments) {
     const curated = document.authority === 'curated';
     for (const decision of document.decisions) {
-      for (const localId of decision.localPeople) {
+      const decisionLocalPeople = [...new Set(decision.localPeople)];
+      for (const localId of decisionLocalPeople) {
         if (!localPeople.has(localId)) throw new Error(`${document.batch} refers to unknown local person ${localId}`);
       }
       if (decision.decision === 'merge') {
         if (curated) {
-          curatedMerges.push(decision.localPeople);
+          curatedMerges.push(decisionLocalPeople);
         } else {
-          modelMerges.push({ batch: document.batch, localPeople: decision.localPeople });
+          modelMerges.push({ batch: document.batch, localPeople: decisionLocalPeople });
         }
       } else if (['keep-separate', 'split'].includes(decision.decision)) {
         const target = curated ? curatedKeepSeparate : modelKeepSeparate;
-        for (let left = 0; left < decision.localPeople.length; left += 1) {
-          for (let right = left + 1; right < decision.localPeople.length; right += 1) {
-            target.add(pairKey(decision.localPeople[left], decision.localPeople[right]));
+        for (let left = 0; left < decisionLocalPeople.length; left += 1) {
+          for (let right = left + 1; right < decisionLocalPeople.length; right += 1) {
+            target.add(pairKey(decisionLocalPeople[left], decisionLocalPeople[right]));
           }
         }
       }
       if (decision.canonicalPersonId) {
-        for (const localId of decision.localPeople) pins.set(localId, decision.canonicalPersonId);
+        for (const localId of decisionLocalPeople) pins.set(localId, decision.canonicalPersonId);
       }
     }
   }
