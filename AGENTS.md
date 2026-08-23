@@ -36,6 +36,14 @@ The standard translation loop is: `make start-translation BOOK=<book>` → fill 
 - **Finish staging batch:** `npm run finish-translation-staging` closes absorbed chapter PRs, git-merges conflicted heads into `translation-staging`, and squash-merges the open `translation-staging` → `master` batch PR (requires `GITHUB_TOKEN`/`GH_TOKEN`).
 - **Shortest-chapter cloud batch:** `npm run sdk-translate:shortest-batch` (or `--dry-run`) scans `origin/master` for incomplete chapters, skips in-flight via `translation-inflight`, launches the 100 shortest with `SDK_CHAPTER_BATCH_CONCURRENCY` (default 25). Plan: `data/shortest-untranslated-batch-plan.json`; log: `/tmp/sdk-shortest-100.log`.
 - **SDK drain:** `npm run sdk-translate:drain` / `npm run sdk-translate:drain-status`.
+- **People extraction lanes:** `npm run people:extract` and Grok Bot share the atomic
+  ledger on `codex/people-work-queue`. Sync ignored local recovery state with
+  `npm run people:queue:sync-cursor`; inspect it with `npm run people:queue:status`.
+  Grok Bot must claim through `npm run people:grokbot:claim -- --worker <stable-id>`
+  and must not call the Cursor SDK. Its extraction PRs target
+  `codex/people-glossary-staging-v2`. All Grok assignments and all resumable Cursor
+  conversations/chunks are sticky until completed or explicitly released. See
+  `GROKBOT_PEOPLE_LANE.md`.
 - **People extraction budgets and recovery:** `npm run people:extract` limits new workers to 60 owned units, 150 candidates, and a 48 KiB compact packet, with a $5 / five-million-token per-run circuit breaker. A run-limit failure affects only that chunk; it must not stop unrelated chapters. When Cursor allowance is at or below 5%, first run a 5-10 chunk calibration cohort, then size the larger wave from accepted p90 usage. Do not put the circuit breaker inside the observed normal completion range or use high concurrency before measuring the remaining allowance. Complete chapters with saved chunks before opening new chapters. `data/people/generated/chunk-extractions/` and `data/people/generated/extraction-state.json` are ignored but economically valuable recovery state: never delete them during cleanup while chapters are incomplete. Resume with `--retry-failed`; validated chunks and adaptive split plans are reused automatically. Retained Cursor conversations are a standard recovery source: the runner continues every interrupted chat before replacing it with a fresh worker. If a continued chat also crosses a run limit, its ownership range is split while all nonoverlapping saved work is preserved.
 - `jq` is a required system tool for `make validate` and scraping targets — it is pre-installed in the VM.
 - There is no linter, test suite, or TypeScript — the project has `"test": "echo \"Error: no test specified\" && exit 1"` in `package.json`.

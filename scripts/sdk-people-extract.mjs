@@ -3,6 +3,7 @@
 import { Agent, CursorAgentError } from '@cursor/sdk';
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
@@ -61,6 +62,19 @@ import {
   validateCompactPeopleExtraction,
   validatePeopleExtraction,
 } from './validate-people-extraction.mjs';
+import { assertDurableCareerCoverage } from './lib/people-extraction-acceptance.mjs';
+import {
+  DEFAULT_PEOPLE_QUEUE_BASE_REF,
+  DEFAULT_PEOPLE_QUEUE_BRANCH,
+  DEFAULT_PEOPLE_QUEUE_REMOTE,
+  chapterKey as workQueueChapterKey,
+  claimIsActive,
+  claimRemotePeopleTargets,
+  fetchPeopleQueueBase,
+  markRemotePeopleClaims,
+  readRemotePeopleWorkLedger,
+  syncLocalCursorReservations,
+} from './lib/people-work-queue.mjs';
 import {
   invalidateResolutionReferences,
   pruneResolutionDocument,
@@ -74,7 +88,7 @@ loadDotenv(REPO_ROOT);
 
 const DEFAULT_MODEL = 'grok-4.5';
 const DEFAULT_REPO_URL = 'https://github.com/GarrettPetersen/records-of-the-grand-historian';
-const DEFAULT_STARTING_REF = 'codex/people-glossary-staging';
+const DEFAULT_STARTING_REF = 'codex/people-glossary-staging-v2';
 const STATE_FILE = path.join(PEOPLE_DIR, 'generated', 'extraction-state.json');
 const RUN_LOCK_FILE = path.join(PEOPLE_DIR, 'generated', 'extraction-run.lock');
 const DEFAULT_PLAN_FILE = path.join(PEOPLE_DIR, 'generated', 'extraction-plan.json');
@@ -134,6 +148,9 @@ Options:
   --fast               Enable the model's fast variant (default: off).
   --repo URL           Repository used only to verify source and recover older agents.
   --starting-ref REF   Verification/recovery branch (default: ${DEFAULT_STARTING_REF}).
+  --worker-id ID       Stable shared-queue worker ID (default: host-cursor-sdk).
+  --queue-remote NAME  Git remote holding centralized claims (default: ${DEFAULT_PEOPLE_QUEUE_REMOTE}).
+  --queue-branch NAME  Atomic claim ledger branch (default: ${DEFAULT_PEOPLE_QUEUE_BRANCH}).
   --dry-run            Build and summarize packets without calling Cursor.
   --recover-only       Download and validate existing artifacts without starting or
                        continuing any Cursor model turn.
@@ -181,6 +198,10 @@ function parseArgs(argv) {
     fast: false,
     repoUrl: process.env.SDK_PEOPLE_REPO ?? DEFAULT_REPO_URL,
     startingRef: process.env.SDK_PEOPLE_STARTING_REF ?? DEFAULT_STARTING_REF,
+    workerId: process.env.SDK_PEOPLE_WORKER_ID ?? `${os.hostname()}-cursor-sdk`,
+    queueRemote: process.env.PEOPLE_QUEUE_REMOTE ?? DEFAULT_PEOPLE_QUEUE_REMOTE,
+    queueBranch: process.env.PEOPLE_QUEUE_BRANCH ?? DEFAULT_PEOPLE_QUEUE_BRANCH,
+    queueBaseRef: process.env.PEOPLE_QUEUE_BASE_REF ?? DEFAULT_PEOPLE_QUEUE_BASE_REF,
     apiKey: process.env.CURSOR_API_KEY,
     dryRun: false,
     recoverOnly: false,
@@ -224,6 +245,9 @@ function parseArgs(argv) {
     else if (arg === '--fast') opts.fast = true;
     else if (arg === '--repo') opts.repoUrl = next();
     else if (arg === '--starting-ref') opts.startingRef = next();
+    else if (arg === '--worker-id') opts.workerId = next();
+    else if (arg === '--queue-remote') opts.queueRemote = next();
+    else if (arg === '--queue-branch') opts.queueBranch = next();
     else if (arg === '--dry-run') opts.dryRun = true;
     else if (arg === '--recover-only') opts.recoverOnly = true;
     else if (arg === '--force') opts.force = true;
@@ -379,6 +403,14 @@ function recoveryOnlyTarget(target, state) {
   );
   return fs.existsSync(archiveDirectory) &&
     fs.readdirSync(archiveDirectory).some((name) => name.endsWith('.json'));
+}
+
+function availableToCursorLane(target, ledger, workerId, state) {
+  const claim = ledger.claims[workQueueChapterKey(target)];
+  if (!claimIsActive(claim)) return true;
+  if (claim.lane !== 'cursor-sdk') return false;
+  if (claim.worker === workerId) return true;
+  return claim.status === 'resume-required' && recoveryOnlyTarget(target, state);
 }
 
 function compareBookOrder(left, right) {
@@ -1413,17 +1445,17 @@ function chunkLineageMap(planned, priorChunks) {
   return chunksById;
 }
 
-function restoreResumableParentChunks(target, packet, planned, prior, opts) {
+function restoreResumableParentChunks(
+  target,
+  packet,
+  planned,
+  prior,
+  opts,
+  parentArchiveIsValid = currentChunkArchiveIsValid,
+) {
   if (!prior?.chunks) return planned;
   let restored = planned;
   for (const [parentId, parentState] of Object.entries(prior.chunks)) {
-    if (
-      parentState?.status !== 'split' ||
-      !parentState.agentId ||
-      parentState.resumeExhausted ||
-      !chunkHitRunLimit(parentState)
-    ) continue;
-
     const chunksById = chunkLineageMap(restored, prior.chunks);
     const descendantIndexes = [];
     for (let index = 0; index < restored.length; index += 1) {
@@ -1451,13 +1483,22 @@ function restoreResumableParentChunks(target, packet, planned, prior, opts) {
       start: restored[firstIndex].start,
       end: restored[lastIndex].end,
     };
+    const recoveredArchive = parentArchiveIsValid(target, packet, parent);
+    const resumableConversation =
+      parentState?.status === 'split' &&
+      parentState.agentId &&
+      !parentState.resumeExhausted &&
+      chunkHitRunLimit(parentState);
+    if (!recoveredArchive && !resumableConversation) continue;
     restored = normalizePeopleExtractionChunkPlan(packet, [
       ...restored.slice(0, firstIndex),
       parent,
       ...restored.slice(lastIndex + 1),
     ], { contextUnits: opts.chunkContextUnits });
     console.log(
-      `[${stateKey(target)}] restored cancelled parent chunk ${parentId} for agent-conversation recovery`,
+      recoveredArchive
+        ? `[${stateKey(target)}] restored validated parent chunk ${parentId} over obsolete child ranges`
+        : `[${stateKey(target)}] restored cancelled parent chunk ${parentId} for agent-conversation recovery`,
     );
   }
   return restored;
@@ -1881,8 +1922,10 @@ async function processChunkedTarget(target, packet, opts, state, control, budget
     chunks: parts.map(({ chunk, extraction }) => chunkRunRecord(chunk, extraction)),
   };
   let compact = assembleCompactPeopleChunks(packet, parts, run);
+  let validated = validateCompactPeopleExtraction(compact, packet);
+  assertDurableCareerCoverage(validated.normalized, packet);
   compact = writeAcceptedExtraction(target, compact, packet);
-  const validated = validateCompactPeopleExtraction(compact, packet);
+  validated = validateCompactPeopleExtraction(compact, packet);
   updateState(state, target, {
     status: 'accepted',
     acceptedPath: path.relative(REPO_ROOT, extractionPath(target.book, target.chapter)),
@@ -1902,7 +1945,8 @@ async function processChunkedTarget(target, packet, opts, state, control, budget
 
 function acceptWholeExtraction(target, accepted, state) {
   let compact = compactPeopleExtraction(accepted.extraction, accepted.packet);
-  validateCompactPeopleExtraction(compact, accepted.packet);
+  const initial = validateCompactPeopleExtraction(compact, accepted.packet);
+  assertDurableCareerCoverage(initial.normalized, accepted.packet);
   const rawArchive = path.join(
     PEOPLE_DIR,
     'generated',
@@ -2023,6 +2067,35 @@ async function processTarget(target, opts, state, control, budget) {
 }
 
 async function selfTest() {
+  const careerPacket = {
+    units: Array.from({ length: 10 }, (_, index) => ({
+      id: `s${String(index + 1).padStart(4, '0')}`,
+      en: 'Alice was appointed governor.',
+      literal: 'Alice was appointed governor.',
+    })),
+  };
+  const sparseCareerExtraction = {
+    run: { promptVersion: 7 },
+    coverage: { allDurableFactsCaptured: true },
+    claims: [{ predicate: 'office', evidence: ['fixture:001:s0001'] }],
+  };
+  let sparseCareerRejected = false;
+  try {
+    assertDurableCareerCoverage(sparseCareerExtraction, careerPacket);
+  } catch (error) {
+    sparseCareerRejected = /not credible/u.test(error.message);
+  }
+  if (!sparseCareerRejected) {
+    throw new Error('Catastrophically sparse career claims were accepted as complete');
+  }
+  assertDurableCareerCoverage({
+    ...sparseCareerExtraction,
+    claims: [
+      { predicate: 'office', evidence: ['fixture:001:s0001'] },
+      { predicate: 'office', evidence: ['fixture:001:s0002'] },
+    ],
+  }, careerPacket);
+
   const appliedRepair = {
     id: 'fixture:001:r0001',
     unit: { id: 's0001' },
@@ -2095,6 +2168,27 @@ async function selfTest() {
   ) {
     throw new Error('Canceled parent chunk was not restored for retained-agent recovery');
   }
+  const recoveredParentPlan = restoreResumableParentChunks(
+    { book: 'fixture', chapter: '003' },
+    recoveryPacket,
+    recoveryPlan,
+    {
+      chunks: {
+        ...recoveryPrior.chunks,
+        '001': { ...recoveryPrior.chunks['001'], status: 'accepted' },
+      },
+    },
+    { chunkContextUnits: 0 },
+    (_target, _packet, chunk) => chunk.id === '001',
+  );
+  if (
+    recoveredParentPlan.length !== 2 ||
+    recoveredParentPlan[0].id !== '001' ||
+    recoveredParentPlan[0].start !== 0 ||
+    recoveredParentPlan[0].end !== 2
+  ) {
+    throw new Error('Validated recovered parent chunk did not supersede obsolete child ranges');
+  }
   const acceptedChildPlan = restoreResumableParentChunks(
     { book: 'fixture', chapter: '003' },
     recoveryPacket,
@@ -2106,6 +2200,7 @@ async function selfTest() {
       },
     },
     { chunkContextUnits: 0 },
+    (_target, _packet, chunk) => chunk.id === '001',
   );
   if (acceptedChildPlan.length !== 3 || acceptedChildPlan[0].id !== '001a') {
     throw new Error('Retained-agent recovery replaced an already accepted child chunk');
@@ -2508,12 +2603,57 @@ async function main() {
     const state = loadState();
     if (!opts.dryRun) recoverInterruptedState(state);
     opts.properNounMatcher = loadProperNounMatcher();
+    const sharedQueueOptions = {
+      remote: opts.queueRemote,
+      branch: opts.queueBranch,
+      baseRef: opts.queueBaseRef,
+    };
+    fetchPeopleQueueBase(sharedQueueOptions);
+    if (!opts.dryRun) {
+      const synced = syncLocalCursorReservations({
+        ...sharedQueueOptions,
+        worker: opts.workerId,
+      });
+      console.log(
+        `Shared queue synchronized: recovery=${synced.result.recovery.length}, ` +
+        `local-ready=${synced.result.ready.length}, merged-pruned=${synced.result.merged.length}`,
+      );
+    }
+    const workLedger = readRemotePeopleWorkLedger(sharedQueueOptions);
     const allTargets = chapterTargets(opts);
+    const laneTargets = allTargets.filter((target) =>
+      availableToCursorLane(target, workLedger, opts.workerId, state)
+    );
     const rawTargets = opts.recoverOnly
-      ? allTargets.filter((target) => recoveryOnlyTarget(target, state))
-      : allTargets;
+      ? laneTargets.filter((target) => recoveryOnlyTarget(target, state))
+      : laneTargets;
+    if (opts.chapter && rawTargets.length === 0) {
+      const claim = workLedger.claims[workQueueChapterKey({ book: opts.book, chapter: opts.chapter })];
+      throw new Error(
+        `${opts.book}/${opts.chapter} is reserved by ${claim?.lane ?? 'another lane'}/` +
+        `${claim?.worker ?? 'unknown worker'} (${claim?.status ?? 'active'})`,
+      );
+    }
     const queue = prepareTargetQueue(rawTargets, opts, state, opts.properNounMatcher);
-    const targets = queue.selected;
+    let targets = queue.selected;
+    let claimedTargets = [];
+    if (!opts.dryRun && !opts.recoverOnly && targets.length > 0) {
+      const reserved = claimRemotePeopleTargets(targets, {
+        ...sharedQueueOptions,
+        lane: 'cursor-sdk',
+        worker: opts.workerId,
+        limit: targets.length,
+      });
+      const claimedKeys = new Set(reserved.result.claimed.map(workQueueChapterKey));
+      claimedTargets = targets.filter((target) => claimedKeys.has(workQueueChapterKey(target)));
+      if (claimedTargets.length !== targets.length) {
+        console.warn(
+          `Shared queue race: reserved ${claimedTargets.length}/${targets.length}; ` +
+          'chapters claimed by the other lane were removed before inference.',
+        );
+      }
+      targets = claimedTargets;
+    }
     const planPath = path.relative(REPO_ROOT, opts.planOut);
     console.log(
       `Queue plan ${planPath}: selected=${targets.length}, waiting=${queue.waiting.length}, ` +
@@ -2535,7 +2675,7 @@ async function main() {
       `per-run raw ceiling=${opts.maxRunCostCents === null ? 'unlimited' : `$${(opts.maxRunCostCents / 100).toFixed(2)}`}; ` +
       `per-run token ceiling=${opts.maxRunTokens === null ? 'unlimited' : opts.maxRunTokens.toLocaleString('en-US')}; ` +
       `${opts.recoverOnly ? 'artifact recovery only; ' : ''}` +
-      'fresh workers=sealed packet-only; no worker git pushes',
+      `shared worker=${opts.workerId}; fresh workers=sealed packet-only; no worker git pushes`,
     );
     if (!opts.dryRun && targets.length > 0) fetchStartingRef(opts.startingRef);
 
@@ -2562,7 +2702,7 @@ async function main() {
           break;
         }
         const target = targets[nextIndex++];
-        results.push(await processTarget(target, opts, state, control, budget));
+        results.push({ target, outcome: await processTarget(target, opts, state, control, budget) });
       }
     });
     try {
@@ -2572,7 +2712,48 @@ async function main() {
     }
 
     const counts = new Map();
-    for (const result of results) counts.set(result.status, (counts.get(result.status) ?? 0) + 1);
+    for (const { outcome } of results) {
+      counts.set(outcome.status, (counts.get(outcome.status) ?? 0) + 1);
+    }
+    if (!opts.dryRun && claimedTargets.length > 0) {
+      const ready = results
+        .filter(({ outcome }) => ['accepted', 'skipped'].includes(outcome.status))
+        .map(({ target }) => target);
+      const resumable = results
+        .filter(({ outcome, target }) =>
+          !['accepted', 'skipped'].includes(outcome.status) && recoveryOnlyTarget(target, state)
+        )
+        .map(({ target }) => target);
+      const failed = results
+        .filter(({ outcome, target }) =>
+          !['accepted', 'skipped'].includes(outcome.status) && !recoveryOnlyTarget(target, state)
+        )
+        .map(({ target }) => target);
+      if (ready.length) {
+        markRemotePeopleClaims(ready, 'ready', {
+          ...sharedQueueOptions,
+          lane: 'cursor-sdk',
+          worker: opts.workerId,
+          note: 'Validated extraction exists locally and awaits a deliberate checkpoint push',
+        });
+      }
+      if (resumable.length) {
+        markRemotePeopleClaims(resumable, 'resume-required', {
+          ...sharedQueueOptions,
+          lane: 'cursor-sdk',
+          worker: opts.workerId,
+          note: 'Retained Cursor conversation, adaptive plan, or accepted chunk must be recovered first',
+        });
+      }
+      if (failed.length) {
+        markRemotePeopleClaims(failed, 'failed', {
+          ...sharedQueueOptions,
+          lane: 'cursor-sdk',
+          worker: opts.workerId,
+          note: 'Manual inspection or explicit release is required before reassignment',
+        });
+      }
+    }
     console.log(`Finished: ${[...counts].map(([status, count]) => `${status}=${count}`).join(', ') || 'no targets'}`);
     console.log(
       `Raw usage cost this invocation: $${(budget.rawCostCents / 100).toFixed(2)}; ` +
