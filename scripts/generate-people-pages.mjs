@@ -529,7 +529,11 @@ function renderFamilyEvidence(assertions) {
 function familyTreeData(person, peopleById) {
   const chartRelations = new Set(['parent-of', 'child-of', 'spouse-of']);
   const directRelationships = uniqueFamilyRelationships(person)
-    .filter((claim) => chartRelations.has(claim.value.relation) && peopleById.has(claim.value.personId))
+    .filter((claim) =>
+      !claim.value.negated &&
+      chartRelations.has(claim.value.relation) &&
+      peopleById.has(claim.value.personId)
+    )
     .sort((left, right) => {
       const leftPerson = peopleById.get(left.value.personId);
       const rightPerson = peopleById.get(right.value.personId);

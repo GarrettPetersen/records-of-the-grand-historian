@@ -146,6 +146,8 @@ export function verifyPeopleSite(options = parseArgs([])) {
       }
       const uniqueFamily = new Set();
       let chartExpected = false;
+      const positiveChartTargets = new Set();
+      const negatedChartTargets = new Set();
       for (const relationship of person.familyRelationships) {
         const target = peopleById.get(relationship.value.personId);
         const key = `${relationship.value.relation}:${relationship.value.personId}`;
@@ -154,11 +156,25 @@ export function verifyPeopleSite(options = parseArgs([])) {
         assert(Boolean(target), `${slug} has a family link to an unknown person`, errors);
         if (target) assert(html.includes(`href="${target.slug}.html"`),
           `${slug} does not link to family target ${target.slug}`, errors);
-        if (['parent-of', 'child-of', 'spouse-of'].includes(relationship.value.relation)) chartExpected = true;
+        if (['parent-of', 'child-of', 'spouse-of'].includes(relationship.value.relation)) {
+          if (relationship.value.negated) negatedChartTargets.add(relationship.value.personId);
+          else {
+            chartExpected = true;
+            positiveChartTargets.add(relationship.value.personId);
+          }
+        }
       }
       if (chartExpected) {
         assert(html.includes('id="person-family-chart"'), `${slug} omits its family chart`, errors);
         assert(html.includes('../people-family.js'), `${slug} omits the family-chart runtime`, errors);
+      }
+      const treeJson = html
+        .match(/<script id="person-family-data" type="application\/json">([\s\S]*?)<\/script>/u)?.[1];
+      const treeIds = new Set(treeJson ? JSON.parse(treeJson).map((record) => record.id) : []);
+      for (const targetId of negatedChartTargets) {
+        if (!positiveChartTargets.has(targetId)) {
+          assert(!treeIds.has(targetId), `${slug} renders a negated family relationship in its chart`, errors);
+        }
       }
     }
   }
