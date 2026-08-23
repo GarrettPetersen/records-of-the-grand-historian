@@ -107,6 +107,22 @@ function requireOrderedIds(items, prefix, digits, label, errors, idKey = 'id') {
   }
 }
 
+function requireIncreasingIds(items, prefix, digits, label, errors, idKey = 'id') {
+  let previous = 0;
+  const suffixPattern = new RegExp(`^[0-9]{${digits}}$`, 'u');
+  for (const [index, item] of items.entries()) {
+    const id = item[idKey];
+    const suffix = typeof id === 'string' && id.startsWith(prefix) ? id.slice(prefix.length) : '';
+    if (!suffixPattern.test(suffix) || Number(suffix) < 1) {
+      errors.push(`${label} ${index + 1} must have an ID matching ${prefix}${'0'.repeat(digits - 1)}1, found ${id}`);
+      continue;
+    }
+    const number = Number(suffix);
+    if (number <= previous) errors.push(`${label} IDs must be in strictly increasing order, found ${id} after ${prefix}${String(previous).padStart(digits, '0')}`);
+    previous = number;
+  }
+}
+
 function canonicalJson(value) {
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
   if (value && typeof value === 'object') {
@@ -370,7 +386,9 @@ export function validatePeopleExtraction(extraction, packet) {
   uniqueIds(normalized.claims, 'claim', errors);
   normalized.claims = normalizeClaims(normalized.claims, namespace);
   uniqueIds(normalized.translationRepairs, 'translation repair', errors);
-  requireOrderedIds(normalized.people, `${namespace}:p`, 3, 'local person', errors, 'localId');
+  // Person IDs remain stable after editorial deletion, so gaps are valid. Other
+  // generated record IDs are rebuilt from array order and remain gapless.
+  requireIncreasingIds(normalized.people, `${namespace}:p`, 3, 'local person', errors, 'localId');
   requireOrderedIds(normalized.mentions, `${namespace}:m`, 4, 'mention', errors);
   requireOrderedIds(normalized.claims, `${namespace}:c`, 4, 'claim', errors);
   requireOrderedIds(normalized.translationRepairs, `${namespace}:r`, 4, 'translation repair', errors);
@@ -742,6 +760,27 @@ function validateFile(file, opts) {
 }
 
 function selfTest() {
+  const sparsePersonIdErrors = [];
+  requireIncreasingIds(
+    [{ localId: 'testbook:001:p001' }, { localId: 'testbook:001:p003' }],
+    'testbook:001:p',
+    3,
+    'local person',
+    sparsePersonIdErrors,
+    'localId',
+  );
+  if (sparsePersonIdErrors.length > 0) throw new Error('Sparse stable person IDs were rejected');
+  const unorderedPersonIdErrors = [];
+  requireIncreasingIds(
+    [{ localId: 'testbook:001:p003' }, { localId: 'testbook:001:p001' }],
+    'testbook:001:p',
+    3,
+    'local person',
+    unorderedPersonIdErrors,
+    'localId',
+  );
+  if (unorderedPersonIdErrors.length === 0) throw new Error('Unordered person IDs unexpectedly passed');
+
   const input = {
     unitCount: 1,
     chapterFingerprint: `sha256:${'1'.repeat(64)}`,
