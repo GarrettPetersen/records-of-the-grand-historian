@@ -3,16 +3,16 @@
   "book": "hanshu",
   "chapter": "098",
   "input": {
-    "chapterFingerprint": "sha256:edb8ce549cbeebf85b113ef929adb51a5b16547023b0530299a1a5be50487c3e",
-    "proposalsFingerprint": "sha256:28470841eb4b67de02ae8b1e0bc3be029d32a73347c70abb3843d48260c28046"
+    "chapterFingerprint": "sha256:8467846fc0f0331656d8599d00d42acbc1a31c1ad556e5e26f6ad9b9a7e87727",
+    "proposalsFingerprint": "sha256:485c5c0a217ed15f4f23b92a4d0a62f9b1b2a24af4e54762196260bb8e18491d"
   },
   "reviewer": {
-    "kind": "cursor-agent",
-    "name": "grok-4.5",
-    "model": "grok-4.5",
-    "agentId": "bc-09ecb16d-59a6-44d2-93c8-5ed5e4f30813",
-    "runId": "run-70bb6947-34b8-44b1-8f31-62f16023ffea",
-    "completedAt": "2026-08-12T19:59:21.986Z"
+    "kind": "codex",
+    "name": "Codex source review",
+    "model": null,
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-23T09:53:55.515Z"
   },
   "proposals": [
     {
@@ -27,7 +27,7 @@
       "field": "idiomatic",
       "before": "You squandered grain to move the gods, you pried with reed stalks for omens; you spurned the spirit's warning— and threw your life into the shallows!",
       "after": "You squandered grain to move the gods, you pried with reed stalks for omens; you spurned Ling Fen's counsel and would not follow— and threw your life into the shallows!",
-      "reason": "Idiomatic omits the named diviner 靈氛 (Ling Fen), paraphrasing only as 'the spirit's warning'.",
+      "reason": "Focus Chinese has 違靈氛而不從: the named diviner Ling Fen and the refusal to follow. Idiomatic 'the spirit's warning' erases that name; the proposed wording restores both 靈氛 and 而不從 without adding unsupported sense.",
       "confidence": "high"
     },
     {
@@ -42,7 +42,7 @@
       "field": "idiomatic",
       "before": "Clear and turbid, high and low notes answer one another like masters tuning a flawless lute.",
       "after": "Clear and turbid, high and low notes answer one another like Kui and Boya tuning a flawless lute.",
-      "reason": "Idiomatic replaces the named musicians 夔 and 牙 with generic 'masters'.",
+      "reason": "Chinese 若夔、牙之調琴 names the musicians Kui and Ya (Boya). Replacing generic 'masters' with those names corrects a real omission; the rest of the idiomatic line is unchanged.",
       "confidence": "high"
     },
     {
@@ -57,7 +57,7 @@
       "field": "idiomatic",
       "before": "The ancient master-builders lay down their tools; the surveyor drops his cord and square.",
       "after": "Ban and Chui cast aside their adze and chisel; Wang Er casts aside his hook and line.",
-      "reason": "Idiomatic drops the personal names 般, 倕, and 王爾 present in the Chinese.",
+      "reason": "Chinese names 般、倕 and 王爾 with their tools 剞厥 and 鉤繩. The idiomatic generics drop those persons; Ban, Chui, and Wang Er with adze, chisel, hook, and line match the source.",
       "confidence": "high"
     },
     {
@@ -72,7 +72,7 @@
       "field": "idiomatic",
       "before": "Xihe guides the day; the groom holds the reins; winds lash; spirits seem to race alongside.",
       "after": "Xihe guides the day; Yanlun holds the reins; winds lash; spirits seem to race alongside.",
-      "reason": "Idiomatic omits the named charioteer 顏倫 (Yanlun), saying only 'the groom'.",
+      "reason": "Chinese pairs 羲和司日 with 顏倫奉輿. Idiomatic 'the groom' erases Yanlun; naming him restores the parallel personal reference without inventing new content.",
       "confidence": "high"
     },
     {
@@ -86,8 +86,23 @@
       },
       "field": "idiomatic",
       "before": "They drift Pengli, gaze toward Shun's land, tally night-shining pearls, split moon-pearls, summon river goddesses, feast the drowned poets' shades.",
-      "after": "They drift Pengli, gaze toward Shun's land, tally night-shining pearls, split moon-pearls, whip Lady Fu of the Luo, and feast Qu Yuan and Peng-Xu.",
-      "reason": "Idiomatic erases the named figures 屈原 and 彭胥 and the action involving 虙妃, replacing them with a vague paraphrase.",
+      "after": "They float across Lake Pengli and gaze toward Youyu; they hammer night-shining crystal, split the wombs of moon-bright pearls, whip Lady Fu of the Luo, and offer a feast to Qu Yuan, Peng Xian, and Wu Zixu.",
+      "reason": "Commentaries identify 彭 as Peng Xian and 胥 as Wu Zixu. The original draft erased the names, while the prior review mistakenly fused the two men as 'Peng-Xu'; the corrected wording restores all three recipients and the concrete poetic actions.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:098:r0006",
+      "unit": {
+        "id": "s0236",
+        "kind": "paragraph-sentence",
+        "blockIndex": 38,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "They float Lake Pengli, sight Youyu, square the wheel of night-gleaming pearls, split the moon-bright pearl's core, whip Lady Fu of the Luo, feast Qu Yuan and Peng and Xu.",
+      "after": "They float on Lake Pengli and gaze toward Youyu; they hammer night-shining crystal, split the wombs of moon-bright pearls, whip Lady Fu of the Luo, and offer a feast to Qu Yuan, Peng Xian, and Wu Zixu.",
+      "reason": "Commentaries identify 彭 as Peng Xian and 胥 as Wu Zixu; the draft's 'Peng and Xu' fails to recover either name, while 'wheel' is not present in 方椎.",
       "confidence": "high"
     }
   ],
@@ -140,11 +155,22 @@
       "repairId": "hanshu:098:r0005",
       "decision": "accept",
       "after": null,
-      "reason": "Chinese has 鞭洛水之虙妃，餉屈原與彭胥: whip Lady Fu of the Luo and feast Qu Yuan and Peng-Xu. Idiomatic 'summon river goddesses' and 'drowned poets' shades' invent paraphrase and drop those names and the whipping; the proposal restores them accurately.",
+      "reason": "Commentaries identify 彭 as Peng Xian and 胥 as Wu Zixu. The original draft erased the names, while the prior review mistakenly fused the two men as 'Peng-Xu'; the corrected wording restores all three recipients and the concrete poetic actions.",
       "sourceWitness": {
         "source": "chapter-text",
         "citation": "s0236",
         "excerpt": "鞭洛水之虙妃，餉屈原與彭胥"
+      }
+    },
+    {
+      "repairId": "hanshu:098:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "Commentaries identify 彭 as Peng Xian and 胥 as Wu Zixu; the draft's 'Peng and Xu' fails to recover either name, while 'wheel' is not present in 方椎.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0236",
+        "excerpt": "浮彭蠡，目有虞，方椎夜光之流離，剖明月之珠胎，鞭洛水之虙妃，餉屈原與彭胥。"
       }
     }
   ],

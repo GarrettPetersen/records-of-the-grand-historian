@@ -3,16 +3,16 @@
   "book": "qingshigao",
   "chapter": "435",
   "input": {
-    "chapterFingerprint": "sha256:88f1d054398168b3bcc2171a93bfbb9cf8328d062770dff3c6886a8353d82a64",
-    "proposalsFingerprint": "sha256:9b467fc4bdb410dfdd1390674ad3a193040a389aa0fb42b43d47adea8eff4de9"
+    "chapterFingerprint": "sha256:9b241752b0a2079d85832a1d5ccf19d990baa8719cec2b221978ccaf3f61bd45",
+    "proposalsFingerprint": "sha256:c6fafd3cbc45a2310abcb2daa21ede0d6420400ff1e57c366fb4cf8cec6a9bb8"
   },
   "reviewer": {
-    "kind": "cursor-agent",
-    "name": "grok-4.5",
-    "model": "grok-4.5",
-    "agentId": "bc-fea528a5-eaf4-4a52-b8df-3365cc42e79d",
-    "runId": "run-2f6a0f4c-0f2b-4b83-adba-9755ede10acf",
-    "completedAt": "2026-08-12T23:58:42.216Z"
+    "kind": "codex",
+    "name": "Codex source review",
+    "model": null,
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-23T09:53:55.515Z"
   },
   "proposals": [
     {
@@ -27,7 +27,7 @@
       "field": "idiomatic",
       "before": "Hart, courtesy name Lubin, was from Belfast in Ireland.",
       "after": "Hart, courtesy name Lubin, was from Belfast in Britain.",
-      "reason": "Chinese states 英國倍爾發司; Ireland is not in the source wording.",
+      "reason": "s0131 reads 英國倍爾發司人; the source places Belfast in Britain (英國) and never names Ireland. Replacing Ireland with Britain restores the Chinese polity label without other change.",
       "confidence": "high"
     },
     {
@@ -42,7 +42,7 @@
       "field": "idiomatic",
       "before": "In 1889, when Tibetan troops raided Bhutan and British forces intervened, Hart sent his brother Commissioner Hart to Tibet to negotiate the boundary with the resident commissioner.",
       "after": "In 1889, when Tibetan troops raided Sikkim and British forces intervened, Hart sent his brother Commissioner Hart to Tibet to negotiate the boundary with the resident commissioner.",
-      "reason": "哲孟雄 is Sikkim, not Bhutan.",
+      "reason": "s0147 has 藏兵寇哲孟雄; 哲孟雄 is Sikkim, not Bhutan (不丹). The proposed idiomatic corrects that place-name error and otherwise preserves the sentence.",
       "confidence": "high"
     },
     {
@@ -57,7 +57,7 @@
       "field": "literal",
       "before": "In the fifteenth year Tibetan troops raided Bhutan; British troops took advantage to intrude; Hart sent his younger brother, Customs Commissioner Hart junior, posthaste to confer with the resident commissioner in Tibet on boundary matters.",
       "after": "In the fifteenth year Tibetan troops raided Sikkim; British troops took advantage to intrude; Hart sent his younger brother, Customs Commissioner Hart junior, posthaste to confer with the resident commissioner in Tibet on boundary matters.",
-      "reason": "哲孟雄 is Sikkim, not Bhutan.",
+      "reason": "The same 哲孟雄 in s0147 must be Sikkim in the literal; Bhutan invents the wrong polity. The proposed replacement fixes only that toponym.",
       "confidence": "high"
     },
     {
@@ -72,7 +72,7 @@
       "field": "idiomatic",
       "before": "After the 1911 revolution he died in office and received generous posthumous honors.",
       "after": "After the 1911 revolution he died of illness and received generous posthumous honors.",
-      "reason": "Chinese is 病卒; he had already resigned earlier, so “in office” invents a false circumstance.",
+      "reason": "s0159 is 辛亥後，病卒，賜優恤; 病卒 means he died of illness. “Died in office” invents a circumstance absent from the Chinese; the proposed wording restores 病卒 accurately.",
       "confidence": "high"
     },
     {
@@ -87,7 +87,22 @@
       "field": "idiomatic",
       "before": "He concluded joint postal regulations with France, Germany, and British India.",
       "after": "He concluded joint postal regulations with France, Germany, and British Natal.",
-      "reason": "英屬那達 refers to Natal, not British India; the literal already preserves Nada/Natal.",
+      "reason": "s0174 names 英屬那達, distinct from 英屬印度 in s0172; 那達 is Natal. British India misreads that toponym, and British Natal matches the Chinese.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:435:r0006",
+      "unit": {
+        "id": "s0008",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "In 1860 the rebels took Songjiang, and Xu recruited several dozen Western soldiers to lead the assault;",
+      "after": "In 1860 the rebels took Songjiang, and Xu ordered Ward to recruit several dozen Western soldiers as the vanguard;",
+      "reason": "煦令募 makes Wu Xu the person who ordered Ward to recruit the Western soldiers; the draft wrongly makes Xu recruit them himself and turns their vanguard role into leading an assault.",
       "confidence": "high"
     }
   ],
@@ -145,6 +160,17 @@
         "source": "chapter-text",
         "citation": "s0174",
         "excerpt": "英屬那達"
+      }
+    },
+    {
+      "repairId": "qingshigao:435:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "煦令募 makes Wu Xu the person who ordered Ward to recruit the Western soldiers; the draft wrongly makes Xu recruit them himself and turns their vanguard role into leading an assault.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0008",
+        "excerpt": "咸豐十年，粵匪陷松江，煦令募西兵數十為前驅；"
       }
     }
   ],

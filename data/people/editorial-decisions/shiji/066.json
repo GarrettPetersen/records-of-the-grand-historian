@@ -3,16 +3,16 @@
   "book": "shiji",
   "chapter": "066",
   "input": {
-    "chapterFingerprint": "sha256:803a0f35f0bc3b49671dd4141c38ae797e5d2fe39c0b000a94c53e1df4fd331c",
-    "proposalsFingerprint": "sha256:1497e38e1aa53292cb959639430c36325b88515340315ca8342808bb5cbe440b"
+    "chapterFingerprint": "sha256:d9302137e9c2f427e0731964749edcbd98031e6beb0c7fd7775d48851a49384f",
+    "proposalsFingerprint": "sha256:b954ccf96a395c7bcacfa7ceb06ae837cb9a044e2b9290035d41178646e1eac8"
   },
   "reviewer": {
-    "kind": "cursor-agent",
-    "name": "grok-4.5",
-    "model": "grok-4.5",
-    "agentId": "bc-d2f2e274-7d45-43a0-a14f-c813b070ef09",
-    "runId": "run-a5bb2159-b1fa-4850-ba1d-030a1c4cb18a",
-    "completedAt": "2026-08-19T23:10:39.232Z"
+    "kind": "codex",
+    "name": "Codex source review",
+    "model": null,
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-23T09:53:55.515Z"
   },
   "proposals": [
     {
@@ -27,7 +27,7 @@
       "field": "literal",
       "before": "The Wu king said: 'Because of your words, I too had my doubts.'",
       "after": "The Wu king said: 'Without your words, I too would have suspected him.'",
-      "reason": "Chinese 微子之言 means 'if it were not for your words' / 'without your words', not 'because of your words'.",
+      "reason": "In 微子之言，吾亦疑之, classical 微 means ‘if it were not for / without,’ not ‘because of’; the before inverts that conditional, while the proposed after correctly renders the counterfactual and 疑之 as suspicion of the person just denounced.",
       "confidence": "high"
     },
     {
@@ -42,7 +42,7 @@
       "field": "literal",
       "before": "Shang having been captured, the envoy captured Wu Zixu.",
       "after": "Shang having been captured, the envoy then tried to capture Wu Zixu.",
-      "reason": "捕 here is attempted seizure; the next sentence shows the envoy dared not advance, matching the idiomatic 'tried to capture'.",
+      "reason": "使者捕伍胥 names the envoy’s attempt to seize Wu Zixu; s0040 shows 使者不敢進 and Wu Zixu’s escape, so a completed ‘captured’ is false and ‘tried to capture’ matches the Chinese sequence.",
       "confidence": "high"
     },
     {
@@ -57,7 +57,292 @@
       "field": "literal",
       "before": "Chu feared Wu again greatly come, then left Ying, moved to Jiao.",
       "after": "Chu feared Wu again greatly come, then left Ying, moved to Ruo.",
-      "reason": "鄀 should be Ruo (or Ruo/Juo), not Jiao; idiomatic already has Ruo.",
+      "reason": "徙於鄀 uses the place-name 鄀, read Ruo; English ‘Jiao’ is a wrong reading of that graph, and replacing it with Ruo corrects the toponym without other semantic change.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:066:r0004",
+      "unit": {
+        "id": "s0058",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "field": "literal",
+      "before": "Wu Zixu having crossed, untied his sword saying: \"This sword worth one hundred jin, give to father.\"",
+      "after": "After Wu Zixu had crossed, he unfastened his sword and said, \"This sword is worth a hundred in gold; I give it to you, elder.\"",
+      "reason": "百金 denotes a value of a hundred in gold, not a weight of one hundred jin; the revision also restores grammatical direct speech.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:066:r0005",
+      "unit": {
+        "id": "s0058",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "field": "idiomatic",
+      "before": "After Wu Zixu crossed, he unfastened his sword and said: 'This sword is worth one hundred jin. I give it to you, elder.'",
+      "after": "After Wu Zixu crossed, he unfastened his sword and said: 'This sword is worth a hundred in gold. I give it to you, elder.'",
+      "reason": "百金 is a monetary value, not one hundred jin; replacing the false unit corrects the offer without otherwise altering the sentence.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:066:r0006",
+      "unit": {
+        "id": "s0059",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 15
+      },
+      "field": "literal",
+      "before": "Father said: \"Chu law, one who gets Wu Zixu granted five myriads shi grain, rank holding jade gui, how just one hundred jin sword!\"",
+      "after": "The elder said, \"Under Chu law, whoever captures Wu Zixu is granted fifty thousand shi of grain and the rank of Holder of the Jade Tablet. Why would I care for a sword worth merely a hundred in gold?\"",
+      "reason": "The draft again mistakes 百金 for one hundred jin and is not grammatical English; the revision preserves the reward, rank, and fisherman's rhetorical contrast.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:066:r0007",
+      "unit": {
+        "id": "s0059",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 15
+      },
+      "field": "idiomatic",
+      "before": "The fisherman said: 'Under Chu law, whoever captures Wu Zixu receives fifty thousand shi of grain and the rank of Holder of the Jade Tablet. Why would I care only for a sword worth one hundred jin?'",
+      "after": "The fisherman said: 'Under Chu law, whoever captures Wu Zixu receives fifty thousand shi of grain and the rank of Holder of the Jade Tablet. Why would I care for a sword worth merely a hundred in gold?'",
+      "reason": "百金 is a monetary value rather than a weight of one hundred jin; the revised question restores the intended contrast.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:066:r0008",
+      "unit": {
+        "id": "s0076",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Helü established, achieved ambitions, summoned Wu Yuan envoy, with him planned state affairs.",
+      "after": "Once Helü had taken the throne and achieved his ambition, he summoned Wu Yun to serve as envoy and planned affairs of state with him.",
+      "reason": "The personal name 員 in 伍員 is read Yún; the revision also makes the literal field grammatical while preserving the appointment and consultation.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:066:r0009",
+      "unit": {
+        "id": "s0076",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Once Helü had taken the throne and achieved his ambition, he summoned Wu Yuan to serve as envoy and planned state affairs with him.",
+      "after": "Once Helü had taken the throne and achieved his ambition, he summoned Wu Yun to serve as envoy and planned affairs of state with him.",
+      "reason": "The personal name 員 in 伍員 is read Yún, not Yuán; Wu Yun is the correct romanization of Wu Zixu's personal name.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:066:r0010",
+      "unit": {
+        "id": "s0110",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "Wu Zixu said: 'Convey my thanks to Shen Baoxu and say: My sun is setting and the road is long, so I am therefore walking inverted and applying things in reverse.'",
+      "after": "Wu Zixu said: 'Offer my apologies to Shen Baoxu and tell him: The sun is setting and the road is long, so I must walk backward and act against the usual order.'",
+      "reason": "為我謝申包胥 asks the messenger to apologize or explain on Zixu's behalf, not to convey thanks; the revision also gives the proverb idiomatic English.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:066:r0011",
+      "unit": {
+        "id": "s0110",
+        "kind": "paragraph-sentence",
+        "blockIndex": 12,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "Wu Zixu said: 'Convey my thanks to Shen Baoxu and tell him: The sun is setting, and the road is long, so I must walk backward and act against the usual order.'",
+      "after": "Wu Zixu said: 'Offer my apologies to Shen Baoxu and tell him: The sun is setting, and the road is long, so I must walk backward and act against the usual order.'",
+      "reason": "謝 here means to apologize or explain through the messenger; 'thanks' reverses the force of Wu Zixu's reply to his old friend.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:066:r0012",
+      "unit": {
+        "id": "s0145",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "Increasingly estranged Wu Zixu strategy.",
+      "after": "He became increasingly estranged from Zixu's counsel.",
+      "reason": "益疏子胥之謀 says the king grew increasingly distant from Zixu's counsel; the draft is ungrammatical and leaves both subject and relation obscure.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:066:r0013",
+      "unit": {
+        "id": "s0145",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "He increasingly estranged Wu Zixu's strategies.",
+      "after": "He became increasingly estranged from Zixu's counsel.",
+      "reason": "The draft is ungrammatical and makes 'strategies' the object of an active verb; 疏 marks the king's growing alienation from Zixu's counsel.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:066:r0014",
+      "unit": {
+        "id": "s0156",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "Wu Zixu, about to depart, told his son: 'I have repeatedly remonstrated with the king, but the king did not use my advice. I now see Wu's perishing.",
+      "after": "As he was about to depart, Wu Zixu told his son: 'I have repeatedly remonstrated with the king, but he has rejected my advice. I can now see that Wu will perish.",
+      "reason": "The draft's 'see Wu's perishing' is unidiomatic; the revision preserves the prediction and improves the repeated reference to the king.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:066:r0015",
+      "unit": {
+        "id": "s0159",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Wu grand steward Pi already with Wu Zixu had enmity, because slandered: \"Wu Zixu character firm violent, little kindness, suspicious treacherous, his resentment fear become deep calamity.",
+      "after": "The Grand Steward Pi of Wu already had a grievance against Zixu and therefore slandered him: \"Zixu is harsh and violent, shows little kindness, and is suspicious and malicious. I fear his resentment will become a grave calamity.",
+      "reason": "The draft is ungrammatical and mistranslates 恐 as though Zixu's resentment itself feared something; Pi is saying that he fears the resentment will become a grave danger.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:066:r0016",
+      "unit": {
+        "id": "s0159",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Wu's Grand Steward Pi, already having enmity with Wu Zixu, therefore slandered: 'Wu Zixu in character is firm and violent, with little kindness, suspicious and treacherous. His resentment fears becoming a deep calamity.",
+      "after": "The Grand Steward Pi of Wu already had a grievance against Zixu and therefore slandered him: 'Zixu is harsh and violent, shows little kindness, and is suspicious and malicious. I fear his resentment will become a grave calamity.",
+      "reason": "The draft assigns fear to the resentment and produces nonsensical English; 恐 introduces Pi's warning about the danger he claims Zixu poses.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:066:r0017",
+      "unit": {
+        "id": "s0160",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Former day king wished attack Qi, Wu Zixu considered not can, king finally attacked had great merit.",
+      "after": "Previously, when the king wished to attack Qi, Zixu said it should not be done; the king ultimately attacked and won a great victory.",
+      "reason": "以為不可 means Zixu judged the campaign inadvisable, not that he thought it impossible; the revision also restores grammatical English.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:066:r0018",
+      "unit": {
+        "id": "s0160",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Previously the king wished to attack Qi. Wu Zixu considered it not possible, but the king finally attacked and had great merit.",
+      "after": "Previously, when the king wished to attack Qi, Zixu said it should not be done; the king ultimately attacked and won a great victory.",
+      "reason": "The draft's 'considered it not possible' is awkward and misstates the remonstrance; 不可 here means the campaign should not be undertaken.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:066:r0019",
+      "unit": {
+        "id": "s0161",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Wu Zixu ashamed his plan strategy not used, then reversed resented.",
+      "after": "Zixu was ashamed that his counsel had not been accepted and therefore became resentful.",
+      "reason": "乃反怨望 means that, according to Pi's accusation, Zixu consequently turned resentful; 'reversed resented' is not meaningful English.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:066:r0020",
+      "unit": {
+        "id": "s0161",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Wu Zixu, ashamed that his plans and strategies were not used, then reversed and resented.",
+      "after": "Zixu was ashamed that his counsel had not been accepted and therefore became resentful.",
+      "reason": "The draft mechanically renders 反 and is ungrammatical; the sentence describes Pi's allegation that Zixu turned resentful.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:066:r0021",
+      "unit": {
+        "id": "s0219",
+        "kind": "paragraph-sentence",
+        "blockIndex": 23,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "When Wu Zixu distressed on Jiang above, path begged food, ambition how once moment forgot Ying?",
+      "after": "When Zixu was in distress beside the Jiang, begging for food along the road, could he have forgotten his resolve to reach Ying for even a moment?",
+      "reason": "The draft is ungrammatical; 志豈嘗須臾忘郢 asks whether Zixu's purpose of reaching Ying ever left his mind.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:066:r0022",
+      "unit": {
+        "id": "s0219",
+        "kind": "paragraph-sentence",
+        "blockIndex": 23,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "When Wu Zixu was trapped on the Jiang and begging for food along the road, could his purpose have forgotten Ying for even a moment?",
+      "after": "When Zixu was in distress beside the Jiang, begging for food along the road, could he have forgotten his resolve to reach Ying for even a moment?",
+      "reason": "The draft incorrectly gives 'purpose' the act of forgetting; the rhetorical question concerns whether Zixu himself ever forgot his objective.",
       "confidence": "high"
     }
   ],
@@ -93,6 +378,215 @@
         "source": "chapter-text",
         "citation": "s0124",
         "excerpt": "徙於鄀"
+      }
+    },
+    {
+      "repairId": "shiji:066:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "百金 denotes a value of a hundred in gold, not a weight of one hundred jin; the revision also restores grammatical direct speech.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0058",
+        "excerpt": "伍胥既渡，解其劍曰：「此劍直百金，以與父。」"
+      }
+    },
+    {
+      "repairId": "shiji:066:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "百金 is a monetary value, not one hundred jin; replacing the false unit corrects the offer without otherwise altering the sentence.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0058",
+        "excerpt": "伍胥既渡，解其劍曰：「此劍直百金，以與父。」"
+      }
+    },
+    {
+      "repairId": "shiji:066:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "The draft again mistakes 百金 for one hundred jin and is not grammatical English; the revision preserves the reward, rank, and fisherman's rhetorical contrast.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0059",
+        "excerpt": "父曰：「楚國之法，得伍胥者賜粟五萬石，爵執珪，豈徒百金劍邪！」"
+      }
+    },
+    {
+      "repairId": "shiji:066:r0007",
+      "decision": "accept",
+      "after": null,
+      "reason": "百金 is a monetary value rather than a weight of one hundred jin; the revised question restores the intended contrast.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0059",
+        "excerpt": "父曰：「楚國之法，得伍胥者賜粟五萬石，爵執珪，豈徒百金劍邪！」"
+      }
+    },
+    {
+      "repairId": "shiji:066:r0008",
+      "decision": "accept",
+      "after": null,
+      "reason": "The personal name 員 in 伍員 is read Yún; the revision also makes the literal field grammatical while preserving the appointment and consultation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0076",
+        "excerpt": "闔廬既立，得志，乃召伍員以為行人，而與謀國事。"
+      }
+    },
+    {
+      "repairId": "shiji:066:r0009",
+      "decision": "accept",
+      "after": null,
+      "reason": "The personal name 員 in 伍員 is read Yún, not Yuán; Wu Yun is the correct romanization of Wu Zixu's personal name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0076",
+        "excerpt": "闔廬既立，得志，乃召伍員以為行人，而與謀國事。"
+      }
+    },
+    {
+      "repairId": "shiji:066:r0010",
+      "decision": "accept",
+      "after": null,
+      "reason": "為我謝申包胥 asks the messenger to apologize or explain on Zixu's behalf, not to convey thanks; the revision also gives the proverb idiomatic English.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0110",
+        "excerpt": "伍子胥曰：「為我謝申包胥曰，吾日莫途遠，吾故倒行而逆施之。」"
+      }
+    },
+    {
+      "repairId": "shiji:066:r0011",
+      "decision": "accept",
+      "after": null,
+      "reason": "謝 here means to apologize or explain through the messenger; 'thanks' reverses the force of Wu Zixu's reply to his old friend.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0110",
+        "excerpt": "伍子胥曰：「為我謝申包胥曰，吾日莫途遠，吾故倒行而逆施之。」"
+      }
+    },
+    {
+      "repairId": "shiji:066:r0012",
+      "decision": "accept",
+      "after": null,
+      "reason": "益疏子胥之謀 says the king grew increasingly distant from Zixu's counsel; the draft is ungrammatical and leaves both subject and relation obscure.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0145",
+        "excerpt": "益疏子胥之謀。"
+      }
+    },
+    {
+      "repairId": "shiji:066:r0013",
+      "decision": "accept",
+      "after": null,
+      "reason": "The draft is ungrammatical and makes 'strategies' the object of an active verb; 疏 marks the king's growing alienation from Zixu's counsel.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0145",
+        "excerpt": "益疏子胥之謀。"
+      }
+    },
+    {
+      "repairId": "shiji:066:r0014",
+      "decision": "accept",
+      "after": null,
+      "reason": "The draft's 'see Wu's perishing' is unidiomatic; the revision preserves the prediction and improves the repeated reference to the king.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0156",
+        "excerpt": "子胥臨行，謂其子曰：「吾數諫王，王不用，吾今見吳之亡矣。"
+      }
+    },
+    {
+      "repairId": "shiji:066:r0015",
+      "decision": "accept",
+      "after": null,
+      "reason": "The draft is ungrammatical and mistranslates 恐 as though Zixu's resentment itself feared something; Pi is saying that he fears the resentment will become a grave danger.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0159",
+        "excerpt": "吳太宰嚭既與子胥有隙，因讒曰：「子胥為人剛暴，少恩，猜賊，其怨望恐為深禍也。"
+      }
+    },
+    {
+      "repairId": "shiji:066:r0016",
+      "decision": "accept",
+      "after": null,
+      "reason": "The draft assigns fear to the resentment and produces nonsensical English; 恐 introduces Pi's warning about the danger he claims Zixu poses.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0159",
+        "excerpt": "吳太宰嚭既與子胥有隙，因讒曰：「子胥為人剛暴，少恩，猜賊，其怨望恐為深禍也。"
+      }
+    },
+    {
+      "repairId": "shiji:066:r0017",
+      "decision": "accept",
+      "after": null,
+      "reason": "以為不可 means Zixu judged the campaign inadvisable, not that he thought it impossible; the revision also restores grammatical English.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0160",
+        "excerpt": "前日王欲伐齊，子胥以為不可，王卒伐之而有大功。"
+      }
+    },
+    {
+      "repairId": "shiji:066:r0018",
+      "decision": "accept",
+      "after": null,
+      "reason": "The draft's 'considered it not possible' is awkward and misstates the remonstrance; 不可 here means the campaign should not be undertaken.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0160",
+        "excerpt": "前日王欲伐齊，子胥以為不可，王卒伐之而有大功。"
+      }
+    },
+    {
+      "repairId": "shiji:066:r0019",
+      "decision": "accept",
+      "after": null,
+      "reason": "乃反怨望 means that, according to Pi's accusation, Zixu consequently turned resentful; 'reversed resented' is not meaningful English.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0161",
+        "excerpt": "子胥恥其計謀不用，乃反怨望。"
+      }
+    },
+    {
+      "repairId": "shiji:066:r0020",
+      "decision": "accept",
+      "after": null,
+      "reason": "The draft mechanically renders 反 and is ungrammatical; the sentence describes Pi's allegation that Zixu turned resentful.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0161",
+        "excerpt": "子胥恥其計謀不用，乃反怨望。"
+      }
+    },
+    {
+      "repairId": "shiji:066:r0021",
+      "decision": "accept",
+      "after": null,
+      "reason": "The draft is ungrammatical; 志豈嘗須臾忘郢 asks whether Zixu's purpose of reaching Ying ever left his mind.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0219",
+        "excerpt": "方子胥窘於江上，道乞食，志豈嘗須臾忘郢邪？"
+      }
+    },
+    {
+      "repairId": "shiji:066:r0022",
+      "decision": "accept",
+      "after": null,
+      "reason": "The draft incorrectly gives 'purpose' the act of forgetting; the rhetorical question concerns whether Zixu himself ever forgot his objective.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0219",
+        "excerpt": "方子胥窘於江上，道乞食，志豈嘗須臾忘郢邪？"
       }
     }
   ],

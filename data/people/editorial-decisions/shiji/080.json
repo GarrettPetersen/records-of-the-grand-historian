@@ -3,16 +3,16 @@
   "book": "shiji",
   "chapter": "080",
   "input": {
-    "chapterFingerprint": "sha256:bf0e04bd254bff15cdd4ec88cf97a80dfa7e2847718ab1d2f1601f107f1049d3",
-    "proposalsFingerprint": "sha256:656d8fbbfa8be121e1d22e68c92e9b239de526550eb0fcbea44f6fa68752ca3b"
+    "chapterFingerprint": "sha256:6e2caed5fddbeecd926c8126726b9e9d25104efe44e5c5ac719584acd5b74e09",
+    "proposalsFingerprint": "sha256:c5cffdff000ec2d297632a333d3ac368f012e1650e4f91c6b66e15fce50f8d55"
   },
   "reviewer": {
-    "kind": "cursor-agent",
-    "name": "grok-4.5",
-    "model": "grok-4.5",
-    "agentId": "bc-364eed4d-1ab7-4634-b29a-db723ed97d2d",
-    "runId": "run-692284ed-8d93-4509-9e5a-4dfd5aa766f7",
-    "completedAt": "2026-08-12T11:14:03.917Z"
+    "kind": "codex",
+    "name": "Codex source review",
+    "model": null,
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-23T09:53:55.515Z"
   },
   "proposals": [
     {
@@ -27,7 +27,7 @@
       "field": "idiomatic",
       "before": "Formerly wuzi Xu's persuasion was listened to by He Lu, and the Wu king went far to Ying;",
       "after": "Formerly Wu Zixu's counsel was heeded by Helü, and the king of Wu pushed as far as Ying;",
-      "reason": "Idiomatic English misspells 伍子胥 as 'wuzi Xu' and 闔閭 as 'He Lu'; use standard Wu Zixu and Helü.",
+      "reason": "Focus unit names 伍子胥 and 闔閭; idiomatic 'wuzi Xu' and 'He Lu' are wrong name forms, while Wu Zixu and Helü restore the standard readings, and 遠跡至郢 is fairly rendered as pushing as far as Ying.",
       "confidence": "high"
     },
     {
@@ -42,7 +42,7 @@
       "field": "idiomatic",
       "before": "Gao Di enfeoffed him as Yue Qing, numbered as Hua Cheng Jun.",
       "after": "Gao Di enfeoffed him at Yueqing and titled him Lord Huacheng.",
-      "reason": "號曰 means 'titled/called', not 'numbered'; 樂卿 is the fief place, not a personal name 'Yue Qing'.",
+      "reason": "封之樂卿 enfeoffs Yue Shu at the place 樂卿, and 號曰華成君 titles him Lord Huacheng; the before wrongly treats 樂卿 as a personal name and mistranslates 號曰 as 'numbered'.",
       "confidence": "high"
     },
     {
@@ -57,7 +57,97 @@
       "field": "idiomatic",
       "before": "Yue Yi thus served as envoy from Wei Zhao Wang to Yan, the Yan king treated him with guest courtesy.",
       "after": "Yue Yi thus served as envoy from King Zhao of Wei to Yan; the king of Yan treated him with guest courtesy.",
-      "reason": "'Wei Zhao Wang' is untranslated romanization; render as King Zhao of Wei for consistency with other royal titles.",
+      "reason": "魏昭王 is King Zhao of Wei; leaving 'Wei Zhao Wang' untranslated is a real title error, and the after matches the chapter's 'King Zhao of Yan' pattern while preserving 使於燕 and guest courtesy.",
+      "confidence": "medium"
+    },
+    {
+      "id": "shiji:080:r0004",
+      "unit": {
+        "id": "s0075",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "Fu Cha not like this, granted leather bag floated river.",
+      "after": "King Fuchai of Wu did otherwise: he had Zixu put in a leather sack and cast into the river.",
+      "reason": "賜之鴟夷而浮之江 refers to Zixu's consignment to a leather sack and the river; the draft is not grammatical English and omits the object.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:080:r0005",
+      "unit": {
+        "id": "s0075",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Fu Cha was not like this, granted him a leather bag and floated him on the river.",
+      "after": "King Fuchai of Wu did otherwise: he had Zixu put in a leather sack and cast into the river.",
+      "reason": "The draft makes the leather sack sound like a gift and leaves the disposal euphemistically vague; the source describes Zixu being put in the sack and cast into the river.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:080:r0006",
+      "unit": {
+        "id": "s0076",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "King Fuchai of Wu did not awaken to the fact that earlier counsel could establish merit, and therefore drowned Zixu without regret;",
+      "after": "The king of Wu failed to understand that Zixu's earlier counsel could have secured his achievement, and so had Zixu cast into the river without regret;",
+      "reason": "沈子胥 refers to consigning Zixu to the river in the preceding clause; 'drowned' incorrectly presents this postmortem disposal as a separate cause of death.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:080:r0007",
+      "unit": {
+        "id": "s0076",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "King Fuchai of Wu failed to understand that earlier counsel could have secured his achievement, and so he drowned Zixu without remorse;",
+      "after": "The king of Wu failed to understand that Zixu's earlier counsel could have secured his achievement, and so had Zixu cast into the river without regret;",
+      "reason": "The fuller Shiji biography records Zixu's forced suicide before his body was put in a leather sack; 'drowned' creates a conflicting death account that the Chinese here does not require.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:080:r0008",
+      "unit": {
+        "id": "s0077",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "Zi Xu not early see lord different capacities, thus came to entering river not dissolving.",
+      "after": "Zixu failed to recognize early enough that his ruler was made of different stuff, and so ended up in the river, his body uncorrupted.",
+      "reason": "The draft is not grammatical English; 主之不同量 contrasts the ruler's measure or character, while 入江而不化 evokes Zixu's body in the river.",
+      "confidence": "medium"
+    },
+    {
+      "id": "shiji:080:r0009",
+      "unit": {
+        "id": "s0077",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Zi Xu did not early see that his lord had different capacities, thus came to entering the river and not dissolving.",
+      "after": "Zixu failed to recognize early enough that his ruler was made of different stuff, and so ended up in the river, his body uncorrupted.",
+      "reason": "The draft is mechanically literal and unreadable; the revision preserves the contrast in character and the traditional image of Zixu's body in the river.",
       "confidence": "medium"
     }
   ],
@@ -93,6 +183,72 @@
         "source": "chapter-text",
         "citation": "s0009",
         "excerpt": "樂毅於是為魏昭王使於燕"
+      }
+    },
+    {
+      "repairId": "shiji:080:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "賜之鴟夷而浮之江 refers to Zixu's consignment to a leather sack and the river; the draft is not grammatical English and omits the object.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "夫差弗是也，賜之鴟夷而浮之江。"
+      }
+    },
+    {
+      "repairId": "shiji:080:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "The draft makes the leather sack sound like a gift and leaves the disposal euphemistically vague; the source describes Zixu being put in the sack and cast into the river.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "夫差弗是也，賜之鴟夷而浮之江。"
+      }
+    },
+    {
+      "repairId": "shiji:080:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "沈子胥 refers to consigning Zixu to the river in the preceding clause; 'drowned' incorrectly presents this postmortem disposal as a separate cause of death.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0076",
+        "excerpt": "吳王不寤先論之可以立功，故沈子胥而不悔；"
+      }
+    },
+    {
+      "repairId": "shiji:080:r0007",
+      "decision": "accept",
+      "after": null,
+      "reason": "The fuller Shiji biography records Zixu's forced suicide before his body was put in a leather sack; 'drowned' creates a conflicting death account that the Chinese here does not require.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0076",
+        "excerpt": "吳王不寤先論之可以立功，故沈子胥而不悔；"
+      }
+    },
+    {
+      "repairId": "shiji:080:r0008",
+      "decision": "accept",
+      "after": null,
+      "reason": "The draft is not grammatical English; 主之不同量 contrasts the ruler's measure or character, while 入江而不化 evokes Zixu's body in the river.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0077",
+        "excerpt": "子胥不蚤見主之不同量，是以至於入江而不化。"
+      }
+    },
+    {
+      "repairId": "shiji:080:r0009",
+      "decision": "accept",
+      "after": null,
+      "reason": "The draft is mechanically literal and unreadable; the revision preserves the contrast in character and the traditional image of Zixu's body in the river.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0077",
+        "excerpt": "子胥不蚤見主之不同量，是以至於入江而不化。"
       }
     }
   ],
