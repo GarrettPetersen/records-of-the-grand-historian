@@ -73,6 +73,16 @@ const duplicateAliasFixture = {
 };
 assert.deepEqual(personAlternateNames(duplicateAliasFixture), ['Anshi (安石)']);
 assert.deepEqual(personPublicAliases(duplicateAliasFixture)[0].claimRefs, ['c01', 'c02']);
+const courtesyNameEndingInZongFixture = {
+  preferredName: { kind: 'personal', en: 'Xiao Daqi', zh: '蕭大器', pinyin: 'Xiāo Dàqì' },
+  names: [
+    { kind: 'courtesy-name', en: 'Renzong', zh: '仁宗', pinyin: 'Rénzōng', claimRefs: ['c01'] },
+  ],
+};
+assert.deepEqual(
+  personPublicAliases(courtesyNameEndingInZongFixture).map((name) => [name.kind, name.en, name.zh]),
+  [['courtesy-name', 'Renzong', '仁宗']],
+);
 const preferredFragmentFixture = {
   preferredName: { kind: 'personal', en: 'Zhao Tuo', zh: '趙佗', pinyin: 'Zhào Tuó' },
   names: [

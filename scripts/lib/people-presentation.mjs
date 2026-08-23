@@ -406,7 +406,9 @@ function rawNameFamily(name) {
 function publicNameFamily(name) {
   const family = rawNameFamily(name);
   const zh = normalizeChineseName(name.zh);
-  if (!['component', 'reference'].includes(family)) {
+  // Repair broad or ambiguous source labels, but preserve explicit semantic
+  // kinds: courtesy names such as 仁宗 are not imperial temple names.
+  if (['personal', 'alternate', 'title'].includes(family)) {
     if (/[\u7956\u5b97]$/u.test(zh)) return 'temple';
     if (/(?:\u7687)?\u5e1d$/u.test(zh) && zh !== '皇帝') return 'posthumous';
   }
