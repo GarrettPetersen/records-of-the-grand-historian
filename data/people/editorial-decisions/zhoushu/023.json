@@ -3,16 +3,16 @@
   "book": "zhoushu",
   "chapter": "023",
   "input": {
-    "chapterFingerprint": "sha256:fd9f6bdfdd134c1a713b8d89cf10e0f3573546937097d86d041be158905cbdca",
-    "proposalsFingerprint": "sha256:7389d7b410ab074021a0b13ffa44e2ecb032f7e58c2bc5786f3b9d8f15a80bb7"
+    "chapterFingerprint": "sha256:201e1fef9b063cb8677c82faebab21470e83af66e231094e48779b406bd17cac",
+    "proposalsFingerprint": "sha256:6814afe7c2f6b1f6f07a620bc3cda6ee370c5b953dd7a7abaf7e8c4b8eb79c64"
   },
   "reviewer": {
-    "kind": "cursor-agent",
-    "name": "grok-4.5",
-    "model": "grok-4.5",
-    "agentId": "bc-6c667d3a-5830-4106-a319-f58685097529",
-    "runId": "run-836bceaf-58a8-4887-9d9d-3f6476083f16",
-    "completedAt": "2026-08-13T21:30:30.908Z"
+    "kind": "codex",
+    "name": "Codex source review",
+    "model": null,
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-23T12:10:00.000Z"
   },
   "proposals": [
     {
@@ -149,6 +149,36 @@
       "after": "Men like the cook, the convict laborer, the planter of virtue, and Guan Zhong in humble obscurity are rarely celebrated in their own time;",
       "reason": "Chinese 庖廚、胥靡、種德、微管 are allusive categories; only 微管 clearly abbreviates Guan Zhong, while Yiyin/Fuyue/Gao Yao are translator expansions.",
       "confidence": "medium"
+    },
+    {
+      "id": "zhoushu:023:r0010",
+      "unit": {
+        "id": "s0164",
+        "kind": "paragraph-sentence",
+        "blockIndex": 20,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Once Lü Wang was a butcher and fisherman, Baili Xi fed cattle, Ning Sheng played horn, and Guan Yiwu was defeated three times—at the time, who among ordinary men would have called them worthy?",
+      "after": "In ancient times Lü Wang butchered and fished, Baili Xi fed cattle, Ning Qi beat time on an ox horn, and Guan Yiwu suffered three defeats. At the time, would ordinary observers have recognized their worth?",
+      "reason": "s0164's 甯生 is the honorific 'Master Ning,' referring to Ning Qi, not a personal name 'Ning Sheng'; 扣角 describes beating time on an ox horn rather than playing a horn, and the revised final question follows 豈謂其賢 more naturally.",
+      "confidence": "high"
+    },
+    {
+      "id": "zhoushu:023:r0011",
+      "unit": {
+        "id": "s0164",
+        "kind": "paragraph-sentence",
+        "blockIndex": 20,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "In old times Lü Wang butchered and fished, Baili Xi fed cattle, Ning Sheng beat horns, and Guan Yiwu was thrice defeated—at that time the drifting masses, how could they have called them worthy?",
+      "after": "In old times Lü Wang butchered and fished, Baili Xi fed cattle, Master Ning beat time on an ox horn, and Guan Yiwu suffered three defeats. At that time, how could the common crowd have called them worthy?",
+      "reason": "甯生 literally uses 生 as an honorific, so 'Master Ning' is appropriate in the literal field; 扣角 is the ox-horn episode and the singular object should be retained.",
+      "confidence": "high"
     }
   ],
   "decisions": [
@@ -249,6 +279,28 @@
         "source": "chapter-text",
         "citation": "s0406",
         "excerpt": "庖廚、胥靡、種德、微管之臣"
+      }
+    },
+    {
+      "repairId": "zhoushu:023:r0010",
+      "decision": "accept",
+      "after": null,
+      "reason": "甯生 is an honorific reference to Ning Qi, not a personal name 'Ning Sheng'; 扣角 is the familiar ox-horn episode and means beating time on the horn, while 豈謂其賢 asks whether observers would have recognized these men as worthy.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0164",
+        "excerpt": "甯生之扣角，管夷吾之三敗"
+      }
+    },
+    {
+      "repairId": "zhoushu:023:r0011",
+      "decision": "accept",
+      "after": null,
+      "reason": "甯生 means Master Ning and identifies Ning Qi; 扣角 is singular and describes beating time on an ox horn, so the existing 'Ning Sheng beat horns' is inaccurate even as a literal rendering.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0164",
+        "excerpt": "甯生之扣角"
       }
     }
   ],

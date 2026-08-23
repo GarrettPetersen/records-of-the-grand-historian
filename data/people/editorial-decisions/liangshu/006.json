@@ -3,16 +3,16 @@
   "book": "liangshu",
   "chapter": "006",
   "input": {
-    "chapterFingerprint": "sha256:9d5d7df33e045eb39391566290f666b6f4e98cff2e708ba1bab04aee1c64e03f",
-    "proposalsFingerprint": "sha256:32077aacc9e3ce9fd6067233914b975795fd586e69b836151778ae41e6eef823"
+    "chapterFingerprint": "sha256:4b737279bf734bfd1e010ae3421b8f97a8f3c125de0a64cf6e228c9347a8f046",
+    "proposalsFingerprint": "sha256:3c180a60bbfad026ab9c18e4a04d119d515723f35bca2c64cf0c54031db544f3"
   },
   "reviewer": {
-    "kind": "cursor-agent",
-    "name": "grok-4.5",
-    "model": "grok-4.5",
-    "agentId": "bc-a51f5fb4-414b-440c-bd15-170023c6925d",
-    "runId": "run-73c45d62-1f51-4d90-813a-1686c41e2f01",
-    "completedAt": "2026-08-14T05:23:38.396Z"
+    "kind": "codex",
+    "name": "Codex source review",
+    "model": null,
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-23T10:18:26.000Z"
   },
   "proposals": [
     {
@@ -329,6 +329,36 @@
       "after": "He said Zhou could be punished; allies assembled unlooked-for; he leapt like a dragon at Fan and Han and struck like lightning at Xiang and Ying; cutting down those of alienated virtue was like shaking dry stalks; taking the lone tyrant was like picking up what was lost.",
       "reason": "剪離德 means cutting down the alienated-in-virtue (the disloyal), not a person named Li; the idiomatic rendering invents a false personal name.",
       "confidence": "high"
+    },
+    {
+      "id": "liangshu:006:r0022",
+      "unit": {
+        "id": "s0177",
+        "kind": "paragraph-sentence",
+        "blockIndex": 32,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Emperor Jing met with an unpropitious house and inherited this time of hardship; campaigns issued from elsewhere and government and punishment were not in his own hands; at the time there were no Yi and Huo to assist him—how could he not yield the throne high?\"",
+      "after": "Emperor Jing encountered disaster in his ruling house and inherited these troubled times. Military campaigns were directed by others, and neither government nor punishment lay in his own hands. With no Yi Yin or Huo Guang to support him, how could he have avoided the lofty act of yielding the throne?\"",
+      "reason": "The draft’s ‘yield the throne high’ is ungrammatical. 高讓 means a lofty or noble act of yielding, and 伊、霍 are the historical exemplars Yi Yin and Huo Guang.",
+      "confidence": "high"
+    },
+    {
+      "id": "liangshu:006:r0023",
+      "unit": {
+        "id": "s0177",
+        "kind": "paragraph-sentence",
+        "blockIndex": 32,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Emperor Jing met an unpropitious house and inherited hardship; campaigns issued elsewhere and government and punishment were not his own; with no Yi and Huo to assist, how could he not yield the throne high?\"",
+      "after": "Emperor Jing inherited a dynasty in ruin and an age of upheaval. Armies marched at another’s command, and neither government nor justice was his to direct. With no Yi Yin or Huo Guang to support him, how could he have avoided yielding the throne?\"",
+      "reason": "The draft is ungrammatical and leaves the paired allusion opaque. 高讓 refers to yielding the throne, while 伊、霍 are Yi Yin and Huo Guang, exemplary regents invoked as the support Emperor Jing lacked.",
+      "confidence": "high"
     }
   ],
   "decisions": [
@@ -561,6 +591,28 @@
         "source": "chapter-text",
         "citation": "s0141",
         "excerpt": "剪離德如振槁"
+      }
+    },
+    {
+      "repairId": "liangshu:006:r0022",
+      "decision": "accept",
+      "after": null,
+      "reason": "The Chinese predicates external control over military, government, and punishment before asking how Emperor Jing could avoid 高讓. The proposal restores grammatical English and correctly expands the conventional Yi Yin and Huo Guang pairing.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0177",
+        "excerpt": "時無伊、霍之輔，焉得不爲高讓歟"
+      }
+    },
+    {
+      "repairId": "liangshu:006:r0023",
+      "decision": "accept",
+      "after": null,
+      "reason": "The idiomatic revision accurately renders the loss of independent command and government, identifies the paired regent allusion, and expresses 高讓 as yielding the throne rather than the nonsensical phrase 'yield the throne high.'",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0177",
+        "excerpt": "征伐有所自出，政刑不由於己"
       }
     }
   ],
