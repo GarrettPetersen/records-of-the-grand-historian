@@ -46,6 +46,10 @@ import {
   serializeCompactPeopleExtraction,
 } from './lib/people-compact.mjs';
 import {
+  DEFAULT_PEOPLE_CHUNK_CONTEXT_UNITS,
+  DEFAULT_PEOPLE_CHUNK_MAX_CANDIDATES,
+  DEFAULT_PEOPLE_CHUNK_MAX_UNITS,
+  DEFAULT_PEOPLE_WORKER_MAX_BYTES,
   assembleCompactPeopleChunks,
   buildPeopleChunkPacket,
   normalizePeopleExtractionChunkPlan,
@@ -73,15 +77,16 @@ const DEFAULT_STARTING_REF = 'codex/people-glossary-staging';
 const STATE_FILE = path.join(PEOPLE_DIR, 'generated', 'extraction-state.json');
 const RUN_LOCK_FILE = path.join(PEOPLE_DIR, 'generated', 'extraction-run.lock');
 const DEFAULT_PLAN_FILE = path.join(PEOPLE_DIR, 'generated', 'extraction-plan.json');
-const DEFAULT_MAX_UNITS = 250;
-const DEFAULT_MAX_CANDIDATES = 600;
+const DEFAULT_MAX_UNITS = DEFAULT_PEOPLE_CHUNK_MAX_UNITS;
+const DEFAULT_MAX_CANDIDATES = DEFAULT_PEOPLE_CHUNK_MAX_CANDIDATES;
+const DEFAULT_MAX_WORKER_BYTES = DEFAULT_PEOPLE_WORKER_MAX_BYTES;
 const DEFAULT_MAX_COST_CENTS = 1000;
-const DEFAULT_MAX_RUN_COST_CENTS = 300;
-const DEFAULT_MAX_RUN_TOKENS = 2_000_000;
+const DEFAULT_MAX_RUN_COST_CENTS = 500;
+const DEFAULT_MAX_RUN_TOKENS = 5_000_000;
 const DEFAULT_RUN_POLL_MS = 15_000;
-const DEFAULT_CHUNK_CONTEXT_UNITS = 6;
+const DEFAULT_CHUNK_CONTEXT_UNITS = DEFAULT_PEOPLE_CHUNK_CONTEXT_UNITS;
 const DEFAULT_AGENT_OVERHEAD_SCORE = 100_000;
-const DEFAULT_AGENT_COST_RESERVE_CENTS = 1000;
+const DEFAULT_AGENT_COST_RESERVE_CENTS = 500;
 const PEOPLE_CONFIG = readJson(path.join(PEOPLE_DIR, 'config.json'));
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
@@ -96,10 +101,11 @@ Options:
   --chapter NNN        Limit extraction to one chapter; requires --book.
   --all                Explicitly allow a corpus-wide queue.
   --limit N            Maximum chapters selected this run.
-  --concurrency N      Parallel Cursor Cloud agents (default: 2, max: 12).
+  --concurrency N      Parallel Cursor Cloud agents (default: 2, max: 100).
   --order ORDER        Queue order: smallest or book (default: smallest).
   --max-units N        Bulk chapter ceiling (default: ${DEFAULT_MAX_UNITS}).
   --max-candidates N   Bulk candidate ceiling (default: ${DEFAULT_MAX_CANDIDATES}).
+  --max-worker-kib N   Maximum compact packet size per new worker (default: ${DEFAULT_MAX_WORKER_BYTES / 1024} KiB).
   --allow-large        Send oversized chapters through one whole-chapter worker.
   --defer-large        Leave oversized chapters in the plan instead of chunking them.
   --chunk-context-units N
@@ -148,6 +154,7 @@ function parseArgs(argv) {
     order: 'smallest',
     maxUnits: DEFAULT_MAX_UNITS,
     maxCandidates: DEFAULT_MAX_CANDIDATES,
+    maxWorkerBytes: DEFAULT_MAX_WORKER_BYTES,
     allowLarge: false,
     deferLarge: false,
     chunkContextUnits: DEFAULT_CHUNK_CONTEXT_UNITS,
@@ -181,10 +188,11 @@ function parseArgs(argv) {
     else if (arg === '--chapter') opts.chapter = normalizedChapterId(next());
     else if (arg === '--all') opts.all = true;
     else if (arg === '--limit') opts.limit = positiveInteger(next(), arg);
-    else if (arg === '--concurrency') opts.concurrency = positiveInteger(next(), arg, 12);
+    else if (arg === '--concurrency') opts.concurrency = positiveInteger(next(), arg, 100);
     else if (arg === '--order') opts.order = next();
     else if (arg === '--max-units') opts.maxUnits = positiveInteger(next(), arg);
     else if (arg === '--max-candidates') opts.maxCandidates = positiveInteger(next(), arg);
+    else if (arg === '--max-worker-kib') opts.maxWorkerBytes = positiveInteger(next(), arg) * 1024;
     else if (arg === '--allow-large') opts.allowLarge = true;
     else if (arg === '--defer-large') opts.deferLarge = true;
     else if (arg === '--chunk-context-units') {
@@ -297,12 +305,40 @@ function withDispatchMetrics(target, workerCount = 1) {
   };
 }
 
+function withRecoveryPriority(target, state) {
+  const chapterState = state.chapters[stateKey(target)] ?? {};
+  const chunkStates = Object.values(chapterState.chunks ?? {});
+  const resumableStatus = (record) =>
+    record.agentId && !record.resumeExhausted && (
+      ['claimed', 'extracting', 'interrupted', 'recovering', 'failed/retryable', 'failed'].includes(record.status) ||
+      chunkHitRunLimit(record)
+    );
+  const hasRetainedChat = resumableStatus(chapterState) || chunkStates.some(resumableStatus);
+  const archiveDirectory = path.join(
+    PEOPLE_DIR,
+    'generated',
+    'chunk-extractions',
+    target.book,
+    target.chapter,
+  );
+  const hasAcceptedPart = chunkStates.some((chunk) => chunk.status === 'accepted') ||
+    (fs.existsSync(archiveDirectory) && fs.readdirSync(archiveDirectory).some((name) => name.endsWith('.json')));
+  return {
+    ...target,
+    metrics: {
+      ...target.metrics,
+      recoveryPriority: hasRetainedChat ? 0 : hasAcceptedPart ? 1 : 2,
+    },
+  };
+}
+
 function compareBookOrder(left, right) {
   return left.book.localeCompare(right.book) || left.chapter.localeCompare(right.chapter);
 }
 
 function compareWorkload(left, right) {
-  return (left.metrics.dispatchScore ?? left.metrics.workloadScore) -
+  return (left.metrics.recoveryPriority ?? 2) - (right.metrics.recoveryPriority ?? 2) ||
+    (left.metrics.dispatchScore ?? left.metrics.workloadScore) -
       (right.metrics.dispatchScore ?? right.metrics.workloadScore) ||
     left.metrics.candidates - right.metrics.candidates ||
     left.metrics.units - right.metrics.units ||
@@ -310,7 +346,65 @@ function compareWorkload(left, right) {
 }
 
 function exceedsBulkCeiling(target, opts) {
-  return target.metrics.units > opts.maxUnits || target.metrics.candidates > opts.maxCandidates;
+  return target.metrics.units > opts.maxUnits ||
+    target.metrics.candidates > opts.maxCandidates ||
+    target.metrics.workerBytes > opts.maxWorkerBytes;
+}
+
+function chunkWorkerBytes(packet, chunk) {
+  return Buffer.byteLength(JSON.stringify(buildPeopleChunkWorkerPacket(packet, chunk)));
+}
+
+function enforceWorkerByteCeiling(target, packet, chunks, opts, state = null) {
+  let planned = normalizePeopleExtractionChunkPlan(packet, chunks, {
+    contextUnits: opts.chunkContextUnits,
+  });
+  for (let index = 0; index < planned.length;) {
+    const chunk = planned[index];
+    const bytes = chunkWorkerBytes(packet, chunk);
+    const previous = target && state?.chapters?.[stateKey(target)]?.chunks?.[chunk.id];
+    const hasArchive = target && fs.existsSync(chunkArchivePath(target, chunk));
+    if (
+      bytes <= opts.maxWorkerBytes ||
+      chunk.units === 1 ||
+      previous?.agentId ||
+      hasArchive
+    ) {
+      index += 1;
+      continue;
+    }
+    const children = splitPeopleExtractionChunk(packet, chunk, {
+      contextUnits: opts.chunkContextUnits,
+    });
+    planned = normalizePeopleExtractionChunkPlan(packet, [
+      ...planned.slice(0, index),
+      ...children,
+      ...planned.slice(index + 1),
+    ], { contextUnits: opts.chunkContextUnits });
+  }
+  return planned;
+}
+
+function planFreshChunks(target, packet, opts, state = null) {
+  const planned = planPeopleExtractionChunks(packet, {
+    maxUnits: opts.maxUnits,
+    maxCandidates: opts.maxCandidates,
+    contextUnits: opts.chunkContextUnits,
+  });
+  return enforceWorkerByteCeiling(target, packet, planned, opts, state);
+}
+
+function baseChunkPlanForTarget(target, packet, opts, state, log = false) {
+  const prior = state.chapters[stateKey(target)];
+  if (prior?.chapterFingerprint === packet.input.chapterFingerprint && prior.chunkPlan?.length) {
+    const restored = normalizePeopleExtractionChunkPlan(packet, prior.chunkPlan, {
+      contextUnits: opts.chunkContextUnits,
+    });
+    if (log) console.log(`[${stateKey(target)}] restored adaptive ${restored.length}-range chunk plan`);
+    return restored;
+  }
+  return restoreLegacyChunkPlan(target, packet, prior, opts) ??
+    planFreshChunks(target, packet, opts, state);
 }
 
 function planTarget(target) {
@@ -325,13 +419,17 @@ function planTarget(target) {
 function recoverInterruptedState(state) {
   let changed = false;
   for (const entry of Object.values(state.chapters)) {
-    if (['claimed', 'extracting', 'failed/retryable'].includes(entry.status)) {
+    const entryRecoverable = ['claimed', 'extracting', 'recovering', 'failed/retryable'].includes(entry.status) ||
+      (entry.status === 'failed' && entry.agentId && !entry.resumeExhausted);
+    if (entryRecoverable) {
       entry.status = 'interrupted';
       entry.updatedAt = new Date().toISOString();
       changed = true;
     }
     for (const chunk of Object.values(entry.chunks ?? {})) {
-      if (!['claimed', 'extracting', 'failed/retryable'].includes(chunk.status)) continue;
+      const chunkRecoverable = ['claimed', 'extracting', 'recovering', 'failed/retryable'].includes(chunk.status) ||
+        (chunk.status === 'failed' && chunk.agentId && !chunk.resumeExhausted);
+      if (!chunkRecoverable) continue;
       chunk.status = 'interrupted';
       chunk.updatedAt = new Date().toISOString();
       changed = true;
@@ -362,7 +460,7 @@ function prepareTargetQueue(rawTargets, opts, state, matcher) {
     const packet = buildPeopleExtractionPacket(target.book, target.chapter, {
       properNounMatcher: matcher,
     });
-    const measured = { ...target, metrics: targetMetrics(packet) };
+    const measured = withRecoveryPriority({ ...target, metrics: targetMetrics(packet) }, state);
     if (!opts.force && currentExtractionIsValid(target, packet)) {
       current.push(measured);
       stateChanged = recordCurrentExtraction(state, target, packet, opts) || stateChanged;
@@ -374,11 +472,7 @@ function prepareTargetQueue(rawTargets, opts, state, matcher) {
       if (opts.deferLarge) {
         oversized.push(measured);
       } else {
-        const chunks = planPeopleExtractionChunks(packet, {
-          maxUnits: opts.maxUnits,
-          maxCandidates: opts.maxCandidates,
-          contextUnits: opts.chunkContextUnits,
-        });
+        const chunks = baseChunkPlanForTarget(target, packet, opts, state);
         eligible.push({ ...withDispatchMetrics(measured, chunks.length), chunkCount: chunks.length });
       }
     } else {
@@ -401,6 +495,7 @@ function prepareTargetQueue(rawTargets, opts, state, matcher) {
       order: opts.order,
       maxUnits: opts.allowLarge ? null : opts.maxUnits,
       maxCandidates: opts.allowLarge ? null : opts.maxCandidates,
+      maxWorkerBytes: opts.allowLarge ? null : opts.maxWorkerBytes,
       largeChapterMode: opts.allowLarge ? 'whole' : opts.deferLarge ? 'defer' : 'chunk',
       chunkContextUnits: opts.chunkContextUnits,
       maxCostCents: opts.maxCostCents,
@@ -427,8 +522,10 @@ function prepareTargetQueue(rawTargets, opts, state, matcher) {
     const item = oversized[0];
     throw new Error(
       `${item.book}/${item.chapter} has ${item.metrics.units} units and ` +
-      `${item.metrics.candidates} candidates, above the bulk ceilings of ` +
-      `${opts.maxUnits}/${opts.maxCandidates}; remove --defer-large to use deterministic chunks ` +
+      `${item.metrics.candidates} candidates in a ` +
+      `${(item.metrics.workerBytes / 1024).toFixed(1)} KiB packet, above the bulk ceilings of ` +
+      `${opts.maxUnits} units, ${opts.maxCandidates} candidates, or ` +
+      `${opts.maxWorkerBytes / 1024} KiB; remove --defer-large to use deterministic chunks ` +
       'or pass --allow-large explicitly',
     );
   }
@@ -467,6 +564,10 @@ function updateChunkState(state, target, chunk, patch) {
       ...(current.chunks ?? {}),
       [chunk.id]: {
         ...(current.chunks?.[chunk.id] ?? { attempts: 0 }),
+        start: chunk.start,
+        end: chunk.end,
+        ...(chunk.parentId ? { parentId: chunk.parentId } : {}),
+        ...(chunk.adaptiveDepth ? { adaptiveDepth: chunk.adaptiveDepth } : {}),
         ...patch,
         updatedAt: new Date().toISOString(),
       },
@@ -659,6 +760,40 @@ VALIDATION ERRORS:
 ${errors.slice(0, 400).map((error) => `- ${error}`).join('\n')}`;
 }
 
+function chunkResumePrompt(target, chunk, errors) {
+  const output = chunkArtifactPath(target, chunk);
+  const packet = chunkPacketArtifactPath(target, chunk);
+  return `Your previous run for owned chunk ${chunk.id} of ${target.book}/${target.chapter} was interrupted before the host accepted a validated artifact, but this conversation and workspace were retained.
+
+Resume the work already completed in this conversation. Do not start the extraction over. Finish any remaining owned units, write the complete extraction to ${output}, and run:
+node scripts/validate-people-extraction.mjs ${output} --packet ${packet} --normalize
+
+After validation succeeds, publish the artifact by running:
+${publishArtifactCommand(output)}
+
+Do not edit the source chapter, commit, push, or open a PR. If the prior output file is incomplete, preserve correct entries and complete it.
+
+PRIOR HOST DIAGNOSTICS:
+${errors.slice(0, 40).map((error) => `- ${error}`).join('\n')}`;
+}
+
+function wholeResumePrompt(target, errors) {
+  const output = artifactPath(target);
+  const packet = packetArtifactPath(target);
+  return `Your previous run for ${target.book}/${target.chapter} was interrupted before the host accepted a validated artifact, but this conversation and workspace were retained.
+
+Resume the work already completed in this conversation. Do not start the extraction over. Finish any remaining units, write the complete extraction to ${output}, and run:
+node scripts/validate-people-extraction.mjs ${output} --packet ${packet} --normalize
+
+After validation succeeds, publish the artifact by running:
+${publishArtifactCommand(output)}
+
+Do not edit the source chapter, commit, push, or open a PR. If the prior output file is incomplete, preserve correct entries and complete it.
+
+PRIOR HOST DIAGNOSTICS:
+${errors.slice(0, 40).map((error) => `- ${error}`).join('\n')}`;
+}
+
 async function closeAgent(agent) {
   if (!agent) return;
   if (typeof agent[Symbol.asyncDispose] === 'function') await agent[Symbol.asyncDispose]();
@@ -736,15 +871,19 @@ function validateDownloadedExtraction(extraction, packet) {
     : validatePeopleExtraction(extraction, packet);
 }
 
-async function recoverInterruptedExtraction(target, packet, opts, state, control) {
+async function recoverInterruptedExtraction(target, packet, opts, state, control, budget) {
   const prior = state.chapters[stateKey(target)];
-  if (prior?.status !== 'interrupted' || !prior.agentId) return null;
+  if (prior?.status !== 'interrupted' || !prior.agentId || prior.resumeExhausted) return null;
 
   let agent;
   let run;
+  let releaseReservation = () => {};
+  let resumeTurnStarted = false;
+  const recoveryErrors = [...(prior.lastErrors ?? [])];
   try {
     console.log(`[${stateKey(target)}] resuming interrupted agent ${prior.agentId}`);
     updateState(state, target, { status: 'recovering' });
+    seedRecordedUsage(budget, prior.usage);
     agent = await Agent.resume(prior.agentId, { apiKey: opts.apiKey });
     const runs = await Agent.listRuns(prior.agentId, {
       runtime: 'cloud',
@@ -752,48 +891,100 @@ async function recoverInterruptedExtraction(target, packet, opts, state, control
       limit: 20,
     });
     run = runs.items.find((candidate) => candidate.status === 'running') ?? runs.items[0];
-    if (!run) throw new Error('interrupted agent has no cloud runs');
-    if (run.status === 'running') {
+    let existingRunError = null;
+    if (run?.status === 'running') {
       control.activeRuns.set(run.id, { run, target });
-      run = await waitForCursorRun(run, {
-        agentId: prior.agentId,
-        apiKey: opts.apiKey,
-        label: `[${stateKey(target)}] recovered extraction`,
-        pollMs: DEFAULT_RUN_POLL_MS,
-        maxRawCostCents: opts.maxRunCostCents,
-        maxTotalTokens: opts.maxRunTokens,
-      });
+      try {
+        run = await waitForCursorRun(run, {
+          agentId: prior.agentId,
+          apiKey: opts.apiKey,
+          label: `[${stateKey(target)}] recovered extraction`,
+          pollMs: DEFAULT_RUN_POLL_MS,
+          maxRawCostCents: opts.maxRunCostCents,
+          maxTotalTokens: opts.maxRunTokens,
+        });
+      } catch (error) {
+        existingRunError = error;
+      } finally {
+        control.activeRuns.delete(run.id);
+      }
     }
-    if (run.status !== 'finished') {
-      throw new Error(run.error?.message ?? `recovered run ended with status ${run.status}`);
+    if (run) {
+      try {
+        const downloaded = withRunMetadata(
+          await downloadExtraction(agent, artifactPath(target)),
+          opts,
+          agent,
+          run,
+        );
+        const validated = validateDownloadedExtraction(downloaded, packet);
+        console.log(`[${stateKey(target)}] recovered validated artifact from run ${run.id}`);
+        updateState(state, target, { resumePending: false });
+        return { extraction: validated.normalized, result: run, stats: validated.stats, packet };
+      } catch (error) {
+        recoveryErrors.push(...validationErrors(error));
+      }
     }
-    const downloaded = withRunMetadata(
-      await downloadExtraction(agent, artifactPath(target)),
-      opts,
+    if (existingRunError) throw existingRunError;
+    releaseReservation = await reserveAgentBudget(opts, budget, control);
+    resumeTurnStarted = true;
+    updateState(state, target, {
+      status: 'recovering',
+      resumePending: true,
+      lastErrors: recoveryErrors,
+    });
+    const accepted = await obtainValidInitialExtraction(
       agent,
-      run,
+      target,
+      packet,
+      opts,
+      state,
+      control,
+      null,
+      wholeResumePrompt(target, recoveryErrors),
     );
-    const validated = validateDownloadedExtraction(downloaded, packet);
-    console.log(`[${stateKey(target)}] recovered validated artifact from run ${run.id}`);
-    return { extraction: validated.normalized, result: run, stats: validated.stats, packet };
+    updateState(state, target, { resumePending: false });
+    return { ...accepted, packet };
   } catch (error) {
     if (error instanceof CursorRunLimitExceededError) {
       control.stopRequested = true;
       control.stopReason = 'run-limit';
     }
+    const exhausted = resumeTurnStarted && (
+      error instanceof CursorRunLimitExceededError ||
+      /failed after \d+ attempt/iu.test(error instanceof Error ? error.message : String(error)) ||
+      (error instanceof CursorAgentError && !error.isRetryable)
+    );
+    const errors = validationErrors(error);
     console.warn(
       `[${stateKey(target)}] interrupted agent was not recoverable: ` +
       `${error instanceof Error ? error.message : String(error)}`,
     );
-    updateState(state, target, { status: 'interrupted', lastErrors: validationErrors(error) });
-    return null;
+    updateState(state, target, {
+      status: 'interrupted',
+      lastErrors: errors,
+      ...(resumeTurnStarted ? { resumePending: false } : {}),
+      ...(exhausted ? { resumeExhausted: true } : {}),
+    });
+    return { recoveryFailed: true, errors };
   } finally {
     if (run?.id) control.activeRuns.delete(run.id);
+    await recordAgentUsage(agent, target, budget, state);
+    releaseReservation();
     await closeAgent(agent);
   }
 }
 
-async function obtainValidInitialExtraction(agent, target, packet, opts, state, control, chunk = null) {
+async function obtainValidInitialExtraction(
+  agent,
+  target,
+  packet,
+  opts,
+  state,
+  control,
+  chunk = null,
+  firstPrompt = null,
+) {
   let errors = [];
   for (let attempt = 1; attempt <= opts.maxAttempts; attempt += 1) {
     if (control.cancelRequested) {
@@ -807,7 +998,7 @@ async function obtainValidInitialExtraction(agent, target, packet, opts, state, 
     if (chunk) updateChunkState(state, target, chunk, patch);
     else updateState(state, target, patch);
     const prompt = attempt === 1
-      ? chunk ? chunkInitialPrompt(target, chunk, opts) : initialPrompt(target, opts)
+      ? firstPrompt ?? (chunk ? chunkInitialPrompt(target, chunk, opts) : initialPrompt(target, opts))
       : chunk ? chunkRetryPrompt(target, chunk, errors) : retryPrompt(target, errors);
     const phase = chunk ? `chunk-${chunk.id}` : 'extraction';
     const wanted = chunk ? chunkArtifactPath(target, chunk) : artifactPath(target);
@@ -818,7 +1009,33 @@ async function obtainValidInitialExtraction(agent, target, packet, opts, state, 
       const validated = validateDownloadedExtraction(downloaded, packet);
       return { extraction: validated.normalized, result, stats: validated.stats };
     } catch (error) {
-      if (error instanceof CursorRunLimitExceededError) {
+      if (error instanceof CursorRunLimitExceededError && chunk) {
+        try {
+          const recovered = withRunMetadata(
+            await downloadExtraction(agent, wanted),
+            opts,
+            agent,
+            { id: error.runId ?? null },
+          );
+          const validated = validateDownloadedExtraction(recovered, packet);
+          console.warn(
+            `[${stateKey(target)}/chunk-${chunk.id}] recovered a valid artifact after ` +
+            `${error.metric} cancellation`,
+          );
+          return {
+            extraction: validated.normalized,
+            result: { id: error.runId ?? null },
+            stats: validated.stats,
+          };
+        } catch (recoveryError) {
+          error.artifactRecoveryError = recoveryError;
+          console.warn(
+            `[${stateKey(target)}/chunk-${chunk.id}] no valid post-cancellation artifact: ` +
+            `${validationErrors(recoveryError)[0]}`,
+          );
+        }
+      }
+      if (error instanceof CursorRunLimitExceededError && !chunk) {
         control.stopRequested = true;
         control.stopReason = 'run-limit';
       }
@@ -856,21 +1073,57 @@ async function recordAgentUsage(agent, target, budget, state, chunk = null) {
     const usage = await agent.getUsage();
     if (chunk) updateChunkState(state, target, chunk, { usage });
     else updateState(state, target, { usage });
-    budget.rawCostCents += usage.cost?.rawCostCents ?? 0;
-    budget.chargedCents += usage.cost?.chargedCents ?? 0;
-    const dollars = usage.cost
-      ? `; raw=$${(usage.cost.rawCostCents / 100).toFixed(2)}; ` +
+    budget.recordedRunIds ??= new Set();
+    budget.recordedAgents ??= new Set();
+    const freshRuns = (usage.runs ?? []).filter((run) => !budget.recordedRunIds.has(run.runId));
+    let rawCostCents;
+    let chargedCents;
+    if ((usage.runs ?? []).length > 0) {
+      rawCostCents = freshRuns.reduce((sum, run) => sum + (run.cost?.rawCostCents ?? 0), 0);
+      chargedCents = freshRuns.reduce((sum, run) => sum + (run.cost?.chargedCents ?? 0), 0);
+      for (const run of freshRuns) {
+        if (run.runId) budget.recordedRunIds.add(run.runId);
+      }
+    } else if (!budget.recordedAgents.has(agent.agentId)) {
+      rawCostCents = usage.cost?.rawCostCents ?? 0;
+      chargedCents = usage.cost?.chargedCents ?? 0;
+      budget.recordedAgents.add(agent.agentId);
+    } else {
+      rawCostCents = 0;
+      chargedCents = 0;
+    }
+    budget.rawCostCents += rawCostCents;
+    budget.chargedCents += chargedCents;
+    const freshTokens = freshRuns.reduce(
+      (sum, run) => sum + (run.usage?.totalTokens ?? 0),
+      0,
+    );
+    const agentTotals = usage.cost
+      ? `${usage.usage.totalTokens.toLocaleString('en-US')} tokens, ` +
+        `raw=$${(usage.cost.rawCostCents / 100).toFixed(2)}, ` +
         `charged=$${(usage.cost.chargedCents / 100).toFixed(2)}`
+      : `${usage.usage.totalTokens.toLocaleString('en-US')} tokens`;
+    const invocationDelta = (usage.runs ?? []).length > 0
+      ? `; invocation delta=${freshTokens.toLocaleString('en-US')} tokens, ` +
+        `raw=$${(rawCostCents / 100).toFixed(2)}, charged=$${(chargedCents / 100).toFixed(2)} ` +
+        `across ${freshRuns.length} new run(s)`
       : '';
     console.log(
       `[${stateKey(target)}${chunk ? `/chunk-${chunk.id}` : ''}] Cursor usage: ` +
-      `${usage.usage.totalTokens.toLocaleString('en-US')} tokens${dollars}`,
+      `agent total=${agentTotals}${invocationDelta}`,
     );
   } catch (error) {
     console.warn(
       `[${stateKey(target)}${chunk ? `/chunk-${chunk.id}` : ''}] could not read Cursor usage: ` +
       `${error instanceof Error ? error.message : String(error)}`,
     );
+  }
+}
+
+function seedRecordedUsage(budget, usage) {
+  budget.recordedRunIds ??= new Set();
+  for (const run of usage?.runs ?? []) {
+    if (run.runId) budget.recordedRunIds.add(run.runId);
   }
 }
 
@@ -932,28 +1185,187 @@ function persistedChunkPlan(chunks) {
   }));
 }
 
+function chunkHitRunLimit(chunkState) {
+  return chunkState?.stopReason === 'run-limit' ||
+    chunkState?.lastErrors?.some((error) =>
+      /cancelled cloud run .* (?:tokens|raw usage cost)/iu.test(error)
+    );
+}
+
+function hasResumableChunkConversation(chunkState) {
+  if (!chunkState?.agentId || chunkState.resumeExhausted) return false;
+  return chunkHitRunLimit(chunkState) ||
+    ['interrupted', 'recovering'].includes(chunkState.status);
+}
+
+function isDescendantChunk(chunk, parentId, chunksById) {
+  let current = chunk;
+  const visited = new Set();
+  while (current?.parentId && !visited.has(current.id)) {
+    if (current.parentId === parentId) return true;
+    visited.add(current.id);
+    current = chunksById.get(current.parentId);
+  }
+  return false;
+}
+
+function chunkLineageMap(planned, priorChunks) {
+  const chunksById = new Map(planned.map((chunk) => [chunk.id, chunk]));
+  for (const [id, state] of Object.entries(priorChunks ?? {})) {
+    const current = chunksById.get(id) ?? { id };
+    chunksById.set(id, { ...state, ...current });
+  }
+  for (const [parentId, state] of Object.entries(priorChunks ?? {})) {
+    for (const childId of state.childChunks ?? []) {
+      const child = chunksById.get(childId) ?? { id: childId };
+      if (!child.parentId) chunksById.set(childId, { ...child, parentId });
+    }
+  }
+  return chunksById;
+}
+
+function restoreResumableParentChunks(target, packet, planned, prior, opts) {
+  if (!prior?.chunks) return planned;
+  let restored = planned;
+  for (const [parentId, parentState] of Object.entries(prior.chunks)) {
+    if (
+      parentState?.status !== 'split' ||
+      !parentState.agentId ||
+      parentState.resumeExhausted ||
+      !chunkHitRunLimit(parentState)
+    ) continue;
+
+    const chunksById = chunkLineageMap(restored, prior.chunks);
+    const descendantIndexes = [];
+    for (let index = 0; index < restored.length; index += 1) {
+      if (isDescendantChunk(restored[index], parentId, chunksById)) {
+        descendantIndexes.push(index);
+      }
+    }
+    if (descendantIndexes.length === 0) continue;
+    if (descendantIndexes.some((index) => {
+      const descendant = restored[index];
+      return prior.chunks[descendant.id]?.status === 'accepted' ||
+        fs.existsSync(chunkArchivePath(target, descendant));
+    })) {
+      continue;
+    }
+    const firstIndex = descendantIndexes[0];
+    const lastIndex = descendantIndexes.at(-1);
+    if (
+      descendantIndexes.length !== lastIndex - firstIndex + 1 ||
+      restored[firstIndex].start >= restored[lastIndex].end
+    ) continue;
+
+    const parent = {
+      id: parentId,
+      start: restored[firstIndex].start,
+      end: restored[lastIndex].end,
+    };
+    restored = normalizePeopleExtractionChunkPlan(packet, [
+      ...restored.slice(0, firstIndex),
+      parent,
+      ...restored.slice(lastIndex + 1),
+    ], { contextUnits: opts.chunkContextUnits });
+    console.log(
+      `[${stateKey(target)}] restored cancelled parent chunk ${parentId} for agent-conversation recovery`,
+    );
+  }
+  return restored;
+}
+
+function archivedChunkRange(target, packet, chunkId) {
+  const archive = chunkArchivePath(target, { id: chunkId });
+  if (!fs.existsSync(archive)) return null;
+  const compact = readJson(archive);
+  const digestRows = compact.input?.unitDigests;
+  if (!Array.isArray(digestRows) || digestRows.length === 0) {
+    throw new Error(`Cannot reconstruct ${stateKey(target)}/chunk-${chunkId}: archive has no unit digests`);
+  }
+  const orderById = new Map(packet.units.map((unit, index) => [unit.id, index]));
+  const orders = digestRows.map((row) => orderById.get(Array.isArray(row) ? row[0] : row.id));
+  if (orders.some((order) => !Number.isInteger(order))) {
+    throw new Error(`Cannot reconstruct ${stateKey(target)}/chunk-${chunkId}: archive units are stale`);
+  }
+  for (let index = 1; index < orders.length; index += 1) {
+    if (orders[index] !== orders[index - 1] + 1) {
+      throw new Error(`Cannot reconstruct ${stateKey(target)}/chunk-${chunkId}: archive is not contiguous`);
+    }
+  }
+  return { start: orders[0], end: orders.at(-1) + 1 };
+}
+
+function restoreLegacyChunkPlan(target, packet, prior, opts) {
+  if (!prior?.chunks || prior.chunkPlan?.length) return null;
+  const archivedRanges = new Map();
+  for (const chunkId of Object.keys(prior.chunks)) {
+    const range = archivedChunkRange(target, packet, chunkId);
+    if (range) archivedRanges.set(chunkId, range);
+  }
+  const hasRetainedChat = Object.values(prior.chunks).some((chunk) =>
+    chunk.agentId && !chunk.resumeExhausted
+  );
+  if (archivedRanges.size === 0) {
+    if (hasRetainedChat) {
+      throw new Error(
+        `Cannot safely resume ${stateKey(target)}: legacy chunk state has agent chats but no ` +
+        'persisted plan or validated archive proving their ownership ranges',
+      );
+    }
+    return null;
+  }
+
+  const policies = [
+    { maxUnits: 250, maxCandidates: 600 },
+    { maxUnits: 125, maxCandidates: 300 },
+    { maxUnits: opts.maxUnits, maxCandidates: opts.maxCandidates },
+  ];
+  const matching = new Map();
+  for (const policy of policies) {
+    const candidate = planPeopleExtractionChunks(packet, {
+      ...policy,
+      contextUnits: opts.chunkContextUnits,
+    });
+    const matchesArchives = [...archivedRanges].every(([chunkId, range]) => {
+      const chunk = candidate.find((item) => item.id === chunkId);
+      return chunk?.start === range.start && chunk.end === range.end;
+    });
+    if (!matchesArchives) continue;
+    matching.set(
+      JSON.stringify(candidate.map(({ id, start, end }) => ({ id, start, end }))),
+      candidate,
+    );
+  }
+  if (matching.size !== 1) {
+    throw new Error(
+      `Cannot safely resume ${stateKey(target)}: validated legacy archives match ` +
+      `${matching.size} distinct deterministic chunk plans`,
+    );
+  }
+  const [restored] = matching.values();
+  for (const [chunkId] of archivedRanges) {
+    const chunk = restored.find((item) => item.id === chunkId);
+    validateCompactPeopleExtraction(
+      readJson(chunkArchivePath(target, { id: chunkId })),
+      buildPeopleChunkPacket(packet, chunk),
+    );
+  }
+  console.log(
+    `[${stateKey(target)}] reconstructed legacy ${restored.length}-range plan from validated chunk archives`,
+  );
+  return restored;
+}
+
 function chunkPlanForTarget(target, packet, opts, state) {
   const prior = state.chapters[stateKey(target)];
-  let planned;
-  if (prior?.chapterFingerprint === packet.input.chapterFingerprint && prior.chunkPlan?.length) {
-    planned = normalizePeopleExtractionChunkPlan(packet, prior.chunkPlan, {
-      contextUnits: opts.chunkContextUnits,
-    });
-    console.log(`[${stateKey(target)}] restored adaptive ${planned.length}-range chunk plan`);
-  } else {
-    planned = planPeopleExtractionChunks(packet, {
-      maxUnits: opts.maxUnits,
-      maxCandidates: opts.maxCandidates,
-      contextUnits: opts.chunkContextUnits,
-    });
-  }
+  let planned = baseChunkPlanForTarget(target, packet, opts, state, true);
+  planned = restoreResumableParentChunks(target, packet, planned, prior, opts);
+  planned = enforceWorkerByteCeiling(target, packet, planned, opts, state);
   for (const chunk of [...planned]) {
     const previousChunk = prior?.chunks?.[chunk.id];
-    const hitRunLimit = previousChunk?.stopReason === 'run-limit' ||
-      previousChunk?.lastErrors?.some((error) =>
-        /cancelled cloud run .* (?:tokens|raw usage cost)/iu.test(error)
-      );
+    const hitRunLimit = chunkHitRunLimit(previousChunk);
     if (!hitRunLimit) continue;
+    if (previousChunk?.agentId && !previousChunk.resumeExhausted) continue;
     planned = replaceChunkWithChildren(target, packet, planned, chunk, opts, state);
   }
   return planned;
@@ -970,9 +1382,11 @@ function replaceChunkWithChildren(target, packet, chunks, failedChunk, opts, sta
     ...children,
     ...chunks.slice(failedIndex + 1),
   ], { contextUnits: opts.chunkContextUnits });
+  const previousChunk = state.chapters[stateKey(target)]?.chunks?.[failedChunk.id];
   updateChunkState(state, target, failedChunk, {
     status: 'split',
     childChunks: children.map((child) => child.id),
+    ...(previousChunk?.resumePending ? { resumePending: false, resumeExhausted: true } : {}),
   });
   updateState(state, target, {
     status: 'interrupted',
@@ -1053,6 +1467,7 @@ function writeAcceptedExtraction(target, compact, packet) {
 async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, budget) {
   const packet = buildPeopleChunkPacket(fullPacket, chunk);
   const archive = chunkArchivePath(target, chunk);
+  const previousChunk = state.chapters[stateKey(target)]?.chunks?.[chunk.id];
   if (fs.existsSync(archive)) {
     try {
       const extraction = readJson(archive);
@@ -1069,22 +1484,126 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
   let agent;
   let releaseReservation = () => {};
   try {
-    releaseReservation = await reserveAgentBudget(opts, budget, control);
-    agent = await Agent.create({
-      apiKey: opts.apiKey,
-      name: `People extraction ${stateKey(target)} chunk ${chunk.id}`,
-      model: modelSelection(opts),
-      cloud: {
-        repos: [{ url: opts.repoUrl, startingRef: opts.startingRef }],
-        workOnCurrentBranch: true,
-        autoCreatePR: false,
-        skipReviewerRequest: true,
-      },
-    });
-    updateChunkState(state, target, chunk, { status: 'claimed', agentId: agent.agentId });
-    const accepted = await obtainValidInitialExtraction(
-      agent, target, packet, opts, state, control, chunk,
-    );
+    const resumeAgentId = hasResumableChunkConversation(previousChunk)
+      ? previousChunk.agentId
+      : null;
+    let accepted = null;
+    const recoveryErrors = [...(previousChunk?.lastErrors ?? [])];
+    if (resumeAgentId) {
+      seedRecordedUsage(budget, previousChunk.usage);
+      agent = await Agent.resume(resumeAgentId, { apiKey: opts.apiKey });
+      updateChunkState(state, target, chunk, {
+        status: 'recovering',
+        agentId: agent.agentId,
+      });
+      console.log(
+        `[${stateKey(target)}/chunk-${chunk.id}] resuming retained agent conversation ${agent.agentId}`,
+      );
+      const runs = await Agent.listRuns(agent.agentId, {
+        runtime: 'cloud',
+        apiKey: opts.apiKey,
+        limit: 20,
+      });
+      let existingRun = runs.items.find((candidate) => candidate.status === 'running') ?? runs.items[0];
+      let existingRunError = null;
+      if (existingRun?.status === 'running') {
+        control.activeRuns.set(existingRun.id, { run: existingRun, target });
+        try {
+          existingRun = await waitForCursorRun(existingRun, {
+            agentId: agent.agentId,
+            apiKey: opts.apiKey,
+            label: `[${stateKey(target)}] recovered chunk-${chunk.id}`,
+            pollMs: DEFAULT_RUN_POLL_MS,
+            maxRawCostCents: opts.maxRunCostCents,
+            maxTotalTokens: opts.maxRunTokens,
+          });
+        } catch (error) {
+          existingRunError = error;
+        } finally {
+          control.activeRuns.delete(existingRun.id);
+        }
+      }
+      if (existingRun) {
+        try {
+          const recovered = withRunMetadata(
+            await downloadExtraction(agent, chunkArtifactPath(target, chunk)),
+            opts,
+            agent,
+            existingRun,
+          );
+          const validated = validateDownloadedExtraction(recovered, packet);
+          accepted = {
+            extraction: validated.normalized,
+            result: existingRun,
+            stats: validated.stats,
+          };
+          console.log(
+            `[${stateKey(target)}/chunk-${chunk.id}] recovered the validated artifact before sending another turn`,
+          );
+        } catch (error) {
+          recoveryErrors.push(...validationErrors(error));
+        }
+      }
+      if (!accepted && existingRunError) {
+        updateChunkState(state, target, chunk, {
+          status: 'failed/retryable',
+          lastErrors: validationErrors(existingRunError),
+          ...(existingRunError instanceof CursorRunLimitExceededError
+            ? { stopReason: 'run-limit' }
+            : {}),
+        });
+        throw existingRunError;
+      }
+      if (!accepted) {
+        releaseReservation = await reserveAgentBudget(opts, budget, control);
+        updateChunkState(state, target, chunk, {
+          status: 'claimed',
+          resumePending: true,
+        });
+      }
+    } else {
+      releaseReservation = await reserveAgentBudget(opts, budget, control);
+      agent = await Agent.create({
+        apiKey: opts.apiKey,
+        name: `People extraction ${stateKey(target)} chunk ${chunk.id}`,
+        model: modelSelection(opts),
+        cloud: {
+          repos: [{ url: opts.repoUrl, startingRef: opts.startingRef }],
+          workOnCurrentBranch: true,
+          autoCreatePR: false,
+          skipReviewerRequest: true,
+        },
+      });
+      updateChunkState(state, target, chunk, {
+        status: 'claimed',
+        agentId: agent.agentId,
+        resumePending: false,
+        resumeExhausted: false,
+      });
+    }
+    if (!accepted) {
+      try {
+        accepted = await obtainValidInitialExtraction(
+          agent,
+          target,
+          packet,
+          opts,
+          state,
+          control,
+          chunk,
+          resumeAgentId ? chunkResumePrompt(target, chunk, recoveryErrors) : null,
+        );
+      } catch (error) {
+        if (resumeAgentId && !(error instanceof CursorRunLimitExceededError)) {
+          updateChunkState(state, target, chunk, {
+            status: 'interrupted',
+            resumePending: false,
+            resumeExhausted: true,
+          });
+        }
+        throw error;
+      }
+    }
     const compact = compactPeopleExtraction(accepted.extraction, packet);
     validateCompactPeopleExtraction(compact, packet);
     writeTextAtomic(archive, serializeCompactPeopleExtraction(compact));
@@ -1094,6 +1613,7 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
       cached: false,
       repairs: accepted.stats.repairs,
       lastErrors: [],
+      resumePending: false,
     });
     console.log(
       `[${stateKey(target)}/chunk-${chunk.id}] accepted: ${accepted.stats.people} people, ` +
@@ -1110,7 +1630,7 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
 
 async function processChunkedTarget(target, packet, opts, state, control, budget) {
   const key = stateKey(target);
-  const chunks = chunkPlanForTarget(target, packet, opts, state);
+  let chunks = chunkPlanForTarget(target, packet, opts, state);
   updateState(state, target, {
     status: 'extracting',
     chapterFingerprint: packet.input.chapterFingerprint,
@@ -1118,13 +1638,24 @@ async function processChunkedTarget(target, packet, opts, state, control, budget
   });
   console.log(`[${key}] chunked extraction: ${chunks.length} disjoint ownership range(s)`);
   const parts = [];
-  for (const chunk of chunks) {
+  for (let index = 0; index < chunks.length;) {
+    const chunk = chunks[index];
     if (control.stopRequested) throw new Error(`Stopped after ${parts.length}/${chunks.length} chunks`);
     try {
       parts.push(await obtainChunkPart(target, packet, chunk, opts, state, control, budget));
+      index += 1;
     } catch (error) {
       if (error instanceof CursorRunLimitExceededError) {
-        replaceChunkWithChildren(target, packet, chunks, chunk, opts, state);
+        const latest = state.chapters[key]?.chunks?.[chunk.id];
+        if (latest?.agentId && !latest.resumePending && !latest.resumeExhausted) {
+          updateChunkState(state, target, chunk, { status: 'interrupted' });
+          console.warn(
+            `[${key}/chunk-${chunk.id}] retaining the interrupted agent conversation for one continuation turn`,
+          );
+          continue;
+        }
+        chunks = replaceChunkWithChildren(target, packet, chunks, chunk, opts, state);
+        continue;
       }
       throw error;
     }
@@ -1211,7 +1742,10 @@ async function processTarget(target, opts, state, control, budget) {
   }
 
   assertCloudSourceMatches(target, packet, opts, opts.properNounMatcher);
-  const recovered = await recoverInterruptedExtraction(target, packet, opts, state, control);
+  const recovered = await recoverInterruptedExtraction(target, packet, opts, state, control, budget);
+  if (recovered?.recoveryFailed) {
+    return { status: 'interrupted', errors: recovered.errors };
+  }
   if (recovered) return acceptWholeExtraction(target, recovered, state);
   updateState(state, target, { status: 'claimed', chapterFingerprint: packet.input.chapterFingerprint });
 
@@ -1242,7 +1776,11 @@ async function processTarget(target, opts, state, control, budget) {
         skipReviewerRequest: true,
       },
     });
-    updateState(state, target, { agentId: agent.agentId });
+    updateState(state, target, {
+      agentId: agent.agentId,
+      resumePending: false,
+      resumeExhausted: false,
+    });
     const accepted = {
       ...await obtainValidInitialExtraction(agent, target, packet, opts, state, control),
       packet,
@@ -1296,13 +1834,148 @@ async function selfTest() {
     throw new Error('Replacement extraction admitted new repairs over existing editorial history');
   }
 
+  const recoveryPacket = {
+    units: Array.from({ length: 4 }, (_, index) => ({
+      id: `s${String(index + 1).padStart(4, '0')}`,
+      blockIndex: index,
+    })),
+    preflight: { candidates: [] },
+  };
+  const recoveryPlan = normalizePeopleExtractionChunkPlan(recoveryPacket, [
+    { id: '001a', start: 0, end: 1, parentId: '001', adaptiveDepth: 1 },
+    { id: '001b', start: 1, end: 2, parentId: '001', adaptiveDepth: 1 },
+    { id: '002', start: 2, end: 4 },
+  ], { contextUnits: 0 });
+  const recoveryPrior = {
+    chunks: {
+      '001': {
+        status: 'split',
+        agentId: 'bc-retained-fixture',
+        stopReason: 'run-limit',
+      },
+      '001a': { status: 'failed' },
+      '001b': { status: 'failed' },
+    },
+  };
+  const restoredRecoveryPlan = restoreResumableParentChunks(
+    { book: 'fixture', chapter: '003' },
+    recoveryPacket,
+    recoveryPlan,
+    recoveryPrior,
+    { chunkContextUnits: 0 },
+  );
+  if (
+    restoredRecoveryPlan.length !== 2 ||
+    restoredRecoveryPlan[0].id !== '001' ||
+    restoredRecoveryPlan[0].start !== 0 ||
+    restoredRecoveryPlan[0].end !== 2
+  ) {
+    throw new Error('Canceled parent chunk was not restored for retained-agent recovery');
+  }
+  const acceptedChildPlan = restoreResumableParentChunks(
+    { book: 'fixture', chapter: '003' },
+    recoveryPacket,
+    recoveryPlan,
+    {
+      chunks: {
+        ...recoveryPrior.chunks,
+        '001a': { status: 'accepted' },
+      },
+    },
+    { chunkContextUnits: 0 },
+  );
+  if (acceptedChildPlan.length !== 3 || acceptedChildPlan[0].id !== '001a') {
+    throw new Error('Retained-agent recovery replaced an already accepted child chunk');
+  }
+  if (
+    !hasResumableChunkConversation({ status: 'interrupted', agentId: 'bc-interrupted-fixture' }) ||
+    hasResumableChunkConversation({
+      status: 'interrupted',
+      agentId: 'bc-exhausted-fixture',
+      resumeExhausted: true,
+    })
+  ) {
+    throw new Error('Interrupted chunk conversation eligibility is incorrect');
+  }
+  const deepRecoveryPlan = normalizePeopleExtractionChunkPlan(recoveryPacket, [
+    { id: '001aa', start: 0, end: 1, parentId: '001a', adaptiveDepth: 2 },
+    { id: '001ab', start: 1, end: 2, parentId: '001a', adaptiveDepth: 2 },
+    { id: '001b', start: 2, end: 3, parentId: '001', adaptiveDepth: 1 },
+    { id: '002', start: 3, end: 4 },
+  ], { contextUnits: 0 });
+  const deepRecoveryPrior = {
+    chunks: {
+      '001': {
+        status: 'split',
+        agentId: 'bc-retained-deep-fixture',
+        stopReason: 'run-limit',
+        childChunks: ['001a', '001b'],
+      },
+      '001a': {
+        status: 'split',
+        childChunks: ['001aa', '001ab'],
+      },
+      '001aa': { status: 'failed' },
+      '001ab': { status: 'failed' },
+      '001b': { status: 'failed' },
+    },
+  };
+  const restoredDeepRecoveryPlan = restoreResumableParentChunks(
+    { book: 'fixture', chapter: '004' },
+    recoveryPacket,
+    deepRecoveryPlan,
+    deepRecoveryPrior,
+    { chunkContextUnits: 0 },
+  );
+  if (
+    restoredDeepRecoveryPlan.length !== 2 ||
+    restoredDeepRecoveryPlan[0].id !== '001' ||
+    restoredDeepRecoveryPlan[0].start !== 0 ||
+    restoredDeepRecoveryPlan[0].end !== 3
+  ) {
+    throw new Error('Deeply split parent chunk was not restored for retained-agent recovery');
+  }
+  const bytePacket = {
+    book: 'fixture',
+    chapter: '005',
+    source: { title: { zh: '測試', en: 'Fixture' } },
+    units: Array.from({ length: 4 }, (_, index) => ({
+      id: `s${String(index + 1).padStart(4, '0')}`,
+      kind: 'paragraph-sentence',
+      blockIndex: index,
+      zh: '甲乙丙丁',
+      en: 'A deliberately long fixture unit.',
+      literal: 'A deliberately long literal fixture unit.',
+    })),
+    preflight: { candidates: [] },
+    context: { westernEraStyle: 'BC_AD', roles: [], polities: [], reigns: [] },
+  };
+  const byteBoundPlan = enforceWorkerByteCeiling(
+    { book: 'fixture', chapter: '005' },
+    bytePacket,
+    [{ id: '001', start: 0, end: 4 }],
+    { chunkContextUnits: 0, maxWorkerBytes: 1 },
+    { chapters: {} },
+  );
+  if (byteBoundPlan.length !== 4 || byteBoundPlan.some((chunk) => chunk.units !== 1)) {
+    throw new Error('Worker byte ceiling did not split an oversized packet to its minimum ranges');
+  }
+
   const small = { book: 'fixture', chapter: '002', metrics: {
     units: 100, candidates: 200, workerBytes: 10_000, workloadScore: 42_000,
   } };
   const large = { book: 'fixture', chapter: '001', metrics: {
     units: 400, candidates: 900, workerBytes: 30_000, workloadScore: 174_000,
   } };
-  const opts = { allowLarge: false, maxUnits: 250, maxCandidates: 600 };
+  const longProse = { book: 'fixture', chapter: '003', metrics: {
+    units: 20, candidates: 40, workerBytes: 80_000, workloadScore: 86_400,
+  } };
+  const opts = {
+    allowLarge: false,
+    maxUnits: 250,
+    maxCandidates: 600,
+    maxWorkerBytes: 64 * 1024,
+  };
   const invalidationFixture = {
     schemaVersion: 1,
     batch: 'fixture',
@@ -1341,6 +2014,13 @@ async function selfTest() {
   if ([large, small].sort(compareWorkload)[0] !== small) {
     throw new Error('Workload ordering did not put the smaller chapter first');
   }
+  const retainedChat = {
+    ...large,
+    metrics: { ...large.metrics, recoveryPriority: 0 },
+  };
+  if ([small, retainedChat].sort(compareWorkload)[0] !== retainedChat) {
+    throw new Error('Workload ordering did not prioritize a retained agent conversation');
+  }
   const oneWorker = withDispatchMetrics(small, 1);
   const fourWorkers = withDispatchMetrics({
     ...small,
@@ -1349,7 +2029,11 @@ async function selfTest() {
   if ([fourWorkers, oneWorker].sort(compareWorkload)[0] !== oneWorker) {
     throw new Error('Dispatch ordering did not account for per-agent overhead');
   }
-  if (exceedsBulkCeiling(small, opts) || !exceedsBulkCeiling(large, opts)) {
+  if (
+    exceedsBulkCeiling(small, opts) ||
+    !exceedsBulkCeiling(large, opts) ||
+    !exceedsBulkCeiling(longProse, opts)
+  ) {
     throw new Error('Bulk size ceilings did not classify fixture chapters');
   }
   if (
@@ -1440,6 +2124,7 @@ async function selfTest() {
       || !cancelledForLimit
       || limitError.isRetryable
       || limitError.metric !== metric
+      || limitError.runId !== guardedRun.id
     ) {
       throw new Error(`In-flight ${metric} limit did not cancel with a non-retryable error`);
     }
@@ -1532,7 +2217,13 @@ async function main() {
 
     const control = createRunControl();
     const removeSignalHandlers = opts.dryRun ? () => {} : installSignalHandlers(control);
-    const budget = { rawCostCents: 0, chargedCents: 0, reservedCents: 0 };
+    const budget = {
+      rawCostCents: 0,
+      chargedCents: 0,
+      reservedCents: 0,
+      recordedRunIds: new Set(),
+      recordedAgents: new Set(),
+    };
     let nextIndex = 0;
     const results = [];
     const workers = Array.from({ length: Math.min(opts.concurrency, targets.length) }, async () => {

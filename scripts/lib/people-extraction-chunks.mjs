@@ -1,6 +1,11 @@
 import { buildInputFingerprint } from './people-content.mjs';
 import { buildCompactInput } from './people-compact.mjs';
 
+export const DEFAULT_PEOPLE_CHUNK_MAX_UNITS = 60;
+export const DEFAULT_PEOPLE_CHUNK_MAX_CANDIDATES = 150;
+export const DEFAULT_PEOPLE_CHUNK_CONTEXT_UNITS = 6;
+export const DEFAULT_PEOPLE_WORKER_MAX_BYTES = 48 * 1024;
+
 function positiveInteger(value, label) {
   if (!Number.isInteger(value) || value < 1) throw new Error(`${label} must be a positive integer`);
   return value;
@@ -32,7 +37,7 @@ export function createPeopleExtractionChunk(packet, range, options = {}) {
   if (!/^[A-Za-z0-9._-]+$/u.test(id)) throw new Error(`Invalid chunk ID: ${id}`);
   const contextUnits = Number.isInteger(options.contextUnits) && options.contextUnits >= 0
     ? options.contextUnits
-    : 6;
+    : DEFAULT_PEOPLE_CHUNK_CONTEXT_UNITS;
   const candidates = candidateCountForRange(packet, start, end);
   return {
     index: range.index ?? 0,
@@ -102,11 +107,14 @@ export function splitPeopleExtractionChunk(packet, chunk, options = {}) {
 }
 
 export function planPeopleExtractionChunks(packet, options = {}) {
-  const maxUnits = positiveInteger(options.maxUnits ?? 250, 'maxUnits');
-  const maxCandidates = positiveInteger(options.maxCandidates ?? 600, 'maxCandidates');
+  const maxUnits = positiveInteger(options.maxUnits ?? DEFAULT_PEOPLE_CHUNK_MAX_UNITS, 'maxUnits');
+  const maxCandidates = positiveInteger(
+    options.maxCandidates ?? DEFAULT_PEOPLE_CHUNK_MAX_CANDIDATES,
+    'maxCandidates',
+  );
   const contextUnits = Number.isInteger(options.contextUnits) && options.contextUnits >= 0
     ? options.contextUnits
-    : 6;
+    : DEFAULT_PEOPLE_CHUNK_CONTEXT_UNITS;
   const counts = candidateCountsByUnit(packet);
   const chunks = [];
   let start = 0;

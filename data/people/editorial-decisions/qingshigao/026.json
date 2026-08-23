@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "026",
+  "input": {
+    "chapterFingerprint": "sha256:ef65f4b90aa03bd3874eb7b376eb19b7e30edf36fb65a81a911ff912993ce955",
+    "proposalsFingerprint": "sha256:1c9a023b580b0b27e5a91659697bccc15b076f79cfe250704ae2ac30ff47c18b"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex source review",
+    "model": null,
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-23T17:33:35Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:026:r0001",
+      "unit": { "id": "s0063", "kind": "paragraph-sentence", "blockIndex": 14, "collection": "sentences", "itemIndex": 6 },
+      "field": "idiomatic",
+      "before": "I heard the Master say, \"Heaven's Way is called round; earth's Way is called square,\" as I learned from the Master.'\"",
+      "after": "I once heard from the Master: \"Heaven's Way is called round; earth's Way is called square.\"'\"",
+      "reason": "Chinese has one 嘗聞諸夫子 report; the idiomatic invents a second \"as I learned from the Master\" and drops 嘗.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:026:r0002",
+      "unit": { "id": "s0005", "kind": "paragraph-sentence", "blockIndex": 0, "collection": "sentences", "itemIndex": 4 },
+      "field": "literal",
+      "before": "in surveying carriage routes' longitude and latitude, the vault's calendar and the dome's chart.",
+      "after": "in surveying the empire's longitude and latitude, he covered the vault of heaven and the breadth of earth.",
+      "reason": "Literal \"vault's calendar and the dome's chart\" misreads 穹歷幅隕; 幅隕 is the classical earth-breadth phrase.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:026:r0003",
+      "unit": { "id": "s0404", "kind": "paragraph-sentence", "blockIndex": 93, "collection": "sentences", "itemIndex": 3 },
+      "field": "idiomatic",
+      "before": "Wakhan lies thirteen degrees fifty-one minutes west of the capital;",
+      "after": "Wokesi lies thirteen degrees fifty-one minutes west of the capital;",
+      "reason": "Chinese 沃克什 is the same place as earlier Wokesi (s0263), not Wakhan (斡罕). The idiomatic English wrongly substitutes Wakhan.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:026:r0004",
+      "unit": { "id": "s0404", "kind": "paragraph-sentence", "blockIndex": 93, "collection": "sentences", "itemIndex": 3 },
+      "field": "literal",
+      "before": "Wakhan, west of the capital by thirteen degrees fifty-one minutes;",
+      "after": "Wokesi, west of the capital by thirteen degrees fifty-one minutes;",
+      "reason": "Literal English also mistranslates 沃克什 as Wakhan; it should match Wokesi used for the same Chinese name earlier in the chapter.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:026:r0005",
+      "unit": { "id": "s0415", "kind": "paragraph-sentence", "blockIndex": 97, "collection": "sentences", "itemIndex": 0 },
+      "field": "idiomatic",
+      "before": "The above were additions of the Qianlong Board of Astronomy.",
+      "after": "Above: Qianlong-era additions to the Shixian Calendar.",
+      "reason": "Chinese 乾隆時憲所增 refers to Qianlong-era Shixian-calendar additions (as correctly rendered at s0266), not a Qianlong Board of Astronomy.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:026:r0006",
+      "unit": { "id": "s0415", "kind": "paragraph-sentence", "blockIndex": 97, "collection": "sentences", "itemIndex": 0 },
+      "field": "literal",
+      "before": "Right: additions under the Qianlong Directorate of Astronomy.",
+      "after": "The above were additions to the Shixian Calendar during the Qianlong reign.",
+      "reason": "Literal likewise invents a Directorate of Astronomy; 時憲 points to the Shixian calendar, parallel to s0266.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:026:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "參嘗聞諸夫子曰 contains one report by Zengzi: he once heard the Master say the quoted words. The existing ending repeats that report and drops the force of 嘗.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0063", "excerpt": "參嘗聞諸夫子曰：『天道曰圓，地道曰方。』" }
+    },
+    {
+      "repairId": "qingshigao:026:r0002",
+      "decision": "revise",
+      "after": "in surveying the maps' longitude and latitude, he traversed every corner of the realm.",
+      "reason": "The proposal correctly rejects the astronomical reading, but its replacement still overreads the corrupted glyphs. A printed witness gives 偏歷幅隅, 'traversed every corner of the realm,' matching the terrestrial map context.",
+      "sourceWitness": { "source": "wikisource", "citation": "Qingshigao 26, opening preface, printed witness variant", "excerpt": "度輿圖經緯，則偏歷幅隅" }
+    },
+    {
+      "repairId": "qingshigao:026:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The focus text is 沃克什, identical to the place rendered Wokesi in the latitude list. Wakhan would require a different Chinese transcription.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0263, s0404", "excerpt": "沃克什高三十度五十六分；... 沃克什偏西十三度五十一分" }
+    },
+    {
+      "repairId": "qingshigao:026:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field must use the same Wokesi rendering for the repeated Chinese place-name 沃克什.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0263, s0404", "excerpt": "沃克什" }
+    },
+    {
+      "repairId": "qingshigao:026:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same note at s0266 is correctly translated as Qianlong-era additions to the Shixian Calendar. 時憲 is not an astronomy board here.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0266, s0415", "excerpt": "右乾隆時憲所增" }
+    },
+    {
+      "repairId": "qingshigao:026:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "This sentence repeats s0266 verbatim, so its literal translation should repeat the established Shixian Calendar sense rather than invent a directorate.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0266, s0415", "excerpt": "右乾隆時憲所增" }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}

@@ -27,6 +27,9 @@ import {
 } from './lib/people-candidates.mjs';
 import { createPeopleSchemaValidator, formatSchemaErrors } from './lib/people-schema.mjs';
 import {
+  DEFAULT_PEOPLE_CHUNK_CONTEXT_UNITS,
+  DEFAULT_PEOPLE_CHUNK_MAX_CANDIDATES,
+  DEFAULT_PEOPLE_CHUNK_MAX_UNITS,
   buildPeopleChunkPacket,
   createPeopleExtractionChunk,
   planPeopleExtractionChunks,
@@ -51,11 +54,11 @@ Options:
   --chunk-id ID     Stable ID for an explicit range.
   --chunk-count N   Total ranges represented in the worker scope.
   --chunk-max-units N
-                    Maximum owned units per chunk (default: 250).
+                    Maximum owned units per chunk (default: ${DEFAULT_PEOPLE_CHUNK_MAX_UNITS}).
   --chunk-max-candidates N
-                    Maximum owned candidates per chunk (default: 600).
+                    Maximum owned candidates per chunk (default: ${DEFAULT_PEOPLE_CHUNK_MAX_CANDIDATES}).
   --chunk-context-units N
-                    Read-only units supplied on each side (default: 6).
+                    Read-only units supplied on each side (default: ${DEFAULT_PEOPLE_CHUNK_CONTEXT_UNITS}).
   --model MODEL     Model recorded in the seed (required with --seed-out).
   --summary         Print candidate detector counts.
   --self-test       Run deterministic packet-builder tests.`);
@@ -74,9 +77,9 @@ function parseArgs(argv) {
     chunkEnd: null,
     chunkId: null,
     chunkCount: null,
-    chunkMaxUnits: 250,
-    chunkMaxCandidates: 600,
-    chunkContextUnits: 6,
+    chunkMaxUnits: DEFAULT_PEOPLE_CHUNK_MAX_UNITS,
+    chunkMaxCandidates: DEFAULT_PEOPLE_CHUNK_MAX_CANDIDATES,
+    chunkContextUnits: DEFAULT_PEOPLE_CHUNK_CONTEXT_UNITS,
     summary: false,
     selfTest: false,
   };

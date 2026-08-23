@@ -158,14 +158,14 @@ async function enforceRunLimits(run, options) {
       `${options.label}: cancelled cloud run ${run.id} at ` +
       `${totalTokens.toLocaleString('en-US')} tokens (limit ` +
       `${maxTotalTokens.toLocaleString('en-US')})`,
-      { metric: 'tokens', observed: totalTokens, limit: maxTotalTokens },
+      { runId: run.id, metric: 'tokens', observed: totalTokens, limit: maxTotalTokens },
     ));
   }
   if (maxRawCostCents !== null && rawCostCents !== null && rawCostCents >= maxRawCostCents) {
     await cancelRunForLimit(run, options, new CursorRunLimitExceededError(
       `${options.label}: cancelled cloud run ${run.id} at $${(rawCostCents / 100).toFixed(2)} ` +
       `raw usage cost (limit $${(maxRawCostCents / 100).toFixed(2)})`,
-      { metric: 'raw-cost', observed: rawCostCents, limit: maxRawCostCents },
+      { runId: run.id, metric: 'raw-cost', observed: rawCostCents, limit: maxRawCostCents },
     ));
   }
 }
@@ -209,7 +209,7 @@ export async function waitForCursorRun(run, options) {
         await cancelRunForLimit(run, options, new CursorRunLimitExceededError(
           `${options.label}: cancelled cloud run ${run.id} because usage monitoring failed ` +
           `${usageReadFailures} consecutive times: ${errorText(error)}`,
-          { metric: 'usage-monitor', observed: usageReadFailures, limit: maximum, cause: error },
+          { runId: run.id, metric: 'usage-monitor', observed: usageReadFailures, limit: maximum, cause: error },
         ));
       }
       console.warn(
