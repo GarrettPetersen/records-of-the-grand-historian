@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
+  buildCompactPeopleExtractionSeed,
   buildPeopleChunkWorkerPacket,
   buildPeopleExtractionPacket,
   buildPeopleWorkerPacket,
@@ -88,6 +89,15 @@ const DEFAULT_CHUNK_CONTEXT_UNITS = DEFAULT_PEOPLE_CHUNK_CONTEXT_UNITS;
 const DEFAULT_AGENT_OVERHEAD_SCORE = 100_000;
 const DEFAULT_AGENT_COST_RESERVE_CENTS = 500;
 const PEOPLE_CONFIG = readJson(path.join(PEOPLE_DIR, 'config.json'));
+const SEALED_WORKER_VERSION = 1;
+const COMPACT_WORKER_INSTRUCTIONS = fs.readFileSync(
+  path.join(REPO_ROOT, 'prompt-people-extraction-compact.txt'),
+  'utf8',
+).trim();
+const COMPACT_EXTRACTION_SCHEMA = fs.readFileSync(
+  path.join(PEOPLE_DIR, 'schema', 'compact-extraction.schema.json'),
+  'utf8',
+).trim();
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
 function usage() {
@@ -122,9 +132,11 @@ Options:
   --model MODEL        Cursor model (default: ${DEFAULT_MODEL}).
   --effort LEVEL       Model effort/reasoning: low, medium, or high (default: low).
   --fast               Enable the model's fast variant (default: off).
-  --repo URL           Repository URL available to cloud agents.
-  --starting-ref REF   Remote branch/ref agents read (default: ${DEFAULT_STARTING_REF}).
+  --repo URL           Repository used only to verify source and recover older agents.
+  --starting-ref REF   Verification/recovery branch (default: ${DEFAULT_STARTING_REF}).
   --dry-run            Build and summarize packets without calling Cursor.
+  --recover-only       Download and validate existing artifacts without starting or
+                       continuing any Cursor model turn.
   --force              Re-extract chapters with a valid sidecar from the current prompt.
   --retry-failed       Include chapters whose latest state is failed.
   --only-failed        Process only failed chapters; implies --retry-failed.
@@ -171,6 +183,7 @@ function parseArgs(argv) {
     startingRef: process.env.SDK_PEOPLE_STARTING_REF ?? DEFAULT_STARTING_REF,
     apiKey: process.env.CURSOR_API_KEY,
     dryRun: false,
+    recoverOnly: false,
     force: false,
     retryFailed: false,
     onlyFailed: false,
@@ -212,6 +225,7 @@ function parseArgs(argv) {
     else if (arg === '--repo') opts.repoUrl = next();
     else if (arg === '--starting-ref') opts.startingRef = next();
     else if (arg === '--dry-run') opts.dryRun = true;
+    else if (arg === '--recover-only') opts.recoverOnly = true;
     else if (arg === '--force') opts.force = true;
     else if (arg === '--retry-failed') opts.retryFailed = true;
     else if (arg === '--only-failed') {
@@ -262,6 +276,19 @@ function modelSelection(opts) {
   };
 }
 
+function assertInferenceAllowed(opts, label) {
+  if (!opts.recoverOnly) return;
+  const error = new Error(
+    `${label} has no validated published artifact; --recover-only forbids a new Cursor turn`,
+  );
+  error.code = 'RECOVERY_ARTIFACT_UNAVAILABLE';
+  throw error;
+}
+
+function isRecoveryArtifactUnavailable(error) {
+  return error?.code === 'RECOVERY_ARTIFACT_UNAVAILABLE';
+}
+
 function chapterTargets(opts) {
   const targets = [];
   const books = fs.readdirSync(DATA_DIR, { withFileTypes: true })
@@ -305,15 +332,18 @@ function withDispatchMetrics(target, workerCount = 1) {
   };
 }
 
+function hasRetainedAgentConversation(record) {
+  return Boolean(record?.agentId && !record.resumeExhausted && (
+    ['claimed', 'extracting', 'interrupted', 'recovering', 'failed/retryable', 'failed'].includes(record.status) ||
+    chunkHitRunLimit(record)
+  ));
+}
+
 function withRecoveryPriority(target, state) {
   const chapterState = state.chapters[stateKey(target)] ?? {};
   const chunkStates = Object.values(chapterState.chunks ?? {});
-  const resumableStatus = (record) =>
-    record.agentId && !record.resumeExhausted && (
-      ['claimed', 'extracting', 'interrupted', 'recovering', 'failed/retryable', 'failed'].includes(record.status) ||
-      chunkHitRunLimit(record)
-    );
-  const hasRetainedChat = resumableStatus(chapterState) || chunkStates.some(resumableStatus);
+  const hasRetainedChat = hasRetainedAgentConversation(chapterState) ||
+    chunkStates.some(hasRetainedAgentConversation);
   const archiveDirectory = path.join(
     PEOPLE_DIR,
     'generated',
@@ -330,6 +360,25 @@ function withRecoveryPriority(target, state) {
       recoveryPriority: hasRetainedChat ? 0 : hasAcceptedPart ? 1 : 2,
     },
   };
+}
+
+function recoveryOnlyTarget(target, state) {
+  const chapterState = state.chapters[stateKey(target)] ?? {};
+  if (
+    hasRetainedAgentConversation(chapterState) ||
+    Object.values(chapterState.chunks ?? {}).some(hasRetainedAgentConversation)
+  ) {
+    return true;
+  }
+  const archiveDirectory = path.join(
+    PEOPLE_DIR,
+    'generated',
+    'chunk-extractions',
+    target.book,
+    target.chapter,
+  );
+  return fs.existsSync(archiveDirectory) &&
+    fs.readdirSync(archiveDirectory).some((name) => name.endsWith('.json'));
 }
 
 function compareBookOrder(left, right) {
@@ -418,6 +467,29 @@ function baseChunkPlanForTarget(target, packet, opts, state, log = false) {
     planFreshChunks(target, packet, opts, state);
 }
 
+function sealedPayloadMetrics(target, packet, opts, state) {
+  const chunked = exceedsBulkCeiling({ metrics: targetMetrics(packet) }, opts) && !opts.allowLarge;
+  if (!chunked) {
+    const bytes = Buffer.byteLength(
+      sealedInitialPrompt(target, packet, buildPeopleWorkerPacket(packet), opts),
+    );
+    return { workers: 1, totalBytes: bytes, maxBytes: bytes };
+  }
+  const chunks = baseChunkPlanForTarget(target, packet, opts, state);
+  const sizes = chunks.map((chunk) => Buffer.byteLength(sealedInitialPrompt(
+    target,
+    buildPeopleChunkPacket(packet, chunk),
+    buildPeopleChunkWorkerPacket(packet, chunk),
+    opts,
+    chunk,
+  )));
+  return {
+    workers: sizes.length,
+    totalBytes: sizes.reduce((sum, bytes) => sum + bytes, 0),
+    maxBytes: Math.max(...sizes),
+  };
+}
+
 function planTarget(target) {
   return {
     book: target.book,
@@ -479,6 +551,8 @@ function prepareTargetQueue(rawTargets, opts, state, matcher) {
       continue;
     } else if (!opts.retryFailed && state.chapters[stateKey(target)]?.status === 'failed') {
       failed.push(measured);
+    } else if (opts.recoverOnly && measured.metrics.recoveryPriority > 1) {
+      continue;
     } else if (exceedsBulkCeiling(measured, opts) && !opts.allowLarge) {
       if (opts.deferLarge) {
         oversized.push(measured);
@@ -676,6 +750,94 @@ function chunkArchivePath(target, chunk) {
 function publishArtifactCommand(output) {
   const artifact = path.posix.join('/opt/cursor/artifacts', output);
   return `mkdir -p ${path.posix.dirname(artifact)} && cp ${output} ${artifact}`;
+}
+
+function sealedArtifactPath(output) {
+  return path.posix.join('/opt/cursor/artifacts', output);
+}
+
+function sealedInitialPrompt(target, packet, workerPacket, opts, chunk = null) {
+  const output = chunk ? chunkArtifactPath(target, chunk) : artifactPath(target);
+  const artifact = sealedArtifactPath(output);
+  const scope = chunk
+    ? `owned chunk ${chunk.id}/${String(chunk.count).padStart(3, '0')} of ${stateKey(target)}`
+    : `chapter ${stateKey(target)}`;
+  const seed = serializeCompactPeopleExtraction(
+    buildCompactPeopleExtractionSeed(packet, opts.model),
+  ).trim();
+  return `Perform the person extraction and final editorial audit for ${scope}.
+
+This is a sealed packet-only assignment. The workspace intentionally contains no repository.
+Use only the four payload sections below. Do not inspect the filesystem, browse, search, use
+subagents, or reconstruct project context. The only permitted workspace action is one final
+shell write that creates the complete JSON artifact at:
+${artifact}
+
+Preserve the seed's scope, input fingerprints, and run metadata exactly. Replace its empty
+result arrays and incomplete coverage flags with the complete compact extraction. For a chunk,
+readOnlyContext is context only and all emitted evidence must belong to owned units. Create the
+artifact directory if necessary, write valid JSON directly to the absolute path above, and do
+not create any other file. Finish only after auditing every owned unit and every candidate.
+
+<compact-worker-instructions version="${PEOPLE_CONFIG.promptVersion}">
+${COMPACT_WORKER_INSTRUCTIONS}
+</compact-worker-instructions>
+
+<compact-extraction-schema>
+${COMPACT_EXTRACTION_SCHEMA}
+</compact-extraction-schema>
+
+<worker-packet version="${workerPacket.version}">
+${JSON.stringify(workerPacket)}
+</worker-packet>
+
+<immutable-seed>
+${seed}
+</immutable-seed>`;
+}
+
+function sealedRetryPrompt(target, chunk, errors) {
+  const output = chunk ? chunkArtifactPath(target, chunk) : artifactPath(target);
+  const artifact = sealedArtifactPath(output);
+  return `The host rejected the sealed extraction artifact for ${stateKey(target)}${chunk ? ` chunk ${chunk.id}` : ''}.
+
+Preserve correct work already present in this conversation. Fix every validation error below,
+audit all owned units again, and overwrite only ${artifact} with the complete valid JSON.
+Do not inspect the filesystem, browse, search, use subagents, or create another file.
+
+VALIDATION ERRORS:
+${errors.slice(0, 400).map((error) => `- ${error}`).join('\n')}`;
+}
+
+function sealedResumePrompt(target, chunk, errors) {
+  const output = chunk ? chunkArtifactPath(target, chunk) : artifactPath(target);
+  const artifact = sealedArtifactPath(output);
+  return `Your sealed packet-only run for ${stateKey(target)}${chunk ? ` chunk ${chunk.id}` : ''} was interrupted before the host accepted a validated artifact.
+
+Resume the work already completed in this conversation; do not restart the extraction. Finish
+the remaining owned units and overwrite only ${artifact} with the complete valid JSON. Do not
+inspect the filesystem, browse, search, use subagents, or create another file.
+
+PRIOR HOST DIAGNOSTICS:
+${errors.slice(0, 40).map((error) => `- ${error}`).join('\n')}`;
+}
+
+function sealedAgentOptions(target, opts, chunk = null) {
+  return {
+    apiKey: opts.apiKey,
+    name: `People extraction ${stateKey(target)}${chunk ? ` chunk ${chunk.id}` : ''}`,
+    model: modelSelection(opts),
+    cloud: {
+      metadata: {
+        purpose: 'people-extraction',
+        workerMode: 'sealed',
+        workerVersion: String(SEALED_WORKER_VERSION),
+        book: target.book,
+        chapter: target.chapter,
+        chunk: chunk?.id ?? 'whole',
+      },
+    },
+  };
 }
 
 function initialPrompt(target, opts) {
@@ -885,6 +1047,7 @@ function validateDownloadedExtraction(extraction, packet) {
 async function recoverInterruptedExtraction(target, packet, opts, state, control, budget) {
   const prior = state.chapters[stateKey(target)];
   if (prior?.status !== 'interrupted' || !prior.agentId || prior.resumeExhausted) return null;
+  const workerMode = prior.workerMode === 'sealed' ? 'sealed' : 'repository';
 
   let agent;
   let run;
@@ -901,6 +1064,7 @@ async function recoverInterruptedExtraction(target, packet, opts, state, control
       apiKey: opts.apiKey,
       limit: 20,
     });
+    seedRecordedRuns(budget, runs.items);
     run = runs.items.find((candidate) => candidate.status === 'running') ?? runs.items[0];
     let existingRunError = null;
     if (run?.status === 'running') {
@@ -937,6 +1101,7 @@ async function recoverInterruptedExtraction(target, packet, opts, state, control
       }
     }
     if (existingRunError) throw existingRunError;
+    assertInferenceAllowed(opts, stateKey(target));
     releaseReservation = await reserveAgentBudget(opts, budget, control);
     resumeTurnStarted = true;
     updateState(state, target, {
@@ -952,7 +1117,10 @@ async function recoverInterruptedExtraction(target, packet, opts, state, control
       state,
       control,
       null,
-      wholeResumePrompt(target, recoveryErrors),
+      workerMode === 'sealed'
+        ? sealedResumePrompt(target, null, recoveryErrors)
+        : wholeResumePrompt(target, recoveryErrors),
+      workerMode,
     );
     updateState(state, target, { resumePending: false });
     return { ...accepted, packet };
@@ -995,6 +1163,7 @@ async function obtainValidInitialExtraction(
   control,
   chunk = null,
   firstPrompt = null,
+  workerMode = 'repository',
 ) {
   let errors = [];
   for (let attempt = 1; attempt <= opts.maxAttempts; attempt += 1) {
@@ -1010,7 +1179,9 @@ async function obtainValidInitialExtraction(
     else updateState(state, target, patch);
     const prompt = attempt === 1
       ? firstPrompt ?? (chunk ? chunkInitialPrompt(target, chunk, opts) : initialPrompt(target, opts))
-      : chunk ? chunkRetryPrompt(target, chunk, errors) : retryPrompt(target, errors);
+      : workerMode === 'sealed'
+        ? sealedRetryPrompt(target, chunk, errors)
+        : chunk ? chunkRetryPrompt(target, chunk, errors) : retryPrompt(target, errors);
     const phase = chunk ? `chunk-${chunk.id}` : 'extraction';
     const wanted = chunk ? chunkArtifactPath(target, chunk) : artifactPath(target);
     let result;
@@ -1135,6 +1306,13 @@ function seedRecordedUsage(budget, usage) {
   budget.recordedRunIds ??= new Set();
   for (const run of usage?.runs ?? []) {
     if (run.runId) budget.recordedRunIds.add(run.runId);
+  }
+}
+
+function seedRecordedRuns(budget, runs) {
+  budget.recordedRunIds ??= new Set();
+  for (const run of runs ?? []) {
+    if (run.id) budget.recordedRunIds.add(run.id);
   }
 }
 
@@ -1498,6 +1676,7 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
     const resumeAgentId = hasResumableChunkConversation(previousChunk)
       ? previousChunk.agentId
       : null;
+    let workerMode = previousChunk?.workerMode === 'sealed' ? 'sealed' : 'repository';
     let accepted = null;
     const recoveryErrors = [...(previousChunk?.lastErrors ?? [])];
     if (resumeAgentId) {
@@ -1515,6 +1694,7 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
         apiKey: opts.apiKey,
         limit: 20,
       });
+      seedRecordedRuns(budget, runs.items);
       let existingRun = runs.items.find((candidate) => candidate.status === 'running') ?? runs.items[0];
       let existingRunError = null;
       if (existingRun?.status === 'running') {
@@ -1566,6 +1746,13 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
         throw existingRunError;
       }
       if (!accepted) {
+        if (opts.recoverOnly) {
+          updateChunkState(state, target, chunk, {
+            status: 'interrupted',
+            resumePending: false,
+          });
+        }
+        assertInferenceAllowed(opts, `${stateKey(target)}/chunk-${chunk.id}`);
         releaseReservation = await reserveAgentBudget(opts, budget, control);
         updateChunkState(state, target, chunk, {
           status: 'claimed',
@@ -1573,21 +1760,15 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
         });
       }
     } else {
+      assertInferenceAllowed(opts, `${stateKey(target)}/chunk-${chunk.id}`);
       releaseReservation = await reserveAgentBudget(opts, budget, control);
-      agent = await Agent.create({
-        apiKey: opts.apiKey,
-        name: `People extraction ${stateKey(target)} chunk ${chunk.id}`,
-        model: modelSelection(opts),
-        cloud: {
-          repos: [{ url: opts.repoUrl, startingRef: opts.startingRef }],
-          workOnCurrentBranch: true,
-          autoCreatePR: false,
-          skipReviewerRequest: true,
-        },
-      });
+      workerMode = 'sealed';
+      agent = await Agent.create(sealedAgentOptions(target, opts, chunk));
       updateChunkState(state, target, chunk, {
         status: 'claimed',
         agentId: agent.agentId,
+        workerMode,
+        workerVersion: SEALED_WORKER_VERSION,
         resumePending: false,
         resumeExhausted: false,
       });
@@ -1602,14 +1783,34 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
           state,
           control,
           chunk,
-          resumeAgentId ? chunkResumePrompt(target, chunk, recoveryErrors) : null,
+          resumeAgentId
+            ? workerMode === 'sealed'
+              ? sealedResumePrompt(target, chunk, recoveryErrors)
+              : chunkResumePrompt(target, chunk, recoveryErrors)
+            : sealedInitialPrompt(
+              target,
+              packet,
+              buildPeopleChunkWorkerPacket(fullPacket, chunk),
+              opts,
+              chunk,
+            ),
+          workerMode,
         );
       } catch (error) {
-        if (resumeAgentId && !(error instanceof CursorRunLimitExceededError)) {
+        if (
+          resumeAgentId &&
+          !(error instanceof CursorRunLimitExceededError) &&
+          !isRecoveryArtifactUnavailable(error)
+        ) {
           updateChunkState(state, target, chunk, {
             status: 'interrupted',
             resumePending: false,
             resumeExhausted: true,
+          });
+        } else if (isRecoveryArtifactUnavailable(error)) {
+          updateChunkState(state, target, chunk, {
+            status: 'interrupted',
+            resumePending: false,
           });
         }
         throw error;
@@ -1745,9 +1946,12 @@ async function processTarget(target, opts, state, control, budget) {
   }
   if (opts.dryRun) {
     const chunkLabel = target.chunkCount ? `, ${target.chunkCount} planned chunks` : '';
+    const payload = sealedPayloadMetrics(target, packet, opts, state);
     console.log(
       `[dry-run ${key}] ${packet.units.length} units, ` +
-      `${packet.preflight.candidates.length} candidates${chunkLabel}`,
+      `${packet.preflight.candidates.length} candidates${chunkLabel}; ` +
+      `sealed payload max ${(payload.maxBytes / 1024).toFixed(1)} KiB, ` +
+      `total ${(payload.totalBytes / 1024).toFixed(1)} KiB across ${payload.workers} worker(s)`,
     );
     return { status: 'dry-run' };
   }
@@ -1765,6 +1969,11 @@ async function processTarget(target, opts, state, control, budget) {
       return await processChunkedTarget(target, packet, opts, state, control, budget);
     } catch (error) {
       const errors = validationErrors(error);
+      if (isRecoveryArtifactUnavailable(error)) {
+        updateState(state, target, { status: 'interrupted' });
+        console.log(`[${key}] no validated artifact is available yet; retained chat preserved`);
+        return { status: 'recovery-unavailable', errors };
+      }
       const status = control.stopRequested ? 'interrupted' : 'failed';
       updateState(state, target, { status, lastErrors: errors });
       console.error(`[${key}] chunked ${status}: ${errors[0]}`);
@@ -1775,25 +1984,28 @@ async function processTarget(target, opts, state, control, budget) {
   let agent;
   let releaseReservation = () => {};
   try {
+    assertInferenceAllowed(opts, key);
     releaseReservation = await reserveAgentBudget(opts, budget, control);
-    agent = await Agent.create({
-      apiKey: opts.apiKey,
-      name: `People extraction ${key}`,
-      model: modelSelection(opts),
-      cloud: {
-        repos: [{ url: opts.repoUrl, startingRef: opts.startingRef }],
-        workOnCurrentBranch: true,
-        autoCreatePR: false,
-        skipReviewerRequest: true,
-      },
-    });
+    agent = await Agent.create(sealedAgentOptions(target, opts));
     updateState(state, target, {
       agentId: agent.agentId,
+      workerMode: 'sealed',
+      workerVersion: SEALED_WORKER_VERSION,
       resumePending: false,
       resumeExhausted: false,
     });
     const accepted = {
-      ...await obtainValidInitialExtraction(agent, target, packet, opts, state, control),
+      ...await obtainValidInitialExtraction(
+        agent,
+        target,
+        packet,
+        opts,
+        state,
+        control,
+        null,
+        sealedInitialPrompt(target, packet, buildPeopleWorkerPacket(packet), opts),
+        'sealed',
+      ),
       packet,
     };
     return acceptWholeExtraction(target, accepted, state);
@@ -1908,6 +2120,18 @@ async function selfTest() {
   ) {
     throw new Error('Interrupted chunk conversation eligibility is incorrect');
   }
+  if (
+    !recoveryOnlyTarget(
+      { book: 'fixture', chapter: '003' },
+      { chapters: { 'fixture/003': recoveryPrior } },
+    ) ||
+    recoveryOnlyTarget(
+      { book: 'fixture', chapter: '003' },
+      { chapters: { 'fixture/003': { status: 'accepted', chunks: {} } } },
+    )
+  ) {
+    throw new Error('Recovery-only prefilter did not isolate resumable work');
+  }
   const deepRecoveryPlan = normalizePeopleExtractionChunkPlan(recoveryPacket, [
     { id: '001aa', start: 0, end: 1, parentId: '001a', adaptiveDepth: 2 },
     { id: '001ab', start: 1, end: 2, parentId: '001a', adaptiveDepth: 2 },
@@ -1958,7 +2182,17 @@ async function selfTest() {
       en: 'A deliberately long fixture unit.',
       literal: 'A deliberately long literal fixture unit.',
     })),
-    preflight: { candidates: [] },
+    input: {
+      unitCount: 4,
+      chapterFingerprint: 'sha256:fixture-chapter',
+      unitDigests: Array.from({ length: 4 }, (_, index) => ({
+        id: `s${String(index + 1).padStart(4, '0')}`,
+        zh: `sha256:fixture-zh-${index}`,
+        en: `sha256:fixture-en-${index}`,
+        literal: `sha256:fixture-literal-${index}`,
+      })),
+    },
+    preflight: { scannerVersion: 2, candidates: [] },
     context: { westernEraStyle: 'BC_AD', roles: [], polities: [], reigns: [] },
   };
   const byteBoundPlan = enforceWorkerByteCeiling(
@@ -1996,6 +2230,37 @@ async function selfTest() {
   );
   if (retainedAgentPlan.length !== 1 || retainedAgentPlan[0].id !== '001') {
     throw new Error('A resumable agent conversation was split before its recovery turn');
+  }
+  const sealedFixtureTarget = { book: 'fixture', chapter: '005' };
+  const sealedFixtureOpts = {
+    apiKey: 'fixture-key',
+    model: 'grok-4.5',
+    effort: 'low',
+    fast: false,
+  };
+  const sealedPrompt = sealedInitialPrompt(
+    sealedFixtureTarget,
+    bytePacket,
+    buildPeopleWorkerPacket(bytePacket),
+    sealedFixtureOpts,
+  );
+  const sealedArtifact = sealedArtifactPath(artifactPath(sealedFixtureTarget));
+  if (
+    !sealedPrompt.includes(sealedArtifact) ||
+    !sealedPrompt.includes('A deliberately long fixture unit.') ||
+    !sealedPrompt.includes('sha256:fixture-chapter') ||
+    !sealedPrompt.includes('<compact-extraction-schema>') ||
+    !sealedPrompt.includes('<immutable-seed>')
+  ) {
+    throw new Error('Sealed worker prompt omitted its artifact, packet, schema, or immutable seed');
+  }
+  const sealedOptions = sealedAgentOptions(sealedFixtureTarget, sealedFixtureOpts);
+  if (
+    'repos' in sealedOptions.cloud ||
+    sealedOptions.cloud.metadata.workerMode !== 'sealed' ||
+    sealedOptions.cloud.metadata.workerVersion !== String(SEALED_WORKER_VERSION)
+  ) {
+    throw new Error('Fresh sealed worker was given repository context or incorrect metadata');
   }
 
   const small = { book: 'fixture', chapter: '002', metrics: {
@@ -2188,6 +2453,23 @@ async function selfTest() {
   if (changed || JSON.stringify(dryRunState) !== beforeDryRun) {
     throw new Error('Dry-run queue planning mutated extraction state');
   }
+  let recoveryOnlyRejectedInference = false;
+  try {
+    assertInferenceAllowed({ recoverOnly: true }, 'fixture/001');
+  } catch (error) {
+    recoveryOnlyRejectedInference = error.code === 'RECOVERY_ARTIFACT_UNAVAILABLE';
+  }
+  if (!recoveryOnlyRejectedInference) {
+    throw new Error('Recovery-only mode did not reject a new model turn');
+  }
+  if (!isRecoveryArtifactUnavailable({ code: 'RECOVERY_ARTIFACT_UNAVAILABLE' })) {
+    throw new Error('Recovery-only artifact absence was not classified');
+  }
+  const historicalBudget = { recordedRunIds: new Set() };
+  seedRecordedRuns(historicalBudget, [{ id: 'run-before-restart' }]);
+  if (!historicalBudget.recordedRunIds.has('run-before-restart')) {
+    throw new Error('Restart accounting did not exclude a preexisting Cursor run');
+  }
   const lockDirectory = fs.mkdtempSync(path.join(REPO_ROOT, '.people-extract-lock-test-'));
   const lockFile = path.join(lockDirectory, 'run.lock');
   try {
@@ -2226,7 +2508,11 @@ async function main() {
     const state = loadState();
     if (!opts.dryRun) recoverInterruptedState(state);
     opts.properNounMatcher = loadProperNounMatcher();
-    const queue = prepareTargetQueue(chapterTargets(opts), opts, state, opts.properNounMatcher);
+    const allTargets = chapterTargets(opts);
+    const rawTargets = opts.recoverOnly
+      ? allTargets.filter((target) => recoveryOnlyTarget(target, state))
+      : allTargets;
+    const queue = prepareTargetQueue(rawTargets, opts, state, opts.properNounMatcher);
     const targets = queue.selected;
     const planPath = path.relative(REPO_ROOT, opts.planOut);
     console.log(
@@ -2248,7 +2534,8 @@ async function main() {
       `agent reservation=$${(opts.agentCostReserveCents / 100).toFixed(2)}; ` +
       `per-run raw ceiling=${opts.maxRunCostCents === null ? 'unlimited' : `$${(opts.maxRunCostCents / 100).toFixed(2)}`}; ` +
       `per-run token ceiling=${opts.maxRunTokens === null ? 'unlimited' : opts.maxRunTokens.toLocaleString('en-US')}; ` +
-      'no worker git pushes',
+      `${opts.recoverOnly ? 'artifact recovery only; ' : ''}` +
+      'fresh workers=sealed packet-only; no worker git pushes',
     );
     if (!opts.dryRun && targets.length > 0) fetchStartingRef(opts.startingRef);
 
