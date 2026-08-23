@@ -355,6 +355,17 @@ function chunkWorkerBytes(packet, chunk) {
   return Buffer.byteLength(JSON.stringify(buildPeopleChunkWorkerPacket(packet, chunk)));
 }
 
+function currentChunkArchiveIsValid(target, packet, chunk) {
+  const archive = chunkArchivePath(target, chunk);
+  if (!fs.existsSync(archive)) return false;
+  try {
+    validateCompactPeopleExtraction(readJson(archive), buildPeopleChunkPacket(packet, chunk));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function enforceWorkerByteCeiling(target, packet, chunks, opts, state = null) {
   let planned = normalizePeopleExtractionChunkPlan(packet, chunks, {
     contextUnits: opts.chunkContextUnits,
@@ -363,12 +374,12 @@ function enforceWorkerByteCeiling(target, packet, chunks, opts, state = null) {
     const chunk = planned[index];
     const bytes = chunkWorkerBytes(packet, chunk);
     const previous = target && state?.chapters?.[stateKey(target)]?.chunks?.[chunk.id];
-    const hasArchive = target && fs.existsSync(chunkArchivePath(target, chunk));
+    const hasCurrentArchive = target && currentChunkArchiveIsValid(target, packet, chunk);
     if (
       bytes <= opts.maxWorkerBytes ||
       chunk.units === 1 ||
-      previous?.agentId ||
-      hasArchive
+      hasResumableChunkConversation(previous) ||
+      hasCurrentArchive
     ) {
       index += 1;
       continue;
@@ -1959,6 +1970,32 @@ async function selfTest() {
   );
   if (byteBoundPlan.length !== 4 || byteBoundPlan.some((chunk) => chunk.units !== 1)) {
     throw new Error('Worker byte ceiling did not split an oversized packet to its minimum ranges');
+  }
+  const staleAgentPlan = enforceWorkerByteCeiling(
+    { book: 'fixture', chapter: '005' },
+    bytePacket,
+    [{ id: '001', start: 0, end: 4 }],
+    { chunkContextUnits: 0, maxWorkerBytes: 1 },
+    { chapters: { 'fixture/005': { chunks: { '001': {
+      status: 'accepted',
+      agentId: 'bc-stale-fixture',
+    } } } } },
+  );
+  if (staleAgentPlan.length !== 4) {
+    throw new Error('A non-resumable historical agent bypassed the worker byte ceiling');
+  }
+  const retainedAgentPlan = enforceWorkerByteCeiling(
+    { book: 'fixture', chapter: '005' },
+    bytePacket,
+    [{ id: '001', start: 0, end: 4 }],
+    { chunkContextUnits: 0, maxWorkerBytes: 1 },
+    { chapters: { 'fixture/005': { chunks: { '001': {
+      status: 'interrupted',
+      agentId: 'bc-retained-fixture',
+    } } } } },
+  );
+  if (retainedAgentPlan.length !== 1 || retainedAgentPlan[0].id !== '001') {
+    throw new Error('A resumable agent conversation was split before its recovery turn');
   }
 
   const small = { book: 'fixture', chapter: '002', metrics: {
