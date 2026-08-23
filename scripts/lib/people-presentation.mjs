@@ -443,6 +443,24 @@ function isPreferredNameVariant(name, preferredName) {
   return sharesNormalizedLatinName(name, preferredName);
 }
 
+function isPreferredNameFragment(name, preferredName) {
+  const nameZh = normalizeChineseName(name.zh);
+  const preferredZh = normalizeChineseName(preferredName.zh);
+  if (!nameZh || !preferredZh || nameZh === preferredZh || !preferredZh.includes(nameZh)) return false;
+
+  const aliasVariants = [name.en, name.pinyin].map(normalizeLatinName).filter(Boolean);
+  if (aliasVariants.length === 0) return true;
+  const preferredVariants = [preferredName.en, preferredName.pinyin].map(normalizeLatinName).filter(Boolean);
+  const preferredTokens = new Set(preferredVariants.flatMap((value) => value.split(' ')));
+  const preferredCompacts = preferredVariants.map((value) => value.replace(/\s+/gu, ''));
+  return aliasVariants.some((value) => {
+    const tokens = value.split(' ');
+    const compact = value.replace(/\s+/gu, '');
+    return tokens.every((token) => preferredTokens.has(token)) ||
+      preferredCompacts.some((preferred) => preferred.includes(compact));
+  });
+}
+
 function aliasCandidateScore(name, family) {
   const sourceFamily = rawNameFamily(name);
   const exactSemanticKind = sourceFamily === family ? 40 : 0;
@@ -500,7 +518,9 @@ export function personPublicAliases(person, limit = MAX_PUBLIC_PERSON_ALIASES) {
   for (const name of person.names ?? []) {
     if (![name.en, name.zh, name.pinyin].some((value) => String(value ?? '').trim())) continue;
     const family = publicNameFamily(name);
-    if (!PUBLIC_ALIAS_FAMILIES.has(family) || isGenericReference(name) || isPreferredNameVariant(name, person.preferredName)) continue;
+    if (!PUBLIC_ALIAS_FAMILIES.has(family) || isGenericReference(name) ||
+        isPreferredNameVariant(name, person.preferredName) ||
+        isPreferredNameFragment(name, person.preferredName)) continue;
     const candidate = {
       kind: DISPLAY_KIND_BY_FAMILY.get(family),
       en: name.en ?? null,

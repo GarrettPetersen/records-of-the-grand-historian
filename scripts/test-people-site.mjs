@@ -67,12 +67,23 @@ assert.deepEqual(personPublicAliases(emperorAliasFixture).map((name) => name.en)
 const duplicateAliasFixture = {
   preferredName: { kind: 'personal', en: 'Chen Ping', zh: '陳平', pinyin: 'Chén Píng' },
   names: [
-    { kind: 'personal', en: 'Ping', zh: '平', pinyin: 'Píng', claimRefs: ['c01'] },
-    { kind: 'alternate', en: null, zh: '平', pinyin: 'Ping', claimRefs: ['c02'] },
+    { kind: 'personal', en: 'Anshi', zh: '安石', pinyin: 'Ānshí', claimRefs: ['c01'] },
+    { kind: 'alternate', en: null, zh: '安石', pinyin: 'Anshi', claimRefs: ['c02'] },
   ],
 };
-assert.deepEqual(personAlternateNames(duplicateAliasFixture), ['Ping (平)']);
+assert.deepEqual(personAlternateNames(duplicateAliasFixture), ['Anshi (安石)']);
 assert.deepEqual(personPublicAliases(duplicateAliasFixture)[0].claimRefs, ['c01', 'c02']);
+const preferredFragmentFixture = {
+  preferredName: { kind: 'personal', en: 'Zhao Tuo', zh: '趙佗', pinyin: 'Zhào Tuó' },
+  names: [
+    { kind: 'alternate', en: 'Tuo', zh: '佗', pinyin: 'Tuó', claimRefs: ['c01'] },
+  ],
+};
+assert.deepEqual(personAlternateNames(preferredFragmentFixture), []);
+assert.deepEqual(personAlternateNames({
+  ...preferredFragmentFixture,
+  names: [{ kind: 'alternate', en: 'Da', zh: '佗', pinyin: 'Dá', claimRefs: ['c02'] }],
+}), ['Da (佗)']);
 assert.throws(
   () => personPublicAliases({ ...aliasFixture, names: [{ kind: 'invented-name-kind', en: 'Example' }] }),
   /Unknown person name kind/u,
