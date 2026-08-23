@@ -119,7 +119,11 @@ unresolved identity or legacy-review flag. Until that product-level gate is
 green, normal builds omit the glossary and all chapter person links rather than
 shipping a misleading partial index. Set `PEOPLE_EBOOK_PREVIEW=1` only for local
 inspection of work in progress; the EPUB publication validator rejects preview
-glossaries.
+glossaries. Run `make ebook-people-preview BOOK=<book> SLUG=<slug>` to build a
+partial glossary and exercise the same XHTML, manifest, spine, person-link,
+backlink, file-target, and fragment-target checks without relaxing the normal
+publication gate. A successful preview check explicitly reports that the EPUB
+remains blocked from publication.
 
 For publication readiness, add `REQUIRE_LANGUAGETOOL_CURRENT=1` to fail if cached LanguageTool scores are stale or missing for the product's source chapters. This does not contact the LanguageTool server; it verifies cache fingerprints. Refresh stale scores with `make score-languagetool BOOK=<book>` once the local LanguageTool server is running.
 

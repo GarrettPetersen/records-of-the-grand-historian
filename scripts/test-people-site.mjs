@@ -64,6 +64,15 @@ const emperorAliasFixture = {
   ],
 };
 assert.deepEqual(personPublicAliases(emperorAliasFixture).map((name) => name.en), ['Liu Che', 'Shizong']);
+const duplicateAliasFixture = {
+  preferredName: { kind: 'personal', en: 'Chen Ping', zh: '陳平', pinyin: 'Chén Píng' },
+  names: [
+    { kind: 'personal', en: 'Ping', zh: '平', pinyin: 'Píng', claimRefs: ['c01'] },
+    { kind: 'alternate', en: null, zh: '平', pinyin: 'Ping', claimRefs: ['c02'] },
+  ],
+};
+assert.deepEqual(personAlternateNames(duplicateAliasFixture), ['Ping (平)']);
+assert.deepEqual(personPublicAliases(duplicateAliasFixture)[0].claimRefs, ['c01', 'c02']);
 assert.throws(
   () => personPublicAliases({ ...aliasFixture, names: [{ kind: 'invented-name-kind', en: 'Example' }] }),
   /Unknown person name kind/u,

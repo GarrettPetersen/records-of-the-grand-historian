@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 
 import assert from 'node:assert/strict';
-import { assessEbookPeopleReadiness } from './lib/ebook-people-readiness.mjs';
+import {
+  assessEbookPeopleReadiness,
+  ebookPeopleReadinessErrors,
+} from './lib/ebook-people-readiness.mjs';
 
 function person(id, localPeople, status = 'machine-reviewed') {
   return { id, localPeople, curation: { status } };
@@ -60,5 +63,44 @@ const unavailable = assessEbookPeopleReadiness(
 );
 assert.equal(unavailable.active, false);
 assert.equal(unavailable.reason, 'generated-data-missing');
+
+const previewQa = {
+  active: true,
+  ready: false,
+  preview: true,
+  missingChapters: ['003'],
+  legacyChapters: [],
+  peopleNeedingReview: 1,
+};
+assert.deepEqual(ebookPeopleReadinessErrors(previewQa), [
+  'People glossary is an incomplete preview and is not valid for publication.',
+  'Active people glossary retains chapter-coverage or identity-review blockers.',
+]);
+assert.deepEqual(ebookPeopleReadinessErrors(previewQa, { allowPreview: true }), []);
+assert.deepEqual(ebookPeopleReadinessErrors({
+  ...previewQa,
+  preview: false,
+}, { allowPreview: true }), [
+  'Active people glossary is neither publication-ready nor marked as a preview.',
+]);
+assert.deepEqual(ebookPeopleReadinessErrors({
+  active: true,
+  ready: true,
+  preview: false,
+  missingChapters: [],
+  legacyChapters: [],
+  peopleNeedingReview: 0,
+}), []);
+assert.deepEqual(ebookPeopleReadinessErrors({
+  active: true,
+  ready: true,
+  preview: true,
+  missingChapters: ['003'],
+  legacyChapters: [],
+  peopleNeedingReview: 0,
+}, { allowPreview: true }), [
+  'Publication-ready people glossary is also marked as a preview.',
+  'Publication-ready people glossary retains chapter-coverage or identity-review blockers.',
+]);
 
 console.log('ebook people readiness self-test: ok');

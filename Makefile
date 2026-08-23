@@ -88,6 +88,7 @@ help:
 	@echo "  make publication-descriptions          # Sync editable MD publication descriptions into JSON"
 	@echo "  make publication-descriptions-init     # Preload/update MD descriptions from the JSON artifact"
 	@echo "  make ebook-validate SLUG=shiji            # Run local structural EPUB checks; set EPUBCHECK_JAR for official EPUBCheck"
+	@echo "  make ebook-people-preview BOOK=shiji SLUG=shiji  # Build and structurally validate the current partial people glossary"
 	@echo "  make ebook-smoke-calibre SLUG=shiji       # Optional Calibre EPUB→AZW3 conversion smoke test"
 	@echo "  make ebook-qa SLUG=shiji                  # Run reusable EPUB + translation QA gates for one product"
 	@echo "  make ebook-qa SLUG=shiji REQUIRE_LANGUAGETOOL_CURRENT=1  # Also require fresh cached LanguageTool scores"
@@ -158,6 +159,15 @@ publication-descriptions-init:
 ebook-validate:
 	@if [ -z "$(SLUG)" ]; then echo "Error: SLUG is required."; exit 1; fi
 	@$(NODE) scripts/validate-ebook.mjs dist/ebooks/$(SLUG)/$(SLUG).epub
+
+.PHONY: ebook-people-preview
+ebook-people-preview:
+	@if [ -z "$(BOOK)" ]; then echo "Error: BOOK is required."; exit 1; fi
+	@if [ -z "$(SLUG)" ]; then echo "Error: SLUG is required."; exit 1; fi
+	@$(NODE) scripts/sync-publication-descriptions.mjs
+	@$(NODE) scripts/compile-people-catalog.mjs
+	@PEOPLE_EBOOK_PREVIEW=1 $(NODE) scripts/generate-ebook.mjs --book $(BOOK)
+	@$(NODE) scripts/validate-ebook.mjs --allow-people-preview dist/ebooks/$(SLUG)/$(SLUG).epub
 
 .PHONY: ebook-smoke-calibre
 ebook-smoke-calibre:

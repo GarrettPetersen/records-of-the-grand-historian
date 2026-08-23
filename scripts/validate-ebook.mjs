@@ -7,9 +7,18 @@ import os from 'node:os';
 import path from 'node:path';
 import { scanArtifactText } from './scan-translation-artifacts.mjs';
 import { renderBookCover } from './generate-book-covers.mjs';
+import { ebookPeopleReadinessErrors } from './lib/ebook-people-readiness.mjs';
 import { isSemanticTableHeader, tableCellRepeatsLabel, tableCells } from './lib/table-structure.mjs';
 
-const epubPath = process.argv[2];
+const cliArgs = process.argv.slice(2);
+const allowPeoplePreview = cliArgs.includes('--allow-people-preview');
+const unknownOptions = cliArgs.filter((arg) => arg.startsWith('--') && arg !== '--allow-people-preview');
+const positionalArgs = cliArgs.filter((arg) => !arg.startsWith('--'));
+if (unknownOptions.length > 0 || positionalArgs.length > 1) {
+  console.error('Usage: node scripts/validate-ebook.mjs [--allow-people-preview] dist/ebooks/<slug>/<slug>.epub');
+  process.exit(1);
+}
+const epubPath = positionalArgs[0];
 const CHILD_TIMEOUT_MS = 10_000;
 const errors = [];
 const MANIFEST_PATH = path.join(process.cwd(), 'ebooks', 'manifest.json');
@@ -31,7 +40,7 @@ function formatChildError(error) {
 }
 
 if (!epubPath) {
-  console.error('Usage: node scripts/validate-ebook.mjs dist/ebooks/<slug>/<slug>.epub');
+  console.error('Usage: node scripts/validate-ebook.mjs [--allow-people-preview] dist/ebooks/<slug>/<slug>.epub');
   process.exit(1);
 }
 
@@ -1156,13 +1165,7 @@ if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
   }
 
   if (peopleQa.active) {
-    if (peopleQa.ready !== true || peopleQa.preview === true) {
-      errors.push('People glossary is an incomplete preview and is not valid for publication.');
-    }
-    if ((peopleQa.missingChapters?.length || 0) > 0 || (peopleQa.legacyChapters?.length || 0) > 0 ||
-        Number(peopleQa.peopleNeedingReview || 0) > 0) {
-      errors.push('Active people glossary retains chapter-coverage or identity-review blockers.');
-    }
+    errors.push(...ebookPeopleReadinessErrors(peopleQa, { allowPreview: allowPeoplePreview }));
     const expectedPeopleEntries = Number(peopleQa.shards || 0) + 1;
     if (!peopleEntries.includes('EPUB/people/index.xhtml')) {
       errors.push('Active people glossary is missing EPUB/people/index.xhtml.');
@@ -1431,3 +1434,6 @@ if (errors.length > 0) {
 }
 
 console.log(`EPUB validation passed: ${path.relative(process.cwd(), epubPath)}`);
+if (allowPeoplePreview && qaReportData?.peopleGlossary?.preview) {
+  console.log('People glossary preview structure passed; this EPUB remains blocked from publication.');
+}

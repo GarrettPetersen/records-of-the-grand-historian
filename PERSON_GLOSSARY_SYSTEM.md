@@ -1173,6 +1173,12 @@ the partial corpus. `scripts/validate-ebook.mjs` checks person counts, index
 counts, chapter mention-link counts, backlink counts, manifest and spine order,
 XHTML validity, and every local file and fragment target.
 
+For an end-to-end work-in-progress check, run
+`make ebook-people-preview BOOK=<book> SLUG=<slug>`. This is the only supported
+path that passes `--allow-people-preview` to the structural validator. It does
+not alter the generated readiness state, and the default validator continues
+to reject the same EPUB until all product-level people gates are green.
+
 Catalog completeness is a strict conjunction, not a synonym for resolved
 identities. Publication remains gated until every source chapter has a validated
 extraction sidecar, every sidecar uses the current prompt version, no proposed

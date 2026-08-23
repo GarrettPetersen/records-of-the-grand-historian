@@ -61,3 +61,32 @@ export function assessEbookPeopleReadiness(siteContext, product, { allowPreview 
     peopleNeedingReview,
   };
 }
+
+export function ebookPeopleReadinessErrors(peopleQa, { allowPreview = false } = {}) {
+  if (!peopleQa?.active) return [];
+  const errors = [];
+  const hasBlockers = (peopleQa.missingChapters?.length || 0) > 0 ||
+    (peopleQa.legacyChapters?.length || 0) > 0 || Number(peopleQa.peopleNeedingReview || 0) > 0;
+
+  if (peopleQa.ready === true) {
+    if (peopleQa.preview === true) {
+      errors.push('Publication-ready people glossary is also marked as a preview.');
+    }
+    if (hasBlockers) {
+      errors.push('Publication-ready people glossary retains chapter-coverage or identity-review blockers.');
+    }
+    return errors;
+  }
+
+  if (peopleQa.preview !== true) {
+    errors.push('Active people glossary is neither publication-ready nor marked as a preview.');
+    return errors;
+  }
+  if (allowPreview) return errors;
+
+  errors.push('People glossary is an incomplete preview and is not valid for publication.');
+  if (hasBlockers) {
+    errors.push('Active people glossary retains chapter-coverage or identity-review blockers.');
+  }
+  return errors;
+}

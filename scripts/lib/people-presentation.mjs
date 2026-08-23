@@ -462,6 +462,36 @@ function aliasTieBreaker(name) {
   return [name.en, name.zh, name.pinyin, name.kind].map((value) => String(value ?? '')).join('\u0000');
 }
 
+function aliasIdentityKey(name) {
+  const chinese = normalizeChineseName(name.zh);
+  if (chinese) return `zh:${chinese}`;
+  const latin = normalizeLatinName(name.en || name.pinyin);
+  return latin ? `latin:${latin}` : null;
+}
+
+function deduplicatePublicAliases(candidates) {
+  const aliases = [];
+  const indexByIdentity = new Map();
+  for (const candidate of candidates) {
+    const identity = aliasIdentityKey(candidate);
+    const existingIndex = identity ? indexByIdentity.get(identity) : undefined;
+    if (existingIndex === undefined) {
+      if (identity) indexByIdentity.set(identity, aliases.length);
+      aliases.push({ ...candidate });
+      continue;
+    }
+    const existing = aliases[existingIndex];
+    existing.claimRefs = [...new Set([
+      ...(existing.claimRefs ?? []),
+      ...(candidate.claimRefs ?? []),
+    ])].sort();
+    for (const field of ['en', 'zh', 'pinyin']) {
+      if (!existing[field] && candidate[field]) existing[field] = candidate[field];
+    }
+  }
+  return aliases;
+}
+
 export function personPublicAliases(person, limit = MAX_PUBLIC_PERSON_ALIASES) {
   if (!Number.isInteger(limit) || limit < 0 || limit > MAX_PUBLIC_PERSON_ALIASES) {
     throw new Error(`Public person alias limit must be an integer from 0 to ${MAX_PUBLIC_PERSON_ALIASES}`);
@@ -486,10 +516,11 @@ export function personPublicAliases(person, limit = MAX_PUBLIC_PERSON_ALIASES) {
       candidatesByFamily.set(family, candidate);
     }
   }
-  return [...candidatesByFamily.values()]
+  const ordered = [...candidatesByFamily.values()]
     .sort((left, right) =>
       (ALIAS_FAMILY_PRIORITY.get(right.family) ?? 0) - (ALIAS_FAMILY_PRIORITY.get(left.family) ?? 0) ||
-      right.score - left.score || aliasTieBreaker(left).localeCompare(aliasTieBreaker(right)))
+      right.score - left.score || aliasTieBreaker(left).localeCompare(aliasTieBreaker(right)));
+  return deduplicatePublicAliases(ordered)
     .slice(0, limit)
     .map(({ family, score, ...name }) => name);
 }
