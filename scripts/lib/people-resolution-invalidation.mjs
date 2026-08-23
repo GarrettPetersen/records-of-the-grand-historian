@@ -24,8 +24,7 @@ function localPersonPrefix(book, chapter) {
   return `${book}:${String(chapter).padStart(3, '0')}:`;
 }
 
-export function pruneResolutionDocument(document, chapters) {
-  const prefixes = chapters.map(({ book, chapter }) => localPersonPrefix(book, chapter));
+function pruneResolutionDocumentWhere(document, isStale) {
   let touchedDecisions = 0;
   let removedDecisions = 0;
   let removedReferences = 0;
@@ -33,7 +32,7 @@ export function pruneResolutionDocument(document, chapters) {
 
   for (const decision of document.decisions) {
     const localPeople = decision.localPeople.filter((localId) => {
-      const stale = prefixes.some((prefix) => localId.startsWith(prefix));
+      const stale = isStale(localId);
       if (stale) removedReferences += 1;
       return !stale;
     });
@@ -57,6 +56,19 @@ export function pruneResolutionDocument(document, chapters) {
   };
 }
 
+export function pruneResolutionDocument(document, chapters) {
+  const prefixes = chapters.map(({ book, chapter }) => localPersonPrefix(book, chapter));
+  return pruneResolutionDocumentWhere(
+    document,
+    (localId) => prefixes.some((prefix) => localId.startsWith(prefix)),
+  );
+}
+
+export function pruneResolutionPeople(document, localPeople) {
+  const stalePeople = new Set(localPeople);
+  return pruneResolutionDocumentWhere(document, (localId) => stalePeople.has(localId));
+}
+
 export function serializeResolutionDocument(document, priorText = '') {
   if (!/\n    \{"decision":/u.test(priorText)) return `${JSON.stringify(document, null, 2)}\n`;
   const header = Object.fromEntries(
@@ -76,10 +88,7 @@ export function serializeResolutionDocument(document, priorText = '') {
   ].join('\n');
 }
 
-export function invalidateResolutionReferences(
-  chapters,
-  { root = path.join(PEOPLE_DIR, 'resolutions') } = {},
-) {
+function invalidateResolutionWhere(prune, root) {
   const totals = {
     filesChanged: 0,
     touchedDecisions: 0,
@@ -88,7 +97,7 @@ export function invalidateResolutionReferences(
   };
   for (const file of resolutionFiles(root)) {
     const priorText = fs.readFileSync(file, 'utf8');
-    const { document, stats } = pruneResolutionDocument(readJson(file), chapters);
+    const { document, stats } = prune(readJson(file));
     if (stats.removedReferences === 0) continue;
     writeTextAtomic(file, serializeResolutionDocument(document, priorText));
     totals.filesChanged += 1;
@@ -97,4 +106,24 @@ export function invalidateResolutionReferences(
     totals.removedReferences += stats.removedReferences;
   }
   return totals;
+}
+
+export function invalidateResolutionReferences(
+  chapters,
+  { root = path.join(PEOPLE_DIR, 'resolutions') } = {},
+) {
+  return invalidateResolutionWhere(
+    (document) => pruneResolutionDocument(document, chapters),
+    root,
+  );
+}
+
+export function invalidateResolutionPeople(
+  localPeople,
+  { root = path.join(PEOPLE_DIR, 'resolutions') } = {},
+) {
+  return invalidateResolutionWhere(
+    (document) => pruneResolutionPeople(document, localPeople),
+    root,
+  );
 }
