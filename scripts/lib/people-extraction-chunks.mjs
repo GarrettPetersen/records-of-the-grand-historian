@@ -231,6 +231,18 @@ function mergeDispositionGroups(groups) {
   return [...merged.values()];
 }
 
+export function peopleChunkRunRecord(chunk, extraction) {
+  return {
+    chunkId: chunk.id,
+    startOrder: chunk.start,
+    endOrderExclusive: chunk.end,
+    model: extraction.run.model,
+    agentId: extraction.run.agentId ?? null,
+    runId: extraction.run.runId ?? null,
+    completedAt: extraction.run.completedAt ?? null,
+  };
+}
+
 export function assembleCompactPeopleChunks(packet, parts, run) {
   if (parts.length === 0) throw new Error('Cannot assemble an empty chunk list');
   const ordered = [...parts].sort((left, right) => left.chunk.index - right.chunk.index);

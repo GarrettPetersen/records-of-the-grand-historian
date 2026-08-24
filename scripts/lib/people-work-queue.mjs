@@ -375,8 +375,19 @@ export function syncLocalCursorReservations(options = {}) {
   return mutateRemotePeopleWorkLedger((ledger) => {
     const merged = pruneMergedClaims(ledger, options);
     const conflicts = [];
+    const synchronizedRecovery = [];
+    const synchronizedReady = [];
+    const reservedElsewhere = [];
     for (const [key, item] of desired) {
       const current = ledger.claims[key];
+      const matchingForeignReadyClaim = item.status === 'ready' &&
+        claimIsActive(current) &&
+        current.lane !== 'cursor-sdk' &&
+        current.chapterFingerprint === item.target.chapterFingerprint;
+      if (matchingForeignReadyClaim) {
+        reservedElsewhere.push({ chapter: key, claim: current });
+        continue;
+      }
       const ownedByAnotherActiveWorker = claimIsActive(current) && (
         current.lane !== 'cursor-sdk' ||
         (
@@ -396,11 +407,18 @@ export function syncLocalCursorReservations(options = {}) {
         claimedAt: current?.claimedAt,
         note: item.target.note,
       }, Date.now());
+      if (item.status === 'ready') synchronizedReady.push(item.target);
+      else synchronizedRecovery.push(item.target);
     }
     if (conflicts.length) {
       throw new Error(`Local Cursor recovery conflicts with remote claims: ${conflicts.map((item) => item.chapter).join(', ')}`);
     }
-    return { recovery, ready, merged };
+    return {
+      recovery: synchronizedRecovery,
+      ready: synchronizedReady,
+      reservedElsewhere,
+      merged,
+    };
   }, {
     ...options,
     message: 'Sync local Cursor people recovery reservations',
