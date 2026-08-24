@@ -1,0 +1,72 @@
+{
+  "path": "data/people/extractions/shiji/035.json",
+  "original": {
+    "bytes": 289478,
+    "sha256": "07822607710d2dc28019b8564522bda2be791bf60f1360b30e78440ecc28145c"
+  },
+  "gzip": {
+    "bytes": 41887,
+    "sha256": "90ef322b4b905c1b5ab5358f325661169e04f1a601c4479c73b21776f65fec36",
+    "note": "gzip -n -c (no timestamp/name)"
+  },
+  "base64": {
+    "chars": 55852,
+    "alphabet": "standard RFC 4648, no wrapping newlines"
+  },
+  "slices": [
+    {
+      "name": "035.json.gz.b64.01",
+      "chars": 7000,
+      "bytes": 7000,
+      "blob": "787f06252a9976210a2e66bc43260eadca389eb1"
+    },
+    {
+      "name": "035.json.gz.b64.02",
+      "chars": 7000,
+      "bytes": 7000,
+      "blob": "90259c7f42d816fee9fc3ee63150fa89b581a595"
+    },
+    {
+      "name": "035.json.gz.b64.03",
+      "chars": 7000,
+      "bytes": 7000,
+      "blob": "32b45975f7833ca6432c8645dd9027d1703f1da1"
+    },
+    {
+      "name": "035.json.gz.b64.04",
+      "chars": 7000,
+      "bytes": 7000,
+      "blob": "0f5aa50962fcee87251ca1a5c9cfe13e59469fd0"
+    },
+    {
+      "name": "035.json.gz.b64.05",
+      "chars": 7000,
+      "bytes": 7000,
+      "blob": "8c9e360bf6142fcd7154f67f3d2dbbcc3bc18aa2"
+    },
+    {
+      "name": "035.json.gz.b64.06",
+      "chars": 7000,
+      "bytes": 7000,
+      "blob": "99f9f19c93341540e613c2859605181cdd701a45"
+    },
+    {
+      "name": "035.json.gz.b64.07",
+      "chars": 7000,
+      "bytes": 7000,
+      "blob": "3f066b5503cd165828fe178353dbc358c710faa2"
+    },
+    {
+      "name": "035.json.gz.b64.08",
+      "chars": 6852,
+      "bytes": 6852,
+      "blob": "c40e48d7e7484c0469a53ef6c93470ac049e75e7"
+    }
+  ],
+  "reconstruct": {
+    "concat": "cat 035.json.gz.b64.* > 035.json.gz.b64",
+    "decode": "base64 -d 035.json.gz.b64 > 035.json.gz",
+    "gunzip": "gzip -dc 035.json.gz > 035.json",
+    "verify": "sha256sum 035.json"
+  }
+}
