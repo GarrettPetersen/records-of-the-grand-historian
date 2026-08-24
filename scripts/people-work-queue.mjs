@@ -63,6 +63,7 @@ function usage() {
   node scripts/people-work-queue.mjs sync-cursor [options]
   node scripts/people-work-queue.mjs plan-grokbot --worker ID [options]
   node scripts/people-work-queue.mjs claim-grokbot --worker ID [options]
+  node scripts/people-work-queue.mjs resume-grokbot --worker ID --book BOOK --chapter NNN
   node scripts/people-work-queue.mjs validate-grokbot --worker ID --book BOOK --chapter NNN [--chunk-id ID]
   node scripts/people-work-queue.mjs assemble-grokbot --worker ID --book BOOK --chapter NNN
   node scripts/people-work-queue.mjs submit-grokbot --worker ID --book BOOK --chapter NNN [options]
@@ -272,6 +273,21 @@ function prepareGrokbotAssignment(target, packet, opts) {
   return { assignment, assignmentFile };
 }
 
+function printGrokbotAssignment(target, source, prepared) {
+  const { assignment, assignmentFile } = prepared;
+  console.log(
+    `${target.reused ? 'Resumed' : 'Claimed'} ${chapterKey(target)}: ${source.units} units, ` +
+    `${source.candidates} candidates, ${source.chunkCount} sealed chunk(s), ` +
+    `max ${(source.maxWorkerBytes / 1024).toFixed(1)} KiB, ` +
+    `total ${(source.workerBytes / 1024).toFixed(1)} KiB`,
+  );
+  console.log(`Assignment: ${path.relative(REPO_ROOT, assignmentFile)}`);
+  console.log(`Create/switch to ${assignment.branch}, then read only the prompt, packet, schema, and seeded output.`);
+  for (const chunk of assignment.chunks) console.log(`Validate ${chunk.id}: ${chunk.validate}`);
+  if (assignment.assemble) console.log(`Assemble: ${assignment.assemble}`);
+  console.log(`Submit:   ${assignment.submit}`);
+}
+
 function chunkPlanMetrics(packet, chunks) {
   const sizes = chunks.map((chunk) =>
     Buffer.byteLength(JSON.stringify(buildPeopleChunkWorkerPacket(packet, chunk)))
@@ -476,18 +492,35 @@ async function claimGrokbot(opts) {
   if (!reserved.result.claimed.length) throw new Error('All eligible chapters were claimed by another lane');
   for (const target of reserved.result.claimed) {
     const source = eligible.find((item) => chapterKey(item) === chapterKey(target));
-    const { assignment, assignmentFile } = prepareGrokbotAssignment(target, source.packet, opts);
-    console.log(
-      `Claimed ${chapterKey(target)}: ${source.units} units, ${source.candidates} candidates, ` +
-      `${source.chunkCount} sealed chunk(s), max ${(source.maxWorkerBytes / 1024).toFixed(1)} KiB, ` +
-      `total ${(source.workerBytes / 1024).toFixed(1)} KiB`,
-    );
-    console.log(`Assignment: ${path.relative(REPO_ROOT, assignmentFile)}`);
-    console.log(`Create/switch to ${assignment.branch}, then read only the prompt, packet, schema, and seeded output.`);
-    for (const chunk of assignment.chunks) console.log(`Validate ${chunk.id}: ${chunk.validate}`);
-    if (assignment.assemble) console.log(`Assemble: ${assignment.assemble}`);
-    console.log(`Submit:   ${assignment.submit}`);
+    printGrokbotAssignment(target, source, prepareGrokbotAssignment(target, source.packet, opts));
   }
+}
+
+function resumeGrokbot(opts) {
+  if (!opts.worker || !opts.book || !opts.chapter) {
+    throw new Error('resume-grokbot requires --worker, --book, and --chapter');
+  }
+  fetchPeopleQueueBase(queueOptions(opts));
+  const target = { book: opts.book, chapter: opts.chapter };
+  const claim = readRemotePeopleWorkLedger(queueOptions(opts)).claims[chapterKey(target)];
+  if (
+    !claimIsActive(claim) ||
+    claim.lane !== 'grokbot' ||
+    claim.worker !== opts.worker ||
+    claim.status !== 'claimed'
+  ) {
+    throw new Error(`${chapterKey(target)} is not reserved for grokbot/${opts.worker}`);
+  }
+  const packet = buildPeopleExtractionPacket(target.book, target.chapter, {
+    properNounMatcher: loadProperNounMatcher(),
+  });
+  if (claim.chapterFingerprint !== packet.input.chapterFingerprint) {
+    throw new Error(`${chapterKey(target)} changed after it was claimed; operator reconciliation is required`);
+  }
+  const chunks = planGrokbotChunks(packet, opts);
+  const source = { ...target, ...chunkPlanMetrics(packet, chunks), chunks, packet };
+  const resumed = { ...source, reused: true };
+  printGrokbotAssignment(resumed, source, prepareGrokbotAssignment(resumed, packet, opts));
 }
 
 function planGrokbot(opts) {
@@ -658,6 +691,7 @@ async function main() {
   if (opts.command === 'sync-cursor') return syncCursor(opts);
   if (opts.command === 'plan-grokbot') return planGrokbot(opts);
   if (opts.command === 'claim-grokbot') return claimGrokbot(opts);
+  if (opts.command === 'resume-grokbot') return resumeGrokbot(opts);
   if (opts.command === 'validate-grokbot') {
     if (!opts.book || !opts.chapter) throw new Error('validate-grokbot requires --book and --chapter');
     const result = validateGrokbotOutput(

@@ -27,10 +27,32 @@ work.
 ## One-Time Setup
 
 1. Give the Grok Bot agent access to the GitHub repository and a persistent terminal.
-2. Clone the repository and run `npm install`.
-3. Keep one clone or Git worktree per concurrently running bot. Give every bot a stable,
+2. Have the trusted orchestrator atomically claim an exact chapter for the worker first.
+   This is the normal route when Grok Bot has the GitHub connector but terminal Git does
+   not have push credentials:
+
+   ```bash
+   npm run people:grokbot:claim -- --worker grokbot-01 --book <book> --chapter <nnn>
+   ```
+3. Use a shallow sparse clone. The full Git history is roughly 10 GiB and the tracked
+   `public/` build assets are not needed by extraction workers. Substitute the assigned
+   book in the final path:
+
+   ```bash
+   git clone --depth 1 --single-branch --branch master --filter=blob:none --sparse \
+     https://github.com/GarrettPetersen/records-of-the-grand-historian.git
+   cd records-of-the-grand-historian
+   git sparse-checkout set scripts data/<book> data/people/chronology \
+     data/people/curation data/people/schema data/people/extractions
+   npm install
+   ```
+
+   Cone-mode sparse checkout includes the small root files and `data/glossary.json`
+   through their parent directories while omitting `public/`, generated people data,
+   and unrelated books. Never give a Grok worker a full-history clone.
+4. Keep one clone or Git worktree per concurrently running bot. Give every bot a stable,
    unique worker ID such as `grokbot-01`.
-4. Work from `origin/master`. Extraction PRs target
+5. Work from `origin/master`. Extraction PRs target
    `codex/people-glossary-staging-v2`, not `master`, so a chapter does not trigger a
    production deployment.
 
@@ -43,8 +65,9 @@ Give each Grok Bot agent this standing instruction:
 ```text
 Process exactly one 24histories people-glossary chapter at a time.
 
-1. In the repository, switch to master, pull origin/master, and run:
-   npm run people:grokbot:claim -- --worker YOUR_STABLE_WORKER_ID
+1. Work in the assigned shallow sparse clone. Switch to master, pull origin/master, and
+   reconstruct the exact sticky claim published by the orchestrator:
+   npm run people:grokbot:resume -- --worker YOUR_STABLE_WORKER_ID --book BOOK --chapter NNN
 2. Read the generated assignment file. Create or resume the exact branch named there.
 3. Process the assignment's sealed chunks in order. For each chunk, read only
    prompt-people-extraction-compact.txt, that chunk's compact packet, the compact
@@ -56,16 +79,18 @@ Process exactly one 24histories people-glossary chapter at a time.
 5. Run each chunk's validation command until it passes. After every chunk passes, run
    the assignment's assembly command; it rejects gaps and overlaps and validates the
    complete chapter.
-6. Run the assignment's submission command. It validates and assembles again, commits only the
-   extraction, pushes the worker branch, marks the claim sticky, and opens a PR to the
-   people staging branch.
+6. If terminal Git can push, run the assignment's submission command. Otherwise, run
+   the assembly command and use the GitHub connector to create the assignment's exact
+   branch from `codex/people-glossary-staging-v2`, commit only the assembled extraction
+   path, and open a PR back to that staging branch. Never place credentials in chat or
+   configure them in the worker shell.
 7. Stop after submission. Start the next chapter only in a clean worktree from the
    latest origin/master.
 
-If interrupted, resume the same bot conversation and branch first. Rerunning the claim
-command with the same worker ID reopens its active assignment without overwriting the
-partial output. Never release or replace an interrupted assignment merely to obtain a
-fresh chapter.
+If interrupted, resume the same bot conversation and branch first. Rerunning the resume
+command with the same worker ID reconstructs its active assignment without mutating the
+ledger or overwriting partial output. Never release or replace an interrupted assignment
+merely to obtain a fresh chapter.
 ```
 
 ## Operator Commands
@@ -80,6 +105,9 @@ npm run people:queue:status
 # Preview and claim one economical chunked chapter for a Grok Bot worker.
 npm run people:grokbot:plan -- --worker grokbot-01
 npm run people:grokbot:claim -- --worker grokbot-01
+
+# Reconstruct a claim already published by the trusted orchestrator; no queue push.
+npm run people:grokbot:resume -- --worker grokbot-01 --book <book> --chapter <nnn>
 
 # Validate each sealed chunk, assemble, and submit.
 npm run people:grokbot:validate -- --worker grokbot-01 --book <book> --chapter <nnn> --chunk-id <id>

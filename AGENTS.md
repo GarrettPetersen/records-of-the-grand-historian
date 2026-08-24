@@ -42,7 +42,11 @@ The standard translation loop is: `make start-translation BOOK=<book>` → fill 
   Grok Bot must claim through `npm run people:grokbot:claim -- --worker <stable-id>`
   and must not call the Cursor SDK. Its extraction PRs target
   `codex/people-glossary-staging-v2`. All Grok assignments and all resumable Cursor
-  conversations/chunks are sticky until completed or explicitly released. See
+  conversations/chunks are sticky until completed or explicitly released. Grok workers
+  must use the documented shallow sparse clone because the full history is roughly
+  10 GiB and `public/` is unnecessary for extraction. When the GitHub connector does
+  not authenticate terminal Git, the trusted orchestrator publishes the exact claim and
+  the worker reconstructs it with `npm run people:grokbot:resume`. See
   `GROKBOT_PEOPLE_LANE.md`.
 - **People extraction budgets and recovery:** `npm run people:extract` limits new workers to 60 owned units, 150 candidates, and a 48 KiB compact packet, with a $5 / five-million-token per-run circuit breaker. A run-limit failure affects only that chunk; it must not stop unrelated chapters. When Cursor allowance is at or below 5%, first run a 5-10 chunk calibration cohort, then size the larger wave from accepted p90 usage. Do not put the circuit breaker inside the observed normal completion range or use high concurrency before measuring the remaining allowance. Complete chapters with saved chunks before opening new chapters. `data/people/generated/chunk-extractions/` and `data/people/generated/extraction-state.json` are ignored but economically valuable recovery state: never delete them during cleanup while chapters are incomplete. Resume with `--retry-failed`; validated chunks and adaptive split plans are reused automatically. Retained Cursor conversations are a standard recovery source: the runner continues every interrupted chat before replacing it with a fresh worker. If a continued chat also crosses a run limit, its ownership range is split while all nonoverlapping saved work is preserved.
 - `jq` is a required system tool for `make validate` and scraping targets — it is pre-installed in the VM.
