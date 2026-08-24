@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "lane": "grokbot",
+  "worker": "grokbot-01",
+  "book": "shiji",
+  "chapter": "035",
+  "branch": "grokbot/people-shiji-035-grokbot-01",
+  "mode": "chunked",
+  "prompt": "prompt-people-extraction-compact.txt",
+  "schema": "data/people/schema/compact-extraction.schema.json",
+  "output": "data/people/extractions/shiji/035.json",
+  "chunks": [
+    {
+      "id": "001",
+      "start": 0,
+      "end": 25,
+      "contextStart": 0,
+      "contextEnd": 31,
+      "packet": "data/people/generated/grokbot/grokbot-01/shiji-035/chunk-001.packet.json",
+      "output": "data/people/generated/grokbot/grokbot-01/shiji-035/chunk-001.output.json",
+      "validate": "npm run people:grokbot:validate -- --worker grokbot-01 --book shiji --chapter 035 --chunk-id 001"
+    },
+    {
+      "id": "002",
+      "start": 25,
+      "end": 56,
+      "contextStart": 19,
+      "contextEnd": 62,
+      "packet": "data/people/generated/grokbot/grokbot-01/shiji-035/chunk-002.packet.json",
+      "output": "data/people/generated/grokbot/grokbot-01/shiji-035/chunk-002.output.json",
+      "validate": "npm run people:grokbot:validate -- --worker grokbot-01 --book shiji --chapter 035 --chunk-id 002"
+    },
+    {
+      "id": "003",
+      "start": 56,
+      "end": 88,
+      "contextStart": 50,
+      "contextEnd": 94,
+      "packet": "data/people/generated/grokbot/grokbot-01/shiji-035/chunk-003.packet.json",
+      "output": "data/people/generated/grokbot/grokbot-01/shiji-035/chunk-003.output.json",
+      "validate": "npm run people:grokbot:validate -- --worker grokbot-01 --book shiji --chapter 035 --chunk-id 003"
+    },
+    {
+      "id": "004",
+      "start": 88,
+      "end": 126,
+      "contextStart": 82,
+      "contextEnd": 132,
+      "packet": "data/people/generated/grokbot/grokbot-01/shiji-035/chunk-004.packet.json",
+      "output": "data/people/generated/grokbot/grokbot-01/shiji-035/chunk-004.output.json",
+      "validate": "npm run people:grokbot:validate -- --worker grokbot-01 --book shiji --chapter 035 --chunk-id 004"
+    },
+    {
+      "id": "005",
+      "start": 126,
+      "end": 159,
+      "contextStart": 120,
+      "contextEnd": 165,
+      "packet": "data/people/generated/grokbot/grokbot-01/shiji-035/chunk-005.packet.json",
+      "output": "data/people/generated/grokbot/grokbot-01/shiji-035/chunk-005.output.json",
+      "validate": "npm run people:grokbot:validate -- --worker grokbot-01 --book shiji --chapter 035 --chunk-id 005"
+    },
+    {
+      "id": "006",
+      "start": 159,
+      "end": 189,
+      "contextStart": 153,
+      "contextEnd": 189,
+      "packet": "data/people/generated/grokbot/grokbot-01/shiji-035/chunk-006.packet.json",
+      "output": "data/people/generated/grokbot/grokbot-01/shiji-035/chunk-006.output.json",
+      "validate": "npm run people:grokbot:validate -- --worker grokbot-01 --book shiji --chapter 035 --chunk-id 006"
+    }
+  ],
+  "assemble": "npm run people:grokbot:assemble -- --worker grokbot-01 --book shiji --chapter 035",
+  "submit": "npm run people:grokbot:submit -- --worker grokbot-01 --book shiji --chapter 035"
+}
