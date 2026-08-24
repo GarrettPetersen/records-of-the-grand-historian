@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -67,6 +68,7 @@ function usage() {
   node scripts/people-work-queue.mjs resume-grokbot --worker ID --book BOOK --chapter NNN
   node scripts/people-work-queue.mjs validate-grokbot --worker ID --book BOOK --chapter NNN [--chunk-id ID]
   node scripts/people-work-queue.mjs assemble-grokbot --worker ID --book BOOK --chapter NNN
+  node scripts/people-work-queue.mjs accept-grokbot --worker ID --book BOOK --chapter NNN
   node scripts/people-work-queue.mjs submit-grokbot --worker ID --book BOOK --chapter NNN [options]
   node scripts/people-work-queue.mjs status [options]
   node scripts/people-work-queue.mjs reconcile [options]
@@ -594,6 +596,37 @@ async function submitGrokbot(opts) {
   console.log(`Submitted ${chapterKey(target)}${prUrl ? `: ${prUrl}` : ' without a pull request'}`);
 }
 
+function acceptGrokbot(opts) {
+  if (!opts.worker || !opts.book || !opts.chapter) {
+    throw new Error('accept-grokbot requires --worker, --book, and --chapter');
+  }
+  const target = { book: opts.book, chapter: opts.chapter };
+  assertGrokbotClaim(opts.worker, target, opts);
+  const output = extractionPath(target.book, target.chapter);
+  if (!fs.existsSync(output)) {
+    throw new Error(`Missing imported Grok Bot output: ${path.relative(REPO_ROOT, output)}`);
+  }
+  const packet = buildPeopleExtractionPacket(target.book, target.chapter, {
+    properNounMatcher: loadProperNounMatcher(),
+  });
+  const bytes = fs.readFileSync(output);
+  const validated = validateCompactPeopleExtraction(JSON.parse(bytes.toString('utf8')), packet);
+  assertDurableCareerCoverage(validated.normalized, packet);
+  const sha256 = createHash('sha256').update(bytes).digest('hex');
+  markRemotePeopleClaims([target], 'ready', {
+    ...queueOptions(opts),
+    lane: 'grokbot',
+    worker: opts.worker,
+    note: `Imported direct attachment: ${validated.stats.people} people, ` +
+      `${validated.stats.mentions} mentions, ${validated.stats.claims} claims; sha256 ${sha256}`,
+  });
+  console.log(
+    `Accepted ${chapterKey(target)}: ${validated.stats.people} people, ` +
+    `${validated.stats.mentions} mentions, ${validated.stats.claims} claims, ` +
+    `${bytes.length} bytes, sha256 ${sha256}`,
+  );
+}
+
 function showStatus(opts) {
   fetchPeopleQueueBase(queueOptions(opts));
   const ledger = readRemotePeopleWorkLedger(queueOptions(opts));
@@ -714,6 +747,7 @@ async function main() {
     );
     return;
   }
+  if (opts.command === 'accept-grokbot') return acceptGrokbot(opts);
   if (opts.command === 'submit-grokbot') return submitGrokbot(opts);
   if (opts.command === 'status') return showStatus(opts);
   if (opts.command === 'reconcile') return reconcile(opts);

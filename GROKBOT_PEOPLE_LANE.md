@@ -80,9 +80,10 @@ Process exactly one 24histories people-glossary chapter at a time.
    the assignment's assembly command; it rejects gaps and overlaps and validates the
    complete chapter.
 6. If terminal Git can push, run the assignment's submission command. Otherwise, run
-   the assembly command and use the GitHub connector to create the assignment's exact
-   branch from `codex/people-glossary-staging-v2`, commit only the assembled extraction
-   path, and open a PR back to that staging branch. Never place credentials in chat or
+   the assembly command and attach the assembled extraction to the trusted orchestrator.
+   The orchestrator verifies the reported byte count and SHA-256, saves it at the exact
+   extraction path, and runs `people:grokbot:accept`. Do not route JSON through a text or
+   repository connector that can alter Unicode bytes. Never place credentials in chat or
    configure them in the worker shell.
 7. Stop after submission. Start the next chapter only in a clean worktree from the
    latest origin/master.
@@ -113,6 +114,9 @@ npm run people:grokbot:resume -- --worker grokbot-01 --book <book> --chapter <nn
 npm run people:grokbot:validate -- --worker grokbot-01 --book <book> --chapter <nnn> --chunk-id <id>
 npm run people:grokbot:assemble -- --worker grokbot-01 --book <book> --chapter <nnn>
 npm run people:grokbot:submit -- --worker grokbot-01 --book <book> --chapter <nnn>
+
+# Trusted orchestrator: validate an imported direct attachment and mark its claim ready.
+npm run people:grokbot:accept -- --worker grokbot-01 --book <book> --chapter <nnn>
 
 # Remove expired leases and work already merged to master.
 npm run people:queue -- reconcile
