@@ -7,6 +7,7 @@ import {
   assembleCompactPeopleChunks,
   buildPeopleChunkPacket,
   normalizePeopleExtractionChunkPlan,
+  peopleChunkRunRecord,
   planPeopleExtractionChunks,
   splitPeopleExtractionChunk,
 } from './lib/people-extraction-chunks.mjs';
@@ -154,15 +155,7 @@ const assembled = assembleCompactPeopleChunks(packet, parts, {
   agentId: null,
   runId: null,
   completedAt: '2026-08-10T00:00:00.000Z',
-  chunks: adaptive.map((chunk) => ({
-    chunkId: chunk.id,
-    startOrder: chunk.start,
-    endOrderExclusive: chunk.end,
-    model: 'fixture',
-    agentId: null,
-    runId: null,
-    completedAt: '2026-08-10T00:00:00.000Z',
-  })),
+  chunks: parts.map(({ chunk, extraction }) => peopleChunkRunRecord(chunk, extraction)),
 });
 const validated = validateCompactPeopleExtraction(assembled, packet);
 if (validated.stats.people !== 5 || assembled.people.at(-1)[0] !== 'p005') {

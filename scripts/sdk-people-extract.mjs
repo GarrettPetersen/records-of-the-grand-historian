@@ -55,6 +55,7 @@ import {
   assembleCompactPeopleChunks,
   buildPeopleChunkPacket,
   normalizePeopleExtractionChunkPlan,
+  peopleChunkRunRecord,
   planPeopleExtractionChunks,
   splitPeopleExtractionChunk,
 } from './lib/people-extraction-chunks.mjs';
@@ -1384,18 +1385,6 @@ async function reserveAgentBudget(opts, budget, control) {
   }
 }
 
-function chunkRunRecord(chunk, extraction) {
-  return {
-    chunkId: chunk.id,
-    startOrder: chunk.start,
-    endOrderExclusive: chunk.end,
-    model: extraction.run.model,
-    agentId: extraction.run.agentId ?? null,
-    runId: extraction.run.runId ?? null,
-    completedAt: extraction.run.completedAt ?? null,
-  };
-}
-
 function persistedChunkPlan(chunks) {
   return chunks.map((chunk) => ({
     id: chunk.id,
@@ -1919,7 +1908,7 @@ async function processChunkedTarget(target, packet, opts, state, control, budget
     agentId: null,
     runId: null,
     completedAt: new Date().toISOString(),
-    chunks: parts.map(({ chunk, extraction }) => chunkRunRecord(chunk, extraction)),
+    chunks: parts.map(({ chunk, extraction }) => peopleChunkRunRecord(chunk, extraction)),
   };
   let compact = assembleCompactPeopleChunks(packet, parts, run);
   let validated = validateCompactPeopleExtraction(compact, packet);
@@ -2616,7 +2605,8 @@ async function main() {
       });
       console.log(
         `Shared queue synchronized: recovery=${synced.result.recovery.length}, ` +
-        `local-ready=${synced.result.ready.length}, merged-pruned=${synced.result.merged.length}`,
+        `local-ready=${synced.result.ready.length}, reserved-elsewhere=${synced.result.reservedElsewhere.length}, ` +
+        `merged-pruned=${synced.result.merged.length}`,
       );
     }
     const workLedger = readRemotePeopleWorkLedger(sharedQueueOptions);

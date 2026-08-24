@@ -48,6 +48,7 @@ import {
   assembleCompactPeopleChunks,
   buildPeopleChunkPacket,
   normalizePeopleExtractionChunkPlan,
+  peopleChunkRunRecord,
   planPeopleExtractionChunks,
   splitPeopleExtractionChunk,
 } from './lib/people-extraction-chunks.mjs';
@@ -423,11 +424,7 @@ function assembleGrokbotOutput(target, opts) {
     agentId: null,
     runId: null,
     completedAt: new Date().toISOString(),
-    chunks: parts.map(({ chunk }) => ({
-      id: chunk.id,
-      start: chunk.start,
-      end: chunk.end,
-    })),
+    chunks: parts.map(({ chunk, extraction }) => peopleChunkRunRecord(chunk, extraction)),
   });
   const validated = validateCompactPeopleExtraction(compact, packet);
   assertDurableCareerCoverage(validated.normalized, packet);
@@ -471,7 +468,8 @@ async function syncCursor(opts) {
   const synced = syncLocalCursorReservations({ ...queueOptions(opts), worker });
   console.log(
     `Cursor reservations synchronized: recovery=${synced.result.recovery.length}, ` +
-    `local-ready=${synced.result.ready.length}, merged-pruned=${synced.result.merged.length}`,
+    `local-ready=${synced.result.ready.length}, reserved-elsewhere=${synced.result.reservedElsewhere.length}, ` +
+    `merged-pruned=${synced.result.merged.length}`,
   );
 }
 
