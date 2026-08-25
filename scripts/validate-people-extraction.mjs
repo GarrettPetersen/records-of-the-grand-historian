@@ -352,7 +352,10 @@ function validateClaimVocabulary(claim, packet, errors) {
   }
   for (const polityId of nestedValuesWithKey(claim.value, 'polityId')) {
     if (!packet.context.polities.some((polity) => polity.id === polityId)) {
-      errors.push(`${claim.id} uses polityId ${JSON.stringify(polityId)} not supplied in its packet`);
+      errors.push(
+        `${claim.id} uses polityId ${JSON.stringify(polityId)} not supplied in its packet; ` +
+        'use a source-grounded polity label object instead of inventing an ID',
+      );
     }
   }
   for (const reignId of nestedValuesWithKey(claim.value, 'reignId')) {
@@ -975,6 +978,26 @@ function selfTest() {
         !error.message.includes('quantity: "unspecified"') ||
         !error.message.includes('quantity objects are invalid')) {
       throw new Error('Invalid family summary did not produce an actionable validation error');
+    }
+  }
+
+  const invalidPolity = structuredClone(comprehensive);
+  invalidPolity.claims.push({
+    id: 'testbook:001:c0004',
+    subject: 'testbook:001:p001',
+    predicate: 'polity-association',
+    value: { polityId: 'invented-polity', relation: 'served' },
+    certainty: 'explicit',
+    evidence: ['testbook:001:s0001'],
+  });
+  try {
+    validatePeopleExtraction(invalidPolity, packet);
+    throw new Error('Invented polity ID unexpectedly passed');
+  } catch (error) {
+    if (!(error instanceof PeopleExtractionValidationError)) throw error;
+    if (!error.message.includes('not supplied in its packet') ||
+        !error.message.includes('source-grounded polity label object')) {
+      throw new Error('Invented polity ID did not produce an actionable validation error');
     }
   }
 

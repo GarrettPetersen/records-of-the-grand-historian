@@ -536,6 +536,8 @@ the chapter states or strongly establishes it:
   stated ethnicity or people-group identity;
 - native place, lineage, clan, and other origin information useful for
   disambiguation;
+- polity association using a canonical registry ID when the extraction packet
+  supplies one, or a source-grounded bilingual polity label when it does not;
 - family-tree edges for ancestry and descent, generation distance, paternal or
   maternal line, birth order, parent/child, sibling, spouse, betrothal, in-law,
   biological/adoptive/foster/step parentage, half-siblings, and other explicit

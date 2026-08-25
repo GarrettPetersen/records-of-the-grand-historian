@@ -311,6 +311,7 @@ source-supported fields:
 {"status":"exile","action":"entered"}
 {"title":{"en":"Prince of Pengcheng","zh":"彭城王"},"action":"held"}
 {"polityId":"liu-song","relation":"served"}
+{"polity":{"en":"Shu Han","zh":"蜀漢"},"relation":"served"}
 {"organization":{"en":"...","zh":"..."},"relation":"member-of"}
 {"credential":{"en":"Presented Scholar","zh":"進士"},"action":"earned"}
 {"belief":{"en":"Buddhism","zh":"佛法"},"relation":"adherent-of"}
@@ -370,10 +371,12 @@ deceased ancestor named only to explain a living descendant.
 Never convert dates from memory. Use a supplied reign ID only when its polity
 and reign are correct. When the packet lacks a mapping, independently verify a
 Western year or interval and omit `reignId`; unresolved source dates do not
-satisfy this prompt. Record stated age and reckoning but do not derive a birth
-year. Never assign a polity from lifespan or chapter alone. Preserve competing
-dates as separate claims joined by `textual-variant` or `conflict`; do not
-choose one silently.
+satisfy this prompt. Likewise, use `polityId` only when that exact ID appears in
+the packet's supplied polity context. Otherwise preserve a source-grounded
+bilingual `polity` label object; never invent a polity ID. Record stated age and
+reckoning but do not derive a birth year. Never assign a polity from lifespan
+or chapter alone. Preserve competing dates as separate claims joined by
+`textual-variant` or `conflict`; do not choose one silently.
 
 This is a complete person-centered source pass, not a separate canonical event
 database. Every linkable mention retains its exact source unit for current
