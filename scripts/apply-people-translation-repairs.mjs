@@ -131,6 +131,27 @@ function applyReviewedClaimChanges(claims, reviewed) {
     .map((claim) => reviewed.revisedClaims.get(claim.id) ?? claim);
 }
 
+function applyReviewedPersonNameChanges(people, claims, reviewed) {
+  const originalClaims = new Map(claims.map((claim) => [claim.id, claim]));
+  const nameRevisions = [...reviewed.revisedClaims.entries()]
+    .map(([id, after]) => ({ before: originalClaims.get(id), after }))
+    .filter(({ before, after }) => before?.predicate === 'name' && after.predicate === 'name');
+
+  return people.map((person) => {
+    const preferred = { ...person.preferredNameSuggestion };
+    let changed = false;
+    for (const { before, after } of nameRevisions) {
+      if (before.subject !== person.localId || after.subject !== person.localId) continue;
+      for (const field of ['en', 'zh', 'pinyin']) {
+        if (preferred[field] !== before.value?.[field] || after.value?.[field] === undefined) continue;
+        preferred[field] = after.value[field];
+        changed = true;
+      }
+    }
+    return changed ? { ...person, preferredNameSuggestion: preferred } : person;
+  });
+}
+
 function describeUnresolvedCandidates(candidateIds, packet) {
   const candidates = new Map(packet.preflight.candidates.map((candidate) => [candidate.id, candidate]));
   return candidateIds.map((id) => {
@@ -433,9 +454,13 @@ function selfTest() {
   extraction.claims[0].evidence = ['fixture:001:s0001'];
   const reviewedExtraction = {
     ...structuredClone(extraction),
+    people: applyReviewedPersonNameChanges(extraction.people, extraction.claims, reviewed),
     claims: applyReviewedClaimChanges(extraction.claims, reviewed),
     translationRepairs: reviewedRepairs,
   };
+  if (reviewedExtraction.people[0].preferredNameSuggestion.pinyin !== 'Liu Zhan') {
+    throw new Error('Reviewed name claim did not update the preferred person suggestion');
+  }
   const reconciled = reconcileExtractionAfterRepairs(reviewedExtraction, revisedPacket, {
     previousPacket: oldPacket,
   });
@@ -1403,6 +1428,7 @@ function main() {
   const reviewedRepairs = retainedRepairs.filter((repair) => repair.status === 'proposed');
   const reviewedExtraction = {
     ...structuredClone(extraction),
+    people: applyReviewedPersonNameChanges(extraction.people, extraction.claims, reviewed),
     claims: applyReviewedClaimChanges(extraction.claims, reviewed),
     translationRepairs: retainedRepairs,
   };
