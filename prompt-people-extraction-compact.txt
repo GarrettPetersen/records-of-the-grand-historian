@@ -168,6 +168,11 @@ establishes. This includes:
   a relative's name stored only as text. Create the other person row even when
   that relative appears nowhere else. Use `family-summary` for unnamed plural,
   counted, unknown-count, or explicitly absent relatives;
+
+  A `family-summary` value must include a nonempty string `kinshipRole` and
+  either a nonnegative integer `count` or a nonempty string `quantity`. For an
+  unknown count, write `"quantity": "unspecified"`; do not encode quantity as
+  an object such as `{ "unspecified": true }`.
 - non-family relationships: teacher/student, patron/client,
   recommender/protege, alliance, rivalry, succession, and every other explicit
   relation between named people;

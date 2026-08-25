@@ -542,7 +542,9 @@ the chapter states or strongly establishes it:
   kinship; every individuated relative is a separate local person and every edge
   targets that person's local ID;
 - aggregate family facts for undifferentiated or counted kin, including explicit
-  childlessness, in `family-summary` claims;
+  childlessness, in `family-summary` claims; these use a nonnegative integer
+  `count` when known or a string `quantity` such as `"unspecified"` when the
+  source gives no exact number;
 - teacher/student, patron/client, recommender/protege, alliance, rivalry,
   succession, and other explicit non-family relationships;
 - exact occupations and broad historical roles;

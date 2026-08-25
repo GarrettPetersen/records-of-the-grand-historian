@@ -342,7 +342,12 @@ function validateClaimVocabulary(claim, packet, errors) {
     }
     if (claim.value?.count === undefined &&
         (typeof claim.value?.quantity !== 'string' || !claim.value.quantity.trim())) {
-      errors.push(`${claim.id} family-summary requires count or quantity`);
+      errors.push(
+        `${claim.id} family-summary for ${claim.subject} at ${claim.evidence.join(', ')} ` +
+        'requires a nonnegative integer count or nonempty string quantity ' +
+        '(use quantity: "unspecified" for an unknown count; quantity objects are invalid); ' +
+        `received ${JSON.stringify(claim.value)}`,
+      );
     }
   }
   for (const polityId of nestedValuesWithKey(claim.value, 'polityId')) {
@@ -946,6 +951,30 @@ function selfTest() {
     if (!error.message.includes('family-relationship uses unknown relation') || !error.message.includes('parentage') ||
         !error.message.includes('kinshipTerm')) {
       throw new Error('Invalid family metadata did not produce the expected validation errors');
+    }
+  }
+
+  const invalidFamilySummary = structuredClone(comprehensive);
+  invalidFamilySummary.claims.push({
+    id: 'testbook:001:c0004',
+    subject: 'testbook:001:p001',
+    predicate: 'family-summary',
+    value: {
+      kinshipRole: 'sons',
+      quantity: { unspecified: true },
+    },
+    certainty: 'explicit',
+    evidence: ['testbook:001:s0001'],
+  });
+  try {
+    validatePeopleExtraction(invalidFamilySummary, packet);
+    throw new Error('Invalid family summary unexpectedly passed');
+  } catch (error) {
+    if (!(error instanceof PeopleExtractionValidationError)) throw error;
+    if (!error.message.includes('family-summary for testbook:001:p001 at testbook:001:s0001') ||
+        !error.message.includes('quantity: "unspecified"') ||
+        !error.message.includes('quantity objects are invalid')) {
+      throw new Error('Invalid family summary did not produce an actionable validation error');
     }
   }
 
