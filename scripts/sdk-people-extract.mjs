@@ -314,6 +314,10 @@ function isRecoveryArtifactUnavailable(error) {
   return error?.code === 'RECOVERY_ARTIFACT_UNAVAILABLE';
 }
 
+function isMissingCursorAgent(error) {
+  return error?.code === 'agent_not_found';
+}
+
 function chapterTargets(opts) {
   const targets = [];
   const books = fs.readdirSync(DATA_DIR, { withFileTypes: true })
@@ -1717,12 +1721,35 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
   let agent;
   let releaseReservation = () => {};
   try {
-    const resumeAgentId = hasResumableChunkConversation(previousChunk)
+    let resumeAgentId = hasResumableChunkConversation(previousChunk)
       ? previousChunk.agentId
       : null;
     let workerMode = previousChunk?.workerMode === 'sealed' ? 'sealed' : 'repository';
     let accepted = null;
     const recoveryErrors = [...(previousChunk?.lastErrors ?? [])];
+    if (resumeAgentId) {
+      try {
+        await Agent.listRuns(resumeAgentId, {
+          runtime: 'cloud',
+          apiKey: opts.apiKey,
+          limit: 1,
+        });
+      } catch (error) {
+        if (!isMissingCursorAgent(error)) throw error;
+        console.warn(
+          `[${stateKey(target)}/chunk-${chunk.id}] retained agent ${resumeAgentId} no longer exists; ` +
+          'starting a sealed replacement worker',
+        );
+        updateChunkState(state, target, chunk, {
+          status: 'interrupted',
+          agentId: null,
+          resumePending: false,
+          resumeExhausted: true,
+          lastErrors: validationErrors(error),
+        });
+        resumeAgentId = null;
+      }
+    }
     if (resumeAgentId) {
       seedRecordedUsage(budget, previousChunk.usage);
       agent = await Agent.resume(resumeAgentId, { apiKey: opts.apiKey });
@@ -2562,6 +2589,10 @@ async function selfTest() {
   }
   if (!isRecoveryArtifactUnavailable({ code: 'RECOVERY_ARTIFACT_UNAVAILABLE' })) {
     throw new Error('Recovery-only artifact absence was not classified');
+  }
+  if (!isMissingCursorAgent({ code: 'agent_not_found' }) ||
+      isMissingCursorAgent({ code: 'network_error' })) {
+    throw new Error('Missing Cursor agent errors were not classified narrowly');
   }
   const scoped = planningScopeTargets([
     { book: 'fixture', chapter: '001' },
