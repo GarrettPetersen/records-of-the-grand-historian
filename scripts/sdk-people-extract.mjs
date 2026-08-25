@@ -414,6 +414,20 @@ function availableToCursorLane(target, ledger, workerId, state) {
   return claim.status === 'resume-required' && recoveryOnlyTarget(target, state);
 }
 
+function planningScopeTargets(laneTargets, ledger, opts, state) {
+  if (opts.recoverOnly) {
+    return laneTargets.filter((target) => recoveryOnlyTarget(target, state));
+  }
+  if (!opts.limit) return laneTargets;
+  const recoveryTargets = laneTargets.filter((target) => {
+    const claim = ledger.claims[workQueueChapterKey(target)];
+    return claim?.lane === 'cursor-sdk' &&
+      claim.status === 'resume-required' &&
+      recoveryOnlyTarget(target, state);
+  });
+  return recoveryTargets.length >= opts.limit ? recoveryTargets : laneTargets;
+}
+
 function compareBookOrder(left, right) {
   return left.book.localeCompare(right.book) || left.chapter.localeCompare(right.chapter);
 }
@@ -2549,6 +2563,24 @@ async function selfTest() {
   if (!isRecoveryArtifactUnavailable({ code: 'RECOVERY_ARTIFACT_UNAVAILABLE' })) {
     throw new Error('Recovery-only artifact absence was not classified');
   }
+  const scoped = planningScopeTargets([
+    { book: 'fixture', chapter: '001' },
+    { book: 'fixture', chapter: '002' },
+    { book: 'fixture', chapter: '003' },
+  ], {
+    claims: {
+      'fixture/001': { lane: 'cursor-sdk', status: 'resume-required' },
+      'fixture/002': { lane: 'cursor-sdk', status: 'resume-required' },
+    },
+  }, { recoverOnly: false, limit: 2 }, {
+    chapters: {
+      'fixture/001': { status: 'interrupted', agentId: 'bc-a' },
+      'fixture/002': { status: 'interrupted', agentId: 'bc-b' },
+    },
+  });
+  if (scoped.length !== 2 || scoped.some((target) => target.chapter === '003')) {
+    throw new Error('Recovery-first planning did not bypass unrelated fresh chapters');
+  }
   const historicalBudget = { recordedRunIds: new Set() };
   seedRecordedRuns(historicalBudget, [{ id: 'run-before-restart' }]);
   if (!historicalBudget.recordedRunIds.has('run-before-restart')) {
@@ -2614,9 +2646,13 @@ async function main() {
     const laneTargets = allTargets.filter((target) =>
       availableToCursorLane(target, workLedger, opts.workerId, state)
     );
-    const rawTargets = opts.recoverOnly
-      ? laneTargets.filter((target) => recoveryOnlyTarget(target, state))
-      : laneTargets;
+    const rawTargets = planningScopeTargets(laneTargets, workLedger, opts, state);
+    if (rawTargets.length < laneTargets.length) {
+      console.log(
+        `Recovery-first planner: measuring ${rawTargets.length} resumable chapter(s) ` +
+        `instead of ${laneTargets.length} available chapters`,
+      );
+    }
     if (opts.chapter && rawTargets.length === 0) {
       const claim = workLedger.claims[workQueueChapterKey({ book: opts.book, chapter: opts.chapter })];
       throw new Error(
