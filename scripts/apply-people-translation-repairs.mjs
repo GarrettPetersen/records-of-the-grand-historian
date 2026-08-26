@@ -30,6 +30,7 @@ import {
 import {
   editorialDecisionPath,
   editorialDecisionSeed,
+  validateAppliedEditorialDecisions,
   validateEditorialDecisions,
 } from './lib/people-editorial-decisions.mjs';
 import {
@@ -126,9 +127,34 @@ function renumberRepairs(repairs, book, chapter) {
 }
 
 function applyReviewedClaimChanges(claims, reviewed) {
-  return claims
+  return [
+    ...claims
     .filter((claim) => !reviewed.retractedClaimIds.has(claim.id))
-    .map((claim) => reviewed.revisedClaims.get(claim.id) ?? claim);
+    .map((claim) => reviewed.revisedClaims.get(claim.id) ?? claim),
+    ...structuredClone(reviewed.addedClaims ?? []),
+  ];
+}
+
+function removeRetractedNameMentionSpans(mentions, claims, reviewed) {
+  const retractedNames = claims.filter((claim) =>
+    reviewed.retractedClaimIds.has(claim.id) && claim.predicate === 'name'
+  );
+  if (retractedNames.length === 0) return structuredClone(mentions);
+
+  return structuredClone(mentions).flatMap((mention) => {
+    for (const claim of retractedNames) {
+      if (
+        claim.subject !== mention.person ||
+        !claim.evidence.some((evidence) => evidence.split(':').at(-1) === mention.unit.id)
+      ) continue;
+      for (const language of ['zh', 'en']) {
+        const exact = claim.value?.[language];
+        if (typeof exact !== 'string' || !exact) continue;
+        mention.spans[language] = mention.spans[language].filter((span) => span.exact !== exact);
+      }
+    }
+    return mention.spans.zh.length > 0 || mention.spans.en.length > 0 ? [mention] : [];
+  });
 }
 
 function applyReviewedPersonNameChanges(people, claims, reviewed) {
@@ -143,12 +169,69 @@ function applyReviewedPersonNameChanges(people, claims, reviewed) {
     for (const { before, after } of nameRevisions) {
       if (before.subject !== person.localId || after.subject !== person.localId) continue;
       for (const field of ['en', 'zh', 'pinyin']) {
-        if (preferred[field] !== before.value?.[field] || after.value?.[field] === undefined) continue;
+        const exactMatch = preferred[field] === before.value?.[field];
+        const descriptiveKinshipMatch =
+          before.value?.kind === 'descriptive-kinship' &&
+          field === 'zh' &&
+          typeof before.value?.zh === 'string' &&
+          preferred.zh?.endsWith(before.value.zh);
+        if ((!exactMatch && !descriptiveKinshipMatch) || after.value?.[field] === undefined) continue;
         preferred[field] = after.value[field];
         changed = true;
       }
     }
     return changed ? { ...person, preferredNameSuggestion: preferred } : person;
+  });
+}
+
+function nestedPersonIds(value, people) {
+  if (typeof value === 'string') return people.has(value) ? [value] : [];
+  if (Array.isArray(value)) return value.flatMap((item) => nestedPersonIds(item, people));
+  if (!value || typeof value !== 'object') return [];
+  return Object.values(value).flatMap((item) => nestedPersonIds(item, people));
+}
+
+function claimPersonPairs(claim, people) {
+  return nestedPersonIds(claim.value, people).flatMap((other) => {
+    if (other === claim.subject || !people.has(claim.subject)) return [];
+    return [[claim.subject, other].sort().join('\u0000')];
+  });
+}
+
+function applyReviewedRelationshipHintChanges(people, originalClaims, finalClaims, reviewed) {
+  const personIds = new Set(people.map((person) => person.localId));
+  const affectedBefore = originalClaims.filter((claim) =>
+    reviewed.retractedClaimIds.has(claim.id) || reviewed.revisedClaims.has(claim.id)
+  );
+  const affectedAfter = [
+    ...reviewed.revisedClaims.values(),
+    ...(reviewed.addedClaims ?? []),
+  ];
+  const removedPairs = new Set(affectedBefore.flatMap((claim) => claimPersonPairs(claim, personIds)));
+  const addedPairs = new Set(affectedAfter.flatMap((claim) => claimPersonPairs(claim, personIds)));
+  const finalPairs = new Set(finalClaims.flatMap((claim) => claimPersonPairs(claim, personIds)));
+
+  return people.map((person) => {
+    const related = new Set(person.identityHints.relatedLocalPeople);
+    for (const pair of removedPairs) {
+      const [left, right] = pair.split('\u0000');
+      if (!finalPairs.has(pair)) {
+        if (person.localId === left) related.delete(right);
+        if (person.localId === right) related.delete(left);
+      }
+    }
+    for (const pair of addedPairs) {
+      const [left, right] = pair.split('\u0000');
+      if (person.localId === left) related.add(right);
+      if (person.localId === right) related.add(left);
+    }
+    return {
+      ...person,
+      identityHints: {
+        ...person.identityHints,
+        relatedLocalPeople: [...related].sort(),
+      },
+    };
   });
 }
 
@@ -217,6 +300,41 @@ function selfTest() {
     explicitClassification.extraction.candidateDispositions[0]?.candidate !== candidateId
   ) {
     throw new Error('Explicit revised-packet candidate disposition was not applied');
+  }
+
+  const retractedMentionResult = removeRetractedNameMentionSpans([{
+    id: 'fixture:001:m0001',
+    person: 'fixture:001:p001',
+    unit: { id: 's0001' },
+    spans: {
+      zh: [],
+      en: [{ exact: 'Wrong Name', occurrence: 0 }],
+    },
+    candidateRefs: ['fixture:001:cand_wrong'],
+  }], [{
+    id: 'fixture:001:c0001',
+    subject: 'fixture:001:p001',
+    predicate: 'name',
+    value: { kind: 'personal', en: 'Wrong Name' },
+    evidence: ['fixture:001:s0001'],
+  }], { retractedClaimIds: new Set(['fixture:001:c0001']) });
+  if (retractedMentionResult.length !== 0) {
+    throw new Error('A mention created solely by a retracted name claim survived reconciliation');
+  }
+  const claimAdditionResult = applyReviewedClaimChanges([], {
+    retractedClaimIds: new Set(),
+    revisedClaims: new Map(),
+    addedClaims: [{
+      id: 'fixture:001:c0002',
+      subject: 'fixture:001:p001',
+      predicate: 'relationship',
+      value: { relation: 'spouse-of', personId: 'fixture:001:p002' },
+      certainty: 'explicit',
+      evidence: ['fixture:001:s0001'],
+    }],
+  });
+  if (claimAdditionResult.length !== 1 || claimAdditionResult[0].id !== 'fixture:001:c0002') {
+    throw new Error('An independently reviewed claim addition was not applied');
   }
   expectDecisionFailure(() => applyExplicitCandidateDispositions(
     explicitClassification,
@@ -378,6 +496,23 @@ function selfTest() {
       excerpt: '劉湛',
     },
   });
+  decisions.claimAdditions.push({
+    repairId: extraction.translationRepairs[1].id,
+    claim: {
+      id: 'fixture:001:c0004',
+      subject: 'fixture:001:p001',
+      predicate: 'role',
+      value: { roleId: 'scholar' },
+      certainty: 'strongly-inferred',
+      evidence: ['fixture:001:s0001'],
+    },
+    reason: 'The accepted fixture repair supplies evidence for an additional durable role claim.',
+    sourceWitness: {
+      source: 'chapter-text',
+      citation: 'fixture/001 s0001',
+      excerpt: '劉湛昨日來，劉湛留。',
+    },
+  });
   const reviewed = validateEditorialDecisions(decisions, extraction, oldPacket);
   const reviewedRepairs = renumberRepairs(reviewed.reviewedRepairs, 'fixture', '001');
   if (reviewedRepairs.length !== 1 || reviewedRepairs[0].id !== 'fixture:001:r0001') {
@@ -431,6 +566,9 @@ function selfTest() {
   if (reviewed.revisedClaims.get('fixture:001:c0001')?.value.pinyin !== 'Liu Zhan') {
     throw new Error('Reviewed claim revision was not returned for application');
   }
+  if (reviewed.addedClaims[0]?.id !== 'fixture:001:c0004') {
+    throw new Error('Reviewed claim addition was not returned for application');
+  }
   const evidenceRemoval = structuredClone(decisions);
   evidenceRemoval.claimRevisions[0].before.evidence = [
     'fixture:001:s0001',
@@ -473,6 +611,7 @@ function selfTest() {
     throw new Error('Repeated repaired person surface was not reconciled');
   }
   validatePeopleExtraction(reconciled.extraction, revisedPacket);
+  validateAppliedEditorialDecisions(decisions, reconciled.extraction);
   const compact = compactPeopleExtraction(reconciled.extraction, revisedPacket);
   const compactResult = validateCompactPeopleExtraction(compact, revisedPacket);
   if (compactResult.stats.people !== 1 || compactResult.stats.repairs !== 1) {
@@ -1429,10 +1568,18 @@ function main() {
     ...reviewed.reviewedRepairs,
   ], opts.book, opts.chapter);
   const reviewedRepairs = retainedRepairs.filter((repair) => repair.status === 'proposed');
+  const reviewedClaims = applyReviewedClaimChanges(extraction.claims, reviewed);
+  const reviewedPeople = applyReviewedRelationshipHintChanges(
+    applyReviewedPersonNameChanges(extraction.people, extraction.claims, reviewed),
+    extraction.claims,
+    reviewedClaims,
+    reviewed,
+  );
   const reviewedExtraction = {
     ...structuredClone(extraction),
-    people: applyReviewedPersonNameChanges(extraction.people, extraction.claims, reviewed),
-    claims: applyReviewedClaimChanges(extraction.claims, reviewed),
+    people: reviewedPeople,
+    mentions: removeRetractedNameMentionSpans(extraction.mentions, extraction.claims, reviewed),
+    claims: reviewedClaims,
     translationRepairs: retainedRepairs,
   };
 

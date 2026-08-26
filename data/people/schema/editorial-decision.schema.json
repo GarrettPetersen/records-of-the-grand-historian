@@ -46,6 +46,10 @@
     "claimRevisions": {
       "type": "array",
       "items": { "$ref": "#/$defs/claimRevision" }
+    },
+    "claimAdditions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/claimAddition" }
     }
   },
   "$defs": {
@@ -141,6 +145,17 @@
         "repairId": { "type": "string", "pattern": "^[a-z0-9_-]+:\\d{3}:r\\d{4,}$" },
         "before": { "$ref": "#/$defs/claim" },
         "after": { "$ref": "#/$defs/claim" },
+        "reason": { "type": "string", "minLength": 10, "maxLength": 500 },
+        "sourceWitness": { "$ref": "#/$defs/sourceWitness" }
+      }
+    },
+    "claimAddition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repairId", "claim", "reason", "sourceWitness"],
+      "properties": {
+        "repairId": { "type": "string", "pattern": "^[a-z0-9_-]+:\\d{3}:r\\d{4,}$" },
+        "claim": { "$ref": "#/$defs/claim" },
         "reason": { "type": "string", "minLength": 10, "maxLength": 500 },
         "sourceWitness": { "$ref": "#/$defs/sourceWitness" }
       }

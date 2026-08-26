@@ -96,6 +96,7 @@ export function editorialDecisionSeed(extraction) {
     })),
     claimRetractions: [],
     claimRevisions: [],
+    claimAdditions: [],
   };
 }
 
@@ -204,7 +205,33 @@ function editorialDocumentErrors(document) {
     }
   }
 
-  return { errors, proposalById, decisionById, retractedClaimIds, revisedClaimIds };
+  const addedClaimIds = new Set();
+  for (const addition of document.claimAdditions ?? []) {
+    const claimId = addition.claim?.id;
+    if (addedClaimIds.has(claimId)) errors.push(`duplicate claim addition for ${claimId}`);
+    if (retractedClaimIds.has(claimId) || revisedClaimIds.has(claimId)) {
+      errors.push(`claim ${claimId} cannot be added and also retracted or revised`);
+    }
+    addedClaimIds.add(claimId);
+    const proposal = proposalById.get(addition.repairId);
+    if (!proposal) {
+      errors.push(`claim addition refers to unknown proposal ${addition.repairId}`);
+      continue;
+    }
+    const decision = decisionById.get(addition.repairId);
+    if (!decision || decision.decision === 'reject') {
+      errors.push(`claim addition ${claimId} is tied to a rejected repair ${addition.repairId}`);
+    }
+  }
+
+  return {
+    errors,
+    proposalById,
+    decisionById,
+    retractedClaimIds,
+    revisedClaimIds,
+    addedClaimIds,
+  };
 }
 
 export function validateEditorialDecisionDocument(document) {
@@ -259,6 +286,11 @@ export function validateAppliedEditorialDecisions(document, extraction) {
     }
     if (!containsReviewedClaim(extraction.claims, revision.after)) {
       errors.push(`revised ${revision.before.id}, but its replacement fact is missing`);
+    }
+  }
+  for (const addition of document.claimAdditions ?? []) {
+    if (!containsReviewedClaim(extraction.claims, addition.claim)) {
+      errors.push(`added ${addition.claim.id}, but its fact is missing`);
     }
   }
 
@@ -349,6 +381,33 @@ export function validateEditorialDecisions(document, extraction, packet) {
     revisedClaims.set(revision.before.id, structuredClone(revision.after));
   }
 
+  const people = new Set(extraction.people.map((person) => person.localId));
+  const addedClaims = [];
+  for (const addition of document.claimAdditions ?? []) {
+    const claim = addition.claim;
+    if (claimById.has(claim.id)) {
+      errors.push(`claim addition reuses existing claim ID ${claim.id}`);
+      continue;
+    }
+    if (!people.has(claim.subject)) {
+      errors.push(`claim addition ${claim.id} refers to missing subject ${claim.subject}`);
+    }
+    const proposal = documentResult.proposalById.get(addition.repairId);
+    const expectedEvidence = `${extraction.book}:${extraction.chapter}:${proposal?.unit.id}`;
+    if (!claim.evidence.includes(expectedEvidence)) {
+      errors.push(
+        `claim addition ${claim.id} is not evidenced in repaired unit ${proposal?.unit.id}`,
+      );
+    }
+    addedClaims.push(structuredClone(claim));
+  }
+
   if (errors.length > 0) throw new EditorialDecisionValidationError(errors);
-  return { reviewedRepairs, decisions: documentResult.decisionById, retractedClaimIds, revisedClaims };
+  return {
+    reviewedRepairs,
+    decisions: documentResult.decisionById,
+    retractedClaimIds,
+    revisedClaims,
+    addedClaims,
+  };
 }

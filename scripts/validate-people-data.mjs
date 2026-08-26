@@ -150,6 +150,7 @@ async function main() {
   let editorialDecisions = 0;
   let claimRetractions = 0;
   let claimRevisions = 0;
+  let claimAdditions = 0;
   for (const file of editorialDecisionFiles()) {
     const document = readJson(file);
     try {
@@ -186,6 +187,7 @@ async function main() {
     editorialDecisions += document.decisions.length;
     claimRetractions += document.claimRetractions.length;
     claimRevisions += document.claimRevisions.length;
+    claimAdditions += document.claimAdditions?.length ?? 0;
   }
   if (errors.length > 0) {
     throw new Error(`Person data validation failed:\n${errors.map((item) => `- ${item}`).join('\n')}`);
@@ -194,7 +196,8 @@ async function main() {
     `Person data validation passed: ${files.length} extraction(s), ${people} local people, ` +
     `${mentions} mentions, ${claims} claims, ${proposedRepairs} proposed repair(s), ` +
     `${appliedRepairs} applied repair(s), ${editorialDecisions} editorial decision(s), ` +
-    `${claimRetractions} claim retraction(s), ${claimRevisions} claim revision(s). ` +
+    `${claimRetractions} claim retraction(s), ${claimRevisions} claim revision(s), ` +
+    `${claimAdditions} claim addition(s). ` +
     `Legacy temporal debt: ${peopleMissingAttestations} person record(s) without an attestation, ` +
     `${peopleMissingActiveDateHints} without an active-date hint. ` +
     `Corpus coverage: ${files.length}/${sourceChapters.length} chapter(s), ` +
