@@ -1299,7 +1299,7 @@ function selfTest() {
     input: {},
     run: { model: 'fixture', promptVersion: 7, agentId: 'fixture' },
     people: [{
-      localId: 'fixture:004:p001',
+      localId: 'fixture:004:p003',
       preferredNameSuggestion: { en: 'Earlier Emperor', zh: '先帝' },
       historicity: 'historical',
       descriptorSuggestion: 'Ruler',
@@ -1308,7 +1308,7 @@ function selfTest() {
     mentions: [],
     claims: [{
       id: 'fixture:004:c0001',
-      subject: 'fixture:004:p001',
+      subject: 'fixture:004:p003',
       predicate: 'name',
       value: { kind: 'title', en: 'Emperor', zh: '帝' },
       certainty: 'explicit',
@@ -1325,6 +1325,9 @@ function selfTest() {
   );
   if (!contextualTitleResult.unresolvedCandidates.includes('fixture:004:cand_emperor')) {
     throw new Error('A generic sovereign title was assigned from unrelated cross-unit evidence');
+  }
+  if (contextualTitleResult.extraction.people[0]?.localId !== 'fixture:004:p003') {
+    throw new Error('Translation repair reconciliation renumbered a stable person ID');
   }
 
   const candidateConflictFixture = {
