@@ -22,6 +22,7 @@ import {
   serializeCompactPeopleExtraction,
 } from './lib/people-compact.mjs';
 import {
+  assignExplicitCandidatePeople,
   applyTranslationRepairs,
   reconcileExtractionAfterRepairs,
   removeDispositionMentionConflicts,
@@ -63,6 +64,10 @@ Options:
                          Explicitly classify a new revised-packet candidate as
                          a non-person. May be repeated; REASON must be one of:
                          ${[...EXPLICIT_NON_PERSON_REASONS].join(', ')}.
+  --candidate-person ID=LOCAL_PERSON@KIND
+                         Assign a new revised-packet candidate to an existing
+                         local person using an explicit mention kind. May be
+                         repeated; LOCAL_PERSON may be p071 or the full ID.
 
 Proposed repairs require a complete, independently authored editorial-decision
 file. The command validates the review before editing, applies only accepted or
@@ -78,6 +83,7 @@ function parseArgs(argv) {
     decisions: null,
     reconcileCurrent: false,
     candidateDispositions: [],
+    candidatePeople: [],
     selfTest: false,
   };
   for (let index = 0; index < argv.length; index += 1) {
@@ -108,6 +114,19 @@ function parseArgs(argv) {
         disposition: 'not-person',
         reason,
         note: 'Explicitly classified while applying an independently reviewed translation repair.',
+      });
+    }
+    else if (arg === '--candidate-person') {
+      const value = next();
+      const separator = value.indexOf('=');
+      const kindSeparator = value.lastIndexOf('@');
+      if (separator < 1 || kindSeparator <= separator + 1 || kindSeparator === value.length - 1) {
+        throw new Error(`${arg} must be ID=LOCAL_PERSON@KIND`);
+      }
+      opts.candidatePeople.push({
+        candidate: value.slice(0, separator),
+        person: value.slice(separator + 1, kindSeparator),
+        kind: value.slice(kindSeparator + 1),
       });
     }
     else if (arg === '--self-test') opts.selfTest = true;
@@ -363,6 +382,33 @@ function selfTest() {
     explicitClassification.extraction.candidateDispositions[0]?.candidate !== candidateId
   ) {
     throw new Error('Explicit revised-packet candidate disposition was not applied');
+  }
+  const personCandidateId = 'fixture:001:cand_abcdef0123456789';
+  const personAssignment = assignExplicitCandidatePeople({
+    extraction: {
+      book: 'fixture',
+      chapter: '001',
+      people: [{ localId: 'fixture:001:p001' }],
+      mentions: [],
+    },
+    unresolvedCandidates: [personCandidateId],
+    unresolvedSpans: [],
+  }, {
+    units: [{
+      id: 's0001', kind: 'paragraph-sentence', blockIndex: 0,
+      collection: 'sentences', itemIndex: 0, zh: '', en: 'King Example arrived.',
+    }],
+    preflight: { candidates: [{
+      id: personCandidateId, unit: 's0001', language: 'en', exact: 'King Example',
+      occurrence: 0, startCodePoint: 0, endCodePoint: 12,
+    }] },
+  }, [{ candidate: personCandidateId, person: 'p001', kind: 'title-reference' }]);
+  if (
+    personAssignment.unresolvedCandidates.length !== 0 ||
+    personAssignment.extraction.mentions[0]?.person !== 'fixture:001:p001' ||
+    personAssignment.extraction.mentions[0]?.candidateRefs[0] !== personCandidateId
+  ) {
+    throw new Error('Explicit revised-packet person candidate was not assigned');
   }
 
   const retractedMentionResult = removeRetractedNameMentionSpans([{
@@ -1612,9 +1658,9 @@ function main() {
 
   if (opts.reconcileCurrent) {
     const reconciled = applyExplicitCandidateDispositions(
-      reconcileExtractionAfterRepairs(extraction, currentPacket, {
+      assignExplicitCandidatePeople(reconcileExtractionAfterRepairs(extraction, currentPacket, {
         markRepairsApplied: false,
-      }),
+      }), currentPacket, opts.candidatePeople),
       currentPacket,
       opts.candidateDispositions,
     );
@@ -1711,9 +1757,9 @@ function main() {
     properNounMatcher: matcher,
   });
   const reconciled = applyExplicitCandidateDispositions(
-    reconcileExtractionAfterRepairs(reviewedExtraction, revisedPacket, {
+    assignExplicitCandidatePeople(reconcileExtractionAfterRepairs(reviewedExtraction, revisedPacket, {
       previousPacket: oldPacket,
-    }),
+    }), revisedPacket, opts.candidatePeople),
     revisedPacket,
     opts.candidateDispositions,
   );
