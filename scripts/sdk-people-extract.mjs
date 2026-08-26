@@ -1049,7 +1049,10 @@ async function runAgentTurn(agent, prompt, target, opts, phase, control) {
     });
     console.log(`[${stateKey(target)}] ${phase} run ${result.id} status=${result.status}`);
     if (result.status !== 'finished') {
-      throw new Error(result.error?.message ?? `Cursor run ended with status ${result.status}`);
+      const error = new Error(result.error?.message ?? `Cursor run ended with status ${result.status}`);
+      error.runId = result.id;
+      error.runStatus = result.status;
+      throw error;
     }
     return result;
   } finally {
@@ -1242,7 +1245,7 @@ async function obtainValidInitialExtraction(
       const validated = validateDownloadedExtraction(downloaded, packet);
       return { extraction: validated.normalized, result, stats: validated.stats };
     } catch (error) {
-      if (error instanceof CursorRunLimitExceededError && chunk) {
+      if (chunk && (error instanceof CursorRunLimitExceededError || error.runStatus)) {
         try {
           const recovered = withRunMetadata(
             await downloadExtraction(agent, wanted),
@@ -1253,7 +1256,9 @@ async function obtainValidInitialExtraction(
           const validated = validateDownloadedExtraction(recovered, packet);
           console.warn(
             `[${stateKey(target)}/chunk-${chunk.id}] recovered a valid artifact after ` +
-            `${error.metric} cancellation`,
+            (error instanceof CursorRunLimitExceededError
+              ? `${error.metric} cancellation`
+              : `terminal run status ${error.runStatus}`),
           );
           return {
             extraction: validated.normalized,
