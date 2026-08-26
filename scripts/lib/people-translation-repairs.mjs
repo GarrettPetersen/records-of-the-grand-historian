@@ -157,6 +157,17 @@ const ENGLISH_CONTEXTUAL_PERSON_TITLES = new Set([
   'Queen',
   'Regent',
 ]);
+const EXPLICIT_MENTION_KINDS = new Set([
+  'personal-name',
+  'courtesy-name',
+  'childhood-name',
+  'religious-name',
+  'temple-name',
+  'posthumous-name',
+  'alternate-name',
+  'title-reference',
+  'kinship-reference',
+]);
 const ENGLISH_INSTITUTIONAL_SUFFIX_RE = /\b(?:Academy|Administration|Bureau|Chancellery|Commission|Court|Department|Directorate|Household|Ministry|Office|Pasturage|Secretariat)$/u;
 
 function locatorKey(locator) {
@@ -547,6 +558,70 @@ function unitLocator(unit) {
     blockIndex: unit.blockIndex,
     collection: unit.collection,
     itemIndex: unit.itemIndex,
+  };
+}
+
+export function assignExplicitCandidatePeople(reconciled, packet, requested) {
+  if (requested.length === 0) return reconciled;
+  const extraction = reconciled.extraction;
+  const candidateById = new Map(packet.preflight.candidates.map((candidate) => [candidate.id, candidate]));
+  const unitById = new Map(packet.units.map((unit) => [unit.id, unit]));
+  const people = new Set(extraction.people.map((person) => person.localId));
+  const unresolved = new Set(reconciled.unresolvedCandidates);
+
+  for (const assignment of requested) {
+    const candidate = candidateById.get(assignment.candidate);
+    if (!candidate) throw new Error(`Explicit person candidate is not in the revised packet: ${assignment.candidate}`);
+    if (!unresolved.has(candidate.id)) {
+      throw new Error(`Explicit person candidate is not unresolved: ${candidate.id}`);
+    }
+    const person = /^p\d{3,}$/u.test(assignment.person)
+      ? `${extraction.book}:${extraction.chapter}:${assignment.person}`
+      : assignment.person;
+    if (!people.has(person)) throw new Error(`Explicit person candidate refers to unknown person: ${person}`);
+    if (!EXPLICIT_MENTION_KINDS.has(assignment.kind)) {
+      throw new Error(`Invalid explicit person mention kind: ${assignment.kind}`);
+    }
+
+    const unit = unitById.get(candidate.unit);
+    if (!unit) throw new Error(`Explicit person candidate refers to missing unit: ${candidate.unit}`);
+    const span = exactSpanAt(unit[candidate.language], candidate.exact, candidate.occurrence);
+    const overlapping = extraction.mentions.filter((mention) =>
+      mention.unit.id === unit.id &&
+      mention.spans[candidate.language].some((current) => spansOverlap(current, span))
+    );
+    if (overlapping.some((mention) => mention.person !== person)) {
+      throw new Error(`Explicit person candidate overlaps another person mention: ${candidate.id}`);
+    }
+
+    const target = extraction.mentions.find((mention) =>
+      mention.person === person && mention.unit.id === unit.id && mention.kind === assignment.kind
+    );
+    if (target) {
+      if (!target.spans[candidate.language].some((current) => spansOverlap(current, span))) {
+        target.spans[candidate.language].push(span);
+      }
+      target.candidateRefs.push(candidate.id);
+    } else {
+      const nextMention = extraction.mentions.length + 1;
+      extraction.mentions.push({
+        id: `${extraction.book}:${extraction.chapter}:m${String(nextMention).padStart(4, '0')}`,
+        person,
+        unit: unitLocator(unit),
+        kind: assignment.kind,
+        spans: {
+          zh: candidate.language === 'zh' ? [span] : [],
+          en: candidate.language === 'en' ? [span] : [],
+        },
+        candidateRefs: [candidate.id],
+      });
+    }
+    unresolved.delete(candidate.id);
+  }
+
+  return {
+    ...reconciled,
+    unresolvedCandidates: reconciled.unresolvedCandidates.filter((candidate) => unresolved.has(candidate)),
   };
 }
 

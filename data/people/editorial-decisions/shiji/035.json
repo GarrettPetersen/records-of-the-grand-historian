@@ -1,0 +1,259 @@
+{
+  "schemaVersion": 3,
+  "book": "shiji",
+  "chapter": "035",
+  "input": {
+    "chapterFingerprint": "sha256:c91a874934777836416326b0929a044747401e33da4bdfdb50a4b3b4a5b0bbf1",
+    "proposalsFingerprint": "sha256:3798b77ad8dbc816ad9ea70eb43f2aa91eb372829be55913bb22945db04ed89a"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-26T05:21:34Z"
+  },
+  "proposals": [
+    {
+      "id": "shiji:035:r0001",
+      "unit": {
+        "id": "s0002",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "King Wu had ten brothers from the same mother.",
+      "after": "King Wu and his same-mother brothers were ten in all.",
+      "reason": "Chinese 武王同母兄弟十人 counts King Wu among ten same-mother brothers, not as having ten brothers besides himself.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:035:r0002",
+      "unit": {
+        "id": "s0010",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Therefore, enfeoffed Shu Xian at Guan, enfeoffed Shu Du at Cai: two people assisted Zhou son Wu Geng Lu Fu, governed Yin remnant people.",
+      "after": "Therefore, enfeoffed Shu Xian at Guan, enfeoffed Shu Du at Cai: the two men assisted Wu Geng Lu Fu, son of Zhou of Shang, and governed the remnant people of Yin.",
+      "reason": "紂 here is King Zhou of Shang, not the Zhou royal house; the literal rendering 'Zhou son' misidentifies the father.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:035:r0003",
+      "unit": {
+        "id": "s0018",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "The other son, Kang Shu, was enfeoffed as lord of Wei and became known as Kang Shu of Wei.",
+      "after": "Over the other group he enfeoffed Kang Shu as lord of Wei, who became known as Kang Shu of Wei.",
+      "reason": "其一 refers to the other share of Yin remnant people, not 'the other son'; Kang Shu is King Wu's brother.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:035:r0004",
+      "unit": {
+        "id": "s0056",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "In the twenty-ninth year, Duke Mu died, and his son Duke Zhuang succeeded on the jiawu day.",
+      "after": "In the twenty-ninth year, Duke Mu died, and his son Duke Zhuang Jia Wu succeeded him.",
+      "reason": "子莊侯甲午立 uses the chapter's posthumous-plus-personal-name formula (as in 釐侯所事, 桓侯封人), so 甲午 is the given name, not a sexagenary date.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:035:r0005",
+      "unit": {
+        "id": "s0056",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "In the twenty-ninth year, Duke Mu died, and his son Duke Zhuang succeeded on jiawu.",
+      "after": "In the twenty-ninth year, Duke Mu died, and his son Duke Zhuang Jia Wu ascended.",
+      "reason": "甲午 is Duke Zhuang's personal name in the Shiji naming formula, not a calendar day.",
+      "confidence": "high"
+    },
+    {
+      "id": "shiji:035:r0006",
+      "unit": {
+        "id": "s0181",
+        "kind": "paragraph-sentence",
+        "blockIndex": 37,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "Dreamer's son then fled away.",
+      "after": "The dreamer's son then fled.",
+      "reason": "Literal omits the article and adds a redundant away; the Chinese is 夢者之子乃亡去.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "shiji:035:r0001",
+      "decision": "revise",
+      "after": "King Wu was one of ten brothers born to the same mother.",
+      "reason": "The count of ten includes King Wu himself. The revision states that relationship directly and avoids the proposal's awkward compound 'same-mother brothers.'",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0002-s0004",
+        "excerpt": "武王同母兄弟十人。母曰太姒，文王正妃也。其長子曰伯邑考，次曰武王發"
+      }
+    },
+    {
+      "repairId": "shiji:035:r0002",
+      "decision": "revise",
+      "after": "He therefore enfeoffed Shu Xian at Guan and Shu Du at Cai. The two men assisted Wu Geng Lufu, son of King Zhou of Shang, in governing the remnant people of Yin.",
+      "reason": "紂 is King Zhou of Shang and modifies 子, making Wu Geng Lufu his son. The revision restores the omitted subject and removes the proposal's ambiguous 'Zhou of Shang.'",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0010",
+        "excerpt": "封叔鮮於管，封叔度於蔡：二人相紂子武庚祿父，治殷遺民。"
+      }
+    },
+    {
+      "repairId": "shiji:035:r0003",
+      "decision": "revise",
+      "after": "Over the other group he enfeoffed Kang Shu as lord of Wei, thereafter known as Kang Shu of Wei.",
+      "reason": "其一 resumes the division of the Yin remnants into two groups in the preceding sentence. It does not call Kang Shu 'the other son.'",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0017-s0018",
+        "excerpt": "分殷餘民為二：其一封微子啟於宋，以續殷祀；其一封康叔為衛君"
+      }
+    },
+    {
+      "repairId": "shiji:035:r0004",
+      "decision": "revise",
+      "after": "In the twenty-ninth year, Duke Mu died, and his son Jiawu, Duke Zhuang, succeeded him.",
+      "reason": "甲午 is the ruler's given name Jiawu, not a sexagenary date. The apposition distinguishes his personal name from his posthumous title.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0056",
+        "excerpt": "二十九年，繆侯卒，子莊侯甲午立。"
+      }
+    },
+    {
+      "repairId": "shiji:035:r0005",
+      "decision": "revise",
+      "after": "In the twenty-ninth year, Duke Mu died, and his son Jiawu, Duke Zhuang, succeeded him.",
+      "reason": "The literal field also misreads 甲午 as a date. It is the personal name Jiawu attached to Duke Zhuang in the standard succession formula.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0056",
+        "excerpt": "子莊侯甲午立。"
+      }
+    },
+    {
+      "repairId": "shiji:035:r0006",
+      "decision": "accept",
+      "after": null,
+      "reason": "The proposed wording accurately supplies the possessive article and renders 亡去 simply as 'fled.'",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0181",
+        "excerpt": "夢者之子乃亡去。"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "shiji:035:r0004",
+      "before": {
+        "id": "shiji:035:c0161",
+        "subject": "shiji:035:p041",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Duke Zhuang Jia Wu",
+          "zh": "莊侯甲午",
+          "pinyin": "Zhuang Hou Jia Wu"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "shiji:035:s0056"
+        ]
+      },
+      "after": {
+        "id": "shiji:035:c0161",
+        "subject": "shiji:035:p041",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Duke Zhuang Jiawu",
+          "zh": "莊侯甲午",
+          "pinyin": "Zhuang Hou Jiawu"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "shiji:035:s0056"
+        ]
+      },
+      "reason": "Chinese given names are joined in Hanyu Pinyin. 甲午 is the single given name Jiawu, not two separate names or a date.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0056",
+        "excerpt": "子莊侯甲午立。"
+      }
+    },
+    {
+      "repairId": "shiji:035:r0005",
+      "before": {
+        "id": "shiji:035:c0163",
+        "subject": "shiji:035:p041",
+        "predicate": "name",
+        "value": {
+          "kind": "given",
+          "en": "Jia Wu",
+          "zh": "甲午",
+          "pinyin": "Jia Wu"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "shiji:035:s0056"
+        ]
+      },
+      "after": {
+        "id": "shiji:035:c0163",
+        "subject": "shiji:035:p041",
+        "predicate": "name",
+        "value": {
+          "kind": "given",
+          "en": "Jiawu",
+          "zh": "甲午",
+          "pinyin": "Jiawu"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "shiji:035:s0056"
+        ]
+      },
+      "reason": "The given name is conventionally romanized as the single Hanyu Pinyin word Jiawu.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0056",
+        "excerpt": "子莊侯甲午立。"
+      }
+    }
+  ],
+  "claimAdditions": []
+}
