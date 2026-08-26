@@ -660,43 +660,21 @@ function renumberMentions(extraction) {
   }
 }
 
-function remapNestedPersonIds(value, personIdMap) {
-  if (typeof value === 'string') return personIdMap.get(value) ?? value;
-  if (Array.isArray(value)) return value.map((item) => remapNestedPersonIds(item, personIdMap));
-  if (value && typeof value === 'object') {
-    return Object.fromEntries(Object.entries(value).map(([key, item]) => [
-      key,
-      remapNestedPersonIds(item, personIdMap),
-    ]));
-  }
-  return value;
-}
-
-function renumberPeopleAndClaims(extraction) {
+function preservePeopleAndRenumberClaims(extraction) {
   const namespace = `${extraction.book}:${extraction.chapter}`;
-  const personIdMap = new Map(extraction.people.map((person, index) => [
-    person.localId,
-    `${namespace}:p${String(index + 1).padStart(3, '0')}`,
-  ]));
+  const survivingPeople = new Set(extraction.people.map((person) => person.localId));
   extraction.people = extraction.people.map((person) => ({
     ...person,
-    localId: personIdMap.get(person.localId),
     identityHints: {
       ...person.identityHints,
       relatedLocalPeople: person.identityHints.relatedLocalPeople.flatMap((id) =>
-        personIdMap.has(id) ? [personIdMap.get(id)] : []
+        survivingPeople.has(id) ? [id] : []
       ),
     },
-  }));
-  extraction.mentions = extraction.mentions.map((mention) => ({
-    ...mention,
-    person: personIdMap.get(mention.person) ?? mention.person,
   }));
   extraction.claims = extraction.claims.map((claim, index) => ({
     ...claim,
     id: `${namespace}:c${String(index + 1).padStart(4, '0')}`,
-    subject: personIdMap.get(claim.subject) ?? claim.subject,
-    value: remapNestedPersonIds(claim.value, personIdMap),
   }));
 }
 
@@ -2314,7 +2292,7 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
     }
   }
 
-  renumberPeopleAndClaims(reconciled);
+  preservePeopleAndRenumberClaims(reconciled);
   renumberMentions(reconciled);
 
   return { extraction: reconciled, unresolvedCandidates: unresolvedAfterFinalMerge, unresolvedSpans };

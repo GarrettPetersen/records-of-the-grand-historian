@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "251",
+  "input": {
+    "chapterFingerprint": "sha256:fdc334ee1c7c86b78c55cf9fb0761698c2744a1c1d8d95c5ec4460b39f01be02",
+    "proposalsFingerprint": "sha256:6300e114ae285e100fb106cb227e77335c78be9fd1e45b53c11a023d0652e3fe"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-26T03:36:21.000Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:251:r0001",
+      "unit": {
+        "id": "s0009",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "When a bodyguard of Alana and slaves belonging to the Duke and Erke Daiqing clashed in the market, his ruling did not accord with the facts. He was convicted of deception, spared execution, and dismissed from office.",
+      "after": "When the household slaves of Bodyguard Alana and of Duke Erke Daiqing fought in the market, his ruling did not accord with the facts. He was convicted of deception, spared execution, and dismissed from office.",
+      "reason": "Chinese 侍衛阿拉那與公額爾克戴青兩家奴 means the slaves of the two households of Bodyguard Alana and Duke Erke Daiqing, not a bodyguard of Alana and a separate Duke apart from Erke Daiqing.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:251:r0002",
+      "unit": {
+        "id": "s0009",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "When a bodyguard of Alana and slaves of the households of the Duke and Erke Daiqing fought in the market, his judgment did not match the facts; he was found guilty of deception, spared death, and stripped of office.",
+      "after": "When the household slaves of Bodyguard Alana and of Duke Erke Daiqing fought in the market, his judgment did not match the facts; he was found guilty of deception, spared death, and stripped of office.",
+      "reason": "Same error as idiomatic: 公額爾克戴青 is one person (Duke Erke Daiqing); 兩家奴 are the slaves of Alana's and the duke's households.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:251:r0003",
+      "unit": {
+        "id": "s0177",
+        "kind": "paragraph-sentence",
+        "blockIndex": 20,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Zheng's general Zhan Tianqi came to Chen Shikai to surrender.",
+      "after": "Zheng's general Zhan Tianshu came to Chen Shikai to surrender.",
+      "reason": "詹天樞 is Zhan Tianshu (樞 shū), not Tianqi; the idiomatic rendering misspells the given name.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:251:r0004",
+      "unit": {
+        "id": "s0177",
+        "kind": "paragraph-sentence",
+        "blockIndex": 20,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Zheng's general Zhan Tianqi came to Chen Shikai to surrender.",
+      "after": "Zheng's general Zhan Tianshu came to Chen Shikai to surrender.",
+      "reason": "詹天樞 is Zhan Tianshu (樞 shū), not Tianqi; the literal rendering misspells the given name.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:251:r0005",
+      "unit": {
+        "id": "s0189",
+        "kind": "paragraph-sentence",
+        "blockIndex": 21,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "literal",
+      "before": "After a long time his achievement in defeating rebels at Daxitan was reviewed posthumously; he was granted tosara hašan, inheritable once.",
+      "after": "After a long time his achievement in defeating rebels at Daxitan was reviewed; he was granted tosara hašan, inheritable once.",
+      "reason": "追論 here is a later review of merit, not a posthumous award; the next units show Zhifang still alive and entering office, so 'posthumously' is wrong.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:251:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "兩家奴 are the slaves of the two preceding households: Bodyguard Alana and Duke Erke Daiqing. The existing English misparses their titles and ownership.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "侍衛阿拉那與公額爾克戴青兩家奴鬥於市"
+      }
+    },
+    {
+      "repairId": "qingshigao:251:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field contains the same syntactic error; 公 belongs to Erke Daiqing's title and 兩家奴 denotes the two households' slaves.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0003",
+        "excerpt": "侍衛阿拉那與公額爾克戴青兩家奴鬥於市"
+      }
+    },
+    {
+      "repairId": "qingshigao:251:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "詹天樞 is Zhan Tianshu; 樞 is shu, not qi. The surrounding context confirms he was Zheng Jing's general surrendering to Chen Shikai.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0177",
+        "excerpt": "錦將詹天樞詣世凱降"
+      }
+    },
+    {
+      "repairId": "qingshigao:251:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field repeats the mistransliteration of 詹天樞; Tianshu is the correct reading.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0177",
+        "excerpt": "詹天樞"
+      }
+    },
+    {
+      "repairId": "qingshigao:251:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "追論 means that the earlier merit was reviewed later. Zhifang remains alive and continues in office in the following units, so 'posthumously' is false.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0110",
+        "excerpt": "久之，追論大溪灘破賊功"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "qingshigao:251:r0003",
+      "before": {
+        "id": "qingshigao:251:c0314",
+        "subject": "qingshigao:251:p101",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Zhan Tianqi",
+          "zh": "詹天樞",
+          "pinyin": "Zhān Tiānshū"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:251:s0177"
+        ]
+      },
+      "after": {
+        "id": "qingshigao:251:c0314",
+        "subject": "qingshigao:251:p101",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Zhan Tianshu",
+          "zh": "詹天樞",
+          "pinyin": "Zhān Tiānshū"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "qingshigao:251:s0177"
+        ]
+      },
+      "reason": "Accepted r0003 establishes the correct English reading of 詹天樞 as Zhan Tianshu; the structured name claim must match it.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0177",
+        "excerpt": "詹天樞"
+      }
+    }
+  ]
+}

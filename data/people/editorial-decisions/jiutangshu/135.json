@@ -1,0 +1,406 @@
+{
+  "schemaVersion": 3,
+  "book": "jiutangshu",
+  "chapter": "135",
+  "input": {
+    "chapterFingerprint": "sha256:4be77319fd4c89daf5bf0e0ef55809f02bc92f87ee87555252daedb12152de6c",
+    "proposalsFingerprint": "sha256:ff60cb4b893e65f86d6ece9f4ef17c87281fce39464d1176d2a227529fb9ca9f"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-08-26T03:36:21.000Z"
+  },
+  "proposals": [
+    {
+      "id": "jiutangshu:135:r0001",
+      "unit": {
+        "id": "s0036",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "On arriving, Mian sent the general Li Guan and Rongzhou prefect Wang Hongren to campaign together against them. All were executed and the Five Ridges were pacified.",
+      "after": "On arriving, Mian sent the general Li Guan and Rongzhou prefect Wang Hong to campaign together against them. All were executed and the Five Ridges were pacified.",
+      "reason": "Chinese has 王翃; the following 人 means jointly/with others, not part of the personal name. Idiomatic wrongly fuses it as Wang Hongren.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiutangshu:135:r0002",
+      "unit": {
+        "id": "s0075",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Li Gao, styled Zilan, was a great-great-grandson of Prince of Cao Ming, a descendant of the succession prince Zhan.",
+      "after": "Li Gao, styled Zilan, was a great-great-grandson of Prince of Cao Ming, and son of the succession prince Zhan.",
+      "reason": "Chinese 嗣王戢之子 means son of succession prince Zhan, not a vague descendant.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiutangshu:135:r0003",
+      "unit": {
+        "id": "s0002",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "His father Ze Yan held the posts of prefect over Han, Bao, Xiang, and Qi and bore the title Duke of Ande; wherever he served, he was known for stern efficiency.",
+      "after": "His father Zeyan held the posts of prefect over Han, Bao, Xiang, and Qi and bore the title Duke of Ande; wherever he served, he was known for stern efficiency.",
+      "reason": "擇言 is a single given name; spacing as Ze Yan obscures that it is one personal name.",
+      "confidence": "medium"
+    },
+    {
+      "id": "jiutangshu:135:r0004",
+      "unit": {
+        "id": "s0202",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "Xianzong took elixirs in excess and suddenly developed a disorder of frenzy and agitation, until he abandoned the throne.",
+      "after": "Xianzong took elixirs in excess and suddenly developed a disorder of frenzy and agitation, until he passed away.",
+      "reason": "棄代 is an imperial death euphemism ('left the age'), not abdication or abandoning the throne; the idiomatic rendering correctly has death.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiutangshu:135:r0005",
+      "unit": {
+        "id": "s0203",
+        "kind": "paragraph-sentence",
+        "blockIndex": 16,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "Muzong, while in the Eastern Palace, wrung his hands over this affair; when he assumed mourning, he banished and executed them all.",
+      "after": "Muzong, while in the Eastern Palace, wrung his hands over this affair; when he observed mourning [on taking the throne], he banished and executed them all.",
+      "reason": "及居喪 marks mourning at succession after Xianzong's death, not merely assuming mourning as an isolated act; the idiomatic version captures the throne-in-mourning sense.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiutangshu:135:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "The official's name is 王翃, Wang Hong. The existing English incorrectly absorbed the following 人 into his given name as Hongren.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0036",
+        "excerpt": "容州刺史王翃人並力招討"
+      }
+    },
+    {
+      "repairId": "jiutangshu:135:r0002",
+      "decision": "revise",
+      "after": "Li Gao, styled Zilan, was a great-great-grandson of Li Ming, Prince of Cao, and son of Li Ji, the succeeding prince.",
+      "reason": "之子 explicitly makes Li Gao the son of the succeeding prince, but 戢 is read Ji, not Zhan. The revised sentence corrects both the relationship and the personal name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "李皋，字子蘭，曹王明玄孫，嗣王戢之子"
+      }
+    },
+    {
+      "repairId": "jiutangshu:135:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "擇言 is one two-character given name, Zeyan; separating it as 'Ze Yan' is inconsistent with standard pinyin treatment in the chapter.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0002",
+        "excerpt": "父擇言"
+      }
+    },
+    {
+      "repairId": "jiutangshu:135:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "棄代 is a euphemism for death, not abdication. The proposal restores the meaning already conveyed by the idiomatic field.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0202",
+        "excerpt": "以至棄代"
+      }
+    },
+    {
+      "repairId": "jiutangshu:135:r0005",
+      "decision": "revise",
+      "after": "Muzong, while in the Eastern Palace, wrung his hands over this affair; when he entered mourning on ascending the throne, he banished or executed them all.",
+      "reason": "及居喪 refers to Muzong entering mourning at the succession after Xianzong's death. The revised wording states that context naturally and renders 竄逐誅之 as alternative punishments rather than claiming every person was both banished and executed.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0203",
+        "excerpt": "穆宗在東宮，扼腕於其事，及居喪，皆竄逐誅之"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "jiutangshu:135:r0001",
+      "before": {
+        "id": "jiutangshu:135:c0065",
+        "subject": "jiutangshu:135:p021",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Wang Hongren",
+          "zh": "王翃",
+          "pinyin": "Wang Hong"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiutangshu:135:s0036"
+        ]
+      },
+      "after": {
+        "id": "jiutangshu:135:c0065",
+        "subject": "jiutangshu:135:p021",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Wang Hong",
+          "zh": "王翃",
+          "pinyin": "Wang Hong"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiutangshu:135:s0036"
+        ]
+      },
+      "reason": "Accepted r0001 establishes that 人 is not part of 王翃's name; the English personal-name claim must therefore read Wang Hong.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0036",
+        "excerpt": "容州刺史王翃"
+      }
+    },
+    {
+      "repairId": "jiutangshu:135:r0002",
+      "before": {
+        "id": "jiutangshu:135:c0140",
+        "subject": "jiutangshu:135:p044",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Zhan",
+          "zh": "戢",
+          "pinyin": "Zhan"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiutangshu:135:s0075"
+        ]
+      },
+      "after": {
+        "id": "jiutangshu:135:c0140",
+        "subject": "jiutangshu:135:p044",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Ji",
+          "zh": "戢",
+          "pinyin": "Ji"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiutangshu:135:s0075"
+        ]
+      },
+      "reason": "戢 is pronounced Ji; the extracted Zhan reading has no basis in the source character.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "嗣王戢之子"
+      }
+    },
+    {
+      "repairId": "jiutangshu:135:r0002",
+      "before": {
+        "id": "jiutangshu:135:c0141",
+        "subject": "jiutangshu:135:p044",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "succession prince"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiutangshu:135:s0075"
+        ]
+      },
+      "after": {
+        "id": "jiutangshu:135:c0141",
+        "subject": "jiutangshu:135:p044",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Succeeding Prince of Cao"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiutangshu:135:s0075"
+        ]
+      },
+      "reason": "In the established Cao-prince lineage, 嗣王 identifies Ji as the succeeding Prince of Cao; the revised English is a usable title rather than an abstract label.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0075",
+        "excerpt": "曹王明玄孫，嗣王戢之子"
+      }
+    },
+    {
+      "repairId": "jiutangshu:135:r0003",
+      "before": {
+        "id": "jiutangshu:135:c0016",
+        "subject": "jiutangshu:135:p004",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Ze Yan",
+          "zh": "擇言",
+          "pinyin": "Zeyan"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiutangshu:135:s0002"
+        ]
+      },
+      "after": {
+        "id": "jiutangshu:135:c0016",
+        "subject": "jiutangshu:135:p004",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Zeyan",
+          "zh": "擇言",
+          "pinyin": "Zeyan"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiutangshu:135:s0002"
+        ]
+      },
+      "reason": "Accepted r0003 establishes 擇言 as the single given name Zeyan; the structured personal-name claim must match the corrected text.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0002",
+        "excerpt": "父擇言"
+      }
+    },
+    {
+      "repairId": "jiutangshu:135:r0005",
+      "before": {
+        "id": "jiutangshu:135:c0668",
+        "subject": "jiutangshu:135:p086",
+        "predicate": "legal-action",
+        "value": {
+          "status": "punishment",
+          "action": "imposed",
+          "label": {
+            "en": "banished and executed those involved",
+            "zh": "皆竄逐誅之"
+          },
+          "dateContext": {
+            "sourceDate": {
+              "text": "及居喪"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 820,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiutangshu:135:s0203"
+        ]
+      },
+      "after": {
+        "id": "jiutangshu:135:c0668",
+        "subject": "jiutangshu:135:p086",
+        "predicate": "legal-action",
+        "value": {
+          "status": "punishment",
+          "action": "imposed",
+          "label": {
+            "en": "banished or executed those involved",
+            "zh": "皆竄逐誅之"
+          },
+          "dateContext": {
+            "sourceDate": {
+              "text": "及居喪"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 820,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiutangshu:135:s0203"
+        ]
+      },
+      "reason": "Revised r0005 distinguishes the alternative punishments in 竄逐誅之; the legal-action label must not say every person was both banished and executed.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0203",
+        "excerpt": "皆竄逐誅之"
+      }
+    },
+    {
+      "repairId": "jiutangshu:135:r0005",
+      "before": {
+        "id": "jiutangshu:135:c0669",
+        "subject": "jiutangshu:135:p086",
+        "predicate": "event-participation",
+        "value": {
+          "kind": "legal",
+          "role": "authority",
+          "action": "banished and executed participants in the elixir affair"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiutangshu:135:s0203"
+        ]
+      },
+      "after": {
+        "id": "jiutangshu:135:c0669",
+        "subject": "jiutangshu:135:p086",
+        "predicate": "event-participation",
+        "value": {
+          "kind": "legal",
+          "role": "authority",
+          "action": "banished or executed participants in the elixir affair"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "jiutangshu:135:s0203"
+        ]
+      },
+      "reason": "The event claim must mirror the corrected alternative punishments established by r0005.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0203",
+        "excerpt": "皆竄逐誅之"
+      }
+    }
+  ]
+}

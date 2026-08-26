@@ -20,6 +20,7 @@ import {
   chapterKey,
   claimIsActive,
   claimRemotePeopleTargets,
+  completedForeignClaimOwnsLocalReadyOutput,
   extractionIsCurrent,
   fetchPeopleQueueBase,
   listPeopleChapterTargets,
@@ -695,6 +696,27 @@ function selfTest() {
   });
   if (laterGrok.claimed.length || laterGrok.blocked.length !== 1) {
     throw new Error('Grok Bot acquired a resumable Cursor chapter');
+  }
+  const locallyReviewedReady = {
+    status: 'ready',
+    target: { book: 'a', chapter: '003', chapterFingerprint: 'sha256:reviewed' },
+  };
+  const completedGrokClaim = {
+    lane: 'grokbot',
+    worker: 'grok-c',
+    status: 'ready',
+    sticky: true,
+    chapterFingerprint: 'sha256:pre-review',
+  };
+  if (!completedForeignClaimOwnsLocalReadyOutput(locallyReviewedReady, completedGrokClaim, 3_000)) {
+    throw new Error('Cursor sync did not preserve a completed Grok claim after editorial review changed the chapter');
+  }
+  if (completedForeignClaimOwnsLocalReadyOutput(
+    locallyReviewedReady,
+    { ...completedGrokClaim, status: 'claimed' },
+    3_000,
+  )) {
+    throw new Error('Cursor sync hid a conflict with unfinished foreign work');
   }
   const packet = {
     units: Array.from({ length: 4 }, (_, index) => ({

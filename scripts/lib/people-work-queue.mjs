@@ -364,6 +364,13 @@ export function localUnpublishedExtractionTargets() {
   return targets.sort((left, right) => chapterKey(left).localeCompare(chapterKey(right)));
 }
 
+export function completedForeignClaimOwnsLocalReadyOutput(item, claim, now = Date.now()) {
+  return item.status === 'ready' &&
+    claimIsActive(claim, now) &&
+    claim.lane !== 'cursor-sdk' &&
+    ['ready', 'submitted'].includes(claim.status);
+}
+
 export function syncLocalCursorReservations(options = {}) {
   const worker = options.worker ?? `${os.hostname()}-cursor-recovery`;
   const recovery = localCursorRecoveryTargets();
@@ -380,11 +387,7 @@ export function syncLocalCursorReservations(options = {}) {
     const reservedElsewhere = [];
     for (const [key, item] of desired) {
       const current = ledger.claims[key];
-      const matchingForeignReadyClaim = item.status === 'ready' &&
-        claimIsActive(current) &&
-        current.lane !== 'cursor-sdk' &&
-        current.chapterFingerprint === item.target.chapterFingerprint;
-      if (matchingForeignReadyClaim) {
+      if (completedForeignClaimOwnsLocalReadyOutput(item, current)) {
         reservedElsewhere.push({ chapter: key, claim: current });
         continue;
       }
