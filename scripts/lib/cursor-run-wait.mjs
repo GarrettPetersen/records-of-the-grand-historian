@@ -171,7 +171,7 @@ async function enforceRunLimits(run, options) {
 }
 
 export async function waitForCursorRun(run, options) {
-  const timeoutMs = options.timeoutMs ?? 90 * 60 * 1000;
+  const timeoutMs = options.timeoutMs ?? 45 * 60 * 1000;
   const pollMs = options.pollMs ?? 30 * 1000;
   const deadline = Date.now() + timeoutMs;
   let streamOutcome;
@@ -254,5 +254,9 @@ export async function waitForCursorRun(run, options) {
     }
     return terminalResult(refreshed);
   }
-  throw new Error(`${options.label}: timed out waiting for cloud run ${run.id}`);
+  await cancelRunForLimit(run, options, new CursorRunLimitExceededError(
+    `${options.label}: cancelled cloud run ${run.id} after waiting ` +
+    `${Math.ceil(timeoutMs / 60_000)} minutes`,
+    { runId: run.id, metric: 'wall-clock', observed: timeoutMs, limit: timeoutMs },
+  ));
 }

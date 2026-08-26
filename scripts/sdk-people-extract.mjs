@@ -1602,6 +1602,7 @@ function chunkPlanForTarget(target, packet, opts, state) {
     const previousChunk = prior?.chunks?.[chunk.id];
     const hitRunLimit = chunkHitRunLimit(previousChunk);
     if (!hitRunLimit) continue;
+    if (currentChunkArchiveIsValid(target, packet, chunk)) continue;
     if (previousChunk?.agentId && !previousChunk.resumeExhausted) continue;
     planned = replaceChunkWithChildren(target, packet, planned, chunk, opts, state);
   }
