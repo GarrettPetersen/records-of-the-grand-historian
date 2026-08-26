@@ -235,6 +235,69 @@ function applyReviewedRelationshipHintChanges(people, originalClaims, finalClaim
   });
 }
 
+function westernPointLabel(point) {
+  if (!point || !['AD', 'BC'].includes(point.era) || !Number.isInteger(point.year)) return null;
+  return `${point.era} ${point.year}`;
+}
+
+function claimActiveDateHints(claim) {
+  const hints = [];
+  function visit(value) {
+    if (!value || typeof value !== 'object') return;
+    if (value.westernInterval?.start && value.westernInterval?.end) {
+      const start = westernPointLabel(value.westernInterval.start);
+      const end = westernPointLabel(value.westernInterval.end);
+      if (start && end) {
+        hints.push(
+          value.westernInterval.start.era === value.westernInterval.end.era
+            ? `${start}-${value.westernInterval.end.year}`
+            : `${start}-${end}`,
+        );
+      }
+    } else if (value.westernYear) {
+      const year = westernPointLabel(value.westernYear);
+      if (year) hints.push(year);
+    }
+    for (const nested of Object.values(value)) {
+      if (nested && typeof nested === 'object') visit(nested);
+    }
+  }
+  visit(claim.value);
+  return [...new Set(hints)];
+}
+
+function applyReviewedTemporalHintChanges(people, originalClaims, finalClaims, reviewed) {
+  const affectedSubjects = new Set([
+    ...originalClaims
+      .filter((claim) =>
+        reviewed.retractedClaimIds.has(claim.id) || reviewed.revisedClaims.has(claim.id)
+      )
+      .filter((claim) => claimActiveDateHints(claim).length > 0)
+      .map((claim) => claim.subject),
+    ...(reviewed.addedClaims ?? [])
+      .filter((claim) => claimActiveDateHints(claim).length > 0)
+      .map((claim) => claim.subject),
+    ...reviewed.revisedClaims.values()
+      .filter((claim) => claimActiveDateHints(claim).length > 0)
+      .map((claim) => claim.subject),
+  ]);
+  if (affectedSubjects.size === 0) return people;
+
+  return people.map((person) => {
+    if (!affectedSubjects.has(person.localId)) return person;
+    const activeDateHints = [...new Set(finalClaims
+      .filter((claim) => claim.subject === person.localId)
+      .flatMap(claimActiveDateHints))].sort();
+    return {
+      ...person,
+      identityHints: {
+        ...person.identityHints,
+        activeDateHints,
+      },
+    };
+  });
+}
+
 function describeUnresolvedCandidates(candidateIds, packet) {
   const candidates = new Map(packet.preflight.candidates.map((candidate) => [candidate.id, candidate]));
   return candidateIds.map((id) => {
@@ -335,6 +398,43 @@ function selfTest() {
   });
   if (claimAdditionResult.length !== 1 || claimAdditionResult[0].id !== 'fixture:001:c0002') {
     throw new Error('An independently reviewed claim addition was not applied');
+  }
+  const temporalPeople = [{
+    localId: 'fixture:001:p001',
+    identityHints: { nativePlaces: [], relatedLocalPeople: [], activeDateHints: ['AD 502-549'] },
+  }];
+  const temporalBefore = [{
+    id: 'fixture:001:c0003',
+    subject: 'fixture:001:p001',
+    predicate: 'attestation',
+    value: {
+      westernInterval: {
+        start: { era: 'AD', year: 502 },
+        end: { era: 'AD', year: 549 },
+      },
+    },
+  }];
+  const temporalAfter = [{
+    ...temporalBefore[0],
+    value: {
+      westernInterval: {
+        start: { era: 'AD', year: 209 },
+        end: { era: 'AD', year: 290 },
+      },
+    },
+  }];
+  const temporalResult = applyReviewedTemporalHintChanges(
+    temporalPeople,
+    temporalBefore,
+    temporalAfter,
+    {
+      retractedClaimIds: new Set(),
+      revisedClaims: new Map([[temporalBefore[0].id, temporalAfter[0]]]),
+      addedClaims: [],
+    },
+  );
+  if (temporalResult[0].identityHints.activeDateHints.join() !== 'AD 209-290') {
+    throw new Error('A reviewed temporal claim revision left stale active-date hints');
   }
   expectDecisionFailure(() => applyExplicitCandidateDispositions(
     explicitClassification,
@@ -1569,8 +1669,13 @@ function main() {
   ], opts.book, opts.chapter);
   const reviewedRepairs = retainedRepairs.filter((repair) => repair.status === 'proposed');
   const reviewedClaims = applyReviewedClaimChanges(extraction.claims, reviewed);
-  const reviewedPeople = applyReviewedRelationshipHintChanges(
-    applyReviewedPersonNameChanges(extraction.people, extraction.claims, reviewed),
+  const reviewedPeople = applyReviewedTemporalHintChanges(
+    applyReviewedRelationshipHintChanges(
+      applyReviewedPersonNameChanges(extraction.people, extraction.claims, reviewed),
+      extraction.claims,
+      reviewedClaims,
+      reviewed,
+    ),
     extraction.claims,
     reviewedClaims,
     reviewed,
