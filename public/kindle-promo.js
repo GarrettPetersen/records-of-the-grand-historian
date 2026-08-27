@@ -3,7 +3,7 @@ import {
   kindleProductForBook,
   kindleModalMarkup,
   storageKeyForBook,
-} from './kindle-promo-shared.js';
+} from './kindle-promo-shared.js?v=20260827-houhanshu';
 
 /** Modal only on published book hubs — not on individual chapters. */
 function currentBookHubProduct() {

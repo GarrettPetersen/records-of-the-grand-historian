@@ -17,6 +17,14 @@ export const KINDLE_PRODUCTS = {
     coverPath: '/covers/books/hanshu.svg',
     coverColor: '#2f5f9f',
   },
+  houhanshu: {
+    bookId: 'houhanshu',
+    amazonUrl: 'https://amzn.to/4ccp9CB',
+    title: 'Book of Later Han',
+    chinese: '後漢書',
+    coverPath: '/covers/books/houhanshu.svg',
+    coverColor: '#b8841f',
+  },
   sanguozhi: {
     bookId: 'sanguozhi',
     amazonUrl: 'https://amzn.to/3QesTM8',

@@ -210,7 +210,7 @@ ${peopleLink}            Source texts: <a href="https://chinesenotes.com" target
 }
 
 function kindlePromoScript(prefix = '') {
-  return `<script type="module" src="${prefix}kindle-promo.js?v=20260611-kindle-products"></script>`;
+  return `<script type="module" src="${prefix}kindle-promo.js?v=20260827-houhanshu"></script>`;
 }
 
 function parseTableAttributePrefix(text) {
