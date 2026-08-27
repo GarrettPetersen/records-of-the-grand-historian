@@ -798,6 +798,17 @@ function chunkArchivePath(target, chunk) {
   );
 }
 
+function rejectedArtifactPath(target, chunk = null) {
+  return chunk
+    ? path.join(
+      PEOPLE_DIR, 'generated', 'rejected-chunk-extractions',
+      target.book, target.chapter, `${chunk.id}.json`,
+    )
+    : path.join(
+      PEOPLE_DIR, 'generated', 'rejected-extractions', target.book, `${target.chapter}.json`,
+    );
+}
+
 function publishArtifactCommand(output) {
   const artifact = path.posix.join('/opt/cursor/artifacts', output);
   return `mkdir -p ${path.posix.dirname(artifact)} && cp ${output} ${artifact}`;
@@ -1092,10 +1103,22 @@ function withRunMetadata(extraction, opts, agent, result) {
   };
 }
 
-function validateDownloadedExtraction(extraction, packet) {
-  return isCompactPeopleExtraction(extraction)
-    ? validateCompactPeopleExtraction(extraction, packet)
-    : validatePeopleExtraction(extraction, packet);
+function validateDownloadedExtraction(extraction, packet, target = null, chunk = null) {
+  try {
+    return isCompactPeopleExtraction(extraction)
+      ? validateCompactPeopleExtraction(extraction, packet)
+      : validatePeopleExtraction(extraction, packet);
+  } catch (error) {
+    if (target) {
+      const rejected = rejectedArtifactPath(target, chunk);
+      writeJsonAtomic(rejected, extraction);
+      console.warn(
+        `[${stateKey(target)}${chunk ? `/chunk-${chunk.id}` : ''}] ` +
+        `preserved rejected artifact at ${path.relative(REPO_ROOT, rejected)}`,
+      );
+    }
+    throw error;
+  }
 }
 
 async function recoverInterruptedExtraction(target, packet, opts, state, control, budget) {
@@ -1146,7 +1169,7 @@ async function recoverInterruptedExtraction(target, packet, opts, state, control
           agent,
           run,
         );
-        const validated = validateDownloadedExtraction(downloaded, packet);
+        const validated = validateDownloadedExtraction(downloaded, packet, target);
         console.log(`[${stateKey(target)}] recovered validated artifact from run ${run.id}`);
         updateState(state, target, { resumePending: false });
         return { extraction: validated.normalized, result: run, stats: validated.stats, packet };
@@ -1242,7 +1265,7 @@ async function obtainValidInitialExtraction(
     try {
       result = await runAgentTurn(agent, prompt, target, opts, phase, control);
       const downloaded = withRunMetadata(await downloadExtraction(agent, wanted), opts, agent, result);
-      const validated = validateDownloadedExtraction(downloaded, packet);
+      const validated = validateDownloadedExtraction(downloaded, packet, target, chunk);
       return { extraction: validated.normalized, result, stats: validated.stats };
     } catch (error) {
       if (chunk && (error instanceof CursorRunLimitExceededError || error.runStatus)) {
@@ -1253,7 +1276,7 @@ async function obtainValidInitialExtraction(
             agent,
             { id: error.runId ?? null },
           );
-          const validated = validateDownloadedExtraction(recovered, packet);
+          const validated = validateDownloadedExtraction(recovered, packet, target, chunk);
           console.warn(
             `[${stateKey(target)}/chunk-${chunk.id}] recovered a valid artifact after ` +
             (error instanceof CursorRunLimitExceededError
@@ -1549,10 +1572,34 @@ function restoreLegacyChunkPlan(target, packet, prior, opts) {
   );
   if (archivedRanges.size === 0) {
     if (hasRetainedChat) {
-      throw new Error(
-        `Cannot safely resume ${stateKey(target)}: legacy chunk state has agent chats but no ` +
-        'persisted plan or validated archive proving their ownership ranges',
+      if (prior.chapterFingerprint !== packet.input.chapterFingerprint) {
+        throw new Error(
+          `Cannot safely resume ${stateKey(target)}: retained chunk chats belong to a stale chapter`,
+        );
+      }
+      const recordedRanges = new Map(Object.entries(prior.chunks)
+        .filter(([, chunk]) =>
+          chunk.agentId && !chunk.resumeExhausted &&
+          Number.isInteger(chunk.start) && Number.isInteger(chunk.end)
+        )
+        .map(([chunkId, chunk]) => [chunkId, { start: chunk.start, end: chunk.end }]));
+      const currentPlan = planFreshChunks(target, packet, opts, null);
+      const matchesRecordedOwnership = recordedRanges.size > 0 &&
+        [...recordedRanges].every(([chunkId, range]) => {
+          const chunk = currentPlan.find((item) => item.id === chunkId);
+          return chunk?.start === range.start && chunk.end === range.end;
+        });
+      if (!matchesRecordedOwnership) {
+        throw new Error(
+          `Cannot safely resume ${stateKey(target)}: current plan does not match the retained ` +
+          'agent ownership ranges',
+        );
+      }
+      console.log(
+        `[${stateKey(target)}] reconstructed legacy ${currentPlan.length}-range plan from ` +
+        'recorded retained-agent ownership',
       );
+      return currentPlan;
     }
     return null;
   }
@@ -1799,7 +1846,7 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
             agent,
             existingRun,
           );
-          const validated = validateDownloadedExtraction(recovered, packet);
+          const validated = validateDownloadedExtraction(recovered, packet, target, chunk);
           accepted = {
             extraction: validated.normalized,
             result: existingRun,
@@ -1924,6 +1971,7 @@ async function processChunkedTarget(target, packet, opts, state, control, budget
     status: 'extracting',
     chapterFingerprint: packet.input.chapterFingerprint,
     chunkCount: chunks.length,
+    chunkPlan: persistedChunkPlan(chunks),
   });
   console.log(`[${key}] chunked extraction: ${chunks.length} disjoint ownership range(s)`);
   const parts = [];
@@ -2131,6 +2179,19 @@ async function selfTest() {
       { predicate: 'office', evidence: ['fixture:001:s0002'] },
     ],
   }, careerPacket);
+
+  assertDurableCareerCoverage({
+    ...sparseCareerExtraction,
+    claims: [],
+  }, {
+    units: Array.from({ length: 10 }, (_, index) => ({
+      id: `s${String(index + 1).padStart(4, '0')}`,
+      en: index === 0
+        ? 'This rule was insufficient to serve as precedent.'
+        : 'Chief ministers served as first offerers.',
+      literal: '',
+    })),
+  });
 
   const appliedRepair = {
     id: 'fixture:001:r0001',
