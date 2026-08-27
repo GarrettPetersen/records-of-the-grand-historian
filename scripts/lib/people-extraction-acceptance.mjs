@@ -19,7 +19,9 @@ export const MIN_CAREER_CUE_UNITS = 8;
 export const MIN_DURABLE_CAREER_COVERAGE = 0.2;
 
 export function durableCareerCoverage(extraction, packet) {
+  const mentionedUnitIds = new Set((extraction.mentions ?? []).map((mention) => mention.unit.id));
   const cueUnits = packet.units.filter((unit) =>
+    mentionedUnitIds.has(unit.id) &&
     CAREER_CUE_PATTERNS.some((pattern) => pattern.test(unit.en) || pattern.test(unit.literal))
   );
   const coveredUnitIds = new Set(

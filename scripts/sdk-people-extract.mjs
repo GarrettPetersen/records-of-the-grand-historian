@@ -1694,16 +1694,16 @@ function repairTarget(repair) {
   return `${repair.unit.id}:${repair.field}`;
 }
 
+function repairOrdinal(repair) {
+  const match = /:r(\d+)$/u.exec(repair.id);
+  return match ? Number(match[1]) : 0;
+}
+
 function preservePriorAppliedRepairs(previous, replacement) {
   const priorApplied = previous.translationRepairs.filter((repair) => repair.status === 'applied');
   const priorPending = previous.translationRepairs.filter((repair) => repair.status === 'proposed');
   if (priorPending.length > 0) {
     throw new Error('Cannot replace an extraction while its translation repairs are awaiting review');
-  }
-  if (replacement.translationRepairs.some((repair) => repair.status === 'proposed')) {
-    throw new Error(
-      'Replacement extraction proposed new translation repairs for a chapter with existing editorial history',
-    );
   }
   const replacementByTarget = new Map(replacement.translationRepairs.map((repair) => [
     repairTarget(repair),
@@ -1711,11 +1711,21 @@ function preservePriorAppliedRepairs(previous, replacement) {
   ]));
   for (const repair of priorApplied) {
     const replacementRepair = replacementByTarget.get(repairTarget(repair));
-    if (replacementRepair && JSON.stringify(replacementRepair) !== JSON.stringify(repair)) {
-      throw new Error(`Replacement extraction changed applied repair ${repair.id}`);
+    if (replacementRepair) {
+      throw new Error(
+        `Replacement extraction revisited previously applied repair target ${repairTarget(repair)}`,
+      );
     }
-    if (!replacementRepair) replacement.translationRepairs.push(structuredClone(repair));
   }
+  let nextOrdinal = priorApplied.reduce((maximum, repair) => Math.max(maximum, repairOrdinal(repair)), 0) + 1;
+  const rebasedReplacement = replacement.translationRepairs.map((repair) => ({
+    ...repair,
+    id: `${replacement.book}:${replacement.chapter}:r${String(nextOrdinal++).padStart(4, '0')}`,
+  }));
+  replacement.translationRepairs = [
+    ...priorApplied.map((repair) => structuredClone(repair)),
+    ...rebasedReplacement,
+  ];
   return replacement;
 }
 
@@ -2161,6 +2171,10 @@ async function selfTest() {
   const sparseCareerExtraction = {
     run: { promptVersion: 7 },
     coverage: { allDurableFactsCaptured: true },
+    mentions: careerPacket.units.map((unit, index) => ({
+      id: `fixture:001:m${String(index + 1).padStart(4, '0')}`,
+      unit: { id: unit.id },
+    })),
     claims: [{ predicate: 'office', evidence: ['fixture:001:s0001'] }],
   };
   let sparseCareerRejected = false;
@@ -2205,7 +2219,7 @@ async function selfTest() {
   };
   const replacement = preservePriorAppliedRepairs(
     { translationRepairs: [appliedRepair] },
-    { translationRepairs: [] },
+    { book: 'fixture', chapter: '001', translationRepairs: [] },
   );
   if (
     replacement.translationRepairs.length !== 1 ||
@@ -2214,17 +2228,39 @@ async function selfTest() {
   ) {
     throw new Error('Replacement extraction did not preserve prior applied repairs');
   }
-  let pendingReplacementRejected = false;
+  const augmentedReplacement = preservePriorAppliedRepairs(
+    { translationRepairs: [appliedRepair] },
+    {
+      book: 'fixture',
+      chapter: '001',
+      translationRepairs: [{
+        ...appliedRepair,
+        unit: { id: 's0002' },
+        status: 'proposed',
+      }],
+    },
+  );
+  if (
+    augmentedReplacement.translationRepairs.length !== 2 ||
+    augmentedReplacement.translationRepairs[1].id !== 'fixture:001:r0002'
+  ) {
+    throw new Error('Replacement extraction did not preserve and rebase additional repair proposals');
+  }
+  let appliedTargetRejected = false;
   try {
     preservePriorAppliedRepairs(
       { translationRepairs: [appliedRepair] },
-      { translationRepairs: [{ ...appliedRepair, status: 'proposed' }] },
+      {
+        book: 'fixture',
+        chapter: '001',
+        translationRepairs: [{ ...appliedRepair, status: 'proposed' }],
+      },
     );
   } catch (error) {
-    pendingReplacementRejected = /existing editorial history/u.test(error.message);
+    appliedTargetRejected = /previously applied repair target/u.test(error.message);
   }
-  if (!pendingReplacementRejected) {
-    throw new Error('Replacement extraction admitted new repairs over existing editorial history');
+  if (!appliedTargetRejected) {
+    throw new Error('Replacement extraction revisited a previously applied repair target');
   }
 
   const recoveryPacket = {

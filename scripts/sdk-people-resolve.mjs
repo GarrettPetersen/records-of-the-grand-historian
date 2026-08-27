@@ -442,13 +442,15 @@ function repositoryPath(file) {
 function prepareDossierFiles(dossiers, opts) {
   for (const dossier of dossiers) {
     const file = dossierFile(dossier, opts);
-    fs.mkdirSync(path.dirname(file), { recursive: true });
-    fs.writeFileSync(file, serializedDossier(dossier));
-    console.log(`[${dossier.batch}] prepared ${repositoryPath(file)}`);
     const workerFile = workerDossierFile(dossier, opts);
     if (workerFile) {
+      fs.mkdirSync(path.dirname(workerFile), { recursive: true });
       fs.writeFileSync(workerFile, `${JSON.stringify(projectDossierForWorker(dossier.document), null, 2)}\n`);
       console.log(`[${dossier.batch}] prepared ${repositoryPath(workerFile)}`);
+    } else {
+      fs.mkdirSync(path.dirname(file), { recursive: true });
+      fs.writeFileSync(file, serializedDossier(dossier));
+      console.log(`[${dossier.batch}] prepared ${repositoryPath(file)}`);
     }
   }
 }
@@ -490,12 +492,13 @@ function verifyDossierInputs(dossiers, opts) {
     return;
   }
   for (const dossier of dossiers) {
-    const file = dossierFile(dossier, opts);
-    verifyCommittedFile(file, serializedDossier(dossier), opts);
     const workerFile = workerDossierFile(dossier, opts);
     if (workerFile) {
       const projected = `${JSON.stringify(projectDossierForWorker(dossier.document), null, 2)}\n`;
       verifyCommittedFile(workerFile, projected, opts);
+    } else {
+      const file = dossierFile(dossier, opts);
+      verifyCommittedFile(file, serializedDossier(dossier), opts);
     }
   }
 }

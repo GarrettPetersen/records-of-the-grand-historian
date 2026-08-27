@@ -18,6 +18,7 @@ import {
 } from './lib/people-content.mjs';
 import {
   editorialDecisionPath,
+  mergeEditorialDecisionReview,
   validateEditorialDecisions,
 } from './lib/people-editorial-decisions.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
@@ -296,7 +297,11 @@ function acceptDecision(document, target, loaded, opts, state, agent, result) {
     completedAt: new Date().toISOString(),
   };
   const reviewed = validateEditorialDecisions(document, loaded.extraction, loaded.packet);
-  writeJsonAtomic(editorialDecisionPath(target.book, target.chapter), document);
+  const file = editorialDecisionPath(target.book, target.chapter);
+  const stored = fs.existsSync(file)
+    ? mergeEditorialDecisionReview(readJson(file), document)
+    : document;
+  writeJsonAtomic(file, stored);
   updateState(state, target, {
     status: 'accepted',
     runId: result.id,
