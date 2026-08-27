@@ -312,6 +312,31 @@ function acceptDecision(document, target, loaded, opts, state, agent, result) {
   return { status: 'accepted' };
 }
 
+async function acceptDecisionPublishedAtRunLimit(error, agent, target, loaded, opts, state) {
+  if (!(error instanceof CursorRunLimitExceededError) || !error.runId) return null;
+  try {
+    const accepted = acceptDecision(
+      await downloadDecision(agent, target),
+      target,
+      loaded,
+      opts,
+      state,
+      agent,
+      { id: error.runId },
+    );
+    console.warn(
+      `[${target.book}/${target.chapter}] accepted a complete artifact published at the run limit`,
+    );
+    return accepted;
+  } catch (artifactError) {
+    console.warn(
+      `[${target.book}/${target.chapter}] run-limit artifact is not yet complete: ` +
+      `${errorList(artifactError)[0]}`,
+    );
+    return null;
+  }
+}
+
 function resumableReview(prior) {
   return Boolean(
     prior?.agentId && !prior.resumeExhausted &&
@@ -384,6 +409,10 @@ async function processTarget(target, opts, state, matcher) {
       } catch (error) {
         const errors = errorList(error);
         if (error instanceof CursorRunLimitExceededError) {
+          const accepted = await acceptDecisionPublishedAtRunLimit(
+            error, agent, target, loaded, opts, state,
+          );
+          if (accepted) return accepted;
           updateState(state, target, {
             status: 'interrupted',
             runId: error.runId ?? latest?.id ?? null,
@@ -433,6 +462,10 @@ async function processTarget(target, opts, state, matcher) {
         updateState(state, target, { status: 'failed/retryable', lastErrors: errors });
         console.error(`[${key}] review attempt ${attempt} failed: ${errors[0]}`);
         if (error instanceof CursorRunLimitExceededError) {
+          const accepted = await acceptDecisionPublishedAtRunLimit(
+            error, agent, target, loaded, opts, state,
+          );
+          if (accepted) return accepted;
           updateState(state, target, {
             status: 'interrupted',
             runId: error.runId ?? null,
