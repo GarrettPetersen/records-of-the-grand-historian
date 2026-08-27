@@ -5,7 +5,7 @@ import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { compilePeopleCatalog } from './compile-people-catalog.mjs';
+import { unresolvedCandidateState } from './compile-people-catalog.mjs';
 import { loadDotenv } from './load-dotenv.mjs';
 import {
   PEOPLE_DIR,
@@ -241,9 +241,18 @@ function shardComponents(components, count, people) {
 
 export function buildDossiers(opts, corpus, resolutions) {
   const candidates = buildResolutionCandidates(corpus.localPeople);
-  const compiled = compilePeopleCatalog(corpus, resolutions);
-  const unresolved = new Set(compiled.catalog.unresolvedCandidateBlockIds);
-  const canonicalByLocal = new Map(Object.entries(compiled.catalog.localPersonMap));
+  const resolved = resolvePeopleClusters(corpus.localPeople, resolutions);
+  const canonicalByLocal = new Map();
+  for (const cluster of resolved.clusters) {
+    for (const localId of cluster.localPeople) {
+      canonicalByLocal.set(localId, cluster.canonicalPersonId);
+    }
+  }
+  const unresolved = new Set(
+    unresolvedCandidateState(candidates, canonicalByLocal, resolved.keepSeparate)
+      .blocks
+      .map((block) => block.id),
+  );
   const targetLocalIds = new Set([...corpus.localPeople.values()]
     .filter((person) => opts.allUnresolved || opts.chapters.has(`${person.book}/${person.chapter}`))
     .map((person) => person.localId));
@@ -256,8 +265,7 @@ export function buildDossiers(opts, corpus, resolutions) {
     opts.componentShards ? components.length : opts.shards,
     candidates.people,
   );
-  const resolved = resolvePeopleClusters(corpus.localPeople, resolutions);
-  return shards.map((shard, index) => {
+  const dossiers = shards.map((shard, index) => {
     const componentById = new Map();
     shard.components.forEach((component, componentIndex) => {
       for (const block of component.blocks) componentById.set(block.id, componentIndex + 1);
@@ -295,6 +303,7 @@ export function buildDossiers(opts, corpus, resolutions) {
       bytes: shard.bytes,
     };
   });
+  return { dossiers, baseline: resolved };
 }
 
 function representativeRichness(person) {
@@ -566,8 +575,15 @@ export function mergeHasIdentityEvidence(localPeople, people) {
   return connected.size === localPeople.length;
 }
 
-export function enforcePriorSeparations(document, corpus, resolutions, accepted = []) {
-  const baseline = resolvePeopleClusters(corpus.localPeople, [...resolutions, ...accepted]);
+export function enforcePriorSeparations(
+  document,
+  corpus,
+  resolutions,
+  accepted = [],
+  resolvedBaseline = null,
+) {
+  const baseline = resolvedBaseline ??
+    resolvePeopleClusters(corpus.localPeople, [...resolutions, ...accepted]);
   const rootByLocal = new Map();
   const membersByRoot = new Map();
   for (const cluster of baseline.clusters) {
@@ -656,7 +672,14 @@ export function enforcePriorSeparations(document, corpus, resolutions, accepted 
   return { document: repaired, repairCount };
 }
 
-export function validateResolutionDocument(document, dossier, corpus, resolutions, accepted = []) {
+export function validateResolutionDocument(
+  document,
+  dossier,
+  corpus,
+  resolutions,
+  accepted = [],
+  { checkGlobalConsistency = true } = {},
+) {
   const ajv = createPeopleSchemaValidator();
   const validate = ajv.getSchema('https://24histories.com/schema/people/resolution-v1.json');
   const errors = [];
@@ -690,7 +713,7 @@ export function validateResolutionDocument(document, dossier, corpus, resolution
       .map((block) => block.component));
     if (components.size !== 1) errors.push(`${label} crosses disconnected identity components`);
   }
-  if (errors.length === 0) {
+  if (errors.length === 0 && checkGlobalConsistency) {
     try {
       resolvePeopleClusters(corpus.localPeople, [...resolutions, ...accepted, document]);
     } catch (error) {
@@ -742,6 +765,7 @@ async function recoverPublishedShardDocuments(
   corpus,
   resolutions,
   accepted,
+  baseline,
   control,
   explicitAgents = null,
 ) {
@@ -830,6 +854,7 @@ async function recoverPublishedShardDocuments(
             corpus,
             resolutions,
             accepted,
+            baseline,
           );
           if (reconciled.repairCount > 0) {
             console.warn(
@@ -842,6 +867,7 @@ async function recoverPublishedShardDocuments(
             corpus,
             resolutions,
             accepted,
+            { checkGlobalConsistency: false },
           );
           break;
         } catch (error) {
@@ -887,7 +913,7 @@ async function recoverPublishedShardDocuments(
   return recovered;
 }
 
-async function processDossier(dossier, opts, corpus, resolutions, accepted, control) {
+async function processDossier(dossier, opts, corpus, resolutions, accepted, baseline, control) {
   let agent;
   let errors = [];
   try {
@@ -924,11 +950,13 @@ async function processDossier(dossier, opts, corpus, resolutions, accepted, cont
             corpus,
             resolutions,
             accepted,
+            baseline,
           ).document,
           dossier,
           corpus,
           resolutions,
           accepted,
+          { checkGlobalConsistency: false },
         );
       } catch (error) {
         errors = error?.errors ?? [error instanceof Error ? error.message : String(error)];
@@ -1197,7 +1225,7 @@ async function main() {
   try {
     const corpus = loadValidatedPeopleCorpus();
     const resolutions = loadValidatedResolutionDocuments(corpus.localPeople);
-    const dossiers = buildDossiers(opts, corpus, resolutions);
+    const { dossiers, baseline } = buildDossiers(opts, corpus, resolutions);
     console.log(
       `Resolution plan: ${dossiers.length} shard(s), ` +
       `${dossiers.reduce((sum, item) => sum + item.document.blocks.length, 0)} unresolved block(s), ` +
@@ -1221,6 +1249,8 @@ async function main() {
     let next = 0;
     const accepted = [];
     let pending = [];
+    // Dossiers contain complete, disjoint identity components. Validate each
+    // against the shared baseline, then run the full graph check on the aggregate.
     for (const dossier of dossiers) {
       const checkpoint = shardCheckpointPath(dossier);
       if (!fs.existsSync(checkpoint)) {
@@ -1233,6 +1263,7 @@ async function main() {
         corpus,
         resolutions,
         accepted,
+        { checkGlobalConsistency: false },
       );
       accepted.push(document);
       console.log(`[${dossier.batch}] resumed validated shard checkpoint`);
@@ -1244,6 +1275,7 @@ async function main() {
       corpus,
       resolutions,
       accepted,
+      baseline,
       control,
       opts.recoverAgents,
     ));
@@ -1255,6 +1287,7 @@ async function main() {
         corpus,
         resolutions,
         accepted,
+        baseline,
         control,
       )) recovered.add(dossier);
     }
@@ -1283,7 +1316,15 @@ async function main() {
       while (next < pending.length && !control.stopRequested) {
         const dossier = pending[next++];
         try {
-          const document = await processDossier(dossier, opts, corpus, resolutions, accepted, control);
+          const document = await processDossier(
+            dossier,
+            opts,
+            corpus,
+            resolutions,
+            accepted,
+            baseline,
+            control,
+          );
           writeShardCheckpoint(dossier, document);
           accepted.push(document);
         } catch (error) {

@@ -674,7 +674,7 @@ function canonicalRecord(cluster, corpus, localMap, roleLabels, unresolvedLocalP
   };
 }
 
-function unresolvedCandidateState(candidateDocument, localMap, keepSeparate) {
+export function unresolvedCandidateState(candidateDocument, localMap, keepSeparate) {
   const blocks = [];
   const localPeople = new Set();
   for (const block of candidateDocument.blocks) {
