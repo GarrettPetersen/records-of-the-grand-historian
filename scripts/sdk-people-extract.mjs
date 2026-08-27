@@ -798,6 +798,17 @@ function chunkArchivePath(target, chunk) {
   );
 }
 
+function rejectedArtifactPath(target, chunk = null) {
+  return chunk
+    ? path.join(
+      PEOPLE_DIR, 'generated', 'rejected-chunk-extractions',
+      target.book, target.chapter, `${chunk.id}.json`,
+    )
+    : path.join(
+      PEOPLE_DIR, 'generated', 'rejected-extractions', target.book, `${target.chapter}.json`,
+    );
+}
+
 function publishArtifactCommand(output) {
   const artifact = path.posix.join('/opt/cursor/artifacts', output);
   return `mkdir -p ${path.posix.dirname(artifact)} && cp ${output} ${artifact}`;
@@ -1049,7 +1060,10 @@ async function runAgentTurn(agent, prompt, target, opts, phase, control) {
     });
     console.log(`[${stateKey(target)}] ${phase} run ${result.id} status=${result.status}`);
     if (result.status !== 'finished') {
-      throw new Error(result.error?.message ?? `Cursor run ended with status ${result.status}`);
+      const error = new Error(result.error?.message ?? `Cursor run ended with status ${result.status}`);
+      error.runId = result.id;
+      error.runStatus = result.status;
+      throw error;
     }
     return result;
   } finally {
@@ -1089,10 +1103,22 @@ function withRunMetadata(extraction, opts, agent, result) {
   };
 }
 
-function validateDownloadedExtraction(extraction, packet) {
-  return isCompactPeopleExtraction(extraction)
-    ? validateCompactPeopleExtraction(extraction, packet)
-    : validatePeopleExtraction(extraction, packet);
+function validateDownloadedExtraction(extraction, packet, target = null, chunk = null) {
+  try {
+    return isCompactPeopleExtraction(extraction)
+      ? validateCompactPeopleExtraction(extraction, packet)
+      : validatePeopleExtraction(extraction, packet);
+  } catch (error) {
+    if (target) {
+      const rejected = rejectedArtifactPath(target, chunk);
+      writeJsonAtomic(rejected, extraction);
+      console.warn(
+        `[${stateKey(target)}${chunk ? `/chunk-${chunk.id}` : ''}] ` +
+        `preserved rejected artifact at ${path.relative(REPO_ROOT, rejected)}`,
+      );
+    }
+    throw error;
+  }
 }
 
 async function recoverInterruptedExtraction(target, packet, opts, state, control, budget) {
@@ -1143,7 +1169,7 @@ async function recoverInterruptedExtraction(target, packet, opts, state, control
           agent,
           run,
         );
-        const validated = validateDownloadedExtraction(downloaded, packet);
+        const validated = validateDownloadedExtraction(downloaded, packet, target);
         console.log(`[${stateKey(target)}] recovered validated artifact from run ${run.id}`);
         updateState(state, target, { resumePending: false });
         return { extraction: validated.normalized, result: run, stats: validated.stats, packet };
@@ -1239,10 +1265,10 @@ async function obtainValidInitialExtraction(
     try {
       result = await runAgentTurn(agent, prompt, target, opts, phase, control);
       const downloaded = withRunMetadata(await downloadExtraction(agent, wanted), opts, agent, result);
-      const validated = validateDownloadedExtraction(downloaded, packet);
+      const validated = validateDownloadedExtraction(downloaded, packet, target, chunk);
       return { extraction: validated.normalized, result, stats: validated.stats };
     } catch (error) {
-      if (error instanceof CursorRunLimitExceededError && chunk) {
+      if (chunk && (error instanceof CursorRunLimitExceededError || error.runStatus)) {
         try {
           const recovered = withRunMetadata(
             await downloadExtraction(agent, wanted),
@@ -1250,10 +1276,12 @@ async function obtainValidInitialExtraction(
             agent,
             { id: error.runId ?? null },
           );
-          const validated = validateDownloadedExtraction(recovered, packet);
+          const validated = validateDownloadedExtraction(recovered, packet, target, chunk);
           console.warn(
             `[${stateKey(target)}/chunk-${chunk.id}] recovered a valid artifact after ` +
-            `${error.metric} cancellation`,
+            (error instanceof CursorRunLimitExceededError
+              ? `${error.metric} cancellation`
+              : `terminal run status ${error.runStatus}`),
           );
           return {
             extraction: validated.normalized,
@@ -1544,10 +1572,34 @@ function restoreLegacyChunkPlan(target, packet, prior, opts) {
   );
   if (archivedRanges.size === 0) {
     if (hasRetainedChat) {
-      throw new Error(
-        `Cannot safely resume ${stateKey(target)}: legacy chunk state has agent chats but no ` +
-        'persisted plan or validated archive proving their ownership ranges',
+      if (prior.chapterFingerprint !== packet.input.chapterFingerprint) {
+        throw new Error(
+          `Cannot safely resume ${stateKey(target)}: retained chunk chats belong to a stale chapter`,
+        );
+      }
+      const recordedRanges = new Map(Object.entries(prior.chunks)
+        .filter(([, chunk]) =>
+          chunk.agentId && !chunk.resumeExhausted &&
+          Number.isInteger(chunk.start) && Number.isInteger(chunk.end)
+        )
+        .map(([chunkId, chunk]) => [chunkId, { start: chunk.start, end: chunk.end }]));
+      const currentPlan = planFreshChunks(target, packet, opts, null);
+      const matchesRecordedOwnership = recordedRanges.size > 0 &&
+        [...recordedRanges].every(([chunkId, range]) => {
+          const chunk = currentPlan.find((item) => item.id === chunkId);
+          return chunk?.start === range.start && chunk.end === range.end;
+        });
+      if (!matchesRecordedOwnership) {
+        throw new Error(
+          `Cannot safely resume ${stateKey(target)}: current plan does not match the retained ` +
+          'agent ownership ranges',
+        );
+      }
+      console.log(
+        `[${stateKey(target)}] reconstructed legacy ${currentPlan.length}-range plan from ` +
+        'recorded retained-agent ownership',
       );
+      return currentPlan;
     }
     return null;
   }
@@ -1602,6 +1654,7 @@ function chunkPlanForTarget(target, packet, opts, state) {
     const previousChunk = prior?.chunks?.[chunk.id];
     const hitRunLimit = chunkHitRunLimit(previousChunk);
     if (!hitRunLimit) continue;
+    if (currentChunkArchiveIsValid(target, packet, chunk)) continue;
     if (previousChunk?.agentId && !previousChunk.resumeExhausted) continue;
     planned = replaceChunkWithChildren(target, packet, planned, chunk, opts, state);
   }
@@ -1793,7 +1846,7 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
             agent,
             existingRun,
           );
-          const validated = validateDownloadedExtraction(recovered, packet);
+          const validated = validateDownloadedExtraction(recovered, packet, target, chunk);
           accepted = {
             extraction: validated.normalized,
             result: existingRun,
@@ -1918,6 +1971,7 @@ async function processChunkedTarget(target, packet, opts, state, control, budget
     status: 'extracting',
     chapterFingerprint: packet.input.chapterFingerprint,
     chunkCount: chunks.length,
+    chunkPlan: persistedChunkPlan(chunks),
   });
   console.log(`[${key}] chunked extraction: ${chunks.length} disjoint ownership range(s)`);
   const parts = [];
@@ -2125,6 +2179,19 @@ async function selfTest() {
       { predicate: 'office', evidence: ['fixture:001:s0002'] },
     ],
   }, careerPacket);
+
+  assertDurableCareerCoverage({
+    ...sparseCareerExtraction,
+    claims: [],
+  }, {
+    units: Array.from({ length: 10 }, (_, index) => ({
+      id: `s${String(index + 1).padStart(4, '0')}`,
+      en: index === 0
+        ? 'This rule was insufficient to serve as precedent.'
+        : 'Chief ministers served as first offerers.',
+      literal: '',
+    })),
+  });
 
   const appliedRepair = {
     id: 'fixture:001:r0001',
@@ -2509,6 +2576,22 @@ async function selfTest() {
   if (sendAttempts !== 2 || fakeRun.id !== 'run-fixture') {
     throw new Error('Cursor agent-busy retry did not preserve the logical turn');
   }
+  let networkSendAttempts = 0;
+  const recoveredNetworkRun = await sendCursorAgentWhenReady({
+    async send() {
+      networkSendAttempts += 1;
+      if (networkSendAttempts === 1) throw new Error('Network request failed');
+      return { id: 'run-network-fixture' };
+    },
+  }, 'fixture prompt', {
+    label: '[fixture] extraction',
+    initialDelayMs: 0,
+    maxDelayMs: 0,
+    timeoutMs: 100,
+  });
+  if (networkSendAttempts !== 2 || recoveredNetworkRun.id !== 'run-network-fixture') {
+    throw new Error('Cursor transient-network retry did not preserve the logical turn');
+  }
   const budget = { rawCostCents: 400, chargedCents: 0, reservedCents: 600 };
   const costOpts = { maxCostCents: 2000, agentCostReserveCents: 1000 };
   if (agentReservationCents(costOpts, budget) !== 1000) {
@@ -2558,6 +2641,35 @@ async function selfTest() {
   }
   await assertGuardCancellation({ totalTokens: 1_001, rawCostCents: 99, metric: 'tokens' });
   await assertGuardCancellation({ totalTokens: 999, rawCostCents: 101, metric: 'raw-cost' });
+  let terminalLimitError;
+  try {
+    await waitForCursorRun({
+      id: 'run-terminal-limit-fixture',
+      usage: undefined,
+      wait: async () => ({ id: 'run-terminal-limit-fixture', status: 'finished' }),
+    }, {
+      agentId: 'bc-terminal-limit-fixture',
+      apiKey: 'fixture',
+      label: '[fixture] terminal guarded run',
+      pollMs: 1,
+      timeoutMs: 100,
+      maxRawCostCents: 100,
+      maxTotalTokens: 1_000,
+      readUsage: async () => ({
+        usage: { totalTokens: 1_001 },
+        cost: { rawCostCents: 99, chargedCents: 0 },
+      }),
+    });
+  } catch (error) {
+    terminalLimitError = error;
+  }
+  if (
+    !(terminalLimitError instanceof CursorRunLimitExceededError)
+    || terminalLimitError.metric !== 'tokens'
+    || terminalLimitError.runId !== 'run-terminal-limit-fixture'
+  ) {
+    throw new Error('Terminal run bypassed its final usage-limit check');
+  }
   const dryRunState = {
     schemaVersion: 1,
     chapters: {

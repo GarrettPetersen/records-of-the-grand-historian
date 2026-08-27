@@ -565,6 +565,7 @@ export function assignExplicitCandidatePeople(reconciled, packet, requested) {
   if (requested.length === 0) return reconciled;
   const extraction = reconciled.extraction;
   const candidateById = new Map(packet.preflight.candidates.map((candidate) => [candidate.id, candidate]));
+  const candidateOrder = new Map(packet.preflight.candidates.map((candidate, index) => [candidate.id, index]));
   const unitById = new Map(packet.units.map((unit) => [unit.id, unit]));
   const people = new Set(extraction.people.map((person) => person.localId));
   const unresolved = new Set(reconciled.unresolvedCandidates);
@@ -618,6 +619,12 @@ export function assignExplicitCandidatePeople(reconciled, packet, requested) {
     }
     unresolved.delete(candidate.id);
   }
+
+  // An explicit assignment may add a language span to a surviving bilingual
+  // mention that already has an alias-only mention in the repaired text.
+  normalizeMentionGeometry(extraction, unitById, candidateById, candidateOrder);
+  removeDispositionMentionConflicts(extraction);
+  renumberMentions(extraction);
 
   return {
     ...reconciled,
@@ -777,7 +784,25 @@ function normalizeMentionSpans(mention, unit, staleSpans) {
   for (const language of ['zh', 'en']) {
     normalized.spans[language] = normalized.spans[language].flatMap((span) => {
       const occurrences = exactOccurrences(unit[language], span.exact, language);
+      const unitPoints = [...unit[language]];
+      const storedCoordinatesStillMatch =
+        Number.isInteger(span.startCodePoint) &&
+        Number.isInteger(span.endCodePoint) &&
+        unitPoints.slice(span.startCodePoint, span.endCodePoint).join('') === span.exact;
       if (occurrences.length === 0) {
+        staleSpans.push({ mention, language, span });
+        return [];
+      }
+      if (
+        Number.isInteger(span.occurrence) &&
+        span.occurrence >= occurrences.length &&
+        !storedCoordinatesStillMatch
+      ) {
+        // A reviewed edit can replace one item in a repeated surface (for
+        // example, the fourth "Duke Li" with "Duke Ligong"). Do not drift
+        // that retired occurrence onto the nearest surviving namesake. Older
+        // compact data may count a word inside a larger token (father in
+        // grandfather), so preserve a span whose stored coordinates still fit.
         staleSpans.push({ mention, language, span });
         return [];
       }
@@ -847,6 +872,22 @@ function coalesceOverlappingMentionSpans(mention, unit) {
       coalesced[coalesced.length - 1] = coveringSpan(unit[language], previous, span);
     }
     mention.spans[language] = coalesced;
+  }
+}
+
+function normalizeMentionGeometry(extraction, unitById, candidateById, candidateOrder) {
+  removeRedundantSamePersonSpans(extraction.mentions, candidateById);
+  extraction.mentions = extraction.mentions.filter((mention) =>
+    mention.spans.zh.length > 0 || mention.spans.en.length > 0
+  );
+  for (const mention of extraction.mentions) {
+    const unit = unitById.get(mention.unit.id);
+    if (unit) coalesceOverlappingMentionSpans(mention, unit);
+    mention.candidateRefs = [...new Set(mention.candidateRefs)];
+    mention.candidateRefs.sort((left, right) =>
+      (candidateOrder.get(left) ?? Number.MAX_SAFE_INTEGER) -
+      (candidateOrder.get(right) ?? Number.MAX_SAFE_INTEGER)
+    );
   }
 }
 
@@ -2282,14 +2323,7 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
   // Candidate reconciliation can widen an existing alias or add a second
   // mention for the same person. Collapse those spans only after all mention
   // growth has finished, and preserve the candidate accounting on the cover.
-  removeRedundantSamePersonSpans(reconciled.mentions, candidateById);
-  reconciled.mentions = reconciled.mentions.filter((mention) =>
-    mention.spans.zh.length > 0 || mention.spans.en.length > 0
-  );
-  for (const mention of reconciled.mentions) {
-    const unit = unitById.get(mention.unit.id);
-    if (unit) coalesceOverlappingMentionSpans(mention, unit);
-  }
+  normalizeMentionGeometry(reconciled, unitById, candidateById, candidateOrder);
 
   // Span growth and deduplication can move candidate coverage between
   // mentions. Re-account from the final geometry so no valid candidate ref is
@@ -2312,13 +2346,7 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
   // person mention is the stronger accounting result.
   removeDispositionMentionConflicts(reconciled);
 
-  for (const mention of reconciled.mentions) {
-    mention.candidateRefs = [...new Set(mention.candidateRefs)];
-    mention.candidateRefs.sort((left, right) =>
-      (candidateOrder.get(left) ?? Number.MAX_SAFE_INTEGER) -
-      (candidateOrder.get(right) ?? Number.MAX_SAFE_INTEGER)
-    );
-  }
+  normalizeMentionGeometry(reconciled, unitById, candidateById, candidateOrder);
 
   const claimSubjects = new Set(reconciled.claims.map((claim) => claim.subject));
   const mentionedPeople = new Set(reconciled.mentions.map((mention) => mention.person));
@@ -2366,6 +2394,12 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       }
     }
   }
+
+  // Preferred-name restoration runs after the main candidate pass and can
+  // meet a surviving bilingual mention for the same person. Normalize once
+  // more so the added display link shares that mention instead of overlapping it.
+  normalizeMentionGeometry(reconciled, unitById, candidateById, candidateOrder);
+  removeDispositionMentionConflicts(reconciled);
 
   preservePeopleAndRenumberClaims(reconciled);
   renumberMentions(reconciled);

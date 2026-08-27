@@ -613,6 +613,19 @@ export function enforcePriorSeparations(document, corpus, resolutions, accepted 
   }
   repaired.decisions = normalizedDecisions;
   for (const decision of repaired.decisions) {
+    if (decision.decision !== 'keep-separate') continue;
+    for (let left = 0; left < decision.localPeople.length; left += 1) {
+      for (let right = left + 1; right < decision.localPeople.length; right += 1) {
+        const leftId = decision.localPeople[left];
+        const rightId = decision.localPeople[right];
+        if (!separatedFrom.has(leftId)) separatedFrom.set(leftId, new Set());
+        if (!separatedFrom.has(rightId)) separatedFrom.set(rightId, new Set());
+        separatedFrom.get(leftId).add(rightId);
+        separatedFrom.get(rightId).add(leftId);
+      }
+    }
+  }
+  for (const decision of repaired.decisions) {
     if (decision.decision !== 'merge') continue;
     const roots = [...new Set(decision.localPeople.map((localId) => rootByLocal.get(localId)))];
     const combined = new Set(roots.flatMap((root) => [...membersByRoot.get(root)]));
@@ -620,9 +633,8 @@ export function enforcePriorSeparations(document, corpus, resolutions, accepted 
       [...(separatedFrom.get(localId) ?? [])].some((other) => combined.has(other))
     );
     if (conflict) {
-      const directPair = decision.localPeople.length === 2 && baseline.keepSeparate.has(
-        pairKey(decision.localPeople[0], decision.localPeople[1]),
-      );
+      const directPair = decision.localPeople.length === 2 &&
+        separatedFrom.get(decision.localPeople[0])?.has(decision.localPeople[1]);
       decision.decision = directPair ? 'keep-separate' : 'possible-same-as';
       decision.basis = [...new Set([...(decision.basis ?? []), 'authoritative-prior-separation'])];
       decision.confidence = directPair ? 'high' : 'low';
@@ -990,6 +1002,27 @@ function selfTest() {
   }, separationCorpus, separation);
   if (reconciled.repairCount !== 1 || reconciled.document.decisions[0].decision !== 'keep-separate') {
     throw new Error('Resolver did not enforce an authoritative prior separation');
+  }
+  const sameDocumentConflict = enforcePriorSeparations({
+    schemaVersion: 1,
+    batch: 'fixture-shard-001',
+    decisions: [{
+      decision: 'merge',
+      localPeople: ['a:001:p001', 'a:002:p001'],
+      basis: ['same-name'],
+      confidence: 'high',
+    }, {
+      decision: 'keep-separate',
+      localPeople: ['a:001:p001', 'a:002:p001'],
+      basis: ['different-people'],
+      confidence: 'high',
+    }],
+  }, separationCorpus, []);
+  if (
+    sameDocumentConflict.repairCount !== 1 ||
+    sameDocumentConflict.document.decisions[0].decision !== 'keep-separate'
+  ) {
+    throw new Error('Resolver did not enforce a same-document separation before merging');
   }
   const groupedCorpus = {
     localPeople: new Map([

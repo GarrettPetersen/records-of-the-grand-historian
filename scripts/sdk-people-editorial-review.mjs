@@ -37,11 +37,11 @@ loadDotenv(REPO_ROOT);
 
 const DEFAULT_MODEL = 'grok-4.5';
 const DEFAULT_REPO_URL = 'https://github.com/GarrettPetersen/records-of-the-grand-historian';
-const DEFAULT_STARTING_REF = 'codex/people-glossary-staging';
+const DEFAULT_STARTING_REF = 'codex/people-glossary-staging-v2';
 const STATE_FILE = path.join(PEOPLE_DIR, 'generated', 'editorial-review-state.json');
 const RUN_LOCK_FILE = path.join(PEOPLE_DIR, 'generated', 'editorial-review-run.lock');
 const DEFAULT_MAX_RUN_COST_CENTS = 100;
-const DEFAULT_MAX_RUN_TOKENS = 750_000;
+const DEFAULT_MAX_RUN_TOKENS = 1_000_000;
 const DEFAULT_RUN_POLL_MS = 15_000;
 const REVIEW_PROMPT = fs.readFileSync(path.join(REPO_ROOT, 'prompt-people-editorial-review.txt'), 'utf8');
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
@@ -223,6 +223,15 @@ VALIDATION ERRORS:
 ${errors.slice(0, 200).map((error) => `- ${error}`).join('\n')}`;
 }
 
+function resumePrompt(target, errors) {
+  const output = artifactRelative(target);
+  return `Resume the independent editorial review already completed in this conversation. Do not reread or restart the dossier. Finish any remaining decisions, write the complete decision document to ${output}, and publish it with:
+${publishCommand(target)}
+
+PRIOR HOST DIAGNOSTICS:
+${errors.slice(0, 40).map((error) => `- ${error}`).join('\n')}`;
+}
+
 async function runTurn(agent, prompt, target, phase, opts) {
   console.log(`[${target.book}/${target.chapter}] ${phase} -> ${agent.agentId}`);
   const run = await sendCursorAgentWhenReady(agent, prompt, {
@@ -277,6 +286,39 @@ function validCurrentDecision(target, loaded) {
   }
 }
 
+function acceptDecision(document, target, loaded, opts, state, agent, result) {
+  document.reviewer = {
+    kind: 'cursor-agent',
+    name: opts.model,
+    model: opts.model,
+    agentId: agent.agentId,
+    runId: result.id,
+    completedAt: new Date().toISOString(),
+  };
+  const reviewed = validateEditorialDecisions(document, loaded.extraction, loaded.packet);
+  writeJsonAtomic(editorialDecisionPath(target.book, target.chapter), document);
+  updateState(state, target, {
+    status: 'accepted',
+    runId: result.id,
+    resumePending: false,
+    decisions: document.decisions.length,
+    acceptedRepairs: reviewed.reviewedRepairs.length,
+    lastErrors: [],
+  });
+  console.log(
+    `[${target.book}/${target.chapter}] accepted ${document.decisions.length} decision(s); ` +
+    `${reviewed.reviewedRepairs.length} repair(s) advance to application`,
+  );
+  return { status: 'accepted' };
+}
+
+function resumableReview(prior) {
+  return Boolean(
+    prior?.agentId && !prior.resumeExhausted &&
+    ['interrupted', 'failed', 'failed/retryable'].includes(prior.status),
+  );
+}
+
 async function processTarget(target, opts, state, matcher) {
   const key = `${target.book}/${target.chapter}`;
   const loaded = loadEditorialReviewChapter(target.book, target.chapter, { properNounMatcher: matcher });
@@ -288,7 +330,8 @@ async function processTarget(target, opts, state, matcher) {
     properNounMatcher: matcher,
     context: 2,
   });
-  if (!opts.retryFailed && state.chapters[key]?.status === 'failed') {
+  const prior = state.chapters[key];
+  if (!opts.retryFailed && prior?.status === 'failed' && !resumableReview(prior)) {
     console.log(`[${key}] previous review failed; pass --retry-failed to retry`);
     return { status: 'skipped-failed' };
   }
@@ -299,6 +342,62 @@ async function processTarget(target, opts, state, matcher) {
 
   let agent;
   try {
+    if (resumableReview(prior)) {
+      console.log(`[${key}] resuming retained reviewer ${prior.agentId}`);
+      agent = await Agent.resume(prior.agentId, { apiKey: opts.apiKey });
+      updateState(state, target, { status: 'recovering', resumePending: true });
+      const runs = await Agent.listRuns(agent.agentId, {
+        runtime: 'cloud',
+        apiKey: opts.apiKey,
+        limit: 20,
+      });
+      let latest = runs.items.find((run) => run.status === 'running') ?? runs.items[0];
+      const recoveryErrors = [...(prior.lastErrors ?? [])];
+      if (latest?.status === 'running') {
+        try {
+          latest = await waitForCursorRun(latest, {
+            agentId: agent.agentId,
+            apiKey: opts.apiKey,
+            label: `[${key}] retained review`,
+            pollMs: DEFAULT_RUN_POLL_MS,
+            maxRawCostCents: opts.maxRunCostCents,
+            maxTotalTokens: opts.maxRunTokens,
+          });
+        } catch (error) {
+          recoveryErrors.push(...errorList(error));
+        }
+      }
+      if (latest) {
+        try {
+          return acceptDecision(
+            await downloadDecision(agent, target), target, loaded, opts, state, agent, latest,
+          );
+        } catch (error) {
+          recoveryErrors.push(...errorList(error));
+        }
+      }
+      try {
+        const result = await runTurn(agent, resumePrompt(target, recoveryErrors), target, 'review continuation', opts);
+        return acceptDecision(
+          await downloadDecision(agent, target), target, loaded, opts, state, agent, result,
+        );
+      } catch (error) {
+        const errors = errorList(error);
+        if (error instanceof CursorRunLimitExceededError) {
+          updateState(state, target, {
+            status: 'interrupted',
+            runId: error.runId ?? latest?.id ?? null,
+            resumePending: true,
+            lastErrors: errors,
+          });
+          console.warn(`[${key}] retained reviewer hit another run limit; conversation remains resumable`);
+          return { status: 'interrupted' };
+        }
+        updateState(state, target, { status: 'failed/retryable', resumePending: true, lastErrors: errors });
+        throw error;
+      }
+    }
+
     agent = await Agent.create({
       apiKey: opts.apiKey,
       name: `Editorial review ${key}`,
@@ -310,7 +409,12 @@ async function processTarget(target, opts, state, matcher) {
         skipReviewerRequest: true,
       },
     });
-    updateState(state, target, { status: 'reviewing', agentId: agent.agentId });
+    updateState(state, target, {
+      status: 'reviewing',
+      agentId: agent.agentId,
+      resumePending: false,
+      resumeExhausted: false,
+    });
     let errors = [];
     for (let attempt = 1; attempt <= opts.maxAttempts; attempt += 1) {
       try {
@@ -321,37 +425,24 @@ async function processTarget(target, opts, state, matcher) {
           attempt === 1 ? 'independent review' : `validation retry ${attempt}`,
           opts,
         );
-        const document = await downloadDecision(agent, target);
-        document.reviewer = {
-          kind: 'cursor-agent',
-          name: opts.model,
-          model: opts.model,
-          agentId: agent.agentId,
-          runId: result.id,
-          completedAt: new Date().toISOString(),
-        };
-        const reviewed = validateEditorialDecisions(document, loaded.extraction, loaded.packet);
-        writeJsonAtomic(editorialDecisionPath(target.book, target.chapter), document);
-        updateState(state, target, {
-          status: 'accepted',
-          runId: result.id,
-          decisions: document.decisions.length,
-          acceptedRepairs: reviewed.reviewedRepairs.length,
-          lastErrors: [],
-        });
-        console.log(
-          `[${key}] accepted ${document.decisions.length} decision(s); ` +
-          `${reviewed.reviewedRepairs.length} repair(s) advance to application`,
+        return acceptDecision(
+          await downloadDecision(agent, target), target, loaded, opts, state, agent, result,
         );
-        return { status: 'accepted' };
       } catch (error) {
         errors = errorList(error);
         updateState(state, target, { status: 'failed/retryable', lastErrors: errors });
         console.error(`[${key}] review attempt ${attempt} failed: ${errors[0]}`);
-        if (
-          error instanceof CursorRunLimitExceededError ||
-          (error instanceof CursorAgentError && !error.isRetryable)
-        ) break;
+        if (error instanceof CursorRunLimitExceededError) {
+          updateState(state, target, {
+            status: 'interrupted',
+            runId: error.runId ?? null,
+            resumePending: true,
+            lastErrors: errors,
+          });
+          console.warn(`[${key}] retained reviewer conversation for continuation`);
+          return { status: 'interrupted' };
+        }
+        if (error instanceof CursorAgentError && !error.isRetryable) break;
       }
     }
     throw Object.assign(new Error(`Review failed after ${opts.maxAttempts} attempt(s)`), { errors });

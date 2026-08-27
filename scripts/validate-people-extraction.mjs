@@ -12,8 +12,10 @@ import { buildPeopleChunkPacket } from './lib/people-extraction-chunks.mjs';
 import {
   PEOPLE_DIR,
   REPO_ROOT,
+  codePoints,
   exactSpanAt,
   normalizedChapterId,
+  occurrenceAt,
   readJson,
   writeTextAtomic,
   writeJsonAtomic,
@@ -88,6 +90,37 @@ export class PeopleExtractionValidationError extends Error {
 
 function deepEqual(left, right) {
   return JSON.stringify(left) === JSON.stringify(right);
+}
+
+function isWordCharacter(value) {
+  return typeof value === 'string' && /^[\p{L}\p{N}_]$/u.test(value);
+}
+
+function locateMentionSpan(text, span, language) {
+  try {
+    return exactSpanAt(text, span.exact, span.occurrence);
+  } catch (exactError) {
+    if (language !== 'en' || typeof span.exact !== 'string' || !span.exact) throw exactError;
+
+    const points = codePoints(text);
+    const needleLength = codePoints(span.exact).length;
+    const foldedExact = span.exact.toLocaleLowerCase('en-US');
+    const matches = [];
+    for (let start = 0; start <= points.length - needleLength; start += 1) {
+      const actual = points.slice(start, start + needleLength).join('');
+      if (actual.toLocaleLowerCase('en-US') !== foldedExact) continue;
+      const actualPoints = codePoints(actual);
+      if (
+        (isWordCharacter(actualPoints[0]) && isWordCharacter(points[start - 1])) ||
+        (isWordCharacter(actualPoints.at(-1)) && isWordCharacter(points[start + needleLength]))
+      ) continue;
+      matches.push({ actual, start });
+    }
+    const selected = matches[span.occurrence];
+    if (!selected) throw exactError;
+    const { actual, start } = selected;
+    return exactSpanAt(text, actual, occurrenceAt(text, actual, start));
+  }
 }
 
 function uniqueIds(items, label, errors, idKey = 'id') {
@@ -436,7 +469,7 @@ export function validatePeopleExtraction(extraction, packet) {
       for (const [spanIndex, span] of mention.spans[language].entries()) {
         spanCount += 1;
         try {
-          const located = exactSpanAt(text, span.exact, span.occurrence);
+          const located = locateMentionSpan(text, span, language);
           mention.spans[language][spanIndex] = located;
           const intervalKey = `${currentUnit.id}:${language}`;
           const existing = intervals.get(intervalKey) ?? [];
@@ -861,6 +894,39 @@ function selfTest() {
 
   const valid = validatePeopleExtraction(extraction, packet);
   if (valid.normalized.mentions[0].spans.zh[0].endCodePoint !== 3) throw new Error('Span normalization failed');
+
+  const caseOnlySpan = structuredClone(extraction);
+  caseOnlySpan.mentions[0].spans.en[0].exact = 'alice';
+  const normalizedCaseOnlySpan = validatePeopleExtraction(caseOnlySpan, packet);
+  if (normalizedCaseOnlySpan.normalized.mentions[0].spans.en[0].exact !== 'Alice') {
+    throw new Error('Unique capitalization-only English span was not normalized');
+  }
+  const ambiguousCasePacket = structuredClone(packet);
+  ambiguousCasePacket.units[0].en = 'Alice met ALICE.';
+  const firstCaseInsensitiveOccurrence = validatePeopleExtraction(caseOnlySpan, ambiguousCasePacket);
+  if (firstCaseInsensitiveOccurrence.normalized.mentions[0].spans.en[0].exact !== 'Alice') {
+    throw new Error('Indexed capitalization-only English span did not select its first occurrence');
+  }
+  Object.assign(ambiguousCasePacket.preflight.candidates[1], {
+    exact: 'ALICE',
+    occurrence: 0,
+    startCodePoint: 10,
+    endCodePoint: 15,
+  });
+  caseOnlySpan.mentions[0].spans.en[0].occurrence = 1;
+  const secondCaseInsensitiveOccurrence = validatePeopleExtraction(caseOnlySpan, ambiguousCasePacket);
+  if (secondCaseInsensitiveOccurrence.normalized.mentions[0].spans.en[0].exact !== 'ALICE') {
+    throw new Error('Indexed capitalization-only English span did not select its second occurrence');
+  }
+  const missingCaseInsensitiveOccurrence = structuredClone(caseOnlySpan);
+  missingCaseInsensitiveOccurrence.mentions[0].spans.en[0].occurrence = 2;
+  try {
+    validatePeopleExtraction(missingCaseInsensitiveOccurrence, ambiguousCasePacket);
+    throw new Error('Missing capitalization-only English occurrence unexpectedly passed');
+  } catch (error) {
+    if (!(error instanceof PeopleExtractionValidationError) ||
+        !error.message.includes('Could not find occurrence')) throw error;
+  }
 
   const unknownNameKind = structuredClone(extraction);
   unknownNameKind.claims[0].value.kind = 'renamed';
