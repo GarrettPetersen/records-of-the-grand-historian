@@ -307,11 +307,13 @@ function injectBookChapterSearch(main) {
     <div id="book-chapter-search-text-results" class="book-chapter-search-text-results" hidden></div>
     <p id="book-chapter-search-empty" class="book-chapter-search-empty" hidden>No matching chapters or passages.</p>
   `;
-  const back = main.querySelector('.back-link');
-  if (back) {
-    back.insertAdjacentElement('afterend', wrap);
+  const loading = main.querySelector('#loading');
+  if (loading) {
+    loading.insertAdjacentElement('beforebegin', wrap);
   } else {
-    main.prepend(wrap);
+    const back = main.querySelector('.back-link');
+    if (back) back.insertAdjacentElement('afterend', wrap);
+    else main.prepend(wrap);
   }
 }
 
@@ -481,7 +483,6 @@ async function renderChapters() {
     return;
   }
 
-  document.title = `${bookData.chinese} - Chapters`;
   document.getElementById('book-title').textContent = bookData.chinese;
   document.getElementById('book-subtitle').textContent = `${bookData.name} (${bookData.pinyin})`;
 
