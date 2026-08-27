@@ -1319,12 +1319,18 @@ async function main() {
       )) recovered.add(dossier);
     }
     pending = pending.filter((dossier) => !recovered.has(dossier));
-    if (opts.recoverOnly) {
+    if (opts.recoverOnly && pending.length > 0) {
       console.log(
         `Recovery-only run checkpointed ${accepted.length}/${dossiers.length} validated shard(s); ` +
         `${pending.length} shard(s) remain pending.`,
       );
       return;
+    }
+    if (opts.recoverOnly) {
+      console.log(
+        `Recovery-only run checkpointed all ${accepted.length} validated shard(s); ` +
+        'writing the aggregate without launching workers.',
+      );
     }
     if (opts.maxNewShards !== null && pending.length > opts.maxNewShards) {
       pending.sort((left, right) =>
