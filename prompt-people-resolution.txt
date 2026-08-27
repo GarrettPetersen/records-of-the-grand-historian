@@ -46,9 +46,13 @@ free-form strings such as `same-Chinese-name`, `compatible-dates`,
 `decisions` may be empty. Preserve the supplied `batch` exactly. Emit only
 decisions supported by the dossier:
 
-- `merge`: all listed local people are the same individual. Require agreement
-  beyond a short or generic name: compatible dates, polity, offices, family,
-  titles, alternate names, or clearly matching historical context.
+- `merge`: all listed local people are the same individual. Every listed record
+  must be connected through a shared non-generic full personal name or an
+  explicitly attested alternate full name/alias. Compatible dates, polity,
+  offices, family, titles, and historical context are corroboration; they never
+  substitute for that name or alias evidence. If the name evidence is only a
+  surname, given-name fragment, courtesy name, temple name, posthumous name,
+  title, or kinship label, use `possible-same-as` instead.
 - `keep-separate`: every listed local person is distinct from every other
   listed person. Use pair decisions when only one pair is established.
 - `possible-same-as`: the records may match but the dossier is insufficient.
@@ -66,6 +70,11 @@ local IDs from those groups when joining groups, but do not emit a no-op merge
 within one current group. Prior separations are binding. Cover high-confidence
 cases first; leave uncertainty explicit instead of guessing. Use concise basis
 codes and notes that state the decisive evidence.
+
+Before publishing, check that no pair of local people appears together in both
+a `merge` decision and a `keep-separate` decision, including as members of a
+larger multi-person merge. When they conflict, `keep-separate` wins and the
+overlapping merge must be removed or changed to `possible-same-as`.
 
 Finish by writing and publishing the requested JSON artifact even when some
 blocks remain unresolved. A conservative partial resolution document is a

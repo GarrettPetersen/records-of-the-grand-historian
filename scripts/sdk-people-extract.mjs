@@ -2576,6 +2576,22 @@ async function selfTest() {
   if (sendAttempts !== 2 || fakeRun.id !== 'run-fixture') {
     throw new Error('Cursor agent-busy retry did not preserve the logical turn');
   }
+  let networkSendAttempts = 0;
+  const recoveredNetworkRun = await sendCursorAgentWhenReady({
+    async send() {
+      networkSendAttempts += 1;
+      if (networkSendAttempts === 1) throw new Error('Network request failed');
+      return { id: 'run-network-fixture' };
+    },
+  }, 'fixture prompt', {
+    label: '[fixture] extraction',
+    initialDelayMs: 0,
+    maxDelayMs: 0,
+    timeoutMs: 100,
+  });
+  if (networkSendAttempts !== 2 || recoveredNetworkRun.id !== 'run-network-fixture') {
+    throw new Error('Cursor transient-network retry did not preserve the logical turn');
+  }
   const budget = { rawCostCents: 400, chargedCents: 0, reservedCents: 600 };
   const costOpts = { maxCostCents: 2000, agentCostReserveCents: 1000 };
   if (agentReservationCents(costOpts, budget) !== 1000) {
