@@ -1663,7 +1663,7 @@ function main() {
   const storedExtraction = readJson(extractionFile);
   const compactStored = isCompactPeopleExtraction(storedExtraction);
   const currentPacket = buildPeopleExtractionPacket(opts.book, opts.chapter, { properNounMatcher: matcher });
-  const extraction = compactStored
+  let extraction = compactStored
     ? expandPeopleExtraction(storedExtraction, currentPacket, {
       allowStaleSurfaces: opts.reconcileCurrent,
     })
@@ -1718,7 +1718,7 @@ function main() {
   }
 
   const oldPacket = currentPacket;
-  validatePeopleExtraction(extraction, oldPacket);
+  extraction = validatePeopleExtraction(extraction, oldPacket).normalized;
   const decisionFile = opts.decisions ?? editorialDecisionPath(opts.book, opts.chapter);
   if (!fs.existsSync(decisionFile)) {
     throw new Error(

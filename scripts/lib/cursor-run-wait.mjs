@@ -137,7 +137,7 @@ async function cancelRunForLimit(run, options, error) {
   throw error;
 }
 
-async function enforceRunLimits(run, options) {
+async function enforceRunLimits(run, options, { terminal = false } = {}) {
   const maxRawCostCents = options.maxRawCostCents ?? null;
   const maxTotalTokens = options.maxTotalTokens ?? null;
   if (maxRawCostCents === null && maxTotalTokens === null) return;
@@ -154,19 +154,24 @@ async function enforceRunLimits(run, options) {
   const rawCostCents = billed?.cost?.rawCostCents ?? null;
 
   if (maxTotalTokens !== null && totalTokens >= maxTotalTokens) {
-    await cancelRunForLimit(run, options, new CursorRunLimitExceededError(
-      `${options.label}: cancelled cloud run ${run.id} at ` +
+    const error = new CursorRunLimitExceededError(
+      `${options.label}: ${terminal ? 'cloud run finished' : 'cancelled cloud run'} ${run.id} at ` +
       `${totalTokens.toLocaleString('en-US')} tokens (limit ` +
       `${maxTotalTokens.toLocaleString('en-US')})`,
       { runId: run.id, metric: 'tokens', observed: totalTokens, limit: maxTotalTokens },
-    ));
+    );
+    if (terminal) throw error;
+    await cancelRunForLimit(run, options, error);
   }
   if (maxRawCostCents !== null && rawCostCents !== null && rawCostCents >= maxRawCostCents) {
-    await cancelRunForLimit(run, options, new CursorRunLimitExceededError(
-      `${options.label}: cancelled cloud run ${run.id} at $${(rawCostCents / 100).toFixed(2)} ` +
+    const error = new CursorRunLimitExceededError(
+      `${options.label}: ${terminal ? 'cloud run finished' : 'cancelled cloud run'} ${run.id} at ` +
+      `$${(rawCostCents / 100).toFixed(2)} ` +
       `raw usage cost (limit $${(maxRawCostCents / 100).toFixed(2)})`,
       { runId: run.id, metric: 'raw-cost', observed: rawCostCents, limit: maxRawCostCents },
-    ));
+    );
+    if (terminal) throw error;
+    await cancelRunForLimit(run, options, error);
   }
 }
 
@@ -188,6 +193,7 @@ export async function waitForCursorRun(run, options) {
     if (streamOutcome?.result && !(
       streamOutcome.result.status === 'error' && lostStream(streamOutcome.result.error?.message)
     )) {
+      await enforceRunLimits(streamOutcome.result, options, { terminal: true });
       return streamOutcome.result;
     }
     if (
@@ -252,6 +258,7 @@ export async function waitForCursorRun(run, options) {
     if (!announcedPolling) {
       console.warn(`${options.label}: cloud run finished before its SDK stream closed; accepting terminal status`);
     }
+    await enforceRunLimits(refreshed, options, { terminal: true });
     return terminalResult(refreshed);
   }
   await cancelRunForLimit(run, options, new CursorRunLimitExceededError(

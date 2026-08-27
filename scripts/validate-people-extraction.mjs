@@ -116,8 +116,9 @@ function locateMentionSpan(text, span, language) {
       ) continue;
       matches.push({ actual, start });
     }
-    if (matches.length !== 1) throw exactError;
-    const [{ actual, start }] = matches;
+    const selected = matches[span.occurrence];
+    if (!selected) throw exactError;
+    const { actual, start } = selected;
     return exactSpanAt(text, actual, occurrenceAt(text, actual, start));
   }
 }
@@ -902,9 +903,26 @@ function selfTest() {
   }
   const ambiguousCasePacket = structuredClone(packet);
   ambiguousCasePacket.units[0].en = 'Alice met ALICE.';
+  const firstCaseInsensitiveOccurrence = validatePeopleExtraction(caseOnlySpan, ambiguousCasePacket);
+  if (firstCaseInsensitiveOccurrence.normalized.mentions[0].spans.en[0].exact !== 'Alice') {
+    throw new Error('Indexed capitalization-only English span did not select its first occurrence');
+  }
+  Object.assign(ambiguousCasePacket.preflight.candidates[1], {
+    exact: 'ALICE',
+    occurrence: 0,
+    startCodePoint: 10,
+    endCodePoint: 15,
+  });
+  caseOnlySpan.mentions[0].spans.en[0].occurrence = 1;
+  const secondCaseInsensitiveOccurrence = validatePeopleExtraction(caseOnlySpan, ambiguousCasePacket);
+  if (secondCaseInsensitiveOccurrence.normalized.mentions[0].spans.en[0].exact !== 'ALICE') {
+    throw new Error('Indexed capitalization-only English span did not select its second occurrence');
+  }
+  const missingCaseInsensitiveOccurrence = structuredClone(caseOnlySpan);
+  missingCaseInsensitiveOccurrence.mentions[0].spans.en[0].occurrence = 2;
   try {
-    validatePeopleExtraction(caseOnlySpan, ambiguousCasePacket);
-    throw new Error('Ambiguous capitalization-only English span unexpectedly passed');
+    validatePeopleExtraction(missingCaseInsensitiveOccurrence, ambiguousCasePacket);
+    throw new Error('Missing capitalization-only English occurrence unexpectedly passed');
   } catch (error) {
     if (!(error instanceof PeopleExtractionValidationError) ||
         !error.message.includes('Could not find occurrence')) throw error;

@@ -2564,6 +2564,35 @@ async function selfTest() {
   }
   await assertGuardCancellation({ totalTokens: 1_001, rawCostCents: 99, metric: 'tokens' });
   await assertGuardCancellation({ totalTokens: 999, rawCostCents: 101, metric: 'raw-cost' });
+  let terminalLimitError;
+  try {
+    await waitForCursorRun({
+      id: 'run-terminal-limit-fixture',
+      usage: undefined,
+      wait: async () => ({ id: 'run-terminal-limit-fixture', status: 'finished' }),
+    }, {
+      agentId: 'bc-terminal-limit-fixture',
+      apiKey: 'fixture',
+      label: '[fixture] terminal guarded run',
+      pollMs: 1,
+      timeoutMs: 100,
+      maxRawCostCents: 100,
+      maxTotalTokens: 1_000,
+      readUsage: async () => ({
+        usage: { totalTokens: 1_001 },
+        cost: { rawCostCents: 99, chargedCents: 0 },
+      }),
+    });
+  } catch (error) {
+    terminalLimitError = error;
+  }
+  if (
+    !(terminalLimitError instanceof CursorRunLimitExceededError)
+    || terminalLimitError.metric !== 'tokens'
+    || terminalLimitError.runId !== 'run-terminal-limit-fixture'
+  ) {
+    throw new Error('Terminal run bypassed its final usage-limit check');
+  }
   const dryRunState = {
     schemaVersion: 1,
     chapters: {
