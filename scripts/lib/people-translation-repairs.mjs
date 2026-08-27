@@ -351,7 +351,8 @@ export function remapMentionSpanThroughEdit(span, oldText, newText, language) {
 
   if (language === 'en') {
     const caseOnlyMatches = caseInsensitiveExactOccurrences(newText, span.exact);
-    if (caseOnlyMatches.length === 1) return caseOnlyMatches[0];
+    const oldExactMatches = caseInsensitiveExactOccurrences(oldText, span.exact);
+    if (oldExactMatches.length === 1 && caseOnlyMatches.length === 1) return caseOnlyMatches[0];
   }
 
   const oldTokens = tokenSpans(oldText);
@@ -779,7 +780,7 @@ export function applyTranslationRepairs(chapter, repairs) {
   return { chapter: revised, changedUnits };
 }
 
-function normalizeMentionSpans(mention, unit, staleSpans) {
+function normalizeMentionSpans(mention, unit, previousUnit, staleSpans) {
   const normalized = structuredClone(mention);
   for (const language of ['zh', 'en']) {
     normalized.spans[language] = normalized.spans[language].flatMap((span) => {
@@ -789,6 +790,21 @@ function normalizeMentionSpans(mention, unit, staleSpans) {
         Number.isInteger(span.startCodePoint) &&
         Number.isInteger(span.endCodePoint) &&
         unitPoints.slice(span.startCodePoint, span.endCodePoint).join('') === span.exact;
+      if (
+        previousUnit &&
+        previousUnit[language] !== unit[language] &&
+        !storedCoordinatesStillMatch
+      ) {
+        const remapped = remapMentionSpanThroughEdit(
+          span,
+          previousUnit[language],
+          unit[language],
+          language,
+        );
+        if (remapped) return [remapped];
+        staleSpans.push({ mention, language, span });
+        return [];
+      }
       if (occurrences.length === 0) {
         staleSpans.push({ mention, language, span });
         return [];
@@ -970,7 +986,8 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
   reconciled.mentions = reconciled.mentions.map((mention) => {
     const unit = unitById.get(mention.unit.id);
     if (!unit) return mention;
-    return normalizeMentionSpans(mention, unit, staleSpans);
+    const previousUnit = previousUnitById.get(mention.unit.id);
+    return normalizeMentionSpans(mention, unit, previousUnit, staleSpans);
   });
   for (const mention of reconciled.mentions) {
     const unit = unitById.get(mention.unit.id);

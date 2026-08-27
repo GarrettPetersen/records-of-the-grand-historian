@@ -533,6 +533,26 @@ function selfTest() {
   if (removedAttribution !== null) {
     throw new Error('Removed person attribution was remapped onto ordinary replacement prose');
   }
+  const repeatedOldText =
+    'Dances ran from Offered Ancestor through Taiwu; later records start from Offered Ancestor.';
+  const repeatedNewText =
+    'Dances ran from the Lord of Hongnong through Taiwu; later records start from Offered Ancestor.';
+  const firstRepeatedStart = repeatedOldText.indexOf('Offered Ancestor');
+  const secondRepeatedStart = repeatedOldText.lastIndexOf('Offered Ancestor');
+  const firstRepeated = remapMentionSpanThroughEdit({
+    exact: 'Offered Ancestor', occurrence: 0,
+    startCodePoint: firstRepeatedStart, endCodePoint: firstRepeatedStart + 16,
+  }, repeatedOldText, repeatedNewText, 'en');
+  const secondRepeated = remapMentionSpanThroughEdit({
+    exact: 'Offered Ancestor', occurrence: 1,
+    startCodePoint: secondRepeatedStart, endCodePoint: secondRepeatedStart + 16,
+  }, repeatedOldText, repeatedNewText, 'en');
+  if (firstRepeated?.exact === 'Offered Ancestor') {
+    throw new Error('A replaced repeated name drifted onto the surviving namesake');
+  }
+  if (secondRepeated?.exact !== 'Offered Ancestor') {
+    throw new Error('A surviving repeated name was not preserved through an earlier replacement');
+  }
   const matcher = loadProperNounMatcher();
   const chapter = {
     meta: { book: 'fixture', chapter: '001', title: { zh: '', en: '' } },
