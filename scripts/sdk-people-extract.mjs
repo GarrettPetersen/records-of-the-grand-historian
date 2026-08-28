@@ -82,6 +82,7 @@ import {
 } from './lib/people-resolution-invalidation.mjs';
 import {
   editorialDecisionPath,
+  preserveAppliedEditorialClaims,
   validateAppliedEditorialDecisions,
 } from './lib/people-editorial-decisions.mjs';
 
@@ -1700,21 +1701,209 @@ function repairOrdinal(repair) {
   return match ? Number(match[1]) : 0;
 }
 
+const WEAK_REPLACEMENT_NAME_KEYS = new Set([
+  'emperor', 'empress', 'king', 'queen', 'prince', 'princess', 'duke', 'marquis',
+  'lord', 'lady', 'master', 'minister', 'general', 'governor', 'official', 'ruler',
+  'father', 'mother', 'son', 'daughter', 'brother', 'sister', 'husband', 'wife',
+]);
+
+function replacementNameKey(language, value) {
+  const text = String(value ?? '').normalize('NFKC').trim();
+  if (!text) return null;
+  if (language === 'zh') {
+    const normalized = text.replace(/[\s\p{P}\p{S}]+/gu, '');
+    return Array.from(normalized).length >= 2 ? `zh:${normalized}` : null;
+  }
+  const normalized = text
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/gu, '')
+    .toLocaleLowerCase('en')
+    .replace(/[^a-z0-9]+/gu, ' ')
+    .trim()
+    .replace(/\s+/gu, ' ');
+  if (!normalized || WEAK_REPLACEMENT_NAME_KEYS.has(normalized)) return null;
+  return normalized.length >= 3 ? `en:${normalized}` : null;
+}
+
+function replacementPersonProfile(extraction, person) {
+  const names = new Set();
+  const preferred = new Set();
+  const evidence = new Set();
+  const addName = (language, value, isPreferred = false) => {
+    const key = replacementNameKey(language, value);
+    if (!key) return;
+    names.add(key);
+    if (isPreferred) preferred.add(key);
+  };
+  addName('en', person.preferredNameSuggestion.en, true);
+  addName('zh', person.preferredNameSuggestion.zh, true);
+  for (const claim of extraction.claims) {
+    if (claim.subject !== person.localId) continue;
+    for (const item of claim.evidence) evidence.add(item);
+    if (claim.predicate !== 'name') continue;
+    addName('en', claim.value?.en);
+    addName('zh', claim.value?.zh);
+  }
+  for (const mention of extraction.mentions) {
+    if (mention.person === person.localId) evidence.add(`${extraction.book}:${extraction.chapter}:${mention.unit.id}`);
+  }
+  return { person, names, preferred, evidence };
+}
+
+function intersectionSize(left, right) {
+  let count = 0;
+  for (const value of left) if (right.has(value)) count += 1;
+  return count;
+}
+
+function replacementIdentityScore(previous, replacement) {
+  const sharedNames = intersectionSize(previous.names, replacement.names);
+  if (sharedNames === 0) return 0;
+  const sharedEvidence = intersectionSize(previous.evidence, replacement.evidence);
+  const sharedPreferred = intersectionSize(previous.preferred, replacement.preferred);
+  if (sharedEvidence === 0 && sharedPreferred === 0) return 0;
+  return (sharedEvidence * 1000) + (sharedPreferred * 100) + sharedNames;
+}
+
+function uniqueBest(matches) {
+  if (matches.length === 0) return null;
+  const ordered = [...matches].sort((left, right) => right.score - left.score);
+  return ordered.length === 1 || ordered[0].score > ordered[1].score ? ordered[0] : null;
+}
+
+function mapNestedPersonIds(value, replacements) {
+  if (typeof value === 'string') return replacements.get(value) ?? value;
+  if (Array.isArray(value)) return value.map((item) => mapNestedPersonIds(item, replacements));
+  if (!value || typeof value !== 'object') return value;
+  return Object.fromEntries(
+    Object.entries(value).map(([key, item]) => [key, mapNestedPersonIds(item, replacements)]),
+  );
+}
+
+function preservePriorPersonIds(previous, replacement) {
+  const priorProfiles = previous.people.map((person) => replacementPersonProfile(previous, person));
+  const nextProfiles = replacement.people.map((person) => replacementPersonProfile(replacement, person));
+  const candidates = [];
+  for (const prior of priorProfiles) {
+    for (const next of nextProfiles) {
+      const score = replacementIdentityScore(prior, next);
+      if (score > 0) candidates.push({ prior, next, score });
+    }
+  }
+  const bestByPrior = new Map(priorProfiles.map((profile) => [
+    profile.person.localId,
+    uniqueBest(candidates.filter((item) => item.prior === profile)),
+  ]));
+  const bestByNext = new Map(nextProfiles.map((profile) => [
+    profile.person.localId,
+    uniqueBest(candidates.filter((item) => item.next === profile)),
+  ]));
+  const replacements = new Map();
+  for (const match of candidates) {
+    if (
+      bestByPrior.get(match.prior.person.localId) !== match ||
+      bestByNext.get(match.next.person.localId) !== match
+    ) continue;
+    replacements.set(match.next.person.localId, match.prior.person.localId);
+  }
+
+  while (true) {
+    const relationshipCandidates = [];
+    const matchedPrior = new Set(replacements.values());
+    for (const prior of priorProfiles) {
+      if (matchedPrior.has(prior.person.localId)) continue;
+      const priorRelated = new Set(prior.person.identityHints.relatedLocalPeople);
+      for (const next of nextProfiles) {
+        if (replacements.has(next.person.localId)) continue;
+        const mappedRelated = new Set(
+          next.person.identityHints.relatedLocalPeople
+            .map((id) => replacements.get(id))
+            .filter(Boolean),
+        );
+        const sharedRelated = intersectionSize(priorRelated, mappedRelated);
+        const sharedEvidence = intersectionSize(prior.evidence, next.evidence);
+        if (sharedRelated === 0 || sharedEvidence === 0) continue;
+        relationshipCandidates.push({
+          prior,
+          next,
+          score: (sharedRelated * 10_000) + (sharedEvidence * 1000),
+        });
+      }
+    }
+    let added = 0;
+    for (const match of relationshipCandidates) {
+      if (
+        uniqueBest(relationshipCandidates.filter((item) => item.prior === match.prior)) !== match ||
+        uniqueBest(relationshipCandidates.filter((item) => item.next === match.next)) !== match
+      ) continue;
+      replacements.set(match.next.person.localId, match.prior.person.localId);
+      added += 1;
+    }
+    if (added === 0) break;
+  }
+
+  const priorIds = new Set(previous.people.map((person) => person.localId));
+  const assignedIds = new Set(replacements.values());
+  const namespace = `${replacement.book}:${replacement.chapter}:p`;
+  const ordinals = [...priorIds, ...replacement.people.map((person) => person.localId)]
+    .map((id) => Number(id.slice(namespace.length)))
+    .filter(Number.isInteger);
+  let nextOrdinal = Math.max(0, ...ordinals) + 1;
+  for (const person of replacement.people) {
+    if (replacements.has(person.localId)) continue;
+    if (!priorIds.has(person.localId) && !assignedIds.has(person.localId)) {
+      assignedIds.add(person.localId);
+      continue;
+    }
+    let freshId;
+    do {
+      freshId = `${namespace}${String(nextOrdinal++).padStart(3, '0')}`;
+    } while (priorIds.has(freshId) || assignedIds.has(freshId));
+    replacements.set(person.localId, freshId);
+    assignedIds.add(freshId);
+  }
+
+  const remapped = mapNestedPersonIds(replacement, replacements);
+  remapped.people.sort((left, right) => left.localId.localeCompare(right.localId, 'en'));
+  for (const person of remapped.people) {
+    person.identityHints.relatedLocalPeople.sort((left, right) => left.localeCompare(right, 'en'));
+  }
+  const remappedIds = remapped.people.map((person) => person.localId);
+  if (new Set(remappedIds).size !== remappedIds.length) {
+    throw new Error('Replacement extraction person-ID preservation produced duplicate local IDs');
+  }
+  Object.assign(replacement, remapped);
+  return {
+    matched: [...replacements].filter(([before, after]) => priorIds.has(after) && before !== after).length,
+    retained: replacement.people.filter((person) => priorIds.has(person.localId)).length,
+    reassigned: [...replacements].filter(([, after]) => !priorIds.has(after)).length,
+  };
+}
+
 function preservePriorAppliedRepairs(previous, replacement) {
   const priorApplied = previous.translationRepairs.filter((repair) => repair.status === 'applied');
   const priorPending = previous.translationRepairs.filter((repair) => repair.status === 'proposed');
   if (priorPending.length > 0) {
     throw new Error('Cannot replace an extraction while its translation repairs are awaiting review');
   }
-  const replacementByTarget = new Map(replacement.translationRepairs.map((repair) => [
-    repairTarget(repair),
-    repair,
-  ]));
+  const replacementByTarget = new Map();
+  for (const repair of replacement.translationRepairs) {
+    const target = repairTarget(repair);
+    if (replacementByTarget.has(target)) {
+      throw new Error(`Replacement extraction proposed multiple repairs for ${target}`);
+    }
+    replacementByTarget.set(target, repair);
+  }
+  const latestAppliedByTarget = new Map();
   for (const repair of priorApplied) {
-    const replacementRepair = replacementByTarget.get(repairTarget(repair));
-    if (replacementRepair) {
+    latestAppliedByTarget.set(repairTarget(repair), repair);
+  }
+  for (const [target, replacementRepair] of replacementByTarget) {
+    const latestApplied = latestAppliedByTarget.get(target);
+    if (latestApplied && replacementRepair.before !== latestApplied.after) {
       throw new Error(
-        `Replacement extraction revisited previously applied repair target ${repairTarget(repair)}`,
+        `Replacement extraction revisited previously applied repair target ${target} ` +
+        'without continuing from its reviewed result',
       );
     }
   }
@@ -1740,10 +1929,23 @@ function preserveEditorialHistory(target, compact, packet) {
     ? validateCompactPeopleExtraction(previousRaw, packet).normalized
     : validatePeopleExtraction(previousRaw, packet).normalized;
   const replacement = validateCompactPeopleExtraction(compact, packet).normalized;
+  const personIds = preservePriorPersonIds(previous, replacement);
+  console.log(
+    `[${stateKey(target)}] preserved ${personIds.retained} prior person ID(s); ` +
+    `remapped ${personIds.matched} match(es) and reassigned ${personIds.reassigned} collision(s)`,
+  );
   preservePriorAppliedRepairs(previous, replacement);
+  const decisions = readJson(decisionsFile);
+  const claims = preserveAppliedEditorialClaims(decisions, replacement);
+  if (claims.removed > 0 || claims.restored > 0) {
+    console.log(
+      `[${stateKey(target)}] preserved reviewed claim history: ` +
+      `${claims.removed} superseded fact(s) removed, ${claims.restored} fact(s) restored`,
+    );
+  }
   const protectedCompact = compactPeopleExtraction(replacement, packet);
   const protectedExtraction = validateCompactPeopleExtraction(protectedCompact, packet).normalized;
-  validateAppliedEditorialDecisions(readJson(decisionsFile), protectedExtraction);
+  validateAppliedEditorialDecisions(decisions, protectedExtraction);
   return protectedCompact;
 }
 
@@ -2262,6 +2464,76 @@ async function selfTest() {
   }
   if (!appliedTargetRejected) {
     throw new Error('Replacement extraction revisited a previously applied repair target');
+  }
+  const sequentialReplacement = preservePriorAppliedRepairs(
+    { translationRepairs: [appliedRepair] },
+    {
+      book: 'fixture',
+      chapter: '001',
+      translationRepairs: [{
+        ...appliedRepair,
+        before: appliedRepair.after,
+        after: 'more accurate',
+        status: 'proposed',
+      }],
+    },
+  );
+  if (
+    sequentialReplacement.translationRepairs.length !== 2 ||
+    sequentialReplacement.translationRepairs[1].id !== 'fixture:001:r0002' ||
+    sequentialReplacement.translationRepairs[1].before !== 'right' ||
+    sequentialReplacement.translationRepairs[1].after !== 'more accurate'
+  ) {
+    throw new Error('Replacement extraction did not preserve a sequential reviewed repair');
+  }
+
+  const fixturePerson = (localId, en, zh, relatedLocalPeople = []) => ({
+    localId,
+    preferredNameSuggestion: { en, zh },
+    identityHints: { relatedLocalPeople },
+  });
+  const priorPeople = {
+    book: 'fixture',
+    chapter: '001',
+    people: [
+      fixturePerson('fixture:001:p001', 'Alice', '艾麗絲'),
+      fixturePerson('fixture:001:p002', 'Bob', '鮑勃'),
+      fixturePerson('fixture:001:p003', 'Retired', '故人'),
+    ],
+    claims: [
+      { subject: 'fixture:001:p001', predicate: 'name', value: { en: 'Alice', zh: '艾麗絲' }, evidence: ['fixture:001:s0001'] },
+      { subject: 'fixture:001:p002', predicate: 'name', value: { en: 'Bob', zh: '鮑勃' }, evidence: ['fixture:001:s0002'] },
+    ],
+    mentions: [],
+  };
+  const replacementPeople = {
+    book: 'fixture',
+    chapter: '001',
+    people: [
+      fixturePerson('fixture:001:p001', 'Bob', '鮑勃', ['fixture:001:p002']),
+      fixturePerson('fixture:001:p002', 'Alice', '艾麗絲', ['fixture:001:p001']),
+      fixturePerson('fixture:001:p003', 'Carol', '卡羅爾'),
+    ],
+    claims: [
+      { subject: 'fixture:001:p001', predicate: 'name', value: { en: 'Bob', zh: '鮑勃' }, evidence: ['fixture:001:s0002'] },
+      { subject: 'fixture:001:p002', predicate: 'name', value: { en: 'Alice', zh: '艾麗絲' }, evidence: ['fixture:001:s0001'] },
+      { subject: 'fixture:001:p001', predicate: 'family-relationship', value: { personId: 'fixture:001:p002' }, evidence: ['fixture:001:s0002'] },
+    ],
+    mentions: [],
+  };
+  const preservedPeople = preservePriorPersonIds(priorPeople, replacementPeople);
+  if (
+    preservedPeople.retained !== 2 ||
+    preservedPeople.matched !== 2 ||
+    preservedPeople.reassigned !== 1 ||
+    replacementPeople.people[0].localId !== 'fixture:001:p001' ||
+    replacementPeople.people[1].localId !== 'fixture:001:p002' ||
+    replacementPeople.people[2].localId !== 'fixture:001:p004' ||
+    replacementPeople.claims[2].subject !== 'fixture:001:p002' ||
+    replacementPeople.claims[2].value.personId !== 'fixture:001:p001' ||
+    replacementPeople.people[0].identityHints.relatedLocalPeople[0] !== 'fixture:001:p002'
+  ) {
+    throw new Error('Replacement extraction did not preserve unambiguous prior person IDs');
   }
 
   const recoveryPacket = {

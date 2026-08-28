@@ -64,21 +64,54 @@ function canonicalize(value) {
   );
 }
 
-function claimFactContract(claim) {
-  const { id: _id, ...contract } = claim;
-  return JSON.stringify(canonicalize(contract));
-}
-
 function claimCoreContract(claim) {
   const { id: _id, evidence: _evidence, ...contract } = claim;
   return JSON.stringify(canonicalize(contract));
 }
 
-function containsReviewedClaim(currentClaims, reviewedClaim) {
+function evidenceIncludes(current, reviewed) {
+  return reviewed.every((item) => current.includes(item));
+}
+
+function reviewedNameValue(language, value) {
+  const text = String(value ?? '').normalize('NFKC').trim();
+  if (language === 'zh') return text;
+  return text
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/gu, '')
+    .toLocaleLowerCase('en')
+    .replace(/[^a-z0-9]+/gu, ' ')
+    .trim()
+    .replace(/\s+/gu, ' ');
+}
+
+function containsReviewedClaim(extraction, reviewedClaim) {
   const reviewedCore = claimCoreContract(reviewedClaim);
-  return currentClaims.some((current) =>
+  if (extraction.claims.some((current) =>
     claimCoreContract(current) === reviewedCore &&
-    reviewedClaim.evidence.every((item) => current.evidence.includes(item))
+    evidenceIncludes(current.evidence, reviewedClaim.evidence)
+  )) return true;
+  if (reviewedClaim.predicate !== 'name') return false;
+
+  const currentNames = extraction.claims.filter((claim) =>
+    claim.subject === reviewedClaim.subject &&
+    claim.predicate === 'name' &&
+    evidenceIncludes(claim.evidence, reviewedClaim.evidence)
+  );
+  const reviewedValues = ['en', 'zh', 'pinyin']
+    .map((language) => [language, reviewedClaim.value?.[language]])
+    .filter(([, value]) => typeof value === 'string' && value.length > 0);
+  if (currentNames.length === 0 || reviewedValues.length === 0) return false;
+  const person = extraction.people.find((item) => item.localId === reviewedClaim.subject);
+  const valueIsPresent = ([language, value]) =>
+    reviewedNameValue(language, person?.preferredNameSuggestion?.[language]) ===
+      reviewedNameValue(language, value) ||
+    currentNames.some((claim) =>
+      reviewedNameValue(language, claim.value?.[language]) === reviewedNameValue(language, value)
+    );
+  return reviewedValues.every(valueIsPresent) && currentNames.some((claim) =>
+    claim.certainty === reviewedClaim.certainty &&
+    reviewedValues.some(([language, value]) => claim.value?.[language] === value)
   );
 }
 
@@ -340,11 +373,13 @@ export function validateAppliedEditorialDecisions(document, extraction) {
   const errors = [...documentResult.errors];
   const pendingReview = currentReview(document, extraction);
   const pendingFingerprint = pendingReview?.input.proposalsFingerprint ?? null;
-  const appliedByTarget = new Map(extraction.translationRepairs.map((repair) => [
-    `${repair.unit.id}:${repair.field}`,
-    repair,
-  ]));
-  const currentClaimFacts = new Set(extraction.claims.map(claimFactContract));
+  const repairsByTarget = new Map();
+  for (const repair of extraction.translationRepairs) {
+    const target = `${repair.unit.id}:${repair.field}`;
+    const repairs = repairsByTarget.get(target) ?? [];
+    repairs.push(repair);
+    repairsByTarget.set(target, repairs);
+  }
   for (const [index, review] of editorialReviews(document).entries()) {
     if (pendingFingerprint && review.input.proposalsFingerprint === pendingFingerprint) continue;
     const prefix = document.schemaVersion === 4 ? `review ${index + 1}: ` : '';
@@ -360,35 +395,42 @@ export function validateAppliedEditorialDecisions(document, extraction) {
       const proposal = reviewResult.proposalById.get(decision.repairId);
       if (!proposal) continue;
       const target = `${proposal.unit.id}:${proposal.field}`;
-      const applied = appliedByTarget.get(target);
       if (decision.decision === 'reject') {
-        if (applied?.before === proposal.before) {
+        if ((repairsByTarget.get(target) ?? []).some((repair) =>
+          repair.status === 'applied' && repair.before === proposal.before
+        )) {
           errors.push(`${prefix}rejected ${decision.repairId}, but it is applied`);
         }
         continue;
       }
       const expectedAfter = decision.decision === 'revise' ? decision.after : proposal.after;
-      if (!applied || applied.before !== proposal.before || applied.after !== expectedAfter) {
+      const applied = (repairsByTarget.get(target) ?? []).find((repair) =>
+        repair.status === 'applied' &&
+        repair.before === proposal.before &&
+        repair.after === expectedAfter
+      );
+      if (!applied) {
         errors.push(`${prefix}does not match applied decision ${decision.repairId}`);
       } else if (applied.reason !== decision.reason) {
         errors.push(`${prefix}lost review reasoning for ${decision.repairId}`);
       }
     }
     for (const retraction of review.claimRetractions ?? []) {
-      if (currentClaimFacts.has(claimFactContract(retraction.claim))) {
+      if (exactReviewedClaimMatches(extraction, retraction.claim).length > 0) {
         errors.push(`${prefix}retracted ${retraction.claim.id}, but its fact remains applied`);
       }
     }
     for (const revision of review.claimRevisions ?? []) {
-      if (containsReviewedClaim(extraction.claims, revision.before)) {
+      const replacementPresent = containsReviewedClaim(extraction, revision.after);
+      if (exactReviewedClaimMatches(extraction, revision.before).length > 0) {
         errors.push(`${prefix}revised ${revision.before.id}, but its old fact remains applied`);
       }
-      if (!containsReviewedClaim(extraction.claims, revision.after)) {
+      if (!replacementPresent) {
         errors.push(`${prefix}revised ${revision.before.id}, but its replacement fact is missing`);
       }
     }
     for (const addition of review.claimAdditions ?? []) {
-      if (!containsReviewedClaim(extraction.claims, addition.claim)) {
+      if (!containsReviewedClaim(extraction, addition.claim)) {
         errors.push(`${prefix}added ${addition.claim.id}, but its fact is missing`);
       }
     }
@@ -396,6 +438,73 @@ export function validateAppliedEditorialDecisions(document, extraction) {
 
   if (errors.length > 0) throw new EditorialDecisionValidationError(errors);
   return documentResult;
+}
+
+function exactReviewedClaimMatches(extraction, reviewedClaim) {
+  const reviewedCore = claimCoreContract(reviewedClaim);
+  return extraction.claims.filter((claim) =>
+    claimCoreContract(claim) === reviewedCore &&
+    evidenceIncludes(claim.evidence, reviewedClaim.evidence)
+  );
+}
+
+function nextPreservedClaimId(extraction) {
+  const namespace = `${extraction.book}:${extraction.chapter}:c`;
+  const used = new Set(extraction.claims.map((claim) => claim.id));
+  let ordinal = Math.max(0, ...[...used]
+    .filter((id) => id.startsWith(namespace))
+    .map((id) => Number(id.slice(namespace.length)))
+    .filter(Number.isInteger)) + 1;
+  return () => {
+    let id;
+    do id = `${namespace}${String(ordinal++).padStart(4, '0')}`;
+    while (used.has(id));
+    used.add(id);
+    return id;
+  };
+}
+
+export function preserveAppliedEditorialClaims(document, extraction) {
+  const result = editorialDocumentErrors(document);
+  if (result.errors.length > 0) throw new EditorialDecisionValidationError(result.errors);
+  const nextClaimId = nextPreservedClaimId(extraction);
+  let removed = 0;
+  let restored = 0;
+
+  const removeExact = (reviewedClaim) => {
+    const matches = new Set(exactReviewedClaimMatches(extraction, reviewedClaim));
+    if (matches.size === 0) return;
+    extraction.claims = extraction.claims.filter((claim) => !matches.has(claim));
+    removed += matches.size;
+  };
+  const restore = (reviewedClaim) => {
+    if (containsReviewedClaim(extraction, reviewedClaim)) return;
+    if (!extraction.people.some((person) => person.localId === reviewedClaim.subject)) {
+      throw new EditorialDecisionValidationError([
+        `cannot preserve reviewed claim ${reviewedClaim.id}: subject ${reviewedClaim.subject} is missing`,
+      ]);
+    }
+    const claim = { ...structuredClone(reviewedClaim), id: nextClaimId() };
+    extraction.claims.push(claim);
+    restored += 1;
+    if (claim.predicate !== 'name') return;
+    const person = extraction.people.find((item) => item.localId === claim.subject);
+    for (const field of ['en', 'zh', 'pinyin']) {
+      if (typeof claim.value?.[field] === 'string' && claim.value[field].length > 0) {
+        person.preferredNameSuggestion[field] = claim.value[field];
+      }
+    }
+  };
+
+  for (const review of editorialReviews(document)) {
+    for (const retraction of review.claimRetractions ?? []) removeExact(retraction.claim);
+    for (const revision of review.claimRevisions ?? []) {
+      removeExact(revision.before);
+      restore(revision.after);
+    }
+    for (const addition of review.claimAdditions ?? []) restore(addition.claim);
+  }
+  return { removed, restored };
 }
 
 export function validateEditorialDecisions(document, extraction, packet) {
