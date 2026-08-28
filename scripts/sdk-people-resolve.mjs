@@ -17,6 +17,7 @@ import {
 import {
   loadValidatedPeopleCorpus,
   loadValidatedResolutionDocuments,
+  peopleResolutionFiles,
 } from './lib/people-corpus.mjs';
 import {
   CursorRunLimitExceededError,
@@ -48,6 +49,8 @@ const DEFAULT_STARTING_REF = 'codex/people-glossary-staging';
 const PROMPT = fs.readFileSync(path.join(REPO_ROOT, 'prompt-people-resolution.txt'), 'utf8');
 const RUN_LOCK_FILE = path.join(PEOPLE_DIR, 'generated', 'resolution-run.lock');
 const SHARD_CHECKPOINT_DIR = path.join(PEOPLE_DIR, 'generated', 'resolution-shards');
+const DOSSIER_MANIFEST_NAME = 'manifest.json';
+const DOSSIER_MANIFEST_VERSION = 1;
 const MAX_INLINE_DOSSIER_BYTES = 256 * 1024;
 const DEFAULT_MAX_RUN_COST_CENTS = 150;
 const DEFAULT_MAX_RUN_TOKENS = 1_250_000;
@@ -439,20 +442,72 @@ function repositoryPath(file) {
   return path.relative(REPO_ROOT, file).split(path.sep).join(path.posix.sep);
 }
 
-function prepareDossierFiles(dossiers, opts) {
+function dossierManifestFile(opts) {
+  return path.join(opts.dossierDir, DOSSIER_MANIFEST_NAME);
+}
+
+function dossierSelection(opts) {
+  return {
+    allUnresolved: opts.allUnresolved,
+    chapters: opts.chapters ? [...opts.chapters].sort() : [],
+    shards: opts.shards,
+    componentShards: opts.componentShards,
+  };
+}
+
+function sourceFingerprintEntries(corpus) {
+  const files = new Set(peopleResolutionFiles());
+  for (const chapter of corpus.chapters) {
+    files.add(chapter.file);
+    files.add(path.join(
+      REPO_ROOT,
+      'data',
+      chapter.extraction.book,
+      `${chapter.extraction.chapter}.json`,
+    ));
+  }
+  return [...files].sort().map((file) => ({
+    file: repositoryPath(file),
+    fingerprint: sha256(fs.readFileSync(file, 'utf8')),
+  }));
+}
+
+function dossierManifest(dossiers, opts, corpus) {
+  return {
+    schemaVersion: DOSSIER_MANIFEST_VERSION,
+    batch: opts.batch,
+    selection: dossierSelection(opts),
+    sourceFiles: sourceFingerprintEntries(corpus),
+    dossiers: dossiers.map((dossier) => {
+      const workerFile = workerDossierFile(dossier, opts);
+      return {
+        batch: dossier.batch,
+        shard: dossier.shard,
+        file: repositoryPath(dossierFile(dossier, opts)),
+        documentFingerprint: dossierFingerprint(dossier),
+        workerFile: workerFile ? repositoryPath(workerFile) : null,
+        workerFingerprint: workerFile
+          ? sha256(`${JSON.stringify(projectDossierForWorker(dossier.document), null, 2)}\n`)
+          : null,
+      };
+    }),
+  };
+}
+
+function prepareDossierFiles(dossiers, opts, corpus) {
   for (const dossier of dossiers) {
     const file = dossierFile(dossier, opts);
     const workerFile = workerDossierFile(dossier, opts);
+    fs.mkdirSync(path.dirname(file), { recursive: true });
+    fs.writeFileSync(file, serializedDossier(dossier));
+    console.log(`[${dossier.batch}] prepared ${repositoryPath(file)}`);
     if (workerFile) {
-      fs.mkdirSync(path.dirname(workerFile), { recursive: true });
       fs.writeFileSync(workerFile, `${JSON.stringify(projectDossierForWorker(dossier.document), null, 2)}\n`);
       console.log(`[${dossier.batch}] prepared ${repositoryPath(workerFile)}`);
-    } else {
-      fs.mkdirSync(path.dirname(file), { recursive: true });
-      fs.writeFileSync(file, serializedDossier(dossier));
-      console.log(`[${dossier.batch}] prepared ${repositoryPath(file)}`);
     }
   }
+  writeJsonAtomic(dossierManifestFile(opts), dossierManifest(dossiers, opts, corpus));
+  console.log(`Prepared ${repositoryPath(dossierManifestFile(opts))}`);
 }
 
 function verifyCommittedFile(file, expected, opts) {
@@ -476,6 +531,140 @@ function verifyCommittedFile(file, expected, opts) {
   if (committed !== expected) {
     throw new Error(`Resolver dossier on ${opts.startingRef} does not match the current corpus: ${relative}`);
   }
+}
+
+function absoluteRepositoryFile(relative, label) {
+  const file = path.resolve(REPO_ROOT, relative);
+  const normalized = path.relative(REPO_ROOT, file);
+  if (!normalized || normalized.startsWith('..') || path.isAbsolute(normalized)) {
+    throw new Error(`${label} must be inside the repository: ${relative}`);
+  }
+  return file;
+}
+
+function baselineFromPreparedDossiers(dossiers) {
+  const membersByCanonical = new Map();
+  const keepSeparate = new Set();
+  const seen = new Set();
+  for (const dossier of dossiers) {
+    for (const [localId, person] of Object.entries(dossier.document.people)) {
+      if (seen.has(localId)) throw new Error(`Prepared dossiers repeat local person ${localId}`);
+      seen.add(localId);
+      const canonical = person.currentCanonicalPersonId;
+      if (!canonical) throw new Error(`Prepared dossier person ${localId} lacks currentCanonicalPersonId`);
+      if (!membersByCanonical.has(canonical)) membersByCanonical.set(canonical, []);
+      membersByCanonical.get(canonical).push(localId);
+    }
+    for (const pair of dossier.document.priorSeparations ?? []) {
+      if (!Array.isArray(pair) || pair.length !== 2) {
+        throw new Error(`${dossier.batch} has an invalid prior separation`);
+      }
+      keepSeparate.add(pairKey(pair[0], pair[1]));
+    }
+  }
+  return {
+    clusters: [...membersByCanonical.entries()].map(([canonicalPersonId, localPeople]) => ({
+      canonicalPersonId,
+      localPeople: localPeople.sort(),
+    })),
+    keepSeparate,
+  };
+}
+
+function loadPreparedDossiers(opts) {
+  const manifestFile = dossierManifestFile(opts);
+  if (!fs.existsSync(manifestFile)) {
+    throw new Error(
+      `Missing ${repositoryPath(manifestFile)}; rerun with --prepare-dossiers and commit the result`,
+    );
+  }
+  const manifestText = fs.readFileSync(manifestFile, 'utf8');
+  verifyCommittedFile(manifestFile, manifestText, opts);
+  const manifest = JSON.parse(manifestText);
+  if (manifest.schemaVersion !== DOSSIER_MANIFEST_VERSION) {
+    throw new Error(`Unsupported resolver dossier manifest version ${manifest.schemaVersion}`);
+  }
+  if (manifest.batch !== opts.batch) {
+    throw new Error(`Resolver dossier manifest batch must be ${opts.batch}`);
+  }
+  if (JSON.stringify(manifest.selection) !== JSON.stringify(dossierSelection(opts))) {
+    throw new Error('Resolver dossier manifest selection does not match the requested scope');
+  }
+  if (!Array.isArray(manifest.sourceFiles) || manifest.sourceFiles.length === 0) {
+    throw new Error('Resolver dossier manifest has no source fingerprints');
+  }
+  const sourcePaths = [];
+  const seenSources = new Set();
+  for (const source of manifest.sourceFiles) {
+    if (!source?.file || seenSources.has(source.file)) {
+      throw new Error(`Resolver dossier manifest has an invalid source file ${source?.file}`);
+    }
+    seenSources.add(source.file);
+    const file = absoluteRepositoryFile(source.file, 'Resolver source file');
+    if (!fs.existsSync(file)) throw new Error(`Missing resolver source file ${source.file}`);
+    if (sha256(fs.readFileSync(file, 'utf8')) !== source.fingerprint) {
+      throw new Error(`Resolver source changed after dossier preparation: ${source.file}`);
+    }
+    sourcePaths.push(source.file);
+  }
+  try {
+    execFileSync('git', ['diff', '--quiet', opts.startingRef, '--', ...sourcePaths], {
+      cwd: REPO_ROOT,
+      stdio: ['ignore', 'ignore', 'pipe'],
+      maxBuffer: 64 * 1024 * 1024,
+    });
+  } catch (error) {
+    const detail = error.stderr?.toString().trim();
+    throw new Error(
+      `Resolver sources differ from starting ref ${opts.startingRef}${detail ? `: ${detail}` : ''}`,
+    );
+  }
+  if (!Array.isArray(manifest.dossiers) || manifest.dossiers.length === 0) {
+    throw new Error('Resolver dossier manifest has no dossiers');
+  }
+  const dossiers = [...manifest.dossiers]
+    .sort((left, right) => left.shard - right.shard)
+    .map((entry, index) => {
+      if (entry.shard !== index + 1) {
+        throw new Error(`Resolver dossier manifest skips shard ${index + 1}`);
+      }
+      const expectedBatch = `${opts.batch}-shard-${String(entry.shard).padStart(3, '0')}`;
+      if (entry.batch !== expectedBatch) {
+        throw new Error(`Resolver dossier manifest shard ${entry.shard} must be ${expectedBatch}`);
+      }
+      const file = absoluteRepositoryFile(entry.file, 'Resolver dossier file');
+      if (path.dirname(file) !== opts.dossierDir) {
+        throw new Error(`Resolver dossier file is outside --dossier-dir: ${entry.file}`);
+      }
+      const serialized = fs.readFileSync(file, 'utf8');
+      verifyCommittedFile(file, serialized, opts);
+      const document = JSON.parse(serialized);
+      const dossier = {
+        batch: entry.batch,
+        shard: entry.shard,
+        document,
+        bytes: Buffer.byteLength(JSON.stringify(document)),
+      };
+      if (document.batch !== entry.batch || dossierFingerprint(dossier) !== entry.documentFingerprint) {
+        throw new Error(`Resolver dossier fingerprint mismatch: ${entry.file}`);
+      }
+      const expectedWorkerFile = workerDossierFile(dossier, opts);
+      const recordedWorkerFile = entry.workerFile
+        ? absoluteRepositoryFile(entry.workerFile, 'Resolver worker dossier file')
+        : null;
+      if (expectedWorkerFile !== recordedWorkerFile) {
+        throw new Error(`Resolver worker dossier projection mismatch for ${entry.batch}`);
+      }
+      if (recordedWorkerFile) {
+        const workerText = fs.readFileSync(recordedWorkerFile, 'utf8');
+        verifyCommittedFile(recordedWorkerFile, workerText, opts);
+        if (sha256(workerText) !== entry.workerFingerprint) {
+          throw new Error(`Resolver worker dossier fingerprint mismatch: ${entry.workerFile}`);
+        }
+      }
+      return dossier;
+    });
+  return { dossiers, baseline: baselineFromPreparedDossiers(dossiers) };
 }
 
 function verifyDossierInputs(dossiers, opts) {
@@ -1253,9 +1442,19 @@ async function main() {
     ? () => {}
     : installSignalHandlers(control, { cancelOnFirstInterrupt: true });
   try {
-    const corpus = loadValidatedPeopleCorpus();
-    const resolutions = loadValidatedResolutionDocuments(corpus.localPeople);
-    const { dossiers, baseline } = buildDossiers(opts, corpus, resolutions);
+    let corpus = null;
+    let resolutions = [];
+    let dossiers;
+    let baseline;
+    const usingPreparedDossiers = Boolean(opts.dossierDir && !opts.prepareDossiers);
+    if (usingPreparedDossiers) {
+      ({ dossiers, baseline } = loadPreparedDossiers(opts));
+      console.log(`Loaded ${dossiers.length} source-verified dossier(s) without rebuilding the corpus graph`);
+    } else {
+      corpus = loadValidatedPeopleCorpus();
+      resolutions = loadValidatedResolutionDocuments(corpus.localPeople);
+      ({ dossiers, baseline } = buildDossiers(opts, corpus, resolutions));
+    }
     console.log(
       `Resolution plan: ${dossiers.length} shard(s), ` +
       `${dossiers.reduce((sum, item) => sum + item.document.blocks.length, 0)} unresolved block(s), ` +
@@ -1270,11 +1469,11 @@ async function main() {
       );
     }
     if (opts.prepareDossiers) {
-      prepareDossierFiles(dossiers, opts);
+      prepareDossierFiles(dossiers, opts, corpus);
       return;
     }
     if (opts.dryRun || dossiers.length === 0) return;
-    if (opts.dossierDir) verifyDossierInputs(dossiers, opts);
+    if (opts.dossierDir && !usingPreparedDossiers) verifyDossierInputs(dossiers, opts);
 
     let next = 0;
     const accepted = [];
@@ -1383,6 +1582,18 @@ async function main() {
         'rerun the same batch to continue.',
       );
       return;
+    }
+    if (!corpus) {
+      console.log('All shard checkpoints are complete; rebuilding the full corpus for aggregate validation');
+      corpus = loadValidatedPeopleCorpus();
+      resolutions = loadValidatedResolutionDocuments(corpus.localPeople);
+      const rebuilt = buildDossiers(opts, corpus, resolutions).dossiers;
+      if (
+        rebuilt.length !== dossiers.length ||
+        rebuilt.some((dossier, index) => dossierFingerprint(dossier) !== dossierFingerprint(dossiers[index]))
+      ) {
+        throw new Error('Prepared resolver dossiers no longer match the fully rebuilt corpus graph');
+      }
     }
     const aggregate = {
       schemaVersion: 1,
