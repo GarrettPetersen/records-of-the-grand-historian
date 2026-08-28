@@ -45,7 +45,7 @@ loadDotenv(REPO_ROOT);
 
 const DEFAULT_MODEL = 'grok-4.5';
 const DEFAULT_REPO_URL = 'https://github.com/GarrettPetersen/records-of-the-grand-historian';
-const DEFAULT_STARTING_REF = 'codex/people-glossary-staging';
+const DEFAULT_STARTING_REF = 'codex/people-glossary-staging-v2';
 const PROMPT = fs.readFileSync(path.join(REPO_ROOT, 'prompt-people-resolution.txt'), 'utf8');
 const RUN_LOCK_FILE = path.join(PEOPLE_DIR, 'generated', 'resolution-run.lock');
 const SHARD_CHECKPOINT_DIR = path.join(PEOPLE_DIR, 'generated', 'resolution-shards');
