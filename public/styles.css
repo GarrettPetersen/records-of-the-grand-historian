@@ -164,24 +164,33 @@ main:has(.reader-container) {
     font-size: 1rem;
 }
 
-.book-translation-features {
-    margin: 0.8rem 0 1rem;
-    padding-left: 1.3rem;
-    color: #4b5563;
-}
-
-.book-translation-features li + li {
-    margin-top: 0.3rem;
-}
-
-.book-translation-features strong {
-    color: var(--text-color);
-}
-
 .book-translation-note .book-translation-project {
-    padding-top: 0.8rem;
+    margin-top: 0.8rem;
+    font-size: 0.9rem;
+}
+
+.book-translation-colophon {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 2.5rem 0 0;
+    padding: 0.85rem 0 0;
     border-top: 1px solid var(--border-color);
-    font-size: 0.88rem;
+    color: #737b86;
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.75rem;
+    line-height: 1.45;
+    list-style: none;
+}
+
+.book-translation-colophon li {
+    display: inline-flex;
+    align-items: center;
+}
+
+.book-translation-colophon li:not(:last-child)::after {
+    margin: 0 0.65rem;
+    color: var(--divider-color);
+    content: "·";
 }
 
 .chapter-index-card {

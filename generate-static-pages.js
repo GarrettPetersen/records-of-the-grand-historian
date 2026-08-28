@@ -190,10 +190,10 @@ function bookLandingCopy(bookId) {
     : '';
   const summary = `This page presents the full English translation of ${book.name} (${alternateNames.join('; ')})${authorClause}.`;
   const features = [
-    ['Full English translation', 'Every chapter of the work is translated.'],
-    ['English and original Chinese side by side', 'Compare the translation directly with the source text throughout.'],
-    ['Free to read online', 'Every chapter is available without a subscription.'],
-    ['Searchable in Chinese or English', 'Search chapter titles and the full text.'],
+    'Full English translation',
+    'English and original Chinese side by side',
+    'Free to read online',
+    'Searchable in Chinese or English',
   ];
   const projectNote = `This edition is part of a new translation effort by translator and editor Garrett M. Petersen to create a comprehensive translation of all 24 official dynastic histories (the Twenty-Four Histories, 二十四史), as well as the Draft History of Qing (Qingshigao, 清史稿) and the Comprehensive Mirror in Aid of Governance (Zizhi Tongjian, 資治通鑑). The effort is AI-assisted, with significant human editorial oversight and tuning. New technology has made it feasible to translate the nearly 40 million combined Chinese characters of these works into clear, readable English.`;
 
@@ -400,7 +400,7 @@ function generateBookLandingHTML(bookId) {
     <title>${escapeHtml(landingCopy.title)}</title>
     <meta name="description" content="${escapeHtml(landingCopy.description)}">
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
-    <link rel="stylesheet" href="../styles.css?v=20260828-book-value">
+    <link rel="stylesheet" href="../styles.css?v=20260828-book-hierarchy">
     <link rel="canonical" href="${pageUrl}">
     <meta property="og:title" content="${escapeHtml(landingCopy.title)}">
     <meta property="og:description" content="${escapeHtml(landingCopy.description)}">
@@ -428,14 +428,15 @@ function generateBookLandingHTML(bookId) {
         <section class="book-translation-note" aria-labelledby="about-this-translation">
             <h2 id="about-this-translation">About this translation</h2>
             <p class="book-translation-summary">${escapeHtml(landingCopy.summary)}</p>
-            <ul class="book-translation-features">
-${landingCopy.features.map(([heading, detail]) => `                <li><strong>${escapeHtml(heading)}.</strong> ${escapeHtml(detail)}</li>`).join('\n')}
-            </ul>
             <p class="book-translation-project">${escapeHtml(landingCopy.projectNote)}</p>
         </section>
 
         <div id="loading">Loading chapters...</div>
         <div class="chapter-list" id="chapter-list" style="display: none;"></div>
+
+        <ul class="book-translation-colophon" aria-label="Translation features">
+${landingCopy.features.map((feature) => `            <li>${escapeHtml(feature)}</li>`).join('\n')}
+        </ul>
     </main>
 
     ${siteFooter('../')}
