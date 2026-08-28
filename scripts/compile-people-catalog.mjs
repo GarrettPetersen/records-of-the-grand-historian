@@ -197,7 +197,7 @@ function sourcePreferredNameSuggestion(members) {
   })).sort((left, right) => right.score - left.score || left.order - right.order)[0]?.value ?? {};
 }
 
-function preferredName(members, override = null) {
+function preferredName(members, override = null, clusterId = null) {
   const nameClaims = members.flatMap((member) => member.claims).filter((claim) => claim.predicate === 'name');
   if (override?.preferredName) {
     const selected = override.preferredName;
@@ -206,7 +206,12 @@ function preferredName(members, override = null) {
       (!selected.zh || claim.value?.zh === selected.zh)
     ).map((claim) => claim.id);
     if (!claimRefs.length) {
-      throw new Error(`Preferred-name override ${JSON.stringify(selected)} is not supported by a source name claim`);
+      const cluster = clusterId
+        ? ` for ${clusterId} (${members.map((member) => member.localId).join(', ')})`
+        : '';
+      throw new Error(
+        `Preferred-name override ${JSON.stringify(selected)}${cluster} is not supported by a source name claim`,
+      );
     }
     return {
       kind: selected.kind,
@@ -580,7 +585,7 @@ function buildPeopleSiteIndex(corpus, catalog) {
 
 function canonicalRecord(cluster, corpus, localMap, roleLabels, unresolvedLocalPeople, currentPromptVersion, override) {
   const members = cluster.localPeople.map((localId) => corpus.localPeople.get(localId));
-  const preferred = preferredName(members, override);
+  const preferred = preferredName(members, override, cluster.canonicalPersonId);
   const slugName = sourcePreferredNameSuggestion(members);
   const roles = canonicalRoles(members, roleLabels);
   const descriptors = members.map((member) => member.descriptorSuggestion);
