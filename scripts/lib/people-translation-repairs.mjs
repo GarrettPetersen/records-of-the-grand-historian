@@ -780,7 +780,52 @@ export function applyTranslationRepairs(chapter, repairs) {
   return { chapter: revised, changedUnits };
 }
 
-function normalizeMentionSpans(mention, unit, previousUnit, staleSpans) {
+function aliasSimilarity(left, right, language) {
+  if (language === 'en') return sharedWordCount(left, right);
+  const rightCharacters = new Set([...right]);
+  return [...new Set([...left])].filter((character) => rightCharacters.has(character)).length;
+}
+
+function remapMentionSpanToKnownAlias(extraction, mention, span, unit, previousUnit, language) {
+  const oldLocation = resolvedOldSpan(previousUnit[language], span);
+  if (!oldLocation) return null;
+  const oldLength = [...previousUnit[language]].length;
+  const newLength = [...unit[language]].length;
+  const expectedStart = oldLocation.startCodePoint * newLength / Math.max(1, oldLength);
+  const sameKindAliases = aliasesForPerson(
+    extraction,
+    mention.person,
+    language,
+    unit.id,
+  ).filter((alias) => alias.kind === mention.kind);
+  const candidates = sameKindAliases.flatMap((alias) =>
+    exactOccurrences(unit[language], alias.exact, language).map((found) => ({
+      ...found,
+      similarity: aliasSimilarity(span.exact, alias.exact, language),
+      distance: Math.abs(found.startCodePoint - expectedStart),
+    }))
+  ).filter((candidate) => candidate.similarity > 0);
+  candidates.sort((left, right) =>
+    right.similarity - left.similarity ||
+    left.distance - right.distance ||
+    (right.endCodePoint - right.startCodePoint) - (left.endCodePoint - left.startCodePoint) ||
+    left.startCodePoint - right.startCodePoint
+  );
+  const selected = candidates[0];
+  if (!selected) return null;
+  const tied = candidates.some((candidate, index) =>
+    index > 0 &&
+    candidate.similarity === selected.similarity &&
+    Math.abs(candidate.distance - selected.distance) < 0.001 &&
+    (candidate.startCodePoint !== selected.startCodePoint ||
+      candidate.endCodePoint !== selected.endCodePoint)
+  );
+  if (tied) return null;
+  const { similarity: _similarity, distance: _distance, ...remapped } = selected;
+  return remapped;
+}
+
+function normalizeMentionSpans(extraction, mention, unit, previousUnit, staleSpans) {
   const normalized = structuredClone(mention);
   for (const language of ['zh', 'en']) {
     normalized.spans[language] = normalized.spans[language].flatMap((span) => {
@@ -795,6 +840,15 @@ function normalizeMentionSpans(mention, unit, previousUnit, staleSpans) {
         previousUnit[language] !== unit[language] &&
         !storedCoordinatesStillMatch
       ) {
+        const aliasRemap = remapMentionSpanToKnownAlias(
+          extraction,
+          mention,
+          span,
+          unit,
+          previousUnit,
+          language,
+        );
+        if (aliasRemap) return [aliasRemap];
         const remapped = remapMentionSpanThroughEdit(
           span,
           previousUnit[language],
@@ -907,6 +961,62 @@ function normalizeMentionGeometry(extraction, unitById, candidateById, candidate
   }
 }
 
+function spanHasNameEvidence(extraction, mention, span, language) {
+  const person = extraction.people.find((item) => item.localId === mention.person);
+  if (person?.preferredNameSuggestion?.[language] === span.exact) return true;
+  return extraction.claims.some((claim) =>
+    claim.subject === mention.person &&
+    claim.predicate === 'name' &&
+    claimEvidenceUnit(claim, mention.unit.id) &&
+    claim.value?.[language] === span.exact
+  );
+}
+
+function removeUnsupportedCrossPersonOverlaps(extraction, candidateById) {
+  for (const language of ['zh', 'en']) {
+    const located = extraction.mentions.flatMap((mention) =>
+      mention.spans[language].map((span) => ({ mention, span }))
+    );
+    for (const current of located) {
+      if (!current.mention.spans[language].includes(current.span)) continue;
+      const conflicts = located.filter((other) =>
+        other !== current &&
+        other.mention.person !== current.mention.person &&
+        other.mention.unit.id === current.mention.unit.id &&
+        other.mention.spans[language].includes(other.span) &&
+        spansOverlap(current.span, other.span)
+      );
+      if (conflicts.length !== 1) continue;
+      const other = conflicts[0];
+      const currentSupported = spanHasNameEvidence(
+        extraction,
+        current.mention,
+        current.span,
+        language,
+      );
+      const otherSupported = spanHasNameEvidence(
+        extraction,
+        other.mention,
+        other.span,
+        language,
+      );
+      if (currentSupported === otherSupported) continue;
+      const loser = currentSupported ? other : current;
+      const winner = currentSupported ? current : other;
+      for (const candidateId of loser.mention.candidateRefs) {
+        const candidate = candidateById.get(candidateId);
+        if (
+          candidate?.language === language &&
+          winner.span.startCodePoint <= candidate.startCodePoint &&
+          candidate.endCodePoint <= winner.span.endCodePoint
+        ) winner.mention.candidateRefs.push(candidateId);
+      }
+      loser.mention.spans[language] = loser.mention.spans[language]
+        .filter((span) => span !== loser.span);
+    }
+  }
+}
+
 function candidateInsideMention(candidate, mention) {
   return mention.unit.id === candidate.unit && mention.spans[candidate.language].some((span) =>
     span.startCodePoint <= candidate.startCodePoint && span.endCodePoint >= candidate.endCodePoint
@@ -987,7 +1097,7 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
     const unit = unitById.get(mention.unit.id);
     if (!unit) return mention;
     const previousUnit = previousUnitById.get(mention.unit.id);
-    return normalizeMentionSpans(mention, unit, previousUnit, staleSpans);
+    return normalizeMentionSpans(reconciled, mention, unit, previousUnit, staleSpans);
   });
   for (const mention of reconciled.mentions) {
     const unit = unitById.get(mention.unit.id);
@@ -2341,6 +2451,8 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
   // mention for the same person. Collapse those spans only after all mention
   // growth has finished, and preserve the candidate accounting on the cover.
   normalizeMentionGeometry(reconciled, unitById, candidateById, candidateOrder);
+  removeUnsupportedCrossPersonOverlaps(reconciled, candidateById);
+  normalizeMentionGeometry(reconciled, unitById, candidateById, candidateOrder);
 
   // Span growth and deduplication can move candidate coverage between
   // mentions. Re-account from the final geometry so no valid candidate ref is
@@ -2415,6 +2527,8 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
   // Preferred-name restoration runs after the main candidate pass and can
   // meet a surviving bilingual mention for the same person. Normalize once
   // more so the added display link shares that mention instead of overlapping it.
+  normalizeMentionGeometry(reconciled, unitById, candidateById, candidateOrder);
+  removeUnsupportedCrossPersonOverlaps(reconciled, candidateById);
   normalizeMentionGeometry(reconciled, unitById, candidateById, candidateOrder);
   removeDispositionMentionConflicts(reconciled);
 
