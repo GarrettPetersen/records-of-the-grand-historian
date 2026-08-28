@@ -335,17 +335,22 @@ export function localCursorRecoveryTargets() {
   return targets.sort((left, right) => chapterKey(left).localeCompare(chapterKey(right)));
 }
 
-export function localUnpublishedExtractionTargets() {
+export function localUnpublishedExtractionTargets(options = {}) {
   const targets = [];
   const root = path.join(PEOPLE_DIR, 'extractions');
   if (!fs.existsSync(root)) return targets;
-  const dirtyPaths = new Set(
-    git(['status', '--porcelain', '--', path.relative(REPO_ROOT, root)]).stdout
+  const relativeRoot = path.relative(REPO_ROOT, root);
+  const changedPaths = new Set([
+    ...git(['status', '--porcelain', '--', relativeRoot]).stdout
       .trim()
       .split('\n')
       .filter(Boolean)
       .map((line) => line.slice(3)),
-  );
+    ...git([
+      'diff', '--name-only', `${options.baseRef ?? DEFAULT_PEOPLE_QUEUE_BASE_REF}...HEAD`,
+      '--', relativeRoot,
+    ], { allowFailure: true }).stdout.trim().split('\n').filter(Boolean),
+  ]);
   for (const bookEntry of fs.readdirSync(root, { withFileTypes: true })) {
     if (!bookEntry.isDirectory()) continue;
     const directory = path.join(root, bookEntry.name);
@@ -353,7 +358,7 @@ export function localUnpublishedExtractionTargets() {
       const chapter = file.slice(0, 3);
       const target = { book: bookEntry.name, chapter };
       const output = extractionPath(target.book, target.chapter);
-      if (!dirtyPaths.has(path.relative(REPO_ROOT, output)) || !extractionIsCurrent(target)) continue;
+      if (!changedPaths.has(path.relative(REPO_ROOT, output)) || !extractionIsCurrent(target)) continue;
       targets.push({
         ...target,
         chapterFingerprint: readJson(output).input.chapterFingerprint,
@@ -374,7 +379,7 @@ export function completedForeignClaimOwnsLocalReadyOutput(item, claim, now = Dat
 export function syncLocalCursorReservations(options = {}) {
   const worker = options.worker ?? `${os.hostname()}-cursor-recovery`;
   const recovery = localCursorRecoveryTargets();
-  const ready = localUnpublishedExtractionTargets();
+  const ready = localUnpublishedExtractionTargets(options);
   const desired = new Map([
     ...recovery.map((target) => [chapterKey(target), { target, status: 'resume-required' }]),
     ...ready.map((target) => [chapterKey(target), { target, status: 'ready' }]),
