@@ -393,6 +393,7 @@ function withRecoveryPriority(target, state) {
 
 function recoveryOnlyTarget(target, state) {
   const chapterState = state.chapters[stateKey(target)] ?? {};
+  if (chapterState.status === 'accepted') return false;
   if (
     hasRetainedAgentConversation(chapterState) ||
     Object.values(chapterState.chunks ?? {}).some(hasRetainedAgentConversation)
@@ -2759,6 +2760,27 @@ async function selfTest() {
   });
   if (scoped.length !== 2 || scoped.some((target) => target.chapter === '003')) {
     throw new Error('Recovery-first planning did not bypass unrelated fresh chapters');
+  }
+  const currentStickyScope = planningScopeTargets([
+    { book: 'fixture', chapter: '001' },
+    { book: 'fixture', chapter: '002' },
+    { book: 'fixture', chapter: '003' },
+  ], {
+    claims: {
+      'fixture/001': { lane: 'cursor-sdk', status: 'resume-required' },
+      'fixture/002': { lane: 'cursor-sdk', status: 'resume-required' },
+    },
+  }, { recoverOnly: false, limit: 1 }, {
+    chapters: {
+      'fixture/001': {
+        status: 'accepted',
+        chunks: { '001': { status: 'interrupted', agentId: 'bc-obsolete' } },
+      },
+      'fixture/002': { status: 'interrupted', agentId: 'bc-current' },
+    },
+  });
+  if (currentStickyScope.length !== 1 || currentStickyScope[0].chapter !== '002') {
+    throw new Error('Accepted chapter archives blocked pending recovery work');
   }
   const historicalBudget = { recordedRunIds: new Set() };
   seedRecordedRuns(historicalBudget, [{ id: 'run-before-restart' }]);
