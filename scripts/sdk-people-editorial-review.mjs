@@ -298,7 +298,7 @@ function acceptDecision(document, target, loaded, opts, state, agent, result) {
   };
   const reviewed = validateEditorialDecisions(document, loaded.extraction, loaded.packet);
   const file = editorialDecisionPath(target.book, target.chapter);
-  const stored = fs.existsSync(file)
+  const stored = validCurrentDecision(target, loaded)
     ? mergeEditorialDecisionReview(readJson(file), document)
     : document;
   writeJsonAtomic(file, stored);
