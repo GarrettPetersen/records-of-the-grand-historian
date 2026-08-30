@@ -1302,7 +1302,12 @@ async function obtainValidInitialExtraction(
         control.stopRequested = true;
         control.stopReason = 'run-limit';
       }
-      errors = validationErrors(error);
+      errors = [
+        ...validationErrors(error),
+        ...(error.artifactRecoveryError
+          ? validationErrors(error.artifactRecoveryError)
+          : []),
+      ];
       const failure = {
         status: control.stopRequested ? 'interrupted' : 'failed/retryable',
         lastErrors: errors,
