@@ -4,6 +4,7 @@ import { Agent, CursorAgentError } from '@cursor/sdk';
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { isDeepStrictEqual } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import { unresolvedCandidateState } from './compile-people-catalog.mjs';
 import { loadDotenv } from './load-dotenv.mjs';
@@ -607,16 +608,47 @@ function loadPreparedDossiers(opts) {
     }
     sourcePaths.push(source.file);
   }
-  try {
-    execFileSync('git', ['diff', '--quiet', opts.startingRef, '--', ...sourcePaths], {
+  const changedSources = execFileSync(
+    'git',
+    ['diff', '--name-only', opts.startingRef, '--', ...sourcePaths],
+    {
       cwd: REPO_ROOT,
-      stdio: ['ignore', 'ignore', 'pipe'],
+      encoding: 'utf8',
       maxBuffer: 64 * 1024 * 1024,
-    });
-  } catch (error) {
-    const detail = error.stderr?.toString().trim();
+    },
+  ).trim().split('\n').filter(Boolean);
+  const semanticChanges = [];
+  for (const source of changedSources) {
+    let startingValue;
+    try {
+      startingValue = JSON.parse(execFileSync(
+        'git',
+        ['show', `${opts.startingRef}:${source}`],
+        {
+          cwd: REPO_ROOT,
+          encoding: 'utf8',
+          maxBuffer: 64 * 1024 * 1024,
+        },
+      ));
+    } catch (error) {
+      const detail = error.stderr?.toString().trim();
+      throw new Error(
+        `Could not read resolver source ${source} from ${opts.startingRef}${detail ? `: ${detail}` : ''}`,
+      );
+    }
+    const localValue = JSON.parse(fs.readFileSync(path.join(REPO_ROOT, source), 'utf8'));
+    if (!isDeepStrictEqual(localValue, startingValue)) {
+      semanticChanges.push(source);
+    }
+  }
+  if (semanticChanges.length > 0) {
     throw new Error(
-      `Resolver sources differ from starting ref ${opts.startingRef}${detail ? `: ${detail}` : ''}`,
+      `Resolver sources differ from starting ref ${opts.startingRef}: ${semanticChanges.join(', ')}`,
+    );
+  }
+  if (changedSources.length > 0) {
+    console.log(
+      `Accepted formatting-only differences in ${changedSources.length} resolver source file(s)`,
     );
   }
   if (!Array.isArray(manifest.dossiers) || manifest.dossiers.length === 0) {
