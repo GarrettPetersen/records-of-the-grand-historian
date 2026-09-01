@@ -317,9 +317,18 @@ function acceptDecision(document, target, loaded, opts, state, agent, result) {
   return { status: 'accepted' };
 }
 
-async function acceptDecisionPublishedAtRunLimit(error, agent, target, loaded, opts, state) {
-  if (!(error instanceof CursorRunLimitExceededError) || !error.runId) return null;
+async function acceptDecisionPublishedAfterError(error, agent, target, loaded, opts, state) {
   try {
+    let runId = error.runId ?? null;
+    if (!runId) {
+      const runs = await Agent.listRuns(agent.agentId, {
+        runtime: 'cloud',
+        apiKey: opts.apiKey,
+        limit: 20,
+      });
+      runId = runs.items.find((run) => run.status !== 'running')?.id ?? null;
+    }
+    if (!runId) return null;
     const accepted = acceptDecision(
       await downloadDecision(agent, target),
       target,
@@ -327,15 +336,15 @@ async function acceptDecisionPublishedAtRunLimit(error, agent, target, loaded, o
       opts,
       state,
       agent,
-      { id: error.runId },
+      { id: runId },
     );
     console.warn(
-      `[${target.book}/${target.chapter}] accepted a complete artifact published at the run limit`,
+      `[${target.book}/${target.chapter}] accepted a complete artifact published before the run error`,
     );
     return accepted;
   } catch (artifactError) {
     console.warn(
-      `[${target.book}/${target.chapter}] run-limit artifact is not yet complete: ` +
+      `[${target.book}/${target.chapter}] published artifact is not yet complete: ` +
       `${errorList(artifactError)[0]}`,
     );
     return null;
@@ -383,6 +392,16 @@ async function processTarget(target, opts, state, matcher) {
       });
       let latest = runs.items.find((run) => run.status === 'running') ?? runs.items[0];
       const recoveryErrors = [...(prior.lastErrors ?? [])];
+      const publishedRun = runs.items.find((run) => run.status !== 'running');
+      if (publishedRun) {
+        try {
+          return acceptDecision(
+            await downloadDecision(agent, target), target, loaded, opts, state, agent, publishedRun,
+          );
+        } catch (error) {
+          recoveryErrors.push(...errorList(error));
+        }
+      }
       if (latest?.status === 'running') {
         try {
           latest = await waitForCursorRun(latest, {
@@ -413,11 +432,11 @@ async function processTarget(target, opts, state, matcher) {
         );
       } catch (error) {
         const errors = errorList(error);
+        const accepted = await acceptDecisionPublishedAfterError(
+          error, agent, target, loaded, opts, state,
+        );
+        if (accepted) return accepted;
         if (error instanceof CursorRunLimitExceededError) {
-          const accepted = await acceptDecisionPublishedAtRunLimit(
-            error, agent, target, loaded, opts, state,
-          );
-          if (accepted) return accepted;
           updateState(state, target, {
             status: 'interrupted',
             runId: error.runId ?? latest?.id ?? null,
@@ -466,11 +485,11 @@ async function processTarget(target, opts, state, matcher) {
         errors = errorList(error);
         updateState(state, target, { status: 'failed/retryable', lastErrors: errors });
         console.error(`[${key}] review attempt ${attempt} failed: ${errors[0]}`);
+        const accepted = await acceptDecisionPublishedAfterError(
+          error, agent, target, loaded, opts, state,
+        );
+        if (accepted) return accepted;
         if (error instanceof CursorRunLimitExceededError) {
-          const accepted = await acceptDecisionPublishedAtRunLimit(
-            error, agent, target, loaded, opts, state,
-          );
-          if (accepted) return accepted;
           updateState(state, target, {
             status: 'interrupted',
             runId: error.runId ?? null,
