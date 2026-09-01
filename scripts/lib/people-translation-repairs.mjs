@@ -592,8 +592,17 @@ export function assignExplicitCandidatePeople(reconciled, packet, requested) {
       mention.unit.id === unit.id &&
       mention.spans[candidate.language].some((current) => spansOverlap(current, span))
     );
-    if (overlapping.some((mention) => mention.person !== person)) {
-      throw new Error(`Explicit person candidate overlaps another person mention: ${candidate.id}`);
+    const conflicting = overlapping.filter((mention) => mention.person !== person);
+    if (conflicting.length > 0) {
+      throw new Error(
+        `Explicit person candidate overlaps another person mention: ${candidate.id}; ` +
+        conflicting.map((mention) =>
+          `${mention.id} (${mention.person}, ${mention.kind}, ` +
+          `zh=[${mention.spans.zh.map((item) => item.exact).join('|')}], ` +
+          `en=[${mention.spans.en.map((item) => item.exact).join('|')}], ` +
+          `candidates=[${mention.candidateRefs.join('|')}])`
+        ).join(', '),
+      );
     }
 
     const target = extraction.mentions.find((mention) =>

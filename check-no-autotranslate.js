@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { execSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -54,8 +54,14 @@ const RULES = [
 ];
 
 function listFiles() {
-  const output = execSync("git ls-files --cached --others --exclude-standard", {
+  const output = execFileSync("git", [
+    "ls-files",
+    "--cached",
+    "--others",
+    "--exclude-standard",
+  ], {
     encoding: "utf8",
+    maxBuffer: 64 * 1024 * 1024,
   }).trim();
   if (!output) return [];
   return output
