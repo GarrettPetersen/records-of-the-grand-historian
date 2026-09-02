@@ -1269,6 +1269,7 @@ async function recoverPublishedShardDocuments(
     latestByName = new Map();
     let cursor;
     do {
+      if (control.stopRequested) return [];
       const page = await Agent.list({
         runtime: 'cloud',
         apiKey: opts.apiKey,
@@ -1288,6 +1289,7 @@ async function recoverPublishedShardDocuments(
 
   const recovered = [];
   for (const dossier of dossiers) {
+    if (control.stopRequested) break;
     const prior = latestByName.get(`People resolution ${dossier.batch}`);
     if (!prior) continue;
     let agent;
@@ -1519,8 +1521,12 @@ async function processDossierOrParts(
   }
 
   if (!opts.skipCloudRecovery && pending.length > 0) {
+    const recoverable = pending.filter((part) =>
+      buildTargetDossierParts(part).length === 0 &&
+      buildAdaptiveDossierParts(part).length === 0
+    );
     const recovered = new Set(await recoverPublishedShardDocuments(
-      pending,
+      recoverable,
       opts,
       corpus,
       resolutions,
@@ -2001,8 +2007,12 @@ async function main() {
     ));
     pending = pending.filter((dossier) => !recovered.has(dossier));
     if (!opts.skipCloudRecovery) {
+      const directlyRecoverable = pending.filter((dossier) =>
+        buildTargetDossierParts(dossier).length === 0 &&
+        buildAdaptiveDossierParts(dossier).length === 0
+      );
       for (const dossier of await recoverPublishedShardDocuments(
-        pending,
+        directlyRecoverable,
         opts,
         corpus,
         resolutions,
