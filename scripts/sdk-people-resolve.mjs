@@ -60,7 +60,15 @@ const DEFAULT_MAX_RUN_COST_CENTS = 150;
 const DEFAULT_MAX_RUN_TOKENS = 1_250_000;
 const DEFAULT_RUN_POLL_MS = 15_000;
 const MAX_SHARDS = 256;
+const MAX_CURSOR_AGENT_NAME_LENGTH = 100;
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+
+function resolverAgentName(batch) {
+  const fullName = `People resolution ${batch}`;
+  if (fullName.length <= MAX_CURSOR_AGENT_NAME_LENGTH) return fullName;
+  const suffix = `-${sha256(fullName).slice(0, 12)}`;
+  return `${fullName.slice(0, MAX_CURSOR_AGENT_NAME_LENGTH - suffix.length)}${suffix}`;
+}
 
 function usage() {
   console.log(`Usage:
@@ -1258,11 +1266,11 @@ async function recoverPublishedShardDocuments(
   explicitAgents = null,
 ) {
   if (dossiers.length === 0) return [];
-  const wanted = new Map(dossiers.map((dossier) => [`People resolution ${dossier.batch}`, dossier]));
+  const wanted = new Map(dossiers.map((dossier) => [resolverAgentName(dossier.batch), dossier]));
   let latestByName;
   if (explicitAgents) {
     latestByName = new Map(dossiers.map((dossier) => [
-      `People resolution ${dossier.batch}`,
+      resolverAgentName(dossier.batch),
       { agentId: explicitAgents.get(dossier.shard) },
     ]));
   } else {
@@ -1290,7 +1298,7 @@ async function recoverPublishedShardDocuments(
   const recovered = [];
   for (const dossier of dossiers) {
     if (control.stopRequested) break;
-    const prior = latestByName.get(`People resolution ${dossier.batch}`);
+    const prior = latestByName.get(resolverAgentName(dossier.batch));
     if (!prior) continue;
     let agent;
     try {
@@ -1410,7 +1418,7 @@ async function processDossier(dossier, opts, corpus, resolutions, accepted, base
   try {
     agent = await Agent.create({
       apiKey: opts.apiKey,
-      name: `People resolution ${dossier.batch}`,
+      name: resolverAgentName(dossier.batch),
       model: modelSelection(opts),
       cloud: {
         repos: [{ url: opts.repoUrl, startingRef: opts.startingRef }],
@@ -1600,6 +1608,19 @@ async function processDossierOrParts(
 }
 
 function selfTest() {
+  const shortAgentName = resolverAgentName('fixture-shard-001');
+  if (shortAgentName !== 'People resolution fixture-shard-001') {
+    throw new Error('Resolver changed an agent name that already fits Cursor limits');
+  }
+  const longBatch = `fixture-${'part-001-'.repeat(16)}`;
+  const longAgentName = resolverAgentName(longBatch);
+  if (
+    longAgentName.length !== MAX_CURSOR_AGENT_NAME_LENGTH ||
+    longAgentName !== resolverAgentName(longBatch) ||
+    longAgentName === resolverAgentName(`${longBatch}different`)
+  ) {
+    throw new Error('Resolver did not shorten long agent names deterministically');
+  }
   const blocks = [
     { id: 'a', localPeople: ['a:001:p001', 'a:002:p001'] },
     { id: 'b', localPeople: ['a:003:p001', 'a:004:p001'] },
