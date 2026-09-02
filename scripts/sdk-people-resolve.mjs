@@ -53,6 +53,9 @@ const SHARD_CHECKPOINT_DIR = path.join(PEOPLE_DIR, 'generated', 'resolution-shar
 const DOSSIER_MANIFEST_NAME = 'manifest.json';
 const DOSSIER_MANIFEST_VERSION = 1;
 const MAX_INLINE_DOSSIER_BYTES = 256 * 1024;
+const TARGET_PART_DOSSIER_BYTES = 220 * 1024;
+const MAX_TARGET_COMPARISONS_PER_PART = 160;
+const ADAPTIVE_TARGET_COMPARISONS_PER_PART = 60;
 const DEFAULT_MAX_RUN_COST_CENTS = 150;
 const DEFAULT_MAX_RUN_TOKENS = 1_250_000;
 const DEFAULT_RUN_POLL_MS = 15_000;
@@ -339,6 +342,225 @@ function projectPersonForWorker(person) {
   };
 }
 
+function rebatchDocument(document, batch) {
+  return {
+    ...document,
+    batch,
+    outputSeed: {
+      ...document.outputSeed,
+      batch,
+      decisions: [],
+    },
+  };
+}
+
+function sliceProjectedDocument(document, blocks) {
+  const visible = new Set(blocks.flatMap((block) => block.localPeople));
+  return {
+    ...document,
+    targetLocalPeople: document.targetLocalPeople.filter((localId) => visible.has(localId)),
+    blocks,
+    people: Object.fromEntries([...visible].sort().map((localId) => [
+      localId,
+      document.people[localId],
+    ])),
+    priorSeparations: document.priorSeparations.filter(([left, right]) =>
+      visible.has(left) && visible.has(right)
+    ),
+  };
+}
+
+function projectTargetGroups(document, targetGroups) {
+  const targetLocalPeople = targetGroups.flatMap((group) => group.localPeople).sort();
+  return projectDossierForWorker({ ...document, targetLocalPeople });
+}
+
+function sliceBlockGroups(block, groups) {
+  return {
+    ...block,
+    localPeople: groups.flat(),
+    currentGroups: groups,
+  };
+}
+
+function targetComparisonCount(document) {
+  const targets = new Set(document.targetLocalPeople);
+  return document.blocks.reduce((total, block) => {
+    const targetGroups = block.currentGroups.filter((group) =>
+      group.some((localId) => targets.has(localId))
+    ).length;
+    return total + targetGroups * (block.currentGroups.length - targetGroups);
+  }, 0);
+}
+
+function splitTargetDocumentByBlocks(document, maxComparisons = MAX_TARGET_COMPARISONS_PER_PART) {
+  const targetLocalIds = new Set(document.targetLocalPeople);
+  const documents = [];
+  for (const block of document.blocks) {
+    const whole = sliceProjectedDocument(document, [block]);
+    if (
+      Buffer.byteLength(JSON.stringify(whole)) <= TARGET_PART_DOSSIER_BYTES &&
+      targetComparisonCount(whole) <= maxComparisons
+    ) {
+      documents.push(whole);
+      continue;
+    }
+    const targetGroups = block.currentGroups.filter((group) =>
+      group.some((localId) => targetLocalIds.has(localId))
+    );
+    const candidateGroups = block.currentGroups.filter((group) =>
+      !group.some((localId) => targetLocalIds.has(localId))
+    ).sort((left, right) => {
+      const leftBytes = Buffer.byteLength(JSON.stringify(left.map((localId) => document.people[localId])));
+      const rightBytes = Buffer.byteLength(JSON.stringify(right.map((localId) => document.people[localId])));
+      return rightBytes - leftBytes || left.join('\u0000').localeCompare(right.join('\u0000'));
+    });
+    const bins = [];
+    for (const group of candidateGroups) {
+      let best = null;
+      for (const bin of bins) {
+        const groups = [...targetGroups, ...bin.groups, group];
+        const candidate = sliceProjectedDocument(document, [sliceBlockGroups(block, groups)]);
+        const bytes = Buffer.byteLength(JSON.stringify(candidate));
+        if (
+          bytes <= TARGET_PART_DOSSIER_BYTES &&
+          targetComparisonCount(candidate) <= maxComparisons &&
+          (!best || bytes < best.bytes)
+        ) {
+          best = { bin, candidate, bytes };
+        }
+      }
+      if (best) {
+        best.bin.groups.push(group);
+        best.bin.document = best.candidate;
+      } else {
+        const groups = [...targetGroups, group];
+        const candidate = sliceProjectedDocument(document, [sliceBlockGroups(block, groups)]);
+        const bytes = Buffer.byteLength(JSON.stringify(candidate));
+        if (bytes > MAX_INLINE_DOSSIER_BYTES) {
+          throw new Error(`${block.id} has an indivisible candidate group above the inline limit`);
+        }
+        bins.push({ groups: [group], document: candidate });
+      }
+    }
+    if (bins.length === 0) {
+      const targetOnly = sliceProjectedDocument(document, [sliceBlockGroups(block, targetGroups)]);
+      if (Buffer.byteLength(JSON.stringify(targetOnly)) > MAX_INLINE_DOSSIER_BYTES) {
+        throw new Error(`${block.id} has target context above the inline limit`);
+      }
+      documents.push(targetOnly);
+    } else {
+      documents.push(...bins.map((bin) => bin.document));
+    }
+  }
+  return documents;
+}
+
+export function buildTargetDossierParts(dossier) {
+  const workerDocument = projectDossierForWorker(dossier.document);
+  if (Buffer.byteLength(JSON.stringify(workerDocument)) <= MAX_INLINE_DOSSIER_BYTES) return [];
+
+  // Pack only assigned target comparisons; background candidates are repeated
+  // where needed so no part has to infer across an omitted name block.
+  const groupsByCanonical = Object.groupBy(
+    dossier.document.targetLocalPeople,
+    (localId) => dossier.document.people[localId].currentCanonicalPersonId,
+  );
+  const targetGroups = Object.entries(groupsByCanonical).map(([canonicalPersonId, localPeople]) => ({
+    canonicalPersonId,
+    localPeople: [...localPeople].sort(),
+  }));
+  const singleGroups = targetGroups.map((group) => ({
+    group,
+    document: projectTargetGroups(dossier.document, [group]),
+  })).sort((left, right) =>
+    Buffer.byteLength(JSON.stringify(right.document)) - Buffer.byteLength(JSON.stringify(left.document)) ||
+    left.group.canonicalPersonId.localeCompare(right.group.canonicalPersonId)
+  );
+
+  const documents = [];
+  const bins = [];
+  for (const item of singleGroups) {
+    const singleBytes = Buffer.byteLength(JSON.stringify(item.document));
+    if (
+      singleBytes > TARGET_PART_DOSSIER_BYTES ||
+      targetComparisonCount(item.document) > MAX_TARGET_COMPARISONS_PER_PART
+    ) {
+      documents.push(...splitTargetDocumentByBlocks(item.document));
+      continue;
+    }
+
+    let best = null;
+    for (const bin of bins) {
+      const groups = [...bin.groups, item.group];
+      const document = projectTargetGroups(dossier.document, groups);
+      const bytes = Buffer.byteLength(JSON.stringify(document));
+      if (
+        bytes <= TARGET_PART_DOSSIER_BYTES &&
+        targetComparisonCount(document) <= MAX_TARGET_COMPARISONS_PER_PART &&
+        (!best || bytes < best.bytes)
+      ) {
+        best = { bin, groups, document, bytes };
+      }
+    }
+    if (best) {
+      best.bin.groups = best.groups;
+      best.bin.document = best.document;
+    } else {
+      bins.push({ groups: [item.group], document: item.document });
+    }
+  }
+  documents.push(...bins.map((bin) => bin.document));
+  documents.sort((left, right) =>
+    left.targetLocalPeople.join('\u0000').localeCompare(right.targetLocalPeople.join('\u0000')) ||
+    left.blocks.map((block) => block.id).join('\u0000')
+      .localeCompare(right.blocks.map((block) => block.id).join('\u0000'))
+  );
+
+  return documents.map((document, index) => {
+    const batch = `${dossier.batch}-part-${String(index + 1).padStart(3, '0')}`;
+    const rebatched = rebatchDocument(document, batch);
+    const bytes = Buffer.byteLength(JSON.stringify(rebatched));
+    if (bytes > MAX_INLINE_DOSSIER_BYTES) {
+      throw new Error(`${batch} exceeds the inline dossier limit after partitioning`);
+    }
+    return {
+      batch,
+      shard: dossier.shard,
+      checkpointGroup: dossier.batch.replace(/-shard-\d+$/u, ''),
+      inline: true,
+      document: rebatched,
+      bytes,
+    };
+  });
+}
+
+function buildAdaptiveDossierParts(dossier) {
+  if (
+    dossier.document.targetLocalPeople.length !== 1 ||
+    targetComparisonCount(dossier.document) <= ADAPTIVE_TARGET_COMPARISONS_PER_PART
+  ) {
+    return [];
+  }
+  const documents = splitTargetDocumentByBlocks(
+    dossier.document,
+    ADAPTIVE_TARGET_COMPARISONS_PER_PART,
+  );
+  if (documents.length < 2) return [];
+  return documents.map((document, index) => {
+    const batch = `${dossier.batch}-sub-${String(index + 1).padStart(3, '0')}`;
+    const rebatched = rebatchDocument(document, batch);
+    return {
+      batch,
+      shard: dossier.shard,
+      checkpointGroup: dossier.checkpointGroup ?? dossier.batch.replace(/-shard-\d+$/u, ''),
+      inline: true,
+      document: rebatched,
+      bytes: Buffer.byteLength(JSON.stringify(rebatched)),
+    };
+  });
+}
+
 export function projectDossierForWorker(document) {
   if (Buffer.byteLength(JSON.stringify(document)) <= MAX_INLINE_DOSSIER_BYTES) return document;
   const targetCanonicalIds = new Set(document.targetLocalPeople.map((localId) =>
@@ -394,7 +616,7 @@ function artifactPath(dossier) {
 }
 
 function shardCheckpointPath(dossier) {
-  const batch = dossier.batch.replace(/-shard-\d+$/u, '');
+  const batch = dossier.checkpointGroup ?? dossier.batch.replace(/-shard-\d+$/u, '');
   return path.join(SHARD_CHECKPOINT_DIR, batch, `${dossier.batch}.json`);
 }
 
@@ -428,12 +650,16 @@ function serializedDossier(dossier) {
 }
 
 function dossierFile(dossier, opts) {
-  if (!opts.dossierDir) return null;
+  if (!opts.dossierDir || dossier.inline) return null;
   return path.join(opts.dossierDir, `${dossier.batch}.json`);
 }
 
 function workerDossierFile(dossier, opts) {
-  if (!opts.dossierDir || Buffer.byteLength(JSON.stringify(dossier.document)) <= MAX_INLINE_DOSSIER_BYTES) {
+  if (
+    !opts.dossierDir ||
+    dossier.inline ||
+    Buffer.byteLength(JSON.stringify(dossier.document)) <= MAX_INLINE_DOSSIER_BYTES
+  ) {
     return null;
   }
   return path.join(opts.dossierDir, `${dossier.batch}.worker.json`);
@@ -917,6 +1143,19 @@ export function enforcePriorSeparations(
   return { document: repaired, repairCount };
 }
 
+function restrictResolutionToTargets(document, dossier) {
+  const targetLocalPeople = dossier.document.targetLocalPeople;
+  if (!Array.isArray(targetLocalPeople)) return { document, removed: 0 };
+  const targets = new Set(targetLocalPeople);
+  const decisions = (document.decisions ?? []).filter((decision) =>
+    decision.localPeople?.some((localId) => targets.has(localId))
+  );
+  return {
+    document: { ...document, decisions },
+    removed: (document.decisions?.length ?? 0) - decisions.length,
+  };
+}
+
 export function validateResolutionDocument(
   document,
   dossier,
@@ -931,6 +1170,7 @@ export function validateResolutionDocument(
   if (!validate(document)) errors.push(...formatSchemaErrors(validate.errors));
   if (document.batch !== dossier.batch) errors.push(`batch must be ${dossier.batch}`);
   const visible = new Set(Object.keys(dossier.document.people));
+  const targets = new Set(dossier.document.targetLocalPeople ?? visible);
   for (const [index, decision] of (document.decisions ?? []).entries()) {
     const label = `decisions[${index}]`;
     if (!decision || typeof decision !== 'object') continue;
@@ -945,6 +1185,9 @@ export function validateResolutionDocument(
     if (decision.localPeople.length < 2) errors.push(`${label} needs at least two local people`);
     for (const localId of decision.localPeople) {
       if (!visible.has(localId)) errors.push(`${label} refers to out-of-scope ${localId}`);
+    }
+    if (!decision.localPeople.some((localId) => targets.has(localId))) {
+      errors.push(`${label} does not involve an assigned target person`);
     }
     if (
       decision.decision === 'merge' &&
@@ -1094,8 +1337,9 @@ async function recoverPublishedShardDocuments(
       let errors = [];
       for (let attempt = 1; attempt <= opts.maxAttempts; attempt += 1) {
         try {
+          const restricted = restrictResolutionToTargets(published, dossier);
           const reconciled = enforcePriorSeparations(
-            published,
+            restricted.document,
             corpus,
             resolutions,
             accepted,
@@ -1107,7 +1351,7 @@ async function recoverPublishedShardDocuments(
             );
           }
           document = validateResolutionDocument(
-            reconciled.document,
+            restrictResolutionToTargets(reconciled.document, dossier).document,
             dossier,
             corpus,
             resolutions,
@@ -1174,6 +1418,7 @@ async function processDossier(dossier, opts, corpus, resolutions, accepted, base
       },
     });
     for (let attempt = 1; attempt <= opts.maxAttempts; attempt += 1) {
+      if (control.stopRequested) break;
       try {
         console.log(`[${dossier.batch}] ${attempt === 1 ? 'resolve' : `retry ${attempt}`} -> ${agent.agentId}`);
         const run = await sendCursorAgentWhenReady(
@@ -1189,14 +1434,15 @@ async function processDossier(dossier, opts, corpus, resolutions, accepted, base
           agent.agentId,
         );
         if (result.status !== 'finished') throw new Error(result.error?.message ?? `run status ${result.status}`);
+        const reconciled = enforcePriorSeparations(
+          restrictResolutionToTargets(await downloadDocument(agent, dossier), dossier).document,
+          corpus,
+          resolutions,
+          accepted,
+          baseline,
+        );
         return validateResolutionDocument(
-          enforcePriorSeparations(
-            await downloadDocument(agent, dossier),
-            corpus,
-            resolutions,
-            accepted,
-            baseline,
-          ).document,
+          restrictResolutionToTargets(reconciled.document, dossier).document,
           dossier,
           corpus,
           resolutions,
@@ -1207,6 +1453,7 @@ async function processDossier(dossier, opts, corpus, resolutions, accepted, base
         errors = error?.errors ?? [error instanceof Error ? error.message : String(error)];
         console.error(`[${dossier.batch}] attempt ${attempt} failed: ${errors[0]}`);
         if (
+          control.stopRequested ||
           error instanceof CursorRunLimitExceededError ||
           (error instanceof CursorAgentError && !error.isRetryable)
         ) break;
@@ -1231,6 +1478,119 @@ async function processDossier(dossier, opts, corpus, resolutions, accepted, base
       console.warn(`[${dossier.batch}] agent cleanup failed after resolution: ${error.message}`);
     }
   }
+}
+
+async function processDossierOrParts(
+  dossier,
+  opts,
+  corpus,
+  resolutions,
+  accepted,
+  baseline,
+  control,
+) {
+  let parts = buildTargetDossierParts(dossier);
+  if (parts.length === 0) parts = buildAdaptiveDossierParts(dossier);
+  if (parts.length === 0) {
+    return processDossier(dossier, opts, corpus, resolutions, accepted, baseline, control);
+  }
+  console.log(
+    `[${dossier.batch}] partitioned ${dossier.document.targetLocalPeople.length} targets into ` +
+    `${parts.length} resumable inline part(s)`,
+  );
+
+  const partDocuments = [];
+  let pending = [];
+  for (const part of parts) {
+    const checkpoint = shardCheckpointPath(part);
+    if (!fs.existsSync(checkpoint)) {
+      pending.push(part);
+      continue;
+    }
+    partDocuments.push(validateResolutionDocument(
+      restrictResolutionToTargets(readShardCheckpoint(part), part).document,
+      part,
+      corpus,
+      resolutions,
+      [...accepted, ...partDocuments],
+      { checkGlobalConsistency: false },
+    ));
+    console.log(`[${part.batch}] resumed validated part checkpoint`);
+  }
+
+  if (!opts.skipCloudRecovery && pending.length > 0) {
+    const recovered = new Set(await recoverPublishedShardDocuments(
+      pending,
+      opts,
+      corpus,
+      resolutions,
+      partDocuments,
+      baseline,
+      control,
+    ));
+    pending = pending.filter((part) => !recovered.has(part));
+  }
+
+  let next = 0;
+  const failures = [];
+  const workers = Array.from({ length: Math.min(opts.concurrency, pending.length) }, async () => {
+    while (next < pending.length && !control.stopRequested) {
+      const part = pending[next++];
+      try {
+        const document = await processDossierOrParts(
+          part,
+          opts,
+          corpus,
+          resolutions,
+          [...accepted, ...partDocuments],
+          baseline,
+          control,
+        );
+        writeShardCheckpoint(part, document);
+        partDocuments.push(document);
+      } catch (error) {
+        failures.push(error);
+      }
+    }
+  });
+  await Promise.all(workers);
+  if (failures.length > 0) {
+    const details = failures.map((error) => error instanceof Error ? error.message : String(error));
+    throw new Error(`${dossier.batch} has ${failures.length} failed part(s): ${details.join('; ')}`);
+  }
+
+  const byBatch = new Map(partDocuments.map((document) => [document.batch, document]));
+  const finalized = [];
+  for (const part of parts) {
+    const reconciled = enforcePriorSeparations(
+      byBatch.get(part.batch),
+      corpus,
+      resolutions,
+      [...accepted, ...finalized],
+      baseline,
+    );
+    finalized.push(validateResolutionDocument(
+      restrictResolutionToTargets(reconciled.document, part).document,
+      part,
+      corpus,
+      resolutions,
+      [...accepted, ...finalized],
+      { checkGlobalConsistency: false },
+    ));
+  }
+  const combined = enforcePriorSeparations({
+    schemaVersion: 1,
+    batch: dossier.batch,
+    decisions: finalized.flatMap((document) => document.decisions),
+  }, corpus, resolutions, accepted, baseline).document;
+  return validateResolutionDocument(
+    combined,
+    dossier,
+    corpus,
+    resolutions,
+    accepted,
+    { checkGlobalConsistency: false },
+  );
 }
 
 function selfTest() {
@@ -1438,6 +1798,101 @@ function selfTest() {
   ) {
     throw new Error('Oversized resolver dossier was not projected to canonical representatives');
   }
+  const partitionPeople = {};
+  const partitionBlocks = [];
+  const partitionTargets = [];
+  for (let targetIndex = 0; targetIndex < 5; targetIndex += 1) {
+    const targetId = `p:001:t${targetIndex}`;
+    partitionTargets.push(targetId);
+    const localPeople = [targetId];
+    partitionPeople[targetId] = {
+      localId: targetId,
+      currentCanonicalPersonId: `per_target_${targetIndex}`,
+      targetOfThisPass: true,
+      preferredName: { en: `Target ${targetIndex}` },
+      descriptor: 'x'.repeat(4000),
+      nameKeys: [],
+      familyRelationships: [],
+    };
+    for (let candidateIndex = 0; candidateIndex < 20; candidateIndex += 1) {
+      const localId = `p:001:t${targetIndex}c${candidateIndex}`;
+      localPeople.push(localId);
+      partitionPeople[localId] = {
+        localId,
+        currentCanonicalPersonId: `per_candidate_${targetIndex}_${candidateIndex}`,
+        targetOfThisPass: false,
+        preferredName: { en: `Candidate ${targetIndex}-${candidateIndex}` },
+        descriptor: 'x'.repeat(4000),
+        nameKeys: [],
+        familyRelationships: [],
+      };
+    }
+    partitionBlocks.push({
+      id: `partition-block-${targetIndex}`,
+      component: 1,
+      localPeople,
+      currentGroups: localPeople.map((localId) => [localId]),
+      sharedNames: [{ key: 'en:fixture', forms: [] }],
+    });
+  }
+  const partitionDossier = {
+    batch: 'partition-shard-001',
+    shard: 1,
+    document: {
+      schemaVersion: 1,
+      batch: 'partition-shard-001',
+      targetLocalPeople: partitionTargets,
+      blocks: partitionBlocks,
+      people: partitionPeople,
+      priorSeparations: [],
+      outputSeed: { schemaVersion: 1, batch: 'partition-shard-001', decisions: [] },
+    },
+  };
+  const partitioned = buildTargetDossierParts(partitionDossier);
+  const coveredTargets = new Set(partitioned.flatMap((part) => part.document.targetLocalPeople));
+  if (
+    partitioned.length < 2 ||
+    coveredTargets.size !== partitionTargets.length ||
+    partitioned.some((part) => part.bytes > MAX_INLINE_DOSSIER_BYTES)
+  ) {
+    throw new Error('Oversized resolver targets were not partitioned into complete inline parts');
+  }
+  const adaptiveTarget = partitionTargets[0];
+  const adaptivePeople = partitionPeople;
+  const adaptiveLocalPeople = [adaptiveTarget, ...Object.keys(adaptivePeople)
+    .filter((localId) => localId !== adaptiveTarget)];
+  const adaptiveDossier = {
+    batch: 'adaptive-shard-001-part-001',
+    shard: 1,
+    checkpointGroup: 'adaptive',
+    document: {
+      ...partitionDossier.document,
+      batch: 'adaptive-shard-001-part-001',
+      targetLocalPeople: [adaptiveTarget],
+      blocks: [{
+        id: 'adaptive-block',
+        component: 1,
+        localPeople: adaptiveLocalPeople,
+        currentGroups: adaptiveLocalPeople.map((localId) => [localId]),
+        sharedNames: [{ key: 'en:fixture', forms: [] }],
+      }],
+      people: adaptivePeople,
+      outputSeed: {
+        schemaVersion: 1,
+        batch: 'adaptive-shard-001-part-001',
+        decisions: [],
+      },
+    },
+  };
+  const adaptiveParts = buildAdaptiveDossierParts(adaptiveDossier);
+  if (
+    adaptiveParts.length < 2 ||
+    adaptiveParts.some((part) =>
+      targetComparisonCount(part.document) > ADAPTIVE_TARGET_COMPARISONS_PER_PART
+    )
+  ) {
+    throw new Error('Failed resolver assignment was not adaptively subdivided');
+  }
   try {
     validateResolutionDocument({
       schemaVersion: 1,
@@ -1518,8 +1973,9 @@ async function main() {
         pending.push(dossier);
         continue;
       }
+      const restricted = restrictResolutionToTargets(readShardCheckpoint(dossier), dossier);
       const document = validateResolutionDocument(
-        readShardCheckpoint(dossier),
+        restricted.document,
         dossier,
         corpus,
         resolutions,
@@ -1527,6 +1983,9 @@ async function main() {
         { checkGlobalConsistency: false },
       );
       accepted.push(document);
+      if (restricted.removed > 0) {
+        console.log(`[${dossier.batch}] ignored ${restricted.removed} off-target decision(s)`);
+      }
       console.log(`[${dossier.batch}] resumed validated shard checkpoint`);
     }
     const explicitPending = pending.filter((dossier) => opts.recoverAgents.has(dossier.shard));
@@ -1583,7 +2042,7 @@ async function main() {
       while (next < pending.length && !control.stopRequested) {
         const dossier = pending[next++];
         try {
-          const document = await processDossier(
+          const document = await processDossierOrParts(
             dossier,
             opts,
             corpus,
