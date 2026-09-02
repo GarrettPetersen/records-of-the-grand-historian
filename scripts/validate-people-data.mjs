@@ -19,6 +19,8 @@ import {
 import { createPeopleSchemaValidator, formatSchemaErrors } from './lib/people-schema.mjs';
 import {
   editorialDecisionPath,
+  editorialReviews,
+  hasEditorialReviewForProposals,
   validateAppliedEditorialDecisions,
   validateEditorialDecisions,
   validateEditorialDecisionDocument,
@@ -172,7 +174,10 @@ async function main() {
       const statuses = new Set(loaded.extraction.translationRepairs.map((repair) => repair.status));
       if (statuses.has('proposed')) {
         try {
-          validateEditorialDecisions(document, loaded.extraction, loaded.packet);
+          validateAppliedEditorialDecisions(document, loaded.extraction);
+          if (hasEditorialReviewForProposals(document, loaded.extraction)) {
+            validateEditorialDecisions(document, loaded.extraction, loaded.packet);
+          }
         } catch (error) {
           errors.push(...(error.errors ?? [error.message]).map((item) => `${path.relative(REPO_ROOT, file)}: ${item}`));
         }
@@ -184,10 +189,12 @@ async function main() {
         }
       }
     }
-    editorialDecisions += document.decisions.length;
-    claimRetractions += document.claimRetractions.length;
-    claimRevisions += document.claimRevisions.length;
-    claimAdditions += document.claimAdditions?.length ?? 0;
+    for (const review of editorialReviews(document)) {
+      editorialDecisions += review.decisions.length;
+      claimRetractions += review.claimRetractions.length;
+      claimRevisions += review.claimRevisions.length;
+      claimAdditions += review.claimAdditions?.length ?? 0;
+    }
   }
   if (errors.length > 0) {
     throw new Error(`Person data validation failed:\n${errors.map((item) => `- ${item}`).join('\n')}`);

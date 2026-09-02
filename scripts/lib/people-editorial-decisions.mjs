@@ -8,7 +8,8 @@ import {
   formatSchemaErrors,
 } from './people-schema.mjs';
 
-const SCHEMA_ID = 'https://24histories.com/schema/people/editorial-decision-v3.json';
+const SCHEMA_V3_ID = 'https://24histories.com/schema/people/editorial-decision-v3.json';
+const SCHEMA_V4_ID = 'https://24histories.com/schema/people/editorial-decision-v4.json';
 const HANZI_RE = /\p{Script=Han}/u;
 
 export class EditorialDecisionValidationError extends Error {
@@ -21,6 +22,33 @@ export class EditorialDecisionValidationError extends Error {
 
 export function editorialDecisionPath(book, chapter) {
   return path.join(PEOPLE_DIR, 'editorial-decisions', book, `${chapter}.json`);
+}
+
+function reviewDocument(book, chapter, review) {
+  return {
+    schemaVersion: 3,
+    book,
+    chapter,
+    ...structuredClone(review),
+  };
+}
+
+function reviewRecord(document) {
+  const {
+    schemaVersion: _schemaVersion,
+    book: _book,
+    chapter: _chapter,
+    ...review
+  } = document;
+  return structuredClone(review);
+}
+
+export function editorialReviews(document) {
+  if (document?.schemaVersion === 3) return [document];
+  if (document?.schemaVersion === 4 && Array.isArray(document.reviews)) {
+    return document.reviews.map((review) => reviewDocument(document.book, document.chapter, review));
+  }
+  return [];
 }
 
 function proposalContract(repair) {
@@ -36,21 +64,54 @@ function canonicalize(value) {
   );
 }
 
-function claimFactContract(claim) {
-  const { id: _id, ...contract } = claim;
-  return JSON.stringify(canonicalize(contract));
-}
-
 function claimCoreContract(claim) {
   const { id: _id, evidence: _evidence, ...contract } = claim;
   return JSON.stringify(canonicalize(contract));
 }
 
-function containsReviewedClaim(currentClaims, reviewedClaim) {
+function evidenceIncludes(current, reviewed) {
+  return reviewed.every((item) => current.includes(item));
+}
+
+function reviewedNameValue(language, value) {
+  const text = String(value ?? '').normalize('NFKC').trim();
+  if (language === 'zh') return text;
+  return text
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/gu, '')
+    .toLocaleLowerCase('en')
+    .replace(/[^a-z0-9]+/gu, ' ')
+    .trim()
+    .replace(/\s+/gu, ' ');
+}
+
+function containsReviewedClaim(extraction, reviewedClaim) {
   const reviewedCore = claimCoreContract(reviewedClaim);
-  return currentClaims.some((current) =>
+  if (extraction.claims.some((current) =>
     claimCoreContract(current) === reviewedCore &&
-    reviewedClaim.evidence.every((item) => current.evidence.includes(item))
+    evidenceIncludes(current.evidence, reviewedClaim.evidence)
+  )) return true;
+  if (reviewedClaim.predicate !== 'name') return false;
+
+  const currentNames = extraction.claims.filter((claim) =>
+    claim.subject === reviewedClaim.subject &&
+    claim.predicate === 'name' &&
+    evidenceIncludes(claim.evidence, reviewedClaim.evidence)
+  );
+  const reviewedValues = ['en', 'zh', 'pinyin']
+    .map((language) => [language, reviewedClaim.value?.[language]])
+    .filter(([, value]) => typeof value === 'string' && value.length > 0);
+  if (currentNames.length === 0 || reviewedValues.length === 0) return false;
+  const person = extraction.people.find((item) => item.localId === reviewedClaim.subject);
+  const valueIsPresent = ([language, value]) =>
+    reviewedNameValue(language, person?.preferredNameSuggestion?.[language]) ===
+      reviewedNameValue(language, value) ||
+    currentNames.some((claim) =>
+      reviewedNameValue(language, claim.value?.[language]) === reviewedNameValue(language, value)
+    );
+  return reviewedValues.every(valueIsPresent) && currentNames.some((claim) =>
+    claim.certainty === reviewedClaim.certainty &&
+    reviewedValues.some(([language, value]) => claim.value?.[language] === value)
   );
 }
 
@@ -100,12 +161,14 @@ export function editorialDecisionSeed(extraction) {
   };
 }
 
-function editorialDocumentErrors(document) {
+function singleEditorialDocumentErrors(document, { validateSchema = true } = {}) {
   const errors = [];
-  const ajv = createPeopleSchemaValidator();
-  const validate = ajv.getSchema(SCHEMA_ID);
-  if (!validate(document)) {
-    errors.push(...formatSchemaErrors(validate.errors).map((error) => `schema: ${error}`));
+  if (validateSchema) {
+    const ajv = createPeopleSchemaValidator();
+    const validate = ajv.getSchema(SCHEMA_V3_ID);
+    if (!validate(document)) {
+      errors.push(...formatSchemaErrors(validate.errors).map((error) => `schema: ${error}`));
+    }
   }
 
   const embeddedProposalFingerprint = proposalSetFingerprint(document.proposals ?? []);
@@ -234,63 +297,142 @@ function editorialDocumentErrors(document) {
   };
 }
 
+function editorialDocumentErrors(document) {
+  if (document?.schemaVersion === 3) return singleEditorialDocumentErrors(document);
+
+  const errors = [];
+  const ajv = createPeopleSchemaValidator();
+  const validate = ajv.getSchema(SCHEMA_V4_ID);
+  if (!validate?.(document)) {
+    errors.push(...formatSchemaErrors(validate?.errors).map((error) => `schema: ${error}`));
+  }
+  const proposalIds = new Set();
+  const reviewFingerprints = new Set();
+  for (const [index, review] of editorialReviews(document).entries()) {
+    const result = singleEditorialDocumentErrors(review, { validateSchema: false });
+    errors.push(...result.errors.map((error) => `review ${index + 1}: ${error}`));
+    const fingerprint = review.input?.proposalsFingerprint;
+    if (reviewFingerprints.has(fingerprint)) {
+      errors.push(`review ${index + 1}: duplicate proposal-set fingerprint ${fingerprint}`);
+    }
+    reviewFingerprints.add(fingerprint);
+    for (const proposal of review.proposals ?? []) {
+      if (proposalIds.has(proposal.id)) {
+        errors.push(`review ${index + 1}: proposal ID ${proposal.id} was already reviewed`);
+      }
+      proposalIds.add(proposal.id);
+    }
+  }
+  return { errors };
+}
+
 export function validateEditorialDecisionDocument(document) {
   const result = editorialDocumentErrors(document);
   if (result.errors.length > 0) throw new EditorialDecisionValidationError(result.errors);
   return result;
 }
 
+function currentReview(document, extraction) {
+  const proposals = proposalContracts(extraction);
+  const fingerprint = proposalSetFingerprint(proposals);
+  return editorialReviews(document).find((review) =>
+    review.input?.proposalsFingerprint === fingerprint &&
+    JSON.stringify(review.proposals) === JSON.stringify(proposals)
+  ) ?? null;
+}
+
+export function hasEditorialReviewForProposals(document, extraction) {
+  return currentReview(document, extraction) !== null;
+}
+
+export function mergeEditorialDecisionReview(existing, incoming) {
+  validateEditorialDecisionDocument(existing);
+  validateEditorialDecisionDocument(incoming);
+  if (existing.book !== incoming.book || existing.chapter !== incoming.chapter) {
+    throw new EditorialDecisionValidationError([
+      `cannot merge ${incoming.book}/${incoming.chapter} review into ${existing.book}/${existing.chapter}`,
+    ]);
+  }
+  const incomingReview = editorialReviews(incoming)[0];
+  const reviews = editorialReviews(existing)
+    .filter((review) => review.input.proposalsFingerprint !== incomingReview.input.proposalsFingerprint)
+    .map(reviewRecord);
+  reviews.push(reviewRecord(incomingReview));
+  const merged = {
+    schemaVersion: 4,
+    book: existing.book,
+    chapter: existing.chapter,
+    reviews,
+  };
+  validateEditorialDecisionDocument(merged);
+  return merged;
+}
+
 export function validateAppliedEditorialDecisions(document, extraction) {
   const documentResult = editorialDocumentErrors(document);
   const errors = [...documentResult.errors];
-  if (
-    document.reviewer?.agentId &&
-    extraction.run?.agentId &&
-    document.reviewer.agentId === extraction.run.agentId
-  ) {
-    errors.push('the extraction agent cannot review its own editorial proposals');
+  const pendingReview = currentReview(document, extraction);
+  const pendingFingerprint = pendingReview?.input.proposalsFingerprint ?? null;
+  const repairsByTarget = new Map();
+  for (const repair of extraction.translationRepairs) {
+    const target = `${repair.unit.id}:${repair.field}`;
+    const repairs = repairsByTarget.get(target) ?? [];
+    repairs.push(repair);
+    repairsByTarget.set(target, repairs);
   }
-
-  const appliedByTarget = new Map(extraction.translationRepairs.map((repair) => [
-    `${repair.unit.id}:${repair.field}`,
-    repair,
-  ]));
-  for (const decision of document.decisions ?? []) {
-    const proposal = documentResult.proposalById.get(decision.repairId);
-    if (!proposal) continue;
-    const target = `${proposal.unit.id}:${proposal.field}`;
-    const applied = appliedByTarget.get(target);
-    if (decision.decision === 'reject') {
-      if (applied?.before === proposal.before) {
-        errors.push(`rejected ${decision.repairId}, but it is applied`);
+  for (const [index, review] of editorialReviews(document).entries()) {
+    if (pendingFingerprint && review.input.proposalsFingerprint === pendingFingerprint) continue;
+    const prefix = document.schemaVersion === 4 ? `review ${index + 1}: ` : '';
+    const reviewResult = singleEditorialDocumentErrors(review, { validateSchema: false });
+    if (
+      review.reviewer?.agentId &&
+      extraction.run?.agentId &&
+      review.reviewer.agentId === extraction.run.agentId
+    ) {
+      errors.push(`${prefix}the extraction agent cannot review its own editorial proposals`);
+    }
+    for (const decision of review.decisions ?? []) {
+      const proposal = reviewResult.proposalById.get(decision.repairId);
+      if (!proposal) continue;
+      const target = `${proposal.unit.id}:${proposal.field}`;
+      if (decision.decision === 'reject') {
+        if ((repairsByTarget.get(target) ?? []).some((repair) =>
+          repair.status === 'applied' && repair.before === proposal.before
+        )) {
+          errors.push(`${prefix}rejected ${decision.repairId}, but it is applied`);
+        }
+        continue;
       }
-      continue;
+      const expectedAfter = decision.decision === 'revise' ? decision.after : proposal.after;
+      const applied = (repairsByTarget.get(target) ?? []).find((repair) =>
+        repair.status === 'applied' &&
+        repair.before === proposal.before &&
+        repair.after === expectedAfter
+      );
+      if (!applied) {
+        errors.push(`${prefix}does not match applied decision ${decision.repairId}`);
+      } else if (applied.reason !== decision.reason) {
+        errors.push(`${prefix}lost review reasoning for ${decision.repairId}`);
+      }
     }
-    const expectedAfter = decision.decision === 'revise' ? decision.after : proposal.after;
-    if (!applied || applied.before !== proposal.before || applied.after !== expectedAfter) {
-      errors.push(`does not match applied decision ${decision.repairId}`);
-    } else if (applied.reason !== decision.reason) {
-      errors.push(`lost review reasoning for ${decision.repairId}`);
+    for (const retraction of review.claimRetractions ?? []) {
+      if (exactReviewedClaimMatches(extraction, retraction.claim).length > 0) {
+        errors.push(`${prefix}retracted ${retraction.claim.id}, but its fact remains applied`);
+      }
     }
-  }
-
-  const currentClaimFacts = new Set(extraction.claims.map(claimFactContract));
-  for (const retraction of document.claimRetractions ?? []) {
-    if (currentClaimFacts.has(claimFactContract(retraction.claim))) {
-      errors.push(`retracted ${retraction.claim.id}, but its fact remains applied`);
+    for (const revision of review.claimRevisions ?? []) {
+      const replacementPresent = containsReviewedClaim(extraction, revision.after);
+      if (exactReviewedClaimMatches(extraction, revision.before).length > 0) {
+        errors.push(`${prefix}revised ${revision.before.id}, but its old fact remains applied`);
+      }
+      if (!replacementPresent) {
+        errors.push(`${prefix}revised ${revision.before.id}, but its replacement fact is missing`);
+      }
     }
-  }
-  for (const revision of document.claimRevisions ?? []) {
-    if (containsReviewedClaim(extraction.claims, revision.before)) {
-      errors.push(`revised ${revision.before.id}, but its old fact remains applied`);
-    }
-    if (!containsReviewedClaim(extraction.claims, revision.after)) {
-      errors.push(`revised ${revision.before.id}, but its replacement fact is missing`);
-    }
-  }
-  for (const addition of document.claimAdditions ?? []) {
-    if (!containsReviewedClaim(extraction.claims, addition.claim)) {
-      errors.push(`added ${addition.claim.id}, but its fact is missing`);
+    for (const addition of review.claimAdditions ?? []) {
+      if (!containsReviewedClaim(extraction, addition.claim)) {
+        errors.push(`${prefix}added ${addition.claim.id}, but its fact is missing`);
+      }
     }
   }
 
@@ -298,31 +440,105 @@ export function validateAppliedEditorialDecisions(document, extraction) {
   return documentResult;
 }
 
-export function validateEditorialDecisions(document, extraction, packet) {
-  const documentResult = editorialDocumentErrors(document);
-  const errors = [...documentResult.errors];
+function exactReviewedClaimMatches(extraction, reviewedClaim) {
+  const reviewedCore = claimCoreContract(reviewedClaim);
+  return extraction.claims.filter((claim) =>
+    claimCoreContract(claim) === reviewedCore &&
+    evidenceIncludes(claim.evidence, reviewedClaim.evidence)
+  );
+}
 
-  if (document.book !== extraction.book || document.chapter !== extraction.chapter) {
+function nextPreservedClaimId(extraction) {
+  const namespace = `${extraction.book}:${extraction.chapter}:c`;
+  const used = new Set(extraction.claims.map((claim) => claim.id));
+  let ordinal = Math.max(0, ...[...used]
+    .filter((id) => id.startsWith(namespace))
+    .map((id) => Number(id.slice(namespace.length)))
+    .filter(Number.isInteger)) + 1;
+  return () => {
+    let id;
+    do id = `${namespace}${String(ordinal++).padStart(4, '0')}`;
+    while (used.has(id));
+    used.add(id);
+    return id;
+  };
+}
+
+export function preserveAppliedEditorialClaims(document, extraction) {
+  const result = editorialDocumentErrors(document);
+  if (result.errors.length > 0) throw new EditorialDecisionValidationError(result.errors);
+  const nextClaimId = nextPreservedClaimId(extraction);
+  let removed = 0;
+  let restored = 0;
+
+  const removeExact = (reviewedClaim) => {
+    const matches = new Set(exactReviewedClaimMatches(extraction, reviewedClaim));
+    if (matches.size === 0) return;
+    extraction.claims = extraction.claims.filter((claim) => !matches.has(claim));
+    removed += matches.size;
+  };
+  const restore = (reviewedClaim) => {
+    if (containsReviewedClaim(extraction, reviewedClaim)) return;
+    if (!extraction.people.some((person) => person.localId === reviewedClaim.subject)) {
+      throw new EditorialDecisionValidationError([
+        `cannot preserve reviewed claim ${reviewedClaim.id}: subject ${reviewedClaim.subject} is missing`,
+      ]);
+    }
+    const claim = { ...structuredClone(reviewedClaim), id: nextClaimId() };
+    extraction.claims.push(claim);
+    restored += 1;
+    if (claim.predicate !== 'name') return;
+    const person = extraction.people.find((item) => item.localId === claim.subject);
+    for (const field of ['en', 'zh', 'pinyin']) {
+      if (typeof claim.value?.[field] === 'string' && claim.value[field].length > 0) {
+        person.preferredNameSuggestion[field] = claim.value[field];
+      }
+    }
+  };
+
+  for (const review of editorialReviews(document)) {
+    for (const retraction of review.claimRetractions ?? []) removeExact(retraction.claim);
+    for (const revision of review.claimRevisions ?? []) {
+      removeExact(revision.before);
+      restore(revision.after);
+    }
+    for (const addition of review.claimAdditions ?? []) restore(addition.claim);
+  }
+  return { removed, restored };
+}
+
+export function validateEditorialDecisions(document, extraction, packet) {
+  const allResults = editorialDocumentErrors(document);
+  const errors = [...allResults.errors];
+  const review = currentReview(document, extraction);
+  if (!review) {
+    errors.push('no review batch matches the current proposed repairs');
+    throw new EditorialDecisionValidationError(errors);
+  }
+  const documentResult = singleEditorialDocumentErrors(review, { validateSchema: false });
+  errors.push(...documentResult.errors);
+
+  if (review.book !== extraction.book || review.chapter !== extraction.chapter) {
     errors.push(
-      `decision scope ${document.book}/${document.chapter} does not match extraction ` +
+      `decision scope ${review.book}/${review.chapter} does not match extraction ` +
       `${extraction.book}/${extraction.chapter}`,
     );
   }
-  if (document.input?.chapterFingerprint !== packet.input.chapterFingerprint) {
+  if (review.input?.chapterFingerprint !== packet.input.chapterFingerprint) {
     errors.push('chapter fingerprint does not match the current chapter');
   }
   const expectedProposals = proposalContracts(extraction);
   const expectedProposalFingerprint = proposalSetFingerprint(expectedProposals);
   if (
-    document.input?.proposalsFingerprint !== expectedProposalFingerprint ||
-    JSON.stringify(document.proposals) !== JSON.stringify(expectedProposals)
+    review.input?.proposalsFingerprint !== expectedProposalFingerprint ||
+    JSON.stringify(review.proposals) !== JSON.stringify(expectedProposals)
   ) {
     errors.push('proposal fingerprint does not match the current proposed repairs');
   }
   if (
-    document.reviewer?.agentId &&
+    review.reviewer?.agentId &&
     extraction.run?.agentId &&
-    document.reviewer.agentId === extraction.run.agentId
+    review.reviewer.agentId === extraction.run.agentId
   ) {
     errors.push('the extraction agent cannot review its own editorial proposals');
   }
@@ -342,7 +558,7 @@ export function validateEditorialDecisions(document, extraction, packet) {
 
   const claimById = new Map(extraction.claims.map((claim) => [claim.id, claim]));
   const retractedClaimIds = new Set();
-  for (const retraction of document.claimRetractions ?? []) {
+  for (const retraction of review.claimRetractions ?? []) {
     const current = claimById.get(retraction.claim.id);
     if (!current) {
       errors.push(`claim retraction refers to missing claim ${retraction.claim.id}`);
@@ -362,7 +578,7 @@ export function validateEditorialDecisions(document, extraction, packet) {
   }
 
   const revisedClaims = new Map();
-  for (const revision of document.claimRevisions ?? []) {
+  for (const revision of review.claimRevisions ?? []) {
     const current = claimById.get(revision.before.id);
     if (!current) {
       errors.push(`claim revision refers to missing claim ${revision.before.id}`);
@@ -383,7 +599,7 @@ export function validateEditorialDecisions(document, extraction, packet) {
 
   const people = new Set(extraction.people.map((person) => person.localId));
   const addedClaims = [];
-  for (const addition of document.claimAdditions ?? []) {
+  for (const addition of review.claimAdditions ?? []) {
     const claim = addition.claim;
     if (claimById.has(claim.id)) {
       errors.push(`claim addition reuses existing claim ID ${claim.id}`);

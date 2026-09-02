@@ -18,6 +18,7 @@ import {
 } from './lib/people-content.mjs';
 import {
   editorialDecisionPath,
+  mergeEditorialDecisionReview,
   validateEditorialDecisions,
 } from './lib/people-editorial-decisions.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
@@ -296,7 +297,11 @@ function acceptDecision(document, target, loaded, opts, state, agent, result) {
     completedAt: new Date().toISOString(),
   };
   const reviewed = validateEditorialDecisions(document, loaded.extraction, loaded.packet);
-  writeJsonAtomic(editorialDecisionPath(target.book, target.chapter), document);
+  const file = editorialDecisionPath(target.book, target.chapter);
+  const stored = validCurrentDecision(target, loaded)
+    ? mergeEditorialDecisionReview(readJson(file), document)
+    : document;
+  writeJsonAtomic(file, stored);
   updateState(state, target, {
     status: 'accepted',
     runId: result.id,
@@ -310,6 +315,40 @@ function acceptDecision(document, target, loaded, opts, state, agent, result) {
     `${reviewed.reviewedRepairs.length} repair(s) advance to application`,
   );
   return { status: 'accepted' };
+}
+
+async function acceptDecisionPublishedAfterError(error, agent, target, loaded, opts, state) {
+  try {
+    let runId = error.runId ?? null;
+    if (!runId) {
+      const runs = await Agent.listRuns(agent.agentId, {
+        runtime: 'cloud',
+        apiKey: opts.apiKey,
+        limit: 20,
+      });
+      runId = runs.items.find((run) => run.status !== 'running')?.id ?? null;
+    }
+    if (!runId) return null;
+    const accepted = acceptDecision(
+      await downloadDecision(agent, target),
+      target,
+      loaded,
+      opts,
+      state,
+      agent,
+      { id: runId },
+    );
+    console.warn(
+      `[${target.book}/${target.chapter}] accepted a complete artifact published before the run error`,
+    );
+    return accepted;
+  } catch (artifactError) {
+    console.warn(
+      `[${target.book}/${target.chapter}] published artifact is not yet complete: ` +
+      `${errorList(artifactError)[0]}`,
+    );
+    return null;
+  }
 }
 
 function resumableReview(prior) {
@@ -353,6 +392,16 @@ async function processTarget(target, opts, state, matcher) {
       });
       let latest = runs.items.find((run) => run.status === 'running') ?? runs.items[0];
       const recoveryErrors = [...(prior.lastErrors ?? [])];
+      const publishedRun = runs.items.find((run) => run.status !== 'running');
+      if (publishedRun) {
+        try {
+          return acceptDecision(
+            await downloadDecision(agent, target), target, loaded, opts, state, agent, publishedRun,
+          );
+        } catch (error) {
+          recoveryErrors.push(...errorList(error));
+        }
+      }
       if (latest?.status === 'running') {
         try {
           latest = await waitForCursorRun(latest, {
@@ -383,6 +432,10 @@ async function processTarget(target, opts, state, matcher) {
         );
       } catch (error) {
         const errors = errorList(error);
+        const accepted = await acceptDecisionPublishedAfterError(
+          error, agent, target, loaded, opts, state,
+        );
+        if (accepted) return accepted;
         if (error instanceof CursorRunLimitExceededError) {
           updateState(state, target, {
             status: 'interrupted',
@@ -432,6 +485,10 @@ async function processTarget(target, opts, state, matcher) {
         errors = errorList(error);
         updateState(state, target, { status: 'failed/retryable', lastErrors: errors });
         console.error(`[${key}] review attempt ${attempt} failed: ${errors[0]}`);
+        const accepted = await acceptDecisionPublishedAfterError(
+          error, agent, target, loaded, opts, state,
+        );
+        if (accepted) return accepted;
         if (error instanceof CursorRunLimitExceededError) {
           updateState(state, target, {
             status: 'interrupted',

@@ -16,6 +16,12 @@ current canonical groups, and prior keep-separate constraints. A local person
 ID is evidence from one chapter; merging IDs says those records identify one
 person. A false merge is much worse than a temporary duplicate.
 
+`targetLocalPeople` is the complete assignment. Every decision must include at
+least one of those target IDs. Compare targets with the other visible records,
+but do not resolve, compare, or emit decisions solely among non-target
+background candidates. Those candidates are context for the assigned targets,
+not additional work.
+
 If the dossier has `projection.mode` set to
 `canonical-group-representatives`, every visible local ID stands for its
 complete already-merged canonical group in the host's full dossier. Compare
