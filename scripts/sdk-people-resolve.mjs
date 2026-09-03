@@ -1192,6 +1192,40 @@ function restrictResolutionToTargets(document, dossier) {
   };
 }
 
+const CONFIDENCE_RANK = new Map([
+  ['low', 0],
+  ['medium', 1],
+  ['high', 2],
+]);
+
+export function dedupeResolutionDecisions(decisions) {
+  const byKey = new Map();
+  for (const source of decisions) {
+    const decision = structuredClone(source);
+    decision.localPeople = [...decision.localPeople].sort();
+    const key = JSON.stringify([decision.decision, decision.localPeople]);
+    const existing = byKey.get(key);
+    if (!existing) {
+      byKey.set(key, decision);
+      continue;
+    }
+    if (
+      existing.canonicalPersonId &&
+      decision.canonicalPersonId &&
+      existing.canonicalPersonId !== decision.canonicalPersonId
+    ) {
+      throw new Error(`Duplicate resolution decisions pin conflicting canonical IDs for ${decision.localPeople.join(', ')}`);
+    }
+    existing.canonicalPersonId ??= decision.canonicalPersonId;
+    existing.basis = [...new Set([...(existing.basis ?? []), ...(decision.basis ?? [])])].sort();
+    existing.notes = [...new Set([...(existing.notes ?? []), ...(decision.notes ?? [])])];
+    if ((CONFIDENCE_RANK.get(decision.confidence) ?? -1) > (CONFIDENCE_RANK.get(existing.confidence) ?? -1)) {
+      existing.confidence = decision.confidence;
+    }
+  }
+  return [...byKey.values()];
+}
+
 export function validateResolutionDocument(
   document,
   dossier,
@@ -1672,6 +1706,29 @@ async function selfTest() {
   if (peak !== 2) throw new Error(`Global resolver concurrency peaked at ${peak}, expected 2`);
   releaseWave();
   await Promise.all(limitedJobs);
+
+  const deduped = dedupeResolutionDecisions([{
+    decision: 'merge',
+    localPeople: ['a:002:p001', 'a:001:p001'],
+    basis: ['same-name'],
+    confidence: 'medium',
+    notes: ['first'],
+  }, {
+    decision: 'merge',
+    localPeople: ['a:001:p001', 'a:002:p001'],
+    basis: ['compatible-dates'],
+    confidence: 'high',
+    notes: ['second'],
+  }]);
+  if (
+    deduped.length !== 1 ||
+    deduped[0].localPeople.join(',') !== 'a:001:p001,a:002:p001' ||
+    deduped[0].confidence !== 'high' ||
+    deduped[0].basis.join(',') !== 'compatible-dates,same-name' ||
+    deduped[0].notes.join(',') !== 'first,second'
+  ) {
+    throw new Error('Resolver did not combine duplicate decisions deterministically');
+  }
 
   const shortAgentName = resolverAgentName('fixture-shard-001');
   if (shortAgentName !== 'People resolution fixture-shard-001') {
@@ -2186,8 +2243,10 @@ async function main() {
     const aggregate = {
       schemaVersion: 1,
       batch: opts.batch,
-      decisions: accepted.sort((left, right) => left.batch.localeCompare(right.batch))
-        .flatMap((document) => document.decisions),
+      decisions: dedupeResolutionDecisions(
+        accepted.sort((left, right) => left.batch.localeCompare(right.batch))
+          .flatMap((document) => document.decisions),
+      ),
     };
     validateResolutionDocument(aggregate, {
       batch: opts.batch,
