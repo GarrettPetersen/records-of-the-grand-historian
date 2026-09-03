@@ -1283,6 +1283,33 @@ async function waitForTrackedRun(run, opts, control, label, agentId) {
   }
 }
 
+async function latestResolverAgents(opts, control) {
+  if (control.resolverAgentsPromise) return control.resolverAgentsPromise;
+  control.resolverAgentsPromise = (async () => {
+    const latestByName = new Map();
+    let cursor;
+    do {
+      if (control.stopRequested) break;
+      const page = await Agent.list({
+        runtime: 'cloud',
+        apiKey: opts.apiKey,
+        limit: 100,
+        cursor,
+      });
+      for (const candidate of page.items) {
+        if (!candidate.name?.startsWith('People resolution ')) continue;
+        const current = latestByName.get(candidate.name);
+        if (!current || (candidate.createdAt ?? 0) > (current.createdAt ?? 0)) {
+          latestByName.set(candidate.name, candidate);
+        }
+      }
+      cursor = page.nextCursor;
+    } while (cursor);
+    return latestByName;
+  })();
+  return control.resolverAgentsPromise;
+}
+
 async function recoverPublishedShardDocuments(
   dossiers,
   opts,
@@ -1302,25 +1329,11 @@ async function recoverPublishedShardDocuments(
       { agentId: explicitAgents.get(dossier.shard) },
     ]));
   } else {
-    latestByName = new Map();
-    let cursor;
-    do {
-      if (control.stopRequested) return [];
-      const page = await Agent.list({
-        runtime: 'cloud',
-        apiKey: opts.apiKey,
-        limit: 100,
-        cursor,
-      });
-      for (const candidate of page.items) {
-        if (!wanted.has(candidate.name)) continue;
-        const current = latestByName.get(candidate.name);
-        if (!current || (candidate.createdAt ?? 0) > (current.createdAt ?? 0)) {
-          latestByName.set(candidate.name, candidate);
-        }
-      }
-      cursor = page.nextCursor;
-    } while (cursor);
+    const allResolverAgents = await latestResolverAgents(opts, control);
+    latestByName = new Map([...wanted.keys()].flatMap((name) => {
+      const agent = allResolverAgents.get(name);
+      return agent ? [[name, agent]] : [];
+    }));
   }
 
   const recovered = [];
