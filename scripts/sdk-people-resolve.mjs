@@ -83,7 +83,7 @@ Options:
   --shards N            Connected-component bins (default: 8, max: ${MAX_SHARDS}).
   --component-shards    Put exactly one connected identity component in each
                         independently checkpointed shard.
-  --concurrency N       Parallel Cursor agents (default: 4, max: 8).
+  --concurrency N       Global parallel Cursor-agent limit (default: 4, max: 8).
   --max-new-shards N    Launch at most N unresolved shards in this invocation;
                         validated checkpoints are reused on the next invocation.
   --max-attempts N      Validation attempts per shard (default: 4).
@@ -114,6 +114,34 @@ function positiveInteger(value, flag, maximum) {
     throw new Error(`${flag} must be an integer from 1 to ${maximum}`);
   }
   return Number(value);
+}
+
+function createConcurrencyLimiter(limit) {
+  let active = 0;
+  const waiting = [];
+
+  async function acquire() {
+    if (active < limit) {
+      active += 1;
+      return;
+    }
+    await new Promise((resolve) => waiting.push(resolve));
+    active += 1;
+  }
+
+  function release() {
+    active -= 1;
+    waiting.shift()?.();
+  }
+
+  return async (task) => {
+    await acquire();
+    try {
+      return await task();
+    } finally {
+      release();
+    }
+  };
 }
 
 function parseChapterScopes(value) {
@@ -1316,27 +1344,29 @@ async function recoverPublishedShardDocuments(
         let result;
         if (running) {
           console.log(`[${dossier.batch}] waiting for existing cloud run ${running.id}`);
-          result = await waitForTrackedRun(
+          result = await control.withAgentSlot(() => waitForTrackedRun(
             running,
             opts,
             control,
             `[${dossier.batch}] recovered identity resolution`,
             prior.agentId,
-          );
+          ));
         } else {
           console.log(`[${dossier.batch}] resuming prior workspace to publish its missing artifact`);
-          const continued = await sendCursorAgentWhenReady(
-            agent,
-            retryPrompt(dossier, [error instanceof Error ? error.message : String(error)]),
-            { label: `[${dossier.batch}] recovered identity resolution` },
-          );
-          result = await waitForTrackedRun(
-            continued,
-            opts,
-            control,
-            `[${dossier.batch}] recovered identity resolution`,
-            prior.agentId,
-          );
+          result = await control.withAgentSlot(async () => {
+            const continued = await sendCursorAgentWhenReady(
+              agent,
+              retryPrompt(dossier, [error instanceof Error ? error.message : String(error)]),
+              { label: `[${dossier.batch}] recovered identity resolution` },
+            );
+            return waitForTrackedRun(
+              continued,
+              opts,
+              control,
+              `[${dossier.batch}] recovered identity resolution`,
+              prior.agentId,
+            );
+          });
         }
         if (result.status !== 'finished') {
           throw new Error(result.error?.message ?? `run status ${result.status}`);
@@ -1378,16 +1408,18 @@ async function recoverPublishedShardDocuments(
           console.log(
             `[${dossier.batch}] recovered retry ${attempt + 1} -> ${agent.agentId}`,
           );
-          const run = await sendCursorAgentWhenReady(agent, retryPrompt(dossier, errors), {
-            label: `[${dossier.batch}] recovered identity resolution`,
+          const result = await control.withAgentSlot(async () => {
+            const run = await sendCursorAgentWhenReady(agent, retryPrompt(dossier, errors), {
+              label: `[${dossier.batch}] recovered identity resolution`,
+            });
+            return waitForTrackedRun(
+              run,
+              opts,
+              control,
+              `[${dossier.batch}] recovered identity resolution`,
+              agent.agentId,
+            );
           });
-          const result = await waitForTrackedRun(
-            run,
-            opts,
-            control,
-            `[${dossier.batch}] recovered identity resolution`,
-            agent.agentId,
-          );
           if (result.status !== 'finished') {
             throw new Error(result.error?.message ?? `run status ${result.status}`);
           }
@@ -1431,18 +1463,20 @@ async function processDossier(dossier, opts, corpus, resolutions, accepted, base
       if (control.stopRequested) break;
       try {
         console.log(`[${dossier.batch}] ${attempt === 1 ? 'resolve' : `retry ${attempt}`} -> ${agent.agentId}`);
-        const run = await sendCursorAgentWhenReady(
-          agent,
-          attempt === 1 ? initialPrompt(dossier, opts) : retryPrompt(dossier, errors),
-          { label: `[${dossier.batch}] identity resolution` },
-        );
-        const result = await waitForTrackedRun(
-          run,
-          opts,
-          control,
-          `[${dossier.batch}] identity resolution`,
-          agent.agentId,
-        );
+        const result = await control.withAgentSlot(async () => {
+          const run = await sendCursorAgentWhenReady(
+            agent,
+            attempt === 1 ? initialPrompt(dossier, opts) : retryPrompt(dossier, errors),
+            { label: `[${dossier.batch}] identity resolution` },
+          );
+          return waitForTrackedRun(
+            run,
+            opts,
+            control,
+            `[${dossier.batch}] identity resolution`,
+            agent.agentId,
+          );
+        });
         if (result.status !== 'finished') throw new Error(result.error?.message ?? `run status ${result.status}`);
         const reconciled = enforcePriorSeparations(
           restrictResolutionToTargets(await downloadDocument(agent, dossier), dossier).document,
@@ -1607,7 +1641,25 @@ async function processDossierOrParts(
   );
 }
 
-function selfTest() {
+async function selfTest() {
+  const limit = createConcurrencyLimiter(2);
+  let active = 0;
+  let peak = 0;
+  let releaseWave;
+  const wave = new Promise((resolve) => {
+    releaseWave = resolve;
+  });
+  const limitedJobs = Array.from({ length: 5 }, () => limit(async () => {
+    active += 1;
+    peak = Math.max(peak, active);
+    await wave;
+    active -= 1;
+  }));
+  await new Promise((resolve) => setImmediate(resolve));
+  if (peak !== 2) throw new Error(`Global resolver concurrency peaked at ${peak}, expected 2`);
+  releaseWave();
+  await Promise.all(limitedJobs);
+
   const shortAgentName = resolverAgentName('fixture-shard-001');
   if (shortAgentName !== 'People resolution fixture-shard-001') {
     throw new Error('Resolver changed an agent name that already fits Cursor limits');
@@ -1952,6 +2004,7 @@ async function main() {
     label: 'People identity resolution scheduler',
   });
   const control = createRunControl();
+  control.withAgentSlot = createConcurrencyLimiter(opts.concurrency);
   const removeSignalHandlers = opts.dryRun || opts.prepareDossiers
     ? () => {}
     : installSignalHandlers(control, { cancelOnFirstInterrupt: true });
