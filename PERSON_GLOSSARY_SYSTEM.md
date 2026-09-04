@@ -366,7 +366,7 @@ dispositions. Build-time expansion must reproduce a valid form equivalent to:
     ]
   },
   "run": {
-    "model": "grok-4.5",
+    "model": "grok-4.6",
     "promptVersion": 7
   },
   "people": [

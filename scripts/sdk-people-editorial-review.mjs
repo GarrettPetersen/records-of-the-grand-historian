@@ -37,7 +37,7 @@ import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
 
 loadDotenv(REPO_ROOT);
 
-const DEFAULT_MODEL = 'grok-4.5';
+const DEFAULT_MODEL = 'grok-4.6';
 const DEFAULT_REPO_URL = 'https://github.com/GarrettPetersen/records-of-the-grand-historian';
 const DEFAULT_STARTING_REF = 'codex/people-glossary-staging-v2';
 const STATE_FILE = path.join(PEOPLE_DIR, 'generated', 'editorial-review-state.json');

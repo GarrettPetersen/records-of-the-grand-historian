@@ -88,7 +88,7 @@ import {
 
 loadDotenv(REPO_ROOT);
 
-const DEFAULT_MODEL = 'grok-4.5';
+const DEFAULT_MODEL = 'grok-4.6';
 const DEFAULT_REPO_URL = 'https://github.com/GarrettPetersen/records-of-the-grand-historian';
 const DEFAULT_STARTING_REF = 'codex/people-glossary-staging-v2';
 const STATE_FILE = path.join(PEOPLE_DIR, 'generated', 'extraction-state.json');
@@ -2740,7 +2740,7 @@ async function selfTest() {
   const sealedFixtureTarget = { book: 'fixture', chapter: '005' };
   const sealedFixtureOpts = {
     apiKey: 'fixture-key',
-    model: 'grok-4.5',
+    model: 'grok-4.6',
     effort: 'low',
     fast: false,
   };
