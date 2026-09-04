@@ -156,6 +156,8 @@ Options:
   --dry-run            Build and summarize packets without calling Cursor.
   --recover-only       Download and validate existing artifacts without starting or
                        continuing any Cursor model turn.
+  --skip-dirty         In bulk runs, report and exclude locally modified chapter files
+                       before claiming work.
   --force              Re-extract chapters with a valid sidecar from the current prompt.
   --retry-failed       Include chapters whose latest state is failed.
   --only-failed        Process only failed chapters; implies --retry-failed.
@@ -207,6 +209,7 @@ function parseArgs(argv) {
     apiKey: process.env.CURSOR_API_KEY,
     dryRun: false,
     recoverOnly: false,
+    skipDirty: false,
     force: false,
     retryFailed: false,
     onlyFailed: false,
@@ -252,6 +255,7 @@ function parseArgs(argv) {
     else if (arg === '--queue-branch') opts.queueBranch = next();
     else if (arg === '--dry-run') opts.dryRun = true;
     else if (arg === '--recover-only') opts.recoverOnly = true;
+    else if (arg === '--skip-dirty') opts.skipDirty = true;
     else if (arg === '--force') opts.force = true;
     else if (arg === '--retry-failed') opts.retryFailed = true;
     else if (arg === '--only-failed') {
@@ -269,6 +273,7 @@ function parseArgs(argv) {
   if (!['low', 'medium', 'high'].includes(opts.effort)) throw new Error('--effort must be low, medium, or high');
   if (!['smallest', 'book'].includes(opts.order)) throw new Error('--order must be smallest or book');
   if (opts.chapter && !opts.book) throw new Error('--chapter requires --book');
+  if (opts.chapter && opts.skipDirty) throw new Error('--skip-dirty is available only for bulk runs');
   if (!opts.book && !opts.all) throw new Error('Specify --book or explicitly pass --all');
   if (opts.all && (opts.book || opts.chapter)) throw new Error('--all cannot be combined with --book or --chapter');
   if (opts.allowLarge && opts.deferLarge) throw new Error('--allow-large cannot be combined with --defer-large');
@@ -772,6 +777,23 @@ function assertCloudSourceMatches(target, localPacket, opts, matcher) {
       'the cloud worker would annotate stale text',
     );
   }
+}
+
+function dirtyChapterRelativePaths() {
+  const output = execFileSync('git', ['status', '--porcelain=v1', '-z', '--', 'data'], {
+    cwd: REPO_ROOT,
+    encoding: 'utf8',
+  });
+  const entries = output.split('\0');
+  const dirty = new Set();
+  for (let index = 0; index < entries.length; index += 1) {
+    const entry = entries[index];
+    if (!entry) continue;
+    const status = entry.slice(0, 2);
+    dirty.add(entry.slice(3));
+    if (/[RC]/u.test(status) && entries[index + 1]) dirty.add(entries[++index]);
+  }
+  return dirty;
 }
 
 function artifactPath(target) {
@@ -3124,7 +3146,7 @@ async function main() {
     const laneTargets = allTargets.filter((target) =>
       availableToCursorLane(target, workLedger, opts.workerId, state)
     );
-    const rawTargets = planningScopeTargets(laneTargets, workLedger, opts, state);
+    let rawTargets = planningScopeTargets(laneTargets, workLedger, opts, state);
     if (rawTargets.length < laneTargets.length) {
       console.log(
         `Recovery-first planner: measuring ${rawTargets.length} resumable chapter(s) ` +
@@ -3137,6 +3159,22 @@ async function main() {
         `${opts.book}/${opts.chapter} is reserved by ${claim?.lane ?? 'another lane'}/` +
         `${claim?.worker ?? 'unknown worker'} (${claim?.status ?? 'active'})`,
       );
+    }
+    if (opts.skipDirty) {
+      const dirty = dirtyChapterRelativePaths();
+      const skipped = rawTargets.filter((target) =>
+        dirty.has(path.relative(REPO_ROOT, chapterPath(target.book, target.chapter)))
+      );
+      rawTargets = rawTargets.filter((target) =>
+        !dirty.has(path.relative(REPO_ROOT, chapterPath(target.book, target.chapter)))
+      );
+      if (skipped.length > 0) {
+        const preview = skipped.slice(0, 12).map(stateKey).join(', ');
+        console.warn(
+          `Bulk planner skipped ${skipped.length} locally modified chapter(s) before claiming work: ` +
+          `${preview}${skipped.length > 12 ? ', ...' : ''}`,
+        );
+      }
     }
     const queue = prepareTargetQueue(rawTargets, opts, state, opts.properNounMatcher);
     let targets = queue.selected;
