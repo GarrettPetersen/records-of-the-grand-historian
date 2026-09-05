@@ -26,6 +26,7 @@ import {
   applyTranslationRepairs,
   reconcileExtractionAfterRepairs,
   removeDispositionMentionConflicts,
+  removeUnsupportedCrossPersonOverlaps,
   remapMentionSpanThroughEdit,
 } from './lib/people-translation-repairs.mjs';
 import {
@@ -532,6 +533,38 @@ function selfTest() {
   );
   if (removedAttribution !== null) {
     throw new Error('Removed person attribution was remapped onto ordinary replacement prose');
+  }
+  const overlappingTitle = {
+    people: [
+      { localId: 'fixture:p001', preferredNameSuggestion: {} },
+      { localId: 'fixture:p002', preferredNameSuggestion: {} },
+    ],
+    claims: [],
+    mentions: [
+      {
+        id: 'fixture:m001',
+        person: 'fixture:p001',
+        unit: { id: 's0001' },
+        kind: 'title-reference',
+        spans: { zh: [], en: [{ exact: 'Chancellor', startCodePoint: 4, endCodePoint: 14 }] },
+        candidateRefs: [],
+      },
+      {
+        id: 'fixture:m002',
+        person: 'fixture:p002',
+        unit: { id: 's0001' },
+        kind: 'personal-name',
+        spans: { zh: [], en: [{ exact: 'Chancellor', startCodePoint: 4, endCodePoint: 14 }] },
+        candidateRefs: [],
+      },
+    ],
+  };
+  removeUnsupportedCrossPersonOverlaps(overlappingTitle, new Map());
+  if (
+    overlappingTitle.mentions[0].spans.en.length !== 1 ||
+    overlappingTitle.mentions[1].spans.en.length !== 0
+  ) {
+    throw new Error('A remapped personal name displaced an unchanged title reference');
   }
   const repeatedOldText =
     'Dances ran from Offered Ancestor through Taiwu; later records start from Offered Ancestor.';

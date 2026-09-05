@@ -981,7 +981,7 @@ function spanHasNameEvidence(extraction, mention, span, language) {
   );
 }
 
-function removeUnsupportedCrossPersonOverlaps(extraction, candidateById) {
+export function removeUnsupportedCrossPersonOverlaps(extraction, candidateById) {
   for (const language of ['zh', 'en']) {
     const located = extraction.mentions.flatMap((mention) =>
       mention.spans[language].map((span) => ({ mention, span }))
@@ -1009,9 +1009,24 @@ function removeUnsupportedCrossPersonOverlaps(extraction, candidateById) {
         other.span,
         language,
       );
-      if (currentSupported === otherSupported) continue;
-      const loser = currentSupported ? other : current;
-      const winner = currentSupported ? current : other;
+      let loser;
+      let winner;
+      if (currentSupported !== otherSupported) {
+        loser = currentSupported ? other : current;
+        winner = currentSupported ? current : other;
+      } else {
+        const sameSpan = current.span.startCodePoint === other.span.startCodePoint &&
+          current.span.endCodePoint === other.span.endCodePoint &&
+          current.span.exact === other.span.exact;
+        const currentIsTitle = current.mention.kind === 'title-reference';
+        const otherIsTitle = other.mention.kind === 'title-reference';
+        if (!sameSpan || currentIsTitle === otherIsTitle) continue;
+        // A broad sentence rewrite can make positional remapping land a
+        // deleted personal name on an unchanged office title. One printed
+        // surface cannot identify both people; retain its title reference.
+        winner = currentIsTitle ? current : other;
+        loser = currentIsTitle ? other : current;
+      }
       for (const candidateId of loser.mention.candidateRefs) {
         const candidate = candidateById.get(candidateId);
         if (
