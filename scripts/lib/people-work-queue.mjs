@@ -32,10 +32,12 @@ const RECOVERABLE_STATUSES = new Set([
 ]);
 
 function git(args, options = {}) {
+  const hasStdinFd = Number.isInteger(options.stdinFd);
   const result = spawnSync('git', args, {
     cwd: options.cwd ?? REPO_ROOT,
     encoding: 'utf8',
-    input: options.input,
+    input: hasStdinFd ? undefined : options.input,
+    stdio: hasStdinFd ? [options.stdinFd, 'pipe', 'pipe'] : undefined,
     env: {
       ...process.env,
       GIT_AUTHOR_NAME: process.env.GIT_AUTHOR_NAME || '24histories queue broker',
@@ -50,6 +52,20 @@ function git(args, options = {}) {
     );
   }
   return result;
+}
+
+function gitWithFileInput(args, input) {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), '24histories-git-stdin-'));
+  const inputFile = path.join(directory, 'input');
+  let inputFd;
+  try {
+    fs.writeFileSync(inputFile, input);
+    inputFd = fs.openSync(inputFile, 'r');
+    return git(args, { stdinFd: inputFd });
+  } finally {
+    if (inputFd !== undefined) fs.closeSync(inputFd);
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
 }
 
 function emptyLedger() {
@@ -91,10 +107,11 @@ function fetchQueueSnapshot({ remote, branch }) {
 
 function writeQueueCommit(ledger, oldOid, { remote, branch, message }) {
   const serialized = `${JSON.stringify(ledger, null, 2)}\n`;
-  const blob = git(['hash-object', '-w', '--stdin'], { input: serialized }).stdout.trim();
-  const tree = git(['mktree'], {
-    input: `100644 blob ${blob}\t${PEOPLE_QUEUE_FILE}\n`,
-  }).stdout.trim();
+  const blob = gitWithFileInput(['hash-object', '-w', '--stdin'], serialized).stdout.trim();
+  const tree = gitWithFileInput(
+    ['mktree'],
+    `100644 blob ${blob}\t${PEOPLE_QUEUE_FILE}\n`,
+  ).stdout.trim();
   const args = ['commit-tree', tree];
   if (oldOid) args.push('-p', oldOid);
   args.push('-m', message);
