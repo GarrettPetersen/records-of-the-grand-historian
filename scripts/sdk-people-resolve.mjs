@@ -1045,6 +1045,10 @@ function genericNameKey(key) {
     /^en:(?:consort|lady|madam|mother|princess|queen|wife) [a-z]+$/u.test(key);
 }
 
+function qualifiedPreferredTitleKey(key) {
+  return /^en:(?:duke|emperor|empress|king|marquis|prince|princess|queen) .+ of .+$/u.test(key);
+}
+
 function strongIdentityEdge(left, right) {
   const rightByKey = new Map(right.nameKeys.map((entry) => [entry.key, entry]));
   for (const leftName of left.nameKeys) {
@@ -1056,6 +1060,7 @@ function strongIdentityEdge(left, right) {
     const rightPreferred = rightKinds.has('preferred');
     const leftFull = [...leftKinds].some((kind) => FULL_IDENTITY_NAME_KINDS.has(kind));
     const rightFull = [...rightKinds].some((kind) => FULL_IDENTITY_NAME_KINDS.has(kind));
+    if (leftPreferred && rightPreferred && qualifiedPreferredTitleKey(leftName.key)) return true;
     if (leftFull && rightFull) return true;
     if (leftPreferred && rightFull) return true;
     if (rightPreferred && leftFull) return true;
@@ -1849,6 +1854,8 @@ async function selfTest() {
     fullName: { nameKeys: [{ key: 'zh:安世', kinds: ['preferred', 'personal-name'] }] },
     courtesyOne: { nameKeys: [{ key: 'zh:伯起', kinds: ['preferred', 'courtesy-name'] }] },
     courtesyTwo: { nameKeys: [{ key: 'zh:伯起', kinds: ['preferred', 'courtesy-name'] }] },
+    qiHuanOne: { nameKeys: [{ key: 'en:duke huan of qi', kinds: ['preferred', 'posthumous'] }] },
+    qiHuanTwo: { nameKeys: [{ key: 'en:duke huan of qi', kinds: ['preferred', 'title'] }] },
   };
   if (mergeHasIdentityEvidence(['ladyOne', 'ladyTwo'], identityPeople)) {
     throw new Error('Generic surname labels unexpectedly supplied merge evidence');
@@ -1861,6 +1868,9 @@ async function selfTest() {
   }
   if (mergeHasIdentityEvidence(['courtesyOne', 'courtesyTwo'], identityPeople)) {
     throw new Error('A shared courtesy name unexpectedly supplied merge evidence');
+  }
+  if (!mergeHasIdentityEvidence(['qiHuanOne', 'qiHuanTwo'], identityPeople)) {
+    throw new Error('A shared fully qualified preferred title did not supply merge evidence');
   }
   const promptDossier = {
     batch: 'fixture-shard-001',
