@@ -436,7 +436,7 @@ function planningScopeTargets(laneTargets, ledger, opts, state) {
       claim.status === 'resume-required' &&
       recoveryOnlyTarget(target, state);
   });
-  return recoveryTargets.length >= opts.limit ? recoveryTargets : laneTargets;
+  return recoveryTargets.length > 0 ? recoveryTargets : laneTargets;
 }
 
 function compareBookOrder(left, right) {
@@ -3051,7 +3051,7 @@ async function selfTest() {
       'fixture/001': { lane: 'cursor-sdk', status: 'resume-required' },
       'fixture/002': { lane: 'cursor-sdk', status: 'resume-required' },
     },
-  }, { recoverOnly: false, limit: 2 }, {
+  }, { recoverOnly: false, limit: 3 }, {
     chapters: {
       'fixture/001': { status: 'interrupted', agentId: 'bc-a' },
       'fixture/002': { status: 'interrupted', agentId: 'bc-b' },
