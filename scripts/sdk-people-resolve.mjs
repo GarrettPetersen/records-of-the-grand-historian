@@ -86,7 +86,8 @@ Options:
   --concurrency N       Global parallel Cursor-agent limit (default: 4, max: 8).
   --max-new-shards N    Launch at most N unresolved shards in this invocation;
                         validated checkpoints are reused on the next invocation.
-  --max-attempts N      Validation attempts per shard (default: 4).
+  --max-attempts N      Agent runs per unresolved shard (default: 4). A recovered
+                        prior artifact is validated before using this allowance.
   --max-run-cost DOLLARS
                         Cancel one active run at this raw usage cost (default: $${(DEFAULT_MAX_RUN_COST_CENTS / 100).toFixed(2)}; use unlimited to disable).
   --max-run-tokens N    Cancel one active run at this token count (default: ${DEFAULT_MAX_RUN_TOKENS.toLocaleString('en-US')}; use unlimited to disable).
@@ -114,6 +115,10 @@ function positiveInteger(value, flag, maximum) {
     throw new Error(`${flag} must be an integer from 1 to ${maximum}`);
   }
   return Number(value);
+}
+
+function recoveryValidationAttempts(maxAttempts) {
+  return Array.from({ length: maxAttempts + 1 }, (_, attempt) => attempt);
 }
 
 function createConcurrencyLimiter(limit) {
@@ -1427,7 +1432,9 @@ async function recoverPublishedShardDocuments(
       }
       let document;
       let errors = [];
-      for (let attempt = 1; attempt <= opts.maxAttempts; attempt += 1) {
+      // The already-published artifact belongs to an earlier run, so validating it
+      // must not consume this invocation's retry allowance.
+      for (const attempt of recoveryValidationAttempts(opts.maxAttempts)) {
         try {
           const restricted = restrictResolutionToTargets(published, dossier);
           const reconciled = enforcePriorSeparations(
@@ -2069,6 +2076,9 @@ async function selfTest() {
     if (error instanceof TypeError || !error.message.includes('localPeople')) {
       throw new Error(`Malformed resolution decision produced an opaque error: ${error.message}`);
     }
+  }
+  if (!isDeepStrictEqual(recoveryValidationAttempts(1), [0, 1])) {
+    throw new Error('Recovered artifacts do not preserve one in-place retry at --max-attempts 1');
   }
   console.log('sdk-people-resolve self-test: ok');
 }
