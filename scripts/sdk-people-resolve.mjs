@@ -104,6 +104,9 @@ Options:
                         without launching any new resolver agents.
   --skip-cloud-recovery Do not inspect prior Cursor agents for shard artifacts.
   --recover-agent N=ID  Recover shard N from a specific Cursor agent (repeatable).
+  --recover-batch NAME=ID
+                        Recover an exact shard or part batch from a specific
+                        Cursor agent (repeatable; avoids a full agent scan).
   --out PATH            Final tracked resolution document.
   --dry-run             Build and summarize dossiers without Cursor.
   --self-test           Run scheduler fixtures without Cursor.
@@ -184,6 +187,7 @@ function parseArgs(argv) {
     recoverOnly: false,
     skipCloudRecovery: false,
     recoverAgents: new Map(),
+    recoverBatches: new Map(),
     out: null,
     dryRun: false,
     selfTest: false,
@@ -220,6 +224,12 @@ function parseArgs(argv) {
       const match = value.match(/^(\d{1,3})=(bc-[a-z0-9-]+)$/u);
       if (!match) throw new Error('--recover-agent must use SHARD=bc-AGENT-ID');
       opts.recoverAgents.set(Number(match[1]), match[2]);
+    }
+    else if (arg === '--recover-batch') {
+      const value = next();
+      const match = value.match(/^([a-z0-9][a-z0-9-]+)=(bc-[a-z0-9-]+)$/u);
+      if (!match) throw new Error('--recover-batch must use BATCH=bc-AGENT-ID');
+      opts.recoverBatches.set(match[1], match[2]);
     }
     else if (arg === '--out') opts.out = path.resolve(REPO_ROOT, next());
     else if (arg === '--dry-run') opts.dryRun = true;
@@ -1390,8 +1400,8 @@ async function recoverPublishedShardDocuments(
   if (explicitAgents) {
     latestByName = new Map(dossiers.map((dossier) => [
       resolverAgentName(dossier.batch),
-      { agentId: explicitAgents.get(dossier.shard) },
-    ]));
+      { agentId: explicitAgents.get(dossier.batch) ?? explicitAgents.get(dossier.shard) },
+    ]).filter(([, agent]) => agent.agentId));
   } else {
     const allResolverAgents = await latestResolverAgents(opts, control);
     latestByName = new Map([...wanted.keys()].flatMap((name) => {
@@ -1668,20 +1678,34 @@ async function processDossierOrParts(
     console.log(`[${part.batch}] resumed validated part checkpoint`);
   }
 
-  if (!opts.skipCloudRecovery && pending.length > 0) {
+  if (pending.length > 0) {
     const recoverable = pending.filter((part) =>
       buildTargetDossierParts(part).length === 0 &&
       buildAdaptiveDossierParts(part).length === 0
     );
+    const exactRecoverable = recoverable.filter((part) => opts.recoverBatches.has(part.batch));
     const recovered = new Set(await recoverPublishedShardDocuments(
-      recoverable,
+      exactRecoverable,
       opts,
       corpus,
       resolutions,
       partDocuments,
       baseline,
       control,
+      opts.recoverBatches,
     ));
+    if (!opts.skipCloudRecovery) {
+      const scanRecoverable = recoverable.filter((part) => !recovered.has(part));
+      for (const part of await recoverPublishedShardDocuments(
+        scanRecoverable,
+        opts,
+        corpus,
+        resolutions,
+        partDocuments,
+        baseline,
+        control,
+      )) recovered.add(part);
+    }
     pending = pending.filter((part) => !recovered.has(part));
   }
 
@@ -2243,7 +2267,13 @@ async function main() {
       }
       console.log(`[${dossier.batch}] resumed validated shard checkpoint`);
     }
-    const explicitPending = pending.filter((dossier) => opts.recoverAgents.has(dossier.shard));
+    const explicitPending = pending.filter((dossier) =>
+      opts.recoverBatches.has(dossier.batch) || opts.recoverAgents.has(dossier.shard)
+    );
+    const explicitAgents = new Map([
+      ...opts.recoverAgents,
+      ...opts.recoverBatches,
+    ]);
     const recovered = new Set(await recoverPublishedShardDocuments(
       explicitPending,
       opts,
@@ -2252,7 +2282,7 @@ async function main() {
       accepted,
       baseline,
       control,
-      opts.recoverAgents,
+      explicitAgents,
     ));
     pending = pending.filter((dossier) => !recovered.has(dossier));
     if (!opts.skipCloudRecovery) {
