@@ -1294,6 +1294,24 @@ export function validateResolutionDocument(
   return document;
 }
 
+export function downgradeUnsupportedMerges(document, dossier) {
+  const normalized = structuredClone(document);
+  let count = 0;
+  for (const decision of normalized.decisions ?? []) {
+    if (
+      decision.decision !== 'merge' ||
+      !Array.isArray(decision.localPeople) ||
+      decision.localPeople.some((localId) => !dossier.document.people[localId]) ||
+      mergeHasIdentityEvidence(decision.localPeople, dossier.document.people)
+    ) {
+      continue;
+    }
+    decision.decision = 'possible-same-as';
+    count += 1;
+  }
+  return { document: normalized, count };
+}
+
 async function closeAgent(agent) {
   if (!agent) return;
   if (typeof agent[Symbol.asyncDispose] === 'function') await agent[Symbol.asyncDispose]();
@@ -1439,13 +1457,19 @@ async function recoverPublishedShardDocuments(
       for (const attempt of recoveryValidationAttempts(opts.maxAttempts)) {
         try {
           const restricted = restrictResolutionToTargets(published, dossier);
+          const downgraded = downgradeUnsupportedMerges(restricted.document, dossier);
           const reconciled = enforcePriorSeparations(
-            restricted.document,
+            downgraded.document,
             corpus,
             resolutions,
             accepted,
             baseline,
           );
+          if (downgraded.count > 0) {
+            console.warn(
+              `[${dossier.batch}] downgraded ${downgraded.count} unsupported merge(s) to possible-same-as`,
+            );
+          }
           if (reconciled.repairCount > 0) {
             console.warn(
               `[${dossier.batch}] reconciled ${reconciled.repairCount} decision(s) with prior identity groups`,
@@ -1553,13 +1577,20 @@ async function processDossier(dossier, opts, corpus, resolutions, accepted, base
           );
         });
         if (result.status !== 'finished') throw new Error(result.error?.message ?? `run status ${result.status}`);
+        const restricted = restrictResolutionToTargets(await downloadDocument(agent, dossier), dossier);
+        const downgraded = downgradeUnsupportedMerges(restricted.document, dossier);
         const reconciled = enforcePriorSeparations(
-          restrictResolutionToTargets(await downloadDocument(agent, dossier), dossier).document,
+          downgraded.document,
           corpus,
           resolutions,
           accepted,
           baseline,
         );
+        if (downgraded.count > 0) {
+          console.warn(
+            `[${dossier.batch}] downgraded ${downgraded.count} unsupported merge(s) to possible-same-as`,
+          );
+        }
         return validateResolutionDocument(
           restrictResolutionToTargets(reconciled.document, dossier).document,
           dossier,
@@ -1894,6 +1925,24 @@ async function selfTest() {
   }
   if (!mergeHasIdentityEvidence(['qiHuanOne', 'qiHuanTwo'], identityPeople)) {
     throw new Error('A shared fully qualified preferred title did not supply merge evidence');
+  }
+  const downgraded = downgradeUnsupportedMerges({
+    schemaVersion: 1,
+    batch: 'fixture-shard-001',
+    decisions: [{
+      decision: 'merge',
+      localPeople: ['ladyOne', 'ladyTwo'],
+      basis: ['same-name'],
+      confidence: 'high',
+    }],
+  }, {
+    document: { people: identityPeople },
+  });
+  if (
+    downgraded.count !== 1 ||
+    downgraded.document.decisions[0].decision !== 'possible-same-as'
+  ) {
+    throw new Error('Unsupported resolver merge was not conservatively downgraded');
   }
   const promptDossier = {
     batch: 'fixture-shard-001',
