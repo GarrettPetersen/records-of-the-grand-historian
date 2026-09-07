@@ -43,6 +43,7 @@ import {
 } from './lib/cursor-run-control.mjs';
 import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
 import {
+  buildCompactInput,
   compactPeopleExtraction,
   isCompactPeopleExtraction,
   serializeCompactPeopleExtraction,
@@ -1127,15 +1128,68 @@ function withRunMetadata(extraction, opts, agent, result) {
   };
 }
 
+export function normalizeCompactWorkerEcho(extraction, packet) {
+  if (!isCompactPeopleExtraction(extraction)) {
+    return { extraction, restoredInput: false, droppedRepairs: 0 };
+  }
+
+  const normalized = structuredClone(extraction);
+  const expectedInput = buildCompactInput(packet);
+  const restoredInput = JSON.stringify(normalized.input) !== JSON.stringify(expectedInput);
+  normalized.input = expectedInput;
+
+  const unitById = new Map(packet.units.map((unit) => [unit.id, unit]));
+  let droppedRepairs = 0;
+  if (Array.isArray(normalized.translationRepairs)) {
+    normalized.translationRepairs = normalized.translationRepairs.filter((repair) => {
+      if (Array.isArray(repair) && repair[6] === 'applied') return true;
+      const unit = Array.isArray(repair) ? unitById.get(repair[0]) : null;
+      const field = repair?.[1] === 'idiomatic'
+        ? 'en'
+        : repair?.[1] === 'literal' ? 'literal' : null;
+      const valid = Array.isArray(repair) &&
+        repair.length === 7 &&
+        unit &&
+        field &&
+        typeof repair[2] === 'string' &&
+        repair[2] === unit[field] &&
+        typeof repair[3] === 'string' &&
+        repair[3].length > 0 &&
+        repair[3] !== repair[2] &&
+        typeof repair[4] === 'string' &&
+        repair[4].length >= 10 &&
+        repair[4].length <= 500 &&
+        ['high', 'medium'].includes(repair[5]) &&
+        repair[6] === 'proposed';
+      if (!valid) droppedRepairs += 1;
+      return valid;
+    });
+  }
+  return { extraction: normalized, restoredInput, droppedRepairs };
+}
+
 function validateDownloadedExtraction(extraction, packet, target = null, chunk = null) {
+  const normalized = normalizeCompactWorkerEcho(extraction, packet);
+  if (target && (normalized.restoredInput || normalized.droppedRepairs > 0)) {
+    const changes = [
+      ...(normalized.restoredInput ? ['restored packet input'] : []),
+      ...(normalized.droppedRepairs > 0
+        ? [`dropped ${normalized.droppedRepairs} invalid proposed repair(s)`]
+        : []),
+    ];
+    console.warn(
+      `[${stateKey(target)}${chunk ? `/chunk-${chunk.id}` : ''}] ` +
+      `host-normalized worker echo: ${changes.join('; ')}`,
+    );
+  }
   try {
-    return isCompactPeopleExtraction(extraction)
-      ? validateCompactPeopleExtraction(extraction, packet)
-      : validatePeopleExtraction(extraction, packet);
+    return isCompactPeopleExtraction(normalized.extraction)
+      ? validateCompactPeopleExtraction(normalized.extraction, packet)
+      : validatePeopleExtraction(normalized.extraction, packet);
   } catch (error) {
     if (target) {
       const rejected = rejectedArtifactPath(target, chunk);
-      writeJsonAtomic(rejected, extraction);
+      writeJsonAtomic(rejected, normalized.extraction);
       console.warn(
         `[${stateKey(target)}${chunk ? `/chunk-${chunk.id}` : ''}] ` +
         `preserved rejected artifact at ${path.relative(REPO_ROOT, rejected)}`,
@@ -2723,6 +2777,43 @@ async function selfTest() {
     preflight: { scannerVersion: 2, candidates: [] },
     context: { westernEraStyle: 'BC_AD', roles: [], polities: [], reigns: [] },
   };
+  const compactEcho = normalizeCompactWorkerEcho({
+    schemaVersion: 2,
+    input: { stale: true },
+    translationRepairs: [[
+      's0001',
+      'idiomatic',
+      bytePacket.units[0].en,
+      'A more accurate fixture unit.',
+      'The replacement is intentionally valid for the fixture.',
+      'high',
+      'proposed',
+    ], [
+      's0002',
+      'idiomatic',
+      'stale text',
+      'A replacement for stale text.',
+      'This proposal must be dropped because its source text is stale.',
+      'high',
+      'proposed',
+    ], [
+      's0003',
+      'idiomatic',
+      'reviewed text',
+      'reviewed replacement',
+      'Applied editorial history must never be dropped by normalization.',
+      'high',
+      'applied',
+    ]],
+  }, bytePacket);
+  if (
+    !compactEcho.restoredInput ||
+    compactEcho.droppedRepairs !== 1 ||
+    compactEcho.extraction.translationRepairs.length !== 2 ||
+    JSON.stringify(compactEcho.extraction.input) !== JSON.stringify(buildCompactInput(bytePacket))
+  ) {
+    throw new Error('Compact worker echo normalization did not preserve host-owned data');
+  }
   const byteBoundPlan = enforceWorkerByteCeiling(
     { book: 'fixture', chapter: '005' },
     bytePacket,

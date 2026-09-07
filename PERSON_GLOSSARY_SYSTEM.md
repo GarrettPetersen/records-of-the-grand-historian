@@ -1244,6 +1244,9 @@ failure rate, then raise concurrency to 16-24 only while whole chapters still
 finish reliably. Run independent editorial review and host-side repair
 application immediately after each extraction wave. Keep all failed and
 interrupted chunks sticky for recovery before assigning fresh chapters.
+Use at least three validation attempts for multi-chunk extraction. With six or
+seven chunks per chapter, a two-attempt ceiling compounds a modest residual
+chunk error rate into excessive whole-chapter deferrals.
 
 Identity resolution is global and can reopen large common-name components.
 Accumulate at least 25 accepted chapters, normally 50, before a resolution
