@@ -38,10 +38,10 @@ import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
 loadDotenv(REPO_ROOT);
 
 const DEFAULT_MODEL = 'grok-4.6';
-const DEFAULT_REPO_URL = 'https://github.com/GarrettPetersen/records-of-the-grand-historian';
-const DEFAULT_STARTING_REF = 'codex/people-glossary-staging-v2';
 const STATE_FILE = path.join(PEOPLE_DIR, 'generated', 'editorial-review-state.json');
 const RUN_LOCK_FILE = path.join(PEOPLE_DIR, 'generated', 'editorial-review-run.lock');
+const DEFAULT_CONCURRENCY = 8;
+const MAX_CONCURRENCY = 24;
 const DEFAULT_MAX_RUN_COST_CENTS = 100;
 const DEFAULT_MAX_RUN_TOKENS = 1_000_000;
 const DEFAULT_RUN_POLL_MS = 15_000;
@@ -59,7 +59,7 @@ Options:
   --chapter NNN        Limit review to one chapter; requires --book.
   --all                Explicitly allow all pending review chapters.
   --limit N            Maximum chapters selected.
-  --concurrency N      Parallel independent reviewers (default: 2, max: 8).
+  --concurrency N      Parallel independent reviewers (default: ${DEFAULT_CONCURRENCY}, max: ${MAX_CONCURRENCY}).
   --max-attempts N     Validation attempts per chapter (default: 2).
   --max-run-cost DOLLARS
                        Cancel one active run at this raw usage cost (default: $${(DEFAULT_MAX_RUN_COST_CENTS / 100).toFixed(2)}; use unlimited to disable).
@@ -67,8 +67,6 @@ Options:
   --model MODEL        Reviewer model (default: ${DEFAULT_MODEL}).
   --effort LEVEL       Reviewer effort: low, medium, or high (default: medium).
   --fast               Enable the model's fast variant.
-  --repo URL           Repository URL for the isolated cloud workspace.
-  --starting-ref REF   Remote branch/ref for the workspace.
   --dry-run            Summarize dossiers without calling Cursor.
   --force              Replace an already valid decision file.
   --retry-failed       Retry chapters whose latest review failed.
@@ -90,15 +88,13 @@ function parseArgs(argv) {
     chapter: null,
     all: false,
     limit: null,
-    concurrency: 2,
+    concurrency: DEFAULT_CONCURRENCY,
     maxAttempts: 2,
     maxRunCostCents: DEFAULT_MAX_RUN_COST_CENTS,
     maxRunTokens: DEFAULT_MAX_RUN_TOKENS,
     model: process.env.SDK_PEOPLE_REVIEW_MODEL ?? DEFAULT_MODEL,
     effort: process.env.SDK_PEOPLE_REVIEW_EFFORT ?? 'medium',
     fast: false,
-    repoUrl: process.env.SDK_PEOPLE_REPO ?? DEFAULT_REPO_URL,
-    startingRef: process.env.SDK_PEOPLE_STARTING_REF ?? DEFAULT_STARTING_REF,
     dryRun: false,
     force: false,
     retryFailed: false,
@@ -115,15 +111,13 @@ function parseArgs(argv) {
     else if (arg === '--chapter') opts.chapter = normalizedChapterId(next());
     else if (arg === '--all') opts.all = true;
     else if (arg === '--limit') opts.limit = integer(next(), arg, Number.MAX_SAFE_INTEGER);
-    else if (arg === '--concurrency') opts.concurrency = integer(next(), arg, 8);
+    else if (arg === '--concurrency') opts.concurrency = integer(next(), arg, MAX_CONCURRENCY);
     else if (arg === '--max-attempts') opts.maxAttempts = integer(next(), arg, 5);
     else if (arg === '--max-run-cost') opts.maxRunCostCents = parseCursorDollarLimit(next(), arg);
     else if (arg === '--max-run-tokens') opts.maxRunTokens = parseCursorIntegerLimit(next(), arg);
     else if (arg === '--model') opts.model = next();
     else if (arg === '--effort') opts.effort = next();
     else if (arg === '--fast') opts.fast = true;
-    else if (arg === '--repo') opts.repoUrl = next();
-    else if (arg === '--starting-ref') opts.startingRef = next();
     else if (arg === '--dry-run') opts.dryRun = true;
     else if (arg === '--force') opts.force = true;
     else if (arg === '--retry-failed') opts.retryFailed = true;
@@ -199,7 +193,7 @@ function artifactRelative(target) {
 function publishCommand(target) {
   const relative = artifactRelative(target);
   const artifact = path.posix.join('/opt/cursor/artifacts', relative);
-  return `mkdir -p ${path.posix.dirname(artifact)} && cp ${relative} ${artifact}`;
+  return `mkdir -p ${path.posix.dirname(relative)} ${path.posix.dirname(artifact)} && cp ${relative} ${artifact}`;
 }
 
 function initialPrompt(target, dossier) {
@@ -362,6 +356,22 @@ function resumableReview(prior) {
   );
 }
 
+export function sealedReviewerAgentOptions(target, opts) {
+  return {
+    apiKey: opts.apiKey,
+    name: `Editorial review ${target.book}/${target.chapter}`,
+    model: modelSelection(opts),
+    cloud: {
+      metadata: {
+        purpose: 'people-editorial-review',
+        workerMode: 'sealed',
+        book: target.book,
+        chapter: target.chapter,
+      },
+    },
+  };
+}
+
 async function processTarget(target, opts, state, matcher) {
   const key = `${target.book}/${target.chapter}`;
   const loaded = loadEditorialReviewChapter(target.book, target.chapter, { properNounMatcher: matcher });
@@ -455,17 +465,7 @@ async function processTarget(target, opts, state, matcher) {
       }
     }
 
-    agent = await Agent.create({
-      apiKey: opts.apiKey,
-      name: `Editorial review ${key}`,
-      model: modelSelection(opts),
-      cloud: {
-        repos: [{ url: opts.repoUrl, startingRef: opts.startingRef }],
-        workOnCurrentBranch: true,
-        autoCreatePR: false,
-        skipReviewerRequest: true,
-      },
-    });
+    agent = await Agent.create(sealedReviewerAgentOptions(target, opts));
     updateState(state, target, {
       status: 'reviewing',
       agentId: agent.agentId,

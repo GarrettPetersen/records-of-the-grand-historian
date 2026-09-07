@@ -1230,6 +1230,30 @@ silently guessed away.
 
 ## One-Pass Cursor SDK Workflow
 
+### Deadline campaign cadence
+
+For a deadline-driven corpus run, calculate the daily quota from current-prompt
+validated chapters, not from the percentage visible on the deployed site. The
+site can lag while accepted work waits on the staging branch. Add a 10-15%
+buffer to the minimum daily rate so retries and difficult chapters do not make
+the final week impossible.
+
+Use 25-50 chapter extraction waves. Begin a new allowance window with 8-12
+parallel workers, measure accepted p90 cost, tokens, duration, and validation
+failure rate, then raise concurrency to 16-24 only while whole chapters still
+finish reliably. Run independent editorial review and host-side repair
+application immediately after each extraction wave. Keep all failed and
+interrupted chunks sticky for recovery before assigning fresh chapters.
+
+Identity resolution is global and can reopen large common-name components.
+Accumulate at least 25 accepted chapters, normally 50, before a resolution
+checkpoint instead of resolving each small extraction commit. This changes
+when the structured records are stitched together, not what the chapter worker
+captures, so it does not require another chapter pass. Validate and push exact
+files to `codex/people-glossary-staging-v2` throughout the day, then merge a
+validated milestone to `master` at least daily to keep public progress close to
+actual progress.
+
 ### 1. Freeze the input contract
 
 Before spending the large batch of credits:
@@ -1306,7 +1330,7 @@ pending -> claimed -> extracted -> validated -> accepted
 Only validated files enter Git. Create local commits in moderate batches, such
 as 50-100 chapter sidecars, so failures and regressions remain reviewable. Keep
 those checkpoints local during routine processing. At a deliberate larger
-boundary, push the accumulated commits to `codex/people-glossary-staging`;
+boundary, push the accumulated commits to `codex/people-glossary-staging-v2`;
 merge that branch to `master` only when ready for one production Cloudflare
 build.
 
@@ -1361,8 +1385,10 @@ context windows pulled from the current chapters. They do not rescan entire
 books. High-confidence decisions update resolution shards and canonical person
 records; uncertain cases remain queued.
 
-Resolution can run continuously behind extraction. It does not need to delay the
-remaining chapter agents.
+Resolution can run after each 25-50 chapter accepted tranche. It does not need
+to delay later chapter agents once the current resolver process has checkpointed
+cleanly, but the same host must not run competing extractor and resolver
+schedulers at once.
 
 ### 7. Generate and verify outputs
 

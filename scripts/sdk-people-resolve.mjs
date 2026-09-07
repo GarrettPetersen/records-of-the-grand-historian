@@ -59,6 +59,8 @@ const ADAPTIVE_TARGET_COMPARISONS_PER_PART = 60;
 const DEFAULT_MAX_RUN_COST_CENTS = 150;
 const DEFAULT_MAX_RUN_TOKENS = 1_250_000;
 const DEFAULT_RUN_POLL_MS = 15_000;
+const DEFAULT_CONCURRENCY = 8;
+const MAX_CONCURRENCY = 24;
 const MAX_SHARDS = 256;
 const MAX_CURSOR_AGENT_NAME_LENGTH = 100;
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
@@ -83,7 +85,7 @@ Options:
   --shards N            Connected-component bins (default: 8, max: ${MAX_SHARDS}).
   --component-shards    Put exactly one connected identity component in each
                         independently checkpointed shard.
-  --concurrency N       Global parallel Cursor-agent limit (default: 4, max: 8).
+  --concurrency N       Global parallel Cursor-agent limit (default: ${DEFAULT_CONCURRENCY}, max: ${MAX_CONCURRENCY}).
   --max-new-shards N    Launch at most N unresolved shards in this invocation;
                         validated checkpoints are reused on the next invocation.
   --max-attempts N      Agent runs per unresolved shard (default: 4). A recovered
@@ -167,7 +169,7 @@ function parseArgs(argv) {
     allUnresolved: false,
     shards: 8,
     componentShards: false,
-    concurrency: 4,
+    concurrency: DEFAULT_CONCURRENCY,
     maxNewShards: null,
     maxAttempts: 4,
     maxRunCostCents: DEFAULT_MAX_RUN_COST_CENTS,
@@ -199,7 +201,7 @@ function parseArgs(argv) {
     else if (arg === '--all-unresolved') opts.allUnresolved = true;
     else if (arg === '--shards') opts.shards = positiveInteger(next(), arg, MAX_SHARDS);
     else if (arg === '--component-shards') opts.componentShards = true;
-    else if (arg === '--concurrency') opts.concurrency = positiveInteger(next(), arg, 8);
+    else if (arg === '--concurrency') opts.concurrency = positiveInteger(next(), arg, MAX_CONCURRENCY);
     else if (arg === '--max-new-shards') opts.maxNewShards = positiveInteger(next(), arg, MAX_SHARDS);
     else if (arg === '--max-attempts') opts.maxAttempts = positiveInteger(next(), arg, 5);
     else if (arg === '--max-run-cost') opts.maxRunCostCents = parseCursorDollarLimit(next(), arg);
@@ -1503,21 +1505,35 @@ async function recoverPublishedShardDocuments(
   return recovered;
 }
 
+function resolverAgentOptions(dossier, opts) {
+  const assignmentFile = workerDossierFile(dossier, opts) ?? dossierFile(dossier, opts);
+  const cloud = {
+    metadata: {
+      purpose: 'people-identity-resolution',
+      workerMode: assignmentFile ? 'repository-dossier' : 'sealed',
+      batch: dossier.batch,
+      shard: String(dossier.shard),
+    },
+  };
+  if (assignmentFile) {
+    cloud.repos = [{ url: opts.repoUrl, startingRef: opts.startingRef }];
+    cloud.workOnCurrentBranch = true;
+    cloud.autoCreatePR = false;
+    cloud.skipReviewerRequest = true;
+  }
+  return {
+    apiKey: opts.apiKey,
+    name: resolverAgentName(dossier.batch),
+    model: modelSelection(opts),
+    cloud,
+  };
+}
+
 async function processDossier(dossier, opts, corpus, resolutions, accepted, baseline, control) {
   let agent;
   let errors = [];
   try {
-    agent = await Agent.create({
-      apiKey: opts.apiKey,
-      name: resolverAgentName(dossier.batch),
-      model: modelSelection(opts),
-      cloud: {
-        repos: [{ url: opts.repoUrl, startingRef: opts.startingRef }],
-        workOnCurrentBranch: true,
-        autoCreatePR: false,
-        skipReviewerRequest: true,
-      },
-    });
+    agent = await Agent.create(resolverAgentOptions(dossier, opts));
     for (let attempt = 1; attempt <= opts.maxAttempts; attempt += 1) {
       if (control.stopRequested) break;
       try {
@@ -1885,6 +1901,19 @@ async function selfTest() {
   };
   const inlinePrompt = initialPrompt(promptDossier, { dossierDir: null });
   if (!inlinePrompt.includes('unique_inline_marker')) throw new Error('Small dossier was not inlined');
+  const fixtureAgentOpts = {
+    apiKey: 'fixture',
+    model: DEFAULT_MODEL,
+    effort: 'low',
+    fast: false,
+    repoUrl: DEFAULT_REPO_URL,
+    startingRef: DEFAULT_STARTING_REF,
+  };
+  const inlineAgent = resolverAgentOptions(promptDossier, {
+    ...fixtureAgentOpts,
+    dossierDir: null,
+  });
+  if (inlineAgent.cloud.repos) throw new Error('Inline resolver agent unexpectedly clones the repository');
   const pathPrompt = initialPrompt(promptDossier, {
     dossierDir: path.join(REPO_ROOT, 'data', 'people', 'resolver-inputs', 'fixture'),
   });
@@ -1892,6 +1921,13 @@ async function selfTest() {
     throw new Error('Path-backed dossier prompt omitted its repository path');
   }
   if (pathPrompt.includes('unique_inline_marker')) throw new Error('Path-backed dossier was inlined');
+  const pathAgent = resolverAgentOptions(promptDossier, {
+    ...fixtureAgentOpts,
+    dossierDir: path.join(REPO_ROOT, 'data', 'people', 'resolver-inputs', 'fixture'),
+  });
+  if (pathAgent.cloud.repos?.[0]?.startingRef !== DEFAULT_STARTING_REF) {
+    throw new Error('Path-backed resolver agent omitted the committed dossier repository');
+  }
   const largeDossier = {
     batch: 'large-shard-001',
     document: {
