@@ -18,8 +18,11 @@ import {
   PEOPLE_DIR,
   REPO_ROOT,
   chapterPath,
+  codePoints,
+  exactSpanAt,
   extractionPath,
   normalizedChapterId,
+  occurrenceAt,
   readJson,
   writeTextAtomic,
   writeJsonAtomic,
@@ -558,9 +561,25 @@ function planTarget(target) {
   };
 }
 
-function recoverInterruptedState(state) {
+function exhaustedValidationConversation(record, maxAttempts) {
+  return Boolean(
+    record?.agentId &&
+    !record.resumeExhausted &&
+    ['failed', 'failed/retryable'].includes(record.status) &&
+    Number.isInteger(record.phaseAttempt) &&
+    record.phaseAttempt >= maxAttempts &&
+    !chunkHitRunLimit(record)
+  );
+}
+
+function recoverInterruptedState(state, maxAttempts) {
   let changed = false;
   for (const entry of Object.values(state.chapters)) {
+    if (exhaustedValidationConversation(entry, maxAttempts)) {
+      entry.resumePending = false;
+      entry.resumeExhausted = true;
+      changed = true;
+    }
     const entryRecoverable = ['claimed', 'extracting', 'recovering', 'failed/retryable'].includes(entry.status) ||
       (entry.status === 'failed' && entry.agentId && !entry.resumeExhausted);
     if (entryRecoverable) {
@@ -569,6 +588,11 @@ function recoverInterruptedState(state) {
       changed = true;
     }
     for (const chunk of Object.values(entry.chunks ?? {})) {
+      if (exhaustedValidationConversation(chunk, maxAttempts)) {
+        chunk.resumePending = false;
+        chunk.resumeExhausted = true;
+        changed = true;
+      }
       const chunkRecoverable = ['claimed', 'extracting', 'recovering', 'failed/retryable'].includes(chunk.status) ||
         (chunk.status === 'failed' && chunk.agentId && !chunk.resumeExhausted);
       if (!chunkRecoverable) continue;
@@ -1128,9 +1152,67 @@ function withRunMetadata(extraction, opts, agent, result) {
   };
 }
 
+function canonicalSurfacePoint(point, language) {
+  if (language === 'en') {
+    return /[\u2018\u2019\u02bc]/u.test(point)
+      ? "'"
+      : point.toLocaleLowerCase('en-US');
+  }
+  return point;
+}
+
+function surfaceProfile(value, language) {
+  const points = codePoints(value);
+  const canonical = [];
+  const sourceIndexes = [];
+  for (const [index, point] of points.entries()) {
+    if (language === 'zh' && /[\s\u200b-\u200d\u2060\ufeff]/u.test(point)) continue;
+    canonical.push(canonicalSurfacePoint(point, language));
+    sourceIndexes.push(index);
+  }
+  return { points, canonical, sourceIndexes };
+}
+
+function formattingEquivalentSurfaceMatches(text, exact, language) {
+  if (!['en', 'zh'].includes(language) || typeof text !== 'string' ||
+      typeof exact !== 'string' || exact.length === 0) return [];
+  const haystack = surfaceProfile(text, language);
+  const needle = surfaceProfile(exact, language);
+  if (needle.canonical.length === 0) return [];
+  const matches = [];
+  const isWord = (value) => typeof value === 'string' && /^[\p{L}\p{N}_]$/u.test(value);
+  for (let start = 0; start <= haystack.canonical.length - needle.canonical.length; start += 1) {
+    let equal = true;
+    for (let offset = 0; offset < needle.canonical.length; offset += 1) {
+      if (haystack.canonical[start + offset] !== needle.canonical[offset]) {
+        equal = false;
+        break;
+      }
+    }
+    if (!equal) continue;
+    const sourceStart = haystack.sourceIndexes[start];
+    const sourceEnd = haystack.sourceIndexes[start + needle.canonical.length - 1] + 1;
+    if (language === 'en' && (
+      (isWord(needle.points[0]) && isWord(haystack.points[sourceStart - 1])) ||
+      (isWord(needle.points.at(-1)) && isWord(haystack.points[sourceEnd]))
+    )) continue;
+    matches.push({
+      exact: haystack.points.slice(sourceStart, sourceEnd).join(''),
+      start: sourceStart,
+    });
+  }
+  return matches;
+}
+
 export function normalizeCompactWorkerEcho(extraction, packet) {
   if (!isCompactPeopleExtraction(extraction)) {
-    return { extraction, restoredInput: false, droppedRepairs: 0 };
+    return {
+      extraction,
+      restoredInput: false,
+      droppedRepairs: 0,
+      normalizedSurfaces: 0,
+      normalizedRelationships: 0,
+    };
   }
 
   const normalized = structuredClone(extraction);
@@ -1139,6 +1221,83 @@ export function normalizeCompactWorkerEcho(extraction, packet) {
   normalized.input = expectedInput;
 
   const unitById = new Map(packet.units.map((unit) => [unit.id, unit]));
+  let normalizedSurfaces = 0;
+  if (Array.isArray(normalized.surfaces)) {
+    const groups = new Map();
+    const addSurface = (person, kind, language, exact, unitId, occurrence) => {
+      const key = JSON.stringify([person, kind, language, exact]);
+      if (!groups.has(key)) groups.set(key, { person, kind, language, exact, units: new Map() });
+      const group = groups.get(key);
+      if (!group.units.has(unitId)) group.units.set(unitId, new Set());
+      group.units.get(unitId).add(occurrence);
+    };
+    for (const surface of normalized.surfaces) {
+      if (!Array.isArray(surface) || surface.length !== 5 || !Array.isArray(surface[4])) {
+        const key = `invalid:${groups.size}`;
+        groups.set(key, { raw: surface });
+        continue;
+      }
+      const [person, kind, language, exact, unitRows] = surface;
+      for (const unitRow of unitRows) {
+        if (!Array.isArray(unitRow) || unitRow.length !== 2 || !Array.isArray(unitRow[1])) {
+          addSurface(person, kind, language, exact, unitRow?.[0], unitRow?.[1]);
+          continue;
+        }
+        const [unitId, occurrences] = unitRow;
+        const text = unitById.get(unitId)?.[language];
+        for (const occurrence of occurrences) {
+          let actualExact = exact;
+          let actualOccurrence = occurrence;
+          try {
+            exactSpanAt(text, exact, occurrence);
+          } catch {
+            const selected = formattingEquivalentSurfaceMatches(text, exact, language)[occurrence];
+            if (selected) {
+              actualExact = selected.exact;
+              actualOccurrence = occurrenceAt(text, actualExact, selected.start);
+              normalizedSurfaces += 1;
+            }
+          }
+          addSurface(person, kind, language, actualExact, unitId, actualOccurrence);
+        }
+      }
+    }
+    normalized.surfaces = [...groups.values()].map((group) => group.raw ?? [
+      group.person,
+      group.kind,
+      group.language,
+      group.exact,
+      [...group.units.entries()].map(([unitId, occurrences]) => [unitId, [...occurrences].sort((a, b) => a - b)]),
+    ]);
+  }
+
+  let normalizedRelationships = 0;
+  if (Array.isArray(normalized.people) && Array.isArray(normalized.claims)) {
+    const hintsByPerson = new Map(normalized.people.flatMap((person) =>
+      Array.isArray(person) && person[4] && typeof person[4] === 'object'
+        ? [[person[0], person[4]]]
+        : []
+    ));
+    for (const claim of normalized.claims) {
+      if (!Array.isArray(claim) || claim[1] !== 'family-relationship') continue;
+      const subject = claim[0];
+      const target = claim[2]?.personId;
+      const subjectHints = hintsByPerson.get(subject);
+      const targetHints = hintsByPerson.get(target);
+      if (!subjectHints || !targetHints) continue;
+      if (!Array.isArray(subjectHints.r)) subjectHints.r = [];
+      if (!Array.isArray(targetHints.r)) targetHints.r = [];
+      if (!subjectHints.r.includes(target)) {
+        subjectHints.r.push(target);
+        normalizedRelationships += 1;
+      }
+      if (!targetHints.r.includes(subject)) {
+        targetHints.r.push(subject);
+        normalizedRelationships += 1;
+      }
+    }
+  }
+
   let droppedRepairs = 0;
   if (Array.isArray(normalized.translationRepairs)) {
     normalized.translationRepairs = normalized.translationRepairs.filter((repair) => {
@@ -1165,16 +1324,33 @@ export function normalizeCompactWorkerEcho(extraction, packet) {
       return valid;
     });
   }
-  return { extraction: normalized, restoredInput, droppedRepairs };
+  return {
+    extraction: normalized,
+    restoredInput,
+    droppedRepairs,
+    normalizedSurfaces,
+    normalizedRelationships,
+  };
 }
 
 function validateDownloadedExtraction(extraction, packet, target = null, chunk = null) {
   const normalized = normalizeCompactWorkerEcho(extraction, packet);
-  if (target && (normalized.restoredInput || normalized.droppedRepairs > 0)) {
+  if (target && (
+    normalized.restoredInput ||
+    normalized.droppedRepairs > 0 ||
+    normalized.normalizedSurfaces > 0 ||
+    normalized.normalizedRelationships > 0
+  )) {
     const changes = [
       ...(normalized.restoredInput ? ['restored packet input'] : []),
       ...(normalized.droppedRepairs > 0
         ? [`dropped ${normalized.droppedRepairs} invalid proposed repair(s)`]
+        : []),
+      ...(normalized.normalizedSurfaces > 0
+        ? [`normalized ${normalized.normalizedSurfaces} format-only surface(s)`]
+        : []),
+      ...(normalized.normalizedRelationships > 0
+        ? [`derived ${normalized.normalizedRelationships} reciprocal family hint(s)`]
         : []),
     ];
     console.warn(
@@ -2063,6 +2239,27 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
       console.warn(`[${stateKey(target)}/chunk-${chunk.id}] stale local artifact ignored: ${validationErrors(error)[0]}`);
     }
   }
+  const rejected = rejectedArtifactPath(target, chunk);
+  if (fs.existsSync(rejected)) {
+    try {
+      const recovered = validateDownloadedExtraction(readJson(rejected), packet);
+      const extraction = compactPeopleExtraction(recovered.normalized, packet);
+      validateCompactPeopleExtraction(extraction, packet);
+      writeTextAtomic(archive, serializeCompactPeopleExtraction(extraction));
+      updateChunkState(state, target, chunk, {
+        status: 'accepted',
+        cached: true,
+        lastErrors: [],
+        resumePending: false,
+      });
+      console.log(
+        `[${stateKey(target)}/chunk-${chunk.id}] recovered a rejected artifact by host normalization`,
+      );
+      return { chunk, extraction };
+    } catch {
+      // The preserved artifact still needs historical or semantic correction.
+    }
+  }
   if (control.stopRequested) throw new Error('Shutdown requested before chunk launch');
 
   let agent;
@@ -2215,11 +2412,13 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
           workerMode,
         );
       } catch (error) {
-        if (
-          resumeAgentId &&
+        const exhausted =
           !(error instanceof CursorRunLimitExceededError) &&
-          !isRecoveryArtifactUnavailable(error)
-        ) {
+          !isRecoveryArtifactUnavailable(error) &&
+          (resumeAgentId || /failed after \d+ attempt/iu.test(
+            error instanceof Error ? error.message : String(error),
+          ));
+        if (exhausted) {
           updateChunkState(state, target, chunk, {
             status: 'interrupted',
             resumePending: false,
@@ -2703,6 +2902,26 @@ async function selfTest() {
     throw new Error('Interrupted chunk conversation eligibility is incorrect');
   }
   if (
+    !exhaustedValidationConversation({
+      status: 'failed/retryable',
+      agentId: 'bc-validation-fixture',
+      phaseAttempt: 3,
+    }, 3) ||
+    exhaustedValidationConversation({
+      status: 'failed/retryable',
+      agentId: 'bc-validation-fixture',
+      phaseAttempt: 2,
+    }, 3) ||
+    exhaustedValidationConversation({
+      status: 'failed/retryable',
+      agentId: 'bc-limit-fixture',
+      phaseAttempt: 3,
+      stopReason: 'run-limit',
+    }, 3)
+  ) {
+    throw new Error('Validation-attempt retirement policy is incorrect');
+  }
+  if (
     !recoveryOnlyTarget(
       { book: 'fixture', chapter: '003' },
       { chapters: { 'fixture/003': recoveryPrior } },
@@ -2760,8 +2979,10 @@ async function selfTest() {
       id: `s${String(index + 1).padStart(4, '0')}`,
       kind: 'paragraph-sentence',
       blockIndex: index,
-      zh: '甲乙丙丁',
-      en: 'A deliberately long fixture unit.',
+      zh: index === 2 ? '遷豫章府 君。' : '甲乙丙丁',
+      en: index === 1
+        ? 'The worker’s father arrived.'
+        : 'A deliberately long fixture unit.',
       literal: 'A deliberately long literal fixture unit.',
     })),
     input: {
@@ -2780,6 +3001,49 @@ async function selfTest() {
   const compactEcho = normalizeCompactWorkerEcho({
     schemaVersion: 2,
     input: { stale: true },
+    people: [[
+      'p001',
+      ['Alice', null, null],
+      'historical',
+      'Official',
+      { n: [], r: [], a: ['AD 1'], p: [], x: null },
+      [],
+      [],
+    ], [
+      'p002',
+      ['Bob', null, null],
+      'historical',
+      'Official',
+      { n: [], r: [], a: ['AD 1'], p: [], x: null },
+      [],
+      [],
+    ]],
+    claims: [[
+      'p001',
+      'family-relationship',
+      { personId: 'p002', relationship: 'parent' },
+      'explicit',
+      ['s0001'],
+    ]],
+    surfaces: [[
+      'p001',
+      'title-reference',
+      'en',
+      'a deliberately',
+      [['s0001', [0]]],
+    ], [
+      'p001',
+      'kinship-reference',
+      'en',
+      "worker's father",
+      [['s0002', [0]]],
+    ], [
+      'p002',
+      'name',
+      'zh',
+      '豫章府君',
+      [['s0003', [0]]],
+    ]],
     translationRepairs: [[
       's0001',
       'idiomatic',
@@ -2809,7 +3073,14 @@ async function selfTest() {
   if (
     !compactEcho.restoredInput ||
     compactEcho.droppedRepairs !== 1 ||
+    compactEcho.normalizedSurfaces !== 3 ||
+    compactEcho.normalizedRelationships !== 2 ||
     compactEcho.extraction.translationRepairs.length !== 2 ||
+    compactEcho.extraction.surfaces[0][3] !== 'A deliberately' ||
+    compactEcho.extraction.surfaces[1][3] !== 'worker’s father' ||
+    compactEcho.extraction.surfaces[2][3] !== '豫章府 君' ||
+    compactEcho.extraction.people[0][4].r[0] !== 'p002' ||
+    compactEcho.extraction.people[1][4].r[0] !== 'p001' ||
     JSON.stringify(compactEcho.extraction.input) !== JSON.stringify(buildCompactInput(bytePacket))
   ) {
     throw new Error('Compact worker echo normalization did not preserve host-owned data');
@@ -3213,7 +3484,7 @@ async function main() {
     : acquireProcessRunLock(RUN_LOCK_FILE, { label: 'People extraction scheduler' });
   try {
     const state = loadState();
-    if (!opts.dryRun) recoverInterruptedState(state);
+    if (!opts.dryRun) recoverInterruptedState(state, opts.maxAttempts);
     opts.properNounMatcher = loadProperNounMatcher();
     const sharedQueueOptions = {
       remote: opts.queueRemote,
