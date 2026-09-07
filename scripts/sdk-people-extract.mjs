@@ -1161,23 +1161,27 @@ function canonicalSurfacePoint(point, language) {
   return point;
 }
 
-function surfaceProfile(value, language) {
+function surfaceProfile(value, language, { ignoreWhitespace = language === 'zh' } = {}) {
   const points = codePoints(value);
   const canonical = [];
   const sourceIndexes = [];
   for (const [index, point] of points.entries()) {
-    if (language === 'zh' && /[\s\u200b-\u200d\u2060\ufeff]/u.test(point)) continue;
+    if (ignoreWhitespace && /[\s\u200b-\u200d\u2060\ufeff]/u.test(point)) continue;
     canonical.push(canonicalSurfacePoint(point, language));
     sourceIndexes.push(index);
   }
   return { points, canonical, sourceIndexes };
 }
 
-function formattingEquivalentSurfaceMatches(text, exact, language) {
+function formattingEquivalentSurfaceMatches(text, exact, language, kind) {
   if (!['en', 'zh'].includes(language) || typeof text !== 'string' ||
       typeof exact !== 'string' || exact.length === 0) return [];
-  const haystack = surfaceProfile(text, language);
-  const needle = surfaceProfile(exact, language);
+  const spacedEnglishName = language === 'en' &&
+    typeof kind === 'string' && kind.endsWith('-name') &&
+    /^[\p{L}\p{M}\s.'\u2018\u2019\u02bc\u00b7-]+$/u.test(exact);
+  const profileOptions = { ignoreWhitespace: language === 'zh' || spacedEnglishName };
+  const haystack = surfaceProfile(text, language, profileOptions);
+  const needle = surfaceProfile(exact, language, profileOptions);
   if (needle.canonical.length === 0) return [];
   const matches = [];
   const isWord = (value) => typeof value === 'string' && /^[\p{L}\p{N}_]$/u.test(value);
@@ -1251,7 +1255,7 @@ export function normalizeCompactWorkerEcho(extraction, packet) {
           try {
             exactSpanAt(text, exact, occurrence);
           } catch {
-            const selected = formattingEquivalentSurfaceMatches(text, exact, language)[occurrence];
+            const selected = formattingEquivalentSurfaceMatches(text, exact, language, kind)[occurrence];
             if (selected) {
               actualExact = selected.exact;
               actualOccurrence = occurrenceAt(text, actualExact, selected.start);
@@ -1707,6 +1711,17 @@ function chunkHitRunLimit(chunkState) {
     );
 }
 
+function chunkRepeatedlyMissedArtifact(chunkState, maxAttempts) {
+  return Boolean(
+    chunkState?.resumeExhausted &&
+    Number.isInteger(chunkState.attempts) &&
+    chunkState.attempts >= maxAttempts * 2 &&
+    chunkState.lastErrors?.some((error) =>
+      /did not expose .*chunk-[0-9a-z]+\.json/iu.test(error)
+    )
+  );
+}
+
 function hasResumableChunkConversation(chunkState) {
   if (!chunkState?.agentId || chunkState.resumeExhausted) return false;
   return chunkHitRunLimit(chunkState) ||
@@ -1912,15 +1927,24 @@ function chunkPlanForTarget(target, packet, opts, state) {
   for (const chunk of [...planned]) {
     const previousChunk = prior?.chunks?.[chunk.id];
     const hitRunLimit = chunkHitRunLimit(previousChunk);
-    if (!hitRunLimit) continue;
+    const missedArtifact = chunkRepeatedlyMissedArtifact(previousChunk, opts.maxAttempts);
+    if (!hitRunLimit && !missedArtifact) continue;
     if (currentChunkArchiveIsValid(target, packet, chunk)) continue;
     if (previousChunk?.agentId && !previousChunk.resumeExhausted) continue;
-    planned = replaceChunkWithChildren(target, packet, planned, chunk, opts, state);
+    planned = replaceChunkWithChildren(
+      target,
+      packet,
+      planned,
+      chunk,
+      opts,
+      state,
+      hitRunLimit ? 'run limit' : 'repeated artifact publication failure',
+    );
   }
   return planned;
 }
 
-function replaceChunkWithChildren(target, packet, chunks, failedChunk, opts, state) {
+function replaceChunkWithChildren(target, packet, chunks, failedChunk, opts, state, reason) {
   const children = splitPeopleExtractionChunk(packet, failedChunk, {
     contextUnits: opts.chunkContextUnits,
   });
@@ -1943,7 +1967,7 @@ function replaceChunkWithChildren(target, packet, chunks, failedChunk, opts, sta
     chunkPlan: persistedChunkPlan(revised),
   });
   console.error(
-    `[${stateKey(target)}/chunk-${failedChunk.id}] split after run limit into ` +
+    `[${stateKey(target)}/chunk-${failedChunk.id}] split after ${reason} into ` +
     children.map((child) => `${child.id} (${child.start}:${child.end})`).join(', '),
   );
   return revised;
@@ -2484,7 +2508,7 @@ async function processChunkedTarget(target, packet, opts, state, control, budget
           );
           continue;
         }
-        chunks = replaceChunkWithChildren(target, packet, chunks, chunk, opts, state);
+        chunks = replaceChunkWithChildren(target, packet, chunks, chunk, opts, state, 'run limit');
         continue;
       }
       throw error;
@@ -2922,6 +2946,20 @@ async function selfTest() {
     throw new Error('Validation-attempt retirement policy is incorrect');
   }
   if (
+    !chunkRepeatedlyMissedArtifact({
+      attempts: 6,
+      resumeExhausted: true,
+      lastErrors: ['Cloud agent did not expose path/chunk-002.json; artifacts: (none)'],
+    }, 3) ||
+    chunkRepeatedlyMissedArtifact({
+      attempts: 3,
+      resumeExhausted: true,
+      lastErrors: ['Cloud agent did not expose path/chunk-002.json; artifacts: (none)'],
+    }, 3)
+  ) {
+    throw new Error('Repeated artifact-publication split policy is incorrect');
+  }
+  if (
     !recoveryOnlyTarget(
       { book: 'fixture', chapter: '003' },
       { chapters: { 'fixture/003': recoveryPrior } },
@@ -2982,6 +3020,7 @@ async function selfTest() {
       zh: index === 2 ? '遷豫章府 君。' : '甲乙丙丁',
       en: index === 1
         ? 'The worker’s father arrived.'
+        : index === 3 ? 'Yao Li arrived.'
         : 'A deliberately long fixture unit.',
       literal: 'A deliberately long literal fixture unit.',
     })),
@@ -3043,6 +3082,12 @@ async function selfTest() {
       'zh',
       '豫章府君',
       [['s0003', [0]]],
+    ], [
+      'p002',
+      'personal-name',
+      'en',
+      'Yaoli',
+      [['s0004', [0]]],
     ]],
     translationRepairs: [[
       's0001',
@@ -3073,12 +3118,13 @@ async function selfTest() {
   if (
     !compactEcho.restoredInput ||
     compactEcho.droppedRepairs !== 1 ||
-    compactEcho.normalizedSurfaces !== 3 ||
+    compactEcho.normalizedSurfaces !== 4 ||
     compactEcho.normalizedRelationships !== 2 ||
     compactEcho.extraction.translationRepairs.length !== 2 ||
     compactEcho.extraction.surfaces[0][3] !== 'A deliberately' ||
     compactEcho.extraction.surfaces[1][3] !== 'worker’s father' ||
     compactEcho.extraction.surfaces[2][3] !== '豫章府 君' ||
+    compactEcho.extraction.surfaces[3][3] !== 'Yao Li' ||
     compactEcho.extraction.people[0][4].r[0] !== 'p002' ||
     compactEcho.extraction.people[1][4].r[0] !== 'p001' ||
     JSON.stringify(compactEcho.extraction.input) !== JSON.stringify(buildCompactInput(bytePacket))
