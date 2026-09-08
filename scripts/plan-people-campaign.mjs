@@ -7,6 +7,11 @@ import { buildPeopleGlossaryProgress } from '../generate-progress.js';
 import { REPO_ROOT } from './lib/people-content.mjs';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
+const CAMPAIGN_MAX_UNITS = 80;
+const CAMPAIGN_MAX_CANDIDATES = 200;
+const CAMPAIGN_MAX_WORKER_KIB = 48;
+const CAMPAIGN_RUN_TIMEOUT_MINUTES = 20;
+const CAMPAIGN_MAX_RUN_TOKENS = 3_000_000;
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
 function usage() {
@@ -17,7 +22,7 @@ function usage() {
 Options:
   --deadline DATE       Last campaign date, inclusive.
   --as-of DATE          Planning date (default: local current date).
-  --waves-per-day N     Extraction waves per day (default: 4).
+  --waves-per-day N     Extraction waves per day (default: 3).
   --buffer-percent N    Completion buffer above the minimum rate (default: 15).
   --resolution-batch N  Accepted chapters per identity checkpoint (default: 50).
   --json                Emit machine-readable JSON.`);
@@ -55,7 +60,7 @@ function parseArgs(argv) {
   const opts = {
     deadline: process.env.PEOPLE_CAMPAIGN_DEADLINE ?? null,
     asOf: localIsoDate(),
-    wavesPerDay: 4,
+    wavesPerDay: 3,
     bufferPercent: 15,
     resolutionBatch: 50,
     json: false,
@@ -96,8 +101,14 @@ export function campaignTargets({ missingChapters, asOf, deadline, wavesPerDay, 
     minimumChaptersPerDay,
     bufferedChaptersPerDay,
     chaptersPerWave,
-    extractionConcurrency: Math.min(24, Math.max(12, Math.ceil(chaptersPerWave / 2))),
-    editorialConcurrency: Math.min(24, Math.max(8, Math.ceil(chaptersPerWave / 3))),
+    extractionConcurrency: Math.min(20, Math.max(12, Math.ceil(chaptersPerWave / 2.5))),
+    editorialConcurrency: Math.min(18, Math.max(8, Math.ceil(chaptersPerWave / 3))),
+    maxUnits: CAMPAIGN_MAX_UNITS,
+    maxCandidates: CAMPAIGN_MAX_CANDIDATES,
+    maxWorkerKiB: CAMPAIGN_MAX_WORKER_KIB,
+    runTimeoutMinutes: CAMPAIGN_RUN_TIMEOUT_MINUTES,
+    maxRunTokens: CAMPAIGN_MAX_RUN_TOKENS,
+    waveCostCeilingDollars: Math.ceil(chaptersPerWave * 4.5),
   };
 }
 
@@ -106,14 +117,18 @@ function selfTest() {
     missingChapters: 3130,
     asOf: '2026-09-07',
     deadline: '2026-09-30',
-    wavesPerDay: 4,
+    wavesPerDay: 3,
     bufferPercent: 15,
   });
   if (
     result.calendarDays !== 24 ||
     result.minimumChaptersPerDay !== 131 ||
     result.bufferedChaptersPerDay !== 151 ||
-    result.chaptersPerWave !== 38
+    result.chaptersPerWave !== 51 ||
+    result.extractionConcurrency !== 20 ||
+    result.maxUnits !== 80 ||
+    result.maxCandidates !== 200 ||
+    result.runTimeoutMinutes !== 20
   ) {
     throw new Error(`Unexpected campaign targets: ${JSON.stringify(result)}`);
   }
@@ -155,7 +170,22 @@ function main() {
   console.log(`Buffered target: ${targets.bufferedChaptersPerDay} chapters/day (${opts.bufferPercent}% buffer)`);
   console.log(`Cadence: ${opts.wavesPerDay} x ${targets.chaptersPerWave}-chapter waves/day`);
   console.log(`Initial concurrency: extraction ${targets.extractionConcurrency}, editorial ${targets.editorialConcurrency}`);
+  console.log(
+    `New-work profile: ${targets.maxUnits} units, ${targets.maxCandidates} candidates, ` +
+    `${targets.maxWorkerKiB} KiB packet ceiling, ${targets.runTimeoutMinutes}m remote timeout, ` +
+    `${targets.maxRunTokens.toLocaleString('en-US')} token circuit breaker`,
+  );
+  console.log(`Per-wave raw cost ceiling: $${targets.waveCostCeilingDollars}`);
   console.log(`Identity resolution checkpoint: every ${opts.resolutionBatch} accepted chapters`);
+  console.log('Recovery first: npm run people:extract -- --all --recover-only --retry-failed --skip-dirty');
+  console.log(
+    `New wave: npm run people:extract -- --all --limit ${targets.chaptersPerWave} --order smallest ` +
+    `--skip-dirty --concurrency ${targets.extractionConcurrency} --max-units ${targets.maxUnits} ` +
+    `--max-candidates ${targets.maxCandidates} --max-worker-kib ${targets.maxWorkerKiB} ` +
+    `--run-timeout-minutes ${targets.runTimeoutMinutes} --max-run-tokens ${targets.maxRunTokens} ` +
+    `--max-attempts 3 --max-cost ${targets.waveCostCeilingDollars} --cost-reserve 5 ` +
+    '--max-run-cost 5 --model grok-4.6 --effort low',
+  );
 }
 
 if (isMain) {

@@ -105,6 +105,7 @@ const DEFAULT_MAX_COST_CENTS = 1000;
 const DEFAULT_MAX_RUN_COST_CENTS = 500;
 const DEFAULT_MAX_RUN_TOKENS = 5_000_000;
 const DEFAULT_RUN_POLL_MS = 15_000;
+const DEFAULT_RUN_TIMEOUT_MS = 20 * 60 * 1000;
 const DEFAULT_CHUNK_CONTEXT_UNITS = DEFAULT_PEOPLE_CHUNK_CONTEXT_UNITS;
 const DEFAULT_AGENT_OVERHEAD_SCORE = 100_000;
 const DEFAULT_AGENT_COST_RESERVE_CENTS = 500;
@@ -147,6 +148,8 @@ Options:
   --max-run-cost DOLLARS
                        Cancel one active run at this raw usage cost (default: $${(DEFAULT_MAX_RUN_COST_CENTS / 100).toFixed(2)}; use unlimited to disable).
   --max-run-tokens N   Cancel one active run at this token count (default: ${DEFAULT_MAX_RUN_TOKENS.toLocaleString('en-US')}; use unlimited to disable).
+  --run-timeout-minutes N
+                       Cancel a stalled remote run after N minutes (default: ${DEFAULT_RUN_TIMEOUT_MS / 60_000}).
   --plan-out PATH      Write the measured queue plan (default: generated data).
   --max-attempts N     Validation attempts per phase (default: 3).
   --model MODEL        Cursor model (default: ${DEFAULT_MODEL}).
@@ -199,6 +202,7 @@ function parseArgs(argv) {
     agentCostReserveCents: DEFAULT_AGENT_COST_RESERVE_CENTS,
     maxRunCostCents: DEFAULT_MAX_RUN_COST_CENTS,
     maxRunTokens: DEFAULT_MAX_RUN_TOKENS,
+    runTimeoutMs: DEFAULT_RUN_TIMEOUT_MS,
     planOut: DEFAULT_PLAN_FILE,
     maxAttempts: 3,
     model: process.env.SDK_PEOPLE_MODEL ?? DEFAULT_MODEL,
@@ -247,6 +251,7 @@ function parseArgs(argv) {
     else if (arg === '--cost-reserve') opts.agentCostReserveCents = parseCursorDollarLimit(next(), arg);
     else if (arg === '--max-run-cost') opts.maxRunCostCents = parseCursorDollarLimit(next(), arg);
     else if (arg === '--max-run-tokens') opts.maxRunTokens = parseCursorIntegerLimit(next(), arg);
+    else if (arg === '--run-timeout-minutes') opts.runTimeoutMs = positiveInteger(next(), arg, 180) * 60_000;
     else if (arg === '--plan-out') opts.planOut = path.resolve(REPO_ROOT, next());
     else if (arg === '--max-attempts') opts.maxAttempts = positiveInteger(next(), arg, 5);
     else if (arg === '--model') opts.model = next();
@@ -378,20 +383,39 @@ function hasRetainedAgentConversation(record) {
   ));
 }
 
-function withRecoveryPriority(target, state) {
+function directoryHasJson(directory) {
+  return fs.existsSync(directory) && fs.readdirSync(directory).some((name) => name.endsWith('.json'));
+}
+
+function hasLocalRecoveryArtifact(target, state) {
   const chapterState = state.chapters[stateKey(target)] ?? {};
   const chunkStates = Object.values(chapterState.chunks ?? {});
-  const hasRetainedChat = hasRetainedAgentConversation(chapterState) ||
-    chunkStates.some(hasRetainedAgentConversation);
-  const archiveDirectory = path.join(
+  const acceptedDirectory = path.join(
     PEOPLE_DIR,
     'generated',
     'chunk-extractions',
     target.book,
     target.chapter,
   );
-  const hasAcceptedPart = chunkStates.some((chunk) => chunk.status === 'accepted') ||
-    (fs.existsSync(archiveDirectory) && fs.readdirSync(archiveDirectory).some((name) => name.endsWith('.json')));
+  const rejectedDirectory = path.join(
+    PEOPLE_DIR,
+    'generated',
+    'rejected-chunk-extractions',
+    target.book,
+    target.chapter,
+  );
+  return chunkStates.some((chunk) => chunk.status === 'accepted') ||
+    directoryHasJson(acceptedDirectory) ||
+    directoryHasJson(rejectedDirectory) ||
+    fs.existsSync(rejectedArtifactPath(target));
+}
+
+function withRecoveryPriority(target, state) {
+  const chapterState = state.chapters[stateKey(target)] ?? {};
+  const chunkStates = Object.values(chapterState.chunks ?? {});
+  const hasRetainedChat = hasRetainedAgentConversation(chapterState) ||
+    chunkStates.some(hasRetainedAgentConversation);
+  const hasAcceptedPart = hasLocalRecoveryArtifact(target, state);
   return {
     ...target,
     metrics: {
@@ -410,15 +434,7 @@ function recoveryOnlyTarget(target, state) {
   ) {
     return true;
   }
-  const archiveDirectory = path.join(
-    PEOPLE_DIR,
-    'generated',
-    'chunk-extractions',
-    target.book,
-    target.chapter,
-  );
-  return fs.existsSync(archiveDirectory) &&
-    fs.readdirSync(archiveDirectory).some((name) => name.endsWith('.json'));
+  return hasLocalRecoveryArtifact(target, state);
 }
 
 function availableToCursorLane(target, ledger, workerId, state) {
@@ -666,6 +682,7 @@ function prepareTargetQueue(rawTargets, opts, state, matcher) {
       maxWorkerBytes: opts.allowLarge ? null : opts.maxWorkerBytes,
       largeChapterMode: opts.allowLarge ? 'whole' : opts.deferLarge ? 'defer' : 'chunk',
       chunkContextUnits: opts.chunkContextUnits,
+      runTimeoutMs: opts.runTimeoutMs,
       maxCostCents: opts.maxCostCents,
       concurrency: opts.concurrency,
     },
@@ -1104,6 +1121,7 @@ async function runAgentTurn(agent, prompt, target, opts, phase, control) {
       apiKey: opts.apiKey,
       label: `[${stateKey(target)}] ${phase}`,
       pollMs: DEFAULT_RUN_POLL_MS,
+      timeoutMs: opts.runTimeoutMs,
       maxRawCostCents: opts.maxRunCostCents,
       maxTotalTokens: opts.maxRunTokens,
     });
@@ -1208,22 +1226,140 @@ function formattingEquivalentSurfaceMatches(text, exact, language, kind) {
   return matches;
 }
 
+const COMPACT_SURFACE_KIND_ALIASES = new Map([
+  ['epithet', 'alternate-name'],
+  ['given-name', 'personal-name'],
+  ['nickname', 'alternate-name'],
+  ['regnal', 'alternate-name'],
+  ['regnal-name', 'alternate-name'],
+  ['surname', 'personal-name'],
+]);
+
+const COMPACT_NAME_KIND_ALIASES = new Map([
+  ['occupation-title', 'title'],
+]);
+
+const EXACT_YEAR_PRECISIONS = new Set(['exact', 'month', 'day', 'season']);
+const APPROXIMATE_YEAR_PRECISIONS = new Set([
+  'approximate',
+  'century',
+  'decade',
+  'range',
+  'year-range',
+]);
+
 function normalizeWesternDatePrecisions(value, seen = new Set()) {
   if (!value || typeof value !== 'object' || seen.has(value)) return 0;
   seen.add(value);
   let normalized = 0;
-  if (
-    ['BC', 'AD'].includes(value.era) &&
-    Number.isInteger(value.year) &&
-    ['exact', 'month', 'day'].includes(value.precision)
-  ) {
-    value.precision = 'year';
-    normalized += 1;
+  if (['BC', 'AD'].includes(value.era) && Number.isInteger(value.year)) {
+    const precision = typeof value.precision === 'string'
+      ? value.precision.trim().toLocaleLowerCase('en-US')
+      : value.precision;
+    if (EXACT_YEAR_PRECISIONS.has(precision)) {
+      value.precision = 'year';
+      normalized += 1;
+    } else if (APPROXIMATE_YEAR_PRECISIONS.has(precision)) {
+      value.precision = 'circa';
+      normalized += 1;
+    }
   }
   for (const child of Array.isArray(value) ? value : Object.values(value)) {
     normalized += normalizeWesternDatePrecisions(child, seen);
   }
   return normalized;
+}
+
+function compactAliasesByPerson(extraction) {
+  const aliases = new Map();
+  const add = (person, language, value, kind = 'personal-name') => {
+    if (typeof value !== 'string' || !value.trim()) return;
+    const key = `${person}:${language}`;
+    if (!aliases.has(key)) aliases.set(key, new Map());
+    aliases.get(key).set(value, { exact: value, kind });
+  };
+  for (const person of extraction.people ?? []) {
+    if (!Array.isArray(person)) continue;
+    const [id, preferred, , , , names] = person;
+    if (Array.isArray(preferred)) {
+      add(id, 'en', preferred[0]);
+      add(id, 'zh', preferred[1]);
+    }
+    for (const name of names ?? []) {
+      const value = Array.isArray(name) ? name[0] : null;
+      if (!value || typeof value !== 'object') continue;
+      const kind = COMPACT_SURFACE_KIND_ALIASES.get(value.kind) ?? value.kind;
+      add(id, 'en', value.en, kind);
+      add(id, 'zh', value.zh, kind);
+    }
+  }
+  return aliases;
+}
+
+function uniqueContainedAliasMatch(text, requested, language, kind, aliases) {
+  if (!(aliases instanceof Map)) return null;
+  const requestedKey = surfaceProfile(requested, language, { ignoreWhitespace: true })
+    .canonical.join('');
+  const matches = new Map();
+  for (const alias of aliases.values()) {
+    const aliasKey = surfaceProfile(alias.exact, language, { ignoreWhitespace: true })
+      .canonical.join('');
+    if (!aliasKey || (!requestedKey.includes(aliasKey) && !aliasKey.includes(requestedKey))) continue;
+    for (const match of formattingEquivalentSurfaceMatches(
+      text,
+      alias.exact,
+      language,
+      alias.kind ?? kind,
+    )) {
+      matches.set(`${match.start}:${match.exact}`, match);
+    }
+  }
+  return matches.size === 1 ? [...matches.values()][0] : null;
+}
+
+function normalizeCompactClaimMetadata(extraction) {
+  let normalizedAttestations = 0;
+  let normalizedFamilyMetadata = 0;
+  for (const claim of extraction.claims ?? []) {
+    if (!Array.isArray(claim) || !claim[2] || typeof claim[2] !== 'object') continue;
+    const value = claim[2];
+    if (claim[1] === 'attestation') {
+      for (const key of ['provenance', 'speaker']) {
+        if (!Object.hasOwn(value, key)) continue;
+        delete value[key];
+        normalizedAttestations += 1;
+      }
+    }
+    if (claim[1] !== 'family-relationship') continue;
+    if ([0, null, 'unspecified'].includes(value.generationDistance)) {
+      delete value.generationDistance;
+      normalizedFamilyMetadata += 1;
+    }
+    if (value.sharedParentage === 'unspecified') {
+      delete value.sharedParentage;
+      normalizedFamilyMetadata += 1;
+    }
+  }
+  return { normalizedAttestations, normalizedFamilyMetadata };
+}
+
+function normalizeCompactNameKinds(extraction) {
+  let normalizedNameKinds = 0;
+  for (const person of extraction.people ?? []) {
+    if (!Array.isArray(person)) continue;
+    for (const name of person[5] ?? []) {
+      const value = Array.isArray(name) ? name[0] : null;
+      const replacement = COMPACT_NAME_KIND_ALIASES.get(value?.kind);
+      if (!replacement) continue;
+      value.kind = replacement;
+      normalizedNameKinds += 1;
+    }
+  }
+  return normalizedNameKinds;
+}
+
+function surfaceKindPriority(kind) {
+  return kind === 'personal-name' ? 3 : typeof kind === 'string' && kind.endsWith('-name') ? 2 : 1;
 }
 
 export function normalizeCompactWorkerEcho(extraction, packet) {
@@ -1233,6 +1369,12 @@ export function normalizeCompactWorkerEcho(extraction, packet) {
       restoredInput: false,
       droppedRepairs: 0,
       normalizedSurfaces: 0,
+      droppedSurfaceOccurrences: 0,
+      normalizedSurfaceOverlaps: 0,
+      normalizedSurfaceKinds: 0,
+      normalizedNameKinds: 0,
+      normalizedAttestations: 0,
+      normalizedFamilyMetadata: 0,
       normalizedRelationships: 0,
       normalizedPrecisions: 0,
     };
@@ -1243,10 +1385,110 @@ export function normalizeCompactWorkerEcho(extraction, packet) {
   const restoredInput = JSON.stringify(normalized.input) !== JSON.stringify(expectedInput);
   normalized.input = expectedInput;
   const normalizedPrecisions = normalizeWesternDatePrecisions(normalized);
+  const normalizedNameKinds = normalizeCompactNameKinds(normalized);
+  const { normalizedAttestations, normalizedFamilyMetadata } =
+    normalizeCompactClaimMetadata(normalized);
 
   const unitById = new Map(packet.units.map((unit) => [unit.id, unit]));
+  const aliasesByPerson = compactAliasesByPerson(normalized);
   let normalizedSurfaces = 0;
+  let droppedSurfaceOccurrences = 0;
+  let normalizedSurfaceOverlaps = 0;
+  let normalizedSurfaceKinds = 0;
   if (Array.isArray(normalized.surfaces)) {
+    const entries = [];
+    const invalidSurfaces = [];
+    for (const surface of normalized.surfaces) {
+      if (!Array.isArray(surface) || surface.length !== 5 || !Array.isArray(surface[4])) {
+        invalidSurfaces.push(surface);
+        continue;
+      }
+      const [person, workerKind, language, exact, unitRows] = surface;
+      const kind = COMPACT_SURFACE_KIND_ALIASES.get(workerKind) ?? workerKind;
+      if (kind !== workerKind) normalizedSurfaceKinds += 1;
+      const structurallyValid = unitRows.every((unitRow) =>
+        Array.isArray(unitRow) && unitRow.length === 2 && Array.isArray(unitRow[1]) &&
+        unitRow[1].every(Number.isInteger)
+      );
+      if (!structurallyValid) {
+        invalidSurfaces.push(surface);
+        continue;
+      }
+      for (const [unitId, occurrences] of unitRows) {
+        const text = unitById.get(unitId)?.[language];
+        if (typeof text !== 'string') {
+          invalidSurfaces.push(surface);
+          continue;
+        }
+        for (const occurrence of occurrences) {
+          let actualExact = exact;
+          let actualOccurrence = occurrence;
+          let located;
+          try {
+            located = exactSpanAt(text, exact, occurrence);
+          } catch {
+            const equivalentMatches = formattingEquivalentSurfaceMatches(text, exact, language, kind);
+            const selected = equivalentMatches[occurrence] ??
+              (equivalentMatches.length === 1 ? equivalentMatches[0] : null) ??
+              uniqueContainedAliasMatch(
+                text,
+                exact,
+                language,
+                kind,
+                aliasesByPerson.get(`${person}:${language}`),
+              );
+            if (!selected) {
+              droppedSurfaceOccurrences += 1;
+              continue;
+            }
+            actualExact = selected.exact;
+            actualOccurrence = occurrenceAt(text, actualExact, selected.start);
+            located = exactSpanAt(text, actualExact, actualOccurrence);
+            normalizedSurfaces += 1;
+          }
+          entries.push({
+            person,
+            kind,
+            language,
+            exact: actualExact,
+            unitId,
+            occurrence: actualOccurrence,
+            start: located.startCodePoint,
+            end: located.endCodePoint,
+          });
+        }
+      }
+    }
+
+    const active = new Set(entries);
+    const ordered = [...entries].sort((left, right) =>
+      left.unitId.localeCompare(right.unitId) ||
+      left.language.localeCompare(right.language) ||
+      left.start - right.start ||
+      right.end - left.end ||
+      right.exact.length - left.exact.length
+    );
+    for (let leftIndex = 0; leftIndex < ordered.length; leftIndex += 1) {
+      const left = ordered[leftIndex];
+      if (!active.has(left)) continue;
+      for (let rightIndex = leftIndex + 1; rightIndex < ordered.length; rightIndex += 1) {
+        const right = ordered[rightIndex];
+        if (right.unitId !== left.unitId || right.language !== left.language) break;
+        if (right.start >= left.end) break;
+        if (!active.has(right) || right.person !== left.person) continue;
+        const nested = (left.start <= right.start && left.end >= right.end) ||
+          (right.start <= left.start && right.end >= left.end);
+        if (!nested) continue;
+        const leftLength = left.end - left.start;
+        const rightLength = right.end - right.start;
+        const keepLeft = leftLength > rightLength ||
+          (leftLength === rightLength && surfaceKindPriority(left.kind) >= surfaceKindPriority(right.kind));
+        active.delete(keepLeft ? right : left);
+        normalizedSurfaceOverlaps += 1;
+        if (!keepLeft) break;
+      }
+    }
+
     const groups = new Map();
     const addSurface = (person, kind, language, exact, unitId, occurrence) => {
       const key = JSON.stringify([person, kind, language, exact]);
@@ -1255,44 +1497,27 @@ export function normalizeCompactWorkerEcho(extraction, packet) {
       if (!group.units.has(unitId)) group.units.set(unitId, new Set());
       group.units.get(unitId).add(occurrence);
     };
-    for (const surface of normalized.surfaces) {
-      if (!Array.isArray(surface) || surface.length !== 5 || !Array.isArray(surface[4])) {
-        const key = `invalid:${groups.size}`;
-        groups.set(key, { raw: surface });
-        continue;
-      }
-      const [person, kind, language, exact, unitRows] = surface;
-      for (const unitRow of unitRows) {
-        if (!Array.isArray(unitRow) || unitRow.length !== 2 || !Array.isArray(unitRow[1])) {
-          addSurface(person, kind, language, exact, unitRow?.[0], unitRow?.[1]);
-          continue;
-        }
-        const [unitId, occurrences] = unitRow;
-        const text = unitById.get(unitId)?.[language];
-        for (const occurrence of occurrences) {
-          let actualExact = exact;
-          let actualOccurrence = occurrence;
-          try {
-            exactSpanAt(text, exact, occurrence);
-          } catch {
-            const selected = formattingEquivalentSurfaceMatches(text, exact, language, kind)[occurrence];
-            if (selected) {
-              actualExact = selected.exact;
-              actualOccurrence = occurrenceAt(text, actualExact, selected.start);
-              normalizedSurfaces += 1;
-            }
-          }
-          addSurface(person, kind, language, actualExact, unitId, actualOccurrence);
-        }
-      }
+    for (const entry of entries) {
+      if (!active.has(entry)) continue;
+      addSurface(
+        entry.person,
+        entry.kind,
+        entry.language,
+        entry.exact,
+        entry.unitId,
+        entry.occurrence,
+      );
     }
-    normalized.surfaces = [...groups.values()].map((group) => group.raw ?? [
+    normalized.surfaces = [
+      ...invalidSurfaces,
+      ...[...groups.values()].map((group) => [
       group.person,
       group.kind,
       group.language,
       group.exact,
       [...group.units.entries()].map(([unitId, occurrences]) => [unitId, [...occurrences].sort((a, b) => a - b)]),
-    ]);
+      ]),
+    ];
   }
 
   let normalizedRelationships = 0;
@@ -1353,6 +1578,12 @@ export function normalizeCompactWorkerEcho(extraction, packet) {
     restoredInput,
     droppedRepairs,
     normalizedSurfaces,
+    droppedSurfaceOccurrences,
+    normalizedSurfaceOverlaps,
+    normalizedSurfaceKinds,
+    normalizedNameKinds,
+    normalizedAttestations,
+    normalizedFamilyMetadata,
     normalizedRelationships,
     normalizedPrecisions,
   };
@@ -1364,6 +1595,12 @@ function validateDownloadedExtraction(extraction, packet, target = null, chunk =
     normalized.restoredInput ||
     normalized.droppedRepairs > 0 ||
     normalized.normalizedSurfaces > 0 ||
+    normalized.droppedSurfaceOccurrences > 0 ||
+    normalized.normalizedSurfaceOverlaps > 0 ||
+    normalized.normalizedSurfaceKinds > 0 ||
+    normalized.normalizedNameKinds > 0 ||
+    normalized.normalizedAttestations > 0 ||
+    normalized.normalizedFamilyMetadata > 0 ||
     normalized.normalizedRelationships > 0 ||
     normalized.normalizedPrecisions > 0
   )) {
@@ -1374,6 +1611,24 @@ function validateDownloadedExtraction(extraction, packet, target = null, chunk =
         : []),
       ...(normalized.normalizedSurfaces > 0
         ? [`normalized ${normalized.normalizedSurfaces} format-only surface(s)`]
+        : []),
+      ...(normalized.droppedSurfaceOccurrences > 0
+        ? [`dropped ${normalized.droppedSurfaceOccurrences} unlocatable surface occurrence(s)`]
+        : []),
+      ...(normalized.normalizedSurfaceOverlaps > 0
+        ? [`collapsed ${normalized.normalizedSurfaceOverlaps} same-person nested surface(s)`]
+        : []),
+      ...(normalized.normalizedSurfaceKinds > 0
+        ? [`normalized ${normalized.normalizedSurfaceKinds} surface kind(s)`]
+        : []),
+      ...(normalized.normalizedNameKinds > 0
+        ? [`normalized ${normalized.normalizedNameKinds} name kind(s)`]
+        : []),
+      ...(normalized.normalizedAttestations > 0
+        ? [`removed ${normalized.normalizedAttestations} misplaced attestation field(s)`]
+        : []),
+      ...(normalized.normalizedFamilyMetadata > 0
+        ? [`removed ${normalized.normalizedFamilyMetadata} empty family qualifier(s)`]
         : []),
       ...(normalized.normalizedRelationships > 0
         ? [`derived ${normalized.normalizedRelationships} reciprocal family hint(s)`]
@@ -1435,6 +1690,7 @@ async function recoverInterruptedExtraction(target, packet, opts, state, control
           apiKey: opts.apiKey,
           label: `[${stateKey(target)}] recovered extraction`,
           pollMs: DEFAULT_RUN_POLL_MS,
+          timeoutMs: opts.runTimeoutMs,
           maxRawCostCents: opts.maxRunCostCents,
           maxTotalTokens: opts.maxRunTokens,
         });
@@ -2369,6 +2625,7 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
             apiKey: opts.apiKey,
             label: `[${stateKey(target)}] recovered chunk-${chunk.id}`,
             pollMs: DEFAULT_RUN_POLL_MS,
+            timeoutMs: opts.runTimeoutMs,
             maxRawCostCents: opts.maxRunCostCents,
             maxTotalTokens: opts.maxRunTokens,
           });
@@ -3164,6 +3421,96 @@ async function selfTest() {
   ) {
     throw new Error('Compact worker echo normalization did not preserve host-owned data');
   }
+  const normalizationPacket = {
+    ...bytePacket,
+    units: [{
+      ...bytePacket.units[0],
+      zh: '哲宗即位。',
+      en: 'When Zhezong came to the throne.',
+    }],
+    input: {
+      ...bytePacket.input,
+      unitCount: 1,
+      unitDigests: [bytePacket.input.unitDigests[0]],
+    },
+  };
+  const normalizedMalformedEcho = normalizeCompactWorkerEcho({
+    schemaVersion: 2,
+    book: 'fixture',
+    chapter: '005',
+    input: buildCompactInput(normalizationPacket),
+    run: {},
+    people: [[
+      'p001',
+      ['Emperor Zhezong', '哲宗', null],
+      'historical',
+      'Emperor',
+      { n: [], r: ['p002'], a: ['AD 1'], p: [], x: null },
+      [[{ kind: 'occupation-title', en: 'Zhezong', zh: '哲宗' }, 'explicit', ['s0001']]],
+      [],
+    ], [
+      'p002',
+      ['Relative', '親屬', null],
+      'historical',
+      'Relative',
+      { n: [], r: ['p001'], a: ['AD 1'], p: [], x: 'Fixture relative.' },
+      [[{ kind: 'personal', en: 'Relative', zh: '親屬' }, 'explicit', ['s0001']]],
+      [],
+    ]],
+    surfaces: [
+      ['p001', 'regnal', 'en', 'Emperor Zhezong', [['s0001', [0]]]],
+      ['p001', 'personal-name', 'en', 'Zhezong', [['s0001', [1]]]],
+      ['p001', 'personal-name', 'en', 'Ghost', [['s0001', [0]]]],
+    ],
+    claims: [[
+      'p001',
+      'attestation',
+      {
+        sourceDate: { text: 'fixture date' },
+        westernYear: { era: 'AD', year: 1, precision: 'decade' },
+        provenance: { mode: 'misplaced' },
+        speaker: 'misplaced',
+      },
+      'explicit',
+      ['s0001'],
+    ], [
+      'p001',
+      'family-relationship',
+      {
+        relation: 'sibling-of',
+        personId: 'p002',
+        generationDistance: 0,
+        sharedParentage: 'unspecified',
+      },
+      'explicit',
+      ['s0001'],
+    ]],
+    translationRepairs: [],
+    candidateDispositions: [],
+    coverage: { unresolvedReferences: [] },
+  }, normalizationPacket);
+  if (
+    normalizedMalformedEcho.normalizedSurfaces !== 2 ||
+    normalizedMalformedEcho.droppedSurfaceOccurrences !== 1 ||
+    normalizedMalformedEcho.normalizedSurfaceOverlaps !== 1 ||
+    normalizedMalformedEcho.normalizedSurfaceKinds !== 1 ||
+    normalizedMalformedEcho.normalizedNameKinds !== 1 ||
+    normalizedMalformedEcho.normalizedAttestations !== 2 ||
+    normalizedMalformedEcho.normalizedFamilyMetadata !== 2 ||
+    normalizedMalformedEcho.normalizedPrecisions !== 1 ||
+    normalizedMalformedEcho.extraction.surfaces.length !== 1 ||
+    normalizedMalformedEcho.extraction.surfaces[0][1] !== 'personal-name' ||
+    normalizedMalformedEcho.extraction.surfaces[0][3] !== 'Zhezong' ||
+    normalizedMalformedEcho.extraction.surfaces[0][4][0][1][0] !== 0 ||
+    normalizedMalformedEcho.extraction.people[0][5][0][0].kind !== 'title' ||
+    normalizedMalformedEcho.extraction.claims[0][2].westernYear.precision !== 'circa' ||
+    Object.hasOwn(normalizedMalformedEcho.extraction.claims[0][2], 'speaker') ||
+    Object.hasOwn(normalizedMalformedEcho.extraction.claims[0][2], 'provenance') ||
+    Object.hasOwn(normalizedMalformedEcho.extraction.claims[1][2], 'generationDistance') ||
+    Object.hasOwn(normalizedMalformedEcho.extraction.claims[1][2], 'sharedParentage')
+  ) {
+    throw new Error('Malformed compact worker echo normalization regressed');
+  }
   const byteBoundPlan = enforceWorkerByteCeiling(
     { book: 'fixture', chapter: '005' },
     bytePacket,
@@ -3657,6 +4004,7 @@ async function main() {
       `agent reservation=$${(opts.agentCostReserveCents / 100).toFixed(2)}; ` +
       `per-run raw ceiling=${opts.maxRunCostCents === null ? 'unlimited' : `$${(opts.maxRunCostCents / 100).toFixed(2)}`}; ` +
       `per-run token ceiling=${opts.maxRunTokens === null ? 'unlimited' : opts.maxRunTokens.toLocaleString('en-US')}; ` +
+      `remote timeout=${Math.ceil(opts.runTimeoutMs / 60_000)}m; ` +
       `${opts.recoverOnly ? 'artifact recovery only; ' : ''}` +
       `shared worker=${opts.workerId}; fresh workers=sealed packet-only; no worker git pushes`,
     );
