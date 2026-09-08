@@ -78,8 +78,12 @@ import {
   claimIsActive,
   claimRemotePeopleTargets,
   fetchPeopleQueueBase,
+  hasLocalCursorRecovery,
+  hasLocalCursorRecoveryArtifact,
+  hasRecoverableCursorConversation,
   markRemotePeopleClaims,
   readRemotePeopleWorkLedger,
+  releaseRemotePeopleClaims,
   syncLocalCursorReservations,
 } from './lib/people-work-queue.mjs';
 import {
@@ -378,46 +382,12 @@ function withDispatchMetrics(target, workerCount = 1) {
   };
 }
 
-function hasRetainedAgentConversation(record) {
-  return Boolean(record?.agentId && !record.resumeExhausted && (
-    ['claimed', 'extracting', 'interrupted', 'recovering', 'failed/retryable', 'failed'].includes(record.status) ||
-    chunkHitRunLimit(record)
-  ));
-}
-
-function directoryHasJson(directory) {
-  return fs.existsSync(directory) && fs.readdirSync(directory).some((name) => name.endsWith('.json'));
-}
-
-function hasLocalRecoveryArtifact(target, state) {
-  const chapterState = state.chapters[stateKey(target)] ?? {};
-  const chunkStates = Object.values(chapterState.chunks ?? {});
-  const acceptedDirectory = path.join(
-    PEOPLE_DIR,
-    'generated',
-    'chunk-extractions',
-    target.book,
-    target.chapter,
-  );
-  const rejectedDirectory = path.join(
-    PEOPLE_DIR,
-    'generated',
-    'rejected-chunk-extractions',
-    target.book,
-    target.chapter,
-  );
-  return chunkStates.some((chunk) => chunk.status === 'accepted') ||
-    directoryHasJson(acceptedDirectory) ||
-    directoryHasJson(rejectedDirectory) ||
-    fs.existsSync(rejectedArtifactPath(target));
-}
-
 function withRecoveryPriority(target, state) {
   const chapterState = state.chapters[stateKey(target)] ?? {};
   const chunkStates = Object.values(chapterState.chunks ?? {});
-  const hasRetainedChat = hasRetainedAgentConversation(chapterState) ||
-    chunkStates.some(hasRetainedAgentConversation);
-  const hasAcceptedPart = hasLocalRecoveryArtifact(target, state);
+  const hasRetainedChat = hasRecoverableCursorConversation(chapterState) ||
+    chunkStates.some(hasRecoverableCursorConversation);
+  const hasAcceptedPart = hasLocalCursorRecoveryArtifact(target, chapterState);
   return {
     ...target,
     metrics: {
@@ -430,13 +400,7 @@ function withRecoveryPriority(target, state) {
 function recoveryOnlyTarget(target, state) {
   const chapterState = state.chapters[stateKey(target)] ?? {};
   if (chapterState.status === 'accepted') return false;
-  if (
-    hasRetainedAgentConversation(chapterState) ||
-    Object.values(chapterState.chunks ?? {}).some(hasRetainedAgentConversation)
-  ) {
-    return true;
-  }
-  return hasLocalRecoveryArtifact(target, state);
+  return hasLocalCursorRecovery(target, chapterState);
 }
 
 function availableToCursorLane(target, ledger, workerId, state) {
@@ -459,6 +423,20 @@ function planningScopeTargets(laneTargets, ledger, opts, state) {
       recoveryOnlyTarget(target, state);
   });
   return recoveryTargets.length > 0 ? recoveryTargets : laneTargets;
+}
+
+function orphanedOwnedClaimTargets(ledger, state, workerId) {
+  return Object.entries(ledger.claims ?? {})
+    .filter(([, claim]) =>
+      claim.lane === 'cursor-sdk' &&
+      claim.worker === workerId &&
+      claim.status === 'claimed'
+    )
+    .map(([key]) => {
+      const [book, chapter] = key.split('/');
+      return { book, chapter };
+    })
+    .filter((target) => !recoveryOnlyTarget(target, state));
 }
 
 function compareBookOrder(left, right) {
@@ -3876,6 +3854,20 @@ async function selfTest() {
   if (scoped.length !== 2 || scoped.some((target) => target.chapter === '003')) {
     throw new Error('Recovery-first planning did not bypass unrelated fresh chapters');
   }
+  const orphanedClaims = orphanedOwnedClaimTargets({
+    claims: {
+      'fixture/001': { lane: 'cursor-sdk', worker: 'cursor-a', status: 'claimed' },
+      'fixture/002': { lane: 'cursor-sdk', worker: 'cursor-a', status: 'claimed' },
+      'fixture/003': { lane: 'grokbot', worker: 'grok-a', status: 'claimed' },
+    },
+  }, {
+    chapters: {
+      'fixture/002': { status: 'interrupted', agentId: 'bc-resumable' },
+    },
+  }, 'cursor-a');
+  if (orphanedClaims.length !== 1 || orphanedClaims[0].chapter !== '001') {
+    throw new Error('Scheduler restart did not isolate unstarted claims for release');
+  }
   const currentStickyScope = planningScopeTargets([
     { book: 'fixture', chapter: '001' },
     { book: 'fixture', chapter: '002' },
@@ -3954,10 +3946,23 @@ async function main() {
       console.log(
         `Shared queue synchronized: recovery=${synced.result.recovery.length}, ` +
         `local-ready=${synced.result.ready.length}, reserved-elsewhere=${synced.result.reservedElsewhere.length}, ` +
+        `stale-recovery-released=${synced.result.releasedStaleRecovery.length}, ` +
         `merged-pruned=${synced.result.merged.length}`,
       );
     }
-    const workLedger = readRemotePeopleWorkLedger(sharedQueueOptions);
+    let workLedger = readRemotePeopleWorkLedger(sharedQueueOptions);
+    if (!opts.dryRun) {
+      const orphaned = orphanedOwnedClaimTargets(workLedger, state, opts.workerId);
+      if (orphaned.length > 0) {
+        releaseRemotePeopleClaims(orphaned, {
+          ...sharedQueueOptions,
+          lane: 'cursor-sdk',
+          worker: opts.workerId,
+        });
+        console.log(`Released ${orphaned.length} unstarted claim(s) left by an earlier scheduler run.`);
+        workLedger = readRemotePeopleWorkLedger(sharedQueueOptions);
+      }
+    }
     const allTargets = chapterTargets(opts);
     const laneTargets = allTargets.filter((target) =>
       availableToCursorLane(target, workLedger, opts.workerId, state)
@@ -4111,6 +4116,18 @@ async function main() {
           worker: opts.workerId,
           note: 'Manual inspection or explicit release is required before reassignment',
         });
+      }
+      const startedKeys = new Set(results.map(({ target }) => workQueueChapterKey(target)));
+      const unstarted = claimedTargets.filter((target) =>
+        !startedKeys.has(workQueueChapterKey(target))
+      );
+      if (unstarted.length) {
+        releaseRemotePeopleClaims(unstarted, {
+          ...sharedQueueOptions,
+          lane: 'cursor-sdk',
+          worker: opts.workerId,
+        });
+        console.log(`Released ${unstarted.length} claim(s) that were not started before shutdown.`);
       }
     }
     console.log(`Finished: ${[...counts].map(([status, count]) => `${status}=${count}`).join(', ') || 'no targets'}`);

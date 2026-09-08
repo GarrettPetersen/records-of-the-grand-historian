@@ -23,6 +23,8 @@ import {
   completedForeignClaimOwnsLocalReadyOutput,
   extractionIsCurrent,
   fetchPeopleQueueBase,
+  hasLocalCursorRecovery,
+  hasRecoverableCursorConversation,
   listPeopleChapterTargets,
   markRemotePeopleClaims,
   mutateRemotePeopleWorkLedger,
@@ -472,6 +474,7 @@ async function syncCursor(opts) {
   console.log(
     `Cursor reservations synchronized: recovery=${synced.result.recovery.length}, ` +
     `local-ready=${synced.result.ready.length}, reserved-elsewhere=${synced.result.reservedElsewhere.length}, ` +
+    `stale-recovery-released=${synced.result.releasedStaleRecovery.length}, ` +
     `merged-pruned=${synced.result.merged.length}`,
   );
 }
@@ -666,6 +669,34 @@ function release(opts) {
 }
 
 function selfTest() {
+  const recoveryFixture = { book: '__people_queue_fixture__', chapter: '999' };
+  if (hasLocalCursorRecovery(recoveryFixture, {
+    status: 'failed',
+    chunkPlan: [{ id: '001', start: 0, end: 1 }],
+    chunks: {
+      '001': {
+        status: 'interrupted',
+        agentId: 'bc-exhausted',
+        resumeExhausted: true,
+      },
+    },
+  })) {
+    throw new Error('A chunk plan without an artifact or resumable conversation was reserved for recovery');
+  }
+  if (!hasRecoverableCursorConversation({
+    status: 'interrupted',
+    agentId: 'bc-resumable',
+    resumeExhausted: false,
+  })) {
+    throw new Error('A resumable Cursor conversation was not recognized');
+  }
+  if (!hasLocalCursorRecovery(recoveryFixture, {
+    status: 'interrupted',
+    chunks: { '001': { status: 'accepted' } },
+  })) {
+    throw new Error('An accepted local chunk was not reserved for recovery');
+  }
+
   const ledger = validatePeopleWorkLedger({ schemaVersion: 1, updatedAt: new Date(0).toISOString(), claims: {} });
   const targets = [
     { book: 'a', chapter: '001', chapterFingerprint: 'sha256:a' },

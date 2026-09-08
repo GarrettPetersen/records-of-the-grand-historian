@@ -320,8 +320,46 @@ export function claimRemotePeopleTargets(targets, options) {
   });
 }
 
-function hasRecoverableConversation(record) {
-  return Boolean(record?.agentId && !record.resumeExhausted && RECOVERABLE_STATUSES.has(record.status));
+export function hasRecoverableCursorConversation(record) {
+  return Boolean(
+    record?.agentId &&
+    !record.resumeExhausted &&
+    (
+      RECOVERABLE_STATUSES.has(record.status) ||
+      record.stopReason === 'run-limit' ||
+      record.lastErrors?.some((error) =>
+        /cancelled cloud run .* (?:tokens|raw usage cost)/iu.test(error)
+      )
+    )
+  );
+}
+
+function directoryHasJson(directory) {
+  return fs.existsSync(directory) && fs.readdirSync(directory).some((file) => file.endsWith('.json'));
+}
+
+export function hasLocalCursorRecoveryArtifact(target, chapterState = {}) {
+  const chunks = Object.values(chapterState.chunks ?? {});
+  const acceptedDirectory = path.join(
+    PEOPLE_DIR, 'generated', 'chunk-extractions', target.book, target.chapter,
+  );
+  const rejectedChunkDirectory = path.join(
+    PEOPLE_DIR, 'generated', 'rejected-chunk-extractions', target.book, target.chapter,
+  );
+  const rejectedExtraction = path.join(
+    PEOPLE_DIR, 'generated', 'rejected-extractions', target.book, `${target.chapter}.json`,
+  );
+  return chunks.some((chunk) => chunk.status === 'accepted') ||
+    directoryHasJson(acceptedDirectory) ||
+    directoryHasJson(rejectedChunkDirectory) ||
+    fs.existsSync(rejectedExtraction);
+}
+
+export function hasLocalCursorRecovery(target, chapterState = {}) {
+  const chunks = Object.values(chapterState.chunks ?? {});
+  return hasRecoverableCursorConversation(chapterState) ||
+    chunks.some(hasRecoverableCursorConversation) ||
+    hasLocalCursorRecoveryArtifact(target, chapterState);
 }
 
 export function localCursorRecoveryTargets() {
@@ -331,15 +369,9 @@ export function localCursorRecoveryTargets() {
   const targets = [];
   for (const [key, chapterState] of Object.entries(state.chapters ?? {})) {
     if (chapterState.status === 'accepted') continue;
-    const chunks = Object.values(chapterState.chunks ?? {});
-    const hasArchive = chunks.some((chunk) => chunk.status === 'accepted') || (() => {
-      const { book, chapter } = splitChapterKey(key);
-      const directory = path.join(PEOPLE_DIR, 'generated', 'chunk-extractions', book, chapter);
-      return fs.existsSync(directory) && fs.readdirSync(directory).some((file) => file.endsWith('.json'));
-    })();
-    const recoverable = hasRecoverableConversation(chapterState) || chunks.some(hasRecoverableConversation);
-    if (!recoverable && !hasArchive && !chapterState.chunkPlan?.length) continue;
     const target = splitChapterKey(key);
+    if (!hasLocalCursorRecovery(target, chapterState)) continue;
+    const chunks = Object.values(chapterState.chunks ?? {});
     if (!fs.existsSync(chapterPath(target.book, target.chapter))) continue;
     targets.push({
       ...target,
@@ -406,6 +438,7 @@ export function syncLocalCursorReservations(options = {}) {
     const conflicts = [];
     const synchronizedRecovery = [];
     const synchronizedReady = [];
+    const releasedStaleRecovery = [];
     const reservedElsewhere = [];
     for (const [key, item] of desired) {
       const current = ledger.claims[key];
@@ -438,9 +471,21 @@ export function syncLocalCursorReservations(options = {}) {
     if (conflicts.length) {
       throw new Error(`Local Cursor recovery conflicts with remote claims: ${conflicts.map((item) => item.chapter).join(', ')}`);
     }
+    for (const [key, claim] of Object.entries(ledger.claims)) {
+      if (
+        claim.lane === 'cursor-sdk' &&
+        claim.worker === worker &&
+        claim.status === 'resume-required' &&
+        !desired.has(key)
+      ) {
+        delete ledger.claims[key];
+        releasedStaleRecovery.push(key);
+      }
+    }
     return {
       recovery: synchronizedRecovery,
       ready: synchronizedReady,
+      releasedStaleRecovery,
       reservedElsewhere,
       merged,
     };
