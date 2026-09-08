@@ -2,6 +2,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { parseArgs } from 'node:util';
 import { buildPeopleExtractionPacket } from './build-people-extraction-packet.mjs';
 import {
   PEOPLE_DIR,
@@ -40,12 +41,46 @@ function assertUnique(items, key, label, errors) {
   return seen;
 }
 
-function editorialDecisionFiles() {
+function parseCliArgs(argv) {
+  const { values } = parseArgs({
+    args: argv,
+    options: {
+      book: { type: 'string' },
+      chapter: { type: 'string' },
+    },
+    strict: true,
+    allowPositionals: false,
+  });
+  if (values.chapter && !values.book) throw new Error('--chapter requires --book');
+  if (values.book && !/^[a-z0-9-]+$/u.test(values.book)) throw new Error(`Invalid book ID: ${values.book}`);
+  if (values.chapter && !/^\d{1,3}$/u.test(values.chapter)) {
+    throw new Error(`Invalid chapter ID: ${values.chapter}`);
+  }
+  return {
+    book: values.book ?? null,
+    chapter: values.chapter?.padStart(3, '0') ?? null,
+  };
+}
+
+function fileMatchesScope(file, scope) {
+  if (!scope.book) return true;
+  const book = path.basename(path.dirname(file));
+  const chapter = path.basename(file, '.json');
+  return book === scope.book && (!scope.chapter || chapter === scope.chapter);
+}
+
+function editorialDecisionFiles(scope) {
   const root = path.join(PEOPLE_DIR, 'editorial-decisions');
   if (!fs.existsSync(root)) return [];
+  if (scope.book && scope.chapter) {
+    const file = editorialDecisionPath(scope.book, scope.chapter);
+    return fs.existsSync(file) ? [file] : [];
+  }
   const files = [];
-  for (const book of fs.readdirSync(root).sort()) {
+  const books = scope.book ? [scope.book] : fs.readdirSync(root).sort();
+  for (const book of books) {
     const directory = path.join(root, book);
+    if (!fs.existsSync(directory)) continue;
     if (!fs.statSync(directory).isDirectory()) continue;
     for (const name of fs.readdirSync(directory).filter((file) => /^\d{3}\.json$/u.test(file)).sort()) {
       files.push(path.join(directory, name));
@@ -98,14 +133,21 @@ function validateConfiguration(errors) {
 }
 
 async function main() {
+  const scope = parseCliArgs(process.argv.slice(2));
+  const scoped = Boolean(scope.book);
   const errors = [];
   const ajv = createPeopleSchemaValidator();
   validateConfiguration(errors);
   validateChronology(ajv, errors);
   if (errors.length > 0) throw new Error(`Person data validation failed:\n${errors.map((item) => `- ${item}`).join('\n')}`);
 
-  const files = peopleExtractionFiles();
+  const allFiles = peopleExtractionFiles();
+  const files = allFiles.filter((file) => fileMatchesScope(file, scope));
   const sourceChapters = sourceChapterIds();
+  if (scoped && files.length === 0) {
+    const label = scope.chapter ? `${scope.book}/${scope.chapter}` : scope.book;
+    throw new Error(`No people extraction found for ${label}`);
+  }
   const matcher = files.length > 0 ? loadProperNounMatcher() : null;
   let people = 0;
   let mentions = 0;
@@ -143,17 +185,19 @@ async function main() {
     });
   }
 
-  try {
-    loadValidatedResolutionDocuments(localPersonIds);
-  } catch (error) {
-    errors.push(error instanceof Error ? error.message : String(error));
+  if (!scoped) {
+    try {
+      loadValidatedResolutionDocuments(localPersonIds);
+    } catch (error) {
+      errors.push(error instanceof Error ? error.message : String(error));
+    }
   }
 
   let editorialDecisions = 0;
   let claimRetractions = 0;
   let claimRevisions = 0;
   let claimAdditions = 0;
-  for (const file of editorialDecisionFiles()) {
+  for (const file of editorialDecisionFiles(scope)) {
     const document = readJson(file);
     try {
       validateEditorialDecisionDocument(document);
@@ -199,16 +243,18 @@ async function main() {
   if (errors.length > 0) {
     throw new Error(`Person data validation failed:\n${errors.map((item) => `- ${item}`).join('\n')}`);
   }
+  const scopeLabel = scope.chapter ? `${scope.book}/${scope.chapter}` : scope.book;
   console.log(
-    `Person data validation passed: ${files.length} extraction(s), ${people} local people, ` +
+    `${scoped ? `Scoped person data validation passed for ${scopeLabel}` : 'Person data validation passed'}: ` +
+    `${files.length} extraction(s), ${people} local people, ` +
     `${mentions} mentions, ${claims} claims, ${proposedRepairs} proposed repair(s), ` +
     `${appliedRepairs} applied repair(s), ${editorialDecisions} editorial decision(s), ` +
     `${claimRetractions} claim retraction(s), ${claimRevisions} claim revision(s), ` +
     `${claimAdditions} claim addition(s). ` +
     `Legacy temporal debt: ${peopleMissingAttestations} person record(s) without an attestation, ` +
     `${peopleMissingActiveDateHints} without an active-date hint. ` +
-    `Corpus coverage: ${files.length}/${sourceChapters.length} chapter(s), ` +
-    `${sourceChapters.length - files.length} remaining.`,
+    `Corpus coverage: ${allFiles.length}/${sourceChapters.length} chapter(s), ` +
+    `${sourceChapters.length - allFiles.length} remaining.`,
   );
 }
 

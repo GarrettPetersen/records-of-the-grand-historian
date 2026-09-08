@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "041",
+  "input": {
+    "chapterFingerprint": "sha256:151b023fd8eec7b89815bd409dfff882e6ae7e9e1c3c353c4fae9a2fd2419ec7",
+    "proposalsFingerprint": "sha256:2f6afbe5ec6bab06065d6ba07ff3905525cbb05a4e85aaaa00267ad97b7769ba"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "gpt-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-09-08T20:35:55Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:041:r0001",
+      "unit": {
+        "id": "s0022",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 20
+      },
+      "field": "idiomatic",
+      "before": "In Qianfu year 3 Li Guochang's son Keyong, of the Datong Army command, was Yunzhong defense commissioner; he slew the defense envoy, seized the prefecture, and sent word to court.",
+      "after": "In Qianfu year 3 Li Guochang, Datong Army military commissioner, had a son Keyong who served as Yunzhong defense commissioner; Keyong slew the defense envoy, seized the prefecture, and sent word to court.",
+      "reason": "Chinese makes 大同軍節度使 modify 李國昌, with son 克用 holding 雲中守捉使; idiomatic English wrongly attaches the Datong Army command to Keyong.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:041:r0002",
+      "unit": {
+        "id": "s0018",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 16
+      },
+      "field": "idiomatic",
+      "before": "In the first year of Yongchun Mochuo's raids harried the people, and the populace was relocated to Shuo.",
+      "after": "In the first year of Yongchun, Mochuo's raids harried the people, and the populace was relocated to Shuo.",
+      "reason": "Insert a comma after Yongchun so the reign year is not fused with the personal name Mochuo.",
+      "confidence": "medium"
+    },
+    {
+      "id": "liaoshi:041:r0003",
+      "unit": {
+        "id": "s0330",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 13
+      },
+      "field": "idiomatic",
+      "before": "Early Guangming forces defeated Guochang; with the Dai north undefended, Taizu attacked, took it, and carried off the populace.",
+      "after": "Early in Guangming, Guochang was defeated; with the Dai north undefended, Taizu attacked, took it, and carried off the populace.",
+      "reason": "Chinese 攻敗國昌 does not name the attackers; English 'forces defeated Guochang' invents an agent. Prefer passive.",
+      "confidence": "medium"
+    },
+    {
+      "id": "liaoshi:041:r0004",
+      "unit": {
+        "id": "s0061",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "It stood one hundred ten li north of Eastern Capital.",
+      "after": "It stood one hundred ten li north of the Western Capital.",
+      "reason": "Changqing/Baideng under Datong Western Capital circuit; Chinese 東京 here is likely a corruption or slip for 西京.",
+      "confidence": "medium"
+    },
+    {
+      "id": "liaoshi:041:r0005",
+      "unit": {
+        "id": "s0168",
+        "kind": "paragraph-sentence",
+        "blockIndex": 22,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "After Emperor Muzong's death Jingzong entered to inherit the Guozhong line, taking the style Yuzhuang.",
+      "after": "After Emperor Muzong's death Jingzong entered to inherit the imperial succession, taking the style Yuzhuang.",
+      "reason": "國統 means imperial succession/line of rule, not a proper name 'Guozhong'; 禦莊 is Yuzhuang not Yuzhuan.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:041:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "大同軍節度使 modifies Li Guochang; Keyong separately held the Yunzhong defense post.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0022",
+        "excerpt": "大同軍節度使李國昌子克用為雲中守捉使"
+      }
+    },
+    {
+      "repairId": "liaoshi:041:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The comma correctly separates the Yongchun reign period from Mochuo's name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0018",
+        "excerpt": "永淳元年，默啜寇擾"
+      }
+    },
+    {
+      "repairId": "liaoshi:041:r0003",
+      "decision": "revise",
+      "after": "Early in the Guangming era, Guochang was defeated in an attack; with northern Dai undefended, Taizu attacked, took it, and carried off the populace.",
+      "reason": "攻敗國昌 leaves the attacking subject unstated. The passive preserves that ambiguity without inventing anonymous 'forces.'",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0330",
+        "excerpt": "廣明初，攻敗國昌"
+      }
+    },
+    {
+      "repairId": "liaoshi:041:r0004",
+      "decision": "reject",
+      "after": null,
+      "reason": "The transmitted text explicitly says 東京. Replacing it with Western Capital requires a textual witness, not a geographic conjecture.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0061",
+        "excerpt": "在東京北一百一十里"
+      }
+    },
+    {
+      "repairId": "liaoshi:041:r0005",
+      "decision": "revise",
+      "after": "After Emperor Muzong's death, Jingzong left this residence to inherit the imperial succession, and it became known as the imperial estate.",
+      "reason": "紹國統 means to inherit the imperial succession, while 禦莊 describes the residence as the Imperial Estate rather than supplying Jingzong with a personal style.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0167-s0168",
+        "excerpt": "景宗未即位嘗居此……景宗入紹國統，號禦莊"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [],
+  "claimAdditions": []
+}

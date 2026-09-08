@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 3,
+  "book": "sanguozhi",
+  "chapter": "041",
+  "input": {
+    "chapterFingerprint": "sha256:a5cfdcad99449def3895d5257aadf18e6eaae27c843424be0060908bbc2298c5",
+    "proposalsFingerprint": "sha256:dff7e13758c06fa1ed17206ce9796902665f7eb6b0b3928bf5ca83315f43dfc1"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "gpt-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-09-08T20:25:04Z"
+  },
+  "proposals": [
+    {
+      "id": "sanguozhi:041:r0001",
+      "unit": {
+        "id": "s0014",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "His son Huo Yi, styled Shaoxian, ended the Former Ruler’s reign as a gentleman attendant at the heir’s residence.",
+      "after": "His son Huo Yi, styled Shaoxian, in the last years of the Former Ruler’s reign became a gentleman attendant at the heir’s residence.",
+      "reason": "Chinese 先主末年為 means in the last years of the Former Sovereign he became X, not that he ended the reign.",
+      "confidence": "high"
+    },
+    {
+      "id": "sanguozhi:041:r0002",
+      "unit": {
+        "id": "s0274",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "Chong's younger brother Xiang Chong served as colonel of the army of loud-shouting archers and as master of writing.",
+      "after": "Chong's younger brother Xiang Chong (名充) served as colonel of the army of loud-shouting archers and as master of writing.",
+      "reason": "Chinese distinguishes 寵 and 充; English uses Xiang Chong for both without marking 充.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "sanguozhi:041:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "先主末年 means 'in the last years of the Former Ruler's reign'; the current English incorrectly makes Huo Yi end the reign.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0014",
+        "excerpt": "先主末年為太子舍人"
+      }
+    },
+    {
+      "repairId": "sanguozhi:041:r0002",
+      "decision": "reject",
+      "after": null,
+      "reason": "向寵 and his younger brother 向充 are distinct people whose names are both conventionally romanized Xiang Chong. Inserting a bare Chinese-character parenthesis into the prose is not an English translation improvement; their structured people records already preserve the distinction.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0274",
+        "excerpt": "寵弟充"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [],
+  "claimAdditions": []
+}

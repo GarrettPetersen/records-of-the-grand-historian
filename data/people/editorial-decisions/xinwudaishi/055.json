@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 3,
+  "book": "xinwudaishi",
+  "chapter": "055",
+  "input": {
+    "chapterFingerprint": "sha256:2ff112c7066764b5fb6c25cddedf3733dff9aec5495bb11959ba187240930450",
+    "proposalsFingerprint": "sha256:f40a766fb0490f0583550970e4b097d9471b0184f988aca23a59dfd0a1a8cf94"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "gpt-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-09-08T20:25:04Z"
+  },
+  "proposals": [
+    {
+      "id": "xinwudaishi:055:r0001",
+      "unit": {
+        "id": "s0001",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "When Emperor Fei first entered and took the throne, he asked Wang Mei, commissioner of the Three Departments: \"How large are the treasury and granary holdings?\"",
+      "after": "When the Deposed Emperor first entered and took the throne, he asked Wang Mei, commissioner of the Three Departments: \"How large are the treasury and granary holdings?\"",
+      "reason": "Chinese 廢帝 is rendered Deposed Emperor in s0000i but Emperor Fei here; standardize to Deposed Emperor.",
+      "confidence": "medium"
+    },
+    {
+      "id": "xinwudaishi:055:r0002",
+      "unit": {
+        "id": "s0042",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Wenji had long been at odds with Chancellor Cui Xie. When Xie appointed a director in the Ministry of Works at Ye, Wenji flew into a rage because Ye was homophonous with his father's name. The appointee came to the ministry for his induction audience, but Wenji refused to receive him and took an extended leave.",
+      "after": "Wenji had long been at odds with Chancellor Cui Xie. When Xie appointed Yu Ye as a director in the Ministry of Works, Wenji flew into a rage because Ye was homophonous with his father's name. When Ye came to the ministry for his induction audience, Wenji refused to receive him and took an extended leave.",
+      "reason": "Chinese 於鄴 is the personal name Yu Ye, not the place Ye; the idiomatic English first treats Ye as a place then as a person.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xinwudaishi:055:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "廢帝 is the historiographic title 'Deposed Emperor,' not a personal or posthumous name to romanize as Emperor Fei.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0001",
+        "excerpt": "廢帝入"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:055:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "於鄴 is the appointee Yu Ye's full name. The following clauses shorten it to 鄴 and describe his arrival and death, confirming that the phrase is not a locative construction.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0042-s0043",
+        "excerpt": "協除工部郎中於鄴……鄴赴省參上……鄴因醉忿自經死"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "xinwudaishi:055:r0002",
+      "before": {
+        "id": "xinwudaishi:055:c0112",
+        "subject": "xinwudaishi:055:p026",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Ye",
+          "zh": "鄴",
+          "pinyin": "Ye"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xinwudaishi:055:s0042"
+        ]
+      },
+      "after": {
+        "id": "xinwudaishi:055:c0112",
+        "subject": "xinwudaishi:055:p026",
+        "predicate": "name",
+        "value": {
+          "kind": "given",
+          "en": "Ye",
+          "zh": "鄴",
+          "pinyin": "Ye"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "xinwudaishi:055:s0042"
+        ]
+      },
+      "reason": "鄴 is Yu Ye's given name, not a second full personal name; classifying it correctly prevents a misleading one-word alias on his person page.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0042",
+        "excerpt": "工部郎中於鄴"
+      }
+    }
+  ],
+  "claimAdditions": []
+}

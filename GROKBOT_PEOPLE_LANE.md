@@ -124,6 +124,9 @@ npm run people:grokbot:submit -- --worker grokbot-01 --book <book> --chapter <nn
 # Trusted orchestrator: validate an imported direct attachment and mark its claim ready.
 npm run people:grokbot:accept -- --worker grokbot-01 --book <book> --chapter <nnn>
 
+# Fast integrated handoff gate for that exact accepted extraction.
+npm run people:validate -- --book <book> --chapter <nnn>
+
 # Remove expired leases and work already merged to master.
 npm run people:queue -- reconcile
 ```
@@ -141,6 +144,13 @@ an independent editorial pass checks the Chinese source and records decisions. M
 reviewed cohort into the people staging branch, then make one checkpoint merge to
 `master`. After the checkpoint lands, run `npm run people:queue -- reconcile` so those
 sticky submitted claims disappear.
+
+Run the scoped validator immediately after every imported attachment and again after
+its editorial decisions are applied. This checks the fresh packet, extraction,
+decisions, chronology, and coverage for one chapter without rescanning thousands of
+unrelated files. Reserve unscoped `npm run people:validate` for reviewed milestone
+merges; that full run also checks the global resolution documents. A scoped pass is a
+handoff gate, not evidence that the whole corpus is complete.
 
 For every accepted translation repair, inspect the parallel literal/idiomatic field and
 later repetitions of the corrected name, place, title, or office. Repair the same error

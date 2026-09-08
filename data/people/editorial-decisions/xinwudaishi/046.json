@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 3,
+  "book": "xinwudaishi",
+  "chapter": "046",
+  "input": {
+    "chapterFingerprint": "sha256:3f58bd0c3288edc50bca08f47dae85a5de35964604a16130b5e480ca80d5ae43",
+    "proposalsFingerprint": "sha256:a801962637e275fde7286f538b9c2bb2faebf102814bfafa235e1a3d01f308aa"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "gpt-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-09-08T20:35:55Z"
+  },
+  "proposals": [
+    {
+      "id": "xinwudaishi:046:r0001",
+      "unit": {
+        "id": "s0248",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "He held Taiping, Kuangguo, Tianping, Zhongwu, Wuning, Guide, and Jinchang in turn. Inns lined the roads wherever he went, and he amassed tens of millions.",
+      "after": "He held Taining, Kuangguo, Tianping, Zhongwu, Wuning, Guide, and Jinchang in turn. Inns lined the roads wherever he went, and he amassed tens of millions.",
+      "reason": "Chinese 泰寧 is Taining, not Taiping; the idiomatic translation misreads the circuit name.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:046:r0002",
+      "unit": {
+        "id": "s0107",
+        "kind": "paragraph-sentence",
+        "blockIndex": 15,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "By dawn he had killed them all. For merit he was made prefect of Cao.",
+      "after": "By dawn he had killed them all. For merit he was made prefect of Tan.",
+      "reason": "Chinese 澶州 is Tan/Chanzhou; idiomatic wrongly renders it as Cao (曹州).",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:046:r0003",
+      "unit": {
+        "id": "s0136",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "That year he died at sixty-two, posthumously Grand Preceptor.",
+      "after": "That year he died at sixty-two, posthumously Grand Marshal.",
+      "reason": "Chinese 贈太尉 is Grand Marshal (taiwei), not Grand Preceptor (太師).",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xinwudaishi:046:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "泰寧 is Taining; Taiping would require 太平.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0248",
+        "excerpt": "歷鎮泰寧、匡國、天平"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:046:r0002",
+      "decision": "revise",
+      "after": "By dawn he had killed them all. For merit he was made prefect of Chanzhou.",
+      "reason": "澶州 is Chanzhou, not Caozhou; spelling out the prefecture avoids the proposal's ambiguous one-syllable form.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0107",
+        "excerpt": "以功拜澶州刺史"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:046:r0003",
+      "decision": "revise",
+      "after": "That year he died at sixty-two and was posthumously appointed Grand Commandant.",
+      "reason": "太尉 is Grand Commandant, not Grand Preceptor (太師) or Grand Marshal.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0136",
+        "excerpt": "年六十二，贈太尉"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [],
+  "claimAdditions": []
+}
