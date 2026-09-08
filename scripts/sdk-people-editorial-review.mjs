@@ -19,6 +19,7 @@ import {
 import {
   editorialDecisionPath,
   mergeEditorialDecisionReview,
+  normalizeEditorialDecisionArtifact,
   validateAppliedEditorialDecisions,
   validateEditorialDecisions,
 } from './lib/people-editorial-decisions.mjs';
@@ -255,7 +256,7 @@ async function downloadDecision(agent, target) {
   if (!artifact) throw new Error(`Cloud reviewer did not expose ${wanted}`);
   const bytes = await agent.downloadArtifact(artifact.path);
   try {
-    return JSON.parse(bytes.toString('utf8'));
+    return normalizeEditorialDecisionArtifact(JSON.parse(bytes.toString('utf8')));
   } catch (error) {
     throw new Error(`${wanted} is not valid JSON: ${error.message}`);
   }

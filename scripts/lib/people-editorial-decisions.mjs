@@ -161,6 +161,70 @@ export function editorialDecisionSeed(extraction) {
   };
 }
 
+function selectKeys(value, keys) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return value;
+  return Object.fromEntries(keys.filter((key) => key in value).map((key) => [key, value[key]]));
+}
+
+function normalizeSourceWitness(value) {
+  return selectKeys(value, ['source', 'citation', 'excerpt']);
+}
+
+function normalizeClaim(value) {
+  return selectKeys(value, ['id', 'subject', 'predicate', 'value', 'certainty', 'evidence']);
+}
+
+/**
+ * Remove model-authored commentary keys from strict schema wrappers. Semantic
+ * fields, including arbitrary claim values, remain untouched and still pass
+ * through the full editorial validator before acceptance.
+ */
+export function normalizeEditorialDecisionArtifact(document) {
+  if (!document || typeof document !== 'object' || document.schemaVersion !== 3) return document;
+  const normalized = selectKeys(structuredClone(document), [
+    'schemaVersion',
+    'book',
+    'chapter',
+    'input',
+    'reviewer',
+    'proposals',
+    'decisions',
+    'claimRetractions',
+    'claimRevisions',
+    'claimAdditions',
+  ]);
+  normalized.input = selectKeys(normalized.input, ['chapterFingerprint', 'proposalsFingerprint']);
+  normalized.reviewer = selectKeys(
+    normalized.reviewer,
+    ['kind', 'name', 'model', 'agentId', 'runId', 'completedAt'],
+  );
+  normalized.proposals = (normalized.proposals ?? []).map((proposal) => ({
+    ...selectKeys(proposal, ['id', 'unit', 'field', 'before', 'after', 'reason', 'confidence']),
+    unit: selectKeys(proposal.unit, ['id', 'kind', 'blockIndex', 'collection', 'itemIndex']),
+  }));
+  normalized.decisions = (normalized.decisions ?? []).map((decision) => ({
+    ...selectKeys(decision, ['repairId', 'decision', 'after', 'reason', 'sourceWitness']),
+    sourceWitness: normalizeSourceWitness(decision.sourceWitness),
+  }));
+  normalized.claimRetractions = (normalized.claimRetractions ?? []).map((retraction) => ({
+    ...selectKeys(retraction, ['repairId', 'claim', 'reason', 'sourceWitness']),
+    claim: normalizeClaim(retraction.claim),
+    sourceWitness: normalizeSourceWitness(retraction.sourceWitness),
+  }));
+  normalized.claimRevisions = (normalized.claimRevisions ?? []).map((revision) => ({
+    ...selectKeys(revision, ['repairId', 'before', 'after', 'reason', 'sourceWitness']),
+    before: normalizeClaim(revision.before),
+    after: normalizeClaim(revision.after),
+    sourceWitness: normalizeSourceWitness(revision.sourceWitness),
+  }));
+  normalized.claimAdditions = (normalized.claimAdditions ?? []).map((addition) => ({
+    ...selectKeys(addition, ['repairId', 'claim', 'reason', 'sourceWitness']),
+    claim: normalizeClaim(addition.claim),
+    sourceWitness: normalizeSourceWitness(addition.sourceWitness),
+  }));
+  return normalized;
+}
+
 function singleEditorialDocumentErrors(document, { validateSchema = true } = {}) {
   const errors = [];
   if (validateSchema) {
