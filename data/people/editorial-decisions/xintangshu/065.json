@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 3,
+  "book": "xintangshu",
+  "chapter": "065",
+  "input": {
+    "chapterFingerprint": "sha256:699620d9b97484c2946f6ed115868765764d733e07dbeead7cfdb3ededd09d04",
+    "proposalsFingerprint": "sha256:edceac3aed30f77f8b5a9c6890723ac8fd1fde1a8bdb61e1b71672a4a4ddee59"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "gpt-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-09-08T16:46:45Z"
+  },
+  "proposals": [
+    {
+      "id": "xintangshu:065:r0001",
+      "unit": {
+        "id": "s0051",
+        "kind": "paragraph-sentence",
+        "blockIndex": 50,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "A Huainan West circuit military commissioner was appointed, commanding five commanderies—Yiyang, Yiyang, Yingchuan, Xingyang, and Runan—from his seat at Yingchuan.",
+      "after": "A Huainan West circuit military commissioner was appointed, commanding five commanderies—Yiyang (義陽), Yiyang (弋陽), Yingchuan, Xingyang, and Runan—from his seat at Yingchuan.",
+      "reason": "Chinese lists 義陽 then 弋陽 as two different commanderies; both were romanized identically as Yiyang, obscuring that they are distinct places.",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:065:r0002",
+      "unit": {
+        "id": "s0051",
+        "kind": "paragraph-sentence",
+        "blockIndex": 50,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "The Huainan West circuit military commissioner was established, holding Yiyang, Yiyang, Yingchuan, Xingyang, and Runan commanderies—five in all—with seat at Yingchuan commandery.",
+      "after": "The Huainan West circuit military commissioner was established, holding Yiyang (義陽), Yiyang (弋陽), Yingchuan, Xingyang, and Runan commanderies—five in all—with seat at Yingchuan commandery.",
+      "reason": "Literal English also collapses 義陽 and 弋陽 into the same spelling without distinguishing the two commanderies named in the Chinese.",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:065:r0003",
+      "unit": {
+        "id": "s0059",
+        "kind": "paragraph-sentence",
+        "blockIndex": 58,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In 759, the second year of Zhide, the Bianzhou chief defense commissioner was abolished and replaced by a Bian–Hua military commissioner at Hua Prefecture, commanding Hua, Pu, Bian, Cao, and Song.",
+      "after": "In 759, the second year of Qianyuan, the Bianzhou chief defense commissioner was abolished and replaced by a Bian–Hua military commissioner at Hua Prefecture, commanding Hua, Pu, Bian, Cao, and Song.",
+      "reason": "After 乾元元年 in the prior unit, 759 二年 is Qianyuan year 2; Zhide ended in 757, so calling 759 a Zhide year is wrong.",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:065:r0004",
+      "unit": {
+        "id": "s0080",
+        "kind": "paragraph-sentence",
+        "blockIndex": 79,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Pinglu Army military commissioner Hou Xiy led his troops to hold Qingzhou and was appointed Qing–Mi military commissioner; the Zi–Yi circuit was then abolished and its five prefectures absorbed into the newly styled Zi–Qing–Pinglu circuit, which also gained Qi Prefecture.",
+      "after": "Pinglu Army military commissioner Hou Xiyi led his troops to hold Qingzhou and was appointed Qing–Mi military commissioner; the Zi–Yi circuit was then abolished and its five prefectures absorbed into the newly styled Zi–Qing–Pinglu circuit, which also gained Qi Prefecture.",
+      "reason": "Chinese 侯希逸 is Hou Xiyi; the idiomatic spelling truncates the given name to Xiy.",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:065:r0005",
+      "unit": {
+        "id": "s0080",
+        "kind": "paragraph-sentence",
+        "blockIndex": 79,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "The Pinglu Army military commissioner Hou Xiy led troops to hold Qingzhou; he was appointed Qing-Mi military commissioner, whereupon the Zi-Yi circuit was abolished and its five prefectures were merged in, styled the Zi-Qing-Pinglu circuit, and Qi Prefecture was added to its jurisdiction.",
+      "after": "The Pinglu Army military commissioner Hou Xiyi led troops to hold Qingzhou; he was appointed Qing-Mi military commissioner, whereupon the Zi-Yi circuit was abolished and its five prefectures were merged in, styled the Zi-Qing-Pinglu circuit, and Qi Prefecture was added to its jurisdiction.",
+      "reason": "Literal English likewise truncates 希逸 to Xiy instead of Xiyi.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xintangshu:065:r0001",
+      "decision": "reject",
+      "after": null,
+      "reason": "The proposal inserts Chinese characters into an English field. The facing source text and the stated count of five commanderies already show that the repeated Pinyin form refers to two places.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "xintangshu/065 s0051",
+        "excerpt": "領義陽、弋陽、潁川、滎陽、汝南五郡"
+      }
+    },
+    {
+      "repairId": "xintangshu:065:r0002",
+      "decision": "reject",
+      "after": null,
+      "reason": "The proposal inserts Chinese characters into an English field. The literal field accurately transliterates both homophonous names and should remain parallel with the source text.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "xintangshu/065 s0051",
+        "excerpt": "領義陽、弋陽、潁川、滎陽、汝南五郡"
+      }
+    },
+    {
+      "repairId": "xintangshu:065:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The preceding dated entry begins 乾元元年, so the following 759 二年 is Qianyuan year two, not Zhide year two.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "xintangshu/065 s0054-s0059",
+        "excerpt": "758 乾元元年 ... 759 二年"
+      }
+    },
+    {
+      "repairId": "xintangshu:065:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "侯希逸 is Hou Xiyi; the existing idiomatic spelling drops the final vowel of his given name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "xintangshu/065 s0080",
+        "excerpt": "平盧軍節度使侯希逸"
+      }
+    },
+    {
+      "repairId": "xintangshu:065:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "侯希逸 is Hou Xiyi; the literal field contains the same truncated spelling.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "xintangshu/065 s0080",
+        "excerpt": "平盧軍節度使侯希逸"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [],
+  "claimAdditions": []
+}

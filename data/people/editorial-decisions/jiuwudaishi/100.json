@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "100",
+  "input": {
+    "chapterFingerprint": "sha256:27663fbd2f5056beabf1d527744d55ac540e299f206215ce424b0f4b3f1088ee",
+    "proposalsFingerprint": "sha256:9367c229b1d9545446f14192eefb348105861d3c5c59989b33f032d8623dad5b"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "gpt-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-09-08T16:46:45Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:100:r0001",
+      "unit": {
+        "id": "s0012",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "That same day Xiao Han, the Khitan-appointed governor of Bian, brought Duke of Xun Li Congyi to the Eastern Capital and asked him to take charge of the Southern Court's military and civil affairs.",
+      "after": "That same day Xiao Han, the Khitan-appointed governor of Bian, brought Li Congyi, Duke of Xun, to the Eastern Capital and asked him to take charge of the Southern Court's military and civil affairs.",
+      "reason": "Chinese 郇國公李從益 is title then personal name; idiomatic fuses them as \"Duke of Xun Li Congyi\".",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:100:r0002",
+      "unit": {
+        "id": "s0046",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 28
+      },
+      "field": "idiomatic",
+      "before": "Hanlin academician and vice minister of rites Bian Guangfan was appointed director of the court for the imperial clan.",
+      "after": "Hanlin academician and vice minister of rites Bian Guangfan was appointed director of the Court of the Imperial Insignia.",
+      "reason": "Chinese 衛尉卿 is the Court of Imperial Insignia/Guards director, not the imperial clan court (宗正卿); idiomatic conflates the two.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:100:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "The appositive form clearly separates Li Congyi's personal name from his title 郇國公 and reads naturally in English.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "jiuwudaishi/100 s0012",
+        "excerpt": "郇國公李從益"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:100:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "衛尉卿 heads the Court of the Imperial Insignia; the existing wording incorrectly identifies the separate court for the imperial clan.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "jiuwudaishi/100 s0046",
+        "excerpt": "邊光範為衛尉卿"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [],
+  "claimAdditions": []
+}

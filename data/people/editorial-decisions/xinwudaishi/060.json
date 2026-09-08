@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 3,
+  "book": "xinwudaishi",
+  "chapter": "060",
+  "input": {
+    "chapterFingerprint": "sha256:72469f039c71e465debef0211c8980528f6c16ab94f3c0112346ce44435f00c0",
+    "proposalsFingerprint": "sha256:be776a74ae20fcbd03eb16db2129c4344608e1889ee2a8b31f9010f36a018c73"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "gpt-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-09-08T16:46:45Z"
+  },
+  "proposals": [
+    {
+      "id": "xinwudaishi:060:r0001",
+      "unit": {
+        "id": "s0001",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Alas—from the Three Dynasties onward, every state had governed by granting fiefs and ruling through enfeoffed lords.",
+      "after": "Alas—from the Three Dynasties and earlier, every state had governed by granting fiefs and ruling through enfeoffed lords.",
+      "reason": "Chinese 三代以上 means the Three Dynasties and earlier antiquity, not 'onward' into later ages; the idiomatic English reverses the temporal direction.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:060:r0002",
+      "unit": {
+        "id": "s0112",
+        "kind": "paragraph-sentence",
+        "blockIndex": 21,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Ji Prefecture: established in the second year of Guangshun under Later Zhou by carving out Juye and Yuncheng from Yanzhou, Rencheng from Yanzhou, and Jinxiang from Danzhou as subordinate counties, with the seat at Juye.",
+      "after": "Ji Prefecture: established in the second year of Guangshun under Later Zhou by carving out Juye and Yuncheng from Yun Prefecture (鄆州), Rencheng from Yan Prefecture (兗州), and Jinxiang from Dan Prefecture as subordinate counties, with the seat at Juye.",
+      "reason": "Chinese distinguishes 鄆州 and 兗州; the idiomatic English wrongly renders both as Yanzhou, collapsing two different prefectures.",
+      "confidence": "high"
+    },
+    {
+      "id": "xinwudaishi:060:r0003",
+      "unit": {
+        "id": "s0174",
+        "kind": "paragraph-sentence",
+        "blockIndex": 46,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Longxi in Tanzhou: in the third year of Qianyou under Later Han, Ma Xifan established it.",
+      "after": "Longxi (龍喜) in Tanzhou: in the third year of Qianyou under Later Han, Ma Xifan established it.",
+      "reason": "龍喜 should not be silently rendered as Longxi without marking the source name; Longxi ordinarily denotes other toponyms (隴西/龍溪).",
+      "confidence": "medium"
+    },
+    {
+      "id": "xinwudaishi:060:r0004",
+      "unit": {
+        "id": "s0182",
+        "kind": "paragraph-sentence",
+        "blockIndex": 48,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "Jingling in Fu Prefecture: Later Jin renamed it Jingling.",
+      "after": "Jingling (竟陵) in Fu Prefecture: Later Jin renamed it Jingling (景陵).",
+      "reason": "Chinese distinguishes 竟陵 and 景陵; collapsing both to identical English Jingling hides the rename.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xinwudaishi:060:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "自三代以上 points back through the Three Dynasties into earlier antiquity; 'onward' reverses the temporal direction.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "xinwudaishi/060 s0001",
+        "excerpt": "自三代以上"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:060:r0002",
+      "decision": "revise",
+      "after": "Ji Prefecture: established in the second year of Guangshun under Later Zhou by carving out Juye and Yuncheng from Yun Prefecture, Rencheng from Yan Prefecture, and Jinxiang from Dan Prefecture as subordinate counties, with the seat at Juye.",
+      "reason": "The source distinguishes Yun Prefecture 鄆州 from Yan Prefecture 兗州; the existing English collapses both into Yanzhou.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "xinwudaishi/060 s0112",
+        "excerpt": "鄆州之鉅野、鄆城，兗州之任城"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:060:r0003",
+      "decision": "reject",
+      "after": null,
+      "reason": "Longxi is the correct Pinyin transliteration of 龍喜, and the facing Chinese text already identifies the graph form. Adding characters here alone would introduce unnecessary inconsistency rather than correct an error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "xinwudaishi/060 s0174",
+        "excerpt": "潭州龍喜"
+      }
+    },
+    {
+      "repairId": "xinwudaishi:060:r0004",
+      "decision": "revise",
+      "after": "Jingling in Fu Prefecture: Later Jin changed the first character of its name while retaining the pronunciation Jingling.",
+      "reason": "The source records a written renaming between two homophones. This revision makes that change intelligible without inserting Chinese characters into the English field.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "xinwudaishi/060 s0182",
+        "excerpt": "復州竟陵，晉改曰景陵"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [],
+  "claimAdditions": []
+}
