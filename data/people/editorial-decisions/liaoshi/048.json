@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 3,
+  "book": "liaoshi",
+  "chapter": "048",
+  "input": {
+    "chapterFingerprint": "sha256:2fa77b698379627e9093bf4cd59f9611cab5279956fcff9c56cfb293baa1ed82",
+    "proposalsFingerprint": "sha256:dcf90b99c7510a11da818c0769299e236482d2303144daabe6fb8ff00d10eb76"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "gpt-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-09-08T15:57:26Z"
+  },
+  "proposals": [
+    {
+      "id": "liaoshi:048:r0001",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "In the first year of Shengzong Tonghe issued an edict left and right chancellors and associate directors for the three capitals.",
+      "after": "In the first year of Shengzong's Tonghe, an edict established left and right chancellors and left and right associate directors for the three capitals.",
+      "reason": "Idiomatic English lacks a grammatical subject and verb for the edict and omits 'left and right' before associate directors present in the Chinese.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:048:r0002",
+      "unit": {
+        "id": "s0050",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "In the first year of Taizong Datong made Zhao Yanshou Zhongjing retention commissioner at Zhenzhou.",
+      "after": "In the first year of Taizong's Datong, Zhao Yanshou was made Zhongjing retention commissioner, governing Zhenzhou.",
+      "reason": "Idiomatic English is missing a subject/passive construction and flattens 治鎮州 as a bare locative rather than governing Zhenzhou.",
+      "confidence": "high"
+    },
+    {
+      "id": "liaoshi:048:r0003",
+      "unit": {
+        "id": "s0053",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Taizong Tianxian year 3 raised Dongping Commandery to Nanjing at Liaoyang.",
+      "after": "In Taizong's Tianxian year 3, Dongping Commandery was raised to Nanjing, governing Liaoyang.",
+      "reason": "Idiomatic English lacks a clear subject construction and flattens 治遼陽 as a bare locative.",
+      "confidence": "medium"
+    },
+    {
+      "id": "liaoshi:048:r0004",
+      "unit": {
+        "id": "s0132",
+        "kind": "paragraph-sentence",
+        "blockIndex": 48,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "Their specific offices are not recorded here.",
+      "after": "As for the offices they established, the details are not fully recorded.",
+      "reason": "Chinese 其設官則未詳云 concerns unspecified official establishments; a slightly clearer idiomatic rendering helps.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "liaoshi:048:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "The revision supplies the missing passive construction and preserves both paired sets of offices in 左右相、左右平章事.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "liaoshi/048 s0011",
+        "excerpt": "詔三京左右相、左右平章事。"
+      }
+    },
+    {
+      "repairId": "liaoshi:048:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The passive appointment is grammatical, and 治鎮州 means that the office governed from Zhenzhou.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "liaoshi/048 s0050",
+        "excerpt": "命趙延壽為中京留守，治鎮州。"
+      }
+    },
+    {
+      "repairId": "liaoshi:048:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The revision gives the sentence a clear passive verb and correctly renders 治遼陽 as governing from Liaoyang.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "liaoshi/048 s0053",
+        "excerpt": "升東平郡為南京，治遼陽。"
+      }
+    },
+    {
+      "repairId": "liaoshi:048:r0004",
+      "decision": "reject",
+      "after": null,
+      "reason": "The existing sentence already conveys 未詳 accurately and more concisely; the proposal adds no useful correction.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "liaoshi/048 s0132",
+        "excerpt": "其设官则末详云。"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [],
+  "claimAdditions": []
+}
