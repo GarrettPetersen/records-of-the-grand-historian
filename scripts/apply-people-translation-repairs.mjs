@@ -32,6 +32,7 @@ import {
 import {
   editorialDecisionPath,
   editorialDecisionSeed,
+  preserveAppliedEditorialClaims,
   validateAppliedEditorialDecisions,
   validateEditorialDecisions,
 } from './lib/people-editorial-decisions.mjs';
@@ -1851,6 +1852,27 @@ function main() {
   }
 
   if (!statuses.has('proposed')) {
+    const decisionFile = opts.decisions ?? editorialDecisionPath(opts.book, opts.chapter);
+    if (fs.existsSync(decisionFile)) {
+      const decisionDocument = readJson(decisionFile);
+      const { removed, restored } = preserveAppliedEditorialClaims(decisionDocument, extraction);
+      validateAppliedEditorialDecisions(decisionDocument, extraction);
+      const result = validatePeopleExtraction(extraction, currentPacket);
+      if (removed > 0 || restored > 0) {
+        if (compactStored) {
+          const compact = compactPeopleExtraction(result.normalized, currentPacket);
+          validateCompactPeopleExtraction(compact, currentPacket);
+          writeTextAtomic(extractionFile, serializeCompactPeopleExtraction(compact));
+        } else {
+          writeJsonAtomic(extractionFile, result.normalized);
+        }
+        console.log(
+          `Replayed applied editorial claim changes for ${opts.book}/${opts.chapter}: ` +
+          `${removed} removed, ${restored} restored.`,
+        );
+        return;
+      }
+    }
     if (compactStored) validateCompactPeopleExtraction(storedExtraction, currentPacket);
     else validatePeopleExtraction(extraction, currentPacket);
     console.log(`No proposed repairs remain for ${opts.book}/${opts.chapter}.`);

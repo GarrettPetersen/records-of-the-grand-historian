@@ -1,0 +1,330 @@
+{
+  "schemaVersion": 3,
+  "book": "hanshu",
+  "chapter": "047",
+  "input": {
+    "chapterFingerprint": "sha256:44dc62651fe183a905db67e3cd1e20cd6608f459c0507bbe96dcf77bd62bd7e5",
+    "proposalsFingerprint": "sha256:84c14e0194d7faab294f8c985f9173a6518a45c442c14160b02a7c92c8ca59a8"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "gpt-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-09-08T18:09:15Z"
+  },
+  "proposals": [
+    {
+      "id": "hanshu:047:r0001",
+      "unit": {
+        "id": "s0006",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "In the fourth year, the August Ancestor Gao died; Empress Dowager Lü summoned the king to Chang'an and killed him with poisoned wine.",
+      "after": "In the fourth year [of Emperor Hui], after the August Ancestor Gao had died, Empress Dowager Lü summoned the king to Chang'an and killed him with poisoned wine.",
+      "reason": "Chinese 四年 follows 九年立 and is conventionally Hui year 4; 高祖崩 is prior context, not the fourth year of Gaozu. The literal wrongly makes Gaozu die in year four.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:047:r0002",
+      "unit": {
+        "id": "s0185",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "A clerk of the inner administration said, \"The empress dowager values only the emperor and the Princess of Lu. You hold more than seventy cities, while the princess has barely a handful.",
+      "after": "Shi, the clerk of the inner administration, said, \"The empress dowager values only the emperor and the Princess Yuan of Lu. You hold more than seventy cities, while the princess has barely a handful.",
+      "reason": "Chinese 內史士 names the speaker as Shi; 魯元公主 is Princess Yuan of Lu, not merely Princess of Lu.",
+      "confidence": "medium"
+    },
+    {
+      "id": "hanshu:047:r0003",
+      "unit": {
+        "id": "s0014",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Luan Bo, returning from the campaign that had broken Qi, joined his command with others, diverted a river, and inundated the Zhao capital.",
+      "after": "Luan Bu, returning from the campaign that had broken Qi, joined his command with others, diverted a river, and inundated the Zhao capital.",
+      "reason": "Chinese 欒布 is Luan Bu (standard Wade-Giles/pinyin Bu), not Bo.",
+      "confidence": "medium"
+    },
+    {
+      "id": "hanshu:047:r0004",
+      "unit": {
+        "id": "s0026",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Liu Jian, Prince Jian of Yan the Numinous.",
+      "after": "Liu Jian, the Numinous Prince of Yan.",
+      "reason": "Posthumous title is 燕靈王 (Numinous Prince of Yan); 'Prince Jian of Yan the Numinous' confuses given name with title order.",
+      "confidence": "high"
+    },
+    {
+      "id": "hanshu:047:r0005",
+      "unit": {
+        "id": "s0077",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "The ministers first considered the king of Qi, but objected in one voice: \"His uncle Si Jun is vicious and overbearing—a man with a tiger's heart beneath a courtier's hat.",
+      "after": "The ministers first considered the king of Qi, but objected in one voice: \"Si Jun of his maternal house is vicious and overbearing—a tiger wearing a courtier's hat.",
+      "reason": "Chinese 母家駟鈞 is Si Jun of the maternal house; 虎而冠 is a tiger wearing a cap/hat.",
+      "confidence": "medium"
+    },
+    {
+      "id": "hanshu:047:r0006",
+      "unit": {
+        "id": "s0244",
+        "kind": "paragraph-sentence",
+        "blockIndex": 22,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "That year Prince Ai of Qi died, and his son Liu Ze, Prince Wen, succeeded him.",
+      "after": "That year Prince Ai of Qi died, and his son Liu Ze (則), Prince Wen of Qi, succeeded him.",
+      "reason": "Chinese 文王則 is Liu Ze with character 則; not to be confused with Langye king 劉澤.",
+      "confidence": "medium"
+    },
+    {
+      "id": "hanshu:047:r0007",
+      "unit": {
+        "id": "s0115",
+        "kind": "paragraph-sentence",
+        "blockIndex": 27,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Soon Luan Bo and the Marquis of Pingyang arrived with other imperial columns, routed the besiegers, and raised the siege.",
+      "after": "Soon Luan Bu and the Marquis of Pingyang arrived with other imperial columns, routed the besiegers, and raised the siege.",
+      "reason": "Chinese 欒布 is Luan Bu.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "hanshu:047:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "The idiomatic field already resolves 四年 as Emperor Hui's fourth year. The literal field should make the same chronology clear and treat 高祖崩 as prior circumstance.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0006",
+        "excerpt": "四年，高祖崩，呂太后徵王到長安"
+      }
+    },
+    {
+      "repairId": "hanshu:047:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "士 is the clerk's personal name in 內史士曰, and 魯元公主 is Princess Yuan of Lu. The proposal restores both omitted name elements.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0185",
+        "excerpt": "內史士曰：太后獨有帝與魯元公主"
+      }
+    },
+    {
+      "repairId": "hanshu:047:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "欒布 is conventionally romanized Luan Bu. The existing Luan Bo is an inconsistent name error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0014",
+        "excerpt": "欒布自破齊還"
+      }
+    },
+    {
+      "repairId": "hanshu:047:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The heading gives Liu Jian's given name followed by his posthumous title 燕靈王. The proposal removes the erroneous construction 'Prince Jian.'",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0026",
+        "excerpt": "燕靈王建"
+      }
+    },
+    {
+      "repairId": "hanshu:047:r0005",
+      "decision": "revise",
+      "after": "The ministers first considered the king of Qi, but objected in one voice: \"His maternal uncle Si Jun is vicious and overbearing—a tiger in a courtier's hat.",
+      "reason": "The current translation's kinship identification is helpful and historically correct, while 虎而冠 is more directly a tiger wearing a cap. The revision preserves both points.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0077",
+        "excerpt": "母家駟鈞惡戾，虎而冠者也"
+      }
+    },
+    {
+      "repairId": "hanshu:047:r0006",
+      "decision": "revise",
+      "after": "That year Prince Ai of Qi died, and his son Liu Ze, Prince Wen of Qi, succeeded him.",
+      "reason": "文王則 identifies Liu Ze as Prince Wen of Qi. Adding the full title prevents confusion without inserting a one-off parenthetical Chinese character into the English prose.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0244",
+        "excerpt": "齊哀王薨，子文王則嗣"
+      }
+    },
+    {
+      "repairId": "hanshu:047:r0007",
+      "decision": "accept",
+      "after": null,
+      "reason": "This is the same 欒布 name as in s0014 and should likewise read Luan Bu.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0115",
+        "excerpt": "漢將欒布、平陽侯等兵至齊"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "hanshu:047:r0002",
+      "claim": {
+        "id": "hanshu:047:c0068",
+        "subject": "hanshu:047:p016",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Princess of Lu"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "hanshu:047:s0185"
+        ]
+      },
+      "reason": "The accepted repair restores the complete title Princess Yuan of Lu. The shortened title was derived only from the mistranslated English and duplicates the correct claim.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0185",
+        "excerpt": "魯元公主"
+      }
+    },
+    {
+      "repairId": "hanshu:047:r0004",
+      "claim": {
+        "id": "hanshu:047:c0176",
+        "subject": "hanshu:047:p042",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Prince Jian of Yan the Numinous"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "hanshu:047:s0026"
+        ]
+      },
+      "reason": "The accepted repair establishes that Jian is the prince's given name, not part of his title. A separate correct claim already records Numinous Prince of Yan.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0026",
+        "excerpt": "燕靈王建"
+      }
+    }
+  ],
+  "claimRevisions": [
+    {
+      "repairId": "hanshu:047:r0003",
+      "before": {
+        "id": "hanshu:047:c0134",
+        "subject": "hanshu:047:p031",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Luan Bo",
+          "zh": "欒布",
+          "pinyin": "Luan Bu"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "hanshu:047:s0014"
+        ]
+      },
+      "after": {
+        "id": "hanshu:047:c0134",
+        "subject": "hanshu:047:p031",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Luan Bu",
+          "zh": "欒布",
+          "pinyin": "Luan Bu"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "hanshu:047:s0014"
+        ]
+      },
+      "reason": "The accepted name correction must propagate from the translated mention into the person's English name claim.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0014",
+        "excerpt": "欒布"
+      }
+    },
+    {
+      "repairId": "hanshu:047:r0007",
+      "before": {
+        "id": "hanshu:047:c0475",
+        "subject": "hanshu:047:p128",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Luan Bo",
+          "zh": "欒布",
+          "pinyin": "Luan Bu"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "hanshu:047:s0115"
+        ]
+      },
+      "after": {
+        "id": "hanshu:047:c0475",
+        "subject": "hanshu:047:p128",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Luan Bu",
+          "zh": "欒布",
+          "pinyin": "Luan Bu"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "hanshu:047:s0115"
+        ]
+      },
+      "reason": "The second local occurrence represents the same corrected name and must not retain the old Luan Bo form.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0115",
+        "excerpt": "欒布"
+      }
+    }
+  ],
+  "claimAdditions": []
+}

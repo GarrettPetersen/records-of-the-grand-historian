@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 3,
+  "book": "xintangshu",
+  "chapter": "067",
+  "input": {
+    "chapterFingerprint": "sha256:890016def1345ffec8f139877da19ea298be8fad7a42b70b4c4a5057ebb8581f",
+    "proposalsFingerprint": "sha256:e74bd17aa7598a748cee590d6e2722fef20331f9107b7e68c994cd27eb6bd032"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "gpt-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-09-08T18:09:15Z"
+  },
+  "proposals": [
+    {
+      "id": "xintangshu:067:r0001",
+      "unit": {
+        "id": "s0007",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "The Jiannan branch disbursement, garrison farm, disposal, and military frontier commissioner was elevated to full military commissioner, also serving as Kunming Army commissioner and commanding twenty-five prefectures—Yi, Peng, Shu, Han, Mei, Mian, Zi, Sui, Qiong, Jian, Rong, Ling, Jia, Pu, Zi, Xi, Li, Rong, Wei, Mao, Jian, Long, Ya, Lu, and He—from his seat at Yi Prefecture.",
+      "after": "The Jiannan branch disbursement, garrison farm, disposal, and military frontier commissioner was elevated to full military commissioner, also serving as Kunming Army commissioner and commanding twenty-five prefectures—Yi, Peng, Shu, Han, Mei, Mian, Zi (梓), Sui, Qiong, Jian (劍), Rong (榮), Ling, Jia, Pu, Zi (資), Xi, Li, Rong (戎), Wei, Mao, Jian (簡), Long, Ya, Lu, and He—from his seat at Yi Prefecture.",
+      "reason": "Chinese lists distinct prefectures 梓/資, 榮/戎, and 劍/簡; English collapses each pair to identical Zi/Rong/Jian without disambiguation.",
+      "confidence": "high"
+    },
+    {
+      "id": "xintangshu:067:r0002",
+      "unit": {
+        "id": "s0020",
+        "kind": "paragraph-sentence",
+        "blockIndex": 78,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "In 760, the first year of Shangyuan, the Li–Lang–Xi chief training commissioner was abolished.",
+      "after": "In 760, the first year of Shangyuan, the Li–Lang–Xu chief training commissioner was abolished.",
+      "reason": "Chinese 漵 is Xu (as in s0241 idiomatic Li–Lang–Xu); s0020 wrongly renders 漵 as Xi.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "xintangshu:067:r0001",
+      "decision": "reject",
+      "after": null,
+      "reason": "The existing romanizations accurately reproduce the prefecture names. Adding selected Chinese characters parenthetically would introduce an inconsistent body-text convention without correcting an error.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0007",
+        "excerpt": "梓、遂、邛、劍、榮、陵、嘉、普、資、巂、黎、戎、維、茂、簡"
+      }
+    },
+    {
+      "repairId": "xintangshu:067:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same office is rendered Li-Lang-Xu when established in s0241. The later abolition must retain Xu for 漵 rather than changing it to Xi.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0020",
+        "excerpt": "廢澧朗漵都團練使"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [],
+  "claimAdditions": []
+}
