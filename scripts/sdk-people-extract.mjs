@@ -1208,6 +1208,24 @@ function formattingEquivalentSurfaceMatches(text, exact, language, kind) {
   return matches;
 }
 
+function normalizeWesternDatePrecisions(value, seen = new Set()) {
+  if (!value || typeof value !== 'object' || seen.has(value)) return 0;
+  seen.add(value);
+  let normalized = 0;
+  if (
+    ['BC', 'AD'].includes(value.era) &&
+    Number.isInteger(value.year) &&
+    ['exact', 'month', 'day'].includes(value.precision)
+  ) {
+    value.precision = 'year';
+    normalized += 1;
+  }
+  for (const child of Array.isArray(value) ? value : Object.values(value)) {
+    normalized += normalizeWesternDatePrecisions(child, seen);
+  }
+  return normalized;
+}
+
 export function normalizeCompactWorkerEcho(extraction, packet) {
   if (!isCompactPeopleExtraction(extraction)) {
     return {
@@ -1216,6 +1234,7 @@ export function normalizeCompactWorkerEcho(extraction, packet) {
       droppedRepairs: 0,
       normalizedSurfaces: 0,
       normalizedRelationships: 0,
+      normalizedPrecisions: 0,
     };
   }
 
@@ -1223,6 +1242,7 @@ export function normalizeCompactWorkerEcho(extraction, packet) {
   const expectedInput = buildCompactInput(packet);
   const restoredInput = JSON.stringify(normalized.input) !== JSON.stringify(expectedInput);
   normalized.input = expectedInput;
+  const normalizedPrecisions = normalizeWesternDatePrecisions(normalized);
 
   const unitById = new Map(packet.units.map((unit) => [unit.id, unit]));
   let normalizedSurfaces = 0;
@@ -1334,6 +1354,7 @@ export function normalizeCompactWorkerEcho(extraction, packet) {
     droppedRepairs,
     normalizedSurfaces,
     normalizedRelationships,
+    normalizedPrecisions,
   };
 }
 
@@ -1343,7 +1364,8 @@ function validateDownloadedExtraction(extraction, packet, target = null, chunk =
     normalized.restoredInput ||
     normalized.droppedRepairs > 0 ||
     normalized.normalizedSurfaces > 0 ||
-    normalized.normalizedRelationships > 0
+    normalized.normalizedRelationships > 0 ||
+    normalized.normalizedPrecisions > 0
   )) {
     const changes = [
       ...(normalized.restoredInput ? ['restored packet input'] : []),
@@ -1355,6 +1377,9 @@ function validateDownloadedExtraction(extraction, packet, target = null, chunk =
         : []),
       ...(normalized.normalizedRelationships > 0
         ? [`derived ${normalized.normalizedRelationships} reciprocal family hint(s)`]
+        : []),
+      ...(normalized.normalizedPrecisions > 0
+        ? [`normalized ${normalized.normalizedPrecisions} Western year precision(s)`]
         : []),
     ];
     console.warn(
@@ -3063,6 +3088,12 @@ async function selfTest() {
       { personId: 'p002', relationship: 'parent' },
       'explicit',
       ['s0001'],
+    ], [
+      'p001',
+      'attestation',
+      { westernYear: { era: 'AD', year: 1, precision: 'month' } },
+      'explicit',
+      ['s0001'],
     ]],
     surfaces: [[
       'p001',
@@ -3120,11 +3151,13 @@ async function selfTest() {
     compactEcho.droppedRepairs !== 1 ||
     compactEcho.normalizedSurfaces !== 4 ||
     compactEcho.normalizedRelationships !== 2 ||
+    compactEcho.normalizedPrecisions !== 1 ||
     compactEcho.extraction.translationRepairs.length !== 2 ||
     compactEcho.extraction.surfaces[0][3] !== 'A deliberately' ||
     compactEcho.extraction.surfaces[1][3] !== 'worker’s father' ||
     compactEcho.extraction.surfaces[2][3] !== '豫章府 君' ||
     compactEcho.extraction.surfaces[3][3] !== 'Yao Li' ||
+    compactEcho.extraction.claims[1][2].westernYear.precision !== 'year' ||
     compactEcho.extraction.people[0][4].r[0] !== 'p002' ||
     compactEcho.extraction.people[1][4].r[0] !== 'p001' ||
     JSON.stringify(compactEcho.extraction.input) !== JSON.stringify(buildCompactInput(bytePacket))
