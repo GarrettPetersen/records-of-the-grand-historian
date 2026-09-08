@@ -7,6 +7,42 @@ export function createRunControl() {
   };
 }
 
+function cursorErrorText(error) {
+  const parts = [];
+  const visit = (value) => {
+    if (!value) return;
+    if (typeof value === 'string') {
+      parts.push(value);
+      return;
+    }
+    if (value instanceof Error || typeof value === 'object') {
+      if (typeof value.code === 'string') parts.push(value.code);
+      if (typeof value.message === 'string') parts.push(value.message);
+      if (Array.isArray(value.errors)) value.errors.forEach(visit);
+    }
+  };
+  visit(error);
+  return parts.join('\n');
+}
+
+export function isCursorUsageLimitError(error) {
+  return /(?:usage_limit_exceeded|increase your hard limit|requires at least \$\d+(?:\.\d+)? remaining)/iu
+    .test(cursorErrorText(error));
+}
+
+export function requestCursorUsageLimitStop(control, error, options = {}) {
+  if (!isCursorUsageLimitError(error)) return false;
+  if (!control.stopRequested) {
+    control.stopRequested = true;
+    control.stopReason = 'usage-limit';
+    (options.log ?? console.error)(
+      'Cursor usage limit reached; draining active work and preserving resumable state. ' +
+      'No new agents will start.',
+    );
+  }
+  return true;
+}
+
 function entryLabel(entry) {
   if (entry.label) return entry.label;
   if (entry.target?.book && entry.target?.chapter) {

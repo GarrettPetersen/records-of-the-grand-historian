@@ -417,7 +417,7 @@ export function syncLocalCursorReservations(options = {}) {
         current.lane !== 'cursor-sdk' ||
         (
           current.worker !== worker &&
-          !['resume-required', 'ready'].includes(current.status)
+          !['failed', 'resume-required', 'ready'].includes(current.status)
         )
       );
       if (ownedByAnotherActiveWorker) {

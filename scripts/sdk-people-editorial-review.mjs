@@ -35,6 +35,10 @@ import {
   parseCursorIntegerLimit,
 } from './lib/cursor-cli-limits.mjs';
 import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
+import {
+  createRunControl,
+  requestCursorUsageLimitStop,
+} from './lib/cursor-run-control.mjs';
 
 loadDotenv(REPO_ROOT);
 
@@ -386,7 +390,7 @@ export function sealedReviewerAgentOptions(target, opts) {
   };
 }
 
-async function processTarget(target, opts, state, matcher) {
+async function processTarget(target, opts, state, matcher, control) {
   const key = `${target.book}/${target.chapter}`;
   const loaded = loadEditorialReviewChapter(target.book, target.chapter, { properNounMatcher: matcher });
   if (!opts.force && validCurrentDecision(target, loaded)) {
@@ -406,6 +410,8 @@ async function processTarget(target, opts, state, matcher) {
     console.log(`[dry-run ${key}] ${dossier.items.length} proposal(s), ${Buffer.byteLength(JSON.stringify(dossier))} dossier bytes`);
     return { status: 'dry-run' };
   }
+
+  if (control.stopRequested) return { status: 'interrupted' };
 
   let agent;
   try {
@@ -454,6 +460,10 @@ async function processTarget(target, opts, state, matcher) {
           recoveryErrors.push(...errorList(error));
         }
       }
+      if (control.stopRequested) {
+        updateState(state, target, { status: 'interrupted', resumePending: true });
+        return { status: 'interrupted' };
+      }
       try {
         const result = await runTurn(
           agent,
@@ -495,6 +505,10 @@ async function processTarget(target, opts, state, matcher) {
     });
     let errors = [];
     for (let attempt = 1; attempt <= opts.maxAttempts; attempt += 1) {
+      if (control.stopRequested) {
+        updateState(state, target, { status: 'interrupted', lastErrors: errors });
+        return { status: 'interrupted' };
+      }
       try {
         const result = await runTurn(
           agent,
@@ -529,9 +543,11 @@ async function processTarget(target, opts, state, matcher) {
     }
     throw Object.assign(new Error(`Review failed after ${opts.maxAttempts} attempt(s)`), { errors });
   } catch (error) {
-    updateState(state, target, { status: 'failed', lastErrors: errorList(error) });
-    console.error(`[${key}] failed: ${errorList(error)[0]}`);
-    return { status: 'failed' };
+    const usageLimitReached = requestCursorUsageLimitStop(control, error);
+    const status = usageLimitReached ? 'interrupted' : 'failed';
+    updateState(state, target, { status, lastErrors: errorList(error) });
+    console.error(`[${key}] ${status}: ${errorList(error)[0]}`);
+    return { status };
   } finally {
     if (agent) {
       try {
@@ -567,18 +583,21 @@ async function main() {
       `remote timeout=${Math.ceil(opts.runTimeoutMs / 60_000)}m; no Git pushes`,
     );
 
+    const control = createRunControl();
     let next = 0;
     const results = [];
     const workers = Array.from({ length: Math.min(opts.concurrency, selected.length) }, async () => {
-      while (next < selected.length) {
-        results.push(await processTarget(selected[next++], opts, state, matcher));
+      while (next < selected.length && !control.stopRequested) {
+        results.push(await processTarget(selected[next++], opts, state, matcher, control));
       }
     });
     await Promise.all(workers);
     const counts = new Map();
     for (const result of results) counts.set(result.status, (counts.get(result.status) ?? 0) + 1);
     console.log(`Finished: ${[...counts].map(([status, count]) => `${status}=${count}`).join(', ') || 'no targets'}`);
+    console.log(`Not started: ${selected.length - next}; stop reason: ${control.stopReason ?? 'queue-complete'}`);
     if (counts.has('failed')) process.exitCode = 2;
+    else if (control.stopReason === 'usage-limit') process.exitCode = 2;
   } finally {
     releaseRunLock();
   }

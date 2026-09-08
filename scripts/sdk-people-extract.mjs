@@ -43,6 +43,8 @@ import {
 import {
   createRunControl,
   installSignalHandlers,
+  isCursorUsageLimitError,
+  requestCursorUsageLimitStop,
 } from './lib/cursor-run-control.mjs';
 import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
 import {
@@ -1746,6 +1748,7 @@ async function recoverInterruptedExtraction(target, packet, opts, state, control
     updateState(state, target, { resumePending: false });
     return { ...accepted, packet };
   } catch (error) {
+    requestCursorUsageLimitStop(control, error);
     if (error instanceof CursorRunLimitExceededError) {
       control.stopRequested = true;
       control.stopReason = 'run-limit';
@@ -1812,6 +1815,7 @@ async function obtainValidInitialExtraction(
       const validated = validateDownloadedExtraction(downloaded, packet, target, chunk);
       return { extraction: validated.normalized, result, stats: validated.stats };
     } catch (error) {
+      const usageLimitReached = requestCursorUsageLimitStop(control, error);
       if (chunk && (error instanceof CursorRunLimitExceededError || error.runStatus)) {
         try {
           const recovered = withRunMetadata(
@@ -1868,6 +1872,8 @@ async function obtainValidInitialExtraction(
         console.error(`  - ... ${errors.length - 20} more error(s)`);
       }
       if (control.cancelRequested) break;
+      if (usageLimitReached) throw error;
+      if (control.stopRequested) throw error;
       if (error instanceof CursorRunLimitExceededError) throw error;
       if (error instanceof CursorAgentError && !error.isRetryable) break;
     }
@@ -2900,6 +2906,7 @@ async function processTarget(target, opts, state, control, budget) {
     try {
       return await processChunkedTarget(target, packet, opts, state, control, budget);
     } catch (error) {
+      requestCursorUsageLimitStop(control, error);
       const errors = validationErrors(error);
       if (isRecoveryArtifactUnavailable(error)) {
         updateState(state, target, { status: 'interrupted' });
@@ -2942,6 +2949,7 @@ async function processTarget(target, opts, state, control, budget) {
     };
     return acceptWholeExtraction(target, accepted, state);
   } catch (error) {
+    requestCursorUsageLimitStop(control, error);
     const errors = validationErrors(error);
     const status = control.stopRequested ? 'interrupted' : 'failed';
     updateState(state, target, { status, lastErrors: errors });
@@ -3839,6 +3847,17 @@ async function selfTest() {
       isMissingCursorAgent({ code: 'network_error' })) {
     throw new Error('Missing Cursor agent errors were not classified narrowly');
   }
+  const usageLimitControl = createRunControl();
+  if (!isCursorUsageLimitError({ code: 'usage_limit_exceeded' }) ||
+      !isCursorUsageLimitError(new Error('Background Agent requires at least $2 remaining')) ||
+      isCursorUsageLimitError(new Error('ordinary validation failure')) ||
+      !requestCursorUsageLimitStop(usageLimitControl, {
+        errors: ['[usage_limit_exceeded] Increase your hard limit'],
+      }, { log: () => {} }) ||
+      !usageLimitControl.stopRequested ||
+      usageLimitControl.stopReason !== 'usage-limit') {
+    throw new Error('Cursor account capacity errors did not trigger a global scheduler stop');
+  }
   const scoped = planningScopeTargets([
     { book: 'fixture', chapter: '001' },
     { book: 'fixture', chapter: '002' },
@@ -4104,7 +4123,7 @@ async function main() {
       'Accepted files remain local. Commit locally in batches; push codex/people-glossary-staging only at a deliberate checkpoint.',
     );
     if (counts.has('failed')) process.exitCode = 2;
-    else if (control.stopReason === 'run-limit') process.exitCode = 2;
+    else if (control.stopReason === 'run-limit' || control.stopReason === 'usage-limit') process.exitCode = 2;
     else if (control.stopReason === 'SIGINT' || control.stopReason === 'SIGTERM') process.exitCode = 130;
   } finally {
     releaseRunLock();
