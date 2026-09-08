@@ -7,10 +7,13 @@ import { fileURLToPath } from 'node:url';
 import {
   PEOPLE_DIR,
   REPO_ROOT,
-  readJson,
   writeJsonAtomic,
 } from './lib/people-content.mjs';
 import { connectedBlockComponents } from './lib/people-resolution.mjs';
+import {
+  readPeopleCatalog,
+  readPeopleResolutionCandidates,
+} from './lib/people-generated-data.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
@@ -504,7 +507,10 @@ function main() {
       throw new Error(`Missing ${path.relative(REPO_ROOT, file)}; run npm run people:catalog first`);
     }
   }
-  const report = buildPeopleMaintenanceReport(readJson(options.catalog), readJson(options.candidates));
+  const report = buildPeopleMaintenanceReport(
+    readPeopleCatalog(options.catalog),
+    readPeopleResolutionCandidates(options.candidates),
+  );
   writeJsonAtomic(options.out, report);
   fs.mkdirSync(path.dirname(options.markdownOut), { recursive: true });
   fs.writeFileSync(options.markdownOut, renderPeopleMaintenanceMarkdown(report, options.limit));

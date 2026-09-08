@@ -5,7 +5,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildPeopleResolutionCandidateDocument } from './build-people-resolution-candidates.mjs';
 import { loadValidatedPeopleCorpus, loadValidatedResolutionDocuments } from './lib/people-corpus.mjs';
-import { PEOPLE_DIR, REPO_ROOT, readJson, writeJsonAtomic } from './lib/people-content.mjs';
+import { PEOPLE_DIR, REPO_ROOT, readJson } from './lib/people-content.mjs';
+import {
+  writePeopleCatalog,
+  writePeopleResolutionCandidates,
+  writePeopleSiteIndex,
+} from './lib/people-generated-data.mjs';
 import { createPeopleSchemaValidator, formatSchemaErrors } from './lib/people-schema.mjs';
 import {
   assertPeopleCatalogPublicationState,
@@ -236,6 +241,22 @@ function preferredName(members, override = null, clusterId = null) {
     preferred: true,
     claimRefs: [...new Set(claimRefs)].sort(),
   };
+}
+
+function preferredNameOverrideErrors(clusters, corpus, overrides) {
+  const errors = [];
+  for (const cluster of clusters) {
+    const override = overrides[cluster.canonicalPersonId];
+    if (!override?.preferredName) continue;
+    const members = cluster.localPeople.map((localId) => corpus.localPeople.get(localId));
+    try {
+      preferredName(members, override, cluster.canonicalPersonId);
+    } catch (error) {
+      if (!String(error?.message ?? error).startsWith('Preferred-name override ')) throw error;
+      errors.push(error.message);
+    }
+  }
+  return errors;
 }
 
 function canonicalNames(members, preferred) {
@@ -750,6 +771,17 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
   if (unknownOverrides.length) {
     throw new Error(`People curation contains unknown canonical IDs: ${unknownOverrides.join(', ')}`);
   }
+  const unsupportedPreferredNames = preferredNameOverrideErrors(
+    resolved.clusters,
+    corpus,
+    resolvedCurationOverrides,
+  );
+  if (unsupportedPreferredNames.length) {
+    throw new Error(
+      `People curation has ${unsupportedPreferredNames.length} unsupported preferred-name override(s):\n` +
+      unsupportedPreferredNames.map((error) => `- ${error}`).join('\n'),
+    );
+  }
   const people = resolved.clusters.map((cluster) =>
     canonicalRecord(
       cluster,
@@ -891,6 +923,18 @@ function selfTest() {
   }
   if (sourcePreferredNameSuggestion([emperorWu]).en !== 'Che') {
     throw new Error('An improved public identity changed an established person URL');
+  }
+  const unsupportedOverrides = preferredNameOverrideErrors([
+    { canonicalPersonId: 'per_fixture_1', localPeople: [emperorWu.localId] },
+    { canonicalPersonId: 'per_fixture_2', localPeople: [left.localId] },
+  ], {
+    localPeople: new Map([[emperorWu.localId, emperorWu], [left.localId, left]]),
+  }, {
+    per_fixture_1: { preferredName: { en: 'Unsupported Emperor Name', zh: '無' } },
+    per_fixture_2: { preferredName: { en: 'Unsupported Historian Name', zh: '無' } },
+  });
+  if (unsupportedOverrides.length !== 2) {
+    throw new Error('Preferred-name preflight did not report every unsupported override');
   }
   const caoCao1 = makePerson('fixture:009:p001', 'Cao Cao', '曹操');
   const caoCao2 = makePerson('fixture:010:p001', 'Cao Cao', '曹操');
@@ -1077,9 +1121,9 @@ function main() {
     }
   }
   const result = compilePeopleCatalog(corpus, resolutions, curation.people);
-  writeJsonAtomic(options.out, result.catalog);
-  writeJsonAtomic(options.candidatesOut, result.candidates);
-  writeJsonAtomic(options.siteIndexOut, result.siteIndex);
+  writePeopleCatalog(options.out, result.catalog);
+  writePeopleResolutionCandidates(options.candidatesOut, result.candidates);
+  writePeopleSiteIndex(options.siteIndexOut, result.siteIndex);
   if (options.requireResolved && !result.catalog.complete) {
     throw new Error(
       `People catalog is incomplete: ${result.catalog.stats.legacyLocalPeople} legacy local people and ` +
@@ -1101,7 +1145,7 @@ if (isMain) {
   try {
     main();
   } catch (error) {
-    console.error(error instanceof Error ? error.message : error);
+    console.error(error instanceof Error ? error.stack : error);
     process.exit(1);
   }
 }

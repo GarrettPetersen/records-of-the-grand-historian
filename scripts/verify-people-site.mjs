@@ -18,6 +18,7 @@ import {
   MAX_PUBLIC_PERSON_ALIASES,
   personPublicAliases,
 } from './lib/people-presentation.mjs';
+import { readPeopleCatalog, readPeopleSiteIndex } from './lib/people-generated-data.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
@@ -66,9 +67,9 @@ function loadSearchEntries(outputRoot, errors) {
 
 export function verifyPeopleSite(options = parseArgs([])) {
   const errors = [];
-  const catalog = readJson(path.join(PEOPLE_DIR, 'generated', 'catalog.json'));
+  const catalog = readPeopleCatalog(path.join(PEOPLE_DIR, 'generated', 'catalog.json'));
   assertPeopleCatalogPublicationState(catalog);
-  const siteIndex = readJson(path.join(PEOPLE_DIR, 'generated', 'site-index.json'));
+  const siteIndex = readPeopleSiteIndex(path.join(PEOPLE_DIR, 'generated', 'site-index.json'));
   const statusPath = path.join(options.outputRoot, 'data', 'people', 'site-status.json');
   if (!fs.existsSync(statusPath)) {
     if (!peopleCatalogIsPublishable(catalog) && !options.allowPreview) {

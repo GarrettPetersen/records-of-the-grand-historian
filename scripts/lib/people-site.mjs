@@ -1,10 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { exactSpanAt, PEOPLE_DIR, readJson } from './people-content.mjs';
+import { exactSpanAt, PEOPLE_DIR } from './people-content.mjs';
 import {
   assertPeopleCatalogPublicationState,
   peopleCatalogIsPublishable,
 } from './people-publication.mjs';
+import { readPeopleCatalog, readPeopleSiteIndex } from './people-generated-data.mjs';
 
 const CATALOG_PATH = path.join(PEOPLE_DIR, 'generated', 'catalog.json');
 const SITE_INDEX_PATH = path.join(PEOPLE_DIR, 'generated', 'site-index.json');
@@ -29,8 +30,8 @@ export function loadPeopleSiteContext({ allowMissing = true, allowPreview = prev
     return { active: false, preview: false, reason: 'generated-data-missing' };
   }
 
-  const catalog = readJson(CATALOG_PATH);
-  const siteIndex = readJson(SITE_INDEX_PATH);
+  const catalog = readPeopleCatalog(CATALOG_PATH);
+  const siteIndex = readPeopleSiteIndex(SITE_INDEX_PATH);
   assertPeopleCatalogPublicationState(catalog);
   if (siteIndex.schemaVersion !== 2) {
     throw new Error('Generated people site index is obsolete; rerun people:catalog');
