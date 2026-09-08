@@ -12,6 +12,8 @@ const CAMPAIGN_MAX_CANDIDATES = 200;
 const CAMPAIGN_MAX_WORKER_KIB = 48;
 const CAMPAIGN_RUN_TIMEOUT_MINUTES = 20;
 const CAMPAIGN_MAX_RUN_TOKENS = 3_000_000;
+const CAMPAIGN_EDITORIAL_MAX_RUN_COST_DOLLARS = 3;
+const CAMPAIGN_EDITORIAL_MAX_RUN_TOKENS = 4_000_000;
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
 function usage() {
@@ -108,6 +110,8 @@ export function campaignTargets({ missingChapters, asOf, deadline, wavesPerDay, 
     maxWorkerKiB: CAMPAIGN_MAX_WORKER_KIB,
     runTimeoutMinutes: CAMPAIGN_RUN_TIMEOUT_MINUTES,
     maxRunTokens: CAMPAIGN_MAX_RUN_TOKENS,
+    editorialMaxRunCostDollars: CAMPAIGN_EDITORIAL_MAX_RUN_COST_DOLLARS,
+    editorialMaxRunTokens: CAMPAIGN_EDITORIAL_MAX_RUN_TOKENS,
     waveCostCeilingDollars: Math.ceil(chaptersPerWave * 4.5),
   };
 }
@@ -128,7 +132,9 @@ function selfTest() {
     result.extractionConcurrency !== 20 ||
     result.maxUnits !== 80 ||
     result.maxCandidates !== 200 ||
-    result.runTimeoutMinutes !== 20
+    result.runTimeoutMinutes !== 20 ||
+    result.editorialMaxRunCostDollars !== 3 ||
+    result.editorialMaxRunTokens !== 4_000_000
   ) {
     throw new Error(`Unexpected campaign targets: ${JSON.stringify(result)}`);
   }
@@ -185,6 +191,13 @@ function main() {
     `--run-timeout-minutes ${targets.runTimeoutMinutes} --max-run-tokens ${targets.maxRunTokens} ` +
     `--max-attempts 3 --max-cost ${targets.waveCostCeilingDollars} --cost-reserve 5 ` +
     '--max-run-cost 5 --model grok-4.6 --effort low',
+  );
+  console.log(
+    `Editorial wave: npm run people:editorial-review -- --all --limit ${targets.chaptersPerWave} ` +
+    `--concurrency ${targets.editorialConcurrency} --max-attempts 2 ` +
+    `--max-run-cost ${targets.editorialMaxRunCostDollars} ` +
+    `--max-run-tokens ${targets.editorialMaxRunTokens} ` +
+    `--run-timeout-minutes ${targets.runTimeoutMinutes} --model grok-4.6 --effort medium`,
   );
 }
 

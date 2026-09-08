@@ -160,6 +160,10 @@ function removeRetractedNameMentionSpans(mentions, claims, reviewed) {
     reviewed.retractedClaimIds.has(claim.id) && claim.predicate === 'name'
   );
   if (retractedNames.length === 0) return structuredClone(mentions);
+  const retainedNames = claims
+    .filter((claim) => !reviewed.retractedClaimIds.has(claim.id))
+    .map((claim) => reviewed.revisedClaims.get(claim.id) ?? claim)
+    .filter((claim) => claim.predicate === 'name');
 
   return structuredClone(mentions).flatMap((mention) => {
     for (const claim of retractedNames) {
@@ -170,6 +174,12 @@ function removeRetractedNameMentionSpans(mentions, claims, reviewed) {
       for (const language of ['zh', 'en']) {
         const exact = claim.value?.[language];
         if (typeof exact !== 'string' || !exact) continue;
+        const stillSupported = retainedNames.some((retained) =>
+          retained.subject === mention.person &&
+          retained.value?.[language] === exact &&
+          retained.evidence.some((evidence) => evidence.split(':').at(-1) === mention.unit.id)
+        );
+        if (stillSupported) continue;
         mention.spans[language] = mention.spans[language].filter((span) => span.exact !== exact);
       }
     }
@@ -493,6 +503,38 @@ function selfTest() {
   }], { retractedClaimIds: new Set(['fixture:001:c0001']) });
   if (retractedMentionResult.length !== 0) {
     throw new Error('A mention created solely by a retracted name claim survived reconciliation');
+  }
+  const sharedSurfaceClaims = [{
+    id: 'fixture:001:c0001',
+    subject: 'fixture:001:p001',
+    predicate: 'name',
+    value: { kind: 'title', en: 'Wrong Name', zh: '貴嬪' },
+    evidence: ['fixture:001:s0001'],
+  }, {
+    id: 'fixture:001:c0002',
+    subject: 'fixture:001:p001',
+    predicate: 'name',
+    value: { kind: 'title', en: 'Honored Consort', zh: '貴嬪' },
+    evidence: ['fixture:001:s0001'],
+  }];
+  const retainedSharedSurface = removeRetractedNameMentionSpans([{
+    id: 'fixture:001:m0001',
+    person: 'fixture:001:p001',
+    unit: { id: 's0001' },
+    spans: {
+      zh: [{ exact: '貴嬪', occurrence: 0 }],
+      en: [{ exact: 'Wrong Name', occurrence: 0 }],
+    },
+    candidateRefs: [],
+  }], sharedSurfaceClaims, {
+    retractedClaimIds: new Set(['fixture:001:c0001']),
+    revisedClaims: new Map(),
+  });
+  if (
+    retainedSharedSurface[0]?.spans.zh.length !== 1 ||
+    retainedSharedSurface[0]?.spans.en.length !== 0
+  ) {
+    throw new Error('Retracting one alias removed a surface retained by another name claim');
   }
   const claimAdditionResult = applyReviewedClaimChanges([], {
     retractedClaimIds: new Set(),

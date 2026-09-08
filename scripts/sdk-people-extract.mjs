@@ -1228,6 +1228,7 @@ function formattingEquivalentSurfaceMatches(text, exact, language, kind) {
 
 const COMPACT_SURFACE_KIND_ALIASES = new Map([
   ['epithet', 'alternate-name'],
+  ['given', 'personal-name'],
   ['given-name', 'personal-name'],
   ['nickname', 'alternate-name'],
   ['regnal', 'alternate-name'],
@@ -1324,7 +1325,7 @@ function normalizeCompactClaimMetadata(extraction) {
     if (!Array.isArray(claim) || !claim[2] || typeof claim[2] !== 'object') continue;
     const value = claim[2];
     if (claim[1] === 'attestation') {
-      for (const key of ['provenance', 'speaker']) {
+      for (const key of ['note', 'provenance', 'speaker']) {
         if (!Object.hasOwn(value, key)) continue;
         delete value[key];
         normalizedAttestations += 1;
@@ -1337,6 +1338,10 @@ function normalizeCompactClaimMetadata(extraction) {
     }
     if (value.sharedParentage === 'unspecified') {
       delete value.sharedParentage;
+      normalizedFamilyMetadata += 1;
+    }
+    if (value.relationshipState === 'claimed') {
+      delete value.relationshipState;
       normalizedFamilyMetadata += 1;
     }
   }
@@ -3468,6 +3473,7 @@ async function selfTest() {
       {
         sourceDate: { text: 'fixture date' },
         westernYear: { era: 'AD', year: 1, precision: 'decade' },
+        note: 'Misplaced free-form note.',
         provenance: { mode: 'misplaced' },
         speaker: 'misplaced',
       },
@@ -3480,6 +3486,7 @@ async function selfTest() {
         relation: 'sibling-of',
         personId: 'p002',
         generationDistance: 0,
+        relationshipState: 'claimed',
         sharedParentage: 'unspecified',
       },
       'explicit',
@@ -3495,8 +3502,8 @@ async function selfTest() {
     normalizedMalformedEcho.normalizedSurfaceOverlaps !== 1 ||
     normalizedMalformedEcho.normalizedSurfaceKinds !== 1 ||
     normalizedMalformedEcho.normalizedNameKinds !== 1 ||
-    normalizedMalformedEcho.normalizedAttestations !== 2 ||
-    normalizedMalformedEcho.normalizedFamilyMetadata !== 2 ||
+    normalizedMalformedEcho.normalizedAttestations !== 3 ||
+    normalizedMalformedEcho.normalizedFamilyMetadata !== 3 ||
     normalizedMalformedEcho.normalizedPrecisions !== 1 ||
     normalizedMalformedEcho.extraction.surfaces.length !== 1 ||
     normalizedMalformedEcho.extraction.surfaces[0][1] !== 'personal-name' ||
@@ -3505,8 +3512,10 @@ async function selfTest() {
     normalizedMalformedEcho.extraction.people[0][5][0][0].kind !== 'title' ||
     normalizedMalformedEcho.extraction.claims[0][2].westernYear.precision !== 'circa' ||
     Object.hasOwn(normalizedMalformedEcho.extraction.claims[0][2], 'speaker') ||
+    Object.hasOwn(normalizedMalformedEcho.extraction.claims[0][2], 'note') ||
     Object.hasOwn(normalizedMalformedEcho.extraction.claims[0][2], 'provenance') ||
     Object.hasOwn(normalizedMalformedEcho.extraction.claims[1][2], 'generationDistance') ||
+    Object.hasOwn(normalizedMalformedEcho.extraction.claims[1][2], 'relationshipState') ||
     Object.hasOwn(normalizedMalformedEcho.extraction.claims[1][2], 'sharedParentage')
   ) {
     throw new Error('Malformed compact worker echo normalization regressed');

@@ -46,6 +46,7 @@ const MAX_CONCURRENCY = 24;
 const DEFAULT_MAX_RUN_COST_CENTS = 100;
 const DEFAULT_MAX_RUN_TOKENS = 1_000_000;
 const DEFAULT_RUN_POLL_MS = 15_000;
+const DEFAULT_RUN_TIMEOUT_MS = 20 * 60 * 1000;
 const REVIEW_PROMPT = fs.readFileSync(path.join(REPO_ROOT, 'prompt-people-editorial-review.txt'), 'utf8');
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
@@ -65,6 +66,8 @@ Options:
   --max-run-cost DOLLARS
                        Cancel one active run at this raw usage cost (default: $${(DEFAULT_MAX_RUN_COST_CENTS / 100).toFixed(2)}; use unlimited to disable).
   --max-run-tokens N   Cancel one active run at this token count (default: ${DEFAULT_MAX_RUN_TOKENS.toLocaleString('en-US')}; use unlimited to disable).
+  --run-timeout-minutes N
+                       Cancel a stalled remote run after N minutes (default: ${DEFAULT_RUN_TIMEOUT_MS / 60_000}).
   --model MODEL        Reviewer model (default: ${DEFAULT_MODEL}).
   --effort LEVEL       Reviewer effort: low, medium, or high (default: medium).
   --fast               Enable the model's fast variant.
@@ -93,6 +96,7 @@ function parseArgs(argv) {
     maxAttempts: 2,
     maxRunCostCents: DEFAULT_MAX_RUN_COST_CENTS,
     maxRunTokens: DEFAULT_MAX_RUN_TOKENS,
+    runTimeoutMs: DEFAULT_RUN_TIMEOUT_MS,
     model: process.env.SDK_PEOPLE_REVIEW_MODEL ?? DEFAULT_MODEL,
     effort: process.env.SDK_PEOPLE_REVIEW_EFFORT ?? 'medium',
     fast: false,
@@ -116,6 +120,7 @@ function parseArgs(argv) {
     else if (arg === '--max-attempts') opts.maxAttempts = integer(next(), arg, 5);
     else if (arg === '--max-run-cost') opts.maxRunCostCents = parseCursorDollarLimit(next(), arg);
     else if (arg === '--max-run-tokens') opts.maxRunTokens = parseCursorIntegerLimit(next(), arg);
+    else if (arg === '--run-timeout-minutes') opts.runTimeoutMs = integer(next(), arg, 180) * 60_000;
     else if (arg === '--model') opts.model = next();
     else if (arg === '--effort') opts.effort = next();
     else if (arg === '--fast') opts.fast = true;
@@ -220,10 +225,16 @@ VALIDATION ERRORS:
 ${errors.slice(0, 200).map((error) => `- ${error}`).join('\n')}`;
 }
 
-function resumePrompt(target, errors) {
+function resumePrompt(target, errors, loaded) {
   const output = artifactRelative(target);
+  const proposalIds = loaded.extraction.translationRepairs
+    .filter((repair) => repair.status === 'proposed')
+    .map((repair) => repair.id);
   return `Resume the independent editorial review already completed in this conversation. Do not reread or restart the dossier. Finish any remaining decisions, write the complete decision document to ${output}, and publish it with:
 ${publishCommand(target)}
+
+The complete current proposal ID set is:
+${proposalIds.map((id) => `- ${id}`).join('\n')}
 
 PRIOR HOST DIAGNOSTICS:
 ${errors.slice(0, 40).map((error) => `- ${error}`).join('\n')}`;
@@ -239,6 +250,7 @@ async function runTurn(agent, prompt, target, phase, opts) {
     apiKey: opts.apiKey,
     label: `[${target.book}/${target.chapter}] ${phase}`,
     pollMs: DEFAULT_RUN_POLL_MS,
+    timeoutMs: opts.runTimeoutMs,
     maxRawCostCents: opts.maxRunCostCents,
     maxTotalTokens: opts.maxRunTokens,
   });
@@ -425,6 +437,7 @@ async function processTarget(target, opts, state, matcher) {
             apiKey: opts.apiKey,
             label: `[${key}] retained review`,
             pollMs: DEFAULT_RUN_POLL_MS,
+            timeoutMs: opts.runTimeoutMs,
             maxRawCostCents: opts.maxRunCostCents,
             maxTotalTokens: opts.maxRunTokens,
           });
@@ -442,7 +455,13 @@ async function processTarget(target, opts, state, matcher) {
         }
       }
       try {
-        const result = await runTurn(agent, resumePrompt(target, recoveryErrors), target, 'review continuation', opts);
+        const result = await runTurn(
+          agent,
+          resumePrompt(target, recoveryErrors, loaded),
+          target,
+          'review continuation',
+          opts,
+        );
         return acceptDecision(
           await downloadDecision(agent, target), target, loaded, opts, state, agent, result,
         );
@@ -544,7 +563,8 @@ async function main() {
     const matcher = loadProperNounMatcher();
     console.log(
       `Selected ${selected.length} chapter(s); reviewer concurrency=${opts.concurrency}; ` +
-      `model=${opts.model} effort=${opts.effort}; ${describeCursorRunLimits(opts)}; no Git pushes`,
+      `model=${opts.model} effort=${opts.effort}; ${describeCursorRunLimits(opts)}; ` +
+      `remote timeout=${Math.ceil(opts.runTimeoutMs / 60_000)}m; no Git pushes`,
     );
 
     let next = 0;

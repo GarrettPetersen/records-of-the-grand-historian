@@ -845,6 +845,16 @@ function normalizeMentionSpans(extraction, mention, unit, previousUnit, staleSpa
         previousUnit[language] !== unit[language] &&
         !storedCoordinatesStillMatch
       ) {
+        if (
+          Number.isInteger(span.occurrence) &&
+          span.occurrence >= occurrences.length
+        ) {
+          // The edited text retired this particular copy of a repeated
+          // surface. Keep it stale rather than relocating it onto a surviving
+          // namesake elsewhere in a long unit.
+          staleSpans.push({ mention, language, span, retiredOccurrence: true });
+          return [];
+        }
         const aliasRemap = remapMentionSpanToKnownAlias(
           extraction,
           mention,
@@ -898,7 +908,11 @@ function normalizeMentionSpans(extraction, mention, unit, previousUnit, staleSpa
   return normalized;
 }
 
-function removeRedundantSamePersonSpans(mentions, candidateById = new Map()) {
+function removeRedundantSamePersonSpans(
+  mentions,
+  candidateById = new Map(),
+  unitById = new Map(),
+) {
   for (const language of ['zh', 'en']) {
     const located = mentions.flatMap((mention) => mention.spans[language].map((span) => ({
       mention,
@@ -906,8 +920,10 @@ function removeRedundantSamePersonSpans(mentions, candidateById = new Map()) {
       length: span.endCodePoint - span.startCodePoint,
     })));
     for (const current of located) {
+      if (!current.mention.spans[language].includes(current.span)) continue;
       const covering = located.find((other) =>
         other !== current &&
+        other.mention.spans[language].includes(other.span) &&
         other.mention.person === current.mention.person &&
         other.mention.unit.id === current.mention.unit.id &&
         other.span.startCodePoint <= current.span.startCodePoint &&
@@ -915,19 +931,51 @@ function removeRedundantSamePersonSpans(mentions, candidateById = new Map()) {
         (other.length > current.length ||
           (other.length === current.length && other.mention.id < current.mention.id))
       );
-      if (!covering) continue;
-      const transferredCandidateRefs = current.mention.candidateRefs.filter((candidateId) => {
+      if (covering) {
+        const transferredCandidateRefs = current.mention.candidateRefs.filter((candidateId) => {
+          const candidate = candidateById.get(candidateId);
+          return candidate?.language === language &&
+            covering.span.startCodePoint <= candidate.startCodePoint &&
+            candidate.endCodePoint <= covering.span.endCodePoint;
+        });
+        covering.mention.candidateRefs.push(...transferredCandidateRefs);
+        current.mention.candidateRefs = current.mention.candidateRefs.filter((candidateId) =>
+          !transferredCandidateRefs.includes(candidateId)
+        );
+        current.mention.spans[language] = current.mention.spans[language]
+          .filter((span) => span !== current.span);
+        continue;
+      }
+
+      const overlapping = located.find((other) =>
+        other !== current &&
+        other.mention.spans[language].includes(other.span) &&
+        other.mention.person === current.mention.person &&
+        other.mention.unit.id === current.mention.unit.id &&
+        spansOverlap(other.span, current.span)
+      );
+      const unit = unitById.get(current.mention.unit.id);
+      if (!overlapping || !unit) continue;
+      const winner = current.mention.kind === 'title-reference'
+        ? current
+        : overlapping.mention.kind === 'title-reference' ? overlapping
+          : current.mention.id < overlapping.mention.id ? current : overlapping;
+      const loser = winner === current ? overlapping : current;
+      const merged = coveringSpan(unit[language], winner.span, loser.span);
+      winner.mention.spans[language] = winner.mention.spans[language]
+        .map((span) => span === winner.span ? merged : span);
+      const transferredCandidateRefs = loser.mention.candidateRefs.filter((candidateId) => {
         const candidate = candidateById.get(candidateId);
         return candidate?.language === language &&
-          covering.span.startCodePoint <= candidate.startCodePoint &&
-          candidate.endCodePoint <= covering.span.endCodePoint;
+          merged.startCodePoint <= candidate.startCodePoint &&
+          candidate.endCodePoint <= merged.endCodePoint;
       });
-      covering.mention.candidateRefs.push(...transferredCandidateRefs);
-      current.mention.candidateRefs = current.mention.candidateRefs.filter((candidateId) =>
+      winner.mention.candidateRefs.push(...transferredCandidateRefs);
+      loser.mention.candidateRefs = loser.mention.candidateRefs.filter((candidateId) =>
         !transferredCandidateRefs.includes(candidateId)
       );
-      current.mention.spans[language] = current.mention.spans[language]
-        .filter((span) => span !== current.span);
+      loser.mention.spans[language] = loser.mention.spans[language]
+        .filter((span) => span !== loser.span);
     }
   }
 }
@@ -951,7 +999,7 @@ function coalesceOverlappingMentionSpans(mention, unit) {
 }
 
 function normalizeMentionGeometry(extraction, unitById, candidateById, candidateOrder) {
-  removeRedundantSamePersonSpans(extraction.mentions, candidateById);
+  removeRedundantSamePersonSpans(extraction.mentions, candidateById, unitById);
   extraction.mentions = extraction.mentions.filter((mention) =>
     mention.spans.zh.length > 0 || mention.spans.en.length > 0
   );
@@ -1128,7 +1176,7 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       return !/^所/u.test(after);
     });
   }
-  removeRedundantSamePersonSpans(reconciled.mentions, candidateById);
+  removeRedundantSamePersonSpans(reconciled.mentions, candidateById, unitById);
 
   for (const mention of reconciled.mentions) {
     mention.candidateRefs = [];
@@ -1148,6 +1196,13 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
     }
     const previousUnit = previousUnitById.get(stale.mention.unit.id);
     let mapped = false;
+    if (stale.retiredOccurrence) {
+      mapped = reconciled.mentions.some((mention) =>
+        mention.person === stale.mention.person &&
+        mention.unit.id === stale.mention.unit.id &&
+        (mention.spans.zh.length > 0 || mention.spans.en.length > 0)
+      );
+    }
     if (isStoredEnglishSubword(stale, previousUnit)) {
       invalidSubwordContexts.add(`${stale.mention.person}\u0000${stale.mention.unit.id}`);
       mapped = true;
@@ -1172,6 +1227,8 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       stale.mention.person,
       stale.language,
       stale.mention.unit.id,
+    ).filter((alias) =>
+      !stale.retiredOccurrence || alias.exact !== stale.span.exact
     ).flatMap((alias) => exactOccurrences(unit[stale.language], alias.exact, stale.language)
       .map((span) => ({ alias, span })));
     const scored = aliases.map((item) => ({
@@ -1294,11 +1351,14 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
       ) || reconciled.claims.some((claim) =>
         claim.subject === stale.mention.person &&
         !claimEvidenceUnit(claim, stale.mention.unit.id)
+      ) || reconciled.claims.some((claim) =>
+        nestedStringValues(claim.value).includes(stale.mention.person)
       );
       if (removedFromDisplay && supportedElsewhere) {
         // The reviewed edit removed a fabricated explicit name but the person
-        // remains supported elsewhere. Contextual claims in this unit may
-        // still be valid even though this particular link is retired.
+        // remains supported by another mention, claim, or relationship.
+        // Contextual claims in this unit may still be valid even though this
+        // particular display link is retired.
         mapped = true;
       }
     }
@@ -2477,6 +2537,12 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
   // Span growth and deduplication can move candidate coverage between
   // mentions. Re-account from the final geometry so no valid candidate ref is
   // lost merely because its containing mention was widened later in the pass.
+  for (const mention of reconciled.mentions) {
+    mention.candidateRefs = mention.candidateRefs.filter((candidateId) => {
+      const candidate = candidateById.get(candidateId);
+      return candidate && candidateInsideMention(candidate, mention);
+    });
+  }
   const finalAccounted = new Set(reconciled.candidateDispositions.map((item) => item.candidate));
   for (const mention of reconciled.mentions) {
     for (const candidateId of mention.candidateRefs) finalAccounted.add(candidateId);

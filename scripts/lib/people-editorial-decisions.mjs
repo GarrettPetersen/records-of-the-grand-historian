@@ -387,7 +387,6 @@ function editorialDocumentErrors(document) {
   if (!validate?.(document)) {
     errors.push(...formatSchemaErrors(validate?.errors).map((error) => `schema: ${error}`));
   }
-  const proposalIds = new Set();
   const reviewFingerprints = new Set();
   for (const [index, review] of editorialReviews(document).entries()) {
     const result = singleEditorialDocumentErrors(review, { validateSchema: false });
@@ -397,12 +396,6 @@ function editorialDocumentErrors(document) {
       errors.push(`review ${index + 1}: duplicate proposal-set fingerprint ${fingerprint}`);
     }
     reviewFingerprints.add(fingerprint);
-    for (const proposal of review.proposals ?? []) {
-      if (proposalIds.has(proposal.id)) {
-        errors.push(`review ${index + 1}: proposal ID ${proposal.id} was already reviewed`);
-      }
-      proposalIds.add(proposal.id);
-    }
   }
   return { errors };
 }
