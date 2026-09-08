@@ -21,6 +21,7 @@ export const PEOPLE_QUEUE_FILE = 'people-work-queue.json';
 export const DEFAULT_CLAIM_HOURS = 24;
 
 const PEOPLE_CONFIG = readJson(path.join(PEOPLE_DIR, 'config.json'));
+const GIT_OUTPUT_MAX_BYTES = 64 * 1024 * 1024;
 const RECOVERABLE_STATUSES = new Set([
   'claimed',
   'extracting',
@@ -38,6 +39,7 @@ function git(args, options = {}) {
     encoding: 'utf8',
     input: hasStdinFd ? undefined : options.input,
     stdio: hasStdinFd ? [options.stdinFd, 'pipe', 'pipe'] : undefined,
+    maxBuffer: options.maxBuffer ?? GIT_OUTPUT_MAX_BYTES,
     env: {
       ...process.env,
       GIT_AUTHOR_NAME: process.env.GIT_AUTHOR_NAME || '24histories queue broker',
@@ -46,6 +48,9 @@ function git(args, options = {}) {
       GIT_COMMITTER_EMAIL: process.env.GIT_COMMITTER_EMAIL || 'queue@24histories.com',
     },
   });
+  if (result.error) {
+    throw new Error(`git ${args.join(' ')} failed to execute: ${result.error.message}`);
+  }
   if (result.status !== 0 && !options.allowFailure) {
     throw new Error(
       `git ${args.join(' ')} failed: ${(result.stderr || result.stdout || '').trim()}`,
