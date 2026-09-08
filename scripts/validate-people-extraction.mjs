@@ -631,7 +631,7 @@ export function validatePeopleExtraction(extraction, packet) {
     }
   }
 
-  const repairedFields = new Set();
+  const repairChains = new Map();
   for (const repair of normalized.translationRepairs) {
     const currentUnit = unitById.get(repair.unit.id);
     if (!currentUnit) {
@@ -645,9 +645,19 @@ export function validatePeopleExtraction(extraction, packet) {
     }
     const fieldKey = repair.field === 'idiomatic' ? 'en' : 'literal';
     const repairKey = `${repair.unit.id}:${repair.field}`;
-    if (repairedFields.has(repairKey)) errors.push(`${repair.id} duplicates a repair for ${repairKey}`);
-    repairedFields.add(repairKey);
+    const previous = repairChains.get(repairKey)?.repair;
+    if (previous) {
+      if (previous.status !== 'applied') {
+        errors.push(`${repair.id} follows pending repair ${previous.id} for ${repairKey}`);
+      }
+      if (repair.before !== previous.after) {
+        errors.push(`${repair.id} does not continue from ${previous.id} for ${repairKey}`);
+      }
+    }
+    repairChains.set(repairKey, { repair, currentUnit, fieldKey });
     if (repair.before === repair.after) errors.push(`${repair.id} replacement is identical to its original text`);
+  }
+  for (const { repair, currentUnit, fieldKey } of repairChains.values()) {
     const expected = repair.status === 'applied' ? repair.after : repair.before;
     if (currentUnit[fieldKey] !== expected) {
       errors.push(
@@ -894,6 +904,37 @@ function selfTest() {
 
   const valid = validatePeopleExtraction(extraction, packet);
   if (valid.normalized.mentions[0].spans.zh[0].endCodePoint !== 3) throw new Error('Span normalization failed');
+
+  const sequentialRepairs = structuredClone(extraction);
+  sequentialRepairs.translationRepairs = [{
+    id: 'testbook:001:r0001',
+    unit: locator,
+    field: 'idiomatic',
+    before: 'Alice arrived.',
+    after: 'Alice came.',
+    reason: 'First reviewed correction.',
+    confidence: 'high',
+    status: 'applied',
+  }, {
+    id: 'testbook:001:r0002',
+    unit: locator,
+    field: 'idiomatic',
+    before: 'Alice came.',
+    after: 'Alice has come.',
+    reason: 'Later evidence supports a further correction.',
+    confidence: 'high',
+    status: 'proposed',
+  }];
+  validatePeopleExtraction(sequentialRepairs, packet);
+  const staleSequentialRepair = structuredClone(sequentialRepairs);
+  staleSequentialRepair.translationRepairs[1].before = 'Alice returned.';
+  try {
+    validatePeopleExtraction(staleSequentialRepair, packet);
+    throw new Error('Discontinuous sequential repair unexpectedly passed');
+  } catch (error) {
+    if (!(error instanceof PeopleExtractionValidationError) ||
+        !error.message.includes('does not continue')) throw error;
+  }
 
   const caseOnlySpan = structuredClone(extraction);
   caseOnlySpan.mentions[0].spans.en[0].exact = 'alice';

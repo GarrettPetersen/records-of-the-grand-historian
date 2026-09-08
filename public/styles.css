@@ -136,6 +136,63 @@ main:has(.reader-container) {
     margin-top: 2rem;
 }
 
+.book-translation-note {
+    margin: 1.5rem 0 2rem;
+    padding: 1.2rem 1.4rem;
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--book-color, var(--primary-color));
+    border-radius: 6px;
+    background: var(--card-bg);
+}
+
+.book-translation-note h2 {
+    margin: 0 0 0.45rem;
+    color: var(--book-color, var(--primary-color));
+    font-size: 1.05rem;
+}
+
+.book-translation-note > p {
+    max-width: 76rem;
+    margin: 0;
+    color: #4b5563;
+    font-size: 0.95rem;
+    line-height: 1.65;
+}
+
+.book-translation-note .book-translation-summary {
+    color: var(--text-color);
+    font-size: 1rem;
+}
+
+.book-translation-note .book-translation-project {
+    margin-top: 0.8rem;
+    font-size: 0.9rem;
+}
+
+.book-translation-colophon {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 2.5rem 0 0;
+    padding: 0.85rem 0 0;
+    border-top: 1px solid var(--border-color);
+    color: #737b86;
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.75rem;
+    line-height: 1.45;
+    list-style: none;
+}
+
+.book-translation-colophon li {
+    display: inline-flex;
+    align-items: center;
+}
+
+.book-translation-colophon li:not(:last-child)::after {
+    margin: 0 0.65rem;
+    color: var(--divider-color);
+    content: "·";
+}
+
 .chapter-index-card {
     border: 1px solid var(--border-color);
     border-top: 4px solid var(--book-color, var(--primary-color));

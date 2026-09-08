@@ -173,6 +173,33 @@ function publicationIntroForBook(bookId) {
   return String(text).split(/\n{2,}/).map(p => p.trim()).filter(Boolean)[0] || '';
 }
 
+function pinyinWithoutToneMarks(pinyin) {
+  return String(pinyin || '').normalize('NFD').replace(/\p{M}+/gu, '');
+}
+
+function bookLandingCopy(bookId) {
+  const book = BOOKS[bookId];
+  if (!book) throw new Error(`Cannot create book landing copy for unknown book: ${bookId}`);
+
+  const romanized = pinyinWithoutToneMarks(book.pinyin);
+  const alternateNames = [...new Set([romanized, book.pinyin, book.chinese].filter(Boolean))];
+  const title = `${romanized} (${book.name}) — Complete English Translation`;
+  const description = `${romanized} (${book.name}): full English translation with the original Chinese and English side by side.`;
+  const authorClause = book.author && book.author !== 'Unknown'
+    ? `, the historical work compiled by ${book.author}`
+    : '';
+  const summary = `This page presents the full English translation of ${book.name} (${alternateNames.join('; ')})${authorClause}.`;
+  const features = [
+    'Full English translation',
+    'English and original Chinese side by side',
+    'Free to read online',
+    'Searchable in Chinese or English',
+  ];
+  const projectNote = `This edition is part of a new translation effort by translator and editor Garrett M. Petersen to create a comprehensive translation of all 24 official dynastic histories (the Twenty-Four Histories, 二十四史), as well as the Draft History of Qing (Qingshigao, 清史稿) and the Comprehensive Mirror in Aid of Governance (Zizhi Tongjian, 資治通鑑). The effort is AI-assisted, with significant human editorial oversight and tuning. New technology has made it feasible to translate the nearly 40 million combined Chinese characters of these works into clear, readable English.`;
+
+  return { title, description, summary, features, projectNote };
+}
+
 function bookTheme(bookId) {
   const color = getBookDesign(bookId).color || '#1a5490';
   const deep = darkenHex(color, 0.32);
@@ -210,7 +237,7 @@ ${peopleLink}            Source texts: <a href="https://chinesenotes.com" target
 }
 
 function kindlePromoScript(prefix = '') {
-  return `<script type="module" src="${prefix}kindle-promo.js?v=20260611-kindle-products"></script>`;
+  return `<script type="module" src="${prefix}kindle-promo.js?v=20260827-houhanshu"></script>`;
 }
 
 function parseTableAttributePrefix(text) {
@@ -362,36 +389,35 @@ function generateBookLandingHTML(bookId) {
   const theme = bookTheme(bookId);
   const kindleProduct = kindleProductForBook(bookId);
   const kindleIntro = publicationIntroForBook(bookId);
-  const title = `${book.chinese} — ${book.name}`;
+  const landingCopy = bookLandingCopy(bookId);
   const pageUrl = canonicalUrlForHtmlFile(CANONICAL_SITE, `book/${bookId}.html`);
   const ogImage = `${CANONICAL_SITE}/og/books/${bookId}.png`;
-  const desc = `Browse chapters of ${book.name} (${book.chinese}).`;
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${escapeHtml(title)}</title>
-    <meta name="description" content="${escapeHtml(desc)}">
+    <title>${escapeHtml(landingCopy.title)}</title>
+    <meta name="description" content="${escapeHtml(landingCopy.description)}">
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
-    <link rel="stylesheet" href="../styles.css?v=20260527-book-colors">
+    <link rel="stylesheet" href="../styles.css?v=20260828-book-hierarchy">
     <link rel="canonical" href="${pageUrl}">
-    <meta property="og:title" content="${escapeHtml(title)}">
-    <meta property="og:description" content="${escapeHtml(desc)}">
+    <meta property="og:title" content="${escapeHtml(landingCopy.title)}">
+    <meta property="og:description" content="${escapeHtml(landingCopy.description)}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="${pageUrl}">
     <meta property="og:image" content="${ogImage}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="${escapeHtml(title)}">
-    <meta name="twitter:description" content="${escapeHtml(desc)}">
+    <meta name="twitter:title" content="${escapeHtml(landingCopy.title)}">
+    <meta name="twitter:description" content="${escapeHtml(landingCopy.description)}">
     <meta name="twitter:image" content="${ogImage}">
 </head>
 <body data-book="${escapeHtml(bookId)}"${kindleProduct ? ` data-kindle-intro="${escapeHtml(kindleIntro)}"` : ''} style="--book-color: ${escapeHtml(theme.color)}; --book-color-deep: ${escapeHtml(theme.deep)};">
     <header>
-        <h1 id="book-title">Loading...</h1>
-        <h2 id="book-subtitle"></h2>
+        <h1 id="book-title">${escapeHtml(book.chinese)}</h1>
+        <h2 id="book-subtitle">${escapeHtml(book.name)} (${escapeHtml(book.pinyin)})</h2>
     </header>
 
     <main>
@@ -399,14 +425,24 @@ function generateBookLandingHTML(bookId) {
 
         ${kindleProduct ? kindleInlineCalloutHtml({ bookId, variant: 'hub', intro: kindleIntro }) : ''}
 
+        <section class="book-translation-note" aria-labelledby="about-this-translation">
+            <h2 id="about-this-translation">About this translation</h2>
+            <p class="book-translation-summary">${escapeHtml(landingCopy.summary)}</p>
+            <p class="book-translation-project">${escapeHtml(landingCopy.projectNote)}</p>
+        </section>
+
         <div id="loading">Loading chapters...</div>
         <div class="chapter-list" id="chapter-list" style="display: none;"></div>
+
+        <ul class="book-translation-colophon" aria-label="Translation features">
+${landingCopy.features.map((feature) => `            <li>${escapeHtml(feature)}</li>`).join('\n')}
+        </ul>
     </main>
 
     ${siteFooter('../')}
     ${kindleProduct ? kindlePromoScript('../') : ''}
 
-    <script type="module" src="../chapters.js?v=20260611-search-retry"></script>
+    <script type="module" src="../chapters.js?v=20260827-book-intro"></script>
 </body>
 </html>`;
 }
