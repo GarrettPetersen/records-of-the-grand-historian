@@ -429,6 +429,51 @@ function selfTest() {
   ) {
     throw new Error('Explicit revised-packet person candidate was not assigned');
   }
+  const explicitConflictAssignment = assignExplicitCandidatePeople({
+    extraction: {
+      book: 'fixture',
+      chapter: '001',
+      people: [
+        { localId: 'fixture:001:p001' },
+        { localId: 'fixture:001:p002' },
+      ],
+      mentions: [{
+        id: 'fixture:001:m0001',
+        person: 'fixture:001:p001',
+        unit: {
+          id: 's0001', kind: 'paragraph-sentence', blockIndex: 0,
+          collection: 'sentences', itemIndex: 0,
+        },
+        kind: 'personal-name',
+        spans: {
+          zh: [{ exact: '甲', occurrence: 0, startCodePoint: 0, endCodePoint: 1 }],
+          en: [{ exact: 'King Example', occurrence: 0, startCodePoint: 0, endCodePoint: 12 }],
+        },
+        candidateRefs: [],
+      }],
+      candidateDispositions: [],
+    },
+    unresolvedCandidates: [personCandidateId],
+    unresolvedSpans: [],
+  }, {
+    units: [{
+      id: 's0001', kind: 'paragraph-sentence', blockIndex: 0,
+      collection: 'sentences', itemIndex: 0, zh: '甲', en: 'King Example arrived.',
+    }],
+    preflight: { candidates: [{
+      id: personCandidateId, unit: 's0001', language: 'en', exact: 'King Example',
+      occurrence: 0, startCodePoint: 0, endCodePoint: 12,
+    }] },
+  }, [{ candidate: personCandidateId, person: 'p002', kind: 'personal-name' }]);
+  const oldPersonMention = explicitConflictAssignment.extraction.mentions.find((mention) =>
+    mention.person === 'fixture:001:p001'
+  );
+  const newPersonMention = explicitConflictAssignment.extraction.mentions.find((mention) =>
+    mention.person === 'fixture:001:p002'
+  );
+  if (oldPersonMention?.spans.en.length !== 0 || newPersonMention?.spans.en.length !== 1) {
+    throw new Error('Explicit person assignment did not replace a conflicting remapped span');
+  }
 
   const retractedMentionResult = removeRetractedNameMentionSpans([{
     id: 'fixture:001:m0001',
