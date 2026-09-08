@@ -166,8 +166,15 @@ function selectKeys(value, keys) {
   return Object.fromEntries(keys.filter((key) => key in value).map((key) => [key, value[key]]));
 }
 
-function normalizeSourceWitness(value) {
-  return selectKeys(value, ['source', 'citation', 'excerpt']);
+function normalizeSourceWitness(value, context) {
+  const witness = selectKeys(value, ['source', 'citation', 'excerpt']);
+  if (
+    witness && typeof witness.citation === 'object' &&
+    typeof witness.citation?.id === 'string'
+  ) {
+    witness.citation = `${context.book}/${context.chapter} ${witness.citation.id}`;
+  }
+  return witness;
 }
 
 function normalizeClaim(value) {
@@ -179,8 +186,10 @@ function normalizeClaim(value) {
  * fields, including arbitrary claim values, remain untouched and still pass
  * through the full editorial validator before acceptance.
  */
-export function normalizeEditorialDecisionArtifact(document) {
+export function normalizeEditorialDecisionArtifact(document, extraction = null) {
   if (!document || typeof document !== 'object' || document.schemaVersion !== 3) return document;
+  const context = { book: document.book, chapter: document.chapter };
+  const claimById = new Map((extraction?.claims ?? []).map((claim) => [claim.id, claim]));
   const normalized = selectKeys(structuredClone(document), [
     'schemaVersion',
     'book',
@@ -204,23 +213,31 @@ export function normalizeEditorialDecisionArtifact(document) {
   }));
   normalized.decisions = (normalized.decisions ?? []).map((decision) => ({
     ...selectKeys(decision, ['repairId', 'decision', 'after', 'reason', 'sourceWitness']),
-    sourceWitness: normalizeSourceWitness(decision.sourceWitness),
+    sourceWitness: normalizeSourceWitness(decision.sourceWitness, context),
   }));
-  normalized.claimRetractions = (normalized.claimRetractions ?? []).map((retraction) => ({
-    ...selectKeys(retraction, ['repairId', 'claim', 'reason', 'sourceWitness']),
-    claim: normalizeClaim(retraction.claim),
-    sourceWitness: normalizeSourceWitness(retraction.sourceWitness),
-  }));
-  normalized.claimRevisions = (normalized.claimRevisions ?? []).map((revision) => ({
-    ...selectKeys(revision, ['repairId', 'before', 'after', 'reason', 'sourceWitness']),
-    before: normalizeClaim(revision.before),
-    after: normalizeClaim(revision.after),
-    sourceWitness: normalizeSourceWitness(revision.sourceWitness),
-  }));
+  normalized.claimRetractions = (normalized.claimRetractions ?? []).map((retraction) => {
+    const claimId = retraction.claim?.id ?? retraction.claimId ?? retraction.id;
+    const authoritativeClaim = claimById.get(claimId);
+    return {
+      ...selectKeys(retraction, ['repairId', 'claim', 'reason', 'sourceWitness']),
+      claim: authoritativeClaim ? structuredClone(authoritativeClaim) : normalizeClaim(retraction.claim),
+      sourceWitness: normalizeSourceWitness(retraction.sourceWitness, context),
+    };
+  });
+  normalized.claimRevisions = (normalized.claimRevisions ?? []).map((revision) => {
+    const claimId = revision.before?.id ?? revision.claimId ?? revision.id;
+    const authoritativeClaim = claimById.get(claimId);
+    return {
+      ...selectKeys(revision, ['repairId', 'before', 'after', 'reason', 'sourceWitness']),
+      before: authoritativeClaim ? structuredClone(authoritativeClaim) : normalizeClaim(revision.before),
+      after: normalizeClaim(revision.after),
+      sourceWitness: normalizeSourceWitness(revision.sourceWitness, context),
+    };
+  });
   normalized.claimAdditions = (normalized.claimAdditions ?? []).map((addition) => ({
     ...selectKeys(addition, ['repairId', 'claim', 'reason', 'sourceWitness']),
     claim: normalizeClaim(addition.claim),
-    sourceWitness: normalizeSourceWitness(addition.sourceWitness),
+    sourceWitness: normalizeSourceWitness(addition.sourceWitness, context),
   }));
   return normalized;
 }

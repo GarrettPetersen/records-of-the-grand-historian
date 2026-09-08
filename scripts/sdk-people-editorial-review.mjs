@@ -284,6 +284,7 @@ function validCurrentDecision(target, loaded) {
 }
 
 function acceptDecision(document, target, loaded, opts, state, agent, result) {
+  document = normalizeEditorialDecisionArtifact(document, loaded.extraction);
   document.reviewer = {
     kind: 'cursor-agent',
     name: opts.model,
