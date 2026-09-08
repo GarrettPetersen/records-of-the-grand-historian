@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 3,
+  "book": "yuanshi",
+  "chapter": "161",
+  "input": {
+    "chapterFingerprint": "sha256:7b002c2e97f5fbcd57c13a9430bfbd3b0e333c319601f70a0f466906fd08a81b",
+    "proposalsFingerprint": "sha256:764d55cef134ec020258e9175bb676206dd6f862a65d68c676aef64102efb9cf"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "gpt-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-09-08T20:35:55Z"
+  },
+  "proposals": [
+    {
+      "id": "yuanshi:161:r0001",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Previously Dayuan had advised that conquering Wu required first conquering Shu, and conquering Shu required first securing Kui; he then dispatched his nephew Wen'an to attack the Song districts of Ba and Qu.",
+      "after": "Previously Dayuan had advised that conquering Wu required first conquering Shu, and conquering Shu required first securing Kui; he then dispatched his nephew Wen'an to attack Song Baqu.",
+      "reason": "Chinese 巴渠 is the place-name Baqu (as elsewhere in this chapter), not two separate districts Ba and Qu.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:161:r0002",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Earlier, Dayuan had offered counsel, saying that to take Wu one must first take Shu, and to take Shu one must first hold Kui; he thereupon sent his nephew Wen'an to attack Ba and Qu in Song territory.",
+      "after": "Earlier, Dayuan had offered counsel, saying that to take Wu one must first take Shu, and to take Shu one must first hold Kui; he thereupon sent his nephew Wen'an to attack Baqu in Song territory.",
+      "reason": "Chinese 巴渠 denotes the single place Baqu, not separate Ba and Qu.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:161:r0003",
+      "unit": {
+        "id": "s0014",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "literal",
+      "before": "The mountain was precipitous on all four sides, suitable for attack and defense; before the fort was finished, the Song Kui Circuit investigating commissioner Zheng Zifa said: 'Panlong is the throat of Kui; if the enemy holds it, Kui will be hard to defend—this is ground that must be contested.'\"",
+      "after": "The mountain was precipitous on all four sides, suitable for attack and defense; before the fort was finished, the Song Kui Circuit investigating commissioner Zheng Zifa said: 'Panlong is the throat of Kui; if the enemy holds it, Kui will be hard to defend—this is ground that must be contested.'",
+      "reason": "Extraneous trailing double-quote after the closing quotation marks the literal English.",
+      "confidence": "high"
+    },
+    {
+      "id": "yuanshi:161:r0004",
+      "unit": {
+        "id": "s0208",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "The next day the Song commander-in-chief Zhang Siguang led troops to reinforce them. Dayuan again routed them and captured General Supervisor Sheng and Qi Chang's younger brother.",
+      "after": "The next day the Song commander-in-chief Zhang Siguang led troops to reinforce them. he again routed them and captured General Supervisor Sheng and Qi Chang's younger brother.",
+      "reason": "Chinese 復大破之 has silent subject continuing from prior sentence; inserting the name Dayuan is interpretive but acceptable. Prefer pronoun to avoid inventing an explicit subject not in the Chinese.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "yuanshi:161:r0001",
+      "decision": "revise",
+      "after": "Previously Dayuan had advised that conquering Wu required first conquering Shu, and conquering Shu required first securing Kui; he then dispatched his nephew Wen'an to attack Baqu in Song territory.",
+      "reason": "巴渠 is the single regional name Baqu, as the chapter also renders it in later passages.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "遣其姪文安攻宋巴渠"
+      }
+    },
+    {
+      "repairId": "yuanshi:161:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field must use the same single place-name Baqu.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0011",
+        "excerpt": "攻宋巴渠"
+      }
+    },
+    {
+      "repairId": "yuanshi:161:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The final double quote is unmatched and extraneous.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0014",
+        "excerpt": "此必爭之地也。'"
+      }
+    },
+    {
+      "repairId": "yuanshi:161:r0004",
+      "decision": "reject",
+      "after": null,
+      "reason": "Dayuan is the continuing subject, and naming him explicitly is clear, idiomatic English. The proposal also introduces a lowercase sentence opening.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0207-s0208",
+        "excerpt": "大淵以奇兵攻之……復大破之"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [],
+  "claimAdditions": []
+}

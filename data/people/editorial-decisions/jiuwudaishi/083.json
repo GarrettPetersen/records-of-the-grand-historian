@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "083",
+  "input": {
+    "chapterFingerprint": "sha256:e59ded7259f0787bb4421d485da29d22432050f85bb5d2265bc8f4c9cd2c4254",
+    "proposalsFingerprint": "sha256:44fce5bbe90267932034bdb2f868649572535e4cf8473cadd719aed3550648ac"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "gpt-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-09-08T18:30:00Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:083:r0001",
+      "unit": {
+        "id": "s0006",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "idiomatic",
+      "before": "Several hundred people in the capital were killed by the earthquake, and inside the Gate of Virtuous Clarity the head of a stone dragon was shaken loose; the learned took stone to be the dynastic surname of the house—a dire omen indeed.",
+      "after": "Several hundred people in the capital were killed by lightning, and inside the Gate of Virtuous Clarity the head of a stone dragon was shaken loose; the learned took stone to be the dynastic surname of the house—a dire omen indeed.",
+      "reason": "After the thunderstorm in the prior unit, 震死者 and 震落 refer to lightning strikes, not an earthquake.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:083:r0002",
+      "unit": {
+        "id": "s0006",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "At that time several hundred people in the capital were killed by the quake; inside the Gate of Virtuous Clarity the head of a stone dragon fell from the shock, and those who understood such things held that stone was the dynastic surname—surely a most inauspicious sign.",
+      "after": "At that time several hundred people in the capital were killed by the lightning strike; inside the Gate of Virtuous Clarity the head of a stone dragon fell from the shock, and those who understood such things held that stone was the dynastic surname—surely a most inauspicious sign.",
+      "reason": "震 in this thunderstorm context means struck by lightning rather than an earthquake.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:083:r0003",
+      "unit": {
+        "id": "s0046",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "On jiayin, Jia Wei, Recorder of the Heir Apparent with edict-drafting duties, became Director of the Bureau of Household Registers while retaining his drafting post.",
+      "after": "On jiayin, Jia Wei, Imperial Diarist and edict drafter, became Director of the Bureau of Household Registers while retaining his drafting post.",
+      "reason": "起居郎 is the imperial diarist, not an office of the Heir Apparent.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:083:r0004",
+      "unit": {
+        "id": "s0046",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "literal",
+      "before": "On jiayin, Jia Wei, Recorder of the Heir Apparent and drafter of edicts, was made Director of the Bureau of Household Registers and continued as drafter of edicts.",
+      "after": "On jiayin, Jia Wei, Imperial Diarist and drafter of edicts, was made Director of the Bureau of Household Registers and continued as drafter of edicts.",
+      "reason": "起居郎 should not be rendered as Recorder of the Heir Apparent.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:083:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "The immediately preceding 大雷雨 controls the sense of 震死: hundreds were killed by lightning, not by a separate earthquake.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0005-s0006", "excerpt": "會大雷雨……都下震死者數百人" }
+    },
+    {
+      "repairId": "jiuwudaishi:083:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "In the thunderstorm context, 震死 means killed by lightning; the paired literal field must carry the same meaning.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0005-s0006", "excerpt": "大雷雨……震死者" }
+    },
+    {
+      "repairId": "jiuwudaishi:083:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "起居郎 was a court diarist who recorded imperial activity, not a recorder attached to the heir apparent.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0046", "excerpt": "起居郎、知制誥賈緯" }
+    },
+    {
+      "repairId": "jiuwudaishi:083:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field contains the same office mistranslation and should render 起居郎 as Imperial Diarist.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0046", "excerpt": "起居郎" }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [],
+  "claimAdditions": []
+}

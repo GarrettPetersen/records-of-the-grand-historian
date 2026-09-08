@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "080",
+  "input": {
+    "chapterFingerprint": "sha256:f474d88beb9577a174dd04cafcf9feb3fe2af6de8207c05932060ba9dd340452",
+    "proposalsFingerprint": "sha256:1fa731cf509122edda1b0e28e4720eca56857e4d1721c5f655ceba72756bb029"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "gpt-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-09-08T18:09:15Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:080:r0001",
+      "unit": {
+        "id": "s0015",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "idiomatic",
+      "before": "In the seventh year of Chongde under Taizong, the Dalai Lama and the Panchen presented tribute with a fresh translation of the scriptures.",
+      "after": "In the seventh year of Chongde under Taizong, the Dalai Lama and the Panchen came through successive interpreters to present tribute.",
+      "reason": "重譯 means relay/successive interpretation for communication, not producing a new translation of scriptures; 來貢 is coming to offer tribute.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:080:r0002",
+      "unit": {
+        "id": "s0013",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "The territory has a monk known as the Dalai Lama, who lives at the Potala Temple in Lhasa and is called Front Tibet;",
+      "after": "The territory has a monk known as the Dalai Lama, who lives at the Potala Temple in Lhasa; that region is called Front Tibet;",
+      "reason": "號為前藏 refers to the region of the Dalai Lama's seat, not to the Dalai Lama himself being called Front Tibet.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:080:r0003",
+      "unit": {
+        "id": "s0014",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "idiomatic",
+      "before": "and the Panchen Lama, who resides at the Tashilhunpo Temple in Shigatse and is called Rear Tibet.",
+      "after": "and the Panchen Lama, who resides at the Tashilhunpo Temple in Shigatse; that region is called Rear Tibet.",
+      "reason": "號為後藏 likewise names the region of the Panchen's seat, not the person.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:080:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "The phrase 重譯來貢 describes tribute reaching court through successive interpreters; it does not mention scriptures or a newly made translation.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0015",
+        "excerpt": "重譯來貢"
+      }
+    },
+    {
+      "repairId": "qingshigao:080:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The coordinated description contrasts the Dalai Lama's seat in Lhasa with the Panchen Lama's seat in Shigatse; 前藏 names the former region, not the monk.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0013",
+        "excerpt": "居拉薩之布達拉廟，號為前藏"
+      }
+    },
+    {
+      "repairId": "qingshigao:080:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The parallel wording makes 後藏 the name of the region centered on the Panchen Lama's seat, not an alias of the Panchen Lama.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0014",
+        "excerpt": "居日喀則城之札什倫布廟，號為後藏"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [],
+  "claimAdditions": []
+}

@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "411",
+  "input": {
+    "chapterFingerprint": "sha256:3ecefe917b304d723c3a9b5b0bdc91e5b1e6c7eb4f6075f8310abdd289c83b74",
+    "proposalsFingerprint": "sha256:0255edeca35e92314f1aa06fef85ade603854c669dc4f2903cbebf78cee1b614"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex",
+    "model": "gpt-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-09-08T18:35:00Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:411:r0001",
+      "unit": {
+        "id": "s0008",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "field": "literal",
+      "before": "When Hong Xiuquan held Nanjing, Vice-President Lü Xianji became Grand Councilor for militia training in Anhui and memorialized that Hongzhang should assist him.",
+      "after": "When Hong Xiuquan held Nanjing, Vice-President Lü Xianji became Anhui militia commissioner and memorialized that Hongzhang should assist him.",
+      "reason": "團練大臣 is a militia-training commissioner, not a Grand Councilor.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:411:r0002",
+      "unit": {
+        "id": "s0032",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 10
+      },
+      "field": "literal",
+      "before": "After securing the eastern Shanghai districts, the false Prince of Mo Wang Tan Shaoguang came to reinforce; Hongzhang defeated him at Beixinjing and the rebels fled to Jiading.",
+      "after": "After securing the eastern Shanghai districts, the false Prince of Mo Tan Shaoguang came to reinforce; Hongzhang defeated him at Beixinjing and the rebels fled to Jiading.",
+      "reason": "慕王 is Prince of Mo; Wang duplicates the title already rendered as Prince.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:411:r0003",
+      "unit": {
+        "id": "s0201",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "field": "idiomatic",
+      "before": "He ordered Commander Song Qing and naval commander Ding Ruchang to hold Lüshun, Deputy Commander Luo Rongguang Dagu, Commander Tang Renlian Beitang, Commanders Cao Kezhong and Brigadier Ye Zhichao the inner and outer defenses at Shanhaiguan, and Brigadier Quan Zukai Yantai. The line from end to end was linked, and the coast stood firm.",
+      "after": "He ordered Commander Song Qing and naval commander Ding Ruchang to hold Lüshun, Deputy Commander Luo Rongguang to hold Dagu, Commander Tang Renlian to hold Beitang, Commanders Cao Kezhong and Brigadier Ye Zhichao to hold the inner and outer defenses at Shanhaiguan, and Brigadier Quan Zukai to hold Yantai. The line from end to end was linked, and the coast stood firm.",
+      "reason": "English fuses posting places onto personal names, obscuring who was posted where.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:411:r0004",
+      "unit": {
+        "id": "s0230",
+        "kind": "paragraph-sentence",
+        "blockIndex": 21,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "In the first month of the twenty-second year, at his audience of farewell, the throne, mindful that he was old and traveling far, ordered his sons Jingfang and Jingshu to accompany him.",
+      "after": "In the first month of the twenty-second year, at his audience of farewell, the throne, mindful that he was old and traveling far, ordered Jingfang and Jingshu to accompany him.",
+      "reason": "Chinese 其子經方、經述 does not yet explain adoption; later s0265 shows Jingfang was a brothers son taken as son. Rendering both flatly as his sons is slightly misleading before that clarification; safer to keep the names without presupposing identical filiation.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:411:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "團練大臣 denotes the official charged with organizing militia; it is not a Grand Council appointment.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0008", "excerpt": "安徽團練大臣" }
+    },
+    {
+      "repairId": "qingshigao:411:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "王 is already represented by 'Prince' in 慕王; retaining a separate Wang before Tan Shaoguang duplicates the title as though it were part of his name.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0032", "excerpt": "偽慕王譚紹光" }
+    },
+    {
+      "repairId": "qingshigao:411:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "Each repeated 守 governs a named officer and posting; supplying 'to hold' prevents Dagu, Beitang, and Yantai from reading as parts of personal names.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0201", "excerpt": "羅榮光守大沽，提督唐仁廉守北塘……全祖凱守煙台" }
+    },
+    {
+      "repairId": "qingshigao:411:r0004",
+      "decision": "reject",
+      "after": null,
+      "reason": "The source explicitly calls Jingfang and Jingshu 其子, 'his sons.' An adopted son remains his son, and deleting the relationship would omit source information.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0230", "excerpt": "命其子經方、經述侍行" }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [],
+  "claimAdditions": []
+}

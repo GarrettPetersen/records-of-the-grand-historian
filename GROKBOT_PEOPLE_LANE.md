@@ -18,6 +18,11 @@ Both lanes use the atomic ledger on `codex/people-work-queue`.
   Grok Bot even after an allowance reset or a long interruption.
 - Accepted work is pruned from the ledger only after it is present and current on
   `origin/master`.
+- A worker's accepted `ready` chapter remains locked in the ledger, but it does not
+  occupy that worker's execution slot. As soon as the orchestrator verifies and accepts
+  an attachment, the same stable worker ID may claim and start its next chapter. It is
+  normal for one worker ID to have older `ready` entries plus one current `claimed`
+  entry.
 - The queue branch is coordination state. Never merge it into `master`.
 
 The claim update is a compare-and-swap Git push. Concurrent workers may race, but only
@@ -85,8 +90,9 @@ Process exactly one 24histories people-glossary chapter at a time.
    extraction path, and runs `people:grokbot:accept`. Do not route JSON through a text or
    repository connector that can alter Unicode bytes. Never place credentials in chat or
    configure them in the worker shell.
-7. Stop after submission. Start the next chapter only in a clean worktree from the
-   latest origin/master.
+7. Stop after submission or attachment. Once the orchestrator has accepted the result
+   and issued a new central claim, start that next chapter in a clean worktree from the
+   latest origin/master. Do not wait for the older ready chapter to reach master.
 
 If interrupted, resume the same bot conversation and branch first. Rerunning the resume
 command with the same worker ID reconstructs its active assignment without mutating the
@@ -118,6 +124,9 @@ npm run people:grokbot:submit -- --worker grokbot-01 --book <book> --chapter <nn
 # Trusted orchestrator: validate an imported direct attachment and mark its claim ready.
 npm run people:grokbot:accept -- --worker grokbot-01 --book <book> --chapter <nnn>
 
+# Fast integrated handoff gate for that exact accepted extraction.
+npm run people:validate -- --book <book> --chapter <nnn>
+
 # Remove expired leases and work already merged to master.
 npm run people:queue -- reconcile
 ```
@@ -135,3 +144,16 @@ an independent editorial pass checks the Chinese source and records decisions. M
 reviewed cohort into the people staging branch, then make one checkpoint merge to
 `master`. After the checkpoint lands, run `npm run people:queue -- reconcile` so those
 sticky submitted claims disappear.
+
+Run the scoped validator immediately after every imported attachment and again after
+its editorial decisions are applied. This checks the fresh packet, extraction,
+decisions, chronology, and coverage for one chapter without rescanning thousands of
+unrelated files. Reserve unscoped `npm run people:validate` for reviewed milestone
+merges; that full run also checks the global resolution documents. A scoped pass is a
+handoff gate, not evidence that the whole corpus is complete.
+
+For every accepted translation repair, inspect the parallel literal/idiomatic field and
+later repetitions of the corrected name, place, title, or office. Repair the same error
+throughout the chapter in the same review, then run `--reconcile-current` so extraction
+fingerprints, candidate dispositions, and mention spans match the final text. This
+paired-field sweep prevents a later cleanup pass over already reviewed chapters.

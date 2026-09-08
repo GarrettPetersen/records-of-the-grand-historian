@@ -32,6 +32,7 @@ import {
 import {
   editorialDecisionPath,
   editorialDecisionSeed,
+  preserveAppliedEditorialClaims,
   validateAppliedEditorialDecisions,
   validateEditorialDecisions,
 } from './lib/people-editorial-decisions.mjs';
@@ -52,6 +53,12 @@ const EXPLICIT_NON_PERSON_REASONS = new Set([
   'reign-period',
   'polity',
   'not-a-name',
+]);
+const NON_PREFERRED_NAME_KINDS = new Set([
+  'alternate',
+  'alternate-name',
+  'alt',
+  'textual-variant',
 ]);
 
 function usage() {
@@ -191,7 +198,12 @@ function applyReviewedPersonNameChanges(people, claims, reviewed) {
   const originalClaims = new Map(claims.map((claim) => [claim.id, claim]));
   const nameRevisions = [...reviewed.revisedClaims.entries()]
     .map(([id, after]) => ({ before: originalClaims.get(id), after }))
-    .filter(({ before, after }) => before?.predicate === 'name' && after.predicate === 'name');
+    .filter(({ before, after }) =>
+      before?.predicate === 'name' &&
+      after.predicate === 'name' &&
+      !NON_PREFERRED_NAME_KINDS.has(String(before.value?.kind).toLowerCase()) &&
+      !NON_PREFERRED_NAME_KINDS.has(String(after.value?.kind).toLowerCase())
+    );
 
   return people.map((person) => {
     const preferred = { ...person.preferredNameSuggestion };
@@ -902,6 +914,25 @@ function selfTest() {
   };
   if (reviewedExtraction.people[0].preferredNameSuggestion.pinyin !== 'Liu Zhan') {
     throw new Error('Reviewed name claim did not update the preferred person suggestion');
+  }
+  const collidingAlternate = {
+    ...structuredClone(extraction.claims[2]),
+    value: { ...structuredClone(extraction.claims[2].value), en: 'Liu Zhan' },
+  };
+  const revisedAlternate = {
+    ...structuredClone(collidingAlternate),
+    value: { ...structuredClone(collidingAlternate.value), en: 'Liu Zhi' },
+  };
+  const alternateReviewed = {
+    revisedClaims: new Map([[collidingAlternate.id, revisedAlternate]]),
+  };
+  const alternateSafePeople = applyReviewedPersonNameChanges(
+    extraction.people,
+    [collidingAlternate],
+    alternateReviewed,
+  );
+  if (alternateSafePeople[0].preferredNameSuggestion.en !== 'Liu Zhan') {
+    throw new Error('Reviewed alternate-name claim overwrote the preferred person suggestion');
   }
   const reconciled = reconcileExtractionAfterRepairs(reviewedExtraction, revisedPacket, {
     previousPacket: oldPacket,
@@ -1851,6 +1882,27 @@ function main() {
   }
 
   if (!statuses.has('proposed')) {
+    const decisionFile = opts.decisions ?? editorialDecisionPath(opts.book, opts.chapter);
+    if (fs.existsSync(decisionFile)) {
+      const decisionDocument = readJson(decisionFile);
+      const { removed, restored } = preserveAppliedEditorialClaims(decisionDocument, extraction);
+      validateAppliedEditorialDecisions(decisionDocument, extraction);
+      const result = validatePeopleExtraction(extraction, currentPacket);
+      if (removed > 0 || restored > 0) {
+        if (compactStored) {
+          const compact = compactPeopleExtraction(result.normalized, currentPacket);
+          validateCompactPeopleExtraction(compact, currentPacket);
+          writeTextAtomic(extractionFile, serializeCompactPeopleExtraction(compact));
+        } else {
+          writeJsonAtomic(extractionFile, result.normalized);
+        }
+        console.log(
+          `Replayed applied editorial claim changes for ${opts.book}/${opts.chapter}: ` +
+          `${removed} removed, ${restored} restored.`,
+        );
+        return;
+      }
+    }
     if (compactStored) validateCompactPeopleExtraction(storedExtraction, currentPacket);
     else validatePeopleExtraction(extraction, currentPacket);
     console.log(`No proposed repairs remain for ${opts.book}/${opts.chapter}.`);
