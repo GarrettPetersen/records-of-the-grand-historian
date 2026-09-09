@@ -137,7 +137,11 @@ function dedupeClaimViews(values) {
     const key = canonicalJson([value.predicate, value.value, value.certainty]);
     const current = byFact.get(key);
     if (!current) {
-      byFact.set(key, structuredClone(value));
+      byFact.set(key, {
+        ...value,
+        evidence: [...value.evidence],
+        claimRefs: [...value.claimRefs],
+      });
       continue;
     }
     current.evidence = [...new Set([...current.evidence, ...value.evidence])].sort();
@@ -581,8 +585,11 @@ function buildPeopleSiteIndex(corpus, catalog) {
           personId,
           slug: person.slug,
           kind: mention.kind,
-          unit: structuredClone(mention.unit),
-          spans: structuredClone(mention.spans),
+          unit: { ...mention.unit },
+          spans: {
+            zh: mention.spans.zh.map((span) => ({ ...span })),
+            en: mention.spans.en.map((span) => ({ ...span })),
+          },
         };
       }),
     };
