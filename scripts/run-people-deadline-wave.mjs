@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildPeopleGlossaryProgress } from '../generate-progress.js';
-import { campaignTargets } from './plan-people-campaign.mjs';
+import { campaignProgress, campaignTargets } from './plan-people-campaign.mjs';
 import { REPO_ROOT } from './lib/people-content.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
@@ -50,15 +50,31 @@ function parseArgs(argv) {
 
 function currentPlan(opts) {
   const manifest = JSON.parse(fs.readFileSync(path.join(REPO_ROOT, 'data', 'manifest.json'), 'utf8'));
-  const progress = buildPeopleGlossaryProgress(manifest).summary;
-  const targets = campaignTargets({
-    missingChapters: progress.sourceChapters - progress.currentChapters,
+  const corpusProgress = buildPeopleGlossaryProgress(manifest);
+  const progress = corpusProgress.summary;
+  const completion = campaignProgress(corpusProgress);
+  const extractionTargets = campaignTargets({
+    missingChapters: completion.extractionDebt,
     asOf: opts.asOf,
     deadline: opts.deadline,
     wavesPerDay: 3,
     bufferPercent: 15,
   });
-  return { ...progress, ...targets };
+  const editorialTargets = campaignTargets({
+    missingChapters: completion.editorialDebt,
+    asOf: opts.asOf,
+    deadline: opts.deadline,
+    wavesPerDay: 3,
+    bufferPercent: 15,
+  });
+  return {
+    ...progress,
+    ...completion,
+    ...extractionTargets,
+    extractionChaptersPerWave: extractionTargets.chaptersPerWave,
+    editorialChaptersPerWave: editorialTargets.chaptersPerWave,
+    editorialConcurrency: editorialTargets.editorialConcurrency,
+  };
 }
 
 export function phaseCommand(phase, plan) {
@@ -80,7 +96,7 @@ export function phaseCommand(phase, plan) {
     ];
   }
   return [
-    'scripts/sdk-people-editorial-review.mjs', '--all', '--limit', String(plan.chaptersPerWave),
+    'scripts/sdk-people-editorial-review.mjs', '--all', '--limit', String(plan.editorialChaptersPerWave ?? plan.chaptersPerWave),
     '--concurrency', String(plan.editorialConcurrency), '--max-attempts', '2',
     '--max-run-cost', String(plan.editorialMaxRunCostDollars),
     '--max-run-tokens', String(plan.editorialMaxRunTokens),
@@ -118,7 +134,9 @@ function main() {
   const command = phaseCommand(opts.phase, plan);
   console.log(
     `People deadline ${opts.phase}: ${plan.currentChapters}/${plan.sourceChapters} current, ` +
-    `${plan.chaptersPerWave} chapters/wave, extraction concurrency ${plan.extractionConcurrency}, ` +
+    `${plan.reviewedChapters}/${plan.sourceChapters} editorially closed, ` +
+    `${plan.extractionChaptersPerWave} extraction and ${plan.editorialChaptersPerWave} editorial chapters/wave, ` +
+    `extraction concurrency ${plan.extractionConcurrency}, ` +
     `editorial concurrency ${plan.editorialConcurrency}`,
   );
   if (opts.dryRun) {

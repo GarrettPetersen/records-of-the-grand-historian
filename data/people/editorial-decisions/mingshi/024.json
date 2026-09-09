@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 3,
+  "book": "mingshi",
+  "chapter": "024",
+  "input": {
+    "chapterFingerprint": "sha256:7e310ea4c39d2466d1d233b349933170cf97ffdf56df5ff016d04bd870adcb02",
+    "proposalsFingerprint": "sha256:941718700b737c7831be3a6c8bd581bb4dc3bbe7afcf8684e94725c7209e7207"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "Codex",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-09-09T00:55:00.000Z"
+  },
+  "proposals": [
+    {
+      "id": "mingshi:024:r0001",
+      "unit": {
+        "id": "s0013",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "idiomatic",
+      "before": "On yimao Minister of War Yang Sichang, Minister of Revenue Cheng Guoxiang, Vice Minister of Rites Fang Fengnian, and Vice Minister of Works Cai Guoyong were all promoted to minister of rites; vice minister of punishments Fan Fucui was made vice minister of rites; all five were also appointed grand secretaries of the Eastern Lodge with seats in confidential state deliberations.",
+      "after": "On yimao Minister of War Yang Sichang, Minister of Revenue Cheng Guoxiang, Vice Minister of Rites Fang Fengnian, and Vice Minister of Works Cai Guoyong were all promoted to minister of rites; Junior Chamberlain of the Court of Judicial Review Fan Fucui was made vice minister of rites; all five were also appointed grand secretaries of the Eastern Lodge with seats in confidential state deliberations.",
+      "reason": "大理少卿 is Junior Chamberlain of the Court of Judicial Review (Dali Temple), not vice minister of punishments (刑部).",
+      "confidence": "high"
+    },
+    {
+      "id": "mingshi:024:r0002",
+      "unit": {
+        "id": "s0013",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 11
+      },
+      "field": "literal",
+      "before": "Day yimao: Minister of War Yang Sichang, Minister of Revenue Cheng Guoxiang, Vice Minister of Rites Fang Fengnian, and Vice Minister of Works Cai Guoyong were all made Ministers of Rites; Vice Minister of Punishments Fan Fucui was made Vice Minister of Rites; all concurrently were Grand Secretaries of the Eastern Lodge, participating in confidential affairs.",
+      "after": "Day yimao: Minister of War Yang Sichang, Minister of Revenue Cheng Guoxiang, Vice Minister of Rites Fang Fengnian, and Vice Minister of Works Cai Guoyong were all made Ministers of Rites; Junior Chamberlain of the Court of Judicial Review Fan Fucui was made Vice Minister of Rites; all concurrently were Grand Secretaries of the Eastern Lodge, participating in confidential affairs.",
+      "reason": "Same office mistranslation: 大理少卿 is Dali Temple junior chamberlain, not Ministry of Punishments.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "mingshi:024:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "大理少卿 is the junior chamberlain of the Court of Judicial Review, an office distinct from the Ministry of Punishments. The proposal correctly restores Fan Fucui's office in the idiomatic field.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "mingshi/024 s0013",
+        "excerpt": "大理少卿範復粹為禮部侍郎"
+      }
+    },
+    {
+      "repairId": "mingshi:024:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field repeats the same institutional error. 大理少卿 denotes the Court of Judicial Review post, not a vice ministership in the Ministry of Punishments.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "mingshi/024 s0013",
+        "excerpt": "大理少卿範復粹"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [],
+  "claimAdditions": []
+}

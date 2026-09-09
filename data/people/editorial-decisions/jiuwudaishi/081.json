@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "081",
+  "input": {
+    "chapterFingerprint": "sha256:2a6e266a8cff7c772b51ae78d1958dd0de0e54c547f152692b7088a14f94492c",
+    "proposalsFingerprint": "sha256:dfed2076e1b06cf7b8edd11c2202fba7deb9242d770d3d9bc237eeec6305ff1e"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "Codex",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-09-09T00:58:00.000Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:081:r0001",
+      "unit": {
+        "id": "s0007",
+        "kind": "paragraph-sentence",
+        "blockIndex": 0,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "When Gaozu was besieged at Taiyuan, he personally braved arrows and stones, repeatedly offering sound advice at Gaozu's side, and Gaozu came to esteem him even more highly.",
+      "after": "When Gaozu was besieged at Taiyuan, the Emperor personally braved arrows and stones, repeatedly offering sound advice at Gaozu's side, and Gaozu came to esteem him even more highly.",
+      "reason": "Chinese subject of personal bravery amid arrows is the Emperor, not Gaozu; 高祖愈重焉 makes Gaozu the one who esteemed him.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:081:r0002",
+      "unit": {
+        "id": "s0024",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "On bingzi, Minister of Education and concurrent Palace Attendant Feng Dao was appointed commissioner for the late emperor's mausoleum, with Vice Director of the Chancellery Dou Zhengu as deputy; Director of the Court of Imperial Sacrifices Cui Rong was made ritual commissioner; Vice Minister of Revenue Lü Qi was made procession commissioner; and Vice Censor-in-Chief Wang Yijian was made ceremonial guard commissioner.",
+      "after": "On bingzi, Minister of Education and concurrent Palace Attendant Feng Dao was appointed commissioner for the late emperor's mausoleum, with Vice Director of the Chancellery Dou Zhengu as deputy; Director of the Court of Imperial Sacrifices Cui Zhuo was made ritual commissioner; Vice Minister of Revenue Lü Qi was made procession commissioner; and Vice Censor-in-Chief Wang Yijian was made ceremonial guard commissioner.",
+      "reason": "Chinese 崔棁 is Cui Zhuo (棁), not Rong; idiomatic English misreads the given name.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:081:r0003",
+      "unit": {
+        "id": "s0069",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "field": "idiomatic",
+      "before": "On gengshen, Cui Rong, ritual commissioner for the mausoleum and Director of the Court of Imperial Sacrifices, was posthumously made Mentor of the Heir Apparent with detached service in the Western Capital, having died of illness.",
+      "after": "On gengshen, Cui Zhuo, ritual commissioner for the mausoleum and Director of the Court of Imperial Sacrifices, was posthumously made Mentor of the Heir Apparent with detached service in the Western Capital, having died of illness.",
+      "reason": "Chinese 崔棁 is Cui Zhuo; idiomatic English wrongly uses Rong.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:081:r0001",
+      "decision": "revise",
+      "after": "When Gaozu was besieged at Taiyuan, the future emperor personally braved arrows and stones and repeatedly offered sound counsel at Gaozu's side; Gaozu came to value him all the more.",
+      "reason": "The prior English makes Gaozu the natural antecedent of 'he,' but the chapter's subject, marked 帝, is the one who braved the missiles and offered counsel. The final 高祖愈重焉 then states Gaozu's growing regard for him.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "jiuwudaishi/081 s0007",
+        "excerpt": "親冒矢石，數獻可於左右，高祖愈重焉"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:081:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The source names 崔棁, read Cui Zhuo. 'Cui Rong' is an unsupported misreading of the same graph and should not be retained as an alternate name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "jiuwudaishi/081 s0024",
+        "excerpt": "太常卿崔棁為禮儀使"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:081:r0003",
+      "decision": "revise",
+      "after": "On gengshen, Cui Zhuo, ritual commissioner for the mausoleum and Director of the Court of Imperial Sacrifices, was appointed Mentor to the Heir Apparent with detached service in the Western Capital because he was ill.",
+      "reason": "The name is Cui Zhuo. In addition, 病故也 gives illness as the reason for the detached Western Capital appointment; it does not say that a posthumous appointment followed his death.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "jiuwudaishi/081 s0069",
+        "excerpt": "崔棁為太子賓客，分司西都，病故也"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "jiuwudaishi:081:r0002",
+      "claim": {
+        "id": "jiuwudaishi:081:c0057",
+        "subject": "jiuwudaishi:081:p013",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Cui Rong",
+          "zh": "崔棁",
+          "pinyin": "Cui Rong"
+        },
+        "certainty": "textual-variant",
+        "evidence": [
+          "jiuwudaishi:081:s0024"
+        ]
+      },
+      "reason": "Cui Rong was generated solely from the mistranslated English; the Chinese consistently gives 崔棁, Cui Zhuo.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "jiuwudaishi/081 s0024",
+        "excerpt": "崔棁"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:081:r0003",
+      "claim": {
+        "id": "jiuwudaishi:081:c0179",
+        "subject": "jiuwudaishi:081:p051",
+        "predicate": "name",
+        "value": {
+          "kind": "personal",
+          "en": "Cui Rong",
+          "zh": "崔棁",
+          "pinyin": "Cui Rong"
+        },
+        "certainty": "textual-variant",
+        "evidence": [
+          "jiuwudaishi:081:s0069"
+        ]
+      },
+      "reason": "This second Cui Rong claim is the same translation-derived false alias and must be removed from the later occurrence as well.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "jiuwudaishi/081 s0069",
+        "excerpt": "崔棁"
+      }
+    }
+  ],
+  "claimRevisions": [],
+  "claimAdditions": []
+}

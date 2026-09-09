@@ -116,6 +116,22 @@ export function campaignTargets({ missingChapters, asOf, deadline, wavesPerDay, 
   };
 }
 
+export function campaignProgress(progress) {
+  const chapters = [...progress.byChapter.values()];
+  const reviewedChapters = chapters.filter((chapter) => (
+    chapter.state === 'current' && chapter.pendingTranslationRepairs === 0
+  )).length;
+  const pendingEditorialChapters = chapters.filter((chapter) => (
+    chapter.state === 'current' && chapter.pendingTranslationRepairs > 0
+  )).length;
+  return {
+    reviewedChapters,
+    pendingEditorialChapters,
+    extractionDebt: progress.summary.sourceChapters - progress.summary.currentChapters,
+    editorialDebt: progress.summary.sourceChapters - reviewedChapters,
+  };
+}
+
 function selfTest() {
   const result = campaignTargets({
     missingChapters: 3130,
@@ -138,6 +154,24 @@ function selfTest() {
   ) {
     throw new Error(`Unexpected campaign targets: ${JSON.stringify(result)}`);
   }
+  const completion = campaignProgress({
+    summary: { sourceChapters: 5, currentChapters: 3 },
+    byChapter: new Map([
+      ['a:001', { state: 'current', pendingTranslationRepairs: 0 }],
+      ['a:002', { state: 'current', pendingTranslationRepairs: 2 }],
+      ['a:003', { state: 'current', pendingTranslationRepairs: 0 }],
+      ['a:004', { state: 'rereview', pendingTranslationRepairs: 0 }],
+      ['a:005', { state: 'missing', pendingTranslationRepairs: 0 }],
+    ]),
+  });
+  if (
+    completion.reviewedChapters !== 2 ||
+    completion.pendingEditorialChapters !== 1 ||
+    completion.extractionDebt !== 2 ||
+    completion.editorialDebt !== 3
+  ) {
+    throw new Error(`Unexpected campaign progress: ${JSON.stringify(completion)}`);
+  }
   console.log('people campaign planner self-test: ok');
 }
 
@@ -147,9 +181,18 @@ function main() {
   if (!opts.deadline) throw new Error('--deadline is required (or set PEOPLE_CAMPAIGN_DEADLINE)');
   const manifestFile = path.join(REPO_ROOT, 'data', 'manifest.json');
   if (!fs.existsSync(manifestFile)) throw new Error('data/manifest.json is missing; run make manifest');
-  const progress = buildPeopleGlossaryProgress(JSON.parse(fs.readFileSync(manifestFile, 'utf8'))).summary;
-  const targets = campaignTargets({
-    missingChapters: progress.sourceChapters - progress.currentChapters,
+  const corpusProgress = buildPeopleGlossaryProgress(JSON.parse(fs.readFileSync(manifestFile, 'utf8')));
+  const progress = corpusProgress.summary;
+  const completion = campaignProgress(corpusProgress);
+  const extractionTargets = campaignTargets({
+    missingChapters: completion.extractionDebt,
+    asOf: opts.asOf,
+    deadline: opts.deadline,
+    wavesPerDay: opts.wavesPerDay,
+    bufferPercent: opts.bufferPercent,
+  });
+  const editorialTargets = campaignTargets({
+    missingChapters: completion.editorialDebt,
     asOf: opts.asOf,
     deadline: opts.deadline,
     wavesPerDay: opts.wavesPerDay,
@@ -159,7 +202,13 @@ function main() {
     asOf: opts.asOf,
     deadline: opts.deadline,
     ...progress,
-    ...targets,
+    ...completion,
+    ...extractionTargets,
+    extractionChaptersPerWave: extractionTargets.chaptersPerWave,
+    editorialChaptersPerWave: editorialTargets.chaptersPerWave,
+    editorialMinimumChaptersPerDay: editorialTargets.minimumChaptersPerDay,
+    editorialBufferedChaptersPerDay: editorialTargets.bufferedChaptersPerDay,
+    editorialConcurrency: editorialTargets.editorialConcurrency,
     wavesPerDay: opts.wavesPerDay,
     bufferPercent: opts.bufferPercent,
     resolutionBatch: opts.resolutionBatch,
@@ -170,34 +219,46 @@ function main() {
   }
   console.log(`People glossary deadline campaign (${opts.asOf} through ${opts.deadline})`);
   console.log(`Current pass: ${progress.currentChapters}/${progress.sourceChapters} (${progress.currentPercent.toFixed(2)}%)`);
-  console.log(`Older rereview: ${progress.rereviewChapters}; missing/current-prompt debt: ${progress.sourceChapters - progress.currentChapters}`);
-  console.log(`Calendar dates remaining: ${targets.calendarDays}`);
-  console.log(`Minimum: ${targets.minimumChaptersPerDay} chapters/day`);
-  console.log(`Buffered target: ${targets.bufferedChaptersPerDay} chapters/day (${opts.bufferPercent}% buffer)`);
-  console.log(`Cadence: ${opts.wavesPerDay} x ${targets.chaptersPerWave}-chapter waves/day`);
-  console.log(`Initial concurrency: extraction ${targets.extractionConcurrency}, editorial ${targets.editorialConcurrency}`);
   console.log(
-    `New-work profile: ${targets.maxUnits} units, ${targets.maxCandidates} candidates, ` +
-    `${targets.maxWorkerKiB} KiB packet ceiling, ${targets.runTimeoutMinutes}m remote timeout, ` +
-    `${targets.maxRunTokens.toLocaleString('en-US')} token circuit breaker`,
+    `Editorially closed: ${completion.reviewedChapters}/${progress.sourceChapters}; ` +
+    `${completion.pendingEditorialChapters} current extraction(s) still have proposed repairs`,
   );
-  console.log(`Per-wave raw cost ceiling: $${targets.waveCostCeilingDollars}`);
+  console.log(`Older rereview: ${progress.rereviewChapters}; missing/current-prompt debt: ${completion.extractionDebt}`);
+  console.log(`Calendar dates remaining: ${extractionTargets.calendarDays}`);
+  console.log(`Extraction minimum: ${extractionTargets.minimumChaptersPerDay} chapters/day`);
+  console.log(`Extraction buffered target: ${extractionTargets.bufferedChaptersPerDay} chapters/day (${opts.bufferPercent}% buffer)`);
+  console.log(`Editorial minimum: ${editorialTargets.minimumChaptersPerDay} closures/day`);
+  console.log(`Editorial buffered target: ${editorialTargets.bufferedChaptersPerDay} closures/day (${opts.bufferPercent}% buffer)`);
+  console.log(
+    `Cadence: ${opts.wavesPerDay} x ${extractionTargets.chaptersPerWave}-chapter extraction waves/day; ` +
+    `${opts.wavesPerDay} x ${editorialTargets.chaptersPerWave}-chapter editorial waves/day`,
+  );
+  console.log(
+    `Initial concurrency: extraction ${extractionTargets.extractionConcurrency}, ` +
+    `editorial ${editorialTargets.editorialConcurrency}`,
+  );
+  console.log(
+    `New-work profile: ${extractionTargets.maxUnits} units, ${extractionTargets.maxCandidates} candidates, ` +
+    `${extractionTargets.maxWorkerKiB} KiB packet ceiling, ${extractionTargets.runTimeoutMinutes}m remote timeout, ` +
+    `${extractionTargets.maxRunTokens.toLocaleString('en-US')} token circuit breaker`,
+  );
+  console.log(`Per-wave raw cost ceiling: $${extractionTargets.waveCostCeilingDollars}`);
   console.log(`Identity resolution checkpoint: every ${opts.resolutionBatch} accepted chapters`);
   console.log('Recovery first: npm run people:extract -- --all --recover-only --retry-failed --skip-dirty');
   console.log(
-    `New wave: npm run people:extract -- --all --limit ${targets.chaptersPerWave} --order smallest ` +
-    `--skip-dirty --concurrency ${targets.extractionConcurrency} --max-units ${targets.maxUnits} ` +
-    `--max-candidates ${targets.maxCandidates} --max-worker-kib ${targets.maxWorkerKiB} ` +
-    `--run-timeout-minutes ${targets.runTimeoutMinutes} --max-run-tokens ${targets.maxRunTokens} ` +
-    `--max-attempts 3 --max-cost ${targets.waveCostCeilingDollars} --cost-reserve 5 ` +
+    `New wave: npm run people:extract -- --all --limit ${extractionTargets.chaptersPerWave} --order smallest ` +
+    `--skip-dirty --concurrency ${extractionTargets.extractionConcurrency} --max-units ${extractionTargets.maxUnits} ` +
+    `--max-candidates ${extractionTargets.maxCandidates} --max-worker-kib ${extractionTargets.maxWorkerKiB} ` +
+    `--run-timeout-minutes ${extractionTargets.runTimeoutMinutes} --max-run-tokens ${extractionTargets.maxRunTokens} ` +
+    `--max-attempts 3 --max-cost ${extractionTargets.waveCostCeilingDollars} --cost-reserve 5 ` +
     '--max-run-cost 5 --model grok-4.6 --effort low',
   );
   console.log(
-    `Editorial wave: npm run people:editorial-review -- --all --limit ${targets.chaptersPerWave} ` +
-    `--concurrency ${targets.editorialConcurrency} --max-attempts 2 ` +
-    `--max-run-cost ${targets.editorialMaxRunCostDollars} ` +
-    `--max-run-tokens ${targets.editorialMaxRunTokens} ` +
-    `--run-timeout-minutes ${targets.runTimeoutMinutes} --model grok-4.6 --effort medium`,
+    `Editorial wave: npm run people:editorial-review -- --all --limit ${editorialTargets.chaptersPerWave} ` +
+    `--concurrency ${editorialTargets.editorialConcurrency} --max-attempts 2 ` +
+    `--max-run-cost ${editorialTargets.editorialMaxRunCostDollars} ` +
+    `--max-run-tokens ${editorialTargets.editorialMaxRunTokens} ` +
+    `--run-timeout-minutes ${editorialTargets.runTimeoutMinutes} --model grok-4.6 --effort medium`,
   );
 }
 

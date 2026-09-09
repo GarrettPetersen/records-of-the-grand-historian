@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "405",
+  "input": {
+    "chapterFingerprint": "sha256:eecd067ba62f145d91fa7410949e5ddd0f37ca02686d67ba427a49815cbca747",
+    "proposalsFingerprint": "sha256:6fd70693cfcce0d5e6c952110dd4d68c761fe8915255f9f8749eaf04a1968932"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "Codex",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-09-09T00:12:08.000Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:405:r0001",
+      "unit": {
+        "id": "s0008",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "In the twenty-third year of the reign (1843), serving as a reviser he presided over the Sichuan provincial examinations, was later made reader-in-waiting, and rose in succession to Grand Secretary of the Grand Secretariat and Vice Minister of Rites, with concurrent charge of the Ministry of War.",
+      "after": "In the twenty-third year of the reign (1843), serving as a Hanlin investigating editor (jian tao) he presided over the Sichuan provincial examinations, was later made reader-in-waiting, and rose in succession to Academician of the Grand Secretariat and Vice Minister of Rites, with concurrent charge of the Ministry of War.",
+      "reason": "內閣學士 is Academician/Bachelor of the Grand Secretariat, not Grand Secretary (大學士); 檢討 is a Hanlin compiling/investigating post, not a generic 'reviser'.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:405:r0002",
+      "unit": {
+        "id": "s0027",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "At first Guofan meant to petition for permission to observe the full three-year mourning. Guo Songsong said, \"You have long aspired to set the realm to rights—if you do not seize this moment to serve, what becomes of your duty to sovereign and father?",
+      "after": "At first Guofan meant to petition for permission to observe the full three-year mourning. Guo Songtao said, \"You have long aspired to set the realm to rights—if you do not seize this moment to serve, what becomes of your duty to sovereign and father?",
+      "reason": "郭嵩燾 is Guo Songtao, not Guo Songsong.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:405:r0003",
+      "unit": {
+        "id": "s0027",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "At first Guofan wished to memorialize requesting to complete the full mourning period. Guo Songsong said: \"Your Excellency has long cherished the resolve to set things right; if you do not seize this moment to serve, what of our sovereign and father?",
+      "after": "At first Guofan wished to memorialize requesting to complete the full mourning period. Guo Songtao said: \"Your Excellency has long cherished the resolve to set things right; if you do not seize this moment to serve, what of our sovereign and father?",
+      "reason": "郭嵩燾 is Guo Songtao, not Guo Songsong.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:405:r0004",
+      "unit": {
+        "id": "s0044",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "He had discussed with Guo Songsong and Jiang Zhongyuan how the southeast was a country of rivers and that suppressing the rebels required a navy; he memorialized to build warships at Hengzhou.",
+      "after": "He had discussed with Guo Songtao and Jiang Zhongyuan how the southeast was a country of rivers and that suppressing the rebels required a navy; he memorialized to build warships at Hengzhou.",
+      "reason": "郭嵩燾 is Guo Songtao, not Guo Songsong.",
+      "confidence": "high"
+    },
+    {
+      "id": "qingshigao:405:r0005",
+      "unit": {
+        "id": "s0084",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "field": "idiomatic",
+      "before": "At the farewell feast Guo Songsong said to Luo Zinan, \"Lord Zeng's force is thin—what then?\"",
+      "after": "At the farewell feast Guo Songtao said to Luo Zinan, \"Lord Zeng's force is thin—what then?\"",
+      "reason": "郭嵩燾 is Guo Songtao, not Guo Songsong.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:405:r0001",
+      "decision": "revise",
+      "after": "In the twenty-third year of the reign (1843), while serving as an Investigating Editor in the Hanlin Academy, he presided over the Sichuan provincial examinations. He was later made Reader-in-Waiting and rose in succession to Academician of the Grand Secretariat and Vice Minister of Rites, while concurrently overseeing the Ministry of War.",
+      "reason": "The source distinguishes 檢討, a Hanlin post, from 內閣學士, an Academician of the Grand Secretariat; the original wrongly promoted the latter to Grand Secretary. The revised wording keeps the proposal's correction while replacing parenthetical split pinyin with natural English and clarifying the sequence of offices.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "qingshigao/405 s0008",
+        "excerpt": "以檢討典試四川，再轉侍讀，累遷內閣學士"
+      }
+    },
+    {
+      "repairId": "qingshigao:405:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The focus unit explicitly names 郭嵩燾, whose name is Guo Songtao. 'Guo Songsong' is an unsupported mistranscription.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "qingshigao/405 s0027",
+        "excerpt": "郭嵩燾曰"
+      }
+    },
+    {
+      "repairId": "qingshigao:405:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The same 郭嵩燾 occurrence controls the literal field; Songtao is the person's established reading, while Songsong has no support in the Chinese.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "qingshigao/405 s0027",
+        "excerpt": "郭嵩燾曰"
+      }
+    },
+    {
+      "repairId": "qingshigao:405:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The abbreviated 嵩燾 refers back to Guo Songtao, so the proposed correction removes a repeated false name while preserving the sentence's meaning.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "qingshigao/405 s0044",
+        "excerpt": "嘗與嵩燾、忠源論東南形勢"
+      }
+    },
+    {
+      "repairId": "qingshigao:405:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "The abbreviated 嵩燾 again denotes Guo Songtao; 'Guo Songsong' is the same transcription error corrected in the earlier occurrences.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "qingshigao/405 s0084",
+        "excerpt": "嵩燾祖餞澤南曰"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [],
+  "claimAdditions": []
+}
