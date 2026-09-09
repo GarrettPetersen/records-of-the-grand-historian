@@ -66,16 +66,21 @@ async function fetchJsonWithRetry(url) {
   throw lastError || new Error('People search data request failed');
 }
 
-async function loadEntries() {
+async function loadIndex() {
   const index = await fetchJsonWithRetry(`${SEARCH_ROOT}/index.json`);
-  if (index.v !== 3 || !Array.isArray(index.parts) || index.parts.length === 0) {
+  if (index.v !== 4 || !Number.isInteger(index.people) ||
+      !Array.isArray(index.featured) || !Array.isArray(index.parts) || index.parts.length === 0) {
     throw new Error('Unsupported people search index');
   }
+  return index;
+}
+
+async function loadEntries(index) {
   const parts = await Promise.all(index.parts.map((part) =>
     fetchJsonWithRetry(`${SEARCH_ROOT}/${encodeURIComponent(part.file)}`)
   ));
   const entries = parts.flatMap((part) => {
-    if (part.v !== 3 || !Array.isArray(part.entries)) throw new Error('Invalid people search shard');
+    if (part.v !== 4 || !Array.isArray(part.entries)) throw new Error('Invalid people search shard');
     return part.entries;
   });
   if (entries.length !== index.people) {
@@ -93,6 +98,8 @@ function scoreEntry(entry, query) {
     entry[FIELD.description],
     entry[FIELD.searchText],
     entry[FIELD.chronology],
+    entry[FIELD.roles].join(' '),
+    entry[FIELD.sources].join(' '),
   ].map(normalize);
   const normalizedQuery = normalize(query);
   const tokens = normalizedQuery.split(/\s+/u).filter(Boolean);
@@ -136,6 +143,11 @@ function currentFilters(elements) {
   };
 }
 
+function hasActiveSearch(filters) {
+  return Boolean(filters.query || filters.period || filters.role || filters.source || filters.letter ||
+    filters.sort !== 'relevance');
+}
+
 function syncUrl(filters) {
   const url = new URL(window.location.href);
   for (const [key, value] of Object.entries({
@@ -177,17 +189,23 @@ async function main() {
   elements.letter = '';
 
   restoreUrl(elements);
-  let entries;
+  let index;
   try {
-    entries = await loadEntries();
+    index = await loadIndex();
   } catch (error) {
     console.error(error);
     elements.status.textContent = 'People search could not load. Use the period, role, source, or A-Z links below.';
     return;
   }
 
-  const apply = () => {
-    const filters = currentFilters(elements);
+  const renderDefault = (filters) => {
+    renderEntries(elements.results, index.featured.slice(0, MAX_RESULTS));
+    elements.status.textContent = `${index.people.toLocaleString('en-US')} people · first ${Math.min(index.people, MAX_RESULTS)} shown`;
+    elements.clear.hidden = true;
+    syncUrl(filters);
+  };
+
+  const renderFiltered = (entries, filters) => {
     const scored = [];
     for (const entry of entries) {
       if (!matchesFilters(entry, filters)) continue;
@@ -209,10 +227,33 @@ async function main() {
     syncUrl(filters);
   };
 
+  let entriesPromise = null;
+  let requestId = 0;
+  const apply = async () => {
+    const filters = currentFilters(elements);
+    const currentRequest = ++requestId;
+    if (!hasActiveSearch(filters)) {
+      renderDefault(filters);
+      return;
+    }
+    elements.status.textContent = 'Searching the people index…';
+    try {
+      entriesPromise ??= loadEntries(index);
+      const entries = await entriesPromise;
+      if (currentRequest !== requestId) return;
+      renderFiltered(entries, filters);
+    } catch (error) {
+      console.error(error);
+      if (currentRequest !== requestId) return;
+      elements.status.textContent = 'People search could not load. Try again in a moment.';
+      entriesPromise = null;
+    }
+  };
+
   let timer = null;
   elements.input.addEventListener('input', () => {
     clearTimeout(timer);
-    timer = setTimeout(apply, 80);
+    timer = setTimeout(apply, 120);
   });
   for (const select of [elements.period, elements.role, elements.source, elements.sort]) {
     select.addEventListener('change', apply);
@@ -227,7 +268,7 @@ async function main() {
     apply();
     elements.input.focus();
   });
-  apply();
+  await apply();
 }
 
 main();

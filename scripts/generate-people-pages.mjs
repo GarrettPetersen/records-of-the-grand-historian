@@ -35,12 +35,14 @@ import {
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 const SITE_URL = (process.env.SITE_URL || 'https://24histories.com').replace(/\/$/u, '');
 const SEARCH_PART_MAX_BYTES = 6 * 1024 * 1024;
+const SEARCH_FEATURED_COUNT = 120;
 const FEATURED_PEOPLE_COUNT = 12;
 const FAMILY_TREE_MAX_PEOPLE = 36;
 const KEY_SOURCE_COUNT = 5;
 const CLAIM_PREVIEW_COUNT = 6;
 const REFERENCE_FILTER_THRESHOLD = 8;
 const PEOPLE_ASSET_VERSION = '20260815-people-record-v6';
+const PEOPLE_SEARCH_ASSET_VERSION = '20260909-people-search-v2';
 const PEOPLE_FAMILY_SOURCE = path.join(REPO_ROOT, 'scripts', 'assets', 'people-family.js');
 const FAMILY_CHART_PACKAGE = path.join(REPO_ROOT, 'node_modules', 'family-chart', 'dist');
 const D3_PACKAGE = path.join(REPO_ROOT, 'node_modules', 'd3', 'dist', 'd3.min.js');
@@ -185,11 +187,40 @@ function copyPeopleAssets(outputRoot) {
   }
 }
 
-function flattenText(value, found = []) {
+const SEARCHABLE_CLAIM_VALUE_KEYS = new Set([
+  'belief', 'clan', 'credential', 'description', 'domain', 'en', 'ethnicity', 'honor',
+  'institution', 'jurisdiction', 'label', 'lineage', 'name', 'occupation', 'office',
+  'organization', 'pinyin', 'place', 'polity', 'role', 'skill', 'status', 'subject',
+  'text', 'title', 'work', 'zh',
+]);
+
+function normalizeSearchText(value) {
+  return String(value ?? '')
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/gu, '')
+    .toLocaleLowerCase('en')
+    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .trim();
+}
+
+function collectSearchableClaimValues(value, key = '', found = []) {
   if (value === null || value === undefined) return found;
-  if (typeof value === 'string' || typeof value === 'number') found.push(String(value));
-  else if (Array.isArray(value)) value.forEach((item) => flattenText(item, found));
-  else if (typeof value === 'object') Object.values(value).forEach((item) => flattenText(item, found));
+  if (typeof value === 'string') {
+    if (SEARCHABLE_CLAIM_VALUE_KEYS.has(key)) found.push(value);
+    return found;
+  }
+  if (typeof value === 'number') {
+    if (key === 'year') found.push(String(value));
+    return found;
+  }
+  if (Array.isArray(value)) {
+    value.forEach((item) => collectSearchableClaimValues(item, key, found));
+    return found;
+  }
+  if (typeof value === 'object') {
+    Object.entries(value).forEach(([childKey, item]) =>
+      collectSearchableClaimValues(item, childKey, found));
+  }
   return found;
 }
 
@@ -1026,18 +1057,27 @@ function generatePersonHtml(person, context) {
 </html>`;
 }
 
-function searchEntry(person) {
+export function personSearchText(person) {
   const searchableKeys = [
     'ethnicities', 'lineages', 'occupations', 'polityAssociations', 'placeAssociations',
     'organizationAssociations', 'offices', 'titlesAndHonors', 'statuses', 'education',
     'credentials', 'beliefs', 'skills', 'works',
   ];
-  const text = [
-    ...person.names.flatMap((name) => [name.en, name.zh, name.pinyin, name.kind]),
-    ...person.roles.flatMap((role) => [role.label, role.roleId]),
-    lifeSummaryForPerson(person),
-    ...searchableKeys.flatMap((key) => flattenText(person[key])),
-  ].filter(Boolean).join(' ');
+  const preferredValues = new Set([
+    person.preferredName?.en,
+    person.preferredName?.zh,
+    person.preferredName?.pinyin,
+  ].map(normalizeSearchText).filter(Boolean));
+  const values = [
+    ...person.names.flatMap((name) => [name.en, name.zh, name.pinyin])
+      .filter((value) => !preferredValues.has(normalizeSearchText(value))),
+    ...searchableKeys.flatMap((key) =>
+      (person[key] ?? []).flatMap((claim) => collectSearchableClaimValues(claim.value))),
+  ];
+  return [...new Set(values.map(normalizeSearchText).filter(Boolean))].join(' ');
+}
+
+function searchEntry(person) {
   const stats = personReferenceStats(person);
   return [
     person.slug,
@@ -1045,13 +1085,31 @@ function searchEntry(person) {
     person.preferredName.zh ?? '',
     person.preferredName.pinyin ?? '',
     person.description.en,
-    text,
+    personSearchText(person),
     lifeSummaryForPerson(person),
     person.roles.map((role) => role.roleId),
     [...new Set(person.references.map((reference) => reference.book))],
     stats.passages,
     periodForPerson(person).slug,
     personDirectoryKey(person),
+  ];
+}
+
+function featuredSearchEntry(person) {
+  const stats = personReferenceStats(person);
+  return [
+    person.slug,
+    personDisplayName(person),
+    person.preferredName.zh ?? '',
+    '',
+    person.description.en,
+    '',
+    lifeSummaryForPerson(person),
+    [],
+    [],
+    stats.passages,
+    '',
+    '',
   ];
 }
 
@@ -1119,13 +1177,13 @@ function writeSearchData(outputRoot, people, context) {
   const entries = people.map(searchEntry);
   const parts = [];
   let current = [];
-  let currentBytes = Buffer.byteLength('{"v":2,"entries":[]}\n', 'utf8');
+  let currentBytes = Buffer.byteLength('{"v":4,"entries":[]}\n', 'utf8');
   for (const entry of entries) {
     const entryBytes = Buffer.byteLength(JSON.stringify(entry), 'utf8') + (current.length ? 1 : 0);
     if (currentBytes + entryBytes > SEARCH_PART_MAX_BYTES && current.length) {
       parts.push(current);
       current = [entry];
-      currentBytes = Buffer.byteLength('{"v":2,"entries":[]}\n', 'utf8') + entryBytes;
+      currentBytes = Buffer.byteLength('{"v":4,"entries":[]}\n', 'utf8') + entryBytes;
     } else {
       current.push(entry);
       currentBytes += entryBytes;
@@ -1134,14 +1192,15 @@ function writeSearchData(outputRoot, people, context) {
   if (current.length) parts.push(current);
   const files = parts.map((part, index) => {
     const file = `part-${String(index + 1).padStart(3, '0')}.json`;
-    writeTextAtomic(path.join(searchDir, file), `${JSON.stringify({ v: 3, entries: part })}\n`);
+    writeTextAtomic(path.join(searchDir, file), `${JSON.stringify({ v: 4, entries: part })}\n`);
     return { file, entries: part.length };
   });
   writeJsonAtomic(path.join(searchDir, 'index.json'), {
-    v: 3,
+    v: 4,
     generatedAt: context.catalog.generatedAt,
     complete: context.catalog.complete,
     people: people.length,
+    featured: rankedPeople(people).slice(0, SEARCH_FEATURED_COUNT).map(featuredSearchEntry),
     parts: files,
   });
   writeJsonAtomic(path.join(outputRoot, 'data', 'people', 'site-status.json'), {
@@ -1311,7 +1370,7 @@ function generateIndexHtml(people, context, collections) {
     </section>
   </main>
   ${pageFooter()}
-  <script type="module" src="../people.js?v=${PEOPLE_ASSET_VERSION}"></script>
+  <script type="module" src="../people.js?v=${PEOPLE_SEARCH_ASSET_VERSION}"></script>
 </body>
 </html>`;
 }
