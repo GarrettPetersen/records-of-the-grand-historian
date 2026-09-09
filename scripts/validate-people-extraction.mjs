@@ -20,7 +20,7 @@ import {
   writeTextAtomic,
   writeJsonAtomic,
 } from './lib/people-content.mjs';
-import { createPeopleSchemaValidator, formatSchemaErrors } from './lib/people-schema.mjs';
+import { formatSchemaErrors, getPeopleSchemaValidator } from './lib/people-schema.mjs';
 import {
   compactInputErrors,
   expandPeopleExtraction,
@@ -399,7 +399,7 @@ function validateClaimVocabulary(claim, packet, errors) {
 
 function validatePeopleExtractionImpl(extraction, packet, options = {}, ownsInput = false) {
   const errors = [];
-  const ajv = createPeopleSchemaValidator();
+  const ajv = getPeopleSchemaValidator();
   const validatePacket = ajv.getSchema(PACKET_SCHEMA_ID);
   const validateExtraction = ajv.getSchema(EXTRACTION_SCHEMA_ID);
   if (!validatePacket(packet)) {
@@ -725,7 +725,7 @@ export function validatePeopleExtraction(extraction, packet, options = {}) {
 }
 
 export function validateCompactPeopleExtraction(compact, packet, options = {}) {
-  const ajv = createPeopleSchemaValidator();
+  const ajv = getPeopleSchemaValidator();
   const validate = ajv.getSchema(COMPACT_SCHEMA_ID);
   const errors = [];
   if (!validate(compact)) {

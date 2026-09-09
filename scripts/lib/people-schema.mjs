@@ -5,8 +5,10 @@ import addFormats from 'ajv-formats';
 import { PEOPLE_DIR, readJson } from './people-content.mjs';
 
 const SCHEMA_DIR = path.join(PEOPLE_DIR, 'schema');
+let sharedValidator = null;
 
-export function createPeopleSchemaValidator() {
+export function getPeopleSchemaValidator() {
+  if (sharedValidator) return sharedValidator;
   const ajv = new Ajv2020({
     allErrors: true,
     allowUnionTypes: true,
@@ -17,7 +19,8 @@ export function createPeopleSchemaValidator() {
   for (const name of fs.readdirSync(SCHEMA_DIR).filter((file) => file.endsWith('.schema.json')).sort()) {
     ajv.addSchema(readJson(path.join(SCHEMA_DIR, name)));
   }
-  return ajv;
+  sharedValidator = ajv;
+  return sharedValidator;
 }
 
 export function formatSchemaErrors(errors) {

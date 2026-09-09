@@ -40,7 +40,7 @@ import {
   connectedBlockComponents,
   resolvePeopleClusters,
 } from './lib/people-resolution.mjs';
-import { createPeopleSchemaValidator, formatSchemaErrors } from './lib/people-schema.mjs';
+import { formatSchemaErrors, getPeopleSchemaValidator } from './lib/people-schema.mjs';
 
 loadDotenv(REPO_ROOT);
 
@@ -1256,7 +1256,7 @@ export function validateResolutionDocument(
   accepted = [],
   { checkGlobalConsistency = true } = {},
 ) {
-  const ajv = createPeopleSchemaValidator();
+  const ajv = getPeopleSchemaValidator();
   const validate = ajv.getSchema('https://24histories.com/schema/people/resolution-v1.json');
   const errors = [];
   if (!validate(document)) errors.push(...formatSchemaErrors(validate.errors));

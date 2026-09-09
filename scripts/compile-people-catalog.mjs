@@ -11,7 +11,7 @@ import {
   writePeopleResolutionCandidates,
   writePeopleSiteIndex,
 } from './lib/people-generated-data.mjs';
-import { createPeopleSchemaValidator, formatSchemaErrors } from './lib/people-schema.mjs';
+import { formatSchemaErrors, getPeopleSchemaValidator } from './lib/people-schema.mjs';
 import {
   assertPeopleCatalogPublicationState,
   peopleCatalogIsComplete,
@@ -601,7 +601,7 @@ function buildPeopleSiteIndex(corpus, catalog) {
     currentPromptVersion: catalog.currentPromptVersion,
     chapters,
   };
-  const ajv = createPeopleSchemaValidator();
+  const ajv = getPeopleSchemaValidator();
   const validate = ajv.getSchema(SITE_INDEX_SCHEMA_ID);
   if (!validate(siteIndex)) {
     throw new Error(
@@ -871,7 +871,7 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
   attachFamilyEdgeIds(people, familyEdges);
   validateCanonicalFamilyGraph(people, familyEdges);
 
-  const ajv = createPeopleSchemaValidator();
+  const ajv = getPeopleSchemaValidator();
   const validate = ajv.getSchema(CANONICAL_SCHEMA_ID);
   const errors = [];
   for (const person of people) {
