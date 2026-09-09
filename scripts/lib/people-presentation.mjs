@@ -51,6 +51,24 @@ function yearClaims(claims) {
   });
 }
 
+function yearClaimSummary(claims) {
+  const byYear = new Map();
+  for (const year of yearClaims(claims).sort((left, right) => left.sort - right.sort)) {
+    const current = byYear.get(year.sort);
+    if (!current || (current.label.startsWith('c. ') && !year.label.startsWith('c. '))) {
+      byYear.set(year.sort, year);
+    }
+  }
+  const years = [...byYear.values()].sort((left, right) => left.sort - right.sort);
+  if (!years.length) return null;
+  return {
+    label: years.length === 1 ? years[0].label : `${years[0].label} to ${years.at(-1).label}`,
+    first: years[0],
+    last: years.at(-1),
+    interval: years.length > 1,
+  };
+}
+
 function astronomicalWesternYear(value) {
   if (!value || !Number.isInteger(value.year)) return null;
   if (value.era === 'AD') return value.year;
@@ -243,16 +261,20 @@ export function personCoherentActivityClaims(person) {
 }
 
 export function personLifeSummary(person) {
-  const births = yearClaims(person.life.birth);
-  const deaths = yearClaims(person.life.death);
+  const birthSummary = yearClaimSummary(person.life.birth);
+  const deathSummary = yearClaimSummary(person.life.death);
   const active = coherentActivityYears(personCoherentActivityClaims(person)).sort((a, b) => a.sort - b.sort);
-  const inferredBirth = births.length === 0 ? inferredPersonBirthYear(person) : null;
-  const born = births[0]?.label ?? formatPersonWesternYear(inferredBirth);
-  const died = deaths[0]?.label ?? null;
-  if (born && died) return `${born} - ${died}`;
+  const inferredBirth = birthSummary === null ? inferredPersonBirthYear(person) : null;
+  const born = birthSummary?.label ?? formatPersonWesternYear(inferredBirth);
+  const died = deathSummary?.label ?? null;
+  if (born && died) {
+    return birthSummary?.interval || deathSummary?.interval
+      ? `Born ${born}; died ${died}`
+      : `${born} - ${died}`;
+  }
   if (born) return `Born ${born}`;
   if (died) {
-    const deathSort = deaths[0].sort;
+    const deathSort = deathSummary.first.sort;
     const earliest = active.find((value) => value.sort < deathSort);
     return earliest ? `First attested ${earliest.label}; died ${died}` : `Died ${died}`;
   }

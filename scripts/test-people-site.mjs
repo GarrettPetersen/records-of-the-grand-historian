@@ -118,6 +118,26 @@ assert.deepEqual(
 );
 assert.equal(personLifeSummary(chronologyFixture), 'First attested BC 209; died BC 195');
 
+const intervalDeathFixture = {
+  life: {
+    birth: [],
+    death: [{
+      value: {
+        westernInterval: {
+          start: { era: 'AD', year: 1582, precision: 'year' },
+          end: { era: 'AD', year: 1585, precision: 'year' },
+        },
+      },
+    }],
+    ageClaims: [],
+    attestedActivity: [{ value: { westernYear: { era: 'AD', year: 1553, precision: 'year' } } }],
+  },
+};
+assert.equal(
+  personLifeSummary(intervalDeathFixture),
+  'First attested AD 1553; died AD 1582 to AD 1585',
+);
+
 const inferredBirthFixture = {
   life: {
     birth: [],
