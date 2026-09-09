@@ -1247,6 +1247,11 @@ failure rate, then raise concurrency to 16-24 only while whole chapters still
 finish reliably. Run independent editorial review and host-side repair
 application immediately after each extraction wave. Keep all failed and
 interrupted chunks sticky for recovery before assigning fresh chapters.
+Deadline waves use `--order deadline-balanced`: three quarters of each wave
+come from the cheapest remaining work, while the final quarter is sampled
+evenly through the rest of the queue and interleaved with the short chapters.
+This preserves high chapter throughput while draining the expensive tail
+continuously instead of leaving it for the final campaign days.
 Use at least three validation attempts for multi-chunk extraction. With six or
 seven chunks per chapter, a two-attempt ceiling compounds a modest residual
 chunk error rate into excessive whole-chapter deferrals.

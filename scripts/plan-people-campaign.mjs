@@ -345,7 +345,7 @@ function main() {
   console.log('Recovery first: npm run people:extract -- --all --recover-only --retry-failed --skip-dirty');
   console.log('Host alias normalization: npm run people:aliases:reconcile -- --all --apply');
   console.log(
-    `New wave: npm run people:extract -- --all --limit ${extractionTargets.chaptersPerWave} --order smallest ` +
+    `New wave: npm run people:extract -- --all --limit ${extractionTargets.chaptersPerWave} --order deadline-balanced ` +
     `--skip-dirty --concurrency ${extractionTargets.extractionConcurrency} --max-units ${extractionTargets.maxUnits} ` +
     `--max-candidates ${extractionTargets.maxCandidates} --max-worker-kib ${extractionTargets.maxWorkerKiB} ` +
     `--run-timeout-minutes ${extractionTargets.runTimeoutMinutes} --max-run-tokens ${extractionTargets.maxRunTokens} ` +

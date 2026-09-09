@@ -91,7 +91,7 @@ export function phaseCommand(phase, plan) {
   if (phase === 'extraction') {
     return [
       'scripts/sdk-people-extract.mjs', '--all', '--limit', String(plan.chaptersPerWave),
-      '--concurrency', String(plan.extractionConcurrency), '--order', 'smallest',
+      '--concurrency', String(plan.extractionConcurrency), '--order', 'deadline-balanced',
       '--max-units', String(plan.maxUnits), '--max-candidates', String(plan.maxCandidates),
       '--max-worker-kib', String(plan.maxWorkerKiB), '--max-cost', String(plan.waveCostCeilingDollars),
       '--cost-reserve', '5', '--max-run-cost', '5', '--max-run-tokens', String(plan.maxRunTokens),
@@ -123,6 +123,7 @@ function selfTest() {
   if (
     extraction[extraction.indexOf('--limit') + 1] !== '51' ||
     extraction[extraction.indexOf('--concurrency') + 1] !== '20' ||
+    extraction[extraction.indexOf('--order') + 1] !== 'deadline-balanced' ||
     editorial[editorial.indexOf('--concurrency') + 1] !== '17' ||
     !recovery.includes('--recover-only')
   ) {
@@ -135,7 +136,7 @@ function main() {
   const opts = parseArgs(process.argv.slice(2));
   if (opts.selfTest) return selfTest();
   const plan = currentPlan(opts);
-  if (opts.phase !== 'recovery' && plan.blackoutDays > 0) {
+  if (!opts.dryRun && opts.phase !== 'recovery' && plan.blackoutDays > 0) {
     throw new Error(
       `Paid capacity is unavailable until ${plan.capacityStart}; ` +
       `the post-reset target is ${plan.chaptersPerWave} extraction chapters per wave`,
