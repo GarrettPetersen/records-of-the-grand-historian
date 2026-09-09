@@ -5,6 +5,7 @@ import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { isDeepStrictEqual } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import {
   buildCompactPeopleExtractionSeed,
@@ -815,11 +816,6 @@ function fetchStartingRef(startingRef) {
 
 function assertCloudSourceMatches(target, localPacket, opts, matcher) {
   const relative = path.relative(REPO_ROOT, chapterPath(target.book, target.chapter));
-  const dirty = execFileSync('git', ['status', '--porcelain', '--', relative], {
-    cwd: REPO_ROOT,
-    encoding: 'utf8',
-  }).trim();
-  if (dirty) throw new Error(`${relative} has local changes; checkpoint or select a clean chapter before cloud extraction`);
   const remote = gitChapterAtRef(target, opts.startingRef);
   const remotePacket = buildPeopleExtractionPacket(target.book, target.chapter, {
     chapterData: remote.chapter,
@@ -834,21 +830,60 @@ function assertCloudSourceMatches(target, localPacket, opts, matcher) {
   }
 }
 
+function jsonDocumentsEqual(left, right) {
+  try {
+    return isDeepStrictEqual(JSON.parse(left), JSON.parse(right));
+  } catch (_error) {
+    return false;
+  }
+}
+
 function dirtyChapterRelativePaths() {
   const output = execFileSync('git', ['status', '--porcelain=v1', '-z', '--', 'data'], {
     cwd: REPO_ROOT,
     encoding: 'utf8',
   });
   const entries = output.split('\0');
-  const dirty = new Set();
+  const dirty = new Map();
   for (let index = 0; index < entries.length; index += 1) {
     const entry = entries[index];
     if (!entry) continue;
     const status = entry.slice(0, 2);
-    dirty.add(entry.slice(3));
-    if (/[RC]/u.test(status) && entries[index + 1]) dirty.add(entries[++index]);
+    dirty.set(entry.slice(3), status);
+    if (/[RC]/u.test(status) && entries[index + 1]) dirty.set(entries[++index], status);
   }
-  return dirty;
+  const materialOutput = execFileSync('git', [
+    'diff', 'HEAD', '--ignore-space-at-eol', '--ignore-blank-lines', '--numstat', '--', 'data',
+  ], {
+    cwd: REPO_ROOT,
+    encoding: 'utf8',
+  });
+  const materiallyChanged = new Set(materialOutput.split(/\r?\n/u).filter(Boolean).map((line) =>
+    line.split('\t').at(-1)
+  ));
+  const formattingOnly = new Set();
+  for (const [relative, status] of dirty) {
+    const ordinaryModification = /^[ M]{2}$/u.test(status) && status.includes('M');
+    if (!/^data\/[^/]+\/\d{3}\.json$/u.test(relative) || !ordinaryModification) continue;
+    if (!materiallyChanged.has(relative)) {
+      formattingOnly.add(relative);
+      continue;
+    }
+    try {
+      const committed = execFileSync('git', ['show', `HEAD:${relative}`], {
+        cwd: REPO_ROOT,
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'pipe'],
+        maxBuffer: 64 * 1024 * 1024,
+      });
+      const current = fs.readFileSync(path.join(REPO_ROOT, relative), 'utf8');
+      if (jsonDocumentsEqual(committed, current)) formattingOnly.add(relative);
+    } catch (_error) {
+      // Missing, untracked, or invalid JSON remains unavailable to bulk workers.
+    }
+  }
+  for (const relative of formattingOnly) dirty.delete(relative);
+  return { dirty: new Set(dirty.keys()), formattingOnly };
 }
 
 function artifactPath(target) {
@@ -2974,6 +3009,11 @@ async function processTarget(target, opts, state, control, budget) {
 }
 
 async function selfTest() {
+  if (!jsonDocumentsEqual('{"chapter":1}\n', '{\n  "chapter": 1\n}') ||
+      jsonDocumentsEqual('{"chapter":1}', '{"chapter":2}') ||
+      jsonDocumentsEqual('{invalid', '{"chapter":1}')) {
+    throw new Error('Semantic dirty-chapter comparison is not conservative');
+  }
   const careerPacket = {
     units: Array.from({ length: 10 }, (_, index) => ({
       id: `s${String(index + 1).padStart(4, '0')}`,
@@ -4029,7 +4069,12 @@ async function main() {
       );
     }
     if (opts.skipDirty) {
-      const dirty = dirtyChapterRelativePaths();
+      const { dirty, formattingOnly } = dirtyChapterRelativePaths();
+      if (formattingOnly.size > 0) {
+        console.log(
+          `Bulk planner retained ${formattingOnly.size} chapter file(s) whose local changes are JSON-equivalent to HEAD.`,
+        );
+      }
       const skipped = rawTargets.filter((target) =>
         dirty.has(path.relative(REPO_ROOT, chapterPath(target.book, target.chapter)))
       );
