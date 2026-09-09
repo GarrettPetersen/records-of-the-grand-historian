@@ -31,6 +31,8 @@ function parseArgs(argv) {
     phase: null,
     limit: null,
     prepareDossiers: false,
+    deferCatalog: false,
+    forceCatalog: false,
     dryRun: false,
     selfTest: false,
   };
@@ -50,6 +52,8 @@ function parseArgs(argv) {
       if (!Number.isInteger(opts.limit) || opts.limit < 1) throw new Error('--limit must be a positive integer');
     }
     else if (arg === '--prepare-dossiers') opts.prepareDossiers = true;
+    else if (arg === '--defer-catalog') opts.deferCatalog = true;
+    else if (arg === '--force-catalog') opts.forceCatalog = true;
     else if (arg === '--dry-run') opts.dryRun = true;
     else if (arg === '--self-test') opts.selfTest = true;
     else throw new Error(`Unknown option: ${arg}`);
@@ -62,6 +66,15 @@ function parseArgs(argv) {
   }
   if (!opts.selfTest && opts.prepareDossiers && opts.phase !== 'resolution') {
     throw new Error('--prepare-dossiers is only valid with --phase resolution');
+  }
+  if (!opts.selfTest && opts.deferCatalog && opts.phase !== 'extraction') {
+    throw new Error('--defer-catalog is only valid with --phase extraction');
+  }
+  if (!opts.selfTest && opts.forceCatalog && opts.phase !== 'editorial') {
+    throw new Error('--force-catalog is only valid with --phase editorial');
+  }
+  if (!opts.selfTest && opts.deferCatalog && opts.forceCatalog) {
+    throw new Error('--defer-catalog and --force-catalog cannot be combined');
   }
   return opts;
 }
@@ -154,6 +167,19 @@ function applyReviewedEditorialDecisions() {
   });
   if (result.error) throw result.error;
   return result.status ?? 1;
+}
+
+export function catalogRefreshAction({
+  prepareDossiers = false,
+  deferCatalog = false,
+  forceCatalog = false,
+  catalogInputsChanged = false,
+  resolutionOutputNeedsCatalog = false,
+} = {}) {
+  if (prepareDossiers) return 'skip';
+  const needed = forceCatalog || catalogInputsChanged || resolutionOutputNeedsCatalog;
+  if (!needed) return 'skip';
+  return deferCatalog ? 'defer' : 'rebuild';
 }
 
 function catalogInputSignature() {
@@ -280,6 +306,12 @@ function selfTest() {
   ) {
     throw new Error('Deadline wave command does not match the campaign targets');
   }
+  if (catalogRefreshAction({ deferCatalog: true, catalogInputsChanged: true }) !== 'defer' ||
+      catalogRefreshAction({ forceCatalog: true }) !== 'rebuild' ||
+      catalogRefreshAction({ prepareDossiers: true, catalogInputsChanged: true }) !== 'skip' ||
+      catalogRefreshAction() !== 'skip') {
+    throw new Error('Catalog refresh policy failed its coalescing behavior');
+  }
   const packageScripts = JSON.parse(
     fs.readFileSync(path.join(REPO_ROOT, 'package.json'), 'utf8'),
   ).scripts;
@@ -362,7 +394,16 @@ function main() {
   const catalogInputsChanged = catalogInputsBefore !== catalogInputSignature();
   const resolutionOutputNeedsCatalog = opts.phase === 'resolution' &&
     plan.resolutionOutput && fs.existsSync(plan.resolutionOutput);
-  if (!opts.prepareDossiers && (catalogInputsChanged || resolutionOutputNeedsCatalog)) {
+  const catalogAction = catalogRefreshAction({
+    prepareDossiers: opts.prepareDossiers,
+    deferCatalog: opts.deferCatalog,
+    forceCatalog: opts.forceCatalog,
+    catalogInputsChanged,
+    resolutionOutputNeedsCatalog,
+  });
+  if (catalogAction === 'defer') {
+    console.log('Deferring the extraction catalog rebuild to the managed editorial wave');
+  } else if (catalogAction === 'rebuild') {
     rebuildPeopleCatalog();
     if (resolutionOutputNeedsCatalog && plan.resolutionDossierReady) {
       fs.rmSync(plan.resolutionDossierDir, { recursive: true });
@@ -370,7 +411,7 @@ function main() {
         `Removed completed prepared dossiers from ${path.relative(REPO_ROOT, plan.resolutionDossierDir)}`,
       );
     }
-  } else if (!opts.prepareDossiers) {
+  } else if (!opts.prepareDossiers && !opts.deferCatalog) {
     console.log('Campaign wave changed no catalog inputs; skipping the catalog rebuild');
   }
   if (result.status !== 0) process.exit(result.status ?? 1);

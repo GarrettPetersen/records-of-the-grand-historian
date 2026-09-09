@@ -34,7 +34,8 @@ Options:
   --dry-run          Print every child wave without paid calls or saved state.
 
 Successful stages are checkpointed locally. Rerunning the command on the same day
-continues at the first unfinished stage.`);
+continues at the first unfinished stage. The managed production cadence combines
+each extraction/editorial pair into one canonical catalog rebuild.`);
 }
 
 function positiveInteger(value, flag, maximum) {
@@ -103,8 +104,8 @@ export function campaignDaySteps({ waves, calibration }) {
   const steps = [{ id: 'recovery', phase: 'recovery' }];
   for (let wave = 1; wave <= waves; wave += 1) {
     steps.push(
-      { id: `extraction-${wave}`, phase: 'extraction' },
-      { id: `editorial-${wave}`, phase: 'editorial' },
+      { id: `extraction-${wave}`, phase: 'extraction', deferCatalog: true },
+      { id: `editorial-${wave}`, phase: 'editorial', forceCatalog: true },
       { id: `resolution-${wave}`, phase: 'resolution' },
     );
   }
@@ -149,6 +150,8 @@ function runStep(step, opts) {
     '--phase', step.phase,
   ];
   if (step.limit) args.push('--limit', String(step.limit));
+  if (step.deferCatalog) args.push('--defer-catalog');
+  if (step.forceCatalog) args.push('--force-catalog');
   if (opts.dryRun) args.push('--dry-run');
   console.log(`\n=== Deadline day: ${step.id} ===`);
   const result = spawnSync(process.execPath, args, {
@@ -170,6 +173,10 @@ function selfTest() {
   if (calibration.map((step) => `${step.id}:${step.limit ?? ''}`).join(',') !==
       'recovery:,identity-calibration:10') {
     throw new Error(`Unexpected calibration cadence: ${JSON.stringify(calibration)}`);
+  }
+  if (!production.filter((step) => step.phase === 'extraction').every((step) => step.deferCatalog) ||
+      !production.filter((step) => step.phase === 'editorial').every((step) => step.forceCatalog)) {
+    throw new Error('Production cadence does not coalesce extraction and editorial catalog rebuilds');
   }
   const packageScripts = JSON.parse(fs.readFileSync(path.join(REPO_ROOT, 'package.json'), 'utf8')).scripts;
   for (const name of ['people:deadline:calibrate', 'people:deadline:day']) {
