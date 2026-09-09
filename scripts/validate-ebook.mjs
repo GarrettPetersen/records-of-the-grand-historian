@@ -8,7 +8,17 @@ import path from 'node:path';
 import { scanArtifactText } from './scan-translation-artifacts.mjs';
 import { renderBookCover } from './generate-book-covers.mjs';
 import { ebookPeopleReadinessErrors } from './lib/ebook-people-readiness.mjs';
-import { isSemanticTableHeader, tableCellRepeatsLabel, tableCells } from './lib/table-structure.mjs';
+import {
+  KDP_MAX_HTML_FILES,
+  ebookChapterHref,
+  planEbookContentDocuments,
+} from './lib/ebook-content-layout.mjs';
+import {
+  inferChapterTableHeaders,
+  isSemanticTableHeader,
+  tableCellRepeatsLabel,
+  tableCells,
+} from './lib/table-structure.mjs';
 
 const cliArgs = process.argv.slice(2);
 const allowPeoplePreview = cliArgs.includes('--allow-people-preview');
@@ -488,10 +498,15 @@ function validateNoInternalMetadataLeaks(label, value) {
   }
 }
 
-function orderedChapterIds(values) {
-  return values
-    .map((value) => value.match(/chapter-(\d{3})/)?.[1])
-    .filter(Boolean);
+function chapterSections(entry, content) {
+  const starts = [...content.matchAll(/<section\b(?=[^>]*\bepub:type="chapter")(?=[^>]*\bid="chapter-(\d{3})")[^>]*>/gu)]
+    .map((match) => ({ chapter: match[1], index: match.index }));
+  return starts.map((start, index) => {
+    const nextStart = starts[index + 1]?.index;
+    const bodyEnd = content.indexOf('</body>', start.index);
+    const end = nextStart ?? (bodyEnd >= 0 ? bodyEnd : content.length);
+    return { chapter: start.chapter, entry, content: content.slice(start.index, end) };
+  });
 }
 
 function containsCjk(value) {
@@ -539,7 +554,7 @@ function expectedRenderedSourceTexts(chapterData) {
       }
       continue;
     }
-    if (block.type === 'table_row' || (block.type === 'table_header' && !isSemanticTableHeader(block))) {
+    if (block.type === 'table_row' || (block.type === 'table_header' && !isSemanticTableHeader(block, chapterData))) {
       const cells = tableCells(block);
       for (const [cellIndex, cell] of cells.entries()) {
         const text = normalizeVisibleText(sourceItemTranslation(cell));
@@ -554,10 +569,11 @@ function expectedRenderedTableFieldCounts(chapterData) {
   const counts = [];
   let headers = [];
   for (const block of chapterData?.content || []) {
-    if (block.type === 'table_header' && isSemanticTableHeader(block)) {
+    if (block.type === 'table_header' && isSemanticTableHeader(block, chapterData)) {
       headers = tableCells(block).map((cell) => (
         normalizeVisibleText(sourceItemTranslation(cell)).replace(/[.!?]+$/u, '').trim()
       ));
+      headers = inferChapterTableHeaders(chapterData, headers) || headers;
       continue;
     }
     if (block.type !== 'table_row' && block.type !== 'table_header') continue;
@@ -604,14 +620,14 @@ function renderedIncludesSplitText(renderedText, text) {
   return cursor > 0;
 }
 
-function validateSourceTextRendered(chapterEntry, chapterData, renderedText) {
+function validateSourceTextRendered(chapterEntry, chapterData, renderedText, chapterId) {
   const normalizedRendered = normalizeVisibleText(renderedText);
   const missing = expectedRenderedSourceTexts(chapterData)
     .filter((item) => {
       if (normalizedRendered.includes(item.text)) return false;
       if (item.kind === 'paragraph sentence' && renderedIncludesSplitText(normalizedRendered, item.text)) return false;
       if (item.kind !== 'table cell') return true;
-      const tableNormalized = normalizeTableYearMarkersForValidation(item.text, chapterEntry);
+      const tableNormalized = normalizeTableYearMarkersForValidation(item.text, chapterId);
       if (tableNormalized && tableNormalized !== item.text && normalizedRendered.includes(tableNormalized)) return false;
       const yearNormalized = tableYearMarkerEquivalent(item.text);
       if (yearNormalized && normalizedRendered.includes(yearNormalized)) return false;
@@ -761,15 +777,15 @@ function removeLeadingTableYearMarkers(value) {
   return rest;
 }
 
-function tableMarkerPrefixForValidation(chapterEntry) {
-  return /chapter-016\.xhtml$/u.test(chapterEntry) ? 'Month' : 'Year';
+function tableMarkerPrefixForValidation(chapterId) {
+  return chapterId === '016' ? 'Month' : 'Year';
 }
 
-function normalizeTableYearMarkersForValidation(value, chapterEntry) {
-  if (/chapter-016\.xhtml$/u.test(chapterEntry)) {
+function normalizeTableYearMarkersForValidation(value, chapterId) {
+  if (chapterId === '016') {
     return normalizeShiji016MonthMarkersForValidation(value);
   }
-  const markerPrefix = tableMarkerPrefixForValidation(chapterEntry);
+  const markerPrefix = tableMarkerPrefixForValidation(chapterId);
   let rest = String(value || '').trim();
   const markers = [];
   for (let index = 0; index < 3; index += 1) {
@@ -839,10 +855,6 @@ function normalizeShiji016MonthMarkersForValidation(value) {
     .trim();
 }
 
-function chapterIdFromEntry(entry) {
-  return entry.match(/chapter-(\d{3})\.xhtml$/u)?.[1] || '';
-}
-
 function tableEntrySections(content) {
   return [...content.matchAll(/<section\b[^>]*class="[^"]*\btable-entry\b[^"]*"[^>]*>([\s\S]*?)<\/section>/gu)]
     .map((match) => match[1]);
@@ -857,8 +869,7 @@ function tagTexts(content, tagName) {
   return [...content.matchAll(re)].map((match) => visibleText(match[1])).filter(Boolean);
 }
 
-function validateRenderedTableEntries(chapterEntry, content) {
-  const chapter = chapterIdFromEntry(chapterEntry);
+function validateRenderedTableEntries(chapterEntry, content, chapter) {
   const qaChapter = qaChapterById.get(chapter);
   const expectedRows = qaChapter?.tableRendering?.renderedRows || 0;
   const sections = tableEntrySections(content);
@@ -900,21 +911,21 @@ function validateRenderedTableEntries(chapterEntry, content) {
     if (expectedFields != null && expectedFields > 1 && !/<dl\b/u.test(section)) {
       errors.push(`${chapterEntry} table entry ${index + 1} has no definition list for table cells.`);
     }
-    if (expectedFields == null && !/<dl\b/u.test(section) && !/chapter-0(1[3-9]|20)\.xhtml/.test(chapterEntry)) {
+    if (expectedFields == null && !/<dl\b/u.test(section) && !/^0(?:1[3-9]|20)$/u.test(chapter)) {
       errors.push(`${chapterEntry} table entry ${index + 1} has no definition list for table cells; source-row alignment was unavailable.`);
     }
     if (dts + unlabeledDds !== dds) {
       errors.push(`${chapterEntry} table entry ${index + 1} has mismatched table field labels/values: ${dts} labeled, ${unlabeledDds} unlabeled, ${dds} value(s).`);
     }
     const duplicateLabels = [...new Set(labels.filter((label, labelIndex) => labels.indexOf(label) !== labelIndex))];
-    if (duplicateLabels.length > 0 && !/chapter-013\.xhtml/.test(chapterEntry)) {
+    if (duplicateLabels.length > 0 && chapter !== '013') {
       errors.push(`${chapterEntry} table entry ${index + 1} has duplicate table field label(s): ${duplicateLabels.join(', ')}.`);
     }
     const punctuatedLabels = labels.filter((label) => /[.!?]$/u.test(label));
     if (punctuatedLabels.length > 0) {
       errors.push(`${chapterEntry} table entry ${index + 1} has sentence punctuation in table field label(s): ${punctuatedLabels.join(', ')}.`);
     }
-    if (expectedFields == null && dts === 0 && dds === 0 && qaChapter?.tableRendering?.maxCells > 1 && !/chapter-0(1[3-9]|20)\.xhtml/.test(chapterEntry)) {
+    if (expectedFields == null && dts === 0 && dds === 0 && qaChapter?.tableRendering?.maxCells > 1 && !/^0(?:1[3-9]|20)$/u.test(chapter)) {
       errors.push(`${chapterEntry} table entry ${index + 1} has no rendered table fields.`);
     }
   }
@@ -991,11 +1002,30 @@ if (fs.existsSync(sidecarCover) && png.length > 0) {
   }
 }
 
-const chapterEntries = entries.filter((entry) => /^EPUB\/text\/chapter-\d+\.xhtml$/.test(entry));
+const chapterEntries = entries.filter((entry) => /^EPUB\/text\/(?:chapter-\d+|chapters-\d+-\d+)\.xhtml$/.test(entry)).sort();
 const peopleEntries = entries.filter((entry) => /^EPUB\/people\/.+\.xhtml$/.test(entry)).sort();
 const xhtmlEntries = entries.filter((entry) => /^EPUB\/.+\.xhtml$/.test(entry)).sort();
 if (chapterEntries.length === 0) {
   errors.push('No chapter XHTML files found.');
+}
+if (xhtmlEntries.length > KDP_MAX_HTML_FILES) {
+  errors.push(`EPUB contains ${xhtmlEntries.length} XHTML files; Kindle requires fewer than 300.`);
+}
+const maxKdpHtmlBytes = 30 * 1024 * 1024;
+for (const entry of xhtmlEntries) {
+  const bytes = fs.statSync(path.join(extractDir, entry)).size;
+  if (bytes >= maxKdpHtmlBytes) {
+    errors.push(`${entry} is ${bytes} bytes; individual Kindle HTML files must be smaller than 30 MB.`);
+  }
+}
+const chapterSectionList = chapterEntries.flatMap((entry) => chapterSections(entry, unzipText(entry)));
+const chapterSectionById = new Map();
+for (const section of chapterSectionList) {
+  if (chapterSectionById.has(section.chapter)) {
+    errors.push(`Chapter ${section.chapter} appears in more than one EPUB chapter section.`);
+    continue;
+  }
+  chapterSectionById.set(section.chapter, section);
 }
 
 const qaReportPath = path.join(productDir, 'qa-report.json');
@@ -1151,17 +1181,55 @@ if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
     }
   }
 
-  const expectedChapterIds = Array.isArray(metadata.chapters) ? metadata.chapters.map(String) : [];
+  const expectedChapterIds = Array.isArray(metadata.chapters)
+    ? metadata.chapters.map((chapter) => String(chapter).padStart(3, '0'))
+    : [];
   const peopleQa = qaReportData?.peopleGlossary || { active: false };
-  const actualChapterIds = orderedChapterIds(chapterEntries).sort();
+  let expectedContentLayout = null;
+  try {
+    expectedContentLayout = planEbookContentDocuments(expectedChapterIds, {
+      hasAbout: Boolean(metadata.aboutThisEdition?.length),
+      peopleActive: Boolean(peopleQa.active),
+      peopleShards: Number(peopleQa.shards || 0),
+    });
+  } catch (error) {
+    errors.push(`Could not plan expected EPUB content layout: ${error.message}`);
+  }
+  const actualChapterIds = [...chapterSectionById.keys()].sort();
   if (expectedChapterIds.length > 0) {
     if (actualChapterIds.length !== expectedChapterIds.length) {
-      errors.push(`EPUB chapter file count mismatch: ${actualChapterIds.length} != ${expectedChapterIds.length}.`);
+      errors.push(`EPUB chapter section count mismatch: ${actualChapterIds.length} != ${expectedChapterIds.length}.`);
     }
     const missingChapters = expectedChapterIds.filter((chapter) => !actualChapterIds.includes(chapter));
     const extraChapters = actualChapterIds.filter((chapter) => !expectedChapterIds.includes(chapter));
-    if (missingChapters.length > 0) errors.push(`EPUB missing chapter file(s): ${missingChapters.join(', ')}.`);
-    if (extraChapters.length > 0) errors.push(`EPUB has unexpected chapter file(s): ${extraChapters.join(', ')}.`);
+    if (missingChapters.length > 0) errors.push(`EPUB missing chapter section(s): ${missingChapters.join(', ')}.`);
+    if (extraChapters.length > 0) errors.push(`EPUB has unexpected chapter section(s): ${extraChapters.join(', ')}.`);
+    const actualChapterOrder = chapterSectionList.map((section) => section.chapter);
+    if (actualChapterOrder.join('|') !== expectedChapterIds.join('|')) {
+      errors.push('EPUB chapter sections do not follow product chapter order.');
+    }
+    if (expectedContentLayout) {
+      const expectedEntries = expectedContentLayout.documents
+        .map((document) => `EPUB/text/${document.file}`)
+        .sort();
+      if (chapterEntries.join('|') !== expectedEntries.join('|')) {
+        errors.push('EPUB chapter document filenames do not match the independently planned Kindle content layout.');
+      }
+      for (const chapter of expectedChapterIds) {
+        const expectedEntry = `EPUB/text/${expectedContentLayout.documentByChapter.get(chapter)?.file || ''}`;
+        const actualEntry = chapterSectionById.get(chapter)?.entry;
+        if (actualEntry && actualEntry !== expectedEntry) {
+          errors.push(`Chapter ${chapter} is packaged in ${actualEntry}; expected ${expectedEntry}.`);
+        }
+      }
+      const qaLayout = qaReportData?.contentLayout;
+      if (!qaLayout
+        || qaLayout.xhtmlFiles !== expectedContentLayout.xhtmlFiles
+        || qaLayout.contentDocuments !== expectedContentLayout.documents.length
+        || qaLayout.chaptersPerDocument !== expectedContentLayout.groupSize) {
+        errors.push('qa-report.json content-layout summary does not match the independently planned Kindle layout.');
+      }
+    }
   }
 
   if (peopleQa.active) {
@@ -1234,7 +1302,7 @@ if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
     'cover-page',
     'frontmatter',
     ...(metadata.aboutThisEdition?.length ? ['about'] : []),
-    ...expectedChapterIds.map((chapter) => `chapter-${chapter}`),
+    ...(expectedContentLayout?.documents.map((document) => document.itemId) || []),
     ...(peopleQa.active ? [
       'people-index',
       ...Array.from({ length: peopleQa.shards }, (_, index) =>
@@ -1254,7 +1322,9 @@ if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
     'cover.xhtml',
     'frontmatter.xhtml',
     ...(metadata.aboutThisEdition?.length ? ['about.xhtml'] : []),
-    ...expectedChapterIds.map((chapter) => `text/chapter-${chapter}.xhtml`),
+    ...(expectedContentLayout ? expectedChapterIds.map((chapter) =>
+      ebookChapterHref(expectedContentLayout, chapter, 'text/')
+    ) : []),
     ...(peopleQa.active ? ['people/index.xhtml'] : []),
   ];
   if (expectedChapterIds.length > 0 && navHrefs.join('|') !== expectedNavHrefs.join('|')) {
@@ -1294,7 +1364,12 @@ if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
 
   const idsByEntry = new Map(xhtmlEntries.map((entry) => {
     const content = unzipText(entry);
-    return [entry, new Set([...content.matchAll(/\bid="([^"]+)"/gu)].map((match) => decodeBasicEntities(match[1])))];
+    const ids = [...content.matchAll(/\sid="([^"]+)"/gu)].map((match) => decodeBasicEntities(match[1]));
+    const duplicates = [...new Set(ids.filter((id, index) => ids.indexOf(id) !== index))];
+    if (duplicates.length > 0) {
+      errors.push(`${entry} contains duplicate id value(s): ${duplicates.slice(0, 12).join(', ')}.`);
+    }
+    return [entry, new Set(ids)];
   }));
   for (const entry of xhtmlEntries) {
     const content = unzipText(entry);
@@ -1349,26 +1424,25 @@ for (const entry of ['EPUB/cover.xhtml', 'EPUB/frontmatter.xhtml', 'EPUB/about.x
 
 if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
   const metadata = readJson(path.join(productDir, 'metadata.json'));
-  for (const chapterEntry of chapterEntries) {
-    const chapter = chapterIdFromEntry(chapterEntry);
+  for (const chapter of (metadata.chapters || []).map((value) => String(value).padStart(3, '0'))) {
+    const chapterSection = chapterSectionById.get(chapter);
+    if (!chapterSection) continue;
+    const chapterEntry = chapterSection.entry;
     const source = sourceChapterMetadata(metadata.book, chapter);
     const chapterData = sourceChapterData(metadata.book, chapter);
     if (!source) continue;
-    const content = unzipText(chapterEntry);
-    if (chapterData) validateSourceTextRendered(chapterEntry, chapterData, visibleSourceText(content));
-    const pageTitle = firstTagText(content, 'title');
+    const content = chapterSection.content;
+    const chapterLabel = `${chapterEntry} chapter ${chapter}`;
+    if (chapterData) validateSourceTextRendered(chapterLabel, chapterData, visibleSourceText(content), chapter);
     const h1 = firstTagText(content, 'h1');
     const kicker = content.match(/<p\b[^>]*class="[^"]*\bchapter-kicker\b[^"]*"[^>]*>([\s\S]*?)<\/p>/u);
     const kickerText = kicker ? visibleText(kicker[1]) : '';
     const expectedKicker = `${source.chineseTitle} - Chapter ${chapter}`;
-    if (pageTitle !== source.englishTitle) {
-      errors.push(`${chapterEntry} title mismatch: "${pageTitle}" != "${source.englishTitle}".`);
-    }
     if (h1 !== source.englishTitle) {
-      errors.push(`${chapterEntry} h1 mismatch: "${h1}" != "${source.englishTitle}".`);
+      errors.push(`${chapterLabel} h1 mismatch: "${h1}" != "${source.englishTitle}".`);
     }
     if (kickerText !== expectedKicker) {
-      errors.push(`${chapterEntry} chapter kicker mismatch: "${kickerText}" != "${expectedKicker}".`);
+      errors.push(`${chapterLabel} chapter kicker mismatch: "${kickerText}" != "${expectedKicker}".`);
     }
   }
 }
@@ -1387,7 +1461,6 @@ const generatedTextRules = [
 for (const chapterEntry of chapterEntries) {
   const content = unzipText(chapterEntry);
   const text = visibleText(content);
-  validateRenderedTableEntries(chapterEntry, content);
   validateNoInternalMetadataLeaks(chapterEntry, text);
   const pageTitle = firstTagText(content, 'title');
   const h1 = firstTagText(content, 'h1');
@@ -1398,6 +1471,9 @@ for (const chapterEntry of chapterEntries) {
   }
   if (containsCjk(h1)) {
     errors.push(`${chapterEntry} h1 contains Chinese characters; EPUB chapter headings should be English-first.`);
+  }
+  for (const chapterSection of chapterSections(chapterEntry, content)) {
+    validateRenderedTableEntries(chapterEntry, chapterSection.content, chapterSection.chapter);
   }
   for (const chunk of visibleTextChunks(content)) {
     const [hit] = scanArtifactText(chunk);
