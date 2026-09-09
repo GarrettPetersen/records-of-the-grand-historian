@@ -23,6 +23,11 @@ const DISPOSITION_REASONS = new Set([
   'place', 'office', 'organization', 'title', 'book-title', 'collective', 'deity',
   'reign-period', 'polity', 'ambiguous', 'duplicate-candidate', 'other',
 ]);
+const SURFACE_KINDS = new Set([
+  'personal-name', 'courtesy-name', 'childhood-name', 'religious-name',
+  'temple-name', 'posthumous-name', 'alternate-name', 'title-reference',
+  'kinship-reference',
+]);
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
 function usage() {
@@ -112,6 +117,24 @@ function validateEnvelope(document) {
   }
 }
 
+function validateLinkDecision(item, decision) {
+  const option = item.options.find((candidate) => candidate.personId === decision.personId);
+  if (!option) throw new Error(`${decision.candidate} links to an unavailable person option`);
+  if (option.kinds.includes(decision.kind)) return;
+  if (decision.allowNewKind !== true) {
+    throw new Error(`${decision.candidate} uses an unavailable mention kind`);
+  }
+  if (option.match !== 'unit-evidence') {
+    throw new Error(`${decision.candidate} may infer a new mention kind only for a unit-evidence person`);
+  }
+  if (!SURFACE_KINDS.has(decision.kind)) {
+    throw new Error(`${decision.candidate} uses an invalid inferred mention kind`);
+  }
+  if (typeof decision.note !== 'string' || decision.note.trim().length < 12) {
+    throw new Error(`${decision.candidate} needs an evidence note for its inferred mention kind`);
+  }
+}
+
 function prepareChapter(review, submitted, matcher) {
   if (submitted.book !== review.book || submitted.chapter !== review.chapter) {
     throw new Error(`Decision scope does not match ${review.book}/${review.chapter}`);
@@ -127,9 +150,7 @@ function prepareChapter(review, submitted, matcher) {
     if (decisions.has(decision.candidate)) throw new Error(`${review.book}/${review.chapter} repeats ${decision.candidate}`);
     if (decision.action === 'link') {
       const item = expected.get(decision.candidate);
-      const option = item.options.find((candidate) => candidate.personId === decision.personId);
-      if (!option) throw new Error(`${decision.candidate} links to an unavailable person option`);
-      if (!option.kinds.includes(decision.kind)) throw new Error(`${decision.candidate} uses an unavailable mention kind`);
+      validateLinkDecision(item, decision);
     } else if (decision.action === 'dispose') {
       if (!DISPOSITION_REASONS.has(decision.reason)) throw new Error(`${decision.candidate} has invalid disposition reason`);
       if (typeof decision.note !== 'string' || decision.note.trim().length < 12) {
@@ -202,6 +223,27 @@ function selfTest() {
   if (serializeLikeSource({ singleLine: true, compact: { value: 1 } }) !== '{"value":1}\n') {
     throw new Error('Single-line source formatting was not preserved');
   }
+  const reviewItem = {
+    options: [{ personId: 'book:001:p001', kinds: ['personal-name'], match: 'unit-evidence' }],
+  };
+  validateLinkDecision(reviewItem, {
+    candidate: 'book:001:cand_a',
+    personId: 'book:001:p001',
+    kind: 'kinship-reference',
+    allowNewKind: true,
+    note: 'The sentence explicitly calls this person the speaker\'s brother.',
+  });
+  let rejected = false;
+  try {
+    validateLinkDecision(reviewItem, {
+      candidate: 'book:001:cand_a',
+      personId: 'book:001:p001',
+      kind: 'kinship-reference',
+    });
+  } catch {
+    rejected = true;
+  }
+  if (!rejected) throw new Error('Unexplained inferred mention kind was accepted');
   console.log('apply-people-alias-decisions self-test: ok');
 }
 
