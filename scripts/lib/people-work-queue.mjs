@@ -90,6 +90,24 @@ export function validatePeopleWorkLedger(ledger) {
     if (!['cursor-sdk', 'grokbot'].includes(claim.lane)) throw new Error(`Invalid queue lane for ${key}`);
     if (!claim.worker || !claim.status || !claim.updatedAt) throw new Error(`Incomplete queue claim for ${key}`);
     if (claim.sticky !== true && !claim.expiresAt) throw new Error(`Non-sticky queue claim lacks expiry: ${key}`);
+    if (claim.grokbotPlan != null) {
+      const plan = claim.grokbotPlan;
+      if (
+        claim.lane !== 'grokbot' ||
+        plan.schemaVersion !== 1 ||
+        !Array.isArray(plan.chunks) ||
+        plan.chunks.length === 0 ||
+        plan.chunks.some((chunk) =>
+          typeof chunk.id !== 'string' ||
+          !Number.isInteger(chunk.start) ||
+          !Number.isInteger(chunk.end) ||
+          chunk.start < 0 ||
+          chunk.end <= chunk.start
+        )
+      ) {
+        throw new Error(`Invalid Grok Bot chunk plan for ${key}`);
+      }
+    }
   }
   return ledger;
 }
@@ -266,6 +284,7 @@ function makeClaim(target, options, now) {
     updatedAt: new Date(now).toISOString(),
     expiresAt: sticky ? null : new Date(now + (options.claimHours ?? DEFAULT_CLAIM_HOURS) * 3_600_000).toISOString(),
     chapterFingerprint: target.chapterFingerprint,
+    ...(target.grokbotPlan ? { grokbotPlan: structuredClone(target.grokbotPlan) } : {}),
     ...(options.note ? { note: options.note } : {}),
     ...(options.branchName ? { branch: options.branchName } : {}),
     ...(options.prUrl ? { prUrl: options.prUrl } : {}),
@@ -288,6 +307,14 @@ export function reservePeopleTargetsInLedger(ledger, targets, options) {
     const current = ledger.claims[key];
     if (claimIsActive(current, now)) {
       if (current.lane === options.lane && current.worker === options.worker) {
+        if (target.grokbotPlan && current.grokbotPlan) {
+          if (JSON.stringify(target.grokbotPlan) !== JSON.stringify(current.grokbotPlan)) {
+            throw new Error(`Refusing to replace the active Grok Bot chunk plan for ${key}`);
+          }
+        } else if (target.grokbotPlan) {
+          current.grokbotPlan = structuredClone(target.grokbotPlan);
+          current.updatedAt = new Date(now).toISOString();
+        }
         claimed.push({ ...target, claim: current, reused: true });
       } else if (cursorMayAdopt(current, options)) {
         current.worker = options.worker;
@@ -510,7 +537,11 @@ export function markRemotePeopleClaims(targets, status, options) {
       if (!claim || claim.lane !== options.lane || claim.worker !== options.worker) {
         throw new Error(`Cannot mark unowned claim ${key} as ${status}`);
       }
-      ledger.claims[key] = makeClaim({ ...target, chapterFingerprint: claim.chapterFingerprint }, {
+      ledger.claims[key] = makeClaim({
+        ...target,
+        chapterFingerprint: claim.chapterFingerprint,
+        ...(claim.grokbotPlan ? { grokbotPlan: claim.grokbotPlan } : {}),
+      }, {
         lane: claim.lane,
         worker: options.worker,
         status,

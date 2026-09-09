@@ -129,6 +129,18 @@ function selfTest() {
   ) {
     throw new Error('Deadline wave command does not match the campaign targets');
   }
+  const packageScripts = JSON.parse(
+    fs.readFileSync(path.join(REPO_ROOT, 'package.json'), 'utf8'),
+  ).scripts;
+  for (const name of [
+    'people:extract:deadline-recovery',
+    'people:extract:deadline-wave',
+    'people:editorial:deadline-wave',
+  ]) {
+    if (!packageScripts[name]?.includes('--capacity-start 2026-09-13')) {
+      throw new Error(`${name} does not enforce the September paid-capacity start date`);
+    }
+  }
   console.log('people deadline wave self-test: ok');
 }
 

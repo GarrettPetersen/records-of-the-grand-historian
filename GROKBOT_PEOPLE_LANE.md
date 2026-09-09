@@ -111,6 +111,9 @@ npm run people:queue:sync-cursor
 # Inspect both lanes and every active reservation.
 npm run people:queue:status
 
+# Host migration: persist exact plans for legacy claims with local assignments.
+npm run people:grokbot:backfill-plans
+
 # September deadline campaign: preview and claim one balanced chapter.
 npm run people:grokbot:plan -- --worker grokbot-01 --order deadline-balanced --max-units 80 --max-candidates 200 --max-worker-kib 48
 npm run people:grokbot:claim -- --worker grokbot-01 --order deadline-balanced --max-units 80 --max-candidates 200 --max-worker-kib 48
@@ -148,6 +151,11 @@ already exists.
 
 The chapter remains one central claim, so no other lane can take a later chunk. Cursor
 retains its adaptive split and conversation-recovery machinery for its own assignments.
+The claim records the exact sealed chunk ranges in the shared ledger. Resumption uses
+those ranges even when the campaign's default ceilings have changed or the worker moves
+to another clone. Legacy claims without a ledger plan are reconstructed from their
+existing assignment; a nondefault replan is rejected rather than overwriting partial
+output.
 
 ## Review And Merge
 

@@ -80,6 +80,7 @@ const GROKBOT_COMPLETION_FLAGS = [
 function usage() {
   console.log(`Usage:
   node scripts/people-work-queue.mjs sync-cursor [options]
+  node scripts/people-work-queue.mjs backfill-grokbot-plans [options]
   node scripts/people-work-queue.mjs plan-grokbot --worker ID [options]
   node scripts/people-work-queue.mjs claim-grokbot --worker ID [options]
   node scripts/people-work-queue.mjs resume-grokbot --worker ID --book BOOK --chapter NNN
@@ -278,6 +279,38 @@ function planGrokbotChunks(packet, opts) {
   return chunks;
 }
 
+function grokbotClaimPlan(chunks) {
+  return {
+    schemaVersion: 1,
+    chunks: chunks.map(({ id, start, end }) => ({ id, start, end })),
+  };
+}
+
+function chunksFromGrokbotClaimPlan(packet, plan) {
+  return normalizePeopleExtractionChunkPlan(packet, plan.chunks, {
+    contextUnits: DEFAULT_PEOPLE_CHUNK_CONTEXT_UNITS,
+  });
+}
+
+function grokbotChunksForTarget(packet, target, opts, claim = null) {
+  if (claim?.grokbotPlan) return chunksFromGrokbotClaimPlan(packet, claim.grokbotPlan);
+  if (claim) {
+    const assignmentFile = path.join(assignmentDirectory(opts.worker, target), 'assignment.json');
+    if (fs.existsSync(assignmentFile)) return chunksFromAssignment(packet, readJson(assignmentFile));
+    if (
+      opts.maxUnits !== DEFAULT_MAX_UNITS ||
+      opts.maxCandidates !== DEFAULT_MAX_CANDIDATES ||
+      opts.maxWorkerBytes !== DEFAULT_MAX_WORKER_BYTES
+    ) {
+      throw new Error(
+        `${chapterKey(target)} is a legacy claim without a persisted plan; ` +
+        'resume it with the original 60-unit, 150-candidate, 48-KiB ceilings',
+      );
+    }
+  }
+  return planGrokbotChunks(packet, opts);
+}
+
 function prepareGrokbotAssignment(target, packet, opts) {
   const directory = assignmentDirectory(opts.worker, target);
   const assignmentFile = path.join(directory, 'assignment.json');
@@ -459,13 +492,15 @@ function eligibleGrokTargets(opts, ledger) {
       claim.lane === 'grokbot' && claim.worker === opts.worker && claim.status === 'claimed'
     )) continue;
     const packet = buildPeopleExtractionPacket(target.book, target.chapter, { properNounMatcher: matcher });
-    const chunks = planGrokbotChunks(packet, opts);
+    const ownedClaim = grokbotClaimOwnedByWorker(target, opts, ledger) ? claim : null;
+    const chunks = grokbotChunksForTarget(packet, target, opts, ownedClaim);
     const metrics = chunkPlanMetrics(packet, chunks);
     eligible.push({
       ...target,
       ...metrics,
       chunks,
       packet,
+      grokbotPlan: ownedClaim?.grokbotPlan ?? grokbotClaimPlan(chunks),
       chapterFingerprint: packet.input.chapterFingerprint,
     });
     if (eligible.length >= Math.max(opts.limit * 12, 12)) break;
@@ -492,6 +527,13 @@ function readGrokbotAssignment(worker, target) {
 }
 
 function chunksFromAssignment(packet, assignment) {
+  if (assignment.mode === 'whole') {
+    return normalizePeopleExtractionChunkPlan(packet, [{
+      id: assignment.chunks[0]?.id ?? '001',
+      start: 0,
+      end: packet.units.length,
+    }], { contextUnits: DEFAULT_PEOPLE_CHUNK_CONTEXT_UNITS });
+  }
   return normalizePeopleExtractionChunkPlan(packet, assignment.chunks.map((row) => ({
     id: row.id,
     start: row.start,
@@ -594,6 +636,63 @@ async function syncCursor(opts) {
   );
 }
 
+async function backfillGrokbotPlans(opts) {
+  fetchPeopleQueueBase(queueOptions(opts));
+  const ledger = readRemotePeopleWorkLedger(queueOptions(opts));
+  const plans = new Map();
+  const missing = [];
+  for (const [key, claim] of Object.entries(ledger.claims)) {
+    if (claim.lane !== 'grokbot' || claim.status !== 'claimed' || claim.grokbotPlan) continue;
+    const target = splitChapterKey(key);
+    const assignmentFile = path.join(assignmentDirectory(claim.worker, target), 'assignment.json');
+    if (!fs.existsSync(assignmentFile)) {
+      missing.push(key);
+      continue;
+    }
+    const packet = buildPeopleExtractionPacket(target.book, target.chapter, {
+      properNounMatcher: loadProperNounMatcher(),
+    });
+    if (claim.chapterFingerprint !== packet.input.chapterFingerprint) {
+      throw new Error(`${key} changed after its Grok Bot claim; operator reconciliation is required`);
+    }
+    plans.set(key, grokbotClaimPlan(chunksFromAssignment(packet, readJson(assignmentFile))));
+  }
+  if (!plans.size) {
+    console.log(`Grok Bot plans already current; ${missing.length} claim(s) lack a local assignment`);
+    return;
+  }
+  const updated = mutateRemotePeopleWorkLedger((current) => {
+    const applied = [];
+    for (const [key, plan] of plans) {
+      const expected = ledger.claims[key];
+      const claim = current.claims[key];
+      if (
+        !claimIsActive(claim) ||
+        claim.lane !== 'grokbot' ||
+        claim.status !== 'claimed' ||
+        claim.worker !== expected.worker ||
+        claim.chapterFingerprint !== expected.chapterFingerprint
+      ) {
+        throw new Error(`${key} changed while Grok Bot plans were being backfilled`);
+      }
+      if (claim.grokbotPlan && JSON.stringify(claim.grokbotPlan) !== JSON.stringify(plan)) {
+        throw new Error(`Refusing to replace the active Grok Bot chunk plan for ${key}`);
+      }
+      claim.grokbotPlan = plan;
+      claim.updatedAt = new Date().toISOString();
+      applied.push(key);
+    }
+    return { applied };
+  }, {
+    ...queueOptions(opts),
+    message: 'Backfill Grok Bot people chunk plans',
+  });
+  console.log(
+    `Backfilled ${updated.result.applied.length} Grok Bot plan(s); ` +
+    `${missing.length} claim(s) lack a local assignment`,
+  );
+}
+
 async function claimGrokbot(opts) {
   if (!opts.worker) throw new Error('claim-grokbot requires --worker');
   fetchPeopleQueueBase(queueOptions(opts));
@@ -636,7 +735,7 @@ function resumeGrokbot(opts) {
   if (claim.chapterFingerprint !== packet.input.chapterFingerprint) {
     throw new Error(`${chapterKey(target)} changed after it was claimed; operator reconciliation is required`);
   }
-  const chunks = planGrokbotChunks(packet, opts);
+  const chunks = grokbotChunksForTarget(packet, target, opts, claim);
   const source = { ...target, ...chunkPlanMetrics(packet, chunks), chunks, packet };
   const resumed = { ...source, reused: true };
   printGrokbotAssignment(resumed, source, prepareGrokbotAssignment(resumed, packet, opts));
@@ -858,6 +957,30 @@ function selfTest() {
   if (grok.claimed.length !== 1 || chapterKey(grok.claimed[0]) !== 'a/002' || grok.blocked.length !== 1) {
     throw new Error('Cross-lane duplicate prevention failed');
   }
+  const fixturePlan = { schemaVersion: 1, chunks: [{ id: '001', start: 0, end: 2 }] };
+  const backfilledGrok = reservePeopleTargetsInLedger(ledger, [{
+    ...targets[1], grokbotPlan: fixturePlan,
+  }], {
+    lane: 'grokbot', worker: 'grok-a', limit: 1, now: 2_500,
+  });
+  if (
+    backfilledGrok.claimed.length !== 1 ||
+    JSON.stringify(ledger.claims['a/002'].grokbotPlan) !== JSON.stringify(fixturePlan)
+  ) {
+    throw new Error('Existing Grok Bot claim did not backfill its sealed chunk plan');
+  }
+  let replacementRejected = false;
+  try {
+    reservePeopleTargetsInLedger(ledger, [{
+      ...targets[1],
+      grokbotPlan: { schemaVersion: 1, chunks: [{ id: '001', start: 0, end: 1 }] },
+    }], {
+      lane: 'grokbot', worker: 'grok-a', limit: 1, now: 2_600,
+    });
+  } catch (error) {
+    replacementRejected = /Refusing to replace/u.test(error.message);
+  }
+  if (!replacementRejected) throw new Error('Active Grok Bot plan replacement was not rejected');
   ledger.claims['a/001'] = {
     ...ledger.claims['a/001'],
     status: 'resume-required',
@@ -910,6 +1033,10 @@ function selfTest() {
   if (JSON.stringify(planned) !== JSON.stringify(rebuilt)) {
     throw new Error('Grok Bot assignment did not reconstruct its canonical chunk plan');
   }
+  const persisted = chunksFromGrokbotClaimPlan(packet, grokbotClaimPlan(planned));
+  if (JSON.stringify(planned) !== JSON.stringify(persisted)) {
+    throw new Error('Grok Bot claim did not preserve its canonical chunk plan');
+  }
   if (
     !grokbotUsesDeadlineTailPool({ order: 'deadline-balanced', worker: 'grokbot-24' }) ||
     grokbotUsesDeadlineTailPool({ order: 'deadline-balanced', worker: 'grokbot-25' }) ||
@@ -960,6 +1087,7 @@ async function main() {
   const opts = parseArgs(process.argv.slice(2));
   if (opts.selfTest) return selfTest();
   if (opts.command === 'sync-cursor') return syncCursor(opts);
+  if (opts.command === 'backfill-grokbot-plans') return backfillGrokbotPlans(opts);
   if (opts.command === 'plan-grokbot') return planGrokbot(opts);
   if (opts.command === 'claim-grokbot') return claimGrokbot(opts);
   if (opts.command === 'resume-grokbot') return resumeGrokbot(opts);
