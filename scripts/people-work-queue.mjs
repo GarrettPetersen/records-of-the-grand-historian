@@ -62,6 +62,17 @@ const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPat
 const DEFAULT_MAX_UNITS = 60;
 const DEFAULT_MAX_CANDIDATES = 150;
 const DEFAULT_MAX_WORKER_BYTES = 48 * 1024;
+const GROKBOT_COMPLETION_FLAGS = [
+  'allUnitsVisited',
+  'preflightCandidatesAccountedFor',
+  'allNamedPeopleAndMentionsCaptured',
+  'allDurableFactsCaptured',
+  'allChronologyCaptured',
+  'allPersonEventsCaptured',
+  'allClaimProvenanceCaptured',
+  'allFamilyRelationshipsCaptured',
+  'editorialPassCompleted',
+];
 
 function usage() {
   console.log(`Usage:
@@ -178,6 +189,56 @@ function assignmentDirectory(worker, target) {
     safeWorkerId(worker),
     `${target.book}-${target.chapter}`,
   );
+}
+
+function splitChapterKey(key) {
+  const [book, chapter] = key.split('/');
+  return { book, chapter };
+}
+
+function classifyGrokbotOutput(output) {
+  if (
+    output?.run?.agentId == null &&
+    output?.run?.runId == null &&
+    output?.run?.completedAt == null &&
+    ['people', 'surfaces', 'mentions', 'claims', 'translationRepairs', 'candidateDispositions']
+      .every((key) => !Array.isArray(output?.[key]) || output[key].length === 0)
+  ) {
+    return 'template';
+  }
+  if (
+    output?.run?.completedAt &&
+    GROKBOT_COMPLETION_FLAGS.every((key) => output?.coverage?.[key] === true)
+  ) {
+    return 'complete';
+  }
+  return 'partial';
+}
+
+function localGrokbotProgress(worker, target) {
+  const assignmentFile = path.join(assignmentDirectory(worker, target), 'assignment.json');
+  if (!fs.existsSync(assignmentFile)) return 'local assignment missing';
+  let assignment;
+  try {
+    assignment = readJson(assignmentFile);
+  } catch {
+    return 'local assignment unreadable';
+  }
+  const counts = { complete: 0, partial: 0, template: 0, missing: 0 };
+  for (const chunk of assignment.chunks ?? []) {
+    const outputFile = path.join(REPO_ROOT, chunk.output);
+    if (!fs.existsSync(outputFile)) {
+      counts.missing += 1;
+      continue;
+    }
+    try {
+      counts[classifyGrokbotOutput(readJson(outputFile))] += 1;
+    } catch {
+      counts.partial += 1;
+    }
+  }
+  return `local chunks complete=${counts.complete} partial=${counts.partial} ` +
+    `template=${counts.template} missing=${counts.missing}`;
 }
 
 function grokBranch(worker, target) {
@@ -642,7 +703,12 @@ function showStatus(opts) {
   console.log(`People work queue: ${Object.keys(ledger.claims).length} active reservation(s)`);
   for (const [key, count] of [...counts].sort()) console.log(`  ${key}: ${count}`);
   for (const [key, claim] of Object.entries(ledger.claims).sort()) {
-    console.log(`  ${key}: ${claim.lane}/${claim.worker} ${claim.status}${claim.sticky ? ' (sticky)' : ''}`);
+    const local = claim.lane === 'grokbot' && claim.status === 'claimed'
+      ? `; ${localGrokbotProgress(claim.worker, splitChapterKey(key))}`
+      : '';
+    console.log(
+      `  ${key}: ${claim.lane}/${claim.worker} ${claim.status}${claim.sticky ? ' (sticky)' : ''}${local}`,
+    );
   }
 }
 
@@ -669,6 +735,30 @@ function release(opts) {
 }
 
 function selfTest() {
+  const template = {
+    schemaVersion: 2,
+    book: 'a',
+    chapter: '001',
+    input: { unitCount: 0, chapterFingerprint: 'sha256:test', candidateScannerVersion: 1, unitDigests: [] },
+    run: { model: 'Grok Bot', promptVersion: 7, agentId: null, runId: null, completedAt: null },
+    people: [],
+    surfaces: [],
+    claims: [],
+    translationRepairs: [],
+    candidateDispositions: [],
+    coverage: {},
+  };
+  if (classifyGrokbotOutput(template) !== 'template') {
+    throw new Error('Seeded Grok Bot output was not classified as a template');
+  }
+  const complete = {
+    ...template,
+    run: { ...template.run, completedAt: new Date(0).toISOString() },
+    coverage: Object.fromEntries(GROKBOT_COMPLETION_FLAGS.map((key) => [key, true])),
+  };
+  if (classifyGrokbotOutput(complete) !== 'complete') {
+    throw new Error('Completed Grok Bot output was not classified as complete');
+  }
   const recoveryFixture = { book: '__people_queue_fixture__', chapter: '999' };
   if (hasLocalCursorRecovery(recoveryFixture, {
     status: 'failed',

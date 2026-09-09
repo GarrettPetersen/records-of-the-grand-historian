@@ -76,7 +76,9 @@ Process exactly one 24histories people-glossary chapter at a time.
 2. Read the generated assignment file. Create or resume the exact branch named there.
 3. Process the assignment's sealed chunks in order. For each chunk, read only
    prompt-people-extraction-compact.txt, that chunk's compact packet, the compact
-   extraction schema, and its seeded output. Do not inspect unrelated chapters, prior
+   extraction schema, and its seeded output. The `output.json` file is an editable
+   template, not evidence that the bot completed the chunk; `people:queue:status`
+   reports local files as `template`, `partial`, `complete`, or `missing`. Do not inspect unrelated chapters, prior
    extractions, or another chunk while writing the current one. Do not call the Cursor SDK.
 4. Complete each seeded chunk extraction. Capture every person, mention, attested time,
    durable claim, relationship, family edge, and candidate disposition. Propose clear

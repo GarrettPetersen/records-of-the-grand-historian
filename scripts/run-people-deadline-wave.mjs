@@ -135,7 +135,7 @@ function main() {
   const opts = parseArgs(process.argv.slice(2));
   if (opts.selfTest) return selfTest();
   const plan = currentPlan(opts);
-  if (plan.blackoutDays > 0) {
+  if (opts.phase !== 'recovery' && plan.blackoutDays > 0) {
     throw new Error(
       `Paid capacity is unavailable until ${plan.capacityStart}; ` +
       `the post-reset target is ${plan.chaptersPerWave} extraction chapters per wave`,
