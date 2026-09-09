@@ -145,6 +145,36 @@ function rebuildPeopleCatalog() {
   if (result.status !== 0) process.exit(result.status ?? 1);
 }
 
+function catalogInputSignature() {
+  const files = [];
+  const addTree = (root) => {
+    if (!fs.existsSync(root)) return;
+    for (const entry of fs.readdirSync(root, { withFileTypes: true })) {
+      const file = path.join(root, entry.name);
+      if (entry.isDirectory()) addTree(file);
+      else if (entry.isFile() && entry.name.endsWith('.json')) files.push(file);
+    }
+  };
+  addTree(path.join(PEOPLE_DIR, 'extractions'));
+  addTree(path.join(PEOPLE_DIR, 'resolutions'));
+  addTree(path.join(PEOPLE_DIR, 'curation'));
+  files.push(path.join(PEOPLE_DIR, 'config.json'), path.join(REPO_ROOT, 'data', 'manifest.json'));
+  for (const entry of fs.readdirSync(path.join(REPO_ROOT, 'data'), { withFileTypes: true })) {
+    if (!entry.isDirectory() || ['people', 'quality'].includes(entry.name)) continue;
+    const directory = path.join(REPO_ROOT, 'data', entry.name);
+    for (const name of fs.readdirSync(directory).filter((item) => /^\d{3}\.json$/u.test(item))) {
+      files.push(path.join(directory, name));
+    }
+  }
+  const hash = crypto.createHash('sha256');
+  for (const file of files.sort()) {
+    const stat = fs.statSync(file);
+    hash.update(path.relative(REPO_ROOT, file));
+    hash.update(`\0${stat.size}\0${stat.mtimeMs}\n`);
+  }
+  return hash.digest('hex');
+}
+
 export function phaseCommand(phase, plan) {
   if (phase === 'recovery') {
     return [
@@ -291,15 +321,21 @@ function main() {
     console.log([process.execPath, ...command].join(' '));
     return;
   }
+  const catalogInputsBefore = catalogInputSignature();
   const result = spawnSync(process.execPath, command, {
     cwd: REPO_ROOT,
     env: process.env,
     stdio: 'inherit',
   });
   if (result.error) throw result.error;
-  const completeResolution = opts.phase !== 'resolution' || opts.prepareDossiers ||
-    (plan.resolutionOutput && fs.existsSync(plan.resolutionOutput));
-  if (completeResolution && !opts.prepareDossiers) rebuildPeopleCatalog();
+  const catalogInputsChanged = catalogInputsBefore !== catalogInputSignature();
+  const resolutionOutputNeedsCatalog = opts.phase === 'resolution' &&
+    plan.resolutionOutput && fs.existsSync(plan.resolutionOutput);
+  if (!opts.prepareDossiers && (catalogInputsChanged || resolutionOutputNeedsCatalog)) {
+    rebuildPeopleCatalog();
+  } else if (!opts.prepareDossiers) {
+    console.log('Campaign wave changed no catalog inputs; skipping the catalog rebuild');
+  }
   if (result.status !== 0) process.exit(result.status ?? 1);
 }
 
