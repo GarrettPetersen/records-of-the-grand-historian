@@ -1766,7 +1766,8 @@ function isNarrowChineseException(text, reason) {
     if (/(?:glyph|decomposition|rare|source[-\s]?glyph)/u.test(normalizedReason) && /\[[^\]\n]*[\u4e00-\u9fff][^\]\n]*\+[^\]\n]*\]/u.test(value)) {
       return true;
     }
-    if (/(?:disambiguat|same romanization)/u.test(normalizedReason) && /\b[A-Z][A-Za-z'’.-]*\s*\([\u4e00-\u9fff]{1,4}\)/u.test(value)) {
+    if (/(?:disambiguat|same romanization)/u.test(normalizedReason)
+      && /\b[A-Z][A-Za-z'’.-]*(?:\s+[A-Z][A-Za-z'’.-]*)*\s*\([\u4e00-\u9fff]{1,4}\)/u.test(value)) {
       return true;
     }
     if (/(?:Officeholder|officeholder|Minister|Vice Minister|Censor|General|Grand Secretary|served|transferred|appointed|relieved|removed|died|declined|did not take|concurrently|granted leave|went on|mourning)[^。]*[\u4e00-\u9fff]/u.test(value)) {
@@ -1793,6 +1794,10 @@ function suspiciousHanExceptionMatch(text, reason) {
   if (!matches.length) return null;
   if (!/(?:proper[-\s]?name|personal[-\s]?name|office[-\s]?table|table[-\s]?cell)/u.test(normalizedReason)) {
     return null;
+  }
+  if (/(?:office[-\s]?table|table[-\s]?cell)/u.test(normalizedReason)
+    && !/(?:disambiguat|same romanization|glyph|written[-\s]?form)/u.test(normalizedReason)) {
+    return matches[0];
   }
   const officeOrAction = /(?:尚書|侍郎|大臣|將軍|都統|副都統|總督|巡撫|布政使|按察使|提督|總兵|參贊|辦事|領隊|理藩院|內閣|軍機|翰林院|都察院|戶部|吏部|禮部|兵部|刑部|工部|駐藏|休致|出師|改設|兼管|事務|回部|[正一二三四五六七八九十閏]?[月][甲乙丙丁戊己庚辛壬癸子丑寅卯辰巳午未申酉戌亥]+(?:召|殉|卒|休致)?)/u;
   for (const match of matches) {
@@ -1828,7 +1833,8 @@ export function scanArtifactText(text, opts = {}) {
         index: match?.index || 0,
         excerpt: excerpt(text, match?.index || 0),
       });
-    } else if ((suspiciousMatch || !isNarrowChineseException(text, opts.allowChineseCharactersReason)) && englishWordCount(text) >= 6) {
+    } else if (suspiciousMatch
+      || (!isNarrowChineseException(text, opts.allowChineseCharactersReason) && englishWordCount(text) >= 6)) {
       hits.push({
         ruleId: 'BROAD_CHINESE_CHARACTERS_EXCEPTION',
         severity: 2,
