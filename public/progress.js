@@ -100,6 +100,7 @@ function validateSummary(summary) {
         'editorialReviewChapters',
         'identityReviewChapters',
         'chaptersWithUnresolvedPeople',
+        'actionableResolutionChapters',
         'identityCleanChapters',
         'rereviewChapters',
         'missingChapters',

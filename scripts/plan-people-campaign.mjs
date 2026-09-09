@@ -16,6 +16,8 @@ const CAMPAIGN_EDITORIAL_MAX_RUN_COST_DOLLARS = 3;
 const CAMPAIGN_EDITORIAL_MAX_RUN_TOKENS = 4_000_000;
 const CAMPAIGN_RESOLUTION_MAX_RUN_COST_DOLLARS = 3;
 const CAMPAIGN_RESOLUTION_MAX_RUN_TOKENS = 4_000_000;
+const RESOLUTION_EASY_PER_TAIL = 7;
+const RESOLUTION_TAIL_QUANTILE = 0.6;
 const ALIAS_DISPOSITION_DEBT_PATH = path.join(
   REPO_ROOT,
   'data',
@@ -169,75 +171,53 @@ export function campaignProgress(progress, aliasDispositionDebt = new Set()) {
   };
 }
 
-export function campaignIdentityProgress(progress, catalog = null) {
-  if (!catalog) {
-    const pendingResolutionChapters = [...progress.byChapter.entries()]
-      .filter(([, chapter]) => chapter.state === 'current' && chapter.unresolvedPeople > 0)
-      .map(([chapterId, chapter]) => ({ chapterId, unresolvedPeople: chapter.unresolvedPeople }))
-      .sort((left, right) =>
-        left.unresolvedPeople - right.unresolvedPeople || left.chapterId.localeCompare(right.chapterId));
-    if (
-      !Number.isInteger(progress.summary.identityCleanChapters) ||
-      !Number.isInteger(progress.summary.peopleNeedingReview) ||
-      !Number.isInteger(progress.summary.unresolvedCandidateBlocks)
-    ) {
-      throw new Error('People progress lacks canonical identity status; run npm run people:catalog');
-    }
-    return {
-      identityClosedChapters: progress.summary.identityCleanChapters,
-      pendingIdentityChapters: pendingResolutionChapters.length,
-      resolutionDebt: progress.summary.sourceChapters - progress.summary.identityCleanChapters,
-      peopleNeedingReview: progress.summary.peopleNeedingReview,
-      unresolvedCandidateBlocks: progress.summary.unresolvedCandidateBlocks,
-      pendingResolutionChapters,
-    };
-  }
-  if (
-    catalog.stats?.sourceChapters !== progress.summary.sourceChapters ||
-    catalog.stats?.extractedChapters !== progress.summary.extractedChapters
-  ) {
-    throw new Error('People catalog is stale relative to extraction progress; run npm run people:catalog');
-  }
-  const currentChapters = new Set([...progress.byChapter.entries()]
-    .filter(([, chapter]) => chapter.state === 'current')
-    .map(([chapterId]) => chapterId));
-  const unresolvedByChapter = new Map();
-  const seenPersonChapters = new Set();
-  const peopleNeedingReview = catalog.people.filter((person) => person.curation?.status === 'needs-review');
-  for (const person of peopleNeedingReview) {
-    for (const localId of person.localPeople) {
-      const [book, chapter] = localId.split(':');
-      const chapterId = `${book}:${chapter}`;
-      if (!currentChapters.has(chapterId)) continue;
-      const key = `${person.id}\u0000${chapterId}`;
-      if (seenPersonChapters.has(key)) continue;
-      seenPersonChapters.add(key);
-      unresolvedByChapter.set(chapterId, (unresolvedByChapter.get(chapterId) ?? 0) + 1);
-    }
-  }
-  const pendingResolutionChapters = [...unresolvedByChapter.entries()]
-    .map(([chapterId, unresolvedPeople]) => ({ chapterId, unresolvedPeople }))
+export function campaignIdentityProgress(progress) {
+  const pendingResolutionChapters = [...progress.byChapter.entries()]
+    .filter(([, chapter]) => chapter.state === 'current' && chapter.resolutionTargetPeople > 0)
+    .map(([chapterId, chapter]) => ({
+      chapterId,
+      unresolvedPeople: chapter.unresolvedPeople,
+      resolutionTargetPeople: chapter.resolutionTargetPeople,
+      resolutionCandidatePeople: chapter.resolutionCandidatePeople,
+      resolutionComparisons: chapter.resolutionComparisons,
+      resolutionMaxBlockPeople: chapter.resolutionMaxBlockPeople,
+    }))
     .sort((left, right) =>
-      left.unresolvedPeople - right.unresolvedPeople || left.chapterId.localeCompare(right.chapterId));
-  const identityClosedChapters = currentChapters.size - pendingResolutionChapters.length;
+      left.resolutionComparisons - right.resolutionComparisons ||
+      left.resolutionCandidatePeople - right.resolutionCandidatePeople ||
+      left.chapterId.localeCompare(right.chapterId));
+  if (
+    !Number.isInteger(progress.summary.identityCleanChapters) ||
+    !Number.isInteger(progress.summary.chaptersWithUnresolvedPeople) ||
+    !Number.isInteger(progress.summary.peopleNeedingReview) ||
+    !Number.isInteger(progress.summary.unresolvedCandidateBlocks)
+  ) {
+    throw new Error('People progress lacks canonical identity status; run npm run people:catalog');
+  }
   return {
-    identityClosedChapters,
-    pendingIdentityChapters: pendingResolutionChapters.length,
-    resolutionDebt: progress.summary.sourceChapters - identityClosedChapters,
-    peopleNeedingReview: peopleNeedingReview.length,
-    unresolvedCandidateBlocks: catalog.stats.unresolvedCandidateBlocks,
+    identityClosedChapters: progress.summary.identityCleanChapters,
+    pendingIdentityChapters: progress.summary.chaptersWithUnresolvedPeople,
+    actionableResolutionChapters: pendingResolutionChapters.length,
+    resolutionDebt: progress.summary.sourceChapters - progress.summary.identityCleanChapters,
+    peopleNeedingReview: progress.summary.peopleNeedingReview,
+    unresolvedCandidateBlocks: progress.summary.unresolvedCandidateBlocks,
     pendingResolutionChapters,
   };
 }
 
 export function selectResolutionChapters(pendingChapters, limit) {
   const pool = pendingChapters.map((item) => ({ ...item }))
-    .sort((left, right) =>
-      left.unresolvedPeople - right.unresolvedPeople || left.chapterId.localeCompare(right.chapterId));
+    .sort((left, right) => {
+      const leftWork = left.resolutionComparisons ?? left.unresolvedPeople;
+      const rightWork = right.resolutionComparisons ?? right.unresolvedPeople;
+      return leftWork - rightWork ||
+        (left.resolutionCandidatePeople ?? 0) - (right.resolutionCandidatePeople ?? 0) ||
+        left.chapterId.localeCompare(right.chapterId);
+    });
   const selected = [];
   while (pool.length > 0 && selected.length < limit) {
-    const tailTurn = selected.length % 4 === 3;
-    const index = tailTurn ? Math.floor((pool.length - 1) * 0.75) : 0;
+    const tailTurn = selected.length % (RESOLUTION_EASY_PER_TAIL + 1) === RESOLUTION_EASY_PER_TAIL;
+    const index = tailTurn ? Math.floor((pool.length - 1) * RESOLUTION_TAIL_QUANTILE) : 0;
     selected.push(pool.splice(index, 1)[0]);
   }
   return selected;
@@ -326,24 +306,25 @@ function selfTest() {
     throw new Error(`Unexpected campaign progress: ${JSON.stringify(completion)}`);
   }
   const identity = campaignIdentityProgress({
-    summary: { sourceChapters: 5, extractedChapters: 4 },
+    summary: {
+      sourceChapters: 5,
+      identityCleanChapters: 1,
+      chaptersWithUnresolvedPeople: 2,
+      peopleNeedingReview: 1,
+      unresolvedCandidateBlocks: 3,
+    },
     byChapter: new Map([
-      ['a:001', { state: 'current' }],
-      ['a:002', { state: 'current' }],
-      ['a:003', { state: 'current' }],
-      ['a:004', { state: 'rereview' }],
-      ['a:005', { state: 'missing' }],
+      ['a:001', { state: 'current', unresolvedPeople: 1, resolutionTargetPeople: 1, resolutionCandidatePeople: 8, resolutionComparisons: 7, resolutionMaxBlockPeople: 8 }],
+      ['a:002', { state: 'current', unresolvedPeople: 1, resolutionTargetPeople: 0, resolutionCandidatePeople: 0, resolutionComparisons: 0, resolutionMaxBlockPeople: 0 }],
+      ['a:003', { state: 'current', unresolvedPeople: 0, resolutionTargetPeople: 0, resolutionCandidatePeople: 0, resolutionComparisons: 0, resolutionMaxBlockPeople: 0 }],
+      ['a:004', { state: 'rereview', unresolvedPeople: 1, resolutionTargetPeople: 1, resolutionCandidatePeople: 3, resolutionComparisons: 2, resolutionMaxBlockPeople: 3 }],
+      ['a:005', { state: 'missing', unresolvedPeople: 0, resolutionTargetPeople: 0, resolutionCandidatePeople: 0, resolutionComparisons: 0, resolutionMaxBlockPeople: 0 }],
     ]),
-  }, {
-    stats: { sourceChapters: 5, extractedChapters: 4, unresolvedCandidateBlocks: 3 },
-    people: [
-      { id: 'p1', curation: { status: 'needs-review' }, localPeople: ['a:001:p001', 'a:002:p001'] },
-      { id: 'p2', curation: { status: 'machine-reviewed' }, localPeople: ['a:003:p001'] },
-    ],
   });
   if (
     identity.identityClosedChapters !== 1 ||
     identity.pendingIdentityChapters !== 2 ||
+    identity.actionableResolutionChapters !== 1 ||
     identity.resolutionDebt !== 4 ||
     identity.peopleNeedingReview !== 1 ||
     identity.unresolvedCandidateBlocks !== 3
@@ -359,6 +340,19 @@ function selfTest() {
   ], 4);
   if (selected.map((item) => item.chapterId).join(',') !== 'a:001,a:002,a:003,a:004') {
     throw new Error(`Unexpected balanced resolution selection: ${JSON.stringify(selected)}`);
+  }
+  const workloadSelection = selectResolutionChapters(
+    Array.from({ length: 10 }, (_, index) => ({
+      chapterId: `a:${String(index + 1).padStart(3, '0')}`,
+      unresolvedPeople: 1,
+      resolutionComparisons: index + 1,
+      resolutionCandidatePeople: index + 2,
+    })),
+    9,
+  );
+  if (workloadSelection.map((item) => item.chapterId).join(',') !==
+      'a:001,a:002,a:003,a:004,a:005,a:006,a:007,a:009,a:008') {
+    throw new Error(`Unexpected workload-aware resolution selection: ${JSON.stringify(workloadSelection)}`);
   }
   console.log('people campaign planner self-test: ok');
 }
@@ -447,7 +441,9 @@ function main() {
   );
   console.log(
     `Identity-clean: ${identity.identityClosedChapters}/${progress.sourceChapters}; ` +
-    `${identity.pendingIdentityChapters} current chapter(s), ${identity.peopleNeedingReview} people, and ` +
+    `${identity.pendingIdentityChapters} current chapter(s) are affected, ` +
+    `${identity.actionableResolutionChapters} chapter(s) can seed unresolved comparisons, ` +
+    `${identity.peopleNeedingReview} people, and ` +
     `${identity.unresolvedCandidateBlocks} candidate blocks still need resolution`,
   );
   console.log(`Alias callback rereview: ${completion.aliasDispositionChapters} current chapter(s)`);

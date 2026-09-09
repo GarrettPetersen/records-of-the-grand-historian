@@ -49,7 +49,10 @@ if (corpus.summary.sourceChapters !== chapterStates.length ||
     corpus.summary.completeChapters !== countedComplete ||
     corpus.summary.editorialReviewChapters !== countedEditorial ||
     corpus.summary.identityReviewChapters !== countedIdentity ||
-    chapterStates.some((chapter) => !chapter.glossaryState || !Number.isInteger(chapter.unresolvedPeople))) {
+    chapterStates.some((chapter) => !chapter.glossaryState ||
+      !Number.isInteger(chapter.unresolvedPeople) ||
+      !Number.isInteger(chapter.resolutionTargetPeople) ||
+      !Number.isInteger(chapter.resolutionComparisons))) {
   throw new Error(`Corpus people progress is inconsistent: ${JSON.stringify(corpus.summary)}`);
 }
 

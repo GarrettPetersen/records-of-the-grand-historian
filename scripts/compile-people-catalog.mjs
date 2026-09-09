@@ -727,6 +727,58 @@ export function unresolvedCandidateState(candidateDocument, localMap, keepSepara
   return { blocks, localPeople };
 }
 
+export function buildResolutionWorkByChapter(unresolvedBlocks, unresolvedLocalPeople, localMap) {
+  const work = new Map();
+  for (const block of unresolvedBlocks) {
+    const groups = Object.groupBy(block.localPeople, (localId) => localMap.get(localId));
+    const canonicalIds = Object.keys(groups);
+    const targetsByChapter = new Map();
+    for (const localId of block.localPeople) {
+      if (!unresolvedLocalPeople.has(localId)) continue;
+      const [book, chapter] = localId.split(':');
+      const chapterId = `${book}:${chapter}`;
+      if (!targetsByChapter.has(chapterId)) {
+        targetsByChapter.set(chapterId, { localPeople: new Set(), canonicalPeople: new Set() });
+      }
+      const targets = targetsByChapter.get(chapterId);
+      targets.localPeople.add(localId);
+      targets.canonicalPeople.add(localMap.get(localId));
+    }
+    for (const [chapterId, targets] of targetsByChapter) {
+      if (!work.has(chapterId)) {
+        work.set(chapterId, {
+          blockIds: new Set(),
+          targetLocalPeople: new Set(),
+          targetCanonicalPeople: new Set(),
+          candidateLocalPeople: new Set(),
+          candidateCanonicalPeople: new Set(),
+          comparisons: 0,
+          maxBlockLocalPeople: 0,
+        });
+      }
+      const chapter = work.get(chapterId);
+      chapter.blockIds.add(block.id);
+      targets.localPeople.forEach((id) => chapter.targetLocalPeople.add(id));
+      targets.canonicalPeople.forEach((id) => chapter.targetCanonicalPeople.add(id));
+      block.localPeople.forEach((id) => chapter.candidateLocalPeople.add(id));
+      canonicalIds.forEach((id) => chapter.candidateCanonicalPeople.add(id));
+      chapter.comparisons += targets.canonicalPeople.size *
+        Math.max(0, canonicalIds.length - targets.canonicalPeople.size);
+      chapter.maxBlockLocalPeople = Math.max(chapter.maxBlockLocalPeople, block.localPeople.length);
+    }
+  }
+  return Object.fromEntries([...work.entries()].sort(([left], [right]) => left.localeCompare(right))
+    .map(([chapterId, chapter]) => [chapterId, {
+      unresolvedBlocks: chapter.blockIds.size,
+      targetLocalPeople: chapter.targetLocalPeople.size,
+      targetCanonicalPeople: chapter.targetCanonicalPeople.size,
+      candidateLocalPeople: chapter.candidateLocalPeople.size,
+      candidateCanonicalPeople: chapter.candidateCanonicalPeople.size,
+      comparisons: chapter.comparisons,
+      maxBlockLocalPeople: chapter.maxBlockLocalPeople,
+    }]));
+}
+
 export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationOverrides = {}) {
   if (!corpus.coverage || !Number.isInteger(corpus.coverage.sourceChapters) ||
       !Number.isInteger(corpus.coverage.extractedChapters) || !Array.isArray(corpus.coverage.missingChapterIds)) {
@@ -746,6 +798,11 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
   const unresolvedState = unresolvedCandidateState(candidateDocument, localMap, resolved.keepSeparate);
   const unresolvedBlocks = unresolvedState.blocks;
   const unresolvedLocalPeople = unresolvedState.localPeople;
+  const resolutionWorkByChapter = buildResolutionWorkByChapter(
+    unresolvedBlocks,
+    unresolvedLocalPeople,
+    localMap,
+  );
   const roleData = readJson(path.join(PEOPLE_DIR, 'curation', 'role-vocabulary.json'));
   const roleLabels = new Map(roleData.roles.map((role) => [role.id, role.label]));
   const canonicalByKnownId = new Map();
@@ -850,6 +907,7 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
       familyEdges,
       localPersonMap,
       unresolvedCandidateBlockIds: unresolvedBlocks.map((block) => block.id),
+      resolutionWorkByChapter,
       missingChapterIds,
   };
   assertPeopleCatalogPublicationState(catalog);
@@ -1049,6 +1107,13 @@ function selfTest() {
   if (resolvedPage.curation.status !== 'machine-reviewed' ||
       ambiguousPages.some((person) => person.curation.status !== 'needs-review')) {
     throw new Error('An unresolved pair contaminated a separately resolved participant in the same candidate block');
+  }
+  const homonymWorkChapters = Object.keys(homonymCatalog.resolutionWorkByChapter);
+  if (homonymWorkChapters.join(',') !== 'fixture:012,fixture:013' ||
+      homonymWorkChapters.some((chapterId) =>
+        homonymCatalog.resolutionWorkByChapter[chapterId].targetCanonicalPeople !== 1
+      )) {
+    throw new Error('Resolution work included a chapter whose local person has no unresolved comparison');
   }
   if (!/^per_[0-9A-HJKMNP-TV-Z]{20}$/u.test(fan.id)) throw new Error('Stable canonical ID is invalid');
   const retiredOverrideResult = compilePeopleCatalog(corpus, resolution, {

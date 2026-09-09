@@ -631,6 +631,10 @@ function applyPeopleIdentityProgress(byChapter, summary) {
     catalog.stats?.extractedChapters === summary.extractedChapters,
     'canonical catalog is stale relative to extraction coverage; run npm run people:catalog',
   );
+  assertPeopleProgress(
+    catalog.resolutionWorkByChapter && typeof catalog.resolutionWorkByChapter === 'object',
+    'canonical catalog lacks chapter resolution workload; run npm run people:catalog',
+  );
   const unresolvedByChapter = new Map();
   const seenPersonChapters = new Set();
   const peopleNeedingReview = catalog.people.filter((person) => person.curation?.status === 'needs-review');
@@ -653,9 +657,17 @@ function applyPeopleIdentityProgress(byChapter, summary) {
     missing: 0,
   };
   let chaptersWithUnresolvedPeople = 0;
+  let actionableResolutionChapters = 0;
   for (const [chapterId, chapter] of byChapter) {
+    const resolutionWork = catalog.resolutionWorkByChapter[chapterId] ?? {};
     chapter.unresolvedPeople = unresolvedByChapter.get(chapterId) ?? 0;
+    chapter.unresolvedBlocks = resolutionWork.unresolvedBlocks ?? 0;
+    chapter.resolutionTargetPeople = resolutionWork.targetCanonicalPeople ?? 0;
+    chapter.resolutionCandidatePeople = resolutionWork.candidateLocalPeople ?? 0;
+    chapter.resolutionComparisons = resolutionWork.comparisons ?? 0;
+    chapter.resolutionMaxBlockPeople = resolutionWork.maxBlockLocalPeople ?? 0;
     if (chapter.state === 'current' && chapter.unresolvedPeople > 0) chaptersWithUnresolvedPeople += 1;
+    if (chapter.state === 'current' && chapter.resolutionTargetPeople > 0) actionableResolutionChapters += 1;
     chapter.glossaryState = chapter.state === 'current'
       ? chapter.pendingTranslationRepairs > 0
         ? 'editorial-review'
@@ -671,6 +683,7 @@ function applyPeopleIdentityProgress(byChapter, summary) {
     editorialReviewChapters: glossaryStateCounts['editorial-review'],
     identityReviewChapters: glossaryStateCounts['identity-review'],
     chaptersWithUnresolvedPeople,
+    actionableResolutionChapters,
     identityCleanChapters: summary.currentChapters - chaptersWithUnresolvedPeople,
     peopleNeedingReview: peopleNeedingReview.length,
     unresolvedCandidateBlocks: catalog.stats.unresolvedCandidateBlocks,

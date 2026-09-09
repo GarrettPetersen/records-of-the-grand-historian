@@ -306,6 +306,7 @@ function main() {
   if (opts.phase === 'resolution') {
     console.log(
       `Resolution selection: ${plan.resolutionScopes.length} chapter scope(s), ` +
+      `${plan.actionableResolutionChapters} actionable seed chapter(s), ` +
       `${plan.peopleNeedingReview} people and ${plan.unresolvedCandidateBlocks} candidate blocks currently unresolved; ` +
       `batch ${plan.resolutionBatchName}`,
     );
