@@ -326,6 +326,7 @@ export function resolvePeopleClusters(localPeople, resolutionDocuments = []) {
   const modelKeepSeparate = new Set();
   const curatedKeepSeparate = new Set();
   const curatedMerges = [];
+  const possibleSameAsGroups = [];
   const pins = new Map();
   for (const document of resolutionDocuments) {
     const curated = document.authority === 'curated';
@@ -347,6 +348,8 @@ export function resolvePeopleClusters(localPeople, resolutionDocuments = []) {
             target.add(pairKey(decisionLocalPeople[left], decisionLocalPeople[right]));
           }
         }
+      } else if (decision.decision === 'possible-same-as') {
+        possibleSameAsGroups.push(decisionLocalPeople);
       }
       if (decision.canonicalPersonId) {
         for (const localId of decisionLocalPeople) pins.set(localId, decision.canonicalPersonId);
@@ -473,5 +476,17 @@ export function resolvePeopleClusters(localPeople, resolutionDocuments = []) {
     cluster.retiredIds = cluster.retiredIds.filter((id) => !canonicalOwners.has(id));
   }
   clusters.sort((a, b) => a.canonicalPersonId.localeCompare(b.canonicalPersonId));
-  return { clusters, keepSeparate };
+  const canonicalByLocal = new Map(clusters.flatMap((cluster) =>
+    cluster.localPeople.map((localId) => [localId, cluster.canonicalPersonId])
+  ));
+  const possibleSameAs = new Set();
+  for (const localPeopleGroup of possibleSameAsGroups) {
+    const canonicalPeople = [...new Set(localPeopleGroup.map((localId) => canonicalByLocal.get(localId)))];
+    for (let left = 0; left < canonicalPeople.length; left += 1) {
+      for (let right = left + 1; right < canonicalPeople.length; right += 1) {
+        possibleSameAs.add(pairKey(canonicalPeople[left], canonicalPeople[right]));
+      }
+    }
+  }
+  return { clusters, keepSeparate, possibleSameAs };
 }

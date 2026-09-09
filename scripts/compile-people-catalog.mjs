@@ -707,7 +707,16 @@ function canonicalRecord(cluster, corpus, localMap, roleLabels, unresolvedLocalP
   };
 }
 
-export function unresolvedCandidateState(candidateDocument, localMap, keepSeparate) {
+function identityPairKey(left, right) {
+  return [left, right].sort().join('\u0000');
+}
+
+export function unresolvedCandidateState(
+  candidateDocument,
+  localMap,
+  keepSeparate,
+  possibleSameAs = new Set(),
+) {
   const blocks = [];
   const localPeople = new Set();
   for (const block of candidateDocument.blocks) {
@@ -718,18 +727,28 @@ export function unresolvedCandidateState(candidateDocument, localMap, keepSepara
       roots.get(canonicalId).push(localId);
     }
     if (roots.size <= 1) continue;
-    const groups = [...roots.values()];
-    let blockUnresolved = false;
+    const groups = [...roots.entries()];
+    const reviewPairs = [];
     for (let left = 0; left < groups.length; left += 1) {
       for (let right = left + 1; right < groups.length; right += 1) {
-        const separated = groups[left].some((a) => groups[right].some((b) => keepSeparate.has([a, b].sort().join('\u0000'))));
-        if (separated) continue;
-        blockUnresolved = true;
-        for (const localId of groups[left]) localPeople.add(localId);
-        for (const localId of groups[right]) localPeople.add(localId);
+        const [leftCanonical, leftMembers] = groups[left];
+        const [rightCanonical, rightMembers] = groups[right];
+        const separated = leftMembers.some((a) =>
+          rightMembers.some((b) => keepSeparate.has(identityPairKey(a, b)))
+        );
+        if (separated || possibleSameAs.has(identityPairKey(leftCanonical, rightCanonical))) continue;
+        reviewPairs.push([leftCanonical, rightCanonical].sort());
+        for (const localId of leftMembers) localPeople.add(localId);
+        for (const localId of rightMembers) localPeople.add(localId);
       }
     }
-    if (blockUnresolved) blocks.push(block);
+    if (reviewPairs.length === 0) continue;
+    const activeCanonicalPeople = new Set(reviewPairs.flat());
+    blocks.push({
+      ...block,
+      localPeople: block.localPeople.filter((localId) => activeCanonicalPeople.has(localMap.get(localId))),
+      reviewPairs,
+    });
   }
   return { blocks, localPeople };
 }
@@ -737,8 +756,6 @@ export function unresolvedCandidateState(candidateDocument, localMap, keepSepara
 export function buildResolutionWorkByChapter(unresolvedBlocks, unresolvedLocalPeople, localMap) {
   const work = new Map();
   for (const block of unresolvedBlocks) {
-    const groups = Object.groupBy(block.localPeople, (localId) => localMap.get(localId));
-    const canonicalIds = Object.keys(groups);
     const targetsByChapter = new Map();
     for (const localId of block.localPeople) {
       if (!unresolvedLocalPeople.has(localId)) continue;
@@ -768,9 +785,10 @@ export function buildResolutionWorkByChapter(unresolvedBlocks, unresolvedLocalPe
       targets.localPeople.forEach((id) => chapter.targetLocalPeople.add(id));
       targets.canonicalPeople.forEach((id) => chapter.targetCanonicalPeople.add(id));
       block.localPeople.forEach((id) => chapter.candidateLocalPeople.add(id));
-      canonicalIds.forEach((id) => chapter.candidateCanonicalPeople.add(id));
-      chapter.comparisons += targets.canonicalPeople.size *
-        Math.max(0, canonicalIds.length - targets.canonicalPeople.size);
+      block.reviewPairs.flat().forEach((id) => chapter.candidateCanonicalPeople.add(id));
+      chapter.comparisons += block.reviewPairs.filter(([left, right]) =>
+        targets.canonicalPeople.has(left) || targets.canonicalPeople.has(right)
+      ).length;
       chapter.maxBlockLocalPeople = Math.max(chapter.maxBlockLocalPeople, block.localPeople.length);
     }
   }
@@ -802,7 +820,12 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
   for (const cluster of resolved.clusters) {
     for (const localId of cluster.localPeople) localMap.set(localId, cluster.canonicalPersonId);
   }
-  const unresolvedState = unresolvedCandidateState(candidateDocument, localMap, resolved.keepSeparate);
+  const unresolvedState = unresolvedCandidateState(
+    candidateDocument,
+    localMap,
+    resolved.keepSeparate,
+    resolved.possibleSameAs,
+  );
   const unresolvedBlocks = unresolvedState.blocks;
   const unresolvedLocalPeople = unresolvedState.localPeople;
   const resolutionWorkByChapter = buildResolutionWorkByChapter(
@@ -1121,6 +1144,25 @@ function selfTest() {
         homonymCatalog.resolutionWorkByChapter[chapterId].targetCanonicalPeople !== 1
       )) {
     throw new Error('Resolution work included a chapter whose local person has no unresolved comparison');
+  }
+  const reviewedAmbiguity = {
+    schemaVersion: 1,
+    batch: 'reviewed-ambiguity-fixture',
+    decisions: [{
+      decision: 'possible-same-as',
+      localPeople: [ambiguousHomonymA.localId, ambiguousHomonymB.localId],
+      basis: ['insufficient-source-evidence'],
+      confidence: 'medium',
+    }],
+  };
+  const reviewedHomonymCatalog = compilePeopleCatalog(
+    homonymCorpus,
+    [...homonymResolution, reviewedAmbiguity],
+  ).catalog;
+  if (reviewedHomonymCatalog.stats.unresolvedCandidateBlocks !== 0 ||
+      Object.keys(reviewedHomonymCatalog.resolutionWorkByChapter).length !== 0 ||
+      reviewedHomonymCatalog.people.some((person) => person.curation.status !== 'machine-reviewed')) {
+    throw new Error('A reviewed possible identity was scheduled again without new source evidence');
   }
   if (!/^per_[0-9A-HJKMNP-TV-Z]{20}$/u.test(fan.id)) throw new Error('Stable canonical ID is invalid');
   const retiredOverrideResult = compilePeopleCatalog(corpus, resolution, {

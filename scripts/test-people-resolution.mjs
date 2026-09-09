@@ -59,6 +59,18 @@ function candidatePerson(localId, preferredNameSuggestion, nameKind, alias) {
 }
 
 {
+  const people = new Map([person('a'), person('b'), person('c')]);
+  const result = resolvePeopleClusters(people, [
+    resolution('prior-merge', [['merge', ['a', 'b']]]),
+    resolution('reviewed-ambiguity', [['possible-same-as', ['b', 'c']]]),
+  ]);
+  const merged = result.clusters.find((cluster) => cluster.localPeople.includes('a'));
+  const separate = result.clusters.find((cluster) => cluster.localPeople.includes('c'));
+  const expected = [merged.canonicalPersonId, separate.canonicalPersonId].sort().join('\u0000');
+  assert.deepEqual([...result.possibleSameAs], [expected]);
+}
+
+{
   const people = new Map([person('a'), person('b')]);
   assert.throws(() => resolvePeopleClusters(people, [
     resolution('model-merge', [['merge', ['a', 'b']]]),
