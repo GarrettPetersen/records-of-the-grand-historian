@@ -79,7 +79,7 @@ function normalizeName(language, value) {
 
 function localNameKeys(person) {
   const keys = new Map();
-  const preferredSurnameOnlyKeys = new Set();
+  const preferredNonBlockingClaimKeys = new Set();
   for (const language of ['en', 'zh']) {
     const preferredKey = normalizeName(language, person.preferredNameSuggestion[language]);
     if (!preferredKey) continue;
@@ -88,8 +88,11 @@ function localNameKeys(person) {
       .filter((claim) => normalizeName(language, claim.value?.[language]) === preferredKey)
       .map((claim) => claim.value?.kind)
       .filter(Boolean);
-    if (matchingKinds.length > 0 && matchingKinds.every((kind) => kind === 'surname')) {
-      preferredSurnameOnlyKeys.add(preferredKey);
+    if (
+      matchingKinds.length > 0 &&
+      matchingKinds.every((kind) => NON_BLOCKING_NAME_KINDS.has(kind))
+    ) {
+      preferredNonBlockingClaimKeys.add(preferredKey);
     }
   }
   const add = (language, value, kind, source) => {
@@ -100,8 +103,8 @@ function localNameKeys(person) {
     const strongForm = language === 'zh'
       ? !WEAK_CHINESE_NAMES.has(bare) && (preferred || Array.from(bare).length >= 2)
       : !WEAK_ENGLISH_NAMES.has(bare) && (bare.includes(' ') || bare.length >= 4);
-    const surnameOnlyPreferred = preferred && preferredSurnameOnlyKeys.has(key);
-    const blocking = strongForm && !surnameOnlyPreferred &&
+    const nonBlockingPreferred = preferred && preferredNonBlockingClaimKeys.has(key);
+    const blocking = strongForm && !nonBlockingPreferred &&
       (preferred || !NON_BLOCKING_NAME_KINDS.has(kind));
     const current = keys.get(key) ?? {
       key, language, value: String(value), kinds: new Set(), sources: new Set(), blocking: false,

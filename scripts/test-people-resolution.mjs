@@ -166,6 +166,25 @@ function candidatePerson(localId, preferredNameSuggestion, nameKind, alias) {
 {
   const people = new Map([
     candidatePerson(
+      'han-emperor-hui',
+      { en: 'Emperor Hui of Han', zh: '惠' },
+      'posthumous',
+      { en: 'Emperor Hui of Han', zh: '惠' },
+    ),
+    candidatePerson(
+      'wei-prince-hui',
+      { en: 'Prince Hui of Wei', zh: '惠' },
+      'posthumous',
+      { en: 'Prince Hui of Wei', zh: '惠' },
+    ),
+  ]);
+  const result = buildResolutionCandidates(people);
+  assert.equal(result.blocks.length, 0, 'preferred posthumous fragments must remain non-blocking');
+}
+
+{
+  const people = new Map([
+    candidatePerson(
       'scholar-wang',
       { en: 'Wang', zh: '王' },
       'surname',
