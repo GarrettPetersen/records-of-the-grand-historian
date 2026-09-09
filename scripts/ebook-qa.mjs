@@ -15,14 +15,16 @@ const MANIFEST_PATH = path.join(REPO_ROOT, 'ebooks', 'manifest.json');
 
 function usage() {
   console.error(`Usage:
-  node scripts/ebook-qa.mjs --slug SLUG [--book BOOK] [--skip-calibre]
-  node scripts/ebook-qa.mjs --all [--skip-calibre]
+  node scripts/ebook-qa.mjs --slug SLUG [--book BOOK] [--skip-calibre] [--allow-people-preview]
+  node scripts/ebook-qa.mjs --all [--skip-calibre] [--allow-people-preview]
 
 Options:
   --slug SLUG      E-book product slug under dist/ebooks/
   --book BOOK      Source book id; derived from ebooks/manifest.json when omitted
   --all            Run QA for every product listed in ebooks/manifest.json
   --skip-calibre   Skip optional Calibre EPUB->AZW3 conversion smoke test
+  --allow-people-preview
+                  Allow an explicitly generated incomplete people glossary during QA
   --require-languagetool-current
                   Require current cached LanguageTool scores for the product source chapters
   --require-manual-signoff
@@ -35,6 +37,7 @@ function parseArgs(argv) {
     book: null,
     all: false,
     skipCalibre: false,
+    allowPeoplePreview: false,
     requireLanguageToolCurrent: false,
     requireManualSignoff: false,
   };
@@ -46,6 +49,10 @@ function parseArgs(argv) {
     }
     if (arg === '--skip-calibre') {
       opts.skipCalibre = true;
+      continue;
+    }
+    if (arg === '--allow-people-preview') {
+      opts.allowPeoplePreview = true;
       continue;
     }
     if (arg === '--require-languagetool-current') {
@@ -140,7 +147,12 @@ function runProduct(productLike, opts) {
     process.exit(1);
   }
 
-  run('EPUB structure validation', 'node', ['scripts/validate-ebook.mjs', epubPath]);
+  const peoplePreviewArgs = opts.allowPeoplePreview ? ['--allow-people-preview'] : [];
+  run('EPUB structure validation', 'node', [
+    'scripts/validate-ebook.mjs',
+    ...peoplePreviewArgs,
+    epubPath,
+  ]);
   run('Publication blocker scan', 'node', ['scripts/scan-ebook-publication-blockers.mjs', '--slug', slug, '--fail']);
 
   if (!opts.skipCalibre) {

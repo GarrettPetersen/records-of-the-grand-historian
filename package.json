@@ -24,7 +24,7 @@
     "people:generated-data:self-test": "node scripts/test-people-generated-data.mjs",
     "people:maintenance": "npm run people:catalog && node scripts/generate-people-maintenance-report.mjs",
     "people:maintenance:self-test": "node scripts/generate-people-maintenance-report.mjs --self-test",
-    "people:site": "node scripts/generate-people-pages.mjs",
+    "people:site": "node generate-static-pages.js && node scripts/generate-people-pages.mjs",
     "people:site:self-test": "node scripts/test-people-site.mjs",
     "people:site:verify": "node scripts/verify-people-site.mjs",
     "ebook:people:self-test": "node scripts/test-ebook-people-readiness.mjs",

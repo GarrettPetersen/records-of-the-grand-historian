@@ -752,7 +752,7 @@ collisions. The generated shards, index page, and vendored family-tree browser
 assets are gitignored and rebuilt during deployment.
 
 ```bash
-# Rebuild the directory, person records, and local family-tree assets
+# Rebuild linked chapter HTML, the directory, person records, and family-tree assets
 npm run people:site
 
 # Verify every generated record and every linked chapter mention
