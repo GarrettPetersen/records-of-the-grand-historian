@@ -135,6 +135,37 @@ function candidatePerson(localId, preferredNameSuggestion, nameKind, alias) {
 {
   const people = new Map([
     candidatePerson(
+      'crown-prince-a',
+      { en: 'Crown Prince', zh: '皇太子' },
+      'title',
+      { en: 'Crown Prince', zh: '皇太子' },
+    ),
+    candidatePerson(
+      'crown-prince-b',
+      { en: 'Crown Prince', zh: '太子' },
+      'title',
+      { en: 'Crown Prince', zh: '太子' },
+    ),
+    candidatePerson(
+      'imperial-prince-a',
+      { en: 'Imperial Prince', zh: '皇子' },
+      'title',
+      { en: 'Imperial Prince', zh: '皇子' },
+    ),
+    candidatePerson(
+      'imperial-prince-b',
+      { en: 'Imperial Prince', zh: '皇子' },
+      'title',
+      { en: 'Imperial Prince', zh: '皇子' },
+    ),
+  ]);
+  const result = buildResolutionCandidates(people);
+  assert.equal(result.blocks.length, 0, 'bare compound sovereign titles must not create identity blocks');
+}
+
+{
+  const people = new Map([
+    candidatePerson(
       'scholar-wang',
       { en: 'Wang', zh: '王' },
       'surname',

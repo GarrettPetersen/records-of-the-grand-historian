@@ -4,10 +4,12 @@ const CROCKFORD32 = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
 const WEAK_ENGLISH_NAMES = new Set([
   'emperor', 'empress', 'king', 'queen', 'prince', 'princess', 'duke', 'marquis',
   'lord', 'lady', 'master', 'minister', 'general', 'governor', 'official', 'ruler',
+  'crown prince', 'crown princess', 'imperial prince', 'imperial princess',
+  'imperial son', 'imperial daughter', 'heir apparent',
 ]);
 const WEAK_CHINESE_NAMES = new Set([
   '上', '主', '侯', '公', '后', '君', '國王', '国王', '天子', '太后', '太子', '夫人',
-  '官', '帝', '王', '王后', '王子', '皇后', '皇太后', '皇太子', '皇帝', '相', '臣',
+  '官', '帝', '王', '王后', '王子', '皇后', '皇子', '皇女', '皇太后', '皇太子', '皇帝', '相', '臣',
   '丞相', '刺史', '大臣', '太守', '宰相', '將軍', '将军', '巡撫', '巡抚', '陛下',
 ]);
 const NON_BLOCKING_NAME_KINDS = new Set([
