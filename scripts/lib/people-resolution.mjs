@@ -4,6 +4,13 @@ const CROCKFORD32 = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
 const WEAK_ENGLISH_NAMES = new Set([
   'emperor', 'empress', 'king', 'queen', 'prince', 'princess', 'duke', 'marquis',
   'lord', 'lady', 'master', 'minister', 'general', 'governor', 'official', 'ruler',
+  'crown prince', 'crown princess', 'imperial prince', 'imperial princess',
+  'imperial son', 'imperial daughter', 'heir apparent',
+]);
+const WEAK_CHINESE_NAMES = new Set([
+  '上', '主', '侯', '公', '后', '君', '國王', '国王', '天子', '太后', '太子', '夫人',
+  '官', '帝', '王', '王后', '王子', '皇后', '皇子', '皇女', '皇太后', '皇太子', '皇帝', '相', '臣',
+  '丞相', '刺史', '大臣', '太守', '宰相', '將軍', '将军', '巡撫', '巡抚', '陛下',
 ]);
 const NON_BLOCKING_NAME_KINDS = new Set([
   'surname',
@@ -66,21 +73,40 @@ function normalizeName(language, value) {
     .toLocaleLowerCase('en')
     .replace(/[^a-z0-9]+/gu, ' ')
     .trim()
-    .replace(/\s+/gu, ' ');
+    .replace(/\s+/gu, ' ')
+    .replace(/^the\s+/u, '');
   return key ? `en:${key}` : null;
 }
 
 function localNameKeys(person) {
   const keys = new Map();
+  const preferredNonBlockingClaimKeys = new Set();
+  for (const language of ['en', 'zh']) {
+    const preferredKey = normalizeName(language, person.preferredNameSuggestion[language]);
+    if (!preferredKey) continue;
+    const matchingKinds = person.claims
+      .filter((claim) => claim.predicate === 'name')
+      .filter((claim) => normalizeName(language, claim.value?.[language]) === preferredKey)
+      .map((claim) => claim.value?.kind)
+      .filter(Boolean);
+    if (
+      matchingKinds.length > 0 &&
+      matchingKinds.every((kind) => NON_BLOCKING_NAME_KINDS.has(kind))
+    ) {
+      preferredNonBlockingClaimKeys.add(preferredKey);
+    }
+  }
   const add = (language, value, kind, source) => {
     const preferred = source === 'preferred';
     const key = normalizeName(language, value);
     if (!key) return;
     const bare = key.slice(3);
     const strongForm = language === 'zh'
-      ? preferred || Array.from(bare).length >= 2
+      ? !WEAK_CHINESE_NAMES.has(bare) && (preferred || Array.from(bare).length >= 2)
       : !WEAK_ENGLISH_NAMES.has(bare) && (bare.includes(' ') || bare.length >= 4);
-    const blocking = strongForm && (preferred || !NON_BLOCKING_NAME_KINDS.has(kind));
+    const nonBlockingPreferred = preferred && preferredNonBlockingClaimKeys.has(key);
+    const blocking = strongForm && !nonBlockingPreferred &&
+      (preferred || !NON_BLOCKING_NAME_KINDS.has(kind));
     const current = keys.get(key) ?? {
       key, language, value: String(value), kinds: new Set(), sources: new Set(), blocking: false,
     };
@@ -206,8 +232,11 @@ export function buildResolutionCandidates(localPeople) {
 }
 
 class UnionFind {
-  constructor(values) {
+  constructor(values, { trackMembers = false } = {}) {
     this.parent = new Map([...values].map((value) => [value, value]));
+    this.membersByRoot = trackMembers
+      ? new Map([...values].map((value) => [value, new Set([value])]))
+      : null;
   }
 
   find(value) {
@@ -225,7 +254,47 @@ class UnionFind {
     if (leftRoot === rightRoot) return;
     const [keep, merge] = [leftRoot, rightRoot].sort();
     this.parent.set(merge, keep);
+    if (this.membersByRoot) {
+      const keepMembers = this.membersByRoot.get(keep);
+      const mergeMembers = this.membersByRoot.get(merge);
+      for (const member of mergeMembers) keepMembers.add(member);
+      this.membersByRoot.delete(merge);
+    }
   }
+
+  members(value) {
+    if (!this.membersByRoot) throw new Error('UnionFind member tracking is not enabled');
+    return this.membersByRoot.get(this.find(value));
+  }
+}
+
+function separationIndex(separations) {
+  const byPerson = new Map();
+  for (const key of separations) {
+    const [left, right] = key.split('\u0000');
+    if (!byPerson.has(left)) byPerson.set(left, new Set());
+    if (!byPerson.has(right)) byPerson.set(right, new Set());
+    byPerson.get(left).add(right);
+    byPerson.get(right).add(left);
+  }
+  return byPerson;
+}
+
+function wouldJoinSeparatedPeople(union, left, right, indexedSeparations) {
+  const leftRoot = union.find(left);
+  const rightRoot = union.find(right);
+  if (leftRoot === rightRoot) return false;
+  const leftMembers = union.members(leftRoot);
+  const rightMembers = union.members(rightRoot);
+  const [scanMembers, targetRoot] = leftMembers.size <= rightMembers.size
+    ? [leftMembers, rightRoot]
+    : [rightMembers, leftRoot];
+  for (const member of scanMembers) {
+    for (const separatedPerson of indexedSeparations.get(member) ?? []) {
+      if (union.find(separatedPerson) === targetRoot) return true;
+    }
+  }
+  return false;
 }
 
 export function connectedBlockComponents(blocks, canonicalByLocal) {
@@ -285,20 +354,6 @@ export function resolvePeopleClusters(localPeople, resolutionDocuments = []) {
     }
   }
 
-  const wouldJoinSeparatedPeople = (union, left, right, separations) => {
-    const leftRoot = union.find(left);
-    const rightRoot = union.find(right);
-    if (leftRoot === rightRoot) return false;
-    for (const key of separations) {
-      const [first, second] = key.split('\u0000');
-      const firstRoot = union.find(first);
-      const secondRoot = union.find(second);
-      if ((firstRoot === leftRoot && secondRoot === rightRoot)
-        || (firstRoot === rightRoot && secondRoot === leftRoot)) return true;
-    }
-    return false;
-  };
-
   const curatedIntentUnion = new UnionFind(ids);
   for (const localPeopleGroup of curatedMerges) {
     const [first, ...rest] = localPeopleGroup;
@@ -325,10 +380,12 @@ export function resolvePeopleClusters(localPeople, resolutionDocuments = []) {
     }
   }
 
-  const modelUnion = new UnionFind(ids);
+  const expandedCuratedSeparationIndex = separationIndex(expandedCuratedKeepSeparate);
+  const explicitDifferentIndex = separationIndex(constraints.different);
+  const modelUnion = new UnionFind(ids, { trackMembers: true });
   for (const key of constraints.same) {
     const [left, right] = key.split('\u0000');
-    if (wouldJoinSeparatedPeople(modelUnion, left, right, expandedCuratedKeepSeparate)) {
+    if (wouldJoinSeparatedPeople(modelUnion, left, right, expandedCuratedSeparationIndex)) {
       throw new Error(`Curated separation contradicts explicit same-person evidence for ${left} and ${right}`);
     }
     modelUnion.union(left, right);
@@ -336,10 +393,10 @@ export function resolvePeopleClusters(localPeople, resolutionDocuments = []) {
   for (const modelMerge of modelMerges) {
     const [first, ...rest] = modelMerge.localPeople;
     for (const other of rest) {
-      if (wouldJoinSeparatedPeople(modelUnion, first, other, constraints.different)) {
+      if (wouldJoinSeparatedPeople(modelUnion, first, other, explicitDifferentIndex)) {
         throw new Error(`${modelMerge.batch} merges people explicitly identified as different: ${first} and ${other}`);
       }
-      if (wouldJoinSeparatedPeople(modelUnion, first, other, expandedCuratedKeepSeparate)) continue;
+      if (wouldJoinSeparatedPeople(modelUnion, first, other, expandedCuratedSeparationIndex)) continue;
       modelUnion.union(first, other);
     }
   }
@@ -366,10 +423,11 @@ export function resolvePeopleClusters(localPeople, resolutionDocuments = []) {
   }
 
   const union = modelUnion;
+  const keepSeparateIndex = separationIndex(keepSeparate);
   for (const localPeopleGroup of curatedMerges) {
     const [first, ...rest] = localPeopleGroup;
     for (const other of rest) {
-      if (wouldJoinSeparatedPeople(union, first, other, keepSeparate)) {
+      if (wouldJoinSeparatedPeople(union, first, other, keepSeparateIndex)) {
         throw new Error(`Curated merge joins people explicitly kept separate: ${first} and ${other}`);
       }
       union.union(first, other);

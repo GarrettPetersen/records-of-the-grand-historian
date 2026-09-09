@@ -115,6 +115,132 @@ function candidatePerson(localId, preferredNameSuggestion, nameKind, alias) {
 
 {
   const people = new Map([
+    candidatePerson(
+      'ritual-emperor-a',
+      { en: 'Emperor', zh: '皇帝' },
+      'title',
+      { en: 'Emperor', zh: '皇帝' },
+    ),
+    candidatePerson(
+      'ritual-emperor-b',
+      { en: 'Emperor', zh: '皇帝' },
+      'title',
+      { en: 'Emperor', zh: '皇帝' },
+    ),
+  ]);
+  const result = buildResolutionCandidates(people);
+  assert.equal(result.blocks.length, 0, 'bare Chinese ruler titles must not create identity blocks');
+}
+
+{
+  const people = new Map([
+    candidatePerson(
+      'crown-prince-a',
+      { en: 'Crown Prince', zh: '皇太子' },
+      'title',
+      { en: 'Crown Prince', zh: '皇太子' },
+    ),
+    candidatePerson(
+      'crown-prince-b',
+      { en: 'Crown Prince', zh: '太子' },
+      'title',
+      { en: 'Crown Prince', zh: '太子' },
+    ),
+    candidatePerson(
+      'imperial-prince-a',
+      { en: 'Imperial Prince', zh: '皇子' },
+      'title',
+      { en: 'Imperial Prince', zh: '皇子' },
+    ),
+    candidatePerson(
+      'imperial-prince-b',
+      { en: 'Imperial Prince', zh: '皇子' },
+      'title',
+      { en: 'Imperial Prince', zh: '皇子' },
+    ),
+  ]);
+  const result = buildResolutionCandidates(people);
+  assert.equal(result.blocks.length, 0, 'bare compound sovereign titles must not create identity blocks');
+}
+
+{
+  const people = new Map([
+    candidatePerson(
+      'qing-empress-dowager-a',
+      { en: 'the Empress Dowager', zh: '皇太后' },
+      'title',
+      { en: 'Empress Dowager', zh: '皇太后' },
+    ),
+    candidatePerson(
+      'qing-empress-dowager-b',
+      { en: 'Empress Dowager', zh: '皇太后' },
+      'title',
+      { en: 'Empress Dowager', zh: '皇太后' },
+    ),
+  ]);
+  const result = buildResolutionCandidates(people);
+  assert.equal(result.blocks.length, 0, 'leading articles must not revive generic title blocks');
+}
+
+{
+  const people = new Map([
+    candidatePerson(
+      'han-emperor-hui',
+      { en: 'Emperor Hui of Han', zh: '惠' },
+      'posthumous',
+      { en: 'Emperor Hui of Han', zh: '惠' },
+    ),
+    candidatePerson(
+      'wei-prince-hui',
+      { en: 'Prince Hui of Wei', zh: '惠' },
+      'posthumous',
+      { en: 'Prince Hui of Wei', zh: '惠' },
+    ),
+  ]);
+  const result = buildResolutionCandidates(people);
+  assert.equal(result.blocks.length, 0, 'preferred posthumous fragments must remain non-blocking');
+}
+
+{
+  const people = new Map([
+    candidatePerson(
+      'scholar-wang',
+      { en: 'Wang', zh: '王' },
+      'surname',
+      { en: 'Wang', zh: '王' },
+    ),
+    candidatePerson(
+      'lady-wang',
+      { en: 'Wang', zh: '王氏' },
+      'surname',
+      { en: 'Wang', zh: '王' },
+    ),
+  ]);
+  const result = buildResolutionCandidates(people);
+  assert.equal(result.blocks.length, 0, 'surname-only preferred labels must not create identity blocks');
+}
+
+{
+  const people = new Map([
+    candidatePerson(
+      'mononym-wang-a',
+      { en: 'Wang', zh: '旺' },
+      'personal',
+      { en: 'Wang', zh: '旺' },
+    ),
+    candidatePerson(
+      'mononym-wang-b',
+      { en: 'Wang', zh: '旺' },
+      'personal',
+      { en: 'Wang', zh: '旺' },
+    ),
+  ]);
+  const result = buildResolutionCandidates(people);
+  assert.equal(result.blocks.length, 1, 'genuine one-word personal names must remain blocking');
+}
+
+{
+  const people = new Map([
     person('confucius-a'),
     person('confucius-b'),
     person('laozi-a'),
@@ -144,6 +270,37 @@ function candidatePerson(localId, preferredNameSuggestion, nameKind, alias) {
   assert.throws(() => resolvePeopleClusters(people, [
     resolution('model-merge', [['merge', ['a', 'b']]]),
   ]), /explicitly identified as different/u);
+}
+
+{
+  const people = new Map([
+    person('a', [{
+      predicate: 'different-person',
+      certainty: 'explicit',
+      value: { personId: 'd' },
+    }]),
+    person('b'),
+    person('c'),
+    person('d'),
+  ]);
+  assert.throws(() => resolvePeopleClusters(people, [
+    resolution('merge-left-component', [['merge', ['a', 'b']]]),
+    resolution('merge-right-component', [['merge', ['c', 'd']]]),
+    resolution('join-through-nonrepresentatives', [['merge', ['b', 'c']]]),
+  ]), /explicitly identified as different/u);
+}
+
+{
+  const people = new Map([person('a'), person('b'), person('c')]);
+  const result = resolvePeopleClusters(people, [
+    resolution('curated-family', [['merge', ['a', 'b']]], 'curated'),
+    resolution('curated-separation', [['keep-separate', ['a', 'c']]], 'curated'),
+    resolution('model-crossing-merge', [['merge', ['b', 'c']]]),
+  ]);
+  assert.deepEqual(
+    result.clusters.map((cluster) => cluster.localPeople).sort((left, right) => left[0].localeCompare(right[0])),
+    [['a', 'b'], ['c']],
+  );
 }
 
 {

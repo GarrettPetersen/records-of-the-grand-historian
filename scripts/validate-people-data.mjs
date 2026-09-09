@@ -18,7 +18,7 @@ import {
   peopleExtractionFiles,
   sourceChapterIds,
 } from './lib/people-corpus.mjs';
-import { createPeopleSchemaValidator, formatSchemaErrors } from './lib/people-schema.mjs';
+import { formatSchemaErrors, getPeopleSchemaValidator } from './lib/people-schema.mjs';
 import {
   editorialDecisionPath,
   editorialReviews,
@@ -137,7 +137,7 @@ async function main() {
   const scope = parseCliArgs(process.argv.slice(2));
   const scoped = Boolean(scope.book);
   const errors = [];
-  const ajv = createPeopleSchemaValidator();
+  const ajv = getPeopleSchemaValidator();
   validateConfiguration(errors);
   validateChronology(ajv, errors);
   if (errors.length > 0) throw new Error(`Person data validation failed:\n${errors.map((item) => `- ${item}`).join('\n')}`);

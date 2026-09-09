@@ -25,7 +25,7 @@ import {
   loadProperNounMatcher,
   scanPeopleCandidates,
 } from './lib/people-candidates.mjs';
-import { createPeopleSchemaValidator, formatSchemaErrors } from './lib/people-schema.mjs';
+import { formatSchemaErrors, getPeopleSchemaValidator } from './lib/people-schema.mjs';
 import {
   DEFAULT_PEOPLE_CHUNK_CONTEXT_UNITS,
   DEFAULT_PEOPLE_CHUNK_MAX_CANDIDATES,
@@ -180,7 +180,7 @@ export function buildPeopleExtractionPacket(book, chapter, options = {}) {
     },
   };
 
-  const ajv = createPeopleSchemaValidator();
+  const ajv = getPeopleSchemaValidator();
   const validate = ajv.getSchema('https://24histories.com/schema/people/extraction-packet-v1.json');
   if (!validate(packet)) {
     throw new Error(`Generated packet failed schema validation:\n${formatSchemaErrors(validate.errors).join('\n')}`);

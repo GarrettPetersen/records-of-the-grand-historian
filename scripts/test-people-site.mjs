@@ -17,6 +17,7 @@ import {
   personPublicAliases,
 } from './lib/people-presentation.mjs';
 import { peopleSiteSelfTest } from './lib/people-site.mjs';
+import { personSearchText } from './generate-people-pages.mjs';
 
 peopleSiteSelfTest();
 
@@ -118,6 +119,26 @@ assert.deepEqual(
 );
 assert.equal(personLifeSummary(chronologyFixture), 'First attested BC 209; died BC 195');
 
+const intervalDeathFixture = {
+  life: {
+    birth: [],
+    death: [{
+      value: {
+        westernInterval: {
+          start: { era: 'AD', year: 1582, precision: 'year' },
+          end: { era: 'AD', year: 1585, precision: 'year' },
+        },
+      },
+    }],
+    ageClaims: [],
+    attestedActivity: [{ value: { westernYear: { era: 'AD', year: 1553, precision: 'year' } } }],
+  },
+};
+assert.equal(
+  personLifeSummary(intervalDeathFixture),
+  'First attested AD 1553; died AD 1582 to AD 1585',
+);
+
 const inferredBirthFixture = {
   life: {
     birth: [],
@@ -188,6 +209,29 @@ assert.equal(
   personPublicDescription({ description: { en: 'Northern Qi prince and commander -- s0179 wrongly identifies his father' } }),
   'Northern Qi prince and commander',
 );
+
+const searchText = personSearchText({
+  names: [{ kind: 'personal-name', en: 'Cao Cao', zh: '曹操', pinyin: 'Cáo Cāo' }],
+  roles: [{ roleId: 'statesman', label: 'Statesman' }],
+  life: { birth: [], death: [], ageClaims: [], attestedActivity: [] },
+  offices: [{
+    value: {
+      label: { en: 'Chancellor', zh: '丞相' },
+      action: 'appointed',
+      dateContext: { westernYear: { era: 'AD', year: 208, precision: 'year' } },
+    },
+    certainty: 'explicit-event-contextual-date',
+    evidence: ['sanguozhi:001:s0042'],
+    claimRefs: ['sanguozhi:001:c0100'],
+  }],
+  placeAssociations: [{ value: { place: { en: 'Xu County', zh: '許縣' } } }],
+});
+assert.match(searchText, /cao cao/u);
+assert.match(searchText, /曹操/u);
+assert.match(searchText, /chancellor/u);
+assert.match(searchText, /許縣/u);
+assert.match(searchText, /208/u);
+assert.doesNotMatch(searchText, /sanguozhi|explicit|appointed/u);
 
 const slug = 'fan-ye-fixture';
 const expectedShard = personPageShardName(slug);

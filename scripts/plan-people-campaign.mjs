@@ -14,6 +14,10 @@ const CAMPAIGN_RUN_TIMEOUT_MINUTES = 20;
 const CAMPAIGN_MAX_RUN_TOKENS = 3_000_000;
 const CAMPAIGN_EDITORIAL_MAX_RUN_COST_DOLLARS = 3;
 const CAMPAIGN_EDITORIAL_MAX_RUN_TOKENS = 4_000_000;
+const CAMPAIGN_RESOLUTION_MAX_RUN_COST_DOLLARS = 3;
+const CAMPAIGN_RESOLUTION_MAX_RUN_TOKENS = 4_000_000;
+const RESOLUTION_EASY_PER_TAIL = 7;
+const RESOLUTION_TAIL_QUANTILE = 0.6;
 const ALIAS_DISPOSITION_DEBT_PATH = path.join(
   REPO_ROOT,
   'data',
@@ -130,6 +134,7 @@ export function campaignTargets({
     chaptersPerWave,
     extractionConcurrency: Math.min(20, Math.max(12, Math.ceil(chaptersPerWave / 2.5))),
     editorialConcurrency: Math.min(18, Math.max(8, Math.ceil(chaptersPerWave / 3))),
+    resolutionConcurrency: Math.min(16, Math.max(8, Math.ceil(chaptersPerWave / 5))),
     maxUnits: CAMPAIGN_MAX_UNITS,
     maxCandidates: CAMPAIGN_MAX_CANDIDATES,
     maxWorkerKiB: CAMPAIGN_MAX_WORKER_KIB,
@@ -137,6 +142,8 @@ export function campaignTargets({
     maxRunTokens: CAMPAIGN_MAX_RUN_TOKENS,
     editorialMaxRunCostDollars: CAMPAIGN_EDITORIAL_MAX_RUN_COST_DOLLARS,
     editorialMaxRunTokens: CAMPAIGN_EDITORIAL_MAX_RUN_TOKENS,
+    resolutionMaxRunCostDollars: CAMPAIGN_RESOLUTION_MAX_RUN_COST_DOLLARS,
+    resolutionMaxRunTokens: CAMPAIGN_RESOLUTION_MAX_RUN_TOKENS,
     waveCostCeilingDollars: Math.ceil(chaptersPerWave * 4.5),
   };
 }
@@ -162,6 +169,58 @@ export function campaignProgress(progress, aliasDispositionDebt = new Set()) {
     extractionDebt: progress.summary.sourceChapters - progress.summary.currentChapters,
     editorialDebt: progress.summary.sourceChapters - reviewedChapters,
   };
+}
+
+export function campaignIdentityProgress(progress) {
+  const pendingResolutionChapters = [...progress.byChapter.entries()]
+    .filter(([, chapter]) => chapter.state === 'current' && chapter.resolutionTargetPeople > 0)
+    .map(([chapterId, chapter]) => ({
+      chapterId,
+      unresolvedPeople: chapter.unresolvedPeople,
+      resolutionTargetPeople: chapter.resolutionTargetPeople,
+      resolutionCandidatePeople: chapter.resolutionCandidatePeople,
+      resolutionComparisons: chapter.resolutionComparisons,
+      resolutionMaxBlockPeople: chapter.resolutionMaxBlockPeople,
+    }))
+    .sort((left, right) =>
+      left.resolutionComparisons - right.resolutionComparisons ||
+      left.resolutionCandidatePeople - right.resolutionCandidatePeople ||
+      left.chapterId.localeCompare(right.chapterId));
+  if (
+    !Number.isInteger(progress.summary.identityCleanChapters) ||
+    !Number.isInteger(progress.summary.chaptersWithUnresolvedPeople) ||
+    !Number.isInteger(progress.summary.peopleNeedingReview) ||
+    !Number.isInteger(progress.summary.unresolvedCandidateBlocks)
+  ) {
+    throw new Error('People progress lacks canonical identity status; run npm run people:catalog');
+  }
+  return {
+    identityClosedChapters: progress.summary.identityCleanChapters,
+    pendingIdentityChapters: progress.summary.chaptersWithUnresolvedPeople,
+    actionableResolutionChapters: pendingResolutionChapters.length,
+    resolutionDebt: progress.summary.sourceChapters - progress.summary.identityCleanChapters,
+    peopleNeedingReview: progress.summary.peopleNeedingReview,
+    unresolvedCandidateBlocks: progress.summary.unresolvedCandidateBlocks,
+    pendingResolutionChapters,
+  };
+}
+
+export function selectResolutionChapters(pendingChapters, limit) {
+  const pool = pendingChapters.map((item) => ({ ...item }))
+    .sort((left, right) => {
+      const leftWork = left.resolutionComparisons ?? left.unresolvedPeople;
+      const rightWork = right.resolutionComparisons ?? right.unresolvedPeople;
+      return leftWork - rightWork ||
+        (left.resolutionCandidatePeople ?? 0) - (right.resolutionCandidatePeople ?? 0) ||
+        left.chapterId.localeCompare(right.chapterId);
+    });
+  const selected = [];
+  while (pool.length > 0 && selected.length < limit) {
+    const tailTurn = selected.length % (RESOLUTION_EASY_PER_TAIL + 1) === RESOLUTION_EASY_PER_TAIL;
+    const index = tailTurn ? Math.floor((pool.length - 1) * RESOLUTION_TAIL_QUANTILE) : 0;
+    selected.push(pool.splice(index, 1)[0]);
+  }
+  return selected;
 }
 
 function currentAliasDispositionDebt(progress) {
@@ -246,6 +305,55 @@ function selfTest() {
   ) {
     throw new Error(`Unexpected campaign progress: ${JSON.stringify(completion)}`);
   }
+  const identity = campaignIdentityProgress({
+    summary: {
+      sourceChapters: 5,
+      identityCleanChapters: 1,
+      chaptersWithUnresolvedPeople: 2,
+      peopleNeedingReview: 1,
+      unresolvedCandidateBlocks: 3,
+    },
+    byChapter: new Map([
+      ['a:001', { state: 'current', unresolvedPeople: 1, resolutionTargetPeople: 1, resolutionCandidatePeople: 8, resolutionComparisons: 7, resolutionMaxBlockPeople: 8 }],
+      ['a:002', { state: 'current', unresolvedPeople: 1, resolutionTargetPeople: 0, resolutionCandidatePeople: 0, resolutionComparisons: 0, resolutionMaxBlockPeople: 0 }],
+      ['a:003', { state: 'current', unresolvedPeople: 0, resolutionTargetPeople: 0, resolutionCandidatePeople: 0, resolutionComparisons: 0, resolutionMaxBlockPeople: 0 }],
+      ['a:004', { state: 'rereview', unresolvedPeople: 1, resolutionTargetPeople: 1, resolutionCandidatePeople: 3, resolutionComparisons: 2, resolutionMaxBlockPeople: 3 }],
+      ['a:005', { state: 'missing', unresolvedPeople: 0, resolutionTargetPeople: 0, resolutionCandidatePeople: 0, resolutionComparisons: 0, resolutionMaxBlockPeople: 0 }],
+    ]),
+  });
+  if (
+    identity.identityClosedChapters !== 1 ||
+    identity.pendingIdentityChapters !== 2 ||
+    identity.actionableResolutionChapters !== 1 ||
+    identity.resolutionDebt !== 4 ||
+    identity.peopleNeedingReview !== 1 ||
+    identity.unresolvedCandidateBlocks !== 3
+  ) {
+    throw new Error(`Unexpected identity progress: ${JSON.stringify(identity)}`);
+  }
+  const selected = selectResolutionChapters([
+    { chapterId: 'a:001', unresolvedPeople: 1 },
+    { chapterId: 'a:002', unresolvedPeople: 2 },
+    { chapterId: 'a:003', unresolvedPeople: 3 },
+    { chapterId: 'a:004', unresolvedPeople: 4 },
+    { chapterId: 'a:005', unresolvedPeople: 5 },
+  ], 4);
+  if (selected.map((item) => item.chapterId).join(',') !== 'a:001,a:002,a:003,a:004') {
+    throw new Error(`Unexpected balanced resolution selection: ${JSON.stringify(selected)}`);
+  }
+  const workloadSelection = selectResolutionChapters(
+    Array.from({ length: 10 }, (_, index) => ({
+      chapterId: `a:${String(index + 1).padStart(3, '0')}`,
+      unresolvedPeople: 1,
+      resolutionComparisons: index + 1,
+      resolutionCandidatePeople: index + 2,
+    })),
+    9,
+  );
+  if (workloadSelection.map((item) => item.chapterId).join(',') !==
+      'a:001,a:002,a:003,a:004,a:005,a:006,a:007,a:009,a:008') {
+    throw new Error(`Unexpected workload-aware resolution selection: ${JSON.stringify(workloadSelection)}`);
+  }
   console.log('people campaign planner self-test: ok');
 }
 
@@ -258,6 +366,7 @@ function main() {
   const corpusProgress = buildPeopleGlossaryProgress(JSON.parse(fs.readFileSync(manifestFile, 'utf8')));
   const progress = corpusProgress.summary;
   const completion = campaignProgress(corpusProgress, currentAliasDispositionDebt(corpusProgress));
+  const identity = campaignIdentityProgress(corpusProgress);
   const extractionTargets = campaignTargets({
     missingChapters: completion.extractionDebt,
     asOf: opts.asOf,
@@ -282,17 +391,37 @@ function main() {
     wavesPerDay: opts.wavesPerDay,
     bufferPercent: opts.bufferPercent,
   });
+  const resolutionTargets = campaignTargets({
+    missingChapters: identity.resolutionDebt,
+    asOf: opts.asOf,
+    deadline: opts.deadline,
+    capacityStart: opts.capacityStart ?? opts.asOf,
+    wavesPerDay: opts.wavesPerDay,
+    bufferPercent: opts.bufferPercent,
+  });
+  const resolutionSelection = selectResolutionChapters(
+    identity.pendingResolutionChapters,
+    resolutionTargets.chaptersPerWave,
+  );
   const result = {
     asOf: opts.asOf,
     deadline: opts.deadline,
     ...progress,
     ...completion,
+    ...identity,
     ...extractionTargets,
     extractionChaptersPerWave: extractionTargets.chaptersPerWave,
     editorialChaptersPerWave: editorialTargets.chaptersPerWave,
     editorialMinimumChaptersPerDay: editorialTargets.minimumChaptersPerDay,
     editorialBufferedChaptersPerDay: editorialTargets.bufferedChaptersPerDay,
     editorialConcurrency: editorialTargets.editorialConcurrency,
+    resolutionChaptersPerWave: resolutionTargets.chaptersPerWave,
+    resolutionMinimumChaptersPerDay: resolutionTargets.minimumChaptersPerDay,
+    resolutionBufferedChaptersPerDay: resolutionTargets.bufferedChaptersPerDay,
+    resolutionConcurrency: resolutionTargets.resolutionConcurrency,
+    resolutionMaxRunCostDollars: resolutionTargets.resolutionMaxRunCostDollars,
+    resolutionMaxRunTokens: resolutionTargets.resolutionMaxRunTokens,
+    resolutionSelection,
     aliasReviewChaptersPerWave: aliasReviewTargets.chaptersPerWave,
     aliasReviewMinimumChaptersPerDay: aliasReviewTargets.minimumChaptersPerDay,
     aliasReviewBufferedChaptersPerDay: aliasReviewTargets.bufferedChaptersPerDay,
@@ -310,6 +439,13 @@ function main() {
     `Editorially closed: ${completion.reviewedChapters}/${progress.sourceChapters}; ` +
     `${completion.pendingEditorialChapters} current extraction(s) still need closure`,
   );
+  console.log(
+    `Identity-clean: ${identity.identityClosedChapters}/${progress.sourceChapters}; ` +
+    `${identity.pendingIdentityChapters} current chapter(s) are affected, ` +
+    `${identity.actionableResolutionChapters} chapter(s) can seed unresolved comparisons, ` +
+    `${identity.peopleNeedingReview} people, and ` +
+    `${identity.unresolvedCandidateBlocks} candidate blocks still need resolution`,
+  );
   console.log(`Alias callback rereview: ${completion.aliasDispositionChapters} current chapter(s)`);
   console.log(`Older rereview: ${progress.rereviewChapters}; extraction/rereview debt: ${completion.extractionDebt}`);
   console.log(`Calendar dates remaining: ${extractionTargets.calendarDays}`);
@@ -323,17 +459,20 @@ function main() {
   console.log(`Extraction buffered target: ${extractionTargets.bufferedChaptersPerDay} chapters/day (${opts.bufferPercent}% buffer)`);
   console.log(`Editorial minimum: ${editorialTargets.minimumChaptersPerDay} closures/day`);
   console.log(`Editorial buffered target: ${editorialTargets.bufferedChaptersPerDay} closures/day (${opts.bufferPercent}% buffer)`);
+  console.log(`Identity-resolution minimum: ${resolutionTargets.minimumChaptersPerDay} chapter scopes/day`);
+  console.log(`Identity-resolution buffered target: ${resolutionTargets.bufferedChaptersPerDay} chapter scopes/day (${opts.bufferPercent}% buffer)`);
   console.log(
     `Alias-review target: ${aliasReviewTargets.bufferedChaptersPerDay} chapters/day ` +
     `in ${opts.wavesPerDay} x ${aliasReviewTargets.chaptersPerWave}-chapter context-only waves`,
   );
   console.log(
     `Cadence: ${opts.wavesPerDay} x ${extractionTargets.chaptersPerWave}-chapter extraction waves/day; ` +
-    `${opts.wavesPerDay} x ${editorialTargets.chaptersPerWave}-chapter editorial waves/day`,
+    `${opts.wavesPerDay} x ${editorialTargets.chaptersPerWave}-chapter editorial waves/day; ` +
+    `${opts.wavesPerDay} x ${resolutionTargets.chaptersPerWave}-chapter identity waves/day`,
   );
   console.log(
     `Initial concurrency: extraction ${extractionTargets.extractionConcurrency}, ` +
-    `editorial ${editorialTargets.editorialConcurrency}`,
+    `editorial ${editorialTargets.editorialConcurrency}, resolution ${resolutionTargets.resolutionConcurrency}`,
   );
   console.log(
     `New-work profile: ${extractionTargets.maxUnits} units, ${extractionTargets.maxCandidates} candidates, ` +
@@ -358,6 +497,10 @@ function main() {
     `--max-run-cost ${editorialTargets.editorialMaxRunCostDollars} ` +
     `--max-run-tokens ${editorialTargets.editorialMaxRunTokens} ` +
     `--run-timeout-minutes ${editorialTargets.runTimeoutMinutes} --model grok-4.6 --effort medium`,
+  );
+  console.log(
+    `Identity wave: npm run people:resolution:deadline-wave -- --limit ${resolutionSelection.length} ` +
+    `(start with --limit 10 after a capacity reset, then use the measured wave size)`,
   );
 }
 

@@ -21,6 +21,8 @@ import {
 import { readPeopleCatalog, readPeopleSiteIndex } from './lib/people-generated-data.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+const MAX_SEARCH_BYTES_PER_PERSON = 512;
+const MAX_FEATURED_SEARCH_ENTRIES = 120;
 
 function parseArgs(argv) {
   const options = {
@@ -49,20 +51,31 @@ function loadSearchEntries(outputRoot, errors) {
   const indexPath = path.join(outputRoot, 'data', 'people', 'search', 'index.json');
   if (!fs.existsSync(indexPath)) {
     errors.push('Missing people search index');
-    return [];
+    return { entries: [], index: null };
   }
   const index = readJson(indexPath);
+  assert(index.v === 4, `People search index is version ${index.v}, expected version 4`, errors);
+  assert(Array.isArray(index.featured) && index.featured.length <= MAX_FEATURED_SEARCH_ENTRIES,
+    `People search index must contain at most ${MAX_FEATURED_SEARCH_ENTRIES} featured entries`, errors);
+  assert(fs.statSync(indexPath).size < 512 * 1024, 'People search bootstrap index exceeds 512 KiB', errors);
   const entries = [];
+  let shardBytes = 0;
   for (const part of index.parts ?? []) {
     const file = path.join(path.dirname(indexPath), part.file);
     if (!fs.existsSync(file)) {
       errors.push(`Missing people search part ${part.file}`);
       continue;
     }
-    entries.push(...(readJson(file).entries ?? []));
+    shardBytes += fs.statSync(file).size;
+    const shard = readJson(file);
+    assert(shard.v === 4, `${part.file} is version ${shard.v}, expected version 4`, errors);
+    entries.push(...(shard.entries ?? []));
   }
   assert(entries.length === index.people, `Search index expected ${index.people} entries, found ${entries.length}`, errors);
-  return entries;
+  const bytesPerPerson = index.people ? shardBytes / index.people : 0;
+  assert(bytesPerPerson <= MAX_SEARCH_BYTES_PER_PERSON,
+    `People search shards average ${bytesPerPerson.toFixed(1)} bytes/person; limit is ${MAX_SEARCH_BYTES_PER_PERSON}`, errors);
+  return { entries, index };
 }
 
 export function verifyPeopleSite(options = parseArgs([])) {
@@ -231,13 +244,19 @@ export function verifyPeopleSite(options = parseArgs([])) {
   assert(indexDocument('h1').length === 1, 'People index must have one h1', errors);
   assert(indexDocument('link[rel="canonical"]').length === 1, 'People index has no canonical URL', errors);
 
-  const searchEntries = loadSearchEntries(options.outputRoot, errors);
+  const { entries: searchEntries, index: searchIndex } = loadSearchEntries(options.outputRoot, errors);
   const searchSlugs = new Set(searchEntries.map((entry) => entry[0]));
   assert(searchSlugs.size === expectedSlugs.size, 'People search contains duplicate or missing slugs', errors);
   for (const slug of expectedSlugs) assert(searchSlugs.has(slug), `Search data omits ${slug}`, errors);
   for (const entry of searchEntries) {
-    assert(Array.isArray(entry) && entry.length >= 12, `Search entry ${entry?.[0] ?? '(unknown)'} is not version 3`, errors);
+    assert(Array.isArray(entry) && entry.length >= 12, `Search entry ${entry?.[0] ?? '(unknown)'} is not version 4`, errors);
+    assert(!/[a-z0-9_-]+:\d{3}:[cs]\d+/iu.test(entry[5]),
+      `Search entry ${entry?.[0] ?? '(unknown)'} leaks evidence identifiers`, errors);
   }
+  const featuredSlugs = new Set((searchIndex?.featured ?? []).map((entry) => entry[0]));
+  assert(featuredSlugs.size === (searchIndex?.featured ?? []).length,
+    'People search bootstrap contains duplicate featured entries', errors);
+  for (const slug of featuredSlugs) assert(expectedSlugs.has(slug), `Search bootstrap contains unknown person ${slug}`, errors);
 
   if (!options.skipChapterLinks) {
     for (const chapter of Object.values(siteIndex.chapters)) {

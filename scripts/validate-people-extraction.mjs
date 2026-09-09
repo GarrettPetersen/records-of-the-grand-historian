@@ -20,7 +20,7 @@ import {
   writeTextAtomic,
   writeJsonAtomic,
 } from './lib/people-content.mjs';
-import { createPeopleSchemaValidator, formatSchemaErrors } from './lib/people-schema.mjs';
+import { formatSchemaErrors, getPeopleSchemaValidator } from './lib/people-schema.mjs';
 import {
   compactInputErrors,
   expandPeopleExtraction,
@@ -167,8 +167,7 @@ function canonicalJson(value) {
 function normalizeClaims(claims, namespace) {
   const merged = [];
   const byFact = new Map();
-  for (const original of claims) {
-    const claim = structuredClone(original);
+  for (const claim of claims) {
     if (claim.predicate === 'role') claim.value = { roleId: claim.value.roleId };
     const key = canonicalJson([claim.subject, claim.predicate, claim.value, claim.certainty]);
     const existing = byFact.get(key);
@@ -398,9 +397,9 @@ function validateClaimVocabulary(claim, packet, errors) {
   }
 }
 
-export function validatePeopleExtraction(extraction, packet, options = {}) {
+function validatePeopleExtractionImpl(extraction, packet, options = {}, ownsInput = false) {
   const errors = [];
-  const ajv = createPeopleSchemaValidator();
+  const ajv = getPeopleSchemaValidator();
   const validatePacket = ajv.getSchema(PACKET_SCHEMA_ID);
   const validateExtraction = ajv.getSchema(EXTRACTION_SCHEMA_ID);
   if (!validatePacket(packet)) {
@@ -411,7 +410,20 @@ export function validatePeopleExtraction(extraction, packet, options = {}) {
   }
   if (errors.length > 0) throw new PeopleExtractionValidationError(errors);
 
-  const normalized = structuredClone(extraction);
+  const normalized = ownsInput ? extraction : {
+    ...extraction,
+    mentions: extraction.mentions.map((mention) => ({
+      ...mention,
+      spans: {
+        zh: [...mention.spans.zh],
+        en: [...mention.spans.en],
+      },
+    })),
+    claims: extraction.claims.map((claim) => ({
+      ...claim,
+      evidence: [...claim.evidence],
+    })),
+  };
   const namespace = `${packet.book}:${packet.chapter}`;
   if (normalized.book !== packet.book || normalized.chapter !== packet.chapter) {
     errors.push(`extraction scope ${normalized.book}/${normalized.chapter} does not match packet ${packet.book}/${packet.chapter}`);
@@ -708,8 +720,12 @@ export function validatePeopleExtraction(extraction, packet, options = {}) {
   };
 }
 
+export function validatePeopleExtraction(extraction, packet, options = {}) {
+  return validatePeopleExtractionImpl(extraction, packet, options);
+}
+
 export function validateCompactPeopleExtraction(compact, packet, options = {}) {
-  const ajv = createPeopleSchemaValidator();
+  const ajv = getPeopleSchemaValidator();
   const validate = ajv.getSchema(COMPACT_SCHEMA_ID);
   const errors = [];
   if (!validate(compact)) {
@@ -717,7 +733,7 @@ export function validateCompactPeopleExtraction(compact, packet, options = {}) {
   }
   errors.push(...compactInputErrors(compact, packet));
   if (errors.length > 0) throw new PeopleExtractionValidationError(errors);
-  return validatePeopleExtraction(expandPeopleExtraction(compact, packet), packet, options);
+  return validatePeopleExtractionImpl(expandPeopleExtraction(compact, packet), packet, options, true);
 }
 
 function usage() {
@@ -929,7 +945,11 @@ function selfTest() {
     coverage: { allUnitsVisited: true, preflightCandidatesAccountedFor: true, unresolvedReferences: [] },
   };
 
+  const extractionBeforeValidation = JSON.stringify(extraction);
   const valid = validatePeopleExtraction(extraction, packet);
+  if (JSON.stringify(extraction) !== extractionBeforeValidation) {
+    throw new Error('Expanded extraction validation mutated its caller input');
+  }
   if (valid.normalized.mentions[0].spans.zh[0].endCodePoint !== 3) throw new Error('Span normalization failed');
 
   const sequentialRepairs = structuredClone(extraction);

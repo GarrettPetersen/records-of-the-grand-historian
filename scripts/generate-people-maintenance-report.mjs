@@ -461,6 +461,7 @@ function selfTest() {
       'a:001:p001': 'per_a', 'b:002:p001': 'per_b', 'a:003:p001': 'per_c',
     },
     unresolvedCandidateBlockIds: ['block_one'],
+    resolutionWorkByChapter: {},
     people: [
       person('per_a', 'alpha', 'Alpha', ['a:001:p001'], [
         reference('a', '001', 's0001', ['m1']), reference('a', '001', 's0002', ['m2']),

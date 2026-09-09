@@ -4,8 +4,8 @@ import {
   sha256,
 } from './people-content.mjs';
 import {
-  createPeopleSchemaValidator,
   formatSchemaErrors,
+  getPeopleSchemaValidator,
 } from './people-schema.mjs';
 
 const SCHEMA_V3_ID = 'https://24histories.com/schema/people/editorial-decision-v3.json';
@@ -245,7 +245,7 @@ export function normalizeEditorialDecisionArtifact(document, extraction = null) 
 function singleEditorialDocumentErrors(document, { validateSchema = true } = {}) {
   const errors = [];
   if (validateSchema) {
-    const ajv = createPeopleSchemaValidator();
+    const ajv = getPeopleSchemaValidator();
     const validate = ajv.getSchema(SCHEMA_V3_ID);
     if (!validate(document)) {
       errors.push(...formatSchemaErrors(validate.errors).map((error) => `schema: ${error}`));
@@ -382,7 +382,7 @@ function editorialDocumentErrors(document) {
   if (document?.schemaVersion === 3) return singleEditorialDocumentErrors(document);
 
   const errors = [];
-  const ajv = createPeopleSchemaValidator();
+  const ajv = getPeopleSchemaValidator();
   const validate = ajv.getSchema(SCHEMA_V4_ID);
   if (!validate?.(document)) {
     errors.push(...formatSchemaErrors(validate?.errors).map((error) => `schema: ${error}`));

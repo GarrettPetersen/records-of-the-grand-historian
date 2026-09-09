@@ -1821,9 +1821,7 @@ function selfTest() {
   console.log('apply-people-translation-repairs self-test: ok');
 }
 
-function main() {
-  const opts = parseArgs(process.argv.slice(2));
-  if (opts.selfTest) return selfTest();
+export function applyPeopleTranslationRepairs(opts) {
   if (!opts.book || !opts.chapter) throw new Error('--book and --chapter are required');
 
   const chapterFile = chapterPath(opts.book, opts.chapter);
@@ -2003,6 +2001,12 @@ function main() {
     `${opts.book}/${opts.chapter}; ${result.stats.people} people and ` +
     `${result.stats.candidates} candidates remain valid.`,
   );
+}
+
+function main() {
+  const opts = parseArgs(process.argv.slice(2));
+  if (opts.selfTest) return selfTest();
+  return applyPeopleTranslationRepairs(opts);
 }
 
 if (isMain) {

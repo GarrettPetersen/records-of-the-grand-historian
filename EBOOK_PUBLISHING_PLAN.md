@@ -105,6 +105,15 @@ ebook-readiness:
 
 `ebook-validate` performs local structural checks, verifies sidecar manifests, scans packaged XHTML for known visible artifacts, checks XML/XHTML well-formedness with `xmllint`, and fails if the generated QA report has errors or warnings. If `EPUBCHECK_JAR=/path/to/epubcheck.jar` is set, it also runs official EPUBCheck before the local checks.
 
+Kindle accepts fewer than 300 HTML files per e-book and individual HTML files
+smaller than 30 MB. The generator works to a 240-XHTML target so expanding
+people glossaries retain headroom: books that fit keep one chapter per file,
+while longer books automatically group adjacent chapters into shared content
+documents. Each chapter still has its own section, page break, TOC entry, and
+chapter-qualified sentence anchors. The validator independently recomputes the
+layout, checks every chapter and fragment target, rejects duplicate IDs, and
+enforces Kindle's hard file-count and file-size ceilings.
+
 `ebook-qa` runs the reusable pre-publication automated gate: EPUB validation, packaged EPUB/upload-bundle publication-blocker scanning, optional Calibre EPUB-to-AZW3 smoke conversion, quote-span alignment, and cheap translation quality scanners.
 
 Run the same gates for later products by changing only the slug/book values, or use `make ebook-qa ALL=1` once multiple e-book products are listed in `ebooks/manifest.json`. Product QA reads each product's `book` and `chapters` fields, so the source QA checks exactly the chapters that are packaged into that e-book. The EPUB validator imports the shared translation-artifact scanner, so source JSON and packaged XHTML use the same formulaic-English rules instead of drifting apart. The publication-blocker scanner checks the final EPUB and KDP upload support files for visible placeholders, raw table-span text, and known KDP spellcheck tripwires such as `edicted`, `strategems`, `Maquis`, `paoge`, unaccented `lese-majeste`, and lowercase `wuchen day`. The cheap source QA bundle also uses reusable compound-name, translation-completeness, translation-metadata, and literal-identical prose scanners, so future books get the same checks for split romanized surnames, missing idiomatic English, literal-only fallback text, stale or agent-labeled translator metadata, and chapters that need review because too much prose still matches the literal draft.

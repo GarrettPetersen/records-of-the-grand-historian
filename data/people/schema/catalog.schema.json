@@ -4,7 +4,7 @@
   "title": "Compiled canonical people catalog",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "generatedAt", "complete", "currentPromptVersion", "stats", "people", "familyEdges", "localPersonMap", "unresolvedCandidateBlockIds", "missingChapterIds"],
+  "required": ["schemaVersion", "generatedAt", "complete", "currentPromptVersion", "stats", "people", "familyEdges", "localPersonMap", "unresolvedCandidateBlockIds", "resolutionWorkByChapter", "missingChapterIds"],
   "properties": {
     "schemaVersion": { "const": 1 },
     "generatedAt": { "type": "string", "format": "date-time" },
@@ -46,6 +46,24 @@
     "unresolvedCandidateBlockIds": {
       "type": "array",
       "items": { "type": "string", "pattern": "^block_[0-9A-HJKMNP-TV-Z]{16}$" }
+    },
+    "resolutionWorkByChapter": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z0-9_-]+:\\d{3}$" },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["unresolvedBlocks", "targetLocalPeople", "targetCanonicalPeople", "candidateLocalPeople", "candidateCanonicalPeople", "comparisons", "maxBlockLocalPeople"],
+        "properties": {
+          "unresolvedBlocks": { "type": "integer", "minimum": 1 },
+          "targetLocalPeople": { "type": "integer", "minimum": 1 },
+          "targetCanonicalPeople": { "type": "integer", "minimum": 1 },
+          "candidateLocalPeople": { "type": "integer", "minimum": 2 },
+          "candidateCanonicalPeople": { "type": "integer", "minimum": 2 },
+          "comparisons": { "type": "integer", "minimum": 1 },
+          "maxBlockLocalPeople": { "type": "integer", "minimum": 2 }
+        }
+      }
     },
     "missingChapterIds": {
       "type": "array",

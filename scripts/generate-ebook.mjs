@@ -9,13 +9,24 @@ import { fileURLToPath } from 'node:url';
 import { Resvg } from '@resvg/resvg-js';
 import { getBookMetadata } from './book-metadata.mjs';
 import { renderBookCover } from './generate-book-covers.mjs';
-import { isSemanticTableHeader, tableCellRepeatsLabel, tableCells } from './lib/table-structure.mjs';
+import {
+  inferChapterTableHeaders,
+  isSemanticTableHeader,
+  tableCellRepeatsLabel,
+  tableCells,
+} from './lib/table-structure.mjs';
 import {
   chapterPeopleContext,
   loadPeopleSiteContext,
-  peopleSentenceAnchor,
   renderUnitWithPeople,
 } from './lib/people-site.mjs';
+import {
+  ebookChapterHref,
+  ebookChapterSectionId,
+  ebookSentenceAnchor,
+  ebookSentenceHref,
+  planEbookContentDocuments,
+} from './lib/ebook-content-layout.mjs';
 import {
   humanizePeopleValue,
   personAlternateNames,
@@ -607,7 +618,7 @@ function hasSuspiciousTableTitlePunctuation(title) {
   return /^[\p{Lu}\p{Lt}0-9][\p{L}0-9'’𨜓 -]{0,60}\.$/u.test(title);
 }
 
-function renderTableHeaderSummary(headers, headerItems = [], chapterContext = null, ebookPeople = null) {
+function renderTableHeaderSummary(headers, headerItems = [], chapter = null, chapterContext = null, ebookPeople = null) {
   const labels = headers.map(textContent).filter(Boolean);
   if (labels.length === 0) return '';
   const rendered = headers.map((header, index) => {
@@ -615,7 +626,7 @@ function renderTableHeaderSummary(headers, headerItems = [], chapterContext = nu
     if (!label) return '';
     const item = headerItems[index];
     if (hasEbookEnglishPersonMention(item, chapterContext)) label = textContent(getTranslation(item));
-    return wrapEbookUnitAnchor(item, renderEbookUnit(item, label, chapterContext, ebookPeople));
+    return wrapEbookUnitAnchor(chapter?.meta?.chapter, item, renderEbookUnit(item, label, chapterContext, ebookPeople));
   }).filter(Boolean);
   return `<p class="table-column-summary">Columns: ${rendered.join('; ')}</p>`;
 }
@@ -661,72 +672,6 @@ function expandTableHeadersForRow(chapter, headers, columnCount) {
     return inferInitialTableHeaders(chapter);
   }
   return headers;
-}
-
-function inferChapterTableHeaders(chapter, headers) {
-  if (chapter?.meta?.book !== 'shiji') return null;
-  const columnCount = headers.length;
-
-  if (chapter?.meta?.chapter === '016' && columnCount === 21) {
-    return [
-      'BCE',
-      'Qin',
-      'Western Chu',
-      'Hengshan',
-      'Linjiang',
-      'Jiujiang',
-      'Changshan',
-      'Dai',
-      'Linzi',
-      'Jibei',
-      'Jiaodong',
-      'Han (Liu Bang)',
-      'Yong',
-      'Sai',
-      'Di',
-      'Yan',
-      'Liaodong',
-      'Western Wei',
-      'Yin',
-      'Han (former state)',
-      'Henan'
-    ];
-  }
-
-  if (chapter?.meta?.chapter === '017' && columnCount === 28) {
-    return [
-      'Year',
-      'Reign year',
-      'Chu',
-      'Lu',
-      'Hengshan',
-      'Qi',
-      'Chengyang',
-      'Jibei',
-      'Jinan',
-      'Langya / Zichuan',
-      'Jiaoxi',
-      'Jiaodong',
-      'Jing',
-      'Huainan',
-      'Yan',
-      'Zhao',
-      'Hejian',
-      'Guangchuan',
-      'Zhongshan',
-      'Lujiang',
-      'Changshan',
-      'Liang',
-      'Jichuan',
-      'Linjiang',
-      'Lü',
-      'Huaiyang',
-      'Dai',
-      'Changsha'
-    ];
-  }
-
-  return null;
 }
 
 function inferBlankTableHeaders(chapter, columnCount) {
@@ -790,7 +735,7 @@ function renderTableEntry(
         });
         cellContent += `<a epub:type="noteref" href="#${fnId}"><sup>${fnNum}</sup></a>`;
       }
-      cellContent = wrapEbookUnitAnchor(cell, cellContent);
+      cellContent = wrapEbookUnitAnchor(chapter.meta.chapter, cell, cellContent);
       return {
         label: label ? escapeXml(label) : null,
         main: displayMain,
@@ -872,10 +817,6 @@ function excerptAround(text, index, width = 80) {
 function allowsChineseCharacters(item) {
   return item?.allowChineseCharacters === true ||
     item?.translations?.some((entry) => entry.allowChineseCharacters === true) === true;
-}
-
-function chapterFileName(chapterId) {
-  return `chapter-${chapterId}.xhtml`;
 }
 
 function ebookPersonAnchor(personId) {
@@ -973,9 +914,9 @@ function hasEbookEnglishPersonMention(item, chapterContext) {
     .some((mention) => (mention.spans?.en ?? []).length > 0);
 }
 
-function wrapEbookUnitAnchor(item, rendered) {
+function wrapEbookUnitAnchor(chapterId, item, rendered) {
   if (!item?.id) return rendered;
-  return `<span id="${peopleSentenceAnchor('en', item.id)}">${rendered}</span>`;
+  return `<span id="${ebookSentenceAnchor(chapterId, 'en', item.id)}">${rendered}</span>`;
 }
 
 function emptyChapterTableStats() {
@@ -1485,7 +1426,7 @@ function tableReviewRows(chapter) {
       pendingBlankHeader = false;
       continue;
     }
-    if (block.type === 'table_header' && isSemanticTableHeader(block)) {
+    if (block.type === 'table_header' && isSemanticTableHeader(block, chapter)) {
       currentHeaders = (block.sentences || []).map(getTranslation).map(textContent);
       currentHeaders = inferChapterTableHeaders(chapter, currentHeaders) || currentHeaders;
       pendingBlankHeader = isBlankHeader(currentHeaders);
@@ -1568,9 +1509,9 @@ ${chapterSections || 'No table-heavy chapters flagged.'}
 `;
 }
 
-function reviewNavigationTargets(product, chapters) {
+function reviewNavigationTargets(product, chapters, contentLayout) {
   const chapterLinks = chapters.map(({ chapter, data }) => ({
-    href: `EPUB/text/${chapterFileName(chapter)}`,
+    href: `EPUB/${ebookChapterHref(contentLayout, chapter, 'text/')}`,
     text: data.meta.title?.en || `Chapter ${Number.parseInt(chapter, 10)}`,
   }));
   return [
@@ -1585,7 +1526,7 @@ function reviewNavigationTargets(product, chapters) {
   ].filter(Boolean);
 }
 
-function reviewProseTargets(chapters, qa) {
+function reviewProseTargets(chapters, qa, contentLayout) {
   const tableHeavy = new Set((qa.chapters || [])
     .filter((chapter) => chapter.tableRendering?.reviewRecommended)
     .map((chapter) => chapter.chapter));
@@ -1593,7 +1534,7 @@ function reviewProseTargets(chapters, qa) {
     .filter(({ chapter }) => !tableHeavy.has(chapter))
     .map(({ chapter, data }) => ({
       chapter,
-      epubEntry: `EPUB/text/${chapterFileName(chapter)}`,
+      epubEntry: `EPUB/${ebookChapterHref(contentLayout, chapter, 'text/')}`,
       title: data.meta.title?.en || `Chapter ${Number.parseInt(chapter, 10)}`,
     }));
   if (proseChapters.length <= 3) return proseChapters;
@@ -1626,14 +1567,14 @@ function proseFlowMetrics(chapterData) {
   };
 }
 
-function renderReviewChecklist(product, qa, chapters) {
+function renderReviewChecklist(product, qa, chapters, contentLayout) {
   const tableChapters = qa.chapters.filter((chapter) => chapter.tableRendering.reviewRecommended);
   const chapterData = new Map(chapters.map(({ chapter, data }) => [chapter, data]));
   const languageTool = languageToolCacheSummary(product);
-  const navigationTargets = reviewNavigationTargets(product, chapters)
+  const navigationTargets = reviewNavigationTargets(product, chapters, contentLayout)
     .map((target) => `  - \`${target.href}\`: ${target.text}`)
     .join('\n');
-  const proseTargets = reviewProseTargets(chapters, qa)
+  const proseTargets = reviewProseTargets(chapters, qa, contentLayout)
     .map((target) => {
       const metrics = proseFlowMetrics(chapterData.get(target.chapter) || {});
       return `  - \`${target.epubEntry}\`: ${target.title} (${metrics.renderedParagraphs} rendered paragraphs, ${metrics.splitParagraphs} source paragraph splits, max ${metrics.maxWords} words)`;
@@ -1777,7 +1718,7 @@ function collectChapterBlocks(chapter, qa, chapterQa, footnotes = [], ebookPeopl
           });
           rendered += `<a epub:type="noteref" href="#${fnId}"><sup>${fnNum}</sup></a>`;
         }
-        rendered = wrapEbookUnitAnchor(item, rendered);
+        rendered = wrapEbookUnitAnchor(chapter.meta.chapter, item, rendered);
         units.push({ plain: main, rendered });
       }
       if (units.length === 0) continue;
@@ -1822,7 +1763,7 @@ function collectChapterBlocks(chapter, qa, chapterQa, footnotes = [], ebookPeopl
       continue;
     }
 
-    if (block.type === 'table_header' && isSemanticTableHeader(block)) {
+    if (block.type === 'table_header' && isSemanticTableHeader(block, chapter)) {
       currentHeaderItems = block.sentences || [];
       currentHeaders = currentHeaderItems.map(getTranslation).map(textContent);
       currentHeaders = inferChapterTableHeaders(chapter, currentHeaders) || currentHeaders;
@@ -1833,7 +1774,7 @@ function collectChapterBlocks(chapter, qa, chapterQa, footnotes = [], ebookPeopl
       if (pendingBlankHeader) {
         tableStats.blankHeaders += 1;
       }
-      const summary = renderTableHeaderSummary(currentHeaders, currentHeaderItems, chapterContext, ebookPeople);
+      const summary = renderTableHeaderSummary(currentHeaders, currentHeaderItems, chapter, chapterContext, ebookPeople);
       if (summary) blocks.push(summary);
       qa.tableRendering.headers += 1;
       continue;
@@ -1848,7 +1789,7 @@ function collectChapterBlocks(chapter, qa, chapterQa, footnotes = [], ebookPeopl
           tableStats.resolvedBlankHeaders += 1;
           tableStats.promotedHeaderRows += 1;
           tableStats.maxCells = Math.max(tableStats.maxCells, currentHeaders.length);
-          const summary = renderTableHeaderSummary(currentHeaders, currentHeaderItems, chapterContext, ebookPeople);
+          const summary = renderTableHeaderSummary(currentHeaders, currentHeaderItems, chapter, chapterContext, ebookPeople);
           if (summary) blocks.push(summary);
           pendingBlankHeader = false;
           continue;
@@ -1896,7 +1837,7 @@ function collectChapterBlocks(chapter, qa, chapterQa, footnotes = [], ebookPeopl
   return blocks;
 }
 
-function renderChapter(chapter, qa, chapterQa, ebookPeople = null) {
+function renderChapterSection(chapter, qa, chapterQa, ebookPeople = null) {
   const chapterId = chapter.meta.chapter;
   const zhTitle = chapter.meta.title?.zh || `Chapter ${chapterId}`;
   const enTitle = chapter.meta.title?.en || `Chapter ${Number.parseInt(chapterId, 10)}`;
@@ -1925,20 +1866,30 @@ function renderChapter(chapter, qa, chapterQa, ebookPeople = null) {
     ).join('\n    ');
   }
 
-  return `<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="en" lang="en">
-<head>
-  <title>${escapeXml(enTitle)}</title>
-  <link rel="stylesheet" type="text/css" href="../styles/ebook.css" />
-</head>
-<body>
-  <section epub:type="chapter">
+  return `<section epub:type="chapter" class="chapter" id="${ebookChapterSectionId(chapterId)}">
     <h1>${escapeXml(enTitle)}</h1>
     <p class="chapter-kicker">${escapeXml(zhTitle)} - Chapter ${escapeXml(chapterId)}</p>
     ${blocks.join('\n    ')}
     ${footnotesSection}
-  </section>
+  </section>`;
+}
+
+function renderContentDocument(document, qa, ebookPeople = null) {
+  const title = document.chapters.length === 1
+    ? document.chapters[0].data.meta.title?.en || `Chapter ${Number.parseInt(document.chapterIds[0], 10)}`
+    : `Chapters ${Number.parseInt(document.chapterIds[0], 10)}-${Number.parseInt(document.chapterIds.at(-1), 10)}`;
+  const sections = document.chapters.map((chapter) =>
+    renderChapterSection(chapter.data, qa, chapter.qa, ebookPeople)
+  ).join('\n  ');
+  return `<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="en" lang="en">
+<head>
+  <title>${escapeXml(title)}</title>
+  <link rel="stylesheet" type="text/css" href="../styles/ebook.css" />
+</head>
+<body>
+  ${sections}
 </body>
 </html>
 `;
@@ -2074,7 +2025,7 @@ function renderEbookGlossaryFamily(person, ebookPeople) {
   return rows.length ? `<h3>Family</h3><ul class="glossary-family">${rows.join('')}</ul>` : '';
 }
 
-function renderEbookGlossaryReferences(person, ebookPeople, chapterTitles) {
+function renderEbookGlossaryReferences(person, ebookPeople, chapterTitles, contentLayout) {
   const groups = new Map();
   for (const reference of ebookGlossaryReferences(person, ebookPeople)) {
     if (!groups.has(reference.chapter)) groups.set(reference.chapter, []);
@@ -2084,14 +2035,14 @@ function renderEbookGlossaryReferences(person, ebookPeople, chapterTitles) {
   const rows = [...groups.entries()].sort((left, right) => left[0].localeCompare(right[0])).map(([chapter, refs]) => {
     const title = chapterTitles.get(chapter) || `Chapter ${Number.parseInt(chapter, 10)}`;
     const links = refs.map((reference, index) =>
-      `<a class="glossary-mention-link" href="../text/${chapterFileName(chapter)}#${peopleSentenceAnchor('en', reference.unitId)}">${index + 1}</a>`
+      `<a class="glossary-mention-link" href="../${ebookSentenceHref(contentLayout, chapter, 'en', reference.unitId, 'text/')}">${index + 1}</a>`
     ).join(', ');
     return `<li><span>${escapeXml(title)}</span>: ${links}</li>`;
   });
   return `<h3>Mentions</h3><ul class="glossary-mentions">${rows.join('')}</ul>`;
 }
 
-function renderEbookGlossaryEntry(person, ebookPeople, chapterTitles) {
+function renderEbookGlossaryEntry(person, ebookPeople, chapterTitles, contentLayout) {
   const aliases = personAlternateNames(person);
   const roles = person.roles.map((role) => role.label);
   const lifeSummary = personLifeSummary(person);
@@ -2102,7 +2053,7 @@ function renderEbookGlossaryEntry(person, ebookPeople, chapterTitles) {
   ${roles.length ? `<p><strong>Roles:</strong> ${escapeXml(formatList(roles))}</p>` : ''}
   ${aliases.length ? `<p><strong>Other names:</strong> ${escapeXml(formatList(aliases))}</p>` : ''}
   ${renderEbookGlossaryFamily(person, ebookPeople)}
-  ${renderEbookGlossaryReferences(person, ebookPeople, chapterTitles)}
+  ${renderEbookGlossaryReferences(person, ebookPeople, chapterTitles, contentLayout)}
 </section>`;
 }
 
@@ -2129,9 +2080,9 @@ function renderEbookPeopleIndex(ebookPeople) {
 </html>`;
 }
 
-function renderEbookGlossaryShard(shard, ebookPeople, chapterTitles) {
+function renderEbookGlossaryShard(shard, ebookPeople, chapterTitles, contentLayout) {
   const entries = shard.people.map((person) =>
-    renderEbookGlossaryEntry(person, ebookPeople, chapterTitles)
+    renderEbookGlossaryEntry(person, ebookPeople, chapterTitles, contentLayout)
   ).join('\n');
   return `<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html>
@@ -2149,10 +2100,10 @@ function renderEbookGlossaryShard(shard, ebookPeople, chapterTitles) {
 </html>`;
 }
 
-function renderNav(product, chapters, ebookPeople = null) {
+function renderNav(product, chapters, contentLayout, ebookPeople = null) {
   const chapterItems = chapters.map(({ chapter, data }) => {
     const title = data.meta.title?.en || `Chapter ${Number.parseInt(chapter, 10)}`;
-    return `<li><a href="text/${chapterFileName(chapter)}">${escapeXml(title)}</a></li>`;
+    return `<li><a href="${ebookChapterHref(contentLayout, chapter, 'text/')}">${escapeXml(title)}</a></li>`;
   }).join('\n      ');
   const hasAbout = Array.isArray(product.aboutThisEdition) && product.aboutThisEdition.length > 0;
   const aboutTocItem = hasAbout ? `<li><a href="about.xhtml">${introductionTitle}</a></li>` : '';
@@ -2184,7 +2135,7 @@ function renderNav(product, chapters, ebookPeople = null) {
       <li><a epub:type="cover" href="cover.xhtml">Cover</a></li>
       <li><a epub:type="copyright-page" href="frontmatter.xhtml">Copyright and Source Note</a></li>
       ${aboutLandmarkItem}
-      <li><a epub:type="bodymatter" href="text/${chapterFileName(chapters[0]?.chapter || '001')}">Start Reading</a></li>
+      <li><a epub:type="bodymatter" href="${ebookChapterHref(contentLayout, chapters[0]?.chapter || '001', 'text/')}">Start Reading</a></li>
       ${peopleLandmarkItem}
     </ol>
   </nav>
@@ -2193,9 +2144,9 @@ function renderNav(product, chapters, ebookPeople = null) {
 `;
 }
 
-function renderPackage(product, chapters, generatedAt, ebookPeople = null) {
-  const items = chapters.map(({ chapter }) => `    <item id="chapter-${chapter}" href="text/${chapterFileName(chapter)}" media-type="application/xhtml+xml" />`).join('\n');
-  const spine = chapters.map(({ chapter }) => `    <itemref idref="chapter-${chapter}" />`).join('\n');
+function renderPackage(product, contentLayout, generatedAt, ebookPeople = null) {
+  const items = contentLayout.documents.map((document) => `    <item id="${document.itemId}" href="text/${document.file}" media-type="application/xhtml+xml" />`).join('\n');
+  const spine = contentLayout.documents.map((document) => `    <itemref idref="${document.itemId}" />`).join('\n');
   const hasAbout = Array.isArray(product.aboutThisEdition) && product.aboutThisEdition.length > 0;
   const aboutItem = hasAbout ? '    <item id="about" href="about.xhtml" media-type="application/xhtml+xml" />\n' : '';
   const aboutSpine = hasAbout ? '    <itemref idref="about" />\n' : '';
@@ -2277,6 +2228,11 @@ body {
 
 h1, h2 {
   line-height: 1.15;
+}
+
+.chapter + .chapter {
+  break-before: page;
+  page-break-before: always;
 }
 
 p {
@@ -2668,6 +2624,17 @@ function buildProduct(product) {
   });
   const ebookPeopleState = buildEbookPeople(product);
   const ebookPeople = ebookPeopleState.active ? ebookPeopleState : null;
+  const contentLayout = planEbookContentDocuments(chapters, {
+    hasAbout: Array.isArray(product.aboutThisEdition) && product.aboutThisEdition.length > 0,
+    peopleActive: Boolean(ebookPeople),
+    peopleShards: ebookPeople?.shards.length || 0,
+  });
+  qa.contentLayout = {
+    targetXhtmlFiles: contentLayout.targetXhtmlFiles,
+    xhtmlFiles: contentLayout.xhtmlFiles,
+    contentDocuments: contentLayout.documents.length,
+    chaptersPerDocument: contentLayout.groupSize,
+  };
   qa.peopleGlossary = ebookPeople ? {
     active: true,
     ready: ebookPeople.ready,
@@ -2707,10 +2674,10 @@ function buildProduct(product) {
     }
   }
 
-  for (const chapter of chapters) {
+  for (const document of contentLayout.documents) {
     writeFile(
-      path.join(buildDir, 'EPUB', 'text', chapterFileName(chapter.chapter)),
-      renderChapter(chapter.data, qa, chapter.qa, ebookPeople)
+      path.join(buildDir, 'EPUB', 'text', document.file),
+      renderContentDocument(document, qa, ebookPeople)
     );
   }
 
@@ -2723,17 +2690,17 @@ function buildProduct(product) {
     for (const shard of ebookPeople.shards) {
       writeFile(
         path.join(buildDir, 'EPUB', 'people', shard.file),
-        renderEbookGlossaryShard(shard, ebookPeople, chapterTitles),
+        renderEbookGlossaryShard(shard, ebookPeople, chapterTitles, contentLayout),
       );
     }
   }
 
-  writeFile(path.join(buildDir, 'EPUB', 'nav.xhtml'), renderNav(product, chapters, ebookPeople));
-  writeFile(path.join(buildDir, 'EPUB', 'package.opf'), renderPackage(product, chapters, generatedAt, ebookPeople));
+  writeFile(path.join(buildDir, 'EPUB', 'nav.xhtml'), renderNav(product, chapters, contentLayout, ebookPeople));
+  writeFile(path.join(buildDir, 'EPUB', 'package.opf'), renderPackage(product, contentLayout, generatedAt, ebookPeople));
   writeFile(path.join(productDir, 'metadata.json'), JSON.stringify(product, null, 2) + '\n');
   writeFile(path.join(productDir, 'qa-report.json'), JSON.stringify(qa, null, 2) + '\n');
   writeFile(path.join(productDir, 'table-review.md'), renderTableReview(product, qa, chapters));
-  writeFile(path.join(productDir, 'review-checklist.md'), renderReviewChecklist(product, qa, chapters));
+  writeFile(path.join(productDir, 'review-checklist.md'), renderReviewChecklist(product, qa, chapters, contentLayout));
 
   if (qa.errors.length > 0) {
     throw new Error(`${product.slug} has ${qa.errors.length} QA error(s). See ${path.relative(repoRoot, path.join(productDir, 'qa-report.json'))}`);

@@ -5,7 +5,7 @@ import { validateCompactPeopleExtraction, validatePeopleExtraction } from '../va
 import { loadProperNounMatcher } from './people-candidates.mjs';
 import { isCompactPeopleExtraction } from './people-compact.mjs';
 import { DATA_DIR, PEOPLE_DIR, REPO_ROOT, readJson } from './people-content.mjs';
-import { createPeopleSchemaValidator, formatSchemaErrors } from './people-schema.mjs';
+import { formatSchemaErrors, getPeopleSchemaValidator } from './people-schema.mjs';
 
 export function peopleExtractionFiles() {
   const root = path.join(PEOPLE_DIR, 'extractions');
@@ -49,7 +49,7 @@ export function peopleResolutionFiles() {
 }
 
 export function loadValidatedResolutionDocuments(localPeople) {
-  const ajv = createPeopleSchemaValidator();
+  const ajv = getPeopleSchemaValidator();
   const validate = ajv.getSchema('https://24histories.com/schema/people/resolution-v1.json');
   const documents = [];
   const batches = new Set();

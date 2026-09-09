@@ -29,6 +29,7 @@ try {
       Array.from({ length: 10_001 }, (_, index) => [`local-${index}`, `person-${index % 251}`]),
     ),
     unresolvedCandidateBlockIds: [],
+    resolutionWorkByChapter: {},
     missingChapterIds: [],
   };
   writePeopleCatalog(catalogFile, catalog);

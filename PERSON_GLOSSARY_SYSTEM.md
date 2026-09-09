@@ -1241,12 +1241,24 @@ site can lag while accepted work waits on the staging branch. Add a 10-15%
 buffer to the minimum daily rate so retries and difficult chapters do not make
 the final week impossible.
 
-Use 25-50 chapter extraction waves. Begin a new allowance window with 8-12
-parallel workers, measure accepted p90 cost, tokens, duration, and validation
-failure rate, then raise concurrency to 16-24 only while whole chapters still
-finish reliably. Run independent editorial review and host-side repair
-application immediately after each extraction wave. Keep all failed and
+Use three quota-sized extraction waves per production day. Begin a new allowance
+window with 8-12 parallel workers, measure accepted p90 cost, tokens, duration,
+and validation failure rate, then raise concurrency to 16-20 only while whole
+chapters still finish reliably. `npm run people:deadline:day` checkpoints every
+successful recovery, extraction, editorial, and identity stage, so rerunning it
+on the same date resumes at the unfinished stage. Each editorial stage now
+applies its independent decisions on the host before the catalog is refreshed;
+collecting decisions alone does not count as closure. Keep all failed and
 interrupted chunks sticky for recovery before assigning fresh chapters.
+The September package commands pin September 13 as the next paid-capacity date.
+Before then, fresh extraction and editorial commands fail loudly while the
+recovery command remains available for artifact-only work.
+On the first paid day, run `npm run people:deadline:calibrate`; it recovers saved
+artifacts and runs the prepared 10-scope identity cohort, then records the local
+calibration gate. Inspect its accepted usage before running
+`npm run people:deadline:day`. The production command executes three cycles of
+extraction, editorial closure, and identity resolution at the quota recalculated
+for that date.
 Deadline waves use `--order deadline-balanced`: three quarters of each wave
 come from the cheapest remaining work, while the final quarter is sampled
 evenly through the rest of the queue and interleaved with the short chapters.
@@ -1259,6 +1271,10 @@ candidates, and a 48-KiB compact-packet ceiling. Leave the pathological largest
 chapters to Cursor's adaptive parallel chunk runner or deliberate assignment.
 Sticky work remains first in both lanes, regardless of scheduling order, so a
 retry never opens a new chapter while its previous assignment is recoverable.
+Every Grok claim persists its exact sealed chunk ranges in the shared ledger.
+Changing campaign ceilings therefore cannot reinterpret existing packet files,
+and another clone can reconstruct the same assignment without relying on local
+state.
 Use at least three validation attempts for multi-chunk extraction. With six or
 seven chunks per chapter, a two-attempt ceiling compounds a modest residual
 chunk error rate into excessive whole-chapter deferrals.
