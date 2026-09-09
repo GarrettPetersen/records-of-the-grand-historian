@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 3,
+  "book": "songshi",
+  "chapter": "484",
+  "input": {
+    "chapterFingerprint": "sha256:6754f63e80e8b37560ee627fd9b4addf48a56948a3aac57cac12d34c207c720d",
+    "proposalsFingerprint": "sha256:5ab9483160f50965d4cc5ceef5f1eacf56c2cef35ca7fb9ca876f25c0b9097cb"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "Codex",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-09-09T01:16:00.000Z"
+  },
+  "proposals": [
+    {
+      "id": "songshi:484:r0001",
+      "unit": {
+        "id": "s0018",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "When Liu Chong of Bingzhou marched south, Tong was sent under Wang Yanchao of Hezhong to intercept him by way of Jinzhou; the force was beaten at Gaoping.",
+      "after": "When Liu Chong of Bingzhou marched south, Tong was sent under Wang Yanchao of Hezhong to intercept him by way of Jinzhou; they defeated him at Gaoping.",
+      "reason": "Chinese 擊之，敗於高平 after an ordered strike most naturally means they defeated the enemy at Gaoping; Zhou historically won Gaoping in 954, so 'the force was beaten' reverses the outcome.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:484:r0002",
+      "unit": {
+        "id": "s0018",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "literal",
+      "before": "Liu Chong of Bingzhou invaded southward. Tong was ordered to assist Wang Yanchao of Hezhong in striking him along the Jinzhou route, but they were defeated at Gaoping.",
+      "after": "Liu Chong of Bingzhou invaded southward. Tong was ordered to assist Wang Yanchao of Hezhong in striking him along the Jinzhou route, and they defeated him at Gaoping.",
+      "reason": "Literal 'but they were defeated' reverses 敗於高平 in this campaign context; the clause records Zhou success at Gaoping.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:484:r0003",
+      "unit": {
+        "id": "s0252",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "When Emperor Gong succeeded, Tong was transferred to garrison Yanzhou.",
+      "after": "When Emperor Gong succeeded, Tong was transferred to garrison Yunzhou.",
+      "reason": "Chinese 鄆州 is Yunzhou (modern Dongping area), not Yanzhou 兗州; the idiomatic rendering misidentifies the prefecture.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:484:r0004",
+      "unit": {
+        "id": "s0252",
+        "kind": "paragraph-sentence",
+        "blockIndex": 7,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "literal",
+      "before": "When Emperor Gong succeeded, Tong was transferred to garrison Yanzhou.",
+      "after": "When Emperor Gong succeeded, Tong was transferred to garrison Yunzhou.",
+      "reason": "Literal likewise renders 鄆州 as Yanzhou; correct place-name is Yunzhou.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:484:r0005",
+      "unit": {
+        "id": "s0119",
+        "kind": "paragraph-sentence",
+        "blockIndex": 17,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "field": "idiomatic",
+      "before": "Murong Yanhao and Wang Quanbin were sent by the eastern route to join Shouxin. With the inspector Li Chongju they routed Yun at Changping and took three thousand heads.",
+      "after": "Murong Yanzhao and Wang Quanbin were sent by the eastern route to join Shouxin. With the inspector Li Chongju they routed Yun at Changping and took three thousand heads.",
+      "reason": "Chinese 慕容延釗 is Murong Yanzhao (釗), not Yanhao; the idiomatic spelling misreads the given name.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:484:r0006",
+      "unit": {
+        "id": "s0127",
+        "kind": "paragraph-sentence",
+        "blockIndex": 18,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "That evening he feasted his officers with Shoujie present and appointed him training commissioner of Shan;",
+      "after": "That evening he feasted his officers with Shoujie present and appointed him training commissioner of Shanzhou;",
+      "reason": "單州 is Shanzhou; truncating to 'Shan' obscures the prefecture name.",
+      "confidence": "medium"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "songshi:484:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "The clause records Liu Chong's defeat at Gaoping. Reading it as a defeat of Tong and Wang Yanchao reverses the documented result and breaks the object continuity from 擊之.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "songshi/484 s0018",
+        "excerpt": "出晉州道擊之，敗於高平"
+      }
+    },
+    {
+      "repairId": "songshi:484:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field makes the same reversal. Tong and Wang Yanchao were sent to attack Liu Chong, whose forces were defeated at Gaoping.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "songshi/484 s0018",
+        "excerpt": "擊之，敗於高平"
+      }
+    },
+    {
+      "repairId": "songshi:484:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "The source has 鄆州, Yunzhou. Yanzhou would be 姚州 or 兌州 and names a different prefecture.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "songshi/484 s0252",
+        "excerpt": "移領鄆州"
+      }
+    },
+    {
+      "repairId": "songshi:484:r0004",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field repeats the same place-name error; 鄆州 must be rendered Yunzhou here.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "songshi/484 s0252",
+        "excerpt": "鄆州"
+      }
+    },
+    {
+      "repairId": "songshi:484:r0005",
+      "decision": "accept",
+      "after": null,
+      "reason": "慕容延釗 is Murong Yanzhao. Yanhao is a mistranscription of the final character and is not an attested alternate name.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "songshi/484 s0119",
+        "excerpt": "遣慕容延釗、王全斌"
+      }
+    },
+    {
+      "repairId": "songshi:484:r0006",
+      "decision": "revise",
+      "after": "That day he feasted his officers with Shoujie present and appointed him training commissioner of Shanzhou;",
+      "reason": "單州 is the prefecture name Shanzhou, so the bare form 'Shan' obscures the territorial command. The revision also restores 是日 as 'that day,' correcting the unsupported 'that evening.'",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "songshi/484 s0127",
+        "excerpt": "是日宴從官…以為單州團練使"
+      }
+    }
+  ],
+  "claimRetractions": [
+    {
+      "repairId": "songshi:484:r0005",
+      "claim": {
+        "id": "songshi:484:c0240",
+        "subject": "songshi:484:p078",
+        "predicate": "name",
+        "value": {
+          "kind": "personal-name",
+          "en": "Murong Yanhao",
+          "zh": "慕容延釗",
+          "pinyin": "Murong Yanzhao"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "songshi:484:s0119"
+        ]
+      },
+      "reason": "Murong Yanhao was copied from the mistranslated English and conflicts with both the Chinese name and the extraction's correct pinyin.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "songshi/484 s0119",
+        "excerpt": "慕容延釗"
+      }
+    }
+  ],
+  "claimRevisions": [],
+  "claimAdditions": []
+}

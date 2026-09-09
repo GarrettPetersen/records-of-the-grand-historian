@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 3,
+  "book": "qingshigao",
+  "chapter": "512",
+  "input": {
+    "chapterFingerprint": "sha256:f6718d2ca6b89573a1d07f574414b1a581a21178605f72622f8cf6757d3c26e2",
+    "proposalsFingerprint": "sha256:3b6c330d88e8e9d5d87d9ddbc9afd76604306238a3f6303ede925814b2ae7d3d"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "Codex",
+    "model": "GPT-5",
+    "agentId": null,
+    "runId": null,
+    "completedAt": "2026-09-09T00:55:00.000Z"
+  },
+  "proposals": [
+    {
+      "id": "qingshigao:512:r0001",
+      "unit": {
+        "id": "s0025",
+        "kind": "paragraph-sentence",
+        "blockIndex": 3,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "Since Kangxi 53 (1714), when the native official Lu Dingqian broke the law, imperial commissioners and the provincial governors jointly tried Bi Jie; Lu emerged only after a regular official was sent in as hostage—and from then on he grew ever bolder.",
+      "after": "Since Kangxi 53 (1714), when the native official Lu Dingqian broke the law, imperial commissioners and the provincial governors held a joint trial at Bijie; Lu emerged only after a regular official was sent in as hostage—and from then on he grew ever bolder.",
+      "reason": "Chinese 會審畢節 means the joint trial was held at the place Bijie, not that a person named Bi Jie was tried.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "qingshigao:512:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "The grammar places 畢節 after 會審 as the location of the joint trial. Bijie is a place, not the person being tried; the offender named in the sentence is Lu Dingqian.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "qingshigao/512 s0025",
+        "excerpt": "欽差、督、撫會審畢節"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [],
+  "claimAdditions": []
+}
