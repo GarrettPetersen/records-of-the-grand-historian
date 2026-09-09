@@ -93,6 +93,75 @@ function mappedText(text, names, context, replacements) {
   });
 }
 
+function collectMappingIssues(chapter, extraction, names) {
+  const issuesByKey = new Map();
+  const inspect = (text, context) => {
+    for (const match of String(text || '').matchAll(HAN_RE)) {
+      const zh = match[0];
+      const options = [...(names.get(zh) || [])].sort();
+      if (options.length === 1) continue;
+      const kind = options.length === 0 ? 'missing' : 'ambiguous';
+      const key = `${kind}\u0000${zh}\u0000${options.join('\u0000')}`;
+      const issue = issuesByKey.get(key) || { kind, zh, options, contexts: [] };
+      if (!issue.contexts.includes(context)) issue.contexts.push(context);
+      issuesByKey.set(key, issue);
+    }
+  };
+
+  for (const block of chapter.content || []) {
+    for (const sentence of block.sentences || []) {
+      for (const translation of sentence.translations || []) {
+        const allowed = translation.allowChineseCharacters === true
+          || sentence.allowChineseCharacters === true;
+        const reason = translation.allowChineseCharactersReason
+          || sentence.allowChineseCharactersReason
+          || '';
+        if (!allowed || !TABLE_REASON_RE.test(reason)) continue;
+        for (const field of ['literal', 'idiomatic']) {
+          inspect(translation[field], `${sentence.id}.${field}`);
+        }
+      }
+    }
+  }
+  for (const row of extraction.surfaces || []) {
+    if (row[2] === 'en') inspect(row[3], `extraction surface ${row[0]}`);
+  }
+  return [...issuesByKey.values()].sort((left, right) =>
+    left.zh.localeCompare(right.zh) || left.kind.localeCompare(right.kind)
+  );
+}
+
+function assertCompleteMappings(chapter, extraction, names) {
+  const issues = collectMappingIssues(chapter, extraction, names);
+  if (issues.length === 0) return;
+  const details = issues.map((issue) => {
+    const mapping = issue.kind === 'missing'
+      ? 'no extraction-backed romanization'
+      : `ambiguous romanizations: ${issue.options.join(', ')}`;
+    const contexts = issue.contexts.slice(0, 8).join(', ');
+    const extra = issue.contexts.length > 8 ? ` (+${issue.contexts.length - 8} more)` : '';
+    return `- ${issue.zh}: ${mapping}; ${contexts}${extra}`;
+  });
+  throw new Error(
+    `Cannot romanize Qing table: ${issues.length} distinct unmapped Han span(s):\n${details.join('\n')}`,
+  );
+}
+
+function enrichCandidateError(error, packet) {
+  const ids = (error?.errors || [])
+    .map((message) => String(message).match(/preflight candidate (\S+) is not accounted for/u)?.[1])
+    .filter(Boolean);
+  if (ids.length === 0) throw error;
+  const candidates = new Map((packet.preflight?.candidates || []).map((candidate) => [candidate.id, candidate]));
+  const details = ids.map((id) => {
+    const candidate = candidates.get(id);
+    return candidate
+      ? `${id}: ${JSON.stringify(candidate)}`
+      : `${id}: candidate details unavailable`;
+  });
+  throw new Error(`${error.message}\nCandidate details:\n${details.join('\n')}`, { cause: error });
+}
+
 function repairChapter(chapter, names) {
   const replacements = [];
   let fieldsChanged = 0;
@@ -186,6 +255,10 @@ function selfTest() {
     failedClosed = true;
   }
   if (!failedClosed) throw new Error('Qing table romanization self-test failed to reject an unknown name');
+  const issues = collectMappingIssues(chapter, { surfaces: [["p999", "personal-name", "en", "李四", []]] }, names);
+  if (issues.length !== 1 || issues[0].zh !== '李四' || issues[0].contexts.length !== 1) {
+    throw new Error('Qing table romanization self-test failed to aggregate unmapped spans');
+  }
   console.log('Qing table romanization self-test: ok');
 }
 
@@ -211,6 +284,7 @@ function main() {
   const chapter = readJson(chapterFile);
   const extraction = readJson(extractionFile);
   const names = extractionNames(extraction);
+  assertCompleteMappings(chapter, extraction, names);
   const result = repairChapter(chapter, names);
   const extractionResult = repairExtractionSurfaces(extraction, names);
   if (result.fieldsChanged === 0 && extractionResult.surfacesChanged === 0) {
@@ -223,7 +297,12 @@ function main() {
     properNounMatcher: loadProperNounMatcher(),
   });
   const expanded = expandPeopleExtraction(extractionResult.repaired, packet);
-  const validated = validatePeopleExtraction(expanded, packet);
+  let validated;
+  try {
+    validated = validatePeopleExtraction(expanded, packet);
+  } catch (error) {
+    enrichCandidateError(error, packet);
+  }
   const compact = compactPeopleExtraction(validated.normalized, packet);
   validateCompactPeopleExtraction(compact, packet);
 
