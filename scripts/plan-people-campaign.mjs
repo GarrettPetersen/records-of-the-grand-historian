@@ -14,6 +14,8 @@ const CAMPAIGN_RUN_TIMEOUT_MINUTES = 20;
 const CAMPAIGN_MAX_RUN_TOKENS = 3_000_000;
 const CAMPAIGN_EDITORIAL_MAX_RUN_COST_DOLLARS = 3;
 const CAMPAIGN_EDITORIAL_MAX_RUN_TOKENS = 4_000_000;
+const CAMPAIGN_RESOLUTION_MAX_RUN_COST_DOLLARS = 3;
+const CAMPAIGN_RESOLUTION_MAX_RUN_TOKENS = 4_000_000;
 const ALIAS_DISPOSITION_DEBT_PATH = path.join(
   REPO_ROOT,
   'data',
@@ -130,6 +132,7 @@ export function campaignTargets({
     chaptersPerWave,
     extractionConcurrency: Math.min(20, Math.max(12, Math.ceil(chaptersPerWave / 2.5))),
     editorialConcurrency: Math.min(18, Math.max(8, Math.ceil(chaptersPerWave / 3))),
+    resolutionConcurrency: Math.min(16, Math.max(8, Math.ceil(chaptersPerWave / 5))),
     maxUnits: CAMPAIGN_MAX_UNITS,
     maxCandidates: CAMPAIGN_MAX_CANDIDATES,
     maxWorkerKiB: CAMPAIGN_MAX_WORKER_KIB,
@@ -137,6 +140,8 @@ export function campaignTargets({
     maxRunTokens: CAMPAIGN_MAX_RUN_TOKENS,
     editorialMaxRunCostDollars: CAMPAIGN_EDITORIAL_MAX_RUN_COST_DOLLARS,
     editorialMaxRunTokens: CAMPAIGN_EDITORIAL_MAX_RUN_TOKENS,
+    resolutionMaxRunCostDollars: CAMPAIGN_RESOLUTION_MAX_RUN_COST_DOLLARS,
+    resolutionMaxRunTokens: CAMPAIGN_RESOLUTION_MAX_RUN_TOKENS,
     waveCostCeilingDollars: Math.ceil(chaptersPerWave * 4.5),
   };
 }
@@ -162,6 +167,80 @@ export function campaignProgress(progress, aliasDispositionDebt = new Set()) {
     extractionDebt: progress.summary.sourceChapters - progress.summary.currentChapters,
     editorialDebt: progress.summary.sourceChapters - reviewedChapters,
   };
+}
+
+export function campaignIdentityProgress(progress, catalog = null) {
+  if (!catalog) {
+    const pendingResolutionChapters = [...progress.byChapter.entries()]
+      .filter(([, chapter]) => chapter.state === 'current' && chapter.unresolvedPeople > 0)
+      .map(([chapterId, chapter]) => ({ chapterId, unresolvedPeople: chapter.unresolvedPeople }))
+      .sort((left, right) =>
+        left.unresolvedPeople - right.unresolvedPeople || left.chapterId.localeCompare(right.chapterId));
+    if (
+      !Number.isInteger(progress.summary.identityCleanChapters) ||
+      !Number.isInteger(progress.summary.peopleNeedingReview) ||
+      !Number.isInteger(progress.summary.unresolvedCandidateBlocks)
+    ) {
+      throw new Error('People progress lacks canonical identity status; run npm run people:catalog');
+    }
+    return {
+      identityClosedChapters: progress.summary.identityCleanChapters,
+      pendingIdentityChapters: pendingResolutionChapters.length,
+      resolutionDebt: progress.summary.sourceChapters - progress.summary.identityCleanChapters,
+      peopleNeedingReview: progress.summary.peopleNeedingReview,
+      unresolvedCandidateBlocks: progress.summary.unresolvedCandidateBlocks,
+      pendingResolutionChapters,
+    };
+  }
+  if (
+    catalog.stats?.sourceChapters !== progress.summary.sourceChapters ||
+    catalog.stats?.extractedChapters !== progress.summary.extractedChapters
+  ) {
+    throw new Error('People catalog is stale relative to extraction progress; run npm run people:catalog');
+  }
+  const currentChapters = new Set([...progress.byChapter.entries()]
+    .filter(([, chapter]) => chapter.state === 'current')
+    .map(([chapterId]) => chapterId));
+  const unresolvedByChapter = new Map();
+  const seenPersonChapters = new Set();
+  const peopleNeedingReview = catalog.people.filter((person) => person.curation?.status === 'needs-review');
+  for (const person of peopleNeedingReview) {
+    for (const localId of person.localPeople) {
+      const [book, chapter] = localId.split(':');
+      const chapterId = `${book}:${chapter}`;
+      if (!currentChapters.has(chapterId)) continue;
+      const key = `${person.id}\u0000${chapterId}`;
+      if (seenPersonChapters.has(key)) continue;
+      seenPersonChapters.add(key);
+      unresolvedByChapter.set(chapterId, (unresolvedByChapter.get(chapterId) ?? 0) + 1);
+    }
+  }
+  const pendingResolutionChapters = [...unresolvedByChapter.entries()]
+    .map(([chapterId, unresolvedPeople]) => ({ chapterId, unresolvedPeople }))
+    .sort((left, right) =>
+      left.unresolvedPeople - right.unresolvedPeople || left.chapterId.localeCompare(right.chapterId));
+  const identityClosedChapters = currentChapters.size - pendingResolutionChapters.length;
+  return {
+    identityClosedChapters,
+    pendingIdentityChapters: pendingResolutionChapters.length,
+    resolutionDebt: progress.summary.sourceChapters - identityClosedChapters,
+    peopleNeedingReview: peopleNeedingReview.length,
+    unresolvedCandidateBlocks: catalog.stats.unresolvedCandidateBlocks,
+    pendingResolutionChapters,
+  };
+}
+
+export function selectResolutionChapters(pendingChapters, limit) {
+  const pool = pendingChapters.map((item) => ({ ...item }))
+    .sort((left, right) =>
+      left.unresolvedPeople - right.unresolvedPeople || left.chapterId.localeCompare(right.chapterId));
+  const selected = [];
+  while (pool.length > 0 && selected.length < limit) {
+    const tailTurn = selected.length % 4 === 3;
+    const index = tailTurn ? Math.floor((pool.length - 1) * 0.75) : 0;
+    selected.push(pool.splice(index, 1)[0]);
+  }
+  return selected;
 }
 
 function currentAliasDispositionDebt(progress) {
@@ -246,6 +325,41 @@ function selfTest() {
   ) {
     throw new Error(`Unexpected campaign progress: ${JSON.stringify(completion)}`);
   }
+  const identity = campaignIdentityProgress({
+    summary: { sourceChapters: 5, extractedChapters: 4 },
+    byChapter: new Map([
+      ['a:001', { state: 'current' }],
+      ['a:002', { state: 'current' }],
+      ['a:003', { state: 'current' }],
+      ['a:004', { state: 'rereview' }],
+      ['a:005', { state: 'missing' }],
+    ]),
+  }, {
+    stats: { sourceChapters: 5, extractedChapters: 4, unresolvedCandidateBlocks: 3 },
+    people: [
+      { id: 'p1', curation: { status: 'needs-review' }, localPeople: ['a:001:p001', 'a:002:p001'] },
+      { id: 'p2', curation: { status: 'machine-reviewed' }, localPeople: ['a:003:p001'] },
+    ],
+  });
+  if (
+    identity.identityClosedChapters !== 1 ||
+    identity.pendingIdentityChapters !== 2 ||
+    identity.resolutionDebt !== 4 ||
+    identity.peopleNeedingReview !== 1 ||
+    identity.unresolvedCandidateBlocks !== 3
+  ) {
+    throw new Error(`Unexpected identity progress: ${JSON.stringify(identity)}`);
+  }
+  const selected = selectResolutionChapters([
+    { chapterId: 'a:001', unresolvedPeople: 1 },
+    { chapterId: 'a:002', unresolvedPeople: 2 },
+    { chapterId: 'a:003', unresolvedPeople: 3 },
+    { chapterId: 'a:004', unresolvedPeople: 4 },
+    { chapterId: 'a:005', unresolvedPeople: 5 },
+  ], 4);
+  if (selected.map((item) => item.chapterId).join(',') !== 'a:001,a:002,a:003,a:004') {
+    throw new Error(`Unexpected balanced resolution selection: ${JSON.stringify(selected)}`);
+  }
   console.log('people campaign planner self-test: ok');
 }
 
@@ -258,6 +372,7 @@ function main() {
   const corpusProgress = buildPeopleGlossaryProgress(JSON.parse(fs.readFileSync(manifestFile, 'utf8')));
   const progress = corpusProgress.summary;
   const completion = campaignProgress(corpusProgress, currentAliasDispositionDebt(corpusProgress));
+  const identity = campaignIdentityProgress(corpusProgress);
   const extractionTargets = campaignTargets({
     missingChapters: completion.extractionDebt,
     asOf: opts.asOf,
@@ -282,17 +397,37 @@ function main() {
     wavesPerDay: opts.wavesPerDay,
     bufferPercent: opts.bufferPercent,
   });
+  const resolutionTargets = campaignTargets({
+    missingChapters: identity.resolutionDebt,
+    asOf: opts.asOf,
+    deadline: opts.deadline,
+    capacityStart: opts.capacityStart ?? opts.asOf,
+    wavesPerDay: opts.wavesPerDay,
+    bufferPercent: opts.bufferPercent,
+  });
+  const resolutionSelection = selectResolutionChapters(
+    identity.pendingResolutionChapters,
+    resolutionTargets.chaptersPerWave,
+  );
   const result = {
     asOf: opts.asOf,
     deadline: opts.deadline,
     ...progress,
     ...completion,
+    ...identity,
     ...extractionTargets,
     extractionChaptersPerWave: extractionTargets.chaptersPerWave,
     editorialChaptersPerWave: editorialTargets.chaptersPerWave,
     editorialMinimumChaptersPerDay: editorialTargets.minimumChaptersPerDay,
     editorialBufferedChaptersPerDay: editorialTargets.bufferedChaptersPerDay,
     editorialConcurrency: editorialTargets.editorialConcurrency,
+    resolutionChaptersPerWave: resolutionTargets.chaptersPerWave,
+    resolutionMinimumChaptersPerDay: resolutionTargets.minimumChaptersPerDay,
+    resolutionBufferedChaptersPerDay: resolutionTargets.bufferedChaptersPerDay,
+    resolutionConcurrency: resolutionTargets.resolutionConcurrency,
+    resolutionMaxRunCostDollars: resolutionTargets.resolutionMaxRunCostDollars,
+    resolutionMaxRunTokens: resolutionTargets.resolutionMaxRunTokens,
+    resolutionSelection,
     aliasReviewChaptersPerWave: aliasReviewTargets.chaptersPerWave,
     aliasReviewMinimumChaptersPerDay: aliasReviewTargets.minimumChaptersPerDay,
     aliasReviewBufferedChaptersPerDay: aliasReviewTargets.bufferedChaptersPerDay,
@@ -310,6 +445,11 @@ function main() {
     `Editorially closed: ${completion.reviewedChapters}/${progress.sourceChapters}; ` +
     `${completion.pendingEditorialChapters} current extraction(s) still need closure`,
   );
+  console.log(
+    `Identity-clean: ${identity.identityClosedChapters}/${progress.sourceChapters}; ` +
+    `${identity.pendingIdentityChapters} current chapter(s), ${identity.peopleNeedingReview} people, and ` +
+    `${identity.unresolvedCandidateBlocks} candidate blocks still need resolution`,
+  );
   console.log(`Alias callback rereview: ${completion.aliasDispositionChapters} current chapter(s)`);
   console.log(`Older rereview: ${progress.rereviewChapters}; extraction/rereview debt: ${completion.extractionDebt}`);
   console.log(`Calendar dates remaining: ${extractionTargets.calendarDays}`);
@@ -323,17 +463,20 @@ function main() {
   console.log(`Extraction buffered target: ${extractionTargets.bufferedChaptersPerDay} chapters/day (${opts.bufferPercent}% buffer)`);
   console.log(`Editorial minimum: ${editorialTargets.minimumChaptersPerDay} closures/day`);
   console.log(`Editorial buffered target: ${editorialTargets.bufferedChaptersPerDay} closures/day (${opts.bufferPercent}% buffer)`);
+  console.log(`Identity-resolution minimum: ${resolutionTargets.minimumChaptersPerDay} chapter scopes/day`);
+  console.log(`Identity-resolution buffered target: ${resolutionTargets.bufferedChaptersPerDay} chapter scopes/day (${opts.bufferPercent}% buffer)`);
   console.log(
     `Alias-review target: ${aliasReviewTargets.bufferedChaptersPerDay} chapters/day ` +
     `in ${opts.wavesPerDay} x ${aliasReviewTargets.chaptersPerWave}-chapter context-only waves`,
   );
   console.log(
     `Cadence: ${opts.wavesPerDay} x ${extractionTargets.chaptersPerWave}-chapter extraction waves/day; ` +
-    `${opts.wavesPerDay} x ${editorialTargets.chaptersPerWave}-chapter editorial waves/day`,
+    `${opts.wavesPerDay} x ${editorialTargets.chaptersPerWave}-chapter editorial waves/day; ` +
+    `${opts.wavesPerDay} x ${resolutionTargets.chaptersPerWave}-chapter identity waves/day`,
   );
   console.log(
     `Initial concurrency: extraction ${extractionTargets.extractionConcurrency}, ` +
-    `editorial ${editorialTargets.editorialConcurrency}`,
+    `editorial ${editorialTargets.editorialConcurrency}, resolution ${resolutionTargets.resolutionConcurrency}`,
   );
   console.log(
     `New-work profile: ${extractionTargets.maxUnits} units, ${extractionTargets.maxCandidates} candidates, ` +
@@ -358,6 +501,10 @@ function main() {
     `--max-run-cost ${editorialTargets.editorialMaxRunCostDollars} ` +
     `--max-run-tokens ${editorialTargets.editorialMaxRunTokens} ` +
     `--run-timeout-minutes ${editorialTargets.runTimeoutMinutes} --model grok-4.6 --effort medium`,
+  );
+  console.log(
+    `Identity wave: npm run people:resolution:deadline-wave -- --limit ${resolutionSelection.length} ` +
+    `(start with --limit 10 after a capacity reset, then use the measured wave size)`,
   );
 }
 

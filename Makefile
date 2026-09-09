@@ -334,13 +334,13 @@ update:
 	@echo "Step 5/8: Refreshing quality reports and generating site progress (merge this book)..."
 	@$(NODE) scripts/scan-placeholder-translations.mjs --out data/quality/placeholder-translations.json --summary --limit=0
 	@$(NODE) scripts/scan-translation-alignment.mjs --book $(BOOK) --out data/quality/translation-alignment.json --merge-out --cache-current --summary --min-severity 3
+	@$(NODE) scripts/compile-people-catalog.mjs
 	@$(NODE) scripts/test-people-progress.mjs
 	@$(NODE) generate-progress.js --book $(BOOK)
 	@echo ""
 	@echo "Step 6/8: Generating static pages..."
 	@$(NODE) scripts/sync-publication-descriptions.mjs
 	@$(NODE) scripts/generate-book-covers.mjs
-	@$(NODE) scripts/compile-people-catalog.mjs
 	@$(NODE) generate-static-pages.js --book $(BOOK)
 	@$(MAKE) generate-people-annotated-pages
 	@$(NODE) scripts/generate-people-pages.mjs
@@ -388,13 +388,13 @@ update-all:
 	@echo "Step 5/8: Refreshing quality reports and generating site progress..."
 	@$(NODE) scripts/scan-placeholder-translations.mjs --out data/quality/placeholder-translations.json --summary --limit=0
 	@$(NODE) scripts/scan-translation-alignment.mjs --out data/quality/translation-alignment.json --merge-out --cache-current --summary --min-severity 3
+	@$(NODE) scripts/compile-people-catalog.mjs
 	@$(NODE) scripts/test-people-progress.mjs
 	@$(NODE) generate-progress.js
 	@echo ""
 	@echo "Step 6/8: Generating static pages..."
 	@$(NODE) scripts/sync-publication-descriptions.mjs
 	@$(NODE) scripts/generate-book-covers.mjs
-	@$(NODE) scripts/compile-people-catalog.mjs
 	@$(NODE) generate-static-pages.js
 	@$(NODE) scripts/generate-people-pages.mjs
 	@$(NODE) scripts/verify-people-site.mjs
@@ -461,6 +461,7 @@ manifest:
 .PHONY: progress
 progress:
 	@echo "Generating people glossary and translation progress data..."
+	@$(NODE) scripts/compile-people-catalog.mjs
 	@$(NODE) scripts/test-people-progress.mjs
 	@$(NODE) generate-progress.js $(if $(BOOK),--book $(BOOK),)
 	@echo "Progress data generated at data/progress.json"

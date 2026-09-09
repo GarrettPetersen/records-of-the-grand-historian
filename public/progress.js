@@ -26,10 +26,12 @@ const CHRONOLOGICAL_ORDER = [
 ];
 
 const OTHER_WORKS_ORDER = ['zizhitongjian', 'qingshigao'];
-const VALID_STATES = new Set(['current', 'rereview', 'missing']);
+const VALID_STATES = new Set(['current', 'editorial-review', 'identity-review', 'rereview', 'missing']);
 const STATE_LABELS = {
-    current: 'Current pass complete',
-    rereview: 'Needs rereview',
+    current: 'Glossary complete',
+    'editorial-review': 'Translation review needed',
+    'identity-review': 'Identity resolution needed',
+    rereview: 'Source rereview needed',
     missing: 'Not started'
 };
 
@@ -94,8 +96,15 @@ function validateSummary(summary) {
         'sourceChapters',
         'extractedChapters',
         'currentChapters',
+        'completeChapters',
+        'editorialReviewChapters',
+        'identityReviewChapters',
+        'chaptersWithUnresolvedPeople',
+        'identityCleanChapters',
         'rereviewChapters',
         'missingChapters',
+        'peopleNeedingReview',
+        'unresolvedCandidateBlocks',
         'peopleRecords',
         'factClaims',
         'familyRelationships',
@@ -114,12 +123,23 @@ function validateSummary(summary) {
         summary.extractedChapters === summary.currentChapters + summary.rereviewChapters,
         'extracted chapter count is inconsistent'
     );
+    requireCondition(
+        summary.sourceChapters === summary.completeChapters + summary.editorialReviewChapters +
+            summary.identityReviewChapters + summary.rereviewChapters + summary.missingChapters,
+        'glossary completion states do not add up'
+    );
 }
 
 function renderOverview(summary) {
     validateSummary(summary);
     const percent = summary.sourceChapters > 0
-        ? (summary.currentChapters / summary.sourceChapters) * 100
+        ? (summary.completeChapters / summary.sourceChapters) * 100
+        : 0;
+    const editorialPercent = summary.sourceChapters > 0
+        ? (summary.editorialReviewChapters / summary.sourceChapters) * 100
+        : 0;
+    const identityPercent = summary.sourceChapters > 0
+        ? (summary.identityReviewChapters / summary.sourceChapters) * 100
         : 0;
     const rereviewPercent = summary.sourceChapters > 0
         ? (summary.rereviewChapters / summary.sourceChapters) * 100
@@ -127,23 +147,25 @@ function renderOverview(summary) {
 
     document.getElementById('coverage-percent').textContent = formatPercent(percent);
     document.getElementById('coverage-current').style.width = `${percent}%`;
+    document.getElementById('coverage-editorial').style.width = `${editorialPercent}%`;
+    document.getElementById('coverage-identity').style.width = `${identityPercent}%`;
     document.getElementById('coverage-rereview').style.width = `${rereviewPercent}%`;
     document.getElementById('coverage-track').setAttribute('aria-valuenow', percent.toFixed(1));
 
     const metrics = document.getElementById('corpus-metrics');
     metrics.replaceChildren(
-        metric('Current chapters', summary.currentChapters, `Complete under prompt v${summary.currentPromptVersion}.`),
+        metric('Complete chapters', summary.completeChapters, 'Extracted, edited, and identity-clean.'),
+        metric('Identity review', summary.chaptersWithUnresolvedPeople, `${formatInteger(summary.peopleNeedingReview)} people remain ambiguous.`),
         metric('Needs rereview', summary.rereviewChapters, 'Extracted under an earlier contract.'),
         metric('Not started', summary.missingChapters, 'Awaiting the full glossary pass.'),
         metric('Individual records', summary.peopleRecords, 'Chapter-local people gathered so far.'),
-        metric('Historical facts', summary.factClaims, `${formatInteger(summary.attestations)} dated attestations recorded.`),
-        metric('Translation fixes', summary.appliedTranslationRepairs, 'Editorial repairs applied during extraction.')
+        metric('Historical facts', summary.factClaims, `${formatInteger(summary.attestations)} dated attestations recorded.`)
     );
 
     const publicationNote = document.getElementById('publication-note');
-    publicationNote.textContent = summary.missingChapters === 0 && summary.rereviewChapters === 0
-        ? 'Chapter extraction is complete. Cross-book identity resolution and editorial refinement continue.'
-        : `The published people index currently covers ${formatInteger(summary.extractedChapters)} of ${formatInteger(summary.sourceChapters)} chapters and grows with each reviewed batch. ${formatInteger(summary.familyRelationships)} family relationships have been recorded so far.`;
+    publicationNote.textContent = `The glossary is complete for ${formatInteger(summary.completeChapters)} of ${formatInteger(summary.sourceChapters)} chapters. ` +
+        `${formatInteger(summary.extractedChapters)} chapters have source extractions, and ${formatInteger(summary.unresolvedCandidateBlocks)} cross-chapter identity groups still require decisions. ` +
+        `${formatInteger(summary.familyRelationships)} family relationships have been recorded so far.`;
     if (summary.pendingTranslationRepairs > 0) {
         publicationNote.textContent += ` ${formatInteger(summary.pendingTranslationRepairs)} proposed translation repairs still await editorial review.`;
     }
@@ -157,7 +179,7 @@ function chapterTitle(chapter) {
 function chapterTooltip(chapter, people) {
     const lines = [
         `${chapter.chapter}: ${chapterTitle(chapter)}`,
-        `Glossary: ${STATE_LABELS[people.state]}`
+        `Glossary: ${STATE_LABELS[people.glossaryState]}`
     ];
     if (people.state !== 'missing') {
         lines.push(
@@ -168,20 +190,23 @@ function chapterTooltip(chapter, people) {
             `Translation fixes applied: ${formatInteger(people.appliedTranslationRepairs)}`,
             `Extraction prompt: v${people.promptVersion}`
         );
+        if (people.unresolvedPeople > 0) {
+            lines.push(`People awaiting identity resolution: ${formatInteger(people.unresolvedPeople)}`);
+        }
     }
     return lines.join('\n');
 }
 
 function bookStats(book) {
-    const stats = { current: 0, rereview: 0, missing: 0, people: 0, facts: 0 };
+    const stats = { current: 0, 'editorial-review': 0, 'identity-review': 0, rereview: 0, missing: 0, people: 0, facts: 0 };
     for (const chapter of book.chapters || []) {
         const people = chapter.peopleGlossary;
-        requireCondition(people && VALID_STATES.has(people.state), `invalid chapter state in ${chapter.chapter}`);
-        stats[people.state] += 1;
+        requireCondition(people && VALID_STATES.has(people.glossaryState), `invalid chapter state in ${chapter.chapter}`);
+        stats[people.glossaryState] += 1;
         stats.people += Number(people.peopleRecords || 0);
         stats.facts += Number(people.factClaims || 0);
     }
-    stats.total = stats.current + stats.rereview + stats.missing;
+    stats.total = stats.current + stats['editorial-review'] + stats['identity-review'] + stats.rereview + stats.missing;
     return stats;
 }
 
@@ -222,8 +247,10 @@ function createBookSection(bookId, book) {
     const statsRow = document.createElement('div');
     statsRow.className = 'book-progress-stats';
     statsRow.append(
-        statItem('current', `${formatInteger(stats.current)} current`),
-        statItem('rereview', `${formatInteger(stats.rereview)} need rereview`),
+        statItem('current', `${formatInteger(stats.current)} complete`),
+        statItem('identity-review', `${formatInteger(stats['identity-review'])} identity review`),
+        statItem('editorial-review', `${formatInteger(stats['editorial-review'])} translation review`),
+        statItem('rereview', `${formatInteger(stats.rereview)} source rereview`),
         statItem('missing', `${formatInteger(stats.missing)} not started`)
     );
     const records = document.createElement('span');
@@ -236,7 +263,7 @@ function createBookSection(bookId, book) {
         const people = chapter.peopleGlossary;
         const tooltip = chapterTooltip(chapter, people);
         const square = document.createElement('a');
-        square.className = `chapter-progress-square ${people.state}`;
+        square.className = `chapter-progress-square ${people.glossaryState}`;
         square.href = `${bookId}/${chapter.chapter}.html`;
         square.dataset.tooltip = tooltip;
         square.title = tooltip.replaceAll('\n', ' | ');

@@ -2227,13 +2227,23 @@ async function main() {
       `${new Set(dossiers.flatMap((item) => Object.keys(item.document.people))).size} local people; no Git pushes`,
     );
     console.log(describeCursorRunLimits(opts));
+    let plannedWorkerRuns = 0;
     for (const dossier of dossiers) {
+      let parts = [];
+      if (opts.dryRun) {
+        parts = buildTargetDossierParts(dossier);
+        if (parts.length === 0) parts = buildAdaptiveDossierParts(dossier);
+      }
+      const workerRuns = parts.length || 1;
+      plannedWorkerRuns += workerRuns;
       console.log(
         `  ${dossier.batch}: ${dossier.document.blocks.length} blocks, ` +
         `${Object.keys(dossier.document.people).length} people, ` +
-        `${(Buffer.byteLength(JSON.stringify(dossier.document)) / 1024).toFixed(1)} KiB`,
+        `${(Buffer.byteLength(JSON.stringify(dossier.document)) / 1024).toFixed(1)} KiB` +
+        (opts.dryRun ? `, ${workerRuns} effective worker run(s)` : ''),
       );
     }
+    if (opts.dryRun) console.log(`Dry-run worker estimate: ${plannedWorkerRuns} effective run(s)`);
     if (opts.prepareDossiers) {
       prepareDossierFiles(dossiers, opts, corpus);
       return;

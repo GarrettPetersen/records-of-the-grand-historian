@@ -17,6 +17,7 @@ import { scoreChapterFile } from './score-translations.js';
 import { isExcludedFromTranslationCount } from './chapter-counts.mjs';
 import { isPunctuationOnlySentence } from './sentence-utils.mjs';
 import { estimateCompletionFromGitHistory } from './scripts/progress-estimate.mjs';
+import { readPeopleCatalog } from './scripts/lib/people-generated-data.mjs';
 
 const MANIFEST_PATH = './data/manifest.json';
 const DATA_DIR = './data';
@@ -30,6 +31,7 @@ const PUBLIC_PROGRESS_PATH = './public/data/progress.json';
 const PUBLIC_PROGRESS_BOOKS_DIR = './public/data/progress/books';
 const PEOPLE_CONFIG_PATH = './data/people/config.json';
 const PEOPLE_EXTRACTIONS_DIR = './data/people/extractions';
+const PEOPLE_CATALOG_PATH = './data/people/generated/catalog.json';
 
 function parseBookArg() {
   const i = process.argv.indexOf('--book');
@@ -621,6 +623,63 @@ function peopleExtractionFiles() {
   return files;
 }
 
+function applyPeopleIdentityProgress(byChapter, summary) {
+  assertPeopleProgress(fs.existsSync(PEOPLE_CATALOG_PATH), `missing ${PEOPLE_CATALOG_PATH}; run npm run people:catalog`);
+  const catalog = readPeopleCatalog(PEOPLE_CATALOG_PATH);
+  assertPeopleProgress(
+    catalog.stats?.sourceChapters === summary.sourceChapters &&
+    catalog.stats?.extractedChapters === summary.extractedChapters,
+    'canonical catalog is stale relative to extraction coverage; run npm run people:catalog',
+  );
+  const unresolvedByChapter = new Map();
+  const seenPersonChapters = new Set();
+  const peopleNeedingReview = catalog.people.filter((person) => person.curation?.status === 'needs-review');
+  for (const person of peopleNeedingReview) {
+    for (const localId of person.localPeople) {
+      const [book, chapter] = localId.split(':');
+      const chapterId = `${book}:${chapter}`;
+      if (!byChapter.has(chapterId)) continue;
+      const key = `${person.id}\u0000${chapterId}`;
+      if (seenPersonChapters.has(key)) continue;
+      seenPersonChapters.add(key);
+      unresolvedByChapter.set(chapterId, (unresolvedByChapter.get(chapterId) ?? 0) + 1);
+    }
+  }
+  const glossaryStateCounts = {
+    current: 0,
+    'editorial-review': 0,
+    'identity-review': 0,
+    rereview: 0,
+    missing: 0,
+  };
+  let chaptersWithUnresolvedPeople = 0;
+  for (const [chapterId, chapter] of byChapter) {
+    chapter.unresolvedPeople = unresolvedByChapter.get(chapterId) ?? 0;
+    if (chapter.state === 'current' && chapter.unresolvedPeople > 0) chaptersWithUnresolvedPeople += 1;
+    chapter.glossaryState = chapter.state === 'current'
+      ? chapter.pendingTranslationRepairs > 0
+        ? 'editorial-review'
+        : chapter.unresolvedPeople > 0
+          ? 'identity-review'
+          : 'current'
+      : chapter.state;
+    glossaryStateCounts[chapter.glossaryState] += 1;
+  }
+  return {
+    ...summary,
+    completeChapters: glossaryStateCounts.current,
+    editorialReviewChapters: glossaryStateCounts['editorial-review'],
+    identityReviewChapters: glossaryStateCounts['identity-review'],
+    chaptersWithUnresolvedPeople,
+    identityCleanChapters: summary.currentChapters - chaptersWithUnresolvedPeople,
+    peopleNeedingReview: peopleNeedingReview.length,
+    unresolvedCandidateBlocks: catalog.stats.unresolvedCandidateBlocks,
+    completePercent: summary.sourceChapters > 0
+      ? (glossaryStateCounts.current / summary.sourceChapters) * 100
+      : 0,
+  };
+}
+
 function buildPeopleGlossaryProgress(manifest) {
   assertPeopleProgress(fs.existsSync(PEOPLE_CONFIG_PATH), `missing ${PEOPLE_CONFIG_PATH}`);
   const config = JSON.parse(fs.readFileSync(PEOPLE_CONFIG_PATH, 'utf8'));
@@ -670,24 +729,25 @@ function buildPeopleGlossaryProgress(manifest) {
   const extractedChapters = currentChapters + rereviewChapters;
   const missingChapters = sourceChapters - extractedChapters;
 
+  const summary = applyPeopleIdentityProgress(expected, {
+    currentPromptVersion: config.promptVersion,
+    sourceChapters,
+    extractedChapters,
+    currentChapters,
+    rereviewChapters,
+    missingChapters,
+    currentPercent: sourceChapters > 0 ? (currentChapters / sourceChapters) * 100 : 0,
+    extractedPercent: sourceChapters > 0 ? (extractedChapters / sourceChapters) * 100 : 0,
+    peopleRecords: sum('peopleRecords'),
+    factClaims: sum('factClaims'),
+    familyRelationships: sum('familyRelationships'),
+    attestations: sum('attestations'),
+    appliedTranslationRepairs: sum('appliedTranslationRepairs'),
+    pendingTranslationRepairs: sum('pendingTranslationRepairs'),
+  });
   return {
     byChapter: expected,
-    summary: {
-      currentPromptVersion: config.promptVersion,
-      sourceChapters,
-      extractedChapters,
-      currentChapters,
-      rereviewChapters,
-      missingChapters,
-      currentPercent: sourceChapters > 0 ? (currentChapters / sourceChapters) * 100 : 0,
-      extractedPercent: sourceChapters > 0 ? (extractedChapters / sourceChapters) * 100 : 0,
-      peopleRecords: sum('peopleRecords'),
-      factClaims: sum('factClaims'),
-      familyRelationships: sum('familyRelationships'),
-      attestations: sum('attestations'),
-      appliedTranslationRepairs: sum('appliedTranslationRepairs'),
-      pendingTranslationRepairs: sum('pendingTranslationRepairs'),
-    },
+    summary,
   };
 }
 

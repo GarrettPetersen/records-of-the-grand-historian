@@ -5,7 +5,7 @@
   "main": "scrape.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node scripts/test-site-urls.mjs && node scripts/sync-publication-descriptions.mjs && node scripts/sync-data-to-public.mjs && node generate-manifest.js && node scripts/test-people-progress.mjs && node scripts/scan-placeholder-translations.mjs --out data/quality/placeholder-translations.json --summary --limit=0 && node generate-progress.js && node scripts/generate-book-covers.mjs && node scripts/compile-people-catalog.mjs && node generate-static-pages.js && node scripts/generate-people-pages.mjs && node scripts/verify-people-site.mjs && node scripts/build-book-search-corpus.mjs && node scripts/generate-sitemap.mjs && node generate-og-images.js --incremental && node scripts/verify-og-assets.mjs",
+    "build": "node scripts/test-site-urls.mjs && node scripts/sync-publication-descriptions.mjs && node scripts/sync-data-to-public.mjs && node generate-manifest.js && node scripts/compile-people-catalog.mjs && node scripts/test-people-progress.mjs && node scripts/scan-placeholder-translations.mjs --out data/quality/placeholder-translations.json --summary --limit=0 && node generate-progress.js && node scripts/generate-book-covers.mjs && node generate-static-pages.js && node scripts/generate-people-pages.mjs && node scripts/verify-people-site.mjs && node scripts/build-book-search-corpus.mjs && node scripts/generate-sitemap.mjs && node generate-og-images.js --incremental && node scripts/verify-og-assets.mjs",
     "test:site-urls": "node scripts/test-site-urls.mjs",
     "test:people-progress": "node scripts/test-people-progress.mjs",
     "publication-descriptions": "node scripts/sync-publication-descriptions.mjs",
@@ -48,6 +48,8 @@
     "people:extract:deadline-recovery": "node scripts/run-people-deadline-wave.mjs --deadline 2026-09-30 --capacity-start 2026-09-13 --phase recovery",
     "people:extract:deadline-wave": "node scripts/run-people-deadline-wave.mjs --deadline 2026-09-30 --capacity-start 2026-09-13 --phase extraction",
     "people:editorial:deadline-wave": "node scripts/run-people-deadline-wave.mjs --deadline 2026-09-30 --capacity-start 2026-09-13 --phase editorial",
+    "people:resolution:deadline-prepare": "node scripts/run-people-deadline-wave.mjs --deadline 2026-09-30 --capacity-start 2026-09-13 --phase resolution --limit 10 --prepare-dossiers",
+    "people:resolution:deadline-wave": "node scripts/run-people-deadline-wave.mjs --deadline 2026-09-30 --capacity-start 2026-09-13 --phase resolution",
     "people:deadline-wave:self-test": "node scripts/run-people-deadline-wave.mjs --self-test",
     "people:extract:self-test": "node scripts/sdk-people-extract.mjs --self-test",
     "people:campaign:plan": "node scripts/plan-people-campaign.mjs",
