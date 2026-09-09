@@ -4,7 +4,7 @@
   "chapter": "106",
   "input": {
     "chapterFingerprint": "sha256:fa995e8dc35efbf8c541e6f652ad97d0c9539fc94d40628da74985fdd282e7e1",
-    "proposalsFingerprint": "sha256:feda29f96d0a5773265cbd79e57fcb8a63dc3b37ab95170fcc0c4bd8adace308"
+    "proposalsFingerprint": "sha256:c7457a9777d240ea3ba29e1870d1d9d8bc11a8f8078fd566730e4f5ca450ad08"
   },
   "reviewer": {
     "kind": "cursor-agent",
@@ -254,6 +254,36 @@
       "after": "When Tang's Wenzong took the throne, Suzong was moved and Jingzong counted as one generation—the precedent is not remote.",
       "reason": "敬宗 is the temple name Jingzong; rendering it as Emperor Jing obscures the Tang emperor intended.",
       "confidence": "high"
+    },
+    {
+      "id": "songshi:106:r0017",
+      "unit": {
+        "id": "s0142",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "literal",
+      "before": "Hence Shang and Zhou, because Qi and Ji had merit in the age of Tang and Yu, called them ancestors of merit; but if merit alone made one an ancestor, then the Xia would not have sacrificed at the border to Gun.",
+      "after": "Hence Shang and Zhou, because Qi and Ji had merit in the age of Yao and Shun, called them ancestors of merit; but if merit alone made one an ancestor, then the Xia would not have sacrificed at the border to Gun.",
+      "reason": "唐 and 虞 are the dynastic designations of Yao and Shun in this ancient chronological pairing, not Tang of Shang and Yu the Great.",
+      "confidence": "high"
+    },
+    {
+      "id": "songshi:106:r0018",
+      "unit": {
+        "id": "s0142",
+        "kind": "paragraph-sentence",
+        "blockIndex": 11,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "field": "idiomatic",
+      "before": "Shang and Zhou honored Qi and Ji as ancestors of merit for their service in the age of Tang and Yu; but if merit alone made one an ancestor, the Xia would not have sacrificed at the border to Gun.",
+      "after": "Shang and Zhou honored Qi and Ji as ancestors of merit for their service in the age of Yao and Shun; but if merit alone made one an ancestor, the Xia would not have sacrificed at the border to Gun.",
+      "reason": "The idiomatic field repeats the same mistaken identities: 唐、虞 conventionally denotes the age of Yao and Shun.",
+      "confidence": "high"
     }
   ],
   "decisions": [
@@ -431,6 +461,28 @@
         "source": "chapter-text",
         "citation": "s0238",
         "excerpt": "以敬宗為一世"
+      }
+    },
+    {
+      "repairId": "songshi:106:r0017",
+      "decision": "accept",
+      "after": null,
+      "reason": "唐 and 虞 are the dynastic designations of Yao and Shun in this ancient chronological pairing, not Tang of Shang and Yu the Great.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0142",
+        "excerpt": "契、稷有功於唐、虞之際"
+      }
+    },
+    {
+      "repairId": "songshi:106:r0018",
+      "decision": "accept",
+      "after": null,
+      "reason": "The idiomatic field repeats the same mistaken identities: 唐、虞 conventionally denotes the age of Yao and Shun.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0142",
+        "excerpt": "契、稷有功於唐、虞之際"
       }
     }
   ],

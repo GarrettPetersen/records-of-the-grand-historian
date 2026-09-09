@@ -117,9 +117,36 @@ function validateEnvelope(document) {
   }
 }
 
-function validateLinkDecision(item, decision) {
+function containsWholeClaimPart(value, exact, language) {
+  if (typeof value !== 'string' || typeof exact !== 'string') return false;
+  const normalizedValue = value.normalize('NFKC');
+  const normalizedExact = exact.normalize('NFKC');
+  if (language === 'zh') return normalizedValue.includes(normalizedExact);
+  const escaped = normalizedExact.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`(^|[^\\p{L}\\p{N}])${escaped}(?=$|[^\\p{L}\\p{N}])`, 'iu').test(normalizedValue);
+}
+
+function validateExplicitTitleClaim(item, decision, compact, book, chapter) {
+  if (decision.allowTitleClaim !== true || decision.kind !== 'title-reference') {
+    throw new Error(`${decision.candidate} links to an unavailable person option`);
+  }
+  if (typeof decision.note !== 'string' || decision.note.trim().length < 12) {
+    throw new Error(`${decision.candidate} needs an evidence note for its title-claim link`);
+  }
+  const person = compact.people.find((row) => row[0] === shortId(decision.personId, book, chapter));
+  const language = item.language === 'zh' ? 'zh' : 'en';
+  const supported = person?.[5]?.some(([name, confidence]) => (
+    name.kind === 'title' && confidence === 'explicit' &&
+    containsWholeClaimPart(name[language], item.exact, language)
+  ));
+  if (!supported) {
+    throw new Error(`${decision.candidate} is not contained in an explicit title claim for ${decision.personId}`);
+  }
+}
+
+function validateLinkDecision(item, decision, compact, book, chapter) {
   const option = item.options.find((candidate) => candidate.personId === decision.personId);
-  if (!option) throw new Error(`${decision.candidate} links to an unavailable person option`);
+  if (!option) return validateExplicitTitleClaim(item, decision, compact, book, chapter);
   if (option.kinds.includes(decision.kind)) return;
   if (decision.allowNewKind !== true) {
     throw new Error(`${decision.candidate} uses an unavailable mention kind`);
@@ -143,6 +170,10 @@ function prepareChapter(review, submitted, matcher) {
     throw new Error(`${review.book}/${review.chapter} decision fingerprint is stale`);
   }
   if (!Array.isArray(submitted.decisions)) throw new Error(`${review.book}/${review.chapter} has no decisions array`);
+  const file = extractionPath(review.book, review.chapter);
+  const sourceText = fs.readFileSync(file, 'utf8');
+  const compact = structuredClone(readJson(file));
+  if (compact.schemaVersion !== 2) throw new Error(`${review.book}/${review.chapter} is not a compact extraction`);
   const expected = new Map(review.reviewItems.map((item) => [item.candidate, item]));
   const decisions = new Map();
   for (const decision of submitted.decisions) {
@@ -150,7 +181,7 @@ function prepareChapter(review, submitted, matcher) {
     if (decisions.has(decision.candidate)) throw new Error(`${review.book}/${review.chapter} repeats ${decision.candidate}`);
     if (decision.action === 'link') {
       const item = expected.get(decision.candidate);
-      validateLinkDecision(item, decision);
+      validateLinkDecision(item, decision, compact, review.book, review.chapter);
     } else if (decision.action === 'dispose') {
       if (!DISPOSITION_REASONS.has(decision.reason)) throw new Error(`${decision.candidate} has invalid disposition reason`);
       if (typeof decision.note !== 'string' || decision.note.trim().length < 12) {
@@ -164,10 +195,6 @@ function prepareChapter(review, submitted, matcher) {
   const missing = [...expected.keys()].filter((candidate) => !decisions.has(candidate));
   if (missing.length > 0) throw new Error(`${review.book}/${review.chapter} is missing ${missing.length} decision(s)`);
 
-  const file = extractionPath(review.book, review.chapter);
-  const sourceText = fs.readFileSync(file, 'utf8');
-  const compact = structuredClone(readJson(file));
-  if (compact.schemaVersion !== 2) throw new Error(`${review.book}/${review.chapter} is not a compact extraction`);
   const packet = buildPeopleExtractionPacket(review.book, review.chapter, { properNounMatcher: matcher });
   const candidateById = new Map(packet.preflight.candidates.map((candidate) => [candidate.id, candidate]));
   for (const [candidateId, decision] of decisions) {
@@ -208,6 +235,10 @@ function updateGeneratedReports(resolvedKeys) {
 
 function selfTest() {
   const compact = {
+    people: [[
+      'p001', null, null, null, null,
+      [[{ kind: 'title', en: 'Duke of Anding Commandery', zh: '安定郡公' }, 'explicit', ['s0001']]],
+    ]],
     surfaces: [],
     candidateDispositions: [['not-person', 'not-a-name', [['cand_a', 'old']]]],
   };
@@ -232,18 +263,38 @@ function selfTest() {
     kind: 'kinship-reference',
     allowNewKind: true,
     note: 'The sentence explicitly calls this person the speaker\'s brother.',
-  });
+  }, compact, 'book', '001');
   let rejected = false;
   try {
     validateLinkDecision(reviewItem, {
       candidate: 'book:001:cand_a',
       personId: 'book:001:p001',
       kind: 'kinship-reference',
-    });
+    }, compact, 'book', '001');
   } catch {
     rejected = true;
   }
   if (!rejected) throw new Error('Unexplained inferred mention kind was accepted');
+  validateLinkDecision({ language: 'en', exact: 'Anding', options: [] }, {
+    candidate: 'book:001:cand_title',
+    personId: 'book:001:p001',
+    kind: 'title-reference',
+    allowTitleClaim: true,
+    note: 'Anding is the territorial component of this person\'s explicit title.',
+  }, compact, 'book', '001');
+  rejected = false;
+  try {
+    validateLinkDecision({ language: 'en', exact: 'Ding', options: [] }, {
+      candidate: 'book:001:cand_partial',
+      personId: 'book:001:p001',
+      kind: 'title-reference',
+      allowTitleClaim: true,
+      note: 'This partial token must not pass the whole-word title check.',
+    }, compact, 'book', '001');
+  } catch {
+    rejected = true;
+  }
+  if (!rejected) throw new Error('Partial title token was accepted as explicit title evidence');
   console.log('apply-people-alias-decisions self-test: ok');
 }
 

@@ -1271,6 +1271,11 @@ already list the required mention kind, a reviewed link decision may set
 concise source-based `note`; the applier rejects this escape hatch for people
 offered only by a same-name match. This closes obvious title, kinship, and
 posthumous-name callbacks without weakening identity selection.
+A shortened title may select a person absent from the packet options only with
+`allowTitleClaim: true`, `kind: "title-reference"`, and a concise evidence
+`note`. The applier requires the candidate to be a whole-word component of that
+person's existing explicit title claim; arbitrary person selection and partial
+token matches remain invalid.
 Review choices include people evidenced in the sentence and people whose
 accepted name claims exactly match the disputed surface, even when that alias
 has not yet been linked anywhere. Review those packets in chapter batches,
