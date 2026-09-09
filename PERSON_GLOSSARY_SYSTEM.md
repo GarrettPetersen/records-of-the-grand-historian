@@ -1252,6 +1252,13 @@ come from the cheapest remaining work, while the final quarter is sampled
 evenly through the rest of the queue and interleaved with the short chapters.
 This preserves high chapter throughput while draining the expensive tail
 continuously instead of leaving it for the final campaign days.
+Use the same workload shape for Grok Bot claims: stable worker IDs allocate
+three workers to the shortest pool and one to a window sampled at 45%, 60%, 75%,
+or 90% through the size-ranked corpus. For September, claim with 80 units, 200
+candidates, and a 48-KiB compact-packet ceiling. Leave the pathological largest
+chapters to Cursor's adaptive parallel chunk runner or deliberate assignment.
+Sticky work remains first in both lanes, regardless of scheduling order, so a
+retry never opens a new chapter while its previous assignment is recoverable.
 Use at least three validation attempts for multi-chunk extraction. With six or
 seven chunks per chapter, a two-attempt ceiling compounds a modest residual
 chunk error rate into excessive whole-chapter deferrals.

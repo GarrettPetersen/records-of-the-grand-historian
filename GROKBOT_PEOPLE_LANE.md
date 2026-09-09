@@ -111,9 +111,9 @@ npm run people:queue:sync-cursor
 # Inspect both lanes and every active reservation.
 npm run people:queue:status
 
-# Preview and claim one economical chunked chapter for a Grok Bot worker.
-npm run people:grokbot:plan -- --worker grokbot-01
-npm run people:grokbot:claim -- --worker grokbot-01
+# September deadline campaign: preview and claim one balanced chapter.
+npm run people:grokbot:plan -- --worker grokbot-01 --order deadline-balanced --max-units 80 --max-candidates 200 --max-worker-kib 48
+npm run people:grokbot:claim -- --worker grokbot-01 --order deadline-balanced --max-units 80 --max-candidates 200 --max-worker-kib 48
 
 # Reconstruct a claim already published by the trusted orchestrator; no queue push.
 npm run people:grokbot:resume -- --worker grokbot-01 --book <book> --chapter <nnn>
@@ -134,10 +134,20 @@ npm run people:queue -- reconcile
 ```
 
 Use `--book` and `--chapter` only when a specific chapter is deliberately assigned.
-The default Grok Bot allocator chooses the smallest unclaimed chapter, then divides it
-into disjoint 60-unit, 150-candidate, and 48-KiB sealed packets. The chapter remains one
-central claim, so no other lane can take a later chunk. Cursor retains its adaptive
-split and conversation-recovery machinery for its own assignments.
+The default Grok Bot allocator still chooses the smallest unclaimed chapter and uses
+60-unit, 150-candidate, and 48-KiB sealed packets. During the September campaign, pass
+`--order deadline-balanced` and the calibrated 80-unit, 200-candidate, 48-KiB ceilings.
+Stable worker IDs are divided deterministically: three of every four draw from the
+shortest pool, while one samples a window at 45%, 60%, 75%, or 90% through the
+size-ranked remaining corpus. The allocator then chooses the most manageable packet
+plan within that window. This keeps headline throughput high, drains the long tail
+continuously, and leaves the pathological largest chapters for Cursor's adaptive
+parallel chunk runner or deliberate assignment. A worker's existing sticky claim
+always takes precedence over either pool, including when a seeded whole-chapter output
+already exists.
+
+The chapter remains one central claim, so no other lane can take a later chunk. Cursor
+retains its adaptive split and conversation-recovery machinery for its own assignments.
 
 ## Review And Merge
 
