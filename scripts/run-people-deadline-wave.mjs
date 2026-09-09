@@ -21,6 +21,7 @@ function parseArgs(argv) {
   const opts = {
     deadline: process.env.PEOPLE_CAMPAIGN_DEADLINE ?? null,
     asOf: localIsoDate(),
+    capacityStart: process.env.PEOPLE_CAMPAIGN_CAPACITY_START ?? null,
     phase: null,
     dryRun: false,
     selfTest: false,
@@ -34,6 +35,7 @@ function parseArgs(argv) {
     };
     if (arg === '--deadline') opts.deadline = next();
     else if (arg === '--as-of') opts.asOf = next();
+    else if (arg === '--capacity-start') opts.capacityStart = next();
     else if (arg === '--phase') opts.phase = next();
     else if (arg === '--dry-run') opts.dryRun = true;
     else if (arg === '--self-test') opts.selfTest = true;
@@ -57,6 +59,7 @@ function currentPlan(opts) {
     missingChapters: completion.extractionDebt,
     asOf: opts.asOf,
     deadline: opts.deadline,
+    capacityStart: opts.capacityStart ?? opts.asOf,
     wavesPerDay: 3,
     bufferPercent: 15,
   });
@@ -64,6 +67,7 @@ function currentPlan(opts) {
     missingChapters: completion.editorialDebt,
     asOf: opts.asOf,
     deadline: opts.deadline,
+    capacityStart: opts.capacityStart ?? opts.asOf,
     wavesPerDay: 3,
     bufferPercent: 15,
   });
@@ -131,6 +135,12 @@ function main() {
   const opts = parseArgs(process.argv.slice(2));
   if (opts.selfTest) return selfTest();
   const plan = currentPlan(opts);
+  if (plan.blackoutDays > 0) {
+    throw new Error(
+      `Paid capacity is unavailable until ${plan.capacityStart}; ` +
+      `the post-reset target is ${plan.chaptersPerWave} extraction chapters per wave`,
+    );
+  }
   const command = phaseCommand(opts.phase, plan);
   console.log(
     `People deadline ${opts.phase}: ${plan.currentChapters}/${plan.sourceChapters} current, ` +

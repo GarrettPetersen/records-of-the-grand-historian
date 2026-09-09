@@ -24,6 +24,7 @@ function usage() {
 Options:
   --deadline DATE       Last campaign date, inclusive.
   --as-of DATE          Planning date (default: local current date).
+  --capacity-start DATE First date paid workers can launch (default: --as-of).
   --waves-per-day N     Extraction waves per day (default: 3).
   --buffer-percent N    Completion buffer above the minimum rate (default: 15).
   --resolution-batch N  Accepted chapters per identity checkpoint (default: 50).
@@ -62,6 +63,7 @@ function parseArgs(argv) {
   const opts = {
     deadline: process.env.PEOPLE_CAMPAIGN_DEADLINE ?? null,
     asOf: localIsoDate(),
+    capacityStart: process.env.PEOPLE_CAMPAIGN_CAPACITY_START ?? null,
     wavesPerDay: 3,
     bufferPercent: 15,
     resolutionBatch: 50,
@@ -77,6 +79,7 @@ function parseArgs(argv) {
     };
     if (arg === '--deadline') opts.deadline = next();
     else if (arg === '--as-of') opts.asOf = next();
+    else if (arg === '--capacity-start') opts.capacityStart = next();
     else if (arg === '--waves-per-day') opts.wavesPerDay = positiveInteger(next(), arg, 24);
     else if (arg === '--buffer-percent') opts.bufferPercent = positiveInteger(next(), arg, 100);
     else if (arg === '--resolution-batch') opts.resolutionBatch = positiveInteger(next(), arg, 200);
@@ -90,16 +93,31 @@ function parseArgs(argv) {
   return opts;
 }
 
-export function campaignTargets({ missingChapters, asOf, deadline, wavesPerDay, bufferPercent }) {
+export function campaignTargets({
+  missingChapters,
+  asOf,
+  deadline,
+  capacityStart = asOf,
+  wavesPerDay,
+  bufferPercent,
+}) {
   const start = isoDate(asOf, '--as-of');
   const end = isoDate(deadline, '--deadline');
+  const capacity = isoDate(capacityStart, '--capacity-start');
   const calendarDays = Math.floor((end.epoch - start.epoch) / DAY_MS) + 1;
   if (calendarDays < 1) throw new Error('--deadline must not be before --as-of');
-  const minimumChaptersPerDay = Math.ceil(missingChapters / calendarDays);
+  const effectiveStartEpoch = Math.max(start.epoch, capacity.epoch);
+  const capacityDays = Math.floor((end.epoch - effectiveStartEpoch) / DAY_MS) + 1;
+  if (capacityDays < 1) throw new Error('--capacity-start must not be after --deadline');
+  const blackoutDays = Math.max(0, Math.floor((effectiveStartEpoch - start.epoch) / DAY_MS));
+  const minimumChaptersPerDay = Math.ceil(missingChapters / capacityDays);
   const bufferedChaptersPerDay = Math.ceil(minimumChaptersPerDay * (1 + bufferPercent / 100));
   const chaptersPerWave = Math.ceil(bufferedChaptersPerDay / wavesPerDay);
   return {
     calendarDays,
+    capacityStart: capacity.value,
+    capacityDays,
+    blackoutDays,
     minimumChaptersPerDay,
     bufferedChaptersPerDay,
     chaptersPerWave,
@@ -154,6 +172,24 @@ function selfTest() {
   ) {
     throw new Error(`Unexpected campaign targets: ${JSON.stringify(result)}`);
   }
+  const blackout = campaignTargets({
+    missingChapters: 2983,
+    asOf: '2026-09-08',
+    deadline: '2026-09-30',
+    capacityStart: '2026-09-13',
+    wavesPerDay: 3,
+    bufferPercent: 15,
+  });
+  if (
+    blackout.calendarDays !== 23 ||
+    blackout.capacityDays !== 18 ||
+    blackout.blackoutDays !== 5 ||
+    blackout.minimumChaptersPerDay !== 166 ||
+    blackout.bufferedChaptersPerDay !== 191 ||
+    blackout.chaptersPerWave !== 64
+  ) {
+    throw new Error(`Unexpected blackout targets: ${JSON.stringify(blackout)}`);
+  }
   const completion = campaignProgress({
     summary: { sourceChapters: 5, currentChapters: 3 },
     byChapter: new Map([
@@ -188,6 +224,7 @@ function main() {
     missingChapters: completion.extractionDebt,
     asOf: opts.asOf,
     deadline: opts.deadline,
+    capacityStart: opts.capacityStart ?? opts.asOf,
     wavesPerDay: opts.wavesPerDay,
     bufferPercent: opts.bufferPercent,
   });
@@ -195,6 +232,7 @@ function main() {
     missingChapters: completion.editorialDebt,
     asOf: opts.asOf,
     deadline: opts.deadline,
+    capacityStart: opts.capacityStart ?? opts.asOf,
     wavesPerDay: opts.wavesPerDay,
     bufferPercent: opts.bufferPercent,
   });
@@ -225,6 +263,12 @@ function main() {
   );
   console.log(`Older rereview: ${progress.rereviewChapters}; missing/current-prompt debt: ${completion.extractionDebt}`);
   console.log(`Calendar dates remaining: ${extractionTargets.calendarDays}`);
+  if (extractionTargets.blackoutDays > 0) {
+    console.log(
+      `Paid-capacity blackout: ${extractionTargets.blackoutDays} day(s); ` +
+      `${extractionTargets.capacityDays} launch day(s) remain from ${extractionTargets.capacityStart}`,
+    );
+  }
   console.log(`Extraction minimum: ${extractionTargets.minimumChaptersPerDay} chapters/day`);
   console.log(`Extraction buffered target: ${extractionTargets.bufferedChaptersPerDay} chapters/day (${opts.bufferPercent}% buffer)`);
   console.log(`Editorial minimum: ${editorialTargets.minimumChaptersPerDay} closures/day`);
