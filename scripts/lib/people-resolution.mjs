@@ -73,7 +73,8 @@ function normalizeName(language, value) {
     .toLocaleLowerCase('en')
     .replace(/[^a-z0-9]+/gu, ' ')
     .trim()
-    .replace(/\s+/gu, ' ');
+    .replace(/\s+/gu, ' ')
+    .replace(/^the\s+/u, '');
   return key ? `en:${key}` : null;
 }
 

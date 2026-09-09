@@ -166,6 +166,25 @@ function candidatePerson(localId, preferredNameSuggestion, nameKind, alias) {
 {
   const people = new Map([
     candidatePerson(
+      'qing-empress-dowager-a',
+      { en: 'the Empress Dowager', zh: '皇太后' },
+      'title',
+      { en: 'Empress Dowager', zh: '皇太后' },
+    ),
+    candidatePerson(
+      'qing-empress-dowager-b',
+      { en: 'Empress Dowager', zh: '皇太后' },
+      'title',
+      { en: 'Empress Dowager', zh: '皇太后' },
+    ),
+  ]);
+  const result = buildResolutionCandidates(people);
+  assert.equal(result.blocks.length, 0, 'leading articles must not revive generic title blocks');
+}
+
+{
+  const people = new Map([
+    candidatePerson(
       'han-emperor-hui',
       { en: 'Emperor Hui of Han', zh: '惠' },
       'posthumous',
