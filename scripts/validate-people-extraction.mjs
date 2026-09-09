@@ -692,6 +692,9 @@ export function validatePeopleExtraction(extraction, packet, options = {}) {
   if (errors.length > 0) throw new PeopleExtractionValidationError(errors);
   return {
     normalized,
+    audit: {
+      aliasDispositionConflicts,
+    },
     stats: {
       units: packet.units.length,
       candidates: packet.preflight.candidates.length,

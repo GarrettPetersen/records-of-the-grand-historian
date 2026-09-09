@@ -1215,6 +1215,9 @@ The build must fail loudly on structural errors. Required checks include:
 - every canonical family edge has two reciprocal person adjacencies carrying
   the same stable edge ID, while its source assertions retain provenance;
 - every preflight candidate has a disposition;
+- a candidate disposed as `not-a-name` is not linked to a person by that exact
+  surface elsewhere in the chapter unless the reviewed local context records a
+  more specific alternate disposition;
 - every chapter-local person used by a build maps to exactly one active
   canonical person;
 - no canonical person maps to a retired ID without a redirect;
@@ -1256,6 +1259,25 @@ captures, so it does not require another chapter pass. Validate and push exact
 files to `codex/people-glossary-staging-v2` throughout the day, then merge a
 validated milestone to `master` at least daily to keep public progress close to
 actual progress.
+
+Legacy callback debt is a separate, cheaper lane. After a full validation run,
+run `npm run people:aliases:reconcile -- --all --apply`. It resolves only cases
+that require no inference: a rejected candidate already contained by a valid
+person mention, or a redundant enclosing candidate around an existing mention.
+It also writes a compact, sentence-local review packet for the remaining cases.
+Review those packets in chapter batches, record every decision, and apply them
+with `npm run people:aliases:apply -- --decisions PATH`. The applier checks the
+chapter fingerprint, permits only people and mention kinds offered by the
+packet, requires complete chapter decisions, validates every revised chapter
+strictly, and writes atomically. Do not spend a full extraction run merely to
+repair old alias dispositions; use full re-extraction only when the focused
+packet exposes broader chapter-quality problems.
+
+Plan this callback lane independently from extraction and editorial closure.
+The deadline planner reports its own daily context-review waves, so callback
+debt cannot inflate the expensive full-chapter quota or consume chapter-worker
+slots. Newly accepted extractions still pass the strict callback gate and do
+not add debt to this lane.
 
 ### 1. Freeze the input contract
 

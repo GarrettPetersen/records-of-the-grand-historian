@@ -748,11 +748,8 @@ function currentExtractionIsValid(target, packet) {
   try {
     const extraction = readJson(file);
     if (extraction.run?.promptVersion < PEOPLE_CONFIG.promptVersion) return false;
-    if (isCompactPeopleExtraction(extraction)) {
-      validateCompactPeopleExtraction(extraction, packet, { strictAliasDispositions: true });
-    } else {
-      validatePeopleExtraction(extraction, packet, { strictAliasDispositions: true });
-    }
+    if (isCompactPeopleExtraction(extraction)) validateCompactPeopleExtraction(extraction, packet);
+    else validatePeopleExtraction(extraction, packet);
     return true;
   } catch {
     return false;

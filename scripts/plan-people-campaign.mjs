@@ -159,7 +159,7 @@ export function campaignProgress(progress, aliasDispositionDebt = new Set()) {
     reviewedChapters,
     pendingEditorialChapters,
     aliasDispositionChapters,
-    extractionDebt: progress.summary.sourceChapters - progress.summary.currentChapters + aliasDispositionChapters,
+    extractionDebt: progress.summary.sourceChapters - progress.summary.currentChapters,
     editorialDebt: progress.summary.sourceChapters - reviewedChapters,
   };
 }
@@ -241,7 +241,7 @@ function selfTest() {
     completion.reviewedChapters !== 1 ||
     completion.pendingEditorialChapters !== 2 ||
     completion.aliasDispositionChapters !== 1 ||
-    completion.extractionDebt !== 3 ||
+    completion.extractionDebt !== 2 ||
     completion.editorialDebt !== 4
   ) {
     throw new Error(`Unexpected campaign progress: ${JSON.stringify(completion)}`);
@@ -274,6 +274,14 @@ function main() {
     wavesPerDay: opts.wavesPerDay,
     bufferPercent: opts.bufferPercent,
   });
+  const aliasReviewTargets = campaignTargets({
+    missingChapters: completion.aliasDispositionChapters,
+    asOf: opts.asOf,
+    deadline: opts.deadline,
+    capacityStart: opts.capacityStart ?? opts.asOf,
+    wavesPerDay: opts.wavesPerDay,
+    bufferPercent: opts.bufferPercent,
+  });
   const result = {
     asOf: opts.asOf,
     deadline: opts.deadline,
@@ -285,6 +293,9 @@ function main() {
     editorialMinimumChaptersPerDay: editorialTargets.minimumChaptersPerDay,
     editorialBufferedChaptersPerDay: editorialTargets.bufferedChaptersPerDay,
     editorialConcurrency: editorialTargets.editorialConcurrency,
+    aliasReviewChaptersPerWave: aliasReviewTargets.chaptersPerWave,
+    aliasReviewMinimumChaptersPerDay: aliasReviewTargets.minimumChaptersPerDay,
+    aliasReviewBufferedChaptersPerDay: aliasReviewTargets.bufferedChaptersPerDay,
     wavesPerDay: opts.wavesPerDay,
     bufferPercent: opts.bufferPercent,
     resolutionBatch: opts.resolutionBatch,
@@ -313,6 +324,10 @@ function main() {
   console.log(`Editorial minimum: ${editorialTargets.minimumChaptersPerDay} closures/day`);
   console.log(`Editorial buffered target: ${editorialTargets.bufferedChaptersPerDay} closures/day (${opts.bufferPercent}% buffer)`);
   console.log(
+    `Alias-review target: ${aliasReviewTargets.bufferedChaptersPerDay} chapters/day ` +
+    `in ${opts.wavesPerDay} x ${aliasReviewTargets.chaptersPerWave}-chapter context-only waves`,
+  );
+  console.log(
     `Cadence: ${opts.wavesPerDay} x ${extractionTargets.chaptersPerWave}-chapter extraction waves/day; ` +
     `${opts.wavesPerDay} x ${editorialTargets.chaptersPerWave}-chapter editorial waves/day`,
   );
@@ -328,6 +343,7 @@ function main() {
   console.log(`Per-wave raw cost ceiling: $${extractionTargets.waveCostCeilingDollars}`);
   console.log(`Identity resolution checkpoint: every ${opts.resolutionBatch} accepted chapters`);
   console.log('Recovery first: npm run people:extract -- --all --recover-only --retry-failed --skip-dirty');
+  console.log('Host alias normalization: npm run people:aliases:reconcile -- --all --apply');
   console.log(
     `New wave: npm run people:extract -- --all --limit ${extractionTargets.chaptersPerWave} --order smallest ` +
     `--skip-dirty --concurrency ${extractionTargets.extractionConcurrency} --max-units ${extractionTargets.maxUnits} ` +
