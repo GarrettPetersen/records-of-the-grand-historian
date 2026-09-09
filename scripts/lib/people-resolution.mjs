@@ -206,8 +206,11 @@ export function buildResolutionCandidates(localPeople) {
 }
 
 class UnionFind {
-  constructor(values) {
+  constructor(values, { trackMembers = false } = {}) {
     this.parent = new Map([...values].map((value) => [value, value]));
+    this.membersByRoot = trackMembers
+      ? new Map([...values].map((value) => [value, new Set([value])]))
+      : null;
   }
 
   find(value) {
@@ -225,7 +228,47 @@ class UnionFind {
     if (leftRoot === rightRoot) return;
     const [keep, merge] = [leftRoot, rightRoot].sort();
     this.parent.set(merge, keep);
+    if (this.membersByRoot) {
+      const keepMembers = this.membersByRoot.get(keep);
+      const mergeMembers = this.membersByRoot.get(merge);
+      for (const member of mergeMembers) keepMembers.add(member);
+      this.membersByRoot.delete(merge);
+    }
   }
+
+  members(value) {
+    if (!this.membersByRoot) throw new Error('UnionFind member tracking is not enabled');
+    return this.membersByRoot.get(this.find(value));
+  }
+}
+
+function separationIndex(separations) {
+  const byPerson = new Map();
+  for (const key of separations) {
+    const [left, right] = key.split('\u0000');
+    if (!byPerson.has(left)) byPerson.set(left, new Set());
+    if (!byPerson.has(right)) byPerson.set(right, new Set());
+    byPerson.get(left).add(right);
+    byPerson.get(right).add(left);
+  }
+  return byPerson;
+}
+
+function wouldJoinSeparatedPeople(union, left, right, indexedSeparations) {
+  const leftRoot = union.find(left);
+  const rightRoot = union.find(right);
+  if (leftRoot === rightRoot) return false;
+  const leftMembers = union.members(leftRoot);
+  const rightMembers = union.members(rightRoot);
+  const [scanMembers, targetRoot] = leftMembers.size <= rightMembers.size
+    ? [leftMembers, rightRoot]
+    : [rightMembers, leftRoot];
+  for (const member of scanMembers) {
+    for (const separatedPerson of indexedSeparations.get(member) ?? []) {
+      if (union.find(separatedPerson) === targetRoot) return true;
+    }
+  }
+  return false;
 }
 
 export function connectedBlockComponents(blocks, canonicalByLocal) {
@@ -285,20 +328,6 @@ export function resolvePeopleClusters(localPeople, resolutionDocuments = []) {
     }
   }
 
-  const wouldJoinSeparatedPeople = (union, left, right, separations) => {
-    const leftRoot = union.find(left);
-    const rightRoot = union.find(right);
-    if (leftRoot === rightRoot) return false;
-    for (const key of separations) {
-      const [first, second] = key.split('\u0000');
-      const firstRoot = union.find(first);
-      const secondRoot = union.find(second);
-      if ((firstRoot === leftRoot && secondRoot === rightRoot)
-        || (firstRoot === rightRoot && secondRoot === leftRoot)) return true;
-    }
-    return false;
-  };
-
   const curatedIntentUnion = new UnionFind(ids);
   for (const localPeopleGroup of curatedMerges) {
     const [first, ...rest] = localPeopleGroup;
@@ -325,10 +354,12 @@ export function resolvePeopleClusters(localPeople, resolutionDocuments = []) {
     }
   }
 
-  const modelUnion = new UnionFind(ids);
+  const expandedCuratedSeparationIndex = separationIndex(expandedCuratedKeepSeparate);
+  const explicitDifferentIndex = separationIndex(constraints.different);
+  const modelUnion = new UnionFind(ids, { trackMembers: true });
   for (const key of constraints.same) {
     const [left, right] = key.split('\u0000');
-    if (wouldJoinSeparatedPeople(modelUnion, left, right, expandedCuratedKeepSeparate)) {
+    if (wouldJoinSeparatedPeople(modelUnion, left, right, expandedCuratedSeparationIndex)) {
       throw new Error(`Curated separation contradicts explicit same-person evidence for ${left} and ${right}`);
     }
     modelUnion.union(left, right);
@@ -336,10 +367,10 @@ export function resolvePeopleClusters(localPeople, resolutionDocuments = []) {
   for (const modelMerge of modelMerges) {
     const [first, ...rest] = modelMerge.localPeople;
     for (const other of rest) {
-      if (wouldJoinSeparatedPeople(modelUnion, first, other, constraints.different)) {
+      if (wouldJoinSeparatedPeople(modelUnion, first, other, explicitDifferentIndex)) {
         throw new Error(`${modelMerge.batch} merges people explicitly identified as different: ${first} and ${other}`);
       }
-      if (wouldJoinSeparatedPeople(modelUnion, first, other, expandedCuratedKeepSeparate)) continue;
+      if (wouldJoinSeparatedPeople(modelUnion, first, other, expandedCuratedSeparationIndex)) continue;
       modelUnion.union(first, other);
     }
   }
@@ -366,10 +397,11 @@ export function resolvePeopleClusters(localPeople, resolutionDocuments = []) {
   }
 
   const union = modelUnion;
+  const keepSeparateIndex = separationIndex(keepSeparate);
   for (const localPeopleGroup of curatedMerges) {
     const [first, ...rest] = localPeopleGroup;
     for (const other of rest) {
-      if (wouldJoinSeparatedPeople(union, first, other, keepSeparate)) {
+      if (wouldJoinSeparatedPeople(union, first, other, keepSeparateIndex)) {
         throw new Error(`Curated merge joins people explicitly kept separate: ${first} and ${other}`);
       }
       union.union(first, other);

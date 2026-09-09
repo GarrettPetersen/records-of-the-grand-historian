@@ -151,6 +151,37 @@ function candidatePerson(localId, preferredNameSuggestion, nameKind, alias) {
     person('a', [{
       predicate: 'different-person',
       certainty: 'explicit',
+      value: { personId: 'd' },
+    }]),
+    person('b'),
+    person('c'),
+    person('d'),
+  ]);
+  assert.throws(() => resolvePeopleClusters(people, [
+    resolution('merge-left-component', [['merge', ['a', 'b']]]),
+    resolution('merge-right-component', [['merge', ['c', 'd']]]),
+    resolution('join-through-nonrepresentatives', [['merge', ['b', 'c']]]),
+  ]), /explicitly identified as different/u);
+}
+
+{
+  const people = new Map([person('a'), person('b'), person('c')]);
+  const result = resolvePeopleClusters(people, [
+    resolution('curated-family', [['merge', ['a', 'b']]], 'curated'),
+    resolution('curated-separation', [['keep-separate', ['a', 'c']]], 'curated'),
+    resolution('model-crossing-merge', [['merge', ['b', 'c']]]),
+  ]);
+  assert.deepEqual(
+    result.clusters.map((cluster) => cluster.localPeople).sort((left, right) => left[0].localeCompare(right[0])),
+    [['a', 'b'], ['c']],
+  );
+}
+
+{
+  const people = new Map([
+    person('a', [{
+      predicate: 'different-person',
+      certainty: 'explicit',
       value: { personId: 'b' },
     }]),
     person('b'),
