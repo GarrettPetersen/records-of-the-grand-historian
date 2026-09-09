@@ -144,6 +144,7 @@ function prepareChapter(review, submitted, matcher) {
   if (missing.length > 0) throw new Error(`${review.book}/${review.chapter} is missing ${missing.length} decision(s)`);
 
   const file = extractionPath(review.book, review.chapter);
+  const sourceText = fs.readFileSync(file, 'utf8');
   const compact = structuredClone(readJson(file));
   if (compact.schemaVersion !== 2) throw new Error(`${review.book}/${review.chapter} is not a compact extraction`);
   const packet = buildPeopleExtractionPacket(review.book, review.chapter, { properNounMatcher: matcher });
@@ -157,7 +158,16 @@ function prepareChapter(review, submitted, matcher) {
     else addDisposition(compact, shortCandidate, decision);
   }
   validateCompactPeopleExtraction(compact, packet, { strictAliasDispositions: true });
-  return { file, compact, decisions: decisions.size };
+  return {
+    file,
+    compact,
+    decisions: decisions.size,
+    singleLine: !sourceText.trim().includes('\n'),
+  };
+}
+
+function serializeLikeSource(item) {
+  return item.singleLine ? `${JSON.stringify(item.compact)}\n` : serializeCompactPeopleExtraction(item.compact);
 }
 
 function updateGeneratedReports(resolvedKeys) {
@@ -189,6 +199,9 @@ function selfTest() {
   if (compact.surfaces[0][4][0][1][0] !== 1) throw new Error('Linked surface was not added');
   addDisposition(compact, 'cand_b', { reason: 'place', note: 'This occurrence names a province.' });
   if (compact.candidateDispositions[0][1] !== 'place') throw new Error('Contextual disposition was not added');
+  if (serializeLikeSource({ singleLine: true, compact: { value: 1 } }) !== '{"value":1}\n') {
+    throw new Error('Single-line source formatting was not preserved');
+  }
   console.log('apply-people-alias-decisions self-test: ok');
 }
 
@@ -214,7 +227,7 @@ function main() {
     prepared.push({ key, ...prepareChapter(expected, submitted, matcher) });
   }
   if (opts.apply) {
-    for (const item of prepared) writeTextAtomic(item.file, serializeCompactPeopleExtraction(item.compact));
+    for (const item of prepared) writeTextAtomic(item.file, serializeLikeSource(item));
     updateGeneratedReports(new Set(prepared.map((item) => item.key)));
   }
   console.log(

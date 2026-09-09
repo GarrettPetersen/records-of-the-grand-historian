@@ -1265,8 +1265,11 @@ run `npm run people:aliases:reconcile -- --all --apply`. It resolves only cases
 that require no inference: a rejected candidate already contained by a valid
 person mention, or a redundant enclosing candidate around an existing mention.
 It also writes a compact, sentence-local review packet for the remaining cases.
-Review those packets in chapter batches, record every decision, and apply them
-with `npm run people:aliases:apply -- --decisions PATH`. The applier checks the
+Review choices include people evidenced in the sentence and people whose
+accepted name claims exactly match the disputed surface, even when that alias
+has not yet been linked anywhere. Review those packets in chapter batches,
+record every decision, and apply them with
+`npm run people:aliases:apply -- --decisions PATH`. The applier checks the
 chapter fingerprint, permits only people and mention kinds offered by the
 packet, requires complete chapter decisions, validates every revised chapter
 strictly, and writes atomically. Do not spend a full extraction run merely to

@@ -28,6 +28,39 @@ const DEFAULT_DEBT_FILE = path.join(PEOPLE_DIR, 'generated', 'alias-disposition-
 const DEFAULT_REPORT_FILE = path.join(PEOPLE_DIR, 'generated', 'alias-callback-review.json');
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
+const NAME_CLAIM_MENTION_KINDS = new Map([
+  ['personal', 'personal-name'],
+  ['personal-name', 'personal-name'],
+  ['surname', 'personal-name'],
+  ['given', 'personal-name'],
+  ['given-name', 'personal-name'],
+  ['courtesy', 'courtesy-name'],
+  ['courtesy-name', 'courtesy-name'],
+  ['style', 'courtesy-name'],
+  ['style-name', 'courtesy-name'],
+  ['childhood', 'childhood-name'],
+  ['childhood-name', 'childhood-name'],
+  ['religious', 'religious-name'],
+  ['religious-name', 'religious-name'],
+  ['temple', 'temple-name'],
+  ['temple-name', 'temple-name'],
+  ['posthumous', 'posthumous-name'],
+  ['posthumous-name', 'posthumous-name'],
+  ['posthumous-title', 'posthumous-name'],
+  ['kinship', 'kinship-reference'],
+  ['kinship-reference', 'kinship-reference'],
+  ['title', 'title-reference'],
+  ['title-name', 'title-reference'],
+  ['title-reference', 'title-reference'],
+  ['noble-title', 'title-reference'],
+  ['honorific', 'title-reference'],
+  ['honorific-title', 'title-reference'],
+]);
+
+function nameClaimMentionKind(kind) {
+  return NAME_CLAIM_MENTION_KINDS.get(String(kind).trim().toLocaleLowerCase('en-US')) ?? 'alternate-name';
+}
+
 function usage() {
   console.log(`Usage:
   node scripts/reconcile-people-alias-callbacks.mjs --all [--apply]
@@ -140,6 +173,7 @@ function reviewItems(normalized, packet, conflicts) {
   const personById = new Map(normalized.people.map((person) => [person.localId, person]));
   const unitById = new Map(packet.units.map((unit) => [unit.id, unit]));
   const optionsBySurface = new Map();
+  const nameClaimsBySurface = new Map();
   const kindsByPerson = new Map();
   const peopleByUnit = new Map();
   for (const mention of normalized.mentions) {
@@ -159,6 +193,18 @@ function reviewItems(normalized, packet, conflicts) {
   }
   const namespace = `${packet.book}:${packet.chapter}:`;
   for (const claim of normalized.claims) {
+    if (claim.predicate === 'name') {
+      const mentionKind = nameClaimMentionKind(claim.value?.kind);
+      for (const language of ['zh', 'en']) {
+        const exact = claim.value?.[language];
+        if (typeof exact !== 'string' || exact.length === 0) continue;
+        const key = `${language}\0${exact}`;
+        if (!nameClaimsBySurface.has(key)) nameClaimsBySurface.set(key, new Map());
+        const people = nameClaimsBySurface.get(key);
+        if (!people.has(claim.subject)) people.set(claim.subject, new Set());
+        people.get(claim.subject).add(mentionKind);
+      }
+    }
     for (const evidence of claim.evidence) {
       if (!evidence.startsWith(namespace)) continue;
       const unit = evidence.slice(namespace.length);
@@ -176,6 +222,13 @@ function reviewItems(normalized, packet, conflicts) {
       kinds: new Set(kinds),
       match: 'exact-surface',
     }]));
+    for (const [personId, kinds] of nameClaimsBySurface.get(`${candidate.language}\0${candidate.exact}`) ?? []) {
+      if (ranked.has(personId)) {
+        for (const kind of kinds) ranked.get(personId).kinds.add(kind);
+      } else {
+        ranked.set(personId, { personId, kinds: new Set(kinds), match: 'name-claim' });
+      }
+    }
     for (const personId of peopleByUnit.get(candidate.unit) ?? []) {
       if (!ranked.has(personId)) {
         ranked.set(personId, {
@@ -187,7 +240,8 @@ function reviewItems(normalized, packet, conflicts) {
     }
     const options = [...ranked.values()]
       .sort((left, right) => (
-        Number(right.match === 'exact-surface') - Number(left.match === 'exact-surface') ||
+        ['exact-surface', 'name-claim', 'unit-evidence'].indexOf(left.match) -
+        ['exact-surface', 'name-claim', 'unit-evidence'].indexOf(right.match) ||
         left.personId.localeCompare(right.personId)
       ))
       .slice(0, 12)
@@ -322,6 +376,8 @@ function selfTest() {
   normalized.mentions[0].spans.en[0].exact = 'Alice';
   const wrapped = safelyWrappedCandidateIds(normalized, packet, [{ candidate: candidate.id }]);
   if (!wrapped.has(candidate.id)) throw new Error('Same-person wrapper candidate was not recognized as safe');
+  if (nameClaimMentionKind('surname') !== 'personal-name') throw new Error('Surname claim mapping failed');
+  if (nameClaimMentionKind('epithet') !== 'alternate-name') throw new Error('Alias claim mapping failed');
   console.log('reconcile-people-alias-callbacks self-test: ok');
 }
 
