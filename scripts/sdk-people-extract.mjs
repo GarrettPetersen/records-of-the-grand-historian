@@ -748,8 +748,11 @@ function currentExtractionIsValid(target, packet) {
   try {
     const extraction = readJson(file);
     if (extraction.run?.promptVersion < PEOPLE_CONFIG.promptVersion) return false;
-    if (isCompactPeopleExtraction(extraction)) validateCompactPeopleExtraction(extraction, packet);
-    else validatePeopleExtraction(extraction, packet);
+    if (isCompactPeopleExtraction(extraction)) {
+      validateCompactPeopleExtraction(extraction, packet, { strictAliasDispositions: true });
+    } else {
+      validatePeopleExtraction(extraction, packet, { strictAliasDispositions: true });
+    }
     return true;
   } catch {
     return false;
@@ -2794,10 +2797,10 @@ async function processChunkedTarget(target, packet, opts, state, control, budget
     chunks: parts.map(({ chunk, extraction }) => peopleChunkRunRecord(chunk, extraction)),
   };
   let compact = assembleCompactPeopleChunks(packet, parts, run);
-  let validated = validateCompactPeopleExtraction(compact, packet);
+  let validated = validateCompactPeopleExtraction(compact, packet, { strictAliasDispositions: true });
   assertDurableCareerCoverage(validated.normalized, packet);
   compact = writeAcceptedExtraction(target, compact, packet);
-  validated = validateCompactPeopleExtraction(compact, packet);
+  validated = validateCompactPeopleExtraction(compact, packet, { strictAliasDispositions: true });
   updateState(state, target, {
     status: 'accepted',
     acceptedPath: path.relative(REPO_ROOT, extractionPath(target.book, target.chapter)),
@@ -2817,7 +2820,7 @@ async function processChunkedTarget(target, packet, opts, state, control, budget
 
 function acceptWholeExtraction(target, accepted, state) {
   let compact = compactPeopleExtraction(accepted.extraction, accepted.packet);
-  const initial = validateCompactPeopleExtraction(compact, accepted.packet);
+  const initial = validateCompactPeopleExtraction(compact, accepted.packet, { strictAliasDispositions: true });
   assertDurableCareerCoverage(initial.normalized, accepted.packet);
   const rawArchive = path.join(
     PEOPLE_DIR,
@@ -2828,7 +2831,7 @@ function acceptWholeExtraction(target, accepted, state) {
   );
   writeJsonAtomic(rawArchive, accepted.extraction);
   compact = writeAcceptedExtraction(target, compact, accepted.packet);
-  const persisted = validateCompactPeopleExtraction(compact, accepted.packet);
+  const persisted = validateCompactPeopleExtraction(compact, accepted.packet, { strictAliasDispositions: true });
   updateState(state, target, {
     status: 'accepted',
     runId: accepted.result.id,

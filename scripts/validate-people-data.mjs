@@ -9,6 +9,7 @@ import {
   REPO_ROOT,
   extractionPath,
   readJson,
+  writeJsonAtomic,
 } from './lib/people-content.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
 import { isCompactPeopleExtraction } from './lib/people-compact.mjs';
@@ -156,17 +157,30 @@ async function main() {
   let peopleMissingActiveDateHints = 0;
   let proposedRepairs = 0;
   let appliedRepairs = 0;
+  let aliasDispositionConflicts = 0;
+  let chaptersWithAliasDispositionConflicts = 0;
+  const aliasDispositionDebt = [];
   const extractionByScope = new Map();
   const localPersonIds = new Set();
   for (const file of files) {
     const extraction = readJson(file);
     const packet = buildPeopleExtractionPacket(extraction.book, extraction.chapter, { properNounMatcher: matcher });
     const result = isCompactPeopleExtraction(extraction)
-      ? validateCompactPeopleExtraction(extraction, packet)
-      : validatePeopleExtraction(extraction, packet);
+      ? validateCompactPeopleExtraction(extraction, packet, { strictAliasDispositions: scoped })
+      : validatePeopleExtraction(extraction, packet, { strictAliasDispositions: scoped });
     people += result.stats.people;
     mentions += result.stats.mentions;
     claims += result.stats.claims;
+    aliasDispositionConflicts += result.stats.aliasDispositionConflicts;
+    if (result.stats.aliasDispositionConflicts > 0) {
+      chaptersWithAliasDispositionConflicts += 1;
+      aliasDispositionDebt.push({
+        book: extraction.book,
+        chapter: extraction.chapter,
+        chapterFingerprint: extraction.input.chapterFingerprint,
+        conflicts: result.stats.aliasDispositionConflicts,
+      });
+    }
     const attestedPeople = new Set(result.normalized.claims
       .filter((claim) => claim.predicate === 'attestation')
       .map((claim) => claim.subject));
@@ -243,6 +257,12 @@ async function main() {
   if (errors.length > 0) {
     throw new Error(`Person data validation failed:\n${errors.map((item) => `- ${item}`).join('\n')}`);
   }
+  if (!scoped) {
+    writeJsonAtomic(path.join(PEOPLE_DIR, 'generated', 'alias-disposition-debt.json'), {
+      schemaVersion: 1,
+      chapters: aliasDispositionDebt,
+    });
+  }
   const scopeLabel = scope.chapter ? `${scope.book}/${scope.chapter}` : scope.book;
   console.log(
     `${scoped ? `Scoped person data validation passed for ${scopeLabel}` : 'Person data validation passed'}: ` +
@@ -253,6 +273,8 @@ async function main() {
     `${claimAdditions} claim addition(s). ` +
     `Legacy temporal debt: ${peopleMissingAttestations} person record(s) without an attestation, ` +
     `${peopleMissingActiveDateHints} without an active-date hint. ` +
+    `Legacy alias-disposition debt: ${aliasDispositionConflicts} candidate(s) in ` +
+    `${chaptersWithAliasDispositionConflicts} chapter(s). ` +
     `Corpus coverage: ${allFiles.length}/${sourceChapters.length} chapter(s), ` +
     `${sourceChapters.length - allFiles.length} remaining.`,
   );

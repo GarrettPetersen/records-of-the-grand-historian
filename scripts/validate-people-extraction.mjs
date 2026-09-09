@@ -398,7 +398,7 @@ function validateClaimVocabulary(claim, packet, errors) {
   }
 }
 
-export function validatePeopleExtraction(extraction, packet) {
+export function validatePeopleExtraction(extraction, packet, options = {}) {
   const errors = [];
   const ajv = createPeopleSchemaValidator();
   const validatePacket = ajv.getSchema(PACKET_SCHEMA_ID);
@@ -448,6 +448,7 @@ export function validatePeopleExtraction(extraction, packet) {
   const accountedCandidates = new Map();
   const intervals = new Map();
   const mentionsByPerson = new Map();
+  const linkedSurfaceKeys = new Set();
 
   for (const mention of normalized.mentions) {
     if (!personIds.has(mention.person)) errors.push(`${mention.id} refers to unknown local person ${mention.person}`);
@@ -471,6 +472,7 @@ export function validatePeopleExtraction(extraction, packet) {
         try {
           const located = locateMentionSpan(text, span, language);
           mention.spans[language][spanIndex] = located;
+          linkedSurfaceKeys.add(`${language}\0${located.exact}`);
           const intervalKey = `${currentUnit.id}:${language}`;
           const existing = intervals.get(intervalKey) ?? [];
           for (const other of existing) {
@@ -516,9 +518,11 @@ export function validatePeopleExtraction(extraction, packet) {
     }
   }
 
+  const aliasDispositionConflicts = [];
   for (const disposition of normalized.candidateDispositions) {
     const candidateId = disposition.candidate;
-    if (!candidateById.has(candidateId)) {
+    const candidate = candidateById.get(candidateId);
+    if (!candidate) {
       errors.push(`candidate disposition refers to unknown candidate ${candidateId}`);
       continue;
     }
@@ -529,6 +533,25 @@ export function validatePeopleExtraction(extraction, packet) {
     accountedCandidates.set(candidateId, 'disposition');
     if (disposition.reason === 'other' && !disposition.note) {
       errors.push(`${candidateId} uses disposition reason "other" without a note`);
+    }
+    if (
+      disposition.reason === 'not-a-name' &&
+      linkedSurfaceKeys.has(`${candidate.language}\0${candidate.exact}`)
+    ) {
+      aliasDispositionConflicts.push({
+        candidate: candidateId,
+        language: candidate.language,
+        exact: candidate.exact,
+        unit: candidate.unit,
+      });
+    }
+  }
+  if (options.strictAliasDispositions) {
+    for (const conflict of aliasDispositionConflicts) {
+      errors.push(
+        `${conflict.candidate} disposes linked ${conflict.language} alias ` +
+        `${JSON.stringify(conflict.exact)} as not-a-name in ${conflict.unit}; link the callback or use an explicit contextual disposition`,
+      );
     }
   }
   for (const candidateId of candidateById.keys()) {
@@ -677,11 +700,12 @@ export function validatePeopleExtraction(extraction, packet) {
       claims: normalized.claims.length,
       repairs: normalized.translationRepairs.length,
       dispositions: normalized.candidateDispositions.length,
+      aliasDispositionConflicts: aliasDispositionConflicts.length,
     },
   };
 }
 
-export function validateCompactPeopleExtraction(compact, packet) {
+export function validateCompactPeopleExtraction(compact, packet, options = {}) {
   const ajv = createPeopleSchemaValidator();
   const validate = ajv.getSchema(COMPACT_SCHEMA_ID);
   const errors = [];
@@ -690,7 +714,7 @@ export function validateCompactPeopleExtraction(compact, packet) {
   }
   errors.push(...compactInputErrors(compact, packet));
   if (errors.length > 0) throw new PeopleExtractionValidationError(errors);
-  return validatePeopleExtraction(expandPeopleExtraction(compact, packet), packet);
+  return validatePeopleExtraction(expandPeopleExtraction(compact, packet), packet, options);
 }
 
 function usage() {
@@ -1151,6 +1175,26 @@ function selfTest() {
     throw new Error('Unaccounted candidate fixture unexpectedly passed');
   } catch (error) {
     if (!error.message.includes('is not accounted for')) throw error;
+  }
+
+  const contradictoryDisposition = structuredClone(extraction);
+  contradictoryDisposition.mentions[0].candidateRefs = ['testbook:001:cand_1111111111111111'];
+  contradictoryDisposition.candidateDispositions = [{
+    candidate: 'testbook:001:cand_2222222222222222',
+    disposition: 'not-person',
+    reason: 'not-a-name',
+  }];
+  const contradiction = validatePeopleExtraction(contradictoryDisposition, packet);
+  if (contradiction.stats.aliasDispositionConflicts !== 1) {
+    throw new Error('Linked alias disposition contradiction was not counted');
+  }
+  try {
+    validatePeopleExtraction(contradictoryDisposition, packet, { strictAliasDispositions: true });
+    throw new Error('Linked alias disposition contradiction unexpectedly passed strict validation');
+  } catch (error) {
+    if (!(error instanceof PeopleExtractionValidationError) || !error.message.includes('disposes linked en alias')) {
+      throw error;
+    }
   }
   console.log('validate-people-extraction self-test: ok');
 }

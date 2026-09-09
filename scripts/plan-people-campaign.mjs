@@ -14,6 +14,13 @@ const CAMPAIGN_RUN_TIMEOUT_MINUTES = 20;
 const CAMPAIGN_MAX_RUN_TOKENS = 3_000_000;
 const CAMPAIGN_EDITORIAL_MAX_RUN_COST_DOLLARS = 3;
 const CAMPAIGN_EDITORIAL_MAX_RUN_TOKENS = 4_000_000;
+const ALIAS_DISPOSITION_DEBT_PATH = path.join(
+  REPO_ROOT,
+  'data',
+  'people',
+  'generated',
+  'alias-disposition-debt.json',
+);
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
 function usage() {
@@ -134,20 +141,50 @@ export function campaignTargets({
   };
 }
 
-export function campaignProgress(progress) {
-  const chapters = [...progress.byChapter.values()];
-  const reviewedChapters = chapters.filter((chapter) => (
-    chapter.state === 'current' && chapter.pendingTranslationRepairs === 0
+export function campaignProgress(progress, aliasDispositionDebt = new Set()) {
+  const chapters = [...progress.byChapter.entries()];
+  const aliasDispositionChapters = chapters.filter(([chapterId, chapter]) => (
+    chapter.state === 'current' && aliasDispositionDebt.has(chapterId)
   )).length;
-  const pendingEditorialChapters = chapters.filter((chapter) => (
-    chapter.state === 'current' && chapter.pendingTranslationRepairs > 0
+  const reviewedChapters = chapters.filter(([chapterId, chapter]) => (
+    chapter.state === 'current' && chapter.pendingTranslationRepairs === 0 &&
+    !aliasDispositionDebt.has(chapterId)
+  )).length;
+  const pendingEditorialChapters = chapters.filter(([chapterId, chapter]) => (
+    chapter.state === 'current' && (
+      chapter.pendingTranslationRepairs > 0 || aliasDispositionDebt.has(chapterId)
+    )
   )).length;
   return {
     reviewedChapters,
     pendingEditorialChapters,
-    extractionDebt: progress.summary.sourceChapters - progress.summary.currentChapters,
+    aliasDispositionChapters,
+    extractionDebt: progress.summary.sourceChapters - progress.summary.currentChapters + aliasDispositionChapters,
     editorialDebt: progress.summary.sourceChapters - reviewedChapters,
   };
+}
+
+function currentAliasDispositionDebt(progress) {
+  if (!fs.existsSync(ALIAS_DISPOSITION_DEBT_PATH)) {
+    throw new Error(
+      `Missing ${path.relative(REPO_ROOT, ALIAS_DISPOSITION_DEBT_PATH)}; ` +
+      'run npm run people:validate before planning a deadline wave',
+    );
+  }
+  const report = JSON.parse(fs.readFileSync(ALIAS_DISPOSITION_DEBT_PATH, 'utf8'));
+  if (report.schemaVersion !== 1 || !Array.isArray(report.chapters)) {
+    throw new Error(`Invalid ${path.relative(REPO_ROOT, ALIAS_DISPOSITION_DEBT_PATH)}`);
+  }
+  const current = new Set();
+  for (const item of report.chapters) {
+    const chapterId = `${item.book}:${item.chapter}`;
+    const extractionFile = path.join(REPO_ROOT, 'data', 'people', 'extractions', item.book, `${item.chapter}.json`);
+    if (!fs.existsSync(extractionFile)) continue;
+    const extraction = JSON.parse(fs.readFileSync(extractionFile, 'utf8'));
+    if (extraction.input?.chapterFingerprint !== item.chapterFingerprint) continue;
+    if (progress.byChapter.get(chapterId)?.state === 'current') current.add(chapterId);
+  }
+  return current;
 }
 
 function selfTest() {
@@ -199,12 +236,13 @@ function selfTest() {
       ['a:004', { state: 'rereview', pendingTranslationRepairs: 0 }],
       ['a:005', { state: 'missing', pendingTranslationRepairs: 0 }],
     ]),
-  });
+  }, new Set(['a:001']));
   if (
-    completion.reviewedChapters !== 2 ||
-    completion.pendingEditorialChapters !== 1 ||
-    completion.extractionDebt !== 2 ||
-    completion.editorialDebt !== 3
+    completion.reviewedChapters !== 1 ||
+    completion.pendingEditorialChapters !== 2 ||
+    completion.aliasDispositionChapters !== 1 ||
+    completion.extractionDebt !== 3 ||
+    completion.editorialDebt !== 4
   ) {
     throw new Error(`Unexpected campaign progress: ${JSON.stringify(completion)}`);
   }
@@ -219,7 +257,7 @@ function main() {
   if (!fs.existsSync(manifestFile)) throw new Error('data/manifest.json is missing; run make manifest');
   const corpusProgress = buildPeopleGlossaryProgress(JSON.parse(fs.readFileSync(manifestFile, 'utf8')));
   const progress = corpusProgress.summary;
-  const completion = campaignProgress(corpusProgress);
+  const completion = campaignProgress(corpusProgress, currentAliasDispositionDebt(corpusProgress));
   const extractionTargets = campaignTargets({
     missingChapters: completion.extractionDebt,
     asOf: opts.asOf,
@@ -259,9 +297,10 @@ function main() {
   console.log(`Current pass: ${progress.currentChapters}/${progress.sourceChapters} (${progress.currentPercent.toFixed(2)}%)`);
   console.log(
     `Editorially closed: ${completion.reviewedChapters}/${progress.sourceChapters}; ` +
-    `${completion.pendingEditorialChapters} current extraction(s) still have proposed repairs`,
+    `${completion.pendingEditorialChapters} current extraction(s) still need closure`,
   );
-  console.log(`Older rereview: ${progress.rereviewChapters}; missing/current-prompt debt: ${completion.extractionDebt}`);
+  console.log(`Alias callback rereview: ${completion.aliasDispositionChapters} current chapter(s)`);
+  console.log(`Older rereview: ${progress.rereviewChapters}; extraction/rereview debt: ${completion.extractionDebt}`);
   console.log(`Calendar dates remaining: ${extractionTargets.calendarDays}`);
   if (extractionTargets.blackoutDays > 0) {
     console.log(
