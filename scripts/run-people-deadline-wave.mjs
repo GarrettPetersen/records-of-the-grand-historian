@@ -145,6 +145,17 @@ function rebuildPeopleCatalog() {
   if (result.status !== 0) process.exit(result.status ?? 1);
 }
 
+function applyReviewedEditorialDecisions() {
+  console.log('Applying all independently reviewed translation decisions');
+  const result = spawnSync(process.execPath, ['scripts/apply-people-editorial-decisions.mjs', '--all'], {
+    cwd: REPO_ROOT,
+    env: process.env,
+    stdio: 'inherit',
+  });
+  if (result.error) throw result.error;
+  return result.status ?? 1;
+}
+
 function catalogInputSignature() {
   const files = [];
   const addTree = (root) => {
@@ -223,6 +234,14 @@ export function phaseCommand(phase, plan) {
   throw new Error(`Unsupported deadline phase ${phase}`);
 }
 
+export function phaseHasWork(phase, plan) {
+  if (phase === 'recovery') return true;
+  if (phase === 'extraction') return plan.extractionDebt > 0;
+  if (phase === 'editorial') return plan.editorialDebt > 0;
+  if (phase === 'resolution') return Boolean(plan.resolutionScopes?.length);
+  throw new Error(`Unsupported deadline phase ${phase}`);
+}
+
 function selfTest() {
   const plan = campaignTargets({
     missingChapters: 3130,
@@ -253,7 +272,11 @@ function selfTest() {
     !recovery.includes('--recover-only') ||
     resolution[resolution.indexOf('--chapters') + 1] !== 'a/001,a/002' ||
     resolution[resolution.indexOf('--concurrency') + 1] !== '8' ||
-    resolution[resolution.indexOf('--dossier-dir') + 1] !== 'data/people/resolution-dossiers/fixture'
+    resolution[resolution.indexOf('--dossier-dir') + 1] !== 'data/people/resolution-dossiers/fixture' ||
+    phaseHasWork('extraction', { extractionDebt: 0 }) ||
+    phaseHasWork('editorial', { editorialDebt: 0 }) ||
+    phaseHasWork('resolution', { resolutionScopes: [] }) ||
+    !phaseHasWork('recovery', {})
   ) {
     throw new Error('Deadline wave command does not match the campaign targets');
   }
@@ -278,6 +301,10 @@ function main() {
   const opts = parseArgs(process.argv.slice(2));
   if (opts.selfTest) return selfTest();
   const plan = currentPlan(opts);
+  if (!phaseHasWork(opts.phase, plan)) {
+    console.log(`People deadline ${opts.phase}: no work is currently eligible`);
+    return;
+  }
   if (
     !opts.dryRun && opts.phase !== 'recovery' &&
     !(opts.phase === 'resolution' && opts.prepareDossiers) &&
@@ -329,6 +356,9 @@ function main() {
     stdio: 'inherit',
   });
   if (result.error) throw result.error;
+  const editorialApplicationStatus = opts.phase === 'editorial'
+    ? applyReviewedEditorialDecisions()
+    : 0;
   const catalogInputsChanged = catalogInputsBefore !== catalogInputSignature();
   const resolutionOutputNeedsCatalog = opts.phase === 'resolution' &&
     plan.resolutionOutput && fs.existsSync(plan.resolutionOutput);
@@ -344,6 +374,7 @@ function main() {
     console.log('Campaign wave changed no catalog inputs; skipping the catalog rebuild');
   }
   if (result.status !== 0) process.exit(result.status ?? 1);
+  if (editorialApplicationStatus !== 0) process.exit(editorialApplicationStatus);
 }
 
 if (isMain) {
