@@ -76,7 +76,9 @@ Process exactly one 24histories people-glossary chapter at a time.
 2. Read the generated assignment file. Create or resume the exact branch named there.
 3. Process the assignment's sealed chunks in order. For each chunk, read only
    prompt-people-extraction-compact.txt, that chunk's compact packet, the compact
-   extraction schema, and its seeded output. Do not inspect unrelated chapters, prior
+   extraction schema, and its seeded output. The `output.json` file is an editable
+   template, not evidence that the bot completed the chunk; `people:queue:status`
+   reports local files as `template`, `partial`, `complete`, or `missing`. Do not inspect unrelated chapters, prior
    extractions, or another chunk while writing the current one. Do not call the Cursor SDK.
 4. Complete each seeded chunk extraction. Capture every person, mention, attested time,
    durable claim, relationship, family edge, and candidate disposition. Propose clear
@@ -109,9 +111,9 @@ npm run people:queue:sync-cursor
 # Inspect both lanes and every active reservation.
 npm run people:queue:status
 
-# Preview and claim one economical chunked chapter for a Grok Bot worker.
-npm run people:grokbot:plan -- --worker grokbot-01
-npm run people:grokbot:claim -- --worker grokbot-01
+# September deadline campaign: preview and claim one balanced chapter.
+npm run people:grokbot:plan -- --worker grokbot-01 --order deadline-balanced --max-units 80 --max-candidates 200 --max-worker-kib 48
+npm run people:grokbot:claim -- --worker grokbot-01 --order deadline-balanced --max-units 80 --max-candidates 200 --max-worker-kib 48
 
 # Reconstruct a claim already published by the trusted orchestrator; no queue push.
 npm run people:grokbot:resume -- --worker grokbot-01 --book <book> --chapter <nnn>
@@ -132,10 +134,20 @@ npm run people:queue -- reconcile
 ```
 
 Use `--book` and `--chapter` only when a specific chapter is deliberately assigned.
-The default Grok Bot allocator chooses the smallest unclaimed chapter, then divides it
-into disjoint 60-unit, 150-candidate, and 48-KiB sealed packets. The chapter remains one
-central claim, so no other lane can take a later chunk. Cursor retains its adaptive
-split and conversation-recovery machinery for its own assignments.
+The default Grok Bot allocator still chooses the smallest unclaimed chapter and uses
+60-unit, 150-candidate, and 48-KiB sealed packets. During the September campaign, pass
+`--order deadline-balanced` and the calibrated 80-unit, 200-candidate, 48-KiB ceilings.
+Stable worker IDs are divided deterministically: three of every four draw from the
+shortest pool, while one samples a window at 45%, 60%, 75%, or 90% through the
+size-ranked remaining corpus. The allocator then chooses the most manageable packet
+plan within that window. This keeps headline throughput high, drains the long tail
+continuously, and leaves the pathological largest chapters for Cursor's adaptive
+parallel chunk runner or deliberate assignment. A worker's existing sticky claim
+always takes precedence over either pool, including when a seeded whole-chapter output
+already exists.
+
+The chapter remains one central claim, so no other lane can take a later chunk. Cursor
+retains its adaptive split and conversation-recovery machinery for its own assignments.
 
 ## Review And Merge
 

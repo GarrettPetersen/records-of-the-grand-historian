@@ -1215,6 +1215,9 @@ The build must fail loudly on structural errors. Required checks include:
 - every canonical family edge has two reciprocal person adjacencies carrying
   the same stable edge ID, while its source assertions retain provenance;
 - every preflight candidate has a disposition;
+- a candidate disposed as `not-a-name` is not linked to a person by that exact
+  surface elsewhere in the chapter unless the reviewed local context records a
+  more specific alternate disposition;
 - every chapter-local person used by a build maps to exactly one active
   canonical person;
 - no canonical person maps to a retired ID without a redirect;
@@ -1244,6 +1247,18 @@ failure rate, then raise concurrency to 16-24 only while whole chapters still
 finish reliably. Run independent editorial review and host-side repair
 application immediately after each extraction wave. Keep all failed and
 interrupted chunks sticky for recovery before assigning fresh chapters.
+Deadline waves use `--order deadline-balanced`: three quarters of each wave
+come from the cheapest remaining work, while the final quarter is sampled
+evenly through the rest of the queue and interleaved with the short chapters.
+This preserves high chapter throughput while draining the expensive tail
+continuously instead of leaving it for the final campaign days.
+Use the same workload shape for Grok Bot claims: stable worker IDs allocate
+three workers to the shortest pool and one to a window sampled at 45%, 60%, 75%,
+or 90% through the size-ranked corpus. For September, claim with 80 units, 200
+candidates, and a 48-KiB compact-packet ceiling. Leave the pathological largest
+chapters to Cursor's adaptive parallel chunk runner or deliberate assignment.
+Sticky work remains first in both lanes, regardless of scheduling order, so a
+retry never opens a new chapter while its previous assignment is recoverable.
 Use at least three validation attempts for multi-chunk extraction. With six or
 seven chunks per chapter, a two-attempt ceiling compounds a modest residual
 chunk error rate into excessive whole-chapter deferrals.
@@ -1256,6 +1271,39 @@ captures, so it does not require another chapter pass. Validate and push exact
 files to `codex/people-glossary-staging-v2` throughout the day, then merge a
 validated milestone to `master` at least daily to keep public progress close to
 actual progress.
+
+Legacy callback debt is a separate, cheaper lane. After a full validation run,
+run `npm run people:aliases:reconcile -- --all --apply`. It resolves only cases
+that require no inference: a rejected candidate already contained by a valid
+person mention, or a redundant enclosing candidate around an existing mention.
+It also writes a compact, sentence-local review packet for the remaining cases.
+When that packet offers the correct person through `unit-evidence` but does not
+already list the required mention kind, a reviewed link decision may set
+`allowNewKind: true`. The decision must use a valid surface kind and include a
+concise source-based `note`; the applier rejects this escape hatch for people
+offered only by a same-name match. This closes obvious title, kinship, and
+posthumous-name callbacks without weakening identity selection.
+A shortened title may select a person absent from the packet options only with
+`allowTitleClaim: true`, `kind: "title-reference"`, and a concise evidence
+`note`. The applier requires the candidate to be a whole-word component of that
+person's existing explicit title claim; arbitrary person selection and partial
+token matches remain invalid.
+Review choices include people evidenced in the sentence and people whose
+accepted name claims exactly match the disputed surface, even when that alias
+has not yet been linked anywhere. Review those packets in chapter batches,
+record every decision, and apply them with
+`npm run people:aliases:apply -- --decisions PATH`. The applier checks the
+chapter fingerprint, permits only people and mention kinds offered by the
+packet, requires complete chapter decisions, validates every revised chapter
+strictly, and writes atomically. Do not spend a full extraction run merely to
+repair old alias dispositions; use full re-extraction only when the focused
+packet exposes broader chapter-quality problems.
+
+Plan this callback lane independently from extraction and editorial closure.
+The deadline planner reports its own daily context-review waves, so callback
+debt cannot inflate the expensive full-chapter quota or consume chapter-worker
+slots. Newly accepted extractions still pass the strict callback gate and do
+not add debt to this lane.
 
 ### 1. Freeze the input contract
 

@@ -62,6 +62,20 @@ const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPat
 const DEFAULT_MAX_UNITS = 60;
 const DEFAULT_MAX_CANDIDATES = 150;
 const DEFAULT_MAX_WORKER_BYTES = 48 * 1024;
+const GROKBOT_CLAIM_ORDERS = new Set(['smallest', 'deadline-balanced']);
+const GROKBOT_DEADLINE_TAIL_MODULUS = 4;
+const GROKBOT_DEADLINE_TAIL_QUANTILES = [0.45, 0.6, 0.75, 0.9];
+const GROKBOT_COMPLETION_FLAGS = [
+  'allUnitsVisited',
+  'preflightCandidatesAccountedFor',
+  'allNamedPeopleAndMentionsCaptured',
+  'allDurableFactsCaptured',
+  'allChronologyCaptured',
+  'allPersonEventsCaptured',
+  'allClaimProvenanceCaptured',
+  'allFamilyRelationshipsCaptured',
+  'editorialPassCompleted',
+];
 
 function usage() {
   console.log(`Usage:
@@ -88,6 +102,7 @@ Shared options:
   --limit N            Number of chapters to claim (default: 1).
 
 Grok Bot claim options:
+  --order ORDER        smallest or deadline-balanced (default: smallest).
   --max-units N        Whole-chapter unit ceiling (default: ${DEFAULT_MAX_UNITS}).
   --max-candidates N   Candidate ceiling (default: ${DEFAULT_MAX_CANDIDATES}).
   --max-worker-kib N   Compact packet ceiling (default: ${DEFAULT_MAX_WORKER_BYTES / 1024}).
@@ -115,6 +130,7 @@ function parseArgs(argv) {
     book: null,
     chapter: null,
     limit: 1,
+    order: 'smallest',
     maxUnits: DEFAULT_MAX_UNITS,
     maxCandidates: DEFAULT_MAX_CANDIDATES,
     maxWorkerBytes: DEFAULT_MAX_WORKER_BYTES,
@@ -140,6 +156,7 @@ function parseArgs(argv) {
     else if (arg === '--book') opts.book = next();
     else if (arg === '--chapter') opts.chapter = String(positiveInteger(next(), arg)).padStart(3, '0');
     else if (arg === '--limit') opts.limit = positiveInteger(next(), arg);
+    else if (arg === '--order') opts.order = next();
     else if (arg === '--max-units') opts.maxUnits = positiveInteger(next(), arg);
     else if (arg === '--max-candidates') opts.maxCandidates = positiveInteger(next(), arg);
     else if (arg === '--max-worker-kib') opts.maxWorkerBytes = positiveInteger(next(), arg) * 1024;
@@ -155,6 +172,9 @@ function parseArgs(argv) {
   if (opts.selfTest) return opts;
   if (!opts.command) throw new Error('A command is required');
   if (opts.chapter && !opts.book) throw new Error('--chapter requires --book');
+  if (!GROKBOT_CLAIM_ORDERS.has(opts.order)) {
+    throw new Error(`--order must be one of: ${[...GROKBOT_CLAIM_ORDERS].join(', ')}`);
+  }
   return opts;
 }
 
@@ -178,6 +198,56 @@ function assignmentDirectory(worker, target) {
     safeWorkerId(worker),
     `${target.book}-${target.chapter}`,
   );
+}
+
+function splitChapterKey(key) {
+  const [book, chapter] = key.split('/');
+  return { book, chapter };
+}
+
+function classifyGrokbotOutput(output) {
+  if (
+    output?.run?.agentId == null &&
+    output?.run?.runId == null &&
+    output?.run?.completedAt == null &&
+    ['people', 'surfaces', 'mentions', 'claims', 'translationRepairs', 'candidateDispositions']
+      .every((key) => !Array.isArray(output?.[key]) || output[key].length === 0)
+  ) {
+    return 'template';
+  }
+  if (
+    output?.run?.completedAt &&
+    GROKBOT_COMPLETION_FLAGS.every((key) => output?.coverage?.[key] === true)
+  ) {
+    return 'complete';
+  }
+  return 'partial';
+}
+
+function localGrokbotProgress(worker, target) {
+  const assignmentFile = path.join(assignmentDirectory(worker, target), 'assignment.json');
+  if (!fs.existsSync(assignmentFile)) return 'local assignment missing';
+  let assignment;
+  try {
+    assignment = readJson(assignmentFile);
+  } catch {
+    return 'local assignment unreadable';
+  }
+  const counts = { complete: 0, partial: 0, template: 0, missing: 0 };
+  for (const chunk of assignment.chunks ?? []) {
+    const outputFile = path.join(REPO_ROOT, chunk.output);
+    if (!fs.existsSync(outputFile)) {
+      counts.missing += 1;
+      continue;
+    }
+    try {
+      counts[classifyGrokbotOutput(readJson(outputFile))] += 1;
+    } catch {
+      counts.partial += 1;
+    }
+  }
+  return `local chunks complete=${counts.complete} partial=${counts.partial} ` +
+    `template=${counts.template} missing=${counts.missing}`;
 }
 
 function grokBranch(worker, target) {
@@ -320,20 +390,70 @@ function chaptersWithExtractionFiles() {
   return found;
 }
 
+function stableWorkerBucket(worker, modulus = GROKBOT_DEADLINE_TAIL_MODULUS) {
+  const numericSuffix = /(\d+)$/u.exec(worker)?.[1];
+  if (numericSuffix) return Number(BigInt(numericSuffix) % BigInt(modulus));
+  return createHash('sha256').update(worker).digest()[0] % modulus;
+}
+
+function grokbotUsesDeadlineTailPool(opts) {
+  return opts.order === 'deadline-balanced' && stableWorkerBucket(opts.worker) === 0;
+}
+
+function grokbotDeadlineTailQuantile(worker) {
+  const numericSuffix = /(\d+)$/u.exec(worker)?.[1];
+  const bucket = numericSuffix
+    ? Number((BigInt(numericSuffix) / BigInt(GROKBOT_DEADLINE_TAIL_MODULUS)) %
+      BigInt(GROKBOT_DEADLINE_TAIL_QUANTILES.length))
+    : createHash('sha256').update(worker).digest()[1] % GROKBOT_DEADLINE_TAIL_QUANTILES.length;
+  return GROKBOT_DEADLINE_TAIL_QUANTILES[bucket];
+}
+
+function grokbotClaimOwnedByWorker(target, opts, ledger) {
+  const claim = ledger.claims[chapterKey(target)];
+  return claim?.lane === 'grokbot' && claim.worker === opts.worker && claim.status === 'claimed';
+}
+
+function orderGrokbotScanTargets(targets, opts, ledger) {
+  const owned = targets.filter((target) => grokbotClaimOwnedByWorker(target, opts, ledger));
+  const available = targets
+    .filter((target) => !grokbotClaimOwnedByWorker(target, opts, ledger))
+    .sort((left, right) =>
+      left.sourceBytes - right.sourceBytes || chapterKey(left).localeCompare(chapterKey(right))
+    );
+  if (!grokbotUsesDeadlineTailPool(opts) || available.length < 2) return [...owned, ...available];
+
+  const center = Math.round((available.length - 1) * grokbotDeadlineTailQuantile(opts.worker));
+  return [
+    ...owned,
+    ...available
+      .map((target, index) => ({ target, distance: Math.abs(index - center), index }))
+      .sort((left, right) => left.distance - right.distance || left.index - right.index)
+      .map(({ target }) => target),
+  ];
+}
+
+function compareEligibleGrokTargets(left, right, opts, ledger) {
+  return Number(grokbotClaimOwnedByWorker(right, opts, ledger)) -
+    Number(grokbotClaimOwnedByWorker(left, opts, ledger)) ||
+    left.chunkCount - right.chunkCount ||
+    left.workerBytes - right.workerBytes ||
+    left.units - right.units ||
+    chapterKey(left).localeCompare(chapterKey(right));
+}
+
 function eligibleGrokTargets(opts, ledger) {
   const matcher = loadProperNounMatcher();
   const eligible = [];
   const extracted = chaptersWithExtractionFiles();
-  const targets = listPeopleChapterTargets({ book: opts.book, chapter: opts.chapter }).sort((left, right) => {
-    const leftClaim = ledger.claims[chapterKey(left)];
-    const rightClaim = ledger.claims[chapterKey(right)];
-    const leftOwned = leftClaim?.lane === 'grokbot' && leftClaim.worker === opts.worker && leftClaim.status === 'claimed';
-    const rightOwned = rightClaim?.lane === 'grokbot' && rightClaim.worker === opts.worker && rightClaim.status === 'claimed';
-    return Number(rightOwned) - Number(leftOwned) || left.sourceBytes - right.sourceBytes;
-  });
+  const targets = orderGrokbotScanTargets(
+    listPeopleChapterTargets({ book: opts.book, chapter: opts.chapter }),
+    opts,
+    ledger,
+  );
   for (const target of targets) {
     // Existing extraction files, including stale ones, stay in the Cursor upgrade lane.
-    if (extracted.has(chapterKey(target))) continue;
+    if (extracted.has(chapterKey(target)) && !grokbotClaimOwnedByWorker(target, opts, ledger)) continue;
     const claim = ledger.claims[chapterKey(target)];
     if (claimIsActive(claim) && !(
       claim.lane === 'grokbot' && claim.worker === opts.worker && claim.status === 'claimed'
@@ -350,12 +470,7 @@ function eligibleGrokTargets(opts, ledger) {
     });
     if (eligible.length >= Math.max(opts.limit * 12, 12)) break;
   }
-  return eligible.sort((left, right) =>
-    left.chunkCount - right.chunkCount ||
-    left.workerBytes - right.workerBytes ||
-    left.units - right.units ||
-    chapterKey(left).localeCompare(chapterKey(right))
-  );
+  return eligible.sort((left, right) => compareEligibleGrokTargets(left, right, opts, ledger));
 }
 
 function run(command, args, options = {}) {
@@ -642,7 +757,12 @@ function showStatus(opts) {
   console.log(`People work queue: ${Object.keys(ledger.claims).length} active reservation(s)`);
   for (const [key, count] of [...counts].sort()) console.log(`  ${key}: ${count}`);
   for (const [key, claim] of Object.entries(ledger.claims).sort()) {
-    console.log(`  ${key}: ${claim.lane}/${claim.worker} ${claim.status}${claim.sticky ? ' (sticky)' : ''}`);
+    const local = claim.lane === 'grokbot' && claim.status === 'claimed'
+      ? `; ${localGrokbotProgress(claim.worker, splitChapterKey(key))}`
+      : '';
+    console.log(
+      `  ${key}: ${claim.lane}/${claim.worker} ${claim.status}${claim.sticky ? ' (sticky)' : ''}${local}`,
+    );
   }
 }
 
@@ -669,6 +789,30 @@ function release(opts) {
 }
 
 function selfTest() {
+  const template = {
+    schemaVersion: 2,
+    book: 'a',
+    chapter: '001',
+    input: { unitCount: 0, chapterFingerprint: 'sha256:test', candidateScannerVersion: 1, unitDigests: [] },
+    run: { model: 'Grok Bot', promptVersion: 7, agentId: null, runId: null, completedAt: null },
+    people: [],
+    surfaces: [],
+    claims: [],
+    translationRepairs: [],
+    candidateDispositions: [],
+    coverage: {},
+  };
+  if (classifyGrokbotOutput(template) !== 'template') {
+    throw new Error('Seeded Grok Bot output was not classified as a template');
+  }
+  const complete = {
+    ...template,
+    run: { ...template.run, completedAt: new Date(0).toISOString() },
+    coverage: Object.fromEntries(GROKBOT_COMPLETION_FLAGS.map((key) => [key, true])),
+  };
+  if (classifyGrokbotOutput(complete) !== 'complete') {
+    throw new Error('Completed Grok Bot output was not classified as complete');
+  }
   const recoveryFixture = { book: '__people_queue_fixture__', chapter: '999' };
   if (hasLocalCursorRecovery(recoveryFixture, {
     status: 'failed',
@@ -765,6 +909,49 @@ function selfTest() {
   });
   if (JSON.stringify(planned) !== JSON.stringify(rebuilt)) {
     throw new Error('Grok Bot assignment did not reconstruct its canonical chunk plan');
+  }
+  if (
+    !grokbotUsesDeadlineTailPool({ order: 'deadline-balanced', worker: 'grokbot-24' }) ||
+    grokbotUsesDeadlineTailPool({ order: 'deadline-balanced', worker: 'grokbot-25' }) ||
+    !grokbotUsesDeadlineTailPool({ order: 'deadline-balanced', worker: 'grokbot-28' }) ||
+    grokbotUsesDeadlineTailPool({ order: 'smallest', worker: 'grokbot-24' })
+  ) {
+    throw new Error('Deadline-balanced Grok Bot worker buckets are not stable at a 3:1 split');
+  }
+  if (
+    grokbotDeadlineTailQuantile('grokbot-24') !== 0.75 ||
+    grokbotDeadlineTailQuantile('grokbot-28') !== 0.9 ||
+    grokbotDeadlineTailQuantile('grokbot-32') !== 0.45
+  ) {
+    throw new Error('Deadline-balanced Grok Bot tail quantiles are not stable');
+  }
+  const arbitraryBucket = stableWorkerBucket('persistent-worker-alpha');
+  if (arbitraryBucket !== stableWorkerBucket('persistent-worker-alpha')) {
+    throw new Error('Nonnumeric Grok Bot worker bucket is not deterministic');
+  }
+  const schedulingOpts = { order: 'deadline-balanced', worker: 'grokbot-25' };
+  const schedulingLedger = {
+    claims: {
+      'a/large': { lane: 'grokbot', worker: 'grokbot-25', status: 'claimed' },
+    },
+  };
+  const schedulingTargets = [
+    { book: 'a', chapter: 'small', sourceBytes: 1, chunkCount: 1, workerBytes: 1, units: 1 },
+    { book: 'a', chapter: 'large', sourceBytes: 100, chunkCount: 10, workerBytes: 100, units: 100 },
+  ];
+  schedulingTargets.sort((left, right) =>
+    compareEligibleGrokTargets(left, right, schedulingOpts, schedulingLedger));
+  if (chapterKey(schedulingTargets[0]) !== 'a/large') {
+    throw new Error('Existing Grok Bot claim did not retain scheduling priority');
+  }
+  const scanTargets = Array.from({ length: 20 }, (_, index) => ({
+    book: 'a', chapter: String(index + 1).padStart(3, '0'), sourceBytes: index + 1,
+  }));
+  const orderedScan = orderGrokbotScanTargets(scanTargets, {
+    order: 'deadline-balanced', worker: 'grokbot-24',
+  }, { claims: {} });
+  if (orderedScan[0].chapter !== '015') {
+    throw new Error(`Tail scan did not start near its assigned quantile: ${orderedScan[0].chapter}`);
   }
   console.log('people-work-queue self-test: ok');
 }

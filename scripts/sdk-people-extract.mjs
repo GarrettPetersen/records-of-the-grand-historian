@@ -139,7 +139,7 @@ Options:
   --all                Explicitly allow a corpus-wide queue.
   --limit N            Maximum chapters selected this run.
   --concurrency N      Parallel Cursor Cloud agents (default: 2, max: 100).
-  --order ORDER        Queue order: smallest or book (default: smallest).
+  --order ORDER        Queue order: smallest, deadline-balanced, or book (default: smallest).
   --max-units N        Bulk chapter ceiling (default: ${DEFAULT_MAX_UNITS}).
   --max-candidates N   Bulk candidate ceiling (default: ${DEFAULT_MAX_CANDIDATES}).
   --max-worker-kib N   Maximum compact packet size per new worker (default: ${DEFAULT_MAX_WORKER_BYTES / 1024} KiB).
@@ -286,7 +286,9 @@ function parseArgs(argv) {
   }
   if (opts.selfTest) return opts;
   if (!['low', 'medium', 'high'].includes(opts.effort)) throw new Error('--effort must be low, medium, or high');
-  if (!['smallest', 'book'].includes(opts.order)) throw new Error('--order must be smallest or book');
+  if (!['smallest', 'deadline-balanced', 'book'].includes(opts.order)) {
+    throw new Error('--order must be smallest, deadline-balanced, or book');
+  }
   if (opts.chapter && !opts.book) throw new Error('--chapter requires --book');
   if (opts.chapter && opts.skipDirty) throw new Error('--skip-dirty is available only for bulk runs');
   if (!opts.book && !opts.all) throw new Error('Specify --book or explicitly pass --all');
@@ -450,6 +452,32 @@ function compareWorkload(left, right) {
     left.metrics.candidates - right.metrics.candidates ||
     left.metrics.units - right.metrics.units ||
     compareBookOrder(left, right);
+}
+
+function selectDeadlineBalanced(ranked, limit) {
+  if (!limit || limit >= ranked.length) return [...ranked];
+  const frontCount = Math.ceil(limit * 0.75);
+  const front = ranked.slice(0, frontCount);
+  const tailCount = limit - frontCount;
+  if (tailCount === 0) return front;
+
+  const tailPool = ranked.slice(frontCount);
+  const tail = Array.from({ length: tailCount }, (_, index) => {
+    const poolIndex = tailCount === 1
+      ? tailPool.length - 1
+      : Math.round(index * (tailPool.length - 1) / (tailCount - 1));
+    return tailPool[poolIndex];
+  });
+  const selected = [];
+  const frontPerTail = Math.floor(front.length / tail.length);
+  let frontIndex = 0;
+  for (const target of tail) {
+    selected.push(...front.slice(frontIndex, frontIndex + frontPerTail));
+    frontIndex += frontPerTail;
+    selected.push(target);
+  }
+  selected.push(...front.slice(frontIndex));
+  return selected;
 }
 
 function exceedsBulkCeiling(target, opts) {
@@ -648,9 +676,14 @@ function prepareTargetQueue(rawTargets, opts, state, matcher) {
   }
   if (stateChanged) saveState(state);
 
-  const ranked = eligible.sort(opts.order === 'smallest' ? compareWorkload : compareBookOrder);
-  const selected = opts.limit ? ranked.slice(0, opts.limit) : ranked;
-  const waiting = ranked.slice(selected.length);
+  const ranked = eligible.sort(opts.order === 'book' ? compareBookOrder : compareWorkload);
+  const selected = opts.limit
+    ? opts.order === 'deadline-balanced'
+      ? selectDeadlineBalanced(ranked, opts.limit)
+      : ranked.slice(0, opts.limit)
+    : ranked;
+  const selectedTargets = new Set(selected);
+  const waiting = ranked.filter((target) => !selectedTargets.has(target));
   const plan = {
     schemaVersion: 1,
     createdAt: new Date().toISOString(),
@@ -2794,10 +2827,10 @@ async function processChunkedTarget(target, packet, opts, state, control, budget
     chunks: parts.map(({ chunk, extraction }) => peopleChunkRunRecord(chunk, extraction)),
   };
   let compact = assembleCompactPeopleChunks(packet, parts, run);
-  let validated = validateCompactPeopleExtraction(compact, packet);
+  let validated = validateCompactPeopleExtraction(compact, packet, { strictAliasDispositions: true });
   assertDurableCareerCoverage(validated.normalized, packet);
   compact = writeAcceptedExtraction(target, compact, packet);
-  validated = validateCompactPeopleExtraction(compact, packet);
+  validated = validateCompactPeopleExtraction(compact, packet, { strictAliasDispositions: true });
   updateState(state, target, {
     status: 'accepted',
     acceptedPath: path.relative(REPO_ROOT, extractionPath(target.book, target.chapter)),
@@ -2817,7 +2850,7 @@ async function processChunkedTarget(target, packet, opts, state, control, budget
 
 function acceptWholeExtraction(target, accepted, state) {
   let compact = compactPeopleExtraction(accepted.extraction, accepted.packet);
-  const initial = validateCompactPeopleExtraction(compact, accepted.packet);
+  const initial = validateCompactPeopleExtraction(compact, accepted.packet, { strictAliasDispositions: true });
   assertDurableCareerCoverage(initial.normalized, accepted.packet);
   const rawArchive = path.join(
     PEOPLE_DIR,
@@ -2828,7 +2861,7 @@ function acceptWholeExtraction(target, accepted, state) {
   );
   writeJsonAtomic(rawArchive, accepted.extraction);
   compact = writeAcceptedExtraction(target, compact, accepted.packet);
-  const persisted = validateCompactPeopleExtraction(compact, accepted.packet);
+  const persisted = validateCompactPeopleExtraction(compact, accepted.packet, { strictAliasDispositions: true });
   updateState(state, target, {
     status: 'accepted',
     runId: accepted.result.id,
@@ -3641,6 +3674,20 @@ async function selfTest() {
   }, 4);
   if ([fourWorkers, oneWorker].sort(compareWorkload)[0] !== oneWorker) {
     throw new Error('Dispatch ordering did not account for per-agent overhead');
+  }
+  const balancedFixtures = Array.from({ length: 12 }, (_, index) => ({
+    book: 'fixture',
+    chapter: String(index + 1).padStart(3, '0'),
+    metrics: {
+      units: index + 1,
+      candidates: index + 1,
+      workerBytes: index + 1,
+      workloadScore: index + 1,
+    },
+  }));
+  const balanced = selectDeadlineBalanced(balancedFixtures, 8).map((target) => target.chapter);
+  if (balanced.join(',') !== '001,002,003,007,004,005,006,012') {
+    throw new Error(`Deadline-balanced ordering selected an unexpected workload mix: ${balanced.join(',')}`);
   }
   if (
     exceedsBulkCeiling(small, opts) ||
