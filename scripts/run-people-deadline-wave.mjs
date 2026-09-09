@@ -334,6 +334,12 @@ function main() {
     plan.resolutionOutput && fs.existsSync(plan.resolutionOutput);
   if (!opts.prepareDossiers && (catalogInputsChanged || resolutionOutputNeedsCatalog)) {
     rebuildPeopleCatalog();
+    if (resolutionOutputNeedsCatalog && plan.resolutionDossierReady) {
+      fs.rmSync(plan.resolutionDossierDir, { recursive: true });
+      console.log(
+        `Removed completed prepared dossiers from ${path.relative(REPO_ROOT, plan.resolutionDossierDir)}`,
+      );
+    }
   } else if (!opts.prepareDossiers) {
     console.log('Campaign wave changed no catalog inputs; skipping the catalog rebuild');
   }
