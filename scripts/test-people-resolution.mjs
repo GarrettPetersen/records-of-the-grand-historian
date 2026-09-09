@@ -115,6 +115,25 @@ function candidatePerson(localId, preferredNameSuggestion, nameKind, alias) {
 
 {
   const people = new Map([
+    candidatePerson(
+      'ritual-emperor-a',
+      { en: 'Emperor', zh: '皇帝' },
+      'title',
+      { en: 'Emperor', zh: '皇帝' },
+    ),
+    candidatePerson(
+      'ritual-emperor-b',
+      { en: 'Emperor', zh: '皇帝' },
+      'title',
+      { en: 'Emperor', zh: '皇帝' },
+    ),
+  ]);
+  const result = buildResolutionCandidates(people);
+  assert.equal(result.blocks.length, 0, 'bare Chinese ruler titles must not create identity blocks');
+}
+
+{
+  const people = new Map([
     person('confucius-a'),
     person('confucius-b'),
     person('laozi-a'),
