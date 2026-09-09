@@ -134,6 +134,44 @@ function candidatePerson(localId, preferredNameSuggestion, nameKind, alias) {
 
 {
   const people = new Map([
+    candidatePerson(
+      'scholar-wang',
+      { en: 'Wang', zh: '王' },
+      'surname',
+      { en: 'Wang', zh: '王' },
+    ),
+    candidatePerson(
+      'lady-wang',
+      { en: 'Wang', zh: '王氏' },
+      'surname',
+      { en: 'Wang', zh: '王' },
+    ),
+  ]);
+  const result = buildResolutionCandidates(people);
+  assert.equal(result.blocks.length, 0, 'surname-only preferred labels must not create identity blocks');
+}
+
+{
+  const people = new Map([
+    candidatePerson(
+      'mononym-wang-a',
+      { en: 'Wang', zh: '旺' },
+      'personal',
+      { en: 'Wang', zh: '旺' },
+    ),
+    candidatePerson(
+      'mononym-wang-b',
+      { en: 'Wang', zh: '旺' },
+      'personal',
+      { en: 'Wang', zh: '旺' },
+    ),
+  ]);
+  const result = buildResolutionCandidates(people);
+  assert.equal(result.blocks.length, 1, 'genuine one-word personal names must remain blocking');
+}
+
+{
+  const people = new Map([
     person('confucius-a'),
     person('confucius-b'),
     person('laozi-a'),
