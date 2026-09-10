@@ -265,6 +265,7 @@ function selfTest() {
     result.maxUnits !== 80 ||
     result.maxCandidates !== 200 ||
     result.runTimeoutMinutes !== 20 ||
+    result.maxRunCostDollars !== 3 ||
     result.editorialMaxRunCostDollars !== 3 ||
     result.editorialMaxRunTokens !== 4_000_000
   ) {
@@ -491,7 +492,7 @@ function main() {
     `--max-candidates ${extractionTargets.maxCandidates} --max-worker-kib ${extractionTargets.maxWorkerKiB} ` +
     `--run-timeout-minutes ${extractionTargets.runTimeoutMinutes} --max-run-tokens ${extractionTargets.maxRunTokens} ` +
     `--max-attempts 3 --max-cost ${extractionTargets.waveCostCeilingDollars} --cost-reserve 5 ` +
-    '--max-run-cost 5 --model grok-4.6 --effort low',
+    `--max-run-cost ${extractionTargets.maxRunCostDollars} --model grok-4.6 --effort low`,
   );
   console.log(
     `Editorial wave: npm run people:editorial-review -- --all --limit ${editorialTargets.chaptersPerWave} ` +
