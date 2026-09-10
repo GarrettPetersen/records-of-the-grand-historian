@@ -635,10 +635,23 @@ function buildAdaptiveDossierParts(dossier) {
 }
 
 export function projectDossierForWorker(document) {
-  if (Buffer.byteLength(JSON.stringify(document)) <= MAX_INLINE_DOSSIER_BYTES) return document;
   const targetCanonicalIds = new Set(document.targetLocalPeople.map((localId) =>
     document.people[localId].currentCanonicalPersonId
   ));
+  const targetComparisonsOnly = {
+    ...document,
+    blocks: document.blocks.map((block) => ({
+      ...block,
+      ...(Array.isArray(block.reviewPairs) ? {
+        reviewPairs: block.reviewPairs.filter(([left, right]) =>
+          targetCanonicalIds.has(left) || targetCanonicalIds.has(right)
+        ),
+      } : {}),
+    })),
+  };
+  if (Buffer.byteLength(JSON.stringify(targetComparisonsOnly)) <= MAX_INLINE_DOSSIER_BYTES) {
+    return targetComparisonsOnly;
+  }
   const targetLocalIds = new Set(document.targetLocalPeople);
   const visible = new Set();
   const blocks = [];
@@ -2027,7 +2040,12 @@ async function selfTest() {
   }
   const promptDossier = {
     batch: 'fixture-shard-001',
-    document: { outputSeed: { batch: 'fixture-shard-001' }, people: { unique_inline_marker: {} } },
+    document: {
+      targetLocalPeople: [],
+      blocks: [],
+      outputSeed: { batch: 'fixture-shard-001' },
+      people: { unique_inline_marker: {} },
+    },
   };
   const inlinePrompt = initialPrompt(promptDossier, { dossierDir: null });
   if (!inlinePrompt.includes('unique_inline_marker')) throw new Error('Small dossier was not inlined');
@@ -2107,6 +2125,53 @@ async function selfTest() {
       filler: 'x'.repeat(2200),
     }];
   }));
+  const focusedProjectionPeople = {
+    'a:001:p001': {
+      localId: 'a:001:p001',
+      currentCanonicalPersonId: 'per_target',
+      targetOfThisPass: true,
+      nameKeys: [],
+      familyRelationships: [],
+    },
+    'a:002:p001': {
+      localId: 'a:002:p001',
+      currentCanonicalPersonId: 'per_context_one',
+      targetOfThisPass: false,
+      nameKeys: [],
+      familyRelationships: [],
+    },
+    'a:003:p001': {
+      localId: 'a:003:p001',
+      currentCanonicalPersonId: 'per_context_two',
+      targetOfThisPass: false,
+      nameKeys: [],
+      familyRelationships: [],
+    },
+  };
+  const focusedProjection = projectDossierForWorker({
+    schemaVersion: 1,
+    batch: 'focused-projection-shard-001',
+    targetLocalPeople: ['a:001:p001'],
+    blocks: [{
+      id: 'focused-projection-block',
+      component: 1,
+      localPeople: Object.keys(focusedProjectionPeople),
+      currentGroups: Object.keys(focusedProjectionPeople).map((localId) => [localId]),
+      sharedNames: [],
+      reviewPairs: [
+        ['per_target', 'per_context_one'],
+        ['per_context_one', 'per_context_two'],
+      ],
+    }],
+    people: focusedProjectionPeople,
+    priorSeparations: [],
+    outputSeed: { schemaVersion: 1, batch: 'focused-projection-shard-001', decisions: [] },
+  });
+  if (!isDeepStrictEqual(focusedProjection.blocks[0].reviewPairs, [
+    ['per_target', 'per_context_one'],
+  ])) {
+    throw new Error('Resolver worker projection retained an unassigned context-only comparison');
+  }
   const projectionIds = Object.keys(projectionPeople);
   const projected = projectDossierForWorker({
     schemaVersion: 1,
