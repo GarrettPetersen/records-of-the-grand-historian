@@ -235,6 +235,107 @@ function candidatePerson(localId, preferredNameSuggestion, nameKind, alias) {
 {
   const people = new Map([
     candidatePerson(
+      'lady-wang-a',
+      { en: 'Lady Wang', zh: '王氏' },
+      'descriptive-kinship',
+      { en: 'Lady Wang', zh: '王氏' },
+    ),
+    candidatePerson(
+      'lady-wang-b',
+      { en: 'Lady Wang', zh: '王氏' },
+      'descriptive-kinship',
+      { en: 'Lady Wang', zh: '王氏' },
+    ),
+    candidatePerson(
+      'lady-sima',
+      { en: 'Lady Sima', zh: '司馬氏' },
+      'descriptive-kinship',
+      { en: 'Lady Sima', zh: '司馬氏' },
+    ),
+  ]);
+  const result = buildResolutionCandidates(people);
+  assert.equal(result.blocks.length, 0, 'generic surname-clan labels must not create identity blocks');
+}
+
+{
+  const people = new Map([
+    candidatePerson(
+      'wang-huifeng-a',
+      { en: 'Wang Huifeng', zh: '王氏' },
+      'personal-name',
+      { en: 'Wang Huifeng', zh: '王氏' },
+    ),
+    candidatePerson(
+      'wang-huifeng-b',
+      { en: 'Wang Huifeng', zh: '王氏' },
+      'personal-name',
+      { en: 'Wang Huifeng', zh: '王氏' },
+    ),
+  ]);
+  const result = buildResolutionCandidates(people);
+  assert.equal(result.blocks.length, 1, 'specific English names must remain blocking');
+}
+
+{
+  const people = new Map([
+    candidatePerson(
+      'wang-yan-one',
+      { en: 'Wang Yan', zh: '王衍' },
+      'personal-name',
+      { en: 'Wang Yan', zh: '王衍' },
+    ),
+    candidatePerson(
+      'wang-yan-two',
+      { en: 'Wang Yan', zh: '王顗' },
+      'personal-name',
+      { en: 'Wang Yan', zh: '王顗' },
+    ),
+  ]);
+  const result = buildResolutionCandidates(people);
+  assert.equal(result.blocks.length, 0, 'conflicting Chinese identity names must partition Romanization collisions');
+}
+
+{
+  const people = new Map([
+    candidatePerson(
+      'wang-yan-full',
+      { en: 'Wang Yan', zh: '王衍' },
+      'personal-name',
+      { en: 'Wang Yan', zh: '王衍' },
+    ),
+    candidatePerson(
+      'wang-yan-unknown',
+      { en: 'Wang Yan' },
+      'personal-name',
+      { en: 'Wang Yan' },
+    ),
+  ]);
+  const result = buildResolutionCandidates(people);
+  assert.equal(result.blocks.length, 1, 'missing Chinese identity evidence must preserve a review candidate');
+}
+
+{
+  const people = new Map([
+    candidatePerson(
+      'courtesy-one',
+      { en: 'Master Wende', zh: '文德' },
+      'courtesy-name',
+      { en: 'Master Wende', zh: '文德' },
+    ),
+    candidatePerson(
+      'courtesy-two',
+      { en: 'Master Wende', zh: '文得' },
+      'courtesy-name',
+      { en: 'Master Wende', zh: '文得' },
+    ),
+  ]);
+  const result = buildResolutionCandidates(people);
+  assert.equal(result.blocks.length, 1, 'non-identity English name kinds must not be partitioned');
+}
+
+{
+  const people = new Map([
+    candidatePerson(
       'mononym-wang-a',
       { en: 'Wang', zh: '旺' },
       'personal',
@@ -291,6 +392,25 @@ function candidatePerson(localId, preferredNameSuggestion, nameKind, alias) {
   ]);
   const result = buildResolutionCandidates(people);
   assert.equal(result.blocks.length, 0, 'generic kinship labels must not create identity blocks');
+}
+
+{
+  const people = new Map([
+    candidatePerson(
+      'third-son-a',
+      { en: 'Third son', zh: '第三子' },
+      'kinship-reference',
+      { en: 'Third son', zh: '第三子' },
+    ),
+    candidatePerson(
+      'third-son-b',
+      { en: 'Third son', zh: '第三子' },
+      'kinship-reference',
+      { en: 'Third son', zh: '第三子' },
+    ),
+  ]);
+  const result = buildResolutionCandidates(people);
+  assert.equal(result.blocks.length, 0, 'bare ordinal kinship labels must not create identity blocks');
 }
 
 {
