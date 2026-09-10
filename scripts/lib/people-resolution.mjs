@@ -6,6 +6,12 @@ const WEAK_ENGLISH_NAMES = new Set([
   'lord', 'lady', 'master', 'minister', 'general', 'governor', 'official', 'ruler',
   'crown prince', 'crown princess', 'imperial prince', 'imperial princess',
   'imperial son', 'imperial daughter', 'heir apparent', 'empress dowager',
+  'wife', 'husband', 'father', 'mother', 'son', 'daughter', 'brother', 'sister',
+  'elder brother', 'younger brother', 'elder sister', 'younger sister',
+  'eldest son', 'second son', 'youngest son', 'birth mother', 'stepmother',
+  'grandfather', 'grandmother', 'paternal grandfather', 'maternal grandfather',
+  'maternal uncle', 'imperial grandson', 'emperor s younger brother',
+  'younger brother of the emperor',
   'his wife', 'her husband', 'his father', 'her father', 'his mother', 'her mother',
   'his son', 'her son', 'his daughter', 'her daughter',
 ]);
@@ -15,6 +21,9 @@ const WEAK_CHINESE_NAMES = new Set([
   '丞相', '刺史', '大臣', '太守', '宰相', '將軍', '将军', '巡撫', '巡抚', '陛下',
   '父', '母', '夫', '妻', '子', '女', '其父', '其母', '其夫', '其妻', '其子', '其女',
   '其兄', '其弟', '其姊', '其妹',
+  '妻子', '公主', '皇弟', '皇考', '祖父', '曾祖', '繼母', '一子', '兄子', '祖母',
+  '所生母', '後母', '父母', '皇妣', '叔父', '老母', '伯父', '女弟', '皇孫', '長女',
+  '幼子', '從父', '第二子',
 ]);
 const NON_BLOCKING_NAME_KINDS = new Set([
   'surname',

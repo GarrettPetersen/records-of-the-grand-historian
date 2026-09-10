@@ -278,19 +278,38 @@ function candidatePerson(localId, preferredNameSuggestion, nameKind, alias) {
   const people = new Map([
     candidatePerson(
       'wife-a',
-      { en: 'His Wife', zh: '其妻' },
+      { en: 'Wife', zh: '妻子' },
       'kinship-name',
-      { en: 'His Wife', zh: '其妻' },
+      { en: 'Wife', zh: '妻子' },
     ),
     candidatePerson(
       'wife-b',
-      { en: 'His Wife', zh: '其妻' },
+      { en: 'Wife', zh: '妻子' },
       'kinship-name',
-      { en: 'His Wife', zh: '其妻' },
+      { en: 'Wife', zh: '妻子' },
     ),
   ]);
   const result = buildResolutionCandidates(people);
   assert.equal(result.blocks.length, 0, 'generic kinship labels must not create identity blocks');
+}
+
+{
+  const people = new Map([
+    candidatePerson(
+      'zhang-wife-a',
+      { en: 'Wife of Zhang Wenxu', zh: '張文緒之妻' },
+      'descriptive-kinship',
+      { en: 'Wife of Zhang Wenxu', zh: '張文緒之妻' },
+    ),
+    candidatePerson(
+      'zhang-wife-b',
+      { en: 'Wife of Zhang Wenxu', zh: '張文緒之妻' },
+      'descriptive-kinship',
+      { en: 'Wife of Zhang Wenxu', zh: '張文緒之妻' },
+    ),
+  ]);
+  const result = buildResolutionCandidates(people);
+  assert.equal(result.blocks.length, 1, 'specific kinship identities must remain blocking');
 }
 
 {
