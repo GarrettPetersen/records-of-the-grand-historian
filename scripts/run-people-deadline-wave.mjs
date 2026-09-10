@@ -225,7 +225,8 @@ export function phaseCommand(phase, plan) {
       '--concurrency', String(plan.extractionConcurrency), '--order', 'deadline-balanced',
       '--max-units', String(plan.maxUnits), '--max-candidates', String(plan.maxCandidates),
       '--max-worker-kib', String(plan.maxWorkerKiB), '--max-cost', String(plan.waveCostCeilingDollars),
-      '--cost-reserve', '5', '--max-run-cost', '5', '--max-run-tokens', String(plan.maxRunTokens),
+      '--cost-reserve', '5', '--max-run-cost', String(plan.maxRunCostDollars),
+      '--max-run-tokens', String(plan.maxRunTokens),
       '--run-timeout-minutes', String(plan.runTimeoutMinutes), '--max-attempts', '3',
       '--retry-failed', '--skip-dirty', '--model', 'grok-4.6', '--effort', 'low',
     ];
@@ -294,6 +295,8 @@ function selfTest() {
     extraction[extraction.indexOf('--limit') + 1] !== '51' ||
     extraction[extraction.indexOf('--concurrency') + 1] !== '20' ||
     extraction[extraction.indexOf('--order') + 1] !== 'deadline-balanced' ||
+    extraction[extraction.indexOf('--max-run-cost') + 1] !== '3' ||
+    extraction[extraction.indexOf('--max-run-tokens') + 1] !== '3000000' ||
     editorial[editorial.indexOf('--concurrency') + 1] !== '17' ||
     !recovery.includes('--recover-only') ||
     resolution[resolution.indexOf('--chapters') + 1] !== 'a/001,a/002' ||
