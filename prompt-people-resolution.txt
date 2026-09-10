@@ -12,9 +12,12 @@ ambiguous block. When evidence is insufficient, emit a concise
 `possible-same-as` decision or omit that block and continue immediately.
 
 The dossier contains unresolved name blocks, concise source-derived records,
-current canonical groups, and prior keep-separate constraints. A local person
-ID is evidence from one chapter; merging IDs says those records identify one
-person. A false merge is much worse than a temporary duplicate.
+current canonical groups, the `reviewPairs` still requiring a decision, and
+prior keep-separate constraints. Each `reviewPairs` entry names two
+`currentCanonicalPersonId` values. Decide only those pairings; omitted pairs
+were already reviewed and must not be reconsidered. A local person ID is
+evidence from one chapter; merging IDs says those records identify one person.
+A false merge is much worse than a temporary duplicate.
 
 `targetLocalPeople` is the complete assignment. Every decision must include at
 least one of those target IDs. Compare targets with the other visible records,
@@ -73,9 +76,17 @@ especially dangerous.
 
 Existing canonical groups are already merged. Refer to one or more visible
 local IDs from those groups when joining groups, but do not emit a no-op merge
-within one current group. Prior separations are binding. Cover high-confidence
-cases first; leave uncertainty explicit instead of guessing. Use concise basis
-codes and notes that state the decisive evidence.
+within one current group. A multi-person merge may span several `reviewPairs`
+when those pairs connect every listed canonical group. `keep-separate` and
+`possible-same-as` decisions must contain only pairings listed in
+`reviewPairs`; use pair decisions when needed. Prior separations are binding.
+Cover high-confidence cases first; leave uncertainty explicit instead of
+guessing. Use concise basis codes and notes that state the decisive evidence.
+
+For a large block containing many records of one well-attested person, emit one
+multi-person merge for all compatible groups connected by the supplied
+`reviewPairs`. Do not enumerate every transitive pair. Keep homonyms or weak
+references outside that merge and decide only their direct target pairings.
 
 Before publishing, check that no pair of local people appears together in both
 a `merge` decision and a `keep-separate` decision, including as members of a

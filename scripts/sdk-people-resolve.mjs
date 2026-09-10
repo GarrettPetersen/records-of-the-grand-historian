@@ -308,16 +308,17 @@ export function buildDossiers(opts, corpus, resolutions) {
       canonicalByLocal.set(localId, cluster.canonicalPersonId);
     }
   }
-  const unresolved = new Set(
-    unresolvedCandidateState(candidates, canonicalByLocal, resolved.keepSeparate)
-      .blocks
-      .map((block) => block.id),
+  const unresolvedState = unresolvedCandidateState(
+    candidates,
+    canonicalByLocal,
+    resolved.keepSeparate,
+    resolved.possibleSameAs,
   );
   const targetLocalIds = new Set([...corpus.localPeople.values()]
     .filter((person) => opts.allUnresolved || opts.chapters.has(`${person.book}/${person.chapter}`))
     .map((person) => person.localId));
-  const blocks = candidates.blocks.filter((block) =>
-    unresolved.has(block.id) && (opts.allUnresolved || block.localPeople.some((id) => targetLocalIds.has(id)))
+  const blocks = unresolvedState.blocks.filter((block) =>
+    opts.allUnresolved || block.localPeople.some((id) => targetLocalIds.has(id))
   );
   const components = connectedBlockComponents(blocks, canonicalByLocal);
   const shards = shardComponents(
@@ -428,17 +429,33 @@ function projectTargetGroups(document, targetGroups) {
   return projectDossierForWorker({ ...document, targetLocalPeople });
 }
 
-function sliceBlockGroups(block, groups) {
+function sliceBlockGroups(block, groups, people) {
+  const canonicalPeople = new Set(groups.map((group) =>
+    people[group[0]].currentCanonicalPersonId
+  ));
   return {
     ...block,
     localPeople: groups.flat(),
     currentGroups: groups,
+    ...(Array.isArray(block.reviewPairs) ? {
+      reviewPairs: block.reviewPairs.filter(([left, right]) =>
+        canonicalPeople.has(left) && canonicalPeople.has(right)
+      ),
+    } : {}),
   };
 }
 
 function targetComparisonCount(document) {
-  const targets = new Set(document.targetLocalPeople);
+  const targetCanonicalPeople = new Set(document.targetLocalPeople.map((localId) =>
+    document.people[localId].currentCanonicalPersonId
+  ));
   return document.blocks.reduce((total, block) => {
+    if (Array.isArray(block.reviewPairs)) {
+      return total + block.reviewPairs.filter(([left, right]) =>
+        targetCanonicalPeople.has(left) || targetCanonicalPeople.has(right)
+      ).length;
+    }
+    const targets = new Set(document.targetLocalPeople);
     const targetGroups = block.currentGroups.filter((group) =>
       group.some((localId) => targets.has(localId))
     ).length;
@@ -473,7 +490,7 @@ function splitTargetDocumentByBlocks(document, maxComparisons = MAX_TARGET_COMPA
       let best = null;
       for (const bin of bins) {
         const groups = [...targetGroups, ...bin.groups, group];
-        const candidate = sliceProjectedDocument(document, [sliceBlockGroups(block, groups)]);
+        const candidate = sliceProjectedDocument(document, [sliceBlockGroups(block, groups, document.people)]);
         const bytes = Buffer.byteLength(JSON.stringify(candidate));
         if (
           bytes <= TARGET_PART_DOSSIER_BYTES &&
@@ -488,7 +505,7 @@ function splitTargetDocumentByBlocks(document, maxComparisons = MAX_TARGET_COMPA
         best.bin.document = best.candidate;
       } else {
         const groups = [...targetGroups, group];
-        const candidate = sliceProjectedDocument(document, [sliceBlockGroups(block, groups)]);
+        const candidate = sliceProjectedDocument(document, [sliceBlockGroups(block, groups, document.people)]);
         const bytes = Buffer.byteLength(JSON.stringify(candidate));
         if (bytes > MAX_INLINE_DOSSIER_BYTES) {
           throw new Error(`${block.id} has an indivisible candidate group above the inline limit`);
@@ -497,7 +514,10 @@ function splitTargetDocumentByBlocks(document, maxComparisons = MAX_TARGET_COMPA
       }
     }
     if (bins.length === 0) {
-      const targetOnly = sliceProjectedDocument(document, [sliceBlockGroups(block, targetGroups)]);
+      const targetOnly = sliceProjectedDocument(
+        document,
+        [sliceBlockGroups(block, targetGroups, document.people)],
+      );
       if (Buffer.byteLength(JSON.stringify(targetOnly)) > MAX_INLINE_DOSSIER_BYTES) {
         throw new Error(`${block.id} has target context above the inline limit`);
       }
@@ -1292,6 +1312,43 @@ export function validateResolutionDocument(
       .filter((block) => block.localPeople.some((id) => decision.localPeople.includes(id)))
       .map((block) => block.component));
     if (components.size !== 1) errors.push(`${label} crosses disconnected identity components`);
+    if (components.size === 1 && decision.localPeople.every((localId) => visible.has(localId))) {
+      const [component] = components;
+      const componentBlocks = dossier.document.blocks.filter((block) => block.component === component);
+      if (componentBlocks.length > 0 && componentBlocks.every((block) => Array.isArray(block.reviewPairs))) {
+        const reviewPairs = new Set(componentBlocks.flatMap((block) =>
+          block.reviewPairs.map(([left, right]) => pairKey(left, right))
+        ));
+        const canonicalPeople = [...new Set(decision.localPeople.map((localId) =>
+          dossier.document.people[localId].currentCanonicalPersonId
+        ))];
+        let covered = canonicalPeople.length >= 2;
+        if (decision.decision === 'merge') {
+          const reached = new Set(canonicalPeople.slice(0, 1));
+          let changed = true;
+          while (changed) {
+            changed = false;
+            for (const left of canonicalPeople) {
+              for (const right of canonicalPeople) {
+                if (left === right || !reviewPairs.has(pairKey(left, right))) continue;
+                if (reached.has(left) && !reached.has(right)) {
+                  reached.add(right);
+                  changed = true;
+                }
+              }
+            }
+          }
+          covered &&= reached.size === canonicalPeople.length;
+        } else {
+          for (let left = 0; left < canonicalPeople.length; left += 1) {
+            for (let right = left + 1; right < canonicalPeople.length; right += 1) {
+              covered &&= reviewPairs.has(pairKey(canonicalPeople[left], canonicalPeople[right]));
+            }
+          }
+        }
+        if (!covered) errors.push(`${label} revisits an already reviewed identity pair`);
+      }
+    }
   }
   if (errors.length === 0 && checkGlobalConsistency) {
     try {

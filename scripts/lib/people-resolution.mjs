@@ -5,20 +5,61 @@ const WEAK_ENGLISH_NAMES = new Set([
   'emperor', 'empress', 'king', 'queen', 'prince', 'princess', 'duke', 'marquis',
   'lord', 'lady', 'master', 'minister', 'general', 'governor', 'official', 'ruler',
   'crown prince', 'crown princess', 'imperial prince', 'imperial princess',
-  'imperial son', 'imperial daughter', 'heir apparent',
+  'imperial son', 'imperial daughter', 'heir apparent', 'empress dowager',
+  'wife', 'husband', 'father', 'mother', 'son', 'daughter', 'brother', 'sister',
+  'elder brother', 'younger brother', 'elder sister', 'younger sister',
+  'eldest son', 'second son', 'youngest son', 'birth mother', 'stepmother',
+  'grandfather', 'grandmother', 'paternal grandfather', 'maternal grandfather',
+  'maternal uncle', 'imperial grandson', 'emperor s younger brother',
+  'younger brother of the emperor',
+  'his wife', 'her husband', 'his father', 'her father', 'his mother', 'her mother',
+  'his son', 'her son', 'his daughter', 'her daughter',
 ]);
 const WEAK_CHINESE_NAMES = new Set([
   '上', '主', '侯', '公', '后', '君', '國王', '国王', '天子', '太后', '太子', '夫人',
   '官', '帝', '王', '王后', '王子', '皇后', '皇子', '皇女', '皇太后', '皇太子', '皇帝', '相', '臣',
   '丞相', '刺史', '大臣', '太守', '宰相', '將軍', '将军', '巡撫', '巡抚', '陛下',
+  '父', '母', '夫', '妻', '子', '女', '其父', '其母', '其夫', '其妻', '其子', '其女',
+  '其兄', '其弟', '其姊', '其妹',
+  '妻子', '公主', '皇弟', '皇考', '祖父', '曾祖', '繼母', '一子', '兄子', '祖母',
+  '所生母', '後母', '父母', '皇妣', '叔父', '老母', '伯父', '女弟', '皇孫', '長女',
+  '幼子', '從父', '第二子',
 ]);
 const NON_BLOCKING_NAME_KINDS = new Set([
   'surname',
   'given',
   'title',
+  'title-name',
+  'title-reference',
   'regnal',
+  'regnal-name',
   'temple',
+  'temple-name',
   'posthumous',
+  'posthumous-name',
+]);
+const IDENTITY_NAME_KINDS = new Set([
+  'alternate',
+  'alternate-name',
+  'birth-name',
+  'changed',
+  'changed-name',
+  'childhood',
+  'childhood-name',
+  'native-name',
+  'personal',
+  'personal-name',
+  'religious',
+  'religious-name',
+]);
+const KINSHIP_NAME_KINDS = new Set([
+  'descriptive-kinship',
+  'kinship',
+  'kinship-reference',
+]);
+const WEAK_KINSHIP_CHINESE_NAMES = new Set([
+  '長子', '次子', '少子', '幼子', '長女', '次女', '幼女', '第三子', '從子', '皇侄',
+  '乳母', '皇祖', '外祖', '曾孫', '父子', '同母', '嫡母', '后父', '後父', '元子', '世子', '皇長子', '母后',
 ]);
 
 function canonicalJson(value) {
@@ -78,9 +119,30 @@ function normalizeName(language, value) {
   return key ? `en:${key}` : null;
 }
 
+function genericChineseClanName(value) {
+  const key = normalizeName('zh', value);
+  return Boolean(key && /^.{1,2}氏$/u.test(key.slice(3)));
+}
+
+function weakChineseName(value, kinshipName) {
+  return WEAK_CHINESE_NAMES.has(value) || /^.{1,2}氏$/u.test(value) ||
+    (kinshipName && WEAK_KINSHIP_CHINESE_NAMES.has(value));
+}
+
+function weakEnglishName(value, pairedValue, kinshipName) {
+  if (WEAK_ENGLISH_NAMES.has(value)) return true;
+  if (
+    genericChineseClanName(pairedValue) &&
+    /^(?:consort|empress|lady|madam|mother|princess|queen|widow|wife) [a-z]+(?: [a-z]+)?$/u.test(value)
+  ) return true;
+  return kinshipName &&
+    /^(?:(?:his|her|their) )?(?:(?:eldest|second|third|youngest|elder|younger|paternal|maternal|birth|step) )?(?:father|mother|son|daughter|brother|sister|uncle|aunt|grandfather|grandmother|grandson|granddaughter|nephew|niece)$/u.test(value);
+}
+
 function localNameKeys(person) {
   const keys = new Map();
   const preferredNonBlockingClaimKeys = new Set();
+  const preferredKinshipClaimKeys = new Set();
   for (const language of ['en', 'zh']) {
     const preferredKey = normalizeName(language, person.preferredNameSuggestion[language]);
     if (!preferredKey) continue;
@@ -95,15 +157,21 @@ function localNameKeys(person) {
     ) {
       preferredNonBlockingClaimKeys.add(preferredKey);
     }
+    if (matchingKinds.some((kind) => KINSHIP_NAME_KINDS.has(kind))) {
+      preferredKinshipClaimKeys.add(preferredKey);
+    }
   }
-  const add = (language, value, kind, source) => {
+  const add = (language, value, pairedValue, kind, source) => {
     const preferred = source === 'preferred';
     const key = normalizeName(language, value);
     if (!key) return;
     const bare = key.slice(3);
+    const kinshipName = KINSHIP_NAME_KINDS.has(kind) ||
+      (preferred && preferredKinshipClaimKeys.has(key));
     const strongForm = language === 'zh'
-      ? !WEAK_CHINESE_NAMES.has(bare) && (preferred || Array.from(bare).length >= 2)
-      : !WEAK_ENGLISH_NAMES.has(bare) && (bare.includes(' ') || bare.length >= 4);
+      ? !weakChineseName(bare, kinshipName) && (preferred || Array.from(bare).length >= 2)
+      : !weakEnglishName(bare, pairedValue, kinshipName) && (bare.includes(' ') || bare.length >= 4) &&
+        !(pairedValue && !bare.includes(' '));
     const nonBlockingPreferred = preferred && preferredNonBlockingClaimKeys.has(key);
     const blocking = strongForm && !nonBlockingPreferred &&
       (preferred || !NON_BLOCKING_NAME_KINDS.has(kind));
@@ -115,18 +183,55 @@ function localNameKeys(person) {
     current.sources.add(source);
     keys.set(key, current);
   };
-  add('en', person.preferredNameSuggestion.en, 'preferred', 'preferred');
-  add('zh', person.preferredNameSuggestion.zh, 'preferred', 'preferred');
+  add(
+    'en',
+    person.preferredNameSuggestion.en,
+    person.preferredNameSuggestion.zh,
+    'preferred',
+    'preferred',
+  );
+  add(
+    'zh',
+    person.preferredNameSuggestion.zh,
+    person.preferredNameSuggestion.en,
+    'preferred',
+    'preferred',
+  );
   for (const claim of person.claims) {
     if (claim.predicate !== 'name') continue;
-    add('en', claim.value?.en, claim.value?.kind, claim.id);
-    add('zh', claim.value?.zh, claim.value?.kind, claim.id);
+    add('en', claim.value?.en, claim.value?.zh, claim.value?.kind, claim.id);
+    add('zh', claim.value?.zh, claim.value?.en, claim.value?.kind, claim.id);
   }
   return [...keys.values()].map((entry) => ({
     ...entry,
     kinds: [...entry.kinds].sort(),
     sources: [...entry.sources].sort(),
   }));
+}
+
+function identityChineseKeys(nameKeys) {
+  return new Set(nameKeys
+    .filter((name) => name.language === 'zh' && name.blocking)
+    .filter((name) => name.kinds.some((kind) => IDENTITY_NAME_KINDS.has(kind)))
+    .map((name) => name.key));
+}
+
+function candidateMemberGroups(key, bucket, members, identityChineseByPerson) {
+  const identityNameForms = bucket.names.every((name) =>
+    name.kinds.some((kind) => IDENTITY_NAME_KINDS.has(kind))
+  );
+  if (!key.startsWith('en:') || !identityNameForms) return [members];
+  const partitions = new Set(members.flatMap((member) =>
+    [...(identityChineseByPerson.get(member) ?? [])]
+  ));
+  if (partitions.size < 2) return [members];
+  const groups = [...partitions].map((partition) => members.filter((member) => {
+    const names = identityChineseByPerson.get(member) ?? new Set();
+    return names.size === 0 || names.has(partition);
+  }));
+  return [...new Map(groups
+    .filter((group) => group.length >= 2)
+    .map((group) => [group.join('\u0000'), group])).values()];
 }
 
 function pairKey(left, right) {
@@ -190,9 +295,11 @@ function localSummary(person) {
 
 export function buildResolutionCandidates(localPeople) {
   const buckets = new Map();
+  const identityChineseByPerson = new Map();
   const people = {};
   for (const person of [...localPeople.values()].sort((a, b) => a.localId.localeCompare(b.localId))) {
     const nameKeys = localNameKeys(person);
+    identityChineseByPerson.set(person.localId, identityChineseKeys(nameKeys));
     people[person.localId] = { ...localSummary(person), nameKeys };
     for (const key of nameKeys) {
       if (!key.blocking) continue;
@@ -207,10 +314,12 @@ export function buildResolutionCandidates(localPeople) {
   for (const [key, bucket] of buckets) {
     if (bucket.members.size < 2) continue;
     const members = [...bucket.members].sort();
-    const memberKey = members.join('\u0000');
-    const current = byMembers.get(memberKey) ?? { members, sharedNames: [] };
-    current.sharedNames.push({ key, forms: bucket.names });
-    byMembers.set(memberKey, current);
+    for (const candidateMembers of candidateMemberGroups(key, bucket, members, identityChineseByPerson)) {
+      const memberKey = candidateMembers.join('\u0000');
+      const current = byMembers.get(memberKey) ?? { members: candidateMembers, sharedNames: [] };
+      current.sharedNames.push({ key, forms: bucket.names });
+      byMembers.set(memberKey, current);
+    }
   }
 
   const blocks = [...byMembers.values()]
@@ -326,6 +435,7 @@ export function resolvePeopleClusters(localPeople, resolutionDocuments = []) {
   const modelKeepSeparate = new Set();
   const curatedKeepSeparate = new Set();
   const curatedMerges = [];
+  const possibleSameAsGroups = [];
   const pins = new Map();
   for (const document of resolutionDocuments) {
     const curated = document.authority === 'curated';
@@ -347,6 +457,8 @@ export function resolvePeopleClusters(localPeople, resolutionDocuments = []) {
             target.add(pairKey(decisionLocalPeople[left], decisionLocalPeople[right]));
           }
         }
+      } else if (decision.decision === 'possible-same-as') {
+        possibleSameAsGroups.push(decisionLocalPeople);
       }
       if (decision.canonicalPersonId) {
         for (const localId of decisionLocalPeople) pins.set(localId, decision.canonicalPersonId);
@@ -473,5 +585,17 @@ export function resolvePeopleClusters(localPeople, resolutionDocuments = []) {
     cluster.retiredIds = cluster.retiredIds.filter((id) => !canonicalOwners.has(id));
   }
   clusters.sort((a, b) => a.canonicalPersonId.localeCompare(b.canonicalPersonId));
-  return { clusters, keepSeparate };
+  const canonicalByLocal = new Map(clusters.flatMap((cluster) =>
+    cluster.localPeople.map((localId) => [localId, cluster.canonicalPersonId])
+  ));
+  const possibleSameAs = new Set();
+  for (const localPeopleGroup of possibleSameAsGroups) {
+    const canonicalPeople = [...new Set(localPeopleGroup.map((localId) => canonicalByLocal.get(localId)))];
+    for (let left = 0; left < canonicalPeople.length; left += 1) {
+      for (let right = left + 1; right < canonicalPeople.length; right += 1) {
+        possibleSameAs.add(pairKey(canonicalPeople[left], canonicalPeople[right]));
+      }
+    }
+  }
+  return { clusters, keepSeparate, possibleSameAs };
 }
