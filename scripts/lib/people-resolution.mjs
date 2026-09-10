@@ -5,20 +5,29 @@ const WEAK_ENGLISH_NAMES = new Set([
   'emperor', 'empress', 'king', 'queen', 'prince', 'princess', 'duke', 'marquis',
   'lord', 'lady', 'master', 'minister', 'general', 'governor', 'official', 'ruler',
   'crown prince', 'crown princess', 'imperial prince', 'imperial princess',
-  'imperial son', 'imperial daughter', 'heir apparent',
+  'imperial son', 'imperial daughter', 'heir apparent', 'empress dowager',
+  'his wife', 'her husband', 'his father', 'her father', 'his mother', 'her mother',
+  'his son', 'her son', 'his daughter', 'her daughter',
 ]);
 const WEAK_CHINESE_NAMES = new Set([
   '上', '主', '侯', '公', '后', '君', '國王', '国王', '天子', '太后', '太子', '夫人',
   '官', '帝', '王', '王后', '王子', '皇后', '皇子', '皇女', '皇太后', '皇太子', '皇帝', '相', '臣',
   '丞相', '刺史', '大臣', '太守', '宰相', '將軍', '将军', '巡撫', '巡抚', '陛下',
+  '父', '母', '夫', '妻', '子', '女', '其父', '其母', '其夫', '其妻', '其子', '其女',
+  '其兄', '其弟', '其姊', '其妹',
 ]);
 const NON_BLOCKING_NAME_KINDS = new Set([
   'surname',
   'given',
   'title',
+  'title-name',
+  'title-reference',
   'regnal',
+  'regnal-name',
   'temple',
+  'temple-name',
   'posthumous',
+  'posthumous-name',
 ]);
 
 function canonicalJson(value) {
@@ -96,14 +105,15 @@ function localNameKeys(person) {
       preferredNonBlockingClaimKeys.add(preferredKey);
     }
   }
-  const add = (language, value, kind, source) => {
+  const add = (language, value, pairedValue, kind, source) => {
     const preferred = source === 'preferred';
     const key = normalizeName(language, value);
     if (!key) return;
     const bare = key.slice(3);
     const strongForm = language === 'zh'
       ? !WEAK_CHINESE_NAMES.has(bare) && (preferred || Array.from(bare).length >= 2)
-      : !WEAK_ENGLISH_NAMES.has(bare) && (bare.includes(' ') || bare.length >= 4);
+      : !WEAK_ENGLISH_NAMES.has(bare) && (bare.includes(' ') || bare.length >= 4) &&
+        !(pairedValue && !bare.includes(' '));
     const nonBlockingPreferred = preferred && preferredNonBlockingClaimKeys.has(key);
     const blocking = strongForm && !nonBlockingPreferred &&
       (preferred || !NON_BLOCKING_NAME_KINDS.has(kind));
@@ -115,12 +125,24 @@ function localNameKeys(person) {
     current.sources.add(source);
     keys.set(key, current);
   };
-  add('en', person.preferredNameSuggestion.en, 'preferred', 'preferred');
-  add('zh', person.preferredNameSuggestion.zh, 'preferred', 'preferred');
+  add(
+    'en',
+    person.preferredNameSuggestion.en,
+    person.preferredNameSuggestion.zh,
+    'preferred',
+    'preferred',
+  );
+  add(
+    'zh',
+    person.preferredNameSuggestion.zh,
+    person.preferredNameSuggestion.en,
+    'preferred',
+    'preferred',
+  );
   for (const claim of person.claims) {
     if (claim.predicate !== 'name') continue;
-    add('en', claim.value?.en, claim.value?.kind, claim.id);
-    add('zh', claim.value?.zh, claim.value?.kind, claim.id);
+    add('en', claim.value?.en, claim.value?.zh, claim.value?.kind, claim.id);
+    add('zh', claim.value?.zh, claim.value?.en, claim.value?.kind, claim.id);
   }
   return [...keys.values()].map((entry) => ({
     ...entry,

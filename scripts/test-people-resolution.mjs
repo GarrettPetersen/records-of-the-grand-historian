@@ -92,13 +92,13 @@ function candidatePerson(localId, preferredNameSuggestion, nameKind, alias) {
     candidatePerson(
       'sui-emperor',
       { en: 'Emperor Wen of Sui', zh: '隋文帝' },
-      'temple',
+      'temple-name',
       { en: 'Gaozu', zh: '高祖' },
     ),
     candidatePerson(
       'han-emperor',
       { en: 'Emperor Gaozu of Han', zh: '漢高祖' },
-      'temple',
+      'temple-name',
       { en: 'Gaozu', zh: '高祖' },
     ),
   ]);
@@ -111,13 +111,13 @@ function candidatePerson(localId, preferredNameSuggestion, nameKind, alias) {
     candidatePerson(
       'general-a',
       { en: 'General A', zh: '甲將軍' },
-      'posthumous',
+      'posthumous-name',
       { en: 'Huai', zh: '懷' },
     ),
     candidatePerson(
       'general-b',
       { en: 'General B', zh: '乙將軍' },
-      'posthumous',
+      'posthumous-name',
       { en: 'Huai', zh: '懷' },
     ),
   ]);
@@ -199,13 +199,13 @@ function candidatePerson(localId, preferredNameSuggestion, nameKind, alias) {
     candidatePerson(
       'han-emperor-hui',
       { en: 'Emperor Hui of Han', zh: '惠' },
-      'posthumous',
+      'posthumous-name',
       { en: 'Emperor Hui of Han', zh: '惠' },
     ),
     candidatePerson(
       'wei-prince-hui',
       { en: 'Prince Hui of Wei', zh: '惠' },
-      'posthumous',
+      'posthumous-name',
       { en: 'Prince Hui of Wei', zh: '惠' },
     ),
   ]);
@@ -249,6 +249,48 @@ function candidatePerson(localId, preferredNameSuggestion, nameKind, alias) {
   ]);
   const result = buildResolutionCandidates(people);
   assert.equal(result.blocks.length, 1, 'genuine one-word personal names must remain blocking');
+}
+
+{
+  const people = new Map([
+    candidatePerson(
+      'zhong-a',
+      { en: 'Zhao Zhong', zh: '趙仲' },
+      'personal-name',
+      { en: 'Zhong', zh: '仲' },
+    ),
+    candidatePerson(
+      'zhong-b',
+      { en: 'Li Zhong', zh: '李忠' },
+      'personal-name',
+      { en: 'Zhong', zh: '忠' },
+    ),
+  ]);
+  const result = buildResolutionCandidates(people);
+  assert.equal(
+    result.blocks.length,
+    0,
+    'one-word English readings with different Chinese counterparts must not create identity blocks',
+  );
+}
+
+{
+  const people = new Map([
+    candidatePerson(
+      'wife-a',
+      { en: 'His Wife', zh: '其妻' },
+      'kinship-name',
+      { en: 'His Wife', zh: '其妻' },
+    ),
+    candidatePerson(
+      'wife-b',
+      { en: 'His Wife', zh: '其妻' },
+      'kinship-name',
+      { en: 'His Wife', zh: '其妻' },
+    ),
+  ]);
+  const result = buildResolutionCandidates(people);
+  assert.equal(result.blocks.length, 0, 'generic kinship labels must not create identity blocks');
 }
 
 {
