@@ -12,9 +12,14 @@ import {
   campaignTargets,
   selectResolutionChapters,
 } from './plan-people-campaign.mjs';
+import {
+  readPeopleCampaignPolicy,
+  rollingCampaignDeadline,
+} from './lib/people-campaign-policy.mjs';
 import { PEOPLE_DIR, REPO_ROOT } from './lib/people-content.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+const campaignPolicy = readPeopleCampaignPolicy();
 
 function localIsoDate(date = new Date()) {
   const year = date.getFullYear();
@@ -27,7 +32,9 @@ function parseArgs(argv) {
   const opts = {
     deadline: process.env.PEOPLE_CAMPAIGN_DEADLINE ?? null,
     asOf: localIsoDate(),
-    capacityStart: process.env.PEOPLE_CAMPAIGN_CAPACITY_START ?? null,
+    capacityStart: process.env.PEOPLE_CURSOR_CAPACITY_START ??
+      campaignPolicy.lanes['cursor-sdk'].capacityStart,
+    maxChaptersPerWave: campaignPolicy.maxChaptersPerWave,
     phase: null,
     limit: null,
     prepareDossiers: false,
@@ -45,7 +52,13 @@ function parseArgs(argv) {
     };
     if (arg === '--deadline') opts.deadline = next();
     else if (arg === '--as-of') opts.asOf = next();
-    else if (arg === '--capacity-start') opts.capacityStart = next();
+    else if (arg === '--cursor-capacity-start') opts.capacityStart = next();
+    else if (arg === '--max-chapters-per-wave') {
+      opts.maxChaptersPerWave = Number.parseInt(next(), 10);
+      if (!Number.isInteger(opts.maxChaptersPerWave) || opts.maxChaptersPerWave < 1) {
+        throw new Error('--max-chapters-per-wave must be a positive integer');
+      }
+    }
     else if (arg === '--phase') opts.phase = next();
     else if (arg === '--limit') {
       opts.limit = Number.parseInt(next(), 10);
@@ -61,9 +74,6 @@ function parseArgs(argv) {
   if (!opts.selfTest && !['recovery', 'extraction', 'editorial', 'resolution'].includes(opts.phase)) {
     throw new Error('--phase must be recovery, extraction, editorial, or resolution');
   }
-  if (!opts.selfTest && !opts.deadline) {
-    throw new Error('--deadline is required (or set PEOPLE_CAMPAIGN_DEADLINE)');
-  }
   if (!opts.selfTest && opts.prepareDossiers && opts.phase !== 'resolution') {
     throw new Error('--prepare-dossiers is only valid with --phase resolution');
   }
@@ -76,6 +86,7 @@ function parseArgs(argv) {
   if (!opts.selfTest && opts.deferCatalog && opts.forceCatalog) {
     throw new Error('--defer-catalog and --force-catalog cannot be combined');
   }
+  opts.deadline ??= rollingCampaignDeadline(opts.asOf, campaignPolicy.planningHorizonDays);
   return opts;
 }
 
@@ -92,6 +103,7 @@ function currentPlan(opts) {
     capacityStart: opts.capacityStart ?? opts.asOf,
     wavesPerDay: 3,
     bufferPercent: 15,
+    maxChaptersPerWave: opts.maxChaptersPerWave,
   });
   const editorialTargets = campaignTargets({
     missingChapters: completion.editorialDebt,
@@ -100,6 +112,7 @@ function currentPlan(opts) {
     capacityStart: opts.capacityStart ?? opts.asOf,
     wavesPerDay: 3,
     bufferPercent: 15,
+    maxChaptersPerWave: opts.maxChaptersPerWave,
   });
   const resolutionTargets = campaignTargets({
     missingChapters: identity.resolutionDebt,
@@ -108,6 +121,7 @@ function currentPlan(opts) {
     capacityStart: opts.capacityStart ?? opts.asOf,
     wavesPerDay: 3,
     bufferPercent: 15,
+    maxChaptersPerWave: opts.maxChaptersPerWave,
   });
   const resolutionSelection = selectResolutionChapters(
     identity.pendingResolutionChapters,
@@ -325,9 +339,16 @@ function selfTest() {
     'people:resolution:deadline-prepare',
     'people:resolution:deadline-wave',
   ]) {
-    if (!packageScripts[name]?.includes('--capacity-start 2026-09-13')) {
-      throw new Error(`${name} does not enforce the September paid-capacity start date`);
+    if (packageScripts[name]?.includes('--capacity-start') ||
+        packageScripts[name]?.includes('--cursor-capacity-start') ||
+        packageScripts[name]?.includes('--deadline')) {
+      throw new Error(`${name} bypasses the centralized people campaign policy`);
     }
+  }
+  if (campaignPolicy.lanes['cursor-sdk'].capacityStart !== '2026-09-24' ||
+      campaignPolicy.lanes.grokbot.capacityStart !== '2026-09-13' ||
+      campaignPolicy.mode !== 'quality-first') {
+    throw new Error('People campaign policy does not preserve the lane calendars and quality mode');
   }
   console.log('people deadline wave self-test: ok');
 }
@@ -351,13 +372,13 @@ function main() {
         ? `${plan.editorialChaptersPerWave} editorial chapters`
         : `${plan.extractionChaptersPerWave} extraction chapters`;
     throw new Error(
-      `Paid capacity is unavailable until ${plan.capacityStart}; ` +
+      `Cursor SDK capacity is unavailable until ${plan.capacityStart}; ` +
       `the post-reset target is ${target} per wave`,
     );
   }
   const command = phaseCommand(opts.phase, plan);
   console.log(
-    `People deadline ${opts.phase}: ${plan.currentChapters}/${plan.sourceChapters} current, ` +
+    `People quality-first ${opts.phase}: ${plan.currentChapters}/${plan.sourceChapters} current, ` +
     `${plan.reviewedChapters}/${plan.sourceChapters} editorially closed, ` +
     `${plan.identityClosedChapters}/${plan.sourceChapters} identity-clean, ` +
     `${plan.extractionChaptersPerWave} extraction, ${plan.editorialChaptersPerWave} editorial, and ` +
@@ -365,6 +386,12 @@ function main() {
     `extraction concurrency ${plan.extractionConcurrency}, ` +
     `editorial concurrency ${plan.editorialConcurrency}`,
   );
+  if (!plan.targetWithinWaveCap) {
+    console.log(
+      `Soft target asks for ${plan.requiredChaptersPerWave} chapters/wave; ` +
+      `keeping the calibrated ${plan.maxChaptersPerWave}-chapter operational cap`,
+    );
+  }
   if (opts.phase === 'resolution') {
     console.log(
       `Resolution selection: ${plan.resolutionScopes.length} chapter scope(s), ` +

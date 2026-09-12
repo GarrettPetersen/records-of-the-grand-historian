@@ -10,10 +10,15 @@ import {
   readJson,
   writeJsonAtomic,
 } from './lib/people-content.mjs';
+import {
+  readPeopleCampaignPolicy,
+  rollingCampaignDeadline,
+} from './lib/people-campaign-policy.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 const STATE_FILE = path.join(PEOPLE_DIR, 'generated', 'deadline-day-state.json');
 const CALIBRATION_FILE = path.join(PEOPLE_DIR, 'generated', 'deadline-calibration.json');
+const campaignPolicy = readPeopleCampaignPolicy();
 
 function localIsoDate(date = new Date()) {
   const year = date.getFullYear();
@@ -24,10 +29,13 @@ function localIsoDate(date = new Date()) {
 
 function usage() {
   console.log(`Usage:
-  node scripts/run-people-deadline-day.mjs --deadline DATE --capacity-start DATE [options]
+  node scripts/run-people-deadline-day.mjs [options]
   node scripts/run-people-deadline-day.mjs --self-test
 
 Options:
+  --deadline DATE    Override the rolling quality-planning horizon.
+  --cursor-capacity-start DATE
+                     Override the campaign policy's Cursor SDK reset date.
   --as-of DATE       Campaign date (default: local current date).
   --waves N          Extraction/editorial/resolution cycles (default: 3).
   --calibration      Run recovery plus the required 10-scope identity calibration.
@@ -62,7 +70,8 @@ function isoDate(value, flag) {
 function parseArgs(argv) {
   const opts = {
     deadline: process.env.PEOPLE_CAMPAIGN_DEADLINE ?? null,
-    capacityStart: process.env.PEOPLE_CAMPAIGN_CAPACITY_START ?? null,
+    capacityStart: process.env.PEOPLE_CURSOR_CAPACITY_START ??
+      campaignPolicy.lanes['cursor-sdk'].capacityStart,
     asOf: localIsoDate(),
     waves: 3,
     calibration: false,
@@ -77,7 +86,7 @@ function parseArgs(argv) {
       return value;
     };
     if (arg === '--deadline') opts.deadline = isoDate(next(), arg);
-    else if (arg === '--capacity-start') opts.capacityStart = isoDate(next(), arg);
+    else if (arg === '--cursor-capacity-start') opts.capacityStart = isoDate(next(), arg);
     else if (arg === '--as-of') opts.asOf = isoDate(next(), arg);
     else if (arg === '--waves') opts.waves = positiveInteger(next(), arg, 8);
     else if (arg === '--calibration') opts.calibration = true;
@@ -88,9 +97,7 @@ function parseArgs(argv) {
       process.exit(0);
     } else throw new Error(`Unknown option: ${arg}`);
   }
-  if (!opts.selfTest && (!opts.deadline || !opts.capacityStart)) {
-    throw new Error('--deadline and --capacity-start are required');
-  }
+  opts.deadline ??= rollingCampaignDeadline(opts.asOf, campaignPolicy.planningHorizonDays);
   return opts;
 }
 
@@ -145,7 +152,7 @@ function runStep(step, opts) {
   const args = [
     'scripts/run-people-deadline-wave.mjs',
     '--deadline', opts.deadline,
-    '--capacity-start', opts.capacityStart,
+    '--cursor-capacity-start', opts.capacityStart,
     '--as-of', opts.asOf,
     '--phase', step.phase,
   ];
@@ -180,9 +187,16 @@ function selfTest() {
   }
   const packageScripts = JSON.parse(fs.readFileSync(path.join(REPO_ROOT, 'package.json'), 'utf8')).scripts;
   for (const name of ['people:deadline:calibrate', 'people:deadline:day']) {
-    if (!packageScripts[name]?.includes('--capacity-start 2026-09-13')) {
-      throw new Error(`${name} does not enforce the paid-capacity start date`);
+    if (packageScripts[name]?.includes('--capacity-start') ||
+        packageScripts[name]?.includes('--cursor-capacity-start') ||
+        packageScripts[name]?.includes('--deadline')) {
+      throw new Error(`${name} bypasses the centralized people campaign policy`);
     }
+  }
+  if (campaignPolicy.lanes['cursor-sdk'].capacityStart !== '2026-09-24' ||
+      campaignPolicy.lanes.grokbot.capacityStart !== '2026-09-13' ||
+      campaignPolicy.mode !== 'quality-first') {
+    throw new Error('People campaign policy does not preserve the lane calendars and quality mode');
   }
   console.log('people deadline day self-test: ok');
 }
