@@ -5,6 +5,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildPeopleGlossaryProgress } from '../generate-progress.js';
 import { REPO_ROOT } from './lib/people-content.mjs';
+import {
+  readPeopleCampaignPolicy,
+  rollingCampaignDeadline,
+} from './lib/people-campaign-policy.mjs';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const CAMPAIGN_MAX_UNITS = 80;
@@ -27,16 +31,22 @@ const ALIAS_DISPOSITION_DEBT_PATH = path.join(
   'alias-disposition-debt.json',
 );
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+const campaignPolicy = readPeopleCampaignPolicy();
 
 function usage() {
   console.log(`Usage:
-  node scripts/plan-people-campaign.mjs --deadline YYYY-MM-DD [options]
+  node scripts/plan-people-campaign.mjs [options]
   node scripts/plan-people-campaign.mjs --self-test
 
 Options:
-  --deadline DATE       Last campaign date, inclusive.
+  --deadline DATE       Override the rolling quality-planning horizon.
   --as-of DATE          Planning date (default: local current date).
-  --capacity-start DATE First date paid workers can launch (default: --as-of).
+  --cursor-capacity-start DATE
+                        First date Cursor SDK workers can launch (default: campaign policy).
+  --grokbot-capacity-start DATE
+                        First date Grok Bot workers can launch (default: campaign policy).
+  --max-chapters-per-wave N
+                        Operational cap; a soft target cannot raise it (default: campaign policy).
   --waves-per-day N     Extraction waves per day (default: 3).
   --buffer-percent N    Completion buffer above the minimum rate (default: 15).
   --resolution-batch N  Accepted chapters per identity checkpoint (default: 50).
@@ -75,7 +85,11 @@ function parseArgs(argv) {
   const opts = {
     deadline: process.env.PEOPLE_CAMPAIGN_DEADLINE ?? null,
     asOf: localIsoDate(),
-    capacityStart: process.env.PEOPLE_CAMPAIGN_CAPACITY_START ?? null,
+    capacityStart: process.env.PEOPLE_CURSOR_CAPACITY_START ??
+      campaignPolicy.lanes['cursor-sdk'].capacityStart,
+    grokbotCapacityStart: process.env.PEOPLE_GROKBOT_CAPACITY_START ??
+      campaignPolicy.lanes.grokbot.capacityStart,
+    maxChaptersPerWave: campaignPolicy.maxChaptersPerWave,
     wavesPerDay: 3,
     bufferPercent: 15,
     resolutionBatch: 50,
@@ -91,7 +105,11 @@ function parseArgs(argv) {
     };
     if (arg === '--deadline') opts.deadline = next();
     else if (arg === '--as-of') opts.asOf = next();
-    else if (arg === '--capacity-start') opts.capacityStart = next();
+    else if (arg === '--cursor-capacity-start') opts.capacityStart = next();
+    else if (arg === '--grokbot-capacity-start') opts.grokbotCapacityStart = next();
+    else if (arg === '--max-chapters-per-wave') {
+      opts.maxChaptersPerWave = positiveInteger(next(), arg, 500);
+    }
     else if (arg === '--waves-per-day') opts.wavesPerDay = positiveInteger(next(), arg, 24);
     else if (arg === '--buffer-percent') opts.bufferPercent = positiveInteger(next(), arg, 100);
     else if (arg === '--resolution-batch') opts.resolutionBatch = positiveInteger(next(), arg, 200);
@@ -102,6 +120,7 @@ function parseArgs(argv) {
       process.exit(0);
     } else throw new Error(`Unknown option: ${arg}`);
   }
+  opts.deadline ??= rollingCampaignDeadline(opts.asOf, campaignPolicy.planningHorizonDays);
   return opts;
 }
 
@@ -112,19 +131,21 @@ export function campaignTargets({
   capacityStart = asOf,
   wavesPerDay,
   bufferPercent,
+  maxChaptersPerWave = Number.MAX_SAFE_INTEGER,
 }) {
   const start = isoDate(asOf, '--as-of');
   const end = isoDate(deadline, '--deadline');
-  const capacity = isoDate(capacityStart, '--capacity-start');
+  const capacity = isoDate(capacityStart, '--cursor-capacity-start');
   const calendarDays = Math.floor((end.epoch - start.epoch) / DAY_MS) + 1;
   if (calendarDays < 1) throw new Error('--deadline must not be before --as-of');
   const effectiveStartEpoch = Math.max(start.epoch, capacity.epoch);
   const capacityDays = Math.floor((end.epoch - effectiveStartEpoch) / DAY_MS) + 1;
-  if (capacityDays < 1) throw new Error('--capacity-start must not be after --deadline');
+  if (capacityDays < 1) throw new Error('--cursor-capacity-start must not be after --deadline');
   const blackoutDays = Math.max(0, Math.floor((effectiveStartEpoch - start.epoch) / DAY_MS));
   const minimumChaptersPerDay = Math.ceil(missingChapters / capacityDays);
   const bufferedChaptersPerDay = Math.ceil(minimumChaptersPerDay * (1 + bufferPercent / 100));
-  const chaptersPerWave = Math.ceil(bufferedChaptersPerDay / wavesPerDay);
+  const requiredChaptersPerWave = Math.ceil(bufferedChaptersPerDay / wavesPerDay);
+  const chaptersPerWave = Math.min(requiredChaptersPerWave, maxChaptersPerWave);
   return {
     calendarDays,
     capacityStart: capacity.value,
@@ -132,7 +153,10 @@ export function campaignTargets({
     blackoutDays,
     minimumChaptersPerDay,
     bufferedChaptersPerDay,
+    requiredChaptersPerWave,
     chaptersPerWave,
+    targetWithinWaveCap: requiredChaptersPerWave <= maxChaptersPerWave,
+    maxChaptersPerWave,
     extractionConcurrency: Math.min(20, Math.max(12, Math.ceil(chaptersPerWave / 2.5))),
     editorialConcurrency: Math.min(18, Math.max(8, Math.ceil(chaptersPerWave / 3))),
     resolutionConcurrency: Math.min(16, Math.max(8, Math.ceil(chaptersPerWave / 5))),
@@ -275,19 +299,25 @@ function selfTest() {
     missingChapters: 2983,
     asOf: '2026-09-08',
     deadline: '2026-09-30',
-    capacityStart: '2026-09-13',
+    capacityStart: '2026-09-24',
     wavesPerDay: 3,
     bufferPercent: 15,
+    maxChaptersPerWave: 64,
   });
   if (
     blackout.calendarDays !== 23 ||
-    blackout.capacityDays !== 18 ||
-    blackout.blackoutDays !== 5 ||
-    blackout.minimumChaptersPerDay !== 166 ||
-    blackout.bufferedChaptersPerDay !== 191 ||
-    blackout.chaptersPerWave !== 64
+    blackout.capacityDays !== 7 ||
+    blackout.blackoutDays !== 16 ||
+    blackout.minimumChaptersPerDay !== 427 ||
+    blackout.bufferedChaptersPerDay !== 492 ||
+    blackout.requiredChaptersPerWave !== 164 ||
+    blackout.chaptersPerWave !== 64 ||
+    blackout.targetWithinWaveCap
   ) {
     throw new Error(`Unexpected blackout targets: ${JSON.stringify(blackout)}`);
+  }
+  if (rollingCampaignDeadline('2026-09-12', campaignPolicy.planningHorizonDays) !== '2026-10-11') {
+    throw new Error('People campaign policy does not preserve its rolling planning horizon');
   }
   const completion = campaignProgress({
     summary: { sourceChapters: 5, currentChapters: 3 },
@@ -363,7 +393,6 @@ function selfTest() {
 function main() {
   const opts = parseArgs(process.argv.slice(2));
   if (opts.selfTest) return selfTest();
-  if (!opts.deadline) throw new Error('--deadline is required (or set PEOPLE_CAMPAIGN_DEADLINE)');
   const manifestFile = path.join(REPO_ROOT, 'data', 'manifest.json');
   if (!fs.existsSync(manifestFile)) throw new Error('data/manifest.json is missing; run make manifest');
   const corpusProgress = buildPeopleGlossaryProgress(JSON.parse(fs.readFileSync(manifestFile, 'utf8')));
@@ -377,6 +406,7 @@ function main() {
     capacityStart: opts.capacityStart ?? opts.asOf,
     wavesPerDay: opts.wavesPerDay,
     bufferPercent: opts.bufferPercent,
+    maxChaptersPerWave: opts.maxChaptersPerWave,
   });
   const editorialTargets = campaignTargets({
     missingChapters: completion.editorialDebt,
@@ -385,6 +415,7 @@ function main() {
     capacityStart: opts.capacityStart ?? opts.asOf,
     wavesPerDay: opts.wavesPerDay,
     bufferPercent: opts.bufferPercent,
+    maxChaptersPerWave: opts.maxChaptersPerWave,
   });
   const aliasReviewTargets = campaignTargets({
     missingChapters: completion.aliasDispositionChapters,
@@ -393,6 +424,7 @@ function main() {
     capacityStart: opts.capacityStart ?? opts.asOf,
     wavesPerDay: opts.wavesPerDay,
     bufferPercent: opts.bufferPercent,
+    maxChaptersPerWave: opts.maxChaptersPerWave,
   });
   const resolutionTargets = campaignTargets({
     missingChapters: identity.resolutionDebt,
@@ -401,6 +433,7 @@ function main() {
     capacityStart: opts.capacityStart ?? opts.asOf,
     wavesPerDay: opts.wavesPerDay,
     bufferPercent: opts.bufferPercent,
+    maxChaptersPerWave: opts.maxChaptersPerWave,
   });
   const resolutionSelection = selectResolutionChapters(
     identity.pendingResolutionChapters,
@@ -409,6 +442,9 @@ function main() {
   const result = {
     asOf: opts.asOf,
     deadline: opts.deadline,
+    campaignMode: campaignPolicy.mode,
+    cursorCapacityStart: opts.capacityStart,
+    grokbotCapacityStart: opts.grokbotCapacityStart,
     ...progress,
     ...completion,
     ...identity,
@@ -436,7 +472,10 @@ function main() {
     console.log(JSON.stringify(result, null, 2));
     return;
   }
-  console.log(`People glossary deadline campaign (${opts.asOf} through ${opts.deadline})`);
+  console.log(`People glossary quality-first campaign (${opts.asOf}; soft target ${opts.deadline})`);
+  console.log(
+    `Lane calendars: Grok Bot ${opts.grokbotCapacityStart}; Cursor SDK ${opts.capacityStart}`,
+  );
   console.log(`Current pass: ${progress.currentChapters}/${progress.sourceChapters} (${progress.currentPercent.toFixed(2)}%)`);
   console.log(
     `Editorially closed: ${completion.reviewedChapters}/${progress.sourceChapters}; ` +
@@ -460,6 +499,13 @@ function main() {
   }
   console.log(`Extraction minimum: ${extractionTargets.minimumChaptersPerDay} chapters/day`);
   console.log(`Extraction buffered target: ${extractionTargets.bufferedChaptersPerDay} chapters/day (${opts.bufferPercent}% buffer)`);
+  if (!extractionTargets.targetWithinWaveCap) {
+    console.log(
+      `Soft target is beyond the calibrated wave cap: it asks for ` +
+      `${extractionTargets.requiredChaptersPerWave} chapters/wave; operations remain capped at ` +
+      `${extractionTargets.maxChaptersPerWave} to protect quality and allowance recovery`,
+    );
+  }
   console.log(`Editorial minimum: ${editorialTargets.minimumChaptersPerDay} closures/day`);
   console.log(`Editorial buffered target: ${editorialTargets.bufferedChaptersPerDay} closures/day (${opts.bufferPercent}% buffer)`);
   console.log(`Identity-resolution minimum: ${resolutionTargets.minimumChaptersPerDay} chapter scopes/day`);
