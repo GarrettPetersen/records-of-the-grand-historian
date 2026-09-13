@@ -194,6 +194,7 @@ export function campaignProgress(progress, aliasDispositionDebt = new Set()) {
     aliasDispositionChapters,
     extractionDebt: progress.summary.sourceChapters - progress.summary.currentChapters,
     editorialDebt: progress.summary.sourceChapters - reviewedChapters,
+    dateAuditDebt: chapters.filter(([, chapter]) => chapter.dateAudit?.status !== 'audited').length,
   };
 }
 

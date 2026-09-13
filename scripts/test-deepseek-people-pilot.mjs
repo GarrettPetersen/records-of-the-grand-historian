@@ -342,6 +342,28 @@ test('additional review sources retain pinned evidence and archives without over
   }
 });
 
+test('an explicit primary edition replaces an unavailable metadata URL and persists on resume', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'people-primary-source-'));
+  try {
+    const local = { dir, packet: { book: 'songshu', chapter: '090' }, primarySourceUrl: 'https://chinesenotes.com/songshu/songshu090.html',
+      reviewPrimarySource: 'https://zh.wikisource.org/wiki/Example' };
+    const fetched = [];
+    const fetchSource = async url => {
+      fetched.push(url);
+      return { id: 'source', url, content: 'An explicitly selected source edition.', title: 'Source' };
+    };
+    await prepareIndependentReviewSources(local, fetchSource);
+    assert.deepEqual(fetched, [local.reviewPrimarySource]);
+    const resumed = { ...local, reviewPrimarySource: undefined };
+    await prepareIndependentReviewSources(resumed, () => { throw new Error('Pinned source should be reused'); });
+    assert.deepEqual(resumed.independentSources, local.independentSources);
+    assert.equal(local.primarySourceUrl, 'https://chinesenotes.com/songshu/songshu090.html');
+    await assert.rejects(prepareIndependentReviewSources({ ...local, reviewPrimarySource: 'http://localhost/private' }, fetchSource));
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test('a research citation requires a real saved quotation and goes stale on claim edits', () => {
   const state = newToolState(snapshot);
   executePeopleTool(state, snapshot, 'write_records', { section: 'claims', records: [{ ...claim, value: { westernYear: { era: 'BC', year: 179, precision: 'year' } } }] });

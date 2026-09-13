@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": 1,
+  "book": "houhanshu",
+  "chapter": "001",
+  "sourceHash": "sha256:476cf19a6e2a58e933581c7468393a3b2f5f199cdc0bb5ade3551b90b4ffb0ca",
+  "extractionHash": "sha256:a7e9937a294135428da51f464e4e76531741dc59d6b666148bc1e673a4bbc833",
+  "status": "needs-revision",
+  "reviewer": {
+    "name": "Codex (manual source review)",
+    "independentOfExtractor": true
+  },
+  "reviewedAt": "2026-09-13T06:03:30Z",
+  "summary": "Read all 16 source units in this introductory page. The recorded Northern Song attestations for Fan Ye and Sima Biao date the later publication of their books, not activity of the authors. Targeted failed checks only; other claims remain unapproved.",
+  "reviewedUnits": [
+    "s0001",
+    "s0002",
+    "s0003",
+    "s0004",
+    "s0005",
+    "s0006",
+    "s0007",
+    "s0008",
+    "s0009",
+    "s0010",
+    "s0011",
+    "s0012",
+    "s0013",
+    "s0014",
+    "s0015",
+    "s0016"
+  ],
+  "itemChecks": [
+    {
+      "id": "claim-8",
+      "verdict": "incorrect",
+      "event": "Unidentified later editors combine earlier historical works.",
+      "reason": "The source dates a Northern Song republication. Fan Ye is identified separately as a Liu Song author, so this later event is not an attestation that he was personally active.",
+      "evidence": [
+        {
+          "unit": "s0016",
+          "quote": "北宋真宗時，有人把晉朝司馬彪的《續漢書》八志三十卷與之合刊"
+        },
+        {
+          "unit": "s0015",
+          "quote": "南朝劉宋時的范曄"
+        }
+      ]
+    },
+    {
+      "id": "claim-19",
+      "verdict": "incorrect",
+      "event": "Unidentified later editors incorporate Sima Biao's treatises.",
+      "reason": "The sentence explicitly calls Sima Biao a Jin author. It attributes the act of combining editions to someone else, not to Sima Biao living in the Northern Song.",
+      "evidence": [
+        {
+          "unit": "s0016",
+          "quote": "北宋真宗時，有人把晉朝司馬彪的《續漢書》八志三十卷與之合刊"
+        }
+      ]
+    }
+  ],
+  "personChecks": [
+    {
+      "id": "p001",
+      "verdict": "incorrect",
+      "event": "Later transmission of Fan Ye's book.",
+      "reason": "Distinguish a work's later reception from its author's own chronology. The current late attestation should not contribute to Fan Ye's activity summary.",
+      "evidence": [
+        {
+          "unit": "s0015",
+          "quote": "紀和列傳的作者是南朝劉宋時的范曄"
+        },
+        {
+          "unit": "s0016",
+          "quote": "北宋真宗時，有人把晉朝司馬彪的《續漢書》八志三十卷與之合刊"
+        }
+      ]
+    },
+    {
+      "id": "p002",
+      "verdict": "incorrect",
+      "event": "Later transmission of Sima Biao's treatises.",
+      "reason": "The Jin author is not a participant living during this Northern Song publication; his textual legacy and his life require separate chronology.",
+      "evidence": [
+        {
+          "unit": "s0016",
+          "quote": "北宋真宗時，有人把晉朝司馬彪的《續漢書》八志三十卷與之合刊"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "items": [
+        "claim-8",
+        "claim-19",
+        "claim-9",
+        "claim-20",
+        "p001",
+        "p002"
+      ],
+      "problem": "The later republication of earlier authors' works is recorded as personal activity. The accompanying event claims also need an explicit distinction between posthumous reception and living participation.",
+      "action": "Delete the two late personal attestations. Retain the publication history only as explicitly posthumous work-reception events, excluding them from life/activity inference. Independently verify the remaining dynasty-window conversions and date claims before approval."
+    }
+  ],
+  "references": []
+}

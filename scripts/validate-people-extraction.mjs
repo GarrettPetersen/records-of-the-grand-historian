@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { westernBoundsErrors } from './lib/people-date-values.mjs';
 import {
   buildPeopleChunkWorkerPacket,
   buildPeopleExtractionPacket,
@@ -239,8 +240,11 @@ function validateAttestationClaim(claim, errors) {
     'sourceDate',
     'westernYear',
     'westernInterval',
+    'westernBounds',
     'qualitative',
     'unresolved',
+    'unresolvedReason',
+    'event',
   ]);
   for (const key of Object.keys(value)) {
     if (!allowedKeys.has(key)) errors.push(`${claim.id} attestation has unknown key ${key}`);
@@ -277,15 +281,17 @@ function validateAttestationClaim(claim, errors) {
   if (value.unresolved !== undefined && typeof value.unresolved !== 'boolean') {
     errors.push(`${claim.id} unresolved must be boolean`);
   }
-  if (value.westernYear !== undefined && value.westernInterval !== undefined) {
-    errors.push(`${claim.id} must use westernYear or westernInterval, not both`);
+  if (value.event !== undefined && (typeof value.event !== 'string' || !value.event.trim())) errors.push(`${claim.id} event must identify whose event is dated`);
+  if (value.westernBounds !== undefined) errors.push(...westernBoundsErrors(value.westernBounds).map(error => `${claim.id}: ${error}`));
+  if (['westernYear', 'westernInterval', 'westernBounds'].filter(key => value[key] !== undefined).length > 1) {
+    errors.push(`${claim.id} must use only one Western date representation`);
   }
   const hasResolvedTime = value.westernYear !== undefined ||
-    value.westernInterval !== undefined || value.qualitative !== undefined;
+    value.westernInterval !== undefined || value.westernBounds !== undefined || value.qualitative !== undefined;
   if (!hasResolvedTime && !(value.sourceDate && value.unresolved === true)) {
     errors.push(`${claim.id} attestation needs a Western date, qualitative chronology, or unresolved sourceDate`);
   }
-  if ((value.westernYear !== undefined || value.westernInterval !== undefined) && !value.sourceDate) {
+  if ((value.westernYear !== undefined || value.westernInterval !== undefined || value.westernBounds !== undefined) && !value.sourceDate) {
     errors.push(`${claim.id} Western attestation must preserve sourceDate`);
   }
 }
@@ -641,19 +647,20 @@ function validatePeopleExtractionImpl(extraction, packet, options = {}, ownsInpu
       }
     }
     if (normalized.run.promptVersion >= 7 && !['legendary', 'literary'].includes(person.historicity)) {
-      if (!person.identityHints.activeDateHints.some((hint) => /\b(?:AD|BC)\s+\d{1,4}\b/u.test(hint))) {
+      const researchHold = personClaims.some(claim => claim.predicate === 'attestation' && claim.value?.unresolved === true && typeof claim.value?.unresolvedReason === 'string' && claim.value.unresolvedReason.trim().length >= 20);
+      if (!researchHold && !person.identityHints.activeDateHints.some((hint) => /\b(?:AD|BC)\s+\d{1,4}\b/u.test(hint))) {
         errors.push(`${person.localId} has no Western active-date hint required for a non-legendary prompt-v7 person`);
       }
       const attestations = personClaims.filter((claim) => claim.predicate === 'attestation');
-      if (!attestations.some((claim) => claim.value?.westernYear || claim.value?.westernInterval)) {
+      if (!researchHold && !attestations.some((claim) => claim.value?.westernYear || claim.value?.westernInterval || claim.value?.westernBounds)) {
         errors.push(`${person.localId} has no Western-year attestation required for a non-legendary prompt-v7 person`);
       }
       const temporalValues = personClaims.flatMap((claim) => [
         ...(claim.predicate === 'attestation' ? [claim.value] : []),
         ...['dateContext', 'startDate', 'endDate'].flatMap((key) => nestedValuesWithKey(claim.value, key)),
       ]);
-      if (temporalValues.some((value) => value?.unresolved === true)) {
-        errors.push(`${person.localId} retains unresolved chronology in a non-legendary prompt-v7 record`);
+      if (temporalValues.some((value) => value?.unresolved === true && (typeof value.unresolvedReason !== 'string' || value.unresolvedReason.trim().length < 20))) {
+        errors.push(`${person.localId} unresolved chronology requires a substantive research-blocker reason`);
       }
     }
   }
@@ -1077,6 +1084,16 @@ function selfTest() {
   } catch (error) {
     if (!(error instanceof PeopleExtractionValidationError)) throw error;
   }
+
+  const researchHold = structuredClone(unresolvedComprehensive);
+  researchHold.claims.find((claim) => claim.predicate === 'attestation').value.unresolvedReason = 'The source does not establish which ruler owned this first reign year.';
+  validatePeopleExtraction(researchHold, packet);
+  const oneSided = structuredClone(comprehensive);
+  oneSided.claims.find((claim) => claim.predicate === 'attestation').value = {
+    sourceDate: { text: 'before the second year' },
+    westernBounds: { before: { era: 'AD', year: 2, precision: 'year' } },
+  };
+  validatePeopleExtraction(oneSided, packet);
 
   const legendaryComprehensive = structuredClone(unresolvedComprehensive);
   legendaryComprehensive.people[0].historicity = 'legendary';

@@ -18,6 +18,7 @@ export function assessEbookPeopleReadiness(siteContext, product, { allowPreview 
       people: [],
       missingChapters: [],
       legacyChapters: [],
+      dateAuditChapters: [],
       peopleNeedingReview: [],
     };
   }
@@ -27,6 +28,7 @@ export function assessEbookPeopleReadiness(siteContext, product, { allowPreview 
   const currentPromptVersion = siteContext.siteIndex.currentPromptVersion;
   const missingChapters = [];
   const legacyChapters = [];
+  const dateAuditChapters = [];
   for (const chapter of chapterIds) {
     const record = chapterRecords[`${product.book}:${chapter}`];
     if (!record) {
@@ -34,6 +36,7 @@ export function assessEbookPeopleReadiness(siteContext, product, { allowPreview 
       continue;
     }
     if (record.promptVersion < currentPromptVersion) legacyChapters.push(chapter);
+    if (record.dateAudit?.status !== 'audited' || record.dateAudit?.auditVersion !== 1) dateAuditChapters.push(chapter);
   }
 
   const people = siteContext.catalog.people.filter((person) => person.localPeople.some((localId) => {
@@ -42,7 +45,7 @@ export function assessEbookPeopleReadiness(siteContext, product, { allowPreview 
   }));
   const peopleNeedingReview = people.filter((person) => person.curation?.status === 'needs-review');
   const ready = people.length > 0 && missingChapters.length === 0 && legacyChapters.length === 0 &&
-    peopleNeedingReview.length === 0;
+    peopleNeedingReview.length === 0 && dateAuditChapters.length === 0;
   const active = people.length > 0 && (ready || allowPreview);
 
   return {
@@ -58,22 +61,24 @@ export function assessEbookPeopleReadiness(siteContext, product, { allowPreview 
     people,
     missingChapters,
     legacyChapters,
+    dateAuditChapters,
     peopleNeedingReview,
   };
 }
 
 export function ebookPeopleReadinessErrors(peopleQa, { allowPreview = false } = {}) {
   if (!peopleQa?.active) return [];
+  if (!Array.isArray(peopleQa.dateAuditChapters)) return ['Active people glossary is missing date-audit coverage.'];
   const errors = [];
   const hasBlockers = (peopleQa.missingChapters?.length || 0) > 0 ||
-    (peopleQa.legacyChapters?.length || 0) > 0 || Number(peopleQa.peopleNeedingReview || 0) > 0;
+    (peopleQa.legacyChapters?.length || 0) > 0 || (peopleQa.dateAuditChapters?.length || 0) > 0 || Number(peopleQa.peopleNeedingReview || 0) > 0;
 
   if (peopleQa.ready === true) {
     if (peopleQa.preview === true) {
       errors.push('Publication-ready people glossary is also marked as a preview.');
     }
     if (hasBlockers) {
-      errors.push('Publication-ready people glossary retains chapter-coverage or identity-review blockers.');
+      errors.push('Publication-ready people glossary retains coverage, date-audit or identity-review blockers.');
     }
     return errors;
   }
@@ -86,7 +91,7 @@ export function ebookPeopleReadinessErrors(peopleQa, { allowPreview = false } = 
 
   errors.push('People glossary is an incomplete preview and is not valid for publication.');
   if (hasBlockers) {
-    errors.push('Active people glossary retains chapter-coverage or identity-review blockers.');
+    errors.push('Active people glossary retains coverage, date-audit or identity-review blockers.');
   }
   return errors;
 }

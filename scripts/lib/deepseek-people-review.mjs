@@ -126,7 +126,11 @@ export async function prepareIndependentReviewSources(snapshot, fetchSource = fe
   const referencesFile = path.join(snapshot.dir, 'independent-source-documents.json');
   const saved = fs.existsSync(referencesFile) ? readJson(referencesFile) : null;
   const additionalSources = snapshot.additionalReviewSources ?? saved?.additionalSources ?? [];
-  const candidates = [...chapterResearchSources(snapshot.packet.book, snapshot.packet.chapter, snapshot.primarySourceUrl), ...additionalSources];
+  const reviewPrimarySource = snapshot.reviewPrimarySource ?? saved?.reviewPrimarySource;
+  const primarySources = reviewPrimarySource
+    ? [{ label: 'Explicitly selected primary edition (replaces metadata source for this review)', url: historicalSourceUrl(reviewPrimarySource).href }]
+    : chapterResearchSources(snapshot.packet.book, snapshot.packet.chapter, snapshot.primarySourceUrl);
+  const candidates = [...primarySources, ...additionalSources];
   const sources = [...new Map(candidates.map(source => {
     const url = historicalSourceUrl(source.url).href;
     return [url, { ...source, url }];
@@ -145,7 +149,7 @@ export async function prepareIndependentReviewSources(snapshot, fetchSource = fe
       fs.mkdirSync(archive, { recursive: true });
       writeJsonAtomic(path.join(archive, `${saved.sourcesKey.slice(7)}.json`), saved);
     }
-    writeJsonAtomic(referencesFile, { sourcesKey, additionalSources, documents });
+    writeJsonAtomic(referencesFile, { sourcesKey, additionalSources, ...(reviewPrimarySource ? { reviewPrimarySource } : {}), documents });
     snapshot.independentSources = documents;
   }
 }

@@ -1,3 +1,5 @@
+import { boundedDateLabel } from './people-date-values.mjs';
+
 export function personDisplayName(person) {
   return person.preferredName.en || person.preferredName.pinyin || person.preferredName.zh || person.id;
 }
@@ -37,6 +39,7 @@ function yearClaims(claims) {
     const visit = (value) => {
       if (Array.isArray(value)) value.forEach(visit);
       else if (value && typeof value === 'object') {
+        if (value.westernBounds) return;
         const formatted = formatPersonWesternYear(value);
         if (formatted) values.push({
           label: formatted,
@@ -186,6 +189,7 @@ function claimRepresentativeYear(claim) {
   const visit = (value) => {
     if (Array.isArray(value)) value.forEach(visit);
     else if (value && typeof value === 'object') {
+      if (value.westernBounds) return;
       const year = signedWesternYear(value);
       if (year !== null) years.push(year);
       else Object.values(value).forEach(visit);
@@ -263,23 +267,31 @@ export function personCoherentActivityClaims(person) {
 export function personLifeSummary(person) {
   const birthSummary = yearClaimSummary(person.life.birth);
   const deathSummary = yearClaimSummary(person.life.death);
+  const boundSummary = claims => {
+    const labels = [...new Set(claims.map(claim => boundedDateLabel(claim.value, formatPersonWesternYear)).filter(Boolean))];
+    return labels.length === 1 ? labels[0] : null;
+  };
+  const birthBound = boundSummary(person.life.birth);
+  const deathBound = boundSummary(person.life.death);
   const active = coherentActivityYears(personCoherentActivityClaims(person)).sort((a, b) => a.sort - b.sort);
-  const inferredBirth = birthSummary === null ? inferredPersonBirthYear(person) : null;
-  const born = birthSummary?.label ?? formatPersonWesternYear(inferredBirth);
-  const died = deathSummary?.label ?? null;
+  const inferredBirth = birthSummary === null && !birthBound ? inferredPersonBirthYear(person) : null;
+  const born = birthSummary?.label ?? birthBound ?? formatPersonWesternYear(inferredBirth);
+  const died = deathSummary?.label ?? deathBound ?? null;
   if (born && died) {
-    return birthSummary?.interval || deathSummary?.interval
+    return birthSummary?.interval || deathSummary?.interval || birthBound || deathBound
       ? `Born ${born}; died ${died}`
       : `${born} - ${died}`;
   }
   if (born) return `Born ${born}`;
   if (died) {
-    const deathSort = deathSummary.first.sort;
+    const deathSort = deathSummary?.first.sort ?? Infinity;
     const earliest = active.find((value) => value.sort < deathSort);
     return earliest ? `First attested ${earliest.label}; died ${died}` : `Died ${died}`;
   }
   if (active.length === 1) return `Attested ${active[0].label}`;
   if (active.length > 1) return `Attested ${active[0].label} - ${active.at(-1).label}`;
+  const activityBound = boundSummary(person.life.attestedActivity);
+  if (activityBound) return `Attested ${activityBound}`;
   const qualitative = qualitativeActivitySummary(person);
   if (qualitative) return qualitative;
   return 'Dates uncertain';

@@ -6,6 +6,12 @@ repository owns assignment, validation, and publication.
 
 ## Coordination Contract
 
+Extraction acceptance is not date approval. Follow `PEOPLE_DATE_AUDIT.md` after
+handoff: a separate reviewer checks event ownership, conversions, one-sided
+bounds, age reckoning and omitted dates. Do not self-certify the extraction as
+date-audited. Preserve unresolved research with a substantive reason instead of
+inventing precision. No chapter is glossary-complete until its date audit passes.
+
 Both lanes use the atomic ledger on `codex/people-work-queue`.
 
 - Cursor SDK runs claim chapters automatically through `npm run people:extract`.

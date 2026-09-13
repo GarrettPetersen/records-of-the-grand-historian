@@ -293,6 +293,7 @@ async function main() {
     feedback: { type: 'string' },
     review: { type: 'boolean', default: false },
     'review-source': { type: 'string', multiple: true },
+    'review-primary-source': { type: 'string' },
     'review-rounds': { type: 'string', default: '1' },
     'require-whole-chapter': { type: 'boolean', default: false },
   } });
@@ -304,6 +305,8 @@ async function main() {
   if (!PRICES[values.model]) throw new Error('Model must be deepseek-flash or deepseek-v4-pro');
   if (values.review && !values.agent) throw new Error('--review requires --agent');
   if (values['review-source'] && !values.review) throw new Error('--review-source requires --review');
+  if (values['review-primary-source'] && (!values.review || values.scopes.includes(','))) throw new Error('--review-primary-source requires --review and exactly one scope');
+  const reviewPrimarySource = values['review-primary-source'] ? historicalSourceUrl(values['review-primary-source']).href : undefined;
   const additionalReviewSources = values['review-source']?.map(url => ({ label: 'Additional independently selected historical reference', url: historicalSourceUrl(url).href }));
   const reviewRounds = Number(values['review-rounds']);
   if (!Number.isSafeInteger(reviewRounds) || reviewRounds < 1 || reviewRounds > 5) throw new Error('Review rounds must be between 1 and 5');
@@ -329,7 +332,10 @@ async function main() {
   try {
     const matcher = loadProperNounMatcher();
     const snapshots = [...new Set(values.scopes.split(','))].map(scope => prepare(scope, index, matcher, values.thinking ? 'enabled' : 'disabled', values.model, maxUnits, values.agent));
-    for (const snapshot of snapshots) snapshot.additionalReviewSources = additionalReviewSources;
+    for (const snapshot of snapshots) {
+      snapshot.additionalReviewSources = additionalReviewSources;
+      snapshot.reviewPrimarySource = reviewPrimarySource;
+    }
     if (values['require-whole-chapter'] && snapshots.some(snapshot => !coversWholeChapter(snapshot))) {
       throw new Error('This assignment does not cover a whole chapter. Multi-chunk chapter assembly and joint review are not implemented in the pilot; no paid requests started.');
     }

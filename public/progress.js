@@ -26,9 +26,10 @@ const CHRONOLOGICAL_ORDER = [
 ];
 
 const OTHER_WORKS_ORDER = ['zizhitongjian', 'qingshigao'];
-const VALID_STATES = new Set(['current', 'editorial-review', 'identity-review', 'rereview', 'missing']);
+const VALID_STATES = new Set(['current', 'date-review', 'editorial-review', 'identity-review', 'rereview', 'missing']);
 const STATE_LABELS = {
     current: 'Glossary complete',
+    'date-review': 'Date audit needed',
     'editorial-review': 'Translation review needed',
     'identity-review': 'Identity resolution needed',
     rereview: 'Source rereview needed',
@@ -97,6 +98,8 @@ function validateSummary(summary) {
         'extractedChapters',
         'currentChapters',
         'completeChapters',
+        'dateReviewChapters',
+        'dateAuditedChapters',
         'editorialReviewChapters',
         'identityReviewChapters',
         'chaptersWithUnresolvedPeople',
@@ -125,7 +128,7 @@ function validateSummary(summary) {
         'extracted chapter count is inconsistent'
     );
     requireCondition(
-        summary.sourceChapters === summary.completeChapters + summary.editorialReviewChapters +
+        summary.sourceChapters === summary.completeChapters + summary.dateReviewChapters + summary.editorialReviewChapters +
             summary.identityReviewChapters + summary.rereviewChapters + summary.missingChapters,
         'glossary completion states do not add up'
     );
@@ -148,6 +151,7 @@ function renderOverview(summary) {
 
     document.getElementById('coverage-percent').textContent = formatPercent(percent);
     document.getElementById('coverage-current').style.width = `${percent}%`;
+    document.getElementById('coverage-dates').style.width = `${summary.sourceChapters ? summary.dateReviewChapters / summary.sourceChapters * 100 : 0}%`;
     document.getElementById('coverage-editorial').style.width = `${editorialPercent}%`;
     document.getElementById('coverage-identity').style.width = `${identityPercent}%`;
     document.getElementById('coverage-rereview').style.width = `${rereviewPercent}%`;
@@ -155,7 +159,8 @@ function renderOverview(summary) {
 
     const metrics = document.getElementById('corpus-metrics');
     metrics.replaceChildren(
-        metric('Complete chapters', summary.completeChapters, 'Extracted, edited, and identity-clean.'),
+        metric('Complete chapters', summary.completeChapters, 'Extracted, date-audited, edited, and identity-clean.'),
+        metric('Date audits', summary.dateAuditedChapters, `${formatInteger(summary.dateReviewChapters)} current extractions await date approval.`),
         metric('Identity review', summary.chaptersWithUnresolvedPeople, `${formatInteger(summary.peopleNeedingReview)} people remain ambiguous.`),
         metric('Needs rereview', summary.rereviewChapters, 'Extracted under an earlier contract.'),
         metric('Not started', summary.missingChapters, 'Awaiting the full glossary pass.'),
@@ -180,7 +185,8 @@ function chapterTitle(chapter) {
 function chapterTooltip(chapter, people) {
     const lines = [
         `${chapter.chapter}: ${chapterTitle(chapter)}`,
-        `Glossary: ${STATE_LABELS[people.glossaryState]}`
+        `Glossary: ${STATE_LABELS[people.glossaryState]}`,
+        `Date audit: ${people.dateAudit.status}`
     ];
     if (people.state !== 'missing') {
         lines.push(
@@ -199,7 +205,7 @@ function chapterTooltip(chapter, people) {
 }
 
 function bookStats(book) {
-    const stats = { current: 0, 'editorial-review': 0, 'identity-review': 0, rereview: 0, missing: 0, people: 0, facts: 0 };
+    const stats = { current: 0, 'date-review': 0, 'editorial-review': 0, 'identity-review': 0, rereview: 0, missing: 0, people: 0, facts: 0 };
     for (const chapter of book.chapters || []) {
         const people = chapter.peopleGlossary;
         requireCondition(people && VALID_STATES.has(people.glossaryState), `invalid chapter state in ${chapter.chapter}`);
@@ -207,7 +213,7 @@ function bookStats(book) {
         stats.people += Number(people.peopleRecords || 0);
         stats.facts += Number(people.factClaims || 0);
     }
-    stats.total = stats.current + stats['editorial-review'] + stats['identity-review'] + stats.rereview + stats.missing;
+    stats.total = stats.current + stats['date-review'] + stats['editorial-review'] + stats['identity-review'] + stats.rereview + stats.missing;
     return stats;
 }
 
@@ -249,6 +255,7 @@ function createBookSection(bookId, book) {
     statsRow.className = 'book-progress-stats';
     statsRow.append(
         statItem('current', `${formatInteger(stats.current)} complete`),
+        statItem('date-review', `${formatInteger(stats['date-review'])} date review`),
         statItem('identity-review', `${formatInteger(stats['identity-review'])} identity review`),
         statItem('editorial-review', `${formatInteger(stats['editorial-review'])} translation review`),
         statItem('rereview', `${formatInteger(stats.rereview)} source rereview`),

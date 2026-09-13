@@ -55,6 +55,7 @@ export function westernDateFields(value, prefix = 'value') {
     const field = `${prefix}.${key}`;
     if (key === 'westernYear') dates.push({ field, date: child });
     else if (key === 'westernInterval') dates.push({ field: `${field}.start`, date: child.start }, { field: `${field}.end`, date: child.end });
+    else if (key === 'westernBounds') dates.push(...Object.entries(child).map(([bound, date]) => ({ field: `${field}.${bound}`, date })));
     else dates.push(...westernDateFields(child, field));
   }
   return dates;

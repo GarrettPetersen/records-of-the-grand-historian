@@ -30,6 +30,18 @@ The standard translation loop is: `make start-translation BOOK=<book>` → fill 
 
 ### Gotchas
 
+- **Independent people date audits:** Follow `PEOPLE_DATE_AUDIT.md` in every lane.
+  All 4,099 chapters started date-un-audited; retain extraction prompt 7 and do not
+  re-extract them for dates. After extraction and repairs, build a
+  `people:dates:packet`, use a separate source reviewer, and record their complete
+  report with `people:dates:record`. Capture acceptance is not date approval.
+  Catalog completion, progress and ebook-glossary gates require approval. Run
+  `people:dates:verify` before milestone builds. Preserve failed audits and research
+  holds instead of guessing dates; `westernBounds` supports one-sided chronology.
+  An unresolved reason saves extraction work but cannot pass the audit. Source or
+  extraction edits make prior approvals stale. Do not launch a paid audit wave
+  without calibrating size/cost and assigning unique resumable review ownership.
+
 - **SDK translation orchestrator:** Per book, session *N+1* starts only after the previous chapter is on `origin/master` (merge-wait); books do not block each other (`--concurrency`). Local: `npm run sdk-translate:local -- --all-untranslated --concurrency 4 --until-complete` (direct push). Cloud: `npm run sdk-translate:cloud -- --all-untranslated --concurrency 19 --until-complete` (PR loop). **One chapter per agent (parallel, no merge-wait):** `npm run sdk-translate:cloud -- --book jinshi --chapter 068` — fan out many processes; each opens a PR but **does not** merge to `master` individually.
 - **Translation PR batching (Cloudflare builds):** Workflow `automerge-cursor.yml` only labels `cursor/*` PRs (`translation-batch`); it does **not** auto-merge to `master`. `npm run merge-translation:staging` (or workflow **Merge translation PRs to staging**) retargets each open chapter PR to `translation-staging` and **merges it via GitHub** so chapter PRs show as merged; then **one** squash PR `translation-staging` → `master` (one ~10m build). `npm run merge-translation:staging:dry-run` lists queued PRs. `--git-only` keeps the old absorb-via-local-git behavior without closing PRs on GitHub. Staging merge conflict resolution keeps **chapter** files from the PR but **drops** `public/data/search-corpus/` from git (gitignored); a post-batch corpus rebuild runs locally only (not committed).
 - **In-flight chapters:** `npm run translation-inflight` lists chapters reserved by open `cursor/*` PRs, work on `translation-staging` not yet on `master`, and local SDK claims (`data/translation-inflight.json`, gitignored). `sdk-translate --chapter` and `make start-translation` skip/blocked duplicates automatically when `GITHUB_TOKEN`/`GH_TOKEN` is set.

@@ -87,13 +87,17 @@ personal relationship in `r` on both people. These hints do not replace the
 structured claims; they make the later cross-chapter identity dossier usable.
 
 Every person must have at least one source-supported active-date hint in `a`.
-Every historical or uncertain person must have a Western year or bounded
-interval such as `AD 445` or `AD 445-446`; `conversion unresolved` is not a
-complete result. Use packet chronology when available. If it is missing,
+Every historical or uncertain person needs a justified Western year, interval,
+or one-sided bound such as `before AD 472`. Never invent an endpoint to satisfy
+the validator. Use packet chronology when available. If it is missing,
 verify the conversion against an authoritative chronology with available
 research tools and preserve the source date text without inventing a reign ID.
-If a safe conversion still cannot be established, fail loudly instead of
-asserting `allChronologyCaptured`. Use a qualitative marker such as `legendary
+If a safe conversion still cannot be established, retain the source date in an
+attestation with `unresolved: true` and a substantive `unresolvedReason`, and use
+`research required: ...` as its active hint. This preserves extraction work but
+blocks independent date approval; it is not a verified chronology. Coverage
+means all source chronology was captured, not that unresolved dates are correct.
+Use a qualitative marker such as `legendary
 antiquity` only for genuinely undatable legendary or literary figures. These
 are attested activity dates, not birth/death dates or asserted lifespans.
 The date of a later author's allusion, genealogy, quotation, or retrospective
@@ -103,7 +107,7 @@ him, or keep a dead parent active because the child's biography later names
 that parent. Identify the alluded person and independently verify a Western
 year or bounded interval from that person's own historical setting; cite the
 allusive unit as evidence and mark the inference honestly. If the identity or
-historical interval cannot be established safely, fail loudly for research
+historical interval cannot be established safely, record a research blocker
 rather than copying the surrounding narrative date.
 
 Every person requires one or more structured name rows and role rows. A name
@@ -266,8 +270,10 @@ one intervening parent. Create anonymous-individuated local person rows for thos
 unstated intermediaries, connect the direct parent/sibling edges, and mark the
 entailed records and edges `strongly-inferred`. Do not invent an intermediary
 when the kinship path is genuinely ambiguous; retain the exact `kin-of` or
-ancestor/descendant edge instead. Give each inferred intermediary the same
-source-context attestation window as the relationship that establishes them.
+ancestor/descendant edge instead. Do not transfer a descendant's date to an
+inferred intermediary. Establish the intermediary's own event or a justified
+one-sided bound, or record an unresolved research hold. Same mother does not
+mean same birth year; `同生` in a maternal list does not by itself mean twins.
 
 The compiler groups all assertions of the same structural relationship into a
 single stable canonical family edge, derives reciprocal adjacency links on the
@@ -344,7 +350,8 @@ the chapter gives one, using `witnessPersonId` when that witness has a local
 person row. Legal actions may similarly use `authorityPersonId`.
 
 Every temporal field above contains an attestation-shaped object: `sourceDate`
-plus `westernYear` or `westernInterval`, an unresolved `sourceDate`, or a
+plus `westernYear`, `westernInterval`, or `westernBounds`, an unresolved
+`sourceDate` with `unresolvedReason`, or a
 genuinely qualitative chronology. Do not put an unstructured date string in
 `dateContext`, `startDate`, or `endDate`.
 
@@ -361,12 +368,19 @@ context. Use one of these value shapes:
 
 ```json
 {"sourceDate":{"text":"元嘉二十二年","reignId":"liu-song-yuanjia","regnalYear":22},"westernYear":{"era":"AD","year":445,"precision":"year"}}
-{"sourceDate":{"text":"元朔中"},"unresolved":true}
+{"sourceDate":{"text":"元朔中"},"unresolved":true,"unresolvedReason":"The polity and ruler are not yet established; the era name alone is ambiguous."}
+{"sourceDate":{"text":"齊受禪後"},"westernBounds":{"onOrAfter":{"era":"AD","year":479,"precision":"year"}},"event":"Personal event after the Qi accession; no later endpoint is stated."}
 {"qualitative":"legendary antiquity"}
 ```
 
-For a bounded interval, use `westernInterval` with `start` and `end` Western
-year objects. Record an attestation for every distinct dated narrative context
+For an interval with two supported endpoints, use `westernInterval` with `start`
+and `end` Western year objects. Otherwise use `westernBounds` with `before`,
+`onOrBefore`, `after`, or `onOrAfter`. These constrain calendar years: an event
+after an accession in AD 479 may still be in AD 479, so use `onOrAfter: 479`,
+not `after: 479`, unless the year itself is excluded. Preserve the finer event
+sequence in `sourceDate.text` and `event`. Never store "after 479" as a point at
+479 or turn "before 472" into an invented 466-472 interval. Record an
+attestation for every distinct dated narrative context
 in which the person appears, even after that person already has one. Combine
 repeated mentions only when they share the same date context. The resolver will
 derive the earliest/latest attested interval across chapters. Never describe
@@ -379,8 +393,8 @@ deceased ancestor named only to explain a living descendant.
 
 Never convert dates from memory. Use a supplied reign ID only when its polity
 and reign are correct. When the packet lacks a mapping, independently verify a
-Western year or interval and omit `reignId`; unresolved source dates do not
-satisfy this prompt. Likewise, use `polityId` only when that exact ID appears in
+Western year or interval and omit `reignId`; retain an explicit research hold
+when verification is unavailable. Likewise, use `polityId` only when that exact ID appears in
 the packet's supplied polity context. Otherwise preserve a source-grounded
 bilingual `polity` label object; never invent a polity ID. Record stated age and
 reckoning but do not derive a birth year. Never assign a polity from lifespan

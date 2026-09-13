@@ -5,7 +5,28 @@ production work, overwrite accepted extractions, apply translation repairs, or
 publish results. Passing schema and source-span validation is not a semantic
 quality approval.
 
-## Current decision: pause paid trials
+## Current decision: second trial complete, further paid work paused
+
+After the initial pause, the user authorized one more complete chapter using
+the remainder of the original $10 allowance. Run Songshu 90 through the
+unchanged harness and all three review gates; measure extraction, reviews,
+repairs, and supervision together. Do not launch a cohort, raise the ceiling,
+or redesign the harness during this trial. Before this run, cumulative
+conservative spending was $6.13112556, leaving $3.86887444 under that ceiling.
+That trial has now stopped at its five-cycle review limit without independent
+approval. Further paid work and scaling remain paused pending user direction.
+
+Infrastructure exception: the recorded Chinese Notes chapter URL returned HTTP
+404 from the local machine. Added an explicit `--review-primary-source URL`
+selector, validated against the existing allowlist and retained in the pinned
+source manifest, to review the Wikisource edition instead. This is not an
+automatic fallback: the original source metadata remains unchanged and the
+selected replacement is visible in the archived review evidence. The worker
+was checkpointed and resumed without resetting its conversation or spending.
+No model, extraction prompt, review criterion, or budget was changed. The
+pre-run account balance was $6.93 at 2026-09-13 01:59 UTC.
+
+### Reason for the initial pause
 
 The supervised Shiji 64 result passed the quality gates, but it did not
 establish that this lane is economical to scale. Further paid experiments and
@@ -489,3 +510,72 @@ feedback, and all three review reports. `wholeChapterApproved` is true;
 translation source, person page, or ebook was changed. Further paid calibration
 and corpus-wide rollout are paused for the economic reasons above; preserve
 this evidence without treating the benchmark as a production extraction.
+
+## Second chapter: Songshu 90
+
+The authorized second trial finished on 2026-09-13 at 02:30 UTC, about 31
+minutes after its first paid request. It covered all 33 units in one packet:
+22 people, 69 surface groups / 99 mention occurrences, 100 explicit fact
+records including 25 family relationships, and eight proposed translation
+field repairs. It used the same Flash extractor and Pro review settings as
+Shiji 64. No historical correction was supplied by the orchestrator; the only
+harness change was the explicit replacement-reference selector described above.
+
+The total conservative peak-rate cost was **$0.853155356**:
+
+| Phase | Requests | Peak Estimate |
+| --- | ---: | ---: |
+| Worker and automatic repairs | 182 | $0.2485 |
+| Editorial reviews | 6 | $0.2571 |
+| Chronology reviews | 7 | $0.3476 |
+| Final combined review | 0 | Not reached |
+| Total | 195 | $0.8532 |
+
+The runner performed five review cycles and four automatic feedback/repair
+rounds, retaining interrupted review responses. Mechanical extraction checks
+pass and the current editorial review approves, but the chronology review
+still requests revisions. `wholeChapterApproved` and `productionAuthorized`
+are both false. This is an unsuccessful acceptance trial, not an $0.85 price
+for a completed chapter, and it does not include an unperformed final combined
+review or any production integration work.
+
+The editorial loop found genuine defects without orchestrator corrections:
+posthumous epithet versus posthumous investiture, omitted military offices,
+the annotated Lipu/Lifeng textual variant, and Ying Province misread as E
+Province. The remaining data problems include unsupported 466-472 activity
+windows copied from Emperor Ming's reign, death point-years that the evidence
+only bounds after the Qi accession, and omitted researched birth/death facts.
+One intermediate repair invented 490 as an upper death bound; another merely
+changed the date's explanation or certainty while retaining the rejected year.
+
+Reviewer agreement is not sufficient either. The last chronology report
+suggests giving Zan his brother Song's inferred birth year because they were
+`同生`. In this genealogical context, the passage establishes a shared mother;
+it does not establish twins or an identical birth year. Do not apply that
+suggestion automatically. The reviewed English also still needs source audit
+of the military jurisdictions in s0021 and s0028: the command includes a whole
+province plus specified commanderies in another province, not commanderies
+spread across the two provinces as the current wording implies.
+
+The existing production attestation gate requires a Western year or a closed
+Western interval for every person. Some rejected claims need more historical
+research or a properly represented one-sided bound. The worker should report
+a research blocker instead of inventing the missing endpoint to satisfy this
+gate. This trial did not change that schema, weaken the validator, or tune
+review prompts to obtain approval.
+
+Across all trials the conservative ledger now totals $6.984280916, leaving
+$3.015719084 under the unchanged $10 ceiling. The account reported $6.56
+remaining versus $6.93 before this trial; the $0.37 reported balance movement
+is not a settled per-chapter invoice because balance updates can lag. No paid
+worker or pending reservation remains. All draft records, source quotations,
+feedback, and responses are preserved at
+`data/people/generated/deepseek-pilot/songshu/090/chunk-1-5e66b698774c/`.
+No production extraction, translation, site page, or ebook was changed.
+
+The lower inference bill is encouraging, but accepted end-to-end cost remains
+unmeasured for a fresh chapter without historical supervision. Stop here rather
+than spend the remaining balance repeatedly relabeling unsupported dates.
+The reference-selection change passes the 38-test offline harness suite,
+including allowlist rejection, pinned-source resumption, and unchanged original
+metadata. Any resumed trial must retain this spending ledger and conversation.
