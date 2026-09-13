@@ -42,18 +42,22 @@ export function dateAuditItems(extraction) {
   return { people, items };
 }
 
-export function buildDateAuditPacket(book, chapter, { dataDir = DATA_DIR, peopleDir = PEOPLE_DIR } = {}) {
+export function buildDateAuditPacket(book, chapter, { dataDir = DATA_DIR, peopleDir = PEOPLE_DIR, extraction: suppliedExtraction } = {}) {
   validateDateAuditScope(book, chapter);
   const source = readJson(path.join(dataDir, book, `${chapter}.json`));
-  const extraction = readJson(path.join(peopleDir, 'extractions', book, `${chapter}.json`));
+  const extraction = suppliedExtraction ?? readJson(path.join(peopleDir, 'extractions', book, `${chapter}.json`));
   if (extraction.book !== book || extraction.chapter !== chapter) throw new Error('Date audit extraction scope mismatch');
   const units = contentUnits(source).map(({ id, zh, en, literal, blockIndex }) => ({ id, zh, en, literal, blockIndex }));
   const { people, items } = dateAuditItems(extraction);
   const unitIds = new Set(units.map(unit => unit.id));
+  const unitPeople = Object.fromEntries(units.map(u=>[u.id,[]]));
+  const mention = (unit, person) => { if(unitPeople[unit] && !unitPeople[unit].includes(person))unitPeople[unit].push(person); };
+  if(extraction.schemaVersion===2) for(const row of extraction.surfaces??[]) for(const occurrence of row[4])mention(occurrence[0],row[0]);
+  else for(const m of extraction.mentions??[])mention(m.unit.id.split(':').at(-1),m.person);
   for (const item of items) if (item.evidence.some(id => !unitIds.has(id))) throw new Error(`Unknown date evidence in ${item.id}`);
   return { schemaVersion: 1, auditVersion: DATE_AUDIT_VERSION, book, chapter,
     sourceHash: sha256(JSON.stringify(units)), extractionHash: sha256(JSON.stringify(extraction)),
-    sourceUrl: source.meta?.url ?? null, extractor: extraction.run, people, items, units,
+    sourceUrl: source.meta?.url ?? null, extractor: extraction.run, people, items, units, unitPeople,
     instructions: 'Review dates, event ownership, conversions, endpoint evidence, age reckoning, omitted life dates, and active-date hints. Read all Chinese units for omissions; English is not independent evidence. Do not re-extract names or mentions. For each item identify whose event is dated and justify each endpoint. Same mother does not imply same birth year. Later allusions are not personal activity. Research or record a blocker rather than invent precision. A report cannot approve with missing checks or unresolved research.' };
 }
 

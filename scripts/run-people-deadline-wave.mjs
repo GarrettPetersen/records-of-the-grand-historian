@@ -20,6 +20,8 @@ import { PEOPLE_DIR, REPO_ROOT } from './lib/people-content.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 const campaignPolicy = readPeopleCampaignPolicy();
+const CAMPAIGN_MODEL = 'grok-4.6';
+const DATE_WORKER = 'deadline-dates-cursor-sdk';
 
 function localIsoDate(date = new Date()) {
   const year = date.getFullYear();
@@ -67,24 +69,30 @@ function parseArgs(argv) {
     else if (arg === '--prepare-dossiers') opts.prepareDossiers = true;
     else if (arg === '--defer-catalog') opts.deferCatalog = true;
     else if (arg === '--force-catalog') opts.forceCatalog = true;
+    else if (arg === '--summary-out') opts.summaryOut = path.resolve(next());
+    else if (arg === '--order') opts.order = next();
     else if (arg === '--dry-run') opts.dryRun = true;
     else if (arg === '--self-test') opts.selfTest = true;
     else throw new Error(`Unknown option: ${arg}`);
   }
-  if (!opts.selfTest && !['recovery', 'extraction', 'editorial', 'resolution'].includes(opts.phase)) {
-    throw new Error('--phase must be recovery, extraction, editorial, or resolution');
+  if (!opts.selfTest && !['recovery', 'extraction', 'editorial', 'dates', 'resolution'].includes(opts.phase)) {
+    throw new Error('--phase must be recovery, extraction, editorial, dates, or resolution');
   }
   if (!opts.selfTest && opts.prepareDossiers && opts.phase !== 'resolution') {
     throw new Error('--prepare-dossiers is only valid with --phase resolution');
   }
-  if (!opts.selfTest && opts.deferCatalog && opts.phase !== 'extraction') {
-    throw new Error('--defer-catalog is only valid with --phase extraction');
+  if (!opts.selfTest && opts.deferCatalog && !['extraction', 'editorial'].includes(opts.phase)) {
+    throw new Error('--defer-catalog is only valid with --phase extraction or editorial');
   }
-  if (!opts.selfTest && opts.forceCatalog && opts.phase !== 'editorial') {
-    throw new Error('--force-catalog is only valid with --phase editorial');
+  if (!opts.selfTest && opts.forceCatalog && !['editorial', 'dates'].includes(opts.phase)) {
+    throw new Error('--force-catalog is only valid with --phase editorial or dates');
   }
   if (!opts.selfTest && opts.deferCatalog && opts.forceCatalog) {
     throw new Error('--defer-catalog and --force-catalog cannot be combined');
+  }
+  if (opts.summaryOut && opts.phase !== 'dates') throw new Error('--summary-out is only valid with --phase dates');
+  if (opts.order && (opts.phase !== 'dates' || !['calibration', 'balanced'].includes(opts.order))) {
+    throw new Error('--order requires --phase dates and must be calibration or balanced');
   }
   opts.deadline ??= rollingCampaignDeadline(opts.asOf, campaignPolicy.planningHorizonDays);
   return opts;
@@ -145,6 +153,9 @@ function currentPlan(opts) {
     extractionChaptersPerWave: extractionTargets.chaptersPerWave,
     editorialChaptersPerWave: editorialTargets.chaptersPerWave,
     editorialConcurrency: editorialTargets.editorialConcurrency,
+    // Keep the new lane at calibration size until measured usage supports scaling.
+    dateChaptersPerWave: Math.min(opts.limit ?? 5, opts.maxChaptersPerWave, completion.dateAuditDebt),
+    dateConcurrency: 2,
     resolutionChaptersPerWave: resolutionTargets.chaptersPerWave,
     resolutionConcurrency: resolutionTargets.resolutionConcurrency,
     resolutionMaxRunCostDollars: resolutionTargets.resolutionMaxRunCostDollars,
@@ -209,6 +220,7 @@ function catalogInputSignature() {
   addTree(path.join(PEOPLE_DIR, 'extractions'));
   addTree(path.join(PEOPLE_DIR, 'resolutions'));
   addTree(path.join(PEOPLE_DIR, 'curation'));
+  addTree(path.join(PEOPLE_DIR, 'date-audits'));
   files.push(path.join(PEOPLE_DIR, 'config.json'), path.join(REPO_ROOT, 'data', 'manifest.json'));
   for (const entry of fs.readdirSync(path.join(REPO_ROOT, 'data'), { withFileTypes: true })) {
     if (!entry.isDirectory() || ['people', 'quality'].includes(entry.name)) continue;
@@ -226,7 +238,7 @@ function catalogInputSignature() {
   return hash.digest('hex');
 }
 
-export function phaseCommand(phase, plan) {
+export function phaseCommand(phase, plan, { dryRun = false, limit, summaryOut, order } = {}) {
   if (phase === 'recovery') {
     return [
       'scripts/sdk-people-extract.mjs', '--all', '--recover-only',
@@ -242,16 +254,26 @@ export function phaseCommand(phase, plan) {
       '--cost-reserve', '5', '--max-run-cost', String(plan.maxRunCostDollars),
       '--max-run-tokens', String(plan.maxRunTokens),
       '--run-timeout-minutes', String(plan.runTimeoutMinutes), '--max-attempts', '3',
-      '--retry-failed', '--skip-dirty', '--model', 'grok-4.6', '--effort', 'low',
+      '--retry-failed', '--skip-dirty', '--model', CAMPAIGN_MODEL, '--effort', 'low',
     ];
   }
   if (phase === 'editorial') return [
-    'scripts/sdk-people-editorial-review.mjs', '--all', '--limit', String(plan.editorialChaptersPerWave ?? plan.chaptersPerWave),
-    '--concurrency', String(plan.editorialConcurrency), '--max-attempts', '2',
+    'scripts/sdk-people-editorial-review.mjs', '--all', '--limit', String(Math.min(limit ?? Infinity, plan.editorialChaptersPerWave ?? plan.chaptersPerWave)),
+    '--concurrency', String(Math.min(limit ?? Infinity, plan.editorialConcurrency)), '--max-attempts', '2',
     '--max-run-cost', String(plan.editorialMaxRunCostDollars),
     '--max-run-tokens', String(plan.editorialMaxRunTokens),
     '--run-timeout-minutes', String(plan.runTimeoutMinutes),
-    '--model', 'grok-4.6', '--effort', 'medium',
+    '--model', CAMPAIGN_MODEL, '--effort', 'medium',
+  ];
+  if (phase === 'dates') return [
+    'scripts/run-people-date-workflow.mjs', '--all',
+    '--worker', DATE_WORKER, '--lane', 'cursor-sdk',
+    '--model', CAMPAIGN_MODEL, dryRun ? '--dry-run' : '--run',
+    '--limit', String(plan.dateChaptersPerWave),
+    '--concurrency', String(plan.dateConcurrency),
+    ...(plan.capacityStart ? ['--cursor-capacity-start', plan.capacityStart] : []),
+    ...(order ? ['--order', order] : []),
+    ...(summaryOut ? ['--summary-out', summaryOut, '--min-approved', '1'] : []),
   ];
   if (phase === 'resolution') {
     if (!plan.resolutionBatchName || !plan.resolutionScopes?.length) {
@@ -264,7 +286,7 @@ export function phaseCommand(phase, plan) {
       '--max-new-shards', String(shards), '--concurrency', String(plan.resolutionConcurrency),
       '--max-attempts', '3', '--max-run-cost', String(plan.resolutionMaxRunCostDollars),
       '--max-run-tokens', String(plan.resolutionMaxRunTokens),
-      '--model', 'grok-4.6', '--effort', 'medium',
+      '--model', CAMPAIGN_MODEL, '--effort', 'medium',
     ];
     if (plan.resolutionDossierReady || plan.prepareDossiers) {
       command.push('--dossier-dir', path.relative(REPO_ROOT, plan.resolutionDossierDir));
@@ -275,10 +297,37 @@ export function phaseCommand(phase, plan) {
   throw new Error(`Unsupported deadline phase ${phase}`);
 }
 
+export function dateRunAcceptedChapters(summary) {
+  if (!summary || !['started', 'approved', 'failed', 'eligibleChapters'].every((key) =>
+    Number.isSafeInteger(summary[key]) && summary[key] >= 0) || !Array.isArray(summary.results)) {
+    throw new Error('Missing or incompatible date workflow run summary');
+  }
+  const seen = new Set();
+  const accepted = [];
+  for (const result of summary.results) {
+    if (!result || !/^[a-z][a-z0-9-]*$/u.test(result.book) ||
+        !/^\d{3}$/u.test(result.chapter) || typeof result.status !== 'string') {
+      throw new Error('Invalid chapter outcome in date workflow run summary');
+    }
+    const key = `${result.book}/${result.chapter}`;
+    // An accepted audit may also report an interrupted host-side queue checkpoint.
+    const outcomeKey = `${key}:${result.status}`;
+    if (seen.has(outcomeKey)) throw new Error(`Duplicate date workflow outcome: ${key}`);
+    seen.add(outcomeKey);
+    if (result.status === 'audited') accepted.push(key);
+  }
+  if (summary.approved !== accepted.length || summary.started < accepted.length ||
+      summary.failed !== summary.results.length - accepted.length) {
+    throw new Error('Date workflow summary counts do not match chapter outcomes');
+  }
+  return accepted;
+}
+
 export function phaseHasWork(phase, plan) {
   if (phase === 'recovery') return true;
   if (phase === 'extraction') return plan.extractionDebt > 0;
   if (phase === 'editorial') return plan.editorialDebt > 0;
+  if (phase === 'dates') return plan.dateAuditDebt > 0;
   if (phase === 'resolution') return Boolean(plan.resolutionScopes?.length);
   throw new Error(`Unsupported deadline phase ${phase}`);
 }
@@ -353,14 +402,7 @@ function selfTest() {
   console.log('people deadline wave self-test: ok');
 }
 
-function main() {
-  const opts = parseArgs(process.argv.slice(2));
-  if (opts.selfTest) return selfTest();
-  const plan = currentPlan(opts);
-  if (!phaseHasWork(opts.phase, plan)) {
-    console.log(`People deadline ${opts.phase}: no work is currently eligible`);
-    return;
-  }
+export function assertPhaseCapacity(opts, plan) {
   if (
     !opts.dryRun && opts.phase !== 'recovery' &&
     !(opts.phase === 'resolution' && opts.prepareDossiers) &&
@@ -370,18 +412,35 @@ function main() {
       ? `${plan.resolutionChaptersPerWave} identity chapter scopes`
       : opts.phase === 'editorial'
         ? `${plan.editorialChaptersPerWave} editorial chapters`
-        : `${plan.extractionChaptersPerWave} extraction chapters`;
+        : opts.phase === 'dates'
+          ? `${plan.dateChaptersPerWave} date audit chapters`
+          : `${plan.extractionChaptersPerWave} extraction chapters`;
     throw new Error(
       `Cursor SDK capacity is unavailable until ${plan.capacityStart}; ` +
       `the post-reset target is ${target} per wave`,
     );
   }
-  const command = phaseCommand(opts.phase, plan);
+}
+
+function main() {
+  const opts = parseArgs(process.argv.slice(2));
+  if (opts.selfTest) return selfTest();
+  const plan = currentPlan(opts);
+  if (!phaseHasWork(opts.phase, plan)) {
+    console.log(`People deadline ${opts.phase}: no work is currently eligible`);
+    // A managed earlier stage may have deferred changes even if this lane is empty.
+    if (opts.forceCatalog && !opts.dryRun) rebuildPeopleCatalog();
+    return;
+  }
+  assertPhaseCapacity(opts, plan);
+  const command = phaseCommand(opts.phase, plan, opts);
   console.log(
     `People quality-first ${opts.phase}: ${plan.currentChapters}/${plan.sourceChapters} current, ` +
     `${plan.reviewedChapters}/${plan.sourceChapters} editorially closed, ` +
     `${plan.identityClosedChapters}/${plan.sourceChapters} identity-clean, ` +
-    `${plan.extractionChaptersPerWave} extraction, ${plan.editorialChaptersPerWave} editorial, and ` +
+    `${plan.dateAuditDebt} chapters awaiting date audits, ` +
+    `${plan.extractionChaptersPerWave} extraction, ${plan.editorialChaptersPerWave} editorial, ` +
+    `${plan.dateChaptersPerWave} date audits, and ` +
     `${plan.resolutionChaptersPerWave} identity chapter scopes/wave, ` +
     `extraction concurrency ${plan.extractionConcurrency}, ` +
     `editorial concurrency ${plan.editorialConcurrency}`,
@@ -427,12 +486,12 @@ function main() {
   const catalogAction = catalogRefreshAction({
     prepareDossiers: opts.prepareDossiers,
     deferCatalog: opts.deferCatalog,
-    forceCatalog: opts.forceCatalog,
+    forceCatalog: opts.forceCatalog || (opts.phase === 'dates' && result.status === 0),
     catalogInputsChanged,
     resolutionOutputNeedsCatalog,
   });
   if (catalogAction === 'defer') {
-    console.log('Deferring the extraction catalog rebuild to the managed editorial wave');
+    console.log('Deferring the catalog rebuild to the managed date wave');
   } else if (catalogAction === 'rebuild') {
     rebuildPeopleCatalog();
     if (resolutionOutputNeedsCatalog && plan.resolutionDossierReady) {

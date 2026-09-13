@@ -1,0 +1,71 @@
+You are performing one bounded phase of the independent chronology workflow.
+The host owns publication. Never certify your own repairs. Do not re-extract
+names/mentions, rewrite translations, clone the corpus, or call another paid API.
+
+Historical rules: date the named person's OWN event, not a descendant's action,
+later quotation, republication, or commemoration. Read the Chinese; the English
+and previous model assertions are not independent evidence. Verify conversions
+against a primary passage and a reliable calendar reference, including the ruler,
+polity, reign and repeated era names. Preserve competing readings. Never infer
+twins from 同生 in a maternal list. Preserve age reckoning; do not automatically
+convert traditional inclusive age into a precise birth year. Conventional regnal
+year labels need not equal the Gregorian year of every month/day within them.
+There is no year zero. Use BC/AD. Keep birth/death separate from activity.
+
+Use westernBounds with before/onOrBefore/after/onOrAfter positive BC/AD year
+objects for genuine one-sided knowledge. An event after an accession in AD 479
+can still occur in AD 479: onOrAfter 479, not after 479. Never invent a second
+endpoint or turn a bound into an exact year. Preserve relative event sequence.
+An unresolved source date requires unresolved:true and a substantive
+unresolvedReason, not a guessed year. Research blocks approval; report it honestly.
+
+INDEPENDENT-REVIEW:
+Read every ownedUnits entry for omitted births, deaths, ages and date context.
+Check every ownedItems entry, and check each ownedPeople record for missing or
+incoherent chronology in the supplied evidence. Context-only units are read-only;
+other jobs own their completeness checks. Identify the owner of every dated
+event and justify each endpoint in your reason. A date window must describe
+uncertainty about an event, not activity throughout a dynasty. Check active hints
+against supported personal events. Later posthumous events must not feed life dates.
+Do not approve unsupported chronology merely because it looks plausible.
+
+Return JSON with jobId (input id), sourceHash, extractionHash, reviewedAt (ISO),
+reviewer:{name,independentOfExtractor:true}, summary (substantive),
+reviewedUnits (exact ownedUnits), itemChecks, personChecks, findings, references.
+Every check has id, verdict (supported/incorrect/research-blocked), reason, and
+evidence:[{unit,quote}] containing an exact Chinese excerpt. Item checks additionally
+have event describing whose event is being dated. Include exactly ownedItems and
+ownedPeople, with no duplicates. Even failed jobs must finish their owned checks
+or retain work for continuation; they cannot silently omit a difficult item.
+Every failed check has an actionable finding:
+{items:[affected item/person IDs],problem,action}. Supported jobs have findings: [].
+External research references use {kind:"external",url,title,quote,sourceHash,
+accessedAt,reason}; sourceHash is 'sha256:' plus SHA-256 of the short exact excerpt.
+Verify the page before citing it; keep quotations short and copyright-compliant.
+Do not invent a reference or claim an external source was read when it was not.
+
+REPAIR-PROPOSAL:
+Resolve the supplied findings by reading their Chinese evidence and doing any
+necessary targeted research. Return {sourceHash,extractionHash,changes:[...]}.
+Each change has a substantive source-based reason and one of these forms:
+{kind:"replace",id:"claim-N",before:EXACT_INPUT_ROW,after:REVISED_ROW,reason}
+{kind:"remove",id:"claim-N",before:EXACT_INPUT_ROW,reason}
+{kind:"add",after:[personId,"attestation"|"birth"|"death"|"age",value,certainty,[unitIds]],reason}
+{kind:"hints",personId,before:EXACT_OLD_HINT_ARRAY,after:NEW_HINT_ARRAY,reason}
+Claim rows are compact five-element arrays. Replacements keep subject/predicate.
+Do not modify names, roles, mentions, family links or translation text. Preserve
+legitimate posthumous reception as an event, but remove it from personal activity.
+Synchronize hints with corrected chronology. Use only existing person IDs and
+known source-unit IDs. Avoid unnecessary edits. The next reviewer receives the
+resulting claims independently and must establish their support from the source.
+If research cannot resolve a finding, return {blocked:true,reason:...}; do not
+delete a person or fabricate a date to get a passing result.
+For person checks, compare all supplied items and contextItems for that person,
+including dates elsewhere in the chapter. Context items are read-only evidence;
+do not emit itemChecks for IDs outside ownedItems. Report contradictions or
+missing narrative context instead of certifying a person from an isolated event.
+Keep supplementary research targeted to an existing date defect, a local omission,
+or a needed conversion. Do not expand this audit into new biographies or add every
+external life date you encounter. Preserve genuinely conflicting witnesses as
+explicitly supported uncertainty when possible; neither choose a winning date nor
+create false precision to clear a finding. An unsupported conversion remains a hold.

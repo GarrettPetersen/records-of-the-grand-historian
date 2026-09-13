@@ -47,18 +47,101 @@ layout gains a date-review state without changing the extraction queue.
 
 This is a targeted review, not a guaranteed cost reduction: it avoids the large
 name/mention output and full extraction loop, but source reading and research still
-cost tokens. Initial manual audits used no paid external calls. The current CLI
-is local and does not launch or bill workers. Before parallel paid audits, assign
-each chapter to exactly one reviewer and persist resumable assignments. Extraction
-queue completion is not a date-audit reservation.
+cost tokens. Initial manual audits used no paid external calls. The packet,
+record, scan and test commands remain offline. `people:dates:run` now implements
+the worker loop; Cursor execution requires explicit `--run` and `--model`.
+Do not launch a paid cohort until capacity and spending are authorized.
 
 For large chapters, split source reading into bounded owned ranges with adjacent
 read-only context. Retain completed check IDs across interruptions; assemble a
 complete report only after all ranges and cross-range dependencies are reviewed.
-Partial reports may retain findings but cannot approve. The packet command
-currently emits the whole chapter: paid chunk scheduling and assembly remain an
-orchestration step, not an automatic lane. Measure packet size before choosing
-concurrency; do not restart completed review work at a token boundary.
+Partial reports may retain findings but cannot approve. The packet command emits
+the whole chapter; the worker runner partitions it into disjoint review jobs,
+fingerprints their ownership and assembles the complete report. A person's check
+also receives their other temporal claims as context. Oversized indivisible
+evidence fails before inference: inspect that chapter and deliberately adjust the
+packet ceiling instead of silently truncating source or skipping checks.
+Measure packet size before choosing concurrency; do not restart completed work.
+
+## Resumable Worker Loop
+
+`people:dates:run` runs audit, scoped repair, fresh independent re-audit and host
+publication. An existing current failed report can seed repair immediately; it
+does not need a redundant initial review. Every candidate still gets a complete
+new review. New extractions enter the same queue once proposed translation repairs
+are closed. The managed campaign now runs extraction, editorial, dates, then
+identity resolution, with a catalog rebuild after dates. Calibration starts with
+five date chapters at concurrency two; these are caps, not spending targets.
+
+Reservations use `dateAudits` in the existing Git-backed ledger on
+`codex/people-work-queue`, separate from extraction claims but mutually exclusive
+with active extraction. Each chapter has a stable lane/worker owner, fingerprints
+and retained job/conversation IDs. A local process lock plus an exclusive shared
+executor token prevents duplicate executors, including across local checkouts.
+The execution lease renews at checkpoints and is released on normal exit, while
+chapter ownership stays sticky. After a hard crash, wait for that lease to expire
+or confirm the executor stopped before explicitly taking over. Moving execution
+to another machine requires stopping the old executor
+and explicitly using `--takeover`; this reuses ownership and remote conversations.
+Never delete an interrupted reservation to assign its work elsewhere.
+
+Local job artifacts, rejected outputs, candidate rounds and state live under
+`data/people/generated/date-workflow/`. They are ignored recovery assets, not
+disposable caches. Review-phase ceilings and exact job IDs are pinned locally and
+in the shared queue; changing invocation limits cannot replace retained ownership.
+Cursor resumes each retained conversation and downloads any
+completed artifact before asking for another turn. Run limits stop that job;
+account usage limits stop all new launches and drain active work. Record usage
+and inspect accepted cost, tokens and failures before raising concurrency.
+
+The host accepts only fingerprinted changes to temporal claims and active hints.
+It runs the production extraction/editorial validators before independent review.
+Non-temporal event content, people, names, mentions and family edges cannot be
+rewritten by the date repair interface. A repair conversation cannot approve its
+own candidate. Attachment lanes must declare their actual worker identity too;
+identity declarations do not replace the operator's responsibility to use a fresh
+review context.
+
+Only complete independent approval permits the canonical extraction to change.
+`data/people/date-repairs/` retains the exact proposal, repair rounds and approval;
+the durable receipt allows recovery if publication stops between its file writes.
+Failed re-audits stay staged. Research holds and exhausted repair-round limits
+remain unfinished and return a nonzero exit status. Changed active inputs fail
+loudly; completed generations are archived when later edits require a new audit.
+
+```sh
+# No queue mutation, credentials or inference.
+npm run people:dates:run -- --all --dry-run --limit 5
+npm run people:dates:run -- --all --order calibration --dry-run --limit 5
+npm run people:dates:workflow:self-test
+node --test scripts/test-people-date-worker.mjs scripts/test-people-campaign-dates.mjs
+
+# Only after capacity/spending approval and model selection.
+npm run people:dates:run -- --all --worker cursor-dates-01 \
+  --lane cursor-sdk --model grok-4.6 --run --limit 5 --concurrency 2
+
+# Retained artifact recovery remains available during the Cursor blackout.
+npm run people:dates:run -- --all --worker cursor-dates-01 --recover-only
+
+# Trusted host: export the next sealed job for a separate Grok Bot conversation.
+# No Cursor SDK calls. Return the exact requested *.result.json, then rerun.
+npm run people:dates:run -- --book BOOK --chapter NNN --worker grok-dates-01 \
+  --lane grokbot --attachment-dir /absolute/path/to/date-handoff
+```
+
+The attachment runner emits `*.input.json` and stops while the result is absent.
+Review results identify `jobId`, the exact packet hashes and owned checks; repair
+results contain exact before-values, source-based reasons and author identity.
+After a repair, send the next review input to a **different** conversation.
+The host validates all artifacts; a bot does not commit, publish or approve itself.
+Use `--retry-blocked` only after obtaining the missing research. Explicit
+`--release --book BOOK --chapter NNN --worker ID` frees an abandoned assignment
+without deleting local recovery files and does not require paid execution.
+The direct Cursor runner also enforces the campaign capacity calendar. An explicit
+`--cursor-capacity-start` or `PEOPLE_CURSOR_CAPACITY_START` override must represent
+verified available capacity, not a way to bypass the pause. Inspect the printed
+calibration cohort for genre and source quality; size quantiles and distinct books
+avoid an all-empty-header sample but do not replace operator judgment.
 
 ## Rules for Every Lane
 
@@ -150,15 +233,27 @@ deliberate re-review, not silent network access during builds.
 - `qingshigao/120`: **audited**. All 17 available Chinese units, ten temporal/hint
   items and three people checked. Yao, Shun and Yu retain legendary antiquity
   instead of inheriting surrounding Qing fiscal chronology.
-- `songshu/090`: **needs-revision**. Ming's attestations borrow his sons'
-  appointment dates. All source units read; only the affected person's checks
-  completed. The remaining people are not certified by this partial failure.
-- `houhanshu/001`: **needs-revision**. Northern Song republication is incorrectly
-  treated as personal activity by the earlier authors Fan Ye and Sima Biao.
-- `mingshi/034`: **research-blocked**. Verify the Zhizheng-to-Zhiyuan emendation
-  and compilation-date precision against independent sources. The available
-  chapter explicitly omits tables; this audit cannot certify missing content.
+- `songshu/090`: **repaired and independently audited**. Removed Ming's borrowed
+  appointment dates, corrected maternal/event ownership, preserved traditional
+  ages without twin or birthday inference, and supplied supported one-sided
+  bounds for undated deaths. The source-completion terminus for two early deaths
+  is explicitly not personal activity in the compilation year. All 33 units,
+  105 temporal/hint items and 22 people checked.
+- `houhanshu/001`: **repaired and independently audited**. Northern Song
+  republication no longer becomes personal activity for Fan Ye or Sima Biao, and
+  the false living-owner publication event is removed. Supplementary dates are
+  source-qualified; Li Xian's conflicting reported ages are explicitly preserved
+  without inventing a harmonized birth. All 16 units, 19 temporal/hint items and
+  four people checked. The first candidate's additional failure is retained.
+- `mingshi/034`: **repaired and independently audited**. The Zhizheng-to-Zhiyuan
+  emendation is independently sourced. Competing death-year witnesses remain
+  explicit within AD 1281-1283 bounds; compilation uses supported sequence and
+  presentation bounds instead of a circa point. All 22 available units, seven
+  temporal/hint items and two people checked. Omitted tables are not certified.
 
-These diagnostic selections do not estimate the corpus error rate. Failed audits
-are actionable debt, not already-applied repairs. Date approval alone does not
-certify translations, exhaustive extraction, identities or publication readiness.
+These diagnostic selections do not estimate the corpus error rate. Original
+negative reports and repair-round evidence are retained; the three initially
+failed pilots have now been repaired and independently re-audited. Date approval
+alone does not certify translations, exhaustive extraction, identities or
+publication readiness. Paid worker transport is covered by offline adapter tests;
+no Cursor, Grok Bot or DeepSeek inference was purchased for this implementation.

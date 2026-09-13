@@ -109,7 +109,20 @@ export function validatePeopleWorkLedger(ledger) {
       }
     }
   }
+  if (ledger.dateAudits !== undefined) {
+    if (!ledger.dateAudits || typeof ledger.dateAudits !== 'object' || Array.isArray(ledger.dateAudits)) throw new Error('Invalid date-audit reservation map');
+    for (const [key, claim] of Object.entries(ledger.dateAudits)) {
+      if (!/^[a-z0-9_-]+\/\d{3}$/.test(key) || !claim.worker || !['cursor-sdk','grokbot','manual'].includes(claim.lane) || !/^sha256:[a-f0-9]{64}$/.test(claim.sourceHash) || !/^sha256:[a-f0-9]{64}$/.test(claim.extractionHash) || !claim.jobs || typeof claim.jobs !== 'object' || Array.isArray(claim.jobs) || !['active','ready','research-blocked'].includes(claim.status)) throw new Error(`Invalid date-audit reservation ${key}`);
+      if(claim.executorToken!==undefined && (typeof claim.executorToken!=='string'||!claim.executorToken||!Number.isFinite(Date.parse(claim.executorExpiresAt))))throw new Error(`Invalid date executor lease ${key}`);
+      for(const plan of Object.values(claim.reviewPlans??{}))if(!Number.isSafeInteger(plan.maxUnits)||plan.maxUnits<1||!Number.isSafeInteger(plan.maxBytes)||plan.maxBytes<1024||!Array.isArray(plan.jobIds)||new Set(plan.jobIds).size!==plan.jobIds.length)throw new Error(`Invalid retained date plan ${key}`);
+    }
+  }
   return ledger;
+}
+
+export function dateExecutorIsBusy(claim, { executorToken, now = Date.now(), takeover = false } = {}) {
+  return Boolean(claim?.executorToken && claim.executorToken !== executorToken &&
+    Date.parse(claim.executorExpiresAt) > now && !takeover);
 }
 
 function remoteRef(remote, branch) {
@@ -121,7 +134,11 @@ function fetchQueueSnapshot({ remote, branch }) {
   const fetched = git([
     'fetch', '--quiet', remote, `+refs/heads/${branch}:${destination}`,
   ], { allowFailure: true });
-  if (fetched.status !== 0) return { oid: null, ledger: emptyLedger() };
+  if (fetched.status !== 0) {
+    const exists = git(['ls-remote','--exit-code','--heads',remote,`refs/heads/${branch}`],{allowFailure:true});
+    if (exists.status === 2) return { oid: null, ledger: emptyLedger() };
+    throw new Error(`Cannot fetch shared people queue ${branch}; refusing to treat an unavailable queue as empty`);
+  }
   const oid = git(['rev-parse', destination]).stdout.trim();
   const shown = git(['show', `${oid}:${PEOPLE_QUEUE_FILE}`], { allowFailure: true });
   if (shown.status !== 0) throw new Error(`${branch} exists without ${PEOPLE_QUEUE_FILE}`);
@@ -304,6 +321,10 @@ export function reservePeopleTargetsInLedger(ledger, targets, options) {
   for (const target of targets) {
     if (claimed.length >= options.limit) break;
     const key = chapterKey(target);
+    if (ledger.dateAudits?.[key] && ledger.dateAudits[key].status !== 'ready') {
+      blocked.push({ ...target, claim: ledger.dateAudits[key], reason: 'Independent date work owns this chapter' });
+      continue;
+    }
     const current = ledger.claims[key];
     if (claimIsActive(current, now)) {
       if (current.lane === options.lane && current.worker === options.worker) {
