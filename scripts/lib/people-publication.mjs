@@ -1,4 +1,5 @@
 const BLOCKER_FIELDS = [
+  'dateAuditPendingChapters',
   'missingChapters',
   'legacyChapters',
   'legacyLocalPeople',

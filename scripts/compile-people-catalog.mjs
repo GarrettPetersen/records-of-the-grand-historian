@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import crypto from 'node:crypto';
+import { dateAuditStatus } from './lib/people-date-audit.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildPeopleResolutionCandidateDocument } from './build-people-resolution-candidates.mjs';
@@ -576,6 +577,7 @@ function buildPeopleSiteIndex(corpus, catalog) {
       book: extraction.book,
       chapter: extraction.chapter,
       promptVersion: extraction.run.promptVersion,
+      dateAudit: dateAuditStatus(extraction.book, extraction.chapter),
       mentions: extraction.mentions.map((mention) => {
         const personId = catalog.localPersonMap[mention.person];
         const person = personById.get(personId);
@@ -917,6 +919,8 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
     sourceChapters: corpus.coverage.sourceChapters,
     extractedChapters: corpus.coverage.extractedChapters,
     missingChapters: missingChapterIds.length,
+    dateAuditPendingChapters: missingChapterIds.length + corpus.chapters.filter(({ extraction }) =>
+      dateAuditStatus(extraction.book, extraction.chapter).status !== 'audited').length,
     localPeople: corpus.localPeople.size,
     canonicalPeople: people.length,
     mergedLocalPeople: corpus.localPeople.size - people.length,
@@ -1180,7 +1184,7 @@ function selfTest() {
       curatedFan.slug !== 'fan-ye-stable') {
     throw new Error('Curation keyed by a retired canonical ID did not follow the surviving cluster');
   }
-  if (!result.complete) throw new Error('Fully covered fixture catalog was not marked complete');
+  if (result.complete || result.stats.dateAuditPendingChapters !== 3) throw new Error('Unaudited fixture catalog was incorrectly marked complete');
   const incompleteCorpus = structuredClone(corpus);
   incompleteCorpus.coverage = { sourceChapters: 4, extractedChapters: 3, missingChapterIds: ['fixture:004'] };
   const incomplete = compilePeopleCatalog(incompleteCorpus, resolution).catalog;

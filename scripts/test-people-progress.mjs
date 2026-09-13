@@ -40,6 +40,7 @@ const countedCurrent = chapterStates.filter((chapter) => chapter.state === 'curr
 const countedRereview = chapterStates.filter((chapter) => chapter.state === 'rereview').length;
 const countedMissing = chapterStates.filter((chapter) => chapter.state === 'missing').length;
 const countedComplete = chapterStates.filter((chapter) => chapter.glossaryState === 'current').length;
+const countedDates = chapterStates.filter((chapter) => chapter.glossaryState === 'date-review').length;
 const countedEditorial = chapterStates.filter((chapter) => chapter.glossaryState === 'editorial-review').length;
 const countedIdentity = chapterStates.filter((chapter) => chapter.glossaryState === 'identity-review').length;
 if (corpus.summary.sourceChapters !== chapterStates.length ||
@@ -47,6 +48,8 @@ if (corpus.summary.sourceChapters !== chapterStates.length ||
     corpus.summary.rereviewChapters !== countedRereview ||
     corpus.summary.missingChapters !== countedMissing ||
     corpus.summary.completeChapters !== countedComplete ||
+    corpus.summary.dateReviewChapters !== countedDates ||
+    chapterStates.some(chapter => chapter.glossaryState === 'current' && chapter.dateAudit.status !== 'audited') ||
     corpus.summary.editorialReviewChapters !== countedEditorial ||
     corpus.summary.identityReviewChapters !== countedIdentity ||
     chapterStates.some((chapter) => !chapter.glossaryState ||
@@ -58,5 +61,5 @@ if (corpus.summary.sourceChapters !== chapterStates.length ||
 
 console.log(
   `people progress tests passed (${countedComplete} complete, ${countedIdentity} identity review, ` +
-  `${countedEditorial} editorial review, ${countedRereview} source rereview, ${countedMissing} missing)`,
+  `${countedDates} date review, ${countedEditorial} editorial review, ${countedRereview} source rereview, ${countedMissing} missing)`,
 );

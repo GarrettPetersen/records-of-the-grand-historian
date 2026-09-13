@@ -18,6 +18,7 @@ import { isExcludedFromTranslationCount } from './chapter-counts.mjs';
 import { isPunctuationOnlySentence } from './sentence-utils.mjs';
 import { estimateCompletionFromGitHistory } from './scripts/progress-estimate.mjs';
 import { readPeopleCatalog } from './scripts/lib/people-generated-data.mjs';
+import { dateAuditStatus } from './scripts/lib/people-date-audit.mjs';
 
 const MANIFEST_PATH = './data/manifest.json';
 const DATA_DIR = './data';
@@ -651,6 +652,7 @@ function applyPeopleIdentityProgress(byChapter, summary) {
   }
   const glossaryStateCounts = {
     current: 0,
+    'date-review': 0,
     'editorial-review': 0,
     'identity-review': 0,
     rereview: 0,
@@ -669,7 +671,9 @@ function applyPeopleIdentityProgress(byChapter, summary) {
     if (chapter.state === 'current' && chapter.unresolvedPeople > 0) chaptersWithUnresolvedPeople += 1;
     if (chapter.state === 'current' && chapter.resolutionTargetPeople > 0) actionableResolutionChapters += 1;
     chapter.glossaryState = chapter.state === 'current'
-      ? chapter.pendingTranslationRepairs > 0
+      ? chapter.dateAudit.status !== 'audited'
+        ? 'date-review'
+        : chapter.pendingTranslationRepairs > 0
         ? 'editorial-review'
         : chapter.unresolvedPeople > 0
           ? 'identity-review'
@@ -680,6 +684,7 @@ function applyPeopleIdentityProgress(byChapter, summary) {
   return {
     ...summary,
     completeChapters: glossaryStateCounts.current,
+    dateReviewChapters: glossaryStateCounts['date-review'],
     editorialReviewChapters: glossaryStateCounts['editorial-review'],
     identityReviewChapters: glossaryStateCounts['identity-review'],
     chaptersWithUnresolvedPeople,
@@ -705,6 +710,7 @@ function buildPeopleGlossaryProgress(manifest) {
       assertPeopleProgress(!expected.has(chapterId), `duplicate source chapter ${chapterId}`);
       expected.set(chapterId, {
         state: 'missing',
+        dateAudit: { status: 'un-audited', auditVersion: 1 },
         promptVersion: null,
         unitCount: 0,
         peopleRecords: 0,
@@ -731,7 +737,8 @@ function buildPeopleGlossaryProgress(manifest) {
     assertPeopleProgress(expected.has(chapterId), `${file} does not correspond to a manifest chapter`);
     assertPeopleProgress(!extracted.has(chapterId), `duplicate extraction ${chapterId}`);
     extracted.add(chapterId);
-    expected.set(chapterId, peopleProgressFromExtraction(extraction, config.promptVersion));
+    expected.set(chapterId, { ...peopleProgressFromExtraction(extraction, config.promptVersion),
+      dateAudit: dateAuditStatus(extraction.book, extraction.chapter) });
   }
 
   const chapters = [...expected.values()];
@@ -749,6 +756,8 @@ function buildPeopleGlossaryProgress(manifest) {
     currentChapters,
     rereviewChapters,
     missingChapters,
+    dateAuditedChapters: chapters.filter(chapter => chapter.dateAudit.status === 'audited').length,
+    dateAuditPendingChapters: chapters.filter(chapter => chapter.dateAudit.status !== 'audited').length,
     currentPercent: sourceChapters > 0 ? (currentChapters / sourceChapters) * 100 : 0,
     extractedPercent: sourceChapters > 0 ? (extractedChapters / sourceChapters) * 100 : 0,
     peopleRecords: sum('peopleRecords'),

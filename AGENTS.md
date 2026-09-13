@@ -30,12 +30,38 @@ The standard translation loop is: `make start-translation BOOK=<book>` → fill 
 
 ### Gotchas
 
+- **Independent people date audits:** Follow `PEOPLE_DATE_AUDIT.md` in every lane.
+  All 4,099 chapters started date-un-audited; retain extraction prompt 7 and do not
+  re-extract them for dates. After extraction and repairs, build a
+  `people:dates:packet`, use a separate source reviewer, and record their complete
+  report with `people:dates:record`. Capture acceptance is not date approval.
+  Catalog completion, progress and ebook-glossary gates require approval. Run
+  `people:dates:verify` before milestone builds. Preserve failed audits and research
+  holds instead of guessing dates; `westernBounds` supports one-sided chronology.
+  An unresolved reason saves extraction work but cannot pass the audit. Source or
+  extraction edits make prior approvals stale. Do not launch a paid audit wave
+  without calibrating size/cost and assigning unique resumable review ownership.
+
 - **SDK translation orchestrator:** Per book, session *N+1* starts only after the previous chapter is on `origin/master` (merge-wait); books do not block each other (`--concurrency`). Local: `npm run sdk-translate:local -- --all-untranslated --concurrency 4 --until-complete` (direct push). Cloud: `npm run sdk-translate:cloud -- --all-untranslated --concurrency 19 --until-complete` (PR loop). **One chapter per agent (parallel, no merge-wait):** `npm run sdk-translate:cloud -- --book jinshi --chapter 068` — fan out many processes; each opens a PR but **does not** merge to `master` individually.
 - **Translation PR batching (Cloudflare builds):** Workflow `automerge-cursor.yml` only labels `cursor/*` PRs (`translation-batch`); it does **not** auto-merge to `master`. `npm run merge-translation:staging` (or workflow **Merge translation PRs to staging**) retargets each open chapter PR to `translation-staging` and **merges it via GitHub** so chapter PRs show as merged; then **one** squash PR `translation-staging` → `master` (one ~10m build). `npm run merge-translation:staging:dry-run` lists queued PRs. `--git-only` keeps the old absorb-via-local-git behavior without closing PRs on GitHub. Staging merge conflict resolution keeps **chapter** files from the PR but **drops** `public/data/search-corpus/` from git (gitignored); a post-batch corpus rebuild runs locally only (not committed).
 - **In-flight chapters:** `npm run translation-inflight` lists chapters reserved by open `cursor/*` PRs, work on `translation-staging` not yet on `master`, and local SDK claims (`data/translation-inflight.json`, gitignored). `sdk-translate --chapter` and `make start-translation` skip/blocked duplicates automatically when `GITHUB_TOKEN`/`GH_TOKEN` is set.
 - **Finish staging batch:** `npm run finish-translation-staging` closes absorbed chapter PRs, git-merges conflicted heads into `translation-staging`, and squash-merges the open `translation-staging` → `master` batch PR (requires `GITHUB_TOKEN`/`GH_TOKEN`).
 - **Shortest-chapter cloud batch:** `npm run sdk-translate:shortest-batch` (or `--dry-run`) scans `origin/master` for incomplete chapters, skips in-flight via `translation-inflight`, launches the 100 shortest with `SDK_CHAPTER_BATCH_CONCURRENCY` (default 25). Plan: `data/shortest-untranslated-batch-plan.json`; log: `/tmp/sdk-shortest-100.log`.
 - **SDK drain:** `npm run sdk-translate:drain` / `npm run sdk-translate:drain-status`.
+- **DeepSeek calibration:** `npm run people:deepseek:pilot` is an isolated,
+  resumable benchmark for already-extracted chapters, not a production lane.
+  Further paid trials are paused for economics; obtain explicit authorization
+  before spending more, including on a calibration cohort. Preserve existing
+  evidence and use the offline self-tests while paused.
+  Use `--agent --max-units 60 --max-turns 300 --review --review-rounds 5`
+  plus `--require-whole-chapter` for full-chapter calibration;
+  `--run` authorizes paid requests within the existing shared $10
+  ceiling. Completion requires the production validator plus full, focused
+  chronology, and focused editorial approvals of the current draft. Never count
+  partial chunks or a general-review approval alone as chapter completion.
+  Preserve all ignored pilot responses, draft state, citations, and interrupted
+  review reasoning. Do not publish these artifacts or bypass the shared queue.
+  See `DEEPSEEK_PEOPLE_PILOT.md` and `npm run people:deepseek:self-test`.
 - **People extraction lanes:** `npm run people:extract` and Grok Bot share the atomic
   ledger on `codex/people-work-queue`. Sync ignored local recovery state with
   `npm run people:queue:sync-cursor`; inspect it with `npm run people:queue:status`.

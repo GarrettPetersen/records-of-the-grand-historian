@@ -22,7 +22,7 @@ const context = {
   siteIndex: {
     currentPromptVersion: 7,
     chapters: {
-      'fixture:001': { promptVersion: 7 },
+      'fixture:001': { promptVersion: 7, dateAudit: { status: 'audited', auditVersion: 1 } },
       'fixture:002': { promptVersion: 7 },
       'fixture:004': { promptVersion: 6 },
     },
@@ -34,6 +34,14 @@ assert.equal(ready.active, true);
 assert.equal(ready.ready, true);
 assert.equal(ready.preview, false);
 assert.deepEqual(ready.people.map((item) => item.id), ['ready']);
+
+const unaudited = structuredClone(context);
+delete unaudited.siteIndex.chapters['fixture:001'].dateAudit;
+const datesPending = assessEbookPeopleReadiness(unaudited, { book: 'fixture', chapters: ['001'] });
+assert.equal(datesPending.ready, false);
+assert.deepEqual(datesPending.dateAuditChapters, ['001']);
+unaudited.siteIndex.chapters['fixture:001'].dateAudit = { status: 'stale', auditVersion: 1 };
+assert.equal(assessEbookPeopleReadiness(unaudited, { book: 'fixture', chapters: ['001'] }).ready, false);
 
 const missing = assessEbookPeopleReadiness(context, { book: 'fixture', chapters: ['001', '003'] });
 assert.equal(missing.active, false);
@@ -70,11 +78,12 @@ const previewQa = {
   preview: true,
   missingChapters: ['003'],
   legacyChapters: [],
+  dateAuditChapters: [],
   peopleNeedingReview: 1,
 };
 assert.deepEqual(ebookPeopleReadinessErrors(previewQa), [
   'People glossary is an incomplete preview and is not valid for publication.',
-  'Active people glossary retains chapter-coverage or identity-review blockers.',
+  'Active people glossary retains coverage, date-audit or identity-review blockers.',
 ]);
 assert.deepEqual(ebookPeopleReadinessErrors(previewQa, { allowPreview: true }), []);
 assert.deepEqual(ebookPeopleReadinessErrors({
@@ -89,6 +98,7 @@ assert.deepEqual(ebookPeopleReadinessErrors({
   preview: false,
   missingChapters: [],
   legacyChapters: [],
+  dateAuditChapters: [],
   peopleNeedingReview: 0,
 }), []);
 assert.deepEqual(ebookPeopleReadinessErrors({
@@ -97,10 +107,18 @@ assert.deepEqual(ebookPeopleReadinessErrors({
   preview: true,
   missingChapters: ['003'],
   legacyChapters: [],
+  dateAuditChapters: [],
   peopleNeedingReview: 0,
 }, { allowPreview: true }), [
   'Publication-ready people glossary is also marked as a preview.',
-  'Publication-ready people glossary retains chapter-coverage or identity-review blockers.',
+  'Publication-ready people glossary retains coverage, date-audit or identity-review blockers.',
+]);
+
+assert.deepEqual(ebookPeopleReadinessErrors({ active: true, ready: true }), [
+  'Active people glossary is missing date-audit coverage.',
+]);
+assert.deepEqual(ebookPeopleReadinessErrors({ active: true, ready: true, dateAuditChapters: ['001'] }), [
+  'Publication-ready people glossary retains coverage, date-audit or identity-review blockers.',
 ]);
 
 console.log('ebook people readiness self-test: ok');

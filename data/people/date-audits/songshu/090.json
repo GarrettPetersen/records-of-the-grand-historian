@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": 1,
+  "book": "songshu",
+  "chapter": "090",
+  "sourceHash": "sha256:467e9ada45b8e16b94b1c62418a46c7108f14a48bfcf0a141948a44cef9509c7",
+  "extractionHash": "sha256:84c464788785ef5722d3ffcd97125ca81fb0925d4a5e31ac8ebbf7c77b3cbbf2",
+  "status": "needs-revision",
+  "reviewer": {
+    "name": "Codex (manual source review)",
+    "independentOfExtractor": true
+  },
+  "reviewedAt": "2026-09-13T06:03:30Z",
+  "summary": "Read all 33 Chinese source units. Targeted checks confirm that Emperor Ming has borrowed activity dates from his sons. This is a failed partial claim audit; the remaining people and date claims are not certified.",
+  "reviewedUnits": [
+    "s0001",
+    "s0002",
+    "s0003",
+    "s0004",
+    "s0005",
+    "s0006",
+    "s0007",
+    "s0008",
+    "s0009",
+    "s0020",
+    "s0021",
+    "s0022",
+    "s0023",
+    "s0024",
+    "s0025",
+    "s0026",
+    "s0027",
+    "s0028",
+    "s0029",
+    "s0030",
+    "s0031",
+    "s0032",
+    "s0033",
+    "s0010",
+    "s0011",
+    "s0012",
+    "s0013",
+    "s0014",
+    "s0015",
+    "s0016",
+    "s0017",
+    "s0018",
+    "s0019"
+  ],
+  "itemChecks": [
+    {
+      "id": "claim-3",
+      "verdict": "incorrect",
+      "event": "Liu You receives office under the Later Deposed Emperor.",
+      "reason": "The subject of the appointment is You, aged five. The preceding genealogy names Ming as his father; it does not establish Ming as personally active in this year.",
+      "evidence": [
+        {
+          "unit": "s0020",
+          "quote": "明帝第七子也"
+        },
+        {
+          "unit": "s0021",
+          "quote": "友年五歲，出為"
+        }
+      ]
+    },
+    {
+      "id": "claim-4",
+      "verdict": "incorrect",
+      "event": "Liu Hui is enfeoffed as Prince of Nanyang.",
+      "reason": "The biographical subject is Hui, Ming's tenth son. The next sentence dates the six-year-old son's enfeoffment, not his father's activity.",
+      "evidence": [
+        {
+          "unit": "s0026",
+          "quote": "明帝第十子也"
+        },
+        {
+          "unit": "s0027",
+          "quote": "元徽四年，年六歲，封南陽王"
+        }
+      ]
+    },
+    {
+      "id": "hints-p001",
+      "verdict": "incorrect",
+      "event": "The hint borrows the chronology of Ming's descendants.",
+      "reason": "The AD 474-479 hint has no personal event for Ming in these cited passages. A genealogical reference cannot make the father active throughout his sons' later careers.",
+      "evidence": [
+        {
+          "unit": "s0002",
+          "quote": "明帝十二子"
+        },
+        {
+          "unit": "s0021",
+          "quote": "後廢帝元徽二年"
+        }
+      ]
+    }
+  ],
+  "personChecks": [
+    {
+      "id": "p001",
+      "verdict": "incorrect",
+      "event": "Ming is named as the princes' father.",
+      "reason": "Ming requires his own source-backed chronology, not an inherited window from the subsequent biographies. This review does not invent a replacement birth or death date.",
+      "evidence": [
+        {
+          "unit": "s0002",
+          "quote": "明帝十二子"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "items": [
+        "claim-3",
+        "claim-4",
+        "hints-p001",
+        "p001"
+      ],
+      "problem": "Emperor Ming is assigned personal activity from appointments of Liu You and Liu Hui. The event subject and the person receiving the attestation do not match.",
+      "action": "Remove the borrowed attestations and hint. Read Ming's own annals for a supported personal event and verified conversion, or retain an explicit unresolved research hold. Then audit the other 21 people and remaining claims before approval."
+    }
+  ],
+  "references": []
+}

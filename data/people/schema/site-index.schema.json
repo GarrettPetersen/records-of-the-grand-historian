@@ -21,6 +21,10 @@
           "book": { "type": "string", "pattern": "^[a-z0-9_-]+$" },
           "chapter": { "type": "string", "pattern": "^\\d{3}$" },
           "promptVersion": { "type": "integer", "minimum": 1 },
+          "dateAudit": { "type": "object", "required": ["status", "auditVersion"], "properties": {
+            "status": { "enum": ["un-audited", "audited", "needs-revision", "research-blocked", "stale"] },
+            "auditVersion": { "type": "integer", "minimum": 1 }
+          } },
           "mentions": {
             "type": "array",
             "items": {
