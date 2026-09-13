@@ -36,6 +36,20 @@ The standard translation loop is: `make start-translation BOOK=<book>` → fill 
 - **Finish staging batch:** `npm run finish-translation-staging` closes absorbed chapter PRs, git-merges conflicted heads into `translation-staging`, and squash-merges the open `translation-staging` → `master` batch PR (requires `GITHUB_TOKEN`/`GH_TOKEN`).
 - **Shortest-chapter cloud batch:** `npm run sdk-translate:shortest-batch` (or `--dry-run`) scans `origin/master` for incomplete chapters, skips in-flight via `translation-inflight`, launches the 100 shortest with `SDK_CHAPTER_BATCH_CONCURRENCY` (default 25). Plan: `data/shortest-untranslated-batch-plan.json`; log: `/tmp/sdk-shortest-100.log`.
 - **SDK drain:** `npm run sdk-translate:drain` / `npm run sdk-translate:drain-status`.
+- **DeepSeek calibration:** `npm run people:deepseek:pilot` is an isolated,
+  resumable benchmark for already-extracted chapters, not a production lane.
+  Further paid trials are paused for economics; obtain explicit authorization
+  before spending more, including on a calibration cohort. Preserve existing
+  evidence and use the offline self-tests while paused.
+  Use `--agent --max-units 60 --max-turns 300 --review --review-rounds 5`
+  plus `--require-whole-chapter` for full-chapter calibration;
+  `--run` authorizes paid requests within the existing shared $10
+  ceiling. Completion requires the production validator plus full, focused
+  chronology, and focused editorial approvals of the current draft. Never count
+  partial chunks or a general-review approval alone as chapter completion.
+  Preserve all ignored pilot responses, draft state, citations, and interrupted
+  review reasoning. Do not publish these artifacts or bypass the shared queue.
+  See `DEEPSEEK_PEOPLE_PILOT.md` and `npm run people:deepseek:self-test`.
 - **People extraction lanes:** `npm run people:extract` and Grok Bot share the atomic
   ledger on `codex/people-work-queue`. Sync ignored local recovery state with
   `npm run people:queue:sync-cursor`; inspect it with `npm run people:queue:status`.

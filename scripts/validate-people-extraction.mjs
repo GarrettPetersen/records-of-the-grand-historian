@@ -290,7 +290,7 @@ function validateAttestationClaim(claim, errors) {
   }
 }
 
-function validateClaimVocabulary(claim, packet, errors) {
+export function validateClaimVocabulary(claim, packet, errors) {
   if (claim.predicate === 'role') {
     const roleId = claim.value?.roleId;
     const known = new Set(packet.context.roles.map((role) => role.id));
