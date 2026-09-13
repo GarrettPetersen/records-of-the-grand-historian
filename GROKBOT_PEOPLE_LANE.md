@@ -183,3 +183,20 @@ later repetitions of the corrected name, place, title, or office. Repair the sam
 throughout the chapter in the same review, then run `--reconcile-current` so extraction
 fingerprints, candidate dispositions, and mention spans match the final text. This
 paired-field sweep prevents a later cleanup pass over already reviewed chapters.
+# Independent Date Work
+
+After extraction and editorial closure, use the separate resumable chronology
+workflow in `PEOPLE_DATE_AUDIT.md`. The trusted host runs `people:dates:run` with
+`--lane grokbot --worker STABLE-ID --attachment-dir ABSOLUTE-PATH` and an explicit
+book/chapter. Its `dateAudits` reservation shares the central ledger and blocks
+duplicate extraction/date work. Grok Bot must not invoke Cursor or another model
+API for these jobs.
+
+Process the emitted `*.input.json` and return the matching `*.result.json` as a
+direct attachment with byte count and SHA-256. The host verifies the attachment,
+places it at the requested path, and reruns the same command. Use the real
+conversation ID as `reviewer.agentId` for reviews and `author.agentId` for repairs;
+both objects also require a name. Resume interrupted conversations first. The
+candidate re-audit must use a different conversation from its repair worker.
+Do not change, commit or publish the canonical extraction from the bot. Only the
+host can accept a fully covered, fingerprint-matching independent approval.

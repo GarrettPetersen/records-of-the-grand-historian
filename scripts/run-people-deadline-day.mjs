@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { spawnSync } from 'node:child_process';
+import { randomUUID } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -14,9 +15,11 @@ import {
   readPeopleCampaignPolicy,
   rollingCampaignDeadline,
 } from './lib/people-campaign-policy.mjs';
+import { dateRunAcceptedChapters } from './run-people-deadline-wave.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 const STATE_FILE = path.join(PEOPLE_DIR, 'generated', 'deadline-day-state.json');
+const CALIBRATION_STATE_FILE = path.join(PEOPLE_DIR, 'generated', 'deadline-calibration-state.json');
 const CALIBRATION_FILE = path.join(PEOPLE_DIR, 'generated', 'deadline-calibration.json');
 const campaignPolicy = readPeopleCampaignPolicy();
 
@@ -37,13 +40,17 @@ Options:
   --cursor-capacity-start DATE
                      Override the campaign policy's Cursor SDK reset date.
   --as-of DATE       Campaign date (default: local current date).
-  --waves N          Extraction/editorial/resolution cycles (default: 3).
-  --calibration      Run recovery plus the required 10-scope identity calibration.
+  --waves N          Extraction/editorial/dates/resolution cycles (default: 3).
+  --calibration      Run recovery, editorial, 5 date chapters, and 10 identity scopes.
   --dry-run          Print every child wave without paid calls or saved state.
 
 Successful stages are checkpointed locally. Rerunning the command on the same day
 continues at the first unfinished stage. The managed production cadence combines
-each extraction/editorial pair into one canonical catalog rebuild.`);
+each extraction/editorial/dates cycle into one canonical catalog rebuild.
+
+Before paid calibration, inspect the cohort with:
+  npm run people:dates:run -- --all --order calibration --limit 5 --concurrency 2 --dry-run
+Check genre coverage manually; size/book sampling is not a genre review.`);
 }
 
 function positiveInteger(value, flag, maximum) {
@@ -105,6 +112,8 @@ export function campaignDaySteps({ waves, calibration }) {
   if (calibration) {
     return [
       { id: 'recovery', phase: 'recovery' },
+      { id: 'editorial-calibration', phase: 'editorial', limit: 5, deferCatalog: true },
+      { id: 'date-calibration', phase: 'dates', limit: 5, order: 'calibration', forceCatalog: true },
       { id: 'identity-calibration', phase: 'resolution', limit: 10 },
     ];
   }
@@ -112,7 +121,8 @@ export function campaignDaySteps({ waves, calibration }) {
   for (let wave = 1; wave <= waves; wave += 1) {
     steps.push(
       { id: `extraction-${wave}`, phase: 'extraction', deferCatalog: true },
-      { id: `editorial-${wave}`, phase: 'editorial', forceCatalog: true },
+      { id: `editorial-${wave}`, phase: 'editorial', deferCatalog: true },
+      { id: `dates-${wave}`, phase: 'dates', forceCatalog: true },
       { id: `resolution-${wave}`, phase: 'resolution' },
     );
   }
@@ -123,14 +133,44 @@ function stateKey(opts) {
   return [opts.asOf, opts.deadline, opts.capacityStart, opts.waves, opts.calibration ? 'calibration' : 'production'].join('|');
 }
 
+export function campaignStateFile(mode) {
+  return mode === 'calibration' ? CALIBRATION_STATE_FILE : STATE_FILE;
+}
+
+export function migrateCampaignDayState(state) {
+  if (![1, 2].includes(state.schemaVersion) || !Array.isArray(state.completed) ||
+      !state.completed.every((id) => typeof id === 'string')) {
+    throw new Error('Invalid campaign day checkpoint');
+  }
+  if (state.dateAcceptedChapters !== undefined && !validAcceptedDateChapters(state.dateAcceptedChapters)) {
+    throw new Error('Invalid accepted date calibration chapters in checkpoint');
+  }
+  const steps = campaignDaySteps({ waves: state.waves, calibration: state.mode === 'calibration' });
+  const completed = new Set(state.completed);
+  if (state.mode === 'calibration' && !acceptedDateCohort(state.dateAcceptedChapters)) {
+    completed.delete('date-calibration');
+  }
+  const missingDates = steps.findIndex((step) => step.phase === 'dates' && !completed.has(step.id));
+  if (missingDates !== -1) {
+    for (const step of steps.slice(missingDates)) {
+      if (step.phase === 'resolution') completed.delete(step.id);
+    }
+  }
+  return { ...state, schemaVersion: 2, completed: [...completed] };
+}
+
 function loadState(opts) {
   const key = stateKey(opts);
-  if (fs.existsSync(STATE_FILE)) {
-    const state = readJson(STATE_FILE);
-    if (state.schemaVersion === 1 && state.key === key) return state;
+  const stateFile = campaignStateFile(opts.calibration ? 'calibration' : 'production');
+  // Import an older calibration checkpoint without replacing the production file.
+  for (const file of new Set([stateFile, STATE_FILE])) {
+    if (fs.existsSync(file)) {
+      const state = readJson(file);
+      if (state.key === key) return migrateCampaignDayState(state);
+    }
   }
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     key,
     asOf: opts.asOf,
     deadline: opts.deadline,
@@ -145,21 +185,63 @@ function loadState(opts) {
 
 function saveState(state) {
   state.updatedAt = new Date().toISOString();
-  writeJsonAtomic(STATE_FILE, state);
+  writeJsonAtomic(campaignStateFile(state.mode), state);
+}
+
+function validAcceptedDateChapters(chapters) {
+  return Array.isArray(chapters) &&
+    chapters.every((key) => typeof key === 'string' && /^[a-z][a-z0-9-]*\/\d{3}$/u.test(key)) &&
+    new Set(chapters).size === chapters.length;
+}
+
+function acceptedDateCohort(chapters) {
+  return validAcceptedDateChapters(chapters) && chapters.length >= 5;
+}
+
+export function calibrationIsCurrent(calibration, capacityStart) {
+  return calibration?.schemaVersion === 2 &&
+    calibration.capacityStart === capacityStart &&
+    calibration.asOf >= capacityStart &&
+    acceptedDateCohort(calibration.dateAcceptedChapters) &&
+    calibration.dateChapters === calibration.dateAcceptedChapters.length && calibration.dateConcurrency === 2 &&
+    calibration.scopes === 10;
+}
+
+export function dateCalibrationStep(step, state, summaryOut) {
+  return {
+    ...step,
+    limit: Math.max(0, 5 - (state.dateAcceptedChapters?.length ?? 0)),
+    catalogOnly: acceptedDateCohort(state.dateAcceptedChapters),
+    summaryOut,
+  };
+}
+
+export function recordDateCalibrationRun(state, summary, invocation) {
+  const accepted = dateRunAcceptedChapters(summary);
+  if (accepted.length > invocation.limit) throw new Error('Date summary exceeded the requested calibration cohort');
+  return {
+    ...state,
+    dateAcceptedChapters: [...new Set([...(state.dateAcceptedChapters ?? []), ...accepted])],
+    dateRunSummaries: [...(state.dateRunSummaries ?? []), invocation.summaryOut],
+  };
 }
 
 function runStep(step, opts) {
-  const args = [
+  const args = step.catalogOnly ? ['scripts/compile-people-catalog.mjs'] : [
     'scripts/run-people-deadline-wave.mjs',
     '--deadline', opts.deadline,
     '--cursor-capacity-start', opts.capacityStart,
     '--as-of', opts.asOf,
     '--phase', step.phase,
   ];
-  if (step.limit) args.push('--limit', String(step.limit));
-  if (step.deferCatalog) args.push('--defer-catalog');
-  if (step.forceCatalog) args.push('--force-catalog');
-  if (opts.dryRun) args.push('--dry-run');
+  if (!step.catalogOnly) {
+    if (step.limit) args.push('--limit', String(step.limit));
+    if (step.deferCatalog) args.push('--defer-catalog');
+    if (step.forceCatalog) args.push('--force-catalog');
+    if (step.summaryOut) args.push('--summary-out', step.summaryOut);
+    if (step.order) args.push('--order', step.order);
+    if (opts.dryRun) args.push('--dry-run');
+  }
   console.log(`\n=== Deadline day: ${step.id} ===`);
   const result = spawnSync(process.execPath, args, {
     cwd: REPO_ROOT,
@@ -174,16 +256,17 @@ function selfTest() {
   const production = campaignDaySteps({ waves: 2, calibration: false });
   const calibration = campaignDaySteps({ waves: 3, calibration: true });
   if (production.map((step) => step.id).join(',') !==
-      'recovery,extraction-1,editorial-1,resolution-1,extraction-2,editorial-2,resolution-2') {
+      'recovery,extraction-1,editorial-1,dates-1,resolution-1,extraction-2,editorial-2,dates-2,resolution-2') {
     throw new Error(`Unexpected production cadence: ${JSON.stringify(production)}`);
   }
   if (calibration.map((step) => `${step.id}:${step.limit ?? ''}`).join(',') !==
-      'recovery:,identity-calibration:10') {
+      'recovery:,editorial-calibration:5,date-calibration:5,identity-calibration:10') {
     throw new Error(`Unexpected calibration cadence: ${JSON.stringify(calibration)}`);
   }
   if (!production.filter((step) => step.phase === 'extraction').every((step) => step.deferCatalog) ||
-      !production.filter((step) => step.phase === 'editorial').every((step) => step.forceCatalog)) {
-    throw new Error('Production cadence does not coalesce extraction and editorial catalog rebuilds');
+      !production.filter((step) => step.phase === 'editorial').every((step) => step.deferCatalog) ||
+      !production.filter((step) => step.phase === 'dates').every((step) => step.forceCatalog)) {
+    throw new Error('Production cadence does not coalesce extraction, editorial, and date catalog rebuilds');
   }
   const packageScripts = JSON.parse(fs.readFileSync(path.join(REPO_ROOT, 'package.json'), 'utf8')).scripts;
   for (const name of ['people:deadline:calibrate', 'people:deadline:day']) {
@@ -205,17 +288,32 @@ function main() {
   const opts = parseArgs(process.argv.slice(2));
   if (opts.selfTest) return selfTest();
   const steps = campaignDaySteps(opts);
-  if (!opts.calibration && !opts.dryRun && !fs.existsSync(CALIBRATION_FILE)) {
-    throw new Error('Run the post-reset identity calibration before the production day command');
+  if (!opts.calibration && !opts.dryRun &&
+      !calibrationIsCurrent(fs.existsSync(CALIBRATION_FILE) ? readJson(CALIBRATION_FILE) : null, opts.capacityStart)) {
+    throw new Error('Run the post-reset date and identity calibration before the production day command');
   }
-  const state = loadState(opts);
+  let state = loadState(opts);
   const completed = new Set(state.completed);
   for (const step of steps) {
     if (completed.has(step.id)) {
       console.log(`Deadline day: ${step.id} already complete; skip`);
       continue;
     }
-    const status = runStep(step, opts);
+    const isDateCalibration = step.id === 'date-calibration' && !opts.dryRun;
+    const invocation = isDateCalibration ? dateCalibrationStep(step, state,
+      path.join(PEOPLE_DIR, 'generated', 'date-calibration-runs', `${randomUUID()}.json`)) : step;
+    const status = runStep(invocation, opts);
+    if (isDateCalibration && !invocation.catalogOnly) {
+      if (fs.existsSync(invocation.summaryOut)) {
+        state = recordDateCalibrationRun(state, readJson(invocation.summaryOut), invocation);
+        saveState(state);
+      } else if (status === 0) {
+        throw new Error('Date calibration returned no run summary; cannot certify accepted chapters');
+      }
+      if (status === 0 && !acceptedDateCohort(state.dateAcceptedChapters)) {
+        throw new Error(`Date calibration accepted ${state.dateAcceptedChapters?.length ?? 0}/5 distinct chapters; rerun to finish the cohort`);
+      }
+    }
     if (status !== 0) {
       console.error(`Deadline day stopped at ${step.id}; rerun the same command to resume here`);
       process.exit(status);
@@ -227,10 +325,15 @@ function main() {
   }
   if (opts.calibration && !opts.dryRun) {
     writeJsonAtomic(CALIBRATION_FILE, {
-      schemaVersion: 1,
+      schemaVersion: 2,
       completedAt: new Date().toISOString(),
       asOf: opts.asOf,
       deadline: opts.deadline,
+      capacityStart: opts.capacityStart,
+      dateChapters: state.dateAcceptedChapters.length,
+      dateAcceptedChapters: state.dateAcceptedChapters,
+      dateRunSummaries: state.dateRunSummaries,
+      dateConcurrency: 2,
       scopes: 10,
     });
   }

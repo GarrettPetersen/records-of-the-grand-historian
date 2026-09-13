@@ -4,14 +4,21 @@
   "book": "houhanshu",
   "chapter": "001",
   "sourceHash": "sha256:476cf19a6e2a58e933581c7468393a3b2f5f199cdc0bb5ade3551b90b4ffb0ca",
-  "extractionHash": "sha256:a7e9937a294135428da51f464e4e76531741dc59d6b666148bc1e673a4bbc833",
-  "status": "needs-revision",
+  "extractionHash": "sha256:469ff37d2a6049dffe939e2a806bd6fc5065873a4d0a8a47fc32bb52e9f2701b",
+  "status": "audited",
   "reviewer": {
-    "name": "Codex (manual source review)",
-    "independentOfExtractor": true
+    "name": "Codex independent chronology reviewer",
+    "independentOfExtractor": true,
+    "workers": [
+      {
+        "name": "Codex independent chronology reviewer",
+        "agentId": "01a09afe-0c74-7702-bd02-dae13444bc58",
+        "independentOfExtractor": true
+      }
+    ]
   },
-  "reviewedAt": "2026-09-13T06:03:30Z",
-  "summary": "Read all 16 source units in this introductory page. The recorded Northern Song attestations for Fan Ye and Sima Biao date the later publication of their books, not activity of the authors. Targeted failed checks only; other claims remain unapproved.",
+  "reviewedAt": "2026-09-13T13:48:58.533Z",
+  "summary": "Independent chronology approval of the exact candidate-2 job after checking all 16 owned Chinese units, all 19 owned temporal/hint items, and all four owned people. Units s0001-s0008 are title, dynasty/author attribution and textual incorporation; s0009-s0011 identify the Tang commentator; s0012-s0015 describe the work and its authors; s0016 gives the retrospective combined-printing statement. Book-part counts are not personal ages, and none of these units supplies an omitted explicit personal birth, death or age. Every supplementary local quotation was checked against the actual corpus unit and full-unit SHA-256; external textual witnesses were independently read and all twelve cited calendar queries independently rerun. AD 432-446 and AD 266-275 remain event-uncertainty windows, not continuous activity. The AD 1022 printing order is posthumous reception with only a lower publication bound, and Zhenzong's mistaken local reign attribution is explicitly distinguished from his verified reign. Li Xian's conflicting ages 32/34 and the separately witnessed birth/death chronology remain source-qualified rather than harmonized. Traditional ages, lunar/Western-year differences, the Yuanjia textual emendation, and Sima Biao's one-sided death bound are preserved. No unsupported conversion or chronology finding remains within this bounded audit.",
   "reviewedUnits": [
     "s0001",
     "s0002",
@@ -32,30 +39,286 @@
   ],
   "itemChecks": [
     {
-      "id": "claim-8",
-      "verdict": "incorrect",
-      "event": "Unidentified later editors combine earlier historical works.",
-      "reason": "The source dates a Northern Song republication. Fan Ye is identified separately as a Liu Song author, so this later event is not an attestation that he was personally active.",
+      "id": "claim-7",
+      "verdict": "supported",
+      "event": "Fan Ye's own composition of the annals and biographies, after demotion and before execution.",
+      "reason": "The local author and Liu Song affiliation are explicit in s0002-s0003 and s0015, but do not themselves supply numbered years. Independently checked Song shu 069 s0112-s0116 places his demotion and ensuing composition after Yuanjia 9 winter. The checked edition's textual note explicitly emends transmitted 元年 to 九年, supported by the preceding Yuanjia 7 narrative; the candidate preserves that variant and identifies its corrected reading. The calendar query for Liu Song Wendi, Yuanjia 9, month 10 day 1 returns 432-11-09 Julian, establishing the earliest Western year of that winter, not an exact composition date. Song shu 005 s0428/s0438 dates his execution to Yuanjia 22 month 12 yiwei, independently converted to 446-01-23 Julian. Thus AD 432-446 is a source-qualified outer authoring window, not continuous activity, a lifespan, or a claimed completion day.",
       "evidence": [
         {
-          "unit": "s0016",
-          "quote": "北宋真宗時，有人把晉朝司馬彪的《續漢書》八志三十卷與之合刊"
+          "unit": "s0002",
+          "quote": "南朝劉宋"
+        },
+        {
+          "unit": "s0003",
+          "quote": "范曄"
         },
         {
           "unit": "s0015",
-          "quote": "南朝劉宋時的范曄"
+          "quote": "紀和列傳的作者是南朝劉宋時的范曄。"
         }
       ]
     },
     {
-      "id": "claim-19",
-      "verdict": "incorrect",
-      "event": "Unidentified later editors incorporate Sima Biao's treatises.",
-      "reason": "The sentence explicitly calls Sima Biao a Jin author. It attributes the act of combining editions to someone else, not to Sima Biao living in the Northern Song.",
+      "id": "claim-8",
+      "verdict": "supported",
+      "event": "Posthumous reception and combined printing of Fan Ye's base text by later editors, not Fan Ye's personal participation.",
+      "reason": "The subject in s0016 is 有人, not the deceased author. I independently fetched and read the appended National Academy order: it requests permission to collate and print thirty treatise volumes, grants implementation, and dates the dispatch to Qianxing 1 month 11 day 14. The conversion is 1022-12-10 Julian; Zhenzong's independently checked death is 1022-03-23 Julian. The candidate explicitly marks the local reign attribution erroneous. The order is authorization, not proof that physical publication was completed that day. For this authorized printing project, onOrAfter AD 1022 is an appropriate one-sided lower bound with no invented completion endpoint. The event text correctly excludes personal activity by Fan Ye, who was executed in AD 446.",
       "evidence": [
         {
           "unit": "s0016",
-          "quote": "北宋真宗時，有人把晉朝司馬彪的《續漢書》八志三十卷與之合刊"
+          "quote": "有人把晉朝司馬彪的《續漢書》八志三十卷與之合刊"
+        }
+      ]
+    },
+    {
+      "id": "claim-17",
+      "verdict": "supported",
+      "event": "Sima Biao's own secretary appointment and promotion under Jin Wudi during Taishi.",
+      "reason": "The local Western Jin attribution attaches to Sima Biao in s0004-s0006. Jin shu 082 s0091 explicitly records 泰始中，為秘書郎，轉丞, so this is an appointment window, not a date for completing the Xu Han shu. The ruler is Jin Wudi, not Liu Song Mingdi's reused Taishi era. Jin shu 003 s0034 places Wudi's accession in Taishi 1 month 12 bingyin, independently converted to 266-02-08 Julian. The same annals' s0323 changes to Xianning 1 on month 1 day 1, independently converted to 275-02-13 Julian. The AD 266-275 outer year envelope is therefore justified although conventional Taishi year labels are 265-274. Neither endpoint claims an exact appointment date or uninterrupted service.",
+      "evidence": [
+        {
+          "unit": "s0004",
+          "quote": "西晉"
+        },
+        {
+          "unit": "s0005",
+          "quote": "司馬彪"
+        },
+        {
+          "unit": "s0006",
+          "quote": "《續漢書》作者"
+        }
+      ]
+    },
+    {
+      "id": "claim-18",
+      "verdict": "supported",
+      "event": "Posthumous reception and printing of Sima Biao's treatises by later editors, not Sima Biao's personal activity.",
+      "reason": "The explicit later agency 有人 in s0016 is consistent with posthumous reception of the Jin author's treatises. The independently read Qianxing order requests 校勘雕印 and directs implementation; its month 11 day 14 dispatch independently converts to 1022-12-10 Julian. It does not give a physical printing-completion date. Thus onOrAfter AD 1022 is a conservative lower bound for the authorized publication project, not an exact completion year or a lifespan endpoint. The local attribution to Zhenzong's reign is expressly corrected because Song shi 008 places his death in month 2, independently converted to 1022-03-23 Julian. Sima Biao's own death remains on or before AD 307 and this later event does not enter his active hints.",
+      "evidence": [
+        {
+          "unit": "s0016",
+          "quote": "有人把晉朝司馬彪的《續漢書》八志三十卷與之合刊"
+        }
+      ]
+    },
+    {
+      "id": "claim-26",
+      "verdict": "supported",
+      "event": "Li Xian personally presented his annotated Hou Han shu to the Tang court.",
+      "reason": "The local Tang commentator identification in s0010-s0011 matches the crown prince in Old Tang History 005 s0260. The preceding s0258 establishes the change from Shangyuan 3 to Yifeng 1; s0260 explicitly dates the presentation to month 12 bingshen. My independent Tang Gaozong/Yifeng 1/12/bingshen calendar query returns 677-01-11 Julian. AD 677 is therefore correct for this actual event, although the named lunar year conventionally corresponds to 676. Presentation is directly attested; it does not establish activity throughout Tang or the entire commentary's composition period. The posthumous title Zhanghuai in the local heading is not treated as a contemporary honour.",
+      "evidence": [
+        {
+          "unit": "s0010",
+          "quote": "唐"
+        },
+        {
+          "unit": "s0011",
+          "quote": "章懷太子 李賢"
+        }
+      ]
+    },
+    {
+      "id": "claim-31",
+      "verdict": "supported",
+      "event": "Zhenzong's own reign, used as a retrospective chronological reference, not his participation in the printing project.",
+      "reason": "Song shi 006 s0013 supplies the Zhidao era context and s0017 records accession in its third year, third month. The calendar independently places that month within AD 997; its first day is 997-04-10 Julian, not an asserted accession day. Song shi 008 s0674/s0677/s0684/s0686 establishes death on Qianxing 1 month 2 wuwu, independently converted to 1022-03-23 Julian. These are genuine accession/death endpoints for AD 997-1022, rather than a dynasty-wide activity inference. The month 11 publication authorization falls after that death; the candidate correctly treats the local 北宋真宗時 as a mistaken reference for the project and explicitly excludes his participation.",
+      "evidence": [
+        {
+          "unit": "s0016",
+          "quote": "北宋真宗時"
+        }
+      ]
+    },
+    {
+      "id": "claim-32",
+      "verdict": "supported",
+      "event": "Fan Ye's own execution.",
+      "reason": "Song shu 005 s0428 supplies Yuanjia 22 and s0438 explicitly names Fan Ye among those executed on month 12 yiwei. This is Liu Song Wendi's Yuanjia, independently queried with the correct polity and ruler, returning 446-01-23 Julian. The conventional Yuanjia 22 label 445 cannot replace the Western year of its final lunar month. AD 446 is supported at the claim's year precision; no birth is inferred. The local evidence identifies the author, and the claim correctly labels the execution as supplementary research rather than a date stated in this introduction.",
+      "evidence": [
+        {
+          "unit": "s0003",
+          "quote": "范曄"
+        },
+        {
+          "unit": "s0015",
+          "quote": "范曄"
+        }
+      ]
+    },
+    {
+      "id": "claim-33",
+      "verdict": "supported",
+      "event": "Fan Ye's traditional stated age at his own execution.",
+      "reason": "Song shu 069 s0340-s0341 names Fan Ye among the executed and immediately states 曄時年四十八, distinctly from ages of relatives elsewhere in the biography. The age is 48 as traditionally reported, not modern elapsed birthday age. Its context agrees with the independently checked Song shu 005 execution date, Yuanjia 22 month 12 yiwei = 446-01-23 Julian, supporting the attached AD 446 year. The candidate preserves the age without calculating a precise birth year from it; this also avoids subtracting inclusive age from the wrong Western-year label.",
+      "evidence": [
+        {
+          "unit": "s0003",
+          "quote": "范曄"
+        },
+        {
+          "unit": "s0015",
+          "quote": "范曄"
+        }
+      ]
+    },
+    {
+      "id": "claim-34",
+      "verdict": "supported",
+      "event": "Sima Biao's own death during the late reign of Jin Huidi.",
+      "reason": "The independently read Jin shu 082 local and external biography witnesses say 惠帝末年卒. This gives a late-reign placement but no numbered death year. Jin shu 004's Guangxi 1 context and s0360 date Huidi's death to month 11 gengwu, independently converted to 307-01-08 Julian. Consequently onOrBefore AD 307 is a supported upper year bound. The candidate retains the qualitative late-reign restriction rather than inventing a lower endpoint, selecting an exact death year, or treating the emperor's own death day as Sima Biao's. The Jin author named locally is the same biography subject.",
+      "evidence": [
+        {
+          "unit": "s0004",
+          "quote": "西晉"
+        },
+        {
+          "unit": "s0005",
+          "quote": "司馬彪"
+        }
+      ]
+    },
+    {
+      "id": "claim-35",
+      "verdict": "supported",
+      "event": "Sima Biao's approximate traditional age at his own death.",
+      "reason": "Jin shu 082 s0102 preserves the death and 六十餘 wording; its local 時所 reading is corroborated by the independently fetched Shidianguji witness 惠帝末年卒，时年六十余. The candidate correctly reports over sixty rather than exactly sixty or a modern elapsed age. Its date context retains death in Huidi's late reign, bounded only on or before AD 307 by the independently converted imperial death endpoint. Neither an exact age, a precise death year, nor a birth year follows from this testimony.",
+      "evidence": [
+        {
+          "unit": "s0005",
+          "quote": "司馬彪"
+        },
+        {
+          "unit": "s0016",
+          "quote": "晉朝司馬彪"
+        }
+      ]
+    },
+    {
+      "id": "claim-36",
+      "verdict": "supported",
+      "event": "Li Xian's own birth, retained as an explicitly source-qualified annal witness.",
+      "reason": "Old Tang History 004 s0051/s0138 identifies Yonghui 5 under Gaozong; s0153 supplies month 12 and s0154 explicitly records the birth of imperial son Xian on wuwu. The independent calendar query returns 655-01-29 Julian despite the conventional lunar-year label 654. The identification is consistent with the Zhanghuai prince named locally and in Old Tang History printed volume 86, repository chapter 090. I independently checked its s0233 age 32 and New Tang History 081 s0137 age 34. Both conflict with the ordinary inclusive count of the annal's Yonghui 5 birth and Wenming 1 death, 684-654+1 = 31 named lunar years. The candidate explicitly retains both conflicting age witnesses and source-qualifies the birth/death statements without selecting a canonical age or inferring an alternative exact birth. Supported as documented conflicting testimony, not a harmonized lifespan.",
+      "evidence": [
+        {
+          "unit": "s0010",
+          "quote": "唐"
+        },
+        {
+          "unit": "s0011",
+          "quote": "章懷太子 李賢"
+        }
+      ]
+    },
+    {
+      "id": "claim-37",
+      "verdict": "supported",
+      "event": "Li Xian's own coerced death in the Old Tang History witness, not his later honours.",
+      "reason": "Old Tang History printed volume 86, repository 090 s0232-s0233, supplies Wenming 1 and then the coercion to suicide. Old Tang History 006 s0025/s0036 independently identifies Wenming's establishment under Ruizong with the dowager ruling and replacement by Guangzhai in month 9; the checked calendar places Wenming's months in AD 684. Only the Western year is asserted. Repository 090 s0234-s0236 explicitly marks the later restoration, burial and Zhanghuai title as posthumous. The candidate also preserves the age 32 witness and New Tang History 081 age 34 witness, neither of which matches inclusive counting from the annal birth. This remains supported source-qualified testimony with an explicitly unresolved historical disagreement, not an unsupported conversion or a silently harmonized life chronology.",
+      "evidence": [
+        {
+          "unit": "s0011",
+          "quote": "章懷太子 李賢"
+        }
+      ]
+    },
+    {
+      "id": "claim-38",
+      "verdict": "supported",
+      "event": "Zhenzong's own death before the later printing authorization.",
+      "reason": "Song shi 008 s0674 establishes Qianxing 1, s0677 supplies month 2, and s0684/s0686 records worsening illness on wuwu and death that same day. Independent conversion returns 1022-03-23 Julian, supporting AD 1022. The separately verified month 11 day 14 dispatch is 1022-12-10 Julian, so it cannot establish the already deceased ruler's participation. The claim correctly distinguishes this supplementary personal death from the local introduction's inaccurate reign attribution.",
+      "evidence": [
+        {
+          "unit": "s0016",
+          "quote": "北宋真宗時"
+        }
+      ]
+    },
+    {
+      "id": "claim-39",
+      "verdict": "supported",
+      "event": "Zhenzong's own explicitly narrated birth.",
+      "reason": "Song shi 006 s0003 dates the preceding omen to Qiande 5; s0004 says 明年 and records birth on month 12 day 2. The mother's dream and pregnancy are contextual, not a sibling's birth or a regnal accession. Song shi 002 s0147/s0175 confirms the following year's Kaibao 1 label and the actual change of era in month 11, before this birth. My independent Song Taizu/Kaibao 1/12/2 calendar query returns 968-12-23 Julian, supporting the candidate's AD 968. The source provides the birth explicitly; no birth year is derived from reign or death age. This date's Julian-to-proleptic-Gregorian distinction does not alter its Western year.",
+      "evidence": [
+        {
+          "unit": "s0016",
+          "quote": "北宋真宗時"
+        }
+      ]
+    },
+    {
+      "id": "claim-40",
+      "verdict": "supported",
+      "event": "Zhenzong's traditional inclusive age at his own death.",
+      "reason": "Song shi 008 s0686 explicitly says 年五十五 for the emperor who dies that same day, not for a relative. The attached date inherits Qianxing 1 month 2 wuwu from s0674/s0677/s0684 and independently converts to 1022-03-23 Julian. Age 55 is preserved as traditional inclusive age, not 55 elapsed birthdays. The separately witnessed AD 968 birth is compatible with the inclusive year count 1022-968+1 = 55; this comparison tests coherence and is not used to infer the birth date.",
+      "evidence": [
+        {
+          "unit": "s0016",
+          "quote": "北宋真宗時"
+        }
+      ]
+    },
+    {
+      "id": "hints-p001",
+      "verdict": "supported",
+      "event": "Summary of Fan Ye's own possible authoring window.",
+      "reason": "The hint agrees with claim-7's source-qualified bounds: the corrected Yuanjia 9 winter demotion/composition narrative gives AD 432 as the earliest year and his independently dated execution supplies AD 446 as the latest. Claim-7 preserves the transmitted 元年 variant and the edition's correction, so the hint is read with that qualification rather than as an unqualified independent date claim. It expressly denies continuous activity or a lifespan and excludes the posthumous Song printing. No missing local birth, death or age has been found in the 16-unit introduction.",
+      "evidence": [
+        {
+          "unit": "s0003",
+          "quote": "范曄"
+        },
+        {
+          "unit": "s0015",
+          "quote": "紀和列傳的作者是南朝劉宋時的范曄。"
+        }
+      ]
+    },
+    {
+      "id": "hints-p002",
+      "verdict": "supported",
+      "event": "Summary of Sima Biao's own appointment window and bounded death.",
+      "reason": "The appointment hint uses the independently checked Jin Wudi Taishi envelope AD 266-275, not the conventional labels 265-274 or Liu Song's reused era. It denies continuous service. The death hint faithfully preserves 惠帝末年卒 as on or before AD 307, with no exact death or birth year; the qualitative age over sixty remains in its separate supported claim. Neither hint imports the AD 1022 or later publication into Sima Biao's activity. The scope contains no omitted local life date that would require a new biography expansion.",
+      "evidence": [
+        {
+          "unit": "s0004",
+          "quote": "西晉"
+        },
+        {
+          "unit": "s0005",
+          "quote": "司馬彪"
+        },
+        {
+          "unit": "s0014",
+          "quote": "司馬彪續作"
+        }
+      ]
+    },
+    {
+      "id": "hints-p003",
+      "verdict": "supported",
+      "event": "Summary of Li Xian's own presentation of the commentary.",
+      "reason": "The hint accurately summarizes the directly attested court presentation, independently verified as Yifeng 1 lunar month 12 bingshen = 677-01-11 Julian. It does not use the conventional 676 label as the actual event year, infer the full composition period, or treat the posthumous Zhanghuai title as contemporary. It makes no life-date or age assertion that would silently resolve the conflicting age witnesses explicitly retained in claims 36-37.",
+      "evidence": [
+        {
+          "unit": "s0010",
+          "quote": "唐"
+        },
+        {
+          "unit": "s0011",
+          "quote": "章懷太子 李賢"
+        }
+      ]
+    },
+    {
+      "id": "hints-p004",
+      "verdict": "supported",
+      "event": "Summary of Zhenzong's own reign as a reference, explicitly excluding post-death printing.",
+      "reason": "The AD 997-1022 endpoints agree with the independently sourced accession in Zhidao 3 month 3 and death in Qianxing 1 month 2. Those are reign endpoints, not an inferred lifespan; the separate birth remains AD 968. The hint expressly excludes participation in the printing order issued later in Qianxing 1, after the ruler's death. Continued use of his era name through that year is not evidence that he was still reigning or alive.",
+      "evidence": [
+        {
+          "unit": "s0016",
+          "quote": "北宋真宗時"
         }
       ]
     }
@@ -63,46 +326,534 @@
   "personChecks": [
     {
       "id": "p001",
-      "verdict": "incorrect",
-      "event": "Later transmission of Fan Ye's book.",
-      "reason": "Distinguish a work's later reception from its author's own chronology. The current late attestation should not contribute to Fan Ye's activity summary.",
+      "verdict": "supported",
+      "reason": "I compared claims 7, 8, 32, 33 and hints-p001 with all local mentions at s0003/s0008/s0015/s0016 and the adjacent Liu Song heading. The author's own composition is bounded by the source-qualified corrected winter demotion and execution, AD 432-446, not by all Liu Song years. His death and reported age 48 are independently witnessed, with no age-derived birth. The Song printing event is expressly posthumous and does not feed his activity hint. The local numbers eight/thirty/ten/eighty are book divisions, not ages; none of the 16 source units omits an explicit personal birth, death or age. The external Yuanjia 元年/九年 variant remains documented rather than suppressed.",
       "evidence": [
         {
+          "unit": "s0003",
+          "quote": "范曄"
+        },
+        {
+          "unit": "s0008",
+          "quote": "三十卷補入范曄所著《後漢書》"
+        },
+        {
           "unit": "s0015",
-          "quote": "紀和列傳的作者是南朝劉宋時的范曄"
+          "quote": "南朝劉宋時的范曄"
         },
         {
           "unit": "s0016",
-          "quote": "北宋真宗時，有人把晉朝司馬彪的《續漢書》八志三十卷與之合刊"
+          "quote": "與之合刊"
         }
       ]
     },
     {
       "id": "p002",
-      "verdict": "incorrect",
-      "event": "Later transmission of Sima Biao's treatises.",
-      "reason": "The Jin author is not a participant living during this Northern Song publication; his textual legacy and his life require separate chronology.",
+      "verdict": "supported",
+      "reason": "I compared claims 17, 18, 34, 35 and hints-p002 across s0004-s0008 and s0013-s0016. The Western Jin author identification supports the targeted biography reference. His Taishi appointment window AD 266-275, late-Huidi death on or before AD 307, and approximate traditional age over sixty are mutually coherent at their stated precision. No exact birth or death is manufactured. The text's 續作 concerns the work, not activity later than Fan Ye; the AD 1022 or later printing is explicitly a posthumous editorial event and is excluded from activity hints. All local units were checked and contain no additional explicit personal life date requiring extraction.",
+      "evidence": [
+        {
+          "unit": "s0004",
+          "quote": "西晉"
+        },
+        {
+          "unit": "s0005",
+          "quote": "司馬彪"
+        },
+        {
+          "unit": "s0014",
+          "quote": "司馬彪續作"
+        },
+        {
+          "unit": "s0016",
+          "quote": "有人把晉朝司馬彪的《續漢書》八志三十卷與之合刊"
+        }
+      ]
+    },
+    {
+      "id": "p003",
+      "verdict": "supported",
+      "reason": "I compared claims 26, 36, 37 and hints-p003 against the Tang commentary heading and independently verified annal/biographical passages. Presentation in AD 677 is personal scholarly activity. The birth witness converts to AD 655, and the coerced-death witness to AD 684; the candidate expressly qualifies both as source reports. I separately verified the Old Tang History age 32 and New Tang History age 34 and their mismatch with 31 inclusive named lunar years. Their preservation, without a canonical age or a silently reconciled birth, is legitimate supported uncertainty, not a reason to select a winning biography. The later Zhanghuai honour is posthumous. The 16-unit source has no omitted explicit birth, death or age; no new external biography facts are required.",
+      "evidence": [
+        {
+          "unit": "s0010",
+          "quote": "唐"
+        },
+        {
+          "unit": "s0011",
+          "quote": "章懷太子 李賢"
+        }
+      ]
+    },
+    {
+      "id": "p004",
+      "verdict": "supported",
+      "reason": "I compared claims 31, 38, 39, 40 and hints-p004 with s0016 and the independently read Song shi references. Birth in AD 968, reign AD 997-1022, death in AD 1022, and traditional inclusive age 55 are coherent and separately source-grounded. Qianxing 1 continued as an era label after his death; it cannot establish that he authorized or participated in the month 11 printing. The candidate explicitly rejects the local erroneous reign attribution for that project while retaining Zhenzong as the person actually named by the introduction. No other local unit supplies an omitted life date for him.",
       "evidence": [
         {
           "unit": "s0016",
-          "quote": "北宋真宗時，有人把晉朝司馬彪的《續漢書》八志三十卷與之合刊"
+          "quote": "北宋真宗時"
         }
       ]
     }
   ],
-  "findings": [
+  "findings": [],
+  "references": [
     {
-      "items": [
-        "claim-8",
-        "claim-19",
-        "claim-9",
-        "claim-20",
-        "p001",
-        "p002"
-      ],
-      "problem": "The later republication of earlier authors' works is recorded as personal activity. The accompanying event claims also need an explicit distinction between posthumous reception and living participation.",
-      "action": "Delete the two late personal attestations. Retain the publication history only as explicitly posthumous work-reception events, excluding them from life/activity inference. Independently verify the remaining dynasty-window conversions and date claims before approval."
+      "book": "songshu",
+      "chapter": "069",
+      "unit": "s0112",
+      "quote": "元嘉九年冬，彭城太妃薨，將葬，祖夕，僚故並集東府。",
+      "sourceHash": "sha256:51dc5f5d4d1e1f1319dd7525c3ff25ed56c20513c9e7ebe77aabcdec491dc55a",
+      "reason": "Corrected Yuanjia 9 winter dates the demotion/composition sequence; the independently read edition note preserves transmitted 元年."
+    },
+    {
+      "book": "songshu",
+      "chapter": "069",
+      "unit": "s0115",
+      "quote": "義康大怒，左遷曄宣城太守。",
+      "sourceHash": "sha256:32a7b3d444d9f7d8c97a548ace710539bbde5670916c59da6f82ed621ffc8cb7",
+      "reason": "Fan Ye is demoted immediately before the composition statement, in the preceding Yuanjia 9 winter context."
+    },
+    {
+      "book": "songshu",
+      "chapter": "069",
+      "unit": "s0116",
+      "quote": "不得志，乃刪眾家後漢書為一家之作。",
+      "sourceHash": "sha256:b7de013f7faf5c6cffcf87ecc3047ed73e799cc4fa67622971235fa446f34c0c",
+      "reason": "Fan Ye personally compiles the history following demotion; the event is authoring, not later publication."
+    },
+    {
+      "book": "songshu",
+      "chapter": "069",
+      "unit": "s0341",
+      "quote": "曄時年四十八。",
+      "sourceHash": "sha256:14b5046d1f8a81bc486da2c438f04db433b1c763daf80227eb7805b1130f7782",
+      "reason": "The preceding execution list includes Fan Ye; this reports his traditional death age 48, not a relative's age."
+    },
+    {
+      "book": "songshu",
+      "chapter": "005",
+      "unit": "s0428",
+      "quote": "二十二年春正月辛卯朔，改用御史中丞何承天元嘉新曆。",
+      "sourceHash": "sha256:94fb4f330930cc83ddd186dabdc1a5469309da67402148c45c44c69812bbf890",
+      "reason": "This establishes Yuanjia 22 for the later month 12 execution entry and agrees with the calendar's first-day cycle."
+    },
+    {
+      "book": "songshu",
+      "chapter": "005",
+      "unit": "s0438",
+      "quote": "十二月乙未，太子詹事范曄謀反，及黨與皆伏誅。",
+      "sourceHash": "sha256:4859688e1597a26930f8f6f84a8232507b67b716b4c1dae44989d5e1b384347e",
+      "reason": "The annal names Fan Ye's execution on month 12 yiwei; the correct Yuanjia 22 conversion is Western AD 446."
+    },
+    {
+      "book": "jinshu",
+      "chapter": "082",
+      "unit": "s0086",
+      "quote": "司馬彪，字紹統，高陽王睦之長子也。",
+      "sourceHash": "sha256:c2db7d4a4a07b2f5d4b1ba51fe27ab0adb3cb9a3863aed46181c0b926932cab0",
+      "reason": "The biography identifies Sima Biao, matching the Western Jin author in the owned source."
+    },
+    {
+      "book": "jinshu",
+      "chapter": "082",
+      "unit": "s0091",
+      "quote": "泰始中，為秘書郎，轉丞。",
+      "sourceHash": "sha256:a70ea0e8bdf20c824fe786fd6b1837922e7b1c396683995985493180beb73fe1",
+      "reason": "Sima Biao's secretary appointment and promotion are explicitly in Jin Wudi's Taishi, without an exact date or service duration."
+    },
+    {
+      "book": "jinshu",
+      "chapter": "082",
+      "unit": "s0102",
+      "quote": "惠帝末年卒，時所六十餘。",
+      "sourceHash": "sha256:a1800288361002c972227339c61d8688cf11a19ad91764c2224f31d70b49631f",
+      "reason": "Late-Huidi death and approximate age over sixty are preserved; the local 時所 wording is corroborated by external 時年."
+    },
+    {
+      "book": "jinshu",
+      "chapter": "003",
+      "unit": "s0034",
+      "quote": "泰始元年冬十二月丙寅，設壇于南郊，百僚在位及匈奴南單于四夷會者數萬人，柴燎告類于上帝曰：「皇帝臣炎敢用玄牡明告于皇皇后帝：魏帝稽協皇運，紹天明命以命炎。",
+      "sourceHash": "sha256:46b3bef4ddf20b40fddda21ed2315bd5da87673aafe461702f7a9de6db83dd5b",
+      "reason": "Jin Wudi's accession at Taishi 1 month 12 bingyin converts to AD 266, establishing the possible appointment envelope's lower year."
+    },
+    {
+      "book": "jinshu",
+      "chapter": "003",
+      "unit": "s0323",
+      "quote": "咸寧元年春正月戊午朔，大赦，改元。",
+      "sourceHash": "sha256:b8717ca5844f18a29f5c4f9bfd1dc347fbba8b80fad8b1e999ded4cf6211307f",
+      "reason": "The Xianning New Year change converts to 275-02-13 Julian, so the preceding Taishi can extend into Western AD 275."
+    },
+    {
+      "book": "jinshu",
+      "chapter": "004",
+      "unit": "s0433",
+      "quote": "光熙元年春正月戊子朔，日有蝕之。",
+      "sourceHash": "sha256:502c691189a16f4855ea293021a26c4f9c42c5224fad85386de7137c7879a290",
+      "reason": "This establishes Guangxi 1 context for the later month 11 death; physical narrative order, not numeric unit-ID sorting, determines inheritance."
+    },
+    {
+      "book": "jinshu",
+      "chapter": "004",
+      "unit": "s0360",
+      "quote": "十一月庚午，帝崩于顯陽殿，時年四十八，葬太陽陵。",
+      "sourceHash": "sha256:4639a905b54ed1cd0b83331570661884c8d2340807214ed6c59e665e01e02465",
+      "reason": "Huidi's death converts to 307-01-08 Julian, giving only Sima Biao's upper death-year bound, not Sima Biao's exact date."
+    },
+    {
+      "book": "jiutangshu",
+      "chapter": "004",
+      "unit": "s0051",
+      "quote": "永徽元年春正月辛丑朔，上不受朝，詔改元。",
+      "sourceHash": "sha256:c37bbd3543440ac22e0c6505e7c9ccd5fcda6a9d984c2b78e4ce638f56a059ba",
+      "reason": "This identifies Gaozong's Yonghui era for the later fifth-year birth narrative."
+    },
+    {
+      "book": "jiutangshu",
+      "chapter": "004",
+      "unit": "s0138",
+      "quote": "五年春三月戊午，幸萬年宮。",
+      "sourceHash": "sha256:8ce2fa806c5b431987d04f20a873ed89fa1ceea2daae37f20551661509636877",
+      "reason": "This establishes Yonghui 5 before the month 12 birth; it is not an independent birth date."
+    },
+    {
+      "book": "jiutangshu",
+      "chapter": "004",
+      "unit": "s0153",
+      "quote": "十二月癸丑，倭國獻琥珀、碼瑙，琥珀大如斗，碼瑙大如五斗器。",
+      "sourceHash": "sha256:c646c3a6726345f89b8dcb50f7d7b76c98bbe0bc92f911178bf53243e1da6baf",
+      "reason": "This month 12 heading is inherited by the immediately following wuwu birth entry."
+    },
+    {
+      "book": "jiutangshu",
+      "chapter": "004",
+      "unit": "s0154",
+      "quote": "戊午，發京師謁昭陵，在路生皇子賢。",
+      "sourceHash": "sha256:91e99b2443285cc2e027a7c6e8c21408a37145d57b10fba085f4d3683344a3ab",
+      "reason": "Imperial son Xian's birth is expressly recorded; the inherited date converts to AD 655 rather than the conventional lunar-year label 654."
+    },
+    {
+      "book": "jiutangshu",
+      "chapter": "005",
+      "unit": "s0258",
+      "quote": "壬申，以陳州言鳳凰見於宛丘，改上元三年曰儀鳳元年，大赦。",
+      "sourceHash": "sha256:97cf27d981291f142576673935b5efdfd78241e813cd7f316af334d98e017f22",
+      "reason": "This establishes Yifeng 1 immediately before the month 12 presentation, replacing Shangyuan 3."
+    },
+    {
+      "book": "jiutangshu",
+      "chapter": "005",
+      "unit": "s0260",
+      "quote": "十二月丙申，皇太子賢上所注《後漢書》，賜物三萬段。",
+      "sourceHash": "sha256:a24f7eb243d00d8ee8dbf106dc4e5f7bf49821c1578f20af6f2ae431d4c6b4f6",
+      "reason": "Li Xian presents the commentary on month 12 bingshen, independently converted to 677-01-11 Julian."
+    },
+    {
+      "book": "jiutangshu",
+      "chapter": "090",
+      "unit": "s0203",
+      "quote": "章懷太子賢，字明允，高宗第六子也。",
+      "sourceHash": "sha256:c93f9ea36668b560cc0381a1a6b9a98272b25ca00f7a3eb11e155be0379874ee",
+      "reason": "Repository chapter 090 is printed Old Tang History volume 86; the subject is Zhanghuai prince Xian."
+    },
+    {
+      "book": "jiutangshu",
+      "chapter": "090",
+      "unit": "s0232",
+      "quote": "文明元年，則天臨朝，令左金吾將軍丘神勣往巴州檢校賢宅，以備外虞。",
+      "sourceHash": "sha256:ae490c61b80dcc6ea33462c703432f48dfe8f5bb62c17d7a55eb81c7bb45f1fa",
+      "reason": "Wenming 1 and Wu's regency supply context for the subsequent coerced death of Li Xian."
+    },
+    {
+      "book": "jiutangshu",
+      "chapter": "090",
+      "unit": "s0233",
+      "quote": "神勣遂閉於別室，逼令自殺，年三十二。",
+      "sourceHash": "sha256:04a97d0277f8749728f6d965c6ae60d367e34b1af11738eeec5643e85ccdf1b7",
+      "reason": "This reports coerced suicide and age 32, retained as a conflicting witness rather than used to overwrite the annal birth."
+    },
+    {
+      "book": "jiutangshu",
+      "chapter": "090",
+      "unit": "s0234",
+      "quote": "則天舉哀於顯福門，貶神勣為疊州刺史，追封賢為雍王。",
+      "sourceHash": "sha256:eb14d8ba420dd2e98df0357808fe647128a86b9412c90d4eb2be3a064126bea9",
+      "reason": "The restoration is explicitly posthumous, not continued personal activity."
+    },
+    {
+      "book": "jiutangshu",
+      "chapter": "090",
+      "unit": "s0235",
+      "quote": "神龍初，追贈司徒，仍遣使迎其喪柩，陪葬於乾陵。",
+      "sourceHash": "sha256:f0af43559f2d972b82f37d5f039346627da067a3068dafd97d2882fe35667e3b",
+      "reason": "Later honours and retrieval of the coffin are posthumous events, not evidence for extending the lifespan."
+    },
+    {
+      "book": "jiutangshu",
+      "chapter": "090",
+      "unit": "s0236",
+      "quote": "睿宗踐祚，又追贈皇太子，諡曰章懷。",
+      "sourceHash": "sha256:92782ed3e456b771c700d335cd55a7b290f969154c18f01e2482920b6917db52",
+      "reason": "Zhanghuai is explicitly a later posthumous title; its appearance in the introduction does not date the prince's living scholarship."
+    },
+    {
+      "book": "songshi",
+      "chapter": "006",
+      "unit": "s0003",
+      "quote": "初，乾德五年，五星從鎮星聚奎。",
+      "sourceHash": "sha256:3f0a47e0cd0cc38cbc46de18b0a59761196a2e023d3b2be7be858d7edccb7e41",
+      "reason": "Qiande 5 dates the preceding omen; the next unit's 明年 advances to the following year."
+    },
+    {
+      "book": "songshi",
+      "chapter": "006",
+      "unit": "s0004",
+      "quote": "明年正月，后夢以裾承日，有娠，十二月二日生于開封府第，赤光照室，左足指有文成「天」字。",
+      "sourceHash": "sha256:68e77257e98cd36ad7ad57865e50e07b5334ddf6938961709a90c1cddc2c620c",
+      "reason": "Zhenzong's birth is explicitly month 12 day 2 in that following year; pregnancy and dream context are not the birth event."
+    },
+    {
+      "book": "songshi",
+      "chapter": "006",
+      "unit": "s0013",
+      "quote": "至道元年八月立為皇太子，改今諱，仍判府事。",
+      "sourceHash": "sha256:2017302b808da10d4c1ada492ceb35c557babe3cdf2254ae8e1e822661d9d346",
+      "reason": "This supplies the Zhidao era inherited by the subsequent third-year accession."
+    },
+    {
+      "book": "songshi",
+      "chapter": "006",
+      "unit": "s0017",
+      "quote": "三年三月，太宗崩，奉遺制即皇帝位于柩前。",
+      "sourceHash": "sha256:b0119889c59cfdb33ed105c31901365c8775bb2d6acbe7b831f4ee28d08fe1d2",
+      "reason": "Zhenzong's accession is recorded in Zhidao 3 month 3, independently placed within AD 997."
+    },
+    {
+      "book": "songshi",
+      "chapter": "008",
+      "unit": "s0674",
+      "quote": "乾興元年春正月辛未朔，改元。",
+      "sourceHash": "sha256:21b66ce532bbac8a24380bee702b7d2cbfc1edd4f640ec8a9a710bc1fd5101ab",
+      "reason": "Qianxing 1 supplies the death-year context; retaining that era label does not mean Zhenzong survived the whole year."
+    },
+    {
+      "book": "songshi",
+      "chapter": "008",
+      "unit": "s0677",
+      "quote": "二月庚子，大赦天下。",
+      "sourceHash": "sha256:aef566a7fc7a5fb2b218145fb47265c73e84d2a4ee4d21e64757377bbac7ae6d",
+      "reason": "This establishes month 2 for the later wuwu illness and same-day death."
+    },
+    {
+      "book": "songshi",
+      "chapter": "008",
+      "unit": "s0684",
+      "quote": "戊午，帝大漸，遺詔皇太子于柩前即皇帝位。",
+      "sourceHash": "sha256:df532cad945374dba3e99b31cc4e4a109c6a88be74b3cdf18912ab7c8ac1b6e9",
+      "reason": "This establishes wuwu and the succession instruction; the death two units later inherits the day."
+    },
+    {
+      "book": "songshi",
+      "chapter": "008",
+      "unit": "s0686",
+      "quote": "帝是日崩于延慶殿，年五十五，在位二十六年。",
+      "sourceHash": "sha256:b16a074540cb011aaa841873fbac22ee794bfe6adbe7ff99cd696a3bb8d658a9",
+      "reason": "This explicitly records the emperor's death and traditional age 55, independently converted to AD 1022."
+    },
+    {
+      "book": "xintangshu",
+      "chapter": "081",
+      "unit": "s0117",
+      "quote": "章懷太子賢字明允。",
+      "sourceHash": "sha256:df46d8c096f315d31a678cb538c2b1b7326291d1781ccddb00c0f332c09be263",
+      "reason": "This identifies the New Tang History subject as Zhanghuai prince Xian."
+    },
+    {
+      "book": "xintangshu",
+      "chapter": "081",
+      "unit": "s0137",
+      "quote": "武后得政，詔左金吾將軍丘神勣檢衛賢第，迫令自殺，年三十四。",
+      "sourceHash": "sha256:0b289ae6dddb386343de97913a6d19f07a5fb72e24ce10fccbb2db436f4f166e",
+      "reason": "This reports age 34 at coerced death, independently confirming the witness conflicting with age 32 and the annal-based inclusive count."
+    },
+    {
+      "url": "https://zh.wikisource.org/wiki/宋書/卷69",
+      "title": "Song shu 69, textual note to Fan Ye's demotion",
+      "quote": "「九年」各本及南史並作「元年」",
+      "kind": "external",
+      "sourceHash": "sha256:ead7490f982b171b9094bdaa997b5f43671c73f7633fcc1682aad96f879552a6",
+      "accessedAt": "2026-09-13T13:47:39Z",
+      "reason": "Independently opened and read the textual note: transmitted 元年 is emended to 九年 using the funeral and preceding Yuanjia 7 chronology. The candidate expressly preserves the variant while qualifying its corrected authoring window."
+    },
+    {
+      "url": "https://www.shidianguji.com/zh/book/LS0003/chapter/1j7lpp4fmob3w_261",
+      "title": "Hou Han shu, appended Zhongshu Menxia order to the National Academy",
+      "quote": "其後漢志三十卷，欲望聖慈許令校勘雕印。",
+      "kind": "external",
+      "sourceHash": "sha256:e59fde91f6487f916822fd767f9aade27e6ade84def84e1c7a02e388adb7e0be",
+      "accessedAt": "2026-09-13T13:47:39Z",
+      "reason": "Independently fetched and read the appended National Academy order's actual article text. This requests collation and printing of the thirty treatise volumes and is followed by implementation authorization, not a physical-publication completion statement."
+    },
+    {
+      "url": "https://www.shidianguji.com/zh/book/LS0003/chapter/1j7lpp4fmob3w_261",
+      "title": "Dated endorsement of the Hou Han shu printing petition",
+      "quote": "乾興元年十一月十四日牒。",
+      "kind": "external",
+      "sourceHash": "sha256:5e6e3caa7212bb682b300aa4621ffaf2be75c4de2656b89b522397cec36c1b59",
+      "accessedAt": "2026-09-13T13:47:39Z",
+      "reason": "Independently fetched and read the dated dispatch alongside its permission and implementation wording. The date converts to 1022-12-10 Julian, after Zhenzong's month 2 death; physical completion remains undated."
+    },
+    {
+      "url": "https://www.shidianguji.com/book/LS0005/chapter/LS0005_1084",
+      "title": "Jin shu 82, Sima Biao biography",
+      "quote": "惠帝末年卒，时年六十余。",
+      "kind": "external",
+      "sourceHash": "sha256:eaa9e6b9d5c4b9948ba1687a22efa5476267479183d94ee0ea238295ef4a1216",
+      "accessedAt": "2026-09-13T13:47:39Z",
+      "reason": "Independently fetched and read the biography's actual article text, corroborating late-Huidi death and approximate age over sixty, including 時年 where the local corpus has 時所. No exact life year is supplied."
+    },
+    {
+      "url": "https://sinocal.sinica.edu.tw/luso.php",
+      "title": "Academia Sinica calendar conversion: 唐 高宗 儀鳳 1/12/丙申",
+      "quote": "西元677年1月11日",
+      "kind": "external",
+      "sourceHash": "sha256:f59428990f245f7d8921f74daeb8ce0e6dece2023fa6606f897aa7efccba00b5",
+      "accessedAt": "2026-09-13T13:47:39Z",
+      "reason": "Tang/Gaozong/Yifeng 1/month 12/bingshen independently returns Julian 677-01-11, establishing AD 677 for the presentation rather than the conventional 676 year label. Query rerun through the official form using swDate=1582/10/15; pre-reform results are Julian, not Gregorian."
+    },
+    {
+      "url": "https://sinocal.sinica.edu.tw/luso.php",
+      "title": "Academia Sinica calendar conversion: 唐 高宗 永徽 5/12/戊午",
+      "quote": "西元655年1月29日",
+      "kind": "external",
+      "sourceHash": "sha256:8ab97a1137e8cafbfb9c149e17d93b74ebe5ffaa215b842a8bc52bc3ed82bd36",
+      "accessedAt": "2026-09-13T13:47:39Z",
+      "reason": "Tang/Gaozong/Yonghui 5/month 12/wuwu independently returns Julian 655-01-29, establishing AD 655 for the annal birth witness, whose lunar-year label is 654. Query rerun through the official form using swDate=1582/10/15; pre-reform results are Julian, not Gregorian."
+    },
+    {
+      "url": "https://sinocal.sinica.edu.tw/luso.php",
+      "title": "Academia Sinica calendar conversion: 南朝宋 文帝 元嘉 22/12/乙未",
+      "quote": "西元446年1月23日",
+      "kind": "external",
+      "sourceHash": "sha256:de2603686ec860a79499b3042cb339b34d6f9999925dedf546e865be75b113d8",
+      "accessedAt": "2026-09-13T13:47:39Z",
+      "reason": "The form's 前宋/Wendi/Yuanjia 22/month 12/yiwei independently returns Julian 446-01-23, establishing AD 446 for Fan Ye's death and age context. Query rerun through the official form using swDate=1582/10/15; pre-reform results are Julian, not Gregorian."
+    },
+    {
+      "url": "https://sinocal.sinica.edu.tw/luso.php",
+      "title": "Academia Sinica calendar conversion: 南朝宋 文帝 元嘉 9/10/1",
+      "quote": "西元432年11月9日",
+      "kind": "external",
+      "sourceHash": "sha256:7f0fc9c099018a2bca4f1201d1de6478e9b05786872d12745c176f0ce64baa4a",
+      "accessedAt": "2026-09-13T13:47:39Z",
+      "reason": "The form's 前宋/Wendi/Yuanjia 9/month 10/day 1 independently returns Julian 432-11-09, establishing the earliest Western year of winter, not an exact composition date. Query rerun through the official form using swDate=1582/10/15; pre-reform results are Julian, not Gregorian."
+    },
+    {
+      "url": "https://sinocal.sinica.edu.tw/luso.php",
+      "title": "Academia Sinica calendar conversion: 晉 武帝 泰始 1/12/丙寅",
+      "quote": "西元266年2月8日",
+      "kind": "external",
+      "sourceHash": "sha256:fe119d4bf39693beb14b4f924a80c217373cb70eb5b48b5cd62583898c709924",
+      "accessedAt": "2026-09-13T13:47:39Z",
+      "reason": "西晉/Wudi/Taishi 1/month 12/bingyin independently returns Julian 266-02-08, corroborating the primary accession and the AD 266 lower year of the appointment envelope. Query rerun through the official form using swDate=1582/10/15; pre-reform results are Julian, not Gregorian."
+    },
+    {
+      "url": "https://sinocal.sinica.edu.tw/luso.php",
+      "title": "Academia Sinica calendar conversion: 晉 武帝 咸寧 1/1/1",
+      "quote": "西元275年2月13日",
+      "kind": "external",
+      "sourceHash": "sha256:7cf378b96197876ce9ca40171d02f80cea9a8e360efca97c3e594715ace29baa",
+      "accessedAt": "2026-09-13T13:47:39Z",
+      "reason": "西晉/Wudi/Xianning 1/month 1/day 1 independently returns Julian 275-02-13, showing that preceding Taishi appointments can fall in AD 275. Query rerun through the official form using swDate=1582/10/15; pre-reform results are Julian, not Gregorian."
+    },
+    {
+      "url": "https://sinocal.sinica.edu.tw/luso.php",
+      "title": "Academia Sinica calendar conversion: 晉 惠帝 光熙 1/11/庚午",
+      "quote": "西元307年1月8日",
+      "kind": "external",
+      "sourceHash": "sha256:c1a875e20ccb9d160f238ffb1e4371a6d380edf17cfccb789fe27de433702fe6",
+      "accessedAt": "2026-09-13T13:47:39Z",
+      "reason": "西晉/Huidi/Guangxi 1/month 11/gengwu independently returns Julian 307-01-08, supplying only an upper year bound for Sima Biao's death. Query rerun through the official form using swDate=1582/10/15; pre-reform results are Julian, not Gregorian."
+    },
+    {
+      "url": "https://sinocal.sinica.edu.tw/luso.php",
+      "title": "Academia Sinica calendar conversion: 宋 太祖 開寶 1/12/2",
+      "quote": "西元968年12月23日",
+      "kind": "external",
+      "sourceHash": "sha256:23b2ec051b28ce8f153b1cc5884e54c9288b2da99e337f98fa310c95f02fe39c",
+      "accessedAt": "2026-09-13T13:47:39Z",
+      "reason": "Song/Taizu/Kaibao 1/month 12/day 2 independently returns Julian 968-12-23, supporting AD 968 for the explicitly narrated birth. Julian/proleptic-Gregorian rendering does not change this Western year. Query rerun through the official form using swDate=1582/10/15; pre-reform results are Julian, not Gregorian."
+    },
+    {
+      "url": "https://sinocal.sinica.edu.tw/luso.php",
+      "title": "Academia Sinica calendar conversion: 宋 真宗 乾興 1/2/戊午",
+      "quote": "西元1022年3月23日",
+      "kind": "external",
+      "sourceHash": "sha256:a2ec39ede00cdc5c0dbd0268119d330bc95e6e91de2c10cce5602e7470f5affb",
+      "accessedAt": "2026-09-13T13:47:39Z",
+      "reason": "Song/Zhenzong/Qianxing 1/month 2/wuwu independently returns Julian 1022-03-23, verifying his personal death before the month 11 order. Query rerun through the official form using swDate=1582/10/15; pre-reform results are Julian, not Gregorian."
+    },
+    {
+      "url": "https://sinocal.sinica.edu.tw/luso.php",
+      "title": "Academia Sinica calendar conversion: 宋 真宗 乾興 1/11/14",
+      "quote": "西元1022年12月10日",
+      "kind": "external",
+      "sourceHash": "sha256:1f417c0b467290cdc1e8f2f3b291af57b8f395dbd5db578cce92dad37473f429",
+      "accessedAt": "2026-09-13T13:47:39Z",
+      "reason": "Song/Zhenzong/Qianxing 1/month 11/day 14 independently returns Julian 1022-12-10. The service retains the era's ruler label after his death; this dates authorization, not completed publication or Zhenzong's activity. Query rerun through the official form using swDate=1582/10/15; pre-reform results are Julian, not Gregorian."
+    },
+    {
+      "url": "https://sinocal.sinica.edu.tw/luso.php",
+      "title": "Academia Sinica calendar conversion: 宋 太宗 至道 3/3/1",
+      "quote": "西元997年4月10日",
+      "kind": "external",
+      "sourceHash": "sha256:2144e3c6672fe74e3cdab06d7f61f797548759c705715295ef7522f46a0d95c7",
+      "accessedAt": "2026-09-13T13:47:39Z",
+      "reason": "Song/Taizong/Zhidao 3/month 3/day 1 independently returns Julian 997-04-10; the returned month table places accession within AD 997. Day 1 is only a calendar probe, not an asserted accession day. Query rerun through the official form using swDate=1582/10/15; pre-reform results are Julian, not Gregorian."
+    },
+    {
+      "url": "https://sinocal.sinica.edu.tw/luso.php",
+      "title": "Academia Sinica calendar conversion: 唐 睿宗 文明 1/2/1",
+      "quote": "西元684年2月21日",
+      "kind": "external",
+      "sourceHash": "sha256:91ae802ce0c848cb575468276d95ecfb670d8bf678e2f406ad19214bdabd6df7",
+      "accessedAt": "2026-09-13T13:47:39Z",
+      "reason": "Tang/Ruizong/Wenming 1/month 2/day 1 independently returns Julian 684-02-21; its returned months 2-8 lie in AD 684, consistent with the primary month 9 era change. No exact death day is inferred. Query rerun through the official form using swDate=1582/10/15; pre-reform results are Julian, not Gregorian."
+    },
+    {
+      "book": "jiutangshu",
+      "chapter": "006",
+      "unit": "s0025",
+      "quote": "大赦天下，改元文明。",
+      "sourceHash": "sha256:dc0b6c59d6644f92cd3f45ad1c51ee9919587d9f854dafa1edeed9a091e7e1c1",
+      "reason": "The adjacent second-month accession and dowager regency establish Wenming under Ruizong in the correct historical context."
+    },
+    {
+      "book": "jiutangshu",
+      "chapter": "006",
+      "unit": "s0036",
+      "quote": "九月，大赦天下，改元為光宅。",
+      "sourceHash": "sha256:f02d4e7270adc215384a61c764d23995b928e58f6a90ed715049884211b82851",
+      "reason": "The month 9 change to Guangzhai ends Wenming in the same year; the independently queried Wenming table lies within AD 684."
+    },
+    {
+      "book": "songshi",
+      "chapter": "002",
+      "unit": "s0147",
+      "quote": "開寶元年春正月甲午，增治京城。",
+      "sourceHash": "sha256:ea83a0e7d82493604418ef57a25d71e724807d2657aa09462b76132e59039747",
+      "reason": "This annal labels the year Kaibao 1; the later month 11 entry records the actual change before Zhenzong's birth."
+    },
+    {
+      "book": "songshi",
+      "chapter": "002",
+      "unit": "s0175",
+      "quote": "十一月癸卯，日南至，有事南郊，改元開寶。",
+      "sourceHash": "sha256:2148f9280e48e6f76c84550b6edb520305e59df8285b80ac03c1f29c053c1440",
+      "reason": "The month 11 change to Kaibao confirms the appropriate era label for Zhenzong's following month 12 birth."
     }
-  ],
-  "references": []
+  ]
 }

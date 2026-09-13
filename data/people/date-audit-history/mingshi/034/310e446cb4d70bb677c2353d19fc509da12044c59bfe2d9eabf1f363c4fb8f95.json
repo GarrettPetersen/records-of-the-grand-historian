@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": 1,
+  "book": "mingshi",
+  "chapter": "034",
+  "sourceHash": "sha256:c459c31ddbbf5307089ba0bc3827d71d931c7d555b27afc32f10b62b3f5364b7",
+  "extractionHash": "sha256:8b72089fc1f6e80bb1770aef4f40f8dc6f6cf71313defe77decd0987334bcd8d",
+  "status": "research-blocked",
+  "reviewer": {
+    "name": "Codex (manual source review)",
+    "independentOfExtractor": true
+  },
+  "reviewedAt": "2026-09-13T06:03:30Z",
+  "summary": "Read all 22 available source units, including table-omission markers. Date approval is withheld: a reign-name correction and its conversion require independent corroboration, and the completion event has been given unsupported circa precision. This does not certify the omitted tables or the translation.",
+  "reviewedUnits": [
+    "s0001",
+    "s0002",
+    "s0003",
+    "s0004",
+    "s0005",
+    "s0006",
+    "s0007",
+    "s0008",
+    "s0009",
+    "s0010",
+    "s0011",
+    "s0012",
+    "s0013",
+    "s0014",
+    "s0015",
+    "s0016",
+    "s0017",
+    "s0018",
+    "s0019",
+    "s0020",
+    "s0021",
+    "s0022"
+  ],
+  "itemChecks": [
+    {
+      "id": "claim-4",
+      "verdict": "research-blocked",
+      "event": "Completion of the Season Granting Calendar.",
+      "reason": "The local source says Zhizheng seventeen, while the extraction substitutes Zhiyuan seventeen and AD 1280. That may be a justified correction, but the audit needs the actual independent Yuan History passage and conversion reference, not the extractor's assertion.",
+      "evidence": [
+        {
+          "unit": "s0011",
+          "quote": "至正十七年《授時曆》成"
+        }
+      ]
+    },
+    {
+      "id": "claim-3",
+      "verdict": "research-blocked",
+      "event": "Wang Xun dies in the nineteenth year.",
+      "reason": "The year inherits the disputed reign name from the previous sentence. Verify the reign correction and death-event identity before approving AD 1282.",
+      "evidence": [
+        {
+          "unit": "s0011",
+          "quote": "至正十七年"
+        },
+        {
+          "unit": "s0012",
+          "quote": "十九年王恂卒"
+        }
+      ]
+    },
+    {
+      "id": "claim-5",
+      "verdict": "research-blocked",
+      "event": "Wang Xun's death.",
+      "reason": "The death is explicit, but its Western conversion depends on the same unverified emendation of the preceding reign. Preserve both witnesses when recording a correction.",
+      "evidence": [
+        {
+          "unit": "s0012",
+          "quote": "十九年王恂卒"
+        }
+      ]
+    },
+    {
+      "id": "claim-17",
+      "verdict": "research-blocked",
+      "event": "Guo Shoujing arranges the ready reckoners.",
+      "reason": "The narrative follows Wang's death with Guo's compilation and later asks whether Guo finished Wang's drafts. It does not give a numerical completion year or an upper endpoint; circa AD 1282 needs independent support.",
+      "evidence": [
+        {
+          "unit": "s0013",
+          "quote": "郭守敬比類編次"
+        },
+        {
+          "unit": "s0015",
+          "quote": "意者王先有藁，而郭卒成之歟"
+        }
+      ]
+    },
+    {
+      "id": "claim-20",
+      "verdict": "research-blocked",
+      "event": "Guo Shoujing completes the compilation.",
+      "reason": "This duplicates the same circa AD 1282 inference in an event claim. After verifying the preceding date, use a supported inclusive lower-year bound if only narrative sequence is established, rather than a guessed approximate point.",
+      "evidence": [
+        {
+          "unit": "s0012",
+          "quote": "十九年王恂卒"
+        },
+        {
+          "unit": "s0013",
+          "quote": "裁爲二卷"
+        }
+      ]
+    }
+  ],
+  "personChecks": [],
+  "findings": [
+    {
+      "items": [
+        "claim-3",
+        "claim-4",
+        "claim-5",
+        "hints-p001",
+        "p001"
+      ],
+      "problem": "The extraction corrects the source reign from Zhizheng to Zhiyuan without an independently pinned witness in this audit. All three Western dates depend on that correction.",
+      "action": "Read and pin the relevant Yuan History passage and authoritative reign conversion. Preserve the source reading and emendation distinctly; then verify each event owner and re-audit."
+    },
+    {
+      "items": [
+        "claim-17",
+        "claim-20",
+        "hints-p002",
+        "p002"
+      ],
+      "problem": "An event sequenced after Wang's death has been reduced to circa AD 1282, although no completion-year proximity or upper endpoint is established in this passage.",
+      "action": "Research the compilation date. If only the sequence survives verification, store an appropriate westernBounds constraint with the relative source wording and synchronize the active hint; do not infer a circa point from a lower bound."
+    }
+  ],
+  "references": []
+}
