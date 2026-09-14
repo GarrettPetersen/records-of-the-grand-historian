@@ -62,6 +62,13 @@ unchanged source and reports, original seal, and reviewed dependency delta.
 Arbitrary truthy strings or regenerated hashes are not approval evidence.
 
 After publication, run scoped people validation and `people:dates:verify`.
+If the curation removed a person or split a conflated identity, also invalidate
+the affected old comparisons with `pruneResolutionPeople` from
+`scripts/lib/people-resolution-invalidation.mjs`. Preserve the original decisions
+and the approved curation receipt hash in a separate curation archive first.
+Retain unrelated comparisons; invalidation is not a new merge or separation.
+Run the full `people:validate` before pushing an identity-changing checkpoint:
+the scoped chapter gate cannot detect references in old cross-book decisions.
 Accumulate reviewed chapter changes on staging, then rebuild and validate the
 site and affected ebooks at a milestone. Extraction acceptance or a successful
 receipt preparation is not date approval, identity completion, or publication.
