@@ -5,7 +5,7 @@ import path from 'node:path';
 import { test } from 'node:test';
 import { writeJsonAtomic, readJson } from './lib/people-content.mjs';
 import { buildDateAuditPacket, dateAuditStatus } from './lib/people-date-audit.mjs';
-import { dateReviewJobs, retainedDateReviewJobs, applyDateRepairProposal, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair } from './lib/people-date-workflow.mjs';
+import { dateReviewJobs, retainedDateReviewJobs, applyDateRepairProposal, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair } from './lib/people-date-workflow.mjs';
 import { validatePeopleWorkLedger, reservePeopleTargetsInLedger, dateExecutorIsBusy } from './lib/people-work-queue.mjs';
 
 function fixture(t) {
@@ -110,6 +110,70 @@ test('repairs reject wrong hashes, non-temporal claims and changed subjects',t=>
   let bad=structuredClone(p);bad.sourceHash='wrong';assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet),/Stale/);
   bad=structuredClone(p);bad.changes[0].id='claim-3';assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet),/temporal claim/);
   bad=structuredClone(p);bad.changes[0].after[0]='p002';assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet),/subject/);
+});
+function receptionRepair(f) {
+  const proposal=repair({packet:f.packet,extraction:f.extraction});
+  proposal.changes.push({kind:'add-reception-event',after:['p001','event-participation',
+    {kind:'posthumous-reference',role:'remembered-official',action:'remembered'},'explicit',['s0001']],
+    reason:'Keep the later reference separate from this official\'s living activity.'});
+  return proposal;
+}
+test('scoped reception additions survive final-delta reconstruction and remain audit items',t=>{
+  const f=fixture(t),proposal=receptionRepair(f),candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
+  const combined=dateRepairDifference(f.extraction,candidate,f.packet);
+  assert.equal(combined.changes.at(-1).kind,'hints');
+  assert.equal(combined.changes.filter(c=>c.kind==='add-reception-event').length,1);
+  assert.deepEqual(applyDateRepairProposal(f.extraction,combined,f.packet),candidate);
+  const packet=buildDateAuditPacket('fixture','001',{...f.options,extraction:candidate});
+  assert.ok(packet.items.some(i=>i.value?.kind==='posthumous-reference'));
+});
+test('reception additions reject non-reception events, life claims, conflicting labels and bad evidence',t=>{
+  const f=fixture(t),proposal=receptionRepair(f);
+  for(const mutate of [
+    row=>{row[1]='role';},row=>{row[1]='attestation';},row=>{row[0]='p999';},
+    row=>{row[2]={kind:'battle'};},row=>{row[2].receptionType='retrospective';},
+    row=>{row[2].receptionType='unknown';},row=>{row[4]=[];},row=>{row[4]=['s9999'];},
+  ]) {
+    const bad=structuredClone(proposal);mutate(bad.changes.at(-1).after);
+    assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet),/Only life\/date|source-unit/);
+  }
+  const duplicate=structuredClone(proposal);duplicate.changes.push(structuredClone(duplicate.changes.at(-1)));
+  assert.throws(()=>applyDateRepairProposal(f.extraction,duplicate,f.packet),/Duplicate/);
+  for(const field of ['hostRequiredChanges','requiredReceptionEvents','requiredHostCuration','blocked']) {
+    assert.throws(()=>applyDateRepairProposal(f.extraction,{...proposal,[field]:true},f.packet),/Incomplete repair/);
+  }
+});
+test('corrected event dates and a separate reception event cannot be mismatched during collapse',t=>{
+  const f=fixture(t);
+  const before=['p001','event-participation',{kind:'appointment',dateContext:{westernYear:{era:'AD',year:2,precision:'year'}}},'explicit',['s0001']];
+  f.extraction.claims.push(before);writeJsonAtomic(f.file,f.extraction);
+  f.packet=buildDateAuditPacket('fixture','001',f.options);
+  const proposal=receptionRepair(f),after=structuredClone(before);after[2].dateContext.westernYear.year=1;
+  proposal.changes.push({kind:'replace',id:'claim-4',before,after,reason:'Correct the appointment date without changing the event itself.'});
+  const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
+  // Put the new reception before the old event to exercise matching by content.
+  candidate.claims.splice(3,2,candidate.claims[4],candidate.claims[3]);
+  const combined=dateRepairDifference(f.extraction,candidate,f.packet);
+  const reconstructed=applyDateRepairProposal(f.extraction,combined,f.packet);
+  assert.deepEqual(reconstructed.claims.find(c=>c[2].kind==='appointment'),after);
+  assert.ok(reconstructed.claims.some(c=>c[2].kind==='posthumous-reference'));
+  const bad=structuredClone(candidate);bad.claims.find(c=>c[2].kind==='appointment')[2].kind='battle';
+  assert.throws(()=>applyDateRepairProposal(f.extraction,dateRepairDifference(f.extraction,bad,f.packet),f.packet),/Only life\/date/);
+});
+test('a reception repair stays staged until a fresh reviewer approves the added event',async t=>{
+  const f=fixture(t);let approve=false;let receptionChecks=0;
+  const worker=async task=>{
+    if(task.kind==='repair')return receptionRepair(f);
+    if(task.key.startsWith('reaudit-') && !approve)throw new Error('waiting for independent reception review');
+    if(task.key.startsWith('reaudit-'))receptionChecks+=task.job.items.filter(i=>i.value?.kind==='posthumous-reference').length;
+    return review(task);
+  };
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options),/waiting for independent/);
+  assert.deepEqual(readJson(f.file),f.extraction);
+  approve=true;
+  assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options)).status,'audited');
+  assert.equal(receptionChecks,1);
+  assert.ok(readJson(f.file).claims.some(c=>c[2].kind==='posthumous-reference'));
 });
 test('incomplete remote artifacts cannot be silently accepted',t=>{
   const f=fixture(t),job=dateReviewJobs(f.packet,f.options)[0],result=review({job,packet:f.packet,key:'test'});result.itemChecks.pop();
