@@ -36,7 +36,7 @@
     "people:editorial-dossier": "node scripts/build-people-editorial-review.mjs",
     "people:editorial-review": "node scripts/sdk-people-editorial-review.mjs",
     "people:apply-repairs": "node scripts/apply-people-translation-repairs.mjs",
-    "people:apply-repairs:self-test": "node scripts/apply-people-translation-repairs.mjs --self-test",
+    "people:apply-repairs:self-test": "node --test scripts/test-people-repair-name-collisions.mjs && node scripts/apply-people-translation-repairs.mjs --self-test",
     "people:apply-editorial": "node scripts/apply-people-editorial-decisions.mjs",
     "people:apply-editorial:self-test": "node scripts/apply-people-editorial-decisions.mjs --self-test",
     "people:remove-false": "node scripts/remove-false-people.mjs",
