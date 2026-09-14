@@ -15,6 +15,7 @@ import {
   writeJsonAtomic,
 } from './lib/people-content.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
+import { personClaimReception } from './lib/people-reception.mjs';
 import {
   compactPeopleExtraction,
   expandPeopleExtraction,
@@ -283,6 +284,7 @@ function westernPointLabel(point) {
 }
 
 function claimActiveDateHints(claim) {
+  if (personClaimReception(claim)) return [];
   const hints = [];
   function visit(value) {
     if (!value || typeof value !== 'object') return;
@@ -309,17 +311,23 @@ function claimActiveDateHints(claim) {
 }
 
 function applyReviewedTemporalHintChanges(people, originalClaims, finalClaims, reviewed) {
+  // Label-only editorial changes do not authorize rebuilding a person's dates.
+  const changedClaims = originalClaims.filter((claim) => {
+    if (reviewed.retractedClaimIds.has(claim.id)) return true;
+    const revision = reviewed.revisedClaims.get(claim.id);
+    return revision && JSON.stringify(claimActiveDateHints(claim).sort()) !==
+      JSON.stringify(claimActiveDateHints(revision).sort());
+  });
   const affectedSubjects = new Set([
-    ...originalClaims
-      .filter((claim) =>
-        reviewed.retractedClaimIds.has(claim.id) || reviewed.revisedClaims.has(claim.id)
-      )
+    ...changedClaims
       .filter((claim) => claimActiveDateHints(claim).length > 0)
       .map((claim) => claim.subject),
     ...(reviewed.addedClaims ?? [])
       .filter((claim) => claimActiveDateHints(claim).length > 0)
       .map((claim) => claim.subject),
-    ...reviewed.revisedClaims.values()
+    ...changedClaims
+      .map((claim) => reviewed.revisedClaims.get(claim.id))
+      .filter(Boolean)
       .filter((claim) => claimActiveDateHints(claim).length > 0)
       .map((claim) => claim.subject),
   ]);
@@ -599,6 +607,39 @@ function selfTest() {
   );
   if (temporalResult[0].identityHints.activeDateHints.join() !== 'AD 209-290') {
     throw new Error('A reviewed temporal claim revision left stale active-date hints');
+  }
+  const labelOnly = { ...temporalBefore[0], value: { ...temporalBefore[0].value, event: 'Corrected office label' } };
+  const additionalDate = { ...temporalBefore[0], id: 'fixture:001:c0004', value: { westernYear: { era: 'AD', year: 550 } } };
+  const labelOnlyResult = applyReviewedTemporalHintChanges(
+    temporalPeople, [...temporalBefore, additionalDate], [labelOnly, additionalDate],
+    { retractedClaimIds: new Set(), revisedClaims: new Map([[labelOnly.id, labelOnly]]), addedClaims: [] },
+  );
+  if (labelOnlyResult !== temporalPeople) {
+    throw new Error('A label-only claim revision changed active-date hints');
+  }
+  const reception = { ...additionalDate, value: { kind: 'posthumous-reference', dateContext: { westernYear: { era: 'AD', year: 700 } } } };
+  const receptionResult = applyReviewedTemporalHintChanges(
+    temporalPeople, [...temporalBefore, reception], [...temporalAfter, reception],
+    { retractedClaimIds: new Set(), revisedClaims: new Map([[temporalBefore[0].id, temporalAfter[0]]]), addedClaims: [] },
+  );
+  if (receptionResult[0].identityHints.activeDateHints.join() !== 'AD 209-290') {
+    throw new Error('A later reference extended rebuilt active-date hints');
+  }
+  const livingEvent = { ...additionalDate, predicate: 'event-participation' };
+  const reclassifiedEvent = { ...reception, predicate: livingEvent.predicate };
+  const reclassifiedResult = applyReviewedTemporalHintChanges(
+    temporalPeople, [livingEvent], [reclassifiedEvent],
+    { retractedClaimIds: new Set(), revisedClaims: new Map([[livingEvent.id, reclassifiedEvent]]), addedClaims: [] },
+  );
+  if (reclassifiedResult[0].identityHints.activeDateHints.length !== 0) {
+    throw new Error('A corrected posthumous classification retained living-activity hints');
+  }
+  const addedReceptionResult = applyReviewedTemporalHintChanges(
+    temporalPeople, temporalBefore, [...temporalBefore, reception],
+    { retractedClaimIds: new Set(), revisedClaims: new Map(), addedClaims: [reception] },
+  );
+  if (addedReceptionResult !== temporalPeople) {
+    throw new Error('Adding a later reference changed active-date hints');
   }
   expectDecisionFailure(() => applyExplicitCandidateDispositions(
     explicitClassification,
