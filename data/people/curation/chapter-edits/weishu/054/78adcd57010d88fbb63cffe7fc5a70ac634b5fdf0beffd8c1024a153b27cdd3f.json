@@ -1,0 +1,2882 @@
+{
+  "schemaVersion": 1,
+  "book": "weishu",
+  "chapter": "054",
+  "createdAt": "2026-09-14T20:50:41.804Z",
+  "reviewer": {
+    "agentId": "019ea934-1759-7410-a2ad-48546e8db30a",
+    "name": "Codex independent parent source review"
+  },
+  "inputPins": {
+    "reviewerId": "01a0a185-1ee1-7d32-a7f9-88adb388e384",
+    "capturedAt": "2026-09-14T20:34:36.545Z",
+    "files": [
+      {
+        "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/weishu/054.json",
+        "snapshot": "/tmp/wei054-alias-review/source.json",
+        "bytes": 184342,
+        "sha256": "sha256:5a0c8835285fb3fc833433e101a0d9e8876c953d42b1a421fc96c30d39aee2a4"
+      },
+      {
+        "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/extractions/weishu/054.json",
+        "snapshot": "/tmp/wei054-alias-review/extraction.json",
+        "bytes": 231021,
+        "sha256": "sha256:5330ae88292fa7cf87ad987cd72fba127e7f96ff3659a699c7ccc644d50110e0"
+      },
+      {
+        "file": "/Users/garrettpetersen/records-of-the-grand-historian/scripts/reconcile-people-alias-callbacks.mjs",
+        "snapshot": "/tmp/wei054-alias-review/reconcile-source.mjs",
+        "bytes": 18234,
+        "sha256": "sha256:696f6225f784b77e84470ffec2b74a8ddd07e6c97693177a6f32199a77fae373"
+      },
+      {
+        "file": "/Users/garrettpetersen/records-of-the-grand-historian/scripts/apply-people-alias-decisions.mjs",
+        "snapshot": "/tmp/wei054-alias-review/apply-source.mjs",
+        "bytes": 14793,
+        "sha256": "sha256:0a3aa73039596b9556b84afeb40eb3267b1eead43196cae1c909e486fbecdeb2"
+      }
+    ]
+  },
+  "beforeHash": "sha256:5330ae88292fa7cf87ad987cd72fba127e7f96ff3659a699c7ccc644d50110e0",
+  "afterHash": "sha256:78adcd57010d88fbb63cffe7fc5a70ac634b5fdf0beffd8c1024a153b27cdd3f",
+  "prerequisite": {
+    "type": "source-reviewed-prerequisite-proposal-not-applied",
+    "sourceHash": "sha256:5a0c8835285fb3fc833433e101a0d9e8876c953d42b1a421fc96c30d39aee2a4",
+    "extractionHash": "sha256:5330ae88292fa7cf87ad987cd72fba127e7f96ff3659a699c7ccc644d50110e0",
+    "path": "/surfaces/207",
+    "before": [
+      "p077",
+      "personal-name",
+      "en",
+      "Yu",
+      [
+        [
+          "s0115",
+          [
+            0
+          ]
+        ],
+        [
+          "s0117",
+          [
+            0
+          ]
+        ]
+      ]
+    ],
+    "after": [
+      "p077",
+      "personal-name",
+      "en",
+      "Yu",
+      [
+        [
+          "s0117",
+          [
+            0
+          ]
+        ]
+      ]
+    ],
+    "reason": "The current p077 Yu occurrence 0 in s0115 spans code points [0,2) of Yun, incorrectly assigning part of p076's name to p077. Remove just this unit occurrence; the full decisions add p076 Yun occurrence 0 and p077 standalone Yu occurrence 1.",
+    "evidence": {
+      "unit": "s0115",
+      "zh": "子雲弟子羽，字鳳降。",
+      "en": "Yun's nephew Yu, whose courtesy name was Fengjiang.",
+      "wrongSpan": {
+        "exact": "Yu",
+        "occurrence": 0,
+        "startCodePoint": 0,
+        "endCodePoint": 2
+      },
+      "correctYu": {
+        "exact": "Yu",
+        "occurrence": 1,
+        "startCodePoint": 13,
+        "endCodePoint": 15
+      },
+      "correctYun": {
+        "exact": "Yun",
+        "occurrence": 0,
+        "startCodePoint": 0,
+        "endCodePoint": 3
+      }
+    },
+    "noClaimChanges": true,
+    "noPeopleChanges": true,
+    "noDateChanges": true,
+    "parentMustApplyExplicitly": true
+  },
+  "reviewedAliasDecisions": {
+    "schemaVersion": 1,
+    "chapters": [
+      {
+        "book": "weishu",
+        "chapter": "054",
+        "chapterFingerprint": "sha256:1e109211e9d3215b5b295c77a67212aa8e67d3a35dbfba9fbe6689da7d89eccd",
+        "decisions": [
+          {
+            "candidate": "weishu:054:cand_6c7d1a4cbc8213b8",
+            "action": "dispose",
+            "reason": "duplicate-candidate",
+            "note": "s0090 城陽公孔伯恭 names the titled commander Kong Bogong. The exact inner Kong Bogong span is already linked to p070 here in both languages. This longer detector span wraps that same reference; retain the local p070 link, do not create another person link to the separately stored commentary record p150, and do not classify Chengyang as a standalone place in this span."
+          },
+          {
+            "candidate": "weishu:054:cand_30477b38348410b1",
+            "action": "link",
+            "personId": "weishu:054:p067",
+            "kind": "personal-name",
+            "note": "s0090 identifies 薛安都; s0094 說安都，安都即與俱載赴軍 repeats that same surrendering commander. This is the second English Andu, the man who rides to the army, not a place or a new person. Link the existing local Xue Andu record p067."
+          },
+          {
+            "candidate": "weishu:054:cand_479bafd26e4c42eb",
+            "action": "link",
+            "personId": "weishu:054:p071",
+            "kind": "personal-name",
+            "note": "s0094 names the attacking general 張永; s0096 永攻南門 and s0097 乘永之失據 continue his failed attack. The second English Yong is Zhang Yong p071, not the unrelated Prince Yong whose Chinese name is 雍."
+          },
+          {
+            "candidate": "weishu:054:cand_61bb6b717cf7bb02",
+            "action": "link",
+            "personId": "weishu:054:p076",
+            "kind": "personal-name",
+            "note": "s0113 names 子雲 with courtesy name 鳳昇; s0115 begins 子雲弟子羽. Yun corresponds to 子雲, p076, not Yu/子羽 p077. This link requires removing the existing erroneous p077 Yu occurrence 0 inside the letters Yun; see prerequisite-span-repair.json. This decision does not approve the English nephew wording or the stored family edges."
+          },
+          {
+            "candidate": "weishu:054:cand_a64315d0ad9d7bad",
+            "action": "link",
+            "personId": "weishu:054:p077",
+            "kind": "personal-name",
+            "note": "s0115 子雲弟子羽，字鳳降 identifies 子羽 with courtesy name 鳳降; the standalone English Yu is the introduced man p077. Yuan Yu p045 has different Chinese 元愉 and belongs to a different narrative. Use occurrence 1, not the substring Yu inside Yun."
+          },
+          {
+            "candidate": "weishu:054:cand_57a5e0448c25cba1",
+            "action": "link",
+            "personId": "weishu:054:p082",
+            "kind": "personal-name",
+            "note": "s0148 宣茂弟叔胤 explicitly identifies Shuyin as Xuanmao's younger brother. The English possessive Xuanmao is the existing Li Xuanmao p082, not the sentence's newly introduced Shuyin p089."
+          },
+          {
+            "candidate": "weishu:054:cand_7b441fdf92143c35",
+            "action": "link",
+            "personId": "weishu:054:p101",
+            "kind": "personal-name",
+            "note": "s0165 names 高允 among Cui Chuo's fellow invitees, then says 語在允傳. The second Gao Yun is the same person whose biography is referenced; p101 already owns the first English and Chinese mention in this very unit. It is a person-name component of the cross-reference, not a separate book title. Do not merge p101 with the other same-name record p065."
+          },
+          {
+            "candidate": "weishu:054:cand_563ac2d058c7edee",
+            "action": "link",
+            "personId": "weishu:054:p106",
+            "kind": "personal-name",
+            "note": "s0183 introduces 合弟秉 and s0185-s0189 continue his career: 彭城王勰征壽春，秉從行. Bing is Cui Bing p106, the local subject of this biography, not the prince or Shouchun. Other Cui Bing records are not being merged."
+          },
+          {
+            "candidate": "weishu:054:cand_efe677fb0f071bb5",
+            "action": "link",
+            "personId": "weishu:054:p106",
+            "kind": "personal-name",
+            "note": "s0198 秉堅守歷年...與秉第二子仲哲赴救 repeats the same defender as the father of Zhongzhe. p106 already owns the first Bing in this unit and the surrounding siege narrative. Link the second possessive Bing to p106, not commander Yuan Tan or the son."
+          },
+          {
+            "candidate": "weishu:054:cand_015b42bb244a2f4c",
+            "action": "link",
+            "personId": "weishu:054:p106",
+            "kind": "personal-name",
+            "note": "s0202 除秉為刺史 names the appointee in the continuous Cui Bing biography after the siege. It refers to local p106, not the province or a new bearer of Bing. The time wording is read for narrative continuity only; no chronology is approved."
+          },
+          {
+            "candidate": "weishu:054:cand_de91e3f8679351d4",
+            "action": "link",
+            "personId": "weishu:054:p111",
+            "kind": "personal-name",
+            "note": "s0213 introduces 長子忻，字伯悅. In s0215 常景引為行臺郎...復為安遠將軍 the omitted object/continuing appointee is that same 忻, explicitly supplied as Xin in English. Link p111, not his recruiter Chang Jing p114."
+          },
+          {
+            "candidate": "weishu:054:cand_e5c875e4f87820b0",
+            "action": "link",
+            "personId": "weishu:054:p106",
+            "kind": "personal-name",
+            "note": "s0219 introduces 仲哲 and s0224 及父秉於燕州被圍 identifies his father. This recalls s0198 秉第二子仲哲赴救 in p106's siege narrative. The father Bing is p106; the following Yuan Tan is the relief commander, not the father."
+          },
+          {
+            "candidate": "weishu:054:cand_9baf67400118ac48",
+            "action": "link",
+            "personId": "weishu:054:p112",
+            "kind": "personal-name",
+            "note": "s0228 仲哲弟叔彥 explicitly names Zhongzhe as Shuyan's elder brother, continuing the Zhongzhe introduced at s0219 and named in s0225. The English possessive Zhongzhe links to p112, while Shuyan is p120."
+          },
+          {
+            "candidate": "weishu:054:cand_bda37176991b833b",
+            "action": "link",
+            "personId": "weishu:054:p126",
+            "kind": "personal-name",
+            "note": "s0246 秉從父弟廣 names Bing as Guang's older paternal cousin after the nearby 秉弟習 branch. In this local extraction branch, p126 owns 秉 at s0233/s0235/s0237 and is the endpoint of Guang p132's source-backed s0246 kinship claim c1073. Retain that local owner for the callback; this does not merge the duplicate-looking p106/p126/p161 records."
+          },
+          {
+            "candidate": "weishu:054:cand_db8fba387374f743",
+            "action": "link",
+            "personId": "weishu:054:p132",
+            "kind": "personal-name",
+            "note": "s0246 introduces 廣字仲慶. In s0250 引廣為鎮南府長史，以母老辭 the recruited Guang declines because of his mother. The second English Guang is the same p132 already linked to the first Guang in the sentence, not Prince Cheng p134."
+          },
+          {
+            "candidate": "weishu:054:cand_d148c64a211ae4b1",
+            "action": "link",
+            "personId": "weishu:054:p148",
+            "kind": "alternate-name",
+            "note": "s0274 identifies the name 系, and s0275 按本名「緯」 explicitly says his original name was Wei. This is the personal-name variant 緯 of the local Li Xi p148, already linked to 緯 in Chinese here, not the surname of Wei Shou or Li Xianfu's posthumous epithet."
+          },
+          {
+            "candidate": "weishu:054:cand_0b17cefbac8ed72e",
+            "action": "link",
+            "personId": "weishu:054:p148",
+            "kind": "alternate-name",
+            "note": "s0276 作「偉」，是「緯」的形訛 compares the transmitted spelling of the same name discussed at s0274-s0275. The first English Wei represents the explicitly rejected written form 偉 of Li Xi/Wei p148's name. Link the discussed referent as a textual-name variant only; do not add a claim that 偉 was his true name or confuse this with Li Hun, whose biography is cited as the witness."
+          },
+          {
+            "candidate": "weishu:054:cand_47254073d5bdf63f",
+            "action": "link",
+            "personId": "weishu:054:p148",
+            "kind": "alternate-name",
+            "note": "The second Wei in s0276 corresponds to 「緯」 in 是「緯」的形訛, the original name explicitly attributed to p148 in s0275. The English latitude gloss distinguishes the written character, but its referent remains the same discussed personal name. It is neither a geographical latitude mention nor the unrelated Wei epithet of p021."
+          },
+          {
+            "candidate": "weishu:054:cand_d449c2453a487bf6",
+            "action": "link",
+            "personId": "weishu:054:p153",
+            "kind": "personal-name",
+            "note": "s0279 quotes 陽平王頤 then compares the readings 頤/顯/順. This second Yi repeats the name 頤 of the quoted prince, already linked locally to p153; s0287 and s0289 explain why 頤 is retained. Link that discussed name, not Li Yi 翼, Prince Yi 懌, or Li Can's posthumous epithet. The alternative readings remain textually qualified and no identities are merged."
+          },
+          {
+            "candidate": "weishu:054:cand_bcee98c4c0ebaf55",
+            "action": "link",
+            "personId": "weishu:054:p154",
+            "kind": "personal-name",
+            "note": "s0280 explicitly names 元顯; s0282 有元顯墓誌...顯所襲 refers again to that epitaph subject and his inherited title. The final English Xian is p154, already linked to Yuan Xian earlier in s0282, not Prince Yi or a place. No genealogy or dates are changed."
+          }
+        ]
+      }
+    ]
+  },
+  "sourceReview": {
+    "reviewerId": "01a0a185-1ee1-7d32-a7f9-88adb388e384",
+    "reviewedAt": "2026-09-14T20:39:23.777Z",
+    "inputPins": {
+      "reviewerId": "01a0a185-1ee1-7d32-a7f9-88adb388e384",
+      "capturedAt": "2026-09-14T20:34:36.545Z",
+      "files": [
+        {
+          "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/weishu/054.json",
+          "snapshot": "/tmp/wei054-alias-review/source.json",
+          "bytes": 184342,
+          "sha256": "sha256:5a0c8835285fb3fc833433e101a0d9e8876c953d42b1a421fc96c30d39aee2a4"
+        },
+        {
+          "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/extractions/weishu/054.json",
+          "snapshot": "/tmp/wei054-alias-review/extraction.json",
+          "bytes": 231021,
+          "sha256": "sha256:5330ae88292fa7cf87ad987cd72fba127e7f96ff3659a699c7ccc644d50110e0"
+        },
+        {
+          "file": "/Users/garrettpetersen/records-of-the-grand-historian/scripts/reconcile-people-alias-callbacks.mjs",
+          "snapshot": "/tmp/wei054-alias-review/reconcile-source.mjs",
+          "bytes": 18234,
+          "sha256": "sha256:696f6225f784b77e84470ffec2b74a8ddd07e6c97693177a6f32199a77fae373"
+        },
+        {
+          "file": "/Users/garrettpetersen/records-of-the-grand-historian/scripts/apply-people-alias-decisions.mjs",
+          "snapshot": "/tmp/wei054-alias-review/apply-source.mjs",
+          "bytes": 14793,
+          "sha256": "sha256:0a3aa73039596b9556b84afeb40eb3267b1eead43196cae1c909e486fbecdeb2"
+        }
+      ]
+    },
+    "scope": "All 21 submitted alias contradictions, with adjacent context and local owner evidence; not an exhaustive chapter review.",
+    "safeReconciliation": {
+      "initial": 21,
+      "safelyContained": 0,
+      "safelyReclassified": 0,
+      "remaining": 21
+    },
+    "candidates": [
+      {
+        "candidate": {
+          "id": "weishu:054:cand_6c7d1a4cbc8213b8",
+          "unit": "s0090",
+          "language": "en",
+          "exact": "Chengyang Kong Bogong",
+          "occurrence": 0,
+          "startCodePoint": 170,
+          "endCodePoint": 191,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "decision": {
+          "candidate": "weishu:054:cand_6c7d1a4cbc8213b8",
+          "action": "dispose",
+          "reason": "duplicate-candidate",
+          "note": "s0090 城陽公孔伯恭 names the titled commander Kong Bogong. The exact inner Kong Bogong span is already linked to p070 here in both languages. This longer detector span wraps that same reference; retain the local p070 link, do not create another person link to the separately stored commentary record p150, and do not classify Chengyang as a standalone place in this span."
+        },
+        "sourceReasoning": "s0090 城陽公孔伯恭 names the titled commander Kong Bogong. The exact inner Kong Bogong span is already linked to p070 here in both languages. This longer detector span wraps that same reference; retain the local p070 link, do not create another person link to the separately stored commentary record p150, and do not classify Chengyang as a standalone place in this span.",
+        "evidence": [
+          {
+            "unit": "s0090",
+            "zh": "天安初，劉彧徐州刺史薛安都舉彭城降，詔鎮南大將軍、博陵公尉元，鎮東將軍、城陽公孔伯恭等率眾迎之。",
+            "en": "Early in Tian'an, Xue Andu, Liu Yu's regional inspector of Xuzhou, surrendered Pengcheng; an edict ordered Duke of Boling Wei Yuan, general who guards the south, Duke of Chengyang Kong Bogong, and others to lead troops to receive him.",
+            "literal": "At the beginning of Tian'an, Liu Yu's Regional Inspector of Xuzhou Xue Andu raised Pengcheng in surrender; an edict ordered the General Who Guards the South, Duke of Boling Wei Yuan, the General Who Pacifies the East, Duke of Chengyang Kong Bogong, and others to lead troops to receive him.",
+            "chineseHash": "sha256:08222ccd1fe6a36b6a1d4a0b7fdd5c5dc0a1070d5e64206b1871a053a388db81",
+            "englishHash": "sha256:462f44a9ef4e79137433ba0c452b6274c0681815700f37f4599e15c731a52141"
+          },
+          {
+            "unit": "s0277",
+            "zh": "鎮東將軍城陽公孔伯恭等率眾迎之 諸本「城陽」作「陽城」，北史卷三三作「城陽」。",
+            "en": "\"General Who Pacifies the East, Duke of Chengyang Kong Bogong and others led troops to welcome him\": in all editions Chengyang is written Yangcheng; Beishi juan 33 reads Chengyang.",
+            "literal": "\"General Who Pacifies the East, Duke of Chengyang Kong Bogong and others led troops to welcome him\": in all editions \"Chengyang\" is written \"Yangcheng\"; Beishi juan 33 reads \"Chengyang.\"",
+            "chineseHash": "sha256:260f08772070f025a372a7b9840de81b538b2d0edd9c4928136ea3372abb6f06",
+            "englishHash": "sha256:b76e8bc0fbc543b61b6ba1cdfaf5dd9c4256f2e7c5c4a4119fa44fb5ff4bc977"
+          }
+        ],
+        "relatedClaims": [],
+        "status": "source-supported"
+      },
+      {
+        "candidate": {
+          "id": "weishu:054:cand_30477b38348410b1",
+          "unit": "s0094",
+          "language": "en",
+          "exact": "Andu",
+          "occurrence": 1,
+          "startCodePoint": 179,
+          "endCodePoint": 183,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "decision": {
+          "candidate": "weishu:054:cand_30477b38348410b1",
+          "action": "link",
+          "personId": "weishu:054:p067",
+          "kind": "personal-name",
+          "note": "s0090 identifies 薛安都; s0094 說安都，安都即與俱載赴軍 repeats that same surrendering commander. This is the second English Andu, the man who rides to the army, not a place or a new person. Link the existing local Xue Andu record p067."
+        },
+        "sourceReasoning": "s0090 identifies 薛安都; s0094 說安都，安都即與俱載赴軍 repeats that same surrendering commander. This is the second English Andu, the man who rides to the army, not a place or a new person. Link the existing local Xue Andu record p067.",
+        "evidence": [
+          {
+            "unit": "s0090",
+            "zh": "天安初，劉彧徐州刺史薛安都舉彭城降，詔鎮南大將軍、博陵公尉元，鎮東將軍、城陽公孔伯恭等率眾迎之。",
+            "en": "Early in Tian'an, Xue Andu, Liu Yu's regional inspector of Xuzhou, surrendered Pengcheng; an edict ordered Duke of Boling Wei Yuan, general who guards the south, Duke of Chengyang Kong Bogong, and others to lead troops to receive him.",
+            "literal": "At the beginning of Tian'an, Liu Yu's Regional Inspector of Xuzhou Xue Andu raised Pengcheng in surrender; an edict ordered the General Who Guards the South, Duke of Boling Wei Yuan, the General Who Pacifies the East, Duke of Chengyang Kong Bogong, and others to lead troops to receive him.",
+            "chineseHash": "sha256:08222ccd1fe6a36b6a1d4a0b7fdd5c5dc0a1070d5e64206b1871a053a388db81",
+            "englishHash": "sha256:462f44a9ef4e79137433ba0c452b6274c0681815700f37f4599e15c731a52141"
+          },
+          {
+            "unit": "s0093",
+            "zh": "安都還城，使遂不至。",
+            "en": "Andu returned to the city, and as a result the envoys never came.",
+            "literal": "Andu returned to the city, and the envoys therefore did not arrive.",
+            "chineseHash": "sha256:62bc574dca0a4d057011ff821ed3da6939d191b63bd01b1f497b7d614b8a793c",
+            "englishHash": "sha256:e3bc9b4120dbbce1426cedeff5597f934961f4037a44bed9aee619f97e145de0"
+          },
+          {
+            "unit": "s0094",
+            "zh": "時劉彧將張永、沈攸之等率眾先屯下礚，元令璨與中書郎高閭入彭城說安都，安都即與俱載赴軍。",
+            "en": "At that time Liu Yu's generals Zhang Yong and Shen Youzhi had encamped at Xiaqi; Yuan sent Can and gentleman of the Masters of Writing Gao Lu into Pengcheng to persuade Andu, and Andu at once rode with them to the army.",
+            "literal": "At that time Liu Yu's generals Zhang Yong, Shen Youzhi, and others led troops and were first encamped at Xiaqi; Yuan ordered Can and Gentleman of the Masters of Writing Gao Lu to enter Pengcheng and persuade Andu, and Andu at once rode with them to the army.",
+            "chineseHash": "sha256:8bfbcd5e79991bed30f93c00c4285697076df02a8dd961147add5cef5554d0d1",
+            "englishHash": "sha256:d9161ba3f0b3582854c109736081f20f49138083ceca78e88984dd134f9aeb21"
+          }
+        ],
+        "relatedClaims": [
+          {
+            "id": "weishu:054:c0233",
+            "subject": "weishu:054:p067",
+            "predicate": "name",
+            "value": {
+              "kind": "personal",
+              "en": "Xue Andu",
+              "zh": "薛安都",
+              "pinyin": "Xue Andu"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0090"
+            ]
+          }
+        ],
+        "status": "source-supported"
+      },
+      {
+        "candidate": {
+          "id": "weishu:054:cand_479bafd26e4c42eb",
+          "unit": "s0097",
+          "language": "en",
+          "exact": "Yong",
+          "occurrence": 1,
+          "startCodePoint": 67,
+          "endCodePoint": 71,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "decision": {
+          "candidate": "weishu:054:cand_479bafd26e4c42eb",
+          "action": "link",
+          "personId": "weishu:054:p071",
+          "kind": "personal-name",
+          "note": "s0094 names the attacking general 張永; s0096 永攻南門 and s0097 乘永之失據 continue his failed attack. The second English Yong is Zhang Yong p071, not the unrelated Prince Yong whose Chinese name is 雍."
+        },
+        "sourceReasoning": "s0094 names the attacking general 張永; s0096 永攻南門 and s0097 乘永之失據 continue his failed attack. The second English Yong is Zhang Yong p071, not the unrelated Prince Yong whose Chinese name is 雍.",
+        "evidence": [
+          {
+            "unit": "s0094",
+            "zh": "時劉彧將張永、沈攸之等率眾先屯下礚，元令璨與中書郎高閭入彭城說安都，安都即與俱載赴軍。",
+            "en": "At that time Liu Yu's generals Zhang Yong and Shen Youzhi had encamped at Xiaqi; Yuan sent Can and gentleman of the Masters of Writing Gao Lu into Pengcheng to persuade Andu, and Andu at once rode with them to the army.",
+            "literal": "At that time Liu Yu's generals Zhang Yong, Shen Youzhi, and others led troops and were first encamped at Xiaqi; Yuan ordered Can and Gentleman of the Masters of Writing Gao Lu to enter Pengcheng and persuade Andu, and Andu at once rode with them to the army.",
+            "chineseHash": "sha256:8bfbcd5e79991bed30f93c00c4285697076df02a8dd961147add5cef5554d0d1",
+            "englishHash": "sha256:d9161ba3f0b3582854c109736081f20f49138083ceca78e88984dd134f9aeb21"
+          },
+          {
+            "unit": "s0096",
+            "zh": "其夜，永攻南門不克，退還。",
+            "en": "That night Yong attacked the south gate, failed to break through, and withdrew.",
+            "literal": "That night Yong attacked the south gate but could not take it and withdrew.",
+            "chineseHash": "sha256:9e37b0fd47328e91d8ee41b143d23c0607706ce2b40e9e639979018b3317103a",
+            "englishHash": "sha256:229750b30908f9a222ae047d3246a2173c4c0c1a15d1c651d24281b6f793e5c1"
+          },
+          {
+            "unit": "s0097",
+            "zh": "時永輜重在武原，璨勸元乘永之失據，攻永米船，大破之，斬首數千級。",
+            "en": "Yong's baggage train was then at Wuyuan; Can urged Yuan to exploit Yong's loss of a secure position, attack his grain boats, and inflict a crushing defeat, beheading several thousand men.",
+            "literal": "At that time Yong's baggage train was at Wuyuan; Can urged Yuan to seize Yong's loss of a secure position, attack Yong's grain boats, and inflict a great defeat, beheading several thousand.",
+            "chineseHash": "sha256:0f666120d9cf100e591f6a02f3cae54c88da10475bd4cc1eacd6e393900b9e9c",
+            "englishHash": "sha256:90b724c3be972610ad62ceea08dc292a17322e116042a07dd3e53c4e18c08bdf"
+          }
+        ],
+        "relatedClaims": [
+          {
+            "id": "weishu:054:c0243",
+            "subject": "weishu:054:p071",
+            "predicate": "name",
+            "value": {
+              "kind": "personal",
+              "en": "Zhang Yong",
+              "zh": "張永",
+              "pinyin": "Zhang Yong"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0094"
+            ]
+          },
+          {
+            "id": "weishu:054:c0244",
+            "subject": "weishu:054:p071",
+            "predicate": "name",
+            "value": {
+              "kind": "personal",
+              "en": "Yong",
+              "zh": "永",
+              "pinyin": "Yong"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0096"
+            ]
+          }
+        ],
+        "status": "source-supported"
+      },
+      {
+        "candidate": {
+          "id": "weishu:054:cand_61bb6b717cf7bb02",
+          "unit": "s0115",
+          "language": "en",
+          "exact": "Yun",
+          "occurrence": 0,
+          "startCodePoint": 0,
+          "endCodePoint": 3,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "decision": {
+          "candidate": "weishu:054:cand_61bb6b717cf7bb02",
+          "action": "link",
+          "personId": "weishu:054:p076",
+          "kind": "personal-name",
+          "note": "s0113 names 子雲 with courtesy name 鳳昇; s0115 begins 子雲弟子羽. Yun corresponds to 子雲, p076, not Yu/子羽 p077. This link requires removing the existing erroneous p077 Yu occurrence 0 inside the letters Yun; see prerequisite-span-repair.json. This decision does not approve the English nephew wording or the stored family edges."
+        },
+        "sourceReasoning": "s0113 names 子雲 with courtesy name 鳳昇; s0115 begins 子雲弟子羽. Yun corresponds to 子雲, p076, not Yu/子羽 p077. This link requires removing the existing erroneous p077 Yu occurrence 0 inside the letters Yun; see prerequisite-span-repair.json. This decision does not approve the English nephew wording or the stored family edges.",
+        "evidence": [
+          {
+            "unit": "s0113",
+            "zh": "秀之弟子雲，字鳳昇。",
+            "en": "Xiuzhi's nephew Yun, whose courtesy name was Fengsheng.",
+            "literal": "Xiuzhi's younger brother's son Yun, styled Fengsheng.",
+            "chineseHash": "sha256:b62e2d8cb159aa0f9ed91ed37c7f72354e4f2700e2d4ef149660674507a151ae",
+            "englishHash": "sha256:9bfba8560c15a3106cd7b7e23ca3202999bf1e7255e75c2eb93b501c1c66babf"
+          },
+          {
+            "unit": "s0115",
+            "zh": "子雲弟子羽，字鳳降。",
+            "en": "Yun's nephew Yu, whose courtesy name was Fengjiang.",
+            "literal": "Yun's younger brother's son Yu, styled Fengjiang.",
+            "chineseHash": "sha256:168bb81484b13b0127a8626f27f559cd8998868bcc3bea1d2cd366f57c0a34b8",
+            "englishHash": "sha256:2e2b4fb5f07d88c3c581a567b036f995d8a5eb3628f6459e64561219eb08a508"
+          },
+          {
+            "unit": "s0117",
+            "zh": "子羽弟子岳，字鳳跱。",
+            "en": "Yu's nephew Yue, whose courtesy name was Fengzhi.",
+            "literal": "Yu's younger brother's son Yue, styled Fengzhi.",
+            "chineseHash": "sha256:520d6946530d14fdb950e494bc9ed0dae513f666cf217245d5f77ed260baa83e",
+            "englishHash": "sha256:1c84a5afa1ffa4ed6623871ca2452e95688ca70a0560ee2099f38cf6d38829ed"
+          },
+          {
+            "unit": "s0119",
+            "zh": "秀之等早孤，事母孝謹，兄弟並容貌魁偉，風度審正，而皆早卒。",
+            "en": "Xiuzhi and his cousins were orphaned early, served their mother with filial care, and were all imposing in appearance and dignified in bearing, yet each died young.",
+            "literal": "Xiuzhi and the others were orphaned early; they served their mother filially and carefully; the brothers were all imposing in appearance and dignified in bearing, yet all died young.",
+            "chineseHash": "sha256:43646d786902416a5f5c8dd68ec7b5fd2ed0a9a88c13d382c62514378ea6e8d3",
+            "englishHash": "sha256:832e2c25546b6356a6c3bfebb62e2059219640000eadd66311b203710f25c4f1"
+          }
+        ],
+        "relatedClaims": [
+          {
+            "id": "weishu:054:c0257",
+            "subject": "weishu:054:p076",
+            "predicate": "name",
+            "value": {
+              "kind": "personal",
+              "en": "Yun",
+              "zh": "子雲",
+              "pinyin": "Ziyun"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0113"
+            ]
+          },
+          {
+            "id": "weishu:054:c0258",
+            "subject": "weishu:054:p076",
+            "predicate": "name",
+            "value": {
+              "kind": "courtesy",
+              "en": "Fengsheng",
+              "zh": "鳳昇",
+              "pinyin": "Fengsheng"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0113"
+            ]
+          },
+          {
+            "id": "weishu:054:c0848",
+            "subject": "weishu:054:p076",
+            "predicate": "family-relationship",
+            "value": {
+              "relation": "kin-of",
+              "personId": "weishu:054:p075",
+              "kinshipTerm": {
+                "zh": "弟子",
+                "en": "nephew"
+              },
+              "subjectRole": "nephew",
+              "objectRole": "uncle"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0113"
+            ]
+          },
+          {
+            "id": "weishu:054:c0852",
+            "subject": "weishu:054:p076",
+            "predicate": "family-relationship",
+            "value": {
+              "relation": "child-of",
+              "personId": "weishu:054:p079",
+              "kinshipTerm": {
+                "zh": "母",
+                "en": "mother"
+              },
+              "parentage": "biological",
+              "subjectRole": "child",
+              "objectRole": "mother"
+            },
+            "certainty": "strongly-inferred",
+            "evidence": [
+              "weishu:054:s0119"
+            ]
+          }
+        ],
+        "status": "source-supported-link-blocked-by-existing-wrong-span"
+      },
+      {
+        "candidate": {
+          "id": "weishu:054:cand_a64315d0ad9d7bad",
+          "unit": "s0115",
+          "language": "en",
+          "exact": "Yu",
+          "occurrence": 1,
+          "startCodePoint": 13,
+          "endCodePoint": 15,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "decision": {
+          "candidate": "weishu:054:cand_a64315d0ad9d7bad",
+          "action": "link",
+          "personId": "weishu:054:p077",
+          "kind": "personal-name",
+          "note": "s0115 子雲弟子羽，字鳳降 identifies 子羽 with courtesy name 鳳降; the standalone English Yu is the introduced man p077. Yuan Yu p045 has different Chinese 元愉 and belongs to a different narrative. Use occurrence 1, not the substring Yu inside Yun."
+        },
+        "sourceReasoning": "s0115 子雲弟子羽，字鳳降 identifies 子羽 with courtesy name 鳳降; the standalone English Yu is the introduced man p077. Yuan Yu p045 has different Chinese 元愉 and belongs to a different narrative. Use occurrence 1, not the substring Yu inside Yun.",
+        "evidence": [
+          {
+            "unit": "s0115",
+            "zh": "子雲弟子羽，字鳳降。",
+            "en": "Yun's nephew Yu, whose courtesy name was Fengjiang.",
+            "literal": "Yun's younger brother's son Yu, styled Fengjiang.",
+            "chineseHash": "sha256:168bb81484b13b0127a8626f27f559cd8998868bcc3bea1d2cd366f57c0a34b8",
+            "englishHash": "sha256:2e2b4fb5f07d88c3c581a567b036f995d8a5eb3628f6459e64561219eb08a508"
+          },
+          {
+            "unit": "s0116",
+            "zh": "征南法曹參軍。",
+            "en": "He served as legal clerk on the southern campaign staff.",
+            "literal": "Legal clerk on the Southern Campaign staff.",
+            "chineseHash": "sha256:1b2d538ac8ed791885852616cce2d66661dec66f4784ab69b9622bf1111a6050",
+            "englishHash": "sha256:fbe01f3b969d30b50ec169aa643e39b9ba76b972d21f1b2e87fb0404d0155c0a"
+          },
+          {
+            "unit": "s0117",
+            "zh": "子羽弟子岳，字鳳跱。",
+            "en": "Yu's nephew Yue, whose courtesy name was Fengzhi.",
+            "literal": "Yu's younger brother's son Yue, styled Fengzhi.",
+            "chineseHash": "sha256:520d6946530d14fdb950e494bc9ed0dae513f666cf217245d5f77ed260baa83e",
+            "englishHash": "sha256:1c84a5afa1ffa4ed6623871ca2452e95688ca70a0560ee2099f38cf6d38829ed"
+          }
+        ],
+        "relatedClaims": [
+          {
+            "id": "weishu:054:c0260",
+            "subject": "weishu:054:p077",
+            "predicate": "name",
+            "value": {
+              "kind": "personal",
+              "en": "Yu",
+              "zh": "子羽",
+              "pinyin": "Ziyu"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0115"
+            ]
+          },
+          {
+            "id": "weishu:054:c0261",
+            "subject": "weishu:054:p077",
+            "predicate": "name",
+            "value": {
+              "kind": "courtesy",
+              "en": "Fengjiang",
+              "zh": "鳳降",
+              "pinyin": "Fengjiang"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0115"
+            ]
+          },
+          {
+            "id": "weishu:054:c0849",
+            "subject": "weishu:054:p077",
+            "predicate": "family-relationship",
+            "value": {
+              "relation": "kin-of",
+              "personId": "weishu:054:p076",
+              "kinshipTerm": {
+                "zh": "弟子",
+                "en": "nephew"
+              },
+              "subjectRole": "nephew",
+              "objectRole": "uncle"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0115"
+            ]
+          }
+        ],
+        "status": "source-supported"
+      },
+      {
+        "candidate": {
+          "id": "weishu:054:cand_57a5e0448c25cba1",
+          "unit": "s0148",
+          "language": "en",
+          "exact": "Xuanmao",
+          "occurrence": 0,
+          "startCodePoint": 0,
+          "endCodePoint": 7,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "decision": {
+          "candidate": "weishu:054:cand_57a5e0448c25cba1",
+          "action": "link",
+          "personId": "weishu:054:p082",
+          "kind": "personal-name",
+          "note": "s0148 宣茂弟叔胤 explicitly identifies Shuyin as Xuanmao's younger brother. The English possessive Xuanmao is the existing Li Xuanmao p082, not the sentence's newly introduced Shuyin p089."
+        },
+        "sourceReasoning": "s0148 宣茂弟叔胤 explicitly identifies Shuyin as Xuanmao's younger brother. The English possessive Xuanmao is the existing Li Xuanmao p082, not the sentence's newly introduced Shuyin p089.",
+        "evidence": [
+          {
+            "unit": "s0148",
+            "zh": "宣茂弟叔胤，舉秀才，著作佐郎。",
+            "en": "Xuanmao's younger brother Shuyin passed the provincial examination as presented scholar and served as an assistant in the office of composition.",
+            "literal": "Xuanmao's younger brother Shuyin passed the provincial examination as Presented Scholar and was an assistant in the Office of Composition.",
+            "chineseHash": "sha256:7018429310d63468140351d42f75f9b9aeedfc177561caaf2a3f75e471306795",
+            "englishHash": "sha256:a85c75fbacf66863a2428415357d2b69d861e94991cc4b8b26620cb05e562ec1"
+          }
+        ],
+        "relatedClaims": [],
+        "status": "source-supported"
+      },
+      {
+        "candidate": {
+          "id": "weishu:054:cand_7b441fdf92143c35",
+          "unit": "s0165",
+          "language": "en",
+          "exact": "Gao Yun",
+          "occurrence": 1,
+          "startCodePoint": 102,
+          "endCodePoint": 109,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "decision": {
+          "candidate": "weishu:054:cand_7b441fdf92143c35",
+          "action": "link",
+          "personId": "weishu:054:p101",
+          "kind": "personal-name",
+          "note": "s0165 names 高允 among Cui Chuo's fellow invitees, then says 語在允傳. The second Gao Yun is the same person whose biography is referenced; p101 already owns the first English and Chinese mention in this very unit. It is a person-name component of the cross-reference, not a separate book title. Do not merge p101 with the other same-name record p065."
+        },
+        "sourceReasoning": "s0165 names 高允 among Cui Chuo's fellow invitees, then says 語在允傳. The second Gao Yun is the same person whose biography is referenced; p101 already owns the first English and Chinese mention in this very unit. It is a person-name component of the cross-reference, not a separate book title. Do not merge p101 with the other same-name record p065.",
+        "evidence": [
+          {
+            "unit": "s0164",
+            "zh": "父綽，少孤，學行修明，有名於世。",
+            "en": "His father Chuo lost his parents early; his scholarship and conduct were cultivated and bright, and he enjoyed renown in the world.",
+            "literal": "His father Chuo was orphaned young; his learning and conduct were cultivated and bright, and he had a name in the world.",
+            "chineseHash": "sha256:1695c58f1e38407e63b12de278ac981d55e85e530ba46060d4d54a9ddf926fbe",
+            "englishHash": "sha256:1dacf928c109c5142ed00f170f03d9c34e744c143a9f1e91c2fb4ae0ca2ee917"
+          },
+          {
+            "unit": "s0165",
+            "zh": "與盧玄、高允、李靈等俱被徵，語在允傳。",
+            "en": "He was summoned to court together with Lu Xuan, Gao Yun, Li Ling, and others; the account is given in Gao Yun's biography.",
+            "literal": "Together with Lu Xuan, Gao Yun, Li Ling, and others he was all summoned to court; the account is in the biography of Yun.",
+            "chineseHash": "sha256:8d3a8bc4609f80bff09a636740391431928946dbc0ad035ef5c9755bbbac07a9",
+            "englishHash": "sha256:920ecce753aa0bdc410e1b4a0ea0feece2f543e2c846df307ffa5e1128f5f726"
+          },
+          {
+            "unit": "s0166",
+            "zh": "尋以母老固辭，後為郡功曹而卒。",
+            "en": "Soon afterward, citing his aged mother, he firmly declined the appointment; he later served as commandery merit clerk and died in that post.",
+            "literal": "Soon, because his mother was old, he firmly declined; later he served as commandery merit clerk and died.",
+            "chineseHash": "sha256:82041d1bfdc3e1b9c544e4e1c9b434677fbfa343e879e78f3f09495a1865f12f",
+            "englishHash": "sha256:c974265c3d33740d724444c796ca8a8dcfe15f2002fc80108293139a7e21071d"
+          }
+        ],
+        "relatedClaims": [
+          {
+            "id": "weishu:054:c0329",
+            "subject": "weishu:054:p101",
+            "predicate": "name",
+            "value": {
+              "kind": "personal",
+              "en": "Gao Yun",
+              "zh": "高允",
+              "pinyin": "Gao Yun"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0165"
+            ]
+          }
+        ],
+        "status": "source-supported"
+      },
+      {
+        "candidate": {
+          "id": "weishu:054:cand_563ac2d058c7edee",
+          "unit": "s0189",
+          "language": "en",
+          "exact": "Bing",
+          "occurrence": 0,
+          "startCodePoint": 58,
+          "endCodePoint": 62,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "decision": {
+          "candidate": "weishu:054:cand_563ac2d058c7edee",
+          "action": "link",
+          "personId": "weishu:054:p106",
+          "kind": "personal-name",
+          "note": "s0183 introduces 合弟秉 and s0185-s0189 continue his career: 彭城王勰征壽春，秉從行. Bing is Cui Bing p106, the local subject of this biography, not the prince or Shouchun. Other Cui Bing records are not being merged."
+        },
+        "sourceReasoning": "s0183 introduces 合弟秉 and s0185-s0189 continue his career: 彭城王勰征壽春，秉從行. Bing is Cui Bing p106, the local subject of this biography, not the prince or Shouchun. Other Cui Bing records are not being merged.",
+        "evidence": [
+          {
+            "unit": "s0183",
+            "zh": "合弟秉，少有志氣。",
+            "en": "He's younger brother Bing was spirited and resolute even in youth.",
+            "literal": "He's younger brother Bing, in youth had will and spirit.",
+            "chineseHash": "sha256:6b9776b46293e89b17adabbf8034dff43ff5c1c12ab8c2f1f8976721bf8f8581",
+            "englishHash": "sha256:31f6f097b82cbb484181ebf5a876592e3a72f14b1fdf3fe71636322b892aa027"
+          },
+          {
+            "unit": "s0185",
+            "zh": "陽平王頤之為定州，[4]秉復為衞軍府錄事參軍，帶毋極令。",
+            "en": "When Prince of Yangping Yizhi served at Dingzhou, [4] Bing again became recording clerk of the guard army command, concurrently serving as magistrate of Wuji.",
+            "literal": "When the Prince of Yangping Yizhi served at Dingzhou, [4] Bing again became recording clerk of the Guard Army command, concurrently magistrate of Wuji.",
+            "chineseHash": "sha256:a02232bdef0e76c22b857f2c14e262a7ba842885fcd0cae7c5e2871871df4495",
+            "englishHash": "sha256:cc20b852cd7d53637cf540e648216c627cebab8aa554aa35c0dcadbe328be43b"
+          },
+          {
+            "unit": "s0186",
+            "zh": "時甄琛為長史，因公事言競之間，秉以拳擊琛，墜於牀下。",
+            "en": "Zhen Chen was then chief secretary; during a dispute over official business Bing punched him and knocked him off the bed.",
+            "literal": "At that time Zhen Chen was chief secretary; during public business a verbal dispute arose between them, and Bing struck Chen with his fist and knocked him from the bed.",
+            "chineseHash": "sha256:d38fb7714131c3b0d7137c6432d5a5cdf4d65f6984aba1ce17d2970d604138a2",
+            "englishHash": "sha256:10285a7d37e257db7408acaef0baa7f45b7de1e283c0e7cad21c51c8b7c1ff19"
+          },
+          {
+            "unit": "s0189",
+            "zh": "彭城王勰征壽春，秉從行，招致壯俠，以為部卒。",
+            "en": "When Prince of Pengcheng Xie campaigned against Shouchun, Bing accompanied him, recruited bold adventurers, and enrolled them as company soldiers.",
+            "literal": "When the Prince of Pengcheng Xie campaigned against Shouchun, Bing followed on the expedition, recruited gallant bravos, and made them company soldiers.",
+            "chineseHash": "sha256:3dffc5a1f1c3c34e6091cb9494371b02d5f65521fa2a3a5f199f89445501594d",
+            "englishHash": "sha256:2b5ff589ba64516a06bf24114d32d60e2d348a5f9135695649148e06b2762e41"
+          }
+        ],
+        "relatedClaims": [
+          {
+            "id": "weishu:054:c0341",
+            "subject": "weishu:054:p106",
+            "predicate": "name",
+            "value": {
+              "kind": "personal",
+              "en": "Bing",
+              "zh": "秉",
+              "pinyin": "Bing"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0183"
+            ]
+          },
+          {
+            "id": "weishu:054:c0968",
+            "subject": "weishu:054:p106",
+            "predicate": "family-relationship",
+            "value": {
+              "relation": "sibling-of",
+              "personId": "weishu:054:p103",
+              "kinshipTerm": {
+                "zh": "弟",
+                "en": "younger brother"
+              },
+              "subjectRole": "younger-brother",
+              "objectRole": "elder-brother",
+              "sharedParentage": "full",
+              "subjectRelativeAge": "younger"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0183"
+            ]
+          }
+        ],
+        "status": "source-supported"
+      },
+      {
+        "candidate": {
+          "id": "weishu:054:cand_2ecceeae447938f6",
+          "unit": "s0190",
+          "language": "en",
+          "exact": "Xie",
+          "occurrence": 0,
+          "startCodePoint": 0,
+          "endCodePoint": 3,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "decision": {
+          "candidate": "weishu:054:cand_2ecceeae447938f6",
+          "action": "dispose",
+          "reason": "ambiguous",
+          "note": "UNRESOLVED OFFERED-OPTION MAPPING, NOT AN UNKNOWN OR NONHUMAN REFERENT: s0189 彭城王勰 is the antecedent of s0190 勰目之 and the quoted speaker. Neither offered p004 Li Xie nor p106 Cui Bing is correct. Existing p129 Yuan Xie has the exact title 彭城王勰 at s0238 but is absent from these options; its English title claim lacks Xie, so the title-claim escape hatch cannot authorize this English span. Hold for a source-backed p129 option/mention repair; do not count this disposition as successful person linkage."
+        },
+        "sourceReasoning": "UNRESOLVED OFFERED-OPTION MAPPING, NOT AN UNKNOWN OR NONHUMAN REFERENT: s0189 彭城王勰 is the antecedent of s0190 勰目之 and the quoted speaker. Neither offered p004 Li Xie nor p106 Cui Bing is correct. Existing p129 Yuan Xie has the exact title 彭城王勰 at s0238 but is absent from these options; its English title claim lacks Xie, so the title-claim escape hatch cannot authorize this English span. Hold for a source-backed p129 option/mention repair; do not count this disposition as successful person linkage.",
+        "evidence": [
+          {
+            "unit": "s0003",
+            "zh": "父勰，字小同，恬靜好學，有聲趙魏。",
+            "en": "His father Xie, whose courtesy name was Xiaotong, was calm and studious and enjoyed renown across Zhao and Wei.",
+            "literal": "His father Xie, styled Xiaotong, was quiet and fond of learning; he had a reputation in Zhao and Wei.",
+            "chineseHash": "sha256:d88583134219fdf8b5fe69618c724ab5b6264deb428a63190428bac8c7386579",
+            "englishHash": "sha256:c8ba6663728f9673093f20129a070cb9b72962dd80f394bfb42902da44384331"
+          },
+          {
+            "unit": "s0189",
+            "zh": "彭城王勰征壽春，秉從行，招致壯俠，以為部卒。",
+            "en": "When Prince of Pengcheng Xie campaigned against Shouchun, Bing accompanied him, recruited bold adventurers, and enrolled them as company soldiers.",
+            "literal": "When the Prince of Pengcheng Xie campaigned against Shouchun, Bing followed on the expedition, recruited gallant bravos, and made them company soldiers.",
+            "chineseHash": "sha256:3dffc5a1f1c3c34e6091cb9494371b02d5f65521fa2a3a5f199f89445501594d",
+            "englishHash": "sha256:2b5ff589ba64516a06bf24114d32d60e2d348a5f9135695649148e06b2762e41"
+          },
+          {
+            "unit": "s0190",
+            "zh": "勰目之，謂左右曰：「吾當寄膽氣於此人。」",
+            "en": "Xie looked him over and told his attendants, \"I mean to place my courage in this man's keeping.\"",
+            "literal": "Xie fixed his gaze on him and said to those beside him: \"I shall entrust my bold spirit to this man.\"",
+            "chineseHash": "sha256:483303905462ed23ddd971b4b3b3b843bf2c627ade26f29f23fee1795586749e",
+            "englishHash": "sha256:355da3b965ed6855d3adad8698c87134ecfbab4bf034cab8d6729c545345221d"
+          },
+          {
+            "unit": "s0238",
+            "zh": "歷司徒主簿、彭城王勰開府屬。",
+            "en": "He served successively as chief clerk under the minister of works and on the opening office staff of Prince of Pengcheng Xie.",
+            "literal": "He served successively as chief clerk under the Minister of Works and a member of Prince of Pengcheng Xie's opening office staff.",
+            "chineseHash": "sha256:ad2f3e6d130d9288e6328c5c187de4adf38dcd5662fffe0508889b685ee463bf",
+            "englishHash": "sha256:3d3c9cd5b934334a0c3eb783662cfdc405f4418ec013b4481b9d4b5f36a747e8"
+          }
+        ],
+        "relatedClaims": [],
+        "status": "unresolved-offered-owner-hold"
+      },
+      {
+        "candidate": {
+          "id": "weishu:054:cand_efe677fb0f071bb5",
+          "unit": "s0198",
+          "language": "en",
+          "exact": "Bing",
+          "occurrence": 1,
+          "startCodePoint": 80,
+          "endCodePoint": 84,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "decision": {
+          "candidate": "weishu:054:cand_efe677fb0f071bb5",
+          "action": "link",
+          "personId": "weishu:054:p106",
+          "kind": "personal-name",
+          "note": "s0198 秉堅守歷年...與秉第二子仲哲赴救 repeats the same defender as the father of Zhongzhe. p106 already owns the first Bing in this unit and the surrounding siege narrative. Link the second possessive Bing to p106, not commander Yuan Tan or the son."
+        },
+        "sourceReasoning": "s0198 秉堅守歷年...與秉第二子仲哲赴救 repeats the same defender as the father of Zhongzhe. p106 already owns the first Bing in this unit and the surrounding siege narrative. Link the second possessive Bing to p106, not commander Yuan Tan or the son.",
+        "evidence": [
+          {
+            "unit": "s0183",
+            "zh": "合弟秉，少有志氣。",
+            "en": "He's younger brother Bing was spirited and resolute even in youth.",
+            "literal": "He's younger brother Bing, in youth had will and spirit.",
+            "chineseHash": "sha256:6b9776b46293e89b17adabbf8034dff43ff5c1c12ab8c2f1f8976721bf8f8581",
+            "englishHash": "sha256:31f6f097b82cbb484181ebf5a876592e3a72f14b1fdf3fe71636322b892aa027"
+          },
+          {
+            "unit": "s0197",
+            "zh": "時天下多事，遂為杜洛周攻圍。",
+            "en": "The realm was then in turmoil, and he came under siege by Du Luozhou.",
+            "literal": "At that time the realm had many troubles, and he was then besieged by Du Luozhou.",
+            "chineseHash": "sha256:9f19239752a38d8f4791f18c7cec8c03498fb453f90b6e16073d2445cfd570fb",
+            "englishHash": "sha256:e6531d45d120af9b5690b52e67213b865f381171057004084df52ffaa012da63"
+          },
+          {
+            "unit": "s0198",
+            "zh": "秉堅守歷年，朝庭遣都督元譚與秉第二子仲哲赴救。",
+            "en": "Bing held out steadfastly for years until the court sent Commander Yuan Tan and Bing's second son Zhongzhe to relieve the city.",
+            "literal": "Bing defended steadfastly for years; the court sent Commander-in-Chief Yuan Tan and Bing's second son Zhongzhe to the rescue.",
+            "chineseHash": "sha256:0a1de3a1e7ce731dc30cdbbaf5cf9406e0a5bf3e8e05d65746623aae5233b1a9",
+            "englishHash": "sha256:9ef49e84385fca3206f4c505188e49d365b2b506064e6b5cd9d215cab4d92400"
+          },
+          {
+            "unit": "s0199",
+            "zh": "譚敗，仲哲死之。",
+            "en": "Tan was defeated and Zhongzhe was killed in the attempt.",
+            "literal": "Tan was defeated, and Zhongzhe died in the effort.",
+            "chineseHash": "sha256:3148958a8defc9f1d7fdb3a20de63c6feda54774761727361e01f34831386135",
+            "englishHash": "sha256:9929c0e720c5c82b1f159450872162459ae743f41c33989337fe73309998183e"
+          }
+        ],
+        "relatedClaims": [
+          {
+            "id": "weishu:054:c0341",
+            "subject": "weishu:054:p106",
+            "predicate": "name",
+            "value": {
+              "kind": "personal",
+              "en": "Bing",
+              "zh": "秉",
+              "pinyin": "Bing"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0183"
+            ]
+          },
+          {
+            "id": "weishu:054:c0968",
+            "subject": "weishu:054:p106",
+            "predicate": "family-relationship",
+            "value": {
+              "relation": "sibling-of",
+              "personId": "weishu:054:p103",
+              "kinshipTerm": {
+                "zh": "弟",
+                "en": "younger brother"
+              },
+              "subjectRole": "younger-brother",
+              "objectRole": "elder-brother",
+              "sharedParentage": "full",
+              "subjectRelativeAge": "younger"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0183"
+            ]
+          }
+        ],
+        "status": "source-supported"
+      },
+      {
+        "candidate": {
+          "id": "weishu:054:cand_015b42bb244a2f4c",
+          "unit": "s0202",
+          "language": "en",
+          "exact": "Bing",
+          "occurrence": 0,
+          "startCodePoint": 128,
+          "endCodePoint": 132,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "decision": {
+          "candidate": "weishu:054:cand_015b42bb244a2f4c",
+          "action": "link",
+          "personId": "weishu:054:p106",
+          "kind": "personal-name",
+          "note": "s0202 除秉為刺史 names the appointee in the continuous Cui Bing biography after the siege. It refers to local p106, not the province or a new bearer of Bing. The time wording is read for narrative continuity only; no chronology is approved."
+        },
+        "sourceReasoning": "s0202 除秉為刺史 names the appointee in the continuous Cui Bing biography after the siege. It refers to local p106, not the province or a new bearer of Bing. The time wording is read for narrative continuity only; no chronology is approved.",
+        "evidence": [
+          {
+            "unit": "s0198",
+            "zh": "秉堅守歷年，朝庭遣都督元譚與秉第二子仲哲赴救。",
+            "en": "Bing held out steadfastly for years until the court sent Commander Yuan Tan and Bing's second son Zhongzhe to relieve the city.",
+            "literal": "Bing defended steadfastly for years; the court sent Commander-in-Chief Yuan Tan and Bing's second son Zhongzhe to the rescue.",
+            "chineseHash": "sha256:0a1de3a1e7ce731dc30cdbbaf5cf9406e0a5bf3e8e05d65746623aae5233b1a9",
+            "englishHash": "sha256:9ef49e84385fca3206f4c505188e49d365b2b506064e6b5cd9d215cab4d92400"
+          },
+          {
+            "unit": "s0200",
+            "zh": "秉遂率城民奔定州，坐免官。",
+            "en": "Bing then led the city's people in flight to Dingzhou and was dismissed from office as punishment.",
+            "literal": "Bing then led the people of the city in flight to Dingzhou and was dismissed from office as punishment.",
+            "chineseHash": "sha256:f29fc16c699dc68d219e1087ce81d0eb4bbb144911e58a155efe6428294da5e2",
+            "englishHash": "sha256:d8f3285a3d0a209629b7be464db669b132754ff1ab8f232283d61fc3853c8dc0"
+          },
+          {
+            "unit": "s0201",
+            "zh": "尋除撫軍將軍，行相州事，轉征東將軍、金紫光祿大夫。",
+            "en": "Soon afterward he was made general who pacifies the army, put in charge of Xiangzhou affairs, and then promoted to general who campaigns against the east and grand master of the golden seal and purple radiance.",
+            "literal": "Soon after he was appointed General Who Pacifies the Army, acted as administrator of Xiangzhou affairs, and was transferred to General Who Campaigns Against the East and Grand Master of the Golden Seal and Purple Radiance.",
+            "chineseHash": "sha256:9880542a24ad0b30a29a4fbe7ba36b278e7be9ceaeed2fc794ca1972969faa79",
+            "englishHash": "sha256:f8e9986feb031582338549e6d6a4a576a27f946f0b87ccca3f29cadb353232e9"
+          },
+          {
+            "unit": "s0202",
+            "zh": "孝昌末，冀州流民聚於河外，因立東冀州，除秉為刺史，加征東將軍。",
+            "en": "Late in the Xiaochang era, refugees from Ji Province gathered beyond the Yellow River, and Eastern Ji Province was established; Bing was appointed its regional inspector and additionally made general who campaigns east.",
+            "literal": "At the end of Xiaochang, displaced persons from Ji Province gathered beyond the Yellow River, and in consequence Eastern Ji Province was established; Bing was appointed regional inspector and additionally given the title General Who Campaigns East.",
+            "chineseHash": "sha256:ceb95a69612b8cbcd1198d4bb0039dcfe21d1c927b9b4a33c7818718ec980168",
+            "englishHash": "sha256:73f3f41d532255adf52b89eb46aa4972a76c58e401dc00fa04df04e6f2afd5c2"
+          }
+        ],
+        "relatedClaims": [],
+        "status": "source-supported"
+      },
+      {
+        "candidate": {
+          "id": "weishu:054:cand_de91e3f8679351d4",
+          "unit": "s0215",
+          "language": "en",
+          "exact": "Xin",
+          "occurrence": 0,
+          "startCodePoint": 147,
+          "endCodePoint": 150,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "decision": {
+          "candidate": "weishu:054:cand_de91e3f8679351d4",
+          "action": "link",
+          "personId": "weishu:054:p111",
+          "kind": "personal-name",
+          "note": "s0213 introduces 長子忻，字伯悅. In s0215 常景引為行臺郎...復為安遠將軍 the omitted object/continuing appointee is that same 忻, explicitly supplied as Xin in English. Link p111, not his recruiter Chang Jing p114."
+        },
+        "sourceReasoning": "s0213 introduces 長子忻，字伯悅. In s0215 常景引為行臺郎...復為安遠將軍 the omitted object/continuing appointee is that same 忻, explicitly supplied as Xin in English. Link p111, not his recruiter Chang Jing p114.",
+        "evidence": [
+          {
+            "unit": "s0213",
+            "zh": "長子忻，字伯悅，有世幹。",
+            "en": "The eldest son Xin, whose courtesy name was Boyue, had inherited family talent.",
+            "literal": "The eldest son Xin, styled Boyue, had inherited family talent.",
+            "chineseHash": "sha256:d86c8986029f335881b69e7776b40ef6f35e22d05381b2cb2ab64a04eb8ed2d4",
+            "englishHash": "sha256:b73232ca809b7c0253d38c03b380a0d920d93b6045629e3e76f0e303590c0981"
+          },
+          {
+            "unit": "s0214",
+            "zh": "為荊州平南府外兵參軍。",
+            "en": "He served as external military staff officer on the pacify-the-south staff of Jing Province.",
+            "literal": "He served as external military staff officer of the Pacify-the-South command of Jing Province.",
+            "chineseHash": "sha256:8c29b5bced96be9d952c829c3be5a9d59fd6c90a3ba6f5fbe4f33322563f64d0",
+            "englishHash": "sha256:5025356e809491b2b97f06f0c024383fc35512446340f9ad2b88c13e403935d4"
+          },
+          {
+            "unit": "s0215",
+            "zh": "北道行臺常景引為行臺郎，又啟除員外郎，復為安遠將軍、尚書左中兵郎中。",
+            "en": "Chang Jing of the northern route mobile headquarters recruited him as a mobile staff clerk; he also had him appointed extraordinary gentleman, and Xin again served as general who pacifies the distance and director of the central military bureau on the left in the masters of writing.",
+            "literal": "Chang Jing of the Northern Route Mobile Headquarters recruited him as a clerk on the mobile staff; he also submitted a request appointing him Extraordinary Gentleman; he again served as General Who Pacifies the Distance and Director of the Central Military Bureau of the Left in the Masters of Writing.",
+            "chineseHash": "sha256:bd47524aa336eb8e4a00febf08a8b6464797379412a179156012ddeb626a6bcf",
+            "englishHash": "sha256:b7d2700899b7d2fa17f226686a43258a28093f6998715ff7b0e475ad8967f76c"
+          },
+          {
+            "unit": "s0216",
+            "zh": "以鄭儼之甥，兼尚書左丞。",
+            "en": "As Zheng Yan's nephew, he concurrently served as left assistant director of the masters of writing.",
+            "literal": "As nephew of Zheng Yan, he concurrently served as Left Assistant Director of the Masters of Writing.",
+            "chineseHash": "sha256:c20639e1effbb5366b5f62971b6804993037a60c15159760413e6e45d1fb2ae0",
+            "englishHash": "sha256:3eef9d2a3777a553ef9cf3917dbfd002aeecd11869e8dd2a768f0d187304bb61"
+          }
+        ],
+        "relatedClaims": [
+          {
+            "id": "weishu:054:c0358",
+            "subject": "weishu:054:p111",
+            "predicate": "name",
+            "value": {
+              "kind": "personal",
+              "en": "Xin",
+              "zh": "忻",
+              "pinyin": "Xin"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0213"
+            ]
+          },
+          {
+            "id": "weishu:054:c0359",
+            "subject": "weishu:054:p111",
+            "predicate": "name",
+            "value": {
+              "kind": "courtesy",
+              "en": "Boyue",
+              "zh": "伯悅",
+              "pinyin": "Boyue"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0213"
+            ]
+          },
+          {
+            "id": "weishu:054:c0969",
+            "subject": "weishu:054:p111",
+            "predicate": "family-relationship",
+            "value": {
+              "relation": "child-of",
+              "personId": "weishu:054:p106",
+              "kinshipTerm": {
+                "zh": "長子",
+                "en": "eldest son"
+              },
+              "parentage": "biological",
+              "subjectRole": "eldest-son",
+              "objectRole": "father",
+              "subjectBirthOrder": 1
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0213"
+            ]
+          },
+          {
+            "id": "weishu:054:c0972",
+            "subject": "weishu:054:p111",
+            "predicate": "family-relationship",
+            "value": {
+              "relation": "kin-of",
+              "personId": "weishu:054:p115",
+              "kinshipTerm": {
+                "zh": "甥",
+                "en": "nephew"
+              },
+              "subjectRole": "nephew",
+              "objectRole": "maternal-uncle"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0216"
+            ]
+          }
+        ],
+        "status": "source-supported"
+      },
+      {
+        "candidate": {
+          "id": "weishu:054:cand_e5c875e4f87820b0",
+          "unit": "s0224",
+          "language": "en",
+          "exact": "Bing",
+          "occurrence": 0,
+          "startCodePoint": 16,
+          "endCodePoint": 20,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "decision": {
+          "candidate": "weishu:054:cand_e5c875e4f87820b0",
+          "action": "link",
+          "personId": "weishu:054:p106",
+          "kind": "personal-name",
+          "note": "s0219 introduces 仲哲 and s0224 及父秉於燕州被圍 identifies his father. This recalls s0198 秉第二子仲哲赴救 in p106's siege narrative. The father Bing is p106; the following Yuan Tan is the relief commander, not the father."
+        },
+        "sourceReasoning": "s0219 introduces 仲哲 and s0224 及父秉於燕州被圍 identifies his father. This recalls s0198 秉第二子仲哲赴救 in p106's siege narrative. The father Bing is p106; the following Yuan Tan is the relief commander, not the father.",
+        "evidence": [
+          {
+            "unit": "s0198",
+            "zh": "秉堅守歷年，朝庭遣都督元譚與秉第二子仲哲赴救。",
+            "en": "Bing held out steadfastly for years until the court sent Commander Yuan Tan and Bing's second son Zhongzhe to relieve the city.",
+            "literal": "Bing defended steadfastly for years; the court sent Commander-in-Chief Yuan Tan and Bing's second son Zhongzhe to the rescue.",
+            "chineseHash": "sha256:0a1de3a1e7ce731dc30cdbbaf5cf9406e0a5bf3e8e05d65746623aae5233b1a9",
+            "englishHash": "sha256:9ef49e84385fca3206f4c505188e49d365b2b506064e6b5cd9d215cab4d92400"
+          },
+          {
+            "unit": "s0219",
+            "zh": "忻弟仲哲。",
+            "en": "Xin's younger brother Zhongzhe.",
+            "literal": "Xin's younger brother Zhongzhe.",
+            "chineseHash": "sha256:d3dbae412a771ffb856c50a420dffb5600799c365395f16cd7c807641be9a1c9",
+            "englishHash": "sha256:5e90ce30c6cf4bc19ea332e5218ff4fe9fc8bd2146d711a78984ff33a51000bc"
+          },
+          {
+            "unit": "s0223",
+            "zh": "假寧朔將軍、統軍，從廣陽王淵北討，擊柔玄賊，破之，賜爵安平縣男。",
+            "en": "Provisionally made general who pacifies the north and army commander, he followed Prince of Guangyang Yuan on the northern campaign, defeated the Rouxuan bandits, and was granted the barony of Anping County.",
+            "literal": "Provisionally made General Who Pacifies the North and Commander of Armies, he followed Prince of Guangyang Yuan on the northern campaign, struck the Rouxuan bandits, defeated them, and was granted the title Baron of Anping County.",
+            "chineseHash": "sha256:ea58bb6a68d83aee72cff4f640f69e37b6e1509b3cb742c42889ae7fad9ce20f",
+            "englishHash": "sha256:9f4a23bece6252e88860ecf0ef22eee8d9473120a1bb9cde824ae87274357857"
+          },
+          {
+            "unit": "s0224",
+            "zh": "及父秉於燕州被圍，泣訴朝庭，遂除別將，與都督元譚赴援。",
+            "en": "When his father Bing was besieged at Yanzhou, he wept and appealed to the court; he was then made a separate commander and went with Commander Yuan Tan to relieve the city.",
+            "literal": "When his father Bing was besieged at Yanzhou, he wept and pleaded to the court; he was then appointed separate commander and went with Commander Yuan Tan to relieve him.",
+            "chineseHash": "sha256:4b42e1cca3aa1acb34d98a6b2e9271e1f9e28dcaa7f46d517d789a11f11067d5",
+            "englishHash": "sha256:11143bd5c9ab1c5458a63901592dc962aea8603b48ee631646e1561ed72af0d8"
+          },
+          {
+            "unit": "s0225",
+            "zh": "到下口，遇賊，仲哲戰歿，時年三十五。",
+            "en": "At Xiakou they met the enemy; Zhongzhe was killed in battle at the age of thirty-five.",
+            "literal": "Reaching Xiakou, they encountered bandits; Zhongzhe died in battle; he was thirty-five.",
+            "chineseHash": "sha256:c831b0b7a78503160b09fa335243d327c83e8e25bc9f553bb1b9e7b12478a9ca",
+            "englishHash": "sha256:c432e2fc5d398a2dd45c3f702fb43cb508ef82164708a038e2b8ebde7ad38587"
+          }
+        ],
+        "relatedClaims": [],
+        "status": "source-supported"
+      },
+      {
+        "candidate": {
+          "id": "weishu:054:cand_9baf67400118ac48",
+          "unit": "s0228",
+          "language": "en",
+          "exact": "Zhongzhe",
+          "occurrence": 0,
+          "startCodePoint": 0,
+          "endCodePoint": 8,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "decision": {
+          "candidate": "weishu:054:cand_9baf67400118ac48",
+          "action": "link",
+          "personId": "weishu:054:p112",
+          "kind": "personal-name",
+          "note": "s0228 仲哲弟叔彥 explicitly names Zhongzhe as Shuyan's elder brother, continuing the Zhongzhe introduced at s0219 and named in s0225. The English possessive Zhongzhe links to p112, while Shuyan is p120."
+        },
+        "sourceReasoning": "s0228 仲哲弟叔彥 explicitly names Zhongzhe as Shuyan's elder brother, continuing the Zhongzhe introduced at s0219 and named in s0225. The English possessive Zhongzhe links to p112, while Shuyan is p120.",
+        "evidence": [
+          {
+            "unit": "s0219",
+            "zh": "忻弟仲哲。",
+            "en": "Xin's younger brother Zhongzhe.",
+            "literal": "Xin's younger brother Zhongzhe.",
+            "chineseHash": "sha256:d3dbae412a771ffb856c50a420dffb5600799c365395f16cd7c807641be9a1c9",
+            "englishHash": "sha256:5e90ce30c6cf4bc19ea332e5218ff4fe9fc8bd2146d711a78984ff33a51000bc"
+          },
+          {
+            "unit": "s0225",
+            "zh": "到下口，遇賊，仲哲戰歿，時年三十五。",
+            "en": "At Xiakou they met the enemy; Zhongzhe was killed in battle at the age of thirty-five.",
+            "literal": "Reaching Xiakou, they encountered bandits; Zhongzhe died in battle; he was thirty-five.",
+            "chineseHash": "sha256:c831b0b7a78503160b09fa335243d327c83e8e25bc9f553bb1b9e7b12478a9ca",
+            "englishHash": "sha256:c432e2fc5d398a2dd45c3f702fb43cb508ef82164708a038e2b8ebde7ad38587"
+          },
+          {
+            "unit": "s0228",
+            "zh": "仲哲弟叔彥，撫軍將軍。",
+            "en": "Zhongzhe's younger brother Shuyan was general who pacifies the army.",
+            "literal": "Zhongzhe's younger brother Shuyan was General Who Pacifies the Army.",
+            "chineseHash": "sha256:3ff5557e5a94fe35b8e52a76d5bfd67bd6dc3136f6b8272803861915a7c39d84",
+            "englishHash": "sha256:857d94b0bb24d112e9b2dae45bfe2e30e11dabcab210109345e27db5a7bc3f50"
+          }
+        ],
+        "relatedClaims": [
+          {
+            "id": "weishu:054:c0362",
+            "subject": "weishu:054:p112",
+            "predicate": "name",
+            "value": {
+              "kind": "personal",
+              "en": "Zhongzhe",
+              "zh": "仲哲",
+              "pinyin": "Zhongzhe"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0198",
+              "weishu:054:s0219"
+            ]
+          },
+          {
+            "id": "weishu:054:c0970",
+            "subject": "weishu:054:p112",
+            "predicate": "family-relationship",
+            "value": {
+              "relation": "sibling-of",
+              "personId": "weishu:054:p111",
+              "kinshipTerm": {
+                "zh": "弟",
+                "en": "younger brother"
+              },
+              "subjectRole": "younger-brother",
+              "objectRole": "elder-brother",
+              "sharedParentage": "full",
+              "subjectRelativeAge": "younger"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0219"
+            ]
+          }
+        ],
+        "status": "source-supported"
+      },
+      {
+        "candidate": {
+          "id": "weishu:054:cand_bda37176991b833b",
+          "unit": "s0246",
+          "language": "en",
+          "exact": "Bing",
+          "occurrence": 0,
+          "startCodePoint": 0,
+          "endCodePoint": 4,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "decision": {
+          "candidate": "weishu:054:cand_bda37176991b833b",
+          "action": "link",
+          "personId": "weishu:054:p126",
+          "kind": "personal-name",
+          "note": "s0246 秉從父弟廣 names Bing as Guang's older paternal cousin after the nearby 秉弟習 branch. In this local extraction branch, p126 owns 秉 at s0233/s0235/s0237 and is the endpoint of Guang p132's source-backed s0246 kinship claim c1073. Retain that local owner for the callback; this does not merge the duplicate-looking p106/p126/p161 records."
+        },
+        "sourceReasoning": "s0246 秉從父弟廣 names Bing as Guang's older paternal cousin after the nearby 秉弟習 branch. In this local extraction branch, p126 owns 秉 at s0233/s0235/s0237 and is the endpoint of Guang p132's source-backed s0246 kinship claim c1073. Retain that local owner for the callback; this does not merge the duplicate-looking p106/p126/p161 records.",
+        "evidence": [
+          {
+            "unit": "s0233",
+            "zh": "及秉還鄉，季良亦去職歸養。",
+            "en": "When Bing returned home, Jiliang also left office to go home and care for him.",
+            "literal": "When Bing returned to his home district, Jiliang also left office to return home and care for him.",
+            "chineseHash": "sha256:6710851bb83cb0ed3b088ee8edd4506686cf2d83aef461a7ca2586d32b137b86",
+            "englishHash": "sha256:513e035f18a246395498dcb6acdf500d4809c1d1d86ac97d23b39dc83c35d2df"
+          },
+          {
+            "unit": "s0235",
+            "zh": "先秉卒於家，時年三十六。",
+            "en": "He died before Bing, who later died at home; he was thirty-six at the time.",
+            "literal": "He predeceased Bing, who later died at home; he was thirty-six.",
+            "chineseHash": "sha256:7428966fff566e1fdeaa0fa9e7ceca7318b0349447b98cc37d911364a4e20bdb",
+            "englishHash": "sha256:f9bb8c4cb9b59a4c9e5ac1c22f23a3b67910ac87dce2de9abc93fcbd2b8a2b18"
+          },
+          {
+            "unit": "s0237",
+            "zh": "秉弟習，字貴禮，有世譽。",
+            "en": "Bing's younger brother Xi, whose courtesy name was Guili, enjoyed inherited family repute.",
+            "literal": "Bing's younger brother Xi, styled Guili, enjoyed inherited family repute.",
+            "chineseHash": "sha256:7d16a329a9e324fd172737ebf37d61e676a992cca76cf637e36543f3411648e8",
+            "englishHash": "sha256:40d5bb81c0d30374b5897c4b5733b8949f011246088c71ddfc8a74f5db443fb7"
+          },
+          {
+            "unit": "s0246",
+            "zh": "秉從父弟廣，字仲慶，有議幹。",
+            "en": "Bing's younger paternal cousin Guang, whose courtesy name was Zhongqing, had talent for deliberation.",
+            "literal": "Bing's younger paternal cousin Guang, styled Zhongqing, had talent for deliberation.",
+            "chineseHash": "sha256:1b9b05c7c31b2f8f022d26ca9ab6ed8a43fd9617012f6425111b35625db8ecdf",
+            "englishHash": "sha256:9c5a53a267d97b27603bd381af495542869ebdb8c0f488d2177b6072bc2cfe4e"
+          }
+        ],
+        "relatedClaims": [
+          {
+            "id": "weishu:054:c0396",
+            "subject": "weishu:054:p126",
+            "predicate": "name",
+            "value": {
+              "kind": "personal",
+              "en": "Bing",
+              "zh": "秉",
+              "pinyin": "Bing"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0233"
+            ]
+          }
+        ],
+        "status": "source-supported"
+      },
+      {
+        "candidate": {
+          "id": "weishu:054:cand_db8fba387374f743",
+          "unit": "s0250",
+          "language": "en",
+          "exact": "Guang",
+          "occurrence": 1,
+          "startCodePoint": 128,
+          "endCodePoint": 133,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "decision": {
+          "candidate": "weishu:054:cand_db8fba387374f743",
+          "action": "link",
+          "personId": "weishu:054:p132",
+          "kind": "personal-name",
+          "note": "s0246 introduces 廣字仲慶. In s0250 引廣為鎮南府長史，以母老辭 the recruited Guang declines because of his mother. The second English Guang is the same p132 already linked to the first Guang in the sentence, not Prince Cheng p134."
+        },
+        "sourceReasoning": "s0246 introduces 廣字仲慶. In s0250 引廣為鎮南府長史，以母老辭 the recruited Guang declines because of his mother. The second English Guang is the same p132 already linked to the first Guang in the sentence, not Prince Cheng p134.",
+        "evidence": [
+          {
+            "unit": "s0246",
+            "zh": "秉從父弟廣，字仲慶，有議幹。",
+            "en": "Bing's younger paternal cousin Guang, whose courtesy name was Zhongqing, had talent for deliberation.",
+            "literal": "Bing's younger paternal cousin Guang, styled Zhongqing, had talent for deliberation.",
+            "chineseHash": "sha256:1b9b05c7c31b2f8f022d26ca9ab6ed8a43fd9617012f6425111b35625db8ecdf",
+            "englishHash": "sha256:9c5a53a267d97b27603bd381af495542869ebdb8c0f488d2177b6072bc2cfe4e"
+          },
+          {
+            "unit": "s0249",
+            "zh": "詔守尚書左丞，父憂去職。",
+            "en": "An edict appointed him acting left assistant director of the masters of writing, but he left office to mourn his father.",
+            "literal": "An edict appointed him acting Left Assistant Director of the Masters of Writing; on his father's death he left office.",
+            "chineseHash": "sha256:eb0d75165a33007c52cb3ed242c2cd0ee536b8cb67ec8f60d9000bad9303fb90",
+            "englishHash": "sha256:52a0a4d0a974d6cda98037db109e255cd8686d8f077b8b1eb77bb6a3b97d1a77"
+          },
+          {
+            "unit": "s0250",
+            "zh": "後任城王澄為揚州，引廣為鎮南府長史，以母老辭。",
+            "en": "Later, when Prince of Rencheng Cheng went to Yangzhou, he recruited Guang as chief secretary of the pacify-the-south staff, but Guang declined because his mother was old.",
+            "literal": "Later when Prince of Rencheng Cheng was assigned to Yangzhou, he recruited Guang as chief secretary of the Pacify-the-South command, but Guang declined on grounds that his mother was elderly.",
+            "chineseHash": "sha256:df12b6d9ca0a7cd0bc6ce4ab19ae03fce68522cb92ea8a82c66766de63707bef",
+            "englishHash": "sha256:c893fc138a8a8f2308ac1be4cfa73367a0a4b008a54eba437e33c0b285692f9a"
+          }
+        ],
+        "relatedClaims": [
+          {
+            "id": "weishu:054:c0412",
+            "subject": "weishu:054:p132",
+            "predicate": "name",
+            "value": {
+              "kind": "personal",
+              "en": "Guang",
+              "zh": "廣",
+              "pinyin": "Guang"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0246"
+            ]
+          },
+          {
+            "id": "weishu:054:c0413",
+            "subject": "weishu:054:p132",
+            "predicate": "name",
+            "value": {
+              "kind": "courtesy",
+              "en": "Zhongqing",
+              "zh": "仲慶",
+              "pinyin": "Zhongqing"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0246"
+            ]
+          },
+          {
+            "id": "weishu:054:c1073",
+            "subject": "weishu:054:p132",
+            "predicate": "family-relationship",
+            "value": {
+              "relation": "kin-of",
+              "personId": "weishu:054:p126",
+              "kinshipTerm": {
+                "zh": "從父弟",
+                "en": "younger paternal cousin"
+              },
+              "subjectRole": "younger-cousin",
+              "objectRole": "elder-cousin",
+              "line": "paternal"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0246"
+            ]
+          },
+          {
+            "id": "weishu:054:c1074",
+            "subject": "weishu:054:p132",
+            "predicate": "family-relationship",
+            "value": {
+              "relation": "child-of",
+              "personId": "weishu:054:p135",
+              "kinshipTerm": {
+                "zh": "父",
+                "en": "father"
+              },
+              "parentage": "biological",
+              "subjectRole": "son",
+              "objectRole": "father"
+            },
+            "certainty": "strongly-inferred",
+            "evidence": [
+              "weishu:054:s0249"
+            ]
+          },
+          {
+            "id": "weishu:054:c1075",
+            "subject": "weishu:054:p132",
+            "predicate": "family-relationship",
+            "value": {
+              "relation": "child-of",
+              "personId": "weishu:054:p136",
+              "kinshipTerm": {
+                "zh": "母",
+                "en": "mother"
+              },
+              "parentage": "biological",
+              "subjectRole": "son",
+              "objectRole": "mother"
+            },
+            "certainty": "strongly-inferred",
+            "evidence": [
+              "weishu:054:s0250"
+            ]
+          }
+        ],
+        "status": "source-supported"
+      },
+      {
+        "candidate": {
+          "id": "weishu:054:cand_d148c64a211ae4b1",
+          "unit": "s0275",
+          "language": "en",
+          "exact": "Wei",
+          "occurrence": 0,
+          "startCodePoint": 23,
+          "endCodePoint": 26,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "decision": {
+          "candidate": "weishu:054:cand_d148c64a211ae4b1",
+          "action": "link",
+          "personId": "weishu:054:p148",
+          "kind": "alternate-name",
+          "note": "s0274 identifies the name 系, and s0275 按本名「緯」 explicitly says his original name was Wei. This is the personal-name variant 緯 of the local Li Xi p148, already linked to 緯 in Chinese here, not the surname of Wei Shou or Li Xianfu's posthumous epithet."
+        },
+        "sourceReasoning": "s0274 identifies the name 系, and s0275 按本名「緯」 explicitly says his original name was Wei. This is the personal-name variant 緯 of the local Li Xi p148, already linked to 緯 in Chinese here, not the surname of Wei Shou or Li Xianfu's posthumous epithet.",
+        "evidence": [
+          {
+            "unit": "s0274",
+            "zh": "繪弟系 北史卷三三「系」作「緯」。",
+            "en": "Hui's younger brother Xi: Beishi juan 33 writes \"Xi\" as \"Wei\".",
+            "literal": "Hui's younger brother Xi: in Beishi juan 33 \"Xi\" is written \"Wei.\"",
+            "chineseHash": "sha256:70277007c586435139539f1311d6c4ea03f7cf45b7f0584cc7331722ecb99a65",
+            "englishHash": "sha256:f5d56415c3f00e11e5eba0959d70718059ca5a59bfdfd47809140e6daec97dcf"
+          },
+          {
+            "unit": "s0275",
+            "zh": "按本名「緯」，魏收避北齊後主諱改作「系」。",
+            "en": "His original name was \"Wei\"; Wei Shou changed it to \"Xi\" to avoid the taboo of the Northern Qi latter ruler.",
+            "literal": "His original name was \"Wei\"; Wei Shou changed it to \"Xi\" to avoid the taboo of the Northern Qi latter ruler.",
+            "chineseHash": "sha256:44ac43e440ba6940a2430b8ab7265ca76c37e95b5429c8b4a5e150102e77773b",
+            "englishHash": "sha256:9b708817a404f1ceb2440b7e7d670127fa1e2fdc78f0cd5b4fcbbe0f9e910ec3"
+          }
+        ],
+        "relatedClaims": [
+          {
+            "id": "weishu:054:c0447",
+            "subject": "weishu:054:p148",
+            "predicate": "name",
+            "value": {
+              "kind": "personal",
+              "en": "Xi",
+              "zh": "系",
+              "pinyin": "Xi"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0274"
+            ]
+          },
+          {
+            "id": "weishu:054:c0448",
+            "subject": "weishu:054:p148",
+            "predicate": "name",
+            "value": {
+              "kind": "alternate",
+              "en": "Wei",
+              "zh": "緯",
+              "pinyin": "Wei"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0275"
+            ]
+          },
+          {
+            "id": "weishu:054:c1080",
+            "subject": "weishu:054:p148",
+            "predicate": "family-relationship",
+            "value": {
+              "relation": "sibling-of",
+              "personId": "weishu:054:p147",
+              "kinshipTerm": {
+                "zh": "弟",
+                "en": "younger brother"
+              },
+              "subjectRole": "younger-brother",
+              "objectRole": "elder-brother",
+              "sharedParentage": "full",
+              "subjectRelativeAge": "younger"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0274"
+            ]
+          }
+        ],
+        "status": "source-supported"
+      },
+      {
+        "candidate": {
+          "id": "weishu:054:cand_0b17cefbac8ed72e",
+          "unit": "s0276",
+          "language": "en",
+          "exact": "Wei",
+          "occurrence": 0,
+          "startCodePoint": 61,
+          "endCodePoint": 64,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "decision": {
+          "candidate": "weishu:054:cand_0b17cefbac8ed72e",
+          "action": "link",
+          "personId": "weishu:054:p148",
+          "kind": "alternate-name",
+          "note": "s0276 作「偉」，是「緯」的形訛 compares the transmitted spelling of the same name discussed at s0274-s0275. The first English Wei represents the explicitly rejected written form 偉 of Li Xi/Wei p148's name. Link the discussed referent as a textual-name variant only; do not add a claim that 偉 was his true name or confuse this with Li Hun, whose biography is cited as the witness."
+        },
+        "sourceReasoning": "s0276 作「偉」，是「緯」的形訛 compares the transmitted spelling of the same name discussed at s0274-s0275. The first English Wei represents the explicitly rejected written form 偉 of Li Xi/Wei p148's name. Link the discussed referent as a textual-name variant only; do not add a claim that 偉 was his true name or confuse this with Li Hun, whose biography is cited as the witness.",
+        "evidence": [
+          {
+            "unit": "s0274",
+            "zh": "繪弟系 北史卷三三「系」作「緯」。",
+            "en": "Hui's younger brother Xi: Beishi juan 33 writes \"Xi\" as \"Wei\".",
+            "literal": "Hui's younger brother Xi: in Beishi juan 33 \"Xi\" is written \"Wei.\"",
+            "chineseHash": "sha256:70277007c586435139539f1311d6c4ea03f7cf45b7f0584cc7331722ecb99a65",
+            "englishHash": "sha256:f5d56415c3f00e11e5eba0959d70718059ca5a59bfdfd47809140e6daec97dcf"
+          },
+          {
+            "unit": "s0275",
+            "zh": "按本名「緯」，魏收避北齊後主諱改作「系」。",
+            "en": "His original name was \"Wei\"; Wei Shou changed it to \"Xi\" to avoid the taboo of the Northern Qi latter ruler.",
+            "literal": "His original name was \"Wei\"; Wei Shou changed it to \"Xi\" to avoid the taboo of the Northern Qi latter ruler.",
+            "chineseHash": "sha256:44ac43e440ba6940a2430b8ab7265ca76c37e95b5429c8b4a5e150102e77773b",
+            "englishHash": "sha256:9b708817a404f1ceb2440b7e7d670127fa1e2fdc78f0cd5b4fcbbe0f9e910ec3"
+          },
+          {
+            "unit": "s0276",
+            "zh": "北齊書卷二九李渾傳作「偉」，是「緯」的形訛。",
+            "en": "The Northern Qi Annals (juan 29), biography of Li Hun, reads Wei in the sense of \"great\"—this is a graphic corruption of Wei in the sense of \"latitude.\"",
+            "literal": "Northern Qi Annals juan 29, biography of Li Hun, reads \"Wei,\" a graphic corruption of \"Wei.\"",
+            "chineseHash": "sha256:1ce6e8440a364767056fb88679463b1d645aa55f5c83039b88475903c654bd78",
+            "englishHash": "sha256:db2f9ee6bdbb93344844791205384f542f9c5c588cfd286ade36de927a57f6f7"
+          }
+        ],
+        "relatedClaims": [
+          {
+            "id": "weishu:054:c0447",
+            "subject": "weishu:054:p148",
+            "predicate": "name",
+            "value": {
+              "kind": "personal",
+              "en": "Xi",
+              "zh": "系",
+              "pinyin": "Xi"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0274"
+            ]
+          },
+          {
+            "id": "weishu:054:c0448",
+            "subject": "weishu:054:p148",
+            "predicate": "name",
+            "value": {
+              "kind": "alternate",
+              "en": "Wei",
+              "zh": "緯",
+              "pinyin": "Wei"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0275"
+            ]
+          },
+          {
+            "id": "weishu:054:c1080",
+            "subject": "weishu:054:p148",
+            "predicate": "family-relationship",
+            "value": {
+              "relation": "sibling-of",
+              "personId": "weishu:054:p147",
+              "kinshipTerm": {
+                "zh": "弟",
+                "en": "younger brother"
+              },
+              "subjectRole": "younger-brother",
+              "objectRole": "elder-brother",
+              "sharedParentage": "full",
+              "subjectRelativeAge": "younger"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0274"
+            ]
+          }
+        ],
+        "status": "source-supported"
+      },
+      {
+        "candidate": {
+          "id": "weishu:054:cand_47254073d5bdf63f",
+          "unit": "s0276",
+          "language": "en",
+          "exact": "Wei",
+          "occurrence": 1,
+          "startCodePoint": 121,
+          "endCodePoint": 124,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "decision": {
+          "candidate": "weishu:054:cand_47254073d5bdf63f",
+          "action": "link",
+          "personId": "weishu:054:p148",
+          "kind": "alternate-name",
+          "note": "The second Wei in s0276 corresponds to 「緯」 in 是「緯」的形訛, the original name explicitly attributed to p148 in s0275. The English latitude gloss distinguishes the written character, but its referent remains the same discussed personal name. It is neither a geographical latitude mention nor the unrelated Wei epithet of p021."
+        },
+        "sourceReasoning": "The second Wei in s0276 corresponds to 「緯」 in 是「緯」的形訛, the original name explicitly attributed to p148 in s0275. The English latitude gloss distinguishes the written character, but its referent remains the same discussed personal name. It is neither a geographical latitude mention nor the unrelated Wei epithet of p021.",
+        "evidence": [
+          {
+            "unit": "s0274",
+            "zh": "繪弟系 北史卷三三「系」作「緯」。",
+            "en": "Hui's younger brother Xi: Beishi juan 33 writes \"Xi\" as \"Wei\".",
+            "literal": "Hui's younger brother Xi: in Beishi juan 33 \"Xi\" is written \"Wei.\"",
+            "chineseHash": "sha256:70277007c586435139539f1311d6c4ea03f7cf45b7f0584cc7331722ecb99a65",
+            "englishHash": "sha256:f5d56415c3f00e11e5eba0959d70718059ca5a59bfdfd47809140e6daec97dcf"
+          },
+          {
+            "unit": "s0275",
+            "zh": "按本名「緯」，魏收避北齊後主諱改作「系」。",
+            "en": "His original name was \"Wei\"; Wei Shou changed it to \"Xi\" to avoid the taboo of the Northern Qi latter ruler.",
+            "literal": "His original name was \"Wei\"; Wei Shou changed it to \"Xi\" to avoid the taboo of the Northern Qi latter ruler.",
+            "chineseHash": "sha256:44ac43e440ba6940a2430b8ab7265ca76c37e95b5429c8b4a5e150102e77773b",
+            "englishHash": "sha256:9b708817a404f1ceb2440b7e7d670127fa1e2fdc78f0cd5b4fcbbe0f9e910ec3"
+          },
+          {
+            "unit": "s0276",
+            "zh": "北齊書卷二九李渾傳作「偉」，是「緯」的形訛。",
+            "en": "The Northern Qi Annals (juan 29), biography of Li Hun, reads Wei in the sense of \"great\"—this is a graphic corruption of Wei in the sense of \"latitude.\"",
+            "literal": "Northern Qi Annals juan 29, biography of Li Hun, reads \"Wei,\" a graphic corruption of \"Wei.\"",
+            "chineseHash": "sha256:1ce6e8440a364767056fb88679463b1d645aa55f5c83039b88475903c654bd78",
+            "englishHash": "sha256:db2f9ee6bdbb93344844791205384f542f9c5c588cfd286ade36de927a57f6f7"
+          }
+        ],
+        "relatedClaims": [
+          {
+            "id": "weishu:054:c0447",
+            "subject": "weishu:054:p148",
+            "predicate": "name",
+            "value": {
+              "kind": "personal",
+              "en": "Xi",
+              "zh": "系",
+              "pinyin": "Xi"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0274"
+            ]
+          },
+          {
+            "id": "weishu:054:c0448",
+            "subject": "weishu:054:p148",
+            "predicate": "name",
+            "value": {
+              "kind": "alternate",
+              "en": "Wei",
+              "zh": "緯",
+              "pinyin": "Wei"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0275"
+            ]
+          },
+          {
+            "id": "weishu:054:c1080",
+            "subject": "weishu:054:p148",
+            "predicate": "family-relationship",
+            "value": {
+              "relation": "sibling-of",
+              "personId": "weishu:054:p147",
+              "kinshipTerm": {
+                "zh": "弟",
+                "en": "younger brother"
+              },
+              "subjectRole": "younger-brother",
+              "objectRole": "elder-brother",
+              "sharedParentage": "full",
+              "subjectRelativeAge": "younger"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0274"
+            ]
+          }
+        ],
+        "status": "source-supported"
+      },
+      {
+        "candidate": {
+          "id": "weishu:054:cand_d449c2453a487bf6",
+          "unit": "s0279",
+          "language": "en",
+          "exact": "Yi",
+          "occurrence": 1,
+          "startCodePoint": 72,
+          "endCodePoint": 74,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "decision": {
+          "candidate": "weishu:054:cand_d449c2453a487bf6",
+          "action": "link",
+          "personId": "weishu:054:p153",
+          "kind": "personal-name",
+          "note": "s0279 quotes 陽平王頤 then compares the readings 頤/顯/順. This second Yi repeats the name 頤 of the quoted prince, already linked locally to p153; s0287 and s0289 explain why 頤 is retained. Link that discussed name, not Li Yi 翼, Prince Yi 懌, or Li Can's posthumous epithet. The alternative readings remain textually qualified and no identities are merged."
+        },
+        "sourceReasoning": "s0279 quotes 陽平王頤 then compares the readings 頤/顯/順. This second Yi repeats the name 頤 of the quoted prince, already linked locally to p153; s0287 and s0289 explain why 頤 is retained. Link that discussed name, not Li Yi 翼, Prince Yi 懌, or Li Can's posthumous epithet. The alternative readings remain textually qualified and no identities are merged.",
+        "evidence": [
+          {
+            "unit": "s0279",
+            "zh": "陽平王頤之為定州 諸本「頤」作「顯」，北史卷三二崔鑒傳作「順」。",
+            "en": "\"Prince Yangping Yi as regional inspector of Dingzhou\": in all editions Yi is written Xian; the biography of Cui Jian in Beishi juan 32 reads Shun.",
+            "literal": "\"Prince Yangping Yi as regional inspector of Dingzhou\": in all editions \"Yi\" is written \"Xian\"; Beishi juan 32 biography of Cui Jian reads \"Shun.\"",
+            "chineseHash": "sha256:19a49f4287aa2907766fc746f69c0a7be8c1bf8d8e10f83539e7e171cf83dcf8",
+            "englishHash": "sha256:eea46e7d087f2b8614b32a9a53fb3a0dd695de8157e18253ef2d726f1e35c69a"
+          },
+          {
+            "unit": "s0287",
+            "zh": "據卷六八甄琛傳稱琛「後為本州陽平王頤衞軍府長史」。",
+            "en": "According to the biography of Zhen Chen (juan 68), Chen \"later served as chief secretary of the guard army staff of Prince Yangping Yi.\"",
+            "literal": "According to juan 68 biography of Zhen Chen, which says Chen \"later served as chief secretary of the guard army staff of Prince Yangping Yi.\"",
+            "chineseHash": "sha256:67f87e6b37cbb29ad1ca6e00e7eaa7396772a9a55477133fe5398e5d621cdfbd",
+            "englishHash": "sha256:3e0822c9b060d492967e9d09b925dfac83fca57f58eff2f7fef2cb1c03eb9b5a"
+          },
+          {
+            "unit": "s0288",
+            "zh": "琛為定州毋極人，本州即指定州，與此傳下文崔秉拳擊甄琛墜牀事相合。",
+            "en": "Chen was a native of Wuji in Dingzhou; his home province was Dingzhou, which agrees with the account below in this biography of Cui Bing striking Zhen Chen and knocking him from the bed.",
+            "literal": "Chen was a native of Wuji in Dingzhou; his home province was Dingzhou, which agrees with the account below in this biography of Cui Bing striking Zhen Chen and knocking him from the bed.",
+            "chineseHash": "sha256:28c945251377694b15a5a77f61f95342b33b8bef23dd2892c43400544e51a261",
+            "englishHash": "sha256:67034953a5f20b78ca30af6a1afe152682555a433480ed11feedab0d6425dd87"
+          },
+          {
+            "unit": "s0289",
+            "zh": "知「顯」「順」都是「頤」的形訛，今改正。",
+            "en": "Thus both \"Xian\" and \"Shun\" are graphic corruptions of \"Yi\"; the text is now corrected accordingly.",
+            "literal": "Thus both \"Xian\" and \"Shun\" are graphic corruptions of \"Yi\"; the text is now corrected accordingly.",
+            "chineseHash": "sha256:fb653afacdc227c73276ffa1ff19928a4cc2f0b0956d349ad4984eadd162993c",
+            "englishHash": "sha256:abf71831028cb3d05dd9026336cf0141320b70ba22ec4411aba30fc18b1e0da0"
+          }
+        ],
+        "relatedClaims": [
+          {
+            "id": "weishu:054:c0459",
+            "subject": "weishu:054:p153",
+            "predicate": "name",
+            "value": {
+              "kind": "personal",
+              "en": "Yi",
+              "zh": "頤",
+              "pinyin": "Yi"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0279"
+            ]
+          },
+          {
+            "id": "weishu:054:c0460",
+            "subject": "weishu:054:p153",
+            "predicate": "name",
+            "value": {
+              "kind": "title",
+              "en": "Prince Yangping Yi",
+              "zh": "陽平王頤"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0279"
+            ]
+          }
+        ],
+        "status": "source-supported"
+      },
+      {
+        "candidate": {
+          "id": "weishu:054:cand_bcee98c4c0ebaf55",
+          "unit": "s0282",
+          "language": "en",
+          "exact": "Xian",
+          "occurrence": 1,
+          "startCodePoint": 102,
+          "endCodePoint": 106,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "decision": {
+          "candidate": "weishu:054:cand_bcee98c4c0ebaf55",
+          "action": "link",
+          "personId": "weishu:054:p154",
+          "kind": "personal-name",
+          "note": "s0280 explicitly names 元顯; s0282 有元顯墓誌...顯所襲 refers again to that epitaph subject and his inherited title. The final English Xian is p154, already linked to Yuan Xian earlier in s0282, not Prince Yi or a place. No genealogy or dates are changed."
+        },
+        "sourceReasoning": "s0280 explicitly names 元顯; s0282 有元顯墓誌...顯所襲 refers again to that epitaph subject and his inherited title. The final English Xian is p154, already linked to Yuan Xian earlier in s0282, not Prince Yi or a place. No genealogy or dates are changed.",
+        "evidence": [
+          {
+            "unit": "s0280",
+            "zh": "按元顯是陽平王熙孫，但其祖他已改封淮南王，墓誌集釋",
+            "en": "Comment: Yuan Xian was grandson of Prince Yangping Xi, but his grandfather had already been re-enfeoffed as Prince of Huainan; the Collected Explanations of Epitaphs",
+            "literal": "According to this, Yuan Xian was grandson of Prince Yangping Xi, but his grandfather had already been re-enfeoffed as Prince of Huainan; Collected Explanations of Epitaphs",
+            "chineseHash": "sha256:4478497aabdaaced29b83c4cd93905a857a283239f2ce195384357a1ab0cd2e2",
+            "englishHash": "sha256:af4ada97f15ddc8d82a6ef66af84ec64cb0672342a9d662015348518c240322c"
+          },
+          {
+            "unit": "s0282",
+            "zh": "有元顯墓誌，父、祖都稱淮南王，顯所襲自然也是淮南王。",
+            "en": "preserves Yuan Xian's epitaph; both father and grandfather are styled Prince of Huainan, so the title Xian inherited would naturally also be Prince of Huainan.",
+            "literal": "has Yuan Xian's epitaph; both father and grandfather are styled Prince of Huainan, so the title Xian inherited would naturally also be Prince of Huainan.",
+            "chineseHash": "sha256:3852b2b808593a11bafa14205079420e91129db37c1711f72289d29e8b24f7e4",
+            "englishHash": "sha256:fae1c4bcdd38ca7f739c004b1dd67de25527e46ae1b5a9a1469681c64a3b9fc5"
+          }
+        ],
+        "relatedClaims": [
+          {
+            "id": "weishu:054:c0463",
+            "subject": "weishu:054:p154",
+            "predicate": "name",
+            "value": {
+              "kind": "personal",
+              "en": "Yuan Xian",
+              "zh": "元顯",
+              "pinyin": "Yuan Xian"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0280"
+            ]
+          },
+          {
+            "id": "weishu:054:c1146",
+            "subject": "weishu:054:p154",
+            "predicate": "family-relationship",
+            "value": {
+              "relation": "descendant-of",
+              "personId": "weishu:054:p155",
+              "kinshipTerm": {
+                "zh": "孫",
+                "en": "grandson"
+              },
+              "subjectRole": "grandson",
+              "objectRole": "grandfather",
+              "generationDistance": 2
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "weishu:054:s0280"
+            ]
+          }
+        ],
+        "status": "source-supported"
+      }
+    ],
+    "dateApproval": false,
+    "identityMerge": false,
+    "canonicalAccepted": false
+  },
+  "personLinkProposal": {
+    "schemaVersion": 1,
+    "proposalType": "source-backed-existing-person-callback-repair",
+    "book": "weishu",
+    "chapter": "054",
+    "status": "proposed-awaiting-independent-parent-review",
+    "approved": false,
+    "author": {
+      "agentId": "01a0a185-1ee1-7d32-a7f9-88adb388e384",
+      "name": "Codex",
+      "authoredAt": "2026-09-14T20:47:43.295Z"
+    },
+    "input": {
+      "source": {
+        "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/weishu/054.json",
+        "snapshot": "/tmp/wei054-alias-review/xie-proposal/source-before.json",
+        "sha256": "sha256:5a0c8835285fb3fc833433e101a0d9e8876c953d42b1a421fc96c30d39aee2a4",
+        "bytes": 184342
+      },
+      "extraction": {
+        "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/extractions/weishu/054.json",
+        "snapshot": "/tmp/wei054-alias-review/xie-proposal/extraction-before.json",
+        "sha256": "sha256:5330ae88292fa7cf87ad987cd72fba127e7f96ff3659a699c7ccc644d50110e0",
+        "bytes": 231021
+      },
+      "chapterFingerprint": "sha256:1e109211e9d3215b5b295c77a67212aa8e67d3a35dbfba9fbe6689da7d89eccd"
+    },
+    "targetPersonId": "weishu:054:p129",
+    "rationale": "The complete title 彭城王勰 in s0189 is identical to the existing p129 title at s0238. In s0190 勰 is the named grammatical subject who looks at Bing (之) and speaks; Bing is not the speaker and the unrelated Li Xie p004 is not this prince. This repairs local references to an existing record, not an identity merge.",
+    "changes": [
+      {
+        "kind": "replace",
+        "path": "/people/128/5",
+        "before": [
+          [
+            {
+              "kind": "title",
+              "en": "Prince of Pengcheng",
+              "zh": "彭城王勰"
+            },
+            "explicit",
+            [
+              "s0238"
+            ]
+          ]
+        ],
+        "after": [
+          [
+            {
+              "kind": "title",
+              "en": "Prince of Pengcheng",
+              "zh": "彭城王勰"
+            },
+            "explicit",
+            [
+              "s0189",
+              "s0238"
+            ]
+          ],
+          [
+            {
+              "kind": "personal",
+              "en": "Xie",
+              "zh": "勰",
+              "pinyin": "Xie"
+            },
+            "explicit",
+            [
+              "s0189",
+              "s0190"
+            ]
+          ]
+        ],
+        "reason": "Retain the existing title wording and s0238 evidence, add its exact recurrence at s0189, and record the bare personal name Xie/勰 attested in the title and the next sentence. No preferred-name, identity-hint or role change."
+      },
+      {
+        "kind": "replace",
+        "path": "/surfaces/347",
+        "before": [
+          "p129",
+          "title-reference",
+          "zh",
+          "彭城王勰",
+          [
+            [
+              "s0238",
+              [
+                0
+              ]
+            ]
+          ]
+        ],
+        "after": [
+          "p129",
+          "title-reference",
+          "zh",
+          "彭城王勰",
+          [
+            [
+              "s0189",
+              [
+                0
+              ]
+            ],
+            [
+              "s0238",
+              [
+                0
+              ]
+            ]
+          ]
+        ],
+        "reason": "Add the exact zh title occurrence at s0189 to the same existing p129 surface; retain s0238 unchanged."
+      },
+      {
+        "kind": "replace",
+        "path": "/surfaces/394",
+        "before": [
+          "p129",
+          "title-reference",
+          "en",
+          "Prince of Pengcheng Xie",
+          [
+            [
+              "s0238",
+              [
+                0
+              ]
+            ]
+          ]
+        ],
+        "after": [
+          "p129",
+          "title-reference",
+          "en",
+          "Prince of Pengcheng Xie",
+          [
+            [
+              "s0189",
+              [
+                0
+              ]
+            ],
+            [
+              "s0238",
+              [
+                0
+              ]
+            ]
+          ]
+        ],
+        "reason": "Add the exact en title occurrence at s0189 to the same existing p129 surface; retain s0238 unchanged."
+      },
+      {
+        "kind": "append-surface",
+        "key": [
+          "p129",
+          "personal-name",
+          "zh",
+          "勰"
+        ],
+        "before": null,
+        "after": [
+          "p129",
+          "personal-name",
+          "zh",
+          "勰",
+          [
+            [
+              "s0190",
+              [
+                0
+              ]
+            ]
+          ]
+        ],
+        "reason": "Capture the explicit named subject of s0190 in both languages. The full s0189 title already captures that unit; do not add a redundant nested personal-name span there."
+      },
+      {
+        "kind": "append-surface",
+        "key": [
+          "p129",
+          "personal-name",
+          "en",
+          "Xie"
+        ],
+        "before": null,
+        "after": [
+          "p129",
+          "personal-name",
+          "en",
+          "Xie",
+          [
+            [
+              "s0190",
+              [
+                0
+              ]
+            ]
+          ]
+        ],
+        "reason": "Capture the explicit named subject of s0190 in both languages. The full s0189 title already captures that unit; do not add a redundant nested personal-name span there."
+      },
+      {
+        "kind": "remove-candidate-disposition",
+        "candidate": "cand_a15e12eb1ebf4151",
+        "before": {
+          "disposition": "not-person",
+          "reason": "office",
+          "entry": [
+            "cand_a15e12eb1ebf4151",
+            null
+          ]
+        },
+        "after": null,
+        "reason": "This candidate is inside the newly captured p129 title or bare-name span and must be accounted for by that mention, not by a competing non-person or ambiguous disposition."
+      },
+      {
+        "kind": "remove-candidate-disposition",
+        "candidate": "cand_4017d6a14424b95b",
+        "before": {
+          "disposition": "not-person",
+          "reason": "not-a-name",
+          "entry": [
+            "cand_4017d6a14424b95b",
+            "fp:Pengcheng Xie"
+          ]
+        },
+        "after": null,
+        "reason": "This candidate is inside the newly captured p129 title or bare-name span and must be accounted for by that mention, not by a competing non-person or ambiguous disposition."
+      },
+      {
+        "kind": "remove-candidate-disposition",
+        "candidate": "cand_78c2d61b40af1c46",
+        "before": {
+          "disposition": "not-person",
+          "reason": "not-a-name",
+          "entry": [
+            "cand_78c2d61b40af1c46",
+            "fp:彭城"
+          ]
+        },
+        "after": null,
+        "reason": "This candidate is inside the newly captured p129 title or bare-name span and must be accounted for by that mention, not by a competing non-person or ambiguous disposition."
+      },
+      {
+        "kind": "remove-candidate-disposition",
+        "candidate": "cand_2ecceeae447938f6",
+        "before": {
+          "disposition": "not-person",
+          "reason": "not-a-name",
+          "entry": [
+            "cand_2ecceeae447938f6",
+            "fp:Xie"
+          ]
+        },
+        "after": null,
+        "reason": "This candidate is inside the newly captured p129 title or bare-name span and must be accounted for by that mention, not by a competing non-person or ambiguous disposition."
+      }
+    ],
+    "preserve": {
+      "preferredNames": true,
+      "localPersonIds": true,
+      "allDatesAndActiveDateHints": true,
+      "allExistingNonNameClaims": true,
+      "rolesAndRelationships": true,
+      "sourceAndTranslations": true,
+      "extractionProvenance": true
+    },
+    "outOfScope": [
+      "The other 20 original alias contradictions",
+      "Yu/Yun prerequisite except as an already staged integration input",
+      "Shouchun place-disposition cleanup",
+      "New event or attribution claims",
+      "Date approval",
+      "Identity merge"
+    ],
+    "applicationInstructions": "Select only the contract matching the exact extraction input. Test every before value, apply the listed replacements/appends/removals, then run the production validator. This is a host curation proposal, not an alias CLI decision file; the old alias packet does not offer p129. Never replay the prior ambiguous Xie decision after this proposal. Parent independent approval is required before any canonical application."
+  },
+  "personLinkEvidence": {
+    "source": {
+      "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/weishu/054.json",
+      "snapshot": "/tmp/wei054-alias-review/xie-proposal/source-before.json",
+      "sha256": "sha256:5a0c8835285fb3fc833433e101a0d9e8876c953d42b1a421fc96c30d39aee2a4",
+      "bytes": 184342
+    },
+    "units": [
+      {
+        "id": "s0003",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 1,
+        "zh": "父勰，字小同，恬靜好學，有聲趙魏。",
+        "en": "His father Xie, whose courtesy name was Xiaotong, was calm and studious and enjoyed renown across Zhao and Wei.",
+        "literal": "His father Xie, styled Xiaotong, was quiet and fond of learning; he had a reputation in Zhao and Wei.",
+        "chineseHash": "sha256:d88583134219fdf8b5fe69618c724ab5b6264deb428a63190428bac8c7386579",
+        "englishHash": "sha256:c8ba6663728f9673093f20129a070cb9b72962dd80f394bfb42902da44384331"
+      },
+      {
+        "id": "s0183",
+        "kind": "paragraph-sentence",
+        "blockIndex": 48,
+        "collection": "sentences",
+        "itemIndex": 0,
+        "zh": "合弟秉，少有志氣。",
+        "en": "He's younger brother Bing was spirited and resolute even in youth.",
+        "literal": "He's younger brother Bing, in youth had will and spirit.",
+        "chineseHash": "sha256:6b9776b46293e89b17adabbf8034dff43ff5c1c12ab8c2f1f8976721bf8f8581",
+        "englishHash": "sha256:31f6f097b82cbb484181ebf5a876592e3a72f14b1fdf3fe71636322b892aa027"
+      },
+      {
+        "id": "s0185",
+        "kind": "paragraph-sentence",
+        "blockIndex": 48,
+        "collection": "sentences",
+        "itemIndex": 2,
+        "zh": "陽平王頤之為定州，[4]秉復為衞軍府錄事參軍，帶毋極令。",
+        "en": "When Prince of Yangping Yizhi served at Dingzhou, [4] Bing again became recording clerk of the guard army command, concurrently serving as magistrate of Wuji.",
+        "literal": "When the Prince of Yangping Yizhi served at Dingzhou, [4] Bing again became recording clerk of the Guard Army command, concurrently magistrate of Wuji.",
+        "chineseHash": "sha256:a02232bdef0e76c22b857f2c14e262a7ba842885fcd0cae7c5e2871871df4495",
+        "englishHash": "sha256:cc20b852cd7d53637cf540e648216c627cebab8aa554aa35c0dcadbe328be43b"
+      },
+      {
+        "id": "s0186",
+        "kind": "paragraph-sentence",
+        "blockIndex": 48,
+        "collection": "sentences",
+        "itemIndex": 3,
+        "zh": "時甄琛為長史，因公事言競之間，秉以拳擊琛，墜於牀下。",
+        "en": "Zhen Chen was then chief secretary; during a dispute over official business Bing punched him and knocked him off the bed.",
+        "literal": "At that time Zhen Chen was chief secretary; during public business a verbal dispute arose between them, and Bing struck Chen with his fist and knocked him from the bed.",
+        "chineseHash": "sha256:d38fb7714131c3b0d7137c6432d5a5cdf4d65f6984aba1ce17d2970d604138a2",
+        "englishHash": "sha256:10285a7d37e257db7408acaef0baa7f45b7de1e283c0e7cad21c51c8b7c1ff19"
+      },
+      {
+        "id": "s0187",
+        "kind": "paragraph-sentence",
+        "blockIndex": 48,
+        "collection": "sentences",
+        "itemIndex": 4,
+        "zh": "琛以本縣長，笑而不論。",
+        "en": "As magistrate of the county Chen only laughed and let the matter pass.",
+        "literal": "Because Chen was magistrate of this county, he laughed and did not pursue the matter.",
+        "chineseHash": "sha256:dce8c3928239b2830bc7f9f42f7d9e1ea8c018547f428ca1087f69109a8fa4fa",
+        "englishHash": "sha256:b21006c9f7a38391610e8c58337061c1020dbb887b41dc05c32a5c0f8afc141d"
+      },
+      {
+        "id": "s0188",
+        "kind": "paragraph-sentence",
+        "blockIndex": 48,
+        "collection": "sentences",
+        "itemIndex": 5,
+        "zh": "其豪率若此。",
+        "en": "Such was his bold and unrestrained character.",
+        "literal": "His bold forthrightness was like this.",
+        "chineseHash": "sha256:32b54c864d78b70dbbb16be1043113008788a103d35c42bb334955b347ec920a",
+        "englishHash": "sha256:10c5937dccfe5ecfdaf38c2ce3828de3f58954448d212ab1d828c76f72ea5faf"
+      },
+      {
+        "id": "s0189",
+        "kind": "paragraph-sentence",
+        "blockIndex": 49,
+        "collection": "sentences",
+        "itemIndex": 0,
+        "zh": "彭城王勰征壽春，秉從行，招致壯俠，以為部卒。",
+        "en": "When Prince of Pengcheng Xie campaigned against Shouchun, Bing accompanied him, recruited bold adventurers, and enrolled them as company soldiers.",
+        "literal": "When the Prince of Pengcheng Xie campaigned against Shouchun, Bing followed on the expedition, recruited gallant bravos, and made them company soldiers.",
+        "chineseHash": "sha256:3dffc5a1f1c3c34e6091cb9494371b02d5f65521fa2a3a5f199f89445501594d",
+        "englishHash": "sha256:2b5ff589ba64516a06bf24114d32d60e2d348a5f9135695649148e06b2762e41"
+      },
+      {
+        "id": "s0190",
+        "kind": "paragraph-sentence",
+        "blockIndex": 49,
+        "collection": "sentences",
+        "itemIndex": 1,
+        "zh": "勰目之，謂左右曰：「吾當寄膽氣於此人。」",
+        "en": "Xie looked him over and told his attendants, \"I mean to place my courage in this man's keeping.\"",
+        "literal": "Xie fixed his gaze on him and said to those beside him: \"I shall entrust my bold spirit to this man.\"",
+        "chineseHash": "sha256:483303905462ed23ddd971b4b3b3b843bf2c627ade26f29f23fee1795586749e",
+        "englishHash": "sha256:355da3b965ed6855d3adad8698c87134ecfbab4bf034cab8d6729c545345221d"
+      },
+      {
+        "id": "s0191",
+        "kind": "paragraph-sentence",
+        "blockIndex": 49,
+        "collection": "sentences",
+        "itemIndex": 2,
+        "zh": "後為司空主簿，轉掾、城門校尉、長兼司空司馬。",
+        "en": "He later served as chief clerk of the minister of works, then as secretary, commandant of the city gates, and senior staff member concurrently serving as grand marshal of the minister of works.",
+        "literal": "Later he was made Chief Clerk of the Minister of Works, transferred to secretary, Commandant of the City Gates, and senior concurrently Grand Marshal of the Minister of Works.",
+        "chineseHash": "sha256:472dc0a20812c0f52fe304d675336629b1b401b6bc490ae04eeb09f1099355e1",
+        "englishHash": "sha256:3efa55bdcbb2964935d807f950db93ebab731670c33066b0f1ab1e75f6927353"
+      },
+      {
+        "id": "s0237",
+        "kind": "paragraph-sentence",
+        "blockIndex": 58,
+        "collection": "sentences",
+        "itemIndex": 0,
+        "zh": "秉弟習，字貴禮，有世譽。",
+        "en": "Bing's younger brother Xi, whose courtesy name was Guili, enjoyed inherited family repute.",
+        "literal": "Bing's younger brother Xi, styled Guili, enjoyed inherited family repute.",
+        "chineseHash": "sha256:7d16a329a9e324fd172737ebf37d61e676a992cca76cf637e36543f3411648e8",
+        "englishHash": "sha256:40d5bb81c0d30374b5897c4b5733b8949f011246088c71ddfc8a74f5db443fb7"
+      },
+      {
+        "id": "s0238",
+        "kind": "paragraph-sentence",
+        "blockIndex": 58,
+        "collection": "sentences",
+        "itemIndex": 1,
+        "zh": "歷司徒主簿、彭城王勰開府屬。",
+        "en": "He served successively as chief clerk under the minister of works and on the opening office staff of Prince of Pengcheng Xie.",
+        "literal": "He served successively as chief clerk under the Minister of Works and a member of Prince of Pengcheng Xie's opening office staff.",
+        "chineseHash": "sha256:ad2f3e6d130d9288e6328c5c187de4adf38dcd5662fffe0508889b685ee463bf",
+        "englishHash": "sha256:3d3c9cd5b934334a0c3eb783662cfdc405f4418ec013b4481b9d4b5f36a747e8"
+      },
+      {
+        "id": "s0239",
+        "kind": "paragraph-sentence",
+        "blockIndex": 58,
+        "collection": "sentences",
+        "itemIndex": 2,
+        "zh": "遷幽州長史、博陵太守，吏民愛敬之。",
+        "en": "He was transferred to chief secretary of Youzhou and administrator of Bolling, where officials and commoners loved and respected him.",
+        "literal": "He was transferred to chief secretary of Youzhou and Administrator of Bolling; officials and commoners loved and respected him.",
+        "chineseHash": "sha256:5f4518d7979e1923f7115019073b1471ad9c277a805d9362251115c3d366ce9e",
+        "englishHash": "sha256:a0b331911ec8e3594db40127e442c06a06b92fe9efcedc0ae5e5ee3458052e10"
+      }
+    ],
+    "p129Before": [
+      "p129",
+      [
+        "Yuan Xie",
+        "元勰",
+        "Yuan Xie"
+      ],
+      "historical",
+      "Royal Family Member",
+      {
+        "n": [],
+        "r": [
+          "p128"
+        ],
+        "a": [
+          "before AD 508"
+        ],
+        "p": [
+          "Northern Wei"
+        ],
+        "x": null
+      },
+      [
+        [
+          {
+            "kind": "title",
+            "en": "Prince of Pengcheng",
+            "zh": "彭城王勰"
+          },
+          "explicit",
+          [
+            "s0238"
+          ]
+        ]
+      ],
+      [
+        [
+          "royal-family-member",
+          "explicit",
+          [
+            "s0238"
+          ]
+        ]
+      ]
+    ],
+    "existingP129NameClaims": [
+      {
+        "id": "weishu:054:c0405",
+        "subject": "weishu:054:p129",
+        "predicate": "name",
+        "value": {
+          "kind": "title",
+          "en": "Prince of Pengcheng",
+          "zh": "彭城王勰"
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "weishu:054:s0238"
+        ]
+      }
+    ],
+    "p129MentionsAfter": [
+      {
+        "id": "weishu:054:m0407",
+        "person": "weishu:054:p129",
+        "unit": {
+          "id": "s0189",
+          "kind": "paragraph-sentence",
+          "blockIndex": 49,
+          "collection": "sentences",
+          "itemIndex": 0
+        },
+        "kind": "title-reference",
+        "spans": {
+          "zh": [],
+          "en": [
+            {
+              "exact": "Prince of Pengcheng Xie",
+              "occurrence": 0,
+              "startCodePoint": 5,
+              "endCodePoint": 28,
+              "unitTextHash": "sha256:2b5ff589ba64516a06bf24114d32d60e2d348a5f9135695649148e06b2762e41"
+            }
+          ]
+        },
+        "candidateRefs": [
+          "weishu:054:cand_a15e12eb1ebf4151",
+          "weishu:054:cand_4017d6a14424b95b"
+        ]
+      },
+      {
+        "id": "weishu:054:m0408",
+        "person": "weishu:054:p129",
+        "unit": {
+          "id": "s0189",
+          "kind": "paragraph-sentence",
+          "blockIndex": 49,
+          "collection": "sentences",
+          "itemIndex": 0
+        },
+        "kind": "title-reference",
+        "spans": {
+          "zh": [
+            {
+              "exact": "彭城王勰",
+              "occurrence": 0,
+              "startCodePoint": 0,
+              "endCodePoint": 4,
+              "unitTextHash": "sha256:3dffc5a1f1c3c34e6091cb9494371b02d5f65521fa2a3a5f199f89445501594d"
+            }
+          ],
+          "en": []
+        },
+        "candidateRefs": [
+          "weishu:054:cand_78c2d61b40af1c46"
+        ]
+      },
+      {
+        "id": "weishu:054:m0409",
+        "person": "weishu:054:p129",
+        "unit": {
+          "id": "s0190",
+          "kind": "paragraph-sentence",
+          "blockIndex": 49,
+          "collection": "sentences",
+          "itemIndex": 1
+        },
+        "kind": "personal-name",
+        "spans": {
+          "zh": [],
+          "en": [
+            {
+              "exact": "Xie",
+              "occurrence": 0,
+              "startCodePoint": 0,
+              "endCodePoint": 3,
+              "unitTextHash": "sha256:355da3b965ed6855d3adad8698c87134ecfbab4bf034cab8d6729c545345221d"
+            }
+          ]
+        },
+        "candidateRefs": [
+          "weishu:054:cand_2ecceeae447938f6"
+        ]
+      },
+      {
+        "id": "weishu:054:m0410",
+        "person": "weishu:054:p129",
+        "unit": {
+          "id": "s0190",
+          "kind": "paragraph-sentence",
+          "blockIndex": 49,
+          "collection": "sentences",
+          "itemIndex": 1
+        },
+        "kind": "personal-name",
+        "spans": {
+          "zh": [
+            {
+              "exact": "勰",
+              "occurrence": 0,
+              "startCodePoint": 0,
+              "endCodePoint": 1,
+              "unitTextHash": "sha256:483303905462ed23ddd971b4b3b3b843bf2c627ade26f29f23fee1795586749e"
+            }
+          ],
+          "en": []
+        },
+        "candidateRefs": []
+      },
+      {
+        "id": "weishu:054:m0482",
+        "person": "weishu:054:p129",
+        "unit": {
+          "id": "s0238",
+          "kind": "paragraph-sentence",
+          "blockIndex": 58,
+          "collection": "sentences",
+          "itemIndex": 1
+        },
+        "kind": "title-reference",
+        "spans": {
+          "zh": [],
+          "en": [
+            {
+              "exact": "Prince of Pengcheng Xie",
+              "occurrence": 0,
+              "startCodePoint": 101,
+              "endCodePoint": 124,
+              "unitTextHash": "sha256:3d3c9cd5b934334a0c3eb783662cfdc405f4418ec013b4481b9d4b5f36a747e8"
+            }
+          ]
+        },
+        "candidateRefs": [
+          "weishu:054:cand_749c67c39d50c78f",
+          "weishu:054:cand_87010f814c744a04"
+        ]
+      },
+      {
+        "id": "weishu:054:m0483",
+        "person": "weishu:054:p129",
+        "unit": {
+          "id": "s0238",
+          "kind": "paragraph-sentence",
+          "blockIndex": 58,
+          "collection": "sentences",
+          "itemIndex": 1
+        },
+        "kind": "title-reference",
+        "spans": {
+          "zh": [
+            {
+              "exact": "彭城王勰",
+              "occurrence": 0,
+              "startCodePoint": 6,
+              "endCodePoint": 10,
+              "unitTextHash": "sha256:ad2f3e6d130d9288e6328c5c187de4adf38dcd5662fffe0508889b685ee463bf"
+            }
+          ],
+          "en": []
+        },
+        "candidateRefs": [
+          "weishu:054:cand_890b2f7c638d3aae"
+        ]
+      }
+    ],
+    "candidateOwnershipAfter": [
+      {
+        "candidate": {
+          "id": "weishu:054:cand_a15e12eb1ebf4151",
+          "unit": "s0189",
+          "language": "en",
+          "exact": "Prince",
+          "occurrence": 0,
+          "startCodePoint": 5,
+          "endCodePoint": 11,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "personId": "weishu:054:p129"
+      },
+      {
+        "candidate": {
+          "id": "weishu:054:cand_4017d6a14424b95b",
+          "unit": "s0189",
+          "language": "en",
+          "exact": "Pengcheng Xie",
+          "occurrence": 0,
+          "startCodePoint": 15,
+          "endCodePoint": 28,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "personId": "weishu:054:p129"
+      },
+      {
+        "candidate": {
+          "id": "weishu:054:cand_78c2d61b40af1c46",
+          "unit": "s0189",
+          "language": "zh",
+          "exact": "彭城",
+          "occurrence": 0,
+          "startCodePoint": 0,
+          "endCodePoint": 2,
+          "detectors": [
+            {
+              "kind": "chinese-notes-proper-noun",
+              "glossaryId": 17416,
+              "pinyin": "péng chéng",
+              "definitions": [
+                "Pengcheng; City of Peng"
+              ]
+            }
+          ]
+        },
+        "personId": "weishu:054:p129"
+      },
+      {
+        "candidate": {
+          "id": "weishu:054:cand_2ecceeae447938f6",
+          "unit": "s0190",
+          "language": "en",
+          "exact": "Xie",
+          "occurrence": 0,
+          "startCodePoint": 0,
+          "endCodePoint": 3,
+          "detectors": [
+            {
+              "kind": "english-capitalized-expression"
+            }
+          ]
+        },
+        "personId": "weishu:054:p129"
+      }
+    ],
+    "sourceLimits": "No independent dates or historical identities are inferred. The same explicit title and immediate named callback establish the local linkage. Existing temporal claims are retained verbatim without endorsement."
+  },
+  "rationale": "Parent read s0113-s0117 and s0187-s0191/s0237-s0238. Yu occurrence zero incorrectly overlaps Yun. The exact title Pengcheng Wang Xie and immediate named subject identify p129, not Li Xie. Accept both source-grounded corrections without endorsing the nephew translation or any chronology.",
+  "stats": {
+    "units": 306,
+    "candidates": 975,
+    "people": 164,
+    "mentions": 603,
+    "claims": 1167,
+    "repairs": 1,
+    "dispositions": 588,
+    "aliasDispositionConflicts": 0
+  },
+  "dateApproval": false,
+  "identityMerge": false,
+  "pendingEditorialReview": [
+    "s0113-s0119 name and sibling sequence; existing proposed translation repairs"
+  ]
+}
