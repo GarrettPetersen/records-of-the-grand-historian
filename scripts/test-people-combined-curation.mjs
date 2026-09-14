@@ -10,11 +10,11 @@ import { validateCompactPeopleExtraction } from './validate-people-extraction.mj
 import { buildCompactInput } from './lib/people-compact.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
 import { editorialDecisionSeed, editorialReviews } from './lib/people-editorial-decisions.mjs';
-import { sha256, writeJsonAtomic } from './lib/people-content.mjs';
+import { sha256, contentUnits, writeJsonAtomic } from './lib/people-content.mjs';
 import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
 import { reservePeopleTargetsInLedger } from './lib/people-work-queue.mjs';
 import { inspectCombinedBefore, prepareCombinedCuration, verifyCombinedCuration, publishCombinedCuration } from './lib/people-combined-curation.mjs';
-import { combinedDatePacket, documentHash, validateCombinedReviews } from './lib/people-combined-curation-review.mjs';
+import { combinedDatePacket, documentHash, replayCombinedSourceReordering, validateCombinedReviews } from './lib/people-combined-curation-review.mjs';
 
 const reason = 'Independently checked this exact source unit and its named individual against the complete fixture.';
 const read = file => JSON.parse(fs.readFileSync(file, 'utf8'));
@@ -24,7 +24,7 @@ const pinFile = file => ({ file, bytes: fs.statSync(file).size, sha256: hashFile
 const chunkRun = agentId => ({ model: 'offline-fixture-chunked', promptVersion: 7, agentId: null,
   chunks: [{ chunkId: '001', startOrder: 0, endOrderExclusive: 1, model: 'offline-fixture', agentId, runId: 'chunk-run', completedAt: '2026-09-13T00:00:00Z' }] });
 
-function fixture(t, book = 'testbook', chapter = '001', run = { model: 'offline-fixture', promptVersion: 7, agentId: 'extractor' }, authorAgentIds = ['extractor', 'curator']) {
+function fixture(t, book = 'testbook', chapter = '001', run = { model: 'offline-fixture', promptVersion: 7, agentId: 'extractor' }, authorAgentIds = ['extractor', 'curator'], { reorder = false } = {}) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'combined-curation-test-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const people = path.join(root, 'data', 'people');
@@ -34,6 +34,13 @@ function fixture(t, book = 'testbook', chapter = '001', run = { model: 'offline-
     dateReport: path.join(people, 'date-audits', book, `${chapter}.json`) };
   const workflow = path.join(people, 'generated', 'date-workflow', book, chapter);
   const source = { meta: { book, chapter }, content: [{ sentences: [{ id: 's0001', zh: '\u827e\u9e97\u7d72\u4f86\u3002', translations: [{ lang: 'en', literal: 'Alice Smith come.', idiomatic: 'The official Alice Smith came.' }] }] }] };
+  if (reorder) {
+    source.content[0].type = 'paragraph';
+    source.content.push(
+      { type: 'paragraph', sentences: [{ id: 's0067', zh: '\u96e8\u3002', translations: [{ lang: 'en', literal: 'it rained.', idiomatic: 'it rained.' }] }] },
+      { type: 'paragraph', sentences: [{ id: 's0002', zh: '\u96ea\u3002', translations: [{ lang: 'en', literal: 'it snowed.', idiomatic: 'it snowed.' }] }] },
+    );
+  }
   const packetFor = source => buildPeopleExtractionPacket(book, chapter, { chapterData: source, properNounMatcher: loadProperNounMatcher() });
   const beforePacket = packetFor(source);
   const extraction = { schemaVersion: 2, book, chapter, input: buildCompactInput(beforePacket),
@@ -47,7 +54,18 @@ function fixture(t, book = 'testbook', chapter = '001', run = { model: 'offline-
   const editorialBefore = editorialDecisionSeed(beforeExpanded);
   editorialBefore.reviewer = { kind: 'human', name: 'Old independent editor', model: null, agentId: 'old-editor', runId: null, completedAt: '2026-09-01T00:00:00Z' };
   const afterSource = structuredClone(source);
-  afterSource.content[0].sentences[0].translations[0].literal = 'Alice Smith came.';
+  let sourceReordering;
+  if (reorder) {
+    const [block] = afterSource.content.splice(1, 1);
+    afterSource.content.splice(0, 0, block);
+    sourceReordering = {
+      schemaVersion: 1, kind: 'source-unit-reordering', book, chapter, authorAgentId: 'curator',
+      beforeSourceHash: documentHash(source), reorderedSourceHash: documentHash(afterSource),
+      beforeUnitOrder: contentUnits(source).map(u => u.id), afterUnitOrder: contentUnits(afterSource).map(u => u.id),
+      moves: [{ kind: 'move-paragraph-block', fromBlockIndex: 1, toBlockIndex: 0, unitIds: ['s0067'], block: structuredClone(block) }],
+    };
+  }
+  afterSource.content[reorder ? 1 : 0].sentences[0].translations[0].literal = 'Alice Smith came.';
   const packet = packetFor(afterSource);
   const candidate = structuredClone(extraction);
   candidate.input = buildCompactInput(packet);
@@ -69,7 +87,7 @@ function fixture(t, book = 'testbook', chapter = '001', run = { model: 'offline-
   const hashes = { sourceHash: dates.sourceHash, extractionHash: dates.extractionHash };
   const check = id => ({ id, verdict: 'supported', reason, evidence: [{ unit: 's0001', quote: '\u827e\u9e97\u7d72' }] });
   const dateReport = { schemaVersion: 1, auditVersion: 1, book, chapter, ...hashes, status: 'audited', reviewer, reviewedAt: '2026-09-14T00:00:00Z', summary: reason,
-    reviewedUnits: ['s0001'], itemChecks: dates.items.map(i => ({ ...check(i.id), event: reason })), personChecks: dates.people.map(p => check(p.id)), findings: [], references: [] };
+    reviewedUnits: dates.units.map(u => u.id), itemChecks: dates.items.map(i => ({ ...check(i.id), event: reason })), personChecks: dates.people.map(p => check(p.id)), findings: [], references: [] };
   const identity = { schemaVersion: 1, reportType: 'complete-independent-source-identity-review', book, chapter, ...hashes, status: 'approved', approved: true,
     reviewer, reviewedAt: dateReport.reviewedAt, summary: reason, findings: [], references: [],
     unitChecks: packet.units.map(u => ({ ...check(u.id), sourceHash: sha256(u.zh), englishHash: sha256(u.en), literalHash: sha256(u.literal), mentions: expanded.mentions.filter(m => m.unit.id === u.id).map(m => m.id) })),
@@ -79,7 +97,7 @@ function fixture(t, book = 'testbook', chapter = '001', run = { model: 'offline-
     mentionChecks: expanded.mentions.map(m => ({ ...check(m.id), personId: m.person.split(':').at(-1), unit: m.unit.id, kind: m.kind, spans: m.spans, candidateRefs: m.candidateRefs })),
     candidateChecks: packet.preflight.candidates.map(c => { const mentions = expanded.mentions.filter(m => m.candidateRefs.includes(c.id)); return { ...c, ...check(c.id), mentionIds: mentions.map(m => m.id), personalOwners: [...new Set(mentions.map(m => m.person.split(':').at(-1)))], disposition: expanded.candidateDispositions.find(d => d.candidate === c.id) ?? null }; }),
     collectiveOccurrenceChecks: [],
-    coverage: { sourceUnits: 1, people: 1, nameClaims: 1, familyRelationships: 0, personalMentions: expanded.mentions.length, scannerCandidates: packet.preflight.candidates.length,
+    coverage: { sourceUnits: packet.units.length, people: 1, nameClaims: 1, familyRelationships: 0, personalMentions: expanded.mentions.length, scannerCandidates: packet.preflight.candidates.length,
       candidateDispositions: expanded.candidateDispositions.length, collectiveOccurrences: 0, temporalItems: dates.items.length,
       allSourceUnitsRead: true, allStoredMentionsChecked: true, unscannedCallbacksChecked: true, namedPeopleAndDefiniteCallbacksComplete: true, omittedNamedPeopleFound: 0 } };
   const beforeDates = combinedDatePacket(book, chapter, source, extraction);
@@ -95,14 +113,23 @@ function fixture(t, book = 'testbook', chapter = '001', run = { model: 'offline-
     identity: path.join(reviewDir, 'identity-review.json'), dateReport: path.join(reviewDir, 'date-report.json'), validation: path.join(reviewDir, 'validation.json'), seal: path.join(reviewDir, 'input-seal.json') };
   for (const [role, doc] of Object.entries({ source: afterSource, extraction: candidate, editorial })) writeJsonAtomic(inputPaths[role], doc);
   const materialization = { ...hashes, sourceByteHash: hashFile(inputPaths.source), extractionByteHash: hashFile(inputPaths.extraction) };
+  if (reorder) materialization.sourceReordering = sourceReordering;
   writeJsonAtomic(inputPaths.materialization, materialization);
   const context = { candidatePath: inputPaths.extraction, sourcePath: inputPaths.source, candidateByteHash: materialization.extractionByteHash, sourceByteHash: materialization.sourceByteHash, editorialDecisionHash: documentHash(newEditorial), amendmentAuthor: 'curator' };
+  if (reorder) {
+    context.sourceReorderingHash = documentHash(sourceReordering);
+    identity.sourceReorderingReview = { id: context.sourceReorderingHash, verdict: 'supported', reason, evidence: [{ unit: 's0067', quote: '\u96e8' }] };
+  }
   identity.reviewContext = context; dateReport.reviewContext = context;
   const validation = { ...hashes, status: 'approved-exact-editorial-amended-candidate', reviewerId: 'reviewer', identityReviewHash: documentHash(identity), dateReportHash: documentHash(dateReport), productionDateReportValid: true, productionAppliedEditorialValid: true, completeIdentityEvidenceCoverage: true, exactFreshDatePacket: true, allProtectedBytesUnchanged: true, productionExtractionStats: result.stats, strictAliasDispositionConflicts: [], dateGeometryReceptionDiagnostics: [] };
   const protectedFile = path.join(root, 'protected.json');
   writeJsonAtomic(protectedFile, { unchanged: true });
   const protectedPaths = [files.source, files.extraction, files.editorial, inputPaths.source, inputPaths.extraction, inputPaths.editorial, inputPaths.materialization, protectedFile];
   const seal = { ...hashes, reviewer, protectedFiles: protectedPaths.map(file => ({ file, bytes: fs.statSync(file).size, sha256: hashFile(file) })) };
+  if (reorder) {
+    validation.sourceReorderingHash = context.sourceReorderingHash;
+    seal.sourceReorderingHash = context.sourceReorderingHash;
+  }
   for (const [role, doc] of Object.entries({ identity, dateReport, validation, seal })) writeJsonAtomic(inputPaths[role], doc);
   const priorClaim = { lane: 'manual', worker: 'sticky-worker', status: 'research-blocked', sourceHash: beforeDates.sourceHash, extractionHash: beforeDates.extractionHash, jobs: structuredClone(state.jobs) };
   const spec = { root, book, chapter, materializedDir, reviewDir, before: inspectCombinedBefore({ root, book, chapter }), priorClaim, claimHash: documentHash(priorClaim), authorAgentIds };
@@ -119,6 +146,169 @@ function fixture(t, book = 'testbook', chapter = '001', run = { model: 'offline-
   return { root, spec, ...prepared, options, files, workflow, inputPaths, ledger, protectedFile, state,
     calls: () => calls, key: `${book}/${chapter}`, docs: { book, chapter, source: afterSource, candidate, editorial, identity, dateReport, validation, materialization, seal, beforeSource: source, beforeExtraction: extraction, beforeEditorial: editorialBefore, authorAgentIds: spec.authorAgentIds } };
 }
+
+function reorderContract(source, moves) {
+  const reordered = structuredClone(source);
+  const operations = moves.map(([fromBlockIndex, toBlockIndex]) => {
+    const [block] = reordered.content.splice(fromBlockIndex, 1);
+    reordered.content.splice(toBlockIndex, 0, block);
+    return { kind: 'move-paragraph-block', fromBlockIndex, toBlockIndex, unitIds: block.sentences.map(u => u.id), block: structuredClone(block) };
+  });
+  return {
+    schemaVersion: 1, kind: 'source-unit-reordering', book: 'testbook', chapter: '001', authorAgentId: 'curator',
+    beforeSourceHash: documentHash(source), reorderedSourceHash: documentHash(reordered),
+    beforeUnitOrder: contentUnits(source).map(u => u.id), afterUnitOrder: contentUnits(reordered).map(u => u.id), moves: operations,
+  };
+}
+
+function reorderSource() {
+  const sentence = id => ({ id, zh: '\u96e8\u3002', translations: [{ lang: 'en', literal: 'it rained.', idiomatic: 'it rained.', model: 'original-provenance' }], reviewed: false });
+  return { meta: { unchanged: true }, content: [
+    { type: 'paragraph', label: 'unchanged block metadata', sentences: [sentence('s0067')] },
+    { type: 'paragraph', sentences: [sentence('s0001'), sentence('s0002')] },
+    { type: 'paragraph', sentences: [sentence('s0003')] },
+  ] };
+}
+
+for (const [label, moves, order] of [
+  ['first to last', [[0, 2]], ['s0001', 's0002', 's0003', 's0067']],
+  ['last to first', [[2, 0]], ['s0003', 's0067', 's0001', 's0002']],
+  ['sequential multi-unit moves', [[1, 0], [2, 1]], ['s0001', 's0002', 's0003', 's0067']],
+]) {
+  test(`source reordering replays ${label} with exact payloads and no input mutation`, () => {
+    const source = reorderSource(), before = structuredClone(source), contract = reorderContract(source, moves);
+    const contractBefore = structuredClone(contract);
+    const after = replayCombinedSourceReordering(source, contract, { book: 'testbook', chapter: '001' });
+    assert.deepEqual(contentUnits(after).map(u => u.id), order);
+    assert.deepEqual(after.meta, source.meta);
+    for (const unit of contentUnits(before)) assert.deepEqual(contentUnits(after).find(u => u.id === unit.id).source, unit.source);
+    assert.deepEqual(source, before);
+    assert.deepEqual(contract, contractBefore);
+  });
+}
+
+for (const [label, mutate] of Object.entries({
+  'wrong scope': c => { c.chapter = '002'; },
+  'unknown protocol': c => { c.schemaVersion = 2; },
+  'missing author': c => { c.authorAgentId = ''; },
+  'unsealed arbitrary operation fields': c => { c.moves[0].patch = { zh: 'changed' }; },
+  'unknown operation': c => { c.moves[0].kind = 'replace-unit'; },
+  'stale source pin': c => { c.beforeSourceHash = `sha256:${'0'.repeat(64)}`; },
+  'stale reordered pin': c => { c.reorderedSourceHash = `sha256:${'0'.repeat(64)}`; },
+  'missing before order': c => { c.beforeUnitOrder.pop(); },
+  'renamed after ID': c => { c.afterUnitOrder[0] = 'renamed'; },
+  'duplicate after ID': c => { c.afterUnitOrder[0] = c.afterUnitOrder[1]; },
+  'wrong direction': c => { c.moves[0].fromBlockIndex = 2; c.moves[0].toBlockIndex = 0; },
+  'negative index': c => { c.moves[0].fromBlockIndex = -1; },
+  'out-of-range destination': c => { c.moves[0].toBlockIndex = 3; },
+  'fractional index': c => { c.moves[0].fromBlockIndex = 0.5; },
+  'coerced index': c => { c.moves[0].fromBlockIndex = '0'; },
+  'no-op': c => { c.moves[0].toBlockIndex = 0; },
+  'missing moves': c => { c.moves = []; },
+  'partial block IDs': c => { c.moves[0].unitIds = []; },
+  'Chinese edit inside move': c => { c.moves[0].block.sentences[0].zh += '\u96ea'; },
+  'English edit inside move': c => { c.moves[0].block.sentences[0].translations[0].literal = 'changed'; },
+  'metadata edit inside move': c => { c.moves[0].block.sentences[0].reviewed = true; },
+  'ID edit inside move': c => { c.moves[0].block.sentences[0].id = 's0004'; },
+})) {
+  test(`source reordering rejects ${label}`, () => {
+    const source = reorderSource(), before = structuredClone(source), contract = reorderContract(source, [[0, 2]]);
+    mutate(contract);
+    assert.throws(() => replayCombinedSourceReordering(source, contract, { book: 'testbook', chapter: '001' }), /source reordering|Source reordering/);
+    assert.deepEqual(source, before);
+  });
+}
+
+test('source reordering refuses duplicate source IDs, table moves, null contracts and cancelling moves', () => {
+  const scope = { book: 'testbook', chapter: '001' };
+  const duplicate = reorderSource(); duplicate.content[1].sentences[0].id = 's0067';
+  assert.throws(() => replayCombinedSourceReordering(duplicate, reorderContract(duplicate, [[0, 2]]), scope), /duplicate content-unit ID/);
+  const table = reorderSource(); table.content[0].type = 'table_header';
+  assert.throws(() => replayCombinedSourceReordering(table, reorderContract(table, [[0, 2]]), scope), /only complete nonempty paragraph/);
+  const mixed = reorderSource(); mixed.content[0].cells = [];
+  assert.throws(() => replayCombinedSourceReordering(mixed, reorderContract(mixed, [[0, 2]]), scope), /only complete nonempty paragraph/);
+  const source = reorderSource();
+  assert.throws(() => replayCombinedSourceReordering(source, null, scope), /Missing source reordering/);
+  assert.throws(() => replayCombinedSourceReordering(source, reorderContract(source, [[0, 2], [2, 0]]), scope), /no net order change/);
+});
+
+const reorderedFixture = t => fixture(t, 'hanshu', '003', undefined, undefined, { reorder: true });
+
+test('source reordering is sealed, independently reviewed, replayed before shifted English repairs and published only in scratch', t => {
+  const f = reorderedFixture(t);
+  const contract = f.docs.materialization.sourceReordering;
+  assert.equal(f.calls(), 0);
+  assert.deepEqual(read(f.files.source), f.docs.beforeSource);
+  assert.deepEqual(unpack(f.receipt.inputs.materialization.content).sourceReordering, contract);
+  assert.equal(f.docs.identity.sourceReorderingReview.id, documentHash(contract));
+  assert.equal(verifyCombinedCuration(f.receipt, f.hash, { root: f.root }).status, 'verified');
+  publishCombinedCuration(f.receipt, f.hash, f.options);
+  const after = read(f.files.source);
+  assert.deepEqual(contentUnits(after).map(u => u.id), ['s0067', 's0001', 's0002']);
+  assert.deepEqual(after.content[0], f.docs.beforeSource.content[1]);
+  assert.equal(after.content[1].sentences[0].translations[0].literal, 'Alice Smith came.');
+  assert.deepEqual(read(f.files.extraction).run, f.docs.beforeExtraction.run);
+  assert.equal(publishCombinedCuration(f.receipt, f.hash, f.options).status, 'complete');
+});
+
+test('source reordering recovery retains the same sealed contract after a partial scratch publication', t => {
+  const f = reorderedFixture(t);
+  assert.throws(() => publishCombinedCuration(f.receipt, f.hash, { ...f.options, checkpoint: stage => { if (stage === 'source') throw new Error('fixture interruption'); } }), /fixture interruption/);
+  assert.equal(f.ledger.dateAudits[f.key].status, 'research-blocked');
+  assert.equal(publishCombinedCuration(f.receipt, f.hash, f.options).status, 'complete');
+  assert.deepEqual(read(f.files.source), f.docs.source);
+});
+
+function bindReordering(docs) {
+  const hash = documentHash(docs.materialization.sourceReordering);
+  for (const report of [docs.identity.reviewContext, docs.dateReport.reviewContext, docs.validation, docs.seal]) report.sourceReorderingHash = hash;
+  docs.identity.sourceReorderingReview.id = hash;
+  docs.validation.identityReviewHash = documentHash(docs.identity);
+  docs.validation.dateReportHash = documentHash(docs.dateReport);
+}
+
+for (const [label, mutate, pattern] of [
+  ['missing explicit approval', d => { delete d.identity.sourceReorderingReview; }, /source reordering approval/],
+  ['rejected source approval', d => { d.identity.sourceReorderingReview.verdict = 'needs-revision'; }, /source reordering approval/],
+  ['no source reasoning', d => { d.identity.sourceReorderingReview.reason = ''; }, /source reordering reasoning/],
+  ['fabricated source evidence', d => { d.identity.sourceReorderingReview.evidence[0].quote = 'not in source'; }, /source reordering source evidence/],
+  ['wrong identity pin', d => { d.identity.reviewContext = { ...d.identity.reviewContext, sourceReorderingHash: 'wrong' }; }, /source reordering hash/],
+  ['missing date pin', d => { d.dateReport.reviewContext = { ...d.dateReport.reviewContext }; delete d.dateReport.reviewContext.sourceReorderingHash; }, /source reordering hash/],
+  ['wrong seal pin', d => { d.seal.sourceReorderingHash = 'wrong'; }, /source reordering hash/],
+  ['missing validation pin', d => { delete d.validation.sourceReorderingHash; }, /source reordering hash/],
+  ['resealed stale exact block', d => { d.materialization.sourceReordering.moves[0].block.sentences[0].zh = 'changed'; bindReordering(d); }, /exact block payload/],
+  ['undeclared move author', d => { d.materialization.sourceReordering.authorAgentId = 'omitted-author'; bindReordering(d); }, /Missing declared curation author/],
+  ['self-approved move author', d => { d.materialization.sourceReordering.authorAgentId = 'reviewer'; d.authorAgentIds.push('reviewer'); bindReordering(d); }, /self-approved/],
+  ['missing incoming editorial component', d => { d.editorial = d.beforeEditorial; }, /exactly one new editorial review component/],
+  ['missing applied English contracts', d => { d.candidate.translationRepairs = []; }, /does not match applied decision/],
+  ['incomplete definite title callbacks', d => { d.identity.coverage.namedPeopleAndDefiniteCallbacksComplete = false; }, /namedPeopleAndDefiniteCallbacksComplete/],
+  ['unresolved identity findings', d => { d.identity.findings = [{ problem: 'Unreviewed emperor reference' }]; }, /unresolved identity findings/],
+  ['metadata changes outside move', d => { d.source.content[0].sentences[0].reviewed = false; }, /unrelated source edit/],
+]) {
+  test(`source reordering cannot bypass ${label}`, t => {
+    const f = reorderedFixture(t), docs = structuredClone(f.docs);
+    const before = Object.fromEntries(Object.entries(f.files).map(([role, file]) => [role, hashFile(file)]));
+    mutate(docs);
+    assert.throws(() => validateCombinedReviews(docs, { dataDir: path.join(f.root, 'data') }), pattern);
+    assert.equal(f.calls(), 0);
+    for (const [role, file] of Object.entries(f.files)) assert.equal(hashFile(file), before[role]);
+  });
+}
+
+test('source reordering cannot be implicit, detached from its approval, or changed after sealing', t => {
+  const f = reorderedFixture(t), docs = structuredClone(f.docs);
+  delete docs.materialization.sourceReordering;
+  assert.throws(() => validateCombinedReviews(docs, { dataDir: path.join(f.root, 'data') }), /source reordering hash/);
+  for (const report of [docs.identity.reviewContext, docs.dateReport.reviewContext, docs.validation, docs.seal]) delete report.sourceReorderingHash;
+  assert.throws(() => validateCombinedReviews(docs, { dataDir: path.join(f.root, 'data') }), /review without a contract/);
+  delete docs.identity.sourceReorderingReview;
+  assert.throws(() => validateCombinedReviews(docs, { dataDir: path.join(f.root, 'data') }), /locator is stale|unrelated source edit/);
+  const materialization = read(f.inputPaths.materialization);
+  materialization.sourceReordering.moves[0].toBlockIndex = 2;
+  writeJsonAtomic(f.inputPaths.materialization, materialization);
+  assert.throws(() => prepareCombinedCuration(f.spec), /protected input|seal must pin/);
+  assert.equal(f.calls(), 0);
+});
 
 function dependencyRefresh(f, { originalEdit = () => {}, addendumEdit = () => {} } = {}) {
   const docs = structuredClone(f.docs), original = structuredClone(docs.validation);

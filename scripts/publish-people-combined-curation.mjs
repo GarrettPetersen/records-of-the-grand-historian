@@ -43,7 +43,25 @@ The content-addressed receipt embeds all before/after files, reports, protected
 inputs and local workflow artifacts. Save its printed hash independently.
 Only the fixed single-chapter source, extraction, editorial and date report
 paths are published. Chinese/metadata edits are unsupported; English edits must
-replay accepted editorial repairs. Old reports and claim/state/jobs are retained.
+replay accepted editorial repairs. Optional whole-paragraph source reordering
+runs first, using materialization validation.json's sourceReordering contract:
+  schemaVersion: 1, kind: "source-unit-reordering", book, chapter, authorAgentId,
+  beforeSourceHash, reorderedSourceHash (SHA-256 of JSON.stringify(full source)),
+  beforeUnitOrder, afterUnitOrder (complete ordered unit ID arrays), moves.
+Each move has exactly kind: "move-paragraph-block", fromBlockIndex, toBlockIndex,
+unitIds (every ID in the block), and block (the exact complete original payload).
+Indices are zero-based and sequential; toBlockIndex is the final index after
+removal. Only whole nonempty paragraph blocks can move. IDs, all Chinese/English
+text, metadata and internal unit order are unchanged by the move itself.
+The complete contract is sealed inside the materialization file. Its document
+hash is required as sourceReorderingHash in both reports' reviewContext and in
+validation.json and input-seal.json. Identity review additionally supplies
+sourceReorderingReview: {id: contractHash, verdict: "supported", reason, evidence}
+with exact source quotations. The move author must be declared and excluded from
+all independent approval roles. No contract means no reordering; arbitrary JSON
+patches, inferred moves and no-ops are rejected. Missing editorial contracts,
+unresolved title callbacks or incomplete date approvals still block publication.
+Old reports and claim/state/jobs are retained.
 No proposed repairs, arbitrary patches, paid calls, commits or deploys are made.
 
 Publish uses the existing global date-process lock and Git-backed queue lease.

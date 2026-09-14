@@ -3,7 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
-import { sha256, setTranslationField, writeJsonAtomic } from './people-content.mjs';
+import { sha256, contentUnits, validateUnitIds, setTranslationField, writeJsonAtomic } from './people-content.mjs';
 import { buildPeopleExtractionPacket } from '../build-people-extraction-packet.mjs';
 import { validateCompactPeopleExtraction } from '../validate-people-extraction.mjs';
 import { loadProperNounMatcher } from './people-candidates.mjs';
@@ -16,6 +16,62 @@ export function requireEqual(actual, expected, label) {
 }
 const requireTrue = (value, label) => requireEqual(value, true, label);
 const shortId = id => id.split(':').at(-1);
+
+function exactFields(value, expected, label) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error(`Missing ${label}`);
+  requireEqual(Object.keys(value).sort(), [...expected].sort(), `${label} fields`);
+}
+
+// Moves run before English repairs. Whole paragraph payloads are carried intact;
+// indices are sequential and toBlockIndex is the final index after removal.
+export function replayCombinedSourceReordering(beforeSource, contract, { book, chapter }) {
+  exactFields(contract, ['schemaVersion', 'kind', 'book', 'chapter', 'authorAgentId', 'beforeSourceHash', 'reorderedSourceHash', 'beforeUnitOrder', 'afterUnitOrder', 'moves'], 'source reordering contract');
+  requireEqual([contract.schemaVersion, contract.kind, contract.book, contract.chapter],
+    [1, 'source-unit-reordering', book, chapter], 'source reordering protocol and scope');
+  if (typeof contract.authorAgentId !== 'string' || !contract.authorAgentId.trim()) throw new Error('Missing source reordering author');
+  requireEqual(documentHash(beforeSource), contract.beforeSourceHash, 'source reordering exact before');
+  const units = contentUnits(beforeSource);
+  validateUnitIds(units, 'source reordering before');
+  requireEqual(units.map(u => u.id), contract.beforeUnitOrder, 'source reordering before unit order');
+  if (!Array.isArray(contract.moves) || !contract.moves.length) throw new Error('Source reordering requires explicit moves');
+  const replay = structuredClone(beforeSource);
+  for (const move of contract.moves) {
+    exactFields(move, ['kind', 'fromBlockIndex', 'toBlockIndex', 'unitIds', 'block'], 'source reordering move');
+    requireEqual(move.kind, 'move-paragraph-block', 'source reordering move kind');
+    for (const index of [move.fromBlockIndex, move.toBlockIndex]) {
+      if (!Number.isInteger(index) || index < 0 || index >= replay.content.length) throw new Error('Source reordering block index out of range');
+    }
+    if (move.fromBlockIndex === move.toBlockIndex) throw new Error('Source reordering move is a no-op');
+    const block = replay.content[move.fromBlockIndex];
+    if (block.type !== 'paragraph' || !Array.isArray(block.sentences) || !block.sentences.length || Object.hasOwn(block, 'cells')) {
+      throw new Error('Source reordering supports only complete nonempty paragraph blocks');
+    }
+    requireEqual(block, move.block, 'source reordering exact block payload');
+    requireEqual(block.sentences.map(u => u.id), move.unitIds, 'source reordering moved unit IDs');
+    replay.content.splice(move.fromBlockIndex, 1);
+    replay.content.splice(move.toBlockIndex, 0, block);
+  }
+  requireEqual(contentUnits(replay).map(u => u.id), contract.afterUnitOrder, 'source reordering after unit order');
+  if (isDeepStrictEqual(contract.beforeUnitOrder, contract.afterUnitOrder)) throw new Error('Source reordering has no net order change');
+  requireEqual(documentHash(replay), contract.reorderedSourceHash, 'source reordering exact reordered source');
+  return replay;
+}
+
+function reviewedSourceReordering(beforeSource, materialization, identity, dateReport, validation, seal, scope) {
+  const contract = materialization.sourceReordering;
+  const hash = contract === undefined ? undefined : documentHash(contract);
+  for (const report of [identity.reviewContext, dateReport.reviewContext, validation, seal]) {
+    requireEqual(report?.sourceReorderingHash, hash, 'reviewed source reordering hash');
+  }
+  if (contract === undefined) {
+    requireEqual(identity.sourceReorderingReview, undefined, 'source reordering review without a contract');
+    return structuredClone(beforeSource);
+  }
+  const replay = replayCombinedSourceReordering(beforeSource, contract, scope);
+  exactFields(identity.sourceReorderingReview, ['id', 'verdict', 'reason', 'evidence'], 'source reordering approval');
+  checks([identity.sourceReorderingReview], [{ id: hash }], new Map(contentUnits(beforeSource).map(u => [u.id, u])), 'source reordering', () => {});
+  return replay;
+}
 
 // Follow run provenance, not arbitrary nested author declarations. Chunk records
 // use the same agentId field; the production schema validates their shape.
@@ -126,9 +182,9 @@ export function validateCombinedReviews({ book, chapter, source, candidate, edit
   validateAppliedEditorialDecisions(editorial, expanded);
   const reviews = editorialReviews(editorial);
   const incoming = incomingEditorialReview(beforeEditorial, editorial, [identity, dateReport]);
-  // Source publication is limited to independently accepted translation repairs.
-  // Chinese, metadata, other units, and unreviewed English edits are not writable.
-  const replay = structuredClone(beforeSource);
+  // Replay only explicitly reviewed whole-block moves, then the independently
+  // accepted English repairs using their final source locators.
+  const replay = reviewedSourceReordering(beforeSource, materialization, identity, dateReport, validation, seal, { book, chapter });
   for (const old of beforeExtraction.translationRepairs) {
     if (!candidate.translationRepairs.some(r => isDeepStrictEqual(r, old))) throw new Error('Old translation repair history changed');
   }
@@ -147,7 +203,7 @@ export function validateCombinedReviews({ book, chapter, source, candidate, edit
     setTranslationField(replay, repair.unit, repair.field, repair.before, repair.after);
   }
   if (!sourceRepairs) throw new Error('Combined source amendment requires new applied translation repairs');
-  requireEqual(replay, source, 'unrelated source edit outside reviewed translation repairs');
+  requireEqual(replay, source, 'unrelated source edit outside reviewed translation repairs and source reordering');
   requireEqual(candidate.run, beforeExtraction.run, 'extractor provenance must not be rewritten');
 
   const dates = combinedDatePacket(book, chapter, source, candidate);
@@ -157,7 +213,7 @@ export function validateCombinedReviews({ book, chapter, source, candidate, edit
   }
   if (!Array.isArray(authorAgentIds) || !authorAgentIds.length || authorAgentIds.some(id => typeof id !== 'string' || !id.trim())) throw new Error('Declare all curation author agent IDs');
   const authors = new Set(authorAgentIds);
-  for (const id of [candidate.run.agentId, identity.reviewContext?.amendmentAuthor, ...(seal.reviewer?.excludedAuthorAgentIds ?? [])]) {
+  for (const id of [candidate.run.agentId, identity.reviewContext?.amendmentAuthor, materialization.sourceReordering?.authorAgentId, ...(seal.reviewer?.excludedAuthorAgentIds ?? [])]) {
     if (id && !authors.has(id)) throw new Error(`Missing declared curation author ${id}`);
   }
   const actualExtractors = new Set();
