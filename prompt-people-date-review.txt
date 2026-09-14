@@ -64,10 +64,17 @@ Each change has a substantive source-based reason and one of these forms:
 {kind:"replace",id:"claim-N",before:EXACT_INPUT_ROW,after:REVISED_ROW,reason}
 {kind:"remove",id:"claim-N",before:EXACT_INPUT_ROW,reason}
 {kind:"add",after:[personId,"attestation"|"birth"|"death"|"age",value,certainty,[unitIds]],reason}
+{kind:"add-reception-event",after:[personId,"event-participation",value,certainty,[unitIds]],reason}
 {kind:"hints",personId,before:EXACT_OLD_HINT_ARRAY,after:NEW_HINT_ARRAY,reason}
 Claim rows are compact five-element arrays. Replacements keep subject/predicate.
 Do not modify names, roles, mentions, family links or translation text. Preserve
 legitimate posthumous reception as an event, but remove it from personal activity.
+Use add-reception-event with an explicit posthumous/retrospective classification
+as described above. Remove or correct the misleading life claim separately.
+Do not invent a date for an undated reference or rewrite unrelated event fields.
+All necessary operations must be in changes; do not leave required companion
+records in hostRequiredChanges or similar side lists. If the supported operations
+cannot represent the complete repair, return blocked:true and explain the gap.
 Synchronize hints with corrected chronology. Use only existing person IDs and
 known source-unit IDs. Avoid unnecessary edits. The next reviewer receives the
 resulting claims independently and must establish their support from the source.

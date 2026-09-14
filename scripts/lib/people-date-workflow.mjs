@@ -3,6 +3,7 @@ import path from 'node:path';
 import { PEOPLE_DIR, readJson, sha256, writeJsonAtomic, writeTextAtomic } from './people-content.mjs';
 import { serializeCompactPeopleExtraction } from './people-compact.mjs';
 import { buildDateAuditPacket, dateAuditItems, dateAuditStatus, recordDateAudit, validateDateAuditReport, dateAuditReferencesCurrent } from './people-date-audit.mjs';
+import { personClaimReception, personReceptionErrors } from './people-reception.mjs';
 
 export const DATE_WORKFLOW_VERSION = 1;
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
@@ -11,6 +12,9 @@ const lifePredicates = new Set(['attestation', 'birth', 'death', 'age']);
 const dateFields = new Set(['westernYear', 'westernInterval', 'westernBounds', 'sourceDate', 'dateContext', 'startDate', 'endDate', 'unresolved', 'unresolvedReason']);
 const withoutDates = value => Array.isArray(value) ? value.map(withoutDates) : value && typeof value === 'object'
   ? Object.fromEntries(Object.entries(value).filter(([key])=>!dateFields.has(key)).map(([key,v])=>[key,withoutDates(v)])) : value;
+const isReceptionEvent = row => Array.isArray(row) && row.length === 5 && row[1] === 'event-participation'
+  && Boolean(personClaimReception({ predicate: row[1], value: row[2] }))
+  && personReceptionErrors({ predicate: row[1], value: row[2] }).length === 0;
 
 export function dateWorkflowDirectory(book, chapter, peopleDir = PEOPLE_DIR) {
   return path.join(peopleDir, 'generated', 'date-workflow', book, chapter);
@@ -114,6 +118,7 @@ export function applyDateRepairProposal(stored, proposal, packet) {
   if (stored.schemaVersion !== 2) throw new Error('Date repair requires the current compact extraction format');
   if (proposal.sourceHash !== packet.sourceHash || proposal.extractionHash !== packet.extractionHash || hash(stored) !== packet.extractionHash) throw new Error('Stale date repair proposal');
   if (!Array.isArray(proposal.changes) || !proposal.changes.length) throw new Error('Repair must contain scoped changes');
+  if (proposal.blocked || ['hostRequiredChanges', 'requiredReceptionEvents', 'requiredHostCuration'].some(key => proposal[key] !== undefined)) throw new Error('Incomplete repair: resolve required host work inside supported changes before staging');
   const candidate = structuredClone(stored);
   const seen = new Set();
   const temporal = new Set(dateAuditItems(stored).items.filter(i=>i.claimIndex !== undefined).map(i=>i.id));
@@ -138,8 +143,11 @@ export function applyDateRepairProposal(stored, proposal, packet) {
         if (!lifePredicates.has(change.before[1]) && !same(withoutDates(change.before[2]),withoutDates(change.after[2]))) throw new Error('Date repair altered non-temporal event fields');
         candidate.claims[index] = change.after;
       }
-    } else if (change.kind === 'add') {
-      if (!Array.isArray(change.after) || change.after.length !== 5 || !['attestation','birth','death','age'].includes(change.after[1]) || !stored.people.some(p=>p[0]===change.after[0])) throw new Error('Only life/date claims for existing people may be added');
+    } else if (change.kind === 'add' || change.kind === 'add-reception-event') {
+      const validKind = change.kind === 'add-reception-event' ? isReceptionEvent(change.after)
+        : Array.isArray(change.after) && change.after.length === 5 && lifePredicates.has(change.after[1]);
+      if (!validKind || !stored.people.some(p=>p[0]===change.after[0])) throw new Error('Only life/date claims or explicitly classified reception events for existing people may be added');
+      if (!Array.isArray(change.after[4]) || !change.after[4].length || change.after[4].some(id=>!packet.units.some(unit=>unit.id===id))) throw new Error('Added claim requires known source-unit evidence');
       if (candidate.claims.some(c=>same(c,change.after))) throw new Error('Duplicate date claim addition');
       candidate.claims.push(change.after);
     } else throw new Error('Unknown date repair operation');
@@ -304,9 +312,10 @@ export function dateRepairDifference(before, after, packet) {
   }
   // Replacements of dated non-life events must stay replacements, not additions.
   for (const claim of remaining) {
-    const removed = changes.find(c=>c.kind==='remove' && c.before[0]===claim[0] && c.before[1]===claim[1]);
+    const removed = changes.find(c=>c.kind==='remove' && c.before[0]===claim[0] && c.before[1]===claim[1]
+      && (lifePredicates.has(claim[1]) || same(withoutDates(c.before[2]),withoutDates(claim[2]))));
     if (removed) { removed.kind = 'replace'; removed.after = claim; }
-    else changes.push({ kind:'add', after:claim, reason:'Added source-backed chronology after independent re-audit.' });
+    else changes.push({ kind:isReceptionEvent(claim)?'add-reception-event':'add', after:claim, reason:'Added source-backed chronology or separate later reception after independent re-audit.' });
   }
   for (const p of before.people) {
     const updated = after.people.find(q=>q[0]===p[0]);

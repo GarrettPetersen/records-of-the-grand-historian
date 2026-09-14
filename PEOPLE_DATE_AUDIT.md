@@ -94,7 +94,12 @@ completed artifact before asking for another turn. Run limits stop that job;
 account usage limits stop all new launches and drain active work. Record usage
 and inspect accepted cost, tokens and failures before raising concurrency.
 
-The host accepts only fingerprinted changes to temporal claims and active hints.
+The host accepts only fingerprinted changes to temporal claims and active hints,
+plus `add-reception-event` for a separately evidenced posthumous or retrospective
+`event-participation` claim about an existing person. Correct or remove the
+misleading life claim separately; an undated later reference need not gain a date.
+Required companion records belong in the proposal's validated `changes`, not a
+side list of unimplemented host work. Such incomplete proposals cannot be staged.
 It runs the production extraction/editorial validators before independent review.
 Non-temporal event content, people, names, mentions and family edges cannot be
 rewritten by the date repair interface. A repair conversation cannot approve its
