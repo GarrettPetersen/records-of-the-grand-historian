@@ -1,0 +1,461 @@
+{
+  "schemaVersion": 1,
+  "book": "hanshu",
+  "chapter": "061",
+  "createdAt": "2026-09-14T21:40:24.970Z",
+  "authorAgentId": "01a0a1c7-f3e1-74f1-a67f-afdf71f91e37",
+  "reviewer": {
+    "agentId": "019ea934-1759-7410-a2ad-48546e8db30a",
+    "name": "Codex independent source review"
+  },
+  "beforeHash": "42f78175cb8bab1115c37cca8396ac25e5dfd02754edaf3fce02245cb13ff6a0",
+  "afterHash": "caaddcf3b5e1d3a4fb0a6237d2eccec298269d8cc6b1904d348903d99703288d",
+  "sourceHash": "854a955cfdb81f0de9516d866171c63583e934d103ffefb7615a930935c4cbaf",
+  "sourceFingerprint": "sha256:c37600d2b8cf0a830dc5d249a785d9626ed7564c0f78ed1643b2b574a67e3c27",
+  "proposalHash": "281546fd26f2fdfce2d234fb54bc84559f88d588dcb410faa9e2a494653bb8cc",
+  "historyHash": "5bbde1044dcf3dc6f5648012758a7d2dae65e51dbbd21541caf65efbb32b9984",
+  "dateApproval": false,
+  "identityMerge": false,
+  "decisions": [
+    {
+      "id": "E01",
+      "approved": true,
+      "dependsOnRepairs": [
+        "hanshu:061:r0028",
+        "hanshu:061:r0029"
+      ],
+      "unit": "s0216",
+      "reason": "The corrected source-derived title refers back to p059 in s0213, not an official or living ruler. The scanner finds neither surface, so passing candidate accounting misses this reference.",
+      "changes": {
+        "claimAdditions": [
+          {
+            "id": "hanshu:061:c0797",
+            "subject": "hanshu:061:p059",
+            "predicate": "event-participation",
+            "value": {
+              "kind": "posthumous-reference",
+              "role": "purported-issuer-of-disputed-edict",
+              "action": "The secretariat records contained no corresponding testamentary edict of the late Emperor Jing; a copy was held only at Dou Ying's house."
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "hanshu:061:s0216",
+              "hanshu:061:s0217"
+            ]
+          },
+          {
+            "id": "hanshu:061:c0798",
+            "subject": "hanshu:061:p059",
+            "predicate": "name",
+            "value": {
+              "kind": "title-reference",
+              "en": "late emperor",
+              "zh": "大行"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "hanshu:061:s0216"
+            ]
+          }
+        ],
+        "surfaceAdditions": [
+          [
+            "p059",
+            "title-reference",
+            "zh",
+            "大行",
+            [
+              [
+                "s0216",
+                [
+                  0
+                ]
+              ]
+            ]
+          ],
+          [
+            "p059",
+            "title-reference",
+            "en",
+            "late emperor",
+            [
+              [
+                "s0216",
+                [
+                  0
+                ]
+              ]
+            ]
+          ]
+        ]
+      },
+      "constraints": [
+        "Keep p059; do not merge chunk-local Emperor Jing records here.",
+        "No date, death event, activeDateHints, or birth/parentage changes.",
+        "The event reports the archival discrepancy, not proven forgery or a proven authentic edict."
+      ],
+      "decision": "accept",
+      "reviewReason": "The corrected source-derived title refers back to p059 in s0213, not an official or living ruler. The scanner finds neither surface, so passing candidate accounting misses this reference."
+    },
+    {
+      "id": "E02",
+      "approved": true,
+      "unit": "s0363",
+      "reason": "An inherited mention links the final character of tai zhong da fu to Guan Fu. This is an office morpheme in Li Xi's title, not a reference to Guan Fu.",
+      "changes": {
+        "removeMentionByContract": {
+          "person": "hanshu:061:p109",
+          "unit": "s0363",
+          "kind": "personal-name",
+          "language": "zh",
+          "exact": "夫",
+          "occurrence": 0,
+          "startCodePoint": 34,
+          "endCodePoint": 35
+        }
+      },
+      "constraints": [
+        "Retain p109 and all genuine Guan Fu mentions elsewhere.",
+        "Do not alter either Wang Hui or Gongsun He."
+      ],
+      "decision": "accept",
+      "reviewReason": "An inherited mention links the final character of tai zhong da fu to Guan Fu. This is an office morpheme in Li Xi's title, not a reference to Guan Fu."
+    },
+    {
+      "id": "E03",
+      "approved": true,
+      "unit": "s0076",
+      "relatedUnit": "s0036",
+      "reason": "Baseline c0391 classifies the Marquis of Gai and Empress Wang as maternal half-siblings. Tong mu di describes Tian Fen, not the sibling relationship of these two Wang children. Hanshu 97A identifies Wang Zhong and Zang Er as the parents of Xin and the two daughters, then separately identifies Fen and Sheng after remarriage. Do not carry Fen's half-sibling classification across the graph.",
+      "changes": {
+        "claimRevision": {
+          "before": {
+            "id": "hanshu:061:c0391",
+            "subject": "hanshu:061:p029",
+            "predicate": "family-relationship",
+            "value": {
+              "relation": "sibling-of",
+              "personId": "hanshu:061:p018",
+              "kinshipTerm": {
+                "zh": "兄",
+                "en": "elder brother"
+              },
+              "subjectRole": "elder-brother",
+              "objectRole": "younger-sister",
+              "sharedParentage": "maternal-half",
+              "subjectRelativeAge": "elder",
+              "line": "maternal"
+            },
+            "certainty": "strongly-inferred",
+            "evidence": [
+              "hanshu:061:s0076",
+              "hanshu:061:s0036"
+            ]
+          },
+          "after": {
+            "id": "hanshu:061:c0391",
+            "subject": "hanshu:061:p029",
+            "predicate": "family-relationship",
+            "value": {
+              "relation": "sibling-of",
+              "personId": "hanshu:061:p018",
+              "kinshipTerm": {
+                "zh": "兄",
+                "en": "elder brother"
+              },
+              "subjectRole": "elder-brother",
+              "objectRole": "younger-sister",
+              "subjectRelativeAge": "elder",
+              "line": "maternal"
+            },
+            "certainty": "strongly-inferred",
+            "evidence": [
+              "hanshu:061:s0076",
+              "hanshu:061:s0036"
+            ]
+          }
+        }
+      },
+      "constraints": [
+        "Proposed conservative removal only; do not add full parentage or new parent edges without independent review.",
+        "c0384/c0385/c0388/c0390 remain untouched by the 25-proposal review."
+      ],
+      "decision": "accept",
+      "reviewReason": "Baseline c0391 classifies the Marquis of Gai and Empress Wang as maternal half-siblings. Tong mu di describes Tian Fen, not the sibling relationship of these two Wang children. Hanshu 97A identifies Wang Zhong and Zang Er as the parents of Xin and the two daughters, then separately identifies Fen and Sheng after remarriage. Do not carry Fen's half-sibling classification across the graph."
+    },
+    {
+      "id": "E04",
+      "approved": true,
+      "unit": "s0036",
+      "reason": "The source locates Tian Fen's birth at Changling, not Empress Wang's native place. The baseline p018 nativePlaces hint has Changling without a supporting native-place/place-association claim. No such hint should be inferred through the half-sibling relation.",
+      "changes": {
+        "personHintRevision": {
+          "person": "hanshu:061:p018",
+          "field": "identityHints.nativePlaces",
+          "before": [
+            "Changling",
+            "長陵"
+          ],
+          "after": []
+        }
+      },
+      "constraints": [
+        "Parent must check for independently retained provenance before removal.",
+        "Keep p002 Changling birthplace c0397; do not change dates."
+      ],
+      "decision": "accept",
+      "reviewReason": "The source locates Tian Fen's birth at Changling, not Empress Wang's native place. The baseline p018 nativePlaces hint has Changling without a supporting native-place/place-association claim. No such hint should be inferred through the half-sibling relation."
+    },
+    {
+      "id": "E05",
+      "approved": true,
+      "unit": "s0008",
+      "reason": "The existing extraction has only the Chinese King Xiao mention here. The revised idiomatic field still explicitly refers to the king of Liang and the emperor, known from s0007 as p009 and p008. This is a pre-existing English title-link gap, not an extra pair of cousins.",
+      "changes": {
+        "surfaceAdditions": [
+          [
+            "p009",
+            "title-reference",
+            "en",
+            "king of Liang",
+            [
+              [
+                "s0008",
+                [
+                  0
+                ]
+              ]
+            ]
+          ],
+          [
+            "p008",
+            "title-reference",
+            "en",
+            "emperor",
+            [
+              [
+                "s0008",
+                [
+                  0
+                ]
+              ]
+            ]
+          ]
+        ],
+        "candidateAccounting": [
+          {
+            "candidate": "hanshu:061:cand_f4b333a38e1dcdb5",
+            "language": "en",
+            "exact": "Liang",
+            "person": "hanshu:061:p009",
+            "kind": "title-reference",
+            "action": "Remove the existing place disposition when the enclosing king-of-Liang mention is added; account for the title component through that mention."
+          }
+        ]
+      },
+      "constraints": [
+        "Do not interpret a place-only Liang elsewhere as a person.",
+        "No new family classification."
+      ],
+      "decision": "accept",
+      "reviewReason": "The existing extraction has only the Chinese King Xiao mention here. The revised idiomatic field still explicitly refers to the king of Liang and the emperor, known from s0007 as p009 and p008. This is a pre-existing English title-link gap, not an extra pair of cousins."
+    },
+    {
+      "id": "E06",
+      "approved": true,
+      "units": [
+        "s0292",
+        "s0296",
+        "s0304",
+        "s0308",
+        "s0363"
+      ],
+      "reason": "Wang Hui's name and existing broad official/general roles survive, but neither chunk-local record has a durable office claim for da xing. The English office correction does not automatically add one.",
+      "changes": {
+        "suggestedOfficeClaims": [
+          {
+            "subject": "hanshu:061:p086",
+            "predicate": "office",
+            "value": {
+              "label": {
+                "en": "Grand Herald",
+                "zh": "大行"
+              },
+              "action": "held"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "hanshu:061:s0292",
+              "hanshu:061:s0296",
+              "hanshu:061:s0304",
+              "hanshu:061:s0308"
+            ]
+          },
+          {
+            "subject": "hanshu:061:p096",
+            "predicate": "office",
+            "value": {
+              "label": {
+                "en": "Grand Herald",
+                "zh": "大行"
+              },
+              "action": "held"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "hanshu:061:s0363"
+            ]
+          }
+        ]
+      },
+      "constraints": [
+        "Assign fresh IDs after parent approval.",
+        "Do not merge p086/p096 in this editorial pass.",
+        "No dates or new kinship inferred."
+      ],
+      "decision": "accept",
+      "reviewReason": "Wang Hui's name and existing broad official/general roles survive, but neither chunk-local record has a durable office claim for da xing. The English office correction does not automatically add one."
+    }
+  ],
+  "evidence": [
+    {
+      "id": "s0007",
+      "kind": "paragraph-sentence",
+      "blockIndex": 2,
+      "collection": "sentences",
+      "itemIndex": 0,
+      "zh": "帝弟梁孝王，母竇太后愛之。",
+      "en": "The emperor's younger brother, King Xiao of Liang, was the favorite of his mother, Empress Dowager Dou.",
+      "literal": "The emperor's younger brother, King Xiao of Liang, his mother Empress Dowager Dou loved him."
+    },
+    {
+      "id": "s0008",
+      "kind": "paragraph-sentence",
+      "blockIndex": 2,
+      "collection": "sentences",
+      "itemIndex": 1,
+      "zh": "孝王朝，因燕昆弟飲。",
+      "en": "When the king of Liang came to court, he and the emperor drank together as brothers.",
+      "literal": "When King Xiao attended court, the brothers drank together at a banquet."
+    },
+    {
+      "id": "s0036",
+      "kind": "paragraph-sentence",
+      "blockIndex": 6,
+      "collection": "sentences",
+      "itemIndex": 0,
+      "zh": "田蚡，孝景王皇后同母弟也，生長陵。",
+      "en": "Tian Fen was the younger maternal half-brother of Empress Wang, Emperor Jing's empress, and was born in Changling.",
+      "literal": "Tian Fen was the uterine younger brother of Empress Wang of Emperor Jing; he was born in Changling."
+    },
+    {
+      "id": "s0076",
+      "kind": "paragraph-sentence",
+      "blockIndex": 11,
+      "collection": "sentences",
+      "itemIndex": 8,
+      "zh": "召客飲，坐其兄蓋侯北鄉，自坐東鄉，以為漢相尊，不可以兄故私橈。",
+      "en": "At feasts he gave his elder brother, Marquis of Gai, the inferior north-facing seat while he took the host's east, insisting that the chancellor of Han could not bend rank for kinship.",
+      "literal": "When he called guests to drink, he seated his elder brother Marquis of Gai with his mat facing north while he himself sat facing east, holding that the Han chancellor's dignity could not be bent for private reasons on account of an elder brother."
+    },
+    {
+      "id": "s0213",
+      "kind": "paragraph-sentence",
+      "blockIndex": 28,
+      "collection": "sentences",
+      "itemIndex": 1,
+      "zh": "孝景時，嬰嘗受遺詔，曰「事有不便，以便宜論上」。",
+      "en": "Emperor Jing had once given Dou Ying a sealed rescript: \"If state business goes awry, memorialize as you see fit.\"",
+      "literal": "Under Emperor Jing, Ying had once received a testamentary edict saying, \"If affairs are inconvenient, you may memorialize at your discretion on what is advantageous.\""
+    },
+    {
+      "id": "s0216",
+      "kind": "paragraph-sentence",
+      "blockIndex": 28,
+      "collection": "sentences",
+      "itemIndex": 4,
+      "zh": "書奏，案尚書，大行無遺詔。",
+      "en": "When the memorial arrived, the imperial secretariat searched its records but found no such testamentary edict from the late emperor.",
+      "literal": "When the memorial was presented, they examined the secretariat records and found no such testamentary edict from the late emperor."
+    },
+    {
+      "id": "s0217",
+      "kind": "paragraph-sentence",
+      "blockIndex": 28,
+      "collection": "sentences",
+      "itemIndex": 5,
+      "zh": "詔書獨臧嬰家，嬰家丞封。",
+      "en": "The only copy of the alleged edict had lain in Dou Ying's house under his steward's seal.",
+      "literal": "The edict text alone was stored in Ying's house; Ying's household steward had sealed it."
+    },
+    {
+      "id": "s0292",
+      "kind": "paragraph-sentence",
+      "blockIndex": 37,
+      "collection": "sentences",
+      "itemIndex": 3,
+      "zh": "閩、東越相攻，遣安國、大行王恢將兵。",
+      "en": "When Min and Eastern Yue went to war, the court sent Han Anguo and Grand Herald Wang Hui with an army.",
+      "literal": "Min and Eastern Yue attacked each other; he sent Anguo and Grand Herald Wang Hui with troops."
+    },
+    {
+      "id": "s0296",
+      "kind": "paragraph-sentence",
+      "blockIndex": 38,
+      "collection": "sentences",
+      "itemIndex": 1,
+      "zh": "大行王恢，燕人，數為邊吏，習故事，議曰：「漢與匈奴和親，率不過數歲即背約。",
+      "en": "Grand Herald Wang Hui of Yan, a veteran frontier officer, argued: \"Every heqin with the Xiongnu lasts only a few years before they break it.",
+      "literal": "Grand Herald Wang Hui, a man of Yan, had repeatedly served as a border official and was versed in precedent; he argued, \"Han and the Xiongnu have made peace through marriage alliance, but as a rule within a few years they break the covenant."
+    },
+    {
+      "id": "s0304",
+      "kind": "paragraph-sentence",
+      "blockIndex": 39,
+      "collection": "sentences",
+      "itemIndex": 0,
+      "zh": "明年，雁門馬邑豪聶壹因大行王恢言：「匈奴初和親，親信邊，可誘以利致之，伏兵襲擊，必破之道也。」",
+      "en": "The next year Nie Yi of Mayi in Yanmen, speaking through Grand Herald Wang Hui, said: \"The Xiongnu have just sealed a heqin and trust the frontier; bait them with loot, then spring an ambush—that will break them.\"",
+      "literal": "The next year Nie Yi, a magnate of Mayi in Yanmen, spoke through Grand Herald Wang Hui: \"The Xiongnu have newly made peace through marriage alliance and trust the border; they can be lured with profit to come; ambush troops and strike them—it is the way surely to break them.\""
+    },
+    {
+      "id": "s0308",
+      "kind": "paragraph-sentence",
+      "blockIndex": 40,
+      "collection": "sentences",
+      "itemIndex": 0,
+      "zh": "大行恢對曰：「陛下雖未言，臣固願效之。",
+      "en": "Wang Hui said, \"Even if you had not asked, I would have urged the same.",
+      "literal": "Grand Herald Hui replied, \"Though Your Majesty has not yet spoken, your servant has long wished to offer this."
+    },
+    {
+      "id": "s0363",
+      "kind": "paragraph-sentence",
+      "blockIndex": 48,
+      "collection": "sentences",
+      "itemIndex": 1,
+      "zh": "衛尉李廣為驍騎將軍，太僕公孫賀為輕車將軍，大行王恢為將屯將軍，太中大夫李息為材官將軍。",
+      "en": "Commandant of the guards Li Guang led the swift cavalry; grand coachman Gongsun He the light chariots; grand herald Wang Hui the camp army; grand counselor Li Xi the specialist corps.",
+      "literal": "Commandant of the guards Li Guang was general of fierce cavalry, Grand Coachman Gongsun He was general of light chariots, Grand Herald Wang Hui was general of encamped troops, Grand Counselor Li Xi was general of specialist troops."
+    }
+  ],
+  "externalCorroboration": {
+    "url": "https://zh.wikisource.org/wiki/漢書/卷097上",
+    "section": "孝景王皇后",
+    "excerpt": "父王仲，槐里人也。母臧兒，故燕王臧荼孫也，為仲妻，生男信與兩女。而仲死，臧兒更嫁為長陵田氏婦，生男蚡、勝。",
+    "conclusion": "Remove the transferred half-sibling classification for Wang Xin and Empress Wang; do not invent a new parent edge or birthplace."
+  },
+  "stats": {
+    "units": 415,
+    "candidates": 910,
+    "people": 110,
+    "mentions": 1003,
+    "claims": 800,
+    "repairs": 29,
+    "dispositions": 296,
+    "aliasDispositionConflicts": 0
+  },
+  "editorial": {
+    "errors": []
+  }
+}
