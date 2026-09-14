@@ -148,6 +148,17 @@ avoid an all-empty-header sample but do not replace operator judgment.
 - Identify **whose event** is dated. A child's appointment is not the father's
   activity; later editions, allusions and commemorations are not evidence that
   their subjects were alive. Keep posthumous reception separate from life events.
+  Preserve the later event, its own date, source unit, and the subject's role as
+  honoree, quoted author, or recalled example. Use `event-participation` with
+  `kind: "posthumous-commemoration"`, `"posthumous-reference"`, or
+  `"retrospective-reference"`; a narrower honor/work claim can instead carry
+  `receptionType: "posthumous"` or `"retrospective"`. The latter does not assert
+  that the subject was dead. These classifications concern the dated event,
+  not when its source was written: a biography written later may still supply
+  genuine birth/death/activity evidence. Never copy a reception date into living
+  attestations or active-date hints. Do not infer a precise death from it.
+  Existing unclassified references require source review, not a date-based
+  bulk relabelling. Later reception remains visible separately on person pages.
 - Justify each endpoint. A reign/dynasty window can bound an event, but does not
   show the person active throughout that period. Prefer narrower verified evidence.
 - Preserve ruler, polity, reign, regnal year and finer calendar wording. Verify
@@ -156,6 +167,13 @@ avoid an all-empty-header sample but do not replace operator judgment.
 - Distinguish conventional historical year labels from Gregorian event dates.
   Lunar years cross Western-year boundaries. Do not invent Gregorian months or
   days. BC/AD has no year zero.
+- For a dated event with a verified month/day, normalize Western years and
+  bounds using the proleptic Gregorian calendar and state the convention in the
+  conversion evidence. Some converters, including Academia Sinica's default,
+  return Julian dates before 1582. Check that setting; preserve the Chinese date
+  and identify any Julian witness explicitly. A Julian December date can fall
+  in the following Gregorian year. Do not apply a fixed offset across centuries
+  or reinterpret a reign-year-only label as an exact Gregorian event date.
 - Preserve stated age and reckoning. Traditional inclusive age is not a modern
   birthday calculation. Do not borrow a sibling's age: `同生` in a maternal list
   does not establish twins or a shared birth year.

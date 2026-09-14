@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { DATA_DIR, PEOPLE_DIR, contentUnits, readJson, sha256, writeJsonAtomic } from './people-content.mjs';
 import { temporalContainers, westernBoundsErrors, westernYearOrder } from './people-date-values.mjs';
+import { personClaimReception, personReceptionErrors } from './people-reception.mjs';
 
 export const DATE_AUDIT_VERSION = 1;
 export const DATE_AUDIT_STATES = ['un-audited', 'audited', 'needs-revision', 'research-blocked', 'stale'];
@@ -17,13 +18,15 @@ function hasTemporalValue(value) {
 }
 
 export function dateAuditDiagnostics(packet) {
-  return packet.items.flatMap(item => temporalContainers(item.value).flatMap(value => {
-    const errors = [];
-    const interval = value.westernInterval;
-    if (interval?.start && interval?.end && westernYearOrder(interval.start) > westernYearOrder(interval.end)) errors.push('Western interval is reversed; verify era and endpoints against the source.');
-    if (value.westernBounds) errors.push(...westernBoundsErrors(value.westernBounds));
+  return packet.items.flatMap(item => {
+    const errors = personReceptionErrors(item);
+    for (const value of temporalContainers(item.value)) {
+      const interval = value.westernInterval;
+      if (interval?.start && interval?.end && westernYearOrder(interval.start) > westernYearOrder(interval.end)) errors.push('Western interval is reversed; verify era and endpoints against the source.');
+      if (value.westernBounds) errors.push(...westernBoundsErrors(value.westernBounds));
+    }
     return errors.map(problem => ({ item: item.id, personId: item.personId, problem }));
-  }));
+  });
 }
 
 export function dateAuditItems(extraction) {
@@ -34,7 +37,7 @@ export function dateAuditItems(extraction) {
   const items = extraction.claims.flatMap((claim, index) => {
     const [personId, predicate, value, certainty, evidence] = compact
       ? claim : [claim.subject, claim.predicate, claim.value, claim.certainty, claim.evidence];
-    if (!LIFE_PREDICATES.has(predicate) && !hasTemporalValue(value)) return [];
+    if (!LIFE_PREDICATES.has(predicate) && !hasTemporalValue(value) && !personClaimReception({ value })) return [];
     return [{ id: `claim-${index + 1}`, claimIndex: index, personId, predicate, value, certainty,
       evidence: evidence.map(id => id.split(':').at(-1)), claimHash: sha256(JSON.stringify(claim)) }];
   });
@@ -80,7 +83,7 @@ export function validateDateAuditReport(report, packet) {
   nonempty(report.summary, 'Audit summary', 20);
   if (!Array.isArray(report.itemChecks) || !Array.isArray(report.personChecks) || !Array.isArray(report.findings) || !Array.isArray(report.references)) throw new Error('Missing date audit checks, findings, or references');
   const complete = report.status === 'audited';
-  if (complete && dateAuditDiagnostics(packet).length) throw new Error('Date approval retains invalid temporal geometry');
+  if (complete && dateAuditDiagnostics(packet).length) throw new Error('Date approval retains invalid temporal geometry or reception ownership');
   exactMembers(report.reviewedUnits, packet.units.map(unit => unit.id), 'Reviewed units', complete);
   exactMembers(report.itemChecks.map(item => item.id), packet.items.map(item => item.id), 'Date checks', complete);
   exactMembers(report.personChecks.map(person => person.id), packet.people.map(person => person.id), 'Person checks', complete);

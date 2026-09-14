@@ -14,6 +14,7 @@ import {
   writeTextAtomic,
 } from './lib/people-content.mjs';
 import { loadPeopleSiteContext } from './lib/people-site.mjs';
+import { personClaimReception } from './lib/people-reception.mjs';
 import {
   PERSON_PAGE_SHARD_COUNT,
   personIdSlugSuffix,
@@ -646,6 +647,19 @@ const CLAIM_SECTIONS = [
   ['Source notes', ['sourceIssues', 'otherClaims']],
 ];
 
+export function personDetailClaimSections(person) {
+  const reception = [];
+  const sections = CLAIM_SECTIONS.map(([label, keys]) => {
+    const claims = keys.flatMap(key => person[key] ?? []).filter(claim => {
+      if (!personClaimReception(claim)) return true;
+      reception.push(claim);
+      return false;
+    });
+    return [label, claims];
+  });
+  return [...sections, ['Later references and commemoration', reception]];
+}
+
 const chapterCache = new Map();
 
 function chapterRecord(book, chapter) {
@@ -1002,8 +1016,7 @@ function generatePersonHtml(person, context) {
   addSection('Life and dates', lifeBody, 'person-chronicle-section', 'life-and-dates');
   addSection('Family', renderFamily(person, context.peopleById, context.familyEdgesById, treeData));
   addSection('Key source chapters', renderKeySources(person), 'person-key-sources-section', 'key-source-chapters');
-  for (const [label, keys] of CLAIM_SECTIONS) {
-    const claims = keys.flatMap((key) => person[key] ?? []);
+  for (const [label, claims] of personDetailClaimSections(person)) {
     addSection(label, renderClaimList(claims, context.peopleById));
   }
   addSection('External records', renderExternalData(person, context.peopleById));
