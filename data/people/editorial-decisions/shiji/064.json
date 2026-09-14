@@ -1,75 +1,152 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "book": "shiji",
   "chapter": "064",
-  "input": {
-    "chapterFingerprint": "sha256:574dff5635cea1f044715178be7d6903b99c8d56f77802bb549b46ba02abe357",
-    "proposalsFingerprint": "sha256:f46b120df5e333de0b22cdf75baf446e5df3c2c8fd7830f4964204fa995969fd"
-  },
-  "reviewer": {
-    "kind": "cursor-agent",
-    "name": "grok-4.5",
-    "model": "grok-4.5",
-    "agentId": "bc-6732ebd2-f711-4353-8214-f1b045f5811f",
-    "runId": "run-f9dd26e4-bc28-4b4b-ad76-bdf4d2c8f642",
-    "completedAt": "2026-08-11T22:36:44.760Z"
-  },
-  "proposals": [
+  "reviews": [
     {
-      "id": "shiji:064:r0001",
-      "unit": {
-        "id": "s0032",
-        "kind": "paragraph-sentence",
-        "blockIndex": 0,
-        "collection": "sentences",
-        "itemIndex": 31
+      "input": {
+        "chapterFingerprint": "sha256:574dff5635cea1f044715178be7d6903b99c8d56f77802bb549b46ba02abe357",
+        "proposalsFingerprint": "sha256:f46b120df5e333de0b22cdf75baf446e5df3c2c8fd7830f4964204fa995969fd"
       },
-      "field": "literal",
-      "before": "Soldiers' encampments wells stoves food drink asked illness medicine, personally stroked and comforted them.",
-      "after": "As for the soldiers' encampments, wells, stoves, food and drink, and inquiries about illness and medicine, he personally stroked and comforted them.",
-      "reason": "Literal English is telegraphic and omits grammatical subjects and connectors, obscuring that Rangju personally oversaw camp welfare.",
-      "confidence": "high"
+      "reviewer": {
+        "kind": "cursor-agent",
+        "name": "grok-4.5",
+        "model": "grok-4.5",
+        "agentId": "bc-6732ebd2-f711-4353-8214-f1b045f5811f",
+        "runId": "run-f9dd26e4-bc28-4b4b-ad76-bdf4d2c8f642",
+        "completedAt": "2026-08-11T22:36:44.760Z"
+      },
+      "proposals": [
+        {
+          "id": "shiji:064:r0001",
+          "unit": {
+            "id": "s0032",
+            "kind": "paragraph-sentence",
+            "blockIndex": 0,
+            "collection": "sentences",
+            "itemIndex": 31
+          },
+          "field": "literal",
+          "before": "Soldiers' encampments wells stoves food drink asked illness medicine, personally stroked and comforted them.",
+          "after": "As for the soldiers' encampments, wells, stoves, food and drink, and inquiries about illness and medicine, he personally stroked and comforted them.",
+          "reason": "Literal English is telegraphic and omits grammatical subjects and connectors, obscuring that Rangju personally oversaw camp welfare.",
+          "confidence": "high"
+        },
+        {
+          "id": "shiji:064:r0002",
+          "unit": {
+            "id": "s0033",
+            "kind": "paragraph-sentence",
+            "blockIndex": 0,
+            "collection": "sentences",
+            "itemIndex": 32
+          },
+          "field": "literal",
+          "before": "All took general's provisions to feast soldiers, body shared rations equally with soldiers.",
+          "after": "He took all the general's provisions to feast the soldiers, and personally shared the rations equally with the soldiers.",
+          "reason": "Literal calques 身 as 'body' and drops the subject, making the sense unclear.",
+          "confidence": "high"
+        }
+      ],
+      "decisions": [
+        {
+          "repairId": "shiji:064:r0001",
+          "decision": "accept",
+          "after": null,
+          "reason": "士卒次舍井灶飲食問疾醫藥，身自拊循之 is a topic–comment line: the welfare list is topicalized and 身自拊循之 means he personally stroked and comforted the soldiers; the before is ungrammatical telegraphic English, and the proposed after restores that structure without inventing or omitting sense.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "s0032",
+            "excerpt": "士卒次舍井灶飲食問疾醫藥，身自拊循之"
+          }
+        },
+        {
+          "repairId": "shiji:064:r0002",
+          "decision": "accept",
+          "after": null,
+          "reason": "悉取將軍之資糧享士卒 means he took all the general's provisions to feast the soldiers (悉 modifies 取, not a plural subject), and 身與士卒平分糧食 means he personally shared rations equally with them; the before's 'All took' and calque 'body' are wrong, and the proposed after matches the Chinese.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "s0033",
+            "excerpt": "悉取將軍之資糧享士卒，身與士卒平分糧食"
+          }
+        }
+      ],
+      "claimRetractions": [],
+      "claimRevisions": []
     },
     {
-      "id": "shiji:064:r0002",
-      "unit": {
-        "id": "s0033",
-        "kind": "paragraph-sentence",
-        "blockIndex": 0,
-        "collection": "sentences",
-        "itemIndex": 32
+      "input": {
+        "chapterFingerprint": "sha256:0e569eea2c716a269f8fadc530a43098a3233d3aebe0582718b00f3957654429",
+        "proposalsFingerprint": "sha256:f6aa551b0a554cbfe0f5bda8b741358cbfd587194f26a16dc2f0cdbd8bd36fa3"
       },
-      "field": "literal",
-      "before": "All took general's provisions to feast soldiers, body shared rations equally with soldiers.",
-      "after": "He took all the general's provisions to feast the soldiers, and personally shared the rations equally with the soldiers.",
-      "reason": "Literal calques 身 as 'body' and drops the subject, making the sense unclear.",
-      "confidence": "high"
+      "reviewer": {
+        "kind": "codex",
+        "name": "Codex independent source reviewer",
+        "model": null,
+        "agentId": "01a0a135-0b59-71c0-bc4f-cfdffef6f4a4",
+        "runId": null,
+        "completedAt": "2026-09-14T18:44:03.344Z"
+      },
+      "proposals": [
+        {
+          "id": "shiji:064:r0003",
+          "unit": {
+            "id": "s0030",
+            "kind": "paragraph-sentence",
+            "blockIndex": 0,
+            "collection": "sentences",
+            "itemIndex": 29
+          },
+          "field": "literal",
+          "before": "Thereupon he beheaded the envoy's groom, the left outer horse of the chariot team, and the left outrider horse, and displayed the punishment before the three armies.",
+          "after": "Thereupon he beheaded the envoy's driver, cut off the chariot's left upright, and killed the team's left outside horse, displaying the punishment before the three armies.",
+          "reason": "Suoyin explains left fu as a wooden upright outside the chariot body, separately from the left outside horse. Preserve the execution of the driver, damage to the chariot, killing of one horse, and public display of punishment; do not introduce a second horse.",
+          "confidence": "high"
+        },
+        {
+          "id": "shiji:064:r0004",
+          "unit": {
+            "id": "s0030",
+            "kind": "paragraph-sentence",
+            "blockIndex": 0,
+            "collection": "sentences",
+            "itemIndex": 29
+          },
+          "field": "idiomatic",
+          "before": "Rangju thereupon beheaded the envoy's groom, the left outside horse of his chariot team, and the left trace horse, displaying the punishment before the three armies.",
+          "after": "Rangju then had the envoy's driver beheaded, the chariot's left upright cut off, and the team's left outside horse killed, displaying the punishment before the three armies.",
+          "reason": "Suoyin explains left fu as a wooden upright outside the chariot body, separately from the left outside horse. Preserve the execution of the driver, damage to the chariot, killing of one horse, and public display of punishment; do not introduce a second horse.",
+          "confidence": "high"
+        }
+      ],
+      "decisions": [
+        {
+          "repairId": "shiji:064:r0003",
+          "decision": "accept",
+          "after": null,
+          "reason": "The Chinese enumerates the envoy's driver, the chariot's left upright, and the left outside horse. Suoyin explains fu as an exterior wooden support, separately from the horse, and connects the left side to the driver. The literal proposal restores all three objects, distinguishes cutting wood from killing, and retains the public punishment without adding a second horse or changing the actor.",
+          "sourceWitness": {
+            "source": "wikisource",
+            "citation": "Shiji 064 Suoyin, s0030 annotation; https://zh.wikisource.org/wiki/史記三家註/卷064 (page identifies revision 2514733)",
+            "excerpt": "駙，當作「軵」，並音附，謂車循外立木，承重較之材。又斬其馬之左驂，以御者在左故也。"
+          }
+        },
+        {
+          "repairId": "shiji:064:r0004",
+          "decision": "accept",
+          "after": null,
+          "reason": "The continuing authority is Rangju; the envoy himself is spared in s0029 and returns in s0031. Suoyin distinguishes the wooden chariot upright from the single left outside horse. The idiomatic causative accurately expresses Rangju's ordered punishment, retains the driver's beheading and public display, and fixes the second-horse error without altering Chinese, chronology or identity.",
+          "sourceWitness": {
+            "source": "wikisource",
+            "citation": "Shiji 064 Suoyin, s0030 annotation; https://zh.wikisource.org/wiki/史記三家註/卷064 (page identifies revision 2514733)",
+            "excerpt": "駙，當作「軵」，並音附，謂車循外立木，承重較之材。又斬其馬之左驂，以御者在左故也。"
+          }
+        }
+      ],
+      "claimRetractions": [],
+      "claimRevisions": [],
+      "claimAdditions": []
     }
-  ],
-  "decisions": [
-    {
-      "repairId": "shiji:064:r0001",
-      "decision": "accept",
-      "after": null,
-      "reason": "士卒次舍井灶飲食問疾醫藥，身自拊循之 is a topic–comment line: the welfare list is topicalized and 身自拊循之 means he personally stroked and comforted the soldiers; the before is ungrammatical telegraphic English, and the proposed after restores that structure without inventing or omitting sense.",
-      "sourceWitness": {
-        "source": "chapter-text",
-        "citation": "s0032",
-        "excerpt": "士卒次舍井灶飲食問疾醫藥，身自拊循之"
-      }
-    },
-    {
-      "repairId": "shiji:064:r0002",
-      "decision": "accept",
-      "after": null,
-      "reason": "悉取將軍之資糧享士卒 means he took all the general's provisions to feast the soldiers (悉 modifies 取, not a plural subject), and 身與士卒平分糧食 means he personally shared rations equally with them; the before's 'All took' and calque 'body' are wrong, and the proposed after matches the Chinese.",
-      "sourceWitness": {
-        "source": "chapter-text",
-        "citation": "s0033",
-        "excerpt": "悉取將軍之資糧享士卒，身與士卒平分糧食"
-      }
-    }
-  ],
-  "claimRetractions": [],
-  "claimRevisions": []
+  ]
 }
