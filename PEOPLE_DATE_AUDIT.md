@@ -100,6 +100,9 @@ plus `add-reception-event` for a separately evidenced posthumous or retrospectiv
 misleading life claim separately; an undated later reference need not gain a date.
 Required companion records belong in the proposal's validated `changes`, not a
 side list of unimplemented host work. Such incomplete proposals cannot be staged.
+Use `date-context` to add missing chronology to an existing non-life claim without
+changing its subject, predicate or non-date value fields. Newly dated claims enter
+the fresh review packet; attaching a date does not approve it.
 It runs the production extraction/editorial validators before independent review.
 Non-temporal event content, people, names, mentions and family edges cannot be
 rewritten by the date repair interface. A repair conversation cannot approve its

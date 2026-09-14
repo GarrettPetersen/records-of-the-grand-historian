@@ -175,6 +175,60 @@ test('a reception repair stays staged until a fresh reviewer approves the added 
   assert.equal(receptionChecks,1);
   assert.ok(readJson(f.file).claims.some(c=>c[2].kind==='posthumous-reference'));
 });
+function undatedEventFixture(t) {
+  const f=fixture(t);
+  f.extraction.claims.push(['p001','event-participation',{kind:'appointment',role:'appointee'},'explicit',['s0001']]);
+  writeJsonAtomic(f.file,f.extraction);f.packet=buildDateAuditPacket('fixture','001',f.options);
+  return f;
+}
+function eventDateRepair(f) {
+  const proposal=repair({packet:f.packet,extraction:f.extraction});
+  const before=f.extraction.claims[3],after=structuredClone(before);
+  after[2].dateContext={sourceDate:{text:'元年'},westernYear:{era:'AD',year:1,precision:'year'}};
+  proposal.changes.push({kind:'date-context',id:'claim-4',before,after,reason:'Preserve the appointment and attach its separately checked first-year source context.'});
+  return proposal;
+}
+test('missing event chronology can be added without replacing the underlying event',t=>{
+  const f=undatedEventFixture(t),proposal=eventDateRepair(f);
+  assert.ok(!f.packet.items.some(i=>i.id==='claim-4'));
+  const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
+  const combined=dateRepairDifference(f.extraction,candidate,f.packet);
+  assert.equal(combined.changes.find(c=>c.id==='claim-4').kind,'date-context');
+  assert.deepEqual(applyDateRepairProposal(f.extraction,combined,f.packet),candidate);
+  assert.ok(buildDateAuditPacket('fixture','001',{...f.options,extraction:candidate}).items.some(i=>i.id==='claim-4'));
+});
+test('date-context cannot rewrite identities, event content, life claims or unowned targets',t=>{
+  const f=undatedEventFixture(t),proposal=eventDateRepair(f);
+  for(const mutate of [
+    c=>{c.after[0]='p002';},c=>{c.after[1]='office';},c=>{c.after[2].role='ruler';},
+    c=>{c.after[2].kind='battle';},c=>{c.id='claim-999';},c=>{c.id='claim-04';},
+    c=>{c.before[3]='uncertain';},c=>{delete c.after[2].dateContext;c.after[3]='uncertain';},
+    c=>{c.id='claim-1';c.before=f.extraction.claims[0];c.after=structuredClone(c.before);},
+  ]) {
+    const bad=structuredClone(proposal);mutate(bad.changes.at(-1));
+    assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet));
+  }
+  const changed=applyDateRepairProposal(f.extraction,proposal,f.packet);
+  changed.claims[3][2].kind='battle';
+  assert.throws(()=>dateRepairDifference(f.extraction,changed,f.packet),/non-temporal claim/);
+});
+test('a newly dated event requires coverage in the fresh independent review',async t=>{
+  const f=undatedEventFixture(t);let approve=false,checked=0;
+  const worker=async task=>{
+    if(task.kind==='repair')return eventDateRepair(f);
+    if(task.key.startsWith('reaudit-')) {
+      if(!approve)throw new Error('awaiting fresh event-date review');
+      checked+=task.job.ownedItems.filter(id=>id==='claim-4').length;
+    }
+    return review(task);
+  };
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options),/awaiting fresh/);
+  assert.deepEqual(readJson(f.file),f.extraction);
+  approve=true;
+  assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options)).status,'audited');
+  assert.equal(checked,1);
+  assert.equal(readJson(f.file).claims[3][2].dateContext.westernYear.year,1);
+});
 test('incomplete remote artifacts cannot be silently accepted',t=>{
   const f=fixture(t),job=dateReviewJobs(f.packet,f.options)[0],result=review({job,packet:f.packet,key:'test'});result.itemChecks.pop();
   assert.throws(()=>validateDateJobResult(result,job,f.packet),/exactly/);
