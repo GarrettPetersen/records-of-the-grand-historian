@@ -445,6 +445,7 @@ export function mergeEditorialDecisionReview(existing, incoming) {
 export function validateAppliedEditorialDecisions(document, extraction) {
   const documentResult = editorialDocumentErrors(document);
   const errors = [...documentResult.errors];
+  const reviews = editorialReviews(document);
   const pendingReview = currentReview(document, extraction);
   const pendingFingerprint = pendingReview?.input.proposalsFingerprint ?? null;
   const repairsByTarget = new Map();
@@ -454,7 +455,7 @@ export function validateAppliedEditorialDecisions(document, extraction) {
     repairs.push(repair);
     repairsByTarget.set(target, repairs);
   }
-  for (const [index, review] of editorialReviews(document).entries()) {
+  for (const [index, review] of reviews.entries()) {
     if (pendingFingerprint && review.input.proposalsFingerprint === pendingFingerprint) continue;
     const prefix = document.schemaVersion === 4 ? `review ${index + 1}: ` : '';
     const reviewResult = singleEditorialDocumentErrors(review, { validateSchema: false });
@@ -470,8 +471,18 @@ export function validateAppliedEditorialDecisions(document, extraction) {
       if (!proposal) continue;
       const target = `${proposal.unit.id}:${proposal.field}`;
       if (decision.decision === 'reject') {
+        // A later review may correct a different defect in the same original
+        // sentence; require its exact approved wording and reasoning.
         if ((repairsByTarget.get(target) ?? []).some((repair) =>
-          repair.status === 'applied' && repair.before === proposal.before
+          repair.status === 'applied' && repair.before === proposal.before &&
+          !reviews.slice(index + 1).some((later) => later.decisions.some((approval) => {
+            if (approval.decision === 'reject') return false;
+            const replacement = later.proposals.find((item) => item.id === approval.repairId);
+            return replacement?.unit.id === proposal.unit.id && replacement.field === proposal.field &&
+              replacement.before === repair.before &&
+              (approval.decision === 'revise' ? approval.after : replacement.after) === repair.after &&
+              approval.reason === repair.reason;
+          }))
         )) {
           errors.push(`${prefix}rejected ${decision.repairId}, but it is applied`);
         }
