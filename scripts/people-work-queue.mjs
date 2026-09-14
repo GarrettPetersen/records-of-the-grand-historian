@@ -557,7 +557,7 @@ function validateGrokbotOutput(target, options = {}) {
     output = path.resolve(REPO_ROOT, row.output);
   }
   if (!fs.existsSync(output)) throw new Error(`Missing Grok Bot output: ${path.relative(REPO_ROOT, output)}`);
-  const validated = validateCompactPeopleExtraction(readJson(output), ownedPacket);
+  const validated = validateCompactPeopleExtraction(readJson(output), ownedPacket, { strictAliasDispositions: true });
   assertDurableCareerCoverage(validated.normalized, ownedPacket);
   return { output, validated, packet: ownedPacket };
 }
@@ -576,7 +576,7 @@ function assembleGrokbotOutput(target, opts) {
     if (!fs.existsSync(output)) throw new Error(`Missing Grok Bot chunk output: ${row.output}`);
     const extraction = readJson(output);
     const ownedPacket = buildPeopleChunkPacket(packet, chunk);
-    const validated = validateCompactPeopleExtraction(extraction, ownedPacket);
+    const validated = validateCompactPeopleExtraction(extraction, ownedPacket, { strictAliasDispositions: true });
     assertDurableCareerCoverage(validated.normalized, ownedPacket);
     return { chunk, extraction };
   });
@@ -588,7 +588,7 @@ function assembleGrokbotOutput(target, opts) {
     completedAt: new Date().toISOString(),
     chunks: parts.map(({ chunk, extraction }) => peopleChunkRunRecord(chunk, extraction)),
   });
-  const validated = validateCompactPeopleExtraction(compact, packet);
+  const validated = validateCompactPeopleExtraction(compact, packet, { strictAliasDispositions: true });
   assertDurableCareerCoverage(validated.normalized, packet);
   const output = extractionPath(target.book, target.chapter);
   writeTextAtomic(output, serializeCompactPeopleExtraction(compact));
@@ -828,7 +828,7 @@ function acceptGrokbot(opts) {
     properNounMatcher: loadProperNounMatcher(),
   });
   const bytes = fs.readFileSync(output);
-  const validated = validateCompactPeopleExtraction(JSON.parse(bytes.toString('utf8')), packet);
+  const validated = validateCompactPeopleExtraction(JSON.parse(bytes.toString('utf8')), packet, { strictAliasDispositions: true });
   assertDurableCareerCoverage(validated.normalized, packet);
   const sha256 = createHash('sha256').update(bytes).digest('hex');
   markRemotePeopleClaims([target], 'ready', {

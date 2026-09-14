@@ -178,6 +178,11 @@ unrelated files. Reserve unscoped `npm run people:validate` for reviewed milesto
 merges; that full run also checks the global resolution documents. A scoped pass is a
 handoff gate, not evidence that the whole corpus is complete.
 
+Grok chunk validation, assembly, and attachment acceptance also reject linked-alias
+`not-a-name` contradictions. Resolve the specific source context: link a real
+callback or supply an explicit non-person disposition, rather than removing the
+candidate or changing a place into a person to pass.
+
 For every accepted translation repair, inspect the parallel literal/idiomatic field and
 later repetitions of the corrected name, place, title, or office. Repair the same error
 throughout the chapter in the same review, then run `--reconcile-current` so extraction
