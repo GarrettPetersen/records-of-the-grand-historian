@@ -156,6 +156,13 @@ avoid an all-empty-header sample but do not replace operator judgment.
 - Distinguish conventional historical year labels from Gregorian event dates.
   Lunar years cross Western-year boundaries. Do not invent Gregorian months or
   days. BC/AD has no year zero.
+- For a dated event with a verified month/day, normalize Western years and
+  bounds using the proleptic Gregorian calendar and state the convention in the
+  conversion evidence. Some converters, including Academia Sinica's default,
+  return Julian dates before 1582. Check that setting; preserve the Chinese date
+  and identify any Julian witness explicitly. A Julian December date can fall
+  in the following Gregorian year. Do not apply a fixed offset across centuries
+  or reinterpret a reign-year-only label as an exact Gregorian event date.
 - Preserve stated age and reckoning. Traditional inclusive age is not a modern
   birthday calculation. Do not borrow a sibling's age: `同生` in a maternal list
   does not establish twins or a shared birth year.
