@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { westernBoundsErrors } from './lib/people-date-values.mjs';
+import { personReceptionErrors } from './lib/people-reception.mjs';
 import {
   buildPeopleChunkWorkerPacket,
   buildPeopleExtractionPacket,
@@ -297,6 +298,7 @@ function validateAttestationClaim(claim, errors) {
 }
 
 export function validateClaimVocabulary(claim, packet, errors) {
+  errors.push(...personReceptionErrors(claim).map(error => `${claim.id}: ${error}`));
   if (claim.predicate === 'role') {
     const roleId = claim.value?.roleId;
     const known = new Set(packet.context.roles.map((role) => role.id));

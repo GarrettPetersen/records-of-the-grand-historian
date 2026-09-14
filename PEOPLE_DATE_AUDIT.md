@@ -148,6 +148,17 @@ avoid an all-empty-header sample but do not replace operator judgment.
 - Identify **whose event** is dated. A child's appointment is not the father's
   activity; later editions, allusions and commemorations are not evidence that
   their subjects were alive. Keep posthumous reception separate from life events.
+  Preserve the later event, its own date, source unit, and the subject's role as
+  honoree, quoted author, or recalled example. Use `event-participation` with
+  `kind: "posthumous-commemoration"`, `"posthumous-reference"`, or
+  `"retrospective-reference"`; a narrower honor/work claim can instead carry
+  `receptionType: "posthumous"` or `"retrospective"`. The latter does not assert
+  that the subject was dead. These classifications concern the dated event,
+  not when its source was written: a biography written later may still supply
+  genuine birth/death/activity evidence. Never copy a reception date into living
+  attestations or active-date hints. Do not infer a precise death from it.
+  Existing unclassified references require source review, not a date-based
+  bulk relabelling. Later reception remains visible separately on person pages.
 - Justify each endpoint. A reign/dynasty window can bound an event, but does not
   show the person active throughout that period. Prefer narrower verified evidence.
 - Preserve ruler, polity, reign, regnal year and finer calendar wording. Verify
