@@ -8,7 +8,6 @@ import {
   personPageSlugSuffix,
 } from '../functions/lib/people-shards.js';
 import {
-  MAX_PUBLIC_PERSON_ALIASES,
   inferredPersonBirthYear,
   personAlternateNames,
   personCoherentActivityClaims,
@@ -43,17 +42,23 @@ const aliasFixture = {
   ],
 };
 const aliases = personPublicAliases(aliasFixture);
-assert.equal(aliases.length, MAX_PUBLIC_PERSON_ALIASES);
+assert.equal(aliases.length, 7);
 assert.deepEqual(aliases.map((name) => [name.kind, name.en, name.zh]), [
   ['personal-name', 'Liu Bang', '劉邦'],
+  ['personal-name', 'Liu Bang', '劉'],
+  ['personal-name', 'Liu Ji', '劉季'],
   ['courtesy-name', 'Ji', '季'],
   ['posthumous-name', 'Gao Huangdi', '高皇帝'],
+  ['temple-name', 'Han Gaozu', '漢高祖'],
   ['temple-name', 'Taizu', '太祖'],
 ]);
 assert.deepEqual(personAlternateNames(aliasFixture), [
   'Liu Bang (劉邦)',
+  'Liu Bang (劉)',
+  'Liu Ji (劉季)',
   'Ji (季)',
   'Gao Huangdi (高皇帝)',
+  'Han Gaozu (漢高祖)',
   'Taizu (太祖)',
 ]);
 const emperorAliasFixture = {

@@ -297,8 +297,6 @@ export function personLifeSummary(person) {
   return 'Dates uncertain';
 }
 
-export const MAX_PUBLIC_PERSON_ALIASES = 4;
-
 const NAME_KIND_FAMILIES = new Map([
   ['personal', 'personal'],
   ['personal-name', 'personal'],
@@ -470,11 +468,6 @@ function isPreferredNameVariant(name, preferredName) {
   const preferredZh = normalizeChineseName(preferredName.zh);
   if (nameZh && preferredZh) {
     if (nameZh === preferredZh) return true;
-    if (['temple', 'posthumous', 'regnal'].includes(publicNameFamily(name))) {
-      const shorter = nameZh.length <= preferredZh.length ? nameZh : preferredZh;
-      const longer = nameZh.length > preferredZh.length ? nameZh : preferredZh;
-      if (shorter.length >= 2 && longer.length - shorter.length <= 2 && longer.endsWith(shorter)) return true;
-    }
   }
   return sharesNormalizedLatinName(name, preferredName);
 }
@@ -546,11 +539,8 @@ function deduplicatePublicAliases(candidates) {
   return aliases;
 }
 
-export function personPublicAliases(person, limit = MAX_PUBLIC_PERSON_ALIASES) {
-  if (!Number.isInteger(limit) || limit < 0 || limit > MAX_PUBLIC_PERSON_ALIASES) {
-    throw new Error(`Public person alias limit must be an integer from 0 to ${MAX_PUBLIC_PERSON_ALIASES}`);
-  }
-  const candidatesByFamily = new Map();
+export function personPublicAliases(person) {
+  const candidates = [];
   for (const name of person.names ?? []) {
     if (![name.en, name.zh, name.pinyin].some((value) => String(value ?? '').trim())) continue;
     const family = publicNameFamily(name);
@@ -566,18 +556,13 @@ export function personPublicAliases(person, limit = MAX_PUBLIC_PERSON_ALIASES) {
       family,
       score: aliasCandidateScore(name, family),
     };
-    const current = candidatesByFamily.get(family);
-    if (!current || candidate.score > current.score ||
-        (candidate.score === current.score && aliasTieBreaker(candidate) < aliasTieBreaker(current))) {
-      candidatesByFamily.set(family, candidate);
-    }
+    candidates.push(candidate);
   }
-  const ordered = [...candidatesByFamily.values()]
+  const ordered = candidates
     .sort((left, right) =>
       (ALIAS_FAMILY_PRIORITY.get(right.family) ?? 0) - (ALIAS_FAMILY_PRIORITY.get(left.family) ?? 0) ||
       right.score - left.score || aliasTieBreaker(left).localeCompare(aliasTieBreaker(right)));
   return deduplicatePublicAliases(ordered)
-    .slice(0, limit)
     .map(({ family, score, ...name }) => name);
 }
 
