@@ -7,7 +7,7 @@ import { buildDateAuditPacket, dateAuditDiagnostics, dateAuditItems, dateAuditSt
 import { sha256, writeJsonAtomic } from './lib/people-content.mjs';
 import { westernBoundsErrors, boundedDateLabel } from './lib/people-date-values.mjs';
 import { personLifeSummary, formatPersonWesternYear, inferredPersonBirthYear } from './lib/people-presentation.mjs';
-import { peopleCatalogIsComplete } from './lib/people-publication.mjs';
+import { peopleCatalogIsComplete, peopleCatalogIsPublishable } from './lib/people-publication.mjs';
 
 const year = n => ({ era: n < 0 ? 'BC' : 'AD', year: Math.abs(n), precision: 'year' });
 test('catalog completion requires date approval independently of extraction', () => {
@@ -16,6 +16,25 @@ test('catalog completion requires date approval independently of extraction', ()
   assert.equal(peopleCatalogIsComplete({ ...stats, dateAuditPendingChapters: 0 }), true);
   delete stats.dateAuditPendingChapters;
   assert.throws(() => peopleCatalogIsComplete(stats), /invalid dateAuditPendingChapters/);
+});
+
+test('publication requires the complete catalog, not merely extracted records', () => {
+  const blockers = {
+    missingChapters: 1,
+    legacyChapters: 0,
+    legacyLocalPeople: 0,
+    pendingTranslationRepairs: 0,
+    unresolvedCandidateBlocks: 0,
+    dateAuditPendingChapters: 1,
+  };
+  assert.equal(peopleCatalogIsPublishable({ people: [{}], complete: false, stats: blockers }), false);
+  const complete = {
+    ...blockers,
+    missingChapters: 0,
+    dateAuditPendingChapters: 0,
+  };
+  assert.equal(peopleCatalogIsPublishable({ people: [{}], complete: true, stats: complete }), true);
+  assert.equal(peopleCatalogIsPublishable({ people: [{}], complete: false, stats: complete }), false);
 });
 function fixture(t) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'people-dates-'));
