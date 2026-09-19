@@ -87,7 +87,7 @@ export function validatePeopleWorkLedger(ledger) {
   }
   for (const [key, claim] of Object.entries(ledger.claims)) {
     if (!/^[a-z0-9_-]+\/\d{3}$/u.test(key)) throw new Error(`Invalid queue chapter key: ${key}`);
-    if (!['cursor-sdk', 'grokbot'].includes(claim.lane)) throw new Error(`Invalid queue lane for ${key}`);
+    if (!['cursor-sdk', 'grokbot', 'codex-spark'].includes(claim.lane)) throw new Error(`Invalid queue lane for ${key}`);
     if (!claim.worker || !claim.status || !claim.updatedAt) throw new Error(`Incomplete queue claim for ${key}`);
     if (claim.sticky !== true && !claim.expiresAt) throw new Error(`Non-sticky queue claim lacks expiry: ${key}`);
     if (claim.grokbotPlan != null) {
