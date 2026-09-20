@@ -9,9 +9,17 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   buildCompactPeopleExtractionSeed,
+  buildPeopleChunkWorkerPacket,
   buildPeopleExtractionPacket,
-  buildPeopleWorkerPacket,
 } from './build-people-extraction-packet.mjs';
+import {
+  assembleCompactPeopleChunks,
+  buildPeopleChunkPacket,
+  normalizePeopleExtractionChunkPlan,
+  peopleChunkRunRecord,
+  planPeopleExtractionChunks,
+  splitPeopleExtractionChunk,
+} from './lib/people-extraction-chunks.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
 import { PEOPLE_DIR, REPO_ROOT, extractionPath, normalizedChapterId, writeTextAtomic } from './lib/people-content.mjs';
 import { serializeCompactPeopleExtraction } from './lib/people-compact.mjs';
@@ -23,6 +31,7 @@ import {
 import { validateCompactPeopleExtraction } from './validate-people-extraction.mjs';
 
 const MODEL = 'gpt-5.3-codex-spark';
+const WORKER_MAX_BYTES = 48 * 1024;
 const INSTRUCTIONS = fs.readFileSync(path.join(REPO_ROOT, 'prompt-people-extraction-compact.txt'), 'utf8').trim();
 const SCHEMA = path.join(PEOPLE_DIR, 'schema', 'compact-extraction.schema.json');
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
@@ -30,10 +39,10 @@ const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPat
 function usage() {
   console.log(`Usage: npm run people:extract:spark -- --book BOOK --chapter NNN [--dry-run|--run]
 
-Spark is a sealed, whole-chapter extraction lane. --dry-run is the default and writes nothing.
---run claims the chapter atomically, invokes Codex with a read-only sandbox, then host-validates
-its final JSON before accepting it. Translation repairs remain proposed evidence; this command
-never edits a translation chapter or applies an editorial decision.`);
+Spark is a sealed, chunked extraction lane. --dry-run is the default and writes nothing.
+--run claims the chapter atomically, invokes Codex with a read-only sandbox for every sealed
+chunk, then host-validates and assembles the chapter. Translation repairs remain proposed
+evidence; this command never edits a translation chapter or applies an editorial decision.`);
 }
 
 function args(argv) {
@@ -51,24 +60,38 @@ function args(argv) {
   return o;
 }
 
-function prompt(target, packet) {
-  const worker = buildPeopleWorkerPacket(packet);
-  const seed = buildCompactPeopleExtractionSeed(packet, MODEL);
-  return `Return ONLY one JSON object conforming to the supplied compact extraction schema. Perform person extraction for ${target.book}/${target.chapter}. This is sealed packet-only work: do not inspect files, browse, use subagents, or run shell commands. Do not propose edits to source translations; translationRepairs are evidence proposals only. Preserve the seed input and run metadata exactly, process every unit and candidate, and set coverage only when true.\n\n<instructions>\n${INSTRUCTIONS}\n</instructions>\n<packet>\n${JSON.stringify(worker)}\n</packet>\n<seed>\n${JSON.stringify(seed)}\n</seed>`;
+function prompt(target, packet, chunk) {
+  const worker = buildPeopleChunkWorkerPacket(packet, chunk);
+  const seed = buildCompactPeopleExtractionSeed(buildPeopleChunkPacket(packet, chunk), MODEL);
+  return `Return ONLY one JSON object conforming to the supplied compact extraction schema. Perform person extraction for owned chunk ${chunk.id} of ${target.book}/${target.chapter}. This is sealed packet-only work: do not inspect files, browse, use subagents, or run shell commands. Do not propose edits to source translations; translationRepairs are evidence proposals only. Process every owned unit and candidate, preserve the seed input and run metadata exactly, and do not emit people or claims for read-only context units. Set coverage only when true.\n\n<instructions>\n${INSTRUCTIONS}\n</instructions>\n<packet>\n${JSON.stringify(worker)}\n</packet>\n<seed>\n${JSON.stringify(seed)}\n</seed>`;
 }
 
 function rejectPath(target) { return path.join(PEOPLE_DIR, 'generated', 'rejected-spark-extractions', target.book, `${target.chapter}.json`); }
 
-function runCodex(target, packet) {
+function runCodex(instructions) {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), '24histories-spark-'));
   const output = path.join(temp, 'output.json');
   try {
-    const result = spawnSync('codex', ['exec', '--ephemeral', '--sandbox', 'read-only', '--model', MODEL, '--output-schema', SCHEMA, '--output-last-message', output, '--color', 'never', prompt(target, packet)], { cwd: REPO_ROOT, encoding: 'utf8', maxBuffer: 2 * 1024 * 1024, timeout: 30 * 60 * 1000 });
+    const result = spawnSync('codex', ['exec', '--ephemeral', '--sandbox', 'read-only', '--model', MODEL, '--output-schema', SCHEMA, '--output-last-message', output, '--color', 'never', instructions], { cwd: REPO_ROOT, encoding: 'utf8', maxBuffer: 2 * 1024 * 1024, timeout: 30 * 60 * 1000 });
     if (result.error) throw new Error(`Codex Spark failed to launch: ${result.error.message}`);
     if (result.status !== 0) throw new Error(`Codex Spark failed (${result.status}): ${(result.stderr || result.stdout).trim()}`);
     if (!fs.existsSync(output)) throw new Error('Codex Spark returned no final JSON');
     return JSON.parse(fs.readFileSync(output, 'utf8'));
   } finally { fs.rmSync(temp, { recursive: true, force: true }); }
+}
+
+function planSparkChunks(packet) {
+  const planned = planPeopleExtractionChunks(packet, { maxUnits: 60, maxCandidates: 150, contextUnits: 6 });
+  const chunks = [...planned];
+  for (let index = 0; index < chunks.length; index += 1) {
+    const chunk = chunks[index];
+    const bytes = Buffer.byteLength(JSON.stringify(buildPeopleChunkWorkerPacket(packet, chunk)));
+    if (bytes <= WORKER_MAX_BYTES) continue;
+    const split = splitPeopleExtractionChunk(packet, chunk, { contextUnits: 6 });
+    chunks.splice(index, 1, ...split);
+    index -= 1;
+  }
+  return normalizePeopleExtractionChunkPlan(packet, chunks, { contextUnits: 6 });
 }
 
 function preflightModel() {
@@ -94,8 +117,8 @@ function main() {
   const o = args(process.argv.slice(2)); if (o.selfTest) return selfTest();
   const target = { book: o.book, chapter: o.chapter };
   const packet = buildPeopleExtractionPacket(o.book, o.chapter, { properNounMatcher: loadProperNounMatcher() });
-  const bytes = Buffer.byteLength(JSON.stringify(buildPeopleWorkerPacket(packet)));
-  const oversized = bytes > 48 * 1024;
+  const chunks = planSparkChunks(packet);
+  const maxChunkBytes = Math.max(...chunks.map((chunk) => Buffer.byteLength(JSON.stringify(buildPeopleChunkWorkerPacket(packet, chunk)))));
   const existing = fs.existsSync(extractionPath(o.book, o.chapter));
   if (existing && o.run) {
     throw new Error(`${o.book}/${o.chapter} already has an extraction; Spark refuses replacement so reviewed history and person IDs cannot be overwritten`);
@@ -103,19 +126,30 @@ function main() {
   const shared = { remote: o.remote, branch: o.branch, baseRef: o.baseRef };
   const claim = readRemotePeopleWorkLedger(shared).claims[`${o.book}/${o.chapter}`];
   if (claimIsActive(claim) && (claim.lane !== 'codex-spark' || claim.worker !== o.worker)) throw new Error(`${o.book}/${o.chapter} is reserved by ${claim.lane}/${claim.worker}`);
-  console.log(`[${o.book}/${o.chapter}] Spark sealed packet ${(bytes / 1024).toFixed(1)} KiB; model=${MODEL}; translation repairs are proposals only.${existing ? ' Existing extraction: dispatch is prohibited.' : ''}`);
+  console.log(`[${o.book}/${o.chapter}] Spark planned ${chunks.length} sealed chunk(s), max ${(maxChunkBytes / 1024).toFixed(1)} KiB; model=${MODEL}; translation repairs are proposals only.${existing ? ' Existing extraction: dispatch is prohibited.' : ''}`);
   if (!o.run) {
     if (existing) console.log('Dry run: existing extraction would prohibit dispatch.');
-    else if (oversized) console.log('Dry run: this whole-chapter packet exceeds the 48 KiB sealed limit and is not dispatchable; select a smaller chapter.');
     else console.log('Dry run complete. Add --run to preflight, claim, and invoke Spark.');
     return;
   }
-  if (oversized) throw new Error(`${o.book}/${o.chapter} sealed packet is ${(bytes / 1024).toFixed(1)} KiB; Spark whole-chapter lane refuses oversized work`);
   preflightModel();
   const reserved = claimRemotePeopleTargets([target], { ...shared, lane: 'codex-spark', worker: o.worker, limit: 1, sticky: true, note: `sealed ${MODEL} extraction` });
   if (!reserved.result.claimed.length) throw new Error('Shared queue reservation lost before Spark dispatch');
   try {
-    const compact = runCodex(target, packet);
+    const parts = chunks.map((chunk) => {
+      const ownedPacket = buildPeopleChunkPacket(packet, chunk);
+      const compact = runCodex(prompt(target, packet, chunk));
+      const validated = validateCompactPeopleExtraction(compact, ownedPacket, { strictAliasDispositions: true }).normalized;
+      return { chunk, extraction: validated };
+    });
+    const compact = assembleCompactPeopleChunks(packet, parts, {
+      model: MODEL,
+      promptVersion: readJson(path.join(PEOPLE_DIR, 'config.json')).promptVersion,
+      agentId: null,
+      runId: null,
+      completedAt: new Date().toISOString(),
+      chunks: parts.map(({ chunk, extraction }) => peopleChunkRunRecord(chunk, extraction)),
+    });
     const validated = validateCompactPeopleExtraction(compact, packet, { strictAliasDispositions: true }).normalized;
     // Host-only acceptance. This does not apply translation repairs or touch chapter source.
     writeTextAtomic(extractionPath(o.book, o.chapter), serializeCompactPeopleExtraction(validated));
