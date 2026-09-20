@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": 1,
+  "book": "hanshu",
+  "chapter": "061",
+  "sourceHash": "sha256:cd15fb3136b12532f3eab049ea7bf7a6c12a4ac2f0f85ec08a5dfd6a8b35b756",
+  "extractionHash": "sha256:67f131d9b7cd676ce47d615073fecd63ea110048da05d043c29517480c12f292",
+  "status": "needs-revision",
+  "reviewer": {
+    "name": "Codex independent Hanshu 061 source-date reviewer",
+    "independentOfExtractor": true
+  },
+  "reviewedAt": "2026-09-20T22:45:00.000Z",
+  "summary": "Focused independent source review found that the pre-heir-installation chronology is artificially capped at 154 BC. The chapter explicitly installs the Li heir in Emperor Jing's fourth year, 153 BC, so its preceding events may extend into early 153 BC.",
+  "reviewedUnits": [
+    "s0007",
+    "s0008",
+    "s0009",
+    "s0025"
+  ],
+  "itemChecks": [
+    {
+      "id": "claim-99",
+      "verdict": "incorrect",
+      "event": "Empress Dowager Dou favored King Xiao of Liang during Emperor Jing's early reign.",
+      "reason": "The linked court sequence occurs before the heir's installation. The chapter dates that installation to Jing's fourth year, 153 BC, so the current upper bound of 154 BC excludes a source-permitted part of the period.",
+      "evidence": [
+        {
+          "unit": "s0025",
+          "quote": "四年，立栗太子，以嬰為傅。"
+        }
+      ]
+    },
+    {
+      "id": "claim-107",
+      "verdict": "incorrect",
+      "event": "King Xiao of Liang attended court and drank with Emperor Jing before an heir was installed.",
+      "reason": "The source says the heir had not yet been installed, and the chapter dates the installation to Jing's fourth year, 153 BC. The upper bound must include early 153 BC rather than ending at 154 BC.",
+      "evidence": [
+        {
+          "unit": "s0009",
+          "quote": "是時，上未立太子，酒酣，上從容曰：「千秋萬歲後傳王。」"
+        },
+        {
+          "unit": "s0025",
+          "quote": "四年，立栗太子，以嬰為傅。"
+        }
+      ]
+    },
+    {
+      "id": "claim-153",
+      "verdict": "incorrect",
+      "event": "Emperor Jing proposed passing the throne to King Xiao of Liang while drinking before an heir was installed.",
+      "reason": "This is the same pre-installation event. The explicit fourth-year installation in 153 BC means the current 154 BC ceiling is one year too narrow.",
+      "evidence": [
+        {
+          "unit": "s0009",
+          "quote": "是時，上未立太子，酒酣，上從容曰：「千秋萬歲後傳王。」"
+        },
+        {
+          "unit": "s0025",
+          "quote": "四年，立栗太子，以嬰為傅。"
+        }
+      ]
+    },
+    {
+      "id": "hints-p009",
+      "verdict": "incorrect",
+      "event": "King Xiao of Liang's active-date hint for the pre-heir-installation court event.",
+      "reason": "The active-date hint repeats the unsupported 154 BC endpoint. It should reconcile with the corrected source-backed upper bound of 153 BC.",
+      "evidence": [
+        {
+          "unit": "s0025",
+          "quote": "四年，立栗太子，以嬰為傅。"
+        }
+      ]
+    }
+  ],
+  "personChecks": [],
+  "findings": [
+    {
+      "items": [
+        "claim-99",
+        "claim-107",
+        "claim-153",
+        "hints-p009"
+      ],
+      "problem": "Three connected temporal claims and King Xiao's active-date hint cap a pre-installation sequence at 154 BC even though the chapter places the installation in 153 BC.",
+      "action": "Change each affected upper bound from onOrBefore BC 154 to onOrBefore BC 153, reconcile King Xiao's active-date hint, then run a fresh independent date review of the repaired extraction."
+    }
+  ],
+  "references": [
+    {
+      "kind": "source",
+      "book": "hanshu",
+      "chapter": "061",
+      "unit": "s0025",
+      "quote": "四年，立栗太子，以嬰為傅。",
+      "sourceHash": "sha256:9c62fe7a507c79dbad773bdb8d361da26e3a557f2debc7c0de53e3373b3d4b4f",
+      "reason": "This unit explicitly dates the Li heir's installation to Emperor Jing's fourth year, establishing the permissible upper bound for the preceding no-heir context."
+    }
+  ]
+}
