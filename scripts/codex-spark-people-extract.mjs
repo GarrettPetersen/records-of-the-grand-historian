@@ -98,7 +98,7 @@ function preflightModel() {
   // ChatGPT-backed Codex CLI installations can reject this model (HTTP 400).  Run this
   // before mutating the shared ledger so an unavailable model cannot strand a claim.
   const result = spawnSync('codex', ['exec', '--ephemeral', '--sandbox', 'read-only', '--model', MODEL, '--color', 'never', 'Reply with exactly: ready'], {
-    cwd: REPO_ROOT, encoding: 'utf8', maxBuffer: 128 * 1024, timeout: 2 * 60 * 1000,
+    cwd: REPO_ROOT, encoding: 'utf8', maxBuffer: 2 * 1024 * 1024, timeout: 2 * 60 * 1000,
   });
   if (result.error) throw new Error(`Codex Spark model preflight failed: ${result.error.message}`);
   if (result.status !== 0) throw new Error(
