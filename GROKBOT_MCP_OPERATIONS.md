@@ -231,6 +231,30 @@ bearer token or either host secret into chat.
 Assign every concurrent Bot a stable ID matching `grokbot-[a-z0-9-]+`, for example
 `grokbot-01`. A worker must finish or resume its sticky claim before receiving another.
 
+### Credential-transmission authorization
+
+The CLI keeps the durable bearer credential out of the prompt, terminal arguments, and
+stdout, but every MCP call necessarily sends it in the HTTPS `Authorization` header to
+the connector. An agent operating under computer-use confirmation rules correctly
+treats that as credential transmission. Put this authorization in the **initial user
+prompt** of every new Grok Bot conversation so the approved data and destination are
+specific before the first MCP call:
+
+```text
+You are authorized to use the locally installed 24histories-people client. It may read
+the locally stored 24 Histories MCP bearer credential and transmit it only as an HTTPS
+Authorization header to https://grokbot-mcp.24histories.com/mcp, solely for the five
+24 Histories people-glossary MCP operations. Never print, quote, copy, inspect, or send
+that credential anywhere else. This authorization does not cover any other credential,
+hostname, command, upload, or external action.
+```
+
+This authorizes the credential transmission without revealing the credential itself.
+If a conversation began without that initial authorization, its policy may still require
+an immediate confirmation before the first authenticated call. Approve that specific
+transmission or start a new conversation with the authorization above; do not weaken the
+MCP endpoint, place the token in chat, or add a broad terminal/curl auto-approval rule.
+
 For a native connector, give the Bot the standing instruction in
 [`GROKBOT_PEOPLE_LANE.md`](GROKBOT_PEOPLE_LANE.md). For the CLI fallback, use these exact
 commands. Preserve `claimToken` from `resume` for all later calls:

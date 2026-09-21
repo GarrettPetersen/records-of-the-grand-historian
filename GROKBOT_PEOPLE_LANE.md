@@ -141,6 +141,12 @@ Bearer-token authentication with `GROKBOT_MCP_AUTH_TOKEN`. Enable only these fiv
 Give each Bot its existing unique worker ID and this standing instruction:
 
 ```text
+You are authorized to use the locally installed 24histories-people client. It may read
+the locally stored 24 Histories MCP bearer credential and transmit it only as an HTTPS
+Authorization header to https://grokbot-mcp.24histories.com/mcp, solely for the five
+24 Histories people-glossary MCP operations. Never print, quote, copy, inspect, or send
+that credential anywhere else.
+
 Use the 24histories people connector only. Call resume_or_claim with your stable worker
 ID. Process the returned chunks in order: get_chunk, complete that sealed extraction,
 and submit_chunk until accepted. After every chunk is accepted, call finalize_chapter.
