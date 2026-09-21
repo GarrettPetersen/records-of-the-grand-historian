@@ -69,6 +69,134 @@ work.
 
 The staging branch is merged to `master` only at a reviewed batch checkpoint.
 
+## MCP Connector (Preferred)
+
+The complete host setup, Grok Bot installation, operating, upgrade, recovery, and
+credential-rotation runbook is in [`GROKBOT_MCP_OPERATIONS.md`](GROKBOT_MCP_OPERATIONS.md).
+Use that runbook when provisioning a new machine or handing the lane to another agent.
+
+The Grok Bot MCP bridge replaces terminal, clone, and attachment handling inside the
+Bot. It does not call the xAI API: Grok Bot still performs inference against its own
+Cursor-provided Grok Bot allowance, while the connector performs only deterministic
+assignment, packet delivery, validation, and GitHub publication.
+
+The bridge exposes exactly five tools:
+
+- `resume_or_claim`: resume the worker's sticky claim or atomically claim one chapter.
+- `get_chunk`: return one sealed prompt/schema/packet/draft bundle.
+- `submit_chunk`: validate an extraction in memory, then atomically save it.
+- `finalize_chapter`: assemble, validate, publish a branch and staging PR, and mark the
+  queue claim submitted.
+- `worker_status`: inspect that stable worker's claims.
+
+It deliberately exposes no shell, filesystem path, arbitrary Git operation, claim
+release, source edit, editorial decision, or date-audit acceptance tool. Signed claim
+tokens bind every write to the worker, chapter fingerprint, and persisted chunk plan.
+
+### Run the bridge
+
+Run it from a dedicated, persistent clone. The clone's ignored
+`data/people/generated/grokbot/` directory contains economically valuable partial
+chunks and must survive process restarts. Do not run the hosted bridge from a developer
+worktree with unrelated edits.
+
+Required environment:
+
+```text
+GROKBOT_MCP_AUTH_TOKEN=<random secret of at least 32 characters>
+GROKBOT_MCP_CLAIM_SECRET=<different random secret of at least 32 characters>
+GITHUB_TOKEN=<fine-grained token>
+GITHUB_REPOSITORY=GarrettPetersen/records-of-the-grand-historian
+HOST=0.0.0.0
+PORT=3001
+GROKBOT_MCP_ALLOWED_HOSTS=mcp.example.com
+```
+
+The GitHub token needs repository Contents read/write permission for the atomic queue
+branch and extraction branch, plus Pull requests read/write permission. The process
+passes the token to Git over an in-memory extra header; never put it in the remote URL,
+Bot conversation, or repository files.
+
+Optional campaign ceilings default to the September profile:
+
+```text
+GROKBOT_MCP_MAX_UNITS=80
+GROKBOT_MCP_MAX_CANDIDATES=200
+GROKBOT_MCP_MAX_WORKER_KIB=48
+```
+
+Start and verify it:
+
+```bash
+npm run people:grokbot:mcp
+curl -fsS https://mcp.example.com/health
+```
+
+The MCP endpoint is `/mcp`. It requires `Authorization: Bearer <token>`, exact allowed
+host matching, HTTPS at the public edge, and rejects browser origins unless explicitly
+listed in `GROKBOT_MCP_ALLOWED_ORIGINS`.
+
+In Grok Bot, add `https://mcp.example.com/mcp` as a custom connector and complete its
+Bearer-token authentication with `GROKBOT_MCP_AUTH_TOKEN`. Enable only these five tools.
+Give each Bot its existing unique worker ID and this standing instruction:
+
+```text
+Use the 24histories people connector only. Call resume_or_claim with your stable worker
+ID. Process the returned chunks in order: get_chunk, complete that sealed extraction,
+and submit_chunk until accepted. After every chunk is accepted, call finalize_chapter.
+Stop after the chapter is submitted. Never combine chunks, invent a claim token, release
+a claim, edit source translations, or perform date-audit work through this connector.
+```
+
+If an individual Grok Bot account does not expose an arbitrary custom-MCP installer,
+use the runbook's single-use bootstrap to install the dependency-free client and its
+owner-only bearer-token file on the Bots' shared cloud computer. Never paste the durable
+bearer token into a Bot conversation. The CLI is still an MCP client: it replaces
+browser/attachment transport with authenticated MCP tool calls and uses no xAI API.
+
+Run `npm run people:grokbot:mcp:self-test` before deployment. Pilot one worker on 5-10
+chapters before enabling the full worker pool. The direct attachment routine below
+remains the recovery fallback, not the preferred path.
+
+### This Mac's Cloudflare Tunnel
+
+The production connector on Garrett's Mac is:
+
+```text
+https://grokbot-mcp.24histories.com/mcp
+```
+
+`cloudflared` and the MCP server run as separate per-user LaunchAgents. The origin binds
+only to `127.0.0.1:3001`; Cloudflare Tunnel is the sole public route. The server reads
+its bearer and claim-signing secrets from owner-only (`0600`) files under
+`~/.local/share/24histories-grokbot-mcp/secrets/`, reads the current GitHub token from
+`gh auth token` at startup, and uses this isolated shallow runtime clone:
+
+```text
+~/.local/share/24histories-grokbot-mcp/repo
+```
+
+`PEOPLE_REPO_ROOT` redirects all queue, packet, extraction, and Git state to that clone,
+so the connector never writes into the active developer checkout. Service definitions
+live at:
+
+```text
+~/Library/LaunchAgents/com.24histories.grokbot-mcp.plist
+~/Library/LaunchAgents/com.24histories.grokbot-tunnel.plist
+```
+
+Inspect them without revealing credentials:
+
+```bash
+launchctl print gui/$(id -u)/com.24histories.grokbot-mcp
+launchctl print gui/$(id -u)/com.24histories.grokbot-tunnel
+curl -fsS https://grokbot-mcp.24histories.com/health
+```
+
+Logs are under `~/.local/state/24histories-grokbot-mcp/`. Keep the Mac awake and online
+while Grok Bot is working. No Worker, database, Access seat, or other hosted compute is
+part of this deployment; Cloudflare supplies DNS and Tunnel ingress only.
+
 ## Bot Routine
 
 Give each Grok Bot agent this standing instruction:

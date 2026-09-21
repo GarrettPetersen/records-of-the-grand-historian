@@ -59,9 +59,9 @@ import {
 import { validateCompactPeopleExtraction } from './validate-people-extraction.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
-const DEFAULT_MAX_UNITS = 60;
-const DEFAULT_MAX_CANDIDATES = 150;
-const DEFAULT_MAX_WORKER_BYTES = 48 * 1024;
+export const DEFAULT_GROKBOT_MAX_UNITS = 60;
+export const DEFAULT_GROKBOT_MAX_CANDIDATES = 150;
+export const DEFAULT_GROKBOT_MAX_WORKER_BYTES = 48 * 1024;
 const GROKBOT_CLAIM_ORDERS = new Set(['smallest', 'deadline-balanced']);
 const GROKBOT_DEADLINE_TAIL_MODULUS = 4;
 const GROKBOT_DEADLINE_TAIL_QUANTILES = [0.45, 0.6, 0.75, 0.9];
@@ -104,9 +104,9 @@ Shared options:
 
 Grok Bot claim options:
   --order ORDER        smallest or deadline-balanced (default: smallest).
-  --max-units N        Whole-chapter unit ceiling (default: ${DEFAULT_MAX_UNITS}).
-  --max-candidates N   Candidate ceiling (default: ${DEFAULT_MAX_CANDIDATES}).
-  --max-worker-kib N   Compact packet ceiling (default: ${DEFAULT_MAX_WORKER_BYTES / 1024}).
+  --max-units N        Whole-chapter unit ceiling (default: ${DEFAULT_GROKBOT_MAX_UNITS}).
+  --max-candidates N   Candidate ceiling (default: ${DEFAULT_GROKBOT_MAX_CANDIDATES}).
+  --max-worker-kib N   Compact packet ceiling (default: ${DEFAULT_GROKBOT_MAX_WORKER_BYTES / 1024}).
 
 Submit options:
   --staging-branch REF Pull request base (default: ${DEFAULT_PEOPLE_STAGING_BRANCH}).
@@ -132,9 +132,9 @@ function parseArgs(argv) {
     chapter: null,
     limit: 1,
     order: 'smallest',
-    maxUnits: DEFAULT_MAX_UNITS,
-    maxCandidates: DEFAULT_MAX_CANDIDATES,
-    maxWorkerBytes: DEFAULT_MAX_WORKER_BYTES,
+    maxUnits: DEFAULT_GROKBOT_MAX_UNITS,
+    maxCandidates: DEFAULT_GROKBOT_MAX_CANDIDATES,
+    maxWorkerBytes: DEFAULT_GROKBOT_MAX_WORKER_BYTES,
     noPr: false,
     force: false,
     chunkId: null,
@@ -179,6 +179,27 @@ function parseArgs(argv) {
   return opts;
 }
 
+export function defaultGrokbotOptions(overrides = {}) {
+  return {
+    remote: DEFAULT_PEOPLE_QUEUE_REMOTE,
+    queueBranch: DEFAULT_PEOPLE_QUEUE_BRANCH,
+    baseRef: DEFAULT_PEOPLE_QUEUE_BASE_REF,
+    stagingBranch: DEFAULT_PEOPLE_STAGING_BRANCH,
+    worker: null,
+    book: null,
+    chapter: null,
+    limit: 1,
+    order: 'deadline-balanced',
+    maxUnits: DEFAULT_GROKBOT_MAX_UNITS,
+    maxCandidates: DEFAULT_GROKBOT_MAX_CANDIDATES,
+    maxWorkerBytes: DEFAULT_GROKBOT_MAX_WORKER_BYTES,
+    noPr: false,
+    force: false,
+    chunkId: null,
+    ...overrides,
+  };
+}
+
 function queueOptions(opts) {
   return {
     remote: opts.remote,
@@ -191,7 +212,7 @@ function safeWorkerId(worker) {
   return worker.toLowerCase().replace(/[^a-z0-9-]+/gu, '-').replace(/^-|-$/gu, '') || 'worker';
 }
 
-function assignmentDirectory(worker, target) {
+export function assignmentDirectory(worker, target) {
   return path.join(
     PEOPLE_DIR,
     'generated',
@@ -298,9 +319,9 @@ function grokbotChunksForTarget(packet, target, opts, claim = null) {
     const assignmentFile = path.join(assignmentDirectory(opts.worker, target), 'assignment.json');
     if (fs.existsSync(assignmentFile)) return chunksFromAssignment(packet, readJson(assignmentFile));
     if (
-      opts.maxUnits !== DEFAULT_MAX_UNITS ||
-      opts.maxCandidates !== DEFAULT_MAX_CANDIDATES ||
-      opts.maxWorkerBytes !== DEFAULT_MAX_WORKER_BYTES
+      opts.maxUnits !== DEFAULT_GROKBOT_MAX_UNITS ||
+      opts.maxCandidates !== DEFAULT_GROKBOT_MAX_CANDIDATES ||
+      opts.maxWorkerBytes !== DEFAULT_GROKBOT_MAX_WORKER_BYTES
     ) {
       throw new Error(
         `${chapterKey(target)} is a legacy claim without a persisted plan; ` +
@@ -520,7 +541,7 @@ function run(command, args, options = {}) {
   return result;
 }
 
-function readGrokbotAssignment(worker, target) {
+export function readGrokbotAssignment(worker, target) {
   const file = path.join(assignmentDirectory(worker, target), 'assignment.json');
   if (!fs.existsSync(file)) throw new Error(`Missing Grok Bot assignment: ${path.relative(REPO_ROOT, file)}`);
   return readJson(file);
@@ -541,7 +562,7 @@ function chunksFromAssignment(packet, assignment) {
   })), { contextUnits: DEFAULT_PEOPLE_CHUNK_CONTEXT_UNITS });
 }
 
-function validateGrokbotOutput(target, options = {}) {
+function grokbotOutputContext(target, options = {}) {
   const packet = buildPeopleExtractionPacket(target.book, target.chapter, {
     properNounMatcher: loadProperNounMatcher(),
   });
@@ -556,13 +577,29 @@ function validateGrokbotOutput(target, options = {}) {
     ownedPacket = buildPeopleChunkPacket(packet, chunk);
     output = path.resolve(REPO_ROOT, row.output);
   }
-  if (!fs.existsSync(output)) throw new Error(`Missing Grok Bot output: ${path.relative(REPO_ROOT, output)}`);
-  const validated = validateCompactPeopleExtraction(readJson(output), ownedPacket, { strictAliasDispositions: true });
-  assertDurableCareerCoverage(validated.normalized, ownedPacket);
-  return { output, validated, packet: ownedPacket };
+  return { output, packet: ownedPacket };
 }
 
-function assembleGrokbotOutput(target, opts) {
+export function validateGrokbotExtractionData(target, options, extraction) {
+  const { output, packet } = grokbotOutputContext(target, options);
+  const validated = validateCompactPeopleExtraction(extraction, packet, { strictAliasDispositions: true });
+  assertDurableCareerCoverage(validated.normalized, packet);
+  return { output, validated, packet };
+}
+
+export function saveGrokbotExtractionData(target, options, extraction) {
+  const result = validateGrokbotExtractionData(target, options, extraction);
+  writeTextAtomic(result.output, serializeCompactPeopleExtraction(extraction));
+  return result;
+}
+
+export function validateGrokbotOutput(target, options = {}) {
+  const { output } = grokbotOutputContext(target, options);
+  if (!fs.existsSync(output)) throw new Error(`Missing Grok Bot output: ${path.relative(REPO_ROOT, output)}`);
+  return validateGrokbotExtractionData(target, options, readJson(output));
+}
+
+export function assembleGrokbotOutput(target, opts) {
   if (!opts.worker) throw new Error('assemble-grokbot requires --worker');
   const assignment = readGrokbotAssignment(opts.worker, target);
   if (assignment.mode === 'whole') return validateGrokbotOutput(target, opts);
@@ -599,7 +636,7 @@ function currentBranch() {
   return run('git', ['branch', '--show-current']).stdout.trim();
 }
 
-function assertGrokbotClaim(worker, target, opts) {
+export function assertGrokbotClaim(worker, target, opts) {
   fetchPeopleQueueBase(queueOptions(opts));
   const claim = readRemotePeopleWorkLedger(queueOptions(opts)).claims[chapterKey(target)];
   if (
@@ -693,7 +730,7 @@ async function backfillGrokbotPlans(opts) {
   );
 }
 
-async function claimGrokbot(opts) {
+export async function claimGrokbot(opts) {
   if (!opts.worker) throw new Error('claim-grokbot requires --worker');
   fetchPeopleQueueBase(queueOptions(opts));
   const ledger = readRemotePeopleWorkLedger(queueOptions(opts));
@@ -708,13 +745,17 @@ async function claimGrokbot(opts) {
     note: 'Persistent Grok Bot assignment; resume this conversation and branch before reassignment',
   });
   if (!reserved.result.claimed.length) throw new Error('All eligible chapters were claimed by another lane');
+  const prepared = [];
   for (const target of reserved.result.claimed) {
     const source = eligible.find((item) => chapterKey(item) === chapterKey(target));
-    printGrokbotAssignment(target, source, prepareGrokbotAssignment(target, source.packet, opts));
+    const result = prepareGrokbotAssignment(target, source.packet, opts);
+    printGrokbotAssignment(target, source, result);
+    prepared.push({ target, source, ...result });
   }
+  return prepared;
 }
 
-function resumeGrokbot(opts) {
+export function resumeGrokbot(opts) {
   if (!opts.worker || !opts.book || !opts.chapter) {
     throw new Error('resume-grokbot requires --worker, --book, and --chapter');
   }
@@ -738,7 +779,9 @@ function resumeGrokbot(opts) {
   const chunks = grokbotChunksForTarget(packet, target, opts, claim);
   const source = { ...target, ...chunkPlanMetrics(packet, chunks), chunks, packet };
   const resumed = { ...source, reused: true };
-  printGrokbotAssignment(resumed, source, prepareGrokbotAssignment(resumed, packet, opts));
+  const prepared = prepareGrokbotAssignment(resumed, packet, opts);
+  printGrokbotAssignment(resumed, source, prepared);
+  return { target: resumed, source, ...prepared };
 }
 
 function planGrokbot(opts) {
@@ -814,7 +857,7 @@ async function submitGrokbot(opts) {
   console.log(`Submitted ${chapterKey(target)}${prUrl ? `: ${prUrl}` : ' without a pull request'}`);
 }
 
-function acceptGrokbot(opts) {
+export function acceptGrokbot(opts) {
   if (!opts.worker || !opts.book || !opts.chapter) {
     throw new Error('accept-grokbot requires --worker, --book, and --chapter');
   }
@@ -843,6 +886,7 @@ function acceptGrokbot(opts) {
     `${validated.stats.mentions} mentions, ${validated.stats.claims} claims, ` +
     `${bytes.length} bytes, sha256 ${sha256}`,
   );
+  return { target, output, validated, bytes: bytes.length, sha256 };
 }
 
 function showStatus(opts) {
