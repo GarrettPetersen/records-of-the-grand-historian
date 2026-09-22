@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": 1,
+  "book": "songshi",
+  "chapter": "110",
+  "sourceHash": "sha256:26130b190993aba87a342066cd6788482fdbe7e33c9325f900ef6f334283fff8",
+  "extractionHash": "sha256:6d09ab3ac4f0187c60f9bb77def5a2b37f34dc76e25d106ac69c287980fc743a",
+  "status": "needs-revision",
+  "reviewer": {
+    "name": "Independent Songshi 110 date reviewer",
+    "independentOfExtractor": true
+  },
+  "reviewedAt": "2026-09-22T19:00:00.000Z",
+  "summary": "Targeted independent source review found two deterministic reversed AD intervals. The cited Song text is a later ceremonial citation of a Han precedent, so it cannot establish either Han person's life activity in AD 202–195.",
+  "reviewedUnits": [
+    "s0089"
+  ],
+  "itemChecks": [
+    {
+      "id": "claim-84",
+      "verdict": "incorrect",
+      "event": "Southern Song ritual officials cite a Book of Han filial-attendance precedent.",
+      "reason": "The claimed AD 202–195 interval is reversed and anachronistic. The source is a later quotation about Emperor Gaozu of Han, rather than evidence that he was active in the Southern Song ritual episode.",
+      "evidence": [
+        {
+          "unit": "s0089",
+          "quote": "《漢書》高皇帝五日一朝太上皇"
+        }
+      ]
+    },
+    {
+      "id": "claim-85",
+      "verdict": "incorrect",
+      "event": "Southern Song ritual officials cite the Supreme Emperor in a Book of Han precedent.",
+      "reason": "The claimed AD 202–195 interval is reversed and anachronistic. This sentence is a later citation of a precedent and supplies no personal activity interval for the Supreme Emperor in the Song ceremony.",
+      "evidence": [
+        {
+          "unit": "s0089",
+          "quote": "《漢書》高皇帝五日一朝太上皇"
+        }
+      ]
+    }
+  ],
+  "personChecks": [],
+  "findings": [
+    {
+      "items": [
+        "claim-84",
+        "claim-85",
+        "p018",
+        "p019"
+      ],
+      "problem": "Two allusion-derived claims encode a reversed AD interval and incorrectly present a later historical citation as living-person chronology.",
+      "action": "Remove or replace the two life-attestation claims through the scoped date-repair workflow; if preserving the citation, add separately classified posthumous-reference reception events with only source-supported ceremony chronology."
+    }
+  ],
+  "references": [
+    {
+      "book": "songshi",
+      "chapter": "110",
+      "unit": "s0089",
+      "quote": "《漢書》高皇帝五日一朝太上皇",
+      "sourceHash": "sha256:b56f0b1f85a2dff841d2846791f3da775cc2bffa1b41e2d399bb12faff05da9c",
+      "reason": "The quoted sentence identifies the text as an appeal to a Han precedent within the Song ritual discussion; it is not a dated living attestation for either referenced Han person."
+    }
+  ]
+}
