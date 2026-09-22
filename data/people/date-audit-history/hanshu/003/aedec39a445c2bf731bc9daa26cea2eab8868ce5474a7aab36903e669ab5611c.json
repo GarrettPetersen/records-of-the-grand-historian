@@ -3,22 +3,22 @@
   "auditVersion": 1,
   "book": "hanshu",
   "chapter": "003",
-  "sourceHash": "sha256:5771fff3760992edca1a3343698d44f0c933fd656e8b23284eef0cbd67e8eb2f",
-  "extractionHash": "sha256:61d2f859f0293cd8d317d1c9291e2bbb914c8cd5b5fa8a0576a63f0a5208b9d8",
+  "sourceHash": "sha256:a4cb17b3bc9463309f3c2a2418ca260d07f217819f29372dc86556b50d7cb30d",
+  "extractionHash": "sha256:cddda8ed33cd0d070b69b8bb75e6997630b21e6dc184738b4acbe56457d551cf",
   "status": "needs-revision",
   "reviewer": {
-    "name": "Codex independent re-audit reviewer",
+    "name": "Codex independent source reviewer",
     "independentOfExtractor": true,
     "workers": [
       {
-        "name": "Codex independent re-audit reviewer",
-        "agentId": "reaudit_dates_hanshu003",
+        "name": "Codex independent source reviewer",
+        "agentId": "01a0a0ee-2186-7432-820e-b610dc1b9d68",
         "independentOfExtractor": true
       }
     ]
   },
-  "reviewedAt": "2026-09-22T21:43:47.295Z",
-  "summary": "Fresh independent whole-chapter Chinese-source re-audit after the source-sequence repair: all 67 current units, 93 temporal/hint items, and 17 people checked. The corrected placement of sixth-year Fei death restores annalistic chronology, but the extraction still contains unsupported marriage-start precision, an unresolved Ruyi month boundary, Fei and Cao conflicting/impossible day witnesses, borrowed or appraisal-derived activity, lost inherited temporal context, mixed conventional and converted activity hints, and a missing Gaozu posthumous-reception distinction. These findings require a scoped repair and a later fresh independent review; no approval is issued.",
+  "reviewedAt": "2026-09-14T17:37:32.552Z",
+  "summary": "Whole-chapter independent Chinese-source reading completed: all 67 owned units, 93 temporal/hint items and 17 people explicitly checked. Not approved. Found borrowed relative-death attestations, appraisal dates incorrectly treated as living activity (including Cao Can after death), a Ruyi death-month Western-year boundary, Fei/Cao calendar and primary-witness conflicts, mixed conventional/converted hints, lost inherited context, installation-versus-marriage overprecision, omitted Gaozu posthumous reception, and an actual misplaced sixth-year source heading. Explicit age five is retained without inventing a birth; generic service/age thresholds and capping were not turned into personal ages. Valid historical dates dependent on the restored source sequence are qualified, not silently inferred. Research holds remain; no source/extraction/queue edits or paid APIs were used, and no repair is approved.",
   "reviewedUnits": [
     "s0001",
     "s0002",
@@ -1550,7 +1550,7 @@
     {
       "id": "p001",
       "verdict": "incorrect",
-      "reason": "All Hui items were independently checked. Explicit age five, heir appointment, accession, capping, death, and burial are captured. The repaired source order now correctly places sixth-year Fei death after fifth-year records, but problems remain in borrowed death attestations, the fourth-month accession attestation, marriage-start overstatement, lost proclamation context, and mixed regnal/Western hints. His burial is not living activity; capping does not establish age twenty.",
+      "reason": "Reviewed all Hui items together. The explicit age-five statement, heir appointment, accession, capping, death and burial are captured; no exact birth or numerical death age is stated. Problems remain in borrowed death attestations, the fourth-month accession attestation, marriage-start overstatement, lost proclamation context, mixed regnal/Western hints and the source-order corruption. His burial is not living activity. Capping does not justify age twenty.",
       "evidence": [
         {
           "unit": "s0002",
@@ -1800,7 +1800,7 @@
     {
       "id": "p015",
       "verdict": "supported",
-      "reason": "Fan Kuai's death, attestation and 189 BC hint agree with sixth-year summer month six in the corrected current Hanshu sequence. All are his own death, not the emperor's activity. No omitted birth or numerical age is stated.",
+      "reason": "Fan Kuai's death, attestation and 189 BC hint agree with sixth-year summer month six in the checked external Hanshu sequence. All are his own death, not the emperor's activity. The local displaced heading is explicitly recorded as a chapter-source defect; no omitted birth or numerical age is present.",
       "evidence": [
         {
           "unit": "s0057",
@@ -1991,6 +1991,18 @@
       ],
       "problem": "Tong's bare 195-188 BC hint reads as a full reign activity span although only one uncertain remonstrance is attested.",
       "action": "Keep the supportable event-uncertainty interval in claim-120, but qualify the hint as a remonstrance sometime during Hui's reign, exact date unknown. Do not claim continuous service, birth or death at the interval endpoints."
+    },
+    {
+      "items": [
+        "p001",
+        "claim-64",
+        "claim-92",
+        "claim-49",
+        "claim-118",
+        "claim-78"
+      ],
+      "problem": "Source unit s0067 (sixth-year Fei death) is physically inserted between first-year s0025 and s0026 instead of after fifth-year s0054. This corrupts inherited chronology for first-year walls and sixth-year regulations/death/works. A primary Hanshu witness establishes the correct sequence; the extracted historical years can be supported only with that witness, not the present local order.",
+      "action": "Host/source owner must resolve the misplaced heading in a separately authorized source repair, or explicitly pin external contextual evidence before acceptance. This audit makes no source/extraction changes and does not approve a repair. Rebuild fingerprints and obtain fresh independent review after any source edit; do not change historically supported event years to match the corrupted nearest heading."
     }
   ],
   "references": [
