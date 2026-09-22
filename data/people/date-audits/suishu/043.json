@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": 1,
+  "book": "suishu",
+  "chapter": "043",
+  "sourceHash": "sha256:68aae9930316b88371ef5e8e7c76d82732533a554bb4fec33fb124922457ca48",
+  "extractionHash": "sha256:f1e89b965c06dc2a3be15147682ed97ce0c9f9e2f4320414fcfee2dde23d8327",
+  "status": "needs-revision",
+  "reviewer": {
+    "name": "Codex independent date-audit reviewer",
+    "independentOfExtractor": true
+  },
+  "reviewedAt": "2026-09-22T23:30:00.000Z",
+  "summary": "Targeted independent audit of the five deterministic reversed Western intervals. The Chinese text invokes the Qin–Han transition and early Han as retrospective comparisons; all five records instead encode AD years in descending order. Their chronology must use BCE-era endpoints in chronological order, with the corresponding active-date hints corrected, before a complete fresh audit can approve this chapter. No date repair is made by this audit report.",
+  "reviewedUnits": [
+    "s0044",
+    "s0048",
+    "s0194"
+  ],
+  "itemChecks": [
+    {
+      "id": "claim-92",
+      "verdict": "incorrect",
+      "event": "early-Han retrospective attestation for Lou Jing",
+      "reason": "The source names Lou Jing only in an early-Han comparison. Its interval is encoded as AD 202 through AD 195, which is both backwards and in the wrong era for the Han founder’s early reign.",
+      "evidence": [
+        {
+          "unit": "s0048",
+          "quote": "婁敬之與漢高，殊非血胤"
+        }
+      ]
+    },
+    {
+      "id": "claim-93",
+      "verdict": "incorrect",
+      "event": "early-Han retrospective attestation for Han Gaozu",
+      "reason": "The source’s Han Gaozu allusion belongs to the early Han, not AD 206–195. The stored AD interval is reversed and confuses BCE years with AD years, so it cannot be retained.",
+      "evidence": [
+        {
+          "unit": "s0048",
+          "quote": "婁敬之與漢高，殊非血胤"
+        }
+      ]
+    },
+    {
+      "id": "claim-243",
+      "verdict": "incorrect",
+      "event": "early-Han enfeoffment reference for Liu Jia",
+      "reason": "The text recalls Liu Jia’s enfeoffment in the early Han. AD 202 through AD 196 is a reversed interval in the wrong era; the chronology needs BCE-normalized endpoints rather than a descending AD range.",
+      "evidence": [
+        {
+          "unit": "s0194",
+          "quote": "昔劉賈封王"
+        }
+      ]
+    },
+    {
+      "id": "claim-281",
+      "verdict": "incorrect",
+      "event": "Qin–Han transition attestation for Xiang Bo",
+      "reason": "The source places Xiang Bo in the Qin–Han transition and Western Chu. AD 209 through AD 202 reverses the period and assigns it to the wrong era; the claim requires BCE chronology.",
+      "evidence": [
+        {
+          "unit": "s0044",
+          "quote": "項伯籍之季父"
+        }
+      ]
+    },
+    {
+      "id": "claim-282",
+      "verdict": "incorrect",
+      "event": "Qin–Han transition attestation for Xiang Ji",
+      "reason": "The source identifies Xiang Ji as the Western Chu figure in the Qin–Han transition. AD 209 through AD 202 is backwards and an era error, so the asserted interval is historically invalid.",
+      "evidence": [
+        {
+          "unit": "s0044",
+          "quote": "背西楚而歸漢"
+        }
+      ]
+    }
+  ],
+  "personChecks": [
+    {
+      "id": "p015",
+      "verdict": "incorrect",
+      "reason": "Xiang Bo’s active-date hint repeats the reversed AD 209–202 interval despite the Chinese comparison locating him at the Qin–Han transition. It must be corrected together with the failed claim.",
+      "evidence": [
+        {
+          "unit": "s0044",
+          "quote": "項伯籍之季父"
+        }
+      ]
+    },
+    {
+      "id": "p016",
+      "verdict": "incorrect",
+      "reason": "Xiang Ji’s active-date hint repeats the reversed AD 209–202 interval even though the cited Western Chu context belongs to the BCE Qin–Han transition. It cannot be approved as currently encoded.",
+      "evidence": [
+        {
+          "unit": "s0044",
+          "quote": "背西楚而歸漢"
+        }
+      ]
+    },
+    {
+      "id": "p018",
+      "verdict": "incorrect",
+      "reason": "Lou Jing’s active-date hint repeats an AD 202–195 range. The early-Han source context identifies the era as BCE, and the attached claim’s reversed interval confirms the hint needs companion repair.",
+      "evidence": [
+        {
+          "unit": "s0048",
+          "quote": "婁敬之與漢高"
+        }
+      ]
+    },
+    {
+      "id": "p019",
+      "verdict": "incorrect",
+      "reason": "Han Gaozu’s active-date hint repeats an AD 206–195 range, contradicting the early-Han historical context. The era must be corrected with the associated reversed temporal claim.",
+      "evidence": [
+        {
+          "unit": "s0048",
+          "quote": "婁敬之與漢高"
+        }
+      ]
+    },
+    {
+      "id": "p053",
+      "verdict": "incorrect",
+      "reason": "Liu Jia’s active-date hint repeats an AD 202–196 range even though the source recalls an early-Han enfeoffment. The hint therefore shares the reversed, wrong-era date defect.",
+      "evidence": [
+        {
+          "unit": "s0194",
+          "quote": "昔劉賈封王"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "items": [
+        "claim-92",
+        "claim-93",
+        "claim-243",
+        "claim-281",
+        "claim-282",
+        "p015",
+        "p016",
+        "p018",
+        "p019",
+        "p053"
+      ],
+      "problem": "Five retrospective Qin–Han and early-Han claims encode BCE history as descending AD intervals, and all five linked people repeat the resulting wrong-era active-date hints.",
+      "action": "Stage a source-backed date repair that changes the five intervals and their linked active hints to BCE chronology in chronological order; then rebuild the packet and obtain a complete independent re-audit of all chapter units, items, and people."
+    }
+  ],
+  "references": []
+}
