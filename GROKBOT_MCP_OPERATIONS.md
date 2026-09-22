@@ -293,8 +293,12 @@ tail -n 100 "$HOME/.local/state/24histories-grokbot-mcp/tunnel.log"
 ```
 
 The Mac must remain awake, logged in, and online while the user LaunchAgents serve work.
-A public health response proves routing, not MCP authorization or queue health. Use the
-installed CLI's `status --worker grokbot-01` for an authenticated end-to-end check.
+The screen may be locked: locking does not stop the MCP server or tunnel while the user
+session remains logged in. A lock blocks GUI automation of the Grok Bot app, not MCP
+calls from the installed client. Do not pause an MCP handoff merely because the screen is
+locked; unlock only when the task actually requires GUI control. A public health response
+proves routing, not MCP authorization or queue health. Use the installed CLI's
+`status --worker grokbot-01` for an authenticated end-to-end check.
 
 ## Upgrade procedure
 
@@ -347,6 +351,9 @@ claim-signing secret for GitHub or Cloudflare.
 - Local health works but public health fails: inspect `tunnel.log`, run
   `cloudflared tunnel info 24histories-grokbot-mcp`, validate the ingress file, and check
   DNS. Do not expose port 3001 directly as a workaround.
+- A worker reports that the Mac is locked: verify public health and authenticated
+  `worker_status`. If they pass, tell the worker to use its locally installed
+  `24histories-people` client; no unlock is needed. Unlock only for GUI automation.
 - HTTP 401: reinstall or reconfigure the client after bearer rotation. Do not weaken
   authentication.
 - HTTP 403: check the exact request Host and Origin allowlists. The production allowed
