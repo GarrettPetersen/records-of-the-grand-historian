@@ -4,21 +4,21 @@
   "book": "suishu",
   "chapter": "086",
   "sourceHash": "sha256:ff6d8a09fcf5b37df7fab4ff1eb1f70013dc24108538405844dc2f64d11d0c9e",
-  "extractionHash": "sha256:9a463d9eceb655ef45f3ef85746ddf1e6aea76298405a8338cdffc2ff4a173e0",
-  "status": "research-blocked",
+  "extractionHash": "sha256:f65609f7f54dfba267d4ba862093bc07c4478d73af10a302fcee8f5267cf1eb8",
+  "status": "needs-revision",
   "reviewer": {
-    "name": "Independent Suishu 086 Chinese-source chronology re-auditor",
+    "name": "Codex independent Chinese-source chronology reviewer",
     "independentOfExtractor": true,
     "workers": [
       {
-        "name": "Independent Suishu 086 Chinese-source chronology re-auditor",
-        "agentId": "codex-reaudit-suishu086",
+        "name": "Codex independent Chinese-source chronology reviewer",
+        "agentId": "01a0a0ef-0c41-7392-ad12-be8e841c8989",
         "independentOfExtractor": true
       }
     ]
   },
-  "reviewedAt": "2026-09-22T22:00:00.000Z",
-  "summary": "Fresh independent re-audit against the repaired current extraction: all 39 Chinese units, all 76 temporal items, and all 21 person summaries were checked. The repaired Western conversions and ownership changes are source-supported, including Wude-5 month 12 in AD 623, the former-office and later-title corrections, the maternal death upper bound, and Huang Jians one-sided succession bound. Three deliberately unresolved personal chronologies remain: Jing Bos undated collaboration, Li Yanshous mothers non-personal mourning reference, and Chus qualified undated preface attribution. Those holds are retained rather than invented dates, so this complete report is research-blocked and does not approve the chapter.",
+  "reviewedAt": "2026-09-14T17:35:48.652Z",
+  "summary": "Whole-chapter independent reading completed: all 39 Chinese source units, 80 owned temporal/hint items and 21 people were individually reviewed. This is the Song Suishu publication colophon, not a foreign-ruler chapter; no foreign-ruler or ancestor identity was inferred. Nine actionable finding groups cover Wude month-12 events wrongly put in 622 instead of Gregorian 623, former/later office-date attribution, unsupported dates for Jing Bo, maternal mourning misassigned as the mother's activity/exact death, Chu's borrowed compilation window, and Huang's overprecise replacement year. Two office checks retain research holds. Supported events retain ruler/era identities, verified calendar conventions and exact Chinese evidence. No stated local birth or age was omitted, and the implied maternal death is preserved conservatively. Later editorial credits are not living attestations. This report does not repair, record, publish or approve the extraction.",
   "reviewedUnits": [
     "s0001",
     "s0002",
@@ -91,9 +91,9 @@
     },
     {
       "id": "claim-15",
-      "verdict": "supported",
+      "verdict": "incorrect",
       "event": "Feng Deyi received the first Sui-history commission in Wude 5, month 12.",
-      "reason": "The repaired claim correctly preserves Wude 5 month 12 and normalizes the entire month to AD 623; it names Feng Deyi as the recipient of the commission without inventing a day or later endpoint.",
+      "reason": "The event belongs to Feng, but AD 622 copies the regnal-year label into a month-specific event. Academia Sinica gives the entire twelfth month as Julian 623-01-07 through 623-02-04, proleptic Gregorian 623-01-10 through 623-02-07. Therefore its Western event year is AD 623. No day is supplied in this chapter.",
       "evidence": [
         {
           "unit": "s0003",
@@ -107,9 +107,9 @@
     },
     {
       "id": "claim-17",
-      "verdict": "supported",
+      "verdict": "incorrect",
       "event": "Feng Deyi held the Secretariat Director title at the month-12 commission.",
-      "reason": "The repaired nested office context correctly dates Feng Deyis 中書令 title at the Wude-5 month-12 edict to AD 623, the Western year containing that lunar month.",
+      "reason": "中書令 directly qualifies Feng at his own appointment to the project. The defect is the Western date: Wude 5 month 12 is wholly in AD 623 in both Julian and proleptic Gregorian calendars. Correct the nested dateContext without changing the office content.",
       "evidence": [
         {
           "unit": "s0003",
@@ -123,9 +123,9 @@
     },
     {
       "id": "claim-18",
-      "verdict": "supported",
+      "verdict": "incorrect",
       "event": "Feng Deyi was appointed jointly with Yan Shigu to compile Sui history.",
-      "reason": "The repaired scholarly commission correctly assigns the Wude-5 month-12 AD 623 edict to Feng Deyi and Yan Shigu, while leaving the later abandonment undated.",
+      "reason": "封德彝、舍人顏師古修隋史 supports the named compiler and colleague. Their joint commission is the twelfth-month edict, not the earlier undated petition; the verified month belongs to Gregorian AD 623, not 622. The later abandonment is not dated precisely.",
       "evidence": [
         {
           "unit": "s0003",
@@ -139,9 +139,9 @@
     },
     {
       "id": "claim-21",
-      "verdict": "supported",
+      "verdict": "incorrect",
       "event": "Yan Shigu received the Wude 5 twelfth-month compilation appointment.",
-      "reason": "The repaired attestation correctly identifies Yan Shigus Wude-5 month-12 commission as an AD 623 event, retaining the Chinese month rather than claiming a day.",
+      "reason": "Yan is a direct recipient of the edict, but the calendar conversion is wrong. Wude 5 is conventionally 622 while its twelfth month runs Gregorian 623-01-10 to 623-02-07. Use year 623 for this event and keep the original Chinese month.",
       "evidence": [
         {
           "unit": "s0003",
@@ -175,9 +175,9 @@
     },
     {
       "id": "claim-24",
-      "verdict": "supported",
+      "verdict": "incorrect",
       "event": "Yan Shigu bore the title Sheren at the first compilation commission.",
-      "reason": "The repaired office claim correctly associates 舍人 with Yan Shigu at the month-12 edict and dates that specific event to AD 623, not to every year of the unfinished project.",
+      "reason": "舍人顏師古 is a contemporary title at the month-12 edict. Its office association is supported, but the nested AD 622 date is not: the verified month is in proleptic Gregorian AD 623. It does not date every year of the unsuccessful project.",
       "evidence": [
         {
           "unit": "s0003",
@@ -190,10 +190,26 @@
       ]
     },
     {
+      "id": "claim-25",
+      "verdict": "incorrect",
+      "event": "Yan Shigu is identified by his former Zhongshu Shilang office at the renewed commission.",
+      "reason": "前中書侍郎 explicitly says former. Although the English label retains former, action held together with a Zhenguan 3/AD 629 dateContext presents a dated tenure. The date dates the writing assignment, not the earlier tenure. His biography also distinguishes appointment, mourning, return and dismissal without establishing this exact tenure year.",
+      "evidence": [
+        {
+          "unit": "s0006",
+          "quote": "貞觀三年，續詔秘書監魏徵修隋史，左僕射房喬總監。"
+        },
+        {
+          "unit": "s0007",
+          "quote": "徵又奏於中書省置秘書內省，令前中書侍郎顏師古、給事中孔穎達、著作郎許敬宗撰隋史。"
+        }
+      ]
+    },
+    {
       "id": "claim-26",
-      "verdict": "supported",
+      "verdict": "incorrect",
       "event": "Yan Shigu was appointed to compile Sui history by the first edict.",
-      "reason": "The repaired event participation correctly preserves Yan Shigus appointment in Wude-5 month 12 and its AD 623 Western-year normalization.",
+      "reason": "The source supports this personal scholarly appointment. Wude 5 month 12 must normalize to AD 623, not the conventional Wude-5 label 622, because the whole month lies in Gregorian January-February 623.",
       "evidence": [
         {
           "unit": "s0003",
@@ -486,6 +502,30 @@
       ]
     },
     {
+      "id": "claim-72",
+      "verdict": "research-blocked",
+      "event": "Xu Jingzong is designated Zhuzuo Lang in the main compilation narrative.",
+      "reason": "A bare AD 629 tenure is not independently secured. s0007 calls Xu 著作郎 under the third-year narrative, but s0023 and the checked Old Tang biography date the appointment to Zhenguan 8/AD 634; s0026 explicitly warns about incompatible dates and offices and possible later additions. Reappointment or anticipatory titling cannot be resolved by arithmetic.",
+      "evidence": [
+        {
+          "unit": "s0006",
+          "quote": "貞觀三年，續詔秘書監魏徵修隋史，左僕射房喬總監。"
+        },
+        {
+          "unit": "s0007",
+          "quote": "徵又奏於中書省置秘書內省，令前中書侍郎顏師古、給事中孔穎達、著作郎許敬宗撰隋史。"
+        },
+        {
+          "unit": "s0023",
+          "quote": "案敬宗傳，貞觀八年，除著作郎，修國史，遷中書舍人。"
+        },
+        {
+          "unit": "s0026",
+          "quote": "與今錄年月官位不同，疑後人所益。"
+        }
+      ]
+    },
+    {
       "id": "claim-73",
       "verdict": "supported",
       "event": "Xu Jingzong was appointed Zhuzuo Lang in the biographical chronology.",
@@ -606,6 +646,18 @@
       ]
     },
     {
+      "id": "claim-88",
+      "verdict": "incorrect",
+      "event": "Yu Zhining is labelled Left Vice Director in the treatise-commission narrative.",
+      "reason": "The extraction treats 左僕射 as held in AD 641. His checked Old Tang biography instead places 拜尚書左僕射 under Yonghui 2, AD 651, ten conventional years later. The colophon can use a later identifying title; its project date cannot certify this office tenure. Preserve both passages rather than change the commission year to match the title.",
+      "evidence": [
+        {
+          "unit": "s0012",
+          "quote": "十五年，又詔左僕射于志寧、太史令李淳風、著作郎韋安仁、符璽郎李延壽同修五代史志。"
+        }
+      ]
+    },
+    {
       "id": "claim-95",
       "verdict": "supported",
       "event": "Li Chunfeng was commissioned to compile the five-dynasty treatises.",
@@ -654,6 +706,22 @@
       "verdict": "supported",
       "event": "Li Yanshou was named in the later treatise commission.",
       "reason": "s0012 expressly places Li among the compilers in the inherited Zhenguan 15, conventional AD 641. s0028 supports his participation with Jing Bo but does not separately date that colleague's appointment. The 656 presentation does not extend Li's personal activity to that year.",
+      "evidence": [
+        {
+          "unit": "s0012",
+          "quote": "十五年，又詔左僕射于志寧、太史令李淳風、著作郎韋安仁、符璽郎李延壽同修五代史志。"
+        },
+        {
+          "unit": "s0028",
+          "quote": "又《李延壽傳》云，被詔與著作佐郎敬播同修五代史志。"
+        }
+      ]
+    },
+    {
+      "id": "claim-116",
+      "verdict": "research-blocked",
+      "event": "Li Yanshou is identified as Fuxi Lang in the fifteenth-year commission account.",
+      "reason": "The 641 project appointment is explicit, but the contemporaneity of 符璽郎 is uncertain. Old Tang 077 s0331-s0333 narrates earlier offices and compilation, then 歷遷符璽郎; the same colophon names demonstrably later titles for Yu and Li Chunfeng. Do not certify the held-office year from the project heading alone or invent a replacement year.",
       "evidence": [
         {
           "unit": "s0012",
@@ -763,9 +831,9 @@
     },
     {
       "id": "claim-133",
-      "verdict": "research-blocked",
+      "verdict": "incorrect",
       "event": "Jing Bo participated with Li Yanshou in compiling the treatises.",
-      "reason": "The current extraction deliberately preserves an unresolved chronology: s0028 establishes Jing Bos collaboration but gives no personal date, and the dated s0012 commission names different people. No point or interval may be inferred from common project membership.",
+      "reason": "s0028 supports the joint work but supplies no year. s0012 dates a commission naming four other officials, not Jing Bo. The checked Li Yanshou biography places their collaboration only in 貞觀中 and does not establish year 15. Exact AD 641 is an unsupported transfer from the project chronology.",
       "evidence": [
         {
           "unit": "s0012",
@@ -779,9 +847,9 @@
     },
     {
       "id": "claim-139",
-      "verdict": "research-blocked",
+      "verdict": "incorrect",
       "event": "Li Yanshou's mother is recalled through his mourning leave.",
-      "reason": "The current extraction deliberately records a research hold: Li Yanshous mourning leave names his mother only relationally and does not attest her as living in AD 629 or give an independent death date.",
+      "reason": "The person who acts in 貞觀三年 is Li Yanshou. 內憂 implies that his mother had died by the bereavement/leave, not that she is attested alive in AD 629. Do not feed her son's office departure into a maternal living attestation.",
       "evidence": [
         {
           "unit": "s0029",
@@ -791,9 +859,9 @@
     },
     {
       "id": "claim-140",
-      "verdict": "supported",
+      "verdict": "incorrect",
       "event": "The death of Li Yanshou's mother is implied by his mourning leave.",
-      "reason": "The repaired death claim correctly keeps the genuine maternal-death implication while expressing only an on-or-before AD 629 upper bound tied to Li Yanshous dated mourning leave; it does not invent an exact death year.",
+      "reason": "Maternal death is genuinely implied and must not be discarded. However 其年以內憂去職 dates Li's departure; it does not independently fix the mother's death to exactly AD 629. Preserve the causal sequence and a no-later-than bound tied to that mourning, without inventing a lower endpoint, age or birth year.",
       "evidence": [
         {
           "unit": "s0029",
@@ -803,9 +871,9 @@
     },
     {
       "id": "claim-142",
-      "verdict": "research-blocked",
+      "verdict": "incorrect",
       "event": "Chu Suiliang is credited by editions with a Five Phases preface.",
-      "reason": "The current extraction deliberately preserves a research hold: the editions attribution of a Five Phases preface to Chu Suiliang is undated and the following note doubts a broader commission, so the other compilers project dates cannot become Chus activity dates.",
+      "reason": "Neither s0032 nor s0033 dates Chu's writing; the latter expressly doubts that he was commissioned to compile. AD 641 and AD 656 are the project commission and another person's presentation, not verified endpoints for Chu's activity. The sourceDate phrase about completion is supplied inference, not source wording. Preserve the undated authorship attribution and editorial doubt separately.",
       "evidence": [
         {
           "unit": "s0012",
@@ -907,9 +975,9 @@
     },
     {
       "id": "claim-174",
-      "verdict": "supported",
+      "verdict": "incorrect",
       "event": "Huang Jian replaced Zhang Guan in the collation work.",
-      "reason": "The repaired replacement claim correctly treats Huang Jians appointment as following Zhang Guans dated June-5 commission, using an on-or-after AD 1024 bound with no invented upper endpoint.",
+      "reason": "觀尋為度支判官，續命黃鑑代之 gives a later sequence, not an explicit Tiansheng-2 year. The June 5 date applies to the original appointment of Zhang and the supervisors. Huang's replacement is on or after that AD 1024 event, but the text alone supplies no upper year; 尋 does not guarantee the same year.",
       "evidence": [
         {
           "unit": "s0034",
@@ -959,9 +1027,9 @@
     },
     {
       "id": "hints-p003",
-      "verdict": "supported",
+      "verdict": "incorrect",
       "event": "Feng Deyi's hint is derived from his month-12 commission.",
-      "reason": "The repaired activity hint now correctly reflects Feng Deyis source-supported AD 623 month-12 commission and no longer retains the erroneous AD 622 conversion.",
+      "reason": "The sole supplied AD 622 activity is the commission whose verified Western event year is AD 623. Change this hint with claims 15, 17 and 18; do not retain 622 merely because it is the conventional label of Wude 5.",
       "evidence": [
         {
           "unit": "s0003",
@@ -975,9 +1043,9 @@
     },
     {
       "id": "hints-p004",
-      "verdict": "supported",
+      "verdict": "incorrect",
       "event": "Yan Shigu's hints combine the first and renewed commissions.",
-      "reason": "The repaired hints correctly distinguish Yan Shigus AD 623 first commission from the independently supported AD 629 renewed commission, without turning the former office title into a tenure date.",
+      "reason": "The renewed AD 629 assignment is supported by s0007 and s0029. The first commission belongs to Gregorian AD 623, not 622. The former-office wording supplies no separate 629 tenure event and must not be used to justify a false office date.",
       "evidence": [
         {
           "unit": "s0005",
@@ -1171,9 +1239,9 @@
     },
     {
       "id": "hints-p014",
-      "verdict": "research-blocked",
+      "verdict": "incorrect",
       "event": "Jing Bo's active hint borrows the date of a different named commission.",
-      "reason": "Jing Bos current hint accurately declares research required because his local collaboration with Li Yanshou is undated; the chapter gives no supported active-year label.",
+      "reason": "Neither the local joint-work reference in s0028 nor the checked Li Yanshou biography specifies AD 641 for Jing Bo. Replace the exact hint only with supported personal chronology, or leave his participation undated; do not infer a point year from common project membership.",
       "evidence": [
         {
           "unit": "s0012",
@@ -1187,9 +1255,9 @@
     },
     {
       "id": "hints-p015",
-      "verdict": "research-blocked",
+      "verdict": "incorrect",
       "event": "The mother's active hint is generated from her son's bereavement.",
-      "reason": "The mothers current hint accurately declares research required because Li Yanshous mourning leave supplies only a bounded maternal death implication, not her own activity or exact death year.",
+      "reason": "AD 629 is Li Yanshou's leave date, and 內憂 establishes that his mother is dead by that mourning. It is not a living attestation for her. Remove the activity hint and retain the separately bounded maternal death.",
       "evidence": [
         {
           "unit": "s0029",
@@ -1199,9 +1267,9 @@
     },
     {
       "id": "hints-p016",
-      "verdict": "research-blocked",
+      "verdict": "incorrect",
       "event": "Chu Suiliang's hint presents the treatise project window as his activity.",
-      "reason": "Chus current hint accurately declares research required because the qualified preface attribution carries no personal chronology and cannot inherit the other compilers project window.",
+      "reason": "AD 641-656 has no personal endpoint evidence for Chu. Editions credit him with a preface, and the colophon doubts any wider commission. Keep undated attribution/reception rather than a fifteen-year activity window borrowed from other people.",
       "evidence": [
         {
           "unit": "s0032",
@@ -1283,9 +1351,9 @@
     },
     {
       "id": "hints-p021",
-      "verdict": "supported",
+      "verdict": "incorrect",
       "event": "Huang Jian's hint overdates his succession to Zhang Guan.",
-      "reason": "The repaired current hint accurately expresses Huang Jians one-sided chronology as on or after AD 1024 and does not assert an unsupported point replacement year.",
+      "reason": "His replacement appointment follows Zhang's transfer, which itself follows the dated June 5 commission. There is no explicit same-year statement. Replace exact AD 1024 with a supported directional description or omit the precise hint; retain the succession itself.",
       "evidence": [
         {
           "unit": "s0036",
@@ -1339,8 +1407,8 @@
     },
     {
       "id": "p003",
-      "verdict": "supported",
-      "reason": "The repaired current claims consistently date Feng Deyis Wude-5 month-12 commission and office to AD 623. They do not infer a life endpoint from the projects later abandonment.",
+      "verdict": "incorrect",
+      "reason": "Feng's three dated claims and activity hint all copy 622 into a twelfth-month event actually occurring in Gregorian 623. The project lasts several years but the text neither dates his death nor proves activity until its abandonment. Correct the linked dates without deriving a lifetime.",
       "evidence": [
         {
           "unit": "s0003",
@@ -1354,8 +1422,8 @@
     },
     {
       "id": "p004",
-      "verdict": "supported",
-      "reason": "The repaired current claims correctly distinguish Yan Shigus AD 623 first commission from his AD 629 renewed assignment and no longer date a former Zhongshu Shilang tenure as current in 629.",
+      "verdict": "incorrect",
+      "reason": "Yan's first commission must move from 622 to Gregorian 623, while the renewed 629 commission is explicitly supported twice. 前 makes his cited Zhongshu Shilang office former, not a dated current tenure. No birth, death or age is missing from his local source; later biographical family material is not imported.",
       "evidence": [
         {
           "unit": "s0005",
@@ -1458,8 +1526,8 @@
     },
     {
       "id": "p008",
-      "verdict": "supported",
-      "reason": "Xu Jingzongs dated scholarly assignments and biographical sequence remain source-supported. The repaired extraction no longer asserts an unsupported AD 629 office tenure merely from the project heading.",
+      "verdict": "research-blocked",
+      "reason": "Xu's compiler attestation and the 634/636/663 biographical sequence are supported, but the unqualified 629 Zhuzuo Lang tenure remains an explicit title/date problem. The late Taizi Shaoshi heading is editorial attribution, not proof of a 663 composition. Preserve s0026's warning; do not resolve it by silently preferring one date. No local birth, death or age omission exists.",
       "evidence": [
         {
           "unit": "s0007",
@@ -1489,8 +1557,8 @@
     },
     {
       "id": "p009",
-      "verdict": "supported",
-      "reason": "Yu Zhining is correctly dated as a named participant in the AD 641 commission, while the repaired extraction no longer backdates a Left Vice Director office tenure from the later identifying title.",
+      "verdict": "incorrect",
+      "reason": "Yu is personally named in the 641 commission, but his Left Vice Director office is backdated from a later identifying title. The checked biography puts the appointment in Yonghui 2/651. s0027 adds only a retrospective reminder; no local birth, death or age is missing.",
       "evidence": [
         {
           "unit": "s0012",
@@ -1538,8 +1606,8 @@
     },
     {
       "id": "p012",
-      "verdict": "supported",
-      "reason": "Li Yanshous AD 629 and AD 641 commissions are explicit. The repaired extraction removes the unsupported dateContext from his Seal Keeper office and keeps his mothers separate bounded death chronology.",
+      "verdict": "research-blocked",
+      "reason": "Li's 629 commission/leave and 641 treatise commission are explicit. The mother's death must not be treated as Li's death or as her activity in his leave year. His own Fuxi Lang office is potentially a later titular identification, as the checked biography narrates it after earlier compilation roles; the precise 641 tenure needs resolution. No birth or age is supplied locally.",
       "evidence": [
         {
           "unit": "s0012",
@@ -1576,8 +1644,8 @@
     },
     {
       "id": "p014",
-      "verdict": "research-blocked",
-      "reason": "Jing Bos collaboration is explicit but undated in the local source. The chapter cannot transfer AD 641 from a commission that names other officials, and no independently verified personal date is supplied here.",
+      "verdict": "incorrect",
+      "reason": "Jing Bo's collaboration is attested, but no local date or checked primary biography fixes it to 641. A common project is insufficient to transfer the dated appointment of four other officials. No local birth, death or age appears; leave participation undated unless a personal date is independently secured.",
       "evidence": [
         {
           "unit": "s0012",
@@ -1591,8 +1659,8 @@
     },
     {
       "id": "p015",
-      "verdict": "research-blocked",
-      "reason": "Li Yanshous unnamed mother is known only through his mourning leave. Her death has a conservative upper bound, but the source provides neither a personal activity date nor an exact death date, so research remains required.",
+      "verdict": "incorrect",
+      "reason": "The unnamed mother is represented only by Li Yanshou's maternal mourning. Her death is an important genuine implication, not an omission to erase, but its precise year and the living attestation/hint are unsupported. Preserve a no-later-than relationship to the leave, and do not infer a birth, age, name, or other family member's chronology.",
       "evidence": [
         {
           "unit": "s0029",
@@ -1602,8 +1670,8 @@
     },
     {
       "id": "p016",
-      "verdict": "research-blocked",
-      "reason": "Chu Suiliangs qualified preface attribution lacks a personal date, while the source explicitly doubts a compilation commission. The current source does not support importing the projects 641-656 chronology.",
+      "verdict": "incorrect",
+      "reason": "Chu's preface attribution has no personal date. The stated doubt about his receiving a compilation commission makes the borrowed 641-656 activity window especially unsafe. Keep undated attribution and editorial reception; no local birth, death, age or familial date is available.",
       "evidence": [
         {
           "unit": "s0032",
@@ -1685,8 +1753,8 @@
     },
     {
       "id": "p021",
-      "verdict": "supported",
-      "reason": "The repaired one-sided chronology correctly places Huang Jians succession on or after the dated AD 1024 commissioning event without claiming the replacement happened in that year.",
+      "verdict": "incorrect",
+      "reason": "Huang's succession is later than the dated original commission but lacks its own year. The report must not certify 1024 as a point date solely from 尋 and 續命. Preserve the relative sequence with an open upper bound; no birth, death, age or family date is supplied locally.",
       "evidence": [
         {
           "unit": "s0036",
@@ -1706,30 +1774,88 @@
   "findings": [
     {
       "items": [
-        "claim-133",
-        "p014",
-        "hints-p014"
+        "claim-15",
+        "claim-17",
+        "claim-18",
+        "claim-21",
+        "claim-24",
+        "claim-26",
+        "hints-p003",
+        "hints-p004",
+        "p003",
+        "p004"
       ],
-      "problem": "Jing Bos collaboration is explicit but has no personal date in the chapter; the only nearby AD 641 commission names different people.",
-      "action": "Keep the undated claim and research hold; do not infer a date from shared project membership."
+      "problem": "Wude 5 month 12 was normalized to AD 622, although the entire verified month falls in Gregorian AD 623.",
+      "action": "Change only these event/office date containers and the dependent first-commission hints to AD 623. Retain 武德五年十二月, state the calendar convention, and do not invent a day or alter Linghu's year-only petition."
+    },
+    {
+      "items": [
+        "claim-25",
+        "p004"
+      ],
+      "problem": "Yan Shigu's former office is represented as a held tenure dated to his later 629 writing assignment.",
+      "action": "Remove or replace the misleading office dateContext with genuinely supported earlier tenure chronology. Preserve 前 and the independent 629 compilation event; do not invent an earlier appointment year."
+    },
+    {
+      "items": [
+        "claim-72",
+        "p008"
+      ],
+      "problem": "Xu's unqualified 629 Zhuzuo Lang tenure conflicts with the chapter's 634 appointment account and its explicit warning about dates and interpolated titles.",
+      "action": "Retain both source witnesses and the editorial warning. Research the actual tenure or remove the unsupported 629 office date while preserving the source-qualified compiler attestation. Do not equate a later title-page credit with living activity or resolve the contradiction by assertion."
+    },
+    {
+      "items": [
+        "claim-88",
+        "p009"
+      ],
+      "problem": "Yu Zhining's Left Vice Director title has been backdated to the 641 treatise commission; the checked biography dates his appointment to Yonghui 2/651.",
+      "action": "Correct the office chronology using the cited personal biography or remove the borrowed dateContext. Preserve the chapter's 641 compilation commission and identify the later-title usage rather than silently revising the source or the project date."
+    },
+    {
+      "items": [
+        "claim-116",
+        "p012"
+      ],
+      "problem": "Li Yanshou's exact 641 Fuxi Lang tenure is not independently established; his biography narrates that office after earlier compilation roles, while the colophon uses later titles for other commissioners.",
+      "action": "Resolve the personal office chronology from a dated primary witness, or remove the unverified 641 office dateContext and preserve the title as a source attribution. Keep the independently explicit 629 and 641 compilation events and do not manufacture a new office year."
+    },
+    {
+      "items": [
+        "claim-133",
+        "hints-p014",
+        "p014"
+      ],
+      "problem": "Jing Bo's collaboration has been assigned exactly AD 641 by borrowing the separate commission naming four other officials.",
+      "action": "Remove the unsupported exact year and synchronized hint, or supply a verified personal commission date. Preserve his undated collaboration with Li Yanshou; the checked biography's broad Zhenguan context does not prove year 15."
     },
     {
       "items": [
         "claim-139",
-        "p015",
-        "hints-p015"
+        "claim-140",
+        "hints-p015",
+        "p015"
       ],
-      "problem": "The maternal reference occurs through Li Yanshous dated mourning leave and cannot establish the mothers living activity or exact death year.",
-      "action": "Keep the supported on-or-before death bound and retain research hold pending an independent maternal chronology witness."
+      "problem": "The mother of Li Yanshou receives a living AD 629 attestation and an exact death year from her son's dated mourning leave.",
+      "action": "Remove the maternal living attestation/hint. Preserve the implied death separately with a no-later-than relationship to Li's Zhenguan-3 leave, using one-sided bounds and explicitly stated year-label convention if normalized. Do not infer a birth, age, lower endpoint, or exact Gregorian death date."
     },
     {
       "items": [
         "claim-142",
-        "p016",
-        "hints-p016"
+        "hints-p016",
+        "p016"
       ],
-      "problem": "Chu Suiliangs preface attribution is undated and qualified by an editorial doubt about his broader commission.",
-      "action": "Keep the undated attribution and research hold; require a personal chronology witness before assigning activity dates."
+      "problem": "Chu Suiliang's AD 641-656 window is borrowed from the general project and Wuji's presentation; his preface attribution itself is undated and qualified.",
+      "action": "Remove the unsupported personal interval and activity hint. Retain the undated preface attribution and the colophon's doubt as attribution/reception, not a life date. Do not assign 1024 to Chu as living activity or invent a date for the editorial reference."
+    },
+    {
+      "items": [
+        "claim-174",
+        "hints-p021",
+        "p021"
+      ],
+      "problem": "Huang Jian's later replacement appointment is asserted as exactly AD 1024 without an explicit same-year statement.",
+      "action": "Preserve the replacement event and relative order after Zhang's initial 1024 appointment. Use an on-or-after bound at the supported year granularity, without an invented upper endpoint, unless a targeted personal source establishes the exact year; synchronize the hint."
     }
   ],
   "references": [
