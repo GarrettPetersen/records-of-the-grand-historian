@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": 1,
+  "book": "mingshi",
+  "chapter": "057",
+  "sourceHash": "sha256:33cbdee4bc2cafb30d627d960c21ee11623767d95a1319cc6e4528ff92fbc44d",
+  "extractionHash": "sha256:3150baec1aea79ac65a15d6bf14f3e05ee1c0163f994fa59d64bf62477aae67c",
+  "status": "needs-revision",
+  "reviewer": {
+    "name": "Codex, independent chronology reviewer",
+    "independentOfExtractor": true
+  },
+  "reviewedAt": "2026-09-22T00:00:00.000Z",
+  "summary": "Targeted independent review established that the two deterministic interval failures encode early-Han BCE chronology as AD dates. The chapter's undated historical allusion cannot itself justify an active span, while checked reference witnesses identify Liu Bang's 195 BCE death and Han Xin's 196 BCE death. The affected claims and active-date hints require a scoped repair and a fresh, complete independent audit before approval.",
+  "reviewedUnits": [
+    "s0027"
+  ],
+  "itemChecks": [
+    {
+      "id": "claim-13",
+      "verdict": "incorrect",
+      "event": "A Ming text recalls the Han ruler's appointment of Han Xin as a general.",
+      "reason": "The source says only that Han Gao appointed Han Xin; it supplies no AD date. The stored AD 206 to AD 195 range is temporally reversed and places an early-Han event in the wrong era.",
+      "evidence": [
+        { "unit": "s0027", "quote": "漢高命韓信爲將" }
+      ]
+    },
+    {
+      "id": "claim-14",
+      "verdict": "incorrect",
+      "event": "A Ming text recalls Han Xin's appointment by the Han ruler.",
+      "reason": "The source is an undated allusion to the appointment. The stored AD 206 to AD 196 range is both reversed and era-wrong; the checked chronology identifies Han Xin's death as 196 BCE, not AD 196.",
+      "evidence": [
+        { "unit": "s0027", "quote": "漢高命韓信爲將" }
+      ]
+    },
+    {
+      "id": "hints-p008",
+      "verdict": "incorrect",
+      "event": "The person summary presents Emperor Gaozu of Han's active-date hint.",
+      "reason": "The active hint AD 206-195 repeats the erroneous era assignment from the failed claim. The cited allusion is to the early Han and cannot support an AD activity interval.",
+      "evidence": [
+        { "unit": "s0027", "quote": "漢高命韓信爲將" }
+      ]
+    },
+    {
+      "id": "hints-p009",
+      "verdict": "incorrect",
+      "event": "The person summary presents Han Xin's active-date hint.",
+      "reason": "The active hint AD 206-196 repeats the reversed, era-wrong date range. The allusion identifies Han Xin but gives no AD chronology, and checked evidence places his death in 196 BCE.",
+      "evidence": [
+        { "unit": "s0027", "quote": "漢高命韓信爲將" }
+      ]
+    }
+  ],
+  "personChecks": [],
+  "findings": [
+    {
+      "items": ["claim-13", "claim-14", "hints-p008", "hints-p009"],
+      "problem": "Two early-Han date intervals are reversed and use AD where the applicable historical chronology is BCE; both corresponding display hints reproduce the same error.",
+      "action": "Stage a date-only repair that removes unsupported interval precision or replaces it with independently supported BCE chronology, synchronizes both hints, then obtain a fresh complete independent audit of the repaired packet."
+    }
+  ],
+  "references": [
+    {
+      "kind": "external",
+      "url": "https://www.encyclopedia.com/people/history/chinese-and-taiwanese-history-biographies/liu-pang",
+      "title": "Liu Pang | Encyclopedia.com",
+      "quote": "Liu Pang (256 B.C.-195 B.C.) was emperor of China.",
+      "sourceHash": "sha256:10b4536b67362f43bdac27a4a7eefc1aa53e821d115810488cdd6f6de7449e85",
+      "accessedAt": "2026-09-22T00:00:00.000Z",
+      "reason": "This checked biographical witness confirms that the ruler named in the chapter belongs to BCE chronology and died in 195 BCE, contradicting the stored AD interval."
+    },
+    {
+      "kind": "external",
+      "url": "https://ctext.org/dictionary.pl?char=%E9%9F%93%E4%BF%A1&if=en&remap=gb",
+      "title": "Han Xin | Chinese Text Project",
+      "quote": "Han Xin (韓信 Hán Xìn; died March 196 BCE) was a Chinese military general and politician who served Liu Bang during the Chu–Han Contention and contributed greatly to the founding of the Han dynasty.",
+      "sourceHash": "sha256:3e608ae50013d5c6d7f64d135eb7cafa34018c942baca6b37b8200897ac76581",
+      "accessedAt": "2026-09-22T00:00:00.000Z",
+      "reason": "This checked reference identifies the general in the chapter and places his death in 196 BCE, contradicting the stored AD interval without inventing a date from the Ming wording."
+    }
+  ]
+}
