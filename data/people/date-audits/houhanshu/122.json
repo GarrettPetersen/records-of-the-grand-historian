@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": 1,
+  "book": "houhanshu",
+  "chapter": "122",
+  "sourceHash": "sha256:fb7e7ad10be09bc8c06b39d6aac9def4eadc280a8cc9d586bfbc7ccf865e015f",
+  "extractionHash": "sha256:1883632e77c7f600472cd70319ffeb5699c296fb96512308b8848c0317efb2e4",
+  "status": "needs-revision",
+  "reviewer": {
+    "name": "Independent Houhanshu 122 Chinese-source chronology auditor",
+    "independentOfExtractor": true,
+    "workers": [
+      {
+        "name": "Independent Houhanshu 122 Chinese-source chronology auditor",
+        "agentId": "codex-date-audit-houhanshu122",
+        "independentOfExtractor": true
+      }
+    ]
+  },
+  "reviewedAt": "2026-09-23T00:00:00.000Z",
+  "summary": "Targeted independent audit of the deterministic reversed interval in the Dongping historical note. Unit s0068 explicitly attributes the division to Emperor Jing, but the extracted attestation and its matching active-date hint encode an impossible AD 157–141 interval. The interval must not be mechanically swapped: its era is also wrong. This report deliberately preserves the source capture and records the required BCE chronology repair for independent re-audit.",
+  "reviewedUnits": [
+    "s0068"
+  ],
+  "itemChecks": [
+    {
+      "id": "claim-145",
+      "verdict": "incorrect",
+      "reason": "The explicit attribution is to 景帝, but the stored AD 157–141 interval is reversed and places the Western Han emperor in the wrong era. The source does not license an automatic endpoint swap or retention of the AD era.",
+      "event": "Emperor Jing divided Liang to create the Jidong kingdom.",
+      "evidence": [
+        {
+          "unit": "s0068",
+          "quote": "景帝分为济东国"
+        }
+      ]
+    }
+  ],
+  "personChecks": [
+    {
+      "id": "p039",
+      "verdict": "incorrect",
+      "reason": "Emperor Jing's sole active-date hint repeats the impossible AD 157–141 interval from claim-145. It must be replaced alongside the claim from a source-backed BCE chronology, not treated as a separate life-date assertion.",
+      "evidence": [
+        {
+          "unit": "s0068",
+          "quote": "景帝分为济东国"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "items": [
+        "claim-145",
+        "p039",
+        "hints-p039"
+      ],
+      "problem": "The Emperor Jing administrative attestation and matching active-date hint use the reversed, era-wrong interval AD 157–141. The Chinese source names Emperor Jing but gives no license to reverse the endpoints mechanically or to preserve the AD era.",
+      "action": "Replace claim-145 and p039's matching hint through the date-repair workflow with a source-backed BCE chronology for Emperor Jing's Jidong division, then rebuild the packet and obtain a fresh complete independent audit before approval."
+    }
+  ],
+  "references": [
+    {
+      "book": "houhanshu",
+      "chapter": "122",
+      "unit": "s0068",
+      "quote": "景帝分为济东国",
+      "sourceHash": "sha256:a7b1d97441f0e099b65ea3c83731c1b434f9ed47d5594c268375cec9b53e6cab",
+      "reason": "This local Chinese witness identifies the event's owner as Emperor Jing and anchors the finding to the only cited unit. It does not itself justify a mechanical calendar conversion."
+    }
+  ]
+}
