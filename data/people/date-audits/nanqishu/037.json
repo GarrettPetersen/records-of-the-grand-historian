@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": 1,
+  "book": "nanqishu",
+  "chapter": "037",
+  "sourceHash": "sha256:4942950cce40506901ac3cb89108597e6082fcc1f9e1b5c594291c75c3089fab",
+  "extractionHash": "sha256:569cfec8614143e934421608dfad144e8b9514892338273e7c159b6768f734e3",
+  "status": "needs-revision",
+  "reviewer": {
+    "name": "Independent Nanqishu 037 chronology reviewer",
+    "independentOfExtractor": true
+  },
+  "reviewedAt": "2026-09-22T00:00:00.000Z",
+  "summary": "Independent targeted chronology audit identified a deterministic reversed Western interval in King Yuan of Chu’s early-Han attestation. The cited source unit establishes only the genealogical reference; it cannot justify retaining an AD 201-to-178 interval. The extraction requires a separate source-backed repair and fresh whole-chapter independent re-audit before approval.",
+  "reviewedUnits": [
+    "s0052"
+  ],
+  "itemChecks": [
+    {
+      "id": "claim-218",
+      "verdict": "incorrect",
+      "event": "Genealogical attestation for King Yuan of Chu in the early Han.",
+      "reason": "The cited Chinese says that the Pengcheng Liu descend from Chu Yuan Wang (楚元王) and labels the context as early Han; it does not support a forward AD range. The stored interval starts at AD 201 and ends at AD 178, which is mechanically reversed and therefore cannot be retained. I have not substituted a point date or changed eras without a separate source-backed repair.",
+      "evidence": [
+        {
+          "unit": "s0052",
+          "quote": "彭城劉同出楚元王，分爲三里，以別宋氏帝族。"
+        }
+      ]
+    }
+  ],
+  "personChecks": [],
+  "findings": [
+    {
+      "items": [
+        "claim-218",
+        "p029"
+      ],
+      "problem": "King Yuan of Chu’s only recorded chronology is a reversed AD 201–178 interval attached to an early-Han genealogical reference; the temporal geometry is invalid and the source unit itself supplies no endpoints.",
+      "action": "Independently verify King Yuan of Chu’s historical chronology from a source that explicitly supports the endpoints and era, repair only the affected temporal claim and active-date hint, then regenerate the packet and conduct a fresh complete independent audit."
+    }
+  ],
+  "references": []
+}
