@@ -4,21 +4,21 @@
   "book": "suishu",
   "chapter": "043",
   "sourceHash": "sha256:68aae9930316b88371ef5e8e7c76d82732533a554bb4fec33fb124922457ca48",
-  "extractionHash": "sha256:eb1d4689e001c246d819fcd1cd807f11a53da216b63f9b28e6cf1165bf27ca4d",
-  "status": "research-blocked",
+  "extractionHash": "sha256:8067b63cbdb40ea602acfefb9416708a9b0963a94ea0026d45d88cc3131f57b3",
+  "status": "needs-revision",
   "reviewer": {
-    "name": "Independent Suishu 043 canonical chronology auditor",
+    "name": "Independent Suishu 043 Chinese-source chronology re-auditor",
     "independentOfExtractor": true,
     "workers": [
       {
-        "name": "Independent Suishu 043 canonical chronology auditor",
-        "agentId": "codex-full-date-audit-suishu043-final",
+        "name": "Independent Suishu 043 Chinese-source chronology re-auditor",
+        "agentId": "codex-reaudit-suishu043-canonical",
         "independentOfExtractor": true
       }
     ]
   },
-  "reviewedAt": "2026-09-22T23:55:00.000Z",
-  "summary": "Fresh full independent canonical audit after 0aa6d2ad96: all 206 Chinese units, all 154 temporal or active-hint items, and all 63 people were rechecked against the current extraction. The repaired Jianyi claims for Emperor Wuyuan and Zhou Taizu now correctly preserve a single AD 534 event, and Empress Xian’s non-personal mausoleum reference no longer asserts a life chronology. Three deliberate holds remain: Yang Aijing’s undated early death, Lady Guo’s undated maternal reference, and Empress Xian’s undated mausoleum reference. They are preserved rather than supplied with invented dates, so the complete report is research-blocked and does not approve the chapter.",
+  "reviewedAt": "2026-09-22T23:39:05.909Z",
+  "summary": "Fresh complete independent audit of all 206 Chinese source units, all 154 temporal or active-hint items, and all 63 people after e6298824b7. The BCE Qin–Han and early-Han corrections are now correctly BCE, and Yang Hong’s Daye 6 AD 610 enfeoffment is correctly retained as a posthumous reception rather than his living attestation. Two deliberate unresolved chronologies (Yang Aijing and Lady Guo) remain research-blocked. The candidate nevertheless cannot be approved: the AD 534 Jianyi clause still assigns unsupported continuous intervals to Emperor Wuyuan and Zhou Taizu, and Empress Xian’s AD 581–604 life chronology incorrectly derives from Yang Da’s mausoleum-arrangements participation. Those temporal claims and matching hints require repair and a fresh independent re-audit.",
   "reviewedUnits": [
     "s0001",
     "s0002",
@@ -374,9 +374,9 @@
     },
     {
       "id": "claim-64",
-      "verdict": "supported",
-      "event": "Emperor Wuyuan participated in the Jianyi action in Guanzhong.",
-      "reason": "The repaired claim preserves the clause as a single AD 534 Jianyi event involving Emperor Wuyuan. It no longer turns the contextual episode into continuous activity or a dynasty-length life chronology.",
+      "verdict": "incorrect",
+      "event": "The Jianyi-in-Guanzhong episode attributed to Emperor Wuyuan.",
+      "reason": "建義 is an event in the clause, not evidence that Emperor Wuyuan remained active continuously through AD 556. The sibling claim for Yang Yuansun has correctly been repaired to the single AD 534 event; this participant’s matching interval must receive the same source-constrained treatment.",
       "evidence": [
         {
           "unit": "s0007",
@@ -386,9 +386,9 @@
     },
     {
       "id": "claim-67",
-      "verdict": "supported",
-      "event": "Zhou Taizu participated in the Jianyi action in Guanzhong.",
-      "reason": "The repaired claim preserves the clause as a single AD 534 Jianyi event involving Zhou Taizu. It no longer turns the contextual episode into continuous activity or a dynasty-length life chronology.",
+      "verdict": "incorrect",
+      "event": "The Jianyi-in-Guanzhong episode attributed to Zhou Taizu.",
+      "reason": "建義 is a single dated episode in this sentence, not a statement that Zhou Taizu was active continuously from AD 534 through AD 556. It needs the same AD 534 point-event treatment as the repaired Yang Yuansun claim.",
       "evidence": [
         {
           "unit": "s0007",
@@ -1226,9 +1226,9 @@
     },
     {
       "id": "claim-270",
-      "verdict": "research-blocked",
-      "event": "Empress Xian is named in an undated mausoleum-arrangement reference.",
-      "reason": "The current claim correctly treats the Empress Xian mausoleum reference as undated and non-personal: Yang Da, not the empress, is the named participant. The source gives no personal chronology for her, so the explicit unresolved record remains a research hold.",
+      "verdict": "incorrect",
+      "event": "Empress Xian’s alleged AD 581–604 attestation from mausoleum arrangements.",
+      "reason": "獻皇后及高祖山陵制度，達並參豫焉 dates Yang Da’s participation in mausoleum arrangements, not living activity by Empress Xian. The broad Sui-reign interval has no source endpoint for her and wrongly assigns another person’s memorial-related event as her attestation.",
       "evidence": [
         {
           "unit": "s0175",
@@ -1394,9 +1394,9 @@
     },
     {
       "id": "hints-p007",
-      "verdict": "supported",
+      "verdict": "incorrect",
       "event": "Active-date summary for Emperor Wuyuan.",
-      "reason": "The active-date summary now says only AD 534 (Jianyi event), matching the local clause. It no longer asserts continuous activity beyond the source-supported event.",
+      "reason": "The local Chinese establishes participation in the AD 534 Jianyi episode but does not support a continuous AD 534–568 active-date span. Preserve the event’s documented point date or add independently sourced life evidence; do not turn a contextual historical range into continuous activity.",
       "evidence": [
         {
           "unit": "s0007",
@@ -1406,9 +1406,9 @@
     },
     {
       "id": "hints-p008",
-      "verdict": "supported",
+      "verdict": "incorrect",
       "event": "Active-date summary for Zhou Taizu.",
-      "reason": "The active-date summary now says only AD 534 (Jianyi event), matching the local clause. It no longer asserts continuous activity beyond the source-supported event.",
+      "reason": "The source supports Zhou Taizu’s participation in the AD 534 Jianyi event, not an unqualified AD 534–556 continuous active-date summary. Retain only the source-supported event date unless a separately cited life chronology is added.",
       "evidence": [
         {
           "unit": "s0007",
@@ -2066,9 +2066,9 @@
     },
     {
       "id": "hints-p063",
-      "verdict": "research-blocked",
+      "verdict": "incorrect",
       "event": "Active-date summary for Empress Xian.",
-      "reason": "The active-date summary correctly says research required and does not infer Empress Xian’s living activity from Yang Da’s mausoleum-arrangements participation. A personal chronology witness is still required.",
+      "reason": "The local mausoleum sentence identifies Yang Da as participant; it supplies no personal AD 581–602 activity range for Empress Xian. Remove the unsupported active-date hint rather than inferring her chronology from the memorial’s design.",
       "evidence": [
         {
           "unit": "s0175",
@@ -2146,8 +2146,8 @@
     },
     {
       "id": "p007",
-      "verdict": "supported",
-      "reason": "The repaired person record confines the chronology to the single AD 534 Jianyi event stated in the source and no longer infers continuous activity from contextual dynasty history.",
+      "verdict": "incorrect",
+      "reason": "The current Jianyi claim and active hint convert the clause’s AD 534 episode into longer continuous activity. The source supports an AD 534 event, not the asserted interval or AD 568 endpoint.",
       "evidence": [
         {
           "unit": "s0007",
@@ -2157,8 +2157,8 @@
     },
     {
       "id": "p008",
-      "verdict": "supported",
-      "reason": "The repaired person record confines the chronology to the single AD 534 Jianyi event stated in the source and no longer infers continuous activity from contextual dynasty history.",
+      "verdict": "incorrect",
+      "reason": "The current Jianyi claim and active hint convert the clause’s AD 534 episode into AD 534–556 continuous activity. The local Chinese supports the point event, not the asserted interval.",
       "evidence": [
         {
           "unit": "s0007",
@@ -2762,8 +2762,8 @@
     },
     {
       "id": "p063",
-      "verdict": "research-blocked",
-      "reason": "Empress Xian is named only in an undated mausoleum-arrangement reference for which Yang Da is the participant. The current unresolved claim and research-required hint correctly decline to convert it into personal activity, but the missing personal chronology blocks approval.",
+      "verdict": "incorrect",
+      "reason": "Empress Xian’s retained claim and hint attach Yang Da’s mausoleum-design participation to her as living activity. The source does not supply an AD 581–602 personal chronology for her.",
       "evidence": [
         {
           "unit": "s0175",
@@ -2773,6 +2773,27 @@
     }
   ],
   "findings": [
+    {
+      "items": [
+        "claim-64",
+        "hints-p007",
+        "p007",
+        "claim-67",
+        "hints-p008",
+        "p008"
+      ],
+      "problem": "The same 建義關中 clause is still rendered as continuous AD 534–556 activity for Emperor Wuyuan and Zhou Taizu, while the repaired Yang Yuansun companion claim correctly treats it as a single AD 534 episode. The AD 568 active-hint endpoint for Emperor Wuyuan has no local support.",
+      "action": "Replace both Jianyi attestation intervals with the source-supported AD 534 point event and remove or independently source the longer active-date hints; then rebuild the packet and obtain a new independent review."
+    },
+    {
+      "items": [
+        "claim-270",
+        "hints-p063",
+        "p063"
+      ],
+      "problem": "Empress Xian’s temporal claim and active hint derive a personal AD 581–604/602 life chronology from a sentence that makes Yang Da, not the empress, the participant in mausoleum arrangements.",
+      "action": "Remove the misleading Empress Xian life claim and active-date hint, or record a separately sourced reception context without asserting her activity; then obtain a fresh independent review."
+    },
     {
       "items": [
         "claim-50",
@@ -2790,15 +2811,6 @@
       ],
       "problem": "Lady Guo is only named in an undated maternal-childhood account. The unresolved claim is correct but remains a research hold.",
       "action": "Preserve the unresolved claim and research-required hint unless independent source evidence establishes her chronology; do not assign the Jianyi event to her."
-    },
-    {
-      "items": [
-        "claim-270",
-        "hints-p063",
-        "p063"
-      ],
-      "problem": "Empress Xian is named only in an undated mausoleum-arrangement reference. The sentence identifies Yang Da as the participant and gives no personal life or death chronology for her.",
-      "action": "Keep the current unresolved claim and research-required hint; do not infer Empress Xian’s activity from Yang Da’s memorial work. Add a personal chronology only with an independent witness."
     }
   ],
   "references": [
