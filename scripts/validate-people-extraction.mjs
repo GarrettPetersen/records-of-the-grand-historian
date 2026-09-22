@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { westernBoundsErrors } from './lib/people-date-values.mjs';
-import { personReceptionErrors } from './lib/people-reception.mjs';
+import { personClaimReception, personReceptionErrors } from './lib/people-reception.mjs';
 import {
   buildPeopleChunkWorkerPacket,
   buildPeopleExtractionPacket,
@@ -634,6 +634,8 @@ function validatePeopleExtractionImpl(extraction, packet, options = {}, ownsInpu
   }
   for (const person of normalized.people) {
     const personClaims = claimsByPerson.get(person.localId) ?? [];
+    const receptionOnlyEvidence = personClaims.some(claim =>
+      claim.predicate === 'event-participation' && personClaimReception(claim));
     if (!personClaims.some((claim) => claim.predicate === 'name')) {
       errors.push(`${person.localId} has no name claim`);
     }
@@ -641,20 +643,20 @@ function validatePeopleExtractionImpl(extraction, packet, options = {}, ownsInpu
       errors.push(`${person.localId} has no role claim; use named-individual when the chapter establishes no narrower role`);
     }
     if (normalized.run.promptVersion >= 5) {
-      if (person.identityHints.activeDateHints.length === 0) {
+      if (person.identityHints.activeDateHints.length === 0 && !receptionOnlyEvidence) {
         errors.push(`${person.localId} has no active-date hint required by prompt v5`);
       }
-      if (!personClaims.some((claim) => claim.predicate === 'attestation')) {
+      if (!personClaims.some((claim) => claim.predicate === 'attestation') && !receptionOnlyEvidence) {
         errors.push(`${person.localId} has no evidence-backed attestation required by prompt v5`);
       }
     }
     if (normalized.run.promptVersion >= 7 && !['legendary', 'literary'].includes(person.historicity)) {
       const researchHold = personClaims.some(claim => claim.predicate === 'attestation' && claim.value?.unresolved === true && typeof claim.value?.unresolvedReason === 'string' && claim.value.unresolvedReason.trim().length >= 20);
-      if (!researchHold && !person.identityHints.activeDateHints.some((hint) => /\b(?:AD|BC)\s+\d{1,4}\b/u.test(hint))) {
+      if (!researchHold && !receptionOnlyEvidence && !person.identityHints.activeDateHints.some((hint) => /\b(?:AD|BC)\s+\d{1,4}\b/u.test(hint))) {
         errors.push(`${person.localId} has no Western active-date hint required for a non-legendary prompt-v7 person`);
       }
       const attestations = personClaims.filter((claim) => claim.predicate === 'attestation');
-      if (!researchHold && !attestations.some((claim) => claim.value?.westernYear || claim.value?.westernInterval || claim.value?.westernBounds)) {
+      if (!researchHold && !receptionOnlyEvidence && !attestations.some((claim) => claim.value?.westernYear || claim.value?.westernInterval || claim.value?.westernBounds)) {
         errors.push(`${person.localId} has no Western-year attestation required for a non-legendary prompt-v7 person`);
       }
       const temporalValues = personClaims.flatMap((claim) => [

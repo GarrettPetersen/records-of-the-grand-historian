@@ -131,7 +131,12 @@ export function applyDateRepairProposal(stored, proposal, packet) {
       const key = `hints-${change.personId}`;
       if (seen.has(key)) throw new Error('Duplicate date repair target'); seen.add(key);
       const person = candidate.people.find(p => p[0] === change.personId);
-      if (!person || !Array.isArray(change.after) || !change.after.length || change.after.some(s=>typeof s !== 'string' || !s.trim()) || !same(person[4]?.a ?? [], change.before)) throw new Error('Invalid or stale active-hint repair');
+      // A person mentioned solely in a dated retrospective or posthumous event
+      // must not retain invented life-date hints just to satisfy the ordinary
+      // extraction invariant. The separately classified reception record is
+      // still required, so an empty hint list cannot hide an ordinary person.
+      const receptionOnly = change.after?.length === 0 && candidate.claims.some(claim => claim[0] === change.personId && isReceptionEvent(claim));
+      if (!person || !Array.isArray(change.after) || (!change.after.length && !receptionOnly) || change.after.some(s=>typeof s !== 'string' || !s.trim()) || !same(person[4]?.a ?? [], change.before)) throw new Error('Invalid or stale active-hint repair');
       person[4] = { ...person[4], a: change.after };
     } else if (change.kind === 'replace' || change.kind === 'remove' || change.kind === 'date-context') {
       if (!/^claim-[1-9]\d*$/.test(change.id) || seen.has(change.id)) throw new Error('Repair must target a unique temporal claim');

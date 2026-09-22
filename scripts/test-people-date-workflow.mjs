@@ -127,6 +127,19 @@ test('scoped reception additions survive final-delta reconstruction and remain a
   const packet=buildDateAuditPacket('fixture','001',{...f.options,extraction:candidate});
   assert.ok(packet.items.some(i=>i.value?.kind==='posthumous-reference'));
 });
+test('a reception-only person may clear fabricated active-date hints',t=>{
+  const f=fixture(t),before=f.extraction.claims[0];
+  const proposal={sourceHash:f.packet.sourceHash,extractionHash:f.packet.extractionHash,changes:[
+    {kind:'remove',id:'claim-1',before,reason:'The cited fixture is a later reception event, not evidence of Jia living in year two.'},
+    {kind:'add-reception-event',after:['p001','event-participation',{kind:'retrospective-reference',role:'recalled-example',action:'cited as a later precedent',receptionType:'retrospective'},'explicit',['s0001']],reason:'Preserve the later citation as a retrospective reference rather than a life attestation.'},
+    {kind:'hints',personId:'p001',before:['AD 2'],after:[],reason:'Remove the fabricated active-date hint because this chapter supplies only later reception evidence.'},
+  ]};
+  const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
+  assert.deepEqual(candidate.people[0][4].a,[]);
+  assert.ok(candidate.claims.some(c=>c[1]==='event-participation'&&c[2].kind==='retrospective-reference'));
+  const noReception=structuredClone(proposal);noReception.changes.splice(1,1);
+  assert.throws(()=>applyDateRepairProposal(f.extraction,noReception,f.packet),/active-hint/);
+});
 test('reception additions reject non-reception events, life claims, conflicting labels and bad evidence',t=>{
   const f=fixture(t),proposal=receptionRepair(f);
   for(const mutate of [
