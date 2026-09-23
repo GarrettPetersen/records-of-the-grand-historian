@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "chenshu",
+  "chapter": "015",
+  "candidateFile": "staged-candidate-4b0f6828257f6326c244.json",
+  "candidateHash": "sha256:4b0f6828257f6326c24401616ee3cabb527cc4d8d88cce80b8f76c7322e5dcb7",
+  "reviewer": {
+    "name": "Codex independent Chenshu 015 date-repair reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T04:00:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted. The one-change proposal replays byte-for-byte and replaces Chen Huiji's unsupported point death in AD 589 with an explicit on-or-after AD 589 bound. It retains the death fact and leaves p003's independently supported AD 557–589 activity hint unchanged.",
+  "validation": {
+    "proposalReplay": "PASS: applying the pinned replacement to the canonical extraction produces sha256:4b0f6828257f6326c24401616ee3cabb527cc4d8d88cce80b8f76c7322e5dcb7, byte-equivalent to the staged candidate.",
+    "scope": "PASS: only claim-164 differs; p003's active hint remains AD 557-589 and all other people, claims, mentions, and provenance remain unchanged.",
+    "oneSidedChronology": "PASS: claim-164 changes an unsupported AD 589 point death to westernBounds.onOrAfter AD 589, without inventing an upper endpoint.",
+    "activeHint": "PASS: p003's AD 557-589 hint remains supported by the source's 557, 560, 567, 578, 584, 587, and 589 career attestations; it is not a death-date assertion.",
+    "chronologyGeometry": "PASS: the candidate passes compact extraction validation and has no date-audit geometry diagnostics.",
+    "canonicalMutation": "NONE: this review changes neither the canonical extraction nor its audit status."
+  },
+  "sourceChecks": [
+    {
+      "claim": "claim-164",
+      "person": "p003",
+      "units": [
+        "s0066",
+        "s0067"
+      ],
+      "quote": "入隋，依例授儀同三司。頃之卒。",
+      "translation": "After entering Sui service he was granted, by precedent, the rank of general-in-chief with the ceremonial equipage of a three-division commandery. Before long he died.",
+      "result": "The sequence makes death subsequent to the 589 Sui entry but does not name its year. An on-or-after AD 589 bound is supported; a point death in AD 589 is not."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only to the canonical extraction matching the candidate's pinned source and extraction hashes.",
+    "Apply precisely the reviewed claim-164 replacement; leave p003's AD 557-589 active hint and all unrelated source-backed career claims intact.",
+    "Do not alter canonical audit status during curation.",
+    "Run a fresh independent canonical audit after application; the unresolved one-sided death bound requires research-blocked rather than audited status."
+  ]
+}
