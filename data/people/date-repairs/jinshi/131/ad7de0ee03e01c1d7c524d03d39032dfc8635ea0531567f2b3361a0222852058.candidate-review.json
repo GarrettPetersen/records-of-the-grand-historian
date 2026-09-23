@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jinshi",
+  "chapter": "131",
+  "candidateCommit": "0b18818422b4d977ab6c37cba0016101d9c77b24",
+  "auditCommit": "28376ca71e01bf1e6d963f1fedd1fcf82c4f5bde",
+  "candidateFile": "staged-candidate-aa5dc4bc084ed38a4f65.json",
+  "sealedCandidateHash": "sha256:ad7de0ee03e01c1d7c524d03d39032dfc8635ea0531567f2b3361a0222852058",
+  "candidateExtractionHash": "sha256:aa5dc4bc084ed38a4f6557bdd1747fd58e1141b88eea04eb311d35c0ff606bfa",
+  "reviewer": {
+    "name": "Codex independent Jinshi 131 sealed date-repair reviewer",
+    "agentId": "review_jinshi131_candidate",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T23:48:01.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Accepted after independent review of the exact sealed candidate and the pinned Jinshi 131 audit. The proposal has exactly 45 non-no-op operations: the 43 broad-context hints named by the first audit finding, the paired p055 hint required by the second finding, and claim-112. It preserves each source phrase and all claim identities and evidence; it replaces only unsupported life-wide active ranges with research holds, and changes Wang Xuan's 正大初 attestation from false AD 1224 point precision to an unresolved early-Zhengda source context. This receipt does not mutate or approve the canonical extraction.",
+  "validation": {
+    "canonicalSourceHash": "sha256:e28aba3593653be5428871af15562d525fc6c59cdf8e1f995d6cc681cdf9f73c",
+    "canonicalExtractionHash": "sha256:ededf7f905a7363cf57de5d326675dc0d30c3ee896c05f2ed92b1d995bae4b9f",
+    "auditReportHash": "sha256:1b43cab79686b656929aac5d7d2d5236249a21ad159ab130fda5379f6583d836",
+    "sealedProposalIdentity": "PASS",
+    "candidateBytes": "PASS",
+    "proposalReplay": "PASS",
+    "coverage": "PASS: 44 hints (the audit's 43 broad-context targets plus p055) and claim-112 only; no omitted or extra operation.",
+    "sourceOwnership": "PASS: all 45 affected audit item checks resolve to their pinned current Chinese source units; p055/claim-112 remains linked to s0129's Wang Xuan narrative.",
+    "historicalEvidenceRetention": "PASS: every subject, predicate, evidence-unit list, source wording, and non-date claim content is retained; p055's separate AD 1230 attestation at s0168 remains intact.",
+    "compactValidation": "PASS: 177 units, 60 people, 358 mentions, 504 claims.",
+    "chronologyGeometry": "PASS",
+    "scopedCanonicalValidation": "PASS",
+    "canonicalMutation": "NONE"
+  },
+  "sourceChecks": [
+    {
+      "units": ["s0007", "s0008", "s0009", "s0011", "s0015", "s0021", "s0038", "s0040", "s0041", "s0042"],
+      "result": "These reign and event contexts identify occurrences within a narrative context, not continuous personal activity through every represented endpoint. The candidate retains the source-linked claims and replaces only the derived hints."
+    },
+    {
+      "units": ["s0048", "s0049", "s0055", "s0058", "s0062", "s0069", "s0096", "s0098"],
+      "result": "These retrospective, bibliographic, dynasty-wide, and bounded narrative contexts do not establish life-wide active ranges; no source claim or evidence link is removed."
+    },
+    {
+      "units": ["s0124", "s0126", "s0140", "s0155", "s0157", "s0001"],
+      "result": "Jingkang-after, Zhenyou, Aizong/Cai, Zhengda, and generic historical contexts remain source evidence but do not warrant the previous continuous personal ranges."
+    },
+    {
+      "units": ["s0129", "s0168"],
+      "result": "正大初 in Wang Xuan's s0129 narrative is an indeterminate early-era context, so claim-112 no longer asserts AD 1224 and p055 receives the paired research hold. The separate explicit 正大七年夏 / AD 1230 attestation at s0168 is unchanged."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only while the canonical source, extraction, audit, sealed proposal, and candidate hashes match this receipt.",
+    "Replay exactly the 45 reviewed operations: 44 hints including p055, and claim-112; do not add, omit, or broaden a change.",
+    "Retain every source-date claim as bounded source context and retain p055's separate AD 1230 attestation.",
+    "Run scoped validation and chronology geometry after curation, then require a fresh independent canonical date audit before publication."
+  ]
+}
