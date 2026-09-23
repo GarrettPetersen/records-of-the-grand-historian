@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jinshi",
+  "chapter": "131",
+  "candidateFile": "staged-candidate-d5d00dcd290c14d7f95f.json",
+  "sealedCandidateHash": "sha256:d5d00dcd290c14d7f95f13b62e3201f9c7e46ede6cf003949fe4bc6b44b7c2e0",
+  "candidateExtractionHash": "sha256:6537d0ef01789bcd73d293daa944499562b3f8df1d0cfb26f06a2b1933d68aba",
+  "reviewer": {
+    "name": "Codex independent Jinshi 131 residual chronology repair reviewer",
+    "agentId": "fresh_jinshi135_audit",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T01:30:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "audited",
+  "summary": "Accepted after independent sealed replay and source-ownership review. The four operations replace only two overbroad or falsely precise dates and their dependent hints. Both 正大初 containers become qualitative early-Zhengda chronology, while Wang Xuan retains the separate explicit 正大七年夏 AD 1230 evidence.",
+  "validation": {
+    "canonicalSourceHash": "sha256:e28aba3593653be5428871af15562d525fc6c59cdf8e1f995d6cc681cdf9f73c",
+    "canonicalExtractionHash": "sha256:aa5dc4bc084ed38a4f6557bdd1747fd58e1141b88eea04eb311d35c0ff606bfa",
+    "canonicalInputs": "PASS: source and extraction match handoff pins.",
+    "sealedProposalIdentity": "PASS: exact four-operation proposal hashes to d5d00dcd290c14d7f95f13b62e3201f9c7e46ede6cf003949fe4bc6b44b7c2e0.",
+    "candidateExtractionIdentity": "PASS: candidate hashes to 6537d0ef01789bcd73d293daa944499562b3f8df1d0cfb26f06a2b1933d68aba.",
+    "proposalReplay": "PASS: byte-for-byte sealed replay.",
+    "auditScope": "PASS: exactly claim-89, hints-p041, claim-112, and hints-p055; no identity, evidence, predicate, role, or non-date content changes.",
+    "sourceSoundness": "PASS: 正大初 is qualitative early-Zhengda, not AD 1224; the candidate does not erase any explicit date.",
+    "directDateRetention": "PASS: claim-113 remains the separate 正大七年夏 AD 1230 Wang Xuan attestation and p055 retains AD 1230.",
+    "compactValidation": "PASS: 177 units, 60 people, 358 mentions, 504 claims.",
+    "chronologyGeometry": "PASS: zero diagnostics.",
+    "scopedValidator": "PASS: people:validate on canonical inputs; replay compact validation passed.",
+    "canonicalMutation": "NONE"
+  },
+  "sourceChecks": [
+    {
+      "unit": "s0128",
+      "quote": "正大初，征至汴京，待詔東華門。",
+      "result": "正大初 is an early-era qualitative context."
+    },
+    {
+      "unit": "s0168",
+      "quote": "正大七年夏，與燕人王鉉邂逅於葉縣村落中。",
+      "result": "This separately supports Wang Xuan AD 1230 and remains unchanged."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only with matching pins.",
+    "Replay only the four sealed operations.",
+    "Retain claim-113 and p055 AD 1230 evidence.",
+    "Run scoped validation and a fresh audit after curation."
+  ],
+  "publication": "staging-only",
+  "masterMutation": "NONE"
+}
