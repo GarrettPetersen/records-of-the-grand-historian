@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "hanshu",
+  "chapter": "002",
+  "candidateFile": "staged-candidate-54bc9dd26885a0c0302e.json",
+  "candidateHash": "sha256:54bc9dd26885a0c0302e1d0a90b6c8497ae1a1d6697ea4d8b9419da5c4649c58",
+  "reviewer": {
+    "name": "Codex independent Hanshu 002 date-repair reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T08:35:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "audited",
+  "summary": "Accepted. s0029 says 春正月，追尊兄伯號曰武哀侯: Liu Bang posthumously honored his elder brother Liu Bo. The candidate removes both BC 202 life-date claims and Liu Bo's active-date hint, while retaining the exact BC 202 honor solely as an explicit posthumous-commemoration reception event.",
+  "validation": {
+    "proposalReplay": "PASS: all four pinned operations replay byte-for-byte to sha256:54bc9dd26885a0c0302e1d0a90b6c8497ae1a1d6697ea4d8b9419da5c4649c58.",
+    "coverage": "PASS: claim-50, claim-51, and hints-p016 are removed/repaired exactly once; one required p016 reception event is added.",
+    "sourceChecks": "PASS: 追尊 means posthumous honoring. 五年春正月 / BC 202 dates that honor, not Liu Bo's life activity. The reception event retains the source date, title 武哀侯, p016 honoree role, posthumous-commemoration kind, and s0029 evidence.",
+    "scope": "PASS: only Liu Bo's two false life claims, active-date hint, and required reception classification differ; the existing sibling relationship and all unrelated extraction facts remain intact.",
+    "compactValidation": "PASS: scoped people validator passed for hanshu/002.",
+    "chronologyGeometry": "PASS: compact extraction validation and date-audit geometry diagnostics pass.",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only against the matching pinned source and canonical extraction hashes.",
+    "Apply all four operations exactly.",
+    "Keep BC 202 only in the classified posthumous-commemoration dateContext; do not restore a Liu Bo life attestation or active-date hint.",
+    "Do not alter canonical audit status during curation; require a fresh independent canonical audit after application."
+  ]
+}
