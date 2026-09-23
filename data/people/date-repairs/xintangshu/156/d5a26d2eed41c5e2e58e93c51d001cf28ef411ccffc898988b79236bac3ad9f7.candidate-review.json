@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "xintangshu",
+  "chapter": "156",
+  "candidateFile": "staged-candidate-d5a26d2eed41c5e2e58e.json",
+  "candidateHash": "sha256:d5a26d2eed41c5e2e58e93c51d001cf28ef411ccffc898988b79236bac3ad9f7",
+  "reviewer": {
+    "name": "Independent Xintangshu 156 staged-candidate source reviewer",
+    "agentId": "date_audit_beiqishu007",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T08:43:26.681Z",
+  "disposition": "reject",
+  "summary": "Rejected. Candidate pins, exact replay, compact validation, and chronology geometry pass. Most replacements correctly remove imported contextual/reign-wide chronology. But the proposal wrongly converts Yang Chaocheng’s directly dated early-Jianzhong campaign and promotion (claim-38), and the same event-participation date (claim-48), into unresolved claims, then removes the corresponding person hint. “建中初” directly dates his own actions to a bounded period; it is not an undated contextual mention. A revised proposal must retain source-faithful chronology for this event and derive an appropriately qualified active hint rather than replacing it with a blanket research hold.",
+  "findings": [
+    {
+      "items": [
+        "claim-38",
+        "claim-48",
+        "hints-p001",
+        "p001"
+      ],
+      "problem": "The candidate states that s0005 provides no convertible absolute date, but the Chinese explicitly places Yang Chaocheng’s own campaign, captures, and promotion in early Jianzhong. Reclassifying it as unresolved loses valid chapter chronology.",
+      "action": "Restore a source-faithful bounded chronology for Yang Chaocheng’s early-Jianzhong actions and revise the p001 hint to reflect that evidenced period; retain holds only for genuinely undated contextual claims.",
+      "evidence": [
+        {
+          "unit": "s0005",
+          "quote": "建中初，從李懷光討劉文喜涇州，斬獲多，加驃騎大將軍。",
+          "sourceHash": "sha256:fb752f8f7e1342d44c7f6df179fa5e5dc0c1db15e8a7cb7d7797e3ed917c2cf2"
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS",
+    "proposalReplay": "PASS",
+    "candidateHash": "PASS",
+    "compactValidation": "PASS: 306 units, 126 people, 721 mentions, 747 claims.",
+    "chronologyGeometry": "PASS",
+    "sourceSoundness": "FAIL: claim-38 / claim-48 / hints-p001 discard direct early-Jianzhong evidence.",
+    "nonDateRetention": "PASS: proposal interface preserves non-temporal content.",
+    "canonicalMutation": "NONE"
+  },
+  "reviewedChanges": {
+    "total": 43,
+    "rejected": 3,
+    "sourceSound": 40
+  }
+}
