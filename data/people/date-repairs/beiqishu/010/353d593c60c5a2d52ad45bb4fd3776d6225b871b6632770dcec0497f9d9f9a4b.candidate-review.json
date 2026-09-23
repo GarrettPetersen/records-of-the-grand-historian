@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "beiqishu",
+  "chapter": "010",
+  "candidateFile": "staged-candidate-353d593c60c5a2d52ad4.json",
+  "sourceHash": "sha256:f625626408a721a8084691e2077a4b5c5111d44cede252bcbc501b0d4d07c44a",
+  "originalExtractionHash": "sha256:c49d3a70e68fe17c4d35558c9bb51941fe86cf0b430f2a689cd0116a656b3d0b",
+  "candidateExtractionHash": "sha256:353d593c60c5a2d52ad45bb4fd3776d6225b871b6632770dcec0497f9d9f9a4b",
+  "reviewer": {
+    "name": "Codex independent Beiqishu 010 staged-candidate reviewer",
+    "agentId": "date-repair-beiqishu010-review",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T01:30:50Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted after independently reconstructing and source-checking all 71 proposal changes: 36 improperly inherited or posthumous Western-date attestations and 35 derived active-date hints. The candidate preserves every underlying claim, person, relationship, office, honor, death, succession, and source unit, but makes the affected chronology source-specific unresolved holds. The only non-hold hints, Yu's and Gao Shi's, retain independently stated living events while excluding their later posthumous honors. This is not date approval: the intentional unresolved holds require a complete fresh canonical audit to record research-blocked.",
+  "candidateValidation": {
+    "proposalApplication": "PASS: applyDateRepairProposal reconstructed the exact declared candidate sha256:353d593c60c5a2d52ad45bb4fd3776d6225b871b6632770dcec0497f9d9f9a4b from the current canonical extraction and current date packet.",
+    "productionExtractionValidator": "PASS: node scripts/validate-people-extraction.mjs /tmp/beiqishu-010-staged-candidate.json reported 108 people, 594 mentions, 1,174 claims, and 655 candidates.",
+    "candidatePacket": "PASS: rebuilt candidate packet has 238 Chinese units, 398 date/hint/reception items, and 108 people.",
+    "temporalGeometry": "PASS: dateAuditDiagnostics(candidate packet) returned no findings.",
+    "canonicalMutation": "NONE: this review does not edit data/people/extractions/beiqishu/010.json or data/people/date-audits/beiqishu/010.json."
+  },
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-124", "claim-125", "claim-126", "claim-127", "claim-128", "claim-129", "claim-130", "claim-131", "claim-143", "claim-144", "claim-145", "claim-146", "claim-147", "hints-p006", "hints-p007", "hints-p008", "hints-p009", "hints-p010", "hints-p011", "hints-p012", "hints-p013", "hints-p021", "hints-p022", "hints-p023", "hints-p024", "hints-p025"],
+      "verdict": "supported-research-hold",
+      "sourceEvidence": [{
+        "book": "beiqishu", "chapter": "010", "unit": "s0003",
+        "quote": "神武皇帝十五男：武明婁皇后生文襄皇帝、文宣皇帝、孝昭皇帝、襄城景王淯、武成皇帝、博陵文簡王濟，王氏生永安簡平王浚，穆氏生平陽靖翼王淹，大尒朱氏生彭城景思王浟、華山王凝，韓氏生上党剛肅王渙，小尒朱氏生任城王湝，游氏生高陽康穆王湜，鄭氏生馮翊王潤，馮氏生漢陽敬懷王洽。",
+        "sourceHash": "sha256:3483d3bd5bb8f8d88ada2dcc044ac700a9271d93ea721101602b4ffeb787f658",
+        "reason": "This genealogy supplies identities, maternity and sibling structure only. It has no 天保 wording, reign-year, relative sequence, or event from which AD 550 could date these thirteen people."
+      }],
+      "reason": "Each listed claim keeps its s0003 sourceDate text and all non-temporal claim content, while replacing the borrowed AD 550 assertion with a substantive source-specific unresolved hold. The thirteen matching hints correctly advertise that research is required rather than converting a genealogy into continuous activity."
+    },
+    {
+      "proposalItems": ["claim-139", "claim-140", "claim-141", "claim-148", "claim-163", "claim-271", "claim-315", "claim-732", "claim-733", "claim-739", "hints-p018", "hints-p019", "hints-p020", "hints-p026", "hints-p041", "hints-p053", "hints-p054", "hints-p098", "hints-p099", "hints-p105"],
+      "verdict": "supported-research-hold",
+      "sourceEvidence": [
+        {"book":"beiqishu","chapter":"010","unit":"s0015","quote":"元象中，封永安郡公。","sourceHash":"sha256:a1a8634257b7e9ce709bdb814b680bc1dc9b6e6bd152789b39a050d19ead55d2","reason":"This dates Jun's enfeoffment, not his mother Lady Wang."},
+        {"book":"beiqishu","chapter":"010","unit":"s0053","quote":"元象中，封平陽郡公，累遷尚書左僕射。","sourceHash":"sha256:e2ded056c6ed0549e0dba74d5c3e6d42efb5c144be0608ac2a343eedff37ff3f","reason":"This dates Yan's own enfeoffment and office, not Lady Mu."},
+        {"book":"beiqishu","chapter":"010","unit":"s0062","quote":"元象二年，拜通直散騎常侍，封長樂郡公。","sourceHash":"sha256:0191298b1c81976625e9d32d184ec608ece450891053902119196bebe9b87e08","reason":"This dates You's appointment, not Grand Lady Erzhu."},
+        {"book":"beiqishu","chapter":"010","unit":"s0007","quote":"年八歲時，問于博士盧景裕曰：『祭神如神在。』","sourceHash":"sha256:0e080666f4fdc6105ec9929a164e2ddf8364836279bb03b32b5f441255ec7d8d","reason":"The eight-year-old is Jun; it supplies neither an absolute year nor activity for Lu Jingyu."},
+        {"book":"beiqishu","chapter":"010","unit":"s0102","quote":"濟南嗣位，除開府儀同三司、尚書令、領大宗正卿。","sourceHash":"sha256:08b0188615737aad582db52fb9500f7e825c9ffbd6b040157a58ff682f8cea23","reason":"The accession and offices belong to Gao Yin, not the referenced person whose claim was polluted."},
+        {"book":"beiqishu","chapter":"010","unit":"s0117","quote":"天姿雄傑，俶儻不群，雖在童幼，恒以將略自許。","sourceHash":"sha256:e553b98899ec34aa21e98d857016bd3ef2efa0e2f037b5da83b3da0569fcde3e","reason":"This childhood description is Huan's; it supplies no Western date for Lady Han."},
+        {"book":"beiqishu","chapter":"010","unit":"s0118","quote":"神武壯而愛之，曰：『此兒似我。』","sourceHash":"sha256:f83cbf2ba1b663fcd484de58bddaefb67b1714fe89020b3258bf335d5f23b4fe","reason":"Gao Huan's affection dates neither Lady Han nor Gao Huan beyond the undated relation."},
+        {"book":"beiqishu","chapter":"010","unit":"s0220","quote":"馮翊王潤，字子澤，神武第十四子也。","sourceHash":"sha256:c327ef1939e2dcfed6b51f95f133c5a4dda56968434d0f2f9f8e748a3f23c957","reason":"The genealogy identifies Run and Gao Huan, without dating either claim at the inherited Eastern Wei span."},
+        {"book":"beiqishu","chapter":"010","unit":"s0224","quote":"潤美姿儀，年十四五，母鄭妃與之同寢，有穢雜之聲。","sourceHash":"sha256:e0360696fe3cb676118f53cc01b72733bb4af5d1f2888b63cc6bb817f8dd979f","reason":"Run's stated age lacks an absolute year and cannot give Lady Zheng an AD 548–552 activity date."},
+        {"book":"beiqishu","chapter":"010","unit":"s0233","quote":"子茂德嗣。","sourceHash":"sha256:7abc305dcfc2a6b0e49958c74298e91331885565042bfa857752056598d545a1","reason":"The succession follows Run's death but is itself undated; it cannot be stretched across AD 561–565 for the heir."}
+      ],
+      "reason": "Every listed Western range was inherited from a child, principal, adjacent accession, child-age statement, or undated succession rather than a personal event. The candidate preserves the source-specific claims and replaces only those false date ownership inferences and their ten derived hints with explicit holds."
+    },
+    {
+      "proposalItems": ["claim-157", "claim-481", "claim-505", "claim-736", "hints-p035", "hints-p081", "hints-p096", "hints-p102"],
+      "verdict": "supported-research-hold",
+      "sourceEvidence": [
+        {"book":"beiqishu","chapter":"010","unit":"s0064","quote":"浟正色答曰：『昔甘羅幼為秦相，未聞能書。』","sourceHash":"sha256:a65b9d3d6a1086f2a4d344b495a116a816753e78499ff138210d95ce41f8857d","reason":"Gan Luo is an historical comparison, not a chapter event dated BC 250."},
+        {"book":"beiqishu","chapter":"010","unit":"s0183","quote":"湝曰：『下官神武帝子，兄弟十五人，幸而獨存。』","sourceHash":"sha256:85eab9be9321f85b8e0c58c0216d5a093ff7320e1880f4039627ade0d74d1ca1","reason":"Gao Huan is a recalled father in Jie’s speech; the text does not date him at AD 532–547."},
+        {"book":"beiqishu","chapter":"010","unit":"s0175","quote":"及安德王稱尊號於晉陽，使劉子昂修啟於湝。","sourceHash":"sha256:cf1b75a100a4f09031029d8c78dc569d0d5e408e408a56e54836ccfb45a8f19c","reason":"The dated political episode does not establish the alluded subject as living in AD 577."},
+        {"book":"beiqishu","chapter":"010","unit":"s0227","quote":"二人表言，王出送臺使，登魏文舊壇，南望歎息，不測其意。","sourceHash":"sha256:83c1574e9eef999e05fd7e702aabf01a1baf9b72f42be05cdc2cedc6dbc0dca2","reason":"The Wei Wen old altar is an allusive place reference, not personal activity by Cao Pi in AD 220–226."}
+      ],
+      "reason": "The four source passages identify prior people or precedents only. Removing their falsely treated historical-era dates and retaining explicit research holds correctly preserves the allusions without pretending this chapter attests their activity."
+    },
+    {
+      "proposalItems": ["claim-353", "claim-419", "claim-482", "claim-483", "claim-503", "claim-504", "claim-742", "claim-743", "claim-744", "hints-p061", "hints-p094", "hints-p095", "hints-p106", "hints-p107", "hints-p108"],
+      "verdict": "supported-research-hold",
+      "sourceEvidence": [
+        {"book":"beiqishu","chapter":"010","unit":"s0140","quote":"至乾明元年，收二王餘骨葬之，贈司空，諡曰剛肅。","sourceHash":"sha256:47c26f7e4d4ba0f17a6373b978da0c70bdcda71ca6e5b89b234f251d4bfad207","reason":"Gathering remains, burial, a grant and a posthumous name in AD 560 follow death; they are not Jun’s living attestation."},
+        {"book":"beiqishu","chapter":"010","unit":"s0186","quote":"至長安，尋與後主同死。","sourceHash":"sha256:331cc227750081e8d5bb005d26f3286f1b2036742e7d4b35c48e9aef764d3b5d","reason":"The sentence supplies a death sequence but no Western year for the deceased companion."},
+        {"book":"beiqishu","chapter":"010","unit":"s0189","quote":"隋開皇三年，表請文帝葬湝及五子於長安北原。","sourceHash":"sha256:e1b6d4ee942db43325dded678a6f4e2b8b3770f85fb6a506fcffe17cb540dd31","reason":"The AD 583 petition is a later burial request for Jie and his sons, not life evidence."},
+        {"book":"beiqishu","chapter":"010","unit":"s0218","quote":"後事發，王氏賜死，詔杖凝一百。","sourceHash":"sha256:3635397d1f6369ae8e3677fcab94a8304808f8b5fb851b26998608e5909420c3","reason":"The death/punishment follows the undated affair and has no Tianbao-wide date for Lady Wang or her father."},
+        {"book":"beiqishu","chapter":"010","unit":"s0237","quote":"乾明元年，贈太保、司空。","sourceHash":"sha256:bcd441419692f42c0332e5e162974d42c69b79321ac1040f88dc4f98a33d365c","reason":"AD 560 grants to Qia follow his stated AD 554 death and cannot date Qia, the Prince of Rencheng, or Jiande as living."},
+        {"book":"beiqishu","chapter":"010","unit":"s0238","quote":"無子，以任城王第二子建德為後。","sourceHash":"sha256:3b1967a06c36a37be4547646f966b0a3848e96914837f88795770925a17ce3fc","reason":"The adoption is undated and cannot be assigned the neighboring death/honor interval."}
+      ],
+      "reason": "These nine claims were incorrectly given date ownership from burial, posthumous grant, later request, adjacent death, or an undated adoption. The candidate retains all sources and meaningful non-temporal claims while turning only the false chronology into explicit unresolved holds."
+    },
+    {
+      "proposalItems": ["hints-p065", "hints-p085"],
+      "verdict": "supported-living-hints-retained",
+      "sourceEvidence": [
+        {"book":"beiqishu","chapter":"010","unit":"s0148","quote":"元象中，封章武郡公。","sourceHash":"sha256:d1afb4ed365c1835a146a9dcc5faaa51b0ef0997588f174a2bc737950e286149","reason":"Yu’s own enfeoffment supports AD 538–539."},
+        {"book":"beiqishu","chapter":"010","unit":"s0149","quote":"天保初，封襄城郡王。","sourceHash":"sha256:33786e4f47cb8d8a2ddc8df562fa3e7421c928b74b6db5e9c276bc2edd26429f","reason":"Yu’s own enfeoffment supports AD 550."},
+        {"book":"beiqishu","chapter":"010","unit":"s0150","quote":"二年春，薨。","sourceHash":"sha256:60b8fd8870d241267c459c314a4b3ba779f43e78f3343be59c5c5d081a40216f","reason":"Yu’s own death supports AD 551; the later AD 560 grant is therefore excluded."},
+        {"book":"beiqishu","chapter":"010","unit":"s0191","quote":"天保元年封。","sourceHash":"sha256:d8f3271dbb58f4c38e5f905beb19af7e3dd62fea17a7e2d2ac730df40b4a3fdc","reason":"Gao Shi’s own enfeoffment supports AD 550."},
+        {"book":"beiqishu","chapter":"010","unit":"s0192","quote":"十年，稍遷尚書令。","sourceHash":"sha256:880e21956b140156a783213e0e0b49d7992ab9e0ee7a06397d67d80a8027322f","reason":"Gao Shi’s own promotion supports AD 559; his subsequent death is also stated in the same sequence."},
+        {"book":"beiqishu","chapter":"010","unit":"s0201","quote":"乾明初，贈假黃鉞、太師、司徒、錄尚書事。","sourceHash":"sha256:84cf739a93d36bcc937c0dfa352e9fc1b472ea8b7f6a8263f10520111e6671b9","reason":"This AD 560 grant is posthumous and is correctly removed from Gao Shi’s active hint."}
+      ],
+      "reason": "Unlike the other thirty-three hint changes, these two people retain source-supported living chronology. The candidate removes only the later posthumous AD 560 dates and preserves Yu’s AD 538–539/550/551 and Gao Shi’s AD 550/559 events."
+    }
+  ],
+  "remainingHold": {
+    "items": ["claim-124", "claim-125", "claim-126", "claim-127", "claim-128", "claim-129", "claim-130", "claim-131", "claim-139", "claim-140", "claim-141", "claim-143", "claim-144", "claim-145", "claim-146", "claim-147", "claim-148", "claim-157", "claim-163", "claim-271", "claim-315", "claim-353", "claim-419", "claim-481", "claim-482", "claim-483", "claim-503", "claim-504", "claim-505", "claim-732", "claim-733", "claim-736", "claim-739", "claim-742", "claim-743", "claim-744", "all 33 research-required replacement hints"],
+    "reason": "The source-specific unresolved chronology is intentional and remains visible. The two exceptional hints p065 and p085 are supported living evidence, not holds. A fresh independent audit after host curation must record research-blocked unless new evidence resolves every listed hold."
+  },
+  "hostRequirements": [
+    "Apply only this exact reviewed staged proposal after rechecking its source and canonical-extraction hashes.",
+    "Run the scoped production extraction validator after application; do not modify source chapter data or unrelated worktree changes.",
+    "Do not change data/people/date-audits/beiqishu/010.json in the curation commit.",
+    "Commission a fresh complete independent canonical audit. It must preserve these holds and record research-blocked rather than audited unless new source-backed personal chronology resolves them."
+  ]
+}
