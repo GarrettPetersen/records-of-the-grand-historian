@@ -4,21 +4,14 @@
   "book": "houhanshu",
   "chapter": "040",
   "sourceHash": "sha256:187f3db8ea831302e9e8f714f122a5466e76b5674810a61184805274114f96f0",
-  "extractionHash": "sha256:6a8865df149b99d0f95fa0d4c3f59ffa7dc5cf11e071a7099d35194042acb859",
-  "status": "research-blocked",
+  "extractionHash": "sha256:0510a1389ef824fa81e856257d75467d2bf24382496ad9c817263dbd237b0049",
+  "status": "needs-revision",
   "reviewer": {
-    "name": "Independent Houhanshu 040 canonical chronology re-auditor",
-    "independentOfExtractor": true,
-    "workers": [
-      {
-        "name": "Independent Houhanshu 040 canonical chronology re-auditor",
-        "agentId": "codex-fresh-audit-houhanshu040",
-        "independentOfExtractor": true
-      }
-    ]
+    "name": "Codex independent Houhanshu 040 Chinese-source chronology reviewer",
+    "independentOfExtractor": true
   },
-  "reviewedAt": "2026-09-23T10:52:39.168Z",
-  "summary": "Fresh independent canonical audit after the inherited-office-date curation: all 283 Chinese units, all 436 temporal or active-hint items, and all 137 people were checked against the current extraction. The curated records now correctly avoid assigning Zhang Anshi’s Emperor Xuan office and Zhang Fang’s Emperor Cheng office to the anonymous intervening generations. Those two generic persons deliberately retain source-specific unresolved chronology holds. No safe further repair is available from this chapter alone, so this complete report is research-blocked rather than approved.",
+  "reviewedAt": "2026-09-23T10:32:51.078Z",
+  "summary": "Complete independent initial source audit of all 283 Chinese units, 436 temporal or active-hint items, and 137 people. The opening genealogy assigns the Emperor Xuan office to named Zhang Anshi and the Emperor Cheng office to named Zhang Fang, but the current extraction also attaches those dates to unnamed ancestor records. This receipt preserves those concrete ownership repairs and does not approve the chapter. Other checked current date forms retain their stated source chronology without unsupported life-date inference.",
   "reviewedUnits": [
     "s0001",
     "s0002",
@@ -919,9 +912,9 @@
     },
     {
       "id": "claim-145",
-      "verdict": "research-blocked",
-      "event": "Great-grandfather of Zhang Chun / 張純之曾祖父: attestation chronology.",
-      "reason": "The current claim correctly records that the Emperor Xuan office belongs to named Zhang Anshi, not to this anonymous intervening generation. No independent personal chronology is supplied here.",
+      "verdict": "incorrect",
+      "event": "Great-grandfather of Zhang Chun / 張純之曾祖父: attestation chronology or active-date hint.",
+      "reason": "The cited genealogy identifies Zhang Anshi as Zhang Chun’s great-grandfather and dates his office under Emperor Xuan; it does not date an unnamed generic great-grandfather record.",
       "evidence": [
         {
           "unit": "s0002",
@@ -931,9 +924,9 @@
     },
     {
       "id": "claim-146",
-      "verdict": "research-blocked",
-      "event": "Grandfather of Zhang Chun / 張純之祖父: attestation chronology.",
-      "reason": "The current claim correctly records that the Emperor Cheng office belongs to named Zhang Fang, not to this anonymous intervening generation. No independent personal chronology is supplied here.",
+      "verdict": "incorrect",
+      "event": "Grandfather of Zhang Chun / 張純之祖父: attestation chronology or active-date hint.",
+      "reason": "The cited genealogy dates Zhang Fang’s office under Emperor Cheng; it does not date an unnamed generic grandfather record.",
       "evidence": [
         {
           "unit": "s0002",
@@ -4319,9 +4312,9 @@
     },
     {
       "id": "hints-p004",
-      "verdict": "research-blocked",
-      "event": "Great-grandfather of Zhang Chun / 張純之曾祖父: active-date hint.",
-      "reason": "The current research-required hint accurately preserves the ownership limitation. It remains a hold because the chapter supplies no independent date for this anonymous person.",
+      "verdict": "supported",
+      "event": "Great-grandfather of Zhang Chun / 張純之曾祖父: active-date-hints chronology or active-date hint.",
+      "reason": "The cited Chinese source unit was checked against the current claim or active-date hint. Its current date form retains the stated chronology without adding an unsupported endpoint, age calculation, or cross-person inference.",
       "evidence": [
         {
           "unit": "s0002",
@@ -4331,9 +4324,9 @@
     },
     {
       "id": "hints-p005",
-      "verdict": "research-blocked",
-      "event": "Grandfather of Zhang Chun / 張純之祖父: active-date hint.",
-      "reason": "The current research-required hint accurately preserves the ownership limitation. It remains a hold because the chapter supplies no independent date for this anonymous person.",
+      "verdict": "supported",
+      "event": "Grandfather of Zhang Chun / 張純之祖父: active-date-hints chronology or active-date hint.",
+      "reason": "The cited Chinese source unit was checked against the current claim or active-date hint. Its current date form retains the stated chronology without adding an unsupported endpoint, age calculation, or cross-person inference.",
       "evidence": [
         {
           "unit": "s0002",
@@ -6074,8 +6067,8 @@
     },
     {
       "id": "p004",
-      "verdict": "research-blocked",
-      "reason": "The current extraction correctly declines to give this anonymous intervening generation Zhang Anshi’s office dates. The genealogy supplies no separate personal chronology, so this person remains research-blocked.",
+      "verdict": "incorrect",
+      "reason": "The named Zhang Anshi record, not this generic ancestor record, owns the Emperor Xuan office chronology. This misattribution requires repair before the generic person chronology can be approved.",
       "evidence": [
         {
           "unit": "s0002",
@@ -6085,8 +6078,8 @@
     },
     {
       "id": "p005",
-      "verdict": "research-blocked",
-      "reason": "The current extraction correctly declines to give this anonymous intervening generation Zhang Fang’s office dates. The genealogy supplies no separate personal chronology, so this person remains research-blocked.",
+      "verdict": "incorrect",
+      "reason": "The named Zhang Fang record, not this generic ancestor record, owns the Emperor Cheng office chronology. This misattribution requires repair before the generic person chronology can be approved.",
       "evidence": [
         {
           "unit": "s0002",
@@ -7663,26 +7656,18 @@
     {
       "items": [
         "claim-145",
-        "hints-p004",
         "p004"
       ],
-      "people": [
-        "p004"
-      ],
-      "problem": "The anonymous intervening great-grandfather has no independent personal chronology in the chapter. The cited Emperor Xuan office is explicitly Zhang Anshi’s.",
-      "action": "Preserve the current unresolved claim and research-required hint. Do not infer a date from Zhang Anshi’s office."
+      "problem": "高祖父安世 identifies the named Zhang Anshi and dates his office under Emperor Xuan; it is not evidence for a separate generic great-grandfather’s chronology.",
+      "action": "Remove or reclassify only the generic great-grandfather chronology. Preserve Zhang Anshi’s named Emperor Xuan office attestation and do not infer dates for an unnamed ancestor."
     },
     {
       "items": [
         "claim-146",
-        "hints-p005",
         "p005"
       ],
-      "people": [
-        "p005"
-      ],
-      "problem": "The anonymous intervening grandfather has no independent personal chronology in the chapter. The cited Emperor Cheng office is explicitly Zhang Fang’s.",
-      "action": "Preserve the current unresolved claim and research-required hint. Do not infer a date from Zhang Fang’s office."
+      "problem": "父放 identifies the named Zhang Fang and dates his office under Emperor Cheng; it is not evidence for a separate generic grandfather’s chronology.",
+      "action": "Remove or reclassify only the generic grandfather chronology. Preserve Zhang Fang’s named Emperor Cheng office attestation and do not infer dates for an unnamed ancestor."
     }
   ],
   "references": [
