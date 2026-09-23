@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "chenshu",
+  "chapter": "019",
+  "candidateFile": "staged-candidate-d644948922c178e88007.json",
+  "candidateHash": "sha256:d644948922c178e8800725e3ea5331c0546261e24cfc87d72e2fe62abd926af0",
+  "reviewer": {
+    "name": "Codex independent Chenshu 019 date-repair reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T05:15:00.000Z",
+  "disposition": "reject",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Rejected. All 33 claim replacements replay exactly and correctly retain legal, rhetorical, and historiographical precedents as source-specific holds, but the proposal contains no paired active-date-hint operations. All 33 audited hints remain unchanged and would still publish borrowed chronology.",
+  "validation": {
+    "proposalReplay": "PASS: the 33 pinned replacements replay byte-for-byte to sha256:d644948922c178e8800725e3ea5331c0546261e24cfc87d72e2fe62abd926af0.",
+    "claimCoverage": "PASS: every audit-listed claim is replaced exactly once (33 of 33), with no unlisted temporal-claim mutation.",
+    "sourceHolds": "PASS: replacements preserve each cited subject, predicate, source wording, provenance, and historical/legal fact while removing only borrowed Western chronology.",
+    "chronologyGeometry": "PASS: compact extraction validation and date-audit geometry diagnostics pass.",
+    "pairedHints": "FAIL: all 33 matching hint repairs are absent; every audit-listed active-date hint remains byte-for-byte unchanged.",
+    "canonicalMutation": "NONE: this review changes neither the canonical extraction nor its audit status."
+  },
+  "sourceChecks": [
+    {
+      "claims": ["claim-209", "claim-238", "claim-361"],
+      "evidence": "s0024: 嘗獨行經漢武通天臺…; s0111: 文舉之對不是過也。; s0259: 支父有讓王之介，嚴子有傲帝之規，千載美談…",
+      "result": "These passages invoke historical rulers, literary examples, and moral precedents. They preserve the allusions but do not provide local personal-date evidence for the named historical figures."
+    }
+  ],
+  "requiredCorrections": {
+    "addHintOperationsFor": [
+      "p018", "p019", "p020", "p025", "p026", "p027", "p047", "p048", "p051", "p052", "p053", "p054", "p056", "p057", "p062", "p063", "p064", "p065", "p071", "p072", "p073", "p074", "p075", "p076", "p077", "p078", "p081", "p082", "p083", "p084", "p087", "p091", "p112"
+    ],
+    "requirement": "Add one exact hints operation for each listed person, replacing borrowed active-date text with the paired source-specific research-required allusion/precedent hold. Preserve independently supported dates in any mixed hint record, do not alter non-temporal data, and restage a new pinned candidate for fresh independent review."
+  }
+}
