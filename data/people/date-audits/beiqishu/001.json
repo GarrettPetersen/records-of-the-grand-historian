@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": 1,
+  "book": "beiqishu",
+  "chapter": "001",
+  "sourceHash": "sha256:d03d333bc8a9aaebfd6c674cc927f2dff54817ee22085a1d10fc2ec9af1dfdc6",
+  "extractionHash": "sha256:ec182f025d73007b13eb5928ece4cd7eb36c850e60c24204fb117e467be84920",
+  "status": "research-blocked",
+  "reviewer": {
+    "name": "Independent Beiqishu 001 chronology auditor",
+    "independentOfExtractor": true,
+    "workers": [
+      {
+        "name": "Independent Beiqishu 001 chronology auditor",
+        "agentId": "codex-date-audit-beiqishu001",
+        "independentOfExtractor": true
+      }
+    ]
+  },
+  "reviewedAt": "2026-09-23T00:00:00.000Z",
+  "summary": "Independent source review identified unsupported life and active-date intervals in the opening genealogy before a complete chapter approval could be made. The Chinese says only that Lady Han died when Gao Huan was born; it does not date that birth, her death, or either person's activity to the extracted multi-year windows. The report deliberately blocks rather than inventing a replacement chronology; the remaining chapter requires source-attributed repair and a fresh complete audit.",
+  "reviewedUnits": [
+    "s0011"
+  ],
+  "itemChecks": [
+    {
+      "id": "claim-93",
+      "verdict": "research-blocked",
+      "event": "Gao Huan's birth, whose date is not stated in this unit.",
+      "reason": "The source records the birth only as the event coincident with his mother's death. It supplies no era, year, or endpoint supporting the inferred AD 500-525 chronology.",
+      "evidence": [
+        {
+          "unit": "s0011",
+          "quote": "神武生而皇妣韓氏殂"
+        }
+      ]
+    },
+    {
+      "id": "claim-94",
+      "verdict": "research-blocked",
+      "event": "Lady Han's death at Gao Huan's birth, not Gao Huan's later career.",
+      "reason": "The Chinese supports the kinship and sequence, but no Western interval. The extraction's AD 500-525 window imports unstated chronology from later narrative context into the mother's death.",
+      "evidence": [
+        {
+          "unit": "s0011",
+          "quote": "神武生而皇妣韓氏殂"
+        }
+      ]
+    },
+    {
+      "id": "hints-p001",
+      "verdict": "research-blocked",
+      "event": "Gao Huan's purported active-life chronology derived from an undated birth sequence.",
+      "reason": "The active-date hint AD 500-525 is not supported by the birth-and-bereavement sentence. It must be replaced with source-attributed life chronology or removed pending research.",
+      "evidence": [
+        {
+          "unit": "s0011",
+          "quote": "養於同產姊婿鎮獄隊尉景家"
+        }
+      ]
+    },
+    {
+      "id": "hints-p009",
+      "verdict": "research-blocked",
+      "event": "Lady Han's purported active-life chronology derived from an undated death sequence.",
+      "reason": "The active-date hint AD 470-500 has no stated endpoint in the source. Lady Han is only placed relationally at her son's birth, whose year this unit does not give.",
+      "evidence": [
+        {
+          "unit": "s0011",
+          "quote": "神武生而皇妣韓氏殂"
+        }
+      ]
+    }
+  ],
+  "personChecks": [
+    {
+      "id": "p001",
+      "verdict": "research-blocked",
+      "reason": "Gao Huan's birth is explicit but undated in the reviewed source. The current active-date range is unsupported and prevents approval until a source-qualified repair is independently audited.",
+      "evidence": [
+        {
+          "unit": "s0011",
+          "quote": "神武生而皇妣韓氏殂"
+        }
+      ]
+    },
+    {
+      "id": "p009",
+      "verdict": "research-blocked",
+      "reason": "Lady Han's death is explicit and tied to her son's birth, but the unit contains no date from which the present active-date range can be justified.",
+      "evidence": [
+        {
+          "unit": "s0011",
+          "quote": "神武生而皇妣韓氏殂"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "items": [
+        "claim-93",
+        "claim-94",
+        "hints-p001",
+        "hints-p009",
+        "p001",
+        "p009"
+      ],
+      "problem": "Opening-genealogy birth, death, and active-date claims use inferred Western intervals that the cited Chinese does not state.",
+      "action": "Repair only after identifying pinned source evidence for any replacement life date; otherwise retain the undated sequence and remove unsupported active-date hints. Rebuild the packet and obtain a fresh complete independent audit."
+    }
+  ],
+  "references": [
+    {
+      "book": "beiqishu",
+      "chapter": "001",
+      "unit": "s0011",
+      "quote": "及神武生而皇妣韓氏殂，養於同產姊婿鎮獄隊尉景家。",
+      "sourceHash": "sha256:429a2aec854a121abad197f63aae3bba02234a144c6baeca7e79a9c989be8dff",
+      "reason": "This unit explicitly records the birth-death sequence while omitting a calendar date, so it cannot justify the extracted Western intervals."
+    }
+  ]
+}
