@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jinshi",
+  "chapter": "130",
+  "candidateCommit": "9d26a85f0418a697771378c860844a352961f2b2",
+  "candidateFile": "staged-candidate-6bc6939732a6dc8998c8.json",
+  "sealedCandidateHash": "sha256:6bc6939732a6dc8998c8a5e8c9ec69fd7caf000975acf89c12b353d6f456e6c6",
+  "candidateExtractionHash": "sha256:282bf40c14f1d3d5eb2379b110e6000adbb799c61db68d52a6a50f4f794f726b",
+  "reviewer": {
+    "name": "Independent Jinshi 130 sealed date-repair reviewer",
+    "agentId": "fresh_jinshi112_audit",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T23:32:55.156Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked after fresh independent audit",
+  "summary": "Accepted exactly twelve sealed operations: Tianhui is corrected from AD 1115–1135 to AD 1123–1137 for two source-bound attestations; imported Fan Ye and Su-family chronology becomes explicit holds with matching hints. All other canonical claims and people are byte-retained.",
+  "reviewedChanges": [
+    {
+      "proposalItems": [
+        "claim-7",
+        "claim-8",
+        "hints-p005",
+        "hints-p006",
+        "claim-39",
+        "hints-p036",
+        "claim-89",
+        "claim-90",
+        "claim-91",
+        "hints-p086",
+        "hints-p087",
+        "hints-p088"
+      ],
+      "verdict": "supported-research-hold",
+      "sourceEvidence": [
+        "s0023: 天會中。",
+        "s0003: 范曄修漢史。",
+        "s0176–s0177: 北宋蘇氏 family reference without personal dates."
+      ],
+      "reason": "The two Tianhui corrections retain bounded source chronology; the four unsupported imported dates are converted to holds while every non-proposal claim and person record is retained exactly."
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: current packet source/extraction hashes and audit hash equal the sealed handoff pins",
+    "proposalReplay": "PASS",
+    "sealedReceiptBinding": "PASS",
+    "retention": "PASS: all 631 non-proposal claims and all 88 non-proposal person records are byte-retained",
+    "compactValidation": "PASS: 185 units, 94 people, 643 claims",
+    "chronologyGeometry": "PASS",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only against matching canonical hashes.",
+    "Require a fresh independent canonical audit after host curation."
+  ]
+}
