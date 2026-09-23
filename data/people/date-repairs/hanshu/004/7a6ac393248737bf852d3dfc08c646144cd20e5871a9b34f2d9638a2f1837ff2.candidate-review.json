@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "hanshu",
+  "chapter": "004",
+  "candidateFile": "staged-candidate-7a6ac393248737bf852d.json",
+  "candidateHash": "sha256:7a6ac393248737bf852d3dfc08c646144cd20e5871a9b34f2d9638a2f1837ff2",
+  "reviewer": {
+    "name": "Codex independent Hanshu 004 date-repair reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T08:50:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted. The nine audited claims are repaired without borrowing dates from maternity, heir designation, appraisal, kinship, or later honor references. p001 and p002 retain independently supported hints; p006 retains only BC 188 accession and BC 184 deposition, not the borrowed BC 187 heir-designation date. p007, p026, p027, p028, and p033 no longer receive living active-date hints from the dated later contexts.",
+  "validation": {
+    "proposalReplay": "PASS: all nineteen pinned operations replay byte-for-byte to sha256:7a6ac393248737bf852d3dfc08c646144cd20e5871a9b34f2d9638a2f1837ff2.",
+    "coverage": "PASS: all nine audit-listed claims (claim-169, claim-176, claim-179, claim-184, claim-187, claim-222, claim-223, claim-224, claim-229) are handled exactly once. The six necessary hint operations preserve p006 BC 188/184 and remove/hold p007, p026, p027, p028, and p033 as required.",
+    "sourceChecks": "PASS: s0090 maternity, s0089 appraisal-era wording, s0093 heir designation, and s0095 nephew enfeoffment remain source-specific unresolved contexts rather than personal activity dates. The later BC 181 references to the Supreme Emperor, Wu’ai, and Lady Xuan and the BC 180 King Daohui kinship reference are retained as explicitly classified retrospective or posthumous reception events, with their original date context and source evidence, not life attestations.",
+    "preservedChronology": "PASS: p001 and p002 retain their independently supported active-date hints; p006 retains BC 188 and BC 184 only. No unrelated valid date, relationship, title, or event fact is removed.",
+    "scope": "PASS: only the nine audited temporal claims, their necessary active-date hints, and four required reception classifications differ semantically.",
+    "compactValidation": "PASS: scoped people validator passed for hanshu/004.",
+    "chronologyGeometry": "PASS: compact extraction validation and date-audit geometry diagnostics pass.",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only against matching pinned source and canonical extraction hashes.",
+    "Apply all nineteen operations exactly, including all four classified reception additions.",
+    "Do not restore a reception date as a living active-date hint or life attestation.",
+    "Do not alter canonical audit status during curation; require a fresh independent canonical audit after application."
+  ]
+}
