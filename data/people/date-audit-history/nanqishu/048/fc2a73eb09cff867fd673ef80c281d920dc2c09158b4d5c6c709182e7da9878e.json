@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": 1,
+  "book": "nanqishu",
+  "chapter": "048",
+  "sourceHash": "sha256:34e99e315b2af118b85f519544fadc71d654607c960c10358bc832ad3acb908d",
+  "extractionHash": "sha256:54cecde092c889a1e26e0965f2f07f073fe493506d91cf91e3abb351cbbecfe8",
+  "status": "needs-revision",
+  "reviewer": {
+    "name": "Independent Nanqishu 048 chronology reviewer",
+    "independentOfExtractor": true
+  },
+  "reviewedAt": "2026-09-22T23:40:13.000Z",
+  "summary": "Focused independent review of the deterministic reversed interval found that Lord Yu's AD 100-50 attestation is both geometrically invalid and in the wrong era. The Nanqishu sentence is an undated allusion. The supplied Han biography identifies Lord Yu as Yu Dingguo's father and judicial predecessor, but does not license an invented two-ended lifespan or activity interval. A separate repair must replace the false AD interval with only supportable, explicitly sourced chronology and then obtain a fresh complete audit.",
+  "reviewedUnits": [
+    "s0113"
+  ],
+  "itemChecks": [
+    {
+      "id": "claim-179",
+      "verdict": "incorrect",
+      "event": "Lord Yu's recalled judicial action in the filial-wife allusion.",
+      "reason": "Nanqishu 048 s0113 is an undated literary allusion to Lord Yu's weeping and the filial wife's injustice; it supplies neither AD dates nor endpoints. Hanshu 082 identifies the same Lord Yu as Yu Dingguo's father and as a county prison clerk and commandery decision official. It also says that Dingguo first studied law under him, then, after his father's death, followed the same judicial path before the narrative reaches Emperor Zhao's death and the Changyi accession. This supports a pre-74 BC Han setting at most; it does not justify the current reversed AD 100-50 interval or simply reversing its numbers.",
+      "evidence": [
+        {
+          "unit": "s0113",
+          "quote": "使于公哭於邊城，孝婦冤於遐外。"
+        }
+      ],
+      "referenceIds": [
+        "L-hanshu-082-s0081",
+        "L-hanshu-082-s0208",
+        "L-hanshu-082-s0209"
+      ]
+    }
+  ],
+  "personChecks": [
+    {
+      "id": "p041",
+      "verdict": "incorrect",
+      "reason": "The active-date hint AD 100-50 repeats the defective claim and reverses chronological direction even on its own terms. The chapter calls Lord Yu only as a legal exemplum. The linked Han account securely places him before his son Yu Dingguo's documented pre-74 BC career sequence, but does not provide a birth, death, or two-ended activity window. Retaining the AD interval would mislead both chronology and identity presentation.",
+      "evidence": [
+        {
+          "unit": "s0113",
+          "quote": "使于公哭於邊城，孝婦冤於遐外。"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "items": [
+        "claim-179",
+        "p041"
+      ],
+      "problem": "Lord Yu has a reversed AD 100-50 interval and matching active hint, although the cited Nanqishu allusion is undated and the local Han evidence places him in an earlier Han family context.",
+      "action": "A separate date-repair reviewer must remove the unsupported AD interval and hint. If retaining a Western value, use only a one-sided BC bound independently justified from Hanshu 082's father-son and career sequence; do not manufacture a lower endpoint or infer a life range. Rebuild the packet and conduct a fresh complete audit after repair."
+    }
+  ],
+  "references": [
+    {
+      "book": "hanshu",
+      "chapter": "082",
+      "unit": "s0081",
+      "quote": "其父於公為縣獄吏、郡決曹，決獄平，羅文法者於公所決皆不恨。",
+      "sourceHash": "sha256:f446fd1147447a5f3ebdfcdf803b3460a781a51f9205422edb51c9898bdc2b57",
+      "reason": "Identifies Lord Yu as Yu Dingguo's father and records the judicial offices behind the allusion."
+    },
+    {
+      "book": "hanshu",
+      "chapter": "082",
+      "unit": "s0208",
+      "quote": "定國少學法於父，父死，後定國亦為獄中、郡決曹，補廷尉史，以選與御史中丞從事治反者獄，以材高舉侍御史，遷御史中丞。",
+      "sourceHash": "sha256:ab3d71dd476ffb0605d8d384ee7705b5ba03cb437850051317e6bb04cf12a3be",
+      "reason": "Establishes the sequence from Lord Yu's legal teaching and death to Dingguo's later judicial career; it does not supply a two-ended date range for Lord Yu."
+    },
+    {
+      "book": "hanshu",
+      "chapter": "082",
+      "unit": "s0209",
+      "quote": "會昭帝崩，昌邑王征即位，行淫亂，定國上書諫。",
+      "sourceHash": "sha256:fd6af5b477f42adf8a90dd30d035034161db2102da13bf4f4b6405b9cb421ca8",
+      "reason": "Anchors the subsequent Dingguo career narrative to Emperor Zhao's death and the Changyi accession, conventionally 74 BC; it is a directional family-context bound, not Lord Yu's personal event date."
+    }
+  ]
+}
