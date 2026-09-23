@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jinshi",
+  "chapter": "042",
+  "candidateCommit": "6b4dc1ad6f69681819df86c991665399c0ef22c8",
+  "candidateFile": "staged-candidate-941d3e4b1d2e61110911.json",
+  "sealedCandidateHash": "sha256:941d3e4b1d2e611109118ff0af6012c275327b48bec5b5eec49a7b4d19079f7f",
+  "candidateExtractionHash": "sha256:5f14e77f69c6927ce27348079b703ca90f0b9e9ce50739646010aa68fd35bdcd",
+  "reviewer": {
+    "name": "Codex independent Jinshi 042 sealed date-repair reviewer",
+    "agentId": "review_jinshi042",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T12:16:49.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Accepted after an independent Chinese-source and exact sealed-replay review. The candidate changes only the four audited contexts: the undated thereafter clause and earlier honorific thanksgiving for p001; the quoted Zhenzong precedent for p003; and the undated retrospective Shizong suburban-sacrifice statement for p007. It changes exactly claims 6, 15, 37, 39, 80, and 84 plus the paired p003 and p007 hints. The p007 hint retains its separately explicit AD 1166 event. The candidate preserves every subject, predicate, evidence unit, source wording, and non-date event context. This receipt neither mutates nor approves the canonical extraction.",
+  "validation": {
+    "canonicalSourceHash": "sha256:40fe9749f363fefcb289127527c3368ef65982e527c92e3b8bcd73edf182400e",
+    "canonicalExtractionHash": "sha256:211e199c2ef13ded5624b05e06a45e0f145282e10059605a14d140877c8613ee",
+    "sealedProposalIdentity": "PASS",
+    "candidateBytes": "PASS",
+    "proposalReplay": "PASS",
+    "coverage": "PASS: claims 6/15, 37/39, and 80/84 with p003/p007 paired hints only; p007 retains explicit AD 1166.",
+    "sourceOwnership": "PASS: s0014 quotes a Song Zhenzong ritual precedent in Shizong's speech; s0016 says only ‘thereafter’; s0111 is an undated retrospective Shizong-sacrifice statement.",
+    "nonDateRetention": "PASS: names, predicates, evidence units, source wording, provenance, and retained event descriptions are unchanged.",
+    "compactValidation": "PASS: 374 units, 10 people, 41 mentions, 137 claims.",
+    "chronologyGeometry": "PASS",
+    "scopedValidator": "PASS",
+    "canonicalMutation": "NONE"
+  },
+  "sourceChecks": [
+    {
+      "unit": "s0014",
+      "quote": "前朕受尊號謁謝，但令朕用宋真宗故事",
+      "result": "The emperor recalls his own earlier thanksgiving and invokes Zhenzong only as quoted precedent; the chapter supplies no endpoints for the earlier event and no personal date for Zhenzong."
+    },
+    {
+      "unit": "s0016",
+      "quote": "是後詔以軍士易之",
+      "result": "‘Thereafter’ preserves a policy-change sequence but supplies no continuous AD 1166–1167 activity interval."
+    },
+    {
+      "unit": "s0111",
+      "quote": "世宗親行郊祀，仗用七千人",
+      "result": "This is an undated retrospective statement; it cannot establish activity through Shizong’s whole reign. The separate AD 1166 hint remains untouched."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only if canonical source and extraction hashes still match this receipt.",
+    "Replay exactly the six reviewed claim changes and two paired hint changes.",
+    "Retain p007's separately explicit AD 1166 hint and every cited source context.",
+    "Run scoped validation and require a fresh independent canonical audit after curation."
+  ]
+}
