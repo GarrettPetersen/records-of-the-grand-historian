@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "hanshu",
+  "chapter": "036",
+  "candidateCommit": "e65b602fc8",
+  "candidateFile": "staged-candidate-b78e2fdc680c883d45e6.json",
+  "sourceHash": "sha256:951082f79c47555ba3c6f9ae127c35c3ca23358764eb2926df80ec97bab77470",
+  "originalExtractionHash": "sha256:8d0ed2746eb505c655d616c4578fffd3efcf53ef53bdf171a4960d0d6e302f02",
+  "candidateExtractionHash": "sha256:b78e2fdc680c883d45e6d38e98eb24aa4b6ccac3fa843ff18c62a3803a8c16dd",
+  "reviewer": {
+    "name": "Codex independent Hanshu 036 staged-candidate reviewer",
+    "agentId": "date_audit_beiqishu005",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T06:28:46.986Z",
+  "disposition": "accept-for-host-curation",
+  "summary": "Accepted. The exact three operations replay against matching current inputs and remove only the unsupported continuous BC 141–87 chronology assigned from 至武帝. The source still attributes the frontier campaign and provincial reorganization to Emperor Wu, and the candidate preserves every campaign field, Chinese summary, subject, predicate, certainty, and source unit while replacing only its overbroad date context and dependent hints with explicit research holds.",
+  "candidateValidation": {
+    "canonicalInputs": "PASS: fresh source and extraction hashes match the handoff and initial audit.",
+    "proposalReplay": "PASS: proposal replayed byte-for-byte to sha256:b78e2fdc680c883d45e6d38e98eb24aa4b6ccac3fa843ff18c62a3803a8c16dd.",
+    "scope": "PASS: exactly claim-39, claim-54, and hints-p009; no additions or unrelated records.",
+    "sourceReview": "PASS: s0149 names Emperor Wu and lists the campaigns/reorganization but gives no regnal year or endpoint supporting a continuous BC 141–87 interval.",
+    "campaignPreservation": "PASS: claim-54 retains kind military, ruler role, campaign action, complete bilingual summary, certainty, and s0149 evidence; only startDate chronology is converted to an unresolved sourceDate hold.",
+    "compactValidation": "PASS: 9 people, 21 mentions, 79 claims.",
+    "temporalGeometry": "PASS: no diagnostic findings.",
+    "canonicalMutation": "NONE"
+  },
+  "reviewedChanges": [
+    {
+      "proposalItem": "claim-39",
+      "personId": "p009",
+      "verdict": "source-sound-conversion",
+      "sourceEvidence": [
+        {
+          "book": "hanshu",
+          "chapter": "036",
+          "unit": "s0149",
+          "quote": "至武帝攘卻胡、越，開地斥境，南置交阯，北置朔方之州，兼徐、梁、幽、并夏、周之制，改雍曰涼，改梁曰益，凡十三郡，置刺史。",
+          "sourceHash": "sha256:9ff2ef8a6cadedc72db8e9b27ff898bdee6629ea1e265d17086614a9702e78d2"
+        }
+      ],
+      "reason": "The source names Emperor Wu as the reign setting, but does not provide a regnal year or show continuous personal activity through the entire reign. Removing the imported BC 141–87 interval and retaining the Chinese sourceDate as a hold is correct."
+    },
+    {
+      "proposalItem": "claim-54",
+      "personId": "p009",
+      "verdict": "source-sound-conversion",
+      "sourceEvidence": [
+        {
+          "book": "hanshu",
+          "chapter": "036",
+          "unit": "s0149",
+          "quote": "至武帝攘卻胡、越，開地斥境，南置交阯，北置朔方之州，兼徐、梁、幽、并夏、周之制，改雍曰涼，改梁曰益，凡十三郡，置刺史。",
+          "sourceHash": "sha256:9ff2ef8a6cadedc72db8e9b27ff898bdee6629ea1e265d17086614a9702e78d2"
+        }
+      ],
+      "reason": "The campaign and provincial reorganization are still explicitly attributed to Emperor Wu in the source. Replacing only the overbroad startDate interval with a source-qualified hold preserves that event and corrects chronology."
+    },
+    {
+      "proposalItem": "hints-p009",
+      "personId": "p009",
+      "verdict": "source-sound-conversion",
+      "sourceEvidence": [
+        {
+          "book": "hanshu",
+          "chapter": "036",
+          "unit": "s0149",
+          "quote": "至武帝攘卻胡、越",
+          "sourceHash": "sha256:9ff2ef8a6cadedc72db8e9b27ff898bdee6629ea1e265d17086614a9702e78d2"
+        }
+      ],
+      "reason": "The two hints are derived only from the unsupported reign endpoints. The single research-required hint accurately reflects the remaining source-local uncertainty."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only against the matching pinned source and canonical extraction hashes.",
+    "Apply exactly these three reviewed operations; do not alter campaign content or legendary qualitative records.",
+    "Commission a fresh complete independent canonical audit after curation; intentional research holds cannot receive audited approval."
+  ]
+}
