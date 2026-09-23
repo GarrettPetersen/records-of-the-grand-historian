@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "chenshu",
+  "chapter": "016",
+  "candidateFile": "staged-candidate-4f6b81f7ea02f1e5b692.json",
+  "candidateHash": "sha256:4f6b81f7ea02f1e5b69262b33f7160b3e2602d160a99ca6a7a7d6dec11e10348",
+  "reviewer": {
+    "name": "Codex independent Chenshu 016 date-repair reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T04:15:00.000Z",
+  "disposition": "reject",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Rejected. The candidate exactly replays and correctly converts all 38 audited temporal claims to source-specific holds, but it omits every one of the 38 paired active-date-hint repairs required by the audit. The stale hints would continue to publish the same unsupported dynasty-wide, allusive, and apparatus-derived personal chronologies.",
+  "validation": {
+    "proposalReplay": "PASS: the 38 pinned replacements replay byte-for-byte to sha256:4f6b81f7ea02f1e5b69262b33f7160b3e2602d160a99ca6a7a7d6dec11e10348.",
+    "claimCoverage": "PASS: all 38 audit-listed claims are present as replacements, with no unlisted temporal-claim mutation.",
+    "claimHolds": "PASS: sampled title-only, allusive, and apparatus references retain their source facts and provenance while removing unsupported Western personal chronology.",
+    "chronologyGeometry": "PASS: compact extraction validation and date-audit geometry diagnostics pass.",
+    "pairedHints": "FAIL: the audit requires 38 paired hint repairs, but the proposal has zero hints operations and all 38 affected hints are byte-for-byte unchanged.",
+    "canonicalMutation": "NONE: this review changes neither the canonical extraction nor its audit status."
+  },
+  "sourceChecks": [
+    {
+      "claims": ["claim-18", "claim-32", "claim-77"],
+      "units": ["s0005", "s0027", "s0120"],
+      "evidence": "父孝穆，梁候官令。 / 祖點，梁尚書左民侍郎。 / 齊武帝手詔頻褒賞。",
+      "result": "These preserve title and office references but do not establish personal activity through the whole Liang or Qi reign; the claim holds are correct, and their stale hints must be replaced."
+    },
+    {
+      "claims": ["claim-38", "claim-45", "claim-90"],
+      "units": ["s0041", "s0045", "s0194"],
+      "evidence": "雖漢誅祿、產… / 攻壘若文鴦，焚艦如黃蓋… / 傅玄見尤於晉代，王商取陷於漢朝…",
+      "result": "These are rhetorical comparisons and recalled examples, not chapter-local personal activity dates; the claim holds are correct, and their stale hints must be replaced."
+    },
+    {
+      "claims": ["claim-81", "claim-98", "claim-311", "claim-336"],
+      "units": ["s0131", "s0226", "s0250", "s0253"],
+      "evidence": "按梁昭明太子薨… / 錢大昕《廿二史考異》云… / 據各本改。 / 是曾鞏等所見本亦訛…",
+      "result": "Mourning citations and later collation witnesses preserve source and editorial facts but supply no personal dated event in this context; the claim holds are correct, and their stale hints must be replaced."
+    }
+  ],
+  "requiredCorrections": {
+    "addHintOperationsFor": [
+      "p005", "p014", "p015", "p016", "p055", "p056", "p057", "p072", "p078",
+      "p020", "p021", "p022", "p023", "p024", "p025", "p026", "p027", "p028", "p029", "p030", "p031", "p032", "p033", "p068", "p069",
+      "p059", "p062", "p076", "p077", "p079", "p080", "p081", "p082", "p083", "p084", "p085", "p086", "p087"
+    ],
+    "requirement": "For each listed person, add an exact hints operation that replaces the current borrowed active-date text with a source-specific research-required hold matching its audit group. Preserve independently valid activity hints when a person has them; do not blank hints or alter non-temporal data. Restage a new pinned candidate and obtain a fresh independent review."
+  }
+}
