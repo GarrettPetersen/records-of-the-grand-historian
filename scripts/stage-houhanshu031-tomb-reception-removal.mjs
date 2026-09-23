@@ -11,14 +11,39 @@ const chapter = '031';
 const extraction = readJson(path.join(PEOPLE_DIR, 'extractions', book, `${chapter}.json`));
 const audit = readJson(path.join(PEOPLE_DIR, 'date-audits', book, `${chapter}.json`));
 const packet = buildDateAuditPacket(book, chapter);
-const claimId = 'claim-177';
-const before = extraction.claims[176];
-
-if (audit.status !== 'needs-revision' || !audit.findings.some(finding => finding.items.includes(claimId)) ||
-    !before || before[0] !== 'p001' || before[1] !== 'attestation' || before[2]?.sourceDate?.text !== '元和中' ||
-    JSON.stringify(before[4]) !== JSON.stringify(['s0001'])) {
-  throw new Error('Houhanshu 031 is not at the expected Yuanhe tomb-worship repair state');
+const targets = new Map([
+  ['claim-173', ['s0007']],
+  ['claim-174', ['s0023', 's0024']],
+  ['claim-175', ['s0024']],
+  ['claim-176', ['s0082']],
+]);
+const finding = audit.findings.find(item =>
+  ['claim-173', 'claim-174', 'claim-175', 'claim-176', 'claim-177'].every(id => item.items.includes(id)));
+if (audit.status !== 'needs-revision' || !finding) {
+  throw new Error('Houhanshu 031 is not at the complete Huan Tan anchor-repair state');
 }
+const changes = [];
+for (const [claimId, evidence] of targets) {
+  const before = extraction.claims[Number(claimId.slice(6)) - 1];
+  if (!before || before[0] !== 'p001' || before[1] !== 'attestation' || JSON.stringify(before[4]) !== JSON.stringify(['s0001'])) {
+    throw new Error(`${claimId} is not the expected Huan Tan heading-anchored attestation`);
+  }
+  const after = structuredClone(before);
+  after[4] = evidence;
+  changes.push({
+    kind: 'replace', id: claimId, before, after,
+    reason: `${claimId} retains its source-bounded chronology but now cites the dated local passage that establishes this Huan Tan event, rather than undated biographical heading s0001.`,
+  });
+}
+const tombBefore = extraction.claims[176];
+if (!tombBefore || tombBefore[0] !== 'p001' || tombBefore[1] !== 'attestation' ||
+    tombBefore[2]?.sourceDate?.text !== '元和中' || JSON.stringify(tombBefore[4]) !== JSON.stringify(['s0001'])) {
+  throw new Error('claim-177 is not the expected Yuanhe tomb-worship attestation');
+}
+changes.push({
+  kind: 'remove', id: 'claim-177', before: tombBefore,
+  reason: 's0085 dates Emperor Zhang\'s envoy worshipping Huan Tan\'s tomb in Yuanhe; it is a posthumous commemoration, not a living attestation or activity date for Huan Tan.',
+});
 
 const proposal = {
   schemaVersion: 1,
@@ -27,13 +52,8 @@ const proposal = {
   chapter,
   sourceHash: packet.sourceHash,
   extractionHash: packet.extractionHash,
-  author: { name: 'Codex Houhanshu 031 tomb-worship date-repair candidate', agentId: 'repair_houhanshu031_round2' },
-  changes: [{
-    kind: 'remove',
-    id: claimId,
-    before,
-    reason: 's0085 dates Emperor Zhang\'s envoy worshipping Huan Tan\'s tomb in Yuanhe; it is a posthumous commemoration, not a living attestation or activity date for Huan Tan.',
-  }],
+  author: { name: 'Codex Houhanshu 031 complete Huan Tan date-repair candidate', agentId: 'repair_houhanshu031_round3' },
+  changes,
 };
 
 const candidate = applyDateRepairProposal(extraction, proposal, packet);
