@@ -4,21 +4,21 @@
   "book": "beiqishu",
   "chapter": "003",
   "sourceHash": "sha256:49ff6e657cf9d83d8df2810dce84a8366b62212ae9f6adcef80a18ddced7f1c3",
-  "extractionHash": "sha256:ee5e3b6fb887673ba319abc75b090e5a4aa4edf6be796e91ddb9b4fb6c7ef370",
-  "status": "needs-revision",
+  "extractionHash": "sha256:13a879adfb6428619ac6c74bd2be1ad6790c77218e87e5e39d87c734bc881c7c",
+  "status": "audited",
   "reviewer": {
-    "name": "Independent Beiqishu 003 chronology auditor",
+    "name": "Independent Beiqishu 003 candidate chronology auditor",
     "independentOfExtractor": true,
     "workers": [
       {
-        "name": "Independent Beiqishu 003 chronology auditor",
-        "agentId": "date-audit-beiqishu003",
+        "name": "Independent Beiqishu 003 candidate chronology auditor",
+        "agentId": "full-reaudit-candidate-beiqishu003",
         "independentOfExtractor": true
       }
     ]
   },
-  "reviewedAt": "2026-09-23T00:26:25.246Z",
-  "summary": "Complete independent audit of all 164 Chinese units, all 121 temporal/hint items, and all 41 people in the current Beiqishu 003 extraction. The chapter’s dated Gao Cheng sequence is coherent through Wuding 5 (AD 547), but two records misuse a three-year interval for the sexagenary-day death notice and one turns Cui Xian’s after-Xinghe-2 context into a point date. The affected active-date hints inherit those errors. These are concrete repair findings, so this fully covered report is needs-revision and does not approve the chapter.",
+  "reviewedAt": "2026-09-23T00:34:26.343Z",
+  "summary": "Complete independent re-audit of all 164 Chinese units, all 121 temporal/hint items, and all 41 people in the repaired Beiqishu 003 candidate. Gao Cheng’s death and age are correctly bounded to the chapter’s Wuding 5 (AD 547) sequence without a fabricated Western day or birth year. Cui Xian’s appointment and active hint correctly preserve the after-Xinghe-2 relation as on or after AD 540. No unresolved chronology, temporal-geometry, reception-ownership, or person-hint defects remain.",
   "reviewedUnits": [
     "s0001",
     "s0002",
@@ -380,27 +380,31 @@
     },
     {
       "id": "claim-45",
-      "verdict": "incorrect",
-      "event": "age chronology for Gao Cheng",
-      "reason": "Gao Cheng’s age claim uses a 547–549 interval merely because the local death sentence begins with the sexagenary day 辛卯. The chapter’s running Wuding 5 chronology supplies a single AD 547 year; the three-year interval is unsupported and makes the date geometry misleading.",
+      "verdict": "supported",
+      "event": "Gao Cheng’s age at assassination in the Wuding 5 sequence",
+      "reason": "The preceding running chronology explicitly enters Wuding 5, and the cited sentence records Gao Cheng’s death and sui age twenty-nine on xinmao. AD 547 is therefore supported for this event; no Western month, day, or birth year is asserted.",
       "evidence": [
         {
           "unit": "s0135",
           "quote": "辛卯，王遇盜而殂，時年二十九。"
         }
-      ]
+      ],
+      "unit": "s0135",
+      "quote": "辛卯，王遇盜而殂，時年二十九。"
     },
     {
       "id": "claim-46",
-      "verdict": "incorrect",
-      "event": "death chronology for Gao Cheng",
-      "reason": "Gao Cheng’s death is placed in a 547–549 interval even though the death sequence is under Wuding 5 and the immediate source says he died on 辛卯 at age twenty-nine. The interval is an unsupported broadening of a dated event.",
+      "verdict": "supported",
+      "event": "Gao Cheng’s assassination and death in the Wuding 5 sequence",
+      "reason": "The preceding running chronology explicitly enters Wuding 5, and the cited sentence records Gao Cheng’s death on xinmao. AD 547 is supported for the death sequence; xinmao is retained as source wording and does not justify a Western month or day.",
       "evidence": [
         {
           "unit": "s0135",
           "quote": "辛卯，王遇盜而殂，時年二十九。"
         }
-      ]
+      ],
+      "unit": "s0135",
+      "quote": "辛卯，王遇盜而殂，時年二十九。"
     },
     {
       "id": "claim-48",
@@ -416,15 +420,17 @@
     },
     {
       "id": "claim-53",
-      "verdict": "incorrect",
-      "event": "office chronology for Cui Xuan",
-      "reason": "Cui Xian’s office date is encoded as a point AD 540 despite the source context being described as after Xinghe 2. A point date erases the one-sided wording and overstates precision.",
+      "verdict": "supported",
+      "event": "Cui Xian’s appointment as Vice Censor-in-Chief after Xinghe 2",
+      "reason": "The source first dates Gao Cheng’s office to Xinghe 2, then narrates Cui Xian’s appointment as a subsequent action. The repaired on-or-after AD 540 bound preserves that sequence and does not promote it to a point appointment year.",
       "evidence": [
         {
           "unit": "s0017",
           "quote": "文襄乃奏吏部郎崔暹為御史中尉，糾劾權豪，無所縱捨，於是風俗更始，私枉路絕。"
         }
-      ]
+      ],
+      "unit": "s0017",
+      "quote": "文襄乃奏吏部郎崔暹為御史中尉，糾劾權豪，無所縱捨，於是風俗更始，私枉路絕。"
     },
     {
       "id": "claim-68",
@@ -597,14 +603,16 @@
     {
       "id": "claim-90",
       "verdict": "supported",
-      "event": "attestation chronology for Gao Cheng",
-      "reason": "Independently checked the cited Chinese unit and the event owner. The retained temporal wording and normalized granularity are supported by this chapter; no unstated life endpoint or borrowed relative chronology is introduced.",
+      "event": "Gao Cheng’s dated death-sequence attestation",
+      "reason": "This is the same dated Wuding 5 death-sequence evidence: the cited Chinese states that the king died on xinmao aged twenty-nine. The repaired AD 547 context retains the day name without inventing a Western day.",
       "evidence": [
         {
           "unit": "s0135",
           "quote": "辛卯，王遇盜而殂，時年二十九。"
         }
-      ]
+      ],
+      "unit": "s0135",
+      "quote": "辛卯，王遇盜而殂，時年二十九。"
     },
     {
       "id": "claim-91",
@@ -705,14 +713,16 @@
     {
       "id": "claim-99",
       "verdict": "supported",
-      "event": "attestation chronology for Cui Xuan",
-      "reason": "Independently checked the cited Chinese unit and the event owner. The retained temporal wording and normalized granularity are supported by this chapter; no unstated life endpoint or borrowed relative chronology is introduced.",
+      "event": "Cui Xian’s dated appointment attestation after Xinghe 2",
+      "reason": "The cited appointment follows the immediately preceding Xinghe 2 action in the chapter narrative. The repaired one-sided lower bound preserves the relative chronology rather than asserting an unsupported exact AD 540 appointment.",
       "evidence": [
         {
           "unit": "s0017",
           "quote": "文襄乃奏吏部郎崔暹為御史中尉，糾劾權豪，無所縱捨，於是風俗更始，私枉路絕。"
         }
-      ]
+      ],
+      "unit": "s0017",
+      "quote": "文襄乃奏吏部郎崔暹為御史中尉，糾劾權豪，無所縱捨，於是風俗更始，私枉路絕。"
     },
     {
       "id": "claim-100",
@@ -1148,15 +1158,17 @@
     },
     {
       "id": "hints-p001",
-      "verdict": "incorrect",
+      "verdict": "supported",
       "event": "active-date-hints chronology for Gao Cheng",
-      "reason": "Gao Cheng’s active-date hints retain the unsupported AD 547–549 range inherited from the erroneous death interval. The directly dated Wuding 5 death is AD 547, not evidence for activity through 549.",
+      "reason": "The repaired hints retain only individually supported dated activity through the Wuding 5 / AD 547 death sequence. The unsupported AD 547–549 interval is absent, so the hints no longer extend Gao Cheng’s life beyond the directly dated death.",
       "evidence": [
         {
-          "unit": "s0001",
-          "quote": "世宗文襄皇帝，諱澄，字子惠，神武長子也，母曰婁太后。"
+          "unit": "s0135",
+          "quote": "辛卯，王遇盜而殂，時年二十九。"
         }
-      ]
+      ],
+      "unit": "s0135",
+      "quote": "辛卯，王遇盜而殂，時年二十九。"
     },
     {
       "id": "hints-p002",
@@ -1232,15 +1244,17 @@
     },
     {
       "id": "hints-p008",
-      "verdict": "incorrect",
+      "verdict": "supported",
       "event": "active-date-hints chronology for Cui Xuan",
-      "reason": "Cui Xian’s active hint is a point AD 540 although the preserved source context is after Xinghe 2; it inherits the temporal overprecision in claim-53.",
+      "reason": "The repaired hint says on or after AD 540, matching the source sequence after the dated Xinghe 2 action. It is explicitly one-sided and does not assert that Cui Xian’s appointment occurred in AD 540 itself.",
       "evidence": [
         {
           "unit": "s0017",
           "quote": "文襄乃奏吏部郎崔暹為御史中尉，糾劾權豪，無所縱捨，於是風俗更始，私枉路絕。"
         }
-      ]
+      ],
+      "unit": "s0017",
+      "quote": "文襄乃奏吏部郎崔暹為御史中尉，糾劾權豪，無所縱捨，於是風俗更始，私枉路絕。"
     },
     {
       "id": "hints-p009",
@@ -1642,12 +1656,12 @@
   "personChecks": [
     {
       "id": "p001",
-      "verdict": "incorrect",
-      "reason": "Gao Cheng’s active-date hints retain the unsupported AD 547–549 range inherited from the erroneous death interval. The directly dated Wuding 5 death is AD 547, not evidence for activity through 549.",
+      "verdict": "supported",
+      "reason": "The repaired hints retain only individually supported dated activity through the Wuding 5 / AD 547 death sequence. The unsupported AD 547–549 interval is absent, so the hints no longer extend Gao Cheng’s life beyond the directly dated death.",
       "evidence": [
         {
-          "unit": "s0001",
-          "quote": "世宗文襄皇帝，諱澄，字子惠，神武長子也，母曰婁太后。"
+          "unit": "s0135",
+          "quote": "辛卯，王遇盜而殂，時年二十九。"
         }
       ]
     },
@@ -1719,8 +1733,8 @@
     },
     {
       "id": "p008",
-      "verdict": "incorrect",
-      "reason": "Cui Xian’s active hint is a point AD 540 although the preserved source context is after Xinghe 2; it inherits the temporal overprecision in claim-53.",
+      "verdict": "supported",
+      "reason": "The repaired hint says on or after AD 540, matching the source sequence after the dated Xinghe 2 action. It is explicitly one-sided and does not assert that Cui Xian’s appointment occurred in AD 540 itself.",
       "evidence": [
         {
           "unit": "s0017",
@@ -2092,44 +2106,6 @@
       ]
     }
   ],
-  "findings": [
-    {
-      "items": [
-        "claim-45"
-      ],
-      "problem": "Gao Cheng’s age claim uses a 547–549 interval merely because the local death sentence begins with the sexagenary day 辛卯. The chapter’s running Wuding 5 chronology supplies a single AD 547 year; the three-year interval is unsupported and makes the date geometry misleading.",
-      "action": "Replace the 547–549 interval with the supported Wuding 5 / AD 547 date context, preserving the source wording 辛卯 and traditional age twenty-nine without inventing a birthday."
-    },
-    {
-      "items": [
-        "claim-46"
-      ],
-      "problem": "Gao Cheng’s death is placed in a 547–549 interval even though the death sequence is under Wuding 5 and the immediate source says he died on 辛卯 at age twenty-nine. The interval is an unsupported broadening of a dated event.",
-      "action": "Repair the death chronology to the supported AD 547 Wuding 5 sequence, retain 辛卯 as source wording, and do not infer a month/day or birth year."
-    },
-    {
-      "items": [
-        "claim-53"
-      ],
-      "problem": "Cui Xian’s office date is encoded as a point AD 540 despite the source context being described as after Xinghe 2. A point date erases the one-sided wording and overstates precision.",
-      "action": "Replace the point year with a one-sided on-or-after AD 540 bound or otherwise preserve the source’s after-Xinghe-2 qualification; re-audit the repaired temporal item."
-    },
-    {
-      "items": [
-        "hints-p001",
-        "p001"
-      ],
-      "problem": "Gao Cheng’s active-date hints retain the unsupported AD 547–549 range inherited from the erroneous death interval. The directly dated Wuding 5 death is AD 547, not evidence for activity through 549.",
-      "action": "Remove the AD 547–549 active hint and retain only source-supported dated activity, then independently re-audit the repaired person record."
-    },
-    {
-      "items": [
-        "hints-p008",
-        "p008"
-      ],
-      "problem": "Cui Xian’s active hint is a point AD 540 although the preserved source context is after Xinghe 2; it inherits the temporal overprecision in claim-53.",
-      "action": "Replace the point active hint with explicitly one-sided chronology or remove it until the office date is repaired and independently re-audited."
-    }
-  ],
+  "findings": [],
   "references": []
 }
