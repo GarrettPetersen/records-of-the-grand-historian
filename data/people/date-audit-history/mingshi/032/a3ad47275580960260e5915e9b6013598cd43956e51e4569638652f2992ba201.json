@@ -4,21 +4,21 @@
   "book": "mingshi",
   "chapter": "032",
   "sourceHash": "sha256:94cfba6bf8265b1ec2aa28921ce8e995c0808c46d62a030eb6e12d336f1123ef",
-  "extractionHash": "sha256:5caab79cb688b4a892880e5786e941b1e4e81885376cbd42197b29a0f9512a07",
-  "status": "research-blocked",
+  "extractionHash": "sha256:7cc02884f1a910c83bb8421ed916bd7c5228b4686d333150b1820e89739b632d",
+  "status": "needs-revision",
   "reviewer": {
-    "name": "Codex independent Mingshi 032 fresh canonical date auditor",
+    "name": "Codex independent Mingshi 032 initial date auditor",
     "independentOfExtractor": true,
     "workers": [
       {
-        "name": "Codex independent Mingshi 032 fresh canonical date auditor",
-        "agentId": "fresh_audit_mingshi032",
+        "name": "Codex independent Mingshi 032 initial date auditor",
+        "agentId": "date_audit_substantive_sixteenth",
         "independentOfExtractor": true
       }
     ]
   },
-  "reviewedAt": "2026-09-23T11:51:39.000Z",
-  "summary": "Fresh independent audit of the curated canonical extraction after 7ac07906b3. All 162 Chinese units, all six temporal or active-hint items, and all three people were rechecked. 至元曆經 in s0115 is a bibliographical calendar-classic title, not a regnal-date event: it cannot date Guo Shoujing, Qi Lüqian, or Li Qian to AD 1264–1294. The repair correctly retains each title-context attestation and explicit research-required hold, but the chapter contains no personal chronology that can resolve those holds.",
+  "reviewedAt": "2026-09-24T01:00:00.000Z",
+  "summary": "Complete initial source audit of all 162 Chinese units, six temporal or active-hint items, and three person records. The chapter names Guo Shoujing, Qi Luqian, and Li Qian in bibliographical discussion. Its two occurrences of zhi yuan are the title of the Calendar Classic, not dated events for any of those three people. The current extraction wrongly treats that title as the Yuan Zhiyuan reign and expands it into an AD 1264–1294 life/activity interval. No personal chronological event is supplied in this chapter.",
   "reviewedUnits": [
     "s0001",
     "s0002",
@@ -186,9 +186,9 @@
   "itemChecks": [
     {
       "id": "claim-4",
-      "verdict": "research-blocked",
-      "event": "Bibliographical attestation involving Guo Shoujing and the Calendar Classic title.",
-      "reason": "The retained sourceDate labels a calendar classic, not a dated event in Guo Shoujing's life. This chapter provides no separately dated personal event, birth, death, age, or defensible activity interval.",
+      "verdict": "incorrect",
+      "event": "Bibliographical reference to Guo Shoujing and the title of a calendar classic.",
+      "reason": "s0007 only directs readers to Guo Shoujing's biography; s0115 calls a text the Zhi yuan Calendar Classic. Neither sentence dates Guo Shoujing's life or work to the full Yuan Zhiyuan reign. The reign ID and AD 1264–1294 interval are unsupported.",
       "evidence": [
         {
           "unit": "s0115",
@@ -198,9 +198,9 @@
     },
     {
       "id": "claim-12",
-      "verdict": "research-blocked",
-      "event": "Bibliographical attestation involving Qi Lüqian and the Calendar Classic title.",
-      "reason": "The retained sourceDate labels a calendar classic, not a dated event in Qi Lüqian's life. This chapter provides no separately dated personal event, birth, death, age, or defensible activity interval.",
+      "verdict": "incorrect",
+      "event": "Bibliographical reference to Qi Luqian and the title of a calendar classic.",
+      "reason": "s0007 only directs readers to Qi Luqian's biography; s0115 calls a text the Zhi yuan Calendar Classic. Neither sentence dates Qi Luqian's life or work to the full Yuan Zhiyuan reign. The reign ID and AD 1264–1294 interval are unsupported.",
       "evidence": [
         {
           "unit": "s0115",
@@ -210,9 +210,9 @@
     },
     {
       "id": "claim-17",
-      "verdict": "research-blocked",
-      "event": "Bibliographical attestation involving Li Qian and the Calendar Classic title.",
-      "reason": "The retained sourceDate labels a calendar classic, not a dated event in Li Qian's life. This chapter provides no separately dated personal event, birth, death, age, or defensible activity interval.",
+      "verdict": "incorrect",
+      "event": "Bibliographical reference to Li Qian and the title of a calendar classic.",
+      "reason": "s0008 identifies a draft attributed to Li Qian; s0115 calls another text the Zhi yuan Calendar Classic. Neither sentence dates Li Qian's life or work to the full Yuan Zhiyuan reign. The reign ID and AD 1264–1294 interval are unsupported.",
       "evidence": [
         {
           "unit": "s0115",
@@ -222,9 +222,9 @@
     },
     {
       "id": "hints-p001",
-      "verdict": "research-blocked",
-      "event": "Active-date research hold for Guo Shoujing.",
-      "reason": "The current hint correctly records the lack of chapter-local personal chronology; the bibliographical cross-reference cannot supply a life interval.",
+      "verdict": "incorrect",
+      "event": "Active-date hint for Guo Shoujing.",
+      "reason": "The hint merely repeats the unsupported full-reign interval derived from a book title. The chapter contains no dated personal event for Guo Shoujing.",
       "evidence": [
         {
           "unit": "s0007",
@@ -234,9 +234,9 @@
     },
     {
       "id": "hints-p002",
-      "verdict": "research-blocked",
-      "event": "Active-date research hold for Qi Lüqian.",
-      "reason": "The current hint correctly records the lack of chapter-local personal chronology; the bibliographical cross-reference cannot supply a life interval.",
+      "verdict": "incorrect",
+      "event": "Active-date hint for Qi Luqian.",
+      "reason": "The hint merely repeats the unsupported full-reign interval derived from a book title. The chapter contains no dated personal event for Qi Luqian.",
       "evidence": [
         {
           "unit": "s0007",
@@ -246,13 +246,13 @@
     },
     {
       "id": "hints-p003",
-      "verdict": "research-blocked",
-      "event": "Active-date research hold for Li Qian.",
-      "reason": "The current hint correctly records the lack of chapter-local personal chronology; authorship of an undated draft cannot supply a life interval.",
+      "verdict": "incorrect",
+      "event": "Active-date hint for Li Qian.",
+      "reason": "The hint merely repeats the unsupported full-reign interval derived from a book title. The chapter contains no dated personal event for Li Qian.",
       "evidence": [
         {
           "unit": "s0008",
-          "quote": "僅存李謙之《議祿》、《曆經》之初稿。"
+          "quote": "《元史》漫無採摭，僅存李謙之《議祿》、《曆經》之初稿。"
         }
       ]
     }
@@ -261,7 +261,7 @@
     {
       "id": "p001",
       "verdict": "research-blocked",
-      "reason": "Guo Shoujing is named in a bibliographical cross-reference and associated method discussion, but all temporal-looking language is a text title or technical context; this chapter supplies no personal chronology.",
+      "reason": "Guo Shoujing is genuinely mentioned in a bibliographical cross-reference, but this chapter contains no dated personal event, birth, death, age, or defensible activity interval.",
       "evidence": [
         {
           "unit": "s0007",
@@ -272,7 +272,7 @@
     {
       "id": "p002",
       "verdict": "research-blocked",
-      "reason": "Qi Lüqian is named in a bibliographical cross-reference, but the chapter supplies no dated event, birth, death, age, or bounded activity period for him.",
+      "reason": "Qi Luqian is genuinely mentioned in a bibliographical cross-reference, but this chapter contains no dated personal event, birth, death, age, or defensible activity interval.",
       "evidence": [
         {
           "unit": "s0007",
@@ -283,11 +283,11 @@
     {
       "id": "p003",
       "verdict": "research-blocked",
-      "reason": "Li Qian is named as the author of surviving drafts, but the chapter supplies no dated event, birth, death, age, or bounded activity period for him.",
+      "reason": "Li Qian is genuinely mentioned as the author of drafts, but this chapter contains no dated personal event, birth, death, age, or defensible activity interval.",
       "evidence": [
         {
           "unit": "s0008",
-          "quote": "僅存李謙之《議祿》、《曆經》之初稿。"
+          "quote": "《元史》漫無採摭，僅存李謙之《議祿》、《曆經》之初稿。"
         }
       ]
     }
@@ -305,8 +305,8 @@
         "p002",
         "p003"
       ],
-      "problem": "The canonical repair correctly removes the false AD 1264–1294 personal intervals, but the chapter remains insufficient to determine personal dates for the three people it names.",
-      "action": "Retain the title-context attestations and explicit research-required holds. Obtain separately sourced, hash-pinned personal chronology before adding any date or activity interval."
+      "problem": "The extraction mistakes the bibliographical title Zhi yuan Calendar Classic for a Yuan-era personal event and then turns it into an AD 1264–1294 interval for three different individuals.",
+      "action": "Remove the three title-derived temporal claims and their three active-date hints. Preserve the nondated bibliographical claims and three source-backed research holds. Rebuild the packet and obtain a new independent candidate review before canonical publication."
     }
   ],
   "references": []
