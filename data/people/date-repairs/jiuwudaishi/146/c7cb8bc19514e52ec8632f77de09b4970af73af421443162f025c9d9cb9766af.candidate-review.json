@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "146",
+  "candidateCommit": "b026141663",
+  "candidateFile": "staged-candidate-c7cb8bc19514e52ec863.json",
+  "sealedCandidateHash": "sha256:c7cb8bc19514e52ec8632f77de09b4970af73af421443162f025c9d9cb9766af",
+  "candidateExtractionHash": "sha256:a626095956d7c4c3b4651e95940841a0e7ff0b8289d8965eff8e144ea6456d16",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 146 staged date-repair reviewer",
+    "agentId": "date_audit_substantive_forty",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T13:09:54.571Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked after fresh independent audit",
+  "summary": "Accepted the sealed repair. The source calls the Yimen rise 二紀之間, an approximate duration that cannot be replaced with the Liang dynasty’s AD 907–923 reign interval; 黃巢大亂之後 is retrospective framing for Liang Zu’s founding, not a Huang Chao activity interval.",
+  "reviewedChanges": [
+    {
+      "proposalItems": [
+        "claim-14",
+        "claim-44"
+      ],
+      "verdict": "supported-research-hold",
+      "sourceEvidence": [
+        "s0006: 「以夷門一鎮，外嚴烽侯，內辟汙萊，厲以耕桑，薄以租賦，士雖苦戰，民則樂輸，二紀之間，俄成霸業。」"
+      ],
+      "reason": "二紀 is an approximate two-decade duration within the narrative. It does not identify the start and end years, so AD 907–923 was an invented substitution of the sixteen-year Liang reign and must not stand as the date geometry for this item."
+    },
+    {
+      "proposalItems": [
+        "claim-15",
+        "claim-46",
+        "hints-p002"
+      ],
+      "verdict": "supported-research-hold",
+      "sourceEvidence": [
+        "s0005: 「梁祖之開國也，屬黃巢大亂之後。」"
+      ],
+      "reason": "The grammar locates Liang Zu’s founding after the Huang Chao upheaval. It is retrospective contextual framing, not a statement that Huang Chao personally acted throughout AD 875–884; no Western personal-activity interval is warranted by this chapter."
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: fresh canonical source and extraction hashes match the sealed handoff pins.",
+    "sealedProposalIdentity": "PASS: sealed candidate hash is sha256:c7cb8bc19514e52ec8632f77de09b4970af73af421443162f025c9d9cb9766af.",
+    "candidateExtractionIdentity": "PASS: candidate extraction hash is sha256:a626095956d7c4c3b4651e95940841a0e7ff0b8289d8965eff8e144ea6456d16.",
+    "proposalReplay": "PASS: applying the sealed proposal to the pinned canonical extraction reproduces the candidate byte-for-byte structurally.",
+    "auditScope": "PASS: only claim-14, claim-44, claim-15, claim-46, and p002’s date hint change.",
+    "sourceSoundness": "PASS: all chapter Chinese was independently read; the two relevant passages support research holds rather than fabricated endpoints.",
+    "nonDateRetention": "PASS: replay confirms subjects, predicates, evidence, certainty, and all non-date/source data are retained outside the sealed date operations.",
+    "compactValidation": "PASS: 209 units, 12 people, 37 mentions, 128 claims.",
+    "chronologyGeometry": "PASS: candidate has no temporal diagnostics.",
+    "canonicalMutation": "NONE: this receipt neither changes source nor curates the canonical extraction."
+  },
+  "hostRequirements": [
+    "Apply only while source and canonical extraction hashes match this sealed review packet.",
+    "Replay exactly the five sealed operations; do not infer Western endpoints from 二紀 or personal activity from retrospective context.",
+    "Do not alter the source or canonical extraction from this receipt.",
+    "Require a fresh independent canonical date audit after host curation."
+  ]
+}
